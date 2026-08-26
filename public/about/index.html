@@ -27,6 +27,34 @@
          the page most likely to collect tracking parameters from shares, which
          is exactly what a self referencing canonical is for. -->
     
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/og-image.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script>
     
     
     
@@ -124,7 +152,7 @@
   
   
   
-<link rel="canonical" href="https://douknowball.com/about" data-rh="true"><meta name="description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/about" data-rh="true"><meta property="og:title" content="About DoUKnowBall | Free Daily Sports Trivia Games" data-rh="true"><meta property="og:description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="About DoUKnowBall | Free Daily Sports Trivia Games" data-rh="true"><meta name="twitter:description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"About DoUKnowBall | Free Daily Sports Trivia Games","description":"The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep.","url":"https://douknowball.com/about","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+<link rel="canonical" href="https://douknowball.com/about" data-rh="true"><meta name="description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/about" data-rh="true"><meta property="og:title" content="About DoUKnowBall | Free Daily Sports Trivia Games" data-rh="true"><meta property="og:description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="About DoUKnowBall | Free Daily Sports Trivia Games" data-rh="true"><meta name="twitter:description" content="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"AboutPage","name":"About DoUKnowBall | Free Daily Sports Trivia Games","description":"The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep.","url":"https://douknowball.com/about","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
 <script src="/prerender-boot.js" defer></script>
 </head>

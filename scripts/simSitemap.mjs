@@ -99,7 +99,12 @@ console.log('5) every lastmod is a claim the shipped files back up');
   if (!fs.existsSync(LEDGER)) {
     fail('scripts/data/lastmod.json is missing, so every lastmod in the sitemap is an unbacked assertion');
   } else {
-    const ledger = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
+    const rawLedger = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
+    /* __version records which reduction the hashes were computed with, so a
+       change to the algorithm holds every date instead of claiming the whole
+       site changed. It is not a route. */
+    const ledger = Object.fromEntries(Object.entries(rawLedger).filter(([k]) => k !== '__version'));
+    if (!rawLedger.__version) fail('the ledger carries no fingerprint version, so an algorithm change would silently re-date the whole site');
     const rows = [...xml.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)<\/loc><lastmod>([^<]*)<\/lastmod>/g)]
       .map(m => ({ route: m[1] || '/', date: m[2] }));
     if (rows.length !== urls.length) fail(`${urls.length} URLs but only ${rows.length} carry a lastmod`);
@@ -137,7 +142,22 @@ console.log('5) every lastmod is a claim the shipped files back up');
         .replace(/<[^>]+>/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
-      const fp = createHash('sha256').update(`${title}\n${desc}\n${text}`).digest('hex').slice(0, 16);
+      /* Round 281: the structured data is part of the fingerprint now, because a
+         page gaining a rich result it never had is a change a crawler should
+         come back for. Normalised the same way, keys sorted and blocks sorted,
+         so formatting cannot masquerade as content. Written out again here
+         rather than imported, on purpose: a bug in the generator's reduction
+         must not be able to agree with itself. */
+      const sortDeep = v => Array.isArray(v)
+        ? v.map(sortDeep)
+        : (v && typeof v === 'object'
+            ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortDeep(v[k])]))
+            : v);
+      const ld = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+        .map(m => { try { return JSON.stringify(sortDeep(JSON.parse(m[1]))); } catch { return m[1].replace(/\s+/g, ' ').trim(); } })
+        .sort()
+        .join('\n');
+      const fp = createHash('sha256').update(`${title}\n${desc}\n${text}\n${ld}`).digest('hex').slice(0, 16);
       if (fp !== entry.hash) { stale += 1; if (stale <= 3) fail(`${route}: the shipped file no longer matches the hash its lastmod was recorded against, so the sitemap is dating the wrong version`); }
     }
     console.log(`   ${rows.length} rows, ${Object.keys(ledger).length} ledger entries, ${unbacked} unbacked, ${mismatched} disagreeing, ${stale} pointing at a version that has been rewritten, ${future} in the future`);

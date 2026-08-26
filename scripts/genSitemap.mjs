@@ -141,10 +141,34 @@ const today = new Date().toISOString().slice(0, 10);
 
    Guarded by scripts/simSitemap.mjs. */
 const LEDGER_PATH = path.join(ROOT, 'scripts/data/lastmod.json');
+/* ROUND 281: THE FINGERPRINT ITSELF IS VERSIONED, and the reason is a mistake
+   this round nearly made.
+
+   Adding the structured data to the reduction changed every hash on the site at
+   once, which made the generator report that all 127 pages had changed. That
+   happened to be TRUE this round, because the same round moved the FAQ and
+   breadcrumb markup into the head on 113 pages and gave every document the site
+   level entity block. But it would have been reported either way, and a ledger
+   that says everything changed whenever its own algorithm is edited is the
+   original defect wearing a different hat.
+
+   So a version mismatch HOLDS every date instead of stamping today. The
+   generator cannot tell a content change from an algorithm change, and between
+   "claim a change I cannot prove" and "stay quiet", staying quiet is the only
+   honest option and the only one Google is not entitled to punish.
+
+   The escape hatch is deliberate and manual: DELETE scripts/data/lastmod.json to
+   force a reseed at today's date. That is the right move only when you know the
+   content genuinely changed everywhere, which is exactly what happened here, and
+   it costs the whole history, so it should be rare. */
+const FINGERPRINT_VERSION = 2;
 const readLedger = () => {
   try { return JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8')); } catch { return {}; }
 };
-const ledger = readLedger();
+const rawLedger = readLedger();
+const ledgerVersion = rawLedger.__version ?? 1;
+const VERSION_CHANGED = ledgerVersion !== FINGERPRINT_VERSION && Object.keys(rawLedger).length > 0;
+const ledger = Object.fromEntries(Object.entries(rawLedger).filter(([k]) => k !== '__version'));
 /* --routes-only: emit the sitemap for the route list and DO NOT touch the
    ledger. The prerenderer reads the sitemap to know what to render, so a route
    added this round has to appear in the file before the prerenderer runs, and
@@ -157,10 +181,26 @@ const ROUTES_ONLY = process.argv.includes('--routes-only');
 const nextLedger = {};
 let changed = 0, held = 0, fresh = 0, noSnapshot = 0;
 
-/** The words and links a crawler reads off the shipped document, and nothing
- *  else: no hashed asset names, no injected style, no markup. Two builds of an
- *  unchanged page must reduce to the same string or this whole mechanism is
- *  noise. */
+/** Everything a crawler takes off the shipped document, and nothing else: the
+ *  title, the description, the readable words, the link targets, and the
+ *  structured data. No hashed asset names, no injected style, no markup. Two
+ *  builds of an unchanged page must reduce to the same string or this whole
+ *  mechanism is noise.
+ *
+ *  ROUND 281 ADDED THE STRUCTURED DATA, and it was added because leaving it out
+ *  gave a visibly wrong answer on real work. That round moved the FAQ and
+ *  breadcrumb markup on 113 game pages from the body, where the snapshot threw
+ *  it away, into the head where it ships, corrected thirteen pages that were
+ *  declaring themselves video games, and put the site level entity block into
+ *  every document. Every one of the 127 pages changed in a way a crawler should
+ *  come back for. The ledger reported six. A page gaining a rich result it never
+ *  had is a change; the fingerprint has to see it.
+ *
+ *  The JSON is normalised before hashing, parsed and re-emitted with its keys
+ *  sorted, so that a formatting difference between two builds cannot masquerade
+ *  as a content change. That is the same standard the rest of this function
+ *  holds itself to: it must be blind to how the file was written and sensitive
+ *  only to what it says. */
 function snapshotFingerprint(route) {
   const file = route === '/'
     ? path.join(ROOT, 'index.html')
@@ -182,7 +222,20 @@ function snapshotFingerprint(route) {
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
-  return createHash('sha256').update(`${title}\n${desc}\n${text}`).digest('hex').slice(0, 16);
+  /* Sorted keys, sorted blocks: two documents saying the same thing in a
+     different order must hash the same. A block that will not parse is folded
+     in as its raw text rather than dropped, because unparseable JSON-LD is
+     itself a change worth noticing. */
+  const sortDeep = v => Array.isArray(v)
+    ? v.map(sortDeep)
+    : (v && typeof v === 'object'
+        ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortDeep(v[k])]))
+        : v);
+  const ld = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+    .map(m => { try { return JSON.stringify(sortDeep(JSON.parse(m[1]))); } catch { return m[1].replace(/\s+/g, ' ').trim(); } })
+    .sort()
+    .join('\n');
+  return createHash('sha256').update(`${title}\n${desc}\n${text}\n${ld}`).digest('hex').slice(0, 16);
 }
 
 function lastmodFor(route) {
@@ -200,6 +253,13 @@ function lastmodFor(route) {
     return today;
   }
   if (prev && prev.hash === fp) { held += 1; nextLedger[route] = prev; return prev.date; }
+  if (prev && VERSION_CHANGED) {
+    /* The reduction changed, so a different hash proves nothing about the page.
+       Record the new hash, keep the date that was already there. */
+    held += 1;
+    nextLedger[route] = { hash: fp, date: prev.date };
+    return prev.date;
+  }
   if (prev) changed += 1; else fresh += 1;
   nextLedger[route] = { hash: fp, date: today };
   return today;
@@ -241,12 +301,18 @@ fs.writeFileSync(path.join(ROOT, 'public/sitemap.xml'), out);
    Object.keys happened to come back in. */
 if (!ROUTES_ONLY) {
 fs.mkdirSync(path.dirname(LEDGER_PATH), { recursive: true });
-const sortedLedger = Object.fromEntries(Object.keys(nextLedger).sort().map(k => [k, nextLedger[k]]));
+const sortedLedger = { __version: FINGERPRINT_VERSION, ...Object.fromEntries(Object.keys(nextLedger).sort().map(k => [k, nextLedger[k]])) };
 fs.writeFileSync(LEDGER_PATH, JSON.stringify(sortedLedger, null, 2) + '\n');
 console.log(
   `lastmod: ${held} unchanged and holding their old date, ${changed} rewritten today, ` +
   `${fresh} new, ${noSnapshot} with no snapshot to read`,
 );
+if (VERSION_CHANGED) {
+  console.log(
+    `   the fingerprint changed from v${ledgerVersion} to v${FINGERPRINT_VERSION}, so every date was HELD: ` +
+    'a different hash proves nothing when the reduction itself moved',
+  );
+}
 } else {
   console.log('lastmod: routes-only pass, every date left exactly as the ledger already had it');
 }

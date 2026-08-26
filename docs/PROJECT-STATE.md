@@ -1334,6 +1334,44 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 281: the structured data was generated correctly and thrown away
+
+Three findings, all counted on the shipped files before anything was touched.
+
+**1. Every game page builds FAQ markup and breadcrumb markup, and no crawler has ever seen
+either.** Both were rendered in the page BODY. Since Round 256 a snapshot keeps the head exactly
+as the build produced it and rebuilds the body from readable content only, headings, paragraphs,
+list items and links, and a script tag is none of those. Counted across all 127 shipped
+documents: exactly one ld+json block each, the `Game` object, which only survives because it
+happens to live in the head. 113 game pages were generating a breadcrumb trail, which is the one
+of the two that Google routinely draws into a result, and shipping none of them. Both are in
+Helmet now, so they land in the head and the snapshot copies them verbatim. Nothing about what is
+generated changed; only where it is put.
+
+**2. Thirteen pages declared themselves video games.** `PageSeo` emitted one shape for the home
+page and `@type: Game` for everything else, so the privacy policy, the terms, About, Contact, the
+Record Books, the world leaderboard, the changelog and all six sport hubs each told Google in
+machine-readable terms that they are a game. Google's structured data guidelines are explicit
+that markup has to describe the page's main content, and on a domain already turned down once for
+low value content, a privacy policy claiming to be a game is exactly the wrong shape of signal.
+The type now comes from `src/lib/pageSchema.ts`: in the game registry means `Game`, and every
+other submitted route has to appear in an explicit table with a real type. Deliberately not a
+prop on the component, because a prop is a thing you forget. `simSchema` section 5 fails if a
+submitted route is in neither, so a new static page cannot inherit `Game` by accident and a new
+game needs no change there at all.
+
+**3. The home page shipped no structured data at all.** Not the wrong kind: none. The app has
+generated a `WebApplication` object since Round 53, but the home page is the one page that is not
+prerendered, because vite regenerates it from `index.html` on whatever machine builds the site,
+so anything React adds at runtime never reaches the raw HTML. Exactly the trap that swallowed its
+canonical in Round 265 and its readable copy in Round 257, and it had swallowed this too. The
+site-level objects, `WebSite`, `Organization` and `WebApplication`, are in the template now.
+Each carries an `@id` naming the site root, so none of them can be read as a claim about
+whichever page is being served, which is what makes it correct that all 126 snapshots carry them
+as well: that is how a crawler ties 127 documents to one entity instead of treating them as 127
+strangers. `simSchema` section 4b parses the template block and compares it against the library's
+export, because two copies of the same JSON is how a thing goes stale.
+
 ## Round 280: what the site was still telling Google, and why Google stopped listening
 
 Three findings, all measured before anything was changed, all on pages that are shipping today.

@@ -273,6 +273,27 @@ does not need anyone to have thought of the failure first. `simPrerender` sectio
 at source level, requiring every ticker line built from a template literal to declare itself
 volatile, so the question cannot go unasked.
 
+### Anything a crawler must read goes in the HEAD, and the home page's goes in the template
+
+Two separate traps, both of which have now swallowed real work more than once.
+
+**A snapshot keeps the head verbatim and rebuilds the body.** `scripts/prerender.mjs` writes each
+page's `<head>` exactly as the build produced it and reconstructs the body from readable content
+only: headings, paragraphs, list items, table cells, links. Anything else in the body is gone. In
+Round 281 that turned out to have been quietly binning the FAQ markup and the breadcrumb trail on
+all 113 game pages since Round 256, both correctly generated, neither ever shipped. **If it must
+reach a crawler and it is not readable text, it belongs in `<Helmet>`.**
+
+**The home page is not prerendered, so nothing React adds at runtime reaches its raw HTML.** vite
+regenerates `dist/index.html` from `index.html` on whatever machine builds the site, so a snapshot
+written over it is thrown away and one written into `public/` would collide with it. Three
+separate things have fallen into this: the readable copy (Round 257), the canonical (Round 265),
+and the entire structured data block (Round 281, which had been generated since Round 53 and seen
+by nobody). **Anything the home page must serve to a crawler goes in `index.html` itself.** When
+that means a second copy of something the app also knows, guard the pair: `simSchema` section 4b
+parses the template's JSON-LD and compares it against `SITE_JSON_LD`, and `simHomeCopy` checks
+every number and link in the static block against the registry.
+
 ### The sitemap's lastmod is derived, never asserted
 
 `genSitemap.mjs` used to stamp `new Date()` on all 127 rows, so any regeneration claimed the

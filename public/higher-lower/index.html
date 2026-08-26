@@ -27,6 +27,34 @@
          the page most likely to collect tracking parameters from shares, which
          is exactly what a self referencing canonical is for. -->
     
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/og-image.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script>
     
     
     
@@ -124,7 +152,7 @@
   
   
   
-<link rel="canonical" href="https://douknowball.com/higher-lower" data-rh="true"><meta name="description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/higher-lower" data-rh="true"><meta property="og:title" content="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall","description":"Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game.","url":"https://douknowball.com/higher-lower","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+<link rel="canonical" href="https://douknowball.com/higher-lower" data-rh="true"><meta name="description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/higher-lower" data-rh="true"><meta property="og:title" content="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Higher or Lower - Soccer Stats Comparison Game | DoUKnowBall","description":"Compare soccer player career stats and guess who has more. Build your streak in this free football trivia game.","url":"https://douknowball.com/higher-lower","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is this different from classic higher or lower?","acceptedAnswer":{"@type":"Answer","text":"You pick the stat instead of calling a hidden number higher or lower. Choosing the battleground is the whole skill."}},{"@type":"Question","name":"Does a tie end my run?","acceptedAnswer":{"@type":"Answer","text":"No, a level stat counts as a win and the streak continues."}},{"@type":"Question","name":"What is the score?","acceptedAnswer":{"@type":"Answer","text":"The streak itself: 1 per correct pick, with your session best shown as the target to beat."}},{"@type":"Question","name":"Is Higher or Lower free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Higher or Lower","item":"https://douknowball.com/higher-lower"}]}</script>
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
 <script src="/prerender-boot.js" defer></script>
 </head>
@@ -135,9 +163,9 @@
 <a href="/">DOUKNOWBALL</a>
 <h1>HIGHER OR LOWER</h1>
 <p>Pick a stat where the left player is higher. Build your streak!</p>
-<h3>Bobby Charlton</h3>
+<h3>Mohamed Salah</h3>
 <p>👆 Tap a stat you think is higher than the opponent</p>
-<h3>Nicolò Barella</h3>
+<h3>Marcelo</h3>
 <h2>Higher or Lower Sports Game | DoUKnowBall</h2>
 <p>Guess whether the next player's stat is higher or lower. Tests your knowledge of player stats across football, NBA and UFC.</p>
 <p>Most higher or lower games hide a number and make you call it. This one flips the table: your player's stats are face up, the challenger's are hidden, and you pick the battleground.</p>

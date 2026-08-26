@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { jsonLdFor } from '@/lib/pageSchema';
 
 interface PageSeoProps {
   title: string;
@@ -148,26 +149,15 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
     return () => mo.disconnect();
   }, []);
 
-  const jsonLd = path === '/'
-    ? {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "DoUKnowBall",
-        "url": "https://douknowball.com",
-        "description": "Free daily sports trivia games covering NFL, NBA, Soccer, MLB, NHL, UFC, F1, Tennis, NASCAR and more.",
-        "applicationCategory": "GameApplication",
-        "operatingSystem": "Web Browser",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
-      }
-    : {
-        "@context": "https://schema.org",
-        "@type": "Game",
-        "name": title,
-        "description": description,
-        "url": canonicalUrl,
-        "isAccessibleForFree": true,
-        "gamePlatform": "Web Browser"
-      };
+  /* ROUND 281: the type comes from src/lib/pageSchema.ts, not from here.
+     Until this round every page that was not the home page was emitted as
+     @type Game, which meant the privacy policy, the terms, the about and
+     contact pages, the record books, the leaderboard, the changelog and all
+     six sport hubs, thirteen documents, each told Google it is a video game.
+     The decision is now made in one place off the game registry plus an
+     explicit table, and scripts/simSchema.mjs fails if a submitted route is in
+     neither, so a new static page cannot inherit Game by accident. */
+  const jsonLd = jsonLdFor(path, title, description, canonicalUrl);
 
   return (
     <Helmet>
@@ -184,9 +174,9 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
-      {/* Round 198: a noindexed page has no business advertising itself as a
-          Game in structured data, so the block is dropped there entirely. */}
-      {noindex ? null : <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
+      {/* Round 198: a noindexed page has no business advertising itself in
+          structured data at all, so the block is dropped there entirely. */}
+      {noindex || !jsonLd ? null : <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
     </Helmet>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
 /* Round 210: the guide arrives one sport at a time instead of every word
    of prose on the site arriving on every page. See gameContent/loader.ts. */
@@ -199,20 +200,38 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
         </div>
       )}
 
-      {game && (
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-      )}
+      {/* ROUND 281: BOTH OF THESE USED TO BE RENDERED HERE, IN THE BODY, WHERE
+          NO CRAWLER EVER SAW THEM.
 
-      {/* Round 53: breadcrumb structured data (Home > Game) for richer snippets. */}
+          Since Round 256 every page ships as a snapshot whose head is kept
+          exactly as the build produced it and whose body is rebuilt from the
+          page's readable content: headings, paragraphs, list items, links. A
+          script tag in the body is not readable content, so it was thrown away.
+          Measured across all 127 shipped documents on 2026-08-24: exactly one
+          ld+json block per page, the Game one from PageSeo, which lives in the
+          head. The FAQ markup and the breadcrumbs, both built and both correct,
+          reached nobody on any of the 113 game pages.
+
+          Moving them into Helmet puts them in the head, where the snapshot keeps
+          them verbatim. Nothing about what is generated changes; only where it
+          is put. The FAQ list stays built from the same array the visible
+          questions come from, which is the property that keeps the markup and
+          the page honest with each other.
+
+          Breadcrumbs are the one of the two that Google routinely renders in a
+          result, so losing them was losing a visible thing, not only a hint. */}
       {game && (
-        <script type="application/ld+json">{JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'DoUKnowBall', item: 'https://douknowball.com' },
-            { '@type': 'ListItem', position: 2, name: gameLabel, item: `https://douknowball.com${path}` },
-          ],
-        })}</script>
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+          <script type="application/ld+json">{JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'DoUKnowBall', item: 'https://douknowball.com' },
+              { '@type': 'ListItem', position: 2, name: gameLabel, item: `https://douknowball.com${path}` },
+            ],
+          })}</script>
+        </Helmet>
       )}
 
       {/* Round 181: real tiles instead of three bare text links, per the

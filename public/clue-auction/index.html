@@ -27,6 +27,34 @@
          the page most likely to collect tracking parameters from shares, which
          is exactly what a self referencing canonical is for. -->
     
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/og-image.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script>
     
     
     
@@ -124,7 +152,7 @@
   
   
   
-<link rel="canonical" href="https://douknowball.com/clue-auction" data-rh="true"><meta name="description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/clue-auction" data-rh="true"><meta property="og:title" content="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall" data-rh="true"><meta property="og:description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall","description":"A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up.","url":"https://douknowball.com/clue-auction","isAccessibleForFree":true,"gamePlatform":"Web Browser"}</script>
+<link rel="canonical" href="https://douknowball.com/clue-auction" data-rh="true"><meta name="description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/clue-auction" data-rh="true"><meta property="og:title" content="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall" data-rh="true"><meta property="og:description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall","description":"A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up.","url":"https://douknowball.com/clue-auction","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why is a clue locked as not available?","acceptedAnswer":{"@type":"Answer","text":"There is no real data behind it, most often a former club for a player who has only ever had one club. The game never invents information."}},{"@type":"Question","name":"Who can the secret player be?","acceptedAnswer":{"@type":"Answer","text":"One of the top 300 current players by market value, the same pool the Who Am I game uses. New cases never repeat the previous secret, and your best win saves on this device."}},{"@type":"Question","name":"Is Clue Auction free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Clue Auction is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Clue Auction","item":"https://douknowball.com/clue-auction"}]}</script>
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
 <script src="/prerender-boot.js" defer></script>
 </head>

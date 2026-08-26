@@ -56,6 +56,19 @@ async function head(pathname) {
     robots: document.querySelector('meta[name="robots"]')?.getAttribute('content') ?? null,
     h1: document.querySelectorAll('h1').length,
     ld: document.querySelectorAll('script[type="application/ld+json"]').length,
+    /* ROUND 281: count the objects that are ABOUT THIS PAGE, separately from
+       the site level ones. Until this round every ld+json block on a page was a
+       page level claim, so a bare count answered both questions. Now index.html
+       carries a WebSite, an Organization and a WebApplication, each with an @id
+       naming the site root, in the raw HTML of every document, because that is
+       what ties 127 pages to one entity and because the home page cannot add it
+       at runtime. Those are claims about the site, true on every page of it, and
+       counting them as "this page advertising itself" made the hidden page rule
+       below fail on four pages that are behaving perfectly. */
+    pageLd: Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+      .flatMap(el => { try { const j = JSON.parse(el.textContent); return Array.isArray(j) ? j : [j]; } catch { return [{ '@type': 'INVALID' }]; } })
+      .filter(o => !/#(website|org|webapp)$/.test(String(o['@id'] ?? '')))
+      .map(o => o['@type']),
     og: document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? null,
   }));
 }
@@ -80,7 +93,12 @@ for (const p of HIDDEN) {
   const h = await head(p);
   say(h.robots === 'noindex, follow', `${p}: robots is ${h.robots ?? 'MISSING'}`);
   say(h.canonical === `https://douknowball.com${p}`, `${p}: keeps its self canonical`);
-  say(h.ld === 0, `${p}: no Game structured data on a page that should not rank (${h.ld})`);
+  /* The rule Round 198 wrote is that a page told not to rank has no business
+     advertising ITSELF in structured data. The site level trio is not that: it
+     names the site root, it is identical on all 130 documents, and no per route
+     switch can remove it from a file the build writes once. So this asserts on
+     the page level objects only, which is what the rule was always about. */
+  say(h.pageLd.length === 0, `${p}: nothing advertising this page itself (${h.pageLd.join(', ') || 'nothing'})`);
 }
 
 console.log('3) The crawl instructions themselves');
