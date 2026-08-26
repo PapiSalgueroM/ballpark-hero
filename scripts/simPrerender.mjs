@@ -32,6 +32,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
+const PUBLIC = path.join(ROOT, 'public');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -179,12 +180,26 @@ console.log('6) no snapshot pins itself to one build');
    page keeps its words and stops being a site. simPrerenderBoot proves the
    replacement works in a real browser; this is the cheap version that runs
    on every build and states the property exactly. */
+/* ROUND 275 MOVED WHERE THIS LOOKS, and the distinction is the whole point.
+   The danger is a hash frozen into a file that is COMMITTED and then copied
+   into a future build that renames its bundle. That danger lives in public/,
+   not in dist/. Round 275 added a build step that writes the real tags into the
+   dist copies precisely because dist is rebuilt from scratch every time, so its
+   hashes are correct by construction and cannot go stale. Reading dist here
+   would now fail on 126 pages for doing exactly the right thing. So this reads
+   the committed files, which is what the rule was always about, and
+   scripts/simSnapshotAssets.mjs is what checks the dist side. */
 let hashed = 0;
-for (const [r, html] of docs) {
+for (const [r] of docs) {
   if (r === '/') continue;   // the root is vite's own output, hashes and all
-  const refs = html.match(/(?:src|href)="\/assets\/[^"]+"/g);
-  if (refs) { hashed += 1; fail(`${r}: pinned to one build by ${refs.length} hashed path(s), first ${refs[0]}`); }
-  if (!html.includes('/prerender-boot.js')) {
+  const committed = path.join(PUBLIC, r.replace(/^\//, ''), 'index.html');
+  if (!existsSync(committed)) continue;
+  const committedHtml = readFileSync(committed, 'utf8');
+  const refs = committedHtml.match(/(?:src|href)="\/assets\/[^"]+"/g);
+  if (refs) { hashed += 1; fail(`${r}: the COMMITTED snapshot is pinned to one build by ${refs.length} hashed path(s), first ${refs[0]}`); }
+  /* The boot script is the fallback for a build where the Round 275 plugin did
+     not run, so it has to be in the committed file too, not only in dist. */
+  if (!committedHtml.includes('/prerender-boot.js')) {
     fail(`${r}: no boot script, so nothing will ever inject the real bundle`);
   }
 }

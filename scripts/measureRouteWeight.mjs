@@ -37,7 +37,14 @@ const MIME={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg'
 const isFile=f=>{try{return statSync(f).isFile()}catch{return false}};
 const server=createServer((req,res)=>{const p=decodeURIComponent(req.url.split('?')[0]);let f=null;
  if(p==='/'||p==='/index.html')f=path.join(DIST,'index.html');
- else{for(const base of [PUBLIC,DIST]){const a=path.join(base,p.replace(/^\//,''));if(isFile(a)){f=a;break}const b=path.join(a,'index.html');if(isFile(b)){f=b;break}}}
+ else{/* Round 275: DIST first, and this order is the whole point. dist/ IS what
+      the host serves, because vite copies public/ into it and the build's own
+      steps then write into dist/. Serving public/ first was measuring the
+      committed snapshot rather than the shipped one, which silently made a
+      build time change to the snapshots invisible: an A/B came back 752ms vs
+      772ms, no difference, because both arms were being served the same
+      untouched file. */
+      for(const base of [DIST,PUBLIC]){const a=path.join(base,p.replace(/^\//,''));if(isFile(a)){f=a;break}const b=path.join(a,'index.html');if(isFile(b)){f=b;break}}}
  if(!f)f=path.join(DIST,'index.html');
  let body;try{body=readFileSync(f)}catch{res.writeHead(404);res.end();return}
  res.writeHead(200,{'content-type':MIME[path.extname(f)]??'application/octet-stream'});res.end(body)});
@@ -69,11 +76,14 @@ for(const route of routes){
       process.env.READY || 'Begin Career',
       { timeout: 180000 }).then(()=>Date.now()-t0).catch(()=>-1);
     const booted=await page.evaluate(()=>document.querySelectorAll('#root [class]').length);
-    rows.push({playable: ready});
-    Object.assign(rows[rows.length-1],{bytes,js,reqs,lastJs,booted});
+    /* Round 275: first contentful paint matters as much as time to playable
+       here, because the snapshot's words are already in the browser long
+       before the app is, and what delays the paint is finding the stylesheet. */
+    const fcp=await page.evaluate(()=>{const e=performance.getEntriesByName('first-contentful-paint')[0];return e?Math.round(e.startTime):-1;});
+    rows.push({playable: ready, fcp, bytes, js, reqs, lastJs, booted});
     await ctx.close();
   }
   const med=k=>{const v=rows.map(r=>r[k]).sort((a,b)=>a-b);return v[Math.floor(v.length/2)];};
-  console.log(`${label.padEnd(8)} ${route.padEnd(16)} total ${(med('bytes')/1024).toFixed(0).padStart(5)}K  js ${(med('js')/1024).toFixed(0).padStart(5)}K  reqs ${String(med('reqs')).padStart(3)}  playable ${String(med('playable')).padStart(6)}ms  (${RUNS} runs, median; styled nodes ${med('booted')})`);
+  console.log(`${label.padEnd(8)} ${route.padEnd(16)} total ${(med('bytes')/1024).toFixed(0).padStart(5)}K  js ${(med('js')/1024).toFixed(0).padStart(5)}K  reqs ${String(med('reqs')).padStart(3)}  FCP ${String(med('fcp')).padStart(6)}ms  playable ${String(med('playable')).padStart(6)}ms  (${RUNS} runs, median; styled nodes ${med('booted')})`);
 }
 await browser.close(); server.close();
