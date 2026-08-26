@@ -30,7 +30,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice,
-  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer,
+  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer,
   advanceOwnerSeason, endOwnerCareer,
@@ -668,6 +668,19 @@ export default function SoccerCareer() {
   // could never run. The bundle IS the source of truth, so load it directly.
   // If a DB-backed roster is ever wanted, recreate the table first and restore
   // a typed (no `as any`) fetch here.
+  /* Round 273: start pulling the manager job market the moment a career is
+     anywhere near the dugout. Two phases matter: post_retirement, which is the
+     screen where the choice is made, and manager_season itself, which is what a
+     SAVED career reloads straight into. That second one is the case worth
+     naming: without it, a player who closed the tab mid manager career would
+     come back to a page that has never loaded the market at all. */
+  useEffect(() => {
+    const phase = career?.phase;
+    if (phase === "post_retirement" || phase === "manager_season") {
+      void loadManagerMarket().catch(() => { /* retried on demand, see the engine */ });
+    }
+  }, [career?.phase]);
+
   useEffect(() => {
     setClubs(FALLBACK_CLUBS);
     setClubsError(false);
@@ -823,8 +836,17 @@ export default function SoccerCareer() {
     setCareer(manualRetire(career));
   };
 
-  const handlePostRetirement = (choice: PostRetirementChoice) => {
+  /* Round 273: picking the dugout is the moment the job market is first
+     needed, and it is a separate download now rather than something every
+     player carries from the first screen. The effect below has almost always
+     fetched it already by the time this runs, because the retirement screen
+     is a page of reading; the await is here so that a fast click on a slow
+     phone still lands in a manager career with a working offer feed. */
+  const handlePostRetirement = async (choice: PostRetirementChoice) => {
     if (!career) return;
+    if (choice === "manager") {
+      try { await loadManagerMarket(); } catch { /* the engine says so on screen and retries */ }
+    }
     setCareer(choosePostRetirement(career, choice, clubs));
   };
 

@@ -29,7 +29,42 @@ import { intlName, familyFor } from './intlNames';
    cycle, and every amount inside the engine stays in euros forever. */
 import { localizeMoney } from './soccerCurrency';
 import { managerProfileFromCareer } from './soccerCareerToManager';
-import { realJobOffers } from './managerJobMarket';
+/* Round 273: the manager job market is loaded ON DEMAND and this import is
+   deliberately NOT static. managerJobMarket is 3 KB of its own code and it
+   imports clubManager, which is the biggest file in the repo, and clubManager
+   imports squadDeal which imports footleEnrichment. One static import line
+   here was therefore putting the whole Club Manager engine and Footle's data
+   in front of every Soccer Career player before they could do anything.
+
+   MEASURED on the built site, /soccer-career on a phone at slow 4G: 2,868 KB
+   over 30 requests, of which 731 KB was the managerJobMarket chunk and 139 KB
+   was Footle's enrichment data. Neither is needed until a career reaches the
+   dugout, which is after retirement and which most first sessions never see.
+
+   The market is loaded by loadManagerMarket() below. See refreshManagerOffers
+   for what happens if it somehow is not there yet, and scripts/simFlagshipWeight.mjs
+   for the guard that stops it creeping back in. */
+type ManagerMarket = typeof import('./managerJobMarket');
+let MARKET: ManagerMarket | null = null;
+let MARKET_INFLIGHT: Promise<void> | null = null;
+
+/** True once the job market is in memory and refreshManagerOffers can run. */
+export function managerMarketReady(): boolean { return MARKET !== null; }
+
+/**
+ * Pull the job market in. Safe to call any number of times and from anywhere:
+ * the second call gets the same promise, and a failed load clears itself so a
+ * retry is possible rather than the career being stuck forever.
+ */
+export function loadManagerMarket(): Promise<void> {
+  if (MARKET) return Promise.resolve();
+  if (!MARKET_INFLIGHT) {
+    MARKET_INFLIGHT = import('./managerJobMarket')
+      .then(m => { MARKET = m; })
+      .catch(e => { MARKET_INFLIGHT = null; throw e; });
+  }
+  return MARKET_INFLIGHT;
+}
 import { managerStanding } from './managerOffers';
 import {
   getLifeEvents, getPriorityLifeEventIds,
@@ -6920,7 +6955,20 @@ export function refreshManagerOffers(s: CareerState, ms: ManagerState): void {
   profile.seasonsSinceRetired = ms.season;
   profile.departure = ms.departure ?? "sacked";
 
-  const offers = realJobOffers(profile, Math.random, [ms.club]);
+  /* Round 273. If the market is not in memory yet the honest thing is to say
+     so and try again, because an EMPTY offer list is a real game state here.
+     It means nobody called, and the note under it is written to sting. Faking
+     that because a file has not downloaded would be telling the player he is
+     finished when he is not. So this says what is actually happening, starts
+     the load, and leaves the career exactly where it was. Both screens that
+     can reach this phase preload the market, so it should never be seen. */
+  if (!MARKET) {
+    void loadManagerMarket();
+    ms.offers = [];
+    ms.offerNote = "Still getting the phone lines up. Give it a second and go again.";
+    return;
+  }
+  const offers = MARKET.realJobOffers(profile, Math.random, [ms.club]);
   ms.offers = offers.map(o => ({
     club: o.club, country: o.country, tier: o.tier, league: o.league,
     brief: o.brief, reason: o.reason, budget: o.budget,

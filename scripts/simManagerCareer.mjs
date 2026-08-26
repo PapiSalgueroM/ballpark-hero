@@ -21,6 +21,40 @@ let failures = 0; const fail = s => { failures += 1; console.error('  FAIL: ' + 
 
 const CLUBS = cm.REAL_LEAGUES.flatMap(l => cm.playableClubs(l.id).map(c => ({ name:c.name, tier:c.tier })));
 
+/* Round 273. The job market is a separate download now, because a static
+   import of it was putting the whole Club Manager engine in front of every
+   Soccer Career player before the first screen. Two things follow, and this
+   harness checks both rather than just calling the loader and moving on.
+
+   FIRST, before loading anything: an offer feed that has not arrived must not
+   look like an offer feed with nothing in it. Zero offers is a real state in
+   this game and the note under it is written to sting, so faking it while a
+   file downloads would tell a player his career is finished when it is not. */
+console.log('0) an unloaded job market says so, and never pretends to be an empty one');
+{
+  const probe = {
+    nationality:'England', peakOverall:74, intStats:{ caps:5 }, seasons:[], events:[],
+    phase:'manager_season', overall:74, age:40,
+    managerState:{ club:'Everton', clubTier:2, season:1, trophies:0, promotions:0, seasonResults:[],
+      nationalTeamOffer:false, managingNationalTeam:false, unemployed:true, seasonsOut:0 },
+  };
+  if (e.managerMarketReady()) {
+    fail('the market is already loaded before anything asked for it, so it is still a static import somewhere');
+  }
+  const out = e.advanceManagerSeason(probe, CLUBS);
+  const note = out.managerState.offerNote ?? '';
+  if ((out.managerState.offers ?? []).length !== 0) fail('an unloaded market produced offers out of nowhere');
+  if (!/phone lines/i.test(note)) {
+    fail(`an unloaded market gave the note ${JSON.stringify(note)}, which reads like a real verdict on the player`);
+  }
+  console.log(`   unloaded: 0 offers and the note is ${JSON.stringify(note.slice(0, 46))}`);
+}
+
+/* SECOND: load it, exactly as the game does before it lets anyone into the
+   dugout, and run everything below against a real market. */
+await e.loadManagerMarket();
+if (!e.managerMarketReady()) { console.error('  FAIL: the market never loaded'); process.exit(1); }
+
 function season(o){ return { year:2030, age:28, club:'Club', clubCountry:'England', clubTier:2, apps:34, goals:10,
   assists:5, cleanSheets:0, yellowCards:2, redCards:0, rating:7.1, leagueTitle:false, domesticCup:false,
   championsLeague:false, worldCup:false, ballonDor:false, ballonDorRank:null, type:'playing',
