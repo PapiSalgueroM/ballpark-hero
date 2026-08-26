@@ -29,6 +29,7 @@
 */
 
 import { intlName } from './intlNames';
+import { NATIONAL_POOLS, NATIONAL_POOL_YEARS } from '@/data/nationalPools';
 
 /* ─── Confederations ─────────────────────────────────────────────────────── */
 
@@ -753,6 +754,59 @@ const XI_SHAPE: { slot: string; group: 'GK' | 'DEF' | 'MID' | 'ATT' }[] = [
   { slot: 'LW', group: 'ATT' }, { slot: 'ST', group: 'ATT' }, { slot: 'RW', group: 'ATT' },
 ];
 
+/* ─── Round 259: real internationals, for the years we have them ─────────
+   Owner report: "What type of squad is this? There's no real life players and
+   this is only 2023. I get it in like 2045 because we don't know who's going
+   to be good then but right now u can say who's good."
+
+   src/data/nationalPools.ts is baked from the same market value table the
+   rest of the site's real players come from, one entry per nation per year,
+   so a 2023 squad holds who was actually good in 2023. Outside that window,
+   and for any nation whose pool that year could not field a team, the
+   generator carries on exactly as it did, which is the part he said he
+   understood. Nothing here invents a cap, a nationality or a rating: a
+   player appears for a nation because his row says that nation, and his
+   number comes off the same value curve as every other real player here. */
+
+/** The game's nation names against the data's. Only where they differ. */
+const POOL_ALIAS: Record<string, string> = {
+  USA: 'United States',
+  Turkey: 'Türkiye',
+  'Ivory Coast': "Cote d'Ivoire",
+  'South Korea': 'Korea, South',
+  'Bosnia & Herzegovina': 'Bosnia-Herzegovina',
+};
+/* Checked against the data's own distinct nationality list rather than
+   assumed: Cape Verde, Czech Republic, DR Congo and North Macedonia all
+   already match, so they are deliberately NOT in the map above. An alias that
+   renames a name to itself is a line nobody can tell is wrong. */
+
+export interface PoolMan { name: string; pos: string; ovr: number; group: 'GK' | 'DEF' | 'MID' | 'ATT'; }
+
+const poolCache = new Map<string, PoolMan[] | null>();
+
+/** The real players a nation had that year, best first, or null if we have
+ *  no fieldable pool for it and the generator should take over. */
+export function realPool(nation: string, year: number): PoolMan[] | null {
+  /* Outside the baked window there is nothing to find, and saying so here
+     keeps the intent visible: a 2045 squad is generated because nobody knows
+     who will be good in 2045, not because a lookup happened to miss. */
+  if (year < NATIONAL_POOL_YEARS.first || year > NATIONAL_POOL_YEARS.last) return null;
+  const key = `${POOL_ALIAS[nation] ?? nation}|${year}`;
+  if (poolCache.has(key)) return poolCache.get(key) ?? null;
+  const blob = NATIONAL_POOLS[key];
+  if (!blob) { poolCache.set(key, null); return null; }
+  const men: PoolMan[] = [];
+  for (const entry of blob.split(',')) {
+    const [name, pos, ovr] = entry.split(':');
+    if (!name || !pos || !ovr) continue;
+    men.push({ name, pos, ovr: Number(ovr), group: positionGroup(pos) });
+  }
+  men.sort((a, b) => b.ovr - a.ovr);
+  poolCache.set(key, men.length ? men : null);
+  return men.length ? men : null;
+}
+
 /** Starters per position group, and the order the best men fill the shirts:
  *  the two centre halves are a nation's best defenders, its best midfielder
  *  plays higher than its holder, and its best forward leads the line. */
@@ -782,8 +836,49 @@ function slotForPosition(pos: string): string {
  */
 function buildStartingXi(
   nation: string, form: PlayerForm | null, myScore: number, myRank: number,
-  rivals: number[], called: boolean,
+  rivals: number[], called: boolean, year?: number,
 ): StartingEleven {
+  /* Round 259: real men for the years the data covers. The pool is read once
+     per sheet and drained per group, so no two shirts carry the same person,
+     and a group the pool cannot cover falls back to the generator line by
+     line rather than all or nothing. */
+  const pool = year === undefined ? null : realPool(nation, year);
+  const drawn = new Set<string>();
+  /**
+   * Hand a group's shirts to the real men who actually play there.
+   *
+   * The first pass simply took the group's best by rating and let the shirt
+   * order fall where it fell, which put Trent Alexander-Arnold at centre half
+   * for England. That is the owner's own complaint from a round earlier
+   * arriving by another road, so each shirt now asks for its own position
+   * first (a right back shirt wants a right back), takes the best man left in
+   * the group only if nobody plays there, and comes back empty if the pool
+   * has run out, in which case the line is generated as before. Mixing is
+   * fine and honest: the data simply does not hold every position for every
+   * nation.
+   */
+  const shirtWants: Record<string, string[]> = {
+    GK: ['GK'],
+    CB: ['CB'], LB: ['LB', 'LM'], RB: ['RB', 'RM'],
+    CDM: ['CDM', 'CM'], CM: ['CM', 'CAM', 'CDM'],
+    ST: ['ST', 'CF'], LW: ['LW', 'LM'], RW: ['RW', 'RM'],
+  };
+  const takeForShirts = (group: 'GK' | 'DEF' | 'MID' | 'ATT', shirts: string[]): (PoolMan | null)[] => {
+    if (!pool) return shirts.map(() => null);
+    const out: (PoolMan | null)[] = [];
+    for (const shirt of shirts) {
+      const wants = shirtWants[shirt] ?? [shirt];
+      let man: PoolMan | undefined;
+      for (const want of wants) {
+        man = pool.find(m => m.pos === want && !drawn.has(m.name));
+        if (man) break;
+      }
+      if (!man) man = pool.find(m => m.group === group && !drawn.has(m.name));
+      if (man) drawn.add(man.name);
+      out.push(man ?? null);
+    }
+    return out;
+  };
   const str = nationStrength(nation);
   const poolTop = 0.65 * str + 28.6;
   const myGroup = form ? positionGroup(form.position) : null;
@@ -804,6 +899,12 @@ function buildStartingXi(
     const others = group === myGroup
       ? [...rivals].sort((a, b) => b - a)
       : Array.from({ length: starters }, (_, i) => poolTop - i * 1.4 + (Math.random() * 4 - 2)).sort((a, b) => b - a);
+    /* The real men for this group's shirts, matched to the position each
+       shirt asks for. Their names and their numbers both come off the row:
+       nothing here rerates a real player to make a sheet look tidier. */
+    const real = takeForShirts(group, shirts);
+    const nameFor = (i: number) => real[i]?.name ?? intlName(nation, nameIdx + i);
+    const ovrFor = (i: number, fallback: number) => (real[i] ? real[i]!.ovr : Math.round(fallback));
 
     const iStart = called && group === myGroup && myRank <= starters;
     if (iStart && form) {
@@ -815,15 +916,19 @@ function buildStartingXi(
       const label = form.position === 'CAM' || !shirts.includes(form.position) ? form.position : shirts[takes];
       mySlot = label;
       const mine: XiMan = { slot: label, name: 'You', ovr: Math.round(form.overall), me: true };
+      /* The real men were matched shirt by shirt, so taking a shirt out has
+         to take its man out with it or every name after it shifts one place
+         and ends up at the wrong position. */
       shirts.splice(takes, 1);
+      real.splice(takes, 1);
       const rest = shirts.map((slot, i) => ({
-        slot, name: intlName(nation, nameIdx + i), ovr: Math.round(others[i] ?? poolTop), me: false,
+        slot, name: nameFor(i), ovr: ovrFor(i, others[i] ?? poolTop), me: false,
       }));
       nameIdx += shirts.length;
       rows[group] = [mine, ...rest];
     } else {
       rows[group] = shirts.map((slot, i) => ({
-        slot, name: intlName(nation, nameIdx + i), ovr: Math.round(others[i] ?? poolTop), me: false,
+        slot, name: nameFor(i), ovr: ovrFor(i, others[i] ?? poolTop), me: false,
       }));
       nameIdx += shirts.length;
       if (called && group === myGroup) {
@@ -864,7 +969,7 @@ export function xiMen(xi: StartingEleven): XiMan[] {
  * the other players your nation has in your position. No coin flip. A weak
  * nation will take a 72 rated forward without blinking; Spain will not.
  */
-export function pickSquad(nation: string, form: PlayerForm | null): SquadCall {
+export function pickSquad(nation: string, form: PlayerForm | null, year?: number): SquadCall {
   const grp = form ? positionGroup(form.position) : 'ATT';
   const places = SQUAD_PLACES[grp];
   const str = nationStrength(nation);
@@ -887,7 +992,7 @@ export function pickSquad(nation: string, form: PlayerForm | null): SquadCall {
       reason: `You are not in the ${nation} setup.`,
       /* Round 197: the eleven exists whether or not he is in it. Watching
          the team you are not in is the point of being left out. */
-      xi: buildStartingXi(nation, null, 0, poolSize, rivals, false),
+      xi: buildStartingXi(nation, null, 0, poolSize, rivals, false, year),
     };
   }
   // Form is the last club season: a rating above 7.0 and goals both help, and
@@ -917,7 +1022,7 @@ export function pickSquad(nation: string, form: PlayerForm | null): SquadCall {
   return {
     called, role, reason, myRank, poolSize, places,
     myScore: Math.round(myScore), cutScore: Math.round(cut),
-    xi: buildStartingXi(nation, form, myScore, myRank, rivals, called),
+    xi: buildStartingXi(nation, form, myScore, myRank, rivals, called, year),
   };
 }
 
@@ -1155,7 +1260,7 @@ export function runInternationalSummer(
   const fmt = tournamentForYear(nation, year);
   if (!fmt) return null;
   const qualifying = runQualifying(nation, fmt, form);
-  const squad = qualifying.qualified ? pickSquad(nation, form) : null;
+  const squad = qualifying.qualified ? pickSquad(nation, form, year) : null;
   return simulateTournament(nation, fmt, year, qualifying, squad, form);
 }
 
