@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays } from 'lucide-react';
-import { leagueOf } from '@/lib/clubManager';
+import { careerLeagueOf } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
@@ -13,7 +13,7 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
   const recent = expanded ? [...played].reverse() : played.slice(-3);
 
   const upcoming = useMemo(() => {
-    const league = leagueOf(career.clubName);
+    const league = careerLeagueOf(career);
     const out: { label: string; detail: string }[] = [];
     // Round 93: expanded shows the WHOLE rest of the season, not a 14 game window.
     for (let w = career.week; w < career.calendar.length && (expanded || out.length < 5); w++) {

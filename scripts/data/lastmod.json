@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "2b50df2267c4e7f1",
-    "date": "2026-08-24"
+    "hash": "66428dbae43bac21",
+    "date": "2026-08-26"
   },
   "/about": {
     "hash": "abdc4ccf14e9aba4",
@@ -21,8 +21,8 @@
     "date": "2026-08-25"
   },
   "/baseball": {
-    "hash": "ad8c3a6c274f765e",
-    "date": "2026-08-25"
+    "hash": "c58a938bd0a73816",
+    "date": "2026-08-26"
   },
   "/baseball-career": {
     "hash": "68d206bdcb581ff5",
@@ -73,8 +73,8 @@
     "date": "2026-08-25"
   },
   "/college": {
-    "hash": "5643a4f3900212c5",
-    "date": "2026-08-25"
+    "hash": "1251b3618f69c818",
+    "date": "2026-08-26"
   },
   "/college-grid": {
     "hash": "0a097c16742e6272",
@@ -189,8 +189,8 @@
     "date": "2026-08-25"
   },
   "/hockey": {
-    "hash": "d5d0881bb99a1416",
-    "date": "2026-08-25"
+    "hash": "f5b4de30f34cbb83",
+    "date": "2026-08-26"
   },
   "/hockey-career": {
     "hash": "5427ba68ddb85460",
@@ -397,8 +397,8 @@
     "date": "2026-08-25"
   },
   "/pro-football": {
-    "hash": "e4ccea26ddec0f70",
-    "date": "2026-08-25"
+    "hash": "9864bcc4ee8ab9e7",
+    "date": "2026-08-26"
   },
   "/puck-detective": {
     "hash": "3f820f4d4781acaa",
@@ -433,8 +433,8 @@
     "date": "2026-08-25"
   },
   "/soccer": {
-    "hash": "9317e5e3eae48db1",
-    "date": "2026-08-25"
+    "hash": "352e2d17c2e89487",
+    "date": "2026-08-26"
   },
   "/soccer-career": {
     "hash": "70ecca0c076b8ba3",
@@ -493,7 +493,7 @@
     "date": "2026-08-25"
   },
   "/whats-new": {
-    "hash": "2b7ba441789f7a54",
+    "hash": "93882f19c10d309a",
     "date": "2026-08-26"
   },
   "/who-am-i": {

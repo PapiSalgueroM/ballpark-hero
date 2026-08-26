@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { REAL_LEAGUES, leagueOf, sortedTable, leagueRounds, LEAGUE_NATIONS } from '@/lib/clubManager';
+import { REAL_LEAGUES, careerLeagueOf, sortedTable, leagueRounds, LEAGUE_NATIONS } from '@/lib/clubManager';
 import type { CareerState, TableRow } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { FlagImg } from '@/components/FlagImg';
@@ -24,7 +24,7 @@ interface WorldTablesCardProps {
  * matchday apps he uses present an unstarted season.
  */
 export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCardProps) {
-  const myLeague = leagueOf(career.clubName);
+  const myLeague = careerLeagueOf(career);
   const [pick, setPick] = useState<string>(myLeague.id);
 
   // My league first, then the rest in their usual order.

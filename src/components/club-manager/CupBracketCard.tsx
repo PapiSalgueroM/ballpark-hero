@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { leagueOf } from '@/lib/clubManager';
+import { careerLeagueOf } from '@/lib/clubManager';
 import type { CareerState, CupTie, CupRound } from '@/lib/clubManager';
 
 interface CupBracketCardProps {
@@ -29,7 +29,7 @@ export function CupBracketCard({ career, onClubClick }: CupBracketCardProps) {
 
   const rounds: CupRound[] = ['R16', 'QF', 'SF', 'F'];
   const winner = bracket.find(t => t.round === 'F')?.winner ?? null;
-  const cupName = leagueOf(career.clubName).cupName;
+  const cupName = careerLeagueOf(career).cupName;
   const upsets = bracket.filter(t => t.upset && t.winner).length;
 
   const side = (name: string, tie: CupTie, isHome: boolean) => {

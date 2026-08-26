@@ -157,7 +157,7 @@ export function buildItems(now: Date = new Date()): TickerItem[] {
 
   /* ---- Live counts off the registry, so they can never go stale ---- */
   const all = CATEGORIES.flatMap(c => c.games);
-  items.push({ icon: '🎮', text: `${all.length} free games, no sign-up, no downloads`, to: '/', volatile: true });
+  items.push({ icon: '🎮', text: `${all.length} free games, all playable without an account`, to: '/', volatile: true });
   const soccer = CATEGORIES.find(c => /soccer/i.test(c.title));
   if (soccer) items.push({ icon: '⚽', text: `${soccer.games.length} soccer games and counting`, to: '/', volatile: true });
   items.push({ icon: '📰', text: 'New stuff ships almost daily. See what changed', to: '/whats-new' });

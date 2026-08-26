@@ -69,7 +69,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['Soccer'],
     seoTitle: 'Free Soccer Games: Football Trivia, Puzzles and Career Sims | DoUKnowBall',
     seoDescription:
-      'Every free soccer game on DoUKnowBall in one place: daily football trivia and grid puzzles, transfer market games, and full career and club management sims. No sign-up, no downloads.',
+      'Every free soccer game on DoUKnowBall in one place: daily football trivia and grid puzzles, transfer market games, and full career and club management sims. Every game plays without an account.',
     intro:
       'This is the biggest section on the site, and it runs on real players, real clubs and real transfer values.',
     deep: {
@@ -98,7 +98,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['Pro Basketball'],
     seoTitle: 'Free Basketball Games: NBA Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
-      'Every free pro basketball game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. No sign-up, no downloads.',
+      'Every free pro basketball game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
       'Franchise grids, career guessers and two long sims, all built on real players and real franchise history.',
     deep: {
@@ -127,7 +127,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['Hockey'],
     seoTitle: 'Free Hockey Games: NHL Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
-      'Every free hockey game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. No sign-up, no downloads.',
+      'Every free hockey game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
       'Grids, guessers and two long sims, all on real skaters and real franchise history.',
     deep: {
@@ -156,7 +156,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['Pro Football'],
     seoTitle: 'Free Football Games: NFL Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
-      'Every free pro football game on DoUKnowBall in one place: daily grids with rarity scores, career-path guessers, connections, and full front office and my career sims. No sign-up, no downloads.',
+      'Every free pro football game on DoUKnowBall in one place: daily grids with rarity scores, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
       'Grid puzzles with rarity scores, career guessers and two long sims, all on real players.',
     deep: {
@@ -185,7 +185,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['Baseball'],
     seoTitle: 'Free Baseball Games: MLB Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
-      'Every free baseball game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. No sign-up, no downloads.',
+      'Every free baseball game on DoUKnowBall in one place: daily franchise grids, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
       'Franchise grids, career guessers and two long sims, all on real players and real franchise history.',
     deep: {
@@ -214,7 +214,7 @@ export const SPORT_HUBS: SportHub[] = [
     titles: ['College Sports'],
     seoTitle: 'College Sports Games: CFB and CBB Trivia and Sims | DoUKnowBall',
     seoDescription:
-      'Every college sports game on DoUKnowBall in one place: free college football and college basketball grids, program guessers and full dynasty sims. No sign-up.',
+      'Every college sports game on DoUKnowBall in one place: free college football and college basketball grids, program guessers and full dynasty sims. Every game plays without an account.',
     intro: 'College football and college basketball, from a two minute grid to a whole dynasty.',
     deep: {
       heading: '🏟️ Run a program',

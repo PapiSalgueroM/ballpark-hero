@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubDefFor, clubPreviewRating, leagueOf, money, confidenceLabel,
+  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money, confidenceLabel,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
@@ -1033,13 +1033,13 @@ const ClubManager = () => {
               <HubTile
                 icon="🏆" title="League"
                 value={`#${g.myPosition || '-'}`}
-                sub={c.form.length ? `Form: ${c.form.join(' ')}` : leagueOf(c.clubName).name}
+                sub={c.form.length ? `Form: ${c.form.join(' ')}` : careerLeagueOf(c).name}
                 onClick={() => g.setActiveTab('table')}
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
                 value={cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
-                sub={uclAlive ? 'UCL alive too' : leagueOf(c.clubName).cupName}
+                sub={uclAlive ? 'UCL alive too' : careerLeagueOf(c).cupName}
                 onClick={() => setHubPanel('cups')}
               />
               <HubTile
@@ -1208,11 +1208,11 @@ const ClubManager = () => {
                 <div className="space-y-2">
                   <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                     {cupAlive ? (
-                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
+                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
                     ) : c.cupRound === 'won' ? (
-                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: WON. It is in the cabinet.</>
+                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: WON. It is in the cabinet.</>
                     ) : (
-                      <>🏅 <span className="font-bold">{leagueOf(c.clubName).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
+                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
                     )}
                   </div>
                   {/* Round 163: every group in the draw, not just mine, plus
@@ -1229,7 +1229,7 @@ const ClubManager = () => {
                   {/* Round 95: the knockout stage as a real bracket. */}
                   <UclBracketCard career={c} onClubClick={setClubView} />
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{leagueOf(c.clubName).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{careerLeagueOf(c).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
                   )}
                 </div>
               )}
