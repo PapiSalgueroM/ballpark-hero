@@ -7,111 +7,115 @@ export interface TransferPathPuzzle {
   hint: string;
 }
 
+/**
+ * The fallback pool, served only when transfer_path_puzzles cannot be read.
+ * Round 294: every minimum, path and hint below is derived from
+ * src/data/careerPlayers.ts (the fallback player pool) under the game's own
+ * rule, same club in the same season, by scripts/genTransferPathHints.mjs.
+ * GENERATED: do not edit by hand, re-run the generator. The live table is
+ * derived the same way from the live career tables and carries its own
+ * hints, which differ where the pools differ.
+ */
 const transferPathPuzzles: TransferPathPuzzle[] = [
-  // 1-step (direct, share a club)
   {
     id: 'tp-1', playerA: 'Zlatan Ibrahimović', playerB: 'Wayne Rooney', minSteps: 1,
     oneOptimalPath: ['Zlatan Ibrahimović', 'Wayne Rooney'],
-    hint: 'They were teammates at a huge English club.',
+    hint: 'Direct link. They were at Manchester United together.',
   },
   {
     id: 'tp-2', playerA: 'Lionel Messi', playerB: 'Neymar', minSteps: 1,
     oneOptimalPath: ['Lionel Messi', 'Neymar'],
-    hint: 'They played together at two different clubs.',
+    hint: 'Direct link. They were at Barcelona together.',
   },
   {
-    id: 'tp-3', playerA: 'Andrea Pirlo', playerB: 'Cristiano Ronaldo', minSteps: 1,
-    oneOptimalPath: ['Andrea Pirlo', 'Cristiano Ronaldo'],
-    hint: 'Both played for the Old Lady.',
+    id: 'tp-3', playerA: 'Andrea Pirlo', playerB: 'Cristiano Ronaldo', minSteps: 2,
+    oneOptimalPath: ['Andrea Pirlo', 'Gianluigi Buffon', 'Cristiano Ronaldo'],
+    hint: 'One middle man does it. He was at Juventus with Andrea Pirlo and, in another season, at Juventus with Cristiano Ronaldo.',
   },
   {
     id: 'tp-4', playerA: 'Fernando Torres', playerB: 'Didier Drogba', minSteps: 1,
     oneOptimalPath: ['Fernando Torres', 'Didier Drogba'],
-    hint: 'Think London blues.',
+    hint: 'Direct link. They were at Chelsea together.',
   },
-
-  // 2-step paths
   {
-    id: 'tp-5', playerA: 'Steven Gerrard', playerB: 'Cristiano Ronaldo', minSteps: 2,
-    oneOptimalPath: ['Steven Gerrard', 'Fernando Torres', 'Cristiano Ronaldo'],
-    hint: 'A Spanish striker connects them via Liverpool and a Madrid club.',
+    id: 'tp-5', playerA: 'Steven Gerrard', playerB: 'Cristiano Ronaldo', minSteps: 3,
+    oneOptimalPath: ['Steven Gerrard', 'Luis Suárez', 'Gerard Piqué', 'Cristiano Ronaldo'],
+    hint: 'Two middle men at least. The first was at Liverpool with Steven Gerrard; the last was at Manchester United with Cristiano Ronaldo.',
   },
   {
     id: 'tp-6', playerA: 'Frank Lampard', playerB: 'Lionel Messi', minSteps: 2,
-    oneOptimalPath: ['Frank Lampard', 'Cesc Fàbregas', 'Lionel Messi'],
-    hint: 'A Spanish midfielder played in both London and Catalonia.',
+    oneOptimalPath: ['Frank Lampard', 'Samuel Eto\'o', 'Lionel Messi'],
+    hint: 'One middle man does it. He was at Chelsea with Frank Lampard and at Barcelona with Lionel Messi.',
   },
   {
     id: 'tp-7', playerA: 'Gareth Bale', playerB: 'Robert Lewandowski', minSteps: 2,
-    oneOptimalPath: ['Gareth Bale', 'Luka Modrić', 'Robert Lewandowski'],
-    hint: 'A Croatian maestro connects them through Madrid.',
+    oneOptimalPath: ['Gareth Bale', 'David Alaba', 'Robert Lewandowski'],
+    hint: 'One middle man does it. He was at Real Madrid with Gareth Bale and at Bayern Munich with Robert Lewandowski.',
   },
   {
     id: 'tp-8', playerA: 'Wayne Rooney', playerB: 'Kylian Mbappé', minSteps: 2,
     oneOptimalPath: ['Wayne Rooney', 'Angel Di María', 'Kylian Mbappé'],
-    hint: 'An Argentine winger links Manchester to Paris.',
+    hint: 'One middle man does it. He was at Manchester United with Wayne Rooney and at PSG with Kylian Mbappé.',
   },
   {
     id: 'tp-9', playerA: 'Samuel Eto\'o', playerB: 'Sergio Ramos', minSteps: 2,
-    oneOptimalPath: ['Samuel Eto\'o', 'Lionel Messi', 'Sergio Ramos'],
-    hint: 'The GOAT connects them: Barcelona then Paris.',
+    oneOptimalPath: ['Samuel Eto\'o', 'Dani Alves', 'Sergio Ramos'],
+    hint: 'One middle man does it. He was at Barcelona with Samuel Eto\'o and at Sevilla with Sergio Ramos.',
   },
   {
     id: 'tp-10', playerA: 'Didier Drogba', playerB: 'Neymar', minSteps: 2,
-    oneOptimalPath: ['Didier Drogba', 'Samuel Eto\'o', 'Neymar'],
-    hint: 'A Cameroonian legend bridges Chelsea to Barcelona.',
+    oneOptimalPath: ['Didier Drogba', 'Cesc Fàbregas', 'Neymar'],
+    hint: 'One middle man does it. He was at Chelsea with Didier Drogba and at Barcelona with Neymar.',
   },
   {
     id: 'tp-11', playerA: 'Luis Suárez', playerB: 'Eden Hazard', minSteps: 2,
-    oneOptimalPath: ['Luis Suárez', 'Antoine Griezmann', 'Eden Hazard'],
-    hint: 'An Atlético/Barça connection, via a French striker.',
+    oneOptimalPath: ['Luis Suárez', 'Diego Costa', 'Eden Hazard'],
+    hint: 'One middle man does it. He was at Atlético Madrid with Luis Suárez and at Chelsea with Eden Hazard.',
   },
   {
     id: 'tp-12', playerA: 'Arjen Robben', playerB: 'Paul Pogba', minSteps: 2,
     oneOptimalPath: ['Arjen Robben', 'Arturo Vidal', 'Paul Pogba'],
-    hint: 'A Chilean midfielder links Bayern to Juventus.',
+    hint: 'One middle man does it. He was at Bayern Munich with Arjen Robben and at Juventus with Paul Pogba.',
   },
   {
     id: 'tp-13', playerA: 'Son Heung-min', playerB: 'Karim Benzema', minSteps: 2,
     oneOptimalPath: ['Son Heung-min', 'Gareth Bale', 'Karim Benzema'],
-    hint: 'A Welsh speedster connects North London to the Bernabéu.',
+    hint: 'One middle man does it. He was at Tottenham with Son Heung-min and at Real Madrid with Karim Benzema.',
   },
   {
-    id: 'tp-14', playerA: 'Mohamed Salah', playerB: 'Zlatan Ibrahimović', minSteps: 2,
-    oneOptimalPath: ['Mohamed Salah', 'Roberto Firmino', 'Zlatan Ibrahimović'],
-    hint: 'Think about who else played at Liverpool and then crossed paths with the Swede.',
+    id: 'tp-14', playerA: 'Mohamed Salah', playerB: 'Zlatan Ibrahimović', minSteps: 3,
+    oneOptimalPath: ['Mohamed Salah', 'Alexander Isak', 'Sandro Tonali', 'Zlatan Ibrahimović'],
+    hint: 'Two middle men at least. The first was at Liverpool with Mohamed Salah; the last was at AC Milan with Zlatan Ibrahimović.',
   },
-
-  // 3-step paths
   {
     id: 'tp-15', playerA: 'Steven Gerrard', playerB: 'Erling Haaland', minSteps: 3,
-    oneOptimalPath: ['Steven Gerrard', 'Luis Suárez', 'Robert Lewandowski', 'Erling Haaland'],
-    hint: 'Liverpool → Barcelona → Bayern/Dortmund route.',
+    oneOptimalPath: ['Steven Gerrard', 'Fernando Torres', 'Kevin De Bruyne', 'Erling Haaland'],
+    hint: 'Two middle men at least. The first was at Liverpool with Steven Gerrard; the last was at Manchester City with Erling Haaland.',
   },
   {
-    id: 'tp-16', playerA: 'Frank Lampard', playerB: 'Vinícius Júnior', minSteps: 3,
-    oneOptimalPath: ['Frank Lampard', 'Eden Hazard', 'Karim Benzema', 'Vinícius Júnior'],
-    hint: 'Chelsea → Real Madrid → the current generation.',
+    id: 'tp-16', playerA: 'Frank Lampard', playerB: 'Vinícius Júnior', minSteps: 2,
+    oneOptimalPath: ['Frank Lampard', 'Eden Hazard', 'Vinícius Júnior'],
+    hint: 'One middle man does it. He was at Chelsea with Frank Lampard and at Real Madrid with Vinícius Júnior.',
   },
   {
-    id: 'tp-17', playerA: 'Gianluigi Buffon', playerB: 'Mohamed Salah', minSteps: 3,
-    oneOptimalPath: ['Gianluigi Buffon', 'Paul Pogba', 'Romelu Lukaku', 'Mohamed Salah'],
-    hint: 'Juventus → Manchester United → Inter/Chelsea → Liverpool route.',
+    id: 'tp-17', playerA: 'Gianluigi Buffon', playerB: 'Mohamed Salah', minSteps: 2,
+    oneOptimalPath: ['Gianluigi Buffon', 'Federico Chiesa', 'Mohamed Salah'],
+    hint: 'One middle man does it. He was at Juventus with Gianluigi Buffon and at Liverpool with Mohamed Salah.',
   },
   {
-    id: 'tp-18', playerA: 'Didier Drogba', playerB: 'Jude Bellingham', minSteps: 3,
-    oneOptimalPath: ['Didier Drogba', 'Eden Hazard', 'Toni Kroos', 'Jude Bellingham'],
-    hint: 'Chelsea → Real Madrid, through a German and Belgian.',
+    id: 'tp-18', playerA: 'Didier Drogba', playerB: 'Jude Bellingham', minSteps: 2,
+    oneOptimalPath: ['Didier Drogba', 'Thibaut Courtois', 'Jude Bellingham'],
+    hint: 'One middle man does it. He was at Chelsea with Didier Drogba and at Real Madrid with Jude Bellingham.',
   },
   {
-    id: 'tp-19', playerA: 'Yaya Touré', playerB: 'Lamine Yamal', minSteps: 3,
-    oneOptimalPath: ['Yaya Touré', 'Sergio Agüero', 'Lionel Messi', 'Lamine Yamal'],
-    hint: 'Manchester City → Barcelona via an Argentine legend.',
+    id: 'tp-19', playerA: 'Yaya Touré', playerB: 'Lamine Yamal', minSteps: 2,
+    oneOptimalPath: ['Yaya Touré', 'Gerard Piqué', 'Lamine Yamal'],
+    hint: 'One middle man does it. He was at Barcelona with Yaya Touré and, in another season, at Barcelona with Lamine Yamal.',
   },
   {
-    id: 'tp-20', playerA: 'Franck Ribéry', playerB: 'Harry Kane', minSteps: 3,
-    oneOptimalPath: ['Franck Ribéry', 'Thomas Müller', 'Robert Lewandowski', 'Harry Kane'],
-    hint: 'Bayern Munich connects them across generations.',
+    id: 'tp-20', playerA: 'Franck Ribéry', playerB: 'Harry Kane', minSteps: 2,
+    oneOptimalPath: ['Franck Ribéry', 'Alphonso Davies', 'Harry Kane'],
+    hint: 'One middle man does it. He was at Bayern Munich with Franck Ribéry and, in another season, at Bayern Munich with Harry Kane.',
   },
 ];
 

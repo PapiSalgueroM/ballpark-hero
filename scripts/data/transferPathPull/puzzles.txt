@@ -1,0 +1,902 @@
+tp-3|Andrea Pirlo|Cristiano Ronaldo|2
+tp-5|Steven Gerrard|Cristiano Ronaldo|2
+tp-6|Frank Lampard|Lionel Messi|2
+tp-7|Gareth Bale|Robert Lewandowski|2
+tp-8|Wayne Rooney|Kylian Mbappé|2
+tp-9|Samuel Eto'o|Sergio Ramos|2
+tp-10|Didier Drogba|Neymar|2
+tp-11|Luis Suárez|Eden Hazard|2
+tp-12|Arjen Robben|Paul Pogba|2
+tp-13|Son Heung-min|Karim Benzema|2
+tp-14|Mohamed Salah|Zlatan Ibrahimović|2
+tp-15|Steven Gerrard|Erling Haaland|3
+tp-16|Frank Lampard|Vinícius Júnior|2
+tp-17|Gianluigi Buffon|Mohamed Salah|2
+tp-18|Didier Drogba|Jude Bellingham|2
+tp-19|Yaya Touré|Lamine Yamal|2
+tp-20|Franck Ribéry|Harry Kane|2
+tpa-20|Angel Di María|Cesc Fàbregas|2
+tpa-21|Gianluigi Buffon|Karim Benzema|2
+tpa-22|Dusan Vlahović|Thomas Müller|2
+tpa-23|Jude Bellingham|Wayne Rooney|3
+tpa-25|Arjen Robben|Gianluigi Donnarumma|2
+tpa-26|Achraf Hakimi|Kevin De Bruyne|2
+tpa-27|Declan Rice|N'Golo Kanté|2
+tpa-28|David Alaba|Son Heung-min|2
+tpa-29|Alisson|Rasmus Højlund|4
+tpa-30|Karim Benzema|Robin van Persie|2
+tpa-31|Kyle Walker|Thibaut Courtois|2
+tpa-32|Bukayo Saka|Pepe|2
+tpa-33|Joshua Kimmich|Viktor Gyökeres|3
+tpa-34|Casemiro|Virgil van Dijk|3
+tpa-36|Alexander Isak|Edinson Cavani|2
+tpa-37|Jamal Musiala|Roberto Firmino|2
+tpa-38|Erling Haaland|Vinícius Tobias|2
+tpa-39|Christian Eriksen|Vinícius Tobias|3
+tpa-40|Pau Cubarsí|Vinícius Júnior|3
+tpa-41|Kylian Mbappé|Robin van Persie|2
+tpa-43|Diogo Jota|Jadon Sancho|3
+tpa-44|Cesc Fàbregas|Dani Carvajal|2
+tpa-45|Estêvão|Federico Chiesa|3
+tpa-47|Jadon Sancho|Victor Osimhen|3
+tpa-48|Nabil Fekir|Victor Osimhen|4
+tpa-49|Ciro Immobile|Dusan Vlahović|3
+tpa-50|Marc-André ter Stegen|Rodrygo|3
+tpa-52|Ciro Immobile|Dries Mertens|3
+tpa-53|Christian Eriksen|Sadio Mané|3
+tpa-54|Gavi|Rodrygo|3
+tpa-55|Lionel Messi|Marcus Rashford|2
+tpa-56|Dani Carvajal|Giorgio Chiellini|2
+tpa-57|Jude Bellingham|Paul Pogba|2
+tpa-58|Gavi|Gonzalo Higuaín|3
+tpa-59|Enzo Fernández|Mikel Oyarzabal|3
+tpa-60|Federico Chiesa|Warren Zaïre-Emery|3
+tpa-62|Federico Valverde|Jan Oblak|3
+tpa-64|Memphis Depay|Thibaut Courtois|3
+tpa-65|Bruno Fernandes|Endrick|3
+tpa-66|Arjen Robben|Neymar|2
+tpa-67|Eden Hazard|João Félix|2
+tpa-68|Cristiano Ronaldo|Rúben Dias|2
+tpa-69|Alejandro Garnacho|Phil Foden|3
+tpa-70|Fernando Torres|Gonzalo Higuaín|2
+tpa-71|Bradley Barcola|Ederson|3
+tpa-72|Arda Güler|Lionel Messi|2
+tpa-73|Andrew Robertson|Gianluigi Donnarumma|3
+tpa-74|Gareth Bale|Sergio Busquets|3
+tpa-75|Bruno Fernandes|Mohamed Salah|3
+tpa-76|André Onana|Andrés Iniesta|3
+tpa-77|Franck Ribéry|Mikel Oyarzabal|3
+tpa-78|Erling Haaland|Thiago Silva|3
+tpa-79|Bukayo Saka|Yassine Bounou|3
+tpa-80|Antoine Griezmann|Victor Osimhen|3
+tpa-81|Lorenzo Insigne|Ousmane Dembélé|3
+tpa-82|Cristian Pulisic|Giorgio Chiellini|3
+tpa-83|Jonathan David|Moussa Diaby|3
+tpa-84|Manuel Neuer|Rodri|2
+tpa-86|Dani Carvajal|Phil Foden|3
+tpa-87|Gianluigi Donnarumma|Yaya Touré|2
+tpa-88|David Silva|Hugo Lloris|2
+tpa-89|Marc-André ter Stegen|Son Heung-min|3
+tpa-90|David Silva|Gavi|2
+tpa-91|Leroy Sané|Martin Ødegaard|2
+tpa-92|Dani Carvajal|Thiago Silva|2
+tpa-93|Marcus Rashford|Pepe|2
+tpa-94|Gianluigi Donnarumma|Luis Suárez|2
+tpa-95|Angel Di María|Yaya Touré|2
+tpa-96|Luis Suárez|Robin van Persie|3
+tpa-97|Alexis Sánchez|Rodri|3
+tpa-98|Viktor Gyökeres|Vinícius Tobias|3
+tpa-99|Alisson|Xavi Simons|2
+tpa-100|Arda Güler|Marquinhos|2
+tpa-101|Hugo Lloris|Thiago Silva|3
+tpa-102|Hugo Lloris|Raphaël Varane|2
+tpa-104|Bernardo Silva|Kalidou Koulibaly|2
+tpa-105|Florian Wirtz|Khvicha Kvaratskhelia|3
+tpa-106|Jamal Musiala|Luis Suárez|3
+tpa-107|Leroy Sané|Paul Pogba|3
+tpa-108|Andrés Iniesta|Jonathan David|4
+tpa-109|Kobbie Mainoo|Martin Ødegaard|2
+tpa-110|Ederson|Mohamed Salah|3
+tpa-111|Antoine Griezmann|Marcelo|3
+tpa-112|Alisson Becker|Leroy Sané|2
+tpa-113|Arjen Robben|Sadio Mané|2
+tpa-114|Jonathan David|Joshua Kimmich|3
+tpa-115|Erling Haaland|Raphaël Varane|2
+tpa-116|Harry Kane|Yaya Touré|2
+tpa-117|Kevin De Bruyne|Pedri|2
+tpa-118|Bukayo Saka|Dani Carvajal|2
+tpa-119|Bradley Barcola|Luka Modrić|2
+tpa-120|Florian Wirtz|Rafael Leão|3
+tpa-121|Frank Lampard|Sandro Tonali|3
+tpa-122|Gareth Bale|Pau Cubarsí|3
+tpa-123|Memphis Depay|Neymar|2
+tpa-124|Franck Ribéry|Radamel Falcao|2
+tpa-125|Thomas Müller|Viktor Gyökeres|3
+tpa-126|Franck Ribéry|Mesut Özil|2
+tpa-127|Neymar|Vinícius Júnior|2
+tpa-128|Luis Suárez|Victor Osimhen|3
+tpa-129|Jan Oblak|Wayne Rooney|2
+tpa-131|Ivan Rakitić|Moisés Caicedo|3
+tpa-132|Bukayo Saka|Romelu Lukaku|2
+tpa-133|Bruno Fernandes|Xavi Simons|3
+tpa-134|Edinson Cavani|Trent Alexander-Arnold|2
+tpa-136|Achraf Hakimi|Gerard Piqué|2
+tpa-137|Pau Cubarsí|Virgil van Dijk|3
+tpa-138|Arturo Vidal|Jadon Sancho|2
+tpa-139|Neymar|Toni Kroos|2
+tpa-140|Edinson Cavani|Mikel Oyarzabal|3
+tpa-141|Bernardo Silva|Nabil Fekir|3
+tpa-142|Martin Ødegaard|Radamel Falcao|2
+tpa-143|Diogo Jota|Victor Osimhen|3
+tpa-145|Gonzalo Higuaín|Jan Oblak|3
+tpa-146|Arda Güler|Xavi Hernández|3
+tpa-147|David Alaba|Hugo Lloris|2
+tpa-148|Andrew Robertson|Lionel Messi|3
+tpa-149|Kalidou Koulibaly|Xavi Simons|4
+tpa-150|Andrea Pirlo|Viktor Gyökeres|3
+tpa-151|Steven Gerrard|Xavi Simons|4
+tpa-152|Alejandro Garnacho|Viktor Gyökeres|3
+tpa-153|Marcus Rashford|Thiago Silva|2
+tpa-154|Jan Oblak|Sandro Tonali|3
+tpa-155|Bernardo Silva|Paulo Dybala|2
+tpa-156|Lamine Yamal|Toni Kroos|3
+tpa-157|Edinson Cavani|Erling Haaland|2
+tpa-158|André Onana|Khvicha Kvaratskhelia|3
+tpa-159|Sergio Busquets|Victor Osimhen|3
+tpa-160|Achraf Hakimi|Alejandro Garnacho|2
+tpa-161|Diego Costa|Xavi Hernández|2
+tpa-162|André Onana|Florian Wirtz|4
+tpa-163|Rasmus Højlund|Vinícius Júnior|2
+tpa-164|Achraf Hakimi|Alisson|3
+tpa-165|Andrew Robertson|Dries Mertens|4
+tpa-166|Bradley Barcola|Bruno Fernandes|3
+tpa-167|Erling Haaland|Leroy Sané|2
+tpa-169|Dani Alves|Dani Carvajal|2
+tpa-170|Paul Pogba|Pedri|2
+tpa-171|Diogo Jota|Lionel Messi|3
+tpa-172|Fernando Torres|Khvicha Kvaratskhelia|3
+tpa-173|Dani Alves|Romelu Lukaku|2
+tpa-174|Rodri|Romelu Lukaku|2
+tpa-175|David Alaba|Neymar|3
+tpa-176|Vinícius Tobias|Wayne Rooney|3
+tpa-177|Jonathan David|Rodri|4
+tpa-178|João Cancelo|Steven Gerrard|2
+tpa-179|Didier Drogba|Ederson|3
+tpa-180|Antoine Griezmann|Diogo Jota|3
+tpa-181|Endrick|Marquinhos|2
+tpa-182|David Silva|Robin van Persie|2
+tpa-183|Andrea Pirlo|Ederson|3
+tpa-184|Didier Drogba|Jordi Alba|2
+tpa-185|Alejandro Garnacho|Kevin De Bruyne|3
+tpa-186|Arturo Vidal|Xavi Simons|3
+tpa-187|Jonathan David|Karim Benzema|3
+tpa-188|Bradley Barcola|Leroy Sané|3
+tpa-189|Federico Valverde|Ivan Rakitić|3
+tpa-190|Gonzalo Higuaín|Mikel Oyarzabal|3
+tpa-191|David Alaba|Federico Chiesa|2
+tpa-192|Marc-André ter Stegen|Thomas Müller|2
+tpa-193|Alphonso Davies|Dani Carvajal|2
+tpa-194|Federico Valverde|Leroy Sané|2
+tpa-195|Diogo Jota|Khvicha Kvaratskhelia|3
+tpa-197|Eden Hazard|Steven Gerrard|2
+tpa-198|Mesut Özil|Xavi Simons|4
+tpa-199|Antoine Griezmann|Moisés Caicedo|2
+tpa-200|Bruno Fernandes|Kalidou Koulibaly|3
+tpa-201|Gianluigi Buffon|Roberto Firmino|3
+tpa-202|Jamal Musiala|Khvicha Kvaratskhelia|3
+tpa-203|Arda Güler|Gerard Piqué|3
+tpa-204|Dani Alves|Kobbie Mainoo|3
+tpa-205|Erling Haaland|João Félix|2
+tpa-206|Lorenzo Insigne|Virgil van Dijk|4
+tpa-207|Alisson|Sandro Tonali|3
+tpa-208|Thomas Müller|Warren Zaïre-Emery|3
+tpa-209|Jordi Alba|Moisés Caicedo|3
+tpa-212|Joshua Kimmich|Kalidou Koulibaly|3
+tpa-213|Estêvão|Trent Alexander-Arnold|3
+tpa-214|Lamine Yamal|Rodrygo|3
+tpa-215|Arturo Vidal|Federico Valverde|2
+tpa-216|Kobbie Mainoo|Victor Osimhen|3
+tpa-218|Lamine Yamal|Sadio Mané|2
+tpa-220|Ciro Immobile|Xavi Hernández|3
+tpa-221|Sergio Agüero|Vinícius Júnior|3
+tpa-222|Antoine Griezmann|Karim Benzema|3
+tpa-223|Andrés Iniesta|Rodri|3
+tpa-224|Ciro Immobile|Robin van Persie|4
+tpa-225|Franck Ribéry|Pierre-Emerick Aubameyang|2
+tpa-226|Declan Rice|Harry Kane|3
+tpa-227|Didier Drogba|Lionel Messi|2
+tpa-228|Bernardo Silva|Robert Lewandowski|2
+tpa-229|Bernardo Silva|Wayne Rooney|2
+tpa-230|Franck Ribéry|Rasmus Højlund|3
+tpa-231|Giorgio Chiellini|Viktor Gyökeres|3
+tpa-232|Pedri|Romelu Lukaku|2
+tpa-233|Neymar|Ousmane Dembélé|2
+tpa-234|Mesut Özil|Zlatan Ibrahimović|2
+tpa-235|Roberto Firmino|Toni Kroos|3
+tpa-236|Alexander Isak|Dani Alves|3
+tpa-237|Luis Suárez|Vinícius Júnior|3
+tpa-238|Hakim Ziyech|Leroy Sané|2
+tpa-239|Alejandro Garnacho|Endrick|3
+tpa-240|Achraf Hakimi|Rodrygo|2
+tpa-241|Diogo Jota|Harry Kane|2
+tpa-242|Andrea Pirlo|Khvicha Kvaratskhelia|3
+tpa-243|Nabil Fekir|Steven Gerrard|4
+tpa-244|Kobbie Mainoo|Vinícius Tobias|3
+tpa-245|Nabil Fekir|Raphaël Varane|3
+tpa-246|Cristiano Ronaldo|Ivan Rakitić|2
+tpa-247|Diogo Jota|Robin van Persie|3
+tpa-248|Kevin De Bruyne|Vinícius Júnior|2
+tpa-249|Harry Kane|Thiago Silva|3
+tpa-250|Ederson|Gerard Piqué|2
+tpa-251|Joshua Kimmich|Roberto Firmino|2
+tpa-252|Dries Mertens|Roberto Firmino|4
+tpa-253|Didier Drogba|Robert Lewandowski|2
+tpa-254|Ciro Immobile|João Félix|2
+tpa-255|Andrew Robertson|Khvicha Kvaratskhelia|3
+tpa-256|Arjen Robben|Leroy Sané|2
+tpa-257|Alisson|Cristian Pulisic|3
+tpa-258|Ciro Immobile|Franck Ribéry|2
+tpa-259|Alphonso Davies|Viktor Gyökeres|3
+tpa-260|Paulo Dybala|Raphaël Varane|2
+tpa-261|Gianluigi Buffon|Robin van Persie|2
+tpa-262|Achraf Hakimi|Paulo Dybala|2
+tpa-263|Andrés Iniesta|Fernando Torres|2
+tpa-264|Thiago Silva|Victor Osimhen|2
+tpa-265|Enzo Fernández|Karim Benzema|2
+tpa-266|Gianluigi Buffon|Thibaut Courtois|2
+tpa-267|Arda Güler|Jonathan David|4
+tpa-268|Florian Wirtz|Jonathan David|3
+tpa-269|Didier Drogba|Yaya Touré|2
+tpa-270|Dani Carvajal|Franck Ribéry|2
+tpa-271|Phil Foden|Warren Zaïre-Emery|3
+tpa-272|Gerard Piqué|Victor Osimhen|3
+tpa-273|Alexander Isak|Rafael Leão|2
+tpa-274|Arjen Robben|Hugo Lloris|3
+tpa-275|Darwin Núñez|Mikel Oyarzabal|2
+tpa-276|Bukayo Saka|Hugo Lloris|3
+tpa-277|Alexander Isak|Raphaël Varane|2
+tpa-279|Dries Mertens|Steven Gerrard|3
+tpa-280|Jonathan David|Steven Gerrard|4
+tpa-281|Gerard Piqué|Thibaut Courtois|2
+tpa-282|Sergio Ramos|Xavi Simons|3
+tpa-283|Declan Rice|Didier Drogba|3
+tpa-284|Moisés Caicedo|Robert Lewandowski|2
+tpa-285|Alisson|Thibaut Courtois|2
+tpa-286|Darwin Núñez|Moussa Diaby|2
+tpa-287|Ciro Immobile|Giorgio Chiellini|3
+tpa-288|Andrea Pirlo|Virgil van Dijk|3
+tpa-289|Declan Rice|Mikel Oyarzabal|2
+tpa-290|Manuel Neuer|Pepe|2
+tpa-291|Jamal Musiala|Thiago Silva|3
+tpa-292|Dani Carvajal|Kalidou Koulibaly|3
+tpa-293|Antoine Griezmann|Kalidou Koulibaly|2
+tpa-294|Alphonso Davies|Robin van Persie|3
+tpa-295|Andrea Pirlo|Angel Di María|2
+tpa-296|Alejandro Garnacho|Alisson|4
+tpa-297|Cole Palmer|Gonzalo Higuaín|3
+tpa-298|David Alaba|Victor Osimhen|2
+tpa-299|Casemiro|Thiago Silva|2
+tpa-301|Ciro Immobile|Lorenzo Insigne|3
+tpa-303|Alejandro Garnacho|Thomas Müller|3
+tpa-304|Bukayo Saka|Marcus Rashford|2
+tpa-305|Martin Ødegaard|Nabil Fekir|3
+tpa-306|Pepe|Zlatan Ibrahimović|2
+tpa-307|Bradley Barcola|David Silva|3
+tpa-308|David Silva|Warren Zaïre-Emery|3
+tpa-309|Riyad Mahrez|Robert Lewandowski|2
+tpa-311|Martin Ødegaard|Warren Zaïre-Emery|2
+tpa-312|Gareth Bale|Jordi Alba|3
+tpa-313|Phil Foden|Robert Lewandowski|2
+tpa-314|Marquinhos|Sadio Mané|3
+tpa-315|Endrick|Jonathan David|4
+tpa-316|Memphis Depay|Radamel Falcao|2
+tpa-317|Alexis Sánchez|Erling Haaland|2
+tpa-318|Jan Oblak|Joshua Kimmich|3
+tpa-319|Dusan Vlahović|Viktor Gyökeres|3
+tpa-320|João Félix|Phil Foden|2
+tpa-321|Fernando Torres|Robin van Persie|2
+tpa-322|Nabil Fekir|Roberto Firmino|4
+tpa-323|Alejandro Garnacho|Radamel Falcao|2
+tpa-324|Khvicha Kvaratskhelia|Vinícius Júnior|3
+tpa-325|Viktor Gyökeres|Yassine Bounou|4
+tpa-326|Federico Valverde|Giorgio Chiellini|2
+tpa-327|Diego Costa|Roberto Firmino|3
+tpa-328|Federico Valverde|Franck Ribéry|2
+tpa-329|Antoine Griezmann|Pepe|3
+tpa-330|Alexis Sánchez|Gianluigi Buffon|2
+tpa-331|Mauro Icardi|Mikel Oyarzabal|3
+tpa-332|Arda Güler|Florian Wirtz|3
+tpa-333|Cole Palmer|Pepe|3
+tpa-334|Alexander Isak|Harry Kane|3
+tpa-335|Victor Osimhen|Viktor Gyökeres|4
+tpa-336|Cristian Pulisic|Marcelo|2
+tpa-337|Antoine Griezmann|Mikel Oyarzabal|3
+tpa-338|Virgil van Dijk|Wayne Rooney|3
+tpa-339|N'Golo Kanté|Wayne Rooney|3
+tpa-340|Khvicha Kvaratskhelia|Luka Modrić|2
+tpa-341|Arturo Vidal|Steven Gerrard|2
+tpa-342|Alisson|Ivan Rakitić|3
+tpa-343|Alphonso Davies|Jonathan David|3
+tpa-344|Gonzalo Higuaín|Wayne Rooney|2
+tpa-345|Erling Haaland|Nabil Fekir|4
+tpa-346|Bernardo Silva|Warren Zaïre-Emery|2
+tpa-347|Jordi Alba|Vinícius Júnior|3
+tpa-348|Andrés Iniesta|Kyle Walker|3
+tpa-349|Martin Ødegaard|Phil Foden|2
+tpa-351|Angel Di María|Son Heung-min|2
+tpa-352|Mesut Özil|Sadio Mané|2
+tpa-354|Ivan Rakitić|Son Heung-min|3
+tpa-355|Memphis Depay|Sergio Ramos|3
+tpa-356|Frank Lampard|Joshua Kimmich|2
+tpa-357|Jonathan David|Marcelo|3
+tpa-358|Frank Lampard|Marquinhos|3
+tpa-359|Andrés Iniesta|Romelu Lukaku|2
+tpa-360|Enzo Fernández|Son Heung-min|3
+tpa-361|Dries Mertens|Sandro Tonali|3
+tpa-362|Paulo Dybala|Sergio Ramos|2
+tpa-363|Ciro Immobile|Victor Osimhen|3
+tpa-364|Rafael Leão|Robin van Persie|3
+tpa-365|Arturo Vidal|Jude Bellingham|2
+tpa-366|Bernardo Silva|Gonzalo Higuaín|3
+tpa-367|Diogo Jota|Paul Pogba|2
+tpa-368|Gareth Bale|Marc-André ter Stegen|3
+tpa-369|Diogo Jota|Moisés Caicedo|2
+tpa-370|Arjen Robben|João Félix|2
+tpa-371|Bukayo Saka|Giorgio Chiellini|3
+tpa-372|Alejandro Garnacho|Luis Suárez|3
+tpa-373|Edinson Cavani|Sergio Agüero|2
+tpa-374|Florian Wirtz|Wayne Rooney|3
+tpa-375|Eden Hazard|Rodri|2
+tpa-376|Andrea Pirlo|Eden Hazard|3
+tpa-379|Diogo Jota|Gianluigi Donnarumma|3
+tpa-380|Ousmane Dembélé|Thibaut Courtois|2
+tpa-381|Gianluigi Donnarumma|Kobbie Mainoo|3
+tpa-382|Declan Rice|Hakim Ziyech|2
+tpa-383|Roberto Firmino|Sandro Tonali|3
+tpa-384|André Onana|Franck Ribéry|3
+tpa-385|Alphonso Davies|Marquinhos|3
+tpa-386|Andrea Pirlo|Cristian Pulisic|2
+tpa-387|Nabil Fekir|Sandro Tonali|3
+tpa-388|Federico Chiesa|Marquinhos|2
+tpa-389|Jude Bellingham|Pedri|3
+tpa-390|Diego Costa|Nabil Fekir|3
+tpa-391|Gareth Bale|Ousmane Dembélé|2
+tpa-392|Alisson Becker|Sergio Ramos|3
+tpa-393|Achraf Hakimi|Florian Wirtz|3
+tpa-395|Rasmus Højlund|Victor Osimhen|3
+tpa-396|Cristiano Ronaldo|Didier Drogba|3
+tpa-397|Alisson|Jordi Alba|3
+tpa-398|Mats Hummels|Rafael Leão|2
+tpa-399|Franck Ribéry|Ousmane Dembélé|2
+tpa-400|Estêvão|Marquinhos|3
+tpa-401|Achraf Hakimi|Rodri|2
+tpa-402|Radamel Falcao|Sergio Ramos|2
+tpa-403|Erling Haaland|Romelu Lukaku|2
+tpa-404|James Rodríguez|Thiago Silva|2
+tpa-405|Phil Foden|Steven Gerrard|2
+tpa-406|Raheem Sterling|Rasmus Højlund|3
+tpa-407|Dusan Vlahović|Eden Hazard|3
+tpa-408|Alexander Isak|Wayne Rooney|3
+tpa-409|Arjen Robben|Lorenzo Insigne|2
+tpa-410|André Onana|Arjen Robben|3
+tpa-411|Andrea Pirlo|Gareth Bale|2
+tpa-412|Florian Wirtz|Steven Gerrard|3
+tpa-413|Paul Pogba|Sergio Ramos|2
+tpa-414|Andrés Iniesta|Arjen Robben|3
+tpa-416|Dries Mertens|Ederson|3
+tpa-417|Arturo Vidal|Diogo Jota|3
+tpa-418|Ivan Rakitić|Paul Pogba|2
+tpa-419|Pierre-Emerick Aubameyang|Thomas Müller|2
+tpa-420|N'Golo Kanté|Xavi Simons|4
+tpa-421|Alphonso Davies|Bradley Barcola|3
+tpa-422|Ivan Rakitić|João Cancelo|2
+tpa-423|Dries Mertens|Vinícius Tobias|3
+tpa-424|Arda Güler|Paulo Dybala|3
+tpa-425|Neymar|Vinícius Tobias|3
+tpa-426|Marcelo|Samuel Eto'o|2
+tpa-427|Jude Bellingham|Xavi Hernández|3
+tpa-428|Alexis Sánchez|Alisson Becker|3
+tpa-429|Alisson Becker|Steven Gerrard|3
+tpa-430|Marquinhos|Sergio Busquets|2
+tpa-431|Diogo Jota|Warren Zaïre-Emery|3
+tpa-432|Khvicha Kvaratskhelia|Lamine Yamal|2
+tpa-433|Arda Güler|Hugo Lloris|3
+tpa-434|Dusan Vlahović|Moisés Caicedo|3
+tpa-435|Luis Suárez|Luka Modrić|3
+tpa-436|Lamine Yamal|Lorenzo Insigne|3
+tpa-437|Gianluigi Donnarumma|Mohamed Salah|3
+tpa-438|Rodri|Samuel Eto'o|3
+tpa-439|Alejandro Garnacho|Marc-André ter Stegen|3
+tpa-440|Diego Costa|Raphaël Varane|2
+tpa-441|Federico Valverde|Jadon Sancho|2
+tpa-442|Pierre-Emerick Aubameyang|Warren Zaïre-Emery|2
+tpa-443|Jan Oblak|Paulo Dybala|3
+tpa-444|João Cancelo|Yaya Touré|2
+tpa-445|Ivan Rakitić|Kalidou Koulibaly|2
+tpa-448|Robert Lewandowski|Thibaut Courtois|2
+tpa-449|Alexis Sánchez|Florian Wirtz|3
+tpa-450|Mikel Oyarzabal|Moussa Diaby|3
+tpa-451|Christian Eriksen|Raheem Sterling|2
+tpa-452|Gonzalo Higuaín|Raheem Sterling|2
+tpa-453|Mauro Icardi|Rasmus Højlund|3
+tpa-454|Achraf Hakimi|Luis Suárez|2
+tpa-455|Alejandro Garnacho|Martin Ødegaard|2
+tpa-456|Riyad Mahrez|Vinícius Júnior|3
+tpa-457|Florian Wirtz|Karim Benzema|2
+tpa-458|Kalidou Koulibaly|Kevin De Bruyne|2
+tpa-459|Memphis Depay|Steven Gerrard|3
+tpa-460|Cristiano Ronaldo|Rodrygo|2
+tpa-461|Kevin De Bruyne|Marcelo|2
+tpa-462|Hugo Lloris|Jordi Alba|3
+tpa-463|Enzo Fernández|Lamine Yamal|2
+tpa-464|Diogo Jota|Neymar|3
+tpa-465|Gavi|Mats Hummels|2
+tpa-466|Andrew Robertson|Dani Alves|3
+tpa-467|Bruno Fernandes|Virgil van Dijk|3
+tpa-468|Pierre-Emerick Aubameyang|Rúben Dias|2
+tpa-469|Lorenzo Insigne|Manuel Neuer|3
+tpa-470|Rafael Leão|Virgil van Dijk|3
+tpa-471|Angel Di María|Declan Rice|3
+tpa-472|Cristiano Ronaldo|Marc-André ter Stegen|2
+tpa-473|André Onana|Joshua Kimmich|3
+tpa-474|Federico Chiesa|Phil Foden|3
+tpa-475|Dani Carvajal|Ederson|2
+tpa-476|Alphonso Davies|Nabil Fekir|4
+tpa-477|Eden Hazard|Moussa Diaby|2
+tpa-478|Edinson Cavani|Jordi Alba|2
+tpa-479|Cristian Pulisic|Vinícius Tobias|3
+tpa-480|Jadon Sancho|Marquinhos|2
+tpa-481|Pierre-Emerick Aubameyang|Steven Gerrard|2
+tpa-482|Cristiano Ronaldo|Thomas Müller|2
+tpa-483|Hakim Ziyech|Yassine Bounou|2
+tpa-484|Gianluigi Donnarumma|Kyle Walker|2
+tpa-485|Alexis Sánchez|Didier Drogba|2
+tpa-486|Frank Lampard|Giorgio Chiellini|3
+tpa-487|Jan Oblak|Pedri|2
+tpa-488|Dusan Vlahović|Yaya Touré|3
+tpa-489|Arda Güler|Kobbie Mainoo|3
+tpa-490|Bradley Barcola|Romelu Lukaku|2
+tpa-491|Arturo Vidal|Moisés Caicedo|3
+tpa-492|Paul Pogba|Thomas Müller|2
+tpa-494|Ousmane Dembélé|Roberto Firmino|3
+tpa-495|Gonzalo Higuaín|Moussa Diaby|2
+tpa-496|Bukayo Saka|Thiago Silva|2
+tpa-497|Kyle Walker|Robert Lewandowski|2
+tpa-498|Bradley Barcola|Gianluigi Buffon|2
+tpa-499|Gianluigi Donnarumma|Toni Kroos|2
+tpa-500|Erling Haaland|Thomas Müller|2
+tpa-501|Pau Cubarsí|Victor Osimhen|3
+tpa-502|Andrea Pirlo|Mikel Oyarzabal|3
+tpa-504|Federico Valverde|Sergio Busquets|3
+tpa-505|Declan Rice|Frank Lampard|3
+tpa-506|Mikel Oyarzabal|Rafael Leão|3
+tpa-507|Mauro Icardi|Raheem Sterling|2
+tpa-508|Alejandro Garnacho|Dani Alves|3
+tpa-509|Arda Güler|Yassine Bounou|3
+tpa-510|Cristian Pulisic|Didier Drogba|2
+tpa-511|Jamal Musiala|Jan Oblak|3
+tpa-512|João Félix|Mats Hummels|2
+tpa-513|Achraf Hakimi|Xavi Simons|3
+tpa-514|Diego Costa|Sergio Busquets|2
+tpa-515|Arda Güler|Yaya Touré|3
+tpa-516|Marcelo|Xavi Hernández|3
+tpa-517|Alphonso Davies|Enzo Fernández|3
+tpa-519|Ederson|Rafael Leão|2
+tpa-520|Kylian Mbappé|Mikel Oyarzabal|3
+tpa-521|David Alaba|Mohamed Salah|2
+tpa-522|Jan Oblak|Manuel Neuer|3
+tpa-523|André Onana|Karim Benzema|2
+tpa-524|Cristian Pulisic|Estêvão|2
+tpa-525|Marquinhos|Toni Kroos|2
+tpa-526|Robin van Persie|Thiago Silva|2
+tpa-527|Andrew Robertson|Neymar|3
+tpa-528|Bukayo Saka|Nabil Fekir|3
+tpa-529|Andrew Robertson|Toni Kroos|3
+tpa-530|Dani Carvajal|Jamal Musiala|2
+tpa-531|Gerard Piqué|João Félix|2
+tpa-532|Kalidou Koulibaly|Kyle Walker|2
+tpa-533|Achraf Hakimi|Rúben Dias|2
+tpa-534|Joshua Kimmich|Luka Modrić|2
+tpa-535|Erling Haaland|Samuel Eto'o|3
+tpa-536|Hugo Lloris|Jude Bellingham|3
+tpa-537|João Cancelo|Marcus Rashford|2
+tpa-538|Declan Rice|Thomas Müller|3
+tpa-539|Diego Costa|Robin van Persie|2
+tpa-540|Fernando Torres|Thomas Müller|2
+tpa-541|Alisson|Hakim Ziyech|3
+tpa-542|Alexis Sánchez|Darwin Núñez|3
+tpa-543|Casemiro|Cristian Pulisic|2
+tpa-544|Dries Mertens|Pau Cubarsí|3
+tpa-545|Bernardo Silva|Sergio Busquets|2
+tpa-546|Riyad Mahrez|Vinícius Tobias|3
+tpa-547|Alisson|Enzo Fernández|3
+tpa-548|Bernardo Silva|Harry Kane|2
+tpa-549|Pepe|Phil Foden|3
+tpa-550|Kylian Mbappé|Viktor Gyökeres|3
+tpa-551|Keylor Navas|N'Golo Kanté|2
+tpa-552|Kobbie Mainoo|Sergio Busquets|3
+tpa-553|Andrew Robertson|Hugo Lloris|3
+tpa-554|Giorgio Chiellini|Memphis Depay|3
+tpa-555|Estêvão|Keylor Navas|3
+tpa-556|Antoine Griezmann|Xavi Hernández|2
+tpa-557|Pepe|Roberto Firmino|2
+tpa-559|Paul Pogba|Pierre-Emerick Aubameyang|3
+tpa-560|Arda Güler|Kalidou Koulibaly|3
+tpa-561|Gianluigi Donnarumma|Thomas Müller|3
+tpa-562|Andrea Pirlo|Arda Güler|3
+tpa-563|Declan Rice|Dries Mertens|3
+tpa-565|Gianluigi Buffon|Jan Oblak|3
+tpa-566|Marcelo|Pau Cubarsí|3
+tpa-567|Gianluigi Donnarumma|Kevin De Bruyne|3
+tpa-568|Pedri|Vinícius Júnior|3
+tpa-569|Lamine Yamal|Radamel Falcao|3
+tpa-570|Joshua Kimmich|Rodri|2
+tpa-571|Hugo Lloris|N'Golo Kanté|2
+tpa-572|Victor Osimhen|Virgil van Dijk|3
+tpa-573|André Onana|Yassine Bounou|3
+tpa-574|James Rodríguez|Robin van Persie|2
+tpa-575|Andrés Iniesta|Frank Lampard|2
+tpa-576|Jude Bellingham|Kobbie Mainoo|3
+tpa-577|Christian Eriksen|Cristian Pulisic|2
+tpa-578|Keylor Navas|Sergio Agüero|3
+tpa-579|Raphaël Varane|Thiago Silva|2
+tpa-580|Moisés Caicedo|Paulo Dybala|3
+tpa-581|Harry Kane|Mesut Özil|2
+tpa-582|Lorenzo Insigne|Mohamed Salah|4
+tpa-583|Eden Hazard|Rasmus Højlund|2
+tpa-584|Federico Chiesa|Marcelo|2
+tpa-585|Arda Güler|Bukayo Saka|3
+tpa-586|Ciro Immobile|Ousmane Dembélé|2
+tpa-587|Manuel Neuer|Trent Alexander-Arnold|2
+tpa-588|Kobbie Mainoo|Steven Gerrard|3
+tpa-589|Cristiano Ronaldo|Enzo Fernández|2
+tpa-590|Federico Valverde|Kobbie Mainoo|2
+tpa-591|Declan Rice|Victor Osimhen|3
+tpa-592|Dusan Vlahović|Zlatan Ibrahimović|2
+tpa-593|Hugo Lloris|Mats Hummels|3
+tpa-594|Sandro Tonali|Xavi Hernández|2
+tpa-595|Franck Ribéry|Keylor Navas|2
+tpa-596|Gerard Piqué|Paulo Dybala|2
+tpa-597|Sadio Mané|Warren Zaïre-Emery|3
+tpa-599|Andrea Pirlo|Raheem Sterling|2
+tpa-600|Arda Güler|Pau Cubarsí|3
+tpa-601|Estêvão|Rasmus Højlund|3
+tpa-602|Cristian Pulisic|Gavi|2
+tpa-603|Erling Haaland|Xavi Hernández|3
+tpa-604|Gavi|Roberto Firmino|3
+tpa-606|Antoine Griezmann|Jude Bellingham|3
+tpa-607|Estêvão|Martin Ødegaard|3
+tpa-608|Dusan Vlahović|Raphaël Varane|2
+tpa-609|Bradley Barcola|Toni Kroos|2
+tpa-610|Bernardo Silva|Endrick|2
+tpa-611|Pedri|Yaya Touré|2
+tpa-612|Bruno Fernandes|Lamine Yamal|2
+tpa-613|Keylor Navas|Xavi Simons|3
+tpa-615|André Onana|Diego Costa|3
+tpa-616|Frank Lampard|Rodri|2
+tpa-617|Dani Carvajal|Dries Mertens|3
+tpa-618|Edinson Cavani|Virgil van Dijk|3
+tpa-619|Alisson|Federico Valverde|2
+tpa-620|Fernando Torres|Mats Hummels|2
+tpa-621|Bradley Barcola|Pierre-Emerick Aubameyang|2
+tpa-622|Harry Kane|Thibaut Courtois|2
+tpa-623|Harry Kane|Jan Oblak|3
+tpa-624|Eden Hazard|Franck Ribéry|2
+tpa-625|Bukayo Saka|Paul Pogba|3
+tpa-626|Bradley Barcola|Hugo Lloris|3
+tpa-627|Moisés Caicedo|Sadio Mané|3
+tpa-628|Moussa Diaby|Nabil Fekir|4
+tpa-630|Antoine Griezmann|Luka Modrić|3
+tpa-632|Dani Alves|Sadio Mané|3
+tpa-633|Ederson|Memphis Depay|2
+tpa-634|Enzo Fernández|Pedri|2
+tpa-635|Ederson|Jadon Sancho|2
+tpa-636|Joshua Kimmich|Rodrygo|2
+tpa-637|Alisson Becker|Arturo Vidal|3
+tpa-638|Lorenzo Insigne|Sadio Mané|3
+tpa-639|Alisson Becker|Sergio Busquets|3
+tpa-640|Jamal Musiala|Xavi Simons|3
+tpa-641|Alisson|Raphaël Varane|3
+tpa-642|Erling Haaland|Paulo Dybala|2
+tpa-643|João Cancelo|Moisés Caicedo|2
+tpa-644|Harry Kane|Mohamed Salah|2
+tpa-645|Bernardo Silva|Rasmus Højlund|3
+tpa-646|Luka Modrić|Victor Osimhen|3
+tpa-648|Joshua Kimmich|Pepe|2
+tpa-649|Jamal Musiala|Rodri|2
+tpa-650|Cesc Fàbregas|Nabil Fekir|3
+tpa-651|Luka Modrić|N'Golo Kanté|2
+tpa-653|Kalidou Koulibaly|Trent Alexander-Arnold|3
+tpa-654|Sandro Tonali|Yassine Bounou|3
+tpa-655|Angel Di María|Leroy Sané|3
+tpa-656|Hugo Lloris|Marquinhos|3
+tpa-657|Florian Wirtz|Kobbie Mainoo|4
+tpa-658|Sergio Agüero|Toni Kroos|3
+tpa-659|Marcus Rashford|Vinícius Tobias|3
+tpa-660|Nabil Fekir|Thomas Müller|3
+tpa-661|Moussa Diaby|Victor Osimhen|3
+tpa-662|Lionel Messi|Mohamed Salah|2
+tpa-663|Federico Valverde|Steven Gerrard|3
+tpa-665|James Rodríguez|Pedri|2
+tpa-667|Gonzalo Higuaín|Radamel Falcao|2
+tpa-668|Alisson Becker|Rúben Dias|3
+tpa-669|Rodrygo|Viktor Gyökeres|3
+tpa-670|Hakim Ziyech|Viktor Gyökeres|3
+tpa-671|Gianluigi Buffon|Rasmus Højlund|3
+tpa-672|Cristian Pulisic|Diego Costa|2
+tpa-673|Arda Güler|Phil Foden|3
+tpa-674|Alexander Isak|Estêvão|2
+tpa-675|Arda Güler|Jordi Alba|3
+tpa-676|Andrés Iniesta|Roberto Firmino|3
+tpa-677|Jadon Sancho|Rodri|2
+tpa-678|Hakim Ziyech|Nabil Fekir|3
+tpa-679|Dani Carvajal|Estêvão|3
+tpa-680|Alisson Becker|Rafael Leão|3
+tpa-682|Darwin Núñez|Vinícius Júnior|2
+tpa-683|Enzo Fernández|Mauro Icardi|2
+tpa-685|Paulo Dybala|Radamel Falcao|2
+tpa-686|João Félix|Toni Kroos|3
+tpa-687|Andrés Iniesta|Bernardo Silva|3
+tpa-688|Bernardo Silva|Estêvão|2
+tpa-690|Cole Palmer|Marcus Rashford|2
+tpa-691|Mats Hummels|Pau Cubarsí|2
+tpa-692|André Onana|Samuel Eto'o|2
+tpa-693|Kevin De Bruyne|Mikel Oyarzabal|2
+tpa-694|Kobbie Mainoo|Sergio Ramos|2
+tpa-695|Marquinhos|Xavi Simons|4
+tpa-696|Bruno Fernandes|Paulo Dybala|2
+tpa-697|Sandro Tonali|Thomas Müller|3
+tpa-698|João Cancelo|Rasmus Højlund|3
+tpa-699|Cristian Pulisic|Dani Alves|2
+tpa-700|Cristiano Ronaldo|Sergio Agüero|2
+tpa-701|Marquinhos|Xavi Hernández|2
+tpa-702|Luis Suárez|Moussa Diaby|2
+tpa-703|Ederson|Lamine Yamal|2
+tpa-704|Marcelo|Xavi Simons|3
+tpa-705|David Silva|Erling Haaland|2
+tpa-706|Memphis Depay|Viktor Gyökeres|3
+tpa-707|Rodrygo|Sandro Tonali|3
+tpa-708|Alisson|Wayne Rooney|3
+tpa-709|Antoine Griezmann|Kevin De Bruyne|2
+tpa-711|Ivan Rakitić|Robert Lewandowski|2
+tpa-712|Dani Alves|Rodri|3
+tpa-713|Didier Drogba|Dusan Vlahović|3
+tpa-714|Pau Cubarsí|Samuel Eto'o|3
+tpa-715|Cole Palmer|Robin van Persie|3
+tpa-716|Alisson Becker|David Alaba|3
+tpa-717|Gianluigi Buffon|Wayne Rooney|2
+tpa-718|Alexander Isak|Keylor Navas|2
+tpa-719|Casemiro|Cesc Fàbregas|2
+tpa-720|Khvicha Kvaratskhelia|Yaya Touré|3
+tpa-721|Didier Drogba|Paul Pogba|2
+tpa-722|Alejandro Garnacho|Toni Kroos|2
+tpa-723|Victor Osimhen|Zlatan Ibrahimović|3
+tpa-724|Alphonso Davies|Raphaël Varane|2
+tpa-725|Christian Eriksen|Dani Alves|2
+tpa-726|Alexander Isak|Joshua Kimmich|3
+tpa-727|Arda Güler|Samuel Eto'o|3
+tpa-728|Gianluigi Buffon|Toni Kroos|2
+tpa-729|Rodri|Steven Gerrard|2
+tpa-730|Dani Carvajal|Kylian Mbappé|2
+tpa-731|Ousmane Dembélé|Zlatan Ibrahimović|2
+tpa-733|Andrew Robertson|Yaya Touré|3
+tpa-734|Andrea Pirlo|Jude Bellingham|3
+tpa-735|Darwin Núñez|Zlatan Ibrahimović|3
+tpa-736|Marcus Rashford|Martin Ødegaard|2
+tpa-737|Jadon Sancho|João Cancelo|2
+tpa-738|Samuel Eto'o|Yassine Bounou|3
+tpa-739|Andrew Robertson|Rasmus Højlund|4
+tpa-740|Alisson Becker|Lionel Messi|3
+tpa-741|Gavi|Thiago Silva|2
+tpa-742|Romelu Lukaku|Sandro Tonali|3
+tpa-743|Endrick|Mauro Icardi|2
+tpa-744|Angel Di María|Victor Osimhen|3
+tpa-745|Ciro Immobile|Viktor Gyökeres|3
+tpa-746|Alexis Sánchez|Pepe|2
+tpa-747|Arturo Vidal|Marquinhos|2
+tpa-748|Bukayo Saka|Samuel Eto'o|2
+tpa-749|Alphonso Davies|Raheem Sterling|2
+tpa-750|Gonzalo Higuaín|Roberto Firmino|3
+tpa-751|Fernando Torres|Gerard Piqué|2
+tpa-752|Moisés Caicedo|Virgil van Dijk|2
+tpa-753|Ivan Rakitić|Steven Gerrard|2
+tpa-754|Gianluigi Donnarumma|Steven Gerrard|3
+tpa-755|Harry Kane|Viktor Gyökeres|3
+tpa-756|Bernardo Silva|Dries Mertens|3
+tpa-757|Edinson Cavani|Roberto Firmino|3
+tpa-758|Thibaut Courtois|Virgil van Dijk|2
+tpa-759|Andrés Iniesta|Yassine Bounou|2
+tpa-760|Alphonso Davies|Gianluigi Donnarumma|3
+tpa-761|David Silva|Steven Gerrard|2
+tpa-762|Alisson Becker|Mikel Oyarzabal|2
+tpa-763|Diego Costa|Leroy Sané|2
+tpa-764|Franck Ribéry|Frank Lampard|2
+tpa-765|Alexis Sánchez|Paulo Dybala|2
+tpa-766|Nabil Fekir|Riyad Mahrez|3
+tpa-767|Raphaël Varane|Sadio Mané|2
+tpa-768|Fernando Torres|Gareth Bale|2
+tpa-769|Alexander Isak|Gareth Bale|2
+tpa-770|Trent Alexander-Arnold|Victor Osimhen|3
+tpa-771|Mikel Oyarzabal|Trent Alexander-Arnold|3
+tpa-772|Luis Suárez|Memphis Depay|2
+tpa-773|Alexander Isak|Dries Mertens|3
+tpa-774|Alexis Sánchez|Pedri|2
+tpa-775|Dani Carvajal|Mauro Icardi|2
+tpa-776|Manuel Neuer|Marquinhos|3
+tpa-777|Romelu Lukaku|Virgil van Dijk|3
+tpa-778|Pau Cubarsí|Xavi Simons|4
+tpa-779|Alisson Becker|Arda Güler|2
+tpa-780|Arda Güler|Ciro Immobile|3
+tpa-781|Endrick|Robin van Persie|3
+tpa-782|Lorenzo Insigne|Thomas Müller|3
+tpa-783|Frank Lampard|Leroy Sané|2
+tpa-784|Lamine Yamal|Rafael Leão|3
+tpa-785|Rodrygo|Rúben Dias|3
+tpa-786|Endrick|Thiago Silva|2
+tpa-787|Jonathan David|Luis Suárez|4
+tpa-788|Vinícius Júnior|Xavi Hernández|3
+tpa-789|Estêvão|Gareth Bale|3
+tpa-790|Sergio Agüero|Trent Alexander-Arnold|3
+tpa-791|Joshua Kimmich|Moisés Caicedo|3
+tpa-794|Andrew Robertson|Warren Zaïre-Emery|3
+tpa-795|Luis Suárez|N'Golo Kanté|2
+tpa-796|Andrea Pirlo|Fernando Torres|3
+tpa-797|Bruno Fernandes|Frank Lampard|3
+tpa-798|Fernando Torres|Harry Kane|3
+tpa-799|Harry Kane|Sergio Busquets|3
+tpa-800|Lorenzo Insigne|Luka Modrić|2
+tpa-801|Neymar|Zlatan Ibrahimović|2
+tpa-802|Moisés Caicedo|Nabil Fekir|4
+tpa-803|Endrick|Fernando Torres|3
+tpa-804|André Onana|Pepe|2
+tpa-806|Pau Cubarsí|Vinícius Tobias|3
+tpa-807|Robert Lewandowski|Steven Gerrard|2
+tpa-808|Dusan Vlahović|Lionel Messi|3
+tpa-809|Lorenzo Insigne|Rafael Leão|3
+tpa-810|Andrea Pirlo|Son Heung-min|3
+tpa-811|Florian Wirtz|Yassine Bounou|3
+tpa-812|Lamine Yamal|Vinícius Tobias|3
+tpa-814|Federico Valverde|Thomas Müller|2
+tpa-815|Keylor Navas|Nabil Fekir|4
+tpa-816|Alphonso Davies|Pierre-Emerick Aubameyang|2
+tpa-817|Marcelo|Nabil Fekir|4
+tpa-818|Edinson Cavani|Joshua Kimmich|3
+tpa-819|Fernando Torres|Kyle Walker|2
+tpa-820|Endrick|Gerard Piqué|3
+tpa-821|Mikel Oyarzabal|Pepe|2
+tpa-822|Arturo Vidal|Darwin Núñez|3
+tpa-823|Alexander Isak|Hugo Lloris|3
+tpa-824|Robert Lewandowski|Virgil van Dijk|3
+tpa-825|Cole Palmer|Mesut Özil|3
+tpa-826|Kevin De Bruyne|Mats Hummels|2
+tpa-827|Moussa Diaby|Romelu Lukaku|2
+tpa-828|Alexander Isak|Karim Benzema|2
+tpa-829|Hugo Lloris|Kalidou Koulibaly|3
+tpa-830|Casemiro|Sadio Mané|2
+tpa-831|Kalidou Koulibaly|Riyad Mahrez|2
+tpa-833|Ederson|Fernando Torres|2
+tpa-835|Pepe|Robert Lewandowski|2
+tpa-836|Viktor Gyökeres|Warren Zaïre-Emery|3
+tpa-837|Alejandro Garnacho|Jude Bellingham|2
+tpa-838|Marc-André ter Stegen|Romelu Lukaku|2
+tpa-839|Leroy Sané|Moisés Caicedo|2
+tpa-840|Jamal Musiala|Victor Osimhen|2
+tpa-841|Alisson|Giorgio Chiellini|2
+tpa-842|Eden Hazard|Lamine Yamal|3
+tpa-843|Keylor Navas|Phil Foden|3
+tpa-844|Jonathan David|Lamine Yamal|4
+tpa-846|Darwin Núñez|Rafael Leão|3
+tpa-847|Hugo Lloris|Rafael Leão|2
+tpa-848|Lorenzo Insigne|Nabil Fekir|4
+tpa-849|Bukayo Saka|Jonathan David|4
+tpa-850|Alexander Isak|Robin van Persie|3
+tpa-851|Angel Di María|N'Golo Kanté|2
+tpa-852|Dani Alves|Steven Gerrard|2
+tpa-853|Alexis Sánchez|Angel Di María|2
+tpa-855|Frank Lampard|Hugo Lloris|3
+tpa-856|Arturo Vidal|Sadio Mané|2
+tpa-857|Enzo Fernández|Pepe|2
+tpa-858|Didier Drogba|Ivan Rakitić|3
+tpa-859|Pedri|Sergio Ramos|2
+tpa-860|Karim Benzema|Marcus Rashford|2
+tpa-861|Memphis Depay|Roberto Firmino|3
+tpa-862|Pau Cubarsí|Toni Kroos|3
+tpa-863|André Onana|Federico Valverde|2
+tpa-864|Dries Mertens|Pepe|2
+tpa-865|Lamine Yamal|Romelu Lukaku|2
+tpa-866|Dusan Vlahović|Pedri|3
+tpa-867|Christian Eriksen|Steven Gerrard|3
+tpa-868|Federico Valverde|Manuel Neuer|2
+tpa-869|Antoine Griezmann|Vinícius Tobias|3
+tpa-870|Dani Carvajal|Romelu Lukaku|2
+tpa-871|David Silva|Dries Mertens|3
+tpa-872|Bruno Fernandes|Declan Rice|3
+tpa-873|Florian Wirtz|Paulo Dybala|2
+tpa-874|Arturo Vidal|Khvicha Kvaratskhelia|2
+tpa-875|Ciro Immobile|Edinson Cavani|3
+tpa-876|Luis Suárez|Trent Alexander-Arnold|3
+tpa-877|Federico Valverde|Hakim Ziyech|3
+tpa-878|Kalidou Koulibaly|Luis Suárez|2
+tpa-879|Declan Rice|Hugo Lloris|3
+tpa-880|Bradley Barcola|Estêvão|3
+tpa-881|Ivan Rakitić|Joshua Kimmich|2
+tpa-882|Khvicha Kvaratskhelia|Raphaël Varane|2
+tpa-883|Gareth Bale|Warren Zaïre-Emery|2
+tpa-884|Erling Haaland|Federico Valverde|2
+tpa-885|Phil Foden|Vinícius Tobias|3
+tpa-886|Dusan Vlahović|Yassine Bounou|3
+tpa-887|Marcelo|Romelu Lukaku|2
+tpa-888|Estêvão|Rafael Leão|3
+tpa-889|Casemiro|Viktor Gyökeres|3
+tpa-890|Federico Chiesa|Lorenzo Insigne|3
+tpa-893|Bernardo Silva|Marquinhos|2
+tpa-894|Darwin Núñez|Ousmane Dembélé|3
+tpa-895|Hakim Ziyech|Steven Gerrard|2
+tpa-896|Diogo Jota|Lorenzo Insigne|3
+tpa-897|Pau Cubarsí|Pepe|3
+tpa-898|Arjen Robben|Enzo Fernández|3
+tpa-899|Dries Mertens|Yaya Touré|3
+tpa-900|Declan Rice|Son Heung-min|3
+tpa-901|Gianluigi Donnarumma|Lamine Yamal|2
+tpa-902|Dani Carvajal|Endrick|2
+tpa-903|Jonathan David|Mikel Oyarzabal|4
+tpa-905|Andrea Pirlo|Diego Costa|3
+tpa-906|Alexis Sánchez|Xavi Simons|3
+tpa-907|Ciro Immobile|Cristiano Ronaldo|3
+tpa-908|Bukayo Saka|Jan Oblak|3
+tpa-909|Christian Eriksen|Martin Ødegaard|2
+tpa-910|Arturo Vidal|Pepe|2
+tpa-911|Achraf Hakimi|Radamel Falcao|2
+tpa-912|Kobbie Mainoo|Lamine Yamal|2
+tpa-913|Kalidou Koulibaly|Vinícius Tobias|3
+tpa-914|Kyle Walker|Ousmane Dembélé|2
+tpa-915|Antoine Griezmann|Marquinhos|2
+tpa-916|Jonathan David|Viktor Gyökeres|4
+tpa-917|Ciro Immobile|Sadio Mané|3
+tpa-918|Endrick|Wayne Rooney|3
+tpa-919|Victor Osimhen|Yassine Bounou|2
+tpa-921|Endrick|Giorgio Chiellini|3
+tpa-922|Arturo Vidal|Bernardo Silva|3
+tpa-923|Roberto Firmino|Sergio Busquets|3
+tpa-924|Andrew Robertson|Kevin De Bruyne|3
+tpa-926|Casemiro|Gianluigi Donnarumma|2
+tpa-927|João Cancelo|Son Heung-min|2
+tpa-928|Warren Zaïre-Emery|Xavi Hernández|2
+tpa-929|Erling Haaland|Gareth Bale|2
+tpa-930|Arjen Robben|Dusan Vlahović|2
+tpa-932|N'Golo Kanté|Rúben Dias|2
+tpa-933|Gianluigi Donnarumma|Robin van Persie|3
+tpa-935|Enzo Fernández|Hugo Lloris|3
+tpa-936|Dani Alves|Jan Oblak|2
+tpa-937|Andrea Pirlo|Bukayo Saka|3
+tpa-938|Ciro Immobile|Samuel Eto'o|3
+tpa-939|Federico Chiesa|Pepe|2
+tpa-940|Darwin Núñez|Victor Osimhen|4
+tpa-941|Dusan Vlahović|Jan Oblak|4
+tpa-942|Gianluigi Donnarumma|Nabil Fekir|3
+tpa-943|Neymar|Thomas Müller|3
+tpa-944|Florian Wirtz|Rodrygo|3
+tpa-945|Jan Oblak|Jonathan David|5
+tpa-946|Christian Eriksen|Giorgio Chiellini|2
+tpa-947|Diego Costa|Xavi Simons|4
+tpa-948|Christian Eriksen|Neymar|2
+tpa-949|Endrick|Nabil Fekir|4
+tpa-950|Marquinhos|Robert Lewandowski|2
+tpa-952|Samuel Eto'o|Viktor Gyökeres|3
+tpa-953|Jude Bellingham|Radamel Falcao|2
+tpa-954|Andrés Iniesta|Rúben Dias|3
+tpa-955|Lorenzo Insigne|Marc-André ter Stegen|3
+tpa-956|Endrick|Gavi|3
+tpa-957|Frank Lampard|Mesut Özil|2
+tpa-958|Bradley Barcola|Giorgio Chiellini|3
+tpa-959|Gonzalo Higuaín|Vinícius Tobias|2
+tpa-960|Marcelo|Pedri|3
+tpa-961|Franck Ribéry|Robin van Persie|3
+tpa-962|Giorgio Chiellini|Phil Foden|2
+tpa-963|Alisson Becker|Gianluigi Buffon|2
+tpa-964|Arda Güler|Harry Kane|2
+tpa-965|Antoine Griezmann|Cesc Fàbregas|2
+tpa-966|Martin Ødegaard|Moussa Diaby|2
+tpa-967|Cole Palmer|Harry Kane|2
+tpa-968|Harry Kane|Warren Zaïre-Emery|3
+tpa-969|Endrick|Mikel Oyarzabal|3

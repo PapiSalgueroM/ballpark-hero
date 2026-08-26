@@ -743,7 +743,7 @@ true on the date above; re-measure rather than quoting them.
 | | |
 |---|---|
 | **HOW YOU SHIP DEPENDS ON WHICH SESSION YOU ARE** | Read this before anything else in this file. **A claude.ai/code session has GitHub credentials: commit, push, and it may merge to `main` under Anthony's standing 2026-08-26 authorization. Do NOT build a zip, a `RUNnn.bat` or a `SHIP` wrapper.** Only a **Cowork** session lacks credentials, and only Cowork uses the bat pipeline. Everything below that talks about packaging, extracting zips from Anthony's folder, or waiting for him to double-click something is **Cowork-path only**, including most of the ship history in this table. See the "Which pipeline are you on" section at the top of `docs/SHIP-PIPELINE.md`. |
-| `origin/main` head | `9f5dfad` = **Round 293**, the entire 258 to 293 backlog pushed 2026-08-26 (36 rounds, Anthony clicked `SHIP154.bat`, a cloud session watched main advance round by round to 293 and verified the count). Lovable sync was file-verified and `deploy_project` called the same day from the cloud session. Anthony's standing instruction from the same day: shipping and publishing happen without him, the build loop moves to cloud sessions, and his computer stops being part of the pipeline. |
+| `origin/main` head | **Round 294** (Transfer Path hints, pushed 2026-08-26 from Anthony's machine through `RUN294.bat`, rebased onto the docs commit `e8d3df6` that landed between 293 and 294; every round from 258 to 294 is on `main`). Before it, `9f5dfad` = **Round 293**, the entire 258 to 293 backlog pushed 2026-08-26 (36 rounds, Anthony clicked `SHIP154.bat`, a cloud session watched main advance round by round to 293 and verified the count). Lovable sync was file-verified and `deploy_project` called the same day from the cloud session. Anthony's standing instruction from the same day: shipping and publishing happen without him, the build loop moves to cloud sessions, and his computer stops being part of the pipeline. |
 | PREVIOUS HEAD, FOR CONTEXT | `dadd94b` = **Round 257**, pushed 2026-08-21 evening and PUBLISHED LIVE the same evening. Verified as a crawler on the live domain afterwards: /soccer-career answers with 10,782 characters of readable text before any JavaScript runs, the app still boots on top of it (338 nodes, zero failed asset requests), and /prerender-boot.js is served. IndexNow resubmitted 122 URLs. **THE ADSENSE BLOCKER IS FIXED AND LIVE**, so a review request can go in whenever Anthony wants. |
 | HOW 258 TO 293 LANDED, AND WHAT EACH ONE WAS | DONE 2026-08-26. The queue that was waiting on one double click: rounds **258 through 293** were packaged on his disk and NOT pushed (2026-08-25: every assertion in RUN258 through RUN283 was re-simulated against the zips from a clean Round 257 tree, 229 checks, all passing; RUN283 was re-delivered with CRLF line endings, the copy on disk was LF only). **`SHIP154.bat` runs all thirty six in order and is the only bat he needs**; every earlier SHIP wrapper (117 through 153) is a subset of the same queue, and each RUN bat self-skips once its round is in the log, so it is safe to click after SHIP142 as well as instead of it. Rounds 284, 285 and 286 from the 2026-08-24 session never reached his disk and were rebuilt on 2026-08-25 as 284 and 285 from the handoff notes; if the old downloads ever turn up, do NOT put them in the folder, the rebuilt ones supersede them. 258 currency plus real ticker events, 259 real internationals, 260 the home page count correction, 261-262 real club squads and the depth chart, 263 the 320px overflow, 264 the sports calendar, 265 the home page canonical and title, 266 footer links plus simInternalLinks, 267 offer fit, 268 /college was shipping empty, 269 two prerenderer defects, 270 six sport hubs, 271 every prerendered page 32px narrow, 272 the retired routes stop serving the home page, 273 the flagship stops shipping another game, **274 the duplicate canonical that would have told Google all 126 pages are the home page**, 275 every page starts loading a second sooner, 276 nine more duplicated head tags, so every page describes itself rather than the site, 277 no page title gets cut off in a search result, 278 the nine deliberately hidden pages stop serving the home page, 279 a tool that asks the live site what a crawler actually gets, **280 the sitemap stops telling Google that all 127 pages changed today** plus the four lines that were frozen wrong on every page and a home page that had half the content of the pages it links to, 281 the structured data that was generated and thrown away, 282 dead addresses stop answering as the home page, 283 the home page offers a game before it asks for an account, **284 today's puzzle stops being frozen into saved pages, and the site-wide noindex that nearly shipped gets a permanent fence**, 285 the footer links all six sport hubs and the privacy policy says everything Google asks it to, 286 the logo, the icons and the social image, plus the sitemap looking past the site chrome, 287 real scores on the ticker from the free feed, and the strip redrawn like a broadcast, 288 Idle Arena, the first true incremental, plus the rules button off the Back button, 289 Face Off, the duel against a rival or a friend, 290 the manifest that makes the site installable, 291 the Brownlow and the Dally M on the records shelf, 292 the Ballon d'Or honours made consistent after two user reports, 293 your dailies on the home page. AFTER THEY LAND: verify Lovable synced to the new head, call deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then run `node scripts/indexnowSubmit.mjs`. |
 | OWNER'S SCREENSHOT LIST, ALL CLEARED | Every item from his 2026-08-21 Soccer Career screenshots is done: real events in the ticker (258), clubs dropping/listing/loaning you (257), the negative net worth format (257), display currency (258), the mirrored team sheet and misplaced CDM (257, tightened in 259), the passport event naming its nation (257), the cut-off player name (257), the group stage table replacing the qualifying one (257), and real players in national squads (259). |
@@ -1353,6 +1353,63 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 purge. Awards is still unbuilt. See the roadmap below.
 
 ---
+
+## Round 294: Transfer Path's hints stop describing a game that no longer exists
+
+A report from the footer button on 2026-08-19, from `/transfer-path`, said "Wrong answer" on
+tp-19, Yaya Toure to Lamine Yamal, and nothing else. Round 292 made future reports carry the
+refused guess; this round found the cause without one. The puzzle table's hint for tp-19 read
+"Direct link. Both wore the Barcelona shirt." The game's rule since 2026-07-10 is same club in
+the **same season** (Toure left Barcelona in 2010, Yamal arrived in 2022), so the hint sent
+people straight into a refusal, and the refusal itself said the two "don't share a club", which
+is false and made the game look broken rather than strict. Measured across all 902 rows with a
+breadth first search inside the database: the hints were written under the old any shared
+club rule and never updated ("Direct link" on tp-19 and tp-20, both pairs the game refuses;
+"One middle man does it" on tpa-23, tpa-29 and others that need two or three; the old text
+was not kept, so the full count of bad hints is not known, only that every row was rewritten),
+and 84 minimums were higher than the true shortest path (65 said 3 where 2 exists, 18 said 4
+where 2 or 3 exists, one said 5 where 3 exists). No puzzle was
+unreachable, and no minimum was too low, so nobody was ever scored unfairly; they were
+misdirected.
+
+**The fix is a derivation, not a rewrite.** `scripts/lib/transferPathHints.mjs` builds the
+graph the hook builds (`club::season` keys), finds one deterministic shortest path per
+puzzle, and writes the hint from that path: "One middle man does it. He was at Manchester City
+with Yaya Toure and at Barcelona with Lamine Yamal" (or "and, in another season, at Barcelona"
+when both clubs are the same), "Two middle men at least. The first was at X with A; the last
+was at Y with B", and so on. `scripts/genTransferPathHints.mjs` turns the 2026-08-26 pull of
+the career and puzzle tables (kept in `scripts/data/transferPathPull/`, since the sandbox
+cannot reach Supabase) into `supabase/migrations/20260826_transfer_path_hints_temporal.sql`,
+902 updates keyed by puzzle id, and rewrites the fallback file
+`src/data/transferPathPuzzles.ts` from the fallback player pool the same way (its 20 puzzles
+had four "direct" links and a 3 step path through Aguero and Messi that the game refuses).
+Applied to the live table through the console on 2026-08-26 as an equivalent VALUES form, and
+proven equal: the md5 over every (id, hint) pair in the database matches the md5 over the
+generated file, the database's own recursive search agrees with every `min_steps`, zero rows
+unreachable, zero long dashes, longest hint 141 characters.
+
+**One career row was wrong and made a hint wrong.** The pool carries two rows for one man,
+"Alisson" and "Alisson Becker"; the first had Roma seasons from 2014 (he joined in July 2016),
+which put him in a dressing room with Ashley Cole and gave tpa-29 a first link that never
+happened. The two false seasons are deleted (in the migration and live). The duplicate name
+itself is left alone on purpose: Career Ladder and the Career game pick their daily player by
+indexing the pool, so removing a row would reshuffle everyone's dailies mid day. Noted for a
+round that handles that.
+
+The board's copy caught up with the rule: the rules line now says "same club, same season,
+same shirt years apart does not count", and the refusal says "was never at the same club as X
+in the same season".
+
+**Held by** `simTransferPathHints`: the migration file is parsed and every row checked on the
+pulled graph (minimum equals the search, the hint promises that many steps, names both
+players, and a shortest path really begins at the first club it names and ends at the last);
+the fallback file checked the same way on the fallback pool with every `oneOptimalPath` walked
+link by link through the game's own acceptance rule; the live tables through the site's own
+fetchers when the host is reachable (skips loudly here); and the wording (no long dash, under
+200 characters, no "Direct link" on a refused pair). Four controls: `TPH_CONTROL=stale` (the
+old tp-19 hint), `club` (a club Pirlo never shared), `min` (the old 5 on tpa-945) and `direct`
+(a well formed direct claim on the reported pair), each reported. The tp-19 report in
+`public.question_reports` is marked resolved.
 
 ## Round 293: your dailies, on the home page
 
@@ -2411,6 +2468,12 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-26** Round 294. Transfer Path hints and minimums derived from the temporal rule
+  (transferPathHints.mjs, genTransferPathHints.mjs, the 2026-08-26 pull, the migration applied
+  live and proven equal by md5, the fallback file regenerated, the Alisson Roma 2014 rows
+  deleted, board copy), simTransferPathHints with four controls, the simIndexNow floor note.
+  Pushed from Anthony's machine through `RUN294.bat` on 2026-08-26, the last round on that path;
+  the head row above now names it.
 - **2026-08-25** Round 293. Your dailies on the home page (yourDailies.ts, YourDailies.tsx,
   simYourDailies with DAILIES_CONTROL=retired, playHomeFold section 4). Pending row: 258
   through 293 wait on `SHIP154.bat`.

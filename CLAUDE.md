@@ -516,6 +516,14 @@ These are not preferences, they are the exposure.
   for good measure, and the visible 24 hours of edge logs showed no call to it. If a helper
   like that is ever wanted again, it does not go in the database: run SQL through the
   Supabase MCP, which authenticates the session, never through an RPC the browser can reach.
+- **Anything a table says about a puzzle that the game's own rule can compute is derived,
+  never typed.** Transfer Path's `min_steps` and `hint` were hand written under the "any
+  shared club" rule and sat unchanged for six weeks after the rule became "same club, same
+  season", until a player followed a hint into a refusal (Round 294). They now come from
+  `scripts/genTransferPathHints.mjs` over a pull of the career tables, and
+  `simTransferPathHints` fails if a row disagrees with the search. When a rule changes,
+  grep the tables for prose that encodes the old one.
+
 
 ### Never reintroduce these specific regressions
 

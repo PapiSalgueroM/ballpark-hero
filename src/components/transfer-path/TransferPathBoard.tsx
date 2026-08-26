@@ -44,7 +44,7 @@ export function TransferPathBoard() {
     setError('');
     const result = addPlayer(name);
     if (!result.ok) {
-      setError(`${name} doesn't share a club with ${chain[chain.length - 1]}`);
+      setError(`${name} was never at the same club as ${chain[chain.length - 1]} in the same season`);
       setLastRejected({ name, after: chain[chain.length - 1] });
     }
   };
@@ -86,8 +86,8 @@ export function TransferPathBoard() {
           </p>
           <HowToPlayPopover title="How to Play Transfer Path" floatingTrigger={false} className="p-1">
             <div className="space-y-3 text-left">
-              <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who shared a club, one link at a time.</p>
-              <p>🔗 Each name you add must have been a club teammate of the LAST player in your chain, in any season.</p>
+              <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
+              <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
               <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
               <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
               <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
