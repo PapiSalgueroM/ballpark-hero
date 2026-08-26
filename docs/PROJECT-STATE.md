@@ -2352,6 +2352,14 @@ STILL OPEN, honestly:
   move if there is a real bias and pointless if there is not. Whoever picks this up: run it
   overnight with the arm means, the sd and the gap printed each time, and find out whether the
   gap centres on zero before changing a single number. Do not re-run until green and ship.
+
+  **MEASURED OVERNIGHT, Round 295 (2026-08-26): the check is healthy, leave it alone.** 29
+  full runs with the arm means and gaps logged each time: median gap 1.70 points, maximum
+  3.87, thresholds sat between 6.0 and 7.1, and not one run came close to failing. The 7.47
+  from Round 271 did not reproduce and sits far outside this distribution, so it stays what
+  it looked like: a genuinely rare event, possibly helped along by whatever else that board
+  was doing at the time. No number was changed, per the rule above. The raw log is not
+  committed (it was a sandbox scratch file); the summary here is the record.
 - ~~Prerender emits inline anchor text twice~~ and ~~Prerender silently drops any element over
   1200 characters~~ **BOTH DONE, ROUND 269**, in one round because both rewrite every snapshot
   and one full re-prerender is cheaper than two. The length cap is now a SHAPE cap (an element
