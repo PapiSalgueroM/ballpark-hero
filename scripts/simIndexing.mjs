@@ -139,14 +139,28 @@ console.log('2) Every live page is either in the sitemap or deliberately out');
   console.log(`   ${sitemap.size} URLs submitted, ${live.size} live routes, 0 unexplained`);
 }
 
-/* ---------- 3. The college hub is reachable, not just listed ---------- */
+/* ---------- 3. Every hub is reachable, not just listed ---------- */
 console.log('3) A sitemap entry with no inbound link is not a page');
 {
-  if (!sitemap.has('/college')) fail('/college is not in the sitemap');
-  const index = read('src/pages/Index.tsx');
-  if (!index.includes('to="/college"')) fail('nothing on the home page links to the college hub');
+  /* Round 198 wrote this for /college alone, and checked for the literal
+     string to="/college" in the home page source. Round 270 turned one hub
+     into six drawn by one component, so that literal is gone and the check
+     had to grow up. It now reads the hub list itself and asks the question
+     that actually matters: is the route in the sitemap, will the generator
+     keep it there, and does the home page a crawler RECEIVES link to it.
+     That last one is the point. The home page's React grid links every hub
+     through a helper, but a crawler with no JavaScript sees index.html, so
+     the static block is where the vote has to be. */
+  const hubRoutes = [...read('src/lib/sportHub.ts').matchAll(/^\s*route: '([^']+)',/gm)].map(m => m[1]);
+  if (hubRoutes.length < 2) fail(`only parsed ${hubRoutes.length} hub routes out of sportHub.ts, which cannot be right`);
   const gen = read('scripts/genSitemap.mjs');
-  if (!gen.includes("p: '/college'")) fail('the generator would drop /college on the next run');
+  const home = read('index.html');
+  for (const r of hubRoutes) {
+    if (!sitemap.has(r)) fail(`${r} is a hub and is not in the sitemap`);
+    if (!gen.includes(`p: '${r}'`)) fail(`the generator would drop ${r} on the next run`);
+    if (!home.includes(`href="${r}"`)) fail(`the home page a crawler receives does not link ${r}, so it is a sitemap entry with no vote`);
+  }
+  console.log(`   ${hubRoutes.length} hubs, each submitted, kept by the generator and linked from the static home page`);
 }
 
 /* ---------- 4. Titles and descriptions do their job ---------- */

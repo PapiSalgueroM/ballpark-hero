@@ -63,46 +63,59 @@ const PUBLIC = path.join(ROOT, 'public');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-/* ── the hubs, and what each one promises ─────────────────────────────────
-   route:  the path it ships at
-   titles: the registry categories it gathers, verbatim
-   count:  the regex that pulls the number the page prints about itself      */
-const HUBS = [
-  {
-    route: '/college',
-    titles: ['College Sports'],
-    count: /All (\d+) college football and college basketball games/i,
-  },
-];
+/* ── load the registry AND the hub definitions the site renders from ───
+   ROUND 270 CHANGED WHERE THE HUB LIST COMES FROM. It used to be typed into
+   this file, which meant a new hub was unchecked until somebody remembered to
+   come back here. It is now read out of src/lib/sportHub.ts, the same list
+   the app itself renders from, so a hub is checked from the moment it exists
+   and cannot be added without being checked. The count regex is the one thing
+   that still lives here, because it describes the SENTENCE the shared
+   component prints rather than anything about a particular sport. */
+const COUNT_LINE = /All (\d+) of them in one place/i;
 
-/* ── load the registry the site actually renders from ─────────────────── */
 const ENTRY = '/tmp/hubs-entry.mjs';
 const OUT = '/tmp/hubs-bundle.mjs';
-writeFileSync(ENTRY, `export * from '${path.join(ROOT, 'src/data/gameRegistry.ts')}';`);
+writeFileSync(ENTRY, [
+  `export * from '${path.join(ROOT, 'src/data/gameRegistry.ts')}';`,
+  `export { SPORT_HUBS } from '${path.join(ROOT, 'src/lib/sportHub.ts')}';`,
+].join('\n'));
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
 });
-const { CATEGORIES, ALL_GAMES } = await import(pathToFileURL(OUT).href + '?t=' + process.pid);
-console.log(`1) registry: ${CATEGORIES.length} categories, ${ALL_GAMES.length} games`);
+const { CATEGORIES, ALL_GAMES, SPORT_HUBS } = await import(pathToFileURL(OUT).href + '?t=' + process.pid);
+const HUBS = SPORT_HUBS.map(h => ({ route: h.route, titles: h.titles, count: COUNT_LINE }));
+console.log(`1) registry: ${CATEGORIES.length} categories, ${ALL_GAMES.length} games, ${HUBS.length} hubs`);
 
-/* ── 1: the hub list is honest ────────────────────────────────────────── */
-console.log('2) every page that looks up a category by title is declared here');
-const PAGES = path.join(ROOT, 'src/pages');
+/* ── 1: the hub list, App.tsx and the sitemap all say the same thing ──── */
+console.log('2) the hub list, the router and the sitemap agree');
 const app = readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
-const lookupPages = readdirSync(PAGES)
-  .filter(f => f.endsWith('.tsx'))
-  .filter(f => /categoriesByTitle\s*\(/.test(readFileSync(path.join(PAGES, f), 'utf8')));
-for (const f of lookupPages) {
-  const component = f.replace(/\.tsx$/, '');
-  /* find the route this component is mounted at, from App.tsx itself */
-  const m = app.match(new RegExp(`<Route path="([^"]+)" element=\\{<${component} ?/>\\}`));
-  if (!m) { fail(`${f} gathers categories but is not routed in App.tsx under its own name`); continue; }
-  if (!HUBS.some(h => h.route === m[1])) {
-    fail(`${f} gathers categories at ${m[1]} and is NOT in the HUBS list in this file, so nothing checks it`);
+const mounted = new Set(
+  [...app.matchAll(/<Route path="([^"]+)" element=\{<SportHub route="([^"]+)" ?\/>\}/g)].map(m => m[1]),
+);
+for (const [, m] of [...app.matchAll(/<Route path="([^"]+)" element=\{<SportHub route="([^"]+)" ?\/>\}/g)].entries()) {
+  if (m[1] !== m[2]) fail(`App.tsx mounts SportHub at ${m[1]} but hands it the route string ${m[2]}, so it would draw the wrong hub`);
+}
+for (const h of HUBS) {
+  if (!mounted.has(h.route)) fail(`${h.route} is defined in sportHub.ts and is not mounted in App.tsx, so it is a 404`);
+}
+for (const r of mounted) {
+  if (!HUBS.some(h => h.route === r)) fail(`App.tsx mounts a hub at ${r} that sportHub.ts does not define, so it would redirect home`);
+}
+const gen = readFileSync(path.join(ROOT, 'scripts/genSitemap.mjs'), 'utf8');
+for (const h of HUBS) {
+  if (!new RegExp(`p: '${h.route}'`).test(gen)) {
+    fail(`${h.route} is a real hub and is not in genSitemap's STATIC_PAGES, so it will never be submitted`);
   }
 }
-console.log(`   ${lookupPages.length} category-gathering page(s), ${HUBS.length} declared`);
+/* Nothing may gather categories outside this system. A one-off page that
+   filters the registry by hand is exactly what /college was. */
+const PAGES = path.join(ROOT, 'src/pages');
+const strays = readdirSync(PAGES)
+  .filter(f => f.endsWith('.tsx') && f !== 'SportHub.tsx' && f !== 'Index.tsx')
+  .filter(f => /categoriesByTitle\s*\(/.test(readFileSync(path.join(PAGES, f), 'utf8')));
+for (const f of strays) fail(`${f} gathers categories on its own instead of through sportHub.ts, so nothing checks what it renders`);
+console.log(`   ${HUBS.length} hubs, all mounted, all in the sitemap, ${strays.length} pages gathering categories on their own`);
 
 /* ── the shipped documents: the home page from the template, everything
       else from its prerendered snapshot, which is what the host serves ─── */

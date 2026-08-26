@@ -31,7 +31,7 @@ const HockeyCareer = lazy(() => import("./pages/HockeyCareer"));
 const HockeyHigherLower = lazy(() => import("./pages/HockeyHigherLower"));
 const NFLCareer = lazy(() => import("./pages/NFLCareer"));
 const Teammates = lazy(() => import("./pages/Teammates"));
-const CollegeHub = lazy(() => import("./pages/CollegeHub"));
+const SportHub = lazy(() => import("./pages/SportHub"));
 const PerfectLineupNba = lazy(() => import("./pages/PerfectLineupNba"));
 const PerfectLineupF1 = lazy(() => import("./pages/PerfectLineupF1"));
 const PerfectLineupNhl = lazy(() => import("./pages/PerfectLineupNhl"));
@@ -341,7 +341,15 @@ const AppContent = () => {
         <Route path="/transfer-path" element={<TransferPath />} />
         <Route path="/guess-transfer-value" element={<Navigate to="/" replace />} />
         <Route path="/perfect-lineup" element={<Navigate to="/" replace />} />
-        <Route path="/college" element={<CollegeHub />} />
+        {/* Round 270: one component, six sport hubs. The route string is the
+            key into SPORT_HUBS in src/lib/sportHub.ts, and scripts/simHubs.mjs
+            checks that these two lists say the same thing. */}
+        <Route path="/college" element={<SportHub route="/college" />} />
+        <Route path="/soccer" element={<SportHub route="/soccer" />} />
+        <Route path="/pro-basketball" element={<SportHub route="/pro-basketball" />} />
+        <Route path="/pro-football" element={<SportHub route="/pro-football" />} />
+        <Route path="/baseball" element={<SportHub route="/baseball" />} />
+        <Route path="/hockey" element={<SportHub route="/hockey" />} />
         <Route path="/perfect-lineup-nba" element={<PerfectLineupNba />} />
         <Route path="/perfect-lineup-f1" element={<PerfectLineupF1 />} />
         <Route path="/perfect-lineup-nhl" element={<PerfectLineupNhl />} />

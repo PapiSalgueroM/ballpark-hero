@@ -35,10 +35,20 @@ const SITE = 'https://douknowball.com';
    link from the home page's College Sports heading in the same round,
    because a sitemap entry with no inbound link is a page Google is
    entitled to ignore. */
+/* Round 270: five more hubs joined /college, all six drawn by one component
+   from src/lib/sportHub.ts. They are listed here rather than parsed out of
+   App.tsx because App.tsx now mounts them all through the same element and
+   the route strings are the only thing that distinguishes them. simHubs
+   fails if this list and SPORT_HUBS ever disagree. */
 const STATIC_PAGES = [
   { p: '/', freq: 'daily', pri: '1.0' },
   { p: '/leaderboard', freq: 'daily', pri: '0.7' },
   { p: '/college', freq: 'weekly', pri: '0.6' },
+  { p: '/soccer', freq: 'weekly', pri: '0.7' },
+  { p: '/pro-basketball', freq: 'weekly', pri: '0.6' },
+  { p: '/pro-football', freq: 'weekly', pri: '0.6' },
+  { p: '/baseball', freq: 'weekly', pri: '0.6' },
+  { p: '/hockey', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
   { p: '/records', freq: 'weekly', pri: '0.6' },
   { p: '/about', freq: 'yearly', pri: '0.4' },

@@ -12,7 +12,12 @@ import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type GameDef } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { SPORT_HUBS } from '@/lib/sportHub';
+
+/** Round 270: the hub that gathers this category, or null when it has none. */
+const hubForCategory = (title: CategoryTitle) =>
+  SPORT_HUBS.find(h => h.titles.includes(title)) ?? null;
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /**
@@ -488,10 +493,13 @@ export default function Index() {
                     {/* Round 198: the College hub existed with real copy and
                         links to every college game, but nothing on the site
                         pointed at it, so no crawler could reach it and no
-                        person could find it. One link fixes both. */}
-                    {cat.title === 'College Sports' && (
+                        person could find it. One link fixes both.
+                        Round 270: five more sports got a hub, so the link is
+                        driven off the hub list instead of one hand written
+                        case, and a hub added there gets its link here free. */}
+                    {hubForCategory(cat.title) && (
                       <Link
-                        to="/college"
+                        to={hubForCategory(cat.title)!.route}
                         /* Round 203: this link was 16px tall, which is half
                            the height a thumb needs. Padded to a real tap
                            target without changing where it sits. */
