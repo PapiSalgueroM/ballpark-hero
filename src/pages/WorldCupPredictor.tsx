@@ -17,6 +17,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
+import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
 
 /* ───── types ───── */
 
@@ -769,6 +770,20 @@ const WorldCupPredictor = () => {
   const [viewingSharedBracket, setViewingSharedBracket] = useState(false);
   const [sharedOwnerName, setSharedOwnerName] = useState("");
   const [sharedBracketData, setSharedBracketData] = useState<any>(null);
+
+  /* Round 299, the scoring audit: this was the one real game on the registry
+     that never recorded a completion, so a finished bracket earned no streak
+     day and no played-today credit. Crowning a champion is the completion
+     moment. One row per crowned name per visit (the ref), never while
+     reading someone else's shared bracket, and no score on purpose: a
+     prediction has no honest point total until the real tournament grades
+     it, and game_completions' score column is nullable by design. */
+  const crownedRef = useRef("");
+  useEffect(() => {
+    if (!champion || viewingSharedBracket || crownedRef.current === champion) return;
+    crownedRef.current = champion;
+    recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
+  }, [champion, viewingSharedBracket, profile]);
 
   // Load shared bracket if URL has ?bracket=xxx
   useEffect(() => {

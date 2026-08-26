@@ -286,6 +286,8 @@ const ListQuiz = () => {
             {phase === 'done' && (
               <div className="mb-6">
                 <ResultScreen
+                  recordCompletionOnMount
+                  completionScore={foundCount}
                   won={tier ? true : pct > 0 ? undefined : false}
                   outcomeEmoji={tier === 'gold' ? '🏆' : tier === 'silver' ? '🎉' : tier === 'bronze' ? '👏' : '📚'}
                   headline={tier ? `${LIST_QUIZ_TIER_EMOJI[tier]} ${LIST_QUIZ_TIER_LABEL[tier]}: ${foundCount} of ${total} (${pct}%)` : `You named ${foundCount} of ${total} (${pct}%)`}

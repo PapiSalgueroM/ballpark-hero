@@ -401,6 +401,7 @@ const PlayerBingo = () => {
 
             {phase === 'won' && (
               <ResultScreen
+                recordCompletionOnMount
                 won
                 outcomeEmoji={blackout ? '🏆' : linesCompleted >= 3 ? '🎉' : linesCompleted >= 2 ? '🔥' : '🐐'}
                 headline={blackout ? 'BLACKOUT!' : 'BINGO!'}
@@ -433,6 +434,7 @@ const PlayerBingo = () => {
 
             {phase === 'lost' && (
               <ResultScreen
+                recordCompletionOnMount
                 won={false}
                 outcomeEmoji={tilesFilled >= 8 ? '😩' : tilesFilled >= 4 ? '😅' : '🫠'}
                 headline={lostHeadline}
