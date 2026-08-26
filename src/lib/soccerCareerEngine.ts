@@ -25,6 +25,9 @@ import {
 } from "./soccerMoney";
 import type { MoneyAction, MoneyState } from "./soccerMoney";
 import { intlName, familyFor } from './intlNames';
+/* Round 258: display only. soccerCurrency imports nothing, so there is no
+   cycle, and every amount inside the engine stays in euros forever. */
+import { localizeMoney } from './soccerCurrency';
 import { managerProfileFromCareer } from './soccerCareerToManager';
 import { realJobOffers } from './managerJobMarket';
 import { managerStanding } from './managerOffers';
@@ -2703,11 +2706,14 @@ export function formatNetWorth(nw: number): string {
      (wages, standing costs, a bad transfer), so it has to read like money:
      the sign comes out front and the size decides the unit. Small amounts
      keep two decimals so 1.34 stays 1.34 rather than rounding to 1.3. */
+  /* Round 258: the euro string is built exactly as before and then handed to
+     the display layer, so every existing caller became currency aware without
+     a single call site changing, and the euro path is byte identical. */
   const sign = nw < 0 ? '-' : '';
   const v = Math.abs(nw);
-  if (v >= 1000) return `${sign}€${(v / 1000).toFixed(1)}B`;
-  if (v >= 1) return `${sign}€${v.toFixed(v < 10 ? 2 : 1)}M`;
-  return `${sign}€${Math.round(v * 1000)}k`;
+  if (v >= 1000) return localizeMoney(`${sign}€${(v / 1000).toFixed(1)}B`);
+  if (v >= 1) return localizeMoney(`${sign}€${v.toFixed(v < 10 ? 2 : 1)}M`);
+  return localizeMoney(`${sign}€${Math.round(v * 1000)}k`);
 }
 
 export function formatFollowers(m: number): string {
@@ -3572,8 +3578,11 @@ function wageForTier(tier: number, overall: number): number {
 }
 
 export function formatWage(wage: number): string {
-  if (wage >= 1000) return `€${(wage / 1000).toFixed(0)}k/wk`;
-  return `€${wage}/wk`;
+  /* Round 258: same trick as formatNetWorth. Build in euros, convert on the
+     way out, so the wage slip follows the player's chosen currency and the
+     stored number never moves. */
+  if (wage >= 1000) return localizeMoney(`€${(wage / 1000).toFixed(0)}k/wk`);
+  return localizeMoney(`€${wage}/wk`);
 }
 
 /* ─── Generate initial contract offers (age 17) ─── */

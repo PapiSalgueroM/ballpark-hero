@@ -49,6 +49,12 @@ import {
   applyMoneyAction,
   acceptLoan, projectLeagueApps,
 } from "@/lib/soccerCareerEngine";
+/* Round 258, his ask alongside the net worth bug: "depending where u live
+   ur currency will be diffrent". `money` rewrites the euro amounts inside
+   any line the game draws, so a wage slip, an event consequence and a
+   transfer fee all follow the same chosen currency. Display only: every
+   number in the save stays in euros. */
+import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -367,7 +373,7 @@ function OfferCard({ offer, onAccept, actionLabel }: { offer: ContractOffer; onA
       <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
         <span>📋 {offer.contractYears}yr</span>
         <span>💰 {formatWage(offer.wage)}</span>
-        {offer.transferFee > 0 && <span>🏷️ €{offer.transferFee.toFixed(1)}M fee</span>}
+        {offer.transferFee > 0 && <span>🏷️ {money(`€${offer.transferFee.toFixed(1)}M`)} fee</span>}
         {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
@@ -415,7 +421,7 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
           {/* Headline */}
           <div className="px-4 pt-4 pb-2">
             <h3 className={`text-base sm:text-lg font-black leading-tight ${typeColor(article.type)}`} style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
-              {article.headline}
+              {money(article.headline)}
             </h3>
           </div>
           {/* Separator */}
@@ -423,7 +429,7 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
           {/* Body */}
           <div className="px-4 pt-2 pb-4">
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
-              {article.body}
+              {money(article.body)}
             </p>
           </div>
         </div>
@@ -575,6 +581,11 @@ export default function SoccerCareer() {
   const [attrShape, setAttrShape] = useState<AttrShape>({});
   const [previewOvr, setPreviewOvr] = useState(0);
   const [saving, setSaving] = useState(false);
+  /* Round 258: the display currency is a preference in its own storage key,
+     not save data, so nothing here needs to know what it is. Bumping this
+     counter is all that is needed to redraw every money figure after the
+     picker changes, and it costs nothing when nobody touches it. */
+  const [, setCurrencyTick] = useState(0);
   const [career, setCareer] = useState<CareerState | null>(() => {
     try {
       const saved = localStorage.getItem(SAVE_KEY);
@@ -978,6 +989,7 @@ export default function SoccerCareer() {
             <GameScreen
               career={career}
               clubs={clubs}
+              onCurrencyChange={() => setCurrencyTick(t => t + 1)}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
               onDismissSummary={handleDismissSummary}
@@ -1806,7 +1818,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="flex items-center justify-center gap-3 mt-2 text-xs text-muted-foreground">
           <span>📋 {career.contractYearsLeft}yr left</span>
           <span>💰 {formatWage(career.weeklyWage)}</span>
-          <span>🏷️ €{career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M value</span>
+          <span>🏷️ {money(`€${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`)} value</span>
         </div>
         <p className="text-xs text-muted-foreground mt-2">
           Projected at {career.currentClub} next season: <span className="font-bold text-foreground">about {projHere.min} to {projHere.max} league games</span>
@@ -2045,7 +2057,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
         </span>
         <div className="text-4xl">{event.emoji}</div>
         <h3 className="text-lg font-black">{event.title}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">{money(event.description)}</p>
       </div>
       <div className="space-y-2">
         {event.choices.map((choice, idx) => (
@@ -2058,7 +2070,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
               <span className="text-lg">{choice.emoji}</span>
               <span className="font-bold text-sm">{choice.label}</span>
             </div>
-            <div className="text-[11px] mt-1 opacity-80 ml-8">{choice.consequence}</div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{money(choice.consequence)}</div>
           </button>
         ))}
       </div>
@@ -2240,7 +2252,7 @@ function RivalryEventCard({ event, rival, career, onDismiss }: { event: RivalryE
         <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">😤 Rivalry Event</span>
         <div className="text-4xl">{event.emoji}</div>
         <h3 className="text-lg font-black">{event.title}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">{event.description}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">{money(event.description)}</p>
       </div>
       <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 text-center">
         <p className="text-xs text-orange-300">⚡ {event.consequence}</p>
@@ -2300,11 +2312,11 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       {rows.map(r => (
         <div key={r.l} className="flex items-center justify-between text-xs">
           <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? `€${(r.p as number).toFixed(0)}M` : r.p}
+            {r.l === "Market Value" ? money(`€${(r.p as number).toFixed(0)}M`) : r.p}
           </span>
           <span className="text-[10px] text-muted-foreground flex-1 text-center">{r.l}</span>
           <span className={`font-bold w-12 text-left ${r.r > r.p ? "text-orange-400" : r.r < r.p ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? `€${(r.r as number).toFixed(0)}M` : r.r}
+            {r.l === "Market Value" ? money(`€${(r.r as number).toFixed(0)}M`) : r.r}
           </span>
         </div>
       ))}
@@ -2354,7 +2366,7 @@ function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; care
 }
 
 /* ─── Financial & Lifestyle Panel ─── */
-function FinancialPanel({ career }: { career: CareerState }) {
+function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
   const lifestyleEmoji: Record<string, string> = {
     "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Billionaire": "👑",
   };
@@ -2389,15 +2401,35 @@ function FinancialPanel({ career }: { career: CareerState }) {
         </div>
       </div>
 
+      {/* Round 258: the currency picker, and the line that keeps it honest.
+          Every figure on this page is converted from the euro the engine
+          actually stores, at published central bank rates for one stated day,
+          so the note under it says which day rather than pretending to be
+          live. Choosing euro removes the note because nothing is converted. */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-[10px] text-muted-foreground">Show money in</span>
+        <select
+          aria-label="Display currency"
+          value={getCurrency().code}
+          onChange={e => { setCurrency(e.target.value); onCurrencyChange?.(); }}
+          className="bg-muted/30 border border-border rounded-md text-[10px] px-1.5 py-0.5 text-foreground"
+        >
+          {CURRENCIES.map(c => (
+            <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>
+          ))}
+        </select>
+        {rateNote() && <span className="text-[10px] text-muted-foreground">{rateNote()}</span>}
+      </div>
+
       {/* Financial details row */}
       <div className="flex items-center gap-3 text-[10px] text-muted-foreground flex-wrap">
-        {(career.totalAssetValue || 0) > 0 && <span>🏠 Assets: €{(career.totalAssetValue || 0).toFixed(1)}M</span>}
-        {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: €{career.sponsorshipIncome.toFixed(1)}M/yr</span>}
-        {career.lifestyleCostPerYear > 0 && <span>💸 Costs: €{career.lifestyleCostPerYear.toFixed(1)}M/yr</span>}
-        {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: €{career.agentFeesPaid.toFixed(1)}M total</span>}
+        {(career.totalAssetValue || 0) > 0 && <span>🏠 Assets: {money(`€${(career.totalAssetValue || 0).toFixed(1)}M`)}</span>}
+        {career.sponsorshipIncome > 0 && <span>🤝 Sponsor: {money(`€${career.sponsorshipIncome.toFixed(1)}M`)}/yr</span>}
+        {career.lifestyleCostPerYear > 0 && <span>💸 Costs: {money(`€${career.lifestyleCostPerYear.toFixed(1)}M`)}/yr</span>}
+        {career.agentFeesPaid > 0 && <span>🕴️ Agent fees: {money(`€${career.agentFeesPaid.toFixed(1)}M`)} total</span>}
         {career.activeSponsorship && (() => {
           const tier = SPONSORSHIP_TIERS.find(t => t.tier === career.activeSponsorship);
-          return tier ? <span className="text-blue-400">{tier.emoji} {tier.name}: €{tier.income}M/yr</span> : null;
+          return tier ? <span className="text-blue-400">{tier.emoji} {tier.name}: {money(`€${tier.income}M`)}/yr</span> : null;
         })()}
       </div>
 
@@ -2520,7 +2552,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
           {isWinner ? "BALLON D'OR WINNER!" : `Ballon d'Or ${bdor.year}`}
         </h3>
         {isWinner && (
-          <p className="text-sm text-amber-300 font-bold">The best player in the world! Legacy +20, Market Value +€15M</p>
+          <p className="text-sm text-amber-300 font-bold">{money('The best player in the world! Legacy +20, Market Value +€15M')}</p>
         )}
         {!isWinner && isNominated && bdor.playerRank !== null && bdor.playerRank <= 3 && (
           <p className="text-sm text-muted-foreground">You finished {bdor.playerRank === 2 ? "2nd" : "3rd"}! Legacy +5</p>
@@ -2965,7 +2997,7 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
               <span className="text-2xl shrink-0 mt-0.5">{choice.emoji}</span>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-bold text-foreground group-hover:text-red-300 transition-colors">{choice.label}</div>
-                <div className="text-[11px] text-muted-foreground mt-1">{choice.consequence}</div>
+                <div className="text-[11px] text-muted-foreground mt-1">{money(choice.consequence)}</div>
                 {choice.risk && (
                   <div className="text-[10px] text-red-400 font-bold mt-1.5 flex items-center gap-1">
                     <span>⚠️</span> {choice.risk}
@@ -3016,7 +3048,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-amber-300">✅ Accept: Become the Cover Star</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">€25M payment · +5M followers · Legacy +10</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{money('€25M payment')} · +5M followers · Legacy +10</div>
               </div>
               <span className="text-lg">🌟</span>
             </div>
@@ -3047,7 +3079,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
           <h3 className="text-lg font-black">Social Media Update</h3>
           <div className="text-lg font-black text-blue-400">{formatFollowers(currentFollowers)} followers</div>
           {activeTierInfo && (
-            <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name}: €{activeTierInfo.income}M/year</div>
+            <div className="text-xs text-emerald-400 font-bold">{activeTierInfo.emoji} {activeTierInfo.name}: {money(`€${activeTierInfo.income}M`)}/year</div>
           )}
         </div>
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-black">
@@ -3066,7 +3098,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
         <p className="text-xs text-muted-foreground">Choose one action this season to manage your online presence</p>
         <div className="text-sm font-black text-blue-400">{formatFollowers(currentFollowers)} followers</div>
         {activeTierInfo && (
-          <div className="text-[10px] text-emerald-400 font-semibold">{activeTierInfo.emoji} Active: {activeTierInfo.name} (€{activeTierInfo.income}M/yr)</div>
+          <div className="text-[10px] text-emerald-400 font-semibold">{activeTierInfo.emoji} Active: {activeTierInfo.name} ({money(`€${activeTierInfo.income}M`)}/yr)</div>
         )}
         {nextTier && (
           <div className="text-[10px] text-muted-foreground">Next unlock: {nextTier.emoji} {nextTier.name} at {(nextTier.minFollowers / 1_000_000).toFixed(0)}M followers</div>
@@ -3127,7 +3159,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef }: {
   career: CareerState;
   clubs: ClubData[];
   onNextSeason: () => void;
@@ -3167,6 +3199,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onEndPundit: () => void;
   onAdvanceOwner: () => void;
   onEndOwner: () => void;
+  /* Round 258: bumping this re-renders every money figure on the page
+     after the currency picker changes. */
+  onCurrencyChange?: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
   const totals = getCareerTotals(career.seasons);
@@ -3335,7 +3370,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
           <div className="w-px h-6 bg-border" />
           <div className="text-center flex-1">
-            <div className="text-sm sm:text-base font-black text-blue-400">€{career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M</div>
+            <div className="text-sm sm:text-base font-black text-blue-400">{money(`€${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`)}</div>
             <div className="text-[9px] text-muted-foreground">Value</div>
           </div>
         </div>
@@ -3575,7 +3610,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               {career.punditEvents.length > 0 && (
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {career.punditEvents.slice(-4).map((e, i) => (
-                    <div key={i} className="text-xs bg-muted/20 rounded-lg px-3 py-1.5">{e}</div>
+                    <div key={i} className="text-xs bg-muted/20 rounded-lg px-3 py-1.5">{money(e)}</div>
                   ))}
                 </div>
               )}
@@ -3615,7 +3650,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
                 <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
                 <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">€{career.ownerState.budget.toFixed(0)}M</div><div className="text-[9px] text-muted-foreground">Budget</div></div>
+                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{money(`€${career.ownerState.budget.toFixed(0)}M`)}</div><div className="text-[9px] text-muted-foreground">Budget</div></div>
               </div>
             </div>
           )}
@@ -3646,7 +3681,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={career.currentClubCountry} size={16} />{career.currentClub}{(career.isClubCaptain ?? false) && <span title="Club captain" className="text-gold shrink-0">©️</span>}</div>
                 <div className="text-xs text-muted-foreground">
-                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · €${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`}
+                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · ${money(`€${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`)}`}
                 </div>
               </div>
               <div className="text-right shrink-0">
@@ -3658,7 +3693,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
-            <FinancialPanel career={career} />
+            <FinancialPanel career={career} onCurrencyChange={onCurrencyChange} />
           )}
 
           {/* Round 134: My Life used to be a wall of eight tabs and a hundred
@@ -3825,7 +3860,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
-                <span className="shrink-0">›</span><span><TextWithFlags text={e} size={14} /></span>
+                <span className="shrink-0">›</span><span><TextWithFlags text={money(e)} size={14} /></span>
               </div>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORIES } from '@/data/gameRegistry';
+import { upcomingEvents, whenPhrase } from '@/data/sportsCalendar';
 
 /**
  * Round 167, his ask from the first review: the scrolling news strip the big
@@ -20,6 +21,14 @@ interface TickerItem {
   icon: string;
   text: string;
   to: string;
+  /**
+   * Round 258: this line is about the real world and it is dated, so it must
+   * never be frozen into a prerendered file that sits on disk for weeks. The
+   * strip marks these data-no-prerender and scripts/prerender.mjs drops them
+   * before writing a snapshot. simPrerender then checks the shipped files for
+   * the calendar's own titles, so the rule cannot quietly stop being true.
+   */
+  dated?: boolean;
 }
 
 /** Tolerant localStorage JSON read: any failure is just "no line". */
@@ -48,8 +57,23 @@ function moneyShort(n: number): string {
   return `$${Math.floor(n)}`;
 }
 
-export function buildItems(): TickerItem[] {
+export function buildItems(now: Date = new Date()): TickerItem[] {
   const items: TickerItem[] = [];
+
+  /* ---- Round 258, his ask: "For the ticker I want real life events going
+     on." Real, dated, two source checked fixtures off src/data/sportsCalendar
+     .ts, soonest first, and they lead the strip because they are the only
+     lines on it about the sport rather than about this site. When the
+     calendar runs dry this loop adds nothing and the strip carries on exactly
+     as it did before, which is the honest way for a hand kept list to age. */
+  for (const ev of upcomingEvents(now)) {
+    items.push({
+      icon: ev.emoji,
+      text: `${ev.title}, ${whenPhrase(ev, now)}`,
+      to: ev.to,
+      dated: true,
+    });
+  }
 
   /* ---- Your Club Manager save, read from its own fields ---- */
   const cm = readSave<{
@@ -131,7 +155,12 @@ export function TopTicker() {
   const home = pathname === '/';
   const itemClass = 'inline-flex items-center gap-1.5 px-4 text-[11px] text-muted-foreground shrink-0';
   const track = items.map((it, i) => (
-    <Link key={`${it.to}-${i}`} to={it.to} className={`${itemClass} hover:text-foreground transition-colors`}>
+    <Link
+      key={`${it.to}-${i}`}
+      to={it.to}
+      data-no-prerender={it.dated ? 'true' : undefined}
+      className={`${itemClass} hover:text-foreground transition-colors`}
+    >
       <span aria-hidden="true">{it.icon}</span>
       <span className="whitespace-nowrap">{it.text}</span>
       <span className="text-border pl-4" aria-hidden="true">·</span>
@@ -140,7 +169,7 @@ export function TopTicker() {
   /* The second copy makes the loop seamless. Plain spans, not links, so a
      keyboard user never tabs through the strip twice. */
   const ghost = items.map((it, i) => (
-    <span key={`dup-${i}`} aria-hidden="true" className={itemClass}>
+    <span key={`dup-${i}`} aria-hidden="true" data-no-prerender={it.dated ? 'true' : undefined} className={itemClass}>
       <span>{it.icon}</span>
       <span className="whitespace-nowrap">{it.text}</span>
       <span className="text-border pl-4">·</span>

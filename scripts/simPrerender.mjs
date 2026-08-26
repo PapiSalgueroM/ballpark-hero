@@ -190,6 +190,40 @@ for (const [r, html] of docs) {
 }
 console.log(`   ${docs.size - 1} snapshots, ${hashed} carrying a hashed path`);
 
+console.log('7) no dated real world line was frozen into a snapshot');
+/* Round 258. The ticker now carries real fixtures with a relative date
+   worked out from the reader's clock ("Italian Grand Prix at Monza, in nine
+   days"). That sentence is true for about a day, and a snapshot lives for
+   weeks, so the ticker marks those lines data-no-prerender and the
+   prerenderer strips them. This reads the calendar's own titles out of the
+   source rather than restating them, so adding an entry extends the check
+   automatically. */
+const calPath = path.join(ROOT, 'src/data/sportsCalendar.ts');
+if (!existsSync(calPath)) {
+  fail('src/data/sportsCalendar.ts is missing, so the ticker has no calendar to read');
+} else {
+  const titles = [...readFileSync(calPath, 'utf8').matchAll(/^\s*title: (?:'([^']+)'|"([^"]+)")/gm)]
+    .map(m => m[1] ?? m[2]);
+  if (titles.length < 3) fail(`only found ${titles.length} calendar titles to check for, which cannot be right`);
+  /* The defect is a TICKER LINE, which is the title followed by a comma and a
+     relative date, not the title on its own. The first draft looked for the
+     bare title and immediately flagged the What's New page for the sentence
+     announcing this very feature, which mentions World Series Game 1 in
+     ordinary prose that stays true forever. A guard that fires on good
+     writing is a guard people learn to skip, so it now matches the shape the
+     ticker actually renders and nothing else. */
+  const WHEN = String.raw`(?:today|tomorrow|on now|in \d+ days|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)`;
+  let frozen = 0;
+  for (const [r, html] of docs) {
+    const t = textOf(html);
+    for (const title of titles) {
+      const line = new RegExp(`${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')},\\s*${WHEN}\\b`);
+      if (line.test(t)) { frozen += 1; fail(`${r}: froze the dated ticker line ${JSON.stringify(title)} into a file that outlives it`); }
+    }
+  }
+  console.log(`   ${titles.length} dated titles, ${frozen} of them frozen as a ticker line in the ${docs.size} snapshots`);
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simPrerender: ${failures} failure${failures === 1 ? '' : 's'}`);

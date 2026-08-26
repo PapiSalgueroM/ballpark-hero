@@ -212,6 +212,13 @@ for (const route of unique) {
        instant before the app draws over it. */
     const payload = await page.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll('[role="dialog"]'))) el.remove();
+      /* Round 258: anything the app marks data-no-prerender is live or dated
+         and must not be frozen into a file that will still be on disk next
+         month. The ticker's real world fixture lines are the first user of
+         this: "Italian Grand Prix at Monza, in nine days" is true for about
+         a day. Same principle as leaving the database requests hanging, just
+         for data that lives in the bundle rather than behind a fetch. */
+      for (const el of Array.from(document.querySelectorAll('[data-no-prerender]'))) el.remove();
       const esc = t => String(t)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const seen = new Set();
