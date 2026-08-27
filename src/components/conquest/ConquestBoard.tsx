@@ -168,6 +168,7 @@ function FreeAgencyPanel({
             <select
               defaultValue=""
               onChange={(e) => { if (e.target.value) setFavoriteTeam(e.target.value); }}
+              aria-label="Pick your team"
               className="w-full px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground"
             >
               <option value="" disabled>Select a team...</option>

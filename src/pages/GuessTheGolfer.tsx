@@ -188,6 +188,7 @@ const GuessTheGolfer = () => {
                   if (e.key === 'Enter' && suggestions.length > 0) submitGuess(suggestions[0].name);
                 }}
                 placeholder="Type a golfer's name..."
+                aria-label="Guess the golfer"
                 className="w-full px-4 py-3 rounded-xl bg-secondary/60 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
               {suggestions.length > 0 && (

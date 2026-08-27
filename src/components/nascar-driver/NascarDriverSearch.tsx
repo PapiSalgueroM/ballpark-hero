@@ -69,6 +69,7 @@ export function NascarDriverSearch({ onGuess, guesses, drivers }: Props) {
         onFocus={() => setShowSuggestions(true)}
         onKeyDown={handleKeyDown}
         placeholder="Type driver name..."
+        aria-label="Search NASCAR drivers"
         className="w-full px-4 py-3 rounded-xl border border-red-500/30 bg-neutral-900 text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all"
       />
       {showSuggestions && filtered.length > 0 && (

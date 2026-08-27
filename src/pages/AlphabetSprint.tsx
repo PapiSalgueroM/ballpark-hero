@@ -329,6 +329,7 @@ const AlphabetSprint = () => {
                 }}
                 onKeyDown={onInputKeyDown}
                 placeholder={`Spell out a "${letter}" surname player...`}
+                aria-label="Type a player surname"
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}

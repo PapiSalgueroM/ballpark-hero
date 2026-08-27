@@ -231,6 +231,7 @@ export function CombatChainBoard() {
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
                       placeholder="Nickname"
+                      aria-label="Your nickname"
                       maxLength={30}
                       className="flex-1 min-w-0 bg-gray-800 border border-gray-600 rounded-md px-3 py-2 text-white placeholder:text-gray-400 focus:border-red-500"
                     />

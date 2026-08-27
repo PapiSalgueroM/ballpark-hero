@@ -312,6 +312,7 @@ const ClueAuction = () => {
                     }
                   }}
                   placeholder="Name the secret player (2+ letters)"
+                  aria-label="Name the secret player"
                   className="w-full bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground"
                   autoComplete="off"
                   autoCorrect="off"

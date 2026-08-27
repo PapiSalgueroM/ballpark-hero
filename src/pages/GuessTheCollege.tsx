@@ -140,6 +140,7 @@ const GuessTheCollege = () => {
               <select
                 value={selectedConference || ''}
                 onChange={e => setSelectedConference(e.target.value || null)}
+                aria-label="Select conference"
                 className="px-3 py-2 rounded-lg border border-border bg-card text-foreground text-sm"
               >
                 <option value="">Select Conference</option>

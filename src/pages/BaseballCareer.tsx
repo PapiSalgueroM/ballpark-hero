@@ -168,6 +168,7 @@ const BaseballCareer = () => {
                 value={guessInput}
                 onChange={(e) => setGuessInput(e.target.value)}
                 placeholder="Type player name..."
+                aria-label="Guess the player"
                 className={cn(
                   'flex-1 min-w-0 px-4 py-3 rounded-xl bg-secondary border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all',
                   wrongGuess

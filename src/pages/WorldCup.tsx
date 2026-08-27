@@ -227,6 +227,7 @@ const WorldCup = () => {
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type your guess…"
+                  aria-label="Guess the World Cup legend"
                   autoComplete="off"
                   className="w-full rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--wc-green))]/50"
                 />

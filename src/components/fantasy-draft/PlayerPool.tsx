@@ -57,6 +57,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
           <input
             type="text"
             placeholder="Search players..."
+            aria-label="Search players"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-2 rounded-lg bg-secondary/60 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"

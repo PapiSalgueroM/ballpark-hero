@@ -534,8 +534,8 @@ export default function Profile() {
                   {isOwnProfile && (
                     editing ? (
                       <>
-                        <Button size="sm" variant="ghost" onClick={() => setEditing(false)}><X className="w-4 h-4" /></Button>
-                        <Button size="sm" onClick={handleSave} disabled={saving}>
+                        <Button size="sm" variant="ghost" onClick={() => setEditing(false)} aria-label="Cancel"><X className="w-4 h-4" /></Button>
+                        <Button size="sm" onClick={handleSave} disabled={saving} aria-label="Save profile">
                           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                         </Button>
                       </>

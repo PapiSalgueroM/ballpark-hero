@@ -291,6 +291,7 @@ const StatDetective = () => {
                       }
                     }}
                     placeholder="Who is it? Type 2+ letters..."
+                    aria-label="Guess the mystery player"
                     className="w-full rounded-xl border border-border bg-card pl-10 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>

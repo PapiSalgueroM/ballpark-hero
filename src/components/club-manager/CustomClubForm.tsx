@@ -142,8 +142,9 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
         {/* Name + stadium */}
         <div className="bg-card border border-border rounded-2xl p-3 grid gap-2">
           <div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Club name</div>
+            <label htmlFor="custom-club-name" className="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Club name</label>
             <input
+              id="custom-club-name"
               value={name}
               onChange={e => setName(e.target.value)}
               maxLength={24}
@@ -155,8 +156,9 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
             )}
           </div>
           <div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Stadium</div>
+            <label htmlFor="custom-club-stadium" className="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Stadium</label>
             <input
+              id="custom-club-stadium"
               value={stadium}
               onChange={e => setStadium(e.target.value)}
               maxLength={30}
@@ -209,8 +211,9 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           {swatchRow(color1, setColor1, 'Main color')}
           {swatchRow(color2, setColor2, 'Second color')}
           <div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Initials on the crest</div>
+            <label htmlFor="custom-club-initials" className="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Initials on the crest</label>
             <input
+              id="custom-club-initials"
               value={initials}
               onChange={e => { setInitialsTouched(true); setInitialsRaw(e.target.value); }}
               maxLength={3}

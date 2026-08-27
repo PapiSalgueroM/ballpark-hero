@@ -80,6 +80,7 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
           onFocus={() => query.trim() && setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder="Search for a player..."
+          aria-label="Search for a player"
           className="w-full bg-card border border-border text-foreground rounded-xl pl-12 pr-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-muted-foreground transition-all"
           autoComplete="off"
         />

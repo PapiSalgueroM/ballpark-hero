@@ -120,6 +120,7 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 placeholder="Add more details (optional)..."
+                aria-label="Describe what is wrong with this question"
                 rows={3}
                 maxLength={500}
                 className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
