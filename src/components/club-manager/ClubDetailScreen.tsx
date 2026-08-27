@@ -5,6 +5,7 @@ import {
   money, sortedTable, isPartialClub, TIER_INFO,
   projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
+  managerOf,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -75,6 +76,21 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
               {league.name} · {TIER_INFO[def.tier].emoji} {TIER_INFO[def.tier].label}
               {clubName === career.clubName ? ' · your club' : ''}
             </div>
+            {/* Round 308: the other dugout has a name now. Your own club
+                shows your created manager if one exists, second person if
+                not, and rivals show the generated name and its tenure. */}
+            {clubName === career.clubName ? (
+              career.manager && (
+                <div className="text-[10px] text-muted-foreground">Dugout: <span className="text-foreground font-semibold">{career.manager.name}</span> (you)</div>
+              )
+            ) : (
+              managerOf(career, clubName) && (
+                <div className="text-[10px] text-muted-foreground">
+                  Dugout: <span className="text-foreground font-semibold">{managerOf(career, clubName)!.name}</span>
+                  {' '}since S{managerOf(career, clubName)!.since}
+                </div>
+              )
+            )}
           </div>
           <Eye className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
         </div>
