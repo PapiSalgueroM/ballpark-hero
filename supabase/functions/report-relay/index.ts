@@ -9,20 +9,34 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const REPORT_EMAIL = "douknowball1@gmail.com";
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+/* Round 304, audit finding 10: this was the ONE function answering any
+   origin while every AI function kept an allowlist, and it is the one that
+   pumps content into a human inbox. Same list the AI functions use. */
+const allowedOrigins = [
+  "https://douknowball.com",
+  "https://www.douknowball.com",
+  "https://douknowball.lovable.app",
+  "https://ballpark-hero.lovable.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+];
 
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...cors, "Content-Type": "application/json" },
-  });
+function corsFor(req: Request): Record<string, string> {
+  const origin = req.headers.get("origin") ?? "";
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+  };
 }
 
 Deno.serve(async (req: Request) => {
+  const cors = corsFor(req);
+  const json = (body: unknown, status = 200): Response =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
   try {

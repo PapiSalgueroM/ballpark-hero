@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -197,7 +202,7 @@
 <div id="root">
 <div id="dukb-snapshot">
 <h1>Terms of Service</h1>
-<p>Last updated: July 3, 2026</p>
+<p>Last updated: August 27, 2026</p>
 <h2>1. Acceptance of Terms</h2>
 <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site. The Site is owned and operated by an individual doing business as DoUKnowBall ("we", "us", "the operator").</p>
 <h2>2. Description of Service</h2>
@@ -210,7 +215,7 @@
 <p>You agree to provide accurate information when creating an account and not to create an account using someone else's identity or a name that is offensive or impersonates another person or brand. We may suspend or remove an account that violates these Terms.</p>
 <p>See our <a href="/privacy">Privacy Policy</a> for details on what account data we collect and how to request its deletion.</p>
 <h2>5. Advertising</h2>
-<p>The Site is supported by advertising, including personalized ads served through Google AdSense. By using the Site, you agree to the display of these ads. See our <a href="/privacy">Privacy Policy</a> and cookie banner for more on how ad personalization works and how to opt out.</p>
+<p>The Site is supported by advertising served through Google AdSense in non-personalized mode. Ads load only if you choose Accept on our cookie banner; choose Essential only and no advertising code is loaded at all. See our <a href="/privacy">Privacy Policy</a> for the full advertising disclosure.</p>
 <h2>6. Intellectual Property &amp; Trademarks</h2>
 <p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
 <p>All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
