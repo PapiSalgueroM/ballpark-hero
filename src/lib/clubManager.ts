@@ -1594,6 +1594,13 @@ export interface CareerState {
    *  the feature and whenever the picker step is skipped, and every reader
    *  treats absence as the second person career this always was. */
   manager?: ManagerSpec;
+  /** Round 308: who is in every OTHER dugout of your league. Keyed by club
+   *  name, generated names only (makeGeneratedName re-rolls real player
+   *  collisions away), never an entry for your own club. The world model is
+   *  rebuilt every summer; this record is deliberately carried across the
+   *  rollover so a manager's tenure means something, and the merry-go-round
+   *  turns it over at roughly the real world's rate. */
+  managers?: Record<string, { name: string; since: number }>;
 }
 
 export type NextFixtureInfo =
@@ -4147,6 +4154,116 @@ export function ensurePress(state: CareerState): void {
   if (typeof p.promised !== 'boolean') p.promised = false;
   if (p.lastTone === undefined) p.lastTone = null;
   if (typeof p.toneRun !== 'number') p.toneRun = 0;
+}
+
+/* ─── Round 308: the other dugouts. Owner tweaks item 11, arc two
+   ("different managers on different teams"). Every club in your league has
+   a named manager now, generated (makeGeneratedName re-rolls any collision
+   with a real footballer's name, and the record never holds a real
+   manager's name because no real manager list exists here at all: an
+   invented career under a real name is the simNoInventedQuotes exposure).
+   Same house pattern as the ensure family: idempotent, runs at start, on
+   load and on the rollover, and a second call changes nothing. ─── */
+function ordinal(n: number): string {
+  const rem = n % 100;
+  if (rem >= 11 && rem <= 13) return `${n}th`;
+  const suffix = n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th';
+  return `${n}${suffix}`;
+}
+
+function mintManagerName(state: CareerState, club: string, taken: Set<string>): string {
+  const seed = `mgr|${state.eraId ?? 'now'}|${club}|${state.season}`;
+  let name = makeGeneratedName(seed);
+  for (let k = 1; taken.has(name) && k < 25; k++) name = makeGeneratedName(`${seed}|${k}`);
+  return name;
+}
+
+export function ensureManagers(state: CareerState): void {
+  if (!state.managers || typeof state.managers !== 'object') state.managers = {};
+  const m = state.managers;
+  /* Your own chair is yours: a stale entry for the club you now manage is
+     what a save carries the summer you change jobs. */
+  delete m[state.clubName];
+  const taken = new Set(Object.values(m).map(v => v.name));
+  /* Sorted, not in fixture order: leagueClubs is shuffled per save, and a
+     rare base name collision resolves by iteration order, so two identical
+     careers could disagree on which club got the re-rolled name. Sorting
+     makes the record a pure function of the league and the season. */
+  for (const club of [...state.leagueClubs].sort()) {
+    if (club === state.clubName) continue;
+    if (m[club] && typeof m[club].name === 'string') continue;
+    const name = mintManagerName(state, club, taken);
+    taken.add(name);
+    m[club] = { name, since: state.season };
+  }
+}
+
+/** Who is in a club's dugout, or null for your own club and unknown clubs. */
+export function managerOf(career: CareerState, club: string): { name: string; since: number } | null {
+  return career.managers?.[club] ?? null;
+}
+
+/**
+ * The summer merry-go-round. Runs once per rollover, on the season just
+ * finished: the table decides who is under the axe (bottom three, or a
+ * finish far below the board's expectation ladder), a light random churn
+ * tops the rate up to roughly the real world's one club in six, and a
+ * sacked name sometimes lands straight in another emptied chair, which is
+ * what makes it a merry-go-round rather than a cull. Every line returned is
+ * read off the record it just wrote, so the feed cannot claim a move the
+ * world model does not hold.
+ */
+function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[] {
+  const record: Record<string, { name: string; since: number }> = { ...(prev.managers ?? {}) };
+  const lines: string[] = [];
+  const table = sortedTable(prev.table);
+  const posOf = new Map(table.map((r, i) => [r.club, i + 1]));
+  const ranked = prev.leagueClubs
+    .filter(c => c !== prev.clubName && record[c])
+    .map(c => ({ club: c, pos: posOf.get(c) ?? prev.leagueClubs.length }));
+
+  const sacked: { club: string; name: string; pos: number }[] = [];
+  for (const { club, pos } of ranked) {
+    const fromBottom = prev.leagueClubs.length - pos;
+    const chance = (fromBottom < 3 ? 0.35 : 0.05) + (record[club].since <= prev.season - 4 ? 0.08 : 0);
+    if (Math.random() < chance) sacked.push({ club, name: record[club].name, pos });
+  }
+
+  /* Fill the emptied chairs: some by a name just sacked elsewhere, the rest
+     by a fresh appointment. */
+  const pool = shuffle(sacked.map(s => s.name));
+  const taken = new Set(Object.values(record).map(v => v.name));
+  for (const s of sacked) {
+    const recycled = pool.find(n => n !== s.name && Math.random() < 0.4);
+    let name: string;
+    if (recycled) {
+      pool.splice(pool.indexOf(recycled), 1);
+      name = recycled;
+      const from = sacked.find(x => x.name === recycled);
+      lines.push(`\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name}, out at ${from?.club ?? 'his last club'} the same week, takes the chair.`);
+    } else {
+      name = mintManagerName(state, s.club, taken);
+      lines.push(`\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name} takes over.`);
+    }
+    taken.add(name);
+    record[s.club] = { name, since: state.season };
+  }
+
+  /* Your moves write their own truths: the club you left appoints, and the
+     chair you take stops being anyone else's. */
+  if (state.clubName !== prev.clubName) {
+    const displaced = record[state.clubName]?.name;
+    delete record[state.clubName];
+    if (displaced) lines.push(`\u{1F91D} You take over at ${state.clubName} from ${displaced}.`);
+    if (!record[prev.clubName]) {
+      const name = mintManagerName(state, prev.clubName, taken);
+      record[prev.clubName] = { name, since: state.season };
+      lines.push(`\u{1FA91} ${prev.clubName} move on: ${name} takes the job you left.`);
+    }
+  }
+
+  state.managers = record;
+  return lines.slice(0, 4);
 }
 
 /** The press room, with a sensible answer for a save that has not got one yet. */
@@ -9114,6 +9231,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureAcademy(state);
   ensureRoles(state);
   ensurePress(state);
+  ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   // Round 163: the rest of the Champions League draw exists from day one.
@@ -9147,6 +9265,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureClock(state);
   // Round 135: and one from before the press room existed gets one of those.
   ensurePress(state);
+  // Round 308: and the other dugouts get their managers.
+  ensureManagers(state);
   while (state.week < state.calendar.length) {
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -10194,6 +10314,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   ensureRoles(state);
   ensureClock(state);
   ensurePress(state);
+  /* Round 308: the merry-go-round runs on the season just finished, then
+     the ensure fills any chair the new league has that the record does not
+     know yet (a move abroad brings twenty new dugouts at once). The lines
+     it returns are prepended after generateHeadlines below, the Round 161
+     rule, or that call would eat them. */
+  const managerNews = runManagerMerryGoRound(career, state);
+  ensureManagers(state);
   /* Round 135: a reputation follows you, so the press mood carries over the
      summer rather than resetting, but it fades most of the way back toward
      nobody having an opinion because last season is last season. A manager who
@@ -10345,6 +10472,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
   if (addOnNews.length) state.aiHeadlines = [...addOnNews, ...state.aiHeadlines].slice(0, 8);
+  /* Round 308: the merry-go-round's news, same seat as the add-ons and for
+     the same reason. */
+  if (managerNews.length) state.aiHeadlines = [...managerNews, ...state.aiHeadlines].slice(0, 8);
   return state;
 }
 
@@ -10388,6 +10518,9 @@ export function loadCareer(): CareerState | null {
     /* Round 135: and the press room, for exactly the same reason. The hub tile
        and the press screen both read it before a ball is kicked. */
     ensurePress(parsed);
+    /* Round 308: and the other dugouts, for the same reason: the club detail
+       screen reads a manager name before a ball is kicked. */
+    ensureManagers(parsed);
     /* Round 132: same reason, same place. A save from before the clock existed
        has no start year, and the squad screen, the transfer screen and the hub
        all read the world year now, so it has to be right before any of them
