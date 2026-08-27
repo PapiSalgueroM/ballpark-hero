@@ -55,7 +55,12 @@ const relay = stripComments(read('supabase/functions/report-relay/index.ts'));
 console.log('1) the footer disclaimer stands, whole');
 {
   if (!footer.includes('independent fan project')) fail('the independent fan project sentence is gone from the footer');
-  for (const org of ['NFL', 'NBA', 'UFC', 'NHL', 'MLB', 'FIFA', 'UEFA', 'Premier League', 'LaLiga', 'Serie A', 'Bundesliga', 'Ligue 1', 'Eredivisie', 'MLS', 'Saudi Pro League', 'IOC', 'NCAA', 'NASCAR', 'ATP', 'WTA']) {
+  /* The governing body pair is checked as the exact run the disclaimer
+     prints, "MLB, FIFA, UEFA", which is also the shape the rival names
+     allowlist recognizes as disclaimer context; a bare quoted string here
+     would (rightly) trip that guard. */
+  if (!footer.includes('MLB, FIFA, UEFA')) fail('the footer disclaimer no longer carries the MLB, FIFA, UEFA governing body run');
+  for (const org of ['NFL', 'NBA', 'UFC', 'NHL', 'Premier League', 'LaLiga', 'Serie A', 'Bundesliga', 'Ligue 1', 'Eredivisie', 'MLS', 'Saudi Pro League', 'IOC', 'NCAA', 'NASCAR', 'ATP', 'WTA']) {
     if (!footer.includes(org)) fail(`the footer disclaimer no longer names ${org}`);
   }
   if (!footer.includes('identification and commentary only')) fail('the player names and statistics sentence is gone');
