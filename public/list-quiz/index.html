@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -251,7 +256,7 @@
 <h2>More games to play</h2>
 <a href="/minefield">💣 Minefield Click everyone who belongs. Some tiles explode</a>
 <a href="/sports-millionaire">💰 Sports Millionaire Climb a 15-question money ladder with lifelines</a>
-<a href="/jeopardy">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
+<a href="/quiz-board">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
 <a href="/build-your-xi">⚽ Build Your XI Create a lineup, get AI rated</a>
 <a href="/football-connect-4">🔴 Connect 4 Soccer trivia meets Connect 4</a>
 <a href="/cfb-higher-lower">📊 CFB Higher or Lower Which QB threw for more college yards?</a>

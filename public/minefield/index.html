@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -235,7 +240,7 @@
 <p>Yes. Minefield is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/sports-millionaire">💰 Sports Millionaire Climb a 15-question money ladder with lifelines</a>
-<a href="/jeopardy">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
+<a href="/quiz-board">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
 <a href="/ball-iq">🧠 Ball Knowledge IQ Twelve questions, getting harder. Do you actually know ball?</a>
 <a href="/fantasy-draft">🧑‍💼 Fantasy Draft Draft your ultimate XI against an AI opponent</a>
 <a href="/guess-cbb-team">🏀 Guess The CBB Program Guess the college basketball program</a>
