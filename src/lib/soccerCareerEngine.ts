@@ -3280,6 +3280,25 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-174", name: "APOEL", country: "Cyprus", tier: 4, color: "#F26522", league: "Cypriot First Division" },
   { id: "fb-175", name: "Flora Tallinn", country: "Estonia", tier: 4, color: "#00954C", league: "Meistriliiga" },
   { id: "fb-176", name: "Zalgiris Vilnius", country: "Lithuania", tier: 4, color: "#00954C", league: "A Lyga" },
+  /* Round 302, off the owner's tweaks document: the leagues he named by name
+     (Liga Portugal here as Primeira Liga, Eredivisie, Scottish, MLS, Saudi,
+     K League) get real depth instead of two or three clubs each. League
+     labels are byte identical to the strings already in this array, because
+     league is free text and a near miss silently creates a new league. */
+  { id: "fb-177", name: "AZ Alkmaar", country: "Netherlands", tier: 3, color: "#DD0000", league: "Eredivisie" },
+  { id: "fb-178", name: "Twente", country: "Netherlands", tier: 4, color: "#E70011", league: "Eredivisie" },
+  { id: "fb-179", name: "Vitoria Guimaraes", country: "Portugal", tier: 4, color: "#F5F5F5", league: "Primeira Liga" },
+  { id: "fb-180", name: "Hearts", country: "Scotland", tier: 4, color: "#800910", league: "Scottish Premiership" },
+  { id: "fb-181", name: "Hibernian", country: "Scotland", tier: 4, color: "#006A4E", league: "Scottish Premiership" },
+  { id: "fb-182", name: "Columbus Crew", country: "USA", tier: 3, color: "#FEDD00", league: "MLS" },
+  { id: "fb-183", name: "Atlanta United", country: "USA", tier: 4, color: "#80000A", league: "MLS" },
+  { id: "fb-184", name: "Al Ahli", country: "Saudi Arabia", tier: 3, color: "#006B3F", league: "Saudi Pro League" },
+  { id: "fb-185", name: "Al Shabab", country: "Saudi Arabia", tier: 4, color: "#F2F2F2", league: "Saudi Pro League" },
+  { id: "fb-186", name: "Ulsan HD", country: "South Korea", tier: 3, color: "#0053A0", league: "K League 1" },
+  { id: "fb-187", name: "FC Seoul", country: "South Korea", tier: 4, color: "#AC1A2F", league: "K League 1" },
+  { id: "fb-188", name: "Pohang Steelers", country: "South Korea", tier: 4, color: "#C8102E", league: "K League 1" },
+  { id: "fb-189", name: "Botafogo", country: "Brazil", tier: 3, color: "#1A1A1A", league: "Brasileirao" },
+  { id: "fb-190", name: "Cruzeiro", country: "Brazil", tier: 4, color: "#0033A0", league: "Brasileirao" },
 ];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
