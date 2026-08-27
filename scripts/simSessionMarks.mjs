@@ -11,12 +11,23 @@
  * marks once per session on the first meaningful action through a ref so
  * a thousand taps stay one mark.
  *
+ * Round 301, audit finding 2, the contract got sharper. Round 300 turned
+ * recordCompletion into the full recorder (anonymous row, streak day,
+ * signed in save), which silently upgraded these per round marks into full
+ * plays: a fifteen season career counted as sixteen plays. The boards now
+ * call recordActivity, the ping that writes the anonymous row and nothing
+ * else, and a recordCompletion call in a board file is a failure here
+ * because it would recreate exactly that regression. Stadium Tycoon,
+ * Club Manager and Soccer Career keep recordCompletion on purpose: their
+ * marks fire once per session or per completed season, and those are
+ * genuine plays.
+ *
  * The contract, statically guarded here because the calls are one-liners
  * a refactor could silently drop or, worse, turn scored:
- *   1. every board imports recordCompletion and calls it UNSCORED with
+ *   1. every board imports recordActivity and calls it UNSCORED with
  *      its exact route path, once, inside its play function, after the
  *      null guard (never at module level, so loading a page is never
- *      "playing" it);
+ *      "playing" it), and never calls recordCompletion at all;
  *   2. the scored legacy path (useGameCompletion) survives untouched in
  *      all eight boards;
  *   3. the tycoon's mark is once-per-session by ref, called first in
@@ -55,22 +66,27 @@ const BOARDS = [
 const TYCOON = 'src/hooks/useStadiumTycoon.ts';
 
 /* ---------- 1. Eight boards: unscored, once, in the right place ---------- */
-console.log('1) Every board marks its play unscored, once, after the guard');
+console.log('1) Every board pings its play unscored, once, after the guard, and never as a full completion');
 for (const [file, route, fn, guard] of BOARDS) {
   const t = read(file);
-  if (!t.includes("import { recordCompletion } from '@/lib/completions';")) {
-    fail(`${file}: no recordCompletion import`);
+  if (!t.includes("import { recordActivity } from '@/lib/completions';")) {
+    fail(`${file}: no recordActivity import`);
     continue;
   }
-  const unscored = `recordCompletion('${route}');`;
+  /* Round 301: a recordCompletion call here is the Round 300 regression,
+     a per round ping counted as a full play with a streak day behind it. */
+  if (/\brecordCompletion\s*\(/.test(t)) {
+    fail(`${file}: calls recordCompletion; board marks are pings, recordActivity only`);
+  }
+  const unscored = `recordActivity('${route}');`;
   const calls = t.split(unscored).length - 1;
   if (calls !== 1) { fail(`${file}: expected exactly 1 unscored mark, found ${calls}`); continue; }
-  if (t.includes(`recordCompletion('${route}',`)) {
+  if (t.includes(`recordActivity('${route}',`)) {
     fail(`${file}: a SCORED direct call exists; scores belong to useGameCompletion only`);
   }
   /* one call in the whole file: the unscored one (imports aside) */
-  const allCalls = [...t.matchAll(/recordCompletion\(/g)].length;
-  if (allCalls !== 1) fail(`${file}: ${allCalls} recordCompletion call sites, expected the single unscored mark`);
+  const allCalls = [...t.matchAll(/recordActivity\(/g)].length;
+  if (allCalls !== 1) fail(`${file}: ${allCalls} recordActivity call sites, expected the single unscored mark`);
   const fnIdx = t.indexOf(`const ${fn} = () => {`);
   const callIdx = t.indexOf(unscored);
   const guardIdx = t.indexOf(guard, fnIdx);
@@ -165,4 +181,4 @@ if (failures > 0) {
   console.error(`simSessionMarks: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simSessionMarks: green. Nine games count the day you play them, none of them invented a score to do it.');
+console.log('simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.');
