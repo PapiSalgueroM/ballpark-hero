@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -201,8 +206,7 @@
 </div>
 <h1>BUILD YOUR STARTING 5</h1>
 <p>Spin a stat challenge, get random NBA teams, build the ultimate lineup</p>
-<p>Your Challenge</p>
-<p>Build a Starting 5 optimizing for the highest career assists per game (APG)</p>
+<p>Spinning your challenge...</p>
 <h2>Pro Basketball Starting 5 | DoUKnowBall</h2>
 <p>Build the starting five that matches all the given criteria. Tests your knowledge of NBA rosters, positions and player history.</p>
 <p>One spin sets the mission: build a starting five with the highest career scoring, or the lowest, or whatever the stat wheel demands.</p>
@@ -257,6 +261,7 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 <p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
 </div>
 </div>

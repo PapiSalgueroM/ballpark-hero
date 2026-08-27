@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -201,12 +206,16 @@
 </div>
 <h1>MISSING XI</h1>
 <p>One player is missing from this famous lineup. Name him in 3 guesses.</p>
+<p>UEFA Champions League</p>
 <p>GK</p>
 <p>RB</p>
 <p>CB</p>
-<p>?</p>
 <p>LB</p>
+<p>?</p>
+<p>CDM</p>
 <p>CM</p>
+<p>LW</p>
+<p>RW</p>
 <h2>Missing XI: Guess the Famous Lineup's Missing Player</h2>
 <p>A real, famous starting XI from soccer history with one player blanked out. Name the missing man with escalating hints that never repeat what the card already shows. Champions League finals, World Cup finals, Euros finals and iconic title deciders.</p>
 <p>One famous real lineup, ten names showing, one tile blank. Missing XI asks the simplest question in football trivia: who is missing? Champions League finals, World Cup finals, Euros deciders and iconic title run-ins all take a turn.</p>
@@ -258,6 +267,7 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 <p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
 </div>
 </div>

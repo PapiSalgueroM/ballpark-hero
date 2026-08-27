@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -218,6 +223,7 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 </div>
 <h2>NASCAR Chain Game | DoUKnowBall</h2>
 <p>Build the longest chain of NASCAR Cup Series drivers by naming someone who raced against the current driver. Test your knowledge of stock car racing history.</p>
