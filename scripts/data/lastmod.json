@@ -8,9 +8,13 @@
     "hash": "abdc4ccf14e9aba4",
     "date": "2026-08-25"
   },
+  "/accessibility": {
+    "hash": "00666a9331c5e2ea",
+    "date": "2026-08-27"
+  },
   "/afl-higher-lower": {
-    "hash": "b7e0808a6381e019",
-    "date": "2026-08-25"
+    "hash": "7236b1d0af758c60",
+    "date": "2026-08-27"
   },
   "/alphabet-sprint": {
     "hash": "fc30e47a08d604c1",
@@ -37,8 +41,8 @@
     "date": "2026-08-25"
   },
   "/build-your-xi": {
-    "hash": "c1757710d4d900c4",
-    "date": "2026-08-25"
+    "hash": "4a775662800bcee7",
+    "date": "2026-08-27"
   },
   "/career": {
     "hash": "3cb3b3f74b7bd08c",
@@ -237,8 +241,8 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "4fdd36adbc24be36",
-    "date": "2026-08-26"
+    "hash": "4ea13fae13a16713",
+    "date": "2026-08-27"
   },
   "/mlb-connect-4": {
     "hash": "7fad83a61216a551",
@@ -301,8 +305,8 @@
     "date": "2026-08-25"
   },
   "/nba-starting-5": {
-    "hash": "a336e733e0f6b60b",
-    "date": "2026-08-26"
+    "hash": "2b384f95c747731e",
+    "date": "2026-08-27"
   },
   "/nfl-career": {
     "hash": "73d12d61e5a9b58f",
@@ -481,8 +485,8 @@
     "date": "2026-08-25"
   },
   "/transfer-path": {
-    "hash": "161878a6f34d7e11",
-    "date": "2026-08-25"
+    "hash": "d4cda5d085c38b78",
+    "date": "2026-08-27"
   },
   "/ufc": {
     "hash": "bcefffecfeafe9f4",
@@ -493,7 +497,7 @@
     "date": "2026-08-25"
   },
   "/whats-new": {
-    "hash": "6981c31a233adac3",
+    "hash": "6273cfc80199f5db",
     "date": "2026-08-27"
   },
   "/who-am-i": {
@@ -509,8 +513,8 @@
     "date": "2026-08-25"
   },
   "/world-cup-bracket": {
-    "hash": "52e068c8531956ab",
-    "date": "2026-08-25"
+    "hash": "721183b59100260a",
+    "date": "2026-08-27"
   },
   "/world-xi": {
     "hash": "2c6e69e7b82d7502",

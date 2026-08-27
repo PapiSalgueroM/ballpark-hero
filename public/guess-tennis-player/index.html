@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -217,6 +222,7 @@
 <a href="/leaderboard">Leaderboard</a>
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 </div>
 <h2>Guess The Tennis Player | DoUKnowBall</h2>
 <p>Identify the mystery tennis player from progressive clues about their Grand Slam record, nationality, era, and famous moments. Covers ATP and WTA from 1970 to 2025.</p>
