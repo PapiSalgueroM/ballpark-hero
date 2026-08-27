@@ -89,6 +89,90 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
   console.log(`   ${paths.length} registry paths: ${covered} wired for credit, ${redirects} retired redirects exempt by shape`);
 }
 
+console.log('2) one recordCompletion call feeds all three pipelines, with the right numbers');
+/* Round 300. Section 1 proves every game REACHES the recorder; this proves
+   the recorder DELIVERS: the anonymous row, the local streak record, and the
+   signed in save all move from one call, and none of them moves twice. The
+   supabase client is swapped for a ledger stub at bundle time, so this runs
+   the real completions and streaks code against a fake database and a fake
+   session, deterministically. */
+{
+  const { execSync } = await import('node:child_process');
+  const STUB = '/tmp/scoringStub.ts';
+  const ENTRY = '/tmp/scoringEntry.mjs';
+  const BUNDLE = '/tmp/scoring.bundle.mjs';
+  fs.writeFileSync(STUB, `
+export const SUPABASE_URL = 'stub';
+export const SUPABASE_PUBLISHABLE_KEY = 'stub';
+export const ledger: Record<string, any[]> = {};
+let sessionUser: { id: string } | null = null;
+export function setSessionUser(u: { id: string } | null) { sessionUser = u; }
+function table(name: string) {
+  ledger[name] = ledger[name] || [];
+  const rows = ledger[name];
+  const q: any = {
+    _filters: {} as Record<string, unknown>,
+    insert(row: any) { rows.push(row); return Promise.resolve({ error: null }).then ? Object.assign(Promise.resolve({ error: null }), { then: Promise.prototype.then.bind(Promise.resolve({ error: null })) }) : { error: null }; },
+    update(patch: any) { q._patch = patch; return q; },
+    select(_cols?: string, opts?: any) { q._count = opts && opts.count; return q; },
+    eq(col: string, val: unknown) {
+      q._filters[col] = val;
+      if (q._patch) {
+        for (const r of rows) if (Object.entries(q._filters).every(([k, v]) => r[k] === v)) Object.assign(r, q._patch);
+        return Promise.resolve({ error: null });
+      }
+      return q;
+    },
+    single() { const hit = rows.find(r => Object.entries(q._filters).every(([k, v]) => r[k] === v)) || null; return Promise.resolve({ data: hit, error: hit ? null : { code: 'PGRST116' } }); },
+    then(res: any, rej: any) {
+      if (q._count) { const n = rows.filter(r => Object.entries(q._filters).every(([k, v]) => r[k] === v)).length; return Promise.resolve({ count: n, error: null }).then(res, rej); }
+      return Promise.resolve({ data: rows, error: null }).then(res, rej);
+    },
+  };
+  return q;
+}
+export const supabase: any = {
+  from: (name: string) => table(name),
+  auth: { getUser: async () => ({ data: { user: sessionUser } }) },
+};
+`);
+  fs.writeFileSync(ENTRY, `
+export { recordCompletion } from '${ROOT}/src/lib/completions.ts';
+export { getStreakState } from '${ROOT}/src/lib/streaks.ts';
+export { ledger, setSessionUser } from '${STUB}';
+`);
+  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@/integrations/supabase/client=${STUB}`, { stdio: 'inherit' });
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem: k => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => { store.set(k, String(v)); },
+    removeItem: k => { store.delete(k); },
+    clear: () => { store.clear(); },
+  };
+  globalThis.window = { dispatchEvent: () => {} };
+  const mod = await import(BUNDLE);
+
+  mod.setSessionUser({ id: 'user-1' });
+  mod.recordCompletion('/soccer-grid', 40, 'Tester', 3);
+  await new Promise(r => setTimeout(r, 50));
+  mod.recordCompletion('/missing-xi', 100, 'Tester');
+  await new Promise(r => setTimeout(r, 50));
+
+  const anon = mod.ledger['game_completions'] || [];
+  if (anon.length !== 2) fail(`anonymous pipeline got ${anon.length} rows from 2 calls`);
+  const streaks = mod.getStreakState();
+  if ((streaks.totalPlays || 0) !== 2) fail(`streak pipeline counted ${streaks.totalPlays} plays from 2 calls`);
+  if ((streaks.totalPoints || 0) !== 140) fail(`streak pipeline summed ${streaks.totalPoints} points, wanted 140`);
+  const scores = (mod.ledger['user_scores'] || []);
+  if (scores.length !== 1) fail(`user_scores has ${scores.length} rows, wanted the one upserted row`);
+  else if (scores[0].total_points !== 140) fail(`signed in points landed at ${scores[0].total_points}, wanted 140`);
+  const daily = mod.ledger['daily_completions'] || [];
+  if (daily.length !== 2) fail(`daily_completions got ${daily.length} rows from 2 different games`);
+  const best = mod.ledger['user_best_scores'] || [];
+  if (best.length !== 2) fail(`user_best_scores got ${best.length} rows from 2 different games`);
+  console.log(`   2 calls: ${anon.length} anonymous rows, ${streaks.totalPlays} plays and ${streaks.totalPoints} points on the streak record, ${scores[0]?.total_points ?? 'no'} signed in points`);
+}
+
 if (CONTROL) {
   if (!controlBit) { console.error('\ncontrol run: nothing was unwired, the control is dead'); process.exit(1); }
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }

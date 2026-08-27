@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
 
 /**
  * Wave 3: anonymous, sitewide completion tracking.
@@ -110,7 +111,7 @@ export function getCurrentPlayerName(profile?: { display_name?: string | null; u
  * omitted, falls back to getCurrentPlayerName() with no profile (i.e. the
  * local guest handle), so every insert always carries some name.
  */
-export function recordCompletion(gamePath: string, score?: number, playerName?: string): void {
+export function recordCompletion(gamePath: string, score?: number, playerName?: string, correctAnswers = 0): void {
   try {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
@@ -134,17 +135,139 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
         } else {
           /* Round 157: tell the header a play just landed, so games-played,
              points and rank move while you are actually playing instead of
-             waiting for the next poll. useGameCompletion already dispatches
-             this for its own auth-gated saves; the anonymous path never did,
-             which is why long sims looked like they never counted. */
+             waiting for the next poll. */
           try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
         }
       });
+
+    /* Round 300: THE ONE RECORDER. Before this round there were three
+       pipelines and which ones a game fed depended on which helper it
+       happened to call: the 19 useGameCompletion games fed all three, the
+       direct callers fed only the anonymous row, so a signed in player could
+       finish a Club Manager season or any of Round 299's fourteen games and
+       watch their flame, their points and their rank not move. Now every
+       path through this function feeds all three: the anonymous row above,
+       the local streak record here, and the signed in save below when a
+       session exists. useGameCompletion no longer writes any of this
+       itself, it calls this function like everybody else, so nothing counts
+       twice. */
+    recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0);
+
+    supabase.auth.getUser()
+      .then(({ data }) => {
+        if (data?.user) return saveAuthCompletion(data.user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
+      })
+      .then(saved => {
+        if (saved) {
+          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
+        }
+      })
+      .catch(() => { /* signed out or auth unreachable: the play still counted above */ });
 
     bumpLocalTodayCount();
   } catch {
     // Never let a tracking failure break gameplay.
   }
+}
+
+/**
+ * Round 300: the signed in save, moved VERBATIM out of useGameCompletion so
+ * every recordCompletion caller feeds it, not only the 19 games that mounted
+ * the hook. Writes user_game_scores, daily_completions (its unique
+ * constraint dedupes a same day replay), the user_scores row the navbar and
+ * leaderboard read, and user_best_scores. Returns true when it ran to the
+ * end so the caller can announce the save. All errors are swallowed by the
+ * caller: a stats failure must never surface to the player.
+ */
+export async function saveAuthCompletion(userId: string, gameSlug: string, score: number, correctAnswers: number): Promise<boolean> {
+  const today = new Date().toISOString().split('T')[0];
+
+  await supabase.from('user_game_scores').insert({
+    user_id: userId,
+    game_type: gameSlug,
+    score,
+    correct_answers: correctAnswers,
+    puzzle_date: today,
+  });
+
+  await supabase.from('daily_completions').insert({
+    user_id: userId,
+    game_slug: gameSlug,
+    date: today,
+  });
+
+  const { data: existing } = await supabase
+    .from('user_scores')
+    .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
+    .eq('user_id', userId)
+    .single();
+
+  const { count: distinctGamesToday } = await supabase
+    .from('daily_completions')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('date', today);
+
+  const gamesPlayedToday = distinctGamesToday || 1;
+  const lastDate = existing?.last_played_at
+    ? new Date(existing.last_played_at).toISOString().split('T')[0]
+    : null;
+  const isSameDay = lastDate === today;
+
+  if (!existing) {
+    await supabase.from('user_scores').insert({
+      user_id: userId,
+      total_points: score,
+      games_played_today: gamesPlayedToday,
+      last_played_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      current_streak: 1,
+      longest_streak: 1,
+    });
+  } else {
+    let newStreak = existing.current_streak || 0;
+    if (!isSameDay) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      newStreak = lastDate === yesterdayStr ? newStreak + 1 : 1;
+    }
+    const newLongest = Math.max(newStreak, existing.longest_streak || 0);
+    await supabase
+      .from('user_scores')
+      .update({
+        total_points: existing.total_points + score,
+        games_played_today: gamesPlayedToday,
+        last_played_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        current_streak: newStreak,
+        longest_streak: newLongest,
+      })
+      .eq('user_id', userId);
+  }
+
+  const { data: existingBest } = await supabase
+    .from('user_best_scores')
+    .select('best_score')
+    .eq('user_id', userId)
+    .eq('game_type', gameSlug)
+    .single();
+
+  if (!existingBest) {
+    await supabase.from('user_best_scores').insert({
+      user_id: userId,
+      game_type: gameSlug,
+      best_score: score,
+    });
+  } else if (score > existingBest.best_score) {
+    await supabase
+      .from('user_best_scores')
+      .update({ best_score: score, achieved_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('game_type', gameSlug);
+  }
+
+  return true;
 }
 
 /**
