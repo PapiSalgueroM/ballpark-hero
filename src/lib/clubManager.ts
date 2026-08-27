@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { nameModerationError } from '@/lib/nameModeration';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -1015,13 +1016,15 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
   if (career.eraId && isHistoricEra(career.eraId)) return null;
   const standing = nationStanding(career);
   if (standing < 70) return null;
-  /* The federation that can watch him every week is the one that calls, so
-     the offer is his club's own country, read off the same NATIONS table the
-     picker uses. That keeps this honest without inventing a nationality for
-     a manager the game has never asked to name. */
+  /* Round 303: a created manager has a homeland, and his own federation is
+     the one that calls when the tournament engine can run its games. Before
+     the manager had a name, the club's own country was the only honest
+     answer, and it stays the answer whenever the spec is absent or the
+     homeland is somewhere the engine cannot simulate. */
+  const own = career.manager?.nationality;
   const league = leagueOf(career.clubName);
   const nationDef = league ? NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
-  const nation = nationDef?.name ?? null;
+  const nation = (own && NATION_CONFED[own]) ? own : (nationDef?.name ?? null);
   /* And only a country the international engine actually knows how to run a
      tournament for: it carries the confederations and the slot counts. */
   if (!nation || !NATION_CONFED[nation]) return null;
@@ -1124,7 +1127,10 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
     /* A week out is not a season out, but the market does cool. Four weeks
        of silence reads to a board like a season on the sofa. */
     seasonsOut: Math.floor(out / 4),
-    nationality: 'England',
+    /* Round 303: the created manager's homeland flows into the market's
+       familiarity sums; the old England hardcode stays only as the default
+       for the second person career that never named one. */
+    nationality: career.manager?.nationality ?? 'England',
     workedIn: [...new Set(career.history.map(h => h.club))].slice(0, 6),
   };
 }
@@ -1584,6 +1590,10 @@ export interface CareerState {
    * Absent on every save that picked a real club, and nothing changes there.
    */
   customClub?: CustomClubSpec;
+  /** Round 303: who you are in the dugout. Absent on every save made before
+   *  the feature and whenever the picker step is skipped, and every reader
+   *  treats absence as the second person career this always was. */
+  manager?: ManagerSpec;
 }
 
 export type NextFixtureInfo =
@@ -2900,6 +2910,34 @@ export const CLUB_IDENTITIES: Record<ClubIdentity, {
   balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'Play what the afternoon asks for.', formationIndex: 1, mentality: 'balanced' },
 };
 
+/* ─── Round 303: the manager in your dugout, off the owner's tweaks list
+   ("customizable created manager"). A name, a homeland, a background and a
+   preferred football. The whole spec is optional: skip it and the game stays
+   the second person career it has always been, and every old save reads as
+   exactly that. The one CLUB_IDENTITIES rule holds here too: nothing in this
+   spec touches the match engine. Style sets the day one tactics like a
+   founding identity does, nationality feeds the national team call and the
+   job market's familiarity, and background is a badge. ─── */
+export type ManagerBackground = 'exPlayer' | 'coachingBadges' | 'analyst' | 'youthCoach';
+
+export interface ManagerSpec {
+  name: string;
+  /** A country off the NATIONS picker. The federation that calls with the
+   *  national team job, and the homeland the job market weighs. */
+  nationality: string;
+  background: ManagerBackground;
+  /** Preferred football, reusing the club identity table: sets the day one
+   *  formation and mentality, never a hidden strength modifier. */
+  style: ClubIdentity;
+}
+
+export const MANAGER_BACKGROUNDS: Record<ManagerBackground, { label: string; emoji: string; blurb: string }> = {
+  exPlayer: { label: 'Ex player', emoji: '🥾', blurb: 'Hung the boots up and walked straight into the dugout.' },
+  coachingBadges: { label: 'Career coach', emoji: '📋', blurb: 'Twenty years of badges and touchline rain.' },
+  analyst: { label: 'Analyst', emoji: '📊', blurb: 'Came up through the data department with a laptop and a plan.' },
+  youthCoach: { label: 'Youth coach', emoji: '🌱', blurb: 'Raised half an academy before the first team called.' },
+};
+
 /** Round 160: the three grounds on offer at the founding. */
 export const CUSTOM_STADIUMS: { capacity: number; label: string; blurb: string }[] = [
   { capacity: 9000, label: 'Compact', blurb: 'Nine thousand, all noise.' },
@@ -2999,6 +3037,40 @@ export function validateCustomClubName(name: string): string | null {
   const stripped = folded.replace(/^(fc|cf|afc|ac|as|sc|cd|rc) /, '').replace(/ (fc|cf|afc|ac|sc)$/, '');
   if (realClubNamesFolded().has(folded) || realClubNamesFolded().has(stripped)) {
     return 'That club already exists. This one is yours, so name it yours.';
+  }
+  return null;
+}
+
+/* Round 303: the manager name gets the same discipline as the club name,
+   plus one rule of its own. Typing a real footballer's name into the dugout
+   would put a real person's name on a career the game invents week by week,
+   which is exactly the exposure simNoInventedQuotes exists to prevent, so
+   the name is checked against every player this game knows: the full baked
+   modern rosters and the trivia pool the guessing games run on. That set
+   does not know every real MANAGER alive, no list could honestly, but it
+   covers the famous ones who played, and the game only ever renders the
+   manager name as a label, never inside quoted speech. */
+let realPeopleFoldedCache: Set<string> | null = null;
+function realPersonNamesFolded(): Set<string> {
+  if (realPeopleFoldedCache) return realPeopleFoldedCache;
+  const s = new Set<string>();
+  for (const roster of Object.values(CM_ROSTERS)) for (const p of roster) s.add(foldClubName(p.n));
+  for (const p of RAW_POOL) s.add(foldClubName(p.name));
+  realPeopleFoldedCache = s;
+  return s;
+}
+
+export function validateManagerName(name: string): string | null {
+  const trimmed = (name ?? '').trim();
+  if (trimmed.length < 2) return 'Give the manager a name, at least 2 characters.';
+  if (trimmed.length > 24) return 'Keep the name under 25 characters.';
+  if (!/^[\p{L}][\p{L} .'-]*$/u.test(trimmed)) {
+    return "Letters, spaces and . ' - only.";
+  }
+  const moderation = nameModerationError(trimmed);
+  if (moderation) return moderation;
+  if (realPersonNamesFolded().has(foldClubName(trimmed))) {
+    return "That is a real footballer's name. This dugout is yours, pick your own.";
   }
   return null;
 }
@@ -8918,7 +8990,7 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
     .sort((a, b) => ((b.potential ?? b.rating) - b.rating) - ((a.potential ?? a.rating) - a.rating));
 }
 
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -9024,6 +9096,18 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     if (identity) {
       state.formationIndex = clamp(identity.formationIndex, 0, FORMATIONS.length - 1);
       state.mentality = identity.mentality;
+    }
+  }
+  if (manager && validateManagerName(manager.name) === null) {
+    /* Round 303: the created manager. His preferred football sets the day
+       one shape at a real club; at a custom club the founding identity
+       already did, and the same person picked both, so the club's badge
+       wins that tie. A starting point, not a lock, the Round 160 rule. */
+    state.manager = { ...manager, name: manager.name.trim() };
+    if (!custom?.identity) {
+      const st = CLUB_IDENTITIES[manager.style];
+      state.formationIndex = clamp(st.formationIndex, 0, FORMATIONS.length - 1);
+      state.mentality = st.mentality;
     }
   }
   ensureContracts(state);
