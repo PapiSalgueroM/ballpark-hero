@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Never commit env files; the live Supabase URL and key are hardcoded in
+# src/integrations/supabase/client.ts on purpose (see CLAUDE.md).
+.env
+.env.*

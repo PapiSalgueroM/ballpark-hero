@@ -25,6 +25,13 @@ declare global {
 export function loadAdSense(): void {
   try {
     if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
+    /* Round 304: non personalized ads only, declared before the script
+       loads. This is what lets the privacy pages promise no ad
+       personalization from us without a certified consent platform, and
+       index.html's inline copy sets the same flag. */
+    const w = window as Window & { adsbygoogle?: unknown[] & { requestNonPersonalizedAds?: number } };
+    w.adsbygoogle = w.adsbygoogle || [];
+    w.adsbygoogle.requestNonPersonalizedAds = 1;
     const s = document.createElement('script');
     s.async = true;
     s.crossOrigin = 'anonymous';

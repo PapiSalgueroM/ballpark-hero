@@ -75,7 +75,11 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
 
   useEffect(() => {
     if (pushed.current) return;
-    if (consent === 'essential') return; // do not initialize ad slot without ads consent
+    /* Round 304: the gate is an explicit rule now. It used to block only on
+       'essential' and let null (undecided) fall through to the script
+       presence check, which happened to hold; an affirmative accepted is
+       the only state that initializes a slot. */
+    if (consent !== 'accepted') return;
     /* No script means no ad, and that is a fact rather than a wait. */
     if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
       setState('empty');

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -85,6 +86,10 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
   const [resetLoading, setResetLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
+  /* Round 304: the COPPA soft policy becomes an affirmation at the door.
+     The games all play without an account; the account is the one feature
+     that collects an email, so it is the one place to ask. */
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
   const { signIn, signUp } = useAuth();
 
   // Re-validates a single field on the fly once the form has been submitted
@@ -135,6 +140,10 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
       return; // Field-level messages are already visible; no toast needed for this case.
+    }
+    if (tab === 'signup' && !ageConfirmed) {
+      setFormError('Tick the box confirming you are 13 or older to create an account. Every game plays without one.');
+      return;
     }
 
     setLoading(true);
@@ -396,6 +405,21 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                 </div>
               )}
             </div>
+            {tab === 'signup' && (
+              <label className="flex items-start gap-2 text-xs text-muted-foreground cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={ageConfirmed}
+                  onChange={e => setAgeConfirmed(e.target.checked)}
+                  className="mt-0.5 accent-primary"
+                />
+                <span>
+                  I am 13 or older, and I agree to the{' '}
+                  <Link to="/terms" onClick={onClose} className="underline hover:text-foreground">Terms</Link> and{' '}
+                  <Link to="/privacy" onClick={onClose} className="underline hover:text-foreground">Privacy Policy</Link>.
+                </span>
+              </label>
+            )}
             {formError && (
               <p className="flex items-start gap-1.5 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md px-3 py-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" /> {formError}

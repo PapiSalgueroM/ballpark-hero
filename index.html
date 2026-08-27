@@ -132,6 +132,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
