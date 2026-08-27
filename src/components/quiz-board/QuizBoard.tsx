@@ -163,7 +163,7 @@ export function QuizBoard() {
         </div>
       )}
 
-      <GameNav currentPath="/jeopardy" />
+      <GameNav currentPath="/quiz-board" />
     </div>
   );
 }

@@ -284,7 +284,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/list-quiz', label: 'Name Them All', emoji: '📝', description: 'How many champions can you name?', isNew: true },
       { path: '/minefield', label: 'Minefield', emoji: '💣', description: 'Click everyone who belongs. Some tiles explode', daily: true, isNew: true },
       { path: '/sports-millionaire', label: 'Sports Millionaire', emoji: '💰', description: 'Climb a 15-question money ladder with lifelines', daily: true, isNew: true },
-      { path: '/jeopardy', label: 'Sports Quiz Board', emoji: '🎓', description: 'Five categories, $200 to $1000. Wrong answers cost you', daily: true, isNew: true },
+      { path: '/quiz-board', label: 'Sports Quiz Board', emoji: '🎓', description: 'Five categories, $200 to $1000. Wrong answers cost you', daily: true, isNew: true },
       { path: '/ball-iq', label: 'Ball Knowledge IQ', emoji: '🧠', description: 'Twelve questions, getting harder. Do you actually know ball?', daily: true, isNew: true },
       { path: '/emoji-guess', label: 'Emoji Guess', emoji: '🤔', description: 'Five football riddles told entirely in emoji', daily: true, isNew: true },
       { path: '/mystery-box', label: 'Mystery Box', emoji: '📦', description: 'Open 15 packs, keep or bin, build the best XI your luck allows', daily: true, isNew: true },

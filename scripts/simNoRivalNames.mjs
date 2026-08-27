@@ -217,7 +217,7 @@ const FIFA_ALLOWED = [
    rather than quietly edited.
    =========================================================================== */
 const LIVE_IDENTIFIERS = [
-  '/jeopardy',        // live route + sitemap entry, the game shows as "Sports Quiz Board"
+  '/jeopardy',        // retired route since Round 305, redirects to /quiz-board so old links live
   "'jeopardy'",       // game completion key, holds every player's streak history
   'jeopardy-',        // localStorage prefix for saved boards
   'jeopardy_clues',   // Supabase table name
