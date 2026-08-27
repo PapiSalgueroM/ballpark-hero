@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
@@ -1172,7 +1173,7 @@ export default function SoccerCareer() {
       {/* New Career Confirmation Dialog */}
       {showNewCareerConfirm && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowNewCareerConfirm(false)}>
-          <div className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="Start a new career?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowNewCareerConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">⚠️ Start New Career?</h3>
             <p className="text-sm text-muted-foreground text-center">Are you sure? This will delete your current career. All progress will be lost forever.</p>
             <div className="flex gap-3">
@@ -4113,7 +4114,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {/* Retire Confirmation Dialog */}
       {showRetireConfirm && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowRetireConfirm(false)}>
-          <div className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="Retire?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowRetireConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">🚪 Retire?</h3>
             <p className="text-sm text-muted-foreground text-center">Are you sure you want to retire? Your career will end here.</p>
             <div className="flex gap-3">

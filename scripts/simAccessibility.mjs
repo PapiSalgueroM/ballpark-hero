@@ -112,6 +112,36 @@ console.log('6) the statement page exists, is linked, and is in the sitemap');
   console.log('   page, route, footer link, sitemap entry and contact all present');
 }
 
+console.log('7) the hand rolled dialogs behave, the banner takes focus, the ticker can be paused');
+{
+  /* Round 307. The seven overlays that predate the shadcn Dialog carry the
+     essentials by hand; each file listed must keep every one of them. */
+  const OVERLAYS = [
+    ['src/components/soccer-career/TrainingPanel.tsx', 1],
+    ['src/components/soccer-career/PhonePanel.tsx', 1],
+    ['src/components/nascar-driver/NascarDriverHowToPlay.tsx', 1],
+    ['src/pages/StadiumTycoon.tsx', 2],
+    ['src/pages/SoccerCareer.tsx', 2],
+  ];
+  for (const [f, n] of OVERLAYS) {
+    const s = strip(read(f));
+    const dialogs = (s.match(/role="dialog"/g) || []).length;
+    if (dialogs < n) fail(`${f}: ${dialogs} dialog roles, expected ${n}`);
+    const esc = (s.match(/escapeCloses\(/g) || []).length;
+    if (esc < n) fail(`${f}: ${esc} Escape handlers, expected ${n}`);
+    const foc = (s.match(/focusDialogOnMount/g) || []).length;
+    if (foc < n + 1 && !s.includes("from '@/lib/dialogA11y'")) fail(`${f}: dialog focus helper missing`);
+  }
+  const banner = strip(read('src/components/CookieConsent.tsx'));
+  if (!banner.includes('aria-label="Cookie choices"')) fail('the cookie banner lost its region name');
+  if (!banner.includes('.focus()')) fail('the cookie banner no longer takes focus on appearance');
+  const ticker = strip(read('src/components/layout/TopTicker.tsx'));
+  if (!/aria-label=\{userPaused \? 'Resume the scores ticker' : 'Pause the scores ticker'\}/.test(ticker)) {
+    fail('the ticker pause button is gone or lost its state naming');
+  }
+  console.log('   7 dialogs across 5 files, the banner announces and focuses, the pause button stands');
+}
+
 if (CONTROL) {
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
   console.error('\ncontrol run: stripping the skip target changed NOTHING, the checks are dead');

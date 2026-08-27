@@ -12,6 +12,7 @@
    the same reflexes stat the engine always mapped them to), and a fourth
    drill arrived: Passing Gates, tap the lit gate before it shuts. */
 import { useEffect, useRef, useState } from "react";
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import type { TrainingDrill } from "@/lib/soccerCareerEngine";
 
@@ -272,7 +273,7 @@ export default function TrainingPanel({ career, available, onComplete, onClose }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
-      <div className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card text-foreground shadow-2xl" onClick={e => e.stopPropagation()}>
+      <div role="dialog" aria-modal="true" aria-label="Training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(onClose)} className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card text-foreground shadow-2xl" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between px-4 py-3 border-b border-border sticky top-0 bg-card z-10">
           <h2 className="text-base font-black">🏋️ Training Ground</h2>
           <button onClick={onClose} className="text-xs font-bold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/30">Close</button>

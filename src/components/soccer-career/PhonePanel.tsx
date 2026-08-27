@@ -21,6 +21,7 @@
    after every tap, so the answer you just got is already on screen. The page
    behind the overlay is never touched. */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState, PhoneMessage } from "@/lib/soccerCareerEngine";
 import { karmaOf } from "@/lib/soccerCareerEngine";
 import { karmaTier } from "@/lib/careerEras";
@@ -140,6 +141,12 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Your phone"
+        tabIndex={-1}
+        ref={focusDialogOnMount}
+        onKeyDown={escapeCloses(onClose)}
         className="w-[330px] max-w-[92vw] h-[640px] max-h-[86vh] rounded-[2.4rem] border-[6px] border-zinc-800 bg-zinc-950 text-white shadow-2xl overflow-hidden flex flex-col relative"
         onClick={e => e.stopPropagation()}
       >

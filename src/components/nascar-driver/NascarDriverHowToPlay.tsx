@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 
 export function NascarDriverHowToPlay() {
   const [open, setOpen] = useState(false);
@@ -10,7 +11,7 @@ export function NascarDriverHowToPlay() {
       </button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setOpen(false)}>
-          <div className="bg-neutral-900 border border-neutral-700 rounded-2xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="How to play" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setOpen(false))} className="bg-neutral-900 border border-neutral-700 rounded-2xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold text-red-400">How to Play</h2>
             <ol className="text-sm text-neutral-300 space-y-2 list-decimal list-inside">
               <li>We pick a mystery NASCAR driver</li>
