@@ -455,8 +455,17 @@ console.log('7) Save size over a full career');
   const max = sizes[sizes.length - 1];
   console.log(`   whole save: median ${(sizes[12] / 1024).toFixed(1)} KB, biggest ${(max / 1024).toFixed(1)} KB`);
   console.log(`   the phone's share: mean ${(avg(phoneShare, v => v) / 1024).toFixed(1)} KB, biggest ${(Math.max(...phoneShare) / 1024).toFixed(1)} KB`);
-  if (max > 46 * 1024) fail(`biggest save is ${(max / 1024).toFixed(1)} KB`);
-  if (Math.max(...phoneShare) > 8 * 1024) fail('the phone alone is eating more than 8 KB');
+  /* Round 302 re-measure. The era world grew from five leagues to twelve, so
+     every save's WorldSeason carries seven more champion and cup entries: on
+     this harness's fixed seeds the biggest save moved 45.7 to 46.7 KB and the
+     phone's share 7.6 to 8.0 KB, and the old bars (46 and 8) sat within one
+     percent of the measured max, the Round 284 coin toss shape. Unbounded
+     growth is guarded elsewhere (MAX_FEED, MAX_THREADS, MAX_LINES,
+     MAX_WORLD_NAMES, and simCareerEras pins the league set at twelve), so
+     these bars exist to catch a structural leak, not a few hundred bytes of
+     deliberate world: set from the new measurement with real headroom. */
+  if (max > 52 * 1024) fail(`biggest save is ${(max / 1024).toFixed(1)} KB`);
+  if (Math.max(...phoneShare) > 10 * 1024) fail('the phone alone is eating more than 10 KB');
 }
 
 /* ---------- 8. A save from before this round ---------- */
