@@ -401,7 +401,12 @@ const AppContent = () => {
         <Route path="/tier-list" element={<TierList />} />
         <Route path="/budget-builder" element={<BudgetBuilder />} />
         <Route path="/grade-transfer" element={<Navigate to="/" replace />} />
-        <Route path="/jeopardy" element={<QuizBoard />} />
+        <Route path="/quiz-board" element={<QuizBoard />} />
+        {/* Round 305: the address sheds the trademark the game itself never
+            used on screen; same treatment as /deal-or-no-deal. Storage keys
+            and the Supabase table keep the old spelling, a data migration is
+            not a copy edit. */}
+        <Route path="/jeopardy" element={<Navigate to="/quiz-board" replace />} />
         <Route path="/ball-iq" element={<BallIq />} />
         <Route path="/rebuild" element={<Rebuild />} />
         <Route path="/emoji-guess" element={<EmojiGuess />} />

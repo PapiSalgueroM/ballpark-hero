@@ -212,10 +212,6 @@
     "hash": "e68845ba93f61380",
     "date": "2026-08-25"
   },
-  "/jeopardy": {
-    "hash": "97e3bed5a6b55275",
-    "date": "2026-08-25"
-  },
   "/leaderboard": {
     "hash": "047e537f426b730b",
     "date": "2026-08-25"
@@ -404,6 +400,10 @@
     "hash": "3f820f4d4781acaa",
     "date": "2026-08-25"
   },
+  "/quiz-board": {
+    "hash": "964a5526957a0a01",
+    "date": "2026-08-27"
+  },
   "/rank-em": {
     "hash": "e0769fe94b3a74d9",
     "date": "2026-08-25"
@@ -493,7 +493,7 @@
     "date": "2026-08-25"
   },
   "/whats-new": {
-    "hash": "96aedad79ad56af8",
+    "hash": "6981c31a233adac3",
     "date": "2026-08-27"
   },
   "/who-am-i": {

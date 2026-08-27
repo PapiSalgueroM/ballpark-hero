@@ -96,7 +96,10 @@ if (bad) process.exit(1);
  * they are real pages kept for direct links and data continuity. Anything
  * else that is a live route but neither game, static nor listed here is
  * deliberately NOT submitted (retired pages kept only for direct links). */
-const LEGACY_LIVE = ['/jeopardy'];
+/* Round 305: /jeopardy left this list when it became a redirect to
+   /quiz-board (the registry path now, so it rides in with the games). The
+   list stays, empty, for the next page kept alive outside the registry. */
+const LEGACY_LIVE = [];
 for (const p of LEGACY_LIVE) {
   if (!liveRoutes.has(p)) { console.error(`FATAL: legacy page ${p} lost its route`); process.exit(1); }
 }

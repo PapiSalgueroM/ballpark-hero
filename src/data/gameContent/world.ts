@@ -626,7 +626,7 @@ export const WORLD_CONTENT: GameContentMap = {
     ],
   },
 
-  '/jeopardy': {
+  '/quiz-board': {
     intro: [
       "Five categories, five money rows, twenty-five clues, and a scoreboard that goes down as well as up. Sports Quiz Board is the game where the wrong answer doesn't just miss, it costs you the tile's full value.",
       "The dollars are pure scorekeeping, nothing real changes hands. The pain of blowing a $1,000 clue, though, is real.",

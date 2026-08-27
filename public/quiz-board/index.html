@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Sports Quiz Board - Daily Trivia Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Sports Quiz Board","item":"https://douknowball.com/quiz-board"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can my score really go negative?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every wrong answer subtracts the tile's value, so a reckless board can finish below zero."}},{"@type":"Question","name":"Do I have to finish in one sitting?","acceptedAnswer":{"@type":"Answer","text":"No. The day's board and your answers are saved in your browser, so you can leave and pick it up later the same day."}},{"@type":"Question","name":"How strict is the answer box?","acceptedAnswer":{"@type":"Answer","text":"Pretty relaxed. Capitals, accents and punctuation don't matter, and a surname works when it's 4 or more letters and points to one answer."}},{"@type":"Question","name":"Is Sports Quiz Board free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Sports Quiz Board is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Sports Quiz Board - Daily Trivia Game | DoUKnowBall","description":"A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you.","url":"https://douknowball.com/quiz-board","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="canonical" href="https://douknowball.com/quiz-board" data-rh="true"><meta name="description" content="A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/quiz-board" data-rh="true"><meta property="og:title" content="Sports Quiz Board - Daily Trivia Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Sports Quiz Board - Daily Trivia Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<p>Building today's board…</p>
+<h1>Sports Quiz Board | DoUKnowBall</h1>
+<p>A daily quiz-show board across five sports categories, Ballon d'Or, Premier League, NBA Finals, Super Bowl and more. Clues are worth $200 to $1000 depending on how far back they go. Get it right and bank the money, get it wrong and lose it.</p>
+<p>Five categories, five money rows, twenty-five clues, and a scoreboard that goes down as well as up. Sports Quiz Board is the game where the wrong answer doesn't just miss, it costs you the tile's full value.</p>
+<p>The dollars are pure scorekeeping, nothing real changes hands. The pain of blowing a $1,000 clue, though, is real.</p>
+<h2>How to play Sports Quiz Board</h2>
+<li>Pick any tile on the board, in any order you like.</li>
+<li>Read the clue and type your answer in the box.</li>
+<li>Correct answers add the tile's value to your score. Wrong answers subtract it.</li>
+<li>Not sure? Close the clue and come back later, deferring is free.</li>
+<li>Answer all 25 tiles to finish the board and share your result grid.</li>
+<h2>Rules to know</h2>
+<li>The board is 5 categories with clues at $200, $400, $600, $800 and $1,000 each, 25 tiles total.</li>
+<li>Wrong answers subtract the full tile value, and your score can go negative.</li>
+<li>Everyone gets the same board each day, and your progress saves so you can finish later.</li>
+<li>Answer matching is forgiving: surnames of 4 or more letters count, and accents and punctuation are ignored.</li>
+<h2>Example walkthrough</h2>
+<p>Say you open a $200 tile in a Ballon d'Or category and it asks for a very recent winner. Easy money. Emboldened, you jump straight to the $1,000 in the same column and meet a winner from decades before you were born.</p>
+<p>You type a surname, it's wrong, and $1,000 evaporates. The lesson sticks: the big tiles reach way back in time, and they're priced that way for a reason.</p>
+<h2>Strategy tips</h2>
+<li>Sweep the $200 and $400 rows first to build a cushion before touching the deep cuts.</li>
+<li>There's no timer. Close a hard clue, let it stew, and circle back.</li>
+<li>Type surnames. Full names are only needed when a surname alone is ambiguous.</li>
+<li>Respect the $1,000 row. High value means old and obscure, and a miss stings double.</li>
+<h2>Sports Quiz Board FAQ</h2>
+<h3>Can my score really go negative?</h3>
+<p>Yes. Every wrong answer subtracts the tile's value, so a reckless board can finish below zero.</p>
+<h3>Do I have to finish in one sitting?</h3>
+<p>No. The day's board and your answers are saved in your browser, so you can leave and pick it up later the same day.</p>
+<h3>How strict is the answer box?</h3>
+<p>Pretty relaxed. Capitals, accents and punctuation don't matter, and a surname works when it's 4 or more letters and points to one answer.</p>
+<h3>Is Sports Quiz Board free to play?</h3>
+<p>Yes. Sports Quiz Board is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/ball-iq">🧠 Ball Knowledge IQ Twelve questions, getting harder. Do you actually know ball?</a>
+<a href="/emoji-guess">🤔 Emoji Guess Five football riddles told entirely in emoji</a>
+<a href="/mystery-box">📦 Mystery Box Open 15 packs, keep or bin, build the best XI your luck allows</a>
+<a href="/overrated-underrated">🔥 Overrated or Underrated Ten players, ten verdicts. See if the crowd agrees with you</a>
+<a href="/conquest">🗺️ NFL Conquest The imperialism map: winners annex whole empires until one team rules America</a>
+<a href="/nba-my-career">🌟 NBA My Career Draft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

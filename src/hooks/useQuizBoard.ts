@@ -27,11 +27,12 @@ export interface QuizBoardState {
 }
 
 const BOARD_CATEGORIES = 5;
-/* The game is called Sports Quiz Board everywhere a player can see it. This
-   storage key, the completion key below and the /jeopardy URL keep their old
-   spelling on purpose: changing them would wipe every player's saved board and
-   break their streak history. Renaming them is a data migration, not a copy
-   edit, so it is a job of its own. */
+/* The game is called Sports Quiz Board everywhere a player can see it, and
+   since Round 305 it lives at /quiz-board (the old address redirects). This
+   storage key and the completion key below keep their old spelling on
+   purpose: changing them would wipe every player's saved board and break
+   their streak history. Renaming them is a data migration, not a copy edit,
+   so it is a job of its own. */
 const STORAGE_PREFIX = 'jeopardy-';
 
 /**
@@ -197,7 +198,7 @@ export function useQuizBoard(): QuizBoardState {
         return t.correct ? '🟩' : '🟥';
       }).join(''),
     ).join('\n');
-    return `Sports Quiz Board, ${today}\n${grid}\n$${score}\ndouknowball.com/jeopardy`;
+    return `Sports Quiz Board, ${today}\n${grid}\n$${score}\ndouknowball.com/quiz-board`;
   }, [finished, categories, board, score, today]);
 
   return {

@@ -9,7 +9,7 @@ export default function QuizBoardPage() {
       <PageSeo
         title="Sports Quiz Board - Daily Trivia Game | DoUKnowBall"
         description="A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you."
-        path="/jeopardy"
+        path="/quiz-board"
       />
       <GameNavbar />
       <QuizBoard />
