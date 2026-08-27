@@ -40,7 +40,9 @@ interface EraDef {
 const S = (name: string, nationality: string, position: string, club: string, g0: number, g1: number, power: number): EraStar =>
   ({ name, nationality, position, club, baseGoals: [g0, g1], power });
 
-const ERA_DEFS: EraDef[] = [
+/* Exported since Round 302 so simCareerEras can pin the window structure and
+   the league key set; game code should keep going through the accessors. */
+export const ERA_DEFS: EraDef[] = [
   {
     from: 1990, to: 1994,
     stars: [
@@ -73,6 +75,17 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Werder Bremen", "Kaiserslautern", "Stuttgart"],
       "Serie A": ["AC Milan", "Juventus", "Inter Milan", "Napoli", "Sampdoria", "Lazio"],
       "Ligue 1": ["Marseille", "PSG", "Monaco", "Nantes", "Bordeaux"],
+      /* Round 302: the leagues the owner named join the title race feed, each
+         window listing the clubs that actually contested that half decade
+         (champions first, verified against season records). MLS is absent
+         before 1995 because the league first kicked off in 1996, and K League
+         joins from 2010 when its club identities settled into the names the
+         game uses; simCareerEras pins both exemptions. */
+      "Primeira Liga": ["Porto", "Benfica", "Sporting CP"],
+      "Eredivisie": ["Ajax", "PSV", "Feyenoord"],
+      "Scottish Premiership": ["Rangers", "Celtic", "Aberdeen"],
+      "Brasileirao": ["Sao Paulo", "Palmeiras", "Flamengo", "Corinthians"],
+      "Saudi Pro League": ["Al Shabab", "Al Nassr", "Al Hilal"],
     },
     rivalFirsts: ["Stefan", "Dario", "Gianluca", "Patrik", "Emile", "Dejan", "Tomas", "Brian", "Oliver", "Marcelo", "Iván", "Predrag", "Davor", "Nwankwo", "Marcel", "Youri", "Ariel", "Christophe", "Darko", "Kenneth"],
   },
@@ -108,6 +121,12 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Kaiserslautern", "Leverkusen"],
       "Serie A": ["Juventus", "AC Milan", "Inter Milan", "Lazio", "Parma", "Fiorentina"],
       "Ligue 1": ["PSG", "Monaco", "Marseille", "Lyon", "Bordeaux"],
+      "Primeira Liga": ["Porto", "Benfica", "Sporting CP"],
+      "Eredivisie": ["Ajax", "PSV", "Feyenoord"],
+      "Scottish Premiership": ["Rangers", "Celtic", "Hearts"],
+      "Brasileirao": ["Corinthians", "Vasco da Gama", "Gremio", "Botafogo"],
+      "Saudi Pro League": ["Al Hilal", "Al Ittihad", "Al Nassr"],
+      "MLS": ["DC United", "Chicago Fire", "LA Galaxy"],
     },
     rivalFirsts: ["Stefan", "Dario", "Gianluca", "Patrik", "Emile", "Dejan", "Tomas", "Brian", "Oliver", "Marcelo", "Iván", "Predrag", "Davor", "Nwankwo", "Marcel", "Youri", "Ariel", "Christophe", "Darko", "Kenneth"],
   },
@@ -144,6 +163,12 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Leverkusen", "Werder Bremen", "Stuttgart"],
       "Serie A": ["Juventus", "AC Milan", "Inter Milan", "Roma", "Lazio"],
       "Ligue 1": ["Lyon", "Monaco", "PSG", "Marseille", "Bordeaux"],
+      "Primeira Liga": ["Porto", "Sporting CP", "Boavista", "Benfica"],
+      "Eredivisie": ["PSV", "Ajax", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Hearts"],
+      "Brasileirao": ["Santos", "Cruzeiro", "Vasco da Gama", "Sao Paulo"],
+      "Saudi Pro League": ["Al Ittihad", "Al Hilal", "Al Shabab"],
+      "MLS": ["LA Galaxy", "San Jose Earthquakes", "DC United"],
     },
     rivalFirsts: ["Fernando", "Diego", "Andrés", "Wesley", "Robin", "Arjen", "Franck", "Ricardo", "Milan", "Dimitar", "Emmanuel", "Obafemi", "Landon", "Gonzalo", "Sergio", "Karim", "Cesc", "Theo", "Mikel", "Klaas"],
   },
@@ -179,6 +204,12 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Werder Bremen", "Stuttgart", "Wolfsburg", "Dortmund"],
       "Serie A": ["Inter Milan", "AC Milan", "Juventus", "Roma", "Fiorentina"],
       "Ligue 1": ["Lyon", "Marseille", "Bordeaux", "PSG", "Monaco"],
+      "Primeira Liga": ["Porto", "Benfica", "Sporting CP"],
+      "Eredivisie": ["PSV", "Ajax", "AZ Alkmaar", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Aberdeen"],
+      "Brasileirao": ["Sao Paulo", "Corinthians", "Flamengo", "Internacional"],
+      "Saudi Pro League": ["Al Hilal", "Al Ittihad", "Al Shabab"],
+      "MLS": ["LA Galaxy", "Houston Dynamo", "Columbus Crew"],
     },
     rivalFirsts: ["Fernando", "Diego", "Andrés", "Wesley", "Robin", "Arjen", "Franck", "Ricardo", "Milan", "Dimitar", "Emmanuel", "Obafemi", "Landon", "Gonzalo", "Sergio", "Karim", "Cesc", "Theo", "Mikel", "Klaas"],
   },
@@ -215,6 +246,13 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Leverkusen", "Schalke"],
       "Serie A": ["Juventus", "AC Milan", "Inter Milan", "Napoli", "Roma"],
       "Ligue 1": ["PSG", "Marseille", "Lyon", "Monaco", "Lille"],
+      "Primeira Liga": ["Porto", "Benfica", "Braga", "Sporting CP"],
+      "Eredivisie": ["Ajax", "Twente", "PSV", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Aberdeen"],
+      "Brasileirao": ["Fluminense", "Corinthians", "Cruzeiro", "Sao Paulo"],
+      "Saudi Pro League": ["Al Hilal", "Al Nassr", "Al Shabab"],
+      "MLS": ["LA Galaxy", "Sporting Kansas City", "Real Salt Lake"],
+      "K League 1": ["FC Seoul", "Jeonbuk Motors", "Pohang Steelers", "Ulsan HD"],
     },
     rivalFirsts: ["Eden", "Isco", "Paulo", "Romelu", "Memphis", "Alexis", "Ángel", "Edinson", "Mario", "Marco", "Antoine", "Ousmane", "Leroy", "Kingsley", "Dele", "Raheem", "Thiago", "Ciro", "James", "Granit"],
   },
@@ -250,6 +288,13 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Leipzig", "Leverkusen"],
       "Serie A": ["Juventus", "Napoli", "Roma", "Inter Milan", "AC Milan"],
       "Ligue 1": ["PSG", "Monaco", "Lyon", "Marseille", "Lille"],
+      "Primeira Liga": ["Benfica", "Porto", "Sporting CP"],
+      "Eredivisie": ["PSV", "Ajax", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Aberdeen"],
+      "Brasileirao": ["Palmeiras", "Corinthians", "Flamengo", "Santos"],
+      "Saudi Pro League": ["Al Hilal", "Al Nassr", "Al Ahli"],
+      "MLS": ["Seattle Sounders", "Toronto FC", "Atlanta United", "Portland Timbers"],
+      "K League 1": ["Jeonbuk Motors", "FC Seoul", "Ulsan HD"],
     },
     rivalFirsts: ["Eden", "Isco", "Paulo", "Romelu", "Memphis", "Alexis", "Ángel", "Edinson", "Mario", "Marco", "Antoine", "Ousmane", "Leroy", "Kingsley", "Dele", "Raheem", "Thiago", "Ciro", "James", "Granit"],
   },
@@ -285,6 +330,13 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Dortmund", "Leipzig", "Leverkusen"],
       "Serie A": ["Inter Milan", "AC Milan", "Napoli", "Juventus", "Atalanta"],
       "Ligue 1": ["PSG", "Marseille", "Monaco", "Lille", "Lyon"],
+      "Primeira Liga": ["Porto", "Sporting CP", "Benfica", "Braga"],
+      "Eredivisie": ["Ajax", "PSV", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Hearts"],
+      "Brasileirao": ["Palmeiras", "Flamengo", "Atletico Mineiro", "Botafogo"],
+      "Saudi Pro League": ["Al Hilal", "Al Ittihad", "Al Nassr"],
+      "MLS": ["LAFC", "Columbus Crew", "LA Galaxy", "Inter Miami"],
+      "K League 1": ["Ulsan HD", "Jeonbuk Motors", "Pohang Steelers"],
     },
     rivalFirsts: ["Kylian", "Erling", "Jude", "Bukayo", "Lamine", "Jamal", "Florian", "Pablo", "Jules", "Aurélien", "Eduardo", "Rasmus", "Cole", "Alejandro", "Xavi", "Kenan", "Arda", "Endrick", "Mathys", "Kobbie"],
   },
@@ -321,13 +373,20 @@ const ERA_DEFS: EraDef[] = [
       "Bundesliga": ["Bayern Munich", "Leverkusen", "Dortmund", "Leipzig"],
       "Serie A": ["Inter Milan", "Napoli", "AC Milan", "Juventus", "Atalanta"],
       "Ligue 1": ["PSG", "Monaco", "Marseille", "Lille", "Lyon"],
+      "Primeira Liga": ["Sporting CP", "Benfica", "Porto"],
+      "Eredivisie": ["PSV", "Ajax", "Feyenoord"],
+      "Scottish Premiership": ["Celtic", "Rangers", "Aberdeen"],
+      "Brasileirao": ["Flamengo", "Palmeiras", "Botafogo", "Cruzeiro"],
+      "Saudi Pro League": ["Al Ittihad", "Al Hilal", "Al Nassr"],
+      "MLS": ["Inter Miami", "LAFC", "Columbus Crew", "Seattle Sounders"],
+      "K League 1": ["Jeonbuk Motors", "Ulsan HD", "Pohang Steelers"],
     },
     rivalFirsts: ["Kylian", "Erling", "Jude", "Bukayo", "Lamine", "Jamal", "Florian", "Pablo", "Jules", "Aurélien", "Eduardo", "Rasmus", "Cole", "Alejandro", "Xavi", "Kenan", "Arda", "Endrick", "Mathys", "Kobbie"],
   },
 ];
 
 /* ─── Era accessors, clamp outside 1990-2029 (2030+ reuses the 2025-29 pool) ─── */
-function eraDefFor(year: number): EraDef {
+export function eraDefFor(year: number): EraDef {
   if (year <= ERA_DEFS[0].to) return ERA_DEFS[0];
   for (const def of ERA_DEFS) { if (year >= def.from && year <= def.to) return def; }
   return ERA_DEFS[ERA_DEFS.length - 1];
@@ -357,6 +416,11 @@ const CLUB_FOUNDED_AFTER: Record<string, number> = {
   "Wellington Phoenix": 2007, "Auckland FC": 2024, "Mumbai City": 2014,
   "Buriram United": 2012, "Hanoi FC": 2006, "Al Duhail": 2009,
   "Shanghai Port": 2005, "Sheriff Tiraspol": 1997, "Beijing Guoan": 1992,
+  /* Round 302 league depth pass. MLS kicked off in 1996, so its two founding
+     era clubs date from there (a gap this table had all along for LA Galaxy),
+     and the newer franchises from their own first seasons. */
+  "LA Galaxy": 1996, "Columbus Crew": 1996, "Seattle Sounders": 2007,
+  "Atlanta United": 2017,
 };
 interface TierRule { name: string; from?: number; until?: number; tier: number }
 const ERA_TIER_RULES: TierRule[] = [

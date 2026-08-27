@@ -113,11 +113,22 @@ const POSITIONS = [
   { value: "CAM", label: "Attacking Mid (CAM)" }, { value: "LW", label: "Left Wing (LW)" },
   { value: "RW", label: "Right Wing (RW)" }, { value: "ST", label: "Striker (ST)" },
 ];
+/* Round 302, off the owner's tweaks document ("eras 2015/16, 2010/11, 05/06
+   plus more eras"): the engine has modeled eight half decade windows since the
+   era system landed, but this picker only exposed four decade starts, so a
+   2005 or 2015 kickoff was unreachable. Every row below maps onto one of the
+   eight ERA_DEFS windows in careerEras.ts, and simCareerEras keeps that true.
+   Old values ("1990s" etc) only ever lived in creation screen state, never in
+   a save, so renaming them breaks nothing. */
 const ERAS = [
-  { value: "1990s", label: "1990s", startYear: 1990 },
-  { value: "2000s", label: "2000s", startYear: 2000 },
-  { value: "2010s", label: "2010s", startYear: 2010 },
-  { value: "2020s", label: "Modern (2020s)", startYear: 2020 },
+  { value: "1990-94", label: "Early 90s (1990 start)", startYear: 1990 },
+  { value: "1995-99", label: "Late 90s (1995 start)", startYear: 1995 },
+  { value: "2000-04", label: "Early 2000s (2000 start)", startYear: 2000 },
+  { value: "2005-09", label: "Late 2000s (2005 start)", startYear: 2005 },
+  { value: "2010-14", label: "Early 2010s (2010 start)", startYear: 2010 },
+  { value: "2015-19", label: "Late 2010s (2015 start)", startYear: 2015 },
+  { value: "2020-24", label: "2020s (2020 start)", startYear: 2020 },
+  { value: "2025", label: "Current era (2025 start)", startYear: 2025 },
 ];
 
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
