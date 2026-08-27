@@ -152,6 +152,40 @@ console.log('5) an old save grows a record on load, never for its own club');
   console.log('   repaired in one call, own chair left alone');
 }
 
+console.log('6) offers and the merry-go-round agree on one vacancy list');
+{
+  /* Round 309. Drive many season ends with the offer gate forced open (a
+     trophy) and check the contract: every vacancy offer names the outgoing
+     manager truthfully, and every decided vacancy the player declines is
+     filled by a NEW name at the rollover. */
+  let offersSeen = 0, vacancyOffers = 0, blurbLies = 0, refills = 0, staleRefills = 0;
+  for (let i = 0; i < 30; i++) {
+    let c = cm.startCareer('Brighton');
+    c.trophies.push({ name: 'League Title', emoji: '\u{1F3C6}', season: c.season });
+    const { state: fin } = cm.finishSeason(c);
+    if (!Array.isArray(fin.pendingVacancies)) { fail('finishSeason wrote no vacancy list'); break; }
+    const byClub = new Map(fin.pendingVacancies.map(v => [v.club, v.name]));
+    for (const o of fin.pendingSummary?.offers ?? []) {
+      offersSeen += 1;
+      if (byClub.has(o.club)) {
+        vacancyOffers += 1;
+        if (!o.blurb.includes(byClub.get(o.club))) { blurbLies += 1; fail(`vacancy offer for ${o.club} does not name ${byClub.get(o.club)}: "${o.blurb}"`); }
+      }
+    }
+    const next = cm.startNextSeason(fin);
+    for (const v of fin.pendingVacancies) {
+      if (v.club === next.clubName) continue;
+      refills += 1;
+      const now = next.managers?.[v.club];
+      if (!now) { staleRefills += 1; fail(`declined vacancy at ${v.club} left an empty chair`); }
+      else if (now.name === v.name) { staleRefills += 1; fail(`declined vacancy at ${v.club} kept ${v.name}, the sacking never happened`); }
+    }
+    if (next.pendingVacancies !== undefined) fail('the rollover did not clear the consumed vacancy list');
+  }
+  console.log(`   ${offersSeen} offers over 30 summers, ${vacancyOffers} from real vacancies (${blurbLies} untrue blurbs), ${refills} declined chairs refilled (${staleRefills} stale)`);
+  if (vacancyOffers === 0) fail('30 trophy summers produced zero vacancy offers, the queue jump is dead');
+}
+
 if (CONTROL) {
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
   console.error('\ncontrol run: severing the ensure changed NOTHING, the checks are dead');
