@@ -203,6 +203,7 @@ export function NascarChainBoard() {
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
                       placeholder="Nickname"
+                      aria-label="Your nickname"
                       maxLength={30}
                       className="flex-1 min-w-0 bg-neutral-800 border border-neutral-600 rounded-md px-3 py-2 text-white placeholder:text-neutral-400 focus:border-red-500"
                     />

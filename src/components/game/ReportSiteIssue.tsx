@@ -126,6 +126,7 @@ export function ReportSiteIssue() {
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 placeholder="What happened? Which game, which player, what went wrong..."
+                aria-label="Describe the problem"
                 rows={3}
                 maxLength={500}
                 className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"

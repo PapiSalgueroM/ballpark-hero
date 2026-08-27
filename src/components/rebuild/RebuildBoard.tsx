@@ -443,6 +443,7 @@ export function RebuildBoard() {
         <select
           value={formation.name}
           onChange={e => setFormation(e.target.value)}
+          aria-label="Choose formation"
           className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
         >
           {FORMATIONS.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
@@ -563,6 +564,7 @@ export function RebuildBoard() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search name or club…"
+            aria-label="Search players by name or club"
             className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
           />
           <div className="max-h-56 space-y-1.5 overflow-y-auto">

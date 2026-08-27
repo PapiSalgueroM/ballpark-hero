@@ -69,6 +69,7 @@ export function TennisPlayerSearch({ onGuess, guesses, players }: Props) {
         onFocus={() => setShowSuggestions(true)}
         onKeyDown={handleKeyDown}
         placeholder="Type player name..."
+        aria-label="Search tennis players"
         className="w-full px-4 py-3 rounded-xl border border-purple-500/30 bg-green-950 text-white placeholder:text-green-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
       />
       {showSuggestions && filtered.length > 0 && (

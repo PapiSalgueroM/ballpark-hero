@@ -58,6 +58,7 @@ export function UfcChainSearch({ fighters, usedFighters, onSelect, disabled }: U
           onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder="Type a fighter who beat them..."
+          aria-label="Search for a fighter who beat them"
           disabled={disabled}
           className="w-full bg-gray-900 border border-red-600 text-white rounded-xl pl-12 pr-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-400 placeholder:text-gray-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           autoComplete="off"

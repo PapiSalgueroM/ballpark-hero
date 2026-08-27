@@ -108,6 +108,7 @@ export function BudgetBuilderBoard() {
         <select
           value={formation.name}
           onChange={e => setFormation(e.target.value)}
+          aria-label="Choose formation"
           className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
         >
           {FORMATIONS.map(f => (
@@ -118,6 +119,7 @@ export function BudgetBuilderBoard() {
           <select
             value={topic}
             onChange={e => setTopic(e.target.value as typeof topic)}
+            aria-label="Choose player pool"
             className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
           >
             {TOPICS.map(t => (

@@ -454,6 +454,7 @@ export function TransferScreen({
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search player or club…"
+            aria-label="Search player or club"
             className="bg-card border-border text-sm"
           />
           <div className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">

@@ -227,6 +227,7 @@ const ListQuiz = () => {
                       value={input}
                       onChange={e => setInput(e.target.value)}
                       placeholder="Type a name…"
+                      aria-label="Type a name from the list"
                       autoCapitalize="words"
                       autoComplete="off"
                       autoCorrect="off"

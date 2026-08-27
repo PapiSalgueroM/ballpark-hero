@@ -160,6 +160,7 @@ const GuessTransferValue = () => {
                   value={Math.min(input, sliderMax)}
                   onChange={(e) => setInput(Number(e.target.value))}
                   className="w-full mt-5 accent-primary"
+                  aria-label="Adjust transfer value guess"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
                   <span>$100K</span>
@@ -174,6 +175,7 @@ const GuessTransferValue = () => {
                     onChange={(e) => setInput(Math.max(0, Number(e.target.value) || 0))}
                     className="flex-1 min-w-0 px-4 py-2 rounded-lg bg-background border border-border text-foreground focus:border-primary"
                     placeholder="Enter exact amount in USD"
+                    aria-label="Transfer value guess in USD"
                   />
                   <button
                     onClick={submit}

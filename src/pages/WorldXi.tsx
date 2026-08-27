@@ -451,6 +451,7 @@ const WorldXi = () => {
                 }}
                 onKeyDown={onKeyDown}
                 placeholder="Type a player's name..."
+                aria-label="Name a player for this slot"
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}

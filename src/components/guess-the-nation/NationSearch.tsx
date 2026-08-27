@@ -53,6 +53,7 @@ export function NationSearch({ countries, usedGuesses, onGuess }: Props) {
         }}
         onFocus={() => setOpen(true)}
         placeholder="Type a country name..."
+        aria-label="Search countries"
         className="w-full px-4 py-3 rounded-lg border border-amber-500/30 bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/50"
       />
       {open && matches.length > 0 && (
