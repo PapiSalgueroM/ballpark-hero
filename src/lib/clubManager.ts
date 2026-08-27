@@ -1601,6 +1601,10 @@ export interface CareerState {
    *  rollover so a manager's tenure means something, and the merry-go-round
    *  turns it over at roughly the real world's rate. */
   managers?: Record<string, { name: string; since: number }>;
+  /** Round 309: the chairs this summer will empty, decided at season end so
+   *  the job offers and the merry-go-round agree on one list. Written by
+   *  finishSeason, consumed and cleared by the rollover. */
+  pendingVacancies?: { club: string; name: string; pos: number }[];
 }
 
 export type NextFixtureInfo =
@@ -4213,21 +4217,37 @@ export function managerOf(career: CareerState, club: string): { name: string; si
  * read off the record it just wrote, so the feed cannot claim a move the
  * world model does not hold.
  */
-function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[] {
-  const record: Record<string, { name: string; since: number }> = { ...(prev.managers ?? {}) };
-  const lines: string[] = [];
+/**
+ * Round 309: which chairs the summer empties, decided ONCE per season so
+ * the job offers a strong finish earns and the merry-go-round that follows
+ * agree on the same list. Bottom three chairs swing the axe hard, a long
+ * tenure adds fatigue everywhere, and nothing here ever touches the
+ * player's own club: the board's opinion of YOU is boardConfidence.
+ */
+function pickSummerSackings(prev: CareerState): { club: string; name: string; pos: number }[] {
+  const record = prev.managers ?? {};
   const table = sortedTable(prev.table);
   const posOf = new Map(table.map((r, i) => [r.club, i + 1]));
-  const ranked = prev.leagueClubs
-    .filter(c => c !== prev.clubName && record[c])
-    .map(c => ({ club: c, pos: posOf.get(c) ?? prev.leagueClubs.length }));
-
   const sacked: { club: string; name: string; pos: number }[] = [];
-  for (const { club, pos } of ranked) {
+  for (const club of prev.leagueClubs) {
+    if (club === prev.clubName || !record[club]) continue;
+    const pos = posOf.get(club) ?? prev.leagueClubs.length;
     const fromBottom = prev.leagueClubs.length - pos;
     const chance = (fromBottom < 3 ? 0.35 : 0.05) + (record[club].since <= prev.season - 4 ? 0.08 : 0);
     if (Math.random() < chance) sacked.push({ club, name: record[club].name, pos });
   }
+  return sacked;
+}
+
+function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[] {
+  const record: Record<string, { name: string; since: number }> = { ...(prev.managers ?? {}) };
+  const lines: string[] = [];
+  /* One list per summer: finishSeason already decided who goes so the
+     offers it printed stay true; a rollover reached without a season end
+     (a fresh save fast-forwarded, a harness) decides for itself. Either
+     way only chairs the record still holds count. */
+  const decided = prev.pendingVacancies ?? pickSummerSackings(prev);
+  const sacked = decided.filter(s => record[s.club] && record[s.club].name === s.name && s.club !== state.clubName);
 
   /* Fill the emptied chairs: some by a name just sacked elsewhere, the rest
      by a fresh appointment. */
@@ -4263,6 +4283,7 @@ function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[]
   }
 
   state.managers = record;
+  state.pendingVacancies = undefined;
   return lines.slice(0, 4);
 }
 
@@ -9799,6 +9820,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       });
     }
   }
+  /* Round 309: the summer's sackings are decided HERE, before the offers,
+     so a job you are offered is a chair that really empties and the
+     merry-go-round that runs at the rollover honors this exact list. */
+  state.pendingVacancies = pickSummerSackings(state);
   if (overshoot >= 2 || seasonTrophies.length > 0) {
     // Round 70: suitors can come from any of the five leagues now.
     // Round 146: inside a historic save they come from the era's own two
@@ -9812,7 +9837,19 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const droppedClub = state.customClub && state.clubName === state.customClub.name
       ? state.customClub.replacedClub
       : null;
-    const suitors = shuffle(everyClub.filter(c => c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
+    /* Round 309: real vacancies lead the queue. A chair this summer empties
+       calls first, named outgoing manager and all, and it may be a same
+       tier club in another league (a sideways move abroad is a real move).
+       The classic up tier suitors top the list back up so a great season
+       still gets its calls even when the axe fell nowhere useful. */
+    const vacancyNames = new Set((state.pendingVacancies ?? []).map(v => v.club));
+    const myLeagueClubs = new Set(careerLeagueOf(state).clubs);
+    const vacancySuitors = shuffle(everyClub.filter(c =>
+      vacancyNames.has(c.name)
+      && (c.tier < club.tier || (c.tier === club.tier && !myLeagueClubs.has(c.name)))
+      && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
+    const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
+    const suitors = [...vacancySuitors, ...classic];
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
@@ -9821,9 +9858,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
          named demand the club would actually hand you on day one. */
       const sLeague = (eraHist && eraLeagueOf(s.name, state.eraId)) || leagueOf(s.name);
       const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague, titleGapFor(s.name, sLeague, state.eraId), state.eraId);
+      const out = (state.pendingVacancies ?? []).find(v => v.club === s.name);
       offers.push({
         club: s.name,
-        blurb: `${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club · ${sLeague.name}${abroad ? ' (abroad)' : ''} · ${money(s.budget)} budget · the board wants: ${ask.label}`,
+        blurb: `${out ? `\u{1FA91} They are moving on from ${out.name} \u{B7} ` : ''}${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club \u{B7} ${sLeague.name}${abroad ? ' (abroad)' : ''} \u{B7} ${money(s.budget)} budget \u{B7} the board wants: ${ask.label}`,
       });
     }
   }
