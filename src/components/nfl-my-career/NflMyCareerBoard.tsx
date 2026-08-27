@@ -25,7 +25,7 @@ import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import { Confetti, CountUp } from '@/components/soccer-career/CareerFx';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
+import { recordActivity } from '@/lib/completions';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';
 import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';
@@ -144,7 +144,7 @@ export default function NflMyCareerBoard() {
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
-    recordCompletion('/nfl-my-career');
+    recordActivity('/nfl-my-career');
     const c: CareerState = JSON.parse(JSON.stringify(career));
 
     // Round 56: an indefinite suspension costs the whole season. It still

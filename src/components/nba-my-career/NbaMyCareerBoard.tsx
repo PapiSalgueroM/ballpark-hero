@@ -20,7 +20,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
+import { recordActivity } from '@/lib/completions';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -142,7 +142,7 @@ export default function NbaMyCareerBoard() {
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
-    recordCompletion('/nba-my-career');
+    recordActivity('/nba-my-career');
     const c: NbaCareerState = JSON.parse(JSON.stringify(career));
 
     // Round 57: an indefinite suspension costs the whole season. You still age,

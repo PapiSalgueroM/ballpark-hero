@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
+import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
 
 /**
  * Wave 3: anonymous, sitewide completion tracking.
@@ -26,8 +26,11 @@ import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
 const LOCAL_TODAY_KEY = 'dukb-local-completions';
 const GUEST_HANDLE_KEY = 'dukb-guest-handle';
 
+/* Round 301, audit finding 6: this used to be a UTC day while the streaks
+   next to it kept Eastern days, so the Games Today counter reset to zero at
+   8pm ET mid evening with the streak day still open. One clock for both. */
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return getEtDateString();
 }
 
 /**
@@ -94,7 +97,57 @@ export function getGuestHandle(): string {
  */
 export function getCurrentPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string {
   const fromProfile = profile?.display_name || profile?.username;
-  return fromProfile || getGuestHandle();
+  return fromProfile || getCachedDisplayName() || getGuestHandle();
+}
+
+/* Round 301, audit finding 8: callers without React context (Club Manager's
+   engine hook, the idle games, every direct recordCompletion site) passed no
+   profile, so a signed in player's plays were filed under their guest handle
+   and the header count plus every name keyed badge missed them. AuthContext
+   caches the profile's display name here whenever it loads or changes, and
+   getCurrentPlayerName falls back through it, so context free callers still
+   attribute to the right name. Cleared on sign out by the same context. */
+const DISPLAY_NAME_CACHE_KEY = 'dukb-display-name';
+export function cacheDisplayName(name: string | null): void {
+  try {
+    if (name) localStorage.setItem(DISPLAY_NAME_CACHE_KEY, name);
+    else localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+  } catch { /* storage unavailable, the guest handle fallback still works */ }
+}
+function getCachedDisplayName(): string | null {
+  try { return localStorage.getItem(DISPLAY_NAME_CACHE_KEY); } catch { return null; }
+}
+
+/**
+ * Round 301, audit finding 2: the ACTIVITY ping, distinct from a completion.
+ * The four front office boards and the four my career boards ping after
+ * every simulated round so Most Played Today reflects live play. (Club
+ * Manager is different and keeps recordCompletion: its calls fire once per
+ * COMPLETED SEASON with the season's score, and a finished season is a
+ * genuine play.) That ping used to be recordCompletion back when it only wrote
+ * the anonymous row; Round 300's fan out silently upgraded it, so one
+ * fifteen season career counted as sixteen plays, sixteen ranked rows and a
+ * diluted average. This is the old shape on purpose: the anonymous row and
+ * the local today count, NO streak record, NO signed in save. A real finish
+ * still goes through recordCompletion, exactly once.
+ */
+export function recordActivity(gamePath: string, score?: number, playerName?: string): void {
+  try {
+    const game = gamePath.replace(/^\//, '');
+    if (!game) return;
+    const row: { game: string; score?: number; player_name?: string } = { game };
+    if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
+    row.player_name = playerName || getCurrentPlayerName();
+    (supabase.from as any)('game_completions')
+      .insert(row)
+      .then(({ error }: { error: unknown }) => {
+        if (error) console.debug('[completions] activity insert failed (ignored):', error);
+        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
+      });
+    bumpLocalTodayCount(game);
+  } catch {
+    // Never let a tracking failure break gameplay.
+  }
 }
 
 /**
@@ -164,7 +217,7 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
       })
       .catch(() => { /* signed out or auth unreachable: the play still counted above */ });
 
-    bumpLocalTodayCount();
+    bumpLocalTodayCount(game);
   } catch {
     // Never let a tracking failure break gameplay.
   }
@@ -267,33 +320,57 @@ export async function saveAuthCompletion(userId: string, gameSlug: string, score
       .eq('game_type', gameSlug);
   }
 
+  /* Round 301, audit finding 15: back up the local streak state to the
+     profile on every signed in save. useStreaks had this sync, but only
+     inside a method nothing called after Round 300 hollowed the hook, so
+     profiles.streak_state was never written and a cleared cache erased a
+     streak forever. Best effort, replicated from useStreaks verbatim:
+     dynamic access because the column is newer than the generated types. */
+  try {
+    await (supabase.from as any)('profiles').upsert(
+      { user_id: userId, streak_state: getStreakState(), updated_at: new Date().toISOString() },
+      { onConflict: 'user_id' },
+    );
+  } catch { /* best effort only */ }
+
   return true;
 }
 
 /**
- * Local, same-browser count of completions recorded today, used as the
- * instant/optimistic half of the header's daily score chip so it doesn't
+ * Local, same-browser tracking of which games were completed today, used as
+ * the instant/optimistic half of the header's daily score chip so it doesn't
  * have to wait on a round trip for the player's own most recent completion.
+ *
+ * Round 301, audit finding 7: this used to be a raw completion COUNT, so a
+ * replay of one game inflated it while the server half counted DISTINCT
+ * games, and the navbar's Math.max compared two different units. The stored
+ * payload is now {date, slugs: string[]}, the set of today's completed game
+ * slugs, and getLocalTodayCount returns the set size so both halves count
+ * the same thing. An old {date, count} payload carries no slug list to
+ * migrate, so it is deliberately treated as empty for today: a one day
+ * reset of the optimistic chip, acceptable because the server's distinct
+ * count backstops signed in players and tomorrow starts clean anyway.
  */
-function bumpLocalTodayCount(): void {
+function bumpLocalTodayCount(game: string): void {
   try {
     const today = todayStr();
     const raw = localStorage.getItem(LOCAL_TODAY_KEY);
     const parsed = raw ? JSON.parse(raw) : null;
-    const count = parsed && parsed.date === today ? (parsed.count || 0) + 1 : 1;
-    localStorage.setItem(LOCAL_TODAY_KEY, JSON.stringify({ date: today, count }));
+    const slugs: string[] = parsed && parsed.date === today && Array.isArray(parsed.slugs) ? parsed.slugs : [];
+    if (!slugs.includes(game)) slugs.push(game);
+    localStorage.setItem(LOCAL_TODAY_KEY, JSON.stringify({ date: today, slugs }));
   } catch {
     /* localStorage unavailable (quota/private mode), not critical */
   }
 }
 
-/** Reads today's locally-tracked completion count for this browser only. */
+/** Reads today's locally-tracked DISTINCT completed game count for this browser only. */
 export function getLocalTodayCount(): number {
   try {
     const raw = localStorage.getItem(LOCAL_TODAY_KEY);
     if (!raw) return 0;
     const parsed = JSON.parse(raw);
-    return parsed && parsed.date === todayStr() ? (parsed.count || 0) : 0;
+    return parsed && parsed.date === todayStr() && Array.isArray(parsed.slugs) ? parsed.slugs.length : 0;
   } catch {
     return 0;
   }

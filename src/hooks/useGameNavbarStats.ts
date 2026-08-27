@@ -18,18 +18,25 @@ interface GameNavbarStats {
  * It still says zero points and zero out of 70 games played. And don't say my
  * rank either").
  *
- * The old version read user_scores / daily_completions, tables that do NOT
- * exist in the live project, and returned zeros for guests entirely. Now:
+ * Round 301, audit finding 14, comment brought back to the truth: until
+ * Round 300 the user_scores / daily_completions tables received no writes
+ * from most games, so the handle-keyed game_completions reads below were the
+ * only honest source; the server tables are live now and the local engine
+ * remains the guest half. Note that GameNavbar only renders these stats for
+ * signed in players (guests see a sign-up chip instead), the handle keying
+ * just keeps the numbers continuous across the guest to account transition.
+ * What each stat reads:
  * - Identity: getCurrentPlayerName(profile), the same handle (guest
  *   "Baller-1234" or profile name) that game_completions rows are written
- *   under, so guests get real numbers too.
+ *   under.
  * - Points today + world rank: the global_rank RPC (same normalized scoring
  *   as the sitewide leaderboard, each game's best run of the day is worth
- *   up to 100 pts).
+ *   up to 100 pts). This is TODAY's board; the profile page's rank badge is
+ *   the all-time board, which is why this chip is labeled "Today".
  * - Games played today: distinct games from game_completions for this
- *   handle, floored by the local same-browser count so the chip updates
- *   instantly even if the insert is still in flight.
- * - Streak: the local streak engine (the server never tracked one).
+ *   handle, floored by the local same-browser distinct-game count so the
+ *   chip updates instantly even if the insert is still in flight.
+ * - Streak: the local streak engine (the instant same-browser record).
  */
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const { profile } = useAuth();
@@ -69,6 +76,11 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       const serverGames = playedRes?.data
         ? new Set((playedRes.data as Array<{ game: string }>).map((r) => r.game)).size
         : 0;
+      /* Round 301, audit finding 7: both sides of this max now count
+         DISTINCT games completed today (getLocalTodayCount returns the size
+         of a local slug set since Round 301), so the merge no longer mixes
+         a raw completion count against a distinct count and a replay of one
+         game cannot inflate the chip. */
       const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
 
       setStats({

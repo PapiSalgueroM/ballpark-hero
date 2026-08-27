@@ -20,7 +20,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
+import { recordActivity } from '@/lib/completions';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { nhlHeatLabel } from '@/lib/nhlCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -141,7 +141,7 @@ export default function NhlMyCareerBoard() {
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
-    recordCompletion('/nhl-my-career');
+    recordActivity('/nhl-my-career');
     const c: NhlCareerState = JSON.parse(JSON.stringify(career));
 
     // Round 59: a suspension costs the whole season. You still age and decline.

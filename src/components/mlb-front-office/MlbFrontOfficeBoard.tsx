@@ -16,7 +16,7 @@ import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
+import { recordActivity } from '@/lib/completions';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
@@ -173,7 +173,7 @@ export default function MlbFrontOfficeBoard() {
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
-    recordCompletion('/mlb-front-office');
+    recordActivity('/mlb-front-office');
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     const report = simMlbRound(lg, myTeam, Math.random);
     mlbAiMoves(lg, myTeam, Math.random);

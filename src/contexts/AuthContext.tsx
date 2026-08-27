@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { cacheDisplayName } from '@/lib/completions';
 
 /** Mirrors the live `profiles` table exactly (verified against the schema in
     Round 55). The old shape claimed current_streak, longest_streak,
@@ -48,6 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (!error && data) {
       setProfile(data as unknown as Profile);
+      /* Round 301, audit finding 8: cache the display name where context
+         free recorders (Club Manager's engine, the idle games) can reach
+         it, so a signed in player's plays stop filing under their guest
+         handle. Cleared on sign out below. */
+      cacheDisplayName((data as unknown as Profile).display_name || (data as unknown as Profile).username || null);
     }
   };
 
@@ -126,6 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    cacheDisplayName(null);
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {

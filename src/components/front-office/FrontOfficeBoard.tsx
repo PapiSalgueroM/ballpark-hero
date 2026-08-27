@@ -17,7 +17,7 @@ import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
+import { recordActivity } from '@/lib/completions';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 // Round 180: the owner upstairs, shared engine and card.
@@ -212,7 +212,7 @@ export default function FrontOfficeBoard() {
     /* Round 195: a played week counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
-    recordCompletion('/front-office');
+    recordActivity('/front-office');
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const injuries = injuryPass(lg.teams, Math.random);
     const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);

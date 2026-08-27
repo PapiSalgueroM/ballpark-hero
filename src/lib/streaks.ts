@@ -1,15 +1,15 @@
 /**
  * Local-first streak engine (#101).
  *
- * IMPORTANT CONTEXT: as of this writing, the `profiles`, `user_scores`, and
- * `daily_completions` tables referenced by AuthContext.tsx / useGameCompletion.ts
- * do NOT exist in the live Supabase project (verified via information_schema
- * and list_tables against flawuiqbvjobmkfkauhw). Every read/write against
- * them in the existing code silently no-ops or fails (caught/swallowed).
- * That existing "streak" logic inside useGameCompletion.ts is therefore dead
- * code in production today. This module does not depend on any of it and
- * does not touch those tables. It computes everything from localStorage so
- * streaks work correctly for every player, logged in or not.
+ * Round 301, audit finding 14, context brought back to the truth: until
+ * Round 300 the `profiles`, `user_scores` and `daily_completions` tables
+ * received no writes from most games, so this local engine was the only
+ * honest source for streaks. Since Round 300 every completion also feeds
+ * those tables through src/lib/completions.ts, so the server is live now
+ * and this module remains the guest half plus the instant same-browser
+ * half for signed in players. It still computes everything from
+ * localStorage and touches no tables, so streaks work for every player,
+ * logged in or not.
  *
  * Design:
  * - All dates are US Eastern Time (ET) calendar dates, "YYYY-MM-DD", so a
@@ -189,8 +189,9 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
   state.perGame[gameSlug] = advanceEntry(perGamePrev, today);
 
   // Lifetime totals for the Profile stats. Every finished game counts as one
-  // play; scores accumulate. The flat profiles/user_scores columns these used
-  // to read don't exist in the live project, so this is the source of truth.
+  // play; scores accumulate. Round 301, audit finding 14: since Round 300 the
+  // server tables also record signed in play, so this is the guest era and
+  // same browser record that the Profile page merges with the server's.
   state.totalPlays = (state.totalPlays || 0) + 1;
   state.totalPoints = (state.totalPoints || 0) + (Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0);
 

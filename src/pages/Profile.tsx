@@ -18,7 +18,7 @@ import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
-import { getBadgeState, type BadgeState } from '@/lib/badges';
+import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -118,12 +118,12 @@ export default function Profile() {
   const { username } = useParams<{ username?: string }>();
   const navigate = useNavigate();
 
-  // #101/#100: local-first streaks and days-visited. This is deliberately
-  // the primary source for streak/visit numbers on this page rather than
-  // profile.current_streak etc: the `profiles` table those legacy fields
-  // read from does not exist in the live database (verified directly via
-  // SQL against flawuiqbvjobmkfkauhw), so those fields are always 0/null in
-  // production today regardless of how much a player has actually played.
+  // #101/#100: local-first streaks and days-visited. Round 301, audit
+  // finding 14: until Round 300 the profiles/user_scores/daily_completions
+  // tables received no writes from most games, so local-first was the only
+  // honest source; the server is live now and local remains the guest half,
+  // so own-profile streaks still read local first (this browser saw every
+  // guest era play) and the server fills in where it knows more.
   const {
     globalCurrentStreak, globalLongestStreak, topGameStreaks, visitStreakDays,
     totalPlays: localTotalPlays, totalPoints: localTotalPoints,
@@ -131,7 +131,10 @@ export default function Profile() {
   // Owner Aug 2026: the games tile shows TODAY's count, not lifetime
   // ("that should be for how many games have I played that day not in
   // general"). Same local source the navbar chip uses.
-  const [gamesToday] = useState(() => getLocalTodayCount());
+  // Round 301, audit finding 7: this is now a DISTINCT game count (the
+  // local tracker stores a set of today's slugs), so it can be merged with
+  // the server's daily_completions distinct count without mixing units.
+  const [localGamesToday] = useState(() => getLocalTodayCount());
 
   const [viewingProfile, setViewingProfile] = useState<any>(null);
   const [bestScores, setBestScores] = useState<BestScore[]>([]);
@@ -144,14 +147,24 @@ export default function Profile() {
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
+  // Round 301, audit finding 1: profiles has no total_games_played column,
+  // so viewed profiles need a real count of the player's user_game_scores
+  // rows instead of a dead field that always read 0.
+  const [serverTotalGames, setServerTotalGames] = useState(0);
+  // Round 301, audit finding 12: game_type of every finished play for the
+  // viewed player, so Fav Sport can count plays instead of best-score rows.
+  const [playedGameTypes, setPlayedGameTypes] = useState<string[]>([]);
 
   // #103: local-first badges. Own-profile only (see the load effect below) -
   // badge rules read this browser's localStorage + this browser's own
   // game_completions history, which only means something on the profile
-  // owner's own device. Starts empty so the Badges card's "X earned" count
-  // and grid render sanely (all-locked) before the async load resolves,
-  // rather than needing a separate loading flag for one card.
-  const [badges, setBadges] = useState<BadgeState[]>([]);
+  // owner's own device.
+  // Round 301, audit finding 10: seeded with every definition as unearned
+  // (instead of []) so the "X / Y earned" denominators are never 0 while
+  // the async load resolves; the grid just renders all-locked.
+  const [badges, setBadges] = useState<BadgeState[]>(
+    () => BADGE_DEFS.map(def => ({ ...def, earned: false }))
+  );
 
   // Personal info (from user_preferences)
   const [favouriteGame, setFavouriteGame] = useState<string>('');
@@ -212,11 +225,16 @@ export default function Profile() {
 
       if (!targetUserId) { setLoading(false); return; }
 
-      const [scoresRes, recentRes, userScoreRes, rankRes, bracketRes, todayRes, prefsRes] = await Promise.all([
+      const [scoresRes, recentRes, userScoreRes, gamesCountRes, gameTypesRes, bracketRes, todayRes, prefsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
         supabase.from('user_game_scores').select('game_type, score, created_at').eq('user_id', targetUserId).order('created_at', { ascending: false }).limit(5),
         supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
-        supabase.from('user_scores').select('user_id').order('total_points', { ascending: false }),
+        // Round 301, audit finding 1: a head-only count of the player's
+        // finished plays, the real Games Played number for viewed profiles.
+        supabase.from('user_game_scores').select('*', { count: 'exact', head: true }).eq('user_id', targetUserId),
+        // Round 301, audit finding 12: game_type only, one narrow column,
+        // so Fav Sport can count actual plays per sport.
+        supabase.from('user_game_scores').select('game_type').eq('user_id', targetUserId),
         supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
         supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
         supabase.from('user_preferences').select('*').eq('user_id', targetUserId).maybeSingle(),
@@ -225,6 +243,8 @@ export default function Profile() {
       setBestScores(scoresRes.data || []);
       setRecentGames((recentRes.data || []) as unknown as RecentGame[]);
       if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
+      setServerTotalGames(gamesCountRes.count ?? 0);
+      setPlayedGameTypes((gameTypesRes.data || []).map((r: any) => r.game_type));
       if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
       if (todayRes.data) setDailyGameSlugs(todayRes.data.map((c: any) => c.game_slug));
 
@@ -237,9 +257,22 @@ export default function Profile() {
         setTimeSpent(p.time_spent_minutes || 0);
       }
 
-      if (rankRes.data) {
-        const idx = rankRes.data.findIndex((p: any) => p.user_id === targetUserId);
-        setLeaderboardRank(idx >= 0 ? idx + 1 : null);
+      /* Round 301, audit finding 4: the old rank query downloaded EVERY
+         user_scores row with no limit, so it pulled the whole table on each
+         load and PostgREST's 1000 row cap meant rank 1001 and beyond
+         silently lost its badge. Count the rows strictly above this
+         player's points instead: rank is that count plus one, a single
+         head-only request, correct for own and viewed profiles alike. No
+         user_scores row means no rank to show. */
+      const myPoints = (userScoreRes.data as any)?.total_points;
+      if (typeof myPoints === 'number') {
+        const { count: aboveCount } = await supabase
+          .from('user_scores')
+          .select('*', { count: 'exact', head: true })
+          .gt('total_points', myPoints);
+        setLeaderboardRank((aboveCount ?? 0) + 1);
+      } else {
+        setLeaderboardRank(null);
       }
 
       setLoading(false);
@@ -250,7 +283,9 @@ export default function Profile() {
 
   /* ── Badges (#103): own-profile only, local-first, loaded once profile/auth is settled ── */
   useEffect(() => {
-    if (authLoading || !isOwnProfile) { setBadges([]); return; }
+    // Round 301, audit finding 10: reset to the all-locked seed, never [],
+    // so any consumer of badges.length keeps a real denominator.
+    if (authLoading || !isOwnProfile) { setBadges(BADGE_DEFS.map(def => ({ ...def, earned: false }))); return; }
     let cancelled = false;
     getBadgeState(profile).then(result => {
       if (!cancelled) setBadges(result);
@@ -258,23 +293,29 @@ export default function Profile() {
     return () => { cancelled = true; };
   }, [authLoading, isOwnProfile, profile]);
 
-  /* ── Time tracking (increment every minute while page is visible) ── */
+  /* ── Time tracking (increment every minute while this page is visible) ── */
+  /* Round 301, audit finding 11: one interval, created once on mount and
+     cleaned up on unmount. The old version listed timeSpent as an effect
+     dependency, so every tick tore the interval down and rebuilt it, and
+     its async closure wrote a stale timeSpent + 1 (a lost-update race with
+     the value loaded from preferences). Functional setState reads the live
+     value, and the write fires with the exact number it just computed. */
   useEffect(() => {
     if (!user || !isOwnProfile) return;
-    const interval = setInterval(async () => {
-      if (document.visibilityState === 'visible') {
-        setTimeSpent(prev => prev + 1);
-        // Fire-and-forget time update
-        try {
-          await supabase.from('user_preferences').upsert(
-            { user_id: user.id, time_spent_minutes: timeSpent + 1, updated_at: new Date().toISOString() } as any,
-            { onConflict: 'user_id' }
-          );
-        } catch (_) { /* ignore */ }
-      }
+    const interval = setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      setTimeSpent(prev => {
+        const next = prev + 1;
+        // Fire and forget; rewriting the same value is harmless.
+        supabase.from('user_preferences').upsert(
+          { user_id: user.id, time_spent_minutes: next, updated_at: new Date().toISOString() } as any,
+          { onConflict: 'user_id' }
+        ).then(() => { /* saved */ }, () => { /* ignore */ });
+        return next;
+      });
     }, 60_000);
     return () => clearInterval(interval);
-  }, [user, isOwnProfile, timeSpent]);
+  }, [user, isOwnProfile]);
 
   /* ── Save personal info ── */
   const savePreferences = useCallback(async (field: string, value: string) => {
@@ -353,35 +394,49 @@ export default function Profile() {
   };
 
   /* ── Computed stats ── */
-  // Own profile reads local-first totals (the flat DB columns don't exist, so
-  // they were always 0); other profiles fall back to whatever the DB has.
+  /* Round 301, audit finding 3: own profile takes the LARGER of the two
+     point totals. Local counts guest era play the server never saw, the
+     server counts signed in play from other devices this browser never
+     saw, so neither alone is complete and the larger of the two is the
+     honest floor (a new device no longer shows Points 0 beside a real
+     rank). Viewed profiles have only the server number. */
   const totalPoints = isOwnProfile
-    ? localTotalPoints
-    : (userScoreData?.total_points ?? viewingProfile?.all_time_score ?? 0);
-  const totalGames = isOwnProfile
-    ? localTotalPlays
-    : (viewingProfile?.total_games_played ?? 0);
-  // Local-first (see useStreaks() above), with the legacy DB-backed fields
-  // only as a fallback for the unlikely case they're ever non-zero (e.g.
-  // after the proposed profiles table + sync exists). On isOwnProfile this
-  // is always the local browser's own streak, which is correct since a
-  // player viewing their own profile is on their own device by definition.
-  // On someone else's profile (isOwnProfile false), local streak data is
-  // this visitor's, not the viewed player's, so it's intentionally not
-  // shown there - see the isOwnProfile guard around the streak stats below.
+    ? Math.max(userScoreData?.total_points ?? 0, localTotalPoints)
+    : (userScoreData?.total_points ?? 0);
+  /* Round 301, audit finding 1: profiles has no total_games_played (or
+     all_time_score) column, so the old fallbacks were dead and someone
+     else's profile always showed Games Played 0. Viewed profiles now use
+     the counted user_game_scores rows fetched above. */
+  const totalGames = isOwnProfile ? localTotalPlays : serverTotalGames;
+  // Local-first (see useStreaks() above): on isOwnProfile this is always
+  // the local browser's own streak, which is correct since a player viewing
+  // their own profile is on their own device by definition. On someone
+  // else's profile, local streak data is this visitor's, not the viewed
+  // player's, so the viewed player's user_scores streaks (written on every
+  // signed in completion since Round 300) are shown instead.
   const currentStreak = isOwnProfile
     ? globalCurrentStreak
-    : (userScoreData?.current_streak ?? viewingProfile?.current_streak ?? 0);
+    : (userScoreData?.current_streak ?? 0);
   const longestStreak = isOwnProfile
     ? globalLongestStreak
-    : (userScoreData?.longest_streak ?? viewingProfile?.longest_streak ?? 0);
+    : (userScoreData?.longest_streak ?? 0);
   const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
+
+  /* Round 301, audit findings 7 and 13: both halves count DISTINCT games
+     completed today, the local slug set for instant credit and the server's
+     daily_completions rows (unique per user, game and date) for cross
+     device truth, so the max of the two is the honest count and the
+     fetched slugs are finally used instead of sitting in dead state. */
+  const gamesToday = Math.max(localGamesToday, new Set(dailyGameSlugs).size);
 
   // Round 75: count sports via the registry; unknown slugs are skipped
   // instead of bucketing into a meaningless "General".
+  /* Round 301, audit finding 12: counted from the viewed player's
+     user_game_scores plays, not from which games happen to have a best
+     score row, so this now measures the sport with the most FINISHED PLAYS
+     rather than the sport with the most distinct games tried. */
   const sportCounts: Record<string, number> = {};
-  bestScores.forEach(s => {
-    const slug = s.game_type;
+  playedGameTypes.forEach(slug => {
     const legacy = SPORT_CATEGORIES[slug];
     const sport = SLUG_TO_SPORT[slug]
       ?? (slug.startsWith('f1') || slug.startsWith('nascar') ? (slug.startsWith('f1') ? 'Formula 1' : 'NASCAR') : null)
@@ -464,7 +519,10 @@ export default function Profile() {
                         {viewingProfile.username && <p className="text-muted-foreground text-sm">@{viewingProfile.username}</p>}
                         <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Joined {format(new Date(viewingProfile.created_at), 'MMM yyyy')}</span>
-                          {leaderboardRank && <span className="flex items-center gap-1"><Medal className="w-3.5 h-3.5 text-primary" /> Rank #{leaderboardRank}</span>}
+                          {/* Round 301, audit finding 5: labeled all-time because the
+                              navbar's rank chip is today's board (global_rank RPC);
+                              two different boards must not share one bare label. */}
+                          {leaderboardRank && <span className="flex items-center gap-1"><Medal className="w-3.5 h-3.5 text-primary" /> All-time rank #{leaderboardRank}</span>}
                         </div>
                       </>
                     )}
@@ -611,7 +669,11 @@ export default function Profile() {
                 ? [{ icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry[0], label: 'Fav Sport', small: true }]
                 : []),
               { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
-              { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time Played' },
+              // Round 301, audit finding 11: honest label. The minutes
+              // counter's only writer is the interval above, which ticks
+              // while this page is open, so it measures time on the profile
+              // page, not time playing games.
+              { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time on profile' },
               // Owner Aug 2026: consecutive days visited ("days in a row"),
               // not a lifetime total. Own-profile only: this browser's visit
               // history has no meaning when looking at someone else's profile.
@@ -655,6 +717,12 @@ export default function Profile() {
           )}
 
           {/* ═══════════════ 4. BADGES ═══════════════ */}
+          {/* Round 301, audit finding 10: own profile only. Badges are computed
+              from this browser's localStorage and its own completion history,
+              which says nothing about the player being viewed, so on someone
+              else's profile this card could only ever render an all-locked
+              grid that read as "this player earned nothing". */}
+          {isOwnProfile && (
           <Card className="border-border/60">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -687,6 +755,7 @@ export default function Profile() {
               </div>
             </CardContent>
           </Card>
+          )}
 
           {/* ═══════════════ WC Predictor Card ═══════════════ */}
           {savedBracket && (
