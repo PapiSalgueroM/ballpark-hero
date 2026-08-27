@@ -27,6 +27,11 @@
  *
  * Run: node scripts/simNationJob.mjs
  */
+/* Round 304: seeded stream first, the Round 299 rule this file missed. The
+   six point lift check ran 120 unpaired summers on live randomness and
+   flipped roughly one board in a dozen (27 against 28 on the night it was
+   caught), which is the exact coin toss the seeding sweep exists to end. */
+import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
