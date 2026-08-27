@@ -15,7 +15,9 @@ import {
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
   TICKET_TIERS, groundUpgradeCost, gatePricePerFan, sponsorOffers, nationOfferFor,
 } from '@/lib/clubManager';
-import type { NationDef, ObjectiveStatus, CupRound } from '@/lib/clubManager';
+import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
+import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
+import { ManagerForm } from '@/components/club-manager/ManagerForm';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
@@ -98,10 +100,13 @@ const ClubManager = () => {
      is looking at: which squads, which players, how good each club is. Same
      idea as the era choice on the My Career create screen, laid out as tiles
      because this game is tiles. */
-  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team' | 'custom'>('era');
+  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team' | 'custom' | 'manager'>('era');
   const [pickEra, setPickEra] = useState<string>(DEFAULT_ERA_ID);
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
   const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
+  /* Round 303: a founded club waits here while the dugout step runs, so the
+     manager spec and the club spec land in startCareer together. */
+  const [pendingCustomSpec, setPendingCustomSpec] = useState<CustomClubSpec | null>(null);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
   const era = eraById(pickEra);
   const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -242,12 +247,16 @@ const ClubManager = () => {
 
   /* ================= CLUB SELECT (Round 70: nation -> league -> team) ================= */
   if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
-    const confirmAndReset = () => {
-      g.confirmClub(pickEra);
+    /* Round 303: the dugout step hands in null (skip) or a manager spec, and
+       either way the picker resets for the next career. */
+    const confirmAndReset = (manager: ManagerSpec | null) => {
+      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined);
+      else g.confirmClub(pickEra, manager ?? undefined);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
       setPickNation(null);
       setPickLeagueId(null);
+      setPendingCustomSpec(null);
     };
     /* Round 146: a historic era swaps the whole picker world: its nations,
        its leagues, its clubs, its stature. The modern path is untouched. */
@@ -270,14 +279,14 @@ const ClubManager = () => {
 
         {/* Step breadcrumb */}
         <div className="flex items-center justify-center gap-1.5 mb-5 text-[10px] font-bold flex-wrap">
-          {(['era', 'nation', 'league', 'team'] as const).map((s, i) => (
+          {(['era', 'nation', 'league', 'team', 'manager'] as const).map((s, i) => (
             <span key={s} className="inline-flex items-center gap-1.5">
               {i > 0 && <ChevronRight className="w-3 h-3 text-muted-foreground/50" />}
               <span className={cn(
                 'px-2.5 py-1 rounded-full border',
                 pickStep === s ? 'bg-primary/10 border-primary text-primary' : 'bg-card border-border text-muted-foreground',
               )}>
-                {i + 1}. {s === 'era' ? 'When' : s === 'nation' ? 'Nation' : s === 'league' ? 'League' : 'Team'}
+                {i + 1}. {s === 'era' ? 'When' : s === 'nation' ? 'Nation' : s === 'league' ? 'League' : s === 'team' ? 'Team' : 'Dugout'}
               </span>
             </span>
           ))}
@@ -514,7 +523,7 @@ const ClubManager = () => {
                     <div className="text-sm font-bold text-foreground truncate">{g.pendingClub}</div>
                   </div>
                   <button
-                    onClick={confirmAndReset}
+                    onClick={() => { setPendingCustomSpec(null); setPickStep('manager'); }}
                     className="shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
                   >
                     <Briefcase className="w-4 h-4" /> Take the job
@@ -532,7 +541,23 @@ const ClubManager = () => {
             leagueId={league.id}
             eraId={historicPick ? pickEra : undefined}
             onBack={() => setPickStep('team')}
-            onCreate={spec => g.confirmCustomClub(pickEra, spec)}
+            onCreate={spec => { setPendingCustomSpec(spec); setPickStep('manager'); }}
+          />
+        )}
+
+        {/* -------- Step 5 (Round 303): who is in the dugout -------- */}
+        {pickStep === 'manager' && (
+          <ManagerForm
+            clubName={pendingCustomSpec?.name || g.pendingClub || 'Back'}
+            defaultNation={pickNation?.name ?? 'England'}
+            onBack={() => {
+              /* Backing out of the dugout drops the stashed club spec too, so
+                 a later real club confirm can never pick up a stale founding. */
+              const target = pendingCustomSpec ? 'custom' : 'team';
+              setPendingCustomSpec(null);
+              setPickStep(target);
+            }}
+            onConfirm={confirmAndReset}
           />
         )}
       </div>
@@ -1437,6 +1462,18 @@ const ClubManager = () => {
                 )}
                 <div className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
+                  {/* Round 303: the created manager's card line. Absent spec, the
+                      panel reads exactly as it always has. */}
+                  {c.manager && (
+                    <div className="flex items-center gap-2 mb-2 rounded-lg border border-border bg-background/60 px-2.5 py-1.5">
+                      <FlagImg name={c.manager.nationality} size={14} />
+                      <span className="text-xs font-bold text-foreground truncate">{c.manager.name}</span>
+                      <span className="text-[9px] text-muted-foreground truncate">
+                        {MANAGER_BACKGROUNDS[c.manager.background]?.emoji} {MANAGER_BACKGROUNDS[c.manager.background]?.label}
+                        {' · '}{CLUB_IDENTITIES[c.manager.style]?.emoji} {CLUB_IDENTITIES[c.manager.style]?.label}
+                      </span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-3 gap-2 text-center mb-2">
                     <div>
                       <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>

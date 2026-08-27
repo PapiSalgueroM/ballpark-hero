@@ -16,7 +16,7 @@ import {
 } from '@/lib/clubManager';
 import type { MatchFacts } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
-import type { NextFixtureInfo, TableRow, CustomClubSpec } from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -93,10 +93,12 @@ export function useClubManager() {
   }, []);
 
   /* Round 132: the era rides in from the picker. Nothing passed means the
-     current era, which is the world this game has always started in. */
-  const confirmClub = useCallback((eraId?: string) => {
+     current era, which is the world this game has always started in.
+     Round 303: the optional manager spec rides the same way; absent means
+     the second person career this has always been. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec) => {
     if (!pendingClub) return;
-    const s = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID);
+    const s = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager);
     setCareer(s);
     setActiveTab('overview');
     setPhase('hub');
@@ -104,8 +106,8 @@ export function useClubManager() {
 
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
-  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec) => {
-    const s = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec);
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec) => {
+    const s = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');
