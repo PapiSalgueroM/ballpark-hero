@@ -133,6 +133,11 @@
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
             var s = document.createElement('script');
             s.async = true;
             s.crossOrigin = 'anonymous';
@@ -254,8 +259,8 @@
 <a href="/nhl-connect-4">🏒 NHL Connect 4 Hockey trivia meets Connect 4</a>
 <a href="/perfect-lineup-nhl">🏒 Perfect Lineup: NHL Build a dream line under random team &amp; era constraints, then simulate</a>
 <a href="/f1-constructor">🏗️ Guess The Constructor Guess the mystery F1 team from clues</a>
-<a href="/jeopardy">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
 <a href="/cfb-higher-lower">📊 CFB Higher or Lower Which QB threw for more college yards?</a>
+<a href="/rarity-round">💎 Rarity Round Name the answer nobody else would. Rarest wins</a>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>
