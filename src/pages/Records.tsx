@@ -86,7 +86,7 @@ const Records = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="The Record Books: Champions by Year in Every Sport | DoUKnowBall"
         description="Every Super Bowl, NBA, World Series, Stanley Cup, WNBA, college football and basketball, English soccer, AFL and NRL champion, year by year, checked against the record."

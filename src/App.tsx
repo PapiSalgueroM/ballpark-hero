@@ -40,6 +40,7 @@ const GuessTheCollege = lazy(() => import("./pages/GuessTheCollege"));
 import NotFound from "./pages/NotFound";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const Accessibility = lazy(() => import("./pages/Accessibility"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminReports = lazy(() => import("./pages/AdminReports"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -311,6 +312,7 @@ const AppContent = () => {
         <Route path="/guess-the-college" element={<GuessTheCollege />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/accessibility" element={<Accessibility />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/whats-new" element={<WhatsNew />} />

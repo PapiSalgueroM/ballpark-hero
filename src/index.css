@@ -207,13 +207,29 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Round 306: the list grew from the 7 named game animations to everything
+     that moves. The 2026-08-27 audit counted 87 animate-pulse and 71
+     animate-spin uses, both infinite loops, none covered; the audit's
+     minimal fix is this list. Spinners freeze into static icons, which is
+     fine: every loading state also carries aria-busy or a text line. */
   .animate-tile-flip,
   .animate-pop-correct,
   .animate-shake-wrong,
   .animate-count-up-fade,
   .animate-cell-reveal,
   .animate-slot-spin,
-  .animate-slot-settle {
+  .animate-slot-settle,
+  .animate-pulse,
+  .animate-spin,
+  .animate-in,
+  .animate-out,
+  .animate-fade-in,
+  .animate-bounce,
+  .animate-trophy-glow,
+  .animate-shine-sweep,
+  .animate-float-up,
+  .animate-confetti-fall,
+  .animate-avatar-bob {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }

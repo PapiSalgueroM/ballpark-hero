@@ -191,11 +191,23 @@ const MlbConnect4 = () => {
                       selectedCol === c && targetRow === r && phase === 'playing';
 
                     return (
-                      <div
+                      <button
                         key={`${r}-${c}`}
+                        type="button"
                         onClick={() => {
                           if (phase === 'playing' && !cell) selectColumn(c);
                         }}
+                        disabled={phase !== 'playing' || !!cell}
+                        /* Round 306: the Round 215 rule reaches this board. An
+                           empty square has no text, so a screen reader heard
+                           nothing and a keyboard could not reach it; the label
+                           carries the clue pair a sighted player reads off the
+                           edges of the grid. */
+                        aria-label={
+                          cell
+                            ? `${cell.playerName}, ${board.rowAttributes[r]} and ${board.columnAttributes[c]}`
+                            : `Empty square, ${board.rowAttributes[r]} and ${board.columnAttributes[c]}`
+                        }
                         className={cn(
                           'aspect-square rounded-lg border flex items-center justify-center transition-all relative',
                           cell
@@ -218,7 +230,7 @@ const MlbConnect4 = () => {
                             {cell.playerName}
                           </span>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
                 </>

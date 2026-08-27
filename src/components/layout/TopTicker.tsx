@@ -145,6 +145,11 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
   const groups = useMemo(() => groupScores(scores), [scores]);
   const [idx, setIdx] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  /* Round 306: auto advancing content needs a way to hold still. Pointer
+     over the strip or keyboard focus inside it parks the wire on the open
+     sport; leaving lets it run again. Reduced motion still shows everything
+     at once with no cycling at all. */
+  const [paused, setPaused] = useState(false);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -162,10 +167,10 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
   /* The loop itself: hold on the open sport for its dwell, then advance.
      A one sport wire never advances; a dead wire has nothing to advance. */
   useEffect(() => {
-    if (reducedMotion || groups.length < 2) return undefined;
+    if (reducedMotion || paused || groups.length < 2) return undefined;
     const t = window.setTimeout(() => setIdx(i => (i + 1) % groups.length), dwellMs(groups[idx % groups.length]?.rows.length ?? 0));
     return () => window.clearTimeout(t);
-  }, [idx, groups, reducedMotion]);
+  }, [idx, groups, reducedMotion, paused]);
 
   /* A feed refresh can shrink the group list under the pointer. */
   const open = groups.length ? idx % groups.length : 0;
@@ -176,7 +181,18 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
   const anyLive = groups.some(g => g.rows.some(r => r.live));
 
   return (
-    <div data-site-chrome="" className={`${home ? '' : 'hidden md:block'} bg-[hsl(225_25%_4%)] border-b border-border/60 overflow-hidden h-8 relative`} aria-label="Live scores ticker">
+    /* Round 306: a section, not a div, because aria-label on a generic
+       element is dropped by the browsers that matter; a named section is a
+       real landmark a screen reader can jump to. */
+    <section
+      data-site-chrome=""
+      className={`${home ? '' : 'hidden md:block'} bg-[hsl(225_25%_4%)] border-b border-border/60 overflow-hidden h-8 relative`}
+      aria-label="Live scores ticker"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       <div className="flex items-center h-full">
         <span data-live-chip="" className="shrink-0 z-10 h-full inline-flex items-center gap-1.5 px-3 bg-primary text-primary-foreground text-[10px] font-black tracking-[0.18em] uppercase">
           <span className={`w-1.5 h-1.5 rounded-full bg-red-500 ${anyLive ? 'animate-pulse' : ''}`} aria-hidden="true" />
@@ -195,7 +211,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

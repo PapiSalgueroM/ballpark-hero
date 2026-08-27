@@ -69,6 +69,7 @@ const STATIC_PAGES = [
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },
   { p: '/terms', freq: 'yearly', pri: '0.3' },
+  { p: '/accessibility', freq: 'yearly', pri: '0.3' },
 ];
 
 /* ---- routes from App.tsx, via the one shared reader ---- */

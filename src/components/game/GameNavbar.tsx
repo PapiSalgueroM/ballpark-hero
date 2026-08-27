@@ -76,7 +76,9 @@ import { AuthModal } from '@/components/auth/AuthModal';
  * Nothing is hidden on mobile now. The four values are all there. Below 640 the
  * words "Points:" and "Rank:" stay collapsed to their icons, which is how it
  * already worked and is what keeps four stats inside 296px at 320 wide, so
- * every icon carries an aria-label for anyone reading this with a screen
+ * every stat carries a screen reader only text label (Round 306: they were
+ * aria-labels on plain spans, which ARIA prohibits on generic elements and
+ * Chrome plus NVDA drop; visible text in an sr-only span survives) for anyone reading this with a screen
  * reader.
  *
  * Guarded by scripts/simMobileChrome.mjs, which measures every child box of
@@ -151,7 +153,7 @@ export function GameNavbar() {
                 {/* Games completed today */}
                 <div className="flex items-center gap-1 text-xs sm:text-sm">
                   <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" aria-hidden="true" />
-                  <span className="text-muted-foreground" aria-label="Games completed today">
+                  <span className="text-muted-foreground"><span className="sr-only">Games completed today: </span>
                     {loading ? (
                       <span className="inline-block w-8 h-4 bg-muted animate-pulse rounded" />
                     ) : (
@@ -165,7 +167,7 @@ export function GameNavbar() {
                 {/* Points today */}
                 <div className="flex items-center gap-1 text-xs sm:text-sm">
                   <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500" aria-hidden="true" />
-                  <span className="text-muted-foreground" aria-label="Points today">
+                  <span className="text-muted-foreground"><span className="sr-only">Points today: </span>
                     {loading ? (
                       <span className="inline-block w-10 h-4 bg-muted animate-pulse rounded" />
                     ) : (
@@ -181,7 +183,7 @@ export function GameNavbar() {
                 {currentStreak > 0 && (
                   <div className="flex items-center gap-1 text-xs sm:text-sm">
                     <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" aria-hidden="true" />
-                    <span className="font-medium text-foreground" aria-label="Day streak">{currentStreak}</span>
+                    <span className="font-medium text-foreground"><span className="sr-only">Day streak: </span>{currentStreak}</span>
                   </div>
                 )}
 
@@ -192,7 +194,7 @@ export function GameNavbar() {
                     "Rank" label or the numbers look contradictory. */}
                 <div className="flex items-center gap-1 text-xs sm:text-sm">
                   <Medal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" aria-hidden="true" />
-                  <span className="text-muted-foreground" aria-label="World rank today">
+                  <span className="text-muted-foreground"><span className="sr-only">World rank today: </span>
                     {loading ? (
                       <span className="inline-block w-8 h-4 bg-muted animate-pulse rounded" />
                     ) : dailyRank ? (
