@@ -49,7 +49,11 @@ Both pages: confirmed valid JSX after edits (all tags balanced, entities intact)
 1. Entity: individual owner doing business as DoUKnowBall. Terms Section 1 now states this.
 2. Governing law: Commonwealth of Massachusetts, exclusive jurisdiction in Massachusetts state/federal courts. Terms Section 14 updated.
 3. COPPA posture: keep the soft policy (option b): no age gate; under-13s asked not to create accounts without a parent; takedown contact provided. Revisit if ad revenue grows.
-4. Deletion/access inbox: DoUknowBall.com@gmail.com (Anthony's update, replacing footyfein1@gmail.com) with the 30-day response promise. Swapped in Privacy Policy and Terms on 2026-07-03.
+4. Deletion/access inbox: douknowball1@gmail.com with the 30-day response promise.
+   (Corrected 2026-08-27: this doc previously recorded DoUknowBall.com@gmail.com, but the live
+   pages, the contact page, the about page and the report relay all use douknowball1@gmail.com,
+   one address in seven places, and that consistency is the thing worth protecting. The code was
+   right, the doc was stale.)
 5. Ad-tech disclosure upkeep: standing practice adopted: any new ad network, analytics tool, or third-party SDK must be added to Privacy Policy Section 4 in the same publish that ships it.
 
 ## Original open questions (resolved above, kept for context)
@@ -57,5 +61,42 @@ Both pages: confirmed valid JSX after edits (all tags balanced, entities intact)
 1. **Formal business name / entity.** The pages currently say "DoUKnowBall" as if it were the operating entity, with no LLC/company name, business address, or registered agent. If DoUKnowBall operates as an individual (not a formal company), the Terms should say so, or the owner should decide whether to form an entity before this matters (e.g., for the indemnification and liability sections to have a real party behind them).
 2. **Governing law and venue.** "Laws of the United States... resolved in the applicable courts" is a vague placeholder inherited from the original draft. It does not name a state or a venue for disputes. A real jurisdiction (the owner's home state, most likely) should be chosen, ideally with a lawyer's input, especially once there is any revenue via AdSense.
 3. **COPPA posture for the account feature.** The app markets to a general audience that "may include minors" per the task brief, has no age gate on sign-up, and now (correctly) discloses that accounts collect email. Legally, the safer and more common approaches are: (a) add an actual age gate or age-affirmation checkbox at sign-up, or (b) keep accounts fully optional with no targeted marketing to under-13 users and treat the current soft "ask for parent involvement" language as the whole policy. This review implemented option (b) as the honest description of current behavior, but only the owner (with a lawyer, if this app starts generating meaningful ad revenue) should decide whether that is sufficient or whether an age gate needs to be built.
-4. **Data deletion SLA and mechanism.** The pages promise a 30-day response to deletion/access requests via a personal Gmail address (`footyfein1@gmail.com`). That is functionally fine for a small site today, but the owner should confirm this inbox is actually monitored, and consider a dedicated support address if the site grows.
+4. **Data deletion SLA and mechanism.** The pages promise a 30-day response to deletion/access requests via a personal Gmail address (now `douknowball1@gmail.com`). That is functionally fine for a small site today, but the owner should confirm this inbox is actually monitored, and consider a dedicated support address if the site grows.
 5. **Google AdSense / ad-tech disclosure completeness.** This review described AdSense and personalized ads at a level consistent with the existing cookie banner. If the owner later adds any other ad network, analytics tool (e.g., Google Analytics), or third-party SDK, the Privacy Policy's Section 4 list needs a matching addition; this was not preemptively added because no such integration currently exists in the codebase.
+
+## The deletion runbook (added 2026-08-27, Round 304)
+
+The pages promise deletion within 30 days of an email to douknowball1@gmail.com. Until Round 304
+nothing anywhere said HOW, so the promise had no procedure behind it. This is the procedure. Run
+it through the Supabase MCP (SQL authenticated by the session), never through anything the
+browser can reach.
+
+Given a request from a signed in user (they must write from the email on the account, or
+otherwise prove control of it):
+
+1. Find the user: `select id from auth.users where email = '<their email>';`
+2. Note their display name and username first, they key the anonymous rows:
+   `select display_name, username from public.profiles where user_id = '<id>';`
+3. Delete the account rows, in this order:
+   - `delete from public.user_best_scores where user_id = '<id>';`
+   - `delete from public.user_game_scores where user_id = '<id>';`
+   - `delete from public.daily_completions where user_id = '<id>';`
+   - `delete from public.user_scores where user_id = '<id>';`
+   - `delete from public.user_preferences where user_id = '<id>';`
+   - `delete from public.profiles where user_id = '<id>';`
+4. The anonymous heartbeat rows in `game_completions` are keyed by display name, not user id.
+   If they ask for those too:
+   `delete from public.game_completions where player_name in ('<display_name>', '<username>');`
+   (This can also catch a different player who happened to type the same name; the row carries
+   nothing else identifying, so over-deleting here is the safe direction.)
+5. Delete the auth user last, via the Supabase dashboard (Authentication, then the user, then
+   Delete) or the admin API. This is what actually kills the login.
+6. Reply to the email confirming what was deleted and when.
+
+Guest (signed out) requests: their rows are keyed by the generated handle in their own browser
+(`dukb-guest-handle` in localStorage). Tell them the handle to look up (they can read it from
+the leaderboard chip), then run step 4 with it, and tell them clearing site data in their
+browser removes the local half.
+
+The other standing promise, access requests ("what do you have on me"): steps 1, 2 and the
+selects in 3 and 4 answer it, pasted into the reply.
