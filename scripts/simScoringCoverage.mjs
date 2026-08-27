@@ -137,7 +137,7 @@ export const supabase: any = {
 };
 `);
   fs.writeFileSync(ENTRY, `
-export { recordCompletion } from '${ROOT}/src/lib/completions.ts';
+export { recordCompletion, recordActivity } from '${ROOT}/src/lib/completions.ts';
 export { getStreakState } from '${ROOT}/src/lib/streaks.ts';
 export { ledger, setSessionUser } from '${STUB}';
 `);
@@ -171,6 +171,19 @@ export { ledger, setSessionUser } from '${STUB}';
   const best = mod.ledger['user_best_scores'] || [];
   if (best.length !== 2) fail(`user_best_scores got ${best.length} rows from 2 different games`);
   console.log(`   2 calls: ${anon.length} anonymous rows, ${streaks.totalPlays} plays and ${streaks.totalPoints} points on the streak record, ${scores[0]?.total_points ?? 'no'} signed in points`);
+
+  /* Round 301, audit finding 2: the activity ping must stay a ping. The sim
+     boards fire it every simulated round, and Round 300's fan out briefly
+     turned those pings into full plays (a fifteen season career counted as
+     sixteen). An activity call adds an anonymous row and NOTHING else. */
+  mod.recordActivity('/front-office');
+  await new Promise(r => setTimeout(r, 50));
+  const anonAfter = (mod.ledger['game_completions'] || []).length;
+  const streaksAfter = mod.getStreakState();
+  if (anonAfter !== 3) fail(`an activity ping should add exactly one anonymous row (${anonAfter} total, wanted 3)`);
+  if ((streaksAfter.totalPlays || 0) !== 2) fail(`an activity ping advanced totalPlays to ${streaksAfter.totalPlays}, pings must never count as plays`);
+  if ((mod.ledger['user_game_scores'] || []).length !== 2) fail('an activity ping wrote a ranked user_game_scores row');
+  console.log(`   1 activity ping: anonymous rows ${anonAfter}, plays still ${streaksAfter.totalPlays}, ranked rows still 2`);
 }
 
 if (CONTROL) {

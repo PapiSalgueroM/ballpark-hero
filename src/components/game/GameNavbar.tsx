@@ -185,7 +185,11 @@ export function GameNavbar() {
                   </div>
                 )}
 
-                {/* World rank today */}
+                {/* World rank today. Round 301, audit finding 5: labeled
+                    "Today" because this is the daily board (global_rank RPC)
+                    while the profile page's rank badge is the all-time
+                    board; two different boards must not share a bare
+                    "Rank" label or the numbers look contradictory. */}
                 <div className="flex items-center gap-1 text-xs sm:text-sm">
                   <Medal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" aria-hidden="true" />
                   <span className="text-muted-foreground" aria-label="World rank today">
@@ -193,12 +197,12 @@ export function GameNavbar() {
                       <span className="inline-block w-8 h-4 bg-muted animate-pulse rounded" />
                     ) : dailyRank ? (
                       <span>
-                        <span className="hidden sm:inline">Rank: </span>
+                        <span className="hidden sm:inline">Today </span>
                         <span className="font-medium text-foreground">#{dailyRank}</span>
                       </span>
                     ) : (
                       <span>
-                        <span className="hidden sm:inline">Rank: </span>-</span>
+                        <span className="hidden sm:inline">Today </span>-</span>
                     )}
                   </span>
                 </div>
