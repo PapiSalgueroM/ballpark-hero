@@ -1,16 +1,29 @@
 import { useEffect, useRef } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
-import { recordGameCompletion as recordStreakCompletion } from '@/lib/streaks';
 import { getNewlyEarnedBadges } from '@/lib/badges';
 
 /**
- * Automatically saves game completion data to user_scores, user_game_scores,
- * user_best_scores, daily_completions, and profiles when a game finishes.
+ * Marks a finished game for the hook-style callers.
  *
- * Call this hook in every game hook/board with the game slug, completion status, and score.
+ * Round 300 hollowed this out on purpose. It used to own three jobs: the
+ * anonymous game_completions row, the local streak record, and the whole
+ * signed in save (user_game_scores, daily_completions, user_scores,
+ * user_best_scores). That made it one of THREE pipelines, and which ones a
+ * game fed depended on which helper it called: the 19 games mounting this
+ * hook fed everything, every direct recordCompletion caller fed only the
+ * anonymous row, so a signed in player could finish a Club Manager season
+ * and watch their flame, points and rank not move.
+ *
+ * All of that lives in ONE place now, lib/completions.recordCompletion,
+ * which fans out to all three pipelines itself (see saveAuthCompletion in
+ * the same file, moved there verbatim from here). This hook is the React
+ * shaped door to it: it watches isComplete, calls the one recorder exactly
+ * once per finish, and keeps the two things that genuinely need React
+ * context, the badge toasts and the profile refresh after the signed in
+ * save lands (announced by the game-completion-saved event the lib
+ * dispatches).
  */
 export function useGameCompletion(
   gameSlug: string,
@@ -19,166 +32,32 @@ export function useGameCompletion(
   correctAnswers: number = 0
 ) {
   const { user, profile, refreshProfile } = useAuth();
-  const savedRef = useRef(false);
   const trackedRef = useRef(false);
 
-  // Reset saved flag when game resets (isComplete goes back to false)
+  // Reset when the game resets (isComplete goes back to false)
   useEffect(() => {
-    if (!isComplete) {
-      savedRef.current = false;
-      trackedRef.current = false;
-    }
+    if (!isComplete) trackedRef.current = false;
   }, [isComplete]);
 
-  // Wave 3: sitewide anonymous completion tracking (public.game_completions).
-  // Fires for every player, logged in or not, independent of the auth-gated
-  // save flow below. Fire-and-forget, never blocks or breaks gameplay if it
-  // fails - recordCompletion catches and swallows all errors internally.
   useEffect(() => {
     if (!isComplete || trackedRef.current) return;
     trackedRef.current = true;
-    recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile));
-    recordStreakCompletion(gameSlug, new Date(), score); // #101: local-first daily streak credit + lifetime plays/points, every player.
-    // #103/#7: toast any badge this completion just unlocked (best effort, guest or signed-in).
+
+    recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile), correctAnswers);
+
+    // Badge toasts, best effort, guest or signed in.
     getNewlyEarnedBadges(profile)
       .then(newBadges => newBadges.forEach(b => toast.success(`Badge unlocked ${b.emoji}`, { description: `${b.name} - ${b.desc}` })))
       .catch(() => { /* best effort */ });
-  }, [isComplete, gameSlug, score, profile]);
+  }, [isComplete, gameSlug, score, correctAnswers, profile]);
 
+  /* The lib announces the signed in save with a second
+     game-completion-saved event; refresh the profile then so the header
+     moves without waiting for a poll. Listening beats guessing a delay. */
   useEffect(() => {
-    if (!isComplete || !user || savedRef.current) return;
-    console.log(`[GameCompletion] 🎮 Game "${gameSlug}" complete. Score: ${score}, User: ${user.id}`);
-    savedRef.current = true;
-
-    const save = async () => {
-      try {
-        const today = new Date().toISOString().split('T')[0];
-        console.log(`[GameCompletion] 📅 Saving for date: ${today}`);
-
-        // 1. Insert game score
-        const { error: gameScoreErr } = await supabase.from('user_game_scores').insert({
-          user_id: user.id,
-          game_type: gameSlug,
-          score,
-          correct_answers: correctAnswers,
-          puzzle_date: today,
-        });
-        console.log(`[GameCompletion] 1/5 user_game_scores insert:`, gameScoreErr ? `❌ ${gameScoreErr.message}` : '✅');
-
-        // 2. Insert daily completion (unique constraint prevents duplicates)
-        const { error: completionErr } = await supabase.from('daily_completions').insert({
-          user_id: user.id,
-          game_slug: gameSlug,
-          date: today,
-        });
-        console.log(`[GameCompletion] 2/5 daily_completions insert:`, completionErr ? `⚠️ ${completionErr.message}` : '✅');
-
-        // 3. Upsert user_scores for navbar
-        const { data: existing, error: fetchErr } = await supabase
-          .from('user_scores')
-          .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
-          .eq('user_id', user.id)
-          .single();
-        console.log(`[GameCompletion] 3/5 user_scores fetch:`, fetchErr ? `⚠️ ${fetchErr.message}` : '✅', existing);
-
-        // Count distinct games completed today from daily_completions (source of truth)
-        const { count: distinctGamesToday } = await supabase
-          .from('daily_completions')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('date', today);
-
-        const gamesPlayedToday = distinctGamesToday || 1;
-
-        const lastDate = existing?.last_played_at
-          ? new Date(existing.last_played_at).toISOString().split('T')[0]
-          : null;
-        const isSameDay = lastDate === today;
-
-        if (!existing) {
-          console.log(`[GameCompletion] No existing user_scores row, inserting new...`);
-          const { error: insertErr } = await supabase.from('user_scores').insert({
-            user_id: user.id,
-            total_points: score,
-            games_played_today: gamesPlayedToday,
-            last_played_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            current_streak: 1,
-            longest_streak: 1,
-          });
-          console.log(`[GameCompletion] user_scores insert:`, insertErr ? `❌ ${insertErr.message}` : '✅');
-        } else {
-          let newStreak = existing.current_streak || 0;
-          if (!isSameDay) {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
-            newStreak = lastDate === yesterdayStr ? newStreak + 1 : 1;
-          }
-          const newLongest = Math.max(newStreak, existing.longest_streak || 0);
-
-          const updatePayload = {
-              total_points: existing.total_points + score,
-              games_played_today: gamesPlayedToday,
-              last_played_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              current_streak: newStreak,
-              longest_streak: newLongest,
-            };
-          console.log(`[GameCompletion] Updating user_scores:`, updatePayload);
-          const { error: updateErr } = await supabase
-            .from('user_scores')
-            .update(updatePayload)
-            .eq('user_id', user.id);
-          console.log(`[GameCompletion] user_scores update:`, updateErr ? `❌ ${updateErr.message}` : '✅');
-        }
-
-        // 4. Update best score
-        const { data: existingBest } = await supabase
-          .from('user_best_scores')
-          .select('best_score')
-          .eq('user_id', user.id)
-          .eq('game_type', gameSlug)
-          .single();
-
-        if (!existingBest) {
-          await supabase.from('user_best_scores').insert({
-            user_id: user.id,
-            game_type: gameSlug,
-            best_score: score,
-          });
-        } else if (score > existingBest.best_score) {
-          await supabase
-            .from('user_best_scores')
-            .update({ best_score: score, achieved_at: new Date().toISOString() })
-            .eq('user_id', user.id)
-            .eq('game_type', gameSlug);
-        }
-
-        // 5. Profile stats
-        // Round 55 BUG FIX: this block used to build a profileUpdate object of
-        // current_streak / longest_streak / last_played_date /
-        // total_games_played / total_correct_answers / streak_freezes /
-        // all_time_score and write it to `profiles`. NONE of those columns
-        // exist on that table (it holds id, user_id, username, display_name,
-        // avatar_url, streak_state, created_at, updated_at), so every single
-        // game completion fired a Postgres write that failed with "column does
-        // not exist", and the error was never checked so it vanished silently.
-        // The columns are real on `user_scores`, which step 3 above already
-        // maintains, and the UI reads its streak from there and from
-        // daily_completions. So the write was pure dead weight on every play.
-        // Verified against the live schema before removing.
-
-        refreshProfile();
-
-        // Dispatch custom event so navbar stats refresh immediately
-        console.log(`[GameCompletion] ✅ All saves complete. Dispatching game-completion-saved event.`);
-        window.dispatchEvent(new Event('game-completion-saved'));
-      } catch (error) {
-        console.error('[GameCompletion] ❌ Failed to save game completion:', error);
-      }
-    };
-
-    save();
-  }, [isComplete, user, gameSlug, score, correctAnswers, profile, refreshProfile]);
+    if (!user) return undefined;
+    const onSaved = () => refreshProfile();
+    window.addEventListener('game-completion-saved', onSaved);
+    return () => window.removeEventListener('game-completion-saved', onSaved);
+  }, [user, refreshProfile]);
 }
