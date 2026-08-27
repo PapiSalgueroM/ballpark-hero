@@ -109,6 +109,10 @@ export function ResultScreen({
 
   return (
     <div
+      /* Round 306: role status, so the ~56 games ending on this card announce
+         their outcome to a screen reader instead of silently swapping the
+         board out from under it. */
+      role="status"
       className={cn(
         'relative bg-surface-1 border border-border rounded-2xl p-5 md:p-6 max-w-md w-full mx-auto text-center shadow-xl animate-in fade-in zoom-in-95 duration-300',
         className,
@@ -145,8 +149,11 @@ export function ResultScreen({
         </div>
       )}
 
-      {/* 5. Emoji-grid block, ALWAYS rendered, styled not raw <pre> */}
-      <div className="my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60 font-mono text-lg leading-relaxed tracking-widest whitespace-pre-wrap break-words">
+      {/* 5. Emoji-grid block, ALWAYS rendered, styled not raw <pre>.
+          Round 306: hidden from screen readers, which would otherwise read
+          out every square's emoji name one by one; the headline and score
+          above already carry the outcome in words. */}
+      <div aria-hidden="true" className="my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60 font-mono text-lg leading-relaxed tracking-widest whitespace-pre-wrap break-words">
         {emojiGrid}
       </div>
 

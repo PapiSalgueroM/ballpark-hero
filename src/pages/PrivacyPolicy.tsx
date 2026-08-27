@@ -6,7 +6,7 @@ const PrivacyPolicy = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo title="Privacy Policy - DoUKnowBall" description="Privacy policy for DoUKnowBall sports trivia games." path="/privacy" />
       <button
         onClick={() => navigate(-1)}

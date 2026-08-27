@@ -36,9 +36,17 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
       style={{ animationDelay: `${animDelay}ms` }}
     >
       <span className="leading-tight text-center px-1">{cell.value}</span>
+      {/* Round 306: the verdict is spoken, not only painted. Green, yellow
+          and red backgrounds carried right, close and wrong to sighted
+          players and nobody else; the sr-only word rides in the same cell so
+          a screen reader hears "Brazil, correct" instead of just "Brazil". */}
+      <span className="sr-only">
+        {cell.status === 'correct' ? ', correct' : cell.status === 'close' ? ', close' : ', wrong'}
+      </span>
       {cell.arrow && (
         <span className="text-[10px] mt-0.5 opacity-80">
-          {cell.arrow === 'up' ? '▲' : '▼'}
+          <span aria-hidden="true">{cell.arrow === 'up' ? '▲' : '▼'}</span>
+          <span className="sr-only">{cell.arrow === 'up' ? 'the answer is higher' : 'the answer is lower'}</span>
         </span>
       )}
     </div>

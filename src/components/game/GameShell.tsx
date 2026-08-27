@@ -30,7 +30,11 @@ interface GameShellProps {
  */
 export function GameShell({ width, title, emoji, subtitle, headerExtra, children, className }: GameShellProps) {
   return (
-    <main className="min-h-screen bg-background">
+    /* Round 306: the id the skip link points at. The doc comment above always
+       promised it; the JSX never had it, so on 69 game pages the site's one
+       keyboard affordance focused nothing. tabIndex -1 so the jump moves real
+       focus, not just the scroll. */
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
       <GameNavbar />
       <div
         className={cn(

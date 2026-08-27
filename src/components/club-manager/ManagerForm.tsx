@@ -63,21 +63,22 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         </div>
 
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Manager name</label>
+          <label htmlFor="manager-name" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Manager name</label>
           <input
+            id="manager-name"
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="e.g. Sam Calloway"
             maxLength={24}
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary"
           />
           {triedSubmit && nameError && <p className="text-[10px] text-red-400 mt-1">{nameError}</p>}
         </div>
 
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Homeland</label>
+          <span id="manager-homeland-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Homeland</span>
           <p className="text-[10px] text-muted-foreground mb-1.5">Your federation for the national team call, and the leagues that know your name.</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
+          <div role="group" aria-labelledby="manager-homeland-label" className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
             {NATIONS.map(n => (
               <button
                 key={n.id}
@@ -95,8 +96,8 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         </div>
 
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Background</label>
-          <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+          <span id="manager-background-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Background</span>
+          <div role="group" aria-labelledby="manager-background-label" className="grid grid-cols-2 gap-1.5 mt-1.5">
             {(Object.keys(MANAGER_BACKGROUNDS) as ManagerBackground[]).map(k => {
               const b = MANAGER_BACKGROUNDS[k];
               return (
@@ -117,9 +118,9 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         </div>
 
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Preferred football</label>
+          <span id="manager-style-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Preferred football</span>
           <p className="text-[10px] text-muted-foreground mb-1.5">Sets your opening formation and mentality. Change both any week from the tactics screen.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+          <div role="group" aria-labelledby="manager-style-label" className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
             {(Object.keys(CLUB_IDENTITIES) as ClubIdentity[]).map(k => {
               const s = CLUB_IDENTITIES[k];
               return (

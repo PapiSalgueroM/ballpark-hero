@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const WhatsNew = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="What's New | DoUKnowBall Updates"
         description="The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first."

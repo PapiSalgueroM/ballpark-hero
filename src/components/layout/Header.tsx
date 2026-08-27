@@ -91,6 +91,9 @@ export function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
+                      /* Round 306: below the sm breakpoint the name span hides
+                         and this button's only content is a single initial. */
+                      aria-label="Account menu"
                       className="flex items-center gap-2 h-9 pl-3 pr-1 rounded-full hover:bg-accent"
                     >
                       <span className="hidden sm:inline max-w-[120px] truncate text-sm font-medium">
@@ -167,7 +170,7 @@ export function Header() {
         {!loading && !user && !isHome && (
           <div className="bg-primary/5 border-t border-primary/10 py-2 px-4 text-center">
             <p className="text-xs text-muted-foreground">
-              <span className="text-primary font-medium">Create a free account</span> to save your scores and track your streak! 🔥
+              <span className="text-primary font-medium">Create a free account</span> to save your scores and track your streak! <span aria-hidden="true">🔥</span>
             </p>
           </div>
         )}

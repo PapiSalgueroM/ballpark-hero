@@ -1189,7 +1189,7 @@ const WorldCupPredictor = () => {
   const [rankingsOpen, setRankingsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <GameNavbar />
       <PageSeo
         title="World Cup 2026 Bracket | Sports Trivia Games"

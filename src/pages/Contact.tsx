@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="Contact DoUKnowBall"
         description="Get in touch with DoUKnowBall: report a bug, flag a wrong answer, pitch a game idea, or reach out about anything else."

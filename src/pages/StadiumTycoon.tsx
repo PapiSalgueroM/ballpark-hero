@@ -137,7 +137,7 @@ export default function StadiumTycoon() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"

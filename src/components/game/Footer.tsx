@@ -78,6 +78,10 @@ export function Footer() {
         <Link to="/terms" className="underline hover:text-foreground transition-colors">
           Terms of Service
         </Link>
+          <span>·</span>
+          <Link to="/accessibility" className="underline hover:text-foreground transition-colors">
+            Accessibility
+          </Link>
         <span>·</span>
         <button
           type="button"
