@@ -11,6 +11,7 @@
  * per the house style, "?" rules modal, everything original.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, Flame, X } from 'lucide-react';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -489,7 +490,7 @@ export default function StadiumTycoon() {
       {/* Away earnings modal */}
       {g.awayPay !== null && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={g.dismissAway}>
-          <div className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
             <div className="text-4xl mb-2">🏟️</div>
             <div className="text-lg font-bold font-display text-foreground">While you were away</div>
             <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at half speed.</p>
@@ -502,7 +503,7 @@ export default function StadiumTycoon() {
       {/* Rules modal */}
       {showHelp && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-          <div className="bg-card border border-border rounded-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Stadium Tycoon works</div>
               <button onClick={() => setShowHelp(false)}><X className="w-4 h-4 text-muted-foreground" /></button>

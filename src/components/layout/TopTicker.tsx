@@ -150,6 +150,10 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
      sport; leaving lets it run again. Reduced motion still shows everything
      at once with no cycling at all. */
   const [paused, setPaused] = useState(false);
+  /* Round 307: the promised pause button, a deliberate stop that survives
+     the pointer leaving. Hover pause and button pause are separate states
+     so mousing away does not undo an explicit choice. */
+  const [userPaused, setUserPaused] = useState(false);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -167,7 +171,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
   /* The loop itself: hold on the open sport for its dwell, then advance.
      A one sport wire never advances; a dead wire has nothing to advance. */
   useEffect(() => {
-    if (reducedMotion || paused || groups.length < 2) return undefined;
+    if (reducedMotion || paused || userPaused || groups.length < 2) return undefined;
     const t = window.setTimeout(() => setIdx(i => (i + 1) % groups.length), dwellMs(groups[idx % groups.length]?.rows.length ?? 0));
     return () => window.clearTimeout(t);
   }, [idx, groups, reducedMotion, paused]);
@@ -198,6 +202,21 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
           <span className={`w-1.5 h-1.5 rounded-full bg-red-500 ${anyLive ? 'animate-pulse' : ''}`} aria-hidden="true" />
           Live
         </span>
+        {/* Round 307: the dedicated pause control the cycling always needed.
+            Effective dwell also pauses under hover and focus; this button is
+            the explicit choice that sticks. Hidden when there is nothing to
+            cycle, because a pause button on a still strip is a lie. */}
+        {groups.length > 1 && !reducedMotion && (
+          <button
+            type="button"
+            onClick={() => setUserPaused(p => !p)}
+            aria-pressed={userPaused}
+            aria-label={userPaused ? 'Resume the scores ticker' : 'Pause the scores ticker'}
+            className="shrink-0 z-10 h-full px-2 text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <span aria-hidden="true">{userPaused ? '▶' : '⏸'}</span>
+          </button>
+        )}
         <div ref={viewportRef} className="flex-1 overflow-hidden h-full" aria-live="off">
           <div className="flex items-center h-full w-max">
             {groups.length === 0 && (

@@ -80,7 +80,21 @@ export function CookieConsent() {
      uselessly above a z-50 overlay. Opting this one subtree back in is the
      standard escape hatch and is scoped to the banner alone. */
   return createPortal(
-    <div ref={ref} data-site-chrome="" className="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg">
+    /* Round 307: a named region that takes focus when it appears. The portal
+       lands at the end of the document, so without the focus move a keyboard
+       user had to tab through the whole page to find the two buttons, and a
+       screen reader was never told the banner existed. */
+    <div
+      ref={el => {
+        ref.current = el;
+        if (el && !el.dataset.dukbFocused) { el.dataset.dukbFocused = '1'; el.focus(); }
+      }}
+      role="region"
+      aria-label="Cookie choices"
+      tabIndex={-1}
+      data-site-chrome=""
+      className="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg"
+    >
       <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
         {/* Round 286: the banner used to say "by continuing you agree", which
             was never how it worked: nothing to do with ads loads until Accept

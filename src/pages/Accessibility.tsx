@@ -45,7 +45,8 @@ const Accessibility = () => {
             <li><strong>Color contrast is checked by machine on every release.</strong> An automated sweep renders every page in a real browser and measures every piece of text against the 4.5 to 1 standard (3 to 1 for large text), including text over gradients and translucent layers. A page that fails does not ship.</li>
             <li><strong>Keyboard play:</strong> a skip link jumps past the navigation straight to the game, every focused control draws a visible ring, and the interactive grids in our connect style games are real buttons a keyboard can reach and a screen reader announces with their clues.</li>
             <li><strong>Screen reader labels:</strong> search boxes, answer fields, report forms and icon buttons carry names, game results are announced when they appear, and guess feedback (right, close, wrong) is spoken alongside the color coding, never carried by color alone.</li>
-            <li><strong>Reduced motion is respected.</strong> With reduce motion set in your system, the animated tiles, reveals, pulses, spinners and the celebration confetti calm down, and the live scores ticker stops cycling and shows everything at once.</li>
+            <li><strong>Reduced motion is respected.</strong> With reduce motion set in your system, the animated tiles, reveals, pulses, spinners and the celebration confetti calm down, and the live scores ticker stops cycling and shows everything at once. The ticker also has its own pause button, and it holds still while your pointer or keyboard focus is on it.</li>
+            <li><strong>Dialogs behave.</strong> Pop up panels announce themselves as dialogs, take keyboard focus when they open, and close with the Escape key. The cookie banner is a named region that receives focus the moment it appears, so the two buttons are one tab away instead of a whole page away.</li>
             <li><strong>No time pressure by default.</strong> Daily puzzles have no clock. The one head to head mode with a shot clock is a deliberate game rule, and everything else waits for you.</li>
             <li><strong>Text and zoom:</strong> the site uses real text, not text baked into images, and the layout is built to reflow at high zoom on a phone sized screen.</li>
           </ul>
@@ -54,9 +55,7 @@ const Accessibility = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">What we are still working on</h2>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>A few older in-game panels (some Soccer Career and Stadium Tycoon popups) are announced as dialogs but do not yet hold keyboard focus inside themselves the way our newer dialogs do. We are converting them.</li>
-            <li>The cookie banner sits at the end of the keyboard tab order instead of the start.</li>
-            <li>The live scores ticker does not yet have its own pause button (it pauses while your pointer or keyboard focus is on it, and it never cycles at all under reduce motion).</li>
+            <li>A few older in-game panels (some Soccer Career and Stadium Tycoon popups) announce as dialogs, take focus and close with Escape, but do not yet hold keyboard focus inside themselves the way our newer dialogs do. We are converting them.</li>
           </ul>
           <p className="mt-2">This list shrinks as rounds ship, and this page is updated when it does.</p>
         </div>
