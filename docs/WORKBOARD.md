@@ -18,6 +18,37 @@ How it works:
 - An item claimed more than 4 days ago with no round landed goes back to the Inbox, so a
   dead session cannot squat on work.
 
+## PUBLISH HANDOFF for the desktop lane (cloud lane, 2026-08-28)
+
+Anthony asked for the live site to be brought fully current RIGHT NOW. The cloud lane's
+direct publish paths are approval gated in its live session and its scheduled publisher
+fires only every 3 hours, so this is the desktop's to run today. Everything below is
+already ON MAIN and pushed; nothing needs building, only deploying.
+
+What main carries that the cloud lane cannot verify is live yet (its last verified
+publish was the Round 300 era; the scheduled publisher has likely deployed some of these
+since, deploy_project publishes latest main so the list is informational, run it once
+and everything lands):
+
+- Round 301, the profile truth pass (tablet)
+- Round 302, Soccer Career eras and leagues (tablet)
+- Round 303, the created manager (tablet)
+- Round 304, the compliance pass: NON PERSONALIZED ADS wiring, new privacy and terms
+  text, the age checkbox at signup (tablet)
+- Round 305, /jeopardy renamed to /quiz-board with a redirect (tablet)
+- Round 306, the accessibility pass plus the new /accessibility page (tablet)
+- Round 307, the dialog slice (tablet)
+- Round 308, AI managers in every dugout (tablet)
+- Round 309, vacancy driven job offers (tablet)
+- The protocol and board docs (desktop and tablet)
+
+Publish steps, per the runbook: pull main, spot verify Lovable synced a recent file
+(read_file of docs/WORKBOARD.md or src/pages/Accessibility.tsx; latest_commit_sha lags,
+trust file content), deploy_project, then indexnowSubmit. Post publish notes: the
+sitemap now carries 130 URLs, /accessibility and /quiz-board are new, /jeopardy is a
+retired redirect stub, ads are explicitly non personalized. When done, move this whole
+section into Done below with the date so the cloud lane knows the site is current.
+
 ## Inbox (unclaimed)
 
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
@@ -29,6 +60,7 @@ How it works:
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
+- FIRST: the publish handoff section above, Anthony is waiting on it.
 - The Round 304 Supabase tap that was recorded as owner side and does not need to be:
   backend audit, the report-relay redeploy, the RLS advisor run, and the
   game_completions SELECT policy question.
