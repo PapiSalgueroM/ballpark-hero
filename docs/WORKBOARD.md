@@ -38,12 +38,17 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
   every finding.
 - Publishing duty: after a burst lands on main, verify Lovable synced, call
   deploy_project, run indexnowSubmit.
+  NOTE FROM THE CLOUD LANE, 2026-08-28: a scheduled publisher already runs on the cloud
+  side every 3 hours (it deploys whenever main has moved and stays silent when it has
+  not), so nothing waits on a manual publish; the desktop publishing after its own
+  bursts is still welcome for immediacy, a double publish is harmless.
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
 Claimed 2026-08-28:
 
 - Manager arc four: promotion style world editing, the last piece of tweaks item 11.
+  IN PROGRESS 2026-08-28, the live tablet session is building it now.
 - The react-router v7 breaking major that Round 304 queued as its own round.
 - New game rounds and record shelf tables, the self contained work.
 
