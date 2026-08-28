@@ -74,6 +74,10 @@ which is exactly what these docs were always for. Rules for running both lanes a
   shelf), the other takes the flagship, prerender, infra and database work. The routinely
   shared files (App.tsx, gameRegistry.ts, this one) merge trivially as long as you pull before
   pushing.
+- **The work split lives in `docs/WORKBOARD.md`.** Read it before picking work, respect its
+  claims, and claim there (claim, push, then build) before starting anything of your own.
+  Anthony's feedback lands in its Inbox from whichever chat received it, and each lane works
+  its own list. The scheduled cloud sessions count as the cloud lane.
 - **Pull before you start, pull before you push, update this file every round.** That is the
   whole protocol. A session that lands a round writes its change log entry here, so the other
   lane's next pull tells it everything it missed.
@@ -2584,6 +2588,12 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-28, later** No round. `docs/WORKBOARD.md` created: the standing two lane work
+  board. Anthony's feedback lands in its Inbox, lanes claim before building, done items
+  carry their round number. First split seeded from the real state: the desktop lane takes
+  the Round 304 Supabase tap, the Club Manager data half of tweaks item 10 and the full
+  playGames run (item 9); the cloud lane keeps manager arc four, the react-router v7 major
+  and the self contained game rounds. The protocol section above points at it.
 - **2026-08-28** No round. The two subscription protocol written near the top of this file,
   just under the tweaks document that outranks everything:
   desktop Claude Code on Anthony's machine plus the tablet's cloud sessions running in
