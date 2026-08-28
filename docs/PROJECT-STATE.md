@@ -48,6 +48,39 @@ The direct asks:
     creation depth, training systems, media and endorsements, staff and facilities, life
     events, prestige loops. Treat it as the permanent backlog feeding every future round.
 
+## Two subscriptions, one repo (2026-08-28)
+
+Anthony runs two Claude subscriptions on this project at once: Claude Code on his own PC (the
+desktop app, working directly in `C:\Users\antho\ballpark-hero`), and a second subscription on
+his tablet, whose sessions run in the cloud on the claude.ai/code path. The two Claudes cannot
+talk to each other and do not need to. Git is the shared brain and this file is the handoff,
+which is exactly what these docs were always for. Rules for running both lanes at once:
+
+- **The desktop lane** works in the real folder with ordinary git and can push directly
+  (Round 294 went up from this machine, so the credentials are on it). No zips, no bats, no
+  extracting: the folder is the tree. It also carries the Lovable and Supabase MCPs, so it can
+  publish and run migrations.
+- **The tablet's cloud lane** follows the claude.ai/code path described in the table below:
+  branch, push, merge under the standing 2026-08-26 authorization, never a zip or a bat, never
+  a reach for Anthony's folder. Cloud sessions can also call deploy_project (the 258 to 293
+  publish came from one).
+- **Round numbers.** Pull first. Check `git log --oneline -5` and `git ls-remote --heads origin`
+  for open branches before claiming a number, take the next free one, and name it in the
+  commit. Two sessions taking the same number resolves as an ordinary merge, not a disaster,
+  but it wastes an hour, so claim before building.
+- **Partition the work.** When both lanes run in the same day, split by area so no file has two
+  authors at once. The natural split: one lane takes self contained rounds (a new game: page,
+  hook, lib, registry entry, SEO copy, sim harness; or a data table round for the records
+  shelf), the other takes the flagship, prerender, infra and database work. The routinely
+  shared files (App.tsx, gameRegistry.ts, this one) merge trivially as long as you pull before
+  pushing.
+- **Pull before you start, pull before you push, update this file every round.** That is the
+  whole protocol. A session that lands a round writes its change log entry here, so the other
+  lane's next pull tells it everything it missed.
+- **Publish discipline.** main updates the Lovable preview only. Whoever publishes pulls latest
+  main first, calls deploy_project on c29d224f-a662-4a15-b809-d86fa3b3f0ad, then runs
+  `node scripts/indexnowSubmit.mjs`. One publish at the end of a burst beats one per round.
+
 ## Owner feedback, 2026-08-19 afternoon (one screenshot, Soccer Career national team)
 
 Two asks plus the standing "keep going":
@@ -2551,6 +2584,11 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-28** No round. The two subscription protocol written near the top of this file,
+  just under the tweaks document that outranks everything:
+  desktop Claude Code on Anthony's machine plus the tablet's cloud sessions running in
+  parallel, coordinated through git and this file, with round number claiming, area
+  partitioning and publish discipline spelled out.
 - **2026-08-26** Round 294. Transfer Path hints and minimums derived from the temporal rule
   (transferPathHints.mjs, genTransferPathHints.mjs, the 2026-08-26 pull, the migration applied
   live and proven equal by md5, the fallback file regenerated, the Alisson Roma 2014 rows
