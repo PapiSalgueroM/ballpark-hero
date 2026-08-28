@@ -40,6 +40,7 @@ and everything lands):
 - Round 307, the dialog slice (tablet)
 - Round 308, AI managers in every dugout (tablet)
 - Round 309, vacancy driven job offers (tablet)
+- Round 310, promotion and relegation, the manager rebuild complete (tablet)
 - The protocol and board docs (desktop and tablet)
 
 Publish steps, per the runbook: pull main, spot verify Lovable synced a recent file
@@ -79,11 +80,11 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 Claimed 2026-08-28:
 
-- Manager arc four: promotion style world editing, the last piece of tweaks item 11.
-  IN PROGRESS 2026-08-28, the live tablet session is building it now.
+
 - The react-router v7 breaking major that Round 304 queued as its own round.
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
 
-(move items here with the round number that shipped them)
+- Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
+  Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
