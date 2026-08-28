@@ -175,6 +175,11 @@ console.log('6) offers and the merry-go-round agree on one vacancy list');
     const next = cm.startNextSeason(fin);
     for (const v of fin.pendingVacancies) {
       if (v.club === next.clubName) continue;
+      /* Round 310: promotion and relegation can carry a vacancy's club out
+         of the division over the same summer, and the record only ever
+         tracks the CURRENT league's dugouts, so a chair that left is no
+         longer this record's to fill. */
+      if (!next.leagueClubs.includes(v.club)) continue;
       refills += 1;
       const now = next.managers?.[v.club];
       if (!now) { staleRefills += 1; fail(`declined vacancy at ${v.club} left an empty chair`); }
