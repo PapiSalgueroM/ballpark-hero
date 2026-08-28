@@ -27,3 +27,6 @@ dist-ssr
 # src/integrations/supabase/client.ts on purpose (see CLAUDE.md).
 .env
 .env.*
+
+# Claude account migration packet, contains project IDs and account emails. Never commit.
+_claude-migration/
