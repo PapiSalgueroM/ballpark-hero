@@ -3,7 +3,11 @@ import { nameModerationError } from '@/lib/nameModeration';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
-import { realJobOffers, allOfferClubs } from '@/lib/managerJobMarket';
+/* Round 310: the offer pool import gained the cache invalidator. The two
+   files already import each other (this module reaches the market at
+   runtime only, and the market reads leagues at runtime only), so the
+   cycle stays evaluation-order safe. */
+import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
@@ -1605,6 +1609,12 @@ export interface CareerState {
    *  the job offers and the merry-go-round agree on one list. Written by
    *  finishSeason, consumed and cleared by the rollover. */
   pendingVacancies?: { club: string; name: string; pos: number }[];
+  /** Round 310: this save's league memberships once its own promotions and
+   *  relegations have moved clubs, keyed by league id, each value the FULL
+   *  membership list. Absent until the first summer a PYRAMIDS pair swaps
+   *  clubs; leagues outside the pyramids never get an entry. Registered
+   *  into the engine on load exactly like customClub. */
+  leagueOverrides?: Record<string, string[]>;
 }
 
 export type NextFixtureInfo =
@@ -1949,6 +1959,21 @@ export const REAL_LEAGUES: LeagueDef[] = [
 ];
 
 /**
+ * Round 310: which divisions trade clubs at the summer rollover. Only the
+ * pairs listed here move; every other league keeps its static membership
+ * because the game does not carry its second division. The counts mirror
+ * relegationSpots for each top flight (3 down in England, 2 in Germany),
+ * and Germany's real third-spot playoff is deliberately not modeled: two go
+ * straight up, two straight down. This pairing is an explicit table on
+ * purpose and must never be inferred from NATIONS: the USA also has two
+ * leagueIds and those are conferences, not a pyramid.
+ */
+export const PYRAMIDS: { top: string; second: string; count: number }[] = [
+  { top: 'premier', second: 'championship', count: 3 },
+  { top: 'bundesliga', second: 'bundesliga2', count: 2 },
+];
+
+/**
  * Round 163: the nation behind every league id, for the flag on the league
  * picker. Names match the FlagImg lookup table exactly. Era leagues reuse
  * these ids, and a custom league wears the id of the league it joined.
@@ -2054,16 +2079,20 @@ const STRENGTH_PRIORS: Record<string, number> = {
   'Istra 1961': 65, 'Lokomotiva Zagreb': 65, 'Gorica': 64, 'Rudeš': 61,
 };
 
-/** The real league a club plays in. Every playable club is covered. */
+/** The real league a club plays in. Every playable club is covered.
+ *  Round 310: "real" means real FOR THIS SAVE: membership is searched
+ *  through the registered overrides, so the summer after Burnley come up
+ *  this answers premier for them, with the promoted-season club list. */
 export function leagueOf(clubName: string): LeagueDef {
-  return REAL_LEAGUES.find(l => l.clubs.includes(clubName))
-    // Round 146: clubs that only exist in a historic era (Blackpool, Hercules,
-    // Zaragoza...) resolve to their era league. REAL_LEAGUES wins for clubs in
-    // both worlds; a historic save reads its own league through eraLeagueOf
-    // and its own club list through career.leagueClubs, so this fallback only
-    // ever serves the era-exclusive names.
-    ?? Object.values(ERA_LEAGUES).flat().find(l => l.clubs.includes(clubName))
-    ?? REAL_LEAGUES[0];
+  const real = REAL_LEAGUES.find(l => effectiveClubsOf(l.id, l.clubs).includes(clubName));
+  if (real) return effectiveLeague(real);
+  // Round 146: clubs that only exist in a historic era (Blackpool, Hercules,
+  // Zaragoza...) resolve to their era league. REAL_LEAGUES wins for clubs in
+  // both worlds; a historic save reads its own league through eraLeagueOf
+  // and its own club list through career.leagueClubs, so this fallback only
+  // ever serves the era-exclusive names.
+  return Object.values(ERA_LEAGUES).flat().find(l => l.clubs.includes(clubName))
+    ?? effectiveLeague(REAL_LEAGUES[0]);
 }
 
 /* ================================================================== */
@@ -2522,7 +2551,11 @@ let CLUB_DEF_CACHE: Map<string, ClubDef> | null = null;
 function clubDefMap(): Map<string, ClubDef> {
   if (CLUB_DEF_CACHE) return CLUB_DEF_CACHE;
   const map = new Map<string, ClubDef>();
-  for (const league of REAL_LEAGUES) {
+  /* Round 310: ranked inside the EFFECTIVE league, so a promoted club's
+     expectation is its rank among this save's top flight, not its old
+     division's. The cache stays valid for exactly one registration:
+     registerLeagueOverrides nulls it, so no signature machinery is needed. */
+  for (const league of REAL_LEAGUES.map(effectiveLeague)) {
     const ranked = league.clubs
       .map(name => ({ name, xi: bakedXIAvg(name) ?? STRENGTH_PRIORS[name] ?? 65 }))
       .sort((a, b) => b.xi - a.xi);
@@ -2546,7 +2579,8 @@ function clubDefMap(): Map<string, ClubDef> {
 
 /** Every playable club (all five real leagues), strongest first. */
 export function playableClubs(leagueId: string): ClubDef[] {
-  const league = REAL_LEAGUES.find(l => l.id === leagueId) ?? REAL_LEAGUES[0];
+  // Round 310: the effective league, so a save's promotions show through.
+  const league = effectiveLeague(REAL_LEAGUES.find(l => l.id === leagueId) ?? REAL_LEAGUES[0]);
   return league.clubs
     .map(name => clubDefMap().get(name))
     .filter((c): c is ClubDef => !!c)
@@ -3302,6 +3336,40 @@ export function registerCustomClub(spec: CustomClubSpec | null, eraId?: string, 
 /** The registered custom spec, if the active save has one. UI convenience. */
 export function activeCustomClub(): CustomClubSpec | null {
   return ACTIVE_CUSTOM ? ACTIVE_CUSTOM.spec : null;
+}
+
+/* Round 310: the second piece of session state, and it follows the
+   ACTIVE_CUSTOM pattern above for exactly the same reason: league
+   membership is read through name-keyed statics everywhere, and which club
+   plays in which division is now a fact about the SAVE once its pyramids
+   start trading clubs. The active save's memberships are registered by the
+   same paths that register the custom club (startCareer, startNextSeason,
+   loadCareer, clearCareer), and registering null restores the static
+   world, so one save's table can never leak into another. */
+let ACTIVE_LEAGUE_OVERRIDES: Record<string, string[]> | null = null;
+
+export function registerLeagueOverrides(o: Record<string, string[]> | null): void {
+  ACTIVE_LEAGUE_OVERRIDES = o;
+  /* Every cached view of "who plays where" goes stale the moment the
+     membership moves: the def map ranks clubs inside their league, and the
+     job market's offer pool records a league name per club. Busting both
+     here means no cache ever needs to know which overrides built it. */
+  CLUB_DEF_CACHE = null;
+  invalidateOfferClubCache();
+}
+
+/** A league's membership for the ACTIVE save: its override when one is
+ *  registered, its static lineup otherwise. */
+function effectiveClubsOf(leagueId: string, clubs: string[]): string[] {
+  return ACTIVE_LEAGUE_OVERRIDES?.[leagueId] ?? clubs;
+}
+
+/** The league def the active save actually plays: untouched when no
+ *  override names its id, otherwise the same def wearing the overridden
+ *  membership. Historic era defs never come through here on purpose. */
+function effectiveLeague(l: LeagueDef): LeagueDef {
+  const clubs = ACTIVE_LEAGUE_OVERRIDES?.[l.id];
+  return clubs ? { ...l, clubs } : l;
 }
 
 /**
@@ -4188,6 +4256,15 @@ export function ensureManagers(state: CareerState): void {
   /* Your own chair is yours: a stale entry for the club you now manage is
      what a save carries the summer you change jobs. */
   delete m[state.clubName];
+  /* Round 310: the record only ever describes the dugouts of the CURRENT
+     league, so clubs that left it (relegation, promotion, you moving
+     abroad) are dropped. Without this a yo-yo career keeps a manager for
+     every club it has ever shared a division with and the record never
+     stops growing across the save. */
+  const inLeague = new Set(state.leagueClubs);
+  for (const club of Object.keys(m)) {
+    if (!inLeague.has(club)) delete m[club];
+  }
   const taken = new Set(Object.values(m).map(v => v.name));
   /* Sorted, not in fixture order: leagueClubs is shuffled per save, and a
      rare base name collision resolves by iteration order, so two identical
@@ -6066,7 +6143,9 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
     }
     return out;
   }
-  for (const league of REAL_LEAGUES) {
+  // Round 310: through the effective memberships, so a strength exists for
+  // every club where this save's world actually has it playing.
+  for (const league of REAL_LEAGUES.map(effectiveLeague)) {
     for (const name of league.clubs) {
       if (out[name] !== undefined) continue;
       out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
@@ -6167,7 +6246,9 @@ export function leagueRounds(size: number): number {
  *  save's world is its era's other league, not the 2026 league set. */
 function initWorld(myClub: string, eraId?: string, myLeagueId?: string): Record<string, WorldLeague> {
   const historic = !!eraId && isHistoricEra(eraId);
-  const leagues = historic ? (ERA_LEAGUES[eraId!] ?? []) : REAL_LEAGUES;
+  // Round 310: the modern world is built from the effective memberships, so
+  // a promoted club's old division fields its replacement, not the club.
+  const leagues = historic ? (ERA_LEAGUES[eraId!] ?? []) : REAL_LEAGUES.map(effectiveLeague);
   /* Round 154: callers that know my league pass it, because a custom club is
      in no league def and the leagueOf fallback would exclude the WRONG league
      from the world, running my real division twice. */
@@ -6205,7 +6286,9 @@ function syncWorld(state: CareerState, myPlayed: number): void {
   if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id);
   const myTotal = leagueRounds(careerLeagueOf(state).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
-  for (const lg of REAL_LEAGUES) {
+  // Round 310: fixtures come off the effective membership, or a relegated
+  // world league would keep playing the club that left it.
+  for (const lg of REAL_LEAGUES.map(effectiveLeague)) {
     const w = state.world[lg.id];
     if (!w) continue;
     const total = leagueRounds(lg.clubs.length);
@@ -6404,7 +6487,9 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
     // The heavyweights alone are about six groups' worth, so the last spots
     // go to real clubs from the UCL eligible leagues, like the real draw's
     // fourth pot.
-    const extras = shuffle(REAL_LEAGUES.filter(l => l.euro).flatMap(l => l.clubs).filter(c => !taken.has(c) && !inPrimary.has(c)));
+    // Round 310: effective memberships, so the fourth pot never seeds a
+    // club this save has sent down out of a euro league.
+    const extras = shuffle(REAL_LEAGUES.filter(l => l.euro).flatMap(l => effectiveLeague(l).clubs).filter(c => !taken.has(c) && !inPrimary.has(c)));
     pool = [...primary, ...extras];
   }
   const groups: UclAiGroup[] = [];
@@ -9159,6 +9244,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     // A fresh real-club career must never inherit a previous save's club.
     registerCustomClub(null);
   }
+  /* Round 310: and it starts on the static memberships for the same reason,
+     custom or not: a NEW career has no promotions behind it, so a previous
+     save's registered pyramid must never leak into its world. */
+  registerLeagueOverrides(null);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -9593,7 +9682,9 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     } else {
       const oppLeague = career.eraId && isHistoricEra(career.eraId)
         ? eraLeagueOf(fx.opponent, career.eraId)
-        : REAL_LEAGUES.find(l => l.clubs.includes(fx.opponent)) ?? null;
+        // Round 310: through the effective membership, so a cup opponent
+        // this save promoted is placed in the division it plays in NOW.
+        : REAL_LEAGUES.map(effectiveLeague).find(l => l.clubs.includes(fx.opponent)) ?? null;
       if (oppLeague && oppLeague.id !== myLeague.id) {
         oppLeagueName = oppLeague.name;
         const w2 = career.world?.[oppLeague.id];
@@ -10111,6 +10202,75 @@ function fillSquadGaps(
 }
 
 /**
+ * Round 310: the summer's promotions and relegations, computed on the season
+ * just finished and returned as the membership overrides the NEW season
+ * registers. Only the PYRAMIDS pairs trade clubs; every other league keeps
+ * its static lineup. The player's club moves like any other club: once the
+ * overrides are registered, leagueOf simply answers with the new division,
+ * so no downstream code special-cases the drop or the climb.
+ */
+function runPromotionRelegation(prev: CareerState): { overrides: Record<string, string[]> | null; lines: string[] } {
+  const carried = prev.leagueOverrides ?? null;
+  /* The finished season resolves under ITS OWN memberships, whatever a
+     screen or a harness registered last. */
+  registerLeagueOverrides(carried);
+  /* A historic era has no second divisions to trade with. A custom save is
+     exempt in v1 on purpose: its spec re-picks replacedClub from its league
+     every summer, and letting the membership move underneath that recompute
+     (the replaced club relegating out, say) is a seam this round does not
+     open. Both keep whatever overrides the save already carried. */
+  if (prev.eraId && isHistoricEra(prev.eraId)) return { overrides: carried, lines: [] };
+  if (prev.customClub) return { overrides: carried, lines: [] };
+  const myLeagueId = careerLeagueOf(prev).id;
+  const next: Record<string, string[]> = carried ? { ...carried } : {};
+  const lines: string[] = [];
+  let moved = false;
+  for (const pyr of PYRAMIDS) {
+    const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
+    const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
+    if (!topDef || !secondDef) continue;
+    const topClubs = carried?.[pyr.top] ?? topDef.clubs;
+    const secondClubs = carried?.[pyr.second] ?? secondDef.clubs;
+    const topTable = myLeagueId === pyr.top
+      ? sortedTable(prev.table)
+      : sortedTable(prev.world?.[pyr.top]?.table ?? []);
+    const secondTable = myLeagueId === pyr.second
+      ? sortedTable(prev.table)
+      : sortedTable(prev.world?.[pyr.second]?.table ?? []);
+    /* A save with no readable table for either half (fast-forwarded with no
+       world, an old save mid-repair) moves nothing: skipping is the honest
+       answer, not inventing a finish. */
+    if (topTable.length < topClubs.length || secondTable.length < secondClubs.length) continue;
+    const topSet = new Set(topClubs);
+    const secondSet = new Set(secondClubs);
+    const down = topTable.filter(r => topSet.has(r.club)).slice(-pyr.count).map(r => r.club);
+    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    /* Sizes are preserved by construction: the exchange only runs when both
+       sides move exactly `count`, so neither division can grow or shrink. */
+    if (down.length !== pyr.count || up.length !== pyr.count) continue;
+    const downSet = new Set(down);
+    const upSet = new Set(up);
+    next[pyr.top] = [...topClubs.filter(c => !downSet.has(c)), ...up];
+    next[pyr.second] = [...secondClubs.filter(c => !upSet.has(c)), ...down];
+    moved = true;
+    if (myLeagueId === pyr.top || myLeagueId === pyr.second) {
+      // The player's own pyramid gets a line per moved club, own club first.
+      for (const c of up) {
+        if (c === prev.clubName) lines.unshift(`\u{2B06} You are up: ${c} will play ${topDef.name} football next season.`);
+        else lines.push(`\u{2B06} ${c} win promotion to the ${topDef.name}.`);
+      }
+      for (const c of down) {
+        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to the ${secondDef.name}.`);
+        else lines.push(`\u{2B07} ${c} are relegated to the ${secondDef.name}.`);
+      }
+    } else {
+      lines.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
+    }
+  }
+  return { overrides: moved ? next : carried, lines: lines.slice(0, 5) };
+}
+
+/**
  * Rolls the career into the next season, optionally at a new club if a job
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
@@ -10118,6 +10278,13 @@ function fillSquadGaps(
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
+  /* Round 310: the pyramids move FIRST, before a single league lookup, so
+     every leagueOf below already answers with next season's memberships.
+     The euro flag of the league the season was PLAYED in is read before
+     the swap registers, for the UCL guard further down. */
+  const pr = runPromotionRelegation(career);
+  const playedLeagueEuro = careerLeagueOf(career).euro;
+  registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
   const eraId = career.eraId;
@@ -10257,7 +10424,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const nextLeague = (custom && customLeagueDef(custom, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
     || leagueOf(clubName);
-  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4) && nextLeague.euro;
+  /* Round 310: prevPos alone lies the summer you come up: first in the
+     Championship is not a Champions League place. summary.qualifiedUcl
+     already encodes the league it was earned in; the fallback arm now
+     checks the euro flag of the league the season was PLAYED in, captured
+     above before the new memberships registered. */
+  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4 && playedLeagueEuro) && nextLeague.euro;
   const league = nextLeague;
   /* Round 154: the swap is recomputed every summer, because the weakest club
      of the league can change as the world ages. The spec remembers who is
@@ -10317,6 +10489,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // told, and the list has to survive the rollover it was written in.
     retiredNames: [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
     retiredLastSummer: retiredNow,
+    // Round 310: the memberships the new season plays under, exactly what
+    // was registered above, so a reload registers the same world back.
+    leagueOverrides: pr.overrides ?? undefined,
   };
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
@@ -10513,6 +10688,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 308: the merry-go-round's news, same seat as the add-ons and for
      the same reason. */
   if (managerNews.length) state.aiHeadlines = [...managerNews, ...state.aiHeadlines].slice(0, 8);
+  /* Round 310: promotion and relegation lead the whole summer, same seat,
+     same reason, prepended last so they sit on top of the feed. */
+  if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
   return state;
 }
 
@@ -10575,6 +10753,11 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
+    /* Round 310: the save's own league memberships come back the same way,
+       registered the moment it opens and nulled for a save from before the
+       feature, so every league lookup on every screen answers with the
+       divisions this save actually plays. */
+    registerLeagueOverrides(parsed.leagueOverrides ?? null);
     return parsed;
   } catch {
     return null;
@@ -10583,6 +10766,8 @@ export function loadCareer(): CareerState | null {
 
 export function clearCareer(): void {
   registerCustomClub(null);
+  // Round 310: the deleted save's promotions go with it.
+  registerLeagueOverrides(null);
   try {
     localStorage.removeItem(SAVE_KEY);
   } catch {

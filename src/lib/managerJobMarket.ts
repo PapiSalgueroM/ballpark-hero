@@ -26,6 +26,14 @@ function countryOfLeague(leagueId: string): string {
 
 let CACHE: OfferClub[] | null = null;
 
+/** Round 310: promotion and relegation move clubs between leagues per save,
+ *  so the "built once" premise below only holds per registered membership.
+ *  registerLeagueOverrides calls this on every registration, which keeps
+ *  the pool honest without this cache learning any override signature. */
+export function invalidateOfferClubCache(): void {
+  CACHE = null;
+}
+
 /**
  * Every club in the game, as the job market sees it. Built once and cached,
  * because it is pure and gets asked for on every render of the offer screen.
