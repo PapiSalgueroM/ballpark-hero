@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 344.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 346.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -123,6 +123,16 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- STALE VALUES SWEEP (BUILDING as Round 344, desktop, 2026-08-29): the Round 315
+  follow up, the 247 players whose latest market value row is 2024 or older at a
+  30m+ peak, swept by parallel research agents under the two-source rule, active
+  players get verified current rows, the honestly retired get marked so the games
+  render them honestly. Desktop gates the database writes.
+- WORLD XI REAL POSITIONS (BUILDING as Round 345, desktop, 2026-08-29): the Round
+  319 handoff, a verified secondary position map so eligibility reads positions a
+  player actually PLAYED. Schema recon first, then a research fan out for the
+  World XI pool players, then the code side reads data instead of a hand rule.
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
