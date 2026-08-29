@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 328.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 329.
 
 ## Inbox (unclaimed)
 
@@ -38,7 +38,7 @@ How it works:
   within a lane. Claim here before building.
 - From that list, unclaimed and sizable: the Rebuild redesign, the Player Stock
   Market redesign, the tycoon merge, the conquest map
-  overhaul, the draft mode game (Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
+  overhaul, (the third new game, the draft mode, BUILDING as Round 328, cloud, 2026-08-29; Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
