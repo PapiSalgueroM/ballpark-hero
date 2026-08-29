@@ -5,7 +5,6 @@ import { CbbProgramSearch } from './CbbProgramSearch';
 import { CbbProgramHowToPlay } from './CbbProgramHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { Footer } from '@/components/game/Footer';
 import { MAX_CLUES } from '@/types/cbbProgram';
 
 const CLUE_LABELS = ['Vibe', 'Region & State', 'Conference', 'Tournament History', 'Championships', 'Mascot'];
@@ -76,7 +75,6 @@ export function CbbProgramBoard() {
           )}
 
           <GameNav />
-          <Footer />
         </div>
       </div>
     );
@@ -194,7 +192,6 @@ export function CbbProgramBoard() {
         )}
 
         <GameNav />
-        <Footer />
       </div>
     </div>
   );

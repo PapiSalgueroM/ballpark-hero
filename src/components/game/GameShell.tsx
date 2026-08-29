@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { Footer } from '@/components/game/Footer';
 
 interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
@@ -74,7 +73,10 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
           </header>
         )}
         {children}
-        <Footer />
+        {/* Round 313: no Footer here. App.tsx renders the one global footer
+            on every route (the Round 49 rule); this shell adding its own put
+            two stacked footers on every game page, which the owner
+            screenshotted. simSingleFooter enforces the rule now. */}
       </div>
     </main>
   );

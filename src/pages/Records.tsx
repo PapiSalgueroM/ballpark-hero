@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
-import { Footer } from '@/components/game/Footer';
 import { RECORD_SECTIONS, type RecordRow, type RecordSection } from '@/lib/records';
 
 /**
@@ -142,7 +141,6 @@ const Records = () => {
         </p>
       </div>
 
-      <Footer />
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { F1ConstructorSearch } from './F1ConstructorSearch';
 import { F1ConstructorHowToPlay } from './F1ConstructorHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { Footer } from '@/components/game/Footer';
 import { MAX_CLUES } from '@/types/f1Constructor';
 
 const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famous Driver'];
@@ -67,7 +66,6 @@ export function F1ConstructorBoard() {
           </div>
 
           <GameNav />
-          <Footer />
         </div>
       </div>
     );
@@ -212,7 +210,6 @@ export function F1ConstructorBoard() {
         )}
 
         <GameNav />
-        <Footer />
       </div>
     </div>
   );

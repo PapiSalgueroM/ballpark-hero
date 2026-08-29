@@ -54,7 +54,6 @@ From the 2026-08-28 review (bugs, claimed same day):
   Windows ROOT path into generated entries, so they cannot run on the desktop lane.
   Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
   pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
-- P1: the double footer.
 - P1: the boot flash (snapshot text visible before React mounts).
 - P1 data batch: Who Am I zero ages and values (Rodri), the Squad Deal league filter
   dealing the wrong league, Build Your XI stale position validity, Sign the Player values
@@ -114,6 +113,16 @@ Standing claims:
 
 ## Done
 
+- ONE FOOTER, Round 313 (desktop lane, 2026-08-29). The double footer he screenshotted:
+  App.tsx has rendered the one global footer on every route since Round 49, but
+  GameShell mounted its own copy inside every game page's column, and six quiz boards
+  plus the Records page kept theirs, so two full footers stacked on most of the site
+  (proven live: 2 footer elements, the disclaimer twice, on /soccer-grid). All eight
+  extra mounts removed; the global footer is now the only one. simSingleFooter is the
+  fence: comment stripped scan of all 789 src files, exactly one render in App.tsx,
+  imports banned elsewhere, FOOTER_CONTROL=double goes red. Snapshots were never
+  doubled so no prerender was needed. tsc zero, build green, the legal and
+  accessibility fences green.
 - THE CLUB MANAGER TABLES TELL THE TRUTH, Round 312 (desktop lane, 2026-08-28). Review
   P1s 2, 3 and part of 4. One root for the first two: syncWorld and the world tables
   picker both iterated REAL_LEAGUES, whose ids never match an era world's, so every era

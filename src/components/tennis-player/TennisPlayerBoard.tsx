@@ -5,7 +5,6 @@ import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { Footer } from '@/components/game/Footer';
 import { MAX_CLUES } from '@/types/tennisPlayer';
 
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
@@ -82,7 +81,6 @@ export function TennisPlayerBoard() {
           )}
 
           <GameNav />
-          <Footer />
         </div>
       </div>
     );
@@ -230,7 +228,6 @@ export function TennisPlayerBoard() {
         )}
 
         <GameNav />
-        <Footer />
       </div>
     </div>
   );

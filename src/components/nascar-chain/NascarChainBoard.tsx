@@ -8,7 +8,6 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { getNascarChainMultiplier } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
-import { Footer } from '@/components/game/Footer';
 import { Loader2 } from 'lucide-react';
 
 interface LeaderboardEntry {
@@ -109,7 +108,6 @@ export function NascarChainBoard() {
           </div>
 
           <GameNav />
-          <Footer />
         </div>
       </div>
     );
@@ -256,7 +254,6 @@ export function NascarChainBoard() {
         )}
 
         <GameNav />
-        <Footer />
       </div>
     </div>
   );

@@ -2597,6 +2597,13 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 313.** One footer. GameShell, six quiz boards and Records each
+  mounted their own Footer on top of App.tsx's global one from Round 49, stacking two
+  full footers on most pages (his screenshot; proven live as 2 footer elements on
+  /soccer-grid). Eight mounts removed, simSingleFooter fences the rule (one render, in
+  App.tsx, comment stripped scan, FOOTER_CONTROL=double). Snapshots never carried the
+  double so nothing was re-prerendered. tsc zero, build green, legal, accessibility,
+  rival names and adsense fences green.
 - **2026-08-29, Round 312.** The Club Manager world plays everywhere, P1s 2 and 3 of the
   08-28 review. syncWorld had iterated REAL_LEAGUES since Round 95, whose ids never match
   an era world's (premier2005 vs premier), so era saves' other leagues never simulated one

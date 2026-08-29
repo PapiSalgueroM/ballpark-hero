@@ -5,7 +5,6 @@ import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { Footer } from '@/components/game/Footer';
 import { MAX_CLUES } from '@/types/nascarDriver';
 
 const CLUE_LABELS = ['Vibe', 'Era', 'Car Number', 'Cup Series Wins', 'Championships', 'Famous Moment'];
@@ -82,7 +81,6 @@ export function NascarDriverBoard() {
           )}
 
           <GameNav />
-          <Footer />
         </div>
       </div>
     );
@@ -230,7 +228,6 @@ export function NascarDriverBoard() {
         )}
 
         <GameNav />
-        <Footer />
       </div>
     </div>
   );
