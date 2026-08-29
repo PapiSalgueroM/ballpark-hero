@@ -1,339 +1,207 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { GameNav } from '@/components/game/GameNav';
+import { useCallback, useMemo, useState } from 'react';
+import { Loader2, TrendingUp, Wallet } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { cn } from '@/lib/utils';
-import { Loader2, TrendingUp, TrendingDown, Trophy } from 'lucide-react';
 import {
-  StockRound,
-  StockPlayer,
-  STOCK_PICKS,
-  dailyStockSeed,
-  randomStockSeed,
-  fetchStockRound,
-  playerReturn,
-  scoreRound,
-  formatMoney,
-  formatPct,
+  AnonCandidate, Campaign, STOCK_BUDGET, assembleCampaign, canAfford, candidateRatio,
+  dailyCampaignSeed, fetchCampaignRows, formatMoney, formatPct, randomCampaignSeed,
+  scoreCampaign, startYearFor,
 } from '@/lib/playerStockMarket';
 
 /**
- * Player Stock Market (task #36). Six real players at a real past year with
- * real market values; buy exactly 3, the market advances one real year, and
- * your portfolio return is scored against the best possible trio. All values
- * come from player_market_values at runtime, nothing authored.
+ * Player Stock Market (rebuilt Round 329 to the owner's spec): start six
+ * seasons back with 200M, move year by year, and buy position by position
+ * until the XI is full, seeing ONLY the stats. No name, no country, no
+ * club, ever, until the reveal. Then the campaign jumps to the present and
+ * your portfolio is worth what those careers really became.
  */
 
+type Phase = 'setup' | 'loading' | 'error' | 'buying' | 'done';
 type Mode = 'daily' | 'unlimited';
-type StockAction = { t: 'lock'; picks: string[] };
-const SENTINEL = [{ id: 'player-stock-market-daily' }];
+const SLUG = 'player-stock-market';
 
-function Sparkline({ p, revealed }: { p: StockPlayer; revealed: boolean }) {
-  const pts = revealed ? [...p.series, { year: 0, value: p.next }] : p.series;
-  if (pts.length < 2) return <div className="h-8" />;
-  const vals = pts.map((x) => x.value);
-  const min = Math.min(...vals), max = Math.max(...vals);
-  const span = max - min || 1;
-  const W = 96, H = 32;
-  const step = W / (pts.length - 1);
-  const poly = pts.map((x, i) => `${(i * step).toFixed(1)},${(H - 4 - ((x.value - min) / span) * (H - 8)).toFixed(1)}`).join(' ');
-  const up = revealed ? p.next >= p.current : vals[vals.length - 1] >= vals[0];
-  return (
-    <svg width={W} height={H} className="overflow-visible">
-      <polyline
-        points={poly}
-        fill="none"
-        strokeWidth="2"
-        className={up ? 'stroke-emerald-400' : 'stroke-red-400'}
-        strokeLinejoin="round"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-const PlayerStockMarket = () => {
+export default function PlayerStockMarket() {
+  const [phase, setPhase] = useState<Phase>('setup');
   const [mode, setMode] = useState<Mode>('daily');
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [slotIndex, setSlotIndex] = useState(0);
+  const [picks, setPicks] = useState<AnonCandidate[]>([]);
 
-  const daily = useMemo(() => dailyStockSeed(), []);
-  const [unl, setUnl] = useState(() => randomStockSeed());
-  const active = mode === 'daily' ? daily : unl;
-
-  const [round, setRound] = useState<StockRound | null>(null);
-  const [loadingRound, setLoadingRound] = useState(true);
-  const [loadError, setLoadError] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-    setLoadingRound(true);
-    setLoadError(false);
-    setRound(null);
-    fetchStockRound(active.year, active.seed).then((r) => {
-      if (!alive) return;
-      if (r) setRound(r);
-      else setLoadError(true);
-      setLoadingRound(false);
-    });
-    return () => { alive = false; };
-  }, [active.year, active.seed]);
-
-  const {
-    guesses: dailyActions,
-    addGuess: addDailyAction,
-    gameStatus: rawDailyStatus,
-    isLoading,
-  } = useDailyPuzzle<{ id: string }, StockAction>({
-    gameSlug: 'player-stock-market',
-    puzzles: SENTINEL,
-    maxGuesses: 999,
-    isWon: (g) => g.some((a) => a.t === 'lock'),
-    isLost: () => false,
-    deserializeGuesses: (raw) => raw as StockAction[],
-  });
-
-  // Round 67: the mirror of the base game. Classic is numbers only (names
-  // hidden). Names style shows you exactly who they are and hides every number
-  // until the market moves, so you are buying on reputation alone. Unlimited
-  // only, so the daily stays one shared fair test.
-  const [style, setStyle] = useState<'numbers' | 'names'>('numbers');
-  const namesStyle = mode === 'unlimited' && style === 'names';
-
-  const [unlimitedActions, setUnlimitedActions] = useState<StockAction[]>([]);
-  const actions = mode === 'daily' ? dailyActions : unlimitedActions;
-  const locked = actions.find((a) => a.t === 'lock');
-
-  const [picks, setPicks] = useState<string[]>([]);
-  const effectivePicks = locked ? locked.picks : picks;
-
-  const result = useMemo(() => {
-    if (!locked || !round) return null;
-    return scoreRound(round.players, locked.picks);
-  }, [locked, round]);
-
-  useGameCompletion('player-stock-market', mode === 'daily' && rawDailyStatus !== 'playing', result?.score ?? 0);
-
-  const togglePick = useCallback((name: string) => {
-    if (locked) return;
-    setPicks((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name)
-        : prev.length >= STOCK_PICKS ? prev
-        : [...prev, name]
-    );
-  }, [locked]);
-
-  const lockIn = useCallback(() => {
-    if (locked || picks.length !== STOCK_PICKS) return;
-    const a: StockAction = { t: 'lock', picks };
-    if (mode === 'daily') addDailyAction(a);
-    else setUnlimitedActions([a]);
-  }, [locked, picks, mode, addDailyAction]);
-
-  const newUnlimited = useCallback(() => {
-    setUnl(randomStockSeed());
-    setUnlimitedActions([]);
+  const start = useCallback(async (m: Mode) => {
+    setMode(m);
+    setPhase('loading');
+    const seed = m === 'daily' ? dailyCampaignSeed() : randomCampaignSeed();
+    const rows = await fetchCampaignRows(startYearFor(seed));
+    const built = rows ? assembleCampaign(rows, seed) : null;
+    if (!built) { setPhase('error'); return; }
+    setCampaign(built);
+    setSlotIndex(0);
     setPicks([]);
+    setPhase('buying');
   }, []);
 
-  const switchMode = useCallback((m: Mode) => { setMode(m); setPicks([]); }, []);
+  const remaining = STOCK_BUDGET - picks.reduce((s, c) => s + c.price, 0);
+  const current = campaign && phase === 'buying' ? campaign.slots[slotIndex] : null;
 
-  const switchStyle = useCallback((st: 'numbers' | 'names') => {
-    setStyle(st);
-    setUnl(randomStockSeed());
-    setUnlimitedActions([]);
-    setPicks([]);
-  }, []);
+  const buy = (c: AnonCandidate) => {
+    if (!campaign || !current || !canAfford(campaign, slotIndex, c, remaining)) return;
+    const next = [...picks, c];
+    setPicks(next);
+    if (slotIndex + 1 >= campaign.slots.length) { setPhase('done'); return; }
+    setSlotIndex(i => i + 1);
+  };
 
-  const revealed = !!locked && !!round;
+  const result = useMemo(
+    () => (campaign && phase === 'done' ? scoreCampaign(campaign, picks) : null),
+    [campaign, phase, picks],
+  );
+  useGameCompletion(SLUG, phase === 'done' && !!result, result?.score ?? 0, picks.filter(c => c.final > c.price).length);
+
+  const trend = (c: AnonCandidate) => {
+    if (c.series.length < 2) return '→';
+    const a = c.series[0].value; const b = c.series[c.series.length - 1].value;
+    return b > a * 1.15 ? '↗' : b < a * 0.85 ? '↘' : '→';
+  };
 
   return (
     <>
       <PageSeo
-        title="Player Stock Market - Buy Low, Sell High on Real Careers | DoUKnowBall"
-        description="Six real players at a real past season with their real market values. Buy three, then watch the market advance one real year. Can you beat the optimal portfolio?"
+        title="Player Stock Market: Invest on Stats Alone | DoUKnowBall"
+        description="Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became."
         path="/player-stock-market"
       />
-      <GameShell
-        width="narrow"
-        title="📈 PLAYER STOCK MARKET"
-        subtitle="You don't know who they are. Buy 3 mystery players on the numbers alone, then the market moves one real year and the names drop."
-        headerExtra={
-          <div className="flex flex-col items-center gap-2 mt-4">
-          <div className="flex items-center justify-center gap-1 bg-secondary rounded-full p-1 w-fit mx-auto">
-            {(['daily', 'unlimited'] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => switchMode(m)}
-                className={cn(
-                  'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                  mode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
-              </button>
-            ))}
-          </div>
-          {mode === 'unlimited' && (
-            <div className="flex items-center justify-center gap-1 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['numbers', 'names'] as const).map((st) => (
-                <button
-                  key={st}
-                  onClick={() => switchStyle(st)}
-                  className={cn(
-                    'px-4 py-1 rounded-full text-xs font-semibold transition-all',
-                    style === st ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
-                  )}
-                >
-                  {st === 'numbers' ? '🔢 Numbers only' : '🧠 Names only'}
-                </button>
-              ))}
+      <GameShell width="narrow" title="Player Stock Market" emoji="📈" subtitle="200M, six seasons back, and nothing but the numbers.">
+        {phase === 'setup' && (
+          <div className="space-y-4 max-w-sm mx-auto">
+            <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
+              <p className="font-bold text-foreground">How to play</p>
+              <p>The market opens six seasons in the past with 200M in your wallet and the 4-3-3's eleven slots to fill, two buys a year.</p>
+              <p>Every candidate is anonymous: you see the position, the age, the real market value trajectory and the last two seasons of goals and assists. Never a name, a country or a club.</p>
+              <p>You pay the real market value of the year you are in. After the eleventh buy the campaign jumps to today, the cards turn over, and your portfolio is worth what those careers really became.</p>
             </div>
-          )}
-          </div>
-        }
-      >
-        {(isLoading || loadingRound) && (
-          <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
+              <span className="block font-bold text-foreground">Daily market</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">The same campaign for everyone today</span>
+            </button>
+            <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
+              <span className="block font-bold text-foreground">Unlimited</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">A fresh market every run</span>
+            </button>
           </div>
         )}
 
-        {!isLoading && !loadingRound && loadError && (
-          <p className="text-center text-muted-foreground py-12">
-            The market is closed (couldn't load player values). Try again shortly.
-          </p>
+        {phase === 'loading' && (
+          <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {!isLoading && !loadingRound && round && (
-          <>
-            <div className="text-center mb-4">
-              <p className="text-sm font-bold text-primary">Market year: {round.year}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {revealed
-                  ? `The market advanced to ${round.year + 1}. Real values revealed.`
-                  : namesStyle
-                    ? `You know exactly who they are. You have no idea what they cost. Buy ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`
-                    : `Buy exactly ${STOCK_PICKS}, then the market advances to ${round.year + 1} for real.`}
-              </p>
+        {phase === 'error' && (
+          <div className="text-center py-12">
+            <p className="text-destructive font-semibold mb-3">Couldn't open the market right now. The full value history needs a connection.</p>
+            <button onClick={() => setPhase('setup')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+              Back
+            </button>
+          </div>
+        )}
+
+        {phase === 'buying' && campaign && current && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <span>Summer {current.offerYear}</span>
+              <span>Buy {slotIndex + 1} of {campaign.slots.length} · the {current.slot.label}</span>
+              <span className="inline-flex items-center gap-1 text-primary"><Wallet className="w-4 h-4" /> {formatMoney(remaining)}</span>
             </div>
 
-            <div className="max-w-md mx-auto space-y-2 mb-5">
-              {round.players.map((p, idx) => {
-                const bought = effectivePicks.includes(p.name);
-                const r = playerReturn(p);
-                const inBest = result?.bestPicks.includes(p.name);
-                // Owner 2026-08-05: you invest BLIND. Names and
-                // clubs stay hidden until the market moves; you only get the
-                // numbers: position, age, nationality and the value history.
-                const mysteryLabel = `Mystery ${p.position} ${String.fromCharCode(65 + idx)}`;
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {current.candidates.map((c, ci) => {
+                const affordable = canAfford(campaign, slotIndex, c, remaining);
                 return (
                   <button
-                    key={p.name}
-                    onClick={() => togglePick(p.name)}
-                    disabled={!!locked}
+                    key={ci}
+                    onClick={() => buy(c)}
+                    disabled={!affordable}
                     className={cn(
-                      'w-full text-left rounded-xl border px-3 py-2.5 transition-all flex items-center gap-3',
-                      bought ? 'border-primary bg-primary/10' : 'border-border bg-card',
-                      !locked && 'hover:border-primary/50 cursor-pointer',
-                      locked && 'cursor-default'
+                      'rounded-xl border p-3 text-left transition-colors',
+                      affordable ? 'bg-surface-1 border-border hover:border-primary/50' : 'bg-muted/20 border-border opacity-50',
                     )}
                   >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-foreground truncate">
-                          {revealed || namesStyle ? p.name : `🕵️ ${mysteryLabel}`}
-                        </span>
-                        {bought && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">Bought</span>}
-                        {revealed && inBest && <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/20 text-gold shrink-0">Optimal</span>}
-                      </div>
-                      <p className="text-[11px] text-muted-foreground truncate">
-                        {revealed || namesStyle ? `${p.club} · ` : ''}{p.position} · age {p.age} · {p.nationality}
-                      </p>
-                      <p className="text-sm font-bold mt-0.5 text-foreground">
-                        {namesStyle && !revealed ? '€ hidden' : formatMoney(p.current)}
-                        {revealed && (
-                          <span className={cn('ml-2 inline-flex items-center gap-1 text-xs font-bold', r >= 0 ? 'text-emerald-400' : 'text-red-400')}>
-                            {r >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                            {formatMoney(p.next)} ({formatPct(r)})
-                          </span>
-                        )}
-                      </p>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm font-bold text-foreground">Anonymous {c.position} · age {c.age || '?'}</span>
+                      <span className="text-base font-black text-primary">{formatMoney(c.price)}</span>
                     </div>
-                    {namesStyle && !revealed
-                      ? <span className="text-lg" aria-hidden="true">🤫</span>
-                      : <Sparkline p={p} revealed={revealed} />}
+                    <p className="text-[11px] text-muted-foreground mt-1 tabular-nums">
+                      Value {trend(c)} {c.series.map(sv => `${String(sv.year).slice(2)}: ${formatMoney(sv.value)}`).join(' · ')}
+                    </p>
+                    {c.output.length > 0 && (
+                      <p className="text-[11px] text-muted-foreground tabular-nums">
+                        Output {c.output.map(o => `${String(o.year).slice(2)}: ${o.goals}g ${o.assists}a`).join(' · ')}
+                      </p>
+                    )}
+                    {!affordable && <p className="text-[10px] text-destructive mt-1">Too rich for the wallet with the rest of the XI still to buy</p>}
                   </button>
                 );
               })}
             </div>
 
-            {!locked && (
-              <div className="flex flex-col items-center gap-2">
-                <button
-                  onClick={lockIn}
-                  disabled={picks.length !== STOCK_PICKS}
-                  className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-40"
-                >
-                  Lock in portfolio ({picks.length}/{STOCK_PICKS})
-                </button>
-                <p className="text-[11px] text-muted-foreground">Tap players to buy and sell before locking in.</p>
+            <div className="rounded-xl border border-border bg-surface-1 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5 text-center">Your portfolio so far</p>
+              <div className="flex flex-wrap gap-1 justify-center">
+                {campaign.slots.map((s, i) => (
+                  <span key={i} className={cn(
+                    'px-1.5 py-0.5 rounded text-[9px] font-semibold',
+                    picks[i] ? 'bg-correct/15 text-foreground' : i === slotIndex ? 'bg-primary text-primary-foreground' : 'bg-secondary/60 text-muted-foreground',
+                  )}>
+                    {s.slot.label}{picks[i] ? ` ${formatMoney(picks[i].price)}` : ''}
+                  </span>
+                ))}
               </div>
-            )}
-
-            {revealed && result && (
-              <div className="mt-4 flex justify-center">
-                <ResultScreen
-                  won={result.score >= 50}
-                  outcomeEmoji={result.score >= 90 ? '🐐' : result.score >= 50 ? '📈' : '📉'}
-                  headline={`Portfolio: ${formatPct(result.yourReturn)}`}
-                  statLine={<>Market year {round.year} → {round.year + 1}</>}
-                  funFact={<>💡 Best possible trio returned {formatPct(result.bestReturn)}; the worst returned {formatPct(result.worstReturn)}.</>}
-                  statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{result.score}/100</span> }]}
-                  emojiGrid={`📈 Player Stock Market ${round.year}${namesStyle ? ' (names only)' : ''}: ${formatPct(result.yourReturn)} · ${result.score}/100`}
-                  share={{
-                    score: `${result.score}/100 on the ${round.year} Player Stock Market`,
-                    gameName: 'Player Stock Market',
-                    gamePath: '/player-stock-market',
-                  }}
-                  onPlayAgain={mode === 'unlimited' ? newUnlimited : undefined}
-                  playAgainLabel="New market"
-                  playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">A new market opens tomorrow!</p> : undefined}
-                />
-              </div>
-            )}
-          </>
+            </div>
+          </div>
         )}
+
+        {phase === 'done' && campaign && result && (
+          <ResultScreen
+            won={result.growth >= 1}
+            outcomeEmoji={result.growth >= 1.5 ? '🚀' : result.growth >= 1 ? '📈' : '📉'}
+            headline={result.growth >= 1.5 ? 'The market loved you!' : result.growth >= 1 ? 'In the green' : 'The market bit back'}
+            statLine={`Spent ${formatMoney(result.spend)} between ${campaign.startYear} and ${campaign.startYear + 5}; worth ${formatMoney(result.finalValue)} in ${campaign.finalYear} (${formatPct(result.growth - 1)})`}
+            funFact={`The unlimited wallet's best picks grew ${formatPct(result.bestGrowth - 1)}; the worst shrank to ${formatPct(result.worstGrowth - 1)}.`}
+            statRow={[{ label: 'Score', value: result.score }]}
+            emojiGrid={[`📈 Player Stock Market: ${result.score} pts`, ...picks.map(c => `${c.final > c.price ? '🟩' : '🟥'} ${formatMoney(c.price)} to ${formatMoney(c.final)}`)].join('\n')}
+            share={{ score: String(result.score), gameName: 'Player Stock Market', gamePath: '/player-stock-market' }}
+            onPlayAgain={() => setPhase('setup')}
+            playAgainLabel="New market"
+          >
+            <div className="text-left text-sm space-y-1.5 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1"><TrendingUp className="w-3.5 h-3.5" /> The reveal</p>
+              {picks.map((c, i) => (
+                <p key={i} className="text-muted-foreground">
+                  <span className={cn('font-semibold', c.final > c.price ? 'text-correct' : 'text-destructive')}>{c.name}</span>
+                  {' '}({c.nationality}, {c.club}): {formatMoney(c.price)} in {campaign.slots[i].offerYear} to {formatMoney(c.final)} today, {formatPct(candidateRatio(c) - 1)}
+                </p>
+              ))}
+            </div>
+          </ResultScreen>
+        )}
+
+        <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
+        <div className="flex justify-center mt-6">
+          <ReportQuestion gameType={SLUG} />
+        </div>
 
         <GameSeoContent
           pageHasOwnH1
-          title="Player Stock Market | DoUKnowBall"
-          description="Six real players at a real past year with their actual market values and value history. Buy three, watch the market advance one real year, and get scored against the optimal portfolio."
-          howToPlay={[
-            'The market shows 6 real players at a real past year with their real market values',
-            'Each card shows a 3-year value history sparkline, momentum or mirage?',
-            'Buy exactly 3 players, then lock in your portfolio',
-            'The market advances one real year: actual next-year values decide your return',
-            'Score 0-100 against the best possible trio. 100 = the optimal portfolio',
-          ]}
-          examples={[
-            'Would you have bought a 30-year-old superstar in 2018, or the teenager whose value was about to triple?',
-            'A falling sparkline can keep falling, or be the buy-low of the year.',
-          ]}
+          title="Player Stock Market: Invest on Stats Alone"
+          description="The anonymous portfolio game: start six seasons back with 200M, and every candidate shows only a position, an age, a real market value trajectory and two seasons of output, never a name, country or club. Buy position by position until the XI is full, then jump to the present and learn what those careers became. All values are real market history."
         />
-
-        <AdBanner slot="1234567916" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="player-stock-market" gameContext={{ year: round?.year }} />
-        </div>
         <GameNav />
       </GameShell>
     </>
   );
-};
-
-export default PlayerStockMarket;
+}
