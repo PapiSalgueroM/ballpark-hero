@@ -1,5 +1,14 @@
 # Project state
 
+## Owner feedback, 2026-08-28 (the full site review, his biggest list yet)
+
+Anthony played the site top to bottom on 2026-08-28 and filed a review covering the
+ticker, the leaderboard, Club Manager end to end, Soccer Career, every small game, three
+new game requests, and a stack of P1 bugs he hit live. **The full transcription is
+`docs/TWEAKS-2026-08-28.md` and it outranks the roadmap and extends the 2026-08-26
+document below.** The first wave is claimed by lane in `docs/WORKBOARD.md`: bugs first,
+his order within a lane.
+
 ## Owner feedback, 2026-08-26 (the 51 page tweaks document, sent after Round 294 went live)
 
 **This list outranks everything below it. Work it top to bottom, in his order.** The document
@@ -2588,6 +2597,12 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-28, evening** No round. Anthony's full site review transcribed to
+  `docs/TWEAKS-2026-08-28.md` (P1 bugs, his two game deletions, the leaderboard name
+  decision, the Club Manager arc list, the per game verdicts, three new game requests,
+  the legal limits on the likeness and real-college-names asks). Pointer section added at
+  the top of this file; first wave claimed by lane on the work board, desktop taking the
+  P1 bugs, cloud taking the deletions and the self contained fixes.
 - **2026-08-28, later** No round. `docs/WORKBOARD.md` created: the standing two lane work
   board. Anthony's feedback lands in its Inbox, lanes claim before building, done items
   carry their round number. First split seeded from the real state: the desktop lane takes

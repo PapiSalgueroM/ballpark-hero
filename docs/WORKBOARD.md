@@ -20,6 +20,16 @@ How it works:
 
 ## Inbox (unclaimed)
 
+- **THE 2026-08-28 REVIEW: `docs/TWEAKS-2026-08-28.md`.** Anthony played the site top to
+  bottom and filed his biggest list yet, transcribed there in full. It outranks the
+  roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
+  that file is the shared backlog both lanes pull from, bugs before features, his order
+  within a lane. Claim here before building.
+- From that list, unclaimed and sizable: the Rebuild redesign, the Sign the Player
+  auction rebuild, the Player Stock Market redesign, the tycoon merge, the conquest map
+  overhaul, the three new games (Search and Discard, Sports Bingo, the draft mode), the
+  Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
+  CFB real names research.
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
   document): either lane pulls a system from it when its own list runs dry. Mine it for
   mechanics, never its vocabulary (simNoRivalNames enforces this).
@@ -28,6 +38,26 @@ How it works:
 
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
+
+From the 2026-08-28 review (bugs, claimed same day):
+
+- P1: the empty ticker. Diagnose scores-poll, the API-Sports quota and live_scores with
+  the database in hand, then the ESPN model: full day slate before games, live scores
+  during, FINAL after, schedule loaded ahead so the strip is never empty.
+- P1: the Club Manager league tables (other leagues stuck on pre-season alphabetical all
+  season, the duplicate zero-point La Liga, the Cups tab rendering the UCL under Copa del
+  Rey, the projected bracket excluding the second placed player, the 8 group 2005/06
+  check).
+- P1: the double footer.
+- P1: the boot flash (snapshot text visible before React mounts).
+- P1 data batch: Who Am I zero ages and values (Rodri), the Squad Deal league filter
+  dealing the wrong league, Build Your XI stale position validity, Sign the Player values
+  (Svilar 162m), the Billion Dollar Game pricing in dollars at one billion and its
+  oversized points.
+- The report-a-bug pipeline: categories, delivery to the project inbox he can read,
+  FormSubmit activation confirmed (folds into the Round 304 Supabase tap below).
+
+Standing claims:
 
 - auditLive's thin page bar has drifted from its own intent: its header and message say
   "the home page's own static block" but line 100 measures the WHOLE live home document,
@@ -55,6 +85,23 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 Claimed 2026-08-28:
 
+From the 2026-08-28 review (his decisions and the self contained fixes):
+
+- Retire Overrated or Underrated and Tier List, his call, the standing retired-route
+  pattern (redirect stub, sitemap, registry, harnesses).
+- The home hero headline shortened ("100+ free games across every sport" shape), the
+  disclaimer staying in the footer.
+- Leaderboard names: regenerate legacy Baller-NNNN handles to the sports word pool and
+  put a profanity blocklist in front of custom display names on shared surfaces (the
+  decision and reasoning are in the tweaks doc).
+- Small fixes batch: Career Ladder flags, Missing XI side colors and overlapping bubbles,
+  Rarity Round hiding the rarest answer and stating the goal upfront, World XI position
+  eligibility and customizable respins, Alphabet Sprint full name instruction, the
+  Soccer Career keeper being told to score more goals, the how-to-play popup audit across
+  every game.
+- Trade Finder: both sides of the ball and current rosters.
+
+Standing claims:
 
 - The react-router v7 breaking major that Round 304 queued as its own round.
 - New game rounds and record shelf tables, the self contained work.
