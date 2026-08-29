@@ -11,26 +11,27 @@
  * Run: node scripts/simTradeFinder.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/tfSimEntry.mjs';
-const BUNDLE = '/tmp/tfSim.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'tfSimEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'tfSim.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const finder = await import('${ROOT}/src/lib/tradeFinder.ts');
-const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
-const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
-const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
-const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
+const finder = await import('${ROOT.replaceAll('\\', '/')}/src/lib/tradeFinder.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
 export { finder, nba, mlb, nhl, nfl };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { finder, nba, mlb, nhl, nfl } = await import(BUNDLE);
+const { finder, nba, mlb, nhl, nfl } = await import(pathToFileURL(BUNDLE).href);
 const { findTrades } = finder;
 
 let failures = 0;

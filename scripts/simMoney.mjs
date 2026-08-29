@@ -28,22 +28,23 @@
  * Run: node scripts/simMoney.mjs [careers]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/moneyEntry.mjs';
-const BUNDLE = '/tmp/money.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'moneyEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'money.bundle.mjs');
 const CAREERS = Number(process.argv[2] || 260);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
-const money = await import('${ROOT}/src/lib/soccerMoney.ts');
-const arcade = await import('${ROOT}/src/lib/soccerArcade.ts');
-const phone = await import('${ROOT}/src/lib/soccerPhone.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+const money = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerMoney.ts');
+const arcade = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerArcade.ts');
+const phone = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerPhone.ts');
 export { engine, money, arcade, phone };
 `);
 await build({

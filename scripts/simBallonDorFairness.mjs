@@ -36,10 +36,12 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
   };
 }
 import { build } from "esbuild";
+import os from 'node:os';
+import path from 'node:path';
 import { unlinkSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
-const OUT = "/tmp/sc-bdor.mjs";
+const OUT = path.join(os.tmpdir(), 'sc-bdor.mjs');
 await build({
   entryPoints: ["src/lib/soccerCareerEngine.ts"],
   bundle: true, format: "esm", platform: "node", outfile: OUT,

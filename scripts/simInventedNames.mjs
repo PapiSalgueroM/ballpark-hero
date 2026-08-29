@@ -27,17 +27,18 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-const BUNDLE_WORLDS = '/tmp/inv.bundle.mjs';
+const BUNDLE_WORLDS = path.join(os.tmpdir(), 'inv.bundle.mjs');
 
 /* Every generator on the site: file, first-name bank, surname bank, and
    what it invents. Add a row when you add a generator; section 4 checks
@@ -83,15 +84,15 @@ const real = new Set();
   walk(path.join(ROOT, 'src/data'));
   /* Plus the baked Club Manager worlds, through the bundler, because their
      nationality map is the canonical list of real footballers here. */
-  const ENTRY = '/tmp/invEntry.mjs';
+  const ENTRY = path.join(os.tmpdir(), 'invEntry.mjs');
   const BUNDLE = BUNDLE_WORLDS;
   fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { NATIONALITY_BY_WORLD } from '${ROOT}/src/data/playerNationalities.ts';
-export { allIntlNames } from '${ROOT}/src/lib/intlNames.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-  const { NATIONALITY_BY_WORLD, allIntlNames } = await import(BUNDLE);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+  const { NATIONALITY_BY_WORLD, allIntlNames } = await import(pathToFileURL(BUNDLE).href);
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
   globalThis.__intl = allIntlNames();
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
@@ -134,14 +135,14 @@ console.log('2) Every combination of every generator, against all of them');
 /* ---------- 2b. The runtime-guarded generator, exercised ---------- */
 console.log('2b) The era filler re-rolls its way past every real name');
 {
-  const ENTRY = '/tmp/eraNameEntry.mjs';
-  const BUNDLE = '/tmp/eraName.bundle.mjs';
+  const ENTRY = path.join(os.tmpdir(), 'eraNameEntry.mjs');
+  const BUNDLE = path.join(os.tmpdir(), 'eraName.bundle.mjs');
   fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { makeGeneratedName } from '${ROOT}/src/lib/clubManagerEras.ts';
+export { makeGeneratedName } from '${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts';
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-  const { makeGeneratedName } = await import(BUNDLE);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+  const { makeGeneratedName } = await import(pathToFileURL(BUNDLE).href);
   const seen = new Set();
   let hits = 0;
   for (let i = 0; i < 20000; i++) {
@@ -163,7 +164,7 @@ export { makeGeneratedName } from '${ROOT}/src/lib/clubManagerEras.ts';
   const listed = new Set([...(eraSrc.match(/const ALSO_REAL_ELSEWHERE[^=]*=\s*\[([\s\S]*?)\];/) ?? [,''])[1].matchAll(/'([^']+)'/g)].map(m => m[1]));
   const cmWorlds = new Set();
   {
-    const { NATIONALITY_BY_WORLD } = await import(BUNDLE_WORLDS);
+    const { NATIONALITY_BY_WORLD } = await import(pathToFileURL(BUNDLE_WORLDS).href);
     for (const w of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(w)) cmWorlds.add(n);
   }
   const uncovered = [];
@@ -210,7 +211,7 @@ console.log('4) A new generator cannot ship unregistered');
       const p = path.join(d, e.name);
       if (e.isDirectory()) walk(p);
       else if (/\.tsx?$/.test(e.name)) {
-        const rel = path.relative(ROOT, p);
+        const rel = path.relative(ROOT, p).replaceAll('\\', '/');
         const t = fs.readFileSync(p, 'utf-8');
         for (const m of t.matchAll(/const ([A-Z_]*FIRST[A-Z_]*)\s*(?::[^=]+)?=\s*\[/g)) {
           found.push(`${rel}::${m[1]}`);
@@ -252,14 +253,14 @@ console.log('6) No two men on the same team are called the same thing');
      suffixes, indistinguishable when picking an eleven or selling one.
      Fixed by a hard uniqueness guard, with the bank widened from 400 to
      1,296 so the guard rarely has to do anything. */
-  const ENTRY = '/tmp/dupeNameEntry.mjs';
-  const BUNDLE = '/tmp/dupeName.bundle.mjs';
+  const ENTRY = path.join(os.tmpdir(), 'dupeNameEntry.mjs');
+  const BUNDLE = path.join(os.tmpdir(), 'dupeName.bundle.mjs');
   fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export * from '${ROOT}/src/lib/clubManager.ts';
+export * from '${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts';
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-  const cmEngine = await import(BUNDLE);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+  const cmEngine = await import(pathToFileURL(BUNDLE).href);
 
   const dupesIn = list => {
     const counts = new Map();
@@ -326,18 +327,18 @@ export * from '${ROOT}/src/lib/clubManager.ts';
        that hundred before you press anything. Measured before the fix,
        over thirty fresh leagues each: the same man appeared twice in 6 of
        30 NFL leagues, 8 of 30 MLB, 13 of 30 NBA and 10 of 30 NHL. */
-    const FO_ENTRY = '/tmp/foNamesEntry.mjs';
-    const FO_BUNDLE = '/tmp/foNames.bundle.mjs';
+    const FO_ENTRY = path.join(os.tmpdir(), 'foNamesEntry.mjs');
+    const FO_BUNDLE = path.join(os.tmpdir(), 'foNames.bundle.mjs');
     fs.writeFileSync(FO_ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
-const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
-const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
-const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
 export { nfl, mlb, nba, nhl };
 `);
-    execSync(`${ROOT}/node_modules/.bin/esbuild ${FO_ENTRY} --bundle --format=esm --platform=node --outfile=${FO_BUNDLE} --log-level=error`, { stdio: 'inherit' });
-    const fo = await import(FO_BUNDLE);
+    execSync(`"${ROOT}/node_modules/.bin/esbuild" "${FO_ENTRY}" --bundle --format=esm --platform=node --outfile="${FO_BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+    const fo = await import(pathToFileURL(FO_BUNDLE).href);
 
     const leagueDupes = lg => {
       const names = [];

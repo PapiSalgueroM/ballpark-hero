@@ -19,6 +19,8 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
+import path from 'node:path';
 import { build } from 'esbuild';
 import { pathToFileURL } from 'node:url';
 
@@ -39,10 +41,10 @@ async function load(file, out) {
 }
 
 const [mlb, nba, nfl, nhl] = await Promise.all([
-  load('mlbMyCareer', '/tmp/rl-mlb.mjs'),
-  load('nbaMyCareer', '/tmp/rl-nba.mjs'),
-  load('nflMyCareer', '/tmp/rl-nfl.mjs'),
-  load('nhlMyCareer', '/tmp/rl-nhl.mjs'),
+  load('mlbMyCareer', path.join(os.tmpdir(), 'rl-mlb.mjs')),
+  load('nbaMyCareer', path.join(os.tmpdir(), 'rl-nba.mjs')),
+  load('nflMyCareer', path.join(os.tmpdir(), 'rl-nfl.mjs')),
+  load('nhlMyCareer', path.join(os.tmpdir(), 'rl-nhl.mjs')),
 ]);
 
 const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };

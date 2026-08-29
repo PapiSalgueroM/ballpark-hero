@@ -45,11 +45,11 @@ if (CONTROL) {
   const src = fs.readFileSync(cmPath, 'utf8');
   const needle = 'const pr = runPromotionRelegation(career);';
   if (!src.includes(needle)) { console.error('control run: the runPromotionRelegation call to sever is not in the source, refusing a dead control'); process.exit(1); }
-  cmPath = '/tmp/clubManager.frozen.ts';
+  cmPath = path.join(os.tmpdir(), 'clubManager.frozen.ts');
   fs.writeFileSync(cmPath, src.replace(needle, 'const pr = { overrides: career.leagueOverrides ?? null, lines: [] as string[] };'));
 }
 fs.writeFileSync(ENTRY, `export * as cm from '${cmPath}';\n`);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
 const store = new Map();
 globalThis.localStorage = {
   getItem: k => (store.has(k) ? store.get(k) : null),

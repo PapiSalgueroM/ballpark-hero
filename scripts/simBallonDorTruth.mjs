@@ -45,19 +45,21 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
   };
 }
 import { build } from "esbuild";
+import os from 'node:os';
+import path from 'node:path';
 import { writeFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
 const CONTROL = process.env.BDOR_CONTROL || "";
 if (CONTROL && CONTROL !== "roll") { console.error(`BDOR_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
-const ENTRY = "/tmp/sc-bdor-truth-entry.mjs";
-const OUT = "/tmp/sc-bdor-truth.mjs";
+const ENTRY = path.join(os.tmpdir(), 'sc-bdor-truth-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'sc-bdor-truth.mjs');
 writeFileSync(ENTRY, `
 export * as eng from "./src/lib/soccerCareerEngine.ts";
 export * as phone from "./src/lib/soccerPhone.ts";
 export * as eras from "./src/lib/careerEras.ts";
-`.replace(/\.\/src/g, process.cwd() + "/src"));
+`.replace(/\.\/src/g, process.cwd().replaceAll('\\', '/') + "/src"));
 await build({ entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node", outfile: OUT, logLevel: "error", alias: { "@": "./src" } });
 const { eng, phone, eras } = await import(pathToFileURL(OUT).href);
 const { initCareer, advanceYouthYear, acceptOffer, advanceProSeason, FALLBACK_CLUBS } = eng;

@@ -9,19 +9,20 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-fs.writeFileSync('/tmp/jmEntry.mjs', `
+fs.writeFileSync(path.join(os.tmpdir(), 'jmEntry.mjs'), `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const jm = await import('${ROOT}/src/lib/managerJobMarket.ts');
-export const cm = await import('${ROOT}/src/lib/clubManager.ts');
-export const br = await import('${ROOT}/src/lib/soccerCareerToManager.ts');
+export const jm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/managerJobMarket.ts');
+export const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+export const br = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerToManager.ts');
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild /tmp/jmEntry.mjs --bundle --format=esm --platform=node --outfile=/tmp/jm.mjs --log-level=error`, { stdio: 'inherit' });
-const { jm, cm, br } = await import('/tmp/jm.mjs');
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${path.join(os.tmpdir(), 'jmEntry.mjs')}" --bundle --format=esm --platform=node --outfile="${path.join(os.tmpdir(), 'jm.mjs')}" --log-level=error`, { stdio: 'inherit' });
+const { jm, cm, br } = await import(pathToFileURL(path.join(os.tmpdir(), 'jm.mjs')).href);
 const { allOfferClubs, vacancies, realJobOffers, marketCountries } = jm;
 const { managerProfileFromCareer } = br;
 

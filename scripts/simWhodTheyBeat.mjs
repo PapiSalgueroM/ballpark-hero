@@ -24,18 +24,19 @@
  * Run: node scripts/simWhodTheyBeat.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/whodbeat-entry.mjs";
-const OUT = "/tmp/whodbeat.mjs";
+const ENTRY = path.join(os.tmpdir(), 'whodbeat-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'whodbeat.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const lib = await import('${ROOT}/src/lib/whodTheyBeat.ts');
-export const hookmod = await import('${ROOT}/src/hooks/useWhodTheyBeat.ts');
+export const lib = await import('${ROOT.replaceAll('\\', '/')}/src/lib/whodTheyBeat.ts');
+export const hookmod = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useWhodTheyBeat.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

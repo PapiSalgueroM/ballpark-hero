@@ -25,26 +25,27 @@
    Run: node scripts/simMissingXi.mjs
 */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/missingXiHarnessEntry.mjs';
-const BUNDLE = '/tmp/missingXiHarness.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'missingXiHarnessEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'missingXiHarness.bundle.mjs');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 fs.writeFileSync(ENTRY, `
-export { LINEUPS, isCorrectGuess } from '${ROOT}/src/lib/missingXi.ts';
+export { LINEUPS, isCorrectGuess } from '${ROOT.replaceAll('\\', '/')}/src/lib/missingXi.ts';
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 /* The stub must live in THIS process: an import statement inside the entry
    hoists above any statement beside it, so a stub written into the entry
    runs after the bundled supabase client already asked for localStorage. */
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const { LINEUPS, isCorrectGuess } = await import(BUNDLE);
+const { LINEUPS, isCorrectGuess } = await import(pathToFileURL(BUNDLE).href);
 
 console.log('1) Every lineup is structurally sound and every blank sits in its own slot');
 {

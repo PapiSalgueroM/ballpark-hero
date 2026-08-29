@@ -31,22 +31,23 @@
  * Run: node scripts/simCareerHub.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/careerHubEntry.mjs';
-const BUNDLE = '/tmp/careerHub.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'careerHubEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'careerHub.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const hub = await import('${ROOT}/src/lib/careerHub.ts');
+const hub = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerHub.ts');
 export { hub };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { hub } = await import(BUNDLE);
+const { hub } = await import(pathToFileURL(BUNDLE).href);
 const { careerHubTiles, trophyLines, weakestMeter, honoursTotal, CAREER_TILE_TITLES } = hub;
 
 let failures = 0;

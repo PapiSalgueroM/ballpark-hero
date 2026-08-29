@@ -30,6 +30,7 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { build } from 'esbuild';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs';
@@ -37,8 +38,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const INTL_OUT = '/tmp/sc-intl.mjs';
-const ENGINE_OUT = '/tmp/sc-intl-engine.mjs';
+const INTL_OUT = path.join(os.tmpdir(), 'sc-intl.mjs');
+const ENGINE_OUT = path.join(os.tmpdir(), 'sc-intl-engine.mjs');
 
 await build({
   entryPoints: ['src/lib/soccerInternational.ts'],
@@ -47,10 +48,10 @@ await build({
 });
 // The engine reaches for localStorage through the life/phone modules, so the
 // stub goes in the entry the way simCup.mjs does it.
-const ENGINE_ENTRY = '/tmp/sc-intl-entry.mjs';
+const ENGINE_ENTRY = path.join(os.tmpdir(), 'sc-intl-entry.mjs');
 fs.writeFileSync(ENGINE_ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const engine = mod;
 `);
 await build({

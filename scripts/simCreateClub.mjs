@@ -25,13 +25,14 @@
  * Run: node scripts/simCreateClub.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/createClubEntry.mjs';
-const BUNDLE = '/tmp/createClub.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'createClubEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'createClub.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 const STORE = new Map();
@@ -40,19 +41,19 @@ globalThis.localStorage = {
   setItem: (k, v) => { STORE.set(k, String(v)); },
   removeItem: k => { STORE.delete(k); },
 };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
-const eras = await import('${ROOT}/src/lib/clubManagerEras.ts');
-const e10 = await import('${ROOT}/src/data/clubManagerEra2010.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
+const e10 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 export const cm = mod;
-export const worlds = { modern: (await import('${ROOT}/src/data/clubManagerRosters.ts')).CM_ROSTERS, era2010: e10.ERA2010_ROSTERS };
+export const worlds = { modern: (await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts')).CM_ROSTERS, era2010: e10.ERA2010_ROSTERS };
 export const erasMod = eras;
 `);
 execSync(
-  `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
+  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { cm, worlds } = await import(BUNDLE);
+const { cm, worlds } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, startNextSeason, finishSeason, playNextEntry, sortedTable, buildMarket,
   validateCustomClubName, crestSvg, sanitizeCrestInitials, registerCustomClub,

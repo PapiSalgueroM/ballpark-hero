@@ -47,18 +47,19 @@
  * Run: node scripts/simCollegeGrid.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/collegegrid-entry.mjs";
-const OUT = "/tmp/collegegrid.mjs";
+const ENTRY = path.join(os.tmpdir(), 'collegegrid-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'collegegrid.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const client = await import('${ROOT}/src/integrations/supabase/client.ts');
-export { collegeGridPuzzles } from '${ROOT}/src/data/collegeGridPuzzles.ts';
+export const client = await import('${ROOT.replaceAll('\\', '/')}/src/integrations/supabase/client.ts');
+export { collegeGridPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/data/collegeGridPuzzles.ts';
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

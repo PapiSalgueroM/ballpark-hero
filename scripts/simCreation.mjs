@@ -27,26 +27,27 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/creationSimEntry.mjs';
-const BUNDLE = '/tmp/creationSim.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'creationSimEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'creationSim.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
-const eras = await import('${ROOT}/src/lib/careerEras.ts');
-const attrs = await import('${ROOT}/src/lib/soccerCareerAttributes.ts');
-const look = await import('${ROOT}/src/lib/soccerCareerAppearance.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts');
+const attrs = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerAttributes.ts');
+const look = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerAppearance.ts');
 export { engine, eras, attrs, look };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { engine, eras, attrs, look } = await import(BUNDLE);
+const { engine, eras, attrs, look } = await import(pathToFileURL(BUNDLE).href);
 const {
   initCareer, advanceYouthYear, advanceProSeason, acceptOffer, dismissSummary,
   repairCareer, effectivePotential, careerBuildEffects, FALLBACK_CLUBS, getCareerTotals,

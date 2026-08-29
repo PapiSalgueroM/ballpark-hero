@@ -24,18 +24,19 @@
  * Run: node scripts/simRecords.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/records-entry.mjs";
-const OUT = "/tmp/records.mjs";
+const ENTRY = path.join(os.tmpdir(), 'records-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'records.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const rec = await import('${ROOT}/src/lib/records.ts');
-export const reg = await import('${ROOT}/src/data/gameRegistry.ts');
+export const rec = await import('${ROOT.replaceAll('\\', '/')}/src/lib/records.ts');
+export const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

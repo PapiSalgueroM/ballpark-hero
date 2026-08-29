@@ -36,6 +36,7 @@
  * Run: node scripts/simTransferPathHints.mjs
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
@@ -94,14 +95,14 @@ console.log('1) the migration against the pull it was made from');
 }
 
 console.log('2) the fallback the page shows when the table is down');
-const ENTRY = '/tmp/tph-entry.mjs';
-const OUT = '/tmp/tph-bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'tph-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'tph-bundle.mjs');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 fs.writeFileSync(ENTRY, `
-export { default as fallbackPuzzles } from '${ROOT}/src/data/transferPathPuzzles.ts';
-export { careerPlayers as fallbackPlayers } from '${ROOT}/src/data/careerPlayers.ts';
-export { fetchCareerPlayers } from '${ROOT}/src/lib/fetchCareerPlayers.ts';
-export { fetchTransferPathPuzzles } from '${ROOT}/src/lib/fetchTransferPathPuzzles.ts';
+export { default as fallbackPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/data/transferPathPuzzles.ts';
+export { careerPlayers as fallbackPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/careerPlayers.ts';
+export { fetchCareerPlayers } from '${ROOT.replaceAll('\\', '/')}/src/lib/fetchCareerPlayers.ts';
+export { fetchTransferPathPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/lib/fetchTransferPathPuzzles.ts';
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(OUT).href);

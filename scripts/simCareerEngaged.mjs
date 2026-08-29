@@ -15,13 +15,14 @@
  * Run: node scripts/simCareerEngaged.mjs [careers]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = '/tmp/sc-engaged.mjs';
-const ENTRY = '/tmp/sc-engaged-entry.mjs';
+const OUT = path.join(os.tmpdir(), 'sc-engaged.mjs');
+const ENTRY = path.join(os.tmpdir(), 'sc-engaged-entry.mjs');
 
 /* Round 124: this harness died on import with "localStorage is not defined",
    and it had been dead at origin/main before this round touched anything. The
@@ -33,7 +34,7 @@ const ENTRY = '/tmp/sc-engaged-entry.mjs';
    output, it did not run. */
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const engine = mod;
 `);
 

@@ -34,17 +34,18 @@
  * Run: node scripts/simInjuryArc.mjs [careers]
  */
 import { build } from "esbuild";
+import os from 'node:os';
 import { writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = "/tmp/injury-engine.mjs";
-const ENTRY = "/tmp/injury-entry.mjs";
+const OUT = path.join(os.tmpdir(), 'injury-engine.mjs');
+const ENTRY = path.join(os.tmpdir(), 'injury-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const engine = mod;
 `);
 await build({

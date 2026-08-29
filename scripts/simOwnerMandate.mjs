@@ -17,26 +17,27 @@
  * Run: node scripts/simOwnerMandate.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/ownerMandateEntry.mjs';
-const BUNDLE = '/tmp/ownerMandate.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'ownerMandateEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'ownerMandate.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
-const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
-const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
-const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
-const eng = await import('${ROOT}/src/lib/foOwnerMandate.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
+const eng = await import('${ROOT.replaceAll('\\', '/')}/src/lib/foOwnerMandate.ts');
 export { nfl, nba, nhl, mlb, eng };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { nfl, nba, nhl, mlb, eng } = await import(BUNDLE);
+const { nfl, nba, nhl, mlb, eng } = await import(pathToFileURL(BUNDLE).href);
 const {
   buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
   firedLine, seriesPostseason, nflPostseason, FO_TRUST_START,

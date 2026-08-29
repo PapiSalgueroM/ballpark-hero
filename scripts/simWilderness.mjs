@@ -23,23 +23,24 @@
  * Run: node scripts/simWilderness.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/wildEntry.mjs';
-const BUNDLE = '/tmp/wild.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'wildEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'wild.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
-const off = await import('${ROOT}/src/lib/managerOffers.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const off = await import('${ROOT.replaceAll('\\', '/')}/src/lib/managerOffers.ts');
 export const engine = mod;
 export const offers = off;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { engine: CM, offers: OFF } = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { engine: CM, offers: OFF } = await import(pathToFileURL(BUNDLE).href);
 const { startCareer, enterWilderness, wildernessWeek, acceptWildernessJob, wildernessProfile } = CM;
 const { managerStanding } = OFF;
 

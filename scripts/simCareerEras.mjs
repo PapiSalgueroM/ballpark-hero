@@ -29,31 +29,32 @@
    Run: node scripts/simCareerEras.mjs
 */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_CAREER_ERAS_CONTROL === 'drop';
 
-const ENTRY = '/tmp/careerEras.entry.mjs';
-const BUNDLE = '/tmp/careerEras.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'careerEras.entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'careerEras.bundle.mjs');
 let erasPath = `${ROOT}/src/lib/careerEras.ts`;
 if (CONTROL) {
   const src = fs.readFileSync(erasPath, 'utf8');
   const needle = '"Primeira Liga": ["Porto", "Benfica", "Sporting CP"],';
   if (!src.includes(needle)) { console.error('control run: the line the control deletes is not in the source, refusing to run a dead control'); process.exit(1); }
-  erasPath = '/tmp/careerEras.control.ts';
+  erasPath = path.join(os.tmpdir(), 'careerEras.control.ts');
   fs.writeFileSync(erasPath, src.replace(needle, ''));
 }
 fs.writeFileSync(ENTRY, `
-export { ERA_DEFS, eraDefFor, adjustClubsForYear } from '${erasPath}';
-export { FALLBACK_CLUBS } from '${ROOT}/src/lib/soccerCareerEngine.ts';
+export { ERA_DEFS, eraDefFor, adjustClubsForYear } from '${erasPath.replaceAll('\\', '/')}';
+export { FALLBACK_CLUBS } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts';
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { ERA_DEFS, eraDefFor, adjustClubsForYear, FALLBACK_CLUBS } = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { ERA_DEFS, eraDefFor, adjustClubsForYear, FALLBACK_CLUBS } = await import(pathToFileURL(BUNDLE).href);
 
 console.log('1) eight contiguous windows, 1990 to 2029');
 {

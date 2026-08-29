@@ -21,9 +21,10 @@
  * Run: node scripts/simOpposition.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src/lib/clubManager.ts');
@@ -90,14 +91,14 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 function baseBundle() {
-  const entry = '/tmp/oppEntry.mjs';
+  const entry = path.join(os.tmpdir(), 'oppEntry.mjs');
   fs.writeFileSync(entry, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${SRC}');
+const mod = await import('${SRC.replaceAll('\\', '/')}');
 export const cm = mod;
 `);
-  const out = '/tmp/opp-base.bundle.mjs';
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${entry} --bundle --format=esm --platform=node --outfile=${out} --log-level=error`, { stdio: 'inherit' });
+  const out = path.join(os.tmpdir(), 'opp-base.bundle.mjs');
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${entry}" --bundle --format=esm --platform=node --outfile="${out}" --log-level=error`, { stdio: 'inherit' });
   return out;
 }
 
@@ -106,7 +107,7 @@ const BASE = baseBundle();
 function arm(tag, transform) {
   const base = fs.readFileSync(BASE, 'utf8');
   const out = transform ? transform(base) : base;
-  const f = `/tmp/opp-${tag}.bundle.mjs`;
+  const f = path.join(os.tmpdir(), `opp-${tag}.bundle.mjs`);
   fs.writeFileSync(f, out);
   return f;
 }
@@ -125,7 +126,7 @@ const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) **
 
 /** One season at Everton, every break seen, nothing changed by the player. */
 async function measure(bundleFile) {
-  const { cm } = await import(bundleFile);
+  const { cm } = await import(pathToFileURL(bundleFile).href);
   const { startCareer, playNextEntry, resumeMatch } = cm;
   const pts = [], gf = [], ga = [];
   let led = 0, ledAndWon = 0, ledAndLost = 0;

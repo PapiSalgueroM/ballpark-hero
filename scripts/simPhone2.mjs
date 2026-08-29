@@ -33,21 +33,22 @@
  * Run: node scripts/simPhone2.mjs [careers]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import { pathToFileURL } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/phone2Entry.mjs';
-const BUNDLE = '/tmp/phone2.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'phone2Entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'phone2.bundle.mjs');
 const CAREERS = Number(process.argv[2] || 320);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
-const phone = await import('${ROOT}/src/lib/soccerPhone.ts');
-const eras = await import('${ROOT}/src/lib/careerEras.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+const phone = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerPhone.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts');
 export { engine, phone, eras };
 `);
 await build({

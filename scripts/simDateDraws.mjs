@@ -44,32 +44,33 @@
  * Run: node scripts/simDateDraws.mjs
  */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/datedraws-entry.mjs";
-const OUT = "/tmp/datedraws.mjs";
+const ENTRY = path.join(os.tmpdir(), 'datedraws-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'datedraws.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const du = await import('${ROOT}/src/lib/dateUtils.ts');
-export const grade = await import('${ROOT}/src/hooks/useGradeTransfer.ts');
-export const emoji = await import('${ROOT}/src/hooks/useEmojiGuess.ts');
-export const ballIq = await import('${ROOT}/src/hooks/useBallIq.ts');
-export const mystery = await import('${ROOT}/src/hooks/useMysteryBox.ts');
-export const emojiData = await import('${ROOT}/src/data/emojiPuzzles.ts');
-export const quiz = await import('${ROOT}/src/lib/fetchQuizBoard.ts');
-export const grades = await import('${ROOT}/src/lib/fetchTransferGrades.ts');
-export { nbaHLPlayers } from '${ROOT}/src/data/nbaHLPlayers.ts';
-export { mlbHLPlayers } from '${ROOT}/src/data/mlbHLPlayers.ts';
-export { tennisHLPlayers } from '${ROOT}/src/data/tennisHLPlayers.ts';
-export { cfbHLPlayers } from '${ROOT}/src/data/cfbHLPlayers.ts';
-export { f1HLDrivers } from '${ROOT}/src/data/f1HLDrivers.ts';
-export { golfLegends } from '${ROOT}/src/data/golfLegends.ts';
-export { hockeyHLPlayers } from '${ROOT}/src/data/hockeyHLPlayers.ts';
-export { aflGoalKickers } from '${ROOT}/src/data/aflGoalKickers.ts';
+export const du = await import('${ROOT.replaceAll('\\', '/')}/src/lib/dateUtils.ts');
+export const grade = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useGradeTransfer.ts');
+export const emoji = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useEmojiGuess.ts');
+export const ballIq = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useBallIq.ts');
+export const mystery = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useMysteryBox.ts');
+export const emojiData = await import('${ROOT.replaceAll('\\', '/')}/src/data/emojiPuzzles.ts');
+export const quiz = await import('${ROOT.replaceAll('\\', '/')}/src/lib/fetchQuizBoard.ts');
+export const grades = await import('${ROOT.replaceAll('\\', '/')}/src/lib/fetchTransferGrades.ts');
+export { nbaHLPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/nbaHLPlayers.ts';
+export { mlbHLPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/mlbHLPlayers.ts';
+export { tennisHLPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/tennisHLPlayers.ts';
+export { cfbHLPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/cfbHLPlayers.ts';
+export { f1HLDrivers } from '${ROOT.replaceAll('\\', '/')}/src/data/f1HLDrivers.ts';
+export { golfLegends } from '${ROOT.replaceAll('\\', '/')}/src/data/golfLegends.ts';
+export { hockeyHLPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/hockeyHLPlayers.ts';
+export { aflGoalKickers } from '${ROOT.replaceAll('\\', '/')}/src/data/aflGoalKickers.ts';
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

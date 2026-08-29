@@ -65,6 +65,23 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   the site's whole pitch is clean free games. If some of that flavor is wanted, the
   existing in-career purchases and a fictional "prediction night out" event carry it
   without slot machines. Parked unless he overrules.
+- WELCOME NOTE from the maker (Anthony, 2026-08-29 late: a welcome message saying
+  this is his first coding project, an independent site he is constantly improving
+  and fact checking, sorry for any bugs, thanks for visiting; his reasoning:
+  sympathy earns patience and a second visit). RECOMMENDATION already given to him:
+  NOT a popup modal, because the home page's whole covenant is offers before asks
+  (playHomeFold enforces the first tile's position) and a blocking dialog before
+  anyone has played is the toll booth Round 283 tore down. Build it as a small
+  dismissible "A note from the maker" card, once per browser, placed under the fold
+  content, plus the same text living permanently on /about; keep his authentic
+  voice, fix the spelling, drop nothing sincere. Copy draft in the item is owed by
+  whoever claims it and goes past him only if the loop cannot write it warmly.
+- LIGHT MODE (Anthony, 2026-08-29 late: "since its basically in dark mode already I
+  would love for there to be a light mode and people can choose"). A real theme
+  system: the palette is dark-only today, so this needs a light token set on the
+  CSS variables, a toggle in the header persisted per browser, prefers-color-scheme
+  as the default, and a legibility pass over the games (the sweeps at 320/390 run
+  in both themes when this lands). Sizeable, its own round or two.
 
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
   indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
@@ -98,37 +115,16 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- Ticker speed (BUILDING as Round 336, desktop, 2026-08-29): his report tonight, "the
-  ticker is moving really slow". Measured live at 60 px/s, the Round 317 design
-  speed, so nothing is broken; with a 3000px slate a full pass takes nearly a
-  minute. The crawl doubles.
-
-- MOBILE PASS, continuing (claimed 2026-08-29; Round 320 the first wave, Round 330 the
-  depth layer): still open from 330: the full playGames walk at 390 was mid run when
-  the round landed (first stretch all clean), so its remaining findings become the
-  next rounds, and after it releases dist, rebuild and re-run the 15 built-site
-  fences (the vite plugin change is proven on a side build but the standing rule
-  wants the real one). Also noted, judged acceptable and left alone: the two Soccer
-  Career floating buttons (training, phone) transiently cover right-aligned numbers
-  in the rows they float over; rows scroll clear, the buttons are owner approved
+- Soccer Career floating buttons, noted in Round 330, judged acceptable and left
+  alone: the training and phone buttons transiently cover right-aligned numbers in
+  the rows they float over; rows scroll clear, the buttons are owner approved
   (Rounds 80, 81, 129, 159), and a real fix is an auto-hide-on-scroll design
-  decision, not a padding hack. The
-  automated layer is now measured and green at 320 and 390 across all 140 routes
-  (sweepGames), plus playIphone with its new streaked-header section, simMobileChrome
-  at its true widest, and playHomeFold brought back to the current page. What remains
-  is the depth layer: the playGames walk at phone width (tweaks item 9 pairs with it)
-  and hand checks inside the heavy games (Club Manager tabs, Soccer Career screens,
-  the records tables) for tap comfort and text scale that box measurements cannot
-  judge. Constraint: no-scroll rule and the FIFA tile rule govern the fixes.
+  decision, not a padding hack.
 - Queued from the 08-28 review, Club Manager residue: era Champions League pools are 16
   clubs so era saves play 4 groups, not the real 8. Growing each era's euro pool to 28
   verified era participants (the real group stage fields are documented facts) is a data
   round. Also the era-id flags now exist in LEAGUE_NATIONS; a fence pinning every
   ERA_LEAGUES id to a nation would keep the next era honest.
-- Harness portability sweep (BUILDING as Round 334, desktop, 2026-08-29, parallel agent fan-out): 85 of 93 sim harnesses still hardcode '/tmp' and embed the
-  Windows ROOT path into generated entries, so they cannot run on the desktop lane.
-  Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
-  pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
 - Data follow up from Round 315: 247 players whose latest market value row is 2024 or
   older at a 30m+ peak. Most are honestly retired or in untracked leagues, but Rodri,
   Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
@@ -194,6 +190,48 @@ Standing claims:
 
 ## Done
 
+- THE WIRE ON PHONES, AND FASTER EVERYWHERE, Round 336 (desktop lane, 2026-08-29).
+  His pair of reports the same evening: "the ticker is moving really slow", then
+  the decisive one, "on the computer its fine but on mobile it isnt moving". The
+  mobile freeze was real and total: a touch tap synthesizes mouseenter at the
+  finger and never sends the matching mouseleave, so the hover pause parked the
+  wire forever after one brush of the strip, on every phone, since the hover pause
+  existed. The pause is pointer-gated now: only a real mouse pauses by hovering, a
+  finger never does, and the explicit pause button and keyboard focus pause both
+  stay. The slow half was design, not defect, measured live at exactly the Round
+  317 speed: 60 px/s is nearly a minute per pass on a 3000px slate, so the crawl
+  is doubled to 110 with the reading hold trimmed to 1500ms. playLiveTicker grew
+  section 9, a real touch context tapping the strip's one non-link element and
+  MEASURING the wire still moving, with a genuine mouse hover parking it as proof
+  the detector reads both states; sections 7 and 8 were re-derived for the
+  doubled speed (overflow-gated waits, a wrap-aware sampled motion read, both of
+  which the faster wire exposed as start-to-end reading artifacts). Full
+  playLiveTicker green with the dim control firing, simTicker and simPrerender
+  green, tsc zero, build green. ALSO SETTLED, same evening: his "this is out
+  dated" screenshot of the old March social banner in Google Images is Google's
+  5 month old cache, not the site; every live page serves the current generated
+  og-image (byte-compared live against the repo) and nothing shipped references
+  the old banner, so it corrects itself on Google's recrawl schedule and Bing's
+  was already pinged today.
+- THE FULL SUITE RUNS HERE, Round 334 (desktop lane, 2026-08-29). The portability
+  sweep, done in one pass instead of a week: a mechanical porter applied the Round
+  312 pattern (os.tmpdir, forward slashed ROOT interpolation, quoted esbuild,
+  pathToFileURL imports) to all 99 remaining harnesses in seconds, four straggler
+  shapes were hand fixed, every file syntax checked and import audited, and then
+  SIX parallel agents ran the whole 121 harness node suite and read every output,
+  under hard rules that they could fix path mechanics only and never touch an
+  assertion. Result: 117 green as ported, 4 more green after documented one line
+  path fixes (including simInventedNames, whose Windows backslash paths had been
+  silently emptying the name bank registration check on this machine), and ONE
+  genuine red that predates the port: simSilverwareSort has demanded team floors
+  for brownlow and dallym since Round 291 added them and nobody ran it; measured
+  live at 91 and 34 medallists (exactly Round 291's verified totals) and floored
+  at half per the harness's own convention, now green. The three longest sims
+  (opposition 14 min, press 9, invented quotes 16) ran solo and green. runAllSims
+  itself proven on Windows. The mobile pass also CLOSED this round: the full 390
+  playGames walk finished at 128 games, ZERO findings, 8 documented
+  harness-limit skips, and the 15 built-site fences re-ran green on a fresh
+  build made with the outDir-aware plugin. tsc zero.
 - THE REBUILD CORE LOOP, Round 333 (cloud lane, 2026-08-29). Phase two of his
   redesign, the owner's spec executed whole: spin for a position in a hidden
   seeded order, keep or sell the drawn man (selling final), three priced

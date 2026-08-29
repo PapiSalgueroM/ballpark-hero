@@ -15,23 +15,24 @@
  * Run: node scripts/simCalendar.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/cmCalEntry.mjs';
-const BUNDLE = '/tmp/cmCal.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'cmCalEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'cmCal.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const cal = await import('${ROOT}/src/components/club-manager/CalendarScreen.tsx');
-const cm = await import('${ROOT}/src/lib/clubManager.ts');
+const cal = await import('${ROOT.replaceAll('\\', '/')}/src/components/club-manager/CalendarScreen.tsx');
+const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const mods = { cal, cm };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --jsx=automatic`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --jsx=automatic`, { stdio: 'inherit' });
 
-const { cal, cm } = (await import(BUNDLE)).mods;
+const { cal, cm } = (await import(pathToFileURL(BUNDLE).href)).mods;
 const { dayOfWeek, daysInMonth, seasonKickoff, dateOfWeek, dateOfEntries } = cal;
 const { startCareer } = cm;
 

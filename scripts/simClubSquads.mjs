@@ -35,19 +35,20 @@
  * Run: node scripts/simClubSquads.mjs [careers]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = '/tmp/clubsquads-bundle.mjs';
-const ENTRY = '/tmp/clubsquads-entry.mjs';
+const OUT = path.join(os.tmpdir(), 'clubsquads-bundle.mjs');
+const ENTRY = path.join(os.tmpdir(), 'clubsquads-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const lib = await import('${ROOT}/src/lib/soccerClubSquad.ts');
-export const data = await import('${ROOT}/src/data/clubSquads.ts');
-export const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+export const lib = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerClubSquad.ts');
+export const data = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubSquads.ts');
+export const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',

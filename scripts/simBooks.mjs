@@ -37,26 +37,27 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/booksEntry.mjs';
-const BUNDLE = '/tmp/books.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'booksEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'books.bundle.mjs');
 
 /* The shim has to run BEFORE the module is evaluated, so the import is
    dynamic: a static `export * from` is hoisted above it and the engine's
    own module-level storage read blows up on node. */
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const engine = mod;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const cm = (await import(BUNDLE)).engine;
+const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
 const { startCareer, playNextEntry, finishSeason, startNextSeason, buildMarket, buyPlayer } = cm;
 
 let failures = 0;
@@ -207,18 +208,18 @@ console.log('3) The four front office leagues add up too');
      A GM league is a CLOSED world, which makes these checkable: every win
      is somebody's defeat, every man has exactly one employer, and nobody
      is rated 140 or paid a negative salary. */
-  const FO_ENTRY = '/tmp/booksFoEntry.mjs';
-  const FO_BUNDLE = '/tmp/booksFo.bundle.mjs';
+  const FO_ENTRY = path.join(os.tmpdir(), 'booksFoEntry.mjs');
+  const FO_BUNDLE = path.join(os.tmpdir(), 'booksFo.bundle.mjs');
   fs.writeFileSync(FO_ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
-const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
-const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
-const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
 export { nfl, mlb, nba, nhl };
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${FO_ENTRY} --bundle --format=esm --platform=node --outfile=${FO_BUNDLE} --log-level=error`, { stdio: 'inherit' });
-  const fo = await import(FO_BUNDLE);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${FO_ENTRY}" --bundle --format=esm --platform=node --outfile="${FO_BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+  const fo = await import(pathToFileURL(FO_BUNDLE).href);
 
   function auditGm(tag, lg) {
     const ids = [];

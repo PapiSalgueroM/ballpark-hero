@@ -43,13 +43,14 @@
  * Run: node scripts/simDaily.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/dailyHarnessEntry.mjs';
-const BUNDLE = '/tmp/dailyHarness.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'dailyHarnessEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'dailyHarness.bundle.mjs');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -72,20 +73,20 @@ const setDay = i => { fixedNow = START + i * DAY; };
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const du = await import('${ROOT}/src/lib/dateUtils.ts');
-const missingXi = await import('${ROOT}/src/lib/missingXi.ts');
-const missingFive = await import('${ROOT}/src/lib/missingFive.ts');
-const missingNine = await import('${ROOT}/src/lib/missingNine.ts');
-const missingEleven = await import('${ROOT}/src/lib/missingEleven.ts');
-const orderTheList = await import('${ROOT}/src/lib/orderTheList.ts');
-const rarityRound = await import('${ROOT}/src/lib/rarityRound.ts');
-const packBattle = await import('${ROOT}/src/lib/packBattle.ts');
-const signThePlayer = await import('${ROOT}/src/lib/signThePlayer.ts');
+const du = await import('${ROOT.replaceAll('\\', '/')}/src/lib/dateUtils.ts');
+const missingXi = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingXi.ts');
+const missingFive = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingFive.ts');
+const missingNine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingNine.ts');
+const missingEleven = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingEleven.ts');
+const orderTheList = await import('${ROOT.replaceAll('\\', '/')}/src/lib/orderTheList.ts');
+const rarityRound = await import('${ROOT.replaceAll('\\', '/')}/src/lib/rarityRound.ts');
+const packBattle = await import('${ROOT.replaceAll('\\', '/')}/src/lib/packBattle.ts');
+const signThePlayer = await import('${ROOT.replaceAll('\\', '/')}/src/lib/signThePlayer.ts');
 export { du, missingXi, missingFive, missingNine, missingEleven, orderTheList, rarityRound, packBattle, signThePlayer };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const mods = await import(BUNDLE);
+const mods = await import(pathToFileURL(BUNDLE).href);
 
 /* A stand in squad for the two games that take a pool from the network. */
 const POOL = Array.from({ length: 120 }, (_, i) => ({

@@ -23,16 +23,17 @@
  * Run: node scripts/simIdleArena.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/idleArenaEntry.mjs';
-const BUNDLE = '/tmp/idleArena.bundle.mjs';
-fs.writeFileSync(ENTRY, `export * from '${ROOT}/src/lib/idleArena.ts';`);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const A = await import(BUNDLE);
+const ENTRY = path.join(os.tmpdir(), 'idleArenaEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'idleArena.bundle.mjs');
+fs.writeFileSync(ENTRY, `export * from '${ROOT.replaceAll('\\', '/')}/src/lib/idleArena.ts';`);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const A = await import(pathToFileURL(BUNDLE).href);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };

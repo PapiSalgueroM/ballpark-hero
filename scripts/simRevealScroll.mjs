@@ -48,6 +48,7 @@
  * VERBOSE=1 prints every press including the quiet ones.
  */
 import pw from './lib/playwrightLoader.mjs';
+import os from 'node:os';
 const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -143,14 +144,14 @@ const INSETS = `(() => {
    this is a real career and not a mock, and the page boots straight into the
    screen the complaint is about. */
 function seedSoccerSave() {
-  const entry = '/tmp/revealScrollSeed.mjs';
-  const bundle = '/tmp/revealScrollSeed.bundle.mjs';
+  const entry = path.join(os.tmpdir(), 'revealScrollSeed.mjs');
+  const bundle = path.join(os.tmpdir(), 'revealScrollSeed.bundle.mjs');
   fs.writeFileSync(entry, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export { engine };
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${entry} --bundle --format=esm --platform=node --outfile=${bundle} --log-level=error`);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${entry}" --bundle --format=esm --platform=node --outfile="${bundle}" --log-level=error`);
   return bundle;
 }
 

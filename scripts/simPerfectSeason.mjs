@@ -33,13 +33,14 @@
  * Run: node scripts/simPerfectSeason.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/perfectseason-entry.mjs";
-const OUT = "/tmp/perfectseason.mjs";
+const ENTRY = path.join(os.tmpdir(), 'perfectseason-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'perfectseason.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = (() => {
@@ -53,11 +54,11 @@ globalThis.localStorage = (() => {
     _set: (k, v) => { store[k] = v; },
   };
 })();
-export const core = await import('${ROOT}/src/lib/perfectSeason.ts');
-export const nba = await import('${ROOT}/src/lib/perfectSeasonNba.ts');
-export const nfl = await import('${ROOT}/src/lib/perfectSeasonNfl.ts');
-export const nhl = await import('${ROOT}/src/lib/perfectSeasonNhl.ts');
-export const mlb = await import('${ROOT}/src/lib/perfectSeasonMlb.ts');
+export const core = await import('${ROOT.replaceAll('\\', '/')}/src/lib/perfectSeason.ts');
+export const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/perfectSeasonNba.ts');
+export const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/perfectSeasonNfl.ts');
+export const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/perfectSeasonNhl.ts');
+export const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/perfectSeasonMlb.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

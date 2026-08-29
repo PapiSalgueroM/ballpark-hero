@@ -211,25 +211,29 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
   await p4.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
   await p4.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await p4.waitForFunction(sel => !!document.querySelector(sel), BAR, { timeout: 20000 }).catch(() => {});
-  /* soccer (1 card) opens first and fits; wait for the fat MLB box */
-  await p4.waitForFunction(sel => /Home Club/.test(document.querySelector(sel)?.innerText || ''), BAR, { timeout: 25000 }).catch(() => {});
+  /* soccer (1 card) opens first and fits; wait for the box that actually
+     OVERFLOWS to be the open one. Round 336 doubled the crawl, so a text
+     wait plus two long windows could watch the fat box glide clean past its
+     end and hand off mid-measurement, reading the next box's parked zero. */
+  await p4.waitForFunction(sel => {
+    const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+    return !!vp && vp.scrollWidth - vp.clientWidth > 200;
+  }, BAR, { timeout: 30000 }).catch(() => {});
   const glide = await p4.evaluate(async (sel) => {
     const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
     if (!vp) return null;
-    const s0 = vp.scrollLeft;
-    await new Promise(r => setTimeout(r, 4000));
-    const s1 = vp.scrollLeft;
-    await new Promise(r => setTimeout(r, 4000));
-    const s2 = vp.scrollLeft;
-    /* measured at the end, because the box opens through a 500ms max-width
-       transition and an early read sees no overflow yet */
     const overflow = vp.scrollWidth - vp.clientWidth;
+    const s0 = vp.scrollLeft;
+    await new Promise(r => setTimeout(r, 2000));
+    const s1 = vp.scrollLeft;
+    await new Promise(r => setTimeout(r, 2000));
+    const s2 = vp.scrollLeft;
     return { overflow, s0, s1, s2 };
   }, BAR);
   say(!!glide, 'the fat box and its viewport were found');
   if (glide) {
     say(glide.overflow > 200, `the slate genuinely overflows the screen (${glide.overflow}px hidden)`);
-    say(glide.s2 > glide.s0 + 100, `the wire is MOVING: scroll ${glide.s0.toFixed(0)} to ${glide.s1.toFixed(0)} to ${glide.s2.toFixed(0)}px across 8s`);
+    say(glide.s2 > glide.s0 + 100, `the wire is MOVING: scroll ${glide.s0.toFixed(0)} to ${glide.s1.toFixed(0)} to ${glide.s2.toFixed(0)}px across 4s`);
   }
 
   console.log('8) clicking pause stops the wire, clicking resume RESUMES it');
@@ -249,16 +253,77 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     await pauseBtn.click();
     /* move the pointer OFF the strip, as a person does, then measure */
     await p4.mouse.move(700, 500);
+    /* Round 336 doubled the crawl, so a start-to-end read can straddle the
+       wrap (the wire reaches the end and restarts at zero, which read as
+       "went backwards, not moving"). Sampled instead: a parked wire reads
+       identical at every sample, a gliding one shows a real step somewhere,
+       and the wrap itself is the biggest step of all. */
     const resumed = await p4.evaluate(async (sel) => {
       const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
-      const s0 = vp.scrollLeft;
-      await new Promise(r => setTimeout(r, 3500));
-      return { s0, s1: vp.scrollLeft, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
+      const seen = [vp.scrollLeft];
+      for (let i = 0; i < 8; i++) { await new Promise(r => setTimeout(r, 450)); seen.push(vp.scrollLeft); }
+      let biggestStep = 0;
+      for (let i = 1; i < seen.length; i++) biggestStep = Math.max(biggestStep, Math.abs(seen[i] - seen[i - 1]));
+      return { seen: seen.map(x => Math.round(x)), biggestStep, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
     }, BAR);
     say(!resumed.focusInStrip, 'the resume click left no sticky focus inside the strip');
-    say(resumed.s1 > resumed.s0 + 50, `resume actually resumes (${resumed.s0.toFixed(0)} to ${resumed.s1.toFixed(0)}px over 3.5s)`);
+    say(resumed.biggestStep > 50, `resume actually resumes (path ${resumed.seen.join(' > ')}, biggest step ${resumed.biggestStep.toFixed(0)}px)`);
   }
   await c4.close();
+
+  console.log('9) on a PHONE, touching the strip never parks the wire');
+  {
+    /* Round 336, his report "on the computer its fine but on mobile it isnt
+       moving": a touch tap synthesizes mouseenter at the finger and never
+       sends the matching mouseleave, so the old hover pause froze the wire
+       forever after one brush. The hover pause is pointer-gated to real
+       mice now. Both halves are asserted with the same measurement: a tap
+       must leave the wire moving, and a synthetic MOUSE pointerenter must
+       still park it, which doubles as proof this section's motion detector
+       can actually read a parked wire. */
+    const c5 = await browser.newContext({
+      viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true,
+      timezoneId: 'America/New_York',
+    });
+    const p5 = await c5.newPage();
+    await p5.route('**://*.supabase.co/**', r => r.abort());
+    await p5.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fat) }));
+    await p5.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
+    await p5.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await p5.waitForFunction(sel => {
+      const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+      return !!vp && vp.scrollWidth - vp.clientWidth > 100;
+    }, BAR, { timeout: 30000 }).catch(() => {});
+    /* the brush that froze every phone. The tap lands on the LIVE chip, the
+       one part of the strip that is not a link, because every score card
+       navigates to its hub and a navigated harness measures nothing. */
+    await p5.tap(`${BAR} [data-live-chip]`).catch(() => {});
+    const afterTap = await p5.evaluate(async (sel) => {
+      const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+      if (!vp) return null;
+      const s0 = vp.scrollLeft;
+      await new Promise(r => setTimeout(r, 4000));
+      return { s0, s1: vp.scrollLeft };
+    }, BAR);
+    say(!!afterTap, 'the strip and its viewport were found on the phone');
+    if (afterTap) {
+      say(afterTap.s1 > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.s1.toFixed(0)}px over 4s)`);
+    }
+    /* Playwright's page.mouse sends true mouse-pointer input even in a touch
+       context, which is exactly the discrimination being tested. */
+    const box = await p5.locator(BAR).boundingBox();
+    await p5.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await p5.waitForTimeout(600);
+    const mouseParked = await p5.evaluate(async (sel) => {
+      const strip = document.querySelector(sel);
+      const vp = strip.querySelector('[aria-live="off"]') || strip.querySelector('.flex-1.overflow-hidden');
+      const s0 = vp.scrollLeft;
+      await new Promise(r => setTimeout(r, 2500));
+      return { s0, s1: vp.scrollLeft };
+    }, BAR);
+    say(Math.abs(mouseParked.s1 - mouseParked.s0) < 2, `a real mouse hover still parks it, so the detector reads both states (${mouseParked.s0.toFixed(0)} to ${mouseParked.s1.toFixed(0)}px over 2.5s)`);
+    await c5.close();
+  }
 }
 
 await browser.close();

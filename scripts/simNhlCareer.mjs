@@ -6,11 +6,13 @@
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
+import path from 'node:path';
 import { build } from 'esbuild';
 import { unlinkSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-const OUT = '/tmp/nhl-engine.mjs';
+const OUT = path.join(os.tmpdir(), 'nhl-engine.mjs');
 await build({
   entryPoints: ['src/lib/nhlMyCareer.ts'],
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,

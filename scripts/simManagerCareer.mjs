@@ -6,17 +6,18 @@
  * Run: node scripts/simManagerCareer.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-fs.writeFileSync('/tmp/mcEntry.mjs', `
+fs.writeFileSync(path.join(os.tmpdir(), 'mcEntry.mjs'), `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const e = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
-export const cm = await import('${ROOT}/src/lib/clubManager.ts');
+export const e = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+export const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild /tmp/mcEntry.mjs --bundle --format=esm --platform=node --outfile=/tmp/mc.mjs --log-level=error`, { stdio:'inherit' });
-const { e, cm } = await import('/tmp/mc.mjs');
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${path.join(os.tmpdir(), 'mcEntry.mjs')}" --bundle --format=esm --platform=node --outfile="${path.join(os.tmpdir(), 'mc.mjs')}" --log-level=error`, { stdio:'inherit' });
+const { e, cm } = await import(pathToFileURL(path.join(os.tmpdir(), 'mc.mjs')).href);
 let failures = 0; const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
 
 const CLUBS = cm.REAL_LEAGUES.flatMap(l => cm.playableClubs(l.id).map(c => ({ name:c.name, tier:c.tier })));

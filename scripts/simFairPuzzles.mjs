@@ -38,28 +38,29 @@
  * Run: node scripts/simFairPuzzles.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/connHarnessEntry.mjs';
-const BUNDLE = '/tmp/connHarness.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'connHarnessEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'connHarness.bundle.mjs');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const soccer = await import('${ROOT}/src/data/connectionsPuzzles.ts');
-const baseball = await import('${ROOT}/src/data/baseballConnectionsPuzzles.ts');
-const nba = await import('${ROOT}/src/data/nbaConnectionsPuzzles.ts');
-const nfl = await import('${ROOT}/src/data/nflConnectionsPuzzles.ts');
-const nhl = await import('${ROOT}/src/data/nhlConnectionsPuzzles.ts');
+const soccer = await import('${ROOT.replaceAll('\\', '/')}/src/data/connectionsPuzzles.ts');
+const baseball = await import('${ROOT.replaceAll('\\', '/')}/src/data/baseballConnectionsPuzzles.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/data/nbaConnectionsPuzzles.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/data/nflConnectionsPuzzles.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/data/nhlConnectionsPuzzles.ts');
 export { soccer, baseball, nba, nfl, nhl };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const mods = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const mods = await import(pathToFileURL(BUNDLE).href);
 
 /**
  * The pool floors, measured 2026-08-20.
@@ -158,19 +159,19 @@ console.log('3) A ranking round has one right order');
 {
   /* Two men on the same number means two orders are both correct and the
      game marks one of them wrong. */
-  const RANK_ENTRY = '/tmp/rankEntry.mjs';
-  const RANK_BUNDLE = '/tmp/rank.bundle.mjs';
+  const RANK_ENTRY = path.join(os.tmpdir(), 'rankEntry.mjs');
+  const RANK_BUNDLE = path.join(os.tmpdir(), 'rank.bundle.mjs');
   fs.writeFileSync(RANK_ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const otl = await import('${ROOT}/src/lib/orderTheList.ts');
-const mx = await import('${ROOT}/src/lib/missingXi.ts');
-const m5 = await import('${ROOT}/src/lib/missingFive.ts');
-const m9 = await import('${ROOT}/src/lib/missingNine.ts');
-const m11 = await import('${ROOT}/src/lib/missingEleven.ts');
+const otl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/orderTheList.ts');
+const mx = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingXi.ts');
+const m5 = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingFive.ts');
+const m9 = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingNine.ts');
+const m11 = await import('${ROOT.replaceAll('\\', '/')}/src/lib/missingEleven.ts');
 export { otl, mx, m5, m9, m11 };
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${RANK_ENTRY} --bundle --format=esm --platform=node --outfile=${RANK_BUNDLE} --log-level=error`, { stdio: 'inherit' });
-  const g = await import(RANK_BUNDLE);
+  execSync(`"${ROOT}/node_modules/.bin/esbuild" "${RANK_ENTRY}" --bundle --format=esm --platform=node --outfile="${RANK_BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+  const g = await import(pathToFileURL(RANK_BUNDLE).href);
 
   const rounds = Object.values(g.otl).find(v => Array.isArray(v) && v[0]?.items);
   if (!rounds) fail('the ranking rounds are not where this harness looks for them');

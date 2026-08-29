@@ -36,13 +36,14 @@
  * Run: node scripts/simSoccerCurrency.mjs [careers]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = '/tmp/currency-bundle.mjs';
-const ENTRY = '/tmp/currency-entry.mjs';
+const OUT = path.join(os.tmpdir(), 'currency-bundle.mjs');
+const ENTRY = path.join(os.tmpdir(), 'currency-entry.mjs');
 
 /* the harness drives the real engine, so it needs the same localStorage stub
    the other career harnesses use, and it needs to be able to CHANGE it */
@@ -55,13 +56,13 @@ globalThis.localStorage = {
 };
 /* dynamic, not static: esbuild hoists a static import above the stub above
    and the engine reads localStorage at module scope, which threw. */
-export const cur = await import('${ROOT}/src/lib/soccerCurrency.ts');
-export const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+export const cur = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCurrency.ts');
+export const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const catalogs = {
-  corruption: await import('${ROOT}/src/lib/soccerCareerCorruption.ts'),
-  realism: await import('${ROOT}/src/lib/soccerCareerRealism.ts'),
-  realismA: await import('${ROOT}/src/lib/soccerCareerRealismA.ts'),
-  realismB: await import('${ROOT}/src/lib/soccerCareerRealismB.ts'),
+  corruption: await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerCorruption.ts'),
+  realism: await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerRealism.ts'),
+  realismA: await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerRealismA.ts'),
+  realismB: await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerRealismB.ts'),
 };
 `);
 await build({

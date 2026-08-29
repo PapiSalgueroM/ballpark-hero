@@ -17,21 +17,22 @@
  * Run: node scripts/simNationalities.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/natEntry.mjs';
-const BUNDLE = '/tmp/nat.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'natEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'nat.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { NATIONALITY_BY_WORLD, nationalityOf } from '${ROOT}/src/data/playerNationalities.ts';
-export { FLAG_CODES } from '${ROOT}/src/components/FlagImg.tsx';
+export { NATIONALITY_BY_WORLD, nationalityOf } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { FLAG_CODES } from '${ROOT.replaceAll('\\', '/')}/src/components/FlagImg.tsx';
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --loader:.tsx=tsx --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { NATIONALITY_BY_WORLD, nationalityOf, FLAG_CODES } = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --loader:.tsx=tsx --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { NATIONALITY_BY_WORLD, nationalityOf, FLAG_CODES } = await import(pathToFileURL(BUNDLE).href);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };

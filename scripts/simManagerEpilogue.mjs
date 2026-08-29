@@ -28,19 +28,20 @@
  * Run: node scripts/simManagerEpilogue.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/managerep-entry.mjs";
-const OUT = "/tmp/managerep.mjs";
+const ENTRY = path.join(os.tmpdir(), 'managerep-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'managerep.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 /* dynamic import, never a static one: static imports hoist above the stub
    line and the engine touches storage at module scope */
-export const eng = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+export const eng = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

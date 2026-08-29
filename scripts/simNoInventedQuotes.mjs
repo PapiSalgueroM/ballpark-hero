@@ -51,30 +51,31 @@
  * Run: node scripts/simNoInventedQuotes.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/quotesEntry.mjs';
-const BUNDLE = '/tmp/quotes.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'quotesEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'quotes.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
-const rosters = await import('${ROOT}/src/data/clubManagerRosters.ts');
-const era2010 = await import('${ROOT}/src/data/clubManagerEra2010.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const rosters = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
+const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 export const cm = mod;
 // Round 146: the 2010 era ships real people too, so its 802 names join the
 // never-quote set through the same {"n":"..."} harvest below.
 export const rs = { modern: rosters, era2010 };
 `);
 execSync(
-  `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
+  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { cm, rs } = await import(BUNDLE);
+const { cm, rs } = await import(pathToFileURL(BUNDLE).href);
 const { startCareer, playNextEntry, answerMessage, autoPickXI, FORMATIONS, ensureRoles } = cm;
 
 let failures = 0;

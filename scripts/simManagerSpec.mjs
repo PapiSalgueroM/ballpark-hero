@@ -27,31 +27,32 @@
    Run: node scripts/simManagerSpec.mjs
 */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_MANAGER_CONTROL === 'unguard';
 
-const ENTRY = '/tmp/managerSpec.entry.mjs';
-const BUNDLE = '/tmp/managerSpec.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'managerSpec.entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'managerSpec.bundle.mjs');
 let cmPath = `${ROOT}/src/lib/clubManager.ts`;
 if (CONTROL) {
   const src = fs.readFileSync(cmPath, 'utf8');
   const needle = 'if (realPersonNamesFolded().has(foldClubName(trimmed))) {';
   if (!src.includes(needle)) { console.error('control run: the guard line to sever is not in the source, refusing to run a dead control'); process.exit(1); }
-  cmPath = '/tmp/clubManager.control.ts';
+  cmPath = path.join(os.tmpdir(), 'clubManager.control.ts');
   fs.writeFileSync(cmPath, src.replace(needle, 'if (false) {'));
 }
 fs.writeFileSync(ENTRY, `
-export * as cm from '${cmPath}';
-export { CM_ROSTERS } from '${ROOT}/src/data/clubManagerRosters.ts';
-export { players as POOL } from '${ROOT}/src/data/players.ts';
+export * as cm from '${cmPath.replaceAll('\\', '/')}';
+export { CM_ROSTERS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts';
+export { players as POOL } from '${ROOT.replaceAll('\\', '/')}/src/data/players.ts';
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
 /* Stub in THIS process, before the import: a stub inside the entry hoists
    below the imports and the module scope reads localStorage first. */
 const store = new Map();
@@ -61,7 +62,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, CM_ROSTERS, POOL } = await import(BUNDLE);
+const { cm, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
 
 console.log('1) the name gate holds');
 {

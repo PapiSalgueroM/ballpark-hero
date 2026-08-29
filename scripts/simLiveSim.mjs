@@ -18,22 +18,23 @@
  * Run: node scripts/simLiveSim.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/cmLiveEntry.mjs';
-const BUNDLE = '/tmp/cmLive.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'cmLiveEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'cmLive.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const engine = mod;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const cm = (await import(BUNDLE)).engine;
+const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
 const { startCareer, playNextEntry, resumeMatch } = cm;
 
 let failures = 0;

@@ -28,18 +28,19 @@
  * Run: node scripts/simLoanSpell.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = "/tmp/loan-engine.mjs";
-const ENTRY = "/tmp/loan-engine-entry.mjs";
+const OUT = path.join(os.tmpdir(), 'loan-engine.mjs');
+const ENTRY = path.join(os.tmpdir(), 'loan-engine-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const engine = mod;
 `);
 await build({

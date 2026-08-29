@@ -19,22 +19,23 @@
  * Run: node scripts/simHalftime.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/htEntry.mjs';
-const BUNDLE = '/tmp/ht.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'htEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'ht.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const cm = mod;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { cm } = await import(BUNDLE);
+const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, resumeMatch, finishSeason, startNextSeason,
   makeHalftimeSub, setHalftimeMentality, benchForHalftime, tiringAtHalftime,

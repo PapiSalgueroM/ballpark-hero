@@ -32,24 +32,25 @@
  * Run: node scripts/simSponsors.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/sponsorEntry.mjs';
-const BUNDLE = '/tmp/sponsor.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'sponsorEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'sponsor.bundle.mjs');
 
 /* The stub has to be in place BEFORE the module body runs, so the import is
    dynamic and sits after the assignment. The static form hoists and the
    engine's supabase client reaches for localStorage on load. */
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const engine = mod;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { engine: CM } = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { engine: CM } = await import(pathToFileURL(BUNDLE).href);
 const { sponsorOffers, signSponsor, sponsorBonusEarned, startCareer, startNextSeason } = CM;
 
 let failures = 0;

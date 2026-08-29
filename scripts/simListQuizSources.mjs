@@ -46,18 +46,19 @@
  * Run: node scripts/simListQuizSources.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/listquiz-entry.mjs";
-const OUT = "/tmp/listquiz.mjs";
+const ENTRY = path.join(os.tmpdir(), 'listquiz-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'listquiz.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const lq = await import('${ROOT}/src/lib/listQuiz.ts');
-export const client = await import('${ROOT}/src/integrations/supabase/client.ts');
+export const lq = await import('${ROOT.replaceAll('\\', '/')}/src/lib/listQuiz.ts');
+export const client = await import('${ROOT.replaceAll('\\', '/')}/src/integrations/supabase/client.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

@@ -27,26 +27,27 @@
  * Run: node scripts/simSeasonReveal.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/seasonRevealEntry.mjs';
-const BUNDLE = '/tmp/seasonReveal.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'seasonRevealEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'seasonReveal.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const nfl = await import('${ROOT}/src/lib/nflMyCareer.ts');
-const nba = await import('${ROOT}/src/lib/nbaMyCareer.ts');
-const nhl = await import('${ROOT}/src/lib/nhlMyCareer.ts');
-const mlb = await import('${ROOT}/src/lib/mlbMyCareer.ts');
-const reveal = await import('${ROOT}/src/lib/usCareerReveal.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nflMyCareer.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaMyCareer.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlMyCareer.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbMyCareer.ts');
+const reveal = await import('${ROOT.replaceAll('\\', '/')}/src/lib/usCareerReveal.ts');
 export { nfl, nba, nhl, mlb, reveal };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { nfl, nba, nhl, mlb, reveal } = await import(BUNDLE);
+const { nfl, nba, nhl, mlb, reveal } = await import(pathToFileURL(BUNDLE).href);
 const { buildSeasonReveal, toneOfLine, stageVerdict } = reveal;
 
 let failures = 0;

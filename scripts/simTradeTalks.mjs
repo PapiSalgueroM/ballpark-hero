@@ -32,26 +32,27 @@
  * Run: node scripts/simTradeTalks.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/tradeTalksEntry.mjs';
-const BUNDLE = '/tmp/tradeTalks.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'tradeTalksEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'tradeTalks.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const talks = await import('${ROOT}/src/lib/foTradeTalks.ts');
-const nfl = await import('${ROOT}/src/lib/frontOffice.ts');
-const nba = await import('${ROOT}/src/lib/nbaFrontOffice.ts');
-const nhl = await import('${ROOT}/src/lib/nhlFrontOffice.ts');
-const mlb = await import('${ROOT}/src/lib/mlbFrontOffice.ts');
+const talks = await import('${ROOT.replaceAll('\\', '/')}/src/lib/foTradeTalks.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
 export { talks, nfl, nba, nhl, mlb };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { talks, nfl, nba, nhl, mlb } = await import(BUNDLE);
+const { talks, nfl, nba, nhl, mlb } = await import(pathToFileURL(BUNDLE).href);
 const { openTalks, standFirm, standFirmOdds, FIRM_PREMIUM, SOUR_PREMIUM,
   STAND_FIRM_BASE, STAND_FIRM_THIN_COVER, STAND_FIRM_YOUTH, STAND_FIRM_MIN, STAND_FIRM_MAX } = talks;
 

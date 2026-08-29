@@ -29,27 +29,28 @@
  * Run: node scripts/simStadiumTycoon.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/tycoonEntry.mjs';
-const BUNDLE = '/tmp/tycoon.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'tycoonEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'tycoon.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/stadiumTycoon.ts');
-const cm = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/stadiumTycoon.ts');
+const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const T = mod;
 export const CM_WORLD = { real: cm.REAL_LEAGUES, eras: cm.ERA_LEAGUES };
 `);
 execSync(
-  `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
+  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { T, CM_WORLD } = await import(BUNDLE);
+const { T, CM_WORLD } = await import(pathToFileURL(BUNDLE).href);
 const {
   TRACKS, newTycoon, tick, buy, tap, costOf, canBuy, incomePerSec,
   prestige, canPrestige, prestigeThreshold, offlineEarnings,

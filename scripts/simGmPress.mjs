@@ -17,23 +17,24 @@
  * Run: node scripts/simGmPress.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/gmPressEntry.mjs';
-const BUNDLE = '/tmp/gmPress.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'gmPressEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'gmPress.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const press = await import('${ROOT}/src/lib/foGmPress.ts');
-const owner = await import('${ROOT}/src/lib/foOwnerMandate.ts');
+const press = await import('${ROOT.replaceAll('\\', '/')}/src/lib/foGmPress.ts');
+const owner = await import('${ROOT.replaceAll('\\', '/')}/src/lib/foOwnerMandate.ts');
 export { press, owner };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { press, owner } = await import(BUNDLE);
+const { press, owner } = await import(pathToFileURL(BUNDLE).href);
 const { buildGmPresser, applyGmPressChoice } = press;
 const { buildOwnerMandate, tiltTier } = owner;
 

@@ -33,24 +33,25 @@
  * Run: node scripts/simAwards.mjs [careersPerPosition]
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/simAwardsEntry.mjs';
-const OUT = '/tmp/simAwards.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'simAwardsEntry.mjs');
+const OUT = path.join(os.tmpdir(), 'simAwards.bundle.mjs');
 
 /* Two stage entry with a localStorage stub, the same shape simUsCoaching.mjs
    uses. The engines pull in life event modules that touch storage at import
    time, so bundling them straight from src explodes without it. */
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const nfl = await import('${ROOT}/src/lib/nflMyCareer.ts');
-export const nba = await import('${ROOT}/src/lib/nbaMyCareer.ts');
-export const mlb = await import('${ROOT}/src/lib/mlbMyCareer.ts');
-export const nhl = await import('${ROOT}/src/lib/nhlMyCareer.ts');
-export const awards = await import('${ROOT}/src/lib/careerAwards.ts');
+export const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nflMyCareer.ts');
+export const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaMyCareer.ts');
+export const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbMyCareer.ts');
+export const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlMyCareer.ts');
+export const awards = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerAwards.ts');
 `);
 
 await build({

@@ -32,24 +32,25 @@
    flipped roughly one board in a dozen (27 against 28 on the night it was
    caught), which is the exact coin toss the seeding sweep exists to end. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/nationEntry.mjs';
-const BUNDLE = '/tmp/nation.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'nationEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'nation.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
-const intl = await import('${ROOT}/src/lib/soccerInternational.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const intl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
 export const engine = mod;
 export const international = intl;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { engine: CM, international: INTL } = await import(BUNDLE);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { engine: CM, international: INTL } = await import(pathToFileURL(BUNDLE).href);
 const { startCareer, nationStanding, nationOfferFor, takeNationJob, leaveNationJob, nationLift, startNextSeason } = CM;
 const { runManagerSummer, nationStrength, NATION_CONFED } = INTL;
 

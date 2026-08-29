@@ -30,18 +30,19 @@
  * Run: node scripts/simSilverwareSort.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/silverware-entry.mjs";
-const OUT = "/tmp/silverware.mjs";
+const ENTRY = path.join(os.tmpdir(), 'silverware-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'silverware.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const lib = await import('${ROOT}/src/lib/silverwareSort.ts');
-export const hookmod = await import('${ROOT}/src/hooks/useSilverwareSort.ts');
+export const lib = await import('${ROOT.replaceAll('\\', '/')}/src/lib/silverwareSort.ts');
+export const hookmod = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useSilverwareSort.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",
@@ -81,8 +82,12 @@ console.log(`   ${hostile.length} hostile shapes rejected, the real shape loads`
 /* ---------------------------------- 1: live pools and the eligible set */
 console.log("1) live pools, the eligible set, and the famous counts");
 /* floors ~half of measured 2026-08-21: sb 23 teams, nba 25, ws 32,
-   cup 30, wnba 12, cfb 22, cbb 37, epl 24, afl 18, nrl 20 */
-const TEAM_FLOORS = { sb: 11, nba: 12, ws: 16, cup: 15, wnba: 6, cfb: 11, cbb: 18, epl: 12, afl: 9, nrl: 10 };
+   cup 30, wnba 12, cfb 22, cbb 37, epl 24, afl 18, nrl 20.
+   Round 334: brownlow and dallym joined the game in Round 291 and never got
+   floors, so this harness has demanded them ever since; measured 2026-08-29
+   at 91 and 34 medallists (the exact totals Round 291 verified), floored at
+   half like every other row. These two count PEOPLE, not clubs. */
+const TEAM_FLOORS = { sb: 11, nba: 12, ws: 16, cup: 15, wnba: 6, cfb: 11, cbb: 18, epl: 12, afl: 9, nrl: 10, brownlow: 45, dallym: 17 };
 const ELIGIBLE = ["sb", "nba", "ws", "cup", "cfb", "cbb", "epl", "afl", "nrl"];
 /* the independent truth for count derivation: knowledge-verified pins,
    most already guarded by the Name Them All ratchets */

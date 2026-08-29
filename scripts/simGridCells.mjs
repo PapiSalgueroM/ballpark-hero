@@ -31,19 +31,20 @@
  * Run: node scripts/simGridCells.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = "/tmp/gridcells.mjs";
-const ENTRY = "/tmp/gridcells-entry.mjs";
+const OUT = path.join(os.tmpdir(), 'gridcells.mjs');
+const ENTRY = path.join(os.tmpdir(), 'gridcells-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const nba = await import('${ROOT}/src/lib/nbaGrid.ts');
-export const nhl = await import('${ROOT}/src/lib/hockeyGrid.ts');
-export const mlb = await import('${ROOT}/src/lib/mlbGrid.ts');
+export const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaGrid.ts');
+export const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/hockeyGrid.ts');
+export const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbGrid.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

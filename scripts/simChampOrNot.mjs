@@ -31,19 +31,20 @@
  * Run: node scripts/simChampOrNot.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/champornot-entry.mjs";
-const OUT = "/tmp/champornot.mjs";
+const ENTRY = path.join(os.tmpdir(), 'champornot-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'champornot.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const lib = await import('${ROOT}/src/lib/champOrNot.ts');
-export const hookmod = await import('${ROOT}/src/hooks/useChampOrNot.ts');
-export const beatlib = await import('${ROOT}/src/lib/whodTheyBeat.ts');
+export const lib = await import('${ROOT.replaceAll('\\', '/')}/src/lib/champOrNot.ts');
+export const hookmod = await import('${ROOT.replaceAll('\\', '/')}/src/hooks/useChampOrNot.ts');
+export const beatlib = await import('${ROOT.replaceAll('\\', '/')}/src/lib/whodTheyBeat.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

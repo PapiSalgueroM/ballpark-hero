@@ -24,26 +24,27 @@
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import os from 'node:os';
 import { build } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/usCoachCareerEntry.mjs';
-const OUT = '/tmp/usCoachCareer.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'usCoachCareerEntry.mjs');
+const OUT = path.join(os.tmpdir(), 'usCoachCareer.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const wire = await import('${ROOT}/src/lib/usCoachCareer.ts');
-export const coach = await import('${ROOT}/src/lib/usCareerToCoach.ts');
-export const nfl = await import('${ROOT}/src/lib/nflMyCareer.ts');
-export const nba = await import('${ROOT}/src/lib/nbaMyCareer.ts');
-export const mlb = await import('${ROOT}/src/lib/mlbMyCareer.ts');
-export const nhl = await import('${ROOT}/src/lib/nhlMyCareer.ts');
-export const dNba = await import('${ROOT}/src/data/conquestDataNba.ts');
-export const dMlb = await import('${ROOT}/src/data/conquestDataMlb.ts');
-export const dNhl = await import('${ROOT}/src/data/conquestDataNhl.ts');
+export const wire = await import('${ROOT.replaceAll('\\', '/')}/src/lib/usCoachCareer.ts');
+export const coach = await import('${ROOT.replaceAll('\\', '/')}/src/lib/usCareerToCoach.ts');
+export const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nflMyCareer.ts');
+export const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaMyCareer.ts');
+export const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbMyCareer.ts');
+export const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlMyCareer.ts');
+export const dNba = await import('${ROOT.replaceAll('\\', '/')}/src/data/conquestDataNba.ts');
+export const dMlb = await import('${ROOT.replaceAll('\\', '/')}/src/data/conquestDataMlb.ts');
+export const dNhl = await import('${ROOT.replaceAll('\\', '/')}/src/data/conquestDataNhl.ts');
 `);
 
 await build({

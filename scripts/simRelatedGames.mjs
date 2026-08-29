@@ -18,22 +18,23 @@
  * Run: node scripts/simRelatedGames.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/relatedGamesEntry.mjs';
-const BUNDLE = '/tmp/relatedGames.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'relatedGamesEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'relatedGames.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
-const reg = await import('${ROOT}/src/data/gameRegistry.ts');
-const rel = await import('${ROOT}/src/lib/relatedGames.ts');
+const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
+const rel = await import('${ROOT.replaceAll('\\', '/')}/src/lib/relatedGames.ts');
 export { reg, rel };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { reg, rel } = await import(BUNDLE);
+const { reg, rel } = await import(pathToFileURL(BUNDLE).href);
 const { ALL_GAMES, CATEGORIES } = reg;
 const { relatedGamesFor } = rel;
 

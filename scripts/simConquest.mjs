@@ -9,23 +9,24 @@
  * Run: node scripts/simConquest.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/cqEntry.mjs';
-const BUNDLE = '/tmp/cq.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'cqEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'cq.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const imp = await import('${ROOT}/src/lib/imperialism.ts');
-const mom = await import('${ROOT}/src/lib/conquestMomentum.ts');
+const imp = await import('${ROOT.replaceAll('\\', '/')}/src/lib/imperialism.ts');
+const mom = await import('${ROOT.replaceAll('\\', '/')}/src/lib/conquestMomentum.ts');
 export { imp, mom };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { imp, mom } = await import(BUNDLE);
+const { imp, mom } = await import(pathToFileURL(BUNDLE).href);
 const { seedEmpires, randomPairings, resolveGame, empireCounts, landlessTeams, statesOf, emptyRecords, applyRecords, homeWinProb, REGULAR_WEEKS } = imp;
 const { momentumAdjust, applyMomentum, MAX_SWING } = mom;
 

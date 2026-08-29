@@ -34,18 +34,19 @@
  * Run: node scripts/simNationalPools.mjs
  */
 import { build } from 'esbuild';
+import os from 'node:os';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = '/tmp/pools-bundle.mjs';
-const ENTRY = '/tmp/pools-entry.mjs';
+const OUT = path.join(os.tmpdir(), 'pools-bundle.mjs');
+const ENTRY = path.join(os.tmpdir(), 'pools-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const intl = await import('${ROOT}/src/lib/soccerInternational.ts');
-export const pools = await import('${ROOT}/src/data/nationalPools.ts');
+export const intl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
+export const pools = await import('${ROOT.replaceAll('\\', '/')}/src/data/nationalPools.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',

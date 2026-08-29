@@ -26,16 +26,17 @@
  * Run: node scripts/simAflHL.mjs
  */
 import { writeFileSync } from "node:fs";
+import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/aflhl-entry.mjs";
-const OUT = "/tmp/aflhl.mjs";
+const ENTRY = path.join(os.tmpdir(), 'aflhl-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'aflhl.mjs');
 
 writeFileSync(ENTRY, `
-export { aflGoalKickers } from '${ROOT}/src/data/aflGoalKickers.ts';
+export { aflGoalKickers } from '${ROOT.replaceAll('\\', '/')}/src/data/aflGoalKickers.ts';
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",

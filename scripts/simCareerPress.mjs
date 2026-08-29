@@ -18,26 +18,27 @@
  * Run: node scripts/simCareerPress.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/careerPressEntry.mjs';
-const BUNDLE = '/tmp/careerPress.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'careerPressEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'careerPress.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const nfl = await import('${ROOT}/src/lib/nflMyCareer.ts');
-const nba = await import('${ROOT}/src/lib/nbaMyCareer.ts');
-const nhl = await import('${ROOT}/src/lib/nhlMyCareer.ts');
-const mlb = await import('${ROOT}/src/lib/mlbMyCareer.ts');
-const press = await import('${ROOT}/src/lib/usCareerPress.ts');
+const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nflMyCareer.ts');
+const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaMyCareer.ts');
+const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlMyCareer.ts');
+const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbMyCareer.ts');
+const press = await import('${ROOT.replaceAll('\\', '/')}/src/lib/usCareerPress.ts');
 export { nfl, nba, nhl, mlb, press };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { nfl, nba, nhl, mlb, press } = await import(BUNDLE);
+const { nfl, nba, nhl, mlb, press } = await import(pathToFileURL(BUNDLE).href);
 const { buildPressMoment, applyPressChoice, pressFactsFrom, PRESS_WORDS } = press;
 
 let failures = 0;

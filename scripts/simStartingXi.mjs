@@ -28,26 +28,27 @@
  * Run: node scripts/simStartingXi.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/xiEntry.mjs';
-const BUNDLE = '/tmp/xi.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'xiEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'xi.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { pickSquad, xiMen, NATION_CONFED } from '${ROOT}/src/lib/soccerInternational.ts';
-export { allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor } from '${ROOT}/src/lib/intlNames.ts';
-export { NATIONALITY_BY_WORLD } from '${ROOT}/src/data/playerNationalities.ts';
+export { pickSquad, xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export { allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const {
   pickSquad, xiMen, NATION_CONFED,
   allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor,
   NATIONALITY_BY_WORLD,
-} = await import(BUNDLE);
+} = await import(pathToFileURL(BUNDLE).href);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };

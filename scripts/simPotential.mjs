@@ -11,23 +11,24 @@
  * Run: node scripts/simPotential.mjs
  */
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/potSimEntry.mjs';
-const BUNDLE = '/tmp/potSim.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'potSimEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'potSim.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
-const eras = await import('${ROOT}/src/lib/careerEras.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts');
 export { engine, eras };
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { engine, eras } = await import(BUNDLE);
+const { engine, eras } = await import(pathToFileURL(BUNDLE).href);
 const { initCareer, advanceYouthYear, advanceProSeason, FALLBACK_CLUBS } = engine;
 const { rollStartingOverall, rollPotential, potentialTier } = eras;
 
