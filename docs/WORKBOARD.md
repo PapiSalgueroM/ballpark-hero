@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 336.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 337.
 
 ## Inbox (unclaimed)
 
@@ -97,6 +97,11 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- Ticker speed (BUILDING as Round 336, desktop, 2026-08-29): his report tonight, "the
+  ticker is moving really slow". Measured live at 60 px/s, the Round 317 design
+  speed, so nothing is broken; with a 3000px slate a full pass takes nearly a
+  minute. The crawl doubles.
 
 - MOBILE PASS, continuing (claimed 2026-08-29; Round 320 the first wave, Round 330 the
   depth layer): still open from 330: the full playGames walk at 390 was mid run when
