@@ -41,9 +41,18 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- P1: the empty ticker. Diagnose scores-poll, the API-Sports quota and live_scores with
-  the database in hand, then the ESPN model: full day slate before games, live scores
-  during, FINAL after, schedule loaded ahead so the strip is never empty.
+- P1: the empty ticker. ROOT CAUSE FOUND 2026-08-28 from the run ledger: the API-Sports
+  account was SUSPENDED at 2026-08-26 18:20 UTC. The cron fires, the function answers 200
+  and fail-closes quietly on every feed ("Your account is suspended, check on
+  dashboard.api-football.com"), so nothing has been written since 16:05 that day and the
+  two day cleanup emptied the table. OWNER STEP, the only blocking one: Anthony logs into
+  the API-Sports / api-football dashboard, sees why, reactivates or makes a new free key,
+  and puts the new key into private.app_secrets HIMSELF via the Supabase dashboard SQL
+  editor (update private.app_secrets set value = 'THE KEY' where name =
+  'api_sports_key'), never pasting it into any chat or file. Desktop follow ups once the
+  key lives: verify a poll writes rows again, add an alert so a feed dead for a day is
+  surfaced instead of quiet, then the ESPN model (full day slate before games, live
+  during, FINAL after, schedule loaded ahead so the strip is never empty).
 - P1: the Club Manager league tables (other leagues stuck on pre-season alphabetical all
   season, the duplicate zero-point La Liga, the Cups tab rendering the UCL under Copa del
   Rey, the projected bracket excluding the second placed player, the 8 group 2005/06
