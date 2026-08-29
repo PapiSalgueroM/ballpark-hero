@@ -2615,8 +2615,15 @@ today rather than adding alongside them.
   and twice this round the section comment carried an INVENTED measurement that
   the real run contradicted, both replaced with measured bands and floors below
   them (75 percent, +3.0). The blinddeal control breaks 298 of 300 duels. What's
-  New announces it, sitemap 130 with the floor ratcheted. tsc zero, build green,
-  full board green.
+  New announces it, sitemap 130 with the floor ratcheted. Two long standing traps
+  fixed in the same round: prerender.mjs now REFUSES a PRERENDER_ONLY route the
+  sitemap does not know instead of silently dropping it (the silent drop shipped a
+  snapshotless page in both new game rounds before four fences caught it late), and
+  simLoanSpell's old-save section stranded about one run in forty (measured 9 of
+  400) because answering the injury rehab choice can resume a season that still
+  needs advancing; it now plays through pauses in a bounded loop the way a person
+  does, 600 instrumented runs zero stranded. tsc zero, build green, full board
+  green.
 - **2026-08-29, Round 324.** The SEO keyword pass, his 08-28 evening ask ("add words
   like key words and description and all that so that on search it pops up higher up").
   Worked the head terms through the places a searcher actually meets: the home title
