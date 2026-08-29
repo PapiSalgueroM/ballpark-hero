@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 329.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 330.
 
 ## Inbox (unclaimed)
 
@@ -36,8 +36,11 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- From that list, unclaimed and sizable: the Rebuild redesign, the Player Stock
-  Market redesign, the tycoon merge, the conquest map
+- Player Stock Market redesign (BUILDING as Round 329, cloud, 2026-08-29): his spec,
+  the "We Invested 200M In Footballers Using ONLY Their Stats" format: start seasons
+  back, move year by year, show stats only, never name, country or club, buy
+  position by position until a full XI.
+- From that list, unclaimed and sizable: the Rebuild redesign, the tycoon merge, the conquest map
   overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
