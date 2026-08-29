@@ -55,7 +55,11 @@ const WorldXi = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [respinsLeft, setRespinsLeft] = useState(3); // owner 2026-08-05: limited respins, 3 per game
+  /* Owner 2026-08-05: limited respins so a bad draw costs a decision.
+     Round 319, owner review: the COUNT is the player's call now, picked on
+     the setup screen before the draw. 3 stays the default. */
+  const [respinBudget, setRespinBudget] = useState(3);
+  const [respinsLeft, setRespinsLeft] = useState(3);
   const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
   const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
@@ -100,7 +104,7 @@ const WorldXi = () => {
     setQuery('');
     setFeedback(null);
     setTimeLeft(timerMode.seconds);
-    setRespinsLeft(3);
+    setRespinsLeft(respinBudget);
     prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
   }, [data, formation, timerMode]);
@@ -369,6 +373,24 @@ const WorldXi = () => {
               ))}
             </div>
 
+            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Respins</h2>
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {[0, 3, 5, 10].map(n => (
+                <button
+                  key={n}
+                  onClick={() => setRespinBudget(n)}
+                  className={cn(
+                    'px-2 py-2.5 rounded-xl border font-bold text-sm transition-all',
+                    respinBudget === n
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  {n === 0 ? 'None' : n}
+                </button>
+              ))}
+            </div>
+
             <p className="text-xs text-muted-foreground text-center mb-4">
               {data.countries.length} nations are in the draw. Each of your 11 slots gets a different one.
             </p>
@@ -630,10 +652,10 @@ const WorldXi = () => {
           title="World XI: The Build-a-XI Football Trivia Game"
           description="A formation, 11 random nations, and your football knowledge. For every country drawn you must name a real player of that nationality who fits the position, from goalkeepers to strikers. Fill all 11 slots to complete your World XI, with optional 90 and 60 second timer modes."
           howToPlay={[
-            'Pick a formation and an optional timer.',
+            'Pick a formation, an optional timer, and how many respins you want (none up to ten, three is the default).',
             'Eleven countries are drawn at random, one per slot, revealed in random order.',
             'For each country, type and select a real player of that nationality who can play the slot.',
-            'Wrong position or wrong country picks are rejected. Fill all 11 to win.',
+            'Wrong position or wrong country picks are rejected. A respin rerolls the current slot\'s nation. Fill all 11 to win.',
           ]}
           examples={[
             'Brazil in goal? Alisson, Ederson and 29 other Brazilian keepers count.',

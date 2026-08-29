@@ -84,6 +84,12 @@ From the 2026-08-28 review (bugs, claimed same day):
   Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
   systematic sweep of that list against current squads would catch the rest. Needs the
   database and web verification, desktop lane work.
+- From Round 319 (cloud): World XI wants eligibility derived from real positions PLAYED
+  (his example: a CF with RW history should fit a RW slot). That needs per player
+  secondary position data pulled and verified from the database side; the code side
+  tightening (wing backs out of winger slots) already shipped. Add a positions_played
+  style column or a verified secondary position map, then World XI's eligiblePositions
+  can read data instead of a hand rule.
 - OWNER TAP, the one thing only Anthony can do: open douknowball1@gmail.com, find the
   FormSubmit "Activate Form" email (a fresh one was triggered 2026-08-29), click
   Activate. Until that click, bug reports reach the admin screen but never his inbox;
@@ -117,11 +123,7 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- Small fixes batch (BUILDING as Round 319, 2026-08-29): Career Ladder flags, Missing XI
-  side colors and overlapping bubbles, Rarity Round hiding the rarest answer and stating
-  the goal upfront, World XI position eligibility and customizable respins, Alphabet
-  Sprint full name instruction, the Soccer Career keeper being told to score more goals.
-  The how-to-play popup audit across every game splits out as its own later round.
+- The how-to-play popup audit across every game (split out of the small fixes batch).
 - Trade Finder: both sides of the ball and current rosters.
 
 Standing claims:
@@ -131,6 +133,16 @@ Standing claims:
 
 ## Done
 
+- THE SMALL FIXES BATCH, Round 319 (cloud lane, 2026-08-29). Six review items: Rarity
+  Round never reveals the rarest answer again and states its goal on the board; World
+  XI's front line winger slots refuse wing backs (the LWB-into-RW hole) and the respin
+  budget is picked before the draw; Missing XI bubbles stop overlapping and both sides
+  fly country flags; Career Ladder flag coverage measured 274 of 274 after a hyphen bug
+  fix (every Al- club was flagless) plus 60 verified new entries; Alphabet Sprint says
+  full names count; the Soccer Career gram nags by position instead of telling keepers
+  to score. NOTE FOR THE DESKTOP LANE: the World XI "eligibility from real positions
+  PLAYED" half needs per player position history data (secondary positions), a database
+  pull, filed here rather than guessed at in code.
 - LEADERBOARD NAMES, Round 318 (cloud lane, 2026-08-29). Legacy Baller-NNNN handles
   regenerate to the word pool on next visit, and every name rendered on the shared board
   passes the blocklist (a dirty stored name prints as a stable substitute handle). The

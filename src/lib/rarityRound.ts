@@ -112,19 +112,21 @@ export interface RoundResult {
 }
 
 /**
- * What the player SHOULD have said. The whole payoff of a rarity game is the
- * board reveal, "you found a 12, but there was a 3 sitting there", and its absence
- * is the other half of why this game read as "you guess one guy and you're
- * done" (owner review, 2026-07-06). The pool is already ranked, so this costs
- * nothing to surface.
+ * The board reveal after a guess. It used to hand over the mode's ideal
+ * answer ("the rarest answer was..."), which taught the answer space but
+ * also handed a stealable secret to anyone willing to back out and rejoin
+ * (owner review, 2026-08-28). It now shows only the famous head of the
+ * pool, the picks most people go for, which teaches the same lesson (what
+ * scores badly in rarity mode, what scores well in crowd mode) without ever
+ * naming the rare answers.
  */
 export interface RoundReveal {
-  /** The mode's ideal answer: most obscure for 'rarity', most famous for 'crowd'. */
-  best: PoolEntry;
-  /** Its score under this mode, the number the player was chasing. */
-  bestPoints: number;
-  /** A few near-ideal alternatives, closest-to-ideal first. */
-  alternatives: PoolEntry[];
+  /** The 3 to 5 most famous names in the pool, most famous first: the picks
+   *  the crowd goes for. Round 319, the owner's call from the 08-28 review:
+   *  the reveal must NEVER show the rarest answer, because people were
+   *  backing out and rejoining to steal it. Only the well known head of the
+   *  pool is ever shown. */
+  topPicked: PoolEntry[];
   /** How many valid answers existed at all. */
   poolSize: number;
 }
@@ -594,14 +596,12 @@ export function totalScore(rounds: RoundResult[]): number {
  * Added 2026-07-15. Without this the game told you your score and nothing else
  *, no sense of the answer space, nothing learned, no "I should have said HIM".
  */
-export function buildReveal(pool: PoolEntry[], mode: RarityMode): RoundReveal | null {
+export function buildReveal(pool: PoolEntry[]): RoundReveal | null {
   if (pool.length === 0) return null;
-  const ordered = mode === 'rarity' ? [...pool].reverse() : [...pool];
-  const best = ordered[0];
+  /* Pool is already ranked 1..n by fame, so the head IS the crowd's picks.
+     The tail (the rare answers) deliberately never leaves this function. */
   return {
-    best,
-    bestPoints: scoreRound(best.rank, pool.length, mode),
-    alternatives: ordered.slice(1, 5),
+    topPicked: pool.slice(0, 5),
     poolSize: pool.length,
   };
 }

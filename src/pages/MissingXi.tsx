@@ -14,6 +14,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { flagForClub } from '@/lib/careerLadder';
 import {
   pickDailyPuzzle,
   pickUnlimitedPuzzle,
@@ -243,7 +244,24 @@ const MissingXi = () => {
               <p className="text-xl md:text-2xl font-display font-bold text-foreground mb-1">
                 {puzzle.lineup.dateLabel}
               </p>
-              <p className="text-sm text-muted-foreground mb-1">{puzzle.lineup.scoreLine}</p>
+              {/* Round 319, owner review ("flags or club colors for the two
+                  sides"): each side's country flag rides the score line, in
+                  the order the line itself names them. flagForClub returns ''
+                  for an unknown club, so a miss skips the flag rather than
+                  showing a wrong one. */}
+              {(() => {
+                const { team, opponent, scoreLine } = puzzle.lineup;
+                const teamFirst = scoreLine.toLowerCase().startsWith(team.toLowerCase());
+                const leftFlag = flagForClub(teamFirst ? team : opponent);
+                const rightFlag = flagForClub(teamFirst ? opponent : team);
+                return (
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {leftFlag && <span className="mr-1.5">{leftFlag}</span>}
+                    {scoreLine}
+                    {rightFlag && <span className="ml-1.5">{rightFlag}</span>}
+                  </p>
+                );
+              })()}
               <p className="text-xs text-muted-foreground">
                 {puzzle.lineup.venue} · {puzzle.lineup.formationLabel} · Showing {puzzle.lineup.team}'s XI
               </p>
@@ -379,11 +397,19 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
 
       {lineup.slots.map((slot, i) => {
         const isBlank = i === candidate.slotIndex;
+        /* Round 319, owner review: bubbles overlapped. A fixed 26% tile is
+           wider than the 18% gap between three centre backs, so neighbours
+           in the same row painted over each other. The width now comes from
+           the row itself: never wider than the nearest same-row neighbour's
+           distance, with a floor so a name still fits. */
+        const rowMates = lineup.slots.filter((s, j) => j !== i && Math.abs(s.y - slot.y) < 8);
+        const minGap = rowMates.reduce((m, s) => Math.min(m, Math.abs(s.x - slot.x)), 100);
+        const widthPct = Math.min(26, Math.max(15, minGap - 1));
         return (
           <div
             key={i}
-            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 w-[26%]"
-            style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5"
+            style={{ left: `${slot.x}%`, top: `${slot.y}%`, width: `${widthPct}%` }}
           >
             <div
               className={cn(

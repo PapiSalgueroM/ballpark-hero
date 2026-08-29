@@ -400,6 +400,13 @@ const RarityRound = () => {
                 {currentCategory.prompt}
               </p>
               <p className="text-sm text-muted-foreground">{currentCategory.hint}</p>
+              {/* Round 319, owner review: the goal stated before the first
+                  guess, on the board itself rather than only in the "?" popup. */}
+              <p className="mt-2 text-xs font-semibold text-primary">
+                {rarityMode === 'rarity'
+                  ? 'The goal: a real answer as few people would think of. Fewer points is better.'
+                  : 'The goal: the answer most people would say. More points is better.'}
+              </p>
             </div>
 
             {phase === 'loading-round' && (
@@ -458,38 +465,39 @@ const RarityRound = () => {
                   {rarityMode === 'rarity' ? 'points (lower is better)' : 'points (higher is better)'}
                 </p>
 
-                {/* The board reveal, the actual payoff: what you SHOULD
-                    have said. Its absence is why this game read as "you guess
-                    one guy and you're done" (owner review 2026-07-06). */}
+                {/* The board reveal. Round 319, the owner's call: never show
+                    the rarest answer here (people backed out, rejoined and
+                    stole it). Only the famous head of the pool is shown, the
+                    picks the crowd goes for, worth few points in rarity mode
+                    and many in crowd mode. */}
                 {(() => {
-                  const reveal = buildReveal(pool, rarityMode);
+                  const reveal = buildReveal(pool);
                   if (!reveal) return null;
-                  const nailedIt = reveal.best.rank === lastResult.rank;
+                  const foundTheRarest = rarityMode === 'rarity' && lastResult.rank === lastResult.poolSize;
                   return (
                     <div className="mb-5 rounded-xl border border-border bg-background/60 p-4 text-left">
-                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {nailedIt
-                          ? 'Nobody could have done better'
-                          : rarityMode === 'rarity'
-                          ? 'The rarest answer was'
-                          : 'The most popular answer was'}
-                      </p>
-                      <div className="flex items-baseline justify-between gap-2">
-                        <span className="truncate font-display text-base font-bold text-gold">
-                          {displayName(reveal.best.name)}
-                        </span>
-                        <span className="shrink-0 text-sm font-bold text-primary">
-                          {reveal.bestPoints} pts
-                        </span>
-                      </div>
-                      {reveal.alternatives.length > 0 && (
-                        <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
-                          Also there:{' '}
-                          {reveal.alternatives.map(a => displayName(a.name)).join(', ')}
+                      {foundTheRarest && (
+                        <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gold">
+                          That IS the rarest one here. Nobody could have done better.
                         </p>
                       )}
+                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {rarityMode === 'rarity' ? 'The picks everyone goes for (worth the fewest points)' : 'The picks everyone goes for'}
+                      </p>
+                      <div className="space-y-1">
+                        {reveal.topPicked.map(a => (
+                          <div key={a.name} className="flex items-baseline justify-between gap-2">
+                            <span className="truncate text-sm font-semibold text-foreground">
+                              {displayName(a.name)}
+                            </span>
+                            <span className="shrink-0 text-xs font-bold text-primary">
+                              {scoreRound(a.rank, reveal.poolSize, rarityMode)} pts
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                       <p className="mt-2 text-[11px] text-muted-foreground">
-                        {reveal.poolSize} valid answers in this category.
+                        {reveal.poolSize} valid answers in this category. The rare ones stay secret.
                       </p>
                     </div>
                   );

@@ -273,8 +273,10 @@ const AlphabetSprint = () => {
               ))}
             </div>
             <ul className="text-xs text-muted-foreground space-y-1 mb-5 max-w-sm mx-auto list-disc list-inside">
-              <li>Spell the player's name and hit Enter. No suggestions. You have to know it.</li>
-              <li>A bare surname works if only one player fits; otherwise type the full name.</li>
+              {/* Round 319, owner review: "say clearly that full names
+                  count". The full name lead sentence is the clarification. */}
+              <li>Type the player's FULL NAME (Kylian Mbappe) or just the surname, then hit Enter. No suggestions. You have to know it.</li>
+              <li>A bare surname works if only one player fits; when several share it, the full name settles it.</li>
               <li>Surname counts, so Kylian Mbappe answers M, not K.</li>
               <li>Each player can only be used once per run.</li>
               <li>Rare letters with too few players never come up.</li>
@@ -328,8 +330,8 @@ const AlphabetSprint = () => {
                   setFeedback(null);
                 }}
                 onKeyDown={onInputKeyDown}
-                placeholder={`Spell out a "${letter}" surname player...`}
-                aria-label="Type a player surname"
+                placeholder={`Full name or surname, "${letter}" surname...`}
+                aria-label="Type a player's full name or surname"
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
