@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 347.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 348.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -112,6 +112,11 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- LIGHT MODE (BUILDING as Round 347, desktop, 2026-08-29): the owner's ask. Recon
+  first (how much of the site rides semantic tokens vs hardcoded dark classes),
+  then a real theme system: light token set, a toggle that persists, system
+  preference respected, and the browser sweeps to prove no game went unreadable.
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
