@@ -306,7 +306,7 @@ const PerfectSeasonMlb = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="162-0: Perfect Season Baseball | DoUKnowBall"
         description="Spin across baseball history, draft a cross-era lineup, and simulate a 162 game season. Can you go 162-0? Free to play."

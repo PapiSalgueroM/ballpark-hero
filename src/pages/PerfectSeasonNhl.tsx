@@ -306,7 +306,7 @@ const PerfectSeasonNhl = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="82-0: Perfect Season Hockey | DoUKnowBall"
         description="Spin across hockey history, draft a cross-era lineup, and simulate an 82 game season. Can you go 82-0? Free to play."

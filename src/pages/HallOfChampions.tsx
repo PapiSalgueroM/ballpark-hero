@@ -69,7 +69,7 @@ const HallOfChampions = () => {
     return (
       <div className="min-h-screen bg-background">
         <GameNavbar />
-        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
         <PageSeo
           title="Hall of Champions: Free Idle Sports Museum Game | DoUKnowBall"
           description="Build a sports museum out of real championship history. Every exhibit is a verified title winner, from Super Bowl I to this year. Free idle game, keeps earning while you are away, no sign-up."
@@ -130,7 +130,7 @@ const HallOfChampions = () => {
   return (
     <div className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Hall of Champions: Free Idle Sports Museum Game | DoUKnowBall"
         description="Build a sports museum out of real championship history. Every exhibit is a verified title winner, from Super Bowl I to this year. Free idle game, keeps earning while you are away, no sign-up."

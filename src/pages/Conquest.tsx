@@ -33,7 +33,7 @@ const Conquest = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4 relative">
             <h1 className="text-2xl font-display font-bold text-primary">NFL Conquest</h1>

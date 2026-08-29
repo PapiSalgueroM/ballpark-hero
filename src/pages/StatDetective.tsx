@@ -171,7 +171,7 @@ const StatDetective = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Stat Detective NBA: Guess the Player from the Stat Line | DoUKnowBall"
         description="A real NBA season with the name removed: era, position and per 36 numbers. Crack the case in eight guesses with feedback clues after every miss. Free, no sign-up."

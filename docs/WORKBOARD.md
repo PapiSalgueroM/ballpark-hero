@@ -196,11 +196,6 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- How-to-play, the stricter half (BUILDING as Round 335, cloud, 2026-08-29): playHowTo
-  pins the floor (every game shows a rules affordance a visitor can see). A handful of
-  non shell pages satisfy it with setup screen rules only, no reopenable "?" mid game;
-  this round tightens the fence to "reopenable during play everywhere" and gives the
-  offenders (the new Rebuild spin screen among them) a real "?".
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
   halves of the review item are data work the cloud sandbox cannot verify (egress is
   proxy blocked, ESPN and Wikipedia both 403). Diagnosis for whoever picks it up: "only
@@ -217,6 +212,16 @@ Standing claims:
 
 ## Done
 
+- THE STRICTER HOW-TO-PLAY FENCE, Round 335 (cloud lane, 2026-08-29). The queued
+  second half: the "handful" of prose-only games was measured at 39 of 116, all
+  the non shell heavyweights included (Soccer Career, the dynasties, perfect
+  seasons, my careers, front offices, conquests, chains, the new Rebuild spin
+  screen). Each mounts the standard GameHelp through a uniform zero height
+  z-10 anchor after the navbar, zero layout shift, and playHowTo now fails any
+  route whose only affordance is prose. Overlap probed at 390 on all 39 (every
+  "?" clickable, clear of title glyphs; the z-10 exists because Fantasy Draft
+  proved a plain anchor gets painted over), 116 of 116 green under the strict
+  rule, blind control proven.
 - GRID MOBILE CLS, Round 348 (desktop lane, 2026-08-29). The Milestone 0 mobile
   bug, fixed at the structural level: all six grid pages used to swap a
   one-line loading div for a 300 to 650px board when data landed (soccer also

@@ -238,7 +238,7 @@ const ClueAuction = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall"
         description="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up."

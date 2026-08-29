@@ -273,7 +273,7 @@ const SignThePlayer = () => {
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(260 30% 8%) 0%, hsl(230 30% 7%) 55%, hsl(150 25% 6%) 100%)' }}>
         <GameNavbar />
-        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10">
           <div className="w-full max-w-5xl mx-auto space-y-5">
 

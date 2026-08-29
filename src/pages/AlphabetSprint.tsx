@@ -213,7 +213,7 @@ const AlphabetSprint = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Alphabet Sprint | DoUKnowBall"
         description="A letter appears, you name a real footballer whose surname starts with it. 60 seconds, streak bonuses, no repeats. How many can you rattle off?"

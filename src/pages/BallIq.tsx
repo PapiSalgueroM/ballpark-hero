@@ -13,7 +13,7 @@ export default function BallIq() {
         path="/ball-iq"
       />
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <BallIqBoard />
       <GameSeoContent
         title="Ball Knowledge IQ Test | DoUKnowBall"
