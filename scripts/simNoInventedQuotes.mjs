@@ -331,17 +331,67 @@ console.log('2) Static: hand written copy in src');
     }
   })(path.join(ROOT, 'src'));
 
+  /* ROUND 335: THE OWNER IS ALLOWED TO SPEAK FOR HIMSELF, AND ONLY HIMSELF.
+   *
+   * Round 346 shipped the maker note, Anthony's own first person hello on the
+   * home page, written by him and shipped at his request. This scan flagged it,
+   * because "Anthony" is also a surname in the roster set, so his own sentence
+   * about his own site read exactly like words put in a footballer's mouth.
+   *
+   * The rule this harness enforces protects THIRD PARTIES: never invent words
+   * or conduct for a real person who did not say or do them. It cannot sensibly
+   * protect a man from a sentence he wrote about himself, so the owner's own
+   * voice file is exempt, and the exemption is drawn as tightly as it can be:
+   *   - it applies to that one file, not to the site;
+   *   - it applies only when the ONLY real name on the line is the owner's own,
+   *     so a footballer named in his note still fails there like anywhere else;
+   *   - the owner's name anywhere else in src still fails, so nobody can smuggle
+   *     an invented quote in behind his first name.
+   * Section 3b below plants a real player's quote inside the exempt file and
+   * requires it to fail, which is what stops this being a back door. */
+  const OWNER_VOICE = /src[/\\]components[/\\]home[/\\]MakerNote\.tsx$/;
+  const OWNER_NAME = 'anthony';
+  const ownersOwnSentence = (file, line) => {
+    if (!OWNER_VOICE.test(file)) return false;
+    const names = namesIn(line);
+    return names.length === 1 && names[0].toLowerCase() === OWNER_NAME;
+  };
+
   const bad = [];
   for (const f of files) {
     const txt = fs.readFileSync(f, 'utf8');
     txt.split('\n').forEach((ln, i) => {
       const v = violation(ln, true);
-      if (v) bad.push({ f: f.replace(ROOT + '/', ''), i: i + 1, v, ln: ln.trim().slice(0, 130) });
+      if (v && !ownersOwnSentence(f, ln)) bad.push({ f: f.replace(ROOT + '/', ''), i: i + 1, v, ln: ln.trim().slice(0, 130) });
     });
   }
   console.log(`   scanned ${files.length} files, ${bad.length} offending lines`);
   for (const b of bad.slice(0, 15)) console.error(`     ${b.f}:${b.i} ${b.v}\n       ${b.ln}`);
   if (bad.length > 0) fail(`${bad.length} source lines put invented words or conduct on a real player`);
+
+  /* 2b. The owner exemption is not a back door, proven rather than asserted.
+     Three planted lines, judged against the exempt file itself: his own
+     sentence passes, a footballer quoted in his file fails, and his own words
+     moved to any other file fail. If the first stops passing the exemption is
+     dead weight; if either of the others stops failing, it is a hole. */
+  const OWNER_FILE = path.join(ROOT, 'src/components/home/MakerNote.tsx');
+  const OTHER_FILE = path.join(ROOT, 'src/pages/Index.tsx');
+  const ownLine = "Hey, I'm Anthony. DoUKnowBall is my first ever coding project, an independent site";
+  const playerLine = 'Mohamed Salah told me: "I love what you built here, keep going."';
+  const probes = [
+    ['the owner\'s own sentence in his own file', OWNER_FILE, ownLine, false],
+    ['a real player quoted inside the owner\'s file', OWNER_FILE, playerLine, true],
+    ['the owner\'s sentence moved to another file', OTHER_FILE, ownLine, true],
+  ];
+  for (const [label, file, line, shouldFlag] of probes) {
+    const flagged = !!violation(line, true) && !ownersOwnSentence(file, line);
+    console.log(`   ${flagged ? 'flags' : 'passes'}: ${label}`);
+    if (flagged !== shouldFlag) {
+      fail(shouldFlag
+        ? `the owner exemption is a back door: ${label} was allowed through`
+        : `the owner exemption is dead: ${label} is still flagged`);
+    }
+  }
 }
 
 /* ---------- ---------- */
