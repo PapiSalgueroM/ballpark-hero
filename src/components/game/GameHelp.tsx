@@ -18,7 +18,15 @@ import type { GameContent } from '@/data/gameContent/types';
  * nothing, and pages that already carry their own rules control opt out
  * through GameShell's help="none" so no page shows two question marks.
  */
-export function GameHelp() {
+interface GameHelpProps {
+  /** Forwarded to the popover trigger. Round 335: non shell pages mount this
+   *  directly and pick the corner (or inline) that fits their own header. */
+  side?: 'left' | 'right';
+  inline?: boolean;
+  className?: string;
+}
+
+export function GameHelp({ side = 'left', inline = false, className }: GameHelpProps = {}) {
   const { pathname } = useLocation();
   const [content, setContent] = useState<GameContent | null>(null);
 
@@ -34,7 +42,7 @@ export function GameHelp() {
   if (!content || content.howToPlay.length === 0) return null;
 
   return (
-    <HowToPlayPopover title="How to play">
+    <HowToPlayPopover title="How to play" triggerSide={side} floatingTrigger={!inline} className={className}>
       <div>
         <h3 className="font-bold text-foreground mb-2">The steps</h3>
         <ol className="list-decimal list-inside space-y-1.5 text-muted-foreground">
