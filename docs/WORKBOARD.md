@@ -79,14 +79,10 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- Rebuild redesign, THE PHASES (split 2026-08-29 so either lane can pick one up):
-  phase two BUILDING as Round 333 (cloud, 2026-08-29), the new core loop (starting XI only on screen, spin for position, keep
-  or sell with three priced replacements plus promote-from-bench free, envelopes up
-  front, board demands, force sales at negative money, the punishment deck with one
-  safe card, restriction presets), cloud buildable on existing pools; phase three,
-  real manager names as hire options per club, DESKTOP GATED: who manages whom
-  changes weekly and needs web verification, and any manager "value" must derive
-  from verifiable records, never be invented on a real person.
+- Rebuild redesign, the remaining phase: phase two (the core loop) SHIPPED as Round
+  333; phase three, real manager names as hire options per club, DESKTOP GATED: who
+  manages whom changes weekly and needs web verification, and any manager "value"
+  must derive from verifiable records, never be invented on a real person.
 - From that list, unclaimed and sizable: the tycoon merge, the conquest map
   overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
@@ -192,6 +188,21 @@ Standing claims:
 
 ## Done
 
+- THE REBUILD CORE LOOP, Round 333 (cloud lane, 2026-08-29). Phase two of his
+  redesign, the owner's spec executed whole: spin for a position in a hidden
+  seeded order, keep or sell the drawn man (selling final), three priced
+  replacements from three value bands plus free bench promotion, restriction
+  presets locked at club pick, a 60M overdraft with random forced sales when the
+  window ends in debt, and a five card punishment deck (one safe, drawn without
+  replacement) replacing the flat best-player forfeit. Wars, finance events,
+  fortune cards, rivals and the season sim all ride on the new loop. The round's
+  harness caught the engine's Lehmer streams opening identically for neighboring
+  seeds (fixed with seed warmup), and the browser playthrough caught a genuine
+  deadlock (deep overdraft, nothing affordable, no bench fit), closed with the
+  leave-the-shirt-empty resort that prices the hole at 40 immediately.
+  simRebuildLoop fences it with measured floors and a proven dupslot control;
+  a mocked-REST Chromium playthrough played the full eleven to the season table.
+  Phase three (real manager hires) stays desktop gated above.
 - THE TICKER WATCHDOG, Round 332 (desktop lane, 2026-08-29). The alert the August
   suspension deserved: scores-poll v7 judges YESTERDAY in New York on every
   ordinary today run, and a fully past day over which every feed wrote zero rows,
