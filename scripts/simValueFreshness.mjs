@@ -49,8 +49,27 @@ for (let i = 0; i < names.length; i += 20) {
   const batch = names.slice(i, i + 20);
   const inList = batch.map(n => `"${n.replace(/"/g, '')}"`).join(',');
   const url = `${URL_}/rest/v1/player_market_values?select=player_name,market_value_usd&year=eq.2026&player_name=in.(${encodeURIComponent(inList)})&limit=1000`;
-  const rows = await fetch(url, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }).then(r => r.json());
-  if (!Array.isArray(rows)) { console.error('DATABASE UNREACHABLE. NOTHING WAS CHECKED.'); process.exit(1); }
+  /* Round 335: this used to be a bare .then(r => r.json()), and the guard
+     below never got the chance to speak. A sandbox whose egress proxy blocks
+     the database answers with a plain text body ("Host not in allowlist"),
+     json() threw a SyntaxError, and the harness died with "Unexpected token
+     'H'" instead of the sentence written right here for exactly this case.
+     The guard stays fail closed on purpose: a run that reached no database
+     checked nothing and must not read as a pass. */
+  let rows = null;
+  try {
+    const res = await fetch(url, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } });
+    const body = await res.text();
+    try { rows = JSON.parse(body); }
+    catch { console.error(`the database answered with something that is not JSON (HTTP ${res.status}): ${body.slice(0, 80)}`); }
+  } catch (err) {
+    console.error(`the database could not be reached: ${String(err).slice(0, 120)}`);
+  }
+  if (!Array.isArray(rows)) {
+    console.error('DATABASE UNREACHABLE. NOTHING WAS CHECKED.');
+    console.error('This harness reads the live database, so it can only run where egress to it is open (the desktop lane).');
+    process.exit(1);
+  }
   for (const r of rows) rows2026.set(r.player_name, r.market_value_usd);
 }
 
