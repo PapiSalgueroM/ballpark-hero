@@ -619,3 +619,177 @@ export function simulateSeason(
 
   return { table: rows, position, highlights, goldenBoot, yourTopScorer, yourAssistKing, headline };
 }
+
+/* ---------------- Round 333: the spin loop (owner's core loop spec) ---------------- */
+
+/** Lehmer stream seeding with three warmup steps. One multiplication leaves
+ *  neighboring seeds within a few million of each other on a 2^31 range, so
+ *  the first draw of every stream was nearly constant across close seeds
+ *  (simRebuildLoop caught the punishment deck opening on the same card for
+ *  500 seeds straight). The warmup wraps the modulus and decorrelates them. */
+function mixSeed(seed: number, salt: number): number {
+  let s = (seed ^ salt) % 2147483647;
+  if (s <= 0) s += 2147483646;
+  for (let k = 0; k < 3; k += 1) s = (s * 16807) % 2147483647;
+  return s;
+}
+
+/** The seeded order the wheel resolves the XI in: every run spins all eleven
+ *  slots exactly once, in an order nobody can pick. */
+export function spinOrder(seed: number, slotCount: number): number[] {
+  const order = Array.from({ length: slotCount }, (_, i) => i);
+  let s = mixSeed(seed, 0x51707);
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    s = (s * 16807) % 2147483647;
+    const j = Math.floor(((s - 1) / 2147483646) * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+export interface ReplacementDeal {
+  /** Three priced options from the market: a marquee, a solid, a cheap seat. */
+  offers: Player[];
+  /** Squad players outside the XI who fit the slot: free to promote. */
+  bench: Player[];
+}
+
+/**
+ * Deals the three priced replacements plus the free bench for a slot whose
+ * man was just sold. Offers come from three value bands of the market's
+ * fits so the choice is always a real one; the bench is whatever the squad
+ * already owns for the position. Deterministic in (seed, salt).
+ */
+export function dealReplacements(
+  market: Player[],
+  benchPool: Player[],
+  slot: FormationSlot,
+  taken: Set<string>,
+  seed: number,
+  salt: number,
+): ReplacementDeal {
+  const fits = market
+    .filter(p => slot.allowed.includes(p.position) && !taken.has(p.name))
+    .sort((a, b) => b.marketValue - a.marketValue);
+  let s = mixSeed(seed, salt * 2654435761);
+  const rand = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+  const grab = (lo: number, hi: number): Player | null => {
+    const a = Math.floor(lo * fits.length);
+    const b = Math.max(a + 1, Math.floor(hi * fits.length));
+    const band = fits.slice(a, b);
+    return band.length ? band[Math.floor(rand() * band.length)] : null;
+  };
+  const offers: Player[] = [];
+  for (const [lo, hi] of [[0, 0.08], [0.25, 0.55], [0.8, 1]] as const) {
+    let c = grab(lo, hi);
+    let hops = 0;
+    while (c && offers.some(o => o.name === c!.name) && hops < 8) { c = grab(lo, hi); hops += 1; }
+    if (c && !offers.some(o => o.name === c!.name)) offers.push(c);
+  }
+  const bench = benchPool
+    .filter(p => slot.allowed.includes(p.position) && !taken.has(p.name))
+    .sort((a, b) => playerRating(b) - playerRating(a))
+    .slice(0, 4);
+  return { offers, bench };
+}
+
+/* The punishment deck (owner spec: "miss board goals and you draw a
+ * punishment card, one safe in the deck"). Five cards, drawn seeded and
+ * without replacement per reckoning, exactly one merciful. */
+export interface PunishCard {
+  id: string;
+  emoji: string;
+  title: string;
+  text: string;
+  kind: 'sellBest' | 'sellRandom' | 'fine' | 'ratingHit' | 'safe';
+  amount: number;
+}
+
+export const PUNISH_DECK: PunishCard[] = [
+  { id: 'sellBest', emoji: '\u{1FA93}', title: 'The Flagship Sale', text: 'The board sells your most valuable player to make a point.', kind: 'sellBest', amount: 0 },
+  { id: 'sellRandom', emoji: '\u{1F3B2}', title: 'The Random Exit', text: 'Somebody leaves. The board will not say why it was him.', kind: 'sellRandom', amount: 0 },
+  { id: 'fine', emoji: '\u{1F9FE}', title: 'The Clawback', text: 'The board claws 25 million back out of the football budget.', kind: 'fine', amount: 25 },
+  { id: 'ratingHit', emoji: '\u{1F4C9}', title: 'The Mutiny', text: 'The dressing room hears about the missed target. The XI plays two below itself.', kind: 'ratingHit', amount: 2 },
+  { id: 'safe', emoji: '\u{1F54A}\uFE0F', title: 'The Board Lets It Slide', text: 'A long meeting, a short memo, no consequences. This time.', kind: 'safe', amount: 0 },
+];
+
+/** Seeded draws WITHOUT replacement: the first miss draws from five, the
+ *  second from the remaining four, and the safe card can only save one. */
+export function drawPunishments(seed: number, misses: number): PunishCard[] {
+  const deck = [...PUNISH_DECK];
+  let s = mixSeed(seed, 0x70756e);
+  const out: PunishCard[] = [];
+  for (let i = 0; i < misses && deck.length > 0; i += 1) {
+    s = (s * 16807) % 2147483647;
+    const j = Math.floor(((s - 1) / 2147483646) * deck.length);
+    out.push(deck.splice(j, 1)[0]);
+  }
+  return out;
+}
+
+/* Restriction presets (owner spec: "restriction presets (Europe only and
+ * such)"): a market filter chosen before the club, purely narrowing. */
+export type RebuildPreset = 'none' | 'europe5' | 'u25';
+export const REBUILD_PRESETS: { id: RebuildPreset; label: string; desc: string }[] = [
+  { id: 'none', label: 'Open market', desc: 'Everyone the scouts know' },
+  { id: 'europe5', label: 'Top five leagues only', desc: 'England, Spain, Italy, Germany, France' },
+  { id: 'u25', label: 'Under 25s only', desc: 'Sign nobody older than 24' },
+];
+const TOP5_LEAGUES = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
+export function applyPreset(market: Player[], preset: RebuildPreset): Player[] {
+  if (preset === 'europe5') return market.filter(p => TOP5_LEAGUES.has(p.league));
+  if (preset === 'u25') return market.filter(p => p.age > 0 && p.age <= 24);
+  return market;
+}
+
+/** How far past zero the wallet may go mid window. The reckoning claws it
+ *  back with forced sales (owner spec: "end with negative money and
+ *  positions are force sold at random"). */
+export const OVERDRAFT_LIMIT = 60;
+
+export interface ForcedSwap {
+  outName: string;
+  inPlayer: Player;
+  recouped: number;
+}
+
+/**
+ * The reckoning's forced sales: while the deficit stands, a random resolved
+ * position is sold and the cheapest market fit takes the shirt, recouping
+ * the difference. Pure and seeded; bounded by the XI itself.
+ */
+export function forceSales(
+  xi: (Player | null)[],
+  formation: Formation,
+  market: Player[],
+  deficit: number,
+  seed: number,
+): { swaps: ForcedSwap[]; remainingDeficit: number } {
+  let owed = deficit;
+  const swaps: ForcedSwap[] = [];
+  let s = mixSeed(seed, 0x666f72);
+  const takenIn = new Set<string>();
+  const candidates = xi
+    .map((p, i) => ({ p, i }))
+    .filter((x): x is { p: Player; i: number } => x.p !== null)
+    .sort((a, b) => b.p.marketValue - a.p.marketValue);
+  const order = [...candidates];
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    s = (s * 16807) % 2147483647;
+    const j = Math.floor(((s - 1) / 2147483646) * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  for (const { p, i } of order) {
+    if (owed <= 0) break;
+    const slot = formation.slots[i];
+    const cheap = market
+      .filter(m => slot.allowed.includes(m.position) && !takenIn.has(m.name) && m.name !== p.name && m.marketValue < p.marketValue)
+      .sort((a, b) => a.marketValue - b.marketValue)[0];
+    if (!cheap) continue;
+    takenIn.add(cheap.name);
+    const recouped = p.marketValue - cheap.marketValue;
+    owed -= recouped;
+    swaps.push({ outName: p.name, inPlayer: cheap, recouped });
+  }
+  return { swaps, remainingDeficit: Math.max(0, owed) };
+}

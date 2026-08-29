@@ -43,37 +43,47 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/rebuild': {
     intro: [
-      "Rebuild Challenge drops you into a real club's 2026 squad with a war chest sized to the badge and a target rating. Commit your sales, flip your fortune, spend what's left, leave the place better.",
-      "The target scales with the job: elite squads need a nudge, modest ones a renovation. The board deals three demands, one tied to the club's identity, a fortune card swings the books, and two AI managers rebuild rivals beside you.",
+      "Rebuild Challenge drops you into a real club's 2026 squad with a war chest sized to the badge and a wheel that decides which shirt you judge next. Spin, keep or sell the man it lands on, and leave the place better.",
+      "The target scales with the job: elite squads need a nudge, modest ones a renovation. The board deals its demands up front, a fortune card swings the books, punishment cards wait for every miss, and two AI managers rebuild rivals beside you.",
     ],
     howToPlay: [
-      "Pick one of 63 real clubs, tiered from elite down to modest.",
-      "Choose a manager: keep the man you have for free, or pay for one of three better names. Each step up lifts your final rating a little more.",
+      "Pick a market restriction first: the open market, the top five leagues only, or under 25s only. It locks the moment you pick a club.",
+      "Pick one of 63 real clubs, tiered from elite down to modest, and choose a manager: keep the man you have for free, or pay for one of three better names.",
       "Flip one of ten fortune cards. Takeovers, lawsuits, anything from +60 to -35 million.",
-      "Commit your sales before the market opens. Once you lock the list, nobody else leaves.",
-      "Tap any XI slot to sign a replacement. Only affordable players are listed.",
-      "Mind the board's three demands, then hit finish for the rivals' windows and the season sim.",
+      "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
+      "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring a marquee, a solid buy and a cheap seat, and promoting a fit from your own squad costs nothing.",
+      "When all eleven shirts are settled, the final whistle brings the reckoning, the rivals' windows and the season sim.",
     ],
     rules: [
       "Budgets scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. Sales add to it, coach fees, war premiums and money swings eat it.",
+      "The wallet can run 60 million past zero. Finish in debt and settled shirts are force sold at random, each swapped for the cheapest fit going, until the books balance.",
+      "The board's demands are dealt up front, one tied to the club's identity. Every miss draws a punishment card from a five card deck, without replacement: a forced flagship sale, a random exit, a 25 million fine, a dressing room mutiny worth two rating points, and exactly one card that lets it slide.",
+      "Every second deal fires a finance event, from a 40 million TV windfall to a 25 million sponsor scandal, on top of whatever your fortune card did.",
+      "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away, and a man you walk away from is gone from your market for good.",
       "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest.",
-      "Three board cards are dealt per run, and one is tied to the club's identity: superclubs demand a galactico, modest clubs demand negative net spend. Each miss gets your most valuable player force sold.",
-      "Every second signing fires a finance event, from a 40 million TV windfall to a 25 million sponsor scandal, on top of whatever your fortune card did.",
-      "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away.",
     ],
     example: [
-      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. You keep the man you have in the dugout, flip the sell-on clause card for +20 million, and commit two aging starters to the exit list before the market opens.",
-      "A rival hijacks your marquee signing and you pay 15 million over value before he folds. The XI lands on 82, both objectives hold, and the season sim puts you second of six. Job Done.",
+      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
+      "Three spins later the wheel finds your 84 rated striker. Keep him and the rating holds, sell him and 70 million funds two upgrades elsewhere. You keep him, finish 12 million in debt, and one forced sale later the XI still lands on 82. Job Done.",
     ],
     tips: [
-      "Read the objectives before selling anyone. A missed one costs your best player.",
-      "Be brave with the cuts. Once the market opens the sale window is shut for good, and a timid exit list leaves you shopping with pocket change.",
+      "Read the board's demands before the first spin. Under 25 demands change who the scouts' marquee should be.",
+      "Sell early, spend late. Money banked from the first spins buys real answers when the wheel finds your weakest shirts.",
+      "The overdraft is a tool, not a plan. Two or three forced sales can undo a whole window's work.",
       "Walk away from wars over players you only half want. Overpaying twice sinks rebuilds.",
     ],
     faqs: [
       {
+        q: "What order does the wheel spin in?",
+        a: "A seeded order fixed when you pick the club, hidden from you, every shirt exactly once. There is no re-spinning to reach your striker early.",
+      },
+      {
         q: "What is the fortune card?",
         a: "After hiring your coach the board hands you ten face-down envelopes and you flip exactly one. Best case is a 60 million takeover, worst is a 35 million hidden clause. The deck order is seeded per run, so there is no re-rolling your luck.",
+      },
+      {
+        q: "What happens if I miss a board demand?",
+        a: "Each miss draws one punishment card from the five card deck, and cards do not go back. Only one of the five is merciful, so a second miss is drawing from four cards that all hurt.",
       },
       {
         q: "What do the grades mean?",
