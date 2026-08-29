@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 315.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 318 (desktop used 315 to 317 while 314 was in flight).
 
 ## Inbox (unclaimed)
 
