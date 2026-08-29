@@ -141,9 +141,6 @@ console.log('3) His last ten counts games he could have played, and only those')
   console.log(`   ${c.name} (injured throughout): window ${c.lastTen.length} long, gap ${promiseGap(c).toFixed(2)}`);
   if (a.lastTen.length > PROMISE_WINDOW) fail(`the window grew past ${PROMISE_WINDOW}`);
   if (playingShare(a) < 0.9) fail('a man who started every match does not read as a starter');
-  // Round 125's margin lesson: the bench man is not guaranteed a clean zero,
-  // because an injury in the XI drags him on. Half is the honest line.
-  if (playingShare(b) > 0.5) fail('a man who was barely used reads as if he had played');
   if (c.lastTen.length !== 0) fail('a match he was injured for went into his window');
   if (promiseGap(c) !== 0) fail('an injured player is being judged on football he could not play');
   // and the window is silent until there is enough of a run
@@ -152,6 +149,73 @@ console.log('3) His last ten counts games he could have played, and only those')
   fresh.squad[0].lastTen = [0, 0, 0];
   if (playingShare(fresh.squad[0]) !== null) fail(`a ${PROMISE_WINDOW_MIN - 1} match run is already being judged`);
   if (promiseGap(fresh.squad[0]) !== 0) fail('a player is being punished before he has had a run of games');
+}
+
+/* ---------- 3b. The benched man, measured over a run of seasons ----------
+ *
+ * ROUND 335 FIXED A COIN TOSS HERE. This section used to assert on ONE
+ * scenario: the benched man's share must not exceed 0.5. Injuries in the XI
+ * drag a bench player on, so that number is a random draw, and measured over
+ * 400 fresh scenarios it came out above 0.5 in 5 of them. A board that runs
+ * this harness therefore went red about one run in eighty on healthy code,
+ * which is exactly the margin lesson Round 284 wrote down: a threshold sitting
+ * inside the distribution is a coin toss dressed as a rule.
+ *
+ * So the question is asked of a DISTRIBUTION instead. Measured over 200
+ * batches of 25 scenarios (5,000 careers) before these floors were set:
+ *   batch mean bench share : min 0.052, median 0.112, p95 0.156, max 0.172
+ *   batch fraction over 0.5: median 0.000, p95 0.040, max 0.080
+ *   starter share          : 1.000 in all 5,000
+ * The ceilings below sit at roughly twice the worst batch ever measured,
+ * while a genuine regression (benched men actually being picked, or the
+ * window counting football they did not play) drives the mean toward 0.5
+ * and the fraction toward 1.0, so this is strictly harder to fool than the
+ * single sample it replaces.
+ *
+ * NEGATIVE CONTROL: SIM_ROLES_CONTROL=benchplays counts the STARTER's share
+ * in the bench slot, the shape a regression would take, and both ceilings
+ * must go red.
+ */
+console.log('3b) A benched man reads as benched, measured over a run of them');
+{
+  const CONTROL = process.env.SIM_ROLES_CONTROL || '';
+  if (CONTROL && CONTROL !== 'benchplays') { console.error(`SIM_ROLES_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+  const REPS = 25;
+  const MEAN_CEILING = 0.35;   // measured worst batch 0.172
+  const OVER_HALF_CEILING = 0.30; // measured worst batch 0.080
+  const shares = [];
+  let starterFloor = 1;
+  for (let rep = 0; rep < REPS; rep += 1) {
+    let t = startCareer('Everton');
+    t.xiIds = autoPickXI(t.squad, FORMATIONS[t.formationIndex] ?? FORMATIONS[0]);
+    ensureRoles(t);
+    const st = t.squad.find(p => t.xiIds.includes(p.id) && p.position !== 'GK');
+    const bn = t.squad.find(p => !t.xiIds.includes(p.id) && !p.isYouth);
+    const hurt = t.squad.find(p => !t.xiIds.includes(p.id) && p.id !== bn.id);
+    hurt.injuryWeeks = 60;
+    const keep = [...t.xiIds];
+    for (let i = 0; i < 14 && t.week < t.calendar.length; i++) {
+      t.xiIds = [...keep];
+      const r = playNextEntry(t, { skipHalftime: true });
+      t = r.state;
+      if (r.kind === 'seasonOver') break;
+    }
+    const played = t.squad.find(p => p.id === st.id);
+    const sat = t.squad.find(p => p.id === bn.id);
+    starterFloor = Math.min(starterFloor, playingShare(played) ?? 0);
+    shares.push(CONTROL === 'benchplays' ? (playingShare(played) ?? 0) : (playingShare(sat) ?? 0));
+  }
+  const meanShare = shares.reduce((x, y) => x + y, 0) / shares.length;
+  const overHalf = shares.filter(x => x > 0.5).length / shares.length;
+  console.log(`   ${REPS} scenarios: benched share mean ${meanShare.toFixed(3)}, ${(overHalf * 100).toFixed(0)}% of them over a half, starters never below ${starterFloor.toFixed(3)}`);
+  if (meanShare > MEAN_CEILING) fail(`benched men average ${meanShare.toFixed(3)} of the football, so being dropped barely shows`);
+  if (overHalf > OVER_HALF_CEILING) fail(`${(overHalf * 100).toFixed(0)}% of benched men played more than half, so the window is not reading the team sheet`);
+  if (starterFloor < 0.9) fail('a man who started every match does not read as a starter');
+  if (CONTROL === 'benchplays') {
+    if (failures > 0) { console.log('simRoles control: green. Feeding the starter through the bench check turned it red, so the ceilings can see a regression.'); process.exit(0); }
+    console.error('simRoles control: RED. The bench check passed a man who played every match.');
+    process.exit(1);
+  }
 }
 
 /* ---------- 4. Happiness moves in BOTH directions ---------- */
