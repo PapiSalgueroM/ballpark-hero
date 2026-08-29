@@ -2597,6 +2597,17 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 342.** The real European nights. Era Champions League
+  fields for 2005-06, 2010-11 and 2015-16: all 32 group stage clubs per season,
+  two-source verified by parallel research agents (Wikipedia as raw wikitext,
+  RSSSF, ESPN) with adversarial re-checks finding zero errors. Foreign clubs
+  rate by a finish-derived prior on the era scale (winner at the era top XI
+  down to group stage at nine below, mirroring the tier bands); baked clubs
+  keep real rosters. Era saves draw the full eight groups now, and the fence
+  caught the projection regression the bigger draw exposed (winners-only field
+  dropping a second placed my-club, Round 312 report at full size), fixed to
+  mirror the real draw slot. simEraWorldTables section 7 with the field
+  control. Sources recorded in the workflow journal for the round.
 - **2026-08-29, Round 341.** The indexing audit, external half, from the owner's
   Search Console task document. Every check that does not need his login ran and
   is re-runnable: all 131 canonical URLs live-probed (200, self canonical, title,

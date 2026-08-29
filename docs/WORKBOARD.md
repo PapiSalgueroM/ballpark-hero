@@ -115,11 +115,6 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- ERA CHAMPIONS LEAGUE FIELDS (BUILDING as Round 342, desktop, 2026-08-29): the last
-  Club Manager residue from the review. Parallel research agents pull the real
-  2005-06, 2010-11 and 2015-16 group stage fields, two sources each, the pools grow
-  from 16 to the real 32 with my club slotted in, era saves play 8 groups like the
-  real competition, and the fences pin the counts.
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
   either sign into the Claude in Chrome extension on the PC so the desktop lane can
@@ -195,6 +190,26 @@ Standing claims:
 
 ## Done
 
+- THE REAL EUROPEAN NIGHTS, Round 342 (desktop lane, 2026-08-29). The last Club
+  Manager residue from the review: era saves played FOUR Champions League groups
+  because the continental pool stopped at sixteen clubs from the two baked
+  leagues. The real fields are in now: all 32 group stage clubs for 2005-06,
+  2010-11 and 2015-16, researched by parallel agents against Wikipedia read as
+  raw wikitext plus RSSSF and ESPN, with independent adversarial re-checks
+  finding zero errors in all three (one agent even caught a hallucinated fetch
+  naming Valencia and Roma in groups they never played and refuted it against
+  RSSSF match records). Baked clubs keep their real rosters; foreign clubs get a
+  strength PRIOR derived from their actual finish that season, anchored to the
+  era rating scale, so nothing is invented, only calibrated. The full eight
+  group draw now builds (proven: the played 2005 save drew 8 groups of 4), and
+  fixing that exposed a projection regression the fence caught immediately:
+  with eight groups the winners-only branch resurrected Round 312 exact report
+  at full size, so a second placed my-club now takes the eighth slot in the
+  projection exactly as the real draw gives it. simEraWorldTables section 7
+  pins the 32 club shape, the exact finish distribution only a real season has,
+  the pinned in-league spelling counts, and the eight group draw, with
+  WORLD_CONTROL=field misspelling an entry in memory and proven red. tsc zero,
+  build green, simWorld green, all three harness controls red.
 - THE INDEXING AUDIT, EXTERNAL HALF, Round 341 (desktop lane, 2026-08-29). His
   Search Console task doc, executed to the line it can be without his login. A
   live probe of every canonical URL: all 131 answer 200 with self canonicals,

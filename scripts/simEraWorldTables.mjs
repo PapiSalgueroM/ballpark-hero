@@ -58,15 +58,15 @@ const BUNDLE = path.join(os.tmpdir(), 'eraWorld.bundle.mjs');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.WORLD_CONTROL || '';
-if (CONTROL && CONTROL !== 'modern' && CONTROL !== 'flagless') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'modern' && CONTROL !== 'flagless' && CONTROL !== 'field') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const m = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
-export const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS } = m;
+export const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = m;
 `);
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS } = await import(pathToFileURL(BUNDLE).href);
+const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = await import(pathToFileURL(BUNDLE).href);
 
 const seeded = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 
@@ -216,6 +216,62 @@ console.log('6) every era league id has a nation for its flag');
   console.log(`   ${checked} era league id(s) checked against LEAGUE_NATIONS`);
 }
 
+console.log('7) the verified Champions League fields, and the full eight group draw');
+{
+  /* Round 342. Each era's group stage was 32 named clubs, two-source
+     researched with an adversarial re-check; this section holds the shipped
+     tables to the shape only a real 32 team season can have, proves the
+     spellings actually hit the baked rosters, and proves the era save now
+     draws all eight groups instead of the starved four the review found.
+     WORLD_CONTROL=field misspells one in-league entry in memory (the exact
+     drift a careless edit would cause) and the pinned in-league counts must
+     go red. */
+  if (CONTROL === 'field') {
+    const row = (ERA_UCL_FIELDS.era2010 ?? []).find(e => e.name === 'Tottenham');
+    if (!row) { console.error('control found nothing to misspell: era2010 has no Tottenham entry'); process.exit(1); }
+    row.name = 'Tottenham Hotspur';
+    console.log('   NEGATIVE CONTROL ON: era2010 Tottenham misspelled in memory, the pinned in-league count must go red');
+  }
+  /* every 32 team Champions League season has exactly this finish shape */
+  const WANT_FINISH = { winner: 1, runner_up: 1, semi_final: 2, quarter_final: 4, round_of_16: 8, group_stage: 16 };
+  /* the documented number of field members that come from the era's own
+     baked leagues, which is exactly what a misspelling silently lowers */
+  const IN_LEAGUE = { era2005: 8, era2010: 7, era2015: 11 };
+  let erasChecked = 0;
+  for (const [eraId, field] of Object.entries(ERA_UCL_FIELDS)) {
+    erasChecked += 1;
+    if (field.length !== 32) fail(`${eraId}'s field has ${field.length} clubs, a group stage is 32`);
+    const names = field.map(e => e.name);
+    if (new Set(names).size !== names.length) fail(`${eraId}'s field repeats a club`);
+    const dist = {};
+    for (const e of field) dist[e.finish] = (dist[e.finish] ?? 0) + 1;
+    for (const [fin, want] of Object.entries(WANT_FINISH)) {
+      if ((dist[fin] ?? 0) !== want) fail(`${eraId} has ${dist[fin] ?? 0} ${fin} where a real season has ${want}`);
+    }
+    const baked = new Set((ERA_LEAGUES[eraId] ?? []).flatMap(l => l.clubs));
+    const inLeague = names.filter(n => baked.has(n)).length;
+    if (inLeague !== IN_LEAGUE[eraId]) {
+      fail(`${eraId}'s field matches ${inLeague} baked club names where the season had ${IN_LEAGUE[eraId]}, a spelling drifted off the rosters`);
+    }
+  }
+  if (erasChecked === 0) fail('ERA_UCL_FIELDS is empty, this section ran on nothing');
+  /* the played 2005 save from section 1: the real eight group draw */
+  const world = era.uclWorld ?? [];
+  if (!era.uclGroup) fail('2005 Barcelona has no Champions League group, so the draw was never built');
+  if (world.length !== 7) fail(`the 2005 save drew ${world.length} AI groups where the field supports 7 (eight with mine, the review's number was 3)`);
+  const fieldNames = new Set((ERA_UCL_FIELDS.era2005 ?? []).map(e => e.name));
+  const seen = new Set([era.clubName, ...(era.uclGroup?.opponents ?? [])]);
+  for (const g of world) {
+    if (g.clubs.length !== 4) fail(`group ${g.letter} has ${g.clubs.length} clubs, a group is 4`);
+    for (const c of g.clubs) {
+      if (!fieldNames.has(c)) fail(`group ${g.letter}'s ${c} is not in the verified 2005-06 field`);
+      if (seen.has(c)) fail(`${c} appears in two groups at once`);
+      seen.add(c);
+    }
+  }
+  console.log(`   ${erasChecked} era field(s) held to the 32 club shape, and the 2005 save drew ${1 + world.length} groups of 4`);
+}
+
 console.log('');
 if (CONTROL === 'modern') {
   if (failures > 0) { console.log(`simEraWorldTables control: green. The rewritten loop was reported (${failures} finding).`); process.exit(0); }
@@ -224,6 +280,10 @@ if (CONTROL === 'modern') {
 if (CONTROL === 'flagless') {
   if (failures > 0) { console.log(`simEraWorldTables control: green. The planted flagless era league was reported (${failures} finding).`); process.exit(0); }
   console.error('simEraWorldTables control: RED. An era league with no nation went unreported.'); process.exit(1);
+}
+if (CONTROL === 'field') {
+  if (failures > 0) { console.log(`simEraWorldTables control: green. The misspelled field entry was reported (${failures} finding).`); process.exit(0); }
+  console.error('simEraWorldTables control: RED. A field spelling that misses the rosters went unreported.'); process.exit(1);
 }
 if (failures > 0) { console.error(`simEraWorldTables: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.');

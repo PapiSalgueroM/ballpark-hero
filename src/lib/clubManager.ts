@@ -6163,7 +6163,10 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
 }
 
 function strengthOf(state: CareerState, club: string): number {
-  return state.clubStrengths[club] ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
+  /* Round 342: a historic save meeting a verified foreign participant reads
+     the finish derived era prior, never a 2026 preview rating. */
+  const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
+  return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
 
 /** Ghost club that gives one side a bye in odd-sized leagues (MLS's 15). */
@@ -6330,7 +6333,167 @@ function syncWorld(state: CareerState, myPlayed: number): void {
 /** Round 146: the continental pool for a historic era is the era's own best
  *  clubs (both its leagues, strongest first), so a 2010 European night is
  *  Chelsea or Valencia and never a club from a 2026 flavor list. */
+/* Round 342: the REAL fields. Each era's Champions League group stage was 32
+   named clubs, a documented historical fact, and the review said so: era
+   saves played 4 groups because this pool stopped at 16 clubs from the two
+   baked leagues. ERA_UCL_FIELDS carries the verified 32 per era (two-source
+   researched, sources in the round record); clubs from the baked leagues keep
+   their real rosters and ratings, and foreign clubs get a strength PRIOR
+   derived from their actual finish that season, anchored to the era's own
+   rating scale, so nothing about a club is invented, only calibrated. */
+type UclFinish = 'winner' | 'runner_up' | 'semi_final' | 'quarter_final' | 'round_of_16' | 'group_stage';
+/* How far a finish sits below the era's best XI, in rating points. The
+   thresholds mirror the era tier bands (a gap of 4 is still tier one company,
+   8 is tier two, 13 tier three), so the season's semifinalists rate like
+   title contenders and a group stage exit rates like a mid table side. */
+const ERA_FINISH_GAP: Record<UclFinish, number> = {
+  winner: 0, runner_up: 1, semi_final: 2.5, quarter_final: 4, round_of_16: 6.5, group_stage: 9,
+};
+export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; finish: UclFinish }[]> = {
+  /* Round 342. Each list is the complete real group stage field for that
+     season, verified against Wikipedia's season articles read as raw wikitext
+     AND RSSSF's group tables (2005-06 and 2010-11) or ESPN's standings
+     (2015-16), with an independent adversarial re-check finding zero errors
+     in all three. Names use this file's own spellings where the club is
+     baked or already known, so roster lookups hit. */
+  era2005: [
+    { name: 'Barcelona', country: 'Spain', finish: 'winner' },
+    { name: 'Arsenal', country: 'England', finish: 'runner_up' },
+    { name: 'AC Milan', country: 'Italy', finish: 'semi_final' },
+    { name: 'Villarreal', country: 'Spain', finish: 'semi_final' },
+    { name: 'Juventus', country: 'Italy', finish: 'quarter_final' },
+    { name: 'Inter Milan', country: 'Italy', finish: 'quarter_final' },
+    { name: 'Benfica', country: 'Portugal', finish: 'quarter_final' },
+    { name: 'Lyon', country: 'France', finish: 'quarter_final' },
+    { name: 'Bayern Munich', country: 'Germany', finish: 'round_of_16' },
+    { name: 'Ajax', country: 'Netherlands', finish: 'round_of_16' },
+    { name: 'Werder Bremen', country: 'Germany', finish: 'round_of_16' },
+    { name: 'PSV', country: 'Netherlands', finish: 'round_of_16' },
+    { name: 'Real Madrid', country: 'Spain', finish: 'round_of_16' },
+    { name: 'Liverpool', country: 'England', finish: 'round_of_16' },
+    { name: 'Chelsea', country: 'England', finish: 'round_of_16' },
+    { name: 'Rangers', country: 'Scotland', finish: 'round_of_16' },
+    { name: 'Club Brugge', country: 'Belgium', finish: 'group_stage' },
+    { name: 'Rapid Vienna', country: 'Austria', finish: 'group_stage' },
+    { name: 'Thun', country: 'Switzerland', finish: 'group_stage' },
+    { name: 'Sparta Prague', country: 'Czech Republic', finish: 'group_stage' },
+    { name: 'Udinese', country: 'Italy', finish: 'group_stage' },
+    { name: 'Panathinaikos', country: 'Greece', finish: 'group_stage' },
+    { name: 'Lille', country: 'France', finish: 'group_stage' },
+    { name: 'Manchester United', country: 'England', finish: 'group_stage' },
+    { name: 'Schalke 04', country: 'Germany', finish: 'group_stage' },
+    { name: 'Fenerbahçe', country: 'Turkey', finish: 'group_stage' },
+    { name: 'Rosenborg', country: 'Norway', finish: 'group_stage' },
+    { name: 'Olympiacos', country: 'Greece', finish: 'group_stage' },
+    { name: 'Real Betis', country: 'Spain', finish: 'group_stage' },
+    { name: 'Anderlecht', country: 'Belgium', finish: 'group_stage' },
+    { name: 'Artmedia Bratislava', country: 'Slovakia', finish: 'group_stage' },
+    { name: 'Porto', country: 'Portugal', finish: 'group_stage' },
+  ],
+  era2010: [
+    { name: 'Barcelona', country: 'Spain', finish: 'winner' },
+    { name: 'Manchester United', country: 'England', finish: 'runner_up' },
+    { name: 'Real Madrid', country: 'Spain', finish: 'semi_final' },
+    { name: 'Schalke 04', country: 'Germany', finish: 'semi_final' },
+    { name: 'Tottenham', country: 'England', finish: 'quarter_final' },
+    { name: 'Chelsea', country: 'England', finish: 'quarter_final' },
+    { name: 'Shakhtar Donetsk', country: 'Ukraine', finish: 'quarter_final' },
+    { name: 'Inter Milan', country: 'Italy', finish: 'quarter_final' },
+    { name: 'Arsenal', country: 'England', finish: 'round_of_16' },
+    { name: 'AC Milan', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Bayern Munich', country: 'Germany', finish: 'round_of_16' },
+    { name: 'Roma', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Valencia', country: 'Spain', finish: 'round_of_16' },
+    { name: 'Lyon', country: 'France', finish: 'round_of_16' },
+    { name: 'Marseille', country: 'France', finish: 'round_of_16' },
+    { name: 'Copenhagen', country: 'Denmark', finish: 'round_of_16' },
+    { name: 'Twente', country: 'Netherlands', finish: 'group_stage' },
+    { name: 'Werder Bremen', country: 'Germany', finish: 'group_stage' },
+    { name: 'Benfica', country: 'Portugal', finish: 'group_stage' },
+    { name: 'Hapoel Tel Aviv', country: 'Israel', finish: 'group_stage' },
+    { name: 'Rangers', country: 'Scotland', finish: 'group_stage' },
+    { name: 'Bursaspor', country: 'Turkey', finish: 'group_stage' },
+    { name: 'Rubin Kazan', country: 'Russia', finish: 'group_stage' },
+    { name: 'Panathinaikos', country: 'Greece', finish: 'group_stage' },
+    { name: 'Basel', country: 'Switzerland', finish: 'group_stage' },
+    { name: 'CFR Cluj', country: 'Romania', finish: 'group_stage' },
+    { name: 'Spartak Moscow', country: 'Russia', finish: 'group_stage' },
+    { name: 'Žilina', country: 'Slovakia', finish: 'group_stage' },
+    { name: 'Ajax', country: 'Netherlands', finish: 'group_stage' },
+    { name: 'Auxerre', country: 'France', finish: 'group_stage' },
+    { name: 'Braga', country: 'Portugal', finish: 'group_stage' },
+    { name: 'Partizan', country: 'Serbia', finish: 'group_stage' },
+  ],
+  era2015: [
+    { name: 'Real Madrid', country: 'Spain', finish: 'winner' },
+    { name: 'Atlético Madrid', country: 'Spain', finish: 'runner_up' },
+    { name: 'Manchester City', country: 'England', finish: 'semi_final' },
+    { name: 'Bayern Munich', country: 'Germany', finish: 'semi_final' },
+    { name: 'Barcelona', country: 'Spain', finish: 'quarter_final' },
+    { name: 'Paris Saint-Germain', country: 'France', finish: 'quarter_final' },
+    { name: 'Wolfsburg', country: 'Germany', finish: 'quarter_final' },
+    { name: 'Benfica', country: 'Portugal', finish: 'quarter_final' },
+    { name: 'Chelsea', country: 'England', finish: 'round_of_16' },
+    { name: 'Arsenal', country: 'England', finish: 'round_of_16' },
+    { name: 'Juventus', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Roma', country: 'Italy', finish: 'round_of_16' },
+    { name: 'PSV', country: 'Netherlands', finish: 'round_of_16' },
+    { name: 'Dynamo Kyiv', country: 'Ukraine', finish: 'round_of_16' },
+    { name: 'Zenit', country: 'Russia', finish: 'round_of_16' },
+    { name: 'Gent', country: 'Belgium', finish: 'round_of_16' },
+    { name: 'Shakhtar Donetsk', country: 'Ukraine', finish: 'group_stage' },
+    { name: 'Malmö FF', country: 'Sweden', finish: 'group_stage' },
+    { name: 'Manchester United', country: 'England', finish: 'group_stage' },
+    { name: 'CSKA Moscow', country: 'Russia', finish: 'group_stage' },
+    { name: 'Galatasaray', country: 'Turkey', finish: 'group_stage' },
+    { name: 'Astana', country: 'Kazakhstan', finish: 'group_stage' },
+    { name: 'Sevilla', country: 'Spain', finish: 'group_stage' },
+    { name: 'Borussia Mönchengladbach', country: 'Germany', finish: 'group_stage' },
+    { name: 'Bayer Leverkusen', country: 'Germany', finish: 'group_stage' },
+    { name: 'BATE Borisov', country: 'Belarus', finish: 'group_stage' },
+    { name: 'Olympiacos', country: 'Greece', finish: 'group_stage' },
+    { name: 'Dinamo Zagreb', country: 'Croatia', finish: 'group_stage' },
+    { name: 'Porto', country: 'Portugal', finish: 'group_stage' },
+    { name: 'Maccabi Tel Aviv', country: 'Israel', finish: 'group_stage' },
+    { name: 'Valencia', country: 'Spain', finish: 'group_stage' },
+    { name: 'Lyon', country: 'France', finish: 'group_stage' },
+  ],
+};
+
+const ERA_TOP_XI_CACHE = new Map<string, number>();
+function eraTopXI(eraId: string): number {
+  const hit = ERA_TOP_XI_CACHE.get(eraId);
+  if (hit != null) return hit;
+  let top = 0;
+  for (const lg of ERA_LEAGUES[eraId] ?? []) for (const c of lg.clubs) top = Math.max(top, eraXIAvg(eraId, c) ?? 0);
+  const v = top || 80;
+  ERA_TOP_XI_CACHE.set(eraId, v);
+  return v;
+}
+
+/** A foreign era club's strength, derived from its real finish that season.
+ *  Null for clubs not in the era's verified field. */
+function eraEuroPrior(eraId: string, club: string): number | null {
+  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === club);
+  if (!row) return null;
+  return Math.round((eraTopXI(eraId) - ERA_FINISH_GAP[row.finish]) * 10) / 10;
+}
+
+/** The one strength chain for any club a historic era can meet in Europe:
+ *  the era bake when the club has a real roster, the finish derived prior
+ *  when it is a verified foreign participant, 60 as the honest floor. */
+function eraEuroStrength(eraId: string, club: string): number {
+  return eraXIAvg(eraId, club) ?? eraEuroPrior(eraId, club) ?? 60;
+}
+
 function eraEuroPool(eraId: string): string[] {
+  const field = ERA_UCL_FIELDS[eraId];
+  if (field && field.length) {
+    return field
+      .map(e => ({ c: e.name, xi: eraEuroStrength(eraId, e.name) }))
+      .sort((a, b) => b.xi - a.xi)
+      .map(e => e.c);
+  }
   const leagues = ERA_LEAGUES[eraId] ?? [];
   return leagues
     .flatMap(l => l.clubs)
@@ -6364,7 +6527,19 @@ function uclSeededField(state: CareerState): string[] {
   if (state.uclGroup) ranked.push(sortedTable(state.uclGroup.table).map(r => r.club));
   for (const g of state.uclWorld ?? []) ranked.push(sortedTable(g.table).map(r => r.club));
   const winners = ranked.map(rows => rows[0]).filter((c): c is string => !!c);
-  if (winners.length >= 8) return winners.slice(0, 8);
+  if (winners.length >= 8) {
+    /* Round 342: with the verified fields the era draw fills all eight
+       groups, and this branch, winners only, quietly resurrected the exact
+       Round 312 report at full size: the engine advances the top TWO of my
+       group, so a second placed me must take the eighth slot here just as
+       uclBracketField gives it to me at the real draw. Same rule, same
+       slot, so the projection people watch all group stage is the bracket
+       they get. */
+    const field = winners.slice(0, 8);
+    const myRows = state.uclGroup ? sortedTable(state.uclGroup.table).map(r => r.club) : [];
+    if (myRows[1] === state.clubName && !field.includes(state.clubName)) field[7] = state.clubName;
+    return field;
+  }
   const runners = ranked.map(rows => rows[1]);
   const field: string[] = [];
   const G = ranked.length;
@@ -6517,8 +6692,9 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   let pool: string[];
   if (historic) {
-    // A historic era's continental pool is sixteen clubs, so its group
-    // stage is honestly smaller rather than padded with relegation fodder.
+    // Round 342: with the verified 32 club field this fills the real eight
+    // group draw; an era without a field keeps the honest sixteen and its
+    // smaller stage rather than padding with relegation fodder.
     pool = shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)));
   } else {
     const primary = shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
@@ -6922,7 +7098,10 @@ const TITLE_GAP = 2.5;
  * and rival distances read its real strength instead of a 65 fallback. */
 function xiChainFor(eraId?: string): (n: string) => number {
   const base: (n: string) => number = eraId && isHistoricEra(eraId)
-    ? n => eraXIAvg(eraId, n) ?? 60
+    /* Round 342: foreign verified participants answer with their finish
+       derived prior instead of a flat 60; in league clubs are untouched
+       because the bake answers first. */
+    ? n => eraEuroStrength(eraId, n)
     : n => bakedXIAvg(n) ?? STRENGTH_PRIORS[n] ?? 65;
   return n => (ACTIVE_CUSTOM && n === ACTIVE_CUSTOM.def.name ? ACTIVE_CUSTOM.xi : base(n));
 }
