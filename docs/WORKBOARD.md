@@ -44,7 +44,7 @@ How it works:
   within a lane. Claim here before building.
 - From that list, unclaimed and sizable: the Rebuild redesign, the Sign the Player
   auction rebuild, the Player Stock Market redesign, the tycoon merge, the conquest map
-  overhaul, the two remaining new games (Search and Discard, the draft mode; Sports Bingo BUILDING as Round 323, cloud, 2026-08-29), the
+  overhaul, the two remaining new games (Search and Discard, the draft mode; Sports Bingo shipped as Round 323), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
@@ -143,6 +143,14 @@ Standing claims:
 
 ## Done
 
+- SPORTS BINGO, Round 323 (cloud lane, 2026-08-29). His pack opening bingo, built to
+  the spec: 24 real conditions plus a free centre, ten packs of five verified players
+  on a fifteen second window, manual marking, shared daily card, unlimited, three CPU
+  tempers on the identical deal. simSportsBingo (with its impossible control) caught an
+  incompletable card and a flattened CPU curve pre launch; a Chromium playthrough
+  proved the loop. Sitemap 129, floor ratcheted, What's New entry. Multiplayer rooms
+  deliberately out of scope (the review's own backend note). Search and Discard and
+  the draft mode remain in the Inbox.
 - REACT-ROUTER V7, Round 322 (cloud lane, 2026-08-29). The queued breaking major,
   mechanical because the app never used the data router APIs: 6.30 to 7.18.3, zero
   code changes, tsc zero first try. Proven in a browser: five direct game loads, all
