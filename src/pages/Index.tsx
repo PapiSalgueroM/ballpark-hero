@@ -341,8 +341,8 @@ export default function Index() {
           attributes compiles fine but breaks simIndexing's parse of the
           PageSeo block, which is how this was caught. */}
       <PageSeo
-        title="DoUKnowBall: Free Daily Sports Trivia Games"
-        description="100+ free sports trivia games and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. Daily challenges, no login required."
+        title="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
+        description="100+ free sports trivia games, daily sports quizzes and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. No login required."
         path="/"
       />
       <HomeTileStyles />
