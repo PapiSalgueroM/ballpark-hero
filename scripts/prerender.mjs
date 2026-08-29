@@ -166,7 +166,9 @@ if (process.env.PRERENDER_ONLY) {
   const unknown = [...want].filter(r => !known.has(r));
   if (unknown.length) {
     console.error(`PRERENDER_ONLY names route(s) the sitemap does not know: ${unknown.join(', ')}.`);
-    console.error('A new route must reach the sitemap first: node scripts/genSitemap.mjs --routes-only, then prerender.');
+    console.error('This script reads dist/sitemap.xml, and the build is what copies public/sitemap.xml into dist.');
+    console.error('New route order: node scripts/genSitemap.mjs --routes-only, then npm run build, THEN prerender.');
+    console.error('Round 328 hit this with the routes-only pass run after the build: public knew the route, dist did not.');
     process.exit(1);
   }
   unique = unique.filter(r => want.has(r));
