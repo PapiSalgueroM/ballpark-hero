@@ -123,6 +123,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/sign-the-player': 'soccer2',
   '/soccer-career': 'soccer2',
   '/soccer-grid': 'soccer2',
+  '/search-and-discard': 'soccer2',
   '/squad-deal': 'soccer2',
   '/stadium-tycoon': 'soccer2',
   '/wonderkid-factory': 'soccer2',

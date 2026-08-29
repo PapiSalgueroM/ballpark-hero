@@ -38,7 +38,7 @@ How it works:
   within a lane. Claim here before building.
 - From that list, unclaimed and sizable: the Rebuild redesign, the Sign the Player
   auction rebuild, the Player Stock Market redesign, the tycoon merge, the conquest map
-  overhaul, the draft mode game (Search and Discard BUILDING as Round 325, cloud, 2026-08-29; Sports Bingo shipped as Round 323), the
+  overhaul, the draft mode game (Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
@@ -137,6 +137,14 @@ Standing claims:
 
 ## Done
 
+- SEARCH AND DISCARD, Round 325 (cloud lane, 2026-08-29). The squad duel to his
+  spec: search three, keep one into the shared 4-3-3, bin two from the whole game,
+  CPU or pass and play, settled by one deterministic 38 game season with derbies.
+  simSearchDiscard caught 32 duplicate names in the baked pool (the same man could
+  land in both squads), a settle curve too soft to reward drafting, and two of its
+  own invented measurement claims, all fixed with measured floors. Online rooms
+  stay out of scope per the review's backend note. The draft mode game is the last
+  of the three new game requests still in the Inbox.
 - THE SEO KEYWORD PASS, Round 324 (cloud lane, 2026-08-29). The head terms worked
   through the home title (both pinned copies), both home descriptions, the og and
   twitter cards, the home static block and all six hub descriptions, each claim
