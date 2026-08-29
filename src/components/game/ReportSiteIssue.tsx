@@ -23,7 +23,11 @@ import { cn } from '@/lib/utils';
  * so reports say where they happened without the player typing it.
  */
 
+/* Round 316, his review: "add way more to the report an issue like incorrect
+   answer or blah blah blah". Wrong answer gets its own chip because it is the
+   report he files most. */
 const REPORT_KINDS = [
+  'Wrong answer',
   'Bug',
   'Wrong info',
   'Idea',

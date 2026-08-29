@@ -1,5 +1,24 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+// DB-BACKED, FREE. This validator answers "did <player> play for <team> (and
+// optionally at <position>, and what's their <stat>)" purely from the
+// nba_player_stats table (career totals with a comma-separated `teams` column
+// of Basketball-Reference abbreviations). No external AI and no API key
+// needed, so NBA Starting 5 / grid games work for free.
+//
+// TWO DIFFERENT KINDS OF "cannot verify", and Round 316 made the line hard:
+//   - COVERAGE GAP: the request succeeded and the player is genuinely not in
+//     the table. Rejecting would block legitimate obscure players the table
+//     never held, so this is ACCEPTED, deliberately and visibly ("not in our
+//     stat table to verify"). A deterministic data decision, not an error.
+//   - ERROR: the lookup failed (network, REST error) or the handler threw.
+//     The old version accepted these too ("never break the game"), which is
+//     the exact fail-open shape the July 2026 P1 rule bans. Errors now return
+//     {valid:false, unverified:true} so the client retries without penalty.
+
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") || "";
+
 const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
@@ -26,9 +45,8 @@ function getCorsHeaders(req: Request) {
 }
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 15;
+const RATE_LIMIT_MAX = 30;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
@@ -39,150 +57,185 @@ function isRateLimited(ip: string): boolean {
   entry.count++;
   return entry.count > RATE_LIMIT_MAX;
 }
-
 setInterval(() => {
   const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if (now > entry.resetAt) rateLimitMap.delete(ip);
-  }
+  for (const [ip, entry] of rateLimitMap) if (now > entry.resetAt) rateLimitMap.delete(ip);
 }, 300_000);
+
+// Team name/nickname -> Basketball-Reference abbreviations (incl. relocations).
+const NICK_TO_ABBRS: Record<string, string[]> = {
+  hawks: ["ATL"],
+  celtics: ["BOS"],
+  nets: ["BRK", "NJN", "NYN"],
+  hornets: ["CHO", "CHH", "CHA"],
+  bobcats: ["CHA"],
+  bulls: ["CHI"],
+  cavaliers: ["CLE"],
+  cavs: ["CLE"],
+  mavericks: ["DAL"],
+  mavs: ["DAL"],
+  nuggets: ["DEN"],
+  pistons: ["DET"],
+  warriors: ["GSW", "SFW"],
+  rockets: ["HOU", "SDR"],
+  pacers: ["IND"],
+  clippers: ["LAC", "SDC", "BUF"],
+  lakers: ["LAL"],
+  grizzlies: ["MEM", "VAN"],
+  heat: ["MIA"],
+  bucks: ["MIL"],
+  timberwolves: ["MIN"],
+  wolves: ["MIN"],
+  pelicans: ["NOP", "NOH", "NOK"],
+  knicks: ["NYK"],
+  thunder: ["OKC"],
+  supersonics: ["SEA"],
+  sonics: ["SEA"],
+  magic: ["ORL"],
+  "76ers": ["PHI"],
+  sixers: ["PHI"],
+  suns: ["PHO"],
+  blazers: ["POR"],
+  trailblazers: ["POR"],
+  kings: ["SAC", "KCK", "KCO", "CIN"],
+  spurs: ["SAS"],
+  raptors: ["TOR"],
+  jazz: ["UTA", "NOJ"],
+  wizards: ["WAS", "WSB", "CAP", "BAL"],
+  bullets: ["WAS", "WSB", "CAP", "BAL"],
+};
+
+function abbrsForTeam(teamName: string): string[] | null {
+  const words = teamName.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean);
+  const joined = words.join("");
+  for (const [nick, abbrs] of Object.entries(NICK_TO_ABBRS)) {
+    if (words.includes(nick) || joined.includes(nick)) return abbrs;
+  }
+  return null;
+}
+
+function posFamilies(pos: string): Set<string> {
+  const s = new Set<string>();
+  const p = (pos || "").toUpperCase();
+  if (p.includes("G")) s.add("G");
+  if (p.includes("F")) s.add("F");
+  if (p.includes("C")) s.add("C");
+  return s;
+}
+
+function requestedFamily(position: string): string | null {
+  const p = (position || "").toUpperCase();
+  if (p.startsWith("PG") || p.startsWith("SG") || p === "G" || p.includes("GUARD")) return "G";
+  if (p.startsWith("SF") || p.startsWith("PF") || p === "F" || p.includes("FORWARD")) return "F";
+  if (p === "C" || p.includes("CENTER")) return "C";
+  return null;
+}
+
+function adjacent(a: string, b: string): boolean {
+  if (a === b) return true;
+  const adj: Record<string, string[]> = { G: ["F"], F: ["G", "C"], C: ["F"] };
+  return (adj[a] || []).includes(b);
+}
+
+function resolveStatValue(row: any, challengeStat: string): number | null {
+  const s = (challengeStat || "").toLowerCase();
+  const g = Number(row.games) || 0;
+  const perGame = /per game|per-game|\bpg\b|ppg|rpg|apg|bpg|spg|average|avg/.test(s);
+  const val = (col: string) => {
+    const raw = Number(row[col]) || 0;
+    return perGame && g ? Math.round((raw / g) * 10) / 10 : raw;
+  };
+  if (/rebound|\breb\b|trb|rpg/.test(s)) return val("trb");
+  if (/assist|\bast\b|apg/.test(s)) return val("ast");
+  if (/three|3p|3-p|3 point|triple/.test(s)) return val("three_p");
+  if (/steal|\bstl\b|spg/.test(s)) return val("stl");
+  if (/block|\bblk\b|bpg/.test(s)) return val("blk");
+  if (/\bgames?\b|\bgp\b/.test(s) && !/per game/.test(s)) return Number(row.games) || 0;
+  if (/point|\bpts\b|scor|ppg/.test(s)) return val("points");
+  return null;
+}
+
+/** ok:false means the LOOKUP failed (an error, never a coverage verdict). */
+async function lookupPlayer(name: string): Promise<{ ok: boolean; row: any | null }> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return { ok: false, row: null };
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/nba_player_stats?player_name=ilike.${encodeURIComponent(name)}&select=player_name,teams,position,points,games,trb,ast,three_p,stl,blk&limit=2`;
+    const r = await fetch(url, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } });
+    if (!r.ok) return { ok: false, row: null };
+    const rows = await r.json();
+    return { ok: true, row: rows && rows.length ? rows[0] : null };
+  } catch (_e) {
+    return { ok: false, row: null };
+  }
+}
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const json = (obj: unknown, status = 200) =>
+    new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("cf-connecting-ip") || "unknown";
-  if (isRateLimited(clientIp)) {
-    return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
-      status: 429,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("cf-connecting-ip") || "unknown";
+  if (isRateLimited(ip)) return json({ valid: false, error: "Rate limit exceeded" }, 429);
 
   try {
     const body = await req.json();
     const { playerName, teamName, position, challengeStat } = body;
 
     if (!playerName || typeof playerName !== "string" || playerName.length > 100) {
-      return new Response(JSON.stringify({ error: "Invalid playerName" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ valid: false, error: "Invalid playerName" }, 400);
     }
     if (!teamName || typeof teamName !== "string" || teamName.length > 100) {
-      return new Response(JSON.stringify({ error: "Invalid teamName" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ valid: false, error: "Invalid teamName" }, 400);
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    // Require a full name (first + last), matching the old UX rule.
+    if (!playerName.trim().includes(" ")) {
+      return json({ valid: false, reason: "Please enter the player's full first and last name (e.g. 'LeBron James').", fullName: null });
+    }
 
-    const positionCheck = position ? `\n3. Is "${position}" a valid/primary position for this player? A player's position is valid if they primarily played that position during their career. PG=Point Guard, SG=Shooting Guard, SF=Small Forward, PF=Power Forward, C=Center. Some players may qualify for adjacent positions (e.g. a SG/SF can play either).` : '';
-    const positionField = position ? ', "validPosition": true/false' : '';
+    const lookup = await lookupPlayer(playerName.trim());
 
-    const statLookup = challengeStat ? `\n4. Look up this player's career ${challengeStat}. For per-game stats use career averages. For counting stats (3PM, Games Played, Championships) use career totals. For Height use inches, Weight use lbs.` : '';
-    const statField = challengeStat ? ', "statValue": <number or null if unknown>' : '';
+    // The lookup ERRORED: fail closed, no penalty, retry.
+    if (!lookup.ok) {
+      return json({ valid: false, unverified: true, reason: "Couldn't verify that answer. Try again in a second." });
+    }
 
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-lite",
-          messages: [
-            {
-              role: "system",
-              content: `You are an NBA database with comprehensive knowledge up to March 2026. Answer ONLY with a JSON object.
+    // Genuinely not in our table -> we can't disprove it; allow (lenient,
+    // deliberate, and said out loud) so obscure real players still work.
+    if (!lookup.row) {
+      return json({ valid: true, reason: "Accepted (not in our stat table to verify).", fullName: playerName.trim() });
+    }
 
-GROUND TRUTH – 2025-26 SEASON ROSTER UPDATES (use these over any older data):
-- Nikola Topić: Oklahoma City Thunder (drafted 2024, NBA debut Feb 12 2026). Position: PG/SG.
-- Luka Dončić: Los Angeles Lakers (traded Feb 2025 from Dallas Mavericks).
-- Kevin Durant: Houston Rockets (traded 2025 from Phoenix Suns).
-- Jimmy Butler: Golden State Warriors (traded 2024-25 from Miami Heat).
-- Bronny James: Los Angeles Lakers (drafted 2024).
-- Russell Westbrook: Denver Nuggets (signed Feb 2024).
-- Klay Thompson: Dallas Mavericks (signed 2024 free agency from Golden State Warriors).
-- Paul George: Philadelphia 76ers (signed 2024 free agency from LA Clippers).
-- DeMar DeRozan: Sacramento Kings (signed 2024 from Chicago Bulls).
-- Dejounte Murray: New Orleans Pelicans (traded 2024 from Atlanta Hawks).
-- Mikal Bridges: New York Knicks (traded 2024 from Brooklyn Nets).
-- Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
-- Lauri Markkanen: Still on Utah Jazz (2025-26 season).
-- Victor Wembanyama: San Antonio Spurs (drafted 2023, 2025-26 sophomore season).
-- Chet Holmgren: Oklahoma City Thunder (drafted 2022).
-- Paolo Banchero: Orlando Magic (drafted 2022).
-- Zion Williamson: New Orleans Pelicans (drafted 2019).
-- Karl-Anthony Towns: New York Knicks (traded 2024 from Minnesota Timberwolves).
+    const row = lookup.row;
+    const fullName = row.player_name as string;
+    const playerAbbrs = String(row.teams || "").split(",").map((t) => t.trim().toUpperCase()).filter(Boolean);
 
-IMPORTANT RULES:
-1. The user MUST provide a full first and last name (e.g. "LeBron James", "Stephen Curry"). If they only provide a first name (e.g. "LeBron", "Steph", "Kobe") or a nickname without a last name, return {"valid": false, "reason": "Please enter the player's full first and last name (e.g. 'LeBron James')", "fullName": null}. Single-word names are NOT acceptable.
-
-2. You MUST verify the player actually played for the specified team. This is CRITICAL. If the player NEVER played for that team (regular season or playoffs), you MUST return valid: false. Do NOT return valid: true unless you are certain the player played for that specific team. Account for team name changes (e.g., Seattle SuperSonics → Oklahoma City Thunder, New Jersey Nets → Brooklyn Nets, Charlotte Bobcats → Charlotte Hornets).
-
-For example:
-- "LeBron James" + "Boston Celtics" → valid: false (he never played for the Celtics)
-- "Stephen Curry" + "Chicago Bulls" → valid: false (he never played for the Bulls)
-- "LeBron James" + "Los Angeles Lakers" → valid: true (he plays for the Lakers)
-
-Tasks:
-1. Check if the player name is a real NBA player (must be full first and last name).
-2. Check if they have EVER played for the given NBA team. If NOT, return valid: false with reason explaining they never played for that team.${positionCheck}${statLookup}
-
-Response format: {"valid": true/false, "reason": "short explanation", "fullName": "Player Full First and Last Name"${positionField}${statField}}
-- If the player never played for the team, set valid to false and reason to "[Player] never played for the [Team]."
-- The "fullName" field MUST always contain the player's commonly known full name (first and last).`,
-            },
-            {
-              role: "user",
-              content: `Player: "${playerName}", Team: "${teamName}"${position ? `, Position: "${position}"` : ''}${challengeStat ? `, Stat: "${challengeStat}"` : ''}`,
-            },
-          ],
-        }),
+    // Team check
+    const wantAbbrs = abbrsForTeam(teamName);
+    if (wantAbbrs) {
+      const played = wantAbbrs.some((a) => playerAbbrs.includes(a));
+      if (!played) {
+        return json({ valid: false, reason: `${fullName} never played for the ${teamName}.`, fullName });
       }
-    );
-
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
-
-    let parsed;
-    try {
-      const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
-      parsed = JSON.parse(jsonMatch[1].trim());
-    } catch {
-      parsed = { valid: true, reason: "Could not parse validation response." };
+    // Position check (lenient: only reject clearly-disjoint families)
+    if (position && typeof position === "string") {
+      const req2 = requestedFamily(position);
+      const fams = posFamilies(row.position);
+      if (req2 && fams.size && ![...fams].some((f) => adjacent(req2, f))) {
+        return json({ valid: false, validPosition: false, reason: `${fullName} did not play ${position}.`, fullName });
+      }
     }
 
-    // If player is valid for team but not for position, override
-    if (parsed.valid && position && parsed.validPosition === false) {
-      parsed.valid = false;
-      parsed.reason = `${playerName} did not primarily play ${position}. Try a different position.`;
-    }
+    const statValue = challengeStat && typeof challengeStat === "string" ? resolveStatValue(row, challengeStat) : null;
 
-    return new Response(JSON.stringify(parsed), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  } catch (e) {
-    console.error("nba-validate-player error:", e);
-    return new Response(
-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({ valid: true, reason: null, fullName, validPosition: true, statValue });
+  } catch (_e) {
+    // Round 316: FAIL CLOSED. This used to accept on any unexpected error,
+    // the exact July P1 shape the standing rule bans.
+    return json({ valid: false, unverified: true, reason: "Couldn't verify that answer. Try again in a second." }, 200);
   }
 });

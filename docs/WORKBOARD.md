@@ -20,6 +20,14 @@ How it works:
 
 ## Inbox (unclaimed)
 
+- MOBILE PASS (Anthony, 2026-08-29: "were losing a lot of viewers because were not the
+  best mobile friendly because how everything is formatted so make sure everything
+  translates smoothly"). A full phone-first sweep of every route: the vehicles are
+  sweepGames at 320/390 widths, playIphone, simMobileChrome and the playGames walk,
+  plus hand checks of the layouts those cannot judge (tap target sizes, text scale,
+  horizontal squeeze, fixed elements covering content). Work the findings as rounds.
+  Note the constraint: no-scroll rule and the FIFA tile rule govern the fixes.
+
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
   indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
   the indexed surface. CAUTION built into the item: thin or near-duplicate pages hurt as
@@ -73,8 +81,12 @@ From the 2026-08-28 review (bugs, claimed same day):
   Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
   systematic sweep of that list against current squads would catch the rest. Needs the
   database and web verification, desktop lane work.
-- The report-a-bug pipeline: categories, delivery to the project inbox he can read,
-  FormSubmit activation confirmed (folds into the Round 304 Supabase tap below).
+- OWNER TAP, the one thing only Anthony can do: open douknowball1@gmail.com, find the
+  FormSubmit "Activate Form" email (a fresh one was triggered 2026-08-29), click
+  Activate. Until that click, bug reports reach the admin screen but never his inbox;
+  after it, every report emails him. Round 316 fixed everything around it.
+- OWNER TAP, small: enable leaked password protection in the Supabase dashboard (Auth
+  settings, one toggle, checks passwords against HaveIBeenPwned), advisor recommended.
 
 Standing claims:
 
@@ -86,9 +98,6 @@ Standing claims:
   own canonical, one description, all 200). Re-derive the bar from what it means to
   measure, with a control, per the harness rules. Until fixed, treat the thin page
   finding as noise when live matches the committed snapshot byte for byte.
-- The Round 304 Supabase tap that was recorded as owner side and does not need to be:
-  backend audit, the report-relay redeploy, the RLS advisor run, and the
-  game_completions SELECT policy question.
 - The Club Manager half of tweaks item 10 (more leagues, more eras), which Round 302
   queued behind Supabase access: the data pulls happen from this lane.
 - Tweaks item 9: the full playGames browser run over every game, every feature, then fix
@@ -127,6 +136,23 @@ Standing claims:
 
 ## Done
 
+- THE REPORT PIPELINE AND THE SUPABASE TAP, Round 316 (desktop lane, 2026-08-29). The
+  report button: relay redeployed with Round 304's queued origin allowlist, plus two
+  finds that explain why his inbox stayed empty: FormSubmit refuses server calls that
+  carry no web Origin (every mail this relay ever sent was silently refused while the
+  old code reported delivery), and the destination inbox never clicked its one-time
+  activation. The relay now sends the site's origin, reports delivery honestly, and a
+  fresh activation email was triggered; the ONE remaining step is Anthony's click,
+  filed at the top of this lane. A "Wrong answer" chip joined the report categories.
+  The Supabase tap: advisor run clean of errors; has_role locked away from anon (the
+  five policies using it are admin checks), four functions pinned to a fixed
+  search_path, game_completions' public SELECT KEPT deliberately (handles and scores
+  only, the same data the public leaderboard already shows). And the July fail-open
+  rule got its fence at last: Round 316 found the pattern in FIVE more validators (four
+  stale repo copies hiding fixed deployed versions, synced; nba-validate-player live
+  in production accepting on lookup errors, fixed and deployed as v7 with the coverage
+  leniency kept and documented). simValidatorsFailClosed scans all 27 edge functions
+  for the smoking-gun pairing with VALIDATOR_CONTROL=open proven red.
 - THE DATA BATCH, Round 315 (desktop lane, 2026-08-29). Five review items and a P1 the
   review exposed underneath one of them.
   Who Am I's Rodri at age 0 value 0: Rodri had NO market value row after 2022, and

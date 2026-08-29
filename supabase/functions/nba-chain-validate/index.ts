@@ -1,30 +1,38 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-// FREE Gemini key (GEMINI_API_KEY) -> gemini-2.5-flash; falls back to the
-// Lovable gateway, then fail-open so the game never blocks.
-const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
-const AI_URL = GEMINI_KEY
-  ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
-  : "https://ai.gateway.lovable.dev/v1/chat/completions";
-const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-pro";
-const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+/**
+ * NBA Chain validator - deterministic rewrite (2026-07-15).
+ *
+ * Was: an LLM with a hand-maintained career cheat-sheet in the prompt, and FOUR
+ * fail-open paths (no key, !response.ok, parse failure, catch) each returning
+ * {valid:true}. With the free Gemini quota exhausted the game accepted anything.
+ *
+ * "Were these two ever teammates" is an overlapping stint on the same team, so
+ * it is answered from public.nba_player_team_stints (13,948 stints / 4,773
+ * players / 1949-2024, built from bref_nba_player_seasons).
+ *
+ * KNOWN COVERAGE GAP: the source has no 2025 or 2026 seasons. A pair who only
+ * became teammates in 2025-26 (e.g. a recent trade) cannot be proven here, so
+ * when BOTH players are still active at the 2024 edge we defer rather than
+ * wrongly reject. Everything else is decided from data.
+ *
+ * Round 316 note: this file was stale in the repo (it still showed the old
+ * LLM fail-open version) while THIS deterministic version had been deployed
+ * since July. Synced from the deployed v5 per the source-of-truth rule.
+ */
 
 const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
   "https://douknowball.lovable.app",
-  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
+  "https://ballpark-hero.lovable.app",
   "http://localhost:8080",
   "http://localhost:5173",
 ];
-
-function isAllowedOrigin(origin: string): boolean {
-  if (allowedOrigins.includes(origin)) return true;
-  if (origin.endsWith(".lovableproject.com")) return true;
-  if (origin.endsWith(".lovable.app")) return true;
-  return false;
+function isAllowedOrigin(o: string) {
+  return allowedOrigins.includes(o) || o.endsWith(".lovableproject.com") || o.endsWith(".lovable.app");
 }
-
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
   return {
@@ -35,166 +43,139 @@ function getCorsHeaders(req: Request) {
 }
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 60_000;
-
-function isRateLimited(ip: string): boolean {
+function isRateLimited(ip: string) {
   const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_LIMIT_MAX;
+  const e = rateLimitMap.get(ip);
+  if (!e || now > e.resetAt) { rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 }); return false; }
+  e.count++;
+  return e.count > 40;
 }
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if (now > entry.resetAt) rateLimitMap.delete(ip);
-  }
-}, 300_000);
+const norm = (s: string) =>
+  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+
+const NICKNAMES: Record<string, string> = {
+  kd: "kevin durant", bron: "lebron james", lebron: "lebron james", wemby: "victor wembanyama",
+  shaq: "shaquille o neal", ai: "allen iverson", "the answer": "allen iverson",
+  cp3: "chris paul", dbook: "devin booker", steph: "stephen curry", giannis: "giannis antetokounmpo",
+  luka: "luka doncic", jokic: "nikola jokic", melo: "carmelo anthony", dwade: "dwyane wade",
+};
+const resolve = (n: string) => NICKNAMES[norm(n)] ?? norm(n);
+
+const DATA_LAST_SEASON = 2024; // bref_nba_player_seasons ends here
+
+interface Stint { player_name: string; team: string; first_season: number; last_season: number; }
+
+function json(body: unknown, corsHeaders: Record<string, string>, status = 200) {
+  return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+}
+
+async function lookup(sb: any, name: string): Promise<Stint[]> {
+  const target = resolve(name);
+  const { data } = await sb
+    .from("nba_player_team_stints")
+    .select("player_name, team, first_season, last_season")
+    .ilike("player_name", `%${name.trim().split(/\s+/).slice(-1)[0]}%`)
+    .limit(400);
+  const rows = (data ?? []) as Stint[];
+  const exact = rows.filter((r) => resolve(r.player_name) === target);
+  if (exact.length > 0) return exact;
+  // unique-surname fallback
+  const bySurname = rows.filter((r) => {
+    const parts = resolve(r.player_name).split(" ");
+    return parts[parts.length - 1] === target;
+  });
+  const names = new Set(bySurname.map((r) => resolve(r.player_name)));
+  return names.size === 1 ? bySurname : [];
+}
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
-
-  const clientIp =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("cf-connecting-ip") ||
-    "unknown";
-  if (isRateLimited(clientIp)) {
-    return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
-      status: 429,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(ip)) return json({ valid: false, reason: "Slow down a moment and try again." }, corsHeaders, 429);
 
   try {
-    const body = await req.json();
-    const { previousPlayer, newPlayer } = body;
-
+    const { previousPlayer, newPlayer } = await req.json();
     if (
       !previousPlayer || typeof previousPlayer !== "string" || previousPlayer.length > 100 ||
       !newPlayer || typeof newPlayer !== "string" || newPlayer.length > 100
     ) {
-      return new Response(JSON.stringify({ valid: false, reason: "Invalid input" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ valid: false, reason: "Invalid input" }, corsHeaders, 400);
     }
 
-    if (!AI_KEY) {
-      return new Response(
-        JSON.stringify({ valid: true, reason: "Could not verify, allowing.", fullName: newPlayer }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    const url = Deno.env.get("SUPABASE_URL");
+    const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!url || !key) return json({ valid: false, reason: "Validator unavailable, so this cannot be counted." }, corsHeaders);
+    const sb = createClient(url, key);
+
+    if (resolve(previousPlayer) === resolve(newPlayer)) {
+      return json({ valid: false, reason: "That is the same player." }, corsHeaders);
+    }
+
+    const [prevStints, newStints] = await Promise.all([lookup(sb, previousPlayer), lookup(sb, newPlayer)]);
+    const properNew = newStints[0]?.player_name ?? newPlayer;
+
+    if (newStints.length === 0) {
+      return json(
+        { valid: false, reason: `${newPlayer} does not appear in our NBA records (1949-${DATA_LAST_SEASON}).`, fullName: newPlayer },
+        corsHeaders,
+      );
+    }
+    if (prevStints.length === 0) {
+      return json(
+        { valid: false, reason: `We have no NBA record for ${previousPlayer}, so this link cannot be verified.`, fullName: properNew },
+        corsHeaders,
       );
     }
 
-    const response = await fetch(
-      AI_URL,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${AI_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: AI_MODEL,
-          messages: [
+    // Teammates: same team code with overlapping seasons.
+    for (const a of prevStints) {
+      for (const b of newStints) {
+        if (a.team !== b.team) continue;
+        const from = Math.max(a.first_season, b.first_season);
+        const to = Math.min(a.last_season, b.last_season);
+        if (from <= to) {
+          const { data: tc } = await sb.from("nba_team_codes").select("team_name").eq("team_code", a.team).maybeSingle();
+          const teamName = tc?.team_name ?? a.team;
+          const span = from === to ? `${from}-${String(from + 1).slice(2)}` : `${from}-${to}`;
+          return json(
             {
-              role: "system",
-              content: `You are a strict NBA roster verifier. You must determine if two NBA players were EVER on the same NBA team roster at the same time during any season through March 2026.
-
-CRITICAL RULES:
-1. ONLY mark valid:true if you are 100% CERTAIN they shared a roster. When in doubt, say false.
-2. A wrong "valid: true" is MUCH worse than a wrong "valid: false". Be conservative.
-3. Do NOT confuse "played against each other" with "were teammates."
-4. Do NOT hallucinate connections. If you cannot recall a specific shared roster, say false.
-
-VERIFIED CAREER HISTORIES (reference these to avoid mistakes):
-- Nikola Jokić: Denver Nuggets (2015-present). ONLY TEAM EVER.
-- Russell Westbrook: OKC Thunder (2008-2019), Houston Rockets (2019-2020), Washington Wizards (2020-2021), LA Lakers (2021-2022), LA Clippers (2022-2023), Denver Nuggets (2023-2024 — signed Feb 2024, waived). NEVER on same team as Jokić except briefly with Nuggets in 2023-24 if rosters overlapped.
-- James Harden: OKC Thunder (2009-2012), Houston Rockets (2012-2021), Brooklyn Nets (2021-2022), Philadelphia 76ers (2022-2024), LA Clippers (2024-present). NEVER on the Spurs.
-- LeBron James: Cleveland Cavaliers (2003-2010, 2014-2018), Miami Heat (2010-2014), LA Lakers (2018-present)
-- Stephen Curry: Golden State Warriors (2009-present). ONLY TEAM EVER.
-- Kevin Durant: Seattle/OKC Thunder (2007-2016), Golden State Warriors (2016-2019), Brooklyn Nets (2019-2023), Phoenix Suns (2023-2025), Houston Rockets (2025-present)
-- Kobe Bryant: LA Lakers (1996-2016). ONLY TEAM EVER.
-- Shaquille O'Neal: Orlando Magic (1992-1996), LA Lakers (1996-2004), Miami Heat (2004-2008), Phoenix Suns (2008-2009), Cleveland Cavaliers (2009-2010), Boston Celtics (2010-2011)
-- Jimmy Butler: Chicago Bulls (2011-2017), Minnesota Timberwolves (2017-2018), Philadelphia 76ers (2018-2019), Miami Heat (2019-2025), Golden State Warriors (2025-present)
-- Luka Dončić: Dallas Mavericks (2018-2025), LA Lakers (2025-present)
-- Bronny James: LA Lakers (2024-present)
-- Tracy McGrady: Toronto Raptors (1997-2000), Orlando Magic (2000-2004), Houston Rockets (2004-2010), New York Knicks (2010), Detroit Pistons (2010), Atlanta Hawks (2011-2012), San Antonio Spurs (2013)
-- Chris Paul: New Orleans Hornets (2005-2011), LA Clippers (2011-2017), Houston Rockets (2017-2019), OKC Thunder (2019-2020), Phoenix Suns (2020-2023), Golden State Warriors (2023-2024), San Antonio Spurs (2024-present)
-- Giannis Antetokounmpo: Milwaukee Bucks (2013-present). ONLY TEAM EVER.
-- Tim Duncan: San Antonio Spurs (1997-2016). ONLY TEAM EVER.
-- Damian Lillard: Portland Trail Blazers (2012-2023), Milwaukee Bucks (2023-present)
-- Anthony Davis: New Orleans Pelicans (2012-2019), LA Lakers (2019-present)
-- Kyrie Irving: Cleveland Cavaliers (2011-2017), Boston Celtics (2017-2019), Brooklyn Nets (2019-2023), Dallas Mavericks (2023-present)
-- Carmelo Anthony: Denver Nuggets (2003-2011), New York Knicks (2011-2017), OKC Thunder (2017-2018), Houston Rockets (2018-2019), Portland Trail Blazers (2019-2021), LA Lakers (2021-2022)
-- Dwight Howard: Orlando Magic (2004-2012), LA Lakers (2012-2013), Houston Rockets (2013-2016), Atlanta Hawks (2016-2017), Charlotte Hornets (2017-2018), Washington Wizards (2018-2019), LA Lakers (2019-2021), Philadelphia 76ers (2021-2022)
-- Joel Embiid: Philadelphia 76ers (2014-present). ONLY TEAM EVER (through March 2026).
-- Jayson Tatum: Boston Celtics (2017-present). ONLY TEAM EVER.
-- Karl-Anthony Towns: Minnesota Timberwolves (2015-2024), New York Knicks (2024-present)
-- Mikal Bridges: Phoenix Suns (2018-2023), Brooklyn Nets (2023-2024), New York Knicks (2024-present)
-- Klay Thompson: Golden State Warriors (2011-2024), Dallas Mavericks (2024-present)
-- Paul George: Indiana Pacers (2010-2017), OKC Thunder (2017-2019), LA Clippers (2019-2024), Philadelphia 76ers (2024-present)
-- DeMar DeRozan: Toronto Raptors (2009-2018), San Antonio Spurs (2018-2021), Chicago Bulls (2021-2024), Sacramento Kings (2024-present)
-- Dejounte Murray: San Antonio Spurs (2016-2022), Atlanta Hawks (2022-2024), New Orleans Pelicans (2024-present)
-- Victor Wembanyama: San Antonio Spurs (2023-present)
-- Nikola Topić: Oklahoma City Thunder (2024-present, NBA debut Feb 2026)
-
-Also resolve nicknames/partial names (e.g., "KD" = Kevin Durant, "Bron" = LeBron James, "Wemby" = Victor Wembanyama, "Shaq" = Shaquille O'Neal, "AI" = Allen Iverson, "The Answer" = Allen Iverson).
-
-Respond with ONLY a valid JSON object (no markdown, no code blocks):
-{
-  "valid": true or false,
-  "connection": "Connected via [Team Name] ([Season(s)])" (only if valid),
-  "reason": "Brief explanation",
-  "fullName": "Full proper name of the SECOND/NEW player ONLY"
-}
-
-CRITICAL: "fullName" must be the NEW player's name, never the previous player. Be CONSERVATIVE — only confirm connections you are certain about.`,
+              valid: true,
+              connection: `${teamName} (${span})`,
+              reason: `${properNew} and ${previousPlayer} were teammates on the ${teamName} in ${span}.`,
+              fullName: properNew,
             },
-            {
-              role: "user",
-              content: `Were "${previousPlayer}" and "${newPlayer}" ever teammates on the same NBA team? Think carefully about each player's full career history before answering.`,
-            },
-          ],
-        }),
+            corsHeaders,
+          );
+        }
       }
-    );
+    }
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ valid: true, reason: "Could not verify, allowing.", fullName: newPlayer }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    // No overlap found. Only defer if BOTH are still active at the data edge,
+    // because a 2025-26 pairing genuinely cannot be proven from this source.
+    const prevActive = Math.max(...prevStints.map((s) => s.last_season)) >= DATA_LAST_SEASON;
+    const newActive = Math.max(...newStints.map((s) => s.last_season)) >= DATA_LAST_SEASON;
+
+    if (prevActive && newActive) {
+      return json(
+        {
+          valid: false,
+          reason: `We cannot confirm ${properNew} and ${previousPlayer} shared a roster. Our NBA records currently run through ${DATA_LAST_SEASON}, so a 2025-26 pairing may be missing.`,
+          fullName: properNew,
+          coverageGap: true,
+        },
+        corsHeaders,
       );
     }
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
-
-    let parsed;
-    try {
-      const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, content];
-      parsed = JSON.parse(jsonMatch[1].trim());
-    } catch {
-      parsed = { valid: true, reason: "Could not parse response.", fullName: newPlayer };
-    }
-
-    return new Response(JSON.stringify(parsed), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  } catch (e) {
-    console.error("nba-chain-validate error:", e);
-    return new Response(
-      JSON.stringify({ valid: true, reason: "Validation error, allowing.", fullName: "" }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return json(
+      { valid: false, reason: `${properNew} and ${previousPlayer} were never teammates.`, fullName: properNew },
+      corsHeaders,
     );
+  } catch (err) {
+    console.error("nba-chain-validate error:", err);
+    return json({ valid: false, reason: "Something went wrong verifying that one, so it cannot be counted." }, corsHeaders);
   }
 });

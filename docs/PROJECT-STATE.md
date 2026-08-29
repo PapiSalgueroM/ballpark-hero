@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 316.** The report pipeline and the Supabase tap. Why his inbox
+  never got a report: FormSubmit refuses server side calls with no web Origin while
+  answering 200, and the old relay read resp.ok as delivered, so every mail ever sent
+  was silently refused; AND the one-time activation was never clicked. Relay v3 sends
+  the site's origin, reports delivery honestly, carries Round 304's queued allowlist,
+  and a fresh activation email is in douknowball1@gmail.com waiting for the one owner
+  click. Advisor run: no errors; has_role revoked from anon (verified the five admin
+  policies and the anon leaderboard RPC still work), four functions pinned to fixed
+  search_path, game_completions public SELECT kept deliberately (handles and scores,
+  already public via the leaderboard). The fail-open hunt: FIVE more validators carried
+  the July P1 shape in the repo; nba-chain, nascar-chain and tennis-chain were stale
+  repo copies hiding deterministic fail-closed versions deployed in July (synced from
+  deployed), nba-validate-player was accepting on LOOKUP ERRORS in production (v7
+  deployed: errors fail closed unverified, the not-in-table leniency kept and
+  documented as a data decision). simValidatorsFailClosed is the permanent fence, 27
+  functions, control proven. "Wrong answer" chip added to the report modal.
 - **2026-08-29, Round 315.** The data batch from the review, five items. Rodri's age 0:
   he, Kimmich, Tchouameni and Ndidi had no market value rows after 2022; four 2026 rows
   inserted, verified from the club's own announcement (Ndidi to Besiktas via lcfc.com),

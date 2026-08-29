@@ -66,7 +66,18 @@ Deno.serve(async (req: Request) => {
     try {
       const resp = await fetch(`https://formsubmit.co/ajax/${REPORT_EMAIL}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        /* Round 316: FormSubmit refuses AJAX calls that carry no web Origin
+           ("open this page through a web server"), which server side fetches
+           do not send by default, so every mail this relay ever sent was
+           being refused. The site's own origin satisfies it, measured
+           2026-08-29: without it success:"false" with the web server
+           message, with it the request proceeds to the activation check. */
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Origin: "https://douknowball.com",
+          Referer: "https://douknowball.com/",
+        },
         body: JSON.stringify({
           _subject: `DoUKnowBall report: ${gameType}`,
           game: gameType,
@@ -75,7 +86,13 @@ Deno.serve(async (req: Request) => {
         }),
         signal: AbortSignal.timeout(6000),
       });
-      emailed = resp.ok;
+      /* Round 316: FormSubmit answers 200 even when the destination inbox has
+         not clicked its one-time activation yet, so resp.ok alone claimed
+         delivery that never happened. Its AJAX body carries success as the
+         string "true" when the mail actually went; anything else is not
+         delivered, and the caller's response says so honestly. */
+      const body = await resp.json().catch(() => null) as { success?: unknown } | null;
+      emailed = resp.ok && String(body?.success) === "true";
     } catch (_e) {
       /* best effort only */
     }
