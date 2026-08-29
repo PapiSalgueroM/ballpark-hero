@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 350.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 351.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -63,6 +63,10 @@ whole audience.**
   route shape, what data each grid can honestly show, replay mechanics), show
   the design before building, then one round for the system and the first
   sport, then one per sport.
+- CLAIMED Round 350 (desktop, 2026-08-29): the grid archive system, contract
+  Task 3, built to docs/designs/GRID-ARCHIVE-DESIGN.md. Shared component plus
+  the NFL grid as sport one. Data recon first: the pick floor is only honest
+  if football_grid_selections actually carries days worth showing.
 - SPEC SPLIT INTO /docs/spec/ (queued, either lane, docs only): the operating
   contract wants the master spec split into per-part files with an index at
   docs/spec/README.md so sessions load only the relevant section. Mechanical,
