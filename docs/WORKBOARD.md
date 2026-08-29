@@ -28,6 +28,35 @@ verified fixes. The fences guard them; the added rule is restraint.**
 
 ## Inbox (unclaimed)
 
+**MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
+outside SEO brief; the desktop lane ran the audit the same evening, findings in
+the chat and summarized here). The brief's premise needs one correction on the
+record: Semrush's 146 monthly visits measure ORGANIC SEARCH arrivals only, and
+within that slice CFB grid terms lead; the site's total traffic is far larger
+and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
+facts are true at once. Grid search is the site's search beachhead, not its
+whole audience.**
+
+- GRID MOBILE CLS BUG (measured 2026-08-29, unclaimed): the async-loading grid
+  boards shift layout on phones. Live CLS at 375px: soccer-grid 0.60, hockey-grid
+  0.40, college-grid 0.34 on one run and 0 on another (network timing), nba 0.06,
+  football and mlb 0. Anything over 0.25 is a failing Core Web Vital. Likely fix:
+  reserve the board's box before data arrives. Same round should take the 16x16
+  Close X on the older three grids' dialogs (tap floor is 30px) and verify the
+  player-search modal rows (probe measured 16 to 40px rows, some may be labels).
+  Zero horizontal overflow anywhere at 375/390, no zoom needed, so the shell is
+  sound; these are the real mobile findings.
+- GRID ARCHIVE AND ANSWER PAGES (blocked on an owner decision): past grids with
+  answers, rarity scores and a replay button, one shared system across all six
+  grid sports. Real search intent, real user value. BUT new indexable routes and
+  sitemap rows are exactly what owner directive 3 froze during the AdSense
+  review. Needs Anthony to either wait for the verdict or explicitly override
+  the freeze for this. The build itself is a fine desktop or cloud round once
+  unblocked.
+- GRID ENGINE TO NEW SPORTS (unclaimed): the engine family already spans soccer,
+  NFL, CFB, NBA, MLB, NHL. Candidates with search demand: CBB grid, WNBA grid.
+  Data-first rounds, two-source rule as always.
+
 **ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
 workable pieces. Bugs still outrank these; within the list his order rules.**
 
