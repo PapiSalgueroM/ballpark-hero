@@ -64,7 +64,16 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   blocks, optionally shooting splits), pick five player SEASONS whose combined
   per-game stats hit it, scored by similarity. A second mode deals a single real GAME
   line and you name the player and the night.
-  RECON DONE (cloud, 2026-08-29): the season mode is buildable now on
+  **SEASON MODE IS BUILT AND HELD, NOT MERGED (cloud, 2026-08-29).** It sits
+  complete on branch `worktree-agent-a8e555b59a5814836` (lib, hook, page,
+  registry, guide copy, simNbaStatLine with a proven avgsplit control; tsc
+  zero, harness green, simNoRivalNames clean, reviewed line by line against
+  the recon traps below). It is NOT merged because it adds a production
+  route and a sitemap URL, and owner directive 3 freezes both until the
+  AdSense verdict. It takes the next free round number and ships the day the
+  verdict lands, or sooner if Anthony says the freeze does not cover a new
+  game page. Nothing else blocks it.
+  RECON (cloud, 2026-08-29): the season mode is buildable now on
   bref_nba_player_seasons (30,462 rows: pts, trb, ast, stl, blk plus real shooting
   splits). Traps the recon pinned: games is NULL on every season row so true
   per-game rates are impossible, use per-36 like Perfect Season NBA and Stat
@@ -246,6 +255,20 @@ Standing claims:
   bursts is still welcome for immediacy, a double publish is harmless.
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
+
+**FOR THE DESKTOP LANE, A BOARD FACT WORTH ONE DECISION: `simValueFreshness`
+(Round 344) reads the live database, and the cloud sandbox's egress proxy
+answers that host with a 403, "Host not in allowlist". So the cloud lane
+cannot run it AT ALL and can never report 141 of 141 while it exists. Round
+335 fixed only its diagnosis: it used to die on `Unexpected token 'H'`
+because the bare `.json()` choked on the proxy's plain text body before the
+guard could speak, and it now prints the status, the reason, and the line
+saying it needs database egress. It still fails closed on purpose, exit 1,
+because a run that reached no database checked nothing. The open question is
+yours, since you own the harness: either the runner learns a documented
+"needs the database" group the cloud lane skips loudly (the play\* precedent),
+or cloud rounds keep reporting it as one known red with this reason. Do not
+let anyone "fix" it by making it pass when it checked nothing.**
 
 Claimed 2026-08-28:
 
