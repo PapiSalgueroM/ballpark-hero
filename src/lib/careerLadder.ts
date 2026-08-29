@@ -292,7 +292,9 @@ const CLUB_COUNTRY: Array<[string, string]> = [
   ['slavia prague', '🇨🇿'], ['slavia praha', '🇨🇿'], ['viktoria plzen', '🇨🇿'],
   ['dinamo zagreb', '🇭🇷'], ['hajduk split', '🇭🇷'], ['rijeka', '🇭🇷'],
   ['red star', '🇷🇸'], ['crvena zvezda', '🇷🇸'], ['partizan', '🇷🇸'],
-  // Saudi / Gulf / Asia
+  // Saudi / Gulf / Asia. Al Ahli Dubai before Al Ahli: Cannavaro's UAE club
+  // vs Mahrez and Firmino's Saudi one, most specific first as everywhere.
+  ['al ahli dubai', '🇦🇪'],
   ['al hilal', '🇸🇦'], ['al ittihad', '🇸🇦'], ['al ahli', '🇸🇦'], ['al shabab', '🇸🇦'], ['al ettifaq', '🇸🇦'],
   ['al sadd', '🇶🇦'], ['al duhail', '🇶🇦'], ['al rayyan', '🇶🇦'], ['al gharafa', '🇶🇦'], ['al arabi', '🇶🇦'],
   ['al ain', '🇦🇪'], ['al wahda', '🇦🇪'], ['al jazira', '🇦🇪'], ['shabab al ahli', '🇦🇪'], ['al wasl', '🇦🇪'],
@@ -341,13 +343,47 @@ const CLUB_COUNTRY: Array<[string, string]> = [
   ['kaizer chiefs', '🇿🇦'], ['orlando pirates', '🇿🇦'], ['mamelodi sundowns', '🇿🇦'],
   ['sydney fc', '🇦🇺'], ['melbourne victory', '🇦🇺'], ['melbourne city', '🇦🇺'], ['western sydney', '🇦🇺'],
   ['adelaide united', '🇦🇺'], ['brisbane roar', '🇦🇺'],
+  /* Round 319, owner review ("flags for each club's country"): measured
+     against the career tables pull, 79 of 274 clubs had no flag (the Gulf
+     clubs were a hyphen bug, fixed in flagForClub; the rest are below).
+     Every ambiguous entry was resolved through the player who actually
+     made the stint (Cerro is Godin's Montevideo club, Audax is Bruno
+     Guimaraes' Sao Paulo one, Platense is Trezeguet's Argentine one,
+     Barranquilla is Luis Diaz's Colombian one). Ambiguous names keep their
+     more specific sibling FIRST, matching is in array order. */
+  ['baniyas', '🇦🇪'], ['bunyodkor', '🇺🇿'], ['kitchee', '🇭🇰'], ['kabuscorp', '🇦🇴'],
+  ['sivasspor', '🇹🇷'], ['pafos', '🇨🇾'], ['spartak subotica', '🇷🇸'],
+  ['anzhi', '🇷🇺'], ['dinamo batumi', '🇬🇪'],
+  ['chennaiyin', '🇮🇳'], ['delhi dynamos', '🇮🇳'], ['pune city', '🇮🇳'],
+  ['caen', '🇫🇷'], ['cannes', '🇫🇷'], ['grenoble', '🇫🇷'], ['istres', '🇫🇷'],
+  ['martigues', '🇫🇷'], ['nimes', '🇫🇷'], ['tours', '🇫🇷'],
+  ['exeter city', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['halifax town', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['fleetwood town', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['notts county', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['oxford united', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['rotherham united', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['swindon town', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['stocksbridge park steels', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['weston super mare', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'],
+  ['como', '🇮🇹'], ['padova', '🇮🇹'], ['perugia', '🇮🇹'], ['pescara', '🇮🇹'],
+  ['piacenza', '🇮🇹'], ['pisa', '🇮🇹'], ['ravenna', '🇮🇹'], ['venezia', '🇮🇹'],
+  ['marsala', '🇮🇹'], ['leffe', '🇮🇹'],
+  ['eibar', '🇪🇸'], ['hercules', '🇪🇸'],
+  ['alverca', '🇵🇹'], ['salgueiros', '🇵🇹'],
+  ['den bosch', '🇳🇱'], ['haarlem', '🇳🇱'], ['willem ii', '🇳🇱'],
+  ['chemnitzer', '🇩🇪'], ['homburg', '🇩🇪'], ['karlsruher', '🇩🇪'], ['rot weiss ahlen', '🇩🇪'],
+  ['liefering', '🇦🇹'],
+  ['chmel blsany', '🇨🇿'], ['dukla prague', '🇨🇿'], ['cobh ramblers', '🇮🇪'],
+  ['nk zagreb', '🇭🇷'], ['marsonia', '🇭🇷'],
+  ['america rj', '🇧🇷'], ['atletico paranaense', '🇧🇷'], ['audax italiano', '🇨🇱'], ['audax', '🇧🇷'],
+  ['csa', '🇧🇷'], ['mogi mirim', '🇧🇷'], ['santa cruz', '🇧🇷'], ['sao caetano', '🇧🇷'],
+  ['uniao sao joao', '🇧🇷'],
+  ['cerro porteno', '🇵🇾'], ['cerro', '🇺🇾'], ['platense', '🇦🇷'], ['barranquilla', '🇨🇴'],
+  ['miami united', '🇺🇸'], ['miami fc', '🇺🇸'], ['new york cosmos', '🇺🇸'],
 ];
 
 /** Flag for the country a CLUB plays in (not the player's nationality).
  *  National-team stints resolve through the country-name scan first. */
 export function flagForClub(club: string | null | undefined): string {
   if (!club) return '';
-  const norm = normalizeName(club);
+  /* Round 319: hyphens fold to spaces before matching. "Al-Nassr" never
+     matched the 'al nassr' entry, and every Al- club was flagless for it. */
+  const norm = normalizeName(club).replace(/-/g, ' ');
   for (const [country, flag] of COUNTRY_FLAGS) {
     if (new RegExp(`\\b${escapeRegExp(country)}\\b`).test(norm)) return flag;
   }

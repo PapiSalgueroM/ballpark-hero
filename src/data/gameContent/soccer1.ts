@@ -258,7 +258,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Brazil in goal is a gift. A wing back from a country you have never watched is the whole game. A slot machine reel spins each nation in, so the next headache is always a surprise.",
     ],
     howToPlay: [
-      "Pick one of 9 formations and a timer: none, 90 seconds or 60 seconds for the whole XI.",
+      "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
       "Hit draw and the reel reveals your nations in random slot order.",
       "Type 2 or more letters and pick a player of that nationality who covers the slot.",
       "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
@@ -266,8 +266,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     rules: [
       "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
-      "You get 3 respins per game, shared across all slots, to reroll a nation you cannot solve.",
-      "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back.",
+      "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
+      "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
       "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
     ],
     example: [

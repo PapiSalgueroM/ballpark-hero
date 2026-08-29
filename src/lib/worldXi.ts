@@ -135,19 +135,34 @@ export function eligiblePositions(pos: Position): Position[] {
   return [pos, ...(ALT_POSITIONS[pos] ?? [])];
 }
 
+/* Round 319, off the owner's review: "a LWB filling a RW slot". The shared
+   formation data gives every wide slot the same set, because a 4-4-2 wide
+   MID slot and a 3-5-2 wing-back slot genuinely take wing-backs. A front
+   line winger slot does not: here the RW and LW slots narrow to wingers and
+   wide mids only, which also cuts the family chain that let LWB reach RW
+   through RWB. squadDeal's own games keep their looser sets on purpose,
+   this is World XI's stricter read of the same data. */
+function slotAllowed(slot: FormationSlot): Position[] {
+  if (slot.label === 'RW') return ['RW', 'RM'];
+  if (slot.label === 'LW') return ['LW', 'LM'];
+  return slot.allowed;
+}
+
 export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
-  return eligiblePositions(p.position).some(pos => slot.allowed.includes(pos));
+  const allowed = slotAllowed(slot);
+  return eligiblePositions(p.position).some(pos => allowed.includes(pos));
 }
 
 /**
  * "ST / CF" style summary of what a slot accepts. Computed from the EFFECTIVE
- * accepted set (any position whose family reaches one of slot.allowed), so the
- * copy matches what fitsSlot actually lets through, e.g. a RW slot lists LW
- * because wingers count on both flanks.
+ * accepted set (any position whose family reaches one of the slot's allowed
+ * positions), so the copy matches what fitsSlot actually lets through, e.g. a
+ * RW slot lists LW because wingers count on both flanks.
  */
 export function allowedLabel(slot: FormationSlot): string {
+  const allowed = slotAllowed(slot);
   const effective = ALL_POSITIONS.filter(pos =>
-    eligiblePositions(pos).some(alt => slot.allowed.includes(alt)),
+    eligiblePositions(pos).some(alt => allowed.includes(alt)),
   );
   return effective.join(' / ');
 }

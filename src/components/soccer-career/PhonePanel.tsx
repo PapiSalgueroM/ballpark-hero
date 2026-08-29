@@ -124,8 +124,16 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
 
   const fanComments = (() => {
     const f = fmtFollowers(career.socialMediaFollowers);
+    /* Round 319, review item 11: the gram told a goalkeeper to score more
+       goals. The nagging fans now nag about the thing the position is
+       actually judged on. */
+    const askForMore =
+      career.position === "GK" ? `More clean sheets please 🙏`
+      : career.position === "CB" || career.position === "LB" || career.position === "RB" || career.position === "LWB" || career.position === "RWB" ? `Lock it down at the back please 🙏`
+      : career.position === "CDM" || career.position === "CM" ? `Run that midfield please 🙏`
+      : `More goals please 🙏`;
     if (karma >= 70) return [`Best in the world AND a good person 😭`, `My kid has your poster up. Never change`, `${f} followers and still humble. Rare.`];
-    if (karma >= 50) return [`Decent season tbh`, `We rate you around here`, `More goals please 🙏`];
+    if (karma >= 50) return [`Decent season tbh`, `We rate you around here`, askForMore];
     if (karma >= 30) return [`Talented but man the attitude...`, `Rooting for the old you`, `Focus on football maybe?`];
     return [`Can't support this guy anymore`, `Talent wasted on a villain`, `The boos on Saturday? Deserved.`];
   })();
