@@ -51,7 +51,9 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 });
-const ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+/* Round 330: WIDTH=390 or 320 plays the season at a real phone width for the
+   mobile depth walk; 430 stays the default baseline. */
+const ctx = await browser.newContext({ viewport: { width: Number(process.env.WIDTH || 430), height: Number(process.env.HEIGHT || 900) }, ignoreHTTPSErrors: true });
 const page = await ctx.newPage();
 
 const errs = [];
@@ -107,16 +109,31 @@ await clearRoom();
 /* Round 132: the picker asks WHEN before it asks where. The default era is
    the current one, and this harness wants the real 2026-27 world, so it takes
    the first tile. */
+/* Round 330: every step below WAITS for the next screen's own content
+   instead of sleeping a fixed 600ms, because each step's list mounts a beat
+   after the press and a fixed sleep raced it: the club click found zero
+   clubs, the fallback confirm tap then matched something else entirely, and
+   the run parked with nothing pressed that mattered. */
 await tap(/2026-27/i, 'the 2026-27 era');
+await page.getByRole('button', { name: /England/i }).first().waitFor({ timeout: 8000 }).catch(() => {});
 await tap(/England/i, 'England');
+await page.getByRole('button', { name: /Premier League/i }).first().waitFor({ timeout: 8000 }).catch(() => {});
 await tap(/Premier League/i, 'Premier League');
-await page.waitForTimeout(600);
 const clubBtn = page.locator('button').filter({ hasText: /Everton|Fulham|Brentford|Crystal Palace|Wolves|Brighton/ }).first();
+await clubBtn.waitFor({ timeout: 8000 }).catch(() => {});
 if (await clubBtn.count().catch(() => 0) > 0) {
-  await clubBtn.click({ timeout: 5000 }).catch(() => {});
-  await page.waitForTimeout(600);
+  await clubBtn.click({ timeout: 5000 }).then(() => say('pressed a Premier League club')).catch(() => {});
 }
-await tap(/take the job|confirm|start/i, 'confirm the job');
+/* Picking a club pins a confirm bar to the bottom of the screen (Round 70),
+   and its button is what moves the picker on, so press it first. */
+await tap(/take the job|confirm|start/i, 'the pinned confirm bar');
+/* Round 303 put a fifth step behind that bar, the dugout form. ITS "Take
+   the job" button submits the manager form, and with an empty name the
+   real-name gate refuses and the picker parks right there, which is where
+   this harness had been stuck since that round. The classic second person
+   career this harness has always played is the skip path. */
+await page.getByText(/who is in the dugout/i).first().waitFor({ timeout: 8000 }).catch(() => {});
+await tap(/skip: just manage/i, 'skip the dugout form, the classic career');
 await page.waitForTimeout(1000);
 
 let t = await screen();

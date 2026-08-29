@@ -38,13 +38,24 @@ import { componentTagger } from "lovable-tagger";
  *
  * Guarded by scripts/simSnapshotAssets.mjs.
  */
-const inlineSnapshotAssets = (root: string) => ({
+/* Round 330: the plugin honors the resolved outDir instead of a hardcoded
+   "dist", so a side build (vite build --outDir dist-verify, used to verify a
+   fix while a long harness run owns dist) gets its snapshots rewritten the
+   same way. Normal builds still resolve to dist and behave exactly as
+   before. The hook cannot read it off `this` because Rollup binds hooks to
+   its own plugin context, so it rides in a closure. */
+const inlineSnapshotAssets = (root: string) => {
+  let outDirName = "dist";
+  return {
   name: "dukb-inline-snapshot-assets",
   apply: "build" as const,
+  configResolved(c: { build: { outDir: string } }) {
+    outDirName = c.build.outDir;
+  },
   /* closeBundle, not writeBundle: publicDir is copied during the write phase,
      and a snapshot that has not been copied yet cannot be rewritten. */
   closeBundle() {
-    const dist = path.resolve(root, "dist");
+    const dist = path.resolve(root, outDirName);
     let indexHtml: string;
     try {
       indexHtml = fs.readFileSync(path.join(dist, "index.html"), "utf8");
@@ -109,7 +120,8 @@ const inlineSnapshotAssets = (root: string) => ({
     }
     console.log(`[dukb] inlined ${styles.length} stylesheet(s) and ${modules.length} module(s) into ${touched} snapshots (${skipped} left alone)`);
   },
-});
+  };
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({

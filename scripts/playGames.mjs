@@ -28,12 +28,22 @@ import fs from 'node:fs';
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const STEPS = Number(process.env.STEPS || 14);
+/* Round 330: the mobile depth walk plays at real phone widths. WIDTH=390 (or
+   320) overrides the default 430, which stays the default so existing runs
+   keep their baseline. */
+const VW = Number(process.env.WIDTH || 430);
+const VH = Number(process.env.HEIGHT || 900);
 
 /* Routes come straight from the registry so a new game is covered the day it
    ships, with no list to keep in step. Same source as sweepGames.mjs. */
 const registry = fs.readFileSync(new URL('../src/data/gameRegistry.ts', import.meta.url), 'utf8');
 const ALL = [...new Set([...registry.matchAll(/path: '([^']+)'/g)].map(m => m[1]))].sort();
-const GAMES = process.env.ONLY ? [process.env.ONLY] : ALL;
+/* Round 330: FROM=/route resumes an interrupted full run at that route (the
+   list is alphabetical), so a run cut off by a session cap can continue
+   instead of starting over. */
+const GAMES = process.env.ONLY ? [process.env.ONLY]
+  : process.env.FROM ? ALL.slice(Math.max(0, ALL.indexOf(process.env.FROM)))
+  : ALL;
 
 const LAUNCH = {
   executablePath: process.env.CHROME_PATH || undefined,
@@ -301,12 +311,12 @@ async function playOnce(game) {
      breaking the connection. */
   let ctx;
   try {
-    ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+    ctx = await browser.newContext({ viewport: { width: VW, height: VH }, ignoreHTTPSErrors: true });
   } catch (e) {
     if (!/browser has been closed|Target page/.test(String(e))) throw e;
     console.log(`  note    the browser died before ${game}, starting a new one`);
     browser = await chromium.launch(LAUNCH);
-    ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+    ctx = await browser.newContext({ viewport: { width: VW, height: VH }, ignoreHTTPSErrors: true });
   }
   const page = await ctx.newPage();
   const errs = [];

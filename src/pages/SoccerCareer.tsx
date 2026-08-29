@@ -3475,8 +3475,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   return (
     <div ref={screenRef} className="space-y-3 pb-20">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+      {/* Round 330, the mobile depth walk: at 320 the Retire and New Career
+          buttons plus the OVR block left the name about 30px, so it rendered
+          as one letter, which is Round 257's "Can't even see my name" back
+          again at a narrower width. Below 480 the identity now takes its own
+          full line and the buttons drop underneath, right aligned; from 480
+          up the single row is exactly what it was. */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1">
           {/* Round 54: your face, on your career, everywhere */}
           {career.appearance && (
             <div className="shrink-0 rounded-xl overflow-hidden border border-border bg-muted/20">
@@ -3496,7 +3502,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ml-auto">
           {/* Round 159: his note, "the retire and new career buttons on my
               career are way too small". Real buttons now: bordered, readable,
               44px tall on touch, still quiet enough not to fight the OVR. */}

@@ -23,6 +23,49 @@ How it works:
 
 ## Inbox (unclaimed)
 
+**ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
+workable pieces. Bugs still outrank these; within the list his order rules.**
+
+- NBA Stat Line: a target stat line (23 points, 6 rebounds, 9 assists, 2 steals, 3
+  blocks, optionally shooting splits), pick five player SEASONS whose combined
+  per-game stats hit it, scored by similarity. A second mode deals a single real GAME
+  line and you name the player and the night. Needs the NBA season stat tables (in
+  the database) and, for the game mode, a verified box score source. Straight trivia,
+  fits the stack, no blockers.
+- Soccer Conquest, one map per league (map changes with the league) plus a big one
+  with the world's best 100 or so clubs. The NFL, NBA and NHL Conquest engines are
+  the pattern; the data (league tables, club strength) is already in the database.
+- WNBA games: a shelf of them (the Record Books already carry WNBA Champions; grids,
+  higher or lower, name them all, career ladder variants are all data-ready pulls).
+- The 82-0 game but fully for soccer: run an unbeaten season with a real club, same
+  engine family as the existing NBA one.
+- A swipe-to-move soccer game (his reference points: full touch control, move around,
+  score) and, bigger, "real animated characters and fully interactive soccer and
+  football games". Buildable as canvas games with generated characters; this is an
+  ARC of rounds (movement, touch input, match flow), not one round. Start with one
+  polished minigame (a free kick or dribble runner with swipe control) and grow it.
+- Wii-Olympics-style minigame collection: several small motion-flavored events
+  (timing, swipe, rhythm) under one roof with medals. Same canvas arc as above,
+  naturally splits one event per round.
+- Tower defense with athletes, many levels, abilities per athlete (a swimmer only in
+  water lanes, a shooter with long range, a striker with damage). LEGAL CONSTRAINT
+  the builder must respect: real athletes as fictional game characters with invented
+  abilities is persona use well past stats trivia, and the standing legal rules (no
+  likenesses, no invented words or deeds for real people) say build it with
+  GENERATED athletes or role archetypes, never real names on the towers. The game
+  itself is fully buildable.
+- More character profiles: a create-your-own profile picture builder (the Soccer
+  Career avatar generator is the seed, it already draws faces). Same legal line as
+  above: generated faces only, never a recognizable real athlete's likeness.
+- CASINO IN SOCCER CAREER: DECISION OWED BY ANTHONY, and the recommendation on the
+  board is NO. He flagged the risk himself ("scared a minor might play and then we
+  get in trouble"). Simulated gambling on a site with young players is exactly what
+  AdSense family-safety review and app content ratings punish, there is no real
+  revenue in it without real-money mechanics (which are out of the question), and
+  the site's whole pitch is clean free games. If some of that flavor is wanted, the
+  existing in-career purchases and a fictional "prediction night out" event carry it
+  without slot machines. Parked unless he overrules.
+
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
   indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
   the indexed surface. CAUTION built into the item: thin or near-duplicate pages hurt as
@@ -62,8 +105,16 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- MOBILE PASS, continuing (claimed 2026-08-29, Round 320 landed the first wave;
-  BUILDING the depth layer as Round 330, 2026-08-29): the
+- MOBILE PASS, continuing (claimed 2026-08-29; Round 320 the first wave, Round 330 the
+  depth layer): still open from 330: the full playGames walk at 390 was mid run when
+  the round landed (first stretch all clean), so its remaining findings become the
+  next rounds, and after it releases dist, rebuild and re-run the 15 built-site
+  fences (the vite plugin change is proven on a side build but the standing rule
+  wants the real one). Also noted, judged acceptable and left alone: the two Soccer
+  Career floating buttons (training, phone) transiently cover right-aligned numbers
+  in the rows they float over; rows scroll clear, the buttons are owner approved
+  (Rounds 80, 81, 129, 159), and a real fix is an auto-hide-on-scroll design
+  decision, not a padding hack. The
   automated layer is now measured and green at 320 and 390 across all 140 routes
   (sweepGames), plus playIphone with its new streaked-header section, simMobileChrome
   at its true widest, and playHomeFold brought back to the current page. What remains
@@ -148,6 +199,25 @@ Standing claims:
 
 ## Done
 
+- THE MOBILE DEPTH LAYER, FIRST FINDINGS, Round 330 (desktop lane, 2026-08-29). The
+  hand check pass at 320 and 390 over the heavy screens and the three new games (all
+  clean, screenshots eyeballed) caught one real product bug: the Soccer Career
+  identity row crushed the player's own name to a single letter at 320, Round 257's
+  "Can't even see my name" back at a narrower width, fixed by wrapping the identity
+  onto its own line below 480 and fenced in simMobileChrome with a
+  SIM_MOBILE_CONTROL=nowrap control proven red. The bigger find was that
+  playClubManager, the harness that exists because the generic walk cannot reach a
+  match, had been silently dead since Round 303: the dugout step's Take the job
+  button submits an empty manager form, the real-name gate refuses, and the driver
+  parked at the picker every run since, reporting BLOCKED into a void. It now waits
+  for each picker step's own content, presses the pinned confirm bar, skips the
+  dugout form, and played a FULL season at 390 through the phone interface: 45 half
+  times, 47 full times, 45 subs, 20 shape changes, 11 windows, zero findings.
+  playGames and playClubManager both take WIDTH/HEIGHT for phone-width runs and
+  playGames takes FROM= to resume an interrupted walk; the snapshot-inlining vite
+  plugin honors the resolved outDir so a side build can verify a fix while a long
+  run owns dist. The full 390 walk was launched and runs on; its findings become the
+  next rounds.
 - THE STOCK MARKET REBUILD, Round 329 (cloud lane, 2026-08-29). His anonymous
   format executed whole: six seasons back, 200M, position by position on stats
   alone, the reveal at the end. Lock proof wallet (punt ceiling plus a reserve

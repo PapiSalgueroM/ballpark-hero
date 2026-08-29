@@ -76,6 +76,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SWEEP_BASE || process.env.BASE || 'http://127.0.0.1:4173';
 const VERBOSE = process.env.VERBOSE === '1';
+/* Round 330: SIM_MOBILE_CONTROL=nowrap re-applies the pre-330 career header
+   layout (single row, no wrap) before the identity name is measured; the run
+   must go red at the phone widths or the name check is measuring nothing. */
+const NOWRAP_CONTROL = process.env.SIM_MOBILE_CONTROL === 'nowrap';
+if (NOWRAP_CONTROL) console.log('CONTROL: re-applying the single row career header, this run must go red\n');
 
 /* His phone first, then the two ends of the phone range, then the two desktop
    widths where the bar switches back to a single row. 320 is the narrowest
@@ -375,6 +380,31 @@ async function measureActionBar(browser, width) {
       return rec;
     }
     rec.barH = first.barH;
+
+    /* Round 330: the identity row. At 320 the Retire and New Career buttons
+       plus the OVR block crushed the player's own name to a single letter,
+       Round 257's "Can't even see my name" back at a narrower width, so the
+       row now wraps below 480 and the name must be whole at every measured
+       width. SIM_MOBILE_CONTROL=nowrap re-applies the old single row layout
+       before measuring, which must turn this red or the check proves
+       nothing. */
+    const nameCheck = await page.evaluate((control) => {
+      const h1 = document.querySelector('h1');
+      const span = h1 ? h1.querySelector('span.truncate') : null;
+      if (!span) return { err: 'no identity name span on the career header' };
+      if (control) {
+        const row = h1.closest('.flex-wrap');
+        if (!row) return { err: 'control could not find the wrapping row to unwrap' };
+        row.style.flexWrap = 'nowrap';
+        if (row.firstElementChild) row.firstElementChild.style.width = 'auto';
+      }
+      return { name: span.innerText, truncated: span.scrollWidth > span.clientWidth + 1 };
+    }, NOWRAP_CONTROL);
+    if (nameCheck.err) {
+      failures.push(`${tag}: ${nameCheck.err}`);
+    } else if (nameCheck.truncated || nameCheck.name !== 'Playtest') {
+      failures.push(`${tag}: the player's own name is not whole on the career header (shows "${nameCheck.name}"${nameCheck.truncated ? ', truncated' : ''})`);
+    }
     const maxY = Math.max(0, first.docH - VH);
     /* 300px a step is about a third of a screen, which is roughly how far a
        thumb flick moves this page, so these are positions he actually stops at
