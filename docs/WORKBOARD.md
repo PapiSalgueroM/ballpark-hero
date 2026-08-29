@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 318 (desktop used 315 to 317 while 314 was in flight).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 319.
 
 ## Inbox (unclaimed)
 
@@ -114,13 +114,15 @@ Standing claims:
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
+next: Round 318 (cloud), building now, claimed 2026-08-29.
+
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
 
-- Leaderboard names: regenerate legacy Baller-NNNN handles to the sports word pool and
-  put a profanity blocklist in front of custom display names on shared surfaces (the
-  decision and reasoning are in the tweaks doc).
+- Leaderboard names (BUILDING as Round 318, 2026-08-29): regenerate legacy Baller-NNNN
+  handles to the sports word pool and put a profanity blocklist in front of custom
+  display names on shared surfaces (the decision and reasoning are in the tweaks doc).
 - Small fixes batch: Career Ladder flags, Missing XI side colors and overlapping bubbles,
   Rarity Round hiding the rarest answer and stating the goal upfront, World XI position
   eligibility and customizable respins, Alphabet Sprint full name instruction, the
