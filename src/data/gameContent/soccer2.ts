@@ -4,31 +4,31 @@ import type { GameContentMap } from './types';
 export const SOCCER_CONTENT_2: GameContentMap = {
   '/sign-the-player': {
     intro: [
-      "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Thirty three players go under the hammer, then a simulated mini league decides who spent it best.",
-      "The auction runs in a fixed order: each position sells its solid player first, then the superstar, and whoever misses both gets stuck with the leftover, fee included.",
+      "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",
+      "The auction runs the way a real room does: lots come up in a random position order at real list price, a contested lot turns into a live bidding war, an unwanted one decays until somebody snaps the bargain, and the most valuable player in the room headlines the final lot.",
     ],
     howToPlay: [
       "Pick a theme: Current Stars, All-Time Legends, or World Cup 2026.",
-      "Each of the 11 positions comes up in turn, good player first, superstar second.",
+      "Pass one is a lot per position from the middle band in a random order; pass two is the elite band, with the single most valuable player held back to headline the close. Until a position has come up, the room shows the running order, never the names.",
       "Bid in steps of 5, 10, or 25 million, or pass.",
-      "Miss both auctions and the weak leftover is assigned to you, fee attached.",
+      "When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, so nobody plays the showdown a man short.",
       "Once all three squads hit 11, the showdown simulates the league and crowns a champion.",
     ],
     rules: [
-      "Every bidder starts with 1 billion pounds, and 33 players sell across 11 positions.",
-      "If nobody bids, the lot is forced onto the richest bidder who needs the position, at the opening price.",
-      "The leftover player's fee is 60 percent of his opening price, minimum 5 million.",
+      "Every bidder starts with 1 billion pounds. Twenty two auction lots cover the 11 positions twice, middle band then elite, and eleven journeymen fill whatever stays open at the end.",
+      "If nobody bids at list price, the price falls step by step; anyone can snap it mid fall, and a lot that reaches thirty percent of list is withdrawn unsold.",
+      "An end of auction fill costs just under half the player's list price, minimum 5 million.",
       "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
       "Score is a place bonus (300, 150, or 50) plus 3 per point of squad rating plus 1 per 10 million left in the bank.",
     ],
     example: [
-      "The striker slot opens with the solid option. The Sheikh wants him, so you nudge the price once and let go. He wins at 240 million, and when the superstar sells next he is too broke to fight you.",
+      "A striker lot opens mid running order at his real list price. The Sheikh wants him, so you nudge the price once and let go; he wins the war at 240 million, and when the elite striker headlines the close he is too broke to fight you.",
       "The leftover striker goes to Mike, fee and all. The sim hands you the title on goal difference, and the unspent money pads your score.",
     ],
     tips: [
       "The Sheikh overpays, so tax him on lots you do not want, then step away.",
       "Moneyball Mike passes on superstars and hunts value, so fight him for the mid priced lots.",
-      "Passing everything still costs you: leftovers always arrive with fees.",
+      "Passing everything still costs you: the end of auction fill charges a fee for every open chair, and journeymen do not win showdowns.",
     ],
     faqs: [
       {

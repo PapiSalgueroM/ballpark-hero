@@ -36,10 +36,6 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- Sign the Player auction rebuild (BUILDING as Round 327, cloud, 2026-08-29): his
-  spec, a random position opens the lot, list price start, live bidding war if
-  contested, price decay, the rest hidden until every position has gone once, the
-  best player headlines the final lots, fill the roster then settle it in a sim.
 - From that list, unclaimed and sizable: the Rebuild redesign, the Player Stock
   Market redesign, the tycoon merge, the conquest map
   overhaul, the draft mode game (Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
@@ -141,6 +137,13 @@ Standing claims:
 
 ## Done
 
+- THE AUCTION REBUILD, Round 327 (cloud lane, 2026-08-29). Sign the Player runs the
+  owner's room now: random position order in two passes, list price openings with
+  the rival maths preserved to the digit, live wars, a decay phase with a snap
+  button replacing forced sales, positions-only running order, the best player
+  headlining the close, end of auction fill before the showdown. simAuctionRoom
+  fences the lot with 200 seeded orders and a proven control; it also proved the
+  decay's 5M clamp guards a genuine rounding fixpoint.
 - THE FANTASY DRAFT REWORK, Round 326 (cloud lane, 2026-08-29). His "too much
   scrolling, unclear goal" both fixed: the pool is a best available shortlist
   (top ten by rating, search reaches everyone), and the draft settles the moment
