@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 
 interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
@@ -19,6 +20,11 @@ interface GameShellProps {
   children: ReactNode;
   /** Optional className applied to the inner content container. */
   className?: string;
+  /** Round 321: 'auto' (default) mounts the standard GameHelp "?" fed by
+   *  the route's own guide content. Pages that already render their own
+   *  rules control (RulesGate, a hand built popover) pass 'none' so no
+   *  page ever shows two question marks. */
+  help?: 'auto' | 'none';
 }
 
 /**
@@ -27,7 +33,7 @@ interface GameShellProps {
  * <main id="dukb-main" className="min-h-screen bg-background"><GameNavbar />...<Footer /></main>
  * boilerplate per R5 spec 3.1.
  */
-export function GameShell({ width, title, emoji, subtitle, headerExtra, children, className }: GameShellProps) {
+export function GameShell({ width, title, emoji, subtitle, headerExtra, children, className, help = 'auto' }: GameShellProps) {
   return (
     /* Round 306: the id the skip link points at. The doc comment above always
        promised it; the JSX never had it, so on 69 game pages the site's one
@@ -48,6 +54,11 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
           className,
         )}
       >
+        {/* Round 321: the standard reopenable "?" on every game drawn
+            through this shell, unless the page carries its own. Sits in the
+            relative container's top left; RulesGate historically takes the
+            top right. */}
+        {help === 'auto' && <GameHelp />}
         {title && (
           <header className="text-center mb-6 md:mb-8">
             {/* Round 263: this heading made six game pages scroll sideways on a

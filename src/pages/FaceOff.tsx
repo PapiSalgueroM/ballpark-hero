@@ -40,7 +40,7 @@ const FaceOff = () => {
         description="Two athletes, one stat, ten seconds. Pick who has more before the rival does. Ten rounds across ten sports against a Rookie, a Pro or a Legend, plus a daily duel that is the same for everyone. Free, no sign-up."
         path="/face-off"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="⚡ FACE OFF"
         subtitle="Two names, one stat, ten seconds. Beat the rival in the other chair."

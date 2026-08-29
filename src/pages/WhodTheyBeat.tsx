@@ -31,7 +31,7 @@ const WhodTheyBeat = () => {
         description="Everyone remembers the champion. The 1994 Rockets, the 2016 Cavs, the 1942 Leafs: who did they actually beat? Ten finals a day across NFL, NBA, MLB, NHL and WNBA."
         path="/whod-they-beat"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="🥈 WHO'D THEY BEAT?"
         subtitle="Everyone remembers the champion. Do you remember the other guys?"

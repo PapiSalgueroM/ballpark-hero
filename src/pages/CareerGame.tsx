@@ -89,7 +89,7 @@ const CareerGame = () => {
         description="Identify the soccer player from their career history. Clubs revealed one by one. Free football trivia game."
         path="/career"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         title="CAREER QUIZ"
         subtitle="Uncover boxes to reveal a player's career, then guess who it is!"

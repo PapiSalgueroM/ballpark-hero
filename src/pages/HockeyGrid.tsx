@@ -205,7 +205,7 @@ const HockeyGrid = () => {
         description="Fill a 3x3 NHL grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited hockey trivia grid."
         path="/hockey-grid"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         emoji="🏒"
         title="NHL FRANCHISE GRID"

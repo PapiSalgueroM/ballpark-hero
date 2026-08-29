@@ -46,7 +46,7 @@ const NFLCareer = () => {
         description="Identify the NFL player from progressive career clues. Draft info, teams, stats, and awards. Free daily trivia."
         path="/nfl-career"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         emoji="🏈"
         title="NFL CAREER PATH"

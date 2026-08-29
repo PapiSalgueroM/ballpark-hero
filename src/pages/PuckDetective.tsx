@@ -290,7 +290,7 @@ const PuckDetective = () => {
         description="Guess the mystery NHL skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes."
         path="/puck-detective"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         emoji="🏒"
         title="PUCK DETECTIVE"

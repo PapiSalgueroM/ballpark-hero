@@ -167,7 +167,7 @@ const MissingXi = () => {
         description="A famous real starting lineup with one player blanked out. Name the missing man in 3 guesses or fewer. Daily puzzle plus an Unlimited archive of Champions League finals, World Cup finals and iconic title deciders."
         path="/missing-xi"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         title="MISSING XI"
         subtitle="One player is missing from this famous lineup. Name him in 3 guesses."

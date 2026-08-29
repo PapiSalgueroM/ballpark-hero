@@ -281,7 +281,7 @@ const PerfectLineup = () => {
         description="Fill a 4-3-3 where every slot demands a player from a random league or country, then simulate the match, or chase a 38 match unbeaten run, and share your result."
         path="/perfect-lineup"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         emoji="⚽"
         title="PERFECT LINEUP"
