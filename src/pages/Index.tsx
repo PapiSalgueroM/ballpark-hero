@@ -381,12 +381,12 @@ export default function Index() {
             <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-primary mb-2">
               DoUKnowBall
             </h1>
-            {/* Owner 2026-08-26: the old line said "No sign-up" flat out, and he
-                called it a lie, because accounts exist. The honest version of the
-                pitch is that every game plays without one. */}
+            {/* Owner 2026-08-28: "hero headline is too long", replaced with his
+                shape. The Round 297 honesty rule survives the cut: the account
+                claim stays phrased as what is true, every game plays without
+                one. The legal disclaimer lives in the footer, never here. */}
             <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-4">
-              Free sports trivia, daily puzzles and full career sims. Every game plays
-              without an account, nothing to download or install.
+              100+ free games across every sport. All playable without an account.
             </p>
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
