@@ -60,8 +60,6 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
       // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
-      { path: '/overrated-underrated', label: 'Overrated or Underrated', emoji: '🔥', description: 'Ten players, ten verdicts. See if the crowd agrees with you', daily: true, isNew: true },
-      { path: '/tier-list', label: 'Tier List', emoji: '🗂️', description: 'Rank eight players S to D, then face the crowd', daily: true, isNew: true },
       { path: '/budget-builder', label: '$1B Budget Builder', emoji: '💵', description: 'One billion dollars, real values, eleven slots. Spend it well', isNew: true },
       { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club. Flip your fortune, commit your cuts, survive the board', isNew: true },
       // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".
@@ -82,6 +80,11 @@ export const CATEGORIES: GameCategory[] = [
       // winning strategy was the opposite of the premise. Fixed, plus the board
       // reveal (what the rarest answer actually was) is now shown after every
       // round, which is the real payoff of a rarity game and was missing entirely.
+      // Overrated or Underrated and Tier List deleted 2026-08-28 per owner
+      // review: "two buttons, no game feel" and "same reasoning, and only one
+      // list ever playable". Routes redirect (/face-off and home), pages,
+      // hooks, components and pool fetch removed, crowd vote tables left in
+      // the database for the desktop lane's backend audit to drop or keep.
       { path: '/rarity-round', label: 'Rarity Round', emoji: '💎', description: 'Name the answer nobody else would. Rarest wins', daily: true, isNew: true },
       { path: '/missing-xi', label: 'Missing XI', emoji: '🧩', description: 'Name the missing player from a famous real lineup', daily: true, isNew: true },
       { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'A blind auction: outbid two AI moguls, £1B each, then sim the showdown', isNew: true },

@@ -105,11 +105,9 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/clue-auction': 'soccer1',
   '/dart-draft': 'soccer1',
   '/missing-xi': 'soccer1',
-  '/overrated-underrated': 'soccer1',
   '/player-bingo': 'soccer1',
   '/rarity-round': 'soccer1',
   '/rebuild': 'soccer1',
-  '/tier-list': 'soccer1',
   '/who-am-i': 'soccer1',
   '/world-xi': 'soccer1',
   /* soccer2 */

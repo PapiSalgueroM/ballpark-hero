@@ -17,6 +17,9 @@ How it works:
   exactly like a live session.
 - An item claimed more than 4 days ago with no round landed goes back to the Inbox, so a
   dead session cannot squat on work.
+- ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
+  starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 315.
 
 ## Inbox (unclaimed)
 
@@ -115,10 +118,6 @@ Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
 
-- Retire Overrated or Underrated and Tier List, his call, the standing retired-route
-  pattern (redirect stub, sitemap, registry, harnesses).
-- The home hero headline shortened ("100+ free games across every sport" shape), the
-  disclaimer staying in the footer.
 - Leaderboard names: regenerate legacy Baller-NNNN handles to the sports word pool and
   put a profanity blocklist in front of custom display names on shared surfaces (the
   decision and reasoning are in the tweaks doc).
@@ -136,6 +135,10 @@ Standing claims:
 
 ## Done
 
+- Both retirements (Overrated or Underrated, Tier List) and the hero headline: Round 314
+  (cloud lane, 2026-08-28; renumbered twice after the lanes collided on 311 and then 313,
+  the desktop's ticker and footer rounds keep those). Crowd vote tables left in the
+  database, noted on the desktop lane's backend audit item.
 - THE WIRE GLIDES, Round 317 (desktop lane, 2026-08-29). His report "the ticker isnt
   moving", and it wasn't in the way that counts: the old loop held each sport's box
   perfectly still for up to 14 seconds then swapped, and once Round 311 loaded the day

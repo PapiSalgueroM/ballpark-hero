@@ -28,7 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITEMAP_FLOOR = 130; /* raised R306 for /accessibility; before that 129 (R293, /idle-arena and /face-off), 127 (R270, the five sport hubs), 122 (R252, /hall-of-champions) */
+const SITEMAP_FLOOR = 128; /* lowered R311, Overrated or Underrated and Tier List retired at the owner's call; before that 130 (R306, /accessibility), 129 (R293, /idle-arena and /face-off), 127 (R270, the five sport hubs) */
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };

@@ -105,8 +105,6 @@ const PackBattle = lazy(() => import("./pages/PackBattle"));
 const SportsMillionaire = lazy(() => import("./pages/SportsMillionaire"));
 const DartDraft = lazy(() => import("./pages/DartDraft"));
 const Minefield = lazy(() => import("./pages/Minefield"));
-const OverratedUnderrated = lazy(() => import("./pages/OverratedUnderrated"));
-const TierList = lazy(() => import("./pages/TierList"));
 const BudgetBuilder = lazy(() => import("./pages/BudgetBuilder"));
 const QuizBoard = lazy(() => import("./pages/QuizBoard"));
 const BallIq = lazy(() => import("./pages/BallIq"));
@@ -399,8 +397,13 @@ const AppContent = () => {
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/dart-draft" element={<DartDraft />} />
         <Route path="/minefield" element={<Minefield />} />
-        <Route path="/overrated-underrated" element={<OverratedUnderrated />} />
-        <Route path="/tier-list" element={<TierList />} />
+        {/* Round 311, Anthony's 2026-08-28 review: both retired at his call
+            ("two buttons, no game feel"). The versus game hands its address to
+            Face Off, the ranking game goes home. Standing retired route
+            pattern: Navigate here, meta refresh stub in public/, out of the
+            sitemap and the registry. */}
+        <Route path="/overrated-underrated" element={<Navigate to="/face-off" replace />} />
+        <Route path="/tier-list" element={<Navigate to="/" replace />} />
         <Route path="/budget-builder" element={<BudgetBuilder />} />
         <Route path="/grade-transfer" element={<Navigate to="/" replace />} />
         <Route path="/quiz-board" element={<QuizBoard />} />
