@@ -13,7 +13,7 @@ export default function NascarChain() {
         path="/nascar-chain"
       />
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <NascarChainBoard />
       <GameSeoContent
           pageHasOwnH1

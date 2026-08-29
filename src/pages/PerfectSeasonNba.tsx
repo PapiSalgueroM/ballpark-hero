@@ -380,7 +380,7 @@ const PerfectSeasonNba = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="82-0: Perfect Season Basketball | DoUKnowBall"
         description="Spin across NBA history, draft a cross-era starting five plus a sixth man, and simulate an 82 game season. Can you go 82-0? Free to play."

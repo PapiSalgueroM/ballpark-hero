@@ -13,7 +13,7 @@ export default function GuessTheNation() {
         path="/guess-the-nation"
       />
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <GuessTheNationBoard />
       <GameSeoContent
           pageHasOwnH1

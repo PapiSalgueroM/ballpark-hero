@@ -13,7 +13,7 @@ export default function EmojiGuess() {
         path="/emoji-guess"
       />
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <EmojiGuessBoard />
       <GameSeoContent
         title="Emoji Guess | DoUKnowBall"

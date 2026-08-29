@@ -255,7 +255,7 @@ const FantasyDraft = () => {
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(145 40% 8%) 0%, hsl(152 35% 6%) 50%, hsl(225 25% 6%) 100%)' }}>
         <GameNavbar />
-        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
 
         <main id="dukb-main" className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none opacity-[0.04]">

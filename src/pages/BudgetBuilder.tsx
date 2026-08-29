@@ -13,7 +13,7 @@ export default function BudgetBuilder() {
         path="/budget-builder"
       />
       <GameNavbar />
-      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <BudgetBuilderBoard />
       <GameSeoContent
         title="€1 Billion Budget Builder | DoUKnowBall"
