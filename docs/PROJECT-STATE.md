@@ -2597,6 +2597,24 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 345.** World XI real positions, and the reason nothing on
+  this site should ever derive a career from a name again. The Round 319
+  handoff wanted eligibility to read positions a player actually played. The
+  first build derived a secondary-position view from player_market_values' own
+  yearly rows and it measured beautifully, 344 multi-position players, until
+  the sample line "Gabriel Pereira (CB, played CB/RW)" turned out to be two
+  Brazilians born a year apart sharing a name, a Copenhagen centre-back
+  wearing an Al-Rayyan winger's seasons. The table has no person identity, and
+  every tightening (age spread, nationality, single birth year) still kept
+  colliding mononyms, so the view was dropped rather than calibrated. What
+  ships: player_verified_positions, curated top 150 by value under the
+  two-source rule with sources stored per row, 63 players with genuine
+  secondary roles, each row carrying its human's primary_position so history
+  attaches only when the pooled player's own role matches, plus the goalkeeper
+  wall. fitsSlot widens by direct membership, no family chain, Round 319's
+  LWB wall intact. simWorldXiPositions runs against the live pool: 63 carry
+  history, 6 earn the strict RW slot through it (Palmer, Güler, Foden), zero
+  breaches, control proven red. tsc zero, build green.
 - **2026-08-29, Round 346.** The maker note. The owner asked for a welcome popup
   in his own words; it shipped as a dismissible card below the games instead,
   because the home page measures offers before asks and a modal in front of the

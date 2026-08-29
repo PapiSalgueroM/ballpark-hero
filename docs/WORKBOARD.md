@@ -114,12 +114,6 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 From the 2026-08-28 review (bugs, claimed same day):
 
 
-- WORLD XI REAL POSITIONS (BUILDING as Round 345, desktop, 2026-08-29): the Round
-  319 handoff, a verified secondary position map so eligibility reads positions a
-  player actually PLAYED. Schema recon first, then a research fan out for the
-  World XI pool players, then the code side reads data instead of a hand rule.
-
-
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
   either sign into the Claude in Chrome extension on the PC so the desktop lane can
   read Search Console itself, or export the GSC Pages report CSV to Downloads and
@@ -194,6 +188,24 @@ Standing claims:
 
 ## Done
 
+- WORLD XI REAL POSITIONS, Round 345 (desktop lane, 2026-08-29). The Round 319
+  handoff, "a CF with RW history should fit a RW slot", now reads verified data
+  instead of a hand rule. The round's real lesson: player_market_values has no
+  person identity, so every derivation keyed on the name fakes careers by
+  merging humans who share one (two Brazilian Gabriel Pereiras born a year
+  apart became a centre-back with wide-right seasons; a "Daniel" played goal
+  and attacking midfield at once; even the strictest identity filter kept
+  colliding mononyms). The derived view was therefore dropped, not calibrated.
+  What ships is curated only: player_verified_positions, the top 150 by value
+  researched under the two-source rule with provenance stored per row, 63
+  players with real secondary roles (Raphinha RW, Valverde RB, Alexander-Arnold
+  CM, Szoboszlai CM and RB), each row carrying the verified human's
+  primary_position so a same-named tail player cannot inherit a star's history,
+  plus the goalkeeper wall behind it. fitsSlot widens by direct membership
+  only, no family chain, so the Round 319 LWB-to-RW hole stays closed.
+  simWorldXiPositions fences it live: 63 pooled players carry history, 6 earn
+  the strict RW slot through it (Palmer, Güler, Foden), zero defenders cross
+  without a verified wide-right season, WXIPOS_CONTROL=nohistory proven red.
 - THE MAKER NOTE, Round 346 (desktop lane, 2026-08-29). His welcome idea, built
   the way the home page can carry it: a small dismissible card in his own voice
   (first coding project, independent, constantly improving, sorry for any bugs,
