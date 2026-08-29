@@ -255,6 +255,21 @@ Standing claims:
   door. The habit the episode argues for: a round that adds any hand written
   copy to `src` runs the full board before it lands, because the copy fences
   (invented quotes, rival names) read files no scoped harness touches.
+  TWO THINGS THE PROBES THEMSELVES TAUGHT, both worth your judgment since you
+  own that harness. First, a probe that plants a violation the checker never
+  catches proves nothing and will happily report success: the first draft
+  planted `Mohamed Salah told me: "..."` inside the exempt file, the probe
+  reported the exemption was a back door, and the truth was that the STRICT
+  source rule ignores that shape everywhere, exempt or not. The probe now
+  plants the shape that actually fires, a real name handing over to a first
+  person sentence, with the person swapped. Second, and this is the part
+  worth a decision: that strict rule requires the name to sit INSIDE the
+  quoted run, deliberately, so a data row like `{ name: "..." }` cannot false
+  positive. The consequence is that a hand written narrative line in `src` of
+  the form `Salah said: "I want to leave"` is NOT caught by the static scan,
+  only by the runtime pass over generated copy. Whether that gap is worth
+  closing (and at what false positive cost across 712 files) is yours to
+  weigh; it was left alone here rather than tightened unilaterally mid-freeze.
 - Tweaks item 9: the full playGames browser run over every game, every feature, then fix
   every finding.
 - Publishing duty: after a burst lands on main, verify Lovable synced, call

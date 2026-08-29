@@ -377,7 +377,13 @@ console.log('2) Static: hand written copy in src');
   const OWNER_FILE = path.join(ROOT, 'src/components/home/MakerNote.tsx');
   const OTHER_FILE = path.join(ROOT, 'src/pages/Index.tsx');
   const ownLine = "Hey, I'm Anthony. DoUKnowBall is my first ever coding project, an independent site";
-  const playerLine = 'Mohamed Salah told me: "I love what you built here, keep going."';
+  /* The planted player line is deliberately the SAME SHAPE that caught the
+     maker note, a real name handing over to a first person sentence, with the
+     person swapped. An earlier draft planted 'Mohamed Salah told me: "..."',
+     which the strict source rule ignores by design (the name sits outside the
+     quoted run, so a data row like { name: "..." } cannot false positive), so
+     the probe proved nothing about the exemption and said so. */
+  const playerLine = "Hey, I'm Mohamed Salah. DoUKnowBall is my first ever coding project, an independent site";
   const probes = [
     ['the owner\'s own sentence in his own file', OWNER_FILE, ownLine, false],
     ['a real player quoted inside the owner\'s file', OWNER_FILE, playerLine, true],
