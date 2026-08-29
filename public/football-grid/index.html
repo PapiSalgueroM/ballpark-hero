@@ -54,7 +54,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Pro Football Grid","item":"https://douknowball.com/football-grid"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the rarity score work?","acceptedAnswer":{"@type":"Answer","text":"Every correct cell shows the percentage of players who picked that same name there, based on real picks on the same puzzle. Your score averages those numbers, so lower means rarer, and rarer is the brag."}},{"@type":"Question","name":"Do correct answers use up guesses too?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 15 guess budget counts every submission, so a perfect game spends 9 and leaves room for exactly 6 mistakes."}},{"@type":"Question","name":"What categories show up?","acceptedAnswer":{"@type":"Answer","text":"Franchises, positions, colleges, draft pedigree like undrafted or top 10 pick, Pro Bowl counts, Super Bowl wins, and awards like MVP."}},{"@type":"Question","name":"What happens when I run out of guesses?","acceptedAnswer":{"@type":"Answer","text":"The grid ends and you keep the cells you filled plus their rarity score. A fresh grid lands at midnight Eastern."}},{"@type":"Question","name":"Is this the same as the baseball grid?","acceptedAnswer":{"@type":"Answer","text":"Same core idea, pointed at football history instead, with crowd sourced rarity built in and an unlimited mode for practice."}},{"@type":"Question","name":"Is Pro Football Grid free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Pro Football Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"NFL Grid - Daily Football Team Grid Game | DoUKnowBall","description":"Daily NFL grid game. Name players who played for each team and match position or award criteria.","url":"https://douknowball.com/football-grid","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NFL Grid","item":"https://douknowball.com/football-grid"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the rarity score work?","acceptedAnswer":{"@type":"Answer","text":"Every correct cell shows the percentage of players who picked that same name there, based on real picks on the same puzzle. Your score averages those numbers, so lower means rarer, and rarer is the brag."}},{"@type":"Question","name":"Do correct answers use up guesses too?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 15 guess budget counts every submission, so a perfect game spends 9 and leaves room for exactly 6 mistakes."}},{"@type":"Question","name":"What categories show up?","acceptedAnswer":{"@type":"Answer","text":"Franchises, positions, colleges, draft pedigree like undrafted or top 10 pick, Pro Bowl counts, Super Bowl wins, and awards like MVP."}},{"@type":"Question","name":"What happens when I run out of guesses?","acceptedAnswer":{"@type":"Answer","text":"The grid ends and you keep the cells you filled plus their rarity score. A fresh grid lands at midnight Eastern."}},{"@type":"Question","name":"Is this the same as the baseball grid?","acceptedAnswer":{"@type":"Answer","text":"Same core idea, pointed at football history instead, with crowd sourced rarity built in and an unlimited mode for practice."}},{"@type":"Question","name":"Is NFL Grid free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. NFL Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"NFL Grid - Daily Football Team Grid Game | DoUKnowBall","description":"Daily NFL grid game. Name players who played for each team and match position or award criteria.","url":"https://douknowball.com/football-grid","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/football-grid" data-rh="true"><meta name="description" content="Daily NFL grid game. Name players who played for each team and match position or award criteria." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/football-grid" data-rh="true"><meta property="og:title" content="NFL Grid - Daily Football Team Grid Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Daily NFL grid game. Name players who played for each team and match position or award criteria." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NFL Grid - Daily Football Team Grid Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Daily NFL grid game. Name players who played for each team and match position or award criteria." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -204,14 +215,14 @@
 <div data-site-chrome>
 <a href="/">DOUKNOWBALL</a>
 </div>
-<h1>🏈PRO FOOTBALL GRID</h1>
+<h1>🏈NFL GRID</h1>
 <p>Fill the 3×3 grid. Each cell needs a player matching both the row and column. Daily challenge!</p>
-<h2>Pro Football Grid | DoUKnowBall</h2>
+<h2>NFL Grid | DoUKnowBall</h2>
 <p>A daily 3×3 grid puzzle where each cell requires a pro football player matching both the row and column criteria. Features a rarity scoring system based on real player selections.</p>
 <p>The grid looks harmless: three rows, three columns, nine cells. Each row and column is a pro football criterion, a franchise, a position, a college, an award, and every cell needs a player who satisfies both. Then you learn that naming a Cowboys quarterback with 3 or more Pro Bowls is harder than it sounds.</p>
 <p>If daily team grids ever owned your mornings, this is that same itch with a twist: a rarity score that rewards deep cuts over obvious answers. Anyone can finish a grid with superstars. Finishing it with the forgotten third receiver from 2009 is the flex.</p>
 <p>A new puzzle drops at midnight Eastern, and everyone plays the same one.</p>
-<h2>How to play Pro Football Grid</h2>
+<h2>How to play NFL Grid</h2>
 <li>Read the three row and three column criteria. A cell crossing Played for Packers with Won Super Bowl needs a player who did both.</li>
 <li>Tap a cell, start typing a name, and pick the player from the suggestions.</li>
 <li>Correct answers lock in green with a rarity percentage. Wrong ones flash red.</li>
@@ -232,7 +243,7 @@
 <li>Journeymen are gold. A four franchise veteran covers cells a one team legend never could.</li>
 <li>If a name misses, change angles. Do not spend a second guess on a teammate from the same hunch.</li>
 <li>Chasing rarity is fun, but 9 of 9 with boring answers always beats 7 of 9 with cool ones.</li>
-<h2>Pro Football Grid FAQ</h2>
+<h2>NFL Grid FAQ</h2>
 <h3>How does the rarity score work?</h3>
 <p>Every correct cell shows the percentage of players who picked that same name there, based on real picks on the same puzzle. Your score averages those numbers, so lower means rarer, and rarer is the brag.</p>
 <h3>Do correct answers use up guesses too?</h3>
@@ -243,15 +254,15 @@
 <p>The grid ends and you keep the cells you filled plus their rarity score. A fresh grid lands at midnight Eastern.</p>
 <h3>Is this the same as the baseball grid?</h3>
 <p>Same core idea, pointed at football history instead, with crowd sourced rarity built in and an unlimited mode for practice.</p>
-<h3>Is Pro Football Grid free to play?</h3>
-<p>Yes. Pro Football Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h3>Is NFL Grid free to play?</h3>
+<p>Yes. NFL Grid is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/nfl-career">🏈 NFL Career Path Guess the NFL player from clues</a>
 <a href="/nfl-higher-lower">📊 NFL Higher or Lower Which star scored more career touchdowns?</a>
 <a href="/nfl-connections">🧩 NFL Connections Group 20 players into four hidden connections</a>
 <a href="/guess-the-college">🏫 Guess The College Guess the D1 school from clues</a>
 <a href="/mlb-front-office">🏢 MLB Front Office Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties</a>
-<a href="/budget-builder">💷 €1B Budget Builder One billion euros, real values, eleven slots. Spend it well</a>
+<a href="/gauntlet-draft">⚔️ Gauntlet Draft Pick your XI five cards at a time, then survive a five round cup</a>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>

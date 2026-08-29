@@ -2597,6 +2597,23 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 349.** The operating contract lands and the NFL grid
+  says its own name. Anthony's 2026-08-29 contract (verbatim in
+  docs/OPERATING-CONTRACT-2026-08.md) makes Google Search Console the ground
+  truth (1,800 clicks per 28 days, 42 percent mobile, a third branded),
+  sets Milestone 0 as owning the grid category, and defers AdSense, which
+  narrows directive 3's freeze: new real-value routes are permitted again
+  while ads.txt, the verification code, robots.txt and existing canonicals
+  stay verified-fix-only. The build half: /football-grid sits at position 21
+  for "nfl grid" (49,500 monthly searches) with the right title and meta but
+  an H1 and sitewide label still saying Pro Football Grid; every naming site
+  now says NFL Grid, snapshots regenerated, sitemap honestly re-dating 23
+  changed pages. Found and fixed on the way: genSitemap could never run on
+  Windows (backslashed ROOT eaten as escapes in its generated esbuild entry,
+  plus a protocol-less bundle import), so the desktop lane's sitemap
+  regeneration had been silently impossible; it is cross-platform now. The
+  cloud lane's held NBA Stat Line branch and the grid archive system are both
+  unblocked by the contract. tsc zero, all fences green.
 - **2026-08-29, Round 335, the three harness findings that came with it.** Rebasing
   onto a main that had moved thirteen rounds made this round's board the first to
   run the two lanes together, and it found three things worth keeping.

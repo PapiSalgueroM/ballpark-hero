@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/minefield" data-rh="true"><meta name="description" content="A category, a board of names. Click everyone who truly belongs - but a few tiles are mines that don't belong at all. Two lives per board, three boards per run, new daily challenge every day." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/minefield" data-rh="true"><meta property="og:title" content="Minefield - Dodge the Fakes | DoUKnowBall" data-rh="true"><meta property="og:description" content="A category, a board of names. Click everyone who truly belongs - but a few tiles are mines that don't belong at all. Two lives per board, three boards per run, new daily challenge every day." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Minefield - Dodge the Fakes | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="A category, a board of names. Click everyone who truly belongs - but a few tiles are mines that don't belong at all. Two lives per board, three boards per run, new daily challenge every day." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -242,7 +253,7 @@
 <a href="/sports-millionaire">💰 Sports Millionaire Climb a 15-question money ladder with lifelines</a>
 <a href="/quiz-board">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
 <a href="/ball-iq">🧠 Ball Knowledge IQ Twelve questions, getting harder. Do you actually know ball?</a>
-<a href="/fantasy-draft">🧑‍💼 Fantasy Draft Draft your ultimate XI against an AI opponent</a>
+<a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
 <a href="/guess-cbb-team">🏀 Guess The CBB Program Guess the college basketball program</a>
 <a href="/hockey-higher-lower">🏒 Higher / Lower Compare career points</a>
 <div data-site-chrome>

@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/rank-em" data-rh="true"><meta name="description" content="Put five players in the correct order by a career stat, most to fewest. A new daily ranking across the NBA, NHL and MLB, every number verified." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/rank-em" data-rh="true"><meta property="og:title" content="Rank 'Em - Put the Players in Order | DoUKnowBall" data-rh="true"><meta property="og:description" content="Put five players in the correct order by a career stat, most to fewest. A new daily ranking across the NBA, NHL and MLB, every number verified." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Rank 'Em - Put the Players in Order | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Put five players in the correct order by a career stat, most to fewest. A new daily ranking across the NBA, NHL and MLB, every number verified." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -247,7 +258,7 @@
 <a href="/guess-the-year">📅 Guess The Year What year did these happen?</a>
 <a href="/fantasy-draft">🧑‍💼 Fantasy Draft Draft your ultimate XI against an AI opponent</a>
 <a href="/cfb-higher-lower">📊 CFB Higher or Lower Which QB threw for more college yards?</a>
-<a href="/football-grid">🏈 Pro Football Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/football-grid">🏈 NFL Grid 3×3 grid puzzle with rarity scores</a>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>

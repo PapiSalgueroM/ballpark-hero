@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/transfer-path" data-rh="true"><meta name="description" content="Connect two soccer players by naming teammates who played at the same clubs. Like Six Degrees of Kevin Bacon for football transfers." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/transfer-path" data-rh="true"><meta property="og:title" content="Transfer Path - Connect Players via Clubs | DoUKnowBall" data-rh="true"><meta property="og:description" content="Connect two soccer players by naming teammates who played at the same clubs. Like Six Degrees of Kevin Bacon for football transfers." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Transfer Path - Connect Players via Clubs | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Connect two soccer players by naming teammates who played at the same clubs. Like Six Degrees of Kevin Bacon for football transfers." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -206,23 +217,6 @@
 </div>
 <h1>TRANSFER PATH</h1>
 <p>Loading Transfer Path…</p>
-<div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/soccer">Soccer</a>
-<a href="/pro-basketball">Basketball</a>
-<a href="/hockey">Hockey</a>
-<a href="/pro-football">Football</a>
-<a href="/baseball">Baseball</a>
-<a href="/college">College</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
-<a href="/records">Record Books</a>
-<a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
-<a href="/terms">Terms of Service</a>
-<a href="/accessibility">Accessibility</a>
-</div>
 <h2>Transfer Path: Connect Soccer Players Through Shared Clubs</h2>
 <p>Link two soccer players by walking through the clubs they share with other players. Like Six Degrees of Kevin Bacon, but for football transfers.</p>
 <p>Two players sit at opposite ends of a chain, and you link them through shared dressing rooms. It is six degrees of separation for football.</p>
@@ -257,12 +251,27 @@
 <p>Yes. Transfer Path is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/squad-deal">🏟️ Squad Deal Build an XI out of mystery boxes</a>
-<a href="/player-stock-market">📈 Player Stock Market Buy 3 players at real past values, then the market moves a real year</a>
-<a href="/budget-builder">💷 €1B Budget Builder One billion euros, real values, eleven slots. Spend it well</a>
+<a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
+<a href="/gauntlet-draft">⚔️ Gauntlet Draft Pick your XI five cards at a time, then survive a five round cup</a>
 <a href="/perfect-season-nfl">🏆 17-0 Perfect Season Draft an offense across eras, run the table</a>
 <a href="/cfb-higher-lower">📊 CFB Higher or Lower Which QB threw for more college yards?</a>
 <a href="/quiz-board">🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you</a>
 <div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 <p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
 </div>
 </div>

@@ -51,7 +51,7 @@ const FootballGrid = () => {
       <GameShell
         width="narrow"
         emoji="🏈"
-        title="PRO FOOTBALL GRID"
+        title="NFL GRID"
         subtitle="Fill the 3×3 grid. Each cell needs a player matching both the row and column. Daily challenge!"
         headerExtra={
           <>
@@ -124,7 +124,7 @@ const FootballGrid = () => {
                   emojiGrid={gridCellsToEmoji(cells)}
                   share={{
                     score: rarityScore !== null ? `a Rarity Score of ${rarityScore}% (${correctCount}/9)` : `${correctCount}/9 cells`,
-                    gameName: 'Pro Football Grid',
+                    gameName: 'NFL Grid',
                     gamePath: '/football-grid',
                   }}
                   playNext={<p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
@@ -136,7 +136,7 @@ const FootballGrid = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Pro Football Grid | DoUKnowBall"
+          title="NFL Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a pro football player matching both the row and column criteria. Features a rarity scoring system based on real player selections."
           howToPlay={[
             'Each cell in the 3×3 grid requires a player who satisfies both the row and column attribute',

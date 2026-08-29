@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/hockey-grid" data-rh="true"><meta name="description" content="Fill a 3x3 NHL grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited hockey trivia grid." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/hockey-grid" data-rh="true"><meta property="og:title" content="NHL Franchise Grid: Daily Hockey Team Grid | DoUKnowBall" data-rh="true"><meta property="og:description" content="Fill a 3x3 NHL grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited hockey trivia grid." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NHL Franchise Grid: Daily Hockey Team Grid | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Fill a 3x3 NHL grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited hockey trivia grid." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -206,6 +217,7 @@
 </div>
 <h1>🏒NHL FRANCHISE GRID</h1>
 <p>Name a player who matches both the row and the column. 9 cells, 9 wrong guesses allowed.</p>
+<p>Loading today's puzzle…</p>
 <h2>NHL Franchise Grid | Daily Hockey Team Grid</h2>
 <p>A 3x3 grid puzzle where each cell needs an NHL player whose career satisfies both the row and column. Rows and columns mix franchises with career milestones like 500 points, 300 goals or 1000 games played.</p>
 <p>Nine cells, nine chances to prove your hockey memory runs deeper than last season.</p>

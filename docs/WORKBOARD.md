@@ -67,11 +67,6 @@ whole audience.**
   contract wants the master spec split into per-part files with an index at
   docs/spec/README.md so sessions load only the relevant section. Mechanical,
   one round, no gates beyond the build staying green.
-- CLAIMED Round 349 (desktop, 2026-08-29): the operating contract lands in the
-  repo, the freeze reconciliation above, and the NFL grid says its own name
-  (H1 "PRO FOOTBALL GRID" and the registry label "Pro Football Grid" align to
-  the "NFL Grid" the page's own title already targets, snapshots regenerated).
-  Contract Task 4 for the money page, smallest honest cut.
 - GRID ENGINE TO NEW SPORTS (unclaimed): the engine family already spans soccer,
   NFL, CFB, NBA, MLB, NHL. Candidates with search demand: CBB grid, WNBA grid.
   Data-first rounds, two-source rule as always.
@@ -340,6 +335,22 @@ Standing claims:
 
 ## Done
 
+- NFL GRID SAYS ITS OWN NAME, Round 349 (desktop lane, 2026-08-29). Contract
+  Task 4 for the money page: /football-grid ranks 21 for "nfl grid" (49,500
+  monthly) with its title and meta already targeting the term, but the H1
+  said PRO FOOTBALL GRID and the registry label rippled "Pro Football Grid"
+  through every tile, hub, breadcrumb and related-games anchor on the site.
+  All four naming sites (H1, label, share card name, SEO block title) now say
+  NFL Grid, the full snapshot pipeline was regenerated, and the sitemap
+  re-dated exactly the 23 pages whose shipped text really changed while 108
+  held their old dates. The round also fixed a real pipeline bug it tripped
+  over: genSitemap generated its esbuild entry with a raw Windows ROOT whose
+  backslashes were eaten as escape sequences, so the desktop lane could not
+  regenerate a sitemap at all (Linux never noticed, which is why nobody had).
+  Forward slashes, os.tmpdir and a file URL import fixed it for both worlds.
+  tsc zero, builds green, all 15 built-site fences green plus simHomeCopy and
+  simNoInventedQuotes, simPrerenderBoot re-proven green in isolation after a
+  batch-run collision with leftover pipeline processes.
 - THE STRICTER HOW-TO-PLAY FENCE, Round 335 (cloud lane, 2026-08-29). The queued
   second half: the "handful" of prose-only games was measured at 39 of 116, all
   the non shell heavyweights included (Soccer Career, the dynasties, perfect

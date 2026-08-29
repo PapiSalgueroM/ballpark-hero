@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/nascar-chain" data-rh="true"><meta name="description" content="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/nascar-chain" data-rh="true"><meta property="og:title" content="NASCAR Chain - Cup Champion Chain Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NASCAR Chain - Cup Champion Chain Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -208,23 +219,6 @@
 <p>Name a driver who beat the current champion to the Cup Series title to extend your chain!</p>
 <p>Same starting driver for everyone today</p>
 <p>Random starting driver, play as many times as you like</p>
-<div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/soccer">Soccer</a>
-<a href="/pro-basketball">Basketball</a>
-<a href="/hockey">Hockey</a>
-<a href="/pro-football">Football</a>
-<a href="/baseball">Baseball</a>
-<a href="/college">College</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
-<a href="/records">Record Books</a>
-<a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
-<a href="/terms">Terms of Service</a>
-<a href="/accessibility">Accessibility</a>
-</div>
 <h2>NASCAR Chain Game | DoUKnowBall</h2>
 <p>Build the longest chain of NASCAR Cup Series drivers by naming someone who raced against the current driver. Test your knowledge of stock car racing history.</p>
 <p>Winning a Cup championship means somebody else didn't. NASCAR Chain runs on that: you get a driver, and you name someone who beat them to a Cup Series title. Then someone who beat that driver to one, and on and on.</p>
@@ -266,6 +260,21 @@
 <a href="/hall-of-champions">🏛️ Hall of Champions Idle museum: buy real championships, fill ten wings, earn while you are away</a>
 <a href="/college-grid">🎓 College Grid College football 3×3 grid puzzle</a>
 <div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 <p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
 </div>
 </div>

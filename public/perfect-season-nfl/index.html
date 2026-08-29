@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/perfect-season-nfl" data-rh="true"><meta name="description" content="Spin across NFL history, draft a cross-era offense, and simulate a 17 game season. Can you go 17-0? Free to play." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/perfect-season-nfl" data-rh="true"><meta property="og:title" content="17-0: Perfect Season Football | DoUKnowBall" data-rh="true"><meta property="og:description" content="Spin across NFL history, draft a cross-era offense, and simulate a 17 game season. Can you go 17-0? Free to play." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="17-0: Perfect Season Football | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Spin across NFL history, draft a cross-era offense, and simulate a 17 game season. Can you go 17-0? Free to play." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -244,7 +255,7 @@
 <h2>More games to play</h2>
 <a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
 <a href="/nfl-my-career">🌟 NFL My Career Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope</a>
-<a href="/football-grid">🏈 Pro Football Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/football-grid">🏈 NFL Grid 3×3 grid puzzle with rarity scores</a>
 <a href="/cfb-higher-lower">📊 CFB Higher or Lower Which QB threw for more college yards?</a>
 <a href="/puck-detective">🏒 Puck Detective Guess the mystery NHL player with attribute clues</a>
 <a href="/missing-xi">🧩 Missing XI Name the missing player from a famous real lineup</a>

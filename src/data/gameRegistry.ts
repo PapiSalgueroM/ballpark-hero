@@ -137,7 +137,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/perfect-season-nfl', label: '17-0 Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', isNew: true },
       { path: '/front-office', label: 'NFL Front Office', emoji: '🏢', description: 'Full GM sim with real rosters: cap, trades, drafts, dynasties', isNew: true, featured: true },
       { path: '/nfl-my-career', label: 'NFL My Career', emoji: '🌟', description: 'Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope', isNew: true, featured: true },
-      { path: '/football-grid', label: 'Pro Football Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
+      { path: '/football-grid', label: 'NFL Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true },
       // retired 2026-07-08 per owner review: "too easy and boring... unless ur going to add to it, discard it". Route kept for direct links; uncomment to revive.
       // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },
       // deleted 2026-08-05 per owner review: "Draft guessed is boring and I say delete it."

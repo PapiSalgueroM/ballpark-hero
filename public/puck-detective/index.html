@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/puck-detective" data-rh="true"><meta name="description" content="Guess the mystery NHL skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/puck-detective" data-rh="true"><meta property="og:title" content="Puck Detective: Guess the NHL Player | DoUKnowBall" data-rh="true"><meta property="og:description" content="Guess the mystery NHL skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Puck Detective: Guess the NHL Player | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Guess the mystery NHL skater in 8 tries. Every guess reveals team, position, nationality, age and jersey number clues with directional arrows. Free daily and unlimited modes." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>

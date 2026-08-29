@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/squad-deal" data-rh="true"><meta name="description" content="Build a full XI out of mystery boxes: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/squad-deal" data-rh="true"><meta property="og:title" content="Squad Deal: Mystery Box Team Builder | DoUKnowBall" data-rh="true"><meta property="og:description" content="Build a full XI out of mystery boxes: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Squad Deal: Mystery Box Team Builder | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Build a full XI out of mystery boxes: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -239,9 +250,9 @@
 <h3>Is Squad Deal free to play?</h3>
 <p>Yes. Squad Deal is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
+<a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
+<a href="/gauntlet-draft">⚔️ Gauntlet Draft Pick your XI five cards at a time, then survive a five round cup</a>
 <a href="/player-stock-market">📈 Player Stock Market Buy 3 players at real past values, then the market moves a real year</a>
-<a href="/budget-builder">💷 €1B Budget Builder One billion euros, real values, eleven slots. Spend it well</a>
-<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Flip your fortune, commit your cuts, survive the board</a>
 <a href="/nfl-connections">🧩 NFL Connections Group 20 players into four hidden connections</a>
 <a href="/f1-driver">🏎️ Guess The F1 Driver Guess the mystery F1 driver from clues</a>
 <a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other</a>

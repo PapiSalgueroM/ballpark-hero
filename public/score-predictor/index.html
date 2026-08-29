@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/score-predictor" data-rh="true"><meta name="description" content="Can you predict the final score of history's most famous matches? Guess soccer, NFL, and NBA scores for points." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/score-predictor" data-rh="true"><meta property="og:title" content="Score Predictor - Guess Famous Match Scores | DoUKnowBall" data-rh="true"><meta property="og:description" content="Can you predict the final score of history's most famous matches? Guess soccer, NFL, and NBA scores for points." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Score Predictor - Guess Famous Match Scores | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Can you predict the final score of history's most famous matches? Guess soccer, NFL, and NBA scores for points." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -208,23 +219,6 @@
 <p>📅 Daily Challenge</p>
 <p>Home</p>
 <p>Away</p>
-<div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
-<a href="/soccer">Soccer</a>
-<a href="/pro-basketball">Basketball</a>
-<a href="/hockey">Hockey</a>
-<a href="/pro-football">Football</a>
-<a href="/baseball">Baseball</a>
-<a href="/college">College</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
-<a href="/records">Record Books</a>
-<a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
-<a href="/terms">Terms of Service</a>
-<a href="/accessibility">Accessibility</a>
-</div>
 <h2>Score Predictor | DoUKnowBall</h2>
 <p>Test your sports memory by predicting the final score of legendary matches across soccer, NFL, and NBA history.</p>
 <p>You remember who won. But do you remember the score? Score Predictor pulls up a famous match, gives you the teams, the competition, the date and a hint, and asks for the exact final score.</p>
@@ -265,6 +259,21 @@
 <a href="/nba-connect-4">🏀 NBA Connect 4 NBA trivia meets Connect 4</a>
 <a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
 <div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
 <p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
 </div>
 </div>

@@ -36,7 +36,8 @@ import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import os from 'node:os';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readRoutes } from './lib/retiredRoutes.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -77,14 +78,20 @@ const { live: liveRoutes, retired } = readRoutes();
 const redirects = new Set(retired.map(r => r.from));
 
 /* ---- games from the registry (house bundle pattern) ---- */
-const ENTRY = '/tmp/sitemapEntry.mjs';
-const BUNDLE = '/tmp/sitemap.bundle.mjs';
+/* Round 349: Windows-safe. The generated entry file is JavaScript source, so
+   a Windows ROOT full of backslashes gets its \U and \b eaten as escapes
+   (esbuild saw "C:Usersantho..." and the whole pipeline died on the desktop
+   lane while Linux never noticed). Forward slashes work on every platform,
+   the tmp dir comes from the OS, and the bundle import needs a file URL on
+   Windows. */
+const ENTRY = path.join(os.tmpdir(), 'sitemapEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'sitemap.bundle.mjs');
 fs.writeFileSync(ENTRY, `
-const reg = await import('${ROOT}/src/data/gameRegistry.ts');
+const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
 export const paths = (reg.ALL_GAMES ?? reg.CATEGORIES.flatMap(c => c.games)).map(g => g.path);
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { paths: gamePaths } = await import(BUNDLE);
+execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { paths: gamePaths } = await import(pathToFileURL(BUNDLE).href);
 
 let bad = 0;
 for (const p of gamePaths) {
