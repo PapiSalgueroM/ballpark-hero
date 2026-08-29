@@ -2,7 +2,7 @@
 import { chromium } from './lib/playwrightLoader.mjs';
 
 const BASE = 'http://127.0.0.1:4173';
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
 const page = await browser.newPage();
 page.setDefaultTimeout(15000);
 const esc = async () => { await page.keyboard.press('Escape'); };

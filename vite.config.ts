@@ -70,7 +70,17 @@ const inlineSnapshotAssets = (root: string) => ({
        snapshot's own inline boot style holds the page until then, which is
        exactly what it was written for. The noscript copy is for a browser that
        never runs the swap. */
+    /* Round 314: the calm boot. The snapshot's readable copy used to show as
+       a full wall of raw text until React mounted (Anthony filmed the flash).
+       One dimmed screenful reads as the site loading; the noscript lifts the
+       cap so a browser that will never boot the app gets the whole page, and
+       crawlers read the DOM either way. Injected here so every build applies
+       it to every snapshot without rewriting the committed files. */
+    const calmBoot =
+      `<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>` +
+      `<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>`;
     const inject =
+      calmBoot + "\n    " +
       styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" onload="this.media='all'">`).join("\n    ") +
       (styles.length ? `\n    <noscript>${styles.map(h => `<link rel="stylesheet" href="${h}">`).join("")}</noscript>\n    ` : "") +
       modules.map(sr => `<script type="module" crossorigin src="${sr}"></script>`).join("\n    ");

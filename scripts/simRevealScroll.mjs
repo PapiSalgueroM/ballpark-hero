@@ -465,7 +465,7 @@ console.log('A press is a YANK if the page went down while the new panel was alr
 console.log(`LOSTTOP if the panel's top ended up above the screen, PROOF if something hidden was brought into view.\n`);
 
 const browser = await chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 });
 

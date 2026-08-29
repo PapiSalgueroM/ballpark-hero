@@ -49,7 +49,7 @@ const server=createServer((req,res)=>{const p=decodeURIComponent(req.url.split('
  let body;try{body=readFileSync(f)}catch{res.writeHead(404);res.end();return}
  res.writeHead(200,{'content-type':MIME[path.extname(f)]??'application/octet-stream'});res.end(body)});
 await new Promise(r=>server.listen(PORT,r));
-const browser=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'/opt/pw-browsers/chromium-1194/chrome-linux/chrome',args:['--no-sandbox']});
+const browser=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||undefined,args:['--no-sandbox']});
 const label=process.argv[2]||'run';
 const RUNS=Number(process.env.RUNS||3);
 const routes=(process.env.ROUTES||'/soccer-career').split(',');

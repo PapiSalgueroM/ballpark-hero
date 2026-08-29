@@ -2597,6 +2597,17 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 314.** The calm boot, the P1 flash he filmed. One dimmed screenful
+  of the crawler copy before React mounts instead of the raw text wall, noscript lifting
+  the cap for no-JS readers, crawlers unaffected. Injected into dist snapshots by the
+  vite plugin each build, baked into prerender.mjs for future runs, and in index.html
+  for the home page (#dukb-home-copy wrapper; the 404 marker logic untouched).
+  simSnapshotAssets section 6 with SNAP_CONTROL=flash. Plus the desktop lane became a
+  full verification machine: all 15 built-site fences green on Windows for the first
+  time (six harness ports, genRetiredStubs' Windows-dead main guard fixed, the stub
+  comparison newline insensitive, eleven browser harnesses off the hardcoded Linux
+  chromium path, gen_logo.py pinned to LF, Python 3.12 and Playwright chromium
+  installed on the machine). His SEO keywords ask filed on the board Inbox.
 - **2026-08-29, Round 313.** One footer. GameShell, six quiz boards and Records each
   mounted their own Footer on top of App.tsx's global one from Round 49, stacking two
   full footers on most pages (his screenshot; proven live as 2 footer elements on

@@ -48,7 +48,7 @@ const LEAKS = [
 ];
 
 const browser = await chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 });
 const ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });

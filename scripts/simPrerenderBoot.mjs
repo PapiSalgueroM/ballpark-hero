@@ -142,7 +142,7 @@ await new Promise(r => server.listen(PORT, r));
    route, so a fix that only works for one of them cannot pass */
 const SAMPLE = ['/soccer-career', '/records', '/whats-new'];
 const browser = await pw.chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox'],
 });
 

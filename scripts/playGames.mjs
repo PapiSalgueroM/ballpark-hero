@@ -36,7 +36,7 @@ const ALL = [...new Set([...registry.matchAll(/path: '([^']+)'/g)].map(m => m[1]
 const GAMES = process.env.ONLY ? [process.env.ONLY] : ALL;
 
 const LAUNCH = {
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 };
 /* Round 122: a hundred and eighteen games is long enough that Chromium itself
@@ -47,7 +47,7 @@ const LAUNCH = {
    a game, so notice it and start a new one rather than throwing away the
    other seventy eight. */
 let browser = await chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 });
 

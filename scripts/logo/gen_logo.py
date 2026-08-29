@@ -224,7 +224,7 @@ def mark_geometry():
 
 def write(name, svg):
     p = os.path.join(OUT, name)
-    with open(p, 'w', encoding='utf-8') as fh:
+    with open(p, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(svg + '\n')
     print(f'wrote {name} ({len(svg)} bytes)')
 
@@ -238,12 +238,12 @@ if __name__ == '__main__':
     write('logo-wordmark.svg', wordmark_svg())
     # the social image's SVG is a build source, not a shipped file: it is
     # 76KB of outlines that only exist to be rasterised, so it lives here
-    with open(os.path.join(HERE, 'og-image.svg'), 'w', encoding='utf-8') as fh:
+    with open(os.path.join(HERE, 'og-image.svg'), 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(social_svg() + '\n')
     print('wrote scripts/logo/og-image.svg')
     geom = os.path.join(ROOT, 'src', 'components', 'layout', 'logoMark.ts')
     if len(sys.argv) > 1:
         geom = os.path.join(sys.argv[1], 'logoMark.ts')
-    with open(geom, 'w', encoding='utf-8') as fh:
+    with open(geom, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(mark_geometry())
     print(f'wrote {geom}')

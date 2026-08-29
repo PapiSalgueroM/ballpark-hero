@@ -454,7 +454,7 @@ console.log(`Top bar measured at ${WIDTHS.join(', ')} wide across ${NAV_ROUTES.l
 console.log(`Signed in means ${WORST.points.toLocaleString()} points, rank #${WORST.rank}, a ${WORST.streak} day streak and ${WORST.played} games played.\n`);
 
 const browser = await chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox', '--no-proxy-server'],
 });
 

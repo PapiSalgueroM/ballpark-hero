@@ -31,8 +31,9 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
@@ -62,14 +63,14 @@ function schemasOf(route) {
 /* The registry is the authority on what is a game, same as it is for the
    sitemap. Bundled rather than regexed, so a formatting change in the data file
    cannot quietly shrink the list this checks against. */
-const ENTRY = '/tmp/simSchemaEntry.mjs';
-const BUNDLE = '/tmp/simSchema.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'simSchemaEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'simSchema.bundle.mjs');
 fs.writeFileSync(ENTRY, `
-const reg = await import('${ROOT}/src/data/gameRegistry.ts');
+const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
 export const paths = (reg.ALL_GAMES ?? reg.CATEGORIES.flatMap(c => c.games)).map(g => g.path);
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { paths: gamePaths } = await import(BUNDLE);
+const { paths: gamePaths } = await import(pathToFileURL(BUNDLE).href);
 const games = new Set(gamePaths);
 
 console.log('1) every shipped page carries structured data, and it parses');

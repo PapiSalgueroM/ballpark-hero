@@ -94,7 +94,7 @@ console.log(`   ${s.seasons.length} seasons, retired at ${s.age}, now unemployed
 
 /* ── the two arms ──────────────────────────────────────────────────────── */
 const browser = await pw.chromium.launch({
-  executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+  executablePath: process.env.CHROME_PATH || undefined,
   args: ['--no-sandbox'],
 });
 

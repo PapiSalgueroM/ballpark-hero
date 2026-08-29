@@ -121,7 +121,12 @@ let stale = 0;
 for (const r of retired) {
   const html = docs.get(r.from);
   if (!html) continue;
-  if (html !== stubHtml(r)) {
+  /* Round 314: newline insensitive, because a Windows checkout with
+     core.autocrlf rewrites the working copy to CRLF while the repo stays LF
+     (git ls-files --eol showed i/lf w/crlf on this exact file), and a fence
+     red over checkout settings on healthy content is a coin toss dressed as
+     a rule. Everything else stays byte exact. */
+  if (html.replace(/\r\n/g, '\n') !== stubHtml(r).replace(/\r\n/g, '\n')) {
     stale += 1;
     fail(`${r.from} on disk differs from what the generator produces now, run node scripts/genRetiredStubs.mjs`);
   }

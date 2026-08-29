@@ -51,6 +51,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { readRoutes, destinationLabel, ROOT, SITE } from './lib/retiredRoutes.mjs';
 
 const PUBLIC = path.join(ROOT, 'public');
@@ -95,7 +96,10 @@ export function stubHtml({ from, to }) {
   ].join('\n');
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+/* Round 314: pathToFileURL, not string glue. On Windows process.argv[1] is a
+   backslashed path, so the old comparison never matched and running this
+   generator did silently nothing on the desktop lane. */
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const { live, retired } = readRoutes();
   let wrote = 0;
   for (const r of retired) {

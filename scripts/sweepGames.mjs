@@ -117,7 +117,7 @@ for (const engineName of wantEngines) {
   let browser;
   try {
     browser = engineName === 'chromium'
-      ? await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
+      ? await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, args: ['--no-sandbox', '--no-proxy-server'] })
       : await webkit.launch();
   } catch (e) {
     console.log(`\n== ${label} ==`);

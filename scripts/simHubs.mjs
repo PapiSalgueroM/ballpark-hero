@@ -54,6 +54,7 @@
  */
 import { build } from 'esbuild';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -73,11 +74,11 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    component prints rather than anything about a particular sport. */
 const COUNT_LINE = /All (\d+) of them in one place/i;
 
-const ENTRY = '/tmp/hubs-entry.mjs';
-const OUT = '/tmp/hubs-bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'hubs-entry.mjs');
+const OUT = path.join(os.tmpdir(), 'hubs-bundle.mjs');
 writeFileSync(ENTRY, [
-  `export * from '${path.join(ROOT, 'src/data/gameRegistry.ts')}';`,
-  `export { SPORT_HUBS } from '${path.join(ROOT, 'src/lib/sportHub.ts')}';`,
+  `export * from '${path.join(ROOT, 'src/data/gameRegistry.ts').replaceAll('\\', '/')}';`,
+  `export { SPORT_HUBS } from '${path.join(ROOT, 'src/lib/sportHub.ts').replaceAll('\\', '/')}';`,
 ].join('\n'));
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',

@@ -18,8 +18,9 @@
 import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -37,14 +38,14 @@ for (const m of app.matchAll(/<Route\s+path="([^"]+)"\s+element={\s*(<Navigate\b
   (m[2] ? redirects : liveRoutes).add(m[1]);
 }
 
-const ENTRY = '/tmp/simSitemapEntry.mjs';
-const BUNDLE = '/tmp/simSitemap.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'simSitemapEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'simSitemap.bundle.mjs');
 fs.writeFileSync(ENTRY, `
-const reg = await import('${ROOT}/src/data/gameRegistry.ts');
+const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
 export const paths = (reg.ALL_GAMES ?? reg.CATEGORIES.flatMap(c => c.games)).map(g => g.path);
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { paths: gamePaths } = await import(BUNDLE);
+execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { paths: gamePaths } = await import(pathToFileURL(BUNDLE).href);
 
 console.log('1) Sanity: the three sources parsed');
 console.log(`   ${urls.length} sitemap URLs, ${liveRoutes.size} live routes, ${redirects.size} redirect routes, ${gamePaths.length} registry games`);

@@ -20,6 +20,13 @@ How it works:
 
 ## Inbox (unclaimed)
 
+- SEO keyword pass (Anthony, 2026-08-28 evening): "add words like key words and
+  description and all that so that on search it pops up higher up, words like sports and
+  trivia and so on." Work the head terms (free sports games, sports trivia, daily sports
+  quiz, football quiz and their sport variants) through titles, meta descriptions and
+  page copy where they read honestly; the meta keywords TAG is dead to Google and is not
+  the ask. Pairs with the standing 88-not-indexed push.
+
 - **THE 2026-08-28 REVIEW: `docs/TWEAKS-2026-08-28.md`.** Anthony played the site top to
   bottom and filed his biggest list yet, transcribed there in full. It outranks the
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
@@ -54,7 +61,6 @@ From the 2026-08-28 review (bugs, claimed same day):
   Windows ROOT path into generated entries, so they cannot run on the desktop lane.
   Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
   pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
-- P1: the boot flash (snapshot text visible before React mounts).
 - P1 data batch: Who Am I zero ages and values (Rodri), the Squad Deal league filter
   dealing the wrong league, Build Your XI stale position validity, Sign the Player values
   (Svilar 162m), the Billion Dollar Game pricing in dollars at one billion and its
@@ -113,6 +119,20 @@ Standing claims:
 
 ## Done
 
+- THE CALM BOOT, Round 314 (desktop lane, 2026-08-29). The flash he filmed: every page
+  showed its full crawler copy as a wall of raw text until React mounted. Now the moment
+  shows one dimmed screenful that reads as the site loading; a noscript lifts the cap so
+  a browser that never boots the app gets the whole page, and crawlers read the DOM
+  either way. Delivered three ways so it holds everywhere: injected into all 138 dist
+  snapshots by the build plugin (no committed file churn), baked into prerender.mjs for
+  future prerenders, and written into index.html for the home page he actually filmed
+  (new #dukb-home-copy wrapper; the 404 marker's #dukb-snapshot logic untouched).
+  simSnapshotAssets section 6 fences both halves with SNAP_CONTROL=flash. The round also
+  made the desktop lane a full verification machine: all 15 built-site fences now run
+  green on Windows (six more harnesses ported, the retired stub generator's dead Windows
+  main guard fixed, stub comparison made newline insensitive with the reason documented,
+  eleven browser harnesses freed from a hardcoded Linux chromium path, the logo
+  generator pinned to LF output, Python and Playwright chromium installed).
 - ONE FOOTER, Round 313 (desktop lane, 2026-08-29). The double footer he screenshotted:
   App.tsx has rendered the one global footer on every route since Round 49, but
   GameShell mounted its own copy inside every game page's column, and six quiz boards

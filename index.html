@@ -191,6 +191,15 @@
   <meta name="twitter:title" content="DoUKnowBall: Free Daily Sports Trivia Games">
   <meta property="og:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
   <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <style>#dukb-home-copy{max-height:100vh;overflow:hidden;opacity:.45}</style>
+  <noscript><style>#dukb-home-copy{max-height:none;overflow:visible;opacity:1}</style></noscript>
 </head>
   <body>
     <!--
@@ -239,6 +248,7 @@
       word of it, floors not figures and real routes only.
     -->
     <div id="root">
+      <div id="dukb-home-copy">
       <h1>DoUKnowBall: free daily sports trivia, puzzles and career sims</h1>
       <p>
         More than 110 free sports games in the browser. Every game plays without an account,
@@ -364,6 +374,7 @@
         <a href="/privacy">Privacy</a> ·
         <a href="/terms">Terms</a>
       </p>
+      </div>
     </div>
     <!--
       ROUND 282: THIS DOCUMENT IS ALSO THE 404 PAGE, AND UNTIL NOW IT NEVER SAID SO.

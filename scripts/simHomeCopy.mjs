@@ -38,14 +38,15 @@
  */
 import { build } from 'esbuild';
 import { readFileSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = '/tmp/homecopy-bundle.mjs';
-const ENTRY = '/tmp/homecopy-entry.mjs';
+const OUT = path.join(os.tmpdir(), 'homecopy-bundle.mjs');
+const ENTRY = path.join(os.tmpdir(), 'homecopy-entry.mjs');
 
-writeFileSync(ENTRY, `export * from '${ROOT}/src/data/gameRegistry.ts';`);
+writeFileSync(ENTRY, `export * from '${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts';`);
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },

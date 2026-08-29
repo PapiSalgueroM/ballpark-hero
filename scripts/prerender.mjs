@@ -289,7 +289,7 @@ async function freshPage() {
   pages = [];
   if (browser) { try { await browser.close(); } catch { /* already gone */ } }
   browser = await chromium.launch({
-    executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
+    executablePath: process.env.CHROME_PATH || undefined,
     args: ['--no-sandbox'],
   });
   for (const days of SAMPLE_DAYS) {
@@ -647,6 +647,13 @@ for (const route of unique) {
          purpose rather than left unset, so a future reset that adds padding
          cannot bring this back. */
       '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>',
+      /* Round 314: the calm boot, baked in for future prerenders. The build
+         plugin injects the same pair into existing snapshots (vite.config.ts),
+         so the rule holds whether a snapshot is old or new; a duplicate of an
+         identical rule is harmless. Cap and dim until React mounts, noscript
+         lifts it for a browser that never will. */
+      '<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>',
+      '<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>',
       '<script src="/prerender-boot.js" defer></script>',
       '</head>',
       '<body>',

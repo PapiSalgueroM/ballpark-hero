@@ -47,7 +47,7 @@ const check = (ok, label, detail) => {
    with it. A machine that does have WebKit still runs it: this catches the
    launch rather than hardcoding chromium. */
 const launch = (name) => name === 'chromium'
-  ? chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--no-sandbox', '--no-proxy-server'] })
+  ? chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, args: ['--no-sandbox', '--no-proxy-server'] })
   : webkit.launch();
 const launchOrSkip = async (name) => {
   try { return await launch(name); }
