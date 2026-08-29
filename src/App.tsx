@@ -83,6 +83,7 @@ const WhoAmI = lazy(() => import("./pages/WhoAmI"));
 const WorldXi = lazy(() => import("./pages/WorldXi"));
 const PlayerBingo = lazy(() => import("./pages/PlayerBingo"));
 const StatDetective = lazy(() => import("./pages/StatDetective"));
+const NbaStatLine = lazy(() => import("./pages/NbaStatLine"));
 const AlphabetSprint = lazy(() => import("./pages/AlphabetSprint"));
 const ClueAuction = lazy(() => import("./pages/ClueAuction"));
 const RarityRound = lazy(() => import("./pages/RarityRound"));
@@ -379,6 +380,7 @@ const AppContent = () => {
         <Route path="/world-xi" element={<WorldXi />} />
         <Route path="/player-bingo" element={<PlayerBingo />} />
         <Route path="/stat-detective" element={<StatDetective />} />
+        <Route path="/nba-stat-line" element={<NbaStatLine />} />
         <Route path="/alphabet-sprint" element={<AlphabetSprint />} />
         <Route path="/clue-auction" element={<ClueAuction />} />
         <Route path="/rarity-round" element={<RarityRound />} />

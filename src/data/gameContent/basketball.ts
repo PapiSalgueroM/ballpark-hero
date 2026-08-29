@@ -70,6 +70,43 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     ],
   },
 
+  '/nba-stat-line': {
+    intro: [
+      "Someone in NBA history put up this exact line. Your job is to rebuild it from parts: a target of points, rebounds and assists per 36 minutes, a shooting split, and in the modern eras steals and blocks too.",
+      "You get five real player seasons, any five you can dig out of the record books. Their combined line is minutes weighted, so a 3,000 minute monster season pulls your blend way harder than a 600 minute cameo.",
+    ],
+    howToPlay: [
+      "Pick a mode. Daily gives everyone the same target with one scored run per day, Unlimited deals a fresh target every time.",
+      "Read the target line. Every number is per 36 minutes, and the shooting split might be FG%, FT% or 3P% depending on the target.",
+      "Search any NBA player and pick one of their real seasons. Each pick shows its own per 36 line so you can see what it adds.",
+      "Watch your combined line update as you go. It is the minutes weighted blend of your five picks.",
+      "Fill all five slots, then submit for a similarity score out of 100.",
+    ],
+    rules: [
+      "Exactly five seasons per run, no season picked twice.",
+      "Only seasons with 500 or more minutes qualify, and combined traded rows do not appear, every pick is a real single team season.",
+      "When the target includes steals or blocks, only seasons from 1973-74 on can be picked, because the league did not track those stats before then. A 3P% target limits picks to 1979-80 on for the same reason.",
+      "The combined shooting split is recalculated from total makes and attempts across your five picks, never by averaging the five percentages.",
+      "Each stat scores by how close you land, and the final score is the average across all target stats. 90 or better counts as nailing the line.",
+    ],
+    example: [
+      "The target reads 24.1 points, 6.0 rebounds, 4.5 assists, 1.3 steals, 0.4 blocks and 48.2 FG% per 36. That smells like a high usage wing, so you grab two scoring guards from the 1990s.",
+      "Your blend sits at 27 points and only 4 rebounds, too hot and too thin on the glass. You round it out with a glue forward and two mid usage seasons, submit at 24.8 and 5.7, and land a 91.",
+    ],
+    tips: [
+      "Minutes are leverage. If your line is close, add low minute seasons so the blend barely moves; if it is way off, a heavy minute season drags it fastest.",
+      "Do not chase one stat at a time. Every pick moves all six numbers, so think in archetypes: scorers, rebounders, connectors.",
+      "Old big man seasons are rebound rocket fuel, 1960s pace inflated boards for everyone. One pick from that era can fix a rebound deficit on its own.",
+      "The shooting split blends by attempts, not evenly. A high volume shooter moves your percentage much more than a low volume one at the same clip.",
+    ],
+    faqs: [
+      { q: "Why per 36 minutes instead of per game?", a: "Per game averages need games played, and the historical season data here stores totals and minutes without game counts. Per 36 rates are exact from what the record does carry, and they make a 1965 season and a 2025 season readable on the same scale." },
+      { q: "Is a perfect 100 possible?", a: "Every target is the real per 36 line of an actual season, so a blend that lands the target exists in the pool. Hitting 100 on the nose means matching every stat almost exactly, which is brutally hard with five picks, 90 plus is the realistic brag." },
+      { q: "Why can I not pick 1960s seasons on some targets?", a: "Steals and blocks were first tracked in 1973-74 and the three point line arrived in 1979-80. When the target includes those stats, earlier seasons have no honest number to contribute, so they sit out. Targets without them open the whole pool back to 1951-52." },
+      { q: "Do steals and blocks always appear?", a: "Only when the season behind the target comes from 1973-74 or later. Older targets score on points, rebounds, assists and the shooting split alone." },
+    ],
+  },
+
   '/nba-starting-5': {
     intro: [
       "One spin sets the mission: build a starting five with the highest career scoring, or the lowest, or whatever the stat wheel demands.",
