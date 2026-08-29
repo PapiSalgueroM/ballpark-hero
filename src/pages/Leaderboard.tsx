@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { getCurrentPlayerName } from '@/lib/completions';
+import { getCurrentPlayerName, publicName } from '@/lib/completions';
 import { useAuth } from '@/contexts/AuthContext';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -61,7 +61,11 @@ type Period = 'today' | 'alltime';
 
 export default function Leaderboard() {
   const { profile } = useAuth();
+  /* Round 318: the raw handle goes to the RPCs (it has to match the stored
+     rows), the filtered form is what renders and what the own-row highlight
+     compares against, since every board row is filtered the same way. */
   const ownHandle = useMemo(() => getCurrentPlayerName(profile), [profile]);
+  const ownShownName = useMemo(() => publicName(ownHandle), [ownHandle]);
 
   const [sport, setSport] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<Period>('today');
@@ -88,7 +92,10 @@ export default function Leaderboard() {
           Array.isArray(res?.data)
             ? res.data.map((r: any) => ({
                 rank: Number(r.rank),
-                playerName: String(r.player_name),
+                /* Round 318: every name shown on this shared board passes
+                   the render-time blocklist; a dirty stored name prints as
+                   its stable substitute handle instead */
+                playerName: publicName(String(r.player_name)),
                 totalPoints: Number(r.total_points) || 0,
                 gamesPlayed: Number(r.games_played) || 0,
               }))
@@ -136,13 +143,13 @@ export default function Leaderboard() {
             <span className="text-muted-foreground font-normal"> in the world</span>
           </p>
           <p className="text-xs text-muted-foreground">
-            {mine.totalPoints.toLocaleString()} pts as {ownHandle}
+            {mine.totalPoints.toLocaleString()} pts as {ownShownName}
           </p>
         </div>
       ) : (
         <div className="flex-1 min-w-0">
           <p className="font-semibold">No points yet{activeTab === 'today' ? ' today' : ''}</p>
-          <p className="text-xs text-muted-foreground">Finish any game and you'll appear here as {ownHandle}.</p>
+          <p className="text-xs text-muted-foreground">Finish any game and you'll appear here as {ownShownName}.</p>
         </div>
       )}
     </div>
@@ -155,7 +162,7 @@ export default function Leaderboard() {
     return (
       <div className="space-y-1">
         {list.map(row => {
-          const isOwn = row.playerName === ownHandle;
+          const isOwn = row.playerName === ownShownName;
           return (
             <div
               key={`${row.rank}-${row.playerName}`}
