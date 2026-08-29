@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 334.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 335.
 
 ## Inbox (unclaimed)
 
@@ -124,7 +124,7 @@ From the 2026-08-28 review (bugs, claimed same day):
   verified era participants (the real group stage fields are documented facts) is a data
   round. Also the era-id flags now exist in LEAGUE_NATIONS; a fence pinning every
   ERA_LEAGUES id to a nation would keep the next era honest.
-- Harness portability sweep: 85 of 93 sim harnesses still hardcode '/tmp' and embed the
+- Harness portability sweep (BUILDING as Round 334, desktop, 2026-08-29, parallel agent fan-out): 85 of 93 sim harnesses still hardcode '/tmp' and embed the
   Windows ROOT path into generated entries, so they cannot run on the desktop lane.
   Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
   pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
