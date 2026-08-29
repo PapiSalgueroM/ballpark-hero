@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 348.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 349.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -37,7 +37,7 @@ and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
 facts are true at once. Grid search is the site's search beachhead, not its
 whole audience.**
 
-- GRID MOBILE CLS BUG (measured 2026-08-29, unclaimed): the async-loading grid
+- GRID MOBILE CLS BUG (BUILDING as Round 348, desktop, 2026-08-29): the async-loading grid
   boards shift layout on phones. Live CLS at 375px: soccer-grid 0.60, hockey-grid
   0.40, college-grid 0.34 on one run and 0 on another (network timing), nba 0.06,
   football and mlb 0. Anything over 0.25 is a failing Core Web Vital. Likely fix:
