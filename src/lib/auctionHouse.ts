@@ -126,13 +126,14 @@ export async function buildAuctionPool(theme: AuctionTheme): Promise<AuctionPlay
     used.add(weak.name);
     for (const [tier, p] of [['great', great], ['good', good], ['weak', weak]] as const) {
       const rating = ratingOf(p, theme);
-      /* Round 315: the opening price is anchored to the player's REAL market
-         value, opening a fifth below it so a contested lot can climb past it.
-         The old curve priced purely off rating ((rating - 55) * 6), which is
-         how an 82 rated Mile Svilar, market value 38, opened at exactly 162:
-         the owner's report to the digit. The rating curve stays only as a
-         floor for players whose value the pool genuinely lacks. */
-      const anchored = p.marketValue > 5 ? Math.round(p.marketValue * 0.8) : Math.round((rating - 55) * 3);
+      /* Round 315 anchored the opening price to the player's REAL market
+         value (the old rating curve opened an 82 rated Mile Svilar at 162,
+         the owner's report to the digit), opening a fifth below it. Round
+         327, his auction spec: the lot opens AT list price now, because the
+         decay phase handles the too-expensive case honestly, falling until
+         somebody bites instead of discounting upfront. The rating curve
+         stays only as a floor for players whose value the pool lacks. */
+      const anchored = p.marketValue > 5 ? Math.round(p.marketValue) : Math.round((rating - 55) * 3);
       result.push({
         ...p, tier, slotKey: slot.key, rating,
         basePrice: Math.max(5, anchored),
@@ -164,7 +165,10 @@ export function createBidders(): Bidder[] {
 
 /** What an AI thinks a player is worth (£M). */
 export function aiValuation(b: Bidder, p: AuctionPlayer, slotsLeftAfterThis: number): number {
-  const base = p.basePrice * 1.6 + (p.tier === 'great' ? 40 : p.tier === 'good' ? 10 : -10);
+  /* Round 327: basePrice rose from 0.8x to 1.0x of market value, so the
+     multiplier fell from 1.6 to 1.28 and every rival still values a player
+     at exactly the number it always did. */
+  const base = p.basePrice * 1.28 + (p.tier === 'great' ? 40 : p.tier === 'good' ? 10 : -10);
   const need = b.squad[p.slotKey] === null ? 1.15 : 0; // never bid on a filled slot
   // keep a reserve: don't spend into being unable to pay assignment fees later
   const reserve = slotsLeftAfterThis * 12;
@@ -175,9 +179,43 @@ export function aiValuation(b: Bidder, p: AuctionPlayer, slotsLeftAfterThis: num
 
 export const BID_STEPS = [5, 10, 25] as const;
 
-/** Assignment fee for the leftover third player. */
+/** Assignment fee for a leftover fill player (0.48 of the new 1.0x base is
+ *  the same absolute fee the old 0.6 of 0.8x charged). */
 export function assignmentFee(p: AuctionPlayer): number {
-  return Math.max(5, Math.round(p.basePrice * 0.6));
+  return Math.max(5, Math.round(p.basePrice * 0.48));
+}
+
+/* Round 327, the decay phase: a lot nobody bites on falls step by step to a
+ * floor instead of being forced onto the richest bidder. */
+export const DECAY_STEP = 0.9;
+export const DECAY_FLOOR = 0.3;
+
+/* Round 327, the owner's running order: pass one is a lot per position from
+ * the middle band in a random order, pass two the elite band, and the single
+ * most valuable player in the room is held back to headline the final lot.
+ * The weak band never comes up as a lot: it fills open chairs at a fee when
+ * the last hammer falls. Exported with an injectable rand so the harness can
+ * drive it deterministically while the page keeps Math.random. */
+export interface OrderedLot { player: AuctionPlayer; pass: 1 | 2; headline?: boolean }
+export function orderLots(pool: AuctionPlayer[], rand: () => number = Math.random): { lots: OrderedLot[]; weakFills: AuctionPlayer[] } {
+  const shuffle = <T,>(arr: T[]): T[] => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i -= 1) { const j = Math.floor(rand() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  };
+  const goods = shuffle(pool.filter(p => p.tier === 'good')).map(player => ({ player, pass: 1 as const }));
+  const greats = shuffle(pool.filter(p => p.tier === 'great'));
+  let bestIdx = 0;
+  for (let i = 1; i < greats.length; i += 1) if (greats[i].marketValue > greats[bestIdx].marketValue) bestIdx = i;
+  const [headliner] = greats.splice(bestIdx, 1);
+  return {
+    lots: [
+      ...goods,
+      ...greats.map(player => ({ player, pass: 2 as const })),
+      { player: headliner, pass: 2, headline: true },
+    ],
+    weakFills: pool.filter(p => p.tier === 'weak'),
+  };
 }
 
 /* ---------------- showdown sim ---------------- */

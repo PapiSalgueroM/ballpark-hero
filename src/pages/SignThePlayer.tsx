@@ -4,21 +4,21 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
 import { Button } from '@/components/ui/button';
-import { Gavel, Loader2, Trophy, RotateCcw, ChevronRight, Ban } from 'lucide-react';
+import { Gavel, Loader2, Trophy, RotateCcw, Ban } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, START_BUDGET,
+  AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, DECAY_FLOOR, DECAY_STEP, START_BUDGET,
   aiValuation, assignmentFee, auctionScore, buildAuctionPool, createBidders,
-  simulateShowdown,
+  orderLots, simulateShowdown,
   type AuctionPlayer, type AuctionTheme, type Bidder, type ShowdownResult,
 } from '@/lib/auctionHouse';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
-type Phase = 'intro' | 'loading' | 'auction' | 'assign' | 'showdown';
+type Phase = 'intro' | 'loading' | 'auction' | 'showdown';
 
-interface Lot { player: AuctionPlayer; kind: 'auction' | 'assign' }
+interface Lot { player: AuctionPlayer; kind: 'auction'; pass: 1 | 2; headline?: boolean }
 
 const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(2)}B` : `£${m}M`);
 
@@ -37,6 +37,8 @@ const SignThePlayer = () => {
   const [log, setLog] = useState<string[]>([]);
   const [aiThinking, setAiThinking] = useState(false);
   const [result, setResult] = useState<ShowdownResult | null>(null);
+  const [weakFills, setWeakFills] = useState<AuctionPlayer[]>([]);
+  const [decaying, setDecaying] = useState(false);
   const timer = useRef<number | null>(null);
 
   const you = bidders.find(b => b.id === 'you')!;
@@ -53,16 +55,14 @@ const SignThePlayer = () => {
     setPhase('loading');
     const pool = await buildAuctionPool(t);
     if (!pool) { setPhase('intro'); return; }
-    const ordered: Lot[] = [];
-    for (const slot of AUCTION_SLOTS) {
-      const three = pool.filter(p => p.slotKey === slot.key);
-      const good = three.find(p => p.tier === 'good')!;
-      const great = three.find(p => p.tier === 'great')!;
-      const weak = three.find(p => p.tier === 'weak')!;
-      ordered.push({ player: good, kind: 'auction' }, { player: great, kind: 'auction' }, { player: weak, kind: 'assign' });
-    }
+    /* Round 327, the owner's auction spec: two passes, random position
+       order, the most valuable player headlining the close, the weak band
+       reserved for the end of auction fill. The law lives in
+       auctionHouse.orderLots where the harness can hold it. */
+    const { lots: ordered, weakFills: fills } = orderLots(pool);
     setBidders(createBidders());
-    setLots(ordered);
+    setWeakFills(fills);
+    setLots(ordered.map(l => ({ player: l.player, kind: 'auction' as const, pass: l.pass, headline: l.headline })));
     setLotIndex(0);
     setResult(null);
     setLog([]);
@@ -73,23 +73,6 @@ const SignThePlayer = () => {
 
   useEffect(() => {
     if (phase !== 'auction' || !lot) return;
-    if (lot.kind === 'assign') {
-      const needers = bidders
-        .filter(b => b.squad[lot.player.slotKey] === null)
-        .sort((a, b) => Object.values(a.squad).filter(Boolean).length - Object.values(b.squad).filter(Boolean).length);
-      const fee = assignmentFee(lot.player);
-      const taker = needers[0];
-      if (taker) {
-        setBidders(prev => prev.map(b => b.id !== taker.id ? b : ({
-          ...b,
-          budget: Math.max(0, b.budget - fee),
-          squad: { ...b.squad, [lot.player.slotKey]: lot.player },
-        })));
-        setLog(l => [`📋 ${lot.player.name} is assigned to ${taker.name} for ${money(fee)}. Nobody else needed a ${lot.player.slotKey}.`, ...l].slice(0, 30));
-      }
-      setPhase('assign');
-      return;
-    }
     const active = new Set(bidders.filter(b => eligible(b, lot.player)).map(b => b.id));
     setActiveIds(active);
     setPrice(lot.player.basePrice);
@@ -101,30 +84,42 @@ const SignThePlayer = () => {
 
   const advance = useCallback(() => {
     if (lotIndex + 1 >= lots.length) {
+      /* Round 327, "fill the roster then settle it in a sim": every hole
+         left when the last hammer falls is filled from the weak band at the
+         assignment fee, budget floored at zero. Nobody plays the showdown
+         a man short. */
       setBidders(prev => {
-        setResult(simulateShowdown(prev));
-        return prev;
+        const filled = prev.map(b => {
+          let budget = b.budget;
+          const squad = { ...b.squad };
+          for (const slot of AUCTION_SLOTS) {
+            if (squad[slot.key] !== null) continue;
+            const fill = weakFills.find(w => w.slotKey === slot.key);
+            if (!fill) continue;
+            const fee = Math.min(assignmentFee(fill), Math.max(0, budget));
+            budget = Math.max(0, budget - fee);
+            squad[slot.key] = fill;
+          }
+          return { ...b, budget, squad };
+        });
+        setResult(simulateShowdown(filled));
+        return filled;
       });
+      setLog(l => ['📋 The hammer has fallen for the last time. Every open chair is filled from the journeyman list at a fee.', ...l].slice(0, 30));
       setPhase('showdown');
     } else {
       setLotIndex(i => i + 1);
       setPhase('auction');
     }
-  }, [lotIndex, lots.length]);
+  }, [lotIndex, lots.length, weakFills]);
 
   const settleLot = useCallback((winnerId: Bidder['id'] | null, finalPrice: number) => {
     if (!lot) return;
-    let soldTo = winnerId;
-    let soldFor = finalPrice;
-    if (!soldTo) {
-      // Nobody bid, the hammer still falls. Forced sale to the richest
-      // bidder who needs the position, at the opening price. An auction lot
-      // must NEVER go unsold or a squad ends up with a permanent hole.
-      const takers = bidders
-        .filter(b => b.squad[lot.player.slotKey] === null)
-        .sort((a, b) => b.budget - a.budget);
-      if (takers[0]) { soldTo = takers[0].id; soldFor = Math.min(lot.player.basePrice, Math.max(5, takers[0].budget)); }
-    }
+    const soldTo = winnerId;
+    const soldFor = finalPrice;
+    /* Round 327: the forced sale is gone. A lot nobody wants DECAYS instead
+       (see startDecay), and a lot that reaches the floor goes unsold; the
+       end of auction fill guarantees no squad plays a man short. */
     if (soldTo) {
       const finalTo = soldTo;
       const price2 = soldFor;
@@ -134,16 +129,50 @@ const SignThePlayer = () => {
         squad: { ...b.squad, [lot.player.slotKey]: lot.player },
       })));
       const w = bidders.find(b => b.id === finalTo);
-      setLog(l => [
-        winnerId
-          ? `✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(price2)}.`
-          : `🔨 Hammer falls. Nobody bid, so ${lot.player.name} is FORCED onto ${w?.name} for ${money(price2)}.`,
-        ...l,
-      ].slice(0, 30));
+      setLog(l => [`✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(price2)}.`, ...l].slice(0, 30));
+    } else {
+      setLog(l => [`🪦 UNSOLD. ${lot.player.name} found no takers even at ${money(finalPrice)}. The lot is withdrawn.`, ...l].slice(0, 30));
     }
+    setDecaying(false);
     setAiThinking(false);
     window.setTimeout(() => advance(), 650);
   }, [lot, bidders, advance]);
+
+  /* Round 327, the decay: nobody bit at list price, so the price falls a
+     step at a time. Each step every eligible rival rolls to snap the
+     bargain (the deeper the discount, the harder to resist), and the TAKE
+     button lets you snap it first. The floor withdraws the lot. */
+  const startDecay = useCallback((fromPrice: number) => {
+    if (!lot) return;
+    setDecaying(true);
+    setLeader(null);
+    const floor = Math.max(5, Math.round(lot.player.basePrice * DECAY_FLOOR));
+    const step = (p: number) => {
+      const next = Math.round(p * DECAY_STEP);
+      if (next <= floor) { settleLot(null, p); return; }
+      setPrice(next);
+      setLog(l => [`📉 No takers. The price falls to ${money(next)}.`, ...l].slice(0, 30));
+      for (const b of bidders) {
+        if (b.id === 'you' || b.squad[lot.player.slotKey] !== null || b.budget < next) continue;
+        const val = aiValuation(b, lot.player, slotsLeftAfter);
+        const discount = 1 - next / lot.player.basePrice;
+        if (next <= val && Math.random() < 0.25 + discount) {
+          window.setTimeout(() => settleLot(b.id, next), 500);
+          return;
+        }
+      }
+      timer.current = window.setTimeout(() => step(next), 950);
+    };
+    timer.current = window.setTimeout(() => step(fromPrice), 950);
+  }, [lot, bidders, slotsLeftAfter, settleLot]);
+
+  /* You snap a decaying lot at the current price. */
+  const userTake = () => {
+    if (!lot || phase !== 'auction' || !decaying) return;
+    if (you.budget < price || you.squad[lot.player.slotKey] !== null) return;
+    if (timer.current) window.clearTimeout(timer.current);
+    settleLot('you', price);
+  };
 
   const runAis = useCallback((currentPrice: number, currentLeader: Bidder['id'] | null, active: Set<Bidder['id']>) => {
     if (!lot) return;
@@ -178,7 +207,10 @@ const SignThePlayer = () => {
       setActiveIds(new Set(act));
       setAiThinking(false);
       const remaining = [...act];
-      if (!act.has('you') && remaining.length <= 1) settleLot(lead, p);
+      if (!act.has('you') && remaining.length <= 1) {
+        if (lead) settleLot(lead, p);
+        else startDecay(p);
+      }
       else if (act.has('you') && remaining.length === 1 && lead === 'you') settleLot('you', p);
     };
     const stepPlay = (i: number) => {
@@ -210,7 +242,10 @@ const SignThePlayer = () => {
     setActiveIds(act);
     setLog(l => ['🫵 You pass.', ...l].slice(0, 30));
     const remaining = [...act];
-    if (remaining.length === 0) settleLot(leader, price);
+    if (remaining.length === 0) {
+      if (leader) settleLot(leader, price);
+      else startDecay(price);
+    }
     else if (remaining.length === 1 && leader === remaining[0]) settleLot(remaining[0], price);
     else runAis(price, leader, act);
   };
@@ -232,7 +267,7 @@ const SignThePlayer = () => {
     <>
       <PageSeo
         title="Sign the Player: Auction House | DoUKnowBall"
-        description="Three bidders, £1B each, 33 players. Outbid two rivals position by position, then simulate the showdown. An auction you actually get to play."
+        description="Three bidders, one room. Lots open at list price in a random position order, contested lots turn into bidding wars, unwanted lots decay until someone bites, and the most valuable player headlines the close. Fill your XI, then the showdown sim decides."
         path="/sign-the-player"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(260 30% 8%) 0%, hsl(230 30% 7%) 55%, hsl(150 25% 6%) 100%)' }}>
@@ -263,7 +298,7 @@ const SignThePlayer = () => {
 
             {phase === 'loading' && <div className="text-center py-24"><Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" /></div>}
 
-            {(phase === 'auction' || phase === 'assign') && lot && (
+            {phase === 'auction' && lot && (
               <div className="flex flex-col lg:flex-row gap-5">
                 <div className="flex-1 space-y-4">
                   <div className="text-center">
@@ -272,9 +307,22 @@ const SignThePlayer = () => {
                     </span>
                   </div>
 
+                  {/* Round 327, "the rest of the lot stays hidden": the room
+                      sees the running order as positions only. Names exist
+                      the moment their lot opens and not before. */}
+                  <div className="flex flex-wrap gap-1 justify-center text-[10px] font-bold uppercase tracking-wide">
+                    {lots.map((l, i) => (
+                      <span key={i} className={cn('px-1.5 py-0.5 rounded',
+                        i < lotIndex ? 'bg-secondary/50 text-muted-foreground line-through' :
+                        i === lotIndex ? 'bg-primary text-primary-foreground' :
+                        'bg-secondary/70 text-muted-foreground')}>
+                        {l.headline ? '🎇 ' : ''}{AUCTION_SLOTS.find(sl => sl.key === l.player.slotKey)?.label ?? l.player.slotKey}{l.pass === 2 && !l.headline ? ' ⭐' : ''}
+                      </span>
+                    ))}
+                  </div>
                   <div className="rounded-2xl border border-primary/40 bg-card/80 backdrop-blur-md p-6 text-center space-y-2 shadow-lg shadow-primary/10">
                     <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-bold">
-                      {lot.kind === 'assign' ? 'Leftover: automatic assignment' : lot.player.tier === 'great' ? '⭐ THE SUPERSTAR LOT' : '🥈 The solid option sells first'}
+                      {lot.headline ? '🎇 THE HEADLINE LOT: the most valuable player in the room' : lot.pass === 2 ? '⭐ Second time around this position: the elite band' : '🥈 First look at this position'}
                     </p>
                     <h2 className="text-3xl font-extrabold text-foreground">{lot.player.name}</h2>
                     <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5 flex-wrap">
@@ -290,7 +338,14 @@ const SignThePlayer = () => {
                           Current price: <span className="text-primary">{money(price)}</span>
                           {leader && <span className="text-sm text-muted-foreground">, {bidders.find(b => b.id === leader)?.emoji} {bidders.find(b => b.id === leader)?.name} leads</span>}
                         </p>
-                        {activeIds.has('you') ? (
+                        {decaying ? (
+                          <div className="flex flex-wrap gap-2 justify-center pt-1">
+                            <Button size="lg" className="font-bold" disabled={you.budget < price || you.squad[lot.player.slotKey] !== null} onClick={userTake}>
+                              Take him at {money(price)}
+                            </Button>
+                            <p className="w-full text-xs text-muted-foreground italic">Nobody bit at list price, so it falls until somebody does. The floor withdraws the lot.</p>
+                          </div>
+                        ) : activeIds.has('you') ? (
                           <div className="flex flex-wrap gap-2 justify-center pt-1">
                             {leader === null ? (
                               <Button size="lg" className="font-bold" disabled={aiThinking || you.budget < price} onClick={() => userBid(0)}>
@@ -312,11 +367,6 @@ const SignThePlayer = () => {
                         )}
                         {aiThinking && <p className="text-xs text-primary animate-pulse font-bold">rivals are thinking…</p>}
                       </div>
-                    )}
-                    {phase === 'assign' && (
-                      <Button size="lg" className="font-bold mt-2" onClick={advance}>
-                        Next lot <ChevronRight className="w-4 h-4 ml-1" />
-                      </Button>
                     )}
                   </div>
 
@@ -342,7 +392,7 @@ const SignThePlayer = () => {
                             className={cn(
                               'flex items-center justify-between rounded px-1.5 py-[3px] text-[10px] leading-tight',
                               p ? 'bg-primary/10' : 'bg-secondary/40',
-                              lot && slot.key === lot.player.slotKey && (phase === 'auction' || phase === 'assign') && 'ring-1 ring-primary/60',
+                              lot && slot.key === lot.player.slotKey && phase === 'auction' && 'ring-1 ring-primary/60',
                             )}
                           >
                             <span className="font-bold text-muted-foreground w-9 shrink-0">{slot.key}</span>
@@ -405,17 +455,18 @@ const SignThePlayer = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Sign the Player: The Auction House | DoUKnowBall"
-          description="A three-way transfer auction: you against two AI moguls with £1B each. Positions sell good-player-first then superstar, leftovers get assigned with a fee, and the three finished squads simulate a mini-league showdown."
+          description="A three-way transfer auction: you against two AI moguls with £1B each. Lots come up in a random position order and open at real list price, a contested lot becomes a live bidding war, an unwanted one decays until somebody snaps the bargain, and the most valuable player in the room headlines the final lot. Fill your XI, then a mini-league showdown decides."
           howToPlay={[
-            'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026. 33 players enter the room: a great, a good and a weak option per position.',
-            'Each position auctions its GOOD player first, then the SUPERSTAR. Bid in £5M/£10M/£25M steps or pass. Whoever misses out takes the leftover player and still pays the assignment fee.',
-            'When all three XIs are full, the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
+            'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026. The room only ever shows the running order as positions; a player is revealed the moment his lot opens.',
+            'Pass one is a lot per position in a random order, pass two is the elite band, and the single most valuable player is held back to headline the close.',
+            'Every lot opens at real list price. If two or more bidders want him it is a war in £5M/£10M/£25M steps; if nobody bites the price falls step by step, and you can snap the bargain any time before the floor withdraws the lot.',
+            'When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, and the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
           ]}
           examples={[
             'The Sheikh jumps £25M when he wants someone, so bait him early',
             "Moneyball Mike passes on superstars, so snipe the value lots he's hunting",
-            'Passing everything still costs you: leftovers come with fees',
-            'Win the league with money in the bank for the max score',
+            'A decaying lot is where the bargains live, but wait too long and a rival snaps him first',
+            'Keep powder dry for the headline lot: the best player in the room always sells last',
           ]}
         />
       </div>
