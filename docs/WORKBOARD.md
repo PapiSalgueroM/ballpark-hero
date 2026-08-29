@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 341.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 342.
 
 ## Inbox (unclaimed)
 
@@ -114,6 +114,14 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- SEO INDEXING INVESTIGATION (BUILDING as Round 341, desktop, 2026-08-29): Anthony's
+  full Search Console task doc. Desktop lane reads the real GSC reports through his
+  browser, classifies every not-indexed URL against the route inventory, fixes only
+  real technical causes, and writes docs/seo/indexing-audit.md and
+  docs/seo/route-inventory.md. No mass reindex requests, no success claims before
+  Google verifies. The 15 built-site fences already cover most of the CI list;
+  gaps found become fences.
 
 
 
