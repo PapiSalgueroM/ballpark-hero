@@ -243,8 +243,18 @@ From the 2026-08-28 review (bugs, claimed same day):
 
 Standing claims:
 
-- The Club Manager half of tweaks item 10 (more leagues, more eras), which Round 302
-  queued behind Supabase access: the data pulls happen from this lane.
+- **A RED MAIN CAUGHT BY THE OTHER LANE, 2026-08-29, worth one habit rather than
+  any blame.** Round 346's maker note landed on main with `simNoInventedQuotes`
+  failing, and the round record says what happened: it ran tsc, the build and
+  the fold harness, which is the harness the round was about, and not the full
+  board. The failing line was Anthony's own hello, flagged because "Anthony" is
+  a surname in the roster set, so his sentence about his own site read to the
+  detector like words put in a footballer's mouth. Round 335 (cloud) fixed it
+  with an exemption scoped to his one voice file and only when his is the sole
+  real name on the line, plus three planted probes proving it is not a back
+  door. The habit the episode argues for: a round that adds any hand written
+  copy to `src` runs the full board before it lands, because the copy fences
+  (invented quotes, rival names) read files no scoped harness touches.
 - Tweaks item 9: the full playGames browser run over every game, every feature, then fix
   every finding.
 - Publishing duty: after a burst lands on main, verify Lovable synced, call
