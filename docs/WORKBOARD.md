@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 333.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 334.
 
 ## Inbox (unclaimed)
 
@@ -80,7 +80,7 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
 - Rebuild redesign, THE PHASES (split 2026-08-29 so either lane can pick one up):
-  phase two, the new core loop (starting XI only on screen, spin for position, keep
+  phase two BUILDING as Round 333 (cloud, 2026-08-29), the new core loop (starting XI only on screen, spin for position, keep
   or sell with three priced replacements plus promote-from-bench free, envelopes up
   front, board demands, force sales at negative money, the punishment deck with one
   safe card, restriction presets), cloud buildable on existing pools; phase three,
