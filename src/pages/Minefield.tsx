@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -103,6 +104,7 @@ const Minefield = () => {
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(222 35% 8%) 0%, hsl(0 35% 8%) 60%, hsl(222 30% 6%) 100%)' }}>
         <GameNavbar />
+        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="flex-1 flex flex-col items-center px-4 py-6 sm:py-10">
           <div className="w-full max-w-3xl mx-auto space-y-5 text-center">
 

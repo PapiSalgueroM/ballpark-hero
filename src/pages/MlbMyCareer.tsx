@@ -1,4 +1,5 @@
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
@@ -14,6 +15,7 @@ const MlbMyCareer = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
+        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">MLB My Career</h1>

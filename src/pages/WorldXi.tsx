@@ -5,6 +5,7 @@ import { Loader2, Play, RotateCcw, Timer, Trophy, Shuffle, Sparkles } from 'luci
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -302,6 +303,7 @@ const WorldXi = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="World XI: Build a Squad From 11 Random Nations | DoUKnowBall"
         description="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up."

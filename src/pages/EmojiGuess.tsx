@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { EmojiGuessBoard } from '@/components/emoji-guess/EmojiGuessBoard';
 
 export default function EmojiGuess() {
@@ -12,6 +13,7 @@ export default function EmojiGuess() {
         path="/emoji-guess"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <EmojiGuessBoard />
       <GameSeoContent
         title="Emoji Guess | DoUKnowBall"

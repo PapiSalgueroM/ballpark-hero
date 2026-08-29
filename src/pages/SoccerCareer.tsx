@@ -5,6 +5,7 @@ import { recordCompletion } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
+import { GameHelp } from "@/components/game/GameHelp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1031,6 +1032,7 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
+        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {!career ? (
             <CreationScreen

@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { NascarChainBoard } from '@/components/nascar-chain/NascarChainBoard';
 
 export default function NascarChain() {
@@ -12,6 +13,7 @@ export default function NascarChain() {
         path="/nascar-chain"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <NascarChainBoard />
       <GameSeoContent
           pageHasOwnH1

@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { QuizBoard } from '@/components/quiz-board/QuizBoard';
 
 export default function QuizBoardPage() {
@@ -12,6 +13,7 @@ export default function QuizBoardPage() {
         path="/quiz-board"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <QuizBoard />
       <GameSeoContent
         title="Sports Quiz Board | DoUKnowBall"
