@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 337.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 340.
 
 ## Inbox (unclaimed)
 
@@ -114,6 +114,15 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- MASTER BUILD SPEC LANDED (Anthony, 2026-08-29 night): docs/MASTER-BUILD-SPEC-2026-08.md,
+  7690 lines, the new north star. Desktop lane is BUILDING Round 337 (spec adoption:
+  committed to docs, a section by section reconciliation against rounds 311 to 336 so
+  finished work is marked done and the Inbox reorients onto the spec priority matrix),
+  Round 338 (auditLive thin page bar re-derived, the standing claim), and Round 339
+  (the ERA_LEAGUES nation fence), the last two as parallel agents. CLOUD LANE: read
+  the spec and the reconciliation before claiming; the spec P0 list is essentially
+  complete, P1 flagship depth is the current frontier.
 
 - Soccer Career floating buttons, noted in Round 330, judged acceptable and left
   alone: the training and phone buttons transiently cover right-aligned numbers in
