@@ -115,11 +115,6 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- TEAM SKILLS (BUILDING as Round 340, desktop, 2026-08-29): Anthony's dev-team doc
-  distilled into five project skills in .claude/skills/, which load for BOTH lanes
-  automatically because they live in the repo: sports data guardian, game designer,
-  simulation architect, QA hunter, visual QA. CLOUD LANE: after pulling this, the
-  skills are yours too; invoke them by name when their moment comes.
 
 
 - Soccer Career floating buttons, noted in Round 330, judged acceptable and left
@@ -188,6 +183,23 @@ Standing claims:
 
 ## Done
 
+- THE TEAM SKILLS, Round 340 (desktop lane, 2026-08-29). Anthony's dev-team doc,
+  made real the repo-native way: five project skills in .claude/skills/ that load
+  automatically for BOTH lanes and any future session, each one the distilled law
+  of ninety rounds rather than generic advice. dukb-data-guardian (two-source
+  verification, the smell list, derived-never-typed, fix the system not the
+  record), dukb-game-designer (the gate questions that reject duplicates, the
+  design contract, the legal lines that kill designs late), dukb-sim-architect
+  (deterministic engines decide, fail-closed validators, sealed era snapshots,
+  balance measured at scale with margins from measured headroom),
+  dukb-qa-hunter (the gates in order, the browser weapons, how to hunt like a
+  cheater, harness-drift judgment), dukb-visual-qa (boxes not vibes, the worst
+  row rule, the paid-for judgment calls). CLAUDE.md's docs map now lists the
+  four new LIVE docs and the skills. Also this push: the stray August 12 brief
+  that add -A swept into the 337 commit is untracked and ignored, and the one
+  secret it carried was neutralized FIRST, the old account's password rotated
+  in the database to a value nobody has seen, so the published string opens
+  nothing.
 - THE SPEC ERA OPENS, Rounds 337, 338 and 339 (desktop lane, 2026-08-29, one push).
   Round 337: the Master Build Spec (7690 lines) and Anthony's parallel operating
   instructions are committed as docs/MASTER-BUILD-SPEC-2026-08.md and

@@ -606,6 +606,15 @@ current:**
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |
 | `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. |
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
+| `docs/WORKBOARD.md` | **LIVE.** The two-lane task board: claims before building, round numbers reserved here. |
+| `docs/MASTER-BUILD-SPEC-2026-08.md` | **LIVE.** The owner's product north star (2026-08-29). Read with the reconciliation beside it. |
+| `docs/SPEC-RECONCILIATION.md` | **LIVE.** Every spec section mapped to shipped rounds. Read BEFORE claiming spec work. |
+| `docs/PARALLEL-AGENT-OPS.md` | **LIVE.** The multi-agent operating rules, the lane ownership split, and the one deviation from them. |
+
+The repo also carries five project skills in `.claude/skills/` (dukb-data-guardian,
+dukb-game-designer, dukb-sim-architect, dukb-qa-hunter, dukb-visual-qa). They load
+for every session in this repo; invoke the matching one before data work, new game
+design, simulation tuning, round verification, or a visual pass.
 
 Useful but read with a date in mind:
 

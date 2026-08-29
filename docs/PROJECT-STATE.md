@@ -2597,6 +2597,21 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 340.** The team skills. The owner's development-team
+  document lands the repo-native way: five project skills in .claude/skills/,
+  loading automatically for both lanes and any future session, each the distilled
+  law of the round history: dukb-data-guardian, dukb-game-designer,
+  dukb-sim-architect, dukb-qa-hunter, dukb-visual-qa. CLAUDE.md's docs map
+  gained the four new LIVE documents and the skills pointer. Same push, the
+  cleanup and the incident: the rounds 337 to 339 commit had staged docs/ with
+  add -A and swept in two files untracked since August 12, one an old session
+  brief carrying a temporary password for the owner's old site account. The
+  password was rotated inside the database to a random value nobody has seen
+  BEFORE any git surgery, making the published string inert; both files are now
+  untracked and gitignored; the string remains in one historical commit,
+  useless. Lesson re-learned and written where it happened: stage explicit
+  files, never a directory, on a machine whose tree carries months of untracked
+  history.
 - **2026-08-29, Rounds 337 to 339.** The spec era opens, three rounds in one push.
   Anthony delivered a 7690 line Master Build Specification and a parallel agent
   operating manual the same night; both are committed (MASTER-BUILD-SPEC-2026-08.md,
