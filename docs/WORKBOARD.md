@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 319.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 320.
 
 ## Inbox (unclaimed)
 
@@ -117,11 +117,11 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- Small fixes batch: Career Ladder flags, Missing XI side colors and overlapping bubbles,
-  Rarity Round hiding the rarest answer and stating the goal upfront, World XI position
-  eligibility and customizable respins, Alphabet Sprint full name instruction, the
-  Soccer Career keeper being told to score more goals, the how-to-play popup audit across
-  every game.
+- Small fixes batch (BUILDING as Round 319, 2026-08-29): Career Ladder flags, Missing XI
+  side colors and overlapping bubbles, Rarity Round hiding the rarest answer and stating
+  the goal upfront, World XI position eligibility and customizable respins, Alphabet
+  Sprint full name instruction, the Soccer Career keeper being told to score more goals.
+  The how-to-play popup audit across every game splits out as its own later round.
 - Trade Finder: both sides of the ball and current rosters.
 
 Standing claims:
