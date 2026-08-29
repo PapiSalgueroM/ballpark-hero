@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 348.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 350 (cloud holds 348 and 349).
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -27,26 +27,6 @@ sitemap.xml, production routes, legal pages and navigation are FROZEN except for
 verified fixes. The fences guard them; the added rule is restraint.**
 
 ## Inbox (unclaimed)
-
-- TWO RULES CONTROLS ON ONE PAGE, found and measured by Round 335, deliberately
-  NOT fixed there. GameShell's doc comment promises "no page ever shows two
-  question marks" and 25 routes contradict it. Measured on the built site
-  BEFORE that round's change and again after, identical both times, so this is
-  pre-existing and the round neither caused it nor cleared it: /connections and
-  /ufc for instance carry GameShell's floating "?" at (0,89) AND the page's own
-  labelled "How to play" at (136,301), and /olympics carries two icon buttons
-  116px apart. The cause looks simple, those pages render their own control but
-  never passed help="none" to GameShell, which is exactly what the prop exists
-  for. WHY IT WAS LEFT: the measuring probe counts any control whose aria names
-  the rules, so it also counted /idle-arena's "Close the rules" button inside an
-  open dialog, which is a false positive and not a duplicate at all. Telling a
-  second TRIGGER from a dialog's own close button needs care, and picking which
-  of two real controls survives is a per page judgment (the page's own is
-  usually the better written one), so twenty-odd files should not be edited
-  blind on a probe that is known to over-count. Whoever takes it: re-measure
-  with a matcher that ignores controls inside an open [role="dialog"], confirm
-  the list, then pass help="none" per page and keep the game's own control.
-  A candidate for a permanent playHowTo section 3 once the count is trustworthy.
 
 **ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
 workable pieces. Bugs still outrank these; within the list his order rules.**
@@ -90,13 +70,6 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   the site's whole pitch is clean free games. If some of that flavor is wanted, the
   existing in-career purchases and a fictional "prediction night out" event carry it
   without slot machines. Parked unless he overrules.
-- LIGHT MODE (Anthony, 2026-08-29 late: "since its basically in dark mode already I
-  would love for there to be a light mode and people can choose"). A real theme
-  system: the palette is dark-only today, so this needs a light token set on the
-  CSS variables, a toggle in the header persisted per browser, prefers-color-scheme
-  as the default, and a legibility pass over the games (the sweeps at 320/390 run
-  in both themes when this lands). Sizeable, its own round or two.
-
 - SPONSOR-READY SURFACES (owner directive 13): configurable presented-by slots for
   challenges, tournaments and hubs, admin configured, never hard-coded brands,
   clearly separated from gameplay. An architecture round first (where the config
@@ -185,6 +158,16 @@ Standing claims:
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
 Claimed 2026-08-28:
+
+- TWO RULES CONTROLS ON ONE PAGE (BUILDING as Round 348, cloud, 2026-08-29): the
+  finding Round 335 measured and deliberately left, taken off the Inbox by the
+  lane that filed it. Re-measure with a matcher that ignores controls inside an
+  open dialog (the known over-count), confirm the real list, pass help="none"
+  per page keeping the game's own control, and land it as playHowTo section 3
+  with its own negative control so the invariant GameShell's doc comment
+  already claims is finally enforced rather than asserted.
+  next: Round 348 (cloud). Round 349 reserved by this lane for the free kick
+  swipe minigame, the opener of his interactive-soccer arc.
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
