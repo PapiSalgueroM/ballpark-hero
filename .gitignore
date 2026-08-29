@@ -30,3 +30,7 @@ dist-ssr
 
 # Claude account migration packet, contains project IDs and account emails. Never commit.
 _claude-migration/
+
+# old session briefs and scratch scripts stay out of the public repo
+docs/NEXT_SESSION_BRIEF.md
+docs/scripts/build-connections-puzzles.py
