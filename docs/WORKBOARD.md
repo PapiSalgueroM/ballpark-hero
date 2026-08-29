@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 322.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 323.
 
 ## Inbox (unclaimed)
 
@@ -139,7 +139,7 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
 
 Standing claims:
 
-- The react-router v7 breaking major that Round 304 queued as its own round.
+- The react-router v7 breaking major (BUILDING as Round 322, 2026-08-29).
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
