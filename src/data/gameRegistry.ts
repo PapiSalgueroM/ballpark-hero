@@ -72,6 +72,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/wonderkid-factory', label: 'Wonderkid Factory', emoji: '🔭', description: 'Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment', isNew: true },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', isNew: true },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', isNew: true },
+      { path: '/sports-bingo', label: 'Sports Bingo', emoji: '🎫', description: 'Open packs of real players on a timer, mark the squares they satisfy', daily: true, isNew: true },
       { path: '/alphabet-sprint', label: 'Alphabet Sprint', emoji: '⚡', description: 'Name a player per letter against the clock', isNew: true },
       { path: '/clue-auction', label: 'Clue Auction', emoji: '💰', description: 'Buy clues, save points, name the secret player', isNew: true },
       // Revived 2026-07-15. Retired 2026-07-06 as "you guess one guy and you're

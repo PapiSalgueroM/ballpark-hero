@@ -488,4 +488,47 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
     ],
   },
+  '/sports-bingo': {
+    intro: [
+      "Sports Bingo hands you a 5 by 5 card of football conditions, a goalkeeper, a Brazilian, someone worth 100M plus, and opens ten packs of real players on a timer. Your job is spotting which squares each pack can claim before it closes.",
+      "The marking is the whole skill. Nothing is claimed for you: a pack sits open for fifteen seconds, you scan five real players and their real attributes, and every square you can justify, you tap. When the next pack opens, the old one is gone for good.",
+      "Play the shared daily card, run unlimited fresh cards, or race a CPU on the same card with the same packs and its own board.",
+    ],
+    howToPlay: [
+      "Pick a mode: the daily card (one shared card and pack run per day), unlimited, or versus the CPU at one of three levels.",
+      "Ten packs of five real players open one at a time, each on a fifteen second timer. You can close a pack early once you have milked it.",
+      "While a pack is open, tap every square that someone in the pack satisfies. A wrong tap shakes and costs nothing but time.",
+      "After the tenth pack the card is scored: squares, lines and the blackout bonus.",
+    ],
+    rules: [
+      "The card holds 24 conditions plus a free centre. Conditions cover position, age, market value, nationality, league, and season output, all read from the same verified player data the rest of the site runs on.",
+      "A square can only be claimed while a pack containing a matching player is open. Closed packs never come back.",
+      "Scoring: 3 points per marked square, 2 per completed row, column or diagonal, and a blackout lands exactly 100.",
+      "Versus mode: the CPU plays the identical card and packs on its own board, and most squares after pack ten wins.",
+      "Every card is completable: the pack run is checked at deal time so each condition on the card has at least one matching player somewhere in the ten packs.",
+    ],
+    example: [
+      "Pack three opens: a 21 year old Brazilian winger worth 45M with 11 goals. That one player claims Age 21 or younger, A Brazilian, A winger, Worth 40M plus and 10 plus goals, if all five sit on your card and you spot them in time.",
+      "You tap four of them before the clock runs out, miss the goals square, and the pack closes. Seven packs later you finish on 19 squares and 4 lines: 65 points, and the ruthless CPU beat you by two squares.",
+    ],
+    tips: [
+      "Read the card before the first pack opens. Knowing your rare squares (a goalkeeper, worth 100M plus) means you never let one slip by.",
+      "One great player can claim four or five squares. Scan every attribute line, not just the name.",
+      "Do not close packs early while broad squares are still open. The timer is generous exactly so the scan is doable.",
+    ],
+    faqs: [
+      {
+        q: "Is the daily card the same for everyone?",
+        a: "Yes. One card and one pack sequence per Eastern Time date, shared worldwide, so daily scores compare fairly.",
+      },
+      {
+        q: "Are the players real?",
+        a: "Every player in every pack is a real footballer from the same verified market data the rest of the site uses, and every condition reads their real attributes.",
+      },
+      {
+        q: "Can the card be impossible?",
+        a: "No. At deal time the ten packs are checked against the card, and any condition nothing satisfies gets a matching player dealt in.",
+      },
+    ],
+  },
 };

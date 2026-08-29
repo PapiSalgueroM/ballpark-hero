@@ -140,6 +140,7 @@ const SilverwareSort = lazy(() => import("./pages/SilverwareSort"));
 const HallOfChampions = lazy(() => import("./pages/HallOfChampions"));
 const IdleArena = lazy(() => import("./pages/IdleArena"));
 const FaceOff = lazy(() => import("./pages/FaceOff"));
+const SportsBingo = lazy(() => import("./pages/SportsBingo"));
 const GuessTheGolfer = lazy(() => import("./pages/GuessTheGolfer"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -444,6 +445,7 @@ const AppContent = () => {
         <Route path="/hall-of-champions" element={<HallOfChampions />} />
         <Route path="/idle-arena" element={<IdleArena />} />
         <Route path="/face-off" element={<FaceOff />} />
+        <Route path="/sports-bingo" element={<SportsBingo />} />
         <Route path="/guess-the-golfer" element={<GuessTheGolfer />} />
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />

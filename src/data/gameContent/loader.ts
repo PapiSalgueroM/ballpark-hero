@@ -108,6 +108,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/player-bingo': 'soccer1',
   '/rarity-round': 'soccer1',
   '/rebuild': 'soccer1',
+  '/sports-bingo': 'soccer1',
   '/who-am-i': 'soccer1',
   '/world-xi': 'soccer1',
   /* soccer2 */
