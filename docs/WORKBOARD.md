@@ -135,12 +135,30 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   clearly separated from gameplay. An architecture round first (where the config
   lives, how a surface renders empty), then surfaces game by game.
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
-  indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
-  the indexed surface. CAUTION built into the item: thin or near-duplicate pages hurt as
-  easily as help, and this site just spent twenty rounds earning its indexing back, so
-  this starts as a small pilot (a handful of genuinely content-rich sub-pages with their
-  own copy) measured in Search Console before any rollout. Pairs with the SEO keyword
-  pass below.
+  indexable URLs for sub-content could grow the indexed surface. CAUTION built into the
+  item: thin or near-duplicate pages hurt as easily as help, so this starts as a small
+  pilot measured in Search Console before any rollout.
+  RECON DONE (cloud, 2026-08-29), the pilot is picked and the traps are mapped:
+  FOUR pages, all fed by data already bundled in code, nothing clock derived:
+  /club-manager-2015-16, /club-manager-2010-11 and /club-manager-2005-06 (season
+  reference pages from ERA_LEAGUES plus the era roster files: real clubs, real
+  players with real ages and values, the partial-squad honesty notes, the era
+  copy from CM_ERAS; none of those club or player names appear anywhere on the
+  shipped site today), and /soccer-career-eras (all eight ERA_DEFS windows on
+  ONE page, about 160 named stars plus the league contender pools; eight
+  separate URLs would be the thin-page shape itself). Alternate E if wanted:
+  /data-and-sources, the provenance page, pure static prose. RULED OUT: any
+  /records sub-page (the tables are Supabase-at-runtime, prerender leaves the
+  request hanging, so the snapshot ships EMPTY of rows, measured on
+  public/records/index.html), daily puzzle archives (clock derived, prints
+  answers), and per-school or per-club programmatic scale (the thin-page risk
+  itself; colleges.ts is a game's answer key). Registration order and the fence
+  checklist are in the recon record; the two easiest misses: raise
+  simIndexNow's SITEMAP_FLOOR in the same round, and give every page at least
+  one inbound body link or simInternalLinks calls it an orphan. The era pages
+  share a template, so the frame must stay thin around genuinely different
+  data: the fences catch byte-identical documents, not near-duplicate prose.
+  Pairs with the SEO keyword pass below.
 
 - **THE 2026-08-28 REVIEW: `docs/TWEAKS-2026-08-28.md`.** Anthony played the site top to
   bottom and filed his biggest list yet, transcribed there in full. It outranks the
