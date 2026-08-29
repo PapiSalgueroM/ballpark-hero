@@ -20,6 +20,13 @@
  * extension ESPN from our address. It lives in private.app_secrets, read
  * through public.app_secret(), service role only, same as always.
  *
+ * Round 332: the watchdog. The 2026-08-26 suspension emptied the strip for
+ * two days and nobody was told; the run ledger knew the whole time. After a
+ * normal today run, this function now looks at YESTERDAY in New York: a
+ * fully past day over which every feed wrote zero rows, or no runs at all
+ * (the cron itself dead), files ONE question_reports row, the same shelf the
+ * owner's admin screen already reads. Never repeated for the same day.
+ *
  * Request shapes:
  *   POST /scores-poll              (x-poll-secret header)  poll every feed
  *   POST /scores-poll?day=1        same, for tomorrow's slate (the second
@@ -27,6 +34,10 @@
  *   POST /scores-poll?date=YYYY-MM-DD  an explicit date
  *   GET  /scores-poll?probe=nba    (x-poll-secret header)  one feed's raw
  *                                  payload, for checking a shape by eye
+ *   POST /scores-poll?watchdog_date=YYYY-MM-DD  run ONLY the watchdog for
+ *                                  that date and answer with its decision;
+ *                                  its report rows carry test:true so a
+ *                                  drill never reads as a real outage
  */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -148,6 +159,37 @@ async function fetchFeed(query: string, date: string): Promise<{ status: number;
   }
 }
 
+/* Round 332. One question: over the whole of checkDate, did ANY feed write a
+   single row? The ledger answers it without touching the feed. Zero rows
+   across every run, or zero runs, is a dead day and files one report on the
+   shelf the admin screen reads; a day already reported is never repeated.
+   The check never throws into the poll: its own failure is returned as data
+   and the poll's response carries it, so a broken watchdog is visible in the
+   run summary rather than fatal to the scores. */
+async function watchdog(checkDate: string, test = false): Promise<Record<string, unknown>> {
+  const { data: runs, error } = await sb.from("live_scores_runs").select("rows").eq("date", checkDate);
+  if (error) return { checkDate, error: error.message };
+  const runCount = runs?.length ?? 0;
+  const total = (runs ?? []).reduce((a: number, r: unknown) => a + (Number((r as { rows?: unknown })?.rows) || 0), 0);
+  if (runCount > 0 && total > 0) return { checkDate, runCount, total, dead: false };
+  const { data: existing, error: exErr } = await sb.from("question_reports")
+    .select("id")
+    .eq("game_type", "site")
+    .contains("game_context", { source: "ticker-watchdog", date: checkDate })
+    .limit(1);
+  if (exErr) return { checkDate, runCount, total, dead: true, error: exErr.message };
+  if (existing && existing.length) return { checkDate, runCount, total, dead: true, alreadyReported: true };
+  const description = runCount === 0
+    ? `Ticker watchdog: no poll runs at all were recorded for ${checkDate}. The cron itself may be dead; check cron.job and the edge function logs.`
+    : `Ticker watchdog: every feed wrote zero rows for the whole of ${checkDate} across ${runCount} runs. The feed host may have changed or closed; the run ledger's notes for that day say what each call got, and cdn.espn.com/core answered 200 in the 2026-08-28 survey as the next candidate host.`;
+  const { error: insErr } = await sb.from("question_reports").insert({
+    game_type: "site",
+    game_context: { source: "ticker-watchdog", date: checkDate, runs: runCount, ...(test ? { test: true } : {}) },
+    description,
+  });
+  return { checkDate, runCount, total, dead: true, reported: !insErr, ...(insErr ? { insertError: insErr.message } : {}) };
+}
+
 serve(async (req) => {
   const url = new URL(req.url);
   const provided = req.headers.get("x-poll-secret") ?? url.searchParams.get("secret") ?? "";
@@ -160,6 +202,16 @@ serve(async (req) => {
      today since Round 287. */
   const dayOffset = Number(url.searchParams.get("day"));
   const date = url.searchParams.get("date") || nyDate(Number.isFinite(dayOffset) ? dayOffset : 0);
+
+  /* Round 332: the watchdog drill. Runs only the ledger check for one named
+     date and answers with the decision; any report it files is marked
+     test:true. This is how the alert path stays provable without waiting
+     for a real outage. */
+  const wdDate = url.searchParams.get("watchdog_date");
+  if (wdDate) {
+    const out = await watchdog(wdDate, true);
+    return new Response(JSON.stringify({ watchdog: out }, null, 1), { headers: { "content-type": "application/json" } });
+  }
 
   const probe = url.searchParams.get("probe");
   if (probe) {
@@ -205,5 +257,13 @@ serve(async (req) => {
   /* rows older than two days are nobody's business any more; future rows
      (tomorrow's slate) are exactly the business and are kept */
   await sb.from("live_scores").delete().lt("start_at", new Date(Date.now() - 2 * 86400000).toISOString());
-  return new Response(JSON.stringify({ date, summary }), { headers: { "content-type": "application/json" } });
+  /* Round 332: the watchdog rides the ordinary today run (the every 20
+     minutes cron), judging yesterday, which is complete by definition. The
+     day=1 and date= and only= variants skip it so one canonical caller owns
+     the check. */
+  let watchdogOut: Record<string, unknown> | undefined;
+  if (!only && !url.searchParams.get("date") && (!Number.isFinite(dayOffset) || dayOffset === 0)) {
+    watchdogOut = await watchdog(nyDate(-1));
+  }
+  return new Response(JSON.stringify({ date, summary, ...(watchdogOut ? { watchdog: watchdogOut } : {}) }), { headers: { "content-type": "application/json" } });
 });

@@ -119,11 +119,6 @@ From the 2026-08-28 review (bugs, claimed same day):
   and hand checks inside the heavy games (Club Manager tabs, Soccer Career screens,
   the records tables) for tap comfort and text scale that box measurements cannot
   judge. Constraint: no-scroll rule and the FIFA tile rule govern the fixes.
-- Ticker follow up (BUILDING as Round 332, desktop, 2026-08-29): an alert when every
-  feed has written zero rows for a full day, so a dead feed is surfaced instead of
-  quiet (the suspension sat unnoticed for two days). The next candidate host if the
-  header endpoint ever closes: cdn.espn.com/core, which answered 200 in the
-  2026-08-28 survey.
 - Queued from the 08-28 review, Club Manager residue: era Champions League pools are 16
   clubs so era saves play 4 groups, not the real 8. Growing each era's euro pool to 28
   verified era participants (the real group stage fields are documented facts) is a data
@@ -197,6 +192,23 @@ Standing claims:
 
 ## Done
 
+- THE TICKER WATCHDOG, Round 332 (desktop lane, 2026-08-29). The alert the August
+  suspension deserved: scores-poll v7 judges YESTERDAY in New York on every
+  ordinary today run, and a fully past day over which every feed wrote zero rows,
+  or no runs at all (the cron itself dead), files one question_reports row on the
+  shelf the admin screen already reads, never repeated for the same day. Proven
+  live by drill, not by reading: watchdog_date=2026-08-28 answered dead false
+  over 390 runs and 155 rows, watchdog_date=2020-01-01 fired and filed (marked
+  test:true so a drill can never read as a real outage), the same drill again
+  answered alreadyReported without a second row, the test row was deleted, and a
+  real poll then wrote 54 rows with the watchdog riding along judging yesterday
+  healthy. The drills ran through pg_net with the secret pulled inline from
+  private.app_secrets, so it never left the database. Repo copy synced from
+  deployed v7; simLiveScores and simValidatorsFailClosed green. Also this
+  session: Round 330 published and VERIFIED live (the wrap row present, the name
+  whole at 320 on douknowball.com) after two stale deploys exposed the sync
+  trap now recorded in SHIP-PIPELINE.md: check get_project's latest_commit_sha
+  against origin/main, read_file is not a sync check.
 - THE REBUILD COPY PASS, Round 331 (cloud lane, 2026-08-29). His quoted offenders
   rewritten in place, the "+N rating" labels replaced with words, mechanics and the
   stored save id untouched, the guide aligned. The hairdryer lives in Club Manager
