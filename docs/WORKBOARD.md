@@ -38,7 +38,7 @@ How it works:
   within a lane. Claim here before building.
 - From that list, unclaimed and sizable: the Rebuild redesign, the Player Stock
   Market redesign, the tycoon merge, the conquest map
-  overhaul, (the third new game, the draft mode, BUILDING as Round 328, cloud, 2026-08-29; Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
+  overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
 - Encyclopedia mining (tweaks item 12, the permanent backlog, pages 4 to 51 of his
@@ -137,6 +137,12 @@ Standing claims:
 
 ## Done
 
+- GAUNTLET DRAFT, Round 328 (cloud lane, 2026-08-29). The draft mode, completing all
+  three new game requests: five card picks per slot in our own card frames, a
+  deterministic five round knockout, daily and unlimited. The harness caught the
+  first ladder making the trophy a 3 percent lottery even for perfect drafts;
+  retuned against measured draft distributions to about one in eight, zero for
+  bargain XIs. simGauntletDraft with its flatdeal control fences it.
 - THE AUCTION REBUILD, Round 327 (cloud lane, 2026-08-29). Sign the Player runs the
   owner's room now: random position order in two passes, list price openings with
   the rival maths preserved to the digit, live wars, a decay phase with a snap

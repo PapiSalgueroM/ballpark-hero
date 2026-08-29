@@ -46,6 +46,40 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
   },
 
+  '/gauntlet-draft': {
+    intro: [
+      "Gauntlet Draft is the draft mode: a formation is drawn, each of its eleven slots deals you five real players from a genuine star to a bargain, and you keep exactly one per slot.",
+      "Then the cup begins. Your finished XI runs five knockout rounds against ever stronger opposition, rated 70 up to 89, with extra time and penalties when the ninety minutes are level.",
+      "The run is decided entirely by the squad you drafted: the same XI always runs the same gauntlet, so every pick is the game.",
+    ],
+    howToPlay: [
+      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+      "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
+      "After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+      "Survive a round for 16 points; lift the trophy for exactly 100.",
+    ],
+    rules: [
+      "Every card is a real player from the same verified market data the rest of the site uses; every opponent club is invented on purpose.",
+      "The five cards per slot are spread across the value bands, so a star and a bargain are always both on the table.",
+      "No player is dealt twice in one draft.",
+      "The knockout is deterministic in your XI: goals come from the rating gap, level games go to extra time and then penalties, and replaying the same squad replays the same cup.",
+      "Opposition ratings climb 70, 76, 81, 85, 89. A bargain draft usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in eight.",
+    ],
+    example: [
+      "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
+      "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back.",
+    ],
+    tips: [
+      "The keeper card matters as much as the striker card: one weak slot drags the whole rating.",
+      "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
+      "Champions need a squad in the high eighties. Check your running rating under the cards as you go.",
+    ],
+    faqs: [
+      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
+      { q: "Are the opponents real clubs?", a: "No, and that is deliberate: every gauntlet opponent is an invented club, so no real badge or name is borrowed. The players you draft are real." },
+      { q: "Can the same squad get a different cup run?", a: "No. The run is computed from your finished XI, so the draft is the whole game and replaying the same eleven replays the same matches." },
+    ],
+  },
   '/footle': {
     intro: [
       "Footle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.",

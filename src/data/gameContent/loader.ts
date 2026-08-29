@@ -118,6 +118,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/fantasy-draft': 'soccer2',
   '/football-connect-4': 'soccer2',
   '/footle': 'soccer2',
+  '/gauntlet-draft': 'soccer2',
   '/higher-lower': 'soccer2',
   '/player-stock-market': 'soccer2',
   '/sign-the-player': 'soccer2',
