@@ -45,10 +45,15 @@ From the 2026-08-28 review (bugs, claimed same day):
   dead feed is surfaced instead of quiet (the suspension sat unnoticed for two days).
   The next candidate host if the header endpoint ever closes: cdn.espn.com/core, which
   answered 200 in the 2026-08-28 survey.
-- P1: the Club Manager league tables (other leagues stuck on pre-season alphabetical all
-  season, the duplicate zero-point La Liga, the Cups tab rendering the UCL under Copa del
-  Rey, the projected bracket excluding the second placed player, the 8 group 2005/06
-  check).
+- Queued from the 08-28 review, Club Manager residue: era Champions League pools are 16
+  clubs so era saves play 4 groups, not the real 8. Growing each era's euro pool to 28
+  verified era participants (the real group stage fields are documented facts) is a data
+  round. Also the era-id flags now exist in LEAGUE_NATIONS; a fence pinning every
+  ERA_LEAGUES id to a nation would keep the next era honest.
+- Harness portability sweep: 85 of 93 sim harnesses still hardcode '/tmp' and embed the
+  Windows ROOT path into generated entries, so they cannot run on the desktop lane.
+  Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
+  pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
 - P1: the double footer.
 - P1: the boot flash (snapshot text visible before React mounts).
 - P1 data batch: Who Am I zero ages and values (Rodri), the Squad Deal league filter
@@ -109,6 +114,22 @@ Standing claims:
 
 ## Done
 
+- THE CLUB MANAGER TABLES TELL THE TRUTH, Round 312 (desktop lane, 2026-08-28). Review
+  P1s 2, 3 and part of 4. One root for the first two: syncWorld and the world tables
+  picker both iterated REAL_LEAGUES, whose ids never match an era world's, so every era
+  save's other league sat frozen on "pre-season, alphabetical order" for the game's
+  whole history and the picker offered the entire modern set with a duplicate zero-point
+  La Liga. One era aware list (worldLeagueDefs) now feeds initWorld, syncWorld and the
+  picker, and syncWorld's own catch-up path heals every broken era save on next load.
+  The knockout: the engine always advanced the top TWO of my group, but the bracket
+  field took only winners and filled from a pool of clubs that finished nowhere, which
+  is exactly the "projected quarter finals exclude my second placed team" report; the
+  field and the projection now take the groups' top twos, winners crossed with
+  runners-up, pool only for genuine shortfall. The Cups tab separates the two
+  competitions under their own headers and finally mounts CupBracketCard, the domestic
+  bracket built in Round 102 and never rendered anywhere. simEraWorldTables is the new
+  harness (era season through the engine's own loop, modern control, picker truth,
+  qualifier composition, source shape, WORLD_CONTROL=modern goes red).
 - THE TICKER IS BACK, Round 311 (desktop lane, 2026-08-28). Review item 1. The dead
   API-Sports account is retired; scores-poll v6 reads ESPN's open scoreboard header
   endpoint (no account, no key, no quota), same table, same secret gate, fail closed as

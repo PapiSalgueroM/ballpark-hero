@@ -16,8 +16,9 @@ interface UclGroupsCardProps {
  *
  * My group is always Group A. The other groups are real four club tables
  * playing their matchdays the same nights mine does, and the projection
- * below pairs the eight current leaders exactly the way the real
- * quarter-final draw will pair them, so a leader change IS a draw change.
+ * below shows the field the engine will actually seed (Round 312: top two
+ * per group when the groups are few, winners crossed with runners-up), so a
+ * table change IS a draw change.
  */
 export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
   const [pick, setPick] = useState('A');
@@ -84,7 +85,7 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
           <p className="text-[9px] text-muted-foreground mt-1.5">
             {preseason
               ? 'If the groups ended right now. Nobody has kicked a ball, so this is just the draw order.'
-              : 'If the groups ended today: the eight current leaders, paired the way the real draw pairs them. This locks in after matchday 6.'}
+              : 'If the groups ended today: everyone currently in a qualifying place, winners drawn against runners-up where the groups send both through. This locks in after matchday 6.'}
           </p>
         </div>
       )}

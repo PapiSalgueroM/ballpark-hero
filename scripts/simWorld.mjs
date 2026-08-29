@@ -12,25 +12,26 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/wdEntry.mjs';
-const BUNDLE = '/tmp/wd.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'wdEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'wd.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT}/src/lib/clubManager.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const cm = mod;
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
 
-const { cm } = await import(BUNDLE);
+const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   REAL_LEAGUES, leagueOf, sortedTable, leagueRounds,
-  projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS,
+  projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS, ERA_LEAGUES,
 } = cm;
 
 let failures = 0;
@@ -419,8 +420,14 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   for (const lg of REAL_LEAGUES) {
     if (!LEAGUE_NATIONS[lg.id]) fail(`league ${lg.id} has no nation flag mapping`);
   }
+  // Round 312: era league ids are in the map too, so the era world picker
+  // carries flags; a stray id still fails.
+  const knownIds = new Set([
+    ...REAL_LEAGUES.map(lg => lg.id),
+    ...Object.values(ERA_LEAGUES).flat().map(lg => lg.id),
+  ]);
   for (const id of Object.keys(LEAGUE_NATIONS)) {
-    if (!REAL_LEAGUES.some(lg => lg.id === id)) fail(`LEAGUE_NATIONS names an unknown league id: ${id}`);
+    if (!knownIds.has(id)) fail(`LEAGUE_NATIONS names an unknown league id: ${id}`);
   }
   console.log('   groups lockstep, projection honest, bracket earned, old saves caught up, flags mapped');
 }

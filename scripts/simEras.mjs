@@ -31,21 +31,22 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/cmEraSimEntry.mjs';
-const BUNDLE = '/tmp/cmEraSim.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'cmEraSimEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'cmEraSim.bundle.mjs');
 
 // Two-stage entry: ES module imports evaluate before the entry's own
 // statements, so the localStorage stub goes in a wrapper that dynamically
 // imports the engine (the house pattern, same as every other sim harness).
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/clubManager.ts');
-const eras = await import('${ROOT}/src/lib/clubManagerEras.ts');
-const rosters = await import('${ROOT}/src/data/clubManagerRosters.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
+const rosters = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
 export { engine, eras, rosters };
 `);
 execSync(
@@ -53,7 +54,7 @@ execSync(
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: E, rosters: DATA } = await import(BUNDLE);
+const { engine: cm, eras: E, rosters: DATA } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, sortedTable,
   renewContract, expiringPlayers, buildMarket, loadCareer, saveCareer,

@@ -1999,6 +1999,10 @@ export const LEAGUE_NATIONS: Record<string, string> = {
   denmark: 'Denmark',
   switzerland: 'Switzerland',
   croatia: 'Croatia',
+  // Round 312: the era league ids, so the world tables picker flags them too.
+  premier2005: 'England', laliga2005: 'Spain',
+  premier2010: 'England', laliga2010: 'Spain',
+  premier2015: 'England', laliga2015: 'Spain', seriea2015: 'Italy',
 };
 
 /** Strength priors for league clubs the player pool cannot rate. */
@@ -6242,13 +6246,26 @@ export function leagueRounds(size: number): number {
   return 2 * (eff - 1);
 }
 
+/** The league defs a save's world actually simulates: the era's own set for
+ *  a historic save, the effective modern set otherwise. Round 312: syncWorld
+ *  and the world tables screen both iterated REAL_LEAGUES, whose ids never
+ *  match an era world's (premier2010 vs the modern id), so every era save's
+ *  other league sat on round zero all season showing "pre-season,
+ *  alphabetical order", and the league picker offered the whole modern set,
+ *  including a second zero-point copy of the save's own league under the
+ *  modern def's name. One list, era aware, used everywhere. */
+export function worldLeagueDefs(state: Pick<CareerState, 'eraId'>): LeagueDef[] {
+  const historic = !!state.eraId && isHistoricEra(state.eraId);
+  return historic ? (ERA_LEAGUES[state.eraId!] ?? []) : REAL_LEAGUES.map(effectiveLeague);
+}
+
 /** Blank standings for every league except my own. Round 146: a historic
  *  save's world is its era's other league, not the 2026 league set. */
 function initWorld(myClub: string, eraId?: string, myLeagueId?: string): Record<string, WorldLeague> {
   const historic = !!eraId && isHistoricEra(eraId);
   // Round 310: the modern world is built from the effective memberships, so
   // a promoted club's old division fields its replacement, not the club.
-  const leagues = historic ? (ERA_LEAGUES[eraId!] ?? []) : REAL_LEAGUES.map(effectiveLeague);
+  const leagues = worldLeagueDefs({ eraId });
   /* Round 154: callers that know my league pass it, because a custom club is
      in no league def and the leagueOf fallback would exclude the WRONG league
      from the world, running my real division twice. */
@@ -6287,8 +6304,10 @@ function syncWorld(state: CareerState, myPlayed: number): void {
   const myTotal = leagueRounds(careerLeagueOf(state).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
   // Round 310: fixtures come off the effective membership, or a relegated
-  // world league would keep playing the club that left it.
-  for (const lg of REAL_LEAGUES.map(effectiveLeague)) {
+  // world league would keep playing the club that left it. Round 312: the
+  // era aware list, because REAL_LEAGUES ids never match an era world's and
+  // this loop skipped every era league for a whole season.
+  for (const lg of worldLeagueDefs(state)) {
     const w = state.world[lg.id];
     if (!w) continue;
     const total = leagueRounds(lg.clubs.length);
@@ -6330,19 +6349,39 @@ function eraEuroPool(eraId: string): string[] {
  * worlds (old saves mid-season, historic eras with small pools) fill the
  * remaining slots from the continental pool exactly as before.
  */
+/** The eight the groups actually send up, in draw order, no padding.
+ *  Round 312: the engine has always advanced the top TWO of my group
+ *  (pos <= 2 above), but this field took only the WINNERS and then filled
+ *  the gap with pool clubs that finished nowhere, so a second placed
+ *  Barcelona watched three lottery clubs take quarter final places, which
+ *  is exactly what the owner reported. Eight groups fill on winners alone;
+ *  fewer groups qualify their runners-up, winners drawn against the
+ *  runner-up of the neighbouring group (A1 v B2, B1 v A2, C1 v D2...), the
+ *  way the real draw crossed them. May return fewer than eight when the
+ *  groups cannot honestly supply them. */
+function uclSeededField(state: CareerState): string[] {
+  const ranked: string[][] = [];
+  if (state.uclGroup) ranked.push(sortedTable(state.uclGroup.table).map(r => r.club));
+  for (const g of state.uclWorld ?? []) ranked.push(sortedTable(g.table).map(r => r.club));
+  const winners = ranked.map(rows => rows[0]).filter((c): c is string => !!c);
+  if (winners.length >= 8) return winners.slice(0, 8);
+  const runners = ranked.map(rows => rows[1]);
+  const field: string[] = [];
+  const G = ranked.length;
+  for (let i = 0; i < G && field.length < 8; i++) {
+    const partner = (i % 2 === 0 ? i + 1 : i - 1 + G) % G;
+    if (winners[i] && !field.includes(winners[i])) field.push(winners[i]);
+    const ru = runners[partner];
+    if (field.length < 8 && ru && !field.includes(ru)) field.push(ru);
+  }
+  return field.slice(0, 8);
+}
+
 function uclBracketField(state: CareerState, includeMe: boolean): string[] {
-  const winners: string[] = [];
-  if (state.uclGroup) {
-    const w = sortedTable(state.uclGroup.table)[0]?.club;
-    if (w) winners.push(w);
-  }
-  for (const g of state.uclWorld ?? []) {
-    const w = sortedTable(g.table)[0]?.club;
-    if (w) winners.push(w);
-  }
-  let field = winners.slice(0, 8);
+  let field = uclSeededField(state);
   if (includeMe && !field.includes(state.clubName)) {
-    // A runner-up replaces the weakest slot rather than shoving everyone.
+    // A qualifier the seeding somehow missed replaces the weakest slot
+    // rather than shoving everyone.
     if (field.length >= 8) field = [...field.slice(0, 7), state.clubName];
     else field = [...field, state.clubName];
   }
@@ -6547,16 +6586,13 @@ function advanceUclWorld(state: CareerState): void {
 export function projectedUclBracket(state: CareerState): { home: string; away: string }[] | null {
   if (state.uclBracket && state.uclBracket.length) return null;
   if (!state.uclGroup) return null;
-  const leaders: string[] = [];
-  const mine = sortedTable(state.uclGroup.table)[0]?.club;
-  if (mine) leaders.push(mine);
-  for (const g of state.uclWorld ?? []) {
-    const w = sortedTable(g.table)[0]?.club;
-    if (w) leaders.push(w);
-  }
+  // Round 312: project the field the engine will actually seed, top two per
+  // group when the groups are few, so a second placed club sees itself in
+  // the bracket it is genuinely on course for.
+  const field = uclSeededField(state);
   const pairs: { home: string; away: string }[] = [];
-  for (let i = 0; i + 1 < leaders.length && pairs.length < 4; i += 2) {
-    pairs.push({ home: leaders[i], away: leaders[i + 1] });
+  for (let i = 0; i + 1 < field.length && pairs.length < 4; i += 2) {
+    pairs.push({ home: field[i], away: field[i + 1] });
   }
   return pairs.length ? pairs : null;
 }

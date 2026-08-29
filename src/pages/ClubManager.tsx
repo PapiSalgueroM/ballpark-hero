@@ -32,6 +32,7 @@ import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClub
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { UclGroupsCard } from '@/components/club-manager/UclGroupsCard';
+import { CupBracketCard } from '@/components/club-manager/CupBracketCard';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import { CalendarScreen } from '@/components/club-manager/CalendarScreen';
 import { InboxCard } from '@/components/club-manager/InboxCard';
@@ -1231,6 +1232,13 @@ const ClubManager = () => {
 
               {hubPanel === 'cups' && (
                 <div className="space-y-2">
+                  {/* Round 312: two clearly separated competitions. The old
+                      panel put the UCL groups straight under the domestic cup
+                      line, which read as the cup showing the wrong table, and
+                      the domestic bracket card had never been mounted at all. */}
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">
+                    🏅 {careerLeagueOf(c).cupName}
+                  </div>
                   <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                     {cupAlive ? (
                       <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
@@ -1239,6 +1247,11 @@ const ClubManager = () => {
                     ) : (
                       <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
                     )}
+                  </div>
+                  {/* Round 102 built this bracket; Round 312 finally mounts it. */}
+                  <CupBracketCard career={c} onClubClick={setClubView} />
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
+                    ⭐ Champions League
                   </div>
                   {/* Round 163: every group in the draw, not just mine, plus
                       the projected bracket that locks in after matchday 6. */}

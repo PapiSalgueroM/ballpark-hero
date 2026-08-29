@@ -29,17 +29,18 @@
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_PROMOTION_CONTROL === 'freeze';
 
-const ENTRY = '/tmp/promotion.entry.mjs';
-const BUNDLE = '/tmp/promotion.bundle.mjs';
-let cmPath = `${ROOT}/src/lib/clubManager.ts`;
+const ENTRY = path.join(os.tmpdir(), 'promotion.entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'promotion.bundle.mjs');
+let cmPath = `${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts`;
 if (CONTROL) {
   const src = fs.readFileSync(cmPath, 'utf8');
   const needle = 'const pr = runPromotionRelegation(career);';
@@ -56,7 +57,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm } = await import(BUNDLE);
+const { cm } = await import(pathToFileURL(BUNDLE).href);
 
 const staticLeague = id => cm.REAL_LEAGUES.find(l => l.id === id);
 const effClubs = (state, id) => state.leagueOverrides?.[id] ?? staticLeague(id).clubs;

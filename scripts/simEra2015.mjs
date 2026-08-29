@@ -29,20 +29,21 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/era2015Entry.mjs';
-const BUNDLE = '/tmp/era2015.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'era2015Entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'era2015.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/clubManager.ts');
-const eras = await import('${ROOT}/src/lib/clubManagerEras.ts');
-const era2015 = await import('${ROOT}/src/data/clubManagerEra2015.ts');
-const era2010 = await import('${ROOT}/src/data/clubManagerEra2010.ts');
-const modern = await import('${ROOT}/src/data/clubManagerRosters.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
+const era2015 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2015.ts');
+const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
+const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
 export { engine, eras, era2015, era2010, modern };
 `);
 execSync(
@@ -50,7 +51,7 @@ execSync(
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD } = await import(BUNDLE);
+const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
 const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,

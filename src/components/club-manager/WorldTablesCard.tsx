@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { REAL_LEAGUES, careerLeagueOf, sortedTable, leagueRounds, LEAGUE_NATIONS } from '@/lib/clubManager';
+import { worldLeagueDefs, careerLeagueOf, sortedTable, leagueRounds, LEAGUE_NATIONS } from '@/lib/clubManager';
 import type { CareerState, TableRow } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { FlagImg } from '@/components/FlagImg';
@@ -27,10 +27,13 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   const myLeague = careerLeagueOf(career);
   const [pick, setPick] = useState<string>(myLeague.id);
 
-  // My league first, then the rest in their usual order.
+  // My league first, then the rest of THIS SAVE'S world in its usual order.
+  // Round 312: this list came from REAL_LEAGUES, so an era save offered the
+  // whole modern set, none of it simulated, with a duplicate of the save's
+  // own league under the modern def's name.
   const leagues = useMemo(
-    () => [myLeague, ...REAL_LEAGUES.filter(l => l.id !== myLeague.id)],
-    [myLeague],
+    () => [myLeague, ...worldLeagueDefs(career).filter(l => l.id !== myLeague.id)],
+    [myLeague, career],
   );
 
   const active = leagues.find(l => l.id === pick) ?? myLeague;

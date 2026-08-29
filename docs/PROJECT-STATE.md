@@ -2597,6 +2597,20 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 312.** The Club Manager world plays everywhere, P1s 2 and 3 of the
+  08-28 review. syncWorld had iterated REAL_LEAGUES since Round 95, whose ids never match
+  an era world's (premier2005 vs premier), so era saves' other leagues never simulated one
+  round and read "pre-season, alphabetical order" forever, while the picker offered the
+  whole modern set plus a duplicate zero-point La Liga. worldLeagueDefs is the one era
+  aware list, used by initWorld, syncWorld and WorldTablesCard; existing era saves self
+  heal through syncWorld's catch-up path. The UCL bracket field and projection now take
+  the groups' top twos (the engine's own pos <= 2 rule), winners crossed with runners-up,
+  ending the lottery-club quarter finals he reported; the Cups tab separates Copa and UCL
+  under headers and mounts the never-rendered CupBracketCard from Round 102. Era league
+  ids joined LEAGUE_NATIONS so era picker chips carry flags. New harness
+  simEraWorldTables (five sections, control WORLD_CONTROL=modern); eight CM harnesses
+  ported to run on Windows (os.tmpdir plus pathToFileURL), the other 85 queued on the
+  board. tsc zero.
 - **2026-08-28, night, Round 311.** The ticker lives again, item 1 of the 08-28 review.
   Root cause from the poller's own run ledger: the API-Sports account was suspended
   2026-08-26 18:20 UTC and the fail closed poller went quietly empty. Fix: scores-poll v6

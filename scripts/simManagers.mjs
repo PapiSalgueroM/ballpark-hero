@@ -26,28 +26,29 @@
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_MANAGERS_CONTROL === 'sever';
 
-const ENTRY = '/tmp/managers.entry.mjs';
-const BUNDLE = '/tmp/managers.bundle.mjs';
-let cmPath = `${ROOT}/src/lib/clubManager.ts`;
+const ENTRY = path.join(os.tmpdir(), 'managers.entry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'managers.bundle.mjs');
+let cmPath = `${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts`;
 if (CONTROL) {
   const src = fs.readFileSync(cmPath, 'utf8');
   const needle = 'ensurePress(state);\n  ensureManagers(state);\n  state.wageCap';
   if (!src.includes(needle)) { console.error('control run: the startCareer ensure call to sever is not in the source, refusing a dead control'); process.exit(1); }
-  cmPath = '/tmp/clubManager.severed.ts';
+  cmPath = path.join(os.tmpdir(), 'clubManager.severed.ts').replaceAll('\\', '/');
   fs.writeFileSync(cmPath, src.replace(needle, 'ensurePress(state);\n  state.wageCap'));
 }
 fs.writeFileSync(ENTRY, `
 export * as cm from '${cmPath}';
-export { CM_ROSTERS } from '${ROOT}/src/data/clubManagerRosters.ts';
-export { players as POOL } from '${ROOT}/src/data/players.ts';
+export { CM_ROSTERS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts';
+export { players as POOL } from '${ROOT.replaceAll('\\', '/')}/src/data/players.ts';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
 const store = new Map();
@@ -57,7 +58,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, CM_ROSTERS, POOL } = await import(BUNDLE);
+const { cm, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
 
 const fold = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
 const realNames = new Set();
