@@ -2597,6 +2597,15 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 343.** The owner directives. His final overrides committed
+  verbatim with the operational mapping (docs/OWNER-DIRECTIVES-2026-08.md): the
+  site stays free forever with corporations funding it, no gambling ever, the
+  AdSense review freeze on every crawler-facing file until the verdict, sponsor
+  ready surfaces filed as an arc, approval-first on the high risk list, and the
+  docs/agents/ contracts created as thin stable pointers at the board, which
+  stays the single live queue. Cloud lane status checked for the owner at the
+  same hour: its last push was Round 333 part 2, the Round 335 claim stands,
+  and the quiet gap fits its three hour schedule.
 - **2026-08-29, Round 342.** The real European nights. Era Champions League
   fields for 2005-06, 2010-11 and 2015-16: all 32 group stage clubs per season,
   two-source verified by parallel research agents (Wikipedia as raw wikitext,

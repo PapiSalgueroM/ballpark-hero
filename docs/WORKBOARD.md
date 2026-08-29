@@ -19,7 +19,12 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 343.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 344.
+
+**ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
+until the verdict, ads.txt, the verification code, canonicals, robots.txt,
+sitemap.xml, production routes, legal pages and navigation are FROZEN except for
+verified fixes. The fences guard them; the added rule is restraint.**
 
 ## Inbox (unclaimed)
 
@@ -83,6 +88,10 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   as the default, and a legibility pass over the games (the sweeps at 320/390 run
   in both themes when this lands). Sizeable, its own round or two.
 
+- SPONSOR-READY SURFACES (owner directive 13): configurable presented-by slots for
+  challenges, tournaments and hubs, admin configured, never hard-coded brands,
+  clearly separated from gameplay. An architecture round first (where the config
+  lives, how a surface renders empty), then surfaces game by game.
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
   indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
   the indexed surface. CAUTION built into the item: thin or near-duplicate pages hurt as
@@ -190,6 +199,13 @@ Standing claims:
 
 ## Done
 
+- THE OWNER DIRECTIVES LAND, Round 343 (desktop lane, 2026-08-29).
+  docs/OWNER-DIRECTIVES-2026-08.md carries his final directives verbatim with the
+  operational mapping: free forever (overrides the spec premium mention), the
+  AdSense review freeze, the sponsor architecture arc filed, the high-risk
+  approval list confirmed as standing law, and docs/agents/ created as the four
+  stable contracts he asked for twice, each deliberately pointing at the board
+  as the single live queue so no second status page can rot and contradict it.
 - THE REAL EUROPEAN NIGHTS, Round 342 (desktop lane, 2026-08-29). The last Club
   Manager residue from the review: era saves played FOUR Champions League groups
   because the continental pool stopped at sixteen clubs from the two baked
