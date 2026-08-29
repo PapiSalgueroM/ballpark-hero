@@ -610,6 +610,8 @@ current:**
 | `docs/MASTER-BUILD-SPEC-2026-08.md` | **LIVE.** The owner's product north star (2026-08-29). Read with the reconciliation beside it. |
 | `docs/SPEC-RECONCILIATION.md` | **LIVE.** Every spec section mapped to shipped rounds. Read BEFORE claiming spec work. |
 | `docs/PARALLEL-AGENT-OPS.md` | **LIVE.** The multi-agent operating rules, the lane ownership split, and the one deviation from them. |
+| `docs/OWNER-DIRECTIVES-2026-08.md` | **LIVE.** The owner overrides: free forever, the AdSense review freeze, the approval list. |
+| `docs/PRODUCT-MISSION.md` | **LIVE.** The mission and the four-ways-to-play design target. |
 
 The repo also carries five project skills in `.claude/skills/` (dukb-data-guardian,
 dukb-game-designer, dukb-sim-architect, dukb-qa-hunter, dukb-visual-qa). They load
