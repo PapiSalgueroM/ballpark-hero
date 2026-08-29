@@ -1,0 +1,394 @@
+# Master Build Spec Reconciliation
+
+Generated 2026-08-29 by eight parallel reading agents over all 7690 lines of
+docs/MASTER-BUILD-SPEC-2026-08.md, checked against the round history in
+docs/WORKBOARD.md and docs/PROJECT-STATE.md (rounds 311 to 336 landed the week
+this spec arrived). Read this BEFORE claiming spec work: done means shipped and
+fenced, partial names the shipped half, new is genuinely unbuilt, constrained
+names the standing rule that limits the section, decided records agreement with
+a decision already taken. Section counts: 361 total, done 38, partial 185, new 96, decided 32, constrained 10.
+
+
+## Done, shipped and fenced
+
+Do not rebuild these; the rounds named did the work.
+
+- **12 User identity system (random safe usernames)** (rounds 318): R318 shipped exactly this: sports-word-pool random handles, legacy Baller-NNNN regeneration, render-side blocklist with stable substitutes for dirty stored names, and fixed the kkk/xxx normalizer bug; simHandleNames fences it.
+- **53 Media / headlines** (rounds 292, 294): Generated press, fan and rival reaction driven by real sim facts exists, with simInventedQuotes and simNoRivalNames fencing it; the spec's 'never let the model invent match facts' matches the shipped derive-from-engine rule and the never-invent-quotes-for-real-people rule.
+- **60 NBA Front Office**: /nba-front-office ships with cap, trades, the play-in, best-of-7 playoffs and dynasties per the registry; shipped before this week's rounds.
+- **61 NFL Front Office**: /front-office ships as the full NFL GM sim (cap, trades, drafts, dynasties); shipped before this week's rounds.
+- **62 MLB Front Office**: /mlb-front-office ships with real 2026 rosters, the tax line, trades and October; minor-league and arbitration depth unverified against the spec's list.
+- **63 NHL Front Office**: /nhl-front-office ships with the hard cap, OT points, the bracket and the Cup; lines/pairs depth unverified against the spec's list.
+- **70 Sign the Player auction rework** (rounds 327): Round 327 executed this spec line by line: random position order, list price openings, live wars, decay with snap button, positions-only running order, best player headlining, end-of-auction fill. simAuctionRoom fences it.
+- **73 Player Stock Market** (rounds 329): Round 329 rebuilt it to the anonymous-stats format: six seasons back, 200M, position by position on numbers only, no reveal before the choice, real market value rows, lock-proof wallet. simStockCampaign fences anonymity and scoring.
+- **79 Rebuild loop** (rounds 333): Round 333 built the spec whole: position spin in hidden seeded order, keep/sell with three priced replacements plus bench promotion, board and finance envelopes, 60M overdraft with forced sales, five card punishment deck with one safe card. simRebuildLoop plus a Chromium playthrough.
+- **92 Game deprecation policy** (rounds 314, 315): Round 314 retired Overrated or Underrated and Tier List with redirects (legacy routes verified in Round 322's redirect smoke); Round 315 rebuilt the Billion Dollar Game (exact one billion in dollars, scoring on the sitewide ~100 scale). Matches the spec's decisions.
+- **95 Mobile** (rounds 320, 330, 334): Round 320 swept all 140 routes at 320/390 and fixed the Header overflow; Round 330 fixed the Soccer Career identity row and played a full Club Manager season at 390; Round 334 closed the pass with the full 128-game playGames walk at 390, zero findings.
+- **99 Bingo/Draft/Cards shared data** (rounds 323, 325, 328): The new card and draft games all draw from the same verified player feeds (fetchSquadPool, career tables); no separate card databases were created.
+- **102 Share cards**: ShareButtons plus ShareCard image card ship on games (copy, X, WhatsApp, messaging); no personal data in the card. Predates this week's rounds.
+- **110 Career Ladder** (rounds 319): Flag coverage measured 274 of 274 clubs after the hyphen bug fix plus 60 verified entries; large pool already in place.
+- **113 Fantasy Draft UX** (rounds 326): Scroll replaced with a top-ten best-available shortlist plus full-pool search, goal stated upfront, draft settles into a scored verdict; the excessive-scrolling complaint was the round's brief.
+- **15 Streak system** (rounds 293, 297, 320): src/lib/streaks.ts implements ET calendar dates, per-game and global streaks, idempotent per-day crediting, current and longest streak display via the header flame (fenced in playIphone). The R293 dailies checklist was deliberately retired in R297 on owner instruction.
+- **18 Help / question mark system** (rounds 321): GameHelp mounted on all 69 shell games, 24 pages keep bespoke rules controls, all 113 games proven to show a visible rules affordance by playHowTo with a blind control. The stricter reopenable-mid-game-everywhere tightening is queued on the board.
+- **22 Indexing audit** (rounds 257, 282, 288, 324, 332): Covered by the standing fence suite: simIndexing, simSitemap (derived lastmod ledger), simHeadTags, simPrerender noindex checks, the soft-404 pre-boot marker, canonical rules, IndexNow pings (131 URLs R332). Search Console watch on the 88 not-indexed is ongoing per R324.
+- **23 AdSense / ad safety**: simAdsense is a standing built-site fence and ad placement follows the between-content pattern; no gameplay-adjacent ad traps exist.
+- **D11 Game registry** (rounds long-standing): src/data/gameRegistry.ts (GameDef with slug, category, daily, isNew) is the source of truth for navigation, sitemap and the harnesses.
+- **D22 Simulation determinism** (rounds 325, 326, 328, 333): Seeded PRNG is the house pattern: daily seeds, Lehmer streams with warmup, deterministic season settles the harnesses replay.
+- **D43 Ticker source of truth** (rounds 311, 317): The ticker reads one live-event domain: Supabase score tables fed by the scores-poll edge function off ESPN, no hardcoded arrays.
+- **D44 Live ticker failure modes** (rounds 311, 332, 336): Never-invent-a-score is the data rule; the watchdog files a report when a whole day writes zero rows or the cron dies, proven by drill.
+- **D46 Game page SEO template** (rounds long-standing, 324): Per-game SEO copy (about 47k words, non-generic), GameSeoContent block, and the keyword pass through titles and descriptions.
+- **D47 Structured data** (rounds 53, 281): JSON-LD WebSite, breadcrumbs and FAQ ship and are fenced by simSchema (template JSON-LD pinned to SITE_JSON_LD); no fake ratings anywhere.
+- **D48 Internal linking** (rounds long-standing): Related-games and hub links ship and simInternalLinks is a standing built-site fence.
+- **D50 Game engine code split** (rounds long-standing): Every game route is React.lazy code-split in App.tsx, so heavy engines load only on their own routes.
+- **D59 Game routing** (rounds 272, 322): One flat canonical route per game; retired routes redirect and are fenced (simRetiredRoutes), all four legacy redirects re-proven under router v7.
+- **D71 Flag component** (rounds 319): FlagImg/flagUtils serve flagcdn flags sitewide, with flagForClub coverage measured at 274 of 274 clubs after the hyphen fix.
+- **D75 Sports data fallbacks** (rounds 294, 325): Baked verified fallback pools ship for DB-backed games (Transfer Path fallback regenerated from its own pool; deduped duel pool) and made-up data is banned by standing rule.
+- **D128 Rights-aware asset pipeline** (rounds 133, 286): Only flagcdn.com external images, all brand assets from the committed generator, fenced by simBrand and simNoRivalNames; no scraped athlete images anywhere.
+- **D129 Brand safety** (rounds 330, 334): Enforced by standing rules and harnesses (invented-quotes sim green Round 334); the casino/gambling question is parked as a decision owed with a written NO recommendation (Round 330), matching the spec's own ban.
+- **D130 Safer real-person game design** (rounds 334): Exactly the repo's standing rule: real stats are reporting, invented quotes/deeds on real people are banned and harness-fenced.
+- **D140 QA test matrix for SEO** (rounds 280, 282, 314, 334): The 15 built-site fences (head tags, sitemap with derived lastmod, schema, internal links, prerender, indexing) cover every listed item and all ran green on a fresh build in Round 334.
+- **D154 Mobile first for games** (rounds 320, 330, 334, 336): The mobile pass shipped and closed: all 140 routes fit 320/390, full playGames phone walk zero findings, touch behavior fixed on the ticker.
+- **D157 First milestone: platform shell** (rounds 311, 313, 316, 318, 321): Header, ticker, footer, accounts, leaderboard with moderated names, reports pipeline, game registry, help standard and the SEO framework all exist and are fenced.
+- **159 Release Process** (rounds throughout): Every round already runs the type gate, build, sim harnesses, browser sweeps, mobile QA and SEO fences before shipping; this is the codified verification-gates practice.
+- **168 Regression Test List** (rounds 320, 334): runAllSims (121 harnesses), sweepGames, playGames (128 games at 390, zero findings, R334) and the 15 built-site fences cover this list and more, proven end to end on Windows.
+
+## Constrained by standing law
+
+The spec itself defers to lawful basis on most of these; our answer is already written in CLAUDE.md and docs/LEGAL_REVIEW.md.
+
+- **58 Draft night presentation**: The four My Career games open with a draft night beat, but the spec's sequence calls for team logos and player images/avatars, which the standing rules ban (no logos, crests or athlete likenesses; only flagcdn.com images).
+- **89 Tower defense, athlete heroes**: Nothing shipped, and the Inbox already records the constraint the spec itself gestures at: real athletes as fictional characters with invented abilities crosses the no-likeness / no-invented-deeds rules, so it must use generated athletes or role archetypes, never real names on towers.
+- **D41 Media system** (rounds 334 (fence run)): Press/media generation exists (usCareerPress, career media) but is governed by the never-invent-quotes-on-real-people rule, fenced by the invented-quotes harness; article-references-event-IDs not implemented.
+- **D69 Player profile component** (rounds 328): Name-plus-stats card frames exist, but the avatar/image field is barred by the no-player-photos and no-real-likeness rules; flagcdn is the only image host.
+- **D70 Team profile component**: The crest field is barred by the no-club-crests/logos rule; team identity renders as text plus country flag instead.
+- **D83 Manager market**: Rebuild phase three (real manager hires) is filed desktop-gated (Round 331 record): who manages whom changes weekly and needs web verification, and a manager's value must derive from verifiable records, never invented onto a real person.
+- **D94 College TV rights**: Nothing shipped; must use fictional network names per the no-brand rules the spec itself echoes.
+- **D114 Tower defense architecture**: Nothing shipped; the idea is filed in the board Inbox (Round 330) with legal constraints marked, athletes only as fictionalized archetypes per the no-likeness rules.
+- **D118 User customization (avatar)**: Avatar builder is filed in the Inbox (Round 330) with legal constraints marked; must never imply a real athlete, per the no-likeness rule.
+- **170 Competitor Inspiration Rule**: simNoRivalNames bans every listed competitor name from shipped files (src, public, supabase, scripts); studying them is fine in docs, but naming them or shipping FIFA-the-game vocabulary is fenced.
+
+## Decided, spec agrees with a taken decision
+
+- **0 Executive directive and non-negotiable principles**: Matches standing practice: validators fail closed (CLAUDE.md rule, R315 re-fixed a fail-open validator), no gambling mechanics (casino question parked with a written NO recommendation, R330 board entry), every game needs help UI (R321 audit), data never invented.
+- **5 Repository-first execution rule**: Matches existing practice: WORKBOARD claim-before-build protocol, the standing retire pattern (registry marking, redirects, stubs) used in R314's two retirements, and CLAUDE.md's inspect-first rules.
+- **119 Legal / rights safeguards**: Matches the standing rules in CLAUDE.md and docs/LEGAL_REVIEW.md: no logos/crests/kits/photos, required disclaimer, provenance tracked, no invented words on real people, simNoRivalNames guard.
+- **120 Player likeness / avatar strategy** (rounds 330): Matches the standing no-real-athlete-likeness rule; the avatar builder idea was filed on the board in Round 330 with the legal constraint explicitly marked.
+- **121 AI usage policy**: Matches practice already in force: AI validators fail closed and are never the authority for scores or facts, which come from the verified Postgres data (validators-fail-closed rule, July 2026 P1).
+- **133 No pay-to-win core leaderboard**: Matches the current state and stance: nothing on the site is paid, and monetization questions (the casino idea) are parked as decisions owed to Anthony with a written NO recommendation (Round 330).
+- **24 Casino decision** (rounds 330): Matches the decision already recorded: R330 filed the casino question as a decision owed to Anthony with a written NO recommendation (WORKBOARD Inbox / PROJECT-STATE), and no wagering mechanics exist. Also aligned with the family-friendly standing position.
+- **D86 Life-choice safety**: Matches the standing legal/content rules in CLAUDE.md and docs/LEGAL_REVIEW.md; no shipped content contradicts it.
+- **D112 Chat safety**: The spec's own conclusion (function without open chat, async challenges first) matches the shipped state: no chat exists and none is planned near-term.
+- **D132 Feature review**: Matches how the WORKBOARD/PROJECT-STATE lanes already triage work by value, risk and reusability, informally.
+- **D133 Bug priority**: P0/P1 language is already project practice (the July fail-open P1, Round 315's P1); no separate scheme needed.
+- **D146 Fix the root shared component** (rounds 313, 319): Already the working rule: the spec's own flag example happened for real (flagForClub hyphen fix audited across all 274 clubs, Round 319; single footer fixed at the shared mount, Round 313).
+- **D147 No fake depth**: Matches Appendix Q and the repo's correctness-first covenant; harnesses are built to catch fake statistics.
+- **D148 Explain consequences** (rounds 333): Design rule already followed (e.g. Rebuild's empty-shirt resort states its cost in the rating immediately, Round 333).
+- **D149 Player agency**: A design rule, consistent with shipped sims; no single audit exists.
+- **D151 Difficulty rule** (rounds 323): Matches practice, e.g. Sports Bingo's three CPU tempers were retuned to differ by behavior, not multiplier (Round 323).
+- **D152 Never punish refresh**: Already a house invariant (daily puzzles ET-seeded, saves in localStorage/DB); Appendix N repeats it and nothing shipped violates it.
+- **D156 Test happy and weird paths**: This is the harness culture the verification-gates section codifies; controls and edge paths are mandatory per CLAUDE.md.
+- **K Implementation order by reusability**: Matches the working prioritization: data and verification first, shared engines before experimental games.
+- **L Claude Code operating instructions**: Superseded in detail by CLAUDE.md's verification gates (real tsc command, build, sims, sweeps), which are stricter and machine-specific.
+- **M AI coding agent rules** (rounds 316): Each rule matches a standing repo rule: validators fail closed (fenced sitewide Round 316), no secrets in bundles, no fake quotes, no cash gambling, no unlicensed images.
+- **N Do-not-ship list** (rounds 313, 321, 332): Nearly every line has a live guard: single footer (313), help and report on every game (316, 321), stale-ticker watchdog (332), no gambling per the parked NO recommendation.
+- **O Success definition**: A vision statement, consistent with the project's stated direction; nothing to ship.
+- **P Owner's feature translation matrix** (rounds 330): Matches how owner asks are already translated on the board (Round 330 transcribed his ideas list with engineering interpretations and legal constraints).
+- **Q Final build commandment**: Restates the repo's existing covenants: correctness over fake polish, no invented data, reusable engines, honest live labeling.
+- **164 Quality Bar**: Matches the repo's existing done-means-tested-and-measured practice (CLAUDE.md verification gates, measured-floor harness rules).
+- **169 Product Philosophy** (rounds 330): The not-a-casino line matches the parked casino decision with a written NO recommendation (R330 board entry); the rest matches standing practice.
+- **171 External-Fact Verification Rule**: Matches the standing two-source-verify-or-mark rule (CM_PARTIAL) and the derived-never-typed rule from R294; the UCL/WNBA versioned-format data itself is not built.
+- **172 Google / Ads / Search Rule**: Matches existing practice: simAdsense fences placement, the R324 SEO pass only described real games, and the scaled-content warning matches the load-bearing gameContent copy stance.
+- **175 The Biggest Product Opportunity**: Retention-over-game-count matches this week's practice (retiring games R314, deepening flagships) and the offers-before-asks covenant.
+- **178 Final Instruction to Claude Code**: Matches the established workflow exactly: P0 fixes first (this week's rounds), harness-gated shipping, no fake UI, documented decisions in PROJECT-STATE.md.
+- **Appendix A Owner's Priority Phrases Translated**: These translations already govern practice: indexability fences, data validation harnesses, no placeholder UI, original designs with rival names banned.
+
+## Partial, the shipped half is named
+
+The unshipped half is claimable work; check the board before starting.
+
+- **1 Product vision and layers**: Layers A (snack games), B (dailies, streaks, leaderboards) and much of C (careers, Club Manager, Rebuild, drafts) exist; Layer D identity beyond usernames and Layer E beyond the ticker do not.
+- **3 Current-product baseline and owner pain points** (rounds 311,313,314,317,318,319,326,327,329,331,333,336): Much of the P0 pain list shipped this week: ticker fixed (311, 317, 332, 336), duplicate footer removed (313), headline shortened (314), Rarity leakage fixed (319), auction logic rebuilt (327), Fantasy Draft reworked (326), Player Stock Market rebuilt (329), Rebuild core loop (331, 333), safe random leaderboard names with moderation (318). Club Manager depth items (god mode, staff, facilities, skill trees, NIL, animation) remain open.
+- **4 Development strategy: reusable engines** (rounds 325,326,328): Some shared engines exist (shared deterministic season engine reused across R325/326/328, daily PRNG seed, sitewide ~100 scoring scale, shared GameShell/GameHelp); most of the 26 listed engines are not formalized as shared systems.
+- **6 Shared data model (player, team, league, season, competition)** (rounds 312): Real Postgres tables exist (player_market_values 2004-2026, career tables, live_scores) and R312's worldLeagueDefs made league defs era-aware, but there is no single normalized schema with provenance, confidence and rule-sets-by-season as specified.
+- **7 Data quality system** (rounds 294,315): Two-source verification and CM_PARTIAL marking are standing rules; R315 fixed age-0 and stale-value rows, R294 made derived puzzle fields computed not typed with a fence. The formalized confidence/verification/conflict metadata layer and automated pre-deploy check suite do not exist as one system.
+- **8 Country and region display (flags)** (rounds 312,315,319): Flags rolled out widely: era picker chips (312), Squad Deal pool and banker (315), Missing XI both sides and Career Ladder 274/274 clubs (319). Not yet universal; note the standing rule that flagcdn.com is the only permitted image host.
+- **9 Live sports ticker** (rounds 311,317,332,336): Core is live: ESPN open feed with today+tomorrow slates (311), crawling wire with pause semantics (317), an outage watchdog (332), mobile freeze fixed and speed doubled (336). Missing: game center pages, followed-team personalization, filtering. Team logos are constrained: no league or club logos ever.
+- **10 Global site layout / shared shell** (rounds 313,321): The duplicate-footer rule is done and fenced (simSingleFooter, 313); GameShell mounts the standard help affordance on 69 games (321), and report-a-bug lives in the global footer. Breadcrumbs, AdSlot guardrails and a formal AppShell per the spec's component list are not unified.
+- **11 Home page** (rounds 314,293,297): Headline shortened to the spec's exact recommended shape with legal text in the footer (314); Most Played and What's New sections exist; the dailies checklist was shipped (293) then removed on the owner's instruction (297) and is fenced to stay retired. Continue Playing, With Friends and profile summary sections do not exist; the offers-before-asks fold rule constrains adding asks above the first tile.
+- **13 Profile system** (rounds 301,320): A profile with played-games completions ({date, slugs} payload, R301) and a header streak flame exists and is measured (simMobileChrome, playIphone R320). The full spec (Ball IQ, world rank, trophy cabinet, career/management/conquest/social panels) is not built.
+- **15 Streak system (lines 696-700 only)** (rounds 293): A canonical local streak record with an exact Eastern-time day definition exists and drives the header flame (read by R293's picker). It is browser-local only; a cloud-backed canonical source is not shipped. Only the section's first two requirement lines fall in this range.
+- **38 Academy**: Club Manager has scouting/academy touchpoints (clubManager.ts, wonderkidFactory.ts), but the spec's filterable academy scouting screen with archetypes, potential ranges and scout confidence does not exist.
+- **39 Squad page**: Club Manager shows squad rows with core attributes and Rebuild (R333) shows fit/rating cards, but the full per-row set (wages, contract, morale, fitness, form, satisfaction drilldowns) is not shipped.
+- **40 Tactics** (rounds 330): Formations and shape changes exist and are played through by playClubManager (20 shape changes in a season, R330), but roles, duties, mentality, pressing, tempo and free-form positioning with realistic consequences do not.
+- **41 Substitutions** (rounds 330): Subs exist and work (45 subs in the R330 full season playthrough), but the swap-and-validate panel with prioritized suggestions (fitness, cards, tactical need) is not built.
+- **43 Match Center**: Club Manager sims matches with half-time/full-time interaction points, but there is no merged Match Center with Quick Sim / Watch / Manage modes or the full stat sheet (xG, interceptions, saves).
+- **45 Event timeline**: Match events are narrated in Club Manager and the career sims, but the minute-stamped timeline with natural added-time display (45+2, 90+5) is not a shipped component.
+- **47 Tables and brackets**: League tables and playoff brackets exist inside the front office and dynasty sims; the full spec (form, qualification status, cup path views, GF-GA formatting everywhere) is not uniform.
+- **48 Soccer Career 2.0**: Soccer Career is the shipped flagship with youth start, potential ranges and development-by-effort; the BitLife-plus-interactive-gameplay reframe is not done.
+- **49 Player development** (rounds 96, 116): Development driven by age, potential headroom, minutes and choices exists (potential-headroom growth is a guarded regression from Rounds 96/116); the full activity menu (nutrition, tactical study, mental development) does not.
+- **51 Player life** (rounds 319): Social media (the gram, made position-aware in R319), fame, money and lifestyle threads exist in Soccer Career; family, home, transport, education and hobbies do not. The responsible-content caveat matches house practice.
+- **52 Sponsorships / brand**: Endorsement/brand beats exist in Soccer Career; the fictional-sponsor-brands requirement is already the standing legal rule (no real brand assets), so what exists complies.
+- **54 Player relationships**: Morale, manager relationship and request/response beats exist in Soccer Career and Club Manager; the full request menu (captaincy, new position) and dressing-room propagation are not systematic.
+- **55 Rivalry system** (rounds 292): A career rival exists in Soccer Career (the Ballon d'Or rival, honours reconciled in R292) and derbies exist in the season engines; media/club rivalry as a general system does not.
+- **56 International career** (rounds 292): Soccer Career has international tournaments and caps (World Cup champions reconciled in R292); youth internationals, selection pressure and Club Manager international job offers are not shipped.
+- **57 College Football Dynasty 2.0**: /cfb-dynasty ships as a full program sim (NIL, transfer portal, 12-team Playoff, dynasties) plus /cbb-dynasty; academics, donors, TV and atmosphere systems are not there. The fictional-generated-players clause matches the standing no-real-likeness rule.
+- **59 Front office engine, universal**: Four front office sims share src/lib/frontOffice.ts and foNames.ts with sport-specific configuration, which is most of the spec's shape; not every listed system (owner, staff, fan relations) exists in all four.
+- **65 Conquest engine 2.0**: Four daily Conquest maps ship (NFL, NBA, MLB, NHL) but there is no shared reusable engine, no soccer leagues, and no historical, fantasy, multiplayer or custom modes. Team colors/icons are limited by the no-logos rule.
+- **66 Conquest gameplay**: The basic annex loop (matchup, battle, territory, history, last survivor) is exactly what the shipped Conquest games run; the optional extras at the section's tail were cut off in this line range.
+- **67 NBA/NFL/MLB/NHL Conquest**: NFL, NBA, MLB and NHL Conquest exist on their maps. Soccer per-league/world conquest and the college map are still Inbox items (Anthony's 08-29 list, 'conquest map overhaul').
+- **69 Universal Draft Engine** (rounds 326, 327, 328): Several draft/auction games exist and were reworked this week (Fantasy Draft R326 shortlist+settle, auction R327, Gauntlet Draft R328, shared season settle engine from R325), but there is no single unified draft engine with all listed modes.
+- **71 Sports Bingo** (rounds 323): Round 323 built the core to spec: 24 real conditions, ten timed packs, manual marking, daily shared card, unlimited, three CPU tempers. Online/local/friend-room modes deliberately out of scope per the review's backend note.
+- **72 Search and Discard** (rounds 325): Round 325 shipped it: search three, keep one, discards leave the whole game, CPU or pass-and-play, one deterministic 38-game season settle. Online rooms explicitly out of scope (backend note recorded in the round).
+- **74 Rarity** (rounds 319): Round 319: the rarest answer is never revealed again (top five famous picks shown instead) and the goal is stated on the board. The full anti-exploit stack (daily session token, server-side recording against reset fishing) is not evidenced as shipped.
+- **75 World XI position matrix** (rounds 319): Round 319 closed the LWB-into-RW hole (winger slots refuse wing backs). The other half, eligibility from verified positions actually played, is filed for the desktop lane because it needs per-player position history data.
+- **76 Build Your XI** (rounds 315): Round 315 fixed exactly the goalkeeper-as-CM case: the slot's role now reaches the validator and the validator fails closed (v6). The richer simulation (tactical fit, chemistry, detailed result) has not shipped.
+- **77 Banker evaluates the roster** (rounds 315): Round 315 moved Squad Deal's banker floor from the single worst box to the 30th percentile of the remaining pool, ending the 78-into-a-pool-of-80s lowball. A full roster-aware offer model (positions, needs, rarity) is not evidenced.
+- **78 Rebuild 2.0 terminology and managers** (rounds 331): Round 331 rewrote the quoted fake terminology in place. Real manager hires (phase three) are desktop gated and constrained by the standing rule that a manager's value must derive from verifiable records, never invented on a real person.
+- **93 Home / game design system** (rounds 321, 335): Round 321 standardized help ('?' via GameHelp on all 69 shell games, playHowTo fences all 113); Round 335 (in flight) tightens to reopenable-mid-game everywhere. Report issue and share are sitewide (footer, ShareButtons). A full audit of score/progress/restart consistency per game is not recorded.
+- **94 Performance** (rounds 336): Route-level React.lazy code splitting, per-route snapshots and fast first paint are standing architecture; Round 336 tuned ticker cost/behavior. No dedicated round evidences image compression, preloading or batched API audits; no 60fps interactive games exist yet.
+- **96 Accessibility** (rounds 306, 317, 336): Keyboard focus behavior is a kept promise (R306 focus-pause, preserved through R317/R336), and an /accessibility page exists with fences among the 15 built-site checks. A full sitewide audit of reduced motion, contrast and screen-reader labels per game is not recorded this week.
+- **98 Card art system** (rounds 328): Round 328 built band-coloured card frames for Gauntlet Draft ('original card art, no rival vocabulary'), but there is no sitewide tiered template system (base/rare/epic/legendary/historical/event). Any art must stay clear of the FIFA-video-game vocabulary ban.
+- **98 Trading cards / pack opening (tail of section in range)** (rounds 323, 328): Own card frames and band colours exist in Gauntlet Draft and timed pack opening exists in Sports Bingo; no standalone collectible card game or rarity glow/walkout presentation. Constrained by the no official card designs/logos rule, which the spec itself states.
+- **100 News engine** (rounds 292, 331 lineage): Sim games generate narrative press/inbox events (press and invented-quotes harnesses fence them); no generalized headline/sentiment engine. Constrained by the never-invent-quotes-on-a-real-person rule.
+- **103 Daily game engine** (rounds 293, 323): One shared daily per game via ET-date seeding (dailyPrngSeed) with separate unlimited modes exists across 70+ dailies; server authority over date/seed/attempts and anti-refresh enforcement do not exist, dailies are client computed.
+- **104 Global leaderboard** (rounds 318): Shared board exists with Today and All Time via global_leaderboard/global_rank RPCs, safe names fenced (simHandleNames); Week/Month/Season views, country and friends filters, avatars and trend are new.
+- **105 Point system** (rounds 323, 326, 328, 329): Per-game score models mapped onto the bounded sitewide 0-100 scale exist for the new and reworked games (bingo squares/lines/blackout, 16 a round in Gauntlet, draft season-points share); not every listed game type has been audited onto it.
+- **106 Sport-specific difficulty** (rounds 323, 328): Difficulty is measured and tuned per game (CPU temper curves, opposition ladders retuned against measured draft distributions), not arbitrary randoms; no cross-game difficulty model using era/popularity/data confidence.
+- **107 Puzzle QC pipeline** (rounds 294, 323): Generators validate before publish in specific games (Transfer Path hints derived and proven against the graph, bingo completability pass with sole-satisfier guard, report monitoring via the footer pipeline); no single generic candidate-to-publish pipeline.
+- **108 Data bug regression tests** (rounds 294, 334): Data-validation harnesses fence real records (career rows, medallist floors, 121-harness suite), but the specific age-0/value-0/current-team/image-fallback checks are not a named regression suite.
+- **109 Puzzle pool expansion** (rounds 294, 319): Pools exist at scale (900+ Transfer Path puzzles, Career Ladder additions) and get topped up per round; there is no ongoing puzzle-factory refresh cadence with difficulty distribution.
+- **111 Missing XI** (rounds 319): Both sides fly country flags and bubbles no longer overlap (width derived from same-row neighbour); the add-many-puzzles half is untouched. Club colors limited by the no-kits/crests rule.
+- **112 Clue Auction / Alphabet Sprint / Bingo** (rounds 319, 323): Alphabet Sprint now states full names count, and Sports Bingo shipped whole with validation, timers and score model; Clue Auction got none of the listed upgrades this week.
+- **115 Sports ticker + game pages** (rounds 311, 317, 336): The wire carries the day-ahead slate, every score card is a link, and motion/pause behavior is fenced (playLiveTicker); dedicated live match center / preview / stats pages behind the click are new.
+- **118 Real-time vs simulation vs historical data** (rounds 311, 332): Live scores live in their own tables fed by scores-poll and never touch game data, and sim worlds are user-local; the separation is de facto, not a declared architecture.
+- **122 Admin console** (rounds 316, 332): AdminLogin plus AdminReports exist and read the question_reports shelf, which the ticker watchdog also files to; users, puzzle pools, source status and analytics views are new.
+- **123 Report issue admin workflow** (rounds 316): The report pipeline delivers honestly and lands on the admin shelf; the status/priority taxonomy (New/Investigating/etc.) is not implemented.
+- **124 Testing strategy** (rounds 334): 121 node harnesses plus browser sweeps and playthroughs cover unit, integration, E2E, data validation and mobile visual passes, all proven green on Windows in Round 334; load tests do not exist.
+- **125 Core acceptance tests** (rounds 317, 318, 330, 336): Ticker states (playLiveTicker), leaderboard name/dup fences (simHandleNames), and a full Club Manager season through the phone UI (playClubManager) are covered; cross-device save round-trip and profile-accuracy acceptance are not.
+- **126 Performance acceptance**: React.lazy route splitting and prerendered snapshots exist site-wide; no explicit performance/blank-screen acceptance harness.
+- **127 Error handling**: Validators fail closed with friendly retry copy and fallback data files exist for key games; no site-wide fence against raw stacks/NaN/age-0 renders.
+- **128 Save system** (rounds 301, 331): Long-form games persist locally with stable save ids (renaming a stored id was explicitly avoided in Round 331) and completions sync; autosave/multiple slots/versioned migrations/cloud saves as specced are not there.
+- **130 Security** (rounds 316, 332): RLS on all public tables, secrets confined to private.app_secrets, exec_sql hole closed, admin route gated, LEADERBOARD-SECURITY doc from 2026-08-26; leaderboard scores are still client-submitted rather than server-validated.
+- **17 Global game contract** (rounds 301, 313, 315, 321): The soft contract exists: gameRegistry GameDef, GameShell with standard help/nav/footer/SEO, the sitewide ~100 scoring scale (simScoringCoverage), completions recording, share buttons. There is no uniform startGame()/submitAction()/finishGame() code API across games.
+- **19 Report issue system** (rounds 294, 304, 316, 332): The footer report button, category chips (incl Wrong answer), delivery relay (fixed to report honestly, origin allowlist), question_reports table and an admin screen that reads the shelf all exist; reports have driven real fixes (R294). The full admin workflow (priority, assign, comments, analytics dashboard) does not exist.
+- **20 Analytics** (rounds 285): GA4 wired since R285 (cookie-consent gated) with Lovable project analytics as the totals source. The spec's per-event taxonomy (hint use, abandon, achievement, level-up etc.) is not instrumented.
+- **21 SEO page clusters** (rounds 324): Six sport hub pages exist with keyword-worked descriptions (simHubs fence), plus 47k words of per-game SEO copy; the exact URL list in the spec (per-sport -games/-trivia/-simulator slugs) is not what shipped.
+- **25 Club Manager 2.0 flagship** (rounds 95-116, 206, 312, 330): Most pillars exist in src/lib/clubManager.ts: squad, transfers, contracts, tactics, matches, board, morale, finances, facilities, academy, scouting, sponsors, era world simulation (R312 fixed era leagues and cup brackets), a full mobile season proven in R330. Staff, media, international management and career progression depth are absent.
+- **26 CM save setup** (rounds 312, 330, 331): Club pick, historical era saves (clubManagerEras) and manager naming (real-name gate) exist; the long pre-save slider list, god mode and face-builder manager creator do not. The real-manager option is also constrained: R331 records that manager values must derive from verifiable records, never be invented on a real person.
+- **30 Board objectives** (rounds ~102-116, 333): BoardObjective and boardConfidence exist in Club Manager, and the Rebuild loop (R333) runs board demands with a punishment deck. The full multi-dimensional category list (nationality quotas, wage control, brand growth) is not there.
+- **31 Sentiment meters** (rounds ~95-116): Board confidence and per-player morale exist and diverge on the same action (measured: full morale range worth ~17 league points). Separate fan approval, staff morale and ownership meters do not exist.
+- **32 Finance system** (rounds ~95-116): Budget, wage bill, transfer fees and sponsor income exist; the daily/weekly/monthly projection dashboard (burn, annual forecast) does not.
+- **33 Ticketing / concessions / sponsors** (rounds ~116): SponsorOffer/SponsorDeal exist in clubManager.ts; ticket, concession and merchandise pricing controls do not. The spec's fictional-sponsor rule matches existing practice (no real-brand claims).
+- **34 Facilities** (rounds 116): A single facilities level plus academy/training/scouting infrastructure exists (R116); the ten separate 0-10 facility tracks with maintenance do not.
+- **35 Transfer engine** (rounds 95-206, 315): Negotiation with fees, release clauses, loans, contract years/wages, morale consequences and market-value anchoring exists (Sign the Player openings fixed to market value R315). The full add-on matrix (installments, sell-on, swaps, obligation to buy, agent fees) is not implemented.
+- **37 Scouting** (rounds 116): A scouting network with current-ability vs potential estimation whose accuracy scales with investment exists (R116); named scouts with regional/positional specializations do not.
+- **D1 Domain model overview**: Game, simulation, sports-data and content domains exist in code (registry, engines, lib fetchers); social and economy domains do not exist.
+- **D2 Database design principles**: Supabase Postgres with RLS on all public tables, immutable career/market history tables, count(*) discipline; no formal snapshot/version IDs or FK-driven schema across the board.
+- **D3 Example user table** (rounds 293, 301, 320): Accounts exist with profiles, streaks and completions, but streak/daily state lives largely in localStorage; no XP, Ball IQ or level fields.
+- **D4 Game result table**: Leaderboard rows are written server-side via RPCs with security hardening; most game results stay local and carry no version/session metadata.
+- **D5 Leaderboard architecture** (rounds 318): Server-side leaderboards with RPCs and render-side name moderation exist; no aggregation jobs, materialized rankings, or daily/weekly/friends keys.
+- **D6 Score normalization** (rounds 323, 326, 328, 329): A sitewide 0-100 scoring scale is applied to new games (blackout exactly 100, trophy exactly 100), but no formal raw/max/weight schema per game.
+- **D10 Feature flags** (rounds 272, 322): No flag system exists; the never-hard-delete rule is however enforced practice (retired-route redirects, LIVE_IDENTIFIERS allowlist, simRetiredRoutes).
+- **D13 Daily puzzle generation** (rounds 294, 323, 328): Dailies are deterministic client-side per ET date (dailyPrngSeed) with shared cards; Transfer Path puzzles are DB-published with generated, graph-derived hints. No publish/freeze/replace job pipeline.
+- **D14 Puzzle generation tests** (rounds 294, 323, 325, 328): Harnesses validate pools per game (hint/min-steps agreement, card completability, deal law, no duplicate players), each with negative controls; not a generic per-puzzle test contract.
+- **D16 Global loading experience**: Lazy routes and per-page loading states exist; no standard skeleton/retry loading system.
+- **D17 Global error experience** (rounds 316): Validators fail closed with plain no-penalty retry messaging, and report-a-bug lives in the global footer with a working relay; no sitewide error contract.
+- **D18 Sports data import pipeline** (rounds 291, 294): Generator scripts plus two-source verification and hash-proven applies exist per dataset (Brownlow/Dally M, Transfer Path hints, market values); no formal fetch/diff/review pipeline.
+- **D20 Historical snapshot rule** (rounds 329): Era data and real market-value history 2004-2026 back the historical games; long-form saves are local and not snapshot-referenced.
+- **D21 World simulation** (rounds 292): Club Manager and Soccer Career simulate seasons, transfers, rivals, honours reconciled to one truth; no explicit tiered-detail architecture.
+- **D23 Match simulation model** (rounds 330): Club Manager plays full seasons with tactics, subs, shape changes and windows; input/output breadth (fatigue, weather, full stat lines) not at spec depth.
+- **D24 Event probability model**: Match engines exist and are tuned against measured distributions, but the contextual probability model (score state, time, fatigue) is not verified at this depth.
+- **D25 Match presentation engine** (rounds 330): Match screens render events, scoreboard and subs; no unified event-to-UI presentation engine.
+- **D26 Match event types** (rounds 330): Soccer events (halftime, fulltime, subs, shapes) are played; NBA/NFL/MLB/NHL sims exist as front-office and my-career games, not event-typed match engines.
+- **D30 Club Manager home screen**: Club Manager exists with fixtures, board, finances, transfers, morale and an inbox; the exact widget/quick-action layout is not this template.
+- **D31 Club Manager inbox**: An event-driven inbox with actionable messages exists (it is the named surface of the invented-quotes legal rule); message-type coverage not at spec breadth.
+- **D32 Message consequences**: Decisions move board, morale and finances in the engines; a stored decision-history is not verified.
+- **D33 Negotiation timer** (rounds 327, 333): Live bidding wars with rival maths, decay phases and walk-aways ship in the auction and Rebuild loops; CM contract negotiation depth per spec not verified.
+- **D34 Transfer AI** (rounds 327, 333): Rival clubs bid with preserved valuation arithmetic and budgets in auction/Rebuild/CM; the full factor list (tactical fit, rivalry, relationship) is not modeled.
+- **D35 Player value model** (rounds 329): Real player_market_values rows 2004-2026 drive values where real, and playerRating drives sim values; the multi-input estimate model is simpler than spec.
+- **D36 Player contract system**: Contract offers and wages exist in Club Manager; bonus/clause granularity per spec not present.
+- **D37 Player morale system**: Morale exists across clubManager and every career engine; the full input/output contract is not formalized.
+- **D38 Fan model** (rounds 319): Fan confidence and position-aware fan reactions exist; attendance/ticket-price modeling does not.
+- **D39 Board model** (rounds 333): Board confidence, demands and consequences (Rebuild's punishment deck for missed demands) exist; not the full input model.
+- **D40 Sacking system**: Sacking off board confidence exists in the management games; the visible confidence/target/trend UI is not verified.
+- **D42 Poll system** (rounds 326): A community vote ships in Fantasy Draft as flavor; no general poll system with vote counts and prediction accuracy.
+- **D45 Sports hubs** (rounds 324): Six sport hubs exist with per-sport descriptions and SEO copy, fenced by simHubs; the exact ten-section template is not the shipped layout.
+- **D49 Performance budget**: Route-level code splitting and prerendered snapshots keep pages light; no formal numeric budgets are set or fenced.
+- **D51 Accessibility acceptance** (rounds 306, 320, 336): Keyboard focus behavior is a kept promise on the ticker, labels and touch targets are swept on phones; no full per-game accessibility acceptance.
+- **D52 Moderation system** (rounds 316, 318): Write-time blocklist plus render-side substitution on the leaderboard (the kkk/xxx over-censoring bug fixed, ordinary names no longer refused) and a report queue exist; no admin override layer.
+- **D57 Save UI**: Long-form games have local saves with continue; no unified My Saves screen with rename/duplicate/archive.
+- **D58 Save recovery** (rounds 325): Old-save compatibility is actively harness-tested (simLoanSpell old-save section); no atomic-write/rollback layer over localStorage.
+- **D60 Analytics dashboard** (rounds 285): Lovable project analytics plus GA4 (consent-gated) exist; no admin metrics dashboard.
+- **D63 Design system** (rounds 321, 328): shadcn/ui plus Tailwind plus shared game components (GameShell, GameNav, GameHelp, card frames) act as the system; no documented token spec.
+- **D64 Sports visual language**: Sport categories with accents/emoji and per-sport hubs exist under one brand from the generated logo set.
+- **D65 Iconography**: One icon family (lucide via shadcn) is the de facto standard; label/tooltip coverage not audited.
+- **D66 Table design** (rounds 291): Record Books and league tables ship with the horizontal-scroll-in-container rule; the full checklist is not fenced.
+- **D67 Match center mobile** (rounds 330, 334): A full Club Manager season plays through the 390 phone interface with zero findings; layout is the game's own, not the spec's tabbed match center.
+- **D68 Club Manager mobile** (rounds 330): Mobile CM is measured and playable end to end at phone widths; no bottom-navigation redesign.
+- **D72 Player position compatibility** (rounds 319): Shared formation slot families exist and were narrowed (winger slots refuse wing backs); per-player position history data is filed for the desktop lane, not shipped.
+- **D73 Player eligibility** (rounds 319): Eligibility is computed per game from position/era/pool; the positions-actually-played half awaits the position-history data pull.
+- **D74 Current-era roster policy**: Datasets carry verification conventions (CM_PARTIAL, two-source rules) and era games use era data; no formal refresh-date/source-version fields.
+- **D76 Competition rule test suite** (rounds 292, 325, 328): Season/competition behavior is harness-tested per game with measured floors; no fixture-based historical-season test files.
+- **D77 Football competition examples** (rounds 292): Domestic league and European honours are simulated and reconciled to one truth per season; representative old/new UCL format verification is not done.
+- **D79 Era selector** (rounds 312): Club Manager era saves exist and Round 312 made era worlds' tables truthful (worldLeagueDefs, era-aware sync); a full Current/Historical/Custom selector UI with decade presets and the data-depth warning is not shipped.
+- **D81 Youth generation** (rounds 334): Invented-name banks for generated players exist and are fenced (simInventedNames, fixed on Windows in Round 334); the full prospect model (traits, ability/potential ranges, personality) is not built.
+- **D84 Career retirement** (rounds 292, 330): Soccer Career has retirement with honours and career stats, and Round 292 made every honour derive from one season record; a generated retirement article/legacy narrative is thinner than specced.
+- **D85 Soccer Career life events** (rounds 319): Career events (inbox, press, fan gram, injuries, transfers) exist; the gram went position-aware in Round 319. Full trigger/options/consequences/cooldown coverage per event type is not audited against this list.
+- **D87 Career fame**: Fan reputation and media reaction exist in Soccer Career; a distinct fame stat driving sponsors, scrutiny and headline risk is not a shipped system.
+- **D88 Career social media** (rounds 319, 334): The fictional gram exists (position-aware since Round 319) and the no-fake-quotes half is enforced by the invented-quotes harness (ran green Round 334); richer teammate/rumor framing is incomplete.
+- **D90 Player career legacy** (rounds 292): Career summary at retirement carries games, trophies and awards off the reconciled honours record (Round 292); wealth, rivalries and fan-reputation legacy fields are thinner.
+- **D101 Universal draft engine UI** (rounds 325, 326, 328): Three draft games shipped this week (Search and Discard, Fantasy Draft rework, Gauntlet Draft) sharing the season-settle engine; a single universal draft UI with round/pick/timer/budget header is not factored out.
+- **D102 Card engine** (rounds 328): Gauntlet Draft ships original band-coloured card frames with rating and rarity spread; no cross-game collection/duplicates/set-completion system. No cash-value claims, per standing rules.
+- **D103 Pack engine** (rounds 323): Sports Bingo opens ten seeded packs of five verified players (Round 323); packs are deterministic client-side from the shared daily seed, not server-generated results.
+- **D104 Pack animation** (rounds 323): Timed pack reveal exists in Sports Bingo; the full rarity-cue reveal sequence is not built, and rewards are already independent of animation.
+- **D105 Sports Bingo server logic** (rounds 323): The game shipped with a shared daily card and seeded packs, but board generation and result checking are client-side, not server-side.
+- **D121 Sharing**: ShareButtons with per-game result text ship sitewide; result-image cards and deep links that open the specific result/challenge are not built.
+- **D123 Friend leaderboard** (rounds 318): The shared leaderboard exists with safe moderated handles (Round 318 regeneration and render-side blocklist); friend-scoped boards and rank-change display do not.
+- **D127 Legal/safety checkpoints** (rounds 316): Privacy/cookie behavior, rights checks and moderation are live practice (docs/LEGAL_REVIEW.md is a live doc; Supabase advisor run clean Round 316); professional legal review at commercial scale remains an owed owner decision on money.
+- **D134 QA test matrix for games** (rounds 320, 321, 334): sweepGames, playGames (full 128-game 390px walk, zero findings, Round 334) and playHowTo cover much of the matrix; slow-connection, duplicate-click and max-input cases are not systematically tested.
+- **D135 QA test matrix for simulations** (rounds 330, 333): playClubManager plays a full season on a phone (Round 330), simRebuildLoop and simLoanSpell cover windows, debt and pause paths; corrupted-state recovery and several boundary cases are not exercised.
+- **D136 QA test matrix for historical modes** (rounds 312): simEraWorldTables drives an era season through the engine's own loop with a modern control; per-decade roster/rule verification beyond that is not done.
+- **D137 QA test matrix for leaderboards** (rounds 318): simHandleNames plus the leaderboard security work cover names and moderation; tie/timezone/duplicate-result cases are not a dedicated matrix.
+- **D138 QA test matrix for ticker** (rounds 311, 317, 332, 336): playLiveTicker measures motion, pause and touch behavior; the Round 332 watchdog files a report on a dead feed day. Postponed/cancelled/overtime state coverage is not explicit.
+- **D139 QA test matrix for ads**: simAdsense fences built-site ad markup; overlap/click-path/slow-ad runtime cases are not browser-tested.
+- **D141 Release notes** (rounds 323, 325, 328): The public What's New page gets an entry with each shipped game/round; it has not been reshaped into the polished structured changelog the spec asks for.
+- **D142 Owner admin dashboard, daily view** (rounds 316, 332): The report queue exists (admin screen reads question_reports; report pipeline fixed Round 316) and the ticker watchdog files data-freshness alerts onto it (Round 332); the rest of the health panel is unbuilt.
+- **D144 Owner dashboard, data view** (rounds 332): The scores-poll watchdog covers feed freshness and dead-cron detection; imports/conflicts/stale-data views beyond that do not exist.
+- **D150 Fail for a reason**: Some shipped flows give reasons (validators return a reason string, fail closed); a sweep for bare 'Rejected' messages across sims has not been done.
+- **D153 Server time**: Daily resets key off the ET date computed client-side (dailyPrngSeed convention), not server UTC; the scores cron and poll are server-side. No auctions/rooms/idle rewards exist yet.
+- **D155 Accessibility first** (rounds 306, 313): An accessibility page and fences exist and promises like keyboard-focus pause are kept (Rounds 306, 317); accessibility-during-build is practice, not a gate.
+- **D158 Second milestone: Club Manager** (rounds 312, 330): Transfers, contracts, tactics, match center, save/load and truthful era tables exist (Round 312; full phone season proven Round 330); staff and board depth are below the spec's bar.
+- **D159 Third milestone: Soccer Career** (rounds 292, 319, 330): The flagship gets continuous upgrade rounds (honours truth, position-aware gram, mobile identity fix); the spec's full interactive-loop depth is not all there.
+- **D160 Fourth milestone: shared engines** (rounds 325, 326, 328): A shared deterministic season-settle engine now underpins three draft games; Conquest, a shared Card engine and an Interactive Arcade engine do not exist.
+- **D163 Final product quality gate** (rounds 321, 332, 334, 336): Several gate items are now true (ticker reliable with a watchdog, every game has help and report, mobile first-class, SEO fences); moderation-at-scale, admin tools and full observability are not.
+- **E1 Games to retire/rework** (rounds 314, 315, 326, 327, 329, 331, 333): Overrated/Underrated and Tier List retired (314), Billion Dollar and Banker's Offer fixed (315), Fantasy Draft reworked (326), Sign the Player rebuilt (327), Stock Market rebuilt (329), Rebuild rebuilt (331, 333); Stadium Tycoon and Wonderkid Factory remain untouched.
+- **E2 Games to maintain/expand** (rounds 294, 319): Active maintenance is real (Transfer Path hints Round 294; Rarity, World XI, Missing XI, Alphabet Sprint fixes Round 319); expansion is ongoing, not complete.
+- **E3 New flagship candidates** (rounds 323, 325, 328): Sports Bingo, Search and Discard and Gauntlet Draft shipped; NBA Stat Line sits in the Inbox (Round 330) and Conquest, Interactive Soccer, Empire, Tower Defense and Sports Party are unbuilt.
+- **G Universal position compatibility matrix** (rounds 319): Round 319 narrowed World XI winger slots and closed the LWB-into-RW chain; the strict verified-positions-played mode needs per-player position history data, filed for the desktop lane.
+- **H Player search/selection rule** (rounds 326): Per-game search exists (whole-pool search with capped matches, Round 326) with flags and teams shown in most games; a uniform filter set (era/sport/league) is not standardized.
+- **I Game result screen standard** (rounds 315, 326): Scores were brought to a sitewide ~100 scale (Round 315), verdict cards and share/play-another exist in newer games; percentile, XP and badge rows are not a shared standard.
+- **J Social result copy**: Per-game share text exists via ShareButtons and never carries private data; the exact copy templates here are not implemented as a system.
+- **138 Daily Social Event** (rounds 293, 297, 318): Daily games, streaks and a shared leaderboard with moderated names exist (R318); no global participation, median or you-beat-X-percent end screen. The home dailies checklist was shipped R293 and removed R297 on the owner's instruction.
+- **140 Deadline Day** (rounds 327, 333): The buy/sell/negotiate window mechanics exist in the Rebuild core loop (R333) and the live auction wars (R327), but not as a timed real-time deadline game.
+- **142 Draft Steal** (rounds 329): Player Stock Market (R329) is close: pick players on stats alone six seasons back, jump to 2026 and see what they became. Not framed as a draft-class steal.
+- **143 Manager Hot Seat** (rounds 333): Board demands, punishment deck and mutiny exist in Rebuild (R333) and Club Manager has board pressure; no standalone confidence-meter dismissal game.
+- **144 Contract Chaos**: Soccer Career compares contract offers (money, role, playing time) inside the sim; no standalone offer-comparison game.
+- **146 Franchise Rescue** (rounds 331, 333): Rebuild is exactly take-a-weak-squad-and-fix-it under board demands with a season sim verdict; the fixed-horizon survive-or-die framing is not there.
+- **152 Game Discovery / Recommendation Engine** (rounds 293, 297): The home page shows Most Played from local history; the streak-based dailies recommender shipped R293 and was removed R297 on the owner's word. No behavioral recommendation engine.
+- **153 Homepage Personalization** (rounds 293, 297, 320): Logged-out popular/daily/live is there (ticker, Most Played, streak flame). Continue/friends/saved-career modules do not exist, and the offers-before-asks covenant (playHomeFold) constrains what can sit above the first game tile.
+- **154 Data Refresh Pipeline** (rounds 311, 332): The scores-poll cron with a run ledger and the R332 watchdog that files a report when a day writes zero rows cover the live-scores slice with never-silent logging; no per-sport roster/standings/historical refresh pipeline.
+- **155 Historical Football Database** (rounds 292, 294): Career tables, player_market_values 2004 to 2026, and reconciled season honours records (R292) exist; no full per-season squads, formats or qualification data.
+- **156 Current Sports Database** (rounds 311): Live schedules and scores come from the ESPN feed since R311; rosters, standings, injuries and transactions are not systematically current.
+- **157 Scheduling** (rounds 323): Daily games all key off one Eastern Time date (dailyPrngSeed), so reset time and timezone are defined; the clock is still the browser's, not a server-side authority.
+- **158 Observability** (rounds 316, 332): The ticker watchdog (R332) alerts on a dead scores day via the reports shelf, and the report relay (R316) now delivers honestly; no general error/performance monitoring or alerting.
+- **160 Product Priority Matrix** (rounds 311-336): Most P0s landed this week: ticker (R311/317/336), reports (R316), global help (R321), leaderboard correctness (R318), position validation (R319), data correctness fences. P1 flagship 2.0 work, cloud saves and P2-P4 engines are not built.
+- **161 90-Day Build Target** (rounds 316-321, 334): The weeks 1-4 audit-and-fix band (profile, leaderboard, ticker, reports, help) shipped rounds 316 to 321; central data validation exists as per-game fences, not a shared layer. Club Manager overhaul and cloud saves not started.
+- **162 6-Month Target** (rounds 323): Sports Bingo shipped (R323). Club Manager 2.0, Soccer Career overhaul, WNBA family, Conquest, universal Draft, achievements and social challenges have not.
+- **165 Definition of Done, Game** (rounds 316, 318, 320, 321, 334): Help (R321), report issue (R316), mobile (R320/330/334), moderated leaderboard (R318) and SEO fences are enforced sitewide; universal profile updates and leaderboard contribution per game are not.
+- **166 Definition of Done, Simulation** (rounds 330, 333): The big sims have save/load, seasons, transfers and harness-proven no-impossible-state (playClubManager full season R330, simRebuildLoop R333); state versioning and balanced financials are not universal.
+- **173 The Meta-Game** (rounds 293, 301, 318): Streaks, per-game completions, guest handles and leaderboards exist locally and on the shared board; no Ball IQ, XP, levels, achievements, trophies or friends.
+- **174 The Sports Life Loop**: Discovery, quick game, score, leaderboard, daily return and share pieces exist; friend challenge, account-anchored saves and achievement steps do not.
+- **176 Game Portfolio Strategy** (rounds 314): The retire lever has been pulled (Overrated or Underrated and Tier List, R314) and flagships get disproportionate work; no formal quarterly tiering exists.
+- **177 Final Vision**: Daily puzzle platform, career sim, management sim, card-styled drafts (R328) and the live-score wire all exist; social network, fantasy platform, conquest and arcade do not.
+- **Appendix B Master Checklist** (rounds 316, 318, 321, 324): Platform help/reports, SEO sitemap and canonical fences, username moderation (R318) and much of the data provenance work are shipped; shared saves, achievements, canonical player data layer and all the new engines are not.
+
+## New, nothing shipped covers it
+
+The frontier. Claim on the board, respect the spec priority matrix (its P0 is essentially done; P1 flagship depth is current).
+
+- **2 Product north star**: The 'sports life' ecosystem framing (friends, challenges, cross-game identity, tournaments, long-running cloud worlds) is not shipped; only the individual pieces above exist.
+- **14 Ball IQ**: No Ball IQ or per-sport skill rating exists. The nearest shipped groundwork is the sitewide ~100 score normalization (R315 rescaled Budget Builder, simScoringCoverage), which addresses the 'long sims must not overwhelm trivia' concern.
+- **42 Position change / training**: No gradual position retraining system exists in Club Manager; nothing shipped covers it.
+- **44 Live match presentation**: No animated live match view with labeled player dots and event animation exists; nothing shipped covers it.
+- **46 Competitions engine**: No generic competitions engine with per-season historical rules versions exists; formats are per-game code today.
+- **50 Interactive training drills**: No click/drag/swipe skill drills exist anywhere on the site.
+- **64 WNBA expansion**: WNBA appears only as trivia data (Name Them All lists, records, Champ or Not); none of the eleven WNBA game families exists. The data-driven league-size requirement matches how schedules would have to be built anyway.
+- **68 NBA Stat Line**: Nothing shipped. Sits in the WORKBOARD Inbox from Anthony's 08-29 ideas list; needs NBA season tables and a verified box score source for the game mode.
+- **80 Stadium Tycoon / Sports Empire merge**: Stadium Tycoon and Wonderkid Factory exist as separate games; the merge into one large tabbed idle game sits unclaimed in the WORKBOARD Inbox ('the tycoon merge').
+- **81 Sports Empire idle loop**: Nothing shipped; part of the unclaimed tycoon merge. Existing idle games have simpler resource loops.
+- **82 Interactive sports arcade engine**: No shared physics/input arcade engine exists. The Inbox files the swipe-to-move soccer idea as an arc of rounds starting from one polished minigame.
+- **83 Soccer arcade flagship**: Nothing shipped; matches the Inbox 'swipe-to-move soccer game' arc, recommended to start with one free kick or dribble minigame.
+- **84 Basketball arcade**: Nothing shipped; depends on the arcade engine (section 82).
+- **85 Football arcade**: Nothing shipped; depends on the arcade engine.
+- **86 Baseball arcade**: Nothing shipped; depends on the arcade engine.
+- **87 Hockey arcade**: Nothing shipped; depends on the arcade engine.
+- **88 Sports Party**: Nothing shipped; same canvas arc as the Wii-Olympics-style Inbox item, one event per round.
+- **90 Multiplayer private rooms**: Nothing shipped. Rounds 323, 325 and 333 all explicitly kept online/friend rooms out of scope per the review's backend note, so this needs the backend decision before any game grows rooms.
+- **91 Cross-platform career pipeline**: Nothing shipped; the My Career games (NFL/NBA/MLB/NHL) and Soccer Career are separate with no shared identity pipeline. Spec's fictional-careers-only caveat matches the standing rule against fabricating real transitions.
+- **97 Animation system**: No shared animation state system (idle/hover/success/reveal/celebration) exists; animations are per-game.
+- **101 Social layer**: No friends, follow, rivals, challenges or private leagues shipped; spec itself marks it future.
+- **114 World Cup / event-specific games**: No archive/rotation mechanism for past-tournament games has shipped.
+- **116 Football/soccer terminology**: No terminology-consistency audit or per-market convention has shipped.
+- **117 Historical era architecture**: No era/rules/roster snapshot save architecture exists; long-form saves run on current data.
+- **129 Offline / connection resilience**: No puzzle caching, offline queueing or connection-status UI has shipped.
+- **131 Anti-cheat**: No signal detection or flag-for-review system exists.
+- **132 Virtual economy**: No coins/gems/XP meta-currency exists; in-sim wallets (Rebuild's 200M etc.) are per-run game state, not an economy. Constrained by the no-gambling stance for anything pack-adjacent.
+- **134 Social challenges**: No challenge modes shipped; multiplayer rooms were explicitly scoped out of Rounds 323 and 325 per the review's backend note.
+- **135 Private leagues (truncated in range)**: No private leagues, invite codes or hosted standings exist; same backend-scope decision as 134.
+- **16 Achievement system**: No generic achievement framework (IDs, XP, rarity, hidden state) exists; achievement-like flavor lives only inside individual career sims.
+- **27 Manager attributes**: No manager attribute sheet exists. Deriving attributes for a real named manager is constrained by the never-invent-facts-about-real-people rule (R331 phase three note).
+- **28 Manager XP / skill tree**: No manager XP or skill tree exists in Club Manager.
+- **29 Staff**: No hireable staff system; only cosmetic manager-background blurbs (e.g. 'Youth coach') exist in clubManager.ts.
+- **36 Financial advisor**: No advisor estimate layer exists in Club Manager.
+- **D7 XP vs score separation**: No XP, Ball IQ or leaderboard-points system exists.
+- **D8 API layer**: Architecture is Supabase REST plus edge functions imported through the hardcoded client, not a domain-oriented /api layer; nothing shipped matches these endpoints.
+- **D9 Server-authoritative game flow**: Games run client-side; only leaderboard writes and AI validation touch the server. Validators fail closed is the adjacent standing rule but no session/verify flow exists.
+- **D12 Game versioning**: No game/rules/data version triple is recorded on results.
+- **D15 Game UI state machine**: Games use hook state; no standardized state-machine convention shipped (the known hooks-after-return regression rule is the only related discipline).
+- **D19 Data diff view**: No admin diff/accept-reject UI; the admin screen reads question_reports only.
+- **D27 Soccer match animation V1**: No 2D pitch match animation ships; pitch layouts exist only as static lineup displays (Missing XI bubbles).
+- **D28 Soccer match animation V2**: Depends on D27, which does not exist.
+- **D29 Soccer match animation V3**: Explicitly future in the spec; nothing shipped.
+- **D53 Reserved names**: No evidence of a reserved-name/impersonation list beyond the profanity blocklist.
+- **D54 Friend system**: No friends, follows or challenges exist.
+- **D55 Blocking**: Depends on the social layer, which does not exist.
+- **D56 Notification system**: No notification system; streaks are shown, never pushed.
+- **D61 Flagship game KPIs**: No per-game KPI instrumentation beyond pageview analytics.
+- **D62 Game experimentation**: No A/B testing infrastructure.
+- **D78 Custom league / god mode**: No custom-competition editor or god mode exists.
+- **D80 Club Manager academy loop**: No scouting-region-to-promotion academy loop with potential-as-range has shipped.
+- **D82 Staff market**: No staff offer/free-agent/salary market exists.
+- **D89 Career brand**: No sponsorship/boots/apparel/investment system has shipped; the fictional-sponsor requirement matches standing rules.
+- **D91 College dynasty atmosphere**: No college dynasty sim exists; college football is trivia/records only.
+- **D92 College recruiting**: Nothing shipped.
+- **D93 CFB custom schedule**: Nothing shipped.
+- **D95 Academic system**: Nothing shipped.
+- **D96 NBA career interactive loop**: Not built; NBA Stat Line and other NBA ideas sit in the board Inbox (transcribed Round 330).
+- **D97 NFL career interactive loop**: Nothing shipped.
+- **D98 MLB career interactive loop**: Nothing shipped.
+- **D99 NHL career interactive loop**: Nothing shipped.
+- **D100 WNBA career**: Nothing shipped.
+- **D106 Conquest data model**: No conquest game exists.
+- **D107 Conquest map UI**: Nothing shipped.
+- **D108 Conquest map history**: Nothing shipped.
+- **D109 Conquest multiplayer**: Nothing shipped; live multiplayer rooms were explicitly deferred in Rounds 323 and 325 per the backend note.
+- **D110 Private room architecture**: No rooms exist; online rooms were deliberately kept out of scope in Rounds 323 and 325.
+- **D111 Multiplayer anti-cheat**: No multiplayer exists; the server-authoritative principle already governs validators and leaderboards but the room-specific machinery is unbuilt.
+- **D113 Sports party architecture**: Nothing shipped.
+- **D115 Tower defense game loop**: Nothing shipped.
+- **D116 Sports Empire architecture**: Nothing shipped.
+- **D117 Sports Empire economy**: Nothing shipped.
+- **D119 Animated profile**: Nothing shipped; reduced-motion respect would follow existing accessibility practice.
+- **D120 Profile cosmetics**: No banners/frames/titles unlock system exists.
+- **D122 Invite flow**: No beat-my-score challenge landing flow exists.
+- **D124 Platform search**: No sitewide search across games/players/teams exists.
+- **D125 Sport search**: Sport hubs exist but no query-driven search of the kind specced.
+- **D126 Notification preferences**: No notification system or preference categories exist.
+- **D131 Game design scorecard**: No formal 1-5 pre-ship scorecard exists; quality gating is done via harnesses instead.
+- **D143 Owner dashboard, game view**: No per-game starts/finishes/error dashboards exist; Lovable analytics is the current source.
+- **D145 Owner dashboard, monetization view**: No RPM/revenue dashboard; AdSense's own console is the source.
+- **D161 Fifth milestone: expansion**: WNBA, multiplayer, Sports Empire, Tower Defense and Sports Party are all unbuilt.
+- **D162 Sixth milestone: personalization/social**: Friends, challenges, private leagues, seasonal events and Hall of Fame are unbuilt.
+- **F NBA Stat Line detailed spec**: Not built; transcribed into the board Inbox from Anthony's ideas list (Round 330).
+- **136 Seasonal Platform**: No seasons, season leaderboards, awards or archived season history exist.
+- **137 DoUKnowBall Hall of Fame**: The Record Books shelf holds real-sport records, not user records; no permanent user records feature exists.
+- **139 Mixed Sports Modes**: None of Sports Survival, Sports Roulette, Against the World or Battle Royale exist.
+- **141 Trade Machine**: Nothing shipped grades user-proposed trades; the deterministic-evaluation requirement matches house practice but the game does not exist.
+- **145 Scout Combine**: Fictional prospects keep it inside the likeness rules, but nothing shipped covers it.
+- **147 Dynasty Killer**: Nothing shipped covers inheriting a champion.
+- **148 Sports Court**: Nothing exists; the spec's own no-real-person-allegations line matches the standing invented-words rule, so it must stay fully fictional.
+- **149 Owner Mode**: Club Manager manages the club, not an owner layer over the manager.
+- **150 Sports Media**: No predictions/headlines accuracy game exists.
+- **151 Career Rescue**: Nothing shipped; fictional athlete keeps it legal.
+- **163 12-Month Target**: Unified profile, multiplayer leagues, arcade engine, Sports Empire and tower defense are all unbuilt; the tower defense item carries a legal-constraint note in the board Inbox (R330).
+- **167 Definition of Done, Interactive Game**: No interactive arcade engine exists, so the input/frame-rate/collision checklist has nothing to apply to yet.

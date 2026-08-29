@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 340.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 341.
 
 ## Inbox (unclaimed)
 
@@ -115,14 +115,12 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- MASTER BUILD SPEC LANDED (Anthony, 2026-08-29 night): docs/MASTER-BUILD-SPEC-2026-08.md,
-  7690 lines, the new north star. Desktop lane is BUILDING Round 337 (spec adoption:
-  committed to docs, a section by section reconciliation against rounds 311 to 336 so
-  finished work is marked done and the Inbox reorients onto the spec priority matrix),
-  Round 338 (auditLive thin page bar re-derived, the standing claim), and Round 339
-  (the ERA_LEAGUES nation fence), the last two as parallel agents. CLOUD LANE: read
-  the spec and the reconciliation before claiming; the spec P0 list is essentially
-  complete, P1 flagship depth is the current frontier.
+- TEAM SKILLS (BUILDING as Round 340, desktop, 2026-08-29): Anthony's dev-team doc
+  distilled into five project skills in .claude/skills/, which load for BOTH lanes
+  automatically because they live in the repo: sports data guardian, game designer,
+  simulation architect, QA hunter, visual QA. CLOUD LANE: after pulling this, the
+  skills are yours too; invoke them by name when their moment comes.
+
 
 - Soccer Career floating buttons, noted in Round 330, judged acceptable and left
   alone: the training and phone buttons transiently cover right-aligned numbers in
@@ -132,8 +130,7 @@ From the 2026-08-28 review (bugs, claimed same day):
 - Queued from the 08-28 review, Club Manager residue: era Champions League pools are 16
   clubs so era saves play 4 groups, not the real 8. Growing each era's euro pool to 28
   verified era participants (the real group stage fields are documented facts) is a data
-  round. Also the era-id flags now exist in LEAGUE_NATIONS; a fence pinning every
-  ERA_LEAGUES id to a nation would keep the next era honest.
+  round. The era-id nation fence SHIPPED in Round 339 (simEraWorldTables section 6).
 - Data follow up from Round 315: 247 players whose latest market value row is 2024 or
   older at a 30m+ peak. Most are honestly retired or in untracked leagues, but Rodri,
   Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
@@ -154,14 +151,6 @@ From the 2026-08-28 review (bugs, claimed same day):
 
 Standing claims:
 
-- auditLive's thin page bar has drifted from its own intent: its header and message say
-  "the home page's own static block" but line 100 measures the WHOLE live home document,
-  which was 1,760 readable characters when the rule was written (its own header records
-  that) and is 4,967 now that rounds 280 plus grew the home copy, so on 2026-08-28 it
-  flagged 101 healthy pages (each serving 2,000 to 4,900 characters of its own text,
-  own canonical, one description, all 200). Re-derive the bar from what it means to
-  measure, with a control, per the harness rules. Until fixed, treat the thin page
-  finding as noise when live matches the committed snapshot byte for byte.
 - The Club Manager half of tweaks item 10 (more leagues, more eras), which Round 302
   queued behind Supabase access: the data pulls happen from this lane.
 - Tweaks item 9: the full playGames browser run over every game, every feature, then fix
@@ -198,6 +187,27 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE SPEC ERA OPENS, Rounds 337, 338 and 339 (desktop lane, 2026-08-29, one push).
+  Round 337: the Master Build Spec (7690 lines) and Anthony's parallel operating
+  instructions are committed as docs/MASTER-BUILD-SPEC-2026-08.md and
+  docs/PARALLEL-AGENT-OPS.md (with the mapping of its rules onto the running
+  system and the one deliberate deviation, claims-first on main instead of
+  feature branches, reasons written in the file), and EIGHT parallel agents read
+  every spec section against the round history to produce
+  docs/SPEC-RECONCILIATION.md: 361 sections classified, 38 done, 187 partial, 96
+  new, 32 decided, 10 constrained by standing law. READ IT BEFORE CLAIMING SPEC
+  WORK; the spec's P0 list is essentially complete and P1 flagship depth is the
+  frontier. Round 338: auditLive's thin page bar re-derived from what it means
+  to measure, the shared chrome measured live per run (quantile per word, 1166
+  chars) with the bar at chrome times 1.4 set from measured headroom, verified
+  against live douknowball.com: 131 of 131 clean, and AUDIT_CONTROL=thin plants
+  a chrome-only measurement on a page it first proves passes, proven red. Round
+  339: simEraWorldTables section 6 pins every ERA_LEAGUES id to a nation in
+  LEAGUE_NATIONS on the real exported values, WORLD_CONTROL=flagless plants a
+  nationless era league and goes red, so the next era cannot ship flagless.
+  Both builds were made by parallel agents under hard no-assertion-touching
+  rules and re-verified by hand.
 
 - THE WIRE ON PHONES, AND FASTER EVERYWHERE, Round 336 (desktop lane, 2026-08-29).
   His pair of reports the same evening: "the ticker is moving really slow", then

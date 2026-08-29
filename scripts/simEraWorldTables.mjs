@@ -32,10 +32,17 @@
  *      into the bracket, never paired inside its own group.
  *   5. SOURCE SHAPE: syncWorld's loop reads worldLeagueDefs, checked on the
  *      comment stripped source.
+ *   6. THE FLAGS: every league id in every era of ERA_LEAGUES has a nation
+ *      in LEAGUE_NATIONS (Round 312 added the era ids by hand), so the next
+ *      era added without one goes red instead of shipping flagless in the
+ *      world tables picker. Checked on the real exported values, never on
+ *      the source text.
  *
  * NEGATIVE CONTROL: WORLD_CONTROL=modern rewrites the in memory source back
  * to the pre-312 REAL_LEAGUES loop (asserting the fixed string was present
- * first) and section 5 must go red.
+ * first) and section 5 must go red. WORLD_CONTROL=flagless plants an era
+ * league id with no LEAGUE_NATIONS entry into the imported tables (refusing
+ * to run if the id already exists anywhere) and section 6 must go red.
  *
  * Run: node scripts/simEraWorldTables.mjs
  */
@@ -51,15 +58,15 @@ const BUNDLE = path.join(os.tmpdir(), 'eraWorld.bundle.mjs');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.WORLD_CONTROL || '';
-if (CONTROL && CONTROL !== 'modern') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'modern' && CONTROL !== 'flagless') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const m = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
-export const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf } = m;
+export const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS } = m;
 `);
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf } = await import(pathToFileURL(BUNDLE).href);
+const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS } = await import(pathToFileURL(BUNDLE).href);
 
 const seeded = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 
@@ -185,10 +192,38 @@ console.log('5) the source shape that keeps it fixed');
   console.log('   syncWorld iterates the era aware league list');
 }
 
+console.log('6) every era league id has a nation for its flag');
+{
+  if (CONTROL === 'flagless') {
+    const plantEra = 'era2005';
+    const plantId = 'bundesliga2005';
+    const already = Object.values(ERA_LEAGUES).flat().some(l => l.id === plantId) || plantId in LEAGUE_NATIONS;
+    if (!ERA_LEAGUES[plantEra] || already) { console.error(`control found nothing to plant: ${plantId} already exists or ${plantEra} does not`); process.exit(1); }
+    ERA_LEAGUES[plantEra].push({ id: plantId, name: 'Bundesliga', cupName: 'DFB-Pokal', euro: true, clubs: [] });
+    console.log(`   NEGATIVE CONTROL ON: ${plantId} planted into ${plantEra} with no LEAGUE_NATIONS entry, this section must go red`);
+  }
+  let checked = 0;
+  for (const [eraId, leagues] of Object.entries(ERA_LEAGUES)) {
+    for (const lg of leagues) {
+      checked += 1;
+      const nation = LEAGUE_NATIONS[lg.id];
+      if (typeof nation !== 'string' || !nation.trim()) {
+        fail(`${eraId}'s ${lg.id} has no nation in LEAGUE_NATIONS, so the world tables picker ships it flagless`);
+      }
+    }
+  }
+  if (checked === 0) fail('ERA_LEAGUES has no leagues at all, this check ran on nothing');
+  console.log(`   ${checked} era league id(s) checked against LEAGUE_NATIONS`);
+}
+
 console.log('');
 if (CONTROL === 'modern') {
   if (failures > 0) { console.log(`simEraWorldTables control: green. The rewritten loop was reported (${failures} finding).`); process.exit(0); }
   console.error('simEraWorldTables control: RED. The pre-312 loop went unreported.'); process.exit(1);
+}
+if (CONTROL === 'flagless') {
+  if (failures > 0) { console.log(`simEraWorldTables control: green. The planted flagless era league was reported (${failures} finding).`); process.exit(0); }
+  console.error('simEraWorldTables control: RED. An era league with no nation went unreported.'); process.exit(1);
 }
 if (failures > 0) { console.error(`simEraWorldTables: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.');
