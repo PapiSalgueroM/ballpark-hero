@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Search and Discard: The Squad Building Duel | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Search and Discard","item":"https://douknowball.com/search-and-discard"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can both squads end up with the same player?","acceptedAnswer":{"@type":"Answer","text":"No. A kept player is off the pool, and a discarded player is out of the whole game, so the two XIs never overlap."}},{"@type":"Question","name":"Is the season a coin flip?","acceptedAnswer":{"@type":"Answer","text":"No. Win chances follow the rating gap game by game, and the same two squads always settle the same way. Better drafts win more, but a two point rating edge is an edge, not a guarantee."}},{"@type":"Question","name":"Is there online multiplayer?","acceptedAnswer":{"@type":"Answer","text":"Not yet. Online rooms need real backend work, so today it is the CPU or two people passing one screen."}},{"@type":"Question","name":"Is Search and Discard free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Search and Discard is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Search and Discard: The Squad Building Duel | DoUKnowBall","description":"Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play.","url":"https://douknowball.com/search-and-discard","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/search-and-discard" data-rh="true"><meta name="description" content="Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/search-and-discard" data-rh="true"><meta property="og:title" content="Search and Discard: The Squad Building Duel | DoUKnowBall" data-rh="true"><meta property="og:description" content="Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Search and Discard: The Squad Building Duel | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>🔎Search and Discard</h1>
+<p>Keep one, bin two, and let the season decide.</p>
+<h2>Search and Discard: The Squad Building Duel</h2>
+<p>Two managers, one shared pool of real footballers, the same 4-3-3 each. Search three players, keep one, discard two from the whole game, and settle the draft in a simulated 38 game season with head to head derbies. Versus the CPU or pass and play on one screen.</p>
+<p>Search and Discard is the squad building duel: two managers, one shared pool of real footballers, both filling the same 4-3-3. On your turn you search three players, keep exactly one, and the other two are discarded from the whole game.</p>
+<p>That discard is the heart of it. A striker you bin can never reach the other squad, so every search is two decisions at once: who makes your XI, and who you refuse to let make theirs.</p>
+<p>When both XIs are full, the arguing stops and a simulated 38 game season settles it, derbies included. Play the CPU or pass one screen between two people.</p>
+<h2>How to play Search and Discard</h2>
+<li>Pick your opponent: the CPU, or a second person on the same screen.</li>
+<li>On your turn, three real players appear. At least one always fits an open slot in your 4-3-3.</li>
+<li>Tap the one you keep, then tap the slot he plays. The other two are binned for good, for both squads.</li>
+<li>Eleven keeps each, alternating turns. Then both XIs play the same simulated season and the table decides.</li>
+<h2>Rules to know</h2>
+<li>Both managers build the identical 4-3-3 from one shared pool, real players and real market values throughout.</li>
+<li>Position rules use the sitewide families: wingers cover both flanks, central mids cover the holding and attacking slots, a keeper is only ever a keeper.</li>
+<li>A discarded player is out of the entire game. He cannot be searched again by either side.</li>
+<li>The settle is deterministic: the same two finished XIs always produce the same season, so the draft is the game.</li>
+<li>Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available.</li>
+<h2>Example walkthrough</h2>
+<p>Your search deals an 89 rated winger, an 84 keeper and a 76 full back, with your goalkeeper slot still open. Keeping the winger is tempting, but keepers are scarce in a shrinking pool, so you take the 84 and bin the other two, and the 89 winger is gone from the duel entirely.</p>
+<p>Ten turns later both squads stand at 11. Yours rates 82, theirs 80, the derbies split, and your side edges the season by four points.</p>
+<h2>Strategy tips</h2>
+<li>Guard the scarce slots. Keepers and centre backs dry up fastest in a shared pool; a late empty GK slot is a disaster.</li>
+<li>Bin with intent. When your slots are nearly full, the keep matters less than which star you deny the other side.</li>
+<li>Ratings follow real market value with an age correction, so a famous veteran is often worth more than his price tag suggests.</li>
+<h2>Search and Discard FAQ</h2>
+<h3>Can both squads end up with the same player?</h3>
+<p>No. A kept player is off the pool, and a discarded player is out of the whole game, so the two XIs never overlap.</p>
+<h3>Is the season a coin flip?</h3>
+<p>No. Win chances follow the rating gap game by game, and the same two squads always settle the same way. Better drafts win more, but a two point rating edge is an edge, not a guarantee.</p>
+<h3>Is there online multiplayer?</h3>
+<p>Not yet. Online rooms need real backend work, so today it is the CPU or two people passing one screen.</p>
+<h3>Is Search and Discard free to play?</h3>
+<p>Yes. Search and Discard is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/player-stock-market">📈 Player Stock Market Buy 3 players at real past values, then the market moves a real year</a>
+<a href="/budget-builder">💵 $1B Budget Builder One billion dollars, real values, eleven slots. Spend it well</a>
+<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Flip your fortune, commit your cuts, survive the board</a>
+<a href="/nfl-my-career">🌟 NFL My Career Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope</a>
+<a href="/guess-the-golfer">⛳ Guess The Golfer A mystery major champion, six clues, fewer is better</a>
+<a href="/mlb-connect-4">⚾ MLB Connect 4 Baseball trivia meets Connect 4</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

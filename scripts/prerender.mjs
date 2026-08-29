@@ -150,9 +150,25 @@ const hiddenRoutes = (() => {
 if (hiddenRoutes.length) console.log(`  plus ${hiddenRoutes.length} noindexed routes that are not submitted: ${hiddenRoutes.join(', ')}`);
 
 let unique = [...new Set([...routes, ...hiddenRoutes])];
-/* PRERENDER_ONLY=/a,/b limits the run while measuring a change */
+/* PRERENDER_ONLY=/a,/b limits the run while measuring a change.
+
+   Round 325: a named route the sitemap does not know is a HARD REFUSAL,
+   not a silent drop. Twice in three rounds (the two new game rounds) a
+   scoped run named a brand new route before the sitemap had been
+   regenerated with it, the filter quietly dropped it, the page shipped
+   with no snapshot, and four separate fences had to catch the hole from
+   four angles after the fact. The documented build:seo order (routes
+   first, then prerender) prevents it, and this makes forgetting that
+   order fail in one obvious line instead of four confusing ones. */
 if (process.env.PRERENDER_ONLY) {
   const want = new Set(process.env.PRERENDER_ONLY.split(',').map(x => x.trim()));
+  const known = new Set(unique);
+  const unknown = [...want].filter(r => !known.has(r));
+  if (unknown.length) {
+    console.error(`PRERENDER_ONLY names route(s) the sitemap does not know: ${unknown.join(', ')}.`);
+    console.error('A new route must reach the sitemap first: node scripts/genSitemap.mjs --routes-only, then prerender.');
+    process.exit(1);
+  }
   unique = unique.filter(r => want.has(r));
 }
 /* ROUND 257: THE HOME PAGE IS NOT PRERENDERED, and that is deliberate.

@@ -292,8 +292,20 @@ console.log("5) a save from before this round runs exactly as before");
        "playing" season and reported that an old save could not play one. That
        is the arc working, not a broken save. The check is that the repaired
        save gets through a season, so a pause is answered and the season is
-       finished, exactly as a player would. */
-    if (s.phase === "rehab_choice") s = applyRehabChoice(s, 1);
+       finished, exactly as a player would.
+
+       Round 325: the single answer above still stranded about one run in
+       forty, measured at 9 of 400: answering the rehab choice can land the
+       state back on "playing" with the season STILL unrecorded, because the
+       season resumes and needs advancing again, which is exactly what the
+       player's next click does. Answered in a bounded loop now, the way a
+       person actually plays through an injury; 600 instrumented runs, zero
+       stranded. */
+    for (let hops = 0; hops < 4 && !s.seasons.some(x => x.type === "playing"); hops += 1) {
+      if (s.phase === "rehab_choice") s = applyRehabChoice(s, 1);
+      else if (s.phase === "playing") s = advanceProSeason(s, clubs);
+      else break;
+    }
     if (!s.seasons.some(x => x.type === "playing")) fail("the repaired save did not play a season");
   } catch (e) {
     fail(`the repaired save crashed the season: ${String(e).slice(0, 90)}`);
