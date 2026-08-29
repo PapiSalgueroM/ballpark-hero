@@ -114,15 +114,9 @@ Standing claims:
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
-next: Round 318 (cloud), building now, claimed 2026-08-29.
-
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-
-- Leaderboard names (BUILDING as Round 318, 2026-08-29): regenerate legacy Baller-NNNN
-  handles to the sports word pool and put a profanity blocklist in front of custom
-  display names on shared surfaces (the decision and reasoning are in the tweaks doc).
 - Small fixes batch: Career Ladder flags, Missing XI side colors and overlapping bubbles,
   Rarity Round hiding the rarest answer and stating the goal upfront, World XI position
   eligibility and customizable respins, Alphabet Sprint full name instruction, the
@@ -137,6 +131,14 @@ Standing claims:
 
 ## Done
 
+- LEADERBOARD NAMES, Round 318 (cloud lane, 2026-08-29). Legacy Baller-NNNN handles
+  regenerate to the word pool on next visit, and every name rendered on the shared board
+  passes the blocklist (a dirty stored name prints as a stable substitute handle). The
+  round's own harness found a live moderation bug: the normalizer collapsed "kkk" to "k"
+  and "xxx" to "x" in the blocklist itself, so every name containing the letter k or x
+  ("Mark", "Luka", "Xavi") has been refused since moderation shipped, in profile saves
+  and created manager names alike. Fixed with both-ways matching, simHandleNames is the
+  fence with its unfence control.
 - Both retirements (Overrated or Underrated, Tier List) and the hero headline: Round 314
   (cloud lane, 2026-08-28; renumbered twice after the lanes collided on 311 and then 313,
   the desktop's ticker and footer rounds keep those). Crowd vote tables left in the

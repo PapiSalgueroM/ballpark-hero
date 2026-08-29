@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
+import { nameModerationError } from '@/lib/nameModeration';
 
 /**
  * Wave 3: anonymous, sitewide completion tracking.
@@ -47,11 +48,17 @@ function todayStr(): string {
    dominate the board, and every guest was minted as Baller-NNNN, so the
    whole board read as one person. New guests draw from a sports word pair
    instead, over 1,600 combinations before the number against the old 9,000
-   copies of one name, so the board reads like a crowd. Existing stored handles are untouched: a returning guest keeps the
-   name their old rows are under, because renaming them would orphan their
-   own history in front of them. No real person's name and no product name
-   is in these lists, and none may ever be added: an invented handle that
-   collides with a real player reads as that player on a public board. */
+   copies of one name, so the board reads like a crowd. No real person's name
+   and no product name is in these lists, and none may ever be added: an
+   invented handle that collides with a real player reads as that player on a
+   public board.
+
+   Round 318 reversed the "existing handles are untouched" half of Round 299,
+   at the owner's call in docs/TWEAKS-2026-08-28.md: legacy Baller-NNNN
+   handles regenerate to the word pool on next visit, so the board stops
+   reading as thousands of copies of one person. The cost is accepted and
+   known: rows written under the old Baller name stay under it, so a
+   returning legacy guest starts a fresh line on the board. */
 const HANDLE_LEFT = [
   'Clinical', 'Rapid', 'Icy', 'Golden', 'Fearless', 'Crafty', 'Late', 'Prime',
   'Rowdy', 'Silky', 'Humble', 'Electric', 'Stubborn', 'Lucky', 'Vintage', 'Sunday',
@@ -67,16 +74,23 @@ const HANDLE_RIGHT = [
   'Rondo', 'Tifo', 'Boxscore', 'Dugout', 'Paint', 'Pocket', 'Glueguy', 'Grinder', 'Baller',
 ] as const;
 
+/* The legacy shape Round 318 retires: exactly "Baller-" plus digits. A word
+   pool mint can never match it (a pool handle always pairs two words before
+   the dash), so this test can only ever catch a pre-Round-299 handle. */
+const LEGACY_HANDLE = /^Baller-\d+$/;
+
 export function getGuestHandle(): string {
   const mint = () => {
     const left = HANDLE_LEFT[Math.floor(Math.random() * HANDLE_LEFT.length)];
     let right = HANDLE_RIGHT[Math.floor(Math.random() * HANDLE_RIGHT.length)];
-    if (right === left) right = 'Baller';
+    /* never a doubled word; when the doubled word IS Baller, the old
+       fallback was a no-op and minted "BallerBaller" (Round 318 fix) */
+    if (right === left) right = left === 'Baller' ? 'Volley' : 'Baller';
     return `${left}${right}-${Math.floor(10 + Math.random() * 90)}`;
   };
   try {
     const existing = localStorage.getItem(GUEST_HANDLE_KEY);
-    if (existing) return existing;
+    if (existing && !LEGACY_HANDLE.test(existing)) return existing;
     const handle = mint();
     localStorage.setItem(GUEST_HANDLE_KEY, handle);
     return handle;
@@ -98,6 +112,32 @@ export function getGuestHandle(): string {
 export function getCurrentPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string {
   const fromProfile = profile?.display_name || profile?.username;
   return fromProfile || getCachedDisplayName() || getGuestHandle();
+}
+
+/**
+ * Round 318, the second half of the owner's leaderboard names decision: a
+ * profanity blocklist in front of every name RENDERED on a shared surface.
+ * Profile.tsx has refused dirty names at write time since the moderation
+ * round, but names saved before that gate existed, or written through any
+ * path that skipped it, are already in game_completions and would still
+ * print. This is the render side of the same fence.
+ *
+ * A name that fails moderation is replaced with a handle derived from a hash
+ * of the name itself, so the substitute is stable: the same row shows the
+ * same substitute on every device and every reload, ranks stay
+ * distinguishable, and nothing random flickers. Clean names pass through
+ * byte for byte.
+ */
+export function publicName(name: string): string {
+  const raw = (name ?? '').trim();
+  if (!raw) return 'Player';
+  if (nameModerationError(raw) === null) return raw;
+  let h = 5381;
+  for (let i = 0; i < raw.length; i += 1) h = ((h * 33) ^ raw.charCodeAt(i)) >>> 0;
+  const left = HANDLE_LEFT[h % HANDLE_LEFT.length];
+  let right = HANDLE_RIGHT[Math.floor(h / 97) % HANDLE_RIGHT.length];
+  if (right === left) right = left === 'Baller' ? 'Volley' : 'Baller';
+  return `${left}${right}-${10 + (h % 90)}`;
 }
 
 /* Round 301, audit finding 8: callers without React context (Club Manager's

@@ -20,17 +20,25 @@ const LEET: Record<string, string> = {
   '8': 'b', '9': 'g', '@': 'a', '$': 's', '!': 'i', '|': 'i', '(': 'c',
 };
 
-/** Lowercase, fold leetspeak, then strip everything that is not a-z, and
- *  collapse runs of the same letter (so "sh1ttttt" -> "shit"). */
-function normalize(s: string): string {
-  const folded = (s || '')
+/** Lowercase, fold leetspeak, then strip everything that is not a-z. */
+function fold(s: string): string {
+  return (s || '')
     .toLowerCase()
     .split('')
     .map((c) => LEET[c] ?? c)
     .join('')
     .replace(/[^a-z]/g, '');
-  // collapse 3+ repeats of a letter to a single letter so padded evasions match
-  return folded.replace(/(.)\1{2,}/g, '$1');
+}
+
+/** Collapse runs of 3+ of the same letter to one, so padded evasions
+ *  ("sh1ttttt" -> "shit") still match. Round 318: this used to be part of
+ *  the one normalize() applied to blocklist entries too, which collapsed
+ *  "kkk" to "k" and "xxx" to "x" at module load, so every name containing
+ *  the letter k or x was refused as blocked language from the day the
+ *  moderation shipped ("Mark", "Luka", "Xavi"). Entries where repetition IS
+ *  the word must never be collapsed; candidates are matched both ways. */
+function collapseRuns(s: string): string {
+  return s.replace(/(.)\1{2,}/g, '$1');
 }
 
 // Curated blocklist (write readably; normalized once at module load). Covers
@@ -61,7 +69,16 @@ const RAW_BLOCKED: string[] = [
   'bastard', 'moron', 'idiot', 'scum', 'loser',
 ];
 
-const BLOCKED_NORMALIZED = Array.from(new Set(RAW_BLOCKED.map(normalize))).filter(Boolean);
+/* Each entry keeps its folded form, and a collapsed form only when collapsing
+   leaves at least 3 letters: a collapsed entry shorter than that is a single
+   letter wearing a trenchcoat, and matching it flags half the alphabet. */
+const BLOCKED = Array.from(new Set(RAW_BLOCKED))
+  .map((w) => {
+    const folded = fold(w);
+    const collapsed = collapseRuns(folded);
+    return { folded, collapsed: collapsed.length >= 3 ? collapsed : null };
+  })
+  .filter((e) => e.folded.length > 0);
 
 /**
  * Returns a user-facing error message if the name is inappropriate, else null.
@@ -69,10 +86,11 @@ const BLOCKED_NORMALIZED = Array.from(new Set(RAW_BLOCKED.map(normalize))).filte
  * separately by the caller).
  */
 export function nameModerationError(name: string | null | undefined): string | null {
-  const norm = normalize(name ?? '');
-  if (!norm) return null;
-  for (const bad of BLOCKED_NORMALIZED) {
-    if (norm.includes(bad)) {
+  const folded = fold(name ?? '');
+  if (!folded) return null;
+  const collapsed = collapseRuns(folded);
+  for (const bad of BLOCKED) {
+    if (folded.includes(bad.folded) || (bad.collapsed !== null && collapsed.includes(bad.collapsed))) {
       return 'Please choose a different name - that one contains language we do not allow.';
     }
   }
