@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 335.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 336.
 
 ## Inbox (unclaimed)
 
@@ -168,10 +168,11 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- How-to-play, the stricter half (queued): playHowTo pins the floor (every game shows
-  a rules affordance a visitor can see). A handful of non shell pages satisfy it with
-  setup screen rules only, no reopenable "?" mid game; tightening the fence to
-  "reopenable during play everywhere" is a later round.
+- How-to-play, the stricter half (BUILDING as Round 335, cloud, 2026-08-29): playHowTo
+  pins the floor (every game shows a rules affordance a visitor can see). A handful of
+  non shell pages satisfy it with setup screen rules only, no reopenable "?" mid game;
+  this round tightens the fence to "reopenable during play everywhere" and gives the
+  offenders (the new Rebuild spin screen among them) a real "?".
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
   halves of the review item are data work the cloud sandbox cannot verify (egress is
   proxy blocked, ESPN and Wikipedia both 403). Diagnosis for whoever picks it up: "only
