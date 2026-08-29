@@ -48,6 +48,9 @@ const UfcGame = () => {
         path="/ufc"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="UFC GUESSER"
         subtitle="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed."

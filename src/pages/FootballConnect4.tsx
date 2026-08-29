@@ -62,6 +62,9 @@ const FootballConnect4 = () => {
         path="/football-connect-4"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="SOCCER CONNECT 4"
         subtitle="Two players, trivia, and 4 in a row"

@@ -72,6 +72,9 @@ const MlbConnect4 = () => {
         path="/mlb-connect-4"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="MLB CONNECT 4"
         subtitle="Play Connect 4 with baseball trivia: name players matching franchise and stat criteria to claim cells and get four in a row."

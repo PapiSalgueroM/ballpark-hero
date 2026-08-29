@@ -43,6 +43,9 @@ export function GuessTheYearBoard() {
   return (
     <div ref={gameRef}>
       <GameShell
+        /* Round 348: this board passes its own "How to Play" button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="Guess The Year"
         emoji="📅"

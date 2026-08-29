@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 350 (cloud holds 348 and 349).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 350 (cloud holds 349 for the free kick minigame).
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -159,16 +159,6 @@ Standing claims:
 
 Claimed 2026-08-28:
 
-- TWO RULES CONTROLS ON ONE PAGE (BUILDING as Round 348, cloud, 2026-08-29): the
-  finding Round 335 measured and deliberately left, taken off the Inbox by the
-  lane that filed it. Re-measure with a matcher that ignores controls inside an
-  open dialog (the known over-count), confirm the real list, pass help="none"
-  per page keeping the game's own control, and land it as playHowTo section 3
-  with its own negative control so the invariant GameShell's doc comment
-  already claims is finally enforced rather than asserted.
-  next: Round 348 (cloud). Round 349 reserved by this lane for the free kick
-  swipe minigame, the opener of his interactive-soccer arc.
-
 From the 2026-08-28 review (his decisions and the self contained fixes):
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
   halves of the review item are data work the cloud sandbox cannot verify (egress is
@@ -185,6 +175,39 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- ONE WAY IN, Round 348 (cloud lane, 2026-08-29). The other half of the help
+  system, and the half nothing was checking. GameShell's doc comment has
+  promised since Round 321 that "no page ever shows two question marks", and no
+  fence held it to that. Round 335 measured 25 routes carrying two and
+  deliberately left them, because the probe it used counted any control whose
+  aria named the rules and so also caught a dialog's own "Close the rules"
+  button. Narrowing the rule to a TRIGGER, a way INTO the rules rather than
+  furniture inside an already-open panel, took the real list to 23 and dropped
+  exactly the two predicted false positives, /wonderkid-factory and
+  /idle-arena. That is why the twenty-odd files were not edited blind.
+  THE CAUSE was one shape repeated: 21 pages plus the Transfer Path and Guess
+  The Year boards pass their own labelled rules button through GameShell's
+  headerExtra prop (whose own doc comment invites it, "e.g. mode toggles,
+  difficulty pills, a How-to-Play trigger") while the shell also mounted the
+  standard GameHelp above it. Two "How to play" buttons in the same column,
+  about 200px apart. The fix is the prop that already existed for exactly this,
+  help="none", so the game's own control survives and the shell's duplicate
+  goes: the page-specific one opens the game's own rules dialog and is the
+  better written of the two. Transfer Path's LOADING shell keeps the standard
+  help on purpose, since it has none of its own.
+  THE FENCE is playHowTo section 3, counting triggers on the resting page a
+  returning player sees, with the open-dialog exclusion as its second line of
+  defence after clearOverlays. 116 of 116 routes now offer exactly one way in.
+  HOWTO_CONTROL=twin clones each page's real trigger and appends the copy: it
+  landed on 116 of 116 and the count read two on every one, so section 3's
+  green means one trigger rather than a blind count, and the run refuses
+  outright if the plant lands nowhere.
+  docs/SPEC-RECONCILIATION.md section 18 is corrected too, since it still
+  described this tightening as queued.
+  tsc zero, build green, simMobileChrome green (34 bar measurements, 86 scroll
+  stops), full playHowTo green across all three sections, and the built-site
+  fences plus simSingleFooter and simAccessibility all green.
 
 - LIGHT MODE, Round 347 (desktop lane, 2026-08-29). The owner's ask, shipped as
   a token flip and not a redesign: the dark :root palette stays the default and

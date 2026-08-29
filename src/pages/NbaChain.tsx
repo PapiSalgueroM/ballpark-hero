@@ -72,6 +72,9 @@ const NbaChain = () => {
         path="/nba-chain"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="NBA CHAIN GAME"
         subtitle="Build the longest chain of connected NBA players by naming teammates. Each new player must have shared a team with the previous one."

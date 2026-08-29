@@ -35,6 +35,9 @@ const HockeyHigherLower = () => {
         path="/hockey-higher-lower"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="🏒 HIGHER OR LOWER"
         subtitle="Which player has more career points?"

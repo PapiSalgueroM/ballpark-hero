@@ -87,6 +87,9 @@ export default function Olympics() {
         path="/olympics"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="The Medal Games"
         emoji="🏆"

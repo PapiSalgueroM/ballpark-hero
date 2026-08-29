@@ -128,6 +128,9 @@ const LineupBuilder = () => {
         path="/build-your-xi"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="BUILD YOUR XI"
         subtitle="Pick a formation, fill each position with a player from the given club or nation"

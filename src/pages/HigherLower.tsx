@@ -49,6 +49,9 @@ const HigherLowerGame = () => {
         path="/higher-lower"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="HIGHER OR LOWER"
         subtitle="Pick a stat where the left player is higher. Build your streak!"

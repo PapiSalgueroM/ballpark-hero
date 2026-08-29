@@ -81,6 +81,9 @@ const NflConnect4 = () => {
         path="/nfl-connect-4"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="NFL CONNECT 4"
         subtitle="Play Connect 4 with football trivia: name players matching franchise and stat criteria to claim cells and get four in a row."

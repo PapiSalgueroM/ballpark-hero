@@ -48,6 +48,9 @@ const FootballGrid = () => {
         path="/football-grid"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         emoji="🏈"
         title="PRO FOOTBALL GRID"

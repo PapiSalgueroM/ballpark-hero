@@ -38,6 +38,9 @@ const Teammates = () => {
         path="/teammates"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="TEAMMATES OR NOT?"
         subtitle="Did these two players ever play on the same team?"

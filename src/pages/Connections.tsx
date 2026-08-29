@@ -68,6 +68,9 @@ const Connections = () => {
         path="/connections"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="CONNECTIONS"
         subtitle="Group 16 soccer players into 4 secret categories. Can you crack the connection?"

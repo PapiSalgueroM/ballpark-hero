@@ -57,6 +57,9 @@ const NbaConnect4 = () => {
         path="/nba-connect-4"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="NBA CONNECT 4"
         subtitle="Play Connect 4 with NBA trivia: name players matching team and stat criteria to claim cells and get four in a row."

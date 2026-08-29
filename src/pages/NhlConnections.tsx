@@ -67,6 +67,9 @@ const NhlConnections = () => {
         path="/nhl-connections"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="narrow"
         title="🏒 CONNECTIONS"
         subtitle="Find four groups of 5 NHL players that share a connection"

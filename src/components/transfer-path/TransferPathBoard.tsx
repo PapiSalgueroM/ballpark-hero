@@ -76,6 +76,10 @@ export function TransferPathBoard() {
 
   return (
     <GameShell
+      /* Round 348: this board passes its own HowToPlayPopover through
+         headerExtra, so the shell must not add a second one. The loading
+         shell above keeps the standard help, since it has none of its own. */
+      help="none"
       width="narrow"
       title="TRANSFER PATH"
       subtitle="Name teammates to connect the two players in as few steps as possible."

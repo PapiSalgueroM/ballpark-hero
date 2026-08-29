@@ -73,11 +73,12 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.HOWTO_CONTROL || '';
-if (CONTROL && CONTROL !== 'blind' && CONTROL !== 'seo') { console.error(`HOWTO_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['blind', 'seo', 'twin'].includes(CONTROL)) { console.error(`HOWTO_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const SECTION = process.env.SECTION || '';
-if (SECTION && SECTION !== '1' && SECTION !== '2') { console.error(`SECTION=${SECTION} is not a section this harness knows`); process.exit(1); }
-const RUN_1 = SECTION !== '2';
-const RUN_2 = SECTION !== '1' && CONTROL !== 'seo';
+if (SECTION && !['1', '2', '3'].includes(SECTION)) { console.error(`SECTION=${SECTION} is not a section this harness knows`); process.exit(1); }
+const RUN_1 = !SECTION || SECTION === '1';
+const RUN_2 = (!SECTION || SECTION === '2') && CONTROL !== 'seo' && CONTROL !== 'twin';
+const RUN_3 = (!SECTION || SECTION === '3') && CONTROL !== 'seo' && CONTROL !== 'blind';
 
 /* The game list comes from the registry file itself, uncommented rows only,
    so a retired game cannot keep a dead entry alive here. */
@@ -137,6 +138,63 @@ function readAffordance({ mode, allowSeo, blind, controlsBlind }) {
     if (t.length < 120 && /^(how to play|how it works|the rules)\b/.test(t)) return 'rules shown pre-play';
   }
   return null;
+}
+
+/**
+ * ROUND 348, section 3: how many ways in are there, exactly?
+ *
+ * GameShell's own doc comment has promised since Round 321 that "no page ever
+ * shows two question marks", and nothing checked it. Round 335 measured 25
+ * routes carrying two, wrote the finding down and deliberately did not act on
+ * it, because the probe it measured with counted any control whose aria named
+ * the rules, which also caught a dialog's own "Close the rules" button. A list
+ * that mixes real duplicates with false ones is not a list you edit twenty
+ * files from.
+ *
+ * So the counting rule is narrower than the finding rule, and the difference
+ * is the whole point: a TRIGGER is a way INTO the rules. A control sitting
+ * inside an open dialog is part of the rules panel already, so it is not a
+ * second way in and is not counted. Everything else that would satisfy
+ * verdicts 1 to 3 is.
+ *
+ * plantTwin is the negative control (HOWTO_CONTROL=twin): it clones the page's
+ * real trigger and appends the copy, so the check must go red on every route
+ * that had one. If the clone finds nothing to copy the run refuses rather than
+ * reporting a green it did not earn.
+ */
+function countTriggers({ plantTwin }) {
+  const visible = (el) => {
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return false;
+    const s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden';
+  };
+  const isTrigger = (el) => {
+    const label = (el.getAttribute('aria-label') || '').toLowerCase();
+    const text = (el.textContent || '').trim().toLowerCase();
+    if (/how to play|rules|instructions/.test(label) || /^(how to play|rules|instructions)\b/.test(text)) return true;
+    if (text === '?') return true;
+    return !!el.querySelector('svg.lucide-help-circle, svg.lucide-circle-help');
+  };
+  /* A control inside an open dialog is the panel's own furniture, its close
+     button or its "Let's Play!" button, not another door to the same room. */
+  const inOpenDialog = (el) => !!el.closest('[role="dialog"][data-state="open"], [role="alertdialog"][data-state="open"], [role="dialog"], [role="alertdialog"]');
+  const find = () => [...document.querySelectorAll('button, a, [role="button"]')]
+    .filter(visible).filter(isTrigger).filter(el => !inOpenDialog(el));
+
+  if (plantTwin) {
+    const real = find()[0];
+    if (!real) return { planted: false, count: find().length, labels: [] };
+    const twin = real.cloneNode(true);
+    twin.setAttribute('data-howto-twin', '');
+    real.parentElement.appendChild(twin);
+  }
+  const found = find();
+  return {
+    planted: !!plantTwin,
+    count: found.length,
+    labels: found.map(el => (el.getAttribute('aria-label') || (el.textContent || '').trim()).slice(0, 40)),
+  };
 }
 
 /* playGames' clearOverlays, same reasoning: most games pop their how-to
@@ -259,6 +317,7 @@ await blockOffsite(page);
 const landing = new Map();
 const playing = new Map();
 const seoLoose = new Map();
+const triggers = new Map();
 const skips = [];
 
 for (const route of routes) {
@@ -282,6 +341,15 @@ for (const route of routes) {
     if (RUN_1) {
       verdict = await page.evaluate(readAffordance, { mode: 'landing', allowSeo: false, blind: CONTROL === 'blind' });
     }
+    if (RUN_3) {
+      /* Clear the room first, so the first-visit how-to dialog is shut and
+         the count reads the resting page a returning player sees. The dialog
+         exclusion inside countTriggers is the second line of defence. */
+      await clearOverlays(page);
+      await page.waitForTimeout(300);
+      const t = await page.evaluate(countTriggers, { plantTwin: CONTROL === 'twin' });
+      triggers.set(route, t);
+    }
     if (RUN_2) {
       await clearOverlays(page);
       await page.waitForTimeout(300);
@@ -300,7 +368,10 @@ for (const route of routes) {
   const parts = [];
   if (RUN_1) parts.push(verdict ? `landing: ${verdict}` : 'landing: NONE');
   if (RUN_2) parts.push(playing.has(route) ? (reached ? `in play: ${reached}` : 'in play: NONE') : 'in play: not driven');
-  const bad = (RUN_1 && !verdict) || (RUN_2 && playing.has(route) && !playing.get(route));
+  if (RUN_3) parts.push(`${triggers.get(route)?.count ?? 0} trigger(s)`);
+  const bad = (RUN_1 && !verdict)
+    || (RUN_2 && playing.has(route) && !playing.get(route))
+    || (RUN_3 && CONTROL !== 'twin' && (triggers.get(route)?.count ?? 0) > 1);
   console.log(`  ${bad ? 'FAIL' : 'PASS'}  ${route}: ${parts.join(', ')}`);
 }
 
@@ -315,6 +386,33 @@ if (RUN_2) console.log(`Section 2, reopenable in play: ${playing.size} routes dr
 if (RUN_2 && skips.length) {
   console.log('  not driven, named so nobody has to average them away:');
   for (const s of skips) console.log(`    ${s}`);
+}
+
+const doubled = [...triggers.entries()].filter(([, t]) => t.count > 1);
+
+if (RUN_3 && CONTROL !== 'twin') {
+  console.log(`Section 3, one way in: ${triggers.size} routes, ${triggers.size - doubled.length} offer exactly one rules trigger.`);
+}
+
+if (CONTROL === 'twin') {
+  /* The plant clones each page's real trigger, so every route that had one
+     must now read two. A route with nothing to clone proves nothing and is
+     reported rather than counted, and if the plant never landed anywhere the
+     run refuses outright. */
+  const planted = [...triggers.entries()].filter(([, t]) => t.planted && t.count > 1);
+  const nothingToClone = [...triggers.entries()].filter(([, t]) => t.count === 0);
+  console.log('');
+  console.log(`playHowTo control twin: cloned the real trigger on ${planted.length} of ${triggers.size} route(s); ${nothingToClone.length} had none to clone.`);
+  if (planted.length === 0) {
+    console.error('playHowTo control twin: RED. The plant landed nowhere, so section 3 is proving nothing.');
+    process.exit(1);
+  }
+  if (planted.length !== triggers.size - nothingToClone.length) {
+    console.error('playHowTo control twin: RED. The plant did not double every route that had a trigger, so the count is not reading what it claims.');
+    process.exit(1);
+  }
+  console.log('playHowTo control twin: green. Section 3 sees a second trigger wherever one is planted, so its green means one trigger and not a blind count.');
+  process.exit(0);
 }
 
 if (CONTROL === 'blind') {
@@ -364,6 +462,11 @@ if (miss1.length > 0) {
 }
 if (miss2.length > 0) {
   console.error(`playHowTo section 2: ${miss2.length} game(s) teach the rules before play and then take them away: ${miss2.join(', ')}`);
+  red = true;
+}
+if (doubled.length > 0) {
+  console.error(`playHowTo section 3: ${doubled.length} page(s) show more than one way into the rules, which GameShell's own contract says never happens:`);
+  for (const [route, t] of doubled) console.error(`    ${route}: ${t.count} (${t.labels.join(' | ')})`);
   red = true;
 }
 if (red) process.exit(1);

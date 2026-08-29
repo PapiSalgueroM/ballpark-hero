@@ -82,6 +82,9 @@ const NbaLineup = () => {
         path="/nba-starting-5"
       />
       <GameShell
+        /* Round 348: this page passes its own labelled rules button through
+           headerExtra, so the shell must not add a second one. */
+        help="none"
         width="wide"
         title="BUILD YOUR STARTING 5"
         subtitle="Spin a stat challenge, get random NBA teams, build the ultimate lineup"
