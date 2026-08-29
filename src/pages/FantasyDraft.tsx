@@ -17,6 +17,13 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
+import type { Player } from '@/types/game';
+
+/** The settle engine reads marketValue, age and name; this table's rows map
+ *  straight onto that. */
+const toSettlePlayer = (p: DraftPlayer): Player =>
+  ({ name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player);
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
@@ -52,6 +59,11 @@ const FantasyDraft = () => {
   const [lastPickId, setLastPickId] = useState<string | null>(null);
   const aiTimerRef = useRef<number | null>(null);
 
+  // Round 326, "unclear goal": the deterministic verdict, computed the
+  // moment the draft completes, the same settle engine Search and Discard
+  // uses. The narrated stories and the vote stay as flavor underneath.
+  const [verdict, setVerdict] = useState<SdSeason | null>(null);
+
   // Season simulation state
   const [simulating, setSimulating] = useState(false);
   const [teamAStory, setTeamAStory] = useState<string | null>(null);
@@ -70,19 +82,21 @@ const FantasyDraft = () => {
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
   const seasonSimulated = teamAStory !== null && teamBStory !== null;
 
-  /* Round 299, the scoring audit: this page never recorded a play, so a
-     full draft and season earned no streak day, no played-today credit and
-     no points. The season simulation landing (both stories set) is the
-     completion moment, it is when the results screen appears. There is no
-     restart on this page, so the ref just fires once per visit. No score
-     on purpose: the result is two narrated season stories and a community
-     vote, the page never shows a final number. */
+  /* Round 299 gave this page a completion record; Round 326 moves it to the
+     VERDICT moment and gives it an honest score. The old completion waited
+     on the narrated stories, which come from an edge function, so a network
+     hiccup meant a finished draft earned nothing; the verdict is computed
+     locally the moment the draft completes, and the score is the season
+     points share, the same shape Search and Discard records. */
   const completionRef = useRef(false);
   useEffect(() => {
-    if (!seasonSimulated || completionRef.current) return;
+    if (!draftComplete || completionRef.current || userTeam.length < TEAM_SIZE || aiTeam.length < TEAM_SIZE) return;
     completionRef.current = true;
-    recordCompletion('/fantasy-draft', undefined, getCurrentPlayerName(profile));
-  }, [seasonSimulated, profile]);
+    const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
+    setVerdict(season);
+    const score = Math.min(100, Math.round((season.points[0] / 114) * 100));
+    recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
+  }, [draftComplete, userTeam, aiTeam, profile]);
 
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
   // Illegal picks are blocked for BOTH the player and the AI. If a side has
@@ -260,7 +274,7 @@ const FantasyDraft = () => {
                   Fantasy Draft<span className="block text-primary">Showdown</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  Draft your Starting XI. Simulate a season. Vote for the winner.
+                  The goal: outdraft the AI. Your XI and its XI play the same simulated season, and the final table decides who drafted better.
                 </p>
                 <div className="w-full max-w-md mx-auto rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-lg shadow-primary/10">
                   <div className="flex items-center justify-center gap-2 mb-3">
@@ -352,6 +366,23 @@ const FantasyDraft = () => {
                       )}
                     </div>
 
+                    {/* Round 326: the verdict, the point of the whole draft,
+                        shown the moment pick 22 lands. */}
+                    {draftComplete && verdict && (
+                      <div className={cn(
+                        'w-full max-w-md mx-auto rounded-2xl border p-5 text-center',
+                        verdict.winner === 0 ? 'border-correct bg-correct/10' : verdict.winner === -1 ? 'border-border bg-card/60' : 'border-destructive/50 bg-destructive/10',
+                      )}>
+                        <p className="text-2xl font-extrabold text-foreground mb-1">
+                          {verdict.winner === 0 ? 'Your draft wins the season!' : verdict.winner === -1 ? 'Dead level after 38 games' : 'The AI drafted better'}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          You {verdict.points[0]} pts ({verdict.ratings[0]} OVR) · AI {verdict.points[1]} pts ({verdict.ratings[1]} OVR)
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">{verdict.headToHead}.</p>
+                      </div>
+                    )}
+
                     {/* Simulate button */}
                     {draftComplete && !seasonSimulated && (
                       <Button
@@ -361,9 +392,9 @@ const FantasyDraft = () => {
                         className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
                       >
                         {simulating ? (
-                          <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Simulating Season...</>
+                          <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Writing the story...</>
                         ) : (
-                          <><Zap className="w-5 h-5 mr-2" />Simulate Season</>
+                          <><Zap className="w-5 h-5 mr-2" />Tell the season's story</>
                         )}
                       </Button>
                     )}
@@ -393,8 +424,8 @@ const FantasyDraft = () => {
                       <ShareButtons
                         gameName="Fantasy Draft"
                         gamePath="/fantasy-draft"
-                        score="Drafted my XI and simulated a full season"
-                        customText="I drafted my Starting XI and simulated a full season on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
+                        score={verdict ? `${verdict.points[0]} pts vs the AI's ${verdict.points[1]}` : 'Drafted my XI and simulated a full season'}
+                        customText="I outdrafted the AI on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
                       />
                     )}
                   </>
@@ -411,7 +442,7 @@ const FantasyDraft = () => {
           howToPlay={[
             "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
             "Build a balanced squad of 11 players across all positions within the daily criteria.",
-            "After drafting, simulate a full season and vote on whose team performed better."
+            "The moment the draft completes, both XIs play the same simulated 38 game season and the table names the winner. The narrated season stories and the community vote follow underneath."
           ]}
           examples={[
             "Draft Mbappé as your striker: 95 pace, 91 shooting",

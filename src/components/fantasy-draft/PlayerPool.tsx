@@ -1,6 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { playerRating } from '@/lib/squadDeal';
+import type { Player } from '@/types/game';
+
+/** The one card curve the whole site uses, fed this table's fields. */
+export function draftRating(p: DraftPlayer): number {
+  return playerRating({ marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27 } as Player);
+}
 
 export interface DraftPlayer {
   id: string;
@@ -37,12 +44,19 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
   const [search, setSearch] = useState('');
   const [posFilter, setPosFilter] = useState<string>('All');
 
+  /* Round 326, off the owner's review ("too much scrolling"): the pool no
+     longer renders as a 480px scroll of every player. It shows the BEST
+     AVAILABLE, top ten by the sitewide card rating, and the search reaches
+     everyone else; a search shows up to twenty matches. The list is short
+     enough to read whole, which is the point. */
   const filtered = useMemo(() => {
-    return players.filter((p) => {
+    const base = players.filter((p) => {
       if (posFilter !== 'All' && p.position !== posFilter) return false;
       if (search.length >= 2 && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
+    const sorted = [...base].sort((a, b) => draftRating(b) - draftRating(a));
+    return sorted.slice(0, search.length >= 2 ? 20 : 10);
   }, [players, search, posFilter]);
 
   return (
@@ -84,7 +98,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
       </div>
 
       {/* Player list */}
-      <div className="max-h-[400px] sm:max-h-[480px] overflow-y-auto divide-y divide-border/50">
+      <div className="divide-y divide-border/50">
         {filtered.length === 0 && (
           <p className="text-center text-sm text-muted-foreground py-8">No players found</p>
         )}
@@ -124,7 +138,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
 
               {/* Value & blocked state */}
               <div className="text-right shrink-0">
-                <p className="text-sm font-semibold text-primary">£{player.market_value_millions}M</p>
+                <p className="text-sm font-bold text-primary">{draftRating(player)} <span className="font-normal text-muted-foreground">· £{player.market_value_millions}M</span></p>
                 {blocked ? (
                   <p className="text-[10px] font-semibold text-destructive">Blocked by today's rule</p>
                 ) : (
@@ -137,7 +151,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
       </div>
 
       <div className="px-4 py-2 border-t border-border text-center">
-        <p className="text-xs text-muted-foreground">{filtered.length} players • {draftedIds.size} drafted</p>
+        <p className="text-xs text-muted-foreground">Best available shown • search reaches the whole pool • {draftedIds.size} drafted</p>
       </div>
     </div>
   );

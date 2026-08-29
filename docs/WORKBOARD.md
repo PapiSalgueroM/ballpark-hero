@@ -36,8 +36,6 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- Fantasy Draft rework (BUILDING as Round 326, cloud, 2026-08-29): his verdict "too
-  much scrolling, unclear goal; rework the layout and the point".
 - From that list, unclaimed and sizable: the Rebuild redesign, the Sign the Player
   auction rebuild, the Player Stock Market redesign, the tycoon merge, the conquest map
   overhaul, the draft mode game (Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
@@ -139,6 +137,12 @@ Standing claims:
 
 ## Done
 
+- THE FANTASY DRAFT REWORK, Round 326 (cloud lane, 2026-08-29). His "too much
+  scrolling, unclear goal" both fixed: the pool is a best available shortlist
+  (top ten by rating, search reaches everyone), and the draft settles the moment
+  it completes through the shared season engine, verdict card, honest score, goal
+  stated upfront. Stories, analysis and the vote kept as flavor. simDraftShowdown
+  is the fence with its flatmap control.
 - SEARCH AND DISCARD, Round 325 (cloud lane, 2026-08-29). The squad duel to his
   spec: search three, keep one into the shared 4-3-3, bin two from the whole game,
   CPU or pass and play, settled by one deterministic 38 game season with derbies.
