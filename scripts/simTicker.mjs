@@ -26,15 +26,16 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/tickerEntry.mjs';
-const BUNDLE = '/tmp/ticker.bundle.mjs';
+const ENTRY = path.join(os.tmpdir(), 'tickerEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'ticker.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
-export { groupScores, dwellMs } from '${ROOT}/src/components/layout/TopTicker.tsx';
+export { groupScores, dwellMs } from '${ROOT.replaceAll('\\', '/')}/src/components/layout/TopTicker.tsx';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --jsx=automatic --loader:.tsx=tsx`, { stdio: 'inherit' });
 
@@ -42,7 +43,7 @@ execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --pla
    statement beside it, and the bundled supabase client asks for localStorage
    at module scope. Same lesson simMissingXi learned the same night. */
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
-const { groupScores, dwellMs } = await import(BUNDLE);
+const { groupScores, dwellMs } = await import(pathToFileURL(BUNDLE).href);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };

@@ -187,6 +187,80 @@ console.log('6) reduced motion gets every box open at once, no cycling');
   await c3.close();
 }
 
+console.log('7) a full slate GLIDES: the wire moves, every card passes, then hands off');
+{
+  /* Round 317, his report "the ticker isnt moving": with the day-ahead slate
+     a sport carries twenty plus cards, the old loop held them perfectly
+     still, and everything past the screen edge was unreachable. This section
+     is the assertion that would have caught it: feed one sport more cards
+     than a 1440 viewport can show and MEASURE the scroll moving. */
+  const fat = Array.from({ length: 16 }, (_, i) => ({
+    id: `mlb:fat${i}`, sport: 'mlb', league: 'MLB',
+    home: `Home Club ${i + 1}`, away: `Away Club ${i + 1}`,
+    home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started',
+    start_at: at(today.getHours() + 2, i % 60), live: false, finished: false, updated_at: at(today.getHours()),
+  })).concat([{
+    id: 'soccer:fat', sport: 'soccer', league: 'La Liga', home: 'Valencia', away: 'Real Betis',
+    home_score: 1, away_score: 2, status_short: '2H', status_long: 'Second Half',
+    start_at: at(today.getHours() - 1), live: true, finished: false, updated_at: at(today.getHours()),
+  }]);
+  const c4 = await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/New_York' });
+  const p4 = await c4.newPage();
+  await p4.route('**://*.supabase.co/**', r => r.abort());
+  await p4.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fat) }));
+  await p4.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
+  await p4.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await p4.waitForFunction(sel => !!document.querySelector(sel), BAR, { timeout: 20000 }).catch(() => {});
+  /* soccer (1 card) opens first and fits; wait for the fat MLB box */
+  await p4.waitForFunction(sel => /Home Club/.test(document.querySelector(sel)?.innerText || ''), BAR, { timeout: 25000 }).catch(() => {});
+  const glide = await p4.evaluate(async (sel) => {
+    const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+    if (!vp) return null;
+    const s0 = vp.scrollLeft;
+    await new Promise(r => setTimeout(r, 4000));
+    const s1 = vp.scrollLeft;
+    await new Promise(r => setTimeout(r, 4000));
+    const s2 = vp.scrollLeft;
+    /* measured at the end, because the box opens through a 500ms max-width
+       transition and an early read sees no overflow yet */
+    const overflow = vp.scrollWidth - vp.clientWidth;
+    return { overflow, s0, s1, s2 };
+  }, BAR);
+  say(!!glide, 'the fat box and its viewport were found');
+  if (glide) {
+    say(glide.overflow > 200, `the slate genuinely overflows the screen (${glide.overflow}px hidden)`);
+    say(glide.s2 > glide.s0 + 100, `the wire is MOVING: scroll ${glide.s0.toFixed(0)} to ${glide.s1.toFixed(0)} to ${glide.s2.toFixed(0)}px across 8s`);
+  }
+
+  console.log('8) clicking pause stops the wire, clicking resume RESUMES it');
+  {
+    /* the second half of his report: focus from the resume click used to
+       keep the wire parked, so the button looked broken. */
+    /* aria-pressed, not the label: the label flips between Pause and Resume */
+    const pauseBtn = p4.locator(`${BAR} button[aria-pressed]`);
+    await pauseBtn.click();
+    const pausedRead = await p4.evaluate(async (sel) => {
+      const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+      const s0 = vp.scrollLeft;
+      await new Promise(r => setTimeout(r, 2500));
+      return { s0, s1: vp.scrollLeft };
+    }, BAR);
+    say(Math.abs(pausedRead.s1 - pausedRead.s0) < 2, `pause parks the wire (${pausedRead.s0.toFixed(0)} to ${pausedRead.s1.toFixed(0)}px over 2.5s)`);
+    await pauseBtn.click();
+    /* move the pointer OFF the strip, as a person does, then measure */
+    await p4.mouse.move(700, 500);
+    const resumed = await p4.evaluate(async (sel) => {
+      const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
+      const s0 = vp.scrollLeft;
+      await new Promise(r => setTimeout(r, 3500));
+      return { s0, s1: vp.scrollLeft, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
+    }, BAR);
+    say(!resumed.focusInStrip, 'the resume click left no sticky focus inside the strip');
+    say(resumed.s1 > resumed.s0 + 50, `resume actually resumes (${resumed.s0.toFixed(0)} to ${resumed.s1.toFixed(0)}px over 3.5s)`);
+  }
+  await c4.close();
+}
+
 await browser.close();
 console.log('');
 if (CONTROL === 'dim') {

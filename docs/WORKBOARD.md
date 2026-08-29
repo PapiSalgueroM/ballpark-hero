@@ -136,6 +136,22 @@ Standing claims:
 
 ## Done
 
+- THE WIRE GLIDES, Round 317 (desktop lane, 2026-08-29). His report "the ticker isnt
+  moving", and it wasn't in the way that counts: the old loop held each sport's box
+  perfectly still for up to 14 seconds then swapped, and once Round 311 loaded the day
+  ahead a sport carries twenty plus cards, so everything past the screen edge was
+  unreachable and the strip read as parked. Two real defects underneath: clicking the
+  Round 307 pause button left FOCUS inside the strip, and focus is itself a pause, so
+  clicking resume kept the wire parked (measured live: activeElement was the pause
+  button, wire frozen); and the missing userPaused dependency meant the loop did not
+  re-arm cleanly. The wire now glides at a steady cable crawl through every card, hands
+  off to the next sport when the last card has passed, holds briefly on a fresh sport,
+  loops itself when only one sport has games, and a mouse click on pause or resume
+  never focuses the button (keyboard tabbing still parks it, the Round 306 promise).
+  playLiveTicker grew sections 7 and 8: a 16 game fixture that genuinely overflows and
+  the scroll MEASURED moving (the assertion that would have caught his report), pause
+  parking it, resume actually resuming with no sticky focus. simTicker and simPrerender
+  green; simTicker ported to Windows.
 - THE REPORT PIPELINE AND THE SUPABASE TAP, Round 316 (desktop lane, 2026-08-29). The
   report button: relay redeployed with Round 304's queued origin allowlist, plus two
   finds that explain why his inbox stayed empty: FormSubmit refuses server calls that

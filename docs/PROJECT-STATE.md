@@ -2597,6 +2597,16 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 317.** The wire glides. His "the ticker isnt moving" had three
+  layers: the day-ahead slate made each sport's box wider than any screen while the
+  loop held it perfectly still (unreachable cards, parked look), the pause button's
+  focus was itself a pause so clicking resume left the wire parked, and userPaused was
+  missing from the loop's dependencies. TopTicker now crawls through every card at
+  cable pace with a reading hold per sport, hands off at the last card, self-loops on a
+  one sport day, and pause/resume clicks never focus (keyboard focus still parks, the
+  Round 306 accessibility promise kept). playLiveTicker sections 7 and 8 measure the
+  scroll actually moving on an overflowing fixture and the resume click actually
+  resuming; simTicker and simPrerender green.
 - **2026-08-29, Round 316.** The report pipeline and the Supabase tap. Why his inbox
   never got a report: FormSubmit refuses server side calls with no web Origin while
   answering 200, and the old relay read resp.ok as delivered, so every mail ever sent

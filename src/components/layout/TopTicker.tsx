@@ -168,13 +168,66 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     }
   }, []);
 
-  /* The loop itself: hold on the open sport for its dwell, then advance.
-     A one sport wire never advances; a dead wire has nothing to advance. */
+  /* Round 317, his report "the ticker isnt moving": it wasn't, in the way
+     that counts. The old loop held each sport's box perfectly still for up
+     to 14 seconds and then swapped, and once Round 311 loaded the full day
+     ahead a sport carries twenty plus cards, so everything past the screen
+     edge was unreachable and the strip read as parked. The wire now GLIDES
+     the way the cable bottom line he named does: a short hold to read the
+     label, then a steady crawl through every card, and the handoff to the
+     next sport when the last card has passed. A group that fits on screen
+     holds for its old dwell instead. Reduced motion keeps the everything
+     open, nothing moving layout. */
+  const lastIdxRef = useRef(-1);
   useEffect(() => {
-    if (reducedMotion || paused || userPaused || groups.length < 2) return undefined;
-    const t = window.setTimeout(() => setIdx(i => (i + 1) % groups.length), dwellMs(groups[idx % groups.length]?.rows.length ?? 0));
-    return () => window.clearTimeout(t);
-  }, [idx, groups, reducedMotion, paused]);
+    if (reducedMotion || paused || userPaused || groups.length === 0) return undefined;
+    const vp = viewportRef.current;
+    if (!vp) return undefined;
+    const fresh = lastIdxRef.current !== idx;
+    lastIdxRef.current = idx;
+    if (fresh) vp.scrollLeft = 0;
+    /* a fresh sport gets the reading hold; a resume after hover or pause
+       picks up mid glide almost at once */
+    let holdLeft = fresh ? 2200 : 350;
+    const SPEED = 55; // px per second, the cable crawl
+    let raf = 0;
+    let last: number | null = null;
+    let settled = 0;
+    const step = (ts: number) => {
+      if (last == null) last = ts;
+      const dt = Math.min(100, ts - last);
+      last = ts;
+      if (holdLeft > 0) {
+        holdLeft -= dt;
+        raf = requestAnimationFrame(step);
+        return;
+      }
+      const maxScroll = vp.scrollWidth - vp.clientWidth;
+      if (maxScroll <= 4) {
+        /* fits on screen: nothing to glide, so hold for the old dwell */
+        settled += dt;
+        if (settled >= dwellMs(groups[idx % groups.length]?.rows.length ?? 0) && groups.length > 1) {
+          setIdx(i => (i + 1) % groups.length);
+          return;
+        }
+        raf = requestAnimationFrame(step);
+        return;
+      }
+      vp.scrollLeft = vp.scrollLeft + (SPEED * dt) / 1000;
+      if (vp.scrollLeft >= maxScroll - 1) {
+        if (groups.length > 1) {
+          setIdx(i => (i + 1) % groups.length);
+          return;
+        }
+        /* a one sport wire loops itself: hold at the end, then restart */
+        vp.scrollLeft = 0;
+        holdLeft = 2200;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [idx, groups, reducedMotion, paused, userPaused]);
 
   /* A feed refresh can shrink the group list under the pointer. */
   const open = groups.length ? idx % groups.length : 0;
@@ -210,6 +263,13 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
           <button
             type="button"
             onClick={() => setUserPaused(p => !p)}
+            /* Round 317: a mouse click must not FOCUS this button, because
+               focus inside the strip is itself a pause, so clicking resume
+               left the wire parked anyway, which is exactly what the owner
+               reported. preventDefault on mousedown stops the focus while
+               keyboard tabbing still lands here and still parks the wire,
+               which is the accessible behavior Round 306 promised. */
+            onMouseDown={e => e.preventDefault()}
             aria-pressed={userPaused}
             aria-label={userPaused ? 'Resume the scores ticker' : 'Pause the scores ticker'}
             className="shrink-0 z-10 h-full px-2 text-[10px] text-muted-foreground hover:text-foreground transition-colors"
