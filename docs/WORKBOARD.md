@@ -113,10 +113,6 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- WELCOME NOTE (BUILDING as Round 346, desktop, 2026-08-29): the dismissible maker
-  card per the Inbox item, his voice cleaned, once per browser, below the fold
-  content, the same note permanent on /about, playHomeFold extended to hold it
-  below the first tile.
 
 - WORLD XI REAL POSITIONS (BUILDING as Round 345, desktop, 2026-08-29): the Round
   319 handoff, a verified secondary position map so eligibility reads positions a
@@ -198,6 +194,17 @@ Standing claims:
 
 ## Done
 
+- THE MAKER NOTE, Round 346 (desktop lane, 2026-08-29). His welcome idea, built
+  the way the home page can carry it: a small dismissible card in his own voice
+  (first coding project, independent, constantly improving, sorry for any bugs,
+  thanks for visiting, have a blessed day), spelling cleaned, nothing sincere
+  dropped. A card and not the popup he pictured, because the fold covenant is
+  offers before asks; it sits measured BELOW the first game tile (note y=548,
+  tile y=333), contains zero account language, and dismisses once per browser.
+  Client rendered only, deliberately outside every crawler-facing file the
+  AdSense freeze covers; the permanent /about copy waits for the verdict, noted
+  here. playHomeFold section 5 fences all of it: renders fresh, below the tile,
+  asks for nothing, gone after dismiss and reload. Full fold harness green.
 - THE STALE VALUES SWEEP, Round 344 (desktop lane, 2026-08-29). The Round 315
   follow up, closed in one evening by eight parallel researchers under the
   two-source rule with every database write reviewed and executed by hand. All

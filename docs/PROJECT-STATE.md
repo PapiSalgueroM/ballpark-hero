@@ -2597,6 +2597,15 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 346.** The maker note. The owner asked for a welcome popup
+  in his own words; it shipped as a dismissible card below the games instead,
+  because the home page measures offers before asks and a modal in front of the
+  list is the toll booth Round 283 removed. His voice kept, spelling cleaned,
+  once per browser, zero account language, client rendered only so the AdSense
+  review freeze surfaces stay untouched (the permanent /about copy waits for
+  the verdict). playHomeFold grew section 5: renders for a fresh visitor,
+  measured below the first tile, asks for nothing, and stays gone after
+  dismiss and reload. tsc zero, build green, full fold harness green.
 - **2026-08-29, Round 344.** The stale values sweep. Eight parallel researchers
   classified all 243 players whose latest value row was 2024 or older at a 30m
   plus peak, two sources per claim; the desktop lane reviewed everything and
