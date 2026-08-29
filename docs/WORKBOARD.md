@@ -19,17 +19,9 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 320.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 321.
 
 ## Inbox (unclaimed)
-
-- MOBILE PASS (Anthony, 2026-08-29: "were losing a lot of viewers because were not the
-  best mobile friendly because how everything is formatted so make sure everything
-  translates smoothly"). A full phone-first sweep of every route: the vehicles are
-  sweepGames at 320/390 widths, playIphone, simMobileChrome and the playGames walk,
-  plus hand checks of the layouts those cannot judge (tap target sizes, text scale,
-  horizontal squeeze, fixed elements covering content). Work the findings as rounds.
-  Note the constraint: no-scroll rule and the FIFA tile rule govern the fixes.
 
 - Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
   indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
@@ -66,6 +58,14 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
+- MOBILE PASS (claimed 2026-08-29, BUILDING as Round 320): Anthony, 2026-08-29: "were
+  losing a lot of viewers because were not the best mobile friendly because how
+  everything is formatted so make sure everything translates smoothly". A full
+  phone-first sweep of every route: sweepGames at 320/390 widths, playIphone,
+  simMobileChrome and the playGames walk, plus hand checks of the layouts those cannot
+  judge (tap target sizes, text scale, horizontal squeeze, fixed elements covering
+  content). Findings worked as rounds, 320 is the first. Constraint: no-scroll rule and
+  the FIFA tile rule govern the fixes.
 - Ticker follow up: an alert when every feed has written zero rows for a full day, so a
   dead feed is surfaced instead of quiet (the suspension sat unnoticed for two days).
   The next candidate host if the header endpoint ever closes: cdn.espn.com/core, which
