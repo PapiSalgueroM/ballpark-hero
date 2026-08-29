@@ -11,8 +11,11 @@ import {
   dealObjectivesWithIdentity, budgetFor, fortuneDeckFor,
   planRivals, simulateRival, simulateSeason,
   isContested, warRivalIndex, rivalCapFor, nextRaise,
+  spinOrder, dealReplacements, drawPunishments, applyPreset, forceSales,
+  OVERDRAFT_LIMIT,
   type CoachOption, type BoardObjective, type FinEvent, type RivalResult,
-  type RivalPlan, type SeasonResult, type FortuneCard,
+  type RivalPlan, type SeasonResult, type FortuneCard, type ReplacementDeal,
+  type RebuildPreset,
 } from '@/lib/rebuildDeck';
 
 export interface WarView {
@@ -27,7 +30,10 @@ export interface WarView {
   outcome: 'live' | 'won' | 'lost';
 }
 
-export type Phase = 'pick-club' | 'pick-coach' | 'fortune' | 'cuts' | 'rebuilding' | 'done';
+/** Round 333: the cuts list and the open market browser are gone. The window
+ *  is one loop now: spin for a position, keep or sell the man you drew,
+ *  selling deals three priced replacements plus the free bench. */
+export type Phase = 'pick-club' | 'pick-coach' | 'fortune' | 'spin' | 'done';
 
 export interface ObjectiveView {
   objective: BoardObjective;
@@ -43,18 +49,14 @@ export interface RebuildState {
   market: Player[];
   formation: Formation;
   setFormation: (name: string) => void;
-  startingXi: (Player | undefined)[];
+  /** The XI as it stands: resolved slots show the decision, unspun slots the incumbent, an open sale shows empty. */
+  startingXi: (Player | null)[];
   startRating: number;
   currentRating: number;
   target: number;
   budget: number;
   sold: Player[];
   signed: Player[];
-  activeSlot: number | null;
-  setActiveSlot: (i: number | null) => void;
-  candidates: Player[];
-  search: string;
-  setSearch: (s: string) => void;
   chooseClub: (c: RebuildClub) => void;
   sign: (p: Player) => void;
   finish: () => void;
@@ -69,11 +71,26 @@ export interface RebuildState {
   flippedIndex: number | null;
   flipFortune: (i: number) => void;
   confirmFortune: () => void;
-  // Keep/sell commitment before the market opens (Round 51)
-  cuts: string[];
-  cutsValue: number;
-  toggleCut: (p: Player) => void;
-  lockCuts: () => void;
+  // Round 333: the spin loop
+  preset: RebuildPreset;
+  setPreset: (p: RebuildPreset) => void;
+  spunSlot: number | null;
+  spinning: boolean;
+  spinsDone: number;
+  spinsTotal: number;
+  spin: () => void;
+  keepSpun: () => void;
+  sellSpun: () => void;
+  deal: ReplacementDeal | null;
+  takeReplacement: (p: Player) => void;
+  promoteBench: (p: Player) => void;
+  /** The last resort that keeps the loop alive: play the shirt empty (rated 40). */
+  leaveEmpty: () => void;
+  redealSpun: () => void;
+  /** Settled shirts: a Player, or null for a shirt deliberately left empty. */
+  decided: Map<number, Player | null>;
+  /** Money after the final reckoning (forced sales, fines); equals budget until then. */
+  finalFunds: number;
   // Rebuild expansion (owner 2026-08-05)
   coachOptions: CoachOption[];
   keepCoach: CoachOption;
@@ -111,10 +128,17 @@ function buildXi(formation: Formation, pool: Player[]): (Player | undefined)[] {
   });
 }
 
-function xiRating(xi: (Player | undefined)[]): number {
+function xiRating(xi: (Player | undefined | null)[]): number {
   const picked = xi.filter(Boolean) as Player[];
   if (picked.length === 0) return 0;
   return Math.round(picked.reduce((s, p) => s + playerRating(p), 0) / picked.length);
+}
+
+/** The reckoning's rating: an empty shirt counts 40, so a punishment sale
+ *  can never raise the average by removing a below average starter. */
+function finalXiRating(xi: (Player | null)[]): number {
+  if (xi.length === 0) return 0;
+  return Math.round(xi.reduce((s, p) => s + (p ? playerRating(p) : 40), 0) / xi.length);
 }
 
 /**
@@ -135,6 +159,13 @@ function gradeFor(current: number, start: number, target: number): string {
   return 'You made it worse';
 }
 
+interface Reckoning {
+  notes: string[];
+  xi: (Player | null)[];
+  funds: number;
+  ratingPen: number;
+}
+
 export function useRebuild(): RebuildState {
   const [phase, setPhase] = useState<Phase>('pick-club');
   const [loading, setLoading] = useState(true);
@@ -146,8 +177,6 @@ export function useRebuild(): RebuildState {
   const [sold, setSold] = useState<Player[]>([]);
   const [signed, setSigned] = useState<Player[]>([]);
   const [startRating, setStartRating] = useState(0);
-  const [activeSlot, setActiveSlot] = useState<number | null>(null);
-  const [search, setSearch] = useState('');
 
   // Rebuild expansion state (owner 2026-08-05)
   const [seed, setSeed] = useState(0);
@@ -157,16 +186,25 @@ export function useRebuild(): RebuildState {
   const [finLog, setFinLog] = useState<FinEvent[]>([]);
   const [extraFunds, setExtraFunds] = useState(0);
   const [transferActions, setTransferActions] = useState(0);
-  const [penalties, setPenalties] = useState<string[]>([]);
-  const [forcedOut, setForcedOut] = useState<Set<string>>(new Set());
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
   const [rivalsLoading, setRivalsLoading] = useState(false);
 
-  // Round 51: fortune card + keep/sell commitment
+  // Round 51: fortune card
   const [fortuneDeck, setFortuneDeck] = useState<FortuneCard[]>([]);
   const [flippedFortune, setFlippedFortune] = useState<FortuneCard | null>(null);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
-  const [cuts, setCuts] = useState<Set<string>>(new Set());
+
+  // Round 333: the spin loop
+  const [preset, setPresetState] = useState<RebuildPreset>('none');
+  const [order, setOrder] = useState<number[]>([]);
+  const [spunSlot, setSpunSlot] = useState<number | null>(null);
+  const [spinning, setSpinning] = useState(false);
+  const [deal, setDeal] = useState<ReplacementDeal | null>(null);
+  const [dealAttempt, setDealAttempt] = useState(0);
+  const [decided, setDecided] = useState<Map<number, Player | null>>(new Map());
+  const [reckoning, setReckoning] = useState<Reckoning | null>(null);
+  const spunSlotRef = useRef<number | null>(null);
+  const spinTimer = useRef<number | null>(null);
 
   // Live bidding wars + season sim (owner 2026-08-05)
   const [rivalPlans, setRivalPlans] = useState<RivalPlan[]>([]);
@@ -178,7 +216,10 @@ export function useRebuild(): RebuildState {
   const warRef = useRef<WarView | null>(null);
   useEffect(() => { warRef.current = war; }, [war]);
 
-  useEffect(() => () => { if (warTimer.current) window.clearTimeout(warTimer.current); }, []);
+  useEffect(() => () => {
+    if (warTimer.current) window.clearTimeout(warTimer.current);
+    if (spinTimer.current) window.clearTimeout(spinTimer.current);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -197,18 +238,40 @@ export function useRebuild(): RebuildState {
 
   const soldNames = useMemo(() => new Set(sold.map(p => p.name)), [sold]);
 
-  /** Current squad = original minus sold, plus signed, minus board force-sales. */
+  /** Current squad = original minus sold, plus signed. */
   const activeSquad = useMemo(
-    () => [...squad.filter(p => !soldNames.has(p.name)), ...signed].filter(p => !forcedOut.has(p.name)),
-    [squad, soldNames, signed, forcedOut],
+    () => [...squad.filter(p => !soldNames.has(p.name)), ...signed],
+    [squad, soldNames, signed],
   );
 
-  const startingXi = useMemo(() => buildXi(formation, activeSquad), [formation, activeSquad]);
-  const coachBonus = coach?.bonus ?? 0;
-  const currentRating = useMemo(
-    () => (startingXi.some(Boolean) ? Math.min(99, xiRating(startingXi) + coachBonus) : 0),
-    [startingXi, coachBonus],
+  /** The inherited XI the wheel resolves. Stable through the whole spin:
+   *  built from the ORIGINAL squad, so selling a man never reshuffles the
+   *  ten shirts still waiting for their spin. */
+  const baseXi = useMemo(
+    () => buildXi(formation, squad).map(p => p ?? null),
+    [formation, squad],
   );
+
+  /** The XI on screen: decisions override (a decided empty shirt stays
+   *  empty), an open sale is an empty shirt too. */
+  const startingXi = useMemo(
+    () => formation.slots.map((_, i) => {
+      if (decided.has(i)) return decided.get(i) ?? null;
+      const inc = baseXi[i];
+      return inc && !soldNames.has(inc.name) ? inc : null;
+    }),
+    [formation, decided, baseXi, soldNames],
+  );
+
+  const coachBonus = coach?.bonus ?? 0;
+  const currentRating = useMemo(() => {
+    if (reckoning) {
+      return Math.max(1, Math.min(99, finalXiRating(reckoning.xi) + coachBonus - reckoning.ratingPen));
+    }
+    // Same law as the reckoning: an empty shirt plays like a 40, so leaving
+    // one open shows its true cost live instead of at the whistle.
+    return startingXi.some(Boolean) ? Math.max(1, Math.min(99, finalXiRating(startingXi) + coachBonus)) : 0;
+  }, [reckoning, startingXi, coachBonus]);
 
   // Round 51: the war chest scales with club size.
   const baseBudget = useMemo(() => (club ? budgetFor(club.tier) : BASE_BUDGET), [club]);
@@ -223,37 +286,27 @@ export function useRebuild(): RebuildState {
     [baseBudget, sold, signed, extraFunds, coach, overpaid],
   );
 
+  const finalFunds = reckoning ? reckoning.funds : budget;
+
   const target = useMemo(
     () => (club ? targetFor(startRating, club.tier) : 0),
     [club, startRating],
   );
 
-  const signedNames = useMemo(() => new Set(signed.map(p => p.name)), [signed]);
-
-  const candidates = useMemo(() => {
-    if (activeSlot === null) return [];
-    const slot = formation.slots[activeSlot];
-    if (!slot) return [];
-    const q = search.trim().toLowerCase();
-    return market
-      .filter(p => slot.allowed.includes(p.position))
-      .filter(p => !signedNames.has(p.name))
-      .filter(p => !lostMap.has(p.name))
-      .filter(p => p.marketValue <= budget)
-      .filter(p => (q ? p.name.toLowerCase().includes(q) || p.club.toLowerCase().includes(q) : true))
-      .sort((a, b) => playerRating(b) - playerRating(a))
-      .slice(0, 50);
-  }, [activeSlot, formation, market, signedNames, budget, search, lostMap]);
-
   const objectives: ObjectiveView[] = useMemo(
     () => objectiveDeck.map(o => ({
       objective: o,
-      met: o.check({ signed, sold, budget }),
+      met: o.check({ signed, sold, budget: finalFunds }),
     })),
-    [objectiveDeck, signed, sold, budget],
+    [objectiveDeck, signed, sold, finalFunds],
   );
 
   useGameCompletion('rebuild', phase === 'done', Math.max(0, currentRating * 10), currentRating >= target ? 1 : 0);
+
+  const setPreset = useCallback((p: RebuildPreset) => {
+    // The restriction is a promise made before the window opens, never changed mid run.
+    setPresetState(prev => (club ? prev : p));
+  }, [club]);
 
   const chooseClub = useCallback(async (c: RebuildClub) => {
     setClub(c);
@@ -262,7 +315,7 @@ export function useRebuild(): RebuildState {
     setSeed(s);
     const [sq, mk] = await Promise.all([fetchClubSquad(c.club), fetchMarket(c.club)]);
     setSquad(sq);
-    setMarket(mk);
+    setMarket(applyPreset(mk, preset));
     setStartRating(xiRating(buildXi(FORMATIONS[0], sq)));
     setFormationName(FORMATIONS[0].name);
     setSold([]);
@@ -273,12 +326,17 @@ export function useRebuild(): RebuildState {
     setFortuneDeck(fortuneDeckFor(s));
     setFlippedFortune(null);
     setFlippedIndex(null);
-    setCuts(new Set());
+    setOrder(spinOrder(s, FORMATIONS[0].slots.length));
+    setSpunSlot(null);
+    spunSlotRef.current = null;
+    setSpinning(false);
+    setDeal(null);
+    setDealAttempt(0);
+    setDecided(new Map());
+    setReckoning(null);
     setFinLog([]);
     setExtraFunds(0);
     setTransferActions(0);
-    setPenalties([]);
-    setForcedOut(new Set());
     setRivals(null);
     setRivalPlans(planRivals(c, clubs, s));
     setWar(null);
@@ -287,7 +345,7 @@ export function useRebuild(): RebuildState {
     setSeason(null);
     setLoading(false);
     setPhase('pick-coach');
-  }, [clubs]);
+  }, [clubs, preset]);
 
   const pickCoach = useCallback((c: CoachOption) => {
     setCoach(c);
@@ -307,24 +365,8 @@ export function useRebuild(): RebuildState {
 
   const confirmFortune = useCallback(() => {
     if (!flippedFortune) return;
-    setPhase('cuts');
+    setPhase('spin');
   }, [flippedFortune]);
-
-  /** Round 51: commit keep/sell BEFORE the market opens. */
-  const toggleCut = useCallback((p: Player) => {
-    setCuts(prev => {
-      const next = new Set(prev);
-      if (next.has(p.name)) next.delete(p.name);
-      else next.add(p.name);
-      return next;
-    });
-  }, []);
-
-  const lockCuts = useCallback(() => {
-    const outgoing = squad.filter(p => cuts.has(p.name));
-    setSold(outgoing);
-    setPhase('rebuilding');
-  }, [squad, cuts]);
 
   /** Every second transfer action, the finance department calls. */
   const bumpFinances = useCallback(() => {
@@ -339,6 +381,74 @@ export function useRebuild(): RebuildState {
     });
   }, [seed]);
 
+  /** The names nobody can be dealt again: everyone holding or promised a shirt,
+   *  everyone bought, sold or lost to a rival this window. */
+  const takenNames = useCallback(() => {
+    const taken = new Set<string>();
+    for (const p of baseXi) if (p) taken.add(p.name);
+    decided.forEach(p => { if (p) taken.add(p.name); });
+    for (const p of signed) taken.add(p.name);
+    for (const p of sold) taken.add(p.name);
+    lostMap.forEach((_, n) => taken.add(n));
+    return taken;
+  }, [baseXi, decided, signed, sold, lostMap]);
+
+  const makeDeal = useCallback((slotIdx: number, attempt: number) => {
+    const slot = formation.slots[slotIdx];
+    return dealReplacements(market, squad, slot, takenNames(), seed, slotIdx + attempt * 37);
+  }, [formation, market, squad, takenNames, seed]);
+
+  const resolveSlot = useCallback((slotIdx: number, p: Player | null) => {
+    setDecided(prev => new Map(prev).set(slotIdx, p));
+    setDeal(null);
+    setDealAttempt(0);
+    setSpunSlot(null);
+    spunSlotRef.current = null;
+  }, []);
+
+  const spin = useCallback(() => {
+    if (phase !== 'spin' || spinning || spunSlot !== null || war || deal) return;
+    const idx = decided.size;
+    if (idx >= order.length) return;
+    setSpinning(true);
+    spinTimer.current = window.setTimeout(() => {
+      const slot = order[idx];
+      setSpinning(false);
+      setSpunSlot(slot);
+      spunSlotRef.current = slot;
+      // An inherited hole (the squad never had a fit) skips keep-or-sell and
+      // goes straight to the scouts' list.
+      const incumbent = baseXi[slot];
+      if (!incumbent) setDeal(makeDeal(slot, 0));
+    }, 1200);
+  }, [phase, spinning, spunSlot, war, deal, decided, order, baseXi, makeDeal]);
+
+  const keepSpun = useCallback(() => {
+    if (spunSlot === null || deal || spinning) return;
+    const incumbent = baseXi[spunSlot];
+    if (!incumbent) return;
+    resolveSlot(spunSlot, incumbent);
+  }, [spunSlot, deal, spinning, baseXi, resolveSlot]);
+
+  const sellSpun = useCallback(() => {
+    if (spunSlot === null || deal || spinning) return;
+    const incumbent = baseXi[spunSlot];
+    if (!incumbent) return;
+    // A sale can never dead-end the run: even with no affordable offer and
+    // no bench fit, leaveEmpty below resolves the shirt (at a price).
+    setSold(prev => (prev.some(x => x.name === incumbent.name) ? prev : [...prev, incumbent]));
+    setDeal(makeDeal(spunSlot, 0));
+    bumpFinances();
+  }, [spunSlot, deal, spinning, baseXi, makeDeal, bumpFinances]);
+
+  /** A fresh scouts' list for the open slot, for when wars ate every offer. */
+  const redealSpun = useCallback(() => {
+    if (spunSlot === null || !deal) return;
+    const attempt = dealAttempt + 1;
+    setDealAttempt(attempt);
+    setDeal(makeDeal(spunSlot, attempt));
+  }, [spunSlot, deal, dealAttempt, makeDeal]);
+
   const completeSigning = useCallback((p: Player, premium: number) => {
     setSigned(prev => {
       if (prev.some(x => x.name === p.name)) return prev;
@@ -346,12 +456,14 @@ export function useRebuild(): RebuildState {
       return [...prev, p];
     });
     if (premium > 0) setOverpaid(o => o + premium);
-    setActiveSlot(null);
-    setSearch('');
-  }, [bumpFinances]);
+    const slot = spunSlotRef.current;
+    if (slot !== null) resolveSlot(slot, p);
+  }, [bumpFinances, resolveSlot]);
 
   const sign = useCallback((p: Player) => {
-    if (p.marketValue > budget || war) return;
+    // Round 333: the wallet can dip to the overdraft mid window; the reckoning
+    // force-sells shirts at random to claw a negative balance back.
+    if (p.marketValue > budget + OVERDRAFT_LIMIT || war) return;
     // A rival can hijack the deal and start a live bidding war (seeded per
     // run + player; stars attract wars, squad players mostly do not).
     const rivalIdx = warRivalIndex(p, seed);
@@ -372,17 +484,37 @@ export function useRebuild(): RebuildState {
         thinking: false,
         outcome: 'live',
       });
-      setActiveSlot(null);
-      setSearch('');
       return;
     }
     completeSigning(p, 0);
   }, [budget, war, rivalPlans, seed, completeSigning]);
 
+  const takeReplacement = useCallback((p: Player) => {
+    if (spunSlot === null || !deal || war) return;
+    spunSlotRef.current = spunSlot;
+    sign(p);
+  }, [spunSlot, deal, war, sign]);
+
+  /** The fourth option: a squad player already at the club takes the shirt, free. */
+  const promoteBench = useCallback((p: Player) => {
+    if (spunSlot === null || !deal || war) return;
+    resolveSlot(spunSlot, p);
+    bumpFinances();
+  }, [spunSlot, deal, war, resolveSlot, bumpFinances]);
+
+  /** The escape hatch the first playthrough proved necessary: with the wallet
+   *  deep in the overdraft, every offer unaffordable and no bench fit, the
+   *  run must still move. An empty shirt plays like a 40 and the rating says
+   *  so immediately, so it is a real cost, never a cheat. */
+  const leaveEmpty = useCallback(() => {
+    if (spunSlot === null || !deal || war) return;
+    resolveSlot(spunSlot, null);
+  }, [spunSlot, deal, war, resolveSlot]);
+
   const raiseWar = useCallback(() => {
     if (!war || war.outcome !== 'live' || war.thinking || war.leader !== 'rival') return;
     const myBid = nextRaise(war.price);
-    if (myBid > budget) return;
+    if (myBid > budget + OVERDRAFT_LIMIT) return;
     setWar(w => w && ({ ...w, price: myBid, leader: 'you', thinking: true, log: [...w.log, `🫵 You bid €${myBid}M.`] }));
     warTimer.current = window.setTimeout(() => {
       const w = warRef.current;
@@ -416,28 +548,75 @@ export function useRebuild(): RebuildState {
     warTimer.current = window.setTimeout(() => setWar(null), 1500);
   }, [war]);
 
+  /** A lost war removes that offer from the open deal on screen. */
+  const dealView = useMemo(() => {
+    if (!deal) return null;
+    return {
+      offers: deal.offers.filter(o => !lostMap.has(o.name)),
+      bench: deal.bench,
+    };
+  }, [deal, lostMap]);
+
   const finish = useCallback(async () => {
     if (war) return; // settle the bidding war first
-    // Board reckoning: every unmet objective costs you a player.
-    const out = new Set(forcedOut);
-    const unmet = objectiveDeck.filter(o => !o.check({ signed, sold, budget }));
-    if (unmet.length > 0) {
-      const notes: string[] = [];
-      for (const o of unmet) {
-        const pool = [...signed, ...squad.filter(p => !soldNames.has(p.name))]
-          .filter(p => !out.has(p.name))
-          .sort((a, b) => b.marketValue - a.marketValue);
-        const victim = pool[0];
-        if (victim) {
-          out.add(victim.name);
-          notes.push(`${o.emoji} ${o.penaltyText} (${victim.name} was sold)`);
-        } else {
-          notes.push(`${o.emoji} ${o.penaltyText}`);
-        }
+    if (decided.size < formation.slots.length || spunSlot !== null || spinning) return;
+
+    const notes: string[] = [];
+    const xi: (Player | null)[] = formation.slots.map((_, i) => decided.get(i) ?? null);
+    let funds = budget;
+    let ratingPen = 0;
+
+    // The overdraft reckoning (owner spec: end with negative money and
+    // positions are force sold at random). Seeded, random order, each sale
+    // swaps a shirt for the cheapest market fit until the debt clears.
+    if (funds < 0) {
+      const { swaps, remainingDeficit } = forceSales(xi, formation, market, -funds, seed);
+      for (const sw of swaps) {
+        const idx = xi.findIndex(p => p?.name === sw.outName);
+        if (idx >= 0) xi[idx] = sw.inPlayer;
+        funds += sw.recouped;
+        notes.push(`🚨 Forced sale: ${sw.outName} out, ${sw.inPlayer.name} in, €${sw.recouped}M clawed back`);
       }
-      setForcedOut(out);
-      setPenalties(notes);
+      if (remainingDeficit > 0) {
+        notes.push(`🚨 €${remainingDeficit}M of debt could not be cleared. The board is livid.`);
+        ratingPen += 2;
+      }
     }
+
+    // Board reckoning: every missed demand draws a punishment card from the
+    // five card deck, without replacement, exactly one merciful.
+    const unmet = objectiveDeck.filter(o => !o.check({ signed, sold, budget: funds }));
+    const cards = drawPunishments(seed, unmet.length);
+    cards.forEach((card, k) => {
+      const missed = unmet[k];
+      const head = `${card.emoji} ${card.title} (missed: ${missed.text})`;
+      if (card.kind === 'safe') { notes.push(`${head}: ${card.text}`); return; }
+      if (card.kind === 'fine') { funds -= card.amount; notes.push(`${head}: ${card.text}`); return; }
+      if (card.kind === 'ratingHit') { ratingPen += card.amount; notes.push(`${head}: ${card.text}`); return; }
+      // sellBest and sellRandom take a shirt; the club's own depth steps in
+      // if anyone fits, otherwise the shirt stays empty and drags the rating.
+      const holders = xi.map((p, i) => ({ p, i })).filter((x): x is { p: Player; i: number } => x.p !== null);
+      if (holders.length === 0) { notes.push(`${head}: ${card.text}`); return; }
+      let victim: { p: Player; i: number };
+      if (card.kind === 'sellBest') {
+        victim = [...holders].sort((a, b) => b.p.marketValue - a.p.marketValue)[0];
+      } else {
+        let s = ((seed ^ 0x726e64) + k * 7919) % 2147483647;
+        if (s <= 0) s += 2147483646;
+        s = (s * 16807) % 2147483647;
+        victim = holders[Math.floor(((s - 1) / 2147483646) * holders.length)];
+      }
+      const used = new Set(xi.filter(Boolean).map(p => (p as Player).name));
+      const stepUp = bestFor(
+        formation.slots[victim.i],
+        squad.filter(p => !soldNames.has(p.name) && !used.has(p.name)),
+        new Set(),
+      );
+      xi[victim.i] = stepUp ?? null;
+      notes.push(`${head}: ${card.text} (${victim.p.name} was sold${stepUp ? `, ${stepUp.name} steps in` : ', the shirt stays empty'})`);
+    });
+
+    setReckoning({ notes, xi, funds, ratingPen });
     setPhase('done');
 
     // Rivals post their windows after yours closes, then the season kicks off.
@@ -455,11 +634,10 @@ export function useRebuild(): RebuildState {
         }
         setRivals(results);
 
-        // Season sim uses your POST-penalty squad, coach bonus included.
-        const postSquad = [...squad.filter(p => !soldNames.has(p.name)), ...signed].filter(p => !out.has(p.name));
-        const postXiPlayers = buildXi(formation, postSquad).filter(Boolean) as Player[];
+        // Season sim uses your POST-reckoning XI, coach bonus included.
+        const postXiPlayers = xi.filter(Boolean) as Player[];
         const postRating = postXiPlayers.length
-          ? Math.min(99, xiRating(buildXi(formation, postSquad)) + (coach?.bonus ?? 0))
+          ? Math.max(1, Math.min(99, finalXiRating(xi) + (coach?.bonus ?? 0) - ratingPen))
           : 0;
         const usedClubs = new Set([club.club, ...plans.map(p => p.club.club)]);
         const fillerPool = clubs.filter(c => !usedClubs.has(c.club) && c.tier === club.tier);
@@ -474,7 +652,7 @@ export function useRebuild(): RebuildState {
         setRivalsLoading(false);
       }
     }
-  }, [war, objectiveDeck, signed, sold, budget, forcedOut, squad, soldNames, club, clubs, seed, market, rivalPlans, lostMap, formation, coach]);
+  }, [war, decided, formation, spunSlot, spinning, budget, market, seed, objectiveDeck, signed, sold, squad, soldNames, club, clubs, rivalPlans, lostMap, coach]);
 
   const reset = useCallback(() => {
     setPhase('pick-club');
@@ -484,19 +662,23 @@ export function useRebuild(): RebuildState {
     setSold([]);
     setSigned([]);
     setStartRating(0);
-    setActiveSlot(null);
     setCoach(null);
     setCoachOptions([]);
     setObjectiveDeck([]);
     setFortuneDeck([]);
     setFlippedFortune(null);
     setFlippedIndex(null);
-    setCuts(new Set());
+    setOrder([]);
+    setSpunSlot(null);
+    spunSlotRef.current = null;
+    setSpinning(false);
+    setDeal(null);
+    setDealAttempt(0);
+    setDecided(new Map());
+    setReckoning(null);
     setFinLog([]);
     setExtraFunds(0);
     setTransferActions(0);
-    setPenalties([]);
-    setForcedOut(new Set());
     setRivals(null);
     setRivalPlans([]);
     setWar(null);
@@ -504,9 +686,15 @@ export function useRebuild(): RebuildState {
     setOverpaid(0);
     setSeason(null);
     if (warTimer.current) window.clearTimeout(warTimer.current);
+    if (spinTimer.current) window.clearTimeout(spinTimer.current);
   }, []);
 
-  const setFormation = useCallback((name: string) => setFormationName(name), []);
+  /** Formation is a pre spin choice: once the wheel has drawn or resolved a
+   *  shirt the shape is locked, or the decided map would point at dead slots. */
+  const setFormation = useCallback((name: string) => {
+    if (decided.size > 0 || spunSlot !== null || spinning) return;
+    setFormationName(name);
+  }, [decided, spunSlot, spinning]);
 
   const grade = useMemo(
     () => gradeFor(currentRating, startRating, target),
@@ -519,24 +707,22 @@ export function useRebuild(): RebuildState {
       ? `\nvs ${rivals[0].name} ${rivals[0].finalRating} · ${rivals[1].name} ${rivals[1].finalRating}`
       : '';
     const seasonLine = season ? `\nSeason: #${season.position} of ${season.table.length}` : '';
-    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${budget}M left\ndouknowball.com/rebuild`;
-  }, [phase, club, startRating, currentRating, target, grade, sold, signed, budget, coach, rivals, season]);
-
-  const cutsValue = useMemo(
-    () => squad.filter(p => cuts.has(p.name)).reduce((s, p) => s + p.marketValue, 0),
-    [squad, cuts],
-  );
+    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${finalFunds}M left\ndouknowball.com/rebuild`;
+  }, [phase, club, startRating, currentRating, target, grade, sold, signed, finalFunds, coach, rivals, season]);
 
   return {
     phase, loading, clubs, club, squad: activeSquad, market, formation, setFormation,
     startingXi, startRating, currentRating, target, budget, sold, signed,
-    activeSlot, setActiveSlot, candidates, search, setSearch,
     chooseClub, sign, finish, reset, grade, shareText,
     baseBudget,
     fortuneDeck, flippedFortune, flippedIndex, flipFortune, confirmFortune,
-    cuts: [...cuts], cutsValue, toggleCut, lockCuts,
+    preset, setPreset,
+    spunSlot, spinning, spinsDone: decided.size, spinsTotal: formation.slots.length,
+    spin, keepSpun, sellSpun,
+    deal: dealView, takeReplacement, promoteBench, leaveEmpty, redealSpun,
+    decided, finalFunds,
     coachOptions, keepCoach: KEEP_COACH, coach, pickCoach,
-    objectives, finLog, penalties, rivals, rivalsLoading,
+    objectives, finLog, penalties: reckoning?.notes ?? [], rivals, rivalsLoading,
     war, raiseWar, walkAway,
     lostToRivals: [...lostMap.keys()], overpaid, season,
   };

@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Check, Copy, RotateCcw, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Check, Copy, RotateCcw } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import { nextRaise, TIER_BUDGET } from '@/lib/rebuildDeck';
+import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -26,20 +26,34 @@ export function RebuildBoard() {
   const {
     phase, loading, clubs, club, squad, formation, setFormation,
     startingXi, startRating, currentRating, target, budget, sold, signed,
-    activeSlot, setActiveSlot, candidates, search, setSearch,
-    chooseClub, sign, finish, reset, grade, shareText,
-    baseBudget,
+    chooseClub, finish, reset, grade, shareText,
     fortuneDeck, flippedFortune, flippedIndex, flipFortune, confirmFortune,
-    cuts, cutsValue, toggleCut, lockCuts,
+    preset, setPreset,
+    spunSlot, spinning, spinsDone, spinsTotal,
+    spin, keepSpun, sellSpun,
+    deal, takeReplacement, promoteBench, leaveEmpty, redealSpun,
+    decided, finalFunds,
     coachOptions, keepCoach, coach, pickCoach,
     objectives, finLog, penalties, rivals, rivalsLoading,
     war, raiseWar, walkAway, overpaid, season,
   } = useRebuild();
-  // Round 61: the owner's no scroll rule. Every phase change (fortune, cuts,
-  // market, results) pulls the new screen into view instead of leaving the
-  // player looking at the old one.
+  // Round 61: the owner's no scroll rule. Every phase change (fortune, spin,
+  // results) pulls the new screen into view instead of leaving the player
+  // looking at the old one.
   const revealRef = useRevealScroll<HTMLDivElement>(phase);
   const [copied, setCopied] = useState(false);
+
+  // Round 333: while the wheel spins, the highlight cycles the unresolved
+  // shirts so the reveal reads as a draw, not a jump cut.
+  const [flash, setFlash] = useState<number | null>(null);
+  useEffect(() => {
+    if (!spinning) { setFlash(null); return; }
+    const open = formation.slots.map((_, i) => i).filter(i => !decided.has(i));
+    if (open.length === 0) return;
+    let k = 0;
+    const t = window.setInterval(() => { k += 1; setFlash(open[k % open.length]); }, 110);
+    return () => window.clearInterval(t);
+  }, [spinning, formation, decided]);
 
   const copyShare = async () => {
     try {
@@ -70,9 +84,30 @@ export function RebuildBoard() {
           Pick a club to rebuild
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          The rules: bigger clubs hand you a bigger war chest, then you flip a fortune card,
-          commit your sales before the market opens, and answer to the board.
+          The rules: bigger clubs hand you a bigger war chest, then you spin for one
+          position at a time. Keep the man you draw or sell him for good, and answer
+          to the board at the end.
         </p>
+
+        <div className="mt-4 rounded-xl border border-border bg-card p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Market restriction, locked once you pick a club
+          </p>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {REBUILD_PRESETS.map(p => (
+              <button
+                key={p.id}
+                onClick={() => setPreset(p.id)}
+                className={`rounded-lg border px-2 py-2 text-left transition-colors ${
+                  preset === p.id ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40'
+                }`}
+              >
+                <span className="block text-xs font-bold text-foreground">{p.label}</span>
+                <span className="block text-[10px] text-muted-foreground">{p.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {order.map(tier => (
           byTier[tier]?.length ? (
@@ -151,7 +186,7 @@ export function RebuildBoard() {
         {objectives.length > 0 && (
           <div className="mt-6 rounded-xl border border-gold/40 bg-gold/5 p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-gold">
-              📋 The board's demands (miss one and they sell a player)
+              📋 The board's demands (each miss draws a punishment card)
             </p>
             <ul className="mt-2 space-y-1">
               {objectives.map(o => (
@@ -210,72 +245,10 @@ export function RebuildBoard() {
               onClick={confirmFortune}
               className="mt-4 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
             >
-              To the squad decisions
+              To the wheel
             </button>
           </div>
         )}
-        <GameNav currentPath="/rebuild" />
-      </div>
-    );
-  }
-
-  // ---- Keep/sell commitment (Round 51: commit before the market opens) ----
-  if (phase === 'cuts') {
-    const sorted = [...squad].sort((a, b) => b.marketValue - a.marketValue);
-    const fundsNow = baseBudget + (flippedFortune?.delta ?? 0) - (coach?.cost ?? 0);
-    return (
-      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
-        <p className="text-center font-display text-xl font-bold text-foreground">
-          Commit your sales. Right now.
-        </p>
-        <p className="mt-1 text-center text-sm text-muted-foreground">
-          The rules: you decide who goes BEFORE you see a single transfer target.
-          Once the market opens, nobody else leaves.
-        </p>
-        <div className="sticky top-2 z-10 mt-4 flex items-center justify-between gap-2 rounded-xl border border-gold/40 bg-card/95 px-4 py-2.5 backdrop-blur">
-          <span className="text-xs text-muted-foreground">
-            €{fundsNow}M<b className="text-emerald-500"> + €{cutsValue}M</b> from {cuts.length} sale{cuts.length === 1 ? '' : 's'}
-          </span>
-          <button
-            onClick={lockCuts}
-            className="shrink-0 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
-          >
-            Lock it. Open the market
-          </button>
-        </div>
-        <div className="mt-3 space-y-1.5">
-          {sorted.map(p => {
-            const out = cuts.includes(p.name);
-            return (
-              <button
-                key={p.name}
-                onClick={() => toggleCut(p)}
-                className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors ${
-                  out ? 'border-destructive/60 bg-destructive/10' : 'border-border bg-card hover:border-primary/40'
-                }`}
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <FlagImg name={p.nationality} size={14} />
-                  <span className="min-w-0">
-                    <span className={`block truncate text-sm font-medium ${out ? 'text-destructive line-through' : 'text-foreground'}`}>
-                      {p.name}
-                    </span>
-                    <span className="block text-[10px] text-muted-foreground">
-                      {p.position} · age {p.age || '?'} · rated {playerRating(p)}
-                    </span>
-                  </span>
-                </span>
-                <span
-                  className={`ml-2 shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold ${
-                    out ? 'border-destructive/60 text-destructive' : 'border-border text-muted-foreground'
-                  }`}
-                >
-                  {out ? `SELLING €${p.marketValue}M` : 'KEEP'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
         <GameNav currentPath="/rebuild" />
       </div>
     );
@@ -306,7 +279,7 @@ export function RebuildBoard() {
           <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
           <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Coach: {coach?.name ?? 'Caretaker'} · Sold {sold.length} · Signed {signed.length} · €{budget}M unspent
+            Coach: {coach?.name ?? 'Caretaker'} · Sold {sold.length} · Signed {signed.length} · €{finalFunds}M {finalFunds < 0 ? 'in debt' : 'left'}
           </p>
 
           {penalties.length > 0 && (
@@ -415,8 +388,14 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Rebuilding ----
+  // ---- The spin loop (Round 333: the owner's core loop) ----
   const onTrack = currentRating >= target;
+  const incumbent = spunSlot !== null ? startingXi[spunSlot] : null;
+  const spentAllSpins = spinsDone >= spinsTotal;
+  const spendCeiling = budget + OVERDRAFT_LIMIT;
+  const dealDeadEnd = !!deal
+    && !deal.offers.some(p => p.marketValue <= spendCeiling)
+    && deal.bench.length === 0;
 
   return (
     <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-6">
@@ -424,8 +403,8 @@ export function RebuildBoard() {
         <div className="flex items-center justify-between">
           <div>
             <p className="font-display text-lg font-black text-foreground">{club.club}</p>
-            <p className="text-[11px] text-muted-foreground">
-              {squad.length} players · €{budget}M to spend
+            <p className={`text-[11px] ${budget < 0 ? 'font-bold text-destructive' : 'text-muted-foreground'}`}>
+              {budget < 0 ? `€${-budget}M IN DEBT` : `€${budget}M to spend`} · overdraft to €{OVERDRAFT_LIMIT}M
             </p>
           </div>
           <div className="text-right">
@@ -440,26 +419,42 @@ export function RebuildBoard() {
       </div>
 
       <div className="mt-3 flex items-center gap-2">
-        <select
-          value={formation.name}
-          onChange={e => setFormation(e.target.value)}
-          aria-label="Choose formation"
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
-        >
-          {FORMATIONS.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
-        </select>
-        <button
-          onClick={finish}
-          className="ml-auto rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
-        >
-          Finish rebuild
-        </button>
+        {spinsDone === 0 && spunSlot === null && !spinning && (
+          <select
+            value={formation.name}
+            onChange={e => setFormation(e.target.value)}
+            aria-label="Choose formation"
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-foreground"
+          >
+            {FORMATIONS.map(f => <option key={f.name} value={f.name}>{f.name}</option>)}
+          </select>
+        )}
+        <span className="text-xs font-semibold text-muted-foreground">
+          {spinsDone} of {spinsTotal} shirts settled
+        </span>
+        {!spentAllSpins && (
+          <button
+            onClick={spin}
+            disabled={spinning || spunSlot !== null || !!war}
+            className="ml-auto rounded-full bg-primary px-6 py-2 text-sm font-black tracking-wide text-primary-foreground hover:opacity-90 disabled:opacity-40"
+          >
+            {spinning ? 'SPINNING…' : 'SPIN'}
+          </button>
+        )}
+        {spentAllSpins && (
+          <button
+            onClick={finish}
+            className="ml-auto rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+          >
+            Final whistle
+          </button>
+        )}
       </div>
 
       {/* Board objectives, live checklist */}
       {objectives.length > 0 && (
         <div className="mt-3 rounded-xl border border-gold/40 bg-gold/5 p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Board demands</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Board demands, each miss draws a punishment card</p>
           {objectives.map(o => (
             <p key={o.objective.id} className={`mt-1 text-xs ${o.met ? 'text-emerald-500' : 'text-muted-foreground'}`}>
               {o.met ? '✅' : '⬜'} {o.objective.text}
@@ -490,109 +485,138 @@ export function RebuildBoard() {
         {formation.slots.map((slot, i) => {
           const p = startingXi[i];
           const last = p ? p.name.split(' ').slice(-1)[0] : null;
+          const isSettled = decided.has(i);
+          const isSpun = spunSlot === i;
+          const isFlash = flash === i;
           return (
-            <button
+            <div
               key={i}
-              onClick={() => setActiveSlot(activeSlot === i ? null : i)}
               style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-lg border px-1.5 py-1 text-center transition-all ${
-                activeSlot === i
-                  ? 'z-10 scale-110 border-gold bg-gold/20'
-                  : p ? 'border-emerald-500/40 bg-background/85 hover:border-primary' : 'border-destructive/60 bg-destructive/20'
+                isSpun ? 'z-10 scale-110 border-gold bg-gold/25'
+                : isFlash ? 'z-10 scale-105 border-gold bg-gold/15'
+                : isSettled ? 'border-emerald-400/70 bg-emerald-500/15'
+                : p ? 'border-emerald-500/40 bg-background/85' : 'border-border bg-background/60'
               }`}
             >
               <span className="block text-[8px] font-bold uppercase text-muted-foreground">{slot.label}</span>
               <span className="block max-w-[64px] truncate text-[10px] font-semibold text-foreground">
-                {last ?? 'EMPTY'}
+                {last ?? (isSpun ? 'OPEN' : 'EMPTY')}
               </span>
               {p && <span className="block text-[9px] font-bold text-primary">{playerRating(p)}</span>}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* XI */}
-      <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        Your XI, tap a slot (pitch or list) to sign someone
-      </p>
-      <div className="mt-2 space-y-1.5">
-        {formation.slots.map((slot, i) => {
-          const p = startingXi[i];
-          return (
-            <div key={i} className="flex items-center gap-2">
-              <button
-                onClick={() => setActiveSlot(activeSlot === i ? null : i)}
-                className={`flex flex-1 items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors ${
-                  activeSlot === i ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/40'
-                }`}
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <span className="w-10 shrink-0 text-[10px] font-bold text-muted-foreground">
-                    {slot.label}
-                  </span>
-                  {p ? (
-                    <>
-                      <FlagImg name={p.nationality} size={14} />
-                      <span className="truncate text-sm font-medium text-foreground">{p.name}</span>
-                    </>
-                  ) : (
-                    <span className="text-sm italic text-destructive">empty, sign someone</span>
-                  )}
-                </span>
-                {p && (
-                  <span className="ml-2 shrink-0 text-xs">
-                    <span className="font-bold text-primary">{playerRating(p)}</span>
-                    <span className="text-gold"> €{p.marketValue}M</span>
-                  </span>
-                )}
-              </button>
+              {isSettled && <span className="block text-[8px] font-bold text-emerald-400">✓</span>}
             </div>
           );
         })}
       </div>
 
-      {/* Signing panel */}
-      {activeSlot !== null && (
+      {/* The drawn shirt: keep him or sell him, and selling is final */}
+      {spunSlot !== null && !deal && incumbent && (
+        <div className="mt-4 rounded-2xl border border-gold/50 bg-card p-4 animate-in fade-in zoom-in-95 duration-300">
+          <p className="text-center text-[10px] font-bold uppercase tracking-widest text-gold">
+            The wheel lands on {formation.slots[spunSlot].label}
+          </p>
+          <div className="mt-2 flex items-center justify-center gap-2">
+            <FlagImg name={incumbent.nationality} size={16} />
+            <p className="font-display text-xl font-black text-foreground">{incumbent.name}</p>
+          </div>
+          <p className="text-center text-xs text-muted-foreground">
+            rated {playerRating(incumbent)} · worth €{incumbent.marketValue}M · age {incumbent.age || '?'}
+          </p>
+          <div className="mt-4 flex justify-center gap-2">
+            <button
+              onClick={keepSpun}
+              className="rounded-full border border-emerald-500/60 bg-emerald-500/10 px-6 py-2.5 text-sm font-bold text-emerald-500 hover:bg-emerald-500/20"
+            >
+              KEEP HIM
+            </button>
+            <button
+              onClick={sellSpun}
+              className="rounded-full border border-destructive/60 bg-destructive/10 px-6 py-2.5 text-sm font-bold text-destructive hover:bg-destructive/20"
+            >
+              SELL, €{incumbent.marketValue}M
+            </button>
+          </div>
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">
+            Selling is final. The scouts bring three priced options and the bench is free.
+          </p>
+        </div>
+      )}
+
+      {/* The replacement deal: three priced men plus the free bench */}
+      {spunSlot !== null && deal && (
         <div className="mt-4 rounded-2xl border border-border bg-card p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="font-display font-bold text-foreground">
-              Sign a {formation.slots[activeSlot].label}, €{budget}M available
-            </p>
-            <button onClick={() => setActiveSlot(null)}><X className="h-4 w-4 text-muted-foreground" /></button>
-          </div>
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search name or club…"
-            aria-label="Search players by name or club"
-            className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
-          />
-          <div className="max-h-56 space-y-1.5 overflow-y-auto">
-            {candidates.length === 0 && (
-              <p className="py-4 text-center text-xs text-muted-foreground">
-                Nobody in this position fits in €{budget}M. Your sales are locked, so aim lower or free up money elsewhere.
-              </p>
-            )}
-            {candidates.map(p => (
-              <button
-                key={p.name}
-                onClick={() => sign(p)}
-                className="flex w-full items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-left hover:border-primary/50"
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <FlagImg name={p.nationality} size={14} />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium text-foreground">{p.name}</span>
-                    <span className="block truncate text-[10px] text-muted-foreground">{p.club}</span>
+          <p className="text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+            {incumbent ? `Fill the ${formation.slots[spunSlot].label} shirt` : `The ${formation.slots[spunSlot].label} shirt was already empty, fill it`}
+          </p>
+          {deal.offers.length > 0 && (
+            <div className="mt-3 space-y-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">The scouts' three</p>
+              {deal.offers.map(p => {
+                const affordable = p.marketValue <= spendCeiling;
+                return (
+                  <button
+                    key={p.name}
+                    onClick={() => takeReplacement(p)}
+                    disabled={!affordable || !!war}
+                    className="flex w-full items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-left hover:border-primary/50 disabled:opacity-40"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <FlagImg name={p.nationality} size={14} />
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium text-foreground">{p.name}</span>
+                        <span className="block truncate text-[10px] text-muted-foreground">{p.club} · age {p.age || '?'}</span>
+                      </span>
+                    </span>
+                    <span className="ml-2 shrink-0 text-right">
+                      <span className="block text-sm font-bold text-primary">{playerRating(p)}</span>
+                      <span className="block text-[10px] text-gold">€{p.marketValue}M</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {deal.bench.length > 0 && (
+            <div className="mt-3 space-y-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-500">Promote from your own squad, free</p>
+              {deal.bench.map(p => (
+                <button
+                  key={p.name}
+                  onClick={() => promoteBench(p)}
+                  disabled={!!war}
+                  className="flex w-full items-center justify-between rounded-lg border border-emerald-500/30 bg-background px-3 py-2 text-left hover:border-emerald-500/60 disabled:opacity-40"
+                >
+                  <span className="flex min-w-0 items-center gap-2">
+                    <FlagImg name={p.nationality} size={14} />
+                    <span className="truncate text-sm font-medium text-foreground">{p.name}</span>
                   </span>
-                </span>
-                <span className="ml-2 shrink-0 text-right">
-                  <span className="block text-sm font-bold text-primary">{playerRating(p)}</span>
-                  <span className="block text-[10px] text-gold">€{p.marketValue}M</span>
-                </span>
+                  <span className="ml-2 shrink-0 text-right">
+                    <span className="block text-sm font-bold text-primary">{playerRating(p)}</span>
+                    <span className="block text-[10px] text-emerald-500">Free</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {dealDeadEnd && (
+            <div className="mt-3 text-center">
+              <p className="text-xs text-muted-foreground">Nobody on the list is gettable with the money left.</p>
+              <button
+                onClick={redealSpun}
+                className="mt-2 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:border-primary/50"
+              >
+                Ask the scouts for a new list
               </button>
-            ))}
-          </div>
+            </div>
+          )}
+          <button
+            onClick={leaveEmpty}
+            disabled={!!war}
+            className="mt-3 w-full rounded-lg border border-border/60 px-3 py-2 text-center text-[11px] text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-40"
+          >
+            Leave the shirt empty. An empty shirt plays like a 40.
+          </button>
         </div>
       )}
 
@@ -645,7 +669,7 @@ export function RebuildBoard() {
                 <div className="mt-4 flex justify-center gap-2">
                   <button
                     onClick={raiseWar}
-                    disabled={war.thinking || war.leader === 'you' || nextRaise(war.price) > budget}
+                    disabled={war.thinking || war.leader === 'you' || nextRaise(war.price) > spendCeiling}
                     className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
                   >
                     Bid €{nextRaise(war.price)}M
@@ -658,9 +682,9 @@ export function RebuildBoard() {
                     Walk away
                   </button>
                 </div>
-                {war.leader === 'rival' && !war.thinking && nextRaise(war.price) > budget && (
+                {war.leader === 'rival' && !war.thinking && nextRaise(war.price) > spendCeiling && (
                   <p className="mt-2 text-center text-[11px] text-destructive">
-                    You cannot afford the next bid. Walk, or lose him anyway.
+                    Even the overdraft cannot cover the next bid. Walk, or lose him anyway.
                   </p>
                 )}
               </>
