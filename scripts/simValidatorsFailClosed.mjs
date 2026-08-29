@@ -47,6 +47,7 @@ console.log('1) no error path returns valid:true');
 const ERROR_REASONS = /(could not verify|could not parse|validation error|, allowing|accepted \(validation error\)|unable to check|unable to verify)/i;
 let controlArmed = false;
 let scanned = 0;
+let unverifiedFns = 0;
 for (const name of fns) {
   let text = fs.readFileSync(path.join(FN_DIR, name, 'index.ts'), 'utf8');
   if (CONTROL === 'open' && !controlArmed) {
@@ -70,11 +71,15 @@ for (const name of fns) {
     }
   }
   /* 2: unverified means NOT valid, always */
-  if (/unverified:\s*true/.test(code) && !/valid:\s*false[^}]{0,120}unverified:\s*true|unverified:\s*true[^}]{0,120}valid:\s*false/s.test(code)) {
-    fail(`${name}/index.ts returns unverified:true without valid:false beside it`);
+  if (/unverified:\s*true/.test(code)) {
+    unverifiedFns += 1;
+    if (!/valid:\s*false[^}]{0,120}unverified:\s*true|unverified:\s*true[^}]{0,120}valid:\s*false/s.test(code)) {
+      fail(`${name}/index.ts returns unverified:true without valid:false beside it`);
+    }
   }
 }
 console.log(`   ${scanned} edge functions scanned`);
+console.log(`   ${unverifiedFns} of them return unverified:true and owe a valid:false beside it`);
 
 console.log('');
 if (CONTROL === 'open') {
