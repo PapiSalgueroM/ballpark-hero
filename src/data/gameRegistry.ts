@@ -120,6 +120,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/guess-transfer-value', label: 'Guess The Value', emoji: '💰', description: 'Guess a player's transfer market value', daily: true, isNew: true },
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
       { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI out of mystery boxes', isNew: true },
+      { path: '/search-and-discard', label: 'Search and Discard', emoji: '🔎', description: 'The squad duel: keep one, bin two, settle it in a season', isNew: true },
       { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Buy 3 players at real past values, then the market moves a real year', daily: true, isNew: true },
       // deleted 2026-08-05 per owner review: he asked for the standalone box
       // game to go and for Squad Deal to stay.

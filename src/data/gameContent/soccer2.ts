@@ -765,4 +765,38 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       { q: 'When exactly should I sell?', a: 'The fee peaks somewhere between rating growth and age decay. A young kid far from his ceiling gains value fast; past 21 the promise premium drains away, and at 24 he leaves for nothing.' },
     ],
   },
+  '/search-and-discard': {
+    intro: [
+      "Search and Discard is the squad building duel: two managers, one shared pool of real footballers, both filling the same 4-3-3. On your turn you search three players, keep exactly one, and the other two are discarded from the whole game.",
+      "That discard is the heart of it. A striker you bin can never reach the other squad, so every search is two decisions at once: who makes your XI, and who you refuse to let make theirs.",
+      "When both XIs are full, the arguing stops and a simulated 38 game season settles it, derbies included. Play the CPU or pass one screen between two people.",
+    ],
+    howToPlay: [
+      "Pick your opponent: the CPU, or a second person on the same screen.",
+      "On your turn, three real players appear. At least one always fits an open slot in your 4-3-3.",
+      "Tap the one you keep, then tap the slot he plays. The other two are binned for good, for both squads.",
+      "Eleven keeps each, alternating turns. Then both XIs play the same simulated season and the table decides.",
+    ],
+    rules: [
+      "Both managers build the identical 4-3-3 from one shared pool, real players and real market values throughout.",
+      "Position rules use the sitewide families: wingers cover both flanks, central mids cover the holding and attacking slots, a keeper is only ever a keeper.",
+      "A discarded player is out of the entire game. He cannot be searched again by either side.",
+      "The settle is deterministic: the same two finished XIs always produce the same season, so the draft is the game.",
+      "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available.",
+    ],
+    example: [
+      "Your search deals an 89 rated winger, an 84 keeper and a 76 full back, with your goalkeeper slot still open. Keeping the winger is tempting, but keepers are scarce in a shrinking pool, so you take the 84 and bin the other two, and the 89 winger is gone from the duel entirely.",
+      "Ten turns later both squads stand at 11. Yours rates 82, theirs 80, the derbies split, and your side edges the season by four points.",
+    ],
+    tips: [
+      "Guard the scarce slots. Keepers and centre backs dry up fastest in a shared pool; a late empty GK slot is a disaster.",
+      "Bin with intent. When your slots are nearly full, the keep matters less than which star you deny the other side.",
+      "Ratings follow real market value with an age correction, so a famous veteran is often worth more than his price tag suggests.",
+    ],
+    faqs: [
+      { q: 'Can both squads end up with the same player?', a: 'No. A kept player is off the pool, and a discarded player is out of the whole game, so the two XIs never overlap.' },
+      { q: 'Is the season a coin flip?', a: 'No. Win chances follow the rating gap game by game, and the same two squads always settle the same way. Better drafts win more, but a two point rating edge is an edge, not a guarantee.' },
+      { q: 'Is there online multiplayer?', a: 'Not yet. Online rooms need real backend work, so today it is the CPU or two people passing one screen.' },
+    ],
+  },
 };

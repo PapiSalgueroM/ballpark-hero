@@ -67,6 +67,7 @@ const HofOrBust = lazy(() => import("./pages/HofOrBust"));
 const ScorePredictor = lazy(() => import("./pages/ScorePredictor"));
 const TransferPath = lazy(() => import("./pages/TransferPath"));
 const SquadDeal = lazy(() => import("./pages/SquadDeal"));
+const SearchAndDiscard = lazy(() => import("./pages/SearchAndDiscard"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
 const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
@@ -360,6 +361,7 @@ const AppContent = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="/deal-or-no-deal" element={<Navigate to="/squad-deal" replace />} />
         <Route path="/squad-deal" element={<SquadDeal />} />
+        <Route path="/search-and-discard" element={<SearchAndDiscard />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
         <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
