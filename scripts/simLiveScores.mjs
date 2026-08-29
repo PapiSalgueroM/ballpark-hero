@@ -24,12 +24,14 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = '/tmp/liveScoresEntry.mjs';
-const BUNDLE = '/tmp/liveScores.bundle.mjs';
+/* the OS temp dir, not a literal /tmp: the desktop lane runs this on Windows */
+const ENTRY = path.join(os.tmpdir(), 'liveScoresEntry.mjs');
+const BUNDLE = path.join(os.tmpdir(), 'liveScores.bundle.mjs');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.LIVE_CONTROL || '';
@@ -37,11 +39,11 @@ if (CONTROL && CONTROL !== 'leak') { console.error(`LIVE_CONTROL=${CONTROL} is n
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const m = await import('${ROOT}/src/lib/liveScores.ts');
+const m = await import('${ROOT.replaceAll('\\', '/')}/src/lib/liveScores.ts');
 export const { teamShort, sortForTicker, isShowable, windowFor, startLabel, LOOKBACK_MS, LOOKAHEAD_MS, SPORT_HUB, SPORT_TAG } = m;
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { teamShort, sortForTicker, isShowable, windowFor, startLabel, LOOKBACK_MS, LOOKAHEAD_MS, SPORT_HUB, SPORT_TAG } = await import(BUNDLE);
+execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { teamShort, sortForTicker, isShowable, windowFor, startLabel, LOOKBACK_MS, LOOKAHEAD_MS, SPORT_HUB, SPORT_TAG } = await import(pathToFileURL(BUNDLE).href);
 
 console.log('1) the shaping says what a fan says and puts now first');
 {
@@ -98,7 +100,7 @@ console.log('2) the feed stays server side');
   const src = fs.readdirSync(path.join(ROOT, 'src'), { recursive: true })
     .filter(f => /\.(ts|tsx)$/.test(String(f)))
     .map(f => [String(f), fs.readFileSync(path.join(ROOT, 'src', String(f)), 'utf8')]);
-  const offenders = src.filter(([, t]) => /api-sports\.io|apisports/i.test(t)).map(([f]) => f);
+  const offenders = src.filter(([, t]) => /api-sports\.io|apisports|site\.api\.espn|espn\.com/i.test(t)).map(([f]) => f);
   if (offenders.length) fail(`the feed's host is named in the browser bundle: ${offenders.join(', ')}`);
   const client = fs.readFileSync(path.join(ROOT, 'src/lib/liveScores.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' ');
   if (!/from '@\/integrations\/supabase\/client'/.test(client)) fail('liveScores.ts does not read the project URL and key from the one file that knows them');

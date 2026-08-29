@@ -1,23 +1,32 @@
 /**
- * Round 287: the scores poller behind the ticker.
+ * Round 311: the scores poller behind the ticker, moved to ESPN's open feeds.
  *
- * WHY IT IS SHAPED LIKE THIS. The owner wants real scores on the ticker and
- * chose the free path: API-Sports' free tier, 100 requests a day per sport.
- * The ticker runs in every visitor's browser, so nothing in the browser may
- * ever call the feed; this function is the only thing that does, on a
- * schedule (pg_cron, every 20 minutes, 72 calls a day per sport), and it
- * writes what it gets into public.live_scores, which the ticker reads through
- * the ordinary anon client. The API key never leaves the database: it sits in
- * private.app_secrets, readable by the service role only.
+ * WHY IT CHANGED. The original Round 287 poller ran on API-Sports' free tier
+ * and that account was suspended on 2026-08-26, which silently emptied the
+ * strip (the run ledger recorded the reason on every call). On 2026-08-28 the
+ * owner asked for ESPN directly. ESPN's public scoreboard JSON needs no
+ * account, no key and has no daily allowance, so the whole failure mode of a
+ * suspended key disappears. We store team names, scores, statuses and start
+ * times, which are facts; no ESPN content, branding or assets are stored or
+ * shown, and nothing in the browser ever calls the feed. This function is
+ * still the only thing that does, on the same pg_cron schedule, writing into
+ * public.live_scores for the ticker to read through the ordinary anon client.
  *
- * Every call is fail closed and quiet. A feed that errors writes a run row
- * saying so and leaves yesterday's rows alone; the ticker shows whatever is
- * fresh and says nothing about the rest. Nothing here is ever invented.
+ * Every call is fail closed and quiet, exactly as before. A feed that errors
+ * writes a run row saying so and leaves existing rows alone; the ticker shows
+ * whatever is fresh. Nothing here is ever invented.
+ *
+ * The poll secret stays: without it anyone could hammer the function and by
+ * extension ESPN from our address. It lives in private.app_secrets, read
+ * through public.app_secret(), service role only, same as always.
  *
  * Request shapes:
- *   POST /scores-poll            (x-poll-secret header)  poll every feed
- *   GET  /scores-poll?probe=nba  (x-poll-secret header)  return one feed's
- *                                raw payload, for checking a shape by eye
+ *   POST /scores-poll              (x-poll-secret header)  poll every feed
+ *   POST /scores-poll?day=1        same, for tomorrow's slate (the second
+ *                                  cron job; day may be any small offset)
+ *   POST /scores-poll?date=YYYY-MM-DD  an explicit date
+ *   GET  /scores-poll?probe=nba    (x-poll-secret header)  one feed's raw
+ *                                  payload, for checking a shape by eye
  */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -50,121 +59,70 @@ function nyDate(offsetDays = 0): string {
 const num = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) ? v : (typeof v === "string" && v.trim() !== "" && Number.isFinite(Number(v)) ? Number(v) : null));
 const str = (v: unknown): string => (typeof v === "string" ? v : v == null ? "" : String(v));
 
-interface Feed {
-  sport: string;
-  host: string;
-  path: (date: string) => string;
-  parse: (payload: unknown) => Row[];
-}
+/* The scoreboard/header endpoint is the one the site's own pages call and it
+   answers plain requests; the older site.api scoreboard now refuses
+   everything with a 403, measured 2026-08-28 from two different networks. */
+const HOST = "https://site.web.api.espn.com/apis/v2/scoreboard/header";
 
-/* Status codes across the API-Sports family are short strings. The sets
-   below are the documented finished and live codes; anything else is
-   "not started" for the ticker's purposes, which is the safe reading. */
-const FINISHED = new Set(["FT", "AET", "PEN", "AOT", "AP", "FINAL", "Finished", "3"]);
-const LIVE_PREFIX = /^(1H|2H|HT|ET|BT|P|LIVE|Q[1-4]|OT|IN|[1-9]|H[12]|1st|2nd|3rd|4th|In Play|Halftime|Overtime|2)$/i;
-
-function classify(short: string, long: string): { live: boolean; finished: boolean } {
-  const s = short.trim();
-  const l = long.trim();
-  const finished = FINISHED.has(s) || /finish|final|ended|after/i.test(l);
-  const live = !finished && (LIVE_PREFIX.test(s) || /in play|quarter|half|inning|period|overtime|live/i.test(l));
-  return { live, finished };
-}
-
-const FEEDS: Feed[] = [
-  {
-    sport: "nfl",
-    host: "https://v1.american-football.api-sports.io",
-    path: d => `/games?date=${d}&timezone=America/New_York`,
-    parse: p => ((p as any)?.response ?? []).filter((g: any) => /^NFL$/i.test(str(g?.league?.name))).map((g: any) => {
-      const short = str(g?.game?.status?.short), long = str(g?.game?.status?.long);
-      const { live, finished } = classify(short, long);
-      return {
-        id: `nfl:${str(g?.game?.id)}`, sport: "nfl", league: str(g?.league?.name),
-        home: str(g?.teams?.home?.name), away: str(g?.teams?.away?.name),
-        home_score: num(g?.scores?.home?.total), away_score: num(g?.scores?.away?.total),
-        status_short: short, status_long: long,
-        start_at: new Date(num(g?.game?.date?.timestamp) ? num(g?.game?.date?.timestamp)! * 1000 : str(g?.game?.date?.date)).toISOString(),
-        live, finished,
-      };
-    }),
-  },
-  {
-    sport: "nba",
-    host: "https://v2.nba.api-sports.io",
-    path: d => `/games?date=${d}`,
-    parse: p => ((p as any)?.response ?? []).map((g: any) => {
-      const short = str(g?.status?.short), long = str(g?.status?.long);
-      const { live, finished } = classify(short, long);
-      return {
-        id: `nba:${str(g?.id)}`, sport: "nba", league: "NBA",
-        home: str(g?.teams?.home?.name), away: str(g?.teams?.visitors?.name),
-        home_score: num(g?.scores?.home?.points), away_score: num(g?.scores?.visitors?.points),
-        status_short: short, status_long: long,
-        start_at: new Date(str(g?.date?.start)).toISOString(),
-        live, finished,
-      };
-    }),
-  },
-  {
-    sport: "mlb",
-    host: "https://v1.baseball.api-sports.io",
-    /* by date only: the free plan refuses a season parameter ("try from 2022
-       to 2024") but answers today's date, so the league is filtered here */
-    path: d => `/games?date=${d}&timezone=America/New_York`,
-    parse: p => ((p as any)?.response ?? []).filter((g: any) => /^MLB$/i.test(str(g?.league?.name))).map((g: any) => {
-      const short = str(g?.status?.short), long = str(g?.status?.long);
-      const { live, finished } = classify(short, long);
-      return {
-        id: `mlb:${str(g?.id)}`, sport: "mlb", league: "MLB",
-        home: str(g?.teams?.home?.name), away: str(g?.teams?.away?.name),
-        home_score: num(g?.scores?.home?.total), away_score: num(g?.scores?.away?.total),
-        status_short: short, status_long: long,
-        start_at: new Date(num(g?.timestamp) ? num(g?.timestamp)! * 1000 : str(g?.date)).toISOString(),
-        live, finished,
-      };
-    }),
-  },
-  {
-    sport: "nhl",
-    host: "https://v1.hockey.api-sports.io",
-    path: d => `/games?date=${d}&timezone=America/New_York`,
-    parse: p => ((p as any)?.response ?? []).filter((g: any) => /^NHL$/i.test(str(g?.league?.name))).map((g: any) => {
-      const short = str(g?.status?.short), long = str(g?.status?.long);
-      const { live, finished } = classify(short, long);
-      return {
-        id: `nhl:${str(g?.id)}`, sport: "nhl", league: "NHL",
-        home: str(g?.teams?.home?.name), away: str(g?.teams?.away?.name),
-        home_score: num(g?.scores?.home), away_score: num(g?.scores?.away),
-        status_short: short, status_long: long,
-        start_at: new Date(num(g?.timestamp) ? num(g?.timestamp)! * 1000 : str(g?.date)).toISOString(),
-        live, finished,
-      };
-    }),
-  },
-  {
-    sport: "soccer",
-    host: "https://v3.football.api-sports.io",
-    /* one request covers every league on the date; the ticker keeps the big
-       ones (Premier League 39, La Liga 140, Serie A 135, Bundesliga 78,
-       Ligue 1 61, Champions League 2, MLS 253) and drops the rest */
-    path: d => `/fixtures?date=${d}&timezone=America/New_York`,
-    parse: p => ((p as any)?.response ?? [])
-      .filter((f: any) => [39, 140, 135, 78, 61, 2, 253].includes(Number(f?.league?.id)))
-      .map((f: any) => {
-        const short = str(f?.fixture?.status?.short), long = str(f?.fixture?.status?.long);
-        const { live, finished } = classify(short, long);
-        return {
-          id: `soccer:${str(f?.fixture?.id)}`, sport: "soccer", league: str(f?.league?.name),
-          home: str(f?.teams?.home?.name), away: str(f?.teams?.away?.name),
-          home_score: num(f?.goals?.home), away_score: num(f?.goals?.away),
-          status_short: short, status_long: long,
-          start_at: new Date(str(f?.fixture?.date)).toISOString(),
-          live, finished,
-        };
-      }),
-  },
+/* One entry per scoreboard we pull. US sports are one call each; soccer is
+   one call per league because the feed has no combined scoreboard. The
+   league text is ours, not the feed's, so the strip's vocabulary stays the
+   site's own. */
+const FEEDS: { sport: string; league: string; query: string; idExtra?: string }[] = [
+  { sport: "nfl", league: "NFL", query: "sport=football&league=nfl" },
+  { sport: "nba", league: "NBA", query: "sport=basketball&league=nba" },
+  { sport: "mlb", league: "MLB", query: "sport=baseball&league=mlb" },
+  { sport: "nhl", league: "NHL", query: "sport=hockey&league=nhl" },
+  { sport: "soccer", league: "Premier League", query: "sport=soccer&league=eng.1", idExtra: "eng.1" },
+  { sport: "soccer", league: "La Liga", query: "sport=soccer&league=esp.1", idExtra: "esp.1" },
+  { sport: "soccer", league: "Serie A", query: "sport=soccer&league=ita.1", idExtra: "ita.1" },
+  { sport: "soccer", league: "Bundesliga", query: "sport=soccer&league=ger.1", idExtra: "ger.1" },
+  { sport: "soccer", league: "Ligue 1", query: "sport=soccer&league=fra.1", idExtra: "fra.1" },
+  { sport: "soccer", league: "Champions League", query: "sport=soccer&league=uefa.champions", idExtra: "uefa.champions" },
+  { sport: "soccer", league: "MLS", query: "sport=soccer&league=usa.1", idExtra: "usa.1" },
 ];
+
+/* The feed's status state is the honest tristate: pre, in, post. Everything
+   else about a status is presentation. Shape measured 2026-08-28:
+   sports[0].leagues[0].events[], each event carrying date, status, summary,
+   fullStatus.type {state, completed, description, detail, shortDetail} and
+   competitors[] with homeAway, displayName and a score string. */
+function parseEvents(feed: { sport: string; league: string; idExtra?: string }, payload: unknown): Row[] {
+  const events = (payload as any)?.sports?.[0]?.leagues?.[0]?.events;
+  if (!Array.isArray(events)) return [];
+  const rows: Row[] = [];
+  for (const ev of events) {
+    const competitors = Array.isArray(ev?.competitors) ? ev.competitors : [];
+    const homeC = competitors.find((c: any) => c?.homeAway === "home");
+    const awayC = competitors.find((c: any) => c?.homeAway === "away");
+    const st = ev?.fullStatus?.type ?? {};
+    const state = str(st?.state || ev?.status).toLowerCase();
+    const live = state === "in";
+    const finished = state === "post" && st?.completed !== false;
+    const started = new Date(str(ev?.date));
+    if (Number.isNaN(started.getTime())) continue;
+    const home = str(homeC?.displayName || homeC?.name);
+    const away = str(awayC?.displayName || awayC?.name);
+    if (!home || !away) continue;
+    rows.push({
+      id: `${feed.sport}:${feed.idExtra ? feed.idExtra + ":" : ""}${str(ev?.id)}`,
+      sport: feed.sport,
+      league: feed.league,
+      home,
+      away,
+      /* a game that has not started has no score, whatever the feed's zero
+         strings say */
+      home_score: state === "pre" ? null : num(homeC?.score),
+      away_score: state === "pre" ? null : num(awayC?.score),
+      status_short: str(ev?.summary || st?.shortDetail).slice(0, 40),
+      status_long: str(st?.description || st?.detail).slice(0, 80),
+      start_at: started.toISOString(),
+      live,
+      finished,
+    });
+  }
+  return rows;
+}
 
 /* private.app_secrets is not exposed through PostgREST, so it is read through
    public.app_secret(), a SECURITY DEFINER function that only the service role
@@ -175,9 +133,14 @@ async function secret(name: string): Promise<string | null> {
   return typeof data === "string" && data ? data : null;
 }
 
-async function fetchFeed(feed: Feed, key: string, date: string): Promise<{ status: number; payload: unknown; error?: string }> {
+async function fetchFeed(query: string, date: string): Promise<{ status: number; payload: unknown; error?: string }> {
   try {
-    const res = await fetch(feed.host + feed.path(date), { headers: { "x-apisports-key": key } });
+    const res = await fetch(`${HOST}?${query}&dates=${date.replaceAll("-", "")}`, {
+      headers: {
+        "accept": "application/json",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+      },
+    });
     const payload = await res.json().catch(() => null);
     return { status: res.status, payload };
   } catch (e) {
@@ -192,46 +155,55 @@ serve(async (req) => {
   if (!expected || provided !== expected) {
     return new Response(JSON.stringify({ error: "not authorised" }), { status: 401, headers: { "content-type": "application/json" } });
   }
-  const key = await secret("api_sports_key");
-  if (!key) {
-    return new Response(JSON.stringify({ error: "no api key on file" }), { status: 500, headers: { "content-type": "application/json" } });
-  }
-  const date = url.searchParams.get("date") || nyDate();
+  /* date=YYYY-MM-DD wins; else day=N offsets today; else today. The old
+     poller ignored day entirely, so the tomorrow cron had been re-polling
+     today since Round 287. */
+  const dayOffset = Number(url.searchParams.get("day"));
+  const date = url.searchParams.get("date") || nyDate(Number.isFinite(dayOffset) ? dayOffset : 0);
 
   const probe = url.searchParams.get("probe");
   if (probe) {
-    const feed = FEEDS.find(f => f.sport === probe);
+    const feed = FEEDS.find(f => f.sport === probe || f.idExtra === probe);
     if (!feed) return new Response(JSON.stringify({ error: `no feed ${probe}` }), { status: 404 });
-    const r = await fetchFeed(feed, key, date);
+    const r = await fetchFeed(feed.query, date);
     let parsed: unknown = null, parseError = "";
-    try { parsed = feed.parse(r.payload); } catch (e) { parseError = String(e); }
-    return new Response(JSON.stringify({ sport: probe, date, status: r.status, error: r.error ?? parseError, parsed, raw: r.payload }, null, 1), {
+    try { parsed = parseEvents(feed, r.payload); } catch (e) { parseError = String(e); }
+    return new Response(JSON.stringify({ probe, date, status: r.status, error: r.error ?? parseError, parsed }, null, 1), {
       headers: { "content-type": "application/json" },
     });
   }
 
   const only = url.searchParams.get("only");
   const feeds = only ? FEEDS.filter(f => only.split(",").includes(f.sport)) : FEEDS;
-  const summary: Record<string, unknown>[] = [];
+  const bySport: Record<string, { rows: number; notes: string[] }> = {};
   for (const feed of feeds) {
-    const r = await fetchFeed(feed, key, date);
+    const r = await fetchFeed(feed.query, date);
     let rows: Row[] = [];
     let note = r.error ?? "";
-    /* API-Sports answers 200 with an errors object when the plan does not
-       cover the request; that is a failure and it must say so */
-    const apiErrors = (r.payload as any)?.errors;
-    if (apiErrors && (Array.isArray(apiErrors) ? apiErrors.length : Object.keys(apiErrors).length)) note = JSON.stringify(apiErrors).slice(0, 300);
     if (r.status === 200 && !note) {
-      try { rows = feed.parse(r.payload).filter(x => x.home && x.away && x.start_at); } catch (e) { note = `parse: ${String(e).slice(0, 200)}`; }
+      try { rows = parseEvents(feed, r.payload).filter(x => x.home && x.away && x.start_at); } catch (e) { note = `parse: ${String(e).slice(0, 200)}`; }
+      /* a quiet day omits the events key, which is normal; a missing league
+         envelope means the feed itself changed shape and must be said */
+      if (!note && !(r.payload as any)?.sports?.[0]?.leagues?.[0]) note = "no league envelope";
+    } else if (!note) {
+      note = `http ${r.status}`;
     }
     if (rows.length) {
       const { error } = await sb.from("live_scores").upsert(rows.map(x => ({ ...x, updated_at: new Date().toISOString() })), { onConflict: "id" });
       if (error) note = `upsert: ${error.message}`;
     }
-    await sb.from("live_scores_runs").insert({ sport: feed.sport, date, http_status: r.status, rows: rows.length, note: note || null });
-    summary.push({ sport: feed.sport, status: r.status, rows: rows.length, note: note || undefined });
+    const s = (bySport[feed.sport] ??= { rows: 0, notes: [] });
+    s.rows += rows.length;
+    if (note) s.notes.push(`${feed.idExtra ?? feed.sport}: ${note}`);
   }
-  /* rows older than two days are nobody's business any more */
+  const summary: Record<string, unknown>[] = [];
+  for (const [sport, s] of Object.entries(bySport)) {
+    const note = s.notes.join("; ").slice(0, 300) || null;
+    await sb.from("live_scores_runs").insert({ sport, date, http_status: 200, rows: s.rows, note });
+    summary.push({ sport, rows: s.rows, note: note ?? undefined });
+  }
+  /* rows older than two days are nobody's business any more; future rows
+     (tomorrow's slate) are exactly the business and are kept */
   await sb.from("live_scores").delete().lt("start_at", new Date(Date.now() - 2 * 86400000).toISOString());
   return new Response(JSON.stringify({ date, summary }), { headers: { "content-type": "application/json" } });
 });

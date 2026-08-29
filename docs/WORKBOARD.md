@@ -41,18 +41,10 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- P1: the empty ticker. ROOT CAUSE FOUND 2026-08-28 from the run ledger: the API-Sports
-  account was SUSPENDED at 2026-08-26 18:20 UTC. The cron fires, the function answers 200
-  and fail-closes quietly on every feed ("Your account is suspended, check on
-  dashboard.api-football.com"), so nothing has been written since 16:05 that day and the
-  two day cleanup emptied the table. OWNER STEP, the only blocking one: Anthony logs into
-  the API-Sports / api-football dashboard, sees why, reactivates or makes a new free key,
-  and puts the new key into private.app_secrets HIMSELF via the Supabase dashboard SQL
-  editor (update private.app_secrets set value = 'THE KEY' where name =
-  'api_sports_key'), never pasting it into any chat or file. Desktop follow ups once the
-  key lives: verify a poll writes rows again, add an alert so a feed dead for a day is
-  surfaced instead of quiet, then the ESPN model (full day slate before games, live
-  during, FINAL after, schedule loaded ahead so the strip is never empty).
+- Ticker follow up: an alert when every feed has written zero rows for a full day, so a
+  dead feed is surfaced instead of quiet (the suspension sat unnoticed for two days).
+  The next candidate host if the header endpoint ever closes: cdn.espn.com/core, which
+  answered 200 in the 2026-08-28 survey.
 - P1: the Club Manager league tables (other leagues stuck on pre-season alphabetical all
   season, the duplicate zero-point La Liga, the Cups tab rendering the UCL under Copa del
   Rey, the projected bracket excluding the second placed player, the 8 group 2005/06
@@ -117,6 +109,16 @@ Standing claims:
 
 ## Done
 
+- THE TICKER IS BACK, Round 311 (desktop lane, 2026-08-28). Review item 1. The dead
+  API-Sports account is retired; scores-poll v6 reads ESPN's open scoreboard header
+  endpoint (no account, no key, no quota), same table, same secret gate, fail closed as
+  before. The day=1 cron had been silently re-polling today since Round 287 and now
+  really seeds tomorrow, so the strip carries the coming slate before kickoff, live
+  scores during, FINAL after. Verified end to end: the run ledger clean, 40 plus rows
+  written for today and tomorrow, and the live douknowball.com strip seen showing three
+  second half soccer matches and Saturday's Liverpool fixture with its start time.
+  simLiveScores green with its planted key control firing, now also banning ESPN's host
+  from src and running on Windows.
 - THE PUBLISH HANDOFF: done, site is current (desktop lane, 2026-08-28). Everything
   through Round 310 is live on douknowball.com. Verified, not assumed: Lovable's copy of
   main carried Round 310's What's New line before deploy_project was called, the live

@@ -125,7 +125,7 @@ What that means in practice:
 | Database | Supabase, project `flawuiqbvjobmkfkauhw` (Pro plan, spend cap ON) |
 | AdSense | publisher `pub-2929318086316376` |
 | Owner logins | site account `amsalguero10@icloud.com`, project mail `douknowball1@gmail.com` |
-| Scores feed | API-Sports free tier (Round 287). The key lives only in `private.app_secrets` on Supabase and is read by the `scores-poll` edge function; never paste it into the repo, an env var or a chat. `simLiveScores` scans for key shaped literals. |
+| Scores feed | ESPN's open scoreboard header endpoint since Round 311 (the API-Sports account from Round 287 was suspended 2026-08-26 and is retired). No key exists any more; the poll secret gating `scores-poll` still lives only in `private.app_secrets` and must never reach the repo or a chat. `simLiveScores` scans for key shaped literals and bans feed hosts from `src`. |
 
 **The Lovable workspace is on the free plan with 0 credits. Never drive builds through the
 Lovable AI agent.** Lovable is used only as the host and the deploy trigger. All code changes

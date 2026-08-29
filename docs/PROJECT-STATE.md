@@ -2597,6 +2597,18 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-28, night, Round 311.** The ticker lives again, item 1 of the 08-28 review.
+  Root cause from the poller's own run ledger: the API-Sports account was suspended
+  2026-08-26 18:20 UTC and the fail closed poller went quietly empty. Fix: scores-poll v6
+  polls ESPN's open scoreboard header endpoint (site.web.api.espn.com, no account, no
+  key, no quota; the old site.api host 403s everything, measured from two networks), same
+  live_scores table and row shape so zero frontend changes, poll secret gate kept. The
+  tomorrow cron's day=1 parameter, ignored since Round 287, is honored now, so the
+  coming slate is always loaded. Deployed through the Supabase MCP, repo copy synced,
+  verified: ledger notes clean, 40 plus rows for today and tomorrow, and the live strip
+  seen carrying three live second half matches and Saturday's fixtures. simLiveScores
+  updated (ESPN host banned from src, OS temp dir so it runs on Windows) and green with
+  its control firing. CLAUDE.md's scores feed row rewritten. No site rebuild needed.
 - **2026-08-28, evening** No round. Anthony's full site review transcribed to
   `docs/TWEAKS-2026-08-28.md` (P1 bugs, his two game deletions, the leaderboard name
   decision, the Club Manager arc list, the per game verdicts, three new game requests,
