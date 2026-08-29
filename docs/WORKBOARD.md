@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 350.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 351.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -193,6 +193,37 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE OWNER IS ALLOWED TO SPEAK, Round 350 (cloud lane, 2026-08-29). Round 349
+  ran the full career suite and found simNoInventedQuotes RED, and not because
+  of anything Round 349 did: it fails on src/components/home/MakerNote.tsx from
+  Round 346, so the legal fence has been red on main since that round landed.
+  The round that landed it ran playHomeFold, which is its own new fence, and
+  not this one. That is precisely the failure CLAUDE.md already records from
+  Round 293, when simIndexNow had been red since 288 because two rounds ran the
+  sitemap fence and skipped it, and it is the argument for running the whole
+  list rather than a hand picked few.
+  THE CAUSE is a name collision, not a legal problem. The guard flags a real
+  person's name sharing a line with first person speech. Anthony is the owner's
+  given name AND three real players' surname (Jaidon Anthony in the baked club
+  rosters, plus Carmelo and Roman Anthony elsewhere in the data), so his own
+  maker note, "Hey, I'm Anthony. DoUKnowBall is my first ever coding project",
+  read to the guard as invented words in a footballer's mouth. He is the one
+  real person who may speak on this site, because he is the author of the words.
+  THE FIX follows the precedent already in the file rather than inventing one:
+  'Anthony' joins SURNAME_STOPLIST, whose documented rule is real observed
+  collisions only, never guesses, and whose stated safety property is that the
+  FULL name check still protects the man himself. All three real Anthonys are
+  well over the six character floor and are still caught by name in full.
+  THE PROOF is pinned in the harness's own self test, both directions, because
+  widening a legal stoplist without proving detection survives is how a fence
+  quietly stops working: KNOWN_BAD gains an invented corridor quote for Jaidon
+  Anthony, which must still be caught and is, and KNOWN_GOOD gains the maker
+  note line verbatim, which must be left alone and now is. The self test fails
+  the whole run if either direction breaks, so the next person to touch this
+  matcher cannot silently open the hole.
+  simNoInventedQuotes green, back to green on main for the first time since
+  Round 346.
 
 - THE STAT THE GAME NEVER HAD, Round 349 (cloud lane, 2026-08-29). Flagship
   depth on /soccer-career, chosen because the AdSense freeze (owner directive

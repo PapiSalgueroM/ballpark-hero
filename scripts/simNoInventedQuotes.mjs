@@ -103,6 +103,14 @@ const SURNAME_STOPLIST = new Set([
   // club (Aston Villa), and Minefield's trivia line about the club tripped
   // the guard. The full name check still protects the man himself.
   'Villa',
+  // Round 350: the owner's own given name is also three real players'
+  // surname (Jaidon Anthony, Carmelo Anthony, Roman Anthony), so Round 346's
+  // maker note, in which Anthony introduces himself in the first person on
+  // his own site, read to this guard as words put in a footballer's mouth.
+  // He is the one real person who may speak here, because he is the author.
+  // The full name check still protects all three men: every one of them is
+  // over the six character floor and is caught by name in full.
+  'Anthony',
 ]);
 
 function realNames() {
@@ -222,6 +230,12 @@ console.log('3) Self test: the detector still catches what Round 137 removed');
     // Jérémy Doku false positive must not have opened a hole the other way.
     'Kylian Mbappé caught you in the corridor. "I want to start on Saturday, boss."',
     'Kylian Mbappe caught you in the corridor. "I want to start on Saturday, boss."',
+    /* Round 350 put 'Anthony' on the surname stoplist so the owner can
+       introduce himself on his own site. This is the hole that would have
+       opened if the full name check did not still stand behind it: Jaidon
+       Anthony is a real footballer in the baked rosters, and inventing words
+       for him must still be caught by his name in full. */
+    'Jaidon Anthony caught you in the corridor. "I want to start on Saturday, boss."',
   ];
   let caught = 0;
   for (const bad of KNOWN_BAD) {
@@ -247,6 +261,12 @@ console.log('3) Self test: the detector still catches what Round 137 removed');
        break, so "Jérémy" parsed as J, r, my and the guard read the "my" in his
        own first name as him talking. A data row is not speech. */
     '{ name: "Jérémy Doku", positions: ["RW", "LW"], style: "Pure chaos, dribbles at fullbacks all day" }',
+    /* Round 350, and the reason the stoplist grew. The owner introducing
+       himself in his own maker note is the one first person sentence on this
+       site that is not invented, because he wrote it. Verbatim from
+       src/components/home/MakerNote.tsx, which had this guard red on main
+       from Round 346 until it was found by a round running the full suite. */
+    "Hey, I'm Anthony. DoUKnowBall is my first ever coding project, an independent site",
   ];
   let falsePositives = 0;
   for (const good of KNOWN_GOOD) {
