@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/missing-xi" data-rh="true"><meta name="description" content="A famous real starting lineup with one player blanked out. Name the missing man in 3 guesses or fewer. Daily puzzle plus an Unlimited archive of Champions League finals, World Cup finals and iconic title deciders." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/missing-xi" data-rh="true"><meta property="og:title" content="Missing XI | DoUKnowBall" data-rh="true"><meta property="og:description" content="A famous real starting lineup with one player blanked out. Name the missing man in 3 guesses or fewer. Daily puzzle plus an Unlimited archive of Champions League finals, World Cup finals and iconic title deciders." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Missing XI | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="A famous real starting lineup with one player blanked out. Name the missing man in 3 guesses or fewer. Daily puzzle plus an Unlimited archive of Champions League finals, World Cup finals and iconic title deciders." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -206,16 +217,10 @@
 </div>
 <h1>MISSING XI</h1>
 <p>One player is missing from this famous lineup. Name him in 3 guesses.</p>
-<p>UEFA Champions League</p>
 <p>GK</p>
-<p>RB</p>
 <p>CB</p>
-<p>LB</p>
 <p>?</p>
-<p>CDM</p>
-<p>CM</p>
-<p>LW</p>
-<p>RW</p>
+<p>ST</p>
 <h2>Missing XI: Guess the Famous Lineup's Missing Player</h2>
 <p>A real, famous starting XI from soccer history with one player blanked out. Name the missing man with escalating hints that never repeat what the card already shows. Champions League finals, World Cup finals, Euros finals and iconic title deciders.</p>
 <p>One famous real lineup, ten names showing, one tile blank. Missing XI asks the simplest question in football trivia: who is missing? Champions League finals, World Cup finals, Euros deciders and iconic title run-ins all take a turn.</p>

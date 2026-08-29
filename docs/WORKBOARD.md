@@ -124,7 +124,15 @@ Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
 - The how-to-play popup audit across every game (split out of the small fixes batch).
-- Trade Finder: both sides of the ball and current rosters.
+- Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
+  halves of the review item are data work the cloud sandbox cannot verify (egress is
+  proxy blocked, ESPN and Wikipedia both 403). Diagnosis for whoever picks it up: "only
+  offensive players" is STRUCTURAL in the NFL sim, frontOffice.ts carries POS lists of
+  QB/RB/WR/TE/OL only and models defense as team units, so fixing it means real
+  defensive players with derived ratings, a data pull. Rosters were baked 2026-08-05
+  (NFL from 2025 nflfastr rosters, so a year stale; NHL is current 2026-27; MLB mixed).
+  The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
+  machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
 Standing claims:
 
