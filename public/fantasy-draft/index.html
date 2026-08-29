@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/fantasy-draft" data-rh="true"><meta name="description" content="Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/fantasy-draft" data-rh="true"><meta property="og:title" content="Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -205,7 +216,7 @@
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Fantasy DraftShowdown</h1>
-<p>Draft your Starting XI. Simulate a season. Vote for the winner.</p>
+<p>The goal: outdraft the AI. Your XI and its XI play the same simulated season, and the final table decides who drafted better.</p>
 <h2>Today's Criteria</h2>
 <h2>Fantasy Draft: Soccer Team Builder | DoUKnowBall</h2>
 <p>Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team.</p>
@@ -242,7 +253,7 @@
 <h2>More games to play</h2>
 <a href="/transfer-path">🔄 Transfer Path Connect two players through shared clubs</a>
 <a href="/squad-deal">🏟️ Squad Deal Build an XI out of mystery boxes</a>
-<a href="/player-stock-market">📈 Player Stock Market Buy 3 players at real past values, then the market moves a real year</a>
+<a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
 <a href="/missing-eleven">🕵️ Missing Eleven Name the missing starter from a famous Super Bowl offense</a>
 <a href="/tennis-higher-lower">📊 Tennis Higher or Lower Which legend won more Grand Slam titles?</a>
 <a href="/mystery-box">📦 Mystery Box Open 15 packs, keep or bin, build the best XI your luck allows</a>
