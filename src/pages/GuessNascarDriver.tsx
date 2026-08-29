@@ -11,7 +11,9 @@ export default function GuessNascarDriver() {
         description="Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge."
         path="/guess-nascar-driver"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <NascarDriverBoard />
       <GameSeoContent
           pageHasOwnH1

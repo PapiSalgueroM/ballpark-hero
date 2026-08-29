@@ -6,6 +6,7 @@ import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { GameHelp } from '@/components/game/GameHelp';
 
 /**
  * Game-page top bar. This renders on all 118 routes, so a change here is a
@@ -85,8 +86,32 @@ import { AuthModal } from '@/components/auth/AuthModal';
  * this bar at 320, 390, 430, 1024 and 1440 on a sample of real game pages, with
  * the worst case numbers injected, and fails on any overlap or any horizontal
  * overflow.
+ *
+ * ── Round 335: the "?" joins the bar ──
+ *
+ * Round 321 mounted the standard rules control in GameShell, but 39 games
+ * draw their own layout straight from this component and never go through
+ * the shell, so a third of the site (including /soccer-career, the most
+ * played page on it) offered no way to learn the rules at all. playHowTo
+ * said green throughout, because its prose verdict was being satisfied by
+ * the "How to play" heading in the SEO block at the bottom of every page.
+ *
+ * The bar is where it belongs rather than in each of those 39 layouts: it
+ * is the one piece of chrome every game page already shares, and being
+ * chrome is exactly what makes the control REOPENABLE, still there on move
+ * forty rather than on a setup screen the first press throws away.
+ *
+ * On the Round 129 maths this is one more shrink-0 item on the top line,
+ * about 36px beside the 148px wordmark and the 79px Back button, so 263 of
+ * the 280 usable pixels at 320 wide. It still fits, and the layout above is
+ * flex-wrap precisely so that the failure mode when something stops fitting
+ * is a wrap onto the next line and never a collision. simMobileChrome
+ * measures it at all five widths.
+ *
+ * GameShell passes help="none" because it renders its own GameHelp in the
+ * content column, so no page shows two question marks.
  */
-export function GameNavbar() {
+export function GameNavbar({ help = 'auto' }: { help?: 'auto' | 'none' } = {}) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
@@ -122,6 +147,16 @@ export function GameNavbar() {
           {/* Back, right, boxed so it can't be missed. Second in the DOM so that
               on a phone it shares the top line with the logo instead of being
               stranded under the stats. */}
+          {/* Round 335: the rules control, beside Back on the top line. It
+              renders nothing on a route with no guide, which is what keeps
+              it off /about, /leaderboard and the rest of the non game pages
+              that also draw this bar. */}
+          {help === 'auto' && (
+            <div className="order-2 lg:order-3 shrink-0 flex items-center">
+              <GameHelp inline />
+            </div>
+          )}
+
           <button
             onClick={() => navigate(-1)}
             aria-label="Go back"

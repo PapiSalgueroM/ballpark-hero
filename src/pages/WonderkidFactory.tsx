@@ -61,7 +61,9 @@ const WonderkidFactory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <PageSeo
         title="Wonderkid Factory: Free Idle Football Academy Game | DoUKnowBall"
         description="Run a youth academy: scouts find kids, coaches grow them toward hidden ceilings, and you decide when to cash out. Deadline day surges, reputation stars, six regions to climb. Free idle game, no sign-up."

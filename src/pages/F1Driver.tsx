@@ -11,7 +11,9 @@ export default function F1Driver() {
         description="Guess the Formula 1 driver from progressive clues. Daily F1 trivia game."
         path="/f1-driver"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <F1DriverBoard />
       <GameSeoContent
           pageHasOwnH1

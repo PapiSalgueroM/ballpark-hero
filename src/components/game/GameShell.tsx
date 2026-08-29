@@ -40,7 +40,11 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
        keyboard affordance focused nothing. tabIndex -1 so the jump moves real
        focus, not just the scroll. */
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
-      <GameNavbar />
+      {/* Round 335: the navbar mounts the rules control for the 39 games that
+          draw their own layout and never reach this shell. Pages that DO reach
+          it get theirs below, in the content column where Round 288 put it, so
+          the navbar's copy is suppressed here and no page shows two. */}
+      <GameNavbar help="none" />
       <div
         className={cn(
           /* Round 288: relative, so RulesGate's floating "?" (absolute top-0

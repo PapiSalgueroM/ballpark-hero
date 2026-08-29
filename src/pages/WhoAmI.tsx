@@ -326,7 +326,9 @@ const WhoAmI = () => {
 
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <PageSeo
         title="Who Am I? Secret Footballer Guessing Game | DoUKnowBall"
         description="Guess the secret footballer. Every guess returns a similarity score from 0 to 100 plus clues on nationality, position, club, age and market value. Find him in as few guesses as you can."

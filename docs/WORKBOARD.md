@@ -28,6 +28,26 @@ verified fixes. The fences guard them; the added rule is restraint.**
 
 ## Inbox (unclaimed)
 
+- TWO RULES CONTROLS ON ONE PAGE, found and measured by Round 335, deliberately
+  NOT fixed there. GameShell's doc comment promises "no page ever shows two
+  question marks" and 25 routes contradict it. Measured on the built site
+  BEFORE that round's change and again after, identical both times, so this is
+  pre-existing and the round neither caused it nor cleared it: /connections and
+  /ufc for instance carry GameShell's floating "?" at (0,89) AND the page's own
+  labelled "How to play" at (136,301), and /olympics carries two icon buttons
+  116px apart. The cause looks simple, those pages render their own control but
+  never passed help="none" to GameShell, which is exactly what the prop exists
+  for. WHY IT WAS LEFT: the measuring probe counts any control whose aria names
+  the rules, so it also counted /idle-arena's "Close the rules" button inside an
+  open dialog, which is a false positive and not a duplicate at all. Telling a
+  second TRIGGER from a dialog's own close button needs care, and picking which
+  of two real controls survives is a per page judgment (the page's own is
+  usually the better written one), so twenty-odd files should not be edited
+  blind on a probe that is known to over-count. Whoever takes it: re-measure
+  with a matcher that ignores controls inside an open [role="dialog"], confirm
+  the list, then pass help="none" per page and keep the game's own control.
+  A candidate for a permanent playHowTo section 3 once the count is trustworthy.
+
 **ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
 workable pieces. Bugs still outrank these; within the list his order rules.**
 
@@ -188,11 +208,6 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- How-to-play, the stricter half (BUILDING as Round 335, cloud, 2026-08-29): playHowTo
-  pins the floor (every game shows a rules affordance a visitor can see). A handful of
-  non shell pages satisfy it with setup screen rules only, no reopenable "?" mid game;
-  this round tightens the fence to "reopenable during play everywhere" and gives the
-  offenders (the new Rebuild spin screen among them) a real "?".
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
   halves of the review item are data work the cloud sandbox cannot verify (egress is
   proxy blocked, ESPN and Wikipedia both 403). Diagnosis for whoever picks it up: "only
@@ -208,6 +223,56 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE HOW-TO-PLAY FENCE GETS ITS TEETH, Round 335 (cloud lane, 2026-08-29).
+  Claimed on 08-29 and then the session died without shipping a line, so this is
+  the round picked up from that claim. It found the fence had been green for the
+  wrong reason since Round 321. playHowTo's fourth verdict accepted any short
+  visible element opening with "how to play", and GameSeoContent renders exactly
+  that heading in the SEO block at the BOTTOM of all 128 game pages, so a page
+  with no rules control anywhere still passed on footer boilerplate. Measured on
+  the built site: 116 routes all "green", but 77 on a real control and 39 on
+  prose, and every one of those 39 was the SEO block. Not one had genuine setup
+  screen rules. The 39 were exactly the pages that draw their own layout from
+  GameNavbar instead of GameShell, and they include /soccer-career, the most
+  played page on the site.
+  THE FIX IS AT THE SYSTEM, not in 39 files: GameNavbar mounts GameHelp in an
+  inline form, so every page drawing the site chrome gets the standard "?" fed
+  by its own guide content, and because it is chrome it is still there mid game
+  rather than on a setup screen the first press throws away. GameShell passes
+  help="none" so its own content column "?" stays the only one, and the 12 pages
+  that draw the navbar directly while carrying their own rules control opt out
+  the same way. All 39 have guide content, so all 39 got a real control: 116 of
+  116 now pass on a control, measured, with zero routes gained or lost elsewhere.
+  THE HARNESS is stricter twice over. The prose verdict now refuses anything
+  inside [data-seo-content], and a new section 2 drives each game one press into
+  play, proves the screen actually changed, and then demands a CONTROL rather
+  than prose, because rules you have scrolled past are not rules you can reopen.
+  Two controls, both proven: HOWTO_CONTROL=blind passes 0 of 116, and
+  HOWTO_CONTROL=seo plants a control-less page and measures that the old verdict
+  would have rescued 84 of 116 routes on the SEO heading alone while the new one
+  refuses them. The seo control is deliberately NOT written as "strict must
+  refuse everything": Footle's opening dialog shows real rules and passes
+  honestly, and an earlier draft that demanded zero would have gone red on
+  exactly the behaviour verdict 4 exists to reward.
+  ALSO IN THIS ROUND, because it was costing every run 12.6 seconds per route:
+  the harness blocks the template's third party hosts (fonts, ads, analytics)
+  the same way it already blocked Supabase, since a rules button that waits on
+  a third party is one the player cannot rely on. Full run went from 32 minutes
+  to about 3, with identical verdicts.
+  HONEST LIMIT, stated rather than averaged away: section 2 drove 27 of 116
+  routes and all 27 kept their control. The other 89 are named in the output and
+  the cause is the sandbox having no egress, so most games render an empty board
+  (/quiz-board literally says "Couldn't build today's board"). The desktop lane,
+  which has database access, will drive far more of them. Section 2 is a real
+  check on what it reaches and it does not pretend to be more.
+  tsc zero, build green, simMobileChrome green (34 bar measurements at 320/390/
+  430/1024/1440 signed in and out, no overlap, and three of its sampled pages
+  are ones that just gained the button), and the built-site fences all green:
+  simAdsense, simBrand, simHeadTags, simHiddenPages, simHubs, simIndexNow,
+  simIndexing, simInternalLinks, simNoRivalNames, simPrerender, simPrerenderBoot,
+  simRetiredRoutes, simSchema, simSitemap, simSnapshotAssets, plus
+  simSingleFooter and simAccessibility.
 
 - THE OWNER DIRECTIVES LAND, Round 343 (desktop lane, 2026-08-29).
   docs/OWNER-DIRECTIVES-2026-08.md carries his final directives verbatim with the

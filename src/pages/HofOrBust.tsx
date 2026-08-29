@@ -11,7 +11,9 @@ export default function HofOrBust() {
         description="Can you tell a Hall of Famer from a bust using only career stats? Vote, reveal hints, and see how the community voted."
         path="/hof-or-bust"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <HofOrBustBoard />
       <GameSeoContent
           pageHasOwnH1

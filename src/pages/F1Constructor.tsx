@@ -11,7 +11,9 @@ export default function F1Constructor() {
         description="Guess the Formula 1 constructor from clues about their history, championships, and famous drivers."
         path="/f1-constructor"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <F1ConstructorBoard />
       <GameSeoContent
           pageHasOwnH1

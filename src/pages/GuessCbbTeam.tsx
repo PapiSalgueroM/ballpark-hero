@@ -11,7 +11,9 @@ export default function GuessCbbTeam() {
         description="Identify the mystery college basketball program from progressive clues. Daily CBB trivia challenge."
         path="/guess-cbb-team"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <CbbProgramBoard />
       <GameSeoContent
           pageHasOwnH1

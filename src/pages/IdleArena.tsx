@@ -89,7 +89,9 @@ const IdleArena = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <PageSeo
         title="Idle Arena: Free Sports Clicker Game | DoUKnowBall"
         description="Tap to score, sign a squad that scores for you, and come back to a bigger number. A free sports idle clicker with eight archetypes, fourteen upgrades, trophies that make every run stronger, and eight hours of offline earnings. No sign-up."

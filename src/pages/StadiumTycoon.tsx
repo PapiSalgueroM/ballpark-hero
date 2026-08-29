@@ -139,7 +139,9 @@ export default function StadiumTycoon() {
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <PageSeo
         title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
         description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."

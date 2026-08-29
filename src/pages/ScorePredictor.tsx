@@ -11,7 +11,9 @@ export default function ScorePredictor() {
         description="Can you predict the final score of history's most famous matches? Guess soccer, NFL, and NBA scores for points."
         path="/score-predictor"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <ScorePredictorBoard />
       <GameSeoContent
           pageHasOwnH1

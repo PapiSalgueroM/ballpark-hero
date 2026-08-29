@@ -11,7 +11,9 @@ export default function GuessTheYear() {
         description="Guess what year famous sports moments happened. NFL, NBA, MLB, NHL, UFC, and more. Daily trivia challenge."
         path="/guess-the-year"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <GuessTheYearBoard />
       <GameSeoContent
           pageHasOwnH1

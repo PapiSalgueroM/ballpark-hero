@@ -17,8 +17,18 @@ import type { GameContent } from '@/data/gameContent/types';
  * and the worked example in the shared popover. Routes with no guide render
  * nothing, and pages that already carry their own rules control opt out
  * through GameShell's help="none" so no page shows two question marks.
+ *
+ * ROUND 335: it is mounted by GameNavbar too, in the `inline` form, and that
+ * is what closed the hole. Round 321 put this in GameShell, but 39 games draw
+ * their own layout from GameNavbar and never touch the shell, so a third of
+ * the site had no rules control at all. GameNavbar reaches all of them, and
+ * because it is the site chrome the "?" is still there mid game rather than
+ * living on a setup screen that the first press throws away. The floating
+ * trigger is absolutely positioned for the shell's content column, which
+ * would land it on top of the navbar's own buttons, so the navbar asks for
+ * the inline one and gets a control that sits in the row like any other.
  */
-export function GameHelp() {
+export function GameHelp({ inline = false }: { inline?: boolean } = {}) {
   const { pathname } = useLocation();
   const [content, setContent] = useState<GameContent | null>(null);
 
@@ -34,7 +44,14 @@ export function GameHelp() {
   if (!content || content.howToPlay.length === 0) return null;
 
   return (
-    <HowToPlayPopover title="How to play">
+    <HowToPlayPopover
+      title="How to play"
+      floatingTrigger={!inline}
+      /* In the navbar row the trigger stands beside the Back button, so it
+         matches its height and its hit area rather than the 44px the
+         floating one gets from the content column around it. */
+      className={inline ? 'shrink-0 inline-flex items-center justify-center min-h-[36px] min-w-[36px] rounded-lg border-2 border-primary/60 bg-surface-1 text-primary hover:bg-primary hover:text-primary-foreground shadow-sm' : undefined}
+    >
       <div>
         <h3 className="font-bold text-foreground mb-2">The steps</h3>
         <ol className="list-decimal list-inside space-y-1.5 text-muted-foreground">

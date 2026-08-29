@@ -11,7 +11,9 @@ export default function GuessTennisPlayer() {
         description="Identify the mystery tennis player from career clues. ATP and WTA legends from 1970 to 2025. Daily puzzle."
         path="/guess-tennis-player"
       />
-      <GameNavbar />
+      {/* Round 335: this page draws its own rules control, so the navbar
+          does not add a second one. */}
+      <GameNavbar help="none" />
       <TennisPlayerBoard />
       <GameSeoContent
           pageHasOwnH1
