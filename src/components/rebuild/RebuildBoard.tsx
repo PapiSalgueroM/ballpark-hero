@@ -119,11 +119,11 @@ export function RebuildBoard() {
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
-          First call: the dugout
+          Pick your manager
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          Keep your caretaker for free, or spend transfer money on a real one.
-          A better coach lifts your final squad rating.
+          Keep the man you have for free, or spend transfer money on a better one.
+          A better manager lifts your final squad rating.
         </p>
 
         <div className="mt-5 grid gap-2">
@@ -141,7 +141,7 @@ export function RebuildBoard() {
                 </span>
               </span>
               <span className="ml-3 shrink-0 text-right">
-                <span className="block text-sm font-bold text-primary">+{c.bonus} rating</span>
+                <span className="block text-sm font-bold text-primary">{c.bonus >= 3 ? 'The full lift' : c.bonus === 2 ? 'A real lift' : c.bonus === 1 ? 'A small lift' : 'No change'}</span>
                 <span className="block text-[11px] text-gold">{c.cost === 0 ? 'Free' : `€${c.cost}M`}</span>
               </span>
             </button>

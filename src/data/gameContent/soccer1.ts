@@ -48,7 +48,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     howToPlay: [
       "Pick one of 63 real clubs, tiered from elite down to modest.",
-      "Choose a coach: the free caretaker, or one of three paid names adding +1, +2 or +3 to your final rating.",
+      "Choose a manager: keep the man you have for free, or pay for one of three better names. Each step up lifts your final rating a little more.",
       "Flip one of ten fortune cards. Takeovers, lawsuits, anything from +60 to -35 million.",
       "Commit your sales before the market opens. Once you lock the list, nobody else leaves.",
       "Tap any XI slot to sign a replacement. Only affordable players are listed.",
@@ -62,7 +62,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away.",
     ],
     example: [
-      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. You keep the caretaker, flip the sell-on clause card for +20 million, and commit two aging starters to the exit list before the market opens.",
+      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. You keep the man you have in the dugout, flip the sell-on clause card for +20 million, and commit two aging starters to the exit list before the market opens.",
       "A rival hijacks your marquee signing and you pay 15 million over value before he folds. The XI lands on 82, both objectives hold, and the season sim puts you second of six. Job Done.",
     ],
     tips: [
