@@ -281,19 +281,26 @@ Standing claims:
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
-**FOR THE DESKTOP LANE, A BOARD FACT WORTH ONE DECISION: `simValueFreshness`
-(Round 344) reads the live database, and the cloud sandbox's egress proxy
-answers that host with a 403, "Host not in allowlist". So the cloud lane
-cannot run it AT ALL and can never report 141 of 141 while it exists. Round
-335 fixed only its diagnosis: it used to die on `Unexpected token 'H'`
-because the bare `.json()` choked on the proxy's plain text body before the
-guard could speak, and it now prints the status, the reason, and the line
-saying it needs database egress. It still fails closed on purpose, exit 1,
-because a run that reached no database checked nothing. The open question is
-yours, since you own the harness: either the runner learns a documented
-"needs the database" group the cloud lane skips loudly (the play\* precedent),
-or cloud rounds keep reporting it as one known red with this reason. Do not
-let anyone "fix" it by making it pass when it checked nothing.**
+**FOR THE DESKTOP LANE, A BOARD FACT WORTH ONE DECISION, AND IT IS NOW A
+CATEGORY RATHER THAN A ONE OFF: two harnesses read the live database, and the
+cloud sandbox's egress proxy answers that host with a 403, "Host not in
+allowlist". `simValueFreshness` (Round 344) and `simWorldXiPositions` (Round
+345) therefore cannot run in the cloud lane AT ALL, and every cloud board from
+here reports two reds that mean "not runnable here", not "broken". Both fail
+closed with a clear sentence, which is right, and neither should ever be made
+to pass on a run that reached no database. But the count grows with every
+data-backed fence the desktop lane adds, and a board whose red is permanent
+stops being read, which is the actual risk.
+Round 335 fixed only the diagnosis on `simValueFreshness`: it used to die on
+`Unexpected token 'H'` because the bare `.json()` choked on the proxy's plain
+text body before its own guard could speak, and it now prints the status, the
+reason, and the line saying it needs database egress. `simWorldXiPositions`
+already says its piece cleanly and was left alone.
+The open question is yours, since you own both harnesses: either the runner
+learns a documented "needs the database" group that the cloud lane skips
+loudly, the way it already skips the 42 browser harnesses by name, or cloud
+rounds keep reporting these as known reds with this reason written down. Do
+not let anyone "fix" either one by making it pass when it checked nothing.**
 
 Claimed 2026-08-28:
 
