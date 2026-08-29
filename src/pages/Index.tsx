@@ -9,6 +9,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
+import { MakerNote } from '@/components/home/MakerNote';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -453,6 +454,8 @@ export default function Index() {
               played stays, per the same document. */}
           <PollOfTheDay />
           <StreakReminder />
+          {/* Round 346: the maker's note, below the games people came for. */}
+          <MakerNote />
 
           {/* Search bar */}
           <div className="relative">

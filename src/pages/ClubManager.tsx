@@ -319,9 +319,11 @@ const ClubManager = () => {
                       do not offer futures. */}
                   <div className={cn(
                     'mt-1.5 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded border',
+                    /* Round 347: token inks so light mode can answer them; the
+                       tinted borders and fills read fine on both themes. */
                     e.startYear <= CM_BASE_YEAR
-                      ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10'
-                      : 'text-yellow-500 border-yellow-500/50 bg-yellow-500/10',
+                      ? 'text-[hsl(var(--wc-green-ink))] border-emerald-500/50 bg-emerald-500/10'
+                      : 'text-gold border-yellow-500/50 bg-yellow-500/10',
                   )}>
                     {e.startYear <= CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}
                   </div>

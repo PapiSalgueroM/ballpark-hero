@@ -39,6 +39,14 @@ export interface WxPlayer {
   value: number; // market value in USD from the row we kept
   /** Age from the same market-value row; feeds the age-aware card rating. */
   age?: number;
+  /** Round 345: secondary positions this player has verifiably played, from
+   *  the curated player_verified_positions table (human-verified, two sources
+   *  per claim). Never derived from the market-value rows themselves: the
+   *  table has no person identity, so a name-keyed derivation merges different
+   *  humans sharing a name and fakes careers (two Gabriel Pereiras taught us).
+   *  A played position grants eligibility for exactly that slot, no family
+   *  expansion, which is the owner's "a CF with RW history fits RW". */
+  positionsPlayed?: Position[];
 }
 
 export interface WorldXiData {
@@ -150,7 +158,12 @@ function slotAllowed(slot: FormationSlot): Position[] {
 
 export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
   const allowed = slotAllowed(slot);
-  return eligiblePositions(p.position).some(pos => allowed.includes(pos));
+  if (eligiblePositions(p.position).some(pos => allowed.includes(pos))) return true;
+  /* Round 345: verified history widens eligibility, exactly and only to the
+     positions the player's own rows have carried. Direct membership, no
+     family chain, so history can never reopen the LWB-to-RW hole Round 319
+     closed. */
+  return (p.positionsPlayed ?? []).some(pos => allowed.includes(pos));
 }
 
 /**
@@ -225,7 +238,32 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       .order('market_value_usd', { ascending: false })
       .limit(PREV_STARS);
 
-    const results = await Promise.all([...pageRequests, prevRequest]);
+    /* Round 345: verified position history, curated only. Each row is a
+       human-verified claim (two sources, stored with provenance) about ONE
+       specific person, and primary_position names which person: history
+       attaches only to a pooled player whose own position matches it, so a
+       tail player sharing a star's name cannot inherit his career.
+       Fail soft on purpose: history only WIDENS eligibility, so a missing
+       table degrades to primary-family rules instead of blocking the game. */
+    const verifiedRequest = supabase
+      .from('player_verified_positions' as never)
+      .select('player_name, secondary_positions, primary_position')
+      .limit(1000);
+
+    const [verifiedRes, ...results] = await Promise.all([verifiedRequest, ...pageRequests, prevRequest]);
+    const playedByName = new Map<string, { primary: Position | ''; secs: Position[] }>();
+    const verRows = (verifiedRes as { error: unknown; data: { player_name: string; secondary_positions: string[]; primary_position: string | null }[] | null });
+    if (!verRows.error && verRows.data) {
+      for (const row of verRows.data) {
+        const secs = (row.secondary_positions ?? []).filter((p): p is Position => (ALL_POSITIONS as string[]).includes(p));
+        if (secs.length) {
+          playedByName.set(row.player_name.trim(), {
+            primary: normalizePosition((row.primary_position ?? '').trim()),
+            secs,
+          });
+        }
+      }
+    }
     const rows: PoolRow[] = [];
     for (const r of results) {
       if (!r.error && r.data) rows.push(...(r.data as PoolRow[]));
@@ -243,6 +281,15 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       if (!name || !country || !position || value <= 0) continue;
       const prev = byName.get(name);
       if (!prev || year > prev.year || (year === prev.year && value > prev.player.value)) {
+        /* Identity guard: the curated history belongs to the human whose
+           primary role the curators recorded, so a same-named player in a
+           different role gets nothing. The goalkeeper boundary stands behind
+           it: even a matched history never lets a keeper earn an outfield
+           slot or an outfielder earn goal. */
+        const playedRaw = playedByName.get(name);
+        const played = playedRaw && playedRaw.primary === position
+          ? playedRaw.secs.filter(p => (position === 'GK') === (p === 'GK'))
+          : undefined;
         byName.set(name, {
           player: {
             name,
@@ -251,6 +298,7 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
             club: (r.club ?? '').trim(),
             value,
             age: Number((r as { age?: number | null }).age) || undefined,
+            ...(played && played.some(p => p !== position) ? { positionsPlayed: played } : {}),
           },
           year,
         });

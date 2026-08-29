@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 346.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 348.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -90,17 +90,6 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   the site's whole pitch is clean free games. If some of that flavor is wanted, the
   existing in-career purchases and a fictional "prediction night out" event carry it
   without slot machines. Parked unless he overrules.
-- WELCOME NOTE from the maker (Anthony, 2026-08-29 late: a welcome message saying
-  this is his first coding project, an independent site he is constantly improving
-  and fact checking, sorry for any bugs, thanks for visiting; his reasoning:
-  sympathy earns patience and a second visit). RECOMMENDATION already given to him:
-  NOT a popup modal, because the home page's whole covenant is offers before asks
-  (playHomeFold enforces the first tile's position) and a blocking dialog before
-  anyone has played is the toll booth Round 283 tore down. Build it as a small
-  dismissible "A note from the maker" card, once per browser, placed under the fold
-  content, plus the same text living permanently on /about; keep his authentic
-  voice, fix the spelling, drop nothing sincere. Copy draft in the item is owed by
-  whoever claims it and goes past him only if the loop cannot write it warmly.
 - LIGHT MODE (Anthony, 2026-08-29 late: "since its basically in dark mode already I
   would love for there to be a light mode and people can choose"). A real theme
   system: the palette is dark-only today, so this needs a light token set on the
@@ -143,16 +132,6 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
-
-- STALE VALUES SWEEP (BUILDING as Round 344, desktop, 2026-08-29): the Round 315
-  follow up, the 247 players whose latest market value row is 2024 or older at a
-  30m+ peak, swept by parallel research agents under the two-source rule, active
-  players get verified current rows, the honestly retired get marked so the games
-  render them honestly. Desktop gates the database writes.
-- WORLD XI REAL POSITIONS (BUILDING as Round 345, desktop, 2026-08-29): the Round
-  319 handoff, a verified secondary position map so eligibility reads positions a
-  player actually PLAYED. Schema recon first, then a research fan out for the
-  World XI pool players, then the code side reads data instead of a hand rule.
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
@@ -224,56 +203,72 @@ Standing claims:
 
 ## Done
 
-- THE HOW-TO-PLAY FENCE GETS ITS TEETH, Round 335 (cloud lane, 2026-08-29).
-  Claimed on 08-29 and then the session died without shipping a line, so this is
-  the round picked up from that claim. It found the fence had been green for the
-  wrong reason since Round 321. playHowTo's fourth verdict accepted any short
-  visible element opening with "how to play", and GameSeoContent renders exactly
-  that heading in the SEO block at the BOTTOM of all 128 game pages, so a page
-  with no rules control anywhere still passed on footer boilerplate. Measured on
-  the built site: 116 routes all "green", but 77 on a real control and 39 on
-  prose, and every one of those 39 was the SEO block. Not one had genuine setup
-  screen rules. The 39 were exactly the pages that draw their own layout from
-  GameNavbar instead of GameShell, and they include /soccer-career, the most
-  played page on the site.
-  THE FIX IS AT THE SYSTEM, not in 39 files: GameNavbar mounts GameHelp in an
-  inline form, so every page drawing the site chrome gets the standard "?" fed
-  by its own guide content, and because it is chrome it is still there mid game
-  rather than on a setup screen the first press throws away. GameShell passes
-  help="none" so its own content column "?" stays the only one, and the 12 pages
-  that draw the navbar directly while carrying their own rules control opt out
-  the same way. All 39 have guide content, so all 39 got a real control: 116 of
-  116 now pass on a control, measured, with zero routes gained or lost elsewhere.
-  THE HARNESS is stricter twice over. The prose verdict now refuses anything
-  inside [data-seo-content], and a new section 2 drives each game one press into
-  play, proves the screen actually changed, and then demands a CONTROL rather
-  than prose, because rules you have scrolled past are not rules you can reopen.
-  Two controls, both proven: HOWTO_CONTROL=blind passes 0 of 116, and
-  HOWTO_CONTROL=seo plants a control-less page and measures that the old verdict
-  would have rescued 84 of 116 routes on the SEO heading alone while the new one
-  refuses them. The seo control is deliberately NOT written as "strict must
-  refuse everything": Footle's opening dialog shows real rules and passes
-  honestly, and an earlier draft that demanded zero would have gone red on
-  exactly the behaviour verdict 4 exists to reward.
-  ALSO IN THIS ROUND, because it was costing every run 12.6 seconds per route:
-  the harness blocks the template's third party hosts (fonts, ads, analytics)
-  the same way it already blocked Supabase, since a rules button that waits on
-  a third party is one the player cannot rely on. Full run went from 32 minutes
-  to about 3, with identical verdicts.
-  HONEST LIMIT, stated rather than averaged away: section 2 drove 27 of 116
-  routes and all 27 kept their control. The other 89 are named in the output and
-  the cause is the sandbox having no egress, so most games render an empty board
-  (/quiz-board literally says "Couldn't build today's board"). The desktop lane,
-  which has database access, will drive far more of them. Section 2 is a real
-  check on what it reaches and it does not pretend to be more.
-  tsc zero, build green, simMobileChrome green (34 bar measurements at 320/390/
-  430/1024/1440 signed in and out, no overlap, and three of its sampled pages
-  are ones that just gained the button), and the built-site fences all green:
-  simAdsense, simBrand, simHeadTags, simHiddenPages, simHubs, simIndexNow,
-  simIndexing, simInternalLinks, simNoRivalNames, simPrerender, simPrerenderBoot,
-  simRetiredRoutes, simSchema, simSitemap, simSnapshotAssets, plus
-  simSingleFooter and simAccessibility.
-
+- LIGHT MODE, Round 347 (desktop lane, 2026-08-29). The owner's ask, shipped as
+  a token flip and not a redesign: the dark :root palette stays the default and
+  the identity (snapshots, social image and the AdSense review all show it, so
+  prefers-color-scheme is deliberately not read), and a .light class on <html>
+  overrides every token with a measured light set. The toggle lives in the
+  footer for everyone (Cookie choices is the precedent) and as an icon in the
+  header from sm up only, because the worst guest header row already measures
+  347px at 360 (Round 320's lesson stands). Applied in main.tsx before React
+  draws, nothing touches index.html or any crawler-facing file the freeze
+  covers; buttons never survive prerendering, so crawlers see no change at
+  all. The recon said 1,884 semantic-token usages against 87 hardcoded darks,
+  and the harness found the ones that mattered: the ticker bar's hardcoded
+  near black (token ink went invisible on it, 1.16), text-red-400 live labels,
+  the gold New badges at 3.23, Club Manager's era chips at 1.92, all fixed at
+  the token level. playLightMode fences it: dark by default (luminance 0.004
+  fresh), the footer toggle flips and survives a reload, and 2,776 sampled
+  text nodes across ten routes all hold the WCAG floor in light mode;
+  LIGHTMODE_CONTROL=nolight strips the light CSS and proves the flip check
+  bites. Fold covenant re-proven with the toggle in the chrome.
+- WORLD XI REAL POSITIONS, Round 345 (desktop lane, 2026-08-29). The Round 319
+  handoff, "a CF with RW history should fit a RW slot", now reads verified data
+  instead of a hand rule. The round's real lesson: player_market_values has no
+  person identity, so every derivation keyed on the name fakes careers by
+  merging humans who share one (two Brazilian Gabriel Pereiras born a year
+  apart became a centre-back with wide-right seasons; a "Daniel" played goal
+  and attacking midfield at once; even the strictest identity filter kept
+  colliding mononyms). The derived view was therefore dropped, not calibrated.
+  What ships is curated only: player_verified_positions, the top 150 by value
+  researched under the two-source rule with provenance stored per row, 63
+  players with real secondary roles (Raphinha RW, Valverde RB, Alexander-Arnold
+  CM, Szoboszlai CM and RB), each row carrying the verified human's
+  primary_position so a same-named tail player cannot inherit a star's history,
+  plus the goalkeeper wall behind it. fitsSlot widens by direct membership
+  only, no family chain, so the Round 319 LWB-to-RW hole stays closed.
+  simWorldXiPositions fences it live: 63 pooled players carry history, 6 earn
+  the strict RW slot through it (Palmer, Güler, Foden), zero defenders cross
+  without a verified wide-right season, WXIPOS_CONTROL=nohistory proven red.
+- THE MAKER NOTE, Round 346 (desktop lane, 2026-08-29). His welcome idea, built
+  the way the home page can carry it: a small dismissible card in his own voice
+  (first coding project, independent, constantly improving, sorry for any bugs,
+  thanks for visiting, have a blessed day), spelling cleaned, nothing sincere
+  dropped. A card and not the popup he pictured, because the fold covenant is
+  offers before asks; it sits measured BELOW the first game tile (note y=548,
+  tile y=333), contains zero account language, and dismisses once per browser.
+  Client rendered only, deliberately outside every crawler-facing file the
+  AdSense freeze covers; the permanent /about copy waits for the verdict, noted
+  here. playHomeFold section 5 fences all of it: renders fresh, below the tile,
+  asks for nothing, gone after dismiss and reload. Full fold harness green.
+- THE STALE VALUES SWEEP, Round 344 (desktop lane, 2026-08-29). The Round 315
+  follow up, closed in one evening by eight parallel researchers under the
+  two-source rule with every database write reviewed and executed by hand. All
+  243 stale high-peak names classified: 135 honestly retired (no invented
+  current rows, the render paths already say so), 101 verified active, 4 name
+  collisions documented (two humans sharing a row name, including the fake
+  Fabinho the list itself exposed), 3 unknowns recorded with what was tried.
+  98 verified 2026 rows written (club, age, value from Transfermarkt at the
+  documented 1.08 EUR to USD landing, sources kept per player in
+  scripts/data/staleSweep2026.json), including Caicedo at Chelsea, Zubimendi at
+  Arsenal, Szczesny at Barcelona, Casemiro at Inter Miami, and a 46 year old
+  Ronaldinho genuinely un-retired at Ravenna (recorded, no value invented). The
+  review gates caught the agents nothing: the one systematic near-miss was MY
+  peak gate wrongly excluding young risers, fixed with the documented rule.
+  simValueFreshness is the fence: the database held to the committed audit
+  (actives present at audited values, retired rowless, collisions untouched),
+  VALUE_CONTROL=phantom proven red. Stale count 243 to 145, every remaining one
+  explained in the audit.
 - THE OWNER DIRECTIVES LAND, Round 343 (desktop lane, 2026-08-29).
   docs/OWNER-DIRECTIVES-2026-08.md carries his final directives verbatim with the
   operational mapping: free forever (overrides the spec premium mention), the
@@ -351,6 +346,56 @@ Standing claims:
   nationless era league and goes red, so the next era cannot ship flagless.
   Both builds were made by parallel agents under hard no-assertion-touching
   rules and re-verified by hand.
+
+- THE HOW-TO-PLAY FENCE GETS ITS TEETH, Round 335 (cloud lane, 2026-08-29).
+  Claimed on 08-29 and then the session died without shipping a line, so this is
+  the round picked up from that claim. It found the fence had been green for the
+  wrong reason since Round 321. playHowTo's fourth verdict accepted any short
+  visible element opening with "how to play", and GameSeoContent renders exactly
+  that heading in the SEO block at the BOTTOM of all 128 game pages, so a page
+  with no rules control anywhere still passed on footer boilerplate. Measured on
+  the built site: 116 routes all "green", but 77 on a real control and 39 on
+  prose, and every one of those 39 was the SEO block. Not one had genuine setup
+  screen rules. The 39 were exactly the pages that draw their own layout from
+  GameNavbar instead of GameShell, and they include /soccer-career, the most
+  played page on the site.
+  THE FIX IS AT THE SYSTEM, not in 39 files: GameNavbar mounts GameHelp in an
+  inline form, so every page drawing the site chrome gets the standard "?" fed
+  by its own guide content, and because it is chrome it is still there mid game
+  rather than on a setup screen the first press throws away. GameShell passes
+  help="none" so its own content column "?" stays the only one, and the 12 pages
+  that draw the navbar directly while carrying their own rules control opt out
+  the same way. All 39 have guide content, so all 39 got a real control: 116 of
+  116 now pass on a control, measured, with zero routes gained or lost elsewhere.
+  THE HARNESS is stricter twice over. The prose verdict now refuses anything
+  inside [data-seo-content], and a new section 2 drives each game one press into
+  play, proves the screen actually changed, and then demands a CONTROL rather
+  than prose, because rules you have scrolled past are not rules you can reopen.
+  Two controls, both proven: HOWTO_CONTROL=blind passes 0 of 116, and
+  HOWTO_CONTROL=seo plants a control-less page and measures that the old verdict
+  would have rescued 84 of 116 routes on the SEO heading alone while the new one
+  refuses them. The seo control is deliberately NOT written as "strict must
+  refuse everything": Footle's opening dialog shows real rules and passes
+  honestly, and an earlier draft that demanded zero would have gone red on
+  exactly the behaviour verdict 4 exists to reward.
+  ALSO IN THIS ROUND, because it was costing every run 12.6 seconds per route:
+  the harness blocks the template's third party hosts (fonts, ads, analytics)
+  the same way it already blocked Supabase, since a rules button that waits on
+  a third party is one the player cannot rely on. Full run went from 32 minutes
+  to about 3, with identical verdicts.
+  HONEST LIMIT, stated rather than averaged away: section 2 drove 27 of 116
+  routes and all 27 kept their control. The other 89 are named in the output and
+  the cause is the sandbox having no egress, so most games render an empty board
+  (/quiz-board literally says "Couldn't build today's board"). The desktop lane,
+  which has database access, will drive far more of them. Section 2 is a real
+  check on what it reaches and it does not pretend to be more.
+  tsc zero, build green, simMobileChrome green (34 bar measurements at 320/390/
+  430/1024/1440 signed in and out, no overlap, and three of its sampled pages
+  are ones that just gained the button), and the built-site fences all green:
+  simAdsense, simBrand, simHeadTags, simHiddenPages, simHubs, simIndexNow,
+  simIndexing, simInternalLinks, simNoRivalNames, simPrerender, simPrerenderBoot,
+  simRetiredRoutes, simSchema, simSitemap, simSnapshotAssets, plus
+  simSingleFooter and simAccessibility.
 
 - THE WIRE ON PHONES, AND FASTER EVERYWHERE, Round 336 (desktop lane, 2026-08-29).
   His pair of reports the same evening: "the ticker is moving really slow", then

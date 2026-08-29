@@ -228,6 +228,48 @@ console.log('4) a returning player gets NO checklist, and the record never moves
   say(!!fresh.first && !!again.first && Math.abs(again.first.top - fresh.first.top) <= 2, 'a fresh profile still gets its first tile in the same place');
 }
 
+console.log('5) the maker note offers after the games, and dismissing it sticks');
+{
+  /* Round 346, the owner's welcome idea built as a card instead of the popup
+     he first pictured, precisely so this file's own covenant holds: the note
+     must sit BELOW the first game tile, must never read as an account ask,
+     and once dismissed must stay gone in that browser. */
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await ctx.newPage();
+  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForFunction(() => !!document.querySelector('[data-maker-note]'), { timeout: 20000 }).catch(() => {});
+  const read = await page.evaluate((nonGameSrc) => {
+    const NON_GAME = new RegExp(nonGameSrc);
+    const note = document.querySelector('[data-maker-note]');
+    const firstTile = [...document.querySelectorAll('a[href^="/"]')]
+      .filter(a => !a.closest('section[aria-label="Live scores ticker"]'))
+      .map(a => ({ p: a.getAttribute('href') || '', top: a.getBoundingClientRect().top + window.scrollY }))
+      .filter(x => x.p && x.p !== '/' && !NON_GAME.test(x.p))
+      .sort((a, b) => a.top - b.top)[0] ?? null;
+    return {
+      present: !!note,
+      noteTop: note ? note.getBoundingClientRect().top + window.scrollY : null,
+      firstTop: firstTile ? firstTile.top : null,
+      asksForAccount: note ? /sign up|log in|create.*account/i.test(note.textContent || '') : false,
+    };
+  }, NON_GAME.source);
+  say(read.present, 'the maker note renders for a fresh visitor');
+  if (read.present) {
+    say(read.noteTop > read.firstTop, `it sits below the first game tile (note y=${Math.round(read.noteTop)}, tile y=${Math.round(read.firstTop)})`);
+    say(!read.asksForAccount, 'it asks for nothing, no account language inside');
+    await page.getByRole('button', { name: /dismiss the note from the maker/i }).click({ timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(400);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => (document.body?.innerText ?? '').length > 200, { timeout: 20000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    const gone = await page.evaluate(() => !document.querySelector('[data-maker-note]'));
+    say(gone, 'dismissed once, gone after reload');
+  }
+  await ctx.close();
+}
+
 await browser.close();
 
 console.log('');

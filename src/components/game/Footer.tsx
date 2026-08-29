@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { SPORT_HUBS } from '@/lib/sportHub';
 
 /* Round 285: every visitor gets a way back to the cookie banner. Consent that
@@ -90,6 +91,8 @@ export function Footer() {
         >
           Cookie choices
         </button>
+        <span>·</span>
+        <ThemeToggle variant="footer" />
         <span>·</span>
         <ReportSiteIssue />
       </div>
