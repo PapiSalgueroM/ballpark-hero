@@ -123,9 +123,10 @@ Standing claims:
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
-- The how-to-play popup audit across every game (BUILDING as Round 321, 2026-08-29):
-  one standard reopenable "?" mounted in GameShell fed by each game's own content entry,
-  plus a fence that fails any registry game with no rules affordance at all.
+- How-to-play, the stricter half (queued): playHowTo pins the floor (every game shows
+  a rules affordance a visitor can see). A handful of non shell pages satisfy it with
+  setup screen rules only, no reopenable "?" mid game; tightening the fence to
+  "reopenable during play everywhere" is a later round.
 - Trade Finder, RECON DONE, NEEDS THE DESKTOP LANE'S NETWORK (cloud, 2026-08-29): both
   halves of the review item are data work the cloud sandbox cannot verify (egress is
   proxy blocked, ESPN and Wikipedia both 403). Diagnosis for whoever picks it up: "only
@@ -143,6 +144,13 @@ Standing claims:
 
 ## Done
 
+- THE HOW-TO-PLAY AUDIT, Round 321 (cloud lane, 2026-08-29). GameShell mounts a
+  standard reopenable "?" (GameHelp) fed by each game's own guide content on all 69
+  shell games; 24 pages with their own rules control opted out so nothing doubles.
+  playHowTo is the fence: every registry route loaded in a real browser on a 390
+  phone, database aborted, must show a rules affordance a visitor can see. 113 of
+  113 green, blind control flags all 113. The stricter "reopenable mid game
+  everywhere" tightening is queued above.
 - THE MOBILE PASS, FIRST WAVE, Round 320 (desktop lane, 2026-08-29). The measured
   baseline for his "make sure everything translates smoothly": every one of the 140
   routes now fits a 320 and a 390 phone with nothing hanging off the side, proven by
