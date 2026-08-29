@@ -433,7 +433,7 @@
     "date": "2026-08-25"
   },
   "/soccer": {
-    "hash": "04a63f9a7de93ed4",
+    "hash": "212cce094ee01145",
     "date": "2026-08-29"
   },
   "/soccer-career": {
@@ -443,6 +443,10 @@
   "/soccer-grid": {
     "hash": "0edf58b7ee26f505",
     "date": "2026-08-25"
+  },
+  "/sports-bingo": {
+    "hash": "",
+    "date": "2026-08-29"
   },
   "/sports-millionaire": {
     "hash": "bce88120b47042b2",
