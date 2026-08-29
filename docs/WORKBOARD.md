@@ -115,13 +115,11 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- SEO INDEXING INVESTIGATION (BUILDING as Round 341, desktop, 2026-08-29): Anthony's
-  full Search Console task doc. Desktop lane reads the real GSC reports through his
-  browser, classifies every not-indexed URL against the route inventory, fixes only
-  real technical causes, and writes docs/seo/indexing-audit.md and
-  docs/seo/route-inventory.md. No mass reindex requests, no success claims before
-  Google verifies. The 15 built-site fences already cover most of the CI list;
-  gaps found become fences.
+- SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
+  either sign into the Claude in Chrome extension on the PC so the desktop lane can
+  read Search Console itself, or export the GSC Pages report CSV to Downloads and
+  say so. Then the classification table in docs/seo/indexing-audit.md gets filled
+  from real verdicts and a handful of high priority pages get manual requests.
 
 
 
@@ -191,6 +189,19 @@ Standing claims:
 
 ## Done
 
+- THE INDEXING AUDIT, EXTERNAL HALF, Round 341 (desktop lane, 2026-08-29). His
+  Search Console task doc, executed to the line it can be without his login. A
+  live probe of every canonical URL: all 131 answer 200 with self canonicals,
+  titles, descriptions and real no-JS text; sitemap valid with zero rot; robots
+  clean; every variant shape folds correctly (http 301, trailing slash and query
+  canonicals, render-time noindex on unknown paths, retired stubs canonicaling
+  to successors); the lovable.app mirror cross-domain canonicals to the real
+  site on every sampled page. docs/seo/route-inventory.md holds the full table,
+  docs/seo/indexing-audit.md holds the classification framework with the honest
+  ledger: no technical blocker exists externally, the 80 plus not-indexed are
+  expected to classify as legitimate folds plus the crawled-not-indexed quality
+  window, and NOTHING is claimed fixed until the real GSC verdicts land. The one
+  remaining input is his (extension sign-in or a CSV export, filed above).
 - THE TEAM SKILLS, Round 340 (desktop lane, 2026-08-29). Anthony's dev-team doc,
   made real the repo-native way: five project skills in .claude/skills/ that load
   automatically for BOTH lanes and any future session, each one the distilled law

@@ -2597,6 +2597,19 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 341.** The indexing audit, external half, from the owner's
+  Search Console task document. Every check that does not need his login ran and
+  is re-runnable: all 131 canonical URLs live-probed (200, self canonical, title,
+  description, 1,600 to 11,000 chars of no-JS text each), sitemap and robots
+  validated, eight variant shapes proven to fold correctly, the lovable.app
+  mirror confirmed cross-domain canonicaling to the real site, and the CI list
+  the task demands mapped onto the 15 standing fences plus the Round 338
+  auditLive. docs/seo/route-inventory.md and docs/seo/indexing-audit.md are the
+  deliverables; the audit says plainly that no external technical blocker
+  exists, predicts the not-indexed classes (legitimate folds plus the
+  crawled-not-indexed quality window), and refuses to claim success until the
+  real GSC verdicts are read, which needs one owner tap: the Chrome extension
+  sign-in, or a Pages report CSV export.
 - **2026-08-29, Round 340.** The team skills. The owner's development-team
   document lands the repo-native way: five project skills in .claude/skills/,
   loading automatically for both lanes and any future session, each the distilled
