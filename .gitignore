@@ -34,3 +34,6 @@ _claude-migration/
 # old session briefs and scratch scripts stay out of the public repo
 docs/NEXT_SESSION_BRIEF.md
 docs/scripts/build-connections-puzzles.py
+
+# Claude Code agent worktrees: scratch checkouts, never repo content
+.claude/worktrees/
