@@ -12,6 +12,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { Flame, User, BarChart3, LogOut, Loader2 } from 'lucide-react';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { useStreaks } from '@/hooks/useStreaks';
 
 export function Header() {
@@ -88,6 +89,9 @@ export function Header() {
               left the wordmark 5.5px short of whole, so the two gaps and the
               button padding each give a little back. */}
           <div className="flex shrink-0 items-center gap-1 min-[360px]:gap-2 sm:gap-3">
+            {/* Round 347: sm and up only. The worst guest row already measures
+                347px at 360 (Round 320), so phones get the footer toggle. */}
+            <ThemeToggle variant="header" />
             {/* #101: global streak flame, local-first, visible whether
                 signed in or not (guest experience must not regress -- see
                 CLAUDE.md guest-first posture). Sits next to the account

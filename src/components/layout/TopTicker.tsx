@@ -109,7 +109,7 @@ function ScoreCard({ row, hub }: { row: LiveScoreRow; hub: string }) {
         <span className="font-semibold text-foreground whitespace-nowrap">{second[0]}</span>
         {second[1] != null && <span className="tabular-nums font-bold text-foreground">{second[1]}</span>}
       </span>
-      <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${row.live ? 'text-red-400' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
+      <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${row.live ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
         {row.live && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" />}
         {state}
       </span>
@@ -253,7 +253,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
        keyboard focus pause both remain). */
     <section
       data-site-chrome=""
-      className={`${home ? '' : 'hidden md:block'} bg-[hsl(225_25%_4%)] border-b border-border/60 overflow-hidden h-8 relative`}
+      className={`${home ? '' : 'hidden md:block'} bg-[hsl(var(--ticker))] border-b border-border/60 overflow-hidden h-8 relative`}
       aria-label="Live scores ticker"
       onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPaused(true); }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse') setPaused(false); }}

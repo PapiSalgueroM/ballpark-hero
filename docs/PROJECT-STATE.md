@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 347.** Light mode, the owner's ask. A .light class on
+  <html> overrides the token palette with a measured light set; the dark
+  default is untouched and deliberate (the snapshots, the social image and the
+  AdSense review all promised a dark site, and prefers-color-scheme is not
+  read). Footer toggle for everyone, header icon from sm up only because the
+  worst guest header row already measures 347px at 360. Applied in main.tsx,
+  so index.html and every frozen crawler-facing surface stays byte-identical;
+  the prerenderer drops buttons, so no snapshot changes either. The new
+  playLightMode harness measured its way to the real bugs: the ticker bar's
+  hardcoded near black (now the --ticker token pair), text-red-400 live
+  labels (now text-destructive), gold New badges and Club Manager era chips
+  too thin as light ink (gold deepened to 28 percent, chips moved to token
+  inks). Final sweep: 2,776 text nodes across ten routes all hold the WCAG
+  floor in light mode, dark loads at luminance 0.004 untouched, the choice
+  survives reloads, and the nolight control proves the flip check bites.
+  tsc zero, build green, playHomeFold green, all 15 built-site fences green.
 - **2026-08-29, Round 345.** World XI real positions, and the reason nothing on
   this site should ever derive a career from a name again. The Round 319
   handoff wanted eligibility to read positions a player actually played. The

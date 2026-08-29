@@ -91,6 +91,89 @@
     --warn-foreground: 225 25% 8%;
 
     --focus-ring-width: 3px;
+
+    /* Round 347: the ticker bar's near black, a shade under the page
+       background, promoted from a hardcoded arbitrary value so light mode
+       can answer it (light mode text on the fixed dark bar measured 1.16). */
+    --ticker: 225 25% 4%;
+  }
+
+  /* Round 347: light mode. The .light class on <html> is the only switch;
+     the default stays the dark :root above (the snapshots, the social image
+     and the AdSense review all show the dark site, so a first visit matches
+     what they promised, and prefers-color-scheme is deliberately not read).
+     Every value here was measured by scripts/playLightMode.mjs against the
+     rendered pages, the same way Round 215 measured the dark set: fills stay
+     dark enough for their ink, inks stay dark enough for white cards. */
+  :root.light {
+    --background: 210 20% 98%;
+    --foreground: 225 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 225 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 25% 12%;
+    /* The brand green fill keeps its near black ink from the dark theme (it
+       measured 6.38 there and the fill is unchanged). As INK the 42% green
+       reads about 3.2 on white, fine for the large wordmark, thin for body
+       text, which is why light mode text-primary leans on this darker value. */
+    /* 30 percent, not 32: the ticker bar sits at 94 and primary ink on it
+       measured 4.21 at 32 percent; 30 clears 4.5 there and 5.2 on white,
+       while white ink on the same green as a fill still clears 5.4. */
+    --primary: 152 60% 30%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 15% 90%;
+    --secondary-foreground: 225 20% 20%;
+    --muted: 220 15% 93%;
+    --muted-foreground: 225 10% 38%;
+    --accent: 152 45% 88%;
+    --accent-foreground: 152 65% 16%;
+    --destructive: 0 72% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 84%;
+    --input: 220 13% 80%;
+    --ring: 152 60% 30%;
+
+    --ticker: 210 20% 94%;
+
+    --correct: 142 71% 30%;
+    --correct-foreground: 0 0% 100%;
+    --close: 45 93% 42%;
+    --close-foreground: 0 0% 8%;
+    --incorrect: 220 15% 28%;
+    --incorrect-foreground: 0 0% 98%;
+
+    --sidebar-background: 210 20% 96%;
+    --sidebar-foreground: 225 20% 20%;
+    --sidebar-primary: 152 60% 32%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 92%;
+    --sidebar-accent-foreground: 225 20% 20%;
+    --sidebar-border: 220 13% 84%;
+    --sidebar-ring: 152 60% 32%;
+
+    /* Game fills that carry white ink stay dark in both themes; only the
+       INKS that sat on dark surfaces darken so they hold on white cards. */
+    --wc-green-ink: 145 55% 27%;
+    --cg-green: 145 55% 26%;
+    --cg-header: 145 35% 88%;
+    --bb-red-ink: 0 72% 40%;
+    --hk-silver: 210 10% 35%;
+    --sg-green: 145 40% 90%;
+    --sg-accent: 152 60% 28%;
+
+    /* 28 percent: gold ink on a white card needs to be this deep to clear
+       4.5 (38 measured 3.23 on the home page's New badges). */
+    --gold: 43 90% 28%;
+    --gold-foreground: 0 0% 100%;
+    --gold-muted: 43 60% 86%;
+
+    --surface-1: 0 0% 100%;
+    --surface-2: 220 15% 96%;
+    --surface-3: 220 15% 91%;
+
+    --success-glow: 142 71% 35% / 0.25;
+    --warn: 25 90% 42%;
+    --warn-foreground: 0 0% 100%;
   }
 }
 

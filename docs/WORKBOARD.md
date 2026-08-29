@@ -113,11 +113,6 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- LIGHT MODE (BUILDING as Round 347, desktop, 2026-08-29): the owner's ask. Recon
-  first (how much of the site rides semantic tokens vs hardcoded dark classes),
-  then a real theme system: light token set, a toggle that persists, system
-  preference respected, and the browser sweeps to prove no game went unreadable.
-
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
   either sign into the Claude in Chrome extension on the PC so the desktop lane can
@@ -193,6 +188,25 @@ Standing claims:
 
 ## Done
 
+- LIGHT MODE, Round 347 (desktop lane, 2026-08-29). The owner's ask, shipped as
+  a token flip and not a redesign: the dark :root palette stays the default and
+  the identity (snapshots, social image and the AdSense review all show it, so
+  prefers-color-scheme is deliberately not read), and a .light class on <html>
+  overrides every token with a measured light set. The toggle lives in the
+  footer for everyone (Cookie choices is the precedent) and as an icon in the
+  header from sm up only, because the worst guest header row already measures
+  347px at 360 (Round 320's lesson stands). Applied in main.tsx before React
+  draws, nothing touches index.html or any crawler-facing file the freeze
+  covers; buttons never survive prerendering, so crawlers see no change at
+  all. The recon said 1,884 semantic-token usages against 87 hardcoded darks,
+  and the harness found the ones that mattered: the ticker bar's hardcoded
+  near black (token ink went invisible on it, 1.16), text-red-400 live labels,
+  the gold New badges at 3.23, Club Manager's era chips at 1.92, all fixed at
+  the token level. playLightMode fences it: dark by default (luminance 0.004
+  fresh), the footer toggle flips and survives a reload, and 2,776 sampled
+  text nodes across ten routes all hold the WCAG floor in light mode;
+  LIGHTMODE_CONTROL=nolight strips the light CSS and proves the flip check
+  bites. Fold covenant re-proven with the toggle in the chrome.
 - WORLD XI REAL POSITIONS, Round 345 (desktop lane, 2026-08-29). The Round 319
   handoff, "a CF with RW history should fit a RW slot", now reads verified data
   instead of a hand rule. The round's real lesson: player_market_values has no
