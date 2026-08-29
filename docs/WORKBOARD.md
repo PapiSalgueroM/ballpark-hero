@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 346.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 347.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -70,17 +70,6 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   the site's whole pitch is clean free games. If some of that flavor is wanted, the
   existing in-career purchases and a fictional "prediction night out" event carry it
   without slot machines. Parked unless he overrules.
-- WELCOME NOTE from the maker (Anthony, 2026-08-29 late: a welcome message saying
-  this is his first coding project, an independent site he is constantly improving
-  and fact checking, sorry for any bugs, thanks for visiting; his reasoning:
-  sympathy earns patience and a second visit). RECOMMENDATION already given to him:
-  NOT a popup modal, because the home page's whole covenant is offers before asks
-  (playHomeFold enforces the first tile's position) and a blocking dialog before
-  anyone has played is the toll booth Round 283 tore down. Build it as a small
-  dismissible "A note from the maker" card, once per browser, placed under the fold
-  content, plus the same text living permanently on /about; keep his authentic
-  voice, fix the spelling, drop nothing sincere. Copy draft in the item is owed by
-  whoever claims it and goes past him only if the loop cannot write it warmly.
 - LIGHT MODE (Anthony, 2026-08-29 late: "since its basically in dark mode already I
   would love for there to be a light mode and people can choose"). A real theme
   system: the palette is dark-only today, so this needs a light token set on the
@@ -123,6 +112,11 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- WELCOME NOTE (BUILDING as Round 346, desktop, 2026-08-29): the dismissible maker
+  card per the Inbox item, his voice cleaned, once per browser, below the fold
+  content, the same note permanent on /about, playHomeFold extended to hold it
+  below the first tile.
 
 - STALE VALUES SWEEP (BUILDING as Round 344, desktop, 2026-08-29): the Round 315
   follow up, the 247 players whose latest market value row is 2024 or older at a
