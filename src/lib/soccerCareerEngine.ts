@@ -1060,7 +1060,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "A mysterious figure approaches you before a big match. He offers €5M to intentionally perform poorly. The money would be untraceable. No one would ever know... probably.",
     choices: [
       { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance of investigation" },
-      { label: "Refuse and report it", emoji: "🛡️", consequence: "Reputation +20, Legacy +10, Fair Play Award" },
+      { label: "Refuse and report it", emoji: "🛡️", consequence: "Popularity +20, Legacy +10, Fair Play Award" },
       { label: "Refuse silently", emoji: "🤐", consequence: "Walk away. Nothing happens." },
     ],
   },
@@ -1080,8 +1080,8 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "DIVING REPUTATION",
     description: "You've developed a reputation for simulation. Journalists are running front-page stories about your theatrical falls in the box. Pundits are calling you 'the greatest actor in football.'",
     choices: [
-      { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
-      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
+      { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but Popularity -15" },
+      { label: "Clean up your game", emoji: "🤝", consequence: "Popularity +10, eligible for Fair Play Award" },
       { label: "Ignore the noise", emoji: "🔇", consequence: "No change, let them talk" },
     ],
   },
@@ -1136,7 +1136,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
     choices: [
       { label: "Swing back", emoji: "👊", consequence: "3-match ban, popularity +5 with your ultras, -15 elsewhere" },
-      { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
+      { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your Popularity +15" },
       { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Minor fine, clip goes viral either way" },
     ],
   },
@@ -1449,7 +1449,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.morale = clamp(s.morale - 30, 0, 100);
           s.integrityBonus -= 30;
           s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; // fine
-          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, reputation destroyed."];
+          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, Popularity -40."];
           s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 5);
         } else {
           s.events = [...s.events, "💰 The money arrived. No one suspects a thing... for now."];
@@ -1460,7 +1460,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.integrityBonus += 10;
         s.morale = clamp(s.morale + 10, 0, 100);
         s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Fair Play Award", emoji: "🛡️" }];
-        s.events = [...s.events, "🛡️ Reported the match fixers. Awarded the Fair Play Award! Reputation +20, Legacy +10"];
+        s.events = [...s.events, "🛡️ Reported the match fixers. Awarded the Fair Play Award! Popularity +20, Legacy +10"];
       } else {
         // Silent
         s.events = [...s.events, "🤐 Walked away from the offer silently."];
@@ -1490,12 +1490,12 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         // Embrace
         s.divingActive = true;
         s.popularity = clamp(s.popularity - 15, 0, 100);
-        s.events = [...s.events, "🎭 Embraced diving. +2 goals/season from penalties, but reputation -15."];
+        s.events = [...s.events, "🎭 Embraced diving. +2 goals/season from penalties, but Popularity -15."];
       } else if (choiceIndex === 1) {
         // Clean up
         s.popularity = clamp(s.popularity + 10, 0, 100);
         s.integrityBonus += 5;
-        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, Fair Play eligible."];
+        s.events = [...s.events, "🤝 Cleaned up your game. Popularity +10, Fair Play eligible."];
       } else {
         // Ignore
         s.events = [...s.events, "🔇 Ignored the diving allegations. Business as usual."];
@@ -1545,7 +1545,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.morale = clamp(s.morale - 25, 0, 100);
           s.integrityBonus -= 25;
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
-          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. 2-season ban, reputation in ruins."];
+          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. 2-season ban, Popularity -35."];
         } else {
           s.events = [...s.events, "🤐 The recording never surfaced. You got away with it, for now."];
         }
@@ -1581,7 +1581,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       } else if (choiceIndex === 1) {
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.integrityBonus += 10;
-        s.events = [...s.events, "🚶 Walked away and reported the incident. The federation fined the other player. Reputation +15."];
+        s.events = [...s.events, "🚶 Walked away and reported the incident. The federation fined the other player. Popularity +15."];
       } else {
         s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Minor fine, clip goes viral anyway."];
       }
@@ -2039,8 +2039,8 @@ export type SponsorshipTier = "local_brand" | "nike_adidas" | "global_ambassador
 export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
   { id: "training_video", label: "Post training video", emoji: "🏋️", description: "Show off your skills in the gym", followerGain: [50_000, 200_000], reputationChange: 0 },
   { id: "viral_celebration", label: "Go viral with celebration clip", emoji: "🎬", description: "Post an iconic goal celebration", followerGain: [500_000, 2_000_000], reputationChange: 0 },
-  { id: "controversial_opinion", label: "Post controversial opinion", emoji: "🔥", description: "Share a hot take about football", followerGain: [1_000_000, 1_000_000], reputationChange: -10, extraEffect: "Reputation -10" },
-  { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Reputation +15" },
+  { id: "controversial_opinion", label: "Post controversial opinion", emoji: "🔥", description: "Share a hot take about football", followerGain: [1_000_000, 1_000_000], reputationChange: -10, extraEffect: "Popularity -10" },
+  { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Popularity +15" },
   { id: "personal_life", label: "Post about personal life", emoji: "📸", description: "Share a glimpse into your life off the pitch", followerGain: [300_000, 300_000], reputationChange: 0 },
   { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "Rivalry intensity increases" },
   { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football, no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
@@ -2087,8 +2087,8 @@ export function applySocialMediaAction(prev: CareerState, actionId: string): Car
 
     if (action.reputationChange !== 0) {
       s.popularity = clamp(s.popularity + action.reputationChange, 0, 100);
-      if (action.reputationChange > 0) s.events = [...s.events, `✨ Reputation +${action.reputationChange}`];
-      else s.events = [...s.events, `⚠️ Reputation ${action.reputationChange}`];
+      if (action.reputationChange > 0) s.events = [...s.events, `✨ Popularity +${action.reputationChange}`];
+      else s.events = [...s.events, `⚠️ Popularity ${action.reputationChange}`];
     }
 
     if (actionId === "troll_rival" && s.rival && !s.rival.retired) {
@@ -2130,7 +2130,7 @@ export function handleCoverAthleteDecision(prev: CareerState, accept: boolean): 
     s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Game Cover Athlete", emoji: "🎮" }];
   } else {
     s.popularity = clamp(s.popularity + 5, 0, 100);
-    s.events = [...s.events, "🎮 Declined the game cover: gained respect for being selective. Reputation +5"];
+    s.events = [...s.events, "🎮 Declined the game cover: gained respect for being selective. Popularity +5"];
   }
   // Will continue via dismissSocialMediaPhase
   s.phase = "social_media_action";
@@ -4594,7 +4594,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.popularity = clamp(s.popularity - 30, 0, 100);
       s.morale = clamp(s.morale - 25, 0, 100);
       s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 3);
-      s.events.push("🚨 FAILED DRUG TEST! Banned for 1 season. Legacy -25, reputation destroyed.");
+      s.events.push("🚨 FAILED DRUG TEST! Banned for 1 season. Legacy -25, Popularity -30.");
       // Skip rest of season
       const lastYear = s.seasons[s.seasons.length - 1].year;
       s.seasons = [...s.seasons, {
@@ -5405,7 +5405,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 9, emoji: "🟥", title: "Red Card Scandal!", description: "You are caught in a red card scandal after a violent foul. Banned for 3 matches.",
       category: "negative", choices: [
-        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Reputation -5",
+        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Popularity -5",
           apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
         { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
@@ -5483,8 +5483,15 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 19, emoji: "🏆❌", title: "World Cup Snub!", description: "You are left out of the World Cup squad despite a great season.",
       category: "international", choices: [
-        { label: "Accept decision gracefully", emoji: "😔", color: "bg-blue-600", consequence: "Morale -5, Respect +5",
-          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🏆❌ Left out of World Cup, accepted it"]; return s; } },
+        /* Round 349: this promised "Respect +5" and delivered nothing. There is
+           no respect stat, so the only half that ever happened was the morale
+           hit, which left the graceful choice strictly worse than advertised
+           AND strictly worse than the loud one beside it, whose Popularity +5
+           is real. Everywhere else the game pays dignity in popularity
+           (declining the cover, walking away from the tunnel, cleaning up the
+           diving), so the promise is made true rather than deleted. */
+        { label: "Accept decision gracefully", emoji: "😔", color: "bg-blue-600", consequence: "Morale -5, Popularity +5",
+          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.popularity = clamp(s.popularity + 5, 0, 100); s.events = [...s.events, "🏆❌ Left out of World Cup, accepted it"]; return s; } },
         { label: "Publicly question manager", emoji: "🎙️", color: "bg-amber-600", consequence: "Popularity +5, International career at risk",
           apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏆❌ Publicly questioned World Cup snub"]; return s; } },
         { label: "Retire from internationals", emoji: "🚶", color: "bg-red-600", consequence: "International career ends",

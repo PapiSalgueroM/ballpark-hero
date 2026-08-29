@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 350 (cloud holds 349 for the free kick minigame).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 350.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -27,6 +27,24 @@ sitemap.xml, production routes, legal pages and navigation are FROZEN except for
 verified fixes. The fences guard them; the added rule is restraint.**
 
 ## Inbox (unclaimed)
+
+- EVERY NEW GAME IS BLOCKED BY THE ADSENSE FREEZE UNTIL THE VERDICT, and this
+  is written here once so each lane stops rediscovering it. Owner directive 3
+  freezes production routes and says nothing structurally adventurous ships to
+  production mid-review. A new game is a new route plus a new sitemap row plus
+  a new prerendered page, which is exactly that. So the free kick swipe
+  minigame (the opener of his interactive-soccer arc, reserved as Round 349 on
+  2026-08-29 and then NOT built for this reason), NBA Stat Line, Soccer
+  Conquest, the WNBA shelf, the soccer 82-0, the Wii-style event collection
+  and the athlete tower defence are all READY TO BUILD AND DELIBERATELY
+  PARKED. None of them is blocked on design or data, only on the review.
+  WHAT TO DO INSTEAD while the freeze holds: depth and polish on games that
+  already have routes, which is what Rounds 348 and 349 did and what the cloud
+  lane is assigned anyway (flagship depth, copy passes, UI reworks).
+  THE MOMENT THE VERDICT LANDS: unpark this list, his order, starting with the
+  free kick minigame since he asked for the interactive soccer arc by name.
+  If Anthony would rather have a new game NOW and accept the review risk, that
+  is his call to make and it overrides this item.
 
 **ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
 workable pieces. Bugs still outrank these; within the list his order rules.**
@@ -175,6 +193,59 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE STAT THE GAME NEVER HAD, Round 349 (cloud lane, 2026-08-29). Flagship
+  depth on /soccer-career, chosen because the AdSense freeze (owner directive
+  3) puts production routes off limits and this touches none. Soccer Career
+  tells you what a choice costs before you take it, "Morale -5, Popularity +5",
+  and that line is the only contract the game offers. Two kinds of it were not
+  being kept.
+  THE VOCABULARY SPLIT, 17 lines: they said "Reputation" for the stat the UI
+  draws as "Popularity". The effect was always applied, so nothing was lost,
+  but a player who reads "Reputation +20" and looks at the two bars on screen
+  finds Popularity and Morale and cannot tell whether the game did what it
+  said. All 17 now say Popularity. Three of them ("reputation destroyed",
+  "in ruins") had no number at all and now state the real one the code
+  already applies, -40, -35 and -30, so the sentence names the change the
+  player can watch happen.
+  THE PROMISE NEVER KEPT, and this one was a bug: the World Cup Snub event
+  offered "Morale -5, Respect +5" and its apply() only did the morale hit.
+  There is no respect stat, so the +5 went nowhere, which left the graceful
+  choice worse than advertised AND worse than the loud choice beside it, whose
+  Popularity +5 is real. Since the game pays dignity in popularity everywhere
+  else (declining the cover, walking away from the tunnel, cleaning up the
+  diving), the promise was made true rather than deleted.
+  THE FENCE, simCareerStatNames, is a CLOSED VOCABULARY rather than a rule,
+  and the measurement is why. The obvious fence, "every stat named in a delta
+  must be a real state field", is wrong here: the engine legitimately writes
+  "lawyers +1M", "hypercar -1.5M" and "Injury recovery -50%", which are prose
+  about money and flavour, and a fence that flagged those would be argued away
+  within a round and then ignored. So every distinct name used in a delta is
+  recorded in scripts/data/careerStatNames.json with what backs it (17 resolve
+  to a real state field, 8 are recorded as prose), and ANY name not in the
+  ledger fails. That is what catches the next one: it does not need to know
+  the invented word will be called Charisma or Fitness or Swagger, because a
+  word nobody signed off on fails by default. Entries claiming a state field
+  are checked against the source too, so the ledger cannot rot into fiction
+  while the engine moves under it. STATNAME_CONTROL=phantom plants
+  "Charisma +10" into a real consequence line, refuses to run if the plant
+  does not land, and is proven red.
+  SCANNED AND CLEAN, recorded so nobody repeats it: the same extraction over
+  all 18 NFL, NBA, MLB and NHL career libs finds only 7 distinct delta names
+  (morale, fanbase, rating, health, worth, heat, potential) and every one is a
+  declared field. The synonym drift was Soccer Career's alone, which fits: it
+  is the oldest and biggest engine in the repo.
+  tsc zero, build green, simCareerStatNames green with its control red,
+  simCareerEngaged, simCareerRealism, simCareerHub and simCareerEras green,
+  and all 15 built-site fences green.
+  ONE RED FOUND WHILE RUNNING THESE, AND IT IS NOT THIS ROUND'S:
+  simNoInventedQuotes fails on src/components/home/MakerNote.tsx from Round
+  346, which this branch never touched. Anthony introducing himself in the
+  first person ("Hey, I am Anthony") trips the real-name-plus-first-person
+  rule, because Anthony is also a real footballer's name. It is a false
+  positive, the owner is the author of his own words, but it means the fence
+  has been RED ON MAIN since Round 346 and the round that landed it ran
+  playHomeFold rather than this one. Taken as Round 350.
 
 - ONE WAY IN, Round 348 (cloud lane, 2026-08-29). The other half of the help
   system, and the half nothing was checking. GameShell's doc comment has

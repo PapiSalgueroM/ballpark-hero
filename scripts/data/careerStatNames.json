@@ -1,0 +1,136 @@
+{
+  "what": "Every distinct name used in a stat delta in Soccer Career player-facing copy. Any name not listed here fails simCareerStatNames, which is how the fence catches the next invented stat without having to know what it will be called.",
+  "generated": "Round 349, 2026-08-29",
+  "howToAddOne": "A genuinely new stat is added here in the same round that adds the stat, by a person. A synonym for an existing stat is not added: use the existing name in the copy instead.",
+  "names": {
+    "and": {
+      "uses": 2,
+      "backing": "prose",
+      "note": "sentence tail, \"+1 Shooting and +1 Dribbling\""
+    },
+    "bonus": {
+      "uses": 1,
+      "backing": "field",
+      "field": "integrityBonus",
+      "note": "reads \"integrity bonus +15\""
+    },
+    "but": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "sentence tail, \"Controversy but +2M followers\""
+    },
+    "by": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "sentence tail"
+    },
+    "cards": {
+      "uses": 1,
+      "backing": "field",
+      "field": "redCards",
+      "note": "reads \"Red cards +1\""
+    },
+    "defending": {
+      "uses": 1,
+      "backing": "field",
+      "field": "defending"
+    },
+    "dribbling": {
+      "uses": 1,
+      "backing": "field",
+      "field": "dribbling"
+    },
+    "followers": {
+      "uses": 14,
+      "backing": "field",
+      "field": "socialMediaFollowers"
+    },
+    "heat": {
+      "uses": 10,
+      "backing": "field",
+      "field": "corruptionHeat"
+    },
+    "hypercar": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "money, reads \"hypercar -1.5M\""
+    },
+    "integrity": {
+      "uses": 13,
+      "backing": "field",
+      "field": "integrityBonus"
+    },
+    "lawyers": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "money, reads \"lawyers +1M\""
+    },
+    "legacy": {
+      "uses": 17,
+      "backing": "field",
+      "field": "legacy"
+    },
+    "media": {
+      "uses": 3,
+      "backing": "field",
+      "field": "socialMediaFollowers",
+      "note": "reads \"Social media +50k\""
+    },
+    "morale": {
+      "uses": 38,
+      "backing": "field",
+      "field": "morale"
+    },
+    "motivation": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "reads \"Motivation boost: all stats +1\", flavour framing"
+    },
+    "overall": {
+      "uses": 1,
+      "backing": "field",
+      "field": "overall"
+    },
+    "pace": {
+      "uses": 10,
+      "backing": "field",
+      "field": "pace"
+    },
+    "physical": {
+      "uses": 6,
+      "backing": "field",
+      "field": "physical"
+    },
+    "popularity": {
+      "uses": 140,
+      "backing": "field",
+      "field": "popularity"
+    },
+    "recovery": {
+      "uses": 1,
+      "backing": "prose",
+      "note": "reads \"Injury recovery -50%\""
+    },
+    "shooting": {
+      "uses": 1,
+      "backing": "field",
+      "field": "shooting"
+    },
+    "stats": {
+      "uses": 5,
+      "backing": "prose",
+      "note": "reads \"All stats +2\", the attribute block as a whole"
+    },
+    "wage": {
+      "uses": 2,
+      "backing": "field",
+      "field": "wage"
+    },
+    "worth": {
+      "uses": 2,
+      "backing": "field",
+      "field": "netWorth",
+      "note": "reads \"net worth +\""
+    }
+  }
+}

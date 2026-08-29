@@ -3227,7 +3227,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-foreground">❌ Decline: Stay Selective</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">Reputation +5 for being humble</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Popularity +5 for being humble</div>
               </div>
               <span className="text-lg">🧘</span>
             </div>
