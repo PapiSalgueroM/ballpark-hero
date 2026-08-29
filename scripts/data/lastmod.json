@@ -424,6 +424,10 @@
     "hash": "03f04e07db134be9",
     "date": "2026-08-25"
   },
+  "/search-and-discard": {
+    "hash": "",
+    "date": "2026-08-29"
+  },
   "/sign-the-player": {
     "hash": "cb60362f8e139b57",
     "date": "2026-08-25"
@@ -433,7 +437,7 @@
     "date": "2026-08-25"
   },
   "/soccer": {
-    "hash": "c6edd32079a03055",
+    "hash": "51b888d379709121",
     "date": "2026-08-29"
   },
   "/soccer-career": {
@@ -493,7 +497,7 @@
     "date": "2026-08-25"
   },
   "/whats-new": {
-    "hash": "c893796025c04006",
+    "hash": "7ee7521728e97ee8",
     "date": "2026-08-29"
   },
   "/who-am-i": {
