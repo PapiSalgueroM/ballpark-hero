@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 342.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 343.
 
 ## Inbox (unclaimed)
 
@@ -114,6 +114,12 @@ Claimed 2026-08-28. This lane takes the work that needs what only this machine h
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
+
+- ERA CHAMPIONS LEAGUE FIELDS (BUILDING as Round 342, desktop, 2026-08-29): the last
+  Club Manager residue from the review. Parallel research agents pull the real
+  2005-06, 2010-11 and 2015-16 group stage fields, two sources each, the pools grow
+  from 16 to the real 32 with my club slotted in, era saves play 8 groups like the
+  real competition, and the fences pin the counts.
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
   either sign into the Claude in Chrome extension on the PC so the desktop lane can
