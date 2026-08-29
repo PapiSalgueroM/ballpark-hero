@@ -34,7 +34,7 @@ const ChampOrNot = () => {
         description="Ten champion claims, true or false. Did the Nuggets really win that Finals? Ten seconds a question across NFL, NBA, MLB, NHL, WNBA, college, soccer and footy."
         path="/champ-or-not"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="🏆 CHAMP OR NOT"
         subtitle="Ten title claims. Which ones really happened?"

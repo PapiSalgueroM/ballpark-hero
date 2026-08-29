@@ -210,7 +210,7 @@ const MlbGrid = () => {
         description="Fill a 3x3 MLB grid by naming baseball legends whose careers match both the row and column: franchises and career milestones. Free daily and unlimited baseball trivia grid."
         path="/mlb-grid"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         emoji="⚾"
         title="MLB FRANCHISE GRID"

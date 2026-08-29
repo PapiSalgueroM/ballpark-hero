@@ -72,7 +72,7 @@ const SoccerGrid = () => {
         description="Fill the 3x3 soccer grid by naming players who match two criteria. Daily football trivia grid game."
         path="/soccer-grid"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         emoji="⚽"
         title="SOCCER GRID"

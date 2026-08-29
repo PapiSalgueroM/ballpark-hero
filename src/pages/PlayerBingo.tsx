@@ -241,7 +241,7 @@ const PlayerBingo = () => {
         description="Fill a 5x5 bingo board of hard football criteria. Real players are revealed by name only, one at a time. Complete a row, column, or diagonal to call bingo before three wrong placements end your game."
         path="/player-bingo"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         title="PLAYER BINGO"
         subtitle="Complete a row, column, or diagonal, then keep the board alive for bonus lines and a blackout."

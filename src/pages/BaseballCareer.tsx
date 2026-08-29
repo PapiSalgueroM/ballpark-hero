@@ -69,7 +69,7 @@ const BaseballCareer = () => {
         description="Progressive clues reveal a mystery baseball player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/baseball-career"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="⚾ CAREER PATH"
         subtitle="Guess the mystery baseball player from progressive clues"

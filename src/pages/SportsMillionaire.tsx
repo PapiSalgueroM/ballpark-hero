@@ -226,7 +226,7 @@ const SportsMillionaire = () => {
         description="Climb a 15-question money ladder built from real sports data. Use 50:50, Ask the Crowd, and Swap Question lifelines. Free, no sign-up, new questions every play."
         path="/sports-millionaire"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         title="SPORTS MILLIONAIRE"
         subtitle="Climb the ladder. Lock in your answer. Walk away anytime with what you've won."

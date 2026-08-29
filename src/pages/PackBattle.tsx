@@ -170,7 +170,7 @@ const PackBattle = () => {
         path="/pack-battle"
         noindex
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="PACK BATTLE"
         subtitle="Call higher or lower on market value before each card flips. One miss busts the pack."

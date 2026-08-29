@@ -286,7 +286,7 @@ const RarityRound = () => {
         description="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play."
         path="/rarity-round"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="RARITY ROUND"
         subtitle={goalLine}

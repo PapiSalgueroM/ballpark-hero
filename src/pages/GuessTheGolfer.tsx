@@ -134,7 +134,7 @@ const GuessTheGolfer = () => {
         description="A mystery major champion hides behind six clues. Nail the golfer in as few clues as you can. New puzzle every day plus unlimited mode."
         path="/guess-the-golfer"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="⛳ GUESS THE GOLFER"
         subtitle="A major champion is hiding. Fewer clues, more points."

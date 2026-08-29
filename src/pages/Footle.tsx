@@ -100,7 +100,7 @@ const Index = () => {
         description="Guess the mystery soccer player in 8 tries. New player every day. Free daily football puzzle game."
         path="/footle"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         title="FOOTLE"
         subtitle="Guess the soccer player in 8 tries. One of 10+ free sports trivia games across soccer, NBA and UFC. No login. No tracking. Just play."

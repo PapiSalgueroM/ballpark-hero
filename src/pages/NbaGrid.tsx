@@ -209,7 +209,7 @@ const NbaGrid = () => {
         description="Fill a 3x3 NBA grid by naming players whose careers match both the row and column: franchises and career milestones. Free daily and unlimited basketball trivia grid."
         path="/nba-grid"
       />
-      <GameShell
+      <GameShell help="none"
         width="wide"
         emoji="🏀"
         title="NBA FRANCHISE GRID"

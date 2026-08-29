@@ -58,7 +58,7 @@ const NbaCareer = () => {
         description="Progressive clues reveal a mystery NBA player. Guess from position, draft, teams, and stats. Daily challenge."
         path="/nba-career"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="🏀 CAREER PATH"
         subtitle="Guess the mystery NBA player from progressive clues"

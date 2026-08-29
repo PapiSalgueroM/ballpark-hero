@@ -331,7 +331,7 @@ const CareerLadder = () => {
         description="A mystery footballer's career appears one career stop at a time. Name the player within 6 guesses. Fewer clues means more points. Daily challenge or unlimited free play."
         path="/career-ladder"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="CAREER LADDER"
         subtitle="One career, revealed stop by stop. Name the player before the ladder runs out."

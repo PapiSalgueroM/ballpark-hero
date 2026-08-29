@@ -35,7 +35,7 @@ const SilverwareSort = () => {
         description="Five teams, one trophy cabinet question: who has more? Stack them in order by real title counts across the Super Bowl, NBA, MLB, NHL, college, English soccer and Aussie footy."
         path="/silverware-sort"
       />
-      <GameShell
+      <GameShell help="none"
         width="narrow"
         title="🥇 SILVERWARE SORT"
         subtitle="Five teams. Stack them, most titles on top."
