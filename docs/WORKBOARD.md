@@ -19,12 +19,21 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 349.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 350.
 
-**ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
-until the verdict, ads.txt, the verification code, canonicals, robots.txt,
-sitemap.xml, production routes, legal pages and navigation are FROZEN except for
-verified fixes. The fences guard them; the added rule is restraint.**
+**THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
+recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
+explicitly defers AdSense ("at current traffic this earns very little") and
+ORDERS new production routes: NFL grid work, grid archive and answer pages.
+That supersedes directive 3's blanket route freeze. Still verified-fix-only:
+ads.txt, the verification code, robots.txt, and existing pages' canonicals.
+New real-value routes and their sitemap rows are permitted again.
+CONSEQUENCES: the NBA Stat Line branch (below) is UNBLOCKED and can merge as
+the next cloud round; the grid archive system is UNBLOCKED and claimable.
+Ground truth is now Google Search Console, not Semrush: 1,800 clicks per 28
+days, mobile 42 percent of clicks, a third branded, /football-grid at position
+21 for "nfl grid" (49,500 monthly volume) with NFL season starting in
+September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
 
@@ -46,13 +55,23 @@ whole audience.**
   shift. Any fix touches the snapshot architecture or index.html (frozen during
   the AdSense review), so this waits for deliberate design plus the verdict.
   The Round 348 harness pins the part the app controls at 0.05.
-- GRID ARCHIVE AND ANSWER PAGES (blocked on an owner decision): past grids with
-  answers, rarity scores and a replay button, one shared system across all six
-  grid sports. Real search intent, real user value. BUT new indexable routes and
-  sitemap rows are exactly what owner directive 3 froze during the AdSense
-  review. Needs Anthony to either wait for the verdict or explicitly override
-  the freeze for this. The build itself is a fine desktop or cloud round once
-  unblocked.
+- GRID ARCHIVE AND ANSWER PAGES (UNBLOCKED by the 2026-08-29 operating
+  contract, its Task 3, unclaimed): past grids with answers, rarity scores and
+  a replay button, one shared system across all six grid sports. Real search
+  intent, real user value, and the contract's explicit carve-out says the
+  thin-page rule must not be used to refuse it. Design first (the shared
+  route shape, what data each grid can honestly show, replay mechanics), show
+  the design before building, then one round for the system and the first
+  sport, then one per sport.
+- SPEC SPLIT INTO /docs/spec/ (queued, either lane, docs only): the operating
+  contract wants the master spec split into per-part files with an index at
+  docs/spec/README.md so sessions load only the relevant section. Mechanical,
+  one round, no gates beyond the build staying green.
+- CLAIMED Round 349 (desktop, 2026-08-29): the operating contract lands in the
+  repo, the freeze reconciliation above, and the NFL grid says its own name
+  (H1 "PRO FOOTBALL GRID" and the registry label "Pro Football Grid" align to
+  the "NFL Grid" the page's own title already targets, snapshots regenerated).
+  Contract Task 4 for the money page, smallest honest cut.
 - GRID ENGINE TO NEW SPORTS (unclaimed): the engine family already spans soccer,
   NFL, CFB, NBA, MLB, NHL. Candidates with search demand: CBB grid, WNBA grid.
   Data-first rounds, two-source rule as always.
