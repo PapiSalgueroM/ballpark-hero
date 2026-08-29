@@ -30,12 +30,6 @@ How it works:
   this starts as a small pilot (a handful of genuinely content-rich sub-pages with their
   own copy) measured in Search Console before any rollout. Pairs with the SEO keyword
   pass below.
-- SEO keyword pass (BUILDING as Round 324, cloud, 2026-08-29) (Anthony, 2026-08-28 evening): "add words like key words and
-  description and all that so that on search it pops up higher up, words like sports and
-  trivia and so on." Work the head terms (free sports games, sports trivia, daily sports
-  quiz, football quiz and their sport variants) through titles, meta descriptions and
-  page copy where they read honestly; the meta keywords TAG is dead to Google and is not
-  the ask. Pairs with the standing 88-not-indexed push.
 
 - **THE 2026-08-28 REVIEW: `docs/TWEAKS-2026-08-28.md`.** Anthony played the site top to
   bottom and filed his biggest list yet, transcribed there in full. It outranks the
@@ -143,6 +137,11 @@ Standing claims:
 
 ## Done
 
+- THE SEO KEYWORD PASS, Round 324 (cloud lane, 2026-08-29). The head terms worked
+  through the home title (both pinned copies), both home descriptions, the og and
+  twitter cards, the home static block and all six hub descriptions, each claim
+  describing games that really exist. The meta keywords tag stayed dead on purpose.
+  Watch Search Console over the coming weeks for the 88-not-indexed movement.
 - SPORTS BINGO, Round 323 (cloud lane, 2026-08-29). His pack opening bingo, built to
   the spec: 24 real conditions plus a free centre, ten packs of five verified players
   on a fifteen second window, manual marking, shared daily card, unlimited, three CPU
