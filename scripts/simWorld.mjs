@@ -336,9 +336,24 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
       sortedTable(s.uclGroup.table)[0].club,
       ...(s.uclWorld ?? []).map(g => sortedTable(g.table)[0].club),
     ];
+    /* ROUND 335: this used to expect the eight leaders and nothing else, and it
+       went red on about one run in five. Measured, 4 failures in 20 runs, and
+       the cause was not the engine: Round 342's rule is that a SECOND placed
+       you takes the eighth slot, exactly as the real draw gives it to you, so
+       the projection people watch all group stage is the bracket they get. The
+       harness was still asserting the pre-342 winners-only rule, so every run
+       where my club happened to sit second at matchday 3 read as a defect. The
+       expectation now says what the engine actually promises, and still fails
+       on any other substitution. */
+    const myRows = sortedTable(s.uclGroup.table).map(r => r.club);
+    const iAmSecond = myRows[1] === s.clubName;
+    const expected = [...leaders];
+    if (iAmSecond && !expected.includes(s.clubName)) expected[7] = s.clubName;
     const projClubs = projMid.flatMap(p => [p.home, p.away]);
-    if (projClubs.join('|') !== leaders.join('|')) {
-      fail('the projection is not the eight current leaders in group order');
+    if (projClubs.join('|') !== expected.join('|')) {
+      fail(`the projection is not the field the engine promises (mine ${iAmSecond ? 'second, so it takes slot eight' : 'not second'})\n`
+        + `       expected ${expected.join(', ')}\n`
+        + `       got      ${projClubs.join(', ')}`);
     }
     if (projMid[0].home !== leaders[0] || projMid[0].away !== leaders[1]) fail('pair one is not A leader v B leader');
   }
