@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 331.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 332.
 
 ## Inbox (unclaimed)
 
@@ -36,7 +36,18 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- From that list, unclaimed and sizable: the Rebuild redesign, the tycoon merge, the conquest map
+- Rebuild copy pass (BUILDING as Round 331, cloud, 2026-08-29): his quoted offenders
+  ("call the dugout", "the caretaker", "the hairdryer", "the young gun"), the
+  AI-flavored copy sweep, and the "+N rating" labels.
+- Rebuild redesign, THE PHASES (split 2026-08-29 so either lane can pick one up):
+  phase two, the new core loop (starting XI only on screen, spin for position, keep
+  or sell with three priced replacements plus promote-from-bench free, envelopes up
+  front, board demands, force sales at negative money, the punishment deck with one
+  safe card, restriction presets), cloud buildable on existing pools; phase three,
+  real manager names as hire options per club, DESKTOP GATED: who manages whom
+  changes weekly and needs web verification, and any manager "value" must derive
+  from verifiable records, never be invented on a real person.
+- From that list, unclaimed and sizable: the tycoon merge, the conquest map
   overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
