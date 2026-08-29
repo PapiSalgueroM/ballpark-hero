@@ -1,5 +1,41 @@
 # Grid archive and answer pages, the design (contract Task 3)
 
+> **STATUS 2026-08-29, hours after this was written: DEFERRED, and the design
+> below is wrong in two ways the data disproved. Recorded rather than deleted,
+> because the reasons are the useful part.**
+>
+> The recon that should have come first:
+>
+> 1. **Selections are keyed by puzzle, not by date.** The three tables carry
+>    `puzzle_id, cell_index, player_name, created_at` and nothing else. There
+>    is no date key, so "the picks for 2026-08-28" is not a question the data
+>    can answer.
+> 2. **Puzzles repeat, so date pages would be duplicates of each other.** Each
+>    grid draws its daily puzzle from a static array on a shuffled cycle
+>    (`selectDailyPuzzle` in useDailyPuzzle.ts). The NFL pool is 30 puzzles,
+>    so puzzle `grid-006` was served on 2026-07-15 and again weeks later; its
+>    picks span 2026-07-15 to 2026-08-05. Sixteen of the NFL grid's 22 seen
+>    puzzle ids have picks spanning more than one day. Date-keyed pages would
+>    therefore publish the same board and the same answers at many URLs, which
+>    is precisely the duplicate-content trap the contract's own rule 13 exists
+>    to prevent.
+> 3. **"Frozen once the day ends" was false** for the same reason: a puzzle's
+>    picks keep accumulating every time it comes back around.
+>
+> And the finding that decides the sequencing: **publishing answers for a pool
+> that recycles every 30 days leaks the live puzzle.** Every NFL grid puzzle is
+> at most 30 days from being today's puzzle again, so an indexed answer page is
+> an indexed answer key for a game we are still running.
+>
+> So the archive waits for the puzzle pool to be deep enough that a published
+> board is genuinely retired for a long time, and when it is built it will be
+> keyed on the PUZZLE (`/football-grid/archive/grid-006`), not on a date, so
+> one page exists per distinct board and no two pages are twins. Round 350
+> builds the pool instead.
+
+---
+
+
 Written 2026-08-29 by the desktop lane, shown to Anthony before any build per
 the contract's "show diffs before applying". One round builds the shared
 system plus the NFL grid archive; later rounds add one sport each.

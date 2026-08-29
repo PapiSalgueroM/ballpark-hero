@@ -63,10 +63,22 @@ whole audience.**
   route shape, what data each grid can honestly show, replay mechanics), show
   the design before building, then one round for the system and the first
   sport, then one per sport.
-- CLAIMED Round 350 (desktop, 2026-08-29): the grid archive system, contract
-  Task 3, built to docs/designs/GRID-ARCHIVE-DESIGN.md. Shared component plus
-  the NFL grid as sport one. Data recon first: the pick floor is only honest
-  if football_grid_selections actually carries days worth showing.
+- CLAIMED Round 350 (desktop, 2026-08-29), REAIMED BY ITS OWN RECON: claimed as
+  the grid archive (contract Task 3), it is now the NFL GRID PUZZLE POOL
+  (contract Task 2), because the recon disproved the archive design and found a
+  worse bug underneath it. Selections are keyed by puzzle, not date, and every
+  grid cycles a static array (selectDailyPuzzle), so THE POOL LENGTH IS THE
+  REPEAT INTERVAL: the NFL grid, the money page ranked 21 for a 49,500-a-month
+  term with the season starting in September, hands a daily player the same
+  board every 30 days. Date-keyed archive pages would have been duplicates of
+  one another (16 of 22 NFL puzzle ids already have picks spanning several
+  days), and publishing answers for a 30-day cycle is publishing an answer key
+  for a live game. Full reasoning kept at the top of
+  docs/designs/GRID-ARCHIVE-DESIGN.md. The archive returns once the pool is
+  deep, keyed on the PUZZLE, never on a date.
+- GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
+  design around /football-grid/archive/<puzzle-id>, one page per distinct
+  board, after the pool is deep enough that a published board stays retired.
 - SPEC SPLIT INTO /docs/spec/ (queued, either lane, docs only): the operating
   contract wants the master spec split into per-part files with an index at
   docs/spec/README.md so sessions load only the relevant section. Mechanical,
