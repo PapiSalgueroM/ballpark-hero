@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { BudgetBuilderBoard } from '@/components/budget-builder/BudgetBuilderBoard';
 
 export default function BudgetBuilder() {
@@ -12,6 +13,7 @@ export default function BudgetBuilder() {
         path="/budget-builder"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <BudgetBuilderBoard />
       <GameSeoContent
         title="€1 Billion Budget Builder | DoUKnowBall"

@@ -2,6 +2,7 @@ import { CombatChainBoard } from '@/components/ufc-chain/CombatChainBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 
 export default function UfcChain() {
   return (
@@ -12,6 +13,7 @@ export default function UfcChain() {
         path="/ufc-chain"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <CombatChainBoard />
       <GameSeoContent
           pageHasOwnH1

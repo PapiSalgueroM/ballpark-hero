@@ -12,6 +12,7 @@ import ShareButtons from "@/components/game/ShareButtons";
 import AwardsPredictor from "@/components/world-cup-predictor/AwardsPredictor";
 import { GameNav } from "@/components/game/GameNav";
 import { GameNavbar } from "@/components/game/GameNavbar";
+import { GameHelp } from "@/components/game/GameHelp";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
@@ -1191,6 +1192,7 @@ const WorldCupPredictor = () => {
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="World Cup 2026 Bracket | Sports Trivia Games"
         description="Build your World Cup 2026 bracket. Predict every match from groups to the final. Share your predictions."

@@ -5,6 +5,7 @@ import { Loader2, RotateCcw, Search, Check, X, Lock, Coins } from 'lucide-react'
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -237,6 +238,7 @@ const ClueAuction = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall"
         description="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up."

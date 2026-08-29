@@ -2,6 +2,7 @@ import { GuessTheNationBoard } from '@/components/guess-the-nation/GuessTheNatio
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 
 export default function GuessTheNation() {
   return (
@@ -12,6 +13,7 @@ export default function GuessTheNation() {
         path="/guess-the-nation"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <GuessTheNationBoard />
       <GameSeoContent
           pageHasOwnH1

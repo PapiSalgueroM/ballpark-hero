@@ -4,6 +4,7 @@ import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarC
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -379,6 +380,7 @@ const PerfectSeasonNba = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="82-0: Perfect Season Basketball | DoUKnowBall"
         description="Spin across NBA history, draft a cross-era starting five plus a sixth man, and simulate an 82 game season. Can you go 82-0? Free to play."

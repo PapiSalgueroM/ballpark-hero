@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -370,6 +371,7 @@ const DartDraft = () => {
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(222 40% 7%) 0%, hsl(210 35% 9%) 55%, hsl(222 35% 6%) 100%)' }}>
         <GameNavbar />
+        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="flex-1 flex flex-col items-center px-3 py-5 sm:py-8">
           <div className="w-full max-w-3xl mx-auto space-y-4 text-center">
 

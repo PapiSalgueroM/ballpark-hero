@@ -16,9 +16,15 @@
  *      play", "Rules", "Instructions");
  *   2. a visible button whose entire text is a question mark;
  *   3. a lucide help-circle icon inside a visible button;
- *   4. a visible heading or section that already SHOWS the rules pre-play
- *      (a "How to play" heading on a setup screen counts, the point is the
- *      player can read the rules before their first move).
+ *   4. a visible heading or section that already SHOWS the rules pre-play.
+ *
+ * ROUND 335, THE STRICTER HALF THE 08-28 REVIEW QUEUED: category 4 is still
+ * detected and named, but it no longer passes on its own. The house rule
+ * says re-openable from a "?" button, and prose on a setup screen is not
+ * that. When the floor was raised, 39 of 116 routes passed on prose alone
+ * (measured 2026-08-29, list in the round record); every one now mounts the
+ * standard GameHelp beside its own layout, so the categories 1 to 3 control
+ * is what this harness demands everywhere.
  *
  * The database is aborted (no egress in the sandbox), which is fine on
  * purpose: the affordance must live at the shell or setup layer, not behind
@@ -91,8 +97,17 @@ for (const route of routes) {
   } catch (e) {
     verdict = null;
   }
-  if (verdict) {
+  if (verdict && verdict !== 'rules shown pre-play') {
     console.log(`  PASS  ${route} (${verdict})`);
+  } else if (verdict) {
+    /* Round 335, the stricter half the 08-28 review queued: rules text on the
+       setup screen is necessary but no longer sufficient. The house rule says
+       "re-openable from a ? button", so a route whose only affordance is
+       prose fails now. Round 335 measured 39 such routes and mounted the
+       standard GameHelp on every one. */
+    failures += 1;
+    misses.push(route);
+    console.log(`  FAIL  ${route}: rules prose only, nothing reopenable`);
   } else {
     failures += 1;
     misses.push(route);

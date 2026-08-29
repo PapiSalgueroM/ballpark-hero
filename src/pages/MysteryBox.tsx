@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { MysteryBoxBoard } from '@/components/mystery-box/MysteryBoxBoard';
 
 export default function MysteryBox() {
@@ -12,6 +13,7 @@ export default function MysteryBox() {
         path="/mystery-box"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <MysteryBoxBoard />
       <GameSeoContent
         title="Mystery Box | DoUKnowBall"

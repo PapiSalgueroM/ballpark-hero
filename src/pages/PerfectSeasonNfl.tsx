@@ -4,6 +4,7 @@ import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarC
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -382,6 +383,7 @@ const PerfectSeasonNfl = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="17-0: Perfect Season Football | DoUKnowBall"
         description="Spin across NFL history, draft a cross-era offense, and simulate a 17 game season. Can you go 17-0? Free to play."

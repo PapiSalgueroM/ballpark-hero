@@ -2,6 +2,7 @@ import { TennisChainBoard } from '@/components/tennis-chain/TennisChainBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 
 export default function TennisChain() {
   return (
@@ -12,6 +13,7 @@ export default function TennisChain() {
         path="/tennis-chain"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <TennisChainBoard />
       <GameSeoContent
           pageHasOwnH1

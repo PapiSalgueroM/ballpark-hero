@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import { BallIqBoard } from '@/components/ball-iq/BallIqBoard';
 
 export default function BallIq() {
@@ -12,6 +13,7 @@ export default function BallIq() {
         path="/ball-iq"
       />
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <BallIqBoard />
       <GameSeoContent
         title="Ball Knowledge IQ Test | DoUKnowBall"

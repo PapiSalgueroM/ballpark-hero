@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import { Star, HelpCircle, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HubTiles, HubPanelHeader, type HubTile } from '@/components/hub/HubTiles';
@@ -68,6 +69,7 @@ const HallOfChampions = () => {
     return (
       <div className="min-h-screen bg-background">
         <GameNavbar />
+        <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
         <PageSeo
           title="Hall of Champions: Free Idle Sports Museum Game | DoUKnowBall"
           description="Build a sports museum out of real championship history. Every exhibit is a verified title winner, from Super Bowl I to this year. Free idle game, keeps earning while you are away, no sign-up."
@@ -128,6 +130,7 @@ const HallOfChampions = () => {
   return (
     <div className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Hall of Champions: Free Idle Sports Museum Game | DoUKnowBall"
         description="Build a sports museum out of real championship history. Every exhibit is a verified title winner, from Super Bowl I to this year. Free idle game, keeps earning while you are away, no sign-up."

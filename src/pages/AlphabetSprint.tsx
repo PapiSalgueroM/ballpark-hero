@@ -5,6 +5,7 @@ import { Loader2, Play, RotateCcw, SkipForward } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -212,6 +213,7 @@ const AlphabetSprint = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
+      <div className="relative mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="Alphabet Sprint | DoUKnowBall"
         description="A letter appears, you name a real footballer whose surname starts with it. 60 seconds, streak bonuses, no repeats. How many can you rattle off?"
