@@ -376,8 +376,13 @@ Landing on `main` rebuilds the Lovable **preview** only. douknowball.com serves 
 snapshot, which does not move on its own. On the claude.ai/code path, "landing on `main`" means
 the PR merged: deploying before the merge publishes the code that was already there.
 
-1. Confirm Lovable actually synced the commit. Use `mcp__Lovable__read_file` on a file the round
-   changed and check the new content is there. Lovable has stuck on an old commit before.
+1. Confirm Lovable actually synced the commit. **Check `latest_commit_sha` in
+   `mcp__Lovable__get_project` against `git rev-parse origin/main`; that sha is what a deploy
+   builds.** Round 330 (2026-08-29) proved `read_file` is NOT a sync check: it served the new
+   commit's content while `latest_commit_sha` sat one commit behind, two deploys in a row built
+   without the round, and the live site verified stale both times. `read_file` reads the git
+   mirror at head; the build source lags it. If the sha is behind, wait or push again to re-kick
+   the webhook, and only deploy once the sha matches.
 2. Call `mcp__Lovable__deploy_project` on `c29d224f-a662-4a15-b809-d86fa3b3f0ad`.
 3. Wait about 5 minutes.
 4. Verify **live**, properly. See below.
