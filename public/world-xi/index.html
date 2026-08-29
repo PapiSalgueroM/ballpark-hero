@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/world-xi" data-rh="true"><meta name="description" content="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/world-xi" data-rh="true"><meta property="og:title" content="World XI: Build a Squad From 11 Random Nations | DoUKnowBall" data-rh="true"><meta property="og:description" content="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="World XI: Build a Squad From 11 Random Nations | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -211,15 +222,15 @@
 <p>World XI deals you eleven random nations, one per slot of your formation, and asks the same question eleven times: can you name a real player from this country who plays this position?</p>
 <p>Brazil in goal is a gift. A wing back from a country you have never watched is the whole game. A slot machine reel spins each nation in, so the next headache is always a surprise.</p>
 <h2>How to play World XI</h2>
-<li>Pick one of 9 formations and a timer: none, 90 seconds or 60 seconds for the whole XI.</li>
+<li>Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.</li>
 <li>Hit draw and the reel reveals your nations in random slot order.</li>
 <li>Type 2 or more letters and pick a player of that nationality who covers the slot.</li>
 <li>Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.</li>
 <li>Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious.</li>
 <h2>Rules to know</h2>
 <li>Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.</li>
-<li>You get 3 respins per game, shared across all slots, to reroll a nation you cannot solve.</li>
-<li>Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back.</li>
+<li>Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.</li>
+<li>Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.</li>
 <li>The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.</li>
 <h2>Example walkthrough</h2>
 <p>A 4-3-3 on the 90 second clock. Brazil lands on the goalkeeper slot and Alisson is typed before the reel settles. France at striker is just as friendly.</p>

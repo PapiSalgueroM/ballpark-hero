@@ -192,10 +192,21 @@
   
   
   
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/rarity-round" data-rh="true"><meta name="description" content="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/rarity-round" data-rh="true"><meta property="og:title" content="Rarity Round | DoUKnowBall" data-rh="true"><meta property="og:description" content="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Rarity Round | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
@@ -206,6 +217,7 @@
 </div>
 <h1>RARITY ROUND</h1>
 <p>Name a valid answer that as few people would think of as possible. Lower score wins.</p>
+<p>The goal: a real answer as few people would think of. Fewer points is better.</p>
 <h2>Rarity Round: Soccer Rarity Trivia</h2>
 <p>Rarity trivia built on real soccer data. Name a valid answer to a category prompt, then see how obscure or how famous your pick was. Flip to Crowd Says for the popularity-scoring mirror mode.</p>
 <p>Rarity Round flips trivia upside down. Anyone can name a Ballon d'Or winner. The question is whether you can name one nobody else would think of, because here the obvious answer scores worst.</p>
