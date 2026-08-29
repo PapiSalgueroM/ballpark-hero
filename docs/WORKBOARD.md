@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 330.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 331.
 
 ## Inbox (unclaimed)
 
@@ -55,7 +55,8 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- MOBILE PASS, continuing (claimed 2026-08-29, Round 320 landed the first wave): the
+- MOBILE PASS, continuing (claimed 2026-08-29, Round 320 landed the first wave;
+  BUILDING the depth layer as Round 330, 2026-08-29): the
   automated layer is now measured and green at 320 and 390 across all 140 routes
   (sweepGames), plus playIphone with its new streaked-header section, simMobileChrome
   at its true widest, and playHomeFold brought back to the current page. What remains
