@@ -20,6 +20,13 @@ How it works:
 
 ## Inbox (unclaimed)
 
+- Programmatic sub-pages, from the outside analysis Anthony pasted 2026-08-29: dedicated
+  indexable URLs for sub-content (era starts, daily puzzle archives, drills) could grow
+  the indexed surface. CAUTION built into the item: thin or near-duplicate pages hurt as
+  easily as help, and this site just spent twenty rounds earning its indexing back, so
+  this starts as a small pilot (a handful of genuinely content-rich sub-pages with their
+  own copy) measured in Search Console before any rollout. Pairs with the SEO keyword
+  pass below.
 - SEO keyword pass (Anthony, 2026-08-28 evening): "add words like key words and
   description and all that so that on search it pops up higher up, words like sports and
   trivia and so on." Work the head terms (free sports games, sports trivia, daily sports
