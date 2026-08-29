@@ -139,11 +139,15 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
 
 Standing claims:
 
-- The react-router v7 breaking major (BUILDING as Round 322, 2026-08-29).
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
 
+- REACT-ROUTER V7, Round 322 (cloud lane, 2026-08-29). The queued breaking major,
+  mechanical because the app never used the data router APIs: 6.30 to 7.18.3, zero
+  code changes, tsc zero first try. Proven in a browser: five direct game loads, all
+  four legacy redirects, playHowTo's 113 route walk, full board green. Trap recorded
+  in the state doc: plain npm install prunes the no-save playwright package.
 - THE HOW-TO-PLAY AUDIT, Round 321 (cloud lane, 2026-08-29). GameShell mounts a
   standard reopenable "?" (GameHelp) fed by each game's own guide content on all 69
   shell games; 24 pages with their own rules control opted out so nothing doubles.
