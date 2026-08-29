@@ -1,48 +1,91 @@
 import { supabase } from '@/integrations/supabase/client';
-import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { getTodayET, dailyPrngSeed } from '@/lib/dateUtils';
+import { FORMATIONS, normalizePosition } from '@/lib/squadDeal';
+import type { FormationSlot } from '@/lib/squadDeal';
 
 /**
- * Player Stock Market (task #36): the market shows 6 real players at a real
- * past year with their real transfermarkt-style market values (and a 3-year
- * value history sparkline). You BUY exactly 3. The market then advances one
- * real year and your portfolio return is computed from the players' actual
- * next-year market values (player_market_values, 2004-2026, ~141k rows).
+ * Player Stock Market, rebuilt in Round 329 to the owner's spec from the
+ * 08-28 review, the "invested in footballers using only their stats"
+ * format: "start seasons back, move year by year, show stats only, never
+ * name, country or club, buy position by position until a full XI."
  *
- * Everything is DB-derived at runtime, no authored facts. Selection is
- * seeded and deterministic for the daily (same date -> same year + cohort),
- * random for unlimited. Scoring maps your trio against all C(6,3)=20
- * possible trios: 100 = the optimal portfolio, 0 = the worst.
+ * THE CAMPAIGN. You start six seasons back with a 200M wallet and the
+ * 4-3-3's eleven slots to fill, two buys a year. Each buy deals four
+ * ANONYMOUS candidates who fit the slot: you see the position, the age,
+ * the three year market value trajectory and the last two seasons of
+ * goals and assists, and NOTHING that names them, no name, no country,
+ * no club. You pay a candidate's real market value at the offer year.
+ * When the eleventh buy lands, the campaign jumps to the present, every
+ * card turns over, and your portfolio is worth whatever those careers
+ * really became.
  *
- * Identity (task #15): resolution prefers person_key and falls back to
- * player_name. person_key is NULL for every row today, so this is a no-op now,
- * but once identities are keyed a same-named journeyman can no longer pollute a
- * star's series. Dedup/series still keep the max value per (key, year).
+ * DATA LAW. Every number is a real row from player_market_values (values,
+ * goals, assists, 2004 to 2026); nothing is authored. Candidates are
+ * filtered to careers the data tracks through to the final year, which is
+ * stated in the guide: you are picking among players whose story the
+ * table can actually finish, and a value can still crater. The engine is
+ * split so assembleCampaign is PURE over injected rows, which is what the
+ * harness drives with synthetic fixtures; fetchCampaignRows owns the two
+ * real queries.
+ *
+ * SCORING. Your growth is placed between the worst and best per-slot
+ * picks of the same offers (both computed without the budget cap, so the
+ * ceiling is what an unlimited wallet could have done; your run respects
+ * the 200M). 100 means you matched the unlimited best, 0 the worst.
  */
 
-export interface StockPlayer {
+export const STOCK_BUDGET = 200_000_000;
+/** Every slot's punt aims at or under this, so eleven punts (88M at worst)
+ *  always fit the 200M wallet with room over. */
+export const PUNT_CEILING = 8_000_000;
+export const CANDIDATES_PER_SLOT = 4;
+export const FINAL_YEAR = 2026;
+export const START_YEARS = [2016, 2017, 2018, 2019, 2020] as const;
+export const STOCK_FORMATION = FORMATIONS[0]; /* 4-3-3 */
+
+export interface AnonCandidate {
+  /** Hidden until the reveal. */
   name: string;
   club: string;
+  nationality: string;
+  /** Shown while buying. */
   position: string;
   age: number;
-  nationality: string;
-  /** Value history ending at the market year: [{year, value}], oldest first. */
+  /** Market value trajectory, oldest first, ending at the offer year. */
   series: { year: number; value: number }[];
-  /** Market value at the market year (the "price you pay"). */
-  current: number;
-  /** Real market value one year later (the outcome, hide until reveal). */
-  next: number;
+  /** Goals and assists, the two seasons ending at the offer year. Keepers
+   *  legitimately show zeros; the trajectory is their story. */
+  output: { year: number; goals: number; assists: number }[];
+  /** What you pay: the real market value at the offer year. */
+  price: number;
+  /** The real market value at FINAL_YEAR. Hidden until the reveal. */
+  final: number;
 }
 
-export interface StockRound {
+export interface CampaignSlot {
+  slot: FormationSlot;
+  offerYear: number;
+  candidates: AnonCandidate[];
+}
+
+export interface Campaign {
+  startYear: number;
+  finalYear: number;
+  budget: number;
+  slots: CampaignSlot[];
+}
+
+export interface MarketRow {
+  player_name: string;
+  club: string | null;
+  position: string | null;
+  age: number | null;
+  nationality: string | null;
   year: number;
-  players: StockPlayer[];
+  market_value_usd: number | null;
+  goals: number | null;
+  assists: number | null;
 }
-
-export const STOCK_PICKS = 3;
-
-// ---------------------------------------------------------------------------
-// Seeded helpers
-// ---------------------------------------------------------------------------
 
 function mulberry32(seed: number) {
   let a = seed >>> 0;
@@ -54,164 +97,201 @@ function mulberry32(seed: number) {
   };
 }
 
-function seededShuffle<T>(arr: T[], seed: number): T[] {
+export function dailyCampaignSeed(): number {
+  return dailyPrngSeed(getTodayET()) ^ 0x50534d32 || 13;
+}
+
+export function randomCampaignSeed(): number {
+  return Math.floor(Math.random() * 2 ** 31) || 17;
+}
+
+export function startYearFor(seed: number): number {
+  return START_YEARS[seed % START_YEARS.length];
+}
+
+/** Slot i is offered in year startYear + floor(i / 2): two buys a season,
+ *  eleven buys across six calendar years. */
+export function offerYearFor(startYear: number, slotIndex: number): number {
+  return startYear + Math.floor(slotIndex / 2);
+}
+
+/**
+ * PURE assembly over injected rows. Per slot, in formation order: the
+ * candidates are players whose normalized position the slot accepts, who
+ * have a value at the offer year AND at the final year, drawn seeded from
+ * value bands (one expensive, two middling, one punt) so the wallet always
+ * has real decisions, deduped across the whole campaign. The punt band
+ * also guarantees every slot keeps at least one candidate a nearly empty
+ * wallet can still afford.
+ */
+export function assembleCampaign(rows: MarketRow[], seed: number): Campaign | null {
+  const startYear = startYearFor(seed);
   const rng = mulberry32(seed);
-  const out = arr.slice();
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
+
+  /* (name|year) -> best row for that year */
+  const byNameYear = new Map<string, MarketRow>();
+  for (const r of rows) {
+    if (!r.player_name || !r.market_value_usd) continue;
+    const k = `${r.player_name}|${r.year}`;
+    const prev = byNameYear.get(k);
+    if (!prev || (prev.market_value_usd ?? 0) < r.market_value_usd) byNameYear.set(k, r);
   }
-  return out;
+  const at = (name: string, year: number) => byNameYear.get(`${name}|${year}`);
+
+  const used = new Set<string>();
+  const slots: CampaignSlot[] = [];
+  for (let i = 0; i < STOCK_FORMATION.slots.length; i += 1) {
+    const slot = STOCK_FORMATION.slots[i];
+    const offerYear = offerYearFor(startYear, i);
+    const fits = [...byNameYear.values()]
+      .filter(r => r.year === offerYear
+        && !used.has(r.player_name)
+        && (r.market_value_usd ?? 0) >= 2_000_000
+        && at(r.player_name, FINAL_YEAR) !== undefined)
+      .filter(r => {
+        const pos = normalizePosition(r.position || '');
+        return pos !== null && (slot.allowed as string[]).includes(pos);
+      })
+      .sort((a, b) => (b.market_value_usd ?? 0) - (a.market_value_usd ?? 0));
+    if (fits.length < CANDIDATES_PER_SLOT) return null;
+
+    const band = (lo: number, hi: number): MarketRow => {
+      const a = Math.floor(lo * fits.length);
+      const b = Math.max(a + 1, Math.floor(hi * fits.length));
+      const pool = fits.slice(a, b).filter(r => !used.has(r.player_name));
+      const src = pool.length ? pool : fits.filter(r => !used.has(r.player_name));
+      return src[Math.floor(rng() * src.length)];
+    };
+    const picked: MarketRow[] = [];
+    for (const [lo, hi] of [[0, 0.1], [0.15, 0.45], [0.35, 0.7]] as const) {
+      let c = band(lo, hi);
+      let hops = 0;
+      while (picked.includes(c) && hops < 10) { c = band(lo, hi); hops += 1; }
+      if (!picked.includes(c)) { picked.push(c); used.add(c.player_name); }
+    }
+    /* THE PUNT, and the lock proof it carries: the fourth candidate is
+       drawn from the cheap end with a hard preference for a price at or
+       under PUNT_CEILING, so eleven punts always fit comfortably inside
+       the wallet and a run can never strand a slot unaffordable (the page
+       reserves the future punts' prices before allowing a splashy buy;
+       the harness proves the arithmetic over hundreds of seeds). */
+    const cheapFirst = fits.filter(r => !used.has(r.player_name)).sort((a, b) => (a.market_value_usd ?? 0) - (b.market_value_usd ?? 0));
+    const puntPool = cheapFirst.filter(r => (r.market_value_usd ?? 0) <= PUNT_CEILING);
+    const punt = (puntPool.length ? puntPool : cheapFirst)[Math.floor(rng() * Math.max(1, Math.min(6, (puntPool.length ? puntPool : cheapFirst).length)))];
+    if (punt && !picked.includes(punt)) { picked.push(punt); used.add(punt.player_name); }
+    if (picked.length < CANDIDATES_PER_SLOT) return null;
+
+    const candidates: AnonCandidate[] = picked.map(r => {
+      const series: { year: number; value: number }[] = [];
+      for (let y = offerYear - 2; y <= offerYear; y += 1) {
+        const row = at(r.player_name, y);
+        if (row?.market_value_usd) series.push({ year: y, value: row.market_value_usd });
+      }
+      const output: { year: number; goals: number; assists: number }[] = [];
+      for (let y = offerYear - 1; y <= offerYear; y += 1) {
+        const row = at(r.player_name, y);
+        if (row) output.push({ year: y, goals: row.goals ?? 0, assists: row.assists ?? 0 });
+      }
+      return {
+        name: r.player_name,
+        club: r.club ?? 'Unknown',
+        nationality: r.nationality ?? 'Unknown',
+        position: normalizePosition(r.position || '') ?? 'CM',
+        age: r.age ?? 0,
+        series,
+        output,
+        price: r.market_value_usd!,
+        final: at(r.player_name, FINAL_YEAR)!.market_value_usd!,
+      };
+    });
+    slots.push({ slot, offerYear, candidates });
+  }
+  return { startYear, finalYear: FINAL_YEAR, budget: STOCK_BUDGET, slots };
 }
 
-/** Daily market year: 2010..2025 (next-year data exists through 2026). */
-export function dailyStockSeed(): { seed: number; year: number } {
-  const seed = dateSeed(getTodayET());
-  return { seed, year: 2010 + (seed % 16) };
-}
-
-export function randomStockSeed(): { seed: number; year: number } {
-  const seed = Math.floor(Math.random() * 2 ** 31);
-  return { seed, year: 2010 + (seed % 16) };
-}
-
-// ---------------------------------------------------------------------------
-// Data
-// ---------------------------------------------------------------------------
-
-export async function fetchStockRound(year: number, seed: number): Promise<StockRound | null> {
+/** The two real queries. Pool rows for the six offer years, then full
+ *  histories for every pooled name so series, output and finals resolve. */
+export async function fetchCampaignRows(startYear: number): Promise<MarketRow[] | null> {
   try {
-    // 1) Candidate pool: top players by value at the market year.
+    const offerYears = Array.from({ length: 6 }, (_, i) => startYear + i);
     const { data: poolRows, error: e1 } = await supabase
       .from('player_market_values')
-      .select('person_key, player_name, club, position, age, nationality, market_value_usd')
-      .eq('year', year)
-      .gte('market_value_usd', 15000000)
+      .select('player_name, club, position, age, nationality, year, market_value_usd, goals, assists')
+      .in('year', offerYears)
+      .gte('market_value_usd', 2_000_000)
       .order('market_value_usd', { ascending: false })
-      .limit(400);
-    if (e1 || !poolRows || poolRows.length < 20) {
-      console.warn('[stockMarket] pool empty/error', e1);
-      return null;
-    }
-
-    // Identity prefers person_key (task #15), falling back to player_name.
-    // Every person_key is NULL today, so this behaves exactly like name-keying
-    // now, but stays forward-compatible once identities are populated.
-    const keyOf = (r: { person_key?: string | null; player_name: string }) =>
-      (r.person_key && String(r.person_key).trim()) || r.player_name;
-
-    // Dedup by identity (per-position rank duplicates exist), keep highest value.
-    const seen = new Set<string>();
-    const pool = poolRows.filter((r) => {
-      if (!r.player_name || !r.club || !r.market_value_usd) return false;
-      const k = keyOf(r);
-      if (seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-
-    // 2) Seeded candidate order; take 14, resolve their histories + outcomes.
-    const candidates = seededShuffle(pool, seed).slice(0, 14);
-    const names = candidates.map((c) => c.player_name);
-
+      .limit(4000);
+    if (e1 || !poolRows || poolRows.length < 200) return null;
+    const names = [...new Set(poolRows.map(r => r.player_name))].slice(0, 900);
     const { data: histRows, error: e2 } = await supabase
       .from('player_market_values')
-      .select('person_key, player_name, year, market_value_usd')
+      .select('player_name, club, position, age, nationality, year, market_value_usd, goals, assists')
       .in('player_name', names)
-      .gte('year', year - 2)
-      .lte('year', year + 1);
-    if (e2 || !histRows) {
-      console.warn('[stockMarket] history error', e2);
-      return null;
-    }
-
-    // (key, year) -> max value, where key prefers person_key over player_name.
-    const byKeyYear = new Map<string, number>();
-    for (const r of histRows) {
-      if (!r.player_name || !r.market_value_usd) continue;
-      const k = `${keyOf(r)}|${r.year}`;
-      byKeyYear.set(k, Math.max(byKeyYear.get(k) ?? 0, Number(r.market_value_usd)));
-    }
-
-    const players: StockPlayer[] = [];
-    for (const c of candidates) {
-      if (players.length >= 6) break;
-      const ckey = keyOf(c);
-      const next = byKeyYear.get(`${ckey}|${year + 1}`);
-      const current = byKeyYear.get(`${ckey}|${year}`) ?? Number(c.market_value_usd);
-      if (!next || !current) continue; // must have a real next-year value
-      const series: { year: number; value: number }[] = [];
-      for (let y = year - 2; y <= year; y++) {
-        const v = byKeyYear.get(`${ckey}|${y}`);
-        if (v) series.push({ year: y, value: v });
-      }
-      players.push({
-        name: c.player_name,
-        club: c.club ?? 'Unknown',
-        position: c.position ?? 'Unknown',
-        age: c.age ?? 0,
-        nationality: c.nationality ?? 'Unknown',
-        series,
-        current,
-        next,
-      });
-    }
-
-    if (players.length < 6) {
-      console.warn('[stockMarket] only', players.length, 'resolvable players for', year);
-      return null;
-    }
-    return { year, players };
-  } catch (err) {
-    console.warn('[stockMarket] unexpected', err);
+      .in('year', [startYear - 2, startYear - 1, ...offerYears, FINAL_YEAR]);
+    if (e2 || !histRows) return null;
+    return [...poolRows, ...histRows] as MarketRow[];
+  } catch {
     return null;
   }
 }
 
-// ---------------------------------------------------------------------------
-// Scoring
-// ---------------------------------------------------------------------------
-
-export function playerReturn(p: StockPlayer): number {
-  return (p.next - p.current) / p.current;
+/** The cheapest candidate's price for one slot. */
+export function puntPriceOf(slot: CampaignSlot): number {
+  return Math.min(...slot.candidates.map(c => c.price));
 }
 
-export function portfolioReturn(players: StockPlayer[], picks: string[]): number {
-  const chosen = players.filter((p) => picks.includes(p.name));
-  if (chosen.length === 0) return 0;
-  return chosen.reduce((s, p) => s + playerReturn(p), 0) / chosen.length;
+/** What must stay in the wallet after buying at slotIndex so every LATER
+ *  slot can still afford its punt. The page's affordability rule. */
+export function reserveAfter(campaign: Campaign, slotIndex: number): number {
+  let sum = 0;
+  for (let j = slotIndex + 1; j < campaign.slots.length; j += 1) sum += puntPriceOf(campaign.slots[j]);
+  return sum;
 }
 
-export interface StockResult {
-  yourReturn: number;
-  bestReturn: number;
-  worstReturn: number;
-  bestPicks: string[];
-  /** 0-100: where your trio lands between the worst and best possible trio. */
+export function canAfford(campaign: Campaign, slotIndex: number, candidate: AnonCandidate, remaining: number): boolean {
+  return candidate.price + reserveAfter(campaign, slotIndex) <= remaining;
+}
+
+/* ---------------- scoring ---------------- */
+
+export interface CampaignResult {
+  spend: number;
+  finalValue: number;
+  growth: number; /* finalValue / spend */
+  bestGrowth: number;
+  worstGrowth: number;
   score: number;
 }
 
-export function scoreRound(players: StockPlayer[], picks: string[]): StockResult {
-  const combos: string[][] = [];
-  for (let i = 0; i < players.length; i++)
-    for (let j = i + 1; j < players.length; j++)
-      for (let k = j + 1; k < players.length; k++)
-        combos.push([players[i].name, players[j].name, players[k].name]);
-
-  let best = -Infinity, worst = Infinity, bestPicks: string[] = [];
-  for (const c of combos) {
-    const r = portfolioReturn(players, c);
-    if (r > best) { best = r; bestPicks = c; }
-    if (r < worst) worst = r;
-  }
-  const yours = portfolioReturn(players, picks);
-  const score = best === worst ? 100 : Math.round(100 * (yours - worst) / (best - worst));
-  return { yourReturn: yours, bestReturn: best, worstReturn: worst, bestPicks, score: Math.max(0, Math.min(100, score)) };
+export function candidateRatio(c: AnonCandidate): number {
+  return c.final / c.price;
 }
 
-// ---------------------------------------------------------------------------
-// Formatting
-// ---------------------------------------------------------------------------
+/**
+ * Places your XI between the worst and best per-slot picks of the same
+ * offers. Best and worst ignore the budget on purpose (the ceiling is what
+ * an unlimited wallet could have done); your own run respected the 200M.
+ */
+export function scoreCampaign(campaign: Campaign, picks: AnonCandidate[]): CampaignResult {
+  const spend = picks.reduce((s, c) => s + c.price, 0);
+  const finalValue = picks.reduce((s, c) => s + c.final, 0);
+  const growth = spend > 0 ? finalValue / spend : 0;
+  let bestSpend = 0; let bestFinal = 0; let worstSpend = 0; let worstFinal = 0;
+  for (const slot of campaign.slots) {
+    const byRatio = [...slot.candidates].sort((a, b) => candidateRatio(b) - candidateRatio(a));
+    bestSpend += byRatio[0].price; bestFinal += byRatio[0].final;
+    const w = byRatio[byRatio.length - 1];
+    worstSpend += w.price; worstFinal += w.final;
+  }
+  const bestGrowth = bestSpend > 0 ? bestFinal / bestSpend : 1;
+  const worstGrowth = worstSpend > 0 ? worstFinal / worstSpend : 1;
+  const score = bestGrowth === worstGrowth
+    ? 100
+    : Math.max(0, Math.min(100, Math.round((100 * (growth - worstGrowth)) / (bestGrowth - worstGrowth))));
+  return { spend, finalValue, growth, bestGrowth, worstGrowth, score };
+}
+
+/* ---------------- formatting ---------------- */
 
 export function formatMoney(v: number): string {
   if (v >= 1e9) return `$${(v / 1e9).toFixed(1)}B`;

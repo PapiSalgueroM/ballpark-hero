@@ -650,45 +650,35 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/player-stock-market': {
     intro: [
-      "Player Stock Market deals six anonymous player cards from one real past season and asks whose value is about to rise. You buy three, blind, and the market fast forwards one real year.",
-      "Every number is real: the prices are historical market values, and the reveal shows what those players were actually worth twelve months later, names included.",
+      "The Player Stock Market rebuilt as the anonymous portfolio game: the market opens six real seasons in the past, hands you 200M, and asks you to fill the 4-3-3's eleven slots buying on nothing but the numbers.",
+      "Every candidate is anonymous while you shop. You see the position, the age, the three year market value trajectory and the last two seasons of goals and assists. Never a name, a country or a club, because knowing who a player is would be the whole answer.",
+      "After the eleventh buy the campaign jumps to today, the cards turn over, and your portfolio is worth what those eleven careers really became. Every value on every card is real market history.",
     ],
     howToPlay: [
-      "Unlimited mode has a second style: Names only. You see exactly who every player is and none of the numbers, so you are buying on reputation alone and the values only drop when the market moves.",
-      "Check the market year. The daily lands somewhere between 2010 and 2025.",
-      "Study each mystery card: position, age, nationality, price, and a 3 year value sparkline.",
-      "Tap to buy exactly 3 players, swapping freely until you lock in.",
-      "Lock the portfolio and the market advances one real year, revealing names and true next values.",
-      "Compare your return with the best and worst possible trios and share your score.",
+      "Pick the daily market (the same campaign for everyone today) or unlimited.",
+      "The market opens six seasons back. Two buys a year: each buy deals four anonymous candidates who fit the current slot, from an expensive bet to a cheap punt.",
+      "Read the trajectories and the output, then buy exactly one at their real market value of that year. The wallet always reserves enough for the remaining slots' punts, so a run can never strand you.",
+      "After the eleventh buy the reveal names every pick and prices the portfolio at today's real values.",
     ],
     rules: [
-      "Six players per round, and you must buy exactly 3.",
-      "Your return is the average percentage change of your three picks.",
-      "Scores run 0 to 100, where 0 matches the worst possible trio and 100 the best of all 20 combinations.",
-      "The daily market is the same for everyone. Unlimited mode deals random markets from other years.",
+      "The wallet is 200M for the whole XI, and prices are real historical market values.",
+      "Candidates come only from careers the data tracks through to the present, which is stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.",
+      "A slot's four candidates always span the market: one from the top of that year's range, two from the middle, and a punt the wallet can always cover.",
+      "Scoring places your growth between the worst and best per slot picks of the same offers, both computed with an unlimited wallet, so 100 means you matched the best possible eye for a trajectory and 0 the worst.",
     ],
     example: [
-      "The market year is 2013. Mystery ST A is 21, Brazilian, around 40 million with a steep climbing sparkline, while Mystery CM B is 31 with a flat line at a huge number. You buy the kid, a mid priced winger with momentum, and a cheap defender as a lottery ticket.",
-      "The market rolls to 2014 and the names drop. The kid soars, the winger flatlines, the defender dips: plus 19 percent against an optimal plus 34, good for 71 of 100.",
+      "Summer 2018, the striker slot. One anonymous card shows age 21, value climbing 8M to 15M to 24M with 14 goals last season. Another shows age 29, 60M flat, 20 goals a year. The kid costs a third as much; you take the trajectory.",
+      "The reveal says the kid was a future superstar bought at 24M and worth six times that today, and your 200M portfolio closes at 310M, a 55 percent gain and a score in the eighties.",
     ],
     tips: [
-      "Age is the loudest signal: value climbs through the early twenties and sags after 30, with exceptions.",
-      "Read the sparkline's shape, not its height. A cheap card rising beats an expensive card coasting.",
-      "Returns are percentages, so a 10 million player doubling outscores a 100 million player inching up.",
+      "Age plus trajectory beats raw output. A 21 year old whose value doubled twice is the market telling you something.",
+      "Do not spend the wallet early: the reserve rule keeps you solvent, but a 60M splash in year one is ten cheap seats later.",
+      "Keepers show no goals, so their trajectory IS the story. Watch for the steady climb.",
     ],
     faqs: [
-      {
-        q: "Are the values real?",
-        a: "Yes, they come from a historical market value database spanning more than two decades, and the reveal uses each player's true value one year on. Nothing is invented.",
-      },
-      {
-        q: "Why are the names hidden?",
-        a: "Buying blind is the game. Names would make it a memory quiz about transfers; hiding them forces you to invest on age, position, nationality, and the curve.",
-      },
-      {
-        q: "What is a good score?",
-        a: "Over 50 means you were closer to the best portfolio than the worst, and 90 plus means you found the breakout. The daily is identical for everyone, so scores travel well in a group chat.",
-      },
+      { q: "Are the numbers real?", a: "Yes, every price, trajectory and outcome is a real row from the market value history the rest of the site runs on, 2004 to 2026. Nothing is authored." },
+      { q: "Why can I never see the names while buying?", a: "That is the game. Knowing the name would be the answer; the format is investing on stats alone, and the reveal at the end names everyone." },
+      { q: "Can I go bankrupt mid draft?", a: "No. Every slot always deals a punt the wallet can cover, and the buy button reserves the future punts' prices before letting you splash." },
     ],
   },
   '/stadium-tycoon': {

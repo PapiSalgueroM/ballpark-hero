@@ -36,10 +36,6 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- Player Stock Market redesign (BUILDING as Round 329, cloud, 2026-08-29): his spec,
-  the "We Invested 200M In Footballers Using ONLY Their Stats" format: start seasons
-  back, move year by year, show stats only, never name, country or club, buy
-  position by position until a full XI.
 - From that list, unclaimed and sizable: the Rebuild redesign, the tycoon merge, the conquest map
   overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
@@ -141,6 +137,12 @@ Standing claims:
 
 ## Done
 
+- THE STOCK MARKET REBUILD, Round 329 (cloud lane, 2026-08-29). His anonymous
+  format executed whole: six seasons back, 200M, position by position on stats
+  alone, the reveal at the end. Lock proof wallet (punt ceiling plus a reserve
+  rule), pure engine over injected rows, and simStockCampaign fences the assembly
+  law, the lock proof, determinism, the scoring identities and the anonymity of
+  the buying screen with its leaky control proven to catch a planted name.
 - GAUNTLET DRAFT, Round 328 (cloud lane, 2026-08-29). The draft mode, completing all
   three new game requests: five card picks per slot in our own card frames, a
   deterministic five round knockout, daily and unlimited. The harness caught the
