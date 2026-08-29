@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 324.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 325.
 
 ## Inbox (unclaimed)
 
@@ -30,7 +30,7 @@ How it works:
   this starts as a small pilot (a handful of genuinely content-rich sub-pages with their
   own copy) measured in Search Console before any rollout. Pairs with the SEO keyword
   pass below.
-- SEO keyword pass (Anthony, 2026-08-28 evening): "add words like key words and
+- SEO keyword pass (BUILDING as Round 324, cloud, 2026-08-29) (Anthony, 2026-08-28 evening): "add words like key words and
   description and all that so that on search it pops up higher up, words like sports and
   trivia and so on." Work the head terms (free sports games, sports trivia, daily sports
   quiz, football quiz and their sport variants) through titles, meta descriptions and
