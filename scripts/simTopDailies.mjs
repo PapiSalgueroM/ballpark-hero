@@ -31,20 +31,22 @@
  */
 import { writeFileSync } from "node:fs";
 import { readFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = "/tmp/topdailies-entry.mjs";
-const OUT = "/tmp/topdailies.mjs";
+const SRC = ROOT.replaceAll("\\", "/");
+const ENTRY = path.join(os.tmpdir(), "topdailies-entry.mjs");
+const OUT = path.join(os.tmpdir(), "topdailies.mjs");
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const pool = await import('${ROOT}/src/lib/fetchOverratedPool.ts');
-export const bb = await import('${ROOT}/src/hooks/useBudgetBuilder.ts');
-export const squadDeal = await import('${ROOT}/src/lib/squadDeal.ts');
-export const du = await import('${ROOT}/src/lib/dateUtils.ts');
+export const pool = await import('${SRC}/src/lib/fetchOverratedPool.ts');
+export const bb = await import('${SRC}/src/hooks/useBudgetBuilder.ts');
+export const squadDeal = await import('${SRC}/src/lib/squadDeal.ts');
+export const du = await import('${SRC}/src/lib/dateUtils.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",
@@ -198,7 +200,7 @@ console.log("4) Budget Builder: every era's every demand met inside the budget, 
       continue;
     }
     const moneyXi = bb.moneyXiFor(eraPool, FORMATION);
-    const budget = bb.budgetFor(moneyXi);
+    const budget = bb.budgetFor(moneyXi, era.id);
     const eligible = bb.CRITERIA.filter(c => !c.todayOnly || era.id === "today");
     let worstHeadroom = Infinity, worstId = "";
     for (const c of eligible) {

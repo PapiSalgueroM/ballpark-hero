@@ -225,20 +225,31 @@ const WhoAmI = () => {
               ? 'They shared a club at some point in their careers'
               : 'No club in common',
           )}
+          {/* Round 315: a guess with no current row (whoAmIPlayerFromEntity's
+              retired path) carries age 0 and value 0 as scoring sentinels, and
+              this used to render them literally: Anthony guessed Rodri while
+              his 2026 row was missing and read "Age 0, $0". The chips now say
+              what the zero means instead of printing it. */}
           {chip(
             'age',
-            b.ageDiff === 0 ? 'hit' : Math.abs(b.ageDiff) <= 3 ? 'near' : 'miss',
-            <>
-              Age {p.age}
-              {b.ageDiff === 0 ? (
-                <Check className="w-3 h-3" />
-              ) : b.ageDiff > 0 ? (
-                <ArrowUp className="w-3 h-3" />
-              ) : (
-                <ArrowDown className="w-3 h-3" />
-              )}
-            </>,
-            b.ageDiff === 0
+            p.age === 0 ? 'miss' : b.ageDiff === 0 ? 'hit' : Math.abs(b.ageDiff) <= 3 ? 'near' : 'miss',
+            p.age === 0 ? (
+              <>No current age<X className="w-3 h-3" /></>
+            ) : (
+              <>
+                Age {p.age}
+                {b.ageDiff === 0 ? (
+                  <Check className="w-3 h-3" />
+                ) : b.ageDiff > 0 ? (
+                  <ArrowUp className="w-3 h-3" />
+                ) : (
+                  <ArrowDown className="w-3 h-3" />
+                )}
+              </>
+            ),
+            p.age === 0
+              ? 'No current season listing for this player, so age cannot be compared'
+              : b.ageDiff === 0
               ? 'Same age as the secret player'
               : b.ageDiff > 0
               ? 'The secret player is older'
@@ -246,18 +257,24 @@ const WhoAmI = () => {
           )}
           {chip(
             'value',
-            valueClose ? 'hit' : valueNear ? 'near' : 'miss',
-            <>
-              {fmtCompactUsd(p.value)}
-              {valueClose ? (
-                <Check className="w-3 h-3" />
-              ) : b.valueLogDiff > 0 ? (
-                <ArrowUp className="w-3 h-3" />
-              ) : (
-                <ArrowDown className="w-3 h-3" />
-              )}
-            </>,
-            valueClose
+            p.value === 0 ? 'miss' : valueClose ? 'hit' : valueNear ? 'near' : 'miss',
+            p.value === 0 ? (
+              <>No listed value<X className="w-3 h-3" /></>
+            ) : (
+              <>
+                {fmtCompactUsd(p.value)}
+                {valueClose ? (
+                  <Check className="w-3 h-3" />
+                ) : b.valueLogDiff > 0 ? (
+                  <ArrowUp className="w-3 h-3" />
+                ) : (
+                  <ArrowDown className="w-3 h-3" />
+                )}
+              </>
+            ),
+            p.value === 0
+              ? 'No current market value on file for this player'
+              : valueClose
               ? 'Almost identical market value'
               : b.valueLogDiff > 0
               ? 'The secret player is worth more'

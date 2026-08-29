@@ -253,72 +253,171 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
 // ---------------------------------------------------------------------------
 // Club → League fallback (for Supabase players not in the enrichment map)
 // ---------------------------------------------------------------------------
+/* Round 315: this map used to hold only SHORT club names ('Chelsea',
+   'Barcelona', 'Villarreal') while the database spells them long ('Chelsea
+   FC', 'FC Barcelona', 'Villarreal CF'), so nearly the entire live pool
+   missed the lookup and fell into the 'Premier League' default below, which
+   is how Anthony picked La Liga in Squad Deal and was dealt Premier League
+   players. The database spellings here are the actual distinct club values
+   of the 2026 top-1000 pool, queried 2026-08-29; the short names stay for
+   the hand built pools (Footle's own list, the Squad Deal legends) that use
+   them. Membership is the 2025/26 season: relegated Leicester, Ipswich and
+   Southampton are EFL Championship rows, and clubs whose current division
+   is genuinely uncertain are left out on purpose, because an absent mapping
+   now falls to 'Other' rather than to a false Premier League. */
 const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
-  // Premier League
-  'Manchester City': 'Premier League', 'Arsenal': 'Premier League',
-  'Liverpool': 'Premier League', 'Chelsea': 'Premier League',
-  'Tottenham': 'Premier League', 'Manchester United': 'Premier League',
-  'Newcastle': 'Premier League', 'Aston Villa': 'Premier League',
-  'West Ham': 'Premier League', 'Brighton': 'Premier League',
-  'Brentford': 'Premier League', 'Wolverhampton': 'Premier League',
-  'Nottingham Forest': 'Premier League', 'Fulham': 'Premier League',
-  'Everton': 'Premier League', 'Crystal Palace': 'Premier League',
-  'Bournemouth': 'Premier League', 'Leicester': 'Premier League',
-  'Ipswich Town': 'Premier League', 'Southampton': 'Premier League',
+  // Premier League, 2025/26 membership
+  'Manchester City': 'Premier League', 'Arsenal': 'Premier League', 'Arsenal FC': 'Premier League',
+  'Liverpool': 'Premier League', 'Liverpool FC': 'Premier League',
+  'Chelsea': 'Premier League', 'Chelsea FC': 'Premier League',
+  'Tottenham': 'Premier League', 'Tottenham Hotspur': 'Premier League',
+  'Manchester United': 'Premier League',
+  'Newcastle': 'Premier League', 'Newcastle United': 'Premier League',
+  'Aston Villa': 'Premier League',
+  'West Ham': 'Premier League', 'West Ham United': 'Premier League',
+  'Brighton': 'Premier League', 'Brighton & Hove Albion': 'Premier League',
+  'Brentford': 'Premier League', 'Brentford FC': 'Premier League',
+  'Wolverhampton': 'Premier League', 'Wolverhampton Wanderers': 'Premier League',
+  'Nottingham Forest': 'Premier League',
+  'Fulham': 'Premier League', 'Fulham FC': 'Premier League',
+  'Everton': 'Premier League', 'Everton FC': 'Premier League',
+  'Crystal Palace': 'Premier League',
+  'Bournemouth': 'Premier League', 'AFC Bournemouth': 'Premier League',
+  'Sunderland AFC': 'Premier League', 'Leeds United': 'Premier League',
+  'Burnley FC': 'Premier League',
+  // EFL Championship (the relegated and the rest of the second tier pool)
+  'Leicester': 'EFL Championship', 'Leicester City': 'EFL Championship',
+  'Ipswich Town': 'EFL Championship', 'Southampton': 'EFL Championship',
+  'Southampton FC': 'EFL Championship', 'Coventry City': 'EFL Championship',
+  'Middlesbrough FC': 'EFL Championship', 'Sheffield United': 'EFL Championship',
+  'Norwich City': 'EFL Championship', 'Watford FC': 'EFL Championship',
+  'Swansea City': 'EFL Championship', 'Bristol City': 'EFL Championship',
+  'Birmingham City': 'EFL Championship', 'Stoke City': 'EFL Championship',
   // La Liga
-  'Real Madrid': 'La Liga', 'Barcelona': 'La Liga',
-  'Atlético Madrid': 'La Liga', 'Athletic Club': 'La Liga',
-  'Real Sociedad': 'La Liga', 'Villarreal': 'La Liga',
-  'Real Betis': 'La Liga', 'Sevilla': 'La Liga', 'Valencia': 'La Liga',
-  'Rayo Vallecano': 'La Liga', 'Girona': 'La Liga', 'Celta Vigo': 'La Liga',
-  'Osasuna': 'La Liga', 'Mallorca': 'La Liga', 'Alavés': 'La Liga',
-  'Getafe': 'La Liga', 'Las Palmas': 'La Liga', 'Leganés': 'La Liga',
+  'Real Madrid': 'La Liga', 'Barcelona': 'La Liga', 'FC Barcelona': 'La Liga',
+  'Atlético Madrid': 'La Liga', 'Atlético de Madrid': 'La Liga',
+  'Athletic Club': 'La Liga', 'Athletic Bilbao': 'La Liga',
+  'Real Sociedad': 'La Liga',
+  'Villarreal': 'La Liga', 'Villarreal CF': 'La Liga',
+  'Real Betis': 'La Liga', 'Real Betis Balompié': 'La Liga',
+  'Sevilla': 'La Liga', 'Sevilla FC': 'La Liga',
+  'Valencia': 'La Liga', 'Valencia CF': 'La Liga',
+  'Rayo Vallecano': 'La Liga',
+  'Girona': 'La Liga', 'Girona FC': 'La Liga',
+  'Celta Vigo': 'La Liga', 'Celta de Vigo': 'La Liga',
+  'Osasuna': 'La Liga', 'CA Osasuna': 'La Liga',
+  'Mallorca': 'La Liga', 'RCD Mallorca': 'La Liga',
+  'Alavés': 'La Liga', 'Deportivo Alavés': 'La Liga',
+  'Getafe': 'La Liga', 'Getafe CF': 'La Liga',
+  'Elche CF': 'La Liga', 'RCD Espanyol Barcelona': 'La Liga',
+  'Levante UD': 'La Liga', 'Real Oviedo': 'La Liga',
   // Serie A
-  'Inter Milan': 'Serie A', 'AC Milan': 'Serie A', 'Juventus': 'Serie A',
-  'Napoli': 'Serie A', 'Roma': 'Serie A', 'Lazio': 'Serie A',
-  'Fiorentina': 'Serie A', 'Atalanta': 'Serie A', 'Torino': 'Serie A',
-  'Bologna': 'Serie A', 'Udinese': 'Serie A', 'Empoli': 'Serie A',
-  'Como': 'Serie A', 'Cagliari': 'Serie A', 'Genoa': 'Serie A',
-  'Verona': 'Serie A',
+  'Inter Milan': 'Serie A', 'AC Milan': 'Serie A',
+  'Juventus': 'Serie A', 'Juventus FC': 'Serie A',
+  'Napoli': 'Serie A', 'SSC Napoli': 'Serie A',
+  'Roma': 'Serie A', 'AS Roma': 'Serie A',
+  'Lazio': 'Serie A', 'SS Lazio': 'Serie A',
+  'Fiorentina': 'Serie A', 'ACF Fiorentina': 'Serie A',
+  'Atalanta': 'Serie A', 'Atalanta BC': 'Serie A',
+  'Torino': 'Serie A', 'Torino FC': 'Serie A',
+  'Bologna': 'Serie A', 'Bologna FC 1909': 'Serie A',
+  'Udinese': 'Serie A', 'Udinese Calcio': 'Serie A',
+  'Como': 'Serie A', 'Como 1907': 'Serie A',
+  'Cagliari': 'Serie A', 'Cagliari Calcio': 'Serie A',
+  'Genoa': 'Serie A', 'Genoa CFC': 'Serie A',
+  'Verona': 'Serie A', 'US Sassuolo': 'Serie A',
+  'Parma Calcio 1913': 'Serie A', 'US Lecce': 'Serie A',
   // Bundesliga
   'Bayern Munich': 'Bundesliga', 'Borussia Dortmund': 'Bundesliga',
-  'Bayer Leverkusen': 'Bundesliga', 'RB Leipzig': 'Bundesliga',
-  'VfB Stuttgart': 'Bundesliga', 'Wolfsburg': 'Bundesliga',
+  'Bayer Leverkusen': 'Bundesliga', 'Bayer 04 Leverkusen': 'Bundesliga',
+  'RB Leipzig': 'Bundesliga', 'VfB Stuttgart': 'Bundesliga',
+  'Wolfsburg': 'Bundesliga', 'VfL Wolfsburg': 'Bundesliga',
   'SC Freiburg': 'Bundesliga', 'Eintracht Frankfurt': 'Bundesliga',
-  'Hoffenheim': 'Bundesliga', 'Borussia Mönchengladbach': 'Bundesliga',
-  'Mainz 05': 'Bundesliga', 'Augsburg': 'Bundesliga', 'Werder Bremen': 'Bundesliga',
+  'Hoffenheim': 'Bundesliga', 'TSG 1899 Hoffenheim': 'Bundesliga',
+  'Borussia Mönchengladbach': 'Bundesliga',
+  'Mainz 05': 'Bundesliga', '1.FSV Mainz 05': 'Bundesliga',
+  'Augsburg': 'Bundesliga', 'FC Augsburg': 'Bundesliga',
+  'Werder Bremen': 'Bundesliga', 'SV Werder Bremen': 'Bundesliga',
+  '1.FC Union Berlin': 'Bundesliga', '1.FC Köln': 'Bundesliga',
+  'Hamburger SV': 'Bundesliga',
   // Ligue 1
-  'PSG': 'Ligue 1', 'Marseille': 'Ligue 1', 'Lyon': 'Ligue 1',
-  'Monaco': 'Ligue 1', 'Lille': 'Ligue 1', 'Rennes': 'Ligue 1',
-  'Nice': 'Ligue 1', 'Lens': 'Ligue 1', 'Nantes': 'Ligue 1',
+  'PSG': 'Ligue 1', 'Paris Saint-Germain': 'Ligue 1',
+  'Marseille': 'Ligue 1', 'Olympique Marseille': 'Ligue 1',
+  'Lyon': 'Ligue 1', 'Olympique Lyon': 'Ligue 1',
+  'Monaco': 'Ligue 1', 'AS Monaco': 'Ligue 1',
+  'Lille': 'Ligue 1', 'LOSC Lille': 'Ligue 1',
+  'Rennes': 'Ligue 1', 'Stade Rennais FC': 'Ligue 1',
+  'Nice': 'Ligue 1', 'OGC Nice': 'Ligue 1',
+  'Lens': 'Ligue 1', 'RC Lens': 'Ligue 1',
+  'Nantes': 'Ligue 1', 'FC Nantes': 'Ligue 1',
+  'RC Strasbourg Alsace': 'Ligue 1', 'Angers SCO': 'Ligue 1',
+  'AJ Auxerre': 'Ligue 1', 'FC Lorient': 'Ligue 1', 'Paris FC': 'Ligue 1',
   // Liga Portugal
-  'Benfica': 'Liga Portugal', 'Porto': 'Liga Portugal', 'Sporting CP': 'Liga Portugal',
+  'Benfica': 'Liga Portugal', 'SL Benfica': 'Liga Portugal',
+  'Porto': 'Liga Portugal', 'FC Porto': 'Liga Portugal',
+  'Sporting CP': 'Liga Portugal', 'SC Braga': 'Liga Portugal',
+  'FC Famalicão': 'Liga Portugal', 'GD Estoril Praia': 'Liga Portugal',
   // Eredivisie
-  'Ajax': 'Eredivisie', 'Feyenoord': 'Eredivisie', 'PSV': 'Eredivisie',
+  'Ajax': 'Eredivisie', 'Ajax Amsterdam': 'Eredivisie',
+  'Feyenoord': 'Eredivisie', 'Feyenoord Rotterdam': 'Eredivisie',
+  'PSV': 'Eredivisie', 'PSV Eindhoven': 'Eredivisie',
+  'AZ Alkmaar': 'Eredivisie', 'FC Utrecht': 'Eredivisie',
   // Saudi Pro League
-  'Al-Hilal': 'Saudi Pro League', 'Al-Nassr': 'Saudi Pro League',
-  'Al-Ittihad': 'Saudi Pro League', 'Al-Ahli': 'Saudi Pro League',
+  'Al-Hilal': 'Saudi Pro League', 'Al-Hilal SFC': 'Saudi Pro League',
+  'Al-Nassr': 'Saudi Pro League', 'Al-Nassr FC': 'Saudi Pro League',
+  'Al-Ittihad': 'Saudi Pro League', 'Al-Ittihad Club': 'Saudi Pro League',
+  'Al-Ahli': 'Saudi Pro League', 'Al-Ahli SFC': 'Saudi Pro League',
   'Al-Shabab': 'Saudi Pro League', 'Al-Ettifaq': 'Saudi Pro League',
+  'Al-Qadsiah FC': 'Saudi Pro League', 'NEOM SC': 'Saudi Pro League',
   // MLS
-  'Inter Miami': 'MLS', 'LA Galaxy': 'MLS', 'LAFC': 'MLS',
+  'Inter Miami': 'MLS', 'Inter Miami CF': 'MLS',
+  'LA Galaxy': 'MLS', 'Los Angeles Galaxy': 'MLS',
+  'LAFC': 'MLS', 'Los Angeles FC': 'MLS',
   'Columbus Crew': 'MLS', 'Nashville SC': 'MLS', 'Portland Timbers': 'MLS',
   'FC Cincinnati': 'MLS', 'Houston Dynamo': 'MLS', 'Toronto FC': 'MLS',
+  'Atlanta United FC': 'MLS', 'San Diego FC': 'MLS',
   // Turkish Süper Lig
   'Galatasaray': 'Turkish Süper Lig', 'Fenerbahçe': 'Turkish Süper Lig',
-  'Besiktas': 'Turkish Süper Lig', 'Trabzonspor': 'Turkish Süper Lig',
+  'Fenerbahce': 'Turkish Süper Lig', 'Besiktas': 'Turkish Süper Lig',
+  'Besiktas JK': 'Turkish Süper Lig', 'Trabzonspor': 'Turkish Süper Lig',
   // Brazilian Série A
-  'Flamengo': 'Brazilian Série A', 'Corinthians': 'Brazilian Série A',
-  'Botafogo': 'Brazilian Série A', 'Fluminense': 'Brazilian Série A',
-  'Atlético Mineiro': 'Brazilian Série A', 'Santos': 'Brazilian Série A',
+  'Flamengo': 'Brazilian Série A', 'CR Flamengo': 'Brazilian Série A',
+  'Corinthians': 'Brazilian Série A', 'Sport Club Corinthians Paulista': 'Brazilian Série A',
+  'Botafogo': 'Brazilian Série A', 'Botafogo de Futebol e Regatas': 'Brazilian Série A',
+  'Fluminense': 'Brazilian Série A',
+  'Atlético Mineiro': 'Brazilian Série A', 'Clube Atlético Mineiro': 'Brazilian Série A',
+  'Santos': 'Brazilian Série A', 'Santos FC': 'Brazilian Série A',
+  'Sociedade Esportiva Palmeiras': 'Brazilian Série A',
+  'Cruzeiro Esporte Clube': 'Brazilian Série A',
+  'Esporte Clube Bahia': 'Brazilian Série A',
+  'São Paulo Futebol Clube': 'Brazilian Série A',
+  // Russian Premier League
+  'Zenit St. Petersburg': 'Russian Premier League', 'Spartak Moscow': 'Russian Premier League',
+  'CSKA Moscow': 'Russian Premier League', 'Dynamo Moscow': 'Russian Premier League',
+  'Lokomotiv Moscow': 'Russian Premier League', 'FC Krasnodar': 'Russian Premier League',
+  // Belgian Pro League
+  'Club Brugge KV': 'Belgian Pro League', 'KRC Genk': 'Belgian Pro League',
+  'RSC Anderlecht': 'Belgian Pro League', 'Union Saint-Gilloise': 'Belgian Pro League',
   // Argentine Primera División
   'River Plate': 'Argentine Primera División', 'Boca Juniors': 'Argentine Primera División',
   'Racing Club': 'Argentine Primera División',
   // Scottish Premiership
-  'Celtic': 'Scottish Premiership', 'Rangers': 'Scottish Premiership',
+  'Celtic': 'Scottish Premiership', 'Celtic FC': 'Scottish Premiership',
+  'Rangers': 'Scottish Premiership', 'Rangers FC': 'Scottish Premiership',
   // Austrian Bundesliga
-  'RB Salzburg': 'Austrian Bundesliga', 'Rapid Wien': 'Austrian Bundesliga',
+  'RB Salzburg': 'Austrian Bundesliga', 'Red Bull Salzburg': 'Austrian Bundesliga',
+  'Rapid Wien': 'Austrian Bundesliga', 'SK Sturm Graz': 'Austrian Bundesliga',
   // Greek Super League
-  'Olympiacos': 'Greek Super League', 'AEK Athens': 'Greek Super League',
+  'Olympiacos': 'Greek Super League', 'Olympiacos Piraeus': 'Greek Super League',
+  'AEK Athens': 'Greek Super League', 'PAOK Thessaloniki': 'Greek Super League',
+  // One club leagues in the current pool
+  'Shakhtar Donetsk': 'Ukrainian Premier League',
+  'FC Midtjylland': 'Danish Superliga',
+  'Malmö FF': 'Swedish Allsvenskan',
+  'FK Bodø/Glimt': 'Norwegian Eliteserien',
+  'Red Star Belgrade': 'Serbian SuperLiga',
+  'Al-Duhail SC': 'Qatari Stars League',
+  'Deportivo Guadalajara': 'Liga MX',
 };
 
 /**
@@ -329,8 +428,17 @@ export function getEnrichment(
   playerName: string,
   club: string
 ): { kitNumber: number; league: League } {
+  /* Round 315: the CLUB decides the league, and only then the hand entry.
+     The old order returned the per-player entry first, so anyone in the hand
+     list who has moved since it was written kept their old league forever,
+     and the final fallback was a flat 'Premier League', which mislabelled
+     nearly the whole live pool once the club spellings stopped matching.
+     Unknown club now reads 'Other': absent from every league filter rather
+     than present in the wrong one. */
   const direct = footleEnrichment[playerName];
-  if (direct) return direct;
-  const leagueFromClub = CLUB_TO_LEAGUE[club] ?? 'Premier League';
-  return { kitNumber: 0, league: leagueFromClub };
+  const fromClub = CLUB_TO_LEAGUE[club];
+  return {
+    kitNumber: direct?.kitNumber ?? 0,
+    league: fromClub ?? direct?.league ?? 'Other',
+  };
 }

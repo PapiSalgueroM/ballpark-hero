@@ -19,8 +19,9 @@
    Run: node scripts/simScoringCoverage.mjs
 */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
@@ -98,9 +99,9 @@ console.log('2) one recordCompletion call feeds all three pipelines, with the ri
    session, deterministically. */
 {
   const { execSync } = await import('node:child_process');
-  const STUB = '/tmp/scoringStub.ts';
-  const ENTRY = '/tmp/scoringEntry.mjs';
-  const BUNDLE = '/tmp/scoring.bundle.mjs';
+  const STUB = path.join(os.tmpdir(), 'scoringStub.ts').replaceAll('\\', '/');
+  const ENTRY = path.join(os.tmpdir(), 'scoringEntry.mjs');
+  const BUNDLE = path.join(os.tmpdir(), 'scoring.bundle.mjs');
   fs.writeFileSync(STUB, `
 export const SUPABASE_URL = 'stub';
 export const SUPABASE_PUBLISHABLE_KEY = 'stub';
@@ -137,11 +138,11 @@ export const supabase: any = {
 };
 `);
   fs.writeFileSync(ENTRY, `
-export { recordCompletion, recordActivity } from '${ROOT}/src/lib/completions.ts';
-export { getStreakState } from '${ROOT}/src/lib/streaks.ts';
+export { recordCompletion, recordActivity } from '${ROOT.replaceAll('\\', '/')}/src/lib/completions.ts';
+export { getStreakState } from '${ROOT.replaceAll('\\', '/')}/src/lib/streaks.ts';
 export { ledger, setSessionUser } from '${STUB}';
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@/integrations/supabase/client=${STUB}`, { stdio: 'inherit' });
+  execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@/integrations/supabase/client=${STUB}`, { stdio: 'inherit' });
   const store = new Map();
   globalThis.localStorage = {
     getItem: k => (store.has(k) ? store.get(k) : null),
@@ -150,7 +151,7 @@ export { ledger, setSessionUser } from '${STUB}';
     clear: () => { store.clear(); },
   };
   globalThis.window = { dispatchEvent: () => {} };
-  const mod = await import(BUNDLE);
+  const mod = await import(pathToFileURL(BUNDLE).href);
 
   mod.setSessionUser({ id: 'user-1' });
   mod.recordCompletion('/soccer-grid', 40, 'Tester', 3);

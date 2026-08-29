@@ -99,6 +99,9 @@ export function useLineupBuilder() {
               playerName: playerName.trim(),
               teamName: currentTeam.name,
               isNation: currentTeam.isNation,
+              /* Round 315: the slot's role rides along, so the validator can
+                 refuse a keeper at CM (the owner's ter Stegen report). */
+              position: position.role,
             }),
           }
         );

@@ -109,8 +109,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     faqs: [
       {
-        q: "Is the budget really a billion euros?",
-        a: "The modern all world cap lands near that headline number, but it is recomputed every run as 62 percent of the priciest possible XI, so each era gets the same squeeze.",
+        q: "Is the budget really a billion dollars?",
+        a: "On the modern board, yes: exactly one billion, in dollars, which is the currency the real market values are recorded in. The best possible XI costs well past it, so the squeeze is real. Historic eras recompute their cap from their own smaller market, 62 percent of the priciest possible XI, so every era forces the same choices.",
       },
       {
         q: "What is the Money XI?",

@@ -126,9 +126,16 @@ export async function buildAuctionPool(theme: AuctionTheme): Promise<AuctionPlay
     used.add(weak.name);
     for (const [tier, p] of [['great', great], ['good', good], ['weak', weak]] as const) {
       const rating = ratingOf(p, theme);
+      /* Round 315: the opening price is anchored to the player's REAL market
+         value, opening a fifth below it so a contested lot can climb past it.
+         The old curve priced purely off rating ((rating - 55) * 6), which is
+         how an 82 rated Mile Svilar, market value 38, opened at exactly 162:
+         the owner's report to the digit. The rating curve stays only as a
+         floor for players whose value the pool genuinely lacks. */
+      const anchored = p.marketValue > 5 ? Math.round(p.marketValue * 0.8) : Math.round((rating - 55) * 3);
       result.push({
         ...p, tier, slotKey: slot.key, rating,
-        basePrice: Math.max(5, Math.round((rating - 55) * 6)), // 60→30M, 80→150M, 95→240M
+        basePrice: Math.max(5, anchored),
       });
     }
   }

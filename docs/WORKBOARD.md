@@ -68,10 +68,11 @@ From the 2026-08-28 review (bugs, claimed same day):
   Windows ROOT path into generated entries, so they cannot run on the desktop lane.
   Eight were ported in Round 312 with scripts/../portHarness (mechanical: os.tmpdir,
   pathToFileURL, forward slashed ROOT); port the rest and run the full suite green.
-- P1 data batch: Who Am I zero ages and values (Rodri), the Squad Deal league filter
-  dealing the wrong league, Build Your XI stale position validity, Sign the Player values
-  (Svilar 162m), the Billion Dollar Game pricing in dollars at one billion and its
-  oversized points.
+- Data follow up from Round 315: 247 players whose latest market value row is 2024 or
+  older at a 30m+ peak. Most are honestly retired or in untracked leagues, but Rodri,
+  Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
+  systematic sweep of that list against current squads would catch the rest. Needs the
+  database and web verification, desktop lane work.
 - The report-a-bug pipeline: categories, delivery to the project inbox he can read,
   FormSubmit activation confirmed (folds into the Round 304 Supabase tap below).
 
@@ -126,6 +127,34 @@ Standing claims:
 
 ## Done
 
+- THE DATA BATCH, Round 315 (desktop lane, 2026-08-29). Five review items and a P1 the
+  review exposed underneath one of them.
+  Who Am I's Rodri at age 0 value 0: Rodri had NO market value row after 2022, and
+  neither did Kimmich, Tchouameni or Ndidi, four world class names missing from the
+  entire current pull; all four inserted with two-source verified clubs, ages and
+  values (sources in the round record), and the retired render path now says "No
+  current age / No listed value" instead of printing its zero sentinels.
+  Squad Deal dealing Premier League players under La Liga: the club-to-league map held
+  only short club names while the database spells them long, so nearly the whole pool
+  fell into a flat Premier League default; the map now carries the 2026 pool's real
+  spellings for every league, the club outranks the stale per-player entry, and an
+  unknown club reads Other instead of a false league. Flags added to the pool list and
+  the banker card, and the banker's floor moved from the single worst box to the 30th
+  percentile of what is left, ending the 78-into-a-pool-of-80s lowball.
+  Build Your XI's ter Stegen at CM: the position never reached the validator; the
+  slot's role now rides along and the prompt refuses a player who never played it. AND
+  the deployed validator's every failure path returned valid:true ("accept unverified
+  so games never 500"), the banned July P1 shape, live in production; v6 fails closed
+  with the standard unverified retry shape. The repo copy had drifted from deployed v5
+  and is resynced.
+  Sign the Player's Svilar at 162m: openings were priced off rating alone ((82-55)x6 is
+  exactly 162); they now anchor to the real market value, opening a fifth below it.
+  The Billion Dollar Game: the Today board is now exactly one billion, in dollars,
+  which is the currency the values are recorded in (the euro sign was always wrong),
+  label and copy updated, and its 1,200-a-play scoring brought to the sitewide ~100
+  scale. simTopDailies proves every demand still winnable at the flat billion.
+  Two more harnesses ported to Windows along the way (simTopDailies,
+  simScoringCoverage).
 - THE CALM BOOT, Round 314 (desktop lane, 2026-08-29). The flash he filmed: every page
   showed its full crawler copy as a wall of raw text until React mounted. Now the moment
   shows one dimmed screenful that reads as the site loading; a noscript lifts the cap so

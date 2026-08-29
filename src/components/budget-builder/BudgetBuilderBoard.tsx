@@ -71,7 +71,7 @@ export function BudgetBuilderBoard() {
                 remaining < 0 ? 'text-destructive' : 'text-gold'
               }`}
             >
-              €{remaining}M
+              ${remaining}M
             </p>
           </div>
           <div className="text-right">
@@ -91,7 +91,7 @@ export function BudgetBuilderBoard() {
           />
         </div>
         <p className="mt-1.5 text-[11px] text-muted-foreground">
-          Spent €{spent}M of €{budget}M ({era.label} market cap: 62% of the priciest possible XI)
+          Spent ${spent}M of ${budget}M ({era.label} market cap: 62% of the priciest possible XI)
         </p>
       </div>
 
@@ -165,7 +165,7 @@ export function BudgetBuilderBoard() {
                     </span>
                   </div>
                   <div className="text-[9px] text-muted-foreground">
-                    {playerRating(p)} · €{p.marketValue}M
+                    {playerRating(p)} · ${p.marketValue}M
                   </div>
                 </>
               ) : (
@@ -204,13 +204,13 @@ export function BudgetBuilderBoard() {
               onClick={() => { release(activeSlot); setActiveSlot(null); }}
               className="mb-3 w-full rounded-lg border border-destructive/40 py-2 text-xs font-semibold text-destructive"
             >
-              Release {squad[activeSlot]!.name} (+€{squad[activeSlot]!.marketValue}M)
+              Release {squad[activeSlot]!.name} (+${squad[activeSlot]!.marketValue}M)
             </button>
           )}
           <div className="max-h-64 space-y-1.5 overflow-y-auto">
             {candidates.length === 0 && (
               <p className="py-4 text-center text-xs text-muted-foreground">
-                Nobody in this position fits in €{remaining}M. Release someone, or pick cheaper.
+                Nobody in this position fits in ${remaining}M. Release someone, or pick cheaper.
               </p>
             )}
             {candidates.map(p => (
@@ -228,7 +228,7 @@ export function BudgetBuilderBoard() {
                 </span>
                 <span className="ml-3 shrink-0 text-right">
                   <span className="block text-sm font-bold text-primary">{playerRating(p)}</span>
-                  <span className="block text-[10px] text-gold">€{p.marketValue}M</span>
+                  <span className="block text-[10px] text-gold">${p.marketValue}M</span>
                 </span>
               </button>
             ))}
@@ -244,7 +244,7 @@ export function BudgetBuilderBoard() {
           </p>
           <p className="mt-2 font-display text-5xl font-black text-primary">{teamRating}</p>
           <p className="text-sm text-muted-foreground">
-            team rating · €{spent}M spent · €{remaining}M left over
+            team rating · ${spent}M spent · ${remaining}M left over
           </p>
 
           {!series && (

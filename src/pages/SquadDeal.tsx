@@ -1,4 +1,4 @@
-import { FlagFromEmoji } from '@/components/FlagImg';
+import { FlagFromEmoji, FlagImg } from '@/components/FlagImg';
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -357,7 +357,11 @@ const SquadDeal = () => {
             const gone = g.eliminated.includes(i);
             return (
               <div key={p.name + i} className={cn('flex items-center justify-between text-xs', gone && 'opacity-40 line-through')}>
-                <span className="truncate text-foreground">{p.name}</span>
+                {/* Round 315: his review asked for flags in this game */}
+                <span className="truncate text-foreground flex items-center gap-1">
+                  <FlagImg name={p.nationality} size={12} />
+                  {p.name}
+                </span>
                 <span className={cn('font-bold ml-2', tierColor(r))}>{r}</span>
               </div>
             );
@@ -383,7 +387,10 @@ const SquadDeal = () => {
       {g.slotPhase === 'offer' && g.offer && (
         <div ref={revealRef} className="mt-6 bg-card border border-primary/40 rounded-2xl p-6 max-w-sm mx-auto text-center shadow-xl">
           <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers</div>
-          <div className="text-2xl font-bold text-foreground">{g.offer.name}</div>
+          <div className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
+            <FlagImg name={g.offer.nationality} size={18} />
+            {g.offer.name}
+          </div>
           <div className="text-sm text-muted-foreground mb-1">{g.offer.position} · {g.offer.club}</div>
           <div className={cn('text-3xl font-bold font-display mb-4', tierColor(g.era2Rating(g.offer)))}>{g.era2Rating(g.offer)}</div>
           <div className="flex gap-3">

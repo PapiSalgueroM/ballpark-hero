@@ -119,10 +119,16 @@ export function moneyXiFor(pool: Player[], formation: Formation): (Player | null
   });
 }
 
-/** Budget = 62% of the unconstrained best-XI cost, rounded to 10M, min 100M.
-    One formula, used by the hook and by the harness that proves every daily
-    demand can be met inside it. */
-export function budgetFor(moneyXi: (Player | null)[]): number {
+/** One formula, used by the hook and by the harness that proves every daily
+    demand can be met inside it.
+    Round 315, the owner's review: "y tf do u call it the 1 billion dollar
+    game but not price at one billion". The Today board is now exactly 1000
+    (one billion, and the values ARE dollars, see the board's Round 315
+    note), which still forces choices because the unconstrained best XI costs
+    well past it. The historic eras keep the 62% self calibration, because
+    their money is small enough that a flat billion would buy every board. */
+export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
+  if (eraId === 'today') return 1000;
   const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
   return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
 }
@@ -168,7 +174,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
 
   const moneyXi = useMemo(() => moneyXiFor(topicPool, formation), [topicPool, formation]);
 
-  const budget = useMemo(() => budgetFor(moneyXi), [moneyXi]);
+  const budget = useMemo(() => budgetFor(moneyXi, era.id), [moneyXi, era.id]);
 
   const spent = useMemo(
     () => Object.values(squad).reduce((s, p) => s + (p?.marketValue ?? 0), 0),
@@ -225,9 +231,16 @@ export function useBudgetBuilder(): BudgetBuilderState {
 
   const finalScore = useMemo(() => {
     if (!complete) return 0;
-    let s = teamRating * 10 + Math.floor(Math.max(0, remaining) / 20);
-    if (criterionMet) s += 100;
-    if (series) s += series.outcome === 'win' ? 150 : series.outcome === 'draw' ? 50 : 0;
+    /* Round 315, the owner's review: "you get way too many points for this
+       game in comparison to the other games". The old formula (rating x 10
+       plus bonuses) paid out around 1,200 a play while most games top out
+       near 100, so this one game dominated the sitewide points. Same
+       ingredients, one tenth the scale: a great day lands a bit over 100,
+       like everywhere else. Old personal bests from the inflated scale will
+       stand until genuinely beaten, which is the honest reading of a best. */
+    let s = teamRating + Math.floor(Math.max(0, remaining) / 200);
+    if (criterionMet) s += 10;
+    if (series) s += series.outcome === 'win' ? 15 : series.outcome === 'draw' ? 5 : 0;
     return s;
   }, [complete, teamRating, remaining, criterionMet, series]);
 
@@ -285,7 +298,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
       ? `\nFinal vs the Money XI (${moneyRating}): ${series.userWins}-${series.aiWins}${series.outcome === 'win' ? ', beat the checkbook!' : series.outcome === 'draw' ? ', honors even' : ''}`
       : '';
     const critLine = `\nBoard demand: ${criterion.label} ${criterionMet ? '✅' : '❌'}`;
-    return `Budget Builder (${era.label}, €${budget}M cap), ${formation.name}\nRating ${teamRating} · Spent €${spent}M · Score ${finalScore}${critLine}${seriesLine}\ndouknowball.com/budget-builder`;
+    return `Budget Builder (${era.label}, $${budget}M cap), ${formation.name}\nRating ${teamRating} · Spent $${spent}M · Score ${finalScore}${critLine}${seriesLine}\ndouknowball.com/budget-builder`;
   }, [complete, era, budget, formation, teamRating, spent, finalScore, criterion, criterionMet, series, moneyRating]);
 
   return {

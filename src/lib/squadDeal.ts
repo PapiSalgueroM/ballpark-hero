@@ -334,7 +334,16 @@ export function bankerOffer(pool: Player[], slot: FormationSlot, unopened: Playe
   // deal is a real decision instead of an obvious pass.
   const sweetener = Math.random() < 0.25;
   const base = avgR * roundFactor * 1.06;
-  const target = Math.max(minR, Math.min(maxR, sweetener ? maxR - 1 : base));
+  /* Owner 2026-08-28 ("how do i have 90% of players 80 and above and u give
+     me a 78"): in a uniformly strong pool the old floor was the single worst
+     box still in play, so the banker could undercut nearly everything left
+     and the call was never a decision. The floor is now the 30th percentile
+     of the remaining ratings: an offer is always better than the bottom
+     third of what is still out there, and the sweetener still spikes it near
+     the top one call in four. */
+  const sorted = [...ratings].sort((a, b) => a - b);
+  const floor = sorted.length ? sorted[Math.floor(0.3 * (sorted.length - 1))] : minR;
+  const target = Math.max(floor, Math.min(maxR, sweetener ? maxR - 1 : base));
   const unopenedNames = new Set(unopened.map(p => p.name));
   // excludeNames = players the banker already offered this slot, so it never re-offers the same guy.
   const elig = pool.filter(p =>

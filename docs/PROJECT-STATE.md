@@ -2597,6 +2597,25 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 315.** The data batch from the review, five items. Rodri's age 0:
+  he, Kimmich, Tchouameni and Ndidi had no market value rows after 2022; four 2026 rows
+  inserted, verified from the club's own announcement (Ndidi to Besiktas via lcfc.com),
+  Soccerway and footballtransfers value estimates cross-checked (Rodri 90m USD from the
+  76.6 to 91.9m EUR range with City's own 70m+ floor per ESPN, Kimmich 43m, Tchouameni
+  81m, Ndidi 11m), stats columns left honestly null; Who Am I's retired path stops
+  printing its zero sentinels. Squad Deal's league filter: the club-to-league map now
+  keyed on the database's real long spellings (queried from the 2026 top-1000), club
+  outranks the stale hand entry, unknown reads Other, never Premier League; flags on the
+  pool and banker card; banker floor at the 30th percentile. Build Your XI: the slot
+  role reaches validate-player now, and the deployed validator's fail-open (every error
+  returned valid:true, the banned July P1 shape) is gone in v6, fail closed with the
+  unverified retry shape; repo copy resynced from deployed v5 which had drifted. Sign
+  the Player: openings anchored to real market value, not (rating-55)x6, which priced
+  Svilar at exactly the 162 he reported. Budget Builder: Today board exactly 1000m, in
+  dollars everywhere (values ARE USD), scoring rescaled from ~1,200 a play to the
+  sitewide ~100. Gates: tsc 0, build, simTopDailies (flat billion proven winnable),
+  simScoringCoverage, simHomeCopy, simNoRivalNames. The 247 stale big-value names
+  sweep is queued on the board.
 - **2026-08-29, Round 314.** The calm boot, the P1 flash he filmed. One dimmed screenful
   of the crawler copy before React mounts instead of the raw text wall, noscript lifting
   the cap for no-JS readers, crawlers unaffected. Injected into dist snapshots by the
