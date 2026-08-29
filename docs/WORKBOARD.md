@@ -79,9 +79,6 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
-- Rebuild copy pass (BUILDING as Round 331, cloud, 2026-08-29): his quoted offenders
-  ("call the dugout", "the caretaker", "the hairdryer", "the young gun"), the
-  AI-flavored copy sweep, and the "+N rating" labels.
 - Rebuild redesign, THE PHASES (split 2026-08-29 so either lane can pick one up):
   phase two, the new core loop (starting XI only on screen, spin for position, keep
   or sell with three priced replacements plus promote-from-bench free, envelopes up
@@ -199,6 +196,11 @@ Standing claims:
 
 ## Done
 
+- THE REBUILD COPY PASS, Round 331 (cloud lane, 2026-08-29). His quoted offenders
+  rewritten in place, the "+N rating" labels replaced with words, mechanics and the
+  stored save id untouched, the guide aligned. The hairdryer lives in Club Manager
+  as real football vocabulary and was deliberately kept there. The redesign's
+  remaining phases are filed above as claimable items.
 - THE MOBILE DEPTH LAYER, FIRST FINDINGS, Round 330 (desktop lane, 2026-08-29). The
   hand check pass at 320 and 390 over the heavy screens and the three new games (all
   clean, screenshots eyeballed) caught one real product bug: the Soccer Career

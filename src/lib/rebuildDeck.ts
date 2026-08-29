@@ -4,7 +4,7 @@ import type { RebuildClub, ClubTier } from '@/lib/fetchRebuild';
 
 /**
  * Rebuild Challenge expansion (owner 2026-08-05, the rebuild-a-club format):
- *  - Coach step: keep your caretaker or pay for one of three candidates.
+ *  - Coach step: keep the man you have or pay for one of three candidates.
  *  - Board objectives: two "management cards" dealt at the start. Miss one
  *    and the board force-sells a player at the end. Brutal, like the videos.
  *  - Financial events: money swings mid-rebuild, good and bad.
@@ -53,7 +53,7 @@ const SOLID_COACHES: Omit<CoachOption, 'cost' | 'bonus'>[] = [
   { id: 'deZerbi', name: 'Roberto De Zerbi', emoji: '🎨', desc: 'Builds out from the back, beautifully' },
 ];
 const BUDGET_COACHES: Omit<CoachOption, 'cost' | 'bonus'>[] = [
-  { id: 'youngGun', name: 'The Young Gun', emoji: '🍼', desc: 'Laptop full of ideas, zero scars' },
+  { id: 'firstTimer', name: 'The First Timer', emoji: '💻', desc: 'Big ideas, no scars yet' },
   { id: 'clubLegend', name: 'The Club Legend', emoji: '🧣', desc: 'Fans love him. Tactics board fears him' },
   { id: 'journeyman', name: 'The Fixer', emoji: '🔧', desc: 'Kept four clubs up. Barely' },
 ];
@@ -71,10 +71,10 @@ export function coachOptionsFor(tier: ClubTier, seed: number): CoachOption[] {
 }
 
 export const KEEP_COACH: CoachOption = {
-  id: 'caretaker',
-  name: 'Keep the Caretaker',
+  id: 'caretaker', /* the id is a save value, renaming it orphans old runs */
+  name: 'Keep the man you have',
   emoji: '🪑',
-  desc: 'Free, loyal, and exactly fine',
+  desc: 'Costs nothing, changes nothing',
   cost: 0,
   bonus: 0,
 };
