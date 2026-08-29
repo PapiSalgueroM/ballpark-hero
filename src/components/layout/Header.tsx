@@ -60,14 +60,34 @@ export function Header() {
           {/* Round 286: the mark, drawn inline from the same geometry as the
               favicon and the social image, then the wordmark in the display
               face. The mark is aria-hidden; the link's name is the word. */}
-          <Link to="/" className="flex items-center gap-2">
-            <LogoMark size={28} className="shrink-0 sm:hidden" />
+          {/* Round 320: Round 117 got this row to fit a 320px phone exactly,
+              then Round 286's mark added 36px back and Sign Up hung 37px off
+              the right edge on every Header route, measured by the mobile
+              sweep. Two layers of fix. Structural: the link can shrink and
+              the wordmark truncates, so NOTHING in this row can push past the
+              screen edge again whatever gets added next. Cosmetic, so the
+              structural layer never actually fires: below 480px the wordmark
+              runs at lg with normal tracking and the two auth buttons drop to
+              px-2, and below 360px the mark sits out as well. The widest row
+              this header can be handed is a streaked guest (flame, count, Log
+              In, Sign Up all at once), and that row measures 347px at its
+              worst, so the full word stays on screen from 360 up with the
+              mark and from 320 up without it. The old 2xl-on-every-phone
+              wordmark never actually fit that row at 390, it just hung off
+              the edge where the streakless sweeps could not see it. */}
+          {/* py-1.5 keeps the link a real thumb target now that the wordmark
+              runs smaller on phones; playIphone section 3 holds the floor. */}
+          <Link to="/" className="flex min-w-0 items-center gap-2 py-1.5">
+            <LogoMark size={28} className="shrink-0 hidden min-[360px]:block sm:hidden" />
             <LogoMark size={32} className="shrink-0 hidden sm:block" />
-            <span className="font-display font-black text-2xl sm:text-3xl tracking-wide text-primary">DoUKnowBall</span>
+            <span className="font-display font-black text-lg min-[480px]:text-2xl sm:text-3xl tracking-normal min-[480px]:tracking-wide text-primary truncate">DoUKnowBall</span>
           </Link>
 
-          {/* Auth Section */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Auth Section. Below 360 the gaps close up one more step: with a
+              three digit streak on the flame the cluster measured 187.5px and
+              left the wordmark 5.5px short of whole, so the two gaps and the
+              button padding each give a little back. */}
+          <div className="flex shrink-0 items-center gap-1 min-[360px]:gap-2 sm:gap-3">
             {/* #101: global streak flame, local-first, visible whether
                 signed in or not (guest experience must not regress -- see
                 CLAUDE.md guest-first posture). Sits next to the account
@@ -139,12 +159,14 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="max-[479px]:px-2 max-[359px]:px-1.5"
                   onClick={() => setAuthModal({ open: true, tab: 'login' })}
                 >
                   Log In
                 </Button>
                 <Button
                   size="sm"
+                  className="max-[479px]:px-2 max-[359px]:px-1.5"
                   onClick={() => setAuthModal({ open: true, tab: 'signup' })}
                 >
                   Sign Up

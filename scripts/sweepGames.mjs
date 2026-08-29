@@ -16,6 +16,8 @@
 import pw from './lib/playwrightLoader.mjs';
 const { chromium, webkit } = pw;
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 /* Round 110: his ask, in his words: "i want everyone to have access for my web
    and that it looks the same regardless of device". This only ever ran ONE
@@ -173,5 +175,5 @@ for (const engineName of wantEngines) {
  }
 }
 console.log(`\nSwept ${routes.length} routes across ${wantEngines.length} engines and ${wantSizes.length} viewports (${done} checks). ${findings.length} findings.`);
-fs.writeFileSync('/tmp/sweep.json', JSON.stringify(findings, null, 1));
+fs.writeFileSync(path.join(os.tmpdir(), 'sweep.json'), JSON.stringify(findings, null, 1));
 process.exit(findings.length === 0 ? 0 : 1);

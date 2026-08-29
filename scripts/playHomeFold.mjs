@@ -71,12 +71,14 @@ async function look(width, height) {
   await page.waitForTimeout(2000);
   const out = await page.evaluate(({ nonGameSrc, vh }) => {
     const NON_GAME = new RegExp(nonGameSrc);
-    /* Round 287: the strip is labelled "Scores and site ticker" now that it
-       carries scores. The label is asserted to exist, because if this selector
-       ever matched nothing the ticker's own game links (at the very top of the
-       page) would be counted as the first playable tile and the check below
-       would pass for the wrong reason. */
-    const TICKER = '[aria-label="Scores and site ticker"]';
+    /* Round 287: the strip is labelled now that it carries scores. The label
+       is asserted to exist, because if this selector ever matched nothing the
+       ticker's own game links (at the very top of the page) would be counted
+       as the first playable tile and the check below would pass for the wrong
+       reason. Round 320: the label is "Live scores ticker" since the Round
+       311 rewrite; this harness carried the Round 287 wording for nine
+       rounds because nothing ran it in between. */
+    const TICKER = 'section[aria-label="Live scores ticker"]';
     const tickerPresent = !!document.querySelector(TICKER);
     const inTicker = el => !!el.closest(TICKER);
     const links = [...document.querySelectorAll('a[href^="/"]')].filter(a => !inTicker(a));
@@ -182,12 +184,16 @@ console.log('3) the tiles say what the games are');
   }
 }
 
-console.log('4) a returning player gets a checklist, and it never moves the first tile');
+console.log('4) a returning player gets NO checklist, and the record never moves the first tile');
 {
-  /* Round 293. The section reads the local streak record, so a fresh profile
-     (sections 1 to 3 above) never sees it; this plants a record with three
-     played dailies and measures that the section appears, below the first
-     tile, with the first tile exactly where the fresh profile had it. */
+  /* Round 293 built a personal dailies checklist here and this section
+     measured it. Round 297 REMOVED it on the owner's direct instruction in
+     the 2026-08-26 tweaks document ("The your dailies I would say get rid of
+     it"), and this harness kept asserting the deleted feature for another
+     twenty three rounds because nothing ran it in between. The plant stays,
+     the expectation flips: a returning player's streak record must NOT bring
+     the checklist back (re-adding it would overrule him silently), and the
+     record must not move the first tile either. */
   const fresh = await look(390, 844);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
@@ -202,25 +208,22 @@ console.log('4) a returning player gets a checklist, and it never moves the firs
     }, loginDates: [], totalPlays: 12, totalPoints: 300 }));
   });
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForFunction(() => !!document.querySelector('section[aria-label="Your dailies"]'), { timeout: 15000 }).catch(() => {});
-  const r = await page.evaluate(() => {
+  await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 200, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(2000);
+  const r = await page.evaluate((nonGameSrc) => {
+    const NON_GAME = new RegExp(nonGameSrc);
     const sec = document.querySelector('section[aria-label="Your dailies"]');
-    if (!sec) return null;
-    const links = [...sec.querySelectorAll('a[href^="/"]')];
-    return {
-      top: sec.getBoundingClientRect().top + window.scrollY,
-      items: links.map(a => ({ href: a.getAttribute('href'), label: a.getAttribute('aria-label') })),
-      line: sec.querySelector('span')?.textContent || '',
-    };
-  });
+    const firstTile = [...document.querySelectorAll('a[href^="/"]')]
+      .filter(a => !a.closest('section[aria-label="Live scores ticker"]'))
+      .map(a => ({ p: a.getAttribute('href') || '', top: a.getBoundingClientRect().top + window.scrollY }))
+      .filter(x => x.p && x.p !== '/' && !NON_GAME.test(x.p))
+      .sort((a, b) => a.top - b.top)[0] ?? null;
+    return { checklist: !!sec, firstTop: firstTile ? firstTile.top : null };
+  }, NON_GAME.source);
   await ctx.close();
-  say(!!r, 'the checklist renders for a planted record');
-  if (r) {
-    say(r.items.length === 3 && r.items.every(i => ['/champ-or-not', '/face-off', '/guess-the-year'].includes(i.href)), `it lists the three played dailies (${r.items.map(i => i.href).join(', ')})`);
-    say(r.items.some(i => /done today/.test(i.label || '')) && r.items.some(i => /not played yet today/.test(i.label || '')), 'each item says whether it is done today');
-    say(/1 done, 2 to go/.test(r.line), `the line under the heading counts what is left ("${r.line}")`);
-    say(!!fresh.first && r.top > fresh.first.top, `it sits below the first tile (checklist at y=${Math.round(r.top)}, first tile at y=${Math.round(fresh.first?.top ?? 0)})`);
-  }
+  say(!r.checklist, 'the retired checklist stays retired even for a planted record');
+  say(!!fresh.first && r.firstTop != null && Math.abs(r.firstTop - fresh.first.top) <= 2,
+    `the planted record does not move the first tile (fresh y=${Math.round(fresh.first?.top ?? 0)}, planted y=${Math.round(r.firstTop ?? 0)})`);
   const again = await look(390, 844);
   say(!!fresh.first && !!again.first && Math.abs(again.first.top - fresh.first.top) <= 2, 'a fresh profile still gets its first tile in the same place');
 }

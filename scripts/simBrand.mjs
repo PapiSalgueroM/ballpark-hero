@@ -160,7 +160,11 @@ console.log('6) the shipped geometry and SVGs are exactly what the generator pro
 {
   const gen = path.join(ROOT, 'scripts/logo/gen_logo.py');
   let py = null;
-  for (const c of ['python3', 'python']) { try { execFileSync(c, ['--version'], { stdio: 'ignore' }); py = c; break; } catch { /* next */ } }
+  /* Round 320: 'py' is the Windows launcher. On a stock Windows shell
+     'python' and 'python3' resolve to Microsoft Store stubs that exit
+     non-zero, so without the launcher this check reported "no python" on the
+     one machine the desktop lane actually runs on. */
+  for (const c of ['python3', 'python', 'py']) { try { execFileSync(c, ['--version'], { stdio: 'ignore' }); py = c; break; } catch { /* next */ } }
   if (!py) {
     fail('no python on this machine, so the generator cannot be re-run and drift between the header and the files cannot be ruled out');
   } else {

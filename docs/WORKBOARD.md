@@ -58,14 +58,14 @@ Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
 From the 2026-08-28 review (bugs, claimed same day):
 
-- MOBILE PASS (claimed 2026-08-29, BUILDING as Round 320): Anthony, 2026-08-29: "were
-  losing a lot of viewers because were not the best mobile friendly because how
-  everything is formatted so make sure everything translates smoothly". A full
-  phone-first sweep of every route: sweepGames at 320/390 widths, playIphone,
-  simMobileChrome and the playGames walk, plus hand checks of the layouts those cannot
-  judge (tap target sizes, text scale, horizontal squeeze, fixed elements covering
-  content). Findings worked as rounds, 320 is the first. Constraint: no-scroll rule and
-  the FIFA tile rule govern the fixes.
+- MOBILE PASS, continuing (claimed 2026-08-29, Round 320 landed the first wave): the
+  automated layer is now measured and green at 320 and 390 across all 140 routes
+  (sweepGames), plus playIphone with its new streaked-header section, simMobileChrome
+  at its true widest, and playHomeFold brought back to the current page. What remains
+  is the depth layer: the playGames walk at phone width (tweaks item 9 pairs with it)
+  and hand checks inside the heavy games (Club Manager tabs, Soccer Career screens,
+  the records tables) for tap comfort and text scale that box measurements cannot
+  judge. Constraint: no-scroll rule and the FIFA tile rule govern the fixes.
 - Ticker follow up: an alert when every feed has written zero rows for a full day, so a
   dead feed is surfaced instead of quiet (the suspension sat unnoticed for two days).
   The next candidate host if the header endpoint ever closes: cdn.espn.com/core, which
@@ -143,6 +143,28 @@ Standing claims:
 
 ## Done
 
+- THE MOBILE PASS, FIRST WAVE, Round 320 (desktop lane, 2026-08-29). The measured
+  baseline for his "make sure everything translates smoothly": every one of the 140
+  routes now fits a 320 and a 390 phone with nothing hanging off the side, proven by
+  sweepGames, and the one real offender was the site Header, where Round 286's logo
+  mark added 36px to a row Round 117 had fitted to 320 exactly, so Sign Up hung 37px
+  off the right edge on all eight Header routes, the home page included. Worse
+  underneath: a guest WITH a streak gets the flame and its count in that row, every
+  sweep on the site runs streakless, and the streaked row never fit at 390 at all.
+  The fix is two layers: structurally the wordmark can now truncate so nothing in
+  that row can ever push past the screen edge again, and cosmetically the row steps
+  down below 480 and again below 360 so the full wordmark actually shows everywhere,
+  measured with a three digit streak at 320. playIphone grew section 4, the
+  streaked-guest header at both widths with HEADER_CONTROL=wide proven red. Three
+  harnesses were also brought back to the truth: simMobileChrome's planted state
+  still used the pre-301 completions payload so its games chip read 0 and the bar
+  was never measured at its widest (now 106/113 renders and everything is still
+  green), playHomeFold was asserting Round 287's ticker label and Round 293's
+  dailies checklist, both long gone (the checklist deliberately, Round 297, his
+  instruction, so the harness now asserts it STAYS retired), and simBrand now finds
+  Windows python through the py launcher instead of the Store stubs. simMobileChrome
+  and sweepGames ported to Windows. tsc zero, build green, all 15 built-site fences
+  green, tablet and desktop swept clean too.
 - THE SMALL FIXES BATCH, Round 319 (cloud lane, 2026-08-29). Six review items: Rarity
   Round never reveals the rarest answer again and states its goal on the board; World
   XI's front line winger slots refuse wing backs (the LWB-into-RW hole) and the respin

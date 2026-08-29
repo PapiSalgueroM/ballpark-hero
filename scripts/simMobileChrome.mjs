@@ -70,7 +70,8 @@ const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import os from 'node:os';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SWEEP_BASE || process.env.BASE || 'http://127.0.0.1:4173';
@@ -100,7 +101,6 @@ const SUPABASE_REF = 'flawuiqbvjobmkfkauhw';
 const etToday = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit',
 }).format(new Date());
-const utcToday = new Date().toISOString().slice(0, 10);
 
 /* The worst realistic day this bar can be handed. Five figures of points, three
    figures of streak, a five figure rank, and the full set of games played, so
@@ -127,7 +127,14 @@ try {
   global: { current: WORST.streak, longest: WORST.streak, lastDate: etToday },
   perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0,
 }))});
-  localStorage.setItem('dukb-local-completions', ${JSON.stringify(JSON.stringify({ date: utcToday, count: WORST.played }))});
+  localStorage.setItem('dukb-local-completions', ${JSON.stringify(JSON.stringify({
+    /* Round 320: Round 301 changed this payload from {date, count} to
+       {date, slugs} on the Eastern day, and an old-shape payload is
+       deliberately read as zero, so planting the retired shape here meant
+       the games chip rendered 0 and the signed-in bar was never measured
+       at its true widest. Same number of games, current shape. */
+    date: etToday, slugs: Array.from({ length: WORST.played }, (_, i) => `g${i}`),
+  }))});
 } catch (e) {}
 `;
 
@@ -272,18 +279,18 @@ async function measureNav(browser, { width, signedIn, route }) {
    path the game uses, so this is a real career, and the page boots straight
    into the screen the complaint is about. */
 function buildSave() {
-  const entry = '/tmp/simMobileChromeSeed.mjs';
-  const bundle = '/tmp/simMobileChromeSeed.bundle.mjs';
+  const entry = path.join(os.tmpdir(), 'simMobileChromeSeed.mjs');
+  const bundle = path.join(os.tmpdir(), 'simMobileChromeSeed.bundle.mjs');
   fs.writeFileSync(entry, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const engine = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export { engine };
 `);
-  execSync(`${ROOT}/node_modules/.bin/esbuild ${entry} --bundle --format=esm --platform=node --outfile=${bundle} --log-level=error`);
+  execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${entry}" --bundle --format=esm --platform=node --outfile="${bundle}" --log-level=error`);
   return bundle;
 }
 
-const { engine } = await import(buildSave());
+const { engine } = await import(pathToFileURL(buildSave()).href);
 let save = engine.initCareer(
   'Playtest', 'England', 'ST', '2020s',
   { pace: 74, shooting: 76, passing: 72, dribbling: 75, defending: 45, physical: 68, reflexes: 30 },

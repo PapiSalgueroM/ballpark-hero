@@ -126,6 +126,69 @@ console.log('3) Tap targets are big enough for a thumb');
   say(small.length === 0, `every control in the page is thumb sized (${small.length}${small.length ? ': ' + small.slice(0, 4).join(', ') : ''})`);
 }
 
+console.log('4) The header survives its widest guest row (streak flame showing)');
+{
+  /* Round 320. Every sweep on this site runs as a fresh streakless guest, and
+     that is exactly how the Header's widest real row went unmeasured for
+     thirty rounds: a guest WITH a streak gets the flame and its count next to
+     Log In and Sign Up, and at 390 that row was wider than the screen with
+     Sign Up hanging off the edge. This section plants a 365 day streak (the
+     widest count the flame is ever asked to hold) and asserts two things on a
+     Header route at both phone widths: the document does not scroll sideways,
+     and the wordmark is not truncated (a truncated span's scrollWidth
+     exceeds its clientWidth, which is how the structural ellipsis guard
+     reports that the cosmetic sizing failed).
+
+     Negative control: HEADER_CONTROL=wide re-applies the pre-320 wordmark
+     size at phone widths after load, which must make the 320 run report a
+     truncated wordmark and this harness exit red. If the control stays green
+     the check is measuring nothing. */
+  const HEADER_CONTROL = process.env.HEADER_CONTROL === 'wide';
+  if (HEADER_CONTROL) console.log('  CONTROL: forcing the wordmark back to its Round 286 width, this run must go red');
+  const etToday = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(new Date());
+  for (const width of [320, 390]) {
+    const c2 = await browser.newContext({
+      ...iPhone,
+      viewport: { width, height: 700 },
+    });
+    await c2.addInitScript(`try {
+      localStorage.setItem('cookie-consent', 'essential');
+      localStorage.setItem('dukb-streaks-v1', JSON.stringify({
+        version: 1,
+        global: { current: 365, longest: 365, lastDate: ${JSON.stringify(etToday)} },
+        perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0,
+      }));
+    } catch (e) {}`);
+    const p2 = await c2.newPage();
+    await p2.route('**://*.supabase.co/**', r => r.abort());
+    await p2.goto(`${BASE}/leaderboard`, { waitUntil: 'domcontentloaded' });
+    await p2.waitForTimeout(1500);
+    if (HEADER_CONTROL) {
+      await p2.addStyleTag({ content: 'header a[href="/"] span { font-size: 1.5rem !important; letter-spacing: .025em !important; }' });
+      await p2.waitForTimeout(200);
+    }
+    const m = await p2.evaluate(() => {
+      const doc = document.documentElement;
+      const header = document.querySelector('header');
+      const word = [...document.querySelectorAll('header a[href="/"] span')]
+        .find(s => /DoUKnowBall/i.test(s.textContent ?? ''));
+      return {
+        overflow: doc.scrollWidth - doc.clientWidth,
+        wordTruncated: word ? word.scrollWidth > word.clientWidth + 1 : null,
+        flameShowing: header ? /\b365\b/.test(header.innerText) : false,
+      };
+    });
+    /* The flame must actually be on the bar, or the width being measured is
+       the streakless row every other sweep already covers. */
+    say(m.flameShowing, `${width}px: the planted 365 day streak is showing on the header`);
+    say(m.overflow <= 2, `${width}px: nothing scrolls sideways with the flame up (${m.overflow}px overflow)`);
+    say(m.wordTruncated === false, `${width}px: the full wordmark is on screen, not ellipsized`);
+    await c2.close();
+  }
+}
+
 const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
 say(pageErrors.length === 0, `no real page errors across ${PAGES.length} pages (${pageErrors.length ? pageErrors[0] : 'clean'})`);
 await page.close();
