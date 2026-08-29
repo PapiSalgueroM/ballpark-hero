@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 326.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 327.
 
 ## Inbox (unclaimed)
 
@@ -36,6 +36,8 @@ How it works:
   roadmap. The P1 bugs and the first feature wave are claimed below; everything else in
   that file is the shared backlog both lanes pull from, bugs before features, his order
   within a lane. Claim here before building.
+- Fantasy Draft rework (BUILDING as Round 326, cloud, 2026-08-29): his verdict "too
+  much scrolling, unclear goal; rework the layout and the point".
 - From that list, unclaimed and sizable: the Rebuild redesign, the Sign the Player
   auction rebuild, the Player Stock Market redesign, the tycoon merge, the conquest map
   overhaul, the draft mode game (Search and Discard shipped as Round 325, Sports Bingo as Round 323), the
