@@ -63,9 +63,19 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 - NBA Stat Line: a target stat line (23 points, 6 rebounds, 9 assists, 2 steals, 3
   blocks, optionally shooting splits), pick five player SEASONS whose combined
   per-game stats hit it, scored by similarity. A second mode deals a single real GAME
-  line and you name the player and the night. Needs the NBA season stat tables (in
-  the database) and, for the game mode, a verified box score source. Straight trivia,
-  fits the stack, no blockers.
+  line and you name the player and the night.
+  RECON DONE (cloud, 2026-08-29): the season mode is buildable now on
+  bref_nba_player_seasons (30,462 rows: pts, trb, ast, stl, blk plus real shooting
+  splits). Traps the recon pinned: games is NULL on every season row so true
+  per-game rates are impossible, use per-36 like Perfect Season NBA and Stat
+  Detective already do; stl and blk are null before 1973-74 (gate the pool when
+  the target includes them); recompute combined percentages from summed makes and
+  attempts, never average the percents; exclude the 2TM to 5TM combined rows;
+  nba_player_team_seasons is DELIBERATELY EMPTY, do not build on it. The GAME
+  line mode is DESKTOP GATED outright: no box-score table exists for any sport,
+  it needs an external pull. File plan sits in the Round 335 session record
+  (lib, hook, page, registry under Pro Basketball, simNbaStatLine with a
+  distinct-targets-over-a-year assertion, the Round 212 lesson).
 - Soccer Conquest, one map per league (map changes with the league) plus a big one
   with the world's best 100 or so clubs. The NFL, NBA and NHL Conquest engines are
   the pattern; the data (league tables, club strength) is already in the database.
