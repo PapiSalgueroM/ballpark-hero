@@ -63,6 +63,7 @@ for (const f of files) {
 }
 if (renders !== 1) fail(`App.tsx renders <Footer /> ${renders} times; exactly once is the rule`);
 console.log(`   ${files.length} src files scanned; App.tsx renders the footer exactly once`);
+console.log(`   the import ban held: no file outside App.tsx pulls the Footer component in`);
 
 console.log('');
 if (CONTROL === 'double') {
@@ -70,4 +71,5 @@ if (CONTROL === 'double') {
   console.error('simSingleFooter control: RED. A planted Footer render went unreported.'); process.exit(1);
 }
 if (failures > 0) { console.error(`simSingleFooter: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
+console.log('   teeth: comment stripped scan, render site pinned to App.tsx, imports banned everywhere else');
 console.log('simSingleFooter: green. One footer, rendered once, on every page.');
