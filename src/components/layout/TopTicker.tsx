@@ -188,8 +188,11 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     if (fresh) vp.scrollLeft = 0;
     /* a fresh sport gets the reading hold; a resume after hover or pause
        picks up mid glide almost at once */
-    let holdLeft = fresh ? 2200 : 350;
-    const SPEED = 55; // px per second, the cable crawl
+    let holdLeft = fresh ? 1500 : 350;
+    /* Round 336, his report: "the ticker is moving really slow". 55 was
+       measured live at 60 px/s, which on a 3000px day-ahead slate is nearly
+       a minute per pass. Doubled, and the reading hold trimmed to match. */
+    const SPEED = 110; // px per second, the cable crawl
     let raf = 0;
     let last: number | null = null;
     let settled = 0;
@@ -221,7 +224,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
         }
         /* a one sport wire loops itself: hold at the end, then restart */
         vp.scrollLeft = 0;
-        holdLeft = 2200;
+        holdLeft = 1500;
       }
       raf = requestAnimationFrame(step);
     };
@@ -241,12 +244,19 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     /* Round 306: a section, not a div, because aria-label on a generic
        element is dropped by the browsers that matter; a named section is a
        real landmark a screen reader can jump to. */
+    /* Round 336, the real cause of "on mobile it isnt moving": a touch tap
+       synthesizes mouseenter at the finger and never sends the matching
+       mouseleave, so one brush of the strip paused the wire forever on every
+       phone. The hover pause is a MOUSE convenience, so it listens to
+       pointer events now and acts only when the pointer is a real mouse; a
+       finger never pauses this way (the explicit pause button and the
+       keyboard focus pause both remain). */
     <section
       data-site-chrome=""
       className={`${home ? '' : 'hidden md:block'} bg-[hsl(225_25%_4%)] border-b border-border/60 overflow-hidden h-8 relative`}
       aria-label="Live scores ticker"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPaused(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === 'mouse') setPaused(false); }}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
