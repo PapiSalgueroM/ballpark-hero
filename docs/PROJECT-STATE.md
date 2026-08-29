@@ -2597,6 +2597,37 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 335, the three harness findings that came with it.** Rebasing
+  onto a main that had moved thirteen rounds made this round's board the first to
+  run the two lanes together, and it found three things worth keeping.
+  ONE, `simRoles` was flipping a coin. It asserted on ONE scenario that a benched
+  man's share of the football stays under a half, injuries in the XI drag a bench
+  player on, and measured over 400 scenarios it crossed that line in 5 of them, so
+  the board went red about one run in eighty on healthy code. Measured first (200
+  batches of 25, so 5,000 careers: batch mean 0.052 to 0.172, fraction over a half
+  0.000 to 0.080, starter 1.000 in all of them), then rewritten to ask the same
+  question of a distribution with ceilings at roughly twice the worst batch, plus
+  a `benchplays` control that feeds the starter through the bench check and turns
+  it red. Strictly harder to fool than the sample it replaces.
+  TWO, `simValueFreshness` cannot run in the cloud lane at all: it reads the live
+  database and this sandbox's proxy answers that host with a 403. It used to die
+  on `Unexpected token 'H'` because a bare `.json()` choked on the proxy's plain
+  text before its own guard could speak; it now names the status and the reason
+  and says it needs database egress, and it still fails closed on purpose, since a
+  run that reached no database checked nothing. The desktop lane owns the decision
+  about how the runner should treat it, filed on the board.
+  THREE, and the one that mattered most, **main was already red**: Round 346's
+  maker note, Anthony's own first person hello, tripped `simNoInventedQuotes`
+  because "Anthony" is a surname in the roster set, so his sentence about his own
+  site read to the detector exactly like invented words in a footballer's mouth.
+  That round ran tsc, the build and the fold harness it was about, not the full
+  board, which is how it landed. The rule protects third parties, so it cannot
+  sensibly protect a man from a sentence he wrote about himself: his own voice
+  file is exempt now, scoped to that one file and only when his is the sole real
+  name on the line, with three planted probes proving it is not a back door (his
+  sentence in his file passes, a real player quoted in his file fails, his
+  sentence moved elsewhere fails). The habit it argues for is on the board: a
+  round that adds hand written copy to `src` runs the full board before it lands.
 - **2026-08-29, Round 335.** The stricter how-to-play half the 08-28 review queued.
   The Round 321 floor accepted rules prose on a setup screen; the house rule says
   re-openable from a "?" button, and the strict walk measured the honest number:
