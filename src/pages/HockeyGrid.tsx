@@ -1,7 +1,8 @@
 import { Fragment, useState, useCallback, useEffect, useMemo } from 'react';
-import { Loader2, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
+import { GridBoardSkeleton } from '@/components/game/GridBoardSkeleton';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { GameNav } from '@/components/game/GameNav';
@@ -289,9 +290,7 @@ const HockeyGrid = () => {
         }
       >
         {isLoading && phase !== 'error' && (
-          <div className="flex justify-center py-10">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
+          <GridBoardSkeleton variant="franchise" />
         )}
 
         {phase === 'error' && (

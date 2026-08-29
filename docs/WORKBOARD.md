@@ -37,15 +37,15 @@ and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
 facts are true at once. Grid search is the site's search beachhead, not its
 whole audience.**
 
-- GRID MOBILE CLS BUG (BUILDING as Round 348, desktop, 2026-08-29): the async-loading grid
-  boards shift layout on phones. Live CLS at 375px: soccer-grid 0.60, hockey-grid
-  0.40, college-grid 0.34 on one run and 0 on another (network timing), nba 0.06,
-  football and mlb 0. Anything over 0.25 is a failing Core Web Vital. Likely fix:
-  reserve the board's box before data arrives. Same round should take the 16x16
-  Close X on the older three grids' dialogs (tap floor is 30px) and verify the
-  player-search modal rows (probe measured 16 to 40px rows, some may be labels).
-  Zero horizontal overflow anywhere at 375/390, no zoom needed, so the shell is
-  sound; these are the real mobile findings.
+- BOOT SWAP CLS, the architectural remainder (found in Round 348, unclaimed and
+  needs design thought, not a quick round): on slow connections the prerendered
+  snapshot shows first and the booted React app then redraws the whole page,
+  which registers as a large layout shift (measured locally at 200KB/s and
+  150ms RTT: 0.53 to 0.69 on grid pages AFTER Round 348 removed the board-swap
+  component; before it, 0.74 to 0.95). Font swap contributes a smaller early
+  shift. Any fix touches the snapshot architecture or index.html (frozen during
+  the AdSense review), so this waits for deliberate design plus the verdict.
+  The Round 348 harness pins the part the app controls at 0.05.
 - GRID ARCHIVE AND ANSWER PAGES (blocked on an owner decision): past grids with
   answers, rarity scores and a replay button, one shared system across all six
   grid sports. Real search intent, real user value. BUT new indexable routes and
@@ -217,6 +217,24 @@ Standing claims:
 
 ## Done
 
+- GRID MOBILE CLS, Round 348 (desktop lane, 2026-08-29). The Milestone 0 mobile
+  bug, fixed at the structural level: all six grid pages used to swap a
+  one-line loading div for a 300 to 650px board when data landed (soccer also
+  dropped a 214px settings panel in above it), which measured live as CLS 0.60
+  on soccer-grid and 0.40 on hockey-grid at 375px, both failing Core Web
+  Vitals. GridBoardSkeleton now renders in every loading branch with the SAME
+  container and sizing classes as the real boards (two geometries, square and
+  franchise, mirrored class for class; soccer reserves its settings panel
+  too), so the page's geometry settles before the network answers. The shared
+  shadcn dialog close X grew from a bare 16x16 icon to a 32x32 tap target
+  (p-2, corner position preserved), which fixes every dialog on the site at
+  once. The player-search rows were verified 40px buttons, no fix needed,
+  item closed. playGridCls fences it: database responses held back 1500ms on
+  every run so the late-data worst case is deterministic, all six routes at
+  or under CLS 0.05, GRIDCLS_CONTROL=noreserve yanks the skeletons mid-load
+  and proved red (soccer 0.42), with the control's own first cut caught not
+  firing and fixed (a pre-parse style injection never survives parsing). The
+  boot-swap remainder is measured and filed as its own board item.
 - LIGHT MODE, Round 347 (desktop lane, 2026-08-29). The owner's ask, shipped as
   a token flip and not a redesign: the dark :root palette stays the default and
   the identity (snapshots, social image and the AdSense review all show it, so

@@ -5,6 +5,7 @@ import { GridPlayerSearch } from '@/components/football-grid/GridPlayerSearch';
 import { FootballGridHowToPlay } from '@/components/football-grid/FootballGridHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
+import { GridBoardSkeleton } from '@/components/game/GridBoardSkeleton';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { gridCellsToEmoji } from '@/lib/shareGrids';
 import AdBanner from '@/components/ads/AdBanner';
@@ -82,9 +83,7 @@ const FootballGrid = () => {
         }
       >
         {isLoading ? (
-          <div className="flex justify-center py-10">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
-          </div>
+          <GridBoardSkeleton variant="square" />
         ) : (
           <>
             {/* Grid */}

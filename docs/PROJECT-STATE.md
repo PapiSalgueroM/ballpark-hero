@@ -2597,6 +2597,26 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 348.** The grid boards hold their ground. Milestone 0's
+  mobile bug: every grid page swapped a one-line loading div for the full
+  board when its data arrived, shoving the SEO block, ad and nav down the
+  page, measured live at 375px as CLS 0.60 on soccer-grid (which also inserts
+  a 214px settings panel post-load) and 0.40 on hockey-grid. Fixed with
+  GridBoardSkeleton, a loading-branch twin of the real boards sharing their
+  exact container and sizing classes in both geometries, so the layout is
+  settled before the network answers; soccer's skeleton reserves the settings
+  panel as well, sized from measurement. The shared dialog close X went from
+  16x16 to a 32x32 tap target for every dialog on the site. The search rows
+  the audit flagged were verified as 40px buttons, no fix needed. playGridCls
+  is the fence: it holds every database response back 1500ms so the late-data
+  worst case happens on every run, demands CLS at or under 0.05 on all six
+  grids, and its noreserve control (which yanks the skeletons mid-load) was
+  proven red at 0.42 after its first cut got caught not firing at all, a
+  pre-parse style injection that never survived parsing. The remaining
+  slow-connection shift is the snapshot-to-React boot swap, measured at 0.53
+  to 0.69 under 200KB/s throttle and filed on the board as an architecture
+  item that waits for the AdSense verdict. tsc zero, build green, all 15
+  built-site fences green.
 - **2026-08-29, Round 347.** Light mode, the owner's ask. A .light class on
   <html> overrides the token palette with a measured light set; the dark
   default is untouched and deliberate (the snapshots, the social image and the

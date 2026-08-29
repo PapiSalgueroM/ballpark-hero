@@ -4,6 +4,7 @@ import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { SoccerGridBoard } from '@/components/soccer-grid/SoccerGridBoard';
 import { SoccerGridSearch } from '@/components/soccer-grid/SoccerGridSearch';
 import { GameShell } from '@/components/game/GameShell';
+import { GridBoardSkeleton } from '@/components/game/GridBoardSkeleton';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { GameNav } from '@/components/game/GameNav';
@@ -142,9 +143,7 @@ const SoccerGrid = () => {
         }
       >
         {(isLoadingPool || isLoading) ? (
-          <div className="flex justify-center py-10">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
-          </div>
+          <GridBoardSkeleton variant="square" withSettings />
         ) : (
           <>
             {showSettingsPanel && (
