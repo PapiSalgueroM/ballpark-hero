@@ -118,11 +118,6 @@ From the 2026-08-28 review (bugs, claimed same day):
   content, the same note permanent on /about, playHomeFold extended to hold it
   below the first tile.
 
-- STALE VALUES SWEEP (BUILDING as Round 344, desktop, 2026-08-29): the Round 315
-  follow up, the 247 players whose latest market value row is 2024 or older at a
-  30m+ peak, swept by parallel research agents under the two-source rule, active
-  players get verified current rows, the honestly retired get marked so the games
-  render them honestly. Desktop gates the database writes.
 - WORLD XI REAL POSITIONS (BUILDING as Round 345, desktop, 2026-08-29): the Round
   319 handoff, a verified secondary position map so eligibility reads positions a
   player actually PLAYED. Schema recon first, then a research fan out for the
@@ -203,6 +198,24 @@ Standing claims:
 
 ## Done
 
+- THE STALE VALUES SWEEP, Round 344 (desktop lane, 2026-08-29). The Round 315
+  follow up, closed in one evening by eight parallel researchers under the
+  two-source rule with every database write reviewed and executed by hand. All
+  243 stale high-peak names classified: 135 honestly retired (no invented
+  current rows, the render paths already say so), 101 verified active, 4 name
+  collisions documented (two humans sharing a row name, including the fake
+  Fabinho the list itself exposed), 3 unknowns recorded with what was tried.
+  98 verified 2026 rows written (club, age, value from Transfermarkt at the
+  documented 1.08 EUR to USD landing, sources kept per player in
+  scripts/data/staleSweep2026.json), including Caicedo at Chelsea, Zubimendi at
+  Arsenal, Szczesny at Barcelona, Casemiro at Inter Miami, and a 46 year old
+  Ronaldinho genuinely un-retired at Ravenna (recorded, no value invented). The
+  review gates caught the agents nothing: the one systematic near-miss was MY
+  peak gate wrongly excluding young risers, fixed with the documented rule.
+  simValueFreshness is the fence: the database held to the committed audit
+  (actives present at audited values, retired rowless, collisions untouched),
+  VALUE_CONTROL=phantom proven red. Stale count 243 to 145, every remaining one
+  explained in the audit.
 - THE OWNER DIRECTIVES LAND, Round 343 (desktop lane, 2026-08-29).
   docs/OWNER-DIRECTIVES-2026-08.md carries his final directives verbatim with the
   operational mapping: free forever (overrides the spec premium mention), the

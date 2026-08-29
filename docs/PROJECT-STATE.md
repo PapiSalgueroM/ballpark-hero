@@ -2597,6 +2597,18 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 344.** The stale values sweep. Eight parallel researchers
+  classified all 243 players whose latest value row was 2024 or older at a 30m
+  plus peak, two sources per claim; the desktop lane reviewed everything and
+  wrote the database by hand. 98 verified 2026 rows inserted (sources per player
+  in scripts/data/staleSweep2026.json, EUR to USD at the documented 1.08
+  landing, the same convention Round 315 used); 135 retired names deliberately
+  left rowless for the honest render paths; 4 name collisions documented, not
+  fixed blind; 3 unknowns recorded. The reviewer gate that needed fixing was
+  mine, not theirs: the value-exceeds-peak exclusion wrongly caught young risers
+  (Caicedo from prospect money to an anchor) and now exempts players 25 or
+  younger at their last row. simValueFreshness fences the database to the
+  committed audit with VALUE_CONTROL=phantom proven red.
 - **2026-08-29, Round 343.** The owner directives. His final overrides committed
   verbatim with the operational mapping (docs/OWNER-DIRECTIVES-2026-08.md): the
   site stays free forever with corporations funding it, no gambling ever, the

@@ -1,0 +1,1860 @@
+{
+ "sweptOn": "2026-08-29",
+ "eurUsdRate": 1.08,
+ "active": [
+  {
+   "name": "Rodrigo Bentancur",
+   "club": "Tottenham Hotspur",
+   "value_usd": 21600000,
+   "age": 29,
+   "position": "Defensive Midfield",
+   "nationality": "Uruguay"
+  },
+  {
+   "name": "Rúben Neves",
+   "club": "Al-Hilal SFC",
+   "value_usd": 27000000,
+   "age": 29,
+   "position": "Defensive Midfield",
+   "nationality": "Portugal"
+  },
+  {
+   "name": "Ruslan Malinovskyi",
+   "club": "Trabzonspor",
+   "value_usd": 2700000,
+   "age": 33,
+   "position": "Central Midfield",
+   "nationality": "Ukraine"
+  },
+  {
+   "name": "Ryan Gravenberch",
+   "club": "Liverpool FC",
+   "value_usd": 86400000,
+   "age": 24,
+   "position": "Defensive Midfield",
+   "nationality": "Netherlands"
+  },
+  {
+   "name": "Sandro Tonali",
+   "club": "Tottenham Hotspur",
+   "value_usd": 86400000,
+   "age": 26,
+   "position": "Defensive Midfield",
+   "nationality": "Italy"
+  },
+  {
+   "name": "Saúl Ñíguez",
+   "club": "CR Flamengo",
+   "value_usd": 1100000,
+   "age": 31,
+   "position": "Central Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Sébastien Haller",
+   "club": "Sanfrecce Hiroshima",
+   "value_usd": 1100000,
+   "age": 32,
+   "position": "Centre-Forward",
+   "nationality": "Cote d'Ivoire"
+  },
+  {
+   "name": "Sergi Roberto",
+   "club": "LA Galaxy",
+   "value_usd": 1500000,
+   "age": 34,
+   "position": "Central Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Sergio Ramos",
+   "club": "Without Club",
+   "value_usd": 900000,
+   "age": 40,
+   "position": "Centre-Back",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Stanislav Lobotka",
+   "club": "SSC Napoli",
+   "value_usd": 10800000,
+   "age": 31,
+   "position": "Defensive Midfield",
+   "nationality": "Slovakia"
+  },
+  {
+   "name": "Stefan Savic",
+   "club": "Trabzonspor",
+   "value_usd": 400000,
+   "age": 35,
+   "position": "Centre-Back",
+   "nationality": "Montenegro"
+  },
+  {
+   "name": "Stefano Sensi",
+   "club": "CSKA Sofia",
+   "value_usd": 1300000,
+   "age": 31,
+   "position": "Central Midfield",
+   "nationality": "Italy"
+  },
+  {
+   "name": "Stephan El Shaarawy",
+   "club": "Without Club",
+   "value_usd": 2600000,
+   "age": 33,
+   "position": "Left Winger",
+   "nationality": "Italy"
+  },
+  {
+   "name": "Steven Nzonzi",
+   "club": "USL Dunkerque",
+   "value_usd": 300000,
+   "age": 37,
+   "position": "Defensive Midfield",
+   "nationality": "France"
+  },
+  {
+   "name": "Teun Koopmeiners",
+   "club": "Juventus FC",
+   "value_usd": 15100000,
+   "age": 28,
+   "position": "Defensive Midfield",
+   "nationality": "Netherlands"
+  },
+  {
+   "name": "Alex Oxlade-Chamberlain",
+   "club": "Celtic FC",
+   "value_usd": 1100000,
+   "age": 33,
+   "position": "Central Midfield",
+   "nationality": "England"
+  },
+  {
+   "name": "Alex Teixeira",
+   "club": "Panserraikos",
+   "value_usd": 100000,
+   "age": 36,
+   "position": "Attacking Midfield",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Álvaro Odriozola",
+   "club": "Real Sociedad",
+   "value_usd": 900000,
+   "age": 30,
+   "position": "Right-Back",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Amadou Onana",
+   "club": "Aston Villa",
+   "value_usd": 48600000,
+   "age": 25,
+   "position": "Defensive Midfield",
+   "nationality": "Belgium"
+  },
+  {
+   "name": "Ander Herrera",
+   "club": "Real Zaragoza",
+   "value_usd": 400000,
+   "age": 37,
+   "position": "Central Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Arkadiusz Milik",
+   "club": "Juventus FC",
+   "value_usd": 1600000,
+   "age": 32,
+   "position": "Centre-Forward",
+   "nationality": "Poland"
+  },
+  {
+   "name": "Arturo Vidal",
+   "club": "CSD Colo-Colo",
+   "value_usd": 200000,
+   "age": 39,
+   "position": "Central Midfield",
+   "nationality": "Chile"
+  },
+  {
+   "name": "Axel Witsel",
+   "club": "OGC Nice",
+   "value_usd": 1300000,
+   "age": 37,
+   "position": "Defensive Midfield",
+   "nationality": "Belgium"
+  },
+  {
+   "name": "Benjamin Mendy",
+   "club": "Pogon Szczecin",
+   "value_usd": 400000,
+   "age": 32,
+   "position": "Left-Back",
+   "nationality": "France"
+  },
+  {
+   "name": "Borja Iglesias",
+   "club": "Celta de Vigo",
+   "value_usd": 3000000,
+   "age": 33,
+   "position": "Centre-Forward",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Boubacar Kamara",
+   "club": "Aston Villa",
+   "value_usd": 43200000,
+   "age": 26,
+   "position": "Defensive Midfield",
+   "nationality": "France"
+  },
+  {
+   "name": "Boubakary Soumaré",
+   "club": "Al-Duhail SC",
+   "value_usd": 10800000,
+   "age": 27,
+   "position": "Defensive Midfield",
+   "nationality": "France"
+  },
+  {
+   "name": "Edinson Cavani",
+   "club": "Without Club",
+   "value_usd": 500000,
+   "age": 39,
+   "position": "Centre-Forward",
+   "nationality": "Uruguay"
+  },
+  {
+   "name": "Edson Álvarez",
+   "club": "West Ham United",
+   "value_usd": 16200000,
+   "age": 28,
+   "position": "Defensive Midfield",
+   "nationality": "Mexico"
+  },
+  {
+   "name": "Eric Bailly",
+   "club": "Columbus Crew",
+   "value_usd": 1300000,
+   "age": 32,
+   "position": "Centre-Back",
+   "nationality": "Cote d'Ivoire"
+  },
+  {
+   "name": "Geoffrey Kondogbia",
+   "club": "Olympique Marseille",
+   "value_usd": 3200000,
+   "age": 33,
+   "position": "Defensive Midfield",
+   "nationality": "Central African Republic"
+  },
+  {
+   "name": "Georginio Wijnaldum",
+   "club": "Without Club",
+   "value_usd": 2400000,
+   "age": 35,
+   "position": "Central Midfield",
+   "nationality": "Netherlands"
+  },
+  {
+   "name": "Granit Xhaka",
+   "club": "Sunderland",
+   "value_usd": 8600000,
+   "age": 33,
+   "position": "Defensive Midfield",
+   "nationality": "Switzerland"
+  },
+  {
+   "name": "Guido Rodríguez",
+   "club": "Valencia CF",
+   "value_usd": 4300000,
+   "age": 32,
+   "position": "Defensive Midfield",
+   "nationality": "Argentina"
+  },
+  {
+   "name": "Gylfi Sigurdsson",
+   "club": "Víkingur Reykjavík",
+   "value_usd": 300000,
+   "age": 36,
+   "position": "Attacking Midfield",
+   "nationality": "Iceland"
+  },
+  {
+   "name": "Hakan Çalhanoğlu",
+   "club": "Inter Milan",
+   "value_usd": 17300000,
+   "age": 32,
+   "position": "Defensive Midfield",
+   "nationality": "Türkiye"
+  },
+  {
+   "name": "Harry Winks",
+   "club": "Cagliari",
+   "value_usd": 2700000,
+   "age": 30,
+   "position": "Defensive Midfield",
+   "nationality": "England"
+  },
+  {
+   "name": "Hugo Lloris",
+   "club": "Los Angeles FC",
+   "value_usd": 1100000,
+   "age": 39,
+   "position": "Goalkeeper",
+   "nationality": "France"
+  },
+  {
+   "name": "Hulk",
+   "club": "Fluminense FC",
+   "value_usd": 1100000,
+   "age": 40,
+   "position": "Centre-Forward",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Ismaël Bennacer",
+   "club": "Without Club",
+   "value_usd": 8600000,
+   "age": 28,
+   "position": "Defensive Midfield",
+   "nationality": "Algeria"
+  },
+  {
+   "name": "Ivan Perišić",
+   "club": "PSV Eindhoven",
+   "value_usd": 1300000,
+   "age": 37,
+   "position": "Left Winger",
+   "nationality": "Croatia"
+  },
+  {
+   "name": "Jean Michaël Seri",
+   "club": "NK Maribor",
+   "value_usd": 100000,
+   "age": 35,
+   "position": "Defensive Midfield",
+   "nationality": "Cote d'Ivoire"
+  },
+  {
+   "name": "Jean-Philippe Gbamin",
+   "club": "CSKA Sofia",
+   "value_usd": 2200000,
+   "age": 30,
+   "position": "Centre-Back",
+   "nationality": "Cote d'Ivoire"
+  },
+  {
+   "name": "Joan Jordán",
+   "club": "CF Estrela da Amadora",
+   "value_usd": 1100000,
+   "age": 32,
+   "position": "Central Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "João Palhinha",
+   "club": "SL Benfica",
+   "value_usd": 16200000,
+   "age": 31,
+   "position": "Defensive Midfield",
+   "nationality": "Portugal"
+  },
+  {
+   "name": "Jordan Henderson",
+   "club": "Chelsea FC",
+   "value_usd": 1300000,
+   "age": 36,
+   "position": "Central Midfield",
+   "nationality": "England"
+  },
+  {
+   "name": "Jorginho",
+   "club": "CR Flamengo",
+   "value_usd": 4300000,
+   "age": 34,
+   "position": "Defensive Midfield",
+   "nationality": "Italy"
+  },
+  {
+   "name": "Juan Mata",
+   "club": "Melbourne Victory",
+   "value_usd": 400000,
+   "age": 38,
+   "position": "Attacking Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Julian Weigl",
+   "club": "Al-Qadsiah FC",
+   "value_usd": 4900000,
+   "age": 30,
+   "position": "Defensive Midfield",
+   "nationality": "Germany"
+  },
+  {
+   "name": "Kalvin Phillips",
+   "club": "Sheffield United",
+   "value_usd": 2700000,
+   "age": 30,
+   "position": "Defensive Midfield",
+   "nationality": "England"
+  },
+  {
+   "name": "Keita Baldé",
+   "club": "AC Monza",
+   "value_usd": 900000,
+   "age": 31,
+   "position": "Left Winger",
+   "nationality": "Senegal"
+  },
+  {
+   "name": "Kerem Demirbay",
+   "club": "Kasımpaşa",
+   "value_usd": 1100000,
+   "age": 33,
+   "position": "Central Midfield",
+   "nationality": "Germany"
+  },
+  {
+   "name": "Moisés Caicedo",
+   "club": "Chelsea FC",
+   "value_usd": 108000000,
+   "age": 24,
+   "position": "Defensive Midfield",
+   "nationality": "Ecuador"
+  },
+  {
+   "name": "Mouctar Diakhaby",
+   "club": "Valencia CF",
+   "value_usd": 1600000,
+   "age": 29,
+   "position": "Centre-Back",
+   "nationality": "Guinea"
+  },
+  {
+   "name": "Moussa Marega",
+   "club": "FC Palm City",
+   "value_usd": 800000,
+   "age": 35,
+   "position": "Centre-Forward",
+   "nationality": "Mali"
+  },
+  {
+   "name": "N'Golo Kanté",
+   "club": "Fenerbahçe",
+   "value_usd": 4300000,
+   "age": 35,
+   "position": "Defensive Midfield",
+   "nationality": "France"
+  },
+  {
+   "name": "Naby Keïta",
+   "club": "Ferencvárosi TC",
+   "value_usd": 1600000,
+   "age": 31,
+   "position": "Central Midfield",
+   "nationality": "Guinea"
+  },
+  {
+   "name": "Nemanja Matić",
+   "club": "US Sassuolo",
+   "value_usd": 1700000,
+   "age": 38,
+   "position": "Defensive Midfield",
+   "nationality": "Serbia"
+  },
+  {
+   "name": "Nicolás Otamendi",
+   "club": "CA River Plate",
+   "value_usd": 1100000,
+   "age": 38,
+   "position": "Centre-Back",
+   "nationality": "Argentina"
+  },
+  {
+   "name": "Pierre-Emerick Aubameyang",
+   "club": "Deportivo A Coruña",
+   "value_usd": 2700000,
+   "age": 37,
+   "position": "Centre-Forward",
+   "nationality": "Gabon"
+  },
+  {
+   "name": "Pierre-Emile Højbjerg",
+   "club": "Olympique Marseille",
+   "value_usd": 16200000,
+   "age": 31,
+   "position": "Defensive Midfield",
+   "nationality": "Denmark"
+  },
+  {
+   "name": "Radja Nainggolan",
+   "club": "Patro Eisden Maasmechelen",
+   "value_usd": 200000,
+   "age": 38,
+   "position": "Central Midfield",
+   "nationality": "Belgium"
+  },
+  {
+   "name": "Leander Dendoncker",
+   "club": "Without Club",
+   "value_usd": 1900000,
+   "age": 31,
+   "position": "Defensive Midfield",
+   "nationality": "Belgium"
+  },
+  {
+   "name": "Leandro Paredes",
+   "club": "Boca Juniors",
+   "value_usd": 5400000,
+   "age": 32,
+   "position": "Defensive Midfield",
+   "nationality": "Argentina"
+  },
+  {
+   "name": "Lucas Moura",
+   "club": "São Paulo FC",
+   "value_usd": 2200000,
+   "age": 34,
+   "position": "Right Winger",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Lucas Torreira",
+   "club": "Galatasaray",
+   "value_usd": 10800000,
+   "age": 30,
+   "position": "Defensive Midfield",
+   "nationality": "Uruguay"
+  },
+  {
+   "name": "Luis Muriel",
+   "club": "Junior FC",
+   "value_usd": 800000,
+   "age": 35,
+   "position": "Centre-Forward",
+   "nationality": "Colombia"
+  },
+  {
+   "name": "Manuel Locatelli",
+   "club": "Juventus",
+   "value_usd": 27000000,
+   "age": 28,
+   "position": "Defensive Midfield",
+   "nationality": "Italy"
+  },
+  {
+   "name": "Marc Roca",
+   "club": "Real Betis",
+   "value_usd": 4300000,
+   "age": 29,
+   "position": "Defensive Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Marcelo Brozović",
+   "club": "Without Club",
+   "value_usd": 8600000,
+   "age": 33,
+   "position": "Defensive Midfield",
+   "nationality": "Croatia"
+  },
+  {
+   "name": "Marcos Alonso",
+   "club": "Celta de Vigo",
+   "value_usd": 1300000,
+   "age": 35,
+   "position": "Centre-Back",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Marko Arnautovic",
+   "club": "Red Star Belgrade",
+   "value_usd": 2200000,
+   "age": 37,
+   "position": "Centre-Forward",
+   "nationality": "Austria"
+  },
+  {
+   "name": "Martín Zubimendi",
+   "club": "Arsenal",
+   "value_usd": 81000000,
+   "age": 27,
+   "position": "Defensive Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "Maxi Gómez",
+   "club": "Club Nacional",
+   "value_usd": 2200000,
+   "age": 30,
+   "position": "Centre-Forward",
+   "nationality": "Uruguay"
+  },
+  {
+   "name": "Casemiro",
+   "club": "Inter Miami CF",
+   "value_usd": 6500000,
+   "age": 34,
+   "position": "Defensive Midfield",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Cheick Doucouré",
+   "club": "Crystal Palace",
+   "value_usd": 10800000,
+   "age": 26,
+   "position": "Defensive Midfield",
+   "nationality": "Mali"
+  },
+  {
+   "name": "Christian Benteke",
+   "club": "Al-Wahda FC",
+   "value_usd": 1300000,
+   "age": 35,
+   "position": "Centre-Forward",
+   "nationality": "Belgium"
+  },
+  {
+   "name": "Dakonam Djené",
+   "club": "Getafe CF",
+   "value_usd": 1500000,
+   "age": 34,
+   "position": "Centre-Back",
+   "nationality": "Togo"
+  },
+  {
+   "name": "Dan-Axel Zagadou",
+   "club": "VfB Stuttgart",
+   "value_usd": 2200000,
+   "age": 27,
+   "position": "Centre-Back",
+   "nationality": "France"
+  },
+  {
+   "name": "Dani Parejo",
+   "club": "Without Club",
+   "value_usd": 1100000,
+   "age": 37,
+   "position": "Central Midfield",
+   "nationality": "Spain"
+  },
+  {
+   "name": "David Luiz",
+   "club": "Pafos FC",
+   "value_usd": 200000,
+   "age": 39,
+   "position": "Centre-Back",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Dele Alli",
+   "club": "Without Club",
+   "value_usd": 1100000,
+   "age": 30,
+   "position": "Attacking Midfield",
+   "nationality": "England"
+  },
+  {
+   "name": "Denis Zakaria",
+   "club": "AS Monaco",
+   "value_usd": 27000000,
+   "age": 29,
+   "position": "Defensive Midfield",
+   "nationality": "Switzerland"
+  },
+  {
+   "name": "Douglas Costa",
+   "club": "Al-Ittifaq FC",
+   "value_usd": 300000,
+   "age": 35,
+   "position": "Right Winger",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Duván Zapata",
+   "club": "Torino FC",
+   "value_usd": 2700000,
+   "age": 35,
+   "position": "Centre-Forward",
+   "nationality": "Colombia"
+  },
+  {
+   "name": "Edin Dzeko",
+   "club": "FC Schalke 04",
+   "value_usd": 1100000,
+   "age": 40,
+   "position": "Centre-Forward",
+   "nationality": "Bosnia-Herzegovina"
+  },
+  {
+   "name": "Thiago Silva",
+   "club": "Fluminense",
+   "value_usd": 500000,
+   "age": 41,
+   "position": "Centre-Back",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Thomas Partey",
+   "club": "Al-Shabab FC",
+   "value_usd": 2200000,
+   "age": 33,
+   "position": "Defensive Midfield",
+   "nationality": "Ghana"
+  },
+  {
+   "name": "Tiemoué Bakayoko",
+   "club": "Without Club",
+   "value_usd": 500000,
+   "age": 32,
+   "position": "Defensive Midfield",
+   "nationality": "France"
+  },
+  {
+   "name": "Tomáš Souček",
+   "club": "West Ham United",
+   "value_usd": 10800000,
+   "age": 31,
+   "position": "Defensive Midfield",
+   "nationality": "Czech Republic"
+  },
+  {
+   "name": "Wesley Moraes",
+   "club": "Shenzhen Peng City",
+   "value_usd": 2200000,
+   "age": 29,
+   "position": "Centre-Forward",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "William Carvalho",
+   "club": "FC Palm City",
+   "value_usd": 1100000,
+   "age": 34,
+   "position": "Defensive Midfield",
+   "nationality": "Portugal"
+  },
+  {
+   "name": "Willian",
+   "club": "Without Club",
+   "value_usd": 400000,
+   "age": 38,
+   "position": "Left Winger",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Willian José",
+   "club": "Esporte Clube Bahia",
+   "value_usd": 1300000,
+   "age": 34,
+   "position": "Centre-Forward",
+   "nationality": "Brazil"
+  },
+  {
+   "name": "Wissam Ben Yedder",
+   "club": "Without Club",
+   "value_usd": 500000,
+   "age": 36,
+   "position": "Centre-Forward",
+   "nationality": "France"
+  },
+  {
+   "name": "Wojciech Szczęsny",
+   "club": "FC Barcelona",
+   "value_usd": 900000,
+   "age": 36,
+   "position": "Goalkeeper",
+   "nationality": "Poland"
+  },
+  {
+   "name": "Yerry Mina",
+   "club": "Cagliari Calcio",
+   "value_usd": 2700000,
+   "age": 31,
+   "position": "Centre-Back",
+   "nationality": "Colombia"
+  },
+  {
+   "name": "Yves Bissouma",
+   "club": "Without Club",
+   "value_usd": 10800000,
+   "age": 29,
+   "position": "Defensive Midfield",
+   "nationality": "Mali"
+  }
+ ],
+ "activeSources": {
+  "Rodrigo Bentancur": [
+   "https://en.wikipedia.org/wiki/Rodrigo_Bentancur",
+   "https://www.transfermarkt.com/rodrigo-bentancur/profil/spieler/354362"
+  ],
+  "Rúben Neves": [
+   "https://en.wikipedia.org/wiki/R%C3%BAben_Neves",
+   "https://www.transfermarkt.com/ruben-neves/profil/spieler/225161"
+  ],
+  "Ruslan Malinovskyi": [
+   "https://en.wikipedia.org/wiki/Ruslan_Malinovskyi",
+   "https://www.transfermarkt.com/ruslan-malinovskyi/profil/spieler/207877"
+  ],
+  "Ryan Gravenberch": [
+   "https://en.wikipedia.org/wiki/Ryan_Gravenberch",
+   "https://www.transfermarkt.com/ryan-gravenberch/profil/spieler/478573"
+  ],
+  "Sandro Tonali": [
+   "https://www.skysports.com/football/news/11095/13559730/sandro-tonali-tottenham-sign-italy-midfielder-in-club-record-lb100m-deal-from-newcastle",
+   "https://en.wikipedia.org/wiki/Sandro_Tonali",
+   "https://www.transfermarkt.com/sandro-tonali/profil/spieler/397033"
+  ],
+  "Saúl Ñíguez": [
+   "https://en.wikipedia.org/wiki/Sa%C3%BAl_%C3%91%C3%ADguez",
+   "https://www.transfermarkt.com/saul-niguez/profil/spieler/148928"
+  ],
+  "Sébastien Haller": [
+   "https://en.wikipedia.org/wiki/S%C3%A9bastien_Haller",
+   "https://www.transfermarkt.com/sebastien-haller/profil/spieler/181375"
+  ],
+  "Sergi Roberto": [
+   "https://www.lagalaxy.com/news/la-galaxy-sign-former-fc-barcelona-and-spanish-international-midfielder-sergi-roberto",
+   "https://www.mlssoccer.com/news/la-galaxy-sign-spanish-midfielder-sergi-roberto",
+   "https://en.wikipedia.org/wiki/Sergi_Roberto",
+   "https://www.transfermarkt.com/sergi-roberto/profil/spieler/85370"
+  ],
+  "Sergio Ramos": [
+   "https://www.foxsports.com/articles/soccer/sergio-ramos-bids-farewell-to-monterrey-after-contract-ends",
+   "https://www.foxsports.com/articles/soccer/sergio-ramos-offers-himself-to-marseille-as-legendary-spanish-defender-searches-for-new-club-after-leaving-liga-mx-side-monterrey",
+   "https://www.transfermarkt.com/sergio-ramos/profil/spieler/25557"
+  ],
+  "Stanislav Lobotka": [
+   "https://en.wikipedia.org/wiki/Stanislav_Lobotka",
+   "https://www.transfermarkt.com/stanislav-lobotka/profil/spieler/192735"
+  ],
+  "Stefan Savic": [
+   "https://en.wikipedia.org/wiki/Stefan_Savi%C4%87",
+   "https://www.transfermarkt.com/stefan-savic/profil/spieler/107010"
+  ],
+  "Stefano Sensi": [
+   "https://en.wikipedia.org/wiki/Stefano_Sensi",
+   "https://www.transfermarkt.com/stefano-sensi/profil/spieler/216179"
+  ],
+  "Stephan El Shaarawy": [
+   "https://football-italia.net/el-shaarawy-announces-roma-departure/",
+   "https://en.wikipedia.org/wiki/Stephan_El_Shaarawy",
+   "https://www.transfermarkt.com/stephan-el-shaarawy/profil/spieler/94529",
+   "https://sport.sky.it/calciomercato/2026/07/02/el-shaarawy-al-shabab-calciomercato-news"
+  ],
+  "Steven Nzonzi": [
+   "https://www.getfootballnewsfrance.com/2026/official-2018-world-cup-champion-steven-nzonzi-joins-ligue-2-side-dunkerque/",
+   "https://en.wikipedia.org/wiki/Steven_Nzonzi",
+   "https://www.transfermarkt.com/steven-nzonzi/profil/spieler/73734"
+  ],
+  "Teun Koopmeiners": [
+   "https://en.wikipedia.org/wiki/Teun_Koopmeiners",
+   "https://www.transfermarkt.com/teun-koopmeiners/profil/spieler/360518"
+  ],
+  "Alex Oxlade-Chamberlain": [
+   "https://www.celticfc.com/news/2026/july/04/alex-oxlade-chamberlain-signs-new-one-year-deal-with-the-champions/",
+   "https://www.playmakerstats.com/player/alex-oxlade-chamberlain/156303",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Oxlade-Chamberlain"
+  ],
+  "Alex Teixeira": [
+   "https://www.slgr.gr/en/player/4818/",
+   "https://www.espn.com/soccer/player/_/id/114031/alex-teixeira",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Alex+Teixeira"
+  ],
+  "Álvaro Odriozola": [
+   "https://www.espn.com/soccer/player/_/id/236156/alvaro-odriozola",
+   "https://de.soccerway.com/spieler/odriozola-alvaro/0zO9SfkA",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Odriozola"
+  ],
+  "Amadou Onana": [
+   "https://www.avfc.co.uk/teams/mens/amadouonana",
+   "https://www.premierleague.com/en/players/449871/amadou-onana/overview",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Amadou+Onana"
+  ],
+  "Ander Herrera": [
+   "https://www.realzaragoza.com/galerias/presentacion-ander-herrera",
+   "https://www.goal.com/en-us/lists/ander-herrera-fulfils-dream-real-zaragoza-return-spain-third-tier/blt046e5e08aceb7777",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Ander+Herrera"
+  ],
+  "Arkadiusz Milik": [
+   "https://sports.yahoo.com/articles/milik-making-hard-jonathan-david-141500910.html",
+   "https://en.wikipedia.org/wiki/2026%E2%80%9327_Juventus_FC_season",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Arkadiusz+Milik"
+  ],
+  "Arturo Vidal": [
+   "https://espndeportes.espn.com/futbol/chile/nota/_/id/16083256/arturo-vidal-confirmo-que-se-quedara-en-colo-colo-durante-2026",
+   "https://www.playmakerstats.com/player/arturo-vidal/35084",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Arturo+Vidal"
+  ],
+  "Axel Witsel": [
+   "https://www.ogcnice.com/en/article/130682/welcome-axel-witsel.html",
+   "https://supersport.com/football/news/16c84d59-0d23-41f3-8d73-7af3fa011c18/belgium-veteran-witsel-signs-for-nice",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Axel+Witsel"
+  ],
+  "Benjamin Mendy": [
+   "https://pogonszczecin.pl/w/benjamin-mendy-nowym-zawodnikiem-pogoni-szczecin-",
+   "https://stolicasportu.pl/newsy/pilka-nozna/ekstraklasa/benjamin-mendy-zostaje-w-pogoni-szczecin-nowy-kontrakt-mistrza-swiata/13160",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Benjamin+Mendy"
+  ],
+  "Borja Iglesias": [
+   "https://rccelta.es/en/jugadores/borja-iglesias/",
+   "https://www.espn.com/soccer/player/_/id/214995/borja-iglesias",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Borja+Iglesias"
+  ],
+  "Boubacar Kamara": [
+   "https://www.spotrac.com/epl/player/_/id/77854/boubacar-kamara",
+   "https://www.goal.com/en/lists/aston-villa-hand-historic-contract-boubacar-kamara-interest-europe-s-top-clubs/blt6515e733807f5b2f",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Boubacar+Kamara"
+  ],
+  "Boubakary Soumaré": [
+   "https://www.lcfc.com/media-article/boubakary-soumare-departs-leicester-city-lcfc-transfer-french-midfielder",
+   "https://en.wikipedia.org/wiki/Boubakary_Soumar%C3%A9",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Boubakary+Soumare"
+  ],
+  "Edinson Cavani": [
+   "https://www.transfermarkt.com/edinson-cavani/profil/spieler/48280",
+   "https://www.goal.com/en-us/lists/edinson-cavani-agrees-to-boca-juniors-contract-termination-but-ex-man-utd-striker-has-no-plans-to-retire-at-39/blt3b0aa95f5079ffdc",
+   "https://buenosairesherald.com/sports/a-bittersweet-farewell-edinson-cavani-announces-boca-juniors-exit",
+   "https://dailysports.net/news/unexpected-edinson-cavanis-potential-next-club-revealed/"
+  ],
+  "Edson Álvarez": [
+   "https://www.transfermarkt.com/edson-alvarez/profil/spieler/401356",
+   "https://www.whufc.com/en/news/edson-alvarez-joins-fenerbahce-sk-loan",
+   "https://www.espn.com/soccer/story/_/id/46055512/mexico-edson-alvarez-joins-fenerbahce-loan-west-ham",
+   "https://readwestham.com/2026/05/12/west-ham-edson-alvarez-to-return-from-fenerbahce/"
+  ],
+  "Eric Bailly": [
+   "https://www.columbuscrew.com/news/columbus-crew-acquire-defender-eric-bailly",
+   "https://massive-report.com/2026/07/17/columbus-crew-add-veteran-defender-eric-bailly-mls-2026/",
+   "https://www.transfermarkt.com/eric-bailly/profil/spieler/286384"
+  ],
+  "Geoffrey Kondogbia": [
+   "https://www.transfermarkt.com/geoffrey-kondogbia/profil/spieler/127189",
+   "https://www.footmercato.net/joueur/geoffrey-kondogbia/",
+   "https://africasoccer.com/marseille-veteran-kondogbia-close-to-premier-league-move/"
+  ],
+  "Georginio Wijnaldum": [
+   "https://www.transfermarkt.com/georginio-wijnaldum/profil/spieler/49499",
+   "https://www.goal.com/en-gb/lists/gini-wijnaldum-summer-move-al-ettifaq-decide-ex-liverpool-midfielder/bltc24698f07df23868",
+   "https://zamin.uz/en/sport/204650-former-liverpool-midfielder-georginio-wijnaldum-leaves-al-ettifaq.html"
+  ],
+  "Granit Xhaka": [
+   "https://www.espn.com/soccer/player/_/id/149981/granit-xhaka",
+   "https://www.sunderlandecho.com/sport/football/sunderland-afc/sunderland-news-granit-xhaka-8836080",
+   "https://www.transfermarkt.com/granit-xhaka/profil/spieler/111455"
+  ],
+  "Guido Rodríguez": [
+   "https://www.whufc.com/en/news/guido-rodriguez-departs",
+   "https://mundoalbiceleste.com/2026/01/24/guido-rodriguez-to-join-valencia-from-west-ham-united/",
+   "https://www.transfermarkt.com/guido-rodriguez/profil/spieler/342385"
+  ],
+  "Gylfi Sigurdsson": [
+   "https://www.espn.com/soccer/player/_/id/121910/gylfi-sigurdsson",
+   "https://www.soccerbase.com/players/player.sd?player_id=49447",
+   "https://www.transfermarkt.com/gylfi-sigurdsson/profil/spieler/90466"
+  ],
+  "Hakan Çalhanoğlu": [
+   "https://www.footitalia.com/news/calhanoglu-inter-stay",
+   "https://www.goal.com/en/lists/inter-contracts-federico-dimarco-carlos-augusto-and-hakan-calhanoglu-summer-transfer-window/blte7c0e542bbd02f94",
+   "https://www.transfermarkt.com/hakan-calhanoglu/profil/spieler/126414"
+  ],
+  "Harry Winks": [
+   "https://en.wikipedia.org/wiki/Harry_Winks",
+   "https://www.transfermarkt.com/harry-winks/profil/spieler/249126"
+  ],
+  "Hugo Lloris": [
+   "https://www.espn.com/soccer/story/_/id/47204052/hugo-lloris-contract-extension-lafc",
+   "https://www.lafc.com/news/lafc-signs-goalkeeper-hugo-lloris-to-contract-extension",
+   "https://www.transfermarkt.com/hugo-lloris/profil/spieler/17965"
+  ],
+  "Hulk": [
+   "https://www.transfermarkt.com/hulk/profil/spieler/80562",
+   "https://onefootball.com/en/news/fluminense-sign-hulk-until-2027-after-atletico-mineiro-exit-42822628",
+   "https://tribuna.com/en/news/2026-05-02-atletico-mineiro-terminates-hulks-contract/"
+  ],
+  "Ismaël Bennacer": [
+   "https://www.transfermarkt.com/ismael-bennacer/profil/spieler/351816",
+   "https://www.beinsports.com/en-us/soccer/serie-a/articles/bennacer-terminates-milan-contract-ahead-of-qatar-move-2026-08-07",
+   "https://onefootball.com/en/news/official-milan-part-company-with-long-term-absentee-bennacer-43244201",
+   "https://lagazettedufennec.com/mercato-ismael-bennacer-au-coeur-dun-nouveau-rebondissement/"
+  ],
+  "Ivan Perišić": [
+   "https://www.transfermarkt.com/ivan-perisic/profil/spieler/42460",
+   "https://www.psv.nl/en/teams/player/ivan-perisic",
+   "https://www.espn.com/soccer/player/_/id/103485/ivan-perisic"
+  ],
+  "Jean Michaël Seri": [
+   "https://www.transfermarkt.com/jean-michael-seri/profil/spieler/178614",
+   "https://www.espn.com/soccer/player/_/id/193539/jean-michael-seri",
+   "https://en.nogomania.com/read/Maribor-midfielder-Jean-Michael-Seri-goes-to-AFCON-as-part-of-a-312m-Ivory-Coast-squad"
+  ],
+  "Jean-Philippe Gbamin": [
+   "https://www.transfermarkt.com/jean-philippe-gbamin/profil/spieler/182894",
+   "https://cska.bg/en/news/posts/2026070516450167143",
+   "https://www.espn.com/soccer/player/_/id/186151/jean-philippe-gbamin"
+  ],
+  "Joan Jordán": [
+   "https://www.transfermarkt.com/joan-jordan/profil/spieler/263727",
+   "https://www.eldesmarque.com/futbol/mercado-de-fichajes/20260810/sevilla-fc-adios-joan-jordan-superviviente-monchi_18_019922168.html",
+   "https://www.comuniate.com/en/noticias/37142/joan-jordans-destination-is-now-known-as-he-leaves-sevilla"
+  ],
+  "João Palhinha": [
+   "https://www.slbenfica.pt/en-us/agora/noticias/2026/08/26/futebol-benfica-joao-palhinha-reforco-contratacao",
+   "https://www.espn.com/soccer/story/_/id/49731125/benfica-sign-joao-palhinha-bayern-munich",
+   "https://www.transfermarkt.com/joao-palhinha/profil/spieler/257455"
+  ],
+  "Jordan Henderson": [
+   "https://www.chelseafc.com/en/news/article/jordan-henderson-joins-chelsea-transfer",
+   "https://www.skysports.com/football/news/11661/13569179/jordan-henderson-transfer-news-chelsea-confirm-signing-of-midfielder-following-brentford-exit",
+   "https://www.transfermarkt.com/jordan-henderson/profil/spieler/61651"
+  ],
+  "Jorginho": [
+   "https://en.flamengo.com.br/futebol/atleta/jorginho",
+   "https://www.espn.com/soccer/player/_/id/165778/jorginho",
+   "https://www.transfermarkt.com/jorginho/profil/spieler/102017"
+  ],
+  "Juan Mata": [
+   "https://www.transfermarkt.com/juan-mata/profil/spieler/44068",
+   "https://melbournevictory.com.au/player/juan-mata/",
+   "https://en.wikipedia.org/wiki/Juan_Mata"
+  ],
+  "Julian Weigl": [
+   "https://www.transfermarkt.com/julian-weigl/profil/spieler/196792",
+   "https://www.borussia.com/news/julian-weigl-moves-to-al-qadisiyah",
+   "https://www.arabnews.com/node/2613807/sport",
+   "https://www.espn.com/soccer/player/_/id/200192/julian-weigl"
+  ],
+  "Kalvin Phillips": [
+   "https://www.espn.com/soccer/story/_/id/49583917/manchester-city-kalvin-phillips-re-joins-sheffield-united-loan",
+   "https://www.transfermarkt.com/kalvin-phillips/profil/spieler/351749",
+   "https://sports.yahoo.com/articles/kalvin-phillips-set-rejoin-former-122523837.html"
+  ],
+  "Keita Baldé": [
+   "https://www.transfermarkt.com/keita-balde/profil/spieler/238752",
+   "https://www.espn.com/soccer/player/_/id/184883/keita-balde",
+   "https://tribuna.com/en/news/2025-06-04-monza-extend-keita-baldes-contract-until-june-30-2027/"
+  ],
+  "Kerem Demirbay": [
+   "https://www.transfermarkt.com/kerem-demirbay/profil/spieler/125858",
+   "https://www.flashscore.com/player/demirbay-kerem/bDxlhHxR/",
+   "https://www.transferfeed.com/transfers/kerem-demirbay-eyupspor-kasmpasa/27631435"
+  ],
+  "Moisés Caicedo": [
+   "https://www.chelseafc.com/en/news/article/moises-caicedo-nicolas-jackson-chelsea-squad-pre-season-tour",
+   "https://www.premierleague.com/en/players/486672/moises-caicedo/overview",
+   "https://www.transfermarkt.com/moises-caicedo/profil/spieler/687626"
+  ],
+  "Mouctar Diakhaby": [
+   "https://www.espn.com/soccer/player/_/id/241117/mouctar-diakhaby",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Mouctar+Diakhaby"
+  ],
+  "Moussa Marega": [
+   "https://www.besoccer.com/player/m-marega-211480",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Moussa+Marega"
+  ],
+  "N'Golo Kanté": [
+   "https://www.espn.com/soccer/story/_/id/47824501/ngolo-kante-joins-fenerbahce-al-ittihad",
+   "https://www.goal.com/en/team/fenerbahce/squad/8lroq0cbhdxj8124qtxwrhvmm",
+   "https://www.transfermarkt.com/ngolo-kante/profil/spieler/225083"
+  ],
+  "Naby Keïta": [
+   "https://www.werder.de/en/news/first-team/2025-2026/naby-keita-transfer-ferencvaros-140126",
+   "https://tribuna.com/en/news/2026-01-15-exliverpool-star-naby-keita-decides-against-werder-bremen-comeback-remaining-in-ferencvar/",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Naby+Keita"
+  ],
+  "Nemanja Matić": [
+   "https://www.espn.com/soccer/player/_/id/135743/nemanja-matic",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Nemanja+Matic"
+  ],
+  "Nicolás Otamendi": [
+   "https://www.riverplate.com/noticias/futbol-profesional/20260529-nicolas-otamendi-firmo-su-contrato-con-river-plate",
+   "https://www.espn.com/soccer/story/_/id/48915325/world-cup-winner-nicolas-otamendi-signs-boyhood-club-river-plate",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Nicolas+Otamendi"
+  ],
+  "Pierre-Emerick Aubameyang": [
+   "https://sports.yahoo.com/articles/pierre-emerick-aubameyang-embraces-la-220304886.html",
+   "https://www.espn.com/soccer/player/_/id/122260/pierre-emerick-aubameyang",
+   "https://www.transfermarkt.com/pierre-emerick-aubameyang/profil/spieler/58864"
+  ],
+  "Pierre-Emile Højbjerg": [
+   "https://www.espn.com/soccer/player/_/id/159543/pierre-emile-h%C3%B8jbjerg",
+   "https://www.flashscore.com/player/hojbjerg-pierre-emile/ITwS8wMo/",
+   "https://www.transfermarkt.com/pierre-emile-hojbjerg/profil/spieler/167799"
+  ],
+  "Radja Nainggolan": [
+   "https://www.espn.com/soccer/player/_/id/113107/radja-nainggolan",
+   "https://www.besoccer.com/player/r-nainggolan-24424",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Radja+Nainggolan"
+  ],
+  "Leander Dendoncker": [
+   "https://www.transfermarkt.com/leander-dendoncker/profil/spieler/168157",
+   "https://en.wikipedia.org/wiki/Leander_Dendoncker",
+   "https://www.soccerzz.com/player/leander-dendoncker/149512"
+  ],
+  "Leandro Paredes": [
+   "https://www.espn.com/soccer/player/_/id/153115/leandro-paredes",
+   "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/leandro-paredes-argentina-case",
+   "https://www.transfermarkt.com/leandro-paredes/profil/spieler/166237"
+  ],
+  "Lucas Moura": [
+   "https://www.espn.com/soccer/player/_/id/130711/lucas-moura",
+   "https://br.soccerway.com/noticias/futebol-paulista-sao-paulo-anuncia-renovacao-com-lucas-moura-ate-o-fim-de-2026/0IGfGmwn",
+   "https://www.transfermarkt.com/lucas-moura/profil/spieler/77100"
+  ],
+  "Lucas Torreira": [
+   "https://www.espn.com/soccer/player/_/id/212973/lucas-torreira",
+   "https://www.soccerbase.com/players/player.sd?player_id=79193",
+   "https://www.transfermarkt.com/lucas-torreira/profil/spieler/318077"
+  ],
+  "Luis Muriel": [
+   "https://www.orlandocitysc.com/news/orlando-city-sc-transfers-forward-luis-muriel-to-colombia-s-junior-fc",
+   "https://www.transfermarkt.com/luis-muriel/profil/spieler/119228"
+  ],
+  "Manuel Locatelli": [
+   "https://www.juventus.com/en/teams/first-team-men/squad/manuel-locatelli",
+   "https://www.espn.com/soccer/player/_/id/217538/manuel-locatelli",
+   "https://www.transfermarkt.com/manuel-locatelli/profil/spieler/265088"
+  ],
+  "Marc Roca": [
+   "https://www.whoscored.com/players/323148/show/marc-roca",
+   "https://pt.soccerway.com/players/marc-roca-junque/363679",
+   "https://www.transfermarkt.com/marc-roca/profil/spieler/336869"
+  ],
+  "Marcelo Brozović": [
+   "https://www.transfermarkt.com/marcelo-brozovic/profil/spieler/156617",
+   "https://fr.soccerway.com/actualites/football-saudi-pro-league-marcelo-brozovic-rejoint-al-nassr-jusqu-en-2026/4Wba4HJk",
+   "https://www.transferfeed.com/players/marcelo-brozovic/32742"
+  ],
+  "Marcos Alonso": [
+   "https://rccelta.es/en/equipo/actualidad/marcos-alonso-stays-and-renews-with-celta-until-2028/",
+   "https://www.beinsports.com/en-us/soccer/la-liga/articles/marcos-alonso-rejects-significant-offers-to-stay-with-celta-2026-07-11",
+   "https://www.transfermarkt.com/marcos-alonso/profil/spieler/112515"
+  ],
+  "Marko Arnautovic": [
+   "https://www.espn.com/soccer/player/_/id/98193/marko-arnautovic",
+   "https://sports.yahoo.com/article/official-arnautovic-joins-red-star-205600273.html",
+   "https://www.transfermarkt.com/marko-arnautovic/profil/spieler/41384"
+  ],
+  "Martín Zubimendi": [
+   "https://www.arsenal.com/men/players/martin-zubimendi",
+   "https://www.espn.com/soccer/player/_/id/287266/martin-zubimendi",
+   "https://www.transfermarkt.com/martin-zubimendi/profil/spieler/423440"
+  ],
+  "Maxi Gómez": [
+   "https://www.fotmob.com/players/687700/maximiliano-gomez",
+   "https://www.soccerzz.com/player/maxi-gomez/479071",
+   "https://www.transfermarkt.com/maxi-gomez/profil/spieler/396894"
+  ],
+  "Casemiro": [
+   "https://www.intermiamicf.com/news/inter-miami-cf-signs-five-time-uefa-champions-league-winning-midfielder-casemiro",
+   "https://www.espn.com/soccer/story/_/id/49425273/former-man-united-real-madrid-midfielder-casemiro-joins-inter-miami",
+   "https://www.transfermarkt.com/casemiro/profil/spieler/16306"
+  ],
+  "Cheick Doucouré": [
+   "https://www.cpfc.co.uk/teams/under-21/cheick-doucour-/",
+   "https://www.espn.com/soccer/player/_/id/266628/cheick-doucoure",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Cheick+Doucoure"
+  ],
+  "Christian Benteke": [
+   "https://alwahda-sc.com/en/%D8%A7%D9%84%D9%88%D8%AD%D8%AF%D8%A9-%D9%8A%D9%88%D9%82%D8%B9-%D9%85%D8%B9-%D8%A7%D9%84%D9%86%D8%AC%D9%85-%D8%A7%D9%84%D8%A8%D9%84%D8%AC%D9%8A%D9%83%D9%8A-%D9%83%D8%B1%D9%8A%D8%B3%D8%AA%D9%8A%D8%A7/",
+   "https://www.newarab.com/news/benteke-joins-uae-pro-leagues-al-wahda",
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=Christian+Benteke"
+  ],
+  "Dakonam Djené": [
+   "https://www.getafecf.com/en/news/comunicado-oficial-djene-dakonam-renueva-con-el-getafe-cf-por-una-temporada-mas",
+   "https://www.espn.com/soccer/player/_/id/181355/djene",
+   "https://www.transfermarkt.com/dakonam-djene/profil/spieler/221150"
+  ],
+  "Dan-Axel Zagadou": [
+   "https://www.bundesliga.com/en/player/dan-axel-zagadou",
+   "https://www.transfermarkt.com/dan-axel-zagadou/profil/spieler/344598"
+  ],
+  "Dani Parejo": [
+   "https://en.wikipedia.org/wiki/Dani_Parejo",
+   "https://sports.yahoo.com/articles/villarreal-legend-announces-exit-club-134500249.html",
+   "https://www.transfermarkt.com/dani-parejo/profil/spieler/59561"
+  ],
+  "David Luiz": [
+   "https://www.goal.com/en-us/lists/how-david-luiz-pafos-chelsea-cult-hero-surprise-late-career-cyprus-return-stamford-bridge-champions-league/blta0998bcb352a87e5",
+   "https://www.foxsports.com/articles/soccer/how-did-david-luiz-end-up-at-pafos-the-story-of-chelsea-cult-heros-surprise-late-career-foray-in-cyprus-ahead-of-return-to-stamford-bridge-in-the-champions-league",
+   "https://www.transfermarkt.com/david-luiz/profil/spieler/46741"
+  ],
+  "Dele Alli": [
+   "https://www.goal.com/en-us/lists/dele-alli-returns-tottenham-free-agent-special-spurs-appearance-search-new-club/blt2d365d80cee82ae5",
+   "https://www.espn.com/soccer/story/_/id/48100991/dele-alli-trains-individually-tottenham-hotspur-facilities",
+   "https://www.transfermarkt.com/dele-alli/profil/spieler/207929"
+  ],
+  "Denis Zakaria": [
+   "https://www.espn.com/soccer/player/_/id/222628/denis-zakaria",
+   "https://www.playmakerstats.com/player/denis-zakaria/433707",
+   "https://www.transfermarkt.com/denis-zakaria/profil/spieler/334526"
+  ],
+  "Douglas Costa": [
+   "https://www.corrieredellosport.it/news/calcio/calcio-estero/calciomercato-estero/2026/07/04-149670586/douglas_costa_saluta_il_chievo_va_in_arabia_all_al-ittifaq_il_comunicato",
+   "https://www.gianlucadimarzio.com/news-calcio/calciomercato-al-ittifaq-douglas-costa-news-4-luglio-2026-494394",
+   "https://www.transfermarkt.com/douglas-costa/profil/spieler/75615"
+  ],
+  "Duván Zapata": [
+   "https://www.toro.it/attualita/news/zapata-torino-rinnovo/1429671/",
+   "https://www.fantacalcio.it/serie-a/squadre/torino/zapata-d/608",
+   "https://www.transfermarkt.com/duvan-zapata/profil/spieler/73794"
+  ],
+  "Edin Dzeko": [
+   "https://schalke04.de/en/team/dzeko-contract-2027/",
+   "https://www.bundesliga.com/en/bundesliga/news/schalke-2026-27-season-preview-dzeko-muslic-38784",
+   "https://www.transfermarkt.com/edin-dzeko/profil/spieler/28396"
+  ],
+  "Thiago Silva": [
+   "https://www.transfermarkt.com/thiago-silva/profil/spieler/29241",
+   "https://www.goal.com/en/lists/thiago-silva-returns-fluminense-after-porto-exit/blte94c6a514b4eceed",
+   "https://onefootball.com/en/news/fluminense-seal-thiago-silva-return-and-announce-deal-until-end-of-2026-43044372"
+  ],
+  "Thomas Partey": [
+   "https://www.transfermarkt.com/thomas-partey/profil/spieler/230784",
+   "https://www.espn.com/soccer/story/_/id/49681055/thomas-partey-signs-al-shabab-leaving-villarreal",
+   "https://ghanasoccernet.com/saudi-club-al-shabab-announce-signing-of-thomas-partey"
+  ],
+  "Tiemoué Bakayoko": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=tiemoue+bakayoko",
+   "https://sports.yahoo.com/articles/metz-contact-sign-ti-mou-141000182.html",
+   "https://sportsview.co.uk/2026/02/celtic-could-go-for-tiemoue-bakayoko-if-alex-oxlade-chamberlain-does-not-join-them"
+  ],
+  "Tomáš Souček": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=tomas+soucek",
+   "https://www.whufc.com/en/teams/mens-team/tomas-soucek",
+   "https://eastlondontimes.co.uk/sports/west-ham-united/tomas-soucek-commits-to-west-ham-after-injury-london-2026/"
+  ],
+  "Wesley Moraes": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=wesley+moraes",
+   "https://en.wikipedia.org/wiki/Wesley_(footballer,_born_November_1996)",
+   "https://www.playmakerstats.com/player/wesley-moraes/468822"
+  ],
+  "William Carvalho": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=william+carvalho",
+   "https://www.abola.pt/noticias/mercado-william-carvalho-surpreende-na-escolha-do-novo-clube-e-ninguem-deu-por-ele-2026082718351361839",
+   "https://www.zerozero.pt/jogador/william-carvalho/43626"
+  ],
+  "Willian": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=willian+borges",
+   "https://www.cnnbrasil.com.br/esportes/futebol/gremio/gremio-e-willian-acertam-rescisao-de-contrato-e-meia-fica-livre-no-mercado/",
+   "https://www.terra.com.br/esportes/gremio/gremio-e-willian-acertam-rescisao-de-contrato,cd2f41f977d9431125a8485fc27ada4d02p7sx33.html"
+  ],
+  "Willian José": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=willian+jose",
+   "https://en.wikipedia.org/wiki/Willian_Jos%C3%A9",
+   "https://www.playmakerstats.com/player/willian-jose/106903"
+  ],
+  "Wissam Ben Yedder": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=ben+yedder",
+   "https://www.soccerladuma.co.za/international/african-football/former-france-star-leaves-wydad-ac",
+   "https://www.afrik-foot.com/wydad-casablanca-wissam-ben-yedder-part-deja-nordin-amrabat-aussi"
+  ],
+  "Wojciech Szczęsny": [
+   "https://www.transfermarkt.com/wojciech-szczesny/profil/spieler/44058",
+   "https://www.fcbarcelona.com/en/football/first-team/news/4305495/wojciech-szczesny-contract-extension-until-2027",
+   "https://www.football-espana.net/2026/05/06/barcelona-veteran-contract-decision"
+  ],
+  "Yerry Mina": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=yerry+mina",
+   "https://cagliaricalcio.com/en/player/yerry-mina/",
+   "https://www.espn.com/soccer/player/_/id/196901/yerry-mina"
+  ],
+  "Yves Bissouma": [
+   "https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=yves+bissouma",
+   "https://tothelaneandback.com/2026/06/10/yves-bissouma-released-tottenham/",
+   "https://news.bet365.com/en-gb/article/football-yves-bissouma-potential-next-club/2026071510511449674"
+  ]
+ },
+ "retired": [
+  {
+   "name": "Robin van Persie",
+   "note": "Retired May 2019 at Feyenoord; went into coaching (Feyenoord head coach until June 2026)."
+  },
+  {
+   "name": "Robinho",
+   "note": "No formal retirement announcement, but career genuinely over: last signing (Santos, Oct 2020) suspended days later, and he has been serving a nine-year prison s"
+  },
+  {
+   "name": "Ruud van Nistelrooy",
+   "note": "Retired May 2012 at Malaga; now assistant coach of the Netherlands national team."
+  },
+  {
+   "name": "Sami Khedira",
+   "note": "Retired at the end of 2020-21 at Hertha BSC."
+  },
+  {
+   "name": "Samuel Eto'o",
+   "note": "Retired September 2019; FECAFOOT president since 2021."
+  },
+  {
+   "name": "Samuel Umtiti",
+   "note": "Announced retirement Sep 15, 2025 (chronic knee cartilage damage); last club Lille."
+  },
+  {
+   "name": "Santi Cazorla",
+   "note": "Announced retirement July 2, 2026 after Real Oviedo's relegation season, aged 41."
+  },
+  {
+   "name": "Santi Mina",
+   "note": "Transfermarkt lists him as retired; no club since Al-Shabab terminated his contract in Aug 2023 (a 2023 Sampdoria move collapsed after fan protests over his 202"
+  },
+  {
+   "name": "Sergio Agüero",
+   "note": "Retired December 2021 at Barcelona due to cardiac arrhythmia."
+  },
+  {
+   "name": "Sergio Busquets",
+   "note": "Announced retirement Sep 2025; final match Dec 6, 2025 for Inter Miami. Now assistant coach at Barcelona Atletic."
+  },
+  {
+   "name": "Shaun Wright-Phillips",
+   "note": "Announced retirement Aug 2019; last club Phoenix Rising."
+  },
+  {
+   "name": "Shkodran Mustafi",
+   "note": "Retired June 25, 2024; became Germany U17 assistant coach."
+  },
+  {
+   "name": "Sokratis",
+   "note": "Sokratis Papastathopoulos announced retirement May 2024, retiring at the end of 2023-24; final club Real Betis (the DB's Olympiacos row predates that final stin"
+  },
+  {
+   "name": "Steven Gerrard",
+   "note": "Retired November 2016 after LA Galaxy; went into management."
+  },
+  {
+   "name": "Suso",
+   "note": "Retired yesterday, Aug 28, 2026, at Cadiz CF aged 32, becoming the club's institutional representative. Transfermarkt already lists him as retired."
+  },
+  {
+   "name": "Alberto Gilardino",
+   "note": "Retired as a player in 2018, has since worked as a manager (Genoa, Pisa)."
+  },
+  {
+   "name": "Alessandro Florenzi",
+   "note": "Announced retirement 27 August 2025 at age 34 after his AC Milan contract expired."
+  },
+  {
+   "name": "Alessandro Nesta",
+   "note": "Retired 2014, has since worked as a manager."
+  },
+  {
+   "name": "Alex Song",
+   "note": "Retired November 2023 at 36 after three seasons with AS Arta/Solar7 in Djibouti."
+  },
+  {
+   "name": "Alexandre Pato",
+   "note": "Announced retirement 1 January 2025; in 2026 reported in talks to buy Colchester United, not playing."
+  },
+  {
+   "name": "Anderson",
+   "note": "Ex-Manchester United midfielder, retired 2019 after leaving Adana Demirspor."
+  },
+  {
+   "name": "André Schürrle",
+   "note": "Retired July 2020 at 29; the database row itself already lists club as Retired."
+  },
+  {
+   "name": "Andrea Pirlo",
+   "note": "Retired 2017 after New York City FC, has since worked as a manager."
+  },
+  {
+   "name": "Andrés Iniesta",
+   "note": "Announced retirement October 2024 after leaving Emirates Club."
+  },
+  {
+   "name": "Andriy Shevchenko",
+   "note": "Retired 2012, later Ukraine national team manager and federation president."
+  },
+  {
+   "name": "Antonio Valencia",
+   "note": "Announced retirement May 2021 after leaving Querétaro."
+  },
+  {
+   "name": "Arda Turan",
+   "note": "Retired 2022 after Galatasaray; now a head coach (Shakhtar Donetsk)."
+  },
+  {
+   "name": "Arjen Robben",
+   "note": "Retired for the second and final time in July 2021 after his Groningen comeback season."
+  },
+  {
+   "name": "Bastian Schweinsteiger",
+   "note": "Retired October 2019 after Chicago Fire."
+  },
+  {
+   "name": "Blaise Matuidi",
+   "note": "Retired 2022 after Inter Miami."
+  },
+  {
+   "name": "Carles Puyol",
+   "note": "Retired 2014 at Barcelona."
+  },
+  {
+   "name": "Carlos Tévez",
+   "note": "Announced retirement June 2022 after Boca Juniors; has since worked as a manager."
+  },
+  {
+   "name": "Eliaquim Mangala",
+   "note": "Announced retirement at 35 and joined Ian Cathro's staff at Saint-Etienne."
+  },
+  {
+   "name": "Erik Lamela",
+   "note": "Retired August 2025 after terminating his AEK Athens contract; now on Sevilla's coaching staff under Matias Almeyda."
+  },
+  {
+   "name": "Esteban Cambiasso",
+   "note": "Retired in 2017 after Olympiacos."
+  },
+  {
+   "name": "Ezequiel Lavezzi",
+   "note": "Retired in late 2019 after Hebei China Fortune."
+  },
+  {
+   "name": "Felipe",
+   "note": "Brazilian centre-back Felipe Augusto de Almeida Monteiro retired 1 July 2024 after Nottingham Forest, matching the row's Atletico Madrid centre-back."
+  },
+  {
+   "name": "Fernando Llorente",
+   "note": "Confirmed retirement in 2023 after being without a club following his Eibar spell."
+  },
+  {
+   "name": "Fernando Torres",
+   "note": "Retired June 2019 at Sagan Tosu, matching the row."
+  },
+  {
+   "name": "Francesco Totti",
+   "note": "Retired 2017 after his Roma farewell, matching the row."
+  },
+  {
+   "name": "Franck Ribéry",
+   "note": "Retired October 2022 at Salernitana."
+  },
+  {
+   "name": "Frank Lampard",
+   "note": "Retired February 2017 after New York City FC; now a manager."
+  },
+  {
+   "name": "Gareth Bale",
+   "note": "Retired January 2023 after LAFC."
+  },
+  {
+   "name": "Gerard Piqué",
+   "note": "Retired November 2022 at Barcelona, matching the row."
+  },
+  {
+   "name": "Gianluca Zambrotta",
+   "note": "Retired in 2014 after a player-coach spell at Chiasso."
+  },
+  {
+   "name": "Gianluigi Buffon",
+   "note": "Retired August 2023 at Parma, matching the row."
+  },
+  {
+   "name": "Giorgio Chiellini",
+   "note": "Retired in 2023 after LAFC; now in Juventus management."
+  },
+  {
+   "name": "Giuseppe Rossi",
+   "note": "Announced retirement July 2023; last played for SPAL in Serie B."
+  },
+  {
+   "name": "Gonzalo Higuaín",
+   "note": "Retired at the end of the 2022 MLS season with Inter Miami, matching the row."
+  },
+  {
+   "name": "Grzegorz Krychowiak",
+   "note": "Announced retirement 27 October 2025 after Anorthosis Famagusta and a farewell amateur match with Mazur Radzymin."
+  },
+  {
+   "name": "Iker Casillas",
+   "note": "Retired August 2020 after heart attack in 2019 while at Porto"
+  },
+  {
+   "name": "Ivan Rakitic",
+   "note": "Announced retirement July 2025 after final season at Hajduk Split, took technical role at the club"
+  },
+  {
+   "name": "Jack Wilshere",
+   "note": "Retired as player in 2022, now a coach"
+  },
+  {
+   "name": "Jackson Martínez",
+   "note": "Retired in 2020 after final spell at Portimonense"
+  },
+  {
+   "name": "Jan Vertonghen",
+   "note": "Retired at end of 2024-25 season with Anderlecht, final match May 18, 2025"
+  },
+  {
+   "name": "Javier Mascherano",
+   "note": "Retired November 2020 at Estudiantes; now a coach"
+  },
+  {
+   "name": "Javier Pastore",
+   "note": "Announced retirement November 2024 after hip prosthesis surgery; last match May 2023 with Qatar SC"
+  },
+  {
+   "name": "Jérôme Boateng",
+   "note": "Announced retirement September 19, 2025 after leaving LASK"
+  },
+  {
+   "name": "Jesús Navas",
+   "note": "Retired December 2024 at Sevilla due to chronic hip problem"
+  },
+  {
+   "name": "Joaquín",
+   "note": "Retired June 2023 at Real Betis"
+  },
+  {
+   "name": "Joël Matip",
+   "note": "Retired summer 2024 after leaving Liverpool; DB row itself already records club as Retired"
+  },
+  {
+   "name": "John Terry",
+   "note": "Retired October 2018 after final season at Aston Villa"
+  },
+  {
+   "name": "José Antonio Reyes",
+   "note": "Deceased: died in a car accident on June 1, 2019, while a Extremadura player"
+  },
+  {
+   "name": "Kaká",
+   "note": "Retired December 2017 after final season at Orlando City"
+  },
+  {
+   "name": "Kevin Strootman",
+   "note": "Announced retirement October 2024 after Genoa contract expired"
+  },
+  {
+   "name": "Kevin Volland",
+   "note": "Ended professional career July 2026 after leaving 1860 Munich; joined amateur hometown club FC Thalhofen. Wikipedia lists him as a former professional footballe"
+  },
+  {
+   "name": "Miroslav Klose",
+   "note": "Retired as a player November 2016 after leaving Lazio."
+  },
+  {
+   "name": "Morgan Schneiderlin",
+   "note": "Announced retirement 18 August 2024."
+  },
+  {
+   "name": "Nani",
+   "note": "Announced retirement December 2024 while at Estrela da Amadora."
+  },
+  {
+   "name": "Nemanja Vidic",
+   "note": "Retired January 2016 after leaving Inter."
+  },
+  {
+   "name": "Nicolas Anelka",
+   "note": "Retired in 2015 after leaving Mumbai City."
+  },
+  {
+   "name": "Paco Alcácer",
+   "note": "Announced retirement in March 2026 at age 32; last match January 2025 in the UAE."
+  },
+  {
+   "name": "Patrick Vieira",
+   "note": "Retired 2011 at Manchester City; now a manager."
+  },
+  {
+   "name": "Pavel Nedved",
+   "note": "Retired 2009 at Juventus."
+  },
+  {
+   "name": "Pepe",
+   "note": "Career ended after leaving Porto in summer 2024; has not played since and confirmed the end of his playing career."
+  },
+  {
+   "name": "Petr Cech",
+   "note": "Retired 2019 at Arsenal."
+  },
+  {
+   "name": "Philipp Lahm",
+   "note": "Retired 2017 at Bayern Munich."
+  },
+  {
+   "name": "Ramires",
+   "note": "Announced retirement in 2023 after leaving Palmeiras."
+  },
+  {
+   "name": "Raphaël Varane",
+   "note": "Announced retirement September 2024 while at Como."
+  },
+  {
+   "name": "Raúl",
+   "note": "Retired November 2015 at New York Cosmos; now a coach."
+  },
+  {
+   "name": "Ricardo Carvalho",
+   "note": "Retired 2017 after leaving Shanghai SIPG."
+  },
+  {
+   "name": "Rio Ferdinand",
+   "note": "Retired May 2015 at QPR."
+  },
+  {
+   "name": "Roberto Carlos",
+   "note": "Retired 2012 at Anzhi Makhachkala."
+  },
+  {
+   "name": "Roberto Soldado",
+   "note": "Announced retirement August 2023 after his Levante contract expired."
+  },
+  {
+   "name": "Konstantinos Manolas",
+   "note": "Retired from professional football in October 2024; since then plays as an amateur (now mostly as a striker) for boyhood club Pannaxiakos in the Cyclades FCA Fi"
+  },
+  {
+   "name": "Leonardo Bonucci",
+   "note": "Confirmed retirement May 2024 after his final Fenerbahce game."
+  },
+  {
+   "name": "Luca Toni",
+   "note": "Retired May 2016 after his final Hellas Verona match against Juventus."
+  },
+  {
+   "name": "Luís Fabiano",
+   "note": "Formally announced retirement in December 2021; now a pundit for ESPN Brazil."
+  },
+  {
+   "name": "Mahamadou Diarra",
+   "note": "Professional career ended when released by Fulham at the end of 2013-14; never signed for another professional club."
+  },
+  {
+   "name": "Marcelo",
+   "note": "Announced retirement 6 February 2025 after leaving Fluminense; confirmed by Real Madrid official statement."
+  },
+  {
+   "name": "Marek Hamsik",
+   "note": "Retired at the end of the 2022-23 season with Trabzonspor, announced June 2023."
+  },
+  {
+   "name": "Mário Fernandes",
+   "note": "Left Zenit by mutual agreement July 2024 and announced retirement 19 September 2025."
+  },
+  {
+   "name": "Mario Gómez",
+   "note": "Retired June 2020 after his final Stuttgart match."
+  },
+  {
+   "name": "Mario Mandžukić",
+   "note": "Announced retirement September 2021, last club AC Milan."
+  },
+  {
+   "name": "Marouane Fellaini",
+   "note": "Announced retirement February 2024 after leaving Shandong Taishan."
+  },
+  {
+   "name": "Mats Hummels",
+   "note": "Retired at the end of the 2024-25 season after one year at Roma."
+  },
+  {
+   "name": "Medhi Benatia",
+   "note": "Retired from playing in 2021 after Fatih Karagumruk; has since been Marseille's sporting director."
+  },
+  {
+   "name": "Mesut Özil",
+   "note": "Announced immediate retirement 22 March 2023 while at Istanbul Basaksehir."
+  },
+  {
+   "name": "Michael Ballack",
+   "note": "Announced retirement 2 October 2012 after leaving Bayer Leverkusen."
+  },
+  {
+   "name": "Michael Essien",
+   "note": "Playing career ended in 2020 after leaving Sabail FK; moved into coaching at FC Nordsjaelland."
+  },
+  {
+   "name": "Michael Owen",
+   "note": "Announced retirement March 2013, final match for Stoke City in May 2013."
+  },
+  {
+   "name": "Miralem Pjanić",
+   "note": "Left CSKA Moscow in June 2025 and announced retirement from professional football in December 2025."
+  },
+  {
+   "name": "César Azpilicueta",
+   "note": "Announced 22 May 2026 that 2025-26 with Sevilla was his final season."
+  },
+  {
+   "name": "Cesc Fàbregas",
+   "note": "Retired July 2023, now head coach of Como."
+  },
+  {
+   "name": "Ciro Immobile",
+   "note": "Announced retirement 14 August 2026 aged 36 while at Paris FC; Transfermarkt now lists him as Retired."
+  },
+  {
+   "name": "Claudio Marchisio",
+   "note": "Retired October 2019."
+  },
+  {
+   "name": "Dani Alves",
+   "note": "No formal retirement announcement, but has not played since January 2023 (Pumas contract terminated) and Wikipedia lists him as a former professional footballer"
+  },
+  {
+   "name": "Daniele De Rossi",
+   "note": "Retired January 2020, now head coach of Genoa."
+  },
+  {
+   "name": "Danny Rose",
+   "note": "Without a club since Watford release in 2022, listed as former professional footballer; the database row itself already records him as Retired."
+  },
+  {
+   "name": "David Beckham",
+   "note": "Retired May 2013."
+  },
+  {
+   "name": "David Silva",
+   "note": "Retired July 2023."
+  },
+  {
+   "name": "David Trezeguet",
+   "note": "Retired 2015."
+  },
+  {
+   "name": "David Villa",
+   "note": "Retired after the 2019 season with Vissel Kobe."
+  },
+  {
+   "name": "Didier Drogba",
+   "note": "Retired November 2018."
+  },
+  {
+   "name": "Diego",
+   "note": "Diego Ribas, retired November 2022 at Flamengo. Matches the database row (Flamengo, attacking midfield, Brazil)."
+  },
+  {
+   "name": "Diego Forlán",
+   "note": "Retired August 2019, now a coach."
+  },
+  {
+   "name": "Diego Godín",
+   "note": "Retired June 2023."
+  },
+  {
+   "name": "Diego Milito",
+   "note": "Retired 2016."
+  },
+  {
+   "name": "Dimitar Berbatov",
+   "note": "Retired September 2019."
+  },
+  {
+   "name": "Dimitri Payet",
+   "note": "Announced retirement 23 March 2026 after nine months without a club following Vasco da Gama."
+  },
+  {
+   "name": "Eden Hazard",
+   "note": "Retired October 2023."
+  },
+  {
+   "name": "Theo Walcott",
+   "note": "Announced retirement 18 Aug 2023 at age 34 after leaving Southampton."
+  },
+  {
+   "name": "Thiago Alcántara",
+   "note": "Retired July 2024 after his Liverpool contract ended; moved into coaching."
+  },
+  {
+   "name": "Thierry Henry",
+   "note": "Retired December 2014 after MLS spell with New York Red Bulls."
+  },
+  {
+   "name": "Toby Alderweireld",
+   "note": "Retired July 2025 after winning the Belgian title with Royal Antwerp; farewell announced during 2024-25 season."
+  },
+  {
+   "name": "Toni Kroos",
+   "note": "Retired after Euro 2024, ending his career at Real Madrid."
+  },
+  {
+   "name": "Victor Wanyama",
+   "note": "Announced retirement 3 April 2026 at 34, after CF Montreal and a short Dunfermline Athletic spell."
+  },
+  {
+   "name": "Vincent Kompany",
+   "note": "Retired as a player in 2020 at Anderlecht; currently Bayern Munich head coach."
+  },
+  {
+   "name": "Vitolo",
+   "note": "Announced retirement in late December 2024 at 35 after long-term injuries; had not played since his 2022-23 Las Palmas loan."
+  },
+  {
+   "name": "Wayne Rooney",
+   "note": "Retired January 2021 to become Derby County manager."
+  },
+  {
+   "name": "Wesley Sneijder",
+   "note": "Retired August 2019; the database row itself already lists club as Retired."
+  },
+  {
+   "name": "Xabi Alonso",
+   "note": "Retired 2017 at Bayern Munich; currently Real Madrid head coach."
+  },
+  {
+   "name": "Xavi",
+   "note": "Retired 2019 at Al-Sadd; went into management."
+  },
+  {
+   "name": "Yaya Touré",
+   "note": "Retired from playing in 2020 after a stint in China; moved into coaching."
+  },
+  {
+   "name": "Zlatan Ibrahimović",
+   "note": "Retired June 2023 at AC Milan; now a Milan senior advisor."
+  }
+ ],
+ "collisions": [
+  {
+   "name": "Fabinho",
+   "note": "Row says age 23 in 2023, Right Winger, Criciuma EC, peak 76m. The famous Fabinho (born 1993) was 29-30 in 2023, a defensive midfielder at Liverpool then Al-Ittihad. Age, position and club all belong to a different Fabinho, while the peak value belongs to the Liverpool one; the row contradicts itself"
+  },
+  {
+   "name": "Fernandinho",
+   "note": "Row says nationality China, Right Winger, age 28 in 2022, Without Club. The famous Fernandinho is a Brazilian defensive midfielder who was 37 in 2022 and at Athletico Paranaense. Nationality, position and age contradict the famous player; row appears to mix in a different Fernandinho. Not researched"
+  },
+  {
+   "name": "Javi Martínez",
+   "note": "DB row shows age 22, Attacking Midfield, CA Osasuna in 2022. The famous Javi Martinez (born 1988, defensive midfielder/centre-back) was 33-34 in 2022, at Bayern Munich then Qatar SC, and never played for Osasuna. Row belongs to a different, younger player with the same name; not researched as the Ba"
+  },
+  {
+   "name": "Nacho Fernández",
+   "note": "The database merges two different players under one name: Real Madrid Centre-Back (Spain) rows 2014-2023 and the Argentine Attacking Midfielder (Gimnasia/River Plate/Atletico Mineiro) rows 2015-2024, with both appearing in the same years (e.g. 2015-2019 twice). The 38M peak (2018) belongs to the Spa"
+  }
+ ],
+ "unknown": [
+  {
+   "name": "Andrea Belotti",
+   "note": "Verified free agent, not retired: Cagliari contract expired 30 June 2026 and the club halted a planned renewal after medical exams in July 2026; Transfermarkt lists him Without Club (value 1.5m EUR) as of 2026-08-29. Not marked active because he has no current club to report."
+  },
+  {
+   "name": "Ante Rebić",
+   "note": "Verified free agent, not retired: left Hajduk Split when his contract expired 30 June 2026 after rejecting a renewal offer; Transfermarkt lists him Without Club (value 0.7m EUR) as of 2026-08-29, no new club announced. Not marked active because he has no current club to report."
+  },
+  {
+   "name": "Radamel Falcao",
+   "note": "Neither a current club nor a retirement can be verified. He re-signed with Millonarios for the first half of 2026, the contract ended 2026-06-30 and he left; as of 2026-08-29 there is no retirement announcement, only unconfirmed reports (a Panama club, a Colombia national-team staff role). Searched "
+  }
+ ],
+ "excluded": [
+  {
+   "name": "Ronaldinho",
+   "why": "no sourced value"
+  },
+  {
+   "name": "Nico Gaitán",
+   "why": "no sourced value"
+  },
+  {
+   "name": "Mario Balotelli",
+   "why": "no sourced value"
+  }
+ ]
+}
