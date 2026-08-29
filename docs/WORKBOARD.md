@@ -78,7 +78,21 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   distinct-targets-over-a-year assertion, the Round 212 lesson).
 - Soccer Conquest, one map per league (map changes with the league) plus a big one
   with the world's best 100 or so clubs. The NFL, NBA and NHL Conquest engines are
-  the pattern; the data (league tables, club strength) is already in the database.
+  the pattern.
+  RECON DONE (cloud, 2026-08-29), correcting this item's own premise: league tables
+  and club strength are NOT in the database (soccer_career_clubs was dropped), but
+  everything needed is BUNDLED IN CODE, so the world map round is self contained:
+  FALLBACK_CLUBS in soccerCareerEngine.ts carries 190 clubs with name, country,
+  tier and color (his best-100 list already written), STRENGTH_PRIORS in
+  clubManager.ts rates the big five leagues, and worldMapGeo.ts is a complete
+  projected world basemap (dart draft uses it today). Round A ships
+  /conquest-soccer on the world map (country territories from GEO_COUNTRIES,
+  each country seeded with its strongest club, clone imperialismNhl.ts with a
+  soccer score model, decide the draw rule); the per league maps are hand
+  authored SVG like usStatesPaths.ts, ONE LEAGUE PER ROUND, and the visual
+  rebuild of the four existing maps (his tweaks item) is a separate round.
+  Generated fixtures over bundled lists, never scraped ones (the NFL data
+  decision precedent).
 - WNBA games: a shelf of them (the Record Books already carry WNBA Champions; grids,
   higher or lower, name them all, career ladder variants are all data-ready pulls).
 - The 82-0 game but fully for soccer: run an unbeaten season with a real club, same
@@ -137,7 +151,19 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   333; phase three, real manager names as hire options per club, DESKTOP GATED: who
   manages whom changes weekly and needs web verification, and any manager "value"
   must derive from verifiable records, never be invented on a real person.
-- From that list, unclaimed and sizable: the tycoon merge, the conquest map
+- The tycoon merge, RECON DONE (cloud, 2026-08-29): the target is Stadium Tycoon
+  PLUS WONDERKID FACTORY (his tweaks lines 220-226 verbatim, "one massive tabbed
+  tycoon"), NOT Club Manager. The staged plan: Round A ships the tabbed /tycoon
+  shell (HubTiles) plus the save fold ONLY, reading both V1 keys into a new
+  merged key with a mergedSeeded latch (the legacySeeded pattern), old routes
+  kept dual writing so a rollback loses nothing; BOTH deserializers hard reject
+  a bumped v and neither key is in LIVE_IDENTIFIERS, so a rename silently wipes
+  saves, the migration assertions go in the game's own harness. Round B the
+  named generated opponent league table (invented names, simNoRivalNames),
+  Round C gems and tiered packs feeding the sell tension across the whole
+  squad, Round D pitch, animations, gear, extra worlds. Round A touches saves
+  and rides alone.
+- From that list, unclaimed and sizable: the conquest map
   overhaul, (ALL THREE new games shipped: Sports Bingo R323, Search and Discard R325, Gauntlet Draft R328), the
   Club Manager arc list, the Soccer Career BitLife audit, the US sports parity arc, the
   CFB real names research.
