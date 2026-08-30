@@ -245,8 +245,8 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "b8d2dc3933e362a3",
-    "date": "2026-08-29"
+    "hash": "38ff17361af27991",
+    "date": "2026-08-30"
   },
   "/mlb-connect-4": {
     "hash": "7fad83a61216a551",
@@ -285,8 +285,8 @@
     "date": "2026-08-25"
   },
   "/nba-connect-4": {
-    "hash": "04cd3f7824d28baf",
-    "date": "2026-08-29"
+    "hash": "38768192c9ed5481",
+    "date": "2026-08-30"
   },
   "/nba-connections": {
     "hash": "1bc6805c9602c9d3",
@@ -297,8 +297,12 @@
     "date": "2026-08-25"
   },
   "/nba-grid": {
-    "hash": "2c7e89090b88f707",
-    "date": "2026-08-29"
+    "hash": "a1ded92bc1153386",
+    "date": "2026-08-30"
+  },
+  "/nba-grid/archive": {
+    "hash": "301fc7ab4f127e08",
+    "date": "2026-08-30"
   },
   "/nba-higher-lower": {
     "hash": "631aee302cbeab9d",

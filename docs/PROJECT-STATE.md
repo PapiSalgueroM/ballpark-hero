@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 354.** The grid archive ships its first slice, and the
+  recon inverted which sport goes first. Soccer and the NFL recycle fixed
+  pools, so their answers are a live answer key; the franchise grids seed each
+  board from its date and never repeat it, so NBA leads. Answers are computed
+  with the game's own matcher against the same data it validates guesses with,
+  not gathered from the sparse selections tables, so 14 boards and 126 cells
+  each carry 39 to 59 real valid players rather than one or two guesses.
+  Baked into a committed JSON file at build time so the page carries no clock
+  and prerenders honestly. simGridArchive fences the boards, the answers, the
+  counts, the dates and the thinness, with a planted-wrong-answer control.
+  Two pipeline facts paid for on the way: the prerenderer reads its route list
+  from dist/sitemap.xml and the sitemap only carries non-game pages named in
+  genSitemap's STATIC_PAGES, so a new non-game route is invisible to both until
+  listed; and `npm run build:seo` halts partway because prerender exits
+  non-zero when it refuses a clock-dependent head, which two pages have. Both
+  are on the board.
 - **2026-08-30, Round 353.** The soccer grid's Hard setting did nothing, and
   the reason is a lesson this repo already knows in another form. Difficulty is
   derived from attribute narrowness, and the bands split the range the score

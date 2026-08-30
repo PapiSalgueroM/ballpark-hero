@@ -37,16 +37,15 @@ September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 354 (desktop, 2026-08-30): THE GRID ARCHIVE, first slice, and
-  the sport order is inverted from the original design by what the recon found.
-  Soccer and NFL grids recycle a fixed pool, so publishing their answers
-  publishes an answer key for a board that comes back. The FRANCHISE grids do
-  not: NBA, MLB and NHL build each day's board from the date seed, so a board
-  is unique to its date and never returns, and their complete valid answer set
-  is computable from the same local data the game validates against, so the
-  page needs no community picks and invents nothing. Slice one is /nba-grid/archive,
-  a single static page built from a committed data file so it carries no clock
-  and prerenders honestly. Day pages and the other sports follow if it earns it.
+- BUILD:SEO HALTS PARTWAY (found in Round 354, unclaimed, small): prerender.mjs
+  exits non-zero when it refuses a route whose head changes with the clock, and
+  /perfect-season-nhl and /hall-of-champions both do, so `npm run build:seo`
+  stops after prerender and never regenerates the sitemap or runs the final
+  build. Refusing those pages is correct; halting the pipeline over it is not,
+  and it has been quietly forcing every round to run the steps by hand. Either
+  make a refusal non-fatal and report it, or fix the two heads so they stop
+  changing with the clock. The second is the better fix if their FAQ blocks are
+  date-dependent for no reason.
 
 **MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
 outside SEO brief; the desktop lane ran the audit the same evening, findings in
@@ -342,6 +341,33 @@ Standing claims:
 
 ## Done
 
+- THE GRID ARCHIVE, first slice, Round 354 (desktop lane, 2026-08-30). Contract
+  Task 3, with the sport order inverted by what the recon found. Soccer and the
+  NFL draw from fixed pools and recycle them, so publishing a board's answers
+  publishes an answer key for a puzzle that comes back; the franchise grids
+  seed each day's board from its date, so a board belongs to its date and never
+  returns. NBA first, therefore. The answers are not community picks either:
+  those tables hold a few hundred rows in total and would have made a mostly
+  empty page. They are computed with the game's own playerMatchesCell over the
+  same indexed data the game validates guesses against, so the page cannot list
+  a player the game would reject. 14 boards, 126 cells, every cell with between
+  39 and 59 valid players and the rarest few named by career games played.
+  The data is baked into src/data/gridArchive.json by scripts/genGridArchive.mjs
+  rather than computed live, because "the last fourteen days" is a thing derived
+  from a clock and the prerenderer strips those on purpose; baked, the page
+  prerenders honestly and its sitemap date moves only when it really changes.
+  simGridArchive checks the boards against the generator, every published answer
+  and count against the live data, that no board is dated later than the day it
+  was generated for, and that no cell is a stub; ARCHIVE_CONTROL=badanswer
+  swaps in a player who does not fit and was proven red.
+  TWO PIPELINE FACTS THIS ROUND PAID FOR, both worth knowing before adding
+  another non-game page: the prerenderer takes its route list from
+  dist/sitemap.xml, and the sitemap only carries non-game pages named in
+  genSitemap's curated STATIC_PAGES, so a new page that is not a registry game
+  is invisible to both until it is listed there. And `npm run build:seo`
+  currently exits 1 partway: prerender returns non-zero when it refuses a
+  clock-dependent head, which two pages have, so the chain halts before the
+  sitemap regenerates. Filed below.
 - SOCCER GRID HARD MODE WAS INERT, Round 353 (desktop lane, 2026-08-30).
   Found while checking whether the archive could safely publish soccer boards,
   which needed the per-tier pool sizes. Difficulty here is DERIVED, from how

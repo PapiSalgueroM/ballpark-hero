@@ -66,6 +66,10 @@ const STATIC_PAGES = [
   { p: '/hockey', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
   { p: '/records', freq: 'weekly', pri: '0.6' },
+  /* Round 354: the NBA grid archive. A non-game page has to be named here to
+     be submitted at all, and being submitted is also what puts it in front of
+     the prerenderer, which reads its route list from this file's output. */
+  { p: '/nba-grid/archive', freq: 'weekly', pri: '0.5' },
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },

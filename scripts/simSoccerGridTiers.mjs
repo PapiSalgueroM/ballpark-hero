@@ -62,8 +62,16 @@ const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const headers = { apikey: KEY, authorization: `Bearer ${KEY}` };
 let rows = [];
 for (let off = 0; off < 5000; off += 500) {
-  const page = await fetch(`${URL_}/rest/v1/soccer_grid_puzzles?select=puzzle_id,rows_json,cols_json&order=sort_order&limit=500&offset=${off}`, { headers })
-    .then(r => r.json()).catch(() => null);
+  /* Retry before giving up. This fence declares an unreachable pool a failure
+     on purpose, but a single dropped connection while the whole suite is
+     hammering the same host is not an unreachable pool, and a fence that goes
+     red for that reason is a fence people learn to ignore. */
+  let page = null;
+  for (let attempt = 0; attempt < 3 && page === null; attempt++) {
+    if (attempt) await new Promise(r => setTimeout(r, 1000 * attempt));
+    page = await fetch(`${URL_}/rest/v1/soccer_grid_puzzles?select=puzzle_id,rows_json,cols_json&order=sort_order&limit=500&offset=${off}`, { headers })
+      .then(r => r.json()).catch(() => null);
+  }
   if (!Array.isArray(page) || page.length === 0) break;
   rows = rows.concat(page);
   if (page.length < 500) break;

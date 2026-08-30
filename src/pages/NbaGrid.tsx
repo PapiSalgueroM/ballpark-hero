@@ -5,6 +5,7 @@ import { GameShell } from '@/components/game/GameShell';
 import { GridBoardSkeleton } from '@/components/game/GridBoardSkeleton';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { Link } from 'react-router-dom';
 import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -405,6 +406,16 @@ const NbaGrid = () => {
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="nba-grid" />
         </div>
+
+        {/* Round 354: the archive is reachable from the game it belongs to, so
+            it is part of the site rather than a page only a sitemap knows. */}
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Missed a day?{' '}
+          <Link to="/nba-grid/archive" className="underline hover:text-foreground">
+            See past boards and who solves them
+          </Link>
+          .
+        </p>
 
         <GameSeoContent
           pageHasOwnH1

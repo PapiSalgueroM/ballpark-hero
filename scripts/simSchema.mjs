@@ -194,7 +194,12 @@ console.log('5) the classification table has not fallen behind the route list');
   } else {
     const src = fs.readFileSync(lib, 'utf8');
     const block = src.slice(src.indexOf('STATIC_TYPES'), src.indexOf('schemaTypeFor'));
-    const listed = new Set([...block.matchAll(/'(\/[a-z0-9-]*)':\s*'([A-Za-z]+)'/g)].map(m => m[1]));
+    /* Round 354: the path pattern accepts nested routes. It used to stop at
+       the first segment, so /nba-grid/archive was invisible to this parser and
+       the check reported a page as unclassified while it sat classified three
+       lines away in the table it was reading. A guard that cannot see a
+       legitimate value reports the wrong bug. */
+    const listed = new Set([...block.matchAll(/'(\/[a-z0-9/-]*)':\s*'([A-Za-z]+)'/g)].map(m => m[1]));
     let unclassified = 0, stale = 0;
     for (const r of submitted) {
       if (r === '/' || games.has(r) || listed.has(r)) continue;
