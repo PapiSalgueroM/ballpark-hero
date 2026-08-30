@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Soccer Conquest - World Map Football Imperialism Game</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Conquest","item":"https://douknowball.com/conquest-soccer"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the Daily Challenge work?","acceptedAnswer":{"@type":"Answer","text":"Everyone gets the same world today: identical starting map, identical fixtures, identical results. Your score comes from which club you back and how well you call the ties, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh world drops at midnight Eastern. Free Play stays unlimited."}},{"@type":"Question","name":"Why does a draw do nothing?","acceptedAnswer":{"@type":"Answer","text":"Because that is what a draw is. Football is the one sport in this format that lets a game end level, and pretending otherwise would just make this the hockey map with different names. A draw costs you a matchday instead of a country, which is why a hard fixture is worth fearing here in a way it is not in the other conquest maps."}},{"@type":"Question","name":"Why is there only one club per country?","acceptedAnswer":{"@type":"Answer","text":"The territory on this map is the country itself. If England fielded sixteen clubs then England would have sixteen owners, and the map would stop making any sense. So each football nation sends its strongest club, and that club plays for the whole country."}},{"@type":"Question","name":"Why does Real Madrid start with one country and a club I have not heard of start with fifteen?","acceptedAnswer":{"@type":"Answer","text":"Every country that does not field a club joins the nearest club that does, on its own continent. Europe is packed with football nations sitting on top of each other, so the giants get one country each. Africa and Asia have far more countries than contesting clubs, so the clubs there open with room. It evens out fast, because one win takes an entire empire."}},{"@type":"Question","name":"Can the season end before matchday 16?","acceptedAnswer":{"@type":"Answer","text":"Yes. If one club paints the entire world, total conquest ends it on the spot."}},{"@type":"Question","name":"Is Soccer Conquest free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Soccer Conquest is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Soccer Conquest - World Map Football Imperialism Game | DoUKnowBall","description":"The imperialism map goes worldwide. 32 clubs, one per country, fight over all 173 countries on earth. Winners take the loser's entire empire, and a draw moves nothing at all.","url":"https://douknowball.com/conquest-soccer","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/conquest-soccer" data-rh="true"><meta name="description" content="The imperialism map goes worldwide. 32 clubs, one per country, fight over all 173 countries on earth. Winners take the loser's entire empire, and a draw moves nothing at all." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/conquest-soccer" data-rh="true"><meta property="og:title" content="Soccer Conquest - World Map Football Imperialism Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="The imperialism map goes worldwide. 32 clubs, one per country, fight over all 173 countries on earth. Winners take the loser's entire empire, and a draw moves nothing at all." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Soccer Conquest - World Map Football Imperialism Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="The imperialism map goes worldwide. 32 clubs, one per country, fight over all 173 countries on earth. Winners take the loser's entire empire, and a draw moves nothing at all." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Soccer Conquest</h1>
+<p>The imperialism map on a world scale: 32 clubs, one per country, 173 countries in play, and a draw that moves nothing at all.</p>
+<p>Pick your club</p>
+<p>One club per country, 32 of them, and all 173 countries on earth belong to somebody from kickoff. Win and you take the loser's ENTIRE empire. Lose and you hand yours over. A draw moves nothing at all, so the giants of Europe start hemmed in with a country each while one club can open holding half of west Africa.</p>
+<p>🗓️ Daily Challenge: every player gets today's exact fixtures and results. Pick the right empire, call the ties, post your score. One scored run per day.</p>
+<h2>Soccer Conquest: World Map Football Imperialism</h2>
+<p>The classic imperialism map format, played across the whole planet. Thirty-two clubs, one from each football nation, start holding every one of the 173 countries on the world map. Win and you annex the loser's entire empire. Lose and you hand yours over. Draw, and not a single border moves, which is what makes a hard fixture something to fear. Sixteen matchdays, then a knockout where ties go to penalties, until one club rules the world.</p>
+<p>Every country on earth belongs to a football club, and none of it is safe.</p>
+<p>Thirty two clubs, one from each football nation, and all 173 countries on the world map are spoken for at kickoff. Win a tie and you annex the loser's entire empire. Lose one and you hand yours over. Draw, and not a single border moves.</p>
+<p>That last rule is the whole game. Being held by a club you should beat does not cost you a country, it costs you a matchday, and there are only sixteen of them.</p>
+<h2>How to play Soccer Conquest</h2>
+<li>Pick your club from all 32. Each one flies the flag of its own country.</li>
+<li>Each matchday, call your featured tie before it plays: home win, away win, or the draw. Correct calls pay 25 score, and the draw counts the same as a winner.</li>
+<li>Watch all 16 results redraw the world. Every beaten club hands over every country it owned.</li>
+<li>Survive 16 matchdays. The top 8 empires reach the knockouts.</li>
+<li>Win the Quarterfinal, the Semifinal and the World Final to rule the whole map.</li>
+<h2>Rules to know</h2>
+<li>16 league matchdays, and every decisive tie transfers the loser's entire empire to the winner.</li>
+<li>A league tie can finish level. A draw transfers nothing, and both clubs take a point.</li>
+<li>Knockout ties cannot draw. Level after extra time means penalties, and the map still changes hands.</li>
+<li>Knockout seeding takes the 8 biggest empires, with league points breaking ties: three for a win, one for a draw.</li>
+<li>Final score: 1 per country held, 25 per correct call, 50 for reaching the knockouts, 200 for winning the lot.</li>
+<li>The Daily Challenge deals every player the same date-seeded world: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.</li>
+<h2>Example walkthrough</h2>
+<p>Say you ride Real Madrid. You open holding Spain and nothing else, because Europe is crowded and every neighbour is somebody's capital. Matchday 2 you beat a club sitting on nine countries of north Africa and suddenly you have ten.</p>
+<p>Then matchday 5 you draw 1-1 with a club from Kazakhstan. Nothing moves. No damage done, but the club that beat somebody that day gained thirty countries on you, and you cannot get that afternoon back.</p>
+<h2>Strategy tips</h2>
+<li>Back the favourite, but read the draw percentage before you dismiss it. Two evenly matched clubs finish level more often than either one wins.</li>
+<li>A big rating gap makes the draw unlikely, so that is when calling a winner is nearly free.</li>
+<li>Never quit on a club that has been wiped out. You are never eliminated, and beating any landowner hands you everything they hold.</li>
+<li>Watch the table: countries held decide seeding first, so a fat empire matters more than a tidy record.</li>
+<li>The giants of Europe start small on purpose. If you want to open with land, look at Africa and Asia, where one club can hold a dozen countries from the first whistle.</li>
+<h2>Soccer Conquest FAQ</h2>
+<h3>How does the Daily Challenge work?</h3>
+<p>Everyone gets the same world today: identical starting map, identical fixtures, identical results. Your score comes from which club you back and how well you call the ties, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh world drops at midnight Eastern. Free Play stays unlimited.</p>
+<h3>Why does a draw do nothing?</h3>
+<p>Because that is what a draw is. Football is the one sport in this format that lets a game end level, and pretending otherwise would just make this the hockey map with different names. A draw costs you a matchday instead of a country, which is why a hard fixture is worth fearing here in a way it is not in the other conquest maps.</p>
+<h3>Why is there only one club per country?</h3>
+<p>The territory on this map is the country itself. If England fielded sixteen clubs then England would have sixteen owners, and the map would stop making any sense. So each football nation sends its strongest club, and that club plays for the whole country.</p>
+<h3>Why does Real Madrid start with one country and a club I have not heard of start with fifteen?</h3>
+<p>Every country that does not field a club joins the nearest club that does, on its own continent. Europe is packed with football nations sitting on top of each other, so the giants get one country each. Africa and Asia have far more countries than contesting clubs, so the clubs there open with room. It evens out fast, because one win takes an entire empire.</p>
+<h3>Can the season end before matchday 16?</h3>
+<p>Yes. If one club paints the entire world, total conquest ends it on the spot.</p>
+<h3>Is Soccer Conquest free to play?</h3>
+<p>Yes. Soccer Conquest is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/budget-builder">💵 $1B Budget Builder One billion dollars, real values, eleven slots. Spend it well</a>
+<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Flip your fortune, commit your cuts, survive the board</a>
+<a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
+<a href="/football-grid">🏈 NFL Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/sports-millionaire">💰 Sports Millionaire Climb a 15-question money ladder with lifelines</a>
+<a href="/nascar-chain">🔗 NASCAR Chain Build a chain of Cup champions</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
