@@ -380,6 +380,37 @@ async function draw(sample, route, url) {
        otherwise notice */
     console.error(`   ${route} (day ${SAMPLE_DAYS[sample]}): the guide had not landed after 15s, capturing anyway`);
   });
+  /* ROUND 355: WAIT FOR THE HEAD TO STOP MOVING, NOT FOR A FIXED NUMBER OF
+     MILLISECONDS.
+     Round 284 closed one race by having the page announce when its guide had
+     landed, and that check still passes on every sample. A second race
+     survived it: Helmet writes the structured data into the head from an
+     effect, so the guide's own marker can clear a tick before its FAQ JSON-LD
+     is actually in the document. Under load that tick matters. Two routes lost
+     their snapshot on every full run, never the same two (alphabet-sprint and
+     golf-higher-lower on one run, perfect-season-nhl and hall-of-champions on
+     another), and the reported difference was always the same shape: the FAQ
+     block PRESENT in one clock sample and ABSENT in another, rather than
+     carrying different content, which is what a real calendar dependency would
+     look like. Run either of those routes on its own and it prerenders
+     perfectly, which is the tell.
+     The cost was worse than the noise: a refused route keeps whatever snapshot
+     it already had, so two pages a run silently held a stale document, and the
+     non-zero exit stopped build:seo before it regenerated the sitemap.
+     So the capture now waits for the head to be the same twice in a row before
+     trusting it. Pages whose head was never going to move settle on the first
+     comparison and pay one interval for it. */
+  await page.waitForFunction(
+    () => {
+      const now = document.head.innerHTML.length + ':' + document.querySelectorAll('script[type="application/ld+json"]').length;
+      const settled = window.__dukbHeadPrev === now;
+      window.__dukbHeadPrev = now;
+      return settled;
+    },
+    { timeout: 12000, polling: 250 },
+  ).catch(() => {
+    console.error(`   ${route} (day ${SAMPLE_DAYS[sample]}): the head was still changing after 12s, capturing anyway`);
+  });
   await page.waitForTimeout(SETTLE_MS);
   /* THE SNAPSHOT IS DELIBERATELY LIGHT. A full DOM capture measured
      96KB a page, 11.6MB across the site, which is far too heavy to
@@ -555,7 +586,7 @@ async function draw(sample, route, url) {
 
 let written = 0, failed = 0, done = 0, refused = 0;
 /* what the clock samples removed, for the summary line */
-let volatileRoutes = 0, droppedBySecond = 0, droppedByThird = 0, headRedraws = 0;
+let volatileRoutes = 0, droppedBySecond = 0, droppedByThird = 0, headRedraws = 0, headRaces = 0;
 for (const route of unique) {
   const url = `http://127.0.0.1:${PORT}${route}`;
   if (done > 0 && done % 25 === 0) await freshPage();
@@ -594,11 +625,47 @@ for (const route of unique) {
       samples = [];
       for (let s = 0; s < SAMPLE_DAYS.length; s++) samples.push(await draw(s, route, url));
       if (!headsAgree(samples)) {
-        failed += 1;
-        console.error(`   NOT WRITTEN ${route}: its head changes with the clock, so no one version of it is true for long`);
-        continue;
+        /* ROUND 355: PRESENCE IS A RACE, CONFLICT IS THE CALENDAR, and only
+           one of those is a reason to throw the page away.
+           Before this, any surviving disagreement was called a date dependent
+           head and the route kept whatever stale snapshot it already had. The
+           disagreements actually being seen were never a block saying two
+           different things on two dates; they were always a block PRESENT in
+           one sample and ABSENT in another, the affected routes changed on
+           every run, and either one prerendered perfectly when run alone. That
+           is Helmet writing structured data from an effect and one sample
+           capturing a beat early, not the calendar.
+           The two are now told apart by shape. If one sample's head contains
+           everything the others contain plus extra, the others had simply not
+           received the extra yet, and the fullest head is the true one. If two
+           samples each hold something the other lacks, they genuinely
+           disagree, which is the Round 282 case this check exists for: refuse,
+           loudly, exactly as before. */
+        const tagsOf = h => (h.match(/<[^>]+>|[^<]+/g) || []).filter(t => t.trim());
+        const lists = samples.map(x => tagsOf(x.head));
+        let fullest = 0;
+        for (let i = 1; i < lists.length; i++) if (lists[i].length > lists[fullest].length) fullest = i;
+        let superset = true;
+        for (let i = 0; i < lists.length && superset; i++) {
+          if (i === fullest) continue;
+          const pool = lists[fullest].slice();
+          for (const t of lists[i]) {
+            const at = pool.indexOf(t);
+            if (at === -1) { superset = false; break; }
+            pool.splice(at, 1);
+          }
+        }
+        if (!superset) {
+          failed += 1;
+          console.error(`   NOT WRITTEN ${route}: its head changes with the clock, so no one version of it is true for long`);
+          continue;
+        }
+        headRaces += 1;
+        console.error(`   ${route}: the heads differ only by what one sample had not received yet, so the fullest (day ${SAMPLE_DAYS[fullest]}) is used`);
+        if (fullest !== 0) samples[0] = { ...samples[0], head: samples[fullest].head };
+      } else {
+        console.error(`   ${route}: the heads agreed on the redraw, so that was a race and not the calendar`);
       }
-      console.error(`   ${route}: the heads agreed on the redraw, so that was a race and not the calendar`);
     }
     /* ONLY THE BLOCKS EVERY SAMPLE AGREES ON ARE WRITTEN, in the first
        sample's order. A block that appears on one date and not another is,
@@ -739,4 +806,5 @@ server.close();
 console.log(`prerendered ${written} routes, ${failed} failed${refused ? `, ${refused} hidden routes refused because they need an account` : ''}`);
 console.log(`clock samples at ${SAMPLE_DAYS.join(', ')} days: ${volatileRoutes} route(s) carried date dependent blocks, ${droppedBySecond} removed by the second sample, ${droppedByThird} more by the third`);
 if (headRedraws) console.log(`${headRedraws} route(s) needed a redraw because their heads disagreed the first time`);
+if (headRaces) console.log(`${headRaces} of those were a sample capturing before Helmet had finished, so the fullest head was used`);
 if (failed > 0) process.exit(1);

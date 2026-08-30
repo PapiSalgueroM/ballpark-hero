@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 355.** The prerender race, and a filed item that was
+  wrong. It was recorded as two pages with clock-dependent heads halting
+  build:seo; in fact the refused pair changed every run and the difference was
+  always the FAQ block being present in one clock sample and absent in another,
+  never different content, and either route prerendered cleanly alone. Helmet
+  writes structured data from an effect, so the Round 284 guide marker can
+  clear a tick before the JSON-LD lands, and a 140 route run makes that tick
+  matter. The capture now waits for the head to be identical twice in a row,
+  and the comparison tells a race from the calendar by shape: a head that is a
+  strict superset of the others is a sample that had not caught up, while a
+  genuine two-way conflict still refuses. A long session had also left 67
+  orphaned node processes running, which was a real part of the load.
+  Two pages a run had been silently keeping stale snapshots, and the non-zero
+  exit had been halting the pipeline before the sitemap regenerated, which is
+  why rounds had been running the steps by hand. After: 137 routes, 0 failed,
+  exit 0, build:seo completes.
 - **2026-08-30, Round 354.** The grid archive ships its first slice, and the
   recon inverted which sport goes first. Soccer and the NFL recycle fixed
   pools, so their answers are a live answer key; the franchise grids seed each

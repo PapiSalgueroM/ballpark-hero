@@ -37,34 +37,6 @@ September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
 
-- BUILD:SEO HALTS PARTWAY (BUILDING as Round 355, desktop, 2026-08-30). The
-  premise in this item is wrong and the round starts by saying so: the refused
-  routes are DIFFERENT on every run (alphabet-sprint and golf-higher-lower on
-  one, perfect-season-nhl and hall-of-champions on another) and the difference
-  is always the FAQ block being PRESENT in one clock sample and ABSENT in
-  another, not carrying different content. That is a race against Helmet, not a
-  calendar dependency, and the prerenderer says so itself on the routes where
-  its one redraw happens to win. Two pages lose their snapshot to it per run,
-  keeping a stale one, and the build halts. Original item text follows.
-  (found in Round 354, small): prerender.mjs
-  exits non-zero when it refuses a route whose head changes with the clock, and
-  /perfect-season-nhl and /hall-of-champions both do, so `npm run build:seo`
-  stops after prerender and never regenerates the sitemap or runs the final
-  build. Refusing those pages is correct; halting the pipeline over it is not,
-  and it has been quietly forcing every round to run the steps by hand. Either
-  make a refusal non-fatal and report it, or fix the two heads so they stop
-  changing with the clock. The second is the better fix if their FAQ blocks are
-  date-dependent for no reason.
-
-**MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
-outside SEO brief; the desktop lane ran the audit the same evening, findings in
-the chat and summarized here). The brief's premise needs one correction on the
-record: Semrush's 146 monthly visits measure ORGANIC SEARCH arrivals only, and
-within that slice CFB grid terms lead; the site's total traffic is far larger
-and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
-facts are true at once. Grid search is the site's search beachhead, not its
-whole audience.**
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -350,6 +322,39 @@ Standing claims:
 
 ## Done
 
+- THE PRERENDER RACE, Round 355 (desktop lane, 2026-08-30). Filed the round
+  before as "two pages have clock-dependent heads and halt the build", and the
+  first thing this round did was disprove its own premise. The refused routes
+  were DIFFERENT on every run (alphabet-sprint and golf-higher-lower on one,
+  perfect-season-nhl and hall-of-champions on another, list-quiz and
+  nfl-higher-lower on a third), and the reported difference was always the same
+  shape: the FAQ block PRESENT in one clock sample and ABSENT in another,
+  rather than carrying different content, which is what a real calendar
+  dependency looks like. Run either refused route on its own and it prerenders
+  perfectly. That is a race, not the calendar.
+  Round 284 had already closed one race here by having the page announce when
+  its guide had landed, and that check still passes on every sample. The one
+  that survived it: Helmet writes structured data into the head from an effect,
+  so the guide's marker can clear a tick before the FAQ JSON-LD is actually in
+  the document, and under the load of a 140 route run that tick lands on the
+  wrong side. Two changes, because the first alone was not enough. The capture
+  waits for the head to be identical twice in a row before trusting it, a wait
+  on the thing that was actually moving rather than a bigger fixed sleep. And
+  the comparison now tells the two cases apart by shape: if one sample's head
+  holds everything the others hold plus extra, the others had not received the
+  extra yet and the fullest head is the true one; only when two samples each
+  hold something the other lacks is it a real disagreement, the Round 282 case
+  this check exists for, and that still refuses loudly. The clean run exercised
+  exactly that path on /nba-my-career and kept the page rather than binning it.
+  One more contributor, written down because it made all of this look worse
+  than it was: 67 orphaned node processes had piled up across a long session of
+  background harness runs, and that was a real part of the load the race needed.
+  Kill stale node processes before trusting a timing measurement here.
+  What it was costing: two pages a run kept a STALE snapshot rather than a new
+  one, silently, and prerender's non-zero exit halted npm run build:seo before
+  it ever regenerated the sitemap, which is why every recent round has been
+  running the pipeline steps by hand. Full run after the fix: 137 routes, 0
+  failed, exit 0, and build:seo completes end to end.
 - THE GRID ARCHIVE, first slice, Round 354 (desktop lane, 2026-08-30). Contract
   Task 3, with the sport order inverted by what the recon found. Soccer and the
   NFL draw from fixed pools and recycle them, so publishing a board's answers
