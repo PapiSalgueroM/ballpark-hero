@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 359.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 360.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,15 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 359 (desktop, 2026-08-30): the same fragility Round 358 found in
+  the three franchise grids lives in src/lib/fetchAllRows.ts, the shared paging
+  helper, where ONE page error aborts the whole read and hands the caller an
+  error. Nine libs depend on it: career players, connections puzzles, the pack
+  pool, quiz board, rebuild, transfer grades, transfer path puzzles, transfer
+  values and Who Am I. Fix the root rather than nine callers, per this repo's
+  own rule, and fence it deterministically by handing the helper a page
+  function that fails on demand.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
