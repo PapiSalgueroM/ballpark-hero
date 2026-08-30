@@ -125,32 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- ROUND 357 IN PROGRESS (desktop, 2026-08-30), HALF DONE AND THE HALF THAT IS
-  DONE IS NOT THE HALF THAT SHIPS. The six sport hubs are the one weakness the
-  AdSense render audit surfaced: thinnest indexable pages (521 to 614 words
-  against a site median of 584 unique) and most similar to one another (25 to
-  36 percent shingle overlap), because sportHub.ts says in its own comment that
-  the copy is "kept together so the tone stays consistent and so a new hub is
-  obviously a copy of an existing one". Owner directive sections 15 and 4.
-  DONE: scripts/simHubDepth.mjs, the fence, which measures depth, cross hub
-  phrasing overlap and whether each hub names games only it names. It reads 15
-  real failures on the current pages, so it bites. Its own section 3 was caught
-  broken first (it looked for hrefs in text that had already had its tags
-  stripped and duly reported zero unique paths for all six hubs, the same answer
-  for every input, which is not a measurement) and is fixed.
-  DONE: six drafts written by one researcher per sport from the real registry
-  game lists, then each put to a separate adversarial checker. The drafts are
-  good, specific and sound like a person. THE CHECKERS REJECTED ALL SIX, with 5
-  to 12 problems each and 38 offered corrections, mostly factual over-claims
-  ("European clubs can ONLY register signings inside two windows", which is
-  false because out of contract players can be registered outside them; "a
-  transfer fee is a one-off payment", which is false because fees are routinely
-  paid in instalments; the Bosman ruling stated more broadly than it held).
-  Everything is saved with its verdicts in scripts/data/hubCopyDrafts357.json.
-  NEXT, and nothing reaches a page before this: apply the corrections, re-verify,
-  then wire the copy into sportHub.ts and SportHub.tsx, rebuild, re-prerender the
-  six hubs, calibrate the fence floors from what actually ships, prove the clone
-  control red, and publish. DO NOT SHIP THE DRAFTS AS THEY STAND.
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -425,6 +399,33 @@ Standing claims:
 
 ## Done
 
+- THE SIX HUBS BECOME CORNERSTONE PAGES, Round 357 (desktop lane, 2026-08-30).
+  The one weakness the AdSense render audit surfaced, fixed and measured. They
+  were the thinnest indexable pages on the site AND the most similar to each
+  other, because sportHub.ts said in its own comment that the copy was kept
+  alike so a new hub would obviously be a copy of an existing one. Good for
+  tone, and the exact recipe for six pages that read as one template. After:
+  words went from 521 to 614 up to 1,362 to 1,935, and the worst similar pair
+  went from 36 percent down to 11. Every number measured, not asserted.
+  How the copy was written matters more than that it exists. One researcher per
+  sport worked from the real registry game lists so no game or path could be
+  invented, then THREE adversarial passes. Pass one rejected all six drafts, 44
+  problems. Pass two fixed them and was rejected again, 21 problems, and the
+  good ones were about THIS SITE's own games, checked against source and the
+  database: rebuild_clubs returns 69 and not 63, NFL Grid has no unlimited
+  mode, the baseball Connections uses groups of five where the soccer one uses
+  four, statDetective's hint order was stated wrong. Pass three was told to CUT
+  every disputed claim rather than fix it, which is what made it converge:
+  four hubs came back clean and two carried one FAQ claim each, both cut by
+  hand. A hub page does not need to know how many clubs a game has.
+  simHubDepth fences depth, cross hub phrasing overlap and whether each hub
+  names games only it names, because padding a hub with sentences that would
+  work for any sport is worse than leaving it short. Its own third section was
+  caught broken first, looking for hrefs in text whose tags were already
+  stripped and returning the same answer for all six inputs. Clone control
+  proven red. Shipped copy and method kept in scripts/data/hubCopy357.json; the
+  raw checker prose is deliberately not kept, because it quoted rival product
+  names while flagging them and tripped simNoRivalNames on a committed file.
 - THE RUNNER LEARNS WHAT IT CANNOT REACH, Round 356 (cloud lane, 2026-08-29).
   The four database-backed fences no longer read as four broken harnesses in
   the lane that physically cannot reach the database. runAllSims probes the

@@ -91,6 +91,57 @@ const SportHub = ({ route }: { route: string }) => {
           </section>
         )}
 
+        {/* ROUND 357: the cornerstone sections. These are what turn a hub from
+            an icon grid into a page worth landing on, and they are plain
+            semantic HTML on purpose so the prerenderer keeps every word of
+            them (it reconstructs bodies from headings, paragraphs, list items,
+            table cells and links, and drops everything else). */}
+        {hub.whyHere && (
+          <section className="mb-10">
+            <h2 className="text-lg font-display font-bold text-foreground mb-2">
+              What is here, and how it splits up
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">{hub.whyHere}</p>
+          </section>
+        )}
+
+        {hub.startHere && hub.startHere.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-lg font-display font-bold text-foreground mb-2">Where to start</h2>
+            <ul className="space-y-3">
+              {hub.startHere.map(s => (
+                <li key={s.path} className="text-sm text-muted-foreground leading-relaxed">
+                  <Link to={s.path} className="font-semibold text-primary hover:underline">{s.label}</Link>
+                  {'. '}{s.why}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {hub.reference && (
+          <section className="mb-10">
+            <h2 className="text-lg font-display font-bold text-foreground mb-2">
+              {hub.h1.replace(/ Games( Hub)?$/, '')}, the background
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">{hub.reference}</p>
+          </section>
+        )}
+
+        {hub.hubFaqs && hub.hubFaqs.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-lg font-display font-bold text-foreground mb-3">Questions people ask</h2>
+            <div className="space-y-4">
+              {hub.hubFaqs.map(f => (
+                <div key={f.q}>
+                  <h3 className="text-sm font-semibold text-foreground">{f.q}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <HubFooterLinks route={hub.route} />
 
         <GameSeoContent

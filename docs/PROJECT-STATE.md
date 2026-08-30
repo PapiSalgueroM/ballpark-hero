@@ -2597,6 +2597,20 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 357.** The six sport hubs become cornerstone pages, which
+  is the one weakness the AdSense render audit actually surfaced. They were
+  simultaneously the thinnest indexable pages and the most similar to one
+  another, by design: sportHub.ts said the copy was kept alike so a new hub
+  would obviously be a copy of an existing one. Words are now 1,362 to 1,935
+  against 521 to 614 before, and the worst similar pair is 11 percent against
+  36. Written by one researcher per sport from the real registry lists, then
+  three adversarial passes: 44 problems, then 21, then 2. The second round of
+  problems is the instructive one, because the checkers were reading this
+  repo's own source and database and catching claims about our own games that
+  were wrong. The third pass was told to cut disputed claims rather than fix
+  them, which is what converged it. simHubDepth fences depth and difference
+  together, with a clone control, because a padded hub is worse than a short
+  one.
 - **2026-08-30, the AdSense verdict, and an audit that found nothing to fix.**
   The review came back a REJECTION: policy violation, "Low value content". The
   freeze directive 3 defined as lasting until the verdict is therefore over.
