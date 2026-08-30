@@ -28,7 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITEMAP_FLOOR = 133; /* raised R352, /nba-stat-line, on top of R354's /nba-grid/archive: both lanes added one page and both wrote 132, so the true floor with both landed is 133; before them 131 (R328, /gauntlet-draft); before that 130 (R325, /search-and-discard); before that 129 (R323, /sports-bingo), 128 (R314, Overrated or Underrated and Tier List retired at the owner's call), 130 (R306, /accessibility), 129 (R293, /idle-arena and /face-off), 127 (R270, the five sport hubs) */
+const SITEMAP_FLOOR = 134; /* raised R358, /conquest-soccer; before that 133 R352, /nba-stat-line, on top of R354's /nba-grid/archive: both lanes added one page and both wrote 132, so the true floor with both landed is 133; before them 131 (R328, /gauntlet-draft); before that 130 (R325, /search-and-discard); before that 129 (R323, /sports-bingo), 128 (R314, Overrated or Underrated and Tier List retired at the owner's call), 130 (R306, /accessibility), 129 (R293, /idle-arena and /face-off), 127 (R270, the five sport hubs) */
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };

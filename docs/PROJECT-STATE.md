@@ -2597,6 +2597,54 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 358.** Soccer Conquest, `/conquest-soccer`. Item 2 off the
+  handoff list and high on Anthony's own list: the imperialism map on a world
+  scale. 32 clubs, one per football nation, and all 173 countries of the
+  projected basemap owned from kickoff. Winners annex the loser's entire empire,
+  16 matchdays then a top-8 knockout, daily and free play on the shared conquest
+  daily infrastructure.
+  THE THING THAT MAKES IT NOT THE HOCKEY MAP RESKINNED: football draws, and a
+  drawn league tie moves nothing at all. The NHL engine says "no ties, ever" and
+  is right to, because hockey settles every game. Here being held by a club you
+  should beat costs you a matchday out of only sixteen, which gives a hard
+  fixture something to fear that the other four conquests do not have, and it
+  gives the player a third thing to call: home, away, or the draw, all scoring
+  the same 25. Knockouts cannot draw, because the round has to produce somebody:
+  level after extra time goes to penalties and is labelled as such.
+  THE DATA IS DERIVED, NOT TYPED, and both of the first cut's rules turned out
+  to be wrong in ways only measurement showed. `scripts/genConquestSoccer.mjs`
+  bakes `src/data/conquestDataSoccer.ts` from FALLBACK_CLUBS, STRENGTH_PRIORS and
+  GEO_COUNTRIES. One club per country, because the territory unit is the country
+  and sixteen English clubs on a world map would give England sixteen owners.
+  The first rating model added a "depth bonus" from a country's whole tier
+  profile, which rewarded thin representation and put Boca Juniors above
+  Barcelona because Argentina carries three clubs and they are all good; it was
+  dropped rather than tuned. The first field was simply the 32 best clubs, which
+  measured 18 of 32 in Europe and handed one African club 30 countries at
+  kickoff while Real Madrid opened with one. The field is apportioned across
+  continents by largest remainder now (africa 9, asia 10, europe 7, namerica 3,
+  samerica 3), which lands at mean 5.4 countries and a biggest opening empire of
+  16. The giants still open crowded, and that is kept deliberately: it is the
+  best hook the map has, and one win takes an entire empire back.
+  `src/lib/worldMapPaths.ts` now holds the seam-aware ring geometry that used to
+  live in `dartMap.ts`, so the conquest
+  chunk draws the same basemap without importing Supabase, the squad builder and
+  the enrichment tables. dartMap re-exports it, so there is still one
+  implementation of the antimeridian handling.
+  simConquestSoccer is the fence, and its numbers come from measurement rather
+  than from what felt right: 15 independent seed families put the league draw
+  rate at 0.2307 to 0.2463 (band set at 0.20 to 0.28), the strongest eight
+  beating the weakest at 0.9668 to 0.9732 (floor 0.90), and the gap-tracks-edge
+  separation at 0.152 to 0.172 (margin 0.05, because a bare "bigger than" is a
+  coin toss the day the two converge). It also re-derives every club and every
+  country assignment from the sources and compares against the shipped bake.
+  Three controls, each proving a different check: SOCCER_CONTROL=nodraw,
+  =drawsteal, =badbake, all proven red, each refusing to run if the thing it
+  edits is not there. Repairing the first two taught one thing worth keeping: a
+  control copy lands in the temp directory where the engine's relative import of
+  ./conquestMomentum stops resolving, so both controls initially failed for a
+  reason that had nothing to do with what they were testing, and a control that
+  dies early looks exactly like a control that fired.
 - **2026-08-30, Round 357.** The spec split, item 1 off the handoff list and the
   thing the owner's operating contract names by hand. The Master Build Spec was
   7,691 lines in one file, which meant every session that wanted one section

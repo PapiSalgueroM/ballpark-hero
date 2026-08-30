@@ -60,6 +60,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/higher-lower-transfers', label: 'Transfer Market', emoji: '📈', description: 'Higher or lower on real market values', isNew: true },
       // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
       // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
+      { path: '/conquest-soccer', label: 'Soccer Conquest', emoji: '🌍', description: 'The imperialism map goes worldwide: 32 clubs, 173 countries, and a draw moves nothing', daily: true, isNew: true },
       { path: '/budget-builder', label: '$1B Budget Builder', emoji: '💵', description: 'One billion dollars, real values, eleven slots. Spend it well', isNew: true },
       { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club. Flip your fortune, commit your cuts, survive the board', isNew: true },
       // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".

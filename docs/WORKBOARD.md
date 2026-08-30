@@ -64,12 +64,9 @@ needs a real pool.
 ### What to take, in this order, all of it database free
 
 1. ~~SPEC SPLIT INTO /docs/spec/.~~ DONE, Round 357, see the Done list.
-2. **SOCCER CONQUEST, world map round.** Your own recon (on this board) proved
-   it is self contained in bundled code: FALLBACK_CLUBS in soccerCareerEngine.ts
-   carries 190 clubs with country, tier and colour, STRENGTH_PRIORS in
-   clubManager.ts rates the big five, and worldMapGeo.ts is a complete projected
-   basemap already used by dart draft. Nothing here needs the database. It is
-   high on Anthony's own list.
+2. ~~SOCCER CONQUEST, world map round.~~ DONE, Round 358, see the Done list.
+   The per league maps and the visual rebuild of the four existing maps are
+   still unclaimed.
 3. **THE SNAPSHOT SWAP CLS**, the architectural remainder in the Inbox below.
    Design work, no data. Read the two constraints written into that item before
    proposing anything: it cannot be hydrated, and it must never be hidden from
@@ -84,9 +81,13 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ### PENDING PUBLISH
 
-(empty as of 2026-08-30, everything through ccc4c583 is live. Round 357 is docs
-and scripts only and changes nothing a visitor sees, so it does not need a
-publish and is not listed here.)
+- **Round 358, Soccer Conquest (/conquest-soccer).** New route, new snapshot,
+  sitemap 133 to 134. Needs deploy_project after it merges, and an indexnowSubmit
+  for the new URL.
+
+(Round 357 is docs and scripts only and changes nothing a visitor sees, so it
+does not need a publish and is not listed here. Everything through ccc4c583 was
+already live before either round.)
 
 ## Inbox (unclaimed)
 
@@ -378,6 +379,44 @@ Standing claims:
 
 ## Done
 
+- SOCCER CONQUEST, THE WORLD MAP, Round 358 (cloud lane, 2026-08-30). Item 2
+  off the handoff list, Round A of the item: /conquest-soccer, 32 clubs, one
+  per football nation, all 173 countries of the basemap owned from kickoff,
+  16 matchdays then a top-8 knockout, daily and free play on the shared
+  conquest daily infrastructure. Registered, SEO copy written, sitemap floor
+  raised in the same round.
+  WHAT MAKES IT NOT THE HOCKEY MAP RESKINNED: football draws, and a drawn
+  league tie moves nothing at all. Being held by a club you should beat costs
+  a matchday out of only sixteen, which is a reason to fear a hard fixture
+  that the other four conquests do not have, and the player calls home, away
+  or the draw, all worth the same 25. Knockouts cannot draw: level after extra
+  time is penalties, labelled as such.
+  BOTH OF THE FIRST CUT'S DATA RULES WERE WRONG AND ONLY MEASUREMENT SHOWED
+  IT, which is the part worth reading. A "depth bonus" derived from a
+  country's whole tier profile rewarded thin representation and put Boca
+  Juniors above Barcelona, because Argentina carries three clubs and they are
+  all good; dropped rather than tuned. And a field of simply the 32 best clubs
+  measured 18 of 32 in Europe, with one African club opening on 30 countries
+  while Real Madrid opened on 1. The field is apportioned across continents by
+  largest remainder now (africa 9, asia 10, europe 7, namerica 3, samerica 3),
+  mean empire 5.4, biggest 16. The giants still open crowded and that is kept:
+  it is the best hook the map has.
+  Everything is derived and baked by scripts/genConquestSoccer.mjs from
+  FALLBACK_CLUBS, STRENGTH_PRIORS and GEO_COUNTRIES, and simConquestSoccer
+  re-derives all of it against the shipped file. Its thresholds come from 15
+  measured seed families rather than from a number that felt right: draw rate
+  0.2307 to 0.2463 (band 0.20 to 0.28), strongest eight over weakest 0.9668 to
+  0.9732 (floor 0.90), edge separation 0.152 to 0.172 (margin 0.05, because a
+  bare "bigger than" is a coin toss the day the two converge). Three controls,
+  nodraw, drawsteal and badbake, all proven red on the check each is for.
+  ALSO IN THIS ROUND, a small extraction: src/lib/worldMapPaths.ts now holds
+  the seam-aware ring geometry that lived in dartMap.ts, so the conquest chunk
+  draws the basemap without importing Supabase, the squad builder and the
+  enrichment tables. dartMap re-exports it, so the antimeridian handling still
+  has exactly one implementation.
+  NEEDS PUBLISHING: YES. New route, new snapshot, sitemap moved.
+  STILL UNCLAIMED from this item: the per league maps (hand authored SVG, one
+  league per round) and the visual rebuild of the four existing maps.
 - THE SPEC SPLIT, Round 357 (cloud lane, 2026-08-30). Item 1 off the handoff
   list, and the thing the operating contract names by hand. The Master Build
   Spec is now docs/spec/: 29 parts, verbatim, 361 sections, the index at

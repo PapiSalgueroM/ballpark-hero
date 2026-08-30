@@ -14,7 +14,7 @@
    ──────────────────────────────────────────────────────────────────────────── */
 import { getTodayET } from '@/lib/dateUtils';
 
-export type ConquestSport = 'nfl' | 'nba' | 'mlb' | 'nhl';
+export type ConquestSport = 'nfl' | 'nba' | 'mlb' | 'nhl' | 'soccer';
 
 /** xmur3-style string hash, gives a well-mixed 32-bit seed. */
 function hashString(str: string): number {

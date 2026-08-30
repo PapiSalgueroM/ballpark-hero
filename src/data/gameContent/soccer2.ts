@@ -2,6 +2,62 @@ import type { GameContentMap } from './types';
 
 // Soccer game guides, batch 2. Casual human tone, no em dashes anywhere.
 export const SOCCER_CONTENT_2: GameContentMap = {
+  '/conquest-soccer': {
+    intro: [
+      "Every country on earth belongs to a football club, and none of it is safe.",
+      "Thirty two clubs, one from each football nation, and all 173 countries on the world map are spoken for at kickoff. Win a tie and you annex the loser's entire empire. Lose one and you hand yours over. Draw, and not a single border moves.",
+      "That last rule is the whole game. Being held by a club you should beat does not cost you a country, it costs you a matchday, and there are only sixteen of them.",
+    ],
+    howToPlay: [
+      "Pick your club from all 32. Each one flies the flag of its own country.",
+      "Each matchday, call your featured tie before it plays: home win, away win, or the draw. Correct calls pay 25 score, and the draw counts the same as a winner.",
+      "Watch all 16 results redraw the world. Every beaten club hands over every country it owned.",
+      "Survive 16 matchdays. The top 8 empires reach the knockouts.",
+      "Win the Quarterfinal, the Semifinal and the World Final to rule the whole map.",
+    ],
+    rules: [
+      "16 league matchdays, and every decisive tie transfers the loser's entire empire to the winner.",
+      "A league tie can finish level. A draw transfers nothing, and both clubs take a point.",
+      "Knockout ties cannot draw. Level after extra time means penalties, and the map still changes hands.",
+      "Knockout seeding takes the 8 biggest empires, with league points breaking ties: three for a win, one for a draw.",
+      "Final score: 1 per country held, 25 per correct call, 50 for reaching the knockouts, 200 for winning the lot.",
+      "The Daily Challenge deals every player the same date-seeded world: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+    ],
+    example: [
+      "Say you ride Real Madrid. You open holding Spain and nothing else, because Europe is crowded and every neighbour is somebody's capital. Matchday 2 you beat a club sitting on nine countries of north Africa and suddenly you have ten.",
+      "Then matchday 5 you draw 1-1 with a club from Kazakhstan. Nothing moves. No damage done, but the club that beat somebody that day gained thirty countries on you, and you cannot get that afternoon back.",
+    ],
+    tips: [
+      "Back the favourite, but read the draw percentage before you dismiss it. Two evenly matched clubs finish level more often than either one wins.",
+      "A big rating gap makes the draw unlikely, so that is when calling a winner is nearly free.",
+      "Never quit on a club that has been wiped out. You are never eliminated, and beating any landowner hands you everything they hold.",
+      "Watch the table: countries held decide seeding first, so a fat empire matters more than a tidy record.",
+      "The giants of Europe start small on purpose. If you want to open with land, look at Africa and Asia, where one club can hold a dozen countries from the first whistle.",
+    ],
+    faqs: [
+      {
+        q: 'How does the Daily Challenge work?',
+        a: 'Everyone gets the same world today: identical starting map, identical fixtures, identical results. Your score comes from which club you back and how well you call the ties, so comparing scores is a fair fight. One scored run per day, streaks build if you show up daily, and a fresh world drops at midnight Eastern. Free Play stays unlimited.',
+      },
+      {
+        q: 'Why does a draw do nothing?',
+        a: 'Because that is what a draw is. Football is the one sport in this format that lets a game end level, and pretending otherwise would just make this the hockey map with different names. A draw costs you a matchday instead of a country, which is why a hard fixture is worth fearing here in a way it is not in the other conquest maps.',
+      },
+      {
+        q: 'Why is there only one club per country?',
+        a: 'The territory on this map is the country itself. If England fielded sixteen clubs then England would have sixteen owners, and the map would stop making any sense. So each football nation sends its strongest club, and that club plays for the whole country.',
+      },
+      {
+        q: 'Why does Real Madrid start with one country and a club I have not heard of start with fifteen?',
+        a: 'Every country that does not field a club joins the nearest club that does, on its own continent. Europe is packed with football nations sitting on top of each other, so the giants get one country each. Africa and Asia have far more countries than contesting clubs, so the clubs there open with room. It evens out fast, because one win takes an entire empire.',
+      },
+      {
+        q: 'Can the season end before matchday 16?',
+        a: 'Yes. If one club paints the entire world, total conquest ends it on the spot.',
+      },
+    ],
+  },
+
   '/sign-the-player': {
     intro: [
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",

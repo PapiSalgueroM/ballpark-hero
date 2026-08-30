@@ -114,6 +114,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/world-xi': 'soccer1',
   /* soccer2 */
   '/build-your-xi': 'soccer2',
+  '/conquest-soccer': 'soccer2',
   '/career': 'soccer2',
   '/connections': 'soccer2',
   '/fantasy-draft': 'soccer2',

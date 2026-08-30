@@ -1,5 +1,9 @@
 import { supabase } from '@/integrations/supabase/client';
 import { GEO_COUNTRIES, CONTINENT_VIEWS, WORLD_W, WORLD_H, type Continent, type GeoCountry } from '@/data/worldMapGeo';
+// Round 358: the seam-aware path geometry moved to its own module so Soccer
+// Conquest can draw the same basemap without importing this engine.
+import { boundsOf, unwrappedRings, pathOf } from '@/lib/worldMapPaths';
+export { pathOf } from '@/lib/worldMapPaths';
 import { FORMATIONS, LEGENDS, POSITION_NORMALIZE, WC2026_NATIONS, normalizePosition, playerRating, type FormationSlot } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
 import type { League, Player } from '@/types/game';
@@ -45,80 +49,6 @@ export const ROUND_VIEWS: MapView[] = [
 export const DART_SLOTS: FormationSlot[] = FORMATIONS[0].slots;
 
 /* ---------------- Country lookup ---------------- */
-interface Bounds { minx: number; miny: number; maxx: number; maxy: number; area: number }
-
-/**
- * Antimeridian repair. Russia and a few Pacific nations cross the 180th
- * meridian; the projection script stitched both halves of each such polygon
- * into ONE ring joined by full-width horizontal traverse edges. Drawn
- * naively that paints smear bars across the Arctic and Pacific (the owner's
- * "map looks weird" bug) and inflates bounding areas, wrecking accuracy
- * scoring. The fix: cut every ring at its seam jumps and close each side as
- * its own polygon. Each piece then lives at its correct map edge, the
- * traverse edges vanish, and hit-testing works on plain coordinates.
- */
-const unwrappedCache = new Map<string, number[][][]>();
-
-function splitAtSeam(ring: number[][]): number[][][] {
-  const jumps: number[] = [];
-  for (let i = 1; i < ring.length; i++) {
-    if (Math.abs(ring[i][0] - ring[i - 1][0]) > WORLD_W / 2) jumps.push(i);
-  }
-  if (jumps.length === 0) return [ring];
-  const starts = [0, ...jumps];
-  const segs: number[][][] = [];
-  for (let s = 0; s < starts.length; s++) {
-    const from = starts[s];
-    const to = s + 1 < starts.length ? starts[s + 1] : ring.length;
-    segs.push(ring.slice(from, to));
-  }
-  // The ring is cyclic, so the last segment continues into the first: merge.
-  if (segs.length > 1) {
-    const last = segs.pop()!;
-    segs[0] = [...last, ...segs[0]];
-  }
-  return segs.filter(s => s.length >= 3);
-}
-
-function unwrappedRings(c: GeoCountry): number[][][] {
-  let r = unwrappedCache.get(c.iso);
-  if (r) return r;
-  r = c.rings
-    .flatMap(splitAtSeam)
-    .filter(ring => {
-      // Belt and braces: drop any near-flat ultra-wide ribbon that still
-      // slips through (projection garbage, never real geography).
-      let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
-      for (const [x, y] of ring) {
-        if (x < minx) minx = x;
-        if (x > maxx) maxx = x;
-        if (y < miny) miny = y;
-        if (y > maxy) maxy = y;
-      }
-      return !(maxx - minx > 150 && maxy - miny < 12);
-    });
-  unwrappedCache.set(c.iso, r);
-  return r;
-}
-
-const boundsCache = new Map<string, Bounds>();
-
-function boundsOf(c: GeoCountry): Bounds {
-  let b = boundsCache.get(c.iso);
-  if (b) return b;
-  let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
-  for (const ring of unwrappedRings(c)) {
-    for (const [x, y] of ring) {
-      if (x < minx) minx = x;
-      if (x > maxx) maxx = x;
-      if (y < miny) miny = y;
-      if (y > maxy) maxy = y;
-    }
-  }
-  b = { minx, miny, maxx, maxy, area: (maxx - minx) * (maxy - miny) };
-  boundsCache.set(c.iso, b);
-  return b;
-}
 
 function inRing(x: number, y: number, ring: number[][]): boolean {
   let inside = false;
@@ -154,23 +84,6 @@ export function countryAt(x: number, y: number): GeoCountry | null {
   return best;
 }
 
-const pathCache = new Map<string, string>();
-
-export function pathOf(c: GeoCountry): string {
-  let p = pathCache.get(c.iso);
-  if (p) return p;
-  const rings = unwrappedRings(c);
-  const b = boundsOf(c);
-  const draw = (dx: number) =>
-    rings
-      .map(ring => 'M' + ring.map(pt => `${Math.round((pt[0] + dx) * 10) / 10},${pt[1]}`).join('L') + 'Z')
-      .join('');
-  p = draw(0);
-  if (b.maxx > WORLD_W) p += draw(-WORLD_W);
-  if (b.minx < 0) p += draw(WORLD_W);
-  pathCache.set(c.iso, p);
-  return p;
-}
 
 /* ---------------- DB nationality names per country ---------------- */
 /** Spellings used by player_market_values.nationality where they differ from map names. */
