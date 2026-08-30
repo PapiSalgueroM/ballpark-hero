@@ -68,7 +68,7 @@ const RIVAL_NAMES = [
 
   // --- daily word and grid games ---
   'wordle',
-  'immaculate ?grid',
+  'immaculate[- ]?grid',
   'poeltl[- ]?(?:style|like|esque)',   // see POELTL note below
   'sporcle',
   'kot4q',
