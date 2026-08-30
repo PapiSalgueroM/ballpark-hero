@@ -282,6 +282,19 @@ loudly, the way it already skips the 42 browser harnesses by name, or cloud
 rounds keep reporting these as known reds with this reason written down. Do
 not let anyone "fix" either one by making it pass when it checked nothing.**
 
+**A THIRD FLAKE, RECORDED NOT FIXED (cloud, 2026-08-29, Round 352): `simEras`
+failed one board with "no keeper sample at 35" and then passed three runs out
+of three standalone, and it had passed the board immediately before. So it is
+a low rate flake in the keeper sampling, roughly one run in four observed,
+unrelated to the round that found it. It is left alone deliberately rather
+than tuned blind: Round 335 fixed two flakes this way (simRoles was a coin
+toss on one scenario, simWorld asserted a rule the engine had replaced) and
+both took a measured distribution first. Whoever picks this up should do the
+same, measure what "keeper sample at 35" actually produces across many runs
+before touching a threshold, because the failure names an era age bucket and
+an empty sample is as likely to be a real gap in an era's keeper pool as it
+is to be a loose floor.**
+
 Claimed 2026-08-28:
 
 From the 2026-08-28 review (his decisions and the self contained fixes):
