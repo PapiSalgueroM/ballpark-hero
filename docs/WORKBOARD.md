@@ -125,18 +125,32 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 357 (desktop, 2026-08-30): THE SIX SPORT HUBS BECOME CORNERSTONE
-  PAGES, which is the one weakness the AdSense render audit actually surfaced.
-  They are simultaneously the thinnest indexable pages (521 to 614 words against
-  a site median of 584 unique and a p90 of 970) and the most similar to each
-  other (25 to 36 percent shingle overlap, the highest of any indexable
-  cluster), because sportHub.ts says in its own comment that the copy is "kept
-  together so the tone stays consistent and so a new hub is obviously a copy of
-  an existing one". That consistency is exactly what makes them read as one
-  template. Owner directive sections 15 and 4. Every factual claim gets checked
-  before it ships, and the fence measures both depth and difference so the next
-  hub cannot quietly become a clone again.
-
+- ROUND 357 IN PROGRESS (desktop, 2026-08-30), HALF DONE AND THE HALF THAT IS
+  DONE IS NOT THE HALF THAT SHIPS. The six sport hubs are the one weakness the
+  AdSense render audit surfaced: thinnest indexable pages (521 to 614 words
+  against a site median of 584 unique) and most similar to one another (25 to
+  36 percent shingle overlap), because sportHub.ts says in its own comment that
+  the copy is "kept together so the tone stays consistent and so a new hub is
+  obviously a copy of an existing one". Owner directive sections 15 and 4.
+  DONE: scripts/simHubDepth.mjs, the fence, which measures depth, cross hub
+  phrasing overlap and whether each hub names games only it names. It reads 15
+  real failures on the current pages, so it bites. Its own section 3 was caught
+  broken first (it looked for hrefs in text that had already had its tags
+  stripped and duly reported zero unique paths for all six hubs, the same answer
+  for every input, which is not a measurement) and is fixed.
+  DONE: six drafts written by one researcher per sport from the real registry
+  game lists, then each put to a separate adversarial checker. The drafts are
+  good, specific and sound like a person. THE CHECKERS REJECTED ALL SIX, with 5
+  to 12 problems each and 38 offered corrections, mostly factual over-claims
+  ("European clubs can ONLY register signings inside two windows", which is
+  false because out of contract players can be registered outside them; "a
+  transfer fee is a one-off payment", which is false because fees are routinely
+  paid in instalments; the Bosman ruling stated more broadly than it held).
+  Everything is saved with its verdicts in scripts/data/hubCopyDrafts357.json.
+  NEXT, and nothing reaches a page before this: apply the corrections, re-verify,
+  then wire the copy into sportHub.ts and SportHub.tsx, rebuild, re-prerender the
+  six hubs, calibrate the fence floors from what actually ships, prove the clone
+  control red, and publish. DO NOT SHIP THE DRAFTS AS THEY STAND.
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
