@@ -21,8 +21,8 @@
     "date": "2026-08-25"
   },
   "/ball-iq": {
-    "hash": "bf9eed9f48485339",
-    "date": "2026-08-25"
+    "hash": "1489c73eda0cc708",
+    "date": "2026-08-30"
   },
   "/baseball": {
     "hash": "5eb05d0f470e4ae2",
@@ -57,8 +57,8 @@
     "date": "2026-08-25"
   },
   "/cfb-dynasty": {
-    "hash": "81a3daa8c45b5e4d",
-    "date": "2026-08-29"
+    "hash": "5df23c5456c1cd8c",
+    "date": "2026-08-30"
   },
   "/cfb-higher-lower": {
     "hash": "8897b028987d6e81",
@@ -103,6 +103,10 @@
   "/conquest-nhl": {
     "hash": "e23b26636641ae93",
     "date": "2026-08-25"
+  },
+  "/conquest-soccer": {
+    "hash": "1e090c6a7ae008a7",
+    "date": "2026-08-30"
   },
   "/contact": {
     "hash": "7be5f0e1d001c2bb",
@@ -153,8 +157,8 @@
     "date": "2026-08-29"
   },
   "/gauntlet-draft": {
-    "hash": "ad159e8ef12b404d",
-    "date": "2026-08-29"
+    "hash": "76d6b76e36d72808",
+    "date": "2026-08-30"
   },
   "/golf-higher-lower": {
     "hash": "ed9da4580dd92ddb",
@@ -205,12 +209,12 @@
     "date": "2026-08-25"
   },
   "/hockey-grid": {
-    "hash": "dd70f7f231dd300d",
-    "date": "2026-08-29"
+    "hash": "48e5cad262be7a1b",
+    "date": "2026-08-30"
   },
   "/hockey-higher-lower": {
-    "hash": "5ba1beb78c557623",
-    "date": "2026-08-25"
+    "hash": "0b84c089ee0ad3f6",
+    "date": "2026-08-30"
   },
   "/hof-or-bust": {
     "hash": "5604303c72d56998",
@@ -265,8 +269,8 @@
     "date": "2026-08-25"
   },
   "/mlb-my-career": {
-    "hash": "f34646ffe735a08f",
-    "date": "2026-08-25"
+    "hash": "8939c4956a51f5e1",
+    "date": "2026-08-30"
   },
   "/mystery-box": {
     "hash": "b6c080d17e7647bf",
@@ -297,7 +301,7 @@
     "date": "2026-08-25"
   },
   "/nba-grid": {
-    "hash": "a1ded92bc1153386",
+    "hash": "659ed8d60dc3a8c2",
     "date": "2026-08-30"
   },
   "/nba-grid/archive": {
@@ -393,8 +397,8 @@
     "date": "2026-08-29"
   },
   "/player-stock-market": {
-    "hash": "eb61654a764a08c7",
-    "date": "2026-08-29"
+    "hash": "7545a4068a5b9589",
+    "date": "2026-08-30"
   },
   "/privacy": {
     "hash": "3fd6588a165261ef",
@@ -437,8 +441,8 @@
     "date": "2026-08-25"
   },
   "/search-and-discard": {
-    "hash": "f62ab7689b3e3f8d",
-    "date": "2026-08-29"
+    "hash": "53473ed95a9130bf",
+    "date": "2026-08-30"
   },
   "/sign-the-player": {
     "hash": "b2368716ea621bd6",
@@ -449,8 +453,8 @@
     "date": "2026-08-25"
   },
   "/soccer": {
-    "hash": "dbf4a0ad628c6ea7",
-    "date": "2026-08-29"
+    "hash": "7034088286b737bc",
+    "date": "2026-08-30"
   },
   "/soccer-career": {
     "hash": "70ecca0c076b8ba3",
