@@ -125,15 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 359 (desktop, 2026-08-30): the same fragility Round 358 found in
-  the three franchise grids lives in src/lib/fetchAllRows.ts, the shared paging
-  helper, where ONE page error aborts the whole read and hands the caller an
-  error. Nine libs depend on it: career players, connections puzzles, the pack
-  pool, quiz board, rebuild, transfer grades, transfer path puzzles, transfer
-  values and Who Am I. Fix the root rather than nine callers, per this repo's
-  own rule, and fence it deterministically by handing the helper a page
-  function that fails on demand.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -407,6 +398,40 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE PAGING HELPER SURVIVES A TRANSIENT, AND THE AdSENSE READINESS DOC LANDS,
+  Round 359 (desktop lane, 2026-08-30). Round 358 found the three franchise
+  grids giving up a whole game on one cancelled page. The same fragility lived
+  in src/lib/fetchAllRows.ts, the shared helper that pages every large read on
+  the site, and NINE more libs depend on it: career players, connections
+  puzzles, the pack pool, the quiz board, rebuild, transfer grades, transfer
+  path puzzles, transfer values and Who Am I. Paging turns one read into ten or
+  twenty queries, so it multiplies the chance of meeting a transient by the
+  number of pages, and the database really does cancel these under load
+  (Postgres 57014). Fixed at the root: two retries of the SAME range with a
+  short backoff, then the error still surfaces, because a database that is
+  genuinely down must not be retried forever.
+  simFetchRetry is the fence and it needs no database on purpose, because the
+  failure is injected rather than waited for, so it is deterministic and it runs
+  in a sandbox with no network. It holds six things, and the two that matter
+  most are not the obvious one: that the rows after a retry are EXACTLY the rows
+  without one (a retry that re-requested the wrong range would corrupt the
+  result rather than fail it, which is the risk the fix itself carries), and
+  that every caller reads the error, because the helper hands back what it
+  collected ALONGSIDE the error, so a caller taking only the data would serve a
+  silent fraction of the table. All nine honour it today and whoAmI documents
+  why; the check is there so the tenth has to. Two controls, one per mechanism:
+  FETCHRETRY_CONTROL=noretry strips the retry and sections 1 and 2 go red,
+  showing the exact production failure (1,000 of 2,500 rows returned WITH an
+  error), and FETCHRETRY_CONTROL=blindcaller blinds one caller and section 6
+  goes red. Both refuse to run if they had nothing to remove.
+  The round also lands docs/adsense/reapply-readiness.md, the owner directive's
+  section 19 deliverable. Verdict NEARLY READY, and the reasoning is that the
+  site is now better but Google's index is not: the hubs were rewritten and the
+  archives shipped on 2026-08-30, so submitting today spends the re-review on a
+  snapshot that predates the response to the rejection. The owner submits, not
+  us. Still blocked on him: index coverage needs Search Console, which no tool
+  here can read.
 
 - THE ARCHIVE COVERS THREE SPORTS, AND A REAL PRODUCTION BUG FELL OUT OF IT,
   Round 358 (desktop lane, 2026-08-30). The archive now runs for the NBA, MLB
