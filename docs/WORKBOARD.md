@@ -125,26 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 360 (desktop, 2026-08-30): THE WORLD LEADERBOARD IS STILL
-  FORGEABLE AND THE FIX HAS BEEN SITTING UNAPPLIED FOR FOUR DAYS.
-  LEADERBOARD-SECURITY-2026-08-26.md and
-  supabase/migrations/20260826_leaderboard_score_caps.sql are both UNTRACKED in
-  Anthony's folder, so they were never committed and never applied. Verified
-  against the live database 2026-08-30: no caps table exists, and neither
-  global_leaderboard() nor global_rank() mentions a cap, so both still compute
-  each game's denominator from game_completions, which accepts anonymous INSERT
-  with WITH CHECK (true). Anyone can post a row for a game key that does not
-  exist, score 1, and collect the full 100 points, repeatably. The board is
-  linked from every page since Round 270.
-  THE MIGRATION CANNOT BE APPLIED AS WRITTEN: its allowlist was derived from
-  source on 2026-08-26 and roughly sixty rounds have shipped since, so applying
-  it would silently zero every game added after that date, which is the exact
-  mistake its own comments say the first draft made. The round is: re-derive the
-  allowlist from current source, re-measure whether the hole has been used since
-  the 105,726 row audit (it is 174,183 rows now), apply, verify the board is
-  unchanged for real players, and fence the allowlist so it cannot go stale
-  again.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -418,6 +398,50 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE WORLD LEADERBOARD STOPS TRUSTING NUMBERS A STRANGER CAN WRITE,
+  Round 360 (desktop lane, 2026-08-30). global_leaderboard() and global_rank()
+  computed each game's denominator from game_completions, which takes anonymous
+  INSERT with WITH CHECK (true), so posting one row under a game key that does
+  not exist made your score that key's maximum and paid the full 100 points,
+  repeatably, on a board linked from every page since Round 270. A fix was
+  written on 2026-08-26 and NEVER APPLIED, because the doc and the migration
+  were both left untracked in Anthony's folder where no session that pulls the
+  repo could see them. Both are committed now.
+  CORRECTING THIS ROUND'S OWN CLAIM: the claim said applying the stale draft
+  would zero every game shipped since 2026-08-26. That was wrong and the diff
+  says so. The draft's half one derives caps from the DATA, so any newer game
+  that had recorded a score was already covered. The real gap was FOUR games
+  that can send a completion and have no scores yet: clue-auction,
+  perfect-season-nhl, stat-detective and who-am-i, all four live registered
+  routes. Four silently earning nothing forever, not sixty.
+  Applied as 20260830_leaderboard_score_caps.sql, superseding the draft, with
+  one design change: half two now carries EVERY key the source can send, derived
+  from source rather than typed, so the table is complete by construction rather
+  than complete by somebody remembering. 137 rows, 122 frozen from live data and
+  15 allowlisted with a null denominator that falls back to the game's own 99th
+  percentile. Re-verified read only on 174,183 rows and 3,982 players
+  immediately before applying: top 100 players whose points change 0, largest
+  change 0, nobody dropped. Re-measured for exploitation: still none, no game's
+  maximum exceeds 1.2x its own 99th percentile. An open door, not a break in.
+  simLeaderboardCaps is the fence and it is the half that lasts, because the
+  inner join that kills the attack turns a missing row into SILENT zero scoring,
+  which is quieter than the bug it replaces. Five checks, CAPS_CONTROL=stalelist
+  for the control. Its own section 4 shipped a bug first: it read
+  game_completions with limit=100000 and went green having seen 1,000 of 174,183
+  rows and 40 of the 122 scoring games, walking straight into the PostgREST
+  1,000 row cap that fetchAllRows exists for and that Round 359 had just
+  hardened. It keyset paginates now and refuses to pass if it enumerates under
+  100 games.
+  get_advisors after the DDL, per the database rules, found one ERROR of my own
+  making: the new view defaulted to SECURITY DEFINER. Now security_invoker, and
+  it exposed nothing meanwhile because both tables it reads are already public
+  read. Confirmed at the same time that app_secret is executable only by
+  postgres and service_role, so the poll secret is not reachable with the anon
+  key.
+  STILL OWED BY ANTHONY, both one click: leaked password protection is still OFF
+  (the 2026-08-30 advisor run confirms it), and the Supabase spend cap wants
+  confirming.
 
 - THE PAGING HELPER SURVIVES A TRANSIENT, AND THE AdSENSE READINESS DOC LANDS,
   Round 359 (desktop lane, 2026-08-30). Round 358 found the three franchise
