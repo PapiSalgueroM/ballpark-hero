@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 356.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 357.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -266,11 +266,15 @@ in the cloud lane AT ALL, and every cloud board from here reports FOUR reds
 that mean "not runnable here", not "broken". Two of those four arrived in a
 single evening, which is the point: the count is climbing with every
 data-backed fence, and a board that is permanently four-red stops being
-read. Both fail
-closed with a clear sentence, which is right, and neither should ever be made
-to pass on a run that reached no database. But the count grows with every
-data-backed fence the desktop lane adds, and a board whose red is permanent
-stops being read, which is the actual risk.
+read. All four fail closed with a clear sentence, which is right, and none of
+them should ever be made to pass on a run that reached no database.
+BEING FIXED AT THE RUNNER AS ROUND 356 (cloud, 2026-08-29), without touching
+any of the four: the runner probes the database once itself and, only when it
+is genuinely unreachable, reports a harness that said NOTHING WAS CHECKED as
+SKIPPED rather than failed. A skip is not a pass and is never counted as one.
+Where the database IS reachable, the desktop lane included, nothing changes
+and that sentence stays a hard failure, because there it means the data broke
+rather than the sandbox.
 Round 335 fixed only the diagnosis on `simValueFreshness`: it used to die on
 `Unexpected token 'H'` because the bare `.json()` choked on the proxy's plain
 text body before its own guard could speak, and it now prints the status, the
