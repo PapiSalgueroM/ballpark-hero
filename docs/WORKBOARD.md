@@ -268,7 +268,7 @@ single evening, which is the point: the count is climbing with every
 data-backed fence, and a board that is permanently four-red stops being
 read. All four fail closed with a clear sentence, which is right, and none of
 them should ever be made to pass on a run that reached no database.
-BEING FIXED AT THE RUNNER AS ROUND 356 (cloud, 2026-08-29), without touching
+FIXED AT THE RUNNER, ROUND 356 (shipped) (cloud, 2026-08-29), without touching
 any of the four: the runner probes the database once itself and, only when it
 is genuinely unreachable, reports a harness that said NOTHING WAS CHECKED as
 SKIPPED rather than failed. A skip is not a pass and is never counted as one.
@@ -318,6 +318,20 @@ Standing claims:
 
 ## Done
 
+- THE RUNNER LEARNS WHAT IT CANNOT REACH, Round 356 (cloud lane, 2026-08-29).
+  The four database-backed fences no longer read as four broken harnesses in
+  the lane that physically cannot reach the database. runAllSims probes the
+  database once, and only when that probe is refused does a harness whose own
+  output ends NOTHING WAS CHECKED report as SKIPPED, named in its own line and
+  subtracted from the green total rather than counted as a pass. Where the
+  database answers, nothing changes and that sentence is still a hard failure,
+  so the desktop lane's runs are identical to before. No list of harness names
+  was added, on purpose: two of the four reach the database through app libs
+  and never mention it, so a text sniff would have missed them, while every one
+  of them says plainly in its output that it checked nothing. The fifth such
+  harness will be handled without anyone editing this. DB_PROBE=reachable is
+  the control and turns the skips back into failures. Cloud board: 143 green,
+  4 skipped, 0 failed.
 - NBA STAT LINE, Round 352 (cloud lane, 2026-08-29). The first item off his
   2026-08-29 ideas list and the first new route since the contract narrowed the
   freeze. A target per-36 line drawn from a real season's own numbers, five real

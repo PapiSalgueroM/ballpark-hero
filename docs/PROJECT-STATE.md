@@ -2597,6 +2597,29 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 356.** The runner learns the difference between broken and
+  unreachable. Four harnesses read the live database (R344 simValueFreshness,
+  R345 simWorldXiPositions, R353 simSoccerGridTiers, R354 simGridArchive), the
+  cloud sandbox's egress proxy answers that host with a 403, and so all four
+  failed every cloud run. Two of them arrived in one evening, so the count is
+  still climbing, and a board that is permanently four-red stops being read,
+  which costs more than the four checks are worth. The fix is deliberately NOT
+  a list of harness names: this runner's own rule is that sniffing beats a list
+  that goes stale, and a text sniff would have missed half of these anyway,
+  because two of the four reach the database indirectly through app libs and
+  never mention it in their source. What all four do instead is say so in their
+  own words before exiting non-zero, every one ending NOTHING WAS CHECKED. So
+  the harness is believed and its claim is then verified: the runner probes the
+  database once itself, and only when that probe is genuinely refused does a
+  harness saying it checked nothing become SKIPPED rather than failed. Where
+  the database answers, the desktop lane included, that same sentence stays a
+  hard failure, because there it means the data broke rather than the sandbox,
+  so their runs are unchanged. A skip is never a pass: it is named in its own
+  line, repeated in the summary, and subtracted from the green total, which is
+  Round 100's lesson that a run covering less than it appears to reads as
+  everything being fine. DB_PROBE=reachable forces the other branch and turns
+  the skips straight back into failures, proven both ways. The cloud board now
+  reads 143 green, 4 skipped, 0 failed.
 - **2026-08-29, Round 352.** NBA Stat Line at `/nba-stat-line`, the first item off
   his 2026-08-29 ideas list and the first new route since the operating contract
   narrowed the AdSense freeze and explicitly ordered new pages. A target per-36
