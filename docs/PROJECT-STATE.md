@@ -2597,6 +2597,18 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 353.** The soccer grid's Hard setting did nothing, and
+  the reason is a lesson this repo already knows in another form. Difficulty is
+  derived from attribute narrowness, and the bands split the range the score
+  COULD take rather than the range it DOES take. Measured on all 710 live
+  puzzles the score has six values, 470 of them exactly 2, so the tiers were
+  easy 554, normal 153, hard 3; the filter falls back to the full pool under
+  20, so Hard was inert and silent. Rebanded from the measured distribution to
+  470 / 193 / 47 with mean narrowness rising across the tiers, fenced by
+  simSoccerGridTiers against the live pool, control re-applies the old bands to
+  the same data and goes red. The same mistake the harness rules warn about
+  ("set margins from measured headroom, not a number that felt right"), made in
+  product logic rather than in a test.
 - **2026-08-30, Round 351.** The footer waits for its page. Filed as an
   architectural snapshot problem needing design thought, the boot shift turned
   out to be mostly a one-line structural bug: <Footer /> sat OUTSIDE the route

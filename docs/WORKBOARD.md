@@ -37,17 +37,6 @@ September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 353 (desktop, 2026-08-30): SOCCER GRID HARD MODE DOES NOTHING.
-  Measured against the live 710 puzzle pool: the difficulty classifier puts 554
-  puzzles in easy, 153 in normal and 3 in hard, and filterPoolByDifficulty
-  falls back to the FULL pool whenever a tier holds fewer than 20, so choosing
-  Hard silently changes nothing at all. A visible control that does nothing is
-  on the contract's own do-not-ship list. Cause: the thresholds split a
-  theoretical 2 to 6 narrowness range while the data only ever produces six
-  distinct scores between 2 and 5.33, two thirds of them exactly 2. Fix is to
-  derive the bands from the measured distribution, plus a fence so a future
-  pool cannot silently kill a tier again.
-
 **MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
 outside SEO brief; the desktop lane ran the audit the same evening, findings in
 the chat and summarized here). The brief's premise needs one correction on the
@@ -342,6 +331,27 @@ Standing claims:
 
 ## Done
 
+- SOCCER GRID HARD MODE WAS INERT, Round 353 (desktop lane, 2026-08-30).
+  Found while checking whether the archive could safely publish soccer boards,
+  which needed the per-tier pool sizes. Difficulty here is DERIVED, from how
+  narrow a board's row and column attribute types are, and the bands split the
+  score's theoretical 2 to 6 range into even thirds. The pool cannot produce
+  high scores, because narrow attributes are rare in it: measured across all
+  710 live puzzles the score takes six values and two thirds of boards sit at
+  exactly 2. So the tiers came out easy 554, normal 153, HARD 3, and because
+  filterPoolByDifficulty falls back to the whole pool below 20, choosing Hard
+  did nothing at all. Nothing crashed and nothing logged; the settings panel
+  simply offered a choice with no effect, which is a button that does nothing
+  on the contract's own do-not-ship list. The bands now cut the measured
+  distribution instead of the theoretical one: 470 / 193 / 47, every tier
+  clear of the floor, mean narrowness rising 2.00, 3.04, 4.07 in the order the
+  labels promise. simSoccerGridTiers holds all three of those against the live
+  pool, and TIERS_CONTROL=oldbands re-applies the shipped bands to the same
+  data and goes red, so the control reproduces the real bug rather than a
+  staged one. Note for the day it ships: a player mid-game on the old tier
+  loses today's board, because useDailyPuzzle validates the saved puzzleIndex
+  and discards a mismatch, which is the safe behaviour and the reason nothing
+  is corrupted.
 - THE FOOTER WAITS FOR ITS PAGE, Round 351 (desktop lane, 2026-08-30). The
   boot swap item, diagnosed rather than assumed, and most of it turned out not
   to be the snapshot architecture at all. Every route is lazily loaded, so

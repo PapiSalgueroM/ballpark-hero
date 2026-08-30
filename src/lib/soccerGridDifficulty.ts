@@ -62,12 +62,40 @@ export function puzzleNarrownessScore(puzzle: SoccerGridPuzzle): number {
 
 /**
  * Classifies a puzzle into Easy / Normal / Hard using the narrowness score.
- * Thresholds split the observed 2-6 range into three bands.
+ *
+ * ROUND 353: THE BANDS COME FROM THE MEASURED DISTRIBUTION, NOT FROM THE
+ * THEORETICAL RANGE. The first cut split the range the score CAN take, 2 to 6,
+ * into even thirds at 2.75 and 4.25. The score cannot actually reach the top
+ * of that range, because the narrow attribute types are rare in the pool (the
+ * counts in the header comment above say so: 41 narrow attributes against
+ * roughly 3,000 broad ones), so a board needs almost every row and column to
+ * be narrow to clear 4.25 and almost none are.
+ *
+ * Measured across all 710 live puzzles on 2026-08-30, the score takes exactly
+ * six values:
+ *
+ *   2.000  470 puzzles      <- every row and column broad
+ *   2.667   84
+ *   3.333  109
+ *   4.000   44
+ *   4.667    1
+ *   5.333    2
+ *
+ * The old bands therefore produced easy 554, normal 153 and HARD 3. Three is
+ * below the fallback floor in filterPoolByDifficulty, so a player choosing
+ * Hard was handed the whole pool and the setting did nothing whatsoever: a
+ * control on screen that changed nothing behind it.
+ *
+ * These bands cut the real distribution instead: easy is the all-broad board,
+ * normal is the two middle scores, hard is everything from 4 up. That gives
+ * 470 / 193 / 47, every tier comfortably above the floor, so all three
+ * settings genuinely select. simSoccerGridTiers holds them there, because the
+ * failure was silent and would be silent again.
  */
 export function classifyPuzzleDifficulty(puzzle: SoccerGridPuzzle): SoccerGridDifficulty {
   const score = puzzleNarrownessScore(puzzle);
-  if (score <= 2.75) return 'easy';
-  if (score <= 4.25) return 'normal';
+  if (score < 2.5) return 'easy';
+  if (score < 4) return 'normal';
   return 'hard';
 }
 
