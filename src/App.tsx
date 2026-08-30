@@ -454,11 +454,24 @@ const AppContent = () => {
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      </Suspense>
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
-          importing their own copy and 95 pages having none. */}
+          importing their own copy and 95 pages having none.
+
+          Round 351: INSIDE the Suspense boundary, and that is the whole fix for
+          a layout shift that had been on every page of the site. Every route is
+          lazily loaded, so while its chunk downloads the fallback below renders
+          at min-h-[60vh], about 487px on a phone. The footer used to render
+          immediately beneath that, roughly 535px down the page, and then the
+          real route would arrive, stand thousands of pixels tall, and shove the
+          footer down with it. Measured on a 375px phone that single move was a
+          0.341 layout shift, which is most of the way to Google's 0.25 "poor"
+          line on its own, and it matched the 0.341 measured on the live site on
+          three unrelated pages. Inside the boundary the footer simply waits for
+          the content whose height it depends on, and then mounts below the
+          fold where a mount costs nothing. */}
       <Footer />
+      </Suspense>
     </>
   );
 };

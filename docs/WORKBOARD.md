@@ -46,28 +46,15 @@ and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
 facts are true at once. Grid search is the site's search beachhead, not its
 whole audience.**
 
-- BOOT SWAP CLS (BUILDING as Round 351, desktop, 2026-08-30). Diagnose first,
-  fix only if the evidence supports a small change; if it genuinely needs the
-  snapshot architecture rebuilt, the round ends as a written diagnosis and the
-  build waits. Core Web Vitals are a ranking input and this is the last
-  measured defect on the pages that earn the traffic.
-  (found in Round 348, was unclaimed and
-  needs design thought, not a quick round): on slow connections the prerendered
-  snapshot shows first and the booted React app then redraws the whole page,
-  which registers as a large layout shift (measured locally at 200KB/s and
-  150ms RTT: 0.53 to 0.69 on grid pages AFTER Round 348 removed the board-swap
-  component; before it, 0.74 to 0.95). Font swap contributes a smaller early
-  shift. Any fix touches the snapshot architecture or index.html (frozen during
-  the AdSense review), so this waits for deliberate design plus the verdict.
-  The Round 348 harness pins the part the app controls at 0.05.
-- GRID ARCHIVE AND ANSWER PAGES (UNBLOCKED by the 2026-08-29 operating
-  contract, its Task 3, unclaimed): past grids with answers, rarity scores and
-  a replay button, one shared system across all six grid sports. Real search
-  intent, real user value, and the contract's explicit carve-out says the
-  thin-page rule must not be used to refuse it. Design first (the shared
-  route shape, what data each grid can honestly show, replay mechanics), show
-  the design before building, then one round for the system and the first
-  sport, then one per sport.
+- SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
+  properly and it is smaller than Round 348 thought): the prerendered snapshot
+  lives INSIDE #root, so when React mounts it clears it and paints a different
+  document, which shifts whatever the visitor could already see. It cannot be
+  hydrated away because the snapshot is deliberately reconstructed readable
+  text rather than React's own markup, and it must NOT be hidden from visitors,
+  because text served only to crawlers is cloaking. Any real fix changes the
+  prerenderer to emit hydratable markup, which is a designed round, not a
+  patch. Round 351 removed the larger and cheaper half of what was filed here.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
@@ -343,6 +330,27 @@ Standing claims:
 
 ## Done
 
+- THE FOOTER WAITS FOR ITS PAGE, Round 351 (desktop lane, 2026-08-30). The
+  boot swap item, diagnosed rather than assumed, and most of it turned out not
+  to be the snapshot architecture at all. Every route is lazily loaded, so
+  while a chunk downloads React shows a spinner in a min-h-[60vh] box, and the
+  global Footer rendered immediately BELOW that Suspense boundary: a full width
+  277px footer painted about 535px down a phone screen, then the real route
+  arrived several thousand pixels tall and shoved it down. That single move
+  measured 0.341, which is exactly the CLS the live site showed on three
+  unrelated pages in Round 348. The fix is moving <Footer /> inside the
+  boundary so it waits for the content it sits under and then mounts below the
+  fold, where a mount costs nothing. Proven by A/B on the real build rather
+  than argued: the old structure measures 0.341 on all five swept routes, the
+  new one measures 0 to 0.027, three consecutive runs green. playBootShift is
+  the fence and it checks the STRUCTURE first (with the route chunk held back
+  2500ms so the fallback is certain, nothing may render under it) and the
+  number second, because the structure is the invariant and the number is
+  evidence. Its first cut was flaky, sleeping a guessed four seconds and
+  failing a merely slow sport hub, so it polls for the footer now. Control
+  BOOTSHIFT_CONTROL=eagerfooter replants a footer under the fallback and was
+  caught on all five routes. The genuine snapshot-swap remainder is smaller
+  than believed and stays on the board.
 - THE NFL GRID POOL, Round 350 (desktop lane, 2026-08-29). Claimed as the grid
   archive and reaimed by its own recon, which found a worse bug underneath:
   every grid walks its static pool once before repeating, so POOL LENGTH IS THE

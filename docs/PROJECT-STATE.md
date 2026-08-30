@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 351.** The footer waits for its page. Filed as an
+  architectural snapshot problem needing design thought, the boot shift turned
+  out to be mostly a one-line structural bug: <Footer /> sat OUTSIDE the route
+  Suspense boundary, so it painted under a 60vh spinner about 535px down a
+  phone screen and was then shoved thousands of pixels down when the lazily
+  loaded route arrived. That move measured 0.341, the exact figure the live
+  site showed on three unrelated pages in Round 348, and it happened on every
+  page and every connection because a route chunk always has to load. Moving
+  the footer inside the boundary drops five swept routes from 0.341 to between
+  0 and 0.027, proven by rebuilding the old structure and measuring it rather
+  than by argument. playBootShift fences the structure first and the number
+  second, with a replant control; its flaky first cut is documented in its
+  header. The true snapshot swap remains, is smaller than believed, and is
+  back on the board with the two things that make it hard written down: it
+  cannot be hydrated because the snapshot is reconstructed text, and it must
+  not be hidden from visitors because that is cloaking.
 - **2026-08-29, Round 350.** The NFL grid stops repeating itself, and a round
   gets reaimed by its own recon. Claimed as the grid archive, the first hour of
   data work disproved the archive design (selections are keyed by puzzle, not
