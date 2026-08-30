@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 355.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 356.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -37,7 +37,16 @@ September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
 
-- BUILD:SEO HALTS PARTWAY (found in Round 354, unclaimed, small): prerender.mjs
+- BUILD:SEO HALTS PARTWAY (BUILDING as Round 355, desktop, 2026-08-30). The
+  premise in this item is wrong and the round starts by saying so: the refused
+  routes are DIFFERENT on every run (alphabet-sprint and golf-higher-lower on
+  one, perfect-season-nhl and hall-of-champions on another) and the difference
+  is always the FAQ block being PRESENT in one clock sample and ABSENT in
+  another, not carrying different content. That is a race against Helmet, not a
+  calendar dependency, and the prerenderer says so itself on the routes where
+  its one redraw happens to win. Two pages lose their snapshot to it per run,
+  keeping a stale one, and the build halts. Original item text follows.
+  (found in Round 354, small): prerender.mjs
   exits non-zero when it refuses a route whose head changes with the clock, and
   /perfect-season-nhl and /hall-of-champions both do, so `npm run build:seo`
   stops after prerender and never regenerates the sitemap or runs the final
