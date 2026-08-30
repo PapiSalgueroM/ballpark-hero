@@ -21,19 +21,39 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 357.
 
-**THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
-recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
-explicitly defers AdSense ("at current traffic this earns very little") and
-ORDERS new production routes: NFL grid work, grid archive and answer pages.
-That supersedes directive 3's blanket route freeze. Still verified-fix-only:
-ads.txt, the verification code, robots.txt, and existing pages' canonicals.
-New real-value routes and their sitemap rows are permitted again.
-CONSEQUENCES: the NBA Stat Line branch (below) is UNBLOCKED and can merge as
-the next cloud round; the grid archive system is UNBLOCKED and claimable.
-Ground truth is now Google Search Console, not Semrush: 1,800 clicks per 28
-days, mobile 42 percent of clicks, a third branded, /football-grid at position
-21 for "nfl grid" (49,500 monthly volume) with NFL season starting in
-September. Milestone 0 is the grid category; D157/D158/D159 wait.**
+**THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
+the console screenshots: a policy violation, "Low value content", with the
+minimum-content and thin-content guidelines linked and a Request review button
+behind an "I confirm I have fixed the issues" checkbox. THE FREEZE IS THEREFORE
+OVER, because directive 3 defined it as lasting until the verdict. Nothing on
+the site is frozen any more; the ordinary care about crawler-facing files still
+applies, and ads.txt, the verification code and robots.txt are still not things
+to touch casually.
+
+**THE DESKTOP LANE AUDITED THE SITE AGAINST THAT VERDICT THE SAME HOUR AND
+FOUND NO MECHANICAL DEFECT TO FIX. Read this before anyone starts writing
+filler copy.** Measured across all 153 shipped documents: the median page
+carries 584 unique words and the 90th percentile 970, the home page 923, and
+only FIVE sentences repeat on more than half the pages, so the guide copy is
+genuinely per game rather than a template with the nouns swapped. Every page
+under 200 unique words is one of three kinds and all three are already handled
+correctly: eleven retired-game signposts that canonicalise to the game that
+replaced them, private pages (profile, admin, password reset) that are
+noindexed, and four games Anthony himself pulled from the menus, noindexed on
+his own instruction. So the thin surface a reviewer could index is essentially
+nothing, and the rejection is a judgement about what the site IS rather than a
+list of pages to repair. Do not respond to it by mass producing copy: that is
+the one move that would make the next review worse.
+
+**WHAT THAT MEANS FOR THE ROADMAP, owner decision pending.** His own operating
+contract already defers AdSense ("at current traffic this earns very little")
+and at 1,800 clicks a month it is worth very little indeed, so the desktop
+lane's recommendation on the record is to NOT request a re-review yet, keep
+growing the traffic Milestone 0 is already growing, and re-apply when the site
+is materially bigger, at which point the same content profile reads
+differently. He has been asked and has not yet answered; until he does, nobody
+should spend a round on AdSense remediation.
+
 
 ## HANDOFF TO THE CLOUD LANE, written 2026-08-30 by the desktop lane
 
@@ -162,13 +182,6 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   the site's whole pitch is clean free games. If some of that flavor is wanted, the
   existing in-career purchases and a fictional "prediction night out" event carry it
   without slot machines. Parked unless he overrules.
-- LIGHT MODE (Anthony, 2026-08-29 late: "since its basically in dark mode already I
-  would love for there to be a light mode and people can choose"). A real theme
-  system: the palette is dark-only today, so this needs a light token set on the
-  CSS variables, a toggle in the header persisted per browser, prefers-color-scheme
-  as the default, and a legibility pass over the games (the sweeps at 320/390 run
-  in both themes when this lands). Sizeable, its own round or two.
-
 - SPONSOR-READY SURFACES (owner directive 13): configurable presented-by slots for
   challenges, tournaments and hubs, admin configured, never hard-coded brands,
   clearly separated from gameplay. An architecture round first (where the config

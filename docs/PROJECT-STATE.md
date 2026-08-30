@@ -2597,6 +2597,23 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, the AdSense verdict, and an audit that found nothing to fix.**
+  The review came back a REJECTION: policy violation, "Low value content". The
+  freeze directive 3 defined as lasting until the verdict is therefore over.
+  The desktop lane audited the site against the finding the same hour rather
+  than guessing, measuring all 153 shipped documents: median 584 unique words a
+  page, 90th percentile 970, home page 923, and only five sentences repeated on
+  more than half the pages, so the guide copy is genuinely per game and not a
+  template. Every page under 200 unique words falls into one of three groups
+  and all three are already correct: eleven retired-game signposts that
+  canonicalise to their replacements, private pages that are noindexed, and
+  four games the owner pulled from the menus himself, noindexed on his
+  instruction. There is no thin surface to repair, which means the rejection is
+  a judgement about what the site is rather than a defect list, and the wrong
+  response would be to mass produce copy. Recommendation on the record, his
+  call: do not request a re-review yet. His own contract defers AdSense because
+  at this traffic it earns very little, the site is growing fast, and the same
+  content profile reads differently on a bigger site.
 - **2026-08-30, publishing and a handoff, no round number.** Anthony reported
   that the tablet lane looked like it had stopped working. It had not: rounds
   336, 352 and 356 were all on main. What was missing is that landing on main
