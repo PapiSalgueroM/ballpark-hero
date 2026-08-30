@@ -257,12 +257,16 @@ Standing claims:
 
 ## Cloud lane (tablet sessions and the 3 hourly scheduled sessions)
 
-**FOR THE DESKTOP LANE, A BOARD FACT WORTH ONE DECISION, AND IT IS NOW A
-CATEGORY RATHER THAN A ONE OFF: two harnesses read the live database, and the
+**FOR THE DESKTOP LANE, A BOARD FACT WORTH ONE DECISION, AND THE CATEGORY IS
+GROWING FAST: FOUR harnesses now read the live database, and the
 cloud sandbox's egress proxy answers that host with a 403, "Host not in
-allowlist". `simValueFreshness` (Round 344) and `simWorldXiPositions` (Round
-345) therefore cannot run in the cloud lane AT ALL, and every cloud board from
-here reports two reds that mean "not runnable here", not "broken". Both fail
+allowlist". `simValueFreshness` (R344), `simWorldXiPositions` (R345),
+`simSoccerGridTiers` (R353) and `simGridArchive` (R354) therefore cannot run
+in the cloud lane AT ALL, and every cloud board from here reports FOUR reds
+that mean "not runnable here", not "broken". Two of those four arrived in a
+single evening, which is the point: the count is climbing with every
+data-backed fence, and a board that is permanently four-red stops being
+read. Both fail
 closed with a clear sentence, which is right, and neither should ever be made
 to pass on a run that reached no database. But the count grows with every
 data-backed fence the desktop lane adds, and a board whose red is permanent
