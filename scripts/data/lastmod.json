@@ -13,8 +13,8 @@
     "date": "2026-08-27"
   },
   "/afl-higher-lower": {
-    "hash": "7236b1d0af758c60",
-    "date": "2026-08-27"
+    "hash": "7977c81c5a518934",
+    "date": "2026-08-30"
   },
   "/alphabet-sprint": {
     "hash": "fc30e47a08d604c1",
@@ -117,16 +117,16 @@
     "date": "2026-08-29"
   },
   "/f1-constructor": {
-    "hash": "fabfa8a2c8fc1d6f",
-    "date": "2026-08-25"
+    "hash": "fe1769f6cd60c81f",
+    "date": "2026-08-30"
   },
   "/f1-driver": {
-    "hash": "e1c68ae65779b0ec",
-    "date": "2026-08-25"
+    "hash": "ae5426d601e7de1c",
+    "date": "2026-08-30"
   },
   "/f1-higher-lower": {
-    "hash": "7758ac9a9edbe0a4",
-    "date": "2026-08-25"
+    "hash": "b5ca99adf6e05b87",
+    "date": "2026-08-30"
   },
   "/face-off": {
     "hash": "97003cd8762234b4",
@@ -165,12 +165,12 @@
     "date": "2026-08-25"
   },
   "/guess-nascar-driver": {
-    "hash": "c0aea2b305e857a8",
-    "date": "2026-08-25"
+    "hash": "7b070177659dec74",
+    "date": "2026-08-30"
   },
   "/guess-tennis-player": {
-    "hash": "81db0488efd2a959",
-    "date": "2026-08-25"
+    "hash": "596881c5cb80b9fe",
+    "date": "2026-08-30"
   },
   "/guess-the-college": {
     "hash": "1bfd27d4cb77b8bb",
@@ -273,8 +273,8 @@
     "date": "2026-08-25"
   },
   "/nascar-chain": {
-    "hash": "bb19318aab68f2dd",
-    "date": "2026-08-25"
+    "hash": "a1db885211363268",
+    "date": "2026-08-30"
   },
   "/nba-career": {
     "hash": "efa74e3ae3dda99b",
@@ -361,8 +361,8 @@
     "date": "2026-08-25"
   },
   "/perfect-lineup-f1": {
-    "hash": "4a6da34007396a28",
-    "date": "2026-08-25"
+    "hash": "3c47113d80278f79",
+    "date": "2026-08-30"
   },
   "/perfect-lineup-nba": {
     "hash": "cac07b0cdf81868b",
@@ -485,12 +485,12 @@
     "date": "2026-08-25"
   },
   "/tennis-chain": {
-    "hash": "22389fe7d4773094",
+    "hash": "0cd614f844ddddaf",
     "date": "2026-08-30"
   },
   "/tennis-higher-lower": {
-    "hash": "99df0e31c32454a1",
-    "date": "2026-08-25"
+    "hash": "bd8f283900d4c9c8",
+    "date": "2026-08-30"
   },
   "/terms": {
     "hash": "48393dd84444e881",
