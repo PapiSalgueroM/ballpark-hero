@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 351.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 352.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -46,7 +46,12 @@ and Lovable analytics has soccer-career at roughly 1 in 5 of ALL pageviews. Both
 facts are true at once. Grid search is the site's search beachhead, not its
 whole audience.**
 
-- BOOT SWAP CLS, the architectural remainder (found in Round 348, unclaimed and
+- BOOT SWAP CLS (BUILDING as Round 351, desktop, 2026-08-30). Diagnose first,
+  fix only if the evidence supports a small change; if it genuinely needs the
+  snapshot architecture rebuilt, the round ends as a written diagnosis and the
+  build waits. Core Web Vitals are a ranking input and this is the last
+  measured defect on the pages that earn the traffic.
+  (found in Round 348, was unclaimed and
   needs design thought, not a quick round): on slow connections the prerendered
   snapshot shows first and the booted React app then redraws the whole page,
   which registers as a large layout shift (measured locally at 200KB/s and
