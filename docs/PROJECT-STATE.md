@@ -2597,6 +2597,24 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-29, Round 350.** The NFL grid stops repeating itself, and a round
+  gets reaimed by its own recon. Claimed as the grid archive, the first hour of
+  data work disproved the archive design (selections are keyed by puzzle, not
+  date; every grid recycles a static array, so 16 of the NFL grid's 22 seen
+  puzzle ids already had picks spanning several days, and date-keyed pages
+  would have been duplicates of each other) and surfaced the real defect
+  beneath it: pool length is the repeat interval, and the site's highest-value
+  page was on a 30-day loop with the NFL season days away. Publishing an answer
+  archive over a 30-day loop would also have published an answer key for a live
+  game, which is why the archive now waits for the pool and will be keyed on
+  the puzzle rather than the date. The pool is 30 to 72. Eight researchers
+  authored by thematic slice, a separate adversary refuted each batch and
+  killed 22 of 64 with named errors, and the 42 survivors ship with their
+  evidence committed. simGridPuzzlePool fences depth, board uniqueness,
+  internal soundness and vocabulary, with a proven clone control; its own first
+  draft failed three shipped criteria, so the vocabulary is derived from the
+  pools instead of guessed. tsc zero, build green, snapshots untouched because
+  the board is clock-dependent and the prerenderer strips it.
 - **2026-08-29, Round 349.** The operating contract lands and the NFL grid
   says its own name. Anthony's 2026-08-29 contract (verbatim in
   docs/OPERATING-CONTRACT-2026-08.md) makes Google Search Console the ground

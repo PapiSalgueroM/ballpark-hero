@@ -63,19 +63,6 @@ whole audience.**
   route shape, what data each grid can honestly show, replay mechanics), show
   the design before building, then one round for the system and the first
   sport, then one per sport.
-- CLAIMED Round 350 (desktop, 2026-08-29), REAIMED BY ITS OWN RECON: claimed as
-  the grid archive (contract Task 3), it is now the NFL GRID PUZZLE POOL
-  (contract Task 2), because the recon disproved the archive design and found a
-  worse bug underneath it. Selections are keyed by puzzle, not date, and every
-  grid cycles a static array (selectDailyPuzzle), so THE POOL LENGTH IS THE
-  REPEAT INTERVAL: the NFL grid, the money page ranked 21 for a 49,500-a-month
-  term with the season starting in September, hands a daily player the same
-  board every 30 days. Date-keyed archive pages would have been duplicates of
-  one another (16 of 22 NFL puzzle ids already have picks spanning several
-  days), and publishing answers for a 30-day cycle is publishing an answer key
-  for a live game. Full reasoning kept at the top of
-  docs/designs/GRID-ARCHIVE-DESIGN.md. The archive returns once the pool is
-  deep, keyed on the PUZZLE, never on a date.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
@@ -351,6 +338,25 @@ Standing claims:
 
 ## Done
 
+- THE NFL GRID POOL, Round 350 (desktop lane, 2026-08-29). Claimed as the grid
+  archive and reaimed by its own recon, which found a worse bug underneath:
+  every grid walks its static pool once before repeating, so POOL LENGTH IS THE
+  REPEAT INTERVAL, and the money page (ranked 21 for "nfl grid", 49,500 a month,
+  NFL season days away) was handing daily players the same nine questions every
+  30 days. The pool went 30 to 72, so the repeat is now quarterly. The 42 new
+  boards were authored by eight parallel researchers by thematic slice and then
+  handed to a separate adversarial checker told to refute rather than approve:
+  64 written, 22 rejected each with a named error (Baldwin's 1,069 yards dated
+  to the wrong season, Freeney's Colts-only sack total sold as a career total,
+  three players credited to teams they never played a regular season game for),
+  42 survived, and every crossing carries at least two evidenced real players
+  in scripts/data/nflGridPool350.json. simGridPuzzlePool is the fence: pool
+  depth against a 60-day floor, no two boards asking the same nine questions
+  (rows and cols compared as unordered sets, because swapping the axes asks the
+  same board), no label crossed with itself, and every criterion inside the
+  vocabulary the game was taught. Its own first draft flagged three shipped,
+  working criteria, so the vocabulary is now derived from the pools rather than
+  guessed. GRIDPOOL_CONTROL=dupe clones a board back in and was proven red.
 - NFL GRID SAYS ITS OWN NAME, Round 349 (desktop lane, 2026-08-29). Contract
   Task 4 for the money page: /football-grid ranks 21 for "nfl grid" (49,500
   monthly) with its title and meta already targeting the term, but the H1
