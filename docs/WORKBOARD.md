@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 357.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 358.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -103,10 +103,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
-- SPEC SPLIT INTO /docs/spec/ (queued, either lane, docs only): the operating
-  contract wants the master spec split into per-part files with an index at
-  docs/spec/README.md so sessions load only the relevant section. Mechanical,
-  one round, no gates beyond the build staying green.
 - GRID ENGINE TO NEW SPORTS (unclaimed): the engine family already spans soccer,
   NFL, CFB, NBA, MLB, NHL. Candidates with search demand: CBB grid, WNBA grid.
   Data-first rounds, two-source rule as always.
@@ -365,6 +361,13 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   (NFL from 2025 nflfastr rosters, so a year stale; NHL is current 2026-27; MLB mixed).
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
+
+Claimed 2026-08-30, next: Round 357 (cloud lane):
+
+- SPEC SPLIT INTO /docs/spec/, item 1 of the desktop lane's handoff list and
+  the thing the operating contract names. Docs only, no database, so it is
+  inside this lane's constraint. The split has to be provably lossless, so it
+  ships with a manifest and a harness rather than on trust.
 
 Standing claims:
 
