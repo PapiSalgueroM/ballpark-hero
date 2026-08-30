@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 352.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 353.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -73,7 +73,8 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
   blocks, optionally shooting splits), pick five player SEASONS whose combined
   per-game stats hit it, scored by similarity. A second mode deals a single real GAME
   line and you name the player and the night.
-  **SEASON MODE IS BUILT AND HELD, NOT MERGED (cloud, 2026-08-29).** It sits
+  **SEASON MODE SHIPPING AS ROUND 352 (cloud, 2026-08-29), unblocked by the
+  operating contract that narrowed the freeze.** It sits
   complete on branch `worktree-agent-a8e555b59a5814836` (lib, hook, page,
   registry, guide copy, simNbaStatLine with a proven avgsplit control; tsc
   zero, harness green, simNoRivalNames clean, reviewed line by line against
