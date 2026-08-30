@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 351.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 352.
 
 **ADSENSE REVIEW IS LIVE (Getting Ready, ads.txt authorized), owner directive 3:
 until the verdict, ads.txt, the verification code, canonicals, robots.txt,
@@ -193,6 +193,53 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE PROMISES AUDIT, Round 351 (cloud lane, 2026-08-29). Round 349 made every
+  consequence line in Soccer Career NAME something the game has. This one asks
+  the harder question behind it: does the choice actually DO what its own line
+  promises? The player reads the consequence before deciding and the apply()
+  runs after, and in six places they had drifted apart. On the most played page
+  on the site, that is the game quietly charging for things it does not sell.
+  WHAT WAS BROKEN, all six verified by reading each apply body rather than
+  trusting the count: three choices promised "Social media +50k", "+100k" and
+  "+75k" and delivered no followers at all, the field never touched; a "Legacy
+  +5" for mentoring a youth player paid out in popularity and morale instead,
+  while every other Legacy choice in the file pays integrityBonus; an "Overall
+  +1" was really a shooting boost banked for next season; and a "Red cards +1"
+  recorded no card.
+  HOW EACH WAS FIXED, and the two directions are deliberate. Where the promise
+  was the intended design, the code now keeps it: the three follower payouts
+  are added (the field is carried in millions, so 0.05, 0.1 and 0.075) and the
+  mentoring choice pays its Legacy into integrityBonus like its siblings, with
+  the popularity and morale it already gave now stated rather than silent.
+  Where the promise was simply the wrong description, the words changed
+  instead: "Overall +1" is now "Shooting +1 next season", which is what
+  happens, and "Red cards +1" is now "3 match ban", because redCards lives on
+  SeasonRecord and there is no career counter to raise; faking one into the
+  season being played would have risked the record itself to fix a label.
+  TWO OF MY OWN LEDGER MAPPINGS FROM ROUND 349 WERE WRONG, and finding them is
+  the argument for the ledger's field check existing. "legacy" pointed at the
+  computed LegacyResult object rather than the integrityBonus counter behind
+  it, and "wage" pointed at a club offer field rather than CareerState's
+  weeklyWage. Both passed Round 349's existence check because a field of that
+  name exists on ANOTHER interface. Corrected, and that near miss is written
+  into the harness header so the next person reads it. Before the correction
+  the audit reported 13 suspects; after it, 6, and all 6 were real.
+  THE FENCE is simCareerStatNames section 4. It pairs each consequence string
+  with the apply body sitting beside it and requires every stat promise to
+  touch the field the ledger says that name means, with one deliberate
+  widening: a promise saying "next season" may be paid through
+  statBoostNextSeason, because that is how the engine banks a future boost.
+  The pairing is textual on purpose. Driving the engine would need the event
+  pool exported and would only reach the choices a random career happened to
+  offer, which is coverage by luck; the apply body sits right beside its own
+  promise, so reading the pair is complete and deterministic. 74 choices, 57
+  stat promises, 57 kept. STATNAME_CONTROL=broken strips the payout from a
+  promise that is currently kept, refuses to run if it strips nothing, and is
+  proven red.
+  tsc zero, build green, simCareerStatNames green with BOTH controls red,
+  simCareerEngaged, simCareerRealism, simCareerHub and simCareerEras green,
+  and all 16 built-site fences green.
 
 - THE OWNER IS ALLOWED TO SPEAK, Round 350 (cloud lane, 2026-08-29). Round 349
   ran the full career suite and found simNoInventedQuotes RED, and not because

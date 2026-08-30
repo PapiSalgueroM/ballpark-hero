@@ -5352,7 +5352,8 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 1, emoji: "⚽", title: "Derby Hero!", description: "You score a last-minute winner in the derby. The crowd goes wild.",
       category: "positive", choices: [
         { label: "Celebrate wildly", emoji: "🎉", color: "bg-emerald-600", consequence: "Popularity +10, Social media +50k",
-          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner! Popularity soared"]; return s; } },
+          /* Round 351: the 50k was promised and never delivered. */
+          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.socialMediaFollowers += 0.05; s.events = [...s.events, "⚽ Scored a derby winner! Popularity soared"]; return s; } },
         { label: "Stay humble", emoji: "🤝", color: "bg-blue-600", consequence: "Morale +10, Team chemistry boost",
           apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner, stayed humble"]; return s; } },
       ] },
@@ -5371,7 +5372,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 4, emoji: "🏆", title: "Player of the Month!", description: "You win Player of the Month.",
       category: "positive", choices: [
-        { label: "Dedicate it to the team", emoji: "🤝", color: "bg-emerald-600", consequence: "Overall +1, Market value +€3M",
+        { label: "Dedicate it to the team", emoji: "🤝", color: "bg-emerald-600", consequence: "Shooting +1 next season, Market value +€3M",
           apply: s => { s.marketValue += 3; s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 }; s.events = [...s.events, "🏆 Won Player of the Month"]; return s; } },
       ] },
     { id: 5, emoji: "👟", title: "Sponsorship Deal!", description: "A major sportswear brand offers you a sponsorship deal.",
@@ -5385,13 +5386,15 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 6, emoji: "👶", title: "Youth Mentor", description: "You mentor a 16-year-old youth player at your club who shows incredible promise.",
       category: "positive", choices: [
-        { label: "Take them under your wing", emoji: "🤝", color: "bg-emerald-600", consequence: "Legacy +5, Youth player may become rival later",
-          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "👶 Mentored a promising youth player"]; return s; } },
+        { label: "Take them under your wing", emoji: "🤝", color: "bg-emerald-600", consequence: "Legacy +5, Popularity +5, Morale +5, Youth player may become rival later",
+          apply: s => { s.integrityBonus += 5; s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "👶 Mentored a promising youth player"]; return s; } },
       ] },
     { id: 7, emoji: "🎯", title: "Puskas Nominee!", description: "You score a Puskas Award-nominated goal.",
       category: "positive", choices: [
-        { label: "Take a bow", emoji: "🎉", color: "bg-emerald-600", consequence: "Social media +100k, Market value +€4M",
-          apply: s => { s.popularity = clamp(s.popularity + 15, 0, 100); s.marketValue += 4; s.events = [...s.events, "🎯 Scored a Puskas-nominated goal!"]; return s; } },
+        { label: "Take a bow", emoji: "🎉", color: "bg-emerald-600", consequence: "Social media +100k, Market value +€4M, Popularity +15",
+          /* Round 351: the 100k was promised and never delivered, and the
+             popularity it does give was not promised. Both say so now. */
+          apply: s => { s.popularity = clamp(s.popularity + 15, 0, 100); s.socialMediaFollowers += 0.1; s.marketValue += 4; s.events = [...s.events, "🎯 Scored a Puskas-nominated goal!"]; return s; } },
       ] },
     { id: 8, emoji: "🔟", title: "Number 10 Shirt!", description: "Your manager gives you the number 10 shirt.",
       category: "positive", choices: [
@@ -5405,7 +5408,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 9, emoji: "🟥", title: "Red Card Scandal!", description: "You are caught in a red card scandal after a violent foul. Banned for 3 matches.",
       category: "negative", choices: [
-        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Popularity -5",
+        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "3 match ban, Popularity -5",
           apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
         { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
@@ -5479,7 +5482,8 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 18, emoji: "🥅", title: "International Debut Goal!", description: "You score on your international debut.",
       category: "international", choices: [
         { label: "Celebrate for the nation", emoji: "🎉", color: "bg-emerald-600", consequence: "Social media +75k, Popularity +10",
-          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, `🥅 Scored on international debut for ${s.nationality}!`]; return s; } },
+          /* Round 351: the 75k was promised and never delivered. */
+          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.socialMediaFollowers += 0.075; s.events = [...s.events, `🥅 Scored on international debut for ${s.nationality}!`]; return s; } },
       ] },
     { id: 19, emoji: "🏆❌", title: "World Cup Snub!", description: "You are left out of the World Cup squad despite a great season.",
       category: "international", choices: [

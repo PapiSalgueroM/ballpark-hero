@@ -68,7 +68,8 @@
     "legacy": {
       "uses": 17,
       "backing": "field",
-      "field": "legacy"
+      "field": "integrityBonus",
+      "note": "reads \"Legacy +8\"; the running counter behind it is integrityBonus, the LegacyResult object is computed at retirement"
     },
     "media": {
       "uses": 3,
@@ -124,7 +125,8 @@
     "wage": {
       "uses": 2,
       "backing": "field",
-      "field": "wage"
+      "field": "weeklyWage",
+      "note": "reads \"Wage -15%\"; CareerState carries weeklyWage, the bare wage field is on the club offer type"
     },
     "worth": {
       "uses": 2,
