@@ -150,12 +150,86 @@ function report(results) {
   }
 }
 
+/* ROUND 356: A HARNESS THAT COULD NOT REACH THE DATABASE IS NOT A FAILING
+ * HARNESS, AND IT IS NOT A PASSING ONE EITHER.
+ *
+ * Four harnesses read the live database (R344 simValueFreshness, R345
+ * simWorldXiPositions, R353 simSoccerGridTiers, R354 simGridArchive) and the
+ * count climbs with every data-backed fence. The cloud sandbox's egress proxy
+ * answers that host with a 403, so in that lane all four fail every single
+ * run, and a board that is permanently four-red stops being read, which costs
+ * far more than the four checks do.
+ *
+ * The fix is not a list of harness names here. This file's own rule is that
+ * sniffing beats a list that goes stale, and a text sniff would miss half of
+ * them anyway: two reach the database indirectly, through app libs, and never
+ * mention it. What every one of them DOES do is say so in its output, in the
+ * words its author chose, before exiting non-zero:
+ *
+ *     DATABASE UNREACHABLE. NOTHING WAS CHECKED.
+ *     SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+ *     NBA GRID DATA UNREACHABLE. NOTHING WAS CHECKED.
+ *     SOCCER GRID POOL UNREACHABLE OR TOO SMALL. NOTHING WAS CHECKED.
+ *
+ * So the harness is believed when it says it checked nothing, and the runner
+ * checks the claim rather than taking it: it probes the database ONCE itself.
+ *
+ *   database unreachable  -> that harness is SKIPPED, with the reason printed.
+ *   database reachable    -> it stays a FAILURE, because there the sentence
+ *                            means the data broke, not that the sandbox did.
+ *
+ * A skip is never counted as a pass, is listed by name, and is repeated in the
+ * closing line, because Round 100's lesson is that a run covering less than it
+ * appears to reads as "everything is fine" when it is not. On the desktop lane,
+ * where the database answers, this changes nothing at all.
+ *
+ * DB_PROBE=reachable forces the reachable branch, which turns the skips back
+ * into the four failures and proves the probe is what suppresses them. */
+const NOTHING_CHECKED = /NOTHING WAS CHECKED/i;
+
+async function databaseReachable() {
+  const forced = process.env.DB_PROBE || '';
+  if (forced === 'reachable') return { ok: true, why: 'DB_PROBE=reachable forced it' };
+  if (forced === 'unreachable') return { ok: false, why: 'DB_PROBE=unreachable forced it' };
+  let url; let key;
+  try {
+    const client = readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+    url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
+    key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
+  } catch { /* the client file is the source of truth and it is not there */ }
+  if (!url || !key) return { ok: false, why: 'no database URL or key in src/integrations/supabase/client.ts' };
+  try {
+    const res = await fetch(`${url}/rest/v1/`, {
+      headers: { apikey: key, authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(8000),
+    });
+    /* Any HTTP answer from the database itself counts as reachable, including
+       an error status. What must not count is the proxy's own refusal, which
+       is what the sandbox returns and which never comes from that host. */
+    const body = await res.text().catch(() => '');
+    if (/host not in allowlist/i.test(body)) return { ok: false, why: `the egress proxy refused the host (HTTP ${res.status})` };
+    return { ok: true, why: `answered HTTP ${res.status}` };
+  } catch (err) {
+    return { ok: false, why: String(err).slice(0, 100) };
+  }
+}
+
+const db = await databaseReachable();
+
 const failures = [];
+const skipped = [];
 
 console.log(`Running ${nodeGroup.length} node harness${nodeGroup.length === 1 ? '' : 'es'}`);
 const nodeResults = await pool(nodeGroup, 3, (f) => run(f));
+for (const r of nodeResults) {
+  if (r.verdict === 'FAIL' && !db.ok && NOTHING_CHECKED.test(r.out)) {
+    r.verdict = 'SKIP';
+    r.why = `it reached no database and said so, and the database is unreachable here (${db.why})`;
+  }
+}
 report(nodeResults);
-failures.push(...nodeResults.filter((r) => r.verdict !== 'PASS'));
+failures.push(...nodeResults.filter((r) => r.verdict !== 'PASS' && r.verdict !== 'SKIP'));
+skipped.push(...nodeResults.filter((r) => r.verdict === 'SKIP'));
 
 if (browserGroup.length && !WANT_BROWSER) {
   console.log(
@@ -216,8 +290,19 @@ if (browserGroup.length && !WANT_BROWSER) {
 }
 
 console.log('');
+/* Round 356: a skip is said out loud every time, above the verdict line, so
+   "all green" can never quietly mean "all green except the ones nobody ran". */
+if (skipped.length) {
+  console.log(
+    `${skipped.length} harness${skipped.length === 1 ? '' : 'es'} SKIPPED, not run and not counted: ` +
+      `${skipped.map((r) => r.file.replace('.mjs', '')).join(', ')}.`,
+  );
+  console.log(`Each one reached no database and said so, and the database is unreachable here: ${db.why}.`);
+  console.log('Run these where egress to the database is open, or DB_PROBE=reachable to see them fail here.');
+}
 if (!failures.length) {
-  console.log(`All ${nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0)} harnesses green.`);
+  const ran = nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0) - skipped.length;
+  console.log(`All ${ran} harnesses green${skipped.length ? `, ${skipped.length} skipped above` : ''}.`);
   process.exit(0);
 }
 
