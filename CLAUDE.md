@@ -607,6 +607,7 @@ current:**
 | `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. |
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
 | `docs/WORKBOARD.md` | **LIVE.** The two-lane task board: claims before building, round numbers reserved here. |
+| `docs/OWNER-ADSENSE-RECOVERY-2026-08-30.md` | **LIVE, P0.** The owner's AdSense recovery addendum, written the hour Google rejected the site for "Low value content". Sets the immediate priority order and the two deliverables (a render audit and a reapply readiness verdict). Does NOT replace the master spec. |
 | `docs/OPERATING-CONTRACT-2026-08.md` | **LIVE.** The owner's 2026-08-29 operating contract: GSC ground truth, Milestone 0 (own the grid category), AdSense deferred, the narrowed freeze. On WHAT to build and in what order it beats every older note including directive 3's blanket route freeze. |
 | `docs/MASTER-BUILD-SPEC-2026-08.md` | **LIVE.** The owner's product north star (2026-08-29). Read with the reconciliation beside it. |
 | `docs/SPEC-RECONCILIATION.md` | **LIVE.** Every spec section mapped to shipped rounds. Read BEFORE claiming spec work. |

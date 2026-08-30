@@ -45,7 +45,21 @@ nothing, and the rejection is a judgement about what the site IS rather than a
 list of pages to repair. Do not respond to it by mass producing copy: that is
 the one move that would make the next review worse.
 
-**WHAT THAT MEANS FOR THE ROADMAP, owner decision pending.** His own operating
+**HE HAS ANSWERED, 2026-08-30: DO NOT RE-APPLY YET, AND KEEP BUILDING THE
+MASTER PLAN.** His full addendum is recorded verbatim in
+docs/OWNER-ADSENSE-RECOVERY-2026-08-30.md and BOTH LANES MUST READ IT. The
+headlines: low value does not mean low word count, so find evidence rather than
+guessing; build a genuine sports reference layer that would be useful even if
+the games did not exist; upgrade the game pages that already earn traffic; do
+not mass generate AI content; connect reference content into the games rather
+than bolting it on for search. Two named deliverables:
+docs/seo/google-render-audit.md (what Google actually receives for the top 20
+to 30 pages) and docs/adsense/reapply-readiness.md (ending in NOT READY,
+NEARLY READY or READY, and he submits the review, not us). New P0 order:
+production bugs and security, then AdSense recovery, then indexing, then sports
+data correctness.
+
+**SUPERSEDED, kept for the reasoning.** His own operating
 contract already defers AdSense ("at current traffic this earns very little")
 and at 1,800 clicks a month it is worth very little indeed, so the desktop
 lane's recommendation on the record is to NOT request a re-review yet, keep
