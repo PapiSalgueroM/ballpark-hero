@@ -94,8 +94,15 @@ export default function ConquestMapSoccer({ territories, favorite, spotlight }: 
               strokeWidth={isMine ? 1.5 : isSpot ? 1.1 : 0.5}
               vectorEffect="non-scaling-stroke"
               opacity={hovered && hovered !== c.iso ? 0.82 : 1}
+              /* Round 336's lesson, applied rather than rediscovered: a finger
+                 synthesizes one mouseenter and never the matching mouseleave,
+                 so a hover-only caption is a mouse feature wearing a phone's
+                 clothes. The tap is handled explicitly and the caption then
+                 stays on the last country touched, which is what a reader of a
+                 map on a phone actually wants. */
               onMouseEnter={() => setHovered(c.iso)}
               onMouseLeave={() => setHovered(null)}
+              onPointerDown={e => { if (e.pointerType !== 'mouse') setHovered(c.iso); }}
             />
           );
         })}

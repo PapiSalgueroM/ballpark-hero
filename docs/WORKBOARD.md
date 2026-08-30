@@ -437,6 +437,20 @@ Standing claims:
   draws the basemap without importing Supabase, the squad builder and the
   enrichment tables. dartMap re-exports it, so the antimeridian handling still
   has exactly one implementation.
+  Browser verified, not just simulated: playGames drives the route clean (14
+  interactions, 0 findings) and a focused phone pass at 390 and 320 measures no
+  horizontal scroll, 32 club tiles all clearing 30px, the map drawing all 173
+  country paths in 32 DISTINCT colours (the palette fix proven in the real
+  render, not just in the generator), a 44px draw button and zero page errors.
+  One thing the measurements could not see and Round 336 had already paid for:
+  the map's caption was hover only, and a finger synthesizes one mouseenter and
+  never the matching mouseleave. Touch is handled explicitly now.
+  Gates: tsc zero, build:seo clean end to end (139 routes prerendered, 0
+  failed, 3 hidden routes refused for needing an account, the expected shape),
+  full node board 145 green, 4 skipped (the database four), 0 failed. The
+  sitemap went 133 to 134 with only NINE pages re-dated and 124 holding their
+  old dates, which is the lastmod ledger behaving exactly as Round 280 intended
+  rather than claiming the whole site changed.
   NEEDS PUBLISHING: YES. New route, new snapshot, sitemap moved.
   STILL UNCLAIMED from this item: the per league maps (hand authored SVG, one
   league per round) and the visual rebuild of the four existing maps.
