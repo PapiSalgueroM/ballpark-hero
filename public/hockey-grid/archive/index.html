@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>NHL Grid Answers: Past Daily Boards | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"CollectionPage","name":"NHL Grid Answers: Past Daily Boards | DoUKnowBall","description":"Past NHL grid boards with every valid answer counted. See which players connect each pair of franchises, then play today's grid.","url":"https://douknowball.com/hockey-grid/archive","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/hockey-grid/archive" data-rh="true"><meta name="description" content="Past NHL grid boards with every valid answer counted. See which players connect each pair of franchises, then play today's grid." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/hockey-grid/archive" data-rh="true"><meta property="og:title" content="NHL Grid Answers: Past Daily Boards | DoUKnowBall" data-rh="true"><meta property="og:description" content="Past NHL grid boards with every valid answer counted. See which players connect each pair of franchises, then play today's grid." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NHL Grid Answers: Past Daily Boards | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Past NHL grid boards with every valid answer counted. See which players connect each pair of franchises, then play today's grid." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>NHL GRID ARCHIVE</h1>
+<p>Past daily boards from 2026-08-16 to 2026-08-29, with the players who solve them</p>
+<p>The NHL grid builds a fresh board from each day's date, so no two days share a puzzle. These are the last 14 of them. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
+<p>The counts and names come from the same player data the game checks your guesses against, so anything listed here would be accepted in the game. Today's board is not here, because people are still playing it. <a href="/hockey-grid">Play today's NHL grid</a>.</p>
+<h2>NHL grid for 2026-08-29</h2>
+<p>Rows: Red Wings, Penguins, Maple Leafs. Columns: Flyers, 300+ Career Goals, Capitals.</p>
+<p>Crossing</p>
+<p>Valid players</p>
+<p>Rarest answers</p>
+<p>Red Wings and Flyers</p>
+<p>58</p>
+<p>Rene Drolet, Bob Wilkie, Bob Ritchie, Rick Foley, Kris Newbury, Serge Lajeunesse, Larry Wright, Mark Pederson</p>
+<p>Red Wings and 300+ Career Goals</p>
+<p>40</p>
+<p>Paul MacLean, Petr Klíma, Wendel Clark, Ray Sheppard, Danny Gare, Rick MacLeish, Vladimir Tarasenko, Tony McKegney</p>
+<p>Red Wings and Capitals</p>
+<p>Riley Barber, Patrick Boileau, Dylan McIlrath, Steve Maltais, Brad Norton, Greg Carroll, Christian Djoos, Madison Bowey</p>
+<p>Penguins and Flyers</p>
+<p>77</p>
+<p>Glenn Mulvenna, Guillaume Lefebvre, Corey Foster, Wayne Hicks, Art Stratton, Mitch Lamoureux, Éric Meloche, Mark Friedman</p>
+<p>Penguins and 300+ Career Goals</p>
+<p>42</p>
+<p>Jake Guentzel, Žigmund Pálffy, Charlie Simmer, Mike Bullard, Petr Klíma, Pierre Larouche, Rick MacLeish, Kevin Stevens</p>
+<p>Penguins and Capitals</p>
+<p>72</p>
+<p>Todd Nelson, Matthew Phillips, Patrick Boileau, Chris Bourque, Ron Jones, Jim McGeough, Steven Oleksy, Chris Ferraro</p>
+<p>Maple Leafs and Flyers</p>
+<p>Randy Osburn, Mike Stothers, Reid Bailey, Nikita Grebenkin, Kris Newbury, Jay Rosehill, Mark Greig, Allan Stanley</p>
+<p>Maple Leafs and 300+ Career Goals</p>
+<p>37</p>
+<p>Auston Matthews, Mike Bullard, Eric Lindros, Wendel Clark, Rick Vaive, Rick Kehoe, Max Pacioretty, Dave Gagner</p>
+<p>Maple Leafs and Capitals</p>
+<p>68</p>
+<p>Patrik Augusta, Joe Lundrigan, Staffan Kronwall, Zach Sill, Daryl Evans, Willie Brossart, Joey Crabb, Brendan Leipsic</p>
+<h2>NHL grid for 2026-08-28</h2>
+<p>Rows: Rangers, 1000+ Games Played, Flyers. Columns: Kings, Penguins, Canadiens.</p>
+<p>Rangers and Kings</p>
+<p>101</p>
+<p>Shawn McCosh, Steve Larouche, Brian McReynolds, Gord Walker, Dean Turner, Igor Liba, Craig Duncanson, John Tripp</p>
+<p>Rangers and Penguins</p>
+<p>102</p>
+<p>Tony Feltrin, Chris Ferraro, Peter Ferraro, Todd Charlesworth, Richard Lintner, Maxim Galanov, Corey Potter, Bob Blackburn</p>
+<p>Rangers and Canadiens</p>
+<p>66</p>
+<p>Corey Locke, Jozef Balej, Christian Thomas, Johan Witehall, Scott Fraser, Gordie Dwyer, Sylvain Blouin, Garth Murray</p>
+<p>1000+ Games Played and Kings</p>
+<p>60</p>
+<p>Dave Lewis, Craig Conroy, Glen Murray, Michal Handzuš, Charlie Huddy, Grant Ledyard, John Tonelli, Russ Courtnall</p>
+<p>1000+ Games Played and Penguins</p>
+<p>59</p>
+<p>Glen Murray, Steve Sullivan, Derick Brassard, Petr Sýkora, Chris Kunitz, Fredrik Olausson, Eddie Olczyk, Brooks Orpik</p>
+<p>1000+ Games Played and Canadiens</p>
+<p>55</p>
+<p>Tomáš Plekanec, Ryan Walter, Craig Conroy, Patrice Brisebois, Andrew Cassels, Keith Acton, Donald Brashear, Brian Gionta</p>
+<p>Flyers and Kings</p>
+<p>Mark Alt, Phil Crowe, Len Hachborn, Tim Tookey, Paul Guay, Roman Vopat, Brad Jones, Mike Byers</p>
+<p>Flyers and Penguins</p>
+<p>Flyers and Canadiens</p>
+<p>64</p>
+<p>Scott Sandelin, Anthony Richard, Jim Montgomery, Mark Pederson, Craig Darby, Noah Juulsen, Jordan Weal, Gilbert Dionne</p>
+<h2>NHL grid for 2026-08-27</h2>
+<p>Rows: Flyers, Oilers, Kings. Columns: Flames, Canadiens, 500+ Career Points.</p>
+<p>Flyers and Flames</p>
+<p>52</p>
+<p>Kyle Greentree, Corban Knight, Jarrod Skalde, Jamie Wright, Mark Freer, Mark Greig, Stewart Malgunas, Blair Jones</p>
+<p>Flyers and 500+ Career Points</p>
+<p>73</p>
+<p>Tim Young, Tim Kerr, Peter Forsberg, Travis Konecny, Dave Poulin, Gary Dornhoefer, Mike Bullard, Eric Lindros</p>
+<p>Oilers and Flames</p>
+<p>51</p>
+<p>David Haas, Len Esau, Kari Jalonen, Corey Potter, Krys Kolanos, Jeff Brubaker, Brandon Davidson, Aaron Johnson</p>
+<p>Oilers and Canadiens</p>
+<p>50</p>
+<p>Shawn Belle, Scott Fraser, William Lagesson, Vladimír Vůjtek, Dan Newman, Alex Henry, Jeff Brubaker, Brandon Davidson</p>
+<p>Oilers and 500+ Career Points</p>
+<p>67</p>
+<p>Mike Rogers, Kent Nilsson, Jimmy Carson, Derek Roy, Bobby Schmautz, Mark Napier, Joe Murphy, Petr Klíma</p>
+<p>Kings and Flames</p>
+<p>54</p>
+<p>Joe Piskula, Jason Morgan, David Van Der Gulik, Peter Ahola, Oscar Fantenberg, Linden Vey, Dale DeGray, Kevin Westgarth</p>
+<p>Kings and Canadiens</p>
+<p>56</p>
+<p>Nikita Scherbak, Kale Clague, Davis Drewiske, Lucien Grenier, Paul Curtis, Paul DiPietro, Randy Rota, Jordan Weal</p>
+<p>Kings and 500+ Career Points</p>
+<p>79</p>
+<p>Jimmy Carson, Dennis Hextall, Žigmund Pálffy, Rick Martin, Kevin Fiala, Charlie Simmer, Syl Apps, Danny Grant</p>
+<h2>NHL grid for 2026-08-26</h2>
+<p>Rows: 300+ Career Goals, Rangers, Flyers. Columns: Blues, Flames, Canucks.</p>
+<p>300+ Career Goals and Blues</p>
+<p>Paul MacLean, Mike Bullard, Brian Sutter, Pavol Demitra, Vladimir Tarasenko, Tony McKegney, Peter Šťastný, Petr Nedvěd</p>
+<p>300+ Career Goals and Flames</p>
+<p>23</p>
+<p>Mike Bullard, Dave Gagner, Tyler Toffoli, Don Lever, John Tonelli, Joe Mullen, Nazem Kadri, Theo Fleury</p>
+<p>300+ Career Goals and Canucks</p>
+<p>24</p>
+<p>Pavel Bure, Cam Neely, Pavol Demitra, Rick Vaive, Dave Gagner, Peter McNab, Tyler Toffoli, Petr Nedvěd</p>
+<p>Rangers and Blues</p>
+<p>100</p>
+<p>Chris Kenady, Ron Attwell, Wayne Rivers, Peter Smrek, Evgeny Grachev, Rob Whistle, Camille Henry, Dallas Eakins</p>
+<p>Rangers and Flames</p>
+<p>61</p>
+<p>Marek Hrivík, Brennan Othmann, Connor Mackey, Dallas Eakins, Corey Potter, Jeff Brubaker, Raphael Diaz, Nigel Dawes</p>
+<p>Rangers and Canucks</p>
+<p>81</p>
+<p>Fedor Fedorov, Jozef Balej, Nicklas Jensen, Lawrence Nycholat, Victor Mancini, Vitali Kravtsov, Benn Ferriero, Bert Robertsson</p>
+<p>Flyers and Blues</p>
+<p>Myron Stankiewicz, Michel Parizeau, Aris Brimanis, Jim Montgomery, Roman Vopat, Michel Picard, Jesse Boulerice, Darren Rumble</p>
+<p>Flyers and Canucks</p>
+<p>Pat Kavanagh, Martin Grenier, Drew Callander, Jim Mair, Lane Pederson, Mark Friedman, Steve Washburn, Ryan Parent</p>
+<h2>NHL grid for 2026-08-25</h2>
+<p>Rows: Capitals, Sabres, 1000+ Games Played. Columns: Canadiens, Oilers, Bruins.</p>
+<p>Capitals and Canadiens</p>
+<p>Riley Barber, Jakub Jeřábek, Benoît Gratton, Alfie Turcotte, Kent Carlson, Daniel Carr, Éric Charron, Alex Henry</p>
+<p>Capitals and Oilers</p>
+<p>35</p>
+<p>Chris Hajt, Barrie Moore, Alexandre Giroux, Chris Ferraro, Taylor Chorney, Alex Henry, John Blum, Nathan Walker</p>
+<p>Capitals and Bruins</p>
+<p>63</p>
+<p>Tyler Lewington, Doug Doull, Chris Bourque, Ron Jones, Matt Herr, Doug Gibson, Bob Gryp, John Gruden</p>
+<p>Sabres and Canadiens</p>
+<p>47</p>
+<p>Kale Clague, Zach Redmond, Brandon Davidson, Ed Ronan, Doug Janik, Dick Duff, Brian Flynn, Larry Mickey</p>
+<p>Sabres and Oilers</p>
+<p>Alex Tidey, Scott Metcalfe, Barrie Moore, Taylor Fedun, Mike Moller, Riley Stillman, Brandon Davidson, Dominik Kahun</p>
+<p>Sabres and Bruins</p>
+<p>Steven Fogarty, Jeff Jillson, Chris Taylor, Anders Bjork, Skip Krake, Tim Schaller, Steve Atkinson, Jim Wiemer</p>
+<p>1000+ Games Played and Oilers</p>
+<p>Evander Kane, Steve Staios, Adam Larsson, Jason Smith, Shawn Horcoff, Eric Brewer, Laurie Boschman, Derick Brassard</p>
+<p>1000+ Games Played and Bruins</p>
+<p>Steve Staios, Rick Middleton, Dave Christian, Glen Murray, Brian Propp, Tyler Seguin, Jean Ratelle, Wade Redden</p>
+<h2>NHL grid for 2026-08-24</h2>
+<p>Rows: Penguins, Bruins, 1000+ Games Played. Columns: Blackhawks, Islanders, Capitals.</p>
+<p>Penguins and Blackhawks</p>
+<p>Tuomas Grönman, Karl Stewart, Alain Nasreddine, Dennis Bonvie, Wayne Van Dorp, Alexander Nylander, Nolan Baumgartner, Jeff Taffe</p>
+<p>Penguins and Islanders</p>
+<p>Kael Mouillierat, Kevin Czuczman, Corey Foster, Alain Nasreddine, Chris Ferraro, Tim Wallace, Trevor Smith, Sven Butenschön</p>
+<p>Bruins and Blackhawks</p>
+<p>Pascal Pelletier, Carl Corazzini, Martin St. Pierre, Johnathan Aitken, Dennis Bonvie, Ian Mitchell, Eric Nickulas, Dave Donnelly</p>
+<p>Bruins and Islanders</p>
+<p>Mike Stevens, Ben Walter, Anders Myrvold, Brandon Smith, Eric Manlow, Graeme Townshend, Grigorijs Panteļejevs, Dean Malkoc</p>
+<p>Bruins and Capitals</p>
+<p>1000+ Games Played and Blackhawks</p>
+<p>Andrew Ladd, Steve Larmer, Todd Gill, Bob Murray, Dave Christian, Michal Handzuš, Steve Sullivan, Keith Carney</p>
+<p>1000+ Games Played and Islanders</p>
+<p>Andrew Ladd, Steve Staios, Dave Lewis, Eric Brewer, Derick Brassard, Keith Acton, Nino Niederreiter, John Tonelli</p>
+<p>1000+ Games Played and Capitals</p>
+<p>Ryan Walter, Dave Christian, T.J. Oshie, Andrew Cassels, Keith Acton, Donald Brashear, Gaétan Duchesne, Grant Ledyard</p>
+<h2>NHL grid for 2026-08-23</h2>
+<p>Rows: 500+ Career Points, Rangers, Bruins. Columns: Kings, Islanders, Canucks.</p>
+<p>500+ Career Points and Kings</p>
+<p>500+ Career Points and Islanders</p>
+<p>Mathew Barzal, Žigmund Pálffy, Mike Bossy, Craig Janney, Don Maloney, Patrick Flatley, Wendel Clark, Brad Boyes</p>
+<p>500+ Career Points and Canucks</p>
+<p>70</p>
+<p>Elias Pettersson, Jimmy Carson, Paul Reinhart, Brian Bradley, Thomas Gradin, Patrik Sundström, Tony Tanti, Barry Pederson</p>
+<p>Rangers and Islanders</p>
+<p>71</p>
+<p>Chris Ferraro, Taylor Beck, Raimo Helminen, Thomas Pöck, Dallas Eakins, Barry Richter, Don Blackburn, Julien Gauthier</p>
+<p>Bruins and Kings</p>
+<p>Dominic Lavoie, Dave Thomlinson, Petr Prajsler, Rich Brennan, Dave Pasin, Paul Guay, Bill O'Dwyer, Marc Potvin</p>
+<p>Bruins and Canucks</p>
+<p>Dale Dunbar, Jack Capuano, Paul O'Neil, Pascal Pelletier, Mike Stevens, Lee Goren, Byron Bitz, John Arbour</p>
+<h2>NHL grid for 2026-08-22</h2>
+<p>Rows: Penguins, Maple Leafs, Bruins. Columns: Capitals, Rangers, 300+ Career Goals.</p>
+<p>Penguins and Rangers</p>
+<p>Maple Leafs and Rangers</p>
+<p>85</p>
+<p>André Deveaux, Jeremy Williams, Maxim Kondratiev, Kris Newbury, Tim Erixon, Brendan Bell, Guy Trottier, Dallas Eakins</p>
+<p>Bruins and Rangers</p>
+<p>95</p>
+<p>Terry Virtue, Tony Tuzzolino, Steven Fogarty, Rob O'Gara, Rich Brennan, Graeme Nicolson, Jean-Yves Roy, Peter Ferraro</p>
+<p>Bruins and 300+ Career Goals</p>
+<p>39</p>
+<p>Charlie Simmer, Cam Neely, Ken Hodge, Johnny Bucyk, David Pastrňák, Kevin Stevens, Reggie Leach, Peter McNab</p>
+<h2>NHL grid for 2026-08-21</h2>
+<p>Rows: Kings, Penguins, Red Wings. Columns: Flyers, Blues, 300+ Career Goals.</p>
+<p>Kings and Flyers</p>
+<p>Kings and Blues</p>
+<p>Derek Bekar, Dominic Lavoie, Dave Thomlinson, Patrice Tardif, Terry Gray, Matt Luff, Roman Vopat, Kevin Dallman</p>
+<p>Kings and 300+ Career Goals</p>
+<p>38</p>
+<p>Žigmund Pálffy, Rick Martin, Charlie Simmer, Petr Klíma, Artemi Panarin, Pavol Demitra, Kevin Stevens, Ilya Kovalchuk</p>
+<p>Penguins and Blues</p>
+<p>83</p>
+<p>Bob Stumpf, Nick Drazenovic, Micki DuPont, Brett Sterling, Perry Ganchar, Joe Noris, Jim Shires, John Arbour</p>
+<p>Red Wings and Blues</p>
+<p>Wade Megan, Jim Shires, Matt Luff, Carl Brewer, Rick Bowness, Brian Lavender, Bob McCord, Klim Kostin</p>
+<h2>NHL grid for 2026-08-20</h2>
+<p>Rows: Bruins, Kings, Sabres. Columns: 1000+ Games Played, Red Wings, Maple Leafs.</p>
+<p>Bruins and 1000+ Games Played</p>
+<p>Bruins and Red Wings</p>
+<p>53</p>
+<p>Nathan Robinson, Dan Renouf, Anders Myrvold, Andrew McKim, Tom Webster, Earl Anderson, Marc Potvin, Josh Langfeld</p>
+<p>Bruins and Maple Leafs</p>
+<p>Jack Capuano, Mike Stevens, Jeff Serowik, Alex Steeves, Matt Lashoff, Rob Cimetta, Fraser Minten, Pär Lindholm</p>
+<p>Kings and 1000+ Games Played</p>
+<p>Kings and Red Wings</p>
+<p>Steve Short, Kevin Schamehorn, Peter Dineen, Donald MacLean, Doug Volmar, Jim Hiller, Matt Luff, Marc Potvin</p>
+<p>Kings and Maple Leafs</p>
+<p>88</p>
+<p>Chris Snell, Donald MacLean, Jason Podollan, Andrew Campbell, John Gibson, Brandon Convery, Daryl Evans, Lorne Stamler</p>
+<p>Sabres and 1000+ Games Played</p>
+<p>48</p>
+<p>Evander Kane, Phil Russell, Charlie Huddy, Keith Carney, Mike Foligno, Don Lever, Erik Johnson, Brian Gionta</p>
+<p>Sabres and Red Wings</p>
+<p>43</p>
+<p>Kyle Criscuolo, Jody Gage, Mal Davis, Mike McMahon, Doug Janik, Scott Wilson, Jacob Bernard-Docker, Jim Watson</p>
+<p>Sabres and Maple Leafs</p>
+<p>Val James, Jerry D'Amigo, T.J. Brennan, Alexander Nylander, Dale DeGray, Mike Byers, Conor Timmins, Chris Evans</p>
+<h2>NHL grid for 2026-08-19</h2>
+<p>Rows: Flyers, Canadiens, Rangers. Columns: 300+ Career Goals, Capitals, Maple Leafs.</p>
+<p>Flyers and 300+ Career Goals</p>
+<p>31</p>
+<p>Tim Kerr, Mike Bullard, Eric Lindros, Rick MacLeish, Kevin Stevens, Bill Barber, Reggie Leach, John LeClair</p>
+<p>Flyers and Capitals</p>
+<p>Mike Vecchione, Boyd Kane, Tim Tookey, Stewart Malgunas, Willie Brossart, Nolan Baumgartner, Brantt Myhres, Mark Taylor</p>
+<p>Flyers and Maple Leafs</p>
+<p>Canadiens and 300+ Career Goals</p>
+<p>25</p>
+<p>Yvan Cournoyer, Pierre Larouche, Jacques Lemaire, Ilya Kovalchuk, Steve Shutt, Max Pacioretty, Tyler Toffoli, John LeClair</p>
+<p>Canadiens and Capitals</p>
+<p>Canadiens and Maple Leafs</p>
+<p>Larry Landon, Rinat Valiev, Bill Kitchen, Adam Brooks, Serge Boisvert, William Lagesson, Gilles Thibaudeau, Byron Froese</p>
+<p>Rangers and 300+ Career Goals</p>
+<p>Tim Kerr, Pavel Bure, Ken Hodge, Rod Gilbert, Eric Lindros, Pierre Larouche, Ray Sheppard, Artemi Panarin</p>
+<p>Rangers and Capitals</p>
+<p>Mike Siltala, Vincent Iorio, Alexandre Giroux, Lawrence Nycholat, Chris Ferraro, Peter Ferraro, Paul Carey, Dylan McIlrath</p>
+<p>Rangers and Maple Leafs</p>
+<h2>NHL grid for 2026-08-18</h2>
+<p>Rows: Maple Leafs, 300+ Career Goals, Blues. Columns: Kings, Red Wings, Capitals.</p>
+<p>Maple Leafs and Kings</p>
+<p>Maple Leafs and Red Wings</p>
+<p>Gary Marsh, Chris McRae, Donald MacLean, Dmytro Timashov, Miroslav Ihnačák, Kris Newbury, Ken Murray, William Lagesson</p>
+<p>300+ Career Goals and Kings</p>
+<p>300+ Career Goals and Red Wings</p>
+<p>300+ Career Goals and Capitals</p>
+<p>Dennis Maruk, Ilya Kovalchuk, Max Pacioretty, Ulf Dahlén, Jean Pronovost, Dave Christian, T.J. Oshie, Geoff Courtnall</p>
+<p>Blues and Kings</p>
+<p>Blues and Red Wings</p>
+<p>Blues and Capitals</p>
+<p>62</p>
+<p>Jakub Jeřábek, Bruce Cowick, Gord Brooks, Mike Lampman, Kent Carlson, D.J. King, Denis Chassé, Keith Aucoin</p>
+<h2>NHL grid for 2026-08-17</h2>
+<p>Rows: Kings, Rangers, 500+ Career Points. Columns: Red Wings, Flyers, Oilers.</p>
+<p>Kings and Oilers</p>
+<p>Richard Petiot, Dan Currie, Kevin Brown, Brent Grieve, Kevin Gravel, Steve Kelly, Craig Redmond, Ken Hammond</p>
+<p>Rangers and Red Wings</p>
+<p>78</p>
+<p>Jim Krulicki, Jim Leavins, Ryan Sproul, Jim Hiller, Kris Newbury, Dylan McIlrath, Steve Richmond, Mike McMahon</p>
+<p>Rangers and Flyers</p>
+<p>69</p>
+<p>Mike Siklenka, Chris Jensen, Kris Newbury, Don Blackburn, Daniel Lacroix, P.J. Stock, Larry Mickey, Reggie Fleming</p>
+<p>Rangers and Oilers</p>
+<p>Vladimir Vorobiev, Lance Nethery, Alexandre Giroux, Aleš Píša, Scott Fraser, Chris Ferraro, Taylor Beck, John Bednarski</p>
+<p>500+ Career Points and Red Wings</p>
+<p>Frank Mahovlich, Norm Ullman, Jimmy Carson, Dennis Hextall, Alex DeBrincat, Paul MacLean, Guy Charron, Danny Grant</p>
+<p>500+ Career Points and Flyers</p>
+<p>500+ Career Points and Oilers</p>
+<h2>NHL grid for 2026-08-16</h2>
+<p>Rows: Oilers, Islanders, 500+ Career Points. Columns: Red Wings, Canucks, Rangers.</p>
+<p>Oilers and Red Wings</p>
+<p>Bill McDougall, Micah Aivazoff, William Lagesson, Ken Solheim, Jeff Brubaker, Klim Kostin, Poul Popiel, Tomáš Jurčo</p>
+<p>Oilers and Canucks</p>
+<p>Steve Pinizzotto, Ken Berry, John Hughes, Bert Robertsson, David Roberts, Taylor Fedun, Sven Butenschön, Philip Larsen</p>
+<p>Oilers and Rangers</p>
+<p>Islanders and Red Wings</p>
+<p>45</p>
+<p>Darryl Bootland, Anders Myrvold, Dmytro Timashov, Bob Cook, Micah Aivazoff, Ken Murray, Tom Miller, Dennis Cholowski</p>
+<p>Islanders and Canucks</p>
+<p>Cole McWard, Mike Stevens, Evgeny Namestnikov, Dane Jackson, Bob Cook, Jim Mair, Aatu Räty, Dean Malkoc</p>
+<p>Islanders and Rangers</p>
+<p>500+ Career Points and Rangers</p>
+<p>109</p>
+<p>Mike Rogers, Valeri Kamensky, Vic Hadfield, Tim Kerr, Pavel Buchnevich, Dennis Hextall, Steve Vickers, Pavel Bure</p>
+<h2>The other grid archives</h2>
+<li><a href="/nba-grid/archive">NBA grid archive</a>, 14 past boards and their answers.</li>
+<li><a href="/mlb-grid/archive">MLB grid archive</a>, 14 past boards and their answers.</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

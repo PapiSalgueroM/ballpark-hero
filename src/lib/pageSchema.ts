@@ -53,6 +53,8 @@ const STATIC_TYPES: Record<string, string> = {
   /* Round 354: a collection of past boards and their answers, which is what
      CollectionPage means, rather than a Game: the archive is not playable. */
   '/nba-grid/archive': 'CollectionPage',
+  '/mlb-grid/archive': 'CollectionPage',
+  '/hockey-grid/archive': 'CollectionPage',
 };
 
 /** The one place that decides. Exported so the guard can check it directly. */

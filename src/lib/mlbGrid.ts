@@ -2,7 +2,8 @@ import { supabase } from '@/integrations/supabase/client';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 
 /**
- * Data layer for the MLB Franchise Grid (3x3 Immaculate-Grid-style board),
+ * Data layer for the MLB Franchise Grid (3x3 board of franchise and stat
+ * criteria, one player per cell),
  * built on the mlb_grid_players view, a port of src/lib/hockeyGrid.ts /
  * src/lib/nbaGrid.ts (task #24). Keep the grid libs in lockstep.
  *
@@ -153,12 +154,27 @@ export async function fetchMlbGridData(): Promise<MlbGridData | null> {
     const PAGE_SIZE = 1000;
     const rows: RawRow[] = [];
     for (let from = 0; ; from += PAGE_SIZE) {
-      const { data, error } = await supabase
+      /* ROUND 358: A TRANSIENT PAGE FAILURE MUST NOT COST THE WHOLE GAME.
+         This gave up the moment any page errored, and each page is a query the
+         database sometimes cancels under load (Postgres 57014, statement
+         timeout). One dropped page and the visitor gets the error card instead
+         of a playable grid. It was found because the archive generator, which
+         calls this same function, failed on two separate runs and succeeded
+         between them, which is what a transient looks like rather than a bug
+         in the query. Two more attempts with a short backoff, then give up as
+         before, because a database that is genuinely down should still surface
+         rather than hang. */
+      const page = async () => await supabase
         .from('mlb_grid_players' as any)
         .select('player_name, franchises, hits, hrs, games')
         .not('franchises', 'is', null)
         .order('player_name', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
+      let { data, error } = await page();
+      for (let attempt = 1; attempt <= 2 && (error || !data); attempt++) {
+        await new Promise((r) => setTimeout(r, 400 * attempt));
+        ({ data, error } = await page());
+      }
       if (error || !data) return null;
       rows.push(...(data as unknown as RawRow[]));
       if (data.length < PAGE_SIZE) break;

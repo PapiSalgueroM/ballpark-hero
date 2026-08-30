@@ -121,7 +121,7 @@ const MlbHigherLower = lazy(() => import("./pages/MlbHigherLower"));
 const TennisHigherLower = lazy(() => import("./pages/TennisHigherLower"));
 const CfbHigherLower = lazy(() => import("./pages/CfbHigherLower"));
 const NbaGrid = lazy(() => import("./pages/NbaGrid"));
-const NbaGridArchive = lazy(() => import("./pages/NbaGridArchive"));
+const GridArchive = lazy(() => import("./pages/GridArchive"));
 const MlbGrid = lazy(() => import("./pages/MlbGrid"));
 const NbaConnections = lazy(() => import("./pages/NbaConnections"));
 const NflConnections = lazy(() => import("./pages/NflConnections"));
@@ -431,9 +431,12 @@ const AppContent = () => {
         <Route path="/tennis-higher-lower" element={<TennisHigherLower />} />
         <Route path="/cfb-higher-lower" element={<CfbHigherLower />} />
         <Route path="/nba-grid" element={<NbaGrid />} />
-        {/* Round 354: past boards with their computed answers, a real page rather
-            than a search-only one, see the component header for why this sport. */}
-        <Route path="/nba-grid/archive" element={<NbaGridArchive />} />
+        {/* Round 354, extended in 358: past boards with their computed answers,
+            a real page rather than a search-only one. See the component header
+            for why these three sports and not the other three. */}
+        <Route path="/nba-grid/archive" element={<GridArchive sport="nba" />} />
+        <Route path="/mlb-grid/archive" element={<GridArchive sport="mlb" />} />
+        <Route path="/hockey-grid/archive" element={<GridArchive sport="nhl" />} />
         <Route path="/mlb-grid" element={<MlbGrid />} />
         <Route path="/nba-connections" element={<NbaConnections />} />
         <Route path="/nfl-connections" element={<NflConnections />} />

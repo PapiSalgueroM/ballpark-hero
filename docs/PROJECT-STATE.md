@@ -2597,6 +2597,15 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 358.** The grid archive covers the NBA, MLB and NHL
+  grids: 42 boards, 378 cells, 3,024 answers, all recomputed by the fence
+  against each game's own matcher. Chosen over splitting the Record Books into
+  champion pages, which would have been commodity content. A real production
+  bug fell out of it: all three franchise grids gave up the whole game if any
+  single page of their table fetch errored, and those pages are queries the
+  database sometimes cancels under load, so one dropped page meant an
+  unplayable grid for that visitor. All three retry now. It surfaced only
+  because the archive generator calls the same function the game does.
 - **2026-08-30, Round 357.** The six sport hubs become cornerstone pages, which
   is the one weakness the AdSense render audit actually surfaced. They were
   simultaneously the thinnest indexable pages and the most similar to one

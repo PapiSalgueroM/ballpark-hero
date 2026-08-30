@@ -70,6 +70,8 @@ const STATIC_PAGES = [
      be submitted at all, and being submitted is also what puts it in front of
      the prerenderer, which reads its route list from this file's output. */
   { p: '/nba-grid/archive', freq: 'weekly', pri: '0.5' },
+  { p: '/mlb-grid/archive', freq: 'weekly', pri: '0.5' },
+  { p: '/hockey-grid/archive', freq: 'weekly', pri: '0.5' },
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },

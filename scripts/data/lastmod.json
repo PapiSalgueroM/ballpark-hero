@@ -208,6 +208,10 @@
     "hash": "dd70f7f231dd300d",
     "date": "2026-08-29"
   },
+  "/hockey-grid/archive": {
+    "hash": "3430882fa5062596",
+    "date": "2026-08-30"
+  },
   "/hockey-higher-lower": {
     "hash": "5ba1beb78c557623",
     "date": "2026-08-25"
@@ -260,6 +264,10 @@
     "hash": "8057ee02fb5fbcfe",
     "date": "2026-08-29"
   },
+  "/mlb-grid/archive": {
+    "hash": "bbbd50ce8bce9e31",
+    "date": "2026-08-30"
+  },
   "/mlb-higher-lower": {
     "hash": "8e5155d096219fc6",
     "date": "2026-08-25"
@@ -301,7 +309,7 @@
     "date": "2026-08-30"
   },
   "/nba-grid/archive": {
-    "hash": "301fc7ab4f127e08",
+    "hash": "df954d21bf7905b9",
     "date": "2026-08-30"
   },
   "/nba-higher-lower": {

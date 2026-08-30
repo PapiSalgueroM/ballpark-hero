@@ -1,2108 +1,6324 @@
 {
- "sport": "nba",
  "generatedFor": "2026-08-29",
- "days": 14,
- "note": "Answers are computed with the game's own playerMatchesCell against the same indexed player data the game validates guesses with. Counts are the full number of valid players for that crossing; the names listed are the rarest by career games played.",
- "boards": [
-  {
-   "date": "2026-08-29",
-   "rows": [
-    "Suns",
-    "Celtics",
-    "Bulls"
-   ],
-   "cols": [
-    "Pistons",
-    "5,000+ Career Rebounds",
-    "Bucks"
-   ],
-   "cells": [
+ "note": "Answers are computed with each game's own playerMatchesCell against the same indexed player data the game validates guesses with. Counts are the full number of valid players for that crossing; the names listed are the rarest by career games played.",
+ "sports": {
+  "nba": {
+   "label": "NBA",
+   "game": "/nba-grid",
+   "boards": [
     {
-     "row": "Suns",
-     "col": "Pistons",
-     "total": 39,
-     "answers": [
-      "Eric Moreland",
-      "Jordan McRae",
-      "Isaiah Livers",
-      "Saben Lee",
-      "David Thirdkill",
-      "Cheick Diallo",
-      "William Bedford",
-      "Chimezie Metu"
+     "date": "2026-08-29",
+     "rows": [
+      "Suns",
+      "Celtics",
+      "Bulls"
+     ],
+     "cols": [
+      "Pistons",
+      "5,000+ Career Rebounds",
+      "Bucks"
+     ],
+     "cells": [
+      {
+       "row": "Suns",
+       "col": "Pistons",
+       "total": 39,
+       "answers": [
+        "Eric Moreland",
+        "Jordan McRae",
+        "Isaiah Livers",
+        "Saben Lee",
+        "David Thirdkill",
+        "Cheick Diallo",
+        "William Bedford",
+        "Chimezie Metu"
+       ]
+      },
+      {
+       "row": "Suns",
+       "col": "5,000+ Career Rebounds",
+       "total": 42,
+       "answers": [
+        "Jusuf Nurkić",
+        "Greg Monroe",
+        "Joe Barry Carroll",
+        "Brian Grant",
+        "Tom Gugliotta",
+        "Truck Robinson",
+        "Marcin Gortat",
+        "Rich Kelley"
+       ]
+      },
+      {
+       "row": "Suns",
+       "col": "Bucks",
+       "total": 59,
+       "answers": [
+        "Alex Stivrins",
+        "Jamaree Bouyea",
+        "Josh Davis",
+        "TyTy Washington Jr.",
+        "Joe Courtney",
+        "Dan Langhi",
+        "Earl Barron",
+        "Kendall Marshall"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Pistons",
+       "total": 43,
+       "answers": [
+        "Ron Harper Jr.",
+        "Gigi Datome",
+        "Carsen Edwards",
+        "Terry Duerod",
+        "David Thirdkill",
+        "Luka Garza",
+        "Earl Tatum",
+        "Jeff Judkins"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "5,000+ Career Rebounds",
+       "total": 32,
+       "answers": [
+        "Greg Monroe",
+        "Troy Murphy",
+        "Enes Freedom",
+        "Tom Gugliotta",
+        "Blake Griffin",
+        "Dave Cowens",
+        "Vin Baker",
+        "Tristan Thompson"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Bucks",
+       "total": 51,
+       "answers": [
+        "Dave Popson",
+        "Conner Henry",
+        "Chris Johnson",
+        "Andre Turner",
+        "David Thirdkill",
+        "Acie Earl",
+        "Jiří Welsch",
+        "Alaa Abdelnaby"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Pistons",
+       "total": 44,
+       "answers": [
+        "Jackie Robinson",
+        "Kay Felder",
+        "Tyler Cook",
+        "Kornél Dávid",
+        "James Wilkes",
+        "Mark Randall",
+        "Ronald Dupree",
+        "Jaden Ivey"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "5,000+ Career Rebounds",
+       "total": 36,
+       "answers": [
+        "Joakim Noah",
+        "Bobby Portis",
+        "Rodney McCray",
+        "Clifford Ray",
+        "Drew Gooden",
+        "Tristan Thompson",
+        "Dave Greenwood",
+        "Carlos Boozer"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Bucks",
+       "total": 53,
+       "answers": [
+        "Joe Alexander",
+        "Joe Courtney",
+        "Sean Kilpatrick",
+        "Isaiah Canaan",
+        "Marcus Fizer",
+        "Jabari Parker",
+        "Nikola Mirotić",
+        "Scott May"
+       ]
+      }
      ]
     },
     {
-     "row": "Suns",
-     "col": "5,000+ Career Rebounds",
-     "total": 42,
-     "answers": [
-      "Jusuf Nurkić",
-      "Greg Monroe",
-      "Joe Barry Carroll",
-      "Brian Grant",
-      "Tom Gugliotta",
-      "Truck Robinson",
-      "Marcin Gortat",
-      "Rich Kelley"
+     "date": "2026-08-28",
+     "rows": [
+      "Lakers",
+      "900+ Games Played",
+      "Pistons"
+     ],
+     "cols": [
+      "76ers",
+      "Celtics",
+      "Mavericks"
+     ],
+     "cells": [
+      {
+       "row": "Lakers",
+       "col": "76ers",
+       "total": 49,
+       "answers": [
+        "Darius Johnson-Odom",
+        "Frankie King",
+        "Mac McClung",
+        "Jalen Hood-Schifino",
+        "Colin Castleton",
+        "Mason Jones",
+        "Trevor Wilson",
+        "Darius Morris"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Celtics",
+       "total": 33,
+       "answers": [
+        "Vander Blue",
+        "Matt Ryan",
+        "MarShon Brooks",
+        "Von Wafer",
+        "Earl Tatum",
+        "Shammond Williams",
+        "Travis Knight",
+        "Svi Mykhailiuk"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Mavericks",
+       "total": 59,
+       "answers": [
+        "Alex Fudge",
+        "Manny Harris",
+        "Ollie Mack",
+        "Quinn Cook",
+        "D.J. Mbenga",
+        "Max Christie",
+        "Marty Byrnes",
+        "Sterling Brown"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "76ers",
+       "total": 50,
+       "answers": [
+        "Jeff Malone",
+        "Jimmy Butler",
+        "JaVale McGee",
+        "Allen Iverson",
+        "Clarence Weatherspoon",
+        "George Hill",
+        "Robert Reid",
+        "Armen Gilliam"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Celtics",
+       "total": 35,
+       "answers": [
+        "Scott Wedman",
+        "Artis Gilmore",
+        "Dennis Schröder",
+        "Al Jefferson",
+        "Rick Fox",
+        "Brian Shaw",
+        "Rickey Green",
+        "David Wesley"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Mavericks",
+       "total": 46,
+       "answers": [
+        "JaVale McGee",
+        "Dennis Rodman",
+        "Mark Aguirre",
+        "Klay Thompson",
+        "JJ Redick",
+        "Eddie Jones",
+        "Adrian Dantley",
+        "Rajon Rondo"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "76ers",
+       "total": 61,
+       "answers": [
+        "Justin Harper",
+        "Louis King",
+        "Braxton Key",
+        "Pepe Sánchez",
+        "Saben Lee",
+        "Steve Hayes",
+        "Ralph Simpson",
+        "Ben Coleman"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Celtics",
+       "total": 43,
+       "answers": [
+        "Ron Harper Jr.",
+        "Gigi Datome",
+        "Carsen Edwards",
+        "Terry Duerod",
+        "David Thirdkill",
+        "Luka Garza",
+        "Earl Tatum",
+        "Jeff Judkins"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Mavericks",
+       "total": 48,
+       "answers": [
+        "Steve Bardo",
+        "Eugene Omoruyi",
+        "Tracy Moore",
+        "Terry Duerod",
+        "Bill Curley",
+        "Walter Bond",
+        "Bob McCann",
+        "Khalid Reeves"
+       ]
+      }
      ]
     },
     {
-     "row": "Suns",
-     "col": "Bucks",
-     "total": 59,
-     "answers": [
-      "Alex Stivrins",
-      "Jamaree Bouyea",
-      "Josh Davis",
-      "TyTy Washington Jr.",
-      "Joe Courtney",
-      "Dan Langhi",
-      "Earl Barron",
-      "Kendall Marshall"
+     "date": "2026-08-27",
+     "rows": [
+      "Pistons",
+      "Rockets",
+      "76ers"
+     ],
+     "cols": [
+      "Hawks",
+      "Mavericks",
+      "10,000+ Career Points"
+     ],
+     "cells": [
+      {
+       "row": "Pistons",
+       "col": "Hawks",
+       "total": 55,
+       "answers": [
+        "Pepe Sánchez",
+        "Keith Herron",
+        "Ivano Newbill",
+        "Jermaine Jackson",
+        "Walker Russell",
+        "Sidney Lowe",
+        "Pace Mannion",
+        "Steve Henson"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Mavericks",
+       "total": 48,
+       "answers": [
+        "Steve Bardo",
+        "Eugene Omoruyi",
+        "Tracy Moore",
+        "Terry Duerod",
+        "Bill Curley",
+        "Walter Bond",
+        "Bob McCann",
+        "Khalid Reeves"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "10,000+ Career Points",
+       "total": 50,
+       "answers": [
+        "Kelly Tripucka",
+        "Bojan Bogdanović",
+        "Derrick Rose",
+        "Sean Elliott",
+        "Ben Gordon",
+        "Dan Roundfield",
+        "Blake Griffin",
+        "Jerami Grant"
+       ]
+      },
+      {
+       "row": "Rockets",
+       "col": "Hawks",
+       "total": 54,
+       "answers": [
+        "Cameron Oliver",
+        "Sean Colson",
+        "James Nunnally",
+        "Josh Davis",
+        "Isaiah Taylor",
+        "Larry Robinson",
+        "Jason Collier",
+        "David Roddy"
+       ]
+      },
+      {
+       "row": "Rockets",
+       "col": "Mavericks",
+       "total": 41,
+       "answers": [
+        "Ray Spalding",
+        "Nate Hinton",
+        "Pops Mensah-Bonsu",
+        "Rodrick Rhodes",
+        "Tracy Moore",
+        "Bill Curley",
+        "Greg Smith",
+        "Eric Riley"
+       ]
+      },
+      {
+       "row": "Rockets",
+       "col": "10,000+ Career Points",
+       "total": 56,
+       "answers": [
+        "Steve Francis",
+        "John Wall",
+        "DeMarcus Cousins",
+        "Joe Barry Carroll",
+        "Kevin Martin",
+        "Cuttino Mobley",
+        "Mike Woodson",
+        "Vin Baker"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Hawks",
+       "total": 60,
+       "answers": [
+        "Ira Bowman",
+        "James Nunnally",
+        "Pepe Sánchez",
+        "Charlie Brown Jr.",
+        "Alex Poythress",
+        "Josh Davis",
+        "Trevor Wilson",
+        "Roshown McLeod"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Mavericks",
+       "total": 41,
+       "answers": [
+        "Charlie Brown Jr.",
+        "Jim Farmer",
+        "Adrian Caldwell",
+        "Justin Anderson",
+        "Jim Spanarkel",
+        "Quentin Grimes",
+        "Boban Marjanović",
+        "Christian Wood"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "10,000+ Career Points",
+       "total": 54,
+       "answers": [
+        "Joel Embiid",
+        "Cliff Robinson",
+        "Glenn Robinson",
+        "Larry Hughes",
+        "Buddy Hield",
+        "Jerami Grant",
+        "Derrick Coleman",
+        "Chris Webber"
+       ]
+      }
      ]
     },
     {
-     "row": "Celtics",
-     "col": "Pistons",
-     "total": 43,
-     "answers": [
-      "Ron Harper Jr.",
-      "Gigi Datome",
-      "Carsen Edwards",
-      "Terry Duerod",
-      "David Thirdkill",
-      "Luka Garza",
-      "Earl Tatum",
-      "Jeff Judkins"
+     "date": "2026-08-26",
+     "rows": [
+      "5,000+ Career Rebounds",
+      "Lakers",
+      "Pistons"
+     ],
+     "cols": [
+      "Warriors",
+      "Hawks",
+      "Heat"
+     ],
+     "cells": [
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "Warriors",
+       "total": 38,
+       "answers": [
+        "DeMarcus Cousins",
+        "Rony Seikaly",
+        "Joe Barry Carroll",
+        "Andrew Bogut",
+        "Troy Murphy",
+        "Tom Gugliotta",
+        "Clifford Ray",
+        "Rick Barry"
+       ]
+      },
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "Hawks",
+       "total": 31,
+       "answers": [
+        "Clint Capela",
+        "John Drew",
+        "Dan Roundfield",
+        "Tom Gugliotta",
+        "Truck Robinson",
+        "Shareef Abdur-Rahim",
+        "Christian Laettner",
+        "Antoine Walker"
+       ]
+      },
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "Heat",
+       "total": 37,
+       "answers": [
+        "Hassan Whiteside",
+        "Bam Adebayo",
+        "Rony Seikaly",
+        "Brian Grant",
+        "Tyrone Hill",
+        "Alonzo Mourning",
+        "Zydrunas Ilgauskas",
+        "Amar'e Stoudemire"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Warriors",
+       "total": 43,
+       "answers": [
+        "Zach Norvell",
+        "Coby Karl",
+        "Sam Jacobson",
+        "Alfonzo McKinnie",
+        "Quinn Cook",
+        "Mike Smrek",
+        "MarShon Brooks",
+        "Juan Toscano-Anderson"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Hawks",
+       "total": 51,
+       "answers": [
+        "Chaundee Brown Jr.",
+        "Kobe Bufkin",
+        "Dylan Windler",
+        "Trevor Wilson",
+        "Skylar Mays",
+        "Christian Koloko",
+        "Ryan Kelly",
+        "Anthony Miller"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Heat",
+       "total": 37,
+       "answers": [
+        "Cole Swider",
+        "Milt Wagner",
+        "Kendrick Nunn",
+        "Smush Parker",
+        "Billy Thompson",
+        "Shawne Williams",
+        "Gabe Vincent",
+        "Thomas Bryant"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Warriors",
+       "total": 43,
+       "answers": [
+        "Braxton Key",
+        "Lou Roe",
+        "Terry Duerod",
+        "Bill Curley",
+        "James Wiseman",
+        "Tod Murphy",
+        "Lindy Waters III",
+        "Steve Harris"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Hawks",
+       "total": 55,
+       "answers": [
+        "Pepe Sánchez",
+        "Keith Herron",
+        "Ivano Newbill",
+        "Jermaine Jackson",
+        "Walker Russell",
+        "Sidney Lowe",
+        "Pace Mannion",
+        "Steve Henson"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Heat",
+       "total": 35,
+       "answers": [
+        "Alondes Williams",
+        "Cole Swider",
+        "Derrick Walton",
+        "Josh Harrellson",
+        "Willie Reed",
+        "R.J. Hampton",
+        "Simone Fontecchio",
+        "Smush Parker"
+       ]
+      }
      ]
     },
     {
-     "row": "Celtics",
-     "col": "5,000+ Career Rebounds",
-     "total": 32,
-     "answers": [
-      "Greg Monroe",
-      "Troy Murphy",
-      "Enes Freedom",
-      "Tom Gugliotta",
-      "Blake Griffin",
-      "Dave Cowens",
-      "Vin Baker",
-      "Tristan Thompson"
+     "date": "2026-08-25",
+     "rows": [
+      "Bucks",
+      "Trail Blazers",
+      "900+ Games Played"
+     ],
+     "cols": [
+      "Mavericks",
+      "Rockets",
+      "Knicks"
+     ],
+     "cells": [
+      {
+       "row": "Bucks",
+       "col": "Mavericks",
+       "total": 57,
+       "answers": [
+        "Tyler Smith",
+        "AJ Johnson",
+        "Jared Cunningham",
+        "Shawn Respert",
+        "DeAndre Liggins",
+        "Chris Douglas-Roberts",
+        "Sterling Brown",
+        "Yi Jianlian"
+       ]
+      },
+      {
+       "row": "Bucks",
+       "col": "Rockets",
+       "total": 50,
+       "answers": [
+        "Josh Davis",
+        "Reece Gaines",
+        "TyTy Washington Jr.",
+        "Conner Henry",
+        "Larry Micheaux",
+        "Tim Breaux",
+        "Rodions Kurucs",
+        "Dan Langhi"
+       ]
+      },
+      {
+       "row": "Bucks",
+       "col": "Knicks",
+       "total": 46,
+       "answers": [
+        "Mirsad Türkcan",
+        "Mamadi Diakite",
+        "Jermaine Jackson",
+        "Earl Barron",
+        "MarJon Beauchamp",
+        "Chris Copeland",
+        "Thanasis Antetokounmpo",
+        "Jericho Sims"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "Mavericks",
+       "total": 29,
+       "answers": [
+        "Lamont Strothers",
+        "Greg Brown III",
+        "Brandon Williams",
+        "Reggie Slater",
+        "Dan Dickau",
+        "Dennis Smith Jr.",
+        "Josh McRoberts",
+        "Matt Carroll"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "Rockets",
+       "total": 40,
+       "answers": [
+        "Tim Quarterman",
+        "Nate Williams",
+        "Richie Frahm",
+        "Jonny Flynn",
+        "Von Wafer",
+        "Bernard Thompson",
+        "Walter Berry",
+        "Hank McDowell"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "Knicks",
+       "total": 37,
+       "answers": [
+        "Earl Barron",
+        "Qyntel Woods",
+        "Cam Reddish",
+        "Ryan Arcidiacono",
+        "Ime Udoka",
+        "Kevin Knox",
+        "Dennis Smith Jr.",
+        "Mario Hezonja"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Mavericks",
+       "total": 46,
+       "answers": [
+        "JaVale McGee",
+        "Dennis Rodman",
+        "Mark Aguirre",
+        "Klay Thompson",
+        "JJ Redick",
+        "Eddie Jones",
+        "Adrian Dantley",
+        "Rajon Rondo"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Rockets",
+       "total": 51,
+       "answers": [
+        "Dennis Schröder",
+        "Brent Barry",
+        "Clarence Weatherspoon",
+        "Robert Reid",
+        "John Lucas",
+        "Eric Gordon",
+        "Tracy McGrady",
+        "Goran Dragić"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Knicks",
+       "total": 43,
+       "answers": [
+        "Gerald Wilkins",
+        "Antonio Davis",
+        "Latrell Sprewell",
+        "Clarence Weatherspoon",
+        "Jalen Rose",
+        "Matt Barnes",
+        "Tracy McGrady",
+        "Bill Cartwright"
+       ]
+      }
      ]
     },
     {
-     "row": "Celtics",
-     "col": "Bucks",
-     "total": 51,
-     "answers": [
-      "Dave Popson",
-      "Conner Henry",
-      "Chris Johnson",
-      "Andre Turner",
-      "David Thirdkill",
-      "Acie Earl",
-      "Jiří Welsch",
-      "Alaa Abdelnaby"
+     "date": "2026-08-24",
+     "rows": [
+      "Celtics",
+      "Knicks",
+      "900+ Games Played"
+     ],
+     "cols": [
+      "Cavaliers",
+      "Spurs",
+      "Bucks"
+     ],
+     "cells": [
+      {
+       "row": "Celtics",
+       "col": "Cavaliers",
+       "total": 55,
+       "answers": [
+        "Brodric Thomas",
+        "Mfiondu Kabengele",
+        "Lester Hudson",
+        "Luke Harangody",
+        "Michael Hawkins",
+        "Jimmy Oliver",
+        "Dwayne Jones",
+        "Larry Robinson"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Spurs",
+       "total": 27,
+       "answers": [
+        "Charles Bassey",
+        "Romeo Langford",
+        "David Thirdkill",
+        "Dwayne Schintzius",
+        "Juancho Hernangómez",
+        "Tyler Zeller",
+        "Luke Kornet",
+        "Ron Mercer"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Bucks",
+       "total": 51,
+       "answers": [
+        "Dave Popson",
+        "Conner Henry",
+        "Chris Johnson",
+        "Andre Turner",
+        "David Thirdkill",
+        "Acie Earl",
+        "Jiří Welsch",
+        "Alaa Abdelnaby"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Cavaliers",
+       "total": 48,
+       "answers": [
+        "Demetris Nichols",
+        "Mamadi Diakite",
+        "Stewart Granger",
+        "Larry Robinson",
+        "Dylan Windler",
+        "Bruno Šundov",
+        "Sedric Toney",
+        "Gerald Paddio"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Spurs",
+       "total": 35,
+       "answers": [
+        "Mamadi Diakite",
+        "James White",
+        "Jeremy Sochan",
+        "Ime Udoka",
+        "DerMarr Johnson",
+        "Pete Myers",
+        "Shannon Brown",
+        "Luke Kornet"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Bucks",
+       "total": 46,
+       "answers": [
+        "Mirsad Türkcan",
+        "Mamadi Diakite",
+        "Jermaine Jackson",
+        "Earl Barron",
+        "MarJon Beauchamp",
+        "Chris Copeland",
+        "Thanasis Antetokounmpo",
+        "Jericho Sims"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Cavaliers",
+       "total": 44,
+       "answers": [
+        "Gerald Wilkins",
+        "Luol Deng",
+        "Scott Wedman",
+        "JaVale McGee",
+        "Steve Kerr",
+        "Dennis Schröder",
+        "Clarence Weatherspoon",
+        "George Hill"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Spurs",
+       "total": 48,
+       "answers": [
+        "George Johnson",
+        "Artis Gilmore",
+        "Steve Kerr",
+        "Dennis Rodman",
+        "Brent Barry",
+        "George Hill",
+        "Danny Ferry",
+        "Patty Mills"
+       ]
+      },
+      {
+       "row": "900+ Games Played",
+       "col": "Bucks",
+       "total": 47,
+       "answers": [
+        "Damian Lillard",
+        "Jared Dudley",
+        "Mickey Johnson",
+        "George Hill",
+        "Serge Ibaka",
+        "John Lucas",
+        "Armen Gilliam",
+        "Lindsey Hunter"
+       ]
+      }
      ]
     },
     {
-     "row": "Bulls",
-     "col": "Pistons",
-     "total": 44,
-     "answers": [
-      "Jackie Robinson",
-      "Kay Felder",
-      "Tyler Cook",
-      "Kornél Dávid",
-      "James Wilkes",
-      "Mark Randall",
-      "Ronald Dupree",
-      "Jaden Ivey"
+     "date": "2026-08-23",
+     "rows": [
+      "10,000+ Career Points",
+      "Lakers",
+      "Knicks"
+     ],
+     "cols": [
+      "76ers",
+      "Spurs",
+      "Heat"
+     ],
+     "cells": [
+      {
+       "row": "10,000+ Career Points",
+       "col": "76ers",
+       "total": 54,
+       "answers": [
+        "Joel Embiid",
+        "Cliff Robinson",
+        "Glenn Robinson",
+        "Larry Hughes",
+        "Buddy Hield",
+        "Jerami Grant",
+        "Derrick Coleman",
+        "Chris Webber"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Spurs",
+       "total": 48,
+       "answers": [
+        "Calvin Natt",
+        "De'Aaron Fox",
+        "Ray Williams",
+        "Billy Knight",
+        "Glenn Robinson",
+        "Kevin Martin",
+        "Sean Elliott",
+        "Mike Mitchell"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Heat",
+       "total": 46,
+       "answers": [
+        "Jamal Mashburn",
+        "Bam Adebayo",
+        "Anfernee Hardaway",
+        "Andrew Wiggins",
+        "Alonzo Mourning",
+        "Zydrunas Ilgauskas",
+        "Amar'e Stoudemire",
+        "Tim Hardaway"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "76ers",
+       "total": 49,
+       "answers": [
+        "Darius Johnson-Odom",
+        "Frankie King",
+        "Mac McClung",
+        "Jalen Hood-Schifino",
+        "Colin Castleton",
+        "Mason Jones",
+        "Trevor Wilson",
+        "Darius Morris"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Spurs",
+       "total": 27,
+       "answers": [
+        "Pétur Guðmundsson",
+        "Mike Smrek",
+        "Lloyd Daniels",
+        "Jeff Lamp",
+        "Ime Udoka",
+        "Jack Haley",
+        "Lonnie Walker IV",
+        "Ira Newble"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Heat",
+       "total": 37,
+       "answers": [
+        "Cole Swider",
+        "Milt Wagner",
+        "Kendrick Nunn",
+        "Smush Parker",
+        "Billy Thompson",
+        "Shawne Williams",
+        "Gabe Vincent",
+        "Thomas Bryant"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "76ers",
+       "total": 49,
+       "answers": [
+        "Norvel Pelle",
+        "Charlie Brown Jr.",
+        "Ignas Brazdeikis",
+        "Corey Gaines",
+        "Chasson Randle",
+        "MarJon Beauchamp",
+        "Alexey Shved",
+        "Guerschon Yabusele"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Spurs",
+       "total": 35,
+       "answers": [
+        "Mamadi Diakite",
+        "James White",
+        "Jeremy Sochan",
+        "Ime Udoka",
+        "DerMarr Johnson",
+        "Pete Myers",
+        "Shannon Brown",
+        "Luke Kornet"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Heat",
+       "total": 43,
+       "answers": [
+        "Matt Fish",
+        "Josh Harrellson",
+        "Ron Grandison",
+        "Earl Barron",
+        "Qyntel Woods",
+        "Henry Walker",
+        "Shawne Williams",
+        "Pete Myers"
+       ]
+      }
      ]
     },
     {
-     "row": "Bulls",
-     "col": "5,000+ Career Rebounds",
-     "total": 36,
-     "answers": [
-      "Joakim Noah",
-      "Bobby Portis",
-      "Rodney McCray",
-      "Clifford Ray",
-      "Drew Gooden",
-      "Tristan Thompson",
-      "Dave Greenwood",
-      "Carlos Boozer"
+     "date": "2026-08-22",
+     "rows": [
+      "Celtics",
+      "Bulls",
+      "Knicks"
+     ],
+     "cols": [
+      "Bucks",
+      "Lakers",
+      "5,000+ Career Rebounds"
+     ],
+     "cells": [
+      {
+       "row": "Celtics",
+       "col": "Bucks",
+       "total": 51,
+       "answers": [
+        "Dave Popson",
+        "Conner Henry",
+        "Chris Johnson",
+        "Andre Turner",
+        "David Thirdkill",
+        "Acie Earl",
+        "Jiří Welsch",
+        "Alaa Abdelnaby"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Lakers",
+       "total": 33,
+       "answers": [
+        "Vander Blue",
+        "Matt Ryan",
+        "MarShon Brooks",
+        "Von Wafer",
+        "Earl Tatum",
+        "Shammond Williams",
+        "Travis Knight",
+        "Svi Mykhailiuk"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "5,000+ Career Rebounds",
+       "total": 32,
+       "answers": [
+        "Greg Monroe",
+        "Troy Murphy",
+        "Enes Freedom",
+        "Tom Gugliotta",
+        "Blake Griffin",
+        "Dave Cowens",
+        "Vin Baker",
+        "Tristan Thompson"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Bucks",
+       "total": 53,
+       "answers": [
+        "Joe Alexander",
+        "Joe Courtney",
+        "Sean Kilpatrick",
+        "Isaiah Canaan",
+        "Marcus Fizer",
+        "Jabari Parker",
+        "Nikola Mirotić",
+        "Scott May"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Lakers",
+       "total": 45,
+       "answers": [
+        "Mac McClung",
+        "Mario Bennett",
+        "Ollie Mack",
+        "Larry Spriggs",
+        "Alfonzo McKinnie",
+        "Mike Smrek",
+        "David Nwaba",
+        "Ronnie Lester"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "5,000+ Career Rebounds",
+       "total": 36,
+       "answers": [
+        "Joakim Noah",
+        "Bobby Portis",
+        "Rodney McCray",
+        "Clifford Ray",
+        "Drew Gooden",
+        "Tristan Thompson",
+        "Dave Greenwood",
+        "Carlos Boozer"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Bucks",
+       "total": 46,
+       "answers": [
+        "Mirsad Türkcan",
+        "Mamadi Diakite",
+        "Jermaine Jackson",
+        "Earl Barron",
+        "MarJon Beauchamp",
+        "Chris Copeland",
+        "Thanasis Antetokounmpo",
+        "Jericho Sims"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Lakers",
+       "total": 48,
+       "answers": [
+        "Travis Wear",
+        "Matt Ryan",
+        "Dylan Windler",
+        "Cam Reddish",
+        "Earl Clark",
+        "Ray Tolbert",
+        "Shawne Williams",
+        "Ime Udoka"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "5,000+ Career Rebounds",
+       "total": 41,
+       "answers": [
+        "Joakim Noah",
+        "Larry Johnson",
+        "Karl-Anthony Towns",
+        "Bobby Portis",
+        "Enes Freedom",
+        "Kenyon Martin",
+        "Spencer Haywood",
+        "Truck Robinson"
+       ]
+      }
      ]
     },
     {
-     "row": "Bulls",
-     "col": "Bucks",
-     "total": 53,
-     "answers": [
-      "Joe Alexander",
-      "Joe Courtney",
-      "Sean Kilpatrick",
-      "Isaiah Canaan",
-      "Marcus Fizer",
-      "Jabari Parker",
-      "Nikola Mirotić",
-      "Scott May"
+     "date": "2026-08-21",
+     "rows": [
+      "76ers",
+      "Celtics",
+      "Suns"
+     ],
+     "cols": [
+      "Pistons",
+      "Warriors",
+      "5,000+ Career Rebounds"
+     ],
+     "cells": [
+      {
+       "row": "76ers",
+       "col": "Pistons",
+       "total": 61,
+       "answers": [
+        "Justin Harper",
+        "Louis King",
+        "Braxton Key",
+        "Pepe Sánchez",
+        "Saben Lee",
+        "Steve Hayes",
+        "Ralph Simpson",
+        "Ben Coleman"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Warriors",
+       "total": 70,
+       "answers": [
+        "Braxton Key",
+        "Malcolm Thomas",
+        "Shelton Jones",
+        "Lester Quiñones",
+        "Jeremy Pargo",
+        "Jeff Dowtin Jr.",
+        "Kevin Pritchard",
+        "Joe Courtney"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "5,000+ Career Rebounds",
+       "total": 40,
+       "answers": [
+        "Joel Embiid",
+        "George McGinnis",
+        "Cliff Robinson",
+        "Greg Monroe",
+        "Derrick Coleman",
+        "Tyrone Hill",
+        "Benoit Benjamin",
+        "Reggie Evans"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Pistons",
+       "total": 43,
+       "answers": [
+        "Ron Harper Jr.",
+        "Gigi Datome",
+        "Carsen Edwards",
+        "Terry Duerod",
+        "David Thirdkill",
+        "Luka Garza",
+        "Earl Tatum",
+        "Jeff Judkins"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "Warriors",
+       "total": 47,
+       "answers": [
+        "Jamel Thomas",
+        "Larry Robinson",
+        "Patrick O'Bryant",
+        "Kevin Pritchard",
+        "J.R. Bremer",
+        "Bart Kofoed",
+        "Kelvin Upshaw",
+        "Charles Bassey"
+       ]
+      },
+      {
+       "row": "Celtics",
+       "col": "5,000+ Career Rebounds",
+       "total": 32,
+       "answers": [
+        "Greg Monroe",
+        "Troy Murphy",
+        "Enes Freedom",
+        "Tom Gugliotta",
+        "Blake Griffin",
+        "Dave Cowens",
+        "Vin Baker",
+        "Tristan Thompson"
+       ]
+      },
+      {
+       "row": "Suns",
+       "col": "Pistons",
+       "total": 39,
+       "answers": [
+        "Eric Moreland",
+        "Jordan McRae",
+        "Isaiah Livers",
+        "Saben Lee",
+        "David Thirdkill",
+        "Cheick Diallo",
+        "William Bedford",
+        "Chimezie Metu"
+       ]
+      },
+      {
+       "row": "Suns",
+       "col": "Warriors",
+       "total": 48,
+       "answers": [
+        "Paul McPherson",
+        "Joe Courtney",
+        "Steve Burtt",
+        "Dan Langhi",
+        "Kenny Battle",
+        "Earl Barron",
+        "Žarko Čabarkapa",
+        "Nikoloz Tskitishvili"
+       ]
+      },
+      {
+       "row": "Suns",
+       "col": "5,000+ Career Rebounds",
+       "total": 42,
+       "answers": [
+        "Jusuf Nurkić",
+        "Greg Monroe",
+        "Joe Barry Carroll",
+        "Brian Grant",
+        "Tom Gugliotta",
+        "Truck Robinson",
+        "Marcin Gortat",
+        "Rich Kelley"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-20",
+     "rows": [
+      "Knicks",
+      "76ers",
+      "Trail Blazers"
+     ],
+     "cols": [
+      "900+ Games Played",
+      "Suns",
+      "Bulls"
+     ],
+     "cells": [
+      {
+       "row": "Knicks",
+       "col": "900+ Games Played",
+       "total": 43,
+       "answers": [
+        "Gerald Wilkins",
+        "Antonio Davis",
+        "Latrell Sprewell",
+        "Clarence Weatherspoon",
+        "Jalen Rose",
+        "Matt Barnes",
+        "Tracy McGrady",
+        "Bill Cartwright"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Suns",
+       "total": 51,
+       "answers": [
+        "Jared Harper",
+        "Bill Martin",
+        "Sedric Toney",
+        "Earl Barron",
+        "Brooks Thompson",
+        "John Jenkins",
+        "Jerrod Mustaf",
+        "Jimmer Fredette"
+       ]
+      },
+      {
+       "row": "Knicks",
+       "col": "Bulls",
+       "total": 52,
+       "answers": [
+        "Demetris Nichols",
+        "Tony White",
+        "Fred Cofield",
+        "Anthony Roberson",
+        "Frank Williams",
+        "Wayne Selden",
+        "Guerschon Yabusele",
+        "Mike Sweetney"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "900+ Games Played",
+       "total": 50,
+       "answers": [
+        "Jeff Malone",
+        "Jimmy Butler",
+        "JaVale McGee",
+        "Allen Iverson",
+        "Clarence Weatherspoon",
+        "George Hill",
+        "Robert Reid",
+        "Armen Gilliam"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Suns",
+       "total": 60,
+       "answers": [
+        "Michael Young",
+        "Jonah Bolden",
+        "Josh Davis",
+        "Joe Courtney",
+        "Richard Dumas",
+        "Lorenzo Brown",
+        "Trevor Ruffin",
+        "Saben Lee"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Bulls",
+       "total": 48,
+       "answers": [
+        "Mac McClung",
+        "Malcolm Thomas",
+        "Joe Courtney",
+        "Guerschon Yabusele",
+        "Dalen Terry",
+        "Tony Bradley",
+        "Isaiah Canaan",
+        "JaKarr Sampson"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "900+ Games Played",
+       "total": 43,
+       "answers": [
+        "Damian Lillard",
+        "Steve Kerr",
+        "Robert Reid",
+        "Patty Mills",
+        "Mychal Thompson",
+        "Steve Smith",
+        "Brian Shaw",
+        "Alton Lister"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "Suns",
+       "total": 44,
+       "answers": [
+        "Jamaree Bouyea",
+        "Ish Wainright",
+        "Earl Barron",
+        "Shavlik Randolph",
+        "Shaquille Harrison",
+        "Bernard Thompson",
+        "Sean Marks",
+        "Nassir Little"
+       ]
+      },
+      {
+       "row": "Trail Blazers",
+       "col": "Bulls",
+       "total": 32,
+       "answers": [
+        "Dave Johnson",
+        "Willie Smith",
+        "Viktor Khryapa",
+        "Shaquille Harrison",
+        "Stephen Graham",
+        "Ryan Arcidiacono",
+        "Michael Holton",
+        "Rick Brunson"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "rows": [
+      "Pistons",
+      "Mavericks",
+      "Lakers"
+     ],
+     "cols": [
+      "5,000+ Career Rebounds",
+      "Bucks",
+      "Bulls"
+     ],
+     "cells": [
+      {
+       "row": "Pistons",
+       "col": "5,000+ Career Rebounds",
+       "total": 34,
+       "answers": [
+        "Greg Monroe",
+        "Dan Roundfield",
+        "Blake Griffin",
+        "Derrick Coleman",
+        "Dave Greenwood",
+        "Chris Webber",
+        "Bob McAdoo",
+        "Christian Laettner"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Bucks",
+       "total": 64,
+       "answers": [
+        "Justin Robinson",
+        "Dan O'Sullivan",
+        "Stanley Umude",
+        "Mike Peplowski",
+        "Jermaine Jackson",
+        "Litterial Green",
+        "David Thirdkill",
+        "Pace Mannion"
+       ]
+      },
+      {
+       "row": "Pistons",
+       "col": "Bulls",
+       "total": 44,
+       "answers": [
+        "Jackie Robinson",
+        "Kay Felder",
+        "Tyler Cook",
+        "Kornél Dávid",
+        "James Wilkes",
+        "Mark Randall",
+        "Ronald Dupree",
+        "Jaden Ivey"
+       ]
+      },
+      {
+       "row": "Mavericks",
+       "col": "5,000+ Career Rebounds",
+       "total": 36,
+       "answers": [
+        "Andrew Bogut",
+        "Troy Murphy",
+        "Chris Kaman",
+        "Rodney McCray",
+        "Drew Gooden",
+        "Anthony Davis",
+        "David Lee",
+        "Shawn Bradley"
+       ]
+      },
+      {
+       "row": "Mavericks",
+       "col": "Bucks",
+       "total": 57,
+       "answers": [
+        "Tyler Smith",
+        "AJ Johnson",
+        "Jared Cunningham",
+        "Shawn Respert",
+        "DeAndre Liggins",
+        "Chris Douglas-Roberts",
+        "Sterling Brown",
+        "Yi Jianlian"
+       ]
+      },
+      {
+       "row": "Mavericks",
+       "col": "Bulls",
+       "total": 34,
+       "answers": [
+        "Carlik Jones",
+        "Ollie Mack",
+        "Chris Anstey",
+        "Anthony Jones",
+        "Khalid Reeves",
+        "Scott Lloyd",
+        "David Wood",
+        "Daniel Gafford"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "5,000+ Career Rebounds",
+       "total": 49,
+       "answers": [
+        "Swen Nater",
+        "Jim Chones",
+        "Cliff Robinson",
+        "Ivica Zubac",
+        "Andrew Bogut",
+        "Troy Murphy",
+        "Chris Kaman",
+        "Brian Grant"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Bucks",
+       "total": 49,
+       "answers": [
+        "Jamal Sampson",
+        "Brad Holland",
+        "Kendall Marshall",
+        "Tyler Ennis",
+        "Randolph Keys",
+        "Sterling Brown",
+        "Jeff Lamp",
+        "Christian Wood"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Bulls",
+       "total": 45,
+       "answers": [
+        "Mac McClung",
+        "Mario Bennett",
+        "Ollie Mack",
+        "Larry Spriggs",
+        "Alfonzo McKinnie",
+        "Mike Smrek",
+        "David Nwaba",
+        "Ronnie Lester"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-18",
+     "rows": [
+      "Bulls",
+      "5,000+ Career Rebounds",
+      "Warriors"
+     ],
+     "cols": [
+      "76ers",
+      "Suns",
+      "Bucks"
+     ],
+     "cells": [
+      {
+       "row": "Bulls",
+       "col": "76ers",
+       "total": 48,
+       "answers": [
+        "Mac McClung",
+        "Malcolm Thomas",
+        "Joe Courtney",
+        "Guerschon Yabusele",
+        "Dalen Terry",
+        "Tony Bradley",
+        "Isaiah Canaan",
+        "JaKarr Sampson"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Suns",
+       "total": 53,
+       "answers": [
+        "Paul Shirley",
+        "Jarell Eddie",
+        "Andre Barrett",
+        "Mario Bennett",
+        "Joe Courtney",
+        "Chandler Hutchison",
+        "Tyler Ulis",
+        "Linton Johnson"
+       ]
+      },
+      {
+       "row": "Bulls",
+       "col": "Bucks",
+       "total": 53,
+       "answers": [
+        "Joe Alexander",
+        "Joe Courtney",
+        "Sean Kilpatrick",
+        "Isaiah Canaan",
+        "Marcus Fizer",
+        "Jabari Parker",
+        "Nikola Mirotić",
+        "Scott May"
+       ]
+      },
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "76ers",
+       "total": 40,
+       "answers": [
+        "Joel Embiid",
+        "George McGinnis",
+        "Cliff Robinson",
+        "Greg Monroe",
+        "Derrick Coleman",
+        "Tyrone Hill",
+        "Benoit Benjamin",
+        "Reggie Evans"
+       ]
+      },
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "Suns",
+       "total": 42,
+       "answers": [
+        "Jusuf Nurkić",
+        "Greg Monroe",
+        "Joe Barry Carroll",
+        "Brian Grant",
+        "Tom Gugliotta",
+        "Truck Robinson",
+        "Marcin Gortat",
+        "Rich Kelley"
+       ]
+      },
+      {
+       "row": "5,000+ Career Rebounds",
+       "col": "Bucks",
+       "total": 40,
+       "answers": [
+        "Swen Nater",
+        "Greg Monroe",
+        "DeMarcus Cousins",
+        "Andrew Bogut",
+        "Bobby Portis",
+        "Kenyon Martin",
+        "Dave Cowens",
+        "Drew Gooden"
+       ]
+      },
+      {
+       "row": "Warriors",
+       "col": "76ers",
+       "total": 70,
+       "answers": [
+        "Braxton Key",
+        "Malcolm Thomas",
+        "Shelton Jones",
+        "Lester Quiñones",
+        "Jeremy Pargo",
+        "Jeff Dowtin Jr.",
+        "Kevin Pritchard",
+        "Joe Courtney"
+       ]
+      },
+      {
+       "row": "Warriors",
+       "col": "Suns",
+       "total": 48,
+       "answers": [
+        "Paul McPherson",
+        "Joe Courtney",
+        "Steve Burtt",
+        "Dan Langhi",
+        "Kenny Battle",
+        "Earl Barron",
+        "Žarko Čabarkapa",
+        "Nikoloz Tskitishvili"
+       ]
+      },
+      {
+       "row": "Warriors",
+       "col": "Bucks",
+       "total": 54,
+       "answers": [
+        "Chris Wright",
+        "John Stroeder",
+        "Jeff Dowtin Jr.",
+        "Joe Courtney",
+        "Dan Langhi",
+        "Earl Barron",
+        "Jeff Adrien",
+        "Ryan Rollins"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-17",
+     "rows": [
+      "76ers",
+      "Lakers",
+      "10,000+ Career Points"
+     ],
+     "cols": [
+      "Suns",
+      "Pistons",
+      "Rockets"
+     ],
+     "cells": [
+      {
+       "row": "76ers",
+       "col": "Suns",
+       "total": 60,
+       "answers": [
+        "Michael Young",
+        "Jonah Bolden",
+        "Josh Davis",
+        "Joe Courtney",
+        "Richard Dumas",
+        "Lorenzo Brown",
+        "Trevor Ruffin",
+        "Saben Lee"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Pistons",
+       "total": 61,
+       "answers": [
+        "Justin Harper",
+        "Louis King",
+        "Braxton Key",
+        "Pepe Sánchez",
+        "Saben Lee",
+        "Steve Hayes",
+        "Ralph Simpson",
+        "Ben Coleman"
+       ]
+      },
+      {
+       "row": "76ers",
+       "col": "Rockets",
+       "total": 63,
+       "answers": [
+        "Elmer Bennett",
+        "Justin Patton",
+        "Demetrius Jackson",
+        "James Nunnally",
+        "Mason Jones",
+        "Josh Davis",
+        "D.J. Wilson",
+        "K.J. McDaniels"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Suns",
+       "total": 48,
+       "answers": [
+        "Joe Crispin",
+        "Nigel Hayes-Davis",
+        "Mario Bennett",
+        "Duane Cooper",
+        "Davon Reed",
+        "Kendall Marshall",
+        "Tyler Ennis",
+        "Jordan Goodwin"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Pistons",
+       "total": 51,
+       "answers": [
+        "Cole Swider",
+        "Dwight Buycks",
+        "Alan Hardy",
+        "Sekou Doumbouya",
+        "Ray Tolbert",
+        "Earl Tatum",
+        "Smush Parker",
+        "Shawne Williams"
+       ]
+      },
+      {
+       "row": "Lakers",
+       "col": "Rockets",
+       "total": 49,
+       "answers": [
+        "Scott Machado",
+        "Andrew Goudelock",
+        "Mason Jones",
+        "Tierre Brown",
+        "Calvin Garrett",
+        "Larry Spriggs",
+        "Anthony Miller",
+        "Tyler Ennis"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Suns",
+       "total": 53,
+       "answers": [
+        "Charlie Scott",
+        "Michael Redd",
+        "Anfernee Hardaway",
+        "Joe Barry Carroll",
+        "Kevin Johnson",
+        "Devin Booker",
+        "Eric Bledsoe",
+        "Truck Robinson"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Pistons",
+       "total": 50,
+       "answers": [
+        "Kelly Tripucka",
+        "Bojan Bogdanović",
+        "Derrick Rose",
+        "Sean Elliott",
+        "Ben Gordon",
+        "Dan Roundfield",
+        "Blake Griffin",
+        "Jerami Grant"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Rockets",
+       "total": 56,
+       "answers": [
+        "Steve Francis",
+        "John Wall",
+        "DeMarcus Cousins",
+        "Joe Barry Carroll",
+        "Kevin Martin",
+        "Cuttino Mobley",
+        "Mike Woodson",
+        "Vin Baker"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-16",
+     "rows": [
+      "Rockets",
+      "Spurs",
+      "10,000+ Career Points"
+     ],
+     "cols": [
+      "Suns",
+      "Heat",
+      "Lakers"
+     ],
+     "cells": [
+      {
+       "row": "Rockets",
+       "col": "Suns",
+       "total": 56,
+       "answers": [
+        "Ray Spalding",
+        "Maciej Lampe",
+        "Andre Barrett",
+        "Josh Davis",
+        "TyTy Washington Jr.",
+        "Dan Langhi",
+        "David Roddy",
+        "Tyler Ennis"
+       ]
+      },
+      {
+       "row": "Rockets",
+       "col": "Heat",
+       "total": 34,
+       "answers": [
+        "Briante Weber",
+        "Josh Christopher",
+        "Loren Woods",
+        "Sam Mack",
+        "Daequan Cook",
+        "Luther Head",
+        "Toney Douglas",
+        "James Ennis III"
+       ]
+      },
+      {
+       "row": "Rockets",
+       "col": "Lakers",
+       "total": 49,
+       "answers": [
+        "Scott Machado",
+        "Andrew Goudelock",
+        "Mason Jones",
+        "Tierre Brown",
+        "Calvin Garrett",
+        "Larry Spriggs",
+        "Anthony Miller",
+        "Tyler Ennis"
+       ]
+      },
+      {
+       "row": "Spurs",
+       "col": "Suns",
+       "total": 40,
+       "answers": [
+        "Jamaree Bouyea",
+        "Joe Courtney",
+        "Linton Johnson",
+        "David Thirdkill",
+        "Sean Marks",
+        "William Bedford",
+        "Chimezie Metu",
+        "Negele Knight"
+       ]
+      },
+      {
+       "row": "Spurs",
+       "col": "Heat",
+       "total": 32,
+       "answers": [
+        "Blake Ahearn",
+        "Jamaree Bouyea",
+        "Sean Marks",
+        "Chris Quinn",
+        "Sam Mack",
+        "Morlon Wiley",
+        "Willie Burton",
+        "Tyler Johnson"
+       ]
+      },
+      {
+       "row": "Spurs",
+       "col": "Lakers",
+       "total": 27,
+       "answers": [
+        "Pétur Guðmundsson",
+        "Mike Smrek",
+        "Lloyd Daniels",
+        "Jeff Lamp",
+        "Ime Udoka",
+        "Jack Haley",
+        "Lonnie Walker IV",
+        "Ira Newble"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Suns",
+       "total": 53,
+       "answers": [
+        "Charlie Scott",
+        "Michael Redd",
+        "Anfernee Hardaway",
+        "Joe Barry Carroll",
+        "Kevin Johnson",
+        "Devin Booker",
+        "Eric Bledsoe",
+        "Truck Robinson"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Heat",
+       "total": 46,
+       "answers": [
+        "Jamal Mashburn",
+        "Bam Adebayo",
+        "Anfernee Hardaway",
+        "Andrew Wiggins",
+        "Alonzo Mourning",
+        "Zydrunas Ilgauskas",
+        "Amar'e Stoudemire",
+        "Tim Hardaway"
+       ]
+      },
+      {
+       "row": "10,000+ Career Points",
+       "col": "Lakers",
+       "total": 63,
+       "answers": [
+        "Luka Dončić",
+        "Charlie Scott",
+        "Brandon Ingram",
+        "Kyle Kuzma",
+        "Cliff Robinson",
+        "Brian Winters",
+        "D'Angelo Russell",
+        "Spencer Haywood"
+       ]
+      }
      ]
     }
    ]
   },
-  {
-   "date": "2026-08-28",
-   "rows": [
-    "Lakers",
-    "900+ Games Played",
-    "Pistons"
-   ],
-   "cols": [
-    "76ers",
-    "Celtics",
-    "Mavericks"
-   ],
-   "cells": [
+  "mlb": {
+   "label": "MLB",
+   "game": "/mlb-grid",
+   "boards": [
     {
-     "row": "Lakers",
-     "col": "76ers",
-     "total": 49,
-     "answers": [
-      "Darius Johnson-Odom",
-      "Frankie King",
-      "Mac McClung",
-      "Jalen Hood-Schifino",
-      "Colin Castleton",
-      "Mason Jones",
-      "Trevor Wilson",
-      "Darius Morris"
+     "date": "2026-08-29",
+     "rows": [
+      "Phillies",
+      "Red Sox",
+      "Dodgers"
+     ],
+     "cols": [
+      "Reds",
+      "300+ Career Home Runs",
+      "White Sox"
+     ],
+     "cells": [
+      {
+       "row": "Phillies",
+       "col": "Reds",
+       "total": 138,
+       "answers": [
+        "Jim Greengrass",
+        "Cliff Lee",
+        "Ron Roenicke",
+        "Harvey Haddix",
+        "Ryan Franklin",
+        "Red Ames",
+        "Syl Johnson",
+        "Harry McCurdy"
+       ]
+      },
+      {
+       "row": "Phillies",
+       "col": "300+ Career Home Runs",
+       "total": 15,
+       "answers": [
+        "Ryan Howard",
+        "Dick Allen",
+        "Chuck Klein",
+        "Jose Bautista",
+        "Greg Luzinski",
+        "Ron Gant",
+        "Roy Sievers",
+        "Lance Parrish"
+       ]
+      },
+      {
+       "row": "Phillies",
+       "col": "White Sox",
+       "total": 74,
+       "answers": [
+        "Chief Bender",
+        "Bud Clancy",
+        "Harry McCurdy",
+        "Todd Cruz",
+        "Lena Blackburne",
+        "Doc White",
+        "Stan Bahnsen",
+        "Jerry Koosman"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "Reds",
+       "total": 98,
+       "answers": [
+        "Carl Mays",
+        "Jesse Tannehill",
+        "Chick Shorten",
+        "Bill Henry",
+        "Don Pavletich",
+        "Matt Batts",
+        "Eddie Pellagrini",
+        "Scott Schoeneweis"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "300+ Career Home Runs",
+       "total": 23,
+       "answers": [
+        "Mo Vaughn",
+        "Jose Canseco",
+        "Adrian Gonzalez",
+        "Fred Lynn",
+        "Reggie Smith",
+        "Jack Clark",
+        "Ellis Burks",
+        "Jim Rice"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "White Sox",
+       "total": 118,
+       "answers": [
+        "Eddie Cicotte",
+        "Gary Bell",
+        "Don Pavletich",
+        "Paul Lehner",
+        "Reid Nichols",
+        "Matt Batts",
+        "Chad Bradford",
+        "Bennie Tate"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "Reds",
+       "total": 134,
+       "answers": [
+        "Chad Moeller",
+        "Bob Fisher",
+        "George Magoon",
+        "Ron Roenicke",
+        "Rube Marquard",
+        "Jim Canavan",
+        "Camilo Pascual",
+        "Cecil Espy"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "300+ Career Home Runs",
+       "total": 27,
+       "answers": [
+        "Darryl Strawberry",
+        "Jeromy Burnitz",
+        "Dick Allen",
+        "Rocky Colavito",
+        "Frank Howard",
+        "Mike Piazza",
+        "Adrian Gonzalez",
+        "Shawn Green"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "White Sox",
+       "total": 83,
+       "answers": [
+        "Gail Hopkins",
+        "Bud Clancy",
+        "George Magoon",
+        "Oris Hockett",
+        "Phil Regan",
+        "Scott Radinsky",
+        "Cal Abrams",
+        "Claude Osteen"
+       ]
+      }
      ]
     },
     {
-     "row": "Lakers",
-     "col": "Celtics",
-     "total": 33,
-     "answers": [
-      "Vander Blue",
-      "Matt Ryan",
-      "MarShon Brooks",
-      "Von Wafer",
-      "Earl Tatum",
-      "Shammond Williams",
-      "Travis Knight",
-      "Svi Mykhailiuk"
+     "date": "2026-08-28",
+     "rows": [
+      "Yankees",
+      "2,000+ Games Played",
+      "Reds"
+     ],
+     "cols": [
+      "Cardinals",
+      "Red Sox",
+      "Tigers"
+     ],
+     "cells": [
+      {
+       "row": "Yankees",
+       "col": "Cardinals",
+       "total": 88,
+       "answers": [
+        "Gabby Street",
+        "Mark Salas",
+        "Darren Holmes",
+        "Tony Fossas",
+        "Kiddo Davis",
+        "Bobby Shantz",
+        "Jack Powell",
+        "Doc Farrell"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Red Sox",
+       "total": 122,
+       "answers": [
+        "Mike McNally",
+        "Carl Mays",
+        "Neal Ball",
+        "Jesse Tannehill",
+        "Steve Farr",
+        "Jimmy Walsh (1912-1917)",
+        "Wes Ferrell",
+        "Bill Lamar"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Tigers",
+       "total": 93,
+       "answers": [
+        "Mark Salas",
+        "Hugh High",
+        "Virgil Trucks",
+        "Ernie Courtney",
+        "Doyle Alexander",
+        "Dick Kryhoski",
+        "Joe Yeager",
+        "Ron Woods"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Cardinals",
+       "total": 42,
+       "answers": [
+        "Cesar Cedeno",
+        "Jim Edmonds",
+        "Jose Cardenal",
+        "Tino Martinez",
+        "Ken Boyer",
+        "Scott Rolen",
+        "George Hendrick",
+        "A. J. Pierzynski"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Red Sox",
+       "total": 38,
+       "answers": [
+        "Ellis Burks",
+        "Heinie Manush",
+        "Wally Moses",
+        "George Scott",
+        "A. J. Pierzynski",
+        "Jesse Burkett",
+        "Jim Rice",
+        "Royce Clayton"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Tigers",
+       "total": 29,
+       "answers": [
+        "Heinie Manush",
+        "Dick Bartell",
+        "Aurelio Rodriguez",
+        "Willie Horton",
+        "Curtis Granderson",
+        "Norm Cash",
+        "Eddie Yost",
+        "Harry Heilmann"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Cardinals",
+       "total": 186,
+       "answers": [
+        "Bob Fisher",
+        "Gabby Street",
+        "Charlie Duffee",
+        "Charlie James",
+        "Harry Gumbert",
+        "Clint Hurdle",
+        "Bob Scheffing",
+        "Harvey Haddix"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Red Sox",
+       "total": 98,
+       "answers": [
+        "Carl Mays",
+        "Jesse Tannehill",
+        "Chick Shorten",
+        "Bill Henry",
+        "Don Pavletich",
+        "Matt Batts",
+        "Eddie Pellagrini",
+        "Scott Schoeneweis"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Tigers",
+       "total": 78,
+       "answers": [
+        "Charlie Carr",
+        "Chick Shorten",
+        "Syl Johnson",
+        "Matt Batts",
+        "Wayne Krenchicki",
+        "Harry Spilman",
+        "Ted Power",
+        "Doug Bair"
+       ]
+      }
      ]
     },
     {
-     "row": "Lakers",
-     "col": "Mavericks",
-     "total": 59,
-     "answers": [
-      "Alex Fudge",
-      "Manny Harris",
-      "Ollie Mack",
-      "Quinn Cook",
-      "D.J. Mbenga",
-      "Max Christie",
-      "Marty Byrnes",
-      "Sterling Brown"
+     "date": "2026-08-27",
+     "rows": [
+      "Reds",
+      "Cleveland",
+      "Cardinals"
+     ],
+     "cols": [
+      "Athletics",
+      "Tigers",
+      "2,000+ Career Hits"
+     ],
+     "cells": [
+      {
+       "row": "Reds",
+       "col": "Athletics",
+       "total": 70,
+       "answers": [
+        "Eric Tipton",
+        "Charlie Carr",
+        "Jimmy Ripple",
+        "Joe Nuxhall",
+        "Morrie Rath",
+        "Jay Howell",
+        "Morgan Murphy",
+        "Doug Bair"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Tigers",
+       "total": 78,
+       "answers": [
+        "Charlie Carr",
+        "Chick Shorten",
+        "Syl Johnson",
+        "Matt Batts",
+        "Wayne Krenchicki",
+        "Harry Spilman",
+        "Ted Power",
+        "Doug Bair"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "2,000+ Career Hits",
+       "total": 42,
+       "answers": [
+        "Dummy Hoy",
+        "Joe Kelley",
+        "George Burns (1911-1925)",
+        "Kiki Cuyler",
+        "Brandon Phillips",
+        "Del Ennis",
+        "Hal Chase",
+        "Edd Roush"
+       ]
+      },
+      {
+       "row": "Cleveland",
+       "col": "Athletics",
+       "total": 122,
+       "answers": [
+        "Marc Rzepczynski",
+        "Charlie Carr",
+        "Chubby Dean",
+        "Joe Boley",
+        "Paul Lehner",
+        "Luis Vizcaino",
+        "Morrie Rath",
+        "Bartolo Colon"
+       ]
+      },
+      {
+       "row": "Cleveland",
+       "col": "Tigers",
+       "total": 94,
+       "answers": [
+        "Nig Clarke",
+        "Ezequiel Carrera",
+        "Charlie Carr",
+        "Mark Salas",
+        "Dan Schatzeder",
+        "Andy Allanson",
+        "Claude Rossman",
+        "Earl Whitehill"
+       ]
+      },
+      {
+       "row": "Cleveland",
+       "col": "2,000+ Career Hits",
+       "total": 36,
+       "answers": [
+        "Earl Averill",
+        "Mark Grudzielanek",
+        "Harvey Kuenn",
+        "George Burns (1914-1929)",
+        "Brandon Phillips",
+        "Joe Sewell",
+        "Victor Martinez",
+        "Orlando Cabrera"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Athletics",
+       "total": 77,
+       "answers": [
+        "Marc Rzepczynski",
+        "Joe Boever",
+        "Pat Neshek",
+        "Ricardo Rincon",
+        "Morgan Murphy",
+        "Bobby Shantz",
+        "Doug Bair",
+        "Moe Drabowsky"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Tigers",
+       "total": 62,
+       "answers": [
+        "Mark Salas",
+        "Joe Boever",
+        "Syl Johnson",
+        "Del Gainer",
+        "Mike Difelice",
+        "Ted Power",
+        "Jack Russell",
+        "Doug Bair"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "2,000+ Career Hits",
+       "total": 51,
+       "answers": [
+        "Ed McKean",
+        "Jack Glasscock",
+        "Dummy Hoy",
+        "Mark Grudzielanek",
+        "Patsy Donovan",
+        "Al Dark",
+        "Johnny Mize",
+        "Del Ennis"
+       ]
+      }
      ]
     },
     {
-     "row": "900+ Games Played",
-     "col": "76ers",
-     "total": 50,
-     "answers": [
-      "Jeff Malone",
-      "Jimmy Butler",
-      "JaVale McGee",
-      "Allen Iverson",
-      "Clarence Weatherspoon",
-      "George Hill",
-      "Robert Reid",
-      "Armen Gilliam"
+     "date": "2026-08-26",
+     "rows": [
+      "300+ Career Home Runs",
+      "Yankees",
+      "Reds"
+     ],
+     "cols": [
+      "Giants",
+      "Athletics",
+      "Pirates"
+     ],
+     "cells": [
+      {
+       "row": "300+ Career Home Runs",
+       "col": "Giants",
+       "total": 27,
+       "answers": [
+        "Darryl Strawberry",
+        "Reggie Sanders",
+        "Bobby Bonds",
+        "Matt Williams",
+        "Johnny Mize",
+        "Dave Kingman",
+        "Moises Alou",
+        "George Foster"
+       ]
+      },
+      {
+       "row": "300+ Career Home Runs",
+       "col": "Athletics",
+       "total": 26,
+       "answers": [
+        "David Justice",
+        "Dick Allen",
+        "Jermaine Dye",
+        "Ron Gant",
+        "Rocky Colavito",
+        "Mark McGwire",
+        "Jose Canseco",
+        "Matt Holliday"
+       ]
+      },
+      {
+       "row": "300+ Career Home Runs",
+       "col": "Pirates",
+       "total": 13,
+       "answers": [
+        "Hank Greenberg",
+        "Ralph Kiner",
+        "Jeromy Burnitz",
+        "Chuck Klein",
+        "Reggie Sanders",
+        "Jose Bautista",
+        "Derrek Lee",
+        "Moises Alou"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Giants",
+       "total": 93,
+       "answers": [
+        "Carl Mays",
+        "Bump Hadley",
+        "Todd Greene",
+        "Doyle Alexander",
+        "Felix Rodriguez",
+        "Kiddo Davis",
+        "Rick Reuschel",
+        "Mickey Witek"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Athletics",
+       "total": 140,
+       "answers": [
+        "Gene Nelson",
+        "Catfish Hunter",
+        "Johnny Blanchard",
+        "Virgil Trucks",
+        "Bump Hadley",
+        "Jimmy Walsh (1912-1917)",
+        "Luis Vizcaino",
+        "Tom Zachary"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Pirates",
+       "total": 78,
+       "answers": [
+        "Jesse Tannehill",
+        "Enrique Wilson",
+        "Damaso Marte",
+        "Luis Tiant",
+        "Bobby Shantz",
+        "Rick Reuschel",
+        "Bullet Joe Bush",
+        "Harry Wolter"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Giants",
+       "total": 136,
+       "answers": [
+        "Carl Mays",
+        "Dave Burba",
+        "Harry Gumbert",
+        "Ron Roenicke",
+        "Bill Henry",
+        "Red Ames",
+        "Fred Lewis",
+        "Rube Marquard"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Athletics",
+       "total": 70,
+       "answers": [
+        "Eric Tipton",
+        "Charlie Carr",
+        "Jimmy Ripple",
+        "Joe Nuxhall",
+        "Morrie Rath",
+        "Jay Howell",
+        "Morgan Murphy",
+        "Doug Bair"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Pirates",
+       "total": 126,
+       "answers": [
+        "Jesse Tannehill",
+        "Harry Gumbert",
+        "Cliff Lee",
+        "Jim Keenan",
+        "Bill Henry",
+        "Harvey Haddix",
+        "Fritz Mollwitz",
+        "Guy Bush"
+       ]
+      }
      ]
     },
     {
-     "row": "900+ Games Played",
-     "col": "Celtics",
-     "total": 35,
-     "answers": [
-      "Scott Wedman",
-      "Artis Gilmore",
-      "Dennis Schröder",
-      "Al Jefferson",
-      "Rick Fox",
-      "Brian Shaw",
-      "Rickey Green",
-      "David Wesley"
+     "date": "2026-08-25",
+     "rows": [
+      "White Sox",
+      "Twins",
+      "2,000+ Games Played"
+     ],
+     "cols": [
+      "Tigers",
+      "Cleveland",
+      "Cubs"
+     ],
+     "cells": [
+      {
+       "row": "White Sox",
+       "col": "Tigers",
+       "total": 84,
+       "answers": [
+        "Eddie Cicotte",
+        "Mark Salas",
+        "Virgil Trucks",
+        "Matt Batts",
+        "Phil Regan",
+        "Jason Grilli",
+        "Red Wilson",
+        "Timo Perez"
+       ]
+      },
+      {
+       "row": "White Sox",
+       "col": "Cleveland",
+       "total": 145,
+       "answers": [
+        "Mark Salas",
+        "Bill Hunnefield",
+        "Dave Altizer",
+        "Gary Bell",
+        "Herbert Perry",
+        "Paul Lehner",
+        "Luis Vizcaino",
+        "Oris Hockett"
+       ]
+      },
+      {
+       "row": "White Sox",
+       "col": "Cubs",
+       "total": 82,
+       "answers": [
+        "Wayne Nordhagen",
+        "Turk Lown",
+        "George Magoon",
+        "Luis Vizcaino",
+        "Phil Regan",
+        "Alex Metzler",
+        "Bennie Tate",
+        "Bob Locker"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "Tigers",
+       "total": 86,
+       "answers": [
+        "Mark Salas",
+        "Tim Corcoran",
+        "Dan Schatzeder",
+        "Earl Whitehill",
+        "Firpo Marberry",
+        "Win Mercer",
+        "Jack Morris",
+        "Jack Russell"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "Cleveland",
+       "total": 103,
+       "answers": [
+        "Mark Salas",
+        "Dan Schatzeder",
+        "Dave Altizer",
+        "Camilo Pascual",
+        "Earl Whitehill",
+        "Wes Ferrell",
+        "Scott Leius",
+        "Ron Washington"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "Cubs",
+       "total": 67,
+       "answers": [
+        "Augie Ojeda",
+        "Ron Mahay",
+        "Brendan Harris",
+        "Earl Whitehill",
+        "Matt Guerrier",
+        "Mickey Livingston",
+        "Bennie Tate",
+        "Jack Russell"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Tigers",
+       "total": 29,
+       "answers": [
+        "Heinie Manush",
+        "Dick Bartell",
+        "Aurelio Rodriguez",
+        "Willie Horton",
+        "Curtis Granderson",
+        "Norm Cash",
+        "Eddie Yost",
+        "Harry Heilmann"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Cleveland",
+       "total": 35,
+       "answers": [
+        "Ellis Burks",
+        "Roger Peckinpaugh",
+        "Jose Cardenal",
+        "Willie Horton",
+        "Boog Powell",
+        "George Hendrick",
+        "Jay Bell",
+        "Keith Hernandez"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Cubs",
+       "total": 40,
+       "answers": [
+        "Cy Williams",
+        "Jim Edmonds",
+        "Jimmy Ryan",
+        "Dick Bartell",
+        "Jose Cardenal",
+        "Phil Cavarretta",
+        "Gary Matthews (1972-1987)",
+        "Ron Cey"
+       ]
+      }
      ]
     },
     {
-     "row": "900+ Games Played",
-     "col": "Mavericks",
-     "total": 46,
-     "answers": [
-      "JaVale McGee",
-      "Dennis Rodman",
-      "Mark Aguirre",
-      "Klay Thompson",
-      "JJ Redick",
-      "Eddie Jones",
-      "Adrian Dantley",
-      "Rajon Rondo"
+     "date": "2026-08-24",
+     "rows": [
+      "Red Sox",
+      "Cubs",
+      "2,000+ Games Played"
+     ],
+     "cols": [
+      "Orioles",
+      "Braves",
+      "White Sox"
+     ],
+     "cells": [
+      {
+       "row": "Red Sox",
+       "col": "Orioles",
+       "total": 111,
+       "answers": [
+        "Dick Drago",
+        "Chick Shorten",
+        "Billy Hoeft",
+        "Dizzy Trout",
+        "Paul Lehner",
+        "Matt Batts",
+        "Heathcliff Slocumb",
+        "Chad Bradford"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "Braves",
+       "total": 87,
+       "answers": [
+        "Walter Barbare",
+        "Alejandro Pena",
+        "Ron Mahay",
+        "Billy Hoeft",
+        "Rudy Seanez",
+        "Wes Ferrell",
+        "Bartolo Colon",
+        "Stan Belinda"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "White Sox",
+       "total": 118,
+       "answers": [
+        "Eddie Cicotte",
+        "Gary Bell",
+        "Don Pavletich",
+        "Paul Lehner",
+        "Reid Nichols",
+        "Matt Batts",
+        "Chad Bradford",
+        "Bennie Tate"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Orioles",
+       "total": 75,
+       "answers": [
+        "Milt Pappas",
+        "Carl Warwick",
+        "Billy Hoeft",
+        "Heathcliff Slocumb",
+        "Alex Metzler",
+        "Moe Drabowsky",
+        "Kevin Gregg",
+        "Manny Alexander"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Braves",
+       "total": 134,
+       "answers": [
+        "Ron Mahay",
+        "Milt Pappas",
+        "Tom Needham",
+        "Billy Hoeft",
+        "Randall Simon",
+        "Del Howard",
+        "Guy Bush",
+        "John Clarkson"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "White Sox",
+       "total": 82,
+       "answers": [
+        "Wayne Nordhagen",
+        "Turk Lown",
+        "George Magoon",
+        "Luis Vizcaino",
+        "Phil Regan",
+        "Alex Metzler",
+        "Bennie Tate",
+        "Bob Locker"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Orioles",
+       "total": 34,
+       "answers": [
+        "Bobby Grich",
+        "Heinie Manush",
+        "Mark Belanger",
+        "Aurelio Rodriguez",
+        "Jeff Conine",
+        "Boog Powell",
+        "George Sisler",
+        "Jesse Burkett"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "Braves",
+       "total": 42,
+       "answers": [
+        "Gary Matthews (1972-1987)",
+        "Wally Joyner",
+        "Dusty Baker",
+        "George Sisler",
+        "A. J. Pierzynski",
+        "Felipe Alou",
+        "Ed Konetchy",
+        "Sherry Magee"
+       ]
+      },
+      {
+       "row": "2,000+ Games Played",
+       "col": "White Sox",
+       "total": 42,
+       "answers": [
+        "Ellis Burks",
+        "Adam Dunn",
+        "Roger Peckinpaugh",
+        "Wally Moses",
+        "Aurelio Rodriguez",
+        "Phil Cavarretta",
+        "Ken Boyer",
+        "A. J. Pierzynski"
+       ]
+      }
      ]
     },
     {
-     "row": "Pistons",
-     "col": "76ers",
-     "total": 61,
-     "answers": [
-      "Justin Harper",
-      "Louis King",
-      "Braxton Key",
-      "Pepe Sánchez",
-      "Saben Lee",
-      "Steve Hayes",
-      "Ralph Simpson",
-      "Ben Coleman"
+     "date": "2026-08-23",
+     "rows": [
+      "2,000+ Career Hits",
+      "Yankees",
+      "Cubs"
+     ],
+     "cols": [
+      "Cardinals",
+      "Braves",
+      "Pirates"
+     ],
+     "cells": [
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Cardinals",
+       "total": 51,
+       "answers": [
+        "Ed McKean",
+        "Jack Glasscock",
+        "Dummy Hoy",
+        "Mark Grudzielanek",
+        "Patsy Donovan",
+        "Al Dark",
+        "Johnny Mize",
+        "Del Ennis"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Braves",
+       "total": 57,
+       "answers": [
+        "Deacon White",
+        "Billy Hamilton",
+        "Paul Hines",
+        "Earl Averill",
+        "Dan Brouthers",
+        "Hugh Duffy",
+        "Patsy Donovan",
+        "Al Dark"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Pirates",
+       "total": 44,
+       "answers": [
+        "Deacon White",
+        "Paul Hines",
+        "Jack Glasscock",
+        "Chuck Klein",
+        "Bill Madlock",
+        "Arky Vaughan",
+        "Patsy Donovan",
+        "Joe Kelley"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Cardinals",
+       "total": 88,
+       "answers": [
+        "Gabby Street",
+        "Mark Salas",
+        "Darren Holmes",
+        "Tony Fossas",
+        "Kiddo Davis",
+        "Bobby Shantz",
+        "Jack Powell",
+        "Doc Farrell"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Braves",
+       "total": 110,
+       "answers": [
+        "Gabby Street",
+        "Johnny Blanchard",
+        "Mike Fischlin",
+        "Mark Wohlers",
+        "Luis Ayala",
+        "Pat Collins",
+        "Tom Zachary",
+        "Wes Ferrell"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Pirates",
+       "total": 78,
+       "answers": [
+        "Jesse Tannehill",
+        "Enrique Wilson",
+        "Damaso Marte",
+        "Luis Tiant",
+        "Bobby Shantz",
+        "Rick Reuschel",
+        "Bullet Joe Bush",
+        "Harry Wolter"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Cardinals",
+       "total": 146,
+       "answers": [
+        "Bob Fisher",
+        "Steve Swisher",
+        "Frank DiPino",
+        "Bob Scheffing",
+        "Carl Warwick",
+        "Fritz Mollwitz",
+        "Guy Bush",
+        "Heathcliff Slocumb"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Braves",
+       "total": 134,
+       "answers": [
+        "Ron Mahay",
+        "Milt Pappas",
+        "Tom Needham",
+        "Billy Hoeft",
+        "Randall Simon",
+        "Del Howard",
+        "Guy Bush",
+        "John Clarkson"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Pirates",
+       "total": 141,
+       "answers": [
+        "John O'Brien",
+        "Wayne Nordhagen",
+        "John Grabow",
+        "Wilbur Cooper",
+        "Bill Henry",
+        "Jim McCormick",
+        "Fritz Mollwitz",
+        "Randall Simon"
+       ]
+      }
      ]
     },
     {
-     "row": "Pistons",
-     "col": "Celtics",
-     "total": 43,
-     "answers": [
-      "Ron Harper Jr.",
-      "Gigi Datome",
-      "Carsen Edwards",
-      "Terry Duerod",
-      "David Thirdkill",
-      "Luka Garza",
-      "Earl Tatum",
-      "Jeff Judkins"
+     "date": "2026-08-22",
+     "rows": [
+      "Red Sox",
+      "Dodgers",
+      "Cubs"
+     ],
+     "cols": [
+      "White Sox",
+      "Yankees",
+      "300+ Career Home Runs"
+     ],
+     "cells": [
+      {
+       "row": "Red Sox",
+       "col": "White Sox",
+       "total": 118,
+       "answers": [
+        "Eddie Cicotte",
+        "Gary Bell",
+        "Don Pavletich",
+        "Paul Lehner",
+        "Reid Nichols",
+        "Matt Batts",
+        "Chad Bradford",
+        "Bennie Tate"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "Yankees",
+       "total": 122,
+       "answers": [
+        "Mike McNally",
+        "Carl Mays",
+        "Neal Ball",
+        "Jesse Tannehill",
+        "Steve Farr",
+        "Jimmy Walsh (1912-1917)",
+        "Wes Ferrell",
+        "Bill Lamar"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "300+ Career Home Runs",
+       "total": 23,
+       "answers": [
+        "Mo Vaughn",
+        "Jose Canseco",
+        "Adrian Gonzalez",
+        "Fred Lynn",
+        "Reggie Smith",
+        "Jack Clark",
+        "Ellis Burks",
+        "Jim Rice"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "White Sox",
+       "total": 83,
+       "answers": [
+        "Gail Hopkins",
+        "Bud Clancy",
+        "George Magoon",
+        "Oris Hockett",
+        "Phil Regan",
+        "Scott Radinsky",
+        "Cal Abrams",
+        "Claude Osteen"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "Yankees",
+       "total": 112,
+       "answers": [
+        "Chad Moeller",
+        "Bill Sudakis",
+        "Tim Jordan",
+        "Tom Zachary",
+        "Wes Ferrell",
+        "Bill Lamar",
+        "Darren Holmes",
+        "Doyle Alexander"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "300+ Career Home Runs",
+       "total": 27,
+       "answers": [
+        "Darryl Strawberry",
+        "Jeromy Burnitz",
+        "Dick Allen",
+        "Rocky Colavito",
+        "Frank Howard",
+        "Mike Piazza",
+        "Adrian Gonzalez",
+        "Shawn Green"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "White Sox",
+       "total": 82,
+       "answers": [
+        "Wayne Nordhagen",
+        "Turk Lown",
+        "George Magoon",
+        "Luis Vizcaino",
+        "Phil Regan",
+        "Alex Metzler",
+        "Bennie Tate",
+        "Bob Locker"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Yankees",
+       "total": 94,
+       "answers": [
+        "Domingo Ramos",
+        "Felix Heredia",
+        "Luis Vizcaino",
+        "Enrique Wilson",
+        "Tony Fossas",
+        "Jay Howell",
+        "Bobby Shantz",
+        "Rick Reuschel"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "300+ Career Home Runs",
+       "total": 23,
+       "answers": [
+        "Ralph Kiner",
+        "Jeromy Burnitz",
+        "Chuck Klein",
+        "Bobby Bonds",
+        "Dave Kingman",
+        "Derrek Lee",
+        "Moises Alou",
+        "Alfonso Soriano"
+       ]
+      }
      ]
     },
     {
-     "row": "Pistons",
-     "col": "Mavericks",
-     "total": 48,
-     "answers": [
-      "Steve Bardo",
-      "Eugene Omoruyi",
-      "Tracy Moore",
-      "Terry Duerod",
-      "Bill Curley",
-      "Walter Bond",
-      "Bob McCann",
-      "Khalid Reeves"
+     "date": "2026-08-21",
+     "rows": [
+      "Cardinals",
+      "Red Sox",
+      "Phillies"
+     ],
+     "cols": [
+      "Reds",
+      "Giants",
+      "300+ Career Home Runs"
+     ],
+     "cells": [
+      {
+       "row": "Cardinals",
+       "col": "Reds",
+       "total": 186,
+       "answers": [
+        "Bob Fisher",
+        "Gabby Street",
+        "Charlie Duffee",
+        "Charlie James",
+        "Harry Gumbert",
+        "Clint Hurdle",
+        "Bob Scheffing",
+        "Harvey Haddix"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Giants",
+       "total": 154,
+       "answers": [
+        "Doc Crandall",
+        "Gene Paulette",
+        "Harry Gumbert",
+        "Frank Linzy",
+        "Dick Buckley",
+        "Jason Christiansen",
+        "Lew McCarty",
+        "Red Ames"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "300+ Career Home Runs",
+       "total": 21,
+       "answers": [
+        "Troy Glaus",
+        "Dick Allen",
+        "Reggie Sanders",
+        "Ron Gant",
+        "Bobby Bonds",
+        "Mark McGwire",
+        "Lance Berkman",
+        "Johnny Mize"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "Reds",
+       "total": 98,
+       "answers": [
+        "Carl Mays",
+        "Jesse Tannehill",
+        "Chick Shorten",
+        "Bill Henry",
+        "Don Pavletich",
+        "Matt Batts",
+        "Eddie Pellagrini",
+        "Scott Schoeneweis"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "Giants",
+       "total": 82,
+       "answers": [
+        "Carl Mays",
+        "Dustan Mohr",
+        "Bill Henry",
+        "Billy Hoeft",
+        "Rube Walberg",
+        "Doug Mirabelli",
+        "Grover Hartley",
+        "Bullet Joe Bush"
+       ]
+      },
+      {
+       "row": "Red Sox",
+       "col": "300+ Career Home Runs",
+       "total": 23,
+       "answers": [
+        "Mo Vaughn",
+        "Jose Canseco",
+        "Adrian Gonzalez",
+        "Fred Lynn",
+        "Reggie Smith",
+        "Jack Clark",
+        "Ellis Burks",
+        "Jim Rice"
+       ]
+      },
+      {
+       "row": "Phillies",
+       "col": "Reds",
+       "total": 138,
+       "answers": [
+        "Jim Greengrass",
+        "Cliff Lee",
+        "Ron Roenicke",
+        "Harvey Haddix",
+        "Ryan Franklin",
+        "Red Ames",
+        "Syl Johnson",
+        "Harry McCurdy"
+       ]
+      },
+      {
+       "row": "Phillies",
+       "col": "Giants",
+       "total": 115,
+       "answers": [
+        "Gene Paulette",
+        "Dan Schatzeder",
+        "Kevin Frandsen",
+        "Frank Linzy",
+        "Dick Buckley",
+        "Ron Roenicke",
+        "Red Ames",
+        "Don Robinson"
+       ]
+      },
+      {
+       "row": "Phillies",
+       "col": "300+ Career Home Runs",
+       "total": 15,
+       "answers": [
+        "Ryan Howard",
+        "Dick Allen",
+        "Chuck Klein",
+        "Jose Bautista",
+        "Greg Luzinski",
+        "Ron Gant",
+        "Roy Sievers",
+        "Lance Parrish"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-20",
+     "rows": [
+      "Cubs",
+      "Cardinals",
+      "Twins"
+     ],
+     "cols": [
+      "2,000+ Games Played",
+      "Phillies",
+      "Dodgers"
+     ],
+     "cells": [
+      {
+       "row": "Cubs",
+       "col": "2,000+ Games Played",
+       "total": 40,
+       "answers": [
+        "Cy Williams",
+        "Jim Edmonds",
+        "Jimmy Ryan",
+        "Dick Bartell",
+        "Jose Cardenal",
+        "Phil Cavarretta",
+        "Gary Matthews (1972-1987)",
+        "Ron Cey"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Phillies",
+       "total": 154,
+       "answers": [
+        "Charlie Bastian",
+        "Andres Blanco",
+        "Randall Simon",
+        "Joe Marty",
+        "Shawn Camp",
+        "Heathcliff Slocumb",
+        "Turk Wendell",
+        "Doc Miller"
+       ]
+      },
+      {
+       "row": "Cubs",
+       "col": "Dodgers",
+       "total": 155,
+       "answers": [
+        "John O'Brien",
+        "Bob Fisher",
+        "Carlos Marmol",
+        "George Magoon",
+        "Mel Rojas",
+        "Carl Warwick",
+        "Jim Canavan",
+        "Phil Regan"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "2,000+ Games Played",
+       "total": 42,
+       "answers": [
+        "Cesar Cedeno",
+        "Jim Edmonds",
+        "Jose Cardenal",
+        "Tino Martinez",
+        "Ken Boyer",
+        "Scott Rolen",
+        "George Hendrick",
+        "A. J. Pierzynski"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Phillies",
+       "total": 155,
+       "answers": [
+        "Gene Paulette",
+        "Otto Krueger",
+        "Rick Wise",
+        "Frank Linzy",
+        "Joe Boever",
+        "Dick Buckley",
+        "Harvey Haddix",
+        "Ryan Franklin"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Dodgers",
+       "total": 145,
+       "answers": [
+        "Bob Fisher",
+        "Stan Rojek",
+        "Carl Warwick",
+        "Lew McCarty",
+        "Gus Weyhing",
+        "Jim Bucher",
+        "Darren Holmes",
+        "Scott Radinsky"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "2,000+ Games Played",
+       "total": 29,
+       "answers": [
+        "Heinie Manush",
+        "Roger Peckinpaugh",
+        "Jimmy Ryan",
+        "George Sisler",
+        "A. J. Pierzynski",
+        "Joe Kuhel",
+        "Eddie Yost",
+        "Joe Cronin"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "Phillies",
+       "total": 62,
+       "answers": [
+        "Tim Corcoran",
+        "Dan Schatzeder",
+        "Tom Prince",
+        "Pat Neshek",
+        "Tom Zachary",
+        "Pete Mackanin",
+        "Mickey Livingston",
+        "Lenny Webster"
+       ]
+      },
+      {
+       "row": "Twins",
+       "col": "Dodgers",
+       "total": 87,
+       "answers": [
+        "Chad Moeller",
+        "Mike Trombley",
+        "Tom Prince",
+        "Camilo Pascual",
+        "Tim Jordan",
+        "Tom Zachary",
+        "Wes Ferrell",
+        "Matt Guerrier"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "rows": [
+      "Reds",
+      "Tigers",
+      "Yankees"
+     ],
+     "cols": [
+      "300+ Career Home Runs",
+      "White Sox",
+      "Dodgers"
+     ],
+     "cells": [
+      {
+       "row": "Reds",
+       "col": "300+ Career Home Runs",
+       "total": 17,
+       "answers": [
+        "Greg Vaughn",
+        "Reggie Sanders",
+        "Ron Gant",
+        "Joe Adcock",
+        "George Foster",
+        "Adam Dunn",
+        "Jim Edmonds",
+        "Scott Rolen"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "White Sox",
+       "total": 81,
+       "answers": [
+        "Turk Lown",
+        "Dave Altizer",
+        "Evar Swanson",
+        "George Magoon",
+        "Don Pavletich",
+        "Harry McCurdy",
+        "Matt Batts",
+        "Lena Blackburne"
+       ]
+      },
+      {
+       "row": "Reds",
+       "col": "Dodgers",
+       "total": 134,
+       "answers": [
+        "Chad Moeller",
+        "Bob Fisher",
+        "George Magoon",
+        "Ron Roenicke",
+        "Rube Marquard",
+        "Jim Canavan",
+        "Camilo Pascual",
+        "Cecil Espy"
+       ]
+      },
+      {
+       "row": "Tigers",
+       "col": "300+ Career Home Runs",
+       "total": 20,
+       "answers": [
+        "Hank Greenberg",
+        "Cecil Fielder",
+        "Prince Fielder",
+        "Juan Gonzalez",
+        "Rocky Colavito",
+        "Frank Howard",
+        "Fred Lynn",
+        "Lance Parrish"
+       ]
+      },
+      {
+       "row": "Tigers",
+       "col": "White Sox",
+       "total": 84,
+       "answers": [
+        "Eddie Cicotte",
+        "Mark Salas",
+        "Virgil Trucks",
+        "Matt Batts",
+        "Phil Regan",
+        "Jason Grilli",
+        "Red Wilson",
+        "Timo Perez"
+       ]
+      },
+      {
+       "row": "Tigers",
+       "col": "Dodgers",
+       "total": 74,
+       "answers": [
+        "Clem Labine",
+        "Sandy Amoros",
+        "Paul Richards",
+        "Mel Rojas",
+        "Phil Regan",
+        "Doyle Alexander",
+        "Ted Power",
+        "Joe Yeager"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "300+ Career Home Runs",
+       "total": 35,
+       "answers": [
+        "Richie Sexson",
+        "Cecil Fielder",
+        "Jay Buhner",
+        "Darryl Strawberry",
+        "David Justice",
+        "Joe DiMaggio",
+        "Rocky Colavito",
+        "Bobby Bonds"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "White Sox",
+       "total": 115,
+       "answers": [
+        "Gene Nelson",
+        "Mark Salas",
+        "Virgil Trucks",
+        "Bump Hadley",
+        "Luis Vizcaino",
+        "Ed Hahn",
+        "Joel Skinner",
+        "Bartolo Colon"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Dodgers",
+       "total": 112,
+       "answers": [
+        "Chad Moeller",
+        "Bill Sudakis",
+        "Tim Jordan",
+        "Tom Zachary",
+        "Wes Ferrell",
+        "Bill Lamar",
+        "Darren Holmes",
+        "Doyle Alexander"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-18",
+     "rows": [
+      "Dodgers",
+      "300+ Career Home Runs",
+      "Giants"
+     ],
+     "cols": [
+      "Cardinals",
+      "Phillies",
+      "White Sox"
+     ],
+     "cells": [
+      {
+       "row": "Dodgers",
+       "col": "Cardinals",
+       "total": 145,
+       "answers": [
+        "Bob Fisher",
+        "Stan Rojek",
+        "Carl Warwick",
+        "Lew McCarty",
+        "Gus Weyhing",
+        "Jim Bucher",
+        "Darren Holmes",
+        "Scott Radinsky"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "Phillies",
+       "total": 124,
+       "answers": [
+        "Tom Prince",
+        "Bud Clancy",
+        "Dave Stewart",
+        "Ron Roenicke",
+        "Danys Baez",
+        "Rudy Seanez",
+        "Tom Zachary",
+        "Roger Bernadina"
+       ]
+      },
+      {
+       "row": "Dodgers",
+       "col": "White Sox",
+       "total": 83,
+       "answers": [
+        "Gail Hopkins",
+        "Bud Clancy",
+        "George Magoon",
+        "Oris Hockett",
+        "Phil Regan",
+        "Scott Radinsky",
+        "Cal Abrams",
+        "Claude Osteen"
+       ]
+      },
+      {
+       "row": "300+ Career Home Runs",
+       "col": "Cardinals",
+       "total": 21,
+       "answers": [
+        "Troy Glaus",
+        "Dick Allen",
+        "Reggie Sanders",
+        "Ron Gant",
+        "Bobby Bonds",
+        "Mark McGwire",
+        "Lance Berkman",
+        "Johnny Mize"
+       ]
+      },
+      {
+       "row": "300+ Career Home Runs",
+       "col": "Phillies",
+       "total": 15,
+       "answers": [
+        "Ryan Howard",
+        "Dick Allen",
+        "Chuck Klein",
+        "Jose Bautista",
+        "Greg Luzinski",
+        "Ron Gant",
+        "Roy Sievers",
+        "Lance Parrish"
+       ]
+      },
+      {
+       "row": "300+ Career Home Runs",
+       "col": "White Sox",
+       "total": 25,
+       "answers": [
+        "Albert Belle",
+        "Dick Allen",
+        "Jermaine Dye",
+        "Greg Luzinski",
+        "Rocky Colavito",
+        "Bobby Bonds",
+        "Jose Canseco",
+        "Roy Sievers"
+       ]
+      },
+      {
+       "row": "Giants",
+       "col": "Cardinals",
+       "total": 154,
+       "answers": [
+        "Doc Crandall",
+        "Gene Paulette",
+        "Harry Gumbert",
+        "Frank Linzy",
+        "Dick Buckley",
+        "Jason Christiansen",
+        "Lew McCarty",
+        "Red Ames"
+       ]
+      },
+      {
+       "row": "Giants",
+       "col": "Phillies",
+       "total": 115,
+       "answers": [
+        "Gene Paulette",
+        "Dan Schatzeder",
+        "Kevin Frandsen",
+        "Frank Linzy",
+        "Dick Buckley",
+        "Ron Roenicke",
+        "Red Ames",
+        "Don Robinson"
+       ]
+      },
+      {
+       "row": "Giants",
+       "col": "White Sox",
+       "total": 74,
+       "answers": [
+        "Bill Hunnefield",
+        "Conor Gillaspie",
+        "Bump Hadley",
+        "Fred Hartman",
+        "Al Worthington",
+        "Scott Linebrink",
+        "Bob Seeds",
+        "Billy Pierce"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-17",
+     "rows": [
+      "Cardinals",
+      "Yankees",
+      "2,000+ Career Hits"
+     ],
+     "cols": [
+      "Phillies",
+      "Reds",
+      "Cleveland"
+     ],
+     "cells": [
+      {
+       "row": "Cardinals",
+       "col": "Phillies",
+       "total": 155,
+       "answers": [
+        "Gene Paulette",
+        "Otto Krueger",
+        "Rick Wise",
+        "Frank Linzy",
+        "Joe Boever",
+        "Dick Buckley",
+        "Harvey Haddix",
+        "Ryan Franklin"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Reds",
+       "total": 186,
+       "answers": [
+        "Bob Fisher",
+        "Gabby Street",
+        "Charlie Duffee",
+        "Charlie James",
+        "Harry Gumbert",
+        "Clint Hurdle",
+        "Bob Scheffing",
+        "Harvey Haddix"
+       ]
+      },
+      {
+       "row": "Cardinals",
+       "col": "Cleveland",
+       "total": 80,
+       "answers": [
+        "Marc Rzepczynski",
+        "Mark Salas",
+        "Rick Wise",
+        "Chuck Finley",
+        "Heathcliff Slocumb",
+        "Gus Weyhing",
+        "Scott Radinsky",
+        "Ricardo Rincon"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Phillies",
+       "total": 81,
+       "answers": [
+        "Phil Linz",
+        "Tom Zachary",
+        "Jason Grimsley",
+        "Ernie Courtney",
+        "Ben Francisco",
+        "Felix Rodriguez",
+        "Luis Aguayo",
+        "Stan Bahnsen"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Reds",
+       "total": 85,
+       "answers": [
+        "Chad Moeller",
+        "Carl Mays",
+        "Gabby Street",
+        "Jesse Tannehill",
+        "Felix Heredia",
+        "Dale Murray",
+        "Bert Daniels",
+        "Mark Wohlers"
+       ]
+      },
+      {
+       "row": "Yankees",
+       "col": "Cleveland",
+       "total": 134,
+       "answers": [
+        "Domingo Ramos",
+        "Neal Ball",
+        "Mark Salas",
+        "Steve Farr",
+        "Mike Fischlin",
+        "Bill Sudakis",
+        "Mark Wohlers",
+        "Shane Spencer"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Phillies",
+       "total": 43,
+       "answers": [
+        "Billy Hamilton",
+        "Dan Brouthers",
+        "Hugh Duffy",
+        "Chuck Klein",
+        "Al Dark",
+        "Harvey Kuenn",
+        "Ed Delahanty",
+        "George Burns (1911-1925)"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Reds",
+       "total": 42,
+       "answers": [
+        "Dummy Hoy",
+        "Joe Kelley",
+        "George Burns (1911-1925)",
+        "Kiki Cuyler",
+        "Brandon Phillips",
+        "Del Ennis",
+        "Hal Chase",
+        "Edd Roush"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Cleveland",
+       "total": 36,
+       "answers": [
+        "Earl Averill",
+        "Mark Grudzielanek",
+        "Harvey Kuenn",
+        "George Burns (1914-1929)",
+        "Brandon Phillips",
+        "Joe Sewell",
+        "Victor Martinez",
+        "Orlando Cabrera"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-16",
+     "rows": [
+      "Cleveland",
+      "Braves",
+      "2,000+ Career Hits"
+     ],
+     "cols": [
+      "Phillies",
+      "Pirates",
+      "Yankees"
+     ],
+     "cells": [
+      {
+       "row": "Cleveland",
+       "col": "Phillies",
+       "total": 87,
+       "answers": [
+        "Nig Clarke",
+        "Ezequiel Carrera",
+        "Dan Schatzeder",
+        "Rick Wise",
+        "Cliff Lee",
+        "Danys Baez",
+        "Rudy Seanez",
+        "Heathcliff Slocumb"
+       ]
+      },
+      {
+       "row": "Cleveland",
+       "col": "Pirates",
+       "total": 89,
+       "answers": [
+        "Walter Barbare",
+        "Nig Clarke",
+        "Cliff Lee",
+        "Chuck Workman",
+        "Gus Weyhing",
+        "Enrique Wilson",
+        "Ricardo Rincon",
+        "Ted Power"
+       ]
+      },
+      {
+       "row": "Cleveland",
+       "col": "Yankees",
+       "total": 134,
+       "answers": [
+        "Domingo Ramos",
+        "Neal Ball",
+        "Mark Salas",
+        "Steve Farr",
+        "Mike Fischlin",
+        "Bill Sudakis",
+        "Mark Wohlers",
+        "Shane Spencer"
+       ]
+      },
+      {
+       "row": "Braves",
+       "col": "Phillies",
+       "total": 127,
+       "answers": [
+        "Joe Boever",
+        "Danys Baez",
+        "Randall Simon",
+        "Rudy Seanez",
+        "Tom Zachary",
+        "Lena Blackburne",
+        "Doc Miller",
+        "Ernie Courtney"
+       ]
+      },
+      {
+       "row": "Braves",
+       "col": "Pirates",
+       "total": 126,
+       "answers": [
+        "Walter Barbare",
+        "Alejandro Pena",
+        "Mike Gonzalez (2003-2013)",
+        "Joe Boever",
+        "Chuck Workman",
+        "Billy O'Dell",
+        "Vic Willis",
+        "Randall Simon"
+       ]
+      },
+      {
+       "row": "Braves",
+       "col": "Yankees",
+       "total": 110,
+       "answers": [
+        "Gabby Street",
+        "Johnny Blanchard",
+        "Mike Fischlin",
+        "Mark Wohlers",
+        "Luis Ayala",
+        "Pat Collins",
+        "Tom Zachary",
+        "Wes Ferrell"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Phillies",
+       "total": 43,
+       "answers": [
+        "Billy Hamilton",
+        "Dan Brouthers",
+        "Hugh Duffy",
+        "Chuck Klein",
+        "Al Dark",
+        "Harvey Kuenn",
+        "Ed Delahanty",
+        "George Burns (1911-1925)"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Pirates",
+       "total": 44,
+       "answers": [
+        "Deacon White",
+        "Paul Hines",
+        "Jack Glasscock",
+        "Chuck Klein",
+        "Bill Madlock",
+        "Arky Vaughan",
+        "Patsy Donovan",
+        "Joe Kelley"
+       ]
+      },
+      {
+       "row": "2,000+ Career Hits",
+       "col": "Yankees",
+       "total": 51,
+       "answers": [
+        "Joe DiMaggio",
+        "Don Mattingly",
+        "Bobby Veach",
+        "Joe Kelley",
+        "George Burns (1914-1929)",
+        "Herman Long",
+        "Johnny Mize",
+        "Joe Sewell"
+       ]
+      }
      ]
     }
    ]
   },
-  {
-   "date": "2026-08-27",
-   "rows": [
-    "Pistons",
-    "Rockets",
-    "76ers"
-   ],
-   "cols": [
-    "Hawks",
-    "Mavericks",
-    "10,000+ Career Points"
-   ],
-   "cells": [
-    {
-     "row": "Pistons",
-     "col": "Hawks",
-     "total": 55,
-     "answers": [
-      "Pepe Sánchez",
-      "Keith Herron",
-      "Ivano Newbill",
-      "Jermaine Jackson",
-      "Walker Russell",
-      "Sidney Lowe",
-      "Pace Mannion",
-      "Steve Henson"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Mavericks",
-     "total": 48,
-     "answers": [
-      "Steve Bardo",
-      "Eugene Omoruyi",
-      "Tracy Moore",
-      "Terry Duerod",
-      "Bill Curley",
-      "Walter Bond",
-      "Bob McCann",
-      "Khalid Reeves"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "10,000+ Career Points",
-     "total": 50,
-     "answers": [
-      "Kelly Tripucka",
-      "Bojan Bogdanović",
-      "Derrick Rose",
-      "Sean Elliott",
-      "Ben Gordon",
-      "Dan Roundfield",
-      "Blake Griffin",
-      "Jerami Grant"
-     ]
-    },
-    {
-     "row": "Rockets",
-     "col": "Hawks",
-     "total": 54,
-     "answers": [
-      "Cameron Oliver",
-      "Sean Colson",
-      "James Nunnally",
-      "Josh Davis",
-      "Isaiah Taylor",
-      "Larry Robinson",
-      "Jason Collier",
-      "David Roddy"
-     ]
-    },
-    {
-     "row": "Rockets",
-     "col": "Mavericks",
-     "total": 41,
-     "answers": [
-      "Ray Spalding",
-      "Nate Hinton",
-      "Pops Mensah-Bonsu",
-      "Rodrick Rhodes",
-      "Tracy Moore",
-      "Bill Curley",
-      "Greg Smith",
-      "Eric Riley"
-     ]
-    },
-    {
-     "row": "Rockets",
-     "col": "10,000+ Career Points",
-     "total": 56,
-     "answers": [
-      "Steve Francis",
-      "John Wall",
-      "DeMarcus Cousins",
-      "Joe Barry Carroll",
-      "Kevin Martin",
-      "Cuttino Mobley",
-      "Mike Woodson",
-      "Vin Baker"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Hawks",
-     "total": 60,
-     "answers": [
-      "Ira Bowman",
-      "James Nunnally",
-      "Pepe Sánchez",
-      "Charlie Brown Jr.",
-      "Alex Poythress",
-      "Josh Davis",
-      "Trevor Wilson",
-      "Roshown McLeod"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Mavericks",
-     "total": 41,
-     "answers": [
-      "Charlie Brown Jr.",
-      "Jim Farmer",
-      "Adrian Caldwell",
-      "Justin Anderson",
-      "Jim Spanarkel",
-      "Quentin Grimes",
-      "Boban Marjanović",
-      "Christian Wood"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "10,000+ Career Points",
-     "total": 54,
-     "answers": [
-      "Joel Embiid",
-      "Cliff Robinson",
-      "Glenn Robinson",
-      "Larry Hughes",
-      "Buddy Hield",
-      "Jerami Grant",
-      "Derrick Coleman",
-      "Chris Webber"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-26",
-   "rows": [
-    "5,000+ Career Rebounds",
-    "Lakers",
-    "Pistons"
-   ],
-   "cols": [
-    "Warriors",
-    "Hawks",
-    "Heat"
-   ],
-   "cells": [
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "Warriors",
-     "total": 38,
-     "answers": [
-      "DeMarcus Cousins",
-      "Rony Seikaly",
-      "Joe Barry Carroll",
-      "Andrew Bogut",
-      "Troy Murphy",
-      "Tom Gugliotta",
-      "Clifford Ray",
-      "Rick Barry"
-     ]
-    },
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "Hawks",
-     "total": 31,
-     "answers": [
-      "Clint Capela",
-      "John Drew",
-      "Dan Roundfield",
-      "Tom Gugliotta",
-      "Truck Robinson",
-      "Shareef Abdur-Rahim",
-      "Christian Laettner",
-      "Antoine Walker"
-     ]
-    },
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "Heat",
-     "total": 37,
-     "answers": [
-      "Hassan Whiteside",
-      "Bam Adebayo",
-      "Rony Seikaly",
-      "Brian Grant",
-      "Tyrone Hill",
-      "Alonzo Mourning",
-      "Zydrunas Ilgauskas",
-      "Amar'e Stoudemire"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Warriors",
-     "total": 43,
-     "answers": [
-      "Zach Norvell",
-      "Coby Karl",
-      "Sam Jacobson",
-      "Alfonzo McKinnie",
-      "Quinn Cook",
-      "Mike Smrek",
-      "MarShon Brooks",
-      "Juan Toscano-Anderson"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Hawks",
-     "total": 51,
-     "answers": [
-      "Chaundee Brown Jr.",
-      "Kobe Bufkin",
-      "Dylan Windler",
-      "Trevor Wilson",
-      "Skylar Mays",
-      "Christian Koloko",
-      "Ryan Kelly",
-      "Anthony Miller"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Heat",
-     "total": 37,
-     "answers": [
-      "Cole Swider",
-      "Milt Wagner",
-      "Kendrick Nunn",
-      "Smush Parker",
-      "Billy Thompson",
-      "Shawne Williams",
-      "Gabe Vincent",
-      "Thomas Bryant"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Warriors",
-     "total": 43,
-     "answers": [
-      "Braxton Key",
-      "Lou Roe",
-      "Terry Duerod",
-      "Bill Curley",
-      "James Wiseman",
-      "Tod Murphy",
-      "Lindy Waters III",
-      "Steve Harris"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Hawks",
-     "total": 55,
-     "answers": [
-      "Pepe Sánchez",
-      "Keith Herron",
-      "Ivano Newbill",
-      "Jermaine Jackson",
-      "Walker Russell",
-      "Sidney Lowe",
-      "Pace Mannion",
-      "Steve Henson"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Heat",
-     "total": 35,
-     "answers": [
-      "Alondes Williams",
-      "Cole Swider",
-      "Derrick Walton",
-      "Josh Harrellson",
-      "Willie Reed",
-      "R.J. Hampton",
-      "Simone Fontecchio",
-      "Smush Parker"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-25",
-   "rows": [
-    "Bucks",
-    "Trail Blazers",
-    "900+ Games Played"
-   ],
-   "cols": [
-    "Mavericks",
-    "Rockets",
-    "Knicks"
-   ],
-   "cells": [
-    {
-     "row": "Bucks",
-     "col": "Mavericks",
-     "total": 57,
-     "answers": [
-      "Tyler Smith",
-      "AJ Johnson",
-      "Jared Cunningham",
-      "Shawn Respert",
-      "DeAndre Liggins",
-      "Chris Douglas-Roberts",
-      "Sterling Brown",
-      "Yi Jianlian"
-     ]
-    },
-    {
-     "row": "Bucks",
-     "col": "Rockets",
-     "total": 50,
-     "answers": [
-      "Josh Davis",
-      "Reece Gaines",
-      "TyTy Washington Jr.",
-      "Conner Henry",
-      "Larry Micheaux",
-      "Tim Breaux",
-      "Rodions Kurucs",
-      "Dan Langhi"
-     ]
-    },
-    {
-     "row": "Bucks",
-     "col": "Knicks",
-     "total": 46,
-     "answers": [
-      "Mirsad Türkcan",
-      "Mamadi Diakite",
-      "Jermaine Jackson",
-      "Earl Barron",
-      "MarJon Beauchamp",
-      "Chris Copeland",
-      "Thanasis Antetokounmpo",
-      "Jericho Sims"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "Mavericks",
-     "total": 29,
-     "answers": [
-      "Lamont Strothers",
-      "Greg Brown III",
-      "Brandon Williams",
-      "Reggie Slater",
-      "Dan Dickau",
-      "Dennis Smith Jr.",
-      "Josh McRoberts",
-      "Matt Carroll"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "Rockets",
-     "total": 40,
-     "answers": [
-      "Tim Quarterman",
-      "Nate Williams",
-      "Richie Frahm",
-      "Jonny Flynn",
-      "Von Wafer",
-      "Bernard Thompson",
-      "Walter Berry",
-      "Hank McDowell"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "Knicks",
-     "total": 37,
-     "answers": [
-      "Earl Barron",
-      "Qyntel Woods",
-      "Cam Reddish",
-      "Ryan Arcidiacono",
-      "Ime Udoka",
-      "Kevin Knox",
-      "Dennis Smith Jr.",
-      "Mario Hezonja"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Mavericks",
-     "total": 46,
-     "answers": [
-      "JaVale McGee",
-      "Dennis Rodman",
-      "Mark Aguirre",
-      "Klay Thompson",
-      "JJ Redick",
-      "Eddie Jones",
-      "Adrian Dantley",
-      "Rajon Rondo"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Rockets",
-     "total": 51,
-     "answers": [
-      "Dennis Schröder",
-      "Brent Barry",
-      "Clarence Weatherspoon",
-      "Robert Reid",
-      "John Lucas",
-      "Eric Gordon",
-      "Tracy McGrady",
-      "Goran Dragić"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Knicks",
-     "total": 43,
-     "answers": [
-      "Gerald Wilkins",
-      "Antonio Davis",
-      "Latrell Sprewell",
-      "Clarence Weatherspoon",
-      "Jalen Rose",
-      "Matt Barnes",
-      "Tracy McGrady",
-      "Bill Cartwright"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-24",
-   "rows": [
-    "Celtics",
-    "Knicks",
-    "900+ Games Played"
-   ],
-   "cols": [
-    "Cavaliers",
-    "Spurs",
-    "Bucks"
-   ],
-   "cells": [
-    {
-     "row": "Celtics",
-     "col": "Cavaliers",
-     "total": 55,
-     "answers": [
-      "Brodric Thomas",
-      "Mfiondu Kabengele",
-      "Lester Hudson",
-      "Luke Harangody",
-      "Michael Hawkins",
-      "Jimmy Oliver",
-      "Dwayne Jones",
-      "Larry Robinson"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "Spurs",
-     "total": 27,
-     "answers": [
-      "Charles Bassey",
-      "Romeo Langford",
-      "David Thirdkill",
-      "Dwayne Schintzius",
-      "Juancho Hernangómez",
-      "Tyler Zeller",
-      "Luke Kornet",
-      "Ron Mercer"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "Bucks",
-     "total": 51,
-     "answers": [
-      "Dave Popson",
-      "Conner Henry",
-      "Chris Johnson",
-      "Andre Turner",
-      "David Thirdkill",
-      "Acie Earl",
-      "Jiří Welsch",
-      "Alaa Abdelnaby"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Cavaliers",
-     "total": 48,
-     "answers": [
-      "Demetris Nichols",
-      "Mamadi Diakite",
-      "Stewart Granger",
-      "Larry Robinson",
-      "Dylan Windler",
-      "Bruno Šundov",
-      "Sedric Toney",
-      "Gerald Paddio"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Spurs",
-     "total": 35,
-     "answers": [
-      "Mamadi Diakite",
-      "James White",
-      "Jeremy Sochan",
-      "Ime Udoka",
-      "DerMarr Johnson",
-      "Pete Myers",
-      "Shannon Brown",
-      "Luke Kornet"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Bucks",
-     "total": 46,
-     "answers": [
-      "Mirsad Türkcan",
-      "Mamadi Diakite",
-      "Jermaine Jackson",
-      "Earl Barron",
-      "MarJon Beauchamp",
-      "Chris Copeland",
-      "Thanasis Antetokounmpo",
-      "Jericho Sims"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Cavaliers",
-     "total": 44,
-     "answers": [
-      "Gerald Wilkins",
-      "Luol Deng",
-      "Scott Wedman",
-      "JaVale McGee",
-      "Steve Kerr",
-      "Dennis Schröder",
-      "Clarence Weatherspoon",
-      "George Hill"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Spurs",
-     "total": 48,
-     "answers": [
-      "George Johnson",
-      "Artis Gilmore",
-      "Steve Kerr",
-      "Dennis Rodman",
-      "Brent Barry",
-      "George Hill",
-      "Danny Ferry",
-      "Patty Mills"
-     ]
-    },
-    {
-     "row": "900+ Games Played",
-     "col": "Bucks",
-     "total": 47,
-     "answers": [
-      "Damian Lillard",
-      "Jared Dudley",
-      "Mickey Johnson",
-      "George Hill",
-      "Serge Ibaka",
-      "John Lucas",
-      "Armen Gilliam",
-      "Lindsey Hunter"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-23",
-   "rows": [
-    "10,000+ Career Points",
-    "Lakers",
-    "Knicks"
-   ],
-   "cols": [
-    "76ers",
-    "Spurs",
-    "Heat"
-   ],
-   "cells": [
-    {
-     "row": "10,000+ Career Points",
-     "col": "76ers",
-     "total": 54,
-     "answers": [
-      "Joel Embiid",
-      "Cliff Robinson",
-      "Glenn Robinson",
-      "Larry Hughes",
-      "Buddy Hield",
-      "Jerami Grant",
-      "Derrick Coleman",
-      "Chris Webber"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Spurs",
-     "total": 48,
-     "answers": [
-      "Calvin Natt",
-      "De'Aaron Fox",
-      "Ray Williams",
-      "Billy Knight",
-      "Glenn Robinson",
-      "Kevin Martin",
-      "Sean Elliott",
-      "Mike Mitchell"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Heat",
-     "total": 46,
-     "answers": [
-      "Jamal Mashburn",
-      "Bam Adebayo",
-      "Anfernee Hardaway",
-      "Andrew Wiggins",
-      "Alonzo Mourning",
-      "Zydrunas Ilgauskas",
-      "Amar'e Stoudemire",
-      "Tim Hardaway"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "76ers",
-     "total": 49,
-     "answers": [
-      "Darius Johnson-Odom",
-      "Frankie King",
-      "Mac McClung",
-      "Jalen Hood-Schifino",
-      "Colin Castleton",
-      "Mason Jones",
-      "Trevor Wilson",
-      "Darius Morris"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Spurs",
-     "total": 27,
-     "answers": [
-      "Pétur Guðmundsson",
-      "Mike Smrek",
-      "Lloyd Daniels",
-      "Jeff Lamp",
-      "Ime Udoka",
-      "Jack Haley",
-      "Lonnie Walker IV",
-      "Ira Newble"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Heat",
-     "total": 37,
-     "answers": [
-      "Cole Swider",
-      "Milt Wagner",
-      "Kendrick Nunn",
-      "Smush Parker",
-      "Billy Thompson",
-      "Shawne Williams",
-      "Gabe Vincent",
-      "Thomas Bryant"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "76ers",
-     "total": 49,
-     "answers": [
-      "Norvel Pelle",
-      "Charlie Brown Jr.",
-      "Ignas Brazdeikis",
-      "Corey Gaines",
-      "Chasson Randle",
-      "MarJon Beauchamp",
-      "Alexey Shved",
-      "Guerschon Yabusele"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Spurs",
-     "total": 35,
-     "answers": [
-      "Mamadi Diakite",
-      "James White",
-      "Jeremy Sochan",
-      "Ime Udoka",
-      "DerMarr Johnson",
-      "Pete Myers",
-      "Shannon Brown",
-      "Luke Kornet"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Heat",
-     "total": 43,
-     "answers": [
-      "Matt Fish",
-      "Josh Harrellson",
-      "Ron Grandison",
-      "Earl Barron",
-      "Qyntel Woods",
-      "Henry Walker",
-      "Shawne Williams",
-      "Pete Myers"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-22",
-   "rows": [
-    "Celtics",
-    "Bulls",
-    "Knicks"
-   ],
-   "cols": [
-    "Bucks",
-    "Lakers",
-    "5,000+ Career Rebounds"
-   ],
-   "cells": [
-    {
-     "row": "Celtics",
-     "col": "Bucks",
-     "total": 51,
-     "answers": [
-      "Dave Popson",
-      "Conner Henry",
-      "Chris Johnson",
-      "Andre Turner",
-      "David Thirdkill",
-      "Acie Earl",
-      "Jiří Welsch",
-      "Alaa Abdelnaby"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "Lakers",
-     "total": 33,
-     "answers": [
-      "Vander Blue",
-      "Matt Ryan",
-      "MarShon Brooks",
-      "Von Wafer",
-      "Earl Tatum",
-      "Shammond Williams",
-      "Travis Knight",
-      "Svi Mykhailiuk"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "5,000+ Career Rebounds",
-     "total": 32,
-     "answers": [
-      "Greg Monroe",
-      "Troy Murphy",
-      "Enes Freedom",
-      "Tom Gugliotta",
-      "Blake Griffin",
-      "Dave Cowens",
-      "Vin Baker",
-      "Tristan Thompson"
-     ]
-    },
-    {
-     "row": "Bulls",
-     "col": "Bucks",
-     "total": 53,
-     "answers": [
-      "Joe Alexander",
-      "Joe Courtney",
-      "Sean Kilpatrick",
-      "Isaiah Canaan",
-      "Marcus Fizer",
-      "Jabari Parker",
-      "Nikola Mirotić",
-      "Scott May"
-     ]
-    },
-    {
-     "row": "Bulls",
-     "col": "Lakers",
-     "total": 45,
-     "answers": [
-      "Mac McClung",
-      "Mario Bennett",
-      "Ollie Mack",
-      "Larry Spriggs",
-      "Alfonzo McKinnie",
-      "Mike Smrek",
-      "David Nwaba",
-      "Ronnie Lester"
-     ]
-    },
-    {
-     "row": "Bulls",
-     "col": "5,000+ Career Rebounds",
-     "total": 36,
-     "answers": [
-      "Joakim Noah",
-      "Bobby Portis",
-      "Rodney McCray",
-      "Clifford Ray",
-      "Drew Gooden",
-      "Tristan Thompson",
-      "Dave Greenwood",
-      "Carlos Boozer"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Bucks",
-     "total": 46,
-     "answers": [
-      "Mirsad Türkcan",
-      "Mamadi Diakite",
-      "Jermaine Jackson",
-      "Earl Barron",
-      "MarJon Beauchamp",
-      "Chris Copeland",
-      "Thanasis Antetokounmpo",
-      "Jericho Sims"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Lakers",
-     "total": 48,
-     "answers": [
-      "Travis Wear",
-      "Matt Ryan",
-      "Dylan Windler",
-      "Cam Reddish",
-      "Earl Clark",
-      "Ray Tolbert",
-      "Shawne Williams",
-      "Ime Udoka"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "5,000+ Career Rebounds",
-     "total": 41,
-     "answers": [
-      "Joakim Noah",
-      "Larry Johnson",
-      "Karl-Anthony Towns",
-      "Bobby Portis",
-      "Enes Freedom",
-      "Kenyon Martin",
-      "Spencer Haywood",
-      "Truck Robinson"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-21",
-   "rows": [
-    "76ers",
-    "Celtics",
-    "Suns"
-   ],
-   "cols": [
-    "Pistons",
-    "Warriors",
-    "5,000+ Career Rebounds"
-   ],
-   "cells": [
-    {
-     "row": "76ers",
-     "col": "Pistons",
-     "total": 61,
-     "answers": [
-      "Justin Harper",
-      "Louis King",
-      "Braxton Key",
-      "Pepe Sánchez",
-      "Saben Lee",
-      "Steve Hayes",
-      "Ralph Simpson",
-      "Ben Coleman"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Warriors",
-     "total": 70,
-     "answers": [
-      "Braxton Key",
-      "Malcolm Thomas",
-      "Shelton Jones",
-      "Lester Quiñones",
-      "Jeremy Pargo",
-      "Jeff Dowtin Jr.",
-      "Kevin Pritchard",
-      "Joe Courtney"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "5,000+ Career Rebounds",
-     "total": 40,
-     "answers": [
-      "Joel Embiid",
-      "George McGinnis",
-      "Cliff Robinson",
-      "Greg Monroe",
-      "Derrick Coleman",
-      "Tyrone Hill",
-      "Benoit Benjamin",
-      "Reggie Evans"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "Pistons",
-     "total": 43,
-     "answers": [
-      "Ron Harper Jr.",
-      "Gigi Datome",
-      "Carsen Edwards",
-      "Terry Duerod",
-      "David Thirdkill",
-      "Luka Garza",
-      "Earl Tatum",
-      "Jeff Judkins"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "Warriors",
-     "total": 47,
-     "answers": [
-      "Jamel Thomas",
-      "Larry Robinson",
-      "Patrick O'Bryant",
-      "Kevin Pritchard",
-      "J.R. Bremer",
-      "Bart Kofoed",
-      "Kelvin Upshaw",
-      "Charles Bassey"
-     ]
-    },
-    {
-     "row": "Celtics",
-     "col": "5,000+ Career Rebounds",
-     "total": 32,
-     "answers": [
-      "Greg Monroe",
-      "Troy Murphy",
-      "Enes Freedom",
-      "Tom Gugliotta",
-      "Blake Griffin",
-      "Dave Cowens",
-      "Vin Baker",
-      "Tristan Thompson"
-     ]
-    },
-    {
-     "row": "Suns",
-     "col": "Pistons",
-     "total": 39,
-     "answers": [
-      "Eric Moreland",
-      "Jordan McRae",
-      "Isaiah Livers",
-      "Saben Lee",
-      "David Thirdkill",
-      "Cheick Diallo",
-      "William Bedford",
-      "Chimezie Metu"
-     ]
-    },
-    {
-     "row": "Suns",
-     "col": "Warriors",
-     "total": 48,
-     "answers": [
-      "Paul McPherson",
-      "Joe Courtney",
-      "Steve Burtt",
-      "Dan Langhi",
-      "Kenny Battle",
-      "Earl Barron",
-      "Žarko Čabarkapa",
-      "Nikoloz Tskitishvili"
-     ]
-    },
-    {
-     "row": "Suns",
-     "col": "5,000+ Career Rebounds",
-     "total": 42,
-     "answers": [
-      "Jusuf Nurkić",
-      "Greg Monroe",
-      "Joe Barry Carroll",
-      "Brian Grant",
-      "Tom Gugliotta",
-      "Truck Robinson",
-      "Marcin Gortat",
-      "Rich Kelley"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-20",
-   "rows": [
-    "Knicks",
-    "76ers",
-    "Trail Blazers"
-   ],
-   "cols": [
-    "900+ Games Played",
-    "Suns",
-    "Bulls"
-   ],
-   "cells": [
-    {
-     "row": "Knicks",
-     "col": "900+ Games Played",
-     "total": 43,
-     "answers": [
-      "Gerald Wilkins",
-      "Antonio Davis",
-      "Latrell Sprewell",
-      "Clarence Weatherspoon",
-      "Jalen Rose",
-      "Matt Barnes",
-      "Tracy McGrady",
-      "Bill Cartwright"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Suns",
-     "total": 51,
-     "answers": [
-      "Jared Harper",
-      "Bill Martin",
-      "Sedric Toney",
-      "Earl Barron",
-      "Brooks Thompson",
-      "John Jenkins",
-      "Jerrod Mustaf",
-      "Jimmer Fredette"
-     ]
-    },
-    {
-     "row": "Knicks",
-     "col": "Bulls",
-     "total": 52,
-     "answers": [
-      "Demetris Nichols",
-      "Tony White",
-      "Fred Cofield",
-      "Anthony Roberson",
-      "Frank Williams",
-      "Wayne Selden",
-      "Guerschon Yabusele",
-      "Mike Sweetney"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "900+ Games Played",
-     "total": 50,
-     "answers": [
-      "Jeff Malone",
-      "Jimmy Butler",
-      "JaVale McGee",
-      "Allen Iverson",
-      "Clarence Weatherspoon",
-      "George Hill",
-      "Robert Reid",
-      "Armen Gilliam"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Suns",
-     "total": 60,
-     "answers": [
-      "Michael Young",
-      "Jonah Bolden",
-      "Josh Davis",
-      "Joe Courtney",
-      "Richard Dumas",
-      "Lorenzo Brown",
-      "Trevor Ruffin",
-      "Saben Lee"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Bulls",
-     "total": 48,
-     "answers": [
-      "Mac McClung",
-      "Malcolm Thomas",
-      "Joe Courtney",
-      "Guerschon Yabusele",
-      "Dalen Terry",
-      "Tony Bradley",
-      "Isaiah Canaan",
-      "JaKarr Sampson"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "900+ Games Played",
-     "total": 43,
-     "answers": [
-      "Damian Lillard",
-      "Steve Kerr",
-      "Robert Reid",
-      "Patty Mills",
-      "Mychal Thompson",
-      "Steve Smith",
-      "Brian Shaw",
-      "Alton Lister"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "Suns",
-     "total": 44,
-     "answers": [
-      "Jamaree Bouyea",
-      "Ish Wainright",
-      "Earl Barron",
-      "Shavlik Randolph",
-      "Shaquille Harrison",
-      "Bernard Thompson",
-      "Sean Marks",
-      "Nassir Little"
-     ]
-    },
-    {
-     "row": "Trail Blazers",
-     "col": "Bulls",
-     "total": 32,
-     "answers": [
-      "Dave Johnson",
-      "Willie Smith",
-      "Viktor Khryapa",
-      "Shaquille Harrison",
-      "Stephen Graham",
-      "Ryan Arcidiacono",
-      "Michael Holton",
-      "Rick Brunson"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-19",
-   "rows": [
-    "Pistons",
-    "Mavericks",
-    "Lakers"
-   ],
-   "cols": [
-    "5,000+ Career Rebounds",
-    "Bucks",
-    "Bulls"
-   ],
-   "cells": [
-    {
-     "row": "Pistons",
-     "col": "5,000+ Career Rebounds",
-     "total": 34,
-     "answers": [
-      "Greg Monroe",
-      "Dan Roundfield",
-      "Blake Griffin",
-      "Derrick Coleman",
-      "Dave Greenwood",
-      "Chris Webber",
-      "Bob McAdoo",
-      "Christian Laettner"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Bucks",
-     "total": 64,
-     "answers": [
-      "Justin Robinson",
-      "Dan O'Sullivan",
-      "Stanley Umude",
-      "Mike Peplowski",
-      "Jermaine Jackson",
-      "Litterial Green",
-      "David Thirdkill",
-      "Pace Mannion"
-     ]
-    },
-    {
-     "row": "Pistons",
-     "col": "Bulls",
-     "total": 44,
-     "answers": [
-      "Jackie Robinson",
-      "Kay Felder",
-      "Tyler Cook",
-      "Kornél Dávid",
-      "James Wilkes",
-      "Mark Randall",
-      "Ronald Dupree",
-      "Jaden Ivey"
-     ]
-    },
-    {
-     "row": "Mavericks",
-     "col": "5,000+ Career Rebounds",
-     "total": 36,
-     "answers": [
-      "Andrew Bogut",
-      "Troy Murphy",
-      "Chris Kaman",
-      "Rodney McCray",
-      "Drew Gooden",
-      "Anthony Davis",
-      "David Lee",
-      "Shawn Bradley"
-     ]
-    },
-    {
-     "row": "Mavericks",
-     "col": "Bucks",
-     "total": 57,
-     "answers": [
-      "Tyler Smith",
-      "AJ Johnson",
-      "Jared Cunningham",
-      "Shawn Respert",
-      "DeAndre Liggins",
-      "Chris Douglas-Roberts",
-      "Sterling Brown",
-      "Yi Jianlian"
-     ]
-    },
-    {
-     "row": "Mavericks",
-     "col": "Bulls",
-     "total": 34,
-     "answers": [
-      "Carlik Jones",
-      "Ollie Mack",
-      "Chris Anstey",
-      "Anthony Jones",
-      "Khalid Reeves",
-      "Scott Lloyd",
-      "David Wood",
-      "Daniel Gafford"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "5,000+ Career Rebounds",
-     "total": 49,
-     "answers": [
-      "Swen Nater",
-      "Jim Chones",
-      "Cliff Robinson",
-      "Ivica Zubac",
-      "Andrew Bogut",
-      "Troy Murphy",
-      "Chris Kaman",
-      "Brian Grant"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Bucks",
-     "total": 49,
-     "answers": [
-      "Jamal Sampson",
-      "Brad Holland",
-      "Kendall Marshall",
-      "Tyler Ennis",
-      "Randolph Keys",
-      "Sterling Brown",
-      "Jeff Lamp",
-      "Christian Wood"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Bulls",
-     "total": 45,
-     "answers": [
-      "Mac McClung",
-      "Mario Bennett",
-      "Ollie Mack",
-      "Larry Spriggs",
-      "Alfonzo McKinnie",
-      "Mike Smrek",
-      "David Nwaba",
-      "Ronnie Lester"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-18",
-   "rows": [
-    "Bulls",
-    "5,000+ Career Rebounds",
-    "Warriors"
-   ],
-   "cols": [
-    "76ers",
-    "Suns",
-    "Bucks"
-   ],
-   "cells": [
-    {
-     "row": "Bulls",
-     "col": "76ers",
-     "total": 48,
-     "answers": [
-      "Mac McClung",
-      "Malcolm Thomas",
-      "Joe Courtney",
-      "Guerschon Yabusele",
-      "Dalen Terry",
-      "Tony Bradley",
-      "Isaiah Canaan",
-      "JaKarr Sampson"
-     ]
-    },
-    {
-     "row": "Bulls",
-     "col": "Suns",
-     "total": 53,
-     "answers": [
-      "Paul Shirley",
-      "Jarell Eddie",
-      "Andre Barrett",
-      "Mario Bennett",
-      "Joe Courtney",
-      "Chandler Hutchison",
-      "Tyler Ulis",
-      "Linton Johnson"
-     ]
-    },
-    {
-     "row": "Bulls",
-     "col": "Bucks",
-     "total": 53,
-     "answers": [
-      "Joe Alexander",
-      "Joe Courtney",
-      "Sean Kilpatrick",
-      "Isaiah Canaan",
-      "Marcus Fizer",
-      "Jabari Parker",
-      "Nikola Mirotić",
-      "Scott May"
-     ]
-    },
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "76ers",
-     "total": 40,
-     "answers": [
-      "Joel Embiid",
-      "George McGinnis",
-      "Cliff Robinson",
-      "Greg Monroe",
-      "Derrick Coleman",
-      "Tyrone Hill",
-      "Benoit Benjamin",
-      "Reggie Evans"
-     ]
-    },
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "Suns",
-     "total": 42,
-     "answers": [
-      "Jusuf Nurkić",
-      "Greg Monroe",
-      "Joe Barry Carroll",
-      "Brian Grant",
-      "Tom Gugliotta",
-      "Truck Robinson",
-      "Marcin Gortat",
-      "Rich Kelley"
-     ]
-    },
-    {
-     "row": "5,000+ Career Rebounds",
-     "col": "Bucks",
-     "total": 40,
-     "answers": [
-      "Swen Nater",
-      "Greg Monroe",
-      "DeMarcus Cousins",
-      "Andrew Bogut",
-      "Bobby Portis",
-      "Kenyon Martin",
-      "Dave Cowens",
-      "Drew Gooden"
-     ]
-    },
-    {
-     "row": "Warriors",
-     "col": "76ers",
-     "total": 70,
-     "answers": [
-      "Braxton Key",
-      "Malcolm Thomas",
-      "Shelton Jones",
-      "Lester Quiñones",
-      "Jeremy Pargo",
-      "Jeff Dowtin Jr.",
-      "Kevin Pritchard",
-      "Joe Courtney"
-     ]
-    },
-    {
-     "row": "Warriors",
-     "col": "Suns",
-     "total": 48,
-     "answers": [
-      "Paul McPherson",
-      "Joe Courtney",
-      "Steve Burtt",
-      "Dan Langhi",
-      "Kenny Battle",
-      "Earl Barron",
-      "Žarko Čabarkapa",
-      "Nikoloz Tskitishvili"
-     ]
-    },
-    {
-     "row": "Warriors",
-     "col": "Bucks",
-     "total": 54,
-     "answers": [
-      "Chris Wright",
-      "John Stroeder",
-      "Jeff Dowtin Jr.",
-      "Joe Courtney",
-      "Dan Langhi",
-      "Earl Barron",
-      "Jeff Adrien",
-      "Ryan Rollins"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-17",
-   "rows": [
-    "76ers",
-    "Lakers",
-    "10,000+ Career Points"
-   ],
-   "cols": [
-    "Suns",
-    "Pistons",
-    "Rockets"
-   ],
-   "cells": [
-    {
-     "row": "76ers",
-     "col": "Suns",
-     "total": 60,
-     "answers": [
-      "Michael Young",
-      "Jonah Bolden",
-      "Josh Davis",
-      "Joe Courtney",
-      "Richard Dumas",
-      "Lorenzo Brown",
-      "Trevor Ruffin",
-      "Saben Lee"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Pistons",
-     "total": 61,
-     "answers": [
-      "Justin Harper",
-      "Louis King",
-      "Braxton Key",
-      "Pepe Sánchez",
-      "Saben Lee",
-      "Steve Hayes",
-      "Ralph Simpson",
-      "Ben Coleman"
-     ]
-    },
-    {
-     "row": "76ers",
-     "col": "Rockets",
-     "total": 63,
-     "answers": [
-      "Elmer Bennett",
-      "Justin Patton",
-      "Demetrius Jackson",
-      "James Nunnally",
-      "Mason Jones",
-      "Josh Davis",
-      "D.J. Wilson",
-      "K.J. McDaniels"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Suns",
-     "total": 48,
-     "answers": [
-      "Joe Crispin",
-      "Nigel Hayes-Davis",
-      "Mario Bennett",
-      "Duane Cooper",
-      "Davon Reed",
-      "Kendall Marshall",
-      "Tyler Ennis",
-      "Jordan Goodwin"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Pistons",
-     "total": 51,
-     "answers": [
-      "Cole Swider",
-      "Dwight Buycks",
-      "Alan Hardy",
-      "Sekou Doumbouya",
-      "Ray Tolbert",
-      "Earl Tatum",
-      "Smush Parker",
-      "Shawne Williams"
-     ]
-    },
-    {
-     "row": "Lakers",
-     "col": "Rockets",
-     "total": 49,
-     "answers": [
-      "Scott Machado",
-      "Andrew Goudelock",
-      "Mason Jones",
-      "Tierre Brown",
-      "Calvin Garrett",
-      "Larry Spriggs",
-      "Anthony Miller",
-      "Tyler Ennis"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Suns",
-     "total": 53,
-     "answers": [
-      "Charlie Scott",
-      "Michael Redd",
-      "Anfernee Hardaway",
-      "Joe Barry Carroll",
-      "Kevin Johnson",
-      "Devin Booker",
-      "Eric Bledsoe",
-      "Truck Robinson"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Pistons",
-     "total": 50,
-     "answers": [
-      "Kelly Tripucka",
-      "Bojan Bogdanović",
-      "Derrick Rose",
-      "Sean Elliott",
-      "Ben Gordon",
-      "Dan Roundfield",
-      "Blake Griffin",
-      "Jerami Grant"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Rockets",
-     "total": 56,
-     "answers": [
-      "Steve Francis",
-      "John Wall",
-      "DeMarcus Cousins",
-      "Joe Barry Carroll",
-      "Kevin Martin",
-      "Cuttino Mobley",
-      "Mike Woodson",
-      "Vin Baker"
-     ]
-    }
-   ]
-  },
-  {
-   "date": "2026-08-16",
-   "rows": [
-    "Rockets",
-    "Spurs",
-    "10,000+ Career Points"
-   ],
-   "cols": [
-    "Suns",
-    "Heat",
-    "Lakers"
-   ],
-   "cells": [
-    {
-     "row": "Rockets",
-     "col": "Suns",
-     "total": 56,
-     "answers": [
-      "Ray Spalding",
-      "Maciej Lampe",
-      "Andre Barrett",
-      "Josh Davis",
-      "TyTy Washington Jr.",
-      "Dan Langhi",
-      "David Roddy",
-      "Tyler Ennis"
-     ]
-    },
-    {
-     "row": "Rockets",
-     "col": "Heat",
-     "total": 34,
-     "answers": [
-      "Briante Weber",
-      "Josh Christopher",
-      "Loren Woods",
-      "Sam Mack",
-      "Daequan Cook",
-      "Luther Head",
-      "Toney Douglas",
-      "James Ennis III"
-     ]
-    },
-    {
-     "row": "Rockets",
-     "col": "Lakers",
-     "total": 49,
-     "answers": [
-      "Scott Machado",
-      "Andrew Goudelock",
-      "Mason Jones",
-      "Tierre Brown",
-      "Calvin Garrett",
-      "Larry Spriggs",
-      "Anthony Miller",
-      "Tyler Ennis"
-     ]
-    },
-    {
-     "row": "Spurs",
-     "col": "Suns",
-     "total": 40,
-     "answers": [
-      "Jamaree Bouyea",
-      "Joe Courtney",
-      "Linton Johnson",
-      "David Thirdkill",
-      "Sean Marks",
-      "William Bedford",
-      "Chimezie Metu",
-      "Negele Knight"
-     ]
-    },
-    {
-     "row": "Spurs",
-     "col": "Heat",
-     "total": 32,
-     "answers": [
-      "Blake Ahearn",
-      "Jamaree Bouyea",
-      "Sean Marks",
-      "Chris Quinn",
-      "Sam Mack",
-      "Morlon Wiley",
-      "Willie Burton",
-      "Tyler Johnson"
-     ]
-    },
-    {
-     "row": "Spurs",
-     "col": "Lakers",
-     "total": 27,
-     "answers": [
-      "Pétur Guðmundsson",
-      "Mike Smrek",
-      "Lloyd Daniels",
-      "Jeff Lamp",
-      "Ime Udoka",
-      "Jack Haley",
-      "Lonnie Walker IV",
-      "Ira Newble"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Suns",
-     "total": 53,
-     "answers": [
-      "Charlie Scott",
-      "Michael Redd",
-      "Anfernee Hardaway",
-      "Joe Barry Carroll",
-      "Kevin Johnson",
-      "Devin Booker",
-      "Eric Bledsoe",
-      "Truck Robinson"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Heat",
-     "total": 46,
-     "answers": [
-      "Jamal Mashburn",
-      "Bam Adebayo",
-      "Anfernee Hardaway",
-      "Andrew Wiggins",
-      "Alonzo Mourning",
-      "Zydrunas Ilgauskas",
-      "Amar'e Stoudemire",
-      "Tim Hardaway"
-     ]
-    },
-    {
-     "row": "10,000+ Career Points",
-     "col": "Lakers",
-     "total": 63,
-     "answers": [
-      "Luka Dončić",
-      "Charlie Scott",
-      "Brandon Ingram",
-      "Kyle Kuzma",
-      "Cliff Robinson",
-      "Brian Winters",
-      "D'Angelo Russell",
-      "Spencer Haywood"
+  "nhl": {
+   "label": "NHL",
+   "game": "/hockey-grid",
+   "boards": [
+    {
+     "date": "2026-08-29",
+     "rows": [
+      "Red Wings",
+      "Penguins",
+      "Maple Leafs"
+     ],
+     "cols": [
+      "Flyers",
+      "300+ Career Goals",
+      "Capitals"
+     ],
+     "cells": [
+      {
+       "row": "Red Wings",
+       "col": "Flyers",
+       "total": 58,
+       "answers": [
+        "Rene Drolet",
+        "Bob Wilkie",
+        "Bob Ritchie",
+        "Rick Foley",
+        "Kris Newbury",
+        "Serge Lajeunesse",
+        "Larry Wright",
+        "Mark Pederson"
+       ]
+      },
+      {
+       "row": "Red Wings",
+       "col": "300+ Career Goals",
+       "total": 40,
+       "answers": [
+        "Paul MacLean",
+        "Petr Klíma",
+        "Wendel Clark",
+        "Ray Sheppard",
+        "Danny Gare",
+        "Rick MacLeish",
+        "Vladimir Tarasenko",
+        "Tony McKegney"
+       ]
+      },
+      {
+       "row": "Red Wings",
+       "col": "Capitals",
+       "total": 58,
+       "answers": [
+        "Riley Barber",
+        "Patrick Boileau",
+        "Dylan McIlrath",
+        "Steve Maltais",
+        "Brad Norton",
+        "Greg Carroll",
+        "Christian Djoos",
+        "Madison Bowey"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Flyers",
+       "total": 77,
+       "answers": [
+        "Glenn Mulvenna",
+        "Guillaume Lefebvre",
+        "Corey Foster",
+        "Wayne Hicks",
+        "Art Stratton",
+        "Mitch Lamoureux",
+        "Éric Meloche",
+        "Mark Friedman"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "300+ Career Goals",
+       "total": 42,
+       "answers": [
+        "Jake Guentzel",
+        "Žigmund Pálffy",
+        "Charlie Simmer",
+        "Mike Bullard",
+        "Petr Klíma",
+        "Pierre Larouche",
+        "Rick MacLeish",
+        "Kevin Stevens"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Capitals",
+       "total": 72,
+       "answers": [
+        "Todd Nelson",
+        "Matthew Phillips",
+        "Patrick Boileau",
+        "Chris Bourque",
+        "Ron Jones",
+        "Jim McGeough",
+        "Steven Oleksy",
+        "Chris Ferraro"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Flyers",
+       "total": 58,
+       "answers": [
+        "Randy Osburn",
+        "Mike Stothers",
+        "Reid Bailey",
+        "Nikita Grebenkin",
+        "Kris Newbury",
+        "Jay Rosehill",
+        "Mark Greig",
+        "Allan Stanley"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "300+ Career Goals",
+       "total": 37,
+       "answers": [
+        "Auston Matthews",
+        "Mike Bullard",
+        "Eric Lindros",
+        "Wendel Clark",
+        "Rick Vaive",
+        "Rick Kehoe",
+        "Max Pacioretty",
+        "Dave Gagner"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Capitals",
+       "total": 68,
+       "answers": [
+        "Patrik Augusta",
+        "Joe Lundrigan",
+        "Staffan Kronwall",
+        "Zach Sill",
+        "Daryl Evans",
+        "Willie Brossart",
+        "Joey Crabb",
+        "Brendan Leipsic"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-28",
+     "rows": [
+      "Rangers",
+      "1000+ Games Played",
+      "Flyers"
+     ],
+     "cols": [
+      "Kings",
+      "Penguins",
+      "Canadiens"
+     ],
+     "cells": [
+      {
+       "row": "Rangers",
+       "col": "Kings",
+       "total": 101,
+       "answers": [
+        "Shawn McCosh",
+        "Steve Larouche",
+        "Brian McReynolds",
+        "Gord Walker",
+        "Dean Turner",
+        "Igor Liba",
+        "Craig Duncanson",
+        "John Tripp"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Penguins",
+       "total": 102,
+       "answers": [
+        "Tony Feltrin",
+        "Chris Ferraro",
+        "Peter Ferraro",
+        "Todd Charlesworth",
+        "Richard Lintner",
+        "Maxim Galanov",
+        "Corey Potter",
+        "Bob Blackburn"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Canadiens",
+       "total": 66,
+       "answers": [
+        "Corey Locke",
+        "Jozef Balej",
+        "Christian Thomas",
+        "Johan Witehall",
+        "Scott Fraser",
+        "Gordie Dwyer",
+        "Sylvain Blouin",
+        "Garth Murray"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Kings",
+       "total": 60,
+       "answers": [
+        "Dave Lewis",
+        "Craig Conroy",
+        "Glen Murray",
+        "Michal Handzuš",
+        "Charlie Huddy",
+        "Grant Ledyard",
+        "John Tonelli",
+        "Russ Courtnall"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Penguins",
+       "total": 59,
+       "answers": [
+        "Glen Murray",
+        "Steve Sullivan",
+        "Derick Brassard",
+        "Petr Sýkora",
+        "Chris Kunitz",
+        "Fredrik Olausson",
+        "Eddie Olczyk",
+        "Brooks Orpik"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Canadiens",
+       "total": 55,
+       "answers": [
+        "Tomáš Plekanec",
+        "Ryan Walter",
+        "Craig Conroy",
+        "Patrice Brisebois",
+        "Andrew Cassels",
+        "Keith Acton",
+        "Donald Brashear",
+        "Brian Gionta"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Kings",
+       "total": 77,
+       "answers": [
+        "Mark Alt",
+        "Phil Crowe",
+        "Len Hachborn",
+        "Tim Tookey",
+        "Paul Guay",
+        "Roman Vopat",
+        "Brad Jones",
+        "Mike Byers"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Penguins",
+       "total": 77,
+       "answers": [
+        "Glenn Mulvenna",
+        "Guillaume Lefebvre",
+        "Corey Foster",
+        "Wayne Hicks",
+        "Art Stratton",
+        "Mitch Lamoureux",
+        "Éric Meloche",
+        "Mark Friedman"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Canadiens",
+       "total": 64,
+       "answers": [
+        "Scott Sandelin",
+        "Anthony Richard",
+        "Jim Montgomery",
+        "Mark Pederson",
+        "Craig Darby",
+        "Noah Juulsen",
+        "Jordan Weal",
+        "Gilbert Dionne"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-27",
+     "rows": [
+      "Flyers",
+      "Oilers",
+      "Kings"
+     ],
+     "cols": [
+      "Flames",
+      "Canadiens",
+      "500+ Career Points"
+     ],
+     "cells": [
+      {
+       "row": "Flyers",
+       "col": "Flames",
+       "total": 52,
+       "answers": [
+        "Kyle Greentree",
+        "Corban Knight",
+        "Jarrod Skalde",
+        "Jamie Wright",
+        "Mark Freer",
+        "Mark Greig",
+        "Stewart Malgunas",
+        "Blair Jones"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Canadiens",
+       "total": 64,
+       "answers": [
+        "Scott Sandelin",
+        "Anthony Richard",
+        "Jim Montgomery",
+        "Mark Pederson",
+        "Craig Darby",
+        "Noah Juulsen",
+        "Jordan Weal",
+        "Gilbert Dionne"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "500+ Career Points",
+       "total": 73,
+       "answers": [
+        "Tim Young",
+        "Tim Kerr",
+        "Peter Forsberg",
+        "Travis Konecny",
+        "Dave Poulin",
+        "Gary Dornhoefer",
+        "Mike Bullard",
+        "Eric Lindros"
+       ]
+      },
+      {
+       "row": "Oilers",
+       "col": "Flames",
+       "total": 51,
+       "answers": [
+        "David Haas",
+        "Len Esau",
+        "Kari Jalonen",
+        "Corey Potter",
+        "Krys Kolanos",
+        "Jeff Brubaker",
+        "Brandon Davidson",
+        "Aaron Johnson"
+       ]
+      },
+      {
+       "row": "Oilers",
+       "col": "Canadiens",
+       "total": 50,
+       "answers": [
+        "Shawn Belle",
+        "Scott Fraser",
+        "William Lagesson",
+        "Vladimír Vůjtek",
+        "Dan Newman",
+        "Alex Henry",
+        "Jeff Brubaker",
+        "Brandon Davidson"
+       ]
+      },
+      {
+       "row": "Oilers",
+       "col": "500+ Career Points",
+       "total": 67,
+       "answers": [
+        "Mike Rogers",
+        "Kent Nilsson",
+        "Jimmy Carson",
+        "Derek Roy",
+        "Bobby Schmautz",
+        "Mark Napier",
+        "Joe Murphy",
+        "Petr Klíma"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Flames",
+       "total": 54,
+       "answers": [
+        "Joe Piskula",
+        "Jason Morgan",
+        "David Van Der Gulik",
+        "Peter Ahola",
+        "Oscar Fantenberg",
+        "Linden Vey",
+        "Dale DeGray",
+        "Kevin Westgarth"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Canadiens",
+       "total": 56,
+       "answers": [
+        "Nikita Scherbak",
+        "Kale Clague",
+        "Davis Drewiske",
+        "Lucien Grenier",
+        "Paul Curtis",
+        "Paul DiPietro",
+        "Randy Rota",
+        "Jordan Weal"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "500+ Career Points",
+       "total": 79,
+       "answers": [
+        "Jimmy Carson",
+        "Dennis Hextall",
+        "Žigmund Pálffy",
+        "Rick Martin",
+        "Kevin Fiala",
+        "Charlie Simmer",
+        "Syl Apps",
+        "Danny Grant"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-26",
+     "rows": [
+      "300+ Career Goals",
+      "Rangers",
+      "Flyers"
+     ],
+     "cols": [
+      "Blues",
+      "Flames",
+      "Canucks"
+     ],
+     "cells": [
+      {
+       "row": "300+ Career Goals",
+       "col": "Blues",
+       "total": 37,
+       "answers": [
+        "Paul MacLean",
+        "Mike Bullard",
+        "Brian Sutter",
+        "Pavol Demitra",
+        "Vladimir Tarasenko",
+        "Tony McKegney",
+        "Peter Šťastný",
+        "Petr Nedvěd"
+       ]
+      },
+      {
+       "row": "300+ Career Goals",
+       "col": "Flames",
+       "total": 23,
+       "answers": [
+        "Mike Bullard",
+        "Dave Gagner",
+        "Tyler Toffoli",
+        "Don Lever",
+        "John Tonelli",
+        "Joe Mullen",
+        "Nazem Kadri",
+        "Theo Fleury"
+       ]
+      },
+      {
+       "row": "300+ Career Goals",
+       "col": "Canucks",
+       "total": 24,
+       "answers": [
+        "Pavel Bure",
+        "Cam Neely",
+        "Pavol Demitra",
+        "Rick Vaive",
+        "Dave Gagner",
+        "Peter McNab",
+        "Tyler Toffoli",
+        "Petr Nedvěd"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Blues",
+       "total": 100,
+       "answers": [
+        "Chris Kenady",
+        "Ron Attwell",
+        "Wayne Rivers",
+        "Peter Smrek",
+        "Evgeny Grachev",
+        "Rob Whistle",
+        "Camille Henry",
+        "Dallas Eakins"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Flames",
+       "total": 61,
+       "answers": [
+        "Marek Hrivík",
+        "Brennan Othmann",
+        "Connor Mackey",
+        "Dallas Eakins",
+        "Corey Potter",
+        "Jeff Brubaker",
+        "Raphael Diaz",
+        "Nigel Dawes"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Canucks",
+       "total": 81,
+       "answers": [
+        "Fedor Fedorov",
+        "Jozef Balej",
+        "Nicklas Jensen",
+        "Lawrence Nycholat",
+        "Victor Mancini",
+        "Vitali Kravtsov",
+        "Benn Ferriero",
+        "Bert Robertsson"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Blues",
+       "total": 72,
+       "answers": [
+        "Myron Stankiewicz",
+        "Michel Parizeau",
+        "Aris Brimanis",
+        "Jim Montgomery",
+        "Roman Vopat",
+        "Michel Picard",
+        "Jesse Boulerice",
+        "Darren Rumble"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Flames",
+       "total": 52,
+       "answers": [
+        "Kyle Greentree",
+        "Corban Knight",
+        "Jarrod Skalde",
+        "Jamie Wright",
+        "Mark Freer",
+        "Mark Greig",
+        "Stewart Malgunas",
+        "Blair Jones"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Canucks",
+       "total": 66,
+       "answers": [
+        "Pat Kavanagh",
+        "Martin Grenier",
+        "Drew Callander",
+        "Jim Mair",
+        "Lane Pederson",
+        "Mark Friedman",
+        "Steve Washburn",
+        "Ryan Parent"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-25",
+     "rows": [
+      "Capitals",
+      "Sabres",
+      "1000+ Games Played"
+     ],
+     "cols": [
+      "Canadiens",
+      "Oilers",
+      "Bruins"
+     ],
+     "cells": [
+      {
+       "row": "Capitals",
+       "col": "Canadiens",
+       "total": 55,
+       "answers": [
+        "Riley Barber",
+        "Jakub Jeřábek",
+        "Benoît Gratton",
+        "Alfie Turcotte",
+        "Kent Carlson",
+        "Daniel Carr",
+        "Éric Charron",
+        "Alex Henry"
+       ]
+      },
+      {
+       "row": "Capitals",
+       "col": "Oilers",
+       "total": 35,
+       "answers": [
+        "Chris Hajt",
+        "Barrie Moore",
+        "Alexandre Giroux",
+        "Chris Ferraro",
+        "Taylor Chorney",
+        "Alex Henry",
+        "John Blum",
+        "Nathan Walker"
+       ]
+      },
+      {
+       "row": "Capitals",
+       "col": "Bruins",
+       "total": 63,
+       "answers": [
+        "Tyler Lewington",
+        "Doug Doull",
+        "Chris Bourque",
+        "Ron Jones",
+        "Matt Herr",
+        "Doug Gibson",
+        "Bob Gryp",
+        "John Gruden"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "Canadiens",
+       "total": 47,
+       "answers": [
+        "Kale Clague",
+        "Zach Redmond",
+        "Brandon Davidson",
+        "Ed Ronan",
+        "Doug Janik",
+        "Dick Duff",
+        "Brian Flynn",
+        "Larry Mickey"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "Oilers",
+       "total": 51,
+       "answers": [
+        "Alex Tidey",
+        "Scott Metcalfe",
+        "Barrie Moore",
+        "Taylor Fedun",
+        "Mike Moller",
+        "Riley Stillman",
+        "Brandon Davidson",
+        "Dominik Kahun"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "Bruins",
+       "total": 51,
+       "answers": [
+        "Steven Fogarty",
+        "Jeff Jillson",
+        "Chris Taylor",
+        "Anders Bjork",
+        "Skip Krake",
+        "Tim Schaller",
+        "Steve Atkinson",
+        "Jim Wiemer"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Canadiens",
+       "total": 55,
+       "answers": [
+        "Tomáš Plekanec",
+        "Ryan Walter",
+        "Craig Conroy",
+        "Patrice Brisebois",
+        "Andrew Cassels",
+        "Keith Acton",
+        "Donald Brashear",
+        "Brian Gionta"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Oilers",
+       "total": 58,
+       "answers": [
+        "Evander Kane",
+        "Steve Staios",
+        "Adam Larsson",
+        "Jason Smith",
+        "Shawn Horcoff",
+        "Eric Brewer",
+        "Laurie Boschman",
+        "Derick Brassard"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Bruins",
+       "total": 63,
+       "answers": [
+        "Steve Staios",
+        "Rick Middleton",
+        "Dave Christian",
+        "Glen Murray",
+        "Brian Propp",
+        "Tyler Seguin",
+        "Jean Ratelle",
+        "Wade Redden"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-24",
+     "rows": [
+      "Penguins",
+      "Bruins",
+      "1000+ Games Played"
+     ],
+     "cols": [
+      "Blackhawks",
+      "Islanders",
+      "Capitals"
+     ],
+     "cells": [
+      {
+       "row": "Penguins",
+       "col": "Blackhawks",
+       "total": 59,
+       "answers": [
+        "Tuomas Grönman",
+        "Karl Stewart",
+        "Alain Nasreddine",
+        "Dennis Bonvie",
+        "Wayne Van Dorp",
+        "Alexander Nylander",
+        "Nolan Baumgartner",
+        "Jeff Taffe"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Islanders",
+       "total": 60,
+       "answers": [
+        "Kael Mouillierat",
+        "Kevin Czuczman",
+        "Corey Foster",
+        "Alain Nasreddine",
+        "Chris Ferraro",
+        "Tim Wallace",
+        "Trevor Smith",
+        "Sven Butenschön"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Capitals",
+       "total": 72,
+       "answers": [
+        "Todd Nelson",
+        "Matthew Phillips",
+        "Patrick Boileau",
+        "Chris Bourque",
+        "Ron Jones",
+        "Jim McGeough",
+        "Steven Oleksy",
+        "Chris Ferraro"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Blackhawks",
+       "total": 54,
+       "answers": [
+        "Pascal Pelletier",
+        "Carl Corazzini",
+        "Martin St. Pierre",
+        "Johnathan Aitken",
+        "Dennis Bonvie",
+        "Ian Mitchell",
+        "Eric Nickulas",
+        "Dave Donnelly"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Islanders",
+       "total": 68,
+       "answers": [
+        "Mike Stevens",
+        "Ben Walter",
+        "Anders Myrvold",
+        "Brandon Smith",
+        "Eric Manlow",
+        "Graeme Townshend",
+        "Grigorijs Panteļejevs",
+        "Dean Malkoc"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Capitals",
+       "total": 63,
+       "answers": [
+        "Tyler Lewington",
+        "Doug Doull",
+        "Chris Bourque",
+        "Ron Jones",
+        "Matt Herr",
+        "Doug Gibson",
+        "Bob Gryp",
+        "John Gruden"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Blackhawks",
+       "total": 54,
+       "answers": [
+        "Andrew Ladd",
+        "Steve Larmer",
+        "Todd Gill",
+        "Bob Murray",
+        "Dave Christian",
+        "Michal Handzuš",
+        "Steve Sullivan",
+        "Keith Carney"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Islanders",
+       "total": 52,
+       "answers": [
+        "Andrew Ladd",
+        "Steve Staios",
+        "Dave Lewis",
+        "Eric Brewer",
+        "Derick Brassard",
+        "Keith Acton",
+        "Nino Niederreiter",
+        "John Tonelli"
+       ]
+      },
+      {
+       "row": "1000+ Games Played",
+       "col": "Capitals",
+       "total": 51,
+       "answers": [
+        "Ryan Walter",
+        "Dave Christian",
+        "T.J. Oshie",
+        "Andrew Cassels",
+        "Keith Acton",
+        "Donald Brashear",
+        "Gaétan Duchesne",
+        "Grant Ledyard"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-23",
+     "rows": [
+      "500+ Career Points",
+      "Rangers",
+      "Bruins"
+     ],
+     "cols": [
+      "Kings",
+      "Islanders",
+      "Canucks"
+     ],
+     "cells": [
+      {
+       "row": "500+ Career Points",
+       "col": "Kings",
+       "total": 79,
+       "answers": [
+        "Jimmy Carson",
+        "Dennis Hextall",
+        "Žigmund Pálffy",
+        "Rick Martin",
+        "Kevin Fiala",
+        "Charlie Simmer",
+        "Syl Apps",
+        "Danny Grant"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Islanders",
+       "total": 67,
+       "answers": [
+        "Mathew Barzal",
+        "Žigmund Pálffy",
+        "Mike Bossy",
+        "Craig Janney",
+        "Don Maloney",
+        "Patrick Flatley",
+        "Wendel Clark",
+        "Brad Boyes"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Canucks",
+       "total": 70,
+       "answers": [
+        "Elias Pettersson",
+        "Jimmy Carson",
+        "Paul Reinhart",
+        "Brian Bradley",
+        "Thomas Gradin",
+        "Patrik Sundström",
+        "Tony Tanti",
+        "Barry Pederson"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Kings",
+       "total": 101,
+       "answers": [
+        "Shawn McCosh",
+        "Steve Larouche",
+        "Brian McReynolds",
+        "Gord Walker",
+        "Dean Turner",
+        "Igor Liba",
+        "Craig Duncanson",
+        "John Tripp"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Islanders",
+       "total": 71,
+       "answers": [
+        "Chris Ferraro",
+        "Taylor Beck",
+        "Raimo Helminen",
+        "Thomas Pöck",
+        "Dallas Eakins",
+        "Barry Richter",
+        "Don Blackburn",
+        "Julien Gauthier"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Canucks",
+       "total": 81,
+       "answers": [
+        "Fedor Fedorov",
+        "Jozef Balej",
+        "Nicklas Jensen",
+        "Lawrence Nycholat",
+        "Victor Mancini",
+        "Vitali Kravtsov",
+        "Benn Ferriero",
+        "Bert Robertsson"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Kings",
+       "total": 71,
+       "answers": [
+        "Dominic Lavoie",
+        "Dave Thomlinson",
+        "Petr Prajsler",
+        "Rich Brennan",
+        "Dave Pasin",
+        "Paul Guay",
+        "Bill O'Dwyer",
+        "Marc Potvin"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Islanders",
+       "total": 68,
+       "answers": [
+        "Mike Stevens",
+        "Ben Walter",
+        "Anders Myrvold",
+        "Brandon Smith",
+        "Eric Manlow",
+        "Graeme Townshend",
+        "Grigorijs Panteļejevs",
+        "Dean Malkoc"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Canucks",
+       "total": 63,
+       "answers": [
+        "Dale Dunbar",
+        "Jack Capuano",
+        "Paul O'Neil",
+        "Pascal Pelletier",
+        "Mike Stevens",
+        "Lee Goren",
+        "Byron Bitz",
+        "John Arbour"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-22",
+     "rows": [
+      "Penguins",
+      "Maple Leafs",
+      "Bruins"
+     ],
+     "cols": [
+      "Capitals",
+      "Rangers",
+      "300+ Career Goals"
+     ],
+     "cells": [
+      {
+       "row": "Penguins",
+       "col": "Capitals",
+       "total": 72,
+       "answers": [
+        "Todd Nelson",
+        "Matthew Phillips",
+        "Patrick Boileau",
+        "Chris Bourque",
+        "Ron Jones",
+        "Jim McGeough",
+        "Steven Oleksy",
+        "Chris Ferraro"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Rangers",
+       "total": 102,
+       "answers": [
+        "Tony Feltrin",
+        "Chris Ferraro",
+        "Peter Ferraro",
+        "Todd Charlesworth",
+        "Richard Lintner",
+        "Maxim Galanov",
+        "Corey Potter",
+        "Bob Blackburn"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "300+ Career Goals",
+       "total": 42,
+       "answers": [
+        "Jake Guentzel",
+        "Žigmund Pálffy",
+        "Charlie Simmer",
+        "Mike Bullard",
+        "Petr Klíma",
+        "Pierre Larouche",
+        "Rick MacLeish",
+        "Kevin Stevens"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Capitals",
+       "total": 68,
+       "answers": [
+        "Patrik Augusta",
+        "Joe Lundrigan",
+        "Staffan Kronwall",
+        "Zach Sill",
+        "Daryl Evans",
+        "Willie Brossart",
+        "Joey Crabb",
+        "Brendan Leipsic"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Rangers",
+       "total": 85,
+       "answers": [
+        "André Deveaux",
+        "Jeremy Williams",
+        "Maxim Kondratiev",
+        "Kris Newbury",
+        "Tim Erixon",
+        "Brendan Bell",
+        "Guy Trottier",
+        "Dallas Eakins"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "300+ Career Goals",
+       "total": 37,
+       "answers": [
+        "Auston Matthews",
+        "Mike Bullard",
+        "Eric Lindros",
+        "Wendel Clark",
+        "Rick Vaive",
+        "Rick Kehoe",
+        "Max Pacioretty",
+        "Dave Gagner"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Capitals",
+       "total": 63,
+       "answers": [
+        "Tyler Lewington",
+        "Doug Doull",
+        "Chris Bourque",
+        "Ron Jones",
+        "Matt Herr",
+        "Doug Gibson",
+        "Bob Gryp",
+        "John Gruden"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Rangers",
+       "total": 95,
+       "answers": [
+        "Terry Virtue",
+        "Tony Tuzzolino",
+        "Steven Fogarty",
+        "Rob O'Gara",
+        "Rich Brennan",
+        "Graeme Nicolson",
+        "Jean-Yves Roy",
+        "Peter Ferraro"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "300+ Career Goals",
+       "total": 39,
+       "answers": [
+        "Charlie Simmer",
+        "Cam Neely",
+        "Ken Hodge",
+        "Johnny Bucyk",
+        "David Pastrňák",
+        "Kevin Stevens",
+        "Reggie Leach",
+        "Peter McNab"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-21",
+     "rows": [
+      "Kings",
+      "Penguins",
+      "Red Wings"
+     ],
+     "cols": [
+      "Flyers",
+      "Blues",
+      "300+ Career Goals"
+     ],
+     "cells": [
+      {
+       "row": "Kings",
+       "col": "Flyers",
+       "total": 77,
+       "answers": [
+        "Mark Alt",
+        "Phil Crowe",
+        "Len Hachborn",
+        "Tim Tookey",
+        "Paul Guay",
+        "Roman Vopat",
+        "Brad Jones",
+        "Mike Byers"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Blues",
+       "total": 59,
+       "answers": [
+        "Derek Bekar",
+        "Dominic Lavoie",
+        "Dave Thomlinson",
+        "Patrice Tardif",
+        "Terry Gray",
+        "Matt Luff",
+        "Roman Vopat",
+        "Kevin Dallman"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "300+ Career Goals",
+       "total": 38,
+       "answers": [
+        "Žigmund Pálffy",
+        "Rick Martin",
+        "Charlie Simmer",
+        "Petr Klíma",
+        "Artemi Panarin",
+        "Pavol Demitra",
+        "Kevin Stevens",
+        "Ilya Kovalchuk"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Flyers",
+       "total": 77,
+       "answers": [
+        "Glenn Mulvenna",
+        "Guillaume Lefebvre",
+        "Corey Foster",
+        "Wayne Hicks",
+        "Art Stratton",
+        "Mitch Lamoureux",
+        "Éric Meloche",
+        "Mark Friedman"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "Blues",
+       "total": 83,
+       "answers": [
+        "Bob Stumpf",
+        "Nick Drazenovic",
+        "Micki DuPont",
+        "Brett Sterling",
+        "Perry Ganchar",
+        "Joe Noris",
+        "Jim Shires",
+        "John Arbour"
+       ]
+      },
+      {
+       "row": "Penguins",
+       "col": "300+ Career Goals",
+       "total": 42,
+       "answers": [
+        "Jake Guentzel",
+        "Žigmund Pálffy",
+        "Charlie Simmer",
+        "Mike Bullard",
+        "Petr Klíma",
+        "Pierre Larouche",
+        "Rick MacLeish",
+        "Kevin Stevens"
+       ]
+      },
+      {
+       "row": "Red Wings",
+       "col": "Flyers",
+       "total": 58,
+       "answers": [
+        "Rene Drolet",
+        "Bob Wilkie",
+        "Bob Ritchie",
+        "Rick Foley",
+        "Kris Newbury",
+        "Serge Lajeunesse",
+        "Larry Wright",
+        "Mark Pederson"
+       ]
+      },
+      {
+       "row": "Red Wings",
+       "col": "Blues",
+       "total": 73,
+       "answers": [
+        "Wade Megan",
+        "Jim Shires",
+        "Matt Luff",
+        "Carl Brewer",
+        "Rick Bowness",
+        "Brian Lavender",
+        "Bob McCord",
+        "Klim Kostin"
+       ]
+      },
+      {
+       "row": "Red Wings",
+       "col": "300+ Career Goals",
+       "total": 40,
+       "answers": [
+        "Paul MacLean",
+        "Petr Klíma",
+        "Wendel Clark",
+        "Ray Sheppard",
+        "Danny Gare",
+        "Rick MacLeish",
+        "Vladimir Tarasenko",
+        "Tony McKegney"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-20",
+     "rows": [
+      "Bruins",
+      "Kings",
+      "Sabres"
+     ],
+     "cols": [
+      "1000+ Games Played",
+      "Red Wings",
+      "Maple Leafs"
+     ],
+     "cells": [
+      {
+       "row": "Bruins",
+       "col": "1000+ Games Played",
+       "total": 63,
+       "answers": [
+        "Steve Staios",
+        "Rick Middleton",
+        "Dave Christian",
+        "Glen Murray",
+        "Brian Propp",
+        "Tyler Seguin",
+        "Jean Ratelle",
+        "Wade Redden"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Red Wings",
+       "total": 53,
+       "answers": [
+        "Nathan Robinson",
+        "Dan Renouf",
+        "Anders Myrvold",
+        "Andrew McKim",
+        "Tom Webster",
+        "Earl Anderson",
+        "Marc Potvin",
+        "Josh Langfeld"
+       ]
+      },
+      {
+       "row": "Bruins",
+       "col": "Maple Leafs",
+       "total": 61,
+       "answers": [
+        "Jack Capuano",
+        "Mike Stevens",
+        "Jeff Serowik",
+        "Alex Steeves",
+        "Matt Lashoff",
+        "Rob Cimetta",
+        "Fraser Minten",
+        "Pär Lindholm"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "1000+ Games Played",
+       "total": 60,
+       "answers": [
+        "Dave Lewis",
+        "Craig Conroy",
+        "Glen Murray",
+        "Michal Handzuš",
+        "Charlie Huddy",
+        "Grant Ledyard",
+        "John Tonelli",
+        "Russ Courtnall"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Red Wings",
+       "total": 71,
+       "answers": [
+        "Steve Short",
+        "Kevin Schamehorn",
+        "Peter Dineen",
+        "Donald MacLean",
+        "Doug Volmar",
+        "Jim Hiller",
+        "Matt Luff",
+        "Marc Potvin"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Maple Leafs",
+       "total": 88,
+       "answers": [
+        "Chris Snell",
+        "Donald MacLean",
+        "Jason Podollan",
+        "Andrew Campbell",
+        "John Gibson",
+        "Brandon Convery",
+        "Daryl Evans",
+        "Lorne Stamler"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "1000+ Games Played",
+       "total": 48,
+       "answers": [
+        "Evander Kane",
+        "Phil Russell",
+        "Charlie Huddy",
+        "Keith Carney",
+        "Mike Foligno",
+        "Don Lever",
+        "Erik Johnson",
+        "Brian Gionta"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "Red Wings",
+       "total": 43,
+       "answers": [
+        "Kyle Criscuolo",
+        "Jody Gage",
+        "Mal Davis",
+        "Mike McMahon",
+        "Doug Janik",
+        "Scott Wilson",
+        "Jacob Bernard-Docker",
+        "Jim Watson"
+       ]
+      },
+      {
+       "row": "Sabres",
+       "col": "Maple Leafs",
+       "total": 72,
+       "answers": [
+        "Val James",
+        "Jerry D'Amigo",
+        "T.J. Brennan",
+        "Alexander Nylander",
+        "Dale DeGray",
+        "Mike Byers",
+        "Conor Timmins",
+        "Chris Evans"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "rows": [
+      "Flyers",
+      "Canadiens",
+      "Rangers"
+     ],
+     "cols": [
+      "300+ Career Goals",
+      "Capitals",
+      "Maple Leafs"
+     ],
+     "cells": [
+      {
+       "row": "Flyers",
+       "col": "300+ Career Goals",
+       "total": 31,
+       "answers": [
+        "Tim Kerr",
+        "Mike Bullard",
+        "Eric Lindros",
+        "Rick MacLeish",
+        "Kevin Stevens",
+        "Bill Barber",
+        "Reggie Leach",
+        "John LeClair"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Capitals",
+       "total": 52,
+       "answers": [
+        "Mike Vecchione",
+        "Boyd Kane",
+        "Tim Tookey",
+        "Stewart Malgunas",
+        "Willie Brossart",
+        "Nolan Baumgartner",
+        "Brantt Myhres",
+        "Mark Taylor"
+       ]
+      },
+      {
+       "row": "Flyers",
+       "col": "Maple Leafs",
+       "total": 58,
+       "answers": [
+        "Randy Osburn",
+        "Mike Stothers",
+        "Reid Bailey",
+        "Nikita Grebenkin",
+        "Kris Newbury",
+        "Jay Rosehill",
+        "Mark Greig",
+        "Allan Stanley"
+       ]
+      },
+      {
+       "row": "Canadiens",
+       "col": "300+ Career Goals",
+       "total": 25,
+       "answers": [
+        "Yvan Cournoyer",
+        "Pierre Larouche",
+        "Jacques Lemaire",
+        "Ilya Kovalchuk",
+        "Steve Shutt",
+        "Max Pacioretty",
+        "Tyler Toffoli",
+        "John LeClair"
+       ]
+      },
+      {
+       "row": "Canadiens",
+       "col": "Capitals",
+       "total": 55,
+       "answers": [
+        "Riley Barber",
+        "Jakub Jeřábek",
+        "Benoît Gratton",
+        "Alfie Turcotte",
+        "Kent Carlson",
+        "Daniel Carr",
+        "Éric Charron",
+        "Alex Henry"
+       ]
+      },
+      {
+       "row": "Canadiens",
+       "col": "Maple Leafs",
+       "total": 68,
+       "answers": [
+        "Larry Landon",
+        "Rinat Valiev",
+        "Bill Kitchen",
+        "Adam Brooks",
+        "Serge Boisvert",
+        "William Lagesson",
+        "Gilles Thibaudeau",
+        "Byron Froese"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "300+ Career Goals",
+       "total": 54,
+       "answers": [
+        "Tim Kerr",
+        "Pavel Bure",
+        "Ken Hodge",
+        "Rod Gilbert",
+        "Eric Lindros",
+        "Pierre Larouche",
+        "Ray Sheppard",
+        "Artemi Panarin"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Capitals",
+       "total": 55,
+       "answers": [
+        "Mike Siltala",
+        "Vincent Iorio",
+        "Alexandre Giroux",
+        "Lawrence Nycholat",
+        "Chris Ferraro",
+        "Peter Ferraro",
+        "Paul Carey",
+        "Dylan McIlrath"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Maple Leafs",
+       "total": 85,
+       "answers": [
+        "André Deveaux",
+        "Jeremy Williams",
+        "Maxim Kondratiev",
+        "Kris Newbury",
+        "Tim Erixon",
+        "Brendan Bell",
+        "Guy Trottier",
+        "Dallas Eakins"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-18",
+     "rows": [
+      "Maple Leafs",
+      "300+ Career Goals",
+      "Blues"
+     ],
+     "cols": [
+      "Kings",
+      "Red Wings",
+      "Capitals"
+     ],
+     "cells": [
+      {
+       "row": "Maple Leafs",
+       "col": "Kings",
+       "total": 88,
+       "answers": [
+        "Chris Snell",
+        "Donald MacLean",
+        "Jason Podollan",
+        "Andrew Campbell",
+        "John Gibson",
+        "Brandon Convery",
+        "Daryl Evans",
+        "Lorne Stamler"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Red Wings",
+       "total": 81,
+       "answers": [
+        "Gary Marsh",
+        "Chris McRae",
+        "Donald MacLean",
+        "Dmytro Timashov",
+        "Miroslav Ihnačák",
+        "Kris Newbury",
+        "Ken Murray",
+        "William Lagesson"
+       ]
+      },
+      {
+       "row": "Maple Leafs",
+       "col": "Capitals",
+       "total": 68,
+       "answers": [
+        "Patrik Augusta",
+        "Joe Lundrigan",
+        "Staffan Kronwall",
+        "Zach Sill",
+        "Daryl Evans",
+        "Willie Brossart",
+        "Joey Crabb",
+        "Brendan Leipsic"
+       ]
+      },
+      {
+       "row": "300+ Career Goals",
+       "col": "Kings",
+       "total": 38,
+       "answers": [
+        "Žigmund Pálffy",
+        "Rick Martin",
+        "Charlie Simmer",
+        "Petr Klíma",
+        "Artemi Panarin",
+        "Pavol Demitra",
+        "Kevin Stevens",
+        "Ilya Kovalchuk"
+       ]
+      },
+      {
+       "row": "300+ Career Goals",
+       "col": "Red Wings",
+       "total": 40,
+       "answers": [
+        "Paul MacLean",
+        "Petr Klíma",
+        "Wendel Clark",
+        "Ray Sheppard",
+        "Danny Gare",
+        "Rick MacLeish",
+        "Vladimir Tarasenko",
+        "Tony McKegney"
+       ]
+      },
+      {
+       "row": "300+ Career Goals",
+       "col": "Capitals",
+       "total": 23,
+       "answers": [
+        "Dennis Maruk",
+        "Ilya Kovalchuk",
+        "Max Pacioretty",
+        "Ulf Dahlén",
+        "Jean Pronovost",
+        "Dave Christian",
+        "T.J. Oshie",
+        "Geoff Courtnall"
+       ]
+      },
+      {
+       "row": "Blues",
+       "col": "Kings",
+       "total": 59,
+       "answers": [
+        "Derek Bekar",
+        "Dominic Lavoie",
+        "Dave Thomlinson",
+        "Patrice Tardif",
+        "Terry Gray",
+        "Matt Luff",
+        "Roman Vopat",
+        "Kevin Dallman"
+       ]
+      },
+      {
+       "row": "Blues",
+       "col": "Red Wings",
+       "total": 73,
+       "answers": [
+        "Wade Megan",
+        "Jim Shires",
+        "Matt Luff",
+        "Carl Brewer",
+        "Rick Bowness",
+        "Brian Lavender",
+        "Bob McCord",
+        "Klim Kostin"
+       ]
+      },
+      {
+       "row": "Blues",
+       "col": "Capitals",
+       "total": 62,
+       "answers": [
+        "Jakub Jeřábek",
+        "Bruce Cowick",
+        "Gord Brooks",
+        "Mike Lampman",
+        "Kent Carlson",
+        "D.J. King",
+        "Denis Chassé",
+        "Keith Aucoin"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-17",
+     "rows": [
+      "Kings",
+      "Rangers",
+      "500+ Career Points"
+     ],
+     "cols": [
+      "Red Wings",
+      "Flyers",
+      "Oilers"
+     ],
+     "cells": [
+      {
+       "row": "Kings",
+       "col": "Red Wings",
+       "total": 71,
+       "answers": [
+        "Steve Short",
+        "Kevin Schamehorn",
+        "Peter Dineen",
+        "Donald MacLean",
+        "Doug Volmar",
+        "Jim Hiller",
+        "Matt Luff",
+        "Marc Potvin"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Flyers",
+       "total": 77,
+       "answers": [
+        "Mark Alt",
+        "Phil Crowe",
+        "Len Hachborn",
+        "Tim Tookey",
+        "Paul Guay",
+        "Roman Vopat",
+        "Brad Jones",
+        "Mike Byers"
+       ]
+      },
+      {
+       "row": "Kings",
+       "col": "Oilers",
+       "total": 64,
+       "answers": [
+        "Richard Petiot",
+        "Dan Currie",
+        "Kevin Brown",
+        "Brent Grieve",
+        "Kevin Gravel",
+        "Steve Kelly",
+        "Craig Redmond",
+        "Ken Hammond"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Red Wings",
+       "total": 78,
+       "answers": [
+        "Jim Krulicki",
+        "Jim Leavins",
+        "Ryan Sproul",
+        "Jim Hiller",
+        "Kris Newbury",
+        "Dylan McIlrath",
+        "Steve Richmond",
+        "Mike McMahon"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Flyers",
+       "total": 69,
+       "answers": [
+        "Mike Siklenka",
+        "Chris Jensen",
+        "Kris Newbury",
+        "Don Blackburn",
+        "Daniel Lacroix",
+        "P.J. Stock",
+        "Larry Mickey",
+        "Reggie Fleming"
+       ]
+      },
+      {
+       "row": "Rangers",
+       "col": "Oilers",
+       "total": 81,
+       "answers": [
+        "Vladimir Vorobiev",
+        "Lance Nethery",
+        "Alexandre Giroux",
+        "Aleš Píša",
+        "Scott Fraser",
+        "Chris Ferraro",
+        "Taylor Beck",
+        "John Bednarski"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Red Wings",
+       "total": 88,
+       "answers": [
+        "Frank Mahovlich",
+        "Norm Ullman",
+        "Jimmy Carson",
+        "Dennis Hextall",
+        "Alex DeBrincat",
+        "Paul MacLean",
+        "Guy Charron",
+        "Danny Grant"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Flyers",
+       "total": 73,
+       "answers": [
+        "Tim Young",
+        "Tim Kerr",
+        "Peter Forsberg",
+        "Travis Konecny",
+        "Dave Poulin",
+        "Gary Dornhoefer",
+        "Mike Bullard",
+        "Eric Lindros"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Oilers",
+       "total": 67,
+       "answers": [
+        "Mike Rogers",
+        "Kent Nilsson",
+        "Jimmy Carson",
+        "Derek Roy",
+        "Bobby Schmautz",
+        "Mark Napier",
+        "Joe Murphy",
+        "Petr Klíma"
+       ]
+      }
+     ]
+    },
+    {
+     "date": "2026-08-16",
+     "rows": [
+      "Oilers",
+      "Islanders",
+      "500+ Career Points"
+     ],
+     "cols": [
+      "Red Wings",
+      "Canucks",
+      "Rangers"
+     ],
+     "cells": [
+      {
+       "row": "Oilers",
+       "col": "Red Wings",
+       "total": 51,
+       "answers": [
+        "Bill McDougall",
+        "Micah Aivazoff",
+        "William Lagesson",
+        "Ken Solheim",
+        "Jeff Brubaker",
+        "Klim Kostin",
+        "Poul Popiel",
+        "Tomáš Jurčo"
+       ]
+      },
+      {
+       "row": "Oilers",
+       "col": "Canucks",
+       "total": 70,
+       "answers": [
+        "Steve Pinizzotto",
+        "Ken Berry",
+        "John Hughes",
+        "Bert Robertsson",
+        "David Roberts",
+        "Taylor Fedun",
+        "Sven Butenschön",
+        "Philip Larsen"
+       ]
+      },
+      {
+       "row": "Oilers",
+       "col": "Rangers",
+       "total": 81,
+       "answers": [
+        "Vladimir Vorobiev",
+        "Lance Nethery",
+        "Alexandre Giroux",
+        "Aleš Píša",
+        "Scott Fraser",
+        "Chris Ferraro",
+        "Taylor Beck",
+        "John Bednarski"
+       ]
+      },
+      {
+       "row": "Islanders",
+       "col": "Red Wings",
+       "total": 45,
+       "answers": [
+        "Darryl Bootland",
+        "Anders Myrvold",
+        "Dmytro Timashov",
+        "Bob Cook",
+        "Micah Aivazoff",
+        "Ken Murray",
+        "Tom Miller",
+        "Dennis Cholowski"
+       ]
+      },
+      {
+       "row": "Islanders",
+       "col": "Canucks",
+       "total": 59,
+       "answers": [
+        "Cole McWard",
+        "Mike Stevens",
+        "Evgeny Namestnikov",
+        "Dane Jackson",
+        "Bob Cook",
+        "Jim Mair",
+        "Aatu Räty",
+        "Dean Malkoc"
+       ]
+      },
+      {
+       "row": "Islanders",
+       "col": "Rangers",
+       "total": 71,
+       "answers": [
+        "Chris Ferraro",
+        "Taylor Beck",
+        "Raimo Helminen",
+        "Thomas Pöck",
+        "Dallas Eakins",
+        "Barry Richter",
+        "Don Blackburn",
+        "Julien Gauthier"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Red Wings",
+       "total": 88,
+       "answers": [
+        "Frank Mahovlich",
+        "Norm Ullman",
+        "Jimmy Carson",
+        "Dennis Hextall",
+        "Alex DeBrincat",
+        "Paul MacLean",
+        "Guy Charron",
+        "Danny Grant"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Canucks",
+       "total": 70,
+       "answers": [
+        "Elias Pettersson",
+        "Jimmy Carson",
+        "Paul Reinhart",
+        "Brian Bradley",
+        "Thomas Gradin",
+        "Patrik Sundström",
+        "Tony Tanti",
+        "Barry Pederson"
+       ]
+      },
+      {
+       "row": "500+ Career Points",
+       "col": "Rangers",
+       "total": 109,
+       "answers": [
+        "Mike Rogers",
+        "Valeri Kamensky",
+        "Vic Hadfield",
+        "Tim Kerr",
+        "Pavel Buchnevich",
+        "Dennis Hextall",
+        "Steve Vickers",
+        "Pavel Bure"
+       ]
+      }
      ]
     }
    ]
   }
- ]
+ }
 }

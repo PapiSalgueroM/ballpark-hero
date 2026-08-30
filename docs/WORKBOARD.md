@@ -125,16 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 358 (desktop, 2026-08-30): the grid archive extends to the MLB
-  and NHL franchise grids. Deliberately NOT the Record Books split, which was
-  the other candidate: a list of Super Bowl winners is commodity content that a
-  thousand sites already carry, and publishing twelve more pages of it is the
-  opposite of the unique value the AdSense finding asks for. The archive is
-  unique by construction, because the boards are ours and the answers are
-  computed with the game's own matcher against our own data, so nobody else has
-  the page. Same safety as Round 354: franchise grids seed each board from its
-  date and never repeat it.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -409,6 +399,25 @@ Standing claims:
 
 ## Done
 
+- THE ARCHIVE COVERS THREE SPORTS, AND A REAL PRODUCTION BUG FELL OUT OF IT,
+  Round 358 (desktop lane, 2026-08-30). The archive now runs for the NBA, MLB
+  and NHL grids: 42 boards, 378 cells, 3,024 published answers, every one
+  recomputed by the fence against each game's own matcher and live data.
+  The other candidate for this round was splitting the Record Books into twelve
+  champion pages, and it was rejected on purpose: a list of Super Bowl winners
+  sits on a thousand other sites and adds nothing by existing here again, which
+  is the opposite of the unique value the AdSense finding asks for. The archive
+  is unique by construction, because the boards are ours and the answers are
+  computed from our own data.
+  THE BUG. The generator failed on MLB, succeeded on a retry, then failed
+  again. That pattern is a transient, and chasing it found that all three
+  franchise grids page through their table and return null if ANY single page
+  errors, where each page is a query the database sometimes cancels under load
+  (Postgres 57014, statement timeout). One dropped page and a real visitor gets
+  the error card instead of a playable grid. All three now retry twice with a
+  short backoff before giving up. Found only because the archive generator
+  calls the same function the game does, which is the argument for building
+  tools on the game's own code rather than a copy of it.
 - THE SIX HUBS BECOME CORNERSTONE PAGES, Round 357 (desktop lane, 2026-08-30).
   The one weakness the AdSense render audit surfaced, fixed and measured. They
   were the thinnest indexable pages on the site AND the most similar to each
