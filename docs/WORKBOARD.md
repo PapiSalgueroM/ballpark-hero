@@ -60,32 +60,7 @@ September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 **ANTHONY'S 2026-08-29 IDEAS LIST (desktop chat, evening), his order, split into
 workable pieces. Bugs still outrank these; within the list his order rules.**
 
-- NBA Stat Line: a target stat line (23 points, 6 rebounds, 9 assists, 2 steals, 3
-  blocks, optionally shooting splits), pick five player SEASONS whose combined
-  per-game stats hit it, scored by similarity. A second mode deals a single real GAME
-  line and you name the player and the night.
-  **SEASON MODE SHIPPING AS ROUND 352 (cloud, 2026-08-29), unblocked by the
-  operating contract that narrowed the freeze.** It sits
-  complete on branch `worktree-agent-a8e555b59a5814836` (lib, hook, page,
-  registry, guide copy, simNbaStatLine with a proven avgsplit control; tsc
-  zero, harness green, simNoRivalNames clean, reviewed line by line against
-  the recon traps below). It is NOT merged because it adds a production
-  route and a sitemap URL, and owner directive 3 freezes both until the
-  AdSense verdict. It takes the next free round number and ships the day the
-  verdict lands, or sooner if Anthony says the freeze does not cover a new
-  game page. Nothing else blocks it.
-  RECON (cloud, 2026-08-29): the season mode is buildable now on
-  bref_nba_player_seasons (30,462 rows: pts, trb, ast, stl, blk plus real shooting
-  splits). Traps the recon pinned: games is NULL on every season row so true
-  per-game rates are impossible, use per-36 like Perfect Season NBA and Stat
-  Detective already do; stl and blk are null before 1973-74 (gate the pool when
-  the target includes them); recompute combined percentages from summed makes and
-  attempts, never average the percents; exclude the 2TM to 5TM combined rows;
-  nba_player_team_seasons is DELIBERATELY EMPTY, do not build on it. The GAME
-  line mode is DESKTOP GATED outright: no box-score table exists for any sport,
-  it needs an external pull. File plan sits in the Round 335 session record
-  (lib, hook, page, registry under Pro Basketball, simNbaStatLine with a
-  distinct-targets-over-a-year assertion, the Round 212 lesson).
+
 - Soccer Conquest, one map per league (map changes with the league) plus a big one
   with the world's best 100 or so clubs. The NFL, NBA and NHL Conquest engines are
   the pattern.
@@ -322,6 +297,17 @@ Standing claims:
 
 ## Done
 
+- NBA STAT LINE, Round 352 (cloud lane, 2026-08-29). The first item off his
+  2026-08-29 ideas list and the first new route since the contract narrowed the
+  freeze. A target per-36 line drawn from a real season's own numbers, five real
+  seasons blended minutes-weighted against it, scored 0 to 100, daily and
+  unlimited. Per-36 rather than per-game because `games` is null on all 30,462
+  season rows, said out loud in the guide instead of hidden; steals and blocks
+  gate the pool to 1973-74 on and a 3P% target to 1979-80 on; splits recomputed
+  from summed makes and attempts, never averaged. Built in a parallel worktree,
+  reviewed here line by line, simNbaStatLine fencing it with measured floors and
+  a proven avgsplit control. Sitemap 132 with the floor raised in the same round.
+  The GAME line mode stays desktop gated: no box-score table exists for any sport.
 - THE PRERENDER RACE, Round 355 (desktop lane, 2026-08-30). Filed the round
   before as "two pages have clock-dependent heads and halt the build", and the
   first thing this round did was disprove its own premise. The refused routes
