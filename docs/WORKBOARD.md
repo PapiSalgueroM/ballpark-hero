@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 357.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 358.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,18 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 357 (desktop, 2026-08-30): THE SIX SPORT HUBS BECOME CORNERSTONE
+  PAGES, which is the one weakness the AdSense render audit actually surfaced.
+  They are simultaneously the thinnest indexable pages (521 to 614 words against
+  a site median of 584 unique and a p90 of 970) and the most similar to each
+  other (25 to 36 percent shingle overlap, the highest of any indexable
+  cluster), because sportHub.ts says in its own comment that the copy is "kept
+  together so the tone stays consistent and so a new hub is obviously a copy of
+  an existing one". That consistency is exactly what makes them read as one
+  template. Owner directive sections 15 and 4. Every factual claim gets checked
+  before it ships, and the fence measures both depth and difference so the next
+  hub cannot quietly become a clone again.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
