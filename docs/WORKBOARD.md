@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 354.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 355.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -36,6 +36,17 @@ days, mobile 42 percent of clicks, a third branded, /football-grid at position
 September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 354 (desktop, 2026-08-30): THE GRID ARCHIVE, first slice, and
+  the sport order is inverted from the original design by what the recon found.
+  Soccer and NFL grids recycle a fixed pool, so publishing their answers
+  publishes an answer key for a board that comes back. The FRANCHISE grids do
+  not: NBA, MLB and NHL build each day's board from the date seed, so a board
+  is unique to its date and never returns, and their complete valid answer set
+  is computable from the same local data the game validates against, so the
+  page needs no community picks and invents nothing. Slice one is /nba-grid/archive,
+  a single static page built from a committed data file so it carries no clock
+  and prerenders honestly. Day pages and the other sports follow if it earns it.
 
 **MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
 outside SEO brief; the desktop lane ran the audit the same evening, findings in
