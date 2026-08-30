@@ -74,6 +74,29 @@ needs a real pool.
 4. **A CANVAS MINIGAME**, the first slice of Anthony's swipe-to-move soccer
    idea. Generated characters only, never a real athlete's likeness.
 
+### A SECOND CLOUD LANE CONSTRAINT, MEASURED IN ROUND 358, AND A FIX WORTH TAKING
+
+The database is not the only thing this sandbox cannot reach. **`npm run
+build:seo` takes about two and a half hours here**, measured at roughly a minute
+a route across 142 routes, against a few minutes on the desktop lane. The cause
+is not CPU: load average sat at 0.16 throughout. Every prerendered page requests
+`fonts.googleapis.com`, the egress proxy refuses it, and each of the three clock
+samples per route waits out that failure before the head settles.
+
+That is survivable but it means a cloud round that regenerates snapshots spends
+most of its wall clock waiting, and it makes the pipeline the slowest thing in
+the lane by an order of magnitude.
+
+**The fix, unclaimed and small, and it helps BOTH lanes:** have
+`scripts/prerender.mjs` route-block external font requests up front so they fail
+instantly instead of timing out. The captured output is the head plus
+reconstructed readable text, and a webfont changes neither, so this cannot move
+a snapshot's content. Whoever takes it should prove that with a before-and-after
+byte comparison of the generated `public/` tree rather than on the argument
+above, and should keep it to fonts rather than blocking all external requests,
+because the template deliberately hands crawlers images from `flagcdn.com` and
+`simBrand` section 3 fences exactly that.
+
 ### What the desktop lane is holding
 
 Milestone 0 grid work that needs the database: extending the archive to MLB and
