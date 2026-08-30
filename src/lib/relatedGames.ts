@@ -87,9 +87,26 @@ export function relatedGamesFor(path: string, categories: GameCategory[] = LIVE_
 
   /* 2. The category cycle: one game from the next category, the one that
      scores highest for this page, so a category's games share the inbound
-     love and the pick holds still when that category grows. */
+     love and the pick holds still when that category grows.
+
+     ROUND 352: A SMALL NEXT CATEGORY TAKES ALL OF IT, because one pick is
+     not enough to keep the promise the harness checks. The ring gives a
+     game c-1 inbound links from its own category, so a two game category
+     hands each of its games exactly one and a one game category hands it
+     none; the rest has to arrive through this cycle or through a variety
+     pick, and variety is a rendezvous hash, which is luck. NASCAR is two
+     games and the category before it is Aussie Rules, which is one page,
+     so that page could only ever link ONE of the two, and the other lived
+     on whatever the hashes felt like. Round 352 added a game, the hashes
+     moved, and /guess-nascar-driver dropped to a single inbound link, so
+     the "2+" the harness asserts was never structural for small
+     categories, only lucky. Taking every game of a small next category
+     makes it structural: measured across the whole registry it moved 10
+     of 117 pages and left nothing under two inbound, with the busiest
+     page on 12 against a hoarding ceiling of 25. */
   const nextCat = categories[(ci + 1) % categories.length];
-  add([...nextCat.games].filter(g => !taken.has(g.path)).sort(byScoreFor(path))[0]);
+  const nextPicks = [...nextCat.games].filter(g => !taken.has(g.path)).sort(byScoreFor(path));
+  for (const g of nextCat.games.length <= 3 ? nextPicks : nextPicks.slice(0, 1)) add(g);
 
   /* 3. Variety picks from anywhere else on the site, best scores first,
      until the block is full. A normal category reaches 6 after two picks
