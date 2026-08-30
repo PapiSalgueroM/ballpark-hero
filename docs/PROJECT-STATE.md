@@ -2631,6 +2631,24 @@ today rather than adding alongside them.
   chunk draws the same basemap without importing Supabase, the squad builder and
   the enrichment tables. dartMap re-exports it, so there is still one
   implementation of the antimeridian handling.
+  THE BUG THAT ALMOST SHIPPED, and it was caught by measuring the field rather
+  than by looking at the map: the club colours in FALLBACK_CLUBS were chosen for
+  a career game where two clubs are never drawn side by side, and on a map
+  colour IS the ownership signal. Wydad Casablanca and Asante Kotoko were both
+  #D6202B and both in Africa, three more African clubs shared #FBC403, three
+  more were all #2B2B2B, and 65 pairs sat within 40 of each other in RGB. Two
+  fixes were built and measured. Keeping the true hue and separating by
+  lightness alone FAILED at 3.0 minimum separation, because the hues cluster on
+  red and blue and the nudge-apart pass cascades; it was worse than the disease.
+  Spreading the field evenly around the hue wheel in true-hue order reaches
+  35.8 and is legible, at the cost of hue drift (with eight reds crowding,
+  Bayern lands on purple). That cost is paid, because 32 mutually
+  distinguishable colours is at the edge of perception and legibility is the
+  requirement; the confusion is removed by using the derived colour EVERYWHERE
+  in this game, so nothing ever shows a club in two colours, and the real one is
+  kept on every row as sourceColor. The lesson worth carrying: data borrowed
+  from another game carries that game's assumptions, and a colour set that is
+  fine in a list is not automatically fine on a map.
   simConquestSoccer is the fence, and its numbers come from measurement rather
   than from what felt right: 15 independent seed families put the league draw
   rate at 0.2307 to 0.2463 (band set at 0.20 to 0.28), the strongest eight
