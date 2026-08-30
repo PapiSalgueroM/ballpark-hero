@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 353.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 354.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -36,6 +36,17 @@ days, mobile 42 percent of clicks, a third branded, /football-grid at position
 September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 353 (desktop, 2026-08-30): SOCCER GRID HARD MODE DOES NOTHING.
+  Measured against the live 710 puzzle pool: the difficulty classifier puts 554
+  puzzles in easy, 153 in normal and 3 in hard, and filterPoolByDifficulty
+  falls back to the FULL pool whenever a tier holds fewer than 20, so choosing
+  Hard silently changes nothing at all. A visible control that does nothing is
+  on the contract's own do-not-ship list. Cause: the thresholds split a
+  theoretical 2 to 6 narrowness range while the data only ever produces six
+  distinct scores between 2 and 5.33, two thirds of them exactly 2. Fix is to
+  derive the bands from the measured distribution, plus a fence so a future
+  pool cannot silently kill a tier again.
 
 **MILESTONE 0, own the grid category (Anthony, 2026-08-29 evening, from a pasted
 outside SEO brief; the desktop lane ran the audit the same evening, findings in
