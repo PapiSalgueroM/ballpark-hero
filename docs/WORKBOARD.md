@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 358.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 359.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,16 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 358 (desktop, 2026-08-30): the grid archive extends to the MLB
+  and NHL franchise grids. Deliberately NOT the Record Books split, which was
+  the other candidate: a list of Super Bowl winners is commodity content that a
+  thousand sites already carry, and publishing twelve more pages of it is the
+  opposite of the unique value the AdSense finding asks for. The archive is
+  unique by construction, because the boards are ours and the answers are
+  computed with the game's own matcher against our own data, so nobody else has
+  the page. Same safety as Round 354: franchise grids seed each board from its
+  date and never repeat it.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
