@@ -432,6 +432,11 @@ Standing claims:
   snapshot that predates the response to the rejection. The owner submits, not
   us. Still blocked on him: index coverage needs Search Console, which no tool
   here can read.
+  PUBLISHED and verified live 2026-08-30: Lovable synced ead052f4, deploy_project
+  called, the live bundle flipped, and the five fetchAllRows backed routes
+  (/career, /connections, /transfer-path, /rebuild, /quiz-board) each serve their
+  own snapshot with a unique title and 2,341 to 2,950 words. All 149 node
+  harnesses green plus the 15 built-site fences re-run by hand afterwards.
 
 - THE ARCHIVE COVERS THREE SPORTS, AND A REAL PRODUCTION BUG FELL OUT OF IT,
   Round 358 (desktop lane, 2026-08-30). The archive now runs for the NBA, MLB
