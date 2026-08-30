@@ -5,7 +5,12 @@
  *   1. the bake matches its sources. src/data/conquestDataSoccer.ts is
  *      generated, so it is re-derived here from FALLBACK_CLUBS, STRENGTH_PRIORS
  *      and GEO_COUNTRIES and compared club for club and country for country. A
- *      generated file nobody re-derives is just a file somebody typed once;
+ *      generated file nobody re-derives is just a file somebody typed once.
+ *      That includes the MAP PALETTE, which exists because the first cut of this
+ *      round shipped the clubs' real colours and the map was unreadable: two
+ *      African clubs both on #D6202B, three more sharing #FBC403, 65 pairs
+ *      within 40 in RGB. Colour is the ownership signal on a map, so it is
+ *      fenced like any other data;
  *   2. the starting world is sound: every one of the basemap's countries is
  *      owned, nobody starts landless, each club holds its own country, and one
  *      country never fields two clubs;
@@ -27,6 +32,9 @@
  *                             3's "nothing moved" must go red.
  *   SOCCER_CONTROL=badbake    one shipped club's rating is bent; section 1 must
  *                             catch the bake disagreeing with its sources.
+ *   SOCCER_CONTROL=colorclash two clubs given one colour, which is the exact bug
+ *                             the palette exists to prevent; section 1's
+ *                             separation floor must go red.
  * Every control checks that the thing it edits is really there first and exits
  * rather than running a control that changed nothing.
  *
@@ -44,7 +52,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const ok = m => console.log('  ok: ' + m);
 
 const CONTROL = process.env.SOCCER_CONTROL || '';
-const KNOWN = ['nodraw', 'drawsteal', 'badbake'];
+const KNOWN = ['nodraw', 'drawsteal', 'badbake', 'colorclash'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`SOCCER_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -84,13 +92,26 @@ if (CONTROL === 'drawsteal') {
     needle + ' { const stolen = soccerLandsOf(owners, away); if (stolen.length) owners[stolen[0]] = home; }',
   ));
 }
+const CLUB_ROW = /(\{ id: '[^']+', name: "[^"]+", country: "[^"]+", iso: '[^']+', continent: '[^']+', color: ')([^']+)(', sourceColor: '[^']+', overall: )(\d+)( \},)/g;
+
 if (CONTROL === 'badbake') {
   const src = fs.readFileSync(dataPath, 'utf8');
-  const m = src.match(/(\{ id: '[^']+', name: "[^"]+", country: "[^"]+", iso: '[^']+', continent: '[^']+', color: '[^']+', overall: )(\d+)( \},)/);
+  const m = CLUB_ROW.exec(src);
   if (!m) { console.error('control refused: no club row matched, so the bend would change nothing'); process.exit(2); }
   dataPath = `${TMP}/conquestDataSoccer.control.ts`;
-  fs.writeFileSync(dataPath, src.replace(m[0], `${m[1]}${+m[2] + 4}${m[3]}`));
-  console.log(`  control: one shipped club's rating bent from ${m[2]} to ${+m[2] + 4}`);
+  fs.writeFileSync(dataPath, src.replace(m[0], `${m[1]}${m[2]}${m[3]}${+m[4] + 4}${m[5]}`));
+  console.log(`  control: one shipped club's rating bent from ${m[4]} to ${+m[4] + 4}`);
+}
+if (CONTROL === 'colorclash') {
+  // The bug this whole palette exists to prevent: two clubs on one colour.
+  const src = fs.readFileSync(dataPath, 'utf8');
+  const rows = [...src.matchAll(CLUB_ROW)];
+  if (rows.length < 2) { console.error('control refused: fewer than two club rows matched, nothing to clash'); process.exit(2); }
+  const [a, b] = rows;
+  if (a[2] === b[2]) { console.error('control refused: those two clubs already share a colour, so the edit changes nothing'); process.exit(2); }
+  dataPath = `${TMP}/conquestDataSoccer.control.ts`;
+  fs.writeFileSync(dataPath, src.replace(b[0], `${b[1]}${a[2]}${b[3]}${b[4]}${b[5]}`));
+  console.log(`  control: a second club given ${a[2]}, the colour that already belongs to another`);
 }
 
 fs.writeFileSync(ENTRY, `
@@ -121,6 +142,7 @@ function mulberry32(seed) {
   const sources = gen.readSources(ROOT);
   const { field } = gen.deriveField(sources);
   const owners = gen.deriveTerritories(field, sources.geo);
+  const derivedColors = gen.deriveMapColors(field);
 
   if (field.length !== SOCCER_CLUBS.length) {
     fail(`re-derived ${field.length} clubs, the shipped file has ${SOCCER_CLUBS.length}`);
@@ -130,12 +152,44 @@ function mulberry32(seed) {
       const shipped = SOCCER_CLUB_MAP.get(n.club.id);
       if (!shipped) { bad += 1; fail(`re-derived club ${n.club.name} is missing from the shipped file`); continue; }
       if (shipped.name !== n.club.name || shipped.country !== n.country || shipped.iso !== n.iso ||
-          shipped.continent !== n.continent || shipped.color !== n.club.color || shipped.overall !== n.overall) {
+          shipped.continent !== n.continent || shipped.overall !== n.overall) {
         bad += 1;
         fail(`${n.club.name} disagrees with its sources (shipped ovr ${shipped.overall}/${shipped.iso}, derived ${n.overall}/${n.iso})`);
+        continue;
+      }
+      // color is the derived map palette, sourceColor is the club's real one.
+      if (shipped.color !== derivedColors[n.club.id]) {
+        bad += 1;
+        fail(`${n.club.name} ships map colour ${shipped.color}, the generator derives ${derivedColors[n.club.id]}`);
+      }
+      if (shipped.sourceColor !== n.club.color) {
+        bad += 1;
+        fail(`${n.club.name} records sourceColor ${shipped.sourceColor}, its real club colour is ${n.club.color}`);
       }
     }
     if (!bad) ok(`${field.length} clubs re-derived from FALLBACK_CLUBS, STRENGTH_PRIORS and GEO_COUNTRIES, all identical`);
+  }
+
+  // The map palette. This exists because the first cut shipped the clubs' real
+  // colours and the map was unreadable: Wydad Casablanca and Asante Kotoko both
+  // #D6202B and both in Africa, three more African clubs on #FBC403, 65 pairs
+  // within 40 in RGB. Colour is the ownership signal here, so it is fenced.
+  const { min: derivedMin } = gen.minPairDistance(derivedColors);
+  const shippedColors = Object.fromEntries(SOCCER_CLUBS.map(c => [c.id, c.color]));
+  const { min: shippedMin, pair } = gen.minPairDistance(shippedColors);
+  // Measured at 35.8 for the shipped field. The floor is set at 25, below the
+  // measurement with real headroom and far above the failure it exists for,
+  // which is two clubs sharing a colour exactly and scoring 0.
+  if (shippedMin < 25) {
+    fail(`two clubs are only ${shippedMin.toFixed(1)} apart in RGB (${pair.join(' and ')}); the map cannot show whose empire is whose`);
+  } else {
+    ok(`map palette separates all 32 clubs, closest pair ${shippedMin.toFixed(1)} apart in RGB`);
+  }
+  if (Math.abs(shippedMin - derivedMin) > 0.05) {
+    fail(`the shipped palette (min ${shippedMin.toFixed(1)}) is not the one the generator derives (min ${derivedMin.toFixed(1)})`);
+  }
+  for (const c of SOCCER_CLUBS) {
+    if (!c.sourceColor) fail(`${c.name} has no sourceColor, so the club's real colour is no longer recorded`);
   }
 
   const shippedIsos = Object.keys(INITIAL_TERRITORIES_SOCCER).sort();

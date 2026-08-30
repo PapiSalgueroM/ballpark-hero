@@ -13,6 +13,14 @@
 //
 // Ratings are simulation strengths, not stat claims. No crests, no kits, no
 // player names: club name, country and colour only.
+//
+// COLOUR: `color` is a DERIVED map palette, not the club's real colour, and it
+// is used everywhere in this game so nothing ever shows a club in two different
+// colours. The real colours collide badly on a map (two African clubs both on
+// #D6202B, three more sharing #FBC403, 65 pairs within 40 in RGB), which makes
+// ownership unreadable, so the field is spread around the hue wheel in the order
+// of its true hues. Measured minimum pairwise distance: 35.8.
+// The club's real colour is kept on every row as `sourceColor`.
 
 export interface SoccerClub {
   id: string;
@@ -20,43 +28,46 @@ export interface SoccerClub {
   country: string;
   iso: string;          // its home territory on the world basemap
   continent: string;
+  /** derived map palette, mutually distinguishable; see the note above */
   color: string;
+  /** the club's real colour, recorded for provenance */
+  sourceColor: string;
   overall: number;
 }
 
 export const SOCCER_CLUBS: SoccerClub[] = [
-  { id: 'fb-1', name: "Real Madrid", country: "Spain", iso: 'es', continent: 'europe', color: '#FEBE10', overall: 88 },
-  { id: 'fb-6', name: "PSG", country: "France", iso: 'fr', continent: 'europe', color: '#004170', overall: 87 },
-  { id: 'fb-5', name: "Bayern Munich", country: "Germany", iso: 'de', continent: 'europe', color: '#DC052D', overall: 87 },
-  { id: 'fb-15', name: "Boca Juniors", country: "Argentina", iso: 'ar', continent: 'samerica', color: '#003DA5', overall: 86 },
-  { id: 'fb-17', name: "Flamengo", country: "Brazil", iso: 'br', continent: 'samerica', color: '#C8102E', overall: 86 },
-  { id: 'fb-10', name: "Arsenal", country: "England", iso: 'gb', continent: 'europe', color: '#EF0107', overall: 86 },
-  { id: 'fb-12', name: "Ajax", country: "Netherlands", iso: 'nl', continent: 'europe', color: '#D2122E', overall: 86 },
-  { id: 'fb-13', name: "Benfica", country: "Portugal", iso: 'pt', continent: 'europe', color: '#E30613', overall: 86 },
-  { id: 'fb-8', name: "Inter Milan", country: "Italy", iso: 'it', continent: 'europe', color: '#0068A8', overall: 85 },
-  { id: 'fb-87', name: "Monterrey", country: "Mexico", iso: 'mx', continent: 'namerica', color: '#0A2240', overall: 79 },
-  { id: 'fb-35', name: "Al Hilal", country: "Saudi Arabia", iso: 'sa', continent: 'asia', color: '#003DA5', overall: 79 },
-  { id: 'fb-33', name: "Fenerbahce", country: "Turkey", iso: 'tr', continent: 'asia', color: '#0A2C59', overall: 79 },
-  { id: 'fb-40', name: "Inter Miami", country: "USA", iso: 'us', continent: 'namerica', color: '#F7B5CD', overall: 79 },
-  { id: 'fb-120', name: "Toronto FC", country: "Canada", iso: 'ca', continent: 'namerica', color: '#B81137', overall: 74 },
-  { id: 'fb-115', name: "Shanghai Port", country: "China", iso: 'cn', continent: 'asia', color: '#D6202B', overall: 74 },
-  { id: 'fb-109', name: "Atletico Nacional", country: "Colombia", iso: 'co', continent: 'samerica', color: '#00A650', overall: 74 },
-  { id: 'fb-116', name: "Zamalek", country: "Egypt", iso: 'eg', continent: 'africa', color: '#FFFFFF', overall: 74 },
-  { id: 'fb-114', name: "Persepolis", country: "Iran", iso: 'ir', continent: 'asia', color: '#D6202B', overall: 74 },
-  { id: 'fb-111', name: "Kawasaki Frontale", country: "Japan", iso: 'jp', continent: 'asia', color: '#009FE8', overall: 74 },
-  { id: 'fb-117', name: "Wydad Casablanca", country: "Morocco", iso: 'ma', continent: 'africa', color: '#D6202B', overall: 74 },
-  { id: 'fb-113', name: "Al Sadd", country: "Qatar", iso: 'qa', continent: 'asia', color: '#2B2B2B', overall: 74 },
-  { id: 'fb-119', name: "Mamelodi Sundowns", country: "South Africa", iso: 'za', continent: 'africa', color: '#FBC403', overall: 74 },
-  { id: 'fb-112', name: "Jeonbuk Motors", country: "South Korea", iso: 'kr', continent: 'asia', color: '#0C6B3E', overall: 74 },
-  { id: 'fb-118', name: "Esperance", country: "Tunisia", iso: 'tn', continent: 'africa', color: '#BC0C12', overall: 74 },
-  { id: 'fb-151', name: "Atletico Petroleos", country: "Angola", iso: 'ao', continent: 'africa', color: '#FBC403', overall: 69 },
-  { id: 'fb-131', name: "Pyunik", country: "Armenia", iso: 'am', continent: 'asia', color: '#D6202B', overall: 69 },
-  { id: 'fb-140', name: "Melbourne Victory", country: "Australia", iso: 'au', continent: 'asia', color: '#0C2E5C', overall: 69 },
-  { id: 'fb-132', name: "Qarabag", country: "Azerbaijan", iso: 'az', continent: 'asia', color: '#2B2B2B', overall: 69 },
-  { id: 'fb-144', name: "TP Mazembe", country: "DR Congo", iso: 'cd', continent: 'africa', color: '#2B2B2B', overall: 69 },
-  { id: 'fb-149', name: "Saint George", country: "Ethiopia", iso: 'et', continent: 'africa', color: '#FBC403', overall: 69 },
-  { id: 'fb-146', name: "Asante Kotoko", country: "Ghana", iso: 'gh', continent: 'africa', color: '#D6202B', overall: 69 },
-  { id: 'fb-147', name: "Gor Mahia", country: "Kenya", iso: 'ke', continent: 'africa', color: '#00954C', overall: 69 },
+  { id: 'fb-1', name: "Real Madrid", country: "Spain", iso: 'es', continent: 'europe', color: '#6EB814', sourceColor: '#FEBE10', overall: 88 },
+  { id: 'fb-6', name: "PSG", country: "France", iso: 'fr', continent: 'europe', color: '#51D6EC', sourceColor: '#004170', overall: 87 },
+  { id: 'fb-5', name: "Bayern Munich", country: "Germany", iso: 'de', continent: 'europe', color: '#B351EC', sourceColor: '#DC052D', overall: 87 },
+  { id: 'fb-15', name: "Boca Juniors", country: "Argentina", iso: 'ar', continent: 'samerica', color: '#5162EC', sourceColor: '#003DA5', overall: 86 },
+  { id: 'fb-17', name: "Flamengo", country: "Brazil", iso: 'br', continent: 'samerica', color: '#9B14B8', sourceColor: '#C8102E', overall: 86 },
+  { id: 'fb-10', name: "Arsenal", country: "England", iso: 'gb', continent: 'europe', color: '#ECA051', sourceColor: '#EF0107', overall: 86 },
+  { id: 'fb-12', name: "Ajax", country: "Netherlands", iso: 'nl', continent: 'europe', color: '#EC51EA', sourceColor: '#D2122E', overall: 86 },
+  { id: 'fb-13', name: "Benfica", country: "Portugal", iso: 'pt', continent: 'europe', color: '#EC6651', sourceColor: '#E30613', overall: 86 },
+  { id: 'fb-8', name: "Inter Milan", country: "Italy", iso: 'it', continent: 'europe', color: '#14B8AF', sourceColor: '#0068A8', overall: 85 },
+  { id: 'fb-87', name: "Monterrey", country: "Mexico", iso: 'mx', continent: 'namerica', color: '#1C80B0', sourceColor: '#0A2240', overall: 79 },
+  { id: 'fb-35', name: "Al Hilal", country: "Saudi Arabia", iso: 'sa', continent: 'asia', color: '#2114B8', sourceColor: '#003DA5', overall: 79 },
+  { id: 'fb-33', name: "Fenerbahce", country: "Turkey", iso: 'tr', continent: 'asia', color: '#519CEB', sourceColor: '#0A2C59', overall: 79 },
+  { id: 'fb-40', name: "Inter Miami", country: "USA", iso: 'us', continent: 'namerica', color: '#7951EC', sourceColor: '#F7B5CD', overall: 79 },
+  { id: 'fb-120', name: "Toronto FC", country: "Canada", iso: 'ca', continent: 'namerica', color: '#5E14B8', sourceColor: '#B81137', overall: 74 },
+  { id: 'fb-115', name: "Shanghai Port", country: "China", iso: 'cn', continent: 'asia', color: '#E656AE', sourceColor: '#D6202B', overall: 74 },
+  { id: 'fb-109', name: "Atletico Nacional", country: "Colombia", iso: 'co', continent: 'samerica', color: '#14B835', sourceColor: '#00A650', overall: 74 },
+  { id: 'fb-116', name: "Zamalek", country: "Egypt", iso: 'eg', continent: 'africa', color: '#DDCF5F', sourceColor: '#FFFFFF', overall: 74 },
+  { id: 'fb-114', name: "Persepolis", country: "Iran", iso: 'ir', continent: 'asia', color: '#B11B93', sourceColor: '#D6202B', overall: 74 },
+  { id: 'fb-111', name: "Kawasaki Frontale", country: "Japan", iso: 'jp', continent: 'asia', color: '#51ECC7', sourceColor: '#009FE8', overall: 74 },
+  { id: 'fb-117', name: "Wydad Casablanca", country: "Morocco", iso: 'ma', continent: 'africa', color: '#B11B5B', sourceColor: '#D6202B', overall: 74 },
+  { id: 'fb-113', name: "Al Sadd", country: "Qatar", iso: 'qa', continent: 'asia', color: '#A88124', sourceColor: '#2B2B2B', overall: 74 },
+  { id: 'fb-119', name: "Mamelodi Sundowns", country: "South Africa", iso: 'za', continent: 'africa', color: '#89EC51', sourceColor: '#FBC403', overall: 74 },
+  { id: 'fb-112', name: "Jeonbuk Motors", country: "South Korea", iso: 'kr', continent: 'asia', color: '#15B772', sourceColor: '#0C6B3E', overall: 74 },
+  { id: 'fb-118', name: "Esperance", country: "Tunisia", iso: 'tn', continent: 'africa', color: '#B84914', sourceColor: '#BC0C12', overall: 74 },
+  { id: 'fb-151', name: "Atletico Petroleos", country: "Angola", iso: 'ao', continent: 'africa', color: '#51EC53', sourceColor: '#FBC403', overall: 69 },
+  { id: 'fb-131', name: "Pyunik", country: "Armenia", iso: 'am', continent: 'asia', color: '#E65678', sourceColor: '#D6202B', overall: 69 },
+  { id: 'fb-140', name: "Melbourne Victory", country: "Australia", iso: 'au', continent: 'asia', color: '#1847B4', sourceColor: '#0C2E5C', overall: 69 },
+  { id: 'fb-132', name: "Qarabag", country: "Azerbaijan", iso: 'az', continent: 'asia', color: '#9EA824', sourceColor: '#2B2B2B', overall: 69 },
+  { id: 'fb-144', name: "TP Mazembe", country: "DR Congo", iso: 'cd', continent: 'africa', color: '#BCDD5F', sourceColor: '#2B2B2B', overall: 69 },
+  { id: 'fb-149', name: "Saint George", country: "Ethiopia", iso: 'et', continent: 'africa', color: '#31B814', sourceColor: '#FBC403', overall: 69 },
+  { id: 'fb-146', name: "Asante Kotoko", country: "Ghana", iso: 'gh', continent: 'africa', color: '#B11B22', sourceColor: '#D6202B', overall: 69 },
+  { id: 'fb-147', name: "Gor Mahia", country: "Kenya", iso: 'ke', continent: 'africa', color: '#51EC8D', sourceColor: '#00954C', overall: 69 },
 ];
 
 export const SOCCER_CLUB_MAP = new Map(SOCCER_CLUBS.map(c => [c.id, c]));

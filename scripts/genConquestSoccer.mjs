@@ -135,6 +135,117 @@ export function deriveField({ clubs, priors, geo }) {
   return { field, seats };
 }
 
+/* ---------------- map colours ----------------
+ *
+ * The club colours in FALLBACK_CLUBS are real and worth keeping, but they were
+ * chosen for a career game where two clubs are never drawn side by side. On a
+ * map, colour IS the ownership signal, and measured on the real field they
+ * collide badly: Wydad Casablanca and Asante Kotoko are both #D6202B and both in
+ * Africa, three more African clubs share #FBC403, and 65 pairs sit within 40 of
+ * each other in RGB. That map cannot be read.
+ *
+ * So each club keeps its true colour for chips and tiles, and gets a SEPARATE
+ * derived mapColor for territory fill. The derivation spreads the field evenly
+ * around the hue wheel IN THE ORDER OF THEIR TRUE HUES, so reds stay near reds
+ * and a club never lands somewhere absurd, then alternates lightness between two
+ * bands so that neighbours in hue also differ in brightness. The rotation offset
+ * is the one that moves the whole field least.
+ */
+function hexToRgb(hex) {
+  return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+}
+function rgbToHex([r, g, b]) {
+  const c = v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
+  return `#${c(r)}${c(g)}${c(b)}`.toUpperCase();
+}
+function rgbToHsl(hex) {
+  const [r, g, b] = hexToRgb(hex).map(v => v / 255);
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return { h: 0, s: 0, l };
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h;
+  if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
+  else if (max === g) h = (b - r) / d + 2;
+  else h = (r - g) / d + 4;
+  return { h: h * 60, s, l };
+}
+function hslToHex(h, s, l) {
+  h = ((h % 360) + 360) % 360;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const [r, g, b] =
+    h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] :
+    h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return rgbToHex([(r + m) * 255, (g + m) * 255, (b + m) * 255]);
+}
+export function rgbDistance(a, b) {
+  const [r1, g1, b1] = hexToRgb(a), [r2, g2, b2] = hexToRgb(b);
+  return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
+}
+
+/**
+ * Two approaches were built and measured before this one was kept.
+ *
+ * Keeping each club's true hue and separating by lightness alone FAILED, and
+ * measurably: the true hues cluster hard on red and blue, the nudge-apart pass
+ * cascades, and it finished at a minimum pairwise distance of 3.0 with Esperance
+ * and Saint George almost identical and both in Africa. Worse than the disease.
+ *
+ * Spreading the field evenly around the wheel, in the order of their true hues,
+ * reaches 35.8 and is genuinely legible. Its cost is hue drift: with eight reds
+ * crowding, Bayern Munich lands on purple.
+ *
+ * That cost is paid, because thirty-two mutually distinguishable colours is at
+ * the edge of what anyone can perceive and legibility is the requirement here.
+ * What removes the confusion is that the drifted colour is used EVERYWHERE in
+ * this game, tiles and chips included, so nothing on the page ever shows a club
+ * in two different colours. Inside Soccer Conquest, this simply is the club's
+ * colour, the way a board game hands you a set of pieces. The club's real colour
+ * is still recorded on every row as sourceColor.
+ */
+export function deriveMapColors(field) {
+  const n = field.length;
+  const step = 360 / n;
+  const withHue = field
+    .map(f => ({ id: f.club.id, hsl: rgbToHsl(f.club.color) }))
+    .sort((a, b) => a.hsl.h - b.hsl.h || a.id.localeCompare(b.id));
+
+  // Rotate the evenly spaced ring to wherever it disturbs the true hues least.
+  const circ = (a, b) => { const d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+  let bestOffset = 0, bestCost = Infinity;
+  for (let o = 0; o < 360; o += 1) {
+    let cost = 0;
+    for (let i = 0; i < n; i++) cost += circ(o + i * step, withHue[i].hsl.h);
+    if (cost < bestCost) { bestCost = cost; bestOffset = o; }
+  }
+
+  const out = {};
+  for (let i = 0; i < n; i++) {
+    const h = bestOffset + i * step;
+    // Saturation kept vivid but not neon; lightness alternates so that
+    // neighbours on the wheel also separate by brightness, not hue alone.
+    const s = Math.max(0.5, Math.min(0.8, withHue[i].hsl.s || 0.65));
+    const l = i % 2 === 0 ? 0.40 : 0.62;
+    out[withHue[i].id] = hslToHex(h, s, l);
+  }
+  return out;
+}
+
+export function minPairDistance(colors) {
+  const vals = Object.values(colors);
+  let min = Infinity, pair = null;
+  for (let i = 0; i < vals.length; i++) {
+    for (let j = i + 1; j < vals.length; j++) {
+      const d = rgbDistance(vals[i], vals[j]);
+      if (d < min) { min = d; pair = [vals[i], vals[j]]; }
+    }
+  }
+  return { min, pair };
+}
+
 export function deriveTerritories(field, geo) {
   const home = new Map(field.map(n => [n.iso, n.club.id]));
   const owners = {};
@@ -154,11 +265,12 @@ export function deriveTerritories(field, geo) {
   return owners;
 }
 
-function render(field, owners, seats, geo) {
+function render(field, owners, seats, geo, colors, minPair) {
   const contLine = Object.keys(seats).sort().map(c => `${c} ${seats[c]}`).join(', ');
   const teams = field.map(n => (
     `  { id: '${n.club.id}', name: ${JSON.stringify(n.club.name)}, country: ${JSON.stringify(n.country)}, ` +
-    `iso: '${n.iso}', continent: '${n.continent}', color: '${n.club.color}', overall: ${n.overall} },`
+    `iso: '${n.iso}', continent: '${n.continent}', color: '${colors[n.club.id]}', ` +
+    `sourceColor: '${n.club.color}', overall: ${n.overall} },`
   )).join('\n');
 
   const byCont = {};
@@ -185,6 +297,14 @@ function render(field, owners, seats, geo) {
 //
 // Ratings are simulation strengths, not stat claims. No crests, no kits, no
 // player names: club name, country and colour only.
+//
+// COLOUR: \`color\` is a DERIVED map palette, not the club's real colour, and it
+// is used everywhere in this game so nothing ever shows a club in two different
+// colours. The real colours collide badly on a map (two African clubs both on
+// #D6202B, three more sharing #FBC403, 65 pairs within 40 in RGB), which makes
+// ownership unreadable, so the field is spread around the hue wheel in the order
+// of its true hues. Measured minimum pairwise distance: ${minPair.toFixed(1)}.
+// The club's real colour is kept on every row as \`sourceColor\`.
 
 export interface SoccerClub {
   id: string;
@@ -192,7 +312,10 @@ export interface SoccerClub {
   country: string;
   iso: string;          // its home territory on the world basemap
   continent: string;
+  /** derived map palette, mutually distinguishable; see the note above */
   color: string;
+  /** the club's real colour, recorded for provenance */
+  sourceColor: string;
   overall: number;
 }
 
@@ -223,8 +346,10 @@ function main() {
 const { clubs, priors, geo } = readSources();
 const { field, seats } = deriveField({ clubs, priors, geo });
 const owners = deriveTerritories(field, geo);
+const colors = deriveMapColors(field);
+const { min: minPair } = minPairDistance(colors);
 const out = path.join(ROOT, 'src/data/conquestDataSoccer.ts');
-fs.writeFileSync(out, render(field, owners, seats, geo), 'utf8');
+fs.writeFileSync(out, render(field, owners, seats, geo, colors, minPair), 'utf8');
 
 const tally = {};
 for (const iso of Object.keys(owners)) tally[owners[iso]] = (tally[owners[iso]] || 0) + 1;
@@ -233,4 +358,5 @@ console.log(`wrote ${path.relative(ROOT, out)}`);
 console.log(`  ${field.length} clubs, ${Object.keys(owners).length} territories`);
 console.log(`  empire sizes: min ${Math.min(...sizes)}, max ${Math.max(...sizes)}, mean ${(sizes.reduce((a, b) => a + b, 0) / sizes.length).toFixed(1)}, landless ${sizes.filter(s => s === 0).length}`);
 console.log(`  seats: ${Object.keys(seats).sort().map(c => `${c} ${seats[c]}`).join(', ')}`);
+console.log(`  map palette: minimum pairwise RGB distance ${minPair.toFixed(1)}`);
 }
