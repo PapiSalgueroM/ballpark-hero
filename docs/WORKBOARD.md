@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 358.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 359.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -361,12 +361,16 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
-Claimed 2026-08-30, next: Round 357 (cloud lane):
+Claimed 2026-08-30, next: Round 358 (cloud lane):
 
-- SPEC SPLIT INTO /docs/spec/, item 1 of the desktop lane's handoff list and
-  the thing the operating contract names. Docs only, no database, so it is
-  inside this lane's constraint. The split has to be provably lossless, so it
-  ships with a manifest and a harness rather than on trust.
+- SOCCER CONQUEST, world map round (Round A), item 2 of the handoff list and
+  high on Anthony's own list. Self contained in bundled code per the recon on
+  this board, so it is inside this lane's database constraint. Round A only:
+  /conquest-soccer on the world basemap. The per league maps are hand authored
+  SVG, one league per round, and the visual rebuild of the four existing maps
+  is a separate round; neither is claimed here.
+
+Done 2026-08-30, Round 357 (cloud lane): the spec split, see the Done list.
 
 Standing claims:
 
