@@ -396,6 +396,14 @@ Standing claims:
   because two copies of a 7,691 line document drift and then nobody knows which
   one is the spec. CLAUDE.md, the operating contract, the reconciliation, the
   parallel-agent ops doc and the owner directives all point at the new place.
+  Gates: tsc zero, build green, full node board 144 green, 4 skipped (the
+  database four, correctly reported as unreachable rather than broken), 0
+  failed. One note for the next cloud session, since it cost a re-run here:
+  simBrand goes red on a fresh cloud clone with a Python traceback from the
+  logo generator, and the cause is simply the `pip3 install fonttools pillow`
+  step CLAUDE.md's bootstrap already lists. Do that at the start, not after a
+  board run. It fails closed, which is right, and it is not a fifth database
+  case.
   NEEDS PUBLISHING: no, docs and scripts only, nothing a visitor sees changes.
 - THE RUNNER LEARNS WHAT IT CANNOT REACH, Round 356 (cloud lane, 2026-08-29).
   The four database-backed fences no longer read as four broken harnesses in

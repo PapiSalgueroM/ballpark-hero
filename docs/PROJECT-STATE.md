@@ -2625,7 +2625,13 @@ today rather than adding alongside them.
   not a second copy: two copies of a 7,691 line document drift, and then nobody
   knows which one is the spec. CLAUDE.md's docs map, the operating contract, the
   reconciliation, the parallel-agent ops doc and the owner directives all point at
-  the new location. tsc zero, build green.
+  the new location. Gates: tsc zero, build green, full node board 144 green, 4
+  skipped (the database four, reported as unreachable rather than broken by
+  Round 356's runner), 0 failed. simBrand went red on the first board run for
+  an environment reason worth knowing: a fresh cloud clone has no fonttools or
+  pillow, so the logo generator dies and the harness cannot compare the shipped
+  assets. `pip3 install fonttools pillow` is already in CLAUDE.md's bootstrap
+  and fixes it; run it before the board, not after.
   ONE THING THE ROUND TRIPPED OVER AND IS WORTH THE NEXT PERSON'S TIME: the
   generator read the working-tree spec, and once the signpost had replaced it a
   regeneration would have split the signpost. It refused instead, because it
