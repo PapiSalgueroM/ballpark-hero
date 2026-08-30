@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 360.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 361.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,26 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 360 (desktop, 2026-08-30): THE WORLD LEADERBOARD IS STILL
+  FORGEABLE AND THE FIX HAS BEEN SITTING UNAPPLIED FOR FOUR DAYS.
+  LEADERBOARD-SECURITY-2026-08-26.md and
+  supabase/migrations/20260826_leaderboard_score_caps.sql are both UNTRACKED in
+  Anthony's folder, so they were never committed and never applied. Verified
+  against the live database 2026-08-30: no caps table exists, and neither
+  global_leaderboard() nor global_rank() mentions a cap, so both still compute
+  each game's denominator from game_completions, which accepts anonymous INSERT
+  with WITH CHECK (true). Anyone can post a row for a game key that does not
+  exist, score 1, and collect the full 100 points, repeatably. The board is
+  linked from every page since Round 270.
+  THE MIGRATION CANNOT BE APPLIED AS WRITTEN: its allowlist was derived from
+  source on 2026-08-26 and roughly sixty rounds have shipped since, so applying
+  it would silently zero every game added after that date, which is the exact
+  mistake its own comments say the first draft made. The round is: re-derive the
+  allowlist from current source, re-measure whether the hole has been used since
+  the 105,726 row audit (it is 174,183 rows now), apply, verify the board is
+  unchanged for real players, and fence the allowlist so it cannot go stale
+  again.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
