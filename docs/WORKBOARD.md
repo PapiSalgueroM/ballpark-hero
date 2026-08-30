@@ -35,6 +35,60 @@ days, mobile 42 percent of clicks, a third branded, /football-grid at position
 21 for "nfl grid" (49,500 monthly volume) with NFL season starting in
 September. Milestone 0 is the grid category; D157/D158/D159 wait.**
 
+## HANDOFF TO THE CLOUD LANE, written 2026-08-30 by the desktop lane
+
+Read this first if you are the cloud/tablet session. Anthony asked for it
+directly, because from his side it looked like you had stopped working.
+
+**You had not.** Rounds 336, 352 and 356 are all yours and all landed on main.
+What was missing is the last step: landing on main only updates the Lovable
+PREVIEW. douknowball.com does not move until somebody calls deploy_project,
+and only the desktop lane has that tool. So your work was real and invisible at
+the same time. Everything through ccc4c583 is now published and live.
+
+**The rule that follows from it:** when you finish a round, say plainly in your
+last message that it needs publishing, and add it to the PENDING PUBLISH list
+at the bottom of this block. The desktop lane clears that list. Do not assume a
+merged round is a shipped round.
+
+### The constraint that decides what you should take
+
+Your sandbox cannot reach the database. Its egress proxy answers Supabase with
+a 403, which is what your own Round 356 taught the sim runner to report as
+unreachable rather than broken. So **anything that reads live data is desktop
+work**, and taking it will cost you a round you cannot finish. That currently
+means: simValueFreshness, simWorldXiPositions, simSoccerGridTiers,
+simGridArchive, scripts/genGridArchive.mjs, and any round whose verification
+needs a real pool.
+
+### What to take, in this order, all of it database free
+
+1. **SPEC SPLIT INTO /docs/spec/.** The owner's operating contract asks for the
+   master spec split into per-part files with an index at docs/spec/README.md,
+   so sessions load only the section they need. Pure docs, mechanical, no data.
+   Do this first because it is small and the contract names it.
+2. **SOCCER CONQUEST, world map round.** Your own recon (on this board) proved
+   it is self contained in bundled code: FALLBACK_CLUBS in soccerCareerEngine.ts
+   carries 190 clubs with country, tier and colour, STRENGTH_PRIORS in
+   clubManager.ts rates the big five, and worldMapGeo.ts is a complete projected
+   basemap already used by dart draft. Nothing here needs the database. It is
+   high on Anthony's own list.
+3. **THE SNAPSHOT SWAP CLS**, the architectural remainder in the Inbox below.
+   Design work, no data. Read the two constraints written into that item before
+   proposing anything: it cannot be hydrated, and it must never be hidden from
+   visitors.
+4. **A CANVAS MINIGAME**, the first slice of Anthony's swipe-to-move soccer
+   idea. Generated characters only, never a real athlete's likeness.
+
+### What the desktop lane is holding
+
+Milestone 0 grid work that needs the database: extending the archive to MLB and
+NHL, and the CBB and WNBA grid expansion. Do not claim those.
+
+### PENDING PUBLISH
+
+(empty as of 2026-08-30, everything through ccc4c583 is live)
+
 ## Inbox (unclaimed)
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it

@@ -2597,6 +2597,20 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, publishing and a handoff, no round number.** Anthony reported
+  that the tablet lane looked like it had stopped working. It had not: rounds
+  336, 352 and 356 were all on main. What was missing is that landing on main
+  updates the Lovable PREVIEW only, and douknowball.com does not move until
+  deploy_project runs, which only the desktop lane can call. So the cloud lane's
+  work was real and invisible at once. Everything through ccc4c583 was verified
+  on the merged tree (tsc zero, build clean, eight fences green) and published.
+  A HANDOFF TO THE CLOUD LANE block now sits at the top of docs/WORKBOARD.md
+  carrying the thing that decides its work: its sandbox cannot reach the
+  database (its own Round 356 taught the runner to report that as unreachable
+  rather than broken), so every live-data round is desktop work and it should
+  take the spec split, Soccer Conquest's world map, the snapshot swap and a
+  canvas minigame, all of which are database free. The block also carries a
+  PENDING PUBLISH list, because "merged" and "shipped" had quietly come apart.
 - **2026-08-29, Round 356.** The runner learns the difference between broken and
   unreachable. Four harnesses read the live database (R344 simValueFreshness,
   R345 simWorldXiPositions, R353 simSoccerGridTiers, R354 simGridArchive), the
