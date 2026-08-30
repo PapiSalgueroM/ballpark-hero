@@ -1,7 +1,7 @@
 # Owner Directives, 2026-08-29
 
 Anthony's final directives, received 2026-08-29 night. These OVERRIDE any
-conflicting recommendation in docs/MASTER-BUILD-SPEC-2026-08.md and bind both
+conflicting recommendation in the Master Build Spec (docs/spec/) and bind both
 lanes. The full text is below the line; the operational mapping first.
 
 **What changes in practice:**

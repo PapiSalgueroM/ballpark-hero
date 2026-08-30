@@ -2,11 +2,12 @@
 
 Received from Anthony in the desktop chat on 2026-08-29, verbatim below the
 line. It arrived with the full v1.0 Master Build Specification attached as
-reference; that spec is the same document the repo already carries as
-`docs/MASTER-BUILD-SPEC-2026-08.md` (adopted Round 337, reconciled in
-`docs/SPEC-RECONCILIATION.md`), so only the contract half is recorded here.
-The contract asks for the spec to be split into `/docs/spec/` sections with an
-index; that split is queued on the board.
+reference; that spec is the same document the repo already carries (adopted
+Round 337, reconciled in `docs/SPEC-RECONCILIATION.md`), so only the contract
+half is recorded here. The contract asks for the spec to be split into
+`/docs/spec/` sections with an index, and Round 357 did that: it lives in
+`docs/spec/` as 29 parts with the index at `docs/spec/README.md`, section
+numbers unchanged.
 
 Reading order for a fresh session stays what CLAUDE.md says, with this file
 added: this contract sets WHAT to build and in what order, and it supersedes
@@ -167,8 +168,9 @@ engine, new data. No new game *types* until the grid category is won.
 ## 4 through 8
 
 The contract's non-negotiable principles, agent rules, working method, do-not-
-ship list and commandment are the same ones the spec carries (sections 0,
-Appendix L, M, N, Q of `docs/MASTER-BUILD-SPEC-2026-08.md`). The operating
+ship list and commandment are the same ones the spec carries (section 0 in
+`docs/spec/00-title-and-directive.md`, Appendix L, M, N and Q in
+`docs/spec/28-appendices-e-to-q.md`). The operating
 additions worth restating:
 
 - Small reversible changes. Show diffs before applying.

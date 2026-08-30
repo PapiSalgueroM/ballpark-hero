@@ -1,0 +1,574 @@
+{
+  "note": "Round 357. The spec split. Verified by scripts/simSpecSplit.mjs. Parts are listed in reading order and concatenating their bodies reproduces sourceSha256 exactly.",
+  "source": "docs/MASTER-BUILD-SPEC-2026-08.md (v1.0, August 2026, adopted Round 337)",
+  "sourceSha256": "c45d7aec73eda6d82776c3027d3f6224bc99df1980b02f27a58146a207e244ff",
+  "sourceLines": 7691,
+  "headerOpen": "<!-- spec-part-header -->",
+  "headerClose": "<!-- /spec-part-header -->",
+  "parts": [
+    {
+      "file": "00-title-and-directive.md",
+      "covers": "Title, executive directive, vision, strategy, repository rule",
+      "sections": [
+        "DoUKnowBall — Master Build Specification",
+        "0. EXECUTIVE DIRECTIVE",
+        "1. PRODUCT VISION",
+        "2. PRODUCT NORTH STAR",
+        "3. CURRENT-PRODUCT BASELINE AND OWNER REQUIREMENTS",
+        "4. DEVELOPMENT STRATEGY",
+        "5. REPOSITORY-FIRST EXECUTION RULE"
+      ],
+      "bodySha256": "554fb225dc9f17b20065604c07f1aac780b48391470b4eb32222823c7f3292a0"
+    },
+    {
+      "file": "01-data-model-and-quality.md",
+      "covers": "Shared data model, data quality, country display",
+      "sections": [
+        "6. SHARED DATA MODEL",
+        "7. DATA QUALITY SYSTEM",
+        "8. COUNTRY AND REGION DISPLAY"
+      ],
+      "bodySha256": "476700f5a9ac46ff6cadc85cadc000a3a16ad141073c45c1a3c9e742faa82dc9"
+    },
+    {
+      "file": "02-platform-shell.md",
+      "covers": "Live ticker, site layout, home page, identity, profile",
+      "sections": [
+        "9. LIVE SPORTS TICKER",
+        "10. GLOBAL SITE LAYOUT",
+        "11. HOME PAGE",
+        "12. USER IDENTITY SYSTEM",
+        "13. PROFILE SYSTEM"
+      ],
+      "bodySha256": "7877c7efd1ba4bb43e8361c436b83b1097fb22be7fcb69d91bd2646d0503249c"
+    },
+    {
+      "file": "03-progression-and-game-contract.md",
+      "covers": "Ball IQ, streaks, achievements, game contract, help, report issue",
+      "sections": [
+        "14. BALL IQ",
+        "15. STREAK SYSTEM",
+        "16. ACHIEVEMENT SYSTEM",
+        "17. GLOBAL GAME CONTRACT",
+        "18. GAME HELP / QUESTION MARK SYSTEM",
+        "19. REPORT ISSUE SYSTEM"
+      ],
+      "bodySha256": "ddb812f80aad2e95fb970fce3fc9272d635ef581eec84287bbf804b27fe4e23c"
+    },
+    {
+      "file": "04-analytics-seo-and-ads.md",
+      "covers": "Analytics, SEO and indexing, indexing audit, AdSense, casino decision",
+      "sections": [
+        "20. ANALYTICS",
+        "21. SEO / INDEXING",
+        "22. INDEXING AUDIT",
+        "23. ADSENSE / AD SAFETY",
+        "24. CASINO DECISION"
+      ],
+      "bodySha256": "d5b7686cb38e7a6f47d50e08f3d779e5a3929e3f2a478fde74e6884e1e3efbdd"
+    },
+    {
+      "file": "05-club-manager.md",
+      "covers": "Club Manager 2.0 end to end, through competitions and brackets",
+      "sections": [
+        "25. CLUB MANAGER 2.0 — FLAGSHIP SIMULATION",
+        "26. CLUB MANAGER — SAVE SETUP",
+        "27. CLUB MANAGER — MANAGER ATTRIBUTES",
+        "28. MANAGER XP / SKILL TREE",
+        "29. CLUB MANAGER — STAFF",
+        "30. CLUB MANAGER — BOARD",
+        "31. FAN / BOARD / PLAYER SENTIMENT",
+        "32. FINANCE SYSTEM",
+        "33. TICKETING / CONCESSIONS / SPONSORS",
+        "34. FACILITIES",
+        "35. TRANSFER ENGINE",
+        "36. FINANCIAL ADVISOR",
+        "37. SCOUTING",
+        "38. ACADEMY",
+        "39. SQUAD PAGE",
+        "40. TACTICS",
+        "41. SUBSTITUTIONS",
+        "42. POSITION CHANGE / TRAINING",
+        "43. MATCH CENTER",
+        "44. LIVE MATCH PRESENTATION",
+        "45. EVENT TIMELINE",
+        "46. COMPETITIONS ENGINE",
+        "47. TABLES AND BRACKETS"
+      ],
+      "bodySha256": "cfe4dcca1eca5c59d0ff4f2cb23a829ca85d151a21399d410a61ab56cb8e660a"
+    },
+    {
+      "file": "06-soccer-career.md",
+      "covers": "Soccer Career 2.0, development, drills, life, brand, media, international",
+      "sections": [
+        "48. SOCCER CAREER 2.0",
+        "49. PLAYER DEVELOPMENT",
+        "50. INTERACTIVE TRAINING DRILLS",
+        "51. PLAYER LIFE",
+        "52. SPONSORSHIPS / BRAND",
+        "53. MEDIA / HEADLINES",
+        "54. PLAYER RELATIONSHIPS",
+        "55. RIVALRY SYSTEM",
+        "56. INTERNATIONAL CAREER"
+      ],
+      "bodySha256": "e14b82b5d55746042bbf1496150fd34bf29bdb4a68758e16cd477369c6abb72a"
+    },
+    {
+      "file": "07-dynasty-and-front-office.md",
+      "covers": "College dynasty, draft night, the four front offices, WNBA",
+      "sections": [
+        "57. COLLEGE FOOTBALL DYNASTY 2.0",
+        "58. DRAFT NIGHT PRESENTATION",
+        "59. FRONT OFFICE ENGINE — UNIVERSAL",
+        "60. NBA FRONT OFFICE",
+        "61. NFL FRONT OFFICE",
+        "62. MLB FRONT OFFICE",
+        "63. NHL FRONT OFFICE",
+        "64. WNBA EXPANSION"
+      ],
+      "bodySha256": "ed07bda63cc71278304df5365b71321599f54c87dac626fe488b50451b9224ea"
+    },
+    {
+      "file": "08-conquest-and-flagship-games.md",
+      "covers": "Conquest, NBA Stat Line, draft, auction, bingo, rarity, XI games, Rebuild",
+      "sections": [
+        "65. CONQUEST ENGINE 2.0",
+        "66. CONQUEST GAMEPLAY",
+        "67. NBA / NFL / MLB / NHL CONQUEST",
+        "68. NBA STAT LINE — NEW FLAGSHIP GAME",
+        "69. UNIVERSAL DRAFT ENGINE",
+        "70. SIGN THE PLAYER — AUCTION REWORK",
+        "71. SPORTS BINGO",
+        "72. SEARCH & DISCARD",
+        "73. PLAYER STOCK MARKET",
+        "74. RARITY",
+        "75. WORLD XI",
+        "76. BUILD YOUR XI",
+        "77. BANKER OFFER / PLAYER DEAL GAMES",
+        "78. REBUILD GAME 2.0",
+        "79. REBUILD LOOP"
+      ],
+      "bodySha256": "7e8bc6248feaf2f9166b504cd6e3ed123ce6eddedbe88b711d896fff0e8381c1"
+    },
+    {
+      "file": "09-tycoon-and-arcade.md",
+      "covers": "Stadium tycoon, arcade engine, the five sport arcades, party, tower defense, rooms",
+      "sections": [
+        "80. STADIUM TYCOON / SPORTS EMPIRE",
+        "81. SPORTS EMPIRE IDLE LOOP",
+        "82. INTERACTIVE SPORTS ARCADE ENGINE",
+        "83. SOCCER ARCADE FLAGSHIP",
+        "84. BASKETBALL ARCADE",
+        "85. FOOTBALL ARCADE",
+        "86. BASEBALL ARCADE",
+        "87. HOCKEY ARCADE",
+        "88. SPORTS PARTY",
+        "89. TOWER DEFENSE — ATHLETE HEROES",
+        "90. MULTIPLAYER PRIVATE ROOMS",
+        "91. CROSS-PLATFORM CAREER PIPELINE",
+        "92. GAME DEPRECATION POLICY"
+      ],
+      "bodySha256": "9dec09e5fb0ca68abc1514ef3b934c0cb9a4549fbfdba6a1680d7d9a67234ad3"
+    },
+    {
+      "file": "10-design-performance-and-mobile.md",
+      "covers": "Design system, performance, mobile, accessibility, animation, card art",
+      "sections": [
+        "93. HOME / GAME DESIGN SYSTEM",
+        "94. PERFORMANCE",
+        "95. MOBILE",
+        "96. ACCESSIBILITY",
+        "97. ANIMATION SYSTEM",
+        "98. CARD ART SYSTEM",
+        "99. SPORTS BINGO + DRAFT + CARDS SHARED DATA"
+      ],
+      "bodySha256": "2b6394fd24c8ff2edb21243d3fcb4b6e250c9bc2de6c4a6e121dca59fbbaeb84"
+    },
+    {
+      "file": "11-social-daily-and-leaderboards.md",
+      "covers": "News, social layer, share cards, daily engine, leaderboards, points, difficulty",
+      "sections": [
+        "100. NEWS ENGINE",
+        "101. SOCIAL LAYER",
+        "102. SHARE CARDS",
+        "103. DAILY GAME ENGINE",
+        "104. GLOBAL LEADERBOARD",
+        "105. POINT SYSTEM",
+        "106. SPORT-SPECIFIC DIFFICULTY",
+        "107. QUALITY CONTROL FOR PUZZLES"
+      ],
+      "bodySha256": "17e56016b21dbcb393a261fc0b368cf8e451f1d99aa5f974a9dcc33f16b8bea3"
+    },
+    {
+      "file": "12-puzzle-games-and-data-rules.md",
+      "covers": "Puzzle game specs, terminology, historical eras, live versus simulated data",
+      "sections": [
+        "108. WHO AM I / RODRI-TYPE DATA BUGS",
+        "109. FOOTLE / CAREER QUIZ / HIGHER-LOWER / CONNECTIONS",
+        "110. CAREER LADDER",
+        "111. MISSING XI",
+        "112. CLUE AUCTION / ALPHABET SPRINT / BINGO",
+        "113. FANTASY DRAFT UX",
+        "114. WORLD CUP / EVENT-SPECIFIC GAMES",
+        "115. SPORTS TICKER + GAME PAGES",
+        "116. FOOTBALL/SOCCER TERMINOLOGY",
+        "117. HISTORICAL ERA ARCHITECTURE",
+        "118. REAL-TIME DATA VS SIMULATION DATA"
+      ],
+      "bodySha256": "fcbdc5e79cef29406401d2107434e38bb02d528170f3786104a840641c3d7b1b"
+    },
+    {
+      "file": "13-legal-admin-and-testing.md",
+      "covers": "Legal safeguards, likeness, AI policy, admin console, testing, errors, saves, security",
+      "sections": [
+        "119. LEGAL / RIGHTS SAFEGUARDS",
+        "120. PLAYER LIKENESS / AVATAR STRATEGY",
+        "121. AI USAGE POLICY",
+        "122. ADMIN CONSOLE",
+        "123. REPORT ISSUE ADMIN WORKFLOW",
+        "124. TESTING STRATEGY",
+        "125. CORE ACCEPTANCE TESTS",
+        "126. PERFORMANCE ACCEPTANCE",
+        "127. ERROR HANDLING",
+        "128. SAVE SYSTEM",
+        "129. OFFLINE / CONNECTION RESILIENCE",
+        "130. SECURITY",
+        "131. ANTI-CHEAT"
+      ],
+      "bodySha256": "b0fe14ad510882b03d3573f09de2bf18f4caefd6a2ff7ebab2ce1e6ef4a294bc"
+    },
+    {
+      "file": "14-economy-and-events.md",
+      "covers": "Virtual economy, no pay to win, challenges, private leagues, seasons, hall of fame",
+      "sections": [
+        "132. VIRTUAL ECONOMY",
+        "133. NO PAY-TO-WIN CORE LEADERBOARD",
+        "134. SOCIAL CHALLENGES",
+        "135. PRIVATE LEAGUES",
+        "136. SEASONAL PLATFORM",
+        "137. DOUKNOWBALL HALL OF FAME",
+        "138. DAILY SOCIAL EVENT",
+        "139. MIXED SPORTS MODES"
+      ],
+      "bodySha256": "378a5ffdce5098ea455284fa4d687e7c70a728fefe459e93d2e9cc6b756c1250"
+    },
+    {
+      "file": "15-new-game-ideas.md",
+      "covers": "The twelve new game ideas, Deadline Day through Career Rescue",
+      "sections": [
+        "140. NEW GAME IDEA — DEADLINE DAY",
+        "141. NEW GAME IDEA — TRADE MACHINE",
+        "142. NEW GAME IDEA — DRAFT STEAL",
+        "143. NEW GAME IDEA — MANAGER HOT SEAT",
+        "144. NEW GAME IDEA — CONTRACT CHAOS",
+        "145. NEW GAME IDEA — SCOUT COMBINE",
+        "146. NEW GAME IDEA — FRANCHISE RESCUE",
+        "147. NEW GAME IDEA — DYNASTY KILLER",
+        "148. NEW GAME IDEA — SPORTS COURT",
+        "149. NEW GAME IDEA — OWNER MODE",
+        "150. NEW GAME IDEA — SPORTS MEDIA",
+        "151. NEW GAME IDEA — CAREER RESCUE"
+      ],
+      "bodySha256": "17e0265c778fb43e62ceff02565794dcb21151c2c8acadd201158cfc64c0c5e1"
+    },
+    {
+      "file": "16-discovery-and-data-operations.md",
+      "covers": "Discovery, personalization, refresh pipeline, databases, scheduling, releases",
+      "sections": [
+        "152. GAME DISCOVERY / RECOMMENDATION ENGINE",
+        "153. HOMEPAGE PERSONALIZATION",
+        "154. DATA REFRESH PIPELINE",
+        "155. HISTORICAL FOOTBALL DATABASE",
+        "156. CURRENT SPORTS DATABASE",
+        "157. SCHEDULING",
+        "158. OBSERVABILITY",
+        "159. RELEASE PROCESS"
+      ],
+      "bodySha256": "37699e77d734fb55592aed561f41a6bec69881339db2270c029417cbd4abb9f9"
+    },
+    {
+      "file": "17-roadmap-and-quality-bar.md",
+      "covers": "Priority matrix, the 90 day, 6 month and 12 month targets, quality bar, philosophy",
+      "sections": [
+        "160. PRODUCT PRIORITY MATRIX",
+        "161. 90-DAY BUILD TARGET",
+        "162. 6-MONTH TARGET",
+        "163. 12-MONTH TARGET",
+        "164. \"GREATEST WEBSITE EVER\" QUALITY BAR",
+        "165. DEFINITION OF DONE — GAME",
+        "166. DEFINITION OF DONE — SIMULATION",
+        "167. DEFINITION OF DONE — INTERACTIVE GAME",
+        "168. REGRESSION TEST LIST",
+        "169. PRODUCT PHILOSOPHY",
+        "170. COMPETITOR INSPIRATION RULE",
+        "171. EXTERNAL-FACT VERIFICATION RULE",
+        "172. GOOGLE / ADS / SEARCH RULE OF THUMB",
+        "173. THE META-GAME",
+        "174. THE \"SPORTS LIFE\" LOOP",
+        "175. THE BIGGEST PRODUCT OPPORTUNITY",
+        "176. GAME PORTFOLIO STRATEGY",
+        "177. FINAL VISION",
+        "178. FINAL INSTRUCTION TO CLAUDE CODE"
+      ],
+      "bodySha256": "3df5ce365e914384a897a6cf55410004a11045cfa2e53df819fc7f28c726d42b"
+    },
+    {
+      "file": "18-appendices-a-to-c.md",
+      "covers": "Appendix A priority phrases, B master checklist, C sources",
+      "sections": [
+        "APPENDIX A — OWNER'S PRIORITY PHRASES TRANSLATED INTO ENGINEERING REQUIREMENTS",
+        "APPENDIX B — MASTER CHECKLIST",
+        "APPENDIX C — SOURCES / CURRENT-FACT REFERENCES",
+        "END OF MASTER SPECIFICATION"
+      ],
+      "bodySha256": "5aa559bb0a9be5c3f49fa5b85132dff0ee19cbbef98393e6ae8a10ef3de0c8cf"
+    },
+    {
+      "file": "19-blueprint-architecture.md",
+      "covers": "Appendix D opens: domain model, database, API, flags, registry, puzzles, UI state",
+      "sections": [
+        "APPENDIX D — IMPLEMENTATION BLUEPRINT",
+        "D1. DOMAIN MODEL OVERVIEW",
+        "D2. DATABASE DESIGN PRINCIPLES",
+        "D3. EXAMPLE USER TABLE",
+        "D4. EXAMPLE GAME RESULT TABLE",
+        "D5. LEADERBOARD ARCHITECTURE",
+        "D6. SCORE NORMALIZATION",
+        "D7. XP VS SCORE",
+        "D8. API LAYER",
+        "D9. SERVER AUTHORITATIVE GAME FLOW",
+        "D10. FEATURE FLAGS",
+        "D11. GAME REGISTRY",
+        "D12. GAME VERSIONING",
+        "D13. DAILY PUZZLE GENERATION",
+        "D14. PUZZLE GENERATION TESTS",
+        "D15. GAME UI STATE MACHINE",
+        "D16. GLOBAL LOADING EXPERIENCE",
+        "D17. GLOBAL ERROR EXPERIENCE",
+        "D18. SPORTS DATA IMPORT PIPELINE",
+        "D19. DATA DIFF VIEW",
+        "D20. HISTORICAL SNAPSHOT RULE"
+      ],
+      "bodySha256": "21d7c6cf1dc5f1ebb5eb779dea3ccf5a717089878d43ee9e4260802499d9652b"
+    },
+    {
+      "file": "20-blueprint-simulation-and-club-manager.md",
+      "covers": "World and match simulation, animation, Club Manager internals, media, ticker truth",
+      "sections": [
+        "D21. WORLD SIMULATION",
+        "D22. SIMULATION DETERMINISM",
+        "D23. MATCH SIMULATION MODEL",
+        "D24. EVENT PROBABILITY MODEL",
+        "D25. MATCH PRESENTATION ENGINE",
+        "D26. MATCH EVENT TYPES",
+        "D27. SOCCER MATCH ANIMATION V1",
+        "D28. SOCCER MATCH ANIMATION V2",
+        "D29. SOCCER MATCH ANIMATION V3",
+        "D30. CLUB MANAGER HOME SCREEN",
+        "D31. CLUB MANAGER INBOX",
+        "D32. CLUB MANAGER MESSAGE CONSEQUENCES",
+        "D33. CLUB MANAGER NEGOTIATION TIMER",
+        "D34. CLUB MANAGER TRANSFER AI",
+        "D35. CLUB MANAGER PLAYER VALUE MODEL",
+        "D36. PLAYER CONTRACT SYSTEM",
+        "D37. PLAYER MORALE SYSTEM",
+        "D38. FAN MODEL",
+        "D39. BOARD MODEL",
+        "D40. SACKING SYSTEM",
+        "D41. MEDIA SYSTEM",
+        "D42. POLL SYSTEM",
+        "D43. TICKER SOURCE OF TRUTH",
+        "D44. LIVE TICKER FAILURE MODES"
+      ],
+      "bodySha256": "be3feb00d68e79f2bbd4de58cfe18b704c94cd9a0173b950f4e601be18b593e0"
+    },
+    {
+      "file": "21-blueprint-seo-and-frontend.md",
+      "covers": "Hubs, SEO templates, structured data, budgets, moderation, friends, saves, design",
+      "sections": [
+        "D45. SPORTS HUBS",
+        "D46. GAME PAGE SEO TEMPLATE",
+        "D47. STRUCTURED DATA",
+        "D48. INTERNAL LINKING",
+        "D49. PERFORMANCE BUDGET",
+        "D50. GAME ENGINE CODE SPLIT",
+        "D51. ACCESSIBILITY ACCEPTANCE",
+        "D52. MODERATION SYSTEM",
+        "D53. RESERVED NAMES",
+        "D54. FRIEND SYSTEM",
+        "D55. BLOCKING",
+        "D56. NOTIFICATION SYSTEM",
+        "D57. SAVE UI",
+        "D58. SAVE RECOVERY",
+        "D59. GAME ROUTING",
+        "D60. ANALYTICS DASHBOARD",
+        "D61. FLAGSHIP GAME KPIs",
+        "D62. GAME EXPERIMENTATION",
+        "D63. DESIGN SYSTEM",
+        "D64. SPORTS VISUAL LANGUAGE",
+        "D65. ICONOGRAPHY",
+        "D66. TABLE DESIGN",
+        "D67. MATCH CENTER MOBILE",
+        "D68. CLUB MANAGER MOBILE"
+      ],
+      "bodySha256": "f04f6f5f084d8baf1bf170c0e9901a6900a8712be1f190aea4e694e4ffc863e4"
+    },
+    {
+      "file": "22-blueprint-components-and-data.md",
+      "covers": "Shared components, eligibility, roster policy, competition tests, era selector, markets",
+      "sections": [
+        "D69. PLAYER PROFILE COMPONENT",
+        "D70. TEAM PROFILE COMPONENT",
+        "D71. FLAG COMPONENT",
+        "D72. PLAYER POSITION COMPATIBILITY",
+        "D73. PLAYER ELIGIBILITY",
+        "D74. CURRENT-ERA ROSTER POLICY",
+        "D75. SPORTS DATA FALLBACKS",
+        "D76. COMPETITION RULE TEST SUITE",
+        "D77. FOOTBALL COMPETITION EXAMPLES",
+        "D78. FOOTBALL SUPER-LEAGUE / CUSTOM LEAGUE",
+        "D79. ERA SELECTOR",
+        "D80. CLUB MANAGER ACADEMY LOOP",
+        "D81. YOUTH GENERATION",
+        "D82. STAFF MARKET",
+        "D83. MANAGER MARKET"
+      ],
+      "bodySha256": "c0f41aba91903b552b491b6e6718dee3878a726687287700ebaaa6ecaeb003c7"
+    },
+    {
+      "file": "23-blueprint-careers.md",
+      "covers": "Retirement, life events, fame, brand, legacy, college depth, the five career loops",
+      "sections": [
+        "D84. CAREER RETIREMENT",
+        "D85. SOCCER CAREER LIFE EVENTS",
+        "D86. LIFE-CHOICE SAFETY",
+        "D87. CAREER FAME",
+        "D88. CAREER SOCIAL MEDIA",
+        "D89. CAREER BRAND",
+        "D90. PLAYER CAREER LEGACY",
+        "D91. COLLEGE DYNASTY ATMOSPHERE",
+        "D92. COLLEGE RECRUITING",
+        "D93. CFB CUSTOM SCHEDULE",
+        "D94. COLLEGE TV RIGHTS",
+        "D95. ACADEMIC SYSTEM",
+        "D96. NBA CAREER INTERACTIVE LOOP",
+        "D97. NFL CAREER INTERACTIVE LOOP",
+        "D98. MLB CAREER INTERACTIVE LOOP",
+        "D99. NHL CAREER INTERACTIVE LOOP",
+        "D100. WNBA CAREER"
+      ],
+      "bodySha256": "96204a17fa7e422cd4fda539195122346924270a84d1fb30642f64bd9e5d913d"
+    },
+    {
+      "file": "24-blueprint-cards-conquest-and-multiplayer.md",
+      "covers": "Draft UI, cards and packs, bingo server, conquest, multiplayer, party, tower defense, empire",
+      "sections": [
+        "D101. UNIVERSAL DRAFT ENGINE UI",
+        "D102. CARD ENGINE",
+        "D103. PACK ENGINE",
+        "D104. PACK ANIMATION",
+        "D105. SPORTS BINGO SERVER LOGIC",
+        "D106. CONQUEST DATA MODEL",
+        "D107. CONQUEST MAP UI",
+        "D108. CONQUEST MAP HISTORY",
+        "D109. CONQUEST MULTIPLAYER",
+        "D110. PRIVATE ROOM ARCHITECTURE",
+        "D111. MULTIPLAYER ANTI-CHEAT",
+        "D112. CHAT SAFETY",
+        "D113. SPORTS PARTY ARCHITECTURE",
+        "D114. TOWER DEFENSE ARCHITECTURE",
+        "D115. TOWER DEFENSE GAME LOOP",
+        "D116. SPORTS EMPIRE ARCHITECTURE",
+        "D117. SPORTS EMPIRE ECONOMY"
+      ],
+      "bodySha256": "d25d7e607404746d82b243c1da67fd4b959ad48faa0406ad8096f48c645bc8a1"
+    },
+    {
+      "file": "25-blueprint-profile-social-and-safety.md",
+      "covers": "Customization, cosmetics, sharing, invites, search, notifications, legal and brand safety",
+      "sections": [
+        "D118. USER CUSTOMIZATION",
+        "D119. ANIMATED PROFILE",
+        "D120. PROFILE COSMETICS",
+        "D121. SHARING",
+        "D122. INVITE FLOW",
+        "D123. FRIEND LEADERBOARD",
+        "D124. PLATFORM SEARCH",
+        "D125. SPORT SEARCH",
+        "D126. NOTIFICATION PREFERENCES",
+        "D127. LEGAL/SAFETY CHECKPOINTS",
+        "D128. RIGHTS-AWARE ASSET PIPELINE",
+        "D129. BRAND SAFETY",
+        "D130. SAFER REAL-PERSON GAME DESIGN"
+      ],
+      "bodySha256": "fb5508ca153c71742b3600a040ac8747c515496580e3e317611adbe19c5ee33c"
+    },
+    {
+      "file": "26-blueprint-quality-and-qa.md",
+      "covers": "Design scorecard, feature review, bug priority, the seven QA matrices, release notes, owner dashboards",
+      "sections": [
+        "D131. GAME DESIGN SCORECARD",
+        "D132. FEATURE REVIEW",
+        "D133. BUG PRIORITY",
+        "D134. QA TEST MATRIX FOR GAMES",
+        "D135. QA TEST MATRIX FOR SIMULATIONS",
+        "D136. QA TEST MATRIX FOR HISTORICAL MODES",
+        "D137. QA TEST MATRIX FOR LEADERBOARDS",
+        "D138. QA TEST MATRIX FOR TICKER",
+        "D139. QA TEST MATRIX FOR ADS",
+        "D140. QA TEST MATRIX FOR SEO",
+        "D141. RELEASE NOTES",
+        "D142. OWNER ADMIN DASHBOARD — DAILY VIEW",
+        "D143. OWNER DASHBOARD — GAME VIEW",
+        "D144. OWNER DASHBOARD — DATA VIEW",
+        "D145. OWNER DASHBOARD — MONETIZATION VIEW"
+      ],
+      "bodySha256": "bad667a07fd7dc625b8c03c2bd643f570f1d015f8df980f0bf539ce2be5b27f9"
+    },
+    {
+      "file": "27-blueprint-rules-and-milestones.md",
+      "covers": "The eleven product development rules and the six implementation milestones",
+      "sections": [
+        "D146. PRODUCT DEVELOPMENT RULE",
+        "D147. PRODUCT DEVELOPMENT RULE — NO FAKE DEPTH",
+        "D148. PRODUCT DEVELOPMENT RULE — EXPLAIN CONSEQUENCES",
+        "D149. PRODUCT DEVELOPMENT RULE — PLAYER AGENCY",
+        "D150. PRODUCT DEVELOPMENT RULE — FAIL FOR A REASON",
+        "D151. PRODUCT DEVELOPMENT RULE — DIFFICULTY",
+        "D152. PRODUCT DEVELOPMENT RULE — NEVER PUNISH REFRESH",
+        "D153. PRODUCT DEVELOPMENT RULE — SERVER TIME",
+        "D154. PRODUCT DEVELOPMENT RULE — MOBILE FIRST FOR GAMES",
+        "D155. PRODUCT DEVELOPMENT RULE — ACCESSIBILITY FIRST",
+        "D156. PRODUCT DEVELOPMENT RULE — TEST THE HAPPY PATH AND THE WEIRD PATH",
+        "D157. FIRST IMPLEMENTATION MILESTONE",
+        "D158. SECOND IMPLEMENTATION MILESTONE",
+        "D159. THIRD IMPLEMENTATION MILESTONE",
+        "D160. FOURTH IMPLEMENTATION MILESTONE",
+        "D161. FIFTH IMPLEMENTATION MILESTONE",
+        "D162. SIXTH IMPLEMENTATION MILESTONE",
+        "D163. FINAL PRODUCT QUALITY GATE"
+      ],
+      "bodySha256": "62cdf5a7aa518c6a7799630a3102251f5d5673cd7984bdcee94e88f904804fdc"
+    },
+    {
+      "file": "28-appendices-e-to-q.md",
+      "covers": "Appendix E through Q: roadmap, Stat Line spec, positions, standards, operating rules, do not ship, success",
+      "sections": [
+        "APPENDIX E — GAME-BY-GAME ROADMAP",
+        "APPENDIX F — NBA STAT LINE DETAILED SPEC",
+        "APPENDIX G — UNIVERSAL POSITION COMPATIBILITY MATRIX",
+        "APPENDIX H — PLAYER SEARCH/SELECTION RULE",
+        "APPENDIX I — GAME RESULT SCREEN STANDARD",
+        "APPENDIX J — SOCIAL RESULT COPY",
+        "APPENDIX K — IMPLEMENTATION ORDER BY REUSABILITY",
+        "APPENDIX L — CLAUDE CODE OPERATING INSTRUCTIONS",
+        "APPENDIX M — AI CODING AGENT RULES",
+        "APPENDIX N — \"DO NOT SHIP\" LIST",
+        "APPENDIX O — SUCCESS DEFINITION",
+        "APPENDIX P — OWNER'S FEATURE TRANSLATION MATRIX",
+        "APPENDIX Q — FINAL BUILD COMMANDMENT"
+      ],
+      "bodySha256": "56a82d52f24cd4f6577791ce2bc8d300a9c260385082e700b093900a66b958b5"
+    }
+  ]
+}

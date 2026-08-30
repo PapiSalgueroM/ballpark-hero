@@ -1,7 +1,8 @@
 # Master Build Spec Reconciliation
 
-Generated 2026-08-29 by eight parallel reading agents over all 7690 lines of
-docs/MASTER-BUILD-SPEC-2026-08.md, checked against the round history in
+Generated 2026-08-29 by eight parallel reading agents over all 7690 lines of the
+Master Build Specification (split into docs/spec/ in Round 357, section numbers
+unchanged, index at docs/spec/README.md), checked against the round history in
 docs/WORKBOARD.md and docs/PROJECT-STATE.md (rounds 311 to 336 landed the week
 this spec arrived). Read this BEFORE claiming spec work: done means shipped and
 fenced, partial names the shipped half, new is genuinely unbuilt, constrained

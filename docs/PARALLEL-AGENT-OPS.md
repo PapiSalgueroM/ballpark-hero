@@ -1,7 +1,7 @@
 # DoUKnowBall Parallel Claude Code Operating Instructions
 
 Received from Anthony 2026-08-29, verbatim below the line, as the operating companion
-to docs/MASTER-BUILD-SPEC-2026-08.md.
+to the Master Build Specification (docs/spec/, index at docs/spec/README.md).
 
 **How this maps onto the running system (read this first).** Most of these rules were
 already live before the document arrived, under different names, and the mapping

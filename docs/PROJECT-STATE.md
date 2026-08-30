@@ -2597,6 +2597,42 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 357.** The spec split, item 1 off the handoff list and the
+  thing the owner's operating contract names by hand. The Master Build Spec was
+  7,691 lines in one file, which meant every session that wanted one section
+  loaded all 361, and the contract asked for per-part files with an index. It is
+  now `docs/spec/`: 29 parts, verbatim, the index at `docs/spec/README.md` with a
+  one-row-per-section lookup table so a reader goes straight to the file holding
+  what they want. Section numbers did not move, so every reference written before
+  today still resolves and `docs/SPEC-RECONCILIATION.md` still lines up row for
+  row.
+  THE PART WORTH KEEPING, because it is what makes a split safe: a split document
+  has a failure mode a single file does not have. A part can be edited, truncated,
+  duplicated or quietly dropped and every other part still reads perfectly. Nothing
+  about the directory looks wrong afterwards. So the split ships with
+  `scripts/simSpecSplit.mjs`, which strips the generated headers, concatenates the
+  bodies in manifest order, and requires the SHA-256 to equal the hash of the
+  document as adopted in Round 337 (c45d7aec). It also derives every section
+  heading FROM THE FILES and compares against the manifest, so moving a section
+  and editing the manifest to match cannot pass. Two controls, both proven red:
+  `SPEC_SPLIT_CONTROL=drop` deletes a real section in memory and fires five
+  separate assertions, `SPEC_SPLIT_CONTROL=unlisted` hides a part and fires four
+  including the orphan-file check. Each control asserts the thing it edits was
+  really there first and exits 2 rather than reporting success if it was not,
+  which is the Round 335 lesson about probes that plant a violation nothing
+  catches.
+  The old single-file path is now a signpost pointing at `docs/spec/`, deliberately
+  not a second copy: two copies of a 7,691 line document drift, and then nobody
+  knows which one is the spec. CLAUDE.md's docs map, the operating contract, the
+  reconciliation, the parallel-agent ops doc and the owner directives all point at
+  the new location. tsc zero, build green.
+  ONE THING THE ROUND TRIPPED OVER AND IS WORTH THE NEXT PERSON'S TIME: the
+  generator read the working-tree spec, and once the signpost had replaced it a
+  regeneration would have split the signpost. It refused instead, because it
+  compares its own reconstitution against the source before writing anything. The
+  fix was to read the pre-split blob out of git rather than the working tree. A
+  generator that verifies before it writes turned a silent 29-file corruption into
+  one line of output.
 - **2026-08-30, publishing and a handoff, no round number.** Anthony reported
   that the tablet lane looked like it had stopped working. It had not: rounds
   336, 352 and 356 were all on main. What was missing is that landing on main

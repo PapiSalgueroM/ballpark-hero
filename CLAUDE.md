@@ -608,7 +608,7 @@ current:**
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
 | `docs/WORKBOARD.md` | **LIVE.** The two-lane task board: claims before building, round numbers reserved here. |
 | `docs/OPERATING-CONTRACT-2026-08.md` | **LIVE.** The owner's 2026-08-29 operating contract: GSC ground truth, Milestone 0 (own the grid category), AdSense deferred, the narrowed freeze. On WHAT to build and in what order it beats every older note including directive 3's blanket route freeze. |
-| `docs/MASTER-BUILD-SPEC-2026-08.md` | **LIVE.** The owner's product north star (2026-08-29). Read with the reconciliation beside it. |
+| `docs/spec/` | **LIVE.** The owner's product north star (2026-08-29), split into 29 parts in Round 357. Start at `docs/spec/README.md` and load only the part you need; read with the reconciliation beside it. The old single-file path is a signpost now. |
 | `docs/SPEC-RECONCILIATION.md` | **LIVE.** Every spec section mapped to shipped rounds. Read BEFORE claiming spec work. |
 | `docs/PARALLEL-AGENT-OPS.md` | **LIVE.** The multi-agent operating rules, the lane ownership split, and the one deviation from them. |
 | `docs/OWNER-DIRECTIVES-2026-08.md` | **LIVE.** The owner overrides: free forever, the AdSense review freeze, the approval list. |

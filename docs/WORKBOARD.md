@@ -63,10 +63,7 @@ needs a real pool.
 
 ### What to take, in this order, all of it database free
 
-1. **SPEC SPLIT INTO /docs/spec/.** The owner's operating contract asks for the
-   master spec split into per-part files with an index at docs/spec/README.md,
-   so sessions load only the section they need. Pure docs, mechanical, no data.
-   Do this first because it is small and the contract names it.
+1. ~~SPEC SPLIT INTO /docs/spec/.~~ DONE, Round 357, see the Done list.
 2. **SOCCER CONQUEST, world map round.** Your own recon (on this board) proved
    it is self contained in bundled code: FALLBACK_CLUBS in soccerCareerEngine.ts
    carries 190 clubs with country, tier and colour, STRENGTH_PRIORS in
@@ -87,7 +84,9 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ### PENDING PUBLISH
 
-(empty as of 2026-08-30, everything through ccc4c583 is live)
+(empty as of 2026-08-30, everything through ccc4c583 is live. Round 357 is docs
+and scripts only and changes nothing a visitor sees, so it does not need a
+publish and is not listed here.)
 
 ## Inbox (unclaimed)
 
@@ -375,6 +374,29 @@ Standing claims:
 
 ## Done
 
+- THE SPEC SPLIT, Round 357 (cloud lane, 2026-08-30). Item 1 off the handoff
+  list, and the thing the operating contract names by hand. The Master Build
+  Spec is now docs/spec/: 29 parts, verbatim, 361 sections, the index at
+  docs/spec/README.md with a lookup row per section so a reader goes straight
+  to the file holding what they want instead of loading 7,691 lines to read
+  one. Section numbers did not move, so every reference written before today
+  still resolves and SPEC-RECONCILIATION still lines up row for row.
+  The point of the round is the fence, not the cutting. A split document has a
+  failure mode a single file does not: a part can be edited, truncated,
+  duplicated or dropped and every other part still reads perfectly, with
+  nothing about the directory looking wrong. simSpecSplit strips the generated
+  headers, concatenates the bodies in manifest order and requires the SHA-256
+  to equal the hash of the document as adopted in Round 337, and it derives the
+  section headings FROM THE FILES rather than trusting the manifest, so moving
+  a section and editing the manifest to match cannot pass. SPEC_SPLIT_CONTROL
+  =drop fires five assertions, =unlisted fires four, and each control checks
+  that the thing it edits was really there before editing it, exiting 2 rather
+  than reporting success if it was not.
+  The old single file path is a signpost now, deliberately not a second copy,
+  because two copies of a 7,691 line document drift and then nobody knows which
+  one is the spec. CLAUDE.md, the operating contract, the reconciliation, the
+  parallel-agent ops doc and the owner directives all point at the new place.
+  NEEDS PUBLISHING: no, docs and scripts only, nothing a visitor sees changes.
 - THE RUNNER LEARNS WHAT IT CANNOT REACH, Round 356 (cloud lane, 2026-08-29).
   The four database-backed fences no longer read as four broken harnesses in
   the lane that physically cannot reach the database. runAllSims probes the
