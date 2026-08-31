@@ -76,7 +76,23 @@ async function rest(pathAndQuery) {
 
 /* The keys the CLIENT can send, read from source rather than from a list kept
    here, so a game added tomorrow is covered by this check the day it ships. */
-const KEY_PATTERN = /useGameCompletion\('([a-z0-9-]+)'|recordCompletion\('\/([a-z0-9-]+)'/g;
+/* ROUND 361 WIDENED THIS, AFTER IT MISSED A GAME AND THE MISS COST REAL POINTS.
+   The first version matched useGameCompletion('literal' and
+   recordCompletion('/literal' only. Five pages pass a `const SLUG` instead of an
+   inline literal, three perfect lineup variants pass `config.gameId`, two calls
+   are split across lines, and WorldCupPredictor uses double quotes. Every one of
+   those was invisible. It did not matter while those games had recorded scores,
+   because the caps table's other half is derived from the data, but nba-stat-line
+   shipped in Round 352 with no scores yet, so it fell through BOTH halves: not a
+   literal in source, and no rows in the table. When someone finally played it,
+   their points silently counted for nothing. Section 4 is what caught it, by
+   reading the completions table rather than the source, which is exactly why a
+   check should never draw both its sides from the same place. */
+const LITERAL = /useGameCompletion\(\s*['"]([a-z0-9-]+)['"]|recordCompletion\(\s*['"]\/([a-z0-9-]+)['"]/g;
+const VIA_IDENT = /useGameCompletion\(\s*([A-Za-z_$][\w$]*)\s*[,)]/g;
+const CONSTANT = /(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::\s*[^=]+)?=\s*['"]([a-z0-9-]+)['"]/g;
+const GAME_ID = /gameId:\s*['"]([a-z0-9-]+)['"]/g;
+
 function sourceKeys() {
   const found = new Set();
   const walk = dir => {
@@ -85,7 +101,17 @@ function sourceKeys() {
       if (e.isDirectory()) walk(p);
       else if (/\.tsx?$/.test(e.name)) {
         const src = fs.readFileSync(p, 'utf8');
-        for (const m of src.matchAll(KEY_PATTERN)) found.add(m[1] || m[2]);
+        for (const m of src.matchAll(LITERAL)) found.add(m[1] || m[2]);
+        for (const m of src.matchAll(GAME_ID)) found.add(m[1]);
+        /* Resolve an identifier argument against the string constants declared
+           in the same file. Deliberately file local: following an import would
+           mean building a module graph, and every case in this repo is local. */
+        const consts = new Map();
+        for (const m of src.matchAll(CONSTANT)) consts.set(m[1], m[2]);
+        for (const m of src.matchAll(VIA_IDENT)) {
+          const v = consts.get(m[1]);
+          if (v) found.add(v);
+        }
       }
     }
   };

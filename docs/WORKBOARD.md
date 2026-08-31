@@ -125,22 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 361 (desktop, 2026-08-30): THE REST OF THE PUBLIC WRITE
-  SURFACE. Round 360 fixed the World Leaderboard's habit of treating forgeable
-  numbers as authoritative, and its own document names three things it left
-  open. Nineteen public tables accept anonymous INSERT with WITH CHECK (true):
-  game_completions, overrated_votes, poll_votes, tier_list_votes, hof_votes,
-  transfer_grade_votes, the three grid_selections tables, rarity_round_guesses,
-  question_reports, cbb_scores, cbb_daily, nascar_scores, nascar_daily,
-  nascar_chain_scores, tennis_chain_scores, ufc_chain_scores,
-  medal_games_scores. Openness is not the defect, it is the guest first design.
-  The defect is anywhere the SITE THEN SHOWS that data back as a fact: a rarity
-  percentage, a vote share, a ranking. Two tables (guess_nation_scores,
-  tennis_scores) already carry real bounds, so the asymmetry is the tell that
-  this was started and not finished. The round audits every one for whether its
-  data is displayed as authoritative, then bounds the ones that are, and leaves
-  genuinely harmless logging alone.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -414,6 +398,56 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE REST OF THE PUBLIC WRITE SURFACE, AND A WRONG NUMBER ON THE HOME PAGE,
+  Round 361 (desktop lane, 2026-08-30). Nineteen anon writable tables audited by
+  six parallel agents, every finding then put to an adversarial verifier told to
+  refute it. The verifier moved three attack cost estimates by an order of
+  magnitude and killed one proposed fence outright (it would have inflated
+  scores worse than the deflation it prevented), so its corrections are taken
+  throughout. Twelve tables feed something a human reads, seven feed nothing and
+  are listed as needing nothing so nobody audits them again.
+  EIGHT TABLES BOUNDED with CHECKs derived from each game's own source, never
+  from what the data happens to hold: the three chain leaderboards (one forged
+  row took rank 1 on a board shown to every finisher, and two of the three
+  tables are empty so it would have been the whole visible history), the three
+  grid rarity tables (about twenty rows own any cell, because the aggregation
+  groups by cell and table size never enters it), hof_votes and poll_votes.
+  Pre flight: zero existing rows violate any predicate.
+  THE WRITE REMOVED RATHER THAN BOUNDED: cbb_daily and nascar_daily hold the
+  ANSWER to the daily puzzle, not a score, and both accepted anonymous inserts
+  while carrying UNIQUE(puzzle_date), so the first row for a date owned that
+  date permanently and the edge function that should fix it returns early when a
+  row exists. Nothing in the browser ever wrote them. Both policies dropped.
+  THE BUG WITH NO ATTACKER IN IT, and it was live on the home page: useMostPlayed
+  tallied the day's completions in the browser on the assumption in its own
+  comment that a day stays small. PostgREST truncates at 1,000 and the day had
+  grown to 3,550, so it ranked an arbitrary slice of the early hours, found only
+  two games clearing the five play bar, and silently served the curated fallback
+  trio. It computed club-manager 990, budget-builder 7, ball-iq 1 where the real
+  top three were club-manager 2638, soccer-career 547, nba-my-career 132. Now a
+  database aggregate that cannot be truncated and joins Round 360's allowlist so
+  an invented key cannot trend. THIRD INSTANCE OF THE POSTGREST 1,000 ROW CAP IN
+  THREE ROUNDS, after fetchAllRows in 359 and this round's own harness draft.
+  THE SYSTEMIC FINDING: live had drifted looser than the committed migrations on
+  five tables, always in the permissive direction. question_reports committed a
+  bounded insert and live had WITH CHECK (true); cbb_scores and
+  medal_games_scores are committed admin read and live was public. Restored, and
+  verified afterwards that a normal bug report is still accepted, which mattered
+  because the report forms swallow their errors so a rejected report would look
+  exactly like a sent one. One missing bound is a bug, five in the same
+  direction is a process with no feedback.
+  simPublicWrites probes behaviour with the anon key and demands a check
+  violation SPECIFICALLY (23514), because a 42501 would mean RLS refused it and
+  prove nothing about a constraint; section 3 proves it can tell the two apart.
+  Every probe is designed to be refused, so a green run writes nothing.
+  PUBWRITES_CONTROL=unbounded points at cbb_scores, which is deliberately left
+  open, and must go red there. Both probe rows it wrote were deleted and the
+  tables verified back at their original counts.
+  get_advisors after both migrations: zero ERROR, and the Round 360 view error
+  is gone. Filed not fixed: nothing schedules either daily edge function, so
+  Daily mode on those two games has run off the client fallback since it
+  shipped.
 
 - THE WORLD LEADERBOARD STOPS TRUSTING NUMBERS A STRANGER CAN WRITE,
   Round 360 (desktop lane, 2026-08-30). global_leaderboard() and global_rank()

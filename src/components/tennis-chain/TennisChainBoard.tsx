@@ -218,7 +218,7 @@ export function TennisChainBoard() {
 
               {leaderboard.length > 0 && (
                 <div className="mb-6 text-left">
-                  <h3 className="text-lg font-bold text-emerald-400 mb-3 text-center">🏆 Today's Top 10</h3>
+                  <h3 className="text-lg font-bold text-emerald-400 mb-3 text-center">🏆 All Time Top 10</h3>
                   <div className="bg-gray-800 rounded-lg overflow-hidden">
                     <div className="grid grid-cols-[40px_1fr_80px_80px] gap-1 p-2 text-xs text-gray-400 font-semibold border-b border-gray-700">
                       <div>#</div><div>Nickname</div><div className="text-right">Chain</div><div className="text-right">Score</div>

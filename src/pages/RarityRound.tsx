@@ -177,9 +177,26 @@ const RarityRound = () => {
             .limit(400)
             .then(({ data }: { data: { answer: string }[] | null }) => {
               if (!data || data.length === 0) return;
+              /* ROUND 361: only count answers that are really in this
+                 category's pool. rarity_round_guesses takes anonymous inserts
+                 and answer is free text, and this panel is headed "What
+                 everyone else picked", so before this every string in the table
+                 was rendered on a public page as a fact about other players.
+                 The leading answer in each category holds between 3 and 14
+                 picks, so a handful of rows could install anything as the
+                 crowd's number one. The pool here is the same verified list the
+                 guess itself is matched against a few lines up, so a real pick
+                 can never be dropped: the insert writes match.name, which came
+                 out of this pool. Counting by pool key also folds case and
+                 spelling variants of the same player together, which the raw
+                 string tally did not. Worst case is an empty panel, which the
+                 render already guards, and an empty panel beats a false one. */
+              const nameByKey = new Map(pool.map(p => [p.key, p.name]));
               const counts = new Map<string, number>();
               for (const row of data) {
-                counts.set(row.answer, (counts.get(row.answer) ?? 0) + 1);
+                const canonical = nameByKey.get(normalizeName(row.answer ?? ''));
+                if (!canonical) continue;
+                counts.set(canonical, (counts.get(canonical) ?? 0) + 1);
               }
               const top = [...counts.entries()]
                 .sort((a, b) => b[1] - a[1])

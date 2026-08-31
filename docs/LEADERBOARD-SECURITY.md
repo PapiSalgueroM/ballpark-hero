@@ -204,3 +204,34 @@ Items 1 to 3 under "What this does NOT fix" are all still true and still need
 their own rounds. And the two one-click items for Anthony are still outstanding:
 **leaked password protection is still off** (the 2026-08-30 advisor run confirms
 it), and the spend cap wants confirming.
+
+
+---
+
+# Round 361 revisited these open items
+
+**Item 1, the INSERT policy, is sharper than it was written.** What Round 360
+left is not just "unknown keys can be written". It is that `completed_on` is
+client supplied and bounded only above, so the backdating window is unbounded:
+roughly **69 anonymous inserts** across distinct (allowlisted game, past day)
+pairs puts a stranger at the top of the board, measured against the current
+number one's 6,877 points from 103 scored rows. Because `least(score, cap)`
+clamps, a forger never has to learn any cap value; any absurd score pays exactly
+100. Still not fixable in RLS or a CHECK: the legitimate score range runs to
+56,000,000, so no single numeric bound is both safe for real play and useful.
+This stays with the edge function or WAF item.
+
+**Item 3 was too broad and is now narrowed to what still exists.** Of the crowd
+vote tables named there, `overrated_votes` and `tier_list_votes` belong to games
+that were deleted and are read by nothing anywhere, and `transfer_grade_votes`
+sits behind a redirect and is empty. Only `hof_votes` and `poll_votes` were ever
+reachable, and both are bounded as of Round 361. Add `rarity_round_guesses` to
+the same family: it was never in this list, its `answer` column is free text,
+and the panel headed "What everyone else picked" rendered whatever was stored.
+Fixed client side rather than with a constraint, because the pool is generated
+and a database allowlist over generated data is the stale allowlist failure this
+repo has already paid for twice.
+
+**Both one click items are still outstanding**, and the 2026-08-30 advisor run
+confirms the first: leaked password protection is off, and the spend cap wants
+confirming.

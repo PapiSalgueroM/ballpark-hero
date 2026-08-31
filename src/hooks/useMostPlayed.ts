@@ -32,10 +32,11 @@ function buildFallback(): MostPlayedEntry[] {
  * Wave 3 / item #11: "Most Played Today" wired to public.game_completions.
  *
  * Queries today's rows (UTC, matching the table's `completed_on` default),
- * groups by game client-side (the table is expected to be small enough per
- * day that this is cheap; a server-side count(*)... group by would need a
- * view or RPC, which is out of scope for this pass), and returns the top 3
- * games with at least MIN_COMPLETIONS_TO_QUALIFY completions.
+ * asks the database for the top 3 games of the day with at least
+ * MIN_COMPLETIONS_TO_QUALIFY completions, via the most_played_today function.
+ * It used to select the day's rows and group them here, which was correct only
+ * while a day stayed under PostgREST's 1,000 row cap. It stopped being correct
+ * and said nothing. See the note at the call site.
  *
  * Falls back to a curated flagship trio whenever fewer than 3 games clear
  * the threshold, so the section never renders empty or looks broken.
@@ -49,32 +50,35 @@ export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean 
 
     const load = async () => {
       try {
-        const today = new Date().toISOString().slice(0, 10);
-
-        // game_completions isn't in the generated Supabase types (added via
-        // direct SQL), so it's addressed dynamically like the insert side in
-        // src/lib/completions.ts.
-        const { data, error } = await (supabase.from as any)('game_completions')
-          .select('game')
-          .eq('completed_on', today);
+        /* ROUND 361: COUNTED IN THE DATABASE, BECAUSE COUNTING IT HERE WAS
+           SILENTLY WRONG. This used to select the day's rows and tally them in
+           the browser, on the assumption written into the comment above that a
+           day's table was small. PostgREST truncates every select at 1,000 rows
+           (the same cap src/lib/fetchAllRows.ts exists for), and the day had
+           grown to 3,550, so the tally ranked an arbitrary slice of the early
+           hours: it saw club-manager 990, budget-builder 7 and ball-iq 1, where
+           the day's real top three were club-manager 2638, soccer-career 547
+           and nba-my-career 132. Only two games cleared the five play bar in
+           that slice, which is fewer than TOP_N, so the section quietly served
+           the curated fallback and looked completely normal while doing it.
+           An aggregate returns three rows instead of thousands, so it cannot be
+           truncated and it stops shipping a day of completions to a phone in
+           order to count them. The function joins game_score_caps, which is
+           Round 360's allowlist, so an invented game key cannot trend either. */
+        const { data, error } = await (supabase.rpc as any)('most_played_today', {
+          p_min: MIN_COMPLETIONS_TO_QUALIFY,
+          p_limit: TOP_N,
+        });
 
         if (error || !data) {
           if (!cancelled) setEntries(buildFallback());
           return;
         }
 
-        const counts = new Map<string, number>();
-        for (const row of data as { game: string }[]) {
-          counts.set(row.game, (counts.get(row.game) || 0) + 1);
-        }
-
-        const ranked = [...counts.entries()]
-          .filter(([, count]) => count >= MIN_COMPLETIONS_TO_QUALIFY)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, TOP_N)
-          .map(([slug, count]) => {
-            const game = gameByPath(`/${slug}`);
-            return game ? { game, count, isFallback: false } : null;
+        const ranked = (data as { game: string; plays: number }[])
+          .map(row => {
+            const game = gameByPath(`/${row.game}`);
+            return game ? { game, count: Number(row.plays), isFallback: false } : null;
           })
           .filter((e): e is MostPlayedEntry => !!e);
 
