@@ -57,7 +57,11 @@
     "date": "2026-08-25"
   },
   "/cbb-grid": {
-    "hash": "b90312e46b8acffe",
+    "hash": "2ce197d0f277fdb1",
+    "date": "2026-08-31"
+  },
+  "/cbb-grid/archive": {
+    "hash": "3c32cd45c414a783",
     "date": "2026-08-31"
   },
   "/cfb-dynasty": {
@@ -153,8 +157,8 @@
     "date": "2026-08-25"
   },
   "/front-office": {
-    "hash": "186dda3a0fd5b796",
-    "date": "2026-08-29"
+    "hash": "98e4e3dd55e31032",
+    "date": "2026-08-31"
   },
   "/gauntlet-draft": {
     "hash": "ad159e8ef12b404d",
@@ -213,8 +217,8 @@
     "date": "2026-08-31"
   },
   "/hockey-grid/archive": {
-    "hash": "3430882fa5062596",
-    "date": "2026-08-30"
+    "hash": "8ae0158b247520a3",
+    "date": "2026-08-31"
   },
   "/hockey-higher-lower": {
     "hash": "5ba1beb78c557623",
@@ -269,8 +273,8 @@
     "date": "2026-08-31"
   },
   "/mlb-grid/archive": {
-    "hash": "bbbd50ce8bce9e31",
-    "date": "2026-08-30"
+    "hash": "2a7e5a47e0013484",
+    "date": "2026-08-31"
   },
   "/mlb-higher-lower": {
     "hash": "8e5155d096219fc6",
@@ -313,8 +317,8 @@
     "date": "2026-08-30"
   },
   "/nba-grid/archive": {
-    "hash": "df954d21bf7905b9",
-    "date": "2026-08-30"
+    "hash": "5f2fbb8730da9fa5",
+    "date": "2026-08-31"
   },
   "/nba-higher-lower": {
     "hash": "631aee302cbeab9d",
@@ -353,7 +357,7 @@
     "date": "2026-08-29"
   },
   "/nhl-connect-4": {
-    "hash": "c6ad8431e32d5ab1",
+    "hash": "72eb4bfbc713d344",
     "date": "2026-08-31"
   },
   "/nhl-connections": {
@@ -513,8 +517,8 @@
     "date": "2026-08-29"
   },
   "/ufc": {
-    "hash": "bcefffecfeafe9f4",
-    "date": "2026-08-25"
+    "hash": "c8a7b276cb07b3d7",
+    "date": "2026-08-31"
   },
   "/ufc-chain": {
     "hash": "2b39bdb5eb5abd86",

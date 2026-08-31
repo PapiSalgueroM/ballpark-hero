@@ -439,6 +439,7 @@ const AppContent = () => {
         <Route path="/nba-grid/archive" element={<GridArchive sport="nba" />} />
         <Route path="/mlb-grid/archive" element={<GridArchive sport="mlb" />} />
         <Route path="/hockey-grid/archive" element={<GridArchive sport="nhl" />} />
+        <Route path="/cbb-grid/archive" element={<GridArchive sport="cbb" />} />
         <Route path="/mlb-grid" element={<MlbGrid />} />
         <Route path="/nba-connections" element={<NbaConnections />} />
         <Route path="/nfl-connections" element={<NflConnections />} />

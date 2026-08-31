@@ -55,6 +55,7 @@ const STATIC_TYPES: Record<string, string> = {
   '/nba-grid/archive': 'CollectionPage',
   '/mlb-grid/archive': 'CollectionPage',
   '/hockey-grid/archive': 'CollectionPage',
+  '/cbb-grid/archive': 'CollectionPage',
 };
 
 /** The one place that decides. Exported so the guard can check it directly. */

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>College Basketball Grid Answers: Past Daily Boards</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"CollectionPage","name":"College Basketball Grid Answers: Past Daily Boards | DoUKnowBall","description":"Past College Basketball grid boards with every valid answer counted. See which players satisfy each school and career achievement, then play today's grid.","url":"https://douknowball.com/cbb-grid/archive","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Consent-gated AdSense loader: only load the ad script if the visitor
+      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
+      // New visitors (no choice yet) do not get the script until they accept;
+      // the banner reloads ads on acceptance via the page lifecycle.
+      //
+      // Round 285: Google Analytics rides on the same gate. The measurement
+      // id and the injection are duplicated in src/lib/consentedScripts.ts,
+      // which is what the banner calls the moment somebody accepts; this copy
+      // covers every later page load. simAdsense holds the two ids together
+      // and refuses a gtag script tag that is not behind this check, so the
+      // tag can never be loaded for a visitor who has not accepted.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            // Round 304: non personalized ads only. Google is told before its
+            // script loads, the privacy pages say the same thing, and
+            // simLegalPages holds the flag and the wording together.
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.requestNonPersonalizedAds = 1;
+            var s = document.createElement('script');
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
+            document.head.appendChild(s);
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: default to no ads script */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (Anthony filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/cbb-grid/archive" data-rh="true"><meta name="description" content="Past College Basketball grid boards with every valid answer counted. See which players satisfy each school and career achievement, then play today's grid." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/cbb-grid/archive" data-rh="true"><meta property="og:title" content="College Basketball Grid Answers: Past Daily Boards | DoUKnowBall" data-rh="true"><meta property="og:description" content="Past College Basketball grid boards with every valid answer counted. See which players satisfy each school and career achievement, then play today's grid." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="College Basketball Grid Answers: Past Daily Boards | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Past College Basketball grid boards with every valid answer counted. See which players satisfy each school and career achievement, then play today's grid." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>COLLEGE BASKETBALL GRID ARCHIVE</h1>
+<p>Past daily boards from 2026-08-17 to 2026-08-30, with the players who solve them</p>
+<p>The College Basketball grid builds a fresh board from each day's date, so no two days share a puzzle. These are the last 14 of them. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
+<p>The counts and names come from the same player data the game checks your guesses against, so anything listed here would be accepted in the game. Today's board is not here, because people are still playing it. <a href="/cbb-grid">Play today's College Basketball grid</a>.</p>
+<h2>College Basketball grid for 2026-08-30</h2>
+<p>Rows: Rutgers, Georgia Tech, Rice. Columns: 120+ Games Played, Played in the 1990s, Started 2010 or Later.</p>
+<p>Crossing</p>
+<p>Valid players</p>
+<p>Rarest answers</p>
+<p>Rutgers and 120+ Games Played</p>
+<p>52</p>
+<p>Earl Johnson, Craig Carter, Jaron Griffin, Derrick Randall, Todd Billet, Ricky Shields, Ron Harper Jr., Junior Etou</p>
+<p>Rutgers and Played in the 1990s</p>
+<p>45</p>
+<p>Waliyy Dixon, Terry Mills, Billy Gilligan, Andre Lamoureux, Eriq Mason, Sheon Givens, Johnny McCrimmon, Alvin Rich</p>
+<p>Rutgers and Started 2010 or Later</p>
+<p>75</p>
+<p>Dylan Harper, Kaden Powers, Airious Bailey, Angelino Mark, Harun Zrno, Vincent Garrett, Antonio Chol, D'Von Campbell</p>
+<p>Georgia Tech and 120+ Games Played</p>
+<p>48</p>
+<p>Matt Geiger, Brandon Alston, Jason Floyd, Luke O'Brien, Tony Akins, B.J. Elder, Zach Peacock, Tyzhaun Claude</p>
+<p>Georgia Tech and Played in the 1990s</p>
+<p>38</p>
+<p>Dion Glover, Stephon Marbury, Ajani Williams, Maurice Brittian, Shaun Fein, Yann Barbic, Fred Vinson, Michael Christian</p>
+<p>Georgia Tech and Started 2010 or Later</p>
+<p>72</p>
+<p>Mouhamed Sylla, Akai Fleming, Darrion Sutton, Tristan Maxwell, Jaeden Mustaf, Josh Okogie, Travis Jorgenson, Ryan Mutombo</p>
+<p>Rice and 120+ Games Played</p>
+<p>44</p>
+<p>Brock Gillespie, Lawrence Ghoram, Patrick Britton, Jeremy Jones, Mike Harris, Morris Almond, Marcus Jackson, Trey Stanton</p>
+<p>Rice and Played in the 1990s</p>
+<p>Jay Christian, Charlese Maag, Nick Robison, Sam Campbell, Derek Michaelis, Scott Oliver, Jesse Cravens, George Mboya</p>
+<p>Rice and Started 2010 or Later</p>
+<p>82</p>
+<p>Najja Hunter, Cam Carroll, Eternity Eguagie, Ahmad Ibrahim, Nick Anderson, A.J. Lapray, Noah Shelby, Keith Washington</p>
+<h2>College Basketball grid for 2026-08-29</h2>
+<p>Rows: Virginia Tech, Texas A&amp;M, Washington. Columns: Played Forward, 1,500+ Career Points, 120+ Games Played.</p>
+<p>Virginia Tech and Played Forward</p>
+<p>67</p>
+<p>Keith Colbert, Bobby Beecher, Joe Hamilton, Dirk Williams, Phil Williams, Shawn Browne, Dennis Mims, Shane Henry</p>
+<p>Virginia Tech and 1,500+ Career Points</p>
+<p>21</p>
+<p>Wally Lancaster, Bryant Matthews, Adam Smith, Bimbo Coles, Zabian Dowdell, Rolan Roberts, Ace Custis, Landers Nolley II</p>
+<p>Virginia Tech and 120+ Games Played</p>
+<p>49</p>
+<p>Ginika Ojiako, Manny Atkins, Zabian Dowdell, Rolan Roberts, Ace Custis, Seth Allen, Jarell Eddie, Ben Emelogu</p>
+<p>Texas A&amp;M and Played Forward</p>
+<p>66</p>
+<p>Tyrone Harbin, Gary Nottingham, Rashone Lewis, John Trezvant, Shedrick Anderson, Doug Dennis, Lance Broderson, Carlton Brown</p>
+<p>Texas A&amp;M and 1,500+ Career Points</p>
+<p>17</p>
+<p>Bernard King, Danuel House, Acie Law IV, Brooks Thompson, Jalen Jones, Zhuric Phelps, Joseph Jones, Rashaun Agee</p>
+<p>Texas A&amp;M and 120+ Games Played</p>
+<p>54</p>
+<p>Jaxson Robinson, Jace Carter, Andre Gordon, Acie Law IV, Solomon Washington, Solomon Washington, Brooks Thompson, Josh Nebo</p>
+<p>Washington and Played Forward</p>
+<p>64</p>
+<p>Amir Rashad, Paul Fortier, Hannes Steinbach, Shag Williams, Jaden McDaniels, Isaiah Stewart, Marquese Chriss, Bryson Tucker</p>
+<p>Washington and 1,500+ Career Points</p>
+<p>Jeff Brown, Nigel Williams-Goss, Isaiah Thomas, Roberto Bergersen, Todd MacCulloch, Adrian Oliver, Eldridge Recasner, Terrell Brown Jr.</p>
+<p>Washington and 120+ Games Played</p>
+<p>47</p>
+<p>Terrell Brown Jr., Rich Manning, Will Conroy, Luis Kortright, Perris Blackwell, Mike Jensen, Mike Jensen, Desmond Simmons</p>
+<h2>College Basketball grid for 2026-08-28</h2>
+<p>Rows: Missouri, Saint Louis, Georgetown. Columns: Started 2010 or Later, Played in the 1990s, Played Guard.</p>
+<p>Missouri and Started 2010 or Later</p>
+<p>88</p>
+<p>Jontay Porter, Christian Guess, Torren Jones, T.O. Barrett, D'Angelo Allen, K.J. Santos, Mario McKinney Jr., Montaque Gill-Caesar</p>
+<p>Missouri and Played in the 1990s</p>
+<p>Mike Wawrzyniak, Paul O'Liney, Pat Schumacher, Troy Hudson, Keyon Dooling, Sammie Haley, Simeon Haley, John Woods</p>
+<p>Missouri and Played Guard</p>
+<p>104</p>
+<p>Jeff Strong, Ricky Clemons, Christian Guess, Mike Wawrzyniak, Randy Pulley, James Douglas, Stefhon Hannah, Stefhon Hannah</p>
+<p>Saint Louis and Started 2010 or Later</p>
+<p>70</p>
+<p>Carte'Are Gordon, Elliott Welmer, Ishan Sharma, Amari McCottry, Jermaine Bishop, Brady Dunlap, Austin Gillmann, Zeke Moore</p>
+<p>Saint Louis and Played in the 1990s</p>
+<p>46</p>
+<p>McGlother Irvin, Larry Hughes, Rasheed Malik, Carlos Skinner, Jeramy Biles, Orlando Stewart, Kevin Footes, Justin Love</p>
+<p>Saint Louis and Played Guard</p>
+<p>87</p>
+<p>McGlother Irvin, Kevin Williams, Daryl Lenard, Larry Hughes, Jeramy Biles, Vincent Smith, Randy Pulley, Orlando Stewart</p>
+<p>Georgetown and Started 2010 or Later</p>
+<p>Thomas Sorber, Aminu Mohammed, Julius Halaifonua, Isaiah Abraham, Galen Alexander, Kobe Clark, Greg Whittington, D'Ante Bass</p>
+<p>Georgetown and Played in the 1990s</p>
+<p>50</p>
+<p>Kenny Brunner, Ed Sheffey, Lee Scruggs, Eric Micoud, Trez Kilpatrick, Brian Kelly, Allen Iverson, Victor Page</p>
+<p>Georgetown and Played Guard</p>
+<p>91</p>
+<p>Kenny Brunner, Ed Sheffey, Horace Broadnax, Aminu Mohammed, David Wingate Jr, Michael Jackson, Drew McKenna, Kayvaun Mulready</p>
+<h2>College Basketball grid for 2026-08-27</h2>
+<p>Rows: VCU, George Mason, Connecticut. Columns: Played Guard, 350+ Career Assists, 700+ Career Rebounds.</p>
+<p>VCU and Played Guard</p>
+<p>Nicky Jones, Alvin Hicks, Nyk Lewis, Ahmad Nowell, Orlando Stewart, Jay Gavin, Don Franco, Nah'Shon Hyland</p>
+<p>VCU and 350+ Career Assists</p>
+<p>15</p>
+<p>Sherman Hamilton, Lamar Taylor, Kenny Harris, Teddy Okereafor, Marcus Evans, Briante Weber, Phillip Russell, Eric Maynor</p>
+<p>VCU and 700+ Career Rebounds</p>
+<p>11</p>
+<p>Larry Sanders, Kendrick Warren, Nick George, Korey Billbury, Brendan Medley-Bacon, Justin Tillman, Treveon Graham, Juvonte Reddic</p>
+<p>George Mason and Played Guard</p>
+<p>95</p>
+<p>Jason Williams, Rob Rose, Ricky Wilson, Bryson Cokley, Derek Shackelford, James Thompson, Lee Brown, Paul Arthur</p>
+<p>George Mason and 350+ Career Assists</p>
+<p>14</p>
+<p>Curtis McCants, Jay Threatt, Jay Threatt, Terry Reynolds, Troy Manns, Marquise Moore, Tyler Kolek, Bryon Allen</p>
+<p>George Mason and 700+ Career Rebounds</p>
+<p>13</p>
+<p>Kenny Sanders, Jesse Young, George Evans, Keyshawn Hall, Robert Dykes, Jai Lewis, Jalen Jenkins, Ryan Pearson</p>
+<p>Connecticut and Played Guard</p>
+<p>Earl Kelley, Braylon Mullins, Stephon Castle, Beau Archibald, James Bouknight, Ahmad Nowell, Greg Economou, Alec Millender</p>
+<p>Connecticut and 350+ Career Assists</p>
+<p>20</p>
+<p>Marcus Williams, A.J. Price, Doron Sheffer, Ben Gordon, Khalid El-Amin, Silas Demary Jr., Kemba Walker, R.J. Cole</p>
+<p>Connecticut and 700+ Career Rebounds</p>
+<p>19</p>
+<p>Hasheem Thabeet, Emeka Okafor, Josh Boone, Tyrese Martin, Scott Burrell, Shonn Miller, Travis Knight, Travis Knight</p>
+<h2>College Basketball grid for 2026-08-26</h2>
+<p>Rows: Rice, Xavier, Oregon. Columns: 1,500+ Career Points, 120+ Games Played, 700+ Career Rebounds.</p>
+<p>Rice and 1,500+ Career Points</p>
+<p>Jason McKrieth, Brent Scott, Torrey Andrews, Mike Harris, Morris Almond, Marcus Evans, Trae Broadnax, Egor Koulechov</p>
+<p>Rice and 700+ Career Rebounds</p>
+<p>Jody Lumpkin, Brent Scott, Kenneth Rourke, Mike Harris, Egor Koulechov, Jack Williams, Arsalan Kazemi, Quincy Olivari</p>
+<p>Xavier and 1,500+ Career Points</p>
+<p>24</p>
+<p>Byron Larkin, Stan Kimbrough, Brian Grant, Darnell Williams, Lenny Brown, Jamie Gladden, Lionel Chalmers Jr, Gary Lumpkin</p>
+<p>Xavier and 120+ Games Played</p>
+<p>Jamal Walker, Rashid Gaston, Andre Walker, Isaiah Philmore, Lenny Brown, Jamie Gladden, Travis Taylor, Dedrick Finn</p>
+<p>Xavier and 700+ Career Rebounds</p>
+<p>James Posey, Derek Strong, C.J. Anderson, Brian Grant, Aaron Williams, Rashid Gaston, Travis Taylor, David West</p>
+<p>Oregon and 1,500+ Career Points</p>
+<p>22</p>
+<p>Anthony Taylor, Dillon Brooks, Orlando Williams, Aaron Brooks, Malik Hairston, Fred Jones, Luke Jackson, Tajuan Porter</p>
+<p>Oregon and 120+ Games Played</p>
+<p>Chamberlain Oguchi, Lok Wur, Eugene Omoruyi, De'Vion Harmon, Amauri Hardy, Fred Jones, Jalen Terry, Abu Kigab</p>
+<p>Oregon and 700+ Career Rebounds</p>
+<p>16</p>
+<p>N'Faly Dante, Jordan Bell, Richard Lucas, Mike Moser, Kyle Milling, Luke Jackson, Maarty Leunen, Arsalan Kazemi</p>
+<h2>College Basketball grid for 2026-08-25</h2>
+<p>Rows: Utah, Marshall, Ohio. Columns: 1,500+ Career Points, Played Forward, Played Guard.</p>
+<p>Utah and 1,500+ Career Points</p>
+<p>Marshall Henderson, Terrence Brown, Don McHenry, Keith Van Horn, Mitch Smith, Luke Nevill, Nick Jacobson, Ezra Ausar</p>
+<p>Utah and Played Forward</p>
+<p>Jerry Stroman, Dilon Farr, Antoine Davison, Kendyl Sanders, Ma Jian, Mikael Jantunen, Gavin Baxter, Watkins Singletary</p>
+<p>Utah and Played Guard</p>
+<p>103</p>
+<p>Kelvin Upshaw, Elijah Moore, Manuel Hendrix, Vante Hendrix, Trent Whiting, Kevin Bradley, Mark Lenoir, Chris Kupets</p>
+<p>Marshall and 1,500+ Career Points</p>
+<p>Skip Henderson, John Brannen, John Taft, Keith Veney, J.R. VanHoose, Tamar Slay, Andrew Taylor, Damier Pitts</p>
+<p>Marshall and Played Forward</p>
+<p>Jeff Guthrie, Thad Bonapart, Maurice Sanders, Eric Smith, Dwayne Lewis, Keith Archie, Jay Johnson, Antonio Haymon</p>
+<p>Marshall and Played Guard</p>
+<p>Matt Walls, Kyle Taylor, Norman Ray, Gery Strickland, Noah Otshudi, Landen Joseph, Caleb Hollenbeck, Frank Lee</p>
+<p>Ohio and 1,500+ Career Points</p>
+<p>Gary Trent, Ladrell Whitehead, Paul Graham, Dave Jamerson, Ryan Taylor, Brandon Hunter, Jerome Tillman, Geno Ford</p>
+<p>Ohio and Played Forward</p>
+<p>62</p>
+<p>Paul Baron, Lorenzo Bryant, Marvin Price, Paul Morris, Delvar Barrett, Damion Washington, Johnnie Jackson, Nate Springs</p>
+<p>Ohio and Played Guard</p>
+<p>76</p>
+<p>Robert Tatum, JJ Kelly, Antonio Cowart Jr., Bert Whittington, Tommy Schmock, Anthony Jones, Steven Coleman, Elijah Elliott</p>
+<h2>College Basketball grid for 2026-08-24</h2>
+<p>Rows: Michigan, Memphis, Hofstra. Columns: Played Guard, 700+ Career Rebounds, 1,500+ Career Points.</p>
+<p>Michigan and Played Guard</p>
+<p>81</p>
+<p>Jamal Crawford, Jett Howard, Caleb Houstan, Brandun Hughes, Trey McKenney, Phat Phat Brooks, Kevin Gaines, Kevin Gaines</p>
+<p>Michigan and 700+ Career Rebounds</p>
+<p>Chris Webber III, Danny Wolf, Robert Traylor, Juwan Howard, Yaxel Lendeborg, LaVell Blanchard, Maceo Baston, DeShawn Sims</p>
+<p>Michigan and 1,500+ Career Points</p>
+<p>Manny Harris, Gary Grant, Juwan Howard, Jalen Rose, Tim Hardaway Jr., Daniel Horton, Yaxel Lendeborg, DeVante Jones</p>
+<p>Memphis and Played Guard</p>
+<p>93</p>
+<p>Jimmie Hunter, Raquan Mitchell, Josh Minott, Dajuan Wagner, Tyreke Evans, Derrick Rose, Hasan Abdul-Hakim, Julius Thedford</p>
+<p>Memphis and 700+ Career Rebounds</p>
+<p>10</p>
+<p>David Vaughn III, Dedric Lawson, Kelly Wise, Earl Timberlake, Shaq Goodwin, Jordan Brown, Robert Dozier, D.J. Jeffries</p>
+<p>Memphis and 1,500+ Career Points</p>
+<p>David Jones, Dedric Lawson, PJ Haggerty, Chris Douglas-Roberts, Ricky Tarrant, Cedric Henderson, Jeremiah Martin, Scooter McFadgon</p>
+<p>Hofstra and Played Guard</p>
+<p>90</p>
+<p>Brad Kelleher, _ Eldredge, Tony Dennison, Dallas Anglin, Preston Edmead, Shaquille Stokes, Taran Buie, Dwan McMillan</p>
+<p>Hofstra and 700+ Career Rebounds</p>
+<p>Jimmy Hall, Kenny Adeleke, Stephen Nwaukoni, Rokas Gustys, Abayomi Iyiola, Roberto Gittens, Isaac Kante, Halil Kanacevic</p>
+<p>Hofstra and 1,500+ Career Points</p>
+<p>18</p>
+<p>Jimmy Hall, Kenny Adeleke, Speedy Claxton, Norm Richardson, Mike Moore, Antoine Agudio, Loren Stokes, Justin Wright-Foreman</p>
+<h2>College Basketball grid for 2026-08-23</h2>
+<p>Rows: Michigan, Florida, Delaware. Columns: Started 2010 or Later, Played Forward, 700+ Career Rebounds.</p>
+<p>Michigan and Started 2010 or Later</p>
+<p>Jett Howard, Moussa Diabate, Caleb Houstan, Ignas Brazdeikis, Ignas Brazdeikis, Trey McKenney, Phat Phat Brooks, Mitch McGary</p>
+<p>Michigan and Played Forward</p>
+<p>68</p>
+<p>Moussa Diabate, Roy Tarpley Jr, Richard Rellford, Butch Wade, Robert Henderson, Ignas Brazdeikis, Ignas Brazdeikis, Mitch McGary</p>
+<p>Florida and Started 2010 or Later</p>
+<p>Bradley Beal, Bradley Beal, Kajus Kublickas, Chris Walker, Scottie Lewis, Isaiah Brown, Alex Kovatchev, Tre Mann</p>
+<p>Florida and Played Forward</p>
+<p>Melven Jones, Adam Allen, Cesar Portillo, Chris Walker, Allan Chaney, Alex Fudge, Mike Miller, Joe Lawrence</p>
+<p>Florida and 700+ Career Rebounds</p>
+<p>Alex Condon, Keyontae Johnson, Al Horford, Dwayne Schintzius, Rueben Chinyelu, Micah Handlogten, Dwayne Davis, David Lee</p>
+<p>Delaware and Started 2010 or Later</p>
+<p>56</p>
+<p>Christian Bliss, Alex Kazanecki, Erik Timko, Izaiah Pasha, Jameel Brown, Chivarsky Corbett, Davon Usher, Macon Emory</p>
+<p>Delaware and Played Forward</p>
+<p>John Weber, Oscar Jones, Darryl Presley, Chivarsky Corbett, Barry Berger, Macon Emory, Chris Prothro, Harding Nana</p>
+<p>Delaware and 700+ Career Rebounds</p>
+<p>Harding Nana, Greg Smith, Spencer Dunkley, Alex Coles, Eric Carter, Mike Pegues, Jamelle Hagins, Jyare Davis</p>
+<h2>College Basketball grid for 2026-08-22</h2>
+<p>Rows: New Mexico State, Rider, Gonzaga. Columns: Played Forward, Started 2010 or Later, 120+ Games Played.</p>
+<p>New Mexico State and Played Forward</p>
+<p>79</p>
+<p>Gilbert Wilburn, Pierre Smith, Crafton Ferguson, Curtis Terrell, Daniel Hicks, Malcolm Leak, Robert Frazier, Yaak Yaak</p>
+<p>New Mexico State and Started 2010 or Later</p>
+<p>94</p>
+<p>Deshawndre Washington, Chris Terrell, Gabe Hadley, Yaak Yaak, Christian Kabongo, Mohamed Thiam, Levar Williams, Shakiru Odunewu</p>
+<p>New Mexico State and 120+ Games Played</p>
+<p>35</p>
+<p>Billy Keys, Ian Baker, Tyrone Watson, C.J. Bobbitt, Mikko Noopila, Johnny Roberson, Virshon Cotton, Dionte Bostick</p>
+<p>Rider and Played Forward</p>
+<p>Davis Bynum, Shemani Fuller, Marshall Grier, Daniel Helterhoff, Ife West-Ingram, Derrick Perry, Chris Mikola, Malachi De Sousa</p>
+<p>Rider and Started 2010 or Later</p>
+<p>Caleb Smith, Davis Bynum, Shemani Fuller, Nurideen Lindsey, Devean Williams, Jaelen McGlone, Jeremiah Pope, Rodney Henderson Jr.</p>
+<p>Rider and 120+ Games Played</p>
+<p>Stevie Jordan, Harris Mansell, Jeff Jones, Khalil Alford, Jason Thompson, Tyere Marshall, Devine Eke, Tariq Ingraham</p>
+<p>Gonzaga and Played Forward</p>
+<p>Bol Kong, Zach Collins, David Cole, Kendall Simmons, Doug Griffin, Mathis Monninghoff, Mike Champion, Todd Franklin</p>
+<p>Gonzaga and Started 2010 or Later</p>
+<p>Jalen Suggs, Davis Fogle, Chet Holmgren, Mario Saint-Supery, Zach Collins, Mathis Monninghoff, Guy Edi, Filip Petrusev</p>
+<p>Gonzaga and 120+ Games Played</p>
+<p>55</p>
+<p>Jeremy Jones, Kyle Bankhead, Geno Crandall, Ryan Woolridge, Manny Arop, Grant Gibbs, Pierre-Marie Altidor Cespedes, Steven Gray</p>
+<h2>College Basketball grid for 2026-08-21</h2>
+<p>Rows: SMU, Tulsa, Alabama. Columns: Played Guard, 1,500+ Career Points, Played Forward.</p>
+<p>SMU and Played Guard</p>
+<p>83</p>
+<p>Chris Boyd, Butch Moore, Johnny Fuller, Brian Epps, Brian Miller, Renaldo Bratton, Scott Johnson, David Shivers</p>
+<p>SMU and 1,500+ Career Points</p>
+<p>Bryan Hopkins, Mike Wilson, Jeryl Sasser Jr, Quinton Ross, Jalen Jones, Zhuric Phelps, Kevin Miller, Nic Moore</p>
+<p>SMU and Played Forward</p>
+<p>59</p>
+<p>Brian Morris, Kevin Lewis, Jermaine O'Neal Jr., Jermyn Bracey, Alex Malone, Chris Jessen, Mohammed Tijjani, Allen Krist</p>
+<p>Tulsa and Played Guard</p>
+<p>92</p>
+<p>Kenneth Kelley, Ade Popoola, Jaylen Lawal, Donte Medder, Kajon Brown, Jaye Nash, Bennie Gibbs, Mark Giorgi</p>
+<p>Tulsa and 1,500+ Career Points</p>
+<p>Tracy Moore, PJ Haggerty, Gary Collier, Justin Hurtt, Shea Seals, James Woodard, Kevin Johnson, Jerome Jordan</p>
+<p>Tulsa and Played Forward</p>
+<p>Dominick Byrd, Rasheed Malik, Tyler Behrend, Don Royster, Guilherme Teichmann, Darold Crow, Jodie Huffman, Brian Rahilly</p>
+<p>Alabama and Played Guard</p>
+<p>Schea Cotton, Joshua Primo, Collin Sexton, JD Davison, Davin Cosby Jr., Rongie Cowser, Marco Whitfield, Chris Rollins</p>
+<p>Alabama and 1,500+ Career Points</p>
+<p>23</p>
+<p>James Robinson, Eric Washington, Jamal Faulkner, Ricky Tarrant, Brian Williams, JaMychal Green, Melvin Cheatum, Michael Ansley</p>
+<p>Alabama and Played Forward</p>
+<p>78</p>
+<p>Buck Johnson Jr, Amari Allen, Keitenn Bristow, London Jemison, Noah Clowney, Gerald Wallace, Brandon Miller, Jason Carter</p>
+<h2>College Basketball grid for 2026-08-20</h2>
+<p>Rows: Minnesota, Virginia, Oklahoma State. Columns: Started 2010 or Later, 1,500+ Career Points, Played Forward.</p>
+<p>Minnesota and Started 2010 or Later</p>
+<p>Kevin Dorsey, Chansey Willis Jr., Cam Christie, Nehemiah Turner, Sean Sutherlin, Carlos Morris, Ahmad Gilbert, Isaac Asuma</p>
+<p>Minnesota and 1,500+ Career Points</p>
+<p>Willie Burton, Cade Tyson, Nate Mason, Voshon Lenard, Quincy Lewis, Sam Jacobson, Dawson Garcia, Jordan Murphy</p>
+<p>Minnesota and Played Forward</p>
+<p>Mitchell Lee, Kevin Smith, Kris Humphries, Royce White, Nehemiah Turner, Terence Woods, Steve Esselink, J'son Stamper</p>
+<p>Virginia and Started 2010 or Later</p>
+<p>Thijs De Ridder, Chance Mallory, Johann Grünloh, Thomas Woldetensae, Anthony Robinson, Carson McCorkle, Austin Nichols, Jacob Cofie</p>
+<p>Virginia and 1,500+ Career Points</p>
+<p>Mike Powell, Billy Baron, Courtney Alexander, Chris Williams, Travis Watson, J.R. Reynolds, Todd Billet, Harold Deane</p>
+<p>Virginia and Played Forward</p>
+<p>65</p>
+<p>Thijs De Ridder, Curtis Williams, Anthony Robinson, Darryl Presley, Stephane Dondon, Andrew Kennedy, Austin Nichols, Jacob Cofie</p>
+<p>Oklahoma State and Started 2010 or Later</p>
+<p>Darrell Williams, Cade Cunningham, Zack Dawson, Davon Dillard, Andrija Vukovic, Stevie Clark, Jean-Paul Olukemi, Joe Burton</p>
+<p>Oklahoma State and 1,500+ Career Points</p>
+<p>Randy Rutherford, James Anderson, Adrian Peterson, Brooks Thompson, Victor Williams, John Lucas III, Le'Bryan Nash, Byron Houston</p>
+<p>Oklahoma State and Played Forward</p>
+<p>77</p>
+<p>Muhammad Akbar, Thomas Jordan, Darrell Williams, Terry Faggins, Ray Alford, Andre Ivy, Andrija Vukovic, Torre Johnson</p>
+<h2>College Basketball grid for 2026-08-19</h2>
+<p>Rows: Indiana, Miami (FL), Washington. Columns: 350+ Career Assists, Played Forward, 1,500+ Career Points.</p>
+<p>Indiana and 350+ Career Assists</p>
+<p>Tom Coverdale, Verdell Jones III, Conor Enright, Michael Lewis, A.J. Guyton, Chris Reynolds, Jamal Meeks, Damon Bailey</p>
+<p>Indiana and Played Forward</p>
+<p>Lou Moore, Winston Morgan, Noah Vonleh, Daryl Pegram, Bryson Tucker, OG Anunoby, Mark Robinson, Mike White</p>
+<p>Indiana and 1,500+ Career Points</p>
+<p>Andre Owens, Luke Recker, Rick Calloway, Marco Killingsworth, Alan Henderson, Brian Evans, Trayce Jackson-Davis, Robert Vaden</p>
+<p>Miami (FL) and 350+ Career Assists</p>
+<p>Thomas Hocker, Armondo Surratt, Vernon Jennings, Kevin Norris, Kevin Presto, John Salmons, Earl Timberlake, Denis Clemente</p>
+<p>Miami (FL) and Played Forward</p>
+<p>Timotej Malovec, Shelton Henderson, Isaiah Johnson-Arigu, Kevin Houston, Doug Elliott, Ivan Cruz Uceda, Justin Caldwell, Danilo Jovanovich</p>
+<p>Miami (FL) and 1,500+ Career Points</p>
+<p>Tim James, Darius Rice, Matthew Cleveland, Dennis Burns, Marcus Barnes, Eric Brown, Robert Hite II, Jack McClinton</p>
+<p>Washington and 350+ Career Assists</p>
+<p>Jason Hamilton, Dan Dickau, Nigel Williams-Goss, Isaiah Thomas, Eldridge Recasner, Abdul Gaddy, Terrell Brown Jr., Will Conroy</p>
+<h2>College Basketball grid for 2026-08-18</h2>
+<p>Rows: Virginia Tech, Providence, Notre Dame. Columns: Played Forward, 350+ Career Assists, Started 2010 or Later.</p>
+<p>Virginia Tech and 350+ Career Assists</p>
+<p>Jay Purcell, Troy Manns, Bimbo Coles, Jamon Gordon, Wabissa Bede, Zabian Dowdell, Justin Robinson, Devin Wilson</p>
+<p>Virginia Tech and Started 2010 or Later</p>
+<p>74</p>
+<p>Neoklis Avdalas, Christian Gurdak, Malik Muller, Tyler Johnson, Rodney Rice, Izaiah Pasha, Marquis Rankin, Johnny Hamilton</p>
+<p>Providence and Played Forward</p>
+<p>David Murray, Jamier Jones, Al Roth, DeSean White, Cal Foster, Leon Brisport, Eli DeLaurier, Greg Bent</p>
+<p>Providence and 350+ Career Assists</p>
+<p>Abdul Abdullah, Billy Donovan, God Shammgod, Kris Dunn, Carlton Screen, Eric Murdock, Vincent Council, Donnie McGrath</p>
+<p>Providence and Started 2010 or Later</p>
+<p>71</p>
+<p>Stefan Vaaks, Jamier Jones, Daquan Davis, Eli DeLaurier, Anton Bonke, Rich Barron, Ryan Mela, Oswin Erhunmwunse</p>
+<p>Notre Dame and Played Forward</p>
+<p>Gary Bell, Tim Kempton, Jim Dolan, Brady Koehler, Cam Biedscheid, Dom Campbell, Eric Katenda, Garrett Sundra</p>
+<p>Notre Dame and 350+ Career Assists</p>
+<p>David Rivers, Admore White, Admore White, Kyle McAlarney, Matt Farrell, Tim Singleton, Jerian Grant, Jimmy Dillon</p>
+<p>Notre Dame and Started 2010 or Later</p>
+<p>Jalen Haralson, Brady Koehler, Blake Wesley, Cam Biedscheid, Dom Campbell, Eric Katenda, Cole Certa, Garrett Sundra</p>
+<h2>College Basketball grid for 2026-08-17</h2>
+<p>Rows: Washington, Utah State, Wake Forest. Columns: 700+ Career Rebounds, Played in the 1990s, Started 2010 or Later.</p>
+<p>Washington and 700+ Career Rebounds</p>
+<p>12</p>
+<p>Aziz N'Diaye, Aziz N'Diaye, Todd MacCulloch, Perris Blackwell, Mark Pope, Jon Brockman, Noah Dickerson, Great Osobor</p>
+<p>Washington and Played in the 1990s</p>
+<p>Amir Rashad, Prentiss Perkins, Michael McClain, Jason Tyrus, Chandler Nairn, David Hawken, Brent Merritt, Brett Pagett</p>
+<p>Washington and Started 2010 or Later</p>
+<p>84</p>
+<p>Markelle Fultz, Hannes Steinbach, Jaden McDaniels, Isaiah Stewart, Dejounte Murray, Dejounte Murray, Marquese Chriss, Tony Wroten</p>
+<p>Utah State and 700+ Career Rebounds</p>
+<p>Neemias Queta, Eric Franson, Spencer Nelson, Nate Harris, Justin Bean, Garry Clark, Great Osobor, Tai Wesley</p>
+<p>Utah State and Played in the 1990s</p>
+<p>53</p>
+<p>Malloy Nesmith, Jarobi Kemp, Myron Simms, Matt Barnes, Dave Isaacson, Rick Randall, Brandon Birch, Neal Geddes</p>
+<p>Utah State and Started 2010 or Later</p>
+<p>DeAngelo Isby, Norbert Janicek, Marvin Jean, Adlan Elamin, Elijah Perryman, Kyisean Reed, Kyisean Reed, Isaac Davis</p>
+<p>Wake Forest and 700+ Career Rebounds</p>
+<p>Rodney Rogers Jr, Tre'Von Spillers, Rafael Vidaurreta, Devin Thomas, Jamaal Levy, Josh Howard, Travis McKie, Tim Duncan</p>
+<p>Wake Forest and Played in the 1990s</p>
+<p>Derrick Hicks, Niki Arinze, William Stringfellow, Todd Sanders, Stacey Castle, James Griffin, Tate Decker, Darryl Cheeley</p>
+<p>Wake Forest and Started 2010 or Later</p>
+<p>Jaylen Hoard, Bobi Klintman, Aaron Clark, Davin Cosby Jr., Melo Eggleston, Jamie Lewis, Cornelius Hudson, Richard Washington</p>
+<h2>The other grid archives</h2>
+<li><a href="/nba-grid/archive">NBA grid archive</a>, 14 past boards and their answers.</li>
+<li><a href="/mlb-grid/archive">MLB grid archive</a>, 14 past boards and their answers.</li>
+<li><a href="/hockey-grid/archive">NHL grid archive</a>, 14 past boards and their answers.</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

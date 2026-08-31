@@ -41,12 +41,23 @@ const DAYS = 14;
    board is still being played and its answers are not ours to publish yet. */
 const ARG_END = process.argv.find(a => a.startsWith('--end='));
 
-/* The three grids that seed a fresh board from the date. They share a shape,
-   so this is a list rather than three copies of the same script. */
+/* The grids that seed a fresh board from the date. They mostly share a shape,
+   so this is a list rather than four copies of the same script.
+   CBB IS NOT QUITE THE SAME SHAPE, and the difference matters for an archive.
+   The franchise boards are a function of the SEED ALONE, so a board published
+   today rebuilds identically forever. A CBB board is a function of the seed AND
+   the eligible school pool, because that pool is derived from the data at
+   runtime rather than listed in source (see the note in src/lib/cbbGrid.ts on
+   why). A school that gained or lost players could therefore change a board
+   that has already been published. So the CBB section records the exact pool it
+   published against, and simGridArchive rebuilds from that recorded pool and
+   separately reports drift against the live one. Recording what you published
+   is the only way an archive can be honest about a derived input. */
 const SPORTS = [
-  { key: 'nba', label: 'NBA', game: '/nba-grid', lib: 'src/lib/nbaGrid.ts', fetch: 'fetchNbaGridData' },
-  { key: 'mlb', label: 'MLB', game: '/mlb-grid', lib: 'src/lib/mlbGrid.ts', fetch: 'fetchMlbGridData' },
-  { key: 'nhl', label: 'NHL', game: '/hockey-grid', lib: 'src/lib/hockeyGrid.ts', fetch: 'fetchHockeyGridData' },
+  { key: 'nba', label: 'NBA', game: '/nba-grid', crossing: 'each pair of franchises', lib: 'src/lib/nbaGrid.ts', fetch: 'fetchNbaGridData' },
+  { key: 'mlb', label: 'MLB', game: '/mlb-grid', crossing: 'each pair of franchises', lib: 'src/lib/mlbGrid.ts', fetch: 'fetchMlbGridData' },
+  { key: 'nhl', label: 'NHL', game: '/hockey-grid', crossing: 'each pair of franchises', lib: 'src/lib/hockeyGrid.ts', fetch: 'fetchHockeyGridData' },
+  { key: 'cbb', label: 'College Basketball', game: '/cbb-grid', crossing: 'each school and career achievement', lib: 'src/lib/cbbGrid.ts', fetch: 'fetchCbbGridData', derivesPool: true },
 ];
 
 const ENTRY = path.join(os.tmpdir(), 'gridArchiveEntry.mjs');
@@ -60,7 +71,9 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 ${SPORTS.map(s => `const ${s.key} = await import('${p(s.lib)}');`).join('\n')}
 const dateLib = await import('${p('src/lib/dateUtils.ts')}');
 export const libs = {
-${SPORTS.map(s => `  ${s.key}: { build: ${s.key}.buildGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell },`).join('\n')}
+${SPORTS.map(s => s.derivesPool
+  ? `  ${s.key}: { build: ${s.key}.buildCbbGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell, pool: ${s.key}.eligibleSchools },`
+  : `  ${s.key}: { build: ${s.key}.buildGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell },`).join('\n')}
 };
 export const dateSeed = dateLib.dateSeed;
 `);
@@ -94,10 +107,16 @@ for (const sport of SPORTS) {
   }
   console.log(`${sport.label}: indexed ${data.players.length} players`);
 
+  /* For CBB the pool is derived here and recorded below, so the archive says
+     what it was built against instead of leaving a reader to guess. */
+  const pool = sport.derivesPool ? lib.pool(data) : null;
+  if (sport.derivesPool) console.log(`${sport.label}: ${pool.length} schools eligible`);
+
   const boards = [];
   let skipped = 0;
   for (const date of dates) {
-    const puzzle = lib.build(dateSeed(date));
+    const puzzle = pool ? lib.build(dateSeed(date), pool) : lib.build(dateSeed(date));
+    if (!puzzle) { skipped += 1; console.log(`   ${sport.label} skipped ${date}: no board could be built`); continue; }
     const cells = [];
     let thin = false;
     for (let r = 0; r < 3; r++) {
@@ -112,7 +131,20 @@ for (const sport of SPORTS) {
     if (thin) { skipped += 1; console.log(`   ${sport.label} skipped ${date}: a cell has fewer than ${MIN_PER_CELL} valid answers`); continue; }
     boards.push({ date, rows: puzzle.rows.map(x => x.label), cols: puzzle.cols.map(x => x.label), cells });
   }
-  sports[sport.key] = { label: sport.label, game: sport.game, boards };
+  sports[sport.key] = {
+    label: sport.label,
+    game: sport.game,
+    /* What a crossing on this board actually is. Carried per sport because the
+       CBB board crosses a school with an achievement while the franchise grids
+       cross two franchises, and a page that says "franchises" on all four would
+       be describing three of them and misdescribing the fourth. */
+    crossing: sport.crossing,
+    boards,
+    /* Only present where the board depends on a derived pool. Its absence on
+       the franchise grids is meaningful: those are seed-only and need no such
+       record. */
+    ...(pool ? { schoolPool: pool.map(x => x.id) } : {}),
+  };
   console.log(`${sport.label}: ${boards.length} boards (${skipped} skipped as thin)`);
 }
 

@@ -72,6 +72,7 @@ const STATIC_PAGES = [
   { p: '/nba-grid/archive', freq: 'weekly', pri: '0.5' },
   { p: '/mlb-grid/archive', freq: 'weekly', pri: '0.5' },
   { p: '/hockey-grid/archive', freq: 'weekly', pri: '0.5' },
+  { p: '/cbb-grid/archive', freq: 'weekly', pri: '0.5' },
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },

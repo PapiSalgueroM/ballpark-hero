@@ -2597,6 +2597,19 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 369.** The CBB grid archive, a fourth alongside Round
+  358's three: 56 boards, 504 cells, 4,032 answers, all recomputed by the fence.
+  It needed a real adaptation rather than another row in the generator's table.
+  The franchise boards are a function of the seed alone and rebuild identically
+  forever; a CBB board is a function of the seed AND the derived school pool, so
+  a school gaining or losing players could change an already published board.
+  The archive records the 106 school pool it published against, the fence
+  rebuilds from that, and a new section compares recorded against live and fails
+  on any school that dropped out. Zero drift today. The new sport also exposed a
+  copy bug: the shared meta description claimed every crossing joined "a pair of
+  franchises", true of three archives and false of the fourth, so that phrase is
+  carried per sport now. `simGridArchive` also got a whole-pull retry after
+  going red twice on transients, the third time this lesson has come up.
 - **2026-08-31, Round 368.** The CBB grid ships, finishing Round 363's engine.
   Milestone 0 Task 5. `/cbb-grid` has a page, route, registry entry and per game
   SEO copy on top of an engine that was already proven: 106 eligible schools

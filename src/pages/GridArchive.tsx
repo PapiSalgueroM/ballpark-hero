@@ -44,7 +44,7 @@ const GridArchive = ({ sport }: { sport: string }) => {
     <>
       <PageSeo
         title={`${data.label} Grid Answers: Past Daily Boards | DoUKnowBall`}
-        description={`Past ${data.label} grid boards with every valid answer counted. See which players connect each pair of franchises, then play today's grid.`}
+        description={`Past ${data.label} grid boards with every valid answer counted. See which players satisfy ${data.crossing}, then play today's grid.`}
         path={`${data.game}/archive`}
       />
       <GameShell

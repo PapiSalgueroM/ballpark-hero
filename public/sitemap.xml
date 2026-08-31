@@ -17,9 +17,10 @@
   <url><loc>https://douknowball.com/hockey</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-08-29</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/records</loc><lastmod>2026-08-25</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://douknowball.com/nba-grid/archive</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://douknowball.com/mlb-grid/archive</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://douknowball.com/hockey-grid/archive</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/nba-grid/archive</loc><lastmod>2026-08-31</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/mlb-grid/archive</loc><lastmod>2026-08-31</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/hockey-grid/archive</loc><lastmod>2026-08-31</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/cbb-grid/archive</loc><lastmod>2026-08-31</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/about</loc><lastmod>2026-08-25</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://douknowball.com/contact</loc><lastmod>2026-08-25</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://douknowball.com/privacy</loc><lastmod>2026-08-27</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
@@ -57,7 +58,7 @@
   <url><loc>https://douknowball.com/gauntlet-draft</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/player-stock-market</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/perfect-season-nfl</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/front-office</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/front-office</loc><lastmod>2026-08-31</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nfl-my-career</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/football-grid</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nfl-career</loc><lastmod>2026-08-31</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
@@ -121,7 +122,7 @@
   <url><loc>https://douknowball.com/afl-higher-lower</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/guess-nascar-driver</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nascar-chain</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/ufc</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/ufc</loc><lastmod>2026-08-31</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/ufc-chain</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/rank-em</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/teammates</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>

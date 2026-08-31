@@ -47,13 +47,21 @@ const SPORTS = [
   { key: 'nba', lib: 'src/lib/nbaGrid.ts', fetch: 'fetchNbaGridData' },
   { key: 'mlb', lib: 'src/lib/mlbGrid.ts', fetch: 'fetchMlbGridData' },
   { key: 'nhl', lib: 'src/lib/hockeyGrid.ts', fetch: 'fetchHockeyGridData' },
+  /* CBB is the one whose board is NOT a function of the seed alone. Its school
+     pool is derived from the data at runtime, so a board rebuilt against a
+     different pool is a different board. The archive records the pool it
+     published against and section 1 rebuilds from that; section 5 separately
+     checks the recorded pool against the live one and reports drift. */
+  { key: 'cbb', lib: 'src/lib/cbbGrid.ts', fetch: 'fetchCbbGridData', derivesPool: true },
 ];
 
 const ENTRY = path.join(os.tmpdir(), 'archEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'arch.bundle.mjs');
 const rel = r => (path.join(ROOT, r)).replaceAll('\\', '/');
 const importLines = SPORTS.map(s => `const ${s.key} = await import('${rel(s.lib)}');`).join('\n');
-const libLines = SPORTS.map(s => `  ${s.key}: { build: ${s.key}.buildGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell },`).join('\n');
+const libLines = SPORTS.map(s => s.derivesPool
+  ? `  ${s.key}: { build: ${s.key}.buildCbbGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell, pool: ${s.key}.eligibleSchools },`
+  : `  ${s.key}: { build: ${s.key}.buildGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell },`).join('\n');
 fs.writeFileSync(ENTRY, [
   'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
   importLines,
@@ -70,7 +78,18 @@ const { libs, dateSeed } = await import(pathToFileURL(BUNDLE).href);
    clear message rather than three half checks. */
 const pools = {};
 for (const s of SPORTS) {
-  const d = await libs[s.key].fetchData();
+  /* ROUND 369: retry the whole pull, for the third time this lesson has come
+     up. The grid libs already retry each PAGE (Round 358), but a pull is ten to
+     forty pages, so the chance of one exhausting its retries is much higher
+     than for a single page, and this harness went red twice on a pool that
+     loaded fine seconds later. A fence that fails at random teaches people to
+     re-run it rather than read it, which is worse than not having it. Round 362
+     put the same retry in simLeaderboardCaps. */
+  let d = null;
+  for (let attempt = 0; attempt <= 2 && !d; attempt++) {
+    if (attempt) await new Promise(r => setTimeout(r, 800 * attempt));
+    d = await libs[s.key].fetchData();
+  }
   if (!d) {
     console.log(`${s.key.toUpperCase()} GRID DATA UNREACHABLE. NOTHING WAS CHECKED.`);
     console.error('simGridArchive: the player data did not load, which is itself worth investigating');
@@ -87,7 +106,7 @@ if (CONTROL === 'badanswer') {
     const sport = archive.sports[s.key];
     if (!sport || planted) continue;
     for (const b of sport.boards) {
-      const real = libs[s.key].build(dateSeed(b.date));
+      const real = rebuild(s.key, b.date);
       for (const c of b.cells) {
         const rowCat = real.rows.find(x => x.label === c.row);
         const colCat = real.cols.find(x => x.label === c.col);
@@ -102,6 +121,18 @@ if (CONTROL === 'badanswer') {
   console.log('   NEGATIVE CONTROL ON: one published answer replaced with a player who does not fit, section 2 must go red');
 }
 
+/* Rebuild a board exactly as it was published: seed alone for the franchise
+   grids, seed plus the RECORDED school pool for CBB. Using the recorded pool is
+   the point, not a shortcut: it is what makes an already published board
+   checkable at all once its inputs can move. Section 5 is what stops that
+   becoming a way to hide drift. */
+function rebuild(sportKey, date) {
+  const sport = SPORTS.find(x => x.key === sportKey);
+  if (!sport.derivesPool) return libs[sportKey].build(dateSeed(date));
+  const recorded = (archive.sports[sportKey].schoolPool || []).map(id => ({ kind: 'school', id, label: id }));
+  return libs[sportKey].build(dateSeed(date), recorded);
+}
+
 const present = SPORTS.filter(s => archive.sports[s.key]);
 if (present.length !== SPORTS.length) {
   fail(`the archive file carries ${present.length} sports, expected ${SPORTS.length}`);
@@ -112,7 +143,7 @@ for (const s of present) {
   const boards = archive.sports[s.key].boards;
   let bad = 0;
   for (const b of boards) {
-    const real = libs[s.key].build(dateSeed(b.date));
+    const real = rebuild(s.key, b.date);
     const rowsOk = JSON.stringify(real.rows.map(x => x.label)) === JSON.stringify(b.rows);
     const colsOk = JSON.stringify(real.cols.map(x => x.label)) === JSON.stringify(b.cols);
     if (!rowsOk || !colsOk) {
@@ -128,7 +159,7 @@ for (const s of present) {
   const boards = archive.sports[s.key].boards;
   let checked = 0, wrongName = 0, wrongCount = 0;
   for (const b of boards) {
-    const real = libs[s.key].build(dateSeed(b.date));
+    const real = rebuild(s.key, b.date);
     for (const c of b.cells) {
       const rowCat = real.rows.find(x => x.label === c.row);
       const colCat = real.cols.find(x => x.label === c.col);
@@ -177,6 +208,32 @@ for (const s of present) {
     }
   }
   console.log(`   ${s.key}  ${cells - thin} of ${cells} cells carry real answers`);
+}
+
+console.log('5) a recorded school pool still matches the live one');
+{
+  /* Only CBB carries a pool, and its absence on the franchise grids is
+     meaningful rather than an oversight: those boards are seed-only, so there
+     is nothing to record. A pool that has drifted does not corrupt the archive,
+     because section 1 rebuilds from what was recorded, but it does mean the
+     LIVE game would now serve a different board for those dates, and a reader
+     comparing the two would be right to call the archive wrong. So report it. */
+  let checked = 0;
+  for (const s of present) {
+    const recorded = archive.sports[s.key].schoolPool;
+    if (!recorded) continue;
+    checked += 1;
+    const live = libs[s.key].pool(pools[s.key]).map(x => x.id);
+    const gone = recorded.filter(x => !live.includes(x));
+    const added = live.filter(x => !recorded.includes(x));
+    console.log(`   ${s.key}  recorded ${recorded.length} schools, live ${live.length}, ${gone.length} gone, ${added.length} newly eligible`);
+    /* A school leaving is what can change a published board, because the pool
+       is indexed positionally. A school arriving changes future boards only. */
+    for (const g of gone.slice(0, 3)) {
+      fail(`${s.key}: "${g}" was in the published pool and is no longer eligible, so the live game no longer serves the boards this archive shows`);
+    }
+  }
+  if (checked === 0) console.log('   no sport records a pool, nothing to check');
 }
 
 console.log('');

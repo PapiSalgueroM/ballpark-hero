@@ -125,16 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 369 (desktop, 2026-08-31): THE CBB GRID ARCHIVE. Round 358 built
-  the pattern for the NBA, MLB and NHL grids: past boards republished with the
-  players who solve them, every answer recomputed by the fence against that
-  game's own matcher and live data, so the page is unique by construction rather
-  than by assertion. /cbb-grid shipped yesterday with a deterministic board, so
-  it can carry one too. The generator needs a real adaptation rather than a
-  fourth row in its table: buildCbbGridPuzzle takes the eligible school pool as
-  an argument, because that pool is derived from the data instead of listed in
-  source, so the archive has to derive it the same way and record what it used.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -408,6 +398,49 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE CBB GRID ARCHIVE, Round 369 (desktop lane, 2026-08-31). A fourth archive
+  joins the three Round 358 built: 56 boards across four sports, 504 cells,
+  4,032 published answers, every one recomputed by the fence against that game's
+  own matcher and live data.
+  IT IS NOT A FOURTH ROW IN THE GENERATOR'S TABLE, and the reason is worth
+  keeping. The franchise boards are a function of the SEED ALONE, so a board
+  published today rebuilds identically forever. A CBB board is a function of the
+  seed AND the eligible school pool, because that pool is derived from the data
+  at runtime rather than listed in source. A school gaining or losing players
+  could therefore change a board that has already been published. So the archive
+  RECORDS the exact 106 school pool it published against, section 1 of the fence
+  rebuilds from that recorded pool, and a new section 5 separately compares the
+  recorded pool to the live one and fails on any school that has dropped out,
+  because that is the case where the live game would no longer serve the board
+  the archive shows. Recording what you published is the only way an archive can
+  be honest about a derived input. Today: 106 recorded, 106 live, zero drift.
+  A COPY BUG THE NEW SPORT EXPOSED: the archive page's meta description said
+  "which players connect each pair of franchises", which is true of three
+  archives and false of the fourth, where a crossing is a school against an
+  achievement. The phrase is carried per sport from the generator now, so the
+  page describes what it actually shows.
+  THE FLAKY FENCE, FIXED PROPERLY THE THIRD TIME. simGridArchive went red twice
+  on a pool that loaded fine seconds later. The grid libs already retry each
+  PAGE since Round 358, but a pull is ten to forty pages, so the odds of one
+  exhausting its retries are much higher than for a single page. The whole pull
+  retries now, the same fix Round 362 gave simLeaderboardCaps. Three consecutive
+  clean runs.
+  A MISTAKE OF MINE, RECORDED: adding the route to genSitemap's STATIC_PAGES was
+  done as a blind string replace on a line I had not read, and those entries are
+  objects rather than bare strings, so it spliced the new route inside an
+  existing one and broke the whole build chain at its first step. Look at the
+  line before replacing it.
+  simSchema CAUGHT A REAL OMISSION AND THEN PASSED ON A STALE FILE. The new
+  archive was not in pageSchema.ts's classification table, so it fell back to a
+  bare WebPage where its three siblings carry CollectionPage. Adding it turned
+  the harness green immediately, but the SNAPSHOT still said WebPage, because a
+  snapshot's head is captured at prerender time and the classification had only
+  reached the source. Its section 5 checks the table, not the file, while the
+  harness's closing line claims everything it generates reaches the file a
+  crawler reads. Fixed here by regenerating that one snapshot with
+  PRERENDER_ONLY, and filed for Round 370, which is already about exactly this:
+  a check that reads the source cannot see what the output dropped.
 
 - THE CBB GRID SHIPS, Round 368 (desktop lane, 2026-08-31), finishing what
   Round 363 proved. Milestone 0 Task 5: the grid engine extended where the
