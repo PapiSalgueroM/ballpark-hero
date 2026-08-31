@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 361.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 362.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,22 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 361 (desktop, 2026-08-30): THE REST OF THE PUBLIC WRITE
+  SURFACE. Round 360 fixed the World Leaderboard's habit of treating forgeable
+  numbers as authoritative, and its own document names three things it left
+  open. Nineteen public tables accept anonymous INSERT with WITH CHECK (true):
+  game_completions, overrated_votes, poll_votes, tier_list_votes, hof_votes,
+  transfer_grade_votes, the three grid_selections tables, rarity_round_guesses,
+  question_reports, cbb_scores, cbb_daily, nascar_scores, nascar_daily,
+  nascar_chain_scores, tennis_chain_scores, ufc_chain_scores,
+  medal_games_scores. Openness is not the defect, it is the guest first design.
+  The defect is anywhere the SITE THEN SHOWS that data back as a fact: a rarity
+  percentage, a vote share, a ranking. Two tables (guess_nation_scores,
+  tennis_scores) already carry real bounds, so the asymmetry is the tell that
+  this was started and not finished. The round audits every one for whether its
+  data is displayed as authoritative, then bounds the ones that are, and leaves
+  genuinely harmless logging alone.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
