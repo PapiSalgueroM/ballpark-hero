@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 369.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 370.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,16 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 369 (desktop, 2026-08-31): THE CBB GRID ARCHIVE. Round 358 built
+  the pattern for the NBA, MLB and NHL grids: past boards republished with the
+  players who solve them, every answer recomputed by the fence against that
+  game's own matcher and live data, so the page is unique by construction rather
+  than by assertion. /cbb-grid shipped yesterday with a deterministic board, so
+  it can carry one too. The generator needs a real adaptation rather than a
+  fourth row in its table: buildCbbGridPuzzle takes the eligible school pool as
+  an argument, because that pool is derived from the data instead of listed in
+  source, so the archive has to derive it the same way and record what it used.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
