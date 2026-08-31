@@ -465,6 +465,16 @@ Standing claims:
   NOT IN THIS ROUND: rarity-round's truncation. Its pools are 10,674 and 141,916
   rows, so it wants a dedup view or an aggregate rather than more paging, which
   is a different kind of fix and gets its own round.
+  PUBLISHED and verified live 2026-08-31: Lovable sync confirmed at 60677a44
+  before deploying, the bundle flipped, and all twelve sampled games of the
+  sixteen touched serve 200.
+  THE SUITE RAN 149 HARNESSES WITH ONE RED, AND IT WAS NOT THIS ROUND:
+  simWorldXiPositions reported "SUPABASE UNREACHABLE OR POOL TOO SMALL, NOTHING
+  WAS CHECKED" and passes green on an immediate re-run. Nothing in this round
+  touches what it reads. It is the same flakiness Round 362 fixed in
+  simLeaderboardCaps by adding a retry, and simWorldXiPositions wants the same
+  treatment: a fence that goes red at random teaches people to re-run it rather
+  than read it. Small, unclaimed, worth doing.
 
 - FOUR DAILY GAMES WERE FROZEN TO THEIR FALLBACK POOLS, Round 365 (desktop
   lane, 2026-08-31). useDailyPuzzle's selection memo deliberately omits
