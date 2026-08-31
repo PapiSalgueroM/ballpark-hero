@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 359.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 360.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -385,7 +385,15 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
-Claimed 2026-08-30, next: Round 358 (cloud lane):
+Claimed 2026-08-30, next: Round 359 (cloud lane):
+
+- THE PRERENDER FONT WAIT, filed by Round 358 and taken here because it blocks
+  this lane's own verification loop: every snapshot round costs two and a half
+  hours before anything can be checked. Claimed with the discipline the item
+  itself asks for, measure before building and prove the output is byte
+  identical rather than arguing it.
+
+Done 2026-08-30, Round 358 (cloud lane):
 
 - SOCCER CONQUEST, world map round (Round A), item 2 of the handoff list and
   high on Anthony's own list. Self contained in bundled code per the recon on
