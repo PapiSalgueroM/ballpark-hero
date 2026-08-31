@@ -450,6 +450,9 @@ Standing claims:
   signature in useGuessTransferValue. Both retired hooks were reverted to HEAD
   and redone by hand against their real identity fields (playerName and name,
   neither of which is `id`, which the first attempt assumed).
+  PUBLISHED and verified live 2026-08-31: Lovable sync confirmed at 7caad9ba
+  BEFORE calling deploy this time (the Round 364 note), the bundle flipped, and
+  /transfer-path, /career and /nba-career all serve 200 with their own titles.
 
 - PLAYER STOCK MARKET'S ECONOMY, FIXED AT THE FETCH, Round 364 (desktop lane,
   2026-08-31). fetchCampaignRows asked for .limit(4000) and PostgREST returned
