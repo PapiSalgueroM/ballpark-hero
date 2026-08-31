@@ -87,15 +87,11 @@ That is survivable but it means a cloud round that regenerates snapshots spends
 most of its wall clock waiting, and it makes the pipeline the slowest thing in
 the lane by an order of magnitude.
 
-**The fix, unclaimed and small, and it helps BOTH lanes:** have
-`scripts/prerender.mjs` route-block external font requests up front so they fail
-instantly instead of timing out. The captured output is the head plus
-reconstructed readable text, and a webfont changes neither, so this cannot move
-a snapshot's content. Whoever takes it should prove that with a before-and-after
-byte comparison of the generated `public/` tree rather than on the argument
-above, and should keep it to fonts rather than blocking all external requests,
-because the template deliberately hands crawlers images from `flagcdn.com` and
-`simBrand` section 3 fences exactly that.
+**FIXED IN ROUND 359, and the numbers above are the before.** prerender.mjs
+aborts the two font hosts now and the same five routes went 4m05s to 56s, with
+the generated documents byte-compared to prove nothing moved. A full pass here
+should now be well under an hour rather than two and a half. The database
+constraint below is unaffected and still stands.
 
 ### What the desktop lane is holding
 
@@ -410,6 +406,27 @@ Standing claims:
 
 ## Done
 
+- THE PRERENDER FONT WAIT, Round 359 (cloud lane, 2026-08-30). Filed by the
+  round before and taken immediately because it was blocking this lane's own
+  verification loop. prerender.mjs now aborts fonts.googleapis.com and
+  fonts.gstatic.com alongside the tag manager and AdSense aborts already there.
+  Measured before it was built, same five routes: 4m05s to 56s, 4.4x. The
+  diagnosis was confirmed by the shape of the numbers rather than assumed, the
+  baseline burning 8.5 seconds of CPU across four minutes of wall clock, so it
+  was waiting and not computing. Every route is drawn three times for the clock
+  samples, so an unreachable font host is waited out three times per route.
+  Proven not to change the output by byte-comparing the generated documents
+  before and after: ten files across five routes, identical in both public/ and
+  dist/. The whole-tree confirmation is a full pass with git status public/
+  clean afterwards, recorded in this round's second commit.
+  Scoped to the two font hosts deliberately: a blanket
+  external abort would break the flagcdn images the template hands crawlers on
+  purpose, which simBrand section 3 fences.
+  NO NEW HARNESS, deliberately: this changes build speed and nothing else, the
+  built-site fences already read the generated documents, and a source shape
+  guard would have walked into this repo's own trap, since the comment
+  explaining why flagcdn is excluded contains the word flagcdn.
+  NEEDS PUBLISHING: no, build tooling only, no shipped file changes.
 - SOCCER CONQUEST, THE WORLD MAP, Round 358 (cloud lane, 2026-08-30). Item 2
   off the handoff list, Round A of the item: /conquest-soccer, 32 clubs, one
   per football nation, all 173 countries of the basemap owned from kickoff,

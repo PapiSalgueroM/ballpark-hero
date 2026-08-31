@@ -2597,6 +2597,39 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-30, Round 359.** The prerender font wait. `scripts/prerender.mjs`
+  now aborts requests to `fonts.googleapis.com` and `fonts.gstatic.com`, the two
+  hosts `index.html` asks for its webfaces, alongside the tag manager and
+  AdSense aborts that were already there.
+  MEASURED BEFORE IT WAS BUILT, on the same five routes: 4m05s before, 56s
+  after, a 4.4x speedup, and the diagnosis was confirmed by the shape of the
+  numbers rather than assumed. The baseline run burned 8.5 seconds of user CPU
+  across four minutes of wall clock, so it was almost entirely waiting, not
+  computing. Every route is drawn three times for the clock samples, so a
+  machine that cannot reach those hosts waits out the failure three times per
+  route; a full 142 route pass in the cloud sandbox took two and a half hours.
+  IT CANNOT CHANGE WHAT IS CAPTURED, and that is asserted rather than argued.
+  The snapshot is the head verbatim plus readable text reconstructed from the
+  body, and a font face changes neither: it changes what glyphs look like, and
+  nothing in the capture reads glyphs. Proven by byte-comparing the generated
+  documents before and after: all ten files across five routes identical in both
+  `public/` and `dist/`. A full 142 route pass is the complete proof and needs no
+  bookkeeping to run, because `public/` is tracked and a clean `git status`
+  after it says the whole tree is unchanged; the result of that pass is recorded
+  in this round's second commit rather than promised here.
+  SCOPED TO THE TWO FONT HOSTS ON PURPOSE. A blanket "abort everything
+  external" would be a different and much worse change, because the template
+  deliberately hands crawlers images from flagcdn.com and simBrand section 3
+  fences exactly that.
+  NO NEW HARNESS, deliberately, and the reasoning is written down so nobody
+  adds one reflexively: this changes build speed and nothing else, the existing
+  built-site fences already read the generated documents, and the only
+  regression that matters here is an output change, which they catch. A source
+  shape guard would also have walked straight into the repo's own trap, because
+  the comment explaining why flagcdn is excluded contains the word flagcdn.
+  Worth knowing for the desktop lane: there the font hosts are reachable, so
+  the win is smaller, but it is not zero (three avoided fetches per route) and
+  it makes the pipeline's runtime independent of the network either way.
 - **2026-08-30, Round 358.** Soccer Conquest, `/conquest-soccer`. Item 2 off the
   handoff list and high on Anthony's own list: the imperialism map on a world
   scale. 32 clubs, one per football nation, and all 173 countries of the

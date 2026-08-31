@@ -331,6 +331,26 @@ async function freshPage() {
     await page.route('**://*.supabase.co/**', () => { /* never settled on purpose */ });
     await page.route('**://*.googletagmanager.com/**', r => r.abort());
     await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
+
+    /* Round 359: the webfonts go the same way, and this one is about the
+       clock rather than the content. The template asks fonts.googleapis.com
+       for a stylesheet and fonts.gstatic.com for the faces, and every route is
+       drawn three times, so a machine that cannot reach those hosts waits out
+       the failure 3 times per route. Measured in the cloud sandbox, whose
+       egress proxy refuses them: 49 seconds a route against 8.5 seconds of CPU
+       across the whole run, so nearly all of it was waiting, and a full pass
+       took two and a half hours.
+       This cannot change what is captured. The snapshot is the head verbatim
+       plus readable text reconstructed from the body, and a font face changes
+       neither: it changes what the glyphs look like, and nothing here reads
+       glyphs. That is asserted rather than argued, by byte-comparing the
+       generated documents before and after, and it held on every route.
+       Scoped to the two font hosts on purpose. The template deliberately hands
+       crawlers images from flagcdn.com and simBrand section 3 fences exactly
+       that, so a blanket "abort everything external" would be a different and
+       much worse change. */
+    await page.route('**://fonts.googleapis.com/**', r => r.abort());
+    await page.route('**://fonts.gstatic.com/**', r => r.abort());
     pages.push(page);
   }
 }
