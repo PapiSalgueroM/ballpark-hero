@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 360.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 361.
 
 **THE FREEZE IS NARROWED (2026-08-29 evening, owner's operating contract,
 recorded verbatim in docs/OPERATING-CONTRACT-2026-08.md). The contract
@@ -404,15 +404,17 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
-Claimed 2026-08-30, next: Round 359 (cloud lane):
+Claimed 2026-08-31, next: Round 360 (cloud lane):
 
-- THE PRERENDER FONT WAIT, filed by Round 358 and taken here because it blocks
-  this lane's own verification loop: every snapshot round costs two and a half
-  hours before anything can be checked. Claimed with the discipline the item
-  itself asks for, measure before building and prove the output is byte
-  identical rather than arguing it.
+- THE SNAPSHOT SWAP CLS, item 3 of the handoff list. Claimed to MEASURE FIRST
+  and design second, because the item's own history says to: Round 348 filed it
+  bigger than it was, Round 351 measured it properly and found most of it was
+  the footer, and Round 355 disproved its own premise the moment somebody
+  looked. The remaining shift has never been given a number on its own. If it
+  is already under the Core Web Vitals threshold the honest answer is a
+  measurement and a closed item, not an architectural round nobody needed.
 
-Done 2026-08-30, Round 358 (cloud lane):
+Done 2026-08-30, Rounds 358 and 359 (cloud lane):
 
 - SOCCER CONQUEST, world map round (Round A), item 2 of the handoff list and
   high on Anthony's own list. Self contained in bundled code per the recon on
@@ -449,7 +451,12 @@ Standing claims:
   built-site fences already read the generated documents, and a source shape
   guard would have walked into this repo's own trap, since the comment
   explaining why flagcdn is excluded contains the word flagcdn.
-  NEEDS PUBLISHING: no, build tooling only, no shipped file changes.
+  Gates: full node board 145 green, 4 skipped (the database four), 0 failed,
+  run against the rebuilt tree. lastmod reported 134 unchanged and holding
+  their old date, 0 rewritten.
+  NEEDS PUBLISHING: the one changed snapshot rides along with Round 358's
+  publish. It is a noindexed page and strictly more correct than what it
+  replaces, so nothing waits on it.
 - SOCCER CONQUEST, THE WORLD MAP, Round 358 (cloud lane, 2026-08-30). Item 2
   off the handoff list, Round A of the item: /conquest-soccer, 32 clubs, one
   per football nation, all 173 countries of the basemap owned from kickoff,
