@@ -452,6 +452,10 @@ Standing claims:
   checks. RARITY_CONTROL=truncate re-caps every pool at 1,000 and catches seven.
   get_advisors after the view DDL: zero ERROR, and security_invoker was set on
   the view up front because Round 361 raised exactly that.
+  PUBLISHED and verified live 2026-08-31: Lovable sync confirmed at 199b69dc
+  before deploying, the bundle flipped and /rarity-round serves 200. The view
+  was already answering correctly on the live database before the deploy, since
+  it is server side: Brazil 1,682, Centre-Back 2,381, 100M+ 53.
 
 - THE DAILY AUDIT LIST, WORKED THROUGH, Round 366 (desktop lane, 2026-08-31).
   Sixteen games across three defect classes, one theme: a daily should be the
