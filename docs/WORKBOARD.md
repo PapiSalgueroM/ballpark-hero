@@ -125,6 +125,31 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- PER PAGE LOAD FETCH COSTS, filed with measurements during the Round 370 Disk
+  IO incident rather than fixed, because the numbers say they are not urgent and
+  the obvious fix carries a drift risk that is worse than the cost.
+  MEASURED against pg_stat_statements: the games I made heavier in recent rounds
+  are NOT contributors yet. ncaa_player_stats (CBB grid) 815 calls and 0.8
+  minutes lifetime, player_peak_values (Rarity) 155 calls and 1.0 minutes. They
+  are cheap because those games have almost no traffic, not because the fetches
+  are small. player_market_values is 671 million blocks and 616 minutes, but
+  over 271,092 calls since June, so mostly predating Rounds 364 and 367.
+  THE SCALING RISK IS REAL THOUGH. /cbb-grid fetches all 43,800 rows of
+  ncaa_player_stats on every page load, 44 paged requests and roughly 2.6 MB,
+  which is 13x what the NBA grid pulls for the same 3x3 game. Only 15,003 of
+  those players attend one of the 106 eligible schools, so 28,797 rows, 66
+  percent, can never answer any cell on any board.
+  WHY IT WAS NOT JUST FIXED. Filtering server side means expressing the
+  eligibility rule in SQL as well as in cbbGrid.ts, and a rule living in two
+  places is the drift this repo has paid for repeatedly. The safe version is a
+  view PLUS a fence: simCbbGrid already computes the eligible list from the
+  TypeScript, so it can compare that against the view's list and fail on any
+  disagreement, which is the derive-then-verify pattern used elsewhere. Worth
+  doing when /cbb-grid has traffic, not before.
+  Same shape, unmeasured: Player Stock Market pulls about 39,000 rows a run and
+  Rarity Round pages whole category pools. Both were deliberate correctness
+  fixes in Rounds 364 and 367 and both are right; both scale with traffic.
+
 - CLAIMED Round 371 (desktop, 2026-08-31): TWO PAGES ARE SERVING CRAWLERS LESS
   THAN THEY HOLD, AND NEITHER IS A CONTENT PROBLEM. Both found by an adversarial
   review of the pages shipped since the render audit, then measured by hand.
