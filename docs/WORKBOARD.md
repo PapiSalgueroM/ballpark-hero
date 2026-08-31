@@ -448,6 +448,12 @@ Standing claims:
   is gone. Filed not fixed: nothing schedules either daily edge function, so
   Daily mode on those two games has run off the client fallback since it
   shipped.
+  PUBLISHED and verified live 2026-08-30: Lovable synced be9c99a1, the live
+  bundle flipped, and most_played_today called with the anon key returns
+  club-manager 2835, soccer-career 648, nba-my-career 132, so the home page
+  shows real data instead of the fallback trio for the first time since the day
+  count passed 1,000. /rarity-round, /ufc-chain and /hof-or-bust all serve 200
+  with their own titles.
 
 - THE WORLD LEADERBOARD STOPS TRUSTING NUMBERS A STRANGER CAN WRITE,
   Round 360 (desktop lane, 2026-08-30). global_leaderboard() and global_rank()
