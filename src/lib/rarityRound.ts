@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 
@@ -188,17 +189,23 @@ function cachedPool(id: string, fetcher: () => Promise<PoolEntry[]>): () => Prom
  * client-side by normalized name (the same approach playerSearch.ts already
  * uses for accent-insensitive matching) is a single request instead.
  */
-async function fetchProminenceMap(): Promise<Map<string, number>> {
-  const { data } = await supabase
-    .from('player_market_values')
-    .select('player_name, market_value_usd')
-    .order('market_value_usd', { ascending: false })
-    .limit(5000);
+async function fetchProminenceMap(names: string[]): Promise<Map<string, number>> {
+  /* ROUND 367: asks for the names it actually needs instead of pulling the top
+     of the table and hoping they are in it. The old query asked for 5,000 rows
+     and PostgREST returned 1,000, which resolved to 299 distinct names, so most
+     winners missed and fell through to the synthetic recency value below,
+     ranking real legends as though they had no market value at all. Peak per
+     player comes from the view, so it is one row per name with no collapse. */
   const map = new Map<string, number>();
+  if (names.length === 0) return map;
+  const { data } = await supabase
+    .from('player_peak_values' as never)
+    .select('player_name, peak_value_usd')
+    .in('player_name', names);
   for (const row of data ?? []) {
     const key = normalizeName(row.player_name as string);
     if (!key) continue;
-    const val = Number(row.market_value_usd) || 0;
+    const val = Number(row.peak_value_usd) || 0;
     const existing = map.get(key);
     if (existing === undefined || val > existing) map.set(key, val);
   }
@@ -220,7 +227,7 @@ async function fetchBallonDorWinners(): Promise<PoolEntry[]> {
   // player_market_values starts at 2004) falls back to a synthetic
   // prominence derived from recency, so older/rarer legends still rank low
   // (obscure to a modern audience) without being dropped from the pool.
-  const prominenceMap = await fetchProminenceMap();
+  const prominenceMap = await fetchProminenceMap((data as { player_name: string }[]).map(r => r.player_name));
 
   const rows = (data as { player_name: string; year: number }[]).map(r => {
     const key = normalizeName(r.player_name);
@@ -237,12 +244,22 @@ async function fetchBallonDorWinners(): Promise<PoolEntry[]> {
 /** Category factory: "Name a player who has played for {club}". Verified pool sizes (distinct players, peak value): Real Madrid 168+, Arsenal 212, Chelsea 200, Barcelona 191, PSG 189, Man City 170. */
 function fetchClubPool(club: string) {
   return async (): Promise<PoolEntry[]> => {
-    const { data, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, market_value_usd')
-      .eq('club', club)
-      .order('market_value_usd', { ascending: false })
-      .limit(1000);
+    /* ROUND 367: stays on player_market_values ON PURPOSE, unlike the pools
+       above. This filter means "ever played for this club", and the peak view
+       carries only a player's MOST RECENT club, so it would silently drop
+       everyone who has since moved on. Measured today the club pools were the
+       one set this bug never reached, the busiest being Arsenal at 660 rows
+       against a 1,000 cap, but that is one busy transfer window from the
+       cliff, so the ceiling goes now rather than being re-measured later. */
+    const { data, error } = await fetchAllRows<{ player_name: string; market_value_usd: number }>(
+      (from, to) => supabase
+        .from('player_market_values')
+        .select('player_name, market_value_usd')
+        .eq('club', club)
+        .order('market_value_usd', { ascending: false })
+        .order('player_name', { ascending: true })
+        .range(from, to),
+    );
     if (error || !data) return [];
     const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
       name: r.player_name,
@@ -252,20 +269,38 @@ function fetchClubPool(club: string) {
   };
 }
 
+/* The generated Supabase types are produced from the tables and views that
+   existed when they were last generated, so a view added in this round is not
+   in them. The repo's convention for that is a cast at the call site, as
+   puckDetective and cbbGrid already do; it also sidesteps the instantiation
+   depth limit that postgrest-js hits on wide selects (see the Round 55 note in
+   useNascarDriver). */
+/* ROUND 367: reads player_peak_values, one row per player, instead of the
+   top 1,000 rows of an all-years table. The old query selected from
+   player_market_values across every year with .limit(1000) ordered by value
+   descending, so the window filled with a few hundred stars and rankPool then
+   collapsed it: Brazil has 1,722 distinct players and 206 were reachable,
+   Centre-Forward has 2,457 and 241 were. That number is not internal. It is
+   shown to the player as the size of the field they are picking from, it feeds
+   the score, and any answer outside the pool is refused outright, so the
+   obscure answers this game exists to reward were exactly the ones being cut.
+   The view reproduces the pool sizes this file's own comments already claimed,
+   to within one, which is what says the aggregate is the intended shape rather
+   than a new invention. */
 /** Category factory: "Name a {nationality} international". Verified pool sizes (distinct players): Brazil 1680, Argentina 1546, Spain 1512, France 1265, England 1169. */
 function fetchNationalityPool(nationality: string) {
   return async (): Promise<PoolEntry[]> => {
-    const { data, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, market_value_usd')
-      .eq('nationality', nationality)
-      .order('market_value_usd', { ascending: false })
-      .limit(1000);
+    const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
+      (from, to) => supabase
+        .from('player_peak_values' as never)
+        .select('player_name, peak_value_usd')
+        .eq('nationality', nationality)
+        .order('peak_value_usd', { ascending: false })
+        .order('player_name', { ascending: true })
+        .range(from, to),
+    );
     if (error || !data) return [];
-    const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
-      name: r.player_name,
-      prominence: r.market_value_usd,
-    }));
+    const rows = data.map(r => ({ name: r.player_name, prominence: r.peak_value_usd }));
     return rankPool(rows);
   };
 }
@@ -273,50 +308,50 @@ function fetchNationalityPool(nationality: string) {
 /** Category factory: "Name a {position}". Verified pool sizes (distinct players, most recent position tag): Centre-Forward 2396, Goalkeeper 2268, Centre-Back 2381. */
 function fetchPositionPool(position: string) {
   return async (): Promise<PoolEntry[]> => {
-    const { data, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, market_value_usd')
-      .eq('position', position)
-      .order('market_value_usd', { ascending: false })
-      .limit(1000);
+    const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
+      (from, to) => supabase
+        .from('player_peak_values' as never)
+        .select('player_name, peak_value_usd')
+        .eq('position', position)
+        .order('peak_value_usd', { ascending: false })
+        .order('player_name', { ascending: true })
+        .range(from, to),
+    );
     if (error || !data) return [];
-    const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
-      name: r.player_name,
-      prominence: r.market_value_usd,
-    }));
+    const rows = data.map(r => ({ name: r.player_name, prominence: r.peak_value_usd }));
     return rankPool(rows);
   };
 }
 
 /** Category 6: players ever worth $100M+. Verified pool size: exactly 50 players peaked at or above $100,000,000. */
 async function fetchElitePool(): Promise<PoolEntry[]> {
-  const { data, error } = await supabase
-    .from('player_market_values')
-    .select('player_name, market_value_usd')
-    .gte('market_value_usd', 100_000_000)
-    .order('market_value_usd', { ascending: false })
-    .limit(1000);
+  const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
+    (from, to) => supabase
+      .from('player_peak_values' as never)
+      .select('player_name, peak_value_usd')
+      .gte('peak_value_usd', 100_000_000)
+      .order('peak_value_usd', { ascending: false })
+      .order('player_name', { ascending: true })
+      .range(from, to),
+  );
   if (error || !data) return [];
-  const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
-    name: r.player_name,
-    prominence: r.market_value_usd,
-  }));
+  const rows = data.map(r => ({ name: r.player_name, prominence: r.peak_value_usd }));
   return rankPool(rows);
 }
 
 /** Category: players ever worth $50M+ (a wider net than the $100M+ elite category). Verified pool size: 341 distinct players peaked at or above $50,000,000. */
 async function fetchFiftyMillionPool(): Promise<PoolEntry[]> {
-  const { data, error } = await supabase
-    .from('player_market_values')
-    .select('player_name, market_value_usd')
-    .gte('market_value_usd', 50_000_000)
-    .order('market_value_usd', { ascending: false })
-    .limit(1000);
+  const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
+    (from, to) => supabase
+      .from('player_peak_values' as never)
+      .select('player_name, peak_value_usd')
+      .gte('peak_value_usd', 50_000_000)
+      .order('peak_value_usd', { ascending: false })
+      .order('player_name', { ascending: true })
+      .range(from, to),
+  );
   if (error || !data) return [];
-  const rows = (data as { player_name: string; market_value_usd: number }[]).map(r => ({
-    name: r.player_name,
-    prominence: r.market_value_usd,
-  }));
+  const rows = data.map(r => ({ name: r.player_name, prominence: r.peak_value_usd }));
   return rankPool(rows);
 }
 

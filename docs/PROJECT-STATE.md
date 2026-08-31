@@ -2597,6 +2597,21 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 367.** Rarity Round serves its whole pool. Every category
+  selected from `player_market_values` across all years with `.limit(1000)`, so
+  the window filled with stars: Brazil 1,722 distinct players with 206
+  reachable, Centre-Forward 2,457 with 241. The pool size is shown to the
+  player, feeds the score and gates which answers are accepted, so this deleted
+  the obscure answers the game exists to reward and told the player they were
+  wrong. Fixed with a `player_peak_values` view, one row per player, which
+  reproduces the pool sizes the file's own comments already claimed to within
+  one. Clubs stay on the raw table on purpose, because that filter means "ever
+  played for" and the view carries only a most recent club. A harness threshold
+  I guessed went red on correct code and is recorded: 31 of 47 Ballon d'Or
+  winners use the synthetic fallback because the value table starts in 2004 and
+  only 16 winners are in it; the check now asks the database for the expected
+  number instead of judging against a fraction. This is the fifth PostgREST
+  1,000 row truncation found in nine rounds.
 - **2026-08-31, Round 366.** The daily audit list worked through: sixteen games,
   three defect classes, one theme, that a daily should be the same puzzle for
   everyone drawn from the whole pool. Group B, unordered pools feeding a

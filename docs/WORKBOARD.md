@@ -125,25 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 367 (desktop, 2026-08-31): RARITY ROUND SHOWS THE PLAYER A POOL
-  SIZE THAT IS OFF BY A FACTOR OF EIGHT, in a game whose entire premise is
-  naming the answer nobody else would. Verified against live data.
-  Every category selects from player_market_values ACROSS ALL YEARS and takes
-  .limit(1000) ordered by value descending, so the window fills with a few
-  hundred stars and rankPool then collapses it. Brazil: 1,722 distinct players
-  in the table, 206 reachable. Centre-Forward: 2,457 against 241. The number is
-  not internal: poolSize is rendered to the player and feeds scoreRound, and any
-  answer outside the pool is REFUSED with "that player doesn't count", so the
-  obscure answers this game exists to reward are exactly the ones truncated away.
-  THE FILE'S OWN COMMENTS NAME THE INTENDED POOLS and the query cannot deliver
-  them: "Verified pool sizes: Brazil 1680, Centre-Forward 2396, Centre-Back
-  2381". A peak-value-per-player view reproduces those numbers to within one
-  (1,681 / 2,396 / 2,381), which is proof the author intended exactly this and
-  the fetch was the only thing in the way.
-  player_market_values_dedup does NOT solve it: it is one row per player-year,
-  136,178 rows. This needs an aggregate, which is why it was held back from
-  Round 366 rather than lumped in with the ordering fixes.
-
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
   route, the page and the registry entry are NOT built yet, so the game is not
@@ -433,6 +414,44 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- RARITY ROUND SERVES ITS WHOLE POOL, Round 367 (desktop lane, 2026-08-31).
+  Every category selected from player_market_values across ALL YEARS with
+  .limit(1000) ordered by value descending. PostgREST caps at 1,000 regardless,
+  so the window filled with a few hundred stars and rankPool collapsed those:
+  Brazil 1,722 distinct players with 206 reachable, Centre-Forward 2,457 with
+  241. In a game whose whole premise is naming the answer nobody else would,
+  and where the pool size is SHOWN to the player, feeds the score, and gates
+  which answers are accepted, this deleted precisely the obscure answers the
+  game exists to reward and then told the player they were wrong.
+  THE FILE'S OWN COMMENTS NAMED THE INTENDED POOLS, which is what made this
+  verifiable rather than a matter of taste: "Brazil 1680, Centre-Forward 2396,
+  Centre-Back 2381". The new player_peak_values view reproduces those to within
+  one, so the aggregate is the shape the author meant and the fetch was the only
+  thing in the way. player_market_values_dedup does NOT solve it: one row per
+  player-YEAR, 136,178 rows.
+  CLUBS DELIBERATELY STAY ON THE RAW TABLE. That filter means "ever played for
+  this club" and the view carries only a most recent club, so using it would
+  silently drop everyone who has since moved. Measured, clubs were the one set
+  this bug never reached (busiest is Arsenal at 660 rows against a 1,000 cap),
+  but they were paged anyway so the ceiling is gone rather than re-measured
+  later.
+  THE BALLON D'OR PROMINENCE LOOKUP asked for 5,000 rows and got 1,000, which
+  resolved 299 distinct names, so most winners fell through to a synthetic
+  recency value and real legends ranked as though they had no market value. It
+  asks for the 47 names it needs now.
+  A HARNESS THRESHOLD I GUESSED WENT RED ON CORRECT CODE, and the fix is worth
+  recording. Section 4 first failed if over 60 percent of winners used the
+  fallback. It reported 31 of 47, which is CORRECT: player_market_values starts
+  in 2004, the award runs from 1956, and only 16 winners are in the value table
+  at all. The section now asks the DATABASE how many should be synthetic (31)
+  and compares, instead of judging against a number that felt right. All 10
+  winners since 2004 resolve.
+  simRarityPools holds four things per category against live data, with section
+  2 counting via a separate query so it never shares a code path with what it
+  checks. RARITY_CONTROL=truncate re-caps every pool at 1,000 and catches seven.
+  get_advisors after the view DDL: zero ERROR, and security_invoker was set on
+  the view up front because Round 361 raised exactly that.
 
 - THE DAILY AUDIT LIST, WORKED THROUGH, Round 366 (desktop lane, 2026-08-31).
   Sixteen games across three defect classes, one theme: a daily should be the
