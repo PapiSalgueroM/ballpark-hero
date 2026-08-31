@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 370.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 371.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -441,6 +441,35 @@ Standing claims:
   crawler reads. Fixed here by regenerating that one snapshot with
   PRERENDER_ONLY, and filed for Round 370, which is already about exactly this:
   a check that reads the source cannot see what the output dropped.
+  PUBLISHED and verified live 2026-08-31: Lovable sync confirmed at 8a447a4a,
+  the bundle flipped, /cbb-grid/archive serves 200 with 4,864 crawler visible
+  words and CollectionPage schema, it is in the live sitemap, and it was
+  submitted to IndexNow.
+
+- CLAIMED Round 370 (desktop, 2026-08-31): TWO PAGES ARE SERVING CRAWLERS LESS
+  THAN THEY HOLD, AND NEITHER IS A CONTENT PROBLEM. Both found by an adversarial
+  review of the pages shipped since the render audit, then measured by hand.
+  (1) THE PRERENDER DEDUPE DELETES REPEATED TABLE CELLS. prerender.mjs line 524
+  keys on tag plus html against a DOCUMENT GLOBAL Set, and td and th collapse to
+  p, so a repeated cell vanishes with no visible gap. Measured on
+  /nba-grid/archive: of 126 crossings, 35 arrive intact, 70 lose their answer
+  count and 21 lose their label outright, so an answer list sits under the
+  previous crossing with nothing naming it. MLB keeps 62, NHL 49, CBB 59. The
+  page's own words promise "how many players in our data satisfy both sides".
+  Fix is targeted: exempt td and th, because a repeated cell is DATA, and leave
+  the link dedupe alone, because the same nav link really does belong once.
+  (2) THE RECORD BOOKS SERVES NO RECORDS AT ALL. /records ships 13 section
+  headings and 25 paragraphs of intro prose describing tables that are not
+  there. Zero champion names reach a crawler: no Yankees, no Patriots, no
+  Celtics, no Lakers. This is NOT the dedupe, which would keep distinct names.
+  It is async section data never reaching the snapshot, so a reference page
+  whose entire value is its tables is empty to search engines.
+  THAT MAKES FIVE TIMES correctly generated content has failed to reach a
+  crawler here: the FAQ markup, the breadcrumbs and the home page structured
+  data in Round 281, the soft 404 marker in Round 282, and now these two. The
+  shape is always the same, the prerenderer RECONSTRUCTS the body rather than
+  copying it, so anything the reconstruction drops is invisible to every check
+  that reads source instead of output. The fences for both read the OUTPUT.
 
 - THE CBB GRID SHIPS, Round 368 (desktop lane, 2026-08-31), finishing what
   Round 363 proved. Milestone 0 Task 5: the grid engine extended where the
