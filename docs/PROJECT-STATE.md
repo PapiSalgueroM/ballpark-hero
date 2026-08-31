@@ -2627,6 +2627,20 @@ today rather than adding alongside them.
   regression that matters here is an output change, which they catch. A source
   shape guard would also have walked straight into the repo's own trap, because
   the comment explaining why flagcdn is excluded contains the word flagcdn.
+  THE FULL PASS FOUND ONE CHANGED FILE, and chasing it was worth more than the
+  speedup. `public/football-timeline/index.html` lost a bare `<p>WR</p>`, a
+  position label off that day's puzzle. Ruled out as a cause: the font change.
+  Both the old and the new prerenderer drop that block consistently when the
+  route runs on its own, three runs each, identical hashes; the leak only
+  appears under a full 142 route run, so it is load and timing dependent, the
+  same shape Round 355 found in the head comparison. The same run's log shows
+  the sampling correctly stripping TEN other blocks from that page ("Ed Reed",
+  "S"), so it was working and this one got through anyway. The new snapshot is
+  therefore strictly MORE correct, and it is committed rather than reverted.
+  The mechanism behind it is filed on the board as its own item, because "all
+  three clock samples agreed" turns out to be satisfiable by luck, and that is
+  the rule Round 284 built to keep dated content out of files that live for
+  weeks.
   Worth knowing for the desktop lane: there the font hosts are reachable, so
   the win is smaller, but it is not zero (three avoided fetches per route) and
   it makes the pipeline's runtime independent of the network either way.

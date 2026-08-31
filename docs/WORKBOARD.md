@@ -110,6 +110,29 @@ already live before either round.)
 
 ## Inbox (unclaimed)
 
+- A DAILY PUZZLE FRAGMENT CAN STILL SURVIVE THE CLOCK SAMPLING, found by
+  Round 359 and NOT fixed there, because it is Round 284's mechanism rather
+  than that round's subject. Evidence: the committed /football-timeline
+  snapshot carried a bare `<p>WR</p>`, a position label off that day's puzzle,
+  sitting between the two ordering hints. The same run's log shows the
+  sampling correctly stripping TEN other blocks from the same page ("Ed Reed",
+  "S"), so it was working and this one got through anyway.
+  What was ruled out: it is not the font change. Both the old and the new
+  prerenderer drop that block consistently when the route is run on its own,
+  three runs each, identical hashes. The leak appeared under a full 142 route
+  run and not in isolation, so it is load and timing dependent, which is the
+  same shape Round 355 found in the head comparison.
+  Why it matters more than one stray label: the rule the sampling exists to
+  enforce is that nothing computed from a clock goes into a file that lives for
+  weeks, and "all three samples agreed" is evidently satisfiable by luck when a
+  block renders at the wrong moment. The page is noindexed so the cost this
+  time was nil, but the mechanism is site-wide.
+  Whoever takes it should measure before tuning, the way Round 355 did: run one
+  daily-puzzle route many times under real load and count how often a puzzle
+  block survives, rather than adding a wait and declaring it fixed.
+  playSnapshotDrift is the tool that already asks this question without needing
+  anyone to guess the offender first.
+
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
