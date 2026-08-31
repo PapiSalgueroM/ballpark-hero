@@ -424,6 +424,22 @@ Standing claims:
   and 710 rebounds, both checked against the table before being written down,
   and it uses him to make a real point about the game: your best answer usually
   fits more than one cell and can only be spent once.
+  THE LEADERBOARD FENCE EARNED ITS KEEP ON THE DAY. Running simLeaderboardCaps
+  before committing reported cbb-grid as the one uncovered key of the 127 the
+  source can send, so every point earned in the new game would have counted for
+  nothing. That is the nba-stat-line bug from Round 361, caught this time on the
+  day the game was built rather than weeks later.
+  PUBLISHED and verified live 2026-08-31: Lovable sync confirmed at 8392f38f
+  before deploying, the bundle flipped, /cbb-grid serves 200 with 3,101 crawler
+  visible words, its own title and h1, and it is in the live sitemap. Submitted
+  to IndexNow with /college, accepted HTTP 200.
+  TWENTY EIGHT SNAPSHOTS MOVED AND ALL OF IT IS EXPLAINED. Related game links
+  picked up the new registry entry. Several were STALE rather than wrong:
+  hockey-grid only now gains the archive link Round 358 added, because that
+  round ran npm run build instead of build:seo. And football-timeline drops a
+  position label because Round 366's fix worked, its daily genuinely varies by
+  date now, so the prerender's three clock samples disagree and it correctly
+  strips the puzzle instead of freezing one answer into the page.
 
 - RARITY ROUND SERVES ITS WHOLE POOL, Round 367 (desktop lane, 2026-08-31).
   Every category selected from player_market_values across ALL YEARS with
