@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 367.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 368.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,25 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 367 (desktop, 2026-08-31): RARITY ROUND SHOWS THE PLAYER A POOL
+  SIZE THAT IS OFF BY A FACTOR OF EIGHT, in a game whose entire premise is
+  naming the answer nobody else would. Verified against live data.
+  Every category selects from player_market_values ACROSS ALL YEARS and takes
+  .limit(1000) ordered by value descending, so the window fills with a few
+  hundred stars and rankPool then collapses it. Brazil: 1,722 distinct players
+  in the table, 206 reachable. Centre-Forward: 2,457 against 241. The number is
+  not internal: poolSize is rendered to the player and feeds scoreRound, and any
+  answer outside the pool is REFUSED with "that player doesn't count", so the
+  obscure answers this game exists to reward are exactly the ones truncated away.
+  THE FILE'S OWN COMMENTS NAME THE INTENDED POOLS and the query cannot deliver
+  them: "Verified pool sizes: Brazil 1680, Centre-Forward 2396, Centre-Back
+  2381". A peak-value-per-player view reproduces those numbers to within one
+  (1,681 / 2,396 / 2,381), which is proof the author intended exactly this and
+  the fetch was the only thing in the way.
+  player_market_values_dedup does NOT solve it: it is one row per player-year,
+  136,178 rows. This needs an aggregate, which is why it was held back from
+  Round 366 rather than lumped in with the ordering fixes.
 
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
