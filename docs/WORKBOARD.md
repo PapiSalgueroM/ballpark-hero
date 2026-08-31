@@ -67,10 +67,9 @@ needs a real pool.
 2. ~~SOCCER CONQUEST, world map round.~~ DONE, Round 358, see the Done list.
    The per league maps and the visual rebuild of the four existing maps are
    still unclaimed.
-3. **THE SNAPSHOT SWAP CLS**, the architectural remainder in the Inbox below.
-   Design work, no data. Read the two constraints written into that item before
-   proposing anything: it cannot be hydrated, and it must never be hidden from
-   visitors.
+3. ~~THE SNAPSHOT SWAP CLS.~~ CLOSED BY MEASUREMENT, Round 360: the swap costs
+   0.0000. The real shift is the deferred stylesheet, now filed as its own
+   Inbox item with the numbers.
 4. **A CANVAS MINIGAME**, the first slice of Anthony's swipe-to-move soccer
    idea. Generated characters only, never a real athlete's likeness.
 
@@ -133,15 +132,32 @@ already live before either round.)
   playSnapshotDrift is the tool that already asks this question without needing
   anyone to guess the offender first.
 
-- SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
-  properly and it is smaller than Round 348 thought): the prerendered snapshot
-  lives INSIDE #root, so when React mounts it clears it and paints a different
-  document, which shifts whatever the visitor could already see. It cannot be
-  hydrated away because the snapshot is deliberately reconstructed readable
-  text rather than React's own markup, and it must NOT be hidden from visitors,
-  because text served only to crawlers is cloaking. Any real fix changes the
-  prerenderer to emit hydratable markup, which is a designed round, not a
-  patch. Round 351 removed the larger and cheaper half of what was filed here.
+- ~~SNAPSHOT SWAP CLS~~ CLOSED BY MEASUREMENT, Round 360. The swap costs
+  0.0000 on every route measured. Round 351's footer move ended it: with
+  nothing rendering below the region React replaces, there is nothing to push.
+  No hydratable markup needed, no architectural round. See the Done list.
+- THE DEFERRED STYLESHEET IS WHERE THE CLS ACTUALLY IS (found by Round 360,
+  measured, NOT fixed, and it is a real decision rather than an oversight).
+  The 158KB stylesheet is deliberately not render blocking: vite.config injects
+  it as media="print" with an onload swap to "all", because a blocking link
+  pushed first contentful paint from 740ms to 2860ms on slow 4G. That trade was
+  made with measurements. What was never measured is its cost, and this is it:
+  the page paints nearly unstyled, the sheet lands, and the text relays out.
+  Measured at 390px on slow 4G it is essentially the whole of this site's CLS:
+  0.1997 on soccer-career, 0.1460 on ball-iq, 0.0843 on football-grid, 0.0737
+  on soccer, 0.0702 on conquest-soccer, 0.0618 on club-manager. Two of those
+  are over the 0.10 Core Web Vitals "good" line, and mobile is 42 percent of
+  clicks.
+  RULED OUT, so nobody repeats it: the webfonts. Aborting both font hosts
+  outright gives identical shifts to four decimal places.
+  THE HONEST OPTIONS, none of them free: inline the critical above-fold CSS so
+  the first paint is already close to the final layout (the standard fix, and a
+  designed round); or accept the trade and stop calling it a bug; or revisit
+  whether 158KB of CSS is the real problem. Whoever takes it must re-measure
+  BOTH sides, because the earlier round measured FCP and time-to-playable and
+  this one measured CLS, and nobody has yet put the two on the same page.
+  playSnapshotCls reports the number every run and caps it at 0.35, so it
+  cannot get materially worse unnoticed.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
@@ -431,6 +447,30 @@ Standing claims:
 
 ## Done
 
+- THE SNAPSHOT SWAP CLS, MEASURED AND CLOSED, Round 360 (cloud lane,
+  2026-08-31). The item was wrong about itself, which is now the third time on
+  this board that a filed CLS item has described something other than what it
+  named, so the pattern is worth naming: measure before designing.
+  THE SWAP COSTS 0.0000, on every one of eight routes at 390px on a throttled
+  connection. The premise, that the snapshot sits inside #root so the mount
+  shifts what the visitor could already see, stopped being true when Round 351
+  moved the Footer inside the Suspense boundary. Nothing renders below the
+  region React replaces, so there is nothing to push. No hydratable markup, no
+  architectural round, nothing to build.
+  WHAT THE SHIFT ACTUALLY IS: the deferred stylesheet, filed above as its own
+  item with the numbers. It accounts for essentially the entire CLS on every
+  route measured, and the webfonts were ruled out by aborting them and getting
+  identical values to four decimal places.
+  playSnapshotCls is the deliverable: it holds the invariant Round 351 won
+  (swap at or under 0.02) and REPORTS the one that was bought, capping it at
+  0.35 rather than failing at today's value, because freezing a deliberate
+  trade-off as correct is not what a fence is for. It also asserts the snapshot
+  really painted first, since a route with no snapshot would pass the swap
+  check for entirely the wrong reason. SNAPCLS_CONTROL=belowroot plants a block
+  below #root, the pre-351 shape, and swap CLS goes 0.0000 to 0.0569 while the
+  stylesheet number is untouched, which proves the two attributions are
+  independent rather than one number wearing two hats.
+  NEEDS PUBLISHING: no, a harness and docs only.
 - THE PRERENDER FONT WAIT, Round 359 (cloud lane, 2026-08-30). Filed by the
   round before and taken immediately because it was blocking this lane's own
   verification loop. prerender.mjs now aborts fonts.googleapis.com and

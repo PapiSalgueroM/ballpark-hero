@@ -2597,6 +2597,48 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 360.** The snapshot swap CLS, measured, and the item was
+  wrong about itself. This is the third time on this board that a filed CLS item
+  has turned out to describe something other than what it named, so the pattern
+  is worth the sentence: Round 348 filed it bigger than it was, Round 351
+  measured it and found most of it was the footer, Round 355 disproved its own
+  premise the moment somebody looked, and now this.
+  THE SWAP COSTS NOTHING. Measured on the real build across eight routes at
+  390px on a throttled connection, the shift attributable to React clearing the
+  prerendered snapshot is 0.0000 on every one. The item's premise, that the
+  snapshot lives inside `#root` so the mount "shifts whatever the visitor could
+  already see", stopped being true when Round 351 moved the global Footer inside
+  the Suspense boundary. With nothing rendering below the region React replaces,
+  there is nothing for the swap to push; it is replaced in place. No
+  architectural round, no hydratable markup, nothing to build.
+  WHAT THE SHIFT ACTUALLY IS, and it was hiding behind that premise. The 158KB
+  stylesheet is deliberately not render blocking: `vite.config.ts` injects it as
+  `media="print"` with an onload swap to `all`, a trade made with measurements
+  because a blocking link pushed first contentful paint from 740ms to 2860ms.
+  The CLS cost of that trade was never measured. It is this: the page paints its
+  text nearly unstyled, the sheet lands, media flips, and the text relays out.
+  Attributed by listening for that exact load event it accounts for essentially
+  the whole number: 0.1997 of 0.1997 on soccer-career, 0.1373 of 0.1460 on
+  ball-iq, 0.0618 of 0.0618 on club-manager.
+  RULED OUT ALONG THE WAY, so nobody re-runs it: the webfonts. Aborting
+  fonts.googleapis.com and fonts.gstatic.com outright produced identical shift
+  values and timings, to four decimal places, so the deferred stylesheet is the
+  cause and the fonts are not.
+  `scripts/playSnapshotCls.mjs` is the deliverable. It holds the invariant that
+  was won (swap at or under 0.02, measured 0.0000) and REPORTS the one that was
+  bought, capping it at 0.35 rather than failing at today's value, because
+  freezing a deliberate trade-off as correct is not what a fence is for. It also
+  asserts the snapshot was really painted first, since a route with no snapshot
+  would pass the swap check for entirely the wrong reason.
+  SNAPCLS_CONTROL=belowroot plants a visible block below `#root`, which is
+  exactly the pre-Round-351 shape, and swap CLS goes 0.0000 to 0.0569 while the
+  stylesheet number is untouched, which also proves the two attributions are
+  independent rather than one number wearing two hats.
+  One thing the harness got wrong first, fixed before it landed: it read the
+  snapshot's height on the first animation frame, before layout settled, and
+  reported 51px for pages really showing a full screenful. It records the height
+  the snapshot actually held while visible now, which comes out at 844px on
+  every route, the `max-height:100vh` calm-boot cap from Round 314 doing its job.
 - **2026-08-30, Round 359.** The prerender font wait. `scripts/prerender.mjs`
   now aborts requests to `fonts.googleapis.com` and `fonts.gstatic.com`, the two
   hosts `index.html` asks for its webfaces, alongside the tag manager and
