@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 368.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 369.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,15 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 368 (desktop, 2026-08-31): THE CBB GRID PAGE, finishing what
+  Round 363 started. The engine and its harness are already committed and green:
+  106 eligible schools derived at runtime, all 848 school by achievement
+  combinations recounted independently, 14 days of boards proven solvable with
+  the thinnest cell holding 10 answers, and CBBGRID_CONTROL=nofloor going red on
+  a cell with zero. What is missing is everything a player can see: the page,
+  the route, the registry entry and the SEO copy. Milestone 0 Task 5, the grid
+  engine extended where the search demand is.
 
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
