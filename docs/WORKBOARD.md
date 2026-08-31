@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 366.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 367.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,20 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 366 (desktop, 2026-08-31): THE WHOLE REMAINING DAILY AUDIT
+  LIST, worked as one round because it is one theme: a daily should be the same
+  puzzle for everyone, drawn from the whole pool. Group B (unordered pools
+  feeding a positional draw): puck-detective, sports-millionaire, ball-iq and
+  quiz-board, champ-or-not and whod-they-beat and silverware-sort, mystery-box,
+  sports-bingo and gauntlet-draft. Group C (per user puzzles): guess-the-nation
+  serving two different pools by difficulty, f1-driver and f1-constructor
+  seeding from the VIEWER'S LOCAL CLOCK so Europe and Australia get a different
+  answer, pack-battle and nba-stat-line failing open on a dropped page. Group D
+  (wrong day boundary): guess-nfl-team, football-timeline, guess-tennis-player,
+  guess-nascar-driver. Every proposed order column gets checked against the live
+  schema BEFORE it is written, because Round 362 nearly shipped .order('id') on
+  a table with no id and would have taken the game down.
 
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
