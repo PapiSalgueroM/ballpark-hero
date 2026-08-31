@@ -125,23 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 362 (desktop, 2026-08-30): THE DAILY PICK'S POOL IS NOT
-  GUARANTEED STABLE. dateUtils.ts documents pool[dateSeed % pool.length] as the
-  site's standard daily mechanism, deliberately, so the pool rotates. That is
-  correct AND it depends entirely on pool ORDER being stable, which several
-  fetches do not ask for: useCbbProgram and useNascarDriver both select with no
-  .order(), and Postgres gives no order guarantee without one. Measured today
-  the order is stable (small unchanged table, heap order), so this is latent
-  rather than firing, and the honest statement is that the invariant is
-  unguaranteed, not that the games are broken. The failure mode is an ordinary
-  data correction: an UPDATE rewrites that row to the end of the heap and every
-  index after it shifts, so the date to puzzle mapping silently changes and two
-  players on the same date can get different puzzles.
-  The sharper sibling to look for is a daily pool ABOVE 1,000 rows fetched
-  without paging, where PostgREST truncation makes most of the catalogue
-  unreachable as a daily and the modulo runs over the wrong length. Round the
-  audit over every daily game, fix what is real, leave what is fine.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -415,6 +398,47 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE DAILY PICK'S POOL NOW HAS A GUARANTEED ORDER, Round 362 (desktop lane,
+  2026-08-30). dateUtils.ts documents pool[dateSeed % pool.length] as the site's
+  daily mechanism and it is correct, but it rests entirely on the pool arriving
+  in the same order every time, and four hooks never asked for one:
+  useCbbProgram, useNascarDriver, useGuessTheNation and useTennisPlayer, which
+  is the very file the other two cite as the pattern to mirror. Postgres returns
+  heap order without an ORDER BY, which looks stable until a row is edited,
+  because an UPDATE rewrites that tuple to the end of the heap and shifts every
+  index after it: the date to puzzle mapping then changes silently and two
+  players on the same date can get different puzzles. Latent, not firing:
+  measured today the order was stable, and the honest claim is that the
+  invariant was unguaranteed rather than that the games were broken.
+  THE FIX RE-MAPS TODAY ONCE, and that is the real cost, stated rather than
+  hidden: today's CBB program moves from Old Dominion to Missouri. One shift,
+  then stable forever, and these are low traffic games. Worth it.
+  TRUNCATION WAS THE OTHER HYPOTHESIS AND THE EVIDENCE KILLED IT: no daily pool
+  table exceeds 1,000 rows. The largest is transfer_path_puzzles at 902, and
+  that one already pages through fetchAllRows. soccer_grid_puzzles at 710 is the
+  nearest unpaged one and it is correctly ordered by sort_order.
+  NEARLY SHIPPED A BREAKING CHANGE, caught by verifying rather than assuming:
+  the first patch ordered all three by 'id', and nascar_drivers HAS NO id COLUMN
+  and no primary key at all. That query 400s and the hook turns it into its
+  error state, so the game would simply have stopped working, and nothing would
+  have caught it because these hooks reach Supabase through `as any` so tsc sees
+  nothing. Ordered by driver_name instead: unique across all 83 rows, non null,
+  and stabler than rank, which a data refresh could renumber.
+  simDailyPoolOrder section 2 exists because of that near miss and is the half
+  that earns its keep: it asks the DATABASE whether every (table, order column)
+  pair in src is real, all 36 of them. Section 1 holds the ordering rule by
+  shape rather than by a list of hooks, so a game added tomorrow is covered.
+  Two controls, one per section, both proven red. The harness itself shipped a
+  bug first: its chain regex required reaching the next .from( within 400
+  characters, so any chain without one was silently DROPPED, and it reported
+  useGuessTheNation as having zero pool reads while that file was the one under
+  investigation. Fixed, and the count went from 12 pairs to 36, which is how the
+  fourth game (tennis) was found at all. A harness that cannot see a file
+  passes it.
+  Filed, not fixed: nascar_drivers has no primary key, and useNascarDriver line
+  63 looks up a daily by .eq('id', ...) on that same idless table, so even if
+  the edge function ever ran, that path would 400. It is dead twice over.
 
 - THE REST OF THE PUBLIC WRITE SURFACE, AND A WRONG NUMBER ON THE HOME PAGE,
   Round 361 (desktop lane, 2026-08-30). Nineteen anon writable tables audited by

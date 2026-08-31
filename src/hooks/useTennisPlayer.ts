@@ -28,7 +28,11 @@ export function useTennisPlayer() {
 
   const loadPlayers = useCallback(async () => {
     setStatus('loading');
-    const { data, error } = await supabase.from('tennis_players').select('*');
+    /* ROUND 362: ordered for the same reason as useCbbProgram, see the note
+       there. This hook is the one the others cite as the pattern to mirror,
+       so it is the one most worth getting right. id is the primary key. */
+    const { data, error } = await supabase.from('tennis_players').select('*')
+      .order('id', { ascending: true });
     if (error) {
       setStatus('error');
       return;

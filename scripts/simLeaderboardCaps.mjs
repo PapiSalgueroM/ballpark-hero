@@ -66,12 +66,29 @@ const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };
 
 async function rest(pathAndQuery) {
-  const r = await fetch(`${URL_}/rest/v1/${pathAndQuery}`, { headers: HEAD });
-  if (!r.ok) {
-    console.error(`the database refused ${pathAndQuery}: ${r.status} ${await r.text()}`);
-    process.exit(1);
+  /* ROUND 362: retry, for the same reason Round 359 put a retry in
+     fetchAllRows. Section 4 keyset paginates and makes about 125 sequential
+     requests, so it meets a transient far more often than any single call
+     would, and the first draft exited on the first failure. That made the fence
+     flaky, and a fence that goes red at random is worse than no fence: people
+     learn to re-run it rather than read it. Two more attempts with a short
+     backoff, then give up loudly, because a database that is genuinely down
+     still has to surface. */
+  let last = '';
+  for (let attempt = 0; attempt <= 2; attempt++) {
+    if (attempt) await new Promise(r => setTimeout(r, 400 * attempt));
+    try {
+      const r = await fetch(`${URL_}/rest/v1/${pathAndQuery}`, { headers: HEAD });
+      if (r.ok) return r.json();
+      last = `${r.status} ${await r.text()}`;
+      /* A refusal is an answer, not a transient: do not retry it. */
+      if (r.status === 401 || r.status === 403 || r.status === 400) break;
+    } catch (e) {
+      last = String(e);
+    }
   }
-  return r.json();
+  console.error(`the database refused ${pathAndQuery}: ${last}`);
+  process.exit(1);
 }
 
 /* The keys the CLIENT can send, read from source rather than from a list kept

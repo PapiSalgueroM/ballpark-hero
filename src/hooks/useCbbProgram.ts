@@ -32,7 +32,19 @@ export function useCbbProgram() {
     setProgramsStatus('loading');
     const { data, error } = await supabase
       .from('cbb_programs')
-      .select('*');
+      .select('*')
+      /* ROUND 362: THE DAILY INDEX NEEDS A GUARANTEED ORDER.
+         The daily puzzle is pool[dateSeed % pool.length], which is this site's
+         documented standard (see dateUtils.ts) and is correct. It rests
+         entirely on the pool arriving in the same order every time, and a
+         select without an order by gives no such guarantee: Postgres returns
+         heap order, which looks stable only until a row is edited, because an
+         UPDATE rewrites that tuple to the end of the heap and shifts every
+         index after it. The mapping from date to puzzle would then change
+         silently, and two players on the same date could be served different
+         puzzles. Ordering by id rather than by a name, because a name can be
+         corrected and an id cannot. */
+      .order('id', { ascending: true });
     if (error) {
       setProgramsStatus('error');
       return;

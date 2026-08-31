@@ -39,7 +39,11 @@ export function useGuessTheNation() {
     setError(false);
     (async () => {
       try {
-        const { data, error: fetchError } = await (supabase as any).from('guess_nation_countries').select('*');
+        /* ROUND 362: ordered for the same reason as useCbbProgram, see the note
+           there. This hook's own comment below promises that every player gets
+           the same daily puzzle, and without an order by, nothing guaranteed it. */
+        const { data, error: fetchError } = await (supabase as any).from('guess_nation_countries').select('*')
+          .order('id', { ascending: true });
         if (cancelled) return;
         if (fetchError || !data) {
           setError(true);

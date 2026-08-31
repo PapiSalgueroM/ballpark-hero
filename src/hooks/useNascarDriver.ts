@@ -28,7 +28,15 @@ export function useNascarDriver() {
 
   const loadDrivers = useCallback(async () => {
     setStatus('loading');
-    const { data, error } = await supabase.from('nascar_drivers').select('*');
+    /* ROUND 362: ordered for the same reason as useCbbProgram, see the note
+       there. The daily index is pool[dateSeed % pool.length] and it needs a
+       pool order that an ordinary row edit cannot move. Ordered by
+       driver_name and not by id, because this table HAS no id and no primary
+       key at all: driver_name is unique across all 83 rows and non null, and
+       it is stabler than rank, which is a computed standing that a data
+       refresh could renumber. */
+    const { data, error } = await supabase.from('nascar_drivers').select('*')
+      .order('driver_name', { ascending: true });
     if (error) {
       setStatus('error');
       return;
