@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 365.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 366.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,24 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 365 (desktop, 2026-08-31): TRANSFER PATH SERVES 21 OF 902
+  PUZZLES, AND SERVES THEM AGAINST THE WRONG PLAYER POOL. Verified by hand.
+  useDailyPuzzle's selection memo deliberately omits `puzzles` from its deps and
+  says so in a comment: it expects a stable module-level array and takes the
+  real selection through `supabasePuzzle`. useSoccerGrid follows that contract
+  and documents it. useTransferPath does not: it passes `puzzles: puzzlePool`,
+  which is STATE seeded from the 21 entry fallback, and passes no
+  supabasePuzzle, so selection runs once against the fallback and never
+  recomputes when the 902 row fetch lands. 881 puzzles can never be the daily.
+  THE SECOND HALF IS WORSE THAN THE FIRST. Both pools are fetched (lines 57 and
+  58) but only playerPool is actually consumed, so the served puzzle is a
+  FALLBACK puzzle validated against LIVE careers. The fallback file's own header
+  says its minimums and hints are derived from the fallback player pool and that
+  the live table "carries its own hints, which differ where the pools differ",
+  and that the fallback is "served only when transfer_path_puzzles cannot be
+  read". Both statements are false in production today. This is the Round 294
+  hint versus rule mismatch returning by a different route.
 
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
