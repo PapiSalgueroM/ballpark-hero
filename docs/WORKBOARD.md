@@ -447,6 +447,15 @@ Standing claims:
   The harness reported a product bug that was its own first: assembleCampaign
   derives its start year from the seed via startYearFor, so fetching one year
   and assembling another finds nothing. Driven from the seeds now.
+  PUBLISHED and verified live 2026-08-31: Lovable synced adaef218, the bundle
+  flipped and /player-stock-market serves 200. The Round 361 fix is visible in
+  the same build: Most Played Today now reads Club Manager, Soccer Career and
+  NBA My Career instead of the curated fallback.
+  PROCESS NOTE, worth keeping: deploy_project was called BEFORE checking that
+  Lovable had synced the commit, so the first deploy published the previous
+  head and the bundle never flipped. Earlier rounds checked get_project's
+  latest_commit_sha first and this one skipped it. Always confirm the sync
+  before deploying, otherwise the poll waits on a build that was never queued.
 
 - THE DAILY PICK'S POOL NOW HAS A GUARANTEED ORDER, Round 362 (desktop lane,
   2026-08-30). dateUtils.ts documents pool[dateSeed % pool.length] as the site's
