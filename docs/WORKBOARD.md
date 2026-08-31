@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 363.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 364.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,22 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 363 (desktop, 2026-08-30): CBB GRID, Milestone 0 Task 5, the
+  grid engine extended where the search demand is. ncaa_player_stats carries
+  43,800 rows, 39,798 distinct players and 407 schools in the same shape the
+  franchise grids already use (player_name, schools, points, trb, ast, games,
+  position), so it can be GENERATED and validated deterministically like
+  nba-grid rather than hand authored and AI validated like the existing college
+  football grid. That matters twice: it is verifiable without a model in the
+  loop, and it supports an archive page like the ones Round 358 built.
+  MEASURED FIRST, and it changed the design: school x school crossings are THIN,
+  because college players mostly attend one school. Among the top 30 schools
+  only 36 pairs have 3 or more shared players and the best is Utah x Utah State
+  at 8. School x stat crossings are rich: 1500+ career points runs 13 to 33 per
+  school, 120+ games runs 53 to 83. So the board is schools against
+  achievements, not schools against schools, and the generator enforces a
+  minimum valid answer count per cell exactly as the franchise generators do.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
