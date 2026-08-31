@@ -121,6 +121,7 @@ const MlbHigherLower = lazy(() => import("./pages/MlbHigherLower"));
 const TennisHigherLower = lazy(() => import("./pages/TennisHigherLower"));
 const CfbHigherLower = lazy(() => import("./pages/CfbHigherLower"));
 const NbaGrid = lazy(() => import("./pages/NbaGrid"));
+const CbbGrid = lazy(() => import("./pages/CbbGrid"));
 const GridArchive = lazy(() => import("./pages/GridArchive"));
 const MlbGrid = lazy(() => import("./pages/MlbGrid"));
 const NbaConnections = lazy(() => import("./pages/NbaConnections"));
@@ -431,6 +432,7 @@ const AppContent = () => {
         <Route path="/tennis-higher-lower" element={<TennisHigherLower />} />
         <Route path="/cfb-higher-lower" element={<CfbHigherLower />} />
         <Route path="/nba-grid" element={<NbaGrid />} />
+        <Route path="/cbb-grid" element={<CbbGrid />} />
         {/* Round 354, extended in 358: past boards with their computed answers,
             a real page rather than a search-only one. See the component header
             for why these three sports and not the other three. */}

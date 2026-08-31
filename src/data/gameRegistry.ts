@@ -161,6 +161,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/college-grid', label: 'College Grid', emoji: '🎓', description: 'College football 3×3 grid puzzle', daily: true },
       { path: '/guess-the-college', label: 'Guess The College', emoji: '🏫', description: 'Guess the D1 school from clues', daily: true },
       { path: '/guess-cbb-team', label: 'Guess The CBB Program', emoji: '🏀', description: 'Guess the college basketball program', daily: true, isNew: true },
+      { path: '/cbb-grid', label: 'College Basketball Grid', emoji: '🔲', description: 'Fill the 3×3 with players who match the school and the achievement', daily: true, isNew: true },
       { path: '/cfb-higher-lower', label: 'CFB Higher or Lower', emoji: '📊', description: 'Which QB threw for more college yards?', daily: true, isNew: true },
       { path: '/cfb-dynasty', label: 'CFB Dynasty', emoji: '🏟️', description: 'Full program sim: NIL recruiting, the portal, the 12-team Playoff, dynasties', isNew: true, featured: true },
       { path: '/cbb-dynasty', label: 'CBB Dynasty', emoji: '🏀', description: 'College hoops sim: one-and-dones, conference tournaments, 32-team March, Cinderella', isNew: true, featured: true },

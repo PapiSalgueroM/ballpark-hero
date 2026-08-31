@@ -2597,6 +2597,18 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 368.** The CBB grid ships, finishing Round 363's engine.
+  Milestone 0 Task 5. `/cbb-grid` has a page, route, registry entry and per game
+  SEO copy on top of an engine that was already proven: 106 eligible schools
+  derived at runtime, all 848 combinations recounted by the harness, a fortnight
+  of boards solvable with the thinnest cell at 10 answers. The board crosses
+  schools with achievements rather than school with school, and that is a data
+  fact rather than a preference: among the thirty best represented programs only
+  36 pairs share three or more players and the best pair is Utah with Utah State
+  at eight, so a school by school board would be mostly unanswerable. The page
+  and its FAQ say so, and there is no difficulty selector because there is no
+  honest all-schools hard mode. Every number in the SEO copy is measured, and
+  the worked example's player was checked against the table before being written.
 - **2026-08-31, Round 367.** Rarity Round serves its whole pool. Every category
   selected from `player_market_values` across all years with `.limit(1000)`, so
   the window filled with stars: Brazil 1,722 distinct players with 206

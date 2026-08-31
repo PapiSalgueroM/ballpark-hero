@@ -56,6 +56,10 @@
     "hash": "c6f70132708020e9",
     "date": "2026-08-25"
   },
+  "/cbb-grid": {
+    "hash": "b90312e46b8acffe",
+    "date": "2026-08-31"
+  },
   "/cfb-dynasty": {
     "hash": "81a3daa8c45b5e4d",
     "date": "2026-08-29"
@@ -77,12 +81,12 @@
     "date": "2026-08-25"
   },
   "/college": {
-    "hash": "96498156d5335b3a",
-    "date": "2026-08-30"
+    "hash": "5ab33e14857307b5",
+    "date": "2026-08-31"
   },
   "/college-grid": {
-    "hash": "0924fe7df24b0c17",
-    "date": "2026-08-29"
+    "hash": "26fdbecf28c78161",
+    "date": "2026-08-31"
   },
   "/connections": {
     "hash": "8859770fc07dad42",
@@ -161,8 +165,8 @@
     "date": "2026-08-29"
   },
   "/guess-cbb-team": {
-    "hash": "a5ba371af2033e97",
-    "date": "2026-08-25"
+    "hash": "170221912a821d85",
+    "date": "2026-08-31"
   },
   "/guess-nascar-driver": {
     "hash": "7b070177659dec74",
@@ -173,8 +177,8 @@
     "date": "2026-08-30"
   },
   "/guess-the-college": {
-    "hash": "1bfd27d4cb77b8bb",
-    "date": "2026-08-30"
+    "hash": "e539e4c3616b69c0",
+    "date": "2026-08-31"
   },
   "/guess-the-golfer": {
     "hash": "cb7a3d5de2a31587",
@@ -193,8 +197,8 @@
     "date": "2026-08-25"
   },
   "/higher-lower": {
-    "hash": "a565e266a38fce12",
-    "date": "2026-08-25"
+    "hash": "f0328ab1bd61a809",
+    "date": "2026-08-31"
   },
   "/hockey": {
     "hash": "676b20b82458e5cc",
@@ -205,8 +209,8 @@
     "date": "2026-08-25"
   },
   "/hockey-grid": {
-    "hash": "dd70f7f231dd300d",
-    "date": "2026-08-29"
+    "hash": "f1d9f9f55aa22140",
+    "date": "2026-08-31"
   },
   "/hockey-grid/archive": {
     "hash": "3430882fa5062596",
@@ -217,8 +221,8 @@
     "date": "2026-08-25"
   },
   "/hof-or-bust": {
-    "hash": "5604303c72d56998",
-    "date": "2026-08-30"
+    "hash": "a56be4afd427833e",
+    "date": "2026-08-31"
   },
   "/idle-arena": {
     "hash": "e68845ba93f61380",
@@ -249,8 +253,8 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "38ff17361af27991",
-    "date": "2026-08-30"
+    "hash": "d9d1562f16fd7873",
+    "date": "2026-08-31"
   },
   "/mlb-connect-4": {
     "hash": "7fad83a61216a551",
@@ -261,8 +265,8 @@
     "date": "2026-08-25"
   },
   "/mlb-grid": {
-    "hash": "8057ee02fb5fbcfe",
-    "date": "2026-08-29"
+    "hash": "f5831df92b63e889",
+    "date": "2026-08-31"
   },
   "/mlb-grid/archive": {
     "hash": "bbbd50ce8bce9e31",
@@ -329,8 +333,8 @@
     "date": "2026-08-30"
   },
   "/nfl-career": {
-    "hash": "73d12d61e5a9b58f",
-    "date": "2026-08-25"
+    "hash": "22bc35a92b7f5acd",
+    "date": "2026-08-31"
   },
   "/nfl-connect-4": {
     "hash": "b6316cc7c3844ce6",
@@ -349,8 +353,8 @@
     "date": "2026-08-29"
   },
   "/nhl-connect-4": {
-    "hash": "72eb4bfbc713d344",
-    "date": "2026-08-29"
+    "hash": "c6ad8431e32d5ab1",
+    "date": "2026-08-31"
   },
   "/nhl-connections": {
     "hash": "2e917a2cd1dcb141",

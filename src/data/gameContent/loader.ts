@@ -58,6 +58,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/cfb-dynasty': 'college',
   '/cfb-higher-lower': 'college',
   '/college-grid': 'college',
+  '/cbb-grid': 'college',
   '/guess-cbb-team': 'college',
   '/guess-the-college': 'college',
   /* football */

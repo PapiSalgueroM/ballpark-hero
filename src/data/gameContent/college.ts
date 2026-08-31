@@ -2,6 +2,61 @@ import type { GameContentMap } from './types';
 
 // College sports game guides. Casual human tone, no em dashes anywhere.
 export const COLLEGE_CONTENT: GameContentMap = {
+  '/cbb-grid': {
+    intro: [
+      "The College Basketball Grid is a daily 3x3 puzzle about who suited up where. Rows are programs like Kentucky, Kansas or Indiana. Columns are career achievements: 1,500 career points, 700 rebounds, 350 assists, 120 games, a position, or an era. Each of the nine cells needs one player who satisfies both.",
+      "It is built on nearly 40,000 college careers across 407 programs, and every crossing on the board has at least ten real answers behind it, so no cell is a dead end. That floor is checked against the live data rather than assumed.",
+      "One grid a day, the same for everyone, nine guesses. A fresh board arrives at midnight Eastern, and unlimited mode deals a new one whenever you want another.",
+    ],
+    howToPlay: [
+      "Tap an empty cell. The game names both requirements, like Kentucky plus 1,500+ Career Points.",
+      "Type a player name. Suggestions appear after a couple of letters, drawn from the same career database the answers are checked against.",
+      "Correct picks lock the cell green. Wrong picks flash red and cost a guess.",
+      "Each player can only be used once on the board, so a name that fits two cells has to be spent on one.",
+      "Fill all nine cells or run out of guesses, then share your emoji grid.",
+    ],
+    rules: [
+      "Nine guesses to fill nine cells. A wrong guess costs a guess and leaves the cell empty.",
+      "A cell only accepts a player who satisfies its row and its column at the same time.",
+      "Rows are always schools. Columns are always achievements, never a second school.",
+      "Every name can be used once per board.",
+      "Daily is the same grid for everybody and saves your progress. Unlimited generates a new grid on demand.",
+    ],
+    example: [
+      "Say the rows are Indiana, Kentucky and Kansas, and the columns are 1,500+ Career Points, 700+ Career Rebounds and Played in the 1990s. You open on Indiana plus 1,500+ Career Points and type Calbert Cheaney, who scored 2,613 for the Hoosiers between 1989 and 1993. Green.",
+      "Cheaney also grabbed 710 rebounds, so he would have fitted the middle column too, but each name is spent once, so you have to choose. That is the whole tension of the board: your best answer usually solves more than one cell.",
+      "The 1990s column is the friendliest on the grid, because it takes anyone whose career touched the decade at all. Save the tight crossings, like a rebounding total at a guard heavy program, for while you still have guesses in hand.",
+    ],
+    tips: [
+      "Start with the column that fits the most people. Games played and the era columns are far wider than the scoring and rebounding ones.",
+      "Big men solve rebound cells and guards solve assist cells. Match the archetype to the column before you reach for a famous name.",
+      "A four year player beats a one and done here. The columns are career totals, so somebody who stayed will clear them and a freshman phenomenon usually will not.",
+      "If a name fits two cells, spend it on the harder one. The easy cell will have another answer.",
+      "Nine guesses for nine cells means there is no budget for guessing. Fill what you know first.",
+    ],
+    faqs: [
+      {
+        q: "Why are the columns achievements instead of a second school?",
+        a: "Because the data says a school against school board would not work. Professional players change franchises constantly, which is what makes the NBA and NHL grids possible. College players mostly attend one school: among the thirty best represented programs, only 36 pairs share three or more players, and the best pair in the whole set is Utah with Utah State at eight. A school by school college grid would be mostly cells nobody could answer, so this board crosses schools with achievements instead, where the thinnest crossing still holds ten players.",
+      },
+      {
+        q: "Which schools can appear?",
+        a: "Only programs where every single achievement column has at least ten qualifying players, which works out at 106 of the 407 programs in the data. That list is recomputed from the database rather than kept by hand, so a program that grows into eligibility is included automatically and nothing goes stale.",
+      },
+      {
+        q: "How far back does the player pool go?",
+        a: "It covers careers across the modern era of college basketball, which is why the era columns exist. Some columns depend on statistics that were not tracked in the earliest years, so the achievements used here are the ones the records support for everybody.",
+      },
+      {
+        q: "Does a transfer count for both schools?",
+        a: "Yes. Roughly a quarter of the players in the pool suited up for more than one program, and each of those schools counts, which is what makes a transfer a useful answer when a crossing looks thin.",
+      },
+      {
+        q: "Is it the same grid for everyone?",
+        a: "In daily mode, yes. The board is generated from the date, so every player gets the same nine cells and your progress is saved if you leave and come back. Unlimited mode deals a random board whenever you want one and does not save.",
+      },
+    ],
+  },
   '/college-grid': {
     intro: [
       "The College Football Grid is a daily 3x3 puzzle for fans who remember where guys played on Saturdays. Rows are schools like Alabama, or sometimes whole conferences. Columns are positions, awards, and draft credentials. Each of the 9 cells needs one player who fits both.",

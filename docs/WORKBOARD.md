@@ -125,31 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 368 (desktop, 2026-08-31): THE CBB GRID PAGE, finishing what
-  Round 363 started. The engine and its harness are already committed and green:
-  106 eligible schools derived at runtime, all 848 school by achievement
-  combinations recounted independently, 14 days of boards proven solvable with
-  the thinnest cell holding 10 answers, and CBBGRID_CONTROL=nofloor going red on
-  a cell with zero. What is missing is everything a player can see: the page,
-  the route, the registry entry and the SEO copy. Milestone 0 Task 5, the grid
-  engine extended where the search demand is.
-
-- CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
-  src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
-  route, the page and the registry entry are NOT built yet, so the game is not
-  live: whoever picks this up writes CbbGrid.tsx modelled on NbaGrid.tsx (443
-  lines, self contained like its MLB and hockey siblings) and wires the route.
-  MEASURED FIRST, and it changed the design: school x school crossings are thin
-  because college players mostly attend one school (among the top 30 schools
-  only 36 pairs share 3+ players, best is Utah x Utah State at 8), so the board
-  is schools against achievements. The school pool is DERIVED AT RUNTIME from
-  the loaded data rather than listed in source, because a hand kept list of
-  "schools with enough players" is the stale allowlist this repo has already
-  paid for twice. 106 schools clear a floor of 10 on all eight achievements;
-  the harness recounts every one of the 848 combinations independently and
-  proves 14 days of boards solvable, with CBBGRID_CONTROL=nofloor going red on
-  a cell with zero answers.
-
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
   lives INSIDE #root, so when React mounts it clears it and paints a different
@@ -423,6 +398,32 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE CBB GRID SHIPS, Round 368 (desktop lane, 2026-08-31), finishing what
+  Round 363 proved. Milestone 0 Task 5: the grid engine extended where the
+  search demand is. /cbb-grid is a real game now with a page, a route, a
+  registry entry and per game SEO copy, on top of an engine that was already
+  green: 106 eligible schools derived at runtime from the loaded data rather
+  than listed in source, all 848 school by achievement combinations recounted
+  independently by the harness, 14 days of boards proven solvable with the
+  thinnest cell holding 10 answers, and CBBGRID_CONTROL=nofloor going red on a
+  cell with zero.
+  THE ONE REAL DESIGN DIFFERENCE FROM ITS SIBLINGS IS A DATA FACT, not taste.
+  The franchise grids cross team with team because professionals move clubs
+  constantly. College players mostly attend one school: among the thirty best
+  represented programs only 36 pairs share three or more players, and the best
+  pair in the entire set is Utah with Utah State at eight. A school by school
+  college board would be mostly unanswerable, so this one crosses schools with
+  achievements, and the page and the FAQ both say so plainly rather than leaving
+  it looking like a missing feature. There is no difficulty selector for the
+  same reason: there is no honest all-schools hard mode to offer.
+  EVERY CLAIM IN THE SEO COPY IS A MEASURED NUMBER: nearly 40,000 careers across
+  407 programs, 106 eligible, ten answers minimum per crossing, and about a
+  quarter of players having suited up for more than one school (10,383 of
+  39,798). The worked example names Calbert Cheaney at Indiana with 2,613 points
+  and 710 rebounds, both checked against the table before being written down,
+  and it uses him to make a real point about the game: your best answer usually
+  fits more than one cell and can only be spent once.
 
 - RARITY ROUND SERVES ITS WHOLE POOL, Round 367 (desktop lane, 2026-08-31).
   Every category selected from player_market_values across ALL YEARS with
