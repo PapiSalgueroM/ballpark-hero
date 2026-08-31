@@ -1,3 +1,4 @@
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { F1DriverPuzzle } from '@/types/f1Driver';
 
 export const F1_DRIVERS: F1DriverPuzzle[] = [
@@ -266,7 +267,15 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
 /** Get daily puzzle using date-based index */
 export function getDailyF1Puzzle(): F1DriverPuzzle {
   const today = new Date();
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  /* ROUND 366: seeded from ET, not from the viewer's own clock. This used
+     new Date()'s local getFullYear/getMonth/getDate, so the seed was whatever
+     calendar date the visitor's machine was on: Europe rolls over five to six
+     hours before ET, Australia fourteen to sixteen, Pacific three hours after.
+     With a small pool, one local date apart is a different answer, and the page
+     tells the visitor to play the daily "for a shared puzzle". Grepping src for
+     this pattern returned exactly these two files, so it was an isolated pair
+     rather than a convention. */
+  const seed = dateSeed(getTodayET());
   return F1_DRIVERS[seed % F1_DRIVERS.length];
 }
 

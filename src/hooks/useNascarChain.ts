@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 import { toast } from 'sonner';
+import { getTodayET } from '@/lib/dateUtils';
 
 /**
  * NASCAR driver pool for the shared PlayerAutocomplete input (see
@@ -29,7 +30,11 @@ export const NASCAR_DRIVER_SOURCE: PlayerSourceConfig = {
 };
 
 function getDailyStarter(): string {
-  const today = new Date().toISOString().slice(0, 10);
+  /* ROUND 366: ET, not UTC. Found by simDailyPoolOrder section 4 rather than
+     by the audit, which did not reach these two. toISOString is UTC, so the
+     daily starter rolled at 8pm ET while the completion filed against
+     getEtDateString, putting the puzzle and the score on different days. */
+  const today = getTodayET();
   let hash = 0;
   for (let i = 0; i < today.length; i++) {
     hash = ((hash << 5) - hash + today.charCodeAt(i)) | 0;

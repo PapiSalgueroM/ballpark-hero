@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
 /**
@@ -249,10 +250,21 @@ async function fetchCareerPointsByName(): Promise<Map<string, number>> {
 export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | null> {
   try {
     const [{ data, error }, pointsByName] = await Promise.all([
-      supabase
+      /* ROUND 366: .limit(4000) returned 1,000 of 1,752 rows, because PostgREST
+         caps every select regardless of the limit asked for. The pool was
+         complete only by luck of physical layout: the duplicate copies of each
+         player_id happened to sit outside the window, so all 876 distinct ids
+         landed inside it. One UPDATE to any of the 752 dropped rows would move
+         its in-window copy to the heap tail, cut the divisor pickDailyMystery
+         uses from 876 to 875, and remap every date. MIN_POOL_SIZE is 200, far
+         below either number, so nothing would have noticed. Paged and ordered
+         on player_id, which is the key pickDailyMystery already sorts by, and
+         the sibling query in this same file already pages this way. */
+      fetchAllRows<any>((from, to) => supabase
         .from('nhl_players' as any)
         .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
-        .limit(4000),
+        .order('player_id', { ascending: true })
+        .range(from, to)),
       fetchCareerPointsByName(),
     ]);
     if (error || !data) return null;

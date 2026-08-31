@@ -155,7 +155,18 @@ export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRo
     if (def.finals.seriesCol) cols.push(def.finals.seriesCol);
     if (def.finals.scoreCols) cols.push(...def.finals.scoreCols);
   }
+  /* ROUND 366: order by id before anything positional reads these rows.
+     pickDaily is rows[dailyDraw(rows.length, ...)], a purely positional read,
+     and the decoy set is a Set walked by index, so heap order decides the
+     board. This is a live risk rather than a theoretical one for these tables
+     specifically: Rounds 239 to 242 and 247 to 249 completed loser,
+     series_result, venue, city and state by UPDATING existing rows, which is
+     exactly the operation that moves a tuple to the heap tail. Every table in
+     COMPS carries an id (checked against information_schema before writing
+     this), and PostgREST allows ordering by a column that is not selected, so
+     the cols array does not change. */
   let q: unknown = supabase.from(def.table as never).select(cols.join(', '));
+  q = (q as { order: (c: string, o: { ascending: boolean }) => unknown }).order('id', { ascending: true });
   if (def.filter) q = def.filter(q);
   const { data, error } = await (q as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);

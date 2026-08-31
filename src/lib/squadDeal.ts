@@ -251,6 +251,17 @@ export async function fetchSquadPool(era: Era, year = 2026): Promise<Player[]> {
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', year)
       .order('market_value_usd', { ascending: false })
+      /* ROUND 366: the .limit(1000) is a deliberate top of the market cap over
+         5,496 rows, not an accidental truncation, but the cut lands inside a
+         tie group: 924 rows sit strictly above $13,000,000, 140 are tied at it,
+         and 76 of those are taken by nothing in particular. Only 46 distinct
+         values exist across the returned 1,000, so 991 of them were effectively
+         in heap order. Sports Bingo shuffles the whole pool, and Gauntlet Draft
+         leans on order three times: a dedupe that keeps the first occurrence, a
+         stable rating sort where every tie keeps fetch order, and a fractional
+         band slice. This one line also covers Squad Deal, Budget Builder and
+         Search and Discard, which share this helper. */
+      .order('player_name', { ascending: true })
       .limit(1000);
     if (error || !data || data.length === 0) return fallbackPlayers.slice();
     const seen = new Set<string>();

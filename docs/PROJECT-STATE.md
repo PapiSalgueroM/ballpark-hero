@@ -2597,6 +2597,28 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 366.** The daily audit list worked through: sixteen games,
+  three defect classes, one theme, that a daily should be the same puzzle for
+  everyone drawn from the whole pool. Group B, unordered pools feeding a
+  positional draw: `puck-detective` (1,000 of 1,752 rows, complete only by luck
+  of heap layout), `sports-millionaire` (a 1,161 row tie block, larger than the
+  page, guaranteed to straddle a range boundary), `ball-iq` and `quiz-board`
+  (one unordered read of a UNION view whose `maxRows` equalled `PAGE_SIZE`, so
+  it could never fetch a second page), `champ-or-not`, `whod-they-beat`,
+  `silverware-sort`, `mystery-box`, `sports-bingo` and `gauntlet-draft`. Group
+  C, per user puzzles: `guess-the-nation` filtered the daily by a difficulty
+  toggle so two cohorts answered different questions under one slug, and
+  `f1-driver` and `f1-constructor` seeded from the viewer's LOCAL clock so
+  Europe and Australia got different answers; `pack-battle` and `nba-stat-line`
+  failed open on a dropped page. Group D, wrong day boundary: four games rolling
+  at UTC or from an elapsed-days count. Every order column was checked against
+  `information_schema` before being written, because Round 362 nearly shipped
+  `.order('id')` on a table with no id. `simDailyPoolOrder` gained two sections,
+  one requiring every paged read to declare an order and one banning any daily
+  seeded from the viewer's clock or UTC, and the second immediately caught
+  `useNascarChain` and `useTennisChain`, which no agent reached. Rarity Round's
+  truncation is deliberately left for its own round: its pools are 10,674 and
+  141,916 rows and want an aggregate, not more paging.
 - **2026-08-31, Round 365.** Four daily games were frozen to their fallback
   pools. `useDailyPuzzle`'s selection memo omits `puzzles` from its deps by
   design, expecting a stable module-level array and taking the real selection

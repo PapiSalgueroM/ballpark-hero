@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { TennisPlayerPuzzle, TennisPlayerState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import { supabase } from '@/integrations/supabase/client';
+import { getTodayET } from '@/lib/dateUtils';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
@@ -49,7 +50,8 @@ export function useTennisPlayer() {
     setLoading(true);
     try {
       if (mode === 'daily') {
-        const today = new Date().toISOString().slice(0, 10);
+        /* ROUND 366: ET, not UTC. This ran a day ahead of every other daily on the site from early evening, and puzzle_date on the scores table sat on a different calendar from the rest of the site. */
+        const today = getTodayET();
         const { data: daily } = await supabase
           .from('tennis_daily')
           .select('player_id')
@@ -95,7 +97,7 @@ export function useTennisPlayer() {
     if (isCorrect) {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getTodayET();
       supabase.from('tennis_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -107,7 +109,7 @@ export function useTennisPlayer() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = getTodayET();
         supabase.from('tennis_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,

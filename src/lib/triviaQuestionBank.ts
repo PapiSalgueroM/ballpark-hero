@@ -137,6 +137,13 @@ async function fetchMarketPool(): Promise<MarketRow[]> {
       .select(cols)
       .eq('year', CURRENT_YEAR)
       .order('market_value_usd', { ascending: false })
+      /* ROUND 366: market_value_usd is nowhere near a total order. The largest
+         single tie block in the current slice is 1,161 rows, LARGER than the
+         1,000 row page, so that block is guaranteed to straddle a .range()
+         boundary rather than merely able to. bandForDifficulty slices this
+         array by fractional index, so band membership is decided by array
+         position. */
+      .order('player_name', { ascending: true })
       .range(from, to);
     if (error || !data || data.length === 0) break;
     rows.push(
@@ -159,7 +166,11 @@ async function fetchBallonDor(): Promise<BallonRow[]> {
   const { data, error } = await supabase
     .from('ballon_dor')
     .select('year, rank, player_name, nationality, club, award_type')
-    .order('year', { ascending: false });
+    .order('year', { ascending: false })
+    /* Completeness rather than a real risk: at most two rows share a year, so
+       the remap is a pair swap inside one year. It costs nothing. */
+    .order('rank', { ascending: true })
+    .order('player_name', { ascending: true });
   if (error || !data) return [];
   return data as BallonRow[];
 }
@@ -167,7 +178,12 @@ async function fetchBallonDor(): Promise<BallonRow[]> {
 async function fetchShirtNumbers(): Promise<ShirtRow[]> {
   const { data, error } = await supabase
     .from('shirt_number_puzzles')
-    .select('player_name, club, league, nationality, kit_number');
+    .select('player_name, club, league, nationality, kit_number')
+    /* ROUND 366: this had no order at all, and pickWithRng indexes these rows
+       directly, so one UPDATE changed the whole fifteen question ladder for a
+       date while the leaderboard treated it as one puzzle. 154 rows, 154
+       distinct names. */
+    .order('player_name', { ascending: true });
   if (error || !data) return [];
   return data as ShirtRow[];
 }

@@ -101,9 +101,13 @@ export interface BeatQuestion {
 
 export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> {
   const cols = [def.yearCol, def.winCol, def.loseCol, def.seriesCol, ...(def.extraCols ?? [])];
+  /* ROUND 366: see the note in champOrNot.ts, this is the identical shape and
+     the identical positional read. Ordering by id, verified present on every
+     table in this game's comp list. */
   const q = supabase
     .from(def.table as never)
-    .select(cols.join(', '));
+    .select(cols.join(', '))
+    .order('id', { ascending: true });
   const { data, error } = await (q as unknown as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: FinalsRow[] = [];

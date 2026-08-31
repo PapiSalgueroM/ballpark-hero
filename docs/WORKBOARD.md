@@ -125,20 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 366 (desktop, 2026-08-31): THE WHOLE REMAINING DAILY AUDIT
-  LIST, worked as one round because it is one theme: a daily should be the same
-  puzzle for everyone, drawn from the whole pool. Group B (unordered pools
-  feeding a positional draw): puck-detective, sports-millionaire, ball-iq and
-  quiz-board, champ-or-not and whod-they-beat and silverware-sort, mystery-box,
-  sports-bingo and gauntlet-draft. Group C (per user puzzles): guess-the-nation
-  serving two different pools by difficulty, f1-driver and f1-constructor
-  seeding from the VIEWER'S LOCAL CLOCK so Europe and Australia get a different
-  answer, pack-battle and nba-stat-line failing open on a dropped page. Group D
-  (wrong day boundary): guess-nfl-team, football-timeline, guess-tennis-player,
-  guess-nascar-driver. Every proposed order column gets checked against the live
-  schema BEFORE it is written, because Round 362 nearly shipped .order('id') on
-  a table with no id and would have taken the game down.
-
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
   route, the page and the registry entry are NOT built yet, so the game is not
@@ -428,6 +414,57 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE DAILY AUDIT LIST, WORKED THROUGH, Round 366 (desktop lane, 2026-08-31).
+  Sixteen games across three defect classes, one theme: a daily should be the
+  same puzzle for everyone, drawn from the whole pool.
+  GROUP B, unordered pools feeding a positional draw. puck-detective was reading
+  1,000 of 1,752 rows and complete only by luck of physical layout, so one
+  UPDATE to any of the 752 dropped rows would have cut the modulo divisor from
+  876 to 875 and remapped every date, under a MIN_POOL_SIZE of 200 that would
+  never have noticed; paged and ordered on player_id now. sports-millionaire's
+  shirt number read had no order at all and its market read ties in a block of
+  1,161 rows, LARGER than the 1,000 row page, so that block was guaranteed to
+  straddle a range boundary. ball-iq and quiz-board share one unordered read of
+  a UNION view, where a plan change alone can reorder output, and its maxRows
+  EQUALLED PAGE_SIZE so it could never fetch a second page at all. champ-or-not,
+  whod-they-beat and silverware-sort read tables whose rows were updated in
+  place in Rounds 239 to 242 and 247 to 249, which is exactly the operation that
+  moves a tuple. mystery-box orders on a key with 62 distinct values across
+  2,914 rows and a 499 row tie block. sports-bingo and gauntlet-draft share one
+  line in squadDeal that also covers Squad Deal, Budget Builder and Search and
+  Discard.
+  GROUP C, per user puzzles. guess-the-nation filtered the DAILY by the
+  difficulty toggle, so 24 easy and 82 total meant two cohorts answered
+  different questions under one completion slug while the comment above promised
+  the opposite. f1-driver and f1-constructor seeded from the VIEWER'S LOCAL
+  CLOCK, so Europe got a different answer five to six hours before ET and
+  Australia fourteen to sixteen, on a page that tells the visitor the daily is
+  "a shared puzzle". pack-battle broke its hand rolled paging on an error, and a
+  break on a LATER page returns a short pool with no error at all; it uses
+  fetchAllRows now and inherits Round 359's retry. nba-stat-line skipped a
+  failed page inside a 25 way Promise.all, leaving about 18,938 rows against a
+  10,000 floor, so the visitor got a different anchor season silently; it fails
+  the pull now, the way both franchise grids already do.
+  GROUP D, wrong day boundary. guess-nfl-team rolled at 00:00 UTC and recomputed
+  inside startGame, so finishing at 7:55pm ET and restarting at 8:05pm gave a
+  different team the same evening. football-timeline summed the date string's
+  character codes, which is order independent, takes 19 distinct values across a
+  year and skews the fifteen puzzles three to one, with any future pool past 19
+  permanently unreachable. guess-tennis-player and guess-nascar-driver used UTC
+  at three sites each.
+  THE FENCE FOUND TWO THE AUDIT MISSED. simDailyPoolOrder gained a section
+  requiring every .range() paged read to declare an order, which is not a risk
+  but provably wrong, and a section banning any daily seeded from the viewer's
+  clock or from UTC. That second one immediately caught useNascarChain and
+  useTennisChain, which no agent reached. 42 order columns verified against the
+  live schema, 18 paged reads ordered, four controls each proven red.
+  EVERY ORDER COLUMN WAS CHECKED AGAINST information_schema BEFORE BEING
+  WRITTEN, all seventeen of them, because Round 362 nearly shipped .order('id')
+  on a table with no id column and would have taken that game down.
+  NOT IN THIS ROUND: rarity-round's truncation. Its pools are 10,674 and 141,916
+  rows, so it wants a dedup view or an aggregate rather than more paging, which
+  is a different kind of fix and gets its own round.
 
 - FOUR DAILY GAMES WERE FROZEN TO THEIR FALLBACK POOLS, Round 365 (desktop
   lane, 2026-08-31). useDailyPuzzle's selection memo deliberately omits

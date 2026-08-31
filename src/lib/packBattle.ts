@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
@@ -71,22 +72,26 @@ interface RawRow {
 export async function fetchPackPool(): Promise<PackCard[]> {
   const cols = 'player_name, nationality, club, market_value_usd';
   const pageSize = 1000;
-  const rows: RawRow[] = [];
-
-  for (let page = 0; page < 20; page++) {
-    const from = page * pageSize;
-    const to = from + pageSize - 1;
-    const { data, error } = await supabase
+  /* ROUND 366: paged through the shared helper instead of by hand. The hand
+     rolled loop broke on an error, and a break on a LATER page returns a short
+     pool with no error at all, after which buildDailyPack shuffles that
+     shortened pool and deals a different five cards to that one visitor. A page
+     zero failure was always visible (the caller shows an error card), so this
+     is specifically about the later pages. Round 359 added a retry to
+     fetchAllRows; this loop paged by hand and never received it.
+     The added player_name order is the same tie-break reasoning as
+     fetchPackPool: market_value_usd is far from a total order, and this read is
+     split across pages. */
+  const { data: rows, error } = await fetchAllRows<RawRow>((from, to) =>
+    supabase
       .from('player_market_values_dedup')
       .select(cols)
       .eq('year', 2026)
       .order('market_value_usd', { ascending: false })
-      .range(from, to);
-    if (error) break;
-    if (!data || data.length === 0) break;
-    rows.push(...(data as RawRow[]));
-    if (data.length < pageSize) break; // last page
-  }
+      .order('player_name', { ascending: true })
+      .range(from, to),
+  );
+  if (error) return [];
 
   const cleaned: PackCard[] = [];
   for (const r of rows) {

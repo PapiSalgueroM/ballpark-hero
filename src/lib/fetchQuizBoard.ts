@@ -34,8 +34,19 @@ export async function fetchQuizBoardClues(): Promise<Clue[]> {
         supabase
           .from('jeopardy_clues')
           .select('clue_id, category, clue, answer, event_year, value')
+          /* ROUND 366: an unordered read of a UNION view is worse than an
+             unordered base table, because a plan change alone can reorder the
+             output, and fetchAllRows' own header requires a deterministic
+             order. Ball IQ draws each rung of its twelve question ramp
+             positionally from a tier slice and carries usedIds forward, so one
+             row moving changes the whole run from that point. 461 rows, 461
+             distinct clue_id, already treated as an identity key by the client. */
+          .order('clue_id', { ascending: true })
           .range(from, to),
-      1000,
+      /* This was 1000, exactly PAGE_SIZE, and fetchAllRows breaks when
+         all.length >= maxRows, so this caller could never fetch a second page
+         at all. At 461 rows it changes nothing today. */
+      20000,
     );
 
     if (error || !data || data.length === 0) {

@@ -1,3 +1,4 @@
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { useState, useMemo, useCallback } from 'react';
 import { timelinePuzzles, TimelinePlayer } from '@/data/timelinePlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -15,9 +16,14 @@ export type TimelineStatus = 'playing' | 'submitted';
 
 export function useFootballTimeline() {
   const puzzle = useMemo(() => {
-    const dateStr = new Date().toISOString().slice(0, 10);
-    const seed = dateStr.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-    return timelinePuzzles[seed % timelinePuzzles.length];
+    /* ROUND 366: three faults in two lines. The date was UTC, so the day rolled
+       at 8pm ET rather than midnight; the seed was the SUM of the date string's
+       character codes, which is order independent and takes only 19 distinct
+       values across a whole year (486 to 504), skewing the fifteen puzzles
+       about three to one; and that 19 value ceiling means any pool grown past
+       19 would leave puzzles permanently unreachable. dailyIndex fixes all
+       three at once. */
+    return timelinePuzzles[dailyIndex(getTodayET(), timelinePuzzles.length)];
   }, []);
 
   const [order, setOrder] = useState<TimelinePlayer[]>(() => {

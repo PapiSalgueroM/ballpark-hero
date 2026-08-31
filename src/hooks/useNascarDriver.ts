@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { NascarDriverPuzzle, NascarDriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/nascarDriver';
 import { supabase } from '@/integrations/supabase/client';
+import { getTodayET } from '@/lib/dateUtils';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
@@ -53,7 +54,8 @@ export function useNascarDriver() {
     setLoading(true);
     try {
       if (mode === 'daily') {
-        const today = new Date().toISOString().slice(0, 10);
+        /* ROUND 366: ET, not UTC. An evening ET player could be served the next day's driver while their completion filed under the current ET date, because completions.ts resolves through getEtDateString(). */
+        const today = getTodayET();
         const { data: daily } = await supabase
           .from('nascar_daily')
           .select('driver_id')
@@ -102,7 +104,7 @@ export function useNascarDriver() {
     if (isCorrect) {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getTodayET();
       supabase.from('nascar_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -114,7 +116,7 @@ export function useNascarDriver() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = getTodayET();
         supabase.from('nascar_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,

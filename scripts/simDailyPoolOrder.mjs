@@ -44,7 +44,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.DAILYORDER_CONTROL || '';
-if (CONTROL && CONTROL !== 'noorder' && CONTROL !== 'badcolumn') {
+const KNOWN = ['noorder', 'badcolumn', 'unpaged', 'utcseed'];
+if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`DAILYORDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -173,6 +174,67 @@ console.log('2) every column the code orders by exists on that table');
     }
   }
   console.log(`   ${list.length - bad} of ${list.length} resolve against the live schema`);
+}
+
+console.log('3) every paged read declares an order');
+{
+  /* ROUND 366: .range() paging without an ORDER BY is not a risk, it is
+     provably wrong: pages can overlap or skip rows, and fetchAllRows' own
+     header says the query passed in MUST have a deterministic order. This is a
+     universal rule with no judgement in it, so it needs no allowlist. */
+  let checked = 0, bad = 0;
+  let controlFired = false;
+  for (const f of FILES) {
+    let fileSrc = code(f.src);
+    if (CONTROL === 'unpaged' && f.rel.endsWith('fetchQuizBoard.ts')) {
+      const before = fileSrc;
+      fileSrc = fileSrc.replace(".order('clue_id', { ascending: true })", '');
+      if (fileSrc === before) { console.error('control cannot run: fetchQuizBoard has no order before its range to strip'); process.exit(1); }
+      controlFired = true;
+      console.log('   NEGATIVE CONTROL ON: fetchQuizBoard stripped of the order on its paged read, section 3 must go red');
+    }
+    for (const m of chains(fileSrc)) {
+      if (!/\.range\s*\(/.test(m.body)) continue;
+      checked += 1;
+      if (!/\.order\s*\(/.test(m.body)) {
+        bad += 1;
+        fail(`${f.rel} pages ${m.table} with .range() and no .order(), so its pages can overlap or skip rows`);
+      }
+    }
+  }
+  console.log(`   ${checked - bad} of ${checked} paged reads declare an order`);
+  if (checked < 10) fail(`only ${checked} paged reads found, so this scan is not reading the source properly`);
+  if (CONTROL === 'unpaged' && !controlFired) { console.error('control never fired'); process.exit(1); }
+}
+
+console.log("4) no daily is seeded from the viewer's own clock or from UTC");
+{
+  /* ROUND 366: f1Drivers and f1Constructors seeded from new Date()'s LOCAL
+     getFullYear/getMonth/getDate, so the answer depended on which calendar date
+     the visitor's machine was on: Europe rolls over five to six hours before
+     ET, Australia fourteen to sixteen. Four more games used
+     toISOString().slice(0,10), which is UTC, rolling the day at 8pm ET. The
+     site's one date authority is getTodayET in dateUtils, and completions.ts
+     already files scores against it, so anything else disagrees with the
+     player's own scoreboard. */
+  const LOCAL_SEED = /getFullYear\(\)\s*\*\s*10000/;
+  const UTC_DATE = /new Date\(\)\.toISOString\(\)\.slice\(0,\s*10\)/;
+  let offenders = 0;
+  for (const f of FILES) {
+    let c = code(f.src);
+    if (CONTROL === 'utcseed' && f.rel.endsWith('useFootballTimeline.ts')) {
+      if (!MODULO_INDEX.test(c) && !/dailyIndex\s*\(/.test(c)) { console.error('control cannot run: useFootballTimeline no longer draws positionally'); process.exit(1); }
+      c += ' const planted = new Date().toISOString().slice(0, 10); ';
+      console.log('   NEGATIVE CONTROL ON: a UTC date planted in useFootballTimeline, section 4 must go red');
+    }
+    /* Only where it can decide a puzzle: a file that also draws positionally or
+       is a daily data module. A UTC timestamp used for logging is not this. */
+    const decidesAPuzzle = MODULO_INDEX.test(c) || /dailyIndex\s*\(|dailyDraw\s*\(/.test(c);
+    if (!decidesAPuzzle) continue;
+    if (LOCAL_SEED.test(c)) { offenders += 1; fail(`${f.rel} seeds a daily from the viewer's LOCAL clock, so two timezones get different answers on the same day`); }
+    if (UTC_DATE.test(c)) { offenders += 1; fail(`${f.rel} seeds a daily from UTC rather than getTodayET, so its day rolls at 8pm ET and disagrees with where completions are filed`); }
+  }
+  console.log(`   ${offenders} files seed a daily from anything other than ET`);
 }
 
 console.log('');

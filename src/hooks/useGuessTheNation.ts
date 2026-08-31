@@ -74,12 +74,24 @@ export function useGuessTheNation() {
 
       let puzzle: NationPuzzle | undefined;
       if (mode === 'daily') {
-        // Deterministic date-seed pick so every player gets the same daily
-        // puzzle and it only changes at the date boundary, mirroring the
-        // pattern in useTennisPlayer.ts so both games agree on reset timing.
+        /* ROUND 366: THE DAILY DRAWS FROM THE UNFILTERED LIST, NOT FROM `pool`.
+           The comment below promised every player the same daily, and the code
+           did the opposite: `pool` is filtered by the difficulty toggle, which
+           is plain component state with Easy and Hard buttons rendered directly
+           above the Daily button. Measured live, 24 of the 82 countries are
+           easy, so the two cohorts were drawing from a 24 long list and an 82
+           long list, filed under one completion slug while answering different
+           questions. Difficulty now governs unlimited, summer, winter and
+           continent only, which is the convention every other daily follows
+           (useChampOrNot gates it on mode === 'unlimited', as do the Higher and
+           Lower hooks).
+           Pinning the daily to the easy pool was the rejected alternative: it
+           would keep today's puzzle for the default cohort but shrink the daily
+           rotation to 24 and make 58 countries permanently unreachable, which
+           is the same pool-is-wrong defect in a different coat. */
         const today = getTodayStr();
         const seed = parseInt(today.replace(/-/g, ''), 10);
-        puzzle = pool[seed % pool.length];
+        puzzle = countries[seed % countries.length];
       } else {
         puzzle = pool[Math.floor(Math.random() * pool.length)];
       }

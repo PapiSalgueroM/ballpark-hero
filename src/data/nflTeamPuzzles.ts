@@ -1,3 +1,4 @@
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { NflTeamPuzzle } from '@/types/guessNflTeam';
 
 export const nflTeamPuzzles: NflTeamPuzzle[] = [
@@ -644,11 +645,12 @@ export const nflTeamPuzzles: NflTeamPuzzle[] = [
 ];
 
 export function getDailyNflTeamPuzzle(): NflTeamPuzzle {
-  const startDate = new Date('2024-01-01');
-  const today = new Date();
-  const daysDiff = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-  const puzzleIndex = daysDiff % nflTeamPuzzles.length;
-  return nflTeamPuzzles[puzzleIndex];
+  /* ROUND 366: elapsed days from a fixed instant against Date.now() rolls the
+     puzzle at 00:00 UTC, which is 8pm ET in summer, and it was recomputed
+     inside startGame rather than pinned, so a player finishing at 7:55pm ET and
+     starting again at 8:05pm was handed a different team the same evening. Same
+     date seed as every other daily on the site. */
+  return nflTeamPuzzles[dateSeed(getTodayET()) % nflTeamPuzzles.length];
 }
 
 export function getRandomNflTeamPuzzle(

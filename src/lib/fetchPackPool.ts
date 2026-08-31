@@ -35,8 +35,20 @@ export async function fetchPackPool(): Promise<PackPlayer[]> {
           .select('player_name, position, age, nationality, club, market_value_usd, value_millions, value_band, goals, assists')
           .eq('year', 2026)
           .order('market_value_usd', { ascending: false })
+          /* ROUND 366: market_value_usd has 62 distinct values across 2,914
+             rows and a largest tie block of 499, so it is nowhere near a total
+             order and the read is split across three .range() calls. byTier
+             pushes in fetch order and the pick indexes the filtered bucket
+             positionally with used carried across all fifteen packs, so one row
+             changing position changes the run rather than one pack.
+             (player_name, nationality) is unique in this slice. */
+          .order('player_name', { ascending: true })
           .range(from, to),
-      3000,
+      /* Raised from 3000, which was 3 percent of headroom over 2,914 real rows,
+         and fetchAllRows trims to maxRows silently. Nothing is being lost
+         today and there is no evidence this slice is growing: a ceiling worth
+         raising, not a bug. */
+      20000,
     );
 
     if (error || !data || data.length === 0) {

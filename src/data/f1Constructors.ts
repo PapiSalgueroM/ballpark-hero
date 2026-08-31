@@ -1,3 +1,4 @@
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { F1ConstructorPuzzle } from '@/types/f1Constructor';
 
 export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
@@ -408,8 +409,17 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
 
 export function getDailyF1ConstructorPuzzle(): F1ConstructorPuzzle {
   const today = new Date();
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  // Different offset from driver game so they don't overlap
+  /* ROUND 366: seeded from ET, not from the viewer's own clock. This used
+     new Date()'s local getFullYear/getMonth/getDate, so the seed was whatever
+     calendar date the visitor's machine was on: Europe rolls over five to six
+     hours before ET, Australia fourteen to sixteen, Pacific three hours after.
+     With a small pool, one local date apart is a different answer, and the page
+     tells the visitor to play the daily "for a shared puzzle". Grepping src for
+     this pattern returned exactly these two files, so it was an isolated pair
+     rather than a convention. */
+  const seed = dateSeed(getTodayET());
+  // Different offset from driver game so they don't overlap. The offset only
+  // decorrelates the two games; it never had anything to do with the timezone.
   return F1_CONSTRUCTORS[(seed + 17) % F1_CONSTRUCTORS.length];
 }
 

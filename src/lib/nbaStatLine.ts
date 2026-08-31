@@ -401,7 +401,15 @@ export async function fetchNbaStatLinePool(): Promise<StatLineSeason[] | null> {
     );
     const rows: RawSeasonRow[] = [];
     for (const page of pages) {
-      if (page.error || !page.data) continue;
+      /* ROUND 366: fail the whole pull rather than skipping the page. This
+         `continue` left roughly 18,938 of the rows on a single dropped page,
+         which clears the 10,000 floor below by a wide margin, so the visitor
+         got a different pool length and therefore a different anchor season and
+         daily target, with no error and nothing to tell them. Both franchise
+         grids already answer this exact risk the other way (see the ROUND 358
+         note in nbaGrid.ts): retry, then return null. Do not raise the floor
+         instead; no floor can tell a 1,000 row shortfall from ordinary growth. */
+      if (page.error || !page.data) return null;
       for (const raw of page.data as unknown as RawSeasonRow[]) rows.push(raw);
     }
     const pool = buildPool(rows);
