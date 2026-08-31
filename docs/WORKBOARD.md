@@ -439,6 +439,11 @@ Standing claims:
   Filed, not fixed: nascar_drivers has no primary key, and useNascarDriver line
   63 looks up a daily by .eq('id', ...) on that same idless table, so even if
   the edge function ever ran, that path would 400. It is dead twice over.
+  PUBLISHED and verified live 2026-08-30: Lovable synced dca8aa18, the bundle
+  flipped, and all four fixed games serve 200 with their own titles. The
+  completeness claim here is mechanical rather than a promise: simDailyPoolOrder
+  section 1 scans all of src by shape, finds seven files that take a date
+  derived index over a fetched pool, and all seven are now ordered.
 
 - THE REST OF THE PUBLIC WRITE SURFACE, AND A WRONG NUMBER ON THE HOME PAGE,
   Round 361 (desktop lane, 2026-08-30). Nineteen anon writable tables audited by
