@@ -2597,6 +2597,26 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 370. THE DISK IO EMERGENCY, and part of it was mine.**
+  Anthony forwarded a Supabase alert that the project was depleting its Disk IO
+  Budget, which ends with the instance unresponsive. `pg_stat_statements` named
+  the cause without ambiguity: `global_rank`, 1,541,353 calls, 13 hours of
+  execution, 1.9 billion buffer blocks, called from `useGameNavbarStats` on
+  every game page load and again from the home page. Second was a "have I played
+  today" lookup, 1.5 million calls filtering on `player_name`, which was not
+  indexed at all. Round 360 had made each `global_rank` call about ten times
+  more expensive by joining `game_denominators`, whose NULL cap fallback runs a
+  percentile subquery per game: one call measured 242 ms and 70,818 blocks
+  against a 2,900 block table. Fixed in three parts: an index on
+  `(player_name, completed_on)`, an index on `(game, score)` for the percentile
+  subquery, and the ranking precomputed into a `player_ranks` materialized view
+  refreshed by cron every five minutes, with `global_rank` reading it for the
+  two shapes the site asks for and still computing live for `p_games` filters.
+  242 ms and 70,818 blocks became 12.9 ms and 969. Verified against the live
+  leaderboard and through the anon key. `simLeaderboardCache` guards the failure
+  mode a cache adds that the live query never had, being silently wrong if the
+  refresh stops. Entirely database side, so it was live immediately with no
+  deploy. Anthony's call, and it is money: do not buy the compute upgrade yet.
 - **2026-08-31, Round 369.** The CBB grid archive, a fourth alongside Round
   358's three: 56 boards, 504 cells, 4,032 answers, all recomputed by the fence.
   It needed a real adaptation rather than another row in the generator's table.

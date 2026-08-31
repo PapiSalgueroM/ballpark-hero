@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 371.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 372.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,32 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 371 (desktop, 2026-08-31): TWO PAGES ARE SERVING CRAWLERS LESS
+  THAN THEY HOLD, AND NEITHER IS A CONTENT PROBLEM. Both found by an adversarial
+  review of the pages shipped since the render audit, then measured by hand.
+  (1) THE PRERENDER DEDUPE DELETES REPEATED TABLE CELLS. prerender.mjs line 524
+  keys on tag plus html against a DOCUMENT GLOBAL Set, and td and th collapse to
+  p, so a repeated cell vanishes with no visible gap. Measured on
+  /nba-grid/archive: of 126 crossings, 35 arrive intact, 70 lose their answer
+  count and 21 lose their label outright, so an answer list sits under the
+  previous crossing with nothing naming it. MLB keeps 62, NHL 49, CBB 59. The
+  page's own words promise "how many players in our data satisfy both sides".
+  Fix is targeted: exempt td and th, because a repeated cell is DATA, and leave
+  the link dedupe alone, because the same nav link really does belong once.
+  (2) THE RECORD BOOKS SERVES NO RECORDS AT ALL. /records ships 13 section
+  headings and 25 paragraphs of intro prose describing tables that are not
+  there. Zero champion names reach a crawler: no Yankees, no Patriots, no
+  Celtics, no Lakers. This is NOT the dedupe, which would keep distinct names.
+  It is async section data never reaching the snapshot, so a reference page
+  whose entire value is its tables is empty to search engines.
+  THAT MAKES FIVE TIMES correctly generated content has failed to reach a
+  crawler here: the FAQ markup, the breadcrumbs and the home page structured
+  data in Round 281, the soft 404 marker in Round 282, and now these two. The
+  shape is always the same, the prerenderer RECONSTRUCTS the body rather than
+  copying it, so anything the reconstruction drops is invisible to every check
+  that reads source instead of output. The fences for both read the OUTPUT.
+
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
@@ -399,6 +425,54 @@ Standing claims:
 
 ## Done
 
+- THE DISK IO EMERGENCY, Round 370 (desktop lane, 2026-08-31). Anthony
+  forwarded a Supabase alert: the project is depleting its Disk IO Budget, which
+  ends with the instance unresponsive. THE FIX IS LIVE ALREADY, because it is
+  entirely database side and needed no client change.
+  MEASURED, NOT GUESSED. pg_stat_statements since 2026-06-14 named it:
+  global_rank, 1,541,353 calls, 13 hours of execution, 1.9 BILLION buffer
+  blocks. It is called from useGameNavbarStats, which runs on EVERY GAME PAGE
+  LOAD, and again from the home page, so every visitor to every page triggered a
+  full ranking of every player on the site. Second: a "have I played this today"
+  lookup, 1,534,448 calls and 529 million blocks, filtering on player_name,
+  which WAS NOT INDEXED AT ALL.
+  AND ROUND 360 MADE IT WORSE, WHICH IS MINE. That round closed a real hole, the
+  leaderboard trusting numbers a stranger could write, by inner joining the
+  ranking to game_denominators. The view is correct, but for each of the 18
+  games with a NULL cap it runs a percentile subquery over that game's
+  completions. Measured today: one call cost 242 ms and touched 70,818 blocks
+  against a table of only ~2,900. The historical mean across the whole window is
+  24.9 ms, so a call today costs about ten times the average of a period that
+  already includes it. The security fix was right. Multiplying the cost of a
+  query that runs on every page load was not.
+  THREE PARTS, in descending order of what each bought. (1) An index on
+  (player_name, completed_on): those 1.5 million lookups went from about 302
+  blocks each to 3. (2) An index on (game, score): the percentile subquery
+  filtered on game while the only index led with completed_on, so it could not
+  seek; this alone took global_rank from 242 ms to 118 ms. (3) The ranking
+  precomputed into a materialized view, refreshed by cron every five minutes,
+  because no index removes the cost of aggregating every row. Only the two
+  shapes the site asks for are cached; a p_games call still computes live, which
+  is what the per sport boards need.
+  RESULT: 242 ms and 70,818 blocks became 12.9 ms and 969 blocks, a 73x cut in
+  buffer traffic on a query called 1.5 million times. Verified correct against
+  the live global_leaderboard, the top five match exactly on rank and points,
+  and verified through the ANON key because that is the path the site uses.
+  simLeaderboardCache guards the failure mode a cache introduces that the live
+  query never had: being WRONG. If the cron stops, every rank on the site
+  freezes silently and a player has no way to know. It compares the cached
+  answer against a freshly computed one rather than checking the cache exists.
+  LBCACHE_CONTROL=drift proves it catches a stale cache.
+  get_advisors after the DDL: zero ERROR. player_ranks is flagged "Materialized
+  View in API", which is accepted rather than missed: it holds a generated
+  pseudonymous handle, points and rank, all already published by the public
+  leaderboard, and the alternative is a SECURITY DEFINER function over a private
+  view, which is a category of risk this repo has already had a P0 about.
+  FOR ANTHONY, and it is his call because it is money: the alert offers a
+  compute add-on upgrade. Do not buy one yet. The load that triggered this was
+  one query called 1.5 million times at ten times its proper cost, and that is
+  now fixed. Watch the Disk IO chart for a day or two first.
+
 - THE CBB GRID ARCHIVE, Round 369 (desktop lane, 2026-08-31). A fourth archive
   joins the three Round 358 built: 56 boards across four sports, 504 cells,
   4,032 published answers, every one recomputed by the fence against that game's
@@ -445,31 +519,6 @@ Standing claims:
   the bundle flipped, /cbb-grid/archive serves 200 with 4,864 crawler visible
   words and CollectionPage schema, it is in the live sitemap, and it was
   submitted to IndexNow.
-
-- CLAIMED Round 370 (desktop, 2026-08-31): TWO PAGES ARE SERVING CRAWLERS LESS
-  THAN THEY HOLD, AND NEITHER IS A CONTENT PROBLEM. Both found by an adversarial
-  review of the pages shipped since the render audit, then measured by hand.
-  (1) THE PRERENDER DEDUPE DELETES REPEATED TABLE CELLS. prerender.mjs line 524
-  keys on tag plus html against a DOCUMENT GLOBAL Set, and td and th collapse to
-  p, so a repeated cell vanishes with no visible gap. Measured on
-  /nba-grid/archive: of 126 crossings, 35 arrive intact, 70 lose their answer
-  count and 21 lose their label outright, so an answer list sits under the
-  previous crossing with nothing naming it. MLB keeps 62, NHL 49, CBB 59. The
-  page's own words promise "how many players in our data satisfy both sides".
-  Fix is targeted: exempt td and th, because a repeated cell is DATA, and leave
-  the link dedupe alone, because the same nav link really does belong once.
-  (2) THE RECORD BOOKS SERVES NO RECORDS AT ALL. /records ships 13 section
-  headings and 25 paragraphs of intro prose describing tables that are not
-  there. Zero champion names reach a crawler: no Yankees, no Patriots, no
-  Celtics, no Lakers. This is NOT the dedupe, which would keep distinct names.
-  It is async section data never reaching the snapshot, so a reference page
-  whose entire value is its tables is empty to search engines.
-  THAT MAKES FIVE TIMES correctly generated content has failed to reach a
-  crawler here: the FAQ markup, the breadcrumbs and the home page structured
-  data in Round 281, the soft 404 marker in Round 282, and now these two. The
-  shape is always the same, the prerenderer RECONSTRUCTS the body rather than
-  copying it, so anything the reconstruction drops is invisible to every check
-  that reads source instead of output. The fences for both read the OUTPUT.
 
 - THE CBB GRID SHIPS, Round 368 (desktop lane, 2026-08-31), finishing what
   Round 363 proved. Milestone 0 Task 5: the grid engine extended where the

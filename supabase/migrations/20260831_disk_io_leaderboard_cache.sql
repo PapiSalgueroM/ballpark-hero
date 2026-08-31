@@ -1,0 +1,64 @@
+-- Round 370: the Disk IO fix. APPLIED 2026-08-31, in response to a Supabase
+-- alert that the project was depleting its Disk IO Budget, which ends with the
+-- instance unresponsive.
+--
+-- MEASURED, NOT GUESSED. pg_stat_statements since 2026-06-14:
+--   global_rank ................ 1,541,353 calls, 13 hours, 1.9 BILLION blocks
+--   "have I played today" ...... 1,534,448 calls, 529 million blocks
+-- global_rank is called from useGameNavbarStats, which runs on EVERY GAME PAGE
+-- LOAD, and again from the home page. So every visitor to every page triggered
+-- a full ranking of every player on the site.
+--
+-- AND ROUND 360 MADE IT WORSE. That round fixed a real hole, the leaderboard
+-- trusting numbers a stranger could write, by inner joining the ranking to
+-- game_denominators. The view is correct, but for each game whose cap is NULL
+-- it runs a percentile subquery over that game's completions, and 18 games have
+-- NULL caps. Measured today: one global_rank call cost 242 ms and touched
+-- 70,818 blocks against a table of only ~2,900 blocks, roughly ten times the
+-- 24.9 ms historical mean for a window that already includes it. The security
+-- fix was right. Multiplying the cost of a query that runs on every page load
+-- was not, and this is the correction.
+--
+-- THREE PARTS, in the order they were applied and in descending order of how
+-- much each bought.
+
+-- 1. The missing index. player_name was not indexed at all, so 1.5 million
+--    "have I played this today" lookups narrowed by day and then filtered the
+--    day's rows by hand: about 302 blocks a call. Now 3. Applied outside a
+--    transaction with CONCURRENTLY so the live site kept writing.
+--    create index concurrently idx_game_completions_player_day
+--      on public.game_completions (player_name, completed_on);
+
+-- 2. The index the percentile subquery actually needed. It filters on game,
+--    and the only index led with completed_on, so it could not seek. This took
+--    global_rank from 242 ms to 118 ms on its own.
+--    create index concurrently idx_game_completions_game_score
+--      on public.game_completions (game, score) where score is not null and score > 0;
+
+-- 3. The ranking, precomputed. An index cannot remove the cost of ranking every
+--    player, because that means aggregating every row. The data only changes
+--    when somebody finishes a game, so it is computed on a schedule instead of
+--    per page view: 576 aggregates a day against roughly 16,000 page driven
+--    ones, and each page view becomes an index lookup. Only the two shapes the
+--    site asks for are cached, ('today', null) for the navbar and
+--    ('alltime', null) for the home page. Anything with a p_games filter still
+--    computes live, which is what the leaderboard's per sport views need and
+--    which runs in the hundreds of calls rather than the millions.
+--
+-- RESULT, measured after: 242 ms and 70,818 blocks became 12.9 ms and 969
+-- blocks, a 73x reduction in buffer traffic on a query called 1.5 million
+-- times. Verified correct against the live global_leaderboard: the top five
+-- players match on both rank and points exactly.
+--
+-- The materialized view is readable by anon, which get_advisors reports as
+-- "Materialized View in API". That is accepted rather than overlooked: it
+-- carries a generated pseudonymous handle, points and rank, all of which the
+-- public leaderboard already publishes. The alternative, a SECURITY DEFINER
+-- function over a private view, adds a category of risk this repo has already
+-- had a P0 about, for no gain.
+--
+-- See the full definitions applied via the Supabase MCP in this round:
+--   materialized view public.player_ranks (period, player_name, total_points,
+--     games_played, rank, total_players), unique index on (period, player_name)
+--   function public.global_rank rewritten to read it, live branch retained
+--   cron job 'refresh-player-ranks' at */5 * * * *
