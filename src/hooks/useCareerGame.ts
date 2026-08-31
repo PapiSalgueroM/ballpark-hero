@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /** One recorded action in a daily Career Path run. Round 55: this type was
     USED in three places but never actually defined or imported, so the daily
@@ -86,6 +87,19 @@ export function useCareerGame() {
     [difficulty, playerPool],
   );
 
+  /* ROUND 365: today's player, computed from the pool that is actually loaded.
+     useDailyPuzzle leaves `puzzles` out of its selection memo on purpose and
+     expects a stable module-level array, taking the real selection through
+     supabasePuzzle. playerPool is state: 151 baked players until the fetch
+     lands, then 253 live ones. Passing it as `puzzles` meant the memo never
+     re-ran, so 102 of the 253, forty percent of the roster, could never be the
+     daily. No difficulty filter here, deliberately: difficulty is an unlimited
+     only tier (see the note on unlimitedPool above). */
+  const todaysPlayer = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return playerPool.length > 0 ? playerPool[seed % playerPool.length] : null;
+  }, [playerPool]);
+
   // ── Daily ──────────────────────────────────────────────────────────────────
   const {
     puzzle: dailyPuzzle,
@@ -95,7 +109,9 @@ export function useCareerGame() {
     isLoading,
   } = useDailyPuzzle<CareerPlayer, CareerAction>({
     gameSlug: 'career-path',
-    puzzles: playerPool,
+    puzzles: fallbackPlayers,
+    supabasePuzzle: todaysPlayer,
+    getPuzzleId: (p) => p.name,
     maxGuesses: 999,
     isWon: (g) => g.some((a) => a.t === 'won'),
     isLost: (g) =>

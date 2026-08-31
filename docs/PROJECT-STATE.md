@@ -2597,6 +2597,20 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 365.** Four daily games were frozen to their fallback
+  pools. `useDailyPuzzle`'s selection memo omits `puzzles` from its deps by
+  design, expecting a stable module-level array and taking the real selection
+  through `supabasePuzzle`; four hooks passed component state, so the memo ran
+  once and never again. `transfer-path` reached 21 of 902 puzzles and, worse,
+  served a fallback puzzle validated against live careers, which is Round 294's
+  hint versus rule mismatch by another route. `career-path` reached 151 of 253
+  players on a game with 484 completions in 30 days, and the fence found that
+  one rather than the audit. `shirt-number` and `guess-transfer-value` are
+  retired; the latter seeds its pool empty, so its daily never resolved at all,
+  matching its zero completions ever. `simDailyPuzzleContract` is deliberately a
+  source check: `simTransferPathHints` passed throughout because each pool is
+  internally consistent, and the defect was the pairing, produced by a React
+  dependency array that no data check can see.
 - **2026-08-31, Round 364.** Player Stock Market's economy, fixed at the fetch.
   `fetchCampaignRows` asked for `.limit(4000)` and PostgREST returned 1,000
   (measured `Content-Range: 0-999/24939`). Sorted value descending, so a query

@@ -3,6 +3,7 @@ import shirtNumberPuzzles, { type ShirtNumberPuzzle } from '@/data/shirtNumberPu
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchShirtNumberPuzzles } from '@/lib/fetchShirtNumberPuzzles';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 // Internal guess record, stores correctness so isWon doesn't need puzzle access
 type ShirtGuess = { guess: number; correct: boolean };
@@ -47,6 +48,15 @@ export function useShirtNumber(): ShirtNumberState {
   }, []);
 
   // ---- MODE -----------------------------------------------------------------
+  /* ROUND 365: see the note in useCareerGame. useDailyPuzzle leaves `puzzles`
+     out of its selection memo and expects a stable module-level array, taking
+     the real selection through supabasePuzzle. Passing state meant the memo
+     never re-ran, so the daily was frozen to the baked pool. */
+  const todaysPuzzle = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
+  }, [puzzlePool]);
+
   const [mode, setMode] = useState<ShirtNumberMode>('daily');
 
   // ---- DAILY: useDailyPuzzle -----------------------------------------------
@@ -60,7 +70,9 @@ export function useShirtNumber(): ShirtNumberState {
     isLoading: isDailyLoading,
   } = useDailyPuzzle<ShirtNumberPuzzle, ShirtGuess>({
     gameSlug: 'shirt-number',
-    puzzles: puzzlePool,
+    puzzles: shirtNumberPuzzles,
+    supabasePuzzle: todaysPuzzle,
+    getPuzzleId: (p) => p.playerName,
     maxGuesses: MAX_ATTEMPTS,
     isWon: (gs) => gs.some(g => g.correct),
     deserializeGuesses: (raw) => raw as ShirtGuess[],

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET } from '@/lib/dateUtils';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { fetchTransferValuePool, TransferValuePlayer } from '@/lib/fetchTransferValuePool';
 
 export const MAX_GUESSES = 6;
@@ -29,10 +29,25 @@ function evaluate(guess: number, truth: number): ValueGuess {
   };
 }
 
+/* A stable module-level reference, because useDailyPuzzle requires one as
+   `puzzles` and this game has no baked fallback pool of its own. */
+const EMPTY_POOL: TransferValuePlayer[] = [];
+
 export function useGuessTransferValue() {
   const [mode, setMode] = useState<Mode>('daily');
   const [pool, setPool] = useState<TransferValuePlayer[]>([]);
   const [isLoadingPool, setIsLoadingPool] = useState(true);
+
+  /* ROUND 365: see the note in useCareerGame. useDailyPuzzle leaves `puzzles`
+     out of its selection memo and expects a stable module-level array, taking
+     the real selection through supabasePuzzle. This hook passed `pool`, which
+     starts EMPTY and is only filled by the fetch, so the memo ran once against
+     an empty array and the daily never resolved at all. The game has 0
+     completions in its whole history, which is consistent with that. */
+  const todaysTarget = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return pool.length > 0 ? pool[seed % pool.length] : null;
+  }, [pool]);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,7 +70,8 @@ export function useGuessTransferValue() {
     reset: resetDaily,
   } = useDailyPuzzle<TransferValuePlayer, ValueGuess>({
     gameSlug: 'guess-transfer-value',
-    puzzles: pool,
+    puzzles: EMPTY_POOL,
+    supabasePuzzle: todaysTarget,
     maxGuesses: MAX_GUESSES,
     isWon: (gs) => gs.length > 0 && gs[gs.length - 1].isCorrect,
     deserializeGuesses: (raw) => raw as ValueGuess[],

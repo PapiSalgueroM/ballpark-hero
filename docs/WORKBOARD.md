@@ -125,24 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 365 (desktop, 2026-08-31): TRANSFER PATH SERVES 21 OF 902
-  PUZZLES, AND SERVES THEM AGAINST THE WRONG PLAYER POOL. Verified by hand.
-  useDailyPuzzle's selection memo deliberately omits `puzzles` from its deps and
-  says so in a comment: it expects a stable module-level array and takes the
-  real selection through `supabasePuzzle`. useSoccerGrid follows that contract
-  and documents it. useTransferPath does not: it passes `puzzles: puzzlePool`,
-  which is STATE seeded from the 21 entry fallback, and passes no
-  supabasePuzzle, so selection runs once against the fallback and never
-  recomputes when the 902 row fetch lands. 881 puzzles can never be the daily.
-  THE SECOND HALF IS WORSE THAN THE FIRST. Both pools are fetched (lines 57 and
-  58) but only playerPool is actually consumed, so the served puzzle is a
-  FALLBACK puzzle validated against LIVE careers. The fallback file's own header
-  says its minimums and hints are derived from the fallback player pool and that
-  the live table "carries its own hints, which differ where the pools differ",
-  and that the fallback is "served only when transfer_path_puzzles cannot be
-  read". Both statements are false in production today. This is the Round 294
-  hint versus rule mismatch returning by a different route.
-
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
   route, the page and the registry entry are NOT built yet, so the game is not
@@ -432,6 +414,42 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- FOUR DAILY GAMES WERE FROZEN TO THEIR FALLBACK POOLS, Round 365 (desktop
+  lane, 2026-08-31). useDailyPuzzle's selection memo deliberately omits
+  `puzzles` from its deps and says so: it expects a stable module-level array
+  and takes the real selection through `supabasePuzzle`. The memo is narrow on
+  purpose, because it gates the localStorage restore and widening it would reset
+  in progress boards for every consumer. Four hooks passed STATE instead, so the
+  memo ran once on the first render and never again.
+  transfer-path: 21 of 902 puzzles reachable. AND THE HALF THAT MATTERED MORE,
+  both pools are fetched but only the PLAYER pool was consumed, so the served
+  puzzle was a FALLBACK puzzle validated against LIVE careers. The fallback
+  file's own header says its minimums and hints come from the fallback player
+  pool, that the live table "carries its own hints, which differ where the pools
+  differ", and that the fallback is served only when the table cannot be read.
+  All three statements were false in production. Round 294's hint versus rule
+  mismatch, arriving by a different route.
+  career-path: 151 of 253 players reachable, so forty percent of the roster
+  could never be the daily, on a game with 484 completions in the last 30 days.
+  This one was found BY THE FENCE, not by the audit.
+  shirt-number and guess-transfer-value: same shape, both retired from the
+  registry. guess-transfer-value seeds its pool EMPTY, so its memo ran against
+  an empty array and the daily never resolved at all, which matches its 0
+  completions in the whole history.
+  simDailyPuzzleContract is the fence and it is a SOURCE check on purpose:
+  simTransferPathHints already verified fallback against fallback and live
+  against live and passed throughout, because each pool is internally
+  consistent. The defect was the PAIRING, produced by a React dependency array,
+  and no data check can see that. It reads the shape instead, finds every
+  useDailyPuzzle caller, and fails any that passes a useState variable as
+  `puzzles` without a supabasePuzzle. DPCONTRACT_CONTROL=regress restores the
+  old shape and it goes red.
+  A SCRIPTED PATCH MADE A MESS AND WAS REVERTED RATHER THAN PAPERED OVER: a
+  regex backreference wrote a literal control character over a function
+  signature in useGuessTransferValue. Both retired hooks were reverted to HEAD
+  and redone by hand against their real identity fields (playerName and name,
+  neither of which is `id`, which the first attempt assumed).
 
 - PLAYER STOCK MARKET'S ECONOMY, FIXED AT THE FETCH, Round 364 (desktop lane,
   2026-08-31). fetchCampaignRows asked for .limit(4000) and PostgREST returned

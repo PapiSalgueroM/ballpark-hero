@@ -7,6 +7,7 @@ import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { dateSeed, getTodayET } from '@/lib/dateUtils';
 
 export type TransferPathMode = 'daily' | 'unlimited';
 
@@ -60,6 +61,17 @@ export function useTransferPath(): TransferPathState {
     });
     return () => { cancelled = true; };
   }, []);
+
+  /* ROUND 365: today's puzzle, computed from whichever pool is currently
+     loaded. Depends on puzzlePool, so when the 902 row fetch replaces the 21
+     entry fallback this recomputes and the daily moves to the live pool, which
+     is the pool whose hints and minimums match the live career graph the game
+     validates against. Same date seed formula as every other daily on the site
+     (see dateUtils), and the same shape useSoccerGrid uses. */
+  const todaysPuzzle = useMemo(() => {
+    const seed = dateSeed(getTodayET());
+    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
+  }, [puzzlePool]);
 
   // ── Career graph, memoized over playerPool ────────────────────────────────
   // TEMPORAL teammates only (owner 2026-07-10: "Ronaldo never played with
@@ -171,7 +183,26 @@ export function useTransferPath(): TransferPathState {
     isLoading,
   } = useDailyPuzzle<TransferPathPuzzle, TransferAction>({
     gameSlug: 'transfer-path',
-    puzzles: puzzlePool,
+    /* ROUND 365: fallbackPuzzles, not puzzlePool, and the real selection goes
+       through supabasePuzzle. useDailyPuzzle deliberately leaves `puzzles` out
+       of its selection memo's deps and says in a comment that it expects a
+       stable module-level array. puzzlePool is STATE: it starts as the 21 entry
+       fallback and becomes the 902 row live pool when the fetch lands. Passing
+       it here broke that contract silently, because the memo never re-ran, so
+       the daily was always drawn from those 21 and 881 puzzles could never
+       appear. useSoccerGrid is the hook that gets this right and its comment
+       explains the same rule.
+       THE HALF THAT MATTERED MORE: both pools are fetched, but only playerPool
+       was consumed, so the served puzzle was a FALLBACK puzzle validated
+       against LIVE careers. The fallback file's own header says its minimums
+       and hints are derived from the fallback player pool, that the live table
+       carries its own hints "which differ where the pools differ", and that the
+       fallback is served only when the table cannot be read. All of that was
+       false in production. It is the Round 294 hint versus rule mismatch
+       arriving by a different route. */
+    puzzles: fallbackPuzzles,
+    supabasePuzzle: todaysPuzzle,
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999,
     isWon: (actions) => actions.some(a => a.t === 'won'),
     isLost: () => false,
