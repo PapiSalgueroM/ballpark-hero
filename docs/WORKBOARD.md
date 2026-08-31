@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 362.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 363.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -124,6 +124,23 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- CLAIMED Round 362 (desktop, 2026-08-30): THE DAILY PICK'S POOL IS NOT
+  GUARANTEED STABLE. dateUtils.ts documents pool[dateSeed % pool.length] as the
+  site's standard daily mechanism, deliberately, so the pool rotates. That is
+  correct AND it depends entirely on pool ORDER being stable, which several
+  fetches do not ask for: useCbbProgram and useNascarDriver both select with no
+  .order(), and Postgres gives no order guarantee without one. Measured today
+  the order is stable (small unchanged table, heap order), so this is latent
+  rather than firing, and the honest statement is that the invariant is
+  unguaranteed, not that the games are broken. The failure mode is an ordinary
+  data correction: an UPDATE rewrites that row to the end of the heap and every
+  index after it shifts, so the date to puzzle mapping silently changes and two
+  players on the same date can get different puzzles.
+  The sharper sibling to look for is a daily pool ABOVE 1,000 rows fetched
+  without paging, where PostgREST truncation makes most of the catalogue
+  unreachable as a daily and the modulo runs over the wrong length. Round the
+  audit over every daily game, fix what is real, leave what is fine.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
