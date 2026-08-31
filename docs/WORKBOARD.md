@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 364.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 365.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,21 +125,51 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 363 (desktop, 2026-08-30): CBB GRID, Milestone 0 Task 5, the
-  grid engine extended where the search demand is. ncaa_player_stats carries
-  43,800 rows, 39,798 distinct players and 407 schools in the same shape the
-  franchise grids already use (player_name, schools, points, trb, ast, games,
-  position), so it can be GENERATED and validated deterministically like
-  nba-grid rather than hand authored and AI validated like the existing college
-  football grid. That matters twice: it is verifiable without a model in the
-  loop, and it supports an archive page like the ones Round 358 built.
-  MEASURED FIRST, and it changed the design: school x school crossings are THIN,
-  because college players mostly attend one school. Among the top 30 schools
-  only 36 pairs have 3 or more shared players and the best is Utah x Utah State
-  at 8. School x stat crossings are rich: 1500+ career points runs 13 to 33 per
-  school, 120+ games runs 53 to 83. So the board is schools against
-  achievements, not schools against schools, and the generator enforces a
-  minimum valid answer count per cell exactly as the franchise generators do.
+- CLAIMED Round 364 (desktop, 2026-08-30): PLAYER STOCK MARKET'S ECONOMY IS
+  BROKEN LIVE, plus the daily integrity family behind it. Found by a 73 game
+  audit fan out; VERIFIED BY HAND against the live database before claiming,
+  and one of the audit's claims was corrected in the process.
+  CONFIRMED AND MEASURED: playerStockMarket.ts:217 asks .limit(4000) and
+  PostgREST returns Content-Range 0-999/24939, so the pool is the top 1,000 of
+  24,939 by value. Because the sort is value descending, the query asks for
+  players from $2,000,000 up and THE CHEAPEST PLAYER IT CAN EVER OFFER IS
+  $38,000,000. PUNT_CEILING is $8,000,000, so the punt filter at :179 matches
+  nothing and :180 silently substitutes the cheapest available instead. The
+  comment at :172 promises "eleven punts always fit comfortably inside the
+  wallet and a run can never strand a slot unaffordable": 11 x $38m is $418m
+  against a $200m budget, so that guarantee is false against live data.
+  simStockCampaign cannot see it because it drives assembleCampaign with
+  injected fixtures that contain cheap players, so the round needs a check that
+  reads the REAL fetch.
+  CORRECTED ON THE RECORD: the audit's headline was that two people on the same
+  date get different players, reproduced four times. I could not reproduce it.
+  The unordered second query returned a byte identical set on five consecutive
+  runs. The missing .order() at :226 is still a real latent fault of the Round
+  362 class and should be fixed, but the live, firing bug is the TRUNCATION and
+  the economy it breaks, not nondeterminism. Do not repeat the stronger claim.
+  ALSO IN THE FAMILY, from the same audit, each to be verified before acting:
+  /transfer-path serves its daily from the 20 entry fallback so 882 of 902
+  puzzles can never appear AND the served hint is generated against the fallback
+  while validating against live careers, which is the Round 294 bug returning;
+  /rarity-round truncates four reads so the pool size shown to the player reads
+  206 where the table holds 1,722, and the obscure answers the game exists to
+  reward are exactly the ones truncated away; /shirt-number serves 33 of 154.
+
+- CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
+  src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
+  route, the page and the registry entry are NOT built yet, so the game is not
+  live: whoever picks this up writes CbbGrid.tsx modelled on NbaGrid.tsx (443
+  lines, self contained like its MLB and hockey siblings) and wires the route.
+  MEASURED FIRST, and it changed the design: school x school crossings are thin
+  because college players mostly attend one school (among the top 30 schools
+  only 36 pairs share 3+ players, best is Utah x Utah State at 8), so the board
+  is schools against achievements. The school pool is DERIVED AT RUNTIME from
+  the loaded data rather than listed in source, because a hand kept list of
+  "schools with enough players" is the stale allowlist this repo has already
+  paid for twice. 106 schools clear a floor of 10 on all eight achievements;
+  the harness recounts every one of the 848 combinations independently and
+  proves 14 days of boards solvable, with CBBGRID_CONTROL=nofloor going red on
+  a cell with zero answers.
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
   properly and it is smaller than Round 348 thought): the prerendered snapshot
