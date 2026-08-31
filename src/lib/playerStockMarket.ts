@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { getTodayET, dailyPrngSeed } from '@/lib/dateUtils';
 import { FORMATIONS, normalizePosition } from '@/lib/squadDeal';
 import type { FormationSlot } from '@/lib/squadDeal';
@@ -214,22 +215,57 @@ export function assembleCampaign(rows: MarketRow[], seed: number): Campaign | nu
 export async function fetchCampaignRows(startYear: number): Promise<MarketRow[] | null> {
   try {
     const offerYears = Array.from({ length: 6 }, (_, i) => startYear + i);
-    const { data: poolRows, error: e1 } = await supabase
-      .from('player_market_values')
-      .select('player_name, club, position, age, nationality, year, market_value_usd, goals, assists')
-      .in('year', offerYears)
-      .gte('market_value_usd', 2_000_000)
-      .order('market_value_usd', { ascending: false })
-      .limit(4000);
+    const COLUMNS = 'player_name, club, position, age, nationality, year, market_value_usd, goals, assists';
+
+    /* ROUND 364: THIS USED TO ASK FOR 4,000 ROWS AND SILENTLY GET 1,000, WHICH
+       BROKE THE GAME'S ECONOMY.
+       PostgREST caps every select at 1,000 rows no matter what .limit() says.
+       Measured against live data: Content-Range 0-999/24939. Because the sort
+       is value descending, the query asked for players from $2,000,000 up and
+       the cheapest row it could ever return was $38,000,000, so 73 percent of
+       the intended pool was thrown away (18,211 of those 24,939 rows sit in the
+       $2m to $8m band). The consequence was not a thin pool, it was a broken
+       promise: PUNT_CEILING is $8,000,000, so the punt filter below could never
+       match anything and the code silently substituted the cheapest available
+       instead. The comment on the punt says eleven punts always fit inside the
+       wallet and a run can never strand a slot unaffordable; eleven punts at
+       $38m is $418m against a $200m budget, so that guarantee was false against
+       live data. simStockCampaign could not see any of it, because it drives
+       assembleCampaign with injected fixtures that do contain cheap players.
+       Paged properly now, through the same helper the rest of the site uses.
+       The year span covers startYear - 2 so the three year price series each
+       offer draws has its history. */
+    const seriesYears = [startYear - 2, startYear - 1, ...offerYears];
+    const { data: poolRows, error: e1 } = await fetchAllRows<MarketRow>((from, to) =>
+      supabase
+        .from('player_market_values')
+        .select(COLUMNS)
+        .in('year', seriesYears)
+        .gte('market_value_usd', 2_000_000)
+        /* Deterministic and unique: fetchAllRows pages with .range(), so an
+           ambiguous order can overlap or skip rows between pages. */
+        .order('player_name', { ascending: true })
+        .order('year', { ascending: true })
+        .range(from, to),
+    );
     if (e1 || !poolRows || poolRows.length < 200) return null;
-    const names = [...new Set(poolRows.map(r => r.player_name))].slice(0, 900);
-    const { data: histRows, error: e2 } = await supabase
-      .from('player_market_values')
-      .select('player_name, club, position, age, nationality, year, market_value_usd, goals, assists')
-      .in('player_name', names)
-      .in('year', [startYear - 2, startYear - 1, ...offerYears, FINAL_YEAR]);
-    if (e2 || !histRows) return null;
-    return [...poolRows, ...histRows] as MarketRow[];
+
+    /* The final year decides who is eligible at all (see the at(name,
+       FINAL_YEAR) test in assembleCampaign) and supplies the closing price.
+       Fetched as a whole year rather than filtered to a list of names: the old
+       code capped that list at 900 of the pool's 7,525 distinct names, so even
+       with the paging fixed above, every cheap player would have failed the
+       eligibility test and been dropped again. */
+    const { data: finalRows, error: e2 } = await fetchAllRows<MarketRow>((from, to) =>
+      supabase
+        .from('player_market_values')
+        .select(COLUMNS)
+        .eq('year', FINAL_YEAR)
+        .order('player_name', { ascending: true })
+        .range(from, to),
+    );
+    if (e2 || !finalRows) return null;
+    return [...poolRows, ...finalRows] as MarketRow[];
   } catch {
     return null;
   }

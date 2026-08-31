@@ -125,36 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 364 (desktop, 2026-08-30): PLAYER STOCK MARKET'S ECONOMY IS
-  BROKEN LIVE, plus the daily integrity family behind it. Found by a 73 game
-  audit fan out; VERIFIED BY HAND against the live database before claiming,
-  and one of the audit's claims was corrected in the process.
-  CONFIRMED AND MEASURED: playerStockMarket.ts:217 asks .limit(4000) and
-  PostgREST returns Content-Range 0-999/24939, so the pool is the top 1,000 of
-  24,939 by value. Because the sort is value descending, the query asks for
-  players from $2,000,000 up and THE CHEAPEST PLAYER IT CAN EVER OFFER IS
-  $38,000,000. PUNT_CEILING is $8,000,000, so the punt filter at :179 matches
-  nothing and :180 silently substitutes the cheapest available instead. The
-  comment at :172 promises "eleven punts always fit comfortably inside the
-  wallet and a run can never strand a slot unaffordable": 11 x $38m is $418m
-  against a $200m budget, so that guarantee is false against live data.
-  simStockCampaign cannot see it because it drives assembleCampaign with
-  injected fixtures that contain cheap players, so the round needs a check that
-  reads the REAL fetch.
-  CORRECTED ON THE RECORD: the audit's headline was that two people on the same
-  date get different players, reproduced four times. I could not reproduce it.
-  The unordered second query returned a byte identical set on five consecutive
-  runs. The missing .order() at :226 is still a real latent fault of the Round
-  362 class and should be fixed, but the live, firing bug is the TRUNCATION and
-  the economy it breaks, not nondeterminism. Do not repeat the stronger claim.
-  ALSO IN THE FAMILY, from the same audit, each to be verified before acting:
-  /transfer-path serves its daily from the 20 entry fallback so 882 of 902
-  puzzles can never appear AND the served hint is generated against the fallback
-  while validating against live careers, which is the Round 294 bug returning;
-  /rarity-round truncates four reads so the pool size shown to the player reads
-  206 where the table holds 1,722, and the obscure answers the game exists to
-  reward are exactly the ones truncated away; /shirt-number serves 33 of 154.
-
 - CBB GRID ENGINE, groundwork landed Round 363, PAGE STILL TO BUILD (desktop).
   src/lib/cbbGrid.ts and scripts/simCbbGrid.mjs are committed and green. The
   route, the page and the registry entry are NOT built yet, so the game is not
@@ -444,6 +414,39 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- PLAYER STOCK MARKET'S ECONOMY, FIXED AT THE FETCH, Round 364 (desktop lane,
+  2026-08-31). fetchCampaignRows asked for .limit(4000) and PostgREST returned
+  1,000: measured Content-Range 0-999/24939. Sorted value descending, so a query
+  asking for players from $2,000,000 up could never return one under
+  $38,000,000, and 18,211 of those 24,939 rows, 73 percent of the intended pool,
+  sit in the $2m to $8m band and were discarded. PUNT_CEILING is $8,000,000, so
+  the punt filter matched nothing and the code silently substituted the cheapest
+  available. The comment on the punt promises eleven punts always fit inside the
+  wallet and a run can never strand a slot: eleven at $38m is $418m against a
+  $200m budget, so the guarantee was false against live data.
+  A SECOND CAP MADE THE FIRST FIX INSUFFICIENT: the history query narrowed to
+  .in('player_name', names) with names capped at 900 of the pool's 7,525
+  distinct names, and eligibility requires a row in FINAL_YEAR, so paging only
+  the pool would have dropped every cheap player again at the eligibility test.
+  The final year is fetched as a whole year now (5,496 rows) instead.
+  MEASURED AFTER: the pool runs $2,000,000 to $216,000,000 with about 18,210
+  rows under the punt ceiling, every slot offers a real punt, and the cheapest
+  in every slot totals $25m to $27m against the $200m budget.
+  HONEST IMPACT: the game was playable, not dead. 197 completions from 143
+  players, 40 in the last week. What was broken is the economy, every offer a
+  superstar and the punt mechanic never firing, plus some seeds that could not
+  assemble at all.
+  simStockLive is the missing check the audit correctly identified.
+  simStockCampaign drives assembleCampaign with INJECTED fixtures, which is the
+  right way to test the engine and is why it stays, but those fixtures contain
+  cheap players, so it proved arithmetic production could not perform. The new
+  harness calls the real fetch. STOCKLIVE_CONTROL=truncate reproduces the old
+  1,000 row cut and goes red with zero rows under the ceiling, a $43m to $49m
+  floor and seeds that assemble nothing.
+  The harness reported a product bug that was its own first: assembleCampaign
+  derives its start year from the seed via startYearFor, so fetching one year
+  and assembling another finds nothing. Driven from the seeds now.
 
 - THE DAILY PICK'S POOL NOW HAS A GUARANTEED ORDER, Round 362 (desktop lane,
   2026-08-30). dateUtils.ts documents pool[dateSeed % pool.length] as the site's

@@ -2597,6 +2597,22 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 364.** Player Stock Market's economy, fixed at the fetch.
+  `fetchCampaignRows` asked for `.limit(4000)` and PostgREST returned 1,000
+  (measured `Content-Range: 0-999/24939`). Sorted value descending, so a query
+  asking for players from $2m up could never return one under $38m, discarding
+  the 18,211 rows of 24,939 that sit in the $2m to $8m band. `PUNT_CEILING` is
+  $8m, so the punt filter matched nothing and the documented guarantee that
+  eleven punts always fit inside a $200m budget was false against live data. A
+  second cap compounded it: the history query narrowed to 900 of the pool's
+  7,525 distinct names, and eligibility needs a FINAL_YEAR row, so paging the
+  pool alone would have dropped every cheap player again at the eligibility
+  test. Both are paged through `fetchAllRows` now and the final year is fetched
+  whole. After: the pool spans $2m to $216m, every slot offers a real punt, and
+  the cheapest-in-every-slot total is $25m to $27m. `simStockLive` is the check
+  the audit said was missing, calling the real fetch where `simStockCampaign`
+  drives fixtures; its control reproduces the old truncation and goes red. This
+  is the fourth PostgREST 1,000 row truncation found in six rounds.
 - **2026-08-30, Round 362.** The daily pick's pool now has a guaranteed order.
   `dateUtils.ts` documents `pool[dateSeed % pool.length]` as the site's daily
   mechanism and that is right, but it depends on the pool arriving in the same
