@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { RECORD_SECTIONS, type RecordRow, type RecordSection } from '@/lib/records';
+import recordBooks from '@/data/recordBooks.json';
 
 /**
  * The Record Books (Round 238): the audited champion tables as a public
@@ -64,25 +65,29 @@ function SectionTable({ def, st }: { def: RecordSection; st: SectionState }) {
 }
 
 const Records = () => {
-  const [states, setStates] = useState<Record<string, SectionState>>(
-    () => Object.fromEntries(RECORD_SECTIONS.map(s => [s.key, { state: 'loading' } as SectionState])),
+  /* ROUND 372: THE TABLES ARE READ FROM A COMMITTED FILE, NOT FETCHED.
+     This page used to fetch all 13 sections on mount and render a spinner until
+     they landed. That meant a crawler received 13 headings, 25 lines of prose
+     and ZERO champion names: no Yankees, no Patriots, no Celtics, no Lakers, on
+     a reference page whose entire value is its champion tables.
+     THAT WAS NOT A PRERENDER BUG. prerender.mjs leaves every Supabase request
+     hanging on purpose, because "a fulfilled request bakes today's data into a
+     file that outlives today". The rule is right and it stays. The mistake was
+     treating champion tables as live data: they are historical facts that move
+     about once a year, so they belong in a file a build regenerates, exactly
+     like src/data/gridArchive.json. scripts/genRecordBooks.mjs writes it by
+     calling these same RECORD_SECTIONS fetchers, so there is still only one
+     definition of what each section contains.
+     It also removes the 13 Supabase queries this page issued on every visit,
+     which matters after the Round 370 Disk IO incident. */
+  const states: Record<string, SectionState> = Object.fromEntries(
+    RECORD_SECTIONS.map(s => {
+      const rows = (recordBooks.sections as Record<string, RecordRow[] | undefined>)[s.key];
+      return [s.key, rows && rows.length > 0
+        ? ({ state: 'ready', rows } as SectionState)
+        : ({ state: 'error' } as SectionState)];
+    }),
   );
-
-  useEffect(() => {
-    let alive = true;
-    const watchdog = window.setTimeout(() => {
-      if (!alive) return;
-      setStates(prev => Object.fromEntries(
-        Object.entries(prev).map(([k, v]) => [k, v.state === 'loading' ? { state: 'error' } as SectionState : v]),
-      ));
-    }, 15000);
-    for (const def of RECORD_SECTIONS) {
-      def.fetch()
-        .then(rows => { if (alive) setStates(p => ({ ...p, [def.key]: { state: 'ready', rows } })); })
-        .catch(() => { if (alive) setStates(p => ({ ...p, [def.key]: { state: 'error' } })); });
-    }
-    return () => { alive = false; window.clearTimeout(watchdog); };
-  }, []);
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">

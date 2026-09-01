@@ -2597,6 +2597,19 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 372.** The Record Books ships its records. `/records`
+  served a crawler 13 headings, 25 lines of prose and zero champion names, on a
+  reference page whose entire value is its tables. Now 2,963 words and 636
+  paragraphs. The fix was not in the prerenderer, which Round 371 nearly
+  patched: it leaves Supabase requests hanging by design so live data is never
+  frozen into a file that outlives the day. Champion tables are not live data,
+  so they are generated into a committed `src/data/recordBooks.json` and
+  rendered synchronously, like `gridArchive.json`. The generator calls the
+  page's own `RECORD_SECTIONS` fetchers so there is one definition of each
+  section. 1,068 rows, 12 sections, back to 1889. It also removes the 13
+  Supabase queries the page issued per visit, which matters after Round 370.
+  `simRecordBooks` section 3 reads the output and is the only check of its three
+  that would have caught the original bug.
 - **2026-08-31, Round 370. THE DISK IO EMERGENCY, and part of it was mine.**
   Anthony forwarded a Supabase alert that the project was depleting its Disk IO
   Budget, which ends with the instance unresponsive. `pg_stat_statements` named

@@ -125,23 +125,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- CLAIMED Round 372 (desktop, 2026-09-01): THE RECORD BOOKS SHIPS ITS RECORDS.
-  /records serves 13 section headings, 25 lines of prose and ZERO champion names
-  to a crawler: no Yankees, no Patriots, no Celtics, no Lakers. It is a reference
-  page whose entire value is its tables.
-  NOT A PRERENDER BUG, and Round 371 corrected that framing on the record.
-  prerender.mjs:331 leaves Supabase requests hanging by design, so live data is
-  never frozen into a file that outlives the day. Records fetches at runtime and
-  renders a spinner until data arrives, so a spinner is what gets captured. Rule
-  1 stays untouched.
-  THE FIX IS THE ARCHIVE PATTERN. Champion tables are historical facts that move
-  about once a year, not today's data, so they get generated into a committed
-  JSON at build time and rendered from it, exactly like src/data/gridArchive.json.
-  A WELCOME SIDE EFFECT given Round 370: /records currently issues 13 Supabase
-  queries on every single visit. Rendering from a committed file removes all 13.
-  The fence must read the OUTPUT and assert champion names reach the snapshot,
-  because a check reading the source would have passed on this for months.
-
 - GENERIC FAQPage SCHEMA FLAPS BETWEEN BUILDS (unclaimed, noticed in Round 371).
   Rebuilding with no relevant source change moved the generic FAQPage block on
   three pages: /nhl-connect-4 and /gauntlet-draft GAINED one they did not have,
@@ -454,6 +437,42 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE RECORD BOOKS SHIPS ITS RECORDS, Round 372 (desktop lane, 2026-09-01).
+  /records served a crawler 13 section headings, 25 lines of prose and ZERO
+  champion names: no Yankees, no Patriots, no Celtics, no Lakers, on a reference
+  page whose entire value is its champion tables. Now 2,963 words and 636
+  paragraphs, up from 1,251 and 25, with every sampled champion present.
+  THE FIX WAS NOT WHERE IT LOOKED. Round 371 nearly patched the prerenderer.
+  prerender.mjs:331 leaves Supabase requests hanging BY DESIGN, because a
+  fulfilled request bakes today's data into a file that outlives today, and that
+  rule is right. The mistake was treating champion tables as live data: they are
+  historical facts that move about once a year, so they belong in a committed
+  file a build regenerates, exactly like src/data/gridArchive.json. Rule 1 was
+  never touched.
+  THE GENERATOR CALLS THE PAGE'S OWN FETCHERS rather than reimplementing the
+  queries. Each section carries its own fetch() including the column mapping and
+  the server side filters (soccer narrows 1,631 rows to 127), so there is still
+  exactly one definition of what a section contains. Reimplementing them in the
+  generator would be the duplicate-rule drift this repo keeps paying for.
+  1,068 rows across 12 sections, back to 1889.
+  A WELCOME SIDE EFFECT after Round 370's Disk IO incident: this page issued 13
+  Supabase queries on EVERY visit. It now issues none.
+  simRecordBooks section 3 reads the OUTPUT, and it is the only one of its three
+  checks that would have caught the original bug: the data was always correct,
+  the delivery was broken. RECORDS_CONTROL=spinner strips every champion name
+  from the snapshot, reproducing exactly what the page used to serve, and it
+  goes red.
+  NOT CHANGED, and it is a product call rather than a bug: the page shows the
+  newest 12 rows per section behind a show-all toggle, so a crawler receives 144
+  of the 1,068 rows. The prerenderer only captures visible elements, so there is
+  no way to serve the rest to crawlers without also showing them to people,
+  which is the correct constraint. Raising the default is Anthony's call.
+  THE SITEMAP FENCE EARNED ITS KEEP MID ROUND: changing /records without
+  re-running genSitemap left its lastmod dating a file that no longer matched
+  its hash, and simSitemap section 5 caught it. The regeneration then reported
+  "136 unchanged and holding their old date, 1 rewritten today", which is the
+  whole point of the ledger.
 
 - THE PRERENDER DEDUPE ATE REPEATED TABLE CELLS, Round 371 (desktop lane,
   2026-08-31). prerender.mjs kept ONE document global Set and applied it to
