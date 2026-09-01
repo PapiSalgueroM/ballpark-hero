@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 376.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 377.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -287,6 +287,39 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
+
+**IN FLIGHT: next: Round 376 (desktop lane, 2026-09-01), THE SLUGS THAT NAME NO
+GAME.** Third find in a row from the same seam: a defect with no symptom.
+SIX slugs are written into daily_completions by code that are not registry
+paths. `conquest-imperialism`, `conquest-mlb-imperialism`,
+`conquest-nba-imperialism` and `conquest-nhl-imperialism` (the registry says
+`conquest`, `conquest-mlb`, `conquest-nba`, `conquest-nhl`), plus `jeopardy`
+(the registry says `quiz-board`, renamed in Round 305) and
+`guess-soccer-club-questions` (whose game is commented out of the registry, so
+that one is harmless). Five are live and still writing: conquest-imperialism as
+recently as 2026-08-31.
+A CORRECTION TO THE OBVIOUS READING, made before writing any code. These games
+are NOT losing their credit. game_score_caps carries caps under the SAME slugs
+the code writes, so Round 360's allowlist accepts them and they score and rank
+normally. The scoring pipeline is internally consistent with itself.
+WHAT IT ACTUALLY BREAKS is every place a completion slug is joined back to the
+REGISTRY, and all five of these games are marked daily: true, so both bite:
+  1. MOST PLAYED TODAY. useMostPlayed does gameByPath('/' + row.game), gets
+     undefined for conquest-imperialism, and filters that entry out. If that
+     drops the list under TOP_N, the whole section silently reverts to the
+     curated fallback trio and looks completely normal. That is the exact
+     failure mode Round 361 fixed once already, arriving by a different door.
+  2. THE DAILY CHECKLIST. It tests completedSlugs.has(slugFromPath(g.path)),
+     so it looks for `conquest` and the row says `conquest-imperialism`. Finish
+     NFL Conquest or the Quiz Board and the checklist shows it undone. Forever.
+THE FIX IS A RESOLVER, NOT A RENAME, and the direction matters. Renaming what
+is written would split every game's history across two slugs, would be REJECTED
+by the score caps allowlist until new rows were added, and `jeopardy` is in
+LIVE_IDENTIFIERS precisely because renaming it is a migration with a backfill
+rather than a find and replace. So the written slugs stay and a resolver maps
+them to registry paths, with a fence that compares the two sides: every slug the
+code writes must resolve, and every distinct slug in the live table must resolve
+or be listed as retired with a reason.
 
 (Round 375, the unsent writes, SHIPPED. See Done. The table audit behind it is
 kept below, because it is the current map of which tables are empty and why,
