@@ -2597,6 +2597,57 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 374. THE DRIVER GAME HAD NO CLUES.**
+  `/guess-nascar-driver` built each puzzle from six columns on `nascar_drivers`:
+  `vibe_word`, `era_hint`, `car_number_hint`, `wins_hint`,
+  `championship_hint`, `famous_moment_hint`, plus `common_names`. **None of
+  those columns exist and none ever did.** Every clue rendered as undefined, so
+  a player was shown six blank cards and could only win by typing a name out of
+  nowhere. The rest of that table is nearly empty too: of 83 rows only `rank`,
+  `driver_name` and `country` are populated, wins on 2, championships on 3,
+  manufacturer and earnings on 0. `nascar_driver_careers` is the same shell.
+  It was listed in the registry as `daily: true` and `isNew: true`, and
+  `nascar_scores` has rows, so people tried to play it.
+  Found by pulling on a much smaller filed note: line 73 did `.eq('id', ...)`
+  on a table with no `id` column. That line was dead (its table `nascar_daily`
+  has zero rows and always has, so the daily driver has always come from the
+  seeded index) and it is gone, but following it found the real bug.
+  **The data to fix it honestly was already in the database.**
+  `nascar_race_results` holds 2,104 populated rows and `nascar_champions` all
+  77 seasons, so the clues are computed rather than typed and nothing about a
+  driver is invented. What the sources can support is the whole design, and the
+  measurement came first: **the results table is NOT a complete win log.**
+  Nineteen seasons are missing outright, 1957 to 1969 among them, which is
+  exactly why Junior Johnson and Ned Jarrett, both fifty win drivers, have zero
+  rows; 1979, 1982 and 1983 are gone too. It also mixes exhibition races (the
+  Busch Clash, the Daytona qualifiers) in with points races. So a "won 105
+  races" clue from it would be false for nearly everyone, and no row may be
+  called a "Cup Series win" either. Each row supports exactly one true
+  statement, this driver won this race in this year, and that is all the clues
+  claim. Championship counts come from `nascar_champions`, which is complete,
+  so they are asserted in both directions.
+  Eligibility is derived, not listed: four usable recorded wins, which is 59 of
+  the 83. A driver who does not qualify is left out rather than padded.
+  **Three data faults surfaced only by looking at the output**, and all three
+  are now handled by shape rather than by a list: races named after the driver
+  (the Alan Kulwicki Memorial) printed the answer on the card; `champions.team`
+  IS the driver's own name for owner drivers like Kulwicki and Herb Thomas; and
+  90 rows between 1949 and 1953 carry a placeholder for the race name
+  ("1951-26"), which is a database artifact, not a clue.
+  The board's hardcoded `CLUE_LABELS` went too. It named the six columns that
+  never existed, and two were wrong for the real data: nothing records a car
+  number, and "Cup Series Wins" over a race result row is the one claim the
+  source cannot support. Labels are generated beside the clue they label.
+  The how-to-play and the SEO copy both described the game as designed rather
+  than as built, down to a worked example resting entirely on a car number clue
+  the game never showed. Both rewritten, with a worked example that is checked:
+  exactly three drivers have seven titles and only Petty drove a Plymouth.
+  `simNascarDriver` section 3 is the one that matters. Sections 1 and 2 would
+  pass on a file full of well formatted lies, because both take the generator's
+  word. Section 3 reads the shipped English, parses the claim, and checks it
+  against raw rows without calling the generator: 354 of 354 verified.
+  `NASCAR_CONTROL=blank` reproduces the shipped bug and `=drift` moves one race
+  year by one so a clue becomes a well formed falsehood; both go red.
 - **2026-08-31, Round 373. ONE PAGE, ONE FAQPage.** Four shipped documents
   carried two contradictory FAQPage blocks each: `/front-office`,
   `/nhl-front-office`, `/gauntlet-draft` and `/nhl-connect-4` declared both the

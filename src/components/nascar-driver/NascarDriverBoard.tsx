@@ -7,10 +7,16 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/nascarDriver';
 
-const CLUE_LABELS = ['Vibe', 'Era', 'Car Number', 'Cup Series Wins', 'Championships', 'Famous Moment'];
+/* ROUND 374: the hardcoded CLUE_LABELS list that sat here is gone. It named
+   the six clue columns the hook used to read off `nascar_drivers`, none of
+   which exist on that table, so every label sat above a blank card. Two of them
+   were also wrong for the data that does exist: nothing in the database records
+   a car number, and no row in nascar_race_results may be called a "Cup Series
+   win" because that table mixes in exhibition races and is missing whole
+   seasons. Labels are generated beside the clue they label now. */
 
 export function NascarDriverBoard() {
-  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allDrivers, loading, status, reloadDrivers } = useNascarDriver();
+  const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allDrivers, loading, status } = useNascarDriver();
   const gameRef = useScrollToGame(gameState);
   const [wrongFlash, setWrongFlash] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -68,14 +74,10 @@ export function NascarDriverBoard() {
             </button>
           </div>
 
-          {status === 'loading' && (
-            <p className="text-sm text-neutral-400">Loading drivers...</p>
-          )}
-          {status === 'error' && (
-            <button onClick={reloadDrivers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">
-              Couldn't load drivers. Tap to retry.
-            </button>
-          )}
+          {/* ROUND 374: the loading and retry branches went with the fetch.
+              The driver pool is bundled now, so there is nothing in flight to
+              wait for and nothing to retry, and a crawler receives the board
+              rather than "Loading drivers...". */}
           {status === 'ready' && allDrivers.length === 0 && (
             <p className="text-sm text-neutral-400">No drivers available yet. Check back soon.</p>
           )}
@@ -124,7 +126,7 @@ export function NascarDriverBoard() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-neutral-400'}`}>
-                    {CLUE_LABELS[i]}
+                    {puzzle.clue_labels[i]}
                   </span>
                   {!isRevealed && <span className="text-xs text-neutral-400">🔒</span>}
                 </div>

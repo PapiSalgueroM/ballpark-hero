@@ -431,11 +431,11 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
   '/guess-nascar-driver': {
     intro: [
       "There's a Cup Series driver on the other side of the screen, and you get six clues to figure out who. It could be a modern playoff regular or a legend from the golden eras of stock car racing.",
-      "Clues unlock in a fixed order: a one-word vibe, the era they raced, their car number, their win count, their championships, and one famous moment.",
+      "Clues unlock in a fixed order and get more specific as they go: the years the driver was winning, how many championships they took, what they were driving in a title year, and then three actual races they won, named and dated.",
     ],
     howToPlay: [
       "Pick Daily Challenge to chase the same driver as everyone else, or Unlimited to keep the puzzles coming.",
-      "Open with the vibe word and guess whenever conviction strikes.",
+      "Read the era clue first and guess whenever conviction strikes.",
       "Every wrong guess reveals the next clue automatically.",
       "Hints unlock the next clue without spending a guess, though the score tier drops the same either way.",
       "Pick a name from the suggestion list to submit your guess.",
@@ -444,23 +444,33 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "6 clues per driver, scored 1000, 800, 600, 400, 200 and 100 by the clue you solve on.",
       "A wrong guess while clue six is showing ends the round.",
       "Give Up reveals the driver and scores 0.",
-      "Daily and Unlimited both pull from the same driver database.",
+      "Daily and Unlimited both pull from the same 59 driver pool.",
+      "Every clue is a fact from a real race result or a real championship season. Nothing about a driver is invented, and where our race records are thin the clue says \"on record\" instead of claiming a career total.",
     ],
     example: [
-      "Say the era clue points at the 1970s and you hold your fire. Clue three drops a car number: 43.",
-      "For NASCAR fans that's not a clue, it's a signature. Richard Petty, The King, guessed on clue three for 600 points.",
-      "His 200 wins and 7 championships were waiting in clues four and five, but you didn't need them.",
+      "Clue one says the driver has race wins on record between 1970 and 1984, so you are in the sport's second golden era and you hold your fire.",
+      "Clue two says seven Cup Series championships. Only three drivers in history have seven, and one of them raced far later, so you are down to two.",
+      "Clue three says a title year came driving a Plymouth, which settles it: Richard Petty, guessed on clue three for 600 points. The 1973 Daytona 500 was waiting in clue four, and you didn't need it.",
     ],
     tips: [
-      "Car numbers are the loudest clue in the game: 3, 24, 43 and 48 each belong to one icon.",
-      "Championship counts cluster at the top, so seven titles narrows it to a very short list.",
-      "The era clue splits the generations cleanly. Use it to rule out half the field before the number arrives.",
+      "Championship counts cluster at the top, so seven titles narrows it to a very short list before you have seen a single race.",
+      "The era clue splits the generations cleanly. Use it to rule out most of the field before the race names arrive.",
+      "The manufacturer in a title year dates a driver closely: Plymouth and Oldsmobile belong to one era, Toyota to another.",
+      "The named races are the giveaway. If you know who won a particular Daytona 500 or Southern 500, the round is over on that clue.",
       "If a name is stuck on the tip of your tongue, scroll the suggestion list; seeing it usually unlocks it.",
     ],
     faqs: [
       {
         q: "Do I have to type the exact full name?",
-        a: "No. Start typing and pick from the suggestions, and common short names are accepted too.",
+        a: "Start typing and pick from the suggestion list, which submits the full name for you. Typing it yourself works too, and a suffix like Jr is optional.",
+      },
+      {
+        q: "Where do the clues come from?",
+        a: "Real race results and the full list of Cup Series champions, both held in our own database. A clue never totals up a career, because our race records have gaps in the early decades and mix in exhibition races, so each one names a single race in a single year instead.",
+      },
+      {
+        q: "Why isn't every famous driver in here?",
+        a: "A driver only makes the pool if our records hold enough real wins to build six honest clues, which is 59 of them today. Padding the rest out with made up detail would be worse than leaving them out.",
       },
       {
         q: "What happens if I give up?",

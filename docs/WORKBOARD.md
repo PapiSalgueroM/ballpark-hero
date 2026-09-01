@@ -288,8 +288,12 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 374 (desktop lane, 2026-09-01), THE DRIVER GAME HAS NO
-CLUES.** Found while checking a filed note that `useNascarDriver` line 73 does
+(Round 374, the driver game's clues, SHIPPED. See Done. The recon that led to
+it is kept below because it is the map of what the NASCAR tables actually hold,
+and the next NASCAR round should read it before trusting any of them.)
+
+**RECON, Round 374.** Found while checking a filed note that
+`useNascarDriver` line 73 does
 `.eq('id', ...)` on a table with no `id` column. That line is dead (its table
 `nascar_daily` has zero rows and always has), but pulling on it found something
 much worse.
@@ -456,6 +460,52 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE DRIVER GAME HAD NO CLUES, Round 374 (desktop lane, 2026-09-01).
+  /guess-nascar-driver built each puzzle from six columns on `nascar_drivers`:
+  vibe_word, era_hint, car_number_hint, wins_hint, championship_hint,
+  famous_moment_hint. NONE OF THEM EXIST. Every clue rendered undefined, so a
+  player got six blank cards and could only win by typing a name out of
+  nowhere. Registry listed, marked daily and new, and nascar_scores has rows,
+  so people tried to play it. Found by pulling on a much smaller filed note
+  about an `.eq('id', ...)` against a table with no id column: that line was
+  dead, and following it found the real bug.
+  THE HONEST DATA WAS ALREADY THERE, which is what made this a round rather
+  than a research project. nascar_race_results has 2,104 populated rows,
+  nascar_champions all 77 seasons. But WHAT EACH SOURCE CAN SUPPORT is the
+  whole design, and measuring that came first: the results table is NOT a
+  complete win log. Nineteen seasons are missing, 1957 to 1969 among them,
+  which is why Junior Johnson and Ned Jarrett, both fifty win drivers, have
+  zero rows in it; 1979, 1982 and 1983 are gone too. It also mixes exhibition
+  races in with points races. So no clue totals it and no clue calls a row a
+  "Cup Series win": each row supports exactly one true sentence, this driver
+  won this race in this year. Championships come from the complete table and
+  are asserted both ways. Eligibility is derived, four usable wins, 59 of 83.
+  THREE DATA FAULTS THAT ONLY SHOWED UP IN THE OUTPUT, all now caught by shape
+  rather than by a list: races named after the driver print the answer on the
+  card (the Alan Kulwicki Memorial); champions.team IS the driver's own name
+  for owner drivers like Kulwicki and Herb Thomas; and 90 rows from 1949 to
+  1953 carry a placeholder race name like "1951-26", which is a database
+  artifact rather than a clue.
+  The board's hardcoded CLUE_LABELS went with it. It named the six columns
+  that never existed, and two were wrong for the real data: nothing in the
+  database records a car number, and "Cup Series Wins" over a results row is
+  the one claim that source cannot make. Labels generate beside their clue now.
+  The how-to-play and the SEO copy described the game as designed rather than
+  as built, including a worked example resting entirely on a car number clue
+  the game never showed. Both rewritten; the new example was checked against
+  the tables (exactly three drivers have seven titles, only Petty drove a
+  Plymouth).
+  simNascarDriver section 3 is the one worth having. Sections 1 and 2 would
+  pass on a file of well formatted lies, because both take the generator's word
+  for what a clue should say. Section 3 reads the shipped English, parses the
+  claim out of it and checks it against raw rows without calling the generator:
+  354 of 354 verified. NASCAR_CONTROL=blank reproduces exactly what the game
+  used to ship and NASCAR_CONTROL=drift moves one race year by one so a clue
+  becomes a well formed falsehood; both go red, and drift is what proves
+  section 3 reads the claim and not the format.
+  The page also renders from a committed file now, so a crawler receives the
+  game instead of a spinner and it stops querying Supabase on every visit.
 
 - ONE PAGE, ONE FAQPage, Round 373 (desktop lane, 2026-09-01). Four shipped
   documents carried TWO contradictory FAQPage blocks each: /front-office,

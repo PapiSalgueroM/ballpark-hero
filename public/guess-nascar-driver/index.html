@@ -54,7 +54,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Guess The Driver","item":"https://douknowball.com/guess-nascar-driver"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I have to type the exact full name?","acceptedAnswer":{"@type":"Answer","text":"No. Start typing and pick from the suggestions, and common short names are accepted too."}},{"@type":"Question","name":"What happens if I give up?","acceptedAnswer":{"@type":"Answer","text":"The driver is revealed and the round scores 0. In Unlimited you can start another one right away."}},{"@type":"Question","name":"Is Guess The Driver free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Guess The Driver is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Guess the NASCAR Driver - Cup Series Trivia Game | DoUKnowBall","description":"Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge.","url":"https://douknowball.com/guess-nascar-driver","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Guess The Driver","item":"https://douknowball.com/guess-nascar-driver"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I have to type the exact full name?","acceptedAnswer":{"@type":"Answer","text":"Start typing and pick from the suggestion list, which submits the full name for you. Typing it yourself works too, and a suffix like Jr is optional."}},{"@type":"Question","name":"Where do the clues come from?","acceptedAnswer":{"@type":"Answer","text":"Real race results and the full list of Cup Series champions, both held in our own database. A clue never totals up a career, because our race records have gaps in the early decades and mix in exhibition races, so each one names a single race in a single year instead."}},{"@type":"Question","name":"Why isn't every famous driver in here?","acceptedAnswer":{"@type":"Answer","text":"A driver only makes the pool if our records hold enough real wins to build six honest clues, which is 59 of them today. Padding the rest out with made up detail would be worse than leaving them out."}},{"@type":"Question","name":"What happens if I give up?","acceptedAnswer":{"@type":"Answer","text":"The driver is revealed and the round scores 0. In Unlimited you can start another one right away."}},{"@type":"Question","name":"Is Guess The Driver free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Guess The Driver is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Guess the NASCAR Driver - Cup Series Trivia Game | DoUKnowBall","description":"Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge.","url":"https://douknowball.com/guess-nascar-driver","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -217,14 +217,13 @@
 </div>
 <h1>Guess The NASCAR Driver</h1>
 <p>How well do you know NASCAR?</p>
-<p>Loading drivers...</p>
 <h2>Guess The NASCAR Driver | DoUKnowBall</h2>
-<p>Identify the mystery NASCAR Cup Series driver from progressive clues about their era, wins, car number, championships, and famous moments.</p>
+<p>Identify the mystery NASCAR Cup Series driver from six clues, starting with the years they were winning and ending with races they actually won.</p>
 <p>There's a Cup Series driver on the other side of the screen, and you get six clues to figure out who. It could be a modern playoff regular or a legend from the golden eras of stock car racing.</p>
-<p>Clues unlock in a fixed order: a one-word vibe, the era they raced, their car number, their win count, their championships, and one famous moment.</p>
+<p>Clues unlock in a fixed order and get more specific as they go: the years the driver was winning, how many championships they took, what they were driving in a title year, and then three actual races they won, named and dated.</p>
 <h2>How to play Guess The Driver</h2>
 <li>Pick Daily Challenge to chase the same driver as everyone else, or Unlimited to keep the puzzles coming.</li>
-<li>Open with the vibe word and guess whenever conviction strikes.</li>
+<li>Read the era clue first and guess whenever conviction strikes.</li>
 <li>Every wrong guess reveals the next clue automatically.</li>
 <li>Hints unlock the next clue without spending a guess, though the score tier drops the same either way.</li>
 <li>Pick a name from the suggestion list to submit your guess.</li>
@@ -232,19 +231,25 @@
 <li>6 clues per driver, scored 1000, 800, 600, 400, 200 and 100 by the clue you solve on.</li>
 <li>A wrong guess while clue six is showing ends the round.</li>
 <li>Give Up reveals the driver and scores 0.</li>
-<li>Daily and Unlimited both pull from the same driver database.</li>
+<li>Daily and Unlimited both pull from the same 59 driver pool.</li>
+<li>Every clue is a fact from a real race result or a real championship season. Nothing about a driver is invented, and where our race records are thin the clue says "on record" instead of claiming a career total.</li>
 <h2>Example walkthrough</h2>
-<p>Say the era clue points at the 1970s and you hold your fire. Clue three drops a car number: 43.</p>
-<p>For NASCAR fans that's not a clue, it's a signature. Richard Petty, The King, guessed on clue three for 600 points.</p>
-<p>His 200 wins and 7 championships were waiting in clues four and five, but you didn't need them.</p>
+<p>Clue one says the driver has race wins on record between 1970 and 1984, so you are in the sport's second golden era and you hold your fire.</p>
+<p>Clue two says seven Cup Series championships. Only three drivers in history have seven, and one of them raced far later, so you are down to two.</p>
+<p>Clue three says a title year came driving a Plymouth, which settles it: Richard Petty, guessed on clue three for 600 points. The 1973 Daytona 500 was waiting in clue four, and you didn't need it.</p>
 <h2>Strategy tips</h2>
-<li>Car numbers are the loudest clue in the game: 3, 24, 43 and 48 each belong to one icon.</li>
-<li>Championship counts cluster at the top, so seven titles narrows it to a very short list.</li>
-<li>The era clue splits the generations cleanly. Use it to rule out half the field before the number arrives.</li>
+<li>Championship counts cluster at the top, so seven titles narrows it to a very short list before you have seen a single race.</li>
+<li>The era clue splits the generations cleanly. Use it to rule out most of the field before the race names arrive.</li>
+<li>The manufacturer in a title year dates a driver closely: Plymouth and Oldsmobile belong to one era, Toyota to another.</li>
+<li>The named races are the giveaway. If you know who won a particular Daytona 500 or Southern 500, the round is over on that clue.</li>
 <li>If a name is stuck on the tip of your tongue, scroll the suggestion list; seeing it usually unlocks it.</li>
 <h2>Guess The Driver FAQ</h2>
 <h3>Do I have to type the exact full name?</h3>
-<p>No. Start typing and pick from the suggestions, and common short names are accepted too.</p>
+<p>Start typing and pick from the suggestion list, which submits the full name for you. Typing it yourself works too, and a suffix like Jr is optional.</p>
+<h3>Where do the clues come from?</h3>
+<p>Real race results and the full list of Cup Series champions, both held in our own database. A clue never totals up a career, because our race records have gaps in the early decades and mix in exhibition races, so each one names a single race in a single year instead.</p>
+<h3>Why isn't every famous driver in here?</h3>
+<p>A driver only makes the pool if our records hold enough real wins to build six honest clues, which is 59 of them today. Padding the rest out with made up detail would be worse than leaving them out.</p>
 <h3>What happens if I give up?</h3>
 <p>The driver is revealed and the round scores 0. In Unlimited you can start another one right away.</p>
 <h3>Is Guess The Driver free to play?</h3>
