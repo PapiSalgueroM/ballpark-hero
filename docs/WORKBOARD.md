@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 383.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 384.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -157,24 +157,6 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   Also: the view's position tie-break is `(array_agg(position ORDER BY year
   DESC))[1]` with no secondary key, so the goalkeeper pool measured 2,268 and
   2,270 minutes apart. Non-deterministic between reads.
-
-- **MISSING XI HAS 28 ANSWERS A PLAYER CANNOT SUBMIT.** Of 324 distinct blank
-  answers, 296 are reachable by typing the name or the surname and 28 are not,
-  because `MissingXi.tsx:292-306` passes `validateOnly` with NO `localNames`, so
-  the only string that can ever be submitted is the database's spelling. Nine
-  are hard blocked by a name-form mismatch the matcher never sees: hyphen
-  (`Eric Maxim Choupo-Moting` vs `Eric-Maxim Choupo-Moting`), name order
-  (`Park Ji-sung` vs `Ji-sung Park`), nickname (`Javier Hernandez` vs
-  `Chicharito`), mononyms (`Bosingwa`, `Petit`, `Everton`), transliteration
-  (`Dmitri Alenichev` vs `Dmitriy Alenichev`) and `İlkay Gündoğan`.
-  THE FIX IS ONE PROP and the component already has it: `PlayerAutocomplete`
-  takes `localNames`, added for an identical NFL report. Pass the whole file's
-  deduped roster (~1,837 names), NOT the current XI's eleven, which would leak
-  the answer to anyone typing two characters.
-  THE DURABLE PART is a fourth section in `simMissingXi.mjs`: for every blank
-  candidate, run the real `searchPlayers` and fail unless some prefix surfaces a
-  row that `isCorrectGuess` accepts. All 28 sit green today because the harness
-  tests the matcher in isolation and never the real guess path.
 
 - **`searchPlayers` HAS A NONDETERMINISTIC PROMINENCE POOL.** Its fallback leg
   orders 1,000 rows by `market_value_usd` with no tiebreak, so ten identical
@@ -775,6 +757,44 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- TWELVE MISSING XI ANSWERS COULD NOT BE SUBMITTED, AND THE REVIEW FOUND A
+  THIRTEENTH, Round 383 (desktop lane, 2026-09-01). Run through the REAL guess
+  path (the real searchPlayers with the page's own options, typing the full
+  name, the surname and the first name) the true count was 12 of 324, not the
+  28 the Round 381 sweep estimated, and three of the 12 (Fabio Coentrao,
+  Edmilson, Kleberson) were not on that list at all: the table keeps their
+  accents, ilike on the plain spelling finds nothing, and none of them sits in
+  the 1,000 rows the accent fallback reads.
+  TWO FIXES, EACH PROVEN ON ITS OWN. The page now hands PlayerAutocomplete the
+  whole file's roster, 696 distinct starters (XI_ROSTER_NAMES), never the
+  current eleven. And ten candidate entries carry a verified `aliases` list so
+  a player who picks the database row (Chicharito, Ji-sung Park, Bosingwa,
+  Nacho Fernández) is not told he is wrong; guessKey folds both spellings into
+  one try.
+  THE HANDOFF WAS WRONG ABOUT EMMANUEL PETIT. The database "Petit" is Armando
+  Petit of Portugal (Benfica, then Koln); Emmanuel Petit has no row at all, so
+  he gets no alias and is reachable only through the roster.
+  THE REVIEW (five refuters, ten verifiers) FOUND NACHO: Real Madrid's Nacho
+  is stored as "Nacho Fernández" and the exact string "Nacho" is a Betis
+  left-back, so the right row was refused and the wrong one accepted. Aliased,
+  and the harness now sweeps every surname around the match year so that
+  shape fails the board. Also from the review: an invisible U+200E on a second
+  Vidic row (normalizeName drops format characters now), three men spelled
+  two ways in the file (unified), and the surname hint reading "Ji-sung" as
+  Park Ji-sung's surname (candidates carry a surname when it is not the last
+  word; letters only in the count).
+  THE FENCE is scripts/simMissingXiReach.mjs, a live harness (its own file so
+  the runner can SKIP it offline): all 323 answers through the real search
+  plus the real mergeLocalNames, every query reported, the page element and
+  the component's merge call read as code, every alias and every surname
+  checked against the table. Five controls, each asserting first and judged
+  on its own section (noprop, nocomponent, nolocal fires 6, badalias,
+  stripalias fires 5). simMissingXi gained sections 4 and 5 with noalias and
+  nosurname controls.
+  LEFT ALONE, named in the change log: namesake strings whose accepted row
+  shows another man's subtitle (Raul, Thiago Motta, Laporte). The fix is
+  person_key, the Rarity Round item.
 
 - THE MAKER NOTE MOVES AND LOSES HIS NAME, Round 382 (desktop lane,
   2026-09-01). His request, in his words: "the note from the maker shouldnt say

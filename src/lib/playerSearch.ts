@@ -60,6 +60,9 @@ import { supabase } from '@/integrations/supabase/client';
 // so the range never contains a literal accented character that could be
 // mangled by copy/paste or re-encoding.
 const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
+// Unicode format characters (zero-width and directional marks, the byte
+// order mark): invisible, and never part of a name.
+const FORMAT_CHARS = /\p{Cf}/gu;
 
 /**
  * Lowercase, diacritics stripped via NFD decomposition, trimmed, internal
@@ -70,6 +73,11 @@ const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.f
 export function normalizeName(s: string | null | undefined): string {
   return foldSpecialLatin(
     (s ?? '')
+      // Round 383: invisible format characters are not part of a name.
+      // player_market_values carries a second "Nemanja Vidic" row with a
+      // trailing U+200E, which the search offered as its own player and
+      // Missing XI then refused. Mirrored in PlayerAutocomplete's index map.
+      .replace(FORMAT_CHARS, '')
       .normalize('NFD')
       .replace(DIACRITICS, '')
       .toLowerCase()
@@ -427,6 +435,52 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
     }
     return { results: [], error: err instanceof Error ? err.message : 'Search failed' };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Local names
+// ---------------------------------------------------------------------------
+
+/** How many caller-supplied names a single query may append after the remote results. */
+const LOCAL_NAME_CAP = 6;
+
+/**
+ * Round 84, moved here in Round 383. Names the caller's own answer pool knows
+ * and the remote source may not (an NFL legend from before the roster table
+ * starts, a lineup spelling the market value table does not use) are matched
+ * CLIENT-SIDE and appended after the remote results. Up to LOCAL_NAME_CAP
+ * matches are taken in the caller's order, `exclude` is honoured, and a man
+ * the remote search already found is not listed twice.
+ *
+ * This lives here rather than inside PlayerAutocomplete so a harness can run
+ * the exact merge the component runs: simMissingXiReach walks every Missing
+ * XI answer through searchPlayers plus this function and fails if a player
+ * could not lock the answer in.
+ */
+export function mergeLocalNames(
+  remote: PlayerEntity[],
+  localNames: string[] | undefined,
+  query: string,
+  exclude?: Set<string>,
+): PlayerEntity[] {
+  if (!localNames || localNames.length === 0) return remote;
+  const q = normalizeName(query);
+  const locals: PlayerEntity[] = [];
+  const localKeys = new Set<string>();
+  for (const n of localNames) {
+    const key = normalizeName(n);
+    if (!key.includes(q)) continue;
+    if (exclude?.has(key)) continue;
+    // Two spellings of one man in the caller's list are one row, never two
+    // rows sharing a React key.
+    if (localKeys.has(key)) continue;
+    localKeys.add(key);
+    locals.push({ key, name: n, rawName: n, meta: {}, matchRank: 2, prominence: 0 });
+    if (locals.length >= LOCAL_NAME_CAP) break;
+  }
+  if (locals.length === 0) return remote;
+  const seen = new Set(remote.map(r => r.key));
+  return [...remote, ...locals.filter(l => !seen.has(l.key))];
 }
 
 // ---------------------------------------------------------------------------

@@ -2597,6 +2597,75 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 383. TWELVE MISSING XI ANSWERS COULD NOT BE SUBMITTED, AND
+  THE REVIEW FOUND A THIRTEENTH.** The Round 381 sweep estimated 28 unreachable
+  of 324. Run through the real guess path (the real `searchPlayers` with the
+  page's own options, typing the full name, the surname and the first name)
+  the true number was **12**, and three of them (Fabio Coentrao, Edmilson,
+  Kleberson) were not on the handoff's list: the table keeps their accents,
+  `ilike` on the plain spelling finds nothing, and none of the three sits in
+  the 1,000 rows by value the accent fallback reads. The page ran
+  `PlayerAutocomplete` with `validateOnly` and no `localNames`, so the only
+  strings a player could ever lock in were the database's spellings.
+  **Two fixes, each proven on its own.** (1) The page hands the autocomplete
+  the whole file's roster, 696 distinct starters (`XI_ROSTER_NAMES`, deduped
+  by the autocomplete's own key), so a lineup's own spelling is always on
+  offer. The whole file on purpose: today's eleven would hand the answer to
+  anyone typing two letters. (2) Ten candidate entries, eight men, carry a
+  verified `aliases` list so a player who picks the database row
+  (`Chicharito`, `Ji-sung Park`, `Bosingwa`, `Nacho Fernández`) is not told
+  he is wrong. Without it, fix 1 puts a remote row and a local row for the
+  same man side by side and one of them counts as a miss. Every alias was
+  checked by SQL for the candidate's nationality and a club he was at, with
+  my own football knowledge as the second source, and `guessKey` folds both
+  spellings into one try so they cannot burn two guesses.
+  **The handoff was wrong about Emmanuel Petit, and following it would have
+  shipped false data.** It listed him as a mononym mismatch, "the database
+  stores `Petit`". That row is Armando Petit: Portugal, Benfica 2004 to 2008,
+  Koln to 2011. Emmanuel Petit has no row at all (he retired in 2004, where
+  the table starts), so he gets no alias and is reachable only through the
+  roster. The `badalias` control hangs that exact alias on him and must go
+  red: it does.
+  **The adversarial review (five refuters, ten verifiers) found what my own
+  harness could not.** `Nacho` of Real Madrid, a candidate in two lineups, is
+  stored as `Nacho Fernández`; the exact string `Nacho` is a Betis left-back
+  from 2004 to 2014, so the page offered the right man's row and refused it
+  while accepting the wrong man's. Aliased now, and section 3 of the harness
+  sweeps every candidate's surname around the match year so a man stored
+  under a string the matcher refuses fails the board (`stripalias` proves it
+  on five entries). The table also carries a second `Nemanja Vidic` row with
+  an invisible U+200E on the end, which the search offered as its own player
+  and the matcher refused: `normalizeName` now drops Unicode format
+  characters, mirrored in the autocomplete's highlight map. The file spelled
+  three men two ways (Barella, Cancelo, Mandžukić), which the roster turned
+  into two identical rows sharing a React key; unified to the accented
+  spellings the table uses, with a section 1 check so it cannot recur. And
+  the surname hint read the last word of the name, so Park Ji-sung's ladder
+  said "starts with J, 7 letters": a candidate carries a `surname` when it is
+  not the last word, and the count is letters only (Choupo-Moting has twelve,
+  not thirteen).
+  **The durable half is `scripts/simMissingXiReach.mjs`**, a live harness in
+  its own file so `runAllSims` can SKIP it offline without hiding the offline
+  checks. It walks all 323 distinct answers (the Cancelo merge took one)
+  through the real `searchPlayers` plus the real `mergeLocalNames` (the merge
+  moved out of the component into `playerSearch.ts` for exactly this, same
+  semantics, same six name cap), every query run and reported on its own: by
+  full name 323 of 323, by surname 294 of 294, by first name 293 of 294.
+  Section 1 reads the page element and the component's merge call as code
+  with comments and strings stripped. Section 3 is the identity fence above.
+  Five controls, each asserting it changed something and judged only on its
+  own section: `noprop`, `nocomponent`, `nolocal` (6 fire, the six no alias
+  can reach because nobody finds "Chicharito" by typing "Javier Hernandez"),
+  `badalias`, `stripalias`. Identical GETs from the prominence leg are
+  memoised after the first live fetch; the ilike leg is unique per query and
+  always live. Measured: 850 live GETs, about four minutes. `simMissingXi`
+  gained sections 4 and 5 with `noalias` and `nosurname` controls.
+  Known and left alone: namesake strings where the accepted row's subtitle
+  belongs to another man (`Raul` is Brazilian in the table, `Thiago Motta`
+  and `Aymeric Laporte` carry their later nationality). The right man is
+  accepted; only the subtitle is wrong, and the real fix is `person_key`,
+  which is the Rarity Round item.
+  tsc zero, build green, both harnesses green with all seven controls red.
 - **2026-09-01, Round 382. THE MAKER NOTE MOVES AND LOSES HIS NAME.** His
   request, verbatim: *"the note from the maker shouldnt say my name also it
   shouldnt pop up there I would rather you put it in one the small like tabs on

@@ -19,11 +19,13 @@ import {
   pickDailyPuzzle,
   pickUnlimitedPuzzle,
   isCorrectGuess,
+  guessKey,
   hintForLevel,
   scoreForGuess,
   buildEmojiGrid,
   MAX_GUESSES,
-  SOCCER_MARKET_VALUE_SOURCE,
+  XI_ROSTER_NAMES,
+  XI_SEARCH_OPTIONS,
   type ActivePuzzle,
   type HintLevel,
 } from '@/lib/missingXi';
@@ -113,7 +115,9 @@ const MissingXi = () => {
     // Wrong guess: only counts if it's a real, different player. Guarding
     // against re-submitting the exact same wrong name twice in a row so a
     // slow double-click can't burn two guesses on one mistake.
-    if (wrongGuesses.some(w => normalizeName(w) === normalizeName(selectedEntity.name))) {
+    // Round 383: keyed through guessKey so the database's spelling and the
+    // lineup's spelling of one man count as the same try.
+    if (wrongGuesses.some(w => guessKey(w, puzzle.lineup) === guessKey(selectedEntity.name, puzzle.lineup))) {
       setErrorMsg('You already tried that name.');
       return;
     }
@@ -299,7 +303,8 @@ const MissingXi = () => {
                     setErrorMsg('');
                   }}
                   onSelect={handleSelect}
-                  searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, minChars: 2, limit: 8 }}
+                  searchOptions={XI_SEARCH_OPTIONS}
+                  localNames={XI_ROSTER_NAMES}
                   placeholder={`Who's the missing ${puzzle.lineup.slots[puzzle.candidate.slotIndex].position}?`}
                   validateOnly
                   autoFocus

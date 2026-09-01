@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
+import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE, type SearchPlayersOptions } from '@/lib/playerSearch';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 
 /**
@@ -92,6 +92,22 @@ export interface BlankCandidate {
    * hand-verified alongside the lineup, the UI must never invent one.
    */
   fact?: string;
+  /**
+   * Round 383: other spellings player_market_values uses for THIS man, so a
+   * player who picks the database row ("Chicharito", "Ji-sung Park") is not
+   * told he is wrong. Each one was checked by SQL against that table for the
+   * candidate's nationality and a club he was at, and simMissingXiReach
+   * section 3 re-checks every alias on every run. Never an alias that is a
+   * different person sharing the string: the database "Petit" is Armando
+   * Petit of Benfica, so Emmanuel Petit carries none.
+   */
+  aliases?: string[];
+  /**
+   * Round 383: the family name, only when it is not the last word of the
+   * name. The hint ladder narrows by surname and read "Ji-sung" off Park
+   * Ji-sung, telling players it starts with J and has seven letters.
+   */
+  surname?: string;
 }
 
 export interface Lineup {
@@ -198,7 +214,7 @@ export const LINEUPS: Lineup[] = [
     ],
     // Ryan Bertrand made his competitive debut in this final, playing makeshift left winger - a real, well-documented surprise starter, not an error.
     blankCandidates: [
-      { name: 'Jose Bosingwa', slotIndex: 1, nationality: 'Portugal', clubAtTime: 'Chelsea' },
+      { name: 'Jose Bosingwa', slotIndex: 1, nationality: 'Portugal', clubAtTime: 'Chelsea', aliases: ['Bosingwa'] },
       { name: 'Salomon Kalou', slotIndex: 8, nationality: "Cote d'Ivoire", clubAtTime: 'Chelsea' },
       { name: 'Ryan Bertrand', slotIndex: 9, nationality: 'England', clubAtTime: 'Chelsea' },
     ],
@@ -559,7 +575,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Eduardo Camavinga', slotIndex: 5, nationality: 'France', clubAtTime: 'Real Madrid' },
-      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid', aliases: ['Nacho Fernández'] },
       { name: 'Rodrygo', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
     ],
     source: 'Wikipedia + Sky Sports + Managing Madrid confirmed-lineups (Camavinga in for Tchouameni) + CBS/NBC Sports, unanimous.',
@@ -1390,7 +1406,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'ST', name: 'Karim Benzema', x: 50, y: 16 },
     ],
     blankCandidates: [
-      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid', aliases: ['Nacho Fernández'] },
       { name: 'Federico Valverde', slotIndex: 8, nationality: 'Uruguay', clubAtTime: 'Real Madrid' },
       { name: 'Eder Militao', slotIndex: 2, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
     ],
@@ -1659,7 +1675,7 @@ export const LINEUPS: Lineup[] = [
     // confirmed rows used as blank candidates instead.
     blankCandidates: [
       { name: 'Rio Ferdinand', slotIndex: 2, nationality: 'England', clubAtTime: 'Manchester United' },
-      { name: 'Park Ji-sung', slotIndex: 5, nationality: 'South Korea', clubAtTime: 'Manchester United' },
+      { name: 'Park Ji-sung', slotIndex: 5, nationality: 'South Korea', clubAtTime: 'Manchester United', aliases: ['Ji-sung Park'], surname: 'Park' },
       { name: 'Wayne Rooney', slotIndex: 9, nationality: 'England', clubAtTime: 'Manchester United' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive + Sky Sports lineup graphic, unanimous on the identical XI to the 2008 title decider.',
@@ -1886,7 +1902,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Alex Sandro', slotIndex: 4, nationality: 'Brazil', clubAtTime: 'Juventus' },
-      { name: 'Everton Soares', slotIndex: 7, nationality: 'Brazil', clubAtTime: 'Gremio' },
+      { name: 'Everton Soares', slotIndex: 7, nationality: 'Brazil', clubAtTime: 'Gremio', aliases: ['Everton'] }, // the database string is shared with other Brazilians; the search dedupes by value and the row it offers is his Gremio one
       { name: 'Arthur Melo', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Barcelona' },
     ],
     source: 'Wikipedia infobox + CONMEBOL official archive + ESPN match report, unanimous.',
@@ -2305,7 +2321,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'LW', name: 'Diego Perotti', x: 20, y: 24 },
     ],
     blankCandidates: [
-      { name: 'Kostas Manolas', slotIndex: 2, nationality: 'Greece', clubAtTime: 'Roma' },
+      { name: 'Kostas Manolas', slotIndex: 2, nationality: 'Greece', clubAtTime: 'Roma', aliases: ['Konstantinos Manolas'] },
       { name: 'Cengiz Under', slotIndex: 8, nationality: 'Turkey', clubAtTime: 'Roma' },
       { name: 'Aleksandar Kolarov', slotIndex: 4, nationality: 'Serbia', clubAtTime: 'Roma' },
     ],
@@ -2371,7 +2387,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Nuno Valente', slotIndex: 4, nationality: 'Portugal', clubAtTime: 'Porto' },
-      { name: 'Dmitri Alenichev', slotIndex: 8, nationality: 'Russia', clubAtTime: 'Porto' },
+      { name: 'Dmitri Alenichev', slotIndex: 8, nationality: 'Russia', clubAtTime: 'Porto', aliases: ['Dmitriy Alenichev'] },
       { name: 'Benni McCarthy', slotIndex: 10, nationality: 'South Africa', clubAtTime: 'Porto' },
     ],
     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the full starting XI including Alenichev and McCarthy on the wings.',
@@ -2621,7 +2637,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'CB', name: 'Alessandro Bastoni', x: 32, y: 76 },
       { position: 'RWB', name: 'Achraf Hakimi', x: 86, y: 52 },
       { position: 'CM', name: 'Marcelo Brozovic', x: 62, y: 56 },
-      { position: 'CM', name: 'Nicolo Barella', x: 38, y: 56 },
+      { position: 'CM', name: 'Nicolò Barella', x: 38, y: 56 },
       { position: 'LWB', name: 'Ivan Perišić', x: 14, y: 52 },
       { position: 'CAM', name: 'Christian Eriksen', x: 50, y: 36 },
       { position: 'ST', name: 'Romelu Lukaku', x: 60, y: 16 },
@@ -2661,7 +2677,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Matthijs de Ligt', slotIndex: 3, nationality: 'Netherlands', clubAtTime: 'Bayern Munich' },
-      { name: 'Eric Maxim Choupo-Moting', slotIndex: 10, nationality: 'Cameroon', clubAtTime: 'Bayern Munich' },
+      { name: 'Eric Maxim Choupo-Moting', slotIndex: 10, nationality: 'Cameroon', clubAtTime: 'Bayern Munich', aliases: ['Eric-Maxim Choupo-Moting'] },
       { name: 'Dayot Upamecano', slotIndex: 2, nationality: 'France', clubAtTime: 'Bayern Munich' },
     ],
     source: 'Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous on the title-deciding final-day XI.',
@@ -3002,7 +3018,7 @@ export const LINEUPS: Lineup[] = [
     formationLabel: '4-3-3',
     slots: [
       GK('Wojciech Szczesny'),
-      { position: 'RB', name: 'Joao Cancelo', x: 84, y: 70 },
+      { position: 'RB', name: 'João Cancelo', x: 84, y: 70 },
       { position: 'CB', name: 'Giorgio Chiellini', x: 62, y: 74 },
       { position: 'CB', name: 'Leonardo Bonucci', x: 38, y: 74 },
       { position: 'LB', name: 'Alex Sandro', x: 16, y: 70 },
@@ -3015,7 +3031,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Rodrigo Bentancur', slotIndex: 7, nationality: 'Uruguay', clubAtTime: 'Juventus' },
-      { name: 'Joao Cancelo', slotIndex: 1, nationality: 'Portugal', clubAtTime: 'Juventus' },
+      { name: 'João Cancelo', slotIndex: 1, nationality: 'Portugal', clubAtTime: 'Juventus' },
       { name: 'Federico Bernardeschi', slotIndex: 10, nationality: 'Italy', clubAtTime: 'Juventus' },
     ],
     source: 'Wikipedia match report + Football Italia archive + Juventus official site, unanimous.',
@@ -3927,7 +3943,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'CM', name: 'Luka Modric', x: 68, y: 50 },
       { position: 'CM', name: 'Marcelo Brozovic', x: 32, y: 50 },
       { position: 'RW', name: 'Ante Rebic', x: 80, y: 24 },
-      { position: 'CF', name: 'Mario Mandzukic', x: 50, y: 18 },
+      { position: 'CF', name: 'Mario Mandžukić', x: 50, y: 18 },
       { position: 'LW', name: 'Ivan Perišić', x: 20, y: 24 },
     ],
     blankCandidates: [
@@ -4343,7 +4359,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'CB', name: 'Francesco Acerbi', x: 50, y: 78 },
       { position: 'CB', name: 'Alessandro Bastoni', x: 32, y: 76 },
       { position: 'RWB', name: 'Denzel Dumfries', x: 86, y: 52 },
-      { position: 'CM', name: 'Nicolo Barella', x: 62, y: 56 },
+      { position: 'CM', name: 'Nicolò Barella', x: 62, y: 56 },
       { position: 'CM', name: 'Hakan Calhanoglu', x: 50, y: 60 },
       { position: 'CM', name: 'Marcelo Brozovic', x: 38, y: 56 },
       { position: 'LWB', name: 'Federico Dimarco', x: 14, y: 52 },
@@ -4610,7 +4626,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Jonny Evans', slotIndex: 3, nationality: 'Northern Ireland', clubAtTime: 'Manchester United' },
       { name: 'Nani', slotIndex: 8, nationality: 'Portugal', clubAtTime: 'Manchester United' },
-      { name: 'Javier Hernandez', slotIndex: 10, nationality: 'Mexico', clubAtTime: 'Manchester United' },
+      { name: 'Javier Hernandez', slotIndex: 10, nationality: 'Mexico', clubAtTime: 'Manchester United', aliases: ['Chicharito'] },
     ],
     source: 'Wikipedia match report + Manchester United official retrospective + Sky Sports lineup graphic, unanimous on Ferguson\'s 13th and final title as manager.',
   },
@@ -4673,7 +4689,7 @@ export const LINEUPS: Lineup[] = [
     ],
     blankCandidates: [
       { name: 'Wes Brown', slotIndex: 1, nationality: 'England', clubAtTime: 'Manchester United' },
-      { name: 'Park Ji-sung', slotIndex: 5, nationality: 'South Korea', clubAtTime: 'Manchester United' },
+      { name: 'Park Ji-sung', slotIndex: 5, nationality: 'South Korea', clubAtTime: 'Manchester United', aliases: ['Ji-sung Park'], surname: 'Park' },
       { name: 'Rio Ferdinand', slotIndex: 2, nationality: 'England', clubAtTime: 'Manchester United' },
     ],
     source: 'Wikipedia dedicated match article + Manchester United official archive, agree on the 1st-leg starting XI.',
@@ -5562,6 +5578,46 @@ export const LINEUPS: Lineup[] = [
 
 ];
 
+/**
+ * Round 383: every starter in the file, deduped, in file order. The page hands
+ * this to PlayerAutocomplete as localNames, so a lineup's own spelling is
+ * always on offer (Jose Bosingwa, Park Ji-sung, Ilkay Gundogan without the
+ * accents the database keeps) whatever the market value table calls him.
+ * It is the WHOLE file on purpose: the eleven of today's lineup would hand
+ * the answer to anyone typing two letters. simMissingXiReach section 1 fails
+ * if it is ever narrowed or dropped from the page.
+ */
+export const XI_ROSTER_NAMES: string[] = (() => {
+  /* Deduped by the same key the autocomplete uses, so two spellings of one
+     man in the file cannot become two identical rows sharing a React key.
+     simMissingXi section 1 also refuses a file that spells a starter two
+     ways, so this is belt and braces. */
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const lu of LINEUPS) {
+    for (const slot of lu.slots) {
+      const key = normalizeName(slot.name);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(slot.name);
+    }
+  }
+  return out;
+})();
+
+/**
+ * The page's search options, exported so simMissingXiReach walks the same
+ * search the player gets. This reads an import at module scope, which the
+ * house rule warns about because of the import cycle it once let in: the
+ * chain was checked in Round 383, playerSearch.ts imports only nameFold and
+ * the supabase client and nothing imports this file back into it.
+ */
+export const XI_SEARCH_OPTIONS: Omit<SearchPlayersOptions, 'query' | 'signal'> = {
+  source: SOCCER_MARKET_VALUE_SOURCE,
+  minChars: 2,
+  limit: 8,
+};
+
 // ---------------------------------------------------------------------------
 // Daily / Unlimited puzzle selection
 // ---------------------------------------------------------------------------
@@ -5609,9 +5665,25 @@ export function pickUnlimitedPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
 export const MAX_GUESSES = 3;
 export const SCORE_BY_GUESS: Record<number, number> = { 1: 100, 2: 70, 3: 40 };
 
-/** True if `guessName` matches this round's candidate, accent/case-insensitive via the shared normalizeName pipeline. */
+/** True if `guessName` matches this round's candidate by name or by one of its verified database aliases, accent/case-insensitive via the shared normalizeName pipeline. */
 export function isCorrectGuess(guessName: string, candidate: BlankCandidate): boolean {
-  return normalizeName(guessName) === normalizeName(candidate.name);
+  const guess = normalizeName(guessName);
+  if (guess === normalizeName(candidate.name)) return true;
+  return (candidate.aliases ?? []).some(alias => normalizeName(alias) === guess);
+}
+
+/**
+ * Round 383: the key a guess is remembered under, so two offered spellings of
+ * one man (the database's "Ji-sung Park" beside the lineup's "Park Ji-sung")
+ * cannot burn two of the three guesses. A guess that matches a blank
+ * candidate of this lineup by name or alias keys as that candidate; anything
+ * else keys as itself.
+ */
+export function guessKey(guessName: string, lineup: Lineup): string {
+  for (const c of lineup.blankCandidates) {
+    if (isCorrectGuess(guessName, c)) return normalizeName(c.name);
+  }
+  return normalizeName(guessName);
 }
 
 /**
@@ -5633,7 +5705,9 @@ export function isCorrectGuess(guessName: string, candidate: BlankCandidate): bo
 export function hintForLevel(level: HintLevel, candidate: BlankCandidate, lineup: Lineup): string | null {
   if (level <= 0) return null;
   const words = candidate.name.trim().split(/\s+/);
-  const surname = words[words.length - 1];
+  const surname = candidate.surname ?? words[words.length - 1];
+  // Letters only: "Choupo-Moting" has twelve, not thirteen.
+  const letters = surname.replace(/[^\p{L}]/gu, '');
   const teamKey = normalizeName(lineup.team);
 
   const hints: string[] = [];
@@ -5644,7 +5718,7 @@ export function hintForLevel(level: HintLevel, candidate: BlankCandidate, lineup
     hints.push(`Club at the time: ${candidate.clubAtTime}`);
   }
   hints.push(`Surname starts with: ${surname.charAt(0).toUpperCase()}`);
-  hints.push(`Surname has ${surname.length} letters`);
+  hints.push(`Surname has ${letters.length} letters`);
   return hints[level - 1] ?? null;
 }
 
@@ -5668,6 +5742,4 @@ export function buildEmojiGrid(guessCount: number, won: boolean, lineup: Lineup)
   return [`Missing XI: ${lineup.dateLabel}`, boxes, resultLine].join('\n');
 }
 
-/** Returns the exported PlayerAutocomplete source config, scoped to the full soccer pool (validation is enforced separately against blankCandidates, same pattern rarityRound.ts uses for its elite-100m category). */
-export { SOCCER_MARKET_VALUE_SOURCE };
 export { displayName };

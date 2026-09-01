@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import {
   normalizeName,
   searchPlayers,
+  mergeLocalNames,
   type PlayerEntity,
   type SearchPlayersOptions,
 } from '@/lib/playerSearch';
@@ -101,6 +102,8 @@ function normalizeWithIndexMap(text: string): { normalized: string; indexMap: nu
   let lastWasSpace = false;
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
+    // Format characters vanish in normalizeName, so they vanish here too.
+    if (/\p{Cf}/u.test(ch)) continue;
     const stripped = foldSpecialLatin(ch).normalize('NFD').replace(DIACRITICS_CHARS, '').toLowerCase();
     for (const outChar of stripped) {
       const isSpace = outChar === ' ' || outChar === '\t' || outChar === '\n' || outChar === '\r';
@@ -213,26 +216,11 @@ export function PlayerAutocomplete({
     setOpen(true);
 
     // Round 84: matches from the caller's own answer pool, computed locally so
-    // legends absent from the remote source are still selectable.
-    const computeLocalMatches = (): PlayerEntity[] => {
-      if (!localNames || localNames.length === 0) return [];
-      const q = normalizeName(value);
-      const out: PlayerEntity[] = [];
-      for (const n of localNames) {
-        const key = normalizeName(n);
-        if (!key.includes(q)) continue;
-        if (searchOptions.exclude?.has(key)) continue;
-        out.push({ key, name: n, rawName: n, meta: {}, matchRank: 2, prominence: 0 });
-        if (out.length >= 6) break;
-      }
-      return out;
-    };
-    const mergeLocal = (remote: PlayerEntity[]): PlayerEntity[] => {
-      const locals = computeLocalMatches();
-      if (locals.length === 0) return remote;
-      const seen = new Set(remote.map(r => r.key));
-      return [...remote, ...locals.filter(l => !seen.has(l.key))];
-    };
+    // legends absent from the remote source are still selectable. The merge
+    // itself lives in playerSearch.ts (Round 383) so a harness can run the
+    // exact one the component runs.
+    const mergeLocal = (remote: PlayerEntity[]): PlayerEntity[] =>
+      mergeLocalNames(remote, localNames, value, searchOptions.exclude);
 
     debounceRef.current = window.setTimeout(() => {
       const thisRequestId = ++requestIdRef.current;
