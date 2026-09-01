@@ -288,8 +288,10 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 377 (desktop lane, 2026-09-01), THE BADGE NOBODY CAN
-WIN.** Found by following the same thread: daily_badges is one of the empty
+(Round 377, the Daily Legend badge, SHIPPED. See Done, including the one
+decision it leaves with Anthony.)
+
+**RECON, Round 377.** daily_badges is one of the empty
 tables from the Round 375 audit, and it is empty for a reason.
 THREE FAULTS IN ONE FEATURE.
   1. THE OVERLAY LIES ABOUT ITS OWN RULE. DailyLegendOverlay congratulates the
@@ -554,6 +556,45 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE BADGE NOBODY CAN WIN, Round 377 (desktop lane, 2026-09-01). daily_badges
+  was one of the empty tables from the Round 375 audit, and it was empty for a
+  reason. Three faults in one small feature.
+  THE OVERLAY LIED ABOUT ITS OWN RULE: it congratulated the winner with "You
+  completed all 37 games today" and the share post said the same. 37 was true a
+  long time ago, the registry holds 118, and that number was typed into prose
+  sitting beside a rule computed elsewhere. The post is the version that goes
+  out to everyone the winner knows.
+  THE GATE WAS UNREACHABLE: it awarded only on reaching TOTAL_GAMES, all 118
+  games, including Club Manager seasons, four Front Office career sims and four
+  Conquest campaigns.
+  AND THE BAR ROSE EVERY ROUND, because counting ALL_GAMES means every game
+  shipped makes it harder. Not merely out of reach, moving away.
+  Measured first: the best any signed in player has ever managed in a day is 25
+  distinct games, 23 of them daily, on 2026-07-27.
+  The badge now means what its name says and the number in the copy is DERIVED
+  from the same list the rule counts. It resolves through Round 376's slug map,
+  without which the Conquest boards and the Quiz Board could never count toward
+  it, which would have kept it unwinnable for a second independent reason. Two
+  rounds in a row where 376 turned out to be load bearing.
+  DECISION OWED BY ANTHONY, with the numbers rather than a guess: 65 dailies is
+  still above the observed record of 23, so the badge may stay unearned. I did
+  NOT lower it, because that is a different badge rather than a fix: the copy
+  says "all", and "all" of a smaller number is false while 65 daily games exist.
+  What this round fixed is that it was unwinnable BY CONSTRUCTION and
+  misdescribing itself. If he wants it earned, an easier tier is a small design
+  change and my recommendation is a second badge around 20 rather than moving
+  this one.
+  simDailyLegend section 1 reads the words a winner actually sees and fails on
+  any typed game count, stripping comments first so the note explaining the bug
+  cannot satisfy the check. LEGEND_CONTROL=hardcode puts "37 games" back and it
+  goes red on both sites. Section 3 proves every daily game is reachable from
+  TWO independent sources, the source scan and live rows, after a literal only
+  first draft reported seven false positives: several games hold their slug in a
+  const or a pool config, so the name appears nowhere near the call. Section 4
+  reports the bar against the record rather than failing on it, because how hard
+  a badge should be is a product call and a fence that fails on a judgement is
+  one people learn to ignore.
 
 - THE SLUGS THAT NAME NO GAME, Round 376 (desktop lane, 2026-09-01). Third find
   in a row from the same seam, a defect with no symptom.

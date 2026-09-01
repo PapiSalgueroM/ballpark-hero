@@ -1,13 +1,20 @@
 import { X } from 'lucide-react';
+import { LEGEND_TARGET } from '@/hooks/useDailyLegend';
 
 interface DailyLegendOverlayProps {
   streakDays: number;
   onDismiss: () => void;
 }
 
+/* ROUND 377: THE NUMBER IS DERIVED, AND IT USED TO BE TYPED.
+   Both lines below said "all 37 games", which was true when the site had 37 and
+   has been wrong ever since. One of them is the congratulation a winner reads,
+   the other is the post they send to everyone they know. LEGEND_TARGET is the
+   same list the award rule counts, so the copy and the rule cannot disagree
+   again. */
 export function DailyLegendOverlay({ streakDays, onDismiss }: DailyLegendOverlayProps) {
   const tweetText = encodeURIComponent(
-    `I just completed all 37 games on douknowball.com today! 🏆 Can you beat that? #DoUKnowBall`
+    `I just completed all ${LEGEND_TARGET} daily games on douknowball.com today! 🏆 Can you beat that? #DoUKnowBall`
   );
   const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
 
@@ -33,7 +40,7 @@ export function DailyLegendOverlay({ streakDays, onDismiss }: DailyLegendOverlay
 
         {/* Subtitle */}
         <p className="text-muted-foreground text-sm md:text-base mb-6 leading-relaxed">
-          You completed all 37 games today. Come back tomorrow to keep your streak alive!
+          You completed all {LEGEND_TARGET} daily games today. Come back tomorrow to keep your streak alive!
         </p>
 
         {/* Streak */}

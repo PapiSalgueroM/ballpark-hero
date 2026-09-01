@@ -2597,6 +2597,39 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 377. THE BADGE NOBODY CAN WIN.** `daily_badges` was one
+  of the empty tables from the Round 375 audit, and it is empty for a reason.
+  Three faults in one small feature:
+  **The overlay lied about its own rule.** It congratulated the winner with
+  "You completed all 37 games today" and the share post said the same. 37 was
+  true a long time ago; the registry holds 118. That number was typed into prose
+  sitting next to a rule computed somewhere else, and the post is the version
+  that goes out to everyone the winner knows.
+  **The gate was unreachable.** It awarded only when distinct completions today
+  reached `TOTAL_GAMES`, `ALL_GAMES.length`, 118, a set including Club Manager
+  seasons, four Front Office career sims and four Conquest campaigns.
+  **And the bar rose every round**, because counting ALL_GAMES means every game
+  shipped makes the badge harder. Not merely out of reach, moving away.
+  Measured before changing anything: the best any signed in player has ever done
+  in a day is 25 distinct games, 23 of them daily, on 2026-07-27.
+  The badge now means what its name says, the day's daily games, and the number
+  in the copy is derived from the same list the rule counts. It also resolves
+  through Round 376's completion slug map, without which the four Conquest
+  boards and the Quiz Board could never count toward it, which would have kept
+  it unwinnable for a second, independent reason.
+  **Left as it is, deliberately: 65 dailies is still above the observed record
+  of 23, so the badge may stay unearned.** Lowering it is not a fix, it is a
+  different badge: the copy says "all", and "all" of a smaller number is false
+  while 65 daily games exist. What this round fixed is that it was unwinnable BY
+  CONSTRUCTION and misdescribing itself. Whether to add an easier tier is
+  Anthony's call and it is on the board with the numbers.
+  `simDailyLegend` section 1 reads the words a winner actually sees and fails on
+  any typed game count, stripping comments first so the note explaining the bug
+  cannot satisfy the check. `LEGEND_CONTROL=hardcode` puts "37 games" back and
+  it goes red on both sites. Section 3 proves every daily game is reachable from
+  TWO independent sources, source scan and live rows, after a literal only first
+  draft reported seven false positives: several games hold their slug in a
+  `const SLUG` or a pool config, so the name appears nowhere near the call.
 - **2026-09-01, Round 376. THE SLUGS THAT NAME NO GAME.**
   `daily_completions.game_slug` is whatever each game's own `useGameCompletion`
   call passes, and six of those are not registry paths: the four Conquest boards
