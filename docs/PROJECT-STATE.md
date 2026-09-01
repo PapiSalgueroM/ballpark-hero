@@ -2597,6 +2597,37 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 379. THE VALIDATOR STOPS NEEDING THE AI** (soccer first).
+  The P0 out of the queue Round 378 unlocked, and the two players who reported
+  it were right. The connect-4 validator runs on a free Gemini quota that is
+  **daily**, and once it is spent every guess is refused for the rest of the day
+  while the message still says "please try again". Measured at 42% refusals in a
+  normal burst, then 14 of 14 once gone, with a 3 second retry recovering none.
+  **Retrying harder is not the fix.** The leverage is the cache KEY. The old
+  cache stored one row per PAIR of attributes, the narrowest unit possible: the
+  16 soccer boards hold 507 distinct cells but only **78 distinct attributes**,
+  so a pair verdict answers one cell and is discarded for every other cell about
+  the same player. Measured before writing code: the 105 true verdicts already
+  paid for decompose into **178 facts that answer 590 cells**. Same spend, 5.6x
+  coverage, and new boards reuse them free. A guess costs no more than before:
+  one call still answers a miss, it just reports the two attributes separately.
+  276 facts were backfilled across all five connect-4 games with SQL, zero AI
+  calls.
+  **Verified live, and the exhausted quota made it airtight**: three cells never
+  stored as a pair came back valid and cached while the AI was fully out of
+  quota, so only the per attribute facts could have answered. All three would
+  have been refused before.
+  The other half is honesty: a 429 surviving the retry is the day's quota, so it
+  now says the checker has hit its limit for today and resets tomorrow. Fail
+  closed is untouched, and the harness checks it is still there.
+  One real limit: a false pair verdict says one of the two attributes failed and
+  never which, so only true ones decompose. `simValidatorCache` section 3 checks
+  every backfilled fact traces to a true verdict.
+  The harness talks only to the FUNCTION. A first draft read the cache table,
+  got zero rows because it is behind RLS (correctly), and reported the feature
+  missing, which is a harness failing in the same shape as its subject.
+  **Still to do**: the same change for the NBA, NFL, MLB and NHL validators,
+  mechanical now the pattern is proven and their facts are already backfilled.
 - **2026-09-01, Round 378. THE LOCKED REPORT QUEUE.** `public.user_roles` had
   ZERO rows, so nobody was an admin. `AdminReports.checkAuth` queries it for
   `role='admin'`, finds nothing and calls `signOut()`, so **Anthony signed in

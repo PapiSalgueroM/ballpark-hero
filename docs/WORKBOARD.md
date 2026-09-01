@@ -125,7 +125,9 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-**CLAIMED as Round 379 (desktop lane, 2026-09-01), soccer first.** The design is
+**SHIPPED as Round 379 for SOCCER. See Done. The other four connect-4
+validators still need the same change, and their facts are already backfilled,
+so it is now a mechanical repeat of a proven pattern.** The design was
 picked and it is option 1 sharpened: cache the ANSWER TO EACH ATTRIBUTE, not to
 each pair of them. Measured on the real board files and the real cache rather
 than argued: the 16 soccer boards hold 507 distinct row-by-column cells but only
@@ -662,6 +664,50 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE VALIDATOR STOPS NEEDING THE AI, Round 379 (desktop lane, 2026-09-01),
+  soccer first. The P0 out of the newly unlocked report queue, and two players
+  were right about it: the connect-4 validator runs on a free Gemini quota that
+  is DAILY, and once it is spent every guess is refused for the rest of the day
+  while the message still says "please try again". Round 378 measured it at 42
+  percent refusals during a normal burst, then 14 of 14 once the day was gone,
+  with a retry three seconds later recovering none.
+  RETRYING HARDER IS NOT THE FIX, which was measured rather than assumed. The
+  leverage is in the cache KEY. The old cache stored one row per PAIR of
+  attributes, the narrowest unit there is: the 16 soccer boards hold 507
+  distinct cells but only 78 distinct attributes, so a pair verdict answers
+  exactly one cell and is thrown away for every other cell asking about the
+  same player. Storing the answer to a SINGLE attribute makes it reusable
+  everywhere.
+  MEASURED ON THE LIVE CACHE BEFORE ANY CODE WAS WRITTEN: the 105 true verdicts
+  already paid for decompose into 178 player-and-attribute facts, and those
+  answer 590 cells rather than 105. The same AI spend, 5.6 times the coverage,
+  and every board added later reuses the facts for free. A guess costs no more
+  than before either: one call still answers a miss, it is just asked to report
+  the two attributes separately so both halves are kept.
+  The 276 facts already implied by today's cache were backfilled across all five
+  connect-4 games with SQL, for zero AI calls.
+  VERIFIED LIVE, AND THE EXHAUSTED QUOTA MADE THE TEST AIRTIGHT: three cells
+  that had never been stored as a pair came back valid and cached while the AI
+  was completely out of quota, so nothing but the per attribute facts could have
+  answered them. Before this round all three would have been refused.
+  The second half is honesty. A 429 that survives the retry is the day's quota
+  and not a blip, so the message now says the checker has hit its limit for
+  today and resets tomorrow, instead of inviting a retry that cannot work. Fail
+  closed is untouched: it is the July 2026 P1 rule and the harness checks it is
+  still there.
+  ONE LIMIT WORTH KNOWING: a false pair verdict cannot be decomposed, because it
+  says one of the two attributes failed and never which. Only the true ones
+  backfill, and simValidatorCache section 3 checks that every backfilled fact
+  traces to a true verdict so nothing can invent one.
+  simValidatorCache talks only to the FUNCTION, never to the cache table. A
+  first draft read the table directly, got zero rows because it is behind RLS
+  (correctly: a public answer cache is a public answer key) and reported the
+  feature missing, which is a harness failing in the same shape as its subject.
+  VCACHE_CONTROL=nofacts asks about players no fact can exist for and it goes
+  red.
+  STILL TO DO, and it is mechanical now the pattern is proven: the same change
+  for the NBA, NFL, MLB and NHL validators. Their backfill has already run.
 
 - THE LOCKED REPORT QUEUE, Round 378 (desktop lane, 2026-09-01). Found by
   running get_advisors, which had not been run in this stretch and is the

@@ -9,8 +9,26 @@ const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1bet
 // SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
 const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
 const CACHE_GAME = "football-connect4";
-const cacheKeyOf = (p: string, r: string, c: string) =>
-  `${p}|${r}|${c}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+const cacheKeyOf = (p: string, r: string, c: string) => norm(`${p}|${r}|${c}`);
+
+/* ROUND 379: THE CACHE REMEMBERS ONE ATTRIBUTE AT A TIME, NOT ONE PAIR.
+   The pair cache above is the narrowest unit there is. The 16 soccer boards
+   hold 507 distinct row-by-column cells but only 78 distinct attributes, so a
+   pair verdict is worth exactly one cell and is thrown away for every other
+   cell that asks about the same player.
+   Measured on the live cache before this was written: the 105 true verdicts
+   already stored decompose into 178 distinct player-and-attribute facts, and
+   those facts between them answer 590 cells rather than 105. The same AI spend,
+   5.6 times the coverage, and every board added later reuses them for free.
+   This matters because the free Gemini quota is a DAILY one. Round 378 measured
+   the failure: 42 percent of guesses refused during a normal burst, then 14 of
+   14 once the day's quota was gone, with a retry three seconds later recovering
+   none of them. Once it is exhausted the game is dead until it resets, so the
+   only real fix is to stop needing the AI, not to ask it more politely.
+   A guess costs no more than before: one call still answers a miss, it is just
+   asked to report the two attributes separately so both answers are kept. */
+const attrKeyOf = (player: string, attribute: string) => `attr|${norm(player)}|${norm(attribute)}`;
 
 const allowedOrigins = [
   "https://douknowball.com",
@@ -93,6 +111,11 @@ serve(async (req) => {
     }
 
     const cacheKey = cacheKeyOf(playerName, rowAttribute, columnAttribute);
+    const rowKey = attrKeyOf(playerName, rowAttribute);
+    const colKey = attrKeyOf(playerName, columnAttribute);
+
+    /* The pair cache is still read FIRST, and it is not being torn out: 144
+       rows were paid for and they keep answering until they age out. */
     try {
       const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
         .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
@@ -100,6 +123,30 @@ serve(async (req) => {
         return new Response(JSON.stringify({ ...(hit.verdict as Record<string, unknown>), cached: true }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
+      }
+    } catch { /* cache down -> fall through */ }
+
+    /* Then the two single attribute facts. If BOTH are known this answers with
+       no AI call at all, which is the whole point: a player already seen on any
+       other board is very likely to be answerable here for nothing. */
+    try {
+      const { data: facts } = await sb.from("ai_validation_cache").select("cache_key, verdict")
+        .eq("game", CACHE_GAME).in("cache_key", [rowKey, colKey]);
+      const byKey = new Map((facts ?? []).map((f: { cache_key: string; verdict: unknown }) => [f.cache_key, f.verdict as Record<string, unknown>]));
+      const rowFact = byKey.get(rowKey);
+      const colFact = byKey.get(colKey);
+      if (rowFact && colFact) {
+        const rowOk = rowFact.match === true;
+        const colOk = colFact.match === true;
+        return new Response(JSON.stringify({
+          valid: rowOk && colOk,
+          reason: {
+            [rowAttribute]: rowOk ? "Verified previously." : "This player does not match this attribute.",
+            [columnAttribute]: colOk ? "Verified previously." : "This player does not match this attribute.",
+          },
+          fullName: (rowFact.fullName as string) || (colFact.fullName as string) || playerName,
+          cached: true,
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     } catch { /* cache down -> fall through to AI */ }
 
@@ -201,10 +248,19 @@ Also resolve nicknames (e.g., "CR7" = Cristiano Ronaldo, "Pele" = Pelé, "R9" = 
 
 Respond with ONLY a valid JSON object (no markdown, no code blocks):
 {
+  "matchesRow": true or false,
+  "matchesColumn": true or false,
   "valid": true or false,
   "reason": "Brief explanation for EACH attribute separately",
   "fullName": "Player's full proper name"
-}`,
+}
+
+"matchesRow" is whether the player matches the ROW attribute ALONE, ignoring the
+column entirely. "matchesColumn" is whether they match the COLUMN attribute
+ALONE, ignoring the row. "valid" must equal matchesRow AND matchesColumn. Judge
+each attribute on its own before combining them: the two answers are stored
+separately and reused for other squares, so a wrong single answer is wrong many
+times over.`,
             },
             {
               role: "user",
@@ -222,8 +278,23 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
     }
 
     if (!response.ok) {
+      /* ROUND 379: A 429 THAT SURVIVES THE RETRY IS THE DAY'S QUOTA, NOT A
+         BLIP, AND SAYING "TRY AGAIN" TO IT IS A LIE. Round 378 measured the
+         difference: once the free daily quota is gone, a retry three seconds
+         later recovered none of 14 attempts, so the player is being invited to
+         keep clicking into a wall. Fail closed exactly as before, which is the
+         July 2026 rule and is not being touched, but say which kind of failure
+         it is so the message is true. */
+      const exhausted = response.status === 429;
       return new Response(
-        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." }),
+        JSON.stringify({
+          valid: false,
+          unverified: true,
+          quotaExhausted: exhausted,
+          reason: exhausted
+            ? "The answer checker has hit its limit for today, so this guess can't be checked. Squares you've already seen still work, and it resets tomorrow."
+            : "Couldn't verify your answer right now, please try again.",
+        }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -243,7 +314,24 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
 
     // cache VERIFIED verdicts only, never the unverified fallbacks
     if (aiVerdict && parsed && typeof parsed === "object") {
-      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict: parsed }); } catch { /* non-fatal */ }
+      const rows: Array<{ game: string; cache_key: string; verdict: unknown }> = [
+        { game: CACHE_GAME, cache_key: cacheKey, verdict: parsed },
+      ];
+      /* ROUND 379: KEEP THE TWO HALVES SEPARATELY, which is the whole round.
+         Only written when the model actually answered each attribute on its
+         own: if the fields are missing it is an older or malformed reply and
+         guessing which half failed from `valid` alone would poison the cache
+         with facts nothing verified. `valid: false` in particular says one of
+         the two failed and never which, so it decomposes into nothing. */
+      const r = parsed as Record<string, unknown>;
+      const fullName = typeof r.fullName === "string" ? r.fullName : playerName;
+      if (typeof r.matchesRow === "boolean") {
+        rows.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: r.matchesRow, fullName } });
+      }
+      if (typeof r.matchesColumn === "boolean") {
+        rows.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: r.matchesColumn, fullName } });
+      }
+      try { await sb.from("ai_validation_cache").upsert(rows); } catch { /* non-fatal */ }
     }
 
     return new Response(JSON.stringify(parsed), {
