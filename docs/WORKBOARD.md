@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 377.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 378.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -287,6 +287,36 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
+
+**IN FLIGHT: next: Round 377 (desktop lane, 2026-09-01), THE BADGE NOBODY CAN
+WIN.** Found by following the same thread: daily_badges is one of the empty
+tables from the Round 375 audit, and it is empty for a reason.
+THREE FAULTS IN ONE FEATURE.
+  1. THE OVERLAY LIES ABOUT ITS OWN RULE. DailyLegendOverlay congratulates the
+     player with "You completed all 37 games today" and its share text says the
+     same. 37 was true a long time ago. The registry holds 118. That number is
+     hardcoded in the copy, and it is the text that goes out on social media.
+  2. THE GATE IS UNREACHABLE. useDailyLegend awards only when a player's
+     distinct completions today reach TOTAL_GAMES, which is ALL_GAMES.length,
+     118, and that set includes Club Manager seasons, four Front Office career
+     sims and four Conquest map games. No human finishes 118 of those in a day.
+     The table has zero rows and always has.
+  3. THE BAR RISES EVERY ROUND. Because it counts ALL_GAMES, every game shipped
+     makes the badge harder. It is not merely impossible, it is diverging.
+MEASURED, rather than assumed: the most any signed in player has ever completed
+in one day is 25 distinct games (2026-07-27). The daily flagged set is 65.
+THE FIX is to make the badge mean what its name says, complete the day's daily
+games, and to DERIVE the number in the copy from the same list the gate uses, so
+it can never say 37 again. It also has to resolve completion slugs through Round
+376's map or the four Conquest boards and the Quiz Board could never be counted
+toward it, which is a neat demonstration that 376 was a prerequisite for this.
+A PRODUCT CALL FOR ANTHONY, recorded rather than invented: 65 dailies in a day
+is still a heavy bar against an observed record of 25, so the badge may stay
+unearned. I am shipping the honest version (the name is the rule) rather than
+inventing a threshold, because this repo sets thresholds from measurement and I
+have no measurement that says what a good bar feels like. If he wants it
+reachable, lowering it is a one line change and my recommendation would be
+somewhere near 20.
 
 (Round 376, the completion slugs, SHIPPED. See Done. The recon is kept below as
 the current map of which slugs are written where.)
