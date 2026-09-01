@@ -13,6 +13,11 @@ import type { League } from '@/types/game';
 // ---------------------------------------------------------------------------
 
 export const footleEnrichment: Record<string, { kitNumber: number; league: League }> = {
+  // Round 393: the eighteen players below moved in the January or summer 2026
+  // windows (scripts/transferOverlay2026.mjs). Their leagues follow the new club
+  // (the club decides the league since Round 315 anyway) and their kit numbers
+  // are each player's Wikipedia infobox on 2026-09-01, a single source: better
+  // than the old club's number, which was certainly wrong, and marked as such.
   // ── Premier League ──────────────────────────────────────────────────────
   'Erling Haaland':         { kitNumber: 9,  league: 'Premier League' },
   'Mohamed Salah':          { kitNumber: 11, league: 'Premier League' },
@@ -27,25 +32,25 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Martin Ødegaard':        { kitNumber: 8,  league: 'Premier League' },
   'William Saliba':         { kitNumber: 12, league: 'Premier League' },
   'Alisson':                { kitNumber: 1,  league: 'Premier League' },
-  'Rodri':                  { kitNumber: 16, league: 'Premier League' },
+  'Rodri':                  { kitNumber: 16, league: 'La Liga' },
   'Ollie Watkins':          { kitNumber: 11, league: 'Premier League' },
   'Alejandro Garnacho':     { kitNumber: 17, league: 'Premier League' },
-  'Bernardo Silva':         { kitNumber: 20, league: 'Premier League' },
+  'Bernardo Silva':         { kitNumber: 20, league: 'La Liga' },
   'Luis Díaz':              { kitNumber: 7,  league: 'Premier League' },
   'Cody Gakpo':             { kitNumber: 18, league: 'Premier League' },
   'Enzo Fernández':         { kitNumber: 8,  league: 'Premier League' },
   'Viktor Gyökeres':        { kitNumber: 9,  league: 'Premier League' },
   'Estêvão':                { kitNumber: 22, league: 'Premier League' },
   'Xavi Simons':            { kitNumber: 7,  league: 'Premier League' },
-  'Omar Marmoush':          { kitNumber: 9,  league: 'Premier League' },
+  'Omar Marmoush':          { kitNumber: 22, league: 'Premier League' },
   'Florian Wirtz':          { kitNumber: 7,  league: 'Premier League' },
   'Moises Caicedo':         { kitNumber: 25, league: 'Premier League' },
   'Moisés Caicedo':         { kitNumber: 25, league: 'Premier League' },
   'Pedro Neto':             { kitNumber: 7,  league: 'Premier League' },
   'Micky van de Ven':       { kitNumber: 37, league: 'Premier League' },
-  'Sandro Tonali':          { kitNumber: 8,  league: 'Premier League' },
+  'Sandro Tonali':          { kitNumber: 16, league: 'Premier League' },
   'Leandro Trossard':       { kitNumber: 19, league: 'Premier League' },
-  'Anthony Gordon':         { kitNumber: 10, league: 'Premier League' },
+  'Anthony Gordon':         { kitNumber: 17, league: 'La Liga' },
   'Bruno Guimarães':        { kitNumber: 39, league: 'Premier League' },
   'Rasmus Højlund':         { kitNumber: 11, league: 'Premier League' },
   'Lisandro Martínez':      { kitNumber: 6,  league: 'Premier League' },
@@ -53,7 +58,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Morgan Gibbs-White':     { kitNumber: 10, league: 'Premier League' },
   'Chris Wood':             { kitNumber: 11, league: 'Premier League' },
   'Mateo Kovačić':          { kitNumber: 8,  league: 'Premier League' },
-  'Morgan Rogers':          { kitNumber: 10, league: 'Premier League' },
+  'Morgan Rogers':          { kitNumber: 17, league: 'Premier League' },
   'Emiliano Martínez':      { kitNumber: 1,  league: 'Premier League' },
   'Nicolas Jackson':        { kitNumber: 15, league: 'Premier League' },
   'Ryan Gravenberch':       { kitNumber: 38, league: 'Premier League' },
@@ -85,7 +90,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Reece James':            { kitNumber: 24, league: 'Premier League' },
   'Levi Colwill':           { kitNumber: 6,  league: 'Premier League' },
   'Romeo Lavia':            { kitNumber: 45, league: 'Premier League' },
-  'Marc Cucurella':         { kitNumber: 3,  league: 'Premier League' },
+  'Marc Cucurella':         { kitNumber: 17, league: 'La Liga' },
   'Christopher Nkunku':     { kitNumber: 18, league: 'Premier League' },
   'João Félix':             { kitNumber: 14, league: 'Premier League' },
   'Kobbie Mainoo':          { kitNumber: 37, league: 'Premier League' },
@@ -111,11 +116,11 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Kylian Mbappé':          { kitNumber: 9,  league: 'La Liga' },
   'Vinícius Júnior':        { kitNumber: 7,  league: 'La Liga' },
   'Jude Bellingham':        { kitNumber: 5,  league: 'La Liga' },
-  'Robert Lewandowski':     { kitNumber: 9,  league: 'La Liga' },
+  'Robert Lewandowski':     { kitNumber: 9, league: 'MLS' },
   'Lamine Yamal':           { kitNumber: 19, league: 'La Liga' },
   'Pedri':                  { kitNumber: 8,  league: 'La Liga' },
   'Raphinha':               { kitNumber: 11, league: 'La Liga' },
-  'Antoine Griezmann':      { kitNumber: 7,  league: 'La Liga' },
+  'Antoine Griezmann':      { kitNumber: 7, league: 'MLS' },
   'Federico Valverde':      { kitNumber: 8,  league: 'La Liga' },
   'Luka Modrić':            { kitNumber: 10, league: 'La Liga' },
   'Gavi':                   { kitNumber: 6,  league: 'La Liga' },
@@ -139,7 +144,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Fermín López':           { kitNumber: 16, league: 'La Liga' },
   'Frenkie de Jong':        { kitNumber: 21, league: 'La Liga' },
   'Ronald Araújo':          { kitNumber: 4,  league: 'La Liga' },
-  'Marc-André ter Stegen':  { kitNumber: 1,  league: 'La Liga' },
+  'Marc-André ter Stegen':  { kitNumber: 1, league: 'Eredivisie' },
   'Jan Oblak':              { kitNumber: 13, league: 'La Liga' },
   'Julián Quiñones':        { kitNumber: 33, league: 'La Liga' },
   'Takefusa Kubo':          { kitNumber: 14, league: 'La Liga' },
@@ -147,7 +152,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Martín Zubimendi':       { kitNumber: 4,  league: 'La Liga' },
   // ── Serie A ─────────────────────────────────────────────────────────────
   'Lautaro Martínez':       { kitNumber: 10, league: 'Serie A' },
-  'Rafael Leão':            { kitNumber: 10, league: 'Serie A' },
+  'Rafael Leão':            { kitNumber: 27, league: 'Turkish Süper Lig' },
   'Dušan Vlahović':         { kitNumber: 9,  league: 'Serie A' },
   'Marcus Thuram':          { kitNumber: 9,  league: 'Serie A' },
   'Nicolò Barella':         { kitNumber: 23, league: 'Serie A' },
@@ -161,7 +166,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Hakan Çalhanoğlu':       { kitNumber: 20, league: 'Serie A' },
   'Federico Dimarco':       { kitNumber: 32, league: 'Serie A' },
   'Alessandro Bastoni':     { kitNumber: 95, league: 'Serie A' },
-  'Denzel Dumfries':        { kitNumber: 2,  league: 'Serie A' },
+  'Denzel Dumfries':        { kitNumber: 24, league: 'La Liga' },
   'Mateo Retegui':          { kitNumber: 32, league: 'Serie A' },
   'Davide Frattesi':        { kitNumber: 16, league: 'Serie A' },
   'Khéphren Thuram':        { kitNumber: 8,  league: 'Serie A' },
@@ -170,7 +175,7 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Randal Kolo Muani':      { kitNumber: 23, league: 'Serie A' },
   'Kenan Yıldız':           { kitNumber: 10, league: 'Serie A' },
   'Christian Pulisic':      { kitNumber: 11, league: 'Serie A' },
-  'Tijjani Reijnders':      { kitNumber: 14, league: 'Serie A' },
+  'Tijjani Reijnders':      { kitNumber: 14, league: 'Saudi Pro League' },
   'Fikayo Tomori':          { kitNumber: 23, league: 'Serie A' },
   'Moise Kean':             { kitNumber: 18, league: 'Serie A' },
   'Charles De Ketelaere':   { kitNumber: 17, league: 'Serie A' },
@@ -192,24 +197,24 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
   'Serge Gnabry':           { kitNumber: 7,  league: 'Bundesliga' },
   'Serhou Guirassy':        { kitNumber: 9,  league: 'Bundesliga' },
   'Alejandro Grimaldo':     { kitNumber: 20, league: 'Bundesliga' },
-  'Karim Adeyemi':          { kitNumber: 27, league: 'Bundesliga' },
+  'Karim Adeyemi':          { kitNumber: 14, league: 'La Liga' },
   'Gregor Kobel':           { kitNumber: 1,  league: 'Bundesliga' },
   'Jamie Gittens':          { kitNumber: 43, league: 'Bundesliga' },
   'Nico Schlotterbeck':     { kitNumber: 4,  league: 'Bundesliga' },
-  'Julian Brandt':          { kitNumber: 10, league: 'Bundesliga' },
+  'Julian Brandt':          { kitNumber: 8, league: 'Eredivisie' },
   'Loïs Openda':            { kitNumber: 11, league: 'Bundesliga' },
   'Jeremie Frimpong (BL)':  { kitNumber: 30, league: 'Bundesliga' }, // at Bayer Leverkusen before Liverpool
   'Patrik Schick':          { kitNumber: 14, league: 'Bundesliga' },
   // ── Ligue 1 ─────────────────────────────────────────────────────────────
   'Ousmane Dembélé':        { kitNumber: 10, league: 'Ligue 1' },
-  'Bradley Barcola':        { kitNumber: 29, league: 'Ligue 1' },
+  'Bradley Barcola':        { kitNumber: 29, league: 'Premier League' },
   'Khvicha Kvaratskhelia':  { kitNumber: 7,  league: 'Ligue 1' },
   'Achraf Hakimi':          { kitNumber: 2,  league: 'Ligue 1' },
   'Gianluigi Donnarumma':   { kitNumber: 99, league: 'Ligue 1' },
   'Marquinhos':             { kitNumber: 5,  league: 'Ligue 1' },
   'Mason Greenwood':        { kitNumber: 10, league: 'Ligue 1' },
   'Warren Zaïre-Emery':     { kitNumber: 33, league: 'Ligue 1' },
-  'Gonçalo Ramos':          { kitNumber: 9,  league: 'Ligue 1' },
+  'Gonçalo Ramos':          { kitNumber: 9, league: 'Serie A' },
   'Lee Kang-in':            { kitNumber: 19, league: 'Ligue 1' },
   'Vitinha':                { kitNumber: 17, league: 'Ligue 1' },
   'Endrick':                { kitNumber: 16, league: 'Ligue 1' },
@@ -266,6 +271,11 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
    is genuinely uncertain are left out on purpose, because an absent mapping
    now falls to 'Other' rather than to a false Premier League. */
 const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
+  // Round 393: destinations of the verified 2026 window moves that the map did
+  // not name (the club decides the league since Round 315, so an unmapped club
+  // reads 'Other' and drops out of every league filter).
+  'Al-Khaleej FC': 'Saudi Pro League', 'Abha Club': 'Saudi Pro League',
+  'Chicago Fire FC': 'MLS', 'Orlando City SC': 'MLS', 'Charlotte FC': 'MLS',
   // Premier League, 2025/26 membership
   'Manchester City': 'Premier League', 'Arsenal': 'Premier League', 'Arsenal FC': 'Premier League',
   'Liverpool': 'Premier League', 'Liverpool FC': 'Premier League',
