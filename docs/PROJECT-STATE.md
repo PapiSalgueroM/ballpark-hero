@@ -2597,6 +2597,48 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 387. RARITY ROUND'S SCORER AND ITS DROPDOWN READ THE SAME
+  ROW.** "Name a goalkeeper" offered Claudio Bravo, the Chilean keeper, and
+  refused him. The dropdown filters `player_market_values` by position across
+  every row a player has and dedupes by the most valuable; the pool read
+  `player_peak_values`, one row per player carrying the position of his
+  NEWEST row, and `person_key` is NULL on every row, so for a shared name
+  that row was another man's (the Argentine left-back's). Measured: 151
+  players whose view position differed from their peak row's, 64 whose
+  nationality did.
+  **Two migrations, both kept in `supabase/migrations`.** `player_peak_values`
+  now carries the position and nationality of the row that earned the peak
+  (value, then year, then id), the row the dropdown shows; same four columns,
+  with casts because CREATE OR REPLACE VIEW may not change a column's type
+  (the first attempt was refused on exactly that). And two new views,
+  `player_position_peaks` and `player_nationality_peaks`, one row per player
+  and TAG with the peak value under that tag, because the view change alone
+  was not enough: the dropdown's filter runs across every row, so a man
+  tagged a winger at his peak and a forward in another year is offered for
+  "Name a forward", and a pool keyed to one row per player still refused
+  him. The position and nationality pools read the tag views, so the pool
+  means what the dropdown means, "ever tagged", as the club pools already
+  mean "ever played for". Pool sizes: Goalkeeper 2,270 to 2,321,
+  Centre-Forward 2,406 to 2,457, Right Winger 2,096 to 2,152, Brazil 1,687
+  to 1,722. `player_peak_values` keeps the value-only categories and the
+  prominence map. `security_invoker` on all three; `get_advisors` shows the
+  new views only in the pre-existing "visible to anon" class that every
+  public table shares.
+  **The fence is `scripts/simRarityAgreement.mjs`**: for all twelve filtered
+  categories (club, nationality, position) the real `searchPlayers` with the
+  category's own `sourceConfig` is run for 36 two letter prefixes and every
+  player it offers must be in the category's real pool. 468 searches, 2,146
+  players offered, 0 refused. Bravo is pinned: offered as Goalkeeper, Chile,
+  $16M, and in the pool. Section 3 checks the view's tags against the row on
+  offer and found the one shape it cannot settle: two different Serginhos
+  with the same name, the same peak value and the same year, which the view
+  breaks by row id and the dropdown by arrival order. Reported as a namesake
+  tie, not failed, because section 1 already proved the pool accepts him.
+  Control `peakonly` judges the tag categories against one tag per player
+  (the old shape) and goes red. `simRarityPools` moved its oracle to the tag
+  views and stays green with its `truncate` control.
+  tsc zero, build green, simMarketYearScope green (the club pool is still
+  the one all-year chain), simRarityPools green, simRarityAgreement green.
 - **2026-09-01, Round 386. ACCENT-INSENSITIVE PLAYER SEARCH AT THE DATABASE,
   AND ONE ANSWER PER QUERY.** `searchPlayers` has two legs: an `ilike` on the
   raw name column with the raw typed text, and a 1,000 row prominence pool

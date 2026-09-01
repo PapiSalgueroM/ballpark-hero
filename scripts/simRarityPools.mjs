@@ -82,13 +82,16 @@ execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --b
 const { CATEGORIES } = await import(pathToFileURL(BUNDLE).href);
 
 /* What the database should say for each category, expressed as its own query.
+   ROUND 387: the nationality and position pools count on the tag views (one
+   row per player and tag), because that is what the pools now read and what
+   the filtered dropdown offers.
    Derived from the category id, so a category added later without an entry here
    is reported rather than silently skipped. */
 const enc = encodeURIComponent;
 function expectedQuery(cat) {
   const id = cat.id;
-  if (id.startsWith('nationality-')) return `player_peak_values?select=player_name&nationality=eq.${enc(cat.answerNoun || id.replace('nationality-', ''))}`;
-  if (id.startsWith('position-')) return `player_peak_values?select=player_name&position=eq.${enc(cat.answerNoun || id.replace('position-', ''))}`;
+  if (id.startsWith('nationality-')) return `player_nationality_peaks?select=player_name&nationality=eq.${enc(cat.answerNoun || id.replace('nationality-', ''))}`;
+  if (id.startsWith('position-')) return `player_position_peaks?select=player_name&position=eq.${enc(cat.answerNoun || id.replace('position-', ''))}`;
   if (id === 'elite-100m') return 'player_peak_values?select=player_name&peak_value_usd=gte.100000000';
   if (id === 'fifty-million') return 'player_peak_values?select=player_name&peak_value_usd=gte.50000000';
   return null;

@@ -286,13 +286,23 @@ function fetchClubPool(club: string) {
    obscure answers this game exists to reward were exactly the ones being cut.
    The view reproduces the pool sizes this file's own comments already claimed,
    to within one, which is what says the aggregate is the intended shape rather
-   than a new invention. */
+   than a new invention.
+   ROUND 387: the nationality and position pools moved on to
+   player_nationality_peaks and player_position_peaks, one row per player and
+   TAG with the peak value under that tag. The dropdown for "Name a goalkeeper"
+   filters player_market_values by position across every row a player has, so
+   a man tagged a winger at his peak and a forward in another year is offered
+   for "Name a forward"; a pool keyed to one row per player refused him. The
+   pool now means what the dropdown means, "ever tagged", as the club pools
+   already mean "ever played for". Measured: Goalkeeper 2,270 to 2,321,
+   Centre-Forward 2,406 to 2,457, Brazil 1,687 to 1,722. player_peak_values
+   keeps the value-only categories and the prominence map. */
 /** Category factory: "Name a {nationality} international". Verified pool sizes (distinct players): Brazil 1680, Argentina 1546, Spain 1512, France 1265, England 1169. */
 function fetchNationalityPool(nationality: string) {
   return async (): Promise<PoolEntry[]> => {
     const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
       (from, to) => supabase
-        .from('player_peak_values' as never)
+        .from('player_nationality_peaks' as never)
         .select('player_name, peak_value_usd')
         .eq('nationality', nationality)
         .order('peak_value_usd', { ascending: false })
@@ -305,12 +315,22 @@ function fetchNationalityPool(nationality: string) {
   };
 }
 
-/** Category factory: "Name a {position}". Verified pool sizes (distinct players, most recent position tag): Centre-Forward 2396, Goalkeeper 2268, Centre-Back 2381. */
+/**
+ * Category factory: "Name a {position}". Verified pool sizes (distinct
+ * players): Centre-Forward 2396, Goalkeeper 2268, Centre-Back 2381 at Round
+ * 367. ROUND 387: the view's position is the one on the row that earned the
+ * player's peak value, which is the row the search dropdown shows, rather
+ * than his newest row. person_key is NULL on every row, so for a shared name
+ * the newest row can be another man's: Claudio Bravo's pool entry carried the
+ * Argentine left-back's position and "Name a goalkeeper" refused the Chilean
+ * keeper the dropdown had just offered. simRarityAgreement holds the two
+ * sides together.
+ */
 function fetchPositionPool(position: string) {
   return async (): Promise<PoolEntry[]> => {
     const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
       (from, to) => supabase
-        .from('player_peak_values' as never)
+        .from('player_position_peaks' as never)
         .select('player_name, peak_value_usd')
         .eq('position', position)
         .order('peak_value_usd', { ascending: false })

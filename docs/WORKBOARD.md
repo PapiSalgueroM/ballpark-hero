@@ -21,19 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 388.
 
-**ROUND 387 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Rarity Round's scorer and
-its dropdown read the same row.** The Inbox item from the Round 381 sweep.
-player_peak_values takes position and nationality from a player's NEWEST row
-and its peak value from his most valuable one, so for a shared name the view
-is a merge of two men (Claudio Bravo: the Chilean goalkeeper's NEXT FREE NUMBER: 388.
-6M under the
-Argentine left-back's position). The dropdown dedupes by the most valuable
-row. The view moves to that same row (value, then year, then id), which
-removes all 151 position and 64 nationality disagreements by construction;
-the four columns stay so nothing that reads the view changes shape. Live
-harness: every dropdown row for a position category is accepted by that
-category's pool. next: Round 387 (desktop lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -149,27 +136,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 measurement. Five agents investigated the queue and five more tried to refute
 them, and the refutations mattered: two proposed fixes were wrong and one was
 proven wrong by running it. Read the verdict before acting on any of these.**
-
-- **CLAIMED, Round 387 (desktop lane, 2026-09-01).** **THE RARITY DROPDOWN OFFERS PLAYERS THE SCORER REFUSES, and the obvious fix
-  is proven not to work.** Same symptom the Peacock-Farrell report described,
-  different cause, still live. The autocomplete reads `player_market_values`,
-  the scorer reads the `player_peak_values` view, and they disagree on 51
-  goalkeepers, 62 centre-forwards and 47 right wingers. **Claudio Bravo, the
-  Chile goalkeeper, is refused today for "Name a goalkeeper."**
-  ROOT CAUSE is worse than position drift: `person_key` is NULL on all 141,916
-  rows of `player_market_values`, so one name is one career. The view is a
-  FRANKENSTEIN MERGE, not a disambiguation: Bravo's row takes position and
-  nationality from an Argentine left-back and its `peak_value_usd` of $16M from
-  the Chilean goalkeeper who earned it at Barcelona. **150 players have a peak
-  value earned in a row tagged a different position than the view assigns.**
-  THE TEMPTING FIX IS REFUTED BY TEST: pointing the position categories at
-  `player_peak_values` returns HTTP 400, `column
-  player_peak_values.market_value_usd does not exist`, because
-  `buildSelectColumns` emits seven columns and the view has four. Run against
-  live PostgREST with the site's anon key before believing otherwise.
-  Also: the view's position tie-break is `(array_agg(position ORDER BY year
-  DESC))[1]` with no secondary key, so the goalkeeper pool measured 2,268 and
-  2,270 minutes apart. Non-deterministic between reads.
 
 - **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
   2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
@@ -730,6 +696,19 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- RARITY ROUND'S SCORER AND ITS DROPDOWN READ THE SAME ROW, Round 387 (desktop
+  lane, 2026-09-01). "Name a goalkeeper" offered Claudio Bravo and refused
+  him: the pool's view carried the position of his NEWEST row, which for a
+  shared name was the Argentine left-back's. player_peak_values now carries
+  the tags of the row that earned the peak, and two new tag views
+  (player_position_peaks, player_nationality_peaks: one row per player and
+  tag) feed the position and nationality pools, so the pool means what the
+  filtered dropdown means, "ever tagged". Pools grow a little (Goalkeeper
+  2,270 to 2,321). Fence: scripts/simRarityAgreement.mjs runs the real
+  search with every filtered category's own config across 36 prefixes and
+  requires every offered player to be in the real pool: 468 searches, 2,146
+  offered, 0 refused, Bravo pinned. simRarityPools follows the views.
 
 - ACCENT-INSENSITIVE PLAYER SEARCH AT THE DATABASE, AND ONE ANSWER PER QUERY,
   Round 386 (desktop lane, 2026-09-01). unaccent and pg_trgm were already
