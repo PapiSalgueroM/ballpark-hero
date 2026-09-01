@@ -288,8 +288,11 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 375 (desktop lane, 2026-09-01), THE WRITES THAT WERE
-NEVER SENT.** Found by auditing every table the app reads after Round 374, on
+(Round 375, the unsent writes, SHIPPED. See Done. The table audit behind it is
+kept below, because it is the current map of which tables are empty and why,
+and the next session should not have to redo it.)
+
+**RECON, Round 375.** Found by auditing every table the app reads after Round 374, on
 the theory that a bug found by accident is worth looking for on purpose.
 Eight tables are empty. Six of those are explicable (write tables for games
 with almost no traffic, and the chain leaderboards need a nickname submitted on
@@ -486,6 +489,50 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE WRITES THAT WERE NEVER SENT, Round 375 (desktop lane, 2026-09-01).
+  guess_nation_scores had ZERO rows while daily_completions, the sitewide
+  recorder, held EIGHT finished games of guess-the-nation, the most recent
+  2026-08-27. Every sibling agreed with its own table: ufc-chain 7 completions
+  and 8 rows, guess-cbb-team 3 and 206, guess-nascar-driver 1 and 19. Only this
+  one had never recorded anything.
+  THE SUPABASE QUERY BUILDER IS A THENABLE. Building the query sends nothing;
+  the request only leaves when something awaits it or calls .then(). Both writes
+  in useGuessTheNation stopped at the semicolon, so no HTTP request was ever
+  issued. Every game that works ends its score write with .then(() => {}), which
+  is exactly what fires it. It is deliberately not awaited, because a score
+  write must never block the player's screen; the empty callback is the whole
+  mechanism, and it looks like a no-op, which is presumably why it was dropped.
+  It was confirmed not to be RLS rather than assumed: the same insert run as the
+  anon role inside a rolled back transaction is accepted by the database.
+  THIS SHAPE HAS NO SYMPTOM, which is the part worth remembering. Nothing
+  throws, nothing logs, the game plays perfectly and the player sees their
+  score. The only evidence is an empty table nobody is looking at. It survived
+  from the game's launch until an audit went hunting for empty tables on
+  purpose, after Round 374 turned one up by accident.
+  Found by auditing all 44 tables the app reads. Eight are empty and six of
+  those are explicable (write tables for games with almost no traffic, and the
+  chain leaderboards need a nickname submitted on top of finishing). A sweep of
+  all 28 write calls in src found these two and nothing else; three more the
+  first pass flagged were false positives where the await sits a line above.
+  simWritesAreSent holds it twice, and the split matters. Section 1 is the
+  class: no insert, update, upsert or delete anywhere in src may be left
+  unawaited, unreturned, unassigned and unthened. It walks BACKWARD to the
+  statement start rather than reading the current line, which is what removed
+  those three false positives, and forward past chained filters so a multi line
+  argument cannot hide the tail. Section 2 is the proof rather than the shape: a
+  real browser plays a round and the harness watches the wire for the POST, with
+  the response stubbed so running the board never adds rows to a real scores
+  table. WRITES_CONTROL=drop restores the shipped source and section 1 goes red.
+  WRITES_CONTROL=noserve strips the .then() out of the SERVED bundle so the
+  browser genuinely replays the bug, and section 2 goes red, which is what
+  proves section 2 is watching the network and not the source.
+  ONE INSTRUMENT LESSON. The first draft of section 2 typed nonsense and pressed
+  Enter. That input has no Enter handler at all, a guess is only submitted by
+  clicking a suggestion, so the harness reported a played round and zero
+  requests, which is indistinguishable from the bug it was testing for. A
+  harness that can fail for its own reasons in the same shape as its subject is
+  worth catching early.
 
 - THE DRIVER GAME HAD NO CLUES, Round 374 (desktop lane, 2026-09-01).
   /guess-nascar-driver built each puzzle from six columns on `nascar_drivers`:

@@ -117,9 +117,21 @@ export function useGuessTheNation() {
         const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
         setGameState({ ...gameState, gameStatus: 'won', score });
         setStreak((s) => s + 1);
+        /* ROUND 375: THE `.then()` IS THE WHOLE FIX, AND WITHOUT IT THIS LINE
+           DID NOTHING FOR MONTHS.
+           The Supabase query builder is a thenable: building the query does not
+           send anything, and the request only leaves when something awaits it
+           or calls .then(). Both writes in this file stopped at the semicolon,
+           so no HTTP request was ever issued and guess_nation_scores sat at
+           zero rows while daily_completions recorded eight finished games of
+           guess-the-nation. Every other game on the site ends its score write
+           the same way this one now does, which is why their tables have rows.
+           It is deliberately not awaited: a score write must never block the
+           player's screen, and a failure here is not worth interrupting a game
+           for. .then() is what fires it; the empty callback is the point. */
         (supabase as any).from('guess_nation_scores').insert({
           puzzle_date: getTodayStr(), clues_used: gameState.revealedClues, score, guessed: true, mode: gameState.mode,
-        });
+        }).then(() => {});
       } else {
         const newRevealed = gameState.revealedClues + 1;
         const isLost = newRevealed > MAX_CLUES;
@@ -130,9 +142,10 @@ export function useGuessTheNation() {
         });
         if (isLost) {
           setStreak(0);
+          /* ROUND 375: same thenable fix as the win path above. */
           (supabase as any).from('guess_nation_scores').insert({
             puzzle_date: getTodayStr(), clues_used: MAX_CLUES, score: 0, guessed: false, mode: gameState.mode,
-          });
+          }).then(() => {});
         }
       }
     },

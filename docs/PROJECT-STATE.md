@@ -2597,6 +2597,41 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 375. THE WRITES THAT WERE NEVER SENT.**
+  `guess_nation_scores` had ZERO rows while `daily_completions`, the sitewide
+  recorder, held eight finished games of guess-the-nation, the most recent
+  2026-08-27. Every sibling agreed with its own table (ufc-chain 7 completions
+  and 8 rows, guess-cbb-team 3 and 206, guess-nascar-driver 1 and 19). Only this
+  one recorded nothing, ever.
+  **The Supabase query builder is a thenable.** Building the query sends
+  nothing; the request only leaves when something awaits it or calls `.then()`.
+  Both writes in `useGuessTheNation` stopped at the semicolon, so no HTTP
+  request was ever issued. Every game that works ends its score write with
+  `.then(() => {})`, which is precisely what fires it. It is deliberately not
+  awaited, because a score write must never block the player's screen; the empty
+  callback is the whole mechanism.
+  Confirmed it was not RLS rather than assuming: running the same insert as the
+  `anon` role inside a rolled back transaction, the database accepts it.
+  **This shape has no symptom.** Nothing throws, nothing logs, the game plays
+  perfectly and the player sees their score. The only evidence was an empty
+  table, which is why it survived from launch until an audit went looking for
+  empty tables on purpose after Round 374.
+  Found by auditing all 44 tables the app reads. Eight are empty; six are
+  explicable (write tables for games with almost no traffic, and the chain
+  leaderboards need a nickname submitted on top of finishing). A sweep of all 28
+  write calls in `src` found these two and nothing else.
+  `simWritesAreSent` holds it twice. Section 1 is the class: no insert, update,
+  upsert or delete may be left unawaited, unreturned, unassigned and unthened,
+  walking backward to the statement start rather than the line start, which is
+  what removed the first draft's three false positives. Section 2 is the proof:
+  a real browser plays a round and the harness watches the network for the POST.
+  `WRITES_CONTROL=drop` restores the shipped source and section 1 goes red;
+  `WRITES_CONTROL=noserve` strips the `.then()` out of the SERVED bundle so the
+  browser genuinely replays the bug, and section 2 goes red.
+  One instrument lesson worth keeping: the first draft of section 2 typed
+  nonsense and pressed Enter. The input has no Enter handler at all, a guess is
+  only submitted by clicking a suggestion, so the harness reported a played
+  round and no request, which looks identical to the bug it was testing for.
 - **2026-09-01, Round 374. THE DRIVER GAME HAD NO CLUES.**
   `/guess-nascar-driver` built each puzzle from six columns on `nascar_drivers`:
   `vibe_word`, `era_hint`, `car_number_hint`, `wins_hint`,
