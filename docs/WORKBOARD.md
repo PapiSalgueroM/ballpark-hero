@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 374.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 375.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -288,7 +288,37 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-(Round 373, the duplicate FAQ schema, SHIPPED. See Done.)
+**IN FLIGHT: next: Round 374 (desktop lane, 2026-09-01), THE DRIVER GAME HAS NO
+CLUES.** Found while checking a filed note that `useNascarDriver` line 73 does
+`.eq('id', ...)` on a table with no `id` column. That line is dead (its table
+`nascar_daily` has zero rows and always has), but pulling on it found something
+much worse.
+**/guess-nascar-driver is unplayable and always has been.** `mapRow` reads six
+clue columns off `nascar_drivers`: `vibe_word`, `era_hint`, `car_number_hint`,
+`wins_hint`, `championship_hint`, `famous_moment_hint`, plus `common_names`.
+NONE OF THOSE COLUMNS EXIST. The table has 14 columns and the six clues are not
+among them, so every clue renders as undefined and a player sees six blank
+cards. The columns that do exist are almost all empty too: of 83 rows, `rank`,
+`driver_name` and `country` are full, `total_wins` is populated on 2, poles on
+3, championships on 3, earnings and manufacturer on 0. `nascar_driver_careers`
+is the same shell: 103 rows, only `driver` and `born` populated. This is a
+registry listed game marked `daily: true` and `isNew: true`, and
+`nascar_scores` has 19 rows, so real people have tried to play it.
+**THE DATA TO FIX IT HONESTLY IS ALREADY IN THE DATABASE**, which is what makes
+this a round rather than a research project. `nascar_race_results` holds 2,104
+fully populated rows from 1949 to 2025 with 164 distinct winners;
+`nascar_champions` holds all 77 seasons complete with team, manufacturer, wins
+and points; `nascar_cup_races` holds the whole 2025 season with tracks, dates
+and pole winners. Of the game's 83 drivers, 74 have real wins in the results
+table, 66 have three or more, and 33 are champions. So every clue can be
+COMPUTED from real results rather than typed, which is the standing rule for
+anything a table says that the data can derive, and no driver, stat or moment
+gets invented.
+Shape: a generator writes the pool and its clues to a committed file the way
+`gridArchive.json` and `recordBooks.json` do, the page renders it synchronously
+so a crawler receives it, eligibility is derived (a driver without enough real
+facts is left out rather than given blanks), and the fence recomputes every
+clue from the live tables and fails on any disagreement.
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
