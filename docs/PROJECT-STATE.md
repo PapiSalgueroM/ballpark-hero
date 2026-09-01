@@ -2614,7 +2614,10 @@ today rather than adding alongside them.
   table name (`source.table` in the shared search layer and the like) and
   are counted rather than probed. Control `ghost` adds a column that does
   not exist to the market value table's set and the run goes red on it, with
-  the fourteen files that read that table named.
+  the fourteen files that read that table named. The same evening it grew to
+  read the 14 `PlayerSourceConfig` literals as well (name, folded, prominence,
+  recency, meta and filter columns), which covers the search layer's dynamic
+  `source.table` chains: 73 tables probed, all green.
 - **2026-09-01, Round 390. EVERY BUG REPORT CARRIES THE ROUTE AND THE EASTERN
   DATE, AND FOOTLE'S SAYS WHICH MODE.** `game_context` on `question_reports`
   is the only context an investigation ever gets. Round 381 read the queue and

@@ -94,6 +94,34 @@ for (const file of walk(path.join(ROOT, 'src'))) {
   }
 }
 
+/* Round 392: the dynamic chains are mostly the shared search layer reading
+   `source.table`, so the PlayerSourceConfig literals are read too: every
+   column a config names (name, first name, folded name, prominence, recency,
+   meta columns, filter columns) joins that table's set. */
+let configs = 0;
+for (const file of walk(path.join(ROOT, 'src'))) {
+  const code = stripComments(fs.readFileSync(file, 'utf8'));
+  const rel = path.relative(ROOT, file).replaceAll('\\', '/');
+  const re = /PlayerSourceConfig\s*=\s*\{([\s\S]*?)\n\};/g;
+  let m;
+  while ((m = re.exec(code))) {
+    const body = m[1];
+    const table = (body.match(/\btable:\s*'([a-zA-Z0-9_]+)'/) || [])[1];
+    if (!table) continue;
+    configs += 1;
+    if (!tables.has(table)) tables.set(table, { cols: new Set(), files: new Set(), chains: 0 });
+    const t = tables.get(table);
+    t.files.add(rel); t.chains += 1;
+    for (const key of ['nameColumn', 'firstNameColumn', 'foldedNameColumn', 'prominenceColumn', 'recencyColumn']) {
+      const cm = body.match(new RegExp('\\b' + key + ":\\s*'([a-zA-Z0-9_]+)'"));
+      if (cm) t.cols.add(cm[1]);
+    }
+    const meta = body.match(/metaColumns:\s*\{([\s\S]*?)\}/);
+    if (meta) for (const cm of meta[1].matchAll(/:\s*'([a-zA-Z0-9_]+)'/g)) t.cols.add(cm[1]);
+    for (const cm of body.matchAll(/column:\s*'([a-zA-Z0-9_]+)'/g)) t.cols.add(cm[1]);
+  }
+}
+
 if (CONTROL === 'ghost') {
   const victim = tables.get('player_market_values');
   if (!victim) abort('control cannot run: player_market_values is not among the tables read');
@@ -101,7 +129,7 @@ if (CONTROL === 'ghost') {
   console.log('   NEGATIVE CONTROL ON: a ghost column added to player_market_values');
 }
 
-console.log(`1) ${tables.size} tables read across ${chainsRead} chains (${dynamicChains} dynamic table names and ${skippedSelectParts} embedded select parts not probed)`);
+console.log(`1) ${tables.size} tables read across ${chainsRead} chains and ${configs} search source configs (${dynamicChains} dynamic table names and ${skippedSelectParts} embedded select parts not probed)`);
 let probed = 0, unreadable = 0;
 const list = [...tables.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 for (const [table, t] of list) {
