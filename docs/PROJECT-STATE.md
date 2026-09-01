@@ -2653,6 +2653,19 @@ today rather than adding alongside them.
   real accounts on a public board, so it is his call.
   tsc zero, vitest 2 passed, build green, simActivityNotCompletion green
   with all three controls red, simWritesAreSent green.
+  **Follow-up, same day:** the full board (169 node harnesses) came back with
+  one red, `simSessionMarks` section 5, whose Round 157 expectation was "at
+  least five scored season marks in useClubManager" and whose own header said
+  Club Manager's marks fired once per completed season. That is the stale
+  belief this round corrected, so the section now asserts the Round 392
+  shape (three match pings, three season end completions, none per match,
+  Soccer Career's season as a ping). The other 168 were green. The report
+  queue is empty: the two connect-4 reports were Rounds 379 and 380, the
+  three Player Bingo reports were Rounds 385 and 389 (ages and clubs now
+  come from the newest row, all 48 World Cup squads are in), the Footle
+  Estêvão report was Round 384, the two Missing XI reports were Round 383,
+  and the July higher-lower and World XI reports were too vague to act on
+  two months later and were closed as such.
 - **2026-09-01, Round 391. EVERY TABLE AND COLUMN THE APP READS IS ASKED FOR
   BY NAME.** Twice this week a page read columns that were not there and
   nothing threw: Round 374's six blank clue cards on the NASCAR game (six

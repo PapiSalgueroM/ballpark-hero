@@ -17,10 +17,19 @@
  * plays: a fifteen season career counted as sixteen plays. The boards now
  * call recordActivity, the ping that writes the anonymous row and nothing
  * else, and a recordCompletion call in a board file is a failure here
- * because it would recreate exactly that regression. Stadium Tycoon,
- * Club Manager and Soccer Career keep recordCompletion on purpose: their
- * marks fire once per session or per completed season, and those are
- * genuine plays.
+ * because it would recreate exactly that regression. Stadium Tycoon keeps
+ * recordCompletion on purpose: its mark fires once per session, and that
+ * is a genuine play.
+ *
+ * Round 392 found the same regression where this file's own note said it
+ * could not be: Club Manager had a recordCompletion after EVERY played
+ * match since Round 157, so a signed in player's running season score was
+ * added to their points fifty times a season (80,246 of the top account's
+ * 87,800 points came from 1,586 match rows). Its match and quick sim marks
+ * are recordActivity now, the finished season and the sacking stay
+ * completions, and Soccer Career's per season mark went the same way.
+ * Section 5 asserts that shape; scripts/simActivityNotCompletion.mjs
+ * proves it by rendering the hook.
  *
  * The contract, statically guarded here because the calls are one-liners
  * a refactor could silently drop or, worse, turn scored:
@@ -34,7 +43,8 @@
  *      doBuy, doHire and doTap;
  *   4. the marked paths are real routes in App.tsx, so the header's
  *      per-slug attribution can never dangle;
- *   5. the Round 157/159 precedents themselves still stand.
+ *   5. the Round 157/159 marks still stand, in their Round 392 shape: a
+      match is a ping, a finished season is the completion.
  *
  * playSessionMarks.mjs proves the same contract dynamically by counting
  * the actual POST bodies a browser sends. Static guard harnesses are the
@@ -151,15 +161,22 @@ console.log('4) The marked paths are routes App.tsx actually serves');
   }
 }
 
-/* ---------- 5. The precedents still stand ---------- */
-console.log('5) Round 157 and Round 159 marks are untouched');
+/* ---------- 5. The precedents still stand, in their Round 392 shape ---------- */
+console.log('5) Club Manager pings a match and completes a season; Soccer Career pings a season');
 {
   const cm = read('src/hooks/useClubManager.ts');
-  const scored = [...cm.matchAll(/recordCompletion\('\/club-manager',/g)].length;
-  if (scored < 5) fail(`useClubManager: only ${scored} scored season marks remain, Round 157 expected at least 5`);
+  const pings = [...cm.matchAll(/recordActivity\('\/club-manager', currentSeasonScore\(/g)].length;
+  const seasons = [...cm.matchAll(/recordCompletion\('\/club-manager', sm\.seasonScore\)/g)].length;
+  const perMatch = [...cm.matchAll(/recordCompletion\('\/club-manager', currentSeasonScore\((res\.)?state\)\)/g)].length;
+  if (pings < 3) fail(`useClubManager: only ${pings} match pings (recordActivity with the running score), Round 392 expects the match, the quick sim run and the second half`);
+  if (seasons < 3) fail(`useClubManager: only ${seasons} season end completions (recordCompletion with sm.seasonScore), Round 157 expects the season over, the quick sim season over and the report's season end`);
+  if (perMatch > 0) fail(`useClubManager: ${perMatch} match result(s) recorded as a full completion, which adds the running season score to a signed in player's points every match (the Round 392 regression)`);
   const soccer = read('src/pages/SoccerCareer.tsx');
-  if (!soccer.includes("recordCompletion('/soccer-career');")) {
-    fail('SoccerCareer: the Round 159 unscored season mark is gone');
+  if (!soccer.includes("recordActivity('/soccer-career');")) {
+    fail('SoccerCareer: the Round 159 unscored season mark is gone (it is a recordActivity ping since Round 392)');
+  }
+  if (soccer.includes("recordCompletion('/soccer-career'")) {
+    fail('SoccerCareer: a season is recorded as a full completion; the scored completion is the retirement through useGameCompletion');
   }
 }
 
