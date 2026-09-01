@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 373.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 374.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,18 +125,7 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- GENERIC FAQPage SCHEMA FLAPS BETWEEN BUILDS (unclaimed, noticed in Round 371).
-  Rebuilding with no relevant source change moved the generic FAQPage block on
-  three pages: /nhl-connect-4 and /gauntlet-draft GAINED one they did not have,
-  /ufc LOST one it did have. Those two pages now ship TWO FAQPage blocks, a
-  hand written one and a generic one, which is a duplicate schema smell on a
-  site under content review.
-  NOT caused by Round 371: that change only affects body reconstruction, and
-  these are head scripts, which the prerenderer copies verbatim from the build.
-  So something in the render decides whether the generic FAQ is emitted and does
-  not decide it the same way every time. simSchema, simHeadTags and simPrerender
-  all pass, so no fence currently asks whether a page emits ONE FAQPage rather
-  than two, which is the check this wants.
+(CLAIMED: the duplicate FAQ schema is now Round 373, desktop lane, below.)
 
 - PER PAGE LOAD FETCH COSTS, filed with measurements during the Round 370 Disk
   IO incident rather than fixed, because the numbers say they are not urgent and
@@ -299,7 +288,23 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-From the 2026-08-28 review (bugs, claimed same day):
+**IN FLIGHT: next: Round 373 (desktop lane, 2026-08-31), THE DUPLICATE FAQ
+SCHEMA.** Taken off the Inbox, where it was filed during Round 371 as a
+flapping generic FAQPage. Measured properly on the shipped snapshots before
+claiming, and it is worse than it was filed as: FOUR documents carry TWO
+FAQPage blocks each, not two documents. /front-office, /nhl-front-office,
+/gauntlet-draft and /nhl-connect-4 each ship the real per game question set AND
+the three question generic fallback ("What is X? / How do you play X? / Is X
+free to play?"), so one URL declares two different FAQPage entities that
+contradict each other. That is a structured data defect on a site sitting under
+a low value content rejection, which is the worst possible moment for a page to
+tell Google two stories about itself.
+The filed note's own diagnosis needs correcting, and the correction is the
+round: it is not that "something decides whether the generic FAQ is emitted".
+GameSeoContent emits a generic FAQ on EVERY page for as long as its guide file
+is in flight, and swaps it for the real one when the file lands. That is by
+design and it is right for a visitor. What is wrong is that the prerenderer can
+photograph the swap halfway through. Bugs first, and this one is cheap.
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
