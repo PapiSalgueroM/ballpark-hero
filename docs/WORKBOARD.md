@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 375.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 376.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -287,6 +287,32 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
+
+**IN FLIGHT: next: Round 375 (desktop lane, 2026-09-01), THE WRITES THAT WERE
+NEVER SENT.** Found by auditing every table the app reads after Round 374, on
+the theory that a bug found by accident is worth looking for on purpose.
+Eight tables are empty. Six of those are explicable (write tables for games
+with almost no traffic, and the chain leaderboards need a nickname submitted on
+top of finishing). ONE IS NOT: `guess_nation_scores` has zero rows while
+`daily_completions`, the sitewide recorder, holds EIGHT completions of
+guess-the-nation, the most recent 2026-08-27. Every sibling game agrees with
+its own table (ufc-chain 7 completions and 8 rows, guess-cbb-team 3 and 206,
+guess-nascar-driver 1 and 19). So that game's own score write has never landed.
+THE MECHANISM, confirmed three ways. `useGuessTheNation` lines 120 and 133 call
+`(supabase as any).from('guess_nation_scores').insert({...});` and then stop.
+The Supabase query builder is a THENABLE: it does not issue the HTTP request
+until something awaits it or calls .then(). Neither line does, so the request is
+never sent at all. The games that work all end in `.then(() => {})`, which is
+exactly what makes them fire. Confirmed it is not RLS by running the same insert
+as the `anon` role inside a rolled back transaction: the database accepts it.
+A sweep of all 28 write calls in src found these two and nothing else; the other
+three the first pass flagged were false positives where the `await` sits a line
+above the `.from(`.
+Round scope: fix both lines, then fence the class both ways. A static check for
+any insert/update/upsert/delete that is neither awaited, returned, assigned nor
+thened, and a runtime check that actually plays a round in a browser and asserts
+the network request leaves, because a source level check is what would have
+missed this for months if the shape had been slightly different.
 
 (Round 374, the driver game's clues, SHIPPED. See Done. The recon that led to
 it is kept below because it is the map of what the NASCAR tables actually hold,
