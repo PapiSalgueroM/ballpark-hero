@@ -533,6 +533,11 @@ Standing claims:
   requests, which is indistinguishable from the bug it was testing for. A
   harness that can fail for its own reasons in the same shape as its subject is
   worth catching early.
+  VERIFIED ON THE LIVE DOMAIN, which for this bug is the only proof that counts:
+  after publishing, a real round was played through on douknowball.com and the
+  score POST returned 201. guess_nation_scores went from zero rows in its entire
+  lifetime to one. That row is genuine (nine guesses were really submitted) and
+  is left in place rather than deleted, so the evidence stays.
 
 - THE DRIVER GAME HAD NO CLUES, Round 374 (desktop lane, 2026-09-01).
   /guess-nascar-driver built each puzzle from six columns on `nascar_drivers`:
