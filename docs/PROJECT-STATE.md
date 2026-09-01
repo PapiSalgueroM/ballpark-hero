@@ -2597,6 +2597,23 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 380. THE OTHER FOUR VALIDATORS.** Round 379's change
+  carried across NBA, NFL, MLB and NHL connect-4, completing the P0 the report
+  queue turned up: one of the two players who reported a dead game named
+  nba-connect-4 specifically. All five now cache one answer per ATTRIBUTE, ask
+  the model to report the two attributes separately, and tell an exhausted daily
+  quota apart from a momentary failure.
+  **Verified live on all five with the quota spent**: cells never stored as a
+  pair came back valid and cached for soccer, NBA, NFL and MLB. Brady on
+  "All-Pro x Buccaneers" and Clemente on ".300+ Average x 3000+ Hits" are two
+  the AI could not have answered today at any price.
+  The edits were applied **by script with assertions on every anchor**, not by
+  hand: four near-identical live functions is exactly where a hand-edit puts a
+  typo into production.
+  It also cleared a standing rule violation nobody had noticed: **26 em and en
+  dashes** across the four files, banned repo-wide by CLAUDE.md, two of them in
+  text a player reads. Nothing currently fences for dashes, which is worth its
+  own round.
 - **2026-09-01, Round 379. THE VALIDATOR STOPS NEEDING THE AI** (soccer first).
   The P0 out of the queue Round 378 unlocked, and the two players who reported
   it were right. The connect-4 validator runs on a free Gemini quota that is

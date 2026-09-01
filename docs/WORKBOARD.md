@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 380.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 381.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,9 +125,8 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-**SHIPPED as Round 379 for SOCCER. See Done. The other four connect-4
-validators still need the same change, and their facts are already backfilled,
-so it is now a mechanical repeat of a proven pattern.** The design was
+**SHIPPED. Soccer as Round 379, the other four as Round 380. All five verified
+live with the quota spent. See Done.** The design was
 picked and it is option 1 sharpened: cache the ANSWER TO EACH ATTRIBUTE, not to
 each pair of them. Measured on the real board files and the real cache rather
 than argued: the 16 soccer boards hold 507 distinct row-by-column cells but only
@@ -664,6 +663,29 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE OTHER FOUR VALIDATORS, Round 380 (desktop lane, 2026-09-01). Round 379's
+  change carried across NBA, NFL, MLB and NHL connect-4, which completes the P0
+  the report queue turned up: one of the two players who reported a dead game
+  named nba-connect-4 specifically.
+  All five now cache one answer per ATTRIBUTE rather than per pair, ask the
+  model to report the two attributes separately, and tell an exhausted daily
+  quota apart from a momentary failure instead of inviting a retry that cannot
+  work.
+  VERIFIED LIVE ON ALL FIVE WITH THE QUOTA SPENT, which is what makes it proof
+  rather than hope: cells that had NEVER been stored as a pair came back valid
+  and cached for soccer, NBA, NFL and MLB. Tom Brady on "All-Pro x Buccaneers"
+  and Clemente on ".300+ Average x 3000+ Hits" are two the AI could not have
+  answered today at any price.
+  The edits were applied by SCRIPT rather than by hand, with assertions on every
+  anchor, because four near-identical live functions is exactly where a careless
+  hand-edit puts a typo into production. The deployed copies and the repo copies
+  match.
+  IT ALSO CLEARED A STANDING RULE VIOLATION nobody had noticed: 26 em and en
+  dashes across the four files, CLAUDE.md bans them repo-wide, and two of them
+  were in text a PLAYER READS ("right now, please try again" had an em dash in
+  it). simNoRivalNames scans these files but nothing checks for dashes, which is
+  worth a fence of its own some round.
 
 - THE VALIDATOR STOPS NEEDING THE AI, Round 379 (desktop lane, 2026-09-01),
   soccer first. The P0 out of the newly unlocked report queue, and two players
