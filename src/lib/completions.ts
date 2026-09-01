@@ -162,9 +162,10 @@ function getCachedDisplayName(): string | null {
  * Round 301, audit finding 2: the ACTIVITY ping, distinct from a completion.
  * The four front office boards and the four my career boards ping after
  * every simulated round so Most Played Today reflects live play. (Club
- * Manager is different and keeps recordCompletion: its calls fire once per
- * COMPLETED SEASON with the season's score, and a finished season is a
- * genuine play.) That ping used to be recordCompletion back when it only wrote
+ * Manager and Soccer Career keep recordCompletion for a FINISHED SEASON and
+ * a retirement, which are genuine plays. Round 392 moved their per match
+ * and per season pings here too: Round 157 had put a completion after every
+ * Club Manager match, and this comment believed it fired once a season.) That ping used to be recordCompletion back when it only wrote
  * the anonymous row; Round 300's fan out silently upgraded it, so one
  * fifteen season career counted as sixteen plays, sixteen ranked rows and a
  * diluted average. This is the old shape on purpose: the anonymous row and

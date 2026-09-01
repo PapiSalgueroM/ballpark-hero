@@ -2307,6 +2307,16 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
    `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
    gitignore. Do not silently delete his research, ask him.
 2. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+3. **Club Manager's inflated points, the history.** Round 392 stopped the leak: every
+   Club Manager match used to add the running season score to a signed in player's
+   points, so the top of the points table held 80,246 of its 87,800 from 1,586 match
+   rows and second place 25,331 from 564. Going forward a season counts once. The 36
+   accounts that hold points earned the old way still hold them, and the board ranks on
+   them. Two honest options: leave history as it is (the board stays wrong at the top
+   for a while), or recompute those accounts' Club Manager points keeping one row per
+   season, inferred from where the running score resets, which is a heuristic that
+   moves real accounts on a public board. Either is one SQL statement once he says
+   which; a backup of `user_game_scores` and `user_scores` comes first either way.
 
 *Closed 2026-08-25: the score ticker data source. He chose the free API-Sports tier ("i want the
 free version unless the 9 dollars is per year"); Round 287 built on it. Reopens only if the free
@@ -2597,6 +2607,52 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 392. A CLUB MANAGER MATCH IS ACTIVITY, NOT A COMPLETION.**
+  Found by asking which score tables were empty (they were not: the table
+  list's row estimates were stale, exact counts said otherwise) and then why
+  `game_completions` takes 20,000 rows a day. `recordCompletion` fans out to
+  three pipelines: the anonymous row, the local streak record, and for a
+  signed in player the whole save (a `user_game_scores` row, the
+  `daily_completions` mark, the score added to `user_scores.total_points`).
+  Round 157 put one after every played Club Manager match so the header moved
+  mid season; Round 300's fan out silently made that a full completion per
+  match; Round 301 fixed the same thing in the eight other sims with
+  `recordActivity` and left Club Manager alone because its own comment
+  believed the game only fired at season end. Measured today: club-manager
+  wrote 10,254 completion rows from 83 players (123 per player, one every 21
+  seconds for the busiest), and the top of the points table held 80,246 of
+  its 87,800 from 1,586 Club Manager rows, the running season score added
+  again after every match (one account's day reads 1, 4, 7, 7, 10, 10, 13...).
+  Second place was the same shape with 25,331 from 564 rows. Soccer Career
+  pinged a completion per season too, unscored, which still wrote a ranked
+  row and a streak record each time (1,348 of them today).
+  **The fix:** the match and quick sim pings in `useClubManager.ts` and the
+  season advance in `SoccerCareer.tsx` are `recordActivity` (the anonymous
+  row and the local today count, nothing else), the finished season, the
+  sacking and the retirement stay completions. Round 301's comment in
+  `lib/completions.ts` now says what is true.
+  **The fence is `scripts/simActivityNotCompletion.mjs`** and it is a hook
+  test, `src/hooks/useClubManager.test.ts`, because the defect is which
+  helper the hook calls at which moment: it renders the real hook, plays a
+  real season through its own actions with the completions module mocked,
+  and asserts that a match is an activity ping and a season end is exactly
+  one completion. Sections 2 and 3 read Soccer Career and the ping itself as
+  code. Controls `match` (a copy of the hook with the completion put back
+  after every match, both tests must fail on their assertions), `career`
+  and `heavy`, each judged on its own section.
+  **Also:** `simWritesAreSent` was landing one real guess-the-nation row in
+  `game_completions` per run (ten today, all at 150 points, the only plays
+  that game recorded all day); it now answers that route itself. And the
+  guess-the-nation score write from Round 375 was proven on the wire: the
+  exact client shape returns 201 through PostgREST, the single row in the
+  table came from the harness, and no real player has finished the game
+  since the fix went live, so the table is empty for an honest reason.
+  **Not done, and filed under "Decisions owed by Anthony":** the points the
+  36 affected accounts already hold. A repair is a heuristic (the season end
+  row can only be inferred from where the running score resets) and it moves
+  real accounts on a public board, so it is his call.
+  tsc zero, vitest 2 passed, build green, simActivityNotCompletion green
+  with all three controls red, simWritesAreSent green.
 - **2026-09-01, Round 391. EVERY TABLE AND COLUMN THE APP READS IS ASKED FOR
   BY NAME.** Twice this week a page read columns that were not there and
   nothing threw: Round 374's six blank clue cards on the NASCAR game (six

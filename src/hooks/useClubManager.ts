@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { recordCompletion } from '@/lib/completions';
+import { recordCompletion, recordActivity } from '@/lib/completions';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
@@ -182,7 +182,13 @@ export function useClubManager() {
          at the end of a 50-fixture season. This is what feeds the header's
          games-played, points and rank, which sat at zero all session for
          anyone mid-season (his screenshot, 2026-08-18). */
-      recordCompletion('/club-manager', currentSeasonScore(res.state));
+      /* Round 392: as ACTIVITY, the shape Round 301 gave the other sims. A
+         completion here fed the signed in save on every match, so a season
+         was fifty ranked rows and the running season score was added to the
+         player's points fifty times over. Measured 2026-09-01: the top of
+         the points table held 80,246 of its 87,800 from 1,586 Club Manager
+         rows. The finished season below is the completion. */
+      recordActivity('/club-manager', currentSeasonScore(res.state));
       setReport(res.report);
       setPhase('matchResult');
     } else if (res.kind === 'seasonOver') {
@@ -233,7 +239,7 @@ export function useClubManager() {
     setCareer(state);
     if (lastReport) {
       // Round 157: a fast-forwarded run still counts as playing today.
-      recordCompletion('/club-manager', currentSeasonScore(state));
+      recordActivity('/club-manager', currentSeasonScore(state));
       setReport(lastReport);
       setPhase('matchResult');
     }
@@ -425,7 +431,7 @@ export function useClubManager() {
     setCareer(res.state);
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
-      recordCompletion('/club-manager', currentSeasonScore(res.state));
+      recordActivity('/club-manager', currentSeasonScore(res.state));
       setReport(res.report);
       setPhase('matchResult');
     } else {

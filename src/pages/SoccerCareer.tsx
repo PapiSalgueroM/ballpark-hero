@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
-import { recordCompletion } from "@/lib/completions";
+import { recordCompletion, recordActivity } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
@@ -754,8 +754,10 @@ export default function SoccerCareer() {
        played, points and rank only ever moved at retirement, so a whole
        evening deep in a career read as never having played (his screenshot,
        2026-08-18, showed 0/107 mid save). Unscored on purpose: the scored
-       completion stays the retirement legacy, this one just marks the play. */
-    recordCompletion('/soccer-career');
+       completion stays the retirement legacy, this one just marks the play.
+       Round 392: an activity ping rather than a completion, so a season no
+       longer writes a ranked row and a streak record (Round 301's shape). */
+    recordActivity('/soccer-career');
   };
 
   const handleAcceptOffer = (offer: ContractOffer) => {

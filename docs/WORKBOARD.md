@@ -21,18 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 393.
 
-**ROUND 392 CLAIMED BY THE DESKTOP LANE, 2026-09-01: A CLUB MANAGER MATCH IS
-ACTIVITY, NOT A COMPLETION.** Measured today: club-manager wrote 10,254
-completion rows from 83 players (123 per player), and because every match
-goes through recordCompletion, a signed in player's running season score is
-added to their points after EVERY match. The top of the points table holds
-80,246 of its 87,800 from 1,586 Club Manager rows. Round 301 moved the other
-eight sims to recordActivity for exactly this and its own comment believed
-Club Manager only fired at season end, which stopped being true in Round 157.
-The match and quick sim pings become activity, the finished season stays the
-completion, Soccer Career's per season ping goes the same way, and a vitest
-fence renders the real hook to prove the shape. Next free number 393.
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -693,6 +681,17 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- A CLUB MANAGER MATCH IS ACTIVITY, NOT A COMPLETION, Round 392 (desktop lane,
+  2026-09-01). Every played match went through recordCompletion, so a signed in
+  player's running season score was added to their points after every match:
+  the top of the points table held 80,246 of its 87,800 from 1,586 Club
+  Manager rows. Round 301 had fixed the other eight sims and believed Club
+  Manager only fired at season end. Match and quick sim pings are activity
+  now, the finished season stays the completion, Soccer Career's per season
+  ping goes the same way. Fence: scripts/simActivityNotCompletion.mjs, a
+  vitest render of the real hook, controls match, career, heavy. The points
+  already on the board are a decision owed by Anthony, see PROJECT-STATE.
 
 - EVERY TABLE AND COLUMN THE APP READS IS ASKED FOR BY NAME, Round 391 (desktop
   lane, 2026-09-01). Round 374's blank clue cards and the Rarity fix Round

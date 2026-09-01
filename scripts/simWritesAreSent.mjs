@@ -178,6 +178,11 @@ if (!fs.existsSync(path.join(DIST, 'index.html'))) {
      than sent to the live project: this harness must not add rows to a real
      scores table every time somebody runs the board. */
   await page.route('**/rest/v1/guess_nation_scores*', route => route.fulfill({ status: 201, body: '[]', contentType: 'application/json' }));
+  /* Round 392: the finished round also records a completion, and this harness
+     was landing one real guess-the-nation row in game_completions per run
+     (ten on 2026-09-01, every one of them at 150 points). A harness that
+     proves a write leaves must not itself write into production. */
+  await page.route('**/rest/v1/game_completions*', route => route.fulfill({ status: 201, body: '', contentType: 'application/json' }));
 
   await page.goto(`http://127.0.0.1:${PORT}/guess-the-nation`, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(3500);
