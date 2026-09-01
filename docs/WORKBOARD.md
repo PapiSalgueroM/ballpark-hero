@@ -19,7 +19,15 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 394.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 395.
+
+**ROUND 394 CLAIMED BY THE DESKTOP LANE, 2026-09-01: THE BAKE OWNS ITS LAST TWO
+LEAGUES.** The 2. Bundesliga and Belgian Pro League blocks were spliced into the
+roster by hand in Rounds 142 and 143 and Round 393 had to carry them verbatim.
+Their 33 dataset spellings are mapped into the bake, the five members with no
+usable rows join the known-empty list, and the roster is re-baked so those
+squads refresh from the table and take the overlay like everyone else. Next
+free number 395.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
