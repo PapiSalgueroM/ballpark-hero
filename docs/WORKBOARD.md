@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 378.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 379.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -287,6 +287,41 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
+
+**IN FLIGHT: next: Round 378 (desktop lane, 2026-09-01), THE LOCKED REPORT
+QUEUE, AND WHAT IS IN IT.** Found by running get_advisors, which had not been
+run in this stretch and is the security half of Anthony's own P0 order.
+THE LOCK. public.user_roles has ZERO rows. AdminReports.checkAuth queries it for
+role='admin', finds nothing, and calls signOut() before redirecting to
+/admin/login. So Anthony signs in and is immediately signed back out. He cannot
+open the bug report screen at all, and it is not obvious from the outside
+because it looks like a failed login rather than a missing row.
+Every admin-gated RLS policy is dead for the same reason: the has_role() based
+read policies on cbb_scores, nascar_scores, guess_nation_scores, tennis_scores
+and medal_games_scores deny everybody, because has_role returns false for every
+user alive.
+WHAT IS BEHIND THE LOCK: 29 reports, 15 unresolved, the newest today. They are
+real players and several are recent and specific. Two say a game is completely
+unplayable, and they are the same family:
+  - soccer-connect-4, 2026-08-30: "it says couldnt verify your answer every time
+    i click"
+  - nba-connect-4, 2026-07-21: "this game does not work at all anything you pick
+    is wrong"
+  That is the AI validator refusing every answer. Failing closed is the correct
+  behaviour when it cannot verify (it is the July 2026 P1 rule) but a validator
+  that can NEVER verify is a dead game, and the fail-closed rule is exactly what
+  makes it look healthy from the inside.
+  - player-stock-market, 2026-08-30: "Says it isn't connected"
+  - player-bingo x3, 2026-08-30/31: Julian Alvarez rejected for "played with
+    Messi", which is true for Argentina, so the rule or the data is club-only
+  - rarity-round, 2026-08-31: Peacock-Farrell not counted as a keeper
+ROUND SCOPE: unlock the queue and fix the validator, because a dead game beats a
+data error. The data reports go on the board for following rounds rather than
+being crammed in here. The has_role anon EXECUTE exposure the advisor also
+flagged is real but minor (it answers "is this uuid an admin" and profiles is
+publicly readable, so admins are enumerable) and rides along only if it is safe:
+has_role is called inside RLS policies, so revoking EXECUTE has to be tested,
+not assumed.
 
 (Round 377, the Daily Legend badge, SHIPPED. See Done, including the one
 decision it leaves with Anthony.)
