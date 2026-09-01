@@ -19,7 +19,17 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 385.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 386.
+
+**ROUND 385 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Player Bingo's stale pool
+and its false teammates.** The Inbox item from the Round 381 sweep. fetchPool
+keeps the newest row AMONG THE 1,000 IT FETCHED, not the player's newest row,
+so a man whose best year sits in the top 1,000 and whose current year does not
+is held at his best year's club, age and value. Each pool player gets his
+real newest row. The Messi teammate false positives get a person check the
+table can support without person_key: a history row that cannot be the same
+man by age is not his. Live harness with controls. next: Round 385 (desktop
+lane).
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -165,7 +175,7 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   typing his name correctly, because leg 1 is `ilike` on the raw text and
   `'%gundogan%'`, `'%rudiger%'` and `'%yaya toure%'` all return zero rows.
 
-- **PLAYER BINGO'S POOL IS 28.7% STALE AND HAS THREE FALSE POSITIVES.**
+- **CLAIMED, Round 385 (desktop lane, 2026-09-01).** **PLAYER BINGO'S POOL IS 28.7% STALE AND HAS THREE FALSE POSITIVES.**
   `fetchPool` spends its 1,000 row budget on ROWS not players, so a player with
   three years eats three slots; 1,000 rows collapse to 467 players and the floor
   is $32M. 134 of 467 carry a row older than their newest, 67 at a club they
