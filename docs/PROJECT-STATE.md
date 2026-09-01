@@ -2597,6 +2597,15 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 388. THE BOOT HARNESS WAITS FOR THE PAINT, NOT THE
+  CLOCK.** `simPrerenderBoot` counted styled nodes 2,500ms after React
+  mounted and on 2026-09-01 read 11 for a page that reads 184 once settled;
+  green on the re-run, filed by Round 382. Both counting sites now wait for
+  the floor the check itself uses (80 styled nodes, measured 198 to 213 on a
+  settled page) with a 15 second ceiling, and only then fall back to a short
+  clock. A fence that goes red at random teaches people to re-run it rather
+  than read it, which is the Round 362 lesson written into one more harness.
+  Green on the full sample, including the six retired-route redirects.
 - **2026-09-01, Round 387. RARITY ROUND'S SCORER AND ITS DROPDOWN READ THE SAME
   ROW.** "Name a goalkeeper" offered Claudio Bravo, the Chilean keeper, and
   refused him. The dropdown filters `player_market_values` by position across

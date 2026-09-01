@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 388.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 389.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -696,6 +696,14 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE BOOT HARNESS WAITS FOR THE PAINT, NOT THE CLOCK, Round 388 (desktop lane,
+  2026-09-01). simPrerenderBoot counted styled nodes 2,500ms after mount and
+  went red on 2026-09-01 at 11 nodes for a page that reads 184 on the re-run
+  (filed by Round 382). Both counting sites now wait for the same floor the
+  check uses (80 styled nodes) and only then fall back to a short clock. A
+  fence that goes red at random teaches people to re-run it rather than read
+  it, the Round 362 lesson. Green on the full sample.
 
 - RARITY ROUND'S SCORER AND ITS DROPDOWN READ THE SAME ROW, Round 387 (desktop
   lane, 2026-09-01). "Name a goalkeeper" offered Claudio Bravo and refused

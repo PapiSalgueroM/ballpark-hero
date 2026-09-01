@@ -169,8 +169,16 @@ for (const route of SAMPLE) {
     /* let it settle before counting: the mount fires early and the page is
        still drawing, so a number read at that instant says 63 for a page
        that ends up at 198 and tells you nothing about whether the app is
-       really there */
-    await page.waitForTimeout(2500);
+       really there. Round 388: this was a fixed 2,500ms stopwatch, and on
+       2026-09-01 a slow paint read 11 styled nodes at the bell and went red
+       for a page that was healthy on the re-run. Wait for the paint itself
+       (the same floor the check below uses) and only then fall back to the
+       clock. */
+    await page.waitForFunction(
+      () => document.querySelectorAll('#root [class]').length >= 80,
+      { timeout: 15000 },
+    ).catch(() => {});
+    await page.waitForTimeout(500);
     const after = await page.evaluate(() => ({
       nodes: document.querySelectorAll('#root *').length,
       classed: document.querySelectorAll('#root [class]').length,
@@ -231,7 +239,9 @@ for (const [route] of stubs) {
       fail(`${route} ended on ${landed}, not ${to}, so the signpost did not send anyone anywhere`);
     }
     await page.waitForFunction(() => !!document.querySelector('#root [class]'), { timeout: 20000 }).catch(() => {});
-    await page.waitForTimeout(1500);
+    /* Round 388: the paint rather than the clock, as above. */
+    await page.waitForFunction(() => document.querySelectorAll('#root [class]').length >= 80, { timeout: 15000 }).catch(() => {});
+    await page.waitForTimeout(500);
     const classed = await page.evaluate(() => document.querySelectorAll('#root [class]').length);
     if (classed < 80) fail(`${route} landed on ${landed} with only ${classed} styled nodes, which is not the app`);
     if (navs > 3) fail(`${route} made ${navs} document navigations, which is a redirect loop rather than a redirect`);
