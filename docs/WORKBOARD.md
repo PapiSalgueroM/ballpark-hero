@@ -19,7 +19,14 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 382.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 383.
+
+**OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
+the maker shouldnt say my name also it shouldnt pop up there I would rather you
+put it in one the small like tabs on the bottom like near the privacy policy and
+tsuff like that". So the card comes off the home page, the note loses his name,
+and it moves behind one of the small footer links. This reverses part of Round
+346, which was his own idea at the time, and that is his call to make.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,6 +132,105 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+**FOUND BY ROUND 381'S VERIFICATION SWEEP, all still live, each with its
+measurement. Five agents investigated the queue and five more tried to refute
+them, and the refutations mattered: two proposed fixes were wrong and one was
+proven wrong by running it. Read the verdict before acting on any of these.**
+
+- **THE RARITY DROPDOWN OFFERS PLAYERS THE SCORER REFUSES, and the obvious fix
+  is proven not to work.** Same symptom the Peacock-Farrell report described,
+  different cause, still live. The autocomplete reads `player_market_values`,
+  the scorer reads the `player_peak_values` view, and they disagree on 51
+  goalkeepers, 62 centre-forwards and 47 right wingers. **Claudio Bravo, the
+  Chile goalkeeper, is refused today for "Name a goalkeeper."**
+  ROOT CAUSE is worse than position drift: `person_key` is NULL on all 141,916
+  rows of `player_market_values`, so one name is one career. The view is a
+  FRANKENSTEIN MERGE, not a disambiguation: Bravo's row takes position and
+  nationality from an Argentine left-back and its `peak_value_usd` of $16M from
+  the Chilean goalkeeper who earned it at Barcelona. **150 players have a peak
+  value earned in a row tagged a different position than the view assigns.**
+  THE TEMPTING FIX IS REFUTED BY TEST: pointing the position categories at
+  `player_peak_values` returns HTTP 400, `column
+  player_peak_values.market_value_usd does not exist`, because
+  `buildSelectColumns` emits seven columns and the view has four. Run against
+  live PostgREST with the site's anon key before believing otherwise.
+  Also: the view's position tie-break is `(array_agg(position ORDER BY year
+  DESC))[1]` with no secondary key, so the goalkeeper pool measured 2,268 and
+  2,270 minutes apart. Non-deterministic between reads.
+
+- **MISSING XI HAS 28 ANSWERS A PLAYER CANNOT SUBMIT.** Of 324 distinct blank
+  answers, 296 are reachable by typing the name or the surname and 28 are not,
+  because `MissingXi.tsx:292-306` passes `validateOnly` with NO `localNames`, so
+  the only string that can ever be submitted is the database's spelling. Nine
+  are hard blocked by a name-form mismatch the matcher never sees: hyphen
+  (`Eric Maxim Choupo-Moting` vs `Eric-Maxim Choupo-Moting`), name order
+  (`Park Ji-sung` vs `Ji-sung Park`), nickname (`Javier Hernandez` vs
+  `Chicharito`), mononyms (`Bosingwa`, `Petit`, `Everton`), transliteration
+  (`Dmitri Alenichev` vs `Dmitriy Alenichev`) and `İlkay Gündoğan`.
+  THE FIX IS ONE PROP and the component already has it: `PlayerAutocomplete`
+  takes `localNames`, added for an identical NFL report. Pass the whole file's
+  deduped roster (~1,837 names), NOT the current XI's eleven, which would leak
+  the answer to anyone typing two characters.
+  THE DURABLE PART is a fourth section in `simMissingXi.mjs`: for every blank
+  candidate, run the real `searchPlayers` and fail unless some prefix surfaces a
+  row that `isCorrectGuess` accepts. All 28 sit green today because the harness
+  tests the matcher in isolation and never the real guess path.
+
+- **`searchPlayers` HAS A NONDETERMINISTIC PROMINENCE POOL.** Its fallback leg
+  orders 1,000 rows by `market_value_usd` with no tiebreak, so ten identical
+  requests returned eight different distinct-name counts (288 to 297). An
+  accented player can be found at prefix "ant" and VANISH once you finish
+  typing his name correctly, because leg 1 is `ilike` on the raw text and
+  `'%gundogan%'`, `'%rudiger%'` and `'%yaya toure%'` all return zero rows.
+
+- **PLAYER BINGO'S POOL IS 28.7% STALE AND HAS THREE FALSE POSITIVES.**
+  `fetchPool` spends its 1,000 row budget on ROWS not players, so a player with
+  three years eats three slots; 1,000 rows collapse to 467 players and the floor
+  is $32M. 134 of 467 carry a row older than their newest, 67 at a club they
+  have left. Kevin De Bruyne is held as a 32 year old at Manchester City when
+  the table's own 2026 row says Napoli. **Elye Wahi satisfies "Aged 21 or
+  younger" while the table says he is 22**, which is a directly wrong answer.
+  Four of eight criterion kinds read the stale row (age, value, nationality,
+  position), not two.
+  THREE FALSE POSITIVES on the Messi tile, all from name collisions or academy
+  rows: `Rodri` via a 2006 Barcelona row when Man City's Rodri was 10 years old,
+  `Lucas Hernández` via a PSG 2023 row he only joined after Messi left, and
+  `Alejandro Grimaldo` via Barcelona academy rows folded into the senior club
+  name. The "drop players with two nationalities" interim fix is REFUTED: Rodri
+  and Grimaldo each have exactly one nationality, so it misses the case it was
+  proposed for.
+  `simMarketYearScope.mjs` passes on this file, because it asks "is the query
+  year-scoped" and not "does it keep the newest row".
+
+- **THE ROUND 365 DAILY-PUZZLE FIX WAS NEVER APPLIED TO `useGame.ts`.**
+  `useDailyPuzzle` deliberately leaves `puzzles` out of its selection memo and
+  expects the real selection to come through `supabasePuzzle`; Round 365 wired
+  that into `useCareerGame`, `useShirtNumber`, `useGuessTransferValue` and
+  `useTransferPath`, each with a comment saying so. `useGame.ts` was missed, so
+  **Footle's daily answer comes from the hardcoded 748 entry fallback file, not
+  the database.** Everything the tier comments describe governs unlimited mode
+  only. Fixing it changes today's answer for every daily game on that hook, so
+  it needs a harness and its own round.
+  THAT FALLBACK FILE IS ALSO STALE: three entries are at "Without Club" in the
+  2026 data (Cavani, Willian, Wijnaldum), nine more disagree with the database
+  on club, `players.ts:787` "Arda Turan, 39, Galatasaray" is a retired manager
+  rather than a player, and two are name collisions serving the wrong person.
+
+- **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
+  2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
+  for 2018. Any 2026 participant who has never been to an earlier tournament
+  fails the "Played at a World Cup" tile. This is a data import job, and it is
+  the item that most directly answers the reporter's "world cup players needed".
+  Note when sizing it: the 2014 and 2018 rows are duplicated (2,208 and 1,472
+  rows for 736 distinct players), so the table needs a dedupe pass too.
+
+- **THE BUG REPORT FORM RECORDS A FIELD THAT CARRIES NO INFORMATION.**
+  `Footle.tsx` sends `difficulty` in `game_context`, but that is the unlimited
+  mode selector, which `changeDifficulty` returns early on in daily mode. It
+  reads "easy" for every daily session ever reported, including an insane one.
+  Worth auditing what every game puts in `game_context`, since this is the only
+  context a future investigation gets.
+
 **SHIPPED. Soccer as Round 379, the other four as Round 380. All five verified
 live with the quota spent. See Done.** The design was
 picked and it is option 1 sharpened: cache the ANSWER TO EACH ATTRIBUTE, not to
@@ -178,11 +284,8 @@ because it does not say WHICH attribute failed, so only the true ones backfill.
   a real share of one day's quota. Measure it with a handful of calls, not
   another 40, and prefer reading the cache table over hammering the function.
 
-**IN FLIGHT: next: Round 381 (desktop lane, 2026-09-01), THE QUEUE'S DATA
-CLAIMS, VERIFIED.** Taking the remaining reports below. A report is a CLAIM, not
-a finding: each one gets checked against the code and the database before
-anything is changed, and a report that turns out to be wrong gets resolved with
-the reason on the record rather than quietly closed.
+(Round 381, the queue's data claims verified, SHIPPED. See Done. Everything it
+turned up that is still live is filed as its own item further down this Inbox.)
 
 - OTHER REPORTS FROM THE NEWLY UNLOCKED QUEUE, 15 unresolved as of 2026-09-01.
   Data correctness, smaller than the validator, each needs verifying before
@@ -192,8 +295,11 @@ the reason on the record rather than quietly closed.
       should say so on the card, and if it is not then the data is wrong.
       Also "world cup, age and transfers needed", so the pool may be stale.
     * rarity-round (2026-08-31): Peacock-Farrell not counted as a goalkeeper.
-    * player-stock-market (2026-08-30): "Says it isn't connected". Round 364
-      made this pull about 39,000 rows, so suspect the paged fetch.
+    * player-stock-market (2026-08-30): "Says it isn't connected". RESOLVED, and
+      MY SUSPICION HERE WAS BACKWARDS: I wrote that Round 364's paged fetch was
+      the suspect. It was the FIX. The report is timestamped 23:43:35Z and Round
+      364 was committed 04:09:32Z the next morning, four and a half hours later,
+      so the code I blamed did not exist when the player hit this.
     * missing-xi (2026-07-29): "LW was literally the player".
     * footle (2026-08-26): answer "not a player like current".
     * higher-lower-transfers, world-xi, missing-xi x2: older, vaguer, verify or
@@ -669,6 +775,61 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE QUEUE'S DATA CLAIMS, VERIFIED, Round 381 (desktop lane, 2026-09-01). Five
+  parallel investigations of the five remaining player reports, each then handed
+  to an independent agent whose only job was to REFUTE it. The refutations are
+  the reason this round is worth its cost: two proposed fixes were wrong, one of
+  them proven wrong by actually running it (HTTP 400), and several measurements
+  were off. Acting on the first pass would have shipped a broken change.
+  THREE REPORTS WERE ALREADY FIXED, verified live rather than taken on a commit
+  message's word, and are now marked resolved:
+    * rarity-round, Peacock-Farrell not counted as a keeper. Fixed by Round 367,
+      SEVENTY TWO MINUTES after it was filed. Cause: the old pool query hit
+      PostgREST's 1,000 row cap, so the goalkeeper pool bottomed out at $9M and
+      his $2M peak fell outside it, while the autocomplete used a different
+      query, offered him, and labelled him a goalkeeper. The game contradicted
+      itself. He is accepted today, rank 888 of 2,268, 61 points.
+    * missing-xi, "LW was literally the player". Fixed by Round 295. The exact
+      2026-07-29 puzzle was reproduced: it demanded "Marco Asensio" while
+      blanking Benzema at ST, with Asensio printed on the board at LW. 26 such
+      slot/candidate mismatches then, 25 of them a clean off-by-one. 0 now.
+    * player-stock-market, "Says it isn't connected". Fixed by Round 364. The
+      game was not intermittently broken, it was 100% dead: 25 of 25 seeds hit
+      the error screen, and game_completions confirms it independently with ZERO
+      completions in the 41 hours that build was live against 8 since the fix.
+  TWO REPORTS WERE WRONG ON THEIR LITERAL READING AND RIGHT UNDERNEATH, and
+  both are answered in this round by fixing the copy rather than the code:
+    * player-bingo, "Julian Alvarez played with Messi and it said it was wrong".
+      The code was right: the tile is a CLUB year overlap by design and they
+      have never shared a club, only an Argentina squad. But the tile said three
+      unqualified words. football-connect4 already ships "Played with Lionel
+      Messi (same club)" and explains it, so Player Bingo was the outlier
+      against this repo's own house wording. Now "Messi club teammate", which
+      fits the 9px tile.
+    * footle, "not a player like current". The answer was Estevao, who is
+      current: Chelsea, 18, rank 34 by 2026 value. But Easy PROMISED "the
+      world's most famous stars" and DELIVERS the top 80 by market value, and
+      value at 18 is priced potential: 12 of the 80 are 21 or younger and the
+      youngest is 17. The promise now matches the rule, in the page and in the
+      SEO copy. The pool was deliberately NOT changed, because its size feeds
+      the daily index and moving it would change the answer under anyone mid
+      puzzle.
+  TWO ERRORS OF MINE WERE CAUGHT AND ARE CORRECTED ON THE RECORD:
+    * This board said Round 364's paged fetch was the suspect cause of the stock
+      market report. It was the FIX. The report is timestamped 23:43:35Z and the
+      commit is 04:09:32Z the next morning, so the code I blamed did not exist
+      when the player hit it.
+    * Round 364's own commit message said "the game was playable rather than
+      dead. 197 completions from 143 distinct players". Those 197 are almost
+      entirely the PRE Round 329 game. The correct figure for the broken build
+      is zero completions in 41 hours.
+  EVERYTHING STILL LIVE IS FILED IN THE INBOX with its measurement, and there is
+  a lot of it: Claudio Bravo refused today for "name a goalkeeper", 28 Missing
+  XI answers that cannot be submitted at all, a nondeterministic search pool,
+  Player Bingo 28.7% stale with three false positives, the Round 365 daily
+  puzzle fix never applied to useGame.ts, and the 2026 World Cup present as a
+  single squad out of 48.
 
 - THE OTHER FOUR VALIDATORS, Round 380 (desktop lane, 2026-09-01). Round 379's
   change carried across NBA, NFL, MLB and NHL connect-4, which completes the P0
