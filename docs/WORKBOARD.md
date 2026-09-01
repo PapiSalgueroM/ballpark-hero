@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 372.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 373.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,6 +125,23 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- CLAIMED Round 372 (desktop, 2026-09-01): THE RECORD BOOKS SHIPS ITS RECORDS.
+  /records serves 13 section headings, 25 lines of prose and ZERO champion names
+  to a crawler: no Yankees, no Patriots, no Celtics, no Lakers. It is a reference
+  page whose entire value is its tables.
+  NOT A PRERENDER BUG, and Round 371 corrected that framing on the record.
+  prerender.mjs:331 leaves Supabase requests hanging by design, so live data is
+  never frozen into a file that outlives the day. Records fetches at runtime and
+  renders a spinner until data arrives, so a spinner is what gets captured. Rule
+  1 stays untouched.
+  THE FIX IS THE ARCHIVE PATTERN. Champion tables are historical facts that move
+  about once a year, not today's data, so they get generated into a committed
+  JSON at build time and rendered from it, exactly like src/data/gridArchive.json.
+  A WELCOME SIDE EFFECT given Round 370: /records currently issues 13 Supabase
+  queries on every single visit. Rendering from a committed file removes all 13.
+  The fence must read the OUTPUT and assert champion names reach the snapshot,
+  because a check reading the source would have passed on this for months.
+
 - GENERIC FAQPage SCHEMA FLAPS BETWEEN BUILDS (unclaimed, noticed in Round 371).
   Rebuilding with no relevant source change moved the generic FAQPage block on
   three pages: /nhl-connect-4 and /gauntlet-draft GAINED one they did not have,
@@ -137,21 +154,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   not decide it the same way every time. simSchema, simHeadTags and simPrerender
   all pass, so no fence currently asks whether a page emits ONE FAQPage rather
   than two, which is the check this wants.
-
-- THE RECORD BOOKS SHIPS NO RECORDS TO CRAWLERS (unclaimed, specified in Round
-  371). /records serves 13 section headings, 25 lines of intro prose and zero
-  champion names: no Yankees, no Patriots, no Celtics, no Lakers. It is a
-  reference page whose entire value is its tables.
-  NOT A PRERENDER BUG. prerender.mjs:331 leaves Supabase requests hanging by
-  design so that live data is never frozen into a file that outlives the day.
-  Records fetches its sections at runtime and renders a spinner until they
-  arrive, so a spinner is what the snapshot captures. Do not touch rule 1.
-  THE FIX IS THE ARCHIVE PATTERN. Champion tables are not today's data, they
-  change about once a year, so generate them into a committed JSON at build time
-  (scripts/genRecordBooks.mjs into src/data/recordBooks.json) and render from
-  that, the way src/data/gridArchive.json already works. The fence should read
-  the OUTPUT and assert champion names actually reach the snapshot, because a
-  check reading the source would have passed on this for months.
 
 - PER PAGE LOAD FETCH COSTS, filed with measurements during the Round 370 Disk
   IO incident rather than fixed, because the numbers say they are not urgent and
