@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 381.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 382.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -177,6 +177,12 @@ because it does not say WHICH attribute failed, so only the true ones backfill.
   HONEST NOTE FOR WHOEVER PICKS THIS UP: the Round 378 diagnosis itself consumed
   a real share of one day's quota. Measure it with a handful of calls, not
   another 40, and prefer reading the cache table over hammering the function.
+
+**IN FLIGHT: next: Round 381 (desktop lane, 2026-09-01), THE QUEUE'S DATA
+CLAIMS, VERIFIED.** Taking the remaining reports below. A report is a CLAIM, not
+a finding: each one gets checked against the code and the database before
+anything is changed, and a report that turns out to be wrong gets resolved with
+the reason on the record rather than quietly closed.
 
 - OTHER REPORTS FROM THE NEWLY UNLOCKED QUEUE, 15 unresolved as of 2026-09-01.
   Data correctness, smaller than the validator, each needs verifying before
