@@ -14,19 +14,24 @@ import { supabase } from '@/integrations/supabase/client';
  * lines up with the typed letters.
  *
  * ACCENT HANDLING
- * The `unaccent` Postgres extension is available on this project but not
- * installed, and pg_trgm is likewise available-but-uninstalled (verified via
- * list_extensions on flawuiqbvjobmkfkauhw, 2026-07-02). A plain
- * `ilike('%mbappe%')` against the accented column value "Kylian Mbappé"
- * returns zero rows (verified with execute_sql), so an unaccented query
- * cannot be trusted to find accented names through ilike alone.
+ * A plain `ilike('%mbappe%')` against the accented column value "Kylian
+ * Mbappé" returns zero rows, so an unaccented query cannot be trusted to
+ * find accented names through ilike on the raw column alone. When this was
+ * written (2026-07-02) neither `unaccent` nor `pg_trgm` was installed on the
+ * project. Both are now (Round 386, 2026-09-01), and player_market_values
+ * carries a stored `name_folded` column, lower(unaccent(player_name)), with a
+ * trigram index, so the soccer source declares `foldedNameColumn` and its
+ * substring leg compares folded against folded. Before that, "gundogan",
+ * "rudiger" and "yaya toure" returned zero rows from leg 1 and were found or
+ * not depending on whether the man sat inside leg 2's pool.
  *
- * The fix used here has two legs that run in parallel:
- *   1. An `ilike` substring query using the RAW (un-normalized) typed text.
- *      This is fast and correct whenever the query's accent state already
- *      matches the stored data (the common case: unaccented query vs
- *      unaccented data, e.g. "haaland", "mahomes", "kelce", or a query typed
- *      with the correct accents).
+ * The two legs that run in parallel:
+ *   1. An `ilike` substring query. On a source with `foldedNameColumn` it is
+ *      the folded column against the normalized query; otherwise it uses the
+ *      RAW (un-normalized) typed text, which is fast and correct whenever the
+ *      query's accent state already matches the stored data (the common
+ *      case: unaccented query vs unaccented data, e.g. "haaland", "mahomes",
+ *      "kelce", or a query typed with the correct accents).
  *   2. A "prominence pool" fetch: the top N rows ordered by whatever
  *      ranking column the source provides (market value, recency, etc),
  *      filtered and ranked client-side after NFD-normalizing both the query
@@ -193,6 +198,14 @@ export interface PlayerSourceConfig {
   prominenceAscending?: boolean;
   /** Columns copied into PlayerEntity.meta, keyed by the meta property name they should populate. */
   metaColumns?: Record<string, string>;
+  /**
+   * Round 386: a stored column holding lower(unaccent(nameColumn)). When set,
+   * the substring leg searches it with the NORMALIZED query instead of the
+   * raw column with the raw text, so "gundogan" finds "İlkay Gündoğan" at
+   * the database rather than hoping he sits inside the prominence pool.
+   * player_market_values.name_folded is the one that exists.
+   */
+  foldedNameColumn?: string;
   /** Row cap for the raw ilike leg. Default 200. */
   ilikeLimit?: number;
   /** Row cap for the prominence-pool accent-fallback leg. Default 1000 (PostgREST's per-request cap). */
@@ -241,6 +254,22 @@ function applyFilters(builder: any, filters: PlayerSourceFilter[] | undefined) {
     if (f.op === 'eq') b = b.eq(f.column, f.value);
     else b = b.ilike(f.column, `%${f.value}%`);
   }
+  return b;
+}
+
+/**
+ * Round 386: one order for both legs, with a full tiebreak. The prominence
+ * pool used to be "order by value, limit 1000" and nothing else, and 317 rows
+ * tie at its 1,000th seat, so ten identical requests returned eight different
+ * name sets and a man on the tie was found or not on a coin toss. Value, then
+ * the most recent row, then the name: one answer.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function orderForProminence(builder: any, source: PlayerSourceConfig) {
+  let b = builder;
+  if (source.prominenceColumn) b = b.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
+  if (source.recencyColumn && source.recencyColumn !== source.prominenceColumn) b = b.order(source.recencyColumn, { ascending: false });
+  b = b.order(source.nameColumn, { ascending: true });
   return b;
 }
 
@@ -341,11 +370,15 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
         .from(source.table)
         .select(selectCols)
         .or(`${source.firstNameColumn}.ilike.%${token}%,${source.nameColumn}.ilike.%${token}%`);
+    } else if (source.foldedNameColumn) {
+      // Round 386: the folded column against the folded query, so accent
+      // state can no longer differ between the two sides.
+      ilikeQuery = (supabase as any).from(source.table).select(selectCols).ilike(source.foldedNameColumn, `%${normalizedQuery}%`);
     } else {
       ilikeQuery = (supabase as any).from(source.table).select(selectCols).ilike(source.nameColumn, `%${rawQuery}%`);
     }
     ilikeQuery = applyFilters(ilikeQuery, source.filters);
-    if (source.prominenceColumn) ilikeQuery = ilikeQuery.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
+    ilikeQuery = orderForProminence(ilikeQuery, source);
     ilikeQuery = ilikeQuery.limit(ilikeLimit);
     if (signal) ilikeQuery = ilikeQuery.abortSignal(signal);
 
@@ -360,9 +393,7 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       : null;
     if (prominenceQuery) {
       prominenceQuery = applyFilters(prominenceQuery, source.filters);
-      if (source.prominenceColumn) {
-        prominenceQuery = prominenceQuery.order(source.prominenceColumn, { ascending: source.prominenceAscending === true });
-      }
+      prominenceQuery = orderForProminence(prominenceQuery, source);
       prominenceQuery = prominenceQuery.limit(prominenceLimit);
       if (signal) prominenceQuery = prominenceQuery.abortSignal(signal);
     }
@@ -493,6 +524,7 @@ export function mergeLocalNames(
 export const SOCCER_MARKET_VALUE_SOURCE: PlayerSourceConfig = {
   table: 'player_market_values',
   nameColumn: 'player_name',
+  foldedNameColumn: 'name_folded',
   prominenceColumn: 'market_value_usd',
   recencyColumn: 'year',
   metaColumns: {

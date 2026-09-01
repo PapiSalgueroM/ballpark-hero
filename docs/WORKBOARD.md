@@ -21,17 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 387.
 
-**ROUND 386 CLAIMED BY THE DESKTOP LANE, 2026-09-01: accent-insensitive player
-search at the database, and a deterministic prominence pool.** The Inbox item
-from the Round 381 sweep. unaccent and pg_trgm are both installed on the
-project now (the playerSearch header still says they are not), so the soccer
-table gets a stored folded-name column with a trigram index and the ilike leg
-searches it with the normalized query: "gundogan", "rudiger" and "yaya toure"
-stop returning zero rows for every soccer autocomplete at once. The prominence
-leg gets a recency and name tiebreak so ten identical requests return one
-answer. Live harness with a raw-column control. next: Round 386 (desktop
-lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -168,13 +157,6 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   Also: the view's position tie-break is `(array_agg(position ORDER BY year
   DESC))[1]` with no secondary key, so the goalkeeper pool measured 2,268 and
   2,270 minutes apart. Non-deterministic between reads.
-
-- **CLAIMED, Round 386 (desktop lane, 2026-09-01).** **`searchPlayers` HAS A NONDETERMINISTIC PROMINENCE POOL.** Its fallback leg
-  orders 1,000 rows by `market_value_usd` with no tiebreak, so ten identical
-  requests returned eight different distinct-name counts (288 to 297). An
-  accented player can be found at prefix "ant" and VANISH once you finish
-  typing his name correctly, because leg 1 is `ilike` on the raw text and
-  `'%gundogan%'`, `'%rudiger%'` and `'%yaya toure%'` all return zero rows.
 
 - **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
   2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
@@ -735,6 +717,19 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- ACCENT-INSENSITIVE PLAYER SEARCH AT THE DATABASE, AND ONE ANSWER PER QUERY,
+  Round 386 (desktop lane, 2026-09-01). unaccent and pg_trgm were already
+  installed (the playerSearch header said otherwise). player_market_values
+  gains a stored name_folded column, lower(unaccent(player_name)), with a
+  trigram index, through an IMMUTABLE fold_name wrapper; the soccer source
+  declares foldedNameColumn and the substring leg compares folded against
+  folded, so "gundogan", "rudiger" and "yaya toure" find their men in every
+  soccer autocomplete at once (16 of 16 plain spellings). Both legs order by
+  value, recency, name: the old pool order measured 10 different answers in
+  10 identical requests, now 1. Fence: scripts/simPlayerSearchAccents.mjs
+  with raw and notie controls. Transfer Path reads career_players and keeps
+  the raw leg.
 
 - PLAYER BINGO HELD 134 OF ITS 470 PLAYERS AT THE WRONG SEASON, AND "RODRI"
   WAS THREE MEN, Round 385 (desktop lane, 2026-09-01). fetchPool kept the

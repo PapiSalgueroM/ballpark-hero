@@ -2597,6 +2597,43 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 386. ACCENT-INSENSITIVE PLAYER SEARCH AT THE DATABASE,
+  AND ONE ANSWER PER QUERY.** `searchPlayers` has two legs: an `ilike` on the
+  raw name column with the raw typed text, and a 1,000 row prominence pool
+  ranked client side. The first returned zero rows for "gundogan", "rudiger"
+  and "yaya toure" because the table keeps the accents, and the second was
+  ordered by value with no tiebreak while 317 rows tie at its 1,000th seat,
+  so an accented man on the tie was found at "ant" and gone once his name was
+  typed correctly. Measured: the old pool order gave **10 different answers
+  in 10 identical requests**.
+  **Both extensions were already installed.** The `playerSearch.ts` header
+  said `unaccent` and `pg_trgm` were available but not installed, which was
+  true on 2026-07-02 and false today (a trigram index on the raw column was
+  already there). Migration `round_386_folded_player_name_search`: an
+  IMMUTABLE `fold_name` wrapper that pins the dictionary (`unaccent` itself
+  is STABLE, so it cannot sit in a generated column), a stored
+  `name_folded` column on `player_market_values` holding
+  `lower(unaccent(player_name))`, and a trigram index on it. 141,916 rows,
+  none null; EXPLAIN shows the bitmap index scan; `get_advisors` shows
+  nothing new (the two "extension in public" notes predate this round).
+  `types.ts` gains the column by hand rather than a full regeneration.
+  **The code:** `PlayerSourceConfig` gains `foldedNameColumn`, the soccer
+  market value source declares it, and the substring leg compares the folded
+  column against the normalized query, so accent state can no longer differ
+  between the two sides. Transfer Path's source reads `career_players`,
+  which has no such column, and keeps the raw leg. Both legs now order by
+  value, then the most recent row, then the name, through one
+  `orderForProminence`. The other sports' tables are untouched.
+  **The fence is `scripts/simPlayerSearchAccents.mjs`**: every row folded,
+  and folded the way the client's `normalizeName` does (108 rows across the
+  nine names that motivated the round); the plain spelling of each man's full
+  name and surname finds him through the real search, 16 of 16; and ten
+  identical two letter requests return one result set. Controls `raw` (the
+  source without the folded column, the old shape: ten of the sixteen
+  vanish) and `notie` (the pool fetched with the old order ten times: ten
+  different answers), each judged on its own section. `simMissingXiReach`
+  re-run on the new search: 323 of 323, unchanged.
+  tsc zero, build green, simMarketYearScope green, both harnesses green.
 - **2026-09-01, Round 385. PLAYER BINGO HELD 134 OF ITS 470 PLAYERS AT THE
   WRONG SEASON, AND "RODRI" WAS THREE MEN.** `fetchPool` took the top 1,000
   rows by value from 2024 on and deduped them by name keeping the newest row

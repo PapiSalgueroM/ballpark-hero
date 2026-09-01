@@ -7296,6 +7296,7 @@ export type Database = {
           id: number
           market_value_usd: number | null
           matches: number | null
+          name_folded: string | null
           nationality: string | null
           person_key: string | null
           player_name: string | null
