@@ -491,6 +491,13 @@ Standing claims:
   once a year, so they should be generated into a committed JSON at build time
   and rendered from it, exactly like src/data/gridArchive.json. Filed, not
   bodged.
+  PUBLISHED and verified live 2026-08-31: Lovable synced faca8295, and all four
+  live archives now serve 126 count paragraphs each, up from 35, 62, 49 and 59.
+  A NOTE ON VERIFYING A SNAPSHOT ONLY DEPLOY: the JS bundle hash did NOT change,
+  because this round touched prerendered HTML and not app code, so the usual
+  "poll until the bundle flips" check sat there for 25 rounds proving nothing.
+  For a snapshot only round, verify the SNAPSHOT content live instead, which is
+  what was done here.
 
 - THE DISK IO EMERGENCY, Round 370 (desktop lane, 2026-08-31). Anthony
   forwarded a Supabase alert: the project is depleting its Disk IO Budget, which
