@@ -19,7 +19,19 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 389.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 390.
+
+**ROUND 389 CLAIMED BY THE DESKTOP LANE, 2026-09-01: the 2026 World Cup squads,
+all 48 of them, and the 2014 and 2018 duplicate rows.** The Inbox item from
+the Round 381 sweep and the one two Player Bingo reports asked for by name
+("world cup players needed"). world_cup_players holds one 2026 squad out of
+48. Source one is the raw wikitext of every squad section through the
+Wikipedia API (fetched with curl and parsed by a script, never retyped by a
+model: a summarised fetch dropped a diacritic from a Czech name between two
+reads). Source two is independent and per team; a player ships only where
+both agree, and every disagreement is listed rather than picked. The 2014 and
+2018 rows are exact triplicates and duplicates (0 groups differ on any field)
+and are collapsed. next: Round 389 (desktop lane).
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -137,7 +149,7 @@ measurement. Five agents investigated the queue and five more tried to refute
 them, and the refutations mattered: two proposed fixes were wrong and one was
 proven wrong by running it. Read the verdict before acting on any of these.**
 
-- **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
+- **CLAIMED, Round 389 (desktop lane, 2026-09-01).** **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
   2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
   for 2018. Any 2026 participant who has never been to an earlier tournament
   fails the "Played at a World Cup" tile. This is a data import job, and it is
