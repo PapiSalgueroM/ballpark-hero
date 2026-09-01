@@ -19,7 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 393.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 394.
+
+**ROUND 393 CLAIMED BY THE DESKTOP LANE, 2026-09-01: THE 2026 WINDOWS REACH THE
+TABLE.** The market value table's 2026 rows are an autumn 2025 snapshot: of the 86
+players worth $60M or more, 14 have moved since (two in January, twelve this
+summer), and the repo's verified transfer overlay only ever reached Club Manager's
+roster bake, so Footle, Player Bingo, Rarity Round and search still show Rodri at
+City and Barcola at PSG. One chunk: every overlay entry plus the eight new moves,
+each two-source verified, written to the 2026 rows; the overlay extended and given
+the table's own club spellings so one list drives both the bake and the table;
+rosters re-baked; one fence that fails if a re-import rolls a verified move back.
+Next free number 394.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
