@@ -2597,6 +2597,53 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 385. PLAYER BINGO HELD 134 OF ITS 470 PLAYERS AT THE
+  WRONG SEASON, AND "RODRI" WAS THREE MEN.** `fetchPool` took the top 1,000
+  rows by value from 2024 on and deduped them by name keeping the newest row
+  AMONG THOSE 1,000, which is not the player's newest row. A man whose best
+  recent year sat inside the top 1,000 and whose current year did not was
+  held at the old club, age and value on four of the eight criterion kinds:
+  Kevin De Bruyne a 32 year old at Manchester City against the table's own
+  2026 row at Napoli, Elye Wahi satisfying "Aged 21 or younger" at 20 while
+  his newest row said 22. `simMarketYearScope` stayed green throughout
+  because it asks whether a query is year scoped, not whether it keeps the
+  newest row.
+  **The fix:** the top rows choose the names, then every name fetches its own
+  recent rows (40 names a request so none can reach the PostgREST cap) and
+  keeps the newest. Measured live after the fix by an independent read of
+  the table: 470 pool players, 0 held at a row that is not their newest, and
+  the old selection would have held 134 of them at an older row. De Bruyne
+  is now Napoli, 34, $11M; Wahi is Nice, 22.
+  **The identity half.** `person_key` is NULL on every row, so one name is
+  one career: "Rodri" is at least three men and the 2006 Barcelona row of a
+  21 year old put Manchester City's Rodri, then aged 10, on the Messi club
+  teammate tile and gave him Betis, Huesca and Cartagena in his club history.
+  "Lucas Hernández" is a Frenchman and a Uruguayan. A history row now has to
+  walk with the pool row, age against year, within one; rows with no age are
+  kept. And a row at 19 or under valued at two million or less is an academy
+  row for the club tiles, because the table files Barcelona B under the
+  senior club's name and Grimaldo's four B seasons read as four seasons
+  alongside Messi. Measured against the live pool before shipping: the
+  academy rule removes exactly Grimaldo and nobody else.
+  **The rule that was refuted by measurement.** Lucas Hernández's 2023 row
+  says PSG and Messi's 2023 row says PSG, but he joined the month after
+  Messi left; the table's year is the valuation's calendar year and falls
+  either side of a summer move. The only rule that removes him (a first year
+  at the club that is Messi's last there) also removes Fabián Ruiz and Hugo
+  Ekitiké, who did play with him. A rejected right answer is the complaint
+  this queue actually gets, so recall wins: he stays, and the harness prints
+  him as a known limit rather than asserting either way.
+  **The fence is `scripts/simPlayerBingoPool.mjs`**: the two rules on the
+  real rows in both directions; every pool player against an independent
+  read of his newest row with the pre-fix selection rebuilt as the baseline;
+  and the Messi tile without Rodri or Grimaldo and with every known Barcelona
+  and PSG teammate who is in the pool. That last list caught its own author:
+  the first draft named Gavi and Jules Koundé, and both debuted or arrived
+  after Messi left. Controls `stale` (judges the old selection, fires on 134)
+  and `pin` (injects Rodri), each asserting first and judged on its own
+  section.
+  tsc zero, build green, simMarketYearScope green, simPlayerBingoPool green
+  with both controls red.
 - **2026-09-01, Round 384. FOOTLE'S DAILY ANSWER CAME FROM THE FILE, NOT THE
   DATABASE.** The Round 365 fix was never applied to `useGame.ts`.
   `useDailyPuzzle` leaves `puzzles` out of its selection memo on purpose (it

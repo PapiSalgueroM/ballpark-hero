@@ -173,6 +173,7 @@ export const POOL_SIZE = 500;
 
 const POOL_ROW_FETCH = 1000; // top rows by value from recent years, deduped down to POOL_SIZE
 const POOL_MIN_YEAR = 2024;
+const POOL_CHUNK = 40; // names per .in() filter when each pool name fetches its own recent rows
 const HISTORY_CHUNK = 80; // names per .in() filter, keeps request URLs comfortably small
 const HISTORY_PAGE = 1000; // PostgREST row cap per request
 const HISTORY_MAX_PAGES = 6;
@@ -199,10 +200,43 @@ interface PoolRow {
   year: number | null;
 }
 
+/**
+ * ROUND 385: person_key is NULL on every row of player_market_values, so one
+ * name is one career and "Rodri" is at least three men (a Barcelona
+ * midfielder aged 21 in 2006, a Huesca player aged 32 in 2009, and the
+ * Manchester City one), and "Lucas Hernández" is a Frenchman and a Uruguayan.
+ * A history row is the pool player's only if its age walks with its year:
+ * the pool row says 29 in 2026, so a 2006 row should say about 9, and 21 is
+ * somebody else. Rows with no age cannot be checked and are kept.
+ */
+export function isSameMan(
+  ref: { age: number; year: number },
+  row: { age: number | null; year: number | null },
+): boolean {
+  if (!(ref.age > 0) || !(ref.year > 0)) return true;
+  if (row.age == null || row.year == null || !(row.age > 0) || !(row.year > 0)) return true;
+  return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
+}
+
+/**
+ * ROUND 385: the table files a club's B team under the senior club's name,
+ * so Alejandro Grimaldo's four Barcelona B seasons (ages 16 to 19, valued at
+ * one or two million) read as four seasons alongside Messi and as "played
+ * for Barcelona". A row at 19 or under valued at two million or less is an
+ * academy row for the club tiles. Measured against the live pool before
+ * shipping: it removes exactly Grimaldo from the Messi tile and nobody else.
+ * Season stat rows are left alone; a goal is a goal whichever team scored it.
+ */
+export function isAcademyRow(row: { age: number | null; value: number | null }): boolean {
+  return row.age != null && row.age > 0 && row.age <= 19 && row.value != null && row.value > 0 && row.value <= 2_000_000;
+}
+
 interface HistoryRow {
   player_name: string | null;
   club: string | null;
   year: number | null;
+  age: number | null;
+  market_value_usd: number | null;
   goals: number | null;
   assists: number | null;
   matches: number | null;
@@ -222,12 +256,15 @@ interface HistoryRow {
  * winter mover is credited at both clubs for that season.
  */
 async function fetchClubHistoryAndStats(
-  names: string[],
+  pool: BingoPlayer[],
 ): Promise<{
   clubHistory: Map<string, Set<string>>;
   clubYears: Map<string, ClubYear[]>;
   seasonStats: Map<string, SeasonStat[]>;
 }> {
+  const names = pool.map(p => p.name);
+  // ROUND 385: the pool row is the reference a history row must walk with.
+  const refs = new Map(pool.map(p => [p.name, { age: p.age, year: p.year }]));
   const clubHistory = new Map<string, Set<string>>();
   const clubYears = new Map<string, ClubYear[]>();
   const seasonStats = new Map<string, SeasonStat[]>();
@@ -241,7 +278,7 @@ async function fetchClubHistoryAndStats(
       for (let page = 0; page < HISTORY_MAX_PAGES; page++) {
         const { data, error } = await supabase
           .from('player_market_values')
-          .select('player_name, club, year, goals, assists, matches, yellow_cards, red_cards')
+          .select('player_name, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards')
           .in('player_name', chunk)
           .order('id', { ascending: true })
           .range(from, from + HISTORY_PAGE - 1);
@@ -249,9 +286,12 @@ async function fetchClubHistoryAndStats(
         for (const r of (data ?? []) as HistoryRow[]) {
           const name = (r.player_name ?? '').trim();
           if (!name) continue;
+          const ref = refs.get(name);
+          if (ref && !isSameMan(ref, { age: r.age, year: r.year })) continue;
+          const academy = isAcademyRow({ age: r.age, value: r.market_value_usd });
 
           const key = clubKey(r.club ?? '');
-          if (key) {
+          if (key && !academy) {
             let set = clubHistory.get(name);
             if (!set) {
               set = new Set<string>();
@@ -261,7 +301,7 @@ async function fetchClubHistoryAndStats(
           }
 
           const year = Number(r.year) || 0;
-          if (year > 0) {
+          if (year > 0 && !academy) {
             let pairs = clubYears.get(name);
             if (!pairs) {
               pairs = [];
@@ -296,37 +336,72 @@ async function fetchClubHistoryAndStats(
   return { clubHistory, clubYears, seasonStats };
 }
 
-/** Top rows by market value from recent years, deduped by player keeping the newest row. */
+/**
+ * The top rows by market value from recent years choose the NAMES; each name
+ * then gets its own newest row.
+ *
+ * ROUND 385: the old version deduped the 1,000 fetched rows by name keeping
+ * the newest AMONG THEM, which is not the player's newest row. A man whose
+ * best recent year sits inside the top 1,000 and whose current year does not
+ * (Kevin De Bruyne: 2024 at Manchester City for $54M in, 2026 at Napoli for
+ * $11M out) was held at the old club, age and value on four of the eight
+ * criterion kinds, and Elye Wahi satisfied "Aged 21 or younger" at a pool
+ * age of 20 while his newest row said 22. Measured before the fix: 134 of
+ * the 467 pool players carried a row older than their newest, 67 of them at
+ * a club they had left.
+ */
 async function fetchPool(): Promise<BingoPlayer[] | null> {
   const { data: rows, error } = await supabase
     .from('player_market_values')
-    .select('player_name, nationality, position, club, market_value_usd, age, year')
+    .select('player_name')
     .gte('year', POOL_MIN_YEAR)
     .gt('market_value_usd', 0)
     .not('age', 'is', null)
     .order('market_value_usd', { ascending: false })
     .limit(POOL_ROW_FETCH);
   if (error || !rows) return null;
+  const names = [...new Set((rows as { player_name: string | null }[]).map(r => (r.player_name ?? '').trim()).filter(Boolean))];
+
+  // Every recent row for those names, in small chunks so no chunk can reach
+  // the PostgREST row cap (40 names, three seasons, a few duplicate rows).
+  const chunks: string[][] = [];
+  for (let i = 0; i < names.length; i += POOL_CHUNK) chunks.push(names.slice(i, i + POOL_CHUNK));
+  const results = await Promise.all(
+    chunks.map(chunk =>
+      supabase
+        .from('player_market_values')
+        .select('player_name, nationality, position, club, market_value_usd, age, year')
+        .in('player_name', chunk)
+        .gte('year', POOL_MIN_YEAR)
+        .gt('market_value_usd', 0)
+        .not('age', 'is', null)
+        .order('year', { ascending: false })
+        .limit(HISTORY_PAGE),
+    ),
+  );
 
   const byName = new Map<string, BingoPlayer>();
-  for (const r of rows as PoolRow[]) {
-    const name = (r.player_name ?? '').trim();
-    const value = Number(r.market_value_usd) || 0;
-    const age = Number(r.age) || 0;
-    const year = Number(r.year) || 0;
-    if (!name || value <= 0 || age <= 0) continue;
-    const candidate: BingoPlayer = {
-      name,
-      nationality: (r.nationality ?? '').trim(),
-      position: (r.position ?? '').trim(),
-      club: (r.club ?? '').trim(),
-      value,
-      age,
-      year,
-    };
-    const prev = byName.get(name);
-    if (!prev || year > prev.year || (year === prev.year && value > prev.value)) {
-      byName.set(name, candidate);
+  for (const res of results) {
+    if (res.error || !res.data) return null;
+    for (const r of res.data as PoolRow[]) {
+      const name = (r.player_name ?? '').trim();
+      const value = Number(r.market_value_usd) || 0;
+      const age = Number(r.age) || 0;
+      const year = Number(r.year) || 0;
+      if (!name || value <= 0 || age <= 0) continue;
+      const candidate: BingoPlayer = {
+        name,
+        nationality: (r.nationality ?? '').trim(),
+        position: (r.position ?? '').trim(),
+        club: (r.club ?? '').trim(),
+        value,
+        age,
+        year,
+      };
+      const prev = byName.get(name);
+      if (!prev || year > prev.year || (year === prev.year && value > prev.value)) {
+        byName.set(name, candidate);
+      }
     }
   }
 
@@ -408,7 +483,7 @@ export async function fetchBingoData(): Promise<BingoData | null> {
     ]);
     if (!pool) return null;
 
-    const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool.map(p => p.name));
+    const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool);
     // Every player at least carries their current club, even if a history page fell short.
     for (const p of pool) {
       const key = clubKey(p.club);

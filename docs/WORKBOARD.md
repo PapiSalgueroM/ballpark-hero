@@ -21,16 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 386.
 
-**ROUND 385 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Player Bingo's stale pool
-and its false teammates.** The Inbox item from the Round 381 sweep. fetchPool
-keeps the newest row AMONG THE 1,000 IT FETCHED, not the player's newest row,
-so a man whose best year sits in the top 1,000 and whose current year does not
-is held at his best year's club, age and value. Each pool player gets his
-real newest row. The Messi teammate false positives get a person check the
-table can support without person_key: a history row that cannot be the same
-man by age is not his. Live harness with controls. next: Round 385 (desktop
-lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -174,25 +164,6 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   accented player can be found at prefix "ant" and VANISH once you finish
   typing his name correctly, because leg 1 is `ilike` on the raw text and
   `'%gundogan%'`, `'%rudiger%'` and `'%yaya toure%'` all return zero rows.
-
-- **CLAIMED, Round 385 (desktop lane, 2026-09-01).** **PLAYER BINGO'S POOL IS 28.7% STALE AND HAS THREE FALSE POSITIVES.**
-  `fetchPool` spends its 1,000 row budget on ROWS not players, so a player with
-  three years eats three slots; 1,000 rows collapse to 467 players and the floor
-  is $32M. 134 of 467 carry a row older than their newest, 67 at a club they
-  have left. Kevin De Bruyne is held as a 32 year old at Manchester City when
-  the table's own 2026 row says Napoli. **Elye Wahi satisfies "Aged 21 or
-  younger" while the table says he is 22**, which is a directly wrong answer.
-  Four of eight criterion kinds read the stale row (age, value, nationality,
-  position), not two.
-  THREE FALSE POSITIVES on the Messi tile, all from name collisions or academy
-  rows: `Rodri` via a 2006 Barcelona row when Man City's Rodri was 10 years old,
-  `Lucas Hernández` via a PSG 2023 row he only joined after Messi left, and
-  `Alejandro Grimaldo` via Barcelona academy rows folded into the senior club
-  name. The "drop players with two nationalities" interim fix is REFUTED: Rodri
-  and Grimaldo each have exactly one nationality, so it misses the case it was
-  proposed for.
-  `simMarketYearScope.mjs` passes on this file, because it asks "is the query
-  year-scoped" and not "does it keep the newest row".
 
 - **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
   2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
@@ -753,6 +724,21 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- PLAYER BINGO HELD 134 OF ITS 470 PLAYERS AT THE WRONG SEASON, AND "RODRI"
+  WAS THREE MEN, Round 385 (desktop lane, 2026-09-01). fetchPool kept the
+  newest row among the 1,000 it fetched rather than the player's newest row,
+  so De Bruyne was a 32 year old at Manchester City and Wahi satisfied "Aged
+  21 or younger" at 20 against a newest row of 22. Now the top rows choose the
+  names and each name fetches its own newest row: 470 players, 0 stale by an
+  independent read, 134 moved. A history row must walk with the pool row (age
+  against year), which takes the other Rodris and the Uruguayan Lucas
+  Hernández out of their histories, and a row at 19 or under valued at $2M or
+  less is an academy row for the club tiles, which takes Grimaldo's Barcelona
+  B seasons off the Messi tile (measured: it removes him and nobody else).
+  Lucas Hernández stays on the Messi tile as a documented limit: the only rule
+  that removes him also removes Fabián Ruiz and Ekitiké, who did play with
+  him. Fence: scripts/simPlayerBingoPool.mjs with stale and pin controls.
 
 - FOOTLE'S DAILY ANSWER CAME FROM THE FILE, NOT THE DATABASE, Round 384
   (desktop lane, 2026-09-01). The Round 365 fix was never applied to
