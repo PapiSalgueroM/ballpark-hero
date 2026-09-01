@@ -33,7 +33,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.ARCHIVE_CONTROL || '';
-if (CONTROL && CONTROL !== 'badanswer') {
+const KNOWN_CONTROLS = ['badanswer', 'dedupe'];
+if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`ARCHIVE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -236,7 +237,69 @@ console.log('5) a recorded school pool still matches the live one');
   if (checked === 0) console.log('   no sport records a pool, nothing to check');
 }
 
+console.log('6) every cell survives prerendering and reaches a crawler');
+{
+  /* THIS SECTION READS THE SNAPSHOT, NOT THE JSON, which is the whole point.
+     Every other section here proves the archive DATA is right. This one proves
+     the data reached the page a crawler is served, because the prerenderer
+     reconstructs the body rather than copying it, and until Round 370 its
+     document global dedupe silently deleted any repeated table cell: 21 of 126
+     labels and 70 of 126 counts were missing from /nba-grid/archive, with no
+     visible gap to notice.
+     Walked in DOCUMENT ORDER: a label whose count is present somewhere else on
+     the page is not good enough, because every cell sharing that count matches
+     the same single paragraph. That distinction is exactly what a first attempt
+     at measuring this got wrong. */
+  const stripP = /<p>(.*?)<\/p>/gs;
+  const escHtml = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  for (const s of present) {
+    const sport = archive.sports[s.key];
+    const file = path.join(ROOT, 'public', sport.game.replace(/^\//, ''), 'archive', 'index.html');
+    if (!fs.existsSync(file)) { fail(`${s.key}: no prerendered snapshot at ${file}, so nothing was served to a crawler`); continue; }
+    const doc = fs.readFileSync(file, 'utf8');
+    let paras = [...doc.matchAll(stripP)].map(m => m[1]);
+    if (CONTROL === 'dedupe') {
+      /* Reproduce the pre Round 371 prerenderer: one document global Set, so
+         the second and later occurrence of any identical paragraph is dropped.
+         That is exactly what deleted 70 counts and 21 labels from
+         /nba-grid/archive. */
+      const before = paras.length;
+      const seenP = new Set();
+      paras = paras.filter(x => (seenP.has(x) ? false : (seenP.add(x), true)));
+      if (paras.length >= before) { console.error('control cannot run: nothing repeated to dedupe'); process.exit(1); }
+    }
+    const cells = sport.boards.flatMap(b => b.cells);
+    const wanted = new Map();
+    for (const c of cells) wanted.set(escHtml(`${c.row} and ${c.col}`), String(c.total));
+    /* COUNT OCCURRENCES, NOT DISTINCT VALUES. A first version compared the 126
+       cells against the number of distinct labels present and reported 21
+       "missing" on a page that was in fact complete: crossings legitimately
+       repeat across boards, so NBA has 126 cells but only 105 distinct labels.
+       What matters is that each CELL has a label paragraph of its own, which is
+       an occurrence count. That is the third measuring error this bug provoked,
+       after testing substring presence instead of per cell presence and after
+       forgetting that an ampersand is escaped in the output. The subject is
+       slippery; count the thing you actually mean. */
+    let intact = 0, noCount = 0, labelOccurrences = 0;
+    for (let i = 0; i < paras.length; i++) {
+      const lbl = paras[i];
+      if (!wanted.has(lbl)) continue;
+      labelOccurrences += 1;
+      if (paras[i + 1] === wanted.get(lbl)) intact += 1; else noCount += 1;
+    }
+    const missingLabels = cells.length - labelOccurrences;
+    console.log(`   ${s.key}  ${intact} of ${cells.length} cells intact, ${noCount} missing their count, ${missingLabels} cells with no label paragraph`);
+    if (noCount > 0) fail(`${s.key}: ${noCount} crossings reach a crawler with no answer count, though the page promises one for every cell`);
+    if (missingLabels > 0) fail(`${s.key}: ${missingLabels} crossing labels never reached the snapshot, so their answers appear under the wrong heading`);
+  }
+}
+
 console.log('');
+if (CONTROL === 'dedupe') {
+  if (failures > 0) { console.log(`simGridArchive control (dedupe): green. The old document global dedupe was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
+  console.error('simGridArchive control (dedupe): RED. Repeated cells were dropped and section 6 did not notice.');
+  process.exit(1);
+}
 if (CONTROL === 'badanswer') {
   if (failures > 0) { console.log(`simGridArchive control: green. The planted wrong answer was caught (${failures} finding).`); process.exit(0); }
   console.error('simGridArchive control: RED. A published answer the game would reject went unnoticed.');

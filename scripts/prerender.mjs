@@ -522,9 +522,30 @@ async function draw(sample, route, url) {
         if (text.length > cap) continue;
         const html = inline(el);
         if (!html) continue;
+        /* ROUND 370: A REPEATED TABLE CELL IS DATA, NOT BOILERPLATE.
+           `seen` is one Set for the whole document, and it was applied to every
+           block including td and th. That is right for the link dedupe above,
+           where the same nav link really does appear on every page and shipping
+           it once is correct. It is wrong for a table: a count of 42 appearing
+           in five different crossings is five facts, and collapsing them makes
+           the page claim less than it knows.
+           MEASURED ON THE GRID ARCHIVES BEFORE THE FIX. Of 126 crossings on
+           /nba-grid/archive, 35 reached a crawler intact, 70 lost their count
+           and 21 lost their label outright, so an answer list appeared under the
+           previous crossing with nothing naming it. MLB kept 62, NHL 49, CBB 59.
+           The page's own words promise "how many players in our data satisfy
+           both sides" and that number was absent from most of them.
+           This is the fourth time in this repo that correctly generated content
+           never reached a crawler, after the FAQ and breadcrumb markup in Round
+           281, the home page structured data in the same round, and the soft 404
+           marker in Round 282. The pattern each time is that the body is
+           reconstructed rather than copied, so anything the reconstruction drops
+           is invisible to every check that reads the source instead of the
+           output. simGridArchive section 6 reads the OUTPUT. */
         const key = tag + '|' + html;
-        if (seen.has(key)) continue;
-        seen.add(key);
+        const repeatable = tag === 'td' || tag === 'th';
+        if (!repeatable && seen.has(key)) continue;
+        if (!repeatable) seen.add(key);
         const out = tag === 'td' || tag === 'th' ? 'p' : tag === 'li' ? 'li' : tag;
         parts.push({ s: `<${out}>${html}</${out}>`, chrome });
       }

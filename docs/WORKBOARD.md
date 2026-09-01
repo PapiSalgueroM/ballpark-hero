@@ -125,6 +125,34 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- GENERIC FAQPage SCHEMA FLAPS BETWEEN BUILDS (unclaimed, noticed in Round 371).
+  Rebuilding with no relevant source change moved the generic FAQPage block on
+  three pages: /nhl-connect-4 and /gauntlet-draft GAINED one they did not have,
+  /ufc LOST one it did have. Those two pages now ship TWO FAQPage blocks, a
+  hand written one and a generic one, which is a duplicate schema smell on a
+  site under content review.
+  NOT caused by Round 371: that change only affects body reconstruction, and
+  these are head scripts, which the prerenderer copies verbatim from the build.
+  So something in the render decides whether the generic FAQ is emitted and does
+  not decide it the same way every time. simSchema, simHeadTags and simPrerender
+  all pass, so no fence currently asks whether a page emits ONE FAQPage rather
+  than two, which is the check this wants.
+
+- THE RECORD BOOKS SHIPS NO RECORDS TO CRAWLERS (unclaimed, specified in Round
+  371). /records serves 13 section headings, 25 lines of intro prose and zero
+  champion names: no Yankees, no Patriots, no Celtics, no Lakers. It is a
+  reference page whose entire value is its tables.
+  NOT A PRERENDER BUG. prerender.mjs:331 leaves Supabase requests hanging by
+  design so that live data is never frozen into a file that outlives the day.
+  Records fetches its sections at runtime and renders a spinner until they
+  arrive, so a spinner is what the snapshot captures. Do not touch rule 1.
+  THE FIX IS THE ARCHIVE PATTERN. Champion tables are not today's data, they
+  change about once a year, so generate them into a committed JSON at build time
+  (scripts/genRecordBooks.mjs into src/data/recordBooks.json) and render from
+  that, the way src/data/gridArchive.json already works. The fence should read
+  the OUTPUT and assert champion names actually reach the snapshot, because a
+  check reading the source would have passed on this for months.
+
 - PER PAGE LOAD FETCH COSTS, filed with measurements during the Round 370 Disk
   IO incident rather than fixed, because the numbers say they are not urgent and
   the obvious fix carries a drift risk that is worse than the cost.
@@ -149,31 +177,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   Same shape, unmeasured: Player Stock Market pulls about 39,000 rows a run and
   Rarity Round pages whole category pools. Both were deliberate correctness
   fixes in Rounds 364 and 367 and both are right; both scale with traffic.
-
-- CLAIMED Round 371 (desktop, 2026-08-31): TWO PAGES ARE SERVING CRAWLERS LESS
-  THAN THEY HOLD, AND NEITHER IS A CONTENT PROBLEM. Both found by an adversarial
-  review of the pages shipped since the render audit, then measured by hand.
-  (1) THE PRERENDER DEDUPE DELETES REPEATED TABLE CELLS. prerender.mjs line 524
-  keys on tag plus html against a DOCUMENT GLOBAL Set, and td and th collapse to
-  p, so a repeated cell vanishes with no visible gap. Measured on
-  /nba-grid/archive: of 126 crossings, 35 arrive intact, 70 lose their answer
-  count and 21 lose their label outright, so an answer list sits under the
-  previous crossing with nothing naming it. MLB keeps 62, NHL 49, CBB 59. The
-  page's own words promise "how many players in our data satisfy both sides".
-  Fix is targeted: exempt td and th, because a repeated cell is DATA, and leave
-  the link dedupe alone, because the same nav link really does belong once.
-  (2) THE RECORD BOOKS SERVES NO RECORDS AT ALL. /records ships 13 section
-  headings and 25 paragraphs of intro prose describing tables that are not
-  there. Zero champion names reach a crawler: no Yankees, no Patriots, no
-  Celtics, no Lakers. This is NOT the dedupe, which would keep distinct names.
-  It is async section data never reaching the snapshot, so a reference page
-  whose entire value is its tables is empty to search engines.
-  THAT MAKES FIVE TIMES correctly generated content has failed to reach a
-  crawler here: the FAQ markup, the breadcrumbs and the home page structured
-  data in Round 281, the soft 404 marker in Round 282, and now these two. The
-  shape is always the same, the prerenderer RECONSTRUCTS the body rather than
-  copying it, so anything the reconstruction drops is invisible to every check
-  that reads source instead of output. The fences for both read the OUTPUT.
 
 
 - SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
@@ -449,6 +452,45 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE PRERENDER DEDUPE ATE REPEATED TABLE CELLS, Round 371 (desktop lane,
+  2026-08-31). prerender.mjs kept ONE document global Set and applied it to
+  every block including td and th, which collapse to p. So any repeated cell was
+  deleted with no visible gap. Measured on /nba-grid/archive before the fix: of
+  126 crossings, 35 arrived intact, 70 lost their answer count and 21 lost their
+  label outright, leaving an answer list under the previous crossing with
+  nothing naming it. MLB kept 62, NHL 49, CBB 59. The page's own words promise
+  "how many players in our data satisfy both sides".
+  THE FIX IS TARGETED, not a removal. The dedupe is RIGHT for links, where the
+  same nav link genuinely appears on every page and shipping it once is correct.
+  It is wrong for a table, where a count of 42 in five crossings is five facts.
+  td and th are exempt now; the link dedupe is untouched. After: all four
+  archives report 126 of 126 cells intact, 0 missing counts, 0 missing labels.
+  simGridArchive section 6 READS THE OUTPUT, which is the whole point: sections
+  1 to 5 all passed throughout while a sixth of the page never reached a
+  crawler, because they check the archive DATA. ARCHIVE_CONTROL=dedupe replays
+  the old global Set and reproduces the original numbers exactly, 70 counts and
+  21 labels missing on NBA.
+  I MISMEASURED THIS THREE TIMES AND THE HARNESS COMMENT SAYS SO. First I tested
+  whether a count appeared ANYWHERE in the document rather than per cell, so
+  every cell sharing a value matched one paragraph and I briefly concluded the
+  page was fine. Then I forgot an ampersand is escaped in the output and
+  "reported" three Texas A&M crossings missing that were present. Then the fence
+  itself compared 126 cells against the number of DISTINCT labels and called a
+  correct page 21 short, because crossings legitimately repeat across boards.
+  Count the thing you actually mean.
+  THE RECORD BOOKS FINDING WAS REAL BUT MY FRAMING WAS WRONG, and this corrects
+  it on the record. /records does ship 13 section headings, 25 lines of prose and
+  ZERO champion names to a crawler. But that is not a defect in the prerenderer,
+  it is a documented rule of it: line 331 leaves every Supabase request hanging
+  on purpose, because "a fulfilled request bakes today's data into a file that
+  outlives today". The page renders spinners and the spinners are what gets
+  captured. I nearly "fixed" a deliberate policy.
+  THE RIGHT FIX IS A DIFFERENT ROUND, and it is the pattern the archives already
+  use: champion tables are not today's data, they are historical facts that move
+  once a year, so they should be generated into a committed JSON at build time
+  and rendered from it, exactly like src/data/gridArchive.json. Filed, not
+  bodged.
 
 - THE DISK IO EMERGENCY, Round 370 (desktop lane, 2026-08-31). Anthony
   forwarded a Supabase alert: the project is depleting its Disk IO Budget, which
