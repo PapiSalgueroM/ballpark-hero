@@ -2597,6 +2597,48 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 384. FOOTLE'S DAILY ANSWER CAME FROM THE FILE, NOT THE
+  DATABASE.** The Round 365 fix was never applied to `useGame.ts`.
+  `useDailyPuzzle` leaves `puzzles` out of its selection memo on purpose (it
+  gates the saved board restore) and takes the real selection through
+  `supabasePuzzle`; Footle passed a pool derived from state as `puzzles`,
+  so the memo ran once against the 748 entry fallback file and never again
+  when the live pool arrived. **Measured before the fix:** the live pool is
+  1,507 players to the file's 748; on the insane tier 1,200 to 326, so 1,173
+  of them could never be the daily; today's answer was Ben Seghir from the
+  file against Savinho from the live pool; and every one of the next 30 days
+  differed, 8 of them a player the file does not hold at all.
+  **The fix is the Round 365 shape.** `todaysTarget` is computed from the
+  pool that actually loaded with the hook's own `dailyIndex` walk, so "every
+  player once before any twice" still holds, and goes in as `supabasePuzzle`
+  with `getPuzzleId` by name; the module level file is only the index space
+  for the saved board. Today's answer changes at publish for anyone who had
+  not finished it, which is the cost of a daily that has been drawn from the
+  wrong pool since Round 365 wired the other four hooks.
+  **Why the fence missed it, and what closes that.** `simDailyPuzzleContract`
+  looked for `useState` names, and `dailyPool` is a `useMemo` over state,
+  which it labelled a module-level ref. The rule is now "module level or
+  supabasePuzzle": a name is module level when the file declares it at
+  column zero or imports it, and anything else is component scoped. The new
+  `memo` control rewrites `useGame` to its old shape in memory and the
+  fence goes red on it; the old `regress` control still fires.
+  **And a test of the wiring itself.** A source check can only find shapes
+  someone has thought of, so `src/hooks/useGame.test.ts` renders the real
+  hook under vitest with the fetch mocked to a pool the file cannot contain
+  and asserts the target is drawn from it, plus a reload test that the saved
+  board survives the pool arriving. Red before the fix (it named Ben Seghir),
+  green after. `scripts/simFootleDaily.mjs` runs it under `runAllSims`, reads
+  the live pool for the headroom numbers above, and carries a `freeze`
+  control that writes the hook's pre-fix shape to a copy inside the project
+  root (vite refuses to load a module from anywhere else, and the first draft
+  of the control went red on exactly that load error rather than on the
+  assertion; it now demands the reload test pass on the copy and the pool
+  test fail on its assertion, or it refuses to run).
+  Known and left alone: the fallback file is stale (Cavani, Willian,
+  Wijnaldum and Arda Turan have no live row), and it is now only ever served
+  when the fetch fails, so it was not worth a data pass this round.
+  tsc zero, build green, hook test green, simFootleDaily green with its
+  control red, simDailyPuzzleContract green with both controls red.
 - **2026-09-01, Round 383. TWELVE MISSING XI ANSWERS COULD NOT BE SUBMITTED, AND
   THE REVIEW FOUND A THIRTEENTH.** The Round 381 sweep estimated 28 unreachable
   of 324. Run through the real guess path (the real `searchPlayers` with the

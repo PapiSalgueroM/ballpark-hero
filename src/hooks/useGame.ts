@@ -5,7 +5,7 @@ import { compareGuess } from '@/lib/gameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { getTodayET, getDailyTier } from '@/lib/dateUtils';
+import { getTodayET, getDailyTier, dailyIndex } from '@/lib/dateUtils';
 import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
 
 const MAX_GUESSES = 8;
@@ -74,6 +74,20 @@ export function useGame() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const dailyPool = useMemo(() => buildTargetPool(dailyTier, playerPool), [dailyTier, playerPool]);
 
+  /* ROUND 384: today's target, computed from the pool that actually loaded.
+     useDailyPuzzle leaves `puzzles` out of its selection memo on purpose and
+     takes the real selection through supabasePuzzle. dailyPool is derived
+     from state (the 748 entry file until the fetch lands, the live pool
+     after), so passing it as `puzzles` meant the memo ran once against the
+     file and never again: every daily answer came from the file, and 1,173
+     of the 1,200 live insane-tier players could never be the daily. Same
+     walk as the hook's own (dailyIndex), so "every player once before any
+     twice" still holds, now over the live pool. */
+  const todaysTarget = useMemo(
+    () => (dailyPool.length > 0 ? dailyPool[dailyIndex(todayStr, dailyPool.length)] : null),
+    [dailyPool, todayStr],
+  );
+
   // ---- DAILY: useDailyPuzzle -----------------------------------------------
   // Always called unconditionally (React rules). Values are only used when
   // mode === 'daily'; unlimited mode reads its own separate state below.
@@ -90,7 +104,11 @@ export function useGame() {
     reset: resetDailyHook,
   } = useDailyPuzzle<Player, GuessResult>({
     gameSlug: 'footle',
-    puzzles: dailyPool,
+    // The module level file is only the index space for the saved board;
+    // the answer itself is todaysTarget above.
+    puzzles: players,
+    supabasePuzzle: todaysTarget,
+    getPuzzleId: (p) => p.name,
     maxGuesses: MAX_GUESSES,
     // Win: the most recent guess is correct
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,

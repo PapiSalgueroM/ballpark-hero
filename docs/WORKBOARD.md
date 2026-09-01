@@ -21,17 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 385.
 
-**ROUND 384 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Footle's daily answer
-comes from the file, not the database.** The Inbox item from the Round 381
-sweep. Measured before writing a line: the live pool is 1,507 players to the
-file's 748, the insane tier 1,200 to 326, today's answer is Ben Seghir from
-the file against Savinho from the live pool, and all 30 of the next 30 days
-differ. A real hook test under vitest (the wiring is the defect, so the wiring
-is what gets rendered) with a sim wrapper carrying a freeze control, and
-simDailyPuzzleContract widened from useState names to anything that is not a
-module level reference, which is the shape that hid this one. next: Round 384
-(desktop lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -194,20 +183,6 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   proposed for.
   `simMarketYearScope.mjs` passes on this file, because it asks "is the query
   year-scoped" and not "does it keep the newest row".
-
-- **CLAIMED, Round 384 (desktop lane, 2026-09-01).** **THE ROUND 365 DAILY-PUZZLE FIX WAS NEVER APPLIED TO `useGame.ts`.**
-  `useDailyPuzzle` deliberately leaves `puzzles` out of its selection memo and
-  expects the real selection to come through `supabasePuzzle`; Round 365 wired
-  that into `useCareerGame`, `useShirtNumber`, `useGuessTransferValue` and
-  `useTransferPath`, each with a comment saying so. `useGame.ts` was missed, so
-  **Footle's daily answer comes from the hardcoded 748 entry fallback file, not
-  the database.** Everything the tier comments describe governs unlimited mode
-  only. Fixing it changes today's answer for every daily game on that hook, so
-  it needs a harness and its own round.
-  THAT FALLBACK FILE IS ALSO STALE: three entries are at "Without Club" in the
-  2026 data (Cavani, Willian, Wijnaldum), nine more disagree with the database
-  on club, `players.ts:787` "Arda Turan, 39, Galatasaray" is a retired manager
-  rather than a player, and two are name collisions serving the wrong person.
 
 - **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
   2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
@@ -768,6 +743,21 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- FOOTLE'S DAILY ANSWER CAME FROM THE FILE, NOT THE DATABASE, Round 384
+  (desktop lane, 2026-09-01). The Round 365 fix was never applied to
+  useGame.ts: it passed a pool derived from state as `puzzles`, so the
+  selection memo ran once against the 748 entry fallback file and never again
+  when the 1,507 player live pool arrived. Measured first: 1,173 of the 1,200
+  live insane-tier players could never be the daily, today's answer was Ben
+  Seghir from the file against Savinho from the live pool, and all of the
+  next 30 days differed. Fixed the Round 365 way (todaysTarget from the
+  loaded pool through supabasePuzzle with getPuzzleId). simDailyPuzzleContract
+  now treats anything not module level as component scoped, with a memo
+  control that rewrites useGame to its old shape. And a real hook test under
+  vitest (src/hooks/useGame.test.ts, red before, green after) run by
+  scripts/simFootleDaily.mjs with a freeze control that refuses to count a
+  load error as a finding.
 
 - TWELVE MISSING XI ANSWERS COULD NOT BE SUBMITTED, AND THE REVIEW FOUND A
   THIRTEENTH, Round 383 (desktop lane, 2026-09-01). Run through the REAL guess
