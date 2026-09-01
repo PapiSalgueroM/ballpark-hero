@@ -19,7 +19,20 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 387.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 388.
+
+**ROUND 387 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Rarity Round's scorer and
+its dropdown read the same row.** The Inbox item from the Round 381 sweep.
+player_peak_values takes position and nationality from a player's NEWEST row
+and its peak value from his most valuable one, so for a shared name the view
+is a merge of two men (Claudio Bravo: the Chilean goalkeeper's NEXT FREE NUMBER: 388.
+6M under the
+Argentine left-back's position). The dropdown dedupes by the most valuable
+row. The view moves to that same row (value, then year, then id), which
+removes all 151 position and 64 nationality disagreements by construction;
+the four columns stay so nothing that reads the view changes shape. Live
+harness: every dropdown row for a position category is accepted by that
+category's pool. next: Round 387 (desktop lane).
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -137,7 +150,7 @@ measurement. Five agents investigated the queue and five more tried to refute
 them, and the refutations mattered: two proposed fixes were wrong and one was
 proven wrong by running it. Read the verdict before acting on any of these.**
 
-- **THE RARITY DROPDOWN OFFERS PLAYERS THE SCORER REFUSES, and the obvious fix
+- **CLAIMED, Round 387 (desktop lane, 2026-09-01).** **THE RARITY DROPDOWN OFFERS PLAYERS THE SCORER REFUSES, and the obvious fix
   is proven not to work.** Same symptom the Peacock-Farrell report described,
   different cause, still live. The autocomplete reads `player_market_values`,
   the scorer reads the `player_peak_values` view, and they disagree on 51
