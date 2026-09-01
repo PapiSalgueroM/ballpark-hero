@@ -19,7 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 386.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 387.
+
+**ROUND 386 CLAIMED BY THE DESKTOP LANE, 2026-09-01: accent-insensitive player
+search at the database, and a deterministic prominence pool.** The Inbox item
+from the Round 381 sweep. unaccent and pg_trgm are both installed on the
+project now (the playerSearch header still says they are not), so the soccer
+table gets a stored folded-name column with a trigram index and the ilike leg
+searches it with the normalized query: "gundogan", "rudiger" and "yaya toure"
+stop returning zero rows for every soccer autocomplete at once. The prominence
+leg gets a recency and name tiebreak so ten identical requests return one
+answer. Live harness with a raw-column control. next: Round 386 (desktop
+lane).
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -158,7 +169,7 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   DESC))[1]` with no secondary key, so the goalkeeper pool measured 2,268 and
   2,270 minutes apart. Non-deterministic between reads.
 
-- **`searchPlayers` HAS A NONDETERMINISTIC PROMINENCE POOL.** Its fallback leg
+- **CLAIMED, Round 386 (desktop lane, 2026-09-01).** **`searchPlayers` HAS A NONDETERMINISTIC PROMINENCE POOL.** Its fallback leg
   orders 1,000 rows by `market_value_usd` with no tiebreak, so ten identical
   requests returned eight different distinct-name counts (288 to 297). An
   accented player can be found at prefix "ant" and VANISH once you finish
