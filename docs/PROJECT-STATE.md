@@ -2597,6 +2597,40 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-08-31, Round 373. ONE PAGE, ONE FAQPage.** Four shipped documents
+  carried two contradictory FAQPage blocks each: `/front-office`,
+  `/nhl-front-office`, `/gauntlet-draft` and `/nhl-connect-4` declared both the
+  real per game questions and a generic three question placeholder. Filed in
+  Round 371 as a generic block "flapping between builds" on two pages; measuring
+  it before claiming found four, and found the mechanism, which is worth keeping
+  because nothing else in the repo has hit it yet.
+  **react-helmet-async 3 on React 19 does not touch the DOM.** It renders head
+  tags as React elements and lets React 19's own head hoisting place them. A
+  hoisted inline `<script>` whose CONTENT changes after mount is not reliably
+  replaced: the new one is appended and the old one can stay for good. Measured
+  with a MutationObserver installed before boot, on the bare shell the
+  prerenderer serves. `GameSeoContent` was the only place on the site where a
+  JSON-LD block's content ever changed after mount, because it emitted a generic
+  FAQ while the guide file was in flight and swapped in the real one on arrival.
+  That is why it looked like flapping: rebuilding an unchanged page really did
+  move the schema, at random.
+  **The placeholder was also never on screen.** The visible FAQ list renders
+  inside `{content && ...}`, so those three questions appeared nowhere a visitor
+  could read them, and Google's FAQPage guidance is that the content must be
+  visible. The file's own comment has claimed since Round 281 that the markup
+  always matches the page. It does now.
+  The fix is that there is no fallback: the block is written once from real
+  content or not at all, from its own `<Helmet>` that mounts already holding its
+  final content. It costs nothing measurable, because every placeholder that
+  existed sat beside a real block. A game page that ends up with no FAQ markup
+  is a page whose guide did not load, and `simSchema` section 3 already fails on
+  that.
+  `simFaqSchema` holds both halves. Section 1 reads the shipped snapshots and
+  fails on two blocks of the same `@type` anywhere, or on the placeholder shape;
+  section 2 watches the head from before boot and fails if any JSON-LD block is
+  inserted and then replaced, which is stronger than "the head settles
+  correctly", because a head that settles correctly can still be photographed
+  mid swap. That is precisely what Round 369 did.
 - **2026-09-01, Round 372.** The Record Books ships its records. `/records`
   served a crawler 13 headings, 25 lines of prose and zero champion names, on a
   reference page whose entire value is its tables. Now 2,963 words and 636

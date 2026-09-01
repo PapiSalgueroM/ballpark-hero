@@ -288,23 +288,7 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 373 (desktop lane, 2026-08-31), THE DUPLICATE FAQ
-SCHEMA.** Taken off the Inbox, where it was filed during Round 371 as a
-flapping generic FAQPage. Measured properly on the shipped snapshots before
-claiming, and it is worse than it was filed as: FOUR documents carry TWO
-FAQPage blocks each, not two documents. /front-office, /nhl-front-office,
-/gauntlet-draft and /nhl-connect-4 each ship the real per game question set AND
-the three question generic fallback ("What is X? / How do you play X? / Is X
-free to play?"), so one URL declares two different FAQPage entities that
-contradict each other. That is a structured data defect on a site sitting under
-a low value content rejection, which is the worst possible moment for a page to
-tell Google two stories about itself.
-The filed note's own diagnosis needs correcting, and the correction is the
-round: it is not that "something decides whether the generic FAQ is emitted".
-GameSeoContent emits a generic FAQ on EVERY page for as long as its guide file
-is in flight, and swaps it for the real one when the file lands. That is by
-design and it is right for a visitor. What is wrong is that the prerenderer can
-photograph the swap halfway through. Bugs first, and this one is cheap.
+(Round 373, the duplicate FAQ schema, SHIPPED. See Done.)
 
 
 - SEO INDEXING, phase two (Round 341 shipped phase one): OWNER TAP NEEDED to finish,
@@ -442,6 +426,55 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- ONE PAGE, ONE FAQPage, Round 373 (desktop lane, 2026-09-01). Four shipped
+  documents carried TWO contradictory FAQPage blocks each: /front-office,
+  /nhl-front-office, /gauntlet-draft and /nhl-connect-4 all declared the real
+  per game question set AND a generic three question placeholder. The Inbox
+  filed this as a generic block flapping on two pages; measuring the snapshots
+  before claiming found four, and found the mechanism.
+  THE MECHANISM IS WORTH KEEPING, because nothing else in this repo has hit it.
+  react-helmet-async 3 on React 19 does not touch the DOM. It renders head tags
+  as React elements and lets React 19's own head hoisting place them, and a
+  hoisted inline <script> whose CONTENT changes after mount is not reliably
+  replaced: the new one is appended and the old one can stay for good.
+  GameSeoContent was the only place on the site where a JSON-LD block's content
+  ever changed after mount, because it emitted a generic FAQ while the guide
+  file was in flight and swapped in the real one on arrival. That is why it
+  looked like flapping: rebuilding an unchanged page really did move the schema,
+  at random. Measured with a MutationObserver installed before boot, on the bare
+  vite shell the prerenderer serves, because serving dist hands back the
+  finished snapshots and measures the bug's output instead of its cause.
+  THE PLACEHOLDER WAS ALSO NEVER ON SCREEN. The visible FAQ list renders inside
+  {content && ...}, so those three questions appeared nowhere a visitor could
+  read them, while the JSON-LD claimed them. Google's FAQPage guidance is that
+  the content must be visible on the page.
+  So there is no fallback any more: the block is written once from real content
+  or not at all, from its own Helmet that mounts already holding its final
+  content. It cost nothing measurable, and that was checked before the change
+  rather than hoped for: every placeholder that existed sat beside a real block,
+  118 real blocks before and 118 after, 0 placeholders, 0 duplicates. The
+  prerenderer then rewrote exactly those four documents out of 156, and the
+  ledger agreed: 133 unchanged and holding their old date, 4 rewritten today.
+  simFaqSchema holds both halves, and the split is deliberate. Section 1 reads
+  all 142 shipped documents with structured data and fails on two blocks of the
+  same @type anywhere, or on the placeholder shape, matched by SHAPE so a
+  reworded placeholder is still caught. Section 2 watches the head from before
+  boot across ten routes and fails if any JSON-LD block is inserted and then
+  replaced, which is stronger than "the head settles correctly", because a head
+  that settles correctly can still be photographed mid swap. That is exactly
+  what Round 369 did. FAQSCHEMA_CONTROL=dupe plants a second FAQPage into in
+  memory copies of the snapshots and section 1 goes red; FAQSCHEMA_CONTROL=swap
+  appends one after boot and section 2 goes red. Both refuse to run if what they
+  plant was not actually planted.
+  ONE INSTRUMENT BUG WORTH THE NOTE: an addInitScript runs before parsing, so
+  document.head is null and observing it throws, killing the script silently.
+  The first run reported one empty head state per route and looked like a
+  passing shape rather than a broken instrument. That is why section 2 fails a
+  route where no structured data appeared at all, rather than treating silence
+  as cleanliness.
+  tsc zero, build:seo green with 142 routes and 137 sitemap URLs, seventeen
+  built-site fences green.
 
 - THE RECORD BOOKS SHIPS ITS RECORDS, Round 372 (desktop lane, 2026-09-01).
   /records served a crawler 13 section headings, 25 lines of prose and ZERO

@@ -38,7 +38,10 @@ interface GameSeoContentProps {
 // #114). The legacy howToPlay/examples props are kept for backwards compatibility
 // and only render as a small fallback when a page has no gameContent entry.
 // The visible FAQ list and the FAQPage JSON-LD are built from the same array so
-// the structured data always matches what is actually on the page.
+// the structured data always matches what is actually on the page. Round 373
+// made that true: the array used to carry a generic placeholder set while the
+// guide file was loading, and that set fed the JSON-LD without ever appearing
+// on screen. See the long note on `faqs` below.
 const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
   const location = useLocation();
   const path = location.pathname;
@@ -68,6 +71,32 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
 
   const gameLabel = game?.label || title;
 
+  /* ROUND 373: THERE IS NO FALLBACK FAQ ANY MORE, AND ITS REMOVAL FIXES TWO
+     THINGS AT ONCE.
+     Until this round, this array held a generic three question set ("What is
+     X? / How do you play X? / Is X free to play?") for as long as the guide
+     file was in flight, and swapped to the real questions when it landed. The
+     visible list below is inside {content && ...}, so that generic set was
+     NEVER ON SCREEN. It existed only to fill the JSON-LD, which means the page
+     was declaring FAQPage markup for questions a visitor could not see, and
+     Google's own FAQPage guidance is that the content must be visible on the
+     page. The comment at the top of this file has claimed since Round 281 that
+     "the structured data always matches what is actually on the page". That was
+     true after the swap and false before it.
+     The second thing it fixes is a duplicate that reached four shipped
+     documents. react-helmet-async 3 on React 19 does not touch the DOM: it
+     renders the head tags as React elements and lets React 19 hoist them. A
+     hoisted inline <script> whose CONTENT changes after mount is not reliably
+     replaced, and this array changing was the only place on the site where a
+     JSON-LD block's content ever changed after mount. Measured with a
+     MutationObserver installed before boot: the head passed through the generic
+     block on every single page, and on some loads the real block was appended
+     without the generic one being removed, permanently. /front-office,
+     /nhl-front-office, /gauntlet-draft and /nhl-connect-4 each shipped TWO
+     FAQPage blocks contradicting each other, from the Round 369 rebuild.
+     So the block is written once, from real content, or not at all. A game page
+     that ends up with no FAQ markup is a page whose guide file did not load,
+     which is a real failure and simSchema section 3 already fails on it. */
   const faqs = content
     ? [
         ...content.faqs,
@@ -76,20 +105,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
           a: `Yes. ${gameLabel} is free to play on DoUKnowBall, right in your browser. No download and no signup needed.`,
         },
       ]
-    : [
-        {
-          q: `What is ${gameLabel}?`,
-          a: description,
-        },
-        {
-          q: `How do you play ${gameLabel}?`,
-          a: `Open the game at douknowball.com${path} and follow the on-screen prompts. Use the "?" help button on the page for the full rules.`,
-        },
-        {
-          q: `Is ${gameLabel} free to play?`,
-          a: `Yes. ${gameLabel} is free to play on DoUKnowBall, with no login required and no download.`,
-        },
-      ];
+    : [];
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -236,7 +252,6 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
           result, so losing them was losing a visible thing, not only a hint. */}
       {game && (
         <Helmet>
-          <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
           <script type="application/ld+json">{JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
@@ -245,6 +260,21 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
               { '@type': 'ListItem', position: 2, name: gameLabel, item: `https://douknowball.com${path}` },
             ],
           })}</script>
+        </Helmet>
+      )}
+      {/* ROUND 373: A SEPARATE Helmet, AND THE SEPARATION IS THE POINT.
+          The breadcrumb above is known the moment the route is known and never
+          changes, so it can mount immediately. The FAQ is not known until the
+          guide file lands. Sharing one Helmet would mean that Helmet's script
+          list CHANGING when the content arrived, which is the exact thing React
+          19's head hoisting does not clean up after (see the note on faqs
+          above). A second Helmet that mounts once, already holding its final
+          content, only ever adds. On a client side route change it unmounts
+          with its route, which React does remove correctly, and the next route
+          mounts its own. */}
+      {game && content && (
+        <Helmet>
+          <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         </Helmet>
       )}
 
