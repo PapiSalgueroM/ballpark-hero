@@ -323,7 +323,11 @@ for (const r of rows) {
 /* ------------------------------------------------------------------ */
 /* Apply the verified summer 2026 overlay                             */
 /* ------------------------------------------------------------------ */
-const engineClubs = [...new Set(Object.values(DB_TO_ENGINE))].concat(KNOWN_EMPTY);
+/* Round 393: one set over both lists. Five HNL clubs (Gorica, Istra 1961,
+   Lokomotiva Zagreb, Rudes, Varazdin) are mapped dataset clubs AND listed as
+   known empty, and concat emitted each of them twice, which tsc refuses as a
+   duplicate object key. The committed roster predates that overlap. */
+const engineClubs = [...new Set([...Object.values(DB_TO_ENGINE), ...KNOWN_EMPTY])];
 const engineClubSet = new Set(engineClubs);
 let overlayMoved = 0;
 let overlayDropped = 0;
@@ -357,7 +361,31 @@ for (const [name, rec] of byPlayer) {
 }
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 
+/* Round 393: the file carries two leagues the bake never mapped, the
+   2. Bundesliga (Round 142) and the Belgian Pro League (Round 143), spliced
+   in by hand under comment markers. A plain re-bake dropped all 35 of them,
+   which is how this was found. Any club block in the existing file whose key
+   this bake does not generate is carried verbatim, counted, and flagged
+   partial by the same rule, so the bake can be re-run for a transfer window
+   without losing a league. Mapping those leagues into DB_TO_ENGINE is the
+   real fix and is filed on the board. */
+const existingPath = path.join(ROOT, 'src/data/clubManagerRosters.ts');
+const carried = [];
+if (fs.existsSync(existingPath)) {
+  const prev = fs.readFileSync(existingPath, 'utf8').split('\r\n').join('\n');
+  const blockRe = /^  '((?:[^'\\]|\\.)+)': \[\n([\s\S]*?)^  \],\n/gm;
+  let m;
+  while ((m = blockRe.exec(prev))) {
+    const key = m[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\');
+    if (engineClubSet.has(key)) continue;
+    carried.push({ key, body: m[2], players: (m[2].match(/\{ n: /g) || []).length });
+  }
+}
+const carriedPlayers = carried.reduce((s, c) => s + c.players, 0);
+console.log(`Carried from the previous file: ${carried.length} clubs, ${carriedPlayers} players (leagues the bake does not map)`);
+
 const partial = [];
+for (const c of carried) if (c.players < 8) partial.push(c.key);
 for (const club of engineClubs) {
   const n = byClub.get(club).length;
   if (CORE_LEAGUE_CLUBS.has(club) && n < 7) errors.push(`CORE club too thin: ${club} has ${n}`);
@@ -408,7 +436,7 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // Source: Supabase player_market_values_dedup (2026 rows, 2025 fallback at a
 // 5% discount) PLUS the verified summer 2026 transfer overlay
 // (scripts/transferOverlay2026.mjs), so squads reflect August 2026 after the
-// window. ${total} players, ${clubsSorted.length} clubs across the big five leagues
+// window. ${total + carriedPlayers} players, ${clubsSorted.length + carried.length} clubs across the big five leagues
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
@@ -434,8 +462,8 @@ export interface BakedPlayer {
 export const CM_ROSTER_META = {
   generated: '${stamp}',
   asOf: 'August 2026, after the summer window',
-  players: ${total},
-  clubs: ${clubsSorted.length},
+  players: ${total + carriedPlayers},
+  clubs: ${clubsSorted.length + carried.length},
   overlayMoves: ${overlayMoved},
 };
 
@@ -451,6 +479,12 @@ for (const club of clubsSorted) {
     out += `    { n: '${esc(p.n)}', p: '${p.p}', a: ${p.a}, v: ${p.v}, r: ${p.r} },\n`;
   }
   out += `  ],\n`;
+}
+if (carried.length) {
+  out += `\n  /* ---- Carried from the previous file, not regenerated: the bake does not
+     map these leagues (2. Bundesliga from Round 142, Belgian Pro League from
+     Round 143). Round 393 made the bake keep them instead of dropping them. ---- */\n`;
+  for (const c of carried) out += `  '${esc(c.key)}': [\n${c.body}  ],\n`;
 }
 out += `};\n`;
 

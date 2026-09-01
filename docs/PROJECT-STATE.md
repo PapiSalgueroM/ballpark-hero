@@ -1,5 +1,23 @@
 # Project state
 
+## Progress by area (orientation, not arithmetic)
+
+The owner asked on 2026-09-01 to be able to see whether the giant project is
+moving, by area rather than by round number. Rough percentages, updated when
+an area moves; the round numbers stay for traceability.
+
+| Area | Progress | What moved most recently |
+|---|---|---|
+| P0 production bugs | 85% | Round 392: a Club Manager match no longer adds the running score to a signed in player's points. Report queue empty. Open: the points history decision below. |
+| Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
+| Grid category (Milestone 0) | 60% | Seven grids, four archives; NFL and soccer archives blocked by design (recycled boards, AI validated). |
+| Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
+| Profiles and leaderboard | 40% | Points inflation stopped forward (392); the 36 affected accounts' history is an owner decision. |
+| AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
+| Club Manager | 20% | Rosters re-baked with the 2026 windows (393); feature work deferred by the operating contract. |
+| Soccer Career | 10% | Per season ping is activity not completion (392); feature work deferred by the operating contract. |
+| Multiplayer foundation | 5% | Not started. |
+
 ## Owner feedback, 2026-08-28 (the full site review, his biggest list yet)
 
 Anthony played the site top to bottom on 2026-08-28 and filed a review covering the
@@ -2607,6 +2625,50 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 393. THE 2026 TRANSFER WINDOWS REACH THE MARKET VALUE
+  TABLE.** The table's 2026 rows are an autumn 2025 snapshot: Semenyo and
+  Guéhi, who moved in January 2026, still sat at Bournemouth and Palace in
+  it. A one-off check of the 86 players worth $60M or more (their Wikipedia
+  infobox on the day, a spot check and not a pipeline) found 14 who had
+  moved since, and the repo's verified overlay
+  (`scripts/transferOverlay2026.mjs`, Round 72) knew six of them but only
+  ever reached Club Manager's roster bake, so Footle, Player Bingo, Rarity
+  Round and player search still showed Rodri at City and Barcola at PSG.
+  **One chunk, per the owner's productivity directive of the same evening:**
+  every overlay entry plus the eight new moves (Rodri, Semenyo, Guéhi,
+  Barcola, Woltemade on loan, Marmoush on loan, Leão, Reijnders), each with
+  a second source in dated headlines from named outlets (ESPN, BBC, Sky, The
+  Athletic, AP, Reuters, Al Jazeera, official club sites, spl.com.sa,
+  MLSsoccer.com), written to the 2026 rows by
+  `supabase/migrations/20260901_round_393_transfer_windows_2026.sql`: 45
+  rows updated, Griezmann has no 2026 row. El Karouani's Aug 13 entry was
+  superseded (Al-Qadsiah terminated the contract, he joined Benfica on
+  2026-09-01) and is corrected. The overlay now carries the table's own club
+  spelling per entry (`db`), so one list drives both the bake and the
+  table, and the rosters were re-baked from the updated table.
+  **The fence is `scripts/simTransferOverlay.mjs`**: every entry names a
+  table spelling; every entry with a 2026 row matches it (so a re-import of
+  the snapshot cannot roll a verified move back silently); every spelling is
+  one the 2026 rows carry; no name is ambiguous. Run before the migration it
+  was red on 43 rows, after it green. Controls `stale` and `typo`, the second
+  rewritten once because "Al-Ahli SC" turned out to be a real spelling of a
+  different club.
+  **Also:** the roster bake itself was emitting five Croatian clubs twice
+  (mapped dataset clubs that were also listed as known empty), which tsc
+  refuses as duplicate keys; the generator now takes one set over both
+  lists. The committed roster predated the overlap, so nobody had re-baked
+  since it appeared.
+  **And the re-bake gave Club Manager 46 players back:** the table had gained
+  rows since the August bake (Rodri, Kimmich, Casemiro, Caicedo, Gravenberch,
+  Tchouaméni, Szczęsny among them) that no squad carried, and the
+  nationalities map (a Round 194 one-session tool whose inputs are gone) was
+  brought level with the roster by that bake's own rule against the live
+  table: 46 names added, none unresolved, every flag present, simNationalities
+  green.
+  **Honest limits:** ages in the 2026 rows are as of autumn 2025 (Wirtz is 22
+  in a row that should say 23) and cannot be corrected without birth dates;
+  below $60M the January and summer 2026 windows are not applied, and a
+  refresh from a documented dataset, not crawling, is the way to do that.
 - **2026-09-01, Round 392. A CLUB MANAGER MATCH IS ACTIVITY, NOT A COMPLETION.**
   Found by asking which score tables were empty (they were not: the table
   list's row estimates were stale, exact counts said otherwise) and then why

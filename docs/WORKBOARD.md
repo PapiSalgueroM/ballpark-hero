@@ -21,17 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 394.
 
-**ROUND 393 CLAIMED BY THE DESKTOP LANE, 2026-09-01: THE 2026 WINDOWS REACH THE
-TABLE.** The market value table's 2026 rows are an autumn 2025 snapshot: of the 86
-players worth $60M or more, 14 have moved since (two in January, twelve this
-summer), and the repo's verified transfer overlay only ever reached Club Manager's
-roster bake, so Footle, Player Bingo, Rarity Round and search still show Rodri at
-City and Barcola at PSG. One chunk: every overlay entry plus the eight new moves,
-each two-source verified, written to the 2026 rows; the overlay extended and given
-the table's own club spellings so one list drives both the bake and the table;
-rosters re-baked; one fence that fails if a re-import rolls a verified move back.
-Next free number 394.
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -142,6 +131,17 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- THE ROSTER BAKE DOES NOT OWN TWO OF ITS LEAGUES. Found in Round 393 when a
+  re-bake dropped 35 clubs and 218 players: the 2. Bundesliga (Round 142) and
+  the Belgian Pro League (Round 143) were spliced into
+  src/data/clubManagerRosters.ts by hand and never mapped in the bake's
+  DB_TO_ENGINE table. The bake now carries any block it does not generate
+  verbatim, so a window re-bake is safe, but those two leagues no longer
+  refresh from the table (their squads are as of August 2026 and their
+  players miss the overlay). The fix is mechanical: map the 35 clubs' dataset
+  spellings into DB_TO_ENGINE (look up each carried block's players in the
+  2026 rows to learn the spelling), then delete the carried block code path.
 
 **FOUND BY ROUND 381'S VERIFICATION SWEEP, all still live, each with its
 measurement. Five agents investigated the queue and five more tried to refute
@@ -692,6 +692,14 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE 2026 TRANSFER WINDOWS REACH THE MARKET VALUE TABLE, Round 393 (desktop
+  lane, 2026-09-01). The 2026 rows were an autumn 2025 snapshot and the verified
+  overlay only reached Club Manager's bake. Every entry plus eight new moves,
+  each with two sources, written to the 2026 rows (45 updated); overlay carries
+  the table's spellings; rosters re-baked. Fence: scripts/simTransferOverlay.mjs
+  (red on 43 rows before the migration, green after), controls stale and typo.
+  Ages and the pool below $60M still wait on a documented dataset.
 
 - A CLUB MANAGER MATCH IS ACTIVITY, NOT A COMPLETION, Round 392 (desktop lane,
   2026-09-01). Every played match went through recordCompletion, so a signed in
