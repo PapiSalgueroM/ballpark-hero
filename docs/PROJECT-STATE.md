@@ -2597,6 +2597,24 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 391. EVERY TABLE AND COLUMN THE APP READS IS ASKED FOR
+  BY NAME.** Twice this week a page read columns that were not there and
+  nothing threw: Round 374's six blank clue cards on the NASCAR game (six
+  columns the table does not have, PostgREST answering 400 and the page
+  rendering the empty result), and the Rarity Round fix Round 381 refuted by
+  running it and getting the same 400. Reading a missing column is silent in
+  the browser and invisible to tsc, because the query builder is typed
+  loosely wherever a table name is dynamic. `scripts/simSchemaNames.mjs`
+  asks the database instead: every `.from('table')` chain in `src` is read
+  as code, the columns it names are collected from `select` and from every
+  filter and order call, and each table's set is probed with
+  `select=<columns>&limit=0` on the site's own anon key. A 400 names the
+  missing columns; a 404 names a table the anon role cannot see. Measured
+  today: 68 tables across 162 chains, all green; 108 chains use a dynamic
+  table name (`source.table` in the shared search layer and the like) and
+  are counted rather than probed. Control `ghost` adds a column that does
+  not exist to the market value table's set and the run goes red on it, with
+  the fourteen files that read that table named.
 - **2026-09-01, Round 390. EVERY BUG REPORT CARRIES THE ROUTE AND THE EASTERN
   DATE, AND FOOTLE'S SAYS WHICH MODE.** `game_context` on `question_reports`
   is the only context an investigation ever gets. Round 381 read the queue and

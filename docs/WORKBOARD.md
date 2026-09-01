@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 391.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 392.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -681,6 +681,15 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- EVERY TABLE AND COLUMN THE APP READS IS ASKED FOR BY NAME, Round 391 (desktop
+  lane, 2026-09-01). Round 374's blank clue cards and the Rarity fix Round
+  381 refuted were both a page reading a column the table does not have, which
+  the browser swallows and tsc cannot see. scripts/simSchemaNames.mjs reads
+  every .from('table') chain in src as code, collects the columns it names,
+  and probes each table with select=<columns>&limit=0 on the anon key: 68
+  tables, 162 chains, all green; 108 dynamic table names counted, not probed.
+  Control ghost.
 
 - EVERY BUG REPORT CARRIES THE ROUTE AND THE EASTERN DATE, AND FOOTLE'S SAYS
   WHICH MODE, Round 390 (desktop lane, 2026-09-01). The last Inbox item from
