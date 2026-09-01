@@ -2597,6 +2597,39 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 381. THE QUEUE'S DATA CLAIMS, VERIFIED.** Five parallel
+  investigations of the five remaining player reports, each handed to an
+  independent agent whose only job was to refute it. **The refutations are why
+  this was worth its cost**: two proposed fixes were wrong, one proven wrong by
+  running it (HTTP 400, a column the view does not have), and several
+  measurements were off. Acting on the first pass would have shipped a broken
+  change.
+  **Three reports were already fixed**, verified live rather than on a commit
+  message's word, and are marked resolved: rarity-round/Peacock-Farrell by Round
+  367 *72 minutes after it was filed*; missing-xi by Round 295, with the exact
+  2026-07-29 puzzle reproduced (it demanded Asensio while blanking Benzema, with
+  Asensio visible at LW); player-stock-market by Round 364, where
+  `game_completions` proves the game was 100% dead, zero completions in the 41
+  hours that build was live against 8 since.
+  **Two reports were wrong literally and right underneath**, both answered by
+  fixing copy rather than code. Player Bingo's "Played with Messi" is a club
+  overlap by design and Alvarez only ever shared an Argentina squad, but the
+  tile said three unqualified words while football-connect4 already ships
+  "(same club)"; it now reads "Messi club teammate". Footle's Easy promised "the
+  world's most famous stars" and delivers the top 80 by market value, where 12
+  of 80 are 21 or younger; the promise now matches the rule, and the pool was
+  deliberately not touched because its size feeds the daily index.
+  **Two errors of mine were caught and are corrected on the record.** The board
+  said Round 364's paged fetch was the suspect cause of the stock market report;
+  it was the fix, and the report predates the commit by four and a half hours.
+  And Round 364's commit message claimed "the game was playable rather than
+  dead, 197 completions" when those completions were almost entirely the pre
+  Round 329 game.
+  Everything still live is filed on the board with measurements: Claudio Bravo
+  refused today for "name a goalkeeper", 28 Missing XI answers that cannot be
+  submitted at all, a nondeterministic search pool, Player Bingo 28.7% stale
+  with three false positives, the Round 365 daily-puzzle fix never applied to
+  `useGame.ts`, and the 2026 World Cup present as one squad out of 48.
 - **2026-09-01, Round 380. THE OTHER FOUR VALIDATORS.** Round 379's change
   carried across NBA, NFL, MLB and NHL connect-4, completing the P0 the report
   queue turned up: one of the two players who reported a dead game named

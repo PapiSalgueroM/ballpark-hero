@@ -115,7 +115,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What are the difficulty tiers?",
-        a: "Easy is world famous stars, Hard is squad players at big clubs, Insane is obscure pros from smaller leagues. A banner shows the daily tier before your first guess.",
+        a: "Easy is the 80 most valuable players in the world right now plus the all-time greats, Hard is squad players at big clubs, Insane is obscure pros from smaller leagues. A banner shows the daily tier before your first guess. Easy goes on market value rather than fame, so a teenager who has not made his name yet can still turn up there.",
       },
       {
         q: "Can I keep playing after the daily?",

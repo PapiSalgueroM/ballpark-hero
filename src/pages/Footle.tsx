@@ -162,7 +162,16 @@ const Index = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">⚙️ Difficulty Modes</h3>
                 <ul className="space-y-1.5 text-muted-foreground">
-                  <li><span className="text-foreground font-semibold">Easy:</span> The world's most famous stars &amp; legends</li>
+                  {/* ROUND 381: this said "the world's most famous stars", and
+                      the rule is the 80 most VALUABLE players plus a list of
+                      all time greats. Value at 18 is priced potential, not
+                      fame: 12 of the current 80 are 21 or younger and the
+                      youngest is 17, which is what a player meant by reporting
+                      that an easy answer was "not a player like current". The
+                      promise is corrected rather than the pool, because
+                      changing the pool size moves the daily answer under
+                      anyone mid puzzle. */}
+                  <li><span className="text-foreground font-semibold">Easy:</span> The 80 most valuable players in the world right now, plus the all-time greats</li>
                   <li><span className="text-foreground font-semibold">Hard:</span> Squad &amp; rotation names from big clubs</li>
                   <li><span className="text-foreground font-semibold">Insane:</span> Genuinely obscure pros: second divisions, smaller leagues, deep squads</li>
                 </ul>

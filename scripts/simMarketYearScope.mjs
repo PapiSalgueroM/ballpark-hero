@@ -34,7 +34,17 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const ALL_YEAR_ALLOWLIST = {
   'src/lib/playerBingo.ts': { count: 1, why: 'club-history tiles check every season row by design' },
   'src/lib/whoAmI.ts': { count: 1, why: 'the club-history clue walks the full career' },
-  'src/lib/rarityRound.ts': { count: 6, why: 'all six are "ever" categories: prominence map, played-for-club, nationality, position, worth 100M+ ever, worth 50M+ ever' },
+  /* ROUND 381: this said 6 and the file has 1. Round 367 moved the prominence
+     map and the nationality, position and value pools onto player_peak_values,
+     leaving only the played-for-club pool here, and it did not update this
+     count. The fence was RED ON MAIN from that round until this one, which is
+     the exact "run the full board before it lands" lesson Round 346 wrote down.
+     The one that stays is deliberate and the file says why: "ever played for
+     this club" cannot come from the peak view, because that view carries only a
+     player's most recent club and would silently drop everyone who has moved
+     on. The exact count is the point of this allowlist: it catches a chain
+     being added AND one being removed. */
+  'src/lib/rarityRound.ts': { count: 1, why: 'the played-for-club pool means "ever played here", and the peak view holds only a player\'s most recent club' },
   'src/lib/fetchSoccerClubNotablePlayers.ts': { count: 2, why: 'notable names for a club include past stars; names only, no values shown' },
 };
 

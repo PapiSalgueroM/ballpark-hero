@@ -759,7 +759,17 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
     withSupport(data, {
       id: 'messi-teammate',
       kind: 'club',
-      label: 'Played with Messi',
+      /* ROUND 381: "Played with Messi" was reported as a wrong answer three
+         times, and the code was right every time. The test below is a CLUB year
+         overlap and nothing else, so Julian Alvarez fails it: he and Messi won
+         a World Cup together for Argentina and have never shared a club. A
+         player reading three unqualified words has no way to know that.
+         This repo already settled the wording elsewhere: football-connect4
+         ships "Played with Lionel Messi (same club)" and its how-to-play spells
+         out that it means the same club at the same time. Player Bingo was the
+         outlier. The tile is 9 to 10px of text so it cannot carry the long
+         form, and this is the short version of the same promise. */
+      label: 'Messi club teammate',
       icon: '🐐',
       test: (p, d) => {
         if (normalizeName(p.name) === 'lionel messi') return false;
