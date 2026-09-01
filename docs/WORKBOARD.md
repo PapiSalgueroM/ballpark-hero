@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 379.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 380.
 
 **THE ADSENSE VERDICT ARRIVED 2026-08-30 AND IT IS A REJECTION.** Anthony sent
 the console screenshots: a policy violation, "Low value content", with the
@@ -125,8 +125,22 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+**CLAIMED as Round 379 (desktop lane, 2026-09-01), soccer first.** The design is
+picked and it is option 1 sharpened: cache the ANSWER TO EACH ATTRIBUTE, not to
+each pair of them. Measured on the real board files and the real cache rather
+than argued: the 16 soccer boards hold 507 distinct row-by-column cells but only
+78 distinct attributes, and the 105 true verdicts already cached decompose into
+178 distinct player-and-attribute facts, which between them would answer 590
+cells instead of 105. THE SAME AI SPEND, 5.6 TIMES THE COVERAGE, and every new
+board reuses the facts for free.
+It costs no extra quota per guess: one AI call still answers a miss, it is just
+asked to report the two attributes separately so both are cached. The 178 facts
+already implied by today's cache can be backfilled with SQL for zero calls.
+One honest limit to carry into it: a false pair verdict cannot be decomposed,
+because it does not say WHICH attribute failed, so only the true ones backfill.
+
 - **THE CONNECT-4 VALIDATOR RUNS OUT OF QUOTA AND THE GAME DIES FOR THE DAY.
-  P0, measured in Round 378, needs a designed round rather than a patch.**
+  P0, measured in Round 378, being fixed in Round 379.**
   Two players reported it and both were right: soccer-connect-4 2026-08-30 "it
   says couldnt verify your answer every time i click", and nba-connect-4
   2026-07-21 "this game does not work at all anything you pick is wrong".
