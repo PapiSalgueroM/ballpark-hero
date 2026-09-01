@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { ALL_GAMES } from '@/data/gameRegistry';
+import { completionSlugForPath } from '@/data/completionSlugs';
 import { CheckCircle2, Circle } from 'lucide-react';
 
 const DAILY_GAMES = ALL_GAMES.filter(g => g.daily);
@@ -28,8 +29,22 @@ function getLocalCompletions(): Set<string> {
   return completed;
 }
 
-function slugFromPath(path: string): string {
-  return path.replace(/^\//, '');
+/* ROUND 376: A PATH IS NOT ALWAYS THE SLUG THE GAME RECORDS UNDER, and this
+   stripped the slash and assumed it was. Six games record under a different
+   name: the four Conquest boards as `<sport>-imperialism`, and the Quiz Board
+   under the original route name it carried before Round 305 renamed it. All
+   five are marked daily, so they appear on this list, and the box looked for
+   `conquest`
+   while the completion row said `conquest-imperialism`. Finishing the game
+   never ticked it, on any day, for anyone.
+   BOTH NAMES ARE ACCEPTED RATHER THAN SWAPPING ONE FOR THE OTHER, because the
+   set this is tested against is mixed: the signed in half holds the recorded
+   completion slugs, and the guest half is scraped out of localStorage key names
+   just above, which follow each game's own storage prefix and are not
+   guaranteed to be either one. Matching on either can fix the database side
+   without risking the local side. */
+function isDone(path: string, completed: Set<string>): boolean {
+  return completed.has(path.replace(/^\//, '')) || completed.has(completionSlugForPath(path));
 }
 
 export function DailyChecklist() {
@@ -64,7 +79,7 @@ export function DailyChecklist() {
   }, []);
 
   const completedCount = DAILY_GAMES.filter(g =>
-    completedSlugs.has(slugFromPath(g.path))
+    isDone(g.path, completedSlugs)
   ).length;
 
   return (
@@ -79,7 +94,7 @@ export function DailyChecklist() {
       </div>
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {DAILY_GAMES.map(game => {
-          const done = completedSlugs.has(slugFromPath(game.path));
+          const done = isDone(game.path, completedSlugs);
           return (
             <Link
               key={game.path}

@@ -288,8 +288,10 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 376 (desktop lane, 2026-09-01), THE SLUGS THAT NAME NO
-GAME.** Third find in a row from the same seam: a defect with no symptom.
+(Round 376, the completion slugs, SHIPPED. See Done. The recon is kept below as
+the current map of which slugs are written where.)
+
+**RECON, Round 376.** Third find in a row from the same seam: a defect with no symptom.
 SIX slugs are written into daily_completions by code that are not registry
 paths. `conquest-imperialism`, `conquest-mlb-imperialism`,
 `conquest-nba-imperialism` and `conquest-nhl-imperialism` (the registry says
@@ -522,6 +524,48 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE SLUGS THAT NAME NO GAME, Round 376 (desktop lane, 2026-09-01). Third find
+  in a row from the same seam, a defect with no symptom.
+  daily_completions.game_slug is whatever each game's own useGameCompletion call
+  passes, and SIX of those are not registry paths: the four Conquest boards
+  record as <sport>-imperialism, the Quiz Board still records as jeopardy from
+  before Round 305 renamed its route, and Guess The Club records as
+  guess-soccer-club-questions. Five are live and still writing.
+  THE OBVIOUS READING WAS WRONG, and checking it before writing code is what
+  kept this round honest. These games are NOT losing their credit.
+  game_score_caps carries caps under the SAME names the code writes, so Round
+  360's allowlist accepts them and they score and rank normally.
+  WHAT ACTUALLY BROKE is every lookup of a completion slug in the REGISTRY, and
+  all five live ones are daily: true, so both places bit. Most Played Today
+  built a path by putting a slash in front of the slug, got undefined and
+  filtered the entry out, so a trending game vanished, and if that took the list
+  under three the whole section reverted to its curated trio while looking
+  perfectly normal. That is the same silent fallback Round 361 fixed, by another
+  door. And the daily checklist tested for `conquest` while the row said
+  `conquest-imperialism`, so finishing any of those five never ticked the box.
+  MAPPED, NOT RENAMED, and the direction was the real decision. Renaming what
+  gets written would split each game's history across two slugs, would be
+  rejected by the score caps allowlist until matching rows were added, and
+  jeopardy is in LIVE_IDENTIFIERS precisely because renaming it is a migration
+  with a backfill rather than a find and replace. src/data/completionSlugs.ts is
+  the resolver. The checklist accepts EITHER name rather than swapping one for
+  the other, because its set is mixed: signed in rows carry recorded slugs and
+  guest entries are scraped out of localStorage key names.
+  simCompletionSlugs holds the SOURCE side and the LIVE TABLE against each
+  other, which is what makes it worth having rather than a restatement of the
+  map: 103 written slugs and 115 distinct recorded ones, both fully accounted
+  for, plus a dead row check and a round trip check. SLUGS_CONTROL=unmap
+  restores the bug and both sides go red independently, which also proves they
+  are independent.
+  THE FIRST DRAFT REPORTED NINE FALSE POSITIVES and would have sent someone to
+  "fix" a deliberate decision. Several games are commented out of the registry
+  on purpose: they keep their route, stay playable on a direct link and still
+  record completions, but they are meant to be absent from the menus, so Most
+  Played Today and the checklist SHOULD skip them. Withdrawn is now DERIVED from
+  the routes in App.tsx rather than hand listed, because a typed list of
+  withdrawn games is exactly the thing that goes stale and starts excusing real
+  bugs.
 
 - THE WRITES THAT WERE NEVER SENT, Round 375 (desktop lane, 2026-09-01).
   guess_nation_scores had ZERO rows while daily_completions, the sitewide

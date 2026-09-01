@@ -2597,6 +2597,42 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 376. THE SLUGS THAT NAME NO GAME.**
+  `daily_completions.game_slug` is whatever each game's own `useGameCompletion`
+  call passes, and six of those are not registry paths: the four Conquest boards
+  record as `<sport>-imperialism`, the Quiz Board still records as `jeopardy`
+  from before Round 305 renamed its route, and Guess The Club records as
+  `guess-soccer-club-questions`. Five are live and still writing.
+  **The obvious reading was wrong and was checked before any code was written.**
+  These games are not losing credit: `game_score_caps` carries caps under the
+  same names the code writes, so Round 360's allowlist accepts them and they
+  score and rank normally. The scoring pipeline agrees with itself.
+  **What broke is every lookup of a completion slug in the REGISTRY**, and all
+  five live ones are `daily: true`, so both places bit. Most Played Today built
+  a path by putting a slash in front of the slug, got undefined and filtered the
+  entry out, so a trending game vanished, and if that took the list under three
+  the whole section fell back to its curated trio while looking perfectly
+  normal, which is the same silent fallback Round 361 fixed by another door. And
+  the daily checklist looked for `conquest` while the row said
+  `conquest-imperialism`, so finishing those five never ticked the box, ever.
+  **Mapped, not renamed.** Renaming what is written would split each game's
+  history across two slugs, would be rejected by the score caps allowlist until
+  matching rows existed, and `jeopardy` is in LIVE_IDENTIFIERS precisely because
+  renaming it is a migration with a backfill. `src/data/completionSlugs.ts` is
+  the resolver; the checklist accepts either name because its set is mixed
+  (signed in rows carry recorded slugs, guest entries are scraped from
+  localStorage key names).
+  `simCompletionSlugs` holds the source side and the live table against each
+  other, which is what makes it worth having: 103 written slugs and 115 distinct
+  recorded ones, both fully accounted for. `SLUGS_CONTROL=unmap` restores the
+  bug and both sides go red independently.
+  **The first draft reported nine false positives** and would have sent someone
+  to "fix" a deliberate decision: several games are commented out of the
+  registry on purpose, keeping their route and their completions while being
+  absent from the menus, and Most Played Today should skip them. Withdrawn is
+  now DERIVED from the routes in `App.tsx` rather than hand listed, because a
+  typed list of withdrawn games is exactly what goes stale and starts excusing
+  real bugs.
 - **2026-09-01, Round 375. THE WRITES THAT WERE NEVER SENT.**
   `guess_nation_scores` had ZERO rows while `daily_completions`, the sitewide
   recorder, held eight finished games of guess-the-nation, the most recent
