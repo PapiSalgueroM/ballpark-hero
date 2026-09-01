@@ -150,10 +150,14 @@ console.log('3) The builders charge, the crowds grow, the caps hold');
   }
 
   // Crowds actually grow: same club, 0 vs 3 expansions, mean home crowd.
+  // Round 394: forty home gates, not eight. The Round 393 roster re-bake made
+  // this eight gate sample read 1.12x on three runs and 1.40x on the next,
+  // with Everton unchanged; the same lesson section 2 learned in Rounds 188
+  // and 190. The sample widens, the bar stays.
   const meanCrowd = (state, n) => {
     let sum = 0, k = 0, guard = 0;
     let ss = state;
-    while (k < n && guard < 60) {
+    while (k < n && guard < 320) {
       guard++;
       const r = playNextEntry(ss, { skipHalftime: true });
       ss = r.state;
@@ -167,8 +171,8 @@ console.log('3) The builders charge, the crowds grow, the caps hold');
   };
   const base = startCareer('Everton');
   const built = { ...startCareer('Everton'), finance: { ticketTier: 1, groundUpgrades: 3, seasonGate: 0, lastGate: null } };
-  const m0 = meanCrowd(base, 8);
-  const m3 = meanCrowd(built, 8);
+  const m0 = meanCrowd(base, 40);
+  const m3 = meanCrowd(built, 40);
   console.log(`   mean home crowd: ${Math.round(m0)} unexpanded vs ${Math.round(m3)} with three expansions`);
   if (m3 < m0 * 1.15) fail(`three expansions moved the mean crowd only ${(m3 / m0).toFixed(2)}x`);
 

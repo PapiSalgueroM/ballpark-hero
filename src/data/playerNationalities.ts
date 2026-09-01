@@ -2,7 +2,7 @@
    One map per sealed world, because a name is not a person: the 2010
    Aaron Ramsey is Welsh, the modern one is English, and a single map
    would invent one of them. Provenance, year windows and the fail-closed
-   rules live in the bake script's header. 6308 entries total. */
+   rules live in the bake script's header. 6312 entries total. */
 
 export const NATIONALITY_BY_WORLD: Record<string, Record<string, string>> = {
 now: {
@@ -1555,6 +1555,7 @@ now: {
   'Jens Odgaard': 'Denmark',
   'Jens Stage': 'Denmark',
   'Jenson Seelt': 'Netherlands',
+  'Jeppe Erenbjerg': 'Denmark',
   'Jeppe Okkels': 'Denmark',
   'Jeremiah St. Juste': 'Netherlands',
   'Jeremie Frimpong': 'Netherlands',
@@ -1676,6 +1677,7 @@ now: {
   'Jorrel Hato': 'Netherlands',
   'Josep Martínez': 'Spain',
   'Joseph Liteta': 'Zambia',
+  'Joseph Opoku': 'Ghana',
   'Joseph Paintsil': 'Ghana',
   'Joseph Rosales': 'Honduras',
   'Josh Acheampong': 'England',
@@ -2257,6 +2259,7 @@ now: {
   'Marko Livaja': 'Croatia',
   'Marko Pjaca': 'Croatia',
   'Marko Stamenić': 'New Zealand',
+  'Marley Aké': 'France',
   'Marlon Fossey': 'United States',
   'Maroan Sannadi': 'Morocco',
   'Marquinhos': 'Brazil',
@@ -2437,6 +2440,7 @@ now: {
   'Michael Keane': 'England',
   'Michael Olise': 'France',
   'Michael Zetterer': 'Germany',
+  'Michal Karbownik': 'Poland',
   'Michal Sadílek': 'Czech Republic',
   'Michal Skoras': 'Poland',
   'Michaël Cuisance': 'France',

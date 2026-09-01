@@ -14,7 +14,7 @@ an area moves; the round numbers stay for traceability.
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 40% | Points inflation stopped forward (392); the 36 affected accounts' history is an owner decision. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
-| Club Manager | 20% | Rosters re-baked with the 2026 windows (393); feature work deferred by the operating contract. |
+| Club Manager | 22% | The bake owns every league it ships (394) and rosters carry the 2026 windows (393); feature work deferred by the operating contract. |
 | Soccer Career | 10% | Per season ping is activity not completion (392); feature work deferred by the operating contract. |
 | Multiplayer foundation | 5% | Not started. |
 
@@ -2625,6 +2625,33 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 394. THE ROSTER BAKE OWNS ITS LAST TWO LEAGUES.** Round
+  393's re-bake dropped 35 clubs before it was taught to carry them, because
+  the 2. Bundesliga (Round 142) and the Belgian Pro League (Round 143) had
+  been spliced into `src/data/clubManagerRosters.ts` by hand and never
+  mapped in the bake. Their dataset spellings were learned by looking each
+  carried block's players up in the 2026 rows (VfL Wolfsburg, 1.FC Heidenheim
+  1846, RSC Anderlecht, Union Saint-Gilloise and so on), 33 are mapped in
+  `DB_TO_ENGINE`, and the five members with no usable rows (Dynamo Dresden,
+  Nürnberg, Osnabrück, Energie Cottbus, Lommel) join the known-empty list.
+  The roster is re-baked from the table: 330 clubs, 3665 players,
+  and the file carries nothing by hand. Those 35 squads now refresh from the table and take
+  the transfer overlay like every other league. The carry code path stays as
+  a safety net and reports zero. Memberships are the ones Rounds 142 and 143
+  shipped; they were not re-verified here.
+  **The full board after Round 393 was 171 of 173 green, and both reds were
+  roster fences reacting to the re-bake, handled here by their own written
+  rules.** `simFinance` measured Everton's crowd growth over eight home gates
+  and read 1.12x on three runs and 1.40x on the next with Everton unchanged;
+  the sample is forty gates now, the lesson its own section 2 learned in
+  Rounds 188 and 190, and it reads 1.34x. `simBoardObjectives` found AC
+  Milan's board asking for the Europa League: Leão's move to Galatasaray took
+  Milan from 2.1 to 2.7 rating points behind Inter's XI, past the 2.5 title
+  gap measured on 2026-08-17. The gap table was re-measured on the new roster
+  as that constant's comment asks: the widest gap among the giants the rank
+  rule does not already cover is now Milan's 2.73, the nearest genuinely
+  outgunned club is Anderlecht at 3.09, and the constant moved from 2.5 to
+  2.9 to split the new clusters. The rule stays.
 - **2026-09-01, Round 393. THE 2026 TRANSFER WINDOWS REACH THE MARKET VALUE
   TABLE.** The table's 2026 rows are an autumn 2025 snapshot: Semenyo and
   Guéhi, who moved in January 2026, still sat at Bournemouth and Palace in

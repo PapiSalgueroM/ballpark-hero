@@ -7089,8 +7089,17 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
    7.7 behind PSG, Aberdeen 13.7). 2.5 splits those clusters. A club inside
    the gap demands the title no matter what its absolute tier says. If a
    roster re-bake moves the clusters, re-measure and retune this number, do
-   not delete the rule. */
-const TITLE_GAP = 2.5;
+   not delete the rule.
+   Round 394, re-measured on 2026-09-01 after the Round 393 re-bake (the 2026
+   windows applied): Leão's move to Galatasaray took AC Milan from 2.1 to
+   2.73 behind Inter, the widest gap among the clubs the rank rule does not
+   already cover (Feyenoord 2.18, Benfica 1.09, Union Saint-Gilloise 1.09,
+   Chelsea 0.45, Manchester City 0.27), while the nearest genuinely outgunned
+   club is Anderlecht at 3.09, then Beşiktaş 4.82 and Trabzonspor 5.09. 2.9
+   splits the new clusters. The measurement script is the method: XI is the
+   mean of the top eleven ratings padded with 60, gap is the distance to the
+   league's best XI. */
+const TITLE_GAP = 2.9;
 
 /** The XI strength chain for a world: the era bake when historic, else the
  * same chain clubDefMap ranks with. Round 146 threading. Round 154: the

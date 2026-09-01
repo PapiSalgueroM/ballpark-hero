@@ -194,6 +194,23 @@ const DB_TO_ENGINE = {
   'Slaven Belupo Koprivnica': 'Slaven Belupo', 'NK Istra 1961': 'Istra 1961',
   'NK Lokomotiva Zagreb': 'Lokomotiva Zagreb', 'HNK Gorica': 'Gorica',
   'NK Rudes': 'Rudeš',
+  // Round 394: the two leagues Rounds 142 and 143 spliced into the roster by
+  // hand, mapped at last so the bake owns them. Memberships are the ones
+  // those rounds shipped; the dataset spellings were learned by looking each
+  // carried block's players up in the 2026 rows (Round 393).
+  // 2. Bundesliga 2026-27
+  'VfL Wolfsburg': 'Wolfsburg', '1.FC Heidenheim 1846': 'Heidenheim', 'FC St. Pauli': 'St. Pauli',
+  'VfL Bochum': 'Bochum', 'Hertha BSC': 'Hertha BSC', '1.FC Magdeburg': 'Magdeburg',
+  '1.FC Kaiserslautern': 'Kaiserslautern', 'Holstein Kiel': 'Holstein Kiel', 'Hannover 96': 'Hannover 96',
+  'Eintracht Braunschweig': 'Braunschweig', 'SpVgg Greuther Fürth': 'Greuther Fürth',
+  'SV Darmstadt 98': 'Darmstadt', 'Arminia Bielefeld': 'Arminia Bielefeld', 'Karlsruher SC': 'Karlsruhe',
+  // Belgian Pro League 2026-27 (Club Brugge is the UCL flavor entry below)
+  'RSC Anderlecht': 'Anderlecht', 'Union Saint-Gilloise': 'Union Saint-Gilloise', 'KRC Genk': 'Genk',
+  'KAA Gent': 'Gent', 'Royal Antwerp FC': 'Antwerp', 'Standard Liège': 'Standard Liège',
+  'KV Mechelen': 'Mechelen', 'KVC Westerlo': 'Westerlo', 'Sint-Truidense VV': 'Sint-Truiden',
+  'Oud-Heverlee Leuven': 'OH Leuven', 'Cercle Brugge': 'Cercle Brugge', 'RAAL La Louvière': 'La Louvière',
+  'SK Beveren': 'Beveren', 'KV Kortrijk': 'Kortrijk', 'Zulte Waregem': 'Zulte Waregem',
+  'Royal Charleroi SC': 'Charleroi',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };
@@ -213,7 +230,9 @@ const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
   // Round 189: verified 2026-27 HNL members with zero usable rows. Istra
   // 1961's single 2025 row (Moris Valincic) is superseded by his own 2026
   // row at Dinamo Zagreb, which empties them honestly.
-  'Varaždin', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš', 'Istra 1961'];
+  'Varaždin', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš', 'Istra 1961',
+  // Round 394: 2. Bundesliga and Belgian members with no 2025/2026 rows.
+  'Dynamo Dresden', 'Nürnberg', 'Osnabrück', 'Energie Cottbus', 'Lommel'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
