@@ -2597,6 +2597,43 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 378. THE LOCKED REPORT QUEUE.** `public.user_roles` had
+  ZERO rows, so nobody was an admin. `AdminReports.checkAuth` queries it for
+  `role='admin'`, finds nothing and calls `signOut()`, so **Anthony signed in
+  and was thrown straight back out** and could not read the bug report queue at
+  all. From outside it looks like a rejected password rather than a missing row.
+  Behind it: **29 reports, 15 unresolved, the newest that same day.** Every
+  `has_role` based RLS policy was dead for the same reason.
+  There was no self repair, which is why it got a fence: the only SELECT policy
+  on `user_roles` is `has_role(auth.uid(),'admin')`, so an empty table cannot be
+  read and no first admin can ever be made through the app. Granted server side,
+  resolving the account from CLAUDE.md to its `auth.users` id rather than typing
+  a uuid, and verified afterwards **through RLS as that user's own role**: 1
+  admin row, all 29 reports readable.
+  The advisor's other finding closed in the same round: `has_role` was callable
+  by anon over REST, and with `profiles` publicly readable it let anyone
+  enumerate accounts and pick out the admin. **Both tempting fixes are wrong and
+  both were tested in a rolled back transaction rather than reasoned about.**
+  Revoking from `anon` does nothing (the grant is to PUBLIC). Revoking from
+  PUBLIC breaks the site: policy functions run as the calling role, so anonymous
+  reads on `tennis_scores` failed and the owner lost the access just restored.
+  The working shape is revoke from PUBLIC, grant to `authenticated`, and scope
+  down the one policy written TO public, which `pg_policies` proved was the only
+  one on the database.
+  `simAdminAccess` holds an admin existing, anon being unable to call
+  `has_role`, and anonymous reads still working. That third section guards the
+  FIX rather than the bug and is the one that catches the wrong version.
+  A small aggregate-only `admin_exists()` was added so the fence can see a state
+  that is invisible from outside by design; it counts holders of a role and can
+  never name one, which is exactly the distinction that made `has_role` worth
+  closing.
+  **What the queue contained became the next P0**, filed with measurements: the
+  connect-4 AI validator exhausts its free daily quota and then refuses every
+  answer for the rest of the day while telling players to try again. Measured at
+  42% refusals in a first burst and 14 of 14 once the quota was gone, with a 3
+  second retry recovering none. The diagnosis itself consumed a real share of a
+  day's quota, which is recorded on the board so the next session measures with
+  a handful of calls rather than another forty.
 - **2026-09-01, Round 377. THE BADGE NOBODY CAN WIN.** `daily_badges` was one
   of the empty tables from the Round 375 audit, and it is empty for a reason.
   Three faults in one small feature:

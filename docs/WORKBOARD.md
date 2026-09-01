@@ -125,6 +125,61 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **THE CONNECT-4 VALIDATOR RUNS OUT OF QUOTA AND THE GAME DIES FOR THE DAY.
+  P0, measured in Round 378, needs a designed round rather than a patch.**
+  Two players reported it and both were right: soccer-connect-4 2026-08-30 "it
+  says couldnt verify your answer every time i click", and nba-connect-4
+  2026-07-21 "this game does not work at all anything you pick is wrong".
+  MEASURED against the live function, which is why this is not guesswork:
+    * A first burst of 12 distinct guesses: 7 verified, 5 refused. 42 percent.
+    * After roughly 35 more calls: 14 of 14 refused, and a retry 3 seconds later
+      recovered NONE of them. So it is not a per minute throttle that refills,
+      it is the free Gemini DAILY quota being exhausted. Once it is gone, every
+      guess in every connect-4 game is refused until the quota resets.
+    * The cache works and repeats are free. Only NEW player-plus-cell
+      combinations cost quota, which is most of real play.
+  WHY IT LOOKS HEALTHY FROM THE INSIDE: failing closed is correct and is the
+  July 2026 P1 rule, so the function is behaving exactly as designed. The
+  message it returns, "Couldn't verify your answer right now, please try again",
+  is TRUE for a momentary blip and FALSE once the day's quota is gone, and the
+  player keeps clicking into a wall being told to keep clicking.
+  RETRYING HARDER IS NOT THE FIX and was measured not to work. The three
+  candidates worth designing between:
+    1. WARM THE CACHE OFFLINE. ai_validation_cache already exists and is
+       consulted first. A generator spends the daily quota overnight on the
+       plausible player-by-cell combinations for the current boards, so live
+       play is served from Postgres. Highest leverage, uses machinery that is
+       already there, and matches the committed-data pattern used in Rounds 372
+       and 374.
+    2. ANSWER FROM OUR OWN DATA. The site holds 141,916 market value rows plus
+       career and world cup tables, and many attributes ("Played for Barcelona",
+       "Won the Champions League") are answerable in Postgres. Bigger, and it
+       puts the rule in two places, which is the drift this repo keeps paying
+       for. Would need the derive-then-verify treatment.
+    3. TELL THE TRUTH WHEN THE QUOTA IS GONE. Smallest and worth doing whatever
+       else happens: distinguish a momentary failure from an exhausted day, and
+       stop inviting a retry that cannot succeed.
+  HONEST NOTE FOR WHOEVER PICKS THIS UP: the Round 378 diagnosis itself consumed
+  a real share of one day's quota. Measure it with a handful of calls, not
+  another 40, and prefer reading the cache table over hammering the function.
+
+- OTHER REPORTS FROM THE NEWLY UNLOCKED QUEUE, 15 unresolved as of 2026-09-01.
+  Data correctness, smaller than the validator, each needs verifying before
+  believing since a report is a claim and not a finding:
+    * player-bingo x3 (2026-08-30/31): Julian Alvarez rejected for "played with
+      Messi". They played together for Argentina, so if the rule is club-only it
+      should say so on the card, and if it is not then the data is wrong.
+      Also "world cup, age and transfers needed", so the pool may be stale.
+    * rarity-round (2026-08-31): Peacock-Farrell not counted as a goalkeeper.
+    * player-stock-market (2026-08-30): "Says it isn't connected". Round 364
+      made this pull about 39,000 rows, so suspect the paged fetch.
+    * missing-xi (2026-07-29): "LW was literally the player".
+    * footle (2026-08-26): answer "not a player like current".
+    * higher-lower-transfers, world-xi, missing-xi x2: older, vaguer, verify or
+      close.
+  One is not a bug at all and is worth reading: a player from Australia writing
+  in to say the soccer career and the manager game are great.
+
 (CLAIMED: the duplicate FAQ schema is now Round 373, desktop lane, below.)
 
 - PER PAGE LOAD FETCH COSTS, filed with measurements during the Round 370 Disk
@@ -288,8 +343,10 @@ workable pieces. Bugs still outrank these; within the list his order rules.**
 Claimed 2026-08-28. This lane takes the work that needs what only this machine has: the
 Supabase MCP, the Lovable MCP, and cheap long local browser runs.
 
-**IN FLIGHT: next: Round 378 (desktop lane, 2026-09-01), THE LOCKED REPORT
-QUEUE, AND WHAT IS IN IT.** Found by running get_advisors, which had not been
+(Round 378, the locked report queue, SHIPPED. See Done. The validator finding it
+turned up is in the Inbox as the next P0.)
+
+**RECON, Round 378.** Found by running get_advisors, which had not been
 run in this stretch and is the security half of Anthony's own P0 order.
 THE LOCK. public.user_roles has ZERO rows. AdminReports.checkAuth queries it for
 role='admin', finds nothing, and calls signOut() before redirecting to
@@ -591,6 +648,47 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE LOCKED REPORT QUEUE, Round 378 (desktop lane, 2026-09-01). Found by
+  running get_advisors, which had not been run in this stretch and is the
+  security half of Anthony's own P0 order.
+  public.user_roles had ZERO rows, so nobody on the site was an admin.
+  AdminReports.checkAuth queries it for role='admin', finds nothing and calls
+  signOut() before redirecting, so ANTHONY SIGNED IN AND WAS THROWN STRAIGHT
+  BACK OUT. From the outside that looks like a rejected password rather than a
+  missing row. Behind it sat 29 player bug reports, 15 unresolved, the newest
+  the same day. Every has_role based RLS policy was dead for the same reason.
+  THERE WAS NO SELF REPAIR, which is why this got a fence and not just a fix:
+  the only SELECT policy on user_roles is has_role(auth.uid(),'admin'), so with
+  the table empty nobody could read it and nobody could ever become the first
+  admin through the app. The grant had to be made server side. It resolves the
+  account from CLAUDE.md (amsalguero10@icloud.com) to its auth.users id rather
+  than typing a uuid. Verified afterwards THROUGH RLS as that user's own role: 1
+  admin row visible, all 29 reports readable.
+  THE ADVISOR'S SECOND FINDING, closed in the same round: has_role was callable
+  by anon over /rest/v1/rpc/has_role. It grants nothing, but it answers "is this
+  account an admin" and profiles is publicly readable with user_id, so the site
+  could be enumerated and the admin picked out.
+  BOTH WRONG FIXES WERE TESTED INSIDE A ROLLED BACK TRANSACTION RATHER THAN
+  REASONED ABOUT, and both were wrong in different ways. Revoking from `anon`
+  alone does NOTHING, because the grant is to PUBLIC. Revoking from PUBLIC alone
+  BREAKS THE SITE: policy functions run as the calling role, so anonymous reads
+  on tennis_scores started failing with "permission denied for function
+  has_role" and the owner lost the access this same round had just restored.
+  The working shape is revoke from PUBLIC, grant to authenticated, and scope the
+  one policy written TO public down to authenticated. A pg_policies query proved
+  tennis_scores held the only such policy on the whole database.
+  simAdminAccess holds all three: an admin exists and has_role agrees, anon
+  cannot execute has_role, and ordinary anonymous reads still work. That third
+  section is a guard on the FIX rather than the bug, and it is the one that
+  would have caught the tempting wrong version. ADMIN_CONTROL=norole asks about
+  a role nobody holds and section 1 goes red. A small aggregate-only
+  admin_exists() was added for it, because "the admin table is empty" is
+  invisible from outside by design; it counts holders of a role and can never
+  name one, which is exactly the distinction that made has_role worth closing.
+  WHAT IS IN THE QUEUE went on the Inbox rather than being crammed in here, and
+  one item became the next round: two players report connect-4 refusing every
+  answer.
 
 - THE BADGE NOBODY CAN WIN, Round 377 (desktop lane, 2026-09-01). daily_badges
   was one of the empty tables from the Round 375 audit, and it was empty for a
