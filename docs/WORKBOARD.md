@@ -19,7 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 384.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 385.
+
+**ROUND 384 CLAIMED BY THE DESKTOP LANE, 2026-09-01: Footle's daily answer
+comes from the file, not the database.** The Inbox item from the Round 381
+sweep. Measured before writing a line: the live pool is 1,507 players to the
+file's 748, the insane tier 1,200 to 326, today's answer is Ben Seghir from
+the file against Savinho from the live pool, and all 30 of the next 30 days
+differ. A real hook test under vitest (the wiring is the defect, so the wiring
+is what gets rendered) with a sim wrapper carrying a freeze control, and
+simDailyPuzzleContract widened from useState names to anything that is not a
+module level reference, which is the shape that hid this one. next: Round 384
+(desktop lane).
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -184,7 +195,7 @@ proven wrong by running it. Read the verdict before acting on any of these.**
   `simMarketYearScope.mjs` passes on this file, because it asks "is the query
   year-scoped" and not "does it keep the newest row".
 
-- **THE ROUND 365 DAILY-PUZZLE FIX WAS NEVER APPLIED TO `useGame.ts`.**
+- **CLAIMED, Round 384 (desktop lane, 2026-09-01).** **THE ROUND 365 DAILY-PUZZLE FIX WAS NEVER APPLIED TO `useGame.ts`.**
   `useDailyPuzzle` deliberately leaves `puzzles` out of its selection memo and
   expects the real selection to come through `supabasePuzzle`; Round 365 wired
   that into `useCareerGame`, `useShirtNumber`, `useGuessTransferValue` and
