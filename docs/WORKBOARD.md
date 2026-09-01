@@ -19,7 +19,19 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 392.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 393.
+
+**ROUND 392 CLAIMED BY THE DESKTOP LANE, 2026-09-01: A CLUB MANAGER MATCH IS
+ACTIVITY, NOT A COMPLETION.** Measured today: club-manager wrote 10,254
+completion rows from 83 players (123 per player), and because every match
+goes through recordCompletion, a signed in player's running season score is
+added to their points after EVERY match. The top of the points table holds
+80,246 of its 87,800 from 1,586 Club Manager rows. Round 301 moved the other
+eight sims to recordActivity for exactly this and its own comment believed
+Club Manager only fired at season end, which stopped being true in Round 157.
+The match and quick sim pings become activity, the finished season stays the
+completion, Soccer Career's per season ping goes the same way, and a vitest
+fence renders the real hook to prove the shape. Next free number 393.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
