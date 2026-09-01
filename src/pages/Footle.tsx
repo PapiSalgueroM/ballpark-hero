@@ -361,7 +361,10 @@ const Index = () => {
         <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="footle" gameContext={{ targetPlayer: targetPlayer?.name, difficulty }} />
+          {/* Round 390: the mode and the tier that mode actually used. The old
+              `difficulty` was the unlimited selector, which reads "easy" on
+              every daily report ever filed. */}
+          <ReportQuestion gameType="footle" gameContext={{ mode, tier: mode === 'daily' ? dailyTier : difficulty, targetPlayer: targetPlayer?.name }} />
         </div>
 
         {/* Game Navigation */}

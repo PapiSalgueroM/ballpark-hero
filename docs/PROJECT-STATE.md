@@ -2597,6 +2597,26 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 390. EVERY BUG REPORT CARRIES THE ROUTE AND THE EASTERN
+  DATE, AND FOOTLE'S SAYS WHICH MODE.** `game_context` on `question_reports`
+  is the only context an investigation ever gets. Round 381 read the queue and
+  found Footle sending `difficulty`, the unlimited mode selector, which reads
+  "easy" for every daily session ever reported (an insane one included), and
+  the inventory measured today says 27 of the 75 report buttons send no
+  context at all. `ReportQuestion` now builds the context itself from
+  `window.location.pathname` and `getTodayET()` and spreads the page's own
+  fields over it, on both delivery paths (the relay function and the direct
+  insert), so a daily report can be re-run for the day it was filed whatever
+  the page sent. Footle sends its mode, the tier that mode actually used
+  (the daily tier or the unlimited selector) and the target.
+  **The fence is `scripts/simReportContext.mjs`**: the component's context
+  read as code (comments and strings stripped) with the path, the date, the
+  spread and both sends; Footle's element with mode and tier and no
+  `difficulty` key (the word may still appear inside the tier expression,
+  which the first draft of the check got wrong); and the inventory printed
+  rather than failed, 75 buttons across 146 pages, 27 with no page context.
+  Controls `nopath` and `footle`.
+  tsc zero, build green, simReportContext green with both controls red.
 - **2026-09-01, Round 389. THE 2026 WORLD CUP, ALL 48 SQUADS, AND THE 2014 AND
   2018 DUPLICATES.** `world_cup_players` held one 2026 squad out of 48 (Spain,
   Round 83, with placeholder numbers), so any 2026 debutant failed Player

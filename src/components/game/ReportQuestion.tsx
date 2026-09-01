@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import { getTodayET } from '@/lib/dateUtils';
 
 interface ReportQuestionProps {
   gameType: string;
@@ -33,13 +34,22 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
     setStatus('loading');
     try {
       const description = [reason, details].filter(Boolean).join(': ');
+      /* Round 390: game_context is the only context an investigation ever
+         gets, and most pages send a field or two at best. The route and the
+         Eastern date go on every report from here, so a daily can be re-run
+         for the day it was reported; a page's own fields come last and win. */
+      const context: Record<string, unknown> = {
+        path: window.location.pathname,
+        date: getTodayET(),
+        ...gameContext,
+      };
       // Preferred path: the report-relay edge function stores the report AND
       // emails it to the owner's inbox. If the function is unreachable, fall
       // back to the direct table insert so no report is ever lost.
       let delivered = false;
       try {
         const { data, error: fnError } = await supabase.functions.invoke('report-relay', {
-          body: { game_type: gameType, game_context: gameContext, description },
+          body: { game_type: gameType, game_context: context, description },
         });
         delivered = !fnError && (data as { ok?: boolean } | null)?.ok !== false;
       } catch {
@@ -48,7 +58,7 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
       if (!delivered) {
         const { error } = await supabase.from('question_reports' as any).insert({
           game_type: gameType,
-          game_context: gameContext,
+          game_context: context,
           description,
         } as any);
         if (error) throw error;

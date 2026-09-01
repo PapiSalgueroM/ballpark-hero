@@ -21,15 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 391.
 
-**ROUND 390 CLAIMED BY THE DESKTOP LANE, 2026-09-01: every bug report carries
-the route and the Eastern date, and Footle's says which mode.** The last
-Inbox item from the Round 381 sweep. game_context is the only context a
-future investigation gets, and Footle's carried a field that reads "easy"
-for every daily session ever reported. ReportQuestion now adds the path and
-the ET date to whatever a page sends, so a daily can be re-run; Footle sends
-its mode, the tier that mode actually used, and the target. A fence reads
-the component as code. next: Round 390 (desktop lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -145,13 +136,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 measurement. Five agents investigated the queue and five more tried to refute
 them, and the refutations mattered: two proposed fixes were wrong and one was
 proven wrong by running it. Read the verdict before acting on any of these.**
-
-- **CLAIMED, Round 390 (desktop lane, 2026-09-01).** **THE BUG REPORT FORM RECORDS A FIELD THAT CARRIES NO INFORMATION.**
-  `Footle.tsx` sends `difficulty` in `game_context`, but that is the unlimited
-  mode selector, which `changeDifficulty` returns early on in daily mode. It
-  reads "easy" for every daily session ever reported, including an insane one.
-  Worth auditing what every game puts in `game_context`, since this is the only
-  context a future investigation gets.
 
 **SHIPPED. Soccer as Round 379, the other four as Round 380. All five verified
 live with the quota spent. See Done.** The design was
@@ -697,6 +681,15 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- EVERY BUG REPORT CARRIES THE ROUTE AND THE EASTERN DATE, AND FOOTLE'S SAYS
+  WHICH MODE, Round 390 (desktop lane, 2026-09-01). The last Inbox item from
+  the Round 381 sweep. ReportQuestion builds the context from the path and
+  getTodayET() and spreads the page's fields over it on both delivery paths;
+  27 of the 75 report buttons sent nothing at all and now carry both. Footle
+  sends mode, the tier that mode used, and the target instead of the
+  unlimited selector. Fence: scripts/simReportContext.mjs with nopath and
+  footle controls.
 
 - THE 2026 WORLD CUP, ALL 48 SQUADS, AND THE 2014 AND 2018 DUPLICATES, Round
   389 (desktop lane, 2026-09-01). world_cup_players held one 2026 squad; now
