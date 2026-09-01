@@ -331,72 +331,48 @@ console.log('2) Static: hand written copy in src');
     }
   })(path.join(ROOT, 'src'));
 
-  /* ROUND 335: THE OWNER IS ALLOWED TO SPEAK FOR HIMSELF, AND ONLY HIMSELF.
-   *
-   * Round 346 shipped the maker note, Anthony's own first person hello on the
-   * home page, written by him and shipped at his request. This scan flagged it,
-   * because "Anthony" is also a surname in the roster set, so his own sentence
-   * about his own site read exactly like words put in a footballer's mouth.
-   *
-   * The rule this harness enforces protects THIRD PARTIES: never invent words
-   * or conduct for a real person who did not say or do them. It cannot sensibly
-   * protect a man from a sentence he wrote about himself, so the owner's own
-   * voice file is exempt, and the exemption is drawn as tightly as it can be:
-   *   - it applies to that one file, not to the site;
-   *   - it applies only when the ONLY real name on the line is the owner's own,
-   *     so a footballer named in his note still fails there like anywhere else;
-   *   - the owner's name anywhere else in src still fails, so nobody can smuggle
-   *     an invented quote in behind his first name.
-   * Section 3b below plants a real player's quote inside the exempt file and
-   * requires it to fail, which is what stops this being a back door. */
-  const OWNER_VOICE = /src[/\\]components[/\\]home[/\\]MakerNote\.tsx$/;
-  const OWNER_NAME = 'anthony';
-  const ownersOwnSentence = (file, line) => {
-    if (!OWNER_VOICE.test(file)) return false;
-    const names = namesIn(line);
-    return names.length === 1 && names[0].toLowerCase() === OWNER_NAME;
-  };
-
+  /* ROUND 382: THE OWNER EXEMPTION IS GONE, BECAUSE WHAT IT EXISTED FOR IS
+     GONE, AND REMOVING IT MAKES THIS HARNESS STRICTER RATHER THAN LOOSER.
+     Round 335 carved out src/components/home/MakerNote.tsx so the owner could
+     write a first person hello on the home page: this scan flagged it because
+     "Anthony" is also a surname in the roster set, so his own sentence about
+     his own site read exactly like words put in a footballer's mouth.
+     In Round 382 he asked for that note off the home page and without his name
+     on it. It now lives on /about in the first person with no name, so the
+     false positive that needed excusing does not occur, and his name appears
+     nowhere in src at all. An exemption kept past the thing it excused is a
+     hole waiting for someone to find it, and this one pointed at a file that no
+     longer exists. The rule it always protected is unchanged and now has no
+     carve-out: never put invented words or conduct on a real person. */
   const bad = [];
   for (const f of files) {
     const txt = fs.readFileSync(f, 'utf8');
     txt.split('\n').forEach((ln, i) => {
       const v = violation(ln, true);
-      if (v && !ownersOwnSentence(f, ln)) bad.push({ f: f.replace(ROOT + '/', ''), i: i + 1, v, ln: ln.trim().slice(0, 130) });
+      if (v) bad.push({ f: f.replace(ROOT + '/', ''), i: i + 1, v, ln: ln.trim().slice(0, 130) });
     });
   }
   console.log(`   scanned ${files.length} files, ${bad.length} offending lines`);
   for (const b of bad.slice(0, 15)) console.error(`     ${b.f}:${b.i} ${b.v}\n       ${b.ln}`);
   if (bad.length > 0) fail(`${bad.length} source lines put invented words or conduct on a real player`);
 
-  /* 2b. The owner exemption is not a back door, proven rather than asserted.
-     Three planted lines, judged against the exempt file itself: his own
-     sentence passes, a footballer quoted in his file fails, and his own words
-     moved to any other file fail. If the first stops passing the exemption is
-     dead weight; if either of the others stops failing, it is a hole. */
-  const OWNER_FILE = path.join(ROOT, 'src/components/home/MakerNote.tsx');
-  const OTHER_FILE = path.join(ROOT, 'src/pages/Index.tsx');
-  const ownLine = "Hey, I'm Anthony. DoUKnowBall is my first ever coding project, an independent site";
-  /* The planted player line is deliberately the SAME SHAPE that caught the
-     maker note, a real name handing over to a first person sentence, with the
-     person swapped. An earlier draft planted 'Mohamed Salah told me: "..."',
-     which the strict source rule ignores by design (the name sits outside the
-     quoted run, so a data row like { name: "..." } cannot false positive), so
-     the probe proved nothing about the exemption and said so. */
-  const playerLine = "Hey, I'm Mohamed Salah. DoUKnowBall is my first ever coding project, an independent site";
+  /* 2b. THE SCAN STILL HAS TEETH WITHOUT THE EXEMPTION, proven rather than
+     asserted. The probe that used to prove the carve-out was not a back door
+     went with the carve-out, and it is replaced by the half that still means
+     something: the SHAPE that started all of this must still be caught,
+     wherever it appears. A real name handing over to a first person sentence
+     is the exact form that flagged the maker note in Round 335, and it must
+     fail now in any file, including the two that used to be special. */
   const probes = [
-    ['the owner\'s own sentence in his own file', OWNER_FILE, ownLine, false],
-    ['a real player quoted inside the owner\'s file', OWNER_FILE, playerLine, true],
-    ['the owner\'s sentence moved to another file', OTHER_FILE, ownLine, true],
+    ['a real player speaking in the first person, in a page file', path.join(ROOT, 'src/pages/Index.tsx')],
+    ['the same line in what used to be the exempt directory', path.join(ROOT, 'src/components/home/PollOfTheDay.tsx')],
   ];
-  for (const [label, file, line, shouldFlag] of probes) {
-    const flagged = !!violation(line, true) && !ownersOwnSentence(file, line);
-    console.log(`   ${flagged ? 'flags' : 'passes'}: ${label}`);
-    if (flagged !== shouldFlag) {
-      fail(shouldFlag
-        ? `the owner exemption is a back door: ${label} was allowed through`
-        : `the owner exemption is dead: ${label} is still flagged`);
-    }
+  const playerLine = "Hey, I'm Mohamed Salah. DoUKnowBall is my first ever coding project, an independent site";
+  for (const [label, file] of probes) {
+    void file;
+    const flagged = !!violation(playerLine, true);
+    console.log(`   ${flagged ? 'flags' : 'PASSES'}: ${label}`);
+    if (!flagged) fail(`the scan no longer catches a real player speaking in the first person: ${label}`);
   }
 }
 

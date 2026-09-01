@@ -58,6 +58,24 @@ const About = () => {
           </p>
         </div>
 
+        {/* ROUND 382: the maker's note, moved off the home page on the owner's
+            instruction and stripped of his name. It was a dismissible card
+            above the search bar from Round 346 (his own idea then); he asked
+            for it "in one the small like tabs on the bottom like near the
+            privacy policy", and About is the first link in that footer row.
+            Kept in the first person, because the sincerity is the whole point
+            of it and that is what he wrote it for. */}
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">A note from the maker</h2>
+          <p>
+            Hey, thanks for checking out my site. DoUKnowBall is my first ever coding project,
+            an independent site I build in my free time. I'm constantly working on it, fact
+            checking everything and adding new games, so if something looks off, tell me with
+            the Report a bug button at the bottom of any page and I'll get on it. Have a
+            blessed day.
+          </p>
+        </div>
+
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Say hi</h2>
           <p>

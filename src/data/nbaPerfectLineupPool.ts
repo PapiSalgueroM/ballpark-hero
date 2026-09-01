@@ -8,7 +8,7 @@ export interface NbaPoolPlayer {
   rating: number; // rough peak rating 0..99
 }
 
-// Curated pool of notable players across eras (authored with Anthony's OK).
+// Curated pool of notable players across eras (authored with the owner's OK).
 // Team = the franchise the player is most associated with.
 export const NBA_POOL: NbaPoolPlayer[] = [
   // PG

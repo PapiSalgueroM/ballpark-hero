@@ -776,6 +776,40 @@ Standing claims:
 
 ## Done
 
+- THE MAKER NOTE MOVES AND LOSES HIS NAME, Round 382 (desktop lane,
+  2026-09-01). His request, in his words: "the note from the maker shouldnt say
+  my name also it shouldnt pop up there I would rather you put it in one the
+  small like tabs on the bottom like near the privacy policy". Done exactly:
+  the dismissible card is gone from the home page, the note now lives on /about
+  under its own heading, and About is the first link in that small footer row
+  next to Privacy Policy. It keeps the first person, because the sincerity is
+  the entire point of it and that is what he wrote it for. Round 346 put it on
+  the home page and that was his idea then; changing his mind about his own
+  voice on his own site is his call and needs no justification.
+  HIS NAME IS NOW GONE FROM `src` ENTIRELY, not just from the note. It was also
+  in a Club Manager form placeholder that players could see ("Real Anthony"),
+  in a WhoAmI code comment, in three data file headers, and in an HTML comment
+  in `index.html` that the prerenderer copies into EVERY page, so it was
+  shipping on 142 documents. All genericised. Real footballers named Anthony
+  are untouched, obviously.
+  THE HARNESS EXEMPTION WENT WITH IT, and removing it makes simNoInventedQuotes
+  STRICTER rather than looser. Round 335 carved out MakerNote.tsx because
+  "Anthony" is a surname in the roster set, so his own sentence about his own
+  site read like words put in a footballer's mouth. That false positive cannot
+  occur any more, and an exemption kept past the thing it excused is a hole
+  waiting to be found. Its back-door probe went too and is replaced by the half
+  that still means something: a real name handing over to a first person
+  sentence must still fail, in any file, including the two that used to be
+  special.
+  The lastmod ledger behaved exactly as designed through this: the comment
+  change rewrote 107 snapshots and moved ZERO dates, because the fingerprint
+  covers readable words and links and deliberately not markup. Only /about and
+  /footle re-dated, which are the two pages whose copy actually changed.
+  ONE FLAKE WORTH FILING: simPrerenderBoot went red once on
+  /overrated-underrated with 11 styled nodes and green on re-run with 184. That
+  is a slow paint, not a defect, but a fence that fails at random teaches people
+  to re-run it rather than read it, so its wait condition wants tightening.
+
 - THE QUEUE'S DATA CLAIMS, VERIFIED, Round 381 (desktop lane, 2026-09-01). Five
   parallel investigations of the five remaining player reports, each then handed
   to an independent agent whose only job was to REFUTE it. The refutations are

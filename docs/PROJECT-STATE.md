@@ -2597,6 +2597,29 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 382. THE MAKER NOTE MOVES AND LOSES HIS NAME.** His
+  request, verbatim: *"the note from the maker shouldnt say my name also it
+  shouldnt pop up there I would rather you put it in one the small like tabs on
+  the bottom like near the privacy policy"*. The card is gone from the home
+  page; the note lives on `/about` under its own heading, and About is the first
+  link in that small footer row. It keeps the first person, because the
+  sincerity is the point. Round 346 put it on the home page at his request;
+  changing his mind about his own voice is his call.
+  **His name is now gone from `src` entirely.** It was also a Club Manager form
+  placeholder players could see, a WhoAmI comment, three data file headers, and
+  an HTML comment in `index.html` that the prerenderer copies into every page,
+  so it was shipping on 142 documents.
+  **The harness exemption went with it, and that makes the fence stricter.**
+  Round 335 carved out `MakerNote.tsx` because "Anthony" is a surname in the
+  roster set. That false positive cannot occur now, and an exemption kept past
+  the thing it excused is a hole waiting to be found. Its back-door probe is
+  replaced by the half that still means something: a real name handing over to a
+  first person sentence must fail in any file.
+  The lastmod ledger behaved exactly as designed: 107 snapshots changed and
+  **zero dates moved**, because the fingerprint covers readable words and links
+  and deliberately not markup. Only `/about` and `/footle` re-dated.
+  Filed: `simPrerenderBoot` went red once (11 styled nodes) and green on re-run
+  (184). A slow paint, but its wait condition wants tightening.
 - **2026-09-01, Round 381. THE QUEUE'S DATA CLAIMS, VERIFIED.** Five parallel
   investigations of the five remaining player reports, each handed to an
   independent agent whose only job was to refute it. **The refutations are why

@@ -8,7 +8,7 @@ export interface NhlPoolPlayer {
   rating: number; // rough peak rating 0..99
 }
 
-// Curated pool of notable NHL players across eras (authored with Anthony's OK).
+// Curated pool of notable NHL players across eras (authored with the owner's OK).
 // Positions/teams/eras restricted to players I'm confident about.
 export const NHL_POOL: NhlPoolPlayer[] = [
   // Centers

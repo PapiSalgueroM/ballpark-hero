@@ -227,7 +227,7 @@ const WhoAmI = () => {
           )}
           {/* Round 315: a guess with no current row (whoAmIPlayerFromEntity's
               retired path) carries age 0 and value 0 as scoring sentinels, and
-              this used to render them literally: Anthony guessed Rodri while
+              this used to render them literally: a player guessed Rodri while
               his 2026 row was missing and read "Age 0, $0". The chips now say
               what the zero means instead of printing it. */}
           {chip(

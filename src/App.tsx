@@ -406,7 +406,7 @@ const AppContent = () => {
         <Route path="/sports-millionaire" element={<SportsMillionaire />} />
         <Route path="/dart-draft" element={<DartDraft />} />
         <Route path="/minefield" element={<Minefield />} />
-        {/* Round 311, Anthony's 2026-08-28 review: both retired at his call
+        {/* Round 311, the owner's 2026-08-28 review: both retired at his call
             ("two buttons, no game feel"). The versus game hands its address to
             Face Off, the ranking game goes home. Standing retired route
             pattern: Navigate here, meta refresh stub in public/, out of the

@@ -148,7 +148,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
               value={name}
               onChange={e => setName(e.target.value)}
               maxLength={24}
-              placeholder="Real Anthony"
+              placeholder="Real Brookfield"
               className="w-full bg-secondary border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:border-primary"
             />
             {(triedSubmit || name.length >= 3) && nameError && (

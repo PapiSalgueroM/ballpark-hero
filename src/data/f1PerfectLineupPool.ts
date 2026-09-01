@@ -8,7 +8,7 @@ export interface F1PoolDriver {
   rating: number; // rough peak rating 0..99
 }
 
-// Curated pool of notable F1 drivers across eras (authored with Anthony's OK).
+// Curated pool of notable F1 drivers across eras (authored with the owner's OK).
 // "team" = the constructor the driver is most associated with.
 export const F1_POOL: F1PoolDriver[] = [
   { name: 'Ayrton Senna', team: 'McLaren', era: '1990s', nationality: 'Brazil', rating: 98 },

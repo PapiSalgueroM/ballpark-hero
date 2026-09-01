@@ -9,7 +9,6 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
-import { MakerNote } from '@/components/home/MakerNote';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -454,8 +453,13 @@ export default function Index() {
               played stays, per the same document. */}
           <PollOfTheDay />
           <StreakReminder />
-          {/* Round 346: the maker's note, below the games people came for. */}
-          <MakerNote />
+          {/* ROUND 382: the maker's note is gone from here, on the owner's
+              instruction: "it shouldnt pop up there I would rather you put it
+              in one the small like tabs on the bottom like near the privacy
+              policy". It now lives on /about, which is the first link in that
+              small footer row, and it no longer carries his name. Round 346
+              put it here and that was his idea at the time; changing his mind
+              about his own voice on his own site is his call. */}
 
           {/* Search bar */}
           <div className="relative">
