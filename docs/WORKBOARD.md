@@ -21,18 +21,6 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 390.
 
-**ROUND 389 CLAIMED BY THE DESKTOP LANE, 2026-09-01: the 2026 World Cup squads,
-all 48 of them, and the 2014 and 2018 duplicate rows.** The Inbox item from
-the Round 381 sweep and the one two Player Bingo reports asked for by name
-("world cup players needed"). world_cup_players holds one 2026 squad out of
-48. Source one is the raw wikitext of every squad section through the
-Wikipedia API (fetched with curl and parsed by a script, never retyped by a
-model: a summarised fetch dropped a diacritic from a Czech name between two
-reads). Source two is independent and per team; a player ships only where
-both agree, and every disagreement is listed rather than picked. The 2014 and
-2018 rows are exact triplicates and duplicates (0 groups differ on any field)
-and are collapsed. next: Round 389 (desktop lane).
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -148,14 +136,6 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 measurement. Five agents investigated the queue and five more tried to refute
 them, and the refutations mattered: two proposed fixes were wrong and one was
 proven wrong by running it. Read the verdict before acting on any of these.**
-
-- **CLAIMED, Round 389 (desktop lane, 2026-09-01).** **THE 2026 WORLD CUP IS ONE SQUAD.** `world_cup_players` holds 26 rows for
-  2026, a single squad out of 48 teams, against 831 for 2022 and 736 distinct
-  for 2018. Any 2026 participant who has never been to an earlier tournament
-  fails the "Played at a World Cup" tile. This is a data import job, and it is
-  the item that most directly answers the reporter's "world cup players needed".
-  Note when sizing it: the 2014 and 2018 rows are duplicated (2,208 and 1,472
-  rows for 736 distinct players), so the table needs a dedupe pass too.
 
 - **THE BUG REPORT FORM RECORDS A FIELD THAT CARRIES NO INFORMATION.**
   `Footle.tsx` sends `difficulty` in `game_context`, but that is the unlimited
@@ -708,6 +688,18 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE 2026 WORLD CUP, ALL 48 SQUADS, AND THE 2014 AND 2018 DUPLICATES, Round
+  389 (desktop lane, 2026-09-01). world_cup_players held one 2026 squad; now
+  1,236 rows across 48 nations, every man agreed by two independent sources
+  (Wikipedia's squad templates through the API, parsed by a script; Al
+  Jazeera's full article; Yahoo Sports as the third voice). Twelve
+  Wikipedia-only names do not ship and are listed in the change log, so ten
+  squads sit at 24 or 25. Round 83's Spain rows carried Marc Pubill, whom no
+  source lists; replaced. 2014 and 2018 exact duplicates collapsed (2,208
+  rows removed, 736 each remain). 892 of the 1,236 names match a market
+  value row, so the Bingo tile can credit them. Fence:
+  scripts/simWorldCupSquads.mjs with short and dupe controls.
 
 - THE BOOT HARNESS WAITS FOR THE PAINT, NOT THE CLOCK, Round 388 (desktop lane,
   2026-09-01). simPrerenderBoot counted styled nodes 2,500ms after mount and

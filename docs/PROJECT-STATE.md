@@ -2597,6 +2597,51 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 389. THE 2026 WORLD CUP, ALL 48 SQUADS, AND THE 2014 AND
+  2018 DUPLICATES.** `world_cup_players` held one 2026 squad out of 48 (Spain,
+  Round 83, with placeholder numbers), so any 2026 debutant failed Player
+  Bingo's "Played at a World Cup" tile, which two players reported by name.
+  Now 1,236 rows across all 48 nations, every one a man two independent
+  sources agree on.
+  **Sources and method.** Source one is the raw wikitext of every squad
+  section through the Wikipedia API, fetched with curl and parsed by a script
+  (never retyped by a model: a summarised fetch of the same page dropped a
+  diacritic from a Czech name between two reads). Source two is Al Jazeera's
+  full 48-squad article of 2026-06-02; Yahoo Sports' article of 2026-06-11
+  is the third voice where those two differ. Names, numbers, birth dates,
+  caps, goals and clubs are Wikipedia's. A man ships when a second source
+  lists him under the same squad; the equivalence rules grew from exact
+  match to spacing (Korean names), transliteration within one edit, nickname
+  and diminutive forms with the same surname and position (Dom Hyam, Nico
+  Paz, Álex Grimaldo), and finally the club as the deciding witness (Munir
+  Mohamedi is Munir El Kajoui at Berkane, Gatito Fernández is Roberto
+  Fernández at Cerro Porteño, Cucho is Juan Camilo Hernández at Betis).
+  Every rule was applied to the whole field and its pairings printed before
+  it was trusted.
+  **What did not ship, by name.** Twelve men Wikipedia lists and neither
+  other source does: Mladen Jurkas and Arjan Malić (Bosnia and Herzegovina),
+  Homam Ahmed and Mohamed Manai (Qatar), Garven Metusala (Haiti), Kaku
+  (Paraguay), Herman Johansson (Sweden), Logan Rogerson (New Zealand), Ahmed
+  Maknzi (Iraq), Dejan Ljubičić (Austria), Ruslanbek Jiyanov (Uzbekistan) and
+  Trevoh Chalobah (England). Most look like late replacements the June
+  articles predate; they wait for a source that names them. Ten squads
+  therefore ship at 24 or 25.
+  **A Round 83 error corrected.** The old Spain rows carried Marc Pubill,
+  whom none of the three sources lists in the final squad. All 26 Spain rows
+  were replaced with the verified ones.
+  **The duplicates.** 2014 held every squad row three times and 2018 twice
+  (2,208 and 1,472 rows for 736 pairs each). Checked first: 0 groups differ
+  on any field. 2,208 surplus rows deleted, 736 each remain.
+  **What it buys Bingo.** 892 of the 1,236 names fold-match a
+  `player_market_values` row, so the tile can credit them; the rest are true
+  squad members from leagues the market table does not carry.
+  **The fence is `scripts/simWorldCupSquads.mjs`**: 48 nations of 23 to 26
+  rows, three keepers on a full squad, positions and birth years inside the
+  measured range (Craig Gordon, 1982, to four men born in 2008), eleven
+  famous names pinned, and no (player, nation, year) twice from 2010 on.
+  Controls `short` (Panama removed) and `dupe` (a 2018 row doubled).
+  Migrations kept in `supabase/migrations`: the dedupe and the six-part
+  insert, concatenated.
 - **2026-09-01, Round 388. THE BOOT HARNESS WAITS FOR THE PAINT, NOT THE
   CLOCK.** `simPrerenderBoot` counted styled nodes 2,500ms after React
   mounted and on 2026-09-01 read 11 for a page that reads 184 once settled;
