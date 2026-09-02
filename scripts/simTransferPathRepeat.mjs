@@ -41,6 +41,17 @@ function runVitest(extraEnv = {}) {
   return { code: result.status, out: (result.stdout || '') + (result.stderr || '') };
 }
 
+function assertionEvidence(output) {
+  const lines = output.split('\n');
+  const selected = new Set();
+  lines.forEach((line, index) => {
+    if (/AssertionError|expected/.test(line)) {
+      for (let i = Math.max(0, index - 3); i <= Math.min(lines.length - 1, index + 8); i += 1) selected.add(i);
+    }
+  });
+  return [...selected].sort((a, b) => a - b).map(index => lines[index]).join('\n');
+}
+
 console.log('1) Transfer Path hook rejects repeated players and preserves valid moves');
 let copy = null;
 let env = {};
@@ -77,10 +88,15 @@ try {
       } else {
         const duplicateRed = /×.*rejects repeating (?:the )?start/.test(result.out);
         const assertionRed = /AssertionError|expected/.test(result.out);
-        if (!duplicateRed || !assertionRed) {
+        const observedResult = result.out.match(/CONTROL_OBSERVED_RESULT .+/)?.[0];
+        const observedChain = result.out.match(/CONTROL_OBSERVED_CHAIN .+/)?.[0];
+        if (!duplicateRed || !assertionRed || !observedResult || !observedChain) {
           console.error('control changed the hook but did not make the duplicate assertion fail');
           exitCode = 1;
         } else {
+          console.log(`   ${observedResult}`);
+          console.log(`   ${observedChain}`);
+          console.log('   RED evidence from the old hook:\n' + assertionEvidence(result.out));
           console.log('simTransferPathRepeat control old: green. The old hook fails the duplicate assertion as expected.');
         }
       }

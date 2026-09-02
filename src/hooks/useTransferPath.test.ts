@@ -71,10 +71,20 @@ describe('useTransferPath repeated players', () => {
     act(() => {
       duplicateResult = rendered.result.current.addPlayer('Alpha');
     });
+    if (process.env.TRANSFER_PATH_HOOK) {
+      console.log(`CONTROL_OBSERVED_RESULT ${JSON.stringify(duplicateResult)}`);
+      console.log(`CONTROL_OBSERVED_CHAIN ${JSON.stringify(rendered.result.current.chain)}`);
+    }
 
-    expect(duplicateResult!).toEqual({ ok: false, club: null, reason: 'duplicate' });
-    expect(rendered.result.current.chain).toEqual(chainBeforeDuplicate);
-    expect(rendered.result.current.connections).toEqual(connectionsBeforeDuplicate);
+    expect({
+      result: duplicateResult!,
+      chain: rendered.result.current.chain,
+      connections: rendered.result.current.connections,
+    }).toEqual({
+      result: { ok: false, club: null, reason: 'duplicate' },
+      chain: chainBeforeDuplicate,
+      connections: connectionsBeforeDuplicate,
+    });
   });
 
   it('rejects a repeated player case-insensitively', async () => {
