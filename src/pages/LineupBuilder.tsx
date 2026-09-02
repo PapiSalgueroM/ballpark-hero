@@ -35,6 +35,7 @@ const LineupBuilder = () => {
     isEvaluating,
     isValidating,
     validationError,
+    checkingDown,
     isSpinning,
     selectFormation,
     selectPosition,
@@ -205,7 +206,16 @@ const LineupBuilder = () => {
               </div>
 
               {/* Input area */}
-              {selectedPositionIndex !== null && currentTeam && !isSpinning && (
+              {/* Round 413: once the day allowance is spent the search box
+                  would only hand back the same refusal, so the strip says so
+                  instead of inviting a retry that cannot succeed. */}
+              {selectedPositionIndex !== null && currentTeam && !isSpinning && checkingDown && (
+                <p className="text-center text-sm text-muted-foreground animate-fade-in">
+                  Answer checking has used up its allowance for today. Your lineup is saved; come back tomorrow.
+                </p>
+              )}
+
+              {selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown && (
                 <div className="animate-fade-in space-y-3">
                   <p className="text-sm text-center text-muted-foreground">
                     Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>

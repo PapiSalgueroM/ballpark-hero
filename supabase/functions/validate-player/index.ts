@@ -75,8 +75,18 @@ serve(async (req) => {
     pos = typeof b.position === "string" && /^[A-Z]{2,3}$/.test(b.position) ? b.position : null;
   } catch { return json({ error: "Bad request" }, 400); }
 
-  /* the fail-closed answer for every path where nothing was actually checked */
-  const unverified = () => json({ valid: false, unverified: true, reason: "Couldn't verify that answer. Try again in a second." });
+  /* the fail-closed answer for every path where nothing was actually checked.
+     Round 413: it says WHICH it was, the way the two grid validators have
+     since Round 407. A blip is worth a retry; the day's free allowance is
+     not, and the game stops inviting one. Fail closed either way. */
+  const unverified = (exhausted = false) => json({
+    valid: false,
+    unverified: true,
+    exhausted,
+    reason: exhausted
+      ? "Answer checking has used up its allowance for today, so this answer was not counted. Please come back tomorrow."
+      : "Couldn't verify that answer. Try again in a second.",
+  });
   if (!AI_KEY) return unverified();
 
   const teamType = isNation ? "national team" : "club";
@@ -85,18 +95,37 @@ serve(async (req) => {
     : "";
   const prompt = `You are a soccer database (knowledge through 2026). Has "${playerName}" ever played senior competitive football for the ${teamType} "${teamName}" (including the 2025-26 season and loan spells)?${positionRule} Count a player as active if they still play club football anywhere. Be lenient with spelling; resolve nicknames (Messi=Lionel Messi, CR7=Cristiano Ronaldo). Reply with ONLY JSON: {"valid":true/false,"reason":"short","fullName":"First Last"}. fullName must always be the player's commonly known full name.`;
 
+  /* Round 413: max_tokens was 200, and this is the same starvation Round 407
+     measured in the two grid validators. The model spends its own reasoning
+     tokens before the JSON, the body arrives cut off mid verdict, the parse
+     finds no object, and every answer came back "couldn't verify" while the
+     key and the daily quota were both fine. Build Your XI and the NBA lineup
+     builder were refusing real players for as long as that cap stood, and the
+     edge logs show three of them hitting it today. 800 leaves room for the
+     thinking and the verdict. A refused call now logs its status, which
+     carries no secret and is the one fact that tells a dead key from a spent
+     day. */
   try {
-    const resp = await fetch(AI_URL, {
+    const callAI = () => fetch(AI_URL, {
       method: "POST",
       headers: { Authorization: `Bearer ${AI_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 200 }),
+      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 800 }),
     });
-    if (!resp.ok) return unverified();
+    let resp = await callAI();
+    if (resp.status === 429) {
+      await new Promise((r) => setTimeout(r, 1200));
+      resp = await callAI();
+    }
+    if (resp.status === 429) { console.log("ai refused: status 429 twice, the day allowance is spent"); return unverified(true); }
+    if (!resp.ok) { console.log(`ai refused: status ${resp.status}`); return unverified(); }
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content || "";
     const m = content.match(/\{[\s\S]*\}/);
-    if (!m) return unverified();
+    if (!m) { console.log(`ai no verdict: status ${resp.status} body ${String(content).slice(0, 160)}`); return unverified(); }
     const parsed = JSON.parse(m[0]);
     return json({ valid: !!parsed.valid, reason: parsed.reason || null, fullName: parsed.fullName || playerName });
-  } catch { return unverified(); }
+  } catch (err) {
+    console.log(`ai threw: ${String(err).slice(0, 160)}`);
+    return unverified();
+  }
 });

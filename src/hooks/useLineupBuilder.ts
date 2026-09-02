@@ -15,6 +15,8 @@ export function useLineupBuilder() {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  /* Round 413: remembered for the session once the day allowance is spent. */
+  const [checkingDown, setCheckingDown] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
 
@@ -117,6 +119,24 @@ export function useLineupBuilder() {
         }
 
         const result = await resp.json();
+
+        /* Round 413: a refusal now says which it was. Answer checking runs on
+           a free daily allowance, and once it is spent every guess came back
+           "try again in a second" until midnight, so a player kept retrying a
+           wall. The validator returns exhausted on a spent allowance; that
+           message is the honest one and it is remembered for the session, so
+           the page stops inviting a retry that cannot succeed. Either way
+           nothing unverified is accepted and no answer is marked wrong. */
+        if (result.unverified) {
+          if (result.exhausted) {
+            setCheckingDown(true);
+            setValidationError('Answer checking has used up its allowance for today. Your lineup is saved; come back tomorrow.');
+          } else {
+            setValidationError(result.reason || "Couldn't verify that answer. Try again in a second.");
+          }
+          setIsValidating(false);
+          return;
+        }
 
         if (!result.valid) {
           setValidationError(result.reason || `${playerName} hasn't played for ${currentTeam.name}`);
@@ -231,7 +251,7 @@ export function useLineupBuilder() {
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,
     filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
-    isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
+    isValidating, validationError, checkingDown, isSpinning, spinTeamIndex, setSpinTeamIndex,
     selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame,
     startSpin, finishSpin, rerollTeam, teamAssignments,
   };

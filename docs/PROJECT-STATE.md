@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 96% | Round 410: Footle keeps its complete bundled fallback whenever either half of the live pool fails, so a daily target cannot fall outside the searchable pool. Round 407: the AI path behind the soccer and college grids works again (its 150 token cap had been cutting every verdict off since July), refusals say whether the day is spent, and a verdict must carry the name the player typed. |
+| P0 production bugs | 97% | Round 413: Build Your XI stopped refusing every answer with a message that invited a retry into a spent daily allowance; all three AI validators now say which it was. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2772,6 +2772,32 @@ today rather than adding alongside them.
   proves the old behavior accepts the repeat and mutates the chain. Task and
   whole-branch reviews found no remaining code issue. No sports data or
   AdSense files changed.
+- **2026-09-02, Round 413. BUILD YOUR XI WAS DEAD, AND IT WAS LYING ABOUT WHY.** An
+  audit of the owner's thirteen P1 items from 2026-08-28 found the game refusing every
+  answer live: three real players hit it today at 12:48, 12:49 and 13:01 and got
+  "Couldn't verify that answer. Try again in a second." for a wall that was not going to
+  clear. `validate-player` had never been given the Round 407 treatment. Two things were
+  wrong. Its output cap was 200, the same starvation that had been cutting the grid
+  validators' verdicts off mid JSON since July, so it is 800 now. And the live cause,
+  which the round found by adding the Round 407 refusal logging and reading the log one
+  minute later: **status 429**, the free daily allowance spent. The cap alone would have
+  fixed nothing today. So the validator now retries a 429 once, returns `exhausted: true`
+  on a second with a refusal that names the allowance, and stays fail closed; the hook
+  remembers it for the session and the page replaces the search box with the honest line
+  (not counted, lineup saved, come back tomorrow). Deployed as v8 and probed: Messi at
+  Barcelona now comes back exhausted rather than "try again in a second". Two deliberate
+  non changes, recorded so nobody adds them later: the name agreement guard the grids
+  carry is NOT here, because this prompt resolves nicknames on purpose (CR7 to Cristiano
+  Ronaldo) and the guard would reject them, and `scripts/simQuotaHonesty.mjs` carries that
+  as a per validator flag with the reason written beside it. The fence now covers all
+  three validators, their hooks and their pages, reading the behaviour rather than one
+  spelling (the grids destructure `data`, this hook keeps `result`); its three controls
+  still fire. **Also found by the audit and still open, recorded rather than fixed:** the
+  Trade Finder carries no defensive players at all (`frontOffice.ts` line 113 lists seven
+  offensive slots and models defense as a team unit) on a roster baked 2026-08-05, and the
+  Budget Builder page still says euros in five strings while the game itself is in
+  dollars. Gates: tsc zero, simQuotaHonesty green with three controls, build green, the
+  live probe.
 - **2026-09-02, Round 412. THE GRID ENGINE CANNOT DEAL A CELL NOBODY CAN ANSWER.** The
   shared engine's easy mode puts one achievement on each axis, which crosses them, and
   that is only a question when a player can satisfy both. For the basketball, baseball

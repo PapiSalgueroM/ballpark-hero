@@ -43,16 +43,27 @@ const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join('\n');
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
 
-const VALIDATORS = ['supabase/functions/soccer-grid-validate/index.ts', 'supabase/functions/college-grid-validate/index.ts'];
-const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useCollegeGrid.ts'];
-const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/CollegeGrid.tsx'];
+/* Round 413: validate-player joins them. Build Your XI and the NBA lineup
+   builder ran on the same free allowance and said "try again in a second"
+   for a whole day after it was spent; the edge log read 429 the moment a
+   refusal was logged. It carries no name agreement guard on purpose: its
+   prompt resolves nicknames (CR7 to Cristiano Ronaldo), which the guard
+   would reject, so nameGuard is false and this list says why. */
+const VALIDATORS = [
+  { file: 'supabase/functions/soccer-grid-validate/index.ts', nameGuard: true },
+  { file: 'supabase/functions/college-grid-validate/index.ts', nameGuard: true },
+  { file: 'supabase/functions/validate-player/index.ts', nameGuard: false },
+];
+const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useCollegeGrid.ts', 'src/hooks/useLineupBuilder.ts'];
+const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/CollegeGrid.tsx', 'src/pages/LineupBuilder.tsx'];
 
 section = 1;
 console.log('1) The validators say which: exhausted on a second 429, a blip otherwise');
-for (const f of VALIDATORS) {
+for (const v of VALIDATORS) {
+  const f = v.file;
   let code = stripComments(read(f));
   if (CONTROL === 'blind' && f.includes('soccer')) {
-    const cut = code.replace(/\s*if \(resp\.status === 429\) return unverified\(true\);/, '');
+    const cut = code.replace(/\s*if \(resp\.status === 429\)[^\n]*return unverified\(true\);/, '');
     if (cut === code) abort('control cannot run: the soccer validator has no second 429 branch to remove');
     code = cut;
     console.log('   NEGATIVE CONTROL ON: the second 429 branch removed from the soccer validator, in memory');
@@ -66,8 +77,8 @@ for (const f of VALIDATORS) {
   if (!/const unverified = \(exhausted = false\) =>/.test(code)) fail(`${f}: the refusal helper does not take an exhausted flag`);
   if (!/exhausted,/.test(code) || !/allowance for today/.test(code)) fail(`${f}: the refusal does not carry exhausted or name the allowance`);
   if (!/if \(resp\.status === 429\) \{/.test(code)) fail(`${f}: a 429 is not retried once`);
-  if (!/if \(resp\.status === 429\) return unverified\(true\);/.test(code)) fail(`${f}: a second 429 does not return unverified(true)`);
-  const secondAt = code.indexOf('if (resp.status === 429) return unverified(true);');
+  if (!/if \(resp\.status === 429\)[^\n]*return unverified\(true\);/.test(code)) fail(`${f}: a second 429 does not return unverified(true)`);
+  const secondAt = code.search(/if \(resp\.status === 429\)[^\n]*return unverified\(true\);/);
   const genericAt = code.indexOf('if (!resp.ok)');
   if (secondAt >= 0 && genericAt >= 0 && secondAt > genericAt) fail(`${f}: the generic refusal comes before the exhausted one, so exhausted can never fire`);
   /* Round 407, the two findings the logs handed back once refusals were
@@ -78,8 +89,8 @@ for (const f of VALIDATORS) {
      token with the guess. */
   const cap = code.match(/max_tokens: (\d+)/);
   if (!cap || Number(cap[1]) < 600) fail(`${f}: max_tokens is ${cap ? cap[1] : 'missing'}, below the 600 the model's reasoning needs before its verdict`);
-  if (!/const sameName = nameTokens\.length === 0 \|\| nameTokens\.some\(\(t\) => guessTokens\.includes\(t\)\);/.test(code)) fail(`${f}: no name agreement guard on the AI verdict`);
-  if (!/result\.valid && !sameName/.test(code)) fail(`${f}: a valid verdict is not gated on the name agreeing with the guess`);
+  if (v.nameGuard && !/const sameName = nameTokens\.length === 0 \|\| nameTokens\.some\(\(t\) => guessTokens\.includes\(t\)\);/.test(code)) fail(`${f}: no name agreement guard on the AI verdict`);
+  if (v.nameGuard && !/result\.valid && !sameName/.test(code)) fail(`${f}: a valid verdict is not gated on the name agreeing with the guess`);
 }
 console.log(`   ${VALIDATORS.length} validators read`);
 
@@ -94,9 +105,10 @@ for (const f of HOOKS) {
     console.log('   NEGATIVE CONTROL ON: the exhausted branch removed from the soccer hook, in memory');
   }
   if (!/const \[checkingDown, setCheckingDown\] = useState\(false\)/.test(code)) fail(`${f}: no checkingDown state`);
-  if (!/if \(data\?\.exhausted\) \{/.test(code)) fail(`${f}: data.exhausted is not read`);
+  if (!/\b(data|result)\??\.exhausted\b/.test(code)) fail(`${f}: the exhausted flag is not read`);
   if (!/setCheckingDown\(true\)/.test(code)) fail(`${f}: checkingDown is never set`);
   if (!/allowance for today/.test(code)) fail(`${f}: the allowance message is missing`);
+  if (/toast\.error\("Couldn't verify that answer, please try again\."\)[\s\S]{0,80}$/.test(code)) fail(`${f}: the blip message is the only one left`);
   if (!/checkingDown,/.test(code.slice(code.lastIndexOf('return {')))) fail(`${f}: checkingDown is not returned to the page`);
 }
 console.log(`   ${HOOKS.length} hooks read`);
@@ -105,7 +117,7 @@ section = 3;
 console.log('3) The pages stop inviting: the notice replaces the search box');
 for (const f of PAGES) {
   const code = stripComments(read(f));
-  if (!/checkingDown \? \(/.test(code)) fail(`${f}: the page does not branch on checkingDown around the search box`);
+  if (!/checkingDown \? \(|!checkingDown/.test(code)) fail(`${f}: the page does not gate its search box on checkingDown`);
   if (!/allowance for today/.test(code)) fail(`${f}: the page carries no allowance notice`);
 }
 console.log(`   ${PAGES.length} pages read`);
@@ -126,4 +138,4 @@ if (CONTROL) {
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
 if (total > 0) { console.error(`\nsimQuotaHonesty: ${total} failure(s)`); process.exit(1); }
-console.log('\nsimQuotaHonesty: green. When the allowance is gone, both AI grids say so and stop asking for retries.');
+console.log('\nsimQuotaHonesty: green. When the allowance is gone, the two AI grids and Build Your XI say so and stop asking for retries.');
