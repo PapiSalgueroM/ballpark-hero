@@ -97,7 +97,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { playerName, columnAttribute, rowAttribute } = body;
+    const { playerName, columnAttribute, rowAttribute, cacheOnly = false } = body;
 
     if (
       !playerName || typeof playerName !== "string" || playerName.length > 100 ||
@@ -149,6 +149,17 @@ serve(async (req) => {
         }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     } catch { /* cache down -> fall through to AI */ }
+
+    /* Round 397: verification harnesses can prove cache coverage without ever
+       spending an AI request. The public game does not send this flag. */
+    if (cacheOnly === true) {
+      return new Response(JSON.stringify({
+        valid: false,
+        unverified: true,
+        cacheMiss: true,
+        reason: "No verified cached answer is available.",
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     const AI_KEY = __GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
     if (!AI_KEY) throw new Error("No AI key configured");

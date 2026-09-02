@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { normalizeName } from '@/lib/playerSearch';
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/integrations/supabase/client';
 import {
   Board,
   Team,
@@ -17,6 +18,26 @@ type C4Action =
   | { t: 'skip'; team: Team };
 
 export type FootballConnect4Mode = 'daily' | 'unlimited';
+
+type ValidatorResponse = {
+  valid?: unknown;
+  unverified?: unknown;
+  reason?: unknown;
+  error?: unknown;
+  fullName?: unknown;
+};
+
+function normalizeValidationReason(reason: unknown, fallback: string): string {
+  if (typeof reason === 'string' && reason.trim()) return reason.trim();
+  if (reason && typeof reason === 'object') {
+    const parts = Object.values(reason)
+      .filter((value): value is string | number => typeof value === 'string' || typeof value === 'number')
+      .map(value => String(value).trim())
+      .filter(Boolean);
+    if (parts.length > 0) return parts.join(' ');
+  }
+  return fallback;
+}
 
 function createEmptyBoard(): Board {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -186,30 +207,45 @@ export function useFootballConnect4() {
 
       try {
         const resp = await fetch(
-          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/football-connect4-validate`,
+          `${SUPABASE_URL}/functions/v1/football-connect4-validate`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
+              Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
             },
             body: JSON.stringify({ playerName: trimmed, columnAttribute: colAttr, rowAttribute: rowAttr }),
           },
         );
 
-        const result = await resp.json();
+        const payload: unknown = await resp.json().catch(() => null);
+        const result: ValidatorResponse | null = payload && typeof payload === 'object'
+          ? payload as ValidatorResponse
+          : null;
 
-        if (!result.valid) {
-          setValidationError(result.reason || 'Player does not match both attributes.');
-          setIsValidating(false);
+        if (!resp.ok) {
+          setValidationError(
+            resp.status === 429
+              ? 'Answer checker is busy right now. This guess was not used. Try again in a minute.'
+              : 'Answer checker is unavailable right now. This guess was not used. Try again.',
+          );
           return;
         }
 
-        const displayName = result.fullName || trimmed;
+        if (!result || result.valid !== true || result.unverified === true) {
+          const fallback = result?.unverified === true
+            ? 'Could not verify this answer. This guess was not used. Try again.'
+            : 'Player does not match both attributes.';
+          setValidationError(normalizeValidationReason(result?.reason ?? result?.error, fallback));
+          return;
+        }
+
+        const displayName = typeof result.fullName === 'string' && result.fullName.trim()
+          ? result.fullName.trim()
+          : trimmed;
 
         if (usedPlayers.has(normalizeName(displayName))) {
           setValidationError(`${displayName} has already been used!`);
-          setIsValidating(false);
           return;
         }
 
@@ -238,10 +274,10 @@ export function useFootballConnect4() {
         setSelectedColumn(null);
         setTargetRow(null);
       } catch {
-        setValidationError('Network error. Please try again.');
+        setValidationError('Answer checker could not connect. This guess was not used. Try again.');
+      } finally {
+        setIsValidating(false);
       }
-
-      setIsValidating(false);
     },
     [phase, selectedColumn, targetRow, board, currentTurn, boardConfig, usedPlayers, mode, addDailyAction, unlimitedBoard],
   );

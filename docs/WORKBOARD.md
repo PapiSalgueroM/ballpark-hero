@@ -23,12 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-01
 
-- **next: Round 397 (Codex lane, isolated worktree). SOCCER CONNECT 4 CLASSIC-8
-  MUST WORK WITH THE AI QUOTA GONE.** Curate only two-source-verified true facts,
-  cover all 42 cells with a 42-name matching, apply the cache migration, extend
-  `simValidatorCache.mjs` with a real hole control, and harden client handling for
-  HTTP 429 and object-shaped reasons. This lane does not touch Round 396 files.
-
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
 put it in one the small like tabs on the bottom like near the privacy policy and
@@ -705,6 +699,17 @@ Standing claims:
   digest, host constraints, three anchors, permutations, missing-row behavior
   and rendered UI behavior, each with a control. Reset behaviors have separate
   controls. Browser reset walk green; real app type gate zero.
+
+- SOCCER CONNECT 4 CLASSIC-8 STAYS PLAYABLE WHEN REMOTE VALIDATION IS DOWN,
+  Round 397 (Codex lane, 2026-09-01). The reported board now has a
+  two-source-verified local cache covering all 42 cells with a 42-name matching.
+  The cache migration is applied and validator version 10 is live. HTTP 429,
+  object-shaped reasons and contradictory unverified responses are handled as
+  retryable verification failures, so they do not burn a guess or end the game.
+  `simValidatorCache.mjs` proves the complete matching and its real hole control;
+  `playFootballConnect4Failures.mjs` covers 429, object reasons, unverified,
+  contradictory and valid responses. Production cache check 42/42; scoped browser
+  game walk, build, type gate and rival-name fence green.
 
 - THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI, Round 398 (desktop lane,
   2026-09-01, built before the Round 396 corrective claim landed, numbered after

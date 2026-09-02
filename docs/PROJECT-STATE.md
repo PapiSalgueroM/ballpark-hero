@@ -2668,6 +2668,21 @@ today rather than adding alongside them.
   gate is zero, the focused sim is green and `playWc2026Reset.mjs` is green
   across score edits, Reset All, pending generation cancellation and a delayed
   rank-fill attempt.
+- **2026-09-01, Round 397. SOCCER CONNECT 4 CLASSIC-8 STAYS PLAYABLE WHEN
+  REMOTE VALIDATION IS DOWN.** A user reported that every click returned
+  "couldn't verify your answer." The reported `classic-8` board now has a
+  two-source-verified cache that covers all 42 cells with a 42-name matching,
+  recorded in `docs/research/connect4-classic8-verified.json` and applied by the
+  Round 397 migration. Validator version 10 is live. The client now normalizes
+  HTTP 429, object-shaped reasons and contradictory valid plus unverified
+  responses into retryable verification failures, so no guess is burned and the
+  game does not end when the remote validator is unavailable.
+  `simValidatorCache.mjs` proves all 42 cached facts, the complete matching and a
+  negative control that removes a real required edge. The new browser harness
+  `playFootballConnect4Failures.mjs` covers 429, object-shaped reasons,
+  unverified, contradictory and valid responses, and its control fires.
+  Production cache check 42/42; scoped browser walk, build, real app type gate
+  and rival-name fence green.
 - **2026-09-01, Round 398. THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI.** The
   biggest match of the year was not in the lineup game. Spain's 4-2-3-1 and
   Argentina's 4-4-2 from the July 19 final are lineups 127 and 128, both
