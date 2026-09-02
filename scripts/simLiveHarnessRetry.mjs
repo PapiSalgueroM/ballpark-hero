@@ -129,21 +129,35 @@ try {
           .replace(/\/\*[\s\S]*?\*\//g, '')
           .replace(/^\s*\/\/.*$/gm, '');
         const importsHelper = /import\s+\{\s*fetchWithTransportRetry\s*\}\s+from\s+['"]\.\/lib\/fetchWithTransportRetry\.mjs['"]/.test(source);
-        const helperCalls = (source.match(/fetchWithTransportRetry\(\s*\(\)\s*=>\s*fetch\s*\(/g) || []).length;
+        const helperCalls = (source.match(/\bfetchWithTransportRetry\s*\(/g) || []).length;
+        const directHelperCalls = (source.match(/fetchWithTransportRetry\(\s*\(\)\s*=>\s*fetch\s*\(/g) || []).length;
         const rawFetches = (source.match(/\bfetch\s*\(/g) || []).length;
         console.log(`   ${file}: ${helperCalls} helper calls for ${rawFetches} fetch sites`);
         if (!importsHelper || helperCalls !== calls || rawFetches !== calls) fail(`${file} does not import and call the helper for every fetch site`);
+        if (file !== 'simValueFreshness.mjs' && directHelperCalls !== calls) fail(`${file} has a fetch site that is not directly wrapped by the helper`);
         const whitespaceFixture = 'fetchWithTransportRetry(() => fetch (url))';
         if ((whitespaceFixture.match(/fetchWithTransportRetry\(\s*\(\)\s*=>\s*fetch\s*\(/g) || []).length !== 1 || (whitespaceFixture.match(/\bfetch\s*\(/g) || []).length !== 1) {
           fail(`${file} source detector misses whitespace before a fetch call`);
         }
-        if (file === 'simSchemaNames.mjs' && !/let\s+refusalFailed\s*=\s*false;[\s\S]*?CONTROL\s*===\s*['"]refusal['"][\s\S]*?if\s*\(\s*res\.ok\s*\)\s*continue;[\s\S]*?fail\([\s\S]*?refusalFailed\s*=\s*true[\s\S]*?if\s*\(\s*CONTROL\s*===\s*['"]refusal['"]\s*\)[\s\S]*?failures\s*===\s*1/.test(source)) {
-          fail('simSchemaNames has no caller-level refusal control that fails a returned HTTP refusal');
+        if (file === 'simSchemaNames.mjs') {
+          const refusalFailsClosed = /let\s+refusalFailed\s*=\s*false;[\s\S]*?CONTROL\s*===\s*['"]refusal['"][\s\S]*?if\s*\(\s*res\.ok\s*\)\s*continue;[\s\S]*?fail\([\s\S]*?refusalFailed\s*=\s*true[\s\S]*?if\s*\(\s*CONTROL\s*===\s*['"]refusal['"]\s*\)[\s\S]*?failures\s*===\s*1/.test(source);
+          const markerIsScoped = /failures\s*>\s*0\s*&&\s*failures\s*===\s*unavailableFailures\s*\)\s*console\.error\(\s*['"][^'"]*NOTHING WAS CHECKED/.test(source);
+          if (!refusalFailsClosed || !markerIsScoped) fail('simSchemaNames does not fail returned refusals with an environment-only runner marker');
+        }
+        if (file === 'simValueFreshness.mjs') {
+          const refusalFailsClosed = /let\s+refusalFailed\s*=\s*false;/.test(source)
+            && /new Response\(\s*['"]\[\]['"][\s\S]*?status:\s*403/.test(source)
+            && /const\s+request\s*=\s*async[\s\S]*?return\s+fetch\([\s\S]*?fetchWithTransportRetry\(request\)/.test(source)
+            && /if\s*\(\s*!res\.ok\s*\)[\s\S]*?fail\([\s\S]*?refusalFailed\s*=\s*true;[\s\S]*?continue;/.test(source)
+            && /!CONTROL\s*&&\s*failures\s*===\s*1\s*\)\s*console\.error\([\s\S]*?NOTHING WAS CHECKED/.test(source)
+            && /if\s*\(\s*CONTROL\s*===\s*['"]refusal['"]\s*\)[\s\S]*?refusalInjected\s*&&\s*refusalFailed\s*&&\s*refusalRequestCalls\s*===\s*1\s*&&\s*!refusalBodyRead\s*&&\s*failures\s*===\s*1/.test(source);
+          if (!refusalFailsClosed) fail('simValueFreshness has no caller-level refusal control that fails a returned HTTP refusal');
         }
         if (file === 'simDailyPoolOrder.mjs') {
           const refusalFailsClosed = /let\s+accessDeniedFailed\s*=\s*false;/.test(source)
             && /CONTROL\s*===\s*['"]accessdenied['"][\s\S]*?status:\s*403/.test(source)
             && /if\s*\(\s*!r\.ok\s*\)[\s\S]*?r\.status\s*===\s*403[\s\S]*?accessDeniedFailed\s*=\s*true;[\s\S]*?fail\(/.test(source)
+            && /failures\s*>\s*0\s*&&\s*failures\s*===\s*unavailableFailures\s*\)\s*console\.error\(\s*['"][^'"]*NOTHING WAS CHECKED/.test(source)
             && /if\s*\(\s*CONTROL\s*===\s*['"]accessdenied['"]\s*\)[\s\S]*?accessDeniedInjected\s*&&\s*accessDeniedFailed\s*&&\s*failures\s*===\s*1/.test(source);
           if (!refusalFailsClosed) fail('simDailyPoolOrder has no caller-level refusal control that fails a returned HTTP refusal');
         }

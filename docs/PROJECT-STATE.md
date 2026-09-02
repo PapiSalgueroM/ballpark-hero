@@ -2784,7 +2784,8 @@ today rather than adding alongside them.
   concurrent table reads and built only 8 or 9 wings. It now merges successful
   wings across at most three short catalog attempts, keeps the exact 10-wing
   contract, recovers a planted one-time partial, and still exits red on a
-  persistent partial or controlled empty catalog. Independent review found no
+  persistent partial, and its empty-catalog control proves the normal child
+  path exits red with the runner marker. Independent review found no
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.

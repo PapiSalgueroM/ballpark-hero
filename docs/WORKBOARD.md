@@ -91,7 +91,7 @@ distance, so verify it before changing layout. After approval, test any extra
 manual placement on a small group of long guides before a wider rollout.
 
 **OWNER REPORT, 2026-09-02, STALE BING SEARCH IMAGE.** Bing still shows the old
-March social banner with "10+ Free Sports Trivia Games" even though the live
+social banner with "10+ Free Sports Trivia Games" even though the live
 generated card has carried count-free wording since Round 286. Treat this as a
 cache-key problem: keep count-free copy, correct the remaining misleading
 "No sign-up" line, ship the generated card at a fresh same-domain filename,

@@ -34,8 +34,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SCHEMA_CONTROL || '';
 if (CONTROL && CONTROL !== 'ghost' && CONTROL !== 'refusal') { console.error(`SIM_SCHEMA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
+let unavailableFailures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
+const abortUnavailable = m => {
+  console.error(m);
+  if (!CONTROL && failures === 0) console.error('SUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
+  else console.error('the live schema check stopped after an earlier or controlled finding, so it cannot be treated as an environment-only skip');
+  process.exit(1);
+};
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
@@ -151,7 +158,7 @@ for (const [table, t] of list) {
   const cols = [...t.cols].sort();
   const q = cols.length ? `select=${encodeURIComponent(cols.join(','))}&limit=0` : 'select=*&limit=0';
   const { response: res, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${table}?${q}`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }));
-  if (!res) abort(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}). NOTHING WAS CHECKED.`);
+  if (!res) abortUnavailable(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}).`);
   probed += 1;
   if (res.ok) continue;
   const body = await res.text().catch(() => '');
@@ -159,15 +166,23 @@ for (const [table, t] of list) {
   if (res.status === 400) {
     /* name the columns: probe one at a time */
     const missing = [];
+    const unanswered = [];
     for (const col of cols) {
       const { response: r, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${table}?select=${encodeURIComponent(col)}&limit=0`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }));
-      if (!r) abort(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}). NOTHING WAS CHECKED.`);
+      if (!r) abortUnavailable(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}).`);
       if (r.status === 400) missing.push(col);
+      else if (!r.ok) unanswered.push(`${col} (HTTP ${r.status})`);
     }
-    fail(`${table}: ${missing.length ? `column(s) ${missing.join(', ')} do not exist` : `HTTP 400 on select=${cols.join(',')}`} [${[...t.files].join(', ')}]`);
+    if (unanswered.length) {
+      unavailableFailures += 1;
+      fail(`${table}: ${unanswered.join(', ')} did not return schema answers [${[...t.files].join(', ')}]`);
+    }
+    if (missing.length) fail(`${table}: column(s) ${missing.join(', ')} do not exist [${[...t.files].join(', ')}]`);
+    else if (!unanswered.length) fail(`${table}: HTTP 400 on select=${cols.join(',')} [${[...t.files].join(', ')}]`);
     continue;
   }
   unreadable += 1;
+  unavailableFailures += 1;
   fail(`${table}: HTTP ${res.status}, not a schema answer, so the schema was not verified`);
   if (CONTROL === 'refusal' && res.status === 403) refusalFailed = true;
 }
@@ -184,5 +199,6 @@ if (CONTROL) {
   if (failures > 0) { console.log(`\ncontrol "${CONTROL}": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING, the check is dead`);
 }
+if (failures > 0 && failures === unavailableFailures) console.error('SUPABASE SCHEMA PROBES WERE REFUSED. NOTHING WAS CHECKED FOR THOSE PROBES.');
 if (failures > 0) { console.error(`\nsimSchemaNames: ${failures} failure(s)`); process.exit(1); }
 console.log('\nsimSchemaNames: all green');

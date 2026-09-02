@@ -56,6 +56,7 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
 }
 
 let failures = 0;
+let unavailableFailures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
@@ -184,22 +185,26 @@ console.log('2) every column the code orders by exists on that table');
   console.log(`   ${list.length} distinct (table, order column) pairs in src`);
   if (list.length < 10) fail(`only ${list.length} pairs found, so this scan is not reading the source properly`);
 
-  let bad = 0;
+  let resolved = 0;
   for (const pr of list) {
     /* Round 417: schema existence needs no scan or sort, which can time out on large tables. */
     const { response: r, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${pr.table}?select=${pr.column}&limit=0`, {
       headers: { apikey: KEY, Authorization: `Bearer ${KEY}` },
     }));
-    if (!r) { console.error(`LIVE SCHEMA PROBE UNREACHABLE (${String(error).slice(0, 120)}). NOTHING WAS CHECKED.`); process.exit(1); }
+    if (!r) {
+      unavailableFailures += 1;
+      fail(`live schema probe for ${pr.table}.${pr.column} was unreachable: ${String(error).slice(0, 120)}`);
+      break;
+    }
     if (!r.ok) {
       let msg = '';
       try { msg = (JSON.parse(await r.text()) || {}).message || ''; } catch { msg = `${r.status}`; }
-      bad += 1;
+      if (r.status !== 400 && r.status !== 404) unavailableFailures += 1;
       if (CONTROL === 'accessdenied' && r.status === 403) accessDeniedFailed = true;
       fail(`${pr.file} orders ${pr.table} by "${pr.column}" and the database says: ${msg}`);
-    }
+    } else resolved += 1;
   }
-  console.log(`   ${list.length - bad} of ${list.length} resolve against the live schema`);
+  console.log(`   ${resolved} of ${list.length} resolve against the live schema`);
 }
 
 console.log('3) every paged read declares an order');
@@ -278,5 +283,6 @@ if (CONTROL) {
     process.exit(1);
   }
 }
+if (failures > 0 && failures === unavailableFailures) console.error('LIVE SCHEMA PROBES WERE UNAVAILABLE. NOTHING WAS CHECKED FOR THOSE PROBES.');
 if (failures > 0) { console.error(`simDailyPoolOrder: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('simDailyPoolOrder: green. Every date indexed pool is ordered, and every order column is real.');
