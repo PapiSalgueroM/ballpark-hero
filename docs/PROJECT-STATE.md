@@ -2625,6 +2625,49 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 396. THE BRACKET PAGE SEEDS THE ROUND OF 32 THE WAY FIFA
+  DID.** The corrective pass the other lane filed against Round 395, taken as
+  written. The page paired its round of 32 from a template of its own (group
+  winners A to H against thirds, I to L against each other) and handed the
+  thirds to those slots in ranking order, neither of which is the real
+  bracket, so the tournament as played could not be rebuilt on the page and
+  the advertised 166 was reachable by the scoring module but not by a player.
+  `src/lib/wc2026Bracket.ts` now holds the real bracket order (sixteen
+  round-of-32 slots, consecutive slots meeting in the round of 16, taken from
+  the tournament as played), the eight winners that face a third (A, B, D, E,
+  G, I, K, L), and all 495 third-place allocation rows in Annexe C of FIFA's
+  May 2026 regulations. The official PDF extraction was compared
+  programmatically with the secondary full table: all 495 rows agreed, all
+  495 unique A to L choose eight sets are present, and there are no extra
+  sets. A missing or malformed allocation fails closed: all eight affected
+  slots stay TBD, the page shows an honest notice, and neither team in those
+  matches is clickable. There is no ranking-order fallback. The page and the
+  scoring fence now build every round through the same pure helper. The
+  perfect page path reaches 166
+  points and changing only the final winner reaches 151, without using
+  `realRounds()` to manufacture the picks. A saved pick counts only while it
+  is one of the two teams in its current slot. Any manual group or qualifier
+  change clears the champion, scored rounds, knockout save and seed signature.
+  Reset All also clears award picks. Every delayed Auto Fill Everything write
+  belongs to a cancelable generation, the bracket's per-round timer is cleared
+  on unmount, and the artificial delays on the other fill buttons are gone, so
+  stale child state cannot return after reset. The remaining example now names
+  the Golden Ball rather than Best Young Player.
+  **Eight fixture dates were corrected in `wc2026Results.ts`:** Netherlands v
+  Morocco June 29, USA v Bosnia & Herzegovina July 1, Mexico v Ecuador June 30,
+  Switzerland v Algeria July 2, Colombia v Ghana July 3, USA v Belgium July 6,
+  Mexico v England July 5 and Argentina v Switzerland July 11. The fence now
+  checks those literals, the page-built 166 and 151 paths, the sixteen real
+  pairings, all 495 allocation rows and reset invalidation. Allocation checks
+  hold the source digest, allowed opponent groups, options 1, 67 and 495,
+  qualifier-order permutations, the rendered fail-closed UI and missing-row
+  behavior. Controls `annex-coverage`, `annex-integrity`, `annex-anchor`,
+  `annex-permutation` and `annex-missing` mutate each allocation check. Reset
+  controls separately mutate knockout removal, signature removal, award
+  removal, seed signature changes and timer cancellation. The real app type
+  gate is zero, the focused sim is green and `playWc2026Reset.mjs` is green
+  across score edits, Reset All, pending generation cancellation and a delayed
+  rank-fill attempt.
 - **2026-09-01, Round 398. THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI.** The
   biggest match of the year was not in the lineup game. Spain's 4-2-3-1 and
   Argentina's 4-4-2 from the July 19 final are lineups 127 and 128, both

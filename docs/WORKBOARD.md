@@ -23,13 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-01
 
-- **next: Round 396 (desktop lane). ROUND 395 CORRECTIVE PASS.** Fix the shipped
-  World Cup bracket before starting anything else: make the page's Round of 32
-  seeding reproduce the real tournament and make the advertised 166-point score
-  reachable; clear champion, rounds and stale downstream winners on resets or
-  changed group seeds; correct the FAQ, examples and eight local fixture dates;
-  and make `simWc2026Results.mjs` exercise the real seeding path with an
-  independent expected fixture and a negative control. Re-run the affected gates.
 - **next: Round 397 (Codex lane, isolated worktree). SOCCER CONNECT 4 CLASSIC-8
   MUST WORK WITH THE AI QUOTA GONE.** Curate only two-source-verified true facts,
   cover all 42 cells with a 42-name matching, apply the cache migration, extend
@@ -696,6 +689,22 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE BRACKET PAGE SEEDS THE ROUND OF 32 THE WAY FIFA DID, Round 396 (desktop
+  lane, 2026-09-01, the corrective pass filed against Round 395). Real bracket
+  order and all 495 official Annexe C third-place allocations in
+  src/lib/wc2026Bracket.ts; every round built through the page helper; missing
+  or malformed rows fail closed with TBD slots, a visible notice and no
+  clickable affected match. The official extraction and secondary full table
+  agreed 495/495. The perfect page path scores 166 and changing only the final
+  winner scores 151. Changed
+  group inputs and Reset All clear parent score state, knockout picks and the
+  seed signature; Reset All also clears awards and cancels delayed writes.
+  The Best Young Player example now says Golden Ball. The eight reviewed local
+  dates are corrected. Sim section 6 holds exact combination coverage, source
+  digest, host constraints, three anchors, permutations, missing-row behavior
+  and rendered UI behavior, each with a control. Reset behaviors have separate
+  controls. Browser reset walk green; real app type gate zero.
 
 - THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI, Round 398 (desktop lane,
   2026-09-01, built before the Round 396 corrective claim landed, numbered after

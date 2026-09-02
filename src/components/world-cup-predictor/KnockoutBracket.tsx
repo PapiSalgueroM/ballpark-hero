@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback, useMemo, MutableRefObject } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef, MutableRefObject } from "react";
 import { Trophy, Zap, Loader2 } from "lucide-react";
 import { FlagImg, getFifaRank, rankWinner } from "@/pages/WorldCupPredictor";
+import { buildKnockoutRounds, buildRound32, validPick } from "@/lib/wc2026Bracket";
+import { clearWc2026ChildStorage, WC2026_STORAGE_KEYS, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
 
@@ -23,36 +25,20 @@ export interface BracketMatch {
   winner: string;
 }
 
-/* ───── bracket seeding ───── */
-
-const R32_TEMPLATE: [string, string][] = [
-  ["1A", "3rd_1"],
-  ["2C", "2D"],
-  ["1B", "3rd_2"],
-  ["2E", "2F"],
-  ["1C", "3rd_3"],
-  ["2G", "2H"],
-  ["1D", "3rd_4"],
-  ["2A", "2B"],
-  ["1E", "3rd_5"],
-  ["1I", "2J"],
-  ["1F", "3rd_6"],
-  ["1J", "2I"],
-  ["1G", "3rd_7"],
-  ["1K", "2L"],
-  ["1H", "3rd_8"],
-  ["1L", "2K"],
-];
+/* ───── bracket seeding ─────
+   Round 396: the round of 32 comes from src/lib/wc2026Bracket.ts, the real
+   bracket order and the real third-place allocation, so the tournament as
+   played can be rebuilt here. The old template paired the wrong winners
+   with thirds and handed the thirds out in ranking order. */
 
 const ROUND_NAMES = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Third Place", "Final"];
 const ROUND_PREFIXES = ["r32", "r16", "qf", "sf", "tp", "f"];
 const ROUND_MATCH_COUNTS = [16, 8, 4, 2, 1, 1];
 
-const KO_STORAGE_KEY = "wc2026-knockout";
-
-function loadPicks(): KnockoutPicks {
+function loadPicks(expectedSignature: string): KnockoutPicks {
   try {
-    const raw = localStorage.getItem(KO_STORAGE_KEY);
+    if (localStorage.getItem(WC2026_STORAGE_KEYS.knockoutSignature) !== expectedSignature) return {};
+    const raw = localStorage.getItem(WC2026_STORAGE_KEYS.knockout);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     // a save written by another version can hold anything, only a plain object is usable
@@ -60,7 +46,7 @@ function loadPicks(): KnockoutPicks {
     // Migration: old format stored {scoreA, scoreB} objects, clear if detected
     const firstVal = Object.values(parsed)[0];
     if (firstVal && typeof firstVal === "object") {
-      localStorage.removeItem(KO_STORAGE_KEY);
+      clearWc2026ChildStorage(localStorage, false);
       return {};
     }
     // drop any non string values so downstream string ops never see garbage
@@ -78,7 +64,7 @@ export interface AutoFillHandle {
 
 interface KnockoutBracketProps {
   seeds: Record<string, GroupSeed>;
-  bestThirds: { team: string }[];
+  bestThirds: { team: string; group: string }[];
   onChampionChange?: (champion: string) => void;
   /** Round 395: the rounds as built from the picks, so the page can score them. */
   onRoundsChange?: (rounds: BracketMatch[][]) => void;
@@ -86,26 +72,44 @@ interface KnockoutBracketProps {
 }
 
 const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, autoFillRef }: KnockoutBracketProps) => {
-  const [picks, setPicks] = useState<KnockoutPicks>(loadPicks);
+  const signature = useMemo(() => wc2026SeedSignature(seeds, bestThirds), [seeds, bestThirds]);
+  const signatureRef = useRef(signature);
+  const [picks, setPicks] = useState<KnockoutPicks>(() => loadPicks(signature));
+  const activePicks = signatureRef.current === signature ? picks : {};
+  const [roundLoading, setRoundLoading] = useState<number | null>(null);
+  const roundTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    localStorage.setItem(KO_STORAGE_KEY, JSON.stringify(picks));
-  }, [picks]);
+    if (signatureRef.current !== signature) return;
+    if (Object.keys(picks).length === 0) {
+      clearWc2026ChildStorage(localStorage, false);
+      return;
+    }
+    localStorage.setItem(WC2026_STORAGE_KEYS.knockout, JSON.stringify(picks));
+    localStorage.setItem(WC2026_STORAGE_KEYS.knockoutSignature, signature);
+  }, [picks, signature]);
 
-  const resolveSeed = useCallback(
-    (label: string): string => {
-      if (label.startsWith("3rd_")) {
-        const idx = parseInt(label.split("_")[1]) - 1;
-        return bestThirds[idx]?.team || "TBD";
-      }
-      const pos = label[0];
-      const group = label.slice(1);
-      const seed = seeds[group];
-      if (!seed) return "TBD";
-      return pos === "1" ? seed.first : seed.second;
-    },
-    [seeds, bestThirds],
-  );
+  useEffect(() => {
+    if (signatureRef.current === signature) return;
+    signatureRef.current = signature;
+    clearWc2026ChildStorage(localStorage, false);
+    if (roundTimerRef.current) clearTimeout(roundTimerRef.current);
+    roundTimerRef.current = null;
+    setRoundLoading(null);
+    setPicks({});
+    onChampionChange?.("");
+    onRoundsChange?.([]);
+  }, [signature, onChampionChange, onRoundsChange]);
+
+  useEffect(() => () => {
+    if (roundTimerRef.current) clearTimeout(roundTimerRef.current);
+  }, []);
+
+  /* Round 396: one builder for the round of 32, shared by the three places
+     that rebuild the bracket. */
+  const round32Build = useMemo(() => buildRound32(seeds, bestThirds), [seeds, bestThirds]);
+  const allocationUnavailable = round32Build.allocation === "unverified";
+  const round32 = useCallback(() => round32Build.slots, [round32Build]);
 
   // When picking a winner, also clear downstream picks that depended on different outcomes
   const handlePick = useCallback((matchId: string, winner: string) => {
@@ -128,59 +132,10 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
   }, []);
 
   // Build all rounds
-  const rounds = useMemo(() => {
-    const allRounds: BracketMatch[][] = [];
-
-    // R32
-    const r32: BracketMatch[] = R32_TEMPLATE.map(([a, b], i) => {
-      const id = `r32-${i}`;
-      return {
-        id,
-        teamA: resolveSeed(a),
-        teamB: resolveSeed(b),
-        winner: picks[id] || "",
-      };
-    });
-    allRounds.push(r32);
-
-    // R16, QF, SF
-    for (let r = 1; r <= 3; r++) {
-      const prev = allRounds[r - 1];
-      const round: BracketMatch[] = [];
-      for (let i = 0; i < prev.length; i += 2) {
-        const id = `${ROUND_PREFIXES[r]}-${i / 2}`;
-        const teamA = prev[i].winner || "";
-        const teamB = prev[i + 1]?.winner || "";
-        round.push({ id, teamA, teamB, winner: (teamA && teamB) ? (picks[id] || "") : "" });
-      }
-      allRounds.push(round);
-    }
-
-    // Third Place Play-off
-    const sf = allRounds[3];
-    const sfLoserA = sf[0]?.winner ? (sf[0].winner === sf[0].teamA ? sf[0].teamB : sf[0].teamA) : "";
-    const sfLoserB = sf[1]?.winner ? (sf[1].winner === sf[1].teamA ? sf[1].teamB : sf[1].teamA) : "";
-    const tpId = "tp-0";
-    allRounds.push([{
-      id: tpId,
-      teamA: sfLoserA,
-      teamB: sfLoserB,
-      winner: (sfLoserA && sfLoserB) ? (picks[tpId] || "") : "",
-    }]);
-
-    // Final
-    const fId = "f-0";
-    const fTeamA = sf[0]?.winner || "";
-    const fTeamB = sf[1]?.winner || "";
-    allRounds.push([{
-      id: fId,
-      teamA: fTeamA,
-      teamB: fTeamB,
-      winner: (fTeamA && fTeamB) ? (picks[fId] || "") : "",
-    }]);
-
-    return allRounds;
-  }, [resolveSeed, picks]);
+  const rounds = useMemo<BracketMatch[][]>(
+    () => buildKnockoutRounds(round32(), activePicks),
+    [round32, activePicks],
+  );
 
   // Auto-fill a specific round by FIFA rank
   const autoFillRound = useCallback((roundIdx: number) => {
@@ -188,9 +143,9 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       const next = { ...prev };
       // Rebuild rounds with current picks to get correct teams
       const allRounds: BracketMatch[][] = [];
-      const r32: BracketMatch[] = R32_TEMPLATE.map(([a, b], i) => {
+      const r32: BracketMatch[] = round32().map((slot, i) => {
         const id = `r32-${i}`;
-        return { id, teamA: resolveSeed(a), teamB: resolveSeed(b), winner: next[id] || "" };
+        return { id, teamA: slot.a, teamB: slot.b, winner: validPick(next[id], slot.a, slot.b) };
       });
       allRounds.push(r32);
       for (let r = 1; r <= 3; r++) {
@@ -200,7 +155,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
           const id = `${ROUND_PREFIXES[r]}-${i / 2}`;
           const teamA = prevRound[i].winner || "";
           const teamB = prevRound[i + 1]?.winner || "";
-          round.push({ id, teamA, teamB, winner: (teamA && teamB) ? (next[id] || "") : "" });
+          round.push({ id, teamA, teamB, winner: validPick(next[id], teamA, teamB) });
         }
         allRounds.push(round);
       }
@@ -208,8 +163,8 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       const sf = allRounds[3];
       const sfLoserA = sf[0]?.winner ? (sf[0].winner === sf[0].teamA ? sf[0].teamB : sf[0].teamA) : "";
       const sfLoserB = sf[1]?.winner ? (sf[1].winner === sf[1].teamA ? sf[1].teamB : sf[1].teamA) : "";
-      allRounds.push([{ id: "tp-0", teamA: sfLoserA, teamB: sfLoserB, winner: (sfLoserA && sfLoserB) ? (next["tp-0"] || "") : "" }]);
-      allRounds.push([{ id: "f-0", teamA: sf[0]?.winner || "", teamB: sf[1]?.winner || "", winner: (sf[0]?.winner && sf[1]?.winner) ? (next["f-0"] || "") : "" }]);
+      allRounds.push([{ id: "tp-0", teamA: sfLoserA, teamB: sfLoserB, winner: validPick(next["tp-0"], sfLoserA, sfLoserB) }]);
+      allRounds.push([{ id: "f-0", teamA: sf[0]?.winner || "", teamB: sf[1]?.winner || "", winner: validPick(next["f-0"], sf[0]?.winner || "", sf[1]?.winner || "") }]);
 
       const round = allRounds[roundIdx];
       if (round) {
@@ -221,7 +176,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       }
       return next;
     });
-  }, [resolveSeed]);
+  }, [round32]);
 
   // Auto-fill ALL rounds sequentially
   const autoFillAllRounds = useCallback(() => {
@@ -229,12 +184,13 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       const next = { ...prev };
 
       // R32
-      const r32: BracketMatch[] = R32_TEMPLATE.map(([a, b], i) => {
+      const r32: BracketMatch[] = round32().map((slot, i) => {
         const id = `r32-${i}`;
-        const tA = resolveSeed(a);
-        const tB = resolveSeed(b);
-        if (tA && tB && !next[id]) next[id] = rankWinner(tA, tB);
-        return { id, teamA: tA, teamB: tB, winner: next[id] || "" };
+        const tA = slot.a;
+        const tB = slot.b;
+        if (!validPick(next[id], tA, tB)) delete next[id];
+        if (tA && tB && tA !== "TBD" && tB !== "TBD" && !next[id]) next[id] = rankWinner(tA, tB);
+        return { id, teamA: tA, teamB: tB, winner: validPick(next[id], tA, tB) };
       });
 
       // R16, QF, SF
@@ -245,8 +201,9 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
           const id = `${ROUND_PREFIXES[r]}-${i / 2}`;
           const tA = prevRound[i].winner || "";
           const tB = prevRound[i + 1]?.winner || "";
+          if (!validPick(next[id], tA, tB)) delete next[id];
           if (tA && tB && !next[id]) next[id] = rankWinner(tA, tB);
-          round.push({ id, teamA: tA, teamB: tB, winner: next[id] || "" });
+          round.push({ id, teamA: tA, teamB: tB, winner: validPick(next[id], tA, tB) });
         }
         prevRound = round;
       }
@@ -265,7 +222,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
 
       return next;
     });
-  }, [resolveSeed]);
+  }, [round32]);
 
   // Expose auto-fill to parent via ref
   useEffect(() => {
@@ -285,14 +242,13 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
     onRoundsChange?.(rounds);
   }, [rounds, onRoundsChange]);
 
-  // Per-round loading state
-  const [roundLoading, setRoundLoading] = useState<number | null>(null);
-
   const handleAutoFillRound = (rIdx: number) => {
+    if (roundTimerRef.current) clearTimeout(roundTimerRef.current);
     setRoundLoading(rIdx);
-    setTimeout(() => {
+    roundTimerRef.current = setTimeout(() => {
       autoFillRound(rIdx);
       setRoundLoading(null);
+      roundTimerRef.current = null;
     }, 1000);
   };
 
@@ -300,7 +256,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
   const roundHasUnfilled = (rIdx: number): boolean => {
     const round = rounds[rIdx];
     if (!round) return false;
-    return round.some((m) => m.teamA && m.teamB && !m.winner);
+    return round.some((m) => m.teamA && m.teamB && m.teamA !== "TBD" && m.teamB !== "TBD" && !m.winner);
   };
 
   return (
@@ -329,6 +285,15 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-4">
         Click a team to pick them as the winner. They'll auto-advance to the next round.
       </p>
+
+      {allocationUnavailable && (
+        <p
+          role="alert"
+          className="mb-4 rounded-lg border border-amber-500/50 bg-amber-950/40 px-3 py-2 text-xs text-amber-100"
+        >
+          We could not build the official Round of 32 for these selections. Recheck the eight third-place teams or reset them. No third-place matchup has been guessed.
+        </p>
+      )}
 
       {/* Bracket, horizontally scrollable with snap on mobile */}
       <div className="overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory md:snap-none md:mx-0 md:px-0">
@@ -421,7 +386,7 @@ interface MatchCardProps {
 
 const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
   const { id, teamA, teamB, winner } = match;
-  const bothTeams = !!teamA && !!teamB;
+  const bothTeams = !!teamA && !!teamB && teamA !== "TBD" && teamB !== "TBD";
 
   const shortName = (name: string) => {
     if (!name) return <span>TBD</span>;

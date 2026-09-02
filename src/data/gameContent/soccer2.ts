@@ -430,11 +430,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Are the groups real?",
-        a: "Yes, the 12 groups mirror the actual 2026 draw with playoff winners, and the auto fill rankings are the real FIFA list.",
+        a: "Yes, the 12 groups are the 48 teams that played, playoff winners included, and the auto fill rankings are the FIFA list from just before the tournament.",
       },
       {
         q: "Is my bracket scored?",
-        a: "No points are tallied against real results. It is a prediction sandbox for sharing and arguing, not a pool.",
+        a: "Yes, since the tournament was played. The panel under the bracket checks your qualifiers, every knockout round, the champion and the three awards against the real 2026 results, out of 166 points. There is no pool and nothing is submitted anywhere.",
       },
     ],
   },

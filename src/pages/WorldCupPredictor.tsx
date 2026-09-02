@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
 import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
+import { clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
 
@@ -424,7 +425,6 @@ interface PlayoffSlotsPanelProps {
 
 const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPanelProps) => {
   const [open, setOpen] = useState(false);
-  const [autoLoading, setAutoLoading] = useState(false);
   const pickedCount = Object.keys(picks).length;
 
   return (
@@ -448,11 +448,8 @@ const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPa
             {pickedCount < 6 && (
               <SmallAutoButton
                 label="Auto Pick"
-                loading={autoLoading}
-                onClick={() => {
-                  setAutoLoading(true);
-                  setTimeout(() => { onAutoPickPlayoffs(); setAutoLoading(false); }, 1000);
-                }}
+                loading={false}
+                onClick={onAutoPickPlayoffs}
               />
             )}
           </div>
@@ -523,7 +520,6 @@ interface GroupPredictionCardProps {
 
 const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onRankFillGroup, onResetGroup }: GroupPredictionCardProps) => {
   const [expanded, setExpanded] = useState(true);
-  const [rankLoading, setRankLoading] = useState(false);
   const matchups = getMatchups(group.teams);
 
   const standings = useMemo(() => computeStandings(group, predictions), [group, predictions]);
@@ -593,11 +589,8 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                 <>
                   <SmallAutoButton
                     label="By Rank"
-                    loading={rankLoading}
-                    onClick={() => {
-                      setRankLoading(true);
-                      setTimeout(() => { onRankFillGroup(group.letter); setRankLoading(false); }, 1000);
-                    }}
+                    loading={false}
+                    onClick={() => onRankFillGroup(group.letter)}
                   />
                   <button
                     onClick={(e) => { e.stopPropagation(); onAutoFillGroup(group.letter); }}
@@ -769,6 +762,13 @@ const WorldCupPredictor = () => {
      finished tournament can score them. */
   const [bracketRounds, setBracketRounds] = useState<BracketMatch[][]>([]);
   const [awardPicks, setAwardPicks] = useState<PredictedAwards>({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
+  const [knockoutResetVersion, setKnockoutResetVersion] = useState(0);
+  const [awardResetVersion, setAwardResetVersion] = useState(0);
+  const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
+  const [autoFillStep, setAutoFillStep] = useState(0);
+  const [autoFillGeneration, setAutoFillGeneration] = useState(0);
+  const autoFillControllerRef = useRef<ReturnType<typeof createAutoFillController> | null>(null);
+  if (!autoFillControllerRef.current) autoFillControllerRef.current = createAutoFillController();
 
   // Save bracket state
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -894,6 +894,29 @@ const WorldCupPredictor = () => {
     localStorage.setItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
   }, [playoffPicks]);
 
+  const cancelAutoFillEverything = useCallback(() => {
+    autoFillControllerRef.current?.cancel();
+    setAutoFillEverythingLoading(false);
+    setAutoFillStep(0);
+    setAutoFillGeneration(0);
+  }, []);
+
+  const invalidateKnockout = useCallback(() => {
+    clearWc2026ChildStorage(localStorage, false);
+    setChampion("");
+    setBracketRounds([]);
+    setKnockoutResetVersion((version) => version + 1);
+  }, []);
+
+  const beginManualBracketChange = useCallback(() => {
+    cancelAutoFillEverything();
+    invalidateKnockout();
+  }, [cancelAutoFillEverything, invalidateKnockout]);
+
+  useEffect(() => () => {
+    autoFillControllerRef.current?.cancel();
+  }, []);
+
   // Resolve TBD slots with playoff picks
   const resolvedGroups = useMemo(() => {
     return groups.map((g) => ({
@@ -908,6 +931,7 @@ const WorldCupPredictor = () => {
   }, [playoffPicks]);
 
   const handlePlayoffPick = useCallback((slot: string, winner: string) => {
+    beginManualBracketChange();
     setPlayoffPicks((prev) => {
       if (prev[slot] === winner) {
         const next = { ...prev };
@@ -916,16 +940,17 @@ const WorldCupPredictor = () => {
       }
       return { ...prev, [slot]: winner };
     });
-  }, []);
+  }, [beginManualBracketChange]);
 
   const handleScoreChange = useCallback(
     (key: string, field: "homeGoals" | "awayGoals", val: number | "") => {
+      beginManualBracketChange();
       setPredictions((prev) => ({
         ...prev,
         [key]: { ...prev[key], [field]: val },
       }));
     },
-    [],
+    [beginManualBracketChange],
   );
 
   // Check if all group matches are filled (12 groups × 6 matches = 72)
@@ -998,6 +1023,7 @@ const WorldCupPredictor = () => {
   };
 
   const handleAutoFillGroup = useCallback((letter: string) => {
+    beginManualBracketChange();
     setPredictions((prev) => {
       const next = { ...prev };
       for (let i = 0; i < 6; i++) {
@@ -1012,18 +1038,20 @@ const WorldCupPredictor = () => {
       }
       return next;
     });
-  }, []);
+  }, [beginManualBracketChange]);
 
   // Ranking-based auto-fill for a single group
   const handleRankFillGroup = useCallback((letter: string) => {
     const group = resolvedGroups.find((g) => g.letter === letter);
     if (!group) return;
+    beginManualBracketChange();
     const scores = rankBasedScoresForGroup(group);
     setPredictions((prev) => ({ ...prev, ...scores }));
-  }, [resolvedGroups]);
+  }, [beginManualBracketChange, resolvedGroups]);
 
   // Ranking-based auto-fill for ALL groups
   const handleRankFillAllGroups = useCallback(() => {
+    beginManualBracketChange();
     setPredictions((prev) => {
       const next = { ...prev };
       for (const group of resolvedGroups) {
@@ -1032,9 +1060,11 @@ const WorldCupPredictor = () => {
       }
       return next;
     });
-  }, [resolvedGroups]);
+  }, [beginManualBracketChange, resolvedGroups]);
 
   const handleAutoFillAll = useCallback(() => {
+    if (allGroupsFilled) return;
+    beginManualBracketChange();
     setPredictions((prev) => {
       const next = { ...prev };
       for (const letter of GROUPS_LETTERS) {
@@ -1051,19 +1081,21 @@ const WorldCupPredictor = () => {
       }
       return next;
     });
-  }, []);
+  }, [allGroupsFilled, beginManualBracketChange]);
 
   // Auto-pick all playoff slots by FIFA ranking
   const handleAutoPickPlayoffs = useCallback(() => {
+    beginManualBracketChange();
     const newPicks: Record<string, string> = {};
     playoffMatchups.forEach((m) => {
       newPicks[m.slot] = rankWinner(m.teamA, m.teamB);
     });
     setPlayoffPicks((prev) => ({ ...prev, ...newPicks }));
-  }, []);
+  }, [beginManualBracketChange]);
 
   // Auto-pick 8 best third-place teams (by pts then FIFA ranking tiebreak)
   const handleAutoPickThirds = useCallback(() => {
+    beginManualBracketChange();
     // Sort bestThirds by pts desc, then by FIFA rank asc (lower = better)
     const sorted = [...bestThirds].sort((a, b) => {
       if (b.pts !== a.pts) return b.pts - a.pts;
@@ -1072,9 +1104,10 @@ const WorldCupPredictor = () => {
       return getFifaRank(a.team) - getFifaRank(b.team);
     });
     setSelectedThirds(sorted.slice(0, 8).map((t) => t.team));
-  }, [bestThirds]);
+  }, [beginManualBracketChange, bestThirds]);
 
   const handleResetGroup = useCallback((letter: string) => {
+    beginManualBracketChange();
     setPredictions((prev) => {
       const next = { ...prev };
       for (let i = 0; i < 6; i++) {
@@ -1082,44 +1115,53 @@ const WorldCupPredictor = () => {
       }
       return next;
     });
-  }, []);
+  }, [beginManualBracketChange]);
 
   const handleResetEverything = useCallback(() => {
+    cancelAutoFillEverything();
+    clearWc2026ChildStorage(localStorage, true);
     setPredictions({});
     setShowBracket(false);
     setSelectedThirds([]);
     setPlayoffPicks({});
-    localStorage.removeItem("wc2026-knockout");
+    setChampion("");
+    setBracketRounds([]);
+    setAwardPicks({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
+    setKnockoutResetVersion((version) => version + 1);
+    setAwardResetVersion((version) => version + 1);
     localStorage.removeItem("wc2026-selected-thirds");
     localStorage.removeItem("wc2026-playoff-picks");
-  }, []);
+  }, [cancelAutoFillEverything]);
 
   // Ref for bracket auto-fill
   const bracketAutoFillRef = useRef<{ autoFillAllRounds: () => void } | null>(null);
 
   // "Auto Fill Everything", runs all steps sequentially with delays
-  const [autoFillEverythingLoading, setAutoFillEverythingLoading] = useState(false);
   const handleAutoFillEverything = useCallback(() => {
+    const controller = autoFillControllerRef.current;
+    if (!controller) return;
+    const generation = controller.start();
+    setAutoFillGeneration(generation);
     setAutoFillEverythingLoading(true);
 
     // Clear everything first so there's no bleed from previous predictions
+    invalidateKnockout();
     setPredictions({});
     setShowBracket(false);
     setSelectedThirds([]);
     setPlayoffPicks({});
-    localStorage.removeItem("wc2026-knockout");
     localStorage.removeItem("wc2026-selected-thirds");
     localStorage.removeItem("wc2026-playoff-picks");
 
     // Step 1: Auto-pick playoffs (after a tick to let state clear)
-    setTimeout(() => {
+    controller.schedule(generation, () => {
       const newPlayoffPicks: Record<string, string> = {};
       playoffMatchups.forEach((m) => {
         newPlayoffPicks[m.slot] = rankWinner(m.teamA, m.teamB);
       });
       setPlayoffPicks(newPlayoffPicks);
 
-      setTimeout(() => {
+      controller.schedule(generation, () => {
         // Step 2: Fill all groups with weighted random scores
         const resolvedForFill = groups.map((g) => ({
           ...g,
@@ -1136,14 +1178,12 @@ const WorldCupPredictor = () => {
         }
         setPredictions(freshScores);
 
-        setTimeout(() => {
+        controller.schedule(generation, () => {
           setAutoFillStep(3);
         }, 500);
       }, 500);
     }, 100);
-  }, []);
-
-  const [autoFillStep, setAutoFillStep] = useState(0);
+  }, [invalidateKnockout]);
 
   useEffect(() => {
     if (autoFillStep === 3) {
@@ -1159,20 +1199,21 @@ const WorldCupPredictor = () => {
     } else if (autoFillStep === 4) {
       // Show bracket
       setShowBracket(true);
-      setTimeout(() => {
+      autoFillControllerRef.current?.schedule(autoFillGeneration, () => {
         setAutoFillStep(5);
       }, 500);
     } else if (autoFillStep === 5) {
       // Auto-fill all knockout rounds
-      setTimeout(() => {
+      autoFillControllerRef.current?.schedule(autoFillGeneration, () => {
         bracketAutoFillRef.current?.autoFillAllRounds();
         setAutoFillEverythingLoading(false);
         setAutoFillStep(0);
       }, 500);
     }
-  }, [autoFillStep, bestThirds]);
+  }, [autoFillGeneration, autoFillStep, bestThirds]);
 
   const handleToggleThird = useCallback((teamName: string) => {
+    beginManualBracketChange();
     setSelectedThirds((prev) => {
       if (prev.includes(teamName)) {
         return prev.filter((t) => t !== teamName);
@@ -1180,15 +1221,16 @@ const WorldCupPredictor = () => {
       if (prev.length >= 8) return prev;
       return [...prev, teamName];
     });
-  }, []);
-
-  const [rankFillAllLoading, setRankFillAllLoading] = useState(false);
-  const [autoPickThirdsLoading, setAutoPickThirdsLoading] = useState(false);
+  }, [beginManualBracketChange]);
 
   // Build the user-selected thirds list for the bracket (ordered by bestThirds ranking)
   const userSelectedThirdsForBracket = useMemo(() => {
     return bestThirds.filter((t) => selectedThirds.includes(t.team));
   }, [bestThirds, selectedThirds]);
+  const knockoutSignature = useMemo(
+    () => wc2026SeedSignature(groupSeeds, userSelectedThirdsForBracket),
+    [groupSeeds, userSelectedThirdsForBracket],
+  );
 
   // Clean up selectedThirds when third-place teams change (e.g. scores edited)
   useEffect(() => {
@@ -1364,8 +1406,8 @@ const WorldCupPredictor = () => {
             <div className="flex gap-2 flex-shrink-0 flex-wrap">
               <SmallAutoButton
                 label="Fill by Rank"
-                loading={rankFillAllLoading}
-                onClick={() => { setRankFillAllLoading(true); setTimeout(() => { handleRankFillAllGroups(); setRankFillAllLoading(false); }, 1000); }}
+                loading={false}
+                onClick={handleRankFillAllGroups}
               />
               <button
                 onClick={handleAutoFillAll}
@@ -1412,8 +1454,8 @@ const WorldCupPredictor = () => {
                 {selectedThirds.length < 8 && (
                   <SmallAutoButton
                     label="Auto Pick"
-                    loading={autoPickThirdsLoading}
-                    onClick={() => { setAutoPickThirdsLoading(true); setTimeout(() => { handleAutoPickThirds(); setAutoPickThirdsLoading(false); }, 1000); }}
+                    loading={false}
+                    onClick={handleAutoPickThirds}
                   />
                 )}
                 <Badge
@@ -1529,12 +1571,12 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} onRoundsChange={setBracketRounds} autoFillRef={bracketAutoFillRef} />
+            <KnockoutBracket key={`${knockoutSignature}:${knockoutResetVersion}`} seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} onRoundsChange={setBracketRounds} autoFillRef={bracketAutoFillRef} />
           </div>
         )}
 
         {/* Awards Predictor */}
-        <AwardsPredictor champion={champion} onAwardsChange={setAwardPicks} />
+        <AwardsPredictor key={`awards:${awardResetVersion}`} champion={champion} onAwardsChange={setAwardPicks} />
 
         {/* Round 395: the tournament has been played, score the bracket against it */}
         {!viewingSharedBracket && (
@@ -1572,11 +1614,11 @@ const WorldCupPredictor = () => {
             "Scroll to the bottom to score it: qualifiers, every knockout round, the champion and the awards against the real 2026 results."
           ]}
           examples={[
-            "Group A: USA, Mexico, Morocco, and more competing for Round of 32 spots",
-            "Group B: France, Argentina, Brazil among the favorites",
+            "Group A as played: Mexico won it with three wins, South Africa went through second, South Korea and Czechia went home",
+            "Group J as played: Argentina, then Austria, with Algeria through as one of the eight best thirds",
             "Round of 32: First knockout stage with 32 teams advancing",
             "Quarter-finals: Eight teams battle for a semi-final spot",
-            "Predict the Golden Boot winner, Best Young Player, and Golden Glove",
+            "Predict the Golden Boot winner, Golden Ball winner, and Golden Glove",
             "The real final: Spain 1, Argentina 0 after extra time at MetLife Stadium, July 19, 2026"
           ]}
         />
