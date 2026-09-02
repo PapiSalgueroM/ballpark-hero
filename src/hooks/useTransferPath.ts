@@ -32,7 +32,7 @@ export interface TransferPathState {
   unlimitedIndex: number;
   isLoading: boolean;
   isLoadingPool: boolean;
-  addPlayer: (name: string) => { ok: boolean; club: string | null };
+  addPlayer: (name: string) => { ok: boolean; club: string | null; reason?: 'duplicate' };
   /** Owner 2026-08-05: players can surrender and see a real connecting path. */
   giveUp: () => void;
   /** Shortest valid path A -> B through the temporal-teammate graph, computed
@@ -271,8 +271,12 @@ export function useTransferPath(): TransferPathState {
   );
 
   // ── addPlayer ──────────────────────────────────────────────────────────────
-  const addPlayer = useCallback((name: string): { ok: boolean; club: string | null } => {
+  const addPlayer = useCallback((name: string): { ok: boolean; club: string | null; reason?: 'duplicate' } => {
     if (status !== 'building') return { ok: false, club: null };
+
+    if (chain.some(player => player.toLowerCase() === name.toLowerCase())) {
+      return { ok: false, club: null, reason: 'duplicate' };
+    }
 
     const lastInChain = chain[chain.length - 1];
     const sharedClub = playersShareClub(lastInChain, name);
