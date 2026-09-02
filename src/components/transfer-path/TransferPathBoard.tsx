@@ -44,7 +44,9 @@ export function TransferPathBoard() {
     setError('');
     const result = addPlayer(name);
     if (!result.ok) {
-      setError(`${name} was never at the same club as ${chain[chain.length - 1]} in the same season`);
+      setError(result.reason === 'duplicate'
+        ? `${name} is already in the path`
+        : `${name} was never at the same club as ${chain[chain.length - 1]} in the same season`);
       setLastRejected({ name, after: chain[chain.length - 1] });
     }
   };

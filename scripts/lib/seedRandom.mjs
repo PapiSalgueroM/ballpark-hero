@@ -19,6 +19,8 @@
    samples). That is a deliberate act with the number in your shell history,
    not the default. */
 
+import { basename } from 'node:path';
+
 function hashString(s) {
   let h = 0x811c9dc5 >>> 0;
   for (let i = 0; i < s.length; i++) {
@@ -29,7 +31,7 @@ function hashString(s) {
 }
 
 const envSeed = Number(process.env.SIM_SEED);
-let a = (Number.isFinite(envSeed) ? envSeed : hashString(process.argv[1] || 'harness')) >>> 0;
+let a = (Number.isFinite(envSeed) ? envSeed : hashString(basename(process.argv[1] || 'harness'))) >>> 0;
 
 Math.random = () => {
   a |= 0;

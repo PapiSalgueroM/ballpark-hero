@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 94% | Round 407: the soccer and college grids say when the day's AI allowance is gone instead of inviting endless retries; the NFL grid no longer uses the AI at all (406). |
+| P0 production bugs | 95% | Round 410: Footle keeps its complete bundled fallback whenever either half of the live pool fails, so a daily target cannot fall outside the searchable pool. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2727,6 +2727,51 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 410. FOOTLE LIVE DATA IS ALL TIERS OR THE COMPLETE
+  FALLBACK.** The full suite exposed a real partial-fetch path, separate from
+  its one transient live-tier sample: the famous player query could succeed
+  while either half of the obscure query failed, and
+  `fetchFootlePlayerPool` would still return the famous rows. Its caller then
+  accepted that incomplete live pool instead of the complete bundled fallback.
+  On an insane day the fixed target could exist only in the fallback while the
+  search list held no insane players. The fetch now returns an empty result
+  before mapping any live rows when the obscure batch fails, preserving its
+  atomic contract. The behavior test mocks only the Supabase query boundary
+  and calls the real fetch: partial failure returns no pool, complete success
+  keeps famous plus insane tiers, and a famous-query error keeps the old
+  fallback behavior. `simFootleAtomicPool` runs that test and its temporary
+  old-path control proves the famous-only regression is caught. The focused
+  daily check still sees a healthy 1,507-player source with easy, hard and
+  insane live-only coverage. No player data, tier boundaries, AdSense files or
+  daily seed logic changed.
+- **2026-09-02, Round 409. SEEDED HARNESSES MEAN THE SAME THING IN EVERY
+  CHECKOUT.** The full Round 408 suite exposed a test-infrastructure defect,
+  not a production regression: `seedRandom.mjs` said it keyed each default
+  stream on the harness filename but actually hashed the absolute launcher
+  path. A linked worktree therefore gave simNationJob a different sample from
+  the main checkout and failed at 22 England titles with a six-point manager
+  lift versus 23 without one. The helper now hashes only the cross-platform
+  basename. Numeric SIM_SEED still overrides it and the PRNG is unchanged.
+  `simSeedRandom` runs child entries with the same name in two folders,
+  different names, and an explicit seed; its temporary old-helper control
+  proves path dependence returns. The filename seed makes simNationJob 32 to
+  19, and all 26 consumers of the shared helper passed without weakening a
+  single threshold. Production code, sports data, and AdSense did not move.
+- **2026-09-02, Round 408. TRANSFER PATH CANNOT LOOP THROUGH THE SAME PLAYER.**
+  A submitted path repeated Dusan Vlahovic three times. The autocomplete hid
+  prior names, but that was only a presentation filter: the hook accepted a
+  repeated player whenever the repeated pair had a real same-club,
+  same-season link. `useTransferPath.addPlayer` now owns the invariant and
+  rejects any case-insensitive name already in the active chain before it can
+  write a daily action or unlimited state. The board reports that the player
+  is already in the path, while a genuine invalid link keeps the existing
+  same-club, same-season explanation and report context. The real-hook test
+  makes a valid temporal teammate move, tries the start again with exact and
+  changed casing, and proves the chain and connections stay unchanged.
+  `simTransferPathRepeat` runs that test and carries an old-hook control which
+  proves the old behavior accepts the repeat and mutates the chain. Task and
+  whole-branch reviews found no remaining code issue. No sports data or
+  AdSense files changed.
 - **2026-09-02, Round 407. THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS
   GONE.** Round 379's third option, the one still open after the cache work: the
   soccer and college grids validate through a free tier AI, Round 378 measured its daily

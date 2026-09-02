@@ -19,11 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 408.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 412.
 
 ## Active claims, 2026-09-02
 
-- None. Round 400 is in Done and Google's AdSense review is pending.
+- **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
+  board-keyed design already approved in
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`: a discoverable archive, one route
+  per distinct retired board, complete answer keys, aggregate recorded rarity,
+  and replay that cannot write daily saves, scores, completions or selection
+  rows. Include board-key collision and retirement safety, crawler integration,
+  help, and a negative-control harness. Do not reopen private selection rows or
+  invent community data where no aggregate exists.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
@@ -734,6 +741,36 @@ Standing claims after Round 400:
 
 ## Done
 
+- FOOTLE LIVE DATA FAILS AS ONE COMPLETE POOL, Round 410 (desktop lane,
+  2026-09-02). The famous query could succeed while either half of the obscure
+  query failed, leaving a famous-only pool even though the fetch contract says
+  any error keeps the complete bundled fallback. On an insane day that could
+  put the fixed daily target outside the searchable player list. The fetch now
+  returns an empty result before mapping any live rows when the obscure batch
+  fails. A real-function test covers partial failure, full success with an
+  insane row, and the existing famous-query fallback. simFootleAtomicPool
+  carries an old-path negative control, and the live tier check confirms the
+  healthy source still supplies all three tiers.
+- SHARED SIMULATION SEEDS NO LONGER CHANGE WITH THE CHECKOUT FOLDER, Round
+  409 (desktop lane, 2026-09-02). The shared helper promised one deterministic
+  stream per harness filename but hashed the absolute launcher path. The same
+  commit therefore produced different samples in the main checkout and a
+  linked worktree, making simNationJob green in one and red at 22 titles to 23
+  in the other. The helper now hashes only the filename while preserving the
+  explicit SIM_SEED override and PRNG. simSeedRandom launches matching names
+  from two folders, different names, and an explicit seed; its old-path
+  control proves the defect. All 26 shared-seed consumers passed, and
+  simNationJob is stable at 32 titles to 19.
+- TRANSFER PATH REJECTS A PLAYER ALREADY IN THE CHAIN, Round 408 (desktop
+  lane, 2026-09-02). A submitted path repeated Dusan Vlahovic three times.
+  The suggestion list had hidden used names, but the hook did not own the
+  rule. The hook now rejects prior names case-insensitively before any state
+  write, and the page says the player is already in the path instead of
+  claiming a false teammate mismatch. The real-hook regression covers a
+  valid move, exact and case-variant repeats, and unchanged chain and
+  connections. simTransferPathRepeat carries an old-hook negative control
+  that prints the accepted repeat and mutated chain before failing as
+  expected. No sports data or AdSense files changed.
 - ADSENSE ROUTE ELIGIBILITY LIVE AND REVIEW SUBMITTED, Round 400 (Codex lane,
   2026-09-02). The global loader is gone; accepted visitors load the real manual
   unit only beside an eligible slot; Auto Ads and Auto optimize are off; and
