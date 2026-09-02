@@ -175,11 +175,15 @@ serve(async (req) => {
 
   const prompt = `You are a college football (NCAA/FBS) trivia expert (2000-2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider the player's college career: school(s) attended, conference, position, Heisman/All-American/National Champion honours, and NFL draft status (round/pick/undrafted). Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
 
+  /* Round 407: max_tokens was 150, and the logs showed the model answering
+     200 with a body of {"valid": and nothing more: its own reasoning tokens
+     spend the budget before the verdict, so every AI judged guess was refused
+     as a blip. 800 leaves room for the thinking and the JSON. */
   try {
     const callAI = () => fetch(AI_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${AI_KEY}` },
-      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 150 }),
+      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 800 }),
     });
     let resp = await callAI();
     if (resp.status === 429) {
