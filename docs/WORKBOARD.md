@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 403.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 404.
 
 ## Active claims, 2026-09-01
 
@@ -30,6 +30,19 @@ How it works:
   negative control. Soccer Career and Club Manager get the first deep checks.
 
 
+
+- **next: Round 403 (desktop lane, 2026-09-02). THE NFL ANSWER KEY, KEYED ON
+  IDENTITY: PHASE 2 OF docs/designs/NFL-GRID-ENGINE-DESIGN.md.**
+  scripts/genNflGridData.mjs derives one row per player (gsis_id) from the
+  documented tables the site holds: seasons and teams from nflfastr_rosters
+  with the 39 codes merged through nfl_team_codes, positions normalised to
+  the pool's buckets, college, draft round and pick from nfl_draft_picks
+  (ambiguous joins dropped), stat seasons summed from nflfastr_player_stats,
+  Super Bowl wins from the winner's season roster. Output
+  src/data/nflGridPlayers.json, fenced by simNflGridData (recompute a sample
+  live, famous careers against a recorded second source, the namesake set
+  split, unreachable database refuses to run). No page changes yet. Files in
+  play: the new generator, data file and fence only.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
