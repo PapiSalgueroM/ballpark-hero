@@ -19,9 +19,26 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 399.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 401.
 
 ## Active claims, 2026-09-01
+
+- **next: Round 399 (desktop lane, work already present in Anthony's tree).
+  CLUB MANAGER FAST-FORWARD SACKING STOP.** `useClubManager.ts` and the focused
+  completion harness are already being edited outside the Codex lane. Do not
+  overlap them.
+- **next: Round 400 (Codex lane, clean verification worktree). FULL SITE FACT
+  AND PLAYABILITY AUDIT.** Run the real type gate, full node harness fleet and
+  browser route sweep from committed `main`; classify every failure before
+  changing code; fix the highest-confidence production bug first, with its
+  negative control. Soccer Career and Club Manager get the first deep checks.
+
+**OWNER PRIORITY, 2026-09-01, LATEST ORDER WINS:** first audit factual accuracy
+and prove every game works, then protect and improve Soccer Career because it is
+the biggest game, then make the AdSense case genuinely ready, then expand the
+Australian sports catalog substantially. NRL and AFL are important because the
+Australian audience is large, but they do not jump ahead of correctness,
+Soccer Career or AdSense readiness.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -133,6 +150,20 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- **MUCH LATER COSMETIC IDEA, owner request 2026-09-01:** a customizable site
+  mascot like the small coding pets, with animal choices and sport animations
+  such as dribbling a basketball, juggling a soccer ball or playing with a
+  hockey puck. Keep it cosmetic, local-save friendly, reduced-motion safe and
+  free of club logos, real kits or player likenesses. This is explicitly not a
+  current priority.
+- **AUSTRALIAN SPORTS EXPANSION, after the owner priority gates above:** build a
+  dedicated `/nrl-my-career` as the first major NRL route, using a fictional
+  player, real two-source-verified clubs and competition structure, no rosters,
+  logos, kits, photos or copied league text. Follow with deeper AFL work. The
+  2026 research spike found schedule reproduction and changing weekly team
+  lists carry avoidable provenance and staleness risk, so the career must not
+  depend on either.
 
 **FOUND BY ROUND 381'S VERIFICATION SWEEP, all still live, each with its
 measurement. Five agents investigated the queue and five more tried to refute
