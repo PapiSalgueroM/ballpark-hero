@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 94% | Round 407: the soccer and college grids say when the day's AI allowance is gone instead of inviting endless retries; the NFL grid no longer uses the AI at all (406). |
+| P0 production bugs | 95% | Round 408: Transfer Path rejects any player already in the chain at the hook boundary and gives a truthful duplicate message. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2727,6 +2727,21 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 408. TRANSFER PATH CANNOT LOOP THROUGH THE SAME PLAYER.**
+  A submitted path repeated Dusan Vlahovic three times. The autocomplete hid
+  prior names, but that was only a presentation filter: the hook accepted a
+  repeated player whenever the repeated pair had a real same-club,
+  same-season link. `useTransferPath.addPlayer` now owns the invariant and
+  rejects any case-insensitive name already in the active chain before it can
+  write a daily action or unlimited state. The board reports that the player
+  is already in the path, while a genuine invalid link keeps the existing
+  same-club, same-season explanation and report context. The real-hook test
+  makes a valid temporal teammate move, tries the start again with exact and
+  changed casing, and proves the chain and connections stay unchanged.
+  `simTransferPathRepeat` runs that test and carries an old-hook control which
+  proves the old behavior accepts the repeat and mutates the chain. Task and
+  whole-branch reviews found no remaining code issue. No sports data or
+  AdSense files changed.
 - **2026-09-02, Round 407. THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS
   GONE.** Round 379's third option, the one still open after the cache work: the
   soccer and college grids validate through a free tier AI, Round 378 measured its daily

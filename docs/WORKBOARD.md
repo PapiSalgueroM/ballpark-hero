@@ -23,13 +23,8 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 408. Transfer Path repeated-player guard.** A
-  submitted chain repeated Dusan Vlahovic three times. The suggestion list
-  filters used names, but the hook that owns the game rule does not reject a
-  repeated player. Add the invariant at the hook boundary, show a truthful
-  rejection message, and cover it with a behavior-level regression test and a
-  negative control. AdSense review remains pending and this round does not
-  change the verified ad boundary.
+- None. Round 408 is complete on its branch and Google's AdSense review is
+  pending.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
@@ -740,6 +735,16 @@ Standing claims after Round 400:
 
 ## Done
 
+- TRANSFER PATH REJECTS A PLAYER ALREADY IN THE CHAIN, Round 408 (desktop
+  lane, 2026-09-02). A submitted path repeated Dusan Vlahovic three times.
+  The suggestion list had hidden used names, but the hook did not own the
+  rule. The hook now rejects prior names case-insensitively before any state
+  write, and the page says the player is already in the path instead of
+  claiming a false teammate mismatch. The real-hook regression covers a
+  valid move, exact and case-variant repeats, and unchanged chain and
+  connections. simTransferPathRepeat carries an old-hook negative control
+  that prints the accepted repeat and mutated chain before failing as
+  expected. No sports data or AdSense files changed.
 - ADSENSE ROUTE ELIGIBILITY LIVE AND REVIEW SUBMITTED, Round 400 (Codex lane,
   2026-09-02). The global loader is gone; accepted visitors load the real manual
   unit only beside an eligible slot; Auto Ads and Auto optimize are off; and
