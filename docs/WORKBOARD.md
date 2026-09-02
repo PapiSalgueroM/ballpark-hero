@@ -19,18 +19,21 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 412.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 413.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
-  board-keyed design already approved in
-  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`: a discoverable archive, one route
-  per distinct retired board, complete answer keys, aggregate recorded rarity,
-  and replay that cannot write daily saves, scores, completions or selection
-  rows. Include board-key collision and retirement safety, crawler integration,
-  help, and a negative-control harness. Do not reopen private selection rows or
-  invent community data where no aggregate exists.
+- **Desktop lane, next: Round 411. Live-data harnesses retry only transient
+  transport failures.** The 184-harness release run passed every code and data
+  assertion, but `simSchemaNames` and `simValueFreshness` each exited before
+  checking anything on a one-off `fetch failed`; both passed immediately alone,
+  and Value Freshness failed again only under parallel runner load. Give each
+  request the same bounded retry pattern already used by the other long live
+  database fences. Refusals and data mismatches must still fail immediately.
+  Add a transport-failure negative control so a retry cannot become an excuse
+  to hide a genuinely unreachable database. NFL Grid archive phase 4 follows
+  as Round 412, after its first engine-era board has retired and its private
+  selections can be exported as aggregate counts only.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
