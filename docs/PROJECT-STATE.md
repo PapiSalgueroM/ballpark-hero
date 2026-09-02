@@ -2772,6 +2772,14 @@ today rather than adding alongside them.
   proves the old behavior accepts the repeat and mutates the chain. Task and
   whole-branch reviews found no remaining code issue. No sports data or
   AdSense files changed.
+- **2026-09-02, Round 415. THE BILLION DOLLAR GAME SAYS DOLLARS.** The last loose end
+  from the owner's item 13, which Round 315 half fixed: the budget became exactly 1000
+  and the board renders it with a dollar sign, but the page around it still said euros in
+  six places, including the browser title and the meta description, so the shipped
+  snapshot served "€1 Billion Budget Builder" over a game that counts in dollars. All six
+  now say dollars, matching the board, the registry label and the guide. The snapshot was
+  re-rendered and the sitemap re-dated that one row honestly. Found by the same audit as
+  Round 413. Gates: tsc zero, the built site fences, build green.
 - **2026-09-02, Round 414. THE OWNER'S TICKER: SLOWER, WIDER, AND MORE ACCURATE.** His
   words today: "can you put the ticker speed a little bit slower and with a lot more
   accuracy and sporting events". Three asks, one round.

@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 415.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 416.
 
 ## Active claims, 2026-09-02
 
@@ -743,6 +743,12 @@ Standing claims after Round 400:
 
 ## Done
 
+- THE BILLION DOLLAR GAME SAYS DOLLARS, Round 415 (desktop lane, 2026-09-02).
+  The owner's item 13 had a tail: the budget and the board were fixed in
+  Round 315 but the page around them still said euros in six places, title
+  and meta description included, so the snapshot served a euro sign over a
+  game counting in dollars. Snapshot re-rendered, that one sitemap row
+  re-dated.
 - THE OWNER'S TICKER, Round 414 (desktop lane, 2026-09-02, his request the
   same day). Crawl 110 to 75 px/s, held by a fence to the window between the
   two speeds he has complained about. Nine sports polled instead of five
