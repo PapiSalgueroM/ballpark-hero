@@ -236,15 +236,15 @@ export function divisionOf(abbr: string): string {
 /* ROUND 419: EVERY CLUB PLAYS SEVENTEEN GAMES, and until now most seasons had
    one that did not. The shape was documented and believed: six divisional
    games home and away against three rivals, plus eleven crossover games,
-   seventeen in all for all thirty two clubs. Measured over 200 built
-   schedules it delivered that in only 27 of them. In the other 173 a single
-   club came up short, sometimes as low as NINE games, because the crossover
+   seventeen in all for all thirty two clubs. Measured over 3,000 built
+   schedules it delivered that 10.6 percent of the time. In the other 89.4
+   percent a club came up short, as low as NINE games, because the crossover
    pairing walked a greedy loop and gave up the moment one club was left
    needing partners nobody could legally supply. Standings sort on wins, so a
    club with eight fewer chances to win is not cosmetic: it cannot reach the
    playoffs, and the mandate ownership grades it against assumes it can. The
-   same pass also placed a club in the same week twice about 38 times a
-   season, under a comment calling that rare and harmless. It was neither.
+   same pass also placed a club in the same week twice 40.8 times a season on
+   average, under a comment calling that rare and harmless. It was neither.
 
    GREEDY CANNOT DO THIS, WHICH IS WHY IT IS NOT GREEDY ANY MORE. Fixing the
    old loop to serve the hungriest club first still only completed the pairing
@@ -739,10 +739,14 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
     t.wins = 0;
     t.losses = 0;
     t.picks = [1, 2, 3];
-    /* Round 418: this is the LEGACY path now. team.defense only reaches the
-       sim through defenceRating's fallback, which fires for a pre 416 save
-       whose clubs have no defenders yet, so the drift is kept exactly as it
-       was for those saves and does nothing for a roster that has its own. */
+    /* Round 418: team.defense NO LONGER REACHES THE SIM AT ALL. An earlier
+       draft of that round kept it as defenceRating's empty roster fallback,
+       and that fallback was the exploit (cutting your whole defence dropped
+       you onto a stored number that was an upgrade for 11 of the 32 clubs),
+       so it was removed. The field and this drift are kept only because they
+       sit inside every saved league in localStorage and removing them would
+       be a save migration for a number nothing reads. Do not restore a code
+       path to it without reading the note above defenceRating first. */
     t.defense = Math.round(Math.max(60, Math.min(95, t.defense + (77 - t.defense) * 0.2 + (rng() * 8 - 4))));
   }
   // trim the FA pool to the useful part
