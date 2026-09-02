@@ -23,18 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 412. THE GRID ENGINE CANNOT DEAL A CELL NOBODY
-  CAN ANSWER.** Measured 2026-09-02 on the committed key: at easy difficulty
-  the NFL grid deals 57 impossible cells across 400 boards (Undrafted x First
-  Round Pick, Wide Receiver x Defensive Lineman). The daily board is normal
-  difficulty so players are safe today, but the lib exports difficulty and the
-  next round to enable it ships an unanswerable cell. The engine learns that a
-  sport's achievements can be mutually exclusive; the NFL config says they are,
-  and easy mode then places one, exactly as normal does. The NBA, MLB and NHL
-  configs do not set the flag, so their seed sequences and every published
-  archive board are untouched. Files in play: src/lib/gridEngine.ts,
-  src/lib/nflGrid.ts, scripts/simNflGrid.mjs, scripts/simGridEngine.mjs. Round
-  411 (NFL archive, other lane) is not touched.
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
   board-keyed design already approved in
@@ -754,6 +742,12 @@ Standing claims after Round 400:
 
 ## Done
 
+- THE GRID ENGINE CANNOT DEAL A CELL NOBODY CAN ANSWER, Round 412 (desktop
+  lane, 2026-09-02). Easy difficulty crossed two mutually exclusive NFL
+  criteria and dealt 57 unanswerable cells across 400 boards; a config can now
+  declare its achievements exclusive and the engine deals one. The other three
+  sports are untouched and every published archive board still rebuilds.
+  simNflGrid section 6 checks every cell at every difficulty, with a control.
 - FOOTLE LIVE DATA FAILS AS ONE COMPLETE POOL, Round 410 (desktop lane,
   2026-09-02). The famous query could succeed while either half of the obscure
   query failed, leaving a famous-only pool even though the fetch contract says

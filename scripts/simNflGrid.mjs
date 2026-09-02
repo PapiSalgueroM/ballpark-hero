@@ -22,9 +22,18 @@
      5. THE DISPLAY NAME IS THE MATCH KEY. The lib indexes players by the
         table's display_name (the search box offers the same column), so a
         namesake guess resolves to exactly one row.
+     6. NO CELL THE LIB CAN DEAL IS UNANSWERABLE, AT ANY DIFFICULTY. 400
+        boards per difficulty, every cell counted against the key. This is
+        the check that would have caught Round 412's defect: easy mode used
+        to cross two mutually exclusive criteria (Undrafted with First Round
+        Pick) and deal a cell nobody could fill.
 
-   NEGATIVE CONTROL: SIM_NFLGRID_CONTROL=thin removes every Super Bowl winner
-   from one franchise in memory; section 3 must go red.
+   NEGATIVE CONTROLS (house rule: prove each check can fail):
+     SIM_NFLGRID_CONTROL=thin   removes every Super Bowl winner from one
+                                franchise in memory; section 3 must go red.
+     SIM_NFLGRID_CONTROL=cross  builds the boards without the exclusive flag,
+                                the pre Round 412 behaviour; section 6 must
+                                go red on the cells nobody can answer.
 
    Run: node scripts/simNflGrid.mjs
 */
@@ -36,7 +45,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NFLGRID_CONTROL || '';
-const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
@@ -51,9 +60,10 @@ const BUNDLE = path.join(os.tmpdir(), 'nflGrid.bundle.mjs');
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const lib = await import('${path.join(ROOT, 'src', 'lib', 'nflGrid.ts').replaceAll('\\', '/')}');
+export const engine = await import('${path.join(ROOT, 'src', 'lib', 'gridEngine.ts').replaceAll('\\', '/')}');
 `);
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { lib } = await import(pathToFileURL(BUNDLE).href);
+const { lib, engine } = await import(pathToFileURL(BUNDLE).href);
 const key = JSON.parse(read('scripts/data/nflGridPlayers.json'));
 let players = key.players ?? [];
 if (players.length < 15000) abort(`the key file holds ${players.length} players; NOTHING WAS CHECKED`);
@@ -151,11 +161,40 @@ console.log('5) The display name is the match key, in the lib and in the search 
   console.log(`   ${displays.size} distinct display names for ${players.length} players`);
 }
 
-const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5];
+section = 6;
+console.log('6) No cell the lib can deal is unanswerable, at any difficulty');
+{
+  const SEEDS = 400;
+  const BAR = 20;
+  if (CONTROL === 'cross') console.log('   NEGATIVE CONTROL ON: boards built without the exclusive flag, the pre Round 412 behaviour');
+  for (const difficulty of ['normal', 'easy', 'hard']) {
+    let worst = Infinity, worstCell = '', thin = 0, shown = 0;
+    for (let seed = 1; seed <= SEEDS; seed += 1) {
+      const board = CONTROL === 'cross'
+        ? engine.buildFranchisePuzzle(lib.FRANCHISE_POOL, lib.ACHIEVEMENT_POOL, seed, difficulty)
+        : lib.buildGridPuzzle(seed, difficulty);
+      for (const row of board.rows) {
+        for (const col of board.cols) {
+          const n = indexed.filter(p => lib.playerMatchesCell(p, { row, col })).length;
+          if (n < worst) { worst = n; worstCell = `${row.label} x ${col.label}`; }
+          if (n < BAR) {
+            thin += 1;
+            shown += 1;
+            if (shown <= 3) fail(`${difficulty}: seed ${seed} deals "${row.label} x ${col.label}" with only ${n} answers`);
+          }
+        }
+      }
+    }
+    if (shown > 3) fail(`${difficulty}: ${shown - 3} further thin cells beyond the three shown`);
+    console.log(`   ${difficulty.padEnd(7)} ${SEEDS} boards, floor ${worst} (${worstCell}), cells under ${BAR}: ${thin}`);
+  }
+}
+const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5] + failures[6];
 if (CONTROL) {
-  if (CONTROL !== 'thin') abort(`unknown control "${CONTROL}" (thin)`);
-  if (failures[3] > 0) { console.log(`\ncontrol "thin": ${failures[3]} failure(s) fired in section 3 as expected, the check works`); process.exit(0); }
-  abort('\ncontrol "thin": changed NOTHING in section 3, the check is dead');
+  const own = { thin: 3, cross: 6 }[CONTROL];
+  if (!own) abort(`unknown control "${CONTROL}" (thin, cross)`);
+  if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
+  abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
 if (total > 0) { console.error(`\nsimNflGrid: ${total} failure(s)`); process.exit(1); }
 console.log('\nsimNflGrid: green. Every cell the engine can deal has answers, and the pools are the key\'s.');

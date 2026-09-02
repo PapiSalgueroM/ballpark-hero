@@ -231,10 +231,22 @@ export function buildFranchisePuzzle(
   achievementPool: GridCategory[],
   seed: number,
   difficulty: GridDifficulty = 'normal',
+  exclusiveAchievements = false,
 ): GridPuzzle {
   const rng = mulberry32(seed);
 
-  if (difficulty === 'hard') {
+  /* Round 412: easy mode puts one achievement on each axis, which crosses
+     them, and that is only a question when a player can satisfy both. The
+     basketball, baseball and hockey pools are career totals (10,000 points
+     AND 5,000 rebounds is an ordinary career), but the NFL pool is mutually
+     exclusive by construction: nobody is undrafted and a first round pick,
+     nobody is a quarterback and a defensive lineman. Measured on the
+     committed key, easy dealt 57 unanswerable cells across 400 boards. A
+     pool that says so is dealt one achievement, exactly as normal does, and
+     the other three sports keep their draw untouched. */
+  const effective: GridDifficulty = exclusiveAchievements && difficulty === 'easy' ? 'normal' : difficulty;
+
+  if (effective === 'hard') {
     // All 6 categories are franchises, no achievement slot at all.
     const franchises = pickN(franchisePool, 6, rng);
     const rows = franchises.slice(0, 3);
@@ -246,7 +258,7 @@ export function buildFranchisePuzzle(
     };
   }
 
-  if (difficulty === 'easy') {
+  if (effective === 'easy') {
     // Both achievement categories are used (one per axis), 2 franchises fill
     // out each axis alongside them.
     const franchises = pickN(franchisePool, 4, rng);

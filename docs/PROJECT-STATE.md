@@ -2772,6 +2772,21 @@ today rather than adding alongside them.
   proves the old behavior accepts the repeat and mutates the chain. Task and
   whole-branch reviews found no remaining code issue. No sports data or
   AdSense files changed.
+- **2026-09-02, Round 412. THE GRID ENGINE CANNOT DEAL A CELL NOBODY CAN ANSWER.** The
+  shared engine's easy mode puts one achievement on each axis, which crosses them, and
+  that is only a question when a player can satisfy both. For the basketball, baseball
+  and hockey pools it is (10,000 points and 5,000 rebounds is an ordinary career), but
+  the NFL pool is mutually exclusive by construction: nobody is undrafted and a first
+  round pick, nobody is a quarterback and a defensive lineman. Measured on the committed
+  key: easy dealt 57 unanswerable cells across 400 boards, including Undrafted crossed
+  with First Round Pick. The daily board is normal difficulty, so no player ever saw one,
+  but the lib exports difficulty and the next round to enable it would have shipped a cell
+  nobody could fill. A config can now say its achievements are exclusive, and the engine
+  then deals one of them even at easy, exactly as normal does; the other three sports do
+  not set the flag, so their draw is untouched and simGridEngine still rebuilds all 42
+  published archive boards. `simNflGrid` section 6 is the check that would have caught it:
+  400 boards per difficulty, every cell counted against the key, floor 23 everywhere now,
+  with a control that builds without the flag and goes red on four cells.
 - **2026-09-02, Round 407. THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS
   GONE.** Round 379's third option, the one still open after the cache work: the
   soccer and college grids validate through a free tier AI, Round 378 measured its daily

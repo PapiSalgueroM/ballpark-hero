@@ -33,6 +33,14 @@ import {
  * not offered; they stay in the key for the archive and for later boards.
  * scripts/simNflGrid.mjs recomputes both floors from the key file.
  *
+ * MUTUALLY EXCLUSIVE CRITERIA. Unlike the other three franchise grids,
+ * whose achievements are career totals a player can hold at once, no player
+ * here is undrafted and a first round pick, or a quarterback and a defensive
+ * lineman. The config says so, and the engine then never crosses two of them
+ * on one board (Round 412; before it, easy difficulty dealt 57 unanswerable
+ * cells across 400 boards). scripts/simNflGrid.mjs section 6 checks every
+ * cell the lib can deal at every difficulty.
+ *
  * NAMES. 1,584 of the players share a name with another player in the key.
  * The table carries a display_name that tells namesakes apart with a season
  * span (and a team, and a position, when the span is not enough); the
@@ -229,7 +237,7 @@ export function saveGridDifficulty(next: GridDifficulty): void {
  * everyone and never repeats a hand authored pool.
  */
 export function buildGridPuzzle(seed: number, difficulty: GridDifficulty = 'normal') {
-  return buildFranchisePuzzle(FRANCHISE_POOL, ACHIEVEMENT_POOL, seed, difficulty);
+  return buildFranchisePuzzle(FRANCHISE_POOL, ACHIEVEMENT_POOL, seed, difficulty, true);
 }
 
 export { gridToEmoji } from '@/lib/gridEngine';

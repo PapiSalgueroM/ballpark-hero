@@ -139,7 +139,10 @@ console.log("3) The engine's identity: the PRNG constant and the three difficult
 {
   const engine = stripComments(read('src/lib/gridEngine.ts'));
   if (!engine.includes('a = (a + 0x6d2b79f5) | 0;')) fail('gridEngine.ts no longer draws from mulberry32 with the published constant');
-  for (const branch of ["difficulty === 'hard'", "difficulty === 'easy'", 'rng() < 0.5']) {
+  /* Round 412: the branches read the EFFECTIVE difficulty, because a pool
+     whose achievements are mutually exclusive is dealt one of them even at
+     easy (see the engine's note). The branches themselves are the sequence. */
+  for (const branch of ["effective === 'hard'", "effective === 'easy'", 'rng() < 0.5']) {
     if (!engine.includes(branch)) fail(`gridEngine.ts lost the ${branch} branch of the puzzle builder`);
   }
   const libsImportEngine = SPORTS.every(s => /from '@\/lib\/gridEngine'/.test(stripComments(read(s.lib))));
