@@ -23,31 +23,15 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **next: Round 400 (Codex lane, clean verification worktree). ADSENSE ROUTE
-  ELIGIBILITY, LOCAL GATES COMPLETE, AWAITING DEPLOYMENT.** The owner moved
-  AdSense readiness first. The
-  global ad loader has been removed from `index.html`; an accepted visitor now
-  loads it only beside a deliberate manual slot in a document without noindex;
-  the three retired slots are removed; and same-tab consent changes reach the
-  slot. One responsive Display unit, `DoUKnowBall Game Banner`, now exists at
-  slot `7540487748`; all 75 source callers across 75 files use it, with zero
-  mismatches by scan. Auto Ads and Auto optimize are verified OFF. The focused
-  browser harness carries five exact lifecycle controls. The final SEO build,
-  TypeScript gate, 13 built-site fences, AdSense, legal and brand harnesses, and
-  the full browser pass are green. The browser measured 358 pixels on mobile and
-  864 on desktop, with zero requests on 16 policy-risk routes. Its final pass
-  also caught and fixed a saved private page carrying noindex into a public
-  game, then passed again with the matching negative control. Deployment, live
-  verification and the Google submissions remain, so this claim stays out of
-  Done.
+- None. Round 400 is in Done and Google's AdSense review is pending.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
 rest of the existing plan. Move quickly, but keep the verification standard and
 do not trade correctness for speed. This supersedes the older work order below.
-The owner later explicitly authorized checking the Request review confirmation
-and submitting after the new build is live and verified. No review has been
-submitted yet.
+The owner explicitly authorized the review submission after live verification.
+Round 400 passed those checks and the review was submitted. Google now shows
+Getting ready and Review requested; its decision is pending.
 
 **HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
 ROADMAP.** This did not replace the priority list when it was recorded. The
@@ -74,13 +58,14 @@ the site is frozen any more; the ordinary care about crawler-facing files still
 applies, and ads.txt, the verification code and robots.txt are still not things
 to touch casually.
 
-**GOOGLE CONSOLES INSPECTED AND CONFIGURED, 2026-09-02.** Round 400 used account
+**GOOGLE CONSOLES INSPECTED AND SUBMITTED, 2026-09-02.** Round 400 used account
 `anacatu2025@gmail.com`, created the real Display unit, and turned Auto Ads and
-Auto optimize off. No AdSense review or Search Console indexing request was
-submitted. The detailed AdSense state, Search Console counts, exact ten-route
-batch and readiness gates have one source of truth:
-`docs/adsense/reapply-readiness.md`. The owner authorized the route batch and
-AdSense review submission after Round 400 is live and its route checks pass.
+Auto optimize off. Search Console accepted the sitemap with status Success and
+137 discovered pages, and all ten priority URLs were added to its crawl queue.
+The AdSense review was submitted after the live checks passed. AdSense now shows
+Getting ready and Review requested; approval is not yet decided. The detailed
+state and evidence have one source of truth:
+`docs/adsense/reapply-readiness.md`.
 
 **HISTORICAL CONTENT AUDIT, 2026-08-30. Read this before anyone starts writing
 filler copy.** It found no measured thin-copy defect. Across all 153 shipped
@@ -119,8 +104,8 @@ to 30 pages) and docs/adsense/reapply-readiness.md (ending in NOT READY,
 NEARLY READY or READY, and he submits the review, not us). New P0 order:
 production bugs and security, then AdSense recovery, then indexing, then sports
 data correctness.
-The 2026-09-02 priority update above is current. The owner still decides when
-to submit the review.
+The 2026-09-02 priority update above is current. The later submission authority
+was exercised after the live checks passed.
 
 **HISTORICAL OPERATING-CONTRACT NOTE, SUPERSEDED BY THE 2026-08-30 ANSWER AND
 THE 2026-09-02 PRIORITY UPDATE.** Before those decisions, the operating contract
@@ -743,12 +728,20 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
-Standing claims after Round 400 finishes:
+Standing claims after Round 400:
 
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
 
+- ADSENSE ROUTE ELIGIBILITY LIVE AND REVIEW SUBMITTED, Round 400 (Codex lane,
+  2026-09-02). The global loader is gone; accepted visitors load the real manual
+  unit only beside an eligible slot; Auto Ads and Auto optimize are off; and
+  legal, private, retired, redirect, fallback and noindex screens make zero ad
+  requests. The complete local matrix passed, then live route-boundary checks
+  and a fresh 29-route Google-render audit passed. Search Console accepted the
+  137-page sitemap and queued all ten priority URLs. AdSense says Getting ready
+  and Review requested. Google's decision remains pending.
 - THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS GONE, Round 407
   (desktop lane, 2026-09-02, Round 379's third option). The soccer and
   college validators return exhausted on a second 429 with a refusal that

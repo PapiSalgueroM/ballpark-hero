@@ -4,13 +4,12 @@ Asked for by the owner's directive of 2026-08-30, section 19. Written 2026-08-30
 after Rounds 348 to 359. Every number here was measured, and the script that
 measured it is named so it can be re-run. Nothing in this file is an estimate.
 
-**Status update, 2026-09-02: Round 400 passed every local gate and is not deployed.** The
-owner has moved AdSense readiness ahead of the rest of the roadmap. The
-measurements below remain the exact 2026-08-30 live baseline, not a claim about
-the current worktree. The Google consoles were inspected under
-`anacatu2025@gmail.com`, then the AdSense unit and site settings described below
-were changed and verified by reopening them. The owner authorized the review
-submission after live verification. No review was requested or approved yet.
+**Status update, 2026-09-02: Round 400 is live and the AdSense review is
+submitted.** The complete local matrix passed before ship, followed by live
+route-boundary checks and a fresh 29-route Google-render audit. Search Console
+accepted the 137-page sitemap and queued all ten priority URLs. AdSense now
+shows Getting ready and Review requested. Google has not decided whether to
+approve the site.
 
 **The verdict is at the bottom. Read the evidence first, because the verdict is
 only worth what the evidence is worth.**
@@ -33,8 +32,12 @@ response was measurement rather than writing.
 `scripts/auditGoogleRender.mjs` fetches the live site three ways: raw HTML with
 no JavaScript, the page after the app boots, and the page rendered with the
 database refused outright. Full output in `docs/seo/google-render-audit.md`.
-This table is the 2026-08-30 live baseline. Re-run it after Round 400 is
-published before replacing any count.
+This table preserves the detailed 2026-08-30 live baseline. A fresh live run on
+2026-09-02 after Round 400 was published again audited 29 routes. All returned
+HTTP 200, all raw responses exceeded 300 words, and no route lost more than half
+its words when database access was blocked. `/soccer-career` carried 1,878 raw
+words and 1,935 after render; `/leaderboard`, the closest database-blocked case,
+carried 591 raw words, 1,211 normally rendered and 621 with data blocked.
 
 | Hypothesis for "low value" | Measurement | Result |
 |---|---|---|
@@ -94,7 +97,7 @@ worse than a short one.
   errored, and the database does cancel those under load. Round 359: the same
   fragility in the shared paging helper, which nine more libs depend on.
 
-## Round 400: the ad-placement boundary, locally complete
+## Round 400: the ad-placement boundary, live and submitted
 
 The 2026-08-30 audit measured content. It did not ask which routes could load
 the AdSense account script. With stored accepted consent, `index.html` loaded
@@ -140,6 +143,14 @@ readable and none carries noindex. The exact TypeScript gate passed. All 13
 built-site fences, the AdSense harness with 14 negative controls, the legal
 harness with four controls, and the brand harness with two controls passed.
 
+After publish, the live audit confirmed one publisher meta and zero global
+AdSense loaders in raw HTML. Accepted `/footle` produced exactly one ad request,
+one loader, one manual slot and one queue entry. Home, Privacy, Terms, password
+reset and an unknown fallback route produced none. Moving in the live app from
+password reset to `/footle` removed the saved noindex and initialized exactly
+one eligible slot. `ads.txt` exactly matched publisher `pub-2929318086316376`,
+and the sitemap contained 137 unique HTTPS URLs.
+
 A deliberate decision worth recording: the Record Books were **not** split into
 twelve champion pages. A list of past champions sits on a thousand other sites
 and adds nothing by existing here again, which is the exact profile the rejection
@@ -148,14 +159,15 @@ describes. Rejecting easy page count is part of the recovery, not a gap in it.
 ## What the Google consoles establish, 2026-09-02
 
 The account used for both checks was `anacatu2025@gmail.com`. The evidence was
-first inspected without changes. Round 400 then created the ad unit and changed
-the two site settings recorded below. No review was submitted.
+first inspected without changes. Round 400 then created the ad unit, changed
+the two site settings recorded below, submitted the Search Console requests and
+submitted the AdSense review.
 
-**AdSense.** Publisher `pub-2929318086316376` shows the site as **Needs
-attention**, with **Low value content** last updated 2026-08-30 at 3:52 AM EDT.
-Ownership is verified and ads.txt is **Authorized**. Policy Center shows no
-current issues. Google CMP has two active European regulation messages across
-the account: one targets `douknowball.com`, and the other targets
+**AdSense.** Before submission, publisher `pub-2929318086316376` showed the site
+as **Needs attention**, with **Low value content** last updated 2026-08-30 at
+3:52 AM EDT. Ownership is verified and ads.txt is **Authorized**. Policy Center
+shows no current issues. Google CMP has two active European regulation messages
+across the account: one targets `douknowball.com`, and the other targets
 `footyfein.com`. Only the first applies to this site.
 
 The `douknowball.com` message was published on 2026-02-11. It is available in
@@ -170,19 +182,25 @@ The account now lists one responsive Display unit, `DoUKnowBall Game Banner`,
 with slot `7540487748`.
 
 The verified final site settings are Auto Ads **OFF** and Auto optimize **OFF**.
-Both values were confirmed false after reopening the site settings. The Request
-review form remains behind the confirmation checkbox. It was not submitted.
+Both values were confirmed false after reopening the site settings. After the
+live checks passed, the confirmation was checked and Request review was
+submitted. The authoritative page state changed to **Getting ready** and
+**Review requested**. The older details row still displayed the prior Needs
+attention result immediately afterward; the new review state is the current
+submission signal. Google says review usually takes a few days and can take two
+to four weeks.
 
-**Search Console.** The sitemap is successful, was last read on 2026-09-01,
-and reports 137 discovered pages. The Page Indexing report, dated 2026-08-27,
-shows 44 indexed and 89 not indexed. Those figures and the sitemap count have
-different report dates, so this document does not force them to reconcile.
-Manual Actions shows none and Security Issues shows none. `/soccer-career` is
-indexed and its inspected page was last crawled on 2026-09-01.
+**Search Console.** The sitemap was resubmitted on 2026-09-02. Google accepted
+it, read it the same day, reports status **Success**, and reports 137 discovered
+pages. The Page Indexing report, dated 2026-08-27, shows 44 indexed and 89 not
+indexed. Those figures and the sitemap count have different report dates, so
+this document does not force them to reconcile. Manual Actions shows none and
+Security Issues shows none. `/soccer-career` is indexed and its inspected page
+was last crawled on 2026-09-01.
 
-The ten-route recrawl batch was inspected and every route is currently
-unindexed. No indexing request has been submitted. Submit this batch only after
-Round 400 is live and its route checks pass:
+The ten-route recrawl batch was inspected before submission and every route was
+unindexed. After Round 400 was live and its route checks passed, every URL below
+returned **Indexing requested** and **URL was added to a priority crawl queue**:
 
 - `/soccer`: Unknown to Google.
 - `/pro-football`: Discovered, currently not indexed.
@@ -197,32 +215,32 @@ Round 400 is live and its route checks pass:
 
 ## The 2026-08-30 waiting recommendation, superseded as a work priority
 
-On 2026-08-30, everything measured above was true of the live site. It was not
-yet true of the site as Google had it stored.
+On 2026-08-30, everything measured in the original audit was true of the live
+site. It was not yet true of the site as Google had it stored.
 
 The hubs were rewritten on 2026-08-30. The first three archives went live that
 day, and the CBB archive followed on 2026-08-31. A
 reviewer works from a fresh fetch, but the surrounding signals, the index, the
-ranking, the sample of pages a reviewer is shown, come from crawl data that
-mostly predates all of it. Submitting now spends the re-review on a snapshot that
-does not include the work done in response to the rejection.
+ranking, and the sample of pages a reviewer is shown came from crawl data that
+mostly predated all of it. At that point, submitting would have spent the
+re-review on a snapshot that did not include the work done in response to the
+rejection.
 
 At that time, the owner's operating contract also treated waiting as low cost
 because the site was growing from about 1,800 clicks a month. On 2026-09-02 he
-superseded that work order and put AdSense readiness first. That changes what the
-team works on. It does not say that the Request review checkbox has been
-confirmed or that a review has been submitted.
+superseded that work order, put AdSense readiness first and authorized the
+submission after live verification. Those gates passed and the review was
+submitted the same day.
 
-## What would move this to READY
+## Readiness gates completed
 
-1. Deploy Round 400 and run the same route-boundary checks against the live
-   site.
-2. Run a fresh live `scripts/auditGoogleRender.mjs`, so the 2026-08-30 counts
-   are replaced with current evidence rather than assumed forward.
-3. Resubmit the sitemap and request the exact ten-route batch above for
-   indexing, then submit the authorized AdSense review.
-4. Later, capture the resulting recrawl and recheck the 44 indexed and 89 not
-   indexed split. The current report is dated 2026-08-27 and predates Round 400.
+1. Round 400 was deployed and the live route-boundary checks passed.
+2. A fresh live `scripts/auditGoogleRender.mjs` run passed across 29 routes.
+3. The sitemap was resubmitted, all ten priority URLs were queued, and the
+   authorized AdSense review was submitted.
+4. After Google recrawls the pages, capture the next Page Indexing report and
+   recheck the old 44 indexed and 89 not indexed split. The current report is
+   dated 2026-08-27 and predates Round 400.
 
 More traffic may strengthen the case, but the owner no longer treats another
 month of growth as a prerequisite to doing the readiness work.
@@ -231,19 +249,14 @@ month of growth as a prerequisite to doing the readiness work.
 
 ## Verdict
 
-# READY TO DEPLOY
+# SUBMITTED, GOOGLE REVIEW PENDING
 
 The 2026-08-30 live audit found no measurable thin-content defect, the hub
 weakness it surfaced was fixed and measured, and four genuinely unique archive
-pages now exist. Round 400 also found a separate site-side ad-placement defect
-and its correction passed every local source, build and browser gate. What
-remains before submission is deployment and live verification, followed by the
-sitemap and ten-route recrawl requests. A newer indexing report can only arrive
-after Google revisits the pages and is not presented here as an instant result.
-The real manual unit is configured, and Auto Ads and Auto optimize are off.
+pages now exist. Round 400 also found and fixed a separate site-side ad-placement
+defect. Its local and live checks passed, the sitemap and priority crawl batch
+were submitted, and the authorized AdSense review was requested. The real
+manual unit is configured, and Auto Ads and Auto optimize are off.
 
-**No review has been submitted yet. The owner authorized submission once the
-live checks pass.**
-
-Re-run `scripts/auditGoogleRender.mjs` before any submission, so the decision is
-made on current numbers rather than on this file.
+**This is not an approval claim. Google is reviewing the live site and controls
+the decision. AdSense currently shows Getting ready and Review requested.**
