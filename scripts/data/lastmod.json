@@ -157,8 +157,8 @@
     "date": "2026-09-01"
   },
   "/front-office": {
-    "hash": "186dda3a0fd5b796",
-    "date": "2026-09-01"
+    "hash": "715dca2e0fe1b2fc",
+    "date": "2026-09-02"
   },
   "/gauntlet-draft": {
     "hash": "ad159e8ef12b404d",
@@ -297,7 +297,7 @@
     "date": "2026-08-25"
   },
   "/nba-chain": {
-    "hash": "b9e0698b1f11838e",
+    "hash": "ebcae1449180947a",
     "date": "2026-09-02"
   },
   "/nba-connect-4": {
@@ -341,7 +341,7 @@
     "date": "2026-08-31"
   },
   "/nfl-connect-4": {
-    "hash": "7d6b29fdd6f2142d",
+    "hash": "b6316cc7c3844ce6",
     "date": "2026-09-02"
   },
   "/nfl-connections": {
@@ -357,7 +357,7 @@
     "date": "2026-08-29"
   },
   "/nhl-connect-4": {
-    "hash": "51c0ae43072fa38a",
+    "hash": "c6ad8431e32d5ab1",
     "date": "2026-09-02"
   },
   "/nhl-connections": {

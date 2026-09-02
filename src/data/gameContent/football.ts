@@ -77,7 +77,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Are the players real?",
-        a: "Yes, real 2025 rosters rated from real 2023 and 2024 production. Contracts, trades, and draft prospects are all fictional.",
+        a: "Yes, the real 2026 rosters, rated from the 2025 season. Quarterbacks, backs, receivers and tight ends are rated on what they produced per game, so a man who missed half the year is not punished for missing it. Defenders blend that production with where they were drafted, because the public numbers count tackles and sacks but carry no coverage figures at all, and rating a corner on tackles alone would mark the best ones down for the fact that nobody throws at them. Linemen have no counting stats either, so they go on draft position and years played. Contracts, trades, and draft prospects are all fictional.",
       },
       {
         q: "Can I get fired?",

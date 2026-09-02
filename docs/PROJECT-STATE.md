@@ -8,8 +8,8 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 97% | Round 413: Build Your XI stopped refusing every answer with a message that invited a retry into a spent daily allowance; all three AI validators now say which it was. |
-| Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
+| P0 production bugs | 98% | Round 416: the Trade Finder's rosters are the real 2026 squads and carry 192 defenders, and the panels stopped hiding seven of your fifteen men, so the owner's item 12 complaint that only offensive players appear is answered. The engine still models defence as one team number, which is Round 418. |
+| Shared data layer and provenance | 58% | Round 416: frontOfficePlayers.ts is derived from the nflverse releases rather than typed by hand, two source verified 98.3 percent against ESPN, re-derivable with --check, and it now refuses to write rather than rate the league on draft position when the join breaks. Ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
@@ -2789,6 +2789,155 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-02, Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE, PART ONE: THE BAKE.**
+  The owner's P1 item 12 from 2026-08-28, recorded as still open in Round 413: "Trade
+  Finder (US sports): only offensive players appear, and rosters are outdated." Both
+  halves were true. `src/data/frontOfficePlayers.ts` held 287 men, all of them QB, RB,
+  WR, TE or OL, so no defender could exist to be traded, and its own header says it was
+  baked on 2026-08-05 by a script that is not in this repo, so nobody could refresh it.
+  It is derived now, by `scripts/genFrontOfficeRoster.mjs`: 480 players over 32 teams,
+  an even 15 per club (QB 1, RB 2, WR 3, TE 1, OL 2, DL 2, LB 2, DB 2), including **192
+  defenders where there were none**. The trade screen and the roster screen both list
+  them, so the literal complaint is answered. The engine still models defence as one team
+  number, which is Round 418.
+  **Where the data comes from, and why not from here.** The site's own tables cannot do
+  it: `nflfastr_player_stats` is offense only and ends at 2024, and the roster table
+  ends at 2025. The nflverse rosters release publishes 2026 (2,902 rows, Aaron Rodgers
+  reads PIT in it) and its `stats_player` release publishes a 2025 file carrying
+  def_sacks, def_tackles_for_loss, def_qb_hits, def_interceptions, def_pass_defended,
+  def_fumbles_forced and tackles. Both cache under `scripts/.cache/nflverse/`, which is
+  gitignored, and `--check` re-derives and compares.
+  **Two source verified.** Every shipped player was checked against ESPN's own public
+  2026 rosters: 457 of the 465 ESPN answers for are confirmed on the same team, 98.3
+  percent, including Myles Garrett on the Rams, Micah Parsons in Green Bay, Sauce Gardner
+  in Indianapolis and Kyler Murray in Minnesota. ESPN returns a 404 for Arizona, which is
+  the 15 unchecked. The 8 unconfirmed are not contradicted either: a sweep of the 31
+  rosters ESPN does answer for, 2,422 men, places none of them on a different team.
+  **HOW A DEFENDER IS RATED, AND THE FIVE TIMES THIS ROUND GOT IT WRONG.** This is the
+  whole round. Every failure was found by measuring the output, and the last three were
+  found by adversarial review AFTER the round looked finished.
+  (1) Ranking the league and keeping each team's best gave a file whose worst starting
+  quarterback was 84. Fixed by selecting the squad first, then ranking it against itself.
+  (2) Ranking every defender on production put Sauce Gardner, the fourth pick of his
+  draft, last among all 64 defensive backs on 28 tackles. The public release carries **no
+  coverage column of any kind**, so counting stats rate a corner by how often teams were
+  willing to throw at him, which is upside down. Fixed by blending in draft pedigree.
+  (3) **An even blend could not have worked, and the arithmetic says so.** Both halves
+  are midrank percentiles and therefore uniform on 0 to 1 by construction, so a 50/50
+  split cannot carry a bottom decile producer past the MIDDLE of the scale however high
+  he was drafted. Pat Surtain II came out at production 0.161 and pedigree 0.839, exactly
+  0.500, and shipped at 80, ten below an undrafted corner on 90. Moving Gardner off last
+  place had hidden that the same defect sat one rung up.
+  (4) **The draft curve never reached the draft.** It was `max(30, 100 - log2(pick)*14)`
+  and log2(32)*14 is exactly 70, so it hit the floor at pick 32 and stayed there: 288 of
+  the 480 shipped men scored the same on draft as going undrafted. The coefficient comes
+  from the draft's own length now, 8.5, so pick 32 scores 57.5 and pick 250 scores 32.3,
+  above the undrafted 30.
+  (5) **And then the fix for (3) over-corrected, which the second review caught.** At a
+  0.75 pedigree weight the corners became a seniority list: Cooper DeJean, a top decile
+  producer, shipped at 73 UNDER Rock Ya-Sin, a bottom decile producer, at 83. The real
+  driver was not the draft at all. Those two were taken six picks apart, so 15 of the 17
+  points between their pedigrees came from years of service, which was worth 3 a year to
+  a maximum of 24 against a draft range of 68. Years in the league is not a claim about
+  how good anybody is, and it punished exactly the young starters the blend exists to
+  treat fairly. Service is worth 1.5 a year to a maximum of 12 now, and the weights were
+  swept against named cases rather than chosen: **CB 0.6, S 0.55, LB 0.45, DL 0.35**, a
+  ladder from "the numbers cannot see the job" to "the numbers ARE the job", since a sack
+  is an event and coverage is not. At 0.5 Derek Stingley Jr. is not even selected; at
+  0.75 the producers invert. At 0.6 every named case lands right: Surtain 85, Gardner 89,
+  Stingley 92, DeJean 82, all above a defensive back median of 81, with the journeymen
+  below it. Garrett 95, Parsons 93, Watt 92, Warner 82, Mahomes 95, Allen 97.
+  Two more rules, both measured: production is counted PER GAME above a four game floor,
+  because a season total measures availability (Fred Warner played six games in 2025);
+  and ties share a midrank, because breaking them on the name handed two men with
+  identical numbers the two ends of the scale.
+  **The blend decides who is picked as well as what he is worth**, since selection
+  ordered defenders on raw production and cut a shutdown corner before the blend saw him.
+  Same bug as rating him last, only quieter: a player who is not in the file cannot look
+  wrong.
+  **THE BAKE NOW FAILS CLOSED.** `num()` returns 0 for a field that is not there, so a
+  renamed `games` column routed every player to the pedigree branch while the run still
+  printed 32 teams and 480 players and exited 0. Measured by renaming it: 137 of the 480
+  names changed and Josh Allen fell from 97 to 78, silently. That is accept on error, in
+  the script that decides what 480 real people are worth. It refuses on TWO floors, and it needed
+  both: the first is the join itself, at least a third of roster rows finding a stats row
+  (the healthy releases manage 1,379 of 1,874, 73.6 percent); the second is that at least
+  a third of the matched rows clear the four game bar (1,180 of 1,379 do). The second
+  floor is not belt and braces. Guarding the join alone did NOT catch the very failure
+  the guard was written for, because a dropped `games` column leaves every row matching
+  perfectly and simply reads them all as zero games. The fence caught that gap the moment
+  the guard was tightened. The bake prints both numbers on every run now, because a
+  silent join is how the whole league got rated on draft position once already.
+  **What this method still cannot do, said plainly rather than hidden.** Offensive linemen
+  are rated on pedigree alone, because no public feed carries a countable event for them,
+  and pedigree cannot see a man drafted in the third round who then became one of the best
+  in the league. It gets the top right (Lane Johnson, Quenton Nelson, Andrew Thomas and
+  Jake Matthews all 90, Penei Sewell 89) and it gets Creed Humphrey wrong, 80 and 62nd of
+  64, because he was pick 63. The damage is bounded on purpose: the linemen's scale is 80
+  to 90, a third of the range a defender gets, so the file says "a starting NFL lineman"
+  about all of them rather than ranking them confidently. Fence section 8 fails if anyone
+  widens that band without first giving linemen something real to be rated on.
+  **Two consequences of a bigger roster, both measured.** 15 contracts instead of 9 takes
+  mean cap used from 64.8M to 127.0M against the 260M cap, nobody over it and the worst
+  placed still holding 65M of room, so free agency and salary matched trades still work.
+  And an existing save is left alone on purpose: it carries the whole league object and
+  nothing migrates it, so a player mid dynasty keeps the squad he took over, the same rule
+  era saves get. He sees the new rosters when he starts a new franchise.
+  **Three engine changes, and only the first one changes nothing.** `teamStrength`
+  counted every non quarterback, non lineman as a skill player, which with defenders on
+  the roster would have counted the defence twice and quietly retuned a sim nobody asked
+  to retune; it names the three skill positions now. `replenishRosters` guaranteed a
+  quarterback and two linemen and then filled to nine off a cycle of WR, RB, TE, WR, OL,
+  so every defender released, traded or retired came back as a receiver and a long save
+  drifted back to the offence-only roster this round exists to end; the floor and the
+  cycle match the shape the data ships now. And the trade panels sliced your roster to its
+  top eight by rating, which was fine at nine men and hides seven of fifteen, most of them
+  the defenders this round adds, so the slices are gone.
+  **The copy was lying the moment the data landed.** Five places told a visitor "real 2025
+  rosters, rated from two seasons of real production" or "rated from real 2023-24
+  production": the pick screen, the SEO block, the FAQ answer, a how to play step and the
+  engine's own file header. A sixth was the generated data file's own header, which still
+  described the even blend after the weights went per position, and no guard could see it
+  because the false line lived in the generator. All six say what is true now, and the FAQ
+  says out loud why a defender's rating is not pure production.
+  **What the harnesses caught, and what two adversarial reviews caught that they did
+  not.** `simInventedNames` went red the first time it ran against the new file: the GM
+  draft class generator pairs Jalen with Redmond and Jalen Redmond is now a real man in
+  the roster, so Redmond left the bank. `runAllSims` marked the new fence EMPTY, and was
+  right to: it printed two lines, and what a harness prints is the only evidence it ran,
+  so it reports per section now. The fence itself carries **117 checks and twelve
+  controls**, each proven to fail on its own section and only there: `offenceonly`,
+  `flat`, `production`, `seasontotals`, `staleheader`, `staleseason`,
+  `flatpedigree`, `evenblend`, `openjoin`, `straybucket`, `offencecycle` and
+  `doublecount`. Section 9 bundles the real engine with esbuild and runs ten offseasons
+  after stripping every defender, so the drain is a behaviour test; `doublecount` bundles
+  a deliberately degraded copy of the engine to prove the double count check discriminates.
+  **Five fence defects worth recording, because they are the general lesson.** Its parser
+  silently dropped the twelve players whose names carry an apostrophe and reported teams a
+  man short, so a harness that miscounts blamed the data. Section 7 checked that any year
+  in the copy was ROSTER_SEASON or STATS_SEASON, which sounds strict and is not, because
+  STATS_SEASON is ALWAYS last year's ROSTER_SEASON: restoring the exact sentence that
+  shipped, "Real 2025 rosters" over a 2026 squad, left the fence green on the one bug the
+  section exists to stop. Its control substituted 2015, proving only that an implausible
+  year is visible. Deleting the years altogether made checks vanish rather than fail, so
+  the fence went from 112 to 110 and still exited 0. And Round 416's own teamStrength fix
+  had no coverage anywhere in the suite: putting the old filter back left every harness
+  green while it moved the number on all 32 teams. **The pattern in all five: a check
+  shaped around the offender somebody already found is a check that finds nothing new.**
+  Gates: tsc zero, 117 checks with twelve controls, the full node suite, all 15 built site
+  fences, build green. Exactly one sitemap row moved date, /front-office. Three snapshots
+  this round did not touch (/nba-chain, /nfl-connect-4, /nhl-connect-4) gained a line
+  naming their board: that board is picked with `Math.random`, which Round 284
+  deliberately freezes with a fixed seed rather than dropping, so it is not a claim about
+  today and none of their dates moved. It surfaces because the draw ORDER shifts with a
+  new bundle, which is the one residual edge of that mechanism: across the three builds
+  this round took, the set of affected pages moved twice before settling. Three flakes, all recorded as flakes and all green on replay: `simPrerenderBoot`
+  timed out on /whats-new while five review agents saturated the machine, and
+  `simHallOfChampions` and `simWorldXiPositions` both reported SUPABASE UNREACHABLE OR
+  POOL TOO SMALL in the final suite run. Neither reads anything this round changed, and
+  the second is explained: the Codex lane's Round 417, which this round rebased onto,
+  fixed exactly that class of flake, including a Hall of Champions wing lost when one of
+  ten concurrent table reads dropped. Both are green on the merged tree.
 - **2026-09-02, Round 415. THE BILLION DOLLAR GAME SAYS DOLLARS.** The last loose end
   from the owner's item 13, which Round 315 half fixed: the budget became exactly 1000
   and the board renders it with a dollar sign, but the page around it still said euros in

@@ -19,28 +19,26 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 418.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 419.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE,
-  PART ONE: THE BAKE.** The owner's P1 item 12 from 2026-08-28, the last one
-  still open: "Trade Finder (US sports): only offensive players appear, and
-  rosters are outdated." Both halves are real. frontOffice.ts models defence
-  as ONE team number and its position list is seven offensive slots, so no
-  defender can exist to be traded; and src/data/frontOfficePlayers.ts was
-  baked on 2026-08-05 from 2025 rosters with no generator in the repo, so
-  nobody can refresh it.
-  This round writes the generator and the data only, no gameplay change, the
-  way the NFL grid key went in before the page moved. Measured today: 745
-  active defenders in the 2025 rosters, 557 of them with draft pedigree, plus
-  years of experience, plus games and games started from nfl_defense_stats.
-  That is the same evidence the file already uses for offensive linemen, who
-  have no production stats either, so the method is the file's own and nothing
-  is invented. Files in play: a new scripts/genFrontOfficeRoster.mjs, the
-  regenerated src/data/frontOfficePlayers.ts, a new fence. Round 411 (NFL
-  archive, other lane) is not touched. Part two, the engine reading defenders
-  so the Trade Finder can show them, is its own round.
+- **Desktop lane, next: Round 418. THE FRONT OFFICE ENGINE READS THE
+  DEFENCE, PART TWO.** Round 416 put 192 real defenders in the roster file
+  and deliberately changed nothing about how they play. The engine still
+  models defence as one team number: teamStrength reads team.defense, the
+  draft and free agency generate seven offensive slots plus a 'DEF' prospect
+  that boosts the unit instead of arriving as a person, and teamStrength was
+  narrowed to name the three skill positions so the new men are counted
+  exactly zero times rather than counted twice. This round makes the defence
+  the players: strength read off the defenders on the roster, defensive
+  prospects who arrive as people with names, and a trade for a defender that
+  actually changes how the team plays. They are already listed and tradeable
+  since 416; what a deal for one does not yet do is move anything. That is
+  the half of the owner's item 12 still open. Files in play:
+  src/lib/frontOffice.ts, src/components/front-office/FrontOfficeBoard.tsx,
+  and whatever the existing front office harnesses need to keep saying
+  something true. Round 411 (NFL archive, other lane) is not touched.
 
 
 
@@ -821,6 +819,29 @@ Standing claims after Round 400:
   failure controls all proved their paths. Final gates: exact TypeScript zero,
   185 of 185 node harnesses green, production build green, and all 15 generated
   site fences green.
+- THE FRONT OFFICE ROSTER GETS A DEFENCE, PART ONE, THE BAKE, Round 416
+  (desktop lane, 2026-09-02). The owner's P1 item 12. frontOfficePlayers.ts
+  is derived now rather than typed by hand, from the nflverse 2026 rosters
+  release and the 2025 stats_player release, and it carries 192 defenders
+  where it carried none. A defender is rated on a blend of production and
+  draft pedigree, weighted by position, and on a per game rate rather than a
+  season total: production alone rated Sauce Gardner last in the league, and
+  totals rated Fred Warner near the bottom for missing eleven games. An EVEN
+  blend, which is what the round tried first, could not have worked: both halves are
+  midrank percentiles, so 50/50 cannot lift a bottom decile producer past the
+  middle of the scale, and Pat Surtain II landed on exactly 0.500 and shipped
+  at 80 under an undrafted corner on 90. Then the first fix over-corrected,
+  which a second adversarial review caught: at 0.75 the corners became a
+  seniority list and a top decile producer shipped ten under a bottom decile
+  one. The weights are swept against named cases now (CB 0.6, S 0.55, LB
+  0.45, DL 0.35) and years of service is worth half what it was, because the
+  real driver was seniority rather than the draft. The draft curve reaches
+  the whole draft instead of clipping at pick 32. Two source verified 98.3
+  percent against ESPN's own 2026 rosters. The bake fails closed on a broken
+  join, the offseason replenishes the defence instead of draining it, the
+  trade panels stopped hiding seven of fifteen men, and six places of copy
+  that described the old data now describe the new. New fence
+  simFrontOfficeRoster: 117 checks, twelve controls. Part two is Round 418.
 - THE BILLION DOLLAR GAME SAYS DOLLARS, Round 415 (desktop lane, 2026-09-02).
   The owner's item 13 had a tail: the budget and the board were fixed in
   Round 315 but the page around them still said euros in six places, title

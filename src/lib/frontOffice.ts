@@ -10,7 +10,8 @@ import { leagueNames, uniqueName } from './foNames';
  * injuries, the real 14-team playoff format (7 seeds per conference, first
  * round byes for the 1 seeds), aging and contract churn across unlimited
  * seasons. Everything the GM does is explicitly hypothetical; player
- * ratings come from real 2023-24 production (see the data file header).
+ * ratings are derived by scripts/genFrontOfficeRoster.mjs from the 2026
+ * rosters and the 2025 season (see the data file header for every rule).
  *
  * Determinism: all randomness flows through the caller's rng so headless
  * tests can replay seasons.
@@ -146,7 +147,15 @@ export function capRoom(team: GmTeamState, cap: number): number {
 export function teamStrength(team: GmTeamState): number {
   const healthy = team.players.filter(p => p.out === 0);
   const qb = Math.max(64, ...healthy.filter(p => p.pos === 'QB').map(p => p.ovr));
-  const skill = healthy.filter(p => p.pos !== 'QB' && p.pos !== 'OL').sort((a, b) => b.ovr - a.ovr).slice(0, 5);
+  /* Round 416: name the skill positions rather than saying "not a QB and not
+     a lineman". The roster now carries defenders, and the old shape would
+     have quietly counted them as skill players while team.defense counted
+     them again below, which is the same defence twice and a different sim
+     from the one that was tuned. Round 418 is where defence starts being
+     read off these players; until then this keeps the balance exactly as it
+     was before the roster grew. */
+  const SKILL: GmPlayer['pos'][] = ['RB', 'WR', 'TE'];
+  const skill = healthy.filter(p => SKILL.includes(p.pos)).sort((a, b) => b.ovr - a.ovr).slice(0, 5);
   const skillAvg = skill.length ? skill.reduce((s, p) => s + p.ovr, 0) / skill.length : 64;
   const ol = healthy.filter(p => p.pos === 'OL');
   const olAvg = ol.length ? ol.reduce((s, p) => s + p.ovr, 0) / ol.length : 64;
@@ -460,7 +469,12 @@ const FIRST = [
 ];
 const LAST = [
   'Whitfield', 'Calloway', 'Bridgewater', 'Sterling', 'Maddox', 'Rourke', 'Delacroix', 'Okafor', 'Vandermeer', 'Holloway',
-  'Kingsley', 'Beaumont', 'Ashford', 'Winslow', 'Marchetti', 'Duvall', 'Slater', 'Redmond', 'Crowder', 'Bishop',
+  /* Round 416: Redmond left the bank. The roster bake added the real 2026
+     squads, one of whom is Jalen Redmond, and Jalen is in the first name
+     list, so the draft class generator could hand a fictional prospect a
+     real man's name. simInventedNames caught it the first time it ran
+     against the new file, which is what it is for. */
+  'Kingsley', 'Beaumont', 'Ashford', 'Winslow', 'Marchetti', 'Duvall', 'Slater', 'Ellingsworth', 'Crowder', 'Bishop',
   'Ravensworth', 'Sutcliffe', 'Thackery', 'Underhill', 'Valentine', 'Wexford', 'Yarborough', 'Zimmerman', 'Aldridge', 'Braddock',
   'Chesterton', 'Draycott', 'Eastmond', 'Fenwick',
 ];
@@ -582,8 +596,9 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
 
 /**
  * Every club fills out to a playable roster after churn: at least one QB,
- * two OL, and nine players total. Depth arrives as clearly generated
- * journeymen (same fictional-name pool as the draft).
+ * two OL, two each of DL, LB and DB, and fifteen players total, which is the
+ * shape the roster file ships. Depth arrives as clearly generated journeymen
+ * (same fictional-name pool as the draft).
  */
 export function replenishRosters(league: LeagueState, rng: () => number): void {
   /* Round 211: one name book for the whole replenishment pass. */
@@ -603,11 +618,23 @@ export function replenishRosters(league: LeagueState, rng: () => number): void {
         pot: ovr,
       });
     };
+    /* Round 416: the defence has to be replenished too, or it drains away.
+       The roster ships with six defenders per club now, and this pass only
+       ever guaranteed a quarterback and two linemen and then filled to nine
+       off an offence-only cycle. Left alone, every defender a club released,
+       traded or retired was replaced by a receiver, so after enough seasons
+       a save quietly reverts to the offence-only roster this round set out
+       to end, and the Trade Finder would have nothing defensive left to
+       show. The floor and the cycle now match the shape the data file
+       actually ships (QB 1, RB 2, WR 3, TE 1, OL 2, DL 2, LB 2, DB 2). */
     if (!t.players.some(p => p.pos === 'QB')) addDepth('QB');
     while (t.players.filter(p => p.pos === 'OL').length < 2) addDepth('OL');
-    const CYCLE: GmPlayer['pos'][] = ['WR', 'RB', 'TE', 'WR', 'OL'];
+    for (const d of ['DL', 'LB', 'DB'] as GmPlayer['pos'][]) {
+      while (t.players.filter(p => p.pos === d).length < 2) addDepth(d);
+    }
+    const CYCLE: GmPlayer['pos'][] = ['WR', 'RB', 'DB', 'TE', 'LB', 'WR', 'DL', 'OL'];
     let i = 0;
-    while (t.players.length < 9) addDepth(CYCLE[i++ % CYCLE.length]);
+    while (t.players.length < 15) addDepth(CYCLE[i++ % CYCLE.length]);
   }
 }
 
