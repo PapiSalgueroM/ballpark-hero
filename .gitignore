@@ -37,3 +37,6 @@ docs/scripts/build-connections-puzzles.py
 
 # Claude Code agent worktrees: scratch checkouts, never repo content
 .claude/worktrees/
+
+# Codex worktrees: isolated feature checkouts, never repo content
+/.worktrees/

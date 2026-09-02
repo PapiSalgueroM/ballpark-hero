@@ -19,7 +19,22 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 396.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 398.
+
+## Active claims, 2026-09-01
+
+- **next: Round 396 (desktop lane). ROUND 395 CORRECTIVE PASS.** Fix the shipped
+  World Cup bracket before starting anything else: make the page's Round of 32
+  seeding reproduce the real tournament and make the advertised 166-point score
+  reachable; clear champion, rounds and stale downstream winners on resets or
+  changed group seeds; correct the FAQ, examples and eight local fixture dates;
+  and make `simWc2026Results.mjs` exercise the real seeding path with an
+  independent expected fixture and a negative control. Re-run the affected gates.
+- **next: Round 397 (Codex lane, isolated worktree). SOCCER CONNECT 4 CLASSIC-8
+  MUST WORK WITH THE AI QUOTA GONE.** Curate only two-source-verified true facts,
+  cover all 42 cells with a 42-name matching, apply the cache migration, extend
+  `simValidatorCache.mjs` with a real hole control, and harden client handling for
+  HTTP 429 and object-shaped reasons. This lane does not touch Round 396 files.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
