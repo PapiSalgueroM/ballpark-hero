@@ -19,12 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 409.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 410.
 
 ## Active claims, 2026-09-02
 
-- None. Round 408 is complete on its branch and Google's AdSense review is
-  pending.
+- **Desktop lane, next: Round 409. Path-independent seeded harnesses.** The
+  full Round 408 suite exposed that `seedRandom.mjs` hashes the absolute
+  launcher path even though its contract says each stream is keyed by the
+  harness filename. The same code therefore passes or fails according to its
+  checkout folder. Add a test that launches the same harness name from two
+  paths, make the seed depend on the filename alone, prove the old behavior
+  through a negative control, and remeasure every harness that uses the shared
+  seed before the full suite. Production game code and AdSense stay untouched.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
