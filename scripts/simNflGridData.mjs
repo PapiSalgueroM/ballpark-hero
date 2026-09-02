@@ -110,6 +110,17 @@ console.log(`1) Shape and rules over ${players.length} players (${CURRENT.size} 
     for (const k of ['pass4k', 'rush1k', 'rec1k', 'sbWins']) if (!(Number.isInteger(p[k]) && p[k] >= 0)) bad(`${p.name}: ${k} is ${p[k]}`);
     const shared = (byName.get(gen.normalizeName(p.name)) ?? 0) > 1;
     if (shared !== !!p.dup) bad(`${p.name}: dup is ${p.dup} but the name is ${shared ? 'shared' : 'unique'}`);
+    if (!p.display || (!shared && p.display !== p.name) || (shared && !p.display.startsWith(p.name + ' ('))) bad(`${p.name}: display "${p.display}" does not follow the display rule`);
+  }
+  const displays = new Set(players.map(p => p.display));
+  if (displays.size !== players.length) fail(`${players.length - displays.size} display names are shared, so a guess could not tell the namesakes apart`);
+  {
+    /* The display rule, recomputed: the file must carry exactly what assignDisplayNames derives. */
+    const copy = players.map(p => ({ ...p, display: '' }));
+    gen.assignDisplayNames(copy);
+    let off = 0;
+    copy.forEach((c, i) => { if (c.display !== players[i].display) off += 1; });
+    if (off > 0) fail(`${off} display names differ from what the display rule derives`);
   }
   if (shown > 8) fail(`${shown - 8} further shape failures beyond the eight shown`);
   console.log(`   ${players.filter(p => p.id.startsWith('nb:')).length} keyed on name plus birth date, ${players.filter(p => p.dup).length} shared names, ${players.filter(p => p.draft === 'undrafted').length} undrafted, ${players.filter(p => p.sbWins > 0).length} with a title`);

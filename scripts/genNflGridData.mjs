@@ -261,7 +261,7 @@ export function buildKey({ rosters = [], oldRosters = [], stats = [], picks = []
     const s = (e.hasStatId ? statSeasons.get(e.id) : null) ?? { pass4k: 0, rush1k: 0, rec1k: 0 };
     players.push({
       id: e.id, name, teams: [...e.teams].sort(), seasons: [e.first, e.last], pos: [...e.pos].sort(),
-      college, draft, pass4k: s.pass4k, rush1k: s.rush1k, rec1k: s.rec1k, sbWins: e.titleSeasons.size, dup: false,
+      college, draft, pass4k: s.pass4k, rush1k: s.rush1k, rec1k: s.rec1k, sbWins: e.titleSeasons.size, dup: false, display: '',
     });
   }
 
@@ -269,7 +269,39 @@ export function buildKey({ rosters = [], oldRosters = [], stats = [], picks = []
   for (const p of players) { const k = normalizeName(p.name); seen.set(k, (seen.get(k) ?? 0) + 1); }
   for (const p of players) if ((seen.get(normalizeName(p.name)) ?? 0) > 1) p.dup = true;
   players.sort((a, b) => a.name.localeCompare(b.name, 'en') || a.id.localeCompare(b.id));
+  assignDisplayNames(players);
   return players;
+}
+
+/** What the search box offers and a guess is matched on: the name alone when
+ *  nobody shares it, else the first of these that tells every namesake
+ *  apart, chosen per name group so all of them read the same way:
+ *  name (first-last), name (first-last, TEAM), name (first-last, TEAM, POS). */
+export function displayLevel(p, level) {
+  const span = `${p.seasons[0]}-${p.seasons[1]}`;
+  if (level === 0) return p.name;
+  if (level === 1) return `${p.name} (${span})`;
+  if (level === 2) return `${p.name} (${span}, ${p.teams[0]})`;
+  return `${p.name} (${span}, ${p.teams[0]}, ${p.pos[0] ?? '?'})`;
+}
+
+export function assignDisplayNames(players) {
+  const groups = new Map();
+  for (const p of players) {
+    const k = normalizeName(p.name);
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(p);
+  }
+  for (const list of groups.values()) {
+    if (list.length === 1) { list[0].display = list[0].name; continue; }
+    for (let level = 1; level <= 3; level += 1) {
+      const names = list.map(p => displayLevel(p, level));
+      if (new Set(names).size === names.length || level === 3) {
+        list.forEach((p, i) => { p.display = names[i]; });
+        break;
+      }
+    }
+  }
 }
 
 export async function pullOldRosters(log = () => {}) {
@@ -314,6 +346,7 @@ export function renderFile(players, sources) {
       draft: 'roster draft_number and draft_club when present; else the nfl_draft_picks row matching name and entry year; else, with no entry year, the one pick row of that name in the three drafts up to the first season; else undrafted when the entry year is 1990 or later and no pick within a year matches; else null',
       stats: 'regular season rows summed per season by gsis_id: seasons with 4,000 passing, 1,000 rushing, 1,000 receiving yards',
       sbWins: 'from 2002 roster rows with game_type SB on the winner super_bowls names for season plus one; before 2002 a counted roster row on the winning franchise that season',
+      display: 'the name alone when nobody shares it; else, per name group, the first of name (first-last), name (first-last, TEAM), name (first-last, TEAM, POS) that tells every namesake apart',
     },
     sourceRows: sources,
     players,
