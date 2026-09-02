@@ -32,18 +32,6 @@ How it works:
 
 
 
-- **next: Round 404 (desktop lane, 2026-09-02). THE KEY SEES EVERY ERA FROM
-  1970.** The Round 403 key starts in 2002 because the roster table does. The
-  nflverse rosters release (documented, one CSV per season from 1920, the
-  same feed the table came from) is pulled for 1970 to 2001 through
-  scripts/lib/nflverseRosters.mjs into a gitignored cache, merged into the
-  key on esb_id (the id every season file carries; gsis_id only reaches back
-  partway), the historical franchise codes mapped to current codes on a
-  two source verified table, and the key's coverage text moved back to
-  1970 for teams and titles. Stats stay 1999 onward and say so. Fence:
-  simNflGridData gains the legends (Montana, Rice, Payton, Marino, Elway,
-  Sanders) and a code map control. Still no page changes. Files in play:
-  the generator, the new lib, the key file, the fence.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -726,6 +714,12 @@ Standing claims:
 
 ## Done
 
+- THE KEY SEES EVERY ERA FROM 1970, Round 404 (desktop lane, 2026-09-02).
+  The nflverse season roster files 1970 to 2001 merged into the NFL answer
+  key on gsis_id or name plus birth date, a season aware franchise code map
+  measured from the files and verified against the record, titles before
+  2002 by season roster, 22008 players. simNflGridData holds it five
+  ways with three controls. No page changes; phase 3 is next.
 - THE NFL ANSWER KEY, KEYED ON IDENTITY, Round 403 (desktop lane, 2026-09-02,
   phase 2 of docs/designs/NFL-GRID-ENGINE-DESIGN.md). scripts/genNflGridData.mjs
   derives scripts/data/nflGridPlayers.json (11621 players on gsis_id) from

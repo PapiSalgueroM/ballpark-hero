@@ -10,7 +10,7 @@ an area moves; the round numbers stay for traceability.
 |---|---|---|
 | P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 72% | Round 403: the NFL answer key exists, 11621 players keyed on identity with every rule written on the file; the page on the engine is next (design phase 3). |
+| Grid category (Milestone 0) | 76% | Round 404: the NFL answer key covers 1970 to 2025 on the documented nflverse season files, 22008 players; the page on the engine is next (design phase 3). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,39 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 404. THE KEY SEES EVERY ERA FROM 1970.** The Round 403 key
+  started in 2002 because the site's roster table does, and a "played for the 49ers"
+  cell that rejects Jerry Rice is not a money page. The nflverse rosters release, a
+  documented dataset with one CSV per season from 1920 and the same feed the site's
+  table came from, is pulled for 1970 to 2001 by `scripts/lib/nflverseRosters.mjs` into a
+  gitignored cache (32 files, about 10 MB) and merged into the key. Three things the
+  old files taught, each now a rule on the file. Identity: the season files before the
+  1990s mostly carry no player id (1970 to 1973 none at all, 1985 one row in four) but
+  every row carries a birth date, so a person is keyed on gsis_id where any row has one
+  and on name plus birth date otherwise, with a bridge built from every row that has
+  both (Rice's 1985 row carries the id his 2004 row does; Payton's thirteen rows share
+  one name and one birth date). Team codes change meaning by season: STL is the
+  Cardinals until 1987 and the Rams from 1995, BAL the Colts until 1983 and the Ravens
+  from 1996, HOU the Oilers until 1996, RAI and RAM the two Los Angeles teams of 1982
+  to 1994; `scripts/lib/nflFranchiseCodes.mjs` maps each code by season to the
+  franchise's current code, every range measured from the files first and checked
+  against Pro Football Reference and NFL.com, and the fence's section 5 holds every
+  rule to exactly a range the files carry, with a control that stretches the
+  Cardinals' range by a season. Titles before 2002: the old files carry no game type,
+  so a title is a counted roster row on the winning franchise that season, one per
+  season at most, and the three winner names `super_bowls` spells that
+  `nfl_team_codes` lacks (Baltimore Colts, Washington Redskins, Los Angeles Raiders) map
+  through the same lib. The result: 22008 players (15180 on a gsis_id, the rest on
+  name plus birth date), 1584 with a shared name, 4534 undrafted, 2383 with a
+  title, and the famous careers read like the record: Brady seven titles and fourteen
+  4,000 yard seasons, Montana four titles, Rice three teams and three titles with his
+  Raiders as LV, Payton one, Elway two, Warner undrafted with his 1999 title, Campbell's
+  Oilers as TEN, Art Monk's three under the Washington name. Stats still start in 1999
+  and the file says so. `simNflGridData` now holds the file five ways with three
+  controls (a moved team, an eighth Brady title, a stretched code range). Still no page
+  changes: phase 3, the page on the engine over this key, is next, and the design's
+  first open question is closed the honest way, by loading the documented source rather
+  than by keeping the AI for the legends.
 - **2026-09-02, Round 403. THE NFL ANSWER KEY, KEYED ON IDENTITY.** Phase 2 of
   `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, and still nothing a player can see changes.
   `scripts/genNflGridData.mjs` derives one row per player from the documented tables the

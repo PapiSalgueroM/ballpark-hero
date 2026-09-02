@@ -1,51 +1,67 @@
 /* The NFL answer key, derived offline and keyed on identity.
 
-   Round 403, phase 2 of docs/designs/NFL-GRID-ENGINE-DESIGN.md. The NFL grid
-   validates through a free tier AI that runs out of quota; the NBA, MLB and
-   NHL grids validate against a table in memory. This generator builds the
-   NFL table's worth of facts, one row per player, from the documented tables
-   the site already holds, so a later phase can judge a guess the way the
-   NBA grid does and an archive can publish a real answer key.
+   Round 403 built this from the tables the site holds (rosters from 2002).
+   Round 404 reaches back to 1970 through the nflverse season roster files,
+   the documented release the 2002 onward table itself came from, so a
+   "played for the 49ers" cell no longer rejects Jerry Rice.
 
-   IDENTITY. Every row is keyed on gsis_id (the NFL's own player id, carried
-   by nflfastr_rosters and nflfastr_player_stats), never on a name: 303 names
-   in the roster table belong to two or more players. A name shared by more
-   than one id is flagged dup so the page can disambiguate before it lets a
-   guess through.
+   WHY. The NFL grid validates through a free tier AI that runs out of
+   quota; the NBA, MLB and NHL grids validate against a table in memory.
+   This generator builds the NFL table's worth of facts, one row per player,
+   so a later phase can judge a guess the way the NBA grid does and an
+   archive can publish a real answer key.
 
-   COVERAGE, STATED ON THE FILE. The roster table starts in 2002 and the
-   weekly stats end with the 2024 season, so every fact below is "within
-   2002 to 2025 rosters" and "within 1999 to 2024 stats". Tom Brady's 2001
-   title is not in the data and the file does not pretend it is; a consumer
-   that needs pre 2002 careers must say so or keep another path for them.
+   IDENTITY. A person is keyed on gsis_id (the NFL's own player id) wherever
+   any of their rows carries one. The season files before the 1990s mostly
+   do not carry ids (1970 to 1973 have none at all) but every row carries a
+   birth date, so a person without an id is keyed on name plus birth date,
+   and a bridge built from every row that has both joins the two: Jerry
+   Rice's 1985 row has the same gsis_id as his 2004 row, Walter Payton's
+   thirteen rows share one name and one birth date. A name shared by more
+   than one person is flagged dup so the page can disambiguate before it
+   lets a guess through.
+
+   COVERAGE, STATED ON THE FILE. Rosters 1970 to 2025; stats 1999 to 2024
+   (the weekly stats table starts in 1999), so a 1,000 yard season before
+   1999 is not in the data and the file says so; colleges and draft data
+   thin out before the 1990s and stay null rather than guessed.
 
    THE RULES, EACH ONE A DERIVATION FROM A COLUMN, NEVER A GUESS:
      teams     roster rows whose status is ACT, RES or INA (on the roster:
-               active, reserve or inactive that week). CUT and DEV (practice
-               squad) rows do not make a team a player's team. Codes are
-               merged to the franchise's current code through nfl_team_codes
-               (SD and LAC are both the Chargers).
+               active, reserve or inactive), plus PUP in the old files where
+               the reserve lists are spelled out. CUT, DEV (practice squad),
+               traded, retired and suspended rows do not make a team a
+               player's team. Historical codes are mapped to the franchise's
+               current code by season through scripts/lib/nflFranchiseCodes.mjs
+               (STL 1980 is the Cardinals, STL 1999 is the Rams); the 39
+               codes of the modern table are merged through nfl_team_codes.
      seasons   first and last roster season under the same rule.
-     pos       the distinct raw position codes on those rows (QB, WR, OLB...).
+     pos       the distinct raw position codes on those rows (QB, WR, OLB;
+               the old files use coarse codes like DB, DL, OL and SPEC).
                Raw on purpose: mapping a label like "Defensive Back" onto
                codes is the page's rule and lives beside the page.
      college   the roster's college, the most frequent non empty value.
-     draft     when the roster carries draft_number and draft_club, that
-               (nflverse fills both from the same record); otherwise an
-               nfl_draft_picks row whose name matches and whose year is the
-               entry year; otherwise, if the entry year is 1990 or later and
-               no pick row matches the name within a year of it, undrafted;
-               otherwise null (unknown is unknown, not undrafted).
+     draft     when a roster row carries a positive draft_number and a
+               draft_club, that (nflverse fills both from the same record);
+               otherwise an nfl_draft_picks row whose name matches and whose
+               year is the entry year; otherwise, when the entry year is
+               unknown, the one pick row of that name in the three drafts up
+               to the first season; otherwise, if the entry year is 1990 or
+               later and no pick row matches the name within a year of it,
+               undrafted; otherwise null (unknown is unknown, not undrafted).
      stats     regular season weekly rows summed per season by gsis_id:
                the number of seasons with 1,000 or more rushing yards,
                1,000 or more receiving yards, 4,000 or more passing yards.
-     sbWins    roster rows whose game_type is SB (the roster snapshot taken at
-               the Super Bowl) on the team that super_bowls names as the
-               winner of the game played in season plus one.
+     sbWins    from 2002: roster rows whose game_type is SB (the snapshot
+               taken at the Super Bowl) on the team super_bowls names as the
+               winner of the game played in season plus one. Before 2002
+               the files carry no game type, so a title is a counted roster
+               row on the winning franchise that season.
 
    Output: scripts/data/nflGridPlayers.json (committed; a later phase loads
    it where the page can read it). scripts/simNflGridData.mjs holds the file
-   to these rules against the live tables and to a recorded second source.
+   to these rules against the live tables, the cached season files and a
+   recorded second source.
 
    Run: node scripts/genNflGridData.mjs
         node scripts/genNflGridData.mjs --check   (rebuild in memory, compare, write nothing)
@@ -53,10 +69,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchSeasonRoster } from './lib/nflverseRosters.mjs';
+import { currentCodeFor, WINNER_NAME_CODES } from './lib/nflFranchiseCodes.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'scripts', 'data', 'nflGridPlayers.json');
 export const ROSTER_STATUSES = ['ACT', 'RES', 'INA'];
+export const OLD_ROSTER_STATUSES = ['ACT', 'RES', 'INA', 'PUP'];
+export const OLD_SEASONS = { from: 1970, to: 2001 };
 export const DRAFT_TABLE_COMPLETE_FROM = 1990;
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
@@ -92,7 +112,7 @@ export async function pullAll(table, select, order, extra = '', onPage = null) {
 export const normalizeName = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const num = v => { const n = Number(String(v ?? '').trim()); return Number.isFinite(n) ? n : null; };
 
-/** Merge the 39 roster codes to each franchise's current code. */
+/** Merge the 39 modern roster codes to each franchise's current code. */
 export function canonicalCodes(codes) {
   const byFranchise = new Map();
   for (const c of codes) {
@@ -107,10 +127,34 @@ export function canonicalCodes(codes) {
   return canon;
 }
 
-export function buildKey({ rosters, stats, picks, codes, superBowls }) {
+/** The season files and the site table, reduced to one row shape. */
+export function unifyRows({ rosters = [], oldRosters = [] }, canon) {
+  const out = [];
+  for (const r of rosters) {
+    const season = num(r.season);
+    if (season == null) continue;
+    out.push({
+      gsis: r.gsis_id || '', name: String(r.full_name ?? '').trim(), birth: String(r.birth_date ?? '').trim(),
+      team: canon[r.team] ?? r.team, season, onRoster: ROSTER_STATUSES.includes(r.status), sbSnapshot: r.game_type === 'SB',
+      old: false, position: r.position, college: r.college, draftNumber: num(r.draft_number), draftClub: r.draft_club, entryYear: num(r.entry_year),
+    });
+  }
+  for (const r of oldRosters) {
+    const season = num(r.season);
+    if (season == null) continue;
+    out.push({
+      gsis: r.gsis_id || '', name: String(r.full_name ?? '').trim(), birth: String(r.birth_date ?? '').trim(),
+      team: currentCodeFor(r.team, season), season, onRoster: OLD_ROSTER_STATUSES.includes(r.status), sbSnapshot: false,
+      old: true, position: r.position, college: r.college, draftNumber: null, draftClub: null, entryYear: num(r.entry_year),
+    });
+  }
+  return out;
+}
+
+export function buildKey({ rosters = [], oldRosters = [], stats = [], picks = [], codes, superBowls }) {
   const canon = canonicalCodes(codes);
-  const franchiseByName = new Map(codes.map(c => [c.franchise, canon[c.team_code]]));
-  for (const c of codes) franchiseByName.set(c.team_name, canon[c.team_code]);
+  const franchiseByName = new Map(Object.entries(WINNER_NAME_CODES));
+  for (const c of codes) { franchiseByName.set(c.franchise, canon[c.team_code]); franchiseByName.set(c.team_name, canon[c.team_code]); }
 
   /* Super Bowl winners by SEASON: super_bowls.year is the calendar year the
      game was played, the season is the year before. */
@@ -148,38 +192,41 @@ export function buildKey({ rosters, stats, picks, codes, superBowls }) {
     statSeasons.set(acc.id, s);
   }
 
-  /* Roster rows by id. */
+  /* Identity: gsis_id where any row of the person has one, joined to the
+     id-less rows through name plus birth date. */
+  const rows = unifyRows({ rosters, oldRosters }, canon);
+  const nb = r => `${normalizeName(r.name)}|${r.birth}`;
+  const bridge = new Map();
+  for (const r of rows) if (r.gsis && r.name && r.birth && !bridge.has(nb(r))) bridge.set(nb(r), r.gsis);
+  const pidOf = r => r.gsis || (r.name && r.birth ? (bridge.get(nb(r)) ?? `nb:${nb(r)}`) : '');
+
   const byId = new Map();
-  for (const r of rosters) {
-    const id = r.gsis_id;
+  for (const r of rows) {
+    const id = pidOf(r);
     if (!id) continue;
-    const season = num(r.season);
-    if (season == null) continue;
-    const onRoster = ROSTER_STATUSES.includes(r.status);
     const e = byId.get(id) ?? {
       id, names: new Map(), teams: new Set(), first: null, last: null, pos: new Set(), colleges: new Map(),
-      draftNumber: null, draftClub: null, entryYear: null, sbWins: 0, anyRoster: false,
+      draftNumber: null, draftClub: null, entryYear: null, titleSeasons: new Set(), anyRoster: false, hasStatId: !!r.gsis,
     };
-    const name = String(r.full_name ?? '').trim();
-    if (name) e.names.set(name, (e.names.get(name) ?? 0) + 1);
-    if (onRoster) {
+    if (r.name) e.names.set(r.name, (e.names.get(r.name) ?? 0) + 1);
+    if (r.onRoster) {
       e.anyRoster = true;
-      const code = canon[r.team] ?? r.team;
-      if (code) e.teams.add(code);
-      e.first = e.first == null ? season : Math.min(e.first, season);
-      e.last = e.last == null ? season : Math.max(e.last, season);
+      if (r.team) e.teams.add(r.team);
+      e.first = e.first == null ? r.season : Math.min(e.first, r.season);
+      e.last = e.last == null ? r.season : Math.max(e.last, r.season);
       if (r.position) e.pos.add(String(r.position).trim().toUpperCase());
       const college = String(r.college ?? '').trim();
       if (college) e.colleges.set(college, (e.colleges.get(college) ?? 0) + 1);
-      if (r.game_type === 'SB' && winnerBySeason.get(season) === code) e.sbWins += 1;
+      /* One title per season at most: the old files can carry two counted
+         rows for one person in a season (a reserve move mid year). */
+      const winner = winnerBySeason.get(r.season);
+      if (winner && winner === r.team && (r.old ? true : r.sbSnapshot)) e.titleSeasons.add(r.season);
     }
     /* A draft number of zero is a placeholder in the roster feed (Chris
        Johnson the running back carried 0.0 beside a real draft club), so
        only a positive pick counts as the roster knowing the draft. */
-    const dn = num(r.draft_number);
-    if (dn != null && dn > 0 && r.draft_club) { e.draftNumber = dn; e.draftClub = String(r.draft_club).trim().toUpperCase(); }
-    const ey = num(r.entry_year);
-    if (ey != null && ey >= 1936) e.entryYear = e.entryYear == null ? ey : Math.min(e.entryYear, ey);
+    if (r.draftNumber != null && r.draftNumber > 0 && r.draftClub) { e.draftNumber = r.draftNumber; e.draftClub = String(r.draftClub).trim().toUpperCase(); }
+    if (r.entryYear != null && r.entryYear >= 1936) e.entryYear = e.entryYear == null ? r.entryYear : Math.min(e.entryYear, r.entryYear);
     byId.set(id, e);
   }
 
@@ -204,12 +251,17 @@ export function buildKey({ rosters, stats, picks, codes, superBowls }) {
       const exact = candidates.filter(p => p.year === e.entryYear);
       if (exact.length === 1) draft = { year: exact[0].year, round: exact[0].round, pick: exact[0].pick };
       else if (exact.length === 0 && e.entryYear >= DRAFT_TABLE_COMPLETE_FROM && !candidates.some(p => Math.abs(p.year - e.entryYear) <= 1)) draft = 'undrafted';
+    } else if (e.first != null) {
+      /* No entry year (the old files rarely carry one): the one pick row of
+         this name in the three drafts up to the first season, or nothing. */
+      const window = candidates.filter(p => p.year != null && p.year <= e.first && p.year >= e.first - 2);
+      if (window.length === 1) draft = { year: window[0].year, round: window[0].round, pick: window[0].pick };
     }
 
-    const s = statSeasons.get(e.id) ?? { pass4k: 0, rush1k: 0, rec1k: 0 };
+    const s = (e.hasStatId ? statSeasons.get(e.id) : null) ?? { pass4k: 0, rush1k: 0, rec1k: 0 };
     players.push({
       id: e.id, name, teams: [...e.teams].sort(), seasons: [e.first, e.last], pos: [...e.pos].sort(),
-      college, draft, pass4k: s.pass4k, rush1k: s.rush1k, rec1k: s.rec1k, sbWins: e.sbWins, dup: false,
+      college, draft, pass4k: s.pass4k, rush1k: s.rush1k, rec1k: s.rec1k, sbWins: e.titleSeasons.size, dup: false,
     });
   }
 
@@ -220,30 +272,48 @@ export function buildKey({ rosters, stats, picks, codes, superBowls }) {
   return players;
 }
 
+export async function pullOldRosters(log = () => {}) {
+  const oldRosters = [];
+  const files = [];
+  for (let season = OLD_SEASONS.from; season <= OLD_SEASONS.to; season += 1) {
+    const { rows, bytes } = await fetchSeasonRoster(season, { log });
+    files.push({ season, rows: rows.length, bytes });
+    oldRosters.push(...rows);
+  }
+  log(`old seasons ${OLD_SEASONS.from} to ${OLD_SEASONS.to}: ${oldRosters.length} rows`);
+  return { oldRosters, files };
+}
+
 export async function pullSources(log = () => {}) {
   const codes = await rest('nfl_team_codes?select=team_code,team_name,franchise&limit=100');
   const superBowls = await rest('super_bowls?select=sb_number,year,winner&order=year.asc&limit=100');
   log(`codes ${codes.length}, super bowls ${superBowls.length}`);
-  const rosters = await pullAll('nflfastr_rosters', 'gsis_id,full_name,team,season,status,game_type,position,college,draft_number,draft_club,entry_year', 'id', '', n => { if (n % 10000 === 0) log(`rosters ${n}`); });
+  const rosters = await pullAll('nflfastr_rosters', 'gsis_id,esb_id,full_name,birth_date,team,season,status,game_type,position,college,draft_number,draft_club,entry_year', 'id', '', n => { if (n % 10000 === 0) log(`rosters ${n}`); });
   log(`rosters ${rosters.length}`);
+  const { oldRosters, files } = await pullOldRosters(log);
   const picks = await pullAll('nfl_draft_picks', 'year,round,pick,player_name,team,college', 'id');
   log(`draft picks ${picks.length}`);
   const stats = await pullAll('nflfastr_player_stats', 'player_id,season,season_type,passing_yards,rushing_yards,receiving_yards', 'id', '&season_type=eq.REG', n => { if (n % 20000 === 0) log(`stats ${n}`); });
   log(`stat rows ${stats.length}`);
-  return { rosters, stats, picks, codes, superBowls };
+  return { rosters, oldRosters, oldFiles: files, stats, picks, codes, superBowls };
 }
 
 export function renderFile(players, sources) {
   return JSON.stringify({
     generatedOn: new Date().toISOString().slice(0, 10),
-    round: 403,
-    coverage: { rosters: '2002 to 2025 season roster snapshots', stats: '1999 to 2024 regular season weekly rows', draft: 'nfl_draft_picks 1936 to 2025, treated as complete from 1990' },
+    round: 404,
+    coverage: {
+      rosters: '1970 to 2025 (nflverse season roster files 1970 to 2001, the site roster table 2002 to 2025)',
+      stats: '1999 to 2024 regular season weekly rows',
+      draft: 'nfl_draft_picks 1936 to 2025, treated as complete from 1990',
+    },
     rules: {
-      teams: `roster rows with status in ${ROSTER_STATUSES.join(', ')}, codes merged to the franchise's current code`,
+      teams: `roster rows with status in ${ROSTER_STATUSES.join(', ')} (${OLD_ROSTER_STATUSES.join(', ')} in the 1970 to 2001 files), historical codes mapped to the franchise's current code by season, modern codes merged through nfl_team_codes`,
+      identity: 'gsis_id where any row carries one; otherwise name plus birth date, bridged to a gsis_id when a row of the same name and birth date has one',
       pos: 'distinct raw roster position codes on those rows',
-      draft: 'roster draft_number and draft_club when present; else the nfl_draft_picks row matching name and entry year; else undrafted when the entry year is 1990 or later and no pick within a year matches; else null',
+      draft: 'roster draft_number and draft_club when present; else the nfl_draft_picks row matching name and entry year; else, with no entry year, the one pick row of that name in the three drafts up to the first season; else undrafted when the entry year is 1990 or later and no pick within a year matches; else null',
       stats: 'regular season rows summed per season by gsis_id: seasons with 4,000 passing, 1,000 rushing, 1,000 receiving yards',
-      sbWins: 'roster rows with game_type SB on the team super_bowls names as the winner of the game played in season plus one',
+      sbWins: 'from 2002 roster rows with game_type SB on the winner super_bowls names for season plus one; before 2002 a counted roster row on the winning franchise that season',
     },
     sourceRows: sources,
     players,
@@ -255,9 +325,9 @@ if (isMain) {
   const check = process.argv.includes('--check');
   const src = await pullSources(m => console.log('   ' + m));
   const players = buildKey(src);
-  const sources = { rosters: src.rosters.length, stats: src.stats.length, picks: src.picks.length, codes: src.codes.length, superBowls: src.superBowls.length };
+  const sources = { rosters: src.rosters.length, oldRosters: src.oldRosters.length, oldFiles: src.oldFiles, stats: src.stats.length, picks: src.picks.length, codes: src.codes.length, superBowls: src.superBowls.length };
   const dups = players.filter(p => p.dup).length;
-  console.log(`${players.length} players, ${dups} carry a shared name, ${players.filter(p => p.draft === 'undrafted').length} undrafted, ${players.filter(p => p.sbWins > 0).length} with a Super Bowl win`);
+  console.log(`${players.length} players, ${players.filter(p => !p.id.startsWith('nb:')).length} on a gsis_id, ${dups} carry a shared name, ${players.filter(p => p.draft === 'undrafted').length} undrafted, ${players.filter(p => p.sbWins > 0).length} with a Super Bowl win`);
   if (check) {
     const current = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : null;
     const same = current && JSON.stringify(current.players) === JSON.stringify(players);

@@ -159,7 +159,9 @@ so the table list comes from `src/integrations/supabase/types.ts`.
    this key alone: either the nflverse season rosters are loaded back to the
    1970s first (a documented dataset, the same feed the roster table came
    from), or the page keeps the validator as the path for a name the key does
-   not carry and says which era the key covers on the card.
+   not carry and says which era the key covers on the card. Round 404 took the
+   first path: the key covers 1970 to 2025 on the nflverse season files, keyed
+   on gsis_id or name plus birth date, with a season aware franchise code map.
 2. Which identity fix comes first: backfilling `person_key` from `gsis_id`, or
    dropping ambiguous names from the generator? Measured 2026-09-02: 14,547 of
    the 14,555 stint names have a `gsis_id` in `nflfastr_rosters`, 303 of those
