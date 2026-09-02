@@ -3,7 +3,6 @@ import { useFootballTimeline } from '@/hooks/useFootballTimeline';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -189,7 +188,6 @@ const FootballTimeline = () => {
           ]}
         />
 
-        <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="football-timeline" gameContext={{ puzzleId: puzzle.id }} />

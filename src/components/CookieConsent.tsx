@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { loadConsentedScripts } from '@/lib/consentedScripts';
+import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScripts';
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -10,6 +10,27 @@ export function CookieConsent() {
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) setVisible(true);
+  }, []);
+
+  /* A withdrawal in another tab reloads this one so vendor code that already
+     ran is removed. Accept can start scripts in place, which preserves an
+     active game. Other choices only update the banner when no vendor ran. */
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== 'cookie-consent') return;
+      if (event.newValue === 'accepted') {
+        setVisible(false);
+        loadConsentedScripts();
+        return;
+      }
+      if (event.oldValue === 'accepted') {
+        window.location.reload();
+        return;
+      }
+      setVisible(event.newValue === null);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
   /* Round 117: mark the document while consent is still unanswered. index.css
@@ -40,21 +61,23 @@ export function CookieConsent() {
     return () => mo.disconnect();
   }, [visible]);
 
-  const accept = () => {
-    localStorage.setItem('cookie-consent', 'accepted');
+  const saveChoice = (choice: 'accepted' | 'essential') => {
+    localStorage.setItem('cookie-consent', choice);
+    window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
     setVisible(false);
-    // index.html only loads the ad and analytics scripts when consent is
-    // already 'accepted' at page load; inject them now so both start this
-    // session too. Round 285 moved the injection into one module shared with
-    // nothing else, because the same two scripts are now gated in two places.
+  };
+
+  const accept = () => {
+    saveChoice('accepted');
+    // Start analytics in this session. The ad loader also runs, but it stays
+    // off until AdBanner renders a deliberate slot after this state change.
     loadConsentedScripts();
   };
 
   // "Essential only": AdBanner reads this exact value and renders nothing
-  // when set, so no personalized-ad slot is initialized.
+  // when set, so no ad slot is initialized.
   const essentialOnly = () => {
-    localStorage.setItem('cookie-consent', 'essential');
-    setVisible(false);
+    saveChoice('essential');
   };
 
   if (!visible) return null;

@@ -10,11 +10,9 @@
  * for, and the ad component behaving like something worth approving.
  *
  * The rule this one is written to is that a board light must be actionable.
- * Anything the code controls is a hard failure. The one thing it does not
- * control, that every ad slot id in the repo is still a placeholder because
- * real ones can only be created inside Anthony's AdSense account, is REPORTED
- * as a number and never fails, because a red that nobody in this repo can
- * clear teaches everyone to ignore the board.
+ * Anything the code controls is a hard failure. Round 400 connected the real
+ * responsive unit from the AdSense account, so a missing or placeholder slot
+ * is a hard failure too.
  *
  * Run: node scripts/simAdsense.mjs
  */
@@ -24,19 +22,129 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const failureMessages = [];
+const fail = m => { failures += 1; failureMessages.push(m); console.error('  FAIL: ' + m); };
 const read = p => readFileSync(path.join(ROOT, p), 'utf8');
+const CONTROL = process.env.SIM_ADSENSE_CONTROL || '';
+const CONTROL_FAILURES = {
+  'same-page-consent': ['CookieConsent stores the answer but does not notify already mounted ad slots in the same tab'],
+  'stale-player-photos': ['the privacy policy still claims a Wikipedia player-photo integration that the site does not use'],
+  'fact-clarity': [
+    'the terms do not distinguish fictional simulation estimates from real sports facts',
+    'the terms still dismiss all game statistics as approximations, contradicting the verified-data promise',
+  ],
+  'script-without-slot': ['loadAdSense does not refuse pages with no explicit manual ad slot'],
+  'noindex-guard': ['loadAdSense does not refuse a deliberate slot when the page is noindexed'],
+  'slot-before-consent': ['AdBanner renders or starts its timeout before the visitor explicitly accepts consent'],
+  'loader-result': [
+    'AdBanner no longer collapses when the guarded loader refuses the page',
+    'AdBanner ignores the loader result and may push on an ineligible page',
+  ],
+  'noindex-ad': ['ResetPassword.tsx is noindexed but still renders AdBanner'],
+  'ad-status-behavior': ['AdBanner does not read and watch data-ad-status, so it cannot know whether an ad ever arrived'],
+  'snapshot-loader': ['public/privacy/index.html contains an executable adsbygoogle.js loader'],
+  'placeholder-slot': ['src/pages/Footle.tsx uses AdBanner slot 1234567890 instead of 7540487748'],
+  'missing-slot': ['found 74 source AdBanner callers, expected exactly 75'],
+  'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
+  'delayed-consent': ['AdBanner does not read stored consent before its first render'],
+};
+if (CONTROL && !Object.hasOwn(CONTROL_FAILURES, CONTROL)) {
+  console.error(`SIM_ADSENSE_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const mutateOnce = (source, needle, replacement, name) => {
+  if (CONTROL !== name) return source;
+  const matches = source.split(needle).length - 1;
+  if (matches !== 1) throw new Error(`${name} control expected one exact target, found ${matches}`);
+  console.log(`   CONTROL ${name}: exact target changed in memory`);
+  return source.replace(needle, replacement);
+};
+const codeOnly = source => source
+  .replace(/<!--[\s\S]*?-->/g, ' ')
+  .replace(/\/\*[\s\S]*?\*\//g, ' ')
+  .replace(/^\s*\/\/[^\n]*/gm, ' ');
+const executableScripts = source => [...source.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script>/gi)]
+  .filter(([, attrs]) => {
+    const type = attrs.match(/\btype\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase();
+    return !type || type === 'module' || /(?:java|ecma)script/.test(type);
+  })
+  .map(match => codeOnly(match[0]))
+  .join('\n');
+const PRIVACY_NPA_BRIDGE = "The first two bullets below are Google's general publisher disclosure. The prior-visit and cross-site personalization described in them are not the ad-selection mode this Site requests. Before Google's advertising script loads, this Site sets Google's non-personalized ads flag. Google may still use cookies and identifiers for frequency capping, aggregate reporting, fraud prevention, and similar purposes.";
 
 /* ── 1: the publisher id is one id, in every place it appears ─────────── */
 console.log('1) one publisher id, everywhere');
 const indexHtml = read('index.html');
 const adsTxt = existsSync(path.join(ROOT, 'public/ads.txt')) ? read('public/ads.txt') : '';
-const banner = read('src/components/ads/AdBanner.tsx');
-const consent = read('src/components/CookieConsent.tsx');
+let banner = read('src/components/ads/AdBanner.tsx');
+let consent = read('src/components/CookieConsent.tsx');
+let privacySource = read('src/pages/PrivacyPolicy.tsx');
+let termsSource = read('src/pages/TermsOfService.tsx');
 
 /* Round 285: the banner no longer carries the id itself, it calls
    src/lib/consentedScripts.ts, which is where both gated scripts live now. */
-const consented = read('src/lib/consentedScripts.ts');
+let consented = read('src/lib/consentedScripts.ts');
+
+consent = mutateOnce(
+  consent,
+  'window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));',
+  'void CONSENT_CHANGED_EVENT;',
+  'same-page-consent',
+);
+privacySource = mutateOnce(
+  privacySource,
+  'We use the following third-party services:',
+  'We use the following third-party services: Wikipedia REST API fetches player photographs.',
+  'stale-player-photos',
+);
+privacySource = mutateOnce(
+  privacySource,
+  PRIVACY_NPA_BRIDGE,
+  '',
+  'privacy-npa-bridge',
+);
+termsSource = mutateOnce(
+  termsSource,
+  'Fictional simulation outputs such as ratings, future seasons, finances, and generated results are entertainment estimates, not records of real events.',
+  'Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.',
+  'fact-clarity',
+);
+consented = mutateOnce(
+  consented,
+  "if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;",
+  "void document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');",
+  'script-without-slot',
+);
+consented = mutateOnce(
+  consented,
+  'if (document.querySelector(\'meta[name="robots"][content*="noindex"]\')) return false;',
+  'void document.querySelector(\'meta[name="robots"][content*="noindex"]\');',
+  'noindex-guard',
+);
+banner = mutateOnce(
+  banner,
+  "if (consent !== 'accepted') return null;",
+  "if (consent === 'essential') return null;",
+  'slot-before-consent',
+);
+banner = mutateOnce(
+  banner,
+  'if (!loadAdSense()) {',
+  'loadAdSense();\n    if (false) {',
+  'loader-result',
+);
+banner = mutateOnce(
+  banner,
+  "const status = el.getAttribute('data-ad-status');",
+  'const status = null;',
+  'ad-status-behavior',
+);
+banner = mutateOnce(
+  banner,
+  'const [consent, setConsent] = useState<string | null>(readStoredConsent);',
+  'const [consent, setConsent] = useState<string | null>(null);',
+  'delayed-consent',
+);
 const ids = new Set();
 for (const src of [indexHtml, adsTxt, banner, consented]) {
   for (const m of src.matchAll(/(?:ca-)?pub-(\d{10,20})/g)) ids.add(m[1]);
@@ -61,12 +169,30 @@ if (!/localStorage\.getItem\('cookie-consent'\)\s*===\s*'accepted'/.test(indexHt
   console.log('   note: the consent gate in index.html changed shape, re-read it before trusting this section');
 }
 const snapDir = path.join(ROOT, 'public');
+const snapshotFiles = [];
+const collectSnapshots = dir => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) collectSnapshots(file);
+    else if (entry.name === 'index.html') snapshotFiles.push(file);
+  }
+};
+collectSnapshots(snapDir);
 let withMeta = 0, snaps = 0, stubs = 0;
-for (const e of readdirSync(snapDir, { withFileTypes: true })) {
-  if (!e.isDirectory()) continue;
-  const f = path.join(snapDir, e.name, 'index.html');
-  if (!existsSync(f)) continue;
-  const html = readFileSync(f, 'utf8');
+for (const f of snapshotFiles) {
+  const relative = path.relative(snapDir, f).split(path.sep).join('/');
+  let html = readFileSync(f, 'utf8');
+  if (relative === 'privacy/index.html') {
+    html = mutateOnce(
+      html,
+      '</head>',
+      '<script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>\n</head>',
+      'snapshot-loader',
+    );
+  }
+  if (/adsbygoogle\.js/i.test(executableScripts(html))) {
+    fail(`public/${relative} contains an executable adsbygoogle.js loader`);
+  }
   /* Round 272's retired signposts and Round 278's noindex stubs are small
      documents whose only job is to declare one thing. Head furniture the page
      will never use is not missing from them, it was never wanted. Counted
@@ -155,6 +281,7 @@ console.log('5) the advertising disclosures, as shipped');
       [/Google AdSense/i, 'that Google AdSense serves the ads'],
       [/third[ -]party vendors, including Google, use cookies to serve ads based on/i, 'that third party vendors including Google use cookies to serve ads based on prior visits'],
       [/advertising cookies enables it and its partners to serve ads/i, "that Google's advertising cookies let it and its partners serve ads across sites"],
+      [/web beacons[\s\S]{0,80}IP addresses[\s\S]{0,80}other identifiers/i, 'that ad serving may use web beacons, IP addresses, and other identifiers'],
       [/opt out of personali[sz]ed advertising/i, 'how to opt out of personalised advertising'],
       [/other third[ -]party vendors and ad networks may also serve ads/i, 'that other vendors and ad networks may serve ads on the site'],
       [/Essential only/, 'what the Essential only choice on the banner does'],
@@ -182,6 +309,25 @@ console.log('5) the advertising disclosures, as shipped');
     fail("the footer has no control that removes the stored 'cookie-consent' answer, so the withdrawal the policy promises does not exist");
   }
   if (!/Cookie choices/.test(footer)) fail('the footer does not offer the Cookie choices control the policy names');
+
+  if (/Wikipedia REST API[\s\S]{0,100}player photographs/i.test(codeOnly(privacySource))) {
+    fail('the privacy policy still claims a Wikipedia player-photo integration that the site does not use');
+  }
+  const privacyWords = codeOnly(privacySource).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!privacyWords.includes(PRIVACY_NPA_BRIDGE)) {
+    fail("the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request");
+  }
+
+  const termsWords = codeOnly(termsSource).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  if (!/real trivia and historical data accurate/i.test(termsWords)) {
+    fail('the terms do not say that real trivia and historical data are kept accurate');
+  }
+  if (!/fictional simulation outputs such as ratings, future seasons, finances, and generated results are entertainment estimates/i.test(termsWords)) {
+    fail('the terms do not distinguish fictional simulation estimates from real sports facts');
+  }
+  if (/Player statistics and data presented in the games are approximations/i.test(termsWords)) {
+    fail('the terms still dismiss all game statistics as approximations, contradicting the verified-data promise');
+  }
 }
 
 /* ── 5b: analytics rides on the same consent gate as the ads ──────────── */
@@ -218,54 +364,151 @@ console.log('5b) analytics loads only behind the same consent as the ads');
     const inside = indexHtml.slice(open, close);
     /* whole line comments only: a URL contains a double slash too */
     const stripped = indexHtml.replace(/<!--[\s\S]*?-->/g, ' ').replace(/^\s*\/\/[^\n]*/gm, ' ');
-    for (const url of ['googletagmanager.com/gtag/js', 'adsbygoogle.js']) {
+    for (const url of ['googletagmanager.com/gtag/js']) {
       const all = (stripped.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
       const gated = (inside.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
       if (all === 0) fail(`index.html never loads ${url} at all`);
       if (all !== gated) fail(`${url} appears ${all} time(s) in index.html code and only ${gated} inside the consent branch`);
     }
+    if (/adsbygoogle\.js/.test(codeOnly(indexHtml))) {
+      fail('index.html loads AdSense globally, which can make private, reset, fallback, and no-content routes eligible for Auto Ads');
+    }
   }
-  console.log(`   measurement id ${[...gaIds][0] ?? 'MISSING'}, one id in both copies, both scripts inside the consent branch and nowhere else`);
+  if (!/adsbygoogle\.js/.test(codeOnly(consented))) {
+    fail('consentedScripts.ts has no on-demand AdSense loader for real ad slots');
+  }
+  console.log(`   measurement id ${[...gaIds][0] ?? 'MISSING'}, analytics stays gated globally and ads load only beside a real slot`);
 }
 
 /* ── 6: an empty ad slot is not labelled as an advertisement ──────────── */
 console.log('6) the ad component never labels an empty box');
-if (!/data-ad-status/.test(banner)) {
-  fail('AdBanner does not watch data-ad-status, so it cannot know whether an ad ever arrived');
+const bannerBehavior = codeOnly(banner);
+if (!/getAttribute\(\s*['"]data-ad-status['"]\s*\)/.test(bannerBehavior)
+    || !/new MutationObserver\(read\)/.test(bannerBehavior)
+    || !/attributeFilter:\s*\[\s*['"]data-ad-status['"]\s*\]/.test(bannerBehavior)) {
+  fail('AdBanner does not read and watch data-ad-status, so it cannot know whether an ad ever arrived');
 }
-if (!/state === 'filled'/.test(banner)) {
+if (!/state === 'filled'/.test(bannerBehavior)) {
   fail('AdBanner does not gate the Advertisement label on a filled slot, so an empty box calls itself an advertisement');
 }
-if (!/script\[src\*="adsbygoogle\.js"\]/.test(banner)) {
-  fail('AdBanner no longer checks whether the ad script is present, so with consent withheld it draws an empty box on every page');
+if (!/if\s*\(\s*!loadAdSense\(\)\s*\)/.test(bannerBehavior)) {
+  fail('AdBanner no longer collapses when the guarded loader refuses the page');
 }
-console.log('   collapses with no script, collapses on unfilled, labels only what filled');
+console.log('   collapses when ineligible or unfilled, labels only what filled');
 
-/* ── 7: reported, never failed ────────────────────────────────────────── */
-console.log('7) ad slot ids');
-const slots = new Set();
+/* ── 6b: accepting consent wakes an ad already mounted on this page ───── */
+console.log('6b) same-page consent reaches an already mounted ad');
+{
+  const consentCode = codeOnly(consent);
+  const bannerCode = codeOnly(banner);
+  const sharedCode = codeOnly(consented);
+  if (!/useState(?:<[^>]+>)?\(\s*(?:readStoredConsent|\(\s*\)\s*=>\s*readStoredConsent\(\s*\))\s*\)/.test(bannerCode)) {
+    fail('AdBanner does not read stored consent before its first render');
+  }
+  if (!/export const CONSENT_CHANGED_EVENT\s*=\s*'[^']+'/.test(sharedCode)) {
+    fail('consentedScripts.ts does not export one event name for same-page consent changes');
+  }
+  if (!/window\.dispatchEvent\(new Event\(CONSENT_CHANGED_EVENT\)\)/.test(consentCode)) {
+    fail('CookieConsent stores the answer but does not notify already mounted ad slots in the same tab');
+  }
+  if (!/addEventListener\(CONSENT_CHANGED_EVENT/.test(bannerCode) || !/removeEventListener\(CONSENT_CHANGED_EVENT/.test(bannerCode)) {
+    fail('AdBanner does not subscribe and unsubscribe from the same-page consent event');
+  }
+  if (!/if\s*\(\s*consent\s*!==\s*['"]accepted['"]\s*\)\s*return null/.test(bannerCode)) {
+    fail('AdBanner renders or starts its timeout before the visitor explicitly accepts consent');
+  }
+  console.log('   either choice notifies the current page, and an ad exists only after Accept');
+}
+
+/* ── 6c: the AdSense script exists only beside a deliberate ad slot ───── */
+console.log('6c) no global Auto Ads eligibility on non-content routes');
+{
+  const bannerCode = codeOnly(banner);
+  const sharedCode = codeOnly(consented);
+  const noindexGuard = sharedCode.indexOf('meta[name="robots"][content*="noindex"]');
+  const slotGuard = sharedCode.indexOf('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');
+  const existingScript = sharedCode.indexOf('script[src*="adsbygoogle.js"]');
+  if (!/if\s*\(\s*!document\.querySelector\(\s*['"]\[data-dukb-manual-ad\] ins\.adsbygoogle\[data-ad-slot\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
+    fail('loadAdSense does not refuse pages with no explicit manual ad slot');
+  }
+  if (!/querySelector\(\s*['"]meta\[name=[\\'"]robots[\\'"]\]\[content\*=[\\'"]noindex[\\'"]\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
+    fail('loadAdSense does not refuse a deliberate slot when the page is noindexed');
+  }
+  if (noindexGuard < 0 || slotGuard < 0 || existingScript < 0 || !(noindexGuard < slotGuard && slotGuard < existingScript)) {
+    fail('loadAdSense does not fail closed before reusing an existing script');
+  }
+  if (!/data-dukb-manual-ad/.test(bannerCode)) {
+    fail('AdBanner does not mark its wrapper as a deliberate manual ad slot');
+  }
+  if (!/if\s*\(\s*!loadAdSense\(\)\s*\)\s*\{/.test(bannerCode)) {
+    fail('AdBanner ignores the loader result and may push on an ineligible page');
+  }
+  const pagesDir = path.join(ROOT, 'src/pages');
+  for (const name of readdirSync(pagesDir)) {
+    if (!name.endsWith('.tsx')) continue;
+    let page = readFileSync(path.join(pagesDir, name), 'utf8');
+    if (name === 'ResetPassword.tsx') {
+      page = mutateOnce(page, '<PageSeo', '<AdBanner slot="123" /><PageSeo', 'noindex-ad');
+    }
+    const pageCode = codeOnly(page);
+    if (/\bnoindex\b/.test(pageCode) && /<AdBanner\b/.test(pageCode)) {
+      fail(`${name} is noindexed but still renders AdBanner`);
+    }
+  }
+  console.log('   the verification meta stays global, but the ad script is limited to pages with an AdBanner');
+}
+
+/* ── 7: every manual ad uses the real display unit ────────────────────── */
+console.log('7) one production slot on every AdBanner caller');
+const EXPECTED_SLOT = '7540487748';
+const EXPECTED_CALLERS = 75;
+const srcDir = path.join(ROOT, 'src');
+const adCallers = [];
 const walk = d => {
   for (const e of readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name);
     if (e.isDirectory()) { walk(p); continue; }
     if (!/\.tsx?$/.test(e.name)) continue;
-    for (const m of readFileSync(p, 'utf8').matchAll(/slot="(\d+)"/g)) slots.add(m[1]);
+    const relative = `src/${path.relative(srcDir, p).split(path.sep).join('/')}`;
+    let source = readFileSync(p, 'utf8');
+    if (relative === 'src/pages/Footle.tsx') {
+      source = mutateOnce(
+        source,
+        `<AdBanner slot="${EXPECTED_SLOT}" format="horizontal" className="mt-8" />`,
+        '',
+        'missing-slot',
+      );
+      source = mutateOnce(source, `slot="${EXPECTED_SLOT}"`, 'slot="1234567890"', 'placeholder-slot');
+    }
+    for (const match of codeOnly(source).matchAll(/<AdBanner\b[\s\S]*?>/g)) {
+      const slot = match[0].match(/\bslot\s*=\s*"([^"]+)"/)?.[1] ?? '(missing or dynamic)';
+      adCallers.push({ relative, slot });
+    }
   }
 };
-walk(path.join(ROOT, 'src'));
-/* The placeholder test is a RANGE, not a shape. A first attempt used a regex
-   and reported 9 of 26, which was simply wrong: every id in the repo sits in
-   one contiguous block starting at the canonical 1234567890, and a check that
-   undercounts the problem it exists to report is worse than not having it. */
-const placeholders = [...slots].filter(s => Number(s) >= 1234567890 && Number(s) <= 1234568000);
-console.log(`   ${slots.size} distinct slot ids in use, ${placeholders.length} still placeholders`);
-if (placeholders.length) {
-  console.log('   NOT A FAILURE: real slot ids can only be created inside the AdSense account, so this');
-  console.log('   is a line for the owner rather than a red light for anyone in this repo. Until they are');
-  console.log('   real, every slot answers unfilled and section 6 is what keeps those boxes off the page.');
+walk(srcDir);
+if (adCallers.length === 0) fail('no shipped AdBanner callers exist');
+if (adCallers.length !== EXPECTED_CALLERS) {
+  fail(`found ${adCallers.length} source AdBanner callers, expected exactly ${EXPECTED_CALLERS}`);
 }
+const wrongSlotCallers = adCallers.filter(caller => caller.slot !== EXPECTED_SLOT);
+for (const caller of wrongSlotCallers) {
+  fail(`${caller.relative} uses AdBanner slot ${caller.slot} instead of ${EXPECTED_SLOT}`);
+}
+console.log(`   ${adCallers.length} callers scanned against slot ${EXPECTED_SLOT}, ${wrongSlotCallers.length} mismatch${wrongSlotCallers.length === 1 ? '' : 'es'}`);
 
 console.log('');
+if (CONTROL) {
+  const expected = [...CONTROL_FAILURES[CONTROL]].sort();
+  const actual = [...failureMessages].sort();
+  const exact = actual.length === expected.length && actual.every((message, i) => message === expected[i]);
+  if (exact) {
+    console.log(`simAdsense control: green. ${CONTROL} caused exactly ${expected.length} owned failure${expected.length === 1 ? '' : 's'}.`);
+    process.exit(0);
+  }
+  console.error(`simAdsense control: RED. ${CONTROL} expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}.`);
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simAdsense: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

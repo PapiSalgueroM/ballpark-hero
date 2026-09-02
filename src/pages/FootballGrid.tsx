@@ -159,7 +159,7 @@ const FootballGrid = () => {
           ]}
         />
 
-        <AdBanner slot="1234567900" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="football-grid" gameContext={{ puzzleId: puzzle.id }} />

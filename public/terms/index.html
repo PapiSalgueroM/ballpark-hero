@@ -119,31 +119,13 @@
       })();
     </script>
     <script>
-      // Consent-gated AdSense loader: only load the ad script if the visitor
-      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
-      // New visitors (no choice yet) do not get the script until they accept;
-      // the banner reloads ads on acceptance via the page lifecycle.
-      //
-      // Round 285: Google Analytics rides on the same gate. The measurement
-      // id and the injection are duplicated in src/lib/consentedScripts.ts,
-      // which is what the banner calls the moment somebody accepts; this copy
-      // covers every later page load. simAdsense holds the two ids together
-      // and refuses a gtag script tag that is not behind this check, so the
-      // tag can never be loaded for a visitor who has not accepted.
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
-            // Round 304: non personalized ads only. Google is told before its
-            // script loads, the privacy pages say the same thing, and
-            // simLegalPages holds the flag and the wording together.
-            window.adsbygoogle = window.adsbygoogle || [];
-            window.adsbygoogle.requestNonPersonalizedAds = 1;
-            var s = document.createElement('script');
-            s.async = true;
-            s.crossOrigin = 'anonymous';
-            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
-            document.head.appendChild(s);
-
             window.dataLayer = window.dataLayer || [];
             window.gtag = function () { window.dataLayer.push(arguments); };
             window.gtag('js', new Date());
@@ -153,7 +135,7 @@
             g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
             document.head.appendChild(g);
           }
-        } catch (e) { /* storage blocked: default to no ads script */ }
+        } catch (e) { /* storage blocked: analytics stays off */ }
       })();
     </script>
     
@@ -213,14 +195,14 @@
 <div id="root">
 <div id="dukb-snapshot">
 <h1>Terms of Service</h1>
-<p>Last updated: August 27, 2026</p>
+<p>Last updated: September 1, 2026</p>
 <h2>1. Acceptance of Terms</h2>
 <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site. The Site is owned and operated by an individual doing business as DoUKnowBall ("we", "us", "the operator").</p>
 <h2>2. Description of Service</h2>
 <p>DoUKnowBall is a free, independent fan site and browser-based entertainment platform that provides sports-themed trivia and guessing games. The Site is operated for entertainment purposes only and is not an official product of any sports league, players' association, or governing body.</p>
 <p>Current game categories include pro football (NFL), college football, pro basketball (NBA), college basketball, baseball (MLB), hockey (NHL), soccer (including World Cup and Champions League), Formula 1, tennis, golf, NASCAR, combat sports (UFC), and multi-sport trivia covering the Olympics and international competitions. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
 <h2>3. Sports Data &amp; Player Information</h2>
-<p>All sports statistics, player names, team names, and career information presented on this Site are factual public information sourced from publicly available databases and records. This data is used for entertainment and educational purposes in the context of trivia games.</p>
+<p>Real player names, team names, historical results, statistics, and trivia answers on the Site come from public records and sports sources. We work to verify this factual material before publishing it and correct errors when we confirm them.</p>
 <h2>4. Accounts</h2>
 <p>You do not need an account to play any game on the Site. If you choose to create one, you can sign up with an email address and password or sign in with Google. You are responsible for keeping your login details secure and for all activity under your account.</p>
 <p>You agree to provide accurate information when creating an account and not to create an account using someone else's identity or a name that is offensive or impersonates another person or brand. We may suspend or remove an account that violates these Terms.</p>
@@ -243,7 +225,7 @@
 <h2>8. Content Updates</h2>
 <p>DoUKnowBall reserves the right to add, modify, or remove games, game content, player data, and features at any time without prior notice. Daily challenges, puzzles, and game data may change at our sole discretion.</p>
 <h2>9. Disclaimer of Warranties</h2>
-<p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
+<p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. We work to keep real trivia and historical data accurate, but errors can happen. Fictional simulation outputs such as ratings, future seasons, finances, and generated results are entertainment estimates, not records of real events.</p>
 <h2>10. Limitation of Liability</h2>
 <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
 <h2>11. Indemnification</h2>

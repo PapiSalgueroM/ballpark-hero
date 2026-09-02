@@ -372,7 +372,7 @@ const LineupBuilder = () => {
           ]}
         />
 
-        <AdBanner slot="1234567896" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="build-your-xi" gameContext={{ team: currentTeam, formation }} />

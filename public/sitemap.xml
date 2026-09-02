@@ -15,7 +15,7 @@
   <url><loc>https://douknowball.com/pro-football</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/baseball</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/hockey</loc><lastmod>2026-08-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-08-29</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-09-02</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/records</loc><lastmod>2026-09-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/nba-grid/archive</loc><lastmod>2026-09-01</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/mlb-grid/archive</loc><lastmod>2026-09-01</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
@@ -23,8 +23,8 @@
   <url><loc>https://douknowball.com/cbb-grid/archive</loc><lastmod>2026-09-01</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/about</loc><lastmod>2026-09-01</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://douknowball.com/contact</loc><lastmod>2026-08-25</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://douknowball.com/privacy</loc><lastmod>2026-08-27</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://douknowball.com/terms</loc><lastmod>2026-08-27</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://douknowball.com/privacy</loc><lastmod>2026-09-02</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://douknowball.com/terms</loc><lastmod>2026-09-02</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://douknowball.com/accessibility</loc><lastmod>2026-08-27</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://douknowball.com/budget-builder</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/rebuild</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
@@ -39,12 +39,12 @@
   <url><loc>https://douknowball.com/sports-bingo</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/alphabet-sprint</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/clue-auction</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/rarity-round</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/rarity-round</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/missing-xi</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/sign-the-player</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/footle</loc><lastmod>2026-09-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/career</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/higher-lower</loc><lastmod>2026-08-31</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/higher-lower</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/connections</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/build-your-xi</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/football-connect-4</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
@@ -79,7 +79,7 @@
   <url><loc>https://douknowball.com/nba-stat-line</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nba-starting-5</loc><lastmod>2026-08-27</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nba-connect-4</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/nba-chain</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/nba-chain</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nba-higher-lower</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nba-grid</loc><lastmod>2026-08-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nba-connections</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
@@ -93,7 +93,7 @@
   <url><loc>https://douknowball.com/baseball-career</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/mlb-higher-lower</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/mlb-grid</loc><lastmod>2026-08-31</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/mlb-connect-4</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/mlb-connect-4</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/conquest-mlb</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/mlb-my-career</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/mlb-front-office</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
@@ -142,6 +142,6 @@
   <url><loc>https://douknowball.com/sports-millionaire</loc><lastmod>2026-08-27</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/quiz-board</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/ball-iq</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/emoji-guess</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/emoji-guess</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/mystery-box</loc><lastmod>2026-08-25</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 </urlset>

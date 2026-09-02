@@ -135,6 +135,14 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
         ? `link:${el.getAttribute('rel')}`
         : `meta:${el.getAttribute('name') ?? el.getAttribute('property')}`;
     const sweep = () => {
+      // A saved private page starts with its noindex tag already in the head.
+      // Helmet has no replacement robots tag on an indexable route, so remove
+      // that stale tag explicitly when the visitor moves into a public page.
+      if (!noindex) {
+        for (const el of Array.from(document.querySelectorAll('meta[name="robots"][content*="noindex"]'))) {
+          el.remove();
+        }
+      }
       const owned = new Set<string>();
       for (const el of Array.from(document.querySelectorAll('head [data-rh]'))) owned.add(keyOf(el));
       if (!owned.size) return;
@@ -147,7 +155,7 @@ const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) =
     const mo = new MutationObserver(sweep);
     mo.observe(document.head, { childList: true, subtree: true });
     return () => mo.disconnect();
-  }, []);
+  }, [noindex]);
 
   /* ROUND 281: the type comes from src/lib/pageSchema.ts, not from here.
      Until this round every page that was not the home page was emitted as

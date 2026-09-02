@@ -328,7 +328,7 @@ const FaceOff = () => {
           ]}
         />
 
-        <AdBanner slot="1234567917" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="face-off" gameContext={{ mode: g.mode, rival: g.difficulty, pair: g.current ? `${g.current.a.name} v ${g.current.b.name} (${g.current.category})` : null }} />
         </div>

@@ -21,27 +21,42 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 408.
 
-## Active claims, 2026-09-01
+## Active claims, 2026-09-02
 
-- **next: Round 400 (Codex lane, clean verification worktree). FULL SITE FACT
-  AND PLAYABILITY AUDIT.** Run the real type gate, full node harness fleet and
-  browser route sweep from committed `main`; classify every failure before
-  changing code; fix the highest-confidence production bug first, with its
-  negative control. Soccer Career and Club Manager get the first deep checks.
+- **next: Round 400 (Codex lane, clean verification worktree). ADSENSE ROUTE
+  ELIGIBILITY, LOCAL GATES COMPLETE, AWAITING DEPLOYMENT.** The owner moved
+  AdSense readiness first. The
+  global ad loader has been removed from `index.html`; an accepted visitor now
+  loads it only beside a deliberate manual slot in a document without noindex;
+  the three retired slots are removed; and same-tab consent changes reach the
+  slot. One responsive Display unit, `DoUKnowBall Game Banner`, now exists at
+  slot `7540487748`; all 75 source callers across 75 files use it, with zero
+  mismatches by scan. Auto Ads and Auto optimize are verified OFF. The focused
+  browser harness carries five exact lifecycle controls. The final SEO build,
+  TypeScript gate, 13 built-site fences, AdSense, legal and brand harnesses, and
+  the full browser pass are green. The browser measured 358 pixels on mobile and
+  864 on desktop, with zero requests on 16 policy-risk routes. Its final pass
+  also caught and fixed a saved private page carrying noindex into a public
+  game, then passed again with the matching negative control. Deployment, live
+  verification and the Google submissions remain, so this claim stays out of
+  Done.
 
 
+**OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
+rest of the existing plan. Move quickly, but keep the verification standard and
+do not trade correctness for speed. This supersedes the older work order below.
+The owner later explicitly authorized checking the Request review confirmation
+and submitting after the new build is live and verified. No review has been
+submitted yet.
 
-
-
-
-
-
-**OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
-Keep following the master plan and choose work from evidence. Do not lose the
-larger opportunity: NRL, AFL, cricket, F1 and other underserved sports have
-millions of fans but far fewer deep browser games than soccer, basketball and
-American football. Build into that gap when the plan and verification state
-make it the right next move, especially with career and manager formats.
+**HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
+ROADMAP.** This did not replace the priority list when it was recorded. The
+2026-09-02 update above now controls. After AdSense readiness, keep choosing
+work from evidence and do not lose the larger opportunity: NRL, AFL, cricket,
+F1 and other underserved sports have millions of fans but far fewer deep
+browser games than soccer, basketball and American football. Build into that
+gap when the plan and verification state make it the right next move,
+especially with career and manager formats.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -59,9 +74,17 @@ the site is frozen any more; the ordinary care about crawler-facing files still
 applies, and ads.txt, the verification code and robots.txt are still not things
 to touch casually.
 
-**THE DESKTOP LANE AUDITED THE SITE AGAINST THAT VERDICT THE SAME HOUR AND
-FOUND NO MECHANICAL DEFECT TO FIX. Read this before anyone starts writing
-filler copy.** Measured across all 153 shipped documents: the median page
+**GOOGLE CONSOLES INSPECTED AND CONFIGURED, 2026-09-02.** Round 400 used account
+`anacatu2025@gmail.com`, created the real Display unit, and turned Auto Ads and
+Auto optimize off. No AdSense review or Search Console indexing request was
+submitted. The detailed AdSense state, Search Console counts, exact ten-route
+batch and readiness gates have one source of truth:
+`docs/adsense/reapply-readiness.md`. The owner authorized the route batch and
+AdSense review submission after Round 400 is live and its route checks pass.
+
+**HISTORICAL CONTENT AUDIT, 2026-08-30. Read this before anyone starts writing
+filler copy.** It found no measured thin-copy defect. Across all 153 shipped
+documents, the median page
 carries 584 unique words and the 90th percentile 970, the home page 923, and
 only FIVE sentences repeat on more than half the pages, so the guide copy is
 genuinely per game rather than a template with the nouns swapped. Every page
@@ -74,8 +97,17 @@ nothing, and the rejection is a judgement about what the site IS rather than a
 list of pages to repair. Do not respond to it by mass producing copy: that is
 the one move that would make the next review worse.
 
-**HE HAS ANSWERED, 2026-08-30: DO NOT RE-APPLY YET, AND KEEP BUILDING THE
-MASTER PLAN.** His full addendum is recorded verbatim in
+**SCOPE CORRECTION, 2026-09-02:** the audit above measured content and noindex
+state. It did not test where the globally loaded AdSense script could execute.
+Round 400 found that the global template loaded the account script without
+checking whether a route owned a deliberate slot. The exposed surface included
+six noindexed snapshots and the fallback; three of those retired games also
+rendered slots. That is a mechanical ad-delivery defect, separate from the
+still-useful thin-copy finding above.
+
+**HISTORICAL OWNER DIRECTION, 2026-08-30, SUPERSEDED AS A WORK ORDER ON
+2026-09-02: DO NOT RE-APPLY YET, AND KEEP BUILDING THE MASTER PLAN.** His full
+addendum is recorded verbatim in
 docs/OWNER-ADSENSE-RECOVERY-2026-08-30.md and BOTH LANES MUST READ IT. The
 headlines: low value does not mean low word count, so find evidence rather than
 guessing; build a genuine sports reference layer that would be useful even if
@@ -87,15 +119,15 @@ to 30 pages) and docs/adsense/reapply-readiness.md (ending in NOT READY,
 NEARLY READY or READY, and he submits the review, not us). New P0 order:
 production bugs and security, then AdSense recovery, then indexing, then sports
 data correctness.
+The 2026-09-02 priority update above is current. The owner still decides when
+to submit the review.
 
-**SUPERSEDED, kept for the reasoning.** His own operating
-contract already defers AdSense ("at current traffic this earns very little")
-and at 1,800 clicks a month it is worth very little indeed, so the desktop
-lane's recommendation on the record is to NOT request a re-review yet, keep
-growing the traffic Milestone 0 is already growing, and re-apply when the site
-is materially bigger, at which point the same content profile reads
-differently. He has been asked and has not yet answered; until he does, nobody
-should spend a round on AdSense remediation.
+**HISTORICAL OPERATING-CONTRACT NOTE, SUPERSEDED BY THE 2026-08-30 ANSWER AND
+THE 2026-09-02 PRIORITY UPDATE.** Before those decisions, the operating contract
+deferred AdSense because it earned little at the measured traffic, and the
+desktop lane recommended growing the site before requesting another review.
+That was the reasoning at the time. It is preserved here as history, not as a
+current instruction.
 
 
 ## HANDOFF TO THE CLOUD LANE, written 2026-08-30 by the desktop lane
@@ -711,7 +743,7 @@ From the 2026-08-28 review (his decisions and the self contained fixes):
   The bake scripts (bake_nhl.py and friends) are NOT in the repo, they lived on the
   machine that ran the 08-05 bake. MLB/NBA/NHL sims already roster both sides.
 
-Standing claims:
+Standing claims after Round 400 finishes:
 
 - New game rounds and record shelf tables, the self contained work.
 

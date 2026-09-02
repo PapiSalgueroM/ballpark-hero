@@ -208,7 +208,7 @@ const HockeyCareer = () => {
           ]}
         />
 
-        <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="hockey-career" gameContext={{ puzzleId: puzzle.id }} />
         </div>
