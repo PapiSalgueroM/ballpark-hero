@@ -19,9 +19,21 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 417.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 418.
 
 ## Active claims, 2026-09-02
+
+- **Codex lane, next: Round 417. LIVE SCHEMA FENCES SURVIVE RUNNER
+  PRESSURE.** Two database-backed harnesses fail randomly when the public API
+  drops a request under a full-suite burst, which makes a green site look red
+  and hides the useful result in reruns. Add a shared retry limited to thrown
+  transport failures, keep every returned HTTP refusal fail closed, repair the
+  daily-order existence probe so it does not sort a live table just to inspect
+  its schema, and cover every behavior with controls that prove they fire.
+  Files in play: scripts/lib/fetchWithTransportRetry.mjs,
+  scripts/simLiveHarnessRetry.mjs, scripts/simSchemaNames.mjs,
+  scripts/simValueFreshness.mjs, scripts/simDailyPoolOrder.mjs, this board and
+  docs/PROJECT-STATE.md.
 
 - **Desktop lane, next: Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE,
   PART ONE: THE BAKE.** The owner's P1 item 12 from 2026-08-28, the last one
