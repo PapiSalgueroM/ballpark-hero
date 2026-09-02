@@ -40,3 +40,6 @@ docs/scripts/build-connections-puzzles.py
 
 # Codex worktrees: isolated feature checkouts, never repo content
 /.worktrees/
+
+# Round 404: nflverse season roster files downloaded by scripts/lib/nflverseRosters.mjs, never committed
+scripts/.cache/
