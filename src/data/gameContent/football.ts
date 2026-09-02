@@ -55,7 +55,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Read the ownership mandate. A loaded roster is told to win the Super Bowl, a mid one to make the playoffs, a bare one to hit an honest win number. It resets every offseason from where your roster really stands.",
       "Shape the roster: cut bloated deals, sign free agents, and take trades to the phone: the other GM counters like a person, asking for a pick, offering a lesser man, or hanging up.",
       "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",
-      "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks boost your defense unit rather than adding a player.",
+      "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks join the roster as players, the same as any other pick.",
       "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you.",
     ],
     rules: [

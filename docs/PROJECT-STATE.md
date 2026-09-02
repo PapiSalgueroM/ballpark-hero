@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 98% | Round 416: the Trade Finder's rosters are the real 2026 squads and carry 192 defenders, and the panels stopped hiding seven of your fifteen men, so the owner's item 12 complaint that only offensive players appear is answered. The engine still models defence as one team number, which is Round 418. |
+| P0 production bugs | both items Round 413's audit left open are closed | Round 413 audited the owner's thirteen P1 items from 2026-08-28 and found exactly two still open: the euro strings (Round 415) and the Trade Finder (Rounds 416 and 418). Both are done, so item 12's second half landed and a trade for a defender now changes how the club plays. The wording is deliberately narrow: it reports what that audit found, not a fresh claim that all thirteen are closed, which this round did not re-audit. |
 | Shared data layer and provenance | 58% | Round 416: frontOfficePlayers.ts is derived from the nflverse releases rather than typed by hand, two source verified 98.3 percent against ESPN, re-derivable with --check, and it now refuses to write rather than rate the league on draft position when the join breaks. Ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2789,6 +2789,143 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-02, Round 418. THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO.** The
+  other half of the owner's P1 item 12. (A naming trap worth one line, because a reviewer
+  fell into it: `docs/TWEAKS-2026-08-28.md` carries TWO numbered lists, a P1 bug list of
+  thirteen and a separate features and ideas list. "P1 item 12" is the Trade Finder;
+  "tweaks item 12" is encyclopedia mining. They are different items with the same number
+  in the same file.) Round 416 put 192 real defenders in the roster
+  file and deliberately changed nothing about how they play, so a player could see them,
+  list them and trade for one, and the trade moved nothing. Defence was a single stored
+  number, `team.defense`, worth 28 percent of team strength, and the men on the roster
+  were worth exactly zero.
+  **The measurement that made this urgent.** That stored number came from a 2024
+  team-unit rating. Correlated against the 2026 defenders the same file now lists, it
+  scores **minus 0.112**: not weakly related, unrelated. The game was showing a club six
+  good defenders and rating its defence off something else entirely, and no amount of
+  squinting makes that a defensible thing to ship once the defenders exist.
+  **What changed.** `teamStrength` reads `defenceRating(team)`, the mean of the healthy
+  DL, LB and DB on the roster. Signing, trading, drafting or losing a defender now moves
+  the number the way signing a receiver always has: upgrading one club's worst defensive
+  lineman to 95 moves its strength 77.63 to 78.61, where before this round it moved it by
+  exactly nothing.
+  **THE ROUND SHIPPED AN EXPLOIT AND AN ADVERSARIAL REVIEW CAUGHT IT.** The first
+  version of `defenceRating` was the mean of the healthy defenders, and a mean pays you
+  for cutting your worst man. Measured on the shipped league: releasing the worst
+  defender made **all 32 clubs stronger**, mean +0.585 and up to +1.04; cutting five of
+  six was worth +2.95 and freed 27M of cap; and cutting all six fell through to the
+  stored 2024 unit number, which for **11 of the 32 was an upgrade**. Miami went 73.85 to
+  79.22 and, over 300 simulated seasons with the real weekly loop, from 3.75 wins to
+  6.34. The board displayed the rise as it happened, with the Cut buttons a dozen lines
+  under the number, so the game was actively inviting it. Nothing in the suite caught it,
+  because the fence checked that a BETTER defender raises strength and never that a
+  SMALLER roster cannot.
+  The fix is the shape the skill term has always used: a **fixed denominator**. The best
+  six defenders count and an empty slot counts as a replacement level man of 60, below
+  the bake's floor of 66, so removing anybody can only lower the number. It is monotone by
+  construction rather than by a check that has to imagine the exploit first. A club
+  fielding its full six is scored exactly as the plain mean, so the opening league and
+  every balance figure above are unchanged. After the fix: cutting the worst defender
+  helps **0 of 32** clubs, cutting all six helps **0 of 32**, and Miami's displayed
+  defence goes 73 to 60 rather than 73 to 92.
+  **The stored number is gone, and that is a deliberate second change.** Keeping
+  `team.defense` as the empty roster fallback is precisely what made cutting your whole
+  defence pay, and no test on a count of defenders can tell a pre 416 save that never had
+  any from a 2026 club that has just cut its last one. So a pre 416 save keeps its titles,
+  its seasons and its squad, and its defence sits at replacement level for every club
+  equally until the first offseason gives everyone their six back. Equally is the load
+  bearing word: a game result reads the GAP between two teams, so a uniform floor changes
+  no outcome between them. This corrects what an earlier draft of this entry claimed,
+  which was that such a save would play exactly as before; it plays on, with defence
+  contributing nothing to who beats whom for at most one season. The offseason drift on
+  `team.defense` is left alone as dead but harmless legacy.
+  **Two things the round had to add or the defenders were unobtainable.** A defensive
+  draft pick used to be a single 'DEF' prospect that added a point or two to the unit
+  number and was then thrown on the floor by `prospectToPlayer`, so the board announced
+  a name you could never look at again; picks arrive at real positions now, in the shape
+  the roster carries. And the opening free agent market was offence only, so the two
+  groups Round 416 added could not be signed at all, only traded for. Both carry
+  defenders now. A 'DEF' prospect stored inside an older save is converted rather than
+  dropped.
+  **The screen stops showing a number that does nothing.** The team panel read "Defense
+  unit {team.defense}", which was the figure the sim no longer consults. It shows the
+  real defensive rating now, because a number on screen that changes nothing when you
+  improve the thing it names is worse than no number at all.
+  **Balance, measured rather than hoped for, and three numbers corrected after review.**
+  A full simulated season through the real engine: team strength spans 73.9 to 88.4 with a
+  standard deviation of 3.46 and defence spans 72.2 to 86.3. **Corrections, all of them
+  mine and all found by the review rather than by me:** an earlier draft of this entry
+  said records ran "28-6 down to 2-32", which is impossible in a 17 game season and came
+  from a probe that added wins itself when `simGame` already does; the real spread is
+  **14-3 down to 1-16**. It also quoted a strength to wins correlation of 0.805 as though
+  that were the figure, when it was one draw; over 40 seasons the median is **0.693** with
+  a range of 0.409 to 0.853, so the sim rewards the better squad clearly but not
+  deterministically, which is what a 17 game season should look like. And the collapse in
+  defence's say was understated: by standard deviation it is 39 percent to 20 percent, but
+  by VARIANCE, which is the ordinary way to attribute a contribution, it is **44 percent
+  to 11 percent**, a fourfold drop rather than a twofold one. The larger number is the
+  honest one and it is the one to argue against.
+  After one offseason every club holds 15 men and 6 defenders and nobody is over the cap.
+  One thing noticed while re-measuring and NOT fixed here, recorded for a later round:
+  `buildSchedule` is supposed to give every club 17 games and actually delivers 13 to 17,
+  because its crossover loop can hit its own iteration guard before every club is filled.
+  That is pre 418 and untouched by this round.
+  The honest caveat stands: ranking the 32 clubs on the old stored number and on their
+  actual defenders agrees on **zero of 32 positions**, which is what an r of minus 0.112
+  has to mean. That is the round working, not a regression, but a returning player starting
+  a new franchise will find a different league table than the one he left.
+  **The trade off, stated plainly because the round entry would otherwise hide it.**
+  A weight is only worth what its input varies by, and the stored number varied a lot more
+  than six real defenders do: standard deviation 9.23 against 3.64. Defence is still
+  labelled 28 percent of team strength, but its share of what actually separates the 32
+  clubs fell from **39 percent to 20 percent** measured by standard deviation, and from
+  **44 percent to 11 percent** measured by variance, which is the stricter and more usual
+  reading. Either way it now sits behind the quarterback (2.77 of the spread) and level
+  with the skill positions (0.94 against 1.02). Restoring its old
+  say would mean widening the spread by 2.54x, and that is refused on purpose: it would be
+  inventing differentiation the data does not support, which is the same sin as the rating
+  fudges Round 416 spent five attempts removing.
+  The honest defence of the trade is that the 39 percent was never yours. It was a stored
+  number a player could nudge by two points with a draft pick and otherwise only watch
+  drift at random every offseason. The 20 percent is fully controllable: every defender
+  you sign, trade, draft or lose moves it. A smaller share of the outcome that the GM
+  actually commands beats a larger one he does not, and that is the whole argument for
+  this round in one line.
+  **The fence flipped, on purpose.** Round 416 asserted that a defender must NOT move
+  team strength, because for that one round he was not supposed to, and wrote in the
+  comment that this round is where it stops being true. The moment `defenceRating`
+  landed that assertion went red and had to be replaced deliberately, which is exactly
+  what a check like that is for. Section 10 is the replacement: a defender moves strength,
+  a better defender raises it, an old save still reads its stored number and is still
+  moved by it, a draft class contains defenders at real positions, every prospect becomes
+  a player, a legacy 'DEF' prospect converts, and the opening market carries all three
+  groups. The `doublecount` control became `unitdefence`, which bundles the pre 418
+  engine and proves the new checks discriminate.
+  **One fence defect found on the way, worth recording.** The two controls that patch the
+  engine matched on plain newlines while the working tree carries CRLF after any checkout
+  or rebase, so `offencecycle` refused to run for a reason that had nothing to do with
+  the code it guards. Its refuse-to-run guard fired and said so, which is the only reason
+  it was not a silently unverified section, and it is the argument for that guard in one
+  sentence. Both controls normalise line endings now.
+  **What the fixed denominator does to injuries, measured over a full season.** An
+  injured defender leaves a replacement level hole too, which is the same rule and the
+  right one, so it was worth checking it does not turn the season into a lottery. Across
+  every club and week: all six healthy 82.9 percent of the time, five 15.3 percent, four
+  or fewer under 2 percent. The in season defence rating runs mean 79.9 with a standard
+  deviation of 3.82 against the static 3.64, so injuries add a little real variation and
+  no cliff. One injured defender costs 1.40 of team strength, three cost 2.80, and losing
+  the entire defensive corps costs 5.09, which is almost exactly what losing the
+  quarterback costs (5.10). A defence is worth about a quarterback, and one defender is
+  worth about a quarter of one. That reads right.
+  **And the check that was missing is the general one.** Section 10 now asserts the
+  property rather than the two moves somebody found: removing ANY defender, ANY number of
+  them, in ANY order, must never raise team strength. It sweeps all 32 clubs, every single
+  removal and every prefix of the worst first and best first orders, and it checks that
+  the number the BOARD shows falls with it, since that display is what invited the click.
+  The `meandefence` control puts the plain mean back and the sweep reports 259 removals
+  that made a club stronger, which is the exploit reproduced on demand.
+  Gates: tsc zero, 128 checks with thirteen controls, the full node suite, all 15 built
+  site fences, build green.
 - **2026-09-02, Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE, PART ONE: THE BAKE.**
   The owner's P1 item 12 from 2026-08-28, recorded as still open in Round 413: "Trade
   Finder (US sports): only offensive players appear, and rosters are outdated." Both

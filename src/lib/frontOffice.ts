@@ -111,8 +111,11 @@ export function initLeague(rng: () => number = Math.random): LeagueState {
 /** A believable opening FA pool: fictional veterans at every position. */
 function buildInitialFreeAgents(rng: () => number, taken: Set<string>): GmPlayer[] {
   const out: GmPlayer[] = [];
-  const POS: GmPlayer['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL'];
-  for (let i = 0; i < 14; i++) {
+  /* Round 418: the opening market carries defenders too. It never did, so
+     the two position groups Round 416 added were unsignable: you could see
+     them on other teams and never acquire one except by trade. */
+  const POS: GmPlayer['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL', 'DL', 'LB', 'DB'];
+  for (let i = 0; i < 20; i++) {
     const pos = POS[i % POS.length];
     const ovr = 70 + Math.floor(rng() * 12);
     out.push({
@@ -143,23 +146,82 @@ export function capRoom(team: GmTeamState, cap: number): number {
   return Math.round((cap - capUsed(team)) * 10) / 10;
 }
 
+export const SKILL_POS: GmPlayer['pos'][] = ['RB', 'WR', 'TE'];
+export const DEF_POS: GmPlayer['pos'][] = ['DL', 'LB', 'DB'];
+
+/* ROUND 418: THE DEFENCE IS THE DEFENDERS. Until now the 28 percent of team
+   strength that defence is worth came from `team.defense`, a single stored
+   number, and the men on the roster were worth nothing at all. That was
+   deliberate for one round while the bake landed, and it left the game
+   saying two different things at once: the old number came from a 2024
+   team-unit rating, and measured against the 2026 defenders the same file
+   now lists its correlation is MINUS 0.112. In other words a club could
+   show you six good defenders and still be rated a poor defence, and
+   trading for a great one changed nothing at all.
+   It reads the roster now, so signing, trading, drafting or losing a
+   defender moves the number the way signing a receiver always has.
+   THERE IS NO FALLBACK TO THE STORED NUMBER, and an earlier draft of this
+   round had one. It was meant to keep pre 416 saves playing as they always
+   had, but no test on a count of defenders can tell a save that never had
+   any from a 2026 club that has just cut its last one, so it turned into a
+   live exploit: cutting your whole defence dropped you onto the stored
+   number, which for 11 of the 32 clubs was an UPGRADE. A pre 416 save
+   therefore keeps its titles, its seasons and its squad, and its defence
+   sits at replacement level for every club EQUALLY until the first offseason
+   gives everyone their six back. Equally is the load bearing word: a result
+   reads the gap between two teams, so a uniform floor changes none of them. */
+/** The defensive complement the roster file ships: DL 2, LB 2, DB 2. */
+export const DEF_SLOTS = 6;
+/* A man off the street. The bake's floor is 66, and the depth journeymen
+   replenishRosters invents start at 66, so 60 is below anything a real
+   roster holds: losing a defender and not replacing him has to cost. */
+export const REPLACEMENT_OVR = 60;
+
+/* A MEAN REWARDS CUTTING YOUR WORST MAN, and the first version of this was a
+   mean. Releasing a below average defender raised the average, so it raised
+   team strength: measured on the shipped league it made all 32 clubs
+   stronger, worth a mean of +0.585 and up to +1.04, and cutting five of six
+   was worth +2.95 while freeing 27M of cap. Worse, cutting all six fell
+   through to the stored 2024 unit number, which for 11 of the 32 was an
+   upgrade: Miami went from 73.85 to 79.22 and from 3.65 wins a season to
+   6.38. The board displayed the rise as it happened, with the Cut buttons a
+   dozen lines below the number, so the game was inviting it.
+   The fix is the shape the skill term has always used: a FIXED denominator.
+   The best DEF_SLOTS defenders count, and an empty slot counts as a
+   replacement level man rather than being quietly left out of the average,
+   so removing anybody can only ever lower the number. It is monotone by
+   construction rather than by a check that has to think of the exploit
+   first. A club that ships its full six is scored exactly as before, so
+   nothing about the opening league changed.
+   THE STORED NUMBER IS GONE, and that is a deliberate second change. Keeping
+   it as the empty roster fallback is what made cutting your whole defence
+   pay, and no test on the count of defenders can tell a pre 416 save that
+   never had any from a 2026 club that has just cut its last one. A pre 416
+   save therefore keeps its titles, its seasons and its squad, and its
+   defence sits at replacement level for every club equally until the first
+   offseason gives everyone their six back. Equally is the important word:
+   game outcomes read the GAP between two teams, so a uniform floor changes
+   no result between them. */
+export function defenceRating(team: GmTeamState): number {
+  const best = team.players
+    .filter(p => p.out === 0 && DEF_POS.includes(p.pos))
+    .map(p => p.ovr)
+    .sort((a, b) => b - a)
+    .slice(0, DEF_SLOTS);
+  const filled = best.reduce((s, v) => s + v, 0);
+  const empty = (DEF_SLOTS - best.length) * REPLACEMENT_OVR;
+  return (filled + empty) / DEF_SLOTS;
+}
+
 /** Team strength: QB 30, skill 30, OL 12, DEF 28 (injured players excluded). */
 export function teamStrength(team: GmTeamState): number {
   const healthy = team.players.filter(p => p.out === 0);
   const qb = Math.max(64, ...healthy.filter(p => p.pos === 'QB').map(p => p.ovr));
-  /* Round 416: name the skill positions rather than saying "not a QB and not
-     a lineman". The roster now carries defenders, and the old shape would
-     have quietly counted them as skill players while team.defense counted
-     them again below, which is the same defence twice and a different sim
-     from the one that was tuned. Round 418 is where defence starts being
-     read off these players; until then this keeps the balance exactly as it
-     was before the roster grew. */
-  const SKILL: GmPlayer['pos'][] = ['RB', 'WR', 'TE'];
-  const skill = healthy.filter(p => SKILL.includes(p.pos)).sort((a, b) => b.ovr - a.ovr).slice(0, 5);
+  const skill = healthy.filter(p => SKILL_POS.includes(p.pos)).sort((a, b) => b.ovr - a.ovr).slice(0, 5);
   const skillAvg = skill.length ? skill.reduce((s, p) => s + p.ovr, 0) / skill.length : 64;
   const ol = healthy.filter(p => p.pos === 'OL');
   const olAvg = ol.length ? ol.reduce((s, p) => s + p.ovr, 0) / ol.length : 64;
-  return qb * 0.30 + skillAvg * 0.30 + olAvg * 0.12 + team.defense * 0.28;
+  return qb * 0.30 + skillAvg * 0.30 + olAvg * 0.12 + defenceRating(team) * 0.28;
 }
 
 // ---------------------------------------------------------------------------
@@ -493,7 +555,12 @@ export function prospectName(rng: () => number, taken?: Set<string>): string {
 }
 
 export function generateDraftClass(rng: () => number, size = 40, taken: Set<string> = new Set()): Prospect[] {
-  const POS: Prospect['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL', 'DEF'];
+  /* Round 418: a defensive pick arrives as a person. It used to be one 'DEF'
+     entry that added a point or two to the team's defence number and never
+     got a position, so the board announced a name you could not look at
+     afterwards. Defenders are drafted at their actual position now, in the
+     shape the roster carries (two each of DL, LB and DB against one QB). */
+  const POS: Prospect['pos'][] = ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL', 'DL', 'DL', 'LB', 'LB', 'DB', 'DB'];
   const out: Prospect[] = [];
   for (let i = 0; i < size; i++) {
     const pos = POS[Math.floor(rng() * POS.length)];
@@ -517,7 +584,14 @@ export function draftOrder(teams: Record<string, GmTeamState>): string[] {
 }
 
 export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | null {
-  if (pr.pos === 'DEF') return null; // defensive picks boost the unit instead
+  /* Round 418: nothing is refused any more. A pre 418 save can still hold a
+     'DEF' prospect in its stored draft class, so that one value is turned
+     into a real position rather than dropped on the floor, which is what
+     used to happen to every defensive pick. */
+  if (pr.pos === 'DEF') {
+    const spread = DEF_POS[Math.floor(rng() * DEF_POS.length)];
+    return prospectToPlayer({ ...pr, pos: spread }, rng);
+  }
   const ovr = pr.trueOvr;
   return {
     id: freshId(),
@@ -580,7 +654,10 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
     t.wins = 0;
     t.losses = 0;
     t.picks = [1, 2, 3];
-    // defense drifts toward the mean plus noise
+    /* Round 418: this is the LEGACY path now. team.defense only reaches the
+       sim through defenceRating's fallback, which fires for a pre 416 save
+       whose clubs have no defenders yet, so the drift is kept exactly as it
+       was for those saves and does nothing for a roster that has its own. */
     t.defense = Math.round(Math.max(60, Math.min(95, t.defense + (77 - t.defense) * 0.2 + (rng() * 8 - 4))));
   }
   // trim the FA pool to the useful part

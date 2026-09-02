@@ -23,22 +23,9 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 418. THE FRONT OFFICE ENGINE READS THE
-  DEFENCE, PART TWO.** Round 416 put 192 real defenders in the roster file
-  and deliberately changed nothing about how they play. The engine still
-  models defence as one team number: teamStrength reads team.defense, the
-  draft and free agency generate seven offensive slots plus a 'DEF' prospect
-  that boosts the unit instead of arriving as a person, and teamStrength was
-  narrowed to name the three skill positions so the new men are counted
-  exactly zero times rather than counted twice. This round makes the defence
-  the players: strength read off the defenders on the roster, defensive
-  prospects who arrive as people with names, and a trade for a defender that
-  actually changes how the team plays. They are already listed and tradeable
-  since 416; what a deal for one does not yet do is move anything. That is
-  the half of the owner's item 12 still open. Files in play:
-  src/lib/frontOffice.ts, src/components/front-office/FrontOfficeBoard.tsx,
-  and whatever the existing front office harnesses need to keep saying
-  something true. Round 411 (NFL archive, other lane) is not touched.
+- **Desktop lane, next: Round 419. UNCLAIMED.** The owner's P1 item 12 is
+  closed by Rounds 416 and 418. Pick the next thing off docs/PROJECT-STATE.md
+  and claim it here before building.
 
 
 
@@ -806,6 +793,33 @@ Standing claims after Round 400:
 
 ## Done
 
+- THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO, Round 418 (desktop
+  lane, 2026-09-02). The other half of the owner's item 12. Round 416 put 192
+  real defenders on the rosters and deliberately left them worth nothing:
+  defence was one stored number worth 28 percent of team strength, and that
+  number came from a 2024 team unit rating whose correlation with the 2026
+  defenders in the same file is MINUS 0.112. teamStrength reads the men on
+  the roster now, so a trade for a defender changes how the club plays;
+  upgrading one team's worst lineman to 95 moves its strength 77.63 to 78.61
+  where it used to move it by nothing. Draft picks and the opening free agent
+  market carry defenders, so they can be acquired and not only admired, and
+  the team panel shows the rating the sim actually reads. A pre 416 save has
+  no defenders and keeps the stored number, so it plays exactly as before.
+  Measured over 40 simulated seasons: strength still predicts wins, median
+  correlation 0.693 (one draw read 0.822, which an earlier draft quoted as
+  though it were the figure), and no club ends over the cap, but the
+  league's pecking order agrees
+  with the old one on zero of 32 positions, which is what that correlation
+  has to mean. An adversarial review caught the round shipping an
+  exploit: defenceRating was a MEAN, so cutting your worst defender raised
+  it and made all 32 clubs stronger, and cutting all six fell through to the
+  stored 2024 number, an upgrade for 11 of them worth 2.6 extra wins a
+  season. It uses a fixed denominator now, so losing a man can only ever
+  cost, and section 10 asserts that as a property over every club, every
+  defender and every removal order rather than over the two moves somebody
+  happened to find. simFrontOfficeRoster is 128 checks and thirteen controls; the
+  Round 416 check asserting a defender must NOT move strength flipped on
+  purpose, which is what it was written for.
 - LIVE DATA FENCES SURVIVE RUNNER PRESSURE, Round 417 (Codex lane,
   2026-09-02). `simSchemaNames`, `simValueFreshness` and
   `simDailyPoolOrder` now share a three-attempt helper that retries thrown

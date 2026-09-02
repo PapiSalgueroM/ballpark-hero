@@ -6,6 +6,7 @@ import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
   generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
+  defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
@@ -284,13 +285,12 @@ export default function FrontOfficeBoard() {
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
     let note: string;
-    if (pr.pos === 'DEF') {
-      lg.teams[myTeam].defense = Math.min(95, lg.teams[myTeam].defense + 2);
-      note = `🛡️ ${pr.name} joins the defense: unit +2.`;
-    } else {
+    {
+      /* Round 418: a defensive pick is a man now, not two points on a unit
+         number nobody could see. prospectToPlayer refuses nobody. */
       const pl = prospectToPlayer(pr, Math.random);
       if (pl) lg.teams[myTeam].players.push(pl);
-      note = `📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
+      note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
     }
     // AI teams grab the rest of the top board between your picks
     const order = draftOrder(lg.teams).filter(a => a !== myTeam);
@@ -299,11 +299,8 @@ export default function FrontOfficeBoard() {
     for (let i = 0; i < aiTakes.length; i++) {
       const abbr = order[i % order.length];
       const taken = aiTakes[i];
-      if (taken.pos === 'DEF') lg.teams[abbr].defense = Math.min(95, lg.teams[abbr].defense + 1);
-      else {
-        const pl = prospectToPlayer(taken, Math.random);
-        if (pl) lg.teams[abbr].players.push(pl);
-      }
+      const pl = prospectToPlayer(taken, Math.random);
+      if (pl) lg.teams[abbr].players.push(pl);
     }
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
@@ -588,7 +585,7 @@ export default function FrontOfficeBoard() {
           <p className="font-display text-lg font-bold text-foreground">The {league.season + 1} Draft</p>
           <p className="mt-1 text-xs text-muted-foreground">
             You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
-            the number on the card is what your scouts THINK. DEF picks boost your defense unit instead of adding a player.
+            the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
           </p>
         </div>
         <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
@@ -703,7 +700,11 @@ export default function FrontOfficeBoard() {
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">
-            Defense unit <b className="text-primary">{my.defense}</b> · payroll ${capUsed(my)}M of ${league.cap}M
+            {/* Round 418: show the number that actually drives the sim. It
+                used to read team.defense, which stopped meaning anything the
+                moment strength started reading the defenders themselves, and
+                a number on screen that changes nothing is worse than none. */}
+            Defense <b className="text-primary">{Math.round(defenceRating(my))}</b> · payroll ${capUsed(my)}M of ${league.cap}M
           </p>
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (

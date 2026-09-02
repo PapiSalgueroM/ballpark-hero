@@ -52,7 +52,8 @@
      SIM_FO_CONTROL=openjoin       join floor driven to 0    -> section 8 red
      SIM_FO_CONTROL=straybucket    strays get their own tier -> section 8 red
      SIM_FO_CONTROL=offencecycle   pre 416 replenishment back -> section 9 red
-     SIM_FO_CONTROL=doublecount    pre 416 skill filter back -> section 9 red
+     SIM_FO_CONTROL=unitdefence    pre 418 unit defence back  -> section 10 red
+     SIM_FO_CONTROL=meandefence    defence back to a plain mean -> section 10 red
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -66,6 +67,13 @@ import {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts');
 const CONTROL = process.env.SIM_FO_CONTROL || '';
+/* Line endings are not a fact about the code. The engine-patching controls
+   below match on plain newlines, and this working tree carries CRLF after any
+   checkout or rebase, so a control that matched yesterday refused to run today
+   for a reason that had nothing to do with what it guards. Its refuse-to-run
+   guard fired correctly and told me, which is the only reason this was not a
+   silently unverified section. */
+const normaliseEol = t => t.split('\r\n').join('\n');
 
 let checks = 0;
 const fails = [];
@@ -85,6 +93,7 @@ const SECTION_NAMES = {
   7: 'the page copy agrees with the generator',
   8: 'the rules this round got wrong the first time',
   9: 'the defence survives the seasons',
+  10: 'the defence is the defenders',
 };
 const ok = (section, label, pass, detail) => {
   checks += 1;
@@ -671,13 +680,28 @@ try {
      back to the pre 416 shape, which swept defenders into the skill average
      while team.defense counted them again. src/ is never touched; the copy
      lives in dist/. It refuses to run if the current filter is not there. */
-  if (CONTROL === 'doublecount' || CONTROL === 'offencecycle') {
+  if (CONTROL === 'unitdefence' || CONTROL === 'offencecycle' || CONTROL === 'meandefence') {
     const enginePath = path.join(ROOT, 'src', 'lib', 'frontOffice.ts');
-    const engineSrc = fs.readFileSync(enginePath, 'utf8');
-    const swaps = CONTROL === 'doublecount'
+    /* normalise the line endings before matching. The swaps below are
+       written with plain newlines, and this repo's working tree carries CRLF
+       after any checkout or rebase, so a control that matched on Monday
+       refused to run on Tuesday for a reason that had nothing to do with the
+       code it guards. */
+    const engineSrc = normaliseEol(fs.readFileSync(enginePath, 'utf8'));
+    const swaps = CONTROL === 'meandefence'
       ? [[
-        'healthy.filter(p => SKILL.includes(p.pos))',
-        "healthy.filter(p => p.pos !== 'QB' && p.pos !== 'OL')",
+        /* the exploit this round shipped and the review caught: an unweighted
+           mean over however many defenders survive, so cutting a below
+           average one raises it */
+        'const filled = best.reduce((s, v) => s + v, 0);',
+        'const filled = best.reduce((s, v) => s + v, 0); if (best.length) return filled / best.length;',
+      ]]
+      : CONTROL === 'unitdefence'
+      ? [[
+        /* the pre 418 engine: strength read a stored team number and the
+           men on the roster were worth nothing at all */
+        'defenceRating(team) * 0.28',
+        'team.defense * 0.28',
       ]]
       : [
         /* the pre 416 replenishment, restored exactly: no defensive
@@ -706,8 +730,10 @@ try {
     rewritten = rewritten.replace(/from '\.\/([A-Za-z0-9_-]+)'/g, `from '${libDir}/$1'`);
     fs.writeFileSync(patched, rewritten);
     importPath = './frontOfficeOld.ts';
-    console.log(CONTROL === 'doublecount'
-      ? '   control doublecount: the pre 416 skill filter put back, so defenders feed the skill average again'
+    console.log(CONTROL === 'meandefence'
+      ? '   control meandefence: defenceRating put back to a plain mean, the shape that paid you for cutting your worst man'
+      : CONTROL === 'unitdefence'
+      ? '   control unitdefence: the pre 418 engine put back, strength reads the stored team number again'
       : '   control offencecycle: the pre 416 replenishment put back, offence only cycle and a floor of nine');
   }
   fs.writeFileSync(entry, `export * from '${importPath}';\n`);
@@ -753,29 +779,131 @@ if (engine) {
     [...DEFENSIVE].every(g => positions.has(g)),
     `groups present: ${[...positions].sort().join(', ')}`);
 
-  /* THE DEFENCE IS NOT COUNTED TWICE, and until now nothing said so. Round
-     416 narrowed teamStrength's skill term from "not a QB and not a lineman"
-     to an explicit RB/WR/TE list, because with defenders on the roster the
-     old shape fed them into the skill average while team.defense counted
-     them again. That fix had zero coverage anywhere in the suite: putting
-     the old filter back left this fence and every other harness green while
-     it moved teamStrength on all 32 teams and reshuffled the league order.
-     The invariant is simple and this is it: a defender must not move the
-     number, because in this round he is not supposed to. Round 418 is where
-     that deliberately stops being true, and this check is what will make
-     that round announce itself instead of drifting. */
+  /* ---- 10. THE DEFENCE IS THE DEFENDERS (Round 418) ------------------- */
+  /* Round 416 asserted the opposite here on purpose: that a defender must
+     NOT move team strength, because for one round he was not supposed to.
+     That check existed so this round would have to announce itself rather
+     than drift, and it did its job: the moment defenceRating landed, the
+     old assertion went red and had to be replaced deliberately. This is the
+     replacement, and it is the whole point of part two. */
   const fresh = engine.initLeague();
   const one = Object.values(fresh.teams)[0];
-  const withDef = engine.teamStrength(one);
-  const withoutDef = engine.teamStrength({
-    ...one, players: one.players.filter(p => !DEFENSIVE.has(p.pos)),
-  });
-  ok(9, 'the fixture team actually has defenders to remove',
+  ok(10, 'the fixture team actually has defenders to remove',
     one.players.some(p => DEFENSIVE.has(p.pos)),
-    'no defenders on the team, so the double count check proved nothing');
-  ok(9, 'a defender does not move team strength while defence is a team number',
-    Math.abs(withDef - withoutDef) < 1e-9,
-    `strength is ${withDef.toFixed(3)} with the defenders and ${withoutDef.toFixed(3)} without them, so they are being counted on top of team.defense`);
+    'no defenders on the team, so nothing below proved anything');
+  const withDef = engine.teamStrength(one);
+  const strippedTeam = { ...one, players: one.players.filter(p => !DEFENSIVE.has(p.pos)) };
+  /* direction, not merely change: "it moved" would pass if it moved the
+     wrong way, which is exactly the exploit this section now guards */
+  ok(10, 'losing every defender makes the team weaker', withDef > engine.teamStrength(strippedTeam) + 1e-9,
+    `strength is ${withDef.toFixed(3)} with the defenders and ${engine.teamStrength(strippedTeam).toFixed(3)} without them`);
+
+  /* and it moves it in the right DIRECTION and by a real amount: swapping a
+     club's worst defender for a much better one has to raise the number */
+  const worst = [...one.players.filter(p => DEFENSIVE.has(p.pos))].sort((a, b) => a.ovr - b.ovr)[0];
+  const upgraded = {
+    ...one,
+    players: one.players.map(p => (p.id === worst.id ? { ...p, ovr: Math.min(99, worst.ovr + 20) } : p)),
+  };
+  ok(10, 'a better defender makes the team stronger',
+    engine.teamStrength(upgraded) > withDef,
+    `upgrading ${worst.name} from ${worst.ovr} moves strength ${withDef.toFixed(3)} to ${engine.teamStrength(upgraded).toFixed(3)}`);
+
+  /* LOSING A MAN CANNOT MAKE YOU BETTER. This is the check that was missing,
+     and its absence cost the round a live exploit: defenceRating was a MEAN,
+     so releasing a below average defender raised it. Measured before the fix,
+     cutting the worst defender made all 32 clubs stronger and cutting all six
+     made 11 of them stronger, worth up to +5.37 and 2.7 extra wins a season,
+     with the board showing the number climbing and the Cut buttons a dozen
+     lines underneath.
+     The property is stated the general way on purpose. It is not "cutting all
+     six must not help" and not "cutting the worst must not help", because a
+     rule shaped around the two moves somebody already found is a rule that
+     misses the third. It is: REMOVING ANY DEFENDER, ANY NUMBER OF THEM, IN
+     ANY ORDER, MUST NEVER RAISE TEAM STRENGTH. Every club, every defender,
+     every prefix of the worst first and the best first orders. */
+  const league32 = Object.values(fresh.teams);
+  const cloneTeam = t => ({ ...t, players: t.players.map(x => ({ ...x })) });
+  let rises = [];
+  for (const t of league32) {
+    const base = engine.teamStrength(t);
+    const defs = t.players.filter(p => DEFENSIVE.has(p.pos));
+    /* every single removal */
+    for (const d of defs) {
+      const c = cloneTeam(t);
+      c.players = c.players.filter(p => p.id !== d.id);
+      const after = engine.teamStrength(c);
+      if (after > base + 1e-9) rises.push(`${t.abbr} cutting ${d.pos} ${d.ovr}: ${base.toFixed(3)} -> ${after.toFixed(3)}`);
+    }
+    /* and every prefix of both orders, which is how a player actually plays it */
+    for (const order of [[...defs].sort((a, b) => a.ovr - b.ovr), [...defs].sort((a, b) => b.ovr - a.ovr)]) {
+      const c = cloneTeam(t);
+      for (const d of order) {
+        c.players = c.players.filter(p => p.id !== d.id);
+        const after = engine.teamStrength(c);
+        if (after > base + 1e-9) rises.push(`${t.abbr} cutting down to ${c.players.filter(p => DEFENSIVE.has(p.pos)).length} defenders: ${base.toFixed(3)} -> ${after.toFixed(3)}`);
+      }
+    }
+  }
+  ok(10, 'the fixture league has defenders to remove',
+    league32.every(t => t.players.some(p => DEFENSIVE.has(p.pos))),
+    'some club has no defenders, so the monotonicity sweep proved nothing there');
+  ok(10, 'releasing a defender never raises team strength', rises.length === 0,
+    `${rises.length} removals made a club STRONGER, e.g. ${rises.slice(0, 3).join(' | ')}`);
+
+  /* and the number the board puts on screen has to fall with it, because that
+     is what invited the click in the first place */
+  let uiRises = 0;
+  for (const t of league32) {
+    const c = cloneTeam(t);
+    c.players = c.players.filter(p => !DEFENSIVE.has(p.pos));
+    if (engine.defenceRating(c) > engine.defenceRating(t) + 1e-9) uiRises += 1;
+  }
+  ok(10, 'and the defence number the board shows falls with them', uiRises === 0,
+    `${uiRises} clubs show a HIGHER defence rating after losing every defender`);
+
+  /* a club that fields its full complement is scored exactly as the plain
+     mean of its defenders, so the fixed denominator changed no real roster */
+  const sameAsMean = league32.every(t => {
+    const d = t.players.filter(p => DEFENSIVE.has(p.pos) && p.out === 0);
+    if (d.length !== 6) return true;
+    return Math.abs(engine.defenceRating(t) - d.reduce((s, p) => s + p.ovr, 0) / d.length) < 1e-9;
+  });
+  ok(10, 'a full defensive complement is scored as its own mean', sameAsMean,
+    'the fixed denominator moved a club that had nothing missing');
+
+  /* A DEFENSIVE PICK IS A PERSON. It used to be a 'DEF' prospect that added
+     a point or two to a unit number and was thrown away by prospectToPlayer,
+     so the board named a man you could never look at again. */
+  let dseed = 424242;
+  const drng = () => { dseed = (dseed * 1664525 + 1013904223) >>> 0; return dseed / 4294967296; };
+  const klass = engine.generateDraftClass(drng, 60, new Set());
+  const defProspects = klass.filter(pr => DEFENSIVE.has(pr.pos));
+  ok(10, 'a draft class contains defensive prospects at real positions',
+    defProspects.length > 0, `${defProspects.length} of ${klass.length} prospects are DL, LB or DB`);
+  ok(10, 'no prospect is still filed under the old DEF placeholder',
+    klass.every(pr => pr.pos !== 'DEF'), `${klass.filter(pr => pr.pos === 'DEF').length} still say DEF`);
+  const converted = klass.map(pr => engine.prospectToPlayer(pr, drng));
+  ok(10, 'every prospect becomes a real player', converted.every(Boolean),
+    `${converted.filter(x => !x).length} of ${klass.length} were thrown away`);
+  /* and the conversion has to spread across the real defensive positions,
+     not funnel every defender into one of them */
+  const convDef = new Set(converted.filter(Boolean).map(p => p.pos).filter(x => DEFENSIVE.has(x)));
+  ok(10, 'drafted defenders land at all three defensive positions',
+    [...DEFENSIVE].every(g => convDef.has(g)),
+    `a 60 man class produced only ${[...convDef].sort().join(', ') || 'none'}`);
+  /* a pre 418 save can still hold a stored DEF prospect: it must convert too */
+  const legacyPick = engine.prospectToPlayer({ id: 'x', name: 'Old Pick', pos: 'DEF', age: 22, grade: 80, trueOvr: 80 }, drng);
+  ok(10, 'a DEF prospect stored by an older save still becomes a defender',
+    !!legacyPick && DEFENSIVE.has(legacyPick.pos),
+    legacyPick ? `converted to ${legacyPick.pos}` : 'it was thrown away, which is what the round set out to stop');
+
+  /* AND YOU CAN ACTUALLY SIGN ONE. The opening market was offence only, so
+     the two groups Round 416 added were unobtainable except by trade. */
+  const faPos = new Set(fresh.freeAgents.map(p => p.pos));
+  ok(10, 'the opening free agent market carries defenders',
+    [...DEFENSIVE].every(g => faPos.has(g)),
+    `market holds ${[...faPos].sort().join(', ')}`);
 }
 
 /* ---- report ------------------------------------------------------------- */
