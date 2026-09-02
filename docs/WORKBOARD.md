@@ -19,9 +19,24 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 413.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 415.
 
 ## Active claims, 2026-09-02
+
+- **Desktop lane, next: Round 414. OWNER REQUEST, 2026-09-02: "can you put the
+  ticker speed a little bit slower and with a lot more accuracy and sporting
+  events".** Three asks, one round. SLOWER: the crawl is 110 px/s since Round
+  336 doubled it on his earlier note that it was too slow, and it comes down.
+  MORE EVENTS: the ESPN header feed carries far more than the five sports the
+  poller asks for, probed today for real counts (college football 25, men's
+  college basketball 56, Europa League 75, WNBA 5, tennis 25, plus Liga MX,
+  Primeira Liga and Eredivisie); every one has a real matchup, and F1 and golf
+  stay out because their events carry no opponents and the strip would have to
+  invent a card shape. MORE ACCURACY: college teams read by their abbreviation
+  the way a bottom line writes them, not by a nickname a dozen schools share.
+  Files in play: supabase/functions/scores-poll (redeployed),
+  src/lib/liveScores.ts, src/components/layout/TopTicker.tsx, the ticker
+  fences. Round 411 (NFL archive, other lane) is not touched.
 
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
@@ -742,6 +757,15 @@ Standing claims after Round 400:
 
 ## Done
 
+- BUILD YOUR XI WAS DEAD AND LYING ABOUT WHY, Round 413 (desktop lane,
+  2026-09-02, found by an audit of the owner's 2026-08-28 P1 list). Its
+  validator's cap was the Round 407 starvation (200, now 800) and the live
+  cause was a spent daily allowance answering 429; it now says which, the
+  hook remembers it and the page stops inviting a retry. Deployed v8 and
+  probed. simQuotaHonesty covers all three validators, their hooks and their
+  pages. Still open from the same audit, recorded not fixed: Trade Finder has
+  no defensive players on a year old roster, and the Budget Builder page says
+  euros in five strings while the game itself is in dollars.
 - THE GRID ENGINE CANNOT DEAL A CELL NOBODY CAN ANSWER, Round 412 (desktop
   lane, 2026-09-02). Easy difficulty crossed two mutually exclusive NFL
   criteria and dealt 57 unanswerable cells across 400 boards; a config can now
