@@ -100,9 +100,17 @@ try {
           console.log('simTransferPathRepeat control old: green. The old hook fails the duplicate assertion as expected.');
         }
       }
-    } else if (result.code !== 0 || !/2 passed/.test(result.out)) {
-      console.error('simTransferPathRepeat: the regression test is not green');
-      exitCode = 1;
+    } else {
+      const markers = result.out.split('\n').filter(line => line.startsWith('TRANSFER_PATH_'));
+      if (result.code !== 0 || !/2 passed/.test(result.out)) {
+        console.error('simTransferPathRepeat: the regression test is not green');
+        exitCode = 1;
+      } else if (markers.length < 4) {
+        console.error('simTransferPathRepeat: behavior markers were not emitted by the passing test assertions');
+        exitCode = 1;
+      } else {
+        markers.forEach(marker => console.log(`   ${marker}`));
+      }
     }
   }
 } finally {

@@ -59,6 +59,9 @@ async function startedUnlimited() {
   });
   expect(validMove!).toEqual({ ok: true, club: 'Club A' });
   expect(rendered.result.current.chain).toEqual(['Alpha', 'Bridge']);
+  if (!process.env.TRANSFER_PATH_HOOK) {
+    console.log(`TRANSFER_PATH_VALID_MOVE ${JSON.stringify(validMove)}`);
+  }
   return rendered;
 }
 
@@ -85,11 +88,19 @@ describe('useTransferPath repeated players', () => {
       chain: chainBeforeDuplicate,
       connections: connectionsBeforeDuplicate,
     });
+    if (!process.env.TRANSFER_PATH_HOOK) {
+      console.log(`TRANSFER_PATH_EXACT_DUPLICATE ${JSON.stringify(duplicateResult)}`);
+      console.log(`TRANSFER_PATH_STATE chain=${JSON.stringify(rendered.result.current.chain)} connections=${JSON.stringify(rendered.result.current.connections)}`);
+    }
   });
 
   it('rejects a repeated player case-insensitively', async () => {
     const rendered = await startedUnlimited();
-    expect(rendered.result.current.addPlayer('aLpHa')).toEqual({ ok: false, club: null, reason: 'duplicate' });
+    const duplicateResult = rendered.result.current.addPlayer('aLpHa');
+    expect(duplicateResult).toEqual({ ok: false, club: null, reason: 'duplicate' });
     expect(rendered.result.current.chain).toEqual(['Alpha', 'Bridge']);
+    if (!process.env.TRANSFER_PATH_HOOK) {
+      console.log(`TRANSFER_PATH_CASE_INSENSITIVE_DUPLICATE ${JSON.stringify(duplicateResult)}`);
+    }
   });
 });
