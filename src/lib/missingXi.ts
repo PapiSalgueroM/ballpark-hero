@@ -5577,7 +5577,7 @@ export const LINEUPS: Lineup[] = [
   },
 
 
-  // 127. 2026 World Cup Final - Spain 1-0 Argentina (AET). Round 398.
+  // 168. 2026 World Cup Final - Spain 1-0 Argentina (AET). Round 398.
   // Ferran Torres, a 62nd minute substitute, scored the only goal in extra time.
   // Both elevens agreed name for name by ESPN's match summary (event 760517,
   // the site's own scores host) and the Wikipedia final article's lineup table,
@@ -5615,7 +5615,7 @@ export const LINEUPS: Lineup[] = [
     source: "ESPN match summary lineups cross-checked against the Wikipedia final article's lineup table, 2026-09-01; clubs from the market value table's 2026 rows.",
   },
 
-  // 128. 2026 World Cup Final - the LOSING side, Argentina 0-1 Spain (AET).
+  // 169. 2026 World Cup Final - the LOSING side, Argentina 0-1 Spain (AET).
   {
     id: 'wc-2026-final-argentina',
     dateLabel: '2026 World Cup Final',

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { recordCompletion, recordActivity } from '@/lib/completions';
+import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
@@ -189,6 +189,7 @@ export function useClubManager() {
          the points table held 80,246 of its 87,800 from 1,586 Club Manager
          rows. The finished season below is the completion. */
       recordActivity('/club-manager', currentSeasonScore(res.state));
+      recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
     } else if (res.kind === 'seasonOver') {
@@ -235,11 +236,18 @@ export function useClubManager() {
         return;
       }
       if (res.kind === 'match' && res.report) lastReport = res.report;
+      /* Round 399: a sacking ends the run. playMyMatch only sets state.sacked
+         and nothing in this loop read it, so a manager sacked in a fast
+         forward kept playing to the window with every later result counted.
+         The report of the match that got him sacked shows, and the next
+         continue hands him to the wilderness like a played match does. */
+      if (state.sacked) break;
     }
     setCareer(state);
     if (lastReport) {
       // Round 157: a fast-forwarded run still counts as playing today.
       recordActivity('/club-manager', currentSeasonScore(state));
+      recordStreakDay('/club-manager');
       setReport(lastReport);
       setPhase('matchResult');
     }
@@ -432,6 +440,7 @@ export function useClubManager() {
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
       recordActivity('/club-manager', currentSeasonScore(res.state));
+      recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
     } else {

@@ -2284,7 +2284,7 @@ export function boardWantLabel(clubName: string, eraId?: string): string {
   const league = (custom && custom.name === clubName && customLeagueDef(custom, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
     || leagueOf(clubName);
-  return leagueDemand(club.expectation, club.tier, league.clubs.length, league, titleGapFor(clubName, league, eraId), eraId).label;
+  return leagueDemand(club.expectation, club.tier, league.clubs.length, league, titleGapFor(clubName, league, eraId), eraId, clubName).label;
 }
 
 // Round 146: the picker needs these era helpers alongside the modern ones.
@@ -3390,7 +3390,7 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   if (!league) return { label: 'Finish in the top half', replaced };
   // The same measured gap the live board will use, so the preview can never
   // promise a demand the real board then walks back.
-  const demand = leagueDemand(def.expectation, def.tier, league.clubs.length, league, gap, historic ? eraId : undefined);
+  const demand = leagueDemand(def.expectation, def.tier, league.clubs.length, league, gap, historic ? eraId : undefined, def.name);
   return { label: demand.label, replaced };
 }
 
@@ -7098,8 +7098,13 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
    club is Anderlecht at 3.09, then Beşiktaş 4.82 and Trabzonspor 5.09. 2.9
    splits the new clusters. The measurement script is the method: XI is the
    mean of the eleven highest ratings padded with 60, gap is the distance to the
-   league's best XI. */
-const TITLE_GAP = 2.9;
+   league's best XI.
+   Round 399: back to 2.5. The review of Round 394 measured what 2.9 had
+   also let in: Roma, Napoli, Atalanta and Tottenham, boards that should be
+   asking for Europe. Milan is reached by TITLE_STATURE below instead, which
+   is what its board actually believes, so the gap can stay a measurement of
+   the squad. */
+const TITLE_GAP = 2.5;
 
 /** The XI strength chain for a world: the era bake when historic, else the
  * same chain clubDefMap ranks with. Round 146 threading. Round 154: the
@@ -7129,8 +7134,31 @@ function titleGapFor(clubName: string, league: LeagueDef, eraId?: string): numbe
 /** One predicate for "this board demands the title", used both to hand a club
  * its demand and to measure how wide the whole band is, so the two can never
  * drift apart. */
-function demandsTitle(rank: number, tier: number, titleGap: number): boolean {
-  return rank <= 2 || (rank <= 4 && tier <= 2) || titleGap <= TITLE_GAP;
+/* Round 399: the clubs whose boards demand the title whatever the current
+   squad says. Round 394 measured Milan 2.73 behind Serie A's best eleven and
+   widened TITLE_GAP to 2.9 to reach them, which also pulled four mid table
+   boards into the title band. The gap stays a measurement of the squad; the
+   stature list is the other half of what a board believes, and it is the
+   same list scripts/simBoardObjectives.mjs holds the engine to. It is a claim
+   about today's boards only: in a historic era the measured gap decides on
+   its own (simEra2005 caught Manchester City's 2005 board demanding the
+   title over a stronger Birmingham). */
+const TITLE_STATURE = new Set([
+  'Arsenal', 'Manchester City', 'Liverpool', 'Chelsea',
+  'Real Madrid', 'Barcelona',
+  'Inter Milan', 'Juventus', 'AC Milan',
+  'Bayern Munich', 'Borussia Dortmund',
+  'PSG', 'Marseille',
+  'PSV', 'Ajax', 'Feyenoord',
+  'Porto', 'Benfica', 'Sporting CP',
+  'Celtic', 'Rangers',
+  'Galatasaray', 'Fenerbahçe',
+  'Club Brugge', 'Genk', 'Union Saint-Gilloise',
+]);
+
+function demandsTitle(rank: number, tier: number, titleGap: number, clubName?: string, eraId?: string): boolean {
+  const stature = !!clubName && !(eraId && isHistoricEra(eraId)) && TITLE_STATURE.has(clubName);
+  return rank <= 2 || (rank <= 4 && tier <= 2) || titleGap <= TITLE_GAP || stature;
 }
 
 /** How many clubs in this league demand the title. The euro windows below
@@ -7141,7 +7169,7 @@ function titleBandSize(league: LeagueDef, eraId?: string): number {
   let n = 0;
   for (const c of league.clubs) {
     const d = eraId && isHistoricEra(eraId) ? eraClubDefFor(c, eraId) : clubDefFor(c);
-    if (demandsTitle(d.expectation, d.tier, titleGapFor(c, league, eraId))) n += 1;
+    if (demandsTitle(d.expectation, d.tier, titleGapFor(c, league, eraId), c, eraId)) n += 1;
   }
   return n;
 }
@@ -7149,7 +7177,7 @@ function titleBandSize(league: LeagueDef, eraId?: string): number {
 /* Round 145: every positional parenthetical is gone from these labels. His
    words: "stop with this top 20 or top 2 nonsense." The board names the
    prize. The table screen already shows where you are against it. */
-function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef, titleGap: number, eraId?: string): { target: number; label: string } {
+function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef, titleGap: number, eraId?: string, clubName?: string): { target: number; label: string } {
   const half = Math.floor(size / 2);
   const drop = relegationSpots(league.id);
 
@@ -7188,7 +7216,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // Rank catches the top two, tier catches the misplaced giant, and the
   // measured XI gap catches the club that is title-class inside its own
   // league even when its absolute rating is modest (Sporting CP, Feyenoord).
-  if (demandsTitle(rank, tier, titleGap)) {
+  if (demandsTitle(rank, tier, titleGap, clubName, eraId)) {
     return { target: 1, label: `Win the ${league.name}` };
   }
 
@@ -7248,7 +7276,7 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
     || (historic && eraLeagueOf(clubName, eraId))
     || leagueOf(clubName);
   const objs: BoardObjective[] = [];
-  const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId);
+  const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId, clubName);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
   const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
   objs.push({
@@ -10025,7 +10053,7 @@ function maybeApproach(state: CareerState): string | null {
   const suitor = pick(shuffle(approachSuitors(state)).slice(0, 6));
   if (!suitor) return null;
   const sLeague = (eraHist && eraLeagueOf(suitor.name, state.eraId)) || leagueOf(suitor.name);
-  const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId);
+  const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId, suitor.name);
   state.approach = {
     club: suitor.name,
     leagueName: sLeague.name,
@@ -10172,7 +10200,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
          no board on earth talks like that. The offer now carries the same
          named demand the club would actually hand you on day one. */
       const sLeague = (eraHist && eraLeagueOf(s.name, state.eraId)) || leagueOf(s.name);
-      const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague, titleGapFor(s.name, sLeague, state.eraId), state.eraId);
+      const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague, titleGapFor(s.name, sLeague, state.eraId), state.eraId, s.name);
       const out = (state.pendingVacancies ?? []).find(v => v.club === s.name);
       offers.push({
         club: s.name,

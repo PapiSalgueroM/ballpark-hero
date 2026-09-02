@@ -172,6 +172,25 @@ function getCachedDisplayName(): string | null {
  * the local today count, NO streak record, NO signed in save. A real finish
  * still goes through recordCompletion, exactly once.
  */
+/**
+ * Round 399: the local streak day, on its own. Round 392 moved Club Manager's
+ * match pings and Soccer Career's season pings onto recordActivity, which
+ * writes the anonymous row and nothing else, and that silently stopped a
+ * played match or season from keeping the header flame alive: since Round
+ * 159 a season had counted as playing today. This records that day locally
+ * (idempotent per day, no signed in save, no points) and the two sims call it
+ * beside their ping. The boards keep Round 301's shape and do not.
+ */
+export function recordStreakDay(gamePath: string): void {
+  try {
+    const game = gamePath.replace(/^\//, '');
+    if (!game) return;
+    recordStreakCompletion(game, new Date(), 0);
+  } catch {
+    // Never let a tracking failure break gameplay.
+  }
+}
+
 export function recordActivity(gamePath: string, score?: number, playerName?: string): void {
   try {
     const game = gamePath.replace(/^\//, '');

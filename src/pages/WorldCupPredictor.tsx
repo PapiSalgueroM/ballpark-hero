@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
 import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
-import { clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
+import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
 
@@ -788,10 +788,23 @@ const WorldCupPredictor = () => {
      reading someone else's shared bracket, and no score on purpose: a
      prediction has no honest point total until the real tournament grades
      it, and game_completions' score column is nullable by design. */
-  const crownedRef = useRef("");
+  /* Round 399: the latch persists. The knockout picks live in localStorage
+     and KnockoutBracket reports the champion from an effect, so on every
+     visit to a finished bracket the champion went from "" to the pick after
+     mount and a per mount ref recorded the completion again: another row a
+     day per visitor, and for a signed in player another save. The crowned
+     name is stored beside the picks and read back on mount.
+     clearWc2026ChildStorage owns the key, so every wipe path clears it, the
+     bracket's own included, and the two reset handlers below clear the ref
+     with it, so a fresh bracket still counts even when it crowns the same
+     favourite without a reload. */
+  const crownedRef = useRef<string>((() => {
+    try { return localStorage.getItem(WC2026_STORAGE_KEYS.crowned) || ""; } catch { return ""; }
+  })());
   useEffect(() => {
     if (!champion || viewingSharedBracket || crownedRef.current === champion) return;
     crownedRef.current = champion;
+    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, champion); } catch { /* storage may be unavailable */ }
     recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
   }, [champion, viewingSharedBracket, profile]);
 
@@ -904,6 +917,7 @@ const WorldCupPredictor = () => {
   const invalidateKnockout = useCallback(() => {
     clearWc2026ChildStorage(localStorage, false);
     setChampion("");
+    crownedRef.current = "";
     setBracketRounds([]);
     setKnockoutResetVersion((version) => version + 1);
   }, []);
@@ -1125,6 +1139,7 @@ const WorldCupPredictor = () => {
     setSelectedThirds([]);
     setPlayoffPicks({});
     setChampion("");
+    crownedRef.current = "";
     setBracketRounds([]);
     setAwardPicks({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
     setKnockoutResetVersion((version) => version + 1);

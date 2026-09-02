@@ -30,6 +30,7 @@ import { CM_ROSTERS, CM_PARTIAL } from '@/data/clubManagerRosters';
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
   recordActivity: vi.fn(),
+  recordStreakDay: vi.fn(),
 }));
 import { recordCompletion, recordActivity } from '@/lib/completions';
 

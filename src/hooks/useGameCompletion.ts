@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { getNewlyEarnedBadges } from '@/lib/badges';
+import { consumeRestoredFinish } from '@/lib/restoredFinish';
 
 /**
  * Marks a finished game for the hook-style callers.
@@ -33,15 +34,36 @@ export function useGameCompletion(
 ) {
   const { user, profile, refreshProfile } = useAuth();
   const trackedRef = useRef(false);
+  /* Round 399: a finish restored from storage is not a new finish. This
+     hook used to record whenever isComplete was true and its per mount ref
+     was fresh, so a game that came back finished from localStorage was
+     recorded again on every visit: another anonymous row and, for a signed
+     in player, the score added to their points again. Measured 2026-09-01:
+     half of all signed in saves outside the two big sims were repeats of a
+     same day save, a retired Soccer Career legacy re-paid on every reload.
+     Two rules now. The hook records only a transition it witnessed,
+     isComplete going from false to true while mounted, which covers the two
+     career sims and the daily games that restore in a state initializer.
+     And a finish that useDailyPuzzle restores in an effect after mount (38
+     games) is announced through src/lib/restoredFinish.ts and consumed here
+     before anything is recorded, because to this hook that restore looks
+     exactly like the player finishing. src/hooks/useGameCompletion.test.ts
+     holds both. */
+  const seenIncompleteRef = useRef(!isComplete);
 
   // Reset when the game resets (isComplete goes back to false)
   useEffect(() => {
-    if (!isComplete) trackedRef.current = false;
+    if (!isComplete) {
+      trackedRef.current = false;
+      seenIncompleteRef.current = true;
+    }
   }, [isComplete]);
 
   useEffect(() => {
-    if (!isComplete || trackedRef.current) return;
+    if (!isComplete || trackedRef.current || !seenIncompleteRef.current) return;
     trackedRef.current = true;
+    /* A finish the daily hook restored after mount said so first. */
+    if (consumeRestoredFinish(gameSlug)) return;
 
     recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile), correctAnswers);
 

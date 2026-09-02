@@ -8,13 +8,13 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 87% | Round 395: the featured 2026 Bracket tile no longer predicts a finished tournament with a wrong Group J; it scores against the real results. Round 392 stopped the Club Manager points leak. Report queue empty. Open: the points history decision below. |
+| P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 60% | Seven grids, four archives; NFL and soccer archives blocked by design (recycled boards, AI validated). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
-| Profiles and leaderboard | 40% | Points inflation stopped forward (392); the 36 affected accounts' history is an owner decision. |
+| Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
-| Club Manager | 22% | The bake owns every league it ships (394) and rosters carry the 2026 windows (393); feature work deferred by the operating contract. |
+| Club Manager | 24% | Quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
 | Soccer Career | 10% | Per season ping is activity not completion (392); feature work deferred by the operating contract. |
 | Multiplayer foundation | 5% | Not started. |
 
@@ -2325,16 +2325,20 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
    `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
    gitignore. Do not silently delete his research, ask him.
 2. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
-3. **Club Manager's inflated points, the history.** Round 392 stopped the leak: every
-   Club Manager match used to add the running season score to a signed in player's
-   points, so the top of the points table held 80,246 of its 87,800 from 1,586 match
-   rows and second place 25,331 from 564. Going forward a season counts once. The 36
-   accounts that hold points earned the old way still hold them, and the board ranks on
-   them. Two honest options: leave history as it is (the board stays wrong at the top
-   for a while), or recompute those accounts' Club Manager points keeping one row per
-   season, inferred from where the running score resets, which is a heuristic that
-   moves real accounts on a public board. Either is one SQL statement once he says
-   which; a backup of `user_game_scores` and `user_scores` comes first either way.
+3. **The inflated points, the history.** Two leaks, both stopped forward, neither
+   repaired backward. Round 392 stopped the per match one: every Club Manager match used
+   to add the running season score to a signed in player's points, so the top of the
+   points table held 80,246 of its 87,800 from 1,586 match rows. Round 399 stopped the
+   per visit one: a finished daily game or a retired career re-recorded its score on
+   every reload, which measured 1,516 same day repeat saves out of 3,039, 596,072 points
+   across 152 accounts (some of that is honest replays, and the rows do not say which).
+   Going forward a season counts once and a finish counts once. The accounts holding
+   points earned the old ways still hold them, and the points board ranks on them (the
+   ranked board is day best per game and is not affected). Two honest options: leave
+   history as it is, or recompute affected accounts keeping one row per season for Club
+   Manager and one row per game per day for everything else, which moves real accounts
+   on a public board. Either is one SQL statement once he says which; a backup of
+   `user_game_scores` and `user_scores` comes first either way.
 
 *Closed 2026-08-25: the score ticker data source. He chose the free API-Sports tier ("i want the
 free version unless the 9 dollars is per year"); Round 287 built on it. Reopens only if the free
@@ -2683,6 +2687,65 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 399. A FINISHED GAME IS RECORDED ONCE, NOT ON EVERY VISIT.** The
+  corrective round from the adversarial review of Rounds 392 to 398. The measured
+  problem: `useGameCompletion` recorded a completion whenever `isComplete` was true
+  and its per mount ref was fresh, so a game that came back finished from localStorage
+  was recorded again on every visit: another anonymous row, and for a signed in player
+  the score added to their points again. Measured 2026-09-01 in
+  `user_game_scores`: 1,516 of 3,039 signed in saves outside the two big sims were
+  same day repeats of an earlier save, 596,072 points across 152 accounts, some of it
+  honest replays (the account that saved Missing XI 39 times in a day was replaying
+  through Play Again, which still counts on purpose), most of it reloads (a retired
+  Soccer Career legacy was re-paid on every visit). Two rules now. The hook records only
+  a transition it witnessed, isComplete going from false to true while mounted, which
+  covers the two career sims and the daily games that restore in a state initializer.
+  And the 38 games on `useDailyPuzzle` restore a finished status in an effect after
+  mount, which to the hook is exactly that transition (the review's refuters caught this
+  before it shipped as fixed), so that hook now announces a restored finish through
+  `src/lib/restoredFinish.ts` and the completion hook consumes the mark before
+  recording. `src/hooks/useGameCompletion.test.ts` holds four cases (mounts finished
+  records nothing, a restored finish records nothing and a later real one records once,
+  a witnessed finish records once, reset then finish records again) and
+  `scripts/simCompletionOnce.mjs` runs them with two controls on copies of the hook,
+  one per rule, each of which must see its own case fail, plus a source check with its
+  own control that the daily hook's restore path calls the mark. The bracket
+  page had the same bug by a different route: the knockout picks persist and the child
+  reports the champion from an effect, so the crown went from empty to the pick after
+  every mount and a per mount ref recorded it again; its latch now persists in
+  localStorage beside the picks, `clearWc2026ChildStorage` owns the key so every wipe
+  path clears it, and the two reset handlers clear the in memory ref with it, so a
+  fresh bracket still counts. Section 2 of the fence reads
+  every direct recordCompletion call site and fails any effect bound call with no latch.
+  Also in this round: Club Manager's quick sim stops at a sacking instead of playing the
+  rest of the season for a manager already out of a job; the local streak day the Round
+  392 activity pings had dropped is back through `recordStreakDay` (the day counts
+  locally, no signed in save, no points, simSessionMarks still green); TITLE_GAP returns
+  to 2.5 with a `TITLE_STATURE` list for the clubs whose boards want the title whatever
+  the squad says (Milan at 2.73 behind Inter's eleven), the same list simBoardObjectives
+  holds the engine to, whose monotone check now lets a stature club out demand a stronger
+  squad and whose outsider list gains Roma, Napoli, Atalanta and Tottenham (all four had
+  been pulled into the title band by 2.9); stature is a claim about today's boards only,
+  a historic era keeps the measured gap, which simEra2005 caught on the first full run
+  when Manchester City's 2005 board demanded the title over a stronger Birmingham; the
+  three connect-4 snapshots that had drifted in the tree were restored to the committed
+  version the sitemap ledger was recorded against; simActivityNotCompletion aborts instead of
+  failing when vitest reports nothing, so a control can never be credited for silence;
+  simTransferOverlay section 2 has a floor of 45 checked entries so an empty answer
+  cannot read green; the two 2026 final lineups in `missingXi.ts` carry their real
+  numbers, 168 and 169. Rounds 396 to 398 were published to douknowball.com at the start
+  of this round (the live bracket page had still been serving the pre 396 copy) and
+  IndexNow was pinged for the bracket and Missing XI pages. **Two doors the fix does not
+  cover, checked and left open on purpose:** `ResultScreen` still records on mount when a
+  caller passes `recordCompletionOnMount`; its three callers today (Higher or Lower
+  Transfers, List Quiz, Player Bingo) persist only a best score and never restore a
+  finished state, so none of them re-fires, but a future caller that does restore one
+  would. And a finished state that lands after mount by any path other than
+  `useDailyPuzzle` would still be a witnessed transition; no game does that today.
+  Gates: tsc zero, six vitest cases green, simCompletionOnce green with its three
+  controls fired,
+  simActivityNotCompletion, simSessionMarks, simTransferOverlay and simBoardObjectives
+  green, build green, full node runner green on the first full pass except three reds, all resolved: simEra2005 (the stature list had reached 2005 boards, fixed), simSitemap (the three drifted snapshots restored), simWorldCupSquads (database unreachable under load, green alone); the later fixes from the review were covered by rerunning the round's own fences and the seven neighbouring ones that read the touched files, all green.
 - **2026-09-01, Round 398. THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI.** The
   biggest match of the year was not in the lineup game. Spain's 4-2-3-1 and
   Argentina's 4-4-2 from the July 19 final are lineups 127 and 128, both

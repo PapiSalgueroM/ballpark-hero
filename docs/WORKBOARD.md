@@ -23,10 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-01
 
-- **next: Round 399 (desktop lane, work already present in Anthony's tree).
-  CLUB MANAGER FAST-FORWARD SACKING STOP.** `useClubManager.ts` and the focused
-  completion harness are already being edited outside the Codex lane. Do not
-  overlap them.
 - **next: Round 400 (Codex lane, clean verification worktree). FULL SITE FACT
   AND PLAYABILITY AUDIT.** Run the real type gate, full node harness fleet and
   browser route sweep from committed `main`; classify every failure before
@@ -715,6 +711,16 @@ Standing claims:
 
 ## Done
 
+- A FINISHED GAME IS RECORDED ONCE, Round 399 (desktop lane, 2026-09-02, the
+  corrective pass from the review of Rounds 392 to 398). useGameCompletion
+  records only a finish it witnessed, and useDailyPuzzle announces a finish it
+  restores after mount (38 games), so a game restored complete from storage no
+  longer writes a row and re-pays its points on every visit; the bracket
+  page's crown latch persists beside the picks and every wipe path clears it.
+  Hook test with four cases, simCompletionOnce with three controls. Club Manager quick sim stops at a
+  sacking; the streak day the activity pings dropped is back; TITLE_GAP back to
+  2.5 with a stature list the objectives fence shares. Rounds 396 to 398
+  published live and IndexNow pinged.
 - THE BRACKET PAGE SEEDS THE ROUND OF 32 THE WAY FIFA DID, Round 396 (desktop
   lane, 2026-09-01, the corrective pass filed against Round 395). Real bracket
   order and all 495 official Annexe C third-place allocations in

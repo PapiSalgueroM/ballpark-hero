@@ -89,7 +89,7 @@ console.log('1) The real hook, rendered: a match is activity, a season end is on
   } finally {
     if (copy) fs.rmSync(path.dirname(copy), { recursive: true, force: true });
   }
-  if (!out.includes('useClubManager.test.ts')) fail('vitest did not report on the test file at all, so nothing was checked:\n' + out.slice(-1500));
+  if (!out.includes('useClubManager.test.ts')) abort('vitest did not report on the test file at all, so nothing was checked:\n' + out.slice(-1500));
   const summary = out.match(/Tests\s+(.+)/);
   console.log(`   vitest exit ${code}, ${summary ? summary[1].trim() : 'no summary line'}`);
   if (CONTROL === 'match') {

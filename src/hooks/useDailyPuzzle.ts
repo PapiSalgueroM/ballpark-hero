@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { getTodayET, dailyIndex } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 // ---------------------------------------------------------------------------
 // Schema version
@@ -312,6 +313,11 @@ export function useDailyPuzzle<T, G>(
 
     if (saved) {
       setGuesses(saved.guesses);
+      /* Round 399: a finished status read back from storage is not a new
+         finish. Say so before setting it, or useGameCompletion sees the
+         same false to true transition a real finish makes and records the
+         game again on every reload. */
+      if (saved.gameStatus !== 'playing') markRestoredFinish(gameSlug);
       setGameStatus(saved.gameStatus);
     } else {
       // No valid saved state, start fresh (also covers supabasePuzzle arriving

@@ -109,6 +109,9 @@ console.log('2) The table says what the overlay says, for every entry with a 202
       if (r.club !== e.db) fail(`${e.name}: the 2026 row says ${r.club}, the verified move says ${e.db}`);
     }
   }
+  /* Round 399: a floor, because an empty answer used to read as green. 45 of
+     46 entries have a 2026 row today (Griezmann is the one that does not). */
+  if (checked < 45) fail(`only ${checked} entries could be checked against a 2026 row, the table answered short`);
   console.log(`   ${checked} entries checked against their 2026 row; ${missing.length} have no 2026 row: ${missing.join(', ') || 'none'}`);
 }
 

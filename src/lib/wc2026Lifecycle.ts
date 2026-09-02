@@ -4,6 +4,8 @@ export const WC2026_STORAGE_KEYS = {
   knockout: 'wc2026-knockout',
   knockoutSignature: 'wc2026-knockout-signature',
   awards: 'wc2026-awards',
+  /* Round 399: the champion whose completion was already recorded. */
+  crowned: 'wc2026-crowned',
 } as const;
 
 export interface Wc2026Storage {
@@ -16,6 +18,7 @@ export interface Wc2026Storage {
 export function clearWc2026ChildStorage(storage: Wc2026Storage, includeAwards: boolean): void {
   storage.removeItem(WC2026_STORAGE_KEYS.knockout);
   storage.removeItem(WC2026_STORAGE_KEYS.knockoutSignature);
+  storage.removeItem(WC2026_STORAGE_KEYS.crowned);
   if (includeAwards) storage.removeItem(WC2026_STORAGE_KEYS.awards);
 }
 

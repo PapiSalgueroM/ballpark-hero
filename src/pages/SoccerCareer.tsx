@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
-import { recordCompletion, recordActivity } from "@/lib/completions";
+import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
@@ -758,6 +758,7 @@ export default function SoccerCareer() {
        Round 392: an activity ping rather than a completion, so a season no
        longer writes a ranked row and a streak record (Round 301's shape). */
     recordActivity('/soccer-career');
+    recordStreakDay('/soccer-career');
   };
 
   const handleAcceptOffer = (offer: ContractOffer) => {

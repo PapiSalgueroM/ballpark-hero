@@ -25,6 +25,7 @@
  *  - a Europa or Conference band vanishing from a top five league
  *  - a relegation demand appearing in MLS, which cannot relegate anybody
  *  - a demand target a stronger club could not hit while a weaker one could
+ *    (except a title demanded of a stature club, Round 399, see GIANTS)
  *  - the double grading "done" before both trophies are in the cabinet
  *
  * Run: node scripts/simBoardObjectives.mjs
@@ -50,6 +51,25 @@ execSync(
 );
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
+
+/* The clubs whose boards demand the title on stature. Since Round 399 the
+   engine holds the same list as TITLE_STATURE in src/lib/clubManager.ts;
+   section 2 checks every one of them is asked for the title, and the
+   monotone check below lets one of them out-demand a stronger squad, because
+   that is exactly what stature means (Milan sits 2.73 behind Serie A's best
+   eleven and its board still wants the league). */
+const GIANTS = [
+    'Arsenal', 'Manchester City', 'Liverpool', 'Chelsea',
+    'Real Madrid', 'Barcelona',
+    'Inter Milan', 'Juventus', 'AC Milan',
+    'Bayern Munich', 'Borussia Dortmund',
+    'PSG', 'Marseille',
+    'PSV', 'Ajax', 'Feyenoord',
+    'Porto', 'Benfica', 'Sporting CP',
+    'Celtic', 'Rangers',
+    'Galatasaray', 'Fenerbahçe',
+    'Club Brugge', 'Genk', 'Union Saint-Gilloise',
+  ];
 const {
   REAL_LEAGUES, playableClubs, buildBoardObjectives, objectiveStatuses,
   startCareer, EURO_SLOTS,
@@ -98,7 +118,9 @@ console.log('1) The demand ladder over all playable clubs');
     // Monotone: a club the league rates stronger never has a WEAKER demand.
     targets.sort((a, b) => a.rank - b.rank);
     for (let i = 1; i < targets.length; i++) {
-      if (targets[i].target < targets[i - 1].target) {
+      /* Round 399: a stature club may be asked for more than a stronger
+         squad. Nothing else may. */
+      if (targets[i].target < targets[i - 1].target && !(targets[i].target === 1 && GIANTS.includes(targets[i].name))) {
         fail(`${league.name}: ${targets[i].name} (rank ${targets[i].rank}) is asked for top ${targets[i].target} while stronger ${targets[i - 1].name} is only asked for top ${targets[i - 1].target}`);
       }
     }
@@ -138,23 +160,11 @@ console.log('1b) Every league-relative giant is told to win it');
      demand. If this fails after a roster re-bake, re-measure the gap table
      (the TITLE_GAP comment in clubManager.ts says how) and retune, do not
      silently let a giant's board start asking for a Champions League spot. */
-  const GIANTS = [
-    'Arsenal', 'Manchester City', 'Liverpool', 'Chelsea',
-    'Real Madrid', 'Barcelona',
-    'Inter Milan', 'Juventus', 'AC Milan',
-    'Bayern Munich', 'Borussia Dortmund',
-    'PSG', 'Marseille',
-    'PSV', 'Ajax', 'Feyenoord',
-    'Porto', 'Benfica', 'Sporting CP',
-    'Celtic', 'Rangers',
-    'Galatasaray', 'Fenerbahçe',
-    'Club Brugge', 'Genk', 'Union Saint-Gilloise',
-  ];
   /* And the sanity mirror: clubs miles off their league's top XI must NOT be
      told to win it, or the band stopped meaning anything. Measured gaps on
      2026-08-17: Aberdeen 13.7, Hearts 13.7, Basaksehir 11.1, Casa Pia deep
      in the primeira tail. */
-  const NOT_TITLE = ['Aberdeen', 'Hearts', 'Başakşehir', 'Casa Pia', 'St Mirren', 'Kortrijk'];
+  const NOT_TITLE = ['Aberdeen', 'Hearts', 'Başakşehir', 'Casa Pia', 'St Mirren', 'Kortrijk', 'Roma', 'Napoli', 'Atalanta', 'Tottenham'];
   for (const name of GIANTS) {
     const league = REAL_LEAGUES.find(l => l.clubs.includes(name));
     if (!league) { fail(`${name} is in the giants list but not in any league`); continue; }
