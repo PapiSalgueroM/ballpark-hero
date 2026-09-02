@@ -304,7 +304,9 @@ serve(async (req) => {
       resp = await callAI();
     }
     if (resp.status === 429) return unverified(true);
-    if (!resp.ok) return unverified();
+    /* Round 407: the status of a refused AI call is the one fact the logs
+       need to tell a dead key from a spent day; it carries no secret. */
+    if (!resp.ok) { console.log(`ai refused: status ${resp.status}`); return unverified(); }
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content?.trim() || "";
     const m = content.match(/\{[\s\S]*\}/);
