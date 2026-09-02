@@ -233,82 +233,167 @@ export function divisionOf(abbr: string): string {
   return FO_TEAM_MAP.get(abbr)!.division;
 }
 
+/* ROUND 419: EVERY CLUB PLAYS SEVENTEEN GAMES, and until now most seasons had
+   one that did not. The shape was documented and believed: six divisional
+   games home and away against three rivals, plus eleven crossover games,
+   seventeen in all for all thirty two clubs. Measured over 200 built
+   schedules it delivered that in only 27 of them. In the other 173 a single
+   club came up short, sometimes as low as NINE games, because the crossover
+   pairing walked a greedy loop and gave up the moment one club was left
+   needing partners nobody could legally supply. Standings sort on wins, so a
+   club with eight fewer chances to win is not cosmetic: it cannot reach the
+   playoffs, and the mandate ownership grades it against assumes it can. The
+   same pass also placed a club in the same week twice about 38 times a
+   season, under a comment calling that rare and harmless. It was neither.
+
+   GREEDY CANNOT DO THIS, WHICH IS WHY IT IS NOT GREEDY ANY MORE. Fixing the
+   old loop to serve the hungriest club first still only completed the pairing
+   17 times in 300, and fitting the result into seventeen weeks with nobody
+   playing twice then succeeded 0 times out of those 17. Seventeen weeks of
+   sixteen games with all thirty two clubs busy every week is a perfect
+   partition, and a greedy walk does not find one by trying harder.
+   The league's own shape hands over a construction instead. Eight divisions
+   of four is a round robin waiting to be used:
+     THE SIX DIVISIONAL WEEKS. Four clubs playing home and away is a double
+     round robin, exactly six rounds of two games, and all eight divisions run
+     theirs at the same time. Six weeks, sixteen games each, everybody busy.
+     THE ELEVEN CROSSOVER WEEKS. Round robin the eight DIVISIONS against each
+     other: seven rounds, each pairing four divisions with four others. In a
+     week where division X meets division Y their four clubs pair off, so
+     every club plays exactly one non division opponent. That is seven weeks.
+     For the remaining four, the same division pairings are used again with a
+     DIFFERENT internal matching (club i meets club i+m rather than club i),
+     so no two clubs ever meet twice.
+   Seventeen weeks, sixteen games each, 272 in all, every club on seventeen
+   and nobody scheduled twice in a week, by construction rather than by luck.
+   The check at the bottom stays anyway and FAILS CLOSED: a game that will not
+   start is a bug somebody fixes, a season where one club plays nine games is
+   a bug nobody sees. */
+const CROSSOVER_GAMES = 11;
+const DIVISIONAL_GAMES = 6;
+export const GAMES_PER_CLUB = CROSSOVER_GAMES + DIVISIONAL_GAMES;
+
+/** Round robin pairings of n items, n even: n-1 rounds, the circle method. */
+function circleRounds<T>(items: T[]): [T, T][][] {
+  const n = items.length;
+  const ring = items.slice(1);
+  const rounds: [T, T][][] = [];
+  for (let r = 0; r < n - 1; r += 1) {
+    const round: [T, T][] = [[items[0], ring[r % ring.length]]];
+    for (let i = 1; i < n / 2; i += 1) {
+      const a = ring[(r + i) % ring.length];
+      const b = ring[(r + ring.length - i) % ring.length];
+      round.push([a, b]);
+    }
+    rounds.push(round);
+    // rotate for the next round
+  }
+  return rounds;
+}
+
 export function buildSchedule(rng: () => number): GmGame[][] {
-  const abbrs = FO_TEAMS.map(t => t.abbr);
-  const games: { home: string; away: string }[] = [];
+  const shuffle = <T,>(arr: T[]): T[] => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  /* clubs grouped by division, both orders shuffled so two seasons do not
+     produce the same fixture list */
   const byDiv = new Map<string, string[]>();
-  for (const a of abbrs) {
-    const d = divisionOf(a);
-    byDiv.set(d, [...(byDiv.get(d) ?? []), a]);
+  for (const t of FO_TEAMS) {
+    byDiv.set(t.division, [...(byDiv.get(t.division) ?? []), t.abbr]);
   }
-  // divisional home-and-home
-  for (const members of byDiv.values()) {
-    for (let i = 0; i < members.length; i++) {
-      for (let j = i + 1; j < members.length; j++) {
-        games.push({ home: members[i], away: members[j] });
-        games.push({ home: members[j], away: members[i] });
+  const divisions = shuffle([...byDiv.keys()]);
+  const clubs = new Map(divisions.map(d => [d, shuffle(byDiv.get(d)!)]));
+
+  /* THE CONSTRUCTION ASSUMES THE LEAGUE'S SHAPE, so it says so out loud rather
+     than quietly producing nonsense if a data refresh ever changes it. An even
+     number of divisions, each the same even size, is what makes both round
+     robins work. */
+  const divSize = clubs.get(divisions[0])!.length;
+  const shapeOk = divisions.length % 2 === 0
+    && divSize % 2 === 0
+    && divisions.every(d => clubs.get(d)!.length === divSize);
+  if (!shapeOk) {
+    throw new Error(
+      `buildSchedule needs an even number of equal, even sized divisions and found `
+      + `${divisions.length} divisions of ${divisions.map(d => clubs.get(d)!.length).join('/')}. `
+      + 'Refusing to guess at a schedule for a league shape it was not built for.');
+  }
+  /* Each division pairing can be reused divSize times before two clubs would
+     meet twice, because the internal matching only has that many offsets. */
+  const maxCrossover = (divisions.length - 1) * divSize;
+  if (CROSSOVER_GAMES > maxCrossover) {
+    throw new Error(
+      `buildSchedule was asked for ${CROSSOVER_GAMES} crossover games but this league shape `
+      + `supports at most ${maxCrossover} before two clubs would have to meet twice.`);
+  }
+
+  const weeks: GmGame[][] = [];
+  const add = (list: GmGame[], home: string, away: string) => {
+    list.push({ week: weeks.length + 1, home, away, homeScore: 0, awayScore: 0, winner: '' });
+  };
+
+  /* six divisional weeks: a double round robin inside every division at once */
+  for (const [ri, round] of circleRounds([0, 1, 2, 3]).entries()) {
+    for (const back of [false, true]) {
+      const w: GmGame[] = [];
+      for (const d of divisions) {
+        const m = clubs.get(d)!;
+        for (const [i, j] of round) {
+          if (back) add(w, m[j], m[i]);
+          else add(w, m[i], m[j]);
+        }
+      }
+      weeks.push(w);
+      void ri;
+    }
+  }
+
+  /* eleven crossover weeks: round robin the divisions, then repeat four of
+     those weeks with a different internal matching */
+  const divRounds = circleRounds(divisions);
+  for (let r = 0; r < CROSSOVER_GAMES; r += 1) {
+    const pairs = divRounds[r % divRounds.length];
+    const matching = Math.floor(r / divRounds.length);
+    const w: GmGame[] = [];
+    for (const [x, y] of pairs) {
+      const xs = clubs.get(x)!;
+      const ys = clubs.get(y)!;
+      for (let i = 0; i < xs.length; i += 1) {
+        const j = (i + matching) % ys.length;
+        /* alternate the host so neither division hosts everything */
+        if ((r + i) % 2 === 0) add(w, xs[i], ys[j]);
+        else add(w, ys[j], xs[i]);
       }
     }
+    weeks.push(w);
   }
-  // crossover: rotate through non-division opponents, 11 each
-  const need = new Map<string, number>(abbrs.map(a => [a, 11]));
-  const shuffled = [...abbrs];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  const played = new Set<string>();
-  for (const g of games) played.add(`${g.home}|${g.away}`);
-  const facing = (a: string, b: string) => played.has(`${a}|${b}`) || played.has(`${b}|${a}`);
-  let guard = 0;
-  outer: while (guard++ < 4000) {
-    const open = shuffled.filter(a => (need.get(a) ?? 0) > 0);
-    if (open.length === 0) break;
-    for (let i = 0; i < open.length; i++) {
-      for (let j = i + 1; j < open.length; j++) {
-        const a = open[i], b = open[j];
-        if (divisionOf(a) === divisionOf(b) || facing(a, b)) continue;
-        const home = rng() < 0.5 ? a : b;
-        const away = home === a ? b : a;
-        games.push({ home, away });
-        played.add(`${home}|${away}`);
-        need.set(a, need.get(a)! - 1);
-        need.set(b, need.get(b)! - 1);
-        continue outer;
+
+  /* the promise, checked before it ships rather than assumed */
+  const played = new Map(FO_TEAMS.map(t => [t.abbr, 0]));
+  for (const w of weeks) {
+    const here = new Set<string>();
+    for (const g of w) {
+      if (here.has(g.home) || here.has(g.away)) {
+        throw new Error(`buildSchedule put a club in week ${g.week} twice, which the season is not allowed to do.`);
       }
+      here.add(g.home);
+      here.add(g.away);
+      played.set(g.home, played.get(g.home)! + 1);
+      played.set(g.away, played.get(g.away)! + 1);
     }
-    // relax the repeat-opponent constraint if stuck
-    const open2 = shuffled.filter(a => (need.get(a) ?? 0) > 0);
-    if (open2.length >= 2) {
-      const a = open2[0];
-      const b = open2.find(x => x !== a && divisionOf(x) !== divisionOf(a)) ?? open2[1];
-      games.push({ home: a, away: b });
-      need.set(a, need.get(a)! - 1);
-      need.set(b, need.get(b)! - 1);
-    } else break;
   }
-  // spread into 17 weeks: each week every team plays at most once; greedy fill
-  const weeks: GmGame[][] = Array.from({ length: REGULAR_WEEKS }, () => []);
-  const pool = [...games];
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  for (const g of pool) {
-    let placed = false;
-    for (let w = 0; w < REGULAR_WEEKS; w++) {
-      const busy = new Set(weeks[w].flatMap(x => [x.home, x.away]));
-      if (!busy.has(g.home) && !busy.has(g.away) && weeks[w].length < 16) {
-        weeks[w].push({ week: w + 1, home: g.home, away: g.away, homeScore: 0, awayScore: 0, winner: '' });
-        placed = true;
-        break;
-      }
-    }
-    if (!placed) {
-      // overflow week gets it anyway (team plays twice; rare and harmless)
-      const w = weeks.reduce((mi, arr, idx, all) => (arr.length < all[mi].length ? idx : mi), 0);
-      weeks[w].push({ week: w + 1, home: g.home, away: g.away, homeScore: 0, awayScore: 0, winner: '' });
-    }
+  const short = [...played.entries()].filter(([, n]) => n !== GAMES_PER_CLUB);
+  if (short.length || weeks.length !== REGULAR_WEEKS) {
+    throw new Error(
+      `buildSchedule produced ${weeks.length} weeks and left ${short.length} club(s) off ${GAMES_PER_CLUB} games `
+      + `(${short.map(([a, n]) => `${a} ${n}`).join(', ')}). Refusing to return a season where somebody plays fewer `
+      + 'games than the rest, which is what shipped before Round 419.');
   }
   return weeks;
 }

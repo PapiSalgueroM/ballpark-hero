@@ -2789,6 +2789,76 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-02, Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.** Found while
+  re-measuring Round 418, not reported by anyone, which is the only reason it was found at
+  all. `buildSchedule` documented and believed a clean shape: six divisional games home
+  and away against three rivals plus eleven crossover, seventeen for all thirty two clubs.
+  Measured over 200 built schedules it delivered that in **27 of them**. In the other 173
+  a club came up short, **as low as nine games**. Standings sort on wins, so a club with
+  eight fewer chances to win cannot reach the playoffs, and ownership grades it against a
+  mandate that assumes it can. The same pass also put a club in the same week twice
+  **40.8 times a season** on average over those 3,000 runs, under a comment in the code
+  calling that "rare and harmless". It was neither.
+  **Greedy could not do this, which is why it is not greedy any more.** The old loop walked
+  the clubs in order pairing whoever fit and gave up the moment one club was left needing
+  partners nobody could legally supply. Rewriting it to serve the hungriest club first, the
+  obvious repair, still completed the pairing only **17 times in 300**, and fitting the
+  result into seventeen weeks with nobody playing twice then succeeded **0 times out of
+  those 17**. Seventeen weeks of sixteen games with all thirty two clubs busy every week is
+  a perfect partition of the fixture list, and a greedy walk does not find one by trying
+  harder. This is worth writing down because the tempting fix (retry until it works) would
+  have looked like diligence and delivered a 5 percent success rate.
+  **The league's own shape hands over a construction.** Eight divisions of four is a round
+  robin waiting to be used. The six divisional weeks are a double round robin inside every
+  division at once: four clubs playing home and away is exactly six rounds of two games,
+  and all eight divisions run theirs simultaneously, so six weeks of sixteen games with
+  everybody busy. The eleven crossover weeks come from round robining the eight DIVISIONS
+  against each other, which gives seven rounds; in a week where division X meets division Y
+  their four clubs pair off, so every club plays exactly one non divisional opponent. The
+  last four weeks reuse four of those division pairings with a different internal matching
+  (club i meets club i+m rather than club i), so no two clubs ever meet twice. Seventeen
+  weeks, sixteen games each, 272 in all, by construction rather than by luck.
+  **It still fails closed.** The builder checks its own promise before returning and throws
+  if any club is off seventeen or anyone is booked twice in a week. A game that will not
+  start is a bug somebody fixes within the hour; a season where one club plays nine games
+  is a bug nobody sees.
+  **Measured after, over 3,000 schedules: 0 clubs off seventeen, 0 double bookings.** Structure checked separately
+  over 100 more: every club faces exactly three divisional rivals and eleven crossover
+  opponents, rivals meet exactly twice and everybody else exactly once, no club plays
+  outside six to eleven home games, and 100 runs produced 100 distinct fixture lists, so
+  seasons do not repeat.
+  **A side effect worth having, stated the way it actually measures.** Unequal game counts
+  were adding noise to the standings, so fixing them sharpened the sim's own signal. Under
+  one probe over 1,000 seasons per engine the strength to wins correlation moves from a
+  median of 0.699 to 0.715 and a mean of 0.693 to 0.705, which is **+0.012 at 3.3 standard
+  errors**. Real, and small. An earlier draft of this entry reported it as a band moving
+  from 0.409-0.853 to 0.518-0.864, which a reviewer showed is not a property of the code:
+  those are the minimum and maximum of 40 draws, they overlap almost entirely between the
+  two engines, and the two ends had not been measured under the same probe. A range of
+  extremes is not a measurement, it is the tail of whatever sample was taken.
+  Records over 200 seasons and 6,400 club seasons: the best club in a season is most often
+  **14-3** (92 of 200) and the worst most often **3-14** (71 of 200), which is the shape a
+  seventeen game season should have. That is the typical season and NOT the span: 1.16
+  percent of club seasons finish better than 14-3 and 1.78 percent worse than 3-14, and
+  both 17-0 and 0-17 turn up.
+  **The season it feeds still ends in a champion, which is the risk a schedule change
+  actually carries.** 25 full seasons played through the real playoff code: no season
+  threw or failed to crown anyone, every club finished on exactly 17 games in every one of
+  them, the 14 seeds came out right and the champion was always among them, and 25 seasons
+  produced 11 different winners, so nothing degenerated into one dynasty.
+  **Two guards added for shapes this construction cannot serve**, because it assumes the
+  league it was written for. If a data refresh ever leaves an odd number of divisions or
+  divisions of different sizes, it throws and names the shape it found rather than
+  guessing; and if the crossover count is ever raised past what the division pairings can
+  supply without two clubs meeting twice, it says so with the maximum this shape supports.
+  `simFrontOfficeRoster` section 11 is the promise itself rather than the shape of the old
+  bug: the counts, the opponents, the meetings, the home split, the week count and the
+  variety, over twelve seasons because one schedule proving out says nothing about the
+  next. Its `shortseason` control cuts the crossover to the seven round robin weeks AND
+  neuters the builder's own guard, so it proves the SECTION catches a thirteen game season
+  rather than the throw doing all the work.
+  Gates: tsc zero, 137 checks with fourteen controls, all node harnesses green, all 15
+  built site fences, build green.
 - **2026-09-02, Round 418. THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO.** The
   other half of the owner's P1 item 12. (A naming trap worth one line, because a reviewer
   fell into it: `docs/TWEAKS-2026-08-28.md` carries TWO numbered lists, a P1 bug list of
@@ -2869,7 +2939,9 @@ today rather than adding alongside them.
   One thing noticed while re-measuring and NOT fixed here, recorded for a later round:
   `buildSchedule` is supposed to give every club 17 games and actually delivers 13 to 17,
   because its crossover loop can hit its own iteration guard before every club is filled.
-  That is pre 418 and untouched by this round.
+  That is pre 418 and untouched by this round. **Superseded: Round 419 fixed it and found
+  the range was worse than measured here, 9 to 17 rather than 13 to 17, across a larger
+  sample. See the Round 419 entry above.**
   The honest caveat stands: ranking the 32 clubs on the old stored number and on their
   actual defenders agrees on **zero of 32 positions**, which is what an r of minus 0.112
   has to mean. That is the round working, not a regression, but a returning player starting

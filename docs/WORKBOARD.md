@@ -23,21 +23,18 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.**
-  Found while re-measuring Round 418, not reported by anyone. `buildSchedule`
-  in src/lib/frontOffice.ts is documented as 6 divisional plus 11 crossover
-  games for all 32 clubs and does not deliver it. Measured over 200 built
-  schedules: **173 of 200 seasons (87 percent) leave one club off 17 games**,
-  as low as 9, because the crossover pairing loop gives up when a single club
-  is left needing partners. A club on 9 games cannot reach the playoffs, and
-  standings sort on wins, so it is a fairness bug not a cosmetic one. The
-  same pass also puts a club in the same week twice about 38 times a season,
-  which the code's own comment calls "rare and harmless" and is neither.
-  The fix has to be provable rather than lucky: complete the pairing (or
-  retry until it completes), then FAIL CLOSED if any club is not on exactly
-  17, rather than shipping a quiet 9. Files in play: src/lib/frontOffice.ts
-  and a new fence section with its control. Round 411 (NFL archive, other
-  lane) is not touched.
+- **Desktop lane, next: Round 420. A FAILED PRERENDER WRITE MUST NOT DELETE
+  THE PAGE.** Hit for real while building Round 419: the prerenderer failed
+  to write /nfl-higher-lower with a Windows UNKNOWN error and left the
+  snapshot **deleted**, because scripts/prerender.mjs:814 does a plain
+  writeFileSync, which truncates the target before it writes. The build did
+  exit 1, so nothing shipped, but the failure mode is wrong: a write that
+  cannot complete should leave the previous page standing, not remove a live
+  route's only crawlable document. Fix is small and standard: write to a temp
+  file in the same directory and rename over the target, which is atomic, so
+  a failure leaves the old snapshot untouched. Worth a fence check that a
+  route's snapshot is never absent after a run, and a control that makes a
+  write fail. Files in play: scripts/prerender.mjs and simPrerender.
 
 
 
@@ -805,6 +802,28 @@ Standing claims after Round 400:
 
 ## Done
 
+- EVERY CLUB PLAYS SEVENTEEN GAMES, Round 419 (desktop lane, 2026-09-02).
+  Found while re-measuring Round 418, not reported. buildSchedule promised 6
+  divisional plus 11 crossover for all 32 clubs and delivered it in 27 of 200
+  built schedules, and over 3,000 runs it fails 89.4 percent of the time,
+  leaving a club as low as 9 games, which is a club that cannot reach the
+  playoffs. It also booked a club twice in a week 40.8 times a season under a
+  comment calling that harmless. Greedy
+  could not fix it: hungriest-first still completed the pairing 17 times in
+  300 and the week fit 0 of those 17. It is a construction now, from the
+  league's own shape: 6 divisional weeks are a double round robin inside every
+  division at once, and the 11 crossover weeks come from round robining the 8
+  DIVISIONS, reusing four pairings with a different internal matching. 0 of
+  200 clubs short after, 0 double bookings, 100 distinct fixture lists from
+  100 runs, and it fails closed if it ever cannot keep the promise. Side
+  effect: less noise in the standings lifted the strength to wins correlation
+  by +0.012 at 3.3 standard errors over 1,000 seasons per engine, real and
+  small. An earlier draft quoted a band of extremes from 40 draws, which a
+  reviewer showed is sample tail rather than a property of the code.
+  simFrontOfficeRoster is 137 checks and fourteen controls, and its schedule
+  section samples 200 seasons rather than 12 because a reviewer built a fault
+  appearing in 5 percent of schedules that 12 caught only 59 percent of the
+  time.
 - THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO, Round 418 (desktop
   lane, 2026-09-02). The other half of the owner's item 12. Round 416 put 192
   real defenders on the rosters and deliberately left them worth nothing:

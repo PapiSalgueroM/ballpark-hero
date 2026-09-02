@@ -54,6 +54,7 @@
      SIM_FO_CONTROL=offencecycle   pre 416 replenishment back -> section 9 red
      SIM_FO_CONTROL=unitdefence    pre 418 unit defence back  -> section 10 red
      SIM_FO_CONTROL=meandefence    defence back to a plain mean -> section 10 red
+     SIM_FO_CONTROL=shortseason    crossover cut to seven weeks -> section 11 red
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -94,6 +95,7 @@ const SECTION_NAMES = {
   8: 'the rules this round got wrong the first time',
   9: 'the defence survives the seasons',
   10: 'the defence is the defenders',
+  11: 'every club plays seventeen games',
 };
 const ok = (section, label, pass, detail) => {
   checks += 1;
@@ -680,7 +682,7 @@ try {
      back to the pre 416 shape, which swept defenders into the skill average
      while team.defense counted them again. src/ is never touched; the copy
      lives in dist/. It refuses to run if the current filter is not there. */
-  if (CONTROL === 'unitdefence' || CONTROL === 'offencecycle' || CONTROL === 'meandefence') {
+  if (CONTROL === 'unitdefence' || CONTROL === 'offencecycle' || CONTROL === 'meandefence' || CONTROL === 'shortseason') {
     const enginePath = path.join(ROOT, 'src', 'lib', 'frontOffice.ts');
     /* normalise the line endings before matching. The swaps below are
        written with plain newlines, and this repo's working tree carries CRLF
@@ -688,7 +690,18 @@ try {
        refused to run on Tuesday for a reason that had nothing to do with the
        code it guards. */
     const engineSrc = normaliseEol(fs.readFileSync(enginePath, 'utf8'));
-    const swaps = CONTROL === 'meandefence'
+    const swaps = CONTROL === 'shortseason'
+      ? [
+        /* the pre 419 shape of the bug: the crossover stops after the seven
+           division round robin weeks, so every club lands on 13 games. The
+           engine's own guard is neutered too, so this proves SECTION 11
+           catches it rather than the throw doing all the work. */
+        ['for (let r = 0; r < CROSSOVER_GAMES; r += 1) {', 'for (let r = 0; r < 7; r += 1) {'],
+        ['  const short = [...played.entries()].filter(([, n]) => n !== GAMES_PER_CLUB);',
+         '  const short = [];'],
+        ['if (short.length || weeks.length !== REGULAR_WEEKS) {', 'if (short.length) {'],
+      ]
+      : CONTROL === 'meandefence'
       ? [[
         /* the exploit this round shipped and the review caught: an unweighted
            mean over however many defenders survive, so cutting a below
@@ -730,7 +743,9 @@ try {
     rewritten = rewritten.replace(/from '\.\/([A-Za-z0-9_-]+)'/g, `from '${libDir}/$1'`);
     fs.writeFileSync(patched, rewritten);
     importPath = './frontOfficeOld.ts';
-    console.log(CONTROL === 'meandefence'
+    console.log(CONTROL === 'shortseason'
+      ? '   control shortseason: the crossover cut to seven weeks and the engine guard neutered, so every club lands on 13 games'
+      : CONTROL === 'meandefence'
       ? '   control meandefence: defenceRating put back to a plain mean, the shape that paid you for cutting your worst man'
       : CONTROL === 'unitdefence'
       ? '   control unitdefence: the pre 418 engine put back, strength reads the stored team number again'
@@ -904,6 +919,95 @@ if (engine) {
   ok(10, 'the opening free agent market carries defenders',
     [...DEFENSIVE].every(g => faPos.has(g)),
     `market holds ${[...faPos].sort().join(', ')}`);
+}
+
+/* ---- 11. EVERY CLUB PLAYS SEVENTEEN GAMES (Round 419) ------------------ */
+/* buildSchedule promised six divisional games home and away plus eleven
+   crossover, seventeen for all thirty two clubs, and did not deliver it.
+   Measured over 200 built schedules before the fix: 173 of them left one club
+   short, as low as NINE games, and a club in the same week twice about 38
+   times a season. Standings sort on wins, so a club with eight fewer chances
+   to win cannot reach the playoffs and is graded by ownership against a
+   mandate that assumes it can. Nothing in the suite asked.
+   The checks below are the promise itself, not the shape of the old bug: the
+   counts, the opponents, the weeks and the variety, over several seasons
+   because one schedule proving out says nothing about the next. */
+if (engine) {
+  /* TWO HUNDRED, AND THE NUMBER IS MEASURED RATHER THAN PICKED. It was 12,
+     which is enough for a fault that appears in every schedule and useless
+     for one that appears in some. A reviewer built exactly that: a mutant
+     collapsing the crossover matching offset on 5 percent of seasons, which
+     leaves 17 games in 17 weeks with no double bookings, so the builder's own
+     guard passes and only the OPPONENT checks below can see it. At 12 seasons
+     this section caught it in 178 of 300 fence runs, a coin toss dressed as a
+     check. At 200 it caught it in 60 of 60. The whole fence runs in about
+     420ms and this costs roughly 130ms more, so the small number was buying
+     nothing. */
+  const SEASONS = 200;
+  const divOfTeam = new Map(teams.map(t => [t.abbr, t.division]));
+  let shortClubs = 0, twiceInAWeek = 0, wrongWeeks = 0;
+  let badDivisional = 0, badCrossover = 0, badMeetings = 0, lopsided = 0;
+  const fixtureLists = new Set();
+  let threw = null;
+  for (let n = 0; n < SEASONS; n += 1) {
+    let sd = 4242 + n * 7919;
+    const rng = () => { sd = (sd * 1664525 + 1013904223) >>> 0; return sd / 4294967296; };
+    let weeks;
+    try { weeks = engine.buildSchedule(rng); } catch (e) { threw = String(e.message || e); break; }
+    if (weeks.length !== 17) wrongWeeks += 1;
+    const games = weeks.flat();
+    const played = new Map(), homes = new Map(), meetings = new Map();
+    const divSeen = new Map(), crossSeen = new Map();
+    for (const w of weeks) {
+      const here = new Set();
+      for (const g of w) {
+        if (here.has(g.home) || here.has(g.away)) twiceInAWeek += 1;
+        here.add(g.home); here.add(g.away);
+        played.set(g.home, (played.get(g.home) || 0) + 1);
+        played.set(g.away, (played.get(g.away) || 0) + 1);
+        homes.set(g.home, (homes.get(g.home) || 0) + 1);
+        const k = [g.home, g.away].sort().join('|');
+        meetings.set(k, (meetings.get(k) || 0) + 1);
+        const same = divOfTeam.get(g.home) === divOfTeam.get(g.away);
+        for (const [a, b] of [[g.home, g.away], [g.away, g.home]]) {
+          const m = same ? divSeen : crossSeen;
+          if (!m.has(a)) m.set(a, new Set());
+          m.get(a).add(b);
+        }
+      }
+    }
+    for (const t of teams) {
+      if (played.get(t.abbr) !== 17) shortClubs += 1;
+      if ((divSeen.get(t.abbr) || new Set()).size !== 3) badDivisional += 1;
+      if ((crossSeen.get(t.abbr) || new Set()).size !== 11) badCrossover += 1;
+      const h = homes.get(t.abbr) || 0;
+      if (h < 6 || h > 11) lopsided += 1;
+    }
+    for (const [k, count] of meetings) {
+      const [a, b] = k.split('|');
+      if (count !== (divOfTeam.get(a) === divOfTeam.get(b) ? 2 : 1)) badMeetings += 1;
+    }
+    fixtureLists.add([...meetings.keys()].sort().join(','));
+  }
+  ok(11, 'the schedule builds at all', threw === null, threw ? threw.slice(0, 120) : '');
+  if (threw === null) {
+    ok(11, 'every club plays exactly seventeen games', shortClubs === 0,
+      `${shortClubs} club seasons off 17 across ${SEASONS} schedules`);
+    ok(11, 'no club is scheduled twice in one week', twiceInAWeek === 0,
+      `${twiceInAWeek} double bookings`);
+    ok(11, 'a season is seventeen weeks', wrongWeeks === 0, `${wrongWeeks} schedules with the wrong week count`);
+    ok(11, 'every club meets its three divisional rivals', badDivisional === 0,
+      `${badDivisional} club seasons with the wrong number of rivals`);
+    ok(11, 'every club takes eleven crossover opponents', badCrossover === 0,
+      `${badCrossover} club seasons off 11`);
+    ok(11, 'rivals meet twice and everybody else once', badMeetings === 0,
+      `${badMeetings} pairings met the wrong number of times`);
+    ok(11, 'nobody plays a lopsided share at home', lopsided === 0,
+      `${lopsided} club seasons outside 6 to 11 home games`);
+    /* and it must not be the same season every year */
+    ok(11, 'two seasons are not the same fixture list', fixtureLists.size === SEASONS,
+      `${fixtureLists.size} distinct fixture lists from ${SEASONS} schedules`);
+  }
 }
 
 /* ---- report ------------------------------------------------------------- */
