@@ -33,12 +33,12 @@ How it works:
   changing code; fix the highest-confidence production bug first, with its
   negative control. Soccer Career and Club Manager get the first deep checks.
 
-**OWNER PRIORITY, 2026-09-01, LATEST ORDER WINS:** first audit factual accuracy
-and prove every game works, then protect and improve Soccer Career because it is
-the biggest game, then make the AdSense case genuinely ready, then expand the
-Australian sports catalog substantially. NRL and AFL are important because the
-Australian audience is large, but they do not jump ahead of correctness,
-Soccer Career or AdSense readiness.
+**OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
+Keep following the master plan and choose work from evidence. Do not lose the
+larger opportunity: NRL, AFL, cricket, F1 and other underserved sports have
+millions of fans but far fewer deep browser games than soccer, basketball and
+American football. Build into that gap when the plan and verification state
+make it the right next move, especially with career and manager formats.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
