@@ -10,7 +10,7 @@ an area moves; the round numbers stay for traceability.
 |---|---|---|
 | P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 76% | Round 404: the NFL answer key covers 1970 to 2025 on the documented nflverse season files, 22008 players; the page on the engine is next (design phase 3). |
+| Grid category (Milestone 0) | 80% | Round 405: the NFL key is a table the page can read and src/lib/nflGrid.ts is the NFL configuration of the engine with measured floors; the page switch is next (Round 406). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,34 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 405. THE NFL KEY AS A TABLE, AND THE NFL GRID LIB ON THE
+  ENGINE.** Phase 3 of `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, first half; still
+  nothing a player can see changes. The key file is 4.9 MB, too big for a bundle, so it
+  is now `public.nfl_grid_players` (RLS on, public read, the migration recorded in
+  `supabase/migrations/`), loaded row for row from the committed file by the database
+  itself: `net.http_get` pulled the file from the repository at its commit and one
+  insert read the JSON, so no write policy was ever opened and nothing passed through a
+  chat. `simNflGridData` section 6 pages the table back and holds it to the file, with a
+  control that gives one player an extra title in the file copy. The key also carries
+  display names now, because 1,584 of its players share a name with another: the name
+  alone when nobody shares it, else the first of span, span plus team, span plus team
+  plus position that tells every namesake apart, chosen per name group so all of them
+  read the same way (Chris Johnson is four people and four display names); the search
+  box will offer those and a guess is matched on them, so a namesake is never a coin
+  toss. `src/lib/nflGrid.ts` is the NFL configuration of the engine over that table:
+  all 32 franchises by current code (the key already folded the Oilers into the Titans
+  and the St. Louis Rams into the Rams), twelve achievements (a title, first round,
+  undrafted, round six or later, eight position groups) and a player index by display
+  name. The floors were measured from the key rather than assumed: every pair of
+  franchises shares at least 23 players (Texans and Steelers), every achievement clears
+  at least 38 on every franchise (a Ravens or Texans quarterback), and the 1,000 yard
+  and 4,000 yard seasons stay out of the pool because they measured too thin for a cell
+  (seven Chargers, two Eagles). `scripts/simNflGrid.mjs` recomputes both floors from
+  the file with headroom under them (20 and 30), holds the pool codes to the key's, the
+  matcher to the key's fields on a sample, and the display name as the match key; its
+  control removes every Bengals title in memory. The advisors show only the exposure
+  notes every public table carries. Next: Round 406 switches `/football-grid` onto this
+  lib after a browser play, keeping its URL, copy, daily rhythm and rarity.
 - **2026-09-02, Round 404. THE KEY SEES EVERY ERA FROM 1970.** The Round 403 key
   started in 2002 because the site's roster table does, and a "played for the 49ers"
   cell that rejects Jerry Rice is not a money page. The nflverse rosters release, a

@@ -54,7 +54,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NFLKEY_CONTROL || '';
 const FILE = path.join(ROOT, 'scripts', 'data', 'nflGridPlayers.json');
-const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
@@ -250,10 +250,49 @@ console.log('5) The code map is what the season files say');
   console.log(`   ${codesLib.HISTORICAL_CODE_RULES.length} rules against ${ranges.size} codes`);
 }
 
-const own = { teams: 2, famous: 3, map: 5 }[CONTROL];
-const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5];
+section = 6;
+console.log('6) The table is the file: public.nfl_grid_players row for row');
+{
+  /* Round 405: the key is served to the page from a table loaded from this
+     committed file (the file is too big for a bundle). A refreshed file that
+     nobody reloads, or a table edited by hand, goes red here. */
+  const rows = [];
+  for (let from = 0; ; from += 1000) {
+    const page = await rest(`nfl_grid_players?select=id,display_name,teams,first_season,last_season,pos,draft_round,draft_pick,undrafted,pass4k,rush1k,rec1k,sb_wins,dup&order=id.asc&offset=${from}&limit=1000`);
+    rows.push(...page);
+    if (page.length < 1000) break;
+  }
+  const byId = new Map(rows.map(r => [r.id, r]));
+  let filePlayers = players;
+  if (CONTROL === 'table') {
+    const victim = filePlayers.find(p => p.sbWins > 0);
+    if (!victim) abort('control cannot run: no player with a title to perturb');
+    filePlayers = filePlayers.map(p => (p === victim ? { ...p, sbWins: p.sbWins + 1 } : p));
+    console.log(`   NEGATIVE CONTROL ON: ${victim.display} given an extra title in the file copy, in memory`);
+  }
+  if (rows.length !== filePlayers.length) fail(`the table holds ${rows.length} rows, the file ${filePlayers.length} players`);
+  let off = 0;
+  for (const p of filePlayers) {
+    const r = byId.get(p.id);
+    if (!r) { off += 1; if (off <= 5) fail(`${p.display} (${p.id}) is not in the table`); continue; }
+    const d = p.draft && typeof p.draft === 'object' ? p.draft : null;
+    const same = r.display_name === p.display
+      && [...r.teams].sort().join(',') === p.teams.join(',')
+      && r.first_season === p.seasons[0] && r.last_season === p.seasons[1]
+      && [...r.pos].sort().join(',') === p.pos.join(',')
+      && (r.draft_round ?? null) === (d ? d.round : null) && (r.draft_pick ?? null) === (d ? d.pick : null)
+      && r.undrafted === (p.draft === 'undrafted')
+      && r.pass4k === p.pass4k && r.rush1k === p.rush1k && r.rec1k === p.rec1k && r.sb_wins === p.sbWins && r.dup === p.dup;
+    if (!same) { off += 1; if (off <= 5) fail(`${p.display}: the table row differs from the file`); }
+  }
+  if (off > 5) fail(`${off - 5} further rows differ beyond the five shown`);
+  console.log(`   ${rows.length} table rows against ${filePlayers.length} file players, ${off} differences`);
+}
+
+const own = { teams: 2, famous: 3, map: 5, table: 6 }[CONTROL];
+const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5] + failures[6];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, map)`);
+  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, map, table)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }

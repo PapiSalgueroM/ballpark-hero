@@ -33,18 +33,6 @@ How it works:
 
 
 
-- **next: Round 405 (desktop lane, 2026-09-02). THE NFL KEY AS A TABLE, AND THE
-  NFL GRID LIB ON THE ENGINE.** Phase 3, first half, still no page change.
-  The 4.4 MB key is too big for a bundle, so it becomes public.nfl_grid_players
-  (RLS on, public read, loaded from the committed file and held to it by a
-  new section of simNflGridData). src/lib/nflGrid.ts is the NFL configuration
-  of src/lib/gridEngine.ts over that table: the 32 franchises, twelve
-  achievements the key measures at 56 or more qualifiers on every franchise
-  (a title, first round, undrafted, round six or later, eight position
-  groups), display names that carry a season span for the 1,584 shared
-  names, and a coverage fence computed from the file. The page switch is
-  Round 406 after a browser play. Files in play: the new lib, a migration,
-  the fences.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -727,6 +715,13 @@ Standing claims:
 
 ## Done
 
+- THE NFL KEY AS A TABLE, AND THE NFL GRID LIB ON THE ENGINE, Round 405
+  (desktop lane, 2026-09-02, phase 3 first half). public.nfl_grid_players
+  loaded by the database from the committed file (no write policy opened),
+  held to the file by simNflGridData section 6; display names for the 1,584
+  namesakes; src/lib/nflGrid.ts on the engine with measured floors (23 per
+  franchise pair, 38 per achievement and franchise) held by simNflGrid with a
+  control. No page change; Round 406 switches the page.
 - THE KEY SEES EVERY ERA FROM 1970, Round 404 (desktop lane, 2026-09-02).
   The nflverse season roster files 1970 to 2001 merged into the NFL answer
   key on gsis_id or name plus birth date, a season aware franchise code map
