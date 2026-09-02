@@ -19,9 +19,22 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 412.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 413.
 
 ## Active claims, 2026-09-02
+
+- **Desktop lane, next: Round 412. THE GRID ENGINE CANNOT DEAL A CELL NOBODY
+  CAN ANSWER.** Measured 2026-09-02 on the committed key: at easy difficulty
+  the NFL grid deals 57 impossible cells across 400 boards (Undrafted x First
+  Round Pick, Wide Receiver x Defensive Lineman). The daily board is normal
+  difficulty so players are safe today, but the lib exports difficulty and the
+  next round to enable it ships an unanswerable cell. The engine learns that a
+  sport's achievements can be mutually exclusive; the NFL config says they are,
+  and easy mode then places one, exactly as normal does. The NBA, MLB and NHL
+  configs do not set the flag, so their seed sequences and every published
+  archive board are untouched. Files in play: src/lib/gridEngine.ts,
+  src/lib/nflGrid.ts, scripts/simNflGrid.mjs, scripts/simGridEngine.mjs. Round
+  411 (NFL archive, other lane) is not touched.
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
   board-keyed design already approved in
