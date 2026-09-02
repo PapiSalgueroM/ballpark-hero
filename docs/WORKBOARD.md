@@ -19,9 +19,19 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 418.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 419.
 
 ## Active claims, 2026-09-02
+
+- **Codex lane, next: Round 418. FRONT DOOR CLEANUP.** Fix the raw crawler-copy
+  flash the owner captured before React paints on the home page and direct game
+  links. Keep the complete static copy visible to no-JavaScript readers and in
+  the response for crawlers, but hide it before body paint when JavaScript is
+  running, with an outcome-based browser fence and a negative control. In the
+  same crawler-facing round, move the count-free social card to a fresh
+  same-domain filename so Bing stops reusing the obsolete "10+" cache key,
+  correct its remaining sign-up wording, update every social-image reference,
+  and regenerate the asset through the logo generator only.
 
 - **Desktop lane, next: Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE,
   PART ONE: THE BAKE.** The owner's P1 item 12 from 2026-08-28, the last one
@@ -97,6 +107,24 @@ cache-key problem: keep count-free copy, correct the remaining misleading
 "No sign-up" line, ship the generated card at a fresh same-domain filename,
 update the root and per-route crawler references, then re-ping the home page.
 Do not hand edit the raster or print the current 118-game count into it.
+
+**OWNER REPORT, 2026-09-02, RAW COPY FLASH BEFORE THE APP.** The owner captured
+the static homepage crawler copy filling the screen before React mounted and
+does not want visitors to see it. The same deliberate dimmed fallback exists
+on direct game links. Round 418 owns the cross-route fix. The copy must remain
+complete for no-JavaScript readers and raw crawlers, and a JavaScript visitor
+must never paint it while waiting for the app bundle.
+
+**OWNER REQUEST, 2026-09-02, GAME-FIRST PAGE FLOW.** On every game page, show
+the playable game first, keep one small top-right question-mark control that
+reopens complete instructions, and auto-open those instructions on the first
+visit only. Below gameplay, keep give-up where that game has one, then show
+related game suggestions and a clear Report a problem action before the long
+guide. Keep the footer report as a fallback until the shared placement is
+proved across all 118 active games. The existing relay already stores reports
+in the admin queue and attempts server-side email without exposing the address;
+inbox delivery still depends on the pending FormSubmit activation. This is the
+next shared game-shell round after Round 418.
 
 **HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
 ROADMAP.** This did not replace the priority list when it was recorded. The
