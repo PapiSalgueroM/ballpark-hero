@@ -2625,6 +2625,18 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 398. THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI.** The
+  biggest match of the year was not in the lineup game. Spain's 4-2-3-1 and
+  Argentina's 4-4-2 from the July 19 final are lineups 127 and 128, both
+  elevens agreed name for name by ESPN's match summary (the site's own scores
+  host) and the Wikipedia final article's lineup table, compared
+  programmatically on 2026-09-01. The blank candidates (Porro, Oyarzabal,
+  Baena; Tagliafico, Montiel, Mac Allister) are players whose club did not
+  move in the summer window, so the club label cannot be stale; clubs come
+  from the market value table's 2026 rows. Four names were written the way
+  the file already spells them (`simMissingXi` section 1 holds one spelling
+  per man, and it caught the accented duplicates on the first run).
+  `simMissingXi` and `simMissingXiReach` green, tsc zero, build green.
 - **2026-09-01, Round 395. THE 2026 BRACKET MEETS THE REAL TOURNAMENT.** The
   featured "2026 Bracket" tile (`/world-cup-bracket`, marked new, 17 completions
   today) still asked players to predict a World Cup that ended on July 19, and

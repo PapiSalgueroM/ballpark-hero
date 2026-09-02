@@ -5576,6 +5576,76 @@ export const LINEUPS: Lineup[] = [
     source: 'Wikipedia 2025 UCL final raw wikitext team sheet + goal list (Hakimi 12, Doue 20+63, Kvaratskhelia 73, Mayulu 86; Doue MOTM; record 5-0 final margin), fetched 2026-07-10.',
   },
 
+
+  // 127. 2026 World Cup Final - Spain 1-0 Argentina (AET). Round 398.
+  // Ferran Torres, a 62nd minute substitute, scored the only goal in extra time.
+  // Both elevens agreed name for name by ESPN's match summary (event 760517,
+  // the site's own scores host) and the Wikipedia final article's lineup table,
+  // compared on 2026-09-01. Clubs at the time from the market value table's
+  // 2026 rows; the three blank candidates are players whose club did not
+  // change in the summer 2026 window, so the label cannot be stale.
+  {
+    id: 'wc-2026-final-spain',
+    dateLabel: '2026 World Cup Final',
+    competition: 'FIFA World Cup',
+    matchDate: '2026-07-19',
+    team: 'Spain',
+    opponent: 'Argentina',
+    scoreLine: 'Spain 1-0 Argentina, AET',
+    venue: 'MetLife Stadium, East Rutherford',
+    formationLabel: '4-2-3-1',
+    slots: [
+      GK('Unai Simon'),
+      { position: 'RB', name: 'Pedro Porro', x: 84, y: 70 },
+      { position: 'CB', name: 'Pau Cubarsí', x: 62, y: 74 },
+      { position: 'CB', name: 'Aymeric Laporte', x: 38, y: 74 },
+      { position: 'LB', name: 'Marc Cucurella', x: 16, y: 70 },
+      { position: 'CDM', name: 'Rodri', x: 62, y: 56 },
+      { position: 'CDM', name: 'Fabián Ruiz', x: 38, y: 56 },
+      { position: 'CAM', name: 'Dani Olmo', x: 50, y: 40 },
+      { position: 'RW', name: 'Lamine Yamal', x: 80, y: 26 },
+      { position: 'LW', name: 'Álex Baena', x: 20, y: 26 },
+      { position: 'ST', name: 'Mikel Oyarzabal', x: 50, y: 16 },
+    ],
+    blankCandidates: [
+      { name: 'Pedro Porro', slotIndex: 1, nationality: 'Spain', clubAtTime: 'Tottenham Hotspur' },
+      { name: 'Mikel Oyarzabal', slotIndex: 10, nationality: 'Spain', clubAtTime: 'Real Sociedad' },
+      { name: 'Álex Baena', slotIndex: 9, nationality: 'Spain', clubAtTime: 'Atlético de Madrid' },
+    ],
+    source: "ESPN match summary lineups cross-checked against the Wikipedia final article's lineup table, 2026-09-01; clubs from the market value table's 2026 rows.",
+  },
+
+  // 128. 2026 World Cup Final - the LOSING side, Argentina 0-1 Spain (AET).
+  {
+    id: 'wc-2026-final-argentina',
+    dateLabel: '2026 World Cup Final',
+    competition: 'FIFA World Cup',
+    matchDate: '2026-07-19',
+    team: 'Argentina',
+    opponent: 'Spain',
+    scoreLine: 'Spain 1-0 Argentina, AET',
+    venue: 'MetLife Stadium, East Rutherford',
+    formationLabel: '4-4-2',
+    slots: [
+      GK('Emiliano Martinez'),
+      { position: 'RB', name: 'Gonzalo Montiel', x: 84, y: 70 },
+      { position: 'CB', name: 'Cristian Romero', x: 62, y: 74 },
+      { position: 'CB', name: 'Lisandro Martinez', x: 38, y: 74 },
+      { position: 'LB', name: 'Nicolas Tagliafico', x: 16, y: 70 },
+      { position: 'RM', name: 'Rodrigo De Paul', x: 82, y: 48 },
+      { position: 'CM', name: 'Enzo Fernández', x: 60, y: 52 },
+      { position: 'CM', name: 'Alexis Mac Allister', x: 40, y: 52 },
+      { position: 'LM', name: 'Nico González', x: 18, y: 48 },
+      { position: 'ST', name: 'Lionel Messi', x: 62, y: 18 },
+      { position: 'ST', name: 'Julián Alvarez', x: 38, y: 18 },
+    ],
+    blankCandidates: [
+      { name: 'Nicolas Tagliafico', slotIndex: 4, nationality: 'Argentina', clubAtTime: 'Olympique Lyon' },
+      { name: 'Gonzalo Montiel', slotIndex: 1, nationality: 'Argentina', clubAtTime: 'CA River Plate' },
+      { name: 'Alexis Mac Allister', slotIndex: 7, nationality: 'Argentina', clubAtTime: 'Liverpool FC' },
+    ],
+    source: "ESPN match summary lineups cross-checked against the Wikipedia final article's lineup table, 2026-09-01; clubs from the market value table's 2026 rows.",
+  },
 ];
 
 /**

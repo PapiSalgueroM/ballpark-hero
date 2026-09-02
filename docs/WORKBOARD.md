@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 398.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 399.
 
 ## Active claims, 2026-09-01
 
@@ -696,6 +696,13 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE 2026 FINAL'S TWO ELEVENS JOIN MISSING XI, Round 398 (desktop lane,
+  2026-09-01, built before the Round 396 corrective claim landed, numbered after
+  it, shipped in one commit). Spain's and Argentina's starting elevens from the
+  July 19 final, agreed name for name by ESPN's match summary and the Wikipedia
+  lineup table; blank candidates chosen among players whose club did not move
+  this summer. simMissingXi and simMissingXiReach green.
 
 - THE 2026 BRACKET MEETS THE REAL TOURNAMENT, Round 395 (desktop lane,
   2026-09-01, claimed and shipped in one commit, the other lane was idle). The
