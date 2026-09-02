@@ -119,6 +119,7 @@ export function useSoccerGrid() {
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [validating, setValidating] = useState(false);
+  const [checkingDown, setCheckingDown] = useState(false);
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
   const correctActions = useMemo(
@@ -313,9 +314,15 @@ export function useSoccerGrid() {
             addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
           }
         } else if (data?.unverified) {
-          // Answer-checking is temporarily offline, don't burn a guess or
-          // flash "wrong"; ask the player to retry.
-          toast.error("Couldn't verify that answer, please try again.");
+          /* Round 407: the validator says which it was. A blip is worth a
+             retry; the day's allowance is not, and the guess was never
+             counted either way. */
+          if (data?.exhausted) {
+            setCheckingDown(true);
+            toast.error('Answer checking has used up its allowance for today. This guess was not counted; your board is saved, come back tomorrow.');
+          } else {
+            toast.error("Couldn't verify that answer, please try again.");
+          }
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);
@@ -342,7 +349,7 @@ export function useSoccerGrid() {
   return {
     puzzle, activeCell, setActiveCell, submitGuess,
     validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol,
-    isLoading, isLoadingPool,
+    isLoading, isLoadingPool, checkingDown,
     // Board rendering: overtimeDisplayCells layers Overtime fills on top of
     // the frozen main cells; plain `cells` is the main-game-only view.
     cells: overtimeDisplayCells,

@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 92% | Round 406: the money page no longer depends on a free tier AI that runs out of quota; every guess is judged in memory. |
+| P0 production bugs | 94% | Round 407: the soccer and college grids say when the day's AI allowance is gone instead of inviting endless retries; the NFL grid no longer uses the AI at all (406). |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2687,6 +2687,26 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 407. THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS
+  GONE.** Round 379's third option, the one still open after the cache work: the
+  soccer and college grids validate through a free tier AI, Round 378 measured its daily
+  quota running out after a few dozen new guesses, and from then until midnight every
+  guess came back "Couldn't verify, please try again", which is true for a blip and a
+  lie for the rest of the day, so a player kept clicking into a wall. Now a refusal says
+  which it was. Both validators retry a 429 once (the college one already did, the
+  soccer one now matches), return `exhausted: true` on a second 429 with a refusal that
+  names the allowance, and stay fail closed either way: nothing unverified is ever
+  accepted, no guess is ever counted. The hooks read the flag, show one honest message
+  (the guess was not counted, the board is saved, come back tomorrow), remember it for
+  the session, and the pages put that notice where the search box was so nobody is
+  invited to try again a hundred times. The NFL grid needs none of this since Round 406;
+  it invokes no edge function at all. `scripts/simQuotaHonesty.mjs` holds the four pieces
+  as code (the validators' helper, retry and order of refusals; the hooks' flag, state and
+  message; the pages' notice; the NFL hook's absence of any edge call), with a control
+  that removes the second 429 branch and one that removes the hook's exhausted branch.
+  Both validators redeployed (soccer v15, college v12) and the repo copies are the
+  deployed code. Gates: tsc zero, simQuotaHonesty with both controls, simGridRarity,
+  simNoRivalNames, build green.
 - **2026-09-02, Round 406. THE NFL GRID PAGE ON THE ENGINE.** Phase 3 of
   `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, the half a player can see. `/football-grid`
   keeps its URL, its copy shape, its daily rhythm, its 15 guess budget, the unlimited

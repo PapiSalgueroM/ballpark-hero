@@ -35,16 +35,6 @@ How it works:
 
 
 
-- **next: Round 407 (desktop lane, 2026-09-02). THE TWO AI GRIDS TELL THE TRUTH
-  WHEN THE DAY'S QUOTA IS GONE.** Round 379's third option, still open: the
-  soccer and college grids answer "try again" forever once the free tier AI
-  has spent its day, and a player keeps clicking into a wall. The validators
-  now say which it was (a blip, or the day's quota answered 429 twice) and
-  the hooks stop inviting a retry that cannot succeed: one honest message,
-  remembered for the session, and the guess never burned. Files in play:
-  the soccer and college validators (redeployed), useSoccerGrid.ts,
-  useCollegeGrid.ts, a source fence. The NFL grid no longer has this problem
-  (Round 406).
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -727,6 +717,12 @@ Standing claims:
 
 ## Done
 
+- THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS GONE, Round 407
+  (desktop lane, 2026-09-02, Round 379's third option). The soccer and
+  college validators return exhausted on a second 429 with a refusal that
+  names the allowance (redeployed, soccer v15 and college v12); the hooks show
+  one honest message, remember it, and the pages replace the search box with
+  the notice. Fail closed either way. simQuotaHonesty with two controls.
 - THE NFL GRID PAGE ON THE ENGINE, Round 406 (desktop lane, 2026-09-02, phase
   3 of docs/designs/NFL-GRID-ENGINE-DESIGN.md). /football-grid builds its
   board from the date seed and judges every guess in memory against the

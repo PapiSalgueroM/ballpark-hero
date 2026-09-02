@@ -124,8 +124,11 @@ serve(async (req) => {
   }
 
   // FAIL CLOSED: when the model can't verify, do NOT accept.
-  const unverified = () =>
-    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
+  /* Round 407: a refusal says which it was. A blip is worth a retry; the
+     day's allowance (a 429 twice) is not, and the page stops inviting one.
+     Still fail closed either way: nothing unverified is ever accepted. */
+  const unverified = (exhausted = false) =>
+    json({ valid: false, unverified: true, exhausted, reason: exhausted ? "Answer checking has used up its allowance for today, so this guess was not counted. Please come back tomorrow." : "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   try {
@@ -183,6 +186,7 @@ serve(async (req) => {
       await new Promise((r) => setTimeout(r, 1200));
       resp = await callAI();
     }
+    if (resp.status === 429) return unverified(true);
     if (!resp.ok) return unverified();
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content?.trim() || "";

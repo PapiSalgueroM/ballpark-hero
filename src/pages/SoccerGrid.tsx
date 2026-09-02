@@ -27,6 +27,7 @@ const SoccerGrid = () => {
     validating, gameStatus, guessesLeft, correctCount, rarityScore, isLoading, isLoadingPool,
     settings, setDifficulty, setTimerMode, timeLeft, timeUp,
     isOvertime, overtimeActive, startOvertime, overtimeCorrectCount,
+    checkingDown,
   } = useSoccerGrid();
 
   type CareerPlayerSlim = { name: string; nationality: string; position: string };
@@ -212,7 +213,11 @@ const SoccerGrid = () => {
                   Find a player who: <span className="text-primary font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
                   + <span className="text-primary font-semibold">{puzzle.cols[activeCell % 3].label}</span>
                 </p>
-                <SoccerGridSearch onSelect={submitGuess} disabled={validating} players={careerPlayerList} />
+                {checkingDown ? (
+                  <p className="text-center text-sm text-muted-foreground">Answer checking has used up its allowance for today. Your board is saved; come back tomorrow.</p>
+                ) : (
+                  <SoccerGridSearch onSelect={submitGuess} disabled={validating} players={careerPlayerList} />
+                )}
               </div>
             )}
 

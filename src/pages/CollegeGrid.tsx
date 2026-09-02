@@ -27,6 +27,7 @@ const CollegeGrid = () => {
     correctCount,
     rarityScore,
     isLoading,
+    checkingDown,
   } = useCollegeGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -90,7 +91,11 @@ const CollegeGrid = () => {
                   Find a player who: <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
                   + <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
                 </p>
-                <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
+                {checkingDown ? (
+                  <p className="text-center text-sm text-muted-foreground">Answer checking has used up its allowance for today. Your board is saved; come back tomorrow.</p>
+                ) : (
+                  <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
+                )}
               </div>
             )}
 
