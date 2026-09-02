@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 401.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 402.
 
 ## Active claims, 2026-09-01
 
@@ -28,6 +28,15 @@ How it works:
   browser route sweep from committed `main`; classify every failure before
   changing code; fix the highest-confidence production bug first, with its
   negative control. Soccer Career and Club Manager get the first deep checks.
+
+- **next: Round 401 (desktop lane, 2026-09-02). THE NFL GRID ON A SHARED, DATA
+  BACKED ENGINE, PHASE 1.** Milestone 0, contract Task 2 (and the road to Task
+  3's archive). Recon first: every grid variant mapped, the NFL data the site
+  already holds measured through PostgREST, then the design and the first
+  shippable slice. The money page keeps its URL, copy and daily rhythm. Files
+  in play: src/lib and src/pages for the seven grids, GridArchive, the NFL
+  pool under scripts/data, the grid harnesses. Codex's Round 400 audit runs on
+  committed main and is not touched.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -588,10 +597,9 @@ clue from the live tables and fails on any disagreement.
   the rows they float over; rows scroll clear, the buttons are owner approved
   (Rounds 80, 81, 129, 159), and a real fix is an auto-hide-on-scroll design
   decision, not a padding hack.
-- Queued from the 08-28 review, Club Manager residue: era Champions League pools are 16
-  clubs so era saves play 4 groups, not the real 8. Growing each era's euro pool to 28
-  verified era participants (the real group stage fields are documented facts) is a data
-  round. The era-id nation fence SHIPPED in Round 339 (simEraWorldTables section 6).
+- (Retired 2026-09-02: the era Champions League item that sat here, 16 club pools and
+  4 groups, had already SHIPPED in Round 342, which carries the verified 32 club field
+  per era and draws the real eight groups. Nothing left to do on it.)
 - Data follow up from Round 315: 247 players whose latest market value row is 2024 or
   older at a 30m+ peak. Most are honestly retired or in untracked leagues, but Rodri,
   Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
