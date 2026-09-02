@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 405.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 406.
 
 ## Active claims, 2026-09-01
 
@@ -32,6 +32,19 @@ How it works:
 
 
 
+
+- **next: Round 405 (desktop lane, 2026-09-02). THE NFL KEY AS A TABLE, AND THE
+  NFL GRID LIB ON THE ENGINE.** Phase 3, first half, still no page change.
+  The 4.4 MB key is too big for a bundle, so it becomes public.nfl_grid_players
+  (RLS on, public read, loaded from the committed file and held to it by a
+  new section of simNflGridData). src/lib/nflGrid.ts is the NFL configuration
+  of src/lib/gridEngine.ts over that table: the 32 franchises, twelve
+  achievements the key measures at 56 or more qualifiers on every franchise
+  (a title, first round, undrafted, round six or later, eight position
+  groups), display names that carry a season span for the 1,584 shared
+  names, and a coverage fence computed from the file. The page switch is
+  Round 406 after a browser play. Files in play: the new lib, a migration,
+  the fences.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
