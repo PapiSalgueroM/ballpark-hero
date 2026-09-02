@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 95% | Round 408: Transfer Path rejects any player already in the chain at the hook boundary and gives a truthful duplicate message. |
+| P0 production bugs | 95% | Round 410: Footle keeps its complete bundled fallback whenever either half of the live pool fails, so a daily target cannot fall outside the searchable pool. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2727,6 +2727,23 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 410. FOOTLE LIVE DATA IS ALL TIERS OR THE COMPLETE
+  FALLBACK.** The full suite exposed a real partial-fetch path, separate from
+  its one transient live-tier sample: the famous player query could succeed
+  while either half of the obscure query failed, and
+  `fetchFootlePlayerPool` would still return the famous rows. Its caller then
+  accepted that incomplete live pool instead of the complete bundled fallback.
+  On an insane day the fixed target could exist only in the fallback while the
+  search list held no insane players. The fetch now returns an empty result
+  before mapping any live rows when the obscure batch fails, preserving its
+  atomic contract. The behavior test mocks only the Supabase query boundary
+  and calls the real fetch: partial failure returns no pool, complete success
+  keeps famous plus insane tiers, and a famous-query error keeps the old
+  fallback behavior. `simFootleAtomicPool` runs that test and its temporary
+  old-path control proves the famous-only regression is caught. The focused
+  daily check still sees a healthy 1,507-player source with easy, hard and
+  insane live-only coverage. No player data, tier boundaries, AdSense files or
+  daily seed logic changed.
 - **2026-09-02, Round 409. SEEDED HARNESSES MEAN THE SAME THING IN EVERY
   CHECKOUT.** The full Round 408 suite exposed a test-infrastructure defect,
   not a production regression: `seedRandom.mjs` said it keyed each default

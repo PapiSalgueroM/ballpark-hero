@@ -19,20 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 411.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 412.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 410. Footle pool loads atomically.** The full
-  suite reproduced an obscure-player query failure while the famous-player
-  query succeeded. `fetchFootlePlayerPool` returned that partial pool even
-  though its contract says any error returns an empty result so the hook keeps
-  the complete bundled fallback. On an insane day that can leave the target
-  outside the searchable pool. Add a mocked behavior test, return no partial
-  pool when either branch fails, prove the old path through a negative
-  control, and rerun the live tier check under the full suite. Production data
-  itself is healthy at 1,507 rows. NFL Grid archive phase 4 follows as Round
-  411.
+- **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
+  board-keyed design already approved in
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`: a discoverable archive, one route
+  per distinct retired board, complete answer keys, aggregate recorded rarity,
+  and replay that cannot write daily saves, scores, completions or selection
+  rows. Include board-key collision and retirement safety, crawler integration,
+  help, and a negative-control harness. Do not reopen private selection rows or
+  invent community data where no aggregate exists.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
@@ -743,6 +741,16 @@ Standing claims after Round 400:
 
 ## Done
 
+- FOOTLE LIVE DATA FAILS AS ONE COMPLETE POOL, Round 410 (desktop lane,
+  2026-09-02). The famous query could succeed while either half of the obscure
+  query failed, leaving a famous-only pool even though the fetch contract says
+  any error keeps the complete bundled fallback. On an insane day that could
+  put the fixed daily target outside the searchable player list. The fetch now
+  returns an empty result before mapping any live rows when the obscure batch
+  fails. A real-function test covers partial failure, full success with an
+  insane row, and the existing famous-query fallback. simFootleAtomicPool
+  carries an old-path negative control, and the live tier check confirms the
+  healthy source still supplies all three tiers.
 - SHARED SIMULATION SEEDS NO LONGER CHANGE WITH THE CHECKOUT FOLDER, Round
   409 (desktop lane, 2026-09-02). The shared helper promised one deterministic
   stream per harness filename but hashed the absolute launcher path. The same
