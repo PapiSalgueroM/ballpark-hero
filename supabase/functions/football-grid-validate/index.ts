@@ -65,6 +65,35 @@ const POSITIONS: Record<string, string[]> = {
   "punter": ["p"],
 };
 
+/* Round 401: a college label matches a school exactly, never by substring.
+   The old test (c.includes(l) || l.includes(c)) accepted an Ohio player for
+   Ohio State, a Florida State player for Florida, a Miami (Ohio) player for
+   Miami. The spellings on the right are the stints table's own, normalised;
+   a college label this list does not know still has to match a school
+   exactly, and a miss falls through to the AI as before. */
+const COLLEGE_ALIASES: Record<string, string[]> = {
+  "alabama": ["alabama"],
+  "auburn": ["auburn"],
+  "clemson": ["clemson"],
+  "florida": ["florida"],
+  "florida state": ["florida state"],
+  "georgia": ["georgia"],
+  "lsu": ["louisiana state", "lsu"],
+  "miami": ["miami", "miami fla", "miami fl"],
+  "michigan": ["michigan"],
+  "notre dame": ["notre dame"],
+  "ohio state": ["ohio state"],
+  "oklahoma": ["oklahoma"],
+  "oregon": ["oregon"],
+  "penn state": ["penn state"],
+  "stanford": ["stanford"],
+  "tennessee": ["tennessee"],
+  "texas": ["texas"],
+  "texas a m": ["texas a m", "texas a amp m"],
+  "usc": ["southern california", "usc"],
+  "wisconsin": ["wisconsin"],
+};
+
 type Verdict = true | false | "unknown";
 interface Stint {
   player_name: string; team: string; position: string | null; college: string | null;
@@ -98,7 +127,7 @@ serve(async (req) => {
   // FAIL CLOSED: when the model can't verify, do NOT accept. Return an explicit
   // unverified verdict so the grid shows "couldn't verify, try again".
   const unverified = () =>
-    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null }, corsHeaders);
+    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   try {
@@ -138,8 +167,9 @@ serve(async (req) => {
           if (have.length === 0) return "unknown";
           return have.some((p) => want.includes(p)) ? true : "unknown";
         }
-        const colleges = stints.map((s) => norm(s.college ?? "")).filter(Boolean);
-        if (colleges.length > 0 && colleges.some((c) => c === l || c.includes(l) || l.includes(c))) return true;
+        const colleges = stints.flatMap((s) => (s.college ?? "").split(";")).map((c) => norm(c)).filter(Boolean);
+        const wanted = COLLEGE_ALIASES[l] ?? [l];
+        if (colleges.length > 0 && colleges.some((c) => wanted.includes(c))) return true;
         return "unknown";
       };
 

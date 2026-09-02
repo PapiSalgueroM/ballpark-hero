@@ -125,7 +125,7 @@ serve(async (req) => {
 
   // FAIL CLOSED: when the model can't verify, do NOT accept.
   const unverified = () =>
-    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null }, corsHeaders);
+    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   try {

@@ -2,23 +2,26 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /**
- * Soccer 3x3 grid validator (2026-07-15 rewrite, v2).
+ * Soccer 3x3 grid validator (2026-08-13 v13).
  *
  * Resolution order:
  *   1. verified-verdict cache (Postgres)
- *   2. DETERMINISTIC check against public.soccer_player_club_stints
- *      (80,577 stints / 27,850 players / 4,923 clubs, 2004-2026)
+ *   2. DETERMINISTIC checks:
+ *      a. "YYYY World Cup Winner" against public.world_cup_players squad rows
+ *         (complete winner squads 1970-2026, era-correct nationality strings).
+ *         The squad row also settles the paired POSITION criterion when the
+ *         player is missing from the stints table (v13).
+ *      b. club / nationality / position against public.soccer_player_club_stints
  *   3. AI (free Gemini) only for what the data cannot settle
  *   4. FAIL CLOSED when the model can't verify (2026-07-22): do NOT accept an
- *      unchecked answer. Return an explicit unverified verdict so the client
- *      shows "couldn't verify, try again" instead of silently accepting.
+ *      unchecked answer.
  *
- * Negative-safety: player_market_values starts in 2004, so a bare 2004 debut is
- * ambiguous - the player may have played earlier (Rijkaard, Hagi) and must NOT
- * be rejected. We therefore treat a career as fully covered when the player
- * either debuted in 2005+, or debuted at the 2004 floor while 21 or younger
- * (Messi was 16, Ronaldo 18, Sneijder 19 - those careers plainly start here).
- * Everything still uncertain falls through and is never falsely rejected.
+ * v12 fix (four user reports, sg-622/636/678/685): honours labels like
+ * "2002 World Cup Winner" used to fall through parseCriterion into the
+ * NATIONALITY matcher, which returned a hard cached FALSE. Roberto Carlos as
+ * a 2002 winner was rejected by string comparison, not by football. Honours
+ * now route to their own deterministic check (World Cup) or the AI, never to
+ * the nationality matcher.
  */
 
 const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
@@ -83,13 +86,24 @@ const DEMONYM: Record<string, string> = {
   albanian: "albania", bulgarian: "bulgaria", israeli: "israel", iranian: "iran",
 };
 
+/** Indisputable public record, nationality strings matching world_cup_players
+ *  era naming exactly (West Germany through 1990, Germany from 1994). */
+const WC_WINNER_BY_YEAR: Record<string, string> = {
+  "1970": "Brazil", "1974": "West Germany", "1978": "Argentina", "1982": "Italy",
+  "1986": "Argentina", "1990": "West Germany", "1994": "Brazil", "1998": "France",
+  "2002": "Brazil", "2006": "Italy", "2010": "Spain", "2014": "Germany",
+  "2018": "France", "2022": "Argentina", "2026": "Spain",
+};
+
 type Verdict = true | false | "unknown";
 interface Stint {
   player_name: string; club: string; nationality: string | null; position: string | null;
   first_year: number; last_year: number; debut_year: number | null; debut_age: number | null;
 }
 
-function parseCriterion(label: string): { kind: "club" | "league" | "position" | "nationality"; value: string } {
+interface Criterion { kind: "club" | "league" | "position" | "nationality" | "wc_winner" | "honour"; value: string }
+
+function parseCriterion(label: string): Criterion {
   const l = label.trim();
   const club = l.match(/^played for\s+(.+)$/i);
   if (club) return { kind: "club", value: club[1] };
@@ -99,16 +113,22 @@ function parseCriterion(label: string): { kind: "club" | "league" | "position" |
   if (/defender|\(DEF\)/i.test(l)) return { kind: "position", value: "def" };
   if (/midfield|\(MID\)/i.test(l)) return { kind: "position", value: "mid" };
   if (/forward|striker|winger|\(FWD\)/i.test(l)) return { kind: "position", value: "fwd" };
+  // v12: honours must NEVER fall into the nationality matcher
+  const wc = l.match(/^(\d{4})\s+world cup winner$/i);
+  if (wc && WC_WINNER_BY_YEAR[wc[1]]) return { kind: "wc_winner", value: wc[1] };
+  if (/world cup|champions league|ballon|golden boot|golden glove|100\+?\s*caps|winner|\bwon\b|champion|title|trophy|top scorer/i.test(l)) {
+    return { kind: "honour", value: l };
+  }
   return { kind: "nationality", value: l };
 }
 
 function positionBucket(pos: string | null): string | null {
   const p = norm(pos ?? "");
   if (!p) return null;
-  if (p.includes("keeper")) return "gk";
-  if (p.includes("back") || p.includes("defend")) return "def";
-  if (p.includes("midfield")) return "mid";
-  if (p.includes("forward") || p.includes("winger") || p.includes("striker")) return "fwd";
+  if (p === "gk" || p.includes("keeper")) return "gk";
+  if (p === "df" || p.includes("back") || p.includes("defend")) return "def";
+  if (p === "mf" || p.includes("midfield")) return "mid";
+  if (p === "fw" || p.includes("forward") || p.includes("winger") || p.includes("striker")) return "fwd";
   return null;
 }
 
@@ -118,7 +138,8 @@ function clubMatches(stintClub: string, wanted: string): boolean {
   return a === b || a.includes(b) || b.includes(a);
 }
 
-function evaluate(crit: { kind: string; value: string }, stints: Stint[], careerComplete: boolean): Verdict {
+function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean): Verdict {
+  if (crit.kind === "wc_winner" || crit.kind === "honour") return "unknown"; // resolved elsewhere
   if (stints.length === 0) return "unknown";
   if (crit.kind === "club") {
     if (stints.some((s) => clubMatches(s.club, crit.value))) return true;
@@ -129,14 +150,43 @@ function evaluate(crit: { kind: string; value: string }, stints: Stint[], career
     const have = stints.map((s) => norm(s.nationality ?? "")).filter(Boolean);
     if (have.length === 0) return "unknown";
     if (have.some((n) => n === want || n.includes(want) || want.includes(n))) return true;
-    return false; // nationality does not change over a career
+    return false;
   }
   if (crit.kind === "position") {
     const buckets = stints.map((s) => positionBucket(s.position)).filter(Boolean) as string[];
     if (buckets.length === 0) return "unknown";
-    return buckets.includes(crit.value) ? true : "unknown"; // players change roles; never hard-reject
+    return buckets.includes(crit.value) ? true : "unknown";
   }
-  return "unknown"; // league: no league data held
+  return "unknown";
+}
+
+/** Deterministic "YYYY World Cup Winner": squad membership in that year's
+ *  winning squad. Squads in the table are complete (22-26 rows per winner),
+ *  so "not in the squad" is a real false, not a data gap. Also returns the
+ *  matched squad row's position so a paired position criterion can be settled
+ *  even when the player is missing from the stints table (v13). */
+async function checkWorldCupWinner(year: string, player: string): Promise<{ verdict: Verdict; properName: string | null; squadPos: string | null }> {
+  const nation = WC_WINNER_BY_YEAR[year];
+  if (!nation) return { verdict: "unknown", properName: null, squadPos: null };
+  try {
+    const { data, error } = await sb.from("world_cup_players")
+      .select("player_name, position")
+      .eq("world_cup_year", Number(year))
+      .eq("nationality", nation)
+      .limit(40);
+    if (error) return { verdict: "unknown", properName: null, squadPos: null };
+    const squad = (data ?? []) as { player_name: string; position: string | null }[];
+    if (squad.length < 15) return { verdict: "unknown", properName: null, squadPos: null }; // incomplete squad, do not judge
+    const guess = norm(player);
+    const hit = squad.find((r) => {
+      const nn = norm(r.player_name);
+      return nn === guess || nn.includes(guess) || guess.includes(nn);
+    });
+    if (hit) return { verdict: true, properName: hit.player_name, squadPos: hit.position };
+    return { verdict: false, properName: null, squadPos: null };
+  } catch {
+    return { verdict: "unknown", properName: null, squadPos: null };
+  }
 }
 
 serve(async (req) => {
@@ -161,11 +211,9 @@ serve(async (req) => {
     return json({ valid: false, error: "Bad request" }, 400);
   }
 
-  // FAIL CLOSED: when the model can't verify, do NOT accept the answer. Return an
-  // explicit unverified verdict (valid:false + unverified:true) so the grid shows
-  // "couldn't verify, try again" and never records it as a wrong guess.
+  // FAIL CLOSED: when the model can't verify, do NOT accept.
   const unverified = () =>
-    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null });
+    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again.", fullName: null });
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   try {
@@ -181,40 +229,65 @@ serve(async (req) => {
       .ilike("player_name", sanitized.player).limit(60);
     let stints = (data ?? []) as Stint[];
 
-    // surname fallback, only when it resolves to exactly one player
     if (stints.length === 0 && sanitized.player.trim().split(/\s+/).length === 1) {
       const { data: bySurname } = await sb.from("soccer_player_club_stints").select(COLS)
         .ilike("player_name", `% ${sanitized.player.trim()}`).limit(60);
-      const names = new Set((bySurname ?? []).map((r: any) => norm(r.player_name)));
+      const names = new Set((bySurname ?? []).map((r: { player_name: string }) => norm(r.player_name)));
       if (names.size === 1) stints = (bySurname ?? []) as Stint[];
     }
 
-    if (stints.length > 0) {
-      const debutYear = stints[0].debut_year ?? Math.min(...stints.map((s) => s.first_year));
-      const debutAge = stints[0].debut_age;
-      const careerComplete = debutYear >= 2005 || (debutAge != null && debutAge <= 21);
+    const rowCrit = parseCriterion(sanitized.row);
+    const colCrit = parseCriterion(sanitized.col);
 
-      const rowV = evaluate(parseCriterion(sanitized.row), stints, careerComplete);
-      const colV = evaluate(parseCriterion(sanitized.col), stints, careerComplete);
-      const properName = stints[0].player_name;
+    const debutYear = stints.length ? (stints[0].debut_year ?? Math.min(...stints.map((s) => s.first_year))) : 0;
+    const debutAge = stints.length ? stints[0].debut_age : null;
+    const careerComplete = stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
 
-      if (rowV === true && colV === true) {
-        const verdict = { valid: true, reason: "Verified from career records.", fullName: properName };
-        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
-        return json(verdict);
+    let rowV = evaluate(rowCrit, stints, careerComplete);
+    let colV = evaluate(colCrit, stints, careerComplete);
+    let properName = stints.length ? stints[0].player_name : null;
+
+    // v12: deterministic World Cup winner resolution, independent of stints.
+    // v13: the winner squad row also settles a paired position criterion when
+    // the stints table has nothing on the player.
+    let squadPos: string | null = null;
+    if (rowCrit.kind === "wc_winner") {
+      const r = await checkWorldCupWinner(rowCrit.value, sanitized.player);
+      rowV = r.verdict;
+      if (!properName && r.properName) properName = r.properName;
+      if (r.squadPos) squadPos = r.squadPos;
+    }
+    if (colCrit.kind === "wc_winner") {
+      const c = await checkWorldCupWinner(colCrit.value, sanitized.player);
+      colV = c.verdict;
+      if (!properName && c.properName) properName = c.properName;
+      if (c.squadPos) squadPos = c.squadPos;
+    }
+    if (squadPos && stints.length === 0) {
+      const bucket = positionBucket(squadPos);
+      if (bucket) {
+        if (rowCrit.kind === "position" && rowV === "unknown") rowV = rowCrit.value === bucket ? true : "unknown";
+        if (colCrit.kind === "position" && colV === "unknown") colV = colCrit.value === bucket ? true : "unknown";
       }
-      if (rowV === false || colV === false) {
-        const which = rowV === false ? sanitized.row : sanitized.col;
-        const verdict = { valid: false, reason: `${properName} does not satisfy "${which}".`, fullName: properName };
-        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
-        return json(verdict);
-      }
+    }
+
+    if (rowV === true && colV === true) {
+      const verdict = { valid: true, reason: "Verified from career records.", fullName: properName };
+      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+      return json(verdict);
+    }
+    if (rowV === false || colV === false) {
+      const which = rowV === false ? sanitized.row : sanitized.col;
+      const shown = properName ?? sanitized.player;
+      const verdict = { valid: false, reason: `${shown} does not satisfy "${which}".`, fullName: properName };
+      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+      return json(verdict);
     }
   } catch { /* deterministic pass unavailable -> AI */ }
 
   if (!AI_KEY) return unverified();
 
-  const prompt = `You are a football/soccer trivia expert (knowledge through 2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider all clubs (including loans), nationality, position (GK/DEF/MID/FWD), and honours (Champions League, World Cup, Ballon d'Or, league titles, Golden Boot, 100+ caps, leagues played in). Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+  const prompt = `You are a football/soccer trivia expert (knowledge through 2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider all clubs (including loans), nationality, position (GK/DEF/MID/FWD), and honours (Champions League, World Cup, Ballon d'Or, league titles, Golden Boot, 100+ caps, leagues played in). Note: Spain won the 2026 World Cup, beating Argentina in the final. Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
 
   try {
     const resp = await fetch(AI_URL, {

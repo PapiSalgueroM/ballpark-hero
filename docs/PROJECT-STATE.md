@@ -10,7 +10,7 @@ an area moves; the round numbers stay for traceability.
 |---|---|---|
 | P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 60% | Seven grids, four archives; NFL and soccer archives blocked by design (recycled boards, AI validated). |
+| Grid category (Milestone 0) | 64% | Round 401: every grid mapped and the shared engine designed; the NFL grid counts rarity right, its college check is exact, and every evidenced answer is typeable. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,49 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 401. THE NFL GRID ON A SHARED ENGINE, PHASE 1: THE RECON, THE
+  DESIGN, AND THE MONEY PAGE'S GUARD RAILS.** Milestone 0, contract Task 2. Five read only
+  agents mapped every grid variant, the NFL data the site already holds, the archive
+  system and the fences, and a synthesis turned that into the design in
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`. The shape of what they found: seven grids in two unrelated families.
+  Three (soccer, NFL, college) run a static pool through an AI validator with community
+  rarity; four (NBA, MLB, NHL, CBB) are data backed in memory with one shared archive
+  page, and three of those four libs are byte identical apart from names, which is the
+  engine waiting to be lifted. The NFL grid, the money page, is in the AI family: 72 hand
+  authored boards, 130 of its 432 criteria (awards, Pro Bowls, Super Bowls, draft, stat
+  seasons) answerable only by the AI or its cache, four boards fully answerable from
+  data. The site holds more NFL data than the validator uses: 30,272 team stints with
+  position and college, 28,000 draft picks, 60,350 roster rows, plus stat and award
+  tables nothing reads yet. The recon also found three defects on the money page that do
+  not wait for the engine, so this round ships them: (1) rarity double counted the
+  player's own pick in all three community rarity grids, because the selections row was
+  inserted before the counts were taken and the formula adds that row itself, so a first
+  pick read 100 instead of the unicorn and every later share was biased upward; the
+  formula now lives once in `src/lib/gridRarity.ts`, the three hooks measure then insert,
+  `gridRarity.test.ts` holds the arithmetic and `scripts/simGridRarity.mjs` holds the
+  order and the single formula with two controls. (2) The NFL validator's college check
+  matched by substring both ways, so an Ohio player passed for Ohio State and a Miami
+  (Ohio) player for Miami; it is an exact match against the stints table's own spellings
+  now, through an alias table keyed on the pool's college labels, and the live cache was
+  read first to confirm no wrong accept had been cached yet (13 college verdicts, all
+  exact). Deployed as version 12 and probed: an Ohio State Seahawk verifies from records,
+  an Ohio University 49er no longer does. (3) The refusal string in all three grid
+  validators carried a dash; college redeployed as version 11 with the comma. The soccer
+  validator turned out to be the bigger finding: production runs a v13 from 2026-08-13
+  with World Cup winner logic that the repo copy never received, so the repo file was
+  synced from the live source (an independent agent diffed the two) and only then given
+  the comma. Also on the money page: the search box could not offer 194 of the 687
+  players the Round 350 evidence names, because the roster table starts in 2002 and the
+  box searched nothing else; `scripts/genNflGridLocalNames.mjs` derives
+  `src/data/nflGridLocalNames.ts` from the ledger, GridPlayerSearch hands it to the
+  autocomplete's localNames (the prop Round 84 built for exactly this), and
+  simGridPuzzlePool section 5 holds the derivation with a control. Offering a name is not
+  accepting it: every guess still goes through the validator. **Seen, not fixed:** during
+  the probes the AI path answered unverified, which is the Round 378 quota picture again
+  and the reason the engine work matters; the soccer validator's club match is a
+  substring test of the same shape as the college one just closed; the college search
+  is a 78 name hand list. Gates: tsc zero, four vitest cases, simGridRarity with both
+  controls, simGridPuzzlePool with both controls, simNoRivalNames, the two live probes.
 - **2026-09-02, Round 399. A FINISHED GAME IS RECORDED ONCE, NOT ON EVERY VISIT.** The
   corrective round from the adversarial review of Rounds 392 to 398. The measured
   problem: `useGameCompletion` recorded a completion whenever `isComplete` was true

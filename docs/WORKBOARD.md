@@ -29,14 +29,6 @@ How it works:
   changing code; fix the highest-confidence production bug first, with its
   negative control. Soccer Career and Club Manager get the first deep checks.
 
-- **next: Round 401 (desktop lane, 2026-09-02). THE NFL GRID ON A SHARED, DATA
-  BACKED ENGINE, PHASE 1.** Milestone 0, contract Task 2 (and the road to Task
-  3's archive). Recon first: every grid variant mapped, the NFL data the site
-  already holds measured through PostgREST, then the design and the first
-  shippable slice. The money page keeps its URL, copy and daily rhythm. Files
-  in play: src/lib and src/pages for the seven grids, GridArchive, the NFL
-  pool under scripts/data, the grid harnesses. Codex's Round 400 audit runs on
-  committed main and is not touched.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -719,6 +711,15 @@ Standing claims:
 
 ## Done
 
+- THE NFL GRID ON A SHARED ENGINE, PHASE 1, Round 401 (desktop lane, 2026-09-02).
+  Recon of all seven grids and the NFL data, the design in docs/designs/NFL-GRID-ENGINE-DESIGN.md, and
+  the money page's guard rails shipped now: rarity measured before the
+  player's row lands (all three community rarity grids, one formula, tested),
+  the NFL validator's college check exact instead of substring (deployed v12
+  and probed), the dash out of all three validators' refusal strings (college
+  v11 deployed, the soccer repo copy synced from the live v13 first), and the
+  search box offering all 687 evidenced answers through localNames. Next
+  phases claim their own rounds from the design.
 - A FINISHED GAME IS RECORDED ONCE, Round 399 (desktop lane, 2026-09-02, the
   corrective pass from the review of Rounds 392 to 398). useGameCompletion
   records only a finish it witnessed, and useDailyPuzzle announces a finish it

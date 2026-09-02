@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { toast } from 'sonner';
+import { rarityPercent } from '@/lib/gridRarity';
 
 type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
@@ -95,10 +96,7 @@ export function useFootballGrid() {
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        if (!totalCount) return 101; // unicorn, first pick for this cell
-        const total = totalCount + 1;
-        const player = (playerCount ?? 0) + 1;
-        return Math.round((player / total) * 100);
+        return rarityPercent(totalCount ?? 0, playerCount ?? 0);
       } catch {
         return 50;
       }
@@ -124,12 +122,15 @@ export function useFootballGrid() {
         const displayName = data?.fullName || playerName;
 
         if (isValid) {
+          /* Round 401: measure the crowd BEFORE this row joins it. The
+             formula adds the player's own row itself; inserting first counted
+             it twice (a first pick read 100 instead of the unicorn 101). */
+          const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
           await supabase.from('football_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
             player_name: displayName.toLowerCase(),
           });
-          const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
         } else if (data?.unverified) {
           // Answer-checking is temporarily offline, don't burn a guess or
