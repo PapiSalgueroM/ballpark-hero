@@ -19,10 +19,16 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 415.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 416.
 
 ## Active claims, 2026-09-02
 
+- **Codex lane, next: Round 415. Live harness reliability.** Retry only
+  thrown transport failures in the two live database fences that can otherwise
+  check nothing under runner pressure. Keep every returned HTTP refusal and
+  every data mismatch immediate. The daily-order schema fence also stops
+  sorting large tables merely to prove a column exists, while its impossible
+  column control remains load bearing.
 
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
