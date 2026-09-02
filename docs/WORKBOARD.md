@@ -19,13 +19,25 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 419.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 420.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 419. UNCLAIMED.** The owner's P1 item 12 is
-  closed by Rounds 416 and 418. Pick the next thing off docs/PROJECT-STATE.md
-  and claim it here before building.
+- **Desktop lane, next: Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.**
+  Found while re-measuring Round 418, not reported by anyone. `buildSchedule`
+  in src/lib/frontOffice.ts is documented as 6 divisional plus 11 crossover
+  games for all 32 clubs and does not deliver it. Measured over 200 built
+  schedules: **173 of 200 seasons (87 percent) leave one club off 17 games**,
+  as low as 9, because the crossover pairing loop gives up when a single club
+  is left needing partners. A club on 9 games cannot reach the playoffs, and
+  standings sort on wins, so it is a fairness bug not a cosmetic one. The
+  same pass also puts a club in the same week twice about 38 times a season,
+  which the code's own comment calls "rare and harmless" and is neither.
+  The fix has to be provable rather than lucky: complete the pairing (or
+  retry until it completes), then FAIL CLOSED if any club is not on exactly
+  17, rather than shipping a quiet 9. Files in play: src/lib/frontOffice.ts
+  and a new fence section with its control. Round 411 (NFL archive, other
+  lane) is not touched.
 
 
 
