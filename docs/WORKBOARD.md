@@ -23,13 +23,16 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 410. NFL Grid archive phase 4.** Build the
-  board-keyed archive from the 1970 to 2025 answer key. Archive identity must
-  never be date-only and no retired board can recur. Add an index, one detail
-  route per distinct board, complete cell answer keys, privacy-safe recorded
-  community pick percentages, and replay isolated from daily saves, scores,
-  completions, and selection writes. This is the final NFL archive phase in
-  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`; no new game type starts first.
+- **Desktop lane, next: Round 410. Footle pool loads atomically.** The full
+  suite reproduced an obscure-player query failure while the famous-player
+  query succeeded. `fetchFootlePlayerPool` returned that partial pool even
+  though its contract says any error returns an empty result so the hook keeps
+  the complete bundled fallback. On an insane day that can leave the target
+  outside the searchable pool. Add a mocked behavior test, return no partial
+  pool when either branch fails, prove the old path through a negative
+  control, and rerun the live tier check under the full suite. Production data
+  itself is healthy at 1,507 rows. NFL Grid archive phase 4 follows as Round
+  411.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
