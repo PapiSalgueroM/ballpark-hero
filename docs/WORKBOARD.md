@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 406.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 407.
 
 ## Active claims, 2026-09-01
 
@@ -33,6 +33,18 @@ How it works:
 
 
 
+
+- **next: Round 406 (desktop lane, 2026-09-02). THE NFL GRID PAGE ON THE
+  ENGINE.** Phase 3, second half, the user visible one. /football-grid keeps
+  its URL, copy shape, daily rhythm, 15 guess budget, unlimited toggle,
+  rarity and completion; the board is built from the date seed by
+  src/lib/nflGrid.ts and every guess is judged in memory against the key,
+  so the AI validator and its daily quota leave the page. The search box
+  offers the key's display names. The 72 board static pool and the Round
+  401 local names retire; the copy says what the categories are now. Fences
+  retargeted, a browser play before the deploy. Files in play:
+  useFootballGrid.ts, FootballGrid.tsx, GridPlayerSearch.tsx, the football
+  copy, simGridPuzzlePool, a new page fence.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
