@@ -1,11 +1,25 @@
-import { supabase } from '@/integrations/supabase/client';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
+import {
+  buildFranchisePuzzle,
+  fetchFranchiseGridData,
+  loadGridDifficultyFor,
+  playerMatchesFranchiseCell,
+  saveGridDifficultyFor,
+  splitFranchises,
+  type FranchiseGridConfig,
+  type FranchiseGridData,
+  type GridCategory,
+  type GridCell,
+  type GridDifficulty,
+} from '@/lib/gridEngine';
 
 /**
  * Data layer for the NBA Franchise Grid (3x3 board of franchise and stat
  * criteria, one player per cell),
  * built entirely on nba_player_stats, a direct port of src/lib/hockeyGrid.ts
- * (task #24). Keep the two in lockstep if the mechanic changes.
+ * (task #24). Since Round 402 the shared mechanic lives in
+ * src/lib/gridEngine.ts and this file is the NBA configuration of it: the
+ * pools, the thresholds, the table and the columns.
  *
  * DATA NOTE (verified live against flawuiqbvjobmkfkauhw on 2026-07-21):
  * nba_player_stats holds CAREER totals, one row per player (3,227 rows,
@@ -28,18 +42,10 @@ import type { PlayerSourceConfig } from '@/lib/playerSearch';
  */
 
 // ---------------------------------------------------------------------------
-// Types
+// Types (the shared shapes come from the engine under their old names)
 // ---------------------------------------------------------------------------
 
-export type CategoryKind = 'franchise' | 'achievement';
-
-export interface GridCategory {
-  kind: CategoryKind;
-  /** Stable id used for column/row identity, e.g. 'LAL' or 'pts10k'. */
-  id: string;
-  /** Short label shown on the grid axis, e.g. 'Lakers' or '10,000+ Points'. */
-  label: string;
-}
+export type { CategoryKind, GridCategory, GridCell, GridPuzzle, CellStatus, GridDifficulty } from '@/lib/gridEngine';
 
 export interface IndexedPlayer {
   name: string;
@@ -50,23 +56,7 @@ export interface IndexedPlayer {
   games: number;
 }
 
-export interface NbaGridData {
-  players: IndexedPlayer[];
-  byNormalizedName: Map<string, IndexedPlayer>;
-}
-
-export interface GridCell {
-  row: GridCategory;
-  col: GridCategory;
-}
-
-export interface GridPuzzle {
-  id: string;
-  rows: GridCategory[];
-  cols: GridCategory[];
-}
-
-export type CellStatus = 'empty' | 'correct' | 'wrong';
+export type NbaGridData = FranchiseGridData<IndexedPlayer>;
 
 // ---------------------------------------------------------------------------
 // Franchise pool
@@ -104,47 +94,46 @@ export const ACHIEVEMENT_POOL: GridCategory[] = [
   { kind: 'achievement', id: 'gp900', label: '900+ Games Played' },
 ];
 
-function matchesCategory(player: IndexedPlayer, cat: GridCategory): boolean {
-  if (cat.kind === 'franchise') return player.franchises.has(cat.id);
-  if (cat.id === 'pts10k') return player.points >= 10000;
-  if (cat.id === 'trb5k') return player.rebounds >= 5000;
-  if (cat.id === 'gp900') return player.games >= 900;
+function achievement(player: IndexedPlayer, id: string): boolean {
+  if (id === 'pts10k') return player.points >= 10000;
+  if (id === 'trb5k') return player.rebounds >= 5000;
+  if (id === 'gp900') return player.games >= 900;
   return false;
 }
 
 export function playerMatchesCell(player: IndexedPlayer, cell: GridCell): boolean {
-  return matchesCategory(player, cell.row) && matchesCategory(player, cell.col);
+  return playerMatchesFranchiseCell(player, cell, achievement);
 }
 
 // ---------------------------------------------------------------------------
 // Fetch + index
 // ---------------------------------------------------------------------------
 
-interface RawStatsRow {
-  player_name: string | null;
-  teams: string | null;
-  points: number | null;
-  trb: number | null;
-  ast: number | null;
-  games: number | null;
-}
-
-// Combining diacritical marks block (U+0300 to U+036F), built from char codes
-// (never literal accented characters) so it cannot be mangled by copy/paste
-// or re-encoding, matching the DIACRITICS regex in src/lib/playerSearch.ts.
-const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
-
-function normalize(name: string): string {
-  return name
-    .normalize('NFD')
-    .replace(DIACRITICS, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, ' ');
-}
-
 // Table has 3,227 rows (verified); anything far below that means a broken fetch.
 export const MIN_POOL_SIZE = 2000;
+
+const NBA_GRID: FranchiseGridConfig<IndexedPlayer> = {
+  table: 'nba_player_stats',
+  select: 'player_name, teams, points, trb, ast, games',
+  franchiseColumn: 'teams',
+  orderColumn: 'player_name',
+  minPoolSize: MIN_POOL_SIZE,
+  toPlayer(raw) {
+    const name = String(raw.player_name ?? '').trim();
+    const teamsStr = String(raw.teams ?? '').trim();
+    if (!name || !teamsStr) return null;
+    const franchises = splitFranchises(teamsStr);
+    if (franchises.size === 0) return null;
+    return {
+      name,
+      franchises,
+      points: Number(raw.points) || 0,
+      rebounds: Number(raw.trb) || 0,
+      assists: Number(raw.ast) || 0,
+      games: Number(raw.games) || 0,
+    };
+  },
+};
 
 /**
  * Fetches the full nba_player_stats table once and builds an in-memory
@@ -152,71 +141,8 @@ export const MIN_POOL_SIZE = 2000;
  * or an implausibly small result, so the page can show an error state
  * instead of a broken grid.
  */
-export async function fetchNbaGridData(): Promise<NbaGridData | null> {
-  try {
-    // PostgREST caps every select at 1000 rows regardless of .limit(),
-    // so page through the table with .range() until a short page arrives.
-    const PAGE_SIZE = 1000;
-    const rows: RawStatsRow[] = [];
-    for (let from = 0; ; from += PAGE_SIZE) {
-      /* ROUND 358: A TRANSIENT PAGE FAILURE MUST NOT COST THE WHOLE GAME.
-         This gave up the moment any page errored, and each page is a query the
-         database sometimes cancels under load (Postgres 57014, statement
-         timeout). One dropped page and the visitor gets the error card instead
-         of a playable grid. It was found because the archive generator, which
-         calls this same function, failed on two separate runs and succeeded
-         between them, which is what a transient looks like rather than a bug
-         in the query. Two more attempts with a short backoff, then give up as
-         before, because a database that is genuinely down should still surface
-         rather than hang. */
-      const page = async () => await supabase
-        .from('nba_player_stats' as any)
-        .select('player_name, teams, points, trb, ast, games')
-        .not('teams', 'is', null)
-        .order('player_name', { ascending: true })
-        .range(from, from + PAGE_SIZE - 1);
-      let { data, error } = await page();
-      for (let attempt = 1; attempt <= 2 && (error || !data); attempt++) {
-        await new Promise((r) => setTimeout(r, 400 * attempt));
-        ({ data, error } = await page());
-      }
-      if (error || !data) return null;
-      rows.push(...(data as unknown as RawStatsRow[]));
-      if (data.length < PAGE_SIZE) break;
-    }
-
-    const players: IndexedPlayer[] = [];
-    const byNormalizedName = new Map<string, IndexedPlayer>();
-
-    for (const raw of rows) {
-      const name = String(raw.player_name ?? '').trim();
-      const teamsStr = String(raw.teams ?? '').trim();
-      if (!name || !teamsStr) continue;
-
-      const franchises = new Set(
-        teamsStr
-          .split(',')
-          .map((t) => t.trim().toUpperCase())
-          .filter(Boolean),
-      );
-      if (franchises.size === 0) continue;
-
-      const entry: IndexedPlayer = {
-        name,
-        franchises,
-        points: Number(raw.points) || 0,
-        rebounds: Number(raw.trb) || 0,
-        assists: Number(raw.ast) || 0,
-        games: Number(raw.games) || 0,
-      };
-      players.push(entry);
-      byNormalizedName.set(normalize(name), entry);
-    }
-
-    return players.length >= MIN_POOL_SIZE ? { players, byNormalizedName } : null;
-  } catch {
-    return null;
-  }
+export function fetchNbaGridData(): Promise<NbaGridData | null> {
+  return fetchFranchiseGridData(NBA_GRID);
 }
 
 /** Bespoke PlayerAutocomplete source for nba_player_stats (career-history
@@ -236,43 +162,17 @@ export const NBA_STATS_PLAYER_SOURCE: PlayerSourceConfig = {
 // Puzzle generation
 // ---------------------------------------------------------------------------
 
-function pickN<T>(pool: T[], n: number, rng: () => number): T[] {
-  const shuffled = [...pool];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled.slice(0, n);
-}
-
-/** Deterministic PRNG (mulberry32) so a date seed reproduces the same grid for every player on the same day. */
-function mulberry32(seed: number): () => number {
-  let a = seed;
-  return function () {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 // Difficulty tiers, same semantics as hockeyGrid (see that module's #40 note):
 // Easy = both milestone slots, Normal = exactly one, Hard = franchises only.
 // Daily mode always uses 'normal'; correctness never depends on tier.
-export type GridDifficulty = 'easy' | 'normal' | 'hard';
 const DIFFICULTY_STORAGE_KEY = 'nba-grid-difficulty';
 
 export function loadGridDifficulty(): GridDifficulty {
-  try {
-    const raw = localStorage.getItem(DIFFICULTY_STORAGE_KEY);
-    if (raw === 'easy' || raw === 'normal' || raw === 'hard') return raw;
-  } catch { /* localStorage unavailable, fall back to default */ }
-  return 'normal';
+  return loadGridDifficultyFor(DIFFICULTY_STORAGE_KEY);
 }
 
 export function saveGridDifficulty(next: GridDifficulty): void {
-  try { localStorage.setItem(DIFFICULTY_STORAGE_KEY, next); } catch { /* ignore */ }
+  saveGridDifficultyFor(DIFFICULTY_STORAGE_KEY, next);
 }
 
 /**
@@ -280,66 +180,12 @@ export function saveGridDifficulty(next: GridDifficulty): void {
  * depends on difficulty; axis placement and shuffling stay seed-deterministic
  * either way, so a daily seed reproduces the same grid for everyone.
  */
-export function buildGridPuzzle(seed: number, difficulty: GridDifficulty = 'normal'): GridPuzzle {
-  const rng = mulberry32(seed);
-
-  if (difficulty === 'hard') {
-    // All 6 categories are franchises, no achievement slot at all.
-    const franchises = pickN(FRANCHISE_POOL, 6, rng);
-    const rows = franchises.slice(0, 3);
-    const cols = franchises.slice(3);
-    return {
-      id: `grid-${seed}`,
-      rows: pickN(rows, rows.length, rng),
-      cols: pickN(cols, cols.length, rng),
-    };
-  }
-
-  if (difficulty === 'easy') {
-    // Both achievement categories are used (one per axis), 2 franchises fill
-    // out each axis alongside them.
-    const franchises = pickN(FRANCHISE_POOL, 4, rng);
-    const achievements = pickN(ACHIEVEMENT_POOL, 2, rng);
-    const rowFranchises = franchises.slice(0, 2);
-    const colFranchises = franchises.slice(2);
-    const rows: GridCategory[] = [achievements[0], ...rowFranchises];
-    const cols: GridCategory[] = [achievements[1], ...colFranchises];
-    return {
-      id: `grid-${seed}`,
-      rows: pickN(rows, rows.length, rng),
-      cols: pickN(cols, cols.length, rng),
-    };
-  }
-
-  // Normal (default): exactly 1 achievement on a random axis.
-  const franchises = pickN(FRANCHISE_POOL, 5, rng);
-  const achievement = pickN(ACHIEVEMENT_POOL, 1, rng)[0];
-
-  const achievementOnRows = rng() < 0.5;
-  const rowFranchiseCount = achievementOnRows ? 2 : 3;
-
-  const rowFranchises = franchises.slice(0, rowFranchiseCount);
-  const colFranchises = franchises.slice(rowFranchiseCount);
-
-  const rows: GridCategory[] = achievementOnRows ? [achievement, ...rowFranchises] : rowFranchises;
-  const cols: GridCategory[] = achievementOnRows ? colFranchises : [achievement, ...colFranchises];
-
-  return {
-    id: `grid-${seed}`,
-    rows: pickN(rows, rows.length, rng),
-    cols: pickN(cols, cols.length, rng),
-  };
+export function buildGridPuzzle(seed: number, difficulty: GridDifficulty = 'normal') {
+  return buildFranchisePuzzle(FRANCHISE_POOL, ACHIEVEMENT_POOL, seed, difficulty);
 }
 
 // ---------------------------------------------------------------------------
 // Share grid
 // ---------------------------------------------------------------------------
 
-export function gridToEmoji(statuses: CellStatus[]): string {
-  const sq = (s: CellStatus) => (s === 'correct' ? '🟩' : s === 'wrong' ? '⬛' : '⬛');
-  return [
-    statuses.slice(0, 3).map(sq).join(''),
-    statuses.slice(3, 6).map(sq).join(''),
-    statuses.slice(6, 9).map(sq).join(''),
-  ].join('\n');
-}
+export { gridToEmoji } from '@/lib/gridEngine';

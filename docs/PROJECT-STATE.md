@@ -10,7 +10,7 @@ an area moves; the round numbers stay for traceability.
 |---|---|---|
 | P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 64% | Round 401: every grid mapped and the shared engine designed; the NFL grid counts rarity right, its college check is exact, and every evidenced answer is typeable. |
+| Grid category (Milestone 0) | 68% | Round 402: one engine behind the NBA, MLB and NHL grids, every published board still rebuilds; the NFL answer key is next (design phase 2). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,30 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 402. THE GRID ENGINE, LIFTED.** Phase 1 of
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, and nothing a player can see changes.
+  `src/lib/nbaGrid.ts`, `mlbGrid.ts` and `hockeyGrid.ts` were textual clones: every
+  hunk of their diff was a docstring, a pool constant, a table or column name or a
+  storage key, and the PRNG, the shuffle, the name normaliser, the paged fetch with
+  the Round 358 retry, the difficulty persistence, the three branch puzzle builder
+  and the emoji share were byte identical. `src/lib/gridEngine.ts` owns those now,
+  behind one config per sport (table, select, franchise column, order column, a
+  toPlayer mapper, a minimum pool size) plus the pools and an achievement predicate,
+  and each lib is its sport's configuration: docstring kept, pools kept, every export
+  name kept (the pages, `genGridArchive.mjs`, `simGridArchive`, `simGridCells` and
+  `simLiveBoards` did not move). The one promise the file makes is the sequence: the
+  builder draws from mulberry32 in exactly the order the libs drew before, so every
+  date seed still rebuilds the board its archive page was generated from.
+  `scripts/simGridEngine.mjs` holds that offline (all 42 published franchise boards
+  rebuilt through the engine, no database needed), holds the libs as code (they import
+  the engine and carry no local PRNG, shuffle, diacritics regex, paged fetch or storage
+  read) and pins the engine's constant and branches; its seed control bundles the libs
+  against an engine whose constant is off by one and section 1 goes red, its copy
+  control plants a local PRNG back into the NBA lib and section 2 goes red. The CBB
+  grid stays off the engine on purpose: it derives its pool from the data and carries
+  a different mulberry32, and unifying that sequence would silently change every future
+  daily board. Gates: tsc zero, simGridEngine with both controls, simGridArchive,
+  simGridCells and simLiveBoards green against the live database, build green.
 - **2026-09-02, Round 401. THE NFL GRID ON A SHARED ENGINE, PHASE 1: THE RECON, THE
   DESIGN, AND THE MONEY PAGE'S GUARD RAILS.** Milestone 0, contract Task 2. Five read only
   agents mapped every grid variant, the NFL data the site already holds, the archive

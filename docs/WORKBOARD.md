@@ -30,16 +30,6 @@ How it works:
   negative control. Soccer Career and Club Manager get the first deep checks.
 
 
-- **next: Round 402 (desktop lane, 2026-09-02). THE GRID ENGINE, LIFTED: PHASE 1
-  OF docs/designs/NFL-GRID-ENGINE-DESIGN.md.** src/lib/gridEngine.ts takes a
-  per sport config and owns the helpers that are byte identical across
-  nbaGrid.ts, mlbGrid.ts and hockeyGrid.ts; the three libs keep every export as
-  thin re-exports, each sport keeps its own PRNG sequence so every published
-  archive board still rebuilds from its seed, and a new fence (simGridEngine)
-  rebuilds gridArchive.json through the engine and reads the libs as code.
-  Nothing a player can see changes. Files in play: src/lib/nbaGrid.ts,
-  mlbGrid.ts, hockeyGrid.ts, cbbGrid.ts (read only), the new engine, the new
-  fence. Codex's Round 400 audit is not touched.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -722,6 +712,13 @@ Standing claims:
 
 ## Done
 
+- THE GRID ENGINE, LIFTED, Round 402 (desktop lane, 2026-09-02, phase 1 of
+  docs/designs/NFL-GRID-ENGINE-DESIGN.md). src/lib/gridEngine.ts owns what
+  the NBA, MLB and NHL grid libs duplicated; each lib is its sport's config
+  with every export name kept, so nothing else moved. simGridEngine rebuilds
+  all 42 published boards through the engine offline and reads the libs as
+  code, with a seed control and a copy control. Phase 2, the NFL answer key
+  keyed on gsis_id, is the next claim.
 - THE NFL GRID ON A SHARED ENGINE, PHASE 1, Round 401 (desktop lane, 2026-09-02).
   Recon of all seven grids and the NFL data, the design in docs/designs/NFL-GRID-ENGINE-DESIGN.md, and
   the money page's guard rails shipped now: rarity measured before the
