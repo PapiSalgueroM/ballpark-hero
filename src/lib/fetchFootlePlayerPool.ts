@@ -272,6 +272,11 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
 
     const [famousRes, obscureRows] = await Promise.all([famousQuery, fetchObscureRows()]);
 
+    if (!obscureRows) {
+      console.warn('[fetchFootlePlayerPool] Obscure batch failed, using fallback');
+      return [];
+    }
+
     if (famousRes.error || !famousRes.data || famousRes.data.length === 0) {
       console.warn('[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback');
       return [];
@@ -353,8 +358,6 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
           difficulty: 'insane',
         });
       }
-    } else {
-      console.warn('[fetchFootlePlayerPool] Obscure batch failed, pool has no insane tier this session');
     }
 
     return pool;
