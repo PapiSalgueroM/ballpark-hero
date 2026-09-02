@@ -10,7 +10,7 @@ an area moves; the round numbers stay for traceability.
 |---|---|---|
 | P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 68% | Round 402: one engine behind the NBA, MLB and NHL grids, every published board still rebuilds; the NFL answer key is next (design phase 2). |
+| Grid category (Milestone 0) | 72% | Round 403: the NFL answer key exists, 11621 players keyed on identity with every rule written on the file; the page on the engine is next (design phase 3). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,42 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 403. THE NFL ANSWER KEY, KEYED ON IDENTITY.** Phase 2 of
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, and still nothing a player can see changes.
+  `scripts/genNflGridData.mjs` derives one row per player from the documented tables the
+  site already holds, keyed on the NFL's own gsis_id and never on a name (303 roster
+  names belong to two or more players; the file flags every shared name). Each fact is a
+  derivation from a column, written on the file itself: teams from roster rows whose
+  status is active, reserve or inactive, with the 39 historical codes merged to each
+  franchise's current code through `nfl_team_codes` (practice squad and cut rows do not
+  make a team a player's team); the season span under the same rule; the raw position
+  codes; the college; the draft from the roster's own pick and club, else the
+  `nfl_draft_picks` row matching name and entry year, else undrafted only when the entry
+  year is 1990 or later and no pick within a year matches (unknown stays null); stat
+  seasons from the regular season weekly rows summed by id (4,000 passing, 1,000 rushing,
+  1,000 receiving); Super Bowl wins from the roster snapshot taken at the Super Bowl on the
+  team `super_bowls` names as that season's winner. The output,
+  `scripts/data/nflGridPlayers.json`: 11621 players, 429 with a shared name,
+  4505 undrafted, 1160 with a title, 2.3 MB, committed beside its rules and its
+  coverage, because the coverage is the honest limit of the whole exercise: the roster
+  table starts in 2002 and the stats end with 2024, so Tom Brady carries six titles here
+  and Jerry Rice two teams, and the file says so rather than pretending. Two data smells
+  the first run surfaced and the rules now absorb: the roster feed writes a draft number
+  of zero as a placeholder (553 rows, Chris Johnson the back among them), so only a
+  positive pick counts and the draft table answers instead; and a roster name the draft
+  table spells differently keeps its pick with the round unknown rather than a guessed
+  one. `scripts/simNflGridData.mjs` holds the file four ways: shape and rules over every
+  row against the live franchise codes; a live recompute of every 500th player's roster
+  rows through the generator's own buildKey; famous careers against facts two sources
+  agree on inside the coverage window (Brady six titles and fourteen 4,000 yard seasons,
+  Mahomes three and six, Manning first overall and two, Henry six 1,000 yard seasons,
+  Warner undrafted); and the coverage text itself. Its teams control moves a sampled
+  player onto a team the rosters never had and section 2 goes red; its famous control
+  hands Brady a seventh title inside the window and section 3 goes red; an unreachable
+  database refuses to run. Phase 3, the page on the engine over this key, is the next
+  claim, and the design's first open question is now answered by the data: the key
+  cannot see a career before 2002, so the page will need either the nflverse season
+  rosters back to the 1970s or a second path for the legends.
 - **2026-09-02, Round 402. THE GRID ENGINE, LIFTED.** Phase 1 of
   `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, and nothing a player can see changes.
   `src/lib/nbaGrid.ts`, `mlbGrid.ts` and `hockeyGrid.ts` were textual clones: every

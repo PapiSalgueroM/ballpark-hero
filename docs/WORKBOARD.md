@@ -31,18 +31,6 @@ How it works:
 
 
 
-- **next: Round 403 (desktop lane, 2026-09-02). THE NFL ANSWER KEY, KEYED ON
-  IDENTITY: PHASE 2 OF docs/designs/NFL-GRID-ENGINE-DESIGN.md.**
-  scripts/genNflGridData.mjs derives one row per player (gsis_id) from the
-  documented tables the site holds: seasons and teams from nflfastr_rosters
-  with the 39 codes merged through nfl_team_codes, positions normalised to
-  the pool's buckets, college, draft round and pick from nfl_draft_picks
-  (ambiguous joins dropped), stat seasons summed from nflfastr_player_stats,
-  Super Bowl wins from the winner's season roster. Output
-  src/data/nflGridPlayers.json, fenced by simNflGridData (recompute a sample
-  live, famous careers against a recorded second source, the namesake set
-  split, unreachable database refuses to run). No page changes yet. Files in
-  play: the new generator, data file and fence only.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -725,6 +713,15 @@ Standing claims:
 
 ## Done
 
+- THE NFL ANSWER KEY, KEYED ON IDENTITY, Round 403 (desktop lane, 2026-09-02,
+  phase 2 of docs/designs/NFL-GRID-ENGINE-DESIGN.md). scripts/genNflGridData.mjs
+  derives scripts/data/nflGridPlayers.json (11621 players on gsis_id) from
+  the roster, draft, stat and Super Bowl tables with every rule written on the
+  file; simNflGridData holds shape, a live recompute, famous careers against
+  the record and the coverage text, with two controls. No page changes. The
+  key sees nothing before 2002, which decides the design's first open
+  question: phase 3 needs the nflverse season rosters or a second path for
+  the legends.
 - THE GRID ENGINE, LIFTED, Round 402 (desktop lane, 2026-09-02, phase 1 of
   docs/designs/NFL-GRID-ENGINE-DESIGN.md). src/lib/gridEngine.ts owns what
   the NBA, MLB and NHL grid libs duplicated; each lib is its sport's config

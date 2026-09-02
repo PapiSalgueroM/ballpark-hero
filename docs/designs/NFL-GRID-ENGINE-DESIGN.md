@@ -152,7 +152,14 @@ so the table list comes from `src/integrations/supabase/types.ts`.
 1. Does the data backed grid restrict its answer key to 2002 onward careers
    (the stints table) and keep the AI only for players absent from the table, or
    is the nflverse season level rosters release (back to 1920, documented) loaded
-   first so pre 2002 tenures become deterministic too?
+   first so pre 2002 tenures become deterministic too? Phase 2 (Round 403) built
+   the key from the tables the site holds and wrote the coverage on the file:
+   Tom Brady carries six titles, Jerry Rice two teams. A "played for" cell that
+   rejects Rice at the 49ers is not a money page, so phase 3 does not ship on
+   this key alone: either the nflverse season rosters are loaded back to the
+   1970s first (a documented dataset, the same feed the roster table came
+   from), or the page keeps the validator as the path for a name the key does
+   not carry and says which era the key covers on the card.
 2. Which identity fix comes first: backfilling `person_key` from `gsis_id`, or
    dropping ambiguous names from the generator? Measured 2026-09-02: 14,547 of
    the 14,555 stint names have a `gsis_id` in `nflfastr_rosters`, 303 of those
