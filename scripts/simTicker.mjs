@@ -18,9 +18,17 @@
  *   4. Hostile rows (null scores, unknown sports, unparseable dates) group
  *      without throwing, because the strip renders on every route and a
  *      feed hiccup must never take the shell down.
+ *   6. Round 414, the owner's three asks in one line each. Every sport the
+ *      poller writes has a tag and a hub, so a new feed can never render as
+ *      a raw key or link nowhere. The crawl is slower than the 110 px/s that
+ *      read as a blur and still quicker than the 60 he called slow. And the
+ *      poller asks for the sports he asked for, F1 and golf excepted, whose
+ *      events carry no opponents.
  *
- * Negative control: SIM_TICKER_CONTROL=promo plants a banned phrase into the
+ * Negative controls: SIM_TICKER_CONTROL=promo plants a banned phrase into the
  * in-memory copy of the source before the scan, and the run must then fail.
+ * SIM_TICKER_CONTROL=untagged drops a sport from the tag map in memory, and
+ * section 6 must go red.
  *
  * Run: node scripts/simTicker.mjs
  */
@@ -146,6 +154,42 @@ console.log('5) The owner\'s banned strip content stays off the wire, read from 
 }
 
 console.log('');
+console.log('6) Round 414: every polled sport is tagged and hubbed, and the crawl is between his two complaints');
+{
+  const liveScores = fs.readFileSync(path.join(ROOT, 'src/lib/liveScores.ts'), 'utf8');
+  const strip = fs.readFileSync(path.join(ROOT, 'src/components/layout/TopTicker.tsx'), 'utf8');
+  const poller = fs.readFileSync(path.join(ROOT, 'supabase/functions/scores-poll/index.ts'), 'utf8');
+
+  const polled = [...poller.matchAll(/\{ sport: "([a-z]+)"/g)].map(m => m[1]);
+  const sports = [...new Set(polled)];
+  if (sports.length < 9) fail(`the poller asks for only ${sports.length} sports; the owner asked for a lot more events`);
+  let tags = liveScores;
+  if (process.env.SIM_TICKER_CONTROL === 'untagged') {
+    const cut = tags.replace(/\n  cfb: 'CFB',/, '');
+    if (cut === tags) { console.error('control cannot run: no cfb tag to drop'); process.exit(1); }
+    tags = cut;
+    console.log('   NEGATIVE CONTROL ON: the CFB tag dropped from the map in memory');
+  }
+  for (const s of sports) {
+    if (!new RegExp(`\\n  ${s}: '`).test(tags.slice(tags.indexOf('SPORT_TAG')))) fail(`${s} is polled but has no SPORT_TAG, so the strip would show a raw key`);
+    if (!new RegExp(`\\n  ${s}: '`).test(tags.slice(tags.indexOf('SPORT_HUB'), tags.indexOf('SPORT_TAG')))) fail(`${s} is polled but has no SPORT_HUB, so its tag would link nowhere`);
+  }
+  const speed = strip.match(/const SPEED = (\d+);/);
+  if (!speed) fail('the crawl speed is not a plain constant any more, so it cannot be checked');
+  else {
+    const px = Number(speed[1]);
+    /* He called 60 px/s slow (Round 336) and 110 too fast (Round 414). The
+       honest window is strictly between the two numbers he named. */
+    if (!(px > 60 && px < 110)) fail(`the crawl is ${px} px/s, outside the window between the speed he called slow and the one he called too fast`);
+  }
+  console.log(`   ${sports.length} polled sports, all tagged and hubbed; crawl ${speed ? speed[1] : '?'} px/s`);
+}
+
+if (process.env.SIM_TICKER_CONTROL === 'untagged') {
+  if (failures > 0) { console.log('control run: the dropped tag was caught, section 6 bites'); process.exit(0); }
+  console.error('control run: a dropped tag changed NOTHING, section 6 is dead');
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simTicker: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

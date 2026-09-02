@@ -79,7 +79,7 @@ const HOST = "https://site.web.api.espn.com/apis/v2/scoreboard/header";
    one call per league because the feed has no combined scoreboard. The
    league text is ours, not the feed's, so the strip's vocabulary stays the
    site's own. */
-const FEEDS: { sport: string; league: string; query: string; idExtra?: string }[] = [
+const FEEDS: { sport: string; league: string; query: string; idExtra?: string; perMatchId?: boolean }[] = [
   { sport: "nfl", league: "NFL", query: "sport=football&league=nfl" },
   { sport: "nba", league: "NBA", query: "sport=basketball&league=nba" },
   { sport: "mlb", league: "MLB", query: "sport=baseball&league=mlb" },
@@ -91,6 +91,39 @@ const FEEDS: { sport: string; league: string; query: string; idExtra?: string }[
   { sport: "soccer", league: "Ligue 1", query: "sport=soccer&league=fra.1", idExtra: "fra.1" },
   { sport: "soccer", league: "Champions League", query: "sport=soccer&league=uefa.champions", idExtra: "uefa.champions" },
   { sport: "soccer", league: "MLS", query: "sport=soccer&league=usa.1", idExtra: "usa.1" },
+  /* Round 414, the owner asked for "a lot more ... sporting events".
+     PROBED WITH A DATE, which matters: the header endpoint answers a bare
+     request with a whole competition's slate, so a first pass here recorded
+     counts like "Europa League 75" that were the season, not a day. Measured
+     properly on 2026-09-02 for the 2nd, 4th and 6th of September: college
+     football 25 each day (this feed answers with the current week whatever
+     date is asked, and the strip's own window narrows it), ATP 25 40 20, WTA
+     21 8 4, Liga MX 0 2 2, Primeira Liga 0 1 3, Eredivisie 0 1 4. College
+     basketball, the WNBA and the Europa League answered zero on all three,
+     which is honest: college basketball starts in November, the WNBA is at
+     the end of its year, and the Europa League league phase has not begun.
+     They are polled anyway because each costs one call and the day they are
+     on, the strip carries them.
+     Formula One and golf were probed too and are deliberately absent: their
+     events carry no competitors at all, so a strip built on home against
+     away would have to invent a card shape, and parseEvents skips them. */
+  { sport: "soccer", league: "Europa League", query: "sport=soccer&league=uefa.europa", idExtra: "uefa.europa" },
+  { sport: "soccer", league: "Eredivisie", query: "sport=soccer&league=ned.1", idExtra: "ned.1" },
+  { sport: "soccer", league: "Primeira Liga", query: "sport=soccer&league=por.1", idExtra: "por.1" },
+  { sport: "soccer", league: "Liga MX", query: "sport=soccer&league=mex.1", idExtra: "mex.1" },
+  { sport: "cfb", league: "College Football", query: "sport=football&league=college-football" },
+  { sport: "cbb", league: "College Basketball", query: "sport=basketball&league=mens-college-basketball" },
+  { sport: "wnba", league: "WNBA", query: "sport=basketball&league=wnba" },
+  /* Tennis needs perMatchId. Every match inside a tournament arrives with
+     the SAME event id (the tournament's: all 25 US Open matches on
+     2026-09-02 carried id 189-2026), so keying on it puts 25 rows on one key
+     and Postgres refuses the whole batch, "ON CONFLICT DO UPDATE command
+     cannot affect row a second time". competitionId is unique per match and
+     is used instead. Only tennis takes it: changing the key for a sport that
+     already has rows would leave the old and the new side by side until the
+     two day cleanup, and the strip would show the same game twice. */
+  { sport: "tennis", league: "ATP", query: "sport=tennis&league=atp", idExtra: "atp", perMatchId: true },
+  { sport: "tennis", league: "WTA", query: "sport=tennis&league=wta", idExtra: "wta", perMatchId: true },
 ];
 
 /* The feed's status state is the honest tristate: pre, in, post. Everything
@@ -98,7 +131,7 @@ const FEEDS: { sport: string; league: string; query: string; idExtra?: string }[
    sports[0].leagues[0].events[], each event carrying date, status, summary,
    fullStatus.type {state, completed, description, detail, shortDetail} and
    competitors[] with homeAway, displayName and a score string. */
-function parseEvents(feed: { sport: string; league: string; idExtra?: string }, payload: unknown): Row[] {
+function parseEvents(feed: { sport: string; league: string; idExtra?: string; perMatchId?: boolean }, payload: unknown): Row[] {
   const events = (payload as any)?.sports?.[0]?.leagues?.[0]?.events;
   if (!Array.isArray(events)) return [];
   const rows: Row[] = [];
@@ -112,11 +145,19 @@ function parseEvents(feed: { sport: string; league: string; idExtra?: string }, 
     const finished = state === "post" && st?.completed !== false;
     const started = new Date(str(ev?.date));
     if (Number.isNaN(started.getTime())) continue;
-    const home = str(homeC?.displayName || homeC?.name);
-    const away = str(awayC?.displayName || awayC?.name);
+    /* Round 414, accuracy: a college team's displayName is "San José State
+       Spartans", and the strip's shortener keeps the last word, so a board of
+       college games would read Spartans against Trojans, a nickname a dozen
+       schools share. A bottom line writes college by the school's
+       abbreviation (SJSU at USC) and so does this. Every other sport keeps
+       its full name, where the last word IS the club or the franchise. */
+    const college = feed.sport === "cfb" || feed.sport === "cbb";
+    const nameOf = (c: any) => str(college ? (c?.abbreviation || c?.displayName || c?.name) : (c?.displayName || c?.name));
+    const home = nameOf(homeC);
+    const away = nameOf(awayC);
     if (!home || !away) continue;
     rows.push({
-      id: `${feed.sport}:${feed.idExtra ? feed.idExtra + ":" : ""}${str(ev?.id)}`,
+      id: `${feed.sport}:${feed.idExtra ? feed.idExtra + ":" : ""}${str(feed.perMatchId ? (ev?.competitionId || ev?.id) : ev?.id)}`,
       sport: feed.sport,
       league: feed.league,
       home,
@@ -240,12 +281,29 @@ serve(async (req) => {
     } else if (!note) {
       note = `http ${r.status}`;
     }
-    if (rows.length) {
-      const { error } = await sb.from("live_scores").upsert(rows.map(x => ({ ...x, updated_at: new Date().toISOString() })), { onConflict: "id" });
-      if (error) note = `upsert: ${error.message}`;
+    /* Round 414. TWO things the tennis feed taught, both of which had been
+       waiting for any feed that repeats a key.
+       DEDUPE. Postgres refuses a whole batch that names one key twice ("ON
+       CONFLICT DO UPDATE command cannot affect row a second time"), so one
+       repeated id threw away every row from that feed. Last one wins, which
+       for a scoreboard is the freshest state of that game.
+       COUNT WHAT LANDED. This used to add rows.length before the upsert was
+       even attempted, so a feed that parsed 46 and wrote none still reported
+       46, into the run ledger the Round 332 watchdog reads. A permanently
+       broken feed could therefore never look dead. The count is now what the
+       database accepted. */
+    const byId = new Map<string, Row>();
+    for (const r of rows) byId.set(r.id, r);
+    const unique = [...byId.values()];
+    if (unique.length !== rows.length) note = [note, `deduped ${rows.length - unique.length} repeated id(s)`].filter(Boolean).join("; ");
+    let written = 0;
+    if (unique.length) {
+      const { error } = await sb.from("live_scores").upsert(unique.map(x => ({ ...x, updated_at: new Date().toISOString() })), { onConflict: "id" });
+      if (error) note = [note, `upsert: ${error.message}`].filter(Boolean).join("; ");
+      else written = unique.length;
     }
     const s = (bySport[feed.sport] ??= { rows: 0, notes: [] });
-    s.rows += rows.length;
+    s.rows += written;
     if (note) s.notes.push(`${feed.idExtra ?? feed.sport}: ${note}`);
   }
   const summary: Record<string, unknown>[] = [];

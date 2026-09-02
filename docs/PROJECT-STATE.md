@@ -2772,6 +2772,48 @@ today rather than adding alongside them.
   proves the old behavior accepts the repeat and mutates the chain. Task and
   whole-branch reviews found no remaining code issue. No sports data or
   AdSense files changed.
+- **2026-09-02, Round 414. THE OWNER'S TICKER: SLOWER, WIDER, AND MORE ACCURATE.** His
+  words today: "can you put the ticker speed a little bit slower and with a lot more
+  accuracy and sporting events". Three asks, one round.
+  **SLOWER.** The crawl was 110 px/s, which Round 336 set by doubling 55 after he said
+  the strip moved really slow. On a day slate of twenty cards that reads as a blur, so it
+  is 75 now: slower than the number he just complained about, quicker than the one he
+  complained about before. `simTicker` section 6 fails if anyone puts it outside the
+  window between his own two numbers, so neither complaint can be answered by
+  overshooting into the other.
+  **A LOT MORE SPORTING EVENTS.** The poller asked ESPN's open header feed for five
+  sports; it asks for nine now, over twenty feeds: college football, men's college
+  basketball, the WNBA, tennis (ATP and WTA, so the US Open shows), the Europa League,
+  Liga MX, the Primeira Liga and the Eredivisie. Formula One and golf were probed and are
+  deliberately out: their events carry no two opponents, so the strip would have to invent
+  a card shape.
+  **MORE ACCURACY**, in three places, two of which were mine.
+  First, college teams now read the way a bottom line writes them, USC and ALA and UGA,
+  because a college displayName is "San José State Spartans" and the strip's shortener
+  keeps the last word, which would have put Spartans against Trojans on the board, a
+  nickname a dozen schools share.
+  Second, the counts in my own comment were wrong and an agent caught them: I had probed
+  each feed without a date, so "Europa League 75" was a whole competition rather than a
+  day. Re-probed properly for three dates, the honest numbers are college football 25 a
+  day, ATP 25 40 20, WTA 21 8 4, Liga MX 0 2 2, and college basketball, the WNBA and the
+  Europa League at zero all week, which is simply their season. They stay polled because
+  each costs one call and the day they are on, the strip carries them, and the comment now
+  says that instead of a number I did not measure.
+  Third, tennis wrote nothing at all on the first deploy and the run ledger said it wrote
+  46. Every match inside a tournament arrives carrying the SAME event id (all 25 US Open
+  matches on the 2nd carried 189-2026), so the batch named one key twenty five times and
+  Postgres refused all of it. Tennis is keyed on `competitionId`, which is unique per
+  match; only tennis, because rekeying a sport that already has rows would show the same
+  game twice until the two day cleanup. Two more things that failure exposed and that
+  every feed now gets: a dedupe before the upsert, so one repeated id can never throw away
+  a whole feed again, and a row count that means what the database accepted rather than
+  what was parsed. That last one matters beyond tidiness: the Round 332 watchdog asks
+  whether any feed wrote a row, and a feed that parses cleanly and writes nothing was
+  reporting healthy numbers into the ledger it reads, so this exact failure could never
+  have raised the alarm.
+  Gates: tsc zero, simTicker green with both controls (the new one drops a sport's tag and
+  section 6 goes red), simLiveScores green, build green, the poller redeployed and run
+  against the live feed with the result read back from the table.
 - **2026-09-02, Round 413. BUILD YOUR XI WAS DEAD, AND IT WAS LYING ABOUT WHY.** An
   audit of the owner's thirteen P1 items from 2026-08-28 found the game refusing every
   answer live: three real players hit it today at 12:48, 12:49 and 13:01 and got

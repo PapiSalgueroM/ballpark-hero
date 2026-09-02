@@ -41,6 +41,13 @@ export const SPORT_HUB: Record<string, string> = {
   mlb: '/baseball',
   nhl: '/hockey',
   soccer: '/soccer',
+  /* Round 414: the sports the owner asked for. Each tag links somewhere the
+     site actually has games for that sport; tennis has no hub, so its tag
+     goes to the tennis game rather than to the home page. */
+  cfb: '/college',
+  cbb: '/college',
+  wnba: '/pro-basketball',
+  tennis: '/tennis-chain',
 };
 
 export const SPORT_TAG: Record<string, string> = {
@@ -49,6 +56,10 @@ export const SPORT_TAG: Record<string, string> = {
   mlb: 'MLB',
   nhl: 'NHL',
   soccer: 'SOCCER',
+  cfb: 'CFB',
+  cbb: 'CBB',
+  wnba: 'WNBA',
+  tennis: 'TENNIS',
 };
 
 /* The feed gives full names ("New York Yankees"). A ticker wants the part a

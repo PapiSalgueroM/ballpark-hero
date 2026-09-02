@@ -37,8 +37,10 @@ export interface SportGroup {
 }
 
 /* Soccer leads, the site's own ordering convention, then the American
-   leagues in season-weight order, then anything new the feed ever adds. */
-const SPORT_ORDER = ['soccer', 'mlb', 'nfl', 'nba', 'nhl'];
+   leagues in season-weight order, then anything new the feed ever adds.
+   Round 414: college football sits behind the NFL and college basketball
+   behind the NBA, the way a bottom line pairs them, and tennis closes. */
+const SPORT_ORDER = ['soccer', 'mlb', 'nfl', 'cfb', 'nba', 'cbb', 'nhl', 'wnba', 'tennis'];
 
 /**
  * Groups the wire into per-sport boxes, each ordered the way a fan scans a
@@ -191,8 +193,12 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     let holdLeft = fresh ? 1500 : 350;
     /* Round 336, his report: "the ticker is moving really slow". 55 was
        measured live at 60 px/s, which on a 3000px day-ahead slate is nearly
-       a minute per pass. Doubled, and the reading hold trimmed to match. */
-    const SPEED = 110; // px per second, the cable crawl
+       a minute per pass. Doubled, and the reading hold trimmed to match.
+       Round 414, his report the other way: "put the ticker speed a little
+       bit slower". 110 read as a blur once a sport carried twenty cards, so
+       it comes down about a third, which is still nearly half again quicker
+       than the 60 he called slow. A little bit slower, not back to before. */
+    const SPEED = 75; // px per second, the cable crawl
     let raf = 0;
     let last: number | null = null;
     let settled = 0;

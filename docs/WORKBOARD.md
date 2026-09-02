@@ -23,20 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 414. OWNER REQUEST, 2026-09-02: "can you put the
-  ticker speed a little bit slower and with a lot more accuracy and sporting
-  events".** Three asks, one round. SLOWER: the crawl is 110 px/s since Round
-  336 doubled it on his earlier note that it was too slow, and it comes down.
-  MORE EVENTS: the ESPN header feed carries far more than the five sports the
-  poller asks for, probed today for real counts (college football 25, men's
-  college basketball 56, Europa League 75, WNBA 5, tennis 25, plus Liga MX,
-  Primeira Liga and Eredivisie); every one has a real matchup, and F1 and golf
-  stay out because their events carry no opponents and the strip would have to
-  invent a card shape. MORE ACCURACY: college teams read by their abbreviation
-  the way a bottom line writes them, not by a nickname a dozen schools share.
-  Files in play: supabase/functions/scores-poll (redeployed),
-  src/lib/liveScores.ts, src/components/layout/TopTicker.tsx, the ticker
-  fences. Round 411 (NFL archive, other lane) is not touched.
 
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
@@ -757,6 +743,16 @@ Standing claims after Round 400:
 
 ## Done
 
+- THE OWNER'S TICKER, Round 414 (desktop lane, 2026-09-02, his request the
+  same day). Crawl 110 to 75 px/s, held by a fence to the window between the
+  two speeds he has complained about. Nine sports polled instead of five
+  (college football, college basketball, WNBA, tennis, Europa League, Liga
+  MX, Primeira Liga, Eredivisie added); F1 and golf stay out, their events
+  carry no opponents. College teams read by abbreviation. Three accuracy
+  fixes, two of them mine: probe counts re-measured with a date, tennis
+  rekeyed on competitionId because every match in a tournament shares one
+  event id, and the run ledger now counts what the database accepted rather
+  than what was parsed, which is what the Round 332 watchdog reads.
 - BUILD YOUR XI WAS DEAD AND LYING ABOUT WHY, Round 413 (desktop lane,
   2026-09-02, found by an audit of the owner's 2026-08-28 P1 list). Its
   validator's cap was the Round 407 starvation (200, now 800) and the live
