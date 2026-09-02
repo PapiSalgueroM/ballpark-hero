@@ -38,7 +38,7 @@ const MissingNine = () => {
   const [mode, setMode] = useState<Mode>('daily');
 
   const dailyPuzzle = useMemo<ActiveNinePuzzle>(() => getDailyNinePuzzle(), []);
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActiveNinePuzzle>(() => getRandomNinePuzzle());
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActiveNinePuzzle | null>(null);
 
   const {
     guesses: dailyActions,
@@ -56,7 +56,7 @@ const MissingNine = () => {
 
   const [unlimitedActions, setUnlimitedActions] = useState<NineAction[]>([]);
 
-  const puzzle = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const puzzle = mode === 'daily' ? dailyPuzzle : (unlimitedPuzzle ?? dailyPuzzle);
   const actions = mode === 'daily' ? dailyActions : unlimitedActions;
   const misses = actions.filter((a) => a.t === 'miss').length;
   const won = actions.some((a) => a.t === 'won');
@@ -97,7 +97,11 @@ const MissingNine = () => {
     setInput('');
   }, []);
 
-  const switchMode = useCallback((m: Mode) => { setMode(m); setInput(''); }, []);
+  const switchMode = useCallback((m: Mode) => {
+    if (m === 'unlimited' && unlimitedPuzzle === null) setUnlimitedPuzzle(getRandomNinePuzzle());
+    setMode(m);
+    setInput('');
+  }, [unlimitedPuzzle]);
 
   useGameCompletion('missing-nine', mode === 'daily' && rawDailyStatus !== 'playing', score);
 

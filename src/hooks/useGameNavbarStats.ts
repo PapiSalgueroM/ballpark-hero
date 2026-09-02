@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getLocalTodayCount } from '@/lib/completions';
 import { getGlobalCurrentStreak } from '@/lib/streaks';
+import { usePlayerName } from '@/hooks/usePlayerName';
 
 interface GameNavbarStats {
   gamesPlayedToday: number;
@@ -40,7 +41,7 @@ interface GameNavbarStats {
  */
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const { profile } = useAuth();
-  const playerName = getCurrentPlayerName(profile);
+  const playerName = usePlayerName(profile);
   const [stats, setStats] = useState<GameNavbarStats>({
     gamesPlayedToday: 0,
     totalPointsToday: 0,
@@ -51,6 +52,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   const fetchingRef = useRef(false);
 
   const fetchStats = useCallback(async () => {
+    if (!playerName) return;
     if (fetchingRef.current) return;
     fetchingRef.current = true;
 

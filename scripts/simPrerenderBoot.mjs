@@ -157,7 +157,7 @@ for (const route of SAMPLE) {
   try {
     await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
     /* 3: the words are there BEFORE anything boots */
-    const preText = await page.evaluate(() => (document.getElementById('root')?.innerText ?? '').trim().length);
+    const preText = await page.evaluate(() => (document.getElementById('root')?.textContent ?? '').trim().length);
     if (preText < 400) fail(`${route}: the snapshot only carries ${preText} characters before boot`);
 
     /* wait for React to take the page over */

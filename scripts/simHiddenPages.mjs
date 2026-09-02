@@ -27,7 +27,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { hiddenRoutes } from './genHiddenStubs.mjs';
+import { hiddenRoutes, isGeneratedStub } from './genHiddenStubs.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC = path.join(ROOT, 'public');
@@ -90,6 +90,22 @@ for (const [r, html] of docs) {
   if (/(?:src|href)="\/assets\//.test(html)) { hashed += 1; fail(`${r} carries a hashed asset path, which goes stale on the next build`); }
 }
 console.log(`   none submitted, ${hashed} with a hashed path`);
+
+/* ── 5: only the real generated marker authorizes an overwrite ─────────── */
+console.log('5) comments, scripts and body copy cannot impersonate a generated stub');
+{
+  const marker = '<meta content="needs an account" name="dukb-hidden-page">';
+  const cases = [
+    ['a real head meta', `<!doctype html><html><head>${marker}</head><body></body></html>`, true],
+    ['a comment', `<!doctype html><html><head><!-- ${marker} --></head><body></body></html>`, false],
+    ['a script string', `<!doctype html><html><head><script>const marker = '${marker}'</script></head><body></body></html>`, false],
+    ['a body meta', `<!doctype html><html><head></head><body>${marker}</body></html>`, false],
+  ];
+  for (const [label, html, expected] of cases) {
+    if (isGeneratedStub(html) !== expected) fail(`${label} was ${expected ? 'not recognized' : 'mistaken'} as the generated hidden-page marker`);
+  }
+  console.log(`   ${cases.length} overwrite-gate cases checked, only the real head meta accepted`);
+}
 
 console.log('');
 if (failures > 0) {

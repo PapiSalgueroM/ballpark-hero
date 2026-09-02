@@ -145,8 +145,9 @@ export function GameNavbar() {
                 className="inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"
               >
                 <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" />
-                <span className="hidden sm:inline">Sign up to track your stats</span>
-                <span className="sm:hidden">Track stats</span>
+                <span className="sr-only">Create an account to keep your leaderboard name and save your streaks across devices</span>
+                <span aria-hidden="true" className="hidden sm:inline">Save name + streaks</span>
+                <span aria-hidden="true" className="sm:hidden">Save streaks</span>
               </button>
             ) : (
               <>

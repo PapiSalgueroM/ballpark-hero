@@ -18,7 +18,6 @@ type OlympicsAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
 
 export function useOlympics() {
   const [mode, setMode] = useState<OlympicsMode>('daily');
-  const switchMode = useCallback((m: OlympicsMode) => setMode(m), []);
 
   // ── Daily ──────────────────────────────────────────────────────────────────
   const {
@@ -44,16 +43,21 @@ export function useOlympics() {
   }, [rawDailyStatus]);
 
   // ── Unlimited ──────────────────────────────────────────────────────────────
-  const [unlimitedAthlete, setUnlimitedAthlete] = useState<OlympicAthlete>(
-    () => olympicAthletes[Math.floor(Math.random() * olympicAthletes.length)],
-  );
+  const [unlimitedAthlete, setUnlimitedAthlete] = useState<OlympicAthlete | null>(null);
   const [unlimitedClueLevel, setUnlimitedClueLevel] = useState(0);
   const [unlimitedStatus, setUnlimitedStatus] = useState<OlympicsStatus>('playing');
 
   // ── Active (mode-dependent) values ────────────────────────────────────────
-  const athlete = mode === 'daily' ? (dailyPuzzle ?? olympicAthletes[0]) : unlimitedAthlete;
+  const athlete = mode === 'daily' ? (dailyPuzzle ?? olympicAthletes[0]) : (unlimitedAthlete ?? olympicAthletes[0]);
   const clueLevel = mode === 'daily' ? dailyClueLevel : unlimitedClueLevel;
   const status = mode === 'daily' ? dailyStatus : unlimitedStatus;
+
+  const switchMode = useCallback((m: OlympicsMode) => {
+    if (m === 'unlimited' && unlimitedAthlete === null) {
+      setUnlimitedAthlete(olympicAthletes[Math.floor(Math.random() * olympicAthletes.length)]);
+    }
+    setMode(m);
+  }, [unlimitedAthlete]);
 
   // ── Shared local state ────────────────────────────────────────────────────
   const [guessInput, setGuessInput] = useState('');

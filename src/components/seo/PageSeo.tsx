@@ -37,7 +37,7 @@ interface PageSeoProps {
 }
 
 const BASE_URL = 'https://douknowball.com';
-const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
+const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image-daily-sports.png`;
 
 /* Round 277: the brand suffix comes off a title that would otherwise be cut in
  * half by Google.

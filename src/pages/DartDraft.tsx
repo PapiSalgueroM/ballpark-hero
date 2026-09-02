@@ -74,7 +74,7 @@ const DartDraft = () => {
   const [lifeboatUsed, setLifeboatUsed] = useState(false);
   const [series, setSeries] = useState<SeriesResult | null>(null);
   const [machineXi, setMachineXi] = useState<(Player | null)[]>([]);
-  const seedRef = useRef(Math.floor(Math.random() * 1e9));
+  const seedRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const dirRef = useRef(1);
   const sweepRef = useRef(0);

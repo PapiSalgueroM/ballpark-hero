@@ -73,7 +73,7 @@ console.log(`   ${docs.size} of ${routes.length} routes have a document`);
    control in this repo replaced a string that was not in the file, stayed
    green, and green meant "the control did not fire", not "the check works". */
 const CONTROL = process.env.SIM_PRERENDER_CONTROL || '';
-if (CONTROL && CONTROL !== 'noindex') {
+if (CONTROL && !['noindex', 'replay', 'port'].includes(CONTROL)) {
   console.error(`SIM_PRERENDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -562,20 +562,159 @@ const failuresBefore14 = failures;
   if (noindexed > 4) fail(`${noindexed} sitemap documents carry a noindex in all`);
   console.log(`   ${docs.size} sitemap documents, ${noindexed} carrying a noindex`);
 }
+const failuresAfter14 = failures;
+
+/* Round 418: a random board or player is a valid photograph, but rebuilding
+   the same source must produce the same photograph. Every clock sample uses a
+   fixed seed, records the call count and hook identity, then repeats in an
+   independent context. A changed head, ordered body, call count or hook makes
+   the route refuse to write.
+
+   SIM_PRERENDER_CONTROL=replay disables the mismatch comparison in memory.
+   The section must report exactly that planted defect and nothing else. */
+console.log('15) seeded random crawler copy repeats before it is written');
+const failuresBefore15 = failures;
+{
+  const prerenderPath = path.join(ROOT, 'scripts/prerender.mjs');
+  let source = readFileSync(prerenderPath, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  if (CONTROL === 'replay') {
+    const before = source;
+    source = source.replace(
+      /const\s+mismatchedReplay\s*=\s*samples\.findIndex\(\(sample,\s*s\)\s*=>\s*!captureRepeats\(sample,\s*replays\[s\]\)\);/,
+      'const mismatchedReplay = -1;',
+    );
+    if (source === before) {
+      console.error('control: could not disable the random replay mismatch gate, so this control would prove nothing');
+      process.exit(1);
+    }
+  }
+
+  const daysMatch = source.match(/const\s+SAMPLE_DAYS\s*=\s*\[([^\]]+)\]/);
+  const days = daysMatch ? daysMatch[1].split(',').map(v => Number(v.trim())) : [];
+  const seedMatch = source.match(/const\s+RANDOM_SEED\s*=\s*(\d+)/);
+  if (days.length < 3 || days.some(v => !Number.isFinite(v)) || !seedMatch || Number(seedMatch[1]) !== 284 || /\bRANDOM_SEEDS\b/.test(source)) {
+    fail('prerender.mjs does not pair every clock sample with the fixed audited random seed');
+  }
+  if (!/const\s+clockScript\s*=\s*\(days,\s*perturbReplay\s*=\s*false\)\s*=>/.test(source)
+      || !/audit\.calls\s*\+=\s*1/.test(source)
+      || !/Math\.random\s*=\s*seededRandom/.test(source)
+      || !/Math\.random\s*===\s*seededRandom/.test(source)) {
+    fail('the prerender init script does not count calls and prove its seeded random hook stayed installed');
+  }
+  if (!/let\s+replayPages\s*=\s*\[\]/.test(source)
+      || !/for\s*\(let\s+pass\s*=\s*0;\s*pass\s*<\s*2;\s*pass\s*\+=\s*1\)/.test(source)
+      || !/pass\s*===\s*0\s*\?\s*pages\s*:\s*replayPages/.test(source)
+      || !/clockScript\(days,\s*CONTROL\s*===\s*['"]random-replay['"]\s*&&\s*pass\s*===\s*1\)/.test(source)) {
+    fail('the prerender browser does not create an independent replay context for every clock sample');
+  }
+  if (!/randomCalls:\s*Number\.isInteger\(randomAudit\?\.calls\)/.test(source)
+      || !/randomHookIntact:\s*randomAudit\?\.intact\?\.\(\)\s*===\s*true/.test(source)
+      || !/const\s+brokenAudit\s*=\s*samples\.findIndex/.test(source)) {
+    fail('the rendered capture does not fail closed on a missing random audit or replaced hook');
+  }
+  if (!/samples\.some\(sample\s*=>\s*sample\.randomCalls\s*>\s*0\)/.test(source)
+      || !/replays\.push\(await\s+draw\(s,\s*route,\s*url,\s*true\)\)/.test(source)
+      || !/const\s+mismatchedReplay\s*=\s*samples\.findIndex\(\(sample,\s*s\)\s*=>\s*!captureRepeats\(sample,\s*replays\[s\]\)\);/.test(source)
+      || !/if\s*\(mismatchedReplay\s*!==\s*-1\)/.test(source)) {
+    fail('the fixed-seed replay does not compare every random-using clock sample before writing');
+  }
+  if (!/original\.randomCalls\s*>=\s*0/.test(source)
+      || !/replay\.randomCalls\s*===\s*original\.randomCalls/.test(source)
+      || !/capturePayload\(replay\)\s*===\s*capturePayload\(original\)/.test(source)) {
+    fail('the replay comparison omits the call count or exact ordered crawler payload');
+  }
+  console.log(`   ${days.length} clock samples use one seed, audited hooks and independent exact replays`);
+}
+const failuresAfter15 = failures;
+
+/* Round 418: the desktop and Codex lanes use separate working trees but share
+   one machine. A fixed default prerender port made a valid build fail as soon
+   as the other lane began its own build. The default must be an operating
+   system assigned loopback port, while an explicit PRERENDER_PORT remains
+   available for debugging.
+
+   SIM_PRERENDER_CONTROL=port changes the default back to 4310 in memory. This
+   section must report that one planted defect and nothing else. */
+console.log('16) concurrent builds get separate prerender ports');
+const failuresBefore16 = failures;
+{
+  const prerenderPath = path.join(ROOT, 'scripts/prerender.mjs');
+  let source = readFileSync(prerenderPath, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  if (CONTROL === 'port') {
+    const before = source;
+    source = source.replace(
+      /(process\.env\.PRERENDER_PORT\s*===\s*undefined\s*\?\s*)0(\s*:\s*Number\(process\.env\.PRERENDER_PORT\))/,
+      (_match, beforeDefault, afterDefault) => `${beforeDefault}4310${afterDefault}`,
+    );
+    if (source === before) {
+      console.error('control: could not restore the fixed prerender port, so this control would prove nothing');
+      process.exit(1);
+    }
+  }
+
+  const defaultMatch = source.match(
+    /const\s+REQUESTED_PORT\s*=\s*process\.env\.PRERENDER_PORT\s*===\s*undefined\s*\?\s*(\d+)\s*:\s*Number\(process\.env\.PRERENDER_PORT\)/,
+  );
+  if (!defaultMatch) {
+    fail('prerender.mjs no longer has an explicit optional PRERENDER_PORT default');
+  } else if (Number(defaultMatch[1]) !== 0) {
+    fail(`prerender.mjs defaults to fixed port ${defaultMatch[1]}, so parallel working-tree builds can collide`);
+  }
+  if (!/server\.listen\(REQUESTED_PORT,\s*['"]127\.0\.0\.1['"]/.test(source)) {
+    fail('the prerender server does not bind the requested port on loopback');
+  }
+  if (!/const\s+boundAddress\s*=\s*server\.address\(\)/.test(source)
+      || !/const\s+PORT\s*=\s*boundAddress\.port/.test(source)) {
+    fail('the prerender browser does not read back the operating system assigned port');
+  }
+  if (!/const\s+url\s*=\s*`http:\/\/127\.0\.0\.1:\$\{PORT\}\$\{route\}`/.test(source)) {
+    fail('prerender navigation does not use the operating system assigned port');
+  }
+  console.log('   free loopback port by default, explicit override retained');
+}
+const failuresAfter16 = failures;
 
 console.log('');
 if (CONTROL === 'noindex') {
   /* Inverted on purpose: under the control section 14 is SUPPOSED to fail,
      so a clean section is the bug. Everything else has to stay clean, or a
      real failure could hide behind the control's expected one. */
-  const caught = failures - failuresBefore14;
-  const elsewhere = failuresBefore14;
-  if (caught > 0 && elsewhere === 0) {
-    console.log(`simPrerender control: green. The injected noindex was reported (${caught} finding), so section 14 works.`);
+  const caught = failuresAfter14 - failuresBefore14;
+  const elsewhere = failuresBefore14 + (failures - failuresAfter14);
+  if (caught === 1 && elsewhere === 0) {
+    console.log('simPrerender control: green. The injected noindex was reported as exactly one finding, so section 14 works.');
     process.exit(0);
   }
-  if (caught === 0) console.error('simPrerender control: RED. A sitemap page carrying a noindex went unreported, so section 14 proves nothing.');
+  if (caught !== 1) console.error(`simPrerender control: RED. The injected noindex produced ${caught} findings, expected exactly one.`);
   if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 14, which the control run must not hide.`);
+  process.exit(1);
+}
+if (CONTROL === 'replay') {
+  const caught = failuresAfter15 - failuresBefore15;
+  const elsewhere = failuresBefore15 + (failures - failuresAfter15);
+  if (caught === 1 && elsewhere === 0) {
+    console.log('simPrerender control: green. The disabled random replay gate was reported as exactly one finding.');
+    process.exit(0);
+  }
+  if (caught !== 1) console.error(`simPrerender control: RED. The disabled random replay gate produced ${caught} findings, expected exactly one.`);
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 15, which the control run must not hide.`);
+  process.exit(1);
+}
+if (CONTROL === 'port') {
+  const caught = failuresAfter16 - failuresBefore16;
+  const elsewhere = failuresBefore16 + (failures - failuresAfter16);
+  if (caught === 1 && elsewhere === 0) {
+    console.log('simPrerender control: green. The restored fixed port was reported as exactly one finding.');
+    process.exit(0);
+  }
+  if (caught !== 1) console.error(`simPrerender control: RED. The restored fixed port produced ${caught} findings, expected exactly one.`);
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 16, which the control run must not hide.`);
   process.exit(1);
 }
 if (failures > 0) {

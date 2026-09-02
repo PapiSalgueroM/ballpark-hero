@@ -123,21 +123,26 @@ export function useGame() {
 
   // ---- UNLIMITED: original Math.random() logic (unchanged) -----------------
   const [difficulty, setDifficultyState] = useState<Difficulty>('easy');
-  // Initial unlimited target uses players.ts fallback (playerPool not yet ready at init time)
-  const [unlimitedTarget, setUnlimitedTarget] = useState<Player>(() => selectRandomPlayer('easy', players));
+  // The first unlimited target is dealt when that mode is opened. Until then
+  // the daily route does not consume a random draw for hidden state.
+  const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<GuessResult[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
   // ---- ACTIVE VALUES (mode-switched) ---------------------------------------
-  const targetPlayer = mode === 'daily' ? dailyTarget : unlimitedTarget;
+  const activeUnlimitedTarget = unlimitedTarget ?? buildTargetPool(difficulty, players)[0];
+  const targetPlayer = mode === 'daily' ? dailyTarget : activeUnlimitedTarget;
   const guesses      = mode === 'daily' ? dailyGuesses : unlimitedGuesses;
   const gameStatus   = mode === 'daily' ? effectiveDailyStatus : unlimitedStatus;
 
   // ---- CALLBACKS -----------------------------------------------------------
 
   const switchMode = useCallback((newMode: FootleMode) => {
+    if (newMode === 'unlimited' && unlimitedTarget === null) {
+      setUnlimitedTarget(selectRandomPlayer('easy', players));
+    }
     setMode(newMode);
-  }, []);
+  }, [unlimitedTarget]);
 
   const makeGuess = useCallback((player: Player) => {
     if (gameStatus !== 'playing' || !targetPlayer) return;
@@ -213,8 +218,8 @@ export function useGame() {
       if (!dailyTarget) return playerPool;
       return ensureAnswerInList(playerPool, dailyTarget.name, p => p.name, dailyTarget);
     }
-    return ensureAnswerInList(playerPool, unlimitedTarget.name, p => p.name, unlimitedTarget);
-  }, [mode, playerPool, dailyTarget, unlimitedTarget]);
+    return ensureAnswerInList(playerPool, activeUnlimitedTarget.name, p => p.name, activeUnlimitedTarget);
+  }, [mode, playerPool, dailyTarget, activeUnlimitedTarget]);
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 

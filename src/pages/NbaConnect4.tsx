@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import { NbaConnect4HowToPlay } from '@/components/nba-connect4/NbaConnect4HowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NBA_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
@@ -18,6 +19,7 @@ const COLS = 7;
 
 const NbaConnect4 = () => {
   const {
+    isReady,
     board,
     grid,
     currentTeam,
@@ -72,6 +74,8 @@ const NbaConnect4 = () => {
       >
         <NbaConnect4HowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
+        {!isReady ? <GameLoadingState label="Choosing a board..." /> : <>
+
         {/* Turn indicator */}
         {phase === 'playing' && (
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -122,7 +126,7 @@ const NbaConnect4 = () => {
         )}
 
         {/* Board name */}
-        <p className="text-center text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
+        <p data-no-prerender="true" className="text-center text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
           Board: {board.name}
         </p>
 
@@ -278,6 +282,8 @@ const NbaConnect4 = () => {
             </button>
           </div>
         )}
+
+        </>}
 
         <GameSeoContent
           pageHasOwnH1

@@ -95,7 +95,7 @@ export function useHockeyHL() {
   const [showingResult, setShowingResult] = useState(false);
 
   // Unlimited local state
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(getRandomPairs);
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(dailyPairs);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

@@ -75,10 +75,10 @@ const GuessTheGolfer = () => {
   const dailyPhase: Phase = dailyWon ? 'won' : dailyWrong.length >= MAX_GUESSES ? 'lost' : 'playing';
 
   // ---- Unlimited ------------------------------------------------------------
-  const [unIndex, setUnIndex] = useState(() => Math.floor(Math.random() * guessableGolfers.length));
+  const [unIndex, setUnIndex] = useState<number | null>(null);
   const [unWrong, setUnWrong] = useState<string[]>([]);
   const [unPhase, setUnPhase] = useState<Phase>('playing');
-  const unGolfer = guessableGolfers[unIndex % guessableGolfers.length];
+  const unGolfer = guessableGolfers[(unIndex ?? 0) % guessableGolfers.length];
 
   const golfer = mode === 'daily' ? dailyGolfer : unGolfer;
   const wrongGuesses = mode === 'daily' ? dailyWrong : unWrong;
@@ -98,6 +98,13 @@ const GuessTheGolfer = () => {
       .filter((g) => norm(g.name).includes(q) && !wrongGuesses.includes(g.name))
       .slice(0, 6);
   }, [input, wrongGuesses]);
+
+  const switchMode = useCallback((nextMode: 'daily' | 'unlimited') => {
+    if (nextMode === 'unlimited' && unIndex === null) {
+      setUnIndex(Math.floor(Math.random() * guessableGolfers.length));
+    }
+    setMode(nextMode);
+  }, [unIndex]);
 
   const submitGuess = useCallback(
     (name: string) => {
@@ -119,7 +126,7 @@ const GuessTheGolfer = () => {
   );
 
   const nextUnlimited = useCallback(() => {
-    setUnIndex((i) => (i + 1 + Math.floor(Math.random() * (guessableGolfers.length - 1))) % guessableGolfers.length);
+    setUnIndex((i) => ((i ?? 0) + 1 + Math.floor(Math.random() * (guessableGolfers.length - 1))) % guessableGolfers.length);
     setUnWrong([]);
     setUnPhase('playing');
     setInput('');
@@ -142,12 +149,12 @@ const GuessTheGolfer = () => {
           <div className="relative">
             <div className="flex items-center justify-center gap-2 mt-3">
               <button
-                onClick={() => setMode('daily')}
+                onClick={() => switchMode('daily')}
                 className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
                   mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
               >Daily</button>
               <button
-                onClick={() => setMode('unlimited')}
+                onClick={() => switchMode('unlimited')}
                 className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
                   mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border')}
               >Unlimited</button>

@@ -85,9 +85,7 @@ export function useMlbHL() {
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[MlbHLPlayer, MlbHLPlayer][]>(
-    () => buildPairs(Math.floor(Math.random() * 100000), hard),
-  );
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[MlbHLPlayer, MlbHLPlayer][]>(dailyPairs);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

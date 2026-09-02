@@ -15,11 +15,10 @@ import {
  *
  * Local-first by design: every value here is readable and correct for
  * guests (no login required to play anything, per this app's guest-first
- * posture). Signed-in sync is best-effort ONLY and, as of this writing, is
- * a documented no-op - see the comment on syncToProfileIfPossible below for
- * why. Nothing in this hook ever blocks or throws on account of the sync
- * attempt; the local read/write path is the source of truth regardless of
- * auth state.
+ * posture). Signed-in saves are also backed up to profiles.streak_state, and
+ * AuthContext restores that snapshot after sign-in. Nothing in this hook
+ * ever blocks or throws on account of a sync attempt; the local read/write
+ * path stays instant even when the network is unavailable.
  */
 
 /**
@@ -27,22 +26,9 @@ import {
  * so it survives a browser reset / new device, "best effort, never
  * blocking" per the spec.
  *
- * As of this writing there is nowhere to sync TO: the `profiles` table does
- * not exist in the live Supabase project (verified directly against
- * information_schema.columns and list_tables on flawuiqbvjobmkfkauhw --
- * it returned zero rows / "relation does not exist"), and no other table
- * has a suitable jsonb or dedicated streak column either. Per the build
- * spec ("If no suitable column exists, keep it local-only and PROPOSE the
- * exact ALTER TABLE in your report, do not run it"), this function is a
- * deliberate no-op stub rather than a blind write against a table that
- * isn't there. The proposed DDL lives in the accompanying report/PR
- * description, not in this file, since this task's edit list does not
- * include running migrations.
- *
- * Once a real table+column exists, this is the only function that needs to
- * change: swap the early return for an upsert of `state` (or a trimmed
- * projection of it) keyed by user.id, still wrapped in try/catch, still
- * fire-and-forget.
+ * The live profiles table has a per-user streak_state jsonb column and an
+ * owner-write RLS policy. This remains best effort: a failed backup never
+ * interrupts a game, and the next signed-in completion tries again.
  */
 async function syncToProfileIfPossible(userId: string, state: StreakState): Promise<void> {
   // The profiles table now exists (created 2026-07-03: user_id unique,
@@ -97,6 +83,16 @@ export function useStreaks(): UseStreaksResult {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const onRestore = () => refresh();
+    window.addEventListener('dukb-streaks-restored', onRestore);
+    window.addEventListener('dukb-streaks-changed', onRestore);
+    return () => {
+      window.removeEventListener('dukb-streaks-restored', onRestore);
+      window.removeEventListener('dukb-streaks-changed', onRestore);
+    };
+  }, [refresh]);
 
   const recordCompletion = useCallback((gameSlug: string) => {
     const next = recordGameCompletion(gameSlug);

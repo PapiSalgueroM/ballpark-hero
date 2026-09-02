@@ -33,7 +33,6 @@ function seedShuffle(players: string[], seed: number): string[] {
 
 export function useConnections() {
   const [mode, setMode] = useState<ConnectionsMode>('daily');
-  const switchMode = useCallback((m: ConnectionsMode) => setMode(m), []);
 
   // ── Supabase puzzle pool ───────────────────────────────────────────────────
   const [puzzlePool, setPuzzlePool] = useState(fallbackPuzzles);
@@ -94,9 +93,7 @@ export function useConnections() {
   );
 
   // ── Unlimited ──────────────────────────────────────────────────────────────
-  const [unlimitedIndex, setUnlimitedIndex] = useState(
-    () => Math.floor(Math.random() * puzzlePool.length),
-  );
+  const [unlimitedIndex, setUnlimitedIndex] = useState<number | null>(null);
   const [solvedGroupsUnlimited, setSolvedGroupsUnlimited] = useState<ConnectionGroup[]>([]);
   const [livesUnlimited, setLivesUnlimited] = useState(4);
   const [hintsUsedUnlimited, setHintsUsedUnlimited] = useState(0);
@@ -117,7 +114,7 @@ export function useConnections() {
   const puzzle =
     mode === 'daily'
       ? (dailyPuzzle ?? fallbackPuzzles[0])
-      : puzzlePool[unlimitedIndex % puzzlePool.length];
+      : puzzlePool[(unlimitedIndex ?? 0) % puzzlePool.length];
 
   const activeSolvedGroups = mode === 'daily' ? dailySolvedGroups : solvedGroupsUnlimited;
   const activeLives = mode === 'daily' ? dailyLives : livesUnlimited;
@@ -178,6 +175,13 @@ export function useConnections() {
   }, [allPlayers, activeSolvedGroups, shuffleKey]);
 
   const shufflePlayers = useCallback(() => setShuffleKey((k) => k + 1), []);
+
+  const switchMode = useCallback((m: ConnectionsMode) => {
+    if (m === 'unlimited' && unlimitedIndex === null) {
+      setUnlimitedIndex(Math.floor(Math.random() * puzzlePool.length));
+    }
+    setMode(m);
+  }, [unlimitedIndex, puzzlePool.length]);
 
   const togglePlayer = useCallback(
     (player: string) => {
@@ -272,7 +276,7 @@ export function useConnections() {
   const nextPuzzle = useCallback(() => {
     if (mode !== 'unlimited') return;
     resetUnlimitedState();
-    setUnlimitedIndex((prev) => prev + 1);
+    setUnlimitedIndex((prev) => (prev ?? 0) + 1);
   }, [mode, resetUnlimitedState]);
 
   const totalPuzzles = puzzlePool.length;
@@ -282,7 +286,7 @@ export function useConnections() {
   return {
     mode, switchMode,
     puzzle,
-    puzzleIndex: unlimitedIndex,
+    puzzleIndex: unlimitedIndex ?? 0,
     totalPuzzles,
     streak,
     selected,

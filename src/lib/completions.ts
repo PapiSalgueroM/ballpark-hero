@@ -1,6 +1,16 @@
 import { supabase } from '@/integrations/supabase/client';
-import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
+import {
+  recordGameCompletion as recordStreakCompletion,
+  recordGameStreakDay as recordStreakDayOnly,
+  getEtDateString,
+  type StreakState,
+} from '@/lib/streaks';
 import { nameModerationError } from '@/lib/nameModeration';
+import {
+  getProgressHydrationSnapshot,
+  isCurrentProgressHydration,
+  type ProgressHydrationSnapshot,
+} from '@/lib/progressHydration';
 
 /**
  * Wave 3: anonymous, sitewide completion tracking.
@@ -26,6 +36,33 @@ import { nameModerationError } from '@/lib/nameModeration';
 
 const LOCAL_TODAY_KEY = 'dukb-local-completions';
 const GUEST_HANDLE_KEY = 'dukb-guest-handle';
+
+/* Signed-in completion saves update several read-modify-write tables and the
+   profile streak snapshot. Keep them in invocation order so two fast finishes
+   cannot let an older snapshot land after a newer one. A rejected save releases
+   the queue, and gameplay remains local-first throughout. */
+let authCompletionSaveQueue: Promise<void> = Promise.resolve();
+
+function enqueueAuthCompletionSave<T>(work: () => Promise<T>): Promise<T> {
+  const queued = authCompletionSaveQueue.catch(() => undefined).then(work);
+  authCompletionSaveQueue = queued.then(() => undefined, () => undefined);
+  return queued;
+}
+
+function afterProgressHydration(
+  snapshot: ProgressHydrationSnapshot | null,
+  apply: (allowProfileStreakBackup: boolean) => void,
+): void {
+  if (!snapshot) {
+    apply(true);
+    return;
+  }
+  if (snapshot.status === 'pending' && snapshot.promise) {
+    void snapshot.promise.then(apply, () => apply(false));
+    return;
+  }
+  apply(snapshot.status === 'ready');
+}
 
 /* Round 301, audit finding 6: this used to be a UTC day while the streaks
    next to it kept Eastern days, so the Games Today counter reset to zero at
@@ -102,6 +139,25 @@ export function getGuestHandle(): string {
   }
 }
 
+function getStoredGuestHandle(): string | null {
+  try {
+    const existing = localStorage.getItem(GUEST_HANDLE_KEY);
+    return existing && !LEGACY_HANDLE.test(existing) ? existing : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Reads the identity already known on this device without minting one.
+ * Render paths use this first, then mint from an effect after React commits,
+ * so a discarded pre-commit render cannot consume a different random stream.
+ */
+export function getStoredPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string | null {
+  const fromProfile = profile?.display_name || profile?.username;
+  return fromProfile || getCachedDisplayName() || getStoredGuestHandle();
+}
+
 /**
  * The display handle to attribute a completion/leaderboard row to right now:
  * the signed-in profile's display_name or username if available, else the
@@ -110,8 +166,7 @@ export function getGuestHandle(): string {
  * not subscribe to anything.
  */
 export function getCurrentPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string {
-  const fromProfile = profile?.display_name || profile?.username;
-  return fromProfile || getCachedDisplayName() || getGuestHandle();
+  return getStoredPlayerName(profile) || getGuestHandle();
 }
 
 /**
@@ -177,15 +232,34 @@ function getCachedDisplayName(): string | null {
  * match pings and Soccer Career's season pings onto recordActivity, which
  * writes the anonymous row and nothing else, and that silently stopped a
  * played match or season from keeping the header flame alive: since Round
- * 159 a season had counted as playing today. This records that day locally
- * (idempotent per day, no signed in save, no points) and the two sims call it
- * beside their ping. The boards keep Round 301's shape and do not.
+ * 159 a season had counted as playing today. This records that day without
+ * adding a finished game or points, and backs up the changed day for a
+ * signed-in player. Repeated activity in the same ET day is a no-op, so the
+ * two sims can call it beside every light ping. The boards keep Round 301's
+ * shape and do not.
  */
 export function recordStreakDay(gamePath: string): void {
   try {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
-    recordStreakCompletion(game, new Date(), 0);
+    const playedAt = new Date();
+    const streakUser = supabase.auth.getUser();
+    const hydration = getProgressHydrationSnapshot();
+    const applyStreakDay = (allowProfileStreakBackup: boolean) => {
+      try {
+        if (hydration && !isCurrentProgressHydration(hydration)) return;
+        const { state, changed } = recordStreakDayOnly(game, playedAt);
+        if (!changed) return;
+        try { window.dispatchEvent(new Event('dukb-streaks-changed')); } catch { /* SSR/harness */ }
+        if (!allowProfileStreakBackup) return;
+        enqueueAuthCompletionSave(async () => {
+          const { data } = await streakUser;
+          if (!data?.user) return false;
+          return backupProfileStreakState(data.user.id, state);
+        }).catch(() => { /* signed out or auth unreachable: the local day remains */ });
+      } catch { /* a delayed local tracking failure must not surface */ }
+    };
+    afterProgressHydration(hydration, applyStreakDay);
   } catch {
     // Never let a tracking failure break gameplay.
   }
@@ -264,18 +338,48 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        session exists. useGameCompletion no longer writes any of this
        itself, it calls this function like everybody else, so nothing counts
        twice. */
-    recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0);
-
-    supabase.auth.getUser()
-      .then(({ data }) => {
-        if (data?.user) return saveAuthCompletion(data.user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
+    const playedAt = new Date();
+    const completionScore = typeof score === 'number' && Number.isFinite(score) ? score : 0;
+    const completionUser = supabase.auth.getUser();
+    const hydration = getProgressHydrationSnapshot();
+    const saveSignedInCompletion = (
+      streakState: StreakState | null,
+      allowProfileStreakBackup: boolean,
+    ) => {
+      enqueueAuthCompletionSave(async () => {
+        const { data } = await completionUser;
+        if (!data?.user) return false;
+        return saveAuthCompletion(
+          data.user.id,
+          game,
+          completionScore,
+          correctAnswers,
+          streakState,
+          allowProfileStreakBackup,
+        );
       })
-      .then(saved => {
-        if (saved) {
-          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
+        .then(saved => {
+          if (saved) {
+            try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
+          }
+        })
+        .catch(() => { /* signed out or auth unreachable: the play still counted above */ });
+    };
+    const applyCompletionProgress = (allowProfileStreakBackup: boolean) => {
+      try {
+        if (hydration && !isCurrentProgressHydration(hydration)) {
+          saveSignedInCompletion(null, false);
+          return;
         }
-      })
-      .catch(() => { /* signed out or auth unreachable: the play still counted above */ });
+        const streakState = recordStreakCompletion(game, playedAt, completionScore);
+        saveSignedInCompletion(streakState, allowProfileStreakBackup);
+      } catch { /* a delayed local tracking failure must not surface */ }
+    };
+
+    /* If an established account is still loading its remote streak, apply
+       this play only after that decision. Otherwise a blank browser could
+       save streak 1 over a much longer account history. */
+    afterProgressHydration(hydration, applyCompletionProgress);
 
     bumpLocalTodayCount(game);
   } catch {
@@ -292,7 +396,14 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
  * end so the caller can announce the save. All errors are swallowed by the
  * caller: a stats failure must never surface to the player.
  */
-export async function saveAuthCompletion(userId: string, gameSlug: string, score: number, correctAnswers: number): Promise<boolean> {
+export async function saveAuthCompletion(
+  userId: string,
+  gameSlug: string,
+  score: number,
+  correctAnswers: number,
+  streakState: StreakState | null,
+  allowProfileStreakBackup: boolean,
+): Promise<boolean> {
   const today = new Date().toISOString().split('T')[0];
 
   await supabase.from('user_game_scores').insert({
@@ -380,20 +491,27 @@ export async function saveAuthCompletion(userId: string, gameSlug: string, score
       .eq('game_type', gameSlug);
   }
 
-  /* Round 301, audit finding 15: back up the local streak state to the
-     profile on every signed in save. useStreaks had this sync, but only
-     inside a method nothing called after Round 300 hollowed the hook, so
-     profiles.streak_state was never written and a cleared cache erased a
-     streak forever. Best effort, replicated from useStreaks verbatim:
-     dynamic access because the column is newer than the generated types. */
-  try {
-    await (supabase.from as any)('profiles').upsert(
-      { user_id: userId, streak_state: getStreakState(), updated_at: new Date().toISOString() },
-      { onConflict: 'user_id' },
-    );
-  } catch { /* best effort only */ }
+  /* Back up the exact state returned when this completion was recorded.
+     Reading localStorage here is unsafe because the anonymous completion
+     event can refresh the profile while these server writes are in flight,
+     briefly restoring the previous remote snapshot over the new local one. */
+  if (allowProfileStreakBackup && streakState) {
+    await backupProfileStreakState(userId, streakState);
+  }
 
   return true;
+}
+
+async function backupProfileStreakState(userId: string, streakState: StreakState): Promise<boolean> {
+  try {
+    const { error } = await (supabase.from as any)('profiles').upsert(
+      { user_id: userId, streak_state: streakState, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id' },
+    );
+    return !error;
+  } catch {
+    return false;
+  }
 }
 
 /**

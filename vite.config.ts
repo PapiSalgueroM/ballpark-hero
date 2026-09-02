@@ -81,17 +81,22 @@ const inlineSnapshotAssets = (root: string) => {
        snapshot's own inline boot style holds the page until then, which is
        exactly what it was written for. The noscript copy is for a browser that
        never runs the swap. */
-    /* Round 314: the calm boot. The snapshot's readable copy used to show as
-       a full wall of raw text until React mounted (Anthony filmed the flash).
-       One dimmed screenful reads as the site loading; the noscript lifts the
-       cap so a browser that will never boot the app gets the whole page, and
-       crawlers read the DOM either way. Injected here so every build applies
-       it to every snapshot without rewriting the committed files. */
-    const calmBoot =
-      `<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>` +
-      `<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>`;
-    const inject =
-      calmBoot + "\n    " +
+    /* Round 418: the dimmed snapshot still painted as raw text. Existing
+       committed snapshots get the same early capability marker and hidden
+       one-viewport reservation as newly prerendered pages. A no-JS browser
+       gets the complete visible copy, and crawlers keep every word in the
+       document either way. Older snapshots can carry the first version of
+       these tags, so the plugin upgrades each tag in place instead of merely
+       checking whether its attribute exists. */
+    const capabilityMarker =
+      `<script data-dukb-js-capability>document.documentElement.classList.add('dukb-js');setTimeout(function(){if(document.querySelector('#dukb-home-copy,#dukb-snapshot'))document.documentElement.classList.remove('dukb-js')},8000)</script>`;
+    const firstPaint =
+      `<style data-dukb-first-paint>.dukb-js #dukb-snapshot{visibility:hidden;height:100vh;max-height:100vh;overflow:hidden;opacity:0;box-sizing:border-box}</style>`;
+    const noJsCopy =
+      `<noscript><style data-dukb-no-js-copy>#dukb-snapshot{visibility:visible;height:auto;max-height:none;overflow:visible;opacity:1}</style></noscript>`;
+    const legacyFirstPaint = `<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>`;
+    const legacyNoJsCopy = `<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>`;
+    const assetTags =
       styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" onload="this.media='all'">`).join("\n    ") +
       (styles.length ? `\n    <noscript>${styles.map(h => `<link rel="stylesheet" href="${h}">`).join("")}</noscript>\n    ` : "") +
       modules.map(sr => `<script type="module" crossorigin src="${sr}"></script>`).join("\n    ");
@@ -108,6 +113,21 @@ const inlineSnapshotAssets = (root: string) => {
         try { html = fs.readFileSync(f, "utf8"); } catch { continue; }
         if (!html.includes("/prerender-boot.js")) { skipped += 1; continue; }
         if (html.includes("/assets/")) { skipped += 1; continue; }
+        html = html.replaceAll(legacyFirstPaint, "").replaceAll(legacyNoJsCopy, "");
+        const missingBootTags: string[] = [];
+        const upsertHeadTag = (tagPattern: RegExp, replacement: string) => {
+          let found = 0;
+          html = html.replace(tagPattern, () => {
+            found += 1;
+            return found === 1 ? replacement : "";
+          });
+          if (found === 0) missingBootTags.push(replacement);
+        };
+        upsertHeadTag(/<script\b[^>]*data-dukb-js-capability[^>]*>[\s\S]*?<\/script>/g, capabilityMarker);
+        upsertHeadTag(/<style\b[^>]*data-dukb-first-paint[^>]*>[\s\S]*?<\/style>/g, firstPaint);
+        upsertHeadTag(/<noscript>\s*<style\b[^>]*data-dukb-no-js-copy[^>]*>[\s\S]*?<\/style>\s*<\/noscript>/g, noJsCopy);
+        const bootTags = missingBootTags.join("\n    ");
+        const inject = (bootTags ? bootTags + "\n    " : "") + assetTags;
         const out = html.replace("</head>", `  ${inject}\n  </head>`);
         if (out === html) { skipped += 1; continue; }
         fs.writeFileSync(f, out);

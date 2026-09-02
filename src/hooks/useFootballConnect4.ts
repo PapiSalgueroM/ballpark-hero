@@ -142,7 +142,7 @@ export function useFootballConnect4() {
   const dailyState = useMemo(() => replayC4Board(dailyActions), [dailyActions]);
 
   // Unlimited local state
-  const [unlimitedBoardConfig, setUnlimitedBoardConfig] = useState<FootballConnect4Board>(getRandomBoard);
+  const [unlimitedBoardConfig, setUnlimitedBoardConfig] = useState<FootballConnect4Board>(FOOTBALL_CONNECT4_BOARDS[0]);
   const [unlimitedBoard, setUnlimitedBoard] = useState<Board>(createEmptyBoard);
   const [unlimitedCurrentTurn, setUnlimitedCurrentTurn] = useState<Team>('blue');
   const [unlimitedPhase, setUnlimitedPhase] = useState<GamePhase>('playing');

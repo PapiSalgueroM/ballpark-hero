@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNbaChain } from '@/hooks/useNbaChain';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { NbaChainHowToPlay } from '@/components/nba-chain/NbaChainHowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
@@ -23,6 +24,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 
 const NbaChain = () => {
   const {
+    isReady,
     mode,
     switchMode,
     chain,
@@ -87,7 +89,7 @@ const NbaChain = () => {
 
             {/* Endless / Round toggle. Endless is the default mode; switching
                 always starts a fresh chain under the new mode's rules. */}
-            <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+            {isReady && <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
               {(['endless', 'round'] as const).map((m) => (
                 <button
                   key={m}
@@ -102,11 +104,13 @@ const NbaChain = () => {
                   {m === 'endless' ? '∞ Endless' : `🎯 Round (${roundPickCount})`}
                 </button>
               ))}
-            </div>
+            </div>}
           </>
         }
       >
         <NbaChainHowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
+
+        {!isReady ? <GameLoadingState label="Choosing a starting player..." /> : <>
 
         {/* Score bar */}
         <div className="flex items-center justify-center gap-6 mb-6">
@@ -162,7 +166,7 @@ const NbaChain = () => {
         {/* Input area */}
         {phase === 'playing' && (
           <div className="space-y-3 animate-fade-in">
-            <p className="text-sm text-center text-muted-foreground">
+            <p data-no-prerender="true" className="text-sm text-center text-muted-foreground">
               Name a player who was a teammate of{' '}
               <span className="font-bold text-primary">{lastPlayer}</span>
             </p>
@@ -239,6 +243,8 @@ const NbaChain = () => {
             />
           </div>
         )}
+
+        </>}
 
         <GameSeoContent
           pageHasOwnH1

@@ -86,9 +86,7 @@ export function useCfbHL() {
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[CfbHLPlayer, CfbHLPlayer][]>(
-    () => buildPairs(Math.floor(Math.random() * 100000), hard),
-  );
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[CfbHLPlayer, CfbHLPlayer][]>(dailyPairs);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

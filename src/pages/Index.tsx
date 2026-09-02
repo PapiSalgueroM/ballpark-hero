@@ -18,7 +18,8 @@ import { SPORT_HUBS } from '@/lib/sportHub';
 /** Round 270: the hub that gathers this category, or null when it has none. */
 const hubForCategory = (title: CategoryTitle) =>
   SPORT_HUBS.find(h => h.titles.includes(title)) ?? null;
-import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getLocalTodayCount } from '@/lib/completions';
+import { usePlayerName } from '@/hooks/usePlayerName';
 
 /**
  * Home search (item #15 audit pass).
@@ -211,7 +212,7 @@ export default function Index() {
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
-  const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
+  const playerName = usePlayerName(profile);
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
@@ -235,6 +236,7 @@ export default function Index() {
   // chip never regresses while an insert is in flight) + all-time world rank
   // from the same global_rank RPC the leaderboard's "Your world rank" uses.
   useEffect(() => {
+    if (!playerName) return;
     let cancelled = false;
     const load = async () => {
       try {
@@ -391,9 +393,10 @@ export default function Index() {
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
                 Streak = consecutive days, played = today's count, plus world
-                rank. Guests see a sign-up nudge because none of it saves
-                without an account. Site-wide traffic numbers still must
-                never render publicly (owner 2026-07-10). */}
+                rank. Guests keep a local streak and leaderboard handle. An
+                account keeps that identity and backs it up across devices.
+                Site-wide traffic numbers still must never render publicly
+                (owner 2026-07-10). */}
             {user ? (
               <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
                 <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -437,7 +440,7 @@ export default function Index() {
                 >
                   Make a free one
                 </button>{' '}
-                and your streak, points and world rank start counting.
+                to keep your leaderboard name and save your streaks across devices.
               </p>
             )}
             <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />

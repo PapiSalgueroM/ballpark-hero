@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { teammatesPairs } from '@/data/teammatesPairs';
 import { TeammatesPair } from '@/types/teammates';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -13,8 +13,16 @@ function buildRound(): TeammatesPair[] {
   return [...easy.slice(0, 3), ...med.slice(0, 3), ...hard.slice(0, 4)];
 }
 
+function buildInitialRound(): TeammatesPair[] {
+  const easy = teammatesPairs.filter(p => p.difficulty === 1);
+  const med = teammatesPairs.filter(p => p.difficulty === 2);
+  const hard = teammatesPairs.filter(p => p.difficulty === 3);
+  return [...easy.slice(0, 3), ...med.slice(0, 3), ...hard.slice(0, 4)];
+}
+
 export function useTeammates() {
-  const [pairs, setPairs] = useState<TeammatesPair[]>(() => buildRound());
+  const [isReady, setIsReady] = useState(false);
+  const [pairs, setPairs] = useState<TeammatesPair[]>(buildInitialRound);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
@@ -22,6 +30,11 @@ export function useTeammates() {
   const [gameOver, setGameOver] = useState(false);
 
   const currentPair = pairs[currentIdx] ?? null;
+
+  useEffect(() => {
+    setPairs(buildRound());
+    setIsReady(true);
+  }, []);
 
   const answer = useCallback((userSaysYes: boolean) => {
     if (answered || gameOver || !currentPair) return;
@@ -64,6 +77,7 @@ export function useTeammates() {
   useGameCompletion('teammates', gameOver, score * 100);
 
   return {
+    isReady,
     currentPair,
     currentIdx,
     totalRounds: ROUNDS,

@@ -1,1 +1,19 @@
 project_id = "pzzadswiradjnvvfybol"
+
+[functions.bootroom-generate-squad]
+verify_jwt = true
+
+[functions.bootroom-scout-report]
+verify_jwt = true
+
+[functions.bootroom-simulate-match]
+verify_jwt = true
+
+[functions.bootroom-reveal]
+verify_jwt = true
+
+[functions.bootroom-transfer-market]
+verify_jwt = true
+
+[functions.bootroom-season-rollover]
+verify_jwt = true

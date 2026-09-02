@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Round 418: mark JavaScript capability before the body can paint. The
+         static copy remains in the document for crawlers and no-JS readers,
+         while the matching head style keeps it out of sight for the short
+         handoff to React. If the app never replaces it, reveal that fallback
+         after eight seconds instead of leaving a permanently blank page. -->
+    <script data-dukb-js-capability>document.documentElement.classList.add('dukb-js');setTimeout(function(){if(document.querySelector('#dukb-home-copy,#dukb-snapshot'))document.documentElement.classList.remove('dukb-js')},8000)</script>
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
          document has to stay fresh so a returning player always gets the
@@ -63,12 +69,12 @@
          It is generated from the same source as the favicon and the header
          mark: scripts/logo/gen_logo.py. -->
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://douknowball.com/og-image.png">
+    <meta property="og:image" content="https://douknowball.com/og-image-daily-sports.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://douknowball.com/og-image.png">
+    <meta name="twitter:image" content="https://douknowball.com/og-image-daily-sports.png">
     <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
          first; the .ico carries 16, 32 and 48 for everything else; the touch
          icon is what a phone shows when the site is added to a home screen. -->
@@ -173,15 +179,11 @@
   <meta name="twitter:title" content="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes">
   <meta property="og:description" content="Free sports trivia games and daily sports quizzes: NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC and Soccer. Every game plays in the browser, no account needed.">
   <meta name="twitter:description" content="How deep does your sports knowledge go? Free daily games covering NFL, NBA, MLB, NHL, F1, Golf, NASCAR, Tennis, UFC &amp; Soccer. DoUKnowBall.com">
-  <!-- Round 314: the moment before React mounts used to show this document's
-       full crawler copy as a wall of raw text (the owner filmed it). The block
-       stays completely in the DOM for crawlers and for no-JS visitors (the
-       noscript lifts the cap), but a browser that is about to boot the app
-       sees one dimmed screenful, which reads as the site loading rather than
-       a broken page. React replaces #root's children on mount, so the capped
-       wrapper lives exactly as long as the wait does. -->
-  <style>#dukb-home-copy{max-height:100vh;overflow:hidden;opacity:.45}</style>
-  <noscript><style>#dukb-home-copy{max-height:none;overflow:visible;opacity:1}</style></noscript>
+  <!-- Round 418: the dimmed copy still looked like a broken page. JavaScript
+       visitors now get one invisible viewport reserved until React replaces
+       #root. The words stay in the DOM, and no-JS readers get the full copy. -->
+  <style data-dukb-first-paint>.dukb-js #dukb-home-copy{visibility:hidden;height:100vh;max-height:100vh;overflow:hidden;opacity:0;box-sizing:border-box}</style>
+  <noscript><style data-dukb-no-js-copy>#dukb-home-copy{visibility:visible;height:auto;max-height:none;overflow:visible;opacity:1}</style></noscript>
 </head>
   <body>
     <!--
@@ -198,9 +200,9 @@
       important page on the site was the emptiest.
 
       So the home page carries its content here, in the template, and React
-      replaces the whole of #root the moment it mounts. A visitor sees this
-      for the instant before the app draws, which is the same thing that
-      happens on every prerendered route.
+      replaces the whole of #root the moment it mounts. The early head marker
+      keeps it out of sight for a JavaScript visitor during that handoff, the
+      same treatment used by every prerendered route.
 
       RULES FOR EDITING THIS BLOCK. Nothing in it may be a figure that goes
       stale: the game counts are phrased as FLOORS ("more than 110") rather

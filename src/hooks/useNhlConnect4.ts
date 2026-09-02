@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { getRandomConnect4Board } from '@/data/nhlConnect4Boards';
+import { useState, useCallback, useEffect } from 'react';
+import { curatedBoards, getRandomConnect4Board } from '@/data/nhlConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { normalizeName } from '@/lib/playerSearch';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
@@ -87,7 +87,8 @@ function getLowestEmptyRow(grid: Connect4Grid, col: number): number | null {
 }
 
 export function useNhlConnect4() {
-  const [board, setBoard] = useState<Connect4Board>(getRandomConnect4Board);
+  const [isReady, setIsReady] = useState(false);
+  const [board, setBoard] = useState<Connect4Board>(curatedBoards[0]);
   const [grid, setGrid] = useState<Connect4Grid>(createEmptyGrid);
   const [currentTeam, setCurrentTeam] = useState<Connect4Team>('red');
   const [phase, setPhase] = useState<Connect4Phase>('playing');
@@ -96,6 +97,11 @@ export function useNhlConnect4() {
   const [validationError, setValidationError] = useState<string | null>(null);
   const [selectedCol, setSelectedCol] = useState<number | null>(null);
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setBoard(getRandomConnect4Board());
+    setIsReady(true);
+  }, []);
 
   // Get the target row for a column (where the piece would land)
   const getTargetRow = useCallback(
@@ -232,6 +238,7 @@ export function useNhlConnect4() {
   useGameCompletion('nhl-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
 
   return {
+    isReady,
     board,
     grid,
     currentTeam,
