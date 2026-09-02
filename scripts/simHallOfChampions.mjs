@@ -31,19 +31,25 @@
  *      rate, plaques survive, funds and exhibits reset, and a rededicated
  *      hall out-earns the pre-rededication hall at the same exhibit count.
  *
- * SKIPS LOUDLY IN CAPITALS when Supabase is unreachable.
+ * FAILS CLOSED IN CAPITALS when Supabase is unreachable.
  *
  * Run: node scripts/simHallOfChampions.mjs
  */
-import { writeFileSync } from "node:fs";
+import { rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import os from 'node:os';
 import path from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENTRY = path.join(os.tmpdir(), 'hall-entry.mjs');
-const OUT = path.join(os.tmpdir(), 'hall.mjs');
+const ENTRY = path.join(os.tmpdir(), `hall-entry-${process.pid}.mjs`);
+const OUT = path.join(os.tmpdir(), `hall-${process.pid}.mjs`);
+const cleanupTempFiles = () => {
+  rmSync(ENTRY, { force: true });
+  rmSync(OUT, { force: true });
+};
+process.once("exit", cleanupTempFiles);
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
@@ -67,6 +73,95 @@ const {
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };
+const CONTROL = process.env.SIM_HALL_CONTROL || "";
+const FORCE_EMPTY_CATALOG = process.env.SIM_HALL_FORCE_EMPTY === "1";
+const FORCE_CATALOG_THROW = process.env.SIM_HALL_FORCE_THROW === "1";
+const PARTIAL_CONTROLS = new Set(["partialcatalog", "persistentpartialcatalog"]);
+const KNOWN_CONTROLS = new Set([...PARTIAL_CONTROLS, "emptycatalog", "throwcatalog"]);
+if (CONTROL && !KNOWN_CONTROLS.has(CONTROL)) {
+  console.error(`simHallOfChampions: unknown SIM_HALL_CONTROL ${JSON.stringify(CONTROL)}`);
+  process.exit(1);
+}
+const CONTROL_MISSING_KEYS = new Set(WING_ORDER.slice(0, 2).map(({ key }) => key));
+const EMPTY_CATALOG_FAILURE = "HALL CATALOG UNREACHABLE OR EMPTY AFTER THREE ATTEMPTS. NOTHING WAS CHECKED.";
+let partialCatalogControlPlanted = false;
+let partialCatalogControlBefore = null;
+let partialCatalogControlAfter = null;
+let catalogFetchAttempts = 0;
+
+if (CONTROL === "emptycatalog" || CONTROL === "throwcatalog") {
+  const provingThrow = CONTROL === "throwcatalog";
+  const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], {
+    cwd: ROOT,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      SIM_HALL_CONTROL: "",
+      SIM_HALL_FORCE_EMPTY: provingThrow ? "" : "1",
+      SIM_HALL_FORCE_THROW: provingThrow ? "1" : "",
+    },
+  });
+  const output = `${child.stdout || ""}${child.stderr || ""}`;
+  const provedFailure = provingThrow
+    ? child.status === 1
+      && output.includes("live catalog threw before it could be verified")
+      && !output.includes(EMPTY_CATALOG_FAILURE)
+      && !output.includes("simHallOfChampions: green")
+    : child.status === 1
+      && output.includes(EMPTY_CATALOG_FAILURE)
+      && output.includes("live catalog stayed empty after 3 attempts")
+      && !output.includes("simHallOfChampions: green");
+  if (provedFailure) {
+    if (provingThrow) console.log("simHallOfChampions control (throwcatalog): green. A thrown catalog error failed without the database-unavailable marker.");
+    else console.log("simHallOfChampions control (emptycatalog): green. The normal path emitted the canonical marker and failed after three empty attempts.");
+    process.exit(0);
+  }
+  console.error(`simHallOfChampions control (${CONTROL}): RED. Child exit=${child.status}, marker=${output.includes(EMPTY_CATALOG_FAILURE)}, emptyAttempts=${output.includes("live catalog stayed empty after 3 attempts")}, throw=${output.includes("live catalog threw before it could be verified")}.`);
+  process.exit(1);
+}
+
+async function fetchCatalogForHarness() {
+  catalogFetchAttempts += 1;
+  if (FORCE_CATALOG_THROW) throw new Error("synthetic catalog programming error");
+  if (FORCE_EMPTY_CATALOG) return [];
+  const catalog = await fetchCatalog();
+  const shouldPlantPartial = PARTIAL_CONTROLS.has(CONTROL)
+    && (CONTROL === "persistentpartialcatalog" || !partialCatalogControlPlanted);
+  if (shouldPlantPartial) {
+    const filtered = catalog.filter(wing => !CONTROL_MISSING_KEYS.has(wing.key));
+    if (!partialCatalogControlPlanted && filtered.length < catalog.length) {
+      partialCatalogControlBefore = catalog.length;
+      partialCatalogControlAfter = filtered.length;
+      partialCatalogControlPlanted = true;
+    }
+    return filtered;
+  }
+  return catalog;
+}
+
+function controlRemovedCatalogRows() {
+  return partialCatalogControlBefore !== null
+    && partialCatalogControlAfter !== null
+    && partialCatalogControlAfter < partialCatalogControlBefore;
+}
+
+async function fetchCompleteCatalog() {
+  const byKey = new Map();
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const catalog = await fetchCatalogForHarness();
+    for (const wing of catalog) {
+      if (CONTROL === "persistentpartialcatalog" && CONTROL_MISSING_KEYS.has(wing.key)) continue;
+      byKey.set(wing.key, wing);
+    }
+    if (byKey.size === WING_ORDER.length) break;
+    if (attempt < 3) {
+      const missing = WING_ORDER.filter(({ key }) => !byKey.has(key)).map(({ key }) => key);
+      console.log(`   catalog attempt ${attempt} missed ${missing.join(", ")}; fetching the live catalog again`);
+      await new Promise(resolve => setTimeout(resolve, attempt * 200));
+    }
+  }
+  return WING_ORDER.map(({ key }) => byKey.get(key)).filter(Boolean);
+}
 
 /* --------------------------------------------- 0: the save fails closed */
 console.log("0) hostile saves load as null, never as state");
@@ -98,17 +193,30 @@ console.log(`   ${hostile.length} hostile shapes rejected, the real shape round 
 /* ------------------------------------------- 1: every exhibit is real */
 console.log("1) the catalog against the live tables");
 let wings = [];
+let catalogError = null;
 try {
-  wings = await fetchCatalog();
-} catch {
+  wings = await fetchCompleteCatalog();
+} catch (error) {
+  catalogError = error;
   wings = [];
 }
+if (PARTIAL_CONTROLS.has(CONTROL) && (!partialCatalogControlPlanted || !controlRemovedCatalogRows())) {
+  fail("partial catalog control did not reduce a fetched catalog");
+}
+if (CONTROL === "partialcatalog" && controlRemovedCatalogRows() && wings.length === WING_ORDER.length) {
+  console.log(`   CONTROL partialcatalog reduced ${partialCatalogControlBefore} wings to ${partialCatalogControlAfter}, then recovered all 10`);
+}
 if (wings.length === 0) {
-  console.log("   SKIPPED, SUPABASE UNREACHABLE. THE CATALOG AND THE ECONOMY DID NOT RUN.");
-  console.log("");
-  if (failures > 0) { console.error(`simHallOfChampions: ${failures} failures`); process.exit(1); }
-  console.log("simHallOfChampions: green (WITH LOUD SKIPS ABOVE)");
-  process.exit(0);
+  if (CONTROL) {
+    fail(`${CONTROL} left an empty controlled catalog after all attempts`);
+  } else if (catalogError) {
+    fail(`live catalog threw before it could be verified: ${String(catalogError).slice(0, 160)}`);
+  } else {
+    if (failures === 0) console.error(`   ${EMPTY_CATALOG_FAILURE}`);
+    fail(`the live catalog stayed empty after ${catalogFetchAttempts} attempts`);
+  }
+  console.error(`simHallOfChampions: ${failures} failure${failures === 1 ? "" : "s"}`);
+  process.exit(1);
 }
 if (wings.length !== WING_ORDER.length) fail(`${wings.length} wings built, ${WING_ORDER.length} are configured`);
 

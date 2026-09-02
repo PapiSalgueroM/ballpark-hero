@@ -35,27 +35,54 @@
  *   copy (refusing to run if there was none to strip) and section 1 goes red.
  *   DAILYORDER_CONTROL=badcolumn adds a (table, column) pair that cannot exist
  *   and section 2 goes red.
+ *   DAILYORDER_CONTROL=accessdenied returns one HTTP 403 and proves section 2
+ *   fails closed rather than calling an unverified column resolved.
+ *   DAILYORDER_CONTROL=transient throws once and proves the caller retries a
+ *   transport failure before accepting the real schema answer.
  *
  * Run: node scripts/simDailyPoolOrder.mjs   (needs the network for section 2)
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchWithTransportRetry } from './lib/fetchWithTransportRetry.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.DAILYORDER_CONTROL || '';
-const KNOWN = ['noorder', 'badcolumn', 'unpaged', 'utcseed'];
+const KNOWN = ['noorder', 'badcolumn', 'unpaged', 'utcseed', 'accessdenied', 'transient'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`DAILYORDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
 let failures = 0;
+let unavailableFailures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
+let accessDeniedInjected = false;
+let accessDeniedFailed = false;
+let transientThrown = false;
+let transientRecovered = false;
+if (CONTROL === 'accessdenied' || CONTROL === 'transient') {
+  const liveFetch = globalThis.fetch;
+  globalThis.fetch = async (...args) => {
+    if (CONTROL === 'accessdenied' && !accessDeniedInjected) {
+      accessDeniedInjected = true;
+      return new Response(JSON.stringify({ message: 'synthetic access policy control' }), { status: 403, headers: { 'content-type': 'application/json' } });
+    }
+    if (CONTROL === 'transient' && !transientThrown) {
+      transientThrown = true;
+      throw new Error('synthetic transient transport failure');
+    }
+    if (CONTROL === 'transient') transientRecovered = true;
+    return liveFetch(...args);
+  };
+  if (CONTROL === 'accessdenied') console.log('   NEGATIVE CONTROL ON: the first schema probe returns a synthetic HTTP 403 and must fail closed');
+  else console.log('   NEGATIVE CONTROL ON: the first schema probe throws once, then must recover through the caller retry');
+}
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -158,22 +185,26 @@ console.log('2) every column the code orders by exists on that table');
   console.log(`   ${list.length} distinct (table, order column) pairs in src`);
   if (list.length < 10) fail(`only ${list.length} pairs found, so this scan is not reading the source properly`);
 
-  let bad = 0;
+  let resolved = 0;
   for (const pr of list) {
-    const r = await fetch(`${URL_}/rest/v1/${pr.table}?select=${pr.column}&order=${pr.column}.asc&limit=1`, {
+    /* Round 417: schema existence needs no scan or sort, which can time out on large tables. */
+    const { response: r, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${pr.table}?select=${pr.column}&limit=0`, {
       headers: { apikey: KEY, Authorization: `Bearer ${KEY}` },
-    });
+    }));
+    if (!r) {
+      unavailableFailures += 1;
+      fail(`live schema probe for ${pr.table}.${pr.column} was unreachable: ${String(error).slice(0, 120)}`);
+      break;
+    }
     if (!r.ok) {
       let msg = '';
       try { msg = (JSON.parse(await r.text()) || {}).message || ''; } catch { msg = `${r.status}`; }
-      /* A table the anon key cannot read at all is not this check's business:
-         it reports 401/42501 rather than a missing column. */
-      if (r.status === 401 || r.status === 403) continue;
-      bad += 1;
+      if (r.status !== 400 && r.status !== 404) unavailableFailures += 1;
+      if (CONTROL === 'accessdenied' && r.status === 403) accessDeniedFailed = true;
       fail(`${pr.file} orders ${pr.table} by "${pr.column}" and the database says: ${msg}`);
-    }
+    } else resolved += 1;
   }
-  console.log(`   ${list.length - bad} of ${list.length} resolve against the live schema`);
+  console.log(`   ${resolved} of ${list.length} resolve against the live schema`);
 }
 
 console.log('3) every paged read declares an order');
@@ -239,9 +270,19 @@ console.log("4) no daily is seeded from the viewer's own clock or from UTC");
 
 console.log('');
 if (CONTROL) {
-  if (failures > 0) { console.log(`simDailyPoolOrder control (${CONTROL}): green. It was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
-  console.error(`simDailyPoolOrder control (${CONTROL}): RED. The planted fault went unnoticed.`);
-  process.exit(1);
+  if (CONTROL === 'accessdenied') {
+    if (accessDeniedInjected && accessDeniedFailed && failures === 1) { console.log('simDailyPoolOrder control (accessdenied): green. One HTTP refusal produced exactly one fail-closed schema finding.'); process.exit(0); }
+    console.error(`simDailyPoolOrder control (accessdenied): RED. Expected one injected refusal and one failure, got injected=${accessDeniedInjected}, failed=${accessDeniedFailed}, failures=${failures}.`);
+    process.exit(1);
+  } else if (CONTROL === 'transient') {
+    if (transientThrown && transientRecovered && failures === 0) console.log('simDailyPoolOrder control (transient): green. The caller retried one thrown transport failure and kept the schema result.');
+    else { console.error(`simDailyPoolOrder control (transient): RED. Expected one thrown and recovered probe with no failures, got thrown=${transientThrown}, recovered=${transientRecovered}, failures=${failures}.`); process.exit(1); }
+  } else {
+    if (failures > 0) { console.log(`simDailyPoolOrder control (${CONTROL}): green. It was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
+    console.error(`simDailyPoolOrder control (${CONTROL}): RED. The planted fault went unnoticed.`);
+    process.exit(1);
+  }
 }
+if (failures > 0 && failures === unavailableFailures) console.error('LIVE SCHEMA PROBES WERE UNAVAILABLE. NOTHING WAS CHECKED FOR THOSE PROBES.');
 if (failures > 0) { console.error(`simDailyPoolOrder: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('simDailyPoolOrder: green. Every date indexed pool is ordered, and every order column is real.');

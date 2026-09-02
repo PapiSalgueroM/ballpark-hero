@@ -28,16 +28,38 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchWithTransportRetry } from './lib/fetchWithTransportRetry.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SCHEMA_CONTROL || '';
+if (CONTROL && CONTROL !== 'ghost' && CONTROL !== 'refusal') { console.error(`SIM_SCHEMA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
+let unavailableFailures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
+const abortUnavailable = m => {
+  console.error(m);
+  if (!CONTROL && failures === 0) console.error('SUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
+  else console.error('the live schema check stopped after an earlier or controlled finding, so it cannot be treated as an environment-only skip');
+  process.exit(1);
+};
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
+let refusalFailed = false;
+let refusalInjected = false;
+if (CONTROL === 'refusal') {
+  const liveFetch = globalThis.fetch;
+  globalThis.fetch = async (...args) => {
+    if (!refusalInjected) {
+      refusalInjected = true;
+      return new Response(JSON.stringify({ message: 'synthetic refusal control' }), { status: 403, headers: { 'content-type': 'application/json' } });
+    }
+    return liveFetch(...args);
+  };
+  console.log('   NEGATIVE CONTROL ON: the first schema probe receives a synthetic HTTP 403 and must go red');
+}
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -135,10 +157,8 @@ const list = [...tables.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 for (const [table, t] of list) {
   const cols = [...t.cols].sort();
   const q = cols.length ? `select=${encodeURIComponent(cols.join(','))}&limit=0` : 'select=*&limit=0';
-  let res;
-  try {
-    res = await fetch(`${URL_}/rest/v1/${table}?${q}`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } });
-  } catch (err) { abort(`\nSUPABASE UNREACHABLE (${String(err).slice(0, 80)}). NOTHING WAS CHECKED.`); }
+  const { response: res, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${table}?${q}`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }));
+  if (!res) abortUnavailable(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}).`);
   probed += 1;
   if (res.ok) continue;
   const body = await res.text().catch(() => '');
@@ -146,23 +166,39 @@ for (const [table, t] of list) {
   if (res.status === 400) {
     /* name the columns: probe one at a time */
     const missing = [];
+    const unanswered = [];
     for (const col of cols) {
-      const r = await fetch(`${URL_}/rest/v1/${table}?select=${encodeURIComponent(col)}&limit=0`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } });
+      const { response: r, error } = await fetchWithTransportRetry(() => fetch(`${URL_}/rest/v1/${table}?select=${encodeURIComponent(col)}&limit=0`, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }));
+      if (!r) abortUnavailable(`\nSUPABASE UNREACHABLE (${String(error).slice(0, 80)}).`);
       if (r.status === 400) missing.push(col);
+      else if (!r.ok) unanswered.push(`${col} (HTTP ${r.status})`);
     }
-    fail(`${table}: ${missing.length ? `column(s) ${missing.join(', ')} do not exist` : `HTTP 400 on select=${cols.join(',')}`} [${[...t.files].join(', ')}]`);
+    if (unanswered.length) {
+      unavailableFailures += 1;
+      fail(`${table}: ${unanswered.join(', ')} did not return schema answers [${[...t.files].join(', ')}]`);
+    }
+    if (missing.length) fail(`${table}: column(s) ${missing.join(', ')} do not exist [${[...t.files].join(', ')}]`);
+    else if (!unanswered.length) fail(`${table}: HTTP 400 on select=${cols.join(',')} [${[...t.files].join(', ')}]`);
     continue;
   }
   unreadable += 1;
-  console.log(`   ${table}: HTTP ${res.status}, not a schema answer, not counted`);
+  unavailableFailures += 1;
+  fail(`${table}: HTTP ${res.status}, not a schema answer, so the schema was not verified`);
+  if (CONTROL === 'refusal' && res.status === 403) refusalFailed = true;
 }
 console.log(`   ${probed} tables probed, ${unreadable} answered outside 200/400/404`);
 const wide = list.filter(([, t]) => t.cols.size >= 8).map(([n, t]) => `${n} (${t.cols.size})`).slice(0, 6);
 console.log(`   widest reads: ${wide.join(', ')}`);
 
 if (CONTROL) {
+  if (CONTROL === 'refusal') {
+    if (!refusalInjected || !refusalFailed) abort('\ncontrol "refusal": changed NOTHING, the synthetic refusal did not reach the caller failure path');
+    if (failures === 1) { console.log('\ncontrol "refusal": exactly one refusal failure fired as expected, the check works'); process.exit(0); }
+    abort(`\ncontrol "refusal": expected exactly one refusal failure, got ${failures}`);
+  }
   if (failures > 0) { console.log(`\ncontrol "${CONTROL}": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING, the check is dead`);
 }
+if (failures > 0 && failures === unavailableFailures) console.error('SUPABASE SCHEMA PROBES WERE REFUSED. NOTHING WAS CHECKED FOR THOSE PROBES.');
 if (failures > 0) { console.error(`\nsimSchemaNames: ${failures} failure(s)`); process.exit(1); }
 console.log('\nsimSchemaNames: all green');

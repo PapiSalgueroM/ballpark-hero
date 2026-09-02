@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 417.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 418.
 
 ## Active claims, 2026-09-02
 
@@ -60,6 +60,43 @@ do not trade correctness for speed. This supersedes the older work order below.
 The owner explicitly authorized the review submission after live verification.
 Round 400 passed those checks and the review was submitted. Google now shows
 Getting ready and Review requested; its decision is pending.
+
+**OWNER PRIORITY UPDATE, 2026-09-02, AUSTRALIAN GROWTH MOVES FORWARD.**
+Australia is already the site's second biggest audience and is not far behind
+the United States. Bring NRL and the wider Australian sports lane forward after
+the active reliability and direct search-image fixes. Start with a verified
+Rugby League data foundation and a buildable game contract, then use it for
+sport-specific games, a manager simulation and a player career. The engine must
+model Rugby League's own positions, interchange, competition structure,
+representative pathway, tactics, match events, storylines and animation beats.
+Keep Rugby Union and AFL separate rather than mixing three different sports
+under one label. Real rosters, transfers, results and player facts stay under
+the two-source rule; no logos, photos or invented dialogue for real players.
+The owner also wants the other coding lane on this work, so this board is the
+shared handoff and the research should be split before implementation.
+
+**OWNER PRIORITY UPDATE, 2026-09-02, MOBILE GROWTH WITHOUT AN AD WALL.**
+Grow mobile reach and revenue without making the information-heavy pages hard
+to read or putting ads near game controls. Before Google's decision, prioritize
+speed, stable layout, one-thumb controls, readable collapsible guides, return
+loops and measured 320, 390 and 430px layouts. Do not try to bypass ad blockers.
+Any new ad placement waits for approval and must reserve its space, hold the
+layout stable and keep clear separation from every interactive control.
+The first actionable round is a measurement fence, not another ad: walk all 75
+`AdBanner` callers at 320, 390 and 430px, require 150px from gameplay and 48px
+from any ordinary control, exercise both 100px and 250px filled heights, and
+measure the filled and unfilled layout shift. The source audit found 72 ads
+followed by `ReportQuestion`; the current browser fence does not measure that
+distance, so verify it before changing layout. After approval, test any extra
+manual placement on a small group of long guides before a wider rollout.
+
+**OWNER REPORT, 2026-09-02, STALE BING SEARCH IMAGE.** Bing still shows the old
+social banner with "10+ Free Sports Trivia Games" even though the live
+generated card has carried count-free wording since Round 286. Treat this as a
+cache-key problem: keep count-free copy, correct the remaining misleading
+"No sign-up" line, ship the generated card at a fresh same-domain filename,
+update the root and per-route crawler references, then re-ping the home page.
+Do not hand edit the raster or print the current 118-game count into it.
 
 **HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
 ROADMAP.** This did not replace the priority list when it was recorded. The
@@ -205,13 +242,27 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   hockey puck. Keep it cosmetic, local-save friendly, reduced-motion safe and
   free of club logos, real kits or player likenesses. This is explicitly not a
   current priority.
-- **AUSTRALIAN SPORTS EXPANSION, after the owner priority gates above:** build a
-  dedicated `/nrl-my-career` as the first major NRL route, using a fictional
-  player, real two-source-verified clubs and competition structure, no rosters,
-  logos, kits, photos or copied league text. Follow with deeper AFL work. The
-  2026 research spike found schedule reproduction and changing weekly team
-  lists carry avoidable provenance and staleness risk, so the career must not
-  depend on either.
+- **AUSTRALIAN SPORTS EXPANSION, MOVED FORWARD BY THE OWNER 2026-09-02:** phase
+  one is a versioned `nrlCompetition2026` foundation with the 17 verified text
+  club identities, positions 1 through 13, six-tackle and scoring rules, the
+  six-candidate and four-active bench, eight-interchange limit, derived season
+  shape, salary-cap components, roster deadlines and per-field sources/status.
+  No copied draw, weekly lists, current rosters, private salaries, logos, kits
+  or photos. Phase two is `/nrl-my-career`, built around a fictional player and
+  seven real position families, then a last-tackle tactics game and a generated
+  roster manager. Rugby Union and AFL need separate engines and data contracts.
+  Current official-site terms do not provide a commercial republication right
+  for scraped rosters or fixtures, so real-player depth waits for rights-cleared
+  data rather than shipping guesses. The desktop lane can take the sourced data
+  foundation while the other lane designs the deterministic career engine.
+- **MOBILE AD-SPACING FENCE, owner request 2026-09-02:** inspect all 75
+  `AdBanner` callers at 320, 390 and 430px before adding any placement. Measure
+  at least 150px from gameplay, 48px from any ordinary control, both 100px and
+  250px filled heights, and filled/unfilled layout shift at or below 0.05 in the
+  lab. Source recon found 72 ads followed by `ReportQuestion`, but did not prove
+  their rendered distance. Change only measured offenders while AdSense review
+  is pending. After approval, any additional manual slot starts as a small test
+  on genuinely long guides, never as a sitewide rollout.
 
 **FOUND BY ROUND 381'S VERIFICATION SWEEP, all still live, each with its
 measurement. Five agents investigated the queue and five more tried to refute
@@ -643,11 +694,6 @@ clue from the live tables and fails on any disagreement.
 - (Retired 2026-09-02: the era Champions League item that sat here, 16 club pools and
   4 groups, had already SHIPPED in Round 342, which carries the verified 32 club field
   per era and draws the real eight groups. Nothing left to do on it.)
-- Data follow up from Round 315: 247 players whose latest market value row is 2024 or
-  older at a 30m+ peak. Most are honestly retired or in untracked leagues, but Rodri,
-  Kimmich, Tchouameni and Ndidi were among them and were world class absences; a
-  systematic sweep of that list against current squads would catch the rest. Needs the
-  database and web verification, desktop lane work.
 - From Round 319 (cloud): World XI wants eligibility derived from real positions PLAYED
   (his example: a CF with RW history should fit a RW slot). That needs per player
   secondary position data pulled and verified from the database side; the code side
@@ -762,6 +808,19 @@ Standing claims after Round 400:
 
 ## Done
 
+- LIVE DATA FENCES SURVIVE RUNNER PRESSURE, Round 417 (Codex lane,
+  2026-09-02). `simSchemaNames`, `simValueFreshness` and
+  `simDailyPoolOrder` now share a three-attempt helper that retries thrown
+  transport failures only. Returned HTTP answers are never retried or hidden,
+  and the daily schema check now fails closed on a refusal. Its existence probe
+  asks for `limit=0`, so it no longer sorts or scans a live table just to learn
+  whether a column exists. The first full suite exposed a second harness flake:
+  Hall of Champions silently lost a wing when one of ten concurrent table
+  reads dropped. It now merges complete wings across three short attempts and
+  still fails unless all 10 exist. Recovery, refusal, partial and persistent
+  failure controls all proved their paths. Final gates: exact TypeScript zero,
+  185 of 185 node harnesses green, production build green, and all 15 generated
+  site fences green.
 - THE BILLION DOLLAR GAME SAYS DOLLARS, Round 415 (desktop lane, 2026-09-02).
   The owner's item 13 had a tail: the budget and the board were fixed in
   Round 315 but the page around them still said euros in six places, title
@@ -2395,7 +2454,8 @@ Standing claims after Round 400:
   follow up, closed in one evening by eight parallel researchers under the
   two-source rule with every database write reviewed and executed by hand. All
   243 stale high-peak names classified: 135 honestly retired (no invented
-  current rows, the render paths already say so), 101 verified active, 4 name
+  current rows, the render paths already say so), 101 verified active, 98
+  written and 3 excluded because no sourced value could be verified, 4 name
   collisions documented (two humans sharing a row name, including the fake
   Fabinho the list itself exposed), 3 unknowns recorded with what was tried.
   98 verified 2026 rows written (club, age, value from Transfermarkt at the
@@ -2407,8 +2467,9 @@ Standing claims after Round 400:
   peak gate wrongly excluding young risers, fixed with the documented rule.
   simValueFreshness is the fence: the database held to the committed audit
   (actives present at audited values, retired rowless, collisions untouched),
-  VALUE_CONTROL=phantom proven red. Stale count 243 to 145, every remaining one
-  explained in the audit.
+  VALUE_CONTROL=phantom proven red. A fresh Round 417 live recount still returns
+  145, exactly 135 retired, 4 collisions, 3 unknowns and 3 excluded for no
+  sourced value.
 - THE OWNER DIRECTIVES LAND, Round 343 (desktop lane, 2026-08-29).
   docs/OWNER-DIRECTIVES-2026-08.md carries his final directives verbatim with the
   operational mapping: free forever (overrides the spec premium mention), the
