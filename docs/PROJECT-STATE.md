@@ -8,9 +8,9 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 89% | Round 399: a finished game restored from storage no longer records its completion on every visit, and the bracket page's crown latch survives a reload. |
+| P0 production bugs | 92% | Round 406: the money page no longer depends on a free tier AI that runs out of quota; every guess is judged in memory. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
-| Grid category (Milestone 0) | 80% | Round 405: the NFL key is a table the page can read and src/lib/nflGrid.ts is the NFL configuration of the engine with measured floors; the page switch is next (Round 406). |
+| Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 25% | Deferred by the owner; ad guardrails before scaling traffic. |
@@ -2687,6 +2687,43 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 406. THE NFL GRID PAGE ON THE ENGINE.** Phase 3 of
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, the half a player can see. `/football-grid`
+  keeps its URL, its copy shape, its daily rhythm, its 15 guess budget, the unlimited
+  toggle, rarity and the completion; underneath, the board is built from the date seed
+  by `src/lib/nflGrid.ts` (the same nine questions for everyone on the same Eastern
+  date, never a repeat of a hand authored pool) and every guess is judged in memory
+  against the answer key in `nfl_grid_players`, 22,008 careers from 1970 with every
+  rule written on the key file. The edge function and its free tier AI, which Round 378
+  measured running out of quota for the rest of the day, leave the page: no network
+  round trip per guess, no "try again" wall. `useFootballGrid` hands the day's board to
+  `useDailyPuzzle` through its runtime puzzle door (the one the soccer grid uses), so the
+  daily save, the guess budget and the completion are the code they were. The search box
+  offers the key's own display names, so a legend the old roster search could not find
+  is a keystroke away and a namesake reads with its seasons beside it; a player already
+  on the board cannot be placed twice. Round 401's local names list and the 72 board
+  static pool retire with their generator, and the pool fence measures the college grid
+  alone now. The copy says what the categories are: all 32 franchises with relocations
+  folded in, position groups, draft stories, Super Bowl winners, judged from a career
+  record going back to 1970; the worked example was rewritten with players the key
+  confirms (Romo undrafted and a Cowboys quarterback, Corey Dillon with the 2004 champs,
+  Tramon Williams undrafted with the Packers, James Jones the receiver with his seasons
+  beside his name because four James Joneses have played), and the first edit landed in
+  the wrong game's entry before the fence caught it, which is what the fence is for.
+  `scripts/simNflGridPage.mjs` holds the page as code: judged in memory (no edge function
+  call, the board from the date seed, the runtime puzzle door), the key's names with
+  validateOnly, a copy that names no criterion the engine cannot deal (no Pro Bowl, MVP,
+  college or award), the static pool gone with no importer left, and four days' boards
+  rebuilt through the hook equal to the lib's; its controls plant an edge function call
+  and a Pro Bowl criterion back. Verified in a browser on the built site: the page read
+  cell one's two criteria, a real answer from the key was typed, the suggestion clicked,
+  and the cell turned correct with exactly one rarity write. The snapshot was re-rendered
+  for the new copy and the sitemap re-dated it honestly. The validator
+  `football-grid-validate` stays deployed for nothing until a later round retires it.
+  Gates: tsc zero, simNflGridPage with both controls, simGridPuzzlePool with its control,
+  simDailyPuzzleContract, simGridRarity, simNoRivalNames (which now skips the derived key
+  file and the gitignored cache, because a player named Madden is a person), simDaily,
+  simCompletionOnce, simSessionMarks, the fifteen built site fences, the browser play.
 - **2026-09-02, Round 405. THE NFL KEY AS A TABLE, AND THE NFL GRID LIB ON THE
   ENGINE.** Phase 3 of `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, first half; still
   nothing a player can see changes. The key file is 4.9 MB, too big for a bundle, so it

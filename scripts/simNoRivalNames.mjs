@@ -235,8 +235,13 @@ const INLINE_ALLOW = 'rival-names-allow';
    means everything except dependencies, build output and binaries.
    =========================================================================== */
 const SCAN = ['src', 'public', 'supabase', 'scripts', 'index.html'];
-const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-ssr', '.git', '.playwright-mcp', 'coverage']);
-const SKIP_FILES = new Set(['simNoRivalNames.mjs']);
+const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-ssr', '.git', '.playwright-mcp', 'coverage', '.cache']);
+/* Round 406: the NFL answer key is a derived data file of real careers, and a
+   player whose surname is Madden is a person, not a product. It carries no
+   prose (every string is a name, a code or a rule the generator wrote), so
+   it is skipped by name rather than line by line. scripts/.cache holds the
+   downloaded nflverse files, gitignored, never shipped. */
+const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json']);
 const BINARY = /\.(png|jpe?g|gif|ico|webp|avif|svg|woff2?|ttf|eot|mp3|mp4|webm|pdf|zip|lockb)$/i;
 
 /* docs/ is deliberately NOT scanned. It holds competitor research whose entire

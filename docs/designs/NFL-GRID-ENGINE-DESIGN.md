@@ -1,6 +1,6 @@
 # The NFL grid on a shared, data backed engine
 
-Status: DESIGN, written in Round 401 (2026-09-02) from a five reader recon of the
+Status: PHASES 1 TO 3 SHIPPED (Rounds 402 to 406, 2026-09-02); phase 4, the archive, is next. Written in Round 401 (2026-09-02) from a five reader recon of the
 repo and the live database; the plan at the end is the synthesis of that recon,
 and an agent's own synthesis pass, still running when this was committed, is
 folded in by the round that starts phase 1 if it adds anything. Milestone 0 of the operating

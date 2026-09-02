@@ -155,7 +155,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
 
   '/football-grid': {
     intro: [
-      "The grid looks harmless: three rows, three columns, nine cells. Each row and column is a pro football criterion, a franchise, a position, a college, an award, and every cell needs a player who satisfies both. Then you learn that naming a Cowboys quarterback with 3 or more Pro Bowls is harder than it sounds.",
+      "The grid looks harmless: three rows, three columns, nine cells. Each row and column is a pro football criterion, a franchise, a position group, a draft story, a Super Bowl ring, and every cell needs a player who satisfies both. Then you learn that naming an undrafted Cowboys quarterback is harder than it sounds.",
       "If daily team grids ever owned your mornings, this is that same itch with a twist: a rarity score that rewards deep cuts over obvious answers. Anyone can finish a grid with superstars. Finishing it with the forgotten third receiver from 2009 is the flex.",
       "A new puzzle drops at midnight Eastern, and everyone plays the same one.",
     ],
@@ -170,12 +170,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Every answer must match its row and its column at the same time.",
       "You get 15 total guesses, right or wrong. An unlimited guesses toggle exists for stress-free practice.",
       "Each correct pick shows what percent of players chose that same name for that cell. Your Rarity Score is the average across your correct cells, and lower is better.",
-      "If answer checking is temporarily down, the guess does not count and you simply retry.",
+      "Every answer is checked against a career record of 22,000 players going back to 1970, right in your browser, so a guess is judged the instant you pick it.",
       "One shared puzzle per day, with your progress saved if you leave and come back.",
     ],
     example: [
-      "Take rows of Patriots, Cowboys, and Packers against columns of Quarterback, 3+ Pro Bowls, and Won Super Bowl. Most people type Tony Romo for the Cowboys quarterback cell and collect a fat common percentage. Quincy Carter earns the same green check at a fraction of the rarity.",
-      "Patriots plus Won Super Bowl is a Tom Brady magnet, so you go Corey Dillon, who carried the 2004 champs, and score single digits. For Packers plus 3+ Pro Bowls, Aaron Rodgers is the obvious play, but Sterling Sharpe made five and almost nobody under 40 remembers.",
+      "Take rows of Patriots, Cowboys, and Packers against columns of Quarterback, Undrafted, and Won a Super Bowl. Most people type Tony Romo for the Cowboys quarterback cell and collect a fat common percentage; he answers the undrafted cell just as well, and using him twice is not allowed, so you have to choose.",
+      "Patriots plus Won a Super Bowl is a Tom Brady magnet, so you go Corey Dillon, who carried the 2004 champs, and score single digits. Packers plus Undrafted has Tramon Williams waiting, and Packers plus Won a Super Bowl is Aaron Rodgers for everyone else, so you pick James Jones, the receiver from the 2010 champs, and the search box shows him with his seasons beside his name because four James Joneses have played in the league.",
       "You close it 9 for 9 with two guesses to spare, and the nine percentages average out to 24. That number goes straight to the group chat.",
     ],
     tips: [
@@ -195,7 +195,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       },
       {
         q: "What categories show up?",
-        a: "Franchises, positions, colleges, draft pedigree like undrafted or top 10 pick, Pro Bowl counts, Super Bowl wins, and awards like MVP.",
+        a: "All 32 franchises, with relocations folded in so the Oilers count as the Titans, plus position groups, draft stories like undrafted or first round, and Super Bowl winners. Every one is answered from a career record of 22,000 players going back to 1970, so a cell never depends on a guess about a guess.",
       },
       {
         q: "What happens when I run out of guesses?",

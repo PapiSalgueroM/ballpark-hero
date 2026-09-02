@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
-import { NFL_ROSTER_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
-import { NFL_GRID_LOCAL_NAMES } from '@/data/nflGridLocalNames';
+import type { PlayerEntity } from '@/lib/playerSearch';
+import { NFL_GRID_PLAYER_SOURCE } from '@/lib/nflGrid';
 
 interface Props {
   onSelect: (name: string) => void;
@@ -20,17 +20,16 @@ export function GridPlayerSearch({ onSelect, disabled }: Props) {
   return (
     <div className="relative flex gap-2 w-full max-w-md mx-auto items-start">
       <div className="flex-1">
+        {/* Round 406: the search box offers the answer key's own display
+            names (22,008 careers from 1970, a season span after a name two
+            or more players share), so every name it offers is one the board
+            can judge, and a legend the old roster search could not find is
+            a keystroke away. */}
         <PlayerAutocomplete
           value={input}
           onChange={setInput}
           onSelect={handleSelect}
-          searchOptions={{ source: NFL_ROSTER_SOURCE }}
-          /* Round 401: the roster table starts in 2002, so a Jim Kelly or an
-             O.J. Simpson could not be typed for the board built around him.
-             These are the players the Round 350 evidence names, derived by
-             scripts/genNflGridLocalNames.mjs; offering a name is not
-             accepting it, the validator still judges every guess. */
-          localNames={NFL_GRID_LOCAL_NAMES}
+          searchOptions={{ source: NFL_GRID_PLAYER_SOURCE }}
           placeholder="Type a player name..."
           disabled={disabled}
           autoFocus

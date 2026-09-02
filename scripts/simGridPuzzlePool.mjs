@@ -23,15 +23,16 @@
  *   4. In vocabulary: every type is in the union the renderer knows, and
  *      every label matches the house shape for its type, so a new author
  *      cannot quietly invent a criterion the validator was never taught.
- *   5. Typeable (Round 401): src/data/nflGridLocalNames.ts equals what
- *      scripts/genNflGridLocalNames.mjs derives from the Round 350 evidence
- *      ledger, so every evidenced answer is a name the search box can offer.
- *      A ledger edit that forgets to regenerate goes red here.
  *
- * NEGATIVE CONTROLS: GRIDPOOL_CONTROL=dupe clones one NFL puzzle back into
- * the pool (asserting the pool was big enough to clone from) and section 2
- * must go red. GRIDPOOL_CONTROL=names drops one evidenced name from the
- * derivation in memory and section 5 must go red.
+ * Round 406: the NFL grid left the static pool for the shared engine (its
+ * board is built from the date seed over the answer key in nfl_grid_players,
+ * see src/lib/nflGrid.ts and scripts/simNflGrid.mjs), so the college grid is
+ * the only static pool this fence measures now. The Round 401 local names
+ * section went with it: the search box offers the key's own names.
+ *
+ * NEGATIVE CONTROL: GRIDPOOL_CONTROL=dupe clones one college puzzle back
+ * into the pool (asserting the pool was big enough to clone from) and
+ * section 2 must go red.
  *
  * Run: node scripts/simGridPuzzlePool.mjs
  */
@@ -43,22 +44,19 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GRIDPOOL_CONTROL || '';
-if (CONTROL && CONTROL !== 'dupe' && CONTROL !== 'names') {
+if (CONTROL && CONTROL !== 'dupe') {
   console.error(`GRIDPOOL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
 let failures = 0;
-let section = 0;
-let sectionFive = 0;
-const fail = m => { failures += 1; if (section === 5) sectionFive += 1; console.error('  FAIL: ' + m); };
+const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 /* The pools that ARE the rotation. Soccer is deliberately absent: its pool is
    fetched from the database at runtime (fetchSoccerGridPuzzles) and the static
    array is only a fallback, so a length assertion here would measure the
    fallback and quietly pass while the real pool drifted. */
 const POOLS = [
-  { key: 'football-grid', module: 'src/data/footballGridPuzzles.ts', name: 'footballGridPuzzles', floor: 60 },
   { key: 'college-grid', module: 'src/data/collegeGridPuzzles.ts', name: 'collegeGridPuzzles', floor: 60 },
 ];
 
@@ -99,7 +97,7 @@ console.log('1) the repeat interval is the pool length, and the pool clears its 
 const pools = {};
 for (const spec of POOLS) {
   const pool = mod[spec.name].slice();
-  if (CONTROL === 'dupe' && spec.key === 'football-grid') {
+  if (CONTROL === 'dupe' && spec.key === 'college-grid') {
     if (pool.length < 2) { console.error('control found nothing to clone: pool too small'); process.exit(1); }
     pool.push({ ...pool[0], id: `${pool[0].id}-control-clone` });
     console.log(`   NEGATIVE CONTROL ON: cloned ${pool[0].id} back into ${spec.key}, section 2 must go red`);
@@ -165,28 +163,7 @@ for (const [key, pool] of Object.entries(pools)) {
   console.log(`   ${key.padEnd(14)} ${offTypes} unknown types, ${offShapes} off-shape labels`);
 }
 
-section = 5;
-console.log('5) every evidenced NFL answer is a name the search box can offer');
-{
-  const { namesFromLedger, renderModule } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'genNflGridLocalNames.mjs')).href);
-  let derived = namesFromLedger();
-  if (CONTROL === 'names') {
-    if (derived.length < 2) { console.error('control found nothing to drop: the ledger names fewer than two players'); process.exit(1); }
-    derived = derived.slice(1);
-    console.log(`   NEGATIVE CONTROL ON: dropped "${namesFromLedger()[0]}" from the derivation, section 5 must go red`);
-  }
-  const committed = fs.readFileSync(path.join(ROOT, 'src', 'data', 'nflGridLocalNames.ts'), 'utf8').split('\r\n').join('\n');
-  if (committed !== renderModule(derived)) fail('src/data/nflGridLocalNames.ts is not what the generator derives from the ledger; run node scripts/genNflGridLocalNames.mjs');
-  if (!/localNames=\{NFL_GRID_LOCAL_NAMES\}/.test(fs.readFileSync(path.join(ROOT, 'src', 'components', 'football-grid', 'GridPlayerSearch.tsx'), 'utf8'))) fail('GridPlayerSearch no longer hands NFL_GRID_LOCAL_NAMES to the autocomplete');
-  console.log(`   ${derived.length} evidenced names, committed file ${committed === renderModule(derived) ? 'matches' : 'differs'}`);
-}
-
 console.log('');
-if (CONTROL === 'names') {
-  if (sectionFive > 0) { console.log(`simGridPuzzlePool control: green. The dropped name was caught (${sectionFive} finding in section 5).`); process.exit(0); }
-  console.error('simGridPuzzlePool control: RED. A missing evidenced name passed, so the derivation check cannot bite.');
-  process.exit(1);
-}
 if (CONTROL === 'dupe') {
   if (failures > 0) { console.log(`simGridPuzzlePool control: green. The cloned board was caught (${failures} finding).`); process.exit(0); }
   console.error('simGridPuzzlePool control: RED. A cloned board passed, so the twin check cannot bite.');

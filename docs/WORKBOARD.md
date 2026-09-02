@@ -34,17 +34,6 @@ How it works:
 
 
 
-- **next: Round 406 (desktop lane, 2026-09-02). THE NFL GRID PAGE ON THE
-  ENGINE.** Phase 3, second half, the user visible one. /football-grid keeps
-  its URL, copy shape, daily rhythm, 15 guess budget, unlimited toggle,
-  rarity and completion; the board is built from the date seed by
-  src/lib/nflGrid.ts and every guess is judged in memory against the key,
-  so the AI validator and its daily quota leave the page. The search box
-  offers the key's display names. The 72 board static pool and the Round
-  401 local names retire; the copy says what the categories are now. Fences
-  retargeted, a browser play before the deploy. Files in play:
-  useFootballGrid.ts, FootballGrid.tsx, GridPlayerSearch.tsx, the football
-  copy, simGridPuzzlePool, a new page fence.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
@@ -727,6 +716,14 @@ Standing claims:
 
 ## Done
 
+- THE NFL GRID PAGE ON THE ENGINE, Round 406 (desktop lane, 2026-09-02, phase
+  3 of docs/designs/NFL-GRID-ENGINE-DESIGN.md). /football-grid builds its
+  board from the date seed and judges every guess in memory against the
+  1970 to 2025 answer key; the AI validator and its quota leave the page; the
+  search box offers the key's display names; the static pool and the local
+  names retire; the copy says what the categories are. simNflGridPage with
+  two controls, a browser play on the built site, the snapshot re-rendered.
+  Phase 4, the archive with answer keys, is next.
 - THE NFL KEY AS A TABLE, AND THE NFL GRID LIB ON THE ENGINE, Round 405
   (desktop lane, 2026-09-02, phase 3 first half). public.nfl_grid_players
   loaded by the database from the committed file (no write policy opened),

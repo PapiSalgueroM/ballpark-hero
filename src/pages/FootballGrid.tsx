@@ -27,6 +27,7 @@ const FootballGrid = () => {
     correctCount,
     rarityScore,
     isLoading,
+    dataError,
     unlimited,
     toggleUnlimited,
   } = useFootballGrid();
@@ -45,7 +46,7 @@ const FootballGrid = () => {
     <>
       <PageSeo
         title="NFL Grid - Daily Football Team Grid Game | DoUKnowBall"
-        description="Daily NFL grid game. Name players who played for each team and match position or award criteria."
+        description="Daily NFL grid game. Name players who played for each team and match position, draft or Super Bowl criteria."
         path="/football-grid"
       />
       <GameShell
@@ -82,7 +83,11 @@ const FootballGrid = () => {
           </>
         }
       >
-        {isLoading ? (
+        {dataError ? (
+          <p className="text-center text-sm text-muted-foreground py-10">
+            The player records could not load. Refresh the page to try again.
+          </p>
+        ) : isLoading ? (
           <GridBoardSkeleton variant="square" />
         ) : (
           <>
@@ -145,12 +150,12 @@ const FootballGrid = () => {
             'A new grid drops at midnight, same challenge for everyone',
           ]}
           examples={[
-            "Dallas Cowboys + Quarterback = Tony Romo, Troy Aikman, Dak Prescott",
-            "New England Patriots + Wide Receiver = Randy Moss, Julian Edelman",
-            "AFC + MVP = Peyton Manning, Lamar Jackson, Patrick Mahomes",
-            "1st Round Pick + Running Back = Saquon Barkley, Adrian Peterson",
-            "NFC North + Linebacker = Brian Urlacher, Ray Nitschke",
-            "Pro Bowl + Safety = Ed Reed, Troy Polamalu, Derwin James"
+            "Played for Cowboys + Quarterback = Tony Romo, Troy Aikman, Dak Prescott",
+            "Played for Patriots + Won a Super Bowl = Tom Brady, Corey Dillon, Deion Branch",
+            "Played for Packers + Undrafted = Tramon Williams",
+            "First Round Pick + Played for Colts = Peyton Manning",
+            "Played for Titans + Running Back = Earl Campbell, Derrick Henry",
+            "Round 6 or Later Pick + Played for Patriots = Tom Brady"
           ]}
         />
 
