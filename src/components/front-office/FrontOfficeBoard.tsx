@@ -6,6 +6,7 @@ import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
   generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
+  defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
@@ -284,13 +285,12 @@ export default function FrontOfficeBoard() {
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
     let note: string;
-    if (pr.pos === 'DEF') {
-      lg.teams[myTeam].defense = Math.min(95, lg.teams[myTeam].defense + 2);
-      note = `🛡️ ${pr.name} joins the defense: unit +2.`;
-    } else {
+    {
+      /* Round 418: a defensive pick is a man now, not two points on a unit
+         number nobody could see. prospectToPlayer refuses nobody. */
       const pl = prospectToPlayer(pr, Math.random);
       if (pl) lg.teams[myTeam].players.push(pl);
-      note = `📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
+      note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
     }
     // AI teams grab the rest of the top board between your picks
     const order = draftOrder(lg.teams).filter(a => a !== myTeam);
@@ -299,11 +299,8 @@ export default function FrontOfficeBoard() {
     for (let i = 0; i < aiTakes.length; i++) {
       const abbr = order[i % order.length];
       const taken = aiTakes[i];
-      if (taken.pos === 'DEF') lg.teams[abbr].defense = Math.min(95, lg.teams[abbr].defense + 1);
-      else {
-        const pl = prospectToPlayer(taken, Math.random);
-        if (pl) lg.teams[abbr].players.push(pl);
-      }
+      const pl = prospectToPlayer(taken, Math.random);
+      if (pl) lg.teams[abbr].players.push(pl);
     }
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
@@ -456,7 +453,8 @@ export default function FrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real 2025 rosters, rated from two seasons of real production. Manage the cap, sign free
+            Real 2026 rosters, rated off the 2025 season and where each man was
+            drafted. Manage the cap, sign free
             agents, swing trades, survive the injury report, draft the future, and chase a dynasty
             across as many seasons as you can. Saves automatically.
           </p>
@@ -587,7 +585,7 @@ export default function FrontOfficeBoard() {
           <p className="font-display text-lg font-bold text-foreground">The {league.season + 1} Draft</p>
           <p className="mt-1 text-xs text-muted-foreground">
             You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
-            the number on the card is what your scouts THINK. DEF picks boost your defense unit instead of adding a player.
+            the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
           </p>
         </div>
         <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
@@ -702,7 +700,11 @@ export default function FrontOfficeBoard() {
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">
-            Defense unit <b className="text-primary">{my.defense}</b> · payroll ${capUsed(my)}M of ${league.cap}M
+            {/* Round 418: show the number that actually drives the sim. It
+                used to read team.defense, which stopped meaning anything the
+                moment strength started reading the defenders themselves, and
+                a number on screen that changes nothing is worse than none. */}
+            Defense <b className="text-primary">{Math.round(defenceRating(my))}</b> · payroll ${capUsed(my)}M of ${league.cap}M
           </p>
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
@@ -761,7 +763,7 @@ export default function FrontOfficeBoard() {
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
             <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                   <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                 </button>
@@ -818,7 +820,7 @@ export default function FrontOfficeBoard() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button
                       key={p.id}
                       onClick={() => setMyTradePiece(p.id)}
@@ -833,7 +835,7 @@ export default function FrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <div key={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>

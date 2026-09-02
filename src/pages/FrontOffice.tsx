@@ -27,9 +27,9 @@ const FrontOffice = () => {
           <GameSeoContent
           pageHasOwnH1
             title="NFL Front Office: the GM Sim"
-            description="Take over a real NFL franchise with rosters rated from two seasons of real production. Manage the salary cap, cut and sign players, negotiate trades the AI actually evaluates, ride out the weekly injury report, scout a draft class where the grades can lie, and chase titles across unlimited saved seasons with aging, breakouts and retirements."
+            description="Take over a real NFL franchise on the real 2026 rosters, offence and defence, rated off 2025 production and draft position. Manage the salary cap, cut and sign players, negotiate trades the AI actually evaluates, ride out the weekly injury report, scout a draft class where the grades can lie, and chase titles across unlimited saved seasons with aging, breakouts and retirements."
             howToPlay={[
-              'Pick a franchise: its real core players are rated from real 2023-24 production.',
+              'Pick a franchise: its real 2026 squad, offence and defence, rated off the 2025 season and draft position.',
               'Work the roster: cut contracts to open cap room, sign free agents, propose trades the AI evaluates on age, position and rating.',
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
               'After the Super Bowl, scout the draft: grades carry error, so the board can lie to you.',

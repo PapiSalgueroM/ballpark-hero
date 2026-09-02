@@ -19,38 +19,34 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 419.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 421.
 
 ## Active claims, 2026-09-02
 
-- **Codex lane, next: Round 418. FRONT DOOR CLEANUP.** Fix the raw crawler-copy
-  flash the owner captured before React paints on the home page and direct game
-  links. Keep the complete static copy visible to no-JavaScript readers and in
-  the response for crawlers, but hide it before body paint when JavaScript is
-  running, with an outcome-based browser fence and a negative control. In the
-  same crawler-facing round, move the count-free social card to a fresh
-  same-domain filename so Bing stops reusing the obsolete "10+" cache key,
-  correct its remaining sign-up wording, update every social-image reference,
-  and regenerate the asset through the logo generator only.
+- **Codex lane, next: Round 420. FRONT DOOR AND ACCOUNT RELIABILITY.** Final
+  merged-tree verification is in progress. This round removes the crawler-copy
+  flash without hiding no-JavaScript content, refreshes the count-free social
+  card, isolates account and guest streaks, audits Player Bingo age data with
+  source receipts, makes Stock Market retry real, clears stale Transfer Path
+  rejection state, removes unsafe first-render randomness and retires obsolete
+  Boot Room endpoints. It does not touch the Desktop lane's Round 419 schedule
+  work.
 
-- **Desktop lane, next: Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE,
-  PART ONE: THE BAKE.** The owner's P1 item 12 from 2026-08-28, the last one
-  still open: "Trade Finder (US sports): only offensive players appear, and
-  rosters are outdated." Both halves are real. frontOffice.ts models defence
-  as ONE team number and its position list is seven offensive slots, so no
-  defender can exist to be traded; and src/data/frontOfficePlayers.ts was
-  baked on 2026-08-05 from 2025 rosters with no generator in the repo, so
-  nobody can refresh it.
-  This round writes the generator and the data only, no gameplay change, the
-  way the NFL grid key went in before the page moved. Measured today: 745
-  active defenders in the 2025 rosters, 557 of them with draft pedigree, plus
-  years of experience, plus games and games started from nfl_defense_stats.
-  That is the same evidence the file already uses for offensive linemen, who
-  have no production stats either, so the method is the file's own and nothing
-  is invented. Files in play: a new scripts/genFrontOfficeRoster.mjs, the
-  regenerated src/data/frontOfficePlayers.ts, a new fence. Round 411 (NFL
-  archive, other lane) is not touched. Part two, the engine reading defenders
-  so the Trade Finder can show them, is its own round.
+- **Desktop lane, next: Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.**
+  Found while re-measuring Round 418, not reported by anyone. `buildSchedule`
+  in src/lib/frontOffice.ts is documented as 6 divisional plus 11 crossover
+  games for all 32 clubs and does not deliver it. Measured over 200 built
+  schedules: **173 of 200 seasons (87 percent) leave one club off 17 games**,
+  as low as 9, because the crossover pairing loop gives up when a single club
+  is left needing partners. A club on 9 games cannot reach the playoffs, and
+  standings sort on wins, so it is a fairness bug not a cosmetic one. The
+  same pass also puts a club in the same week twice about 38 times a season,
+  which the code's own comment calls "rare and harmless" and is neither.
+  The fix has to be provable rather than lucky: complete the pairing (or
+  retry until it completes), then FAIL CLOSED if any club is not on exactly
+  17, rather than shipping a quiet 9. Files in play: src/lib/frontOffice.ts
+  and a new fence section with its control. Round 411 (NFL archive, other
+  lane) is not touched.
 
 
 
@@ -836,6 +832,33 @@ Standing claims after Round 400:
 
 ## Done
 
+- THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO, Round 418 (desktop
+  lane, 2026-09-02). The other half of the owner's item 12. Round 416 put 192
+  real defenders on the rosters and deliberately left them worth nothing:
+  defence was one stored number worth 28 percent of team strength, and that
+  number came from a 2024 team unit rating whose correlation with the 2026
+  defenders in the same file is MINUS 0.112. teamStrength reads the men on
+  the roster now, so a trade for a defender changes how the club plays;
+  upgrading one team's worst lineman to 95 moves its strength 77.63 to 78.61
+  where it used to move it by nothing. Draft picks and the opening free agent
+  market carry defenders, so they can be acquired and not only admired, and
+  the team panel shows the rating the sim actually reads. A pre 416 save has
+  no defenders and keeps the stored number, so it plays exactly as before.
+  Measured over 40 simulated seasons: strength still predicts wins, median
+  correlation 0.693 (one draw read 0.822, which an earlier draft quoted as
+  though it were the figure), and no club ends over the cap, but the
+  league's pecking order agrees
+  with the old one on zero of 32 positions, which is what that correlation
+  has to mean. An adversarial review caught the round shipping an
+  exploit: defenceRating was a MEAN, so cutting your worst defender raised
+  it and made all 32 clubs stronger, and cutting all six fell through to the
+  stored 2024 number, an upgrade for 11 of them worth 2.6 extra wins a
+  season. It uses a fixed denominator now, so losing a man can only ever
+  cost, and section 10 asserts that as a property over every club, every
+  defender and every removal order rather than over the two moves somebody
+  happened to find. simFrontOfficeRoster is 128 checks and thirteen controls; the
+  Round 416 check asserting a defender must NOT move strength flipped on
+  purpose, which is what it was written for.
 - LIVE DATA FENCES SURVIVE RUNNER PRESSURE, Round 417 (Codex lane,
   2026-09-02). `simSchemaNames`, `simValueFreshness` and
   `simDailyPoolOrder` now share a three-attempt helper that retries thrown
@@ -849,6 +872,29 @@ Standing claims after Round 400:
   failure controls all proved their paths. Final gates: exact TypeScript zero,
   185 of 185 node harnesses green, production build green, and all 15 generated
   site fences green.
+- THE FRONT OFFICE ROSTER GETS A DEFENCE, PART ONE, THE BAKE, Round 416
+  (desktop lane, 2026-09-02). The owner's P1 item 12. frontOfficePlayers.ts
+  is derived now rather than typed by hand, from the nflverse 2026 rosters
+  release and the 2025 stats_player release, and it carries 192 defenders
+  where it carried none. A defender is rated on a blend of production and
+  draft pedigree, weighted by position, and on a per game rate rather than a
+  season total: production alone rated Sauce Gardner last in the league, and
+  totals rated Fred Warner near the bottom for missing eleven games. An EVEN
+  blend, which is what the round tried first, could not have worked: both halves are
+  midrank percentiles, so 50/50 cannot lift a bottom decile producer past the
+  middle of the scale, and Pat Surtain II landed on exactly 0.500 and shipped
+  at 80 under an undrafted corner on 90. Then the first fix over-corrected,
+  which a second adversarial review caught: at 0.75 the corners became a
+  seniority list and a top decile producer shipped ten under a bottom decile
+  one. The weights are swept against named cases now (CB 0.6, S 0.55, LB
+  0.45, DL 0.35) and years of service is worth half what it was, because the
+  real driver was seniority rather than the draft. The draft curve reaches
+  the whole draft instead of clipping at pick 32. Two source verified 98.3
+  percent against ESPN's own 2026 rosters. The bake fails closed on a broken
+  join, the offseason replenishes the defence instead of draining it, the
+  trade panels stopped hiding seven of fifteen men, and six places of copy
+  that described the old data now describe the new. New fence
+  simFrontOfficeRoster: 117 checks, twelve controls. Part two is Round 418.
 - THE BILLION DOLLAR GAME SAYS DOLLARS, Round 415 (desktop lane, 2026-09-02).
   The owner's item 13 had a tail: the budget and the board were fixed in
   Round 315 but the page around them still said euros in six places, title
