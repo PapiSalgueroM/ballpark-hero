@@ -2893,13 +2893,20 @@ today rather than adding alongside them.
   cycle match the shape the data ships now. And the trade panels sliced your roster to its
   top eight by rating, which was fine at nine men and hides seven of fifteen, most of them
   the defenders this round adds, so the slices are gone.
-  **The copy was lying the moment the data landed.** Five places told a visitor "real 2025
+  **The copy was lying the moment the data landed.** Six places told a visitor "real 2025
   rosters, rated from two seasons of real production" or "rated from real 2023-24
-  production": the pick screen, the SEO block, the FAQ answer, a how to play step and the
-  engine's own file header. A sixth was the generated data file's own header, which still
-  described the even blend after the weights went per position, and no guard could see it
-  because the false line lived in the generator. All six say what is true now, and the FAQ
-  says out loud why a defender's rating is not pure production.
+  production": the pick screen, the SEO block, the FAQ answer, a how to play step, the
+  engine's own file header, and the generated data file's own header, which still
+  described the even blend after the weights went per position and which no guard could
+  see because the false line lived in the generator. All six say what is true now.
+  **One correction to that count, found by checking the live page rather than the source:
+  the how to play step I edited never renders.** `GameSeoContent` prefers the
+  `src/data/gameContent` entry and falls back to its `howToPlay` prop only when a page has
+  no entry, and /front-office has one, so that prop is legacy and inert. The step a
+  visitor actually reads comes from the football content file and carried no stale claim.
+  So five of the six were live and one was a dead prop that is now accurate anyway. The
+  fence scans the live source as well as the prop, and the FAQ answer, which is live, says
+  out loud why a defender's rating is not pure production.
   **What the harnesses caught, and what two adversarial reviews caught that they did
   not.** `simInventedNames` went red the first time it ran against the new file: the GM
   draft class generator pairs Jalen with Redmond and Jalen Redmond is now a real man in
