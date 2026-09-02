@@ -19,9 +19,28 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 416.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 417.
 
 ## Active claims, 2026-09-02
+
+- **Desktop lane, next: Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE,
+  PART ONE: THE BAKE.** The owner's P1 item 12 from 2026-08-28, the last one
+  still open: "Trade Finder (US sports): only offensive players appear, and
+  rosters are outdated." Both halves are real. frontOffice.ts models defence
+  as ONE team number and its position list is seven offensive slots, so no
+  defender can exist to be traded; and src/data/frontOfficePlayers.ts was
+  baked on 2026-08-05 from 2025 rosters with no generator in the repo, so
+  nobody can refresh it.
+  This round writes the generator and the data only, no gameplay change, the
+  way the NFL grid key went in before the page moved. Measured today: 745
+  active defenders in the 2025 rosters, 557 of them with draft pedigree, plus
+  years of experience, plus games and games started from nfl_defense_stats.
+  That is the same evidence the file already uses for offensive linemen, who
+  have no production stats either, so the method is the file's own and nothing
+  is invented. Files in play: a new scripts/genFrontOfficeRoster.mjs, the
+  regenerated src/data/frontOfficePlayers.ts, a new fence. Round 411 (NFL
+  archive, other lane) is not touched. Part two, the engine reading defenders
+  so the Trade Finder can show them, is its own round.
 
 
 
