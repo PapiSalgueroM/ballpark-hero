@@ -2924,8 +2924,11 @@ today rather than adding alongside them.
   the number the BOARD shows falls with it, since that display is what invited the click.
   The `meandefence` control puts the plain mean back and the sweep reports 259 removals
   that made a club stronger, which is the exploit reproduced on demand.
-  Gates: tsc zero, 128 checks with thirteen controls, the full node suite, all 15 built
-  site fences, build green.
+  Gates: tsc zero, 128 checks with thirteen controls, all 186 node harnesses green, all 15
+  built site fences, build green. Verified live on douknowball.com as a crawler after
+  publishing: eight checks, the draft step reading "join the roster as players", the old
+  unit boost claim gone from the snapshot, and no 2023, 2024 or 2025 claim left on the
+  page.
 - **2026-09-02, Round 416. THE FRONT OFFICE ROSTER GETS A DEFENCE, PART ONE: THE BAKE.**
   The owner's P1 item 12 from 2026-08-28, recorded as still open in Round 413: "Trade
   Finder (US sports): only offensive players appear, and rosters are outdated." Both
