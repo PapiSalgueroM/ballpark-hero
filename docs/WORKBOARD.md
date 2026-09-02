@@ -19,18 +19,17 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 410.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 411.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 409. Path-independent seeded harnesses.** The
-  full Round 408 suite exposed that `seedRandom.mjs` hashes the absolute
-  launcher path even though its contract says each stream is keyed by the
-  harness filename. The same code therefore passes or fails according to its
-  checkout folder. Add a test that launches the same harness name from two
-  paths, make the seed depend on the filename alone, prove the old behavior
-  through a negative control, and remeasure every harness that uses the shared
-  seed before the full suite. Production game code and AdSense stay untouched.
+- **Desktop lane, next: Round 410. NFL Grid archive phase 4.** Build the
+  board-keyed archive from the 1970 to 2025 answer key. Archive identity must
+  never be date-only and no retired board can recur. Add an index, one detail
+  route per distinct board, complete cell answer keys, privacy-safe recorded
+  community pick percentages, and replay isolated from daily saves, scores,
+  completions, and selection writes. This is the final NFL archive phase in
+  `docs/designs/NFL-GRID-ENGINE-DESIGN.md`; no new game type starts first.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
@@ -741,6 +740,16 @@ Standing claims after Round 400:
 
 ## Done
 
+- SHARED SIMULATION SEEDS NO LONGER CHANGE WITH THE CHECKOUT FOLDER, Round
+  409 (desktop lane, 2026-09-02). The shared helper promised one deterministic
+  stream per harness filename but hashed the absolute launcher path. The same
+  commit therefore produced different samples in the main checkout and a
+  linked worktree, making simNationJob green in one and red at 22 titles to 23
+  in the other. The helper now hashes only the filename while preserving the
+  explicit SIM_SEED override and PRNG. simSeedRandom launches matching names
+  from two folders, different names, and an explicit seed; its old-path
+  control proves the defect. All 26 shared-seed consumers passed, and
+  simNationJob is stable at 32 titles to 19.
 - TRANSFER PATH REJECTS A PLAYER ALREADY IN THE CHAIN, Round 408 (desktop
   lane, 2026-09-02). A submitted path repeated Dusan Vlahovic three times.
   The suggestion list had hidden used names, but the hook did not own the

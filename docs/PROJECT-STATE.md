@@ -2727,6 +2727,19 @@ today rather than adding alongside them.
   unverified, contradictory and valid responses, and its control fires.
   Production cache check 42/42; scoped browser walk, build, real app type gate
   and rival-name fence green.
+- **2026-09-02, Round 409. SEEDED HARNESSES MEAN THE SAME THING IN EVERY
+  CHECKOUT.** The full Round 408 suite exposed a test-infrastructure defect,
+  not a production regression: `seedRandom.mjs` said it keyed each default
+  stream on the harness filename but actually hashed the absolute launcher
+  path. A linked worktree therefore gave simNationJob a different sample from
+  the main checkout and failed at 22 England titles with a six-point manager
+  lift versus 23 without one. The helper now hashes only the cross-platform
+  basename. Numeric SIM_SEED still overrides it and the PRNG is unchanged.
+  `simSeedRandom` runs child entries with the same name in two folders,
+  different names, and an explicit seed; its temporary old-helper control
+  proves path dependence returns. The filename seed makes simNationJob 32 to
+  19, and all 26 consumers of the shared helper passed without weakening a
+  single threshold. Production code, sports data, and AdSense did not move.
 - **2026-09-02, Round 408. TRANSFER PATH CANNOT LOOP THROUGH THE SAME PLAYER.**
   A submitted path repeated Dusan Vlahovic three times. The autocomplete hid
   prior names, but that was only a presentation filter: the hook accepted a
