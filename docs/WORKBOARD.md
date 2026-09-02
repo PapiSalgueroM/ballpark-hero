@@ -19,11 +19,17 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 408.
+and the other lane takes NNN+1. NEXT FREE NUMBER: 409.
 
 ## Active claims, 2026-09-02
 
-- None. Round 400 is in Done and Google's AdSense review is pending.
+- **Desktop lane, next: Round 408. Transfer Path repeated-player guard.** A
+  submitted chain repeated Dusan Vlahovic three times. The suggestion list
+  filters used names, but the hook that owns the game rule does not reject a
+  repeated player. Add the invariant at the hook boundary, show a truthful
+  rejection message, and cover it with a behavior-level regression test and a
+  negative control. AdSense review remains pending and this round does not
+  change the verified ad boundary.
 
 
 **OWNER PRIORITY UPDATE, 2026-09-02:** AdSense readiness comes first, then the
