@@ -310,12 +310,13 @@ serve(async (req) => {
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content?.trim() || "";
     const m = content.match(/\{[\s\S]*\}/);
-    if (!m) return unverified();
+    if (!m) { console.log(`ai no verdict: status ${resp.status} body ${content.slice(0, 160)}`); return unverified(); }
     const result = JSON.parse(m[0]);
     const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
     return json(verdict);
-  } catch {
+  } catch (err) {
+    console.log(`ai threw: ${String(err).slice(0, 160)}`);
     return unverified();
   }
 });
