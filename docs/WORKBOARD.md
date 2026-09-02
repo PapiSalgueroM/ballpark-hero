@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 402.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 403.
 
 ## Active claims, 2026-09-01
 
@@ -29,6 +29,17 @@ How it works:
   changing code; fix the highest-confidence production bug first, with its
   negative control. Soccer Career and Club Manager get the first deep checks.
 
+
+- **next: Round 402 (desktop lane, 2026-09-02). THE GRID ENGINE, LIFTED: PHASE 1
+  OF docs/designs/NFL-GRID-ENGINE-DESIGN.md.** src/lib/gridEngine.ts takes a
+  per sport config and owns the helpers that are byte identical across
+  nbaGrid.ts, mlbGrid.ts and hockeyGrid.ts; the three libs keep every export as
+  thin re-exports, each sport keeps its own PRNG sequence so every published
+  archive board still rebuilds from its seed, and a new fence (simGridEngine)
+  rebuilds gridArchive.json through the engine and reads the libs as code.
+  Nothing a player can see changes. Files in play: src/lib/nbaGrid.ts,
+  mlbGrid.ts, hockeyGrid.ts, cbbGrid.ts (read only), the new engine, the new
+  fence. Codex's Round 400 audit is not touched.
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
