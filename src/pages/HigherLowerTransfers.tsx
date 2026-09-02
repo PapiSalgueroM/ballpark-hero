@@ -5,7 +5,6 @@ import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
-import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -222,7 +221,6 @@ const HigherLowerTransfers = () => {
           </>
         )}
 
-        <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="higher-lower-transfers" />

@@ -119,31 +119,13 @@
       })();
     </script>
     <script>
-      // Consent-gated AdSense loader: only load the ad script if the visitor
-      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
-      // New visitors (no choice yet) do not get the script until they accept;
-      // the banner reloads ads on acceptance via the page lifecycle.
-      //
-      // Round 285: Google Analytics rides on the same gate. The measurement
-      // id and the injection are duplicated in src/lib/consentedScripts.ts,
-      // which is what the banner calls the moment somebody accepts; this copy
-      // covers every later page load. simAdsense holds the two ids together
-      // and refuses a gtag script tag that is not behind this check, so the
-      // tag can never be loaded for a visitor who has not accepted.
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
-            // Round 304: non personalized ads only. Google is told before its
-            // script loads, the privacy pages say the same thing, and
-            // simLegalPages holds the flag and the wording together.
-            window.adsbygoogle = window.adsbygoogle || [];
-            window.adsbygoogle.requestNonPersonalizedAds = 1;
-            var s = document.createElement('script');
-            s.async = true;
-            s.crossOrigin = 'anonymous';
-            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
-            document.head.appendChild(s);
-
             window.dataLayer = window.dataLayer || [];
             window.gtag = function () { window.dataLayer.push(arguments); };
             window.gtag('js', new Date());
@@ -153,7 +135,7 @@
             g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
             document.head.appendChild(g);
           }
-        } catch (e) { /* storage blocked: default to no ads script */ }
+        } catch (e) { /* storage blocked: analytics stays off */ }
       })();
     </script>
     

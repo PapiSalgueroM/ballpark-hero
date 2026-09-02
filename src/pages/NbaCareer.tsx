@@ -211,7 +211,7 @@ const NbaCareer = () => {
           ]}
         />
 
-        <AdBanner slot="1234567909" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="nba-career" gameContext={{ puzzleId: puzzle.id }} />
         </div>

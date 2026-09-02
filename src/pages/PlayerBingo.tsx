@@ -455,7 +455,7 @@ const PlayerBingo = () => {
 
         <style>{'@keyframes pb-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }'}</style>
 
-        <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="player-bingo" />

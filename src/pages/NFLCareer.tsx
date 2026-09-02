@@ -193,7 +193,7 @@ const NFLCareer = () => {
           ]}
         />
 
-        <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <NFLCareerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="nfl-career" gameContext={{ targetPlayer: targetPlayer?.name }} />

@@ -608,11 +608,11 @@ current:**
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
 | `docs/WORKBOARD.md` | **LIVE.** The two-lane task board: claims before building, round numbers reserved here. |
 | `docs/OWNER-ADSENSE-RECOVERY-2026-08-30.md` | **LIVE, P0.** The owner's AdSense recovery addendum, written the hour Google rejected the site for "Low value content". Sets the immediate priority order and the two deliverables (a render audit and a reapply readiness verdict). Does NOT replace the master spec. |
-| `docs/OPERATING-CONTRACT-2026-08.md` | **LIVE.** The owner's 2026-08-29 operating contract: GSC ground truth, Milestone 0 (own the grid category), AdSense deferred, the narrowed freeze. On WHAT to build and in what order it beats every older note including directive 3's blanket route freeze. |
+| `docs/OPERATING-CONTRACT-2026-08.md` | **LIVE FOR ITS REMAINING RULES.** The owner's 2026-08-29 operating contract still governs GSC ground truth and Milestone 0. Its AdSense deferral and narrowed freeze were superseded by the owner's 2026-09-02 priority recorded in `docs/WORKBOARD.md`. |
 | `docs/MASTER-BUILD-SPEC-2026-08.md` | **LIVE.** The owner's product north star (2026-08-29). Read with the reconciliation beside it. |
 | `docs/SPEC-RECONCILIATION.md` | **LIVE.** Every spec section mapped to shipped rounds. Read BEFORE claiming spec work. |
 | `docs/PARALLEL-AGENT-OPS.md` | **LIVE.** The multi-agent operating rules, the lane ownership split, and the one deviation from them. |
-| `docs/OWNER-DIRECTIVES-2026-08.md` | **LIVE.** The owner overrides: free forever, the AdSense review freeze, the approval list. |
+| `docs/OWNER-DIRECTIVES-2026-08.md` | **LIVE FOR ITS REMAINING OVERRIDES.** Free forever and the approval list still govern. The AdSense review freeze ended when the rejection arrived on 2026-08-30; current submission authority is recorded in `docs/WORKBOARD.md`. |
 | `docs/PRODUCT-MISSION.md` | **LIVE.** The mission and the four-ways-to-play design target. |
 
 The repo also carries five project skills in `.claude/skills/` (dukb-data-guardian,

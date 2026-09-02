@@ -155,7 +155,7 @@ const TennisHigherLower = () => {
           ]}
         />
 
-        <AdBanner slot="1234567902" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="tennis-higher-lower" gameContext={{ mode }} />
         </div>

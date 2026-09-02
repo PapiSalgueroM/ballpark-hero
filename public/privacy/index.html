@@ -119,31 +119,13 @@
       })();
     </script>
     <script>
-      // Consent-gated AdSense loader: only load the ad script if the visitor
-      // accepted full cookies (CookieConsent stores 'accepted' or 'essential').
-      // New visitors (no choice yet) do not get the script until they accept;
-      // the banner reloads ads on acceptance via the page lifecycle.
-      //
-      // Round 285: Google Analytics rides on the same gate. The measurement
-      // id and the injection are duplicated in src/lib/consentedScripts.ts,
-      // which is what the banner calls the moment somebody accepts; this copy
-      // covers every later page load. simAdsense holds the two ids together
-      // and refuses a gtag script tag that is not behind this check, so the
-      // tag can never be loaded for a visitor who has not accepted.
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
       (function () {
         try {
           if (localStorage.getItem('cookie-consent') === 'accepted') {
-            // Round 304: non personalized ads only. Google is told before its
-            // script loads, the privacy pages say the same thing, and
-            // simLegalPages holds the flag and the wording together.
-            window.adsbygoogle = window.adsbygoogle || [];
-            window.adsbygoogle.requestNonPersonalizedAds = 1;
-            var s = document.createElement('script');
-            s.async = true;
-            s.crossOrigin = 'anonymous';
-            s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
-            document.head.appendChild(s);
-
             window.dataLayer = window.dataLayer || [];
             window.gtag = function () { window.dataLayer.push(arguments); };
             window.gtag('js', new Date());
@@ -153,7 +135,7 @@
             g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
             document.head.appendChild(g);
           }
-        } catch (e) { /* storage blocked: default to no ads script */ }
+        } catch (e) { /* storage blocked: analytics stays off */ }
       })();
     </script>
     
@@ -213,7 +195,7 @@
 <div id="root">
 <div id="dukb-snapshot">
 <h1>Privacy Policy</h1>
-<p>Last updated: August 27, 2026</p>
+<p>Last updated: September 1, 2026</p>
 <h2>1. Information We Collect</h2>
 <p>DoUKnowBall is completely free. There are no subscriptions, no paid features, and no in-app purchases, so we never collect or store payment information of any kind. You can also play every game without an account. If you choose to use certain features, here is what we collect:</p>
 <li>Local storage data: Game progress, scores, streaks, and preferences are stored in your browser's local storage on your own device and are not sent to our servers unless described below.</li>
@@ -242,13 +224,14 @@
 <li>Google AdSense: We display advertisements provided by Google AdSense, and only after you have chosen Accept on our cookie banner. We ask Google for non-personalized ads on this site, so ads are selected from the page you are viewing rather than from a profile of your browsing. Google still uses cookies for things like frequency capping and fraud prevention. Section 5 has the full advertising disclosure and every opt-out link, including <a href="https://www.google.com/settings/ads">Google's Ads Settings</a>.</li>
 <li>Google Analytics: We use Google Analytics 4 to see which games people play and how the Site is used, so we know what to build next. It loads only after you choose Accept on our cookie banner, and it uses cookies to tell one visit from another. Google Analytics 4 uses your IP address to work out your rough location and then discards it; it is not stored in our reports. You can also opt out of Google Analytics everywhere with <a href="https://tools.google.com/dlpage/gaoptout">Google's browser add-on</a>.</li>
 <li>Lovable (hosting): The Site itself is built and hosted on Lovable's platform, which serves the pages and assets you load. Like any web host, its servers receive standard technical request data (such as your IP address and browser type) in order to deliver the Site.</li>
-<li>Wikipedia REST API: Used in some game modes to fetch publicly available player photographs. No personal data is sent.</li>
 <li>FormSubmit: When you use a Report button, the report is relayed to our inbox through FormSubmit, an email relay service. Only the report text you typed and the page you were on are sent, nothing about your identity.</li>
 <li>AI services (Google Gemini): Many of our games use an AI model to check answers and rate lineups. When you type an answer into a grid, board, or lineup game, the text you typed is sent through our backend to an AI model (currently Google's Gemini, reached either directly or through our hosting provider Lovable's AI gateway) so it can be verified against the category, and in games like "Build Your XI" the AI generates a rating for your team. Only the game content itself (your typed answer, player names, team names, formation data) is sent. Your name, email, account details, and device identifiers are never included, we do not use your inputs to train any model of our own, and the AI's output is only ever a validation result or rating shown back to you in the game.</li>
 <h2>5. Advertising and Your Choices</h2>
 <p>Ads are how the games stay free. We use Google AdSense, and we ask Google for non-personalized ads only: what you see is picked from the page you are on, not from a profile of you. Here is what using Google advertising means in practice, in the words Google asks publishers to use:</p>
+<p>The first two bullets below are Google's general publisher disclosure. The prior-visit and cross-site personalization described in them are not the ad-selection mode this Site requests. Before Google's advertising script loads, this Site sets Google's non-personalized ads flag. Google may still use cookies and identifiers for frequency capping, aggregate reporting, fraud prevention, and similar purposes.</p>
 <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or to other websites.</li>
 <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.</li>
+<li>When Google serves an ad, it and its partners may use cookies, web beacons, IP addresses, and other identifiers to deliver, limit, measure, and protect advertising.</li>
 <li>You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads">Google's Ads Settings</a>.</li>
 <li>Other third party vendors and ad networks may also serve ads on this site. You can opt out of some of these vendors' use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices">www.aboutads.info/choices</a>, and in the European Union at <a href="https://www.youronlinechoices.eu">www.youronlinechoices.eu</a>.</li>
 <li>Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites">policies.google.com/technologies/partner-sites</a>.</li>

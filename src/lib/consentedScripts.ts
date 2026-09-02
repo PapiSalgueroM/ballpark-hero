@@ -1,19 +1,18 @@
 /**
  * Round 285: the two third party scripts that only ever load after Accept.
  *
- * index.html carries an inline copy of exactly this for every page load that
- * already has consent stored, because the template cannot import anything.
- * This module is the copy the banner calls the moment somebody accepts, so
- * ads and analytics start in the same session rather than on the next one.
- * simAdsense checks the ids here against index.html so the two copies cannot
- * drift, and checks that index.html never loads either script outside its
- * consent branch.
+ * index.html carries the analytics half for page loads that already have
+ * consent stored, because the template cannot import anything. AdSense stays
+ * here and loads on demand only when the page contains a deliberate ad slot.
+ * This keeps account, reset, fallback, and other no-slot screens free of ad
+ * requests while the global meta tag still verifies the publisher account.
  *
  * Neither function does anything when its script is already on the page, so
  * calling them twice is harmless.
  */
 export const ADSENSE_CLIENT = 'ca-pub-2929318086316376';
 export const GA_MEASUREMENT_ID = 'G-KZQK2G68YC';
+export const CONSENT_CHANGED_EVENT = 'dukb-consent-changed';
 
 declare global {
   interface Window {
@@ -22,13 +21,13 @@ declare global {
   }
 }
 
-export function loadAdSense(): void {
+export function loadAdSense(): boolean {
   try {
-    if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
+    if (document.querySelector('meta[name="robots"][content*="noindex"]')) return false;
+    if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;
+    if (document.querySelector('script[src*="adsbygoogle.js"]')) return true;
     /* Round 304: non personalized ads only, declared before the script
-       loads. This is what lets the privacy pages promise no ad
-       personalization from us without a certified consent platform, and
-       index.html's inline copy sets the same flag. */
+       loads. This keeps ad requests consistent with the privacy pages. */
     const w = window as Window & { adsbygoogle?: unknown[] & { requestNonPersonalizedAds?: number } };
     w.adsbygoogle = w.adsbygoogle || [];
     w.adsbygoogle.requestNonPersonalizedAds = 1;
@@ -37,8 +36,10 @@ export function loadAdSense(): void {
     s.crossOrigin = 'anonymous';
     s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
     document.head.appendChild(s);
+    return true;
   } catch {
     // DOM blocked: ads simply stay off this session
+    return false;
   }
 }
 

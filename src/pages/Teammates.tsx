@@ -192,7 +192,7 @@ const Teammates = () => {
           ]}
         />
 
-        <AdBanner slot="1234567891" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <TeammatesHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <GameNav />
       </GameShell>

@@ -12,7 +12,12 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    document.querySelector('meta[name="robots"][data-dukb-fallback]')?.remove();
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    return () => {
+      document.querySelector('meta[name="robots"][data-dukb-fallback]')?.remove();
+      document.querySelector('meta[name="robots"][data-dukb-not-found]')?.remove();
+    };
   }, [location.pathname]);
 
   const popular = POPULAR_PATHS
@@ -25,7 +30,7 @@ const NotFound = () => {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Helmet>
         <title>Page Not Found | DoUKnowBall</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex" data-dukb-not-found="" />
       </Helmet>
       <div className="w-full max-w-lg text-center">
         <p className="text-6xl">🥅</p>

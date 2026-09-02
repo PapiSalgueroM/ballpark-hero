@@ -17,7 +17,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: August 27, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: September 1, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -33,7 +33,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">3. Sports Data &amp; Player Information</h2>
-          <p>All sports statistics, player names, team names, and career information presented on this Site are factual public information sourced from publicly available databases and records. This data is used for entertainment and educational purposes in the context of trivia games.</p>
+          <p>Real player names, team names, historical results, statistics, and trivia answers on the Site come from public records and sports sources. We work to verify this factual material before publishing it and correct errors when we confirm them.</p>
         </div>
 
         <div>
@@ -76,7 +76,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">9. Disclaimer of Warranties</h2>
-          <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. Player statistics and data presented in the games are approximations for entertainment purposes and may not reflect exact real-world figures.</p>
+          <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. We work to keep real trivia and historical data accurate, but errors can happen. Fictional simulation outputs such as ratings, future seasons, finances, and generated results are entertainment estimates, not records of real events.</p>
         </div>
 
         <div>

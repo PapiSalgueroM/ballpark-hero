@@ -189,7 +189,7 @@ const ClubManager = () => {
           </HowToPlayPopover>
           {inner}
         </div>
-        <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"

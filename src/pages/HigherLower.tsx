@@ -155,7 +155,7 @@ const HigherLowerGame = () => {
           ]}
         />
 
-        <AdBanner slot="1234567894" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <HigherLowerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
         <div className="flex justify-center mt-6">

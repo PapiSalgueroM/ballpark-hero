@@ -331,7 +331,7 @@ const ListQuiz = () => {
           Studying for a Gold run? <Link to="/records" className="text-primary hover:underline">The Record Books</Link> lay out the team title lists year by year.
         </p>
 
-        <AdBanner slot="1234567890" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="list-quiz" />

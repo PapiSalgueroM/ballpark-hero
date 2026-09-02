@@ -313,7 +313,7 @@ const MissingNine = () => {
           ]}
         />
 
-        <AdBanner slot="1234567914" format="horizontal" className="mt-8" />
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType="missing-nine" gameContext={{ lineup: lineup.id }} />
         </div>
