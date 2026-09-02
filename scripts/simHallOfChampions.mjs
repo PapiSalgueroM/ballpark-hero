@@ -67,6 +67,58 @@ const {
 
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };
+const CONTROL = process.env.SIM_HALL_CONTROL || "";
+const PARTIAL_CONTROLS = new Set(["partialcatalog", "persistentpartialcatalog"]);
+const KNOWN_CONTROLS = new Set([...PARTIAL_CONTROLS, "emptycatalog"]);
+if (CONTROL && !KNOWN_CONTROLS.has(CONTROL)) {
+  console.error(`simHallOfChampions: unknown SIM_HALL_CONTROL ${JSON.stringify(CONTROL)}`);
+  process.exit(1);
+}
+const CONTROL_MISSING_KEYS = new Set(WING_ORDER.slice(0, 2).map(({ key }) => key));
+let partialCatalogControlPlanted = false;
+let partialCatalogControlBefore = null;
+let partialCatalogControlAfter = null;
+
+async function fetchCatalogForHarness() {
+  if (CONTROL === "emptycatalog") return [];
+  const catalog = await fetchCatalog();
+  const shouldPlantPartial = PARTIAL_CONTROLS.has(CONTROL)
+    && (CONTROL === "persistentpartialcatalog" || !partialCatalogControlPlanted);
+  if (shouldPlantPartial) {
+    const filtered = catalog.filter(wing => !CONTROL_MISSING_KEYS.has(wing.key));
+    if (!partialCatalogControlPlanted && filtered.length < catalog.length) {
+      partialCatalogControlBefore = catalog.length;
+      partialCatalogControlAfter = filtered.length;
+      partialCatalogControlPlanted = true;
+    }
+    return filtered;
+  }
+  return catalog;
+}
+
+function controlRemovedCatalogRows() {
+  return partialCatalogControlBefore !== null
+    && partialCatalogControlAfter !== null
+    && partialCatalogControlAfter < partialCatalogControlBefore;
+}
+
+async function fetchCompleteCatalog() {
+  const byKey = new Map();
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const catalog = await fetchCatalogForHarness();
+    for (const wing of catalog) {
+      if (CONTROL === "persistentpartialcatalog" && CONTROL_MISSING_KEYS.has(wing.key)) continue;
+      byKey.set(wing.key, wing);
+    }
+    if (byKey.size === WING_ORDER.length) break;
+    if (attempt < 3) {
+      const missing = WING_ORDER.filter(({ key }) => !byKey.has(key)).map(({ key }) => key);
+      console.log(`   catalog attempt ${attempt} missed ${missing.join(", ")}; fetching the live catalog again`);
+      await new Promise(resolve => setTimeout(resolve, attempt * 200));
+    }
+  }
+  return WING_ORDER.map(({ key }) => byKey.get(key)).filter(Boolean);
+}
 
 /* --------------------------------------------- 0: the save fails closed */
 console.log("0) hostile saves load as null, never as state");
@@ -99,9 +151,20 @@ console.log(`   ${hostile.length} hostile shapes rejected, the real shape round 
 console.log("1) the catalog against the live tables");
 let wings = [];
 try {
-  wings = await fetchCatalog();
+  wings = await fetchCompleteCatalog();
 } catch {
   wings = [];
+}
+if (PARTIAL_CONTROLS.has(CONTROL) && (!partialCatalogControlPlanted || !controlRemovedCatalogRows())) {
+  fail("partial catalog control did not reduce a fetched catalog");
+}
+if (CONTROL === "partialcatalog" && controlRemovedCatalogRows() && wings.length === WING_ORDER.length) {
+  console.log(`   CONTROL partialcatalog reduced ${partialCatalogControlBefore} wings to ${partialCatalogControlAfter}, then recovered all 10`);
+}
+if (CONTROL && wings.length === 0) {
+  fail(`${CONTROL} left an empty controlled catalog after all attempts`);
+  console.error(`simHallOfChampions: ${failures} failure${failures === 1 ? "" : "s"}`);
+  process.exit(1);
 }
 if (wings.length === 0) {
   console.log("   SKIPPED, SUPABASE UNREACHABLE. THE CATALOG AND THE ECONOMY DID NOT RUN.");

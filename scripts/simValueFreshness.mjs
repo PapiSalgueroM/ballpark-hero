@@ -24,6 +24,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { fetchWithTransportRetry } from './lib/fetchWithTransportRetry.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
@@ -58,7 +59,8 @@ for (let i = 0; i < names.length; i += 20) {
      checked nothing and must not read as a pass. */
   let rows = null;
   try {
-    const res = await fetch(url, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } });
+    const { response: res, error } = await fetchWithTransportRetry(() => fetch(url, { headers: { apikey: KEY, authorization: `Bearer ${KEY}` } }));
+    if (!res) throw error;
     const body = await res.text();
     try { rows = JSON.parse(body); }
     catch { console.error(`the database answered with something that is not JSON (HTTP ${res.status}): ${body.slice(0, 80)}`); }
