@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 407.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 408.
 
 ## Active claims, 2026-09-01
 
@@ -34,6 +34,17 @@ How it works:
 
 
 
+
+- **next: Round 407 (desktop lane, 2026-09-02). THE TWO AI GRIDS TELL THE TRUTH
+  WHEN THE DAY'S QUOTA IS GONE.** Round 379's third option, still open: the
+  soccer and college grids answer "try again" forever once the free tier AI
+  has spent its day, and a player keeps clicking into a wall. The validators
+  now say which it was (a blip, or the day's quota answered 429 twice) and
+  the hooks stop inviting a retry that cannot succeed: one honest message,
+  remembered for the session, and the guess never burned. Files in play:
+  the soccer and college validators (redeployed), useSoccerGrid.ts,
+  useCollegeGrid.ts, a source fence. The NFL grid no longer has this problem
+  (Round 406).
 
 **OWNER STRATEGIC NOTE, 2026-09-01:** this is not a replacement priority list.
 Keep following the master plan and choose work from evidence. Do not lose the
