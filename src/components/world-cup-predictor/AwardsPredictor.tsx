@@ -15,7 +15,6 @@ const GOLDEN_BOOT_PLAYERS = [
   { name: "Gakpo", nation: "Netherlands" },
   { name: "Musiala", nation: "Germany" },
   { name: "Díaz", nation: "Colombia" },
-  { name: "Osimhen", nation: "Nigeria" },
   { name: "Pulisic", nation: "USA" },
   { name: "Hirving Lozano", nation: "Mexico" },
   { name: "Mitoma", nation: "Japan" },
@@ -29,19 +28,14 @@ const GOLDEN_BOOT_PLAYERS = [
   { name: "Taremi", nation: "Iran" },
   { name: "Trézéguet", nation: "Egypt" },
   { name: "Kudus", nation: "Ghana" },
-  { name: "Alexis Sánchez", nation: "Chile" },
-  { name: "Lookman", nation: "Nigeria" },
   { name: "Davies", nation: "Canada" },
   { name: "McGinn", nation: "Scotland" },
   { name: "Slimani", nation: "Algeria" },
   { name: "Haller", nation: "Ivory Coast" },
   { name: "Almirón", nation: "Paraguay" },
-  { name: "Zieliński", nation: "Poland" },
   { name: "Shomurodov", nation: "Uzbekistan" },
-  { name: "Dolberg", nation: "Denmark" },
   { name: "Muani", nation: "France" },
   { name: "Gyökeres", nation: "Sweden" },
-  { name: "Rashica", nation: "Kosovo" },
   { name: "Luckassen", nation: "Curaçao" },
   { name: "Mothiba", nation: "South Africa" },
   { name: "Garry Rodrigues", nation: "Cape Verde" },
@@ -50,9 +44,41 @@ const GOLDEN_BOOT_PLAYERS = [
   { name: "Davis", nation: "Panama" },
   { name: "Ben Romdhane", nation: "Tunisia" },
   { name: "Isak", nation: "Sweden" },
-  { name: "Rashani", nation: "Kosovo" },
   { name: "Nazon", nation: "Haiti" },
   { name: "Metsemaker", nation: "Curaçao" },
+];
+
+/* Round 395: the Golden Ball has its own list. It used to reuse the Golden
+   Boot forwards, so a midfielder could not be picked, and Rodri won it. */
+const GOLDEN_BALL_PLAYERS = [
+  { name: "Rodri", nation: "Spain" },
+  { name: "Pedri", nation: "Spain" },
+  { name: "Lamine Yamal", nation: "Spain" },
+  { name: "Mbappé", nation: "France" },
+  { name: "Bellingham", nation: "England" },
+  { name: "Messi", nation: "Argentina" },
+  { name: "Vinícius Jr", nation: "Brazil" },
+  { name: "Musiala", nation: "Germany" },
+  { name: "Wirtz", nation: "Germany" },
+  { name: "De Bruyne", nation: "Belgium" },
+  { name: "Valverde", nation: "Uruguay" },
+  { name: "Rice", nation: "England" },
+  { name: "Palmer", nation: "England" },
+  { name: "Kane", nation: "England" },
+  { name: "Saka", nation: "England" },
+  { name: "Gakpo", nation: "Netherlands" },
+  { name: "Hakimi", nation: "Morocco" },
+  { name: "Ødegaard", nation: "Norway" },
+  { name: "Haaland", nation: "Norway" },
+  { name: "Bruno Fernandes", nation: "Portugal" },
+  { name: "Ronaldo", nation: "Portugal" },
+  { name: "Salah", nation: "Egypt" },
+  { name: "Gyökeres", nation: "Sweden" },
+  { name: "Pulisic", nation: "USA" },
+  { name: "Alphonso Davies", nation: "Canada" },
+  { name: "Kudus", nation: "Ghana" },
+  { name: "Xhaka", nation: "Switzerland" },
+  { name: "Modrić", nation: "Croatia" },
 ];
 
 const GOLDEN_GLOVE_KEEPERS = [
@@ -77,20 +103,16 @@ const GOLDEN_GLOVE_KEEPERS = [
   { name: "Ryan", nation: "Australia" },
   { name: "Kobel", nation: "Switzerland" },
   { name: "Ørjan Nyland", nation: "Norway" },
-  { name: "Schmeichel", nation: "Denmark" },
   { name: "Rochet", nation: "Uruguay" },
   { name: "Seung-gyu", nation: "South Korea" },
   { name: "Al-Subaiee", nation: "Saudi Arabia" },
   { name: "Beiranvand", nation: "Iran" },
   { name: "El-Shenawy", nation: "Egypt" },
   { name: "Ati-Zigi", nation: "Ghana" },
-  { name: "Bravo", nation: "Chile" },
-  { name: "Okoye", nation: "Nigeria" },
   { name: "Crépeau", nation: "Canada" },
   { name: "Clark", nation: "Scotland" },
   { name: "Dahmen", nation: "Tunisia" },
   { name: "Nordfeldt", nation: "Sweden" },
-  { name: "Muric", nation: "Kosovo" },
   { name: "Joseph", nation: "Haiti" },
   { name: "Dos Ramos", nation: "Curaçao" },
   { name: "Williams", nation: "South Africa" },
@@ -242,8 +264,13 @@ function AwardDropdown({
 
 /* ───── Main Awards component ───── */
 
-export default function AwardsPredictor({ champion }: { champion: string }) {
+export default function AwardsPredictor({ champion, onAwardsChange }: { champion: string; onAwardsChange?: (picks: AwardPicks) => void }) {
   const [awards, setAwards] = useState<AwardPicks>(loadAwards);
+
+  /* Round 395: the page scores these against the real awards. */
+  useEffect(() => {
+    onAwardsChange?.(awards);
+  }, [awards, onAwardsChange]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(awards));
@@ -254,7 +281,7 @@ export default function AwardsPredictor({ champion }: { champion: string }) {
 
   const bootPlayer = GOLDEN_BOOT_PLAYERS.find((p) => p.name === awards.goldenBoot);
   const glovePlayer = GOLDEN_GLOVE_KEEPERS.find((p) => p.name === awards.goldenGlove);
-  const ballPlayer = GOLDEN_BOOT_PLAYERS.find((p) => p.name === awards.goldenBall);
+  const ballPlayer = GOLDEN_BALL_PLAYERS.find((p) => p.name === awards.goldenBall);
 
   const hasPicks = champion || awards.goldenBoot || awards.goldenGlove || awards.goldenBall;
 
@@ -312,7 +339,7 @@ export default function AwardsPredictor({ champion }: { champion: string }) {
           label="Golden Ball (Best Player)"
           emoji="🌟"
           value={awards.goldenBall}
-          options={GOLDEN_BOOT_PLAYERS}
+          options={GOLDEN_BALL_PLAYERS}
           onChange={update("goldenBall")}
         />
       </div>

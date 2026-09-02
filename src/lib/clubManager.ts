@@ -7097,7 +7097,7 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
    Chelsea 0.45, Manchester City 0.27), while the nearest genuinely outgunned
    club is Anderlecht at 3.09, then Beşiktaş 4.82 and Trabzonspor 5.09. 2.9
    splits the new clusters. The measurement script is the method: XI is the
-   mean of the top eleven ratings padded with 60, gap is the distance to the
+   mean of the eleven highest ratings padded with 60, gap is the distance to the
    league's best XI. */
 const TITLE_GAP = 2.9;
 

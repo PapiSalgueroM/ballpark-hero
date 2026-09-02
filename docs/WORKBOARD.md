@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 395.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 396.
 
 **OWNER REQUEST, 2026-09-01, taken as Round 382 (desktop lane):** "the note from
 the maker shouldnt say my name also it shouldnt pop up there I would rather you
@@ -681,6 +681,16 @@ Standing claims:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- THE 2026 BRACKET MEETS THE REAL TOURNAMENT, Round 395 (desktop lane,
+  2026-09-01, claimed and shipped in one commit, the other lane was idle). The
+  featured bracket tile still predicted a World Cup that ended July 19 and
+  listed Chile and Nigeria in Group J, who never qualified. The tournament as
+  played, two-source verified (ESPN's feed and Wikipedia's articles, compared
+  programmatically): groups, 32 knockout matches, awards. A scoring module and
+  a results panel under the bracket; Group J corrected; Austria and Jordan
+  given ranks and flags; a Golden Ball list with Rodri in it. Fence:
+  scripts/simWc2026Results.mjs, controls chain, swap, score.
 
 - THE ROSTER BAKE OWNS ITS LAST TWO LEAGUES, Round 394 (desktop lane,
   2026-09-01). The 2. Bundesliga and Belgian Pro League blocks were hand

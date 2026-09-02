@@ -16,7 +16,7 @@ export interface GroupSeed {
 // picks stored as matchId → winning team name
 type KnockoutPicks = Record<string, string>;
 
-interface BracketMatch {
+export interface BracketMatch {
   id: string;
   teamA: string;
   teamB: string;
@@ -80,10 +80,12 @@ interface KnockoutBracketProps {
   seeds: Record<string, GroupSeed>;
   bestThirds: { team: string }[];
   onChampionChange?: (champion: string) => void;
+  /** Round 395: the rounds as built from the picks, so the page can score them. */
+  onRoundsChange?: (rounds: BracketMatch[][]) => void;
   autoFillRef?: MutableRefObject<AutoFillHandle | null>;
 }
 
-const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: KnockoutBracketProps) => {
+const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, autoFillRef }: KnockoutBracketProps) => {
   const [picks, setPicks] = useState<KnockoutPicks>(loadPicks);
 
   useEffect(() => {
@@ -278,6 +280,10 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, autoFillRef }: K
   useEffect(() => {
     onChampionChange?.(champion);
   }, [champion, onChampionChange]);
+
+  useEffect(() => {
+    onRoundsChange?.(rounds);
+  }, [rounds, onRoundsChange]);
 
   // Per-round loading state
   const [roundLoading, setRoundLoading] = useState<number | null>(null);

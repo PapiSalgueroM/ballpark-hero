@@ -1,3 +1,6 @@
+import BracketResults from "@/components/world-cup-predictor/BracketResults";
+import type { BracketMatch } from "@/components/world-cup-predictor/KnockoutBracket";
+import type { PredictedAwards } from "@/lib/wc2026Score";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
@@ -112,8 +115,8 @@ const groups: Group[] = [
   ]},
   { letter: "J", teams: [
     { name: "Argentina", isTBD: false },
-    { name: "Chile", isTBD: false },
-    { name: "Nigeria", isTBD: false },
+    { name: "Austria", isTBD: false },
+    { name: "Jordan", isTBD: false },
     { name: "Algeria", isTBD: false },
   ]},
   { letter: "K", teams: [
@@ -157,6 +160,8 @@ const FIFA_RANKINGS: { rank: number; team: string }[] = [
   { rank: 33, team: "Ivory Coast" }, { rank: 34, team: "Panama" }, { rank: 36, team: "Poland" },
   { rank: 38, team: "Sweden" }, { rank: 41, team: "Paraguay" }, { rank: 42, team: "Scotland" },
   { rank: 45, team: "Tunisia" }, { rank: 50, team: "Uzbekistan" }, { rank: 54, team: "Chile" },
+  // Round 395: Austria and Jordan, the two Group J members the list never carried (their places in the pre-tournament FIFA rankings, per the tournament article).
+  { rank: 24, team: "Austria" }, { rank: 63, team: "Jordan" },
   { rank: 56, team: "Qatar" }, { rank: 60, team: "South Africa" }, { rank: 61, team: "Saudi Arabia" },
   { rank: 67, team: "Cape Verde" }, { rank: 73, team: "Ghana" }, { rank: 82, team: "Curaçao" },
   { rank: 83, team: "Haiti" }, { rank: 85, team: "New Zealand" }, { rank: 95, team: "Kosovo" },
@@ -202,7 +207,7 @@ const FLAG_CODES: Record<string, string> = {
   "Belgium": "be", "Egypt": "eg", "Iran": "ir", "New Zealand": "nz",
   "Spain": "es", "Uruguay": "uy", "Saudi Arabia": "sa", "Cape Verde": "cv",
   "France": "fr", "Senegal": "sn", "Norway": "no",
-  "Argentina": "ar", "Chile": "cl", "Nigeria": "ng", "Algeria": "dz",
+  "Argentina": "ar", "Chile": "cl", "Nigeria": "ng", "Algeria": "dz", "Austria": "at", "Jordan": "jo",
   "Portugal": "pt", "Colombia": "co", "Uzbekistan": "uz",
   "England": "gb-eng", "Croatia": "hr", "Ghana": "gh", "Panama": "pa",
   // Playoff teams
@@ -760,6 +765,10 @@ const WorldCupPredictor = () => {
     } catch { return {}; }
   });
   const [champion, setChampion] = useState("");
+  /* Round 395: what the bracket built and what the awards panel holds, so the
+     finished tournament can score them. */
+  const [bracketRounds, setBracketRounds] = useState<BracketMatch[][]>([]);
+  const [awardPicks, setAwardPicks] = useState<PredictedAwards>({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
 
   // Save bracket state
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -1195,7 +1204,7 @@ const WorldCupPredictor = () => {
       <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <PageSeo
         title="World Cup 2026 Bracket | Sports Trivia Games"
-        description="Build your World Cup 2026 bracket. Predict every match from groups to the final. Share your predictions."
+        description="Build your World Cup 2026 bracket and score it against the real tournament: every group, the round of 32 to the final, and the awards. Spain won it."
         path="/world-cup-bracket"
       />
 
@@ -1291,6 +1300,9 @@ const WorldCupPredictor = () => {
           </div>
           <p className="text-[hsl(150,15%,60%)] text-sm sm:text-base">
            USA <FlagImg name="USA" /> · Mexico <FlagImg name="Mexico" /> · Canada <FlagImg name="Canada" />, 48 Teams · 12 Groups
+          </p>
+          <p className="mt-2 text-[hsl(150,15%,72%)] text-sm sm:text-base">
+            Played June 11 to July 19, 2026. Spain won it. Build your bracket and see how it scores against what really happened.
           </p>
           {champion && !viewingSharedBracket && (
             <div className="mt-4 space-y-3">
@@ -1517,12 +1529,17 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} autoFillRef={bracketAutoFillRef} />
+            <KnockoutBracket seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} onRoundsChange={setBracketRounds} autoFillRef={bracketAutoFillRef} />
           </div>
         )}
 
         {/* Awards Predictor */}
-        <AwardsPredictor champion={champion} />
+        <AwardsPredictor champion={champion} onAwardsChange={setAwardPicks} />
+
+        {/* Round 395: the tournament has been played, score the bracket against it */}
+        {!viewingSharedBracket && (
+          <BracketResults seeds={allGroupsFilled ? groupSeeds : {}} thirds={userSelectedThirdsForBracket.map((t) => t.team)} rounds={bracketRounds} awards={awardPicks} />
+        )}
 
         {/* Fixed "Auto Fill Everything" button */}
         {!viewingSharedBracket && (
@@ -1546,12 +1563,13 @@ const WorldCupPredictor = () => {
       <div className="max-w-5xl mx-auto px-4">
         <GameSeoContent
           pageHasOwnH1
-          title="World Cup 2026 Bracket Builder | DoUKnowBall"
-          description="Build your complete World Cup 2026 bracket: predict every match from the group stage through the knockout rounds to the final. Share your bracket with friends and compare predictions."
+          title="World Cup 2026 Bracket, Scored Against the Real Results | DoUKnowBall"
+          description="Build your complete World Cup 2026 bracket, every group match, the round of 32 to the final and the three big awards, then score it against how the tournament was actually played. Spain beat Argentina in the final."
           howToPlay={[
             "Pick winners for each group stage match to determine which teams advance to the knockouts.",
             "Fill in the knockout bracket from the Round of 32 all the way to the Final.",
-            "Share your completed bracket with friends, save it to your account, and see how others predicted."
+            "Share your completed bracket with friends, save it to your account, and see how others predicted.",
+            "Scroll to the bottom to score it: qualifiers, every knockout round, the champion and the awards against the real 2026 results."
           ]}
           examples={[
             "Group A: USA, Mexico, Morocco, and more competing for Round of 32 spots",
@@ -1559,7 +1577,7 @@ const WorldCupPredictor = () => {
             "Round of 32: First knockout stage with 32 teams advancing",
             "Quarter-finals: Eight teams battle for a semi-final spot",
             "Predict the Golden Boot winner, Best Young Player, and Golden Glove",
-            "Final at MetLife Stadium, New Jersey, July 19, 2026"
+            "The real final: Spain 1, Argentina 0 after extra time at MetLife Stadium, July 19, 2026"
           ]}
         />
         <GameNav />

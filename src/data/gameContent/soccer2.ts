@@ -395,6 +395,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/world-cup-bracket': {
     intro: [
+      "The 2026 World Cup has been played: Spain beat Argentina 1-0 after extra time in the final at MetLife Stadium on July 19. Build your bracket here anyway, then score it against what really happened, group by group and round by round, awards included.",
       "The 2026 World Cup runs 48 teams, 12 groups, and 104 matches, and this predictor lets you call all of it: every group game by exact score, every knockout winner, and the awards.",
       "The field is the real one, playoff winners included, and the format follows FIFA's: top two per group advance plus the 8 best third place teams into a round of 32.",
     ],
@@ -404,6 +405,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Confirm your 8 third place qualifiers and generate the bracket.",
       "Pick winners from the round of 32 through the final, third place game included.",
       "Call the Golden Boot, Golden Glove, and Golden Ball, then share it all.",
+      "Read your score at the bottom: every qualifier, knockout team, the champion and each award checked against the real results, out of 166 points.",
     ],
     rules: [
       "12 groups of 4 make 72 group matches, and score inputs go up to 9 goals a side.",
@@ -412,7 +414,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "By Rank auto fill uses real FIFA rankings: the higher ranked side wins 65 percent of sims, the underdog 20, and 15 percent draw.",
     ],
     example: [
-      "In Group J you hand Argentina three routine wins, then pencil a Nigeria and Algeria draw that leaves third place hanging on goal difference.",
+      "In Group J you hand Argentina three routine wins, then pencil an Austria and Algeria draw that leaves third place hanging on goal difference.",
       "By the knockouts your France and Brazil picks collide in a semifinal, so somebody goes home early. You send Brazil through, save the bracket, and drop the link in the group chat.",
     ],
     tips: [

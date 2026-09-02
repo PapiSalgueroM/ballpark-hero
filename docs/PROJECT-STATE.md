@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 85% | Round 392: a Club Manager match no longer adds the running score to a signed in player's points. Report queue empty. Open: the points history decision below. |
+| P0 production bugs | 87% | Round 395: the featured 2026 Bracket tile no longer predicts a finished tournament with a wrong Group J; it scores against the real results. Round 392 stopped the Club Manager points leak. Report queue empty. Open: the points history decision below. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 60% | Seven grids, four archives; NFL and soccer archives blocked by design (recycled boards, AI validated). |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2625,6 +2625,42 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-01, Round 395. THE 2026 BRACKET MEETS THE REAL TOURNAMENT.** The
+  featured "2026 Bracket" tile (`/world-cup-bracket`, marked new, 17 completions
+  today) still asked players to predict a World Cup that ended on July 19, and
+  its Group J listed Chile and Nigeria, two teams that did not qualify; Austria
+  and Jordan played it. Neither Austria nor Jordan had a flag code or a ranking
+  entry, and the Golden Ball dropdown reused the Golden Boot forwards, so the
+  actual winner, Rodri, could not be picked.
+  **What shipped:** `src/data/wc2026Results.ts`, the tournament as played:
+  twelve groups with final positions and the eight qualified thirds, all 32
+  knockout matches with scores, extra time, shootouts and winners, the
+  champion, and the four individual awards. Every row agreed by two sources,
+  compared programmatically on 2026-09-01: ESPN's open scoreboard feed (the
+  site's own scores source since Round 311), one request per tournament day,
+  and Wikipedia's tournament articles through the API (the knockout bracket,
+  the qualified-teams table, the awards table), with The Athletic and FOX
+  Sports as the awards' second source. Group membership comes from who played
+  whom in the 72 group matches; positions from the qualified-teams table,
+  which agreed with the tables computed from the results in all twelve
+  groups. `src/lib/wc2026Score.ts` scores a bracket against it (qualifiers,
+  group winners, thirds, each knockout round, the champion, the awards; 166
+  points) and `BracketResults` shows the breakdown under the bracket with the
+  real bracket a click away. Group J corrected, Austria (24) and Jordan (63)
+  given their pre-tournament ranking and flags, a Golden Ball list of its own
+  with Rodri in it, eleven pick entries from nations that never played
+  removed, the bracket component reports its rounds and the awards panel its
+  picks so the page can score them. Hero, meta, SEO copy and the registry
+  description now say the tournament was played and Spain won it.
+  **The fence is `scripts/simWc2026Results.mjs`:** the results file is
+  internally true (48 distinct teams, eight thirds, every winner one of its
+  teams, every round drawn from the previous round's winners, the champion
+  the final's winner); the page's groups equal the real groups, read as code
+  (the Chile and Nigeria class); the scoring module, through esbuild, gives a
+  perfect bracket the maximum, an empty one zero, and a perfect bracket with
+  the wrong champion exactly fifteen fewer; the award pick lists can name the
+  winners. Controls `chain`, `swap` and `score`, each judged on its own
+  section.
 - **2026-09-01, Round 394. THE ROSTER BAKE OWNS ITS LAST TWO LEAGUES.** Round
   393's re-bake dropped 35 clubs before it was taught to carry them, because
   the 2. Bundesliga (Round 142) and the Belgian Pro League (Round 143) had
