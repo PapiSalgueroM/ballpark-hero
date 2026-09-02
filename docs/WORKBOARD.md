@@ -782,9 +782,12 @@ Standing claims after Round 400:
 - THE TWO AI GRIDS TELL THE TRUTH WHEN THE DAY'S ALLOWANCE IS GONE, Round 407
   (desktop lane, 2026-09-02, Round 379's third option). The soccer and
   college validators return exhausted on a second 429 with a refusal that
-  names the allowance (redeployed, soccer v15 and college v12); the hooks show
-  one honest message, remember it, and the pages replace the search box with
-  the notice. Fail closed either way. simQuotaHonesty with two controls.
+  names the allowance; the hooks show one honest message, remember it, and
+  the pages replace the search box with the notice. Fail closed either way.
+  Then the logs showed the real failure: a 150 token cap cut every AI verdict
+  off (Round 378's "spent quota"), now 800, and a nonsense name came back
+  valid, now guarded by name agreement. Soccer v19, college v14.
+  simQuotaHonesty with three controls.
 - THE NFL GRID PAGE ON THE ENGINE, Round 406 (desktop lane, 2026-09-02, phase
   3 of docs/designs/NFL-GRID-ENGINE-DESIGN.md). /football-grid builds its
   board from the date seed and judges every guess in memory against the

@@ -57,13 +57,29 @@ for (const f of VALIDATORS) {
     code = cut;
     console.log('   NEGATIVE CONTROL ON: the second 429 branch removed from the soccer validator, in memory');
   }
+  if (CONTROL === 'lenient' && f.includes('soccer')) {
+    const cut = code.replace('result.valid && !sameName', 'false');
+    if (cut === code) abort('control cannot run: the soccer validator has no name guard to remove');
+    code = cut;
+    console.log('   NEGATIVE CONTROL ON: the name guard removed from the soccer validator, in memory');
+  }
   if (!/const unverified = \(exhausted = false\) =>/.test(code)) fail(`${f}: the refusal helper does not take an exhausted flag`);
   if (!/exhausted,/.test(code) || !/allowance for today/.test(code)) fail(`${f}: the refusal does not carry exhausted or name the allowance`);
   if (!/if \(resp\.status === 429\) \{/.test(code)) fail(`${f}: a 429 is not retried once`);
   if (!/if \(resp\.status === 429\) return unverified\(true\);/.test(code)) fail(`${f}: a second 429 does not return unverified(true)`);
   const secondAt = code.indexOf('if (resp.status === 429) return unverified(true);');
-  const genericAt = code.indexOf('if (!resp.ok) return unverified();');
+  const genericAt = code.indexOf('if (!resp.ok)');
   if (secondAt >= 0 && genericAt >= 0 && secondAt > genericAt) fail(`${f}: the generic refusal comes before the exhausted one, so exhausted can never fire`);
+  /* Round 407, the two findings the logs handed back once refusals were
+     logged: the model's own reasoning tokens ate a 150 token cap before
+     the verdict (every AI judged guess refused as a blip), and a lenient
+     prompt mapped a nonsense name onto a real player (a verdict handed to
+     a stranger). The cap must leave room, and a verdict must share a name
+     token with the guess. */
+  const cap = code.match(/max_tokens: (\d+)/);
+  if (!cap || Number(cap[1]) < 600) fail(`${f}: max_tokens is ${cap ? cap[1] : 'missing'}, below the 600 the model's reasoning needs before its verdict`);
+  if (!/const sameName = nameTokens\.length === 0 \|\| nameTokens\.some\(\(t\) => guessTokens\.includes\(t\)\);/.test(code)) fail(`${f}: no name agreement guard on the AI verdict`);
+  if (!/result\.valid && !sameName/.test(code)) fail(`${f}: a valid verdict is not gated on the name agreeing with the guess`);
 }
 console.log(`   ${VALIDATORS.length} validators read`);
 
@@ -102,10 +118,10 @@ console.log('4) The NFL grid is not in this: no edge function call at all');
   console.log('   useFootballGrid read');
 }
 
-const own = { blind: 1, mute: 2 }[CONTROL];
+const own = { blind: 1, lenient: 1, mute: 2 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (blind, mute)`);
+  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }

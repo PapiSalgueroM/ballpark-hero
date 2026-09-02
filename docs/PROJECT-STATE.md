@@ -8,7 +8,7 @@ an area moves; the round numbers stay for traceability.
 
 | Area | Progress | What moved most recently |
 |---|---|---|
-| P0 production bugs | 95% | Round 410: Footle keeps its complete bundled fallback whenever either half of the live pool fails, so a daily target cannot fall outside the searchable pool. |
+| P0 production bugs | 96% | Round 410: Footle keeps its complete bundled fallback whenever either half of the live pool fails, so a daily target cannot fall outside the searchable pool. Round 407: the AI path behind the soccer and college grids works again (its 150 token cap had been cutting every verdict off since July), refusals say whether the day is spent, and a verdict must carry the name the player typed. |
 | Shared data layer and provenance | 55% | Round 393: the 2026 windows reach the table for every verified move; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
@@ -2789,9 +2789,23 @@ today rather than adding alongside them.
   as code (the validators' helper, retry and order of refusals; the hooks' flag, state and
   message; the pages' notice; the NFL hook's absence of any edge call), with a control
   that removes the second 429 branch and one that removes the hook's exhausted branch.
-  Both validators redeployed (soccer v15, college v12) and the repo copies are the
-  deployed code. Gates: tsc zero, simQuotaHonesty with both controls, simGridRarity,
-  simNoRivalNames, build green.
+  **Then the logs handed back the real story.** With refusals logged (soccer v16 and
+  v17), a probe of an AI only pair took six seconds and the log read "ai no verdict:
+  status 200 body {"valid":" and nothing more. The model was answering, and its answer
+  was being cut off: max_tokens was 150 and the model's own reasoning tokens spend that
+  before the verdict, so every AI judged guess in both grids had been refused as a blip
+  for as long as that cap stood. That is the failure Round 378 measured and read as a
+  spent daily quota. The cap is 800 now (soccer v18, college v13) and the AI path
+  answers: Zlatan for Scored in the Milan derby plus Won a league title in two
+  different countries, Joe Burrow for LSU plus Heisman, both verified live. The same
+  probes showed one more hole: a nonsense name came back valid with Patrick Vieira's
+  name attached, because the prompt asks the model to be lenient with spelling. A
+  verdict now counts only when the name the model settled on shares a token with the
+  name the player typed (soccer v19, college v14), and the probe rows those tests
+  cached were deleted. simQuotaHonesty holds the cap and the guard as code with a third
+  control that removes the guard. The repo copies are the deployed code, diffed by an
+  independent agent after each deploy. Gates: tsc zero, simQuotaHonesty with three
+  controls, simGridRarity, simNoRivalNames, build green.
 - **2026-09-02, Round 406. THE NFL GRID PAGE ON THE ENGINE.** Phase 3 of
   `docs/designs/NFL-GRID-ENGINE-DESIGN.md`, the half a player can see. `/football-grid`
   keeps its URL, its copy shape, its daily rhythm, its 15 guess budget, the unlimited

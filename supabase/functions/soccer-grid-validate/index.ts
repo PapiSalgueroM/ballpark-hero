@@ -316,7 +316,17 @@ serve(async (req) => {
     const m = content.match(/\{[\s\S]*\}/);
     if (!m) { console.log(`ai no verdict: status ${resp.status} body ${content.slice(0, 160)}`); return unverified(); }
     const result = JSON.parse(m[0]);
-    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+    /* Round 407: the prompt asks the model to be lenient with spelling, and
+       a probe with a nonsense name came back valid with a real player's
+       name attached. A verdict only counts when the name the model settled
+       on shares a token with the name the player typed; otherwise the guess
+       is a miss, never a match handed to a stranger. */
+    const guessTokens = norm(sanitized.player).split(" ").filter((t) => t.length > 2);
+    const nameTokens = norm(String(result.fullName || "")).split(" ").filter((t) => t.length > 2);
+    const sameName = nameTokens.length === 0 || nameTokens.some((t) => guessTokens.includes(t));
+    const verdict = result.valid && !sameName
+      ? { valid: false, reason: "That name did not match a player we could verify.", fullName: null }
+      : { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
     return json(verdict);
   } catch (err) {
