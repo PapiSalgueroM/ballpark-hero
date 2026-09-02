@@ -476,7 +476,7 @@ ok(7, 'the front office copy states a season at all', copyYears > 0,
 /* 8a. THE DRAFT CURVE REACHES THE END OF THE DRAFT. The first curve was
    100 - log2(pick) * 14 floored at 30, and log2(32) * 14 is exactly 70, so
    every pick from 32 to the last one scored identically to going undrafted:
-   309 of the 480 shipped men sat on that floor. A rating that cannot tell
+   288 of the 480 shipped men sat on that floor. A rating that cannot tell
    pick 33 from an undrafted free agent is not using the draft at all. */
 /* the control is the curve this round shipped first: 14 per doubling with a
    floor of 30, which lands on that floor at pick 32 and never leaves it */
@@ -509,7 +509,7 @@ ok(8, 'the shipped defenders and linemen are not one flat rating',
 /* 8a2. THE LINEMEN'S BAND STAYS NARROW WHILE THEY ARE GUESSES. An offensive
    lineman has no countable event in any public feed, so his rating is
    pedigree and nothing else, and pedigree cannot see a third round pick who
-   became one of the best in the league: Creed Humphrey comes out 57th of 64.
+   became one of the best in the league: Creed Humphrey comes out 62nd of 64.
    The honest response to a weak signal is a narrow scale, and the file's is
    80 to 90 against the corners' 66 to 95. This check exists so nobody later
    widens that band without first giving the linemen something real to be
@@ -558,8 +558,10 @@ ok(8, 'the elite corners the file kept are rated above its own median back',
     : 'none of them are in the file, so this proved nothing');
 
 /* 8c. THE JOIN FAILS CLOSED. A renamed games column routed every player to
-   pedigree, changed 144 of 480 names, dropped Josh Allen from 97 to 79, and
-   exited 0 with every check green. */
+   pedigree, changed 137 of 480 names, dropped Josh Allen from 97 to 78, and
+   exited 0 with every check green. The guard has two floors, because guarding
+   the join alone did NOT catch this: a dropped games column leaves every row
+   matching perfectly and simply reads them all as zero games. */
 if (CONTROL === 'openjoin') console.log('   control openjoin: the join floor driven to 0, which is what fail open looks like');
 let refused = null;
 try {
