@@ -19,9 +19,21 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 422.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 423.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED: Round 422. YOUR SALARY MUST REACH YOUR BANK
+  ACCOUNT.** Owner reported it playing /nfl-my-career: money never arrives and
+  the balance goes negative at 30m a year. True, and in all four My Career
+  games. The yearly line subtracted upkeep and added nothing, and its fallback
+  paid out only on the first season. Fixed, existing saves repaired (a negative
+  balance is provably the bug, since a purchase is refused when it costs more
+  than you hold), and covered by scripts/simCareerBanking.mjs with a control.
+  8 years at 30m now banks 88.1m where it used to go negative.
+  NOTE FOR BOTH LANES: the money harnesses could never have caught this. They
+  inject a starting balance and simMoney only fails below MINUS 3 million. If
+  you touch an economy, assert that money ARRIVES, not just that it is finite.
 
 - **Desktop lane, DONE: Round 421. A BLOCK MUST NOT BE DROPPED FROM A SNAPSHOT
   BY A RACE.** The four connect 4 pages pick their board with

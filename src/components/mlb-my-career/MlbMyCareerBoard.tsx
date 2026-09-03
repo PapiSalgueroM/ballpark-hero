@@ -8,6 +8,8 @@ import {
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
   mlbAssignRole, mlbCampBattle,
   type MlbCareerPos, type MlbCareerState, type MlbCareerEvent, type MlbSeasonLine,
+  repairNetWorth,
+  getMlbSpendItem
 } from '@/lib/mlbMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
@@ -102,7 +104,11 @@ export default function MlbMyCareerBoard() {
       if (!s.c) return;
       /* Round 183, repair-on-load: a pre-183 career was everyday. */
       if (!s.c.role) s.c.role = 'starter';
-      setCareer(s.c);
+      /* Round 422: rebuild a balance the pre 422 bug drove below zero. Costs
+         were charged every year against income that was never banked, so a
+         negative number here is the defect and never a debt the player chose.
+         A healthy save is returned untouched. */
+      setCareer(repairNetWorth(s.c, id => getMlbSpendItem(id)?.cost ?? 0));
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
          clubManager.ts: repair whatever is on disk instead of trusting it. A

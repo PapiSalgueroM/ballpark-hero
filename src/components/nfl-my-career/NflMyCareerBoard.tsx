@@ -8,6 +8,8 @@ import { NFL_ERAS,
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
   nflAssignRole, nflCampBattle,
   type CareerPos, type CareerState, type CareerEvent, type SeasonLine,
+  repairNetWorth,
+  getNflSpendItem
 } from '@/lib/nflMyCareer';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
@@ -105,7 +107,11 @@ export default function NflMyCareerBoard() {
       if (!s.c) return;
       /* Round 182, repair-on-load: a pre-182 career was a de facto starter. */
       if (!s.c.role) s.c.role = 'starter';
-      setCareer(s.c);
+      /* Round 422: rebuild a balance the pre 422 bug drove below zero. Costs
+         were charged every year against income that was never banked, so a
+         negative number here is the defect and never a debt the player chose.
+         A healthy save is returned untouched. */
+      setCareer(repairNetWorth(s.c, id => getNflSpendItem(id)?.cost ?? 0));
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
          clubManager.ts: repair whatever is on disk instead of trusting it. A

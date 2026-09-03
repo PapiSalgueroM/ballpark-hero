@@ -2789,6 +2789,43 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-03, Round 422. YOUR SALARY MUST REACH YOUR BANK ACCOUNT.** Reported by the owner
+  playing /nfl-my-career, in his words: "none of my money is going into my account. It just
+  keeps going into the negatives even when I am making 30 million dollars a year." He was
+  right, and it was in all four My Career games, not just the NFL one. One line ran every
+  season:
+  `c.netWorth = Math.round(((c.netWorth ?? c.earnings * 0.45) - upkeep) * 10) / 10;`
+  It subtracted living costs and **added nothing**. The `?? c.earnings * 0.45` fallback only
+  fires while `netWorth` is undefined, so it paid out exactly once, on the first season, and
+  from then on the balance was a number that could only ever fall. The `if (upkeep > 0)` gate
+  around it hid the other half: a player who buys nothing has no upkeep, so his net worth
+  never moved off his signing bonus no matter what he earned. Both halves are gone. The pay
+  lands every year at the same 0.45 take home rate the file already used, so no new number
+  was invented, it is just applied every season instead of once.
+  **Measured, on his exact case.** Eight years at 30m with 2.5m of upkeep: the balance used
+  to drift negative and now ends on **88.1m** (88.3, 88.4 and 88.5 for the NBA, MLB and NHL
+  versions). Over a played career the take home rate lands at 0.42 of gross, which is the
+  0.45 net of upkeep, so the model does what its own comment always claimed.
+  **Existing saves are repaired, and that is safe rather than a guess.** Buying is refused
+  when `item.cost > net`, so spending can never take a player negative. Only upkeep charged
+  against income that was never banked could, which is precisely this bug, so a negative
+  balance is ALWAYS the defect and never a debt the player chose. `repairNetWorth` rebuilds
+  it from what the save really records, take home on career earnings minus the one time cost
+  of everything still on the receipt, and returns a healthy save untouched. Past upkeep is
+  deliberately not re-deducted, because it was charged against a balance with no income in
+  it, so charging it again would keep part of the bug.
+  **Why nothing caught it, which is the part worth keeping.** The money harnesses touch
+  `netWorth` constantly and could not have found this. They INJECT a starting balance
+  (`simMoney` uses 50, `simNflCareer` uses 300), so accumulation is never exercised at all,
+  and `simMoney`'s only assertion on the number is that it must not fall below **minus 3
+  million**, which tolerates the bug outright. A check that hands the game its money and then
+  permits a negative answer cannot find a game that never pays anybody.
+  `scripts/simCareerBanking.mjs` starts a real career from its real signing bonus instead,
+  plays it, and asserts outcomes: money arrives, it scales with what you earn, a player who
+  never spends never goes backwards, and the repair works. Control `BANKING_CONTROL=nobank`
+  restores the old line and raises 12 findings, printing the owner's symptom exactly: 2m a
+  year and 25m a year both bank 0.3m.
+  Gates: tsc zero, vite build, simCareerBanking green with its control green, full node suite.
 - **2026-09-03, Round 421 addendum two. THE ROUND 422 LEAD IS DEAD, KILLED WITH THE EVIDENCE
   THAT WAS ALREADY IN HAND.** Round 421's commit message pointed the next round at
   /missing-eleven, /missing-five, /missing-nine and /rank-em, on the grounds that they pick

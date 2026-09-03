@@ -621,12 +621,33 @@ export function progress(c: CareerState, rng: () => number): string[] {
   }
 
   // Living costs and upkeep come out every year you are earning.
+  /* Round 422: THE YEAR'S PAY IS BANKED HERE, and until this round it never was.
+     Reported by the owner playing the game: "none of my money is going into my
+     account, it just keeps going into the negatives even when I am making 30
+     million dollars a year." Exactly right, and the line above was the whole
+     story. It subtracted upkeep and added NOTHING, and the `?? earnings * 0.45`
+     fallback only fires while netWorth is undefined, so after the first year it
+     was a number that could only ever go down.
+     The `if (upkeep > 0)` gate hid the other half of it: a player who buys
+     nothing has no upkeep, so his net worth never moved off his signing bonus no
+     matter what he earned. Both halves are gone; the pay lands every year.
+     TAKE_HOME is the same 0.45 this file already used to turn career earnings
+     into money actually banked, so no new number is invented here, it is just
+     applied every year instead of once.
+     The fallback deliberately uses earnings MINUS this year's salary, because
+     the season sim adds the salary to earnings before this runs, and crediting
+     both would pay a legacy save twice for the same season. */
   const upkeep = c.yearlyCosts ?? 0;
-  if (upkeep > 0) {
-    c.netWorth = Math.round(((c.netWorth ?? c.earnings * 0.45) - upkeep) * 10) / 10;
-  }
+  const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
+  c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
   return notes;
 }
+
+/* Round 422: the share of gross pay that actually reaches the bank, after
+   tax, agent and living. It was already the number this file used to turn
+   career earnings into net worth; it is named here so the yearly banking and
+   the repair below cannot drift apart from it. */
+const TAKE_HOME = 0.45;
 
 /* ─── Round 56: the money ─── */
 export type NflSpendCategory = 'home' | 'ride' | 'invest' | 'body' | 'flex' | 'family' | 'shady';
@@ -939,4 +960,26 @@ export function careerTotals(c: CareerState) {
     t.rec += s.rec ?? 0; t.recYds += s.recYds ?? 0; t.recTd += s.recTd ?? 0;
   }
   return t;
+}
+
+/* Round 422: a balance the old bug drove below zero is an ARTEFACT, not a
+   choice the player made, and it can be repaired safely because of one fact:
+   buying is refused when `item.cost > net`, so spending can never take anyone
+   negative. Only upkeep charged against income that was never banked could,
+   and that is precisely the bug. So a negative balance is always the defect and
+   never a real debt, which is what makes rebuilding it honest rather than a
+   guess.
+   It is rebuilt from what the save actually records: take home pay on career
+   earnings, minus the one time cost of everything still on the receipt. Past
+   upkeep is deliberately NOT re-deducted, because it was charged against a
+   balance that had no income in it, so charging it again would keep part of the
+   bug. Runs on load, once, and does nothing to a healthy save. */
+export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
+  c: T,
+  costOf: (id: string) => number,
+): T {
+  if ((c.netWorth ?? 0) >= 0) return c;
+  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
+  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
+  return { ...c, netWorth: rebuilt };
 }
