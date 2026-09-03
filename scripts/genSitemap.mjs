@@ -33,6 +33,8 @@
  * is not hypothetical: it is what shipped /college empty in Round 268.
  */
 import { execSync } from 'node:child_process';
+/* Round 420: a failed write must not delete a shipped artifact. See scripts/lib/atomicWrite.mjs. */
+import { writeFileAtomic } from './lib/atomicWrite.mjs';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -317,7 +319,7 @@ const out = `<?xml version="1.0" encoding="UTF-8"?>
 ${rows.join('\n')}
 </urlset>
 `;
-fs.writeFileSync(path.join(ROOT, 'public/sitemap.xml'), out);
+writeFileAtomic(path.join(ROOT, 'public/sitemap.xml'), out);
 
 /* The ledger is written from nextLedger rather than mutated in place, so a
    route that has left the sitemap drops out of it instead of sitting there
@@ -326,7 +328,7 @@ fs.writeFileSync(path.join(ROOT, 'public/sitemap.xml'), out);
 if (!ROUTES_ONLY) {
 fs.mkdirSync(path.dirname(LEDGER_PATH), { recursive: true });
 const sortedLedger = { __version: FINGERPRINT_VERSION, ...Object.fromEntries(Object.keys(nextLedger).sort().map(k => [k, nextLedger[k]])) };
-fs.writeFileSync(LEDGER_PATH, JSON.stringify(sortedLedger, null, 2) + '\n');
+writeFileAtomic(LEDGER_PATH, JSON.stringify(sortedLedger, null, 2) + '\n');
 console.log(
   `lastmod: ${held} unchanged and holding their old date, ${changed} rewritten today, ` +
   `${fresh} new, ${noSnapshot} with no snapshot to read`,

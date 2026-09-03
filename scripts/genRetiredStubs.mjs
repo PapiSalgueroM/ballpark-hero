@@ -50,6 +50,8 @@
  * Guarded by: scripts/simRetiredRoutes.mjs
  */
 import fs from 'node:fs';
+/* Round 420: a failed write must not delete a shipped artifact. See scripts/lib/atomicWrite.mjs. */
+import { writeFileAtomic } from './lib/atomicWrite.mjs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { readRoutes, destinationLabel, ROOT, SITE } from './lib/retiredRoutes.mjs';
@@ -116,7 +118,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
       if (base === DIST && !fs.existsSync(DIST)) continue;
       const dir = path.join(base, r.from.replace(/^\//, ''));
       fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(path.join(dir, 'index.html'), html);
+      writeFileAtomic(path.join(dir, 'index.html'), html);
     }
     wrote += 1;
     console.log(`  ${r.from} -> ${r.to}`);

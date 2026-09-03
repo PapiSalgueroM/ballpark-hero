@@ -33,6 +33,8 @@
  * Guarded by: scripts/simHiddenPages.mjs
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
+/* Round 420: a failed write must not delete a shipped artifact. See scripts/lib/atomicWrite.mjs. */
+import { writeFileAtomic } from './lib/atomicWrite.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -156,7 +158,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       if (base === DIST && !existsSync(DIST)) continue;
       const dir = path.join(base, rel);
       mkdirSync(dir, { recursive: true });
-      writeFileSync(path.join(dir, 'index.html'), html);
+      writeFileAtomic(path.join(dir, 'index.html'), html);
     }
     wrote += 1;
     console.log(`  ${route} -> noindex stub`);

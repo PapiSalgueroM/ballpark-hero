@@ -19,25 +19,65 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 421.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 423.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.**
-  Found while re-measuring Round 418, not reported by anyone. `buildSchedule`
-  in src/lib/frontOffice.ts is documented as 6 divisional plus 11 crossover
-  games for all 32 clubs and does not deliver it. Measured over 200 built
-  schedules: **173 of 200 seasons (87 percent) leave one club off 17 games**,
-  as low as 9, because the crossover pairing loop gives up when a single club
-  is left needing partners. A club on 9 games cannot reach the playoffs, and
-  standings sort on wins, so it is a fairness bug not a cosmetic one. The
-  same pass also puts a club in the same week twice about 38 times a season,
-  which the code's own comment calls "rare and harmless" and is neither.
-  The fix has to be provable rather than lucky: complete the pairing (or
-  retry until it completes), then FAIL CLOSED if any club is not on exactly
-  17, rather than shipping a quiet 9. Files in play: src/lib/frontOffice.ts
-  and a new fence section with its control. Round 411 (NFL archive, other
-  lane) is not touched.
+- **Desktop lane, CLAIMED: Round 421. A BLOCK MUST NOT BE DROPPED FROM A
+  SNAPSHOT BY A RACE.** Round 355 fixed this class for the HEAD: a block that
+  is PRESENT in one clock sample and ABSENT in another, rather than carrying
+  different content, gets intersected away and looks exactly like a real date
+  dependency. Its tell is that the route prerenders perfectly when run on its
+  own. The same shape is now visible in the BODY. /nhl-connect-4 lost its
+  "Board: Passports" line from the Round 420 build while /nba-connect-4 gained
+  "Board: The Gauntlet" that HEAD does not have, with no connect 4 code
+  changing between the two builds, and which route loses it moves from run to
+  run exactly as Round 355 reported. Established already, so do not re-derive:
+  the board line is unconditional JSX with no loading gate, the pick is
+  Math.random, the prerenderer reseeds per navigation (a draw counter reads 8
+  at every route rather than accumulating), and all four routes return the same
+  board at all three samples when rendered in isolation. So the pick is
+  deterministic and the drop is not about the board. Cost is snapshot churn and
+  a page re-dated in the sitemap for no real change, which is the one thing the
+  lastmod ledger exists to prevent and the only re-crawl lever the site has.
+  **Strong candidate, found while gating Round 420 and deliberately left out of
+  it. Read this carefully, the first write up of it was wrong.** The connect 4
+  board line is NOT computed from the date. All four pages pick with
+  getRandomConnect4Board, which is curatedBoards[Math.floor(Math.random() * n)],
+  and prerender.mjs already replaces Math.random with a fixed seed generator
+  before any page code runs precisely so a random pick is frozen the same way in
+  every build. Its own comment names /mlb-connect-4 as the page that motivated
+  that, because two runs on the same day disagreed about it.
+  What is observed and not explained by that seeding: /nhl-connect-4 had its
+  board line left out of the Round 420 build, so the three samples disagreed,
+  and /nba-connect-4 gained a line HEAD does not have, so it flipped between
+  builds. /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 "Board:
+  Air Raid" at HEAD today.
+  THE OBVIOUS HYPOTHESIS WAS TESTED AND IS DEAD, do not spend the round on it.
+  It was that the seeded generator is global, so anything drawing from it a
+  date dependent number of times before the board is picked would shift the
+  sequence and change the board. Measured by mirroring the prerenderer exactly
+  (seed 284, same PRNG, same date shift, same request routing) and counting
+  draws: all four routes draw EXACTLY 8 times at every one of the 0, 5 and 11
+  day samples, and each route returns the same board at all three. The seeding
+  works. The boards it predicts are the ones actually shipped: nhl Passports,
+  nba The Gauntlet, mlb Modern Era, nfl Air Raid.
+  WHAT IS LEFT, and it is a different question. /nhl-connect-4's board line was
+  dropped from the Round 420 build even though its board is identical at all
+  three samples, so the block was dropped for something ELSE inside it, not for
+  the board name. And /nba-connect-4 flipped from dropped at HEAD to kept in
+  that build with no connect 4 code changing between them. So the question is
+  what else lives in that block and what makes a block's keep or drop decision
+  move between builds. Start by diffing the block the prerenderer compares
+  rather than the board, and do not reach for data-no-prerender until that is
+  known.
+
+- **Codex lane, CLAIMED: Round 422. FRONT DOOR AND ACCOUNT RELIABILITY.**
+  Finish the verified account isolation, deterministic first paint, count-free
+  social card, Player Bingo age audit, reported game repairs, retired endpoint
+  tombstones and Stadium Tycoon clock fix. Merge the landed Round 419 schedule
+  and Round 420 atomic-write work, regenerate every snapshot, run the complete
+  release board, then publish and verify the exact merged commit live.
 
 
 
@@ -820,22 +860,62 @@ Standing claims after Round 400:
 
 ## Done
 
-- FRONT DOOR AND ACCOUNT RELIABILITY, Round 420 (Codex lane, 2026-09-02).
-  JavaScript visitors no longer see the crawler-copy handoff flash, while raw
-  crawlers, no-JavaScript visitors and failed boots retain the complete fallback.
-  A newly keyed generated social card carries no stale game count. Guest and
-  signed-in streaks are identity scoped, failed hydration stays local, account
-  writes are serialized, and a delayed completion cannot cross from account A
-  into account B. Player Bingo has 73 exact date-of-birth identities with a
-  committed two-source receipt, conservative bounds for the rest and no deceased
-  Diogo Jota. Stock Market retry refetches, Transfer Path clears stale rejection
-  state, unsafe first-render randomness is fenced, and six obsolete Boot Room
-  endpoints are authenticated 410 tombstones. Stadium Tycoon skips its live loop
-  during prerender and accumulates subsecond ticks so matches advance. The
-  indexing harness excludes test and spec files from page discovery. Exact
-  TypeScript, the full SEO build, all 15 generated-site fences and the targeted
-  unit, browser and negative-control gates passed. The branch-wide `runAllSims`
-  result remains the release gate and is not claimed here.
+- A FAILED PRERENDER WRITE MUST NOT DELETE THE PAGE, Round 420 (desktop
+  lane, 2026-09-02). Hit for real while building Round 419: the prerenderer
+  failed to write public/nfl-higher-lower/index.html and left the snapshot
+  DELETED rather than stale, because a plain writeFileSync truncates its
+  target before writing. The build exited 1 so nothing shipped, but that is
+  luck about when the write failed. scripts/lib/atomicWrite.mjs writes to a
+  temp beside the target and renames over it, so a failed write leaves the
+  old page whole and no litter behind. simPrerender section 15 exercises the
+  guarantee directly in a few milliseconds, including the failure path
+  through an injected io seam, because a check that needs a 145 route browser
+  run to reach the write is a check nobody runs. Its truncwrite control puts
+  the old write back, and it is inverted like the noindex one: it reports
+  green only when the failures came from section 15 and nothing else broke,
+  because a red that could have come from anywhere proves nothing. Fixing
+  that exposed a defect this round had introduced: the noindex control took
+  its failure boundary above section 14 and section 15 was appended below it,
+  so a real section 15 regression was counted as the control's own expected
+  catch and the run declared itself green and exited 0. Two markers now, so
+  anything added later lands outside by default. The first version of that
+  control merely threw instead of truncating, so it passed and proved
+  nothing; a real failed write truncates and then fails. Widened once the
+  class was understood: the sitemap, the lastmod ledger and both stub
+  generators wrote the same way, and the ledger is the worst case of the
+  five, since CLAUDE.md says losing it re-dates all 137 pages. The rename
+  itself then needed a retry, and measuring is what said so: 8 of 1,000
+  writes failed with EPERM because something outside this project (a
+  scanner, the indexer, a sync client) held the target for that instant,
+  which across 145 routes is more than one dead build per run. One immediate
+  retry barely helped, still 14 in 1,000. Five attempts with a 1, 2, 4, 8ms
+  backoff failed 0 of 1,000, and 993 still landed first try. A genuine error
+  is not retried. The trade made on purpose: if a holder never lets go the
+  build now stops where the old write would have succeeded, and stopping
+  with the page intact beats deleting a live snapshot. No truncating
+  fallback, that is the bug being removed.
+- EVERY CLUB PLAYS SEVENTEEN GAMES, Round 419 (desktop lane, 2026-09-02).
+  Found while re-measuring Round 418, not reported. buildSchedule promised 6
+  divisional plus 11 crossover for all 32 clubs and delivered it in 27 of 200
+  built schedules, and over 3,000 runs it fails 89.4 percent of the time,
+  leaving a club as low as 9 games, which is a club that cannot reach the
+  playoffs. It also booked a club twice in a week 40.8 times a season under a
+  comment calling that harmless. Greedy
+  could not fix it: hungriest-first still completed the pairing 17 times in
+  300 and the week fit 0 of those 17. It is a construction now, from the
+  league's own shape: 6 divisional weeks are a double round robin inside every
+  division at once, and the 11 crossover weeks come from round robining the 8
+  DIVISIONS, reusing four pairings with a different internal matching. 0 of
+  200 clubs short after, 0 double bookings, 100 distinct fixture lists from
+  100 runs, and it fails closed if it ever cannot keep the promise. Side
+  effect: less noise in the standings lifted the strength to wins correlation
+  by +0.012 at 3.3 standard errors over 1,000 seasons per engine, real and
+  small. An earlier draft quoted a band of extremes from 40 draws, which a
+  reviewer showed is sample tail rather than a property of the code.
+  simFrontOfficeRoster is 137 checks and fourteen controls, and its schedule
+  section samples 200 seasons rather than 12 because a reviewer built a fault
+  appearing in 5 percent of schedules that 12 caught only 59 percent of the
+  time.
 - THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO, Round 418 (desktop
   lane, 2026-09-02). The other half of the owner's item 12. Round 416 put 192
   real defenders on the rosters and deliberately left them worth nothing:

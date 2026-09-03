@@ -26,7 +26,10 @@
  *
  * Run: node scripts/simPrerender.mjs
  */
+import fs from 'node:fs';
 import { readFileSync, existsSync, statSync } from 'node:fs';
+/* Round 420: the atomic write is exercised directly in section 17 */
+import { writeFileAtomic, RENAME_ATTEMPTS } from './lib/atomicWrite.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -73,7 +76,13 @@ console.log(`   ${docs.size} of ${routes.length} routes have a document`);
    control in this repo replaced a string that was not in the file, stayed
    green, and green meant "the control did not fire", not "the check works". */
 const CONTROL = process.env.SIM_PRERENDER_CONTROL || '';
-if (CONTROL && !['noindex', 'replay', 'port'].includes(CONTROL)) {
+/* Round 420 adds truncwrite, which puts back the write that truncates its
+   target before writing. Like noindex it is INVERTED: its section is supposed
+   to fail under it, so the run reports "control: green" and exits 0 when it
+   catches that, and red if its section stayed clean or anything outside it
+   failed. A control whose red could come from anywhere says
+   nothing about the check it is meant to prove. */
+if (CONTROL && !['noindex', 'replay', 'port', 'truncwrite'].includes(CONTROL)) {
   console.error(`SIM_PRERENDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -680,7 +689,193 @@ const failuresBefore16 = failures;
 }
 const failuresAfter16 = failures;
 
+/* ---- 17. A FAILED WRITE MUST NOT DELETE THE PAGE (Round 420) ----------- */
+/* Hit for real while Round 419 was being built: the prerenderer failed to
+   write public/nfl-higher-lower/index.html with a Windows UNKNOWN error and
+   left the snapshot DELETED, because a plain writeFileSync truncates its
+   target before it writes a byte. The build exited 1 so nothing shipped, but
+   that is luck about WHEN the write failed, not a property of the write. A
+   snapshot is the only document a crawler ever sees for its route, so losing
+   one has to mean "the page is stale", never "the page is gone".
+   This exercises the guarantee DIRECTLY against a scratch directory, both the
+   happy path and the failures, in a few milliseconds. A check that has to
+   drive a headless browser over 145 routes to reach the write is a check
+   nobody runs, which is exactly why nothing was watching this before.
+   The failure is injected through writeFileAtomic's io seam, because there is
+   no portable way to make a real disk write fail on demand, and a check that
+   cannot exercise the failure path is only testing the happy one.
+   SIM_PRERENDER_CONTROL=truncwrite swaps in the write this round removed, the
+   one that truncates its target first. The failures it raises must come from
+   THIS section and nowhere else, which the inverted block at the end of the
+   file checks before it calls the control green. */
+console.log('17) a failed write leaves the previous page whole');
+const failuresBefore17 = failures;
+{
+  const tmpRoot = path.join(ROOT, 'dist', '.atomicwrite-check');
+  fs.rmSync(tmpRoot, { recursive: true, force: true });
+  const target = path.join(tmpRoot, 'page', 'index.html');
+
+  /* the control is the pre 420 write: straight at the target, no temp */
+  const naive = (file, contents, io = fs) => {
+    io.mkdirSync(path.dirname(file), { recursive: true });
+    io.writeFileSync(file, contents);
+    return file;
+  };
+  if (CONTROL === 'truncwrite') {
+    console.log('   control truncwrite: the pre 420 write put back, straight at the target with no temp');
+  }
+  const write = CONTROL === 'truncwrite' ? naive : writeFileAtomic;
+
+  write(target, 'first');
+  if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== 'first') {
+    fail('the snapshot write did not write the file it was given');
+  }
+  write(target, 'second');
+  if (fs.readFileSync(target, 'utf8') !== 'second') fail('the snapshot write did not replace an existing file');
+
+  /* THE POINT. A write that cannot finish must leave the previous document
+     standing. The stub throws where the bytes would land, which is what a
+     failing disk looks like from in here. */
+  const before = fs.readFileSync(target, 'utf8');
+  /* The stub TRUNCATES AND THEN THROWS, because that is what a real failed
+     write does and it is the whole reason this section exists. A stub that
+     merely throws would leave the target untouched even for the truncating
+     write, and the control would pass: the first version of this did exactly
+     that and proved nothing. */
+  const exploding = {
+    mkdirSync: fs.mkdirSync.bind(fs),
+    renameSync: fs.renameSync.bind(fs),
+    writeFileSync(where) {
+      fs.writeFileSync(where, '');
+      throw new Error('injected: the disk gave up after opening the file');
+    },
+  };
+  let threw = false;
+  try { write(target, 'third', exploding); } catch { threw = true; }
+  if (!threw) fail('the snapshot write swallowed a failed write, so a caller cannot tell the page did not update');
+  if (!fs.existsSync(target)) {
+    fail('a failed snapshot write DELETED the page: the route would serve nothing to a crawler');
+  } else if (fs.readFileSync(target, 'utf8') !== before) {
+    fail('a failed snapshot write damaged the previous page instead of leaving it alone');
+  }
+  const litter = fs.existsSync(path.join(tmpRoot, 'page'))
+    ? fs.readdirSync(path.join(tmpRoot, 'page')).filter(f => f.includes('.tmp'))
+    : [];
+  if (litter.length) fail(`a failed snapshot write left ${litter.length} temp file(s) behind: ${litter.join(', ')}`);
+
+  /* THE RETRY IS LOAD BEARING, and that was measured rather than assumed.
+     Renaming over an existing file on Windows fails with EPERM whenever
+     anything holds a handle on the target for that instant, which on a normal
+     desktop means a virus scanner, the search indexer or a sync client
+     touching the file that was just written: 8 failures per 1000 writes with
+     no retry, and an immediate retry barely helped. Across 145 routes that is
+     more than one dead build per prerender, so without the retry this module
+     would have swapped a rare destructive bug for a frequent build breaking
+     one.
+     These count the rename attempts rather than timing them. A timing
+     assertion against a 15ms backoff is a coin toss on a busy machine, and
+     this repo's own rule is to measure the strongest signal, not the most
+     descriptive one. */
+  if (CONTROL !== 'truncwrite') {
+    /* `failUntil`, NOT `failures`: that name is the harness's own failure
+       counter, and shadowing it inside a helper that exists to inject
+       failures is a trap waiting for the next reader. */
+    const flaky = (failUntil, code) => {
+      let calls = 0;
+      return {
+        calls: () => calls,
+        io: {
+          mkdirSync: fs.mkdirSync.bind(fs),
+          writeFileSync: fs.writeFileSync.bind(fs),
+          renameSync(from, to) {
+            calls += 1;
+            if (calls <= failUntil) { const e = new Error('injected: a holder has the target'); e.code = code; throw e; }
+            return fs.renameSync(from, to);
+          },
+        },
+      };
+    };
+
+    /* a hold that clears must be ridden out, not reported as a failure */
+    const transient = flaky(2, 'EPERM');
+    write(target, 'after a transient hold', transient.io);
+    if (fs.readFileSync(target, 'utf8') !== 'after a transient hold') {
+      fail('a rename that failed twice with EPERM and then cleared did not land: the retry is missing');
+    }
+    if (transient.calls() !== 3) fail(`expected 3 rename attempts before it cleared, saw ${transient.calls()}`);
+
+    /* a hold that never clears must still leave the old page standing */
+    const permanent = flaky(Infinity, 'EPERM');
+    const held = fs.readFileSync(target, 'utf8');
+    let heldThrew = false;
+    try { write(target, 'never lands', permanent.io); } catch { heldThrew = true; }
+    if (!heldThrew) fail('a rename that never succeeds must throw rather than report a page written');
+    if (permanent.calls() !== RENAME_ATTEMPTS) {
+      fail(`a permanently held target got ${permanent.calls()} rename attempts, expected ${RENAME_ATTEMPTS}`);
+    }
+    if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== held) {
+      fail('a rename that never succeeded damaged the previous page instead of leaving it alone');
+    }
+
+    /* and a genuine error is not a hold: retrying it just delays the truth */
+    const genuine = flaky(Infinity, 'ENOENT');
+    try { write(target, 'nope', genuine.io); } catch { /* expected */ }
+    if (genuine.calls() !== 1) {
+      fail(`a genuine ENOENT was retried ${genuine.calls()} times; only a transient hold should be retried`);
+    }
+
+    /* the retry path is a second way to leave a temp behind, and the litter
+       check above ran before any of it */
+    const retryLitter = fs.readdirSync(path.join(tmpRoot, 'page')).filter(f => f.includes('.tmp'));
+    if (retryLitter.length) {
+      fail(`a rename that gave up left ${retryLitter.length} temp file(s) behind: ${retryLitter.join(', ')}`);
+    }
+  }
+
+  /* and the prerenderer has to actually use it, or none of this matters */
+  /* COMMENTS STRIPPED BEFORE MATCHING. The call sits directly under a comment
+     that names writeFileAtomic, and prose about the code is the one place a
+     string a guard looks for is guaranteed to appear. Reverting the CALL while
+     leaving that comment does fail this check as written, but a comment that
+     happened to quote the call shape would satisfy it, and this repo has
+     shipped that mistake four times in one day. So the prose goes first. */
+  const prerenderSrc = fs.readFileSync(path.join(ROOT, 'scripts', 'prerender.mjs'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  if (!/writeFileAtomic\(path\.join\(base,/.test(prerenderSrc)) {
+    fail('scripts/prerender.mjs no longer writes its snapshots through writeFileAtomic, so a failed write can delete a page again');
+  }
+
+  fs.rmSync(tmpRoot, { recursive: true, force: true });
+  /* Only claim it holds if it held. An unconditional success line under a
+     FAIL is how a reader skims a red run and sees green, and this repo's
+     rule is that a harness is judged by its output. */
+  if (failures === failuresBefore17) {
+    console.log('   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than');
+    console.log('   damage the old page, it does not retry a genuine error, and it leaves no litter');
+  } else {
+    console.log('   the snapshot write did NOT hold, see the failure(s) above');
+  }
+}
+const failuresAfter17 = failures;
+
 console.log('');
+if (CONTROL === 'truncwrite') {
+  /* Inverted for the same reason as the noindex control below: under this
+     control section 17 is SUPPOSED to fail, so a clean section 17 is the bug.
+     Without this the control just exits 1 like any other red run, and "the
+     control went red" would be satisfied by a failure anywhere in the
+     harness, which proves nothing about the write. */
+  const caught = failuresAfter17 - failuresBefore17;
+  const elsewhere = failuresBefore17 + (failures - failuresAfter17);
+  if (caught > 0 && elsewhere === 0) {
+    console.log(`simPrerender control: green. The pre 420 truncating write was reported (${caught} finding), so section 17 works.`);
+    process.exit(0);
+  }
+  if (caught === 0) console.error('simPrerender control: RED. A truncating snapshot write went unreported, so section 17 proves nothing.');
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 17, which the control run must not hide.`);
+  process.exit(1);
+}
 if (CONTROL === 'noindex') {
   /* Inverted on purpose: under the control section 14 is SUPPOSED to fail,
      so a clean section is the bug. Everything else has to stay clean, or a

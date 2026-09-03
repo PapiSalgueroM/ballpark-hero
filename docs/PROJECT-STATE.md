@@ -2829,6 +2829,221 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-02, Round 420. A FAILED WRITE MUST NOT DELETE A SHIPPED ARTIFACT.** Hit for
+  real while Round 419 was being built, which is the only reason it is known about. The
+  prerenderer failed to write `public/nfl-higher-lower/index.html` with a Windows UNKNOWN
+  error and left the snapshot **deleted**, not stale: a plain `writeFileSync` truncates
+  its target before it writes a byte, so a write that cannot finish takes the old page
+  with it. That build exited 1 and nothing shipped, but that is luck about WHEN the write
+  failed rather than a property of the write. A snapshot is the only document a crawler
+  ever sees for its route, so losing one has to mean the page is stale and never that the
+  page is gone.
+  **The fix is the standard one and it is now a module.** `scripts/lib/atomicWrite.mjs`
+  writes the bytes to a temp file beside the target and renames over it. A rename inside
+  one directory is atomic on every filesystem this project runs on, so a reader sees
+  either the whole old document or the whole new one and never a truncated half. If the
+  write throws the target was never touched, and the temp is removed, so a failed run
+  cannot leave litter in `public/` for somebody to commit by accident. The temp sits
+  BESIDE the target on purpose: a temp in the system temp directory would make the last
+  step a copy across filesystems and reintroduce exactly the partial write this removes.
+  **It is a separate module because the guarantee deserves a test that somebody will
+  actually run.** A check that has to drive a headless browser over 145 routes to reach
+  the write is a check nobody runs, which is precisely why nothing was watching this
+  before. `simPrerender` section 15 exercises it directly against a scratch directory in
+  a few milliseconds and with no browser: it writes, it replaces, it rides out a hold that clears, it throws
+  rather than damage the page when a hold never clears, it does not retry a genuine error,
+  the previous page is still there and unchanged afterwards, no temp file is left behind,
+  and `prerender.mjs` is still routing its snapshots through it, because if it stops doing
+  that none of the rest means anything. The retry checks **count rename attempts rather
+  than timing them**, because a timing assertion against a 15ms backoff is a coin toss on
+  a busy machine.
+  **The failure is injected through a seam, and the first attempt at that proved nothing.**
+  There is no portable way to make a real disk write fail on demand, so `writeFileAtomic`
+  takes an optional io object that every real caller leaves alone. The first version of
+  the stub simply threw, which left the target untouched even for the truncating write, so
+  the control passed and the section was only ever testing the happy path. A real failed
+  write TRUNCATES AND THEN FAILS. The stub does that now, and
+  `SIM_PRERENDER_CONTROL=truncwrite` puts the pre 420 write back and section 15 reports the
+  right sentence: a failed snapshot write damaged the previous page instead of leaving it
+  alone. That is the repo's own rule about controls, learned again: a control that changes
+  nothing is green for the wrong reason.
+  **Both controls are inverted now, and the noindex one was quietly broken by this round.**
+  A control has to prove a specific check, so "the run went red" is not a result if the red
+  could have come from anywhere. `truncwrite` therefore reports `control: green` and exits
+  0 only when the failures came from section 15 and nothing else failed, matching what
+  `noindex` already did for section 14. Finding that also turned up a real defect this
+  round had introduced: the noindex control captured its failure boundary above section 14,
+  and section 15 was appended BELOW it, so a genuine section 15 regression was counted as
+  the control's own expected catch. The control run printed the FAIL line and then declared
+  itself green and exited 0. The boundary is a pair of markers now, so any section added
+  after 14 lands in "elsewhere" by default, which is the safe direction. The plain run was
+  never affected, so the node suite would still have caught a regression, but the control
+  run named as a gate in this entry was proving nothing.
+  **The round was widened once the class was understood, and the worst case was not the
+  one that bit.** Checking the other writers of shipped artifacts found four more on the
+  same truncating write: `genSitemap.mjs` writes `public/sitemap.xml` and
+  `scripts/data/lastmod.json`, and `genRetiredStubs.mjs` and `genHiddenStubs.mjs` write
+  their route documents. The ledger is the alarming one. CLAUDE.md says in as many words
+  that it is committed on purpose because it is the only memory of when each page last
+  really changed, and that losing it re-dates the whole site: a failed write there would
+  have cost 137 pages their history rather than one route its document. All four go
+  through the same module now.
+  **The first version of this paragraph claimed a check it had not done.** It said all four
+  writes had been run to prove it, with the ledger intact at 138 keys. Three had: the two
+  stub generators wrote 13 documents and `public/sitemap.xml` was rewritten. The fourth,
+  the ledger, the one this entry calls the alarming one, had not been written at all. The
+  single `genSitemap` run behind that claim was `--routes-only`, which is precisely the
+  path that skips the ledger write, and the file's timestamp was an hour older than
+  `atomicWrite.mjs` itself. The module was fine; the sentence was not. What is true now,
+  and checked rather than assumed: two full `build:seo` runs have written the ledger
+  through `writeFileAtomic`, it holds 138 keys, the two runs produced a byte identical
+  file, exactly one route's entry differs from HEAD rather than all 137, and no `.tmp`
+  file is left anywhere under `public/` or `dist/`. Worth writing down because the failure
+  was not a coding mistake, it was claiming a verification that never ran, which is the
+  same defect this session has now caught in its own work more than once.
+  **The rename needed a retry, and only measuring it said so.** The obvious worry about
+  this fix is whether renaming over an existing file is even reliable on Windows, so it
+  was measured instead of assumed, and the first answer was no: over 1,000 writes to one
+  target, **8 failed with EPERM**, every one of them because something outside this
+  project (a virus scanner, the search indexer, a sync client) held a handle on the file
+  for the instant the rename happened. Across 145 routes that is more than one dead build
+  per prerender run, so shipping it as first written would have traded a rare destructive
+  bug for a frequent build breaking one. One immediate retry barely helped, still 14 in
+  1,000, because the holder has not let go yet. Five attempts with a 1, 2, 4, 8ms backoff
+  failed **0 of 1,000**, and 993 of those still landed on the first try, so the retry
+  costs nothing when nothing is holding the file. A genuine error is not retried at all,
+  because spinning through a backoff on a bad path just delays the truth.
+  **What the retry does not fix, said plainly because it is a real behaviour change.** If
+  something holds the target open for longer than that backoff, the rename fails and the
+  build stops, where the old truncating write would have succeeded: measured at 20 out of
+  20 with a handle held open across the whole window. That is the trade this round is
+  making on purpose, and it is the right way round. A build that stops with the previous
+  page intact is recoverable; a snapshot silently deleted on a live route is not. There is
+  deliberately **no fallback to a truncating write**, since that is the bug being removed,
+  and the repo's fail closed rule says the same thing in a different context.
+  **This round ships no content change at all, and keeping it that way turned up something
+  for another round.** Rebuilding to gate the work moved exactly one snapshot,
+  `/nba-connect-4`, which gained a line reading "Board: The Gauntlet". Round 420 changed
+  nothing under `src/`, so nothing should have moved. It was reverted along with its ledger
+  entry and the sitemap, so the committed tree carries only the write safety code and these
+  notes.
+  **The first version of this paragraph got the mechanism wrong and it is corrected here.**
+  It said the board line was computed from the date and that the fix was to mark it
+  volatile. That is not what the code does. All four connect 4 pages pick with
+  `getRandomConnect4Board`, which is `curatedBoards[Math.floor(Math.random() * n)]`, and
+  nothing about it reads the clock. Worse, the case is already known: `prerender.mjs`
+  replaces `Math.random` with a fixed seed generator (seed 284) before any page code runs,
+  for exactly this reason, and its own comment names `/mlb-connect-4` as the page that
+  motivated it, because two runs on the same day once disagreed about it. So the intended
+  behaviour is that a random pick is frozen identically in every build, which is not false
+  and does not need dropping.
+  **What is actually observed, which that seeding does not explain.** `/nhl-connect-4` had
+  its board line left out of this build, meaning the three samples disagreed, and
+  `/nba-connect-4` gained a line that HEAD does not have, meaning a build to build flip.
+  Both are inconsistent with a pick that is identical across the three samples and across
+  runs. `/mlb-connect-4` ships "Board: Modern Era" and `/nfl-connect-4` "Board: Air Raid"
+  at HEAD today, so the line itself is live and long standing, and none of this is a
+  regression from this round. The likely reason, stated as a hypothesis and NOT as a
+  finding because it has not been proved: the seeded generator is global and shared, so
+  any code that draws from it a date dependent number of times before the board is picked
+  shifts the sequence and changes which board comes out, which would make a nominally
+  random pick indirectly clock dependent. The cost is snapshot churn and a page re-dated
+  in the sitemap for no real change, which is the exact thing the lastmod ledger exists to
+  prevent.
+  **That hypothesis was then tested and it is dead, recorded so nobody chases it again.**
+  Mirroring the prerenderer exactly (seed 284, the same PRNG, the same date shift, the same
+  request routing) and counting the draws: all four connect 4 routes draw **exactly 8
+  times at every one of the 0, 5 and 11 day samples**, and each returns the same board at
+  all three. The seeding does what Round 284 says it does. The boards it predicts are the
+  ones really shipped: nhl Passports, nba The Gauntlet, mlb Modern Era, nfl Air Raid. So
+  the pick is not clock dependent, directly or indirectly.
+  **What that leaves is a different and better posed question.** `/nhl-connect-4` lost its
+  board line from this build even though its board is identical at all three samples, so
+  that block was dropped for something else inside it rather than for the board. And
+  `/nba-connect-4` flipped from dropped at HEAD to kept here with no connect 4 code
+  changing in between. The next round should diff the block the prerenderer actually
+  compares, not the board, and should not reach for `data-no-prerender` until it knows
+  what moves a block's keep or drop decision between two builds.
+  **One thing deliberately NOT claimed.** This closes the shipped artifact writers the
+  build uses. It does not audit every writeFileSync in `scripts/`, several of which write
+  caches and scratch files where a truncating failure costs nothing worth guarding.
+  Gates: tsc zero, two full `build:seo` runs at exit 0, simPrerender green plus both
+  controls reporting green for the right reason (truncwrite catching 1 finding from section
+  15 and nothing else, noindex catching 1 from section 14 and nothing else), the boundary
+  fix proved by reverting `prerender.mjs` to the truncating write and watching the noindex
+  control refuse to call itself green, all 15 built site fences green twice, 186 node
+  harnesses green, and `git diff` showing no content change under `public/` or in the
+  ledger.
+- **2026-09-02, Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.** Found while
+  re-measuring Round 418, not reported by anyone, which is the only reason it was found at
+  all. `buildSchedule` documented and believed a clean shape: six divisional games home
+  and away against three rivals plus eleven crossover, seventeen for all thirty two clubs.
+  Measured over 200 built schedules it delivered that in **27 of them**. In the other 173
+  a club came up short, **as low as nine games**. Standings sort on wins, so a club with
+  eight fewer chances to win cannot reach the playoffs, and ownership grades it against a
+  mandate that assumes it can. The same pass also put a club in the same week twice
+  **40.8 times a season** on average over those 3,000 runs, under a comment in the code
+  calling that "rare and harmless". It was neither.
+  **Greedy could not do this, which is why it is not greedy any more.** The old loop walked
+  the clubs in order pairing whoever fit and gave up the moment one club was left needing
+  partners nobody could legally supply. Rewriting it to serve the hungriest club first, the
+  obvious repair, still completed the pairing only **17 times in 300**, and fitting the
+  result into seventeen weeks with nobody playing twice then succeeded **0 times out of
+  those 17**. Seventeen weeks of sixteen games with all thirty two clubs busy every week is
+  a perfect partition of the fixture list, and a greedy walk does not find one by trying
+  harder. This is worth writing down because the tempting fix (retry until it works) would
+  have looked like diligence and delivered a 5 percent success rate.
+  **The league's own shape hands over a construction.** Eight divisions of four is a round
+  robin waiting to be used. The six divisional weeks are a double round robin inside every
+  division at once: four clubs playing home and away is exactly six rounds of two games,
+  and all eight divisions run theirs simultaneously, so six weeks of sixteen games with
+  everybody busy. The eleven crossover weeks come from round robining the eight DIVISIONS
+  against each other, which gives seven rounds; in a week where division X meets division Y
+  their four clubs pair off, so every club plays exactly one non divisional opponent. The
+  last four weeks reuse four of those division pairings with a different internal matching
+  (club i meets club i+m rather than club i), so no two clubs ever meet twice. Seventeen
+  weeks, sixteen games each, 272 in all, by construction rather than by luck.
+  **It still fails closed.** The builder checks its own promise before returning and throws
+  if any club is off seventeen or anyone is booked twice in a week. A game that will not
+  start is a bug somebody fixes within the hour; a season where one club plays nine games
+  is a bug nobody sees.
+  **Measured after, over 3,000 schedules: 0 clubs off seventeen, 0 double bookings.** Structure checked separately
+  over 100 more: every club faces exactly three divisional rivals and eleven crossover
+  opponents, rivals meet exactly twice and everybody else exactly once, no club plays
+  outside six to eleven home games, and 100 runs produced 100 distinct fixture lists, so
+  seasons do not repeat.
+  **A side effect worth having, stated the way it actually measures.** Unequal game counts
+  were adding noise to the standings, so fixing them sharpened the sim's own signal. Under
+  one probe over 1,000 seasons per engine the strength to wins correlation moves from a
+  median of 0.699 to 0.715 and a mean of 0.693 to 0.705, which is **+0.012 at 3.3 standard
+  errors**. Real, and small. An earlier draft of this entry reported it as a band moving
+  from 0.409-0.853 to 0.518-0.864, which a reviewer showed is not a property of the code:
+  those are the minimum and maximum of 40 draws, they overlap almost entirely between the
+  two engines, and the two ends had not been measured under the same probe. A range of
+  extremes is not a measurement, it is the tail of whatever sample was taken.
+  Records over 200 seasons and 6,400 club seasons: the best club in a season is most often
+  **14-3** (92 of 200) and the worst most often **3-14** (71 of 200), which is the shape a
+  seventeen game season should have. That is the typical season and NOT the span: 1.16
+  percent of club seasons finish better than 14-3 and 1.78 percent worse than 3-14, and
+  both 17-0 and 0-17 turn up.
+  **The season it feeds still ends in a champion, which is the risk a schedule change
+  actually carries.** 25 full seasons played through the real playoff code: no season
+  threw or failed to crown anyone, every club finished on exactly 17 games in every one of
+  them, the 14 seeds came out right and the champion was always among them, and 25 seasons
+  produced 11 different winners, so nothing degenerated into one dynasty.
+  **Two guards added for shapes this construction cannot serve**, because it assumes the
+  league it was written for. If a data refresh ever leaves an odd number of divisions or
+  divisions of different sizes, it throws and names the shape it found rather than
+  guessing; and if the crossover count is ever raised past what the division pairings can
+  supply without two clubs meeting twice, it says so with the maximum this shape supports.
+  `simFrontOfficeRoster` section 11 is the promise itself rather than the shape of the old
+  bug: the counts, the opponents, the meetings, the home split, the week count and the
+  variety, over twelve seasons because one schedule proving out says nothing about the
+  next. Its `shortseason` control cuts the crossover to the seven round robin weeks AND
+  neuters the builder's own guard, so it proves the SECTION catches a thirteen game season
+  rather than the throw doing all the work.
+  Gates: tsc zero, 137 checks with fourteen controls, all node harnesses green, all 15
+  built site fences, build green.
 - **2026-09-02, Round 418. THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO.** The
   other half of the owner's P1 item 12. (A naming trap worth one line, because a reviewer
   fell into it: `docs/TWEAKS-2026-08-28.md` carries TWO numbered lists, a P1 bug list of
@@ -2909,7 +3124,9 @@ today rather than adding alongside them.
   One thing noticed while re-measuring and NOT fixed here, recorded for a later round:
   `buildSchedule` is supposed to give every club 17 games and actually delivers 13 to 17,
   because its crossover loop can hit its own iteration guard before every club is filled.
-  That is pre 418 and untouched by this round.
+  That is pre 418 and untouched by this round. **Superseded: Round 419 fixed it and found
+  the range was worse than measured here, 9 to 17 rather than 13 to 17, across a larger
+  sample. See the Round 419 entry above.**
   The honest caveat stands: ranking the 32 clubs on the old stored number and on their
   actual defenders agrees on **zero of 32 positions**, which is what an r of minus 0.112
   has to mean. That is the round working, not a regression, but a returning player starting
