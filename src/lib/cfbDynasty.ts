@@ -382,13 +382,31 @@ export function cfbOffseason(st: CfbState, rng: () => number): string[] {
       keep.push(p);
     }
     t.players = keep;
-    // AI reload: fill back to 12 with freshmen scaled to prestige
+    /* AI reload: fill back to 12 with freshmen scaled to prestige.
+       ROUND 426: TOP UP THE POSITIONS THE ROSTER IS MISSING. This used to read
+       ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length], which indexes by how
+       many players the team happens to have while filling. The skill positions
+       are the FIRST five entries of ROSTER_SHAPE, so any team that kept five or
+       more players could only ever draw index 5 and up: linemen and defenders.
+       Seniors graduate and elite juniors declare every offseason, so quarterbacks,
+       backs and receivers drained away season after season and were never
+       replaced. By the fifth season no team on the board had a QB, RB or WR,
+       heismanRace found nobody eligible and came back empty, and the [0] index in
+       the board threw and bricked the save (part one of this round).
+       Subtracting what the roster already has from a copy of ROSTER_SHAPE fills
+       the actual holes instead. The rng draws are unchanged in count and order,
+       so this only moves which position a freshman plays. */
+    const need = [...ROSTER_SHAPE];
+    for (const p of t.players) {
+      const i = need.indexOf(p.pos);
+      if (i !== -1) need.splice(i, 1);
+    }
     while (t.players.length < 12) {
       const stars = starsFor(prestige, rng);
       const ovr = clampi(prestige - 16 + stars * 1.6 + Math.floor(rng() * 5), 55, 90);
       t.players.push({
         id: fid(), name: cfbGenName(rng),
-        pos: ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],
+        pos: need.shift() ?? ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],
         cls: 'FR', ovr, pot: clampi(ovr + 6 + Math.floor(rng() * 7), ovr, 99), stars,
       });
     }
