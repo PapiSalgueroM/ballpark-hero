@@ -2912,10 +2912,18 @@ today rather than adding alongside them.
   navigation could stall the whole run indefinitely, neither passing nor failing, which is
   the least useful thing a check can do, so each route now has a budget (`ROUTE_BUDGET_MS`,
   120s) and blowing it is a failure like any other.
+  **Live verified**, published and read as a crawler with no JavaScript:
+  douknowball.com/nhl-connect-4 serves "Board: Passports" and /nba-connect-4 serves "Board:
+  The Gauntlet" in the raw HTML, the same boards the seeded probe predicted, and the same
+  content that was being dropped from those snapshots before this round.
   Gates: tsc zero, build:seo exit 0, simPrerender green with all THREE controls green for
   the right reason and each catching exactly 1 finding from its own section, all 15 built
   site fences, 186 node harnesses, and playRenderStability green across every route with its
-  own control green.
+  own control green. The suite needed three runs to get a clean 186: one run lost
+  simLeaderboardCaps to the real bug in the addendum above, and one lost simPlayerBingoPool
+  to a Postgres 57014 statement timeout and simPlayerSearchAccents to an unreachable
+  Supabase, both of which passed on their own straight afterwards. Recorded as the flakes
+  they were rather than quietly re-run until green.
 - **2026-09-02, Round 420. A FAILED WRITE MUST NOT DELETE A SHIPPED ARTIFACT.** Hit for
   real while Round 419 was being built, which is the only reason it is known about. The
   prerenderer failed to write `public/nfl-higher-lower/index.html` with a Windows UNKNOWN
