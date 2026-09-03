@@ -107,7 +107,19 @@ export function randomCampaignSeed(): number {
 }
 
 export function startYearFor(seed: number): number {
-  return START_YEARS[seed % START_YEARS.length];
+  /* Round 427: never hand back undefined. A negative seed made `seed % length`
+     negative, this returned undefined, and the undefined start year turned into
+     NaN in the query string, so the Daily market asked Postgres for
+     `year=in.(NaN)` and got a 400. The player saw "Couldn't open the market
+     right now", which reads like a network problem and is not one.
+     Part one of this round stopped dailyPrngSeed returning negative, so this
+     should now be unreachable. It is guarded anyway because the failure mode is
+     a silent 400 rather than a visible error: the mode simply refuses to start
+     and nothing on screen says why. Wrapping the modulo keeps a stray seed in
+     range instead, and a non finite one falls back to the first year. */
+  const n = START_YEARS.length;
+  if (!Number.isFinite(seed)) return START_YEARS[0];
+  return START_YEARS[((Math.trunc(seed) % n) + n) % n];
 }
 
 /** Slot i is offered in year startYear + floor(i / 2): two buys a season,
