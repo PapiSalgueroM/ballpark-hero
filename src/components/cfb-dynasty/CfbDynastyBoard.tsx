@@ -87,7 +87,16 @@ export default function CfbDynastyBoard() {
     if (state.round >= CFB_ROUNDS) {
       const post = runCfbPostseason(state, Math.random);
       const heisman = heismanRace(state, Math.random);
-      state.heismanWinners = [...(state.heismanWinners ?? []), heisman[0].name];
+      /* Round 426: heismanRace can legitimately come back EMPTY, and indexing
+         [0] blindly here threw "Cannot read properties of undefined (reading
+         'name')" inside the final week handler, so the season never advanced,
+         the state never saved, and the dynasty was bricked for good: reloading
+         restored the same dead week and crashed again. Only "Fire yourself and
+         start over" was left, which throws away every season played. */
+      const heismanWinner = heisman[0];
+      if (heismanWinner) {
+        state.heismanWinners = [...(state.heismanWinners ?? []), heismanWinner.name];
+      }
       const won = post.champion === state.myTeam;
       state.natties.push({ season: state.season, team: post.champion });
       if (won) state.myTitles += 1;
@@ -194,9 +203,14 @@ export default function CfbDynastyBoard() {
           <p className="mt-2 text-xs text-muted-foreground">
             Title game: {label(title.winner)} beat {label(title.winner === title.home ? title.away : title.home)} {Math.max(title.hs, title.as)}-{Math.min(title.hs, title.as)}
           </p>
-          <p className="mt-1 text-xs text-amber-300 font-bold">
-            🏆 Heisman: {postseason.heisman[0].name} ({postseason.heisman[0].pos}, {label(postseason.heisman[0].team)})
-          </p>
+          {/* Round 426: guarded for the same reason as the handler above. Without
+              this the recap crashes on the render instead of on the click, which
+              is the same dead end from the player's side. */}
+          {postseason.heisman[0] && (
+            <p className="mt-1 text-xs text-amber-300 font-bold">
+              🏆 Heisman: {postseason.heisman[0].name} ({postseason.heisman[0].pos}, {label(postseason.heisman[0].team)})
+            </p>
+          )}
           <div className="mt-2 max-h-44 space-y-0.5 overflow-y-auto text-[11px] text-muted-foreground">
             {postseason.ccgs.map((g, i) => (
               <p key={`c${i}`}>{g.name}: {label(g.winner)} {Math.max(g.hs, g.as)}-{Math.min(g.hs, g.as)}</p>
