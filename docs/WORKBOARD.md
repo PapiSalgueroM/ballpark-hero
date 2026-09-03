@@ -37,13 +37,25 @@ How it works:
   board line left out of the Round 420 build, so the three samples disagreed,
   and /nba-connect-4 gained a line HEAD does not have, so it flipped between
   builds. /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 "Board:
-  Air Raid" at HEAD today. Hypothesis only, unproved: the seeded generator is
-  global, so anything drawing from it a date dependent number of times before
-  the board is picked shifts the sequence and changes the board, making a
-  nominally random pick indirectly clock dependent. Cost is snapshot churn and
-  a page re-dated in the sitemap for no real change. Prove or kill the
-  hypothesis first, then fix. Do not reach for data-no-prerender before knowing
-  which of the two mechanisms is actually at work.
+  Air Raid" at HEAD today.
+  THE OBVIOUS HYPOTHESIS WAS TESTED AND IS DEAD, do not spend the round on it.
+  It was that the seeded generator is global, so anything drawing from it a
+  date dependent number of times before the board is picked would shift the
+  sequence and change the board. Measured by mirroring the prerenderer exactly
+  (seed 284, same PRNG, same date shift, same request routing) and counting
+  draws: all four routes draw EXACTLY 8 times at every one of the 0, 5 and 11
+  day samples, and each route returns the same board at all three. The seeding
+  works. The boards it predicts are the ones actually shipped: nhl Passports,
+  nba The Gauntlet, mlb Modern Era, nfl Air Raid.
+  WHAT IS LEFT, and it is a different question. /nhl-connect-4's board line was
+  dropped from the Round 420 build even though its board is identical at all
+  three samples, so the block was dropped for something ELSE inside it, not for
+  the board name. And /nba-connect-4 flipped from dropped at HEAD to kept in
+  that build with no connect 4 code changing between them. So the question is
+  what else lives in that block and what makes a block's keep or drop decision
+  move between builds. Start by diffing the block the prerenderer compares
+  rather than the board, and do not reach for data-no-prerender until that is
+  known.
 
 
 

@@ -2909,7 +2909,21 @@ today rather than adding alongside them.
   shifts the sequence and changes which board comes out, which would make a nominally
   random pick indirectly clock dependent. The cost is snapshot churn and a page re-dated
   in the sitemap for no real change, which is the exact thing the lastmod ledger exists to
-  prevent. Round 421 should prove or kill that hypothesis before changing anything.
+  prevent.
+  **That hypothesis was then tested and it is dead, recorded so nobody chases it again.**
+  Mirroring the prerenderer exactly (seed 284, the same PRNG, the same date shift, the same
+  request routing) and counting the draws: all four connect 4 routes draw **exactly 8
+  times at every one of the 0, 5 and 11 day samples**, and each returns the same board at
+  all three. The seeding does what Round 284 says it does. The boards it predicts are the
+  ones really shipped: nhl Passports, nba The Gauntlet, mlb Modern Era, nfl Air Raid. So
+  the pick is not clock dependent, directly or indirectly.
+  **What that leaves is a different and better posed question.** `/nhl-connect-4` lost its
+  board line from this build even though its board is identical at all three samples, so
+  that block was dropped for something else inside it rather than for the board. And
+  `/nba-connect-4` flipped from dropped at HEAD to kept here with no connect 4 code
+  changing in between. The next round should diff the block the prerenderer actually
+  compares, not the board, and should not reach for `data-no-prerender` until it knows
+  what moves a block's keep or drop decision between two builds.
   **One thing deliberately NOT claimed.** This closes the shipped artifact writers the
   build uses. It does not audit every writeFileSync in `scripts/`, several of which write
   caches and scratch files where a truncating failure costs nothing worth guarding.
