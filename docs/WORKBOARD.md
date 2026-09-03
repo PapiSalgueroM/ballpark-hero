@@ -26,19 +26,24 @@ How it works:
 - **Desktop lane, next: Round 421. UNCLAIMED.** Pick the next thing off
   docs/PROJECT-STATE.md and claim it here before building.
   **Strong candidate, found while gating Round 420 and deliberately left out of
-  it.** Three connect 4 snapshots carry a board line computed from the date:
-  /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 ships "Board: Air
-  Raid" at HEAD right now, live, and a rebuild added "Board: The Gauntlet" to
-  /nba-connect-4 (reverted, so it is not in the tree). This is the rule about
-  nothing computed from a clock reaching a saved page, and the prerenderer's
-  three sample method is what misses it: a board picked by hashing the date can
-  agree at days 0, 5 and 11 by coincidence, and the sampler then treats it as
-  stable. It caught the same block on /nhl-connect-4 and left it out, which is
-  why only some pages are affected. The fix is the documented one, mark the
-  block volatile at source, and it wants a check that would have found it
-  without anyone naming connect 4 first, since a list of affected games has
-  been written three times in this repo and each one covered only what was
-  already known.
+  it. Read this carefully, the first write up of it was wrong.** The connect 4
+  board line is NOT computed from the date. All four pages pick with
+  getRandomConnect4Board, which is curatedBoards[Math.floor(Math.random() * n)],
+  and prerender.mjs already replaces Math.random with a fixed seed generator
+  before any page code runs precisely so a random pick is frozen the same way in
+  every build. Its own comment names /mlb-connect-4 as the page that motivated
+  that, because two runs on the same day disagreed about it.
+  What is observed and not explained by that seeding: /nhl-connect-4 had its
+  board line left out of the Round 420 build, so the three samples disagreed,
+  and /nba-connect-4 gained a line HEAD does not have, so it flipped between
+  builds. /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 "Board:
+  Air Raid" at HEAD today. Hypothesis only, unproved: the seeded generator is
+  global, so anything drawing from it a date dependent number of times before
+  the board is picked shifts the sequence and changes the board, making a
+  nominally random pick indirectly clock dependent. Cost is snapshot churn and
+  a page re-dated in the sitemap for no real change. Prove or kill the
+  hypothesis first, then fix. Do not reach for data-no-prerender before knowing
+  which of the two mechanisms is actually at work.
 
 
 

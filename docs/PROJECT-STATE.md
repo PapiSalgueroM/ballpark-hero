@@ -2881,21 +2881,35 @@ today rather than adding alongside them.
   page intact is recoverable; a snapshot silently deleted on a live route is not. There is
   deliberately **no fallback to a truncating write**, since that is the bug being removed,
   and the repo's fail closed rule says the same thing in a different context.
-  **This round ships no content change at all, and keeping it that way turned up a live
-  bug that belongs to another round.** Rebuilding to gate the work moved exactly one
-  snapshot, `/nba-connect-4`, which gained a line reading "Board: The Gauntlet". Round 420
-  changed nothing under `src/`, so nothing should have moved. The cause is the sampler:
-  the prerenderer keeps only the blocks that agree across its day 0, 5 and 11 renders, and
-  a board picked by hashing the date can agree at those three offsets by coincidence, at
-  which point a line computed from the clock is written into a page that is served for
-  weeks. The prerenderer caught it on `/nhl-connect-4` and reported leaving "Board:
-  Passports" out; it did not catch it on the others. Checking HEAD rather than assuming,
-  **`/mlb-connect-4` has been shipping "Board: Modern Era" and `/nfl-connect-4` "Board: Air
-  Raid" already**, so this is live on two pages now and is not a regression from this
-  round. The new third one was reverted along with its ledger entry and the sitemap, so
-  the committed tree carries only the write safety code and these notes, and the real fix
-  (marking the block volatile the way the rule already prescribes) is its own round rather
-  than a passenger on this one.
+  **This round ships no content change at all, and keeping it that way turned up something
+  for another round.** Rebuilding to gate the work moved exactly one snapshot,
+  `/nba-connect-4`, which gained a line reading "Board: The Gauntlet". Round 420 changed
+  nothing under `src/`, so nothing should have moved. It was reverted along with its ledger
+  entry and the sitemap, so the committed tree carries only the write safety code and these
+  notes.
+  **The first version of this paragraph got the mechanism wrong and it is corrected here.**
+  It said the board line was computed from the date and that the fix was to mark it
+  volatile. That is not what the code does. All four connect 4 pages pick with
+  `getRandomConnect4Board`, which is `curatedBoards[Math.floor(Math.random() * n)]`, and
+  nothing about it reads the clock. Worse, the case is already known: `prerender.mjs`
+  replaces `Math.random` with a fixed seed generator (seed 284) before any page code runs,
+  for exactly this reason, and its own comment names `/mlb-connect-4` as the page that
+  motivated it, because two runs on the same day once disagreed about it. So the intended
+  behaviour is that a random pick is frozen identically in every build, which is not false
+  and does not need dropping.
+  **What is actually observed, which that seeding does not explain.** `/nhl-connect-4` had
+  its board line left out of this build, meaning the three samples disagreed, and
+  `/nba-connect-4` gained a line that HEAD does not have, meaning a build to build flip.
+  Both are inconsistent with a pick that is identical across the three samples and across
+  runs. `/mlb-connect-4` ships "Board: Modern Era" and `/nfl-connect-4` "Board: Air Raid"
+  at HEAD today, so the line itself is live and long standing, and none of this is a
+  regression from this round. The likely reason, stated as a hypothesis and NOT as a
+  finding because it has not been proved: the seeded generator is global and shared, so
+  any code that draws from it a date dependent number of times before the board is picked
+  shifts the sequence and changes which board comes out, which would make a nominally
+  random pick indirectly clock dependent. The cost is snapshot churn and a page re-dated
+  in the sitemap for no real change, which is the exact thing the lastmod ledger exists to
+  prevent. Round 421 should prove or kill that hypothesis before changing anything.
   **One thing deliberately NOT claimed.** This closes the shipped artifact writers the
   build uses. It does not audit every writeFileSync in `scripts/`, several of which write
   caches and scratch files where a truncating failure costs nothing worth guarding.
