@@ -50,7 +50,7 @@
 
    Run: node scripts/simPlayerBingoPool.mjs
 */
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -59,8 +59,6 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.SIM_BINGO_CONTROL || '';
-const ENTRY = path.join(os.tmpdir(), 'playerBingoPoolEntry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'playerBingoPool.bundle.mjs');
 
 let failures = 0;
 let section = 0;
@@ -68,14 +66,28 @@ const bySection = { 1: 0, 2: 0, 3: 0 };
 const fail = m => { failures += 1; bySection[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 
-fs.writeFileSync(ENTRY, `
+async function loadBundle() {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'player-bingo-pool-'));
+  const entry = path.join(tempDir, 'entry.mjs');
+  const bundle = path.join(tempDir, 'bundle.mjs');
+  try {
+    fs.writeFileSync(entry, `
 export { fetchBingoData, buildCriteria, isSameMan, isAcademyRow, MIN_TILE_SUPPORT } from '${ROOT_URL}/src/lib/playerBingo.ts';
 export { supabase } from '${ROOT_URL}/src/integrations/supabase/client.ts';
 export { normalizeName } from '${ROOT_URL}/src/lib/playerSearch.ts';
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+    execFileSync(process.execPath, [
+      path.join(ROOT, 'node_modules', 'esbuild', 'bin', 'esbuild'),
+      entry, '--bundle', '--format=esm', '--platform=node', `--outfile=${bundle}`, '--log-level=error',
+    ], { stdio: 'inherit' });
+    return await import(pathToFileURL(bundle).href);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const { fetchBingoData, buildCriteria, isSameMan, isAcademyRow, MIN_TILE_SUPPORT, supabase, normalizeName } = await import(pathToFileURL(BUNDLE).href);
+const { fetchBingoData, buildCriteria, isSameMan, isAcademyRow, MIN_TILE_SUPPORT, supabase, normalizeName } = await loadBundle();
 
 const POOL_MIN_YEAR = 2024; // mirrors the lib's constant; section 2 fails loudly if the pool disagrees
 
@@ -140,6 +152,9 @@ async function oldSelection() {
     .gt('market_value_usd', 0)
     .not('age', 'is', null)
     .order('market_value_usd', { ascending: false })
+    .order('player_name', { ascending: true })
+    .order('year', { ascending: false })
+    .order('id', { ascending: true })
     .limit(1000);
   if (error) throw error;
   const byName = new Map();
@@ -248,15 +263,17 @@ console.log('3) The Messi club teammate tile carries the right men, and Rodri\'s
 }
 
 if (CONTROL) {
-  const target = { stale: 2, pin: 3 }[CONTROL];
-  if (!target) abort(`unknown control "${CONTROL}"`);
-  const fired = bySection[target];
-  const elsewhere = failures - fired;
-  if (fired > 0) {
-    console.log(`\ncontrol "${CONTROL}": ${fired} failure(s) fired in section ${target} as expected, the check works${elsewhere ? ` (${elsewhere} elsewhere, not counted)` : ''}`);
+  const expected = {
+    stale: { section: 2, count: 6 },
+    pin: { section: 3, count: 1 },
+  }[CONTROL];
+  if (!expected) abort(`unknown control "${CONTROL}"`);
+  const fired = bySection[expected.section];
+  if (fired === expected.count && failures === expected.count) {
+    console.log(`\ncontrol "${CONTROL}": exactly ${expected.count} expected failure(s), the check works`);
     process.exit(0);
   }
-  abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${target}, the check is dead`);
+  abort(`\ncontrol "${CONTROL}": got ${fired} target and ${failures} total failures, expected exactly ${expected.count}`);
 }
 
 if (failures > 0) {

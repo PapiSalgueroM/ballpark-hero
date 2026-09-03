@@ -32,7 +32,7 @@ import {
   ordinal,
 } from '@/lib/worldXi';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 import { SlotReel } from '@/components/world-xi/SlotReel';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
@@ -179,7 +179,7 @@ const WorldXi = () => {
     }
     if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
     recordedRef.current = true;
-    recordCompletion('/world-xi', filledCount, getCurrentPlayerName());
+    recordCompletion('/world-xi', filledCount);
   }, [phase, filledCount]);
 
   const pick = (p: WxPlayer) => {

@@ -144,11 +144,18 @@ console.log('3) The ping is light, as code: recordActivity reaches neither the s
     body = heavy;
     console.log('   NEGATIVE CONTROL ON: a signed in save added to the ping in memory');
   }
+  const publicStart = code.indexOf('function recordPublicCompletion(');
+  if (publicStart < 0) abort('recordPublicCompletion is missing, the activity row check needs re-anchoring');
+  const publicEnd = code.indexOf('\n}\n\n', publicStart);
+  if (publicEnd < 0) abort('recordPublicCompletion body could not be bounded, the activity row check needs re-anchoring');
+  const publicBody = code.slice(publicStart, publicEnd + 2);
+  if (!body.includes('recordPublicCompletion(')) fail('recordActivity no longer delegates to the public completion writer');
+  const lightPath = `${body}\n${publicBody}`;
   for (const heavyCall of ['recordStreakCompletion(', 'saveAuthCompletion(', 'supabase.auth.getUser(']) {
-    if (body.includes(heavyCall)) fail(`recordActivity calls ${heavyCall}...), which makes every sim round a full completion again`);
+    if (lightPath.includes(heavyCall)) fail(`recordActivity calls ${heavyCall}...), which makes every sim round a full completion again`);
   }
-  if (!body.includes("('game_completions')")) fail('recordActivity no longer writes the anonymous game_completions row, so Most Played Today stops seeing live play');
-  console.log(`   body ${body.length} characters, writes the anonymous row: ${body.includes("('game_completions')")}`);
+  if (!publicBody.includes("('game_completions')")) fail('recordActivity no longer reaches the anonymous game_completions row, so Most Played Today stops seeing live play');
+  console.log(`   activity ${body.length} characters, public writer ${publicBody.length} characters, writes the anonymous row: ${publicBody.includes("('game_completions')")}`);
 }
 
 const total = failures[1] + failures[2] + failures[3];

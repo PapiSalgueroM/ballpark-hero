@@ -94,9 +94,7 @@ export function useNflHL() {
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedRounds, setUnlimitedRounds] = useState<HLRound[]>(
-    () => buildRounds(Math.floor(Math.random() * 100000), hard),
-  );
+  const [unlimitedRounds, setUnlimitedRounds] = useState<HLRound[]>(dailyRounds);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

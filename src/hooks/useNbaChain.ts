@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { CHAIN_STARTERS } from '@/types/nbaChain';
 import type { ChainLink, ChainGamePhase } from '@/types/nbaChain';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -52,7 +52,8 @@ export function useNbaChain() {
   // Endless is the default mode; a returning player's last choice is
   // remembered locally but always falls back to endless if unset/invalid.
   const [mode, setModeState] = useState<NbaChainMode>(loadMode);
-  const [initialStarter] = useState(() => getRandomStarter());
+  const initialStarter = CHAIN_STARTERS[0];
+  const [isReady, setIsReady] = useState(false);
   const [chain, setChain] = useState<ChainLink[]>(() => [{ playerName: initialStarter }]);
   const [phase, setPhase] = useState<ChainGamePhase>('playing');
   const [gameOverReason, setGameOverReason] = useState<string | null>(null);
@@ -62,6 +63,13 @@ export function useNbaChain() {
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(() => {
     return new Set([normalizeName(initialStarter)]);
   });
+
+  useEffect(() => {
+    const starter = getRandomStarter();
+    setChain([{ playerName: starter }]);
+    setUsedPlayers(new Set([normalizeName(starter)]));
+    setIsReady(true);
+  }, []);
 
   const score = chain.length - 1;
 
@@ -231,6 +239,7 @@ export function useNbaChain() {
   useGameCompletion('nba-chain', phase === 'ended', score * 100);
 
   return {
+    isReady,
     mode,
     switchMode,
     chain,

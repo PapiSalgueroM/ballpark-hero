@@ -1,5 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
+import { getPlayerBingoAgeEligibility } from '@/data/playerBingoBirthDates';
 import { flagFor } from '@/lib/dealPlayers';
+import { getTodayET } from '@/lib/dateUtils';
 import { clubKey, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
 
@@ -118,7 +120,9 @@ export interface BingoPlayer {
   position: string; // Transfermarkt style, e.g. "Centre-Forward"
   club: string; // club on the player's most recent row
   value: number; // market value in USD from the most recent row
-  age: number; // age on the most recent row
+  age: number; // historical age on the most recent row, used for isSameMan
+  is21OrUnder: boolean; // current eligibility from an exact DOB or a safe snapshot bound
+  is29OrOlder: boolean; // current eligibility from an exact DOB or a safe snapshot bound
   year: number; // year of the row we kept
 }
 
@@ -351,13 +355,17 @@ async function fetchClubHistoryAndStats(
  * a club they had left.
  */
 async function fetchPool(): Promise<BingoPlayer[] | null> {
+  const gameDate = getTodayET();
   const { data: rows, error } = await supabase
     .from('player_market_values')
-    .select('player_name')
+    .select('id, player_name, market_value_usd, year')
     .gte('year', POOL_MIN_YEAR)
     .gt('market_value_usd', 0)
     .not('age', 'is', null)
     .order('market_value_usd', { ascending: false })
+    .order('player_name', { ascending: true })
+    .order('year', { ascending: false })
+    .order('id', { ascending: true })
     .limit(POOL_ROW_FETCH);
   if (error || !rows) return null;
   const names = [...new Set((rows as { player_name: string | null }[]).map(r => (r.player_name ?? '').trim()).filter(Boolean))];
@@ -389,13 +397,18 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
       const age = Number(r.age) || 0;
       const year = Number(r.year) || 0;
       if (!name || value <= 0 || age <= 0) continue;
+      const nationality = (r.nationality ?? '').trim();
+      const position = (r.position ?? '').trim();
+      const ageEligibility = getPlayerBingoAgeEligibility({ name, nationality, position, age, year }, gameDate);
       const candidate: BingoPlayer = {
         name,
-        nationality: (r.nationality ?? '').trim(),
-        position: (r.position ?? '').trim(),
+        nationality,
+        position,
         club: (r.club ?? '').trim(),
         value,
         age,
+        is21OrUnder: ageEligibility.is21OrUnder,
+        is29OrOlder: ageEligibility.is29OrOlder,
         year,
       };
       const prev = byName.get(name);
@@ -405,7 +418,9 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
     }
   }
 
-  const pool = [...byName.values()].sort((a, b) => b.value - a.value).slice(0, POOL_SIZE);
+  const pool = [...byName.values()]
+    .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name))
+    .slice(0, POOL_SIZE);
   return pool.length >= 100 ? pool : null;
 }
 
@@ -748,7 +763,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       kind: 'age',
       label: 'Aged 29 or older',
       icon: '🎂',
-      test: p => p.age >= 29,
+      test: p => p.is29OrOlder,
     }),
   );
   out.push(
@@ -757,7 +772,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       kind: 'age',
       label: 'Aged 21 or younger',
       icon: '🌱',
-      test: p => p.age > 0 && p.age <= 21,
+      test: p => p.is21OrUnder,
     }),
   );
 

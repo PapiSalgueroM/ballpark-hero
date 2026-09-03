@@ -47,15 +47,13 @@ export function useNbaCareer() {
     dailyActions.some(a => a.t === 'give') ? 'revealed' : 'playing';
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle>(
-    () => nbaCareerPuzzles[Math.floor(Math.random() * nbaCareerPuzzles.length)]
-  );
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle | null>(null);
   const [clueLevel, setClueLevel] = useState(0);
   const [hard, setHard] = useState(false);
   const [status, setStatus] = useState<NbaCareerStatus>('playing');
 
   // ---- ACTIVE VALUES -------------------------------------------------------
-  const puzzle          = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const puzzle          = mode === 'daily' ? dailyPuzzle : (unlimitedPuzzle ?? nbaCareerPuzzles[0]);
   const activeClueLevel = mode === 'daily' ? dailyClueLevel : clueLevel;
   const activeStatus    = mode === 'daily' ? dailyStatus : status;
 
@@ -90,7 +88,12 @@ export function useNbaCareer() {
   }, [activeClueLevel, player, hard]);
 
   // ---- CALLBACKS -----------------------------------------------------------
-  const switchMode = useCallback((newMode: NbaCareerMode) => setMode(newMode), []);
+  const switchMode = useCallback((newMode: NbaCareerMode) => {
+    if (newMode === 'unlimited' && unlimitedPuzzle === null) {
+      setUnlimitedPuzzle(nbaCareerPuzzles[Math.floor(Math.random() * nbaCareerPuzzles.length)]);
+    }
+    setMode(newMode);
+  }, [unlimitedPuzzle]);
   const toggleHard = useCallback(() => setHard(h => !h), []);
 
   const revealNextClue = useCallback(() => {

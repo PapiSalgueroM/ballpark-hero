@@ -42,17 +42,22 @@ export function useUfcGame() {
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedFighter, setUnlimitedFighter] = useState<UfcFighter>(selectRandomFighter);
+  const [unlimitedFighter, setUnlimitedFighter] = useState<UfcFighter | null>(null);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<UfcGuessResult[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
   // ---- ACTIVE VALUES -------------------------------------------------------
-  const targetFighter = mode === 'daily' ? dailyFighter : unlimitedFighter;
+  const targetFighter = mode === 'daily' ? dailyFighter : (unlimitedFighter ?? uniqueUfcFighters[0]);
   const guesses      = mode === 'daily' ? dailyGuesses  : unlimitedGuesses;
   const gameStatus   = mode === 'daily' ? effectiveDailyStatus : unlimitedStatus;
 
   // ---- CALLBACKS -----------------------------------------------------------
-  const switchMode = useCallback((newMode: UfcGameMode) => setMode(newMode), []);
+  const switchMode = useCallback((newMode: UfcGameMode) => {
+    if (newMode === 'unlimited' && unlimitedFighter === null) {
+      setUnlimitedFighter(selectRandomFighter());
+    }
+    setMode(newMode);
+  }, [unlimitedFighter]);
 
   const makeGuess = useCallback((fighter: UfcFighter) => {
     if (gameStatus !== 'playing' || !targetFighter) return;

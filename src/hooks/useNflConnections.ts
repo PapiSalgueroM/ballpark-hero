@@ -108,10 +108,8 @@ export function useNflConnections() {
   }, [dailyLives, dailySolvedGroups, dailyPuzzle]);
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedIndex, setUnlimitedIndex] = useState(
-    () => Math.floor(Math.random() * fallbackNflPuzzles.length)
-  );
-  const unlimitedPuzzle = puzzlePool[unlimitedIndex % puzzlePool.length];
+  const [unlimitedIndex, setUnlimitedIndex] = useState<number | null>(null);
+  const unlimitedPuzzle = puzzlePool[(unlimitedIndex ?? 0) % puzzlePool.length];
   const [unlimitedSolvedGroups, setUnlimitedSolvedGroups] = useState<SolvedGroup[]>([]);
   const [unlimitedLives, setUnlimitedLives] = useState(4);
 
@@ -152,9 +150,12 @@ export function useNflConnections() {
 
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: NflConnMode) => {
+    if (newMode === 'unlimited' && unlimitedIndex === null) {
+      setUnlimitedIndex(Math.floor(Math.random() * puzzlePool.length));
+    }
     setMode(newMode);
     setSelected([]);
-  }, []);
+  }, [unlimitedIndex, puzzlePool.length]);
 
   const togglePlayer = useCallback((name: string) => {
     if (gameStatus !== 'playing') return;

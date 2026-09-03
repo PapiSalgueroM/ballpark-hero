@@ -59,7 +59,7 @@ describe('useGameCompletion records a finish once, when it happens', () => {
     rerender({ done: true });
     rerender({ done: true });
     expect(recordCompletion).toHaveBeenCalledTimes(1);
-    expect(recordCompletion).toHaveBeenCalledWith('/footle', 400, 'Tester', 0);
+    expect(recordCompletion).toHaveBeenCalledWith('/footle', 400, undefined, 0);
   });
 
   it('records nothing for a finish the daily puzzle hook restored after mount, and a later real finish once', () => {

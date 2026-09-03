@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMlbConnect4 } from '@/hooks/useMlbConnect4';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import { MlbConnect4HowToPlay } from '@/components/mlb-connect4/MlbConnect4HowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { type PlayerEntity } from '@/lib/playerSearch';
@@ -27,6 +28,7 @@ const COLS = 7;
 
 const MlbConnect4 = () => {
   const {
+    isReady,
     board,
     grid,
     currentTeam,
@@ -87,6 +89,8 @@ const MlbConnect4 = () => {
       >
         <MlbConnect4HowToPlay open={showHowToPlay} onOpenChange={setShowHowToPlay} />
 
+        {!isReady ? <GameLoadingState label="Choosing a board..." /> : <>
+
         {/* Turn indicator */}
         {phase === 'playing' && (
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -137,7 +141,7 @@ const MlbConnect4 = () => {
         )}
 
         {/* Board name */}
-        <p className="text-center text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
+        <p data-no-prerender="true" className="text-center text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
           Board: {board.name}
         </p>
 
@@ -296,6 +300,8 @@ const MlbConnect4 = () => {
             </button>
           </div>
         )}
+
+        </>}
 
         <GameSeoContent
           pageHasOwnH1

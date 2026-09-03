@@ -42,12 +42,14 @@
  *      data that arrives over the network and does nothing for a board the
  *      page works out from the date. Fifteen saved pages carried today's
  *      puzzle, three of them printing the literal date ("Today's lineup,
- *      2026-08-24"). Every route is now rendered three times with the
- *      page's own clock at 0, 5 and 11 days and only the blocks all three
- *      renders agree on are written. Nothing here knows which games are
- *      daily, and that is deliberate: a list of affected games has been
- *      written three times in this repo and each one covered what somebody
- *      had already found and nothing after.
+ *      2026-08-24"). Every route is rendered three times with the page's own
+ *      clock at 0, 5 and 11 days, and only blocks all three agree on are
+ *      written. Nothing here knows which games are daily, and that is
+ *      deliberate: a list of affected games has been written three times in
+ *      this repo and each one covered what somebody had already found and
+ *      nothing after. Random choices are valid content, so Round 422 keeps one
+ *      fixed seed and independently replays every random-using clock sample.
+ *      A changed head, body, call count or hook refuses the route before write.
  *
  * simPrerender.mjs is the cheap fence: it fails if a route is missing, if
  * two routes share a document, if a page's own words are absent from it, or
@@ -68,7 +70,17 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const PUBLIC = path.join(ROOT, 'public');
-const PORT = Number(process.env.PRERENDER_PORT || 4310);
+/* Round 422: two working trees can build at the same time. A fixed default
+   port made one prerenderer kill the other with EADDRINUSE, so the operating
+   system chooses a free loopback port unless a caller explicitly supplies
+   PRERENDER_PORT. */
+const REQUESTED_PORT = process.env.PRERENDER_PORT === undefined
+  ? 0
+  : Number(process.env.PRERENDER_PORT);
+if (!Number.isInteger(REQUESTED_PORT) || REQUESTED_PORT < 0 || REQUESTED_PORT > 65535) {
+  console.error('PRERENDER_PORT must be an integer from 0 through 65535.');
+  process.exit(1);
+}
 /** how long to let a page draw before the snapshot is taken */
 const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
 /* ROUND 284: THE CLOCK SAMPLES, in days from the real date. Every route is
@@ -85,6 +97,13 @@ const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
    what the third sample removed over and above the second, so the cost of
    keeping it stays measured rather than assumed. */
 const SAMPLE_DAYS = [0, 5, 11];
+/* ROUND 284, RECHECKED IN ROUND 422: RANDOM CHOICES ARE FROZEN, NOT GUESSED AT.
+   A random board or player is still a valid choice. The snapshot promise is
+   that the same source produces the same crawler photograph on every build,
+   so every clock sample and its independent replay start from one fixed seed.
+   The replay gate below refuses a route before writing if that promise is not
+   true. */
+const RANDOM_SEED = 284;
 
 if (!existsSync(path.join(DIST, 'index.html'))) {
   console.error('No dist/index.html. Run npm run build first.');
@@ -230,7 +249,20 @@ const server = createServer((req, res) => {
   res.writeHead(200, { 'content-type': 'text/html' });
   res.end(SHELL);
 });
-await new Promise(r => server.listen(PORT, r));
+await new Promise((resolve, reject) => {
+  const onError = error => reject(error);
+  server.once('error', onError);
+  server.listen(REQUESTED_PORT, '127.0.0.1', () => {
+    server.off('error', onError);
+    resolve();
+  });
+});
+const boundAddress = server.address();
+if (!boundAddress || typeof boundAddress === 'string') {
+  server.close();
+  throw new Error('The prerender server did not expose a TCP port.');
+}
+const PORT = boundAddress.port;
 
 /* Round 257: the browser is recreated rather than assumed. One 122 route
    run died at route 108 with "Target page, context or browser has been
@@ -240,8 +272,9 @@ await new Promise(r => server.listen(PORT, r));
    dead browser is a waste, and a fresh page every 25 routes keeps the
    memory flat enough that it stops happening. */
 let browser = null;
-/* one page per clock sample, all in the same browser */
+/* One primary page and one independent replay page per stability sample. */
 let pages = [];
+let replayPages = [];
 
 /* ROUND 284: THE PAGE'S OWN CLOCK IS MOVED, NOT THE MACHINE'S. Date is
    replaced before any of the app's code runs, the same shape
@@ -256,42 +289,73 @@ let pages = [];
    without the flag every page rendered here looked like a dead address and
    the noindex went into all 133 saved files. It was caught before it shipped
    by the fence in simPrerender, section 14, which is the check to keep. */
-/* NEGATIVE CONTROL: PRERENDER_CONTROL=noflag leaves the flag unset, which
-   reproduces the near miss on purpose. The documents it writes go to dist/
-   only, never to public/, so nothing it produces can ship; they exist so that
-   simPrerender section 14 can be seen to fail on real output rather than on
-   a string somebody typed into a test. Pair it with PRERENDER_ONLY. */
+/* NEGATIVE CONTROL: PRERENDER_CONTROL=noflag leaves the flag unset, confirms
+   the real fallback marker fires, and keeps only that marker's robots tag from
+   being cleaned up by Helmet. That recreates the original near miss while
+   leaving the route's real title and canonical intact. Control output goes to
+   dist/ only, never public/, so nothing it produces can ship. Pair it with
+   PRERENDER_ONLY, then require simPrerender section 14 to report the route. */
 const CONTROL = process.env.PRERENDER_CONTROL || '';
-if (CONTROL && CONTROL !== 'noflag') {
+if (CONTROL && !['noflag', 'random-replay'].includes(CONTROL)) {
   console.error(`PRERENDER_CONTROL=${CONTROL} is not a control this script knows`);
   process.exit(1);
 }
-if (CONTROL) console.log('NEGATIVE CONTROL ON: the prerender flag is NOT set, output goes to dist/ only, and section 14 of simPrerender must go red on it');
+if (CONTROL === 'noflag') console.log('NEGATIVE CONTROL ON: the prerender flag is NOT set, output goes to dist/ only, and section 14 of simPrerender must go red on it');
+if (CONTROL === 'random-replay') console.log('BEHAVIORAL CONTROL ON: a random binary collision survives the clock intersection, then the independent replay must refuse it before any write');
+if (CONTROL === 'random-replay' && unique.length !== 1) {
+  console.error(`PRERENDER_CONTROL=random-replay requires exactly one non-home PRERENDER_ONLY route, received ${unique.length}.`);
+  process.exit(1);
+}
 
-/* ROUND 284, SECOND HALF OF THE SAME RULE: RANDOM CONTENT IS MADE THE SAME
-   ON EVERY BUILD. Some pages pick from a pool with Math.random rather than
-   the date (the Connect 4 boards, for one), and the clock samples only catch
-   that by luck: two runs of this script on the same day disagreed about
-   /mlb-connect-4, because on one of them all three samples happened to draw
-   the same board out of a small pool and the line was written. A pick that
-   is random is not false, so it does not need dropping; what it must not do
-   is change from one build to the next, which rewrites the file and re-dates
-   the page for no reason. Math.random is therefore replaced with a seeded
-   generator, the same seed on every sample and every run, before any page
-   code runs. Date driven content is still caught by the three clocks; random
-   content is simply frozen the same way every time. */
-const RANDOM_SEED = 284;
-const clockScript = days => `(() => {
-  ${CONTROL === 'noflag' ? '' : 'window.__DUKB_PRERENDER__ = true;'}
+/* ROUND 422: THE SEEDED STREAM AUDITS ITSELF. Counting calls catches a change
+   in random control flow even when the visible words happen to agree, and the
+   identity check catches any later code that replaces the seeded function and
+   would otherwise bypass both the counter and the replay. */
+const clockScript = (days, perturbReplay = false) => `(() => {
+  ${CONTROL === 'noflag' ? `
+  (function () {
+    const isFallbackMarker = node => node instanceof Element
+      && node.matches('meta[data-dukb-fallback][name="robots"]');
+    const appendChild = Node.prototype.appendChild;
+    Node.prototype.appendChild = function (node) {
+      const result = appendChild.call(this, node);
+      if (isFallbackMarker(node)) window.__DUKB_NOFLAG_MARKER_SEEN__ = true;
+      return result;
+    };
+    const removeChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function (node) {
+      if (isFallbackMarker(node)) return node;
+      return removeChild.call(this, node);
+    };
+    const remove = Element.prototype.remove;
+    Element.prototype.remove = function () {
+      if (isFallbackMarker(this)) return;
+      return remove.call(this);
+    };
+  })();` : 'window.__DUKB_PRERENDER__ = true;'}
   (function () {
     let s = ${RANDOM_SEED} | 0;
-    Math.random = function () {
+    const audit = { calls: 0, intact: null };
+    const seededRandom = function () {
+      audit.calls += 1;
       s = (s + 0x6D2B79F5) | 0;
       let t = Math.imul(s ^ (s >>> 15), 1 | s);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
+    Math.random = seededRandom;
+    audit.intact = function () { return Math.random === seededRandom; };
+    window.__DUKB_PRERENDER_RANDOM_AUDIT__ = audit;
   })();
+  ${CONTROL === 'random-replay' ? `
+  for (let i = 0; i < 6; i += 1) Math.random();
+  const randomReplayChoice = Math.random() < 0.5 ? 'A' : 'B';
+  const randomReplayControl = ${perturbReplay ? "randomReplayChoice === 'A' ? 'B' : 'A'" : 'randomReplayChoice'};
+  addEventListener('DOMContentLoaded', () => {
+    const p = document.createElement('p');
+    p.textContent = '__DUKB_RANDOM_REPLAY_CONTROL__' + randomReplayControl;
+    document.body.appendChild(p);
+  }, { once: true });` : ''}
   const SHIFT = ${days} * 86400000;
   if (SHIFT === 0) return;
   const RealDate = Date;
@@ -303,36 +367,63 @@ const clockScript = days => `(() => {
   globalThis.Date = D;
 })();`;
 
+/* The behavioral control recreates the exact collision that disproved the
+   earlier cross-seed claim. All three seventh values differ, but each lands on
+   the same side of a normal 50/50 branch, so an output intersection keeps B. */
+if (CONTROL === 'random-replay') {
+  const seventhValue = seed => {
+    let s = seed | 0;
+    let value = 0;
+    for (let call = 0; call < 7; call += 1) {
+      s = (s + 0x6D2B79F5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      value = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    return value;
+  };
+  const oldValues = [284, 418, 973].map(seventhValue);
+  const oldLabels = oldValues.map(value => value < 0.5 ? 'A' : 'B');
+  if (new Set(oldValues).size !== 3 || new Set(oldLabels).size !== 1 || oldLabels[0] !== 'B') {
+    console.error('random-replay control no longer recreates the old three-stream categorical collision');
+    process.exit(1);
+  }
+}
+
 async function freshPage() {
-  for (const p of pages) { try { await p.context().close(); } catch { /* already gone */ } }
+  for (const p of [...pages, ...replayPages]) { try { await p.context().close(); } catch { /* already gone */ } }
   pages = [];
+  replayPages = [];
   if (browser) { try { await browser.close(); } catch { /* already gone */ } }
   browser = await chromium.launch({
     executablePath: process.env.CHROME_PATH || undefined,
     args: ['--no-sandbox'],
   });
-  for (const days of SAMPLE_DAYS) {
-    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-    await ctx.addInitScript(clockScript(days));
-    const page = await ctx.newPage();
+  for (let pass = 0; pass < 2; pass += 1) {
+    const target = pass === 0 ? pages : replayPages;
+    for (const days of SAMPLE_DAYS) {
+      const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      await ctx.addInitScript(clockScript(days, CONTROL === 'random-replay' && pass === 1));
+      const page = await ctx.newPage();
 
-    /* No visitor's state may end up in a file every visitor receives. The
-       first full pass baked "Your stadium empire: $54 banked" into the ticker
-       on every page, which is this browser's own save talking. Storage is
-       wiped before each document is drawn, so the snapshot shows only what a
-       brand new visitor would see. */
-    await page.addInitScript(() => {
-      try { localStorage.clear(); sessionStorage.clear(); } catch { /* blocked, nothing to clear */ }
-    });
+      /* No visitor's state may end up in a file every visitor receives. The
+         first full pass baked "Your stadium empire: $54 banked" into the ticker
+         on every page, which is this browser's own save talking. Storage is
+         wiped before each document is drawn, so the snapshot shows only what a
+         brand new visitor would see. */
+      await page.addInitScript(() => {
+        try { localStorage.clear(); sessionStorage.clear(); } catch { /* blocked, nothing to clear */ }
+      });
 
-    /* rule 1: let live data hang rather than land. A fulfilled request bakes
-       today's data into a file that outlives today; an aborted one trips the
-       fail-closed error cards into the snapshot. Hanging leaves the normal
-       loading state, which is honest and dateless. */
-    await page.route('**://*.supabase.co/**', () => { /* never settled on purpose */ });
-    await page.route('**://*.googletagmanager.com/**', r => r.abort());
-    await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
-    pages.push(page);
+      /* rule 1: let live data hang rather than land. A fulfilled request bakes
+         today's data into a file that outlives today; an aborted one trips the
+         fail-closed error cards into the snapshot. Hanging leaves the normal
+         loading state, which is honest and dateless. */
+      await page.route('**://*.supabase.co/**', () => { /* never settled on purpose */ });
+      await page.route('**://*.googletagmanager.com/**', r => r.abort());
+      await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
+      target.push(page);
+    }
   }
 }
 
@@ -341,18 +432,19 @@ await freshPage();
 /* Draw one route on one of the clock samples and hand back its head and
    its blocks. The page is looked up by index each time rather than held,
    because the retry below replaces every page in the browser. */
-async function draw(sample, route, url) {
+async function draw(sample, route, url, replay = false) {
+  const pageAt = () => (replay ? replayPages : pages)[sample];
   try {
-    await pages[sample].goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await pageAt().goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
   } catch (first) {
     /* one retry on a fresh browser: a dead browser fails every remaining
        route, and losing the whole tail to one crash is how 14 stale
        snapshots nearly shipped */
     console.error(`   retrying ${route} on a fresh browser`);
     await freshPage();
-    await pages[sample].goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+    await pageAt().goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
   }
-  const page = pages[sample];
+  const page = pageAt();
   /* wait for the app to actually mount something, then let the rest of
      the page paint. #dukb-main is the game shell; the plain pages use
      their own containers, so a body with real text is the fallback. */
@@ -416,14 +508,15 @@ async function draw(sample, route, url) {
   /* THE SNAPSHOT IS DELIBERATELY LIGHT. A full DOM capture measured
      96KB a page, 11.6MB across the site, which is far too heavy to
      carry in the repo and would ship in every round's zip forever. A
-     crawler does not need the app's markup, it needs the words, the
-     headings, the links and the head. So the snapshot keeps the built
-     <head> exactly as vite produced it (title, description, canonical,
-     JSON-LD, the script tags) and rebuilds the body as plain semantic
-     HTML holding the page's own readable content in document order.
-     Nothing is added: every string below came off the rendered page.
-     React clears #root on mount, so a real visitor sees this for the
-     instant before the app draws over it. */
+      crawler does not need the app's markup, it needs the words, the
+      headings, the links and the head. So the snapshot keeps the built
+      <head> exactly as vite produced it (title, description, canonical,
+      JSON-LD, the script tags) and rebuilds the body as plain semantic
+      HTML holding the page's own readable content in document order.
+      Nothing is added: every string below came off the rendered page.
+      React clears #root on mount. The early marker keeps this copy hidden
+      from JavaScript visitors while preserving it for crawlers and no-JS
+      readers. */
   const captured = await page.evaluate(() => {
       for (const el of Array.from(document.querySelectorAll('[role="dialog"]'))) el.remove();
       /* Round 258: anything the app marks data-no-prerender is live or dated
@@ -596,8 +689,18 @@ async function draw(sample, route, url) {
         mark.remove();
       }
       head = doc.head.innerHTML;
-      return { head, parts };
+      const randomAudit = window.__DUKB_PRERENDER_RANDOM_AUDIT__;
+      return {
+        head,
+        parts,
+        randomCalls: Number.isInteger(randomAudit?.calls) ? randomAudit.calls : -1,
+        randomHookIntact: randomAudit?.intact?.() === true,
+        noflagMarkerSeen: window.__DUKB_NOFLAG_MARKER_SEEN__ === true,
+      };
     });
+  if (CONTROL === 'noflag' && !captured.noflagMarkerSeen) {
+    throw new Error('noflag control did not observe the real fallback noindex marker');
+  }
   /* Park the page. An idle sample left on a game page keeps its ticker, its
      countdown and its animations running while the other two samples draw,
      which on a small machine is enough to make the settle window mean
@@ -606,9 +709,22 @@ async function draw(sample, route, url) {
   return captured;
 }
 
-let written = 0, failed = 0, done = 0, refused = 0;
+let written = 0, failed = 0, done = 0, refused = 0, randomReplayRefusals = 0;
 /* what the clock samples removed, for the summary line */
 let volatileRoutes = 0, droppedBySecond = 0, droppedByThird = 0, headRedraws = 0, headRaces = 0;
+const capturePayload = capture => JSON.stringify({
+  head: capture.head,
+  parts: capture.parts,
+  randomCalls: capture.randomCalls,
+  randomHookIntact: capture.randomHookIntact,
+});
+const captureRepeats = (original, replay) => (
+  original.randomHookIntact
+  && replay.randomHookIntact
+  && original.randomCalls >= 0
+  && replay.randomCalls === original.randomCalls
+  && capturePayload(replay) === capturePayload(original)
+);
 for (const route of unique) {
   const url = `http://127.0.0.1:${PORT}${route}`;
   if (done > 0 && done % 25 === 0) await freshPage();
@@ -705,6 +821,55 @@ for (const route of unique) {
     }
     const lostToSecond = first.length - afterSecond.length;
     const lostToThird = afterSecond.length - keep.length;
+    if (CONTROL === 'random-replay') {
+      const planted = samples.map(sample => sample.parts.filter(part => part.s.includes('__DUKB_RANDOM_REPLAY_CONTROL__')));
+      const keptControl = keep.filter(part => part.s.includes('__DUKB_RANDOM_REPLAY_CONTROL__'));
+      const labels = planted.map(parts => parts[0]?.s);
+      if (planted.some(parts => parts.length !== 1) || new Set(labels).size !== 1 || !labels[0]?.includes('CONTROL__B') || keptControl.length !== 1) {
+        throw new Error(`random-replay control did not survive the raw intersection exactly once: captured ${planted.map(parts => parts.length).join(',')}, labels ${new Set(labels).size}, kept ${keptControl.length}`);
+      }
+    }
+
+    const brokenAudit = samples.findIndex(sample => !sample.randomHookIntact || sample.randomCalls < 0);
+    if (brokenAudit !== -1) {
+      failed += 1;
+      console.error(`   NOT WRITTEN ${route}: random audit missing or replaced on day ${SAMPLE_DAYS[brokenAudit]}`);
+      continue;
+    }
+    if (samples.some(sample => sample.randomCalls > 0)) {
+      const replays = [];
+      for (let s = 0; s < SAMPLE_DAYS.length; s += 1) replays.push(await draw(s, route, url, true));
+      const mismatchedReplay = samples.findIndex((sample, s) => !captureRepeats(sample, replays[s]));
+      if (mismatchedReplay !== -1) {
+        if (CONTROL === 'random-replay') {
+          const original = samples[mismatchedReplay];
+          const replay = replays[mismatchedReplay];
+          const withoutControl = capture => JSON.stringify({
+            head: capture.head,
+            parts: capture.parts.filter(part => !part.s.includes('__DUKB_RANDOM_REPLAY_CONTROL__')),
+            randomCalls: capture.randomCalls,
+            randomHookIntact: capture.randomHookIntact,
+          });
+          if (!original.randomHookIntact || !replay.randomHookIntact || original.randomCalls !== replay.randomCalls) {
+            throw new Error(`random-replay control changed the audit instead of only the captured text: calls ${original.randomCalls}/${replay.randomCalls}`);
+          }
+          if (withoutControl(original) !== withoutControl(replay) || capturePayload(original) === capturePayload(replay)) {
+            throw new Error('random-replay control did not isolate one captured-text change');
+          }
+          randomReplayRefusals += 1;
+          console.log(`   expected refusal ${route}: day ${SAMPLE_DAYS[mismatchedReplay]} changed on its fixed-seed replay`);
+          continue;
+        }
+        failed += 1;
+        const original = samples[mismatchedReplay];
+        const replay = replays[mismatchedReplay];
+        console.error(`   NOT WRITTEN ${route}: day ${SAMPLE_DAYS[mismatchedReplay]} did not repeat with the fixed random seed (calls ${original.randomCalls}/${replay.randomCalls}, hooks ${original.randomHookIntact}/${replay.randomHookIntact})`);
+        continue;
+      }
+    }
+    if (CONTROL === 'random-replay') {
+      throw new Error('random-replay control reached the write path instead of being refused');
+    }
     if (lostToSecond + lostToThird > 0) {
       volatileRoutes += 1;
       droppedBySecond += lostToSecond;
@@ -712,7 +877,7 @@ for (const route of unique) {
       const kept = new Set(keep.map(p => p.s));
       const gone = first.filter(p => !kept.has(p.s));
       const show = gone.slice(0, 2).map(p => JSON.stringify(p.s.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
-      console.log(`   ${route}: ${gone.length} block(s) change with the date and were left out: ${show}`);
+      console.log(`   ${route}: ${gone.length} block(s) change with the clock and were left out: ${show}`);
     }
     /* runs of site chrome are wrapped so the sitemap can look past them */
     const lines = [];
@@ -754,13 +919,12 @@ for (const route of unique) {
          purpose rather than left unset, so a future reset that adds padding
          cannot bring this back. */
       '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>',
-      /* Round 314: the calm boot, baked in for future prerenders. The build
-         plugin injects the same pair into existing snapshots (vite.config.ts),
-         so the rule holds whether a snapshot is old or new; a duplicate of an
-         identical rule is harmless. Cap and dim until React mounts, noscript
-         lifts it for a browser that never will. */
-      '<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>',
-      '<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>',
+      /* Round 422: keep the crawler copy in the document without painting it
+         for a JavaScript visitor. The capability marker is copied from the
+         template head above. This rule reserves one viewport until React
+         replaces #root, and noscript restores the complete visible page. */
+      '<style data-dukb-first-paint>.dukb-js #dukb-snapshot{visibility:hidden;height:100vh;max-height:100vh;overflow:hidden;opacity:0;box-sizing:border-box}</style>',
+      '<noscript><style data-dukb-no-js-copy>#dukb-snapshot{visibility:visible;height:auto;max-height:none;overflow:visible;opacity:1}</style></noscript>',
       '<script src="/prerender-boot.js" defer></script>',
       '</head>',
       '<body>',
@@ -830,7 +994,15 @@ await browser.close();
 server.close();
 
 console.log(`prerendered ${written} routes, ${failed} failed${refused ? `, ${refused} hidden routes refused because they need an account` : ''}`);
-console.log(`clock samples at ${SAMPLE_DAYS.join(', ')} days: ${volatileRoutes} route(s) carried date dependent blocks, ${droppedBySecond} removed by the second sample, ${droppedByThird} more by the third`);
+console.log(`stability samples at ${SAMPLE_DAYS.join(', ')} days: ${volatileRoutes} route(s) carried clock dependent blocks, ${droppedBySecond} removed by the second sample, ${droppedByThird} more by the third`);
 if (headRedraws) console.log(`${headRedraws} route(s) needed a redraw because their heads disagreed the first time`);
 if (headRaces) console.log(`${headRaces} of those were a sample capturing before Helmet had finished, so the fullest head was used`);
+if (CONTROL === 'random-replay') {
+  if (unique.length === 1 && randomReplayRefusals === 1 && failed === 0 && written === 0) {
+    console.log('prerender random-replay control: green. The categorical collision survived the raw intersection, and the independent fixed-seed replay refused it before writing output.');
+    process.exit(0);
+  }
+  console.error(`prerender random-replay control: RED. Expected one scoped route, one replay refusal and no writes or failures; saw ${unique.length}, ${randomReplayRefusals}, ${written}, ${failed}.`);
+  process.exit(1);
+}
 if (failed > 0) process.exit(1);

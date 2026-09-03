@@ -1,0 +1,371 @@
+{
+  "auditDate": "2026-09-02",
+  "gameTimezone": "America/New_York",
+  "records": [
+    {
+      "name": "Abdukodir Khusanov", "nationality": "Uzbekistan", "position": "Centre-Back", "dob": "2004-02-29",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.mancity.com/news/mens/abdukodir-khusanov-background-piece-factfile-63872983", "https://www.premierleague.com/en/players/578153/abdukodir-khusanov/matches"]
+    },
+    {
+      "name": "Habib Diarra", "nationality": "Senegal", "position": "Central Midfield", "dob": "2004-01-03",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/547027/habib-diarra/overview", "https://www.fff.fr/equipe-nationale/joueur/9845-diarra-habib/fiche.html"]
+    },
+    {
+      "name": "Yegor Yarmolyuk", "nationality": "Ukraine", "position": "Central Midfield", "dob": "2004-03-01",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/601975/yegor-yarmolyuk/overview", "https://www.uefa.com/under21/teams/players/250150909--yehor-yarmoliuk/"]
+    },
+    {
+      "name": "Gonzalo García", "nationality": "Spain", "position": "Centre-Forward", "dob": "2004-03-24",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.realmadrid.com/en-US/football/first-team/players/gonzalo-garcia-torres", "https://www.laliga.com/jugador/gonzalo-garcia-1"]
+    },
+    {
+      "name": "Savinho", "nationality": "Brazil", "position": "Left Winger", "dob": "2004-04-10",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/510281/savio-moreira-de-oliveira/overview", "https://www.cbf.com.br/futebol-brasileiro/atletas/copa-do-brasil/profissional/2021/620423"]
+    },
+    {
+      "name": "Joel Ordóñez", "nationality": "Ecuador", "position": "Centre-Back", "dob": "2004-04-21",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.clubbrugge.be/en/teams/a-kern/players/joel-ord%C3%B3%C3%B1ez?competition=&season=2024-2024", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefachampionsleague/2026/match/2046019/printmatchpresskits/"]
+    },
+    {
+      "name": "Johan Bakayoko", "nationality": "Belgium", "position": "Right Winger", "dob": "2003-04-20",
+      "snapshotAge": 21, "snapshotYear": 2025, "ageOnAuditDate": 23, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.bundesliga.com/de/spieler/johan-bakayoko", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefaeuropaleague/2023/match/2035962/printmatchpresskits/"]
+    },
+    {
+      "name": "Andrey Santos", "nationality": "Brazil", "position": "Central Midfield", "dob": "2004-05-03",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.cbf.com.br/futebol-brasileiro/atletas/copa-do-brasil/sub-20/2020/611858", "https://www.premierleague.com/en/players/532605/andrey-nascimento-dos-santos/overview"]
+    },
+    {
+      "name": "Samu Aghehowa", "nationality": "Spain", "position": "Centre-Forward", "dob": "2004-05-05",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.fcporto.pt/en/football/fcporto/player/samu-aghehowa", "https://rfef.es/es/selecciones/jugadores/samu-sub-19"]
+    },
+    {
+      "name": "Bilal El Khannouss", "nationality": "Morocco", "position": "Attacking Midfield", "dob": "2004-05-10",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.vfb.de/en/1893/team/squad/seasons/2026-2027/team-list/?data=&mobile=", "https://www.bundesliga.com/en/player/bilal-el-khannouss/"]
+    },
+    {
+      "name": "Cristhian Mosquera", "nationality": "Spain", "position": "Centre-Back", "dob": "2004-06-27",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/500040/", "https://rfef.es/es/selecciones/jugadores/cristhian-mosquera-sub-21"]
+    },
+    {
+      "name": "Hugo Larsson", "nationality": "Sweden", "position": "Central Midfield", "dob": "2004-06-27",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.bundesliga.com/en/player/hugo-larsson", "https://www.uefa.com/european-qualifiers/teams/players/250164502--hugo-larsson/"]
+    },
+    {
+      "name": "Alejandro Garnacho", "nationality": "Argentina", "position": "Left Winger", "dob": "2004-07-01",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/493105/alejandro-garnacho/career", "https://es.uefa.com/uefasupercup/clubs/players/250135496--alejandro-garnacho/"]
+    },
+    {
+      "name": "Mateus Fernandes", "nationality": "Portugal", "position": "Central Midfield", "dob": "2004-07-10",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/551226/mateus-goncalo-espanha-fernandes/overview", "https://www.fpf.pt/pt/Jogadores/Jogador/playerId/923642/contextId/176"]
+    },
+    {
+      "name": "Michael Kayode", "nationality": "Italy", "position": "Right-Back", "dob": "2004-07-10",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/607464/michael-kayode/matches", "https://pt.uefa.com/under21/teams/players/250178834--michael-kayode/"]
+    },
+    {
+      "name": "Yankuba Minteh", "nationality": "The Gambia", "position": "Right Winger", "dob": "2004-07-22",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/592031/yankuba-minteh/overview", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefaeuropaleague/2024/match/2039942/"]
+    },
+    {
+      "name": "Valentín Barco", "nationality": "Argentina", "position": "Central Midfield", "dob": "2004-07-23",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://sevillafc.es/en/actualidad/noticias/cesion-valentin-barco-sevilla-fc-2425", "https://cdn.conmebol.com/wp-content/uploads/2023/11/GET-Mundial-SUB-20-Argentina-2.023-INGLES-Digital.pdf"]
+    },
+    {
+      "name": "Gavi", "nationality": "Spain", "position": "Central Midfield", "dob": "2004-08-05",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.fcbarcelona.com/en/football/first-team/news/2284537/present-and-future-gavi", "https://rfef.es/es/selecciones/jugadores/gavi-ficha-absoluta"]
+    },
+    {
+      "name": "Jamie Gittens", "nationality": "England", "position": "Left Winger", "dob": "2004-08-08",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 22, "status": "crossed-out-of-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/463936/jamie-gittens/matches", "https://www.chelseafc.com/en/news/article/everything-you-need-to-know-about-jamie-gittens"]
+    },
+    {
+      "name": "João Neves", "nationality": "Portugal", "position": "Central Midfield", "dob": "2004-09-27",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.psg.fr/en/players/joao-neves", "https://www.uefa.com/european-qualifiers/teams/players/250164991--joao-neves/"]
+    },
+    {
+      "name": "Nico Paz", "nationality": "Argentina", "position": "Attacking Midfield", "dob": "2004-09-08",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://comofootball.com/en/paz-bursting-onto-the-world-stage-with-como-1907/", "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026/articles/jovenes-talentos-de-la-copa-mundial-nico-paz-argentina"]
+    },
+    {
+      "name": "Lewis Hall", "nationality": "England", "position": "Left-Back", "dob": "2004-09-08",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/487838/lewis-hall/overview", "https://www.uefa.com/under21/teams/players/250139204--lewis-hall/"]
+    },
+    {
+      "name": "Patrick Dorgu", "nationality": "Denmark", "position": "Left-Back", "dob": "2004-10-26",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/596777/patrick-dorgu/matches", "https://www.uefa.com/european-qualifiers/teams/players/250178823--patrick-dorgu/"]
+    },
+    {
+      "name": "Santiago Castro", "nationality": "Argentina", "position": "Centre-Forward", "dob": "2004-09-18",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.afa.com.ar/referees/posts/la-numeracion-de-nuestros-protagonistas-sudamericanos", "https://www.bolognafc.it/rossoblu/castro-santiago/"]
+    },
+    {
+      "name": "Rico Lewis", "nationality": "England", "position": "Right-Back", "dob": "2004-11-21",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/477064/rico-lewis/matches", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefanationsleague/2025/match/2040103/"]
+    },
+    {
+      "name": "Noah Sadiki", "nationality": "DR Congo", "position": "Central Midfield", "dob": "2004-12-17",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/577669/noah-sadiki/overview", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefaeuropaleague/2025/match/2042199/"]
+    },
+    {
+      "name": "Evan Ferguson", "nationality": "Ireland", "position": "Centre-Forward", "dob": "2004-10-19",
+      "snapshotAge": 21, "snapshotYear": 2026, "ageOnAuditDate": 21, "status": "still-age-21-under",
+      "sources": ["https://www.premierleague.com/en/players/487117/evan-ferguson/matches", "https://www.uefa.com/european-qualifiers/teams/players/250130793--evan-ferguson/"]
+    },
+    {
+      "name": "Brais Méndez", "nationality": "Spain", "position": "Attacking Midfield", "dob": "1997-01-07",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.laliga.com/en-GB/player/brais-mendez", "https://rfef.es/es/selecciones/jugadores/brais-mendez-0"]
+    },
+    {
+      "name": "Luis Díaz", "nationality": "Colombia", "position": "Left Winger", "dob": "1997-01-13",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://fcbayern.com/en/teams/first-team/luis-diaz", "https://www.bundesliga.com/en/player/luis-diaz/"]
+    },
+    {
+      "name": "Pau Torres", "nationality": "Spain", "position": "Centre-Back", "dob": "1997-01-16",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/244954/pau-torres/overview", "https://rfef.es/es/selecciones/jugadores/pau-torres"]
+    },
+    {
+      "name": "Nicolò Barella", "nationality": "Italy", "position": "Central Midfield", "dob": "1997-02-07",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.inter.it/en/teams/first-team/player/nicolo-barella", "https://www.uefa.com/european-qualifiers/teams/players/250066739--nicolo-barella/"]
+    },
+    {
+      "name": "Pepê", "nationality": "Brazil", "position": "Right Winger", "dob": "1997-02-24",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.ligaportugal.pt/backoffice/assets/FC_Porto_AFS_Jornada_16_7ca9001008.pdf", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefaeuropaleague/2025/match/2042082/printMatchPressKits"]
+    },
+    {
+      "name": "David Neres", "nationality": "Brazil", "position": "Right Winger", "dob": "1997-03-03",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://sscnapoli.it/en/auguri-a-neres/", "https://english.ajax.nl/archive/ajax-extends-neres-contract-until-mid-2023/"]
+    },
+    {
+      "name": "Bremer", "nationality": "Brazil", "position": "Centre-Back", "dob": "1997-03-18",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.juventus.com/en/teams/first-team-men/squad/gleison-bremer?appview=true", "https://www.cbf.com.br/futebol-brasileiro/atletas/campeonato-brasileiro/serie-c/2017/500272"]
+    },
+    {
+      "name": "Gabriel Jesus", "nationality": "Brazil", "position": "Centre-Forward", "dob": "1997-04-03",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/205651/gabriel-jesus/overview", "https://www.cbf.com.br/futebol-brasileiro/atletas/campeonato-brasileiro/serie-c/2015/431525"]
+    },
+    {
+      "name": "Mikel Oyarzabal", "nationality": "Spain", "position": "Centre-Forward", "dob": "1997-04-21",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.laliga.com/jugador/oyarzabal", "https://rfef.es/es/selecciones/jugadores/mikel-oyarzabal"]
+    },
+    {
+      "name": "Youri Tielemans", "nationality": "Belgium", "position": "Central Midfield", "dob": "1997-05-07",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/166989/youri-tielemans/matches", "https://www.uefa.com/european-qualifiers/teams/players/250064006--youri-tielemans/"]
+    },
+    {
+      "name": "Richarlison", "nationality": "Brazil", "position": "Centre-Forward", "dob": "1997-05-10",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/212319/richarlison/overview", "https://www.cob.org.br/time-brasil/medalhistas-olimpicos/richarlison-de-andrade"]
+    },
+    {
+      "name": "Frenkie de Jong", "nationality": "Netherlands", "position": "Central Midfield", "dob": "1997-05-12",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://players.fcbarcelona.com/en/player/2745-de-jong-frenkie-jong", "https://www.uefa.com/european-qualifiers/teams/players/50327423--frenkie-de-jong/"]
+    },
+    {
+      "name": "Rúben Dias", "nationality": "Portugal", "position": "Centre-Back", "dob": "1997-05-14",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/171314/r%C3%BAben-dias/overview", "https://www.uefa.com/european-qualifiers/teams/players/250058220--ruben-dias/"]
+    },
+    {
+      "name": "Ousmane Dembélé", "nationality": "France", "position": "Centre-Forward", "dob": "1997-05-15",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.psg.fr/en/players/ousmane-dembele", "https://www.fff.fr/equipe-nationale/joueur/8736-dembele-ousmane/fiche.html"]
+    },
+    {
+      "name": "Kaoru Mitoma", "nationality": "Japan", "position": "Left Winger", "dob": "1997-05-20",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.jfa.jp/eng/national_team/u24_2021/member/MITOMA_Kaoru.html", "https://www.premierleague.com/en/players/451340/kaoru-mitoma/matches"]
+    },
+    {
+      "name": "Maximilian Kilman", "nationality": "England", "position": "Centre-Back", "dob": "1997-05-23",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/214048/maximilian-kilman/overview", "https://www.thefa.com/news/2018/sep/25/max-kilman-futsal-strategy-240918"]
+    },
+    {
+      "name": "Konrad Laimer", "nationality": "Austria", "position": "Right-Back", "dob": "1997-05-27",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://app.fcbayern.com/de/teams/profis/konrad-laimer", "https://www.bundesliga.com/de/spieler/konrad-laimer"]
+    },
+    {
+      "name": "Unai Simón", "nationality": "Spain", "position": "Goalkeeper", "dob": "1997-06-11",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.athletic-club.eus/en/players/unai-simon-mendibil/", "https://www.laliga.com/en-US/player/unai-simon"]
+    },
+    {
+      "name": "Albert Gudmundsson", "nationality": "Iceland", "position": "Second Striker", "dob": "1997-06-15",
+      "snapshotAge": 27, "snapshotYear": 2025, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.uefa.com/european-qualifiers/teams/players/250055351--albert-gudmundsson/", "https://img.legaseriea.it/vimages/67cdc325/2024-25_A_UNICO_UNI_28_NAPFIO_ENG.pdf"]
+    },
+    {
+      "name": "Artem Dovbyk", "nationality": "Ukraine", "position": "Centre-Forward", "dob": "1997-06-21",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://uaf.ua/en/teams/ukraine-national-team/dovbyk-artem", "https://www.laliga.com/en-US/player/artem-dovbyk"]
+    },
+    {
+      "name": "Jean-Philippe Mateta", "nationality": "France", "position": "Centre-Forward", "dob": "1997-06-28",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/231747/jean-philippe-mateta/career", "https://www.fff.fr/equipe-nationale/joueur/8984-mateta-jean-philippe/fiche.html"]
+    },
+    {
+      "name": "Marcus Thuram", "nationality": "France", "position": "Centre-Forward", "dob": "1997-08-06",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.fff.fr/equipe-nationale/joueur/8889-thuram-marcus/fiche.html", "https://www.inter.it/en/teams/first-team/player/marcus-thuram"]
+    },
+    {
+      "name": "Antonee Robinson", "nationality": "United States", "position": "Left-Back", "dob": "1997-08-08",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.ussoccer.com/players/r/antonee-robinson", "https://www.premierleague.com/en/players/169528/antonee-robinson/matches"]
+    },
+    {
+      "name": "Leon Bailey", "nationality": "Jamaica", "position": "Right Winger", "dob": "1997-08-09",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.premierleague.com/en/players/215711/leon-bailey/matches", "https://www.uefa.com/uefachampionsleague/news/0235-0e961beeb0c0-71d302bbb537-1000--the-lowdown-on-leverkusen-signing-leon-bailey/"]
+    },
+    {
+      "name": "Lautaro Martínez", "nationality": "Argentina", "position": "Centre-Forward", "dob": "1997-08-22",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.inter.it/en/teams/first-team/player/lautaro-martinez", "https://www.afa.com.ar/rus/posts/lautaro-martinez"]
+    },
+    {
+      "name": "Lucas Paquetá", "nationality": "Brazil", "position": "Attacking Midfield", "dob": "1997-08-27",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 29, "status": "crossed-into-age-29-plus",
+      "sources": ["https://www.cbf.com.br/futebol-brasileiro/atletas/campeonato-brasileiro/sub-20-b/2026/319635", "https://www.flamengo.com.br/noticias/futebol/de-volta-a-casa--paqueta-retorna-ao-mengao-para-continuar-sua-historia"]
+    },
+    {
+      "name": "Dominic Solanke", "nationality": "England", "position": "Centre-Forward", "dob": "1997-09-14",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/news/4079109", "https://www.uefa.com/MultimediaFiles/Download/Publications/uefaorg/General/02/38/86/29/2388629_DOWNLOAD.pdf"]
+    },
+    {
+      "name": "Tammy Abraham", "nationality": "England", "position": "Centre-Forward", "dob": "1997-10-02",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.thefa.com/england/mens-seniors/squad/tammy-abraham", "https://editorial.uefa.com/resources/0257-0de5a078f82a-eb14542af683-1000/uefa_european_under-21_championship_programme.pdf"]
+    },
+    {
+      "name": "Theo Hernández", "nationality": "France", "position": "Left-Back", "dob": "1997-10-06",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://alhilal.com/en/teams/mens-team/theo", "https://www.uefa.com/european-qualifiers/teams/players/250076126--theo-hernandez/"]
+    },
+    {
+      "name": "Ben White", "nationality": "England", "position": "Right-Back", "dob": "1997-10-08",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/198869/ben-white/career", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefachampionsleague/2026/match/2045964/printMatchPressKits"]
+    },
+    {
+      "name": "Nikola Milenković", "nationality": "Serbia", "position": "Centre-Back", "dob": "1997-10-12",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/227444/nikola-milenkovic/overview", "https://www.uefa.com/european-qualifiers/teams/players/250097040--nikola-milenkovic/"]
+    },
+    {
+      "name": "Ademola Lookman", "nationality": "Nigeria", "position": "Left Winger", "dob": "1997-10-20",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://en.atalanta.it/news/happy-birthday-to-ademola-lookman", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefachampionsleague/2025/match/2041988"]
+    },
+    {
+      "name": "Ezri Konsa", "nationality": "England", "position": "Centre-Back", "dob": "1997-10-23",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/199798/konsa/overview", "https://www.uefa.com/european-qualifiers/teams/players/250123068--ezri-konsa/"]
+    },
+    {
+      "name": "Federico Chiesa", "nationality": "Italy", "position": "Right Winger", "dob": "1997-10-25",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.liverpoolfc.com/team/mens/player/federico-chiesa", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/european-qualifiers/2024/match/2036318/printmatchpresskits/"]
+    },
+    {
+      "name": "Marcus Rashford", "nationality": "England", "position": "Left Winger", "dob": "1997-10-31",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.fcbarcelona.com/en/football/first-team/players/13565/marcus-rashford", "https://www.uefa.com/european-qualifiers/teams/players/250088246--marcus-rashford/"]
+    },
+    {
+      "name": "Federico Dimarco", "nationality": "Italy", "position": "Left-Back", "dob": "1997-11-10",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.inter.it/en/teams/first-team/player/federico-dimarco", "https://www.uefa.com/european-qualifiers/teams/players/250056189--federico-dimarco/"]
+    },
+    {
+      "name": "Christopher Nkunku", "nationality": "France", "position": "Centre-Forward", "dob": "1997-11-14",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.fff.fr/equipe-nationale/joueur/8831-nkunku-christopher/fiche.html", "https://www.uefa.com/european-qualifiers/teams/players/250076654--christopher-nkunku/"]
+    },
+    {
+      "name": "Noussair Mazraoui", "nationality": "Morocco", "position": "Right-Back", "dob": "1997-11-14",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/230001/noussair-mazraoui/video", "https://www.manutd.com/en/teams/mens-team/noussair-mazraoui"]
+    },
+    {
+      "name": "Viktor Tsygankov", "nationality": "Ukraine", "position": "Right Winger", "dob": "1997-11-15",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://uaf.ua/en/teams/ukraine-national-team/tsygankov-viktor", "https://www.uefa.com/european-qualifiers/teams/players/250058270--viktor-tsygankov/"]
+    },
+    {
+      "name": "Bruno Guimarães", "nationality": "Brazil", "position": "Central Midfield", "dob": "1997-11-16",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/208706/bruno-guimaraes-rodriguez-moura/overview", "https://library.olympics.com/digitalCollection/DigitalCollectionAttachmentDownloadHandler.ashx?documentId=849121&parentDocumentId=849101&skipCopyright=true&skipWatermark=true"]
+    },
+    {
+      "name": "Gregor Kobel", "nationality": "Switzerland", "position": "Goalkeeper", "dob": "1997-12-06",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.bvb.de/de/en/teams/football/player/gregor-kobel.html", "https://www.uefa.com/european-qualifiers/teams/players/250069832--gregor-kobel/"]
+    },
+    {
+      "name": "Harvey Barnes", "nationality": "England", "position": "Left Winger", "dob": "1997-12-09",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/201666/harvey-barnes/matches", "https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefachampionsleague/2024/match/2039175/"]
+    },
+    {
+      "name": "Dávid Hancko", "nationality": "Slovakia", "position": "Centre-Back", "dob": "1997-12-13",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://en.atleticodemadrid.com/jugadores/david-hancko-2025-2026-2", "https://www.uefa.com/european-qualifiers/teams/players/250092668--david-hancko/"]
+    },
+    {
+      "name": "Gabriel", "nationality": "Brazil", "position": "Centre-Back", "dob": "1997-12-19",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/226597/gabriel-magalhaes/overview", "https://www.cbf.com.br/futebol-brasileiro/atletas/copa-do-brasil/masculino/2016/418797"]
+    },
+    {
+      "name": "Fikayo Tomori", "nationality": "England", "position": "Centre-Back", "dob": "1997-12-19",
+      "snapshotAge": 28, "snapshotYear": 2026, "ageOnAuditDate": 28, "status": "still-under-age-29",
+      "sources": ["https://www.premierleague.com/en/players/194794/fikayo-tomori/career", "https://www.acmilan.com/it/squadre/prima-squadra-maschile/giocatori/fikayo-tomori"]
+    },
+    {
+      "name": "Diogo Jota", "nationality": "Portugal", "position": "Left Winger", "dob": "1996-12-04",
+      "snapshotAge": 28, "snapshotYear": 2025, "ageOnAuditDate": null, "status": "excluded-deceased",
+      "sources": ["https://www.liverpoolfc.com/team/mens/player/diogo-jota?ya_src=serp300", "https://www.liverpoolfc.com/news/diogo-jota-1996-2025", "https://www.fpf.pt/pt/News/Todas-as-not%C3%ADcias/Not%C3%ADcia/news/52187"]
+    }
+  ]
+}

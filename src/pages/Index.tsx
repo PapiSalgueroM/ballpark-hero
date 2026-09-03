@@ -12,13 +12,14 @@ import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { SPORT_HUBS } from '@/lib/sportHub';
 
 /** Round 270: the hub that gathers this category, or null when it has none. */
 const hubForCategory = (title: CategoryTitle) =>
   SPORT_HUBS.find(h => h.titles.includes(title)) ?? null;
-import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getLocalTodayCount } from '@/lib/completions';
+import { usePlayerName } from '@/hooks/usePlayerName';
 
 /**
  * Home search (item #15 audit pass).
@@ -181,40 +182,30 @@ function getPopularFallbackGames(): GameDef[] {
     .filter((g): g is GameDef => !!g);
 }
 
-function countPlayedGames(): number {
-  const today = new Date().toISOString().slice(0, 10);
-  let count = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      try {
-        const val = localStorage.getItem(key);
-        if (val) {
-          const parsed = JSON.parse(val);
-          if (parsed.status && parsed.status !== 'playing') count++;
-        }
-      } catch { /* not a game key */ }
-    }
-  }
-  return count;
-}
-
 export default function Index() {
   const { user, profile } = useAuth();
   // Owner (2026-08-05): the hero shows a CONSECUTIVE-day streak (not total
   // days visited), games played TODAY (not lifetime), and world rank, and all
   // of it only for signed-in players. Guests get a sign-up nudge instead.
   const { globalCurrentStreak } = useStreaks();
-  const [playedCount, setPlayedCount] = useState(0);
   const [gamesToday, setGamesToday] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
+  const [personalStatsIdentity, setPersonalStatsIdentity] = useState<string | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
-  const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
+  const playerName = usePlayerName(profile, user?.id ?? 'guest');
+  const currentStatsIdentity = playerName ? `${user?.id ?? 'guest'}:${playerName}` : null;
+  const visibleGamesToday = personalStatsIdentity === currentStatsIdentity
+    ? gamesToday
+    : getLocalTodayCount();
+  const visibleWorldRank = personalStatsIdentity === currentStatsIdentity ? worldRank : null;
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
+  const [bestScoresIdentity, setBestScoresIdentity] = useState<string | null>(null);
+  const currentBestScoresIdentity = user?.id ?? null;
+  const visibleBestScores = bestScoresIdentity === currentBestScoresIdentity ? bestScores : {};
   const isSearching = searchQuery.trim().length > 0;
 
   // Index built once (registry is static at runtime), scoring re-run only
@@ -226,23 +217,23 @@ export default function Index() {
   );
 
   useEffect(() => {
-    setPlayedCount(countPlayedGames());
     setGamesToday(getLocalTodayCount());
   }, []);
 
-  // Lifetime hero stats: distinct games ever completed under this handle
-  // (server truth from game_completions, floored by the local count so the
-  // chip never regresses while an insert is in flight) + all-time world rank
-  // from the same global_rank RPC the leaderboard's "Your world rank" uses.
+  // Personal hero stats: games completed today under this handle, floored by
+  // the local count so the chip never regresses while an insert is in flight,
+  // plus the all-time world rank used by the leaderboard.
   useEffect(() => {
+    const localGames = getLocalTodayCount();
+    setGamesToday(localGames);
+    setWorldRank(null);
+    setPersonalStatsIdentity(currentStatsIdentity);
+    if (!playerName || !currentStatsIdentity) return;
     let cancelled = false;
     const load = async () => {
       try {
         const todayUtc = new Date().toISOString().split('T')[0];
-        const [playedRes, rankRes, todayRes] = await Promise.all([
-          (supabase.from as any)('game_completions')
-            .select('game')
-            .eq('player_name', playerName),
+        const [rankRes, todayRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
             p_player: playerName,
             p_period: 'alltime',
@@ -259,19 +250,7 @@ export default function Index() {
           const distinctToday = new Set(
             (todayRes.data as Array<{ game: string }>).map(r => r.game)
           ).size;
-          setGamesToday(prev => Math.max(prev, distinctToday));
-        }
-
-        if (playedRes?.data) {
-          // Only count games that still exist on the site, so the chip can
-          // never read 40/38 after a game is retired.
-          const liveSlugs = new Set(ALL_GAMES.map(g => g.path.replace(/^\//, '')));
-          const distinct = new Set(
-            (playedRes.data as Array<{ game: string }>)
-              .map(r => r.game)
-              .filter(g => liveSlugs.has(g))
-          ).size;
-          setPlayedCount(prev => Math.min(TOTAL_GAMES, Math.max(prev, distinct)));
+          setGamesToday(Math.max(getLocalTodayCount(), distinctToday));
         }
 
         const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
@@ -281,7 +260,7 @@ export default function Index() {
     };
     load();
     return () => { cancelled = true; };
-  }, [playerName]);
+  }, [currentStatsIdentity, playerName]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -311,14 +290,18 @@ export default function Index() {
 
   // Fetch user best scores
   useEffect(() => {
-    if (!user) { setBestScores({}); return; }
+    const userId = user?.id ?? null;
+    setBestScores({});
+    setBestScoresIdentity(userId);
+    if (!userId) return;
+    let cancelled = false;
     const fetchBest = async () => {
       try {
         const { data } = await supabase
           .from('user_best_scores')
           .select('game_type, best_score')
-          .eq('user_id', user.id);
-        if (data) {
+          .eq('user_id', userId);
+        if (!cancelled && data) {
           const map: Record<string, number> = {};
           data.forEach(r => { map[r.game_type] = r.best_score; });
           setBestScores(map);
@@ -326,7 +309,8 @@ export default function Index() {
       } catch { /* silent */ }
     };
     fetchBest();
-  }, [user]);
+    return () => { cancelled = true; };
+  }, [user?.id]);
 
   return (
     <>
@@ -391,9 +375,10 @@ export default function Index() {
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
                 Streak = consecutive days, played = today's count, plus world
-                rank. Guests see a sign-up nudge because none of it saves
-                without an account. Site-wide traffic numbers still must
-                never render publicly (owner 2026-07-10). */}
+                rank. Guests keep a local streak and leaderboard handle. An
+                account keeps that identity and backs it up across devices.
+                Site-wide traffic numbers still must never render publicly
+                (owner 2026-07-10). */}
             {user ? (
               <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
                 <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -408,12 +393,12 @@ export default function Index() {
                 </div>
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                  <span>Played today: <strong className="text-foreground">{gamesToday}</strong></span>
+                  <span>Played today: <strong className="text-foreground">{visibleGamesToday}</strong></span>
                 </div>
-                {worldRank !== null && (
+                {visibleWorldRank !== null && (
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <Globe className="w-4 h-4 text-primary" />
-                    <span>World rank <strong className="text-foreground">#{worldRank.toLocaleString()}</strong></span>
+                    <span>World rank <strong className="text-foreground">#{visibleWorldRank.toLocaleString()}</strong></span>
                   </div>
                 )}
               </div>
@@ -437,7 +422,7 @@ export default function Index() {
                 >
                   Make a free one
                 </button>{' '}
-                and your streak, points and world rank start counting.
+                to keep your leaderboard name and save your streaks across devices.
               </p>
             )}
             <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
@@ -488,7 +473,7 @@ export default function Index() {
             filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredGames.map(game => (
-                  <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
+                  <GameCard key={game.path} game={game} bestScore={visibleBestScores[game.path.slice(1)]} />
                 ))}
               </div>
             ) : (
@@ -501,7 +486,7 @@ export default function Index() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
                   {getPopularFallbackGames().map(game => (
-                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
+                    <GameCard key={game.path} game={game} bestScore={visibleBestScores[game.path.slice(1)]} />
                   ))}
                 </div>
               </div>
@@ -524,7 +509,7 @@ export default function Index() {
                 <RevealSection>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {FEATURED_GAMES.map((game, i) => (
-                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                      <GameCard key={game.path} game={game} bestScore={visibleBestScores[game.path.slice(1)]} revealIndex={i} />
                     ))}
                   </div>
                 </RevealSection>
@@ -560,7 +545,7 @@ export default function Index() {
                   <RevealSection>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {cat.games.map((game, i) => (
-                        <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                        <GameCard key={game.path} game={game} bestScore={visibleBestScores[game.path.slice(1)]} revealIndex={i} />
                       ))}
                     </div>
                   </RevealSection>

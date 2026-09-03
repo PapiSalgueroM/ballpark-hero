@@ -40,6 +40,7 @@
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { JSDOM } from 'jsdom';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -123,52 +124,131 @@ for (const [route, html] of stubs) {
 }
 console.log(`   ${stubs.length} signposts, ${stubTags} touched`);
 
-/* ── 6: the calm boot (Round 314) ─────────────────────────────────────────
-   The moment before React mounts used to show the snapshot's whole crawler
-   copy as a wall of raw text, filmed by the owner on 2026-08-28. Every
-   shipped snapshot must cap and dim #dukb-snapshot to one screenful AND
-   carry the noscript that lifts the cap for a browser that will never boot
-   the app. The home page gets the same pair for #dukb-home-copy in the
-   template. Both halves are required: the cap without the noscript hides
-   content from no-JS readers, the noscript without the cap does nothing.
-   NEGATIVE CONTROL: SNAP_CONTROL=flash strips the pair from one page in
-   memory and this section must go red. */
-console.log('6) the calm boot: one dimmed screenful before React, the whole page without JS');
+/* ── 6: the invisible handoff (Round 422) ─────────────────────────────────
+   The dimmed crawler copy still looked like a broken page. Every shipped
+   document now needs all three pieces: an early JavaScript capability marker,
+   a marker-scoped rule that hides exactly one viewport, and a noscript rule
+   that restores the complete visible document. The copy itself stays in the
+   DOM for crawlers in both cases.
+
+   NEGATIVE CONTROLS: SNAP_CONTROL=flash strips the marker,
+   SNAP_CONTROL=recovery removes its failure fallback, SNAP_CONTROL=paint
+   makes the JavaScript handoff visible, and SNAP_CONTROL=nojs hides the
+   no-JavaScript copy. SNAP_CONTROL=wrapper removes the element each rule is
+   meant to style. Each mutation is applied to one snapshot and the home page,
+   and both findings must be reported alone. */
+console.log('6) the invisible handoff: hidden for app boot, complete without JavaScript');
 {
   const CONTROL = process.env.SNAP_CONTROL || '';
-  if (CONTROL && CONTROL !== 'flash') { console.error(`SNAP_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
-  const capRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}/;
-  const liftRe = /<noscript><style>#dukb-snapshot\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>/;
-  let calm = 0;
-  let controlArmed = false;
+  if (CONTROL && !['flash', 'recovery', 'paint', 'nojs', 'wrapper'].includes(CONTROL)) { console.error(`SNAP_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+  const validMarker = code =>
+    /document\.documentElement\.classList\.add\((['"])dukb-js\1\)/.test(code) &&
+    /setTimeout\s*\(/.test(code) &&
+    /document\.querySelector\((['"])#dukb-home-copy,#dukb-snapshot\1\)/.test(code) &&
+    /document\.documentElement\.classList\.remove\((['"])dukb-js\1\)/.test(code) &&
+    /,\s*8000\s*\)/.test(code);
+  const hiddenRule = id => `.dukb-js #${id}{visibility:hidden;height:100vh;max-height:100vh;overflow:hidden;opacity:0;box-sizing:border-box}`;
+  const visibleRule = id => `#${id}{visibility:visible;height:auto;max-height:none;overflow:visible;opacity:1}`;
+  const parsedState = (html, id) => {
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+    const markers = [...document.head.querySelectorAll('script[data-dukb-js-capability]')];
+    const paints = [...document.head.querySelectorAll('style[data-dukb-first-paint]')];
+    const noJs = [...document.head.querySelectorAll('noscript style[data-dukb-no-js-copy]')];
+    const wrappers = [...document.body.querySelectorAll('[id]')].filter(element => element.id === id);
+    const state = {
+      marker: { count: markers.length, ok: markers.length === 1 && validMarker(markers[0].textContent || '') },
+      paint: { count: paints.length, ok: paints.length === 1 && (paints[0].textContent || '').includes(hiddenRule(id)) },
+      noJs: { count: noJs.length, ok: noJs.length === 1 && (noJs[0].textContent || '').includes(visibleRule(id)) },
+      wrapper: { count: wrappers.length, ok: wrappers.length === 1 },
+    };
+    dom.window.close();
+    return state;
+  };
+  const mutateControl = (html, id, label) => {
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+    if (CONTROL === 'wrapper') {
+      const wrapper = [...document.body.querySelectorAll('[id]')].find(element => element.id === id);
+      if (!wrapper) { console.error(`control found no #${id} wrapper in ${label}`); process.exit(1); }
+      wrapper.removeAttribute('id');
+      wrapper.setAttribute('data-removed-wrapper', 'true');
+      const changed = dom.serialize();
+      dom.window.close();
+      return changed;
+    }
+    if (CONTROL === 'flash') {
+      const marker = document.head.querySelector('script[data-dukb-js-capability]');
+      if (!marker) { console.error(`control found no capability marker in ${label}`); process.exit(1); }
+      marker.remove();
+    } else if (CONTROL === 'recovery') {
+      const from = "document.documentElement.classList.remove('dukb-js')";
+      const to = "document.documentElement.classList.contains('dukb-js')";
+      const marker = document.head.querySelector('script[data-dukb-js-capability]');
+      if (!marker || !(marker.textContent || '').includes(from)) { console.error(`control found no recovery action in ${label}`); process.exit(1); }
+      marker.textContent = (marker.textContent || '').replace(from, to);
+    } else if (CONTROL === 'paint') {
+      const from = hiddenRule(id);
+      const to = from.replace('visibility:hidden', 'visibility:visible');
+      const style = document.head.querySelector('style[data-dukb-first-paint]');
+      if (!style || !(style.textContent || '').includes(from)) { console.error(`control found no first-paint rule in ${label}`); process.exit(1); }
+      style.textContent = (style.textContent || '').replace(from, to);
+    } else if (CONTROL === 'nojs') {
+      const from = visibleRule(id);
+      const to = from.replace('visibility:visible', 'visibility:hidden');
+      const style = document.head.querySelector('noscript style[data-dukb-no-js-copy]');
+      if (!style || !(style.textContent || '').includes(from)) { console.error(`control found no no-JavaScript rule in ${label}`); process.exit(1); }
+      style.textContent = (style.textContent || '').replace(from, to);
+    }
+    const changed = dom.serialize();
+    dom.window.close();
+    if (changed === html) { console.error(`control changed nothing in ${label}`); process.exit(1); }
+    return changed;
+  };
+  const failuresBeforeSection = failures;
+  let ready = 0;
+  let controlArmed = 0;
   for (const [route, htmlIn] of snaps) {
     let html = htmlIn;
-    if (CONTROL === 'flash' && !controlArmed) {
-      if (!capRe.test(html)) { console.error(`control found nothing to strip on /${route}`); process.exit(1); }
-      html = html.replace(capRe, '');
-      controlArmed = true;
-      console.log(`   NEGATIVE CONTROL ON: the cap stripped from /${route} in memory, this section must go red`);
+    if (CONTROL && controlArmed === 0) {
+      html = mutateControl(html, 'dukb-snapshot', `/${route}`);
+      controlArmed += 1;
+      console.log(`   NEGATIVE CONTROL ON: ${CONTROL} mutation applied to /${route} in memory`);
     }
-    const hasCap = capRe.test(html);
-    const hasLift = liftRe.test(html);
-    if (hasCap && hasLift) { calm += 1; continue; }
-    if (!hasCap) fail(`/${route} ships without the boot cap, so the raw text wall is back on it`);
-    else fail(`/${route} caps the snapshot but lost the noscript lift, hiding content from no-JS readers`);
+    const { marker, paint, noJs, wrapper } = parsedState(html, 'dukb-snapshot');
+    if (marker.ok && paint.ok && noJs.ok && wrapper.ok) { ready += 1; continue; }
+    if (!marker.ok) fail(`/${route} has ${marker.count} working capability markers in its head, expected exactly one`);
+    if (!paint.ok) fail(`/${route} has ${paint.count} valid first-paint rules in its head, expected exactly one`);
+    if (!noJs.ok) fail(`/${route} has ${noJs.count} valid no-JavaScript rules in its head, expected exactly one`);
+    if (!wrapper.ok) fail(`/${route} has ${wrapper.count} #dukb-snapshot wrappers, expected exactly one so the handoff rules style real copy`);
   }
-  const home = readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  if (!/#dukb-home-copy\{max-height:100vh;overflow:hidden;opacity:\.45\}/.test(home)) {
-    fail('the built home page lost its #dukb-home-copy cap, the page he actually filmed');
+  let home = readFileSync(path.join(DIST, 'index.html'), 'utf8');
+  if (CONTROL) {
+    home = mutateControl(home, 'dukb-home-copy', 'the built home page');
+    controlArmed += 1;
   }
-  if (!/<noscript><style>#dukb-home-copy\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>/.test(home)) {
-    fail('the built home page lost the noscript lift for its static copy');
+  const { marker: homeMarker, paint: homePaint, noJs: homeNoJs, wrapper: homeWrapper } = parsedState(home, 'dukb-home-copy');
+  if (!homeMarker.ok) {
+    fail(`the built home page has ${homeMarker.count} working capability markers in its head, expected exactly one`);
   }
-  if (!/<div id="dukb-home-copy">/.test(home)) {
-    fail('the built home page has no #dukb-home-copy wrapper, so the cap styles nothing');
+  if (!homePaint.ok) {
+    fail(`the built home page has ${homePaint.count} valid first-paint rules in its head, expected exactly one`);
   }
-  console.log(`   ${calm} of ${snaps.length} shipped pages carry the calm boot, and the home template carries its own`);
-  if (CONTROL === 'flash') {
-    if (failures > 0) { console.log(`simSnapshotAssets control: green. The stripped cap was reported (${failures} finding).`); process.exit(0); }
-    console.error('simSnapshotAssets control: RED. A stripped cap went unreported.'); process.exit(1);
+  if (!homeNoJs.ok) {
+    fail(`the built home page has ${homeNoJs.count} valid no-JavaScript rules in its head, expected exactly one`);
+  }
+  if (!homeWrapper.ok) {
+    fail(`the built home page has ${homeWrapper.count} #dukb-home-copy wrappers, expected exactly one so the handoff rules style real copy`);
+  }
+  console.log(`   ${ready} of ${snaps.length} shipped pages carry all three pieces, and the home template carries its own`);
+  if (CONTROL) {
+    const added = failures - failuresBeforeSection;
+    if (controlArmed === 2 && failuresBeforeSection === 0 && added === 2) {
+      console.log(`simSnapshotAssets control: green. Both ${CONTROL} mutations were the only findings.`);
+      process.exit(0);
+    }
+    console.error(`simSnapshotAssets control: RED. Armed ${controlArmed}, earlier findings ${failuresBeforeSection}, section findings ${added}.`);
+    process.exit(1);
   }
 }
 

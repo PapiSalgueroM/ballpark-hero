@@ -24,7 +24,7 @@ export function GuestScoreBanner({ score }: GuestScoreBannerProps) {
           You scored <span className="text-primary font-bold">{score}</span>! 🎉
         </p>
         <p className="text-sm text-muted-foreground mb-3">
-          Create a free account to save your score and track your streak <Flame className="inline w-4 h-4 text-orange-500" />
+          Create an account to keep your leaderboard name and save your streaks across devices. <Flame className="inline w-4 h-4 text-orange-500" />
         </p>
         <div className="flex items-center justify-center gap-2">
           <Button

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { HigherLowerPlayer } from '@/types/higherLower';
 import { higherLowerPlayers } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -33,8 +33,8 @@ function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): 
   return available[Math.floor(Math.random() * available.length)];
 }
 
-function getStreakReaction(streak: number): { emoji: string; message: string } {
-  const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+function getStreakReaction(streak: number, offset: number): { emoji: string; message: string } {
+  const pick = (arr: string[]) => arr[(streak + offset) % arr.length];
   if (streak === 0) return { emoji: '😬', message: pick([
     "Zero on the board. We all start somewhere.",
     "Not a single one. The comeback begins now.",
@@ -73,8 +73,9 @@ function getStreakReaction(streak: number): { emoji: string; message: string } {
 }
 
 export function useHigherLower() {
-  const [currentPlayer, setCurrentPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([]));
-  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([currentPlayer.name], currentPlayer));
+  const [isReady, setIsReady] = useState(false);
+  const [currentPlayer, setCurrentPlayer] = useState<HigherLowerPlayer>(higherLowerPlayers[0]);
+  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(higherLowerPlayers[1]);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [gameStatus, setGameStatus] = useState<'playing' | 'lost'>('playing');
@@ -82,6 +83,14 @@ export function useHigherLower() {
   const [revealedStats, setRevealedStats] = useState(false);
 
   const statLabels = STAT_LABELS;
+
+  useEffect(() => {
+    const p1 = getRandomPlayer([]);
+    const p2 = getRandomPlayer([p1.name], p1);
+    setCurrentPlayer(p1);
+    setNextPlayer(p2);
+    setIsReady(true);
+  }, []);
 
   const chooseStat = useCallback((stat: StatKey) => {
     if (gameStatus !== 'playing' || revealedStats) return;
@@ -130,12 +139,13 @@ export function useHigherLower() {
     setRevealedStats(false);
   }, []);
 
-  const streakReaction = useMemo(() => getStreakReaction(streak), [streak]);
-  const lossReaction = useMemo(() => getStreakReaction(streak), [streak]);
+  const streakReaction = useMemo(() => getStreakReaction(streak, 0), [streak]);
+  const lossReaction = useMemo(() => getStreakReaction(streak, 1), [streak]);
 
   useGameCompletion('higher-lower', gameStatus === 'lost', streak * 100);
 
   return {
+    isReady,
     currentPlayer,
     nextPlayer,
     streak,

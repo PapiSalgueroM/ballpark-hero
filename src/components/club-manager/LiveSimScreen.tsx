@@ -47,6 +47,11 @@ interface LiveSimScreenProps {
 const SPEEDS = [0.5, 1, 2, 4] as const;
 /** Sim minutes per real second at 1x. 0.5 makes a match about three minutes. */
 const BASE_RATE = 0.5;
+const DRIFT_STEPS = [-3.5, -2.25, -1, 0, 1, 2.25, 3.5] as const;
+
+export function liveSimDrift(phase: number, salt: number): number {
+  return DRIFT_STEPS[(phase + salt) % DRIFT_STEPS.length];
+}
 
 /** The generic mirrored shape the opposition lines up in (4-4-2). */
 const OPP_SPOTS: { x: number; y: number }[] = [
@@ -68,7 +73,7 @@ export function LiveSimScreen({
   const [showSquad, setShowSquad] = useState(false);
   const [banner, setBanner] = useState<{ text: string; tone: 'me' | 'opp' | 'none' } | null>(null);
   const [ball, setBall] = useState({ x: 50, y: 50 });
-  const [phase, setPhase] = useState(0); // re-rolls the drift every beat
+  const [phase, setPhase] = useState(0); // advances the drift every beat
   const rafRef = useRef<number | null>(null);
   const lastTs = useRef<number | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -188,7 +193,6 @@ export function LiveSimScreen({
   const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
   const dots: Dot[] = useMemo(() => {
     const out: Dot[] = [];
-    const drift = () => (Math.random() - 0.5) * 7;
     const push = ((possMine - 0.5) * 14);
     formation.slots.forEach((slot, i) => {
       const base = slotPosition(slot, career.mentality);
@@ -196,8 +200,8 @@ export function LiveSimScreen({
       out.push({
         key: `m${i}`,
         // My goal is the bottom of this screen: engine y=94 is my keeper.
-        x: Math.max(3, Math.min(97, base.x + drift())),
-        y: Math.max(3, Math.min(97, base.y - push + drift())),
+        x: Math.max(3, Math.min(97, base.x + liveSimDrift(phase, i * 2))),
+        y: Math.max(3, Math.min(97, base.y - push + liveSimDrift(phase, i * 2 + 1))),
         mine: true,
         label: p ? lastName(p.name) : slot.label,
       });
@@ -205,14 +209,14 @@ export function LiveSimScreen({
     OPP_SPOTS.forEach((s, i) => {
       out.push({
         key: `o${i}`,
-        x: Math.max(3, Math.min(97, s.x + drift())),
-        y: Math.max(3, Math.min(97, s.y + push * 0.9 + drift())),
+        x: Math.max(3, Math.min(97, s.x + liveSimDrift(phase, 30 + i * 2))),
+        y: Math.max(3, Math.min(97, s.y + push * 0.9 + liveSimDrift(phase, 31 + i * 2))),
         mine: false,
         label: '',
       });
     });
     return out;
-    // phase re-rolls the drift every beat; that is its whole job.
+    // phase advances the drift every beat; that is its whole job.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formation, career.mentality, xi, possMine, phase]);
 

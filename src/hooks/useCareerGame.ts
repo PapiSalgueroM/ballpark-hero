@@ -78,7 +78,6 @@ export function useCareerGame() {
   }, []);
 
   const [mode, setMode] = useState<CareerGameMode>('daily');
-  const switchMode = useCallback((m: CareerGameMode) => setMode(m), []);
 
   // #78: unlimited-only difficulty tier, remembered across sessions.
   const [difficulty, setDifficulty] = useState<CareerDifficulty>(loadStoredDifficulty);
@@ -137,21 +136,29 @@ export function useCareerGame() {
   // ── Unlimited ──────────────────────────────────────────────────────────────
   // Initial pick uses the tier-filtered fallback pool so a stored Easy/Hard
   // preference is respected even before the Supabase pool has loaded.
-  const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer>(() => {
-    const initialPool = buildCareerPool(loadStoredDifficulty(), fallbackPlayers);
-    return initialPool[Math.floor(Math.random() * initialPool.length)];
-  });
+  const [unlimitedPlayer, setUnlimitedPlayer] = useState<CareerPlayer | null>(null);
   const [unlimitedRevealedCells, setUnlimitedRevealedCells] = useState<Set<string>>(new Set());
   const [unlimitedGameStatus, setUnlimitedGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [unlimitedBoxesUsed, setUnlimitedBoxesUsed] = useState(0);
   const [unlimitedGuessesUsed, setUnlimitedGuessesUsed] = useState(0);
 
   // ── Active (mode-dependent) values ────────────────────────────────────────
-  const targetPlayer = mode === 'daily' ? (dailyPuzzle ?? playerPool[0]) : unlimitedPlayer;
+  const fallbackUnlimitedPlayer = buildCareerPool(difficulty, fallbackPlayers)[0];
+  const targetPlayer = mode === 'daily'
+    ? (dailyPuzzle ?? playerPool[0])
+    : (unlimitedPlayer ?? fallbackUnlimitedPlayer);
   const revealedCells = mode === 'daily' ? dailyRevealedCells : unlimitedRevealedCells;
   const gameStatus = mode === 'daily' ? dailyGameStatus : unlimitedGameStatus;
   const boxesUsed = mode === 'daily' ? dailyBoxesUsed : unlimitedBoxesUsed;
   const guessesUsed = mode === 'daily' ? dailyGuessesUsed : unlimitedGuessesUsed;
+
+  const switchMode = useCallback((m: CareerGameMode) => {
+    if (m === 'unlimited' && unlimitedPlayer === null) {
+      const initialPool = buildCareerPool(difficulty, fallbackPlayers);
+      setUnlimitedPlayer(initialPool[Math.floor(Math.random() * initialPool.length)]);
+    }
+    setMode(m);
+  }, [difficulty, unlimitedPlayer]);
 
   // ── Actions ────────────────────────────────────────────────────────────────
   const revealCell = useCallback((key: string) => {

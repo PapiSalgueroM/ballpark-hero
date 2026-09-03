@@ -33,6 +33,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
+const isPageSource = f => f.endsWith('.tsx') && !/\.(?:test|spec)\.tsx$/.test(f);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -54,7 +55,7 @@ const sitemap = new Set([...xml.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)
 const pages = [];
 const dir = path.join(ROOT, 'src/pages');
 for (const f of fs.readdirSync(dir)) {
-  if (!f.endsWith('.tsx')) continue;
+  if (!isPageSource(f)) continue;
   const s = fs.readFileSync(path.join(dir, f), 'utf-8');
   const m = s.match(/<PageSeo([\s\S]{0,700}?)\/>/);
   if (!m) {
@@ -249,7 +250,7 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
 
   let checked = 0, own = 0;
   for (const f of fs.readdirSync(PAGES_DIR)) {
-    if (!f.endsWith('.tsx')) continue;
+    if (!isPageSource(f)) continue;
     const fp = path.join(PAGES_DIR, f);
     const t = readFile(fp);
     if (!t.includes('<GameSeoContent')) continue;

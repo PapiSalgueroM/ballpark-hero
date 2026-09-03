@@ -2247,6 +2247,25 @@ function rollPrimeType(): PrimeType {
   return "extended";
 }
 
+function legacyPrimeType(s: CareerState): PrimeType {
+  const identity = [s.playerName, s.nationality, s.position, s.era, s.currentClub].join('|');
+  let hash = 2166136261 >>> 0;
+  for (let i = 0; i < identity.length; i += 1) {
+    hash ^= identity.charCodeAt(i);
+    hash = Math.imul(hash, 16777619) >>> 0;
+  }
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 2246822507) >>> 0;
+  hash ^= hash >>> 13;
+  hash = Math.imul(hash, 3266489909) >>> 0;
+  hash ^= hash >>> 16;
+  const bucket = (hash >>> 0) / 4294967296;
+  if (bucket < 0.25) return "early";
+  if (bucket < 0.65) return "normal";
+  if (bucket < 0.90) return "late";
+  return "extended";
+}
+
 function isInPrime(age: number, primeType: PrimeType): boolean {
   switch (primeType) {
     case "early": return age >= 22 && age <= 26;
@@ -2328,7 +2347,7 @@ export function careerBuildEffects(s: CareerState): BuildEffects {
 export function repairCareer<T extends CareerState>(state: T): T {
   if (!state || typeof state !== "object") return state;
   const s = state as CareerState;
-  if (!s.primeType) s.primeType = rollPrimeType();
+  if (!s.primeType) s.primeType = legacyPrimeType(s);
   /* Round 217: saves from before the loan move have neither field. Null is
      the exact old behaviour: no loan running, no offers pending. */
   if (s.loan === undefined) s.loan = null;

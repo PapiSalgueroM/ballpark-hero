@@ -48,7 +48,9 @@ export function TransferPathBoard() {
         ? `${name} is already in the path`
         : `${name} was never at the same club as ${chain[chain.length - 1]} in the same season`);
       setLastRejected({ name, after: chain[chain.length - 1] });
+      return;
     }
+    setLastRejected(null);
   };
 
   const handleAutocompleteSelect = (entity: PlayerEntity) => {
@@ -60,6 +62,23 @@ export function TransferPathBoard() {
     // addPlayer, unchanged from before this migration.
     const match = allNames.find(n => n.toLowerCase() === entity.name.toLowerCase()) ?? entity.name;
     handleSelect(match);
+  };
+
+  const resetPuzzleUi = () => {
+    setInput('');
+    setError('');
+    setShowHint(false);
+    setLastRejected(null);
+  };
+
+  const handleNextPuzzle = () => {
+    nextPuzzle();
+    resetPuzzleUi();
+  };
+
+  const handleSwitchToUnlimited = () => {
+    switchToUnlimited();
+    resetPuzzleUi();
   };
 
   const isWon = status === 'won';
@@ -173,7 +192,7 @@ export function TransferPathBoard() {
             )}
             {mode === 'unlimited' && (
               <button
-                onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); }}
+                onClick={handleNextPuzzle}
                 className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Next Puzzle
@@ -227,11 +246,11 @@ export function TransferPathBoard() {
               gameName: 'Transfer Path',
               gamePath: '/transfer-path',
             }}
-            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); } : undefined}
+            onPlayAgain={mode === 'unlimited' ? handleNextPuzzle : undefined}
             playAgainLabel="Next Puzzle"
             playNext={mode === 'daily' ? (
               <button
-                onClick={switchToUnlimited}
+                onClick={handleSwitchToUnlimited}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-card hover:bg-muted/50 text-sm font-semibold transition-colors"
               >
                 <RotateCcw className="w-4 h-4" /> Play Unlimited

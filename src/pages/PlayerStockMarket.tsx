@@ -103,9 +103,9 @@ export default function PlayerStockMarket() {
 
         {phase === 'error' && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">Couldn't open the market right now. The full value history needs a connection.</p>
-            <button onClick={() => setPhase('setup')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
-              Back
+            <p className="text-destructive font-semibold mb-3">Couldn't open the market right now. Please try again.</p>
+            <button onClick={() => start(mode)} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+              Retry
             </button>
           </div>
         )}

@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { getCurrentPlayerName, publicName } from '@/lib/completions';
+import { publicName } from '@/lib/completions';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePlayerName } from '@/hooks/usePlayerName';
 import { CATEGORIES } from '@/data/gameRegistry';
 
 import PageSeo from '@/components/seo/PageSeo';
@@ -60,12 +61,12 @@ const SPORT_OPTIONS: SportOption[] = [
 type Period = 'today' | 'alltime';
 
 export default function Leaderboard() {
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
   /* Round 318: the raw handle goes to the RPCs (it has to match the stored
      rows), the filtered form is what renders and what the own-row highlight
      compares against, since every board row is filtered the same way. */
-  const ownHandle = useMemo(() => getCurrentPlayerName(profile), [profile]);
-  const ownShownName = useMemo(() => publicName(ownHandle), [ownHandle]);
+  const ownHandle = usePlayerName(profile, user?.id ?? 'guest');
+  const ownShownName = useMemo(() => publicName(ownHandle ?? 'Player'), [ownHandle]);
 
   const [sport, setSport] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<Period>('today');
@@ -74,6 +75,7 @@ export default function Leaderboard() {
   const [myRank, setMyRank] = useState<Record<Period, MyRank | null>>({ today: null, alltime: null });
 
   useEffect(() => {
+    if (!ownHandle) return;
     let cancelled = false;
     const slugs = SPORT_OPTIONS.find(o => o.value === sport)?.slugs ?? null;
 

@@ -196,7 +196,7 @@ export function Header() {
         {!loading && !user && !isHome && (
           <div className="bg-primary/5 border-t border-primary/10 py-2 px-4 text-center">
             <p className="text-xs text-muted-foreground">
-              <span className="text-primary font-medium">Create a free account</span> to save your scores and track your streak! <span aria-hidden="true">🔥</span>
+              <span className="text-primary font-medium">Create a free account</span> to keep your leaderboard name and save your streaks across devices. <span aria-hidden="true">🔥</span>
             </p>
           </div>
         )}

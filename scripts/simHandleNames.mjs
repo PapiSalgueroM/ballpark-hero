@@ -143,7 +143,7 @@ console.log('6) the leaderboard actually uses the fence');
   const src = fs.readFileSync(`${ROOT}/src/pages/Leaderboard.tsx`, 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
   if (!/publicName\(String\(r\.player_name\)\)/.test(src)) fail('Leaderboard.tsx no longer maps board rows through publicName');
-  if (!/publicName\(ownHandle\)/.test(src)) fail('Leaderboard.tsx no longer filters the own displayed handle');
+  if (!/publicName\(\s*ownHandle(?:\s*\?\?\s*['"]Player['"])?\s*\)/.test(src)) fail('Leaderboard.tsx no longer filters the own displayed handle');
   console.log('   board rows and the own displayed handle both pass through publicName, read from code not prose');
 }
 

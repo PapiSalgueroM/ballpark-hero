@@ -85,9 +85,7 @@ export function useF1HL() {
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
 
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[F1HLDriver, F1HLDriver][]>(
-    () => buildPairs(Math.floor(Math.random() * 100000), hard),
-  );
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[F1HLDriver, F1HLDriver][]>(dailyPairs);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

@@ -36,8 +36,8 @@ const RankEm = () => {
   const [mode, setMode] = useState<Mode>('daily');
 
   const dailyRound = useMemo<RankRound>(() => getDailyRankRound(), []);
-  const [unlimitedRound, setUnlimitedRound] = useState<RankRound>(() => getRandomRankRound());
-  const [unlimitedSeed, setUnlimitedSeed] = useState<number>(() => Math.floor(Math.random() * 1e9));
+  const [unlimitedRound, setUnlimitedRound] = useState<RankRound | null>(null);
+  const [unlimitedSeed, setUnlimitedSeed] = useState<number | null>(null);
 
   const {
     guesses: dailyActions,
@@ -55,8 +55,8 @@ const RankEm = () => {
 
   const [unlimitedActions, setUnlimitedActions] = useState<RankAction[]>([]);
 
-  const round = mode === 'daily' ? dailyRound : unlimitedRound;
-  const seed = mode === 'daily' ? dateSeed(getTodayET()) : unlimitedSeed;
+  const round = mode === 'daily' ? dailyRound : (unlimitedRound ?? dailyRound);
+  const seed = mode === 'daily' ? dateSeed(getTodayET()) : (unlimitedSeed ?? 0);
   const actions = mode === 'daily' ? dailyActions : unlimitedActions;
   const submitted = actions.length > 0;
   const submittedOrder = submitted ? actions[0].order : null;
@@ -90,6 +90,14 @@ const RankEm = () => {
 
   const undo = useCallback(() => { if (!submitted) setPicks((prev) => prev.slice(0, -1)); }, [submitted]);
 
+  const switchMode = useCallback((nextMode: Mode) => {
+    if (nextMode === 'unlimited' && unlimitedRound === null) {
+      setUnlimitedRound(getRandomRankRound());
+      setUnlimitedSeed(Math.floor(Math.random() * 1e9));
+    }
+    setMode(nextMode);
+  }, [unlimitedRound]);
+
   const newUnlimited = useCallback(() => {
     setUnlimitedRound(getRandomRankRound());
     setUnlimitedSeed(Math.floor(Math.random() * 1e9));
@@ -119,7 +127,7 @@ const RankEm = () => {
             {(['daily', 'unlimited'] as const).map((m) => (
               <button
                 key={m}
-                onClick={() => setMode(m)}
+                onClick={() => switchMode(m)}
                 className={cn(
                   'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
                   mode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'

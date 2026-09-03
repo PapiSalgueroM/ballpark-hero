@@ -4,6 +4,7 @@ import { TeammatesHowToPlay } from '@/components/teammates/TeammatesHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HelpCircle, User, ArrowRight } from 'lucide-react';
 import AdBanner from '@/components/ads/AdBanner';
@@ -14,6 +15,7 @@ const sportEmoji: Record<string, string> = { NFL: '🏈', NBA: '🏀', Soccer: '
 
 const Teammates = () => {
   const {
+    isReady,
     currentPair,
     currentIdx,
     totalRounds,
@@ -43,7 +45,7 @@ const Teammates = () => {
         subtitle="Did these two players ever play on the same team?"
         headerExtra={
           <>
-            {!gameOver && (
+            {isReady && !gameOver && (
               <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
                 <span>Question <span className="text-foreground font-semibold">{currentIdx + 1}/{totalRounds}</span></span>
                 <span>Score <span className="text-correct font-semibold">{score}</span></span>
@@ -59,8 +61,10 @@ const Teammates = () => {
           </>
         }
       >
+        {!isReady && <GameLoadingState label="Choosing matchup..." />}
+
         {/* Game card */}
-        {!gameOver && currentPair && (
+        {isReady && !gameOver && currentPair && (
           <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-xl mb-8">
             {/* Sport badge */}
             <div className="flex justify-center mb-6">
@@ -149,7 +153,7 @@ const Teammates = () => {
         )}
 
         {/* Game Over */}
-        {gameOver && (
+        {isReady && gameOver && (
           <div className="flex justify-center mb-8">
             <ResultScreen
               won={score >= 5}

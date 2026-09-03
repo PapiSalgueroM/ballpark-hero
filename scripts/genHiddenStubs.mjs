@@ -45,6 +45,23 @@ const SITE = 'https://douknowball.com';
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+export function isGeneratedStub(html) {
+  const headEnd = html.search(/<\/head\s*>/i);
+  const bodyStart = html.search(/<body\b/i);
+  if (headEnd < 0 || bodyStart < headEnd) return false;
+  const head = html.slice(0, headEnd)
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ');
+  for (const match of head.matchAll(/<meta\b[^<>]*>/gi)) {
+    const attributes = new Map();
+    for (const attribute of match[0].matchAll(/\b([a-z][\w:-]*)\s*=\s*(["'])(.*?)\2/gi)) {
+      attributes.set(attribute[1].toLowerCase(), attribute[3]);
+    }
+    if (attributes.get('name') === 'dukb-hidden-page' && attributes.get('content') === 'needs an account') return true;
+  }
+  return false;
+}
+
 /** Every live route that is unsubmitted and whose own page asks for noindex. */
 export function hiddenRoutes() {
   const app = readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
@@ -113,7 +130,7 @@ export function stubHtml(route, title, robots) {
     '</head>',
     '<body>',
     '<div id="root">',
-    '<main>',
+    '<main id="dukb-snapshot">',
     `<h1>${esc(title)}</h1>`,
     '<p>This page needs an account, so there is nothing here for a search engine to read. It is marked as one to skip.</p>',
     '<p><a href="/">Go to DoUKnowBall</a></p>',
@@ -125,11 +142,12 @@ export function stubHtml(route, title, robots) {
   ].join('\n');
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   let wrote = 0, already = 0;
   for (const route of hiddenRoutes()) {
     const rel = route.replace(/^\//, '');
-    if (existsSync(path.join(PUBLIC, rel, 'index.html'))) { already += 1; continue; }
+    const publicFile = path.join(PUBLIC, rel, 'index.html');
+    if (existsSync(publicFile) && !isGeneratedStub(readFileSync(publicFile, 'utf8'))) { already += 1; continue; }
     const { title, robots } = declaredBy(route);
     /* A page with no title of its own gets one named after itself. That is not
        inventing a claim, it is naming a door, and it is strictly better than the

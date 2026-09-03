@@ -2,6 +2,7 @@ import { useHigherLower } from '@/hooks/useHigherLower';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HigherLowerHowToPlay } from '@/components/higher-lower/HigherLowerHowToPlay';
 import { HelpCircle } from 'lucide-react';
@@ -25,6 +26,7 @@ const STAT_EMOJIS: Record<StatKey, string> = {
 
 const HigherLowerGame = () => {
   const {
+    isReady,
     currentPlayer,
     nextPlayer,
     streak,
@@ -68,7 +70,9 @@ const HigherLowerGame = () => {
           </>
         }
       >
-        {gameStatus === 'playing' && (
+        {!isReady && <GameLoadingState label="Choosing matchup..." />}
+
+        {isReady && gameStatus === 'playing' && (
           <>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch justify-center">
               {/* Current Player - Revealed */}
@@ -105,7 +109,7 @@ const HigherLowerGame = () => {
           </>
         )}
 
-        {gameStatus === 'lost' && (
+        {isReady && gameStatus === 'lost' && (
           <div className="mt-8 flex justify-center">
             <ResultScreen
               won={false}

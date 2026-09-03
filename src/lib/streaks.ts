@@ -40,7 +40,7 @@
  * - Best/longest streak (current all-time high) is tracked per-game and
  *   globally, independent of whether the current streak later resets.
  *
- * Storage shape (single localStorage key, see STORAGE_KEY):
+ * Storage shape (one active localStorage key plus an identity-scoped copy):
  * {
  *   version: 1,
  *   global: { current: number, longest: number, lastDate: 'YYYY-MM-DD' | null },
@@ -77,6 +77,10 @@ export interface StreakState {
 }
 
 const STORAGE_KEY = 'dukb-streaks-v1';
+const STORAGE_IDENTITY_KEY = 'dukb-streaks-identity-v1';
+const STORAGE_SCOPED_PREFIX = 'dukb-streaks-scoped-v1:';
+const GUEST_IDENTITY = 'guest';
+let runtimeStreakIdentity: string | undefined;
 
 const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 
@@ -114,9 +118,8 @@ function daysBetween(a: string, b: string): number {
   return Math.round(ms / (24 * 60 * 60 * 1000));
 }
 
-function readState(): StreakState {
+function parseStoredState(raw: string | null): StreakState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyState();
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.version !== 1) return emptyState();
@@ -133,13 +136,198 @@ function readState(): StreakState {
   }
 }
 
+function readState(): StreakState {
+  try {
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    if (runtimeStreakIdentity !== undefined) {
+      const runtimeStored = localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${runtimeStreakIdentity}`);
+      if (runtimeStored) return parseStoredState(runtimeStored);
+      if (storedIdentity !== runtimeStreakIdentity) return emptyState();
+    } else if (storedIdentity) {
+      const stored = localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${storedIdentity}`);
+      if (stored) return parseStoredState(stored);
+    }
+    return parseStoredState(localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return emptyState();
+  }
+}
+
 function writeState(state: StreakState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const serialized = JSON.stringify(state);
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    const identity = runtimeStreakIdentity ?? storedIdentity;
+    if (identity) {
+      localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${identity}`, serialized);
+      if (storedIdentity !== identity) return;
+    }
+    localStorage.setItem(STORAGE_KEY, serialized);
   } catch {
     // localStorage unavailable (quota / private mode) - streaks just won't
     // persist this session. Never throw, this must not break gameplay.
   }
+}
+
+/**
+ * Moves the active streak store between the guest and signed-in identities.
+ * A first run adopts the legacy active value for the session already in the
+ * browser. Later changes save the identity being left and restore only the
+ * identity being entered. A brand-new account may start with the current
+ * guest state, while one signed-in account can never seed another account.
+ */
+export function setStreakStorageIdentity(userId: string | null): void {
+  const nextIdentity = userId || GUEST_IDENTITY;
+  const nextKey = `${STORAGE_SCOPED_PREFIX}${nextIdentity}`;
+  let recoverySerialized = JSON.stringify(emptyState());
+  try {
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    let discardedStaleRuntime = false;
+    const runtimeStored = runtimeStreakIdentity === undefined
+      ? null
+      : localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${runtimeStreakIdentity}`);
+    const activeStored = localStorage.getItem(STORAGE_KEY);
+    if (
+      !storedIdentity
+      && runtimeStreakIdentity !== undefined
+      && (!runtimeStored || (!!activeStored && activeStored !== runtimeStored))
+    ) {
+      runtimeStreakIdentity = undefined;
+      discardedStaleRuntime = true;
+    }
+    const currentIdentity = runtimeStreakIdentity ?? storedIdentity;
+    const activeState = readState();
+    const activeSerialized = JSON.stringify(activeState);
+
+    if (currentIdentity === nextIdentity) {
+      runtimeStreakIdentity = nextIdentity;
+      return;
+    }
+
+    const nextStored = localStorage.getItem(nextKey);
+    if (!currentIdentity) {
+      recoverySerialized = nextStored && !discardedStaleRuntime
+        ? JSON.stringify(parseStoredState(nextStored))
+        : activeSerialized;
+    } else {
+      const nextState = nextStored
+        ? parseStoredState(nextStored)
+        : currentIdentity === GUEST_IDENTITY && nextIdentity !== GUEST_IDENTITY
+          ? activeState
+          : emptyState();
+      recoverySerialized = JSON.stringify(nextState);
+    }
+    runtimeStreakIdentity = nextIdentity;
+
+    /* Shared state and its marker are cleared before any transition write.
+       If a later write fails, Account A cannot remain active under B. */
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_IDENTITY_KEY);
+    if (currentIdentity) {
+      localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${currentIdentity}`, activeSerialized);
+    }
+    localStorage.setItem(nextKey, recoverySerialized);
+    localStorage.setItem(STORAGE_IDENTITY_KEY, nextIdentity);
+    localStorage.setItem(STORAGE_KEY, recoverySerialized);
+    try { window.dispatchEvent(new Event('dukb-streaks-restored')); } catch { /* non-browser harness */ }
+  } catch {
+    runtimeStreakIdentity = nextIdentity;
+    /* Recover each slot independently. The destination marker is installed
+       before active state so a partial recovery cannot expose another
+       identity's progress. */
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* unavailable */ }
+    try { localStorage.removeItem(STORAGE_IDENTITY_KEY); } catch { /* unavailable */ }
+    try {
+      const stored = localStorage.getItem(nextKey);
+      if (stored) recoverySerialized = JSON.stringify(parseStoredState(stored));
+    } catch { /* unavailable */ }
+    try { localStorage.setItem(nextKey, recoverySerialized); } catch { /* unavailable */ }
+    let markerReady = false;
+    try {
+      localStorage.setItem(STORAGE_IDENTITY_KEY, nextIdentity);
+      markerReady = localStorage.getItem(STORAGE_IDENTITY_KEY) === nextIdentity;
+    } catch { /* unavailable */ }
+    if (markerReady) {
+      try { localStorage.setItem(STORAGE_KEY, recoverySerialized); } catch { /* unavailable */ }
+    }
+    try { window.dispatchEvent(new Event('dukb-streaks-restored')); } catch { /* non-browser harness */ }
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function profileEntry(value: unknown): StreakEntry | null {
+  if (!isRecord(value)) return null;
+  const current = value.current;
+  const longest = value.longest;
+  const lastDate = value.lastDate;
+  if (!Number.isInteger(current) || Number(current) < 0) return null;
+  if (!Number.isInteger(longest) || Number(longest) < Number(current)) return null;
+  if (lastDate !== null && (typeof lastDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(lastDate))) return null;
+  return { current: Number(current), longest: Number(longest), lastDate: lastDate as string | null };
+}
+
+/**
+ * Reads a streak snapshot from the signed-in profile without trusting raw
+ * JSON from the database. A blank profile uses the table default `{}` and
+ * returns null, which tells AuthContext to upload this browser's guest-era
+ * progress. A real version-1 snapshot is copied into a clean shape before it
+ * can touch localStorage.
+ */
+export function profileStreakState(value: unknown): StreakState | null {
+  if (!isRecord(value) || value.version !== 1) return null;
+  const global = profileEntry(value.global);
+  if (!global || !isRecord(value.perGame) || !Array.isArray(value.loginDates)) return null;
+
+  const perGame: Record<string, StreakEntry> = {};
+  for (const [slug, rawEntry] of Object.entries(value.perGame)) {
+    if (!slug) return null;
+    const entry = profileEntry(rawEntry);
+    if (!entry) return null;
+    perGame[slug] = entry;
+  }
+
+  const loginDates = [...new Set(value.loginDates)];
+  if (loginDates.some(date => typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date))) return null;
+  loginDates.sort();
+
+  const totalPlays = value.totalPlays ?? 0;
+  const totalPoints = value.totalPoints ?? 0;
+  if (!Number.isFinite(totalPlays) || Number(totalPlays) < 0) return null;
+  if (!Number.isFinite(totalPoints) || Number(totalPoints) < 0) return null;
+
+  return {
+    version: 1,
+    global,
+    perGame,
+    loginDates: loginDates as string[],
+    totalPlays: Math.floor(Number(totalPlays)),
+    totalPoints: Math.floor(Number(totalPoints)),
+  };
+}
+
+/**
+ * Restores an established account's saved streak on this browser. The
+ * account snapshot is authoritative because the compact streak shape does
+ * not carry enough event history to merge two devices without inventing a
+ * result. New accounts have `{}` instead and keep their local guest state.
+ */
+export function restoreStreakStateFromProfile(value: unknown): StreakState | null {
+  const state = profileStreakState(value);
+  if (!state) return null;
+  /* loginDates is a full set of exact dates rather than a compressed streak,
+     so it can be merged without guessing. Keep the current device's visits,
+     including the visit recorded while the profile request was in flight. */
+  const local = readState();
+  const restored = {
+    ...state,
+    loginDates: [...new Set([...state.loginDates, ...local.loginDates])].sort(),
+  };
+  writeState(restored);
+  try { window.dispatchEvent(new Event('dukb-streaks-restored')); } catch { /* non-browser harness */ }
+  return restored;
 }
 
 /**
@@ -197,6 +385,28 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
 
   writeState(state);
   return state;
+}
+
+/**
+ * Credits the ET play day used by long-running simulations without recording
+ * a finished game, score, or lifetime play. Returns changed=false when this
+ * game already received its streak credit today, so callers can avoid another
+ * profile backup after every match or season advanced on the same day.
+ */
+export function recordGameStreakDay(
+  gameSlug: string,
+  when: Date = new Date(),
+): { state: StreakState; changed: boolean } {
+  const today = getEtDateString(when);
+  const state = readState();
+  const previousGame = state.perGame[gameSlug] ?? { ...EMPTY_ENTRY };
+  const changed = state.global.lastDate !== today || previousGame.lastDate !== today;
+  if (!changed) return { state, changed: false };
+
+  state.global = advanceEntry(state.global, today);
+  state.perGame[gameSlug] = advanceEntry(previousGame, today);
+  writeState(state);
+  return { state, changed: true };
 }
 
 /**

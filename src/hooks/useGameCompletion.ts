@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 import { getNewlyEarnedBadges } from '@/lib/badges';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
 
@@ -65,7 +65,7 @@ export function useGameCompletion(
     /* A finish the daily hook restored after mount said so first. */
     if (consumeRestoredFinish(gameSlug)) return;
 
-    recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile), correctAnswers);
+    recordCompletion(`/${gameSlug}`, score, undefined, correctAnswers);
 
     // Badge toasts, best effort, guest or signed in.
     getNewlyEarnedBadges(profile)

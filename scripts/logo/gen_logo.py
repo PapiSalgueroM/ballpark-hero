@@ -182,7 +182,7 @@ def social_svg():
     # two lines of tagline and the domain
     for text, y, size, fill, opacity in [
         ('Free daily sports trivia, puzzles and career sims.', 470, 34, INK, 0.92),
-        ('No sign-up. No downloads.', 522, 34, GREEN, 1.0),
+        ('Every game plays without an account. No downloads.', 522, 34, GREEN, 1.0),
         ('douknowball.com', 590, 26, INK, 0.5),
     ]:
         runs, w = text_paths(text, 0, 0, size)
@@ -238,9 +238,12 @@ if __name__ == '__main__':
     write('logo-wordmark.svg', wordmark_svg())
     # the social image's SVG is a build source, not a shipped file: it is
     # 76KB of outlines that only exist to be rasterised, so it lives here
-    with open(os.path.join(HERE, 'og-image.svg'), 'w', encoding='utf-8', newline='\n') as fh:
+    social_source = os.path.join(HERE, 'og-image.svg')
+    if len(sys.argv) > 1:
+        social_source = os.path.join(sys.argv[1], 'og-image.svg')
+    with open(social_source, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(social_svg() + '\n')
-    print('wrote scripts/logo/og-image.svg')
+    print(f'wrote {social_source}')
     geom = os.path.join(ROOT, 'src', 'components', 'layout', 'logoMark.ts')
     if len(sys.argv) > 1:
         geom = os.path.join(sys.argv[1], 'logoMark.ts')

@@ -15,7 +15,7 @@ import { GiveUpButton } from '@/components/game/GiveUpButton';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 import {
   WhoAmIData,
   WhoAmIPlayer,
@@ -153,7 +153,7 @@ const WhoAmI = () => {
     }
     if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
     recordedRef.current = true;
-    recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
+    recordCompletion('/who-am-i');
   }, [phase]);
 
   const lastGuess = guesses.length > 0 ? guesses[guesses.length - 1] : null;

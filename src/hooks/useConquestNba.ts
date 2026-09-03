@@ -226,6 +226,7 @@ function findBorderEnemyStates(teamId: string, territories: Record<string, strin
 }
 
 export function useConquestNba() {
+  const [isReady, setIsReady] = useState(false);
   const [territories, setTerritories] = useState(buildInitialTerritories);
   const [rosters, setRosters] = useState(buildInitialRosters);
   const [eliminated, setEliminated] = useState<string[]>([]);
@@ -238,7 +239,12 @@ export function useConquestNba() {
   const [gameLog, setGameLog] = useState<LogEntry[]>([]);
   const [animStartTime, setAnimStartTime] = useState(0);
   const [noEnemyMsg, setNoEnemyMsg] = useState<string | null>(null);
-  const [powerupStates, setPowerupStates] = useState<Set<string>>(() => pickRandomPowerupStates());
+  const [powerupStates, setPowerupStates] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setPowerupStates(pickRandomPowerupStates());
+    setIsReady(true);
+  }, []);
 
   const [teamSavedPowerups, setTeamSavedPowerups] = useState<Record<string, SavedPowerup[]>>({});
   const [invincibleTeams, setInvincibleTeams] = useState<Set<string>>(new Set());
@@ -810,6 +816,7 @@ export function useConquestNba() {
   }, []);
 
   return {
+    isReady,
     territories, rosters, eliminated, turn, phase,
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
     animStartTime, noEnemyMsg, powerupStates,

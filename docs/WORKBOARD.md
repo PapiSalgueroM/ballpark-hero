@@ -19,9 +19,9 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 422.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 423.
 
-## Active claims, 2026-09-02
+## Active claims, 2026-09-03
 
 - **Desktop lane, CLAIMED: Round 421. A BLOCK MUST NOT BE DROPPED FROM A
   SNAPSHOT BY A RACE.** Round 355 fixed this class for the HEAD: a block that
@@ -71,6 +71,38 @@ How it works:
   move between builds. Start by diffing the block the prerenderer compares
   rather than the board, and do not reach for data-no-prerender until that is
   known.
+
+- **Codex lane, CLAIMED: Round 422. FRONT DOOR AND ACCOUNT RELIABILITY.**
+  Finish the verified account isolation, deterministic first paint, count-free
+  social card, Player Bingo age audit, reported game repairs, retired endpoint
+  tombstones and Stadium Tycoon clock fix. Merge the landed Round 419 schedule
+  and Round 420 atomic-write work, regenerate every snapshot, run the complete
+  release board, then publish and verify the exact merged commit live. Working
+  branch head is `a2ba5ad5` plus final account fixes; it is not on `main` and is
+  not live. The final full runner is still pending.
+  Account ordering has two levels: identity changes advance a generation, and
+  profile reads inside that generation advance a request number. Only the
+  current identity and newest request may own profile UI and cached names; a
+  superseded initial hydration can use only a strictly newer snapshot from the
+  same generation. Display-name recovery repopulates the shared cache only
+  after the destination identity marker is written and read back. Signed-in
+  public completion rows wait for successful same-account hydration, or a later
+  same-account profile verification after failure, and otherwise do not write.
+  Authenticated completion updates are ordered only inside the current loaded
+  page. They remain unordered across tabs and devices, public history remains
+  keyed by mutable display name, and the multi-table backend save is not one
+  transaction. `docs/PROJECT-STATE.md` carries the full interim record.
+
+- **NEXT AFTER ROUND 422, P1: STABLE COMPLETION IDENTITY AND ONE ATOMIC SERVER
+  SAVE.** Replace display-name joins with a stable identity for future public
+  completion rows, without exposing email or inventing ownership for ambiguous
+  history. Move the authenticated completion write set behind one server-side
+  transaction that verifies the caller, is idempotent on a completion request,
+  and updates the completion, totals, best score and streak together or not at
+  all. The migration must state what can and cannot be backfilled, keep public
+  reads fail closed, preserve guest play, enable RLS immediately, run both
+  advisors, and carry race, retry and cross-account negative controls. Do not
+  start the shared game-first shell until this backend safety slice is closed.
 
 
 
@@ -127,6 +159,34 @@ cache-key problem: keep count-free copy, correct the remaining misleading
 "No sign-up" line, ship the generated card at a fresh same-domain filename,
 update the root and per-route crawler references, then re-ping the home page.
 Do not hand edit the raster or print the current 118-game count into it.
+
+**OWNER REPORT, 2026-09-02, RAW COPY FLASH BEFORE THE APP.** The owner captured
+the static homepage crawler copy filling the screen before React mounted and
+does not want visitors to see it. The same deliberate dimmed fallback exists
+on direct game links. Round 422 owns the cross-route fix. The copy must remain
+complete for no-JavaScript readers and raw crawlers, and a JavaScript visitor
+must never paint it while waiting for the app bundle.
+
+**OWNER REQUEST, 2026-09-02, GAME-FIRST PAGE FLOW.** On every game page, show
+the playable game first, keep one small top-right question-mark control that
+reopens complete instructions, and auto-open those instructions on the first
+visit only. Below gameplay, keep give-up where that game has one, then show
+related game suggestions and a clear Report a problem action before the long
+guide. This follows the stable-identity and atomic-completion P1 above.
+The 2026-09-03 source recon measured the real shape rather than treating the
+site as one shell: all 118 active registry games render `GameSeoContent`; 71
+have an in-game `ReportQuestion`, while 47 rely only on the global footer; and
+103 render related-game recommendations from both `GameNav` and
+`GameSeoContent`, so they currently carry duplicate recommendation blocks.
+Help is split again: 86 use the standard `GameHelp`, 12 use `RulesGate`, and 20
+use a bespoke primary control; 26 of the 86 standard-help games also show a
+bespoke help control. The implementation therefore belongs at shared
+boundaries with explicit opt-outs, not as 118 manual page edits: exactly one
+visible help affordance, one first-visit gate, one recommendation block and one
+in-game report action per route. Keep the footer report as a fallback until the
+new placement is browser-proved across all 118 games. The existing relay stores
+reports in the admin queue and attempts server-side email without exposing the
+address; inbox delivery still depends on the pending FormSubmit activation.
 
 **HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
 ROADMAP.** This did not replace the priority list when it was recorded. The
@@ -272,19 +332,66 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   hockey puck. Keep it cosmetic, local-save friendly, reduced-motion safe and
   free of club logos, real kits or player likenesses. This is explicitly not a
   current priority.
+- **VERIFIED CURRENT SOCCER PLAYER LAYER, user report 2026-09-02:** a report
+  says some real players cannot be found and names Lucas Herrington, with no
+  game slug beyond the site/footer context. Exact and likely-spelling searches
+  found him only in `world_cup_players`, not in the market, career, fact or
+  autocomplete source tables. Football Australia and The Analyst independently
+  agree on Lucas Herrington, DOB 2007-09-05, Australia and centre-back; Football
+  Australia's transfer report and Colorado Rapids independently agree that his
+  current club is Hull City in the Premier League, with ABC as a third transfer
+  confirmation. His existing World Cup row is a historical tournament snapshot
+  and must stay Colorado Rapids, squad number 25, 4 caps, 0 goals, DOB
+  2007-09-05 and year 2026. Current valuation products disagree materially, so
+  do not write a market value, substitute the transfer fee, or add an incomplete
+  career path. The gap is systemic: 343 of 1,236 verified 2026 World Cup squad
+  names are absent from every `player_market_values` year, and 537 lack a 2026
+  row.
+  Minimum safe slice: create a public `current_soccer_players` identity table
+  keyed by `person_key`, with folded name, DOB, nationality, position, current
+  club and league, active status, facts-as-of date and a publish flag. Seed only
+  `lucas-herrington-2007-09-05`, with Hull City, Premier League and facts as of
+  2026-09-02. Age is derived from DOB; market value stays null. Keep field-level
+  URLs in a private source-receipt table and require two distinct source owners
+  for every published fact. Public RLS reads only published rows; anon and
+  authenticated receive no write grant. A `security_invoker` search view unions
+  published current identities with market history without turning null value
+  into zero or letting stale market metadata beat a verified current record.
+  Switch only identity autocomplete consumers first: Career Ladder suggestions,
+  Soccer Connect 4 autocomplete and Build Your XI autocomplete. Do not switch
+  Who Am I, Rarity Round, Player Bingo, Transfer Path or any value-bound or
+  career-answer pool until each can represent missing value and identity safely.
+  Fence the schema, RLS, two-owner receipts, exact Lucas result, null value,
+  historical World Cup preservation and the three-consumer boundary. Negative
+  controls drop Lucas, collapse to one source, merge namesakes, invent a value
+  and mutate the historical snapshot. Bulk population waits for a licensed feed
+  or an explicitly approved manual verification workflow.
 - **AUSTRALIAN SPORTS EXPANSION, MOVED FORWARD BY THE OWNER 2026-09-02:** phase
-  one is a versioned `nrlCompetition2026` foundation with the 17 verified text
-  club identities, positions 1 through 13, six-tackle and scoring rules, the
-  six-candidate and four-active bench, eight-interchange limit, derived season
-  shape, salary-cap components, roster deadlines and per-field sources/status.
-  No copied draw, weekly lists, current rosters, private salaries, logos, kits
-  or photos. Phase two is `/nrl-my-career`, built around a fictional player and
-  seven real position families, then a last-tackle tactics game and a generated
-  roster manager. Rugby Union and AFL need separate engines and data contracts.
-  Current official-site terms do not provide a commercial republication right
-  for scraped rosters or fixtures, so real-player depth waits for rights-cleared
-  data rather than shipping guesses. The desktop lane can take the sourced data
-  foundation while the other lane designs the deterministic career engine.
+  one is a small versioned rules foundation, not a copied competition database.
+  `rugbyLeagueBaseRules` holds the two-source verified universal facts: 13
+  players on field, positions numbered 1 through 13, six tackles per set, an
+  80-minute match, and scoring of 4 for a try, 2 for a conversion, 2 for a
+  penalty goal and 1 for a field goal. The NRL-hosted international rule book
+  and the International Rugby League laws are the two owners. A separate
+  `nrl2026Overrides` layer carries season-specific rules, including six bench
+  candidates, four usable players and eight interchanges, checked against NRL
+  and AAP. Every factual field needs source ids, checked date, effective season
+  and status. Product position families must be labeled as our grouping rather
+  than an official classification.
+  Phase two, and the first game to ship, is the fictional
+  `/rugby-league-last-tackle`. Ten daily last-play situations offer a high kick,
+  grubber, shift and run, territorial kick or field goal. A pure deterministic
+  table grades the tactical choice from 0 to 10 independently of a second
+  seeded stream that animates the simulated outcome, so luck can change the
+  story but never the knowledge score. Use original top-down pitch animation,
+  generated player dots, fictional clubs and a reduced-motion final-state path.
+  Prove the reusable event engine there before a fictional career, then a
+  generated-roster manager. The real 17-club and 27-round competition facts are
+  researched but are not needed for this first game. No copied draw, weekly
+  lists, current rosters, private salaries, logos, kits, photos or attributed
+  real-person dialogue. Exact salary-cap gameplay, real-player depth and
+  current transactions wait for rights-cleared, independently corroborated
+  data. Rugby Union and AFL keep separate engines and data contracts.
 - **MOBILE AD-SPACING FENCE, owner request 2026-09-02:** inspect all 75
   `AdBanner` callers at 320, 390 and 430px before adding any placement. Measure
   at least 150px from gameplay, 48px from any ordinary control, both 100px and
@@ -403,15 +510,12 @@ turned up that is still live is filed as its own item further down this Inbox.)
   fixes in Rounds 364 and 367 and both are right; both scale with traffic.
 
 
-- SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
-  properly and it is smaller than Round 348 thought): the prerendered snapshot
-  lives INSIDE #root, so when React mounts it clears it and paints a different
-  document, which shifts whatever the visitor could already see. It cannot be
-  hydrated away because the snapshot is deliberately reconstructed readable
-  text rather than React's own markup, and it must NOT be hidden from visitors,
-  because text served only to crawlers is cloaking. Any real fix changes the
-  prerenderer to emit hydratable markup, which is a designed round, not a
-  patch. Round 351 removed the larger and cheaper half of what was filed here.
+- SNAPSHOT SWAP CLS remains: Round 422 removed the raw-copy flash by hiding the
+  snapshot only after JavaScript capability is known, reserving one viewport,
+  keeping all text in the DOM, restoring full no-JavaScript visibility, and
+  recovering after a failed boot. React still replaces reconstructed markup,
+  so measure residual CLS before closing this item; hydratable markup remains
+  the architectural option.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
@@ -905,7 +1009,9 @@ Standing claims after Round 400:
   where it used to move it by nothing. Draft picks and the opening free agent
   market carry defenders, so they can be acquired and not only admired, and
   the team panel shows the rating the sim actually reads. A pre 416 save has
-  no defenders and keeps the stored number, so it plays exactly as before.
+  no defenders, so every club starts at the same replacement-level defence
+  until the first offseason replenishes six defenders; its titles, seasons
+  and squad still load.
   Measured over 40 simulated seasons: strength still predicts wins, median
   correlation 0.693 (one draw read 0.822, which an earlier draft quoted as
   though it were the figure), and no club ends over the cap, but the

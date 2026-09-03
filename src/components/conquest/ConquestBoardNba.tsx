@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
+import { GameLoadingState } from '@/components/game/GameLoadingState';
 import ConquestMapNba from './ConquestMapNba';
 import { NBA_TEAM_MAP, NBA_TEAMS, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
 import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
@@ -257,6 +258,8 @@ export default function ConquestBoardNba() {
     game.phase === 'animating' && teamRevealed && !dirRevealed,
     game.direction || '',
   );
+
+  if (!game.isReady) return <GameLoadingState label="Placing power-ups..." />;
 
   const t = (id: string | null) => id ? NBA_TEAM_MAP.get(id) : undefined;
   const activeTeamDisplay = game.phase === 'animating' && !teamRevealed ? spinTeam : game.attackingTeam;

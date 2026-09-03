@@ -38,7 +38,7 @@ const MissingFive = () => {
   const [mode, setMode] = useState<Mode>('daily');
 
   const dailyPuzzle = useMemo<ActiveFivePuzzle>(() => getDailyFivePuzzle(), []);
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActiveFivePuzzle>(() => getRandomFivePuzzle());
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActiveFivePuzzle | null>(null);
 
   const {
     guesses: dailyActions,
@@ -56,7 +56,7 @@ const MissingFive = () => {
 
   const [unlimitedActions, setUnlimitedActions] = useState<FiveAction[]>([]);
 
-  const puzzle = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const puzzle = mode === 'daily' ? dailyPuzzle : (unlimitedPuzzle ?? dailyPuzzle);
   const actions = mode === 'daily' ? dailyActions : unlimitedActions;
   const misses = actions.filter((a) => a.t === 'miss').length;
   const won = actions.some((a) => a.t === 'won');
@@ -98,7 +98,11 @@ const MissingFive = () => {
     setInput('');
   }, []);
 
-  const switchMode = useCallback((m: Mode) => { setMode(m); setInput(''); }, []);
+  const switchMode = useCallback((m: Mode) => {
+    if (m === 'unlimited' && unlimitedPuzzle === null) setUnlimitedPuzzle(getRandomFivePuzzle());
+    setMode(m);
+    setInput('');
+  }, [unlimitedPuzzle]);
 
   useGameCompletion('missing-five', mode === 'daily' && rawDailyStatus !== 'playing', score);
 

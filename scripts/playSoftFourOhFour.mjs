@@ -103,6 +103,7 @@ async function read(pathname, { settle = 400 } = {}) {
     ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? null,
     snapshot: !!document.getElementById('dukb-snapshot'),
     text: (document.body?.innerText ?? '').replace(/\s+/g, ' ').trim(),
+    homeCopyText: (document.getElementById('dukb-home-copy')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
     links: Array.from(document.querySelectorAll('a[href^="/"]')).length,
   }));
 }
@@ -152,7 +153,7 @@ console.log('3) the home page is untouched');
   say(home.robots === null, `no robots tag on the home page (${home.robots ?? 'none'})`);
   say(home.canonical === 'https://douknowball.com/', `it keeps its canonical (${home.canonical})`);
   say(!/not found/i.test(home.title), `its title is its own: ${JSON.stringify(home.title)}`);
-  say(home.text.length > 1500, `it still carries its copy (${home.text.length} characters)`);
+  say(home.homeCopyText.length > 1500, `it still carries its copy (${home.homeCopyText.length} characters)`);
 }
 
 console.log('4) real routes are untouched, which is the half that must not fail');

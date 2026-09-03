@@ -43,15 +43,13 @@ export function useHockeyCareer() {
     dailyActions.some(a => a.t === 'give') ? 'revealed' : 'playing';
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle>(
-    () => hockeyCareerPuzzles[Math.floor(Math.random() * hockeyCareerPuzzles.length)]
-  );
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<Puzzle | null>(null);
   const [clueLevel, setClueLevel] = useState(0);
   const [hard, setHard] = useState(false);
   const [status, setStatus] = useState<HockeyCareerStatus>('playing');
 
   // ---- ACTIVE VALUES -------------------------------------------------------
-  const puzzle          = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const puzzle          = mode === 'daily' ? dailyPuzzle : (unlimitedPuzzle ?? hockeyCareerPuzzles[0]);
   const activeClueLevel = mode === 'daily' ? dailyClueLevel : clueLevel;
   const activeStatus    = mode === 'daily' ? dailyStatus : status;
 
@@ -86,7 +84,12 @@ export function useHockeyCareer() {
   }, [activeClueLevel, player, hard]);
 
   // ---- CALLBACKS -----------------------------------------------------------
-  const switchMode = useCallback((newMode: HockeyCareerMode) => setMode(newMode), []);
+  const switchMode = useCallback((newMode: HockeyCareerMode) => {
+    if (newMode === 'unlimited' && unlimitedPuzzle === null) {
+      setUnlimitedPuzzle(hockeyCareerPuzzles[Math.floor(Math.random() * hockeyCareerPuzzles.length)]);
+    }
+    setMode(newMode);
+  }, [unlimitedPuzzle]);
   const toggleHard = useCallback(() => setHard(h => !h), []);
 
   const revealNextClue = useCallback(() => {

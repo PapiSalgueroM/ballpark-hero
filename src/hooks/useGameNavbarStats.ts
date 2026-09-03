@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getLocalTodayCount } from '@/lib/completions';
 import { getGlobalCurrentStreak } from '@/lib/streaks';
+import { usePlayerName } from '@/hooks/usePlayerName';
 
 interface GameNavbarStats {
   gamesPlayedToday: number;
@@ -39,20 +40,25 @@ interface GameNavbarStats {
  * - Streak: the local streak engine (the instant same-browser record).
  */
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
-  const { profile } = useAuth();
-  const playerName = getCurrentPlayerName(profile);
-  const [stats, setStats] = useState<GameNavbarStats>({
+  const { user, profile } = useAuth();
+  const playerName = usePlayerName(profile, user?.id ?? 'guest');
+  const requestIdentity = playerName ? `${user?.id ?? 'guest'}:${playerName}` : null;
+  const [stats, setStats] = useState<GameNavbarStats & { identity: string | null }>({
+    identity: null,
     gamesPlayedToday: 0,
     totalPointsToday: 0,
     dailyRank: null,
     currentStreak: 0,
     loading: true,
   });
-  const fetchingRef = useRef(false);
+  const fetchingRef = useRef(new Set<string>());
+  const latestRequestIdentityRef = useRef(requestIdentity);
+  latestRequestIdentityRef.current = requestIdentity;
 
   const fetchStats = useCallback(async () => {
-    if (fetchingRef.current) return;
-    fetchingRef.current = true;
+    if (!playerName || !requestIdentity) return;
+    if (fetchingRef.current.has(requestIdentity)) return;
+    fetchingRef.current.add(requestIdentity);
 
     try {
       const todayUtc = new Date().toISOString().split('T')[0];
@@ -83,7 +89,9 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
          game cannot inflate the chip. */
       const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
 
+      if (latestRequestIdentityRef.current !== requestIdentity) return;
       setStats({
+        identity: requestIdentity,
         gamesPlayedToday,
         totalPointsToday,
         dailyRank,
@@ -92,19 +100,33 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       });
     } catch (error) {
       console.debug('[NavbarStats] fetch failed:', error);
+      if (latestRequestIdentityRef.current !== requestIdentity) return;
       // Even offline, show local truths rather than dashes.
       setStats((prev) => ({
-        ...prev,
-        gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
+        identity: requestIdentity,
+        gamesPlayedToday: Math.max(
+          prev.identity === requestIdentity ? prev.gamesPlayedToday : 0,
+          getLocalTodayCount(),
+        ),
+        totalPointsToday: prev.identity === requestIdentity ? prev.totalPointsToday : 0,
+        dailyRank: prev.identity === requestIdentity ? prev.dailyRank : null,
         currentStreak: getGlobalCurrentStreak(),
         loading: false,
       }));
     } finally {
-      fetchingRef.current = false;
+      fetchingRef.current.delete(requestIdentity);
     }
-  }, [playerName]);
+  }, [playerName, requestIdentity]);
 
   useEffect(() => {
+    setStats({
+      identity: requestIdentity,
+      gamesPlayedToday: getLocalTodayCount(),
+      totalPointsToday: 0,
+      dailyRank: null,
+      currentStreak: getGlobalCurrentStreak(),
+      loading: requestIdentity !== null,
+    });
     fetchStats();
 
     // Refetch when the app comes back to the foreground (mobile) or focus.
@@ -118,10 +140,17 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
     // Instant refresh after a game finishes (small delay for the DB write).
     const handleGameComplete = () => {
+      if (!requestIdentity) return;
       setStats((prev) => ({
-        ...prev,
-        gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
+        identity: requestIdentity,
+        gamesPlayedToday: Math.max(
+          prev.identity === requestIdentity ? prev.gamesPlayedToday : 0,
+          getLocalTodayCount(),
+        ),
+        totalPointsToday: prev.identity === requestIdentity ? prev.totalPointsToday : 0,
+        dailyRank: prev.identity === requestIdentity ? prev.dailyRank : null,
         currentStreak: getGlobalCurrentStreak(),
+        loading: prev.identity === requestIdentity ? prev.loading : false,
       }));
       setTimeout(fetchStats, 800);
     };
@@ -136,7 +165,17 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       window.removeEventListener('game-completion-saved', handleGameComplete);
       clearInterval(pollInterval);
     };
-  }, [fetchStats]);
+  }, [fetchStats, requestIdentity]);
 
-  return { ...stats, totalGames: TOTAL_GAMES };
+  const visibleStats: GameNavbarStats = stats.identity === requestIdentity
+    ? stats
+    : {
+        gamesPlayedToday: getLocalTodayCount(),
+        totalPointsToday: 0,
+        dailyRank: null,
+        currentStreak: getGlobalCurrentStreak(),
+        loading: requestIdentity !== null,
+      };
+
+  return { ...visibleStats, totalGames: TOTAL_GAMES };
 }
