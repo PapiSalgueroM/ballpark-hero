@@ -118,6 +118,11 @@ export function useNbaConnections() {
   // ---- ACTIVE VALUES -------------------------------------------------------
   const puzzle       = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
   const solvedGroups = mode === 'daily' ? dailySolvedGroupsFinal : unlimitedSolvedGroups;
+  /* Round 425: groups the PLAYER actually found. solvedGroups above is
+     padded with the unsolved groups when the last life goes, so the board can
+     reveal them, which made every loss report 4/4 on screen and on the share
+     card. Same fix Baseball Connections already carries. */
+  const foundGroups = mode === 'daily' ? dailySolvedGroups.length : unlimitedSolvedGroups.length;
   const lives        = mode === 'daily' ? dailyLives : unlimitedLives;
   const gameStatus: NbaConnStatus = mode === 'daily'
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
@@ -227,6 +232,7 @@ export function useNbaConnections() {
     submitSelection,
     deselectAll,
     solvedGroups,
+    foundGroups,
     lives,
     gameStatus,
     shakeWrong,

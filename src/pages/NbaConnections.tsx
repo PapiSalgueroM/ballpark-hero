@@ -42,6 +42,7 @@ const NbaConnections = () => {
     submitSelection,
     deselectAll,
     solvedGroups,
+    foundGroups,
     lives,
     gameStatus,
     shakeWrong,
@@ -92,7 +93,7 @@ const NbaConnections = () => {
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">
-                Groups found: <span className="font-semibold text-primary">{solvedGroups.length}</span>/4
+                Groups found: <span className="font-semibold text-primary">{foundGroups}</span>/4
               </span>
               <span className="text-muted-foreground">
                 Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
@@ -197,11 +198,11 @@ const NbaConnections = () => {
               headline={lives > 0 ? 'All Groups Found!' : 'Out of Lives!'}
               statLine={
                 <>
-                  Found <span className="font-bold text-primary">{solvedGroups.length}</span>/4 groups
+                  Found <span className="font-bold text-primary">{foundGroups}</span>/4 groups
                   {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
                 </>
               }
-              emojiGrid={lives > 0 ? `🏆 NBA Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `🏀 NBA Connections: ${solvedGroups.length}/4 groups`}
+              emojiGrid={lives > 0 ? `🏆 NBA Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `🏀 NBA Connections: ${foundGroups}/4 groups`}
               share={{
                 score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's NBA Connections` : `today's NBA Connections`,
                 gameName: 'NBA Connections',
