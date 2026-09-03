@@ -44,6 +44,14 @@ export function ConfettiBurst({ seed = 1, count = 30 }: { seed?: number; count?:
           100% { opacity: 0; transform: translateY(240px) rotate(560deg); }
         }
         .cm-confetti { animation-name: cmConfettiFall; animation-timing-function: ease-in; animation-fill-mode: forwards; }
+        /* Round 423: decoration, so it simply does not run for somebody who
+           asked for less motion. It carries no content and is aria-hidden
+           already, so removing it loses the visitor nothing. This lives in
+           ConfettiBurst's OWN styles rather than the shared block because the
+           burst is used in places that never mount CelebrationStyles. */
+        @media (prefers-reduced-motion: reduce) {
+          .cm-confetti { display: none; }
+        }
       `}</style>
     </div>
   );
@@ -65,6 +73,23 @@ export function CelebrationStyles() {
       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }
       @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }
       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }
+
+      /* Round 423: honour the setting the visitor already made.
+         This kit is the site's celebration layer: ResultScreen uses it, and 75
+         games end on ResultScreen, so somebody who asked their operating system
+         for less motion was getting 28 pieces of confetti and a slamming emoji
+         from most of the site. Two components in this repo already do this
+         properly (TacticsScreen and ConquestMap), so the convention existed and
+         the shared kit was the one place missing it.
+         The rules END on their final frame rather than being removed: several of
+         these start at opacity 0 and animate IN, so simply cancelling them would
+         leave the headline and the stat row invisible, which is a worse bug than
+         the one being fixed. The confetti is the only thing that truly stops,
+         because it is decoration and carries no content. */
+      @media (prefers-reduced-motion: reduce) {
+        .cm-rise, .cm-slam, .cm-tick-in { animation: none; opacity: 1; transform: none; }
+        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }
+      }
     `}</style>
   );
 }

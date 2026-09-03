@@ -19,9 +19,24 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 423.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 424.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED: Round 423. THE CELEBRATION RESPECTS REDUCED
+  MOTION.** ResultScreen mounts the shared celebration kit and 75 files end on
+  ResultScreen, so a visitor who asked for less motion got confetti and a
+  slamming emoji from most of the site. Guarded, with the animations ending on
+  their final frame rather than cancelled, because several start at opacity 0
+  and cancelling them leaves the headline invisible. Fence is
+  scripts/playReducedMotion.mjs, control REDUCED_MOTION_CONTROL=noguard.
+  FOR THE NEXT LANE, measured and worth not re-deriving: the site IS animated.
+  108 of 146 pages use animation classes, 71 files animate in-game feedback,
+  and Round 149 already put the win celebration in all 75 ResultScreen games.
+  The real opportunity is that soccer-career/CareerFx.tsx (Confetti, CountUp,
+  ShineWrap, FloatUp) is pure presentation used by ONE game, and the tailwind
+  count-pop keyframe is defined and used nowhere. That is an addition to make,
+  not a hole to plug.
 
 - **Desktop lane, CLAIMED: Round 422. YOUR SALARY MUST REACH YOUR BANK
   ACCOUNT.** Owner reported it playing /nfl-my-career: money never arrives and
