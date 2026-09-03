@@ -4,6 +4,12 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 422: mark JavaScript capability before the body can paint. The
+         static copy remains in the document for crawlers and no-JS readers,
+         while the matching head style keeps it out of sight for the short
+         handoff to React. If the app never replaces it, reveal that fallback
+         after eight seconds instead of leaving a permanently blank page. -->
+    <script data-dukb-js-capability="">document.documentElement.classList.add('dukb-js');setTimeout(function(){if(document.querySelector('#dukb-home-copy,#dukb-snapshot'))document.documentElement.classList.remove('dukb-js')},8000)</script>
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
          document has to stay fresh so a returning player always gets the
@@ -174,21 +180,17 @@
   
   
   
-  <!-- Round 314: the moment before React mounts used to show this document's
-       full crawler copy as a wall of raw text (the owner filmed it). The block
-       stays completely in the DOM for crawlers and for no-JS visitors (the
-       noscript lifts the cap), but a browser that is about to boot the app
-       sees one dimmed screenful, which reads as the site loading rather than
-       a broken page. React replaces #root's children on mount, so the capped
-       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 422: the dimmed copy still looked like a broken page. JavaScript
+       visitors now get one invisible viewport reserved until React replaces
+       #root. The words stay in the DOM, and no-JS readers get the full copy. -->
   
   <noscript></noscript>
   
   
-<link rel="canonical" href="https://douknowball.com/higher-lower-transfers" data-rh="true"><meta name="description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta name="robots" content="noindex, follow" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/higher-lower-transfers" data-rh="true"><meta property="og:title" content="Higher or Lower: Transfer Market | DoUKnowBall" data-rh="true"><meta property="og:description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Higher or Lower: Transfer Market | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<link rel="canonical" href="https://douknowball.com/higher-lower-transfers" data-rh="true"><meta name="description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta name="robots" content="noindex, follow" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/higher-lower-transfers" data-rh="true"><meta property="og:title" content="Higher or Lower: Transfer Market | DoUKnowBall" data-rh="true"><meta property="og:description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image-daily-sports.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Higher or Lower: Transfer Market | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Who is worth more? Guess higher or lower on real player market values and build the longest streak you can. Free, endless, no sign-up." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image-daily-sports.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
-<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
-<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<style data-dukb-first-paint>.dukb-js #dukb-snapshot{visibility:hidden;height:100vh;max-height:100vh;overflow:hidden;opacity:0;box-sizing:border-box}</style>
+<noscript><style data-dukb-no-js-copy>#dukb-snapshot{visibility:visible;height:auto;max-height:none;overflow:visible;opacity:1}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>

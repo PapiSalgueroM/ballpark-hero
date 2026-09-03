@@ -47,7 +47,7 @@
  *      written. Nothing here knows which games are daily, and that is
  *      deliberate: a list of affected games has been written three times in
  *      this repo and each one covered what somebody had already found and
- *      nothing after. Random choices are valid content, so Round 420 keeps one
+ *      nothing after. Random choices are valid content, so Round 422 keeps one
  *      fixed seed and independently replays every random-using clock sample.
  *      A changed head, body, call count or hook refuses the route before write.
  *
@@ -70,7 +70,7 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const PUBLIC = path.join(ROOT, 'public');
-/* Round 420: two working trees can build at the same time. A fixed default
+/* Round 422: two working trees can build at the same time. A fixed default
    port made one prerenderer kill the other with EADDRINUSE, so the operating
    system chooses a free loopback port unless a caller explicitly supplies
    PRERENDER_PORT. */
@@ -97,7 +97,7 @@ const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
    what the third sample removed over and above the second, so the cost of
    keeping it stays measured rather than assumed. */
 const SAMPLE_DAYS = [0, 5, 11];
-/* ROUND 284, RECHECKED IN ROUND 420: RANDOM CHOICES ARE FROZEN, NOT GUESSED AT.
+/* ROUND 284, RECHECKED IN ROUND 422: RANDOM CHOICES ARE FROZEN, NOT GUESSED AT.
    A random board or player is still a valid choice. The snapshot promise is
    that the same source produces the same crawler photograph on every build,
    so every clock sample and its independent replay start from one fixed seed.
@@ -307,7 +307,7 @@ if (CONTROL === 'random-replay' && unique.length !== 1) {
   process.exit(1);
 }
 
-/* ROUND 420: THE SEEDED STREAM AUDITS ITSELF. Counting calls catches a change
+/* ROUND 422: THE SEEDED STREAM AUDITS ITSELF. Counting calls catches a change
    in random control flow even when the visible words happen to agree, and the
    identity check catches any later code that replaces the seeded function and
    would otherwise bypass both the counter and the replay. */
@@ -919,7 +919,7 @@ for (const route of unique) {
          purpose rather than left unset, so a future reset that adds padding
          cannot bring this back. */
       '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>',
-      /* Round 420: keep the crawler copy in the document without painting it
+      /* Round 422: keep the crawler copy in the document without painting it
          for a JavaScript visitor. The capability marker is copied from the
          template head above. This rule reserves one viewport until React
          replaces #root, and noscript restores the complete visible page. */

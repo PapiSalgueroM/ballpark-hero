@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { StreakState } from '@/lib/streaks';
 
@@ -103,9 +103,14 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getStreakState } from '@/lib/streaks';
 
 function CompletionHarness({ complete }: { complete: boolean }) {
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   useGameCompletion('footle', complete, 400, 5);
-  return <p>{user ? 'ready' : 'waiting'}</p>;
+  return (
+    <>
+      <p>{user ? 'ready' : 'waiting'}</p>
+      <button onClick={() => { void refreshProfile(); }}>Refresh profile</button>
+    </>
+  );
 }
 
 describe('completion refresh race', () => {
@@ -243,6 +248,43 @@ describe('completion refresh race', () => {
     expect(fixtures.profileUpsert).not.toHaveBeenCalled();
 
     window.removeEventListener('game-completion-saved', savedEvent);
+    vi.useRealTimers();
+  });
+
+  it('records a public completion after a failed hydration gets a same-account profile name', async () => {
+    fixtures.profileReads.mockImplementationOnce(async () => ({
+      data: null,
+      error: new Error('offline'),
+    }));
+
+    const view = render(
+      <AuthProvider>
+        <CompletionHarness complete={false} />
+      </AuthProvider>,
+    );
+    expect(await screen.findByText('ready')).toBeInTheDocument();
+    await waitFor(() => expect(fixtures.profileReads).toHaveBeenCalledTimes(1));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Refresh profile' }));
+    await waitFor(() => expect(fixtures.profileReads).toHaveBeenCalledTimes(2));
+    await waitFor(() => {
+      expect(localStorage.getItem('dukb-display-name-scoped-v1:user-1')).toBe('Tester');
+    });
+
+    view.rerender(
+      <AuthProvider>
+        <CompletionHarness complete />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(fixtures.completionInsert).toHaveBeenCalledTimes(1));
+    expect(fixtures.completionInsert).toHaveBeenCalledWith({
+      game: 'footle',
+      player_name: 'Tester',
+      score: 400,
+    });
+    expect(fixtures.profileUpsert).not.toHaveBeenCalled();
+
     vi.useRealTimers();
   });
 

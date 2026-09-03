@@ -12,7 +12,11 @@ import {
   restoreStreakStateFromProfile,
   setStreakStorageIdentity,
 } from '@/lib/streaks';
-import { ensureProgressHydration, resetProgressHydration } from '@/lib/progressHydration';
+import {
+  ensureProgressHydration,
+  markProgressProfileVerified,
+  resetProgressHydration,
+} from '@/lib/progressHydration';
 
 /** Mirrors the live `profiles` table exactly (verified against the schema in
     Round 55). The old shape claimed current_streak, longest_streak,
@@ -154,12 +158,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const newerSnapshot = latestProfileSnapshotRef.current;
-    if (
-      hydrateProgress
-      && !isLatestRequest()
-      && newerSnapshot?.generation === generation
-      && newerSnapshot.request > request
-    ) {
+    if (hydrateProgress && !isLatestRequest()) {
+      if (
+        newerSnapshot?.generation !== generation
+        || newerSnapshot.request <= request
+      ) return false;
       nextProfile = newerSnapshot.profile;
     }
 
@@ -190,6 +193,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
          it, so a signed in player's plays stop filing under their guest
          handle. Cleared on sign out below. */
       cacheDisplayName(nextProfile.display_name || nextProfile.username || null);
+      if (!hydrateProgress) markProgressProfileVerified(userId);
     }
     return hydrationSucceeded;
   };

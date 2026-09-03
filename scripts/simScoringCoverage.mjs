@@ -136,7 +136,7 @@ export const supabase: any = {
 };
 `);
   fs.writeFileSync(ENTRY, `
-export { cacheDisplayName, recordCompletion, recordActivity } from '${ROOT.replaceAll('\\', '/')}/src/lib/completions.ts';
+export { cacheDisplayName, recordCompletion, recordActivity, setDisplayNameStorageIdentity } from '${ROOT.replaceAll('\\', '/')}/src/lib/completions.ts';
 export { getStreakState } from '${ROOT.replaceAll('\\', '/')}/src/lib/streaks.ts';
 export { ensureProgressHydration, resetProgressHydration } from '${ROOT.replaceAll('\\', '/')}/src/lib/progressHydration.ts';
 export { ledger, setSessionUser } from '${STUB}';
@@ -153,6 +153,7 @@ export { ledger, setSessionUser } from '${STUB}';
   const mod = await import(pathToFileURL(BUNDLE).href);
 
   mod.setSessionUser({ id: 'user-1' });
+  mod.setDisplayNameStorageIdentity('user-1');
   mod.resetProgressHydration('user-1');
   await mod.ensureProgressHydration('user-1', async () => true);
   mod.cacheDisplayName('Tester');

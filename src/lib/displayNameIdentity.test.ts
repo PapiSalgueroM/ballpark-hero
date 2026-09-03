@@ -2,17 +2,23 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {} }));
 
-import {
-  cacheDisplayName,
-  getCurrentPlayerName,
-  getStoredPlayerName,
-  setDisplayNameStorageIdentity,
-} from '@/lib/completions';
+type CompletionModule = typeof import('@/lib/completions');
+let cacheDisplayName: CompletionModule['cacheDisplayName'];
+let getCurrentPlayerName: CompletionModule['getCurrentPlayerName'];
+let getStoredPlayerName: CompletionModule['getStoredPlayerName'];
+let setDisplayNameStorageIdentity: CompletionModule['setDisplayNameStorageIdentity'];
 
 describe('display name identity storage', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    vi.resetModules();
     localStorage.clear();
     localStorage.setItem('dukb-guest-handle', 'IcyPoacher-42');
+    ({
+      cacheDisplayName,
+      getCurrentPlayerName,
+      getStoredPlayerName,
+      setDisplayNameStorageIdentity,
+    } = await import('@/lib/completions'));
   });
 
   afterEach(() => {
@@ -82,6 +88,66 @@ describe('display name identity storage', () => {
 
     expect(localStorage.getItem('dukb-display-name-scoped-v1:account-a')).toBe('Alpha');
     expect(localStorage.getItem('dukb-display-name-scoped-v1:account-b')).toBe('Beta');
+  });
+
+  it('keeps Account B scoped when every write of its identity marker fails', async () => {
+    cacheDisplayName('Alpha');
+    setDisplayNameStorageIdentity('account-a');
+
+    const originalSetItem = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function setItem(key, value) {
+      if (key === 'dukb-display-name-identity-v1' && value === 'account-b') {
+        throw new Error('blocked');
+      }
+      return originalSetItem.call(this, key, value);
+    });
+
+    setDisplayNameStorageIdentity('account-b');
+    expect(localStorage.getItem('dukb-display-name-identity-v1')).toBeNull();
+    cacheDisplayName('Beta');
+
+    expect(localStorage.getItem('dukb-display-name')).toBeNull();
+    expect(localStorage.getItem('dukb-display-name-scoped-v1:account-a')).toBe('Alpha');
+    expect(localStorage.getItem('dukb-display-name-scoped-v1:account-b')).toBe('Beta');
+
+    vi.restoreAllMocks();
+    vi.resetModules();
+    const reloaded = await import('@/lib/completions');
+    expect(reloaded.getStoredPlayerName()).toBe('IcyPoacher-42');
+
+    reloaded.setDisplayNameStorageIdentity('account-b');
+    expect(reloaded.getStoredPlayerName()).toBe('Beta');
+  });
+
+  it('does not expose an existing Account B scoped name when its marker cannot be persisted', async () => {
+    cacheDisplayName('Alpha');
+    setDisplayNameStorageIdentity('account-a');
+    localStorage.setItem('dukb-display-name-scoped-v1:account-b', 'Beta Old');
+
+    const originalSetItem = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function setItem(key, value) {
+      if (key === 'dukb-display-name-identity-v1' && value === 'account-b') {
+        throw new Error('blocked');
+      }
+      return originalSetItem.call(this, key, value);
+    });
+
+    setDisplayNameStorageIdentity('account-b');
+    expect(localStorage.getItem('dukb-display-name-identity-v1')).toBeNull();
+    expect(getStoredPlayerName()).toBe('Beta Old');
+    expect(localStorage.getItem('dukb-display-name')).toBeNull();
+
+    cacheDisplayName('Beta Fresh');
+    expect(localStorage.getItem('dukb-display-name-scoped-v1:account-b')).toBe('Beta Fresh');
+    expect(localStorage.getItem('dukb-display-name')).toBeNull();
+
+    vi.restoreAllMocks();
+    vi.resetModules();
+    const reloaded = await import('@/lib/completions');
+    expect(reloaded.getStoredPlayerName()).toBe('IcyPoacher-42');
+
+    reloaded.setDisplayNameStorageIdentity('account-b');
+    expect(reloaded.getStoredPlayerName()).toBe('Beta Fresh');
   });
 
   it('ignores Account A after its active name survives a persistent removal failure', async () => {

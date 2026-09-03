@@ -203,7 +203,7 @@ describe('AuthContext same-user profile races', () => {
     });
   });
 
-  it('keeps a valid initial hydration while a newer non-hydrating read is pending', async () => {
+  it('refuses an older initial hydration while a newer same-user read is pending', async () => {
     const olderRead = deferred<ProfileResult>();
     const newerRead = deferred<ProfileResult>();
     fixtures.profileRead
@@ -223,9 +223,9 @@ describe('AuthContext same-user profile races', () => {
     });
 
     expect(getStreakState()).toMatchObject({
-      global: { current: 2, longest: 4, lastDate: '2026-09-01' },
-      totalPlays: 7,
-      totalPoints: 320,
+      global: { current: 0, longest: 0, lastDate: null },
+      totalPlays: 0,
+      totalPoints: 0,
     });
 
     const newerProfile = profileResult('New Name');
@@ -242,9 +242,9 @@ describe('AuthContext same-user profile races', () => {
     });
     await waitFor(() => expect(screen.getByTestId('profile-name')).toHaveTextContent('New Name'));
     expect(getStreakState()).toMatchObject({
-      global: { current: 2, longest: 4, lastDate: '2026-09-01' },
-      totalPlays: 7,
-      totalPoints: 320,
+      global: { current: 0, longest: 0, lastDate: null },
+      totalPlays: 0,
+      totalPoints: 0,
     });
   });
 

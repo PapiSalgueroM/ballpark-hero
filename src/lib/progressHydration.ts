@@ -5,6 +5,7 @@ export interface ProgressHydrationSnapshot {
   generation: number;
   status: ProgressHydrationStatus;
   promise: Promise<boolean> | null;
+  profileVerifiedAfterFailure: boolean;
 }
 
 let currentHydration: ProgressHydrationSnapshot | null = null;
@@ -18,8 +19,21 @@ let hydrationGeneration = 0;
 export function resetProgressHydration(userId: string | null): void {
   hydrationGeneration += 1;
   currentHydration = userId
-    ? { userId, generation: hydrationGeneration, status: 'idle', promise: null }
+    ? {
+        userId,
+        generation: hydrationGeneration,
+        status: 'idle',
+        promise: null,
+        profileVerifiedAfterFailure: false,
+      }
     : null;
+}
+
+/** Allows public attribution after a failed hydration only once a later
+ * same-account profile read has verified the account's scoped public name. */
+export function markProgressProfileVerified(userId: string): void {
+  if (!currentHydration || currentHydration.userId !== userId) return;
+  currentHydration.profileVerifiedAfterFailure = true;
 }
 
 /**
@@ -45,6 +59,7 @@ export function ensureProgressHydration(
     generation: existing.generation,
     status: 'pending',
     promise: null,
+    profileVerifiedAfterFailure: existing.profileVerifiedAfterFailure,
   };
   const promise = Promise.resolve()
     .then(hydrate)
@@ -56,6 +71,7 @@ export function ensureProgressHydration(
           generation: task.generation,
           status: success ? 'ready' : 'failed',
           promise: null,
+          profileVerifiedAfterFailure: task.profileVerifiedAfterFailure,
         };
       }
       return success;

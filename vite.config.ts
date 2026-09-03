@@ -81,7 +81,7 @@ const inlineSnapshotAssets = (root: string) => {
        snapshot's own inline boot style holds the page until then, which is
        exactly what it was written for. The noscript copy is for a browser that
        never runs the swap. */
-    /* Round 420: the dimmed snapshot still painted as raw text. Existing
+    /* Round 422: the dimmed snapshot still painted as raw text. Existing
        committed snapshots get the same early capability marker and hidden
        one-viewport reservation as newly prerendered pages. A no-JS browser
        gets the complete visible copy, and crawlers keep every word in the

@@ -1,5 +1,5 @@
 /**
- * Round 420 browser harness: crawler copy never paints for a JavaScript visitor.
+ * Round 422 browser harness: crawler copy never paints for a JavaScript visitor.
  *
  * The home template and every saved route carry readable HTML so crawlers and
  * browsers without JavaScript get a complete document. That same copy used to

@@ -225,13 +225,6 @@ let displayNameRuntimeIdentity: string | undefined;
 export function cacheDisplayName(name: string | null): void {
   try {
     const storedIdentity = localStorage.getItem(DISPLAY_NAME_IDENTITY_KEY);
-    if (
-      displayNameRuntimeIdentity !== undefined
-      && !storedIdentity
-      && !localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${displayNameRuntimeIdentity}`)
-    ) {
-      displayNameRuntimeIdentity = undefined;
-    }
     const identity = displayNameRuntimeIdentity ?? storedIdentity;
     if (identity && identity !== DISPLAY_NAME_GUEST_IDENTITY) {
       if (name) localStorage.setItem(`${DISPLAY_NAME_SCOPED_PREFIX}${identity}`, name);
@@ -299,8 +292,12 @@ export function setDisplayNameStorageIdentity(userId: string | null): void {
        prevent the later cleanup calls from running. */
     try { localStorage.removeItem(DISPLAY_NAME_CACHE_KEY); } catch { /* unavailable */ }
     try { localStorage.removeItem(DISPLAY_NAME_IDENTITY_KEY); } catch { /* unavailable */ }
-    try { localStorage.setItem(DISPLAY_NAME_IDENTITY_KEY, nextIdentity); } catch { /* unavailable */ }
-    if (nextIdentity !== DISPLAY_NAME_GUEST_IDENTITY) {
+    let markerRecovered = false;
+    try {
+      localStorage.setItem(DISPLAY_NAME_IDENTITY_KEY, nextIdentity);
+      markerRecovered = localStorage.getItem(DISPLAY_NAME_IDENTITY_KEY) === nextIdentity;
+    } catch { /* unavailable */ }
+    if (markerRecovered && nextIdentity !== DISPLAY_NAME_GUEST_IDENTITY) {
       try {
         const stored = localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`);
         if (stored) localStorage.setItem(DISPLAY_NAME_CACHE_KEY, stored);
@@ -370,6 +367,8 @@ function recordPublicCompletion(
     void hydration.promise.then(success => {
       if (success) insertForHydratedIdentity();
     }, () => undefined);
+  } else if (hydration.status === 'failed' && hydration.profileVerifiedAfterFailure) {
+    insertForHydratedIdentity();
   }
 }
 

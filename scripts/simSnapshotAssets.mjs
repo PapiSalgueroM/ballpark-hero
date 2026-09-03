@@ -124,7 +124,7 @@ for (const [route, html] of stubs) {
 }
 console.log(`   ${stubs.length} signposts, ${stubTags} touched`);
 
-/* ── 6: the invisible handoff (Round 420) ─────────────────────────────────
+/* ── 6: the invisible handoff (Round 422) ─────────────────────────────────
    The dimmed crawler copy still looked like a broken page. Every shipped
    document now needs all three pieces: an early JavaScript capability marker,
    a marker-scoped rule that hides exactly one viewport, and a noscript rule

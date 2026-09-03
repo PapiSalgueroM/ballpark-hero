@@ -573,7 +573,7 @@ const failuresBefore14 = failures;
 }
 const failuresAfter14 = failures;
 
-/* Round 420: a random board or player is a valid photograph, but rebuilding
+/* Round 422: a random board or player is a valid photograph, but rebuilding
    the same source must produce the same photograph. Every clock sample uses a
    fixed seed, records the call count and hook identity, then repeats in an
    independent context. A changed head, ordered body, call count or hook makes
@@ -639,7 +639,7 @@ const failuresBefore15 = failures;
 }
 const failuresAfter15 = failures;
 
-/* Round 420: the desktop and Codex lanes use separate working trees but share
+/* Round 422: the desktop and Codex lanes use separate working trees but share
    one machine. A fixed default prerender port made a valid build fail as soon
    as the other lane began its own build. The default must be an operating
    system assigned loopback port, while an explicit PRERENDER_PORT remains
