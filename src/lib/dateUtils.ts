@@ -80,7 +80,18 @@ export function dailyPrngSeed(dateStr: string): number {
   h = Math.imul(h, 2246822507) >>> 0;
   h ^= h >>> 13;
   h = Math.imul(h, 3266489909) >>> 0;
-  h ^= h >>> 16;
+  /* ROUND 427: THE >>> 0 HERE IS LOAD BEARING. Every other step in this hash
+     re-coerces to unsigned, because `^=` in JavaScript yields a SIGNED 32 bit
+     result. This final mix did not, so whenever the last xor set bit 31 the
+     function returned a NEGATIVE seed: dailyPrngSeed('2026-09-03') was
+     -54366920, and 3 of 10 consecutive dates came back negative.
+     Every PRNG consumer of this seed already defends itself
+     (`if (s <= 0) s += 2147483646`), which is why only the one caller that used
+     the seed as a raw array index ever showed it: playerStockMarket's
+     START_YEARS[seed % length] indexed negative, returned undefined, and the
+     undefined start year became NaN in the query string, so the Daily market
+     asked Postgres for `year=in.(NaN)` and got a 400 back. */
+  h = (h ^ (h >>> 16)) >>> 0;
   return (h % 2147483646) + 1;
 }
 
