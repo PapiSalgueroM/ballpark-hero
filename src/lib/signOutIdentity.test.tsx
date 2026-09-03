@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const fixtures = vi.hoisted(() => {
@@ -86,6 +86,20 @@ describe('sign-out identity transition', () => {
     });
   });
 
+  it('keeps the persisted account name when its first profile refresh is offline', async () => {
+    fixtures.profileRead.mockResolvedValueOnce({
+      data: null,
+      error: new Error('offline'),
+    } as typeof fixtures.profileResult);
+
+    render(<AuthProvider><IdentityButton /></AuthProvider>);
+    await waitFor(() => expect(fixtures.profileRead).toHaveBeenCalledTimes(1));
+    await act(async () => { await Promise.resolve(); });
+
+    expect(screen.getByRole('button', { name: 'Captain42' })).toBeInTheDocument();
+    expect(localStorage.getItem('dukb-display-name')).toBe('Captain42');
+  });
+
   it('ignores a signed-in profile read that resolves after the session signed out', async () => {
     let releaseProfile = (_value: typeof fixtures.profileResult) => undefined;
     const heldProfile = new Promise<typeof fixtures.profileResult>((resolve) => { releaseProfile = resolve; });
@@ -106,6 +120,26 @@ describe('sign-out identity transition', () => {
     });
 
     expect(screen.getByRole('button', { name: 'IcyPoacher-42' })).toBeInTheDocument();
+    expect(localStorage.getItem('dukb-display-name')).toBeNull();
+  });
+
+  it('clears the previous account name before a replacement account profile can load', async () => {
+    render(<AuthProvider><IdentityButton /></AuthProvider>);
+    expect(await screen.findByRole('button', { name: 'Captain42' })).toBeInTheDocument();
+
+    fixtures.profileRead.mockResolvedValueOnce({
+      data: null,
+      error: new Error('offline'),
+    } as typeof fixtures.profileResult);
+
+    await act(async () => {
+      fixtures.authCallback?.('SIGNED_IN', {
+        user: { id: 'user-2' },
+        access_token: 'second-token',
+      });
+    });
+
+    expect(await screen.findByRole('button', { name: 'IcyPoacher-42' })).toBeInTheDocument();
     expect(localStorage.getItem('dukb-display-name')).toBeNull();
   });
 });

@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import ShareButtons from '@/components/game/ShareButtons';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 /* Round 149: the celebration kit was born in Club Manager (Round 147) and
  * graduated site-wide the next day: every one of the ~56 games ending on
  * this screen now celebrates a win the same way. It keeps its club-manager
@@ -98,7 +98,7 @@ export function ResultScreen({
   useEffect(() => {
     if (!recordCompletionOnMount || recordedRef.current) return;
     recordedRef.current = true;
-    recordCompletion(share.gamePath, completionScore, getCurrentPlayerName());
+    recordCompletion(share.gamePath, completionScore);
   }, [recordCompletionOnMount, completionScore, share.gamePath]);
 
   const headlineColor = won === true ? 'text-correct' : won === false ? 'text-destructive' : 'text-primary';

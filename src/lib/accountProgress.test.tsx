@@ -22,15 +22,45 @@ const profileRow: {
   updated_at: '2026-09-01T00:00:00.000Z',
 };
 
-const maybeSingle = vi.fn(async () => ({ data: profileRow, error: null }));
+const maybeSingle = vi.fn(async () => ({ data: { ...profileRow }, error: null }));
 const eq = vi.fn(() => ({ maybeSingle }));
 const select = vi.fn(() => ({ eq }));
+const conditionalUpdate = vi.fn(async (
+  payload: Partial<typeof profileRow>,
+  equality: Record<string, unknown>,
+  nullFields: Set<string>,
+) => {
+  const matches = equality.user_id === profileRow.user_id
+    && (!nullFields.has('display_name') || profileRow.display_name === null)
+    && (!nullFields.has('username') || profileRow.username === null);
+  if (!matches) return { data: null, error: null };
+
+  Object.assign(profileRow, payload);
+  return { data: { ...profileRow }, error: null };
+});
+const update = vi.fn((payload: Partial<typeof profileRow>) => {
+  const equality: Record<string, unknown> = {};
+  const nullFields = new Set<string>();
+  const query = {
+    eq: vi.fn((field: string, value: unknown) => {
+      equality[field] = value;
+      return query;
+    }),
+    is: vi.fn((field: string, value: unknown) => {
+      if (value === null) nullFields.add(field);
+      return query;
+    }),
+    select: vi.fn(() => query),
+    maybeSingle: vi.fn(() => conditionalUpdate(payload, equality, nullFields)),
+  };
+  return query;
+});
 const upsert = vi.fn(async () => ({ error: null }));
 const unsubscribe = vi.fn();
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
-    from: vi.fn(() => ({ select, upsert })),
+    from: vi.fn(() => ({ select, update, upsert })),
     auth: {
       onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe } } })),
       getSession: vi.fn(async () => ({
@@ -92,6 +122,8 @@ describe('account progress migration', () => {
     profileRow.username = null;
     profileRow.streak_state = {};
     maybeSingle.mockClear();
+    conditionalUpdate.mockClear();
+    update.mockClear();
     upsert.mockReset();
     upsert.mockResolvedValue({ error: null });
   });
@@ -118,10 +150,12 @@ describe('account progress migration', () => {
 
     expect(await screen.findByText('IcyPoacher-42')).toBeInTheDocument();
     await waitFor(() => expect(upsert).toHaveBeenCalled());
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ display_name: 'IcyPoacher-42' }),
+    );
     expect(upsert).toHaveBeenCalledWith(
       expect.objectContaining({
         user_id: 'user-1',
-        display_name: 'IcyPoacher-42',
         streak_state: localState,
       }),
       { onConflict: 'user_id' },

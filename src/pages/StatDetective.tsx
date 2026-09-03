@@ -40,7 +40,7 @@ import {
   statChips,
   suggestProfiles,
 } from '@/lib/statDetective';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 
 type Phase = 'boot' | 'error' | 'pick' | 'playing' | 'done';
 
@@ -140,7 +140,7 @@ const StatDetective = () => {
     if (phase === 'playing') completionRef.current = false;
     if (phase !== 'done' || completionRef.current) return;
     completionRef.current = true;
-    recordCompletion('/stat-detective', undefined, getCurrentPlayerName());
+    recordCompletion('/stat-detective');
   }, [phase]);
 
   const misses = guesses.filter(g => !g.isCorrect).length;

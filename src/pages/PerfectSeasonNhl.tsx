@@ -23,7 +23,7 @@ import {
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 
 const SPORT_KEY = 'nhl';
 
@@ -245,7 +245,7 @@ const PerfectSeasonNhl = () => {
   useEffect(() => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
-    recordCompletion('/perfect-season-nhl', sim.wins, getCurrentPlayerName());
+    recordCompletion('/perfect-season-nhl', sim.wins);
   }, [phase, sim]);
 
   const skipSim = () => setRevealed(NHL_GAMES);

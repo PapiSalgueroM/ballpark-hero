@@ -13,8 +13,8 @@
    exempt BY SHAPE (read from App.tsx, never a hand list here, so a new
    redirect exempts itself and a new game cannot hide behind the list).
 
-   Negative control: SIM_SCORING_CONTROL=unwire deletes the completion
-   imports from WorldCupPredictor's in-memory copy and the run must fail.
+   Negative control: SIM_SCORING_CONTROL=unwire replaces
+   WorldCupPredictor's in-memory copy with an inert page and the run must fail.
 
    Run: node scripts/simScoringCoverage.mjs
 */
@@ -33,14 +33,12 @@ const read = p => {
   for (const e of ['', '.tsx', '.ts']) {
     try {
       let s = fs.readFileSync(p + e, 'utf8');
-      if (CONTROL && (p + e).endsWith('pages/WorldCupPredictor.tsx')) {
+      if (CONTROL && path.basename(p + e) === 'WorldCupPredictor.tsx') {
         const before = s;
-        /* Sever the call names AND the import specifier: the walk follows
-           imports into the completions module, whose own source contains
-           the needle, so leaving the specifier standing lets the walk reach
-           coverage through the very import being unwired. The first draft
-           of this control did exactly that and reported itself dead. */
-        s = s.replace(/recordCompletion|useGameCompletion/g, 'nothingAtAll').replace(/@\/lib\/completions/g, '@/lib/nothingAtAll');
+        /* An inert page removes both direct and transitive paths. This keeps
+           the control independent of whatever shared chrome the real page
+           imports later. */
+        s = 'export default function WorldCupPredictor() { return null; }';
         if (s !== before) controlBit = true;
       }
       return s;
@@ -96,7 +94,7 @@ console.log('2) one recordCompletion call feeds all three pipelines, with the ri
    signed in save all move from one call, and none of them moves twice. The
    supabase client is swapped for a ledger stub at bundle time, so this runs
    the real completions and streaks code against a fake database and a fake
-   session, deterministically. */
+   signed-in hydration, deterministically. */
 {
   const { execSync } = await import('node:child_process');
   const STUB = path.join(os.tmpdir(), 'scoringStub.ts').replaceAll('\\', '/');
@@ -138,8 +136,9 @@ export const supabase: any = {
 };
 `);
   fs.writeFileSync(ENTRY, `
-export { recordCompletion, recordActivity } from '${ROOT.replaceAll('\\', '/')}/src/lib/completions.ts';
+export { cacheDisplayName, recordCompletion, recordActivity } from '${ROOT.replaceAll('\\', '/')}/src/lib/completions.ts';
 export { getStreakState } from '${ROOT.replaceAll('\\', '/')}/src/lib/streaks.ts';
+export { ensureProgressHydration, resetProgressHydration } from '${ROOT.replaceAll('\\', '/')}/src/lib/progressHydration.ts';
 export { ledger, setSessionUser } from '${STUB}';
 `);
   execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@/integrations/supabase/client=${STUB}`, { stdio: 'inherit' });
@@ -154,6 +153,9 @@ export { ledger, setSessionUser } from '${STUB}';
   const mod = await import(pathToFileURL(BUNDLE).href);
 
   mod.setSessionUser({ id: 'user-1' });
+  mod.resetProgressHydration('user-1');
+  await mod.ensureProgressHydration('user-1', async () => true);
+  mod.cacheDisplayName('Tester');
   mod.recordCompletion('/soccer-grid', 40, 'Tester', 3);
   await new Promise(r => setTimeout(r, 50));
   mod.recordCompletion('/missing-xi', 100, 'Tester');

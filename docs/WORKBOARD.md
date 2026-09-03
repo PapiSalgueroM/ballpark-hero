@@ -23,15 +23,6 @@ How it works:
 
 ## Active claims, 2026-09-02
 
-- **Codex lane, next: Round 420. FRONT DOOR AND ACCOUNT RELIABILITY.** Final
-  merged-tree verification is in progress. This round removes the crawler-copy
-  flash without hiding no-JavaScript content, refreshes the count-free social
-  card, isolates account and guest streaks, audits Player Bingo age data with
-  source receipts, makes Stock Market retry real, clears stale Transfer Path
-  rejection state, removes unsafe first-render randomness and retires obsolete
-  Boot Room endpoints. It does not touch the Desktop lane's Round 419 schedule
-  work.
-
 - **Desktop lane, next: Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.**
   Found while re-measuring Round 418, not reported by anyone. `buildSchedule`
   in src/lib/frontOffice.ts is documented as 6 divisional plus 11 crossover
@@ -107,7 +98,7 @@ Do not hand edit the raster or print the current 118-game count into it.
 **OWNER REPORT, 2026-09-02, RAW COPY FLASH BEFORE THE APP.** The owner captured
 the static homepage crawler copy filling the screen before React mounted and
 does not want visitors to see it. The same deliberate dimmed fallback exists
-on direct game links. Round 418 owns the cross-route fix. The copy must remain
+on direct game links. Round 420 owns the cross-route fix. The copy must remain
 complete for no-JavaScript readers and raw crawlers, and a JavaScript visitor
 must never paint it while waiting for the app bundle.
 
@@ -120,7 +111,7 @@ guide. Keep the footer report as a fallback until the shared placement is
 proved across all 118 active games. The existing relay already stores reports
 in the admin queue and attempts server-side email without exposing the address;
 inbox delivery still depends on the pending FormSubmit activation. This is the
-next shared game-shell round after Round 418.
+next shared game-shell round after Round 420.
 
 **HISTORICAL OWNER STRATEGIC NOTE, 2026-09-01, RETAINED FOR THE POST-ADSENSE
 ROADMAP.** This did not replace the priority list when it was recorded. The
@@ -397,15 +388,12 @@ turned up that is still live is filed as its own item further down this Inbox.)
   fixes in Rounds 364 and 367 and both are right; both scale with traffic.
 
 
-- SNAPSHOT SWAP CLS, the real architectural remainder (Round 351 measured it
-  properly and it is smaller than Round 348 thought): the prerendered snapshot
-  lives INSIDE #root, so when React mounts it clears it and paints a different
-  document, which shifts whatever the visitor could already see. It cannot be
-  hydrated away because the snapshot is deliberately reconstructed readable
-  text rather than React's own markup, and it must NOT be hidden from visitors,
-  because text served only to crawlers is cloaking. Any real fix changes the
-  prerenderer to emit hydratable markup, which is a designed round, not a
-  patch. Round 351 removed the larger and cheaper half of what was filed here.
+- SNAPSHOT SWAP CLS remains: Round 420 removed the raw-copy flash by hiding the
+  snapshot only after JavaScript capability is known, reserving one viewport,
+  keeping all text in the DOM, restoring full no-JavaScript visibility, and
+  recovering after a failed boot. React still replaces reconstructed markup,
+  so measure residual CLS before closing this item; hydratable markup remains
+  the architectural option.
 - GRID ARCHIVE, DEFERRED behind the pool (was Task 3, unclaimed): rebuild the
   design around /football-grid/archive/<puzzle-id>, one page per distinct
   board, after the pool is deep enough that a published board stays retired.
@@ -832,6 +820,22 @@ Standing claims after Round 400:
 
 ## Done
 
+- FRONT DOOR AND ACCOUNT RELIABILITY, Round 420 (Codex lane, 2026-09-02).
+  JavaScript visitors no longer see the crawler-copy handoff flash, while raw
+  crawlers, no-JavaScript visitors and failed boots retain the complete fallback.
+  A newly keyed generated social card carries no stale game count. Guest and
+  signed-in streaks are identity scoped, failed hydration stays local, account
+  writes are serialized, and a delayed completion cannot cross from account A
+  into account B. Player Bingo has 73 exact date-of-birth identities with a
+  committed two-source receipt, conservative bounds for the rest and no deceased
+  Diogo Jota. Stock Market retry refetches, Transfer Path clears stale rejection
+  state, unsafe first-render randomness is fenced, and six obsolete Boot Room
+  endpoints are authenticated 410 tombstones. Stadium Tycoon skips its live loop
+  during prerender and accumulates subsecond ticks so matches advance. The
+  indexing harness excludes test and spec files from page discovery. Exact
+  TypeScript, the full SEO build, all 15 generated-site fences and the targeted
+  unit, browser and negative-control gates passed. The branch-wide `runAllSims`
+  result remains the release gate and is not claimed here.
 - THE FRONT OFFICE ENGINE READS THE DEFENCE, PART TWO, Round 418 (desktop
   lane, 2026-09-02). The other half of the owner's item 12. Round 416 put 192
   real defenders on the rosters and deliberately left them worth nothing:
@@ -843,7 +847,9 @@ Standing claims after Round 400:
   where it used to move it by nothing. Draft picks and the opening free agent
   market carry defenders, so they can be acquired and not only admired, and
   the team panel shows the rating the sim actually reads. A pre 416 save has
-  no defenders and keeps the stored number, so it plays exactly as before.
+  no defenders, so every club starts at the same replacement-level defence
+  until the first offseason replenishes six defenders; its titles, seasons
+  and squad still load.
   Measured over 40 simulated seasons: strength still predicts wins, median
   correlation 0.693 (one draw read 0.822, which an earlier draft quoted as
   though it were the figure), and no club ends over the cap, but the

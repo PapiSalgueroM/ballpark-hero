@@ -61,11 +61,11 @@ const SPORT_OPTIONS: SportOption[] = [
 type Period = 'today' | 'alltime';
 
 export default function Leaderboard() {
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
   /* Round 318: the raw handle goes to the RPCs (it has to match the stored
      rows), the filtered form is what renders and what the own-row highlight
      compares against, since every board row is filtered the same way. */
-  const ownHandle = usePlayerName(profile);
+  const ownHandle = usePlayerName(profile, user?.id ?? 'guest');
   const ownShownName = useMemo(() => publicName(ownHandle ?? 'Player'), [ownHandle]);
 
   const [sport, setSport] = useState<string>('all');

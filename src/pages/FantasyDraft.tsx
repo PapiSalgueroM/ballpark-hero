@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import type { Player } from '@/types/game';
 
@@ -44,7 +44,7 @@ interface AnalysisData {
 
 const FantasyDraft = () => {
   const { toast } = useToast();
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [started, setStarted] = useState(false);
   const [criteria, setCriteria] = useState<string | null>(null);
   const [loadingCriteria, setLoadingCriteria] = useState(true);
@@ -96,8 +96,8 @@ const FantasyDraft = () => {
     const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
     setVerdict(season);
     const score = Math.min(100, Math.round((season.points[0] / 114) * 100));
-    recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
-  }, [draftComplete, userTeam, aiTeam, profile]);
+    recordCompletion('/fantasy-draft', score, undefined, season.winner === 0 ? 1 : 0);
+  }, [draftComplete, userTeam, aiTeam]);
 
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
   // Illegal picks are blocked for BOTH the player and the AI. If a side has

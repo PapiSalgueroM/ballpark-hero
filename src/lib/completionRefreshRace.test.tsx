@@ -17,6 +17,7 @@ const fixtures = vi.hoisted(() => {
     remote,
     profileReads: vi.fn(),
     profileUpsert: vi.fn(async () => ({ error: new Error('offline') })),
+    completionInsert: vi.fn(async () => ({ error: null })),
     unsubscribe: vi.fn(),
   };
 });
@@ -76,6 +77,7 @@ vi.mock('@/integrations/supabase/client', () => {
         select: vi.fn(() => emptySingleQuery),
       };
     }
+    if (name === 'game_completions') return { insert: fixtures.completionInsert };
     return { insert: vi.fn(() => resolved()) };
   };
 
@@ -113,6 +115,7 @@ describe('completion refresh race', () => {
     localStorage.clear();
     fixtures.profileReads.mockClear();
     fixtures.profileUpsert.mockClear();
+    fixtures.completionInsert.mockClear();
   });
 
   it('keeps the new local streak when both completion events refresh a stale profile and its backup fails', async () => {
@@ -170,6 +173,10 @@ describe('completion refresh race', () => {
       </AuthProvider>,
     );
     expect(getStreakState().totalPlays).toBe(0);
+    expect(fixtures.profileReads).toHaveBeenCalledTimes(1);
+    expect(fixtures.completionInsert).not.toHaveBeenCalled();
+    expect(savedEvent).not.toHaveBeenCalled();
+    await act(async () => { await Promise.resolve(); });
 
     await act(async () => {
       releaseInitial({
@@ -190,6 +197,8 @@ describe('completion refresh race', () => {
 
     await waitFor(() => expect(fixtures.profileUpsert).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(savedEvent).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(fixtures.profileReads).toHaveBeenCalledTimes(3));
+    expect(fixtures.completionInsert).toHaveBeenCalledTimes(1);
     expect(getStreakState()).toEqual({
       ...fixtures.remote,
       global: { current: 4, longest: 4, lastDate: '2026-09-02' },
@@ -227,7 +236,8 @@ describe('completion refresh race', () => {
       </AuthProvider>,
     );
 
-    await waitFor(() => expect(savedEvent).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(savedEvent).toHaveBeenCalledTimes(1));
+    expect(fixtures.completionInsert).not.toHaveBeenCalled();
     expect(getStreakState().totalPlays).toBe(1);
     expect(getStreakState().totalPoints).toBe(400);
     expect(fixtures.profileUpsert).not.toHaveBeenCalled();
@@ -267,7 +277,8 @@ describe('completion refresh race', () => {
       </AuthProvider>,
     );
 
-    await waitFor(() => expect(savedEvent).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(savedEvent).toHaveBeenCalledTimes(1));
+    expect(fixtures.completionInsert).not.toHaveBeenCalled();
     expect(getStreakState().totalPlays).toBe(1);
     expect(getStreakState().totalPoints).toBe(400);
     expect(fixtures.profileUpsert).not.toHaveBeenCalled();

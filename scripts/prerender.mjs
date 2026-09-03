@@ -47,7 +47,7 @@
  *      written. Nothing here knows which games are daily, and that is
  *      deliberate: a list of affected games has been written three times in
  *      this repo and each one covered what somebody had already found and
- *      nothing after. Random choices are valid content, so Round 418 keeps one
+ *      nothing after. Random choices are valid content, so Round 420 keeps one
  *      fixed seed and independently replays every random-using clock sample.
  *      A changed head, body, call count or hook refuses the route before write.
  *
@@ -69,7 +69,7 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const PUBLIC = path.join(ROOT, 'public');
-/* Round 418: two working trees can build at the same time. A fixed default
+/* Round 420: two working trees can build at the same time. A fixed default
    port made one prerenderer kill the other with EADDRINUSE, so the operating
    system chooses a free loopback port unless a caller explicitly supplies
    PRERENDER_PORT. */
@@ -96,7 +96,7 @@ const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
    what the third sample removed over and above the second, so the cost of
    keeping it stays measured rather than assumed. */
 const SAMPLE_DAYS = [0, 5, 11];
-/* ROUND 284, RECHECKED IN ROUND 418: RANDOM CHOICES ARE FROZEN, NOT GUESSED AT.
+/* ROUND 284, RECHECKED IN ROUND 420: RANDOM CHOICES ARE FROZEN, NOT GUESSED AT.
    A random board or player is still a valid choice. The snapshot promise is
    that the same source produces the same crawler photograph on every build,
    so every clock sample and its independent replay start from one fixed seed.
@@ -288,11 +288,12 @@ let replayPages = [];
    without the flag every page rendered here looked like a dead address and
    the noindex went into all 133 saved files. It was caught before it shipped
    by the fence in simPrerender, section 14, which is the check to keep. */
-/* NEGATIVE CONTROL: PRERENDER_CONTROL=noflag leaves the flag unset, which
-   reproduces the near miss on purpose. The documents it writes go to dist/
-   only, never to public/, so nothing it produces can ship; they exist so that
-   simPrerender section 14 can be seen to fail on real output rather than on
-   a string somebody typed into a test. Pair it with PRERENDER_ONLY. */
+/* NEGATIVE CONTROL: PRERENDER_CONTROL=noflag leaves the flag unset, confirms
+   the real fallback marker fires, and keeps only that marker's robots tag from
+   being cleaned up by Helmet. That recreates the original near miss while
+   leaving the route's real title and canonical intact. Control output goes to
+   dist/ only, never public/, so nothing it produces can ship. Pair it with
+   PRERENDER_ONLY, then require simPrerender section 14 to report the route. */
 const CONTROL = process.env.PRERENDER_CONTROL || '';
 if (CONTROL && !['noflag', 'random-replay'].includes(CONTROL)) {
   console.error(`PRERENDER_CONTROL=${CONTROL} is not a control this script knows`);
@@ -305,12 +306,32 @@ if (CONTROL === 'random-replay' && unique.length !== 1) {
   process.exit(1);
 }
 
-/* ROUND 418: THE SEEDED STREAM AUDITS ITSELF. Counting calls catches a change
+/* ROUND 420: THE SEEDED STREAM AUDITS ITSELF. Counting calls catches a change
    in random control flow even when the visible words happen to agree, and the
    identity check catches any later code that replaces the seeded function and
    would otherwise bypass both the counter and the replay. */
 const clockScript = (days, perturbReplay = false) => `(() => {
-  ${CONTROL === 'noflag' ? '' : 'window.__DUKB_PRERENDER__ = true;'}
+  ${CONTROL === 'noflag' ? `
+  (function () {
+    const isFallbackMarker = node => node instanceof Element
+      && node.matches('meta[data-dukb-fallback][name="robots"]');
+    const appendChild = Node.prototype.appendChild;
+    Node.prototype.appendChild = function (node) {
+      const result = appendChild.call(this, node);
+      if (isFallbackMarker(node)) window.__DUKB_NOFLAG_MARKER_SEEN__ = true;
+      return result;
+    };
+    const removeChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function (node) {
+      if (isFallbackMarker(node)) return node;
+      return removeChild.call(this, node);
+    };
+    const remove = Element.prototype.remove;
+    Element.prototype.remove = function () {
+      if (isFallbackMarker(this)) return;
+      return remove.call(this);
+    };
+  })();` : 'window.__DUKB_PRERENDER__ = true;'}
   (function () {
     let s = ${RANDOM_SEED} | 0;
     const audit = { calls: 0, intact: null };
@@ -673,8 +694,12 @@ async function draw(sample, route, url, replay = false) {
         parts,
         randomCalls: Number.isInteger(randomAudit?.calls) ? randomAudit.calls : -1,
         randomHookIntact: randomAudit?.intact?.() === true,
+        noflagMarkerSeen: window.__DUKB_NOFLAG_MARKER_SEEN__ === true,
       };
     });
+  if (CONTROL === 'noflag' && !captured.noflagMarkerSeen) {
+    throw new Error('noflag control did not observe the real fallback noindex marker');
+  }
   /* Park the page. An idle sample left on a game page keeps its ticker, its
      countdown and its animations running while the other two samples draw,
      which on a small machine is enough to make the settle window mean
@@ -893,7 +918,7 @@ for (const route of unique) {
          purpose rather than left unset, so a future reset that adds padding
          cannot bring this back. */
       '<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>',
-      /* Round 418: keep the crawler copy in the document without painting it
+      /* Round 420: keep the crawler copy in the document without painting it
          for a JavaScript visitor. The capability marker is copied from the
          template head above. This rule reserves one viewport until React
          replaces #root, and noscript restores the complete visible page. */

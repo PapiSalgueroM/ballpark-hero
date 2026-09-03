@@ -21,7 +21,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
-import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
+import { recordCompletion } from "@/lib/completions";
 import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
@@ -735,7 +735,7 @@ const GROUPS_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
 const WorldCupPredictor = () => {
   const [searchParams] = useSearchParams();
   const sharedBracketId = searchParams.get("bracket");
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
 
   const [predictions, setPredictions] = useState<Predictions>(loadPredictions);
   const [showBracket, setShowBracket] = useState(() => {
@@ -805,8 +805,8 @@ const WorldCupPredictor = () => {
     if (!champion || viewingSharedBracket || crownedRef.current === champion) return;
     crownedRef.current = champion;
     try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, champion); } catch { /* storage may be unavailable */ }
-    recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
-  }, [champion, viewingSharedBracket, profile]);
+    recordCompletion("/world-cup-bracket");
+  }, [champion, viewingSharedBracket]);
 
   // Load shared bracket if URL has ?bracket=xxx
   useEffect(() => {

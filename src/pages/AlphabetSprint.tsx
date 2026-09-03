@@ -11,7 +11,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fetchWhoAmIPool } from '@/lib/whoAmI';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 
 import {
   MODES,
@@ -128,7 +128,7 @@ const AlphabetSprint = () => {
     }
     if (phase !== 'done' || recordedRef.current) return;
     recordedRef.current = true;
-    recordCompletion('/alphabet-sprint', score, getCurrentPlayerName());
+    recordCompletion('/alphabet-sprint', score);
   }, [phase, score]);
 
   const start = (id: SprintModeId) => {

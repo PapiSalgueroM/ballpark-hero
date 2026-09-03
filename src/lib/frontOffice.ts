@@ -654,10 +654,9 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
     t.wins = 0;
     t.losses = 0;
     t.picks = [1, 2, 3];
-    /* Round 418: this is the LEGACY path now. team.defense only reaches the
-       sim through defenceRating's fallback, which fires for a pre 416 save
-       whose clubs have no defenders yet, so the drift is kept exactly as it
-       was for those saves and does nothing for a roster that has its own. */
+    /* Round 418: team.defense is a legacy save field kept for save-shape
+       compatibility. defenceRating never reads it, including for pre 416
+       saves, so this bounded drift has no effect on team strength. */
     t.defense = Math.round(Math.max(60, Math.min(95, t.defense + (77 - t.defense) * 0.2 + (rng() * 8 - 4))));
   }
   // trim the FA pool to the useful part

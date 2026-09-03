@@ -11,15 +11,37 @@ type NamedProfile = {
  * render. A first-time guest gets a handle immediately after the first commit;
  * returning guests and named accounts can use the stored value right away.
  */
-export function usePlayerName(profile?: NamedProfile): string | null {
-  const [playerName, setPlayerName] = useState(() => getStoredPlayerName(profile));
+export function usePlayerName(profile?: NamedProfile, authIdentity?: string | null): string | null {
+  const [committedName, setCommittedName] = useState<{
+    identity: string;
+    displayName: string | null;
+    username: string | null;
+    name: string;
+  } | null>(null);
+  const identity = authIdentity || 'guest';
+  const displayName = profile?.display_name ?? null;
+  const username = profile?.username ?? null;
+  const playerName = getStoredPlayerName(profile);
+  const inMemoryName = committedName
+    && committedName.identity === identity
+    && committedName.displayName === displayName
+    && committedName.username === username
+    ? committedName.name
+    : null;
 
   useEffect(() => {
-    const refresh = () => setPlayerName(getCurrentPlayerName(profile));
+    const refresh = () => {
+      setCommittedName({
+        identity,
+        displayName,
+        username,
+        name: getCurrentPlayerName(profile),
+      });
+    };
     refresh();
     window.addEventListener('dukb-player-name-changed', refresh);
     return () => window.removeEventListener('dukb-player-name-changed', refresh);
-  }, [profile]);
+  }, [identity, displayName, username]);
 
-  return playerName;
+  return playerName ?? inMemoryName;
 }

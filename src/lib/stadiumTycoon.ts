@@ -451,6 +451,8 @@ export interface TycoonState {
   fanbase: number;
   /** Current match minute 0-90, advanced by the hook. */
   minute: number;
+  /** Sub-minute match time carried between the hook's live 0.2s ticks. */
+  matchElapsedSec?: number;
   /** Goals in the current match, us and them. */
   goalsFor: number;
   goalsAgainst: number;
@@ -503,6 +505,7 @@ export interface TycoonState {
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
 const SAVE_VERSION = 1;
+const MATCH_MINUTE_SECONDS = 1.4;
 
 export function newTycoon(now: number): TycoonState {
   return {
@@ -513,6 +516,7 @@ export function newTycoon(now: number): TycoonState {
     levels: Object.fromEntries(TRACKS.map(t => [t.id, 0])),
     fanbase: 90,
     minute: 0,
+    matchElapsedSec: 0,
     goalsFor: 0,
     goalsAgainst: 0,
     streak: 0,
@@ -813,8 +817,12 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   }
 
   // The match advances minute by minute.
-  const MIN_LEN = 1.4;
-  let minutes = Math.floor((st.minute * MIN_LEN + dt) / MIN_LEN) - st.minute;
+  const carried = Number.isFinite(st.matchElapsedSec) && (st.matchElapsedSec ?? 0) >= 0
+    ? st.matchElapsedSec ?? 0
+    : 0;
+  const matchElapsed = carried + dt;
+  let minutes = Math.floor(matchElapsed / MATCH_MINUTE_SECONDS);
+  st.matchElapsedSec = matchElapsed - minutes * MATCH_MINUTE_SECONDS;
   // A huge dt (returning from background) fast-forwards at most one match.
   minutes = Math.max(0, Math.min(minutes, 120));
   for (let i = 0; i < minutes; i++) {
@@ -999,6 +1007,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     s.boostChargeSec = Math.min(s.boostChargeSec, BOOST_CHARGE_SEC);
     if (!Number.isFinite(s.boostLeftSec) || s.boostLeftSec < 0) s.boostLeftSec = 0;
     s.boostLeftSec = Math.min(s.boostLeftSec, BOOST_DURATION_SEC);
+    if (!Number.isFinite(s.matchElapsedSec) || (s.matchElapsedSec ?? 0) < 0 || (s.matchElapsedSec ?? 0) >= MATCH_MINUTE_SECONDS) {
+      s.matchElapsedSec = 0;
+    }
     // Round 152: only real milestone ids survive a load.
     if (!Array.isArray(s.claimed)) s.claimed = [];
     s.claimed = s.claimed.filter(id => MILESTONES.some(m => m.id === id));

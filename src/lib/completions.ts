@@ -35,7 +35,21 @@ import {
  */
 
 const LOCAL_TODAY_KEY = 'dukb-local-completions';
+const LOCAL_TODAY_IDENTITY_KEY = 'dukb-local-completions-identity-v1';
+const LOCAL_TODAY_SCOPED_PREFIX = 'dukb-local-completions-scoped-v1:';
+const LOCAL_TODAY_GUEST_IDENTITY = 'guest';
 const GUEST_HANDLE_KEY = 'dukb-guest-handle';
+
+type LocalTodayPayload = { date: string; slugs: string[] };
+
+/* The active browser identity is known synchronously from AuthContext. Keep
+   that runtime owner separate from the persisted marker so a failed storage
+   transition cannot make later activity trust the previous account's marker. */
+let localTodayRuntimeIdentity: string | null = null;
+/* undefined means the shared payload came from storage and has not been
+   claimed in this runtime. null is a real pre-auth runtime owner, so a play
+   recorded before AuthContext settles remains immediately visible. */
+let localTodayActivePayloadIdentity: string | null | undefined;
 
 /* Signed-in completion saves update several read-modify-write tables and the
    profile streak snapshot. Keep them in invocation order so two fast finishes
@@ -203,14 +217,160 @@ export function publicName(name: string): string {
    getCurrentPlayerName falls back through it, so context free callers still
    attribute to the right name. Cleared on sign out by the same context. */
 const DISPLAY_NAME_CACHE_KEY = 'dukb-display-name';
+const DISPLAY_NAME_IDENTITY_KEY = 'dukb-display-name-identity-v1';
+const DISPLAY_NAME_SCOPED_PREFIX = 'dukb-display-name-scoped-v1:';
+const DISPLAY_NAME_GUEST_IDENTITY = 'guest';
+let displayNameRuntimeIdentity: string | undefined;
+
 export function cacheDisplayName(name: string | null): void {
   try {
-    if (name) localStorage.setItem(DISPLAY_NAME_CACHE_KEY, name);
-    else localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+    const storedIdentity = localStorage.getItem(DISPLAY_NAME_IDENTITY_KEY);
+    if (
+      displayNameRuntimeIdentity !== undefined
+      && !storedIdentity
+      && !localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${displayNameRuntimeIdentity}`)
+    ) {
+      displayNameRuntimeIdentity = undefined;
+    }
+    const identity = displayNameRuntimeIdentity ?? storedIdentity;
+    if (identity && identity !== DISPLAY_NAME_GUEST_IDENTITY) {
+      if (name) localStorage.setItem(`${DISPLAY_NAME_SCOPED_PREFIX}${identity}`, name);
+      else localStorage.removeItem(`${DISPLAY_NAME_SCOPED_PREFIX}${identity}`);
+      if (storedIdentity !== identity) return;
+    } else if (identity === DISPLAY_NAME_GUEST_IDENTITY && storedIdentity !== identity) {
+      return;
+    }
+    if (name) {
+      localStorage.setItem(DISPLAY_NAME_CACHE_KEY, name);
+    } else {
+      localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+    }
   } catch { /* storage unavailable, the guest handle fallback still works */ }
 }
+
+/** Restores only the signed-in account's cached public name. */
+export function setDisplayNameStorageIdentity(userId: string | null): void {
+  const nextIdentity = userId || DISPLAY_NAME_GUEST_IDENTITY;
+  displayNameRuntimeIdentity = nextIdentity;
+  try {
+    const currentIdentity = localStorage.getItem(DISPLAY_NAME_IDENTITY_KEY);
+    const activeName = localStorage.getItem(DISPLAY_NAME_CACHE_KEY);
+
+    if (!currentIdentity) {
+      localStorage.setItem(DISPLAY_NAME_IDENTITY_KEY, nextIdentity);
+      if (nextIdentity === DISPLAY_NAME_GUEST_IDENTITY) {
+        localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+      } else if (activeName) {
+        localStorage.setItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`, activeName);
+      }
+      return;
+    }
+
+    if (currentIdentity === nextIdentity) {
+      if (nextIdentity === DISPLAY_NAME_GUEST_IDENTITY) {
+        localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+      } else {
+        const stored = localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`);
+        if (!stored && activeName) {
+          localStorage.setItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`, activeName);
+        } else if (!activeName && stored) {
+          localStorage.setItem(DISPLAY_NAME_CACHE_KEY, stored);
+        }
+      }
+      return;
+    }
+
+    /* Clear the shared slots before any transition write can throw. A failed
+       archive may lose a cache copy, but it cannot expose Account A to B or
+       leave B filing its name under A. */
+    localStorage.removeItem(DISPLAY_NAME_CACHE_KEY);
+    localStorage.removeItem(DISPLAY_NAME_IDENTITY_KEY);
+    if (currentIdentity !== DISPLAY_NAME_GUEST_IDENTITY && activeName) {
+      localStorage.setItem(`${DISPLAY_NAME_SCOPED_PREFIX}${currentIdentity}`, activeName);
+    }
+    localStorage.setItem(DISPLAY_NAME_IDENTITY_KEY, nextIdentity);
+    if (nextIdentity !== DISPLAY_NAME_GUEST_IDENTITY) {
+      const stored = localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`);
+      if (stored) localStorage.setItem(DISPLAY_NAME_CACHE_KEY, stored);
+    }
+  } catch {
+    /* Best-effort recovery uses the destination marker with no shared name.
+       Each operation is isolated because one failed storage call must not
+       prevent the later cleanup calls from running. */
+    try { localStorage.removeItem(DISPLAY_NAME_CACHE_KEY); } catch { /* unavailable */ }
+    try { localStorage.removeItem(DISPLAY_NAME_IDENTITY_KEY); } catch { /* unavailable */ }
+    try { localStorage.setItem(DISPLAY_NAME_IDENTITY_KEY, nextIdentity); } catch { /* unavailable */ }
+    if (nextIdentity !== DISPLAY_NAME_GUEST_IDENTITY) {
+      try {
+        const stored = localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${nextIdentity}`);
+        if (stored) localStorage.setItem(DISPLAY_NAME_CACHE_KEY, stored);
+      } catch { /* unavailable */ }
+    }
+  }
+}
+
 function getCachedDisplayName(): string | null {
-  try { return localStorage.getItem(DISPLAY_NAME_CACHE_KEY); } catch { return null; }
+  try {
+    if (displayNameRuntimeIdentity !== undefined) {
+      if (displayNameRuntimeIdentity === DISPLAY_NAME_GUEST_IDENTITY) return null;
+      return localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${displayNameRuntimeIdentity}`);
+    }
+    const identity = localStorage.getItem(DISPLAY_NAME_IDENTITY_KEY);
+    if (!identity) return localStorage.getItem(DISPLAY_NAME_CACHE_KEY);
+    if (identity === DISPLAY_NAME_GUEST_IDENTITY) return null;
+    return localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${identity}`);
+  } catch {
+    return null;
+  }
+}
+
+function getCachedDisplayNameForIdentity(userId: string): string | null {
+  try {
+    return localStorage.getItem(`${DISPLAY_NAME_SCOPED_PREFIX}${userId}`);
+  } catch {
+    return null;
+  }
+}
+
+type PublicCompletionRow = { game: string; score?: number; player_name: string };
+
+function recordPublicCompletion(
+  game: string,
+  score: number | undefined,
+  playerName: string | undefined,
+  hydration: ProgressHydrationSnapshot | null,
+): void {
+  const insert = (resolvedPlayerName: string) => {
+    const row: PublicCompletionRow = { game, player_name: resolvedPlayerName };
+    if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
+    (supabase.from as any)('game_completions')
+      .insert(row)
+      .then(({ error }: { error: unknown }) => {
+        if (error) console.debug('[completions] insert failed (ignored):', error);
+        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
+      });
+  };
+  if (playerName) {
+    insert(playerName);
+    return;
+  }
+  if (!hydration) {
+    insert(getCurrentPlayerName());
+    return;
+  }
+
+  const insertForHydratedIdentity = () => {
+    if (!isCurrentProgressHydration(hydration)) return;
+    const hydratedName = getCachedDisplayNameForIdentity(hydration.userId);
+    if (hydratedName) insert(hydratedName);
+  };
+  if (hydration.status === 'ready') {
+    insertForHydratedIdentity();
+  } else if (hydration.status === 'pending' && hydration.promise) {
+    void hydration.promise.then(success => {
+      if (success) insertForHydratedIdentity();
+    }, () => undefined);
+  }
 }
 
 /**
@@ -243,19 +403,17 @@ export function recordStreakDay(gamePath: string): void {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
     const playedAt = new Date();
-    const streakUser = supabase.auth.getUser();
     const hydration = getProgressHydrationSnapshot();
+    const streakUserId = hydration?.userId ?? null;
     const applyStreakDay = (allowProfileStreakBackup: boolean) => {
       try {
         if (hydration && !isCurrentProgressHydration(hydration)) return;
         const { state, changed } = recordStreakDayOnly(game, playedAt);
         if (!changed) return;
         try { window.dispatchEvent(new Event('dukb-streaks-changed')); } catch { /* SSR/harness */ }
-        if (!allowProfileStreakBackup) return;
+        if (!allowProfileStreakBackup || !streakUserId) return;
         enqueueAuthCompletionSave(async () => {
-          const { data } = await streakUser;
-          if (!data?.user) return false;
-          return backupProfileStreakState(data.user.id, state);
+          return backupProfileStreakState(streakUserId, state);
         }).catch(() => { /* signed out or auth unreachable: the local day remains */ });
       } catch { /* a delayed local tracking failure must not surface */ }
     };
@@ -269,15 +427,7 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
   try {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
-    const row: { game: string; score?: number; player_name?: string } = { game };
-    if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
-    row.player_name = playerName || getCurrentPlayerName();
-    (supabase.from as any)('game_completions')
-      .insert(row)
-      .then(({ error }: { error: unknown }) => {
-        if (error) console.debug('[completions] activity insert failed (ignored):', error);
-        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
-      });
+    recordPublicCompletion(game, score, playerName, getProgressHydrationSnapshot());
     bumpLocalTodayCount(game);
   } catch {
     // Never let a tracking failure break gameplay.
@@ -294,38 +444,16 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
  * @param score optional numeric score for this completion. Omitted/undefined
  * keeps the row out of leaderboard aggregation (score stays null) but the
  * insert still happens, matching the table's nullable-by-design column.
- * @param playerName optional display handle to attribute the score to. If
- * omitted, falls back to getCurrentPlayerName() with no profile (i.e. the
- * local guest handle), so every insert always carries some name.
+ * @param playerName optional explicit display handle to attribute the score
+ * to. When omitted, guests use their local handle; a signed-in play waits
+ * for successful same-account profile hydration and its cached public name.
  */
 export function recordCompletion(gamePath: string, score?: number, playerName?: string, correctAnswers = 0): void {
   try {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
-
-    const row: { game: string; score?: number; player_name?: string } = { game };
-    if (typeof score === 'number' && Number.isFinite(score)) {
-      row.score = score;
-    }
-    row.player_name = playerName || getCurrentPlayerName();
-
-    // Supabase client typings don't know about game_completions yet (it was
-    // added directly via SQL, not through a generated-types migration), so
-    // this table is addressed dynamically rather than through the typed
-    // `.from()` overloads.
-    (supabase.from as any)('game_completions')
-      .insert(row)
-      .then(({ error }: { error: unknown }) => {
-        if (error) {
-          // Swallow silently, this must never surface to the player.
-          console.debug('[completions] insert failed (ignored):', error);
-        } else {
-          /* Round 157: tell the header a play just landed, so games-played,
-             points and rank move while you are actually playing instead of
-             waiting for the next poll. */
-          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
-        }
-      });
+    const hydration = getProgressHydrationSnapshot();
+    recordPublicCompletion(game, score, playerName, hydration);
 
     /* Round 300: THE ONE RECORDER. Before this round there were three
        pipelines and which ones a game fed depended on which helper it
@@ -340,17 +468,15 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        twice. */
     const playedAt = new Date();
     const completionScore = typeof score === 'number' && Number.isFinite(score) ? score : 0;
-    const completionUser = supabase.auth.getUser();
-    const hydration = getProgressHydrationSnapshot();
+    const completionUserId = hydration?.userId ?? null;
     const saveSignedInCompletion = (
       streakState: StreakState | null,
       allowProfileStreakBackup: boolean,
     ) => {
+      if (!completionUserId) return;
       enqueueAuthCompletionSave(async () => {
-        const { data } = await completionUser;
-        if (!data?.user) return false;
         return saveAuthCompletion(
-          data.user.id,
+          completionUserId,
           game,
           completionScore,
           correctAnswers,
@@ -529,14 +655,130 @@ async function backupProfileStreakState(userId: string, streakState: StreakState
  * reset of the optimistic chip, acceptable because the server's distinct
  * count backstops signed in players and tomorrow starts clean anyway.
  */
+function parseLocalTodayPayload(raw: string | null): LocalTodayPayload | null {
+  try {
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.date !== 'string' || !Array.isArray(parsed.slugs)) return null;
+    const slugs = parsed.slugs.filter((slug: unknown): slug is string => typeof slug === 'string');
+    return {
+      date: parsed.date,
+      slugs: [...new Set<string>(slugs)],
+    };
+  } catch {
+    return null;
+  }
+}
+
+function readRawLocalTodayPayload(): LocalTodayPayload | null {
+  try {
+    return parseLocalTodayPayload(localStorage.getItem(LOCAL_TODAY_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function readLocalTodayPayload(): LocalTodayPayload | null {
+  try {
+    if (localTodayRuntimeIdentity) {
+      return parseLocalTodayPayload(
+        localStorage.getItem(`${LOCAL_TODAY_SCOPED_PREFIX}${localTodayRuntimeIdentity}`),
+      );
+    }
+    if (localTodayActivePayloadIdentity !== null) return null;
+    if (localStorage.getItem(LOCAL_TODAY_IDENTITY_KEY)) return null;
+    return readRawLocalTodayPayload();
+  } catch {
+    return null;
+  }
+}
+
+function writeLocalTodayPayload(payload: LocalTodayPayload): void {
+  const serialized = JSON.stringify(payload);
+  if (localTodayRuntimeIdentity) {
+    localStorage.setItem(`${LOCAL_TODAY_SCOPED_PREFIX}${localTodayRuntimeIdentity}`, serialized);
+    if (localStorage.getItem(LOCAL_TODAY_IDENTITY_KEY) !== localTodayRuntimeIdentity) {
+      localTodayActivePayloadIdentity = undefined;
+      return;
+    }
+  } else if (localStorage.getItem(LOCAL_TODAY_IDENTITY_KEY)) {
+    localTodayActivePayloadIdentity = undefined;
+    return;
+  }
+  localStorage.setItem(LOCAL_TODAY_KEY, serialized);
+  localTodayActivePayloadIdentity = localTodayRuntimeIdentity;
+}
+
+/**
+ * Moves the optimistic daily completion set between browser identities.
+ * The first signed-in account adopts games played as a guest on this device,
+ * while later account changes restore only that account's own saved set.
+ */
+export function setLocalCompletionStorageIdentity(userId: string | null): void {
+  const nextIdentity = userId || LOCAL_TODAY_GUEST_IDENTITY;
+  const previousRuntimeIdentity = localTodayRuntimeIdentity;
+  localTodayRuntimeIdentity = nextIdentity;
+  try {
+    const currentIdentity = localStorage.getItem(LOCAL_TODAY_IDENTITY_KEY);
+    const activeRead = readRawLocalTodayPayload();
+    const currentStored = currentIdentity
+      ? parseLocalTodayPayload(localStorage.getItem(`${LOCAL_TODAY_SCOPED_PREFIX}${currentIdentity}`))
+      : null;
+    const activeBelongsToCurrent = previousRuntimeIdentity === currentIdentity
+      || (previousRuntimeIdentity === null && currentIdentity === nextIdentity);
+    const active = !currentIdentity
+      ? activeRead ?? { date: todayStr(), slugs: [] }
+      : activeBelongsToCurrent
+        ? activeRead ?? currentStored ?? { date: todayStr(), slugs: [] }
+        : currentStored ?? { date: todayStr(), slugs: [] };
+    const activeSerialized = JSON.stringify(active);
+
+    if (!currentIdentity) {
+      localTodayActivePayloadIdentity = undefined;
+      localStorage.setItem(LOCAL_TODAY_IDENTITY_KEY, nextIdentity);
+      localStorage.setItem(`${LOCAL_TODAY_SCOPED_PREFIX}${nextIdentity}`, activeSerialized);
+      if (activeRead) localTodayActivePayloadIdentity = nextIdentity;
+      return;
+    }
+    if (currentIdentity === nextIdentity) {
+      if (!activeBelongsToCurrent || !activeRead) {
+        localTodayActivePayloadIdentity = undefined;
+        writeLocalTodayPayload(active);
+      } else {
+        localTodayActivePayloadIdentity = nextIdentity;
+      }
+      return;
+    }
+
+    const nextKey = `${LOCAL_TODAY_SCOPED_PREFIX}${nextIdentity}`;
+    const nextStored = parseLocalTodayPayload(localStorage.getItem(nextKey));
+    const nextPayload = nextStored
+      ?? (currentIdentity === LOCAL_TODAY_GUEST_IDENTITY && nextIdentity !== LOCAL_TODAY_GUEST_IDENTITY
+        ? active
+        : { date: todayStr(), slugs: [] });
+
+    /* Clear both the active payload and its old ownership marker before any
+       write that can fail. If a quota error interrupts the archive or restore,
+       the next account sees zero and later activity cannot enter the old
+       account's scoped copy. */
+    localTodayActivePayloadIdentity = undefined;
+    localStorage.removeItem(LOCAL_TODAY_KEY);
+    localStorage.removeItem(LOCAL_TODAY_IDENTITY_KEY);
+    localStorage.setItem(`${LOCAL_TODAY_SCOPED_PREFIX}${currentIdentity}`, activeSerialized);
+    localStorage.setItem(LOCAL_TODAY_IDENTITY_KEY, nextIdentity);
+    writeLocalTodayPayload(nextPayload);
+  } catch {
+    // Storage unavailable. The server-backed count still works.
+  }
+}
+
 function bumpLocalTodayCount(game: string): void {
   try {
     const today = todayStr();
-    const raw = localStorage.getItem(LOCAL_TODAY_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    const slugs: string[] = parsed && parsed.date === today && Array.isArray(parsed.slugs) ? parsed.slugs : [];
+    const parsed = readLocalTodayPayload();
+    const slugs = parsed?.date === today ? [...parsed.slugs] : [];
     if (!slugs.includes(game)) slugs.push(game);
-    localStorage.setItem(LOCAL_TODAY_KEY, JSON.stringify({ date: today, slugs }));
+    writeLocalTodayPayload({ date: today, slugs });
   } catch {
     /* localStorage unavailable (quota/private mode), not critical */
   }
@@ -545,10 +787,8 @@ function bumpLocalTodayCount(game: string): void {
 /** Reads today's locally-tracked DISTINCT completed game count for this browser only. */
 export function getLocalTodayCount(): number {
   try {
-    const raw = localStorage.getItem(LOCAL_TODAY_KEY);
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw);
-    return parsed && parsed.date === todayStr() && Array.isArray(parsed.slugs) ? parsed.slugs.length : 0;
+    const parsed = readLocalTodayPayload();
+    return parsed?.date === todayStr() ? parsed.slugs.length : 0;
   } catch {
     return 0;
   }

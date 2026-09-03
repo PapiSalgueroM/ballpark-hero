@@ -1,7 +1,12 @@
 import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { cacheDisplayName, getGuestHandle } from '@/lib/completions';
+import {
+  cacheDisplayName,
+  getGuestHandle,
+  setDisplayNameStorageIdentity,
+  setLocalCompletionStorageIdentity,
+} from '@/lib/completions';
 import {
   getStreakState,
   restoreStreakStateFromProfile,
@@ -56,62 +61,136 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const authUserIdRef = useRef<string | null | undefined>(undefined);
   const authGenerationRef = useRef(0);
+  const profileRequestRef = useRef(0);
+  const latestProfileSnapshotRef = useRef<{
+    generation: number;
+    request: number;
+    profile: Profile;
+  } | null>(null);
 
   const setAuthIdentity = (userId: string | null) => {
     if (authUserIdRef.current === userId) return;
     authUserIdRef.current = userId;
     authGenerationRef.current += 1;
+    profileRequestRef.current += 1;
+    latestProfileSnapshotRef.current = null;
+    setProfile(null);
+    setDisplayNameStorageIdentity(userId);
+    try { window.dispatchEvent(new Event('dukb-player-name-changed')); } catch { /* SSR/harness */ }
     setStreakStorageIdentity(userId);
+    setLocalCompletionStorageIdentity(userId);
     resetProgressHydration(userId);
   };
 
   const fetchProfile = async (userId: string, hydrateProgress = false): Promise<boolean> => {
     const generation = authGenerationRef.current;
+    const request = profileRequestRef.current + 1;
+    profileRequestRef.current = request;
+    const isCurrentIdentity = () => (
+      generation === authGenerationRef.current
+      && authUserIdRef.current === userId
+    );
+    const isLatestRequest = () => (
+      isCurrentIdentity() && request === profileRequestRef.current
+    );
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (generation !== authGenerationRef.current || authUserIdRef.current !== userId) return false;
+    if (!isCurrentIdentity()) return false;
+    /* A newer same-account refresh owns profile UI and display-name cache.
+       Initial hydration still has to finish so a play already waiting on it
+       can safely extend the remote streak instead of losing its backup. */
+    if (!hydrateProgress && !isLatestRequest()) return false;
 
     if (error || !data) return false;
 
-    const loaded = data as unknown as Profile;
+    let nextProfile = data as unknown as Profile;
+    const rememberProfileSnapshot = (next: Profile) => {
+      const remembered = latestProfileSnapshotRef.current;
+      if (!remembered || remembered.generation !== generation || request >= remembered.request) {
+        latestProfileSnapshotRef.current = { generation, request, profile: next };
+      }
+    };
+    rememberProfileSnapshot(nextProfile);
     const updates: Partial<Profile> = {};
     let hydrationSucceeded = true;
 
-    if (!loaded.display_name && !loaded.username) {
-      updates.display_name = getGuestHandle();
+    if (!nextProfile.display_name && !nextProfile.username && isLatestRequest()) {
+      const suggestedName = getGuestHandle();
+      const { data: claimed } = await (supabase.from as any)('profiles')
+        .update({ display_name: suggestedName, updated_at: new Date().toISOString() })
+        .eq('user_id', userId)
+        .is('display_name', null)
+        .is('username', null)
+        .select('*')
+        .maybeSingle();
+      if (!isCurrentIdentity()) return false;
+
+      if (!isLatestRequest()) {
+        /* A profile edit or fresher read now owns the visible name. The
+           conditional database write could not replace a nonblank edit. */
+      } else if (claimed) {
+        nextProfile = claimed as Profile;
+        rememberProfileSnapshot(nextProfile);
+      } else {
+        /* A real profile edit may have won the conditional update. Re-read it
+           instead of trusting the blank row captured before that edit. */
+        const { data: current } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle();
+        if (!isCurrentIdentity()) return false;
+        if (current) {
+          nextProfile = current as unknown as Profile;
+          rememberProfileSnapshot(nextProfile);
+        } else if (isLatestRequest()) {
+          nextProfile = { ...nextProfile, display_name: suggestedName };
+        }
+      }
     }
 
-    if (hydrateProgress && !restoreStreakStateFromProfile(loaded.streak_state)) {
-      if (isBlankProfileStreak(loaded.streak_state)) {
+    const newerSnapshot = latestProfileSnapshotRef.current;
+    if (
+      hydrateProgress
+      && !isLatestRequest()
+      && newerSnapshot?.generation === generation
+      && newerSnapshot.request > request
+    ) {
+      nextProfile = newerSnapshot.profile;
+    }
+
+    if (hydrateProgress && !restoreStreakStateFromProfile(nextProfile.streak_state)) {
+      if (isBlankProfileStreak(nextProfile.streak_state)) {
         updates.streak_state = getStreakState();
       } else {
         hydrationSucceeded = false;
       }
     }
 
-    let nextProfile = loaded;
-    if (Object.keys(updates).length > 0) {
+    if (Object.keys(updates).length > 0 && isLatestRequest()) {
       const { error: syncError } = await supabase
         .from('profiles')
         .upsert(
           { user_id: userId, ...updates } as any,
           { onConflict: 'user_id' },
         );
-      if (!syncError) nextProfile = { ...loaded, ...updates };
+      if (!syncError) nextProfile = { ...nextProfile, ...updates };
     }
 
-    if (generation !== authGenerationRef.current || authUserIdRef.current !== userId) return false;
+    if (!isCurrentIdentity()) return false;
 
-    setProfile(nextProfile);
-    /* Round 301, audit finding 8: cache the display name where context
-       free recorders (Club Manager's engine, the idle games) can reach
-       it, so a signed in player's plays stop filing under their guest
-       handle. Cleared on sign out below. */
-    cacheDisplayName(nextProfile.display_name || nextProfile.username || null);
+    if (isLatestRequest()) {
+      setProfile(nextProfile);
+      /* Round 301, audit finding 8: cache the display name where context
+         free recorders (Club Manager's engine, the idle games) can reach
+         it, so a signed in player's plays stop filing under their guest
+         handle. Cleared on sign out below. */
+      cacheDisplayName(nextProfile.display_name || nextProfile.username || null);
+    }
     return hydrationSucceeded;
   };
 
@@ -217,6 +296,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('Not authenticated') };
+    profileRequestRef.current += 1;
 
     const { error } = await supabase
       .from('profiles')

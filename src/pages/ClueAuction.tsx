@@ -31,7 +31,7 @@ import {
   buildClueReveals,
 } from '@/lib/clueAuction';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion } from '@/lib/completions';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -134,7 +134,7 @@ const ClueAuction = () => {
     if (phase === 'playing') completionRef.current = false;
     if ((phase !== 'won' && phase !== 'lost') || completionRef.current) return;
     completionRef.current = true;
-    recordCompletion('/clue-auction', phase === 'won' ? bank : 0, getCurrentPlayerName());
+    recordCompletion('/clue-auction', phase === 'won' ? bank : 0);
   }, [phase, bank]);
 
   const won = phase === 'won';

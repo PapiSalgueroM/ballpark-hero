@@ -82,6 +82,7 @@ export function useStadiumTycoon() {
 
   // The loop.
   useEffect(() => {
+    if ((window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return;
     let raf = 0;
     let last = performance.now();
     let acc = 0;

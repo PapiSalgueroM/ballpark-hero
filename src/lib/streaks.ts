@@ -80,6 +80,7 @@ const STORAGE_KEY = 'dukb-streaks-v1';
 const STORAGE_IDENTITY_KEY = 'dukb-streaks-identity-v1';
 const STORAGE_SCOPED_PREFIX = 'dukb-streaks-scoped-v1:';
 const GUEST_IDENTITY = 'guest';
+let runtimeStreakIdentity: string | undefined;
 
 const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 
@@ -117,9 +118,8 @@ function daysBetween(a: string, b: string): number {
   return Math.round(ms / (24 * 60 * 60 * 1000));
 }
 
-function readState(): StreakState {
+function parseStoredState(raw: string | null): StreakState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyState();
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.version !== 1) return emptyState();
@@ -136,12 +136,33 @@ function readState(): StreakState {
   }
 }
 
+function readState(): StreakState {
+  try {
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    if (runtimeStreakIdentity !== undefined) {
+      const runtimeStored = localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${runtimeStreakIdentity}`);
+      if (runtimeStored) return parseStoredState(runtimeStored);
+      if (storedIdentity !== runtimeStreakIdentity) return emptyState();
+    } else if (storedIdentity) {
+      const stored = localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${storedIdentity}`);
+      if (stored) return parseStoredState(stored);
+    }
+    return parseStoredState(localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return emptyState();
+  }
+}
+
 function writeState(state: StreakState): void {
   try {
     const serialized = JSON.stringify(state);
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    const identity = runtimeStreakIdentity ?? storedIdentity;
+    if (identity) {
+      localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${identity}`, serialized);
+      if (storedIdentity !== identity) return;
+    }
     localStorage.setItem(STORAGE_KEY, serialized);
-    const identity = localStorage.getItem(STORAGE_IDENTITY_KEY);
-    if (identity) localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${identity}`, serialized);
   } catch {
     // localStorage unavailable (quota / private mode) - streaks just won't
     // persist this session. Never throw, this must not break gameplay.
@@ -156,39 +177,80 @@ function writeState(state: StreakState): void {
  * guest state, while one signed-in account can never seed another account.
  */
 export function setStreakStorageIdentity(userId: string | null): void {
+  const nextIdentity = userId || GUEST_IDENTITY;
+  const nextKey = `${STORAGE_SCOPED_PREFIX}${nextIdentity}`;
+  let recoverySerialized = JSON.stringify(emptyState());
   try {
-    const nextIdentity = userId || GUEST_IDENTITY;
-    const currentIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    const storedIdentity = localStorage.getItem(STORAGE_IDENTITY_KEY);
+    let discardedStaleRuntime = false;
+    const runtimeStored = runtimeStreakIdentity === undefined
+      ? null
+      : localStorage.getItem(`${STORAGE_SCOPED_PREFIX}${runtimeStreakIdentity}`);
+    const activeStored = localStorage.getItem(STORAGE_KEY);
+    if (
+      !storedIdentity
+      && runtimeStreakIdentity !== undefined
+      && (!runtimeStored || (!!activeStored && activeStored !== runtimeStored))
+    ) {
+      runtimeStreakIdentity = undefined;
+      discardedStaleRuntime = true;
+    }
+    const currentIdentity = runtimeStreakIdentity ?? storedIdentity;
     const activeState = readState();
     const activeSerialized = JSON.stringify(activeState);
 
-    if (!currentIdentity) {
-      localStorage.setItem(STORAGE_IDENTITY_KEY, nextIdentity);
-      localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${nextIdentity}`, activeSerialized);
+    if (currentIdentity === nextIdentity) {
+      runtimeStreakIdentity = nextIdentity;
       return;
     }
-    if (currentIdentity === nextIdentity) return;
 
-    localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${currentIdentity}`, activeSerialized);
-    const nextKey = `${STORAGE_SCOPED_PREFIX}${nextIdentity}`;
     const nextStored = localStorage.getItem(nextKey);
-    let nextState: StreakState;
-    if (nextStored) {
-      localStorage.setItem(STORAGE_KEY, nextStored);
-      nextState = readState();
-    } else if (currentIdentity === GUEST_IDENTITY && nextIdentity !== GUEST_IDENTITY) {
-      nextState = activeState;
+    if (!currentIdentity) {
+      recoverySerialized = nextStored && !discardedStaleRuntime
+        ? JSON.stringify(parseStoredState(nextStored))
+        : activeSerialized;
     } else {
-      nextState = emptyState();
+      const nextState = nextStored
+        ? parseStoredState(nextStored)
+        : currentIdentity === GUEST_IDENTITY && nextIdentity !== GUEST_IDENTITY
+          ? activeState
+          : emptyState();
+      recoverySerialized = JSON.stringify(nextState);
     }
+    runtimeStreakIdentity = nextIdentity;
 
-    const nextSerialized = JSON.stringify(nextState);
-    localStorage.setItem(STORAGE_KEY, nextSerialized);
-    localStorage.setItem(nextKey, nextSerialized);
+    /* Shared state and its marker are cleared before any transition write.
+       If a later write fails, Account A cannot remain active under B. */
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_IDENTITY_KEY);
+    if (currentIdentity) {
+      localStorage.setItem(`${STORAGE_SCOPED_PREFIX}${currentIdentity}`, activeSerialized);
+    }
+    localStorage.setItem(nextKey, recoverySerialized);
     localStorage.setItem(STORAGE_IDENTITY_KEY, nextIdentity);
+    localStorage.setItem(STORAGE_KEY, recoverySerialized);
     try { window.dispatchEvent(new Event('dukb-streaks-restored')); } catch { /* non-browser harness */ }
   } catch {
-    // Storage unavailable. Streaks remain local to this page session.
+    runtimeStreakIdentity = nextIdentity;
+    /* Recover each slot independently. The destination marker is installed
+       before active state so a partial recovery cannot expose another
+       identity's progress. */
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* unavailable */ }
+    try { localStorage.removeItem(STORAGE_IDENTITY_KEY); } catch { /* unavailable */ }
+    try {
+      const stored = localStorage.getItem(nextKey);
+      if (stored) recoverySerialized = JSON.stringify(parseStoredState(stored));
+    } catch { /* unavailable */ }
+    try { localStorage.setItem(nextKey, recoverySerialized); } catch { /* unavailable */ }
+    let markerReady = false;
+    try {
+      localStorage.setItem(STORAGE_IDENTITY_KEY, nextIdentity);
+      markerReady = localStorage.getItem(STORAGE_IDENTITY_KEY) === nextIdentity;
+    } catch { /* unavailable */ }
+    if (markerReady) {
+      try { localStorage.setItem(STORAGE_KEY, recoverySerialized); } catch { /* unavailable */ }
+    }
+    try { window.dispatchEvent(new Event('dukb-streaks-restored')); } catch { /* non-browser harness */ }
   }
 }
 
