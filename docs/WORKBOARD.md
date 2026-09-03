@@ -19,12 +19,27 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 421.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 422.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 421. UNCLAIMED.** Pick the next thing off
-  docs/PROJECT-STATE.md and claim it here before building.
+- **Desktop lane, CLAIMED: Round 421. A BLOCK MUST NOT BE DROPPED FROM A
+  SNAPSHOT BY A RACE.** Round 355 fixed this class for the HEAD: a block that
+  is PRESENT in one clock sample and ABSENT in another, rather than carrying
+  different content, gets intersected away and looks exactly like a real date
+  dependency. Its tell is that the route prerenders perfectly when run on its
+  own. The same shape is now visible in the BODY. /nhl-connect-4 lost its
+  "Board: Passports" line from the Round 420 build while /nba-connect-4 gained
+  "Board: The Gauntlet" that HEAD does not have, with no connect 4 code
+  changing between the two builds, and which route loses it moves from run to
+  run exactly as Round 355 reported. Established already, so do not re-derive:
+  the board line is unconditional JSX with no loading gate, the pick is
+  Math.random, the prerenderer reseeds per navigation (a draw counter reads 8
+  at every route rather than accumulating), and all four routes return the same
+  board at all three samples when rendered in isolation. So the pick is
+  deterministic and the drop is not about the board. Cost is snapshot churn and
+  a page re-dated in the sitemap for no real change, which is the one thing the
+  lastmod ledger exists to prevent and the only re-crawl lever the site has.
   **Strong candidate, found while gating Round 420 and deliberately left out of
   it. Read this carefully, the first write up of it was wrong.** The connect 4
   board line is NOT computed from the date. All four pages pick with
