@@ -451,6 +451,11 @@ export interface TycoonState {
   fanbase: number;
   /** Current match minute 0-90, advanced by the hook. */
   minute: number;
+  /** Round 424: play seconds banked toward the next whole match minute. Without
+   *  this the sub-minute remainder was discarded on every tick and the clock
+   *  never moved at all. Optional so existing saves load and simply start
+   *  banking from zero. */
+  matchSec?: number;
   /** Goals in the current match, us and them. */
   goalsFor: number;
   goalsAgainst: number;
@@ -812,11 +817,27 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
     if (st.goldenLeftSec <= 0) st.goldenKind = null;
   }
 
-  // The match advances minute by minute.
+  /* The match advances minute by minute.
+     ROUND 424: THE CLOCK NEVER MOVED. This read
+       minutes = Math.floor((st.minute * MIN_LEN + dt) / MIN_LEN) - st.minute;
+     and st.minute is an integer, so that whole expression is just
+     Math.floor(dt / MIN_LEN), with the remainder recomputed from st.minute on
+     every call and therefore THROWN AWAY. The hook ticks as soon as its
+     accumulator passes 0.2s (useStadiumTycoon.ts:94), so dt is about a fifth of
+     a second, Math.floor(0.2 / 1.4) is 0, and the answer was 0 forever.
+     Measured on a real save over 180 minutes of continuous play: minute 0,
+     match 0, goals 0, wins 0, streak 0. Not one goal had ever been scored by
+     anybody, on any save, since the tick rate last changed. The scoreboard read
+     "YOU 0 - 0 0'" for the life of the game and the footer read "match #1".
+     The seconds are banked now instead, so a fifth of a second is a fifth of a
+     minute's progress rather than nothing at all. */
   const MIN_LEN = 1.4;
-  let minutes = Math.floor((st.minute * MIN_LEN + dt) / MIN_LEN) - st.minute;
+  st.matchSec = (st.matchSec ?? 0) + dt;
+  let minutes = Math.floor(st.matchSec / MIN_LEN);
+  st.matchSec -= minutes * MIN_LEN;
   // A huge dt (returning from background) fast-forwards at most one match.
-  minutes = Math.max(0, Math.min(minutes, 120));
+  if (minutes > 120) { minutes = 120; st.matchSec = 0; }
+  minutes = Math.max(0, minutes);
   for (let i = 0; i < minutes; i++) {
     st.minute += 1;
     if (st.minute <= 90) {

@@ -19,9 +19,43 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 424.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 425.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED: Round 424. STADIUM TYCOON'S MATCH WAS NEVER
+  PLAYED.** Shipped and live. The minutes-elapsed line reduced to
+  Math.floor(dt / 1.4) with the remainder discarded every tick, and the hook
+  ticks at 0.2s, so it was 0 forever. Scoreboard stuck at 0-0 minute 0, footer
+  stuck on "match #1", no goal ever scored, no bonus paid, no win, no streak,
+  no division, on any save. Idle income still ticked so the game looked alive
+  while its whole match loop was dead. Fixed by banking the seconds. Fence is
+  scripts/simTycoonClock.mjs, control TYCOON_CLOCK_CONTROL=stall.
+
+  THE QUEUE, all confirmed by adversarial verification in the same audit (14 of
+  15 findings survived). Every one of the six economies on this site is broken
+  in some way. Take them in this order:
+  1. PLAYER STOCK MARKET scores a spend RATIO (playerStockMarket.ts:314), so
+     investing the 200M wallet can only hurt and the winning play is leaving
+     87% unspent: cheapest-XI scores 93.8 and is in the green 100/100 runs. The
+     two stats on the card also pick WORSE than random (12.7% and 13.5% against
+     25%); only price predicts. The game is titled "Invest on Stats Alone".
+  2. REBUILD opens 15 of 66 clubs 3-4 points down before a move is made, because
+     useRebuild.ts:319 sets startRating with a formula that ignores empty shirts
+     while the HUD uses one that scores them 40. And dealObjectivesWithIdentity
+     (rebuildDeck.ts:281) deals contradictory hands in 25% of runs, e.g. "sign a
+     galactico worth 80M or more" beside "no single signing over 60M".
+  3. IDLE ARENA never enforces its declared 8 hour offline cap on a tab left
+     open (useIdleArena.ts:45), and the Trophy panel's worked example is the
+     inverse of the real formula.
+  4. SOCCER CAREER money app freezes at retirement while the game keeps paying
+     for another 25 seasons (soccerCareerEngine.ts:7055).
+  5. CLUB MANAGER's transfer kitty does not survive the summer: next season's
+     budget is a pure function of the club's static def and ignores every pound
+     earned (clubManager.ts:10656). The wage cap also re-anchors to 115% of your
+     own bill every summer so it can never bind.
+  6. STADIUM TYCOON away earnings settle only on page LOAD, so a backgrounded
+     tab pays two seconds for hours away (useStadiumTycoon.ts:145).
 
 - **Desktop lane, CLAIMED: Round 423. THE CELEBRATION RESPECTS REDUCED
   MOTION.** ResultScreen mounts the shared celebration kit and 75 files end on

@@ -2789,6 +2789,42 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-03, Round 424. STADIUM TYCOON'S MATCH WAS NEVER PLAYED.** The worst defect found
+  so far, and it had been shipped and live. `src/lib/stadiumTycoon.ts` worked out how many
+  match minutes had passed as
+  `Math.floor((st.minute * MIN_LEN + dt) / MIN_LEN) - st.minute`, and `st.minute` is an
+  integer, so the whole expression reduces to `Math.floor(dt / MIN_LEN)` with the remainder
+  recomputed from `st.minute` on every call and therefore **thrown away**. The hook ticks as
+  soon as its accumulator passes 0.2s, so `dt` is about a fifth of a second,
+  `Math.floor(0.2 / 1.4)` is 0, and the answer was 0 on every tick, forever.
+  **What that meant for a player.** The scoreboard read "YOU 0 - 0 Ironbridge Rovers" at
+  minute 0 for the entire life of a save, and the footer read "match #1". Not one goal was
+  ever scored, so no goal bonus was ever paid, no win was ever recorded, no streak, no
+  division, and none of the celebration the game is built around ever fired. Measured on a
+  real save at the real cadence over 180 minutes of continuous play: minute 0, match 0,
+  goals 0, wins 0, streak 0. The idle income still ticked, so the game looked alive while
+  its entire match loop was dead.
+  **The fix banks the seconds** instead of recomputing from an integer, so a fifth of a
+  second is a fifth of a minute's progress rather than nothing. Measured after: 60s of play
+  reaches minute 42 (60 / 1.4 = 42.9), and 200s accounts for 142 match minutes against the
+  142.8 the rate implies, so no play time is being dropped.
+  **Why nothing caught it, which is the transferable part.** Every existing check drove
+  `tick()` with a big `dt`, and a big `dt` is the one shape that HIDES this: at `dt = 60`
+  the floor is 42 and the clock looks perfect. The bug existed only at the rate the game
+  actually runs at. `scripts/simTycoonClock.mjs` therefore reads the tick threshold out of
+  `useStadiumTycoon.ts` rather than hard coding it, drives the engine at that real cadence,
+  and asserts player-visible outcomes: the clock moves, a match completes, goals are scored,
+  goal events reach the UI, and no play time is lost. Control `TYCOON_CLOCK_CONTROL=stall`
+  restores the old line and raises 6 findings.
+  **One correction made against this harness rather than the code.** Its first draft measured
+  the rate with `st.minute` alone, which RESETS when a match ends, so it read 10 after 140s
+  and called a working clock broken. Counting finished matches too gives the right number.
+  The check was wrong, not the fix.
+  **Found by a six way audit of every economy in the site**, which confirmed defects in all
+  six: Stadium Tycoon, Player Stock Market, Rebuild, Idle Arena, the Soccer Career money app
+  and Club Manager. 14 of 15 findings survived adversarial verification. The rest are listed
+  on the board and are the queue for the rounds after this one.
+  Gates: tsc zero, vite build, simTycoonClock green with its control green, full node suite.
 - **2026-09-03, Round 423. THE CELEBRATION RESPECTS A VISITOR WHO ASKED FOR LESS MOTION.**
   The owner's direction was the opposite of this ("I really need my games to be good and
   animated"), and the round is small on purpose: the survey done to answer him turned up one
