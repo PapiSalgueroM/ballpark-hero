@@ -2789,6 +2789,29 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-03, Round 421 addendum two. THE ROUND 422 LEAD IS DEAD, KILLED WITH THE EVIDENCE
+  THAT WAS ALREADY IN HAND.** Round 421's commit message pointed the next round at
+  /missing-eleven, /missing-five, /missing-nine and /rank-em, on the grounds that they pick
+  with `getRandom...` rather than from the date yet have blocks dropped as "changing with the
+  date", so they might be losing real content to the same race. It was written as a
+  measurement to make rather than a claim, and the measurement says no.
+  **Two independent pieces of evidence, neither of which needed a new run.** First, the
+  blocks they drop are named in the build log and they are daily puzzle content: "Super Bowl
+  LI", "Patriots 34-28 Falcons (OT)", "2013 NBA Finals, Game 7", "NHL career assists". Second
+  and stronger, they ROTATE with the date across builds. `/rank-em` dropped "NHL career games
+  played" on 2026-09-02 and "NHL career assists" on 2026-09-03; `/missing-five` moved from the
+  2019 Finals to the 2013 Finals over the same two builds. A race gives a different answer at
+  the same clock, not a tidy rotation across days.
+  **And the sweep had already settled it.** `playRenderStability` renders every route five
+  times at the SAME clock and reported 0 unstable across all 137, these four included, and
+  none of them were touched by Round 421's fix. A route that says the same thing five times
+  running is not racing, so anything it drops across the 0, 5 and 11 day samples is dropped
+  because of the date, which is the mechanism doing its job.
+  Recorded because this repo has paid for unkilled hypotheses before, most recently in Round
+  420 where a theory left standing for an hour was the thing that had to be tested and
+  disproved before the real cause could be found. The right next round is the
+  `RAW_RANDOM_BASELINE` ratchet, which is preventive rather than a live bug: 24 files still
+  draw inside a `useState` initialiser, and the sweep says none of them is currently unstable.
 - **2026-09-03, Round 421 addendum. A PLAYED GAME WAS EARNING NOTHING, AND THE SUITE CAUGHT
   IT MID ROUND.** Unrelated to Round 421's own work, which is what makes it worth writing
   down. `simLeaderboardCaps` section 4 went red while gating the round, reporting
