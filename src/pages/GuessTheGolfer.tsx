@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -49,6 +50,12 @@ function clueList(g: GolfLegend): string[] {
   ];
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstIndex = makeFirstDraw(() => Math.floor(Math.random() * guessableGolfers.length));
+
 const GuessTheGolfer = () => {
   const [mode, setMode] = useState<'daily' | 'unlimited'>('daily');
 
@@ -75,7 +82,8 @@ const GuessTheGolfer = () => {
   const dailyPhase: Phase = dailyWon ? 'won' : dailyWrong.length >= MAX_GUESSES ? 'lost' : 'playing';
 
   // ---- Unlimited ------------------------------------------------------------
-  const [unIndex, setUnIndex] = useState(() => Math.floor(Math.random() * guessableGolfers.length));
+  const [unIndex, setUnIndex] = useState(firstIndex.get);
+  useEffect(firstIndex.release, []);
   const [unWrong, setUnWrong] = useState<string[]>([]);
   const [unPhase, setUnPhase] = useState<Phase>('playing');
   const unGolfer = guessableGolfers[unIndex % guessableGolfers.length];

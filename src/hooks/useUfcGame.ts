@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { UfcFighter, UfcGuessResult } from '@/types/ufc';
 import { uniqueUfcFighters } from '@/data/ufcFighters';
 import { compareUfcGuess } from '@/lib/ufcGameLogic';
@@ -14,6 +15,12 @@ export type UfcGameMode = 'daily' | 'unlimited';
 function selectRandomFighter(): UfcFighter {
   return uniqueUfcFighters[Math.floor(Math.random() * uniqueUfcFighters.length)];
 }
+
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstFighter = makeFirstDraw(selectRandomFighter);
 
 export function useUfcGame() {
   // ---- MODE ----------------------------------------------------------------
@@ -42,7 +49,8 @@ export function useUfcGame() {
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
 
   // ---- UNLIMITED -----------------------------------------------------------
-  const [unlimitedFighter, setUnlimitedFighter] = useState<UfcFighter>(selectRandomFighter);
+  const [unlimitedFighter, setUnlimitedFighter] = useState<UfcFighter>(firstFighter.get);
+  useEffect(firstFighter.release, []);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<UfcGuessResult[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 

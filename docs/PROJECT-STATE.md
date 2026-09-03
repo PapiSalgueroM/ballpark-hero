@@ -2789,6 +2789,133 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-03, Round 421 addendum. A PLAYED GAME WAS EARNING NOTHING, AND THE SUITE CAUGHT
+  IT MID ROUND.** Unrelated to Round 421's own work, which is what makes it worth writing
+  down. `simLeaderboardCaps` section 4 went red while gating the round, reporting
+  `higher-lower-transfers` as having recorded scores and no row in `game_score_caps`. The
+  suite had been green twice earlier the same night, so nothing in the code had changed:
+  what changed is that somebody PLAYED it. Two completions, the most recent stamped
+  2026-09-03, all of it scoring zero on the board because a key absent from that table earns
+  nothing by design.
+  **Where the key lives is the interesting part.** `/higher-lower-transfers` is routed in
+  `src/App.tsx` and its entry in `src/data/gameRegistry.ts` is commented out, so the page is
+  reachable and unlisted. That is exactly the shape a source derived list can miss and a
+  player can still find, and it is why section 4 reads the completions table rather than the
+  source. A check should never draw both its sides from the same place.
+  **The cap is NULL, and that is a refusal to invent rather than a shrug.** The game records
+  an endless streak with no natural ceiling, and every other higher-lower cap in the table
+  already equals its own observed maximum because the cap clamps what gets stored, so
+  deriving a number from the data would have been circular. A null denominator is the
+  documented behaviour in `docs/LEADERBOARD-SECURITY.md`: the game is allowlisted and falls
+  back to the 99th percentile of its own scores, which is what every game allowlisted before
+  it was played uses. `supabase/migrations/20260903_caps_allowlist_higher_lower_transfers.sql`
+  records it, applied the same minute. Verified: 126 keys carry real scores and 0 are
+  uncovered, with the harness's own `CAPS_CONTROL=stalelist` control still green.
+- **2026-09-03, Round 421. A BLOCK MUST NOT BE DROPPED FROM A SNAPSHOT BY A RACE.** Found
+  while gating Round 420 and chased through three wrong theories, which is worth recording
+  because the log line encouraged every one of them.
+  **What was actually wrong.** The four connect 4 pages pick their board with
+  `useState(getRandomConnect4Board)`. `scripts/prerender.mjs` replaces `Math.random` with a
+  fixed seed generator before any page code runs (Round 284) so a random pick freezes
+  identically in every build, and that only works if the draws happen in the same ORDER
+  every time. React does not promise a `useState` initialiser runs once: it may begin a
+  render, throw the work away and start again. When it retried, the initialiser drew AGAIN,
+  advancing the shared generator and handing back a different board. Measured on
+  /nhl-connect-4 with a counter and a stack trace on every draw: **8 draws when the
+  initialiser fires once and 9 when it fires twice**, draws 0 to 7 byte identical in every
+  run, the ninth from that very line (0.5178 gives Passports, 0.2038 gives Silverware).
+  **It is a race, not the calendar, settled by repetition.** The same route at the same
+  clock sample gave 8 draws on one run and 9 on the next. When the three clock samples do
+  not all land the same way the "Board: X" line differs between them, the prerenderer drops
+  it, and the log says the block "changes with the date". It does not, and that sentence is
+  what sent this round looking at the calendar.
+  **The cost.** A page rewrites itself between two builds with no source change and is then
+  re-dated in `scripts/data/lastmod.json` and the sitemap for nothing. That is the one thing
+  the ledger exists to prevent, and lastmod is the only re-crawl lever this site has.
+  **The fix, in the component and not in the prerenderer.** A state initialiser has to be
+  safe to run more than once, and drawing from a shared generator inside one is not.
+  `src/lib/firstDraw.ts` holds the pick from the first render attempt until the commit that
+  survives, and releases it there. That is the tightest window: it covers exactly the race
+  and is empty every other moment, so a discarded render cannot draw and two components
+  using one hook at once still get their own pick. It uses a `filled` flag rather than a null check on purpose: two of the sites
+  seed an INDEX and a SEED, and a legitimate draw of 0 is falsy, so the obvious
+  `if (!held) held = draw()` would redraw for exactly the value it most needs to hold still.
+  Ten sites now use it. Verified by re-running the stack probe: 6 runs of 6 make exactly 8
+  draws with a single draw from that line, where before the fix the same probe split 8 and 9.
+  **The harness is the part worth keeping, and the review rewrote it.** 
+  `scripts/playRenderStability.mjs` renders every route repeatedly AT THE SAME CLOCK and
+  fails if the readable blocks differ. The three sample method downstream is a good test for
+  "computed from the date" and a terrible test for anything unstable for another reason,
+  because an unstable block disagrees with itself and is dropped exactly as though the
+  calendar had moved. Nothing in it knows which pages are random or daily. It strips
+  `data-no-prerender` first, exactly as the prerenderer does, or it reports every ticker on
+  the site: the first run did precisely that and flagged "Next puzzle in 00:36:15" on four
+  pages. `RENDER_STABILITY_CONTROL=unstable` injects an element carrying a fresh random
+  number per load, asserts the injection landed, and inverts the exit.
+  **Three defects the adversarial review found in that harness, all fixed.** It sampled each
+  route only TWICE, and the bug is a per render event, so two samples disagree only when
+  exactly one of them retried: 2p(1-p), which peaks at 0.5. A coin toss dressed as a check.
+  It renders five times now, because the miss rate is p^n + (1-p)^n and five cuts the worst
+  case from 1 in 2 to 1 in 16; the margin is that arithmetic, not a number that felt right.
+  It also SKIPPED a route it could not render, left `failures` untouched, exited 0 and
+  printed "Every route says the same thing twice", which is a fail open in a guard and false
+  for the routes it never looked at. An unrenderable route is a failure now. And it compared
+  blocks as SETS, so a reordering or a change in how many times a block appears was
+  invisible, while `prerender.mjs` keeps the first sample's order and its duplicates; the
+  comparison is an ordered sequence now.
+  **The rule now has a guard, which immediately proved the round's own list wrong.**
+  `simPrerender` section 16 fails if any `useState` initialiser draws randomly outside
+  `firstDraw.ts`, reading the code with comments stripped, with control
+  `SIM_PRERENDER_CONTROL=rawrandom`. This round's write up first said five other sites, then
+  six; the guard found **26 draws across 24 more files**. That is the whole argument for a
+  guard over a hand written list, and it is the fourth time this repo has learned it.
+  **What is deliberately NOT fixed, and why, stated accurately this time.** Those 24 files
+  are frozen in `RAW_RANDOM_BASELINE`, a ratchet rather than an amnesty: anything new fails,
+  and a file that gets fixed must leave the list or the check fails too, so the debt can
+  only shrink. They are not all harmless. `/missing-eleven`, `/missing-five`, `/missing-nine`
+  and `/rank-em` pick with `getRandom...` rather than from the date, yet the prerenderer
+  reports their blocks as changing with the date and drops them, so those pages may be
+  losing real content to this race rather than to the calendar. **That is a measurement for
+  Round 422, not a claim made here.** Two of them (`useHigherLower`) seed from other
+  component state and cannot take a module level memo unchanged. The earlier draft justified
+  leaving them with two statements that were simply false, both caught by the review: that
+  they are all unlimited mode state not rendered by default (`useWorldCup` defaults to
+  unlimited) and that fixing them would change what a returning player is dealt (it would
+  not, the memo is released at the commit that used it, so every fresh mount draws again).
+  **A limit of the fix, not fixed here.** Under the prerender seed the board pick is draw
+  index 4 of 8, and the four draws ahead of it belong to react-dom internals and a storage
+  probe. This round removes one source of draw ORDER instability and leaves the order
+  dependency itself standing, so a React bump or a new draw anywhere in shared chrome would
+  still rewrite all four snapshots at once. It would be visible and correct rather than
+  silent, but it is worth knowing before someone treats these snapshots as immovable.
+  **What the rebuild actually changed, checked rather than assumed.** `/nhl-connect-4` is
+  gone from the prerenderer's dropped block list and both it and `/nba-connect-4` now carry
+  their board line in the snapshot, which is the fix landing. Three other routes moved at the
+  same time (`/football-timeline` 6 to 9, `/rarity-round` 2 to 3, `/missing-xi` 20 to 19) and
+  the obvious worry was that this round had destabilised them. It had not: rendered five
+  times each at the same clock they are all stable, so their blocks are dropped by the clock
+  samples, which is the mechanism working correctly. What moved was the DATE, which rolled
+  from 2026-09-02 to 2026-09-03 between the two builds. `/rarity-round` losing the line "Any
+  club, any era in our records." is that, not this round.
+  **The navigation retry, added because fail closed has a cost.** Turning an unrenderable
+  route from a skip into a failure means one flaky navigation can turn the whole guard red,
+  so the harness now retries a goto once at a 45 second timeout, exactly as
+  `scripts/prerender.mjs` retries its own. A slow page is not an unstable page; a page that
+  cannot load twice is worth knowing about and still fails. It paid for itself immediately:
+  the sweep now checks **137 of 137 routes with 0 unreachable**, where the first version
+  checked 131 and quietly skipped 6, so six pages that were never looked at used to be
+  counted as a pass.
+  **Two more things the long run exposed, both fixed.** It printed nothing at all until the
+  end, so a run over every route was forty minutes of silence in which a wedged browser
+  looked exactly like a slow one, and one did wedge and had to be killed. It reports every
+  ten routes now, because this repo judges a harness by its output. And a single stuck
+  navigation could stall the whole run indefinitely, neither passing nor failing, which is
+  the least useful thing a check can do, so each route now has a budget (`ROUTE_BUDGET_MS`,
+  120s) and blowing it is a failure like any other.
+  Gates: tsc zero, build:seo exit 0, simPrerender green with all THREE controls green for
+  the right reason and each catching exactly 1 finding from its own section, all 15 built
+  site fences, 186 node harnesses, and playRenderStability green across every route with its
+  own control green.
 - **2026-09-02, Round 420. A FAILED WRITE MUST NOT DELETE A SHIPPED ARTIFACT.** Hit for
   real while Round 419 was being built, which is the only reason it is known about. The
   prerenderer failed to write `public/nfl-higher-lower/index.html` with a Windows UNKNOWN

@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/mlbConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { normalizeName } from '@/lib/playerSearch';
@@ -86,8 +87,15 @@ function getLowestEmptyRow(grid: Connect4Grid, col: number): number | null {
   return null;
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstBoard = makeFirstDraw(getRandomConnect4Board);
+
 export function useMlbConnect4() {
-  const [board, setBoard] = useState<Connect4Board>(getRandomConnect4Board);
+  const [board, setBoard] = useState<Connect4Board>(firstBoard.get);
+  useEffect(firstBoard.release, []);
   const [grid, setGrid] = useState<Connect4Grid>(createEmptyGrid);
   const [currentTeam, setCurrentTeam] = useState<Connect4Team>('red');
   const [phase, setPhase] = useState<Connect4Phase>('playing');

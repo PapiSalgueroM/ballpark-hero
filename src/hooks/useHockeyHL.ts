@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
@@ -68,6 +69,12 @@ function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   return result;
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstUnlimited = makeFirstDraw(getRandomPairs);
+
 export function useHockeyHL() {
   const [mode, setMode] = useState<HockeyHLMode>('daily');
   const [hard, setHard] = useState(false);
@@ -95,7 +102,8 @@ export function useHockeyHL() {
   const [showingResult, setShowingResult] = useState(false);
 
   // Unlimited local state
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(getRandomPairs);
+  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(firstUnlimited.get);
+  useEffect(firstUnlimited.release, []);
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 

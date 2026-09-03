@@ -21,58 +21,44 @@ How it works:
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 422.
 
-## Active claims, 2026-09-02
+## Active claims, 2026-09-03
 
-- **Desktop lane, CLAIMED: Round 421. A BLOCK MUST NOT BE DROPPED FROM A
-  SNAPSHOT BY A RACE.** Round 355 fixed this class for the HEAD: a block that
-  is PRESENT in one clock sample and ABSENT in another, rather than carrying
-  different content, gets intersected away and looks exactly like a real date
-  dependency. Its tell is that the route prerenders perfectly when run on its
-  own. The same shape is now visible in the BODY. /nhl-connect-4 lost its
-  "Board: Passports" line from the Round 420 build while /nba-connect-4 gained
-  "Board: The Gauntlet" that HEAD does not have, with no connect 4 code
-  changing between the two builds, and which route loses it moves from run to
-  run exactly as Round 355 reported. Established already, so do not re-derive:
-  the board line is unconditional JSX with no loading gate, the pick is
-  Math.random, the prerenderer reseeds per navigation (a draw counter reads 8
-  at every route rather than accumulating), and all four routes return the same
-  board at all three samples when rendered in isolation. So the pick is
-  deterministic and the drop is not about the board. Cost is snapshot churn and
-  a page re-dated in the sitemap for no real change, which is the one thing the
-  lastmod ledger exists to prevent and the only re-crawl lever the site has.
-  **Strong candidate, found while gating Round 420 and deliberately left out of
-  it. Read this carefully, the first write up of it was wrong.** The connect 4
-  board line is NOT computed from the date. All four pages pick with
-  getRandomConnect4Board, which is curatedBoards[Math.floor(Math.random() * n)],
-  and prerender.mjs already replaces Math.random with a fixed seed generator
-  before any page code runs precisely so a random pick is frozen the same way in
-  every build. Its own comment names /mlb-connect-4 as the page that motivated
-  that, because two runs on the same day disagreed about it.
-  What is observed and not explained by that seeding: /nhl-connect-4 had its
-  board line left out of the Round 420 build, so the three samples disagreed,
-  and /nba-connect-4 gained a line HEAD does not have, so it flipped between
-  builds. /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 "Board:
-  Air Raid" at HEAD today.
-  THE OBVIOUS HYPOTHESIS WAS TESTED AND IS DEAD, do not spend the round on it.
-  It was that the seeded generator is global, so anything drawing from it a
-  date dependent number of times before the board is picked would shift the
-  sequence and change the board. Measured by mirroring the prerenderer exactly
-  (seed 284, same PRNG, same date shift, same request routing) and counting
-  draws: all four routes draw EXACTLY 8 times at every one of the 0, 5 and 11
-  day samples, and each route returns the same board at all three. The seeding
-  works. The boards it predicts are the ones actually shipped: nhl Passports,
-  nba The Gauntlet, mlb Modern Era, nfl Air Raid.
-  WHAT IS LEFT, and it is a different question. /nhl-connect-4's board line was
-  dropped from the Round 420 build even though its board is identical at all
-  three samples, so the block was dropped for something ELSE inside it, not for
-  the board name. And /nba-connect-4 flipped from dropped at HEAD to kept in
-  that build with no connect 4 code changing between them. So the question is
-  what else lives in that block and what makes a block's keep or drop decision
-  move between builds. Start by diffing the block the prerenderer compares
-  rather than the board, and do not reach for data-no-prerender until that is
-  known.
-
-
+- **Desktop lane, DONE: Round 421. A BLOCK MUST NOT BE DROPPED FROM A SNAPSHOT
+  BY A RACE.** The four connect 4 pages pick their board with
+  useState(getRandomConnect4Board), and prerender.mjs seeds Math.random so a
+  random pick freezes identically in every build (Round 284), which only holds
+  if the draws happen in the same ORDER every time. React does not promise a
+  useState initialiser runs once: it can begin a render, discard it and retry,
+  and the retry drew AGAIN, advancing the shared generator and changing the
+  board. Measured with a counter and a stack on every draw: 8 draws when it
+  fires once, 9 when it fires twice, draws 0 to 7 identical every run, the
+  ninth from that line. A race, not the calendar, settled by repetition. The
+  prerenderer then drops the differing block and calls it "changes with the
+  date", which cost this round three wrong theories.
+  Fix is src/lib/firstDraw.ts, which holds the pick from the first render
+  attempt to the commit that survives and releases it there, the tightest
+  window that covers the race, used at 10 sites. 6 of 6 probe runs now make exactly 8
+  draws where the same probe split 8 and 9 before.
+  scripts/playRenderStability.mjs renders every route repeatedly at the SAME
+  clock and fails if the readable blocks differ. The adversarial review found
+  three defects in it and all three are fixed: it sampled twice, which detects
+  a per render race with probability at most 0.5, so it renders five times now
+  (miss rate p^n + (1-p)^n); it SKIPPED unrenderable routes while exiting 0 and
+  printing a green sentence, a fail open in a guard, so an unrenderable route
+  is a failure now; and it compared blocks as sets, missing reordering and
+  duplicate counts that prerender.mjs preserves, so it compares an ordered
+  sequence now.
+  simPrerender section 16 enforces the rule at source level (control
+  rawrandom). It immediately proved this round's own list wrong: the write up
+  said five other sites, then six, and the guard found 26 draws across 24 more
+  files. Those are frozen in RAW_RANDOM_BASELINE as a ratchet, not an amnesty:
+  anything new fails, and a fixed file must leave the list or the check fails.
+  ROUND 422 SHOULD START HERE: /missing-eleven, /missing-five, /missing-nine
+  and /rank-em pick with getRandom..., not from the date, yet the prerenderer
+  drops their blocks as "changing with the date". They may be losing real
+  content to this race. MEASURE it before fixing. Two sites (useHigherLower)
+  seed from other component state and cannot take a module level memo
+  unchanged.
 
 - **Desktop lane, next: Round 411. NFL Grid archive phase 4.** Finish the
   board-keyed design already approved in

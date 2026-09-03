@@ -338,6 +338,24 @@ does not need anyone to have thought of the failure first. `simPrerender` sectio
 at source level, requiring every ticker line built from a template literal to declare itself
 volatile, so the question cannot go unasked.
 
+**And the mirror image, added in Round 421: a block can be dropped for having nothing to do with
+the clock, and the log will still call it the calendar.** The three sample method is a good test
+for "computed from the date" and a terrible test for anything unstable for another reason,
+because an unstable block disagrees with itself and is intersected away exactly as though the
+date had moved. The real case was a random pick inside a `useState` initialiser: React does not
+promise an initialiser runs only once, a discarded render drew from the seeded generator a second
+time, and the board came back different. It is a race, not a date, and the prerenderer reported
+it as "changes with the date", which cost a round three wrong theories.
+`scripts/playRenderStability.mjs` renders every route **repeatedly at the same clock** and fails if
+the readable blocks differ, which separates the two causes and knows nothing about which games are
+daily or random. Control: `RENDER_STABILITY_CONTROL=unstable`. **Never draw from `Math.random`
+inside a `useState` initialiser**; use `src/lib/firstDraw.ts`, which holds the pick from the first
+render attempt to the commit that survives, so a discarded render cannot draw. `simPrerender` section 16
+enforces that at source level (control `rawrandom`). It is a **ratchet, not a clean sheet**: 24
+files still do this and are frozen in `RAW_RANDOM_BASELINE`, anything new fails, and a file that
+gets fixed must leave the list. Four of those routes drop blocks the prerenderer blames on the
+calendar while picking with `getRandom...`, so they may be losing real content to this race.
+
 **Since Round 284 the prerenderer itself works this way.** `data-no-prerender` only ever covered
 what somebody had marked, and a board the page computes from the date (a daily puzzle, a
 "Today's lineup, 2026-08-24" caption) was frozen into fifteen saved pages that no rule about

@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { worldCupPuzzles } from '@/data/worldCupPuzzles';
 import { WorldCupPuzzle, WorldCupClue, WorldCupGameStatus } from '@/types/worldCup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -116,6 +117,13 @@ function countProgression(actions: WCAction[]): number {
   return actions.filter(a => a.t === 'w' || a.t === 's').length;
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstPuzzle = makeFirstDraw(() => worldCupPuzzles[Math.floor(Math.random() * worldCupPuzzles.length)]);
+const firstSeed = makeFirstDraw(() => Math.floor(Math.random() * 1e9));
+
 export function useWorldCup() {
   // ---- MODE ----------------------------------------------------------------
   // Default to UNLIMITED (revival decision, 2026-07-22). The game was pulled
@@ -151,10 +159,10 @@ export function useWorldCup() {
   // ---- UNLIMITED -----------------------------------------------------------
   // Frozen Era: lock the puzzle pool to one past World Cup year, or 'all' for classic behavior.
   const [era, setEraState] = useState<FrozenEra>('all');
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState(
-    () => worldCupPuzzles[Math.floor(Math.random() * worldCupPuzzles.length)]
-  );
-  const [unlimitedSeed, setUnlimitedSeed] = useState(() => Math.floor(Math.random() * 1e9));
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState(firstPuzzle.get);
+  const [unlimitedSeed, setUnlimitedSeed] = useState(firstSeed.get);
+  useEffect(firstPuzzle.release, []);
+  useEffect(firstSeed.release, []);
   const [revealedCount, setRevealedCount] = useState(1);
   const [attempts, setAttempts] = useState<string[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<WorldCupGameStatus>('playing');

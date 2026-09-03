@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { CHAIN_STARTERS } from '@/types/nbaChain';
 import type { ChainLink, ChainGamePhase } from '@/types/nbaChain';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -48,11 +49,18 @@ function saveMode(mode: NbaChainMode) {
   } catch {}
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstStarter = makeFirstDraw(() => getRandomStarter());
+
 export function useNbaChain() {
   // Endless is the default mode; a returning player's last choice is
   // remembered locally but always falls back to endless if unset/invalid.
   const [mode, setModeState] = useState<NbaChainMode>(loadMode);
-  const [initialStarter] = useState(() => getRandomStarter());
+  const [initialStarter] = useState(firstStarter.get);
+  useEffect(firstStarter.release, []);
   const [chain, setChain] = useState<ChainLink[]>(() => [{ playerName: initialStarter }]);
   const [phase, setPhase] = useState<ChainGamePhase>('playing');
   const [gameOverReason, setGameOverReason] = useState<string | null>(null);

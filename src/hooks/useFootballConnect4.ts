@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { normalizeName } from '@/lib/playerSearch';
@@ -121,6 +122,12 @@ function replayC4Board(actions: C4Action[]): {
   return { board, currentTurn, phase, winner, isDraw, usedPlayers };
 }
 
+/* Round 421: drawn once per MOUNT, not once per render attempt. A discarded
+   render that drew again shifted the prerenderer's seeded generator and
+   changed the pick, which made the snapshot disagree with itself. The
+   measurement and the reasoning live in src/lib/firstDraw.ts. */
+const firstUnlimited = makeFirstDraw(getRandomBoard);
+
 export function useFootballConnect4() {
   const [mode, setMode] = useState<FootballConnect4Mode>('daily');
 
@@ -142,7 +149,8 @@ export function useFootballConnect4() {
   const dailyState = useMemo(() => replayC4Board(dailyActions), [dailyActions]);
 
   // Unlimited local state
-  const [unlimitedBoardConfig, setUnlimitedBoardConfig] = useState<FootballConnect4Board>(getRandomBoard);
+  const [unlimitedBoardConfig, setUnlimitedBoardConfig] = useState<FootballConnect4Board>(firstUnlimited.get);
+  useEffect(firstUnlimited.release, []);
   const [unlimitedBoard, setUnlimitedBoard] = useState<Board>(createEmptyBoard);
   const [unlimitedCurrentTurn, setUnlimitedCurrentTurn] = useState<Team>('blue');
   const [unlimitedPhase, setUnlimitedPhase] = useState<GamePhase>('playing');

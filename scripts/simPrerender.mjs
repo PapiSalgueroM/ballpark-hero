@@ -82,7 +82,7 @@ const CONTROL = process.env.SIM_PRERENDER_CONTROL || '';
    catches that, and red if section 15 stayed clean or if anything outside
    section 15 failed. A control whose red could come from anywhere says
    nothing about the check it is meant to prove. */
-if (CONTROL && CONTROL !== 'noindex' && CONTROL !== 'truncwrite') {
+if (CONTROL && CONTROL !== 'noindex' && CONTROL !== 'truncwrite' && CONTROL !== 'rawrandom') {
   console.error(`SIM_PRERENDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -746,6 +746,116 @@ const failuresAfter14 = failures;
   }
 }
 
+/* CLOSE THE BRACKET ROUND SECTION 15 for the same reason as section 14 above:
+   anything added below must land in "elsewhere" by default rather than being
+   adopted by a control as part of its expected failure. */
+const failuresAfter15 = failures;
+
+/* ---- 16. NO RANDOM PICK SEEDS REACT STATE DIRECTLY (Round 421) --------- */
+/* Round 421 found the connect 4 board line being dropped from snapshots and
+   reported as "changes with the date" when the date had nothing to do with it.
+   React does not promise a useState initialiser runs once, a discarded render
+   drew from the prerenderer's seeded generator a second time, and the pick
+   changed. The page then rewrote itself between builds and was re-dated in the
+   sitemap for nothing.
+   CLAUDE.md now carries that as a rule, and a rule with no guard is a comment.
+   This is the guard: no useState initialiser may draw randomly unless it goes
+   through src/lib/firstDraw.ts, which draws once per mount and releases on
+   unmount. It reads the CODE, not the comments, because prose about a rule is
+   the one place the rule's own words are guaranteed to appear.
+   SIM_PRERENDER_CONTROL=rawrandom puts one raw draw back, in memory only, and
+   this section must report it. */
+/* THE DEBT, FROZEN. Round 421 fixed the ten sites it could prove and measure,
+   and this guard then found twenty four files it had missed, which is the
+   whole argument for a guard over a hand written list: the round's own list
+   said five, then six, and the code said twenty four.
+   They are NOT all harmless. /missing-eleven, /missing-five, /missing-nine and
+   /rank-em pick with getRandom..., not from the date, yet the prerenderer
+   reports their blocks as "changing with the date" and drops them, so those
+   pages may be losing real content to this race rather than to the calendar.
+   That is a measurement Round 422 should make, not a claim to make here.
+   Two of them (useHigherLower) seed from OTHER component state, so they cannot
+   take a module level memo unchanged and need their own thinking.
+   This list is a RATCHET, not an amnesty: anything not on it fails, and a file
+   that leaves the list must be removed from it, so the debt can only shrink. */
+const RAW_RANDOM_BASELINE = new Set([
+  'src/hooks/useAflHL.ts',
+  'src/hooks/useBaseballCareer.ts',
+  'src/hooks/useBaseballConnections.ts',
+  'src/hooks/useCfbHL.ts',
+  'src/hooks/useConnections.ts',
+  'src/hooks/useF1HL.ts',
+  'src/hooks/useFootballDraft.ts',
+  'src/hooks/useGame.ts',
+  'src/hooks/useGolfHL.ts',
+  'src/hooks/useHigherLower.ts',
+  'src/hooks/useHockeyCareer.ts',
+  'src/hooks/useMlbHL.ts',
+  'src/hooks/useNbaCareer.ts',
+  'src/hooks/useNbaConnections.ts',
+  'src/hooks/useNbaHL.ts',
+  'src/hooks/useNflConnections.ts',
+  'src/hooks/useNflHL.ts',
+  'src/hooks/useNhlConnections.ts',
+  'src/hooks/useOlympics.ts',
+  'src/hooks/useTennisHL.ts',
+  'src/pages/MissingEleven.tsx',
+  'src/pages/MissingFive.tsx',
+  'src/pages/MissingNine.tsx',
+  'src/pages/RankEm.tsx',
+]);
+
+console.log('16) no random pick seeds React state directly');
+{
+  const srcRoot = path.join(ROOT, 'src');
+  const files = [];
+  const walk = dir => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (/\.(ts|tsx)$/.test(e.name)) files.push(full);
+    }
+  };
+  walk(srcRoot);
+
+  /* comments and strings stripped first: a paragraph explaining the rule
+     contains the very shape this looks for */
+  const strip = src => src
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/^\s*\/\/.*$/gm, ' ');
+
+  const RAW = /useState\s*(?:<[^>]*>)?\s*\(\s*(?:\(\s*\)\s*=>\s*)?[^)]*?(?:Math\s*\.\s*random|[Rr]andom[A-Za-z0-9]*)\s*[^)]*\)/g;
+  const offenders = [];
+  let scanned = 0;
+  for (const f of files) {
+    if (f.endsWith(path.join('lib', 'firstDraw.ts'))) continue;
+    const code = strip(fs.readFileSync(f, 'utf8'));
+    scanned += 1;
+    for (const m of code.matchAll(RAW)) {
+      const hit = m[0].replace(/\s+/g, ' ');
+      /* the sanctioned shape reads its pick off a FirstDraw handle */
+      if (/\.get\s*\)/.test(hit) || /makeFirstDraw/.test(hit)) continue;
+      offenders.push(`${path.relative(ROOT, f).split(path.sep).join('/')}: ${hit.slice(0, 90)}`);
+    }
+  }
+  if (CONTROL === 'rawrandom') {
+    console.log('   control rawrandom: one raw draw injected in memory, section 16 must report it');
+    offenders.push('src/hooks/useControlInjected.ts: useState(() => Math.random())');
+  }
+  const fresh = offenders.filter(o => !RAW_RANDOM_BASELINE.has(o.split(':')[0]));
+  for (const o of fresh) {
+    fail(`a random pick seeds React state directly, so a discarded render redraws it and the snapshot moves: ${o}`);
+  }
+  /* the ratchet only holds if it is kept honest in BOTH directions: a file that
+     has been fixed must leave the list, or the list quietly re-permits it */
+  const files_ = new Set(offenders.map(o => o.split(':')[0]));
+  const stale = [...RAW_RANDOM_BASELINE].filter(f => !files_.has(f));
+  for (const f of stale) {
+    fail(`${f} no longer seeds React state from a raw random draw, so remove it from RAW_RANDOM_BASELINE in this file; the list must only shrink`);
+  }
+  console.log(`   ${scanned} source files scanned, ${offenders.length} raw random initialiser(s), ${RAW_RANDOM_BASELINE.size} file(s) on the frozen baseline, ${fresh.length} new`);
+}
+
 console.log('');
 if (CONTROL === 'truncwrite') {
   /* Inverted for the same reason as the noindex control below: under this
@@ -753,8 +863,8 @@ if (CONTROL === 'truncwrite') {
      Without this the control just exits 1 like any other red run, and "the
      control went red" would be satisfied by a failure anywhere in the
      harness, which proves nothing about the write. */
-  const caught = failures - failuresAfter14;
-  const elsewhere = failuresAfter14;
+  const caught = failuresAfter15 - failuresAfter14;
+  const elsewhere = failuresAfter14 + (failures - failuresAfter15);
   if (caught > 0 && elsewhere === 0) {
     console.log(`simPrerender control: green. The pre 420 truncating write was reported (${caught} finding), so section 15 works.`);
     process.exit(0);
@@ -775,6 +885,19 @@ if (CONTROL === 'noindex') {
   }
   if (caught === 0) console.error('simPrerender control: RED. A sitemap page carrying a noindex went unreported, so section 14 proves nothing.');
   if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 14, which the control run must not hide.`);
+  process.exit(1);
+}
+if (CONTROL === 'rawrandom') {
+  /* inverted like the other two: section 16 is supposed to fail under it, and
+     the failure must come from section 16 and nowhere else */
+  const caught = failures - failuresAfter15;
+  const elsewhere = failuresAfter15;
+  if (caught > 0 && elsewhere === 0) {
+    console.log(`simPrerender control: green. The injected raw draw was reported (${caught} finding), so section 16 works.`);
+    process.exit(0);
+  }
+  if (caught === 0) console.error('simPrerender control: RED. A raw random useState initialiser went unreported, so section 16 proves nothing.');
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 16, which the control run must not hide.`);
   process.exit(1);
 }
 if (failures > 0) {
