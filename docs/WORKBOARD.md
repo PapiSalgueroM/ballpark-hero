@@ -19,22 +19,26 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 420.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 421.
 
 ## Active claims, 2026-09-02
 
-- **Desktop lane, next: Round 420. A FAILED PRERENDER WRITE MUST NOT DELETE
-  THE PAGE.** Hit for real while building Round 419: the prerenderer failed
-  to write /nfl-higher-lower with a Windows UNKNOWN error and left the
-  snapshot **deleted**, because scripts/prerender.mjs:814 does a plain
-  writeFileSync, which truncates the target before it writes. The build did
-  exit 1, so nothing shipped, but the failure mode is wrong: a write that
-  cannot complete should leave the previous page standing, not remove a live
-  route's only crawlable document. Fix is small and standard: write to a temp
-  file in the same directory and rename over the target, which is atomic, so
-  a failure leaves the old snapshot untouched. Worth a fence check that a
-  route's snapshot is never absent after a run, and a control that makes a
-  write fail. Files in play: scripts/prerender.mjs and simPrerender.
+- **Desktop lane, next: Round 421. UNCLAIMED.** Pick the next thing off
+  docs/PROJECT-STATE.md and claim it here before building.
+  **Strong candidate, found while gating Round 420 and deliberately left out of
+  it.** Three connect 4 snapshots carry a board line computed from the date:
+  /mlb-connect-4 ships "Board: Modern Era" and /nfl-connect-4 ships "Board: Air
+  Raid" at HEAD right now, live, and a rebuild added "Board: The Gauntlet" to
+  /nba-connect-4 (reverted, so it is not in the tree). This is the rule about
+  nothing computed from a clock reaching a saved page, and the prerenderer's
+  three sample method is what misses it: a board picked by hashing the date can
+  agree at days 0, 5 and 11 by coincidence, and the sampler then treats it as
+  stable. It caught the same block on /nhl-connect-4 and left it out, which is
+  why only some pages are affected. The fix is the documented one, mark the
+  block volatile at source, and it wants a check that would have found it
+  without anyone naming connect 4 first, since a list of affected games has
+  been written three times in this repo and each one covered only what was
+  already known.
 
 
 
@@ -802,6 +806,40 @@ Standing claims after Round 400:
 
 ## Done
 
+- A FAILED PRERENDER WRITE MUST NOT DELETE THE PAGE, Round 420 (desktop
+  lane, 2026-09-02). Hit for real while building Round 419: the prerenderer
+  failed to write public/nfl-higher-lower/index.html and left the snapshot
+  DELETED rather than stale, because a plain writeFileSync truncates its
+  target before writing. The build exited 1 so nothing shipped, but that is
+  luck about when the write failed. scripts/lib/atomicWrite.mjs writes to a
+  temp beside the target and renames over it, so a failed write leaves the
+  old page whole and no litter behind. simPrerender section 15 exercises the
+  guarantee directly in a few milliseconds, including the failure path
+  through an injected io seam, because a check that needs a 145 route browser
+  run to reach the write is a check nobody runs. Its truncwrite control puts
+  the old write back, and it is inverted like the noindex one: it reports
+  green only when the failures came from section 15 and nothing else broke,
+  because a red that could have come from anywhere proves nothing. Fixing
+  that exposed a defect this round had introduced: the noindex control took
+  its failure boundary above section 14 and section 15 was appended below it,
+  so a real section 15 regression was counted as the control's own expected
+  catch and the run declared itself green and exited 0. Two markers now, so
+  anything added later lands outside by default. The first version of that
+  control merely threw instead of truncating, so it passed and proved
+  nothing; a real failed write truncates and then fails. Widened once the
+  class was understood: the sitemap, the lastmod ledger and both stub
+  generators wrote the same way, and the ledger is the worst case of the
+  five, since CLAUDE.md says losing it re-dates all 137 pages. The rename
+  itself then needed a retry, and measuring is what said so: 8 of 1,000
+  writes failed with EPERM because something outside this project (a
+  scanner, the indexer, a sync client) held the target for that instant,
+  which across 145 routes is more than one dead build per run. One immediate
+  retry barely helped, still 14 in 1,000. Five attempts with a 1, 2, 4, 8ms
+  backoff failed 0 of 1,000, and 993 still landed first try. A genuine error
+  is not retried. The trade made on purpose: if a holder never lets go the
+  build now stops where the old write would have succeeded, and stopping
+  with the page intact beats deleting a live snapshot. No truncating
+  fallback, that is the bug being removed.
 - EVERY CLUB PLAYS SEVENTEEN GAMES, Round 419 (desktop lane, 2026-09-02).
   Found while re-measuring Round 418, not reported. buildSchedule promised 6
   divisional plus 11 crossover for all 32 clubs and delivered it in 27 of 200

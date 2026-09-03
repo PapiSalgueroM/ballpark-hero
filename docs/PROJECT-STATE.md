@@ -2789,6 +2789,123 @@ today rather than adding alongside them.
   remaining issue. Final gates: exact TypeScript zero, 185 of 185 node
   harnesses green, production build green, and all 15 generated-site fences
   green.
+- **2026-09-02, Round 420. A FAILED WRITE MUST NOT DELETE A SHIPPED ARTIFACT.** Hit for
+  real while Round 419 was being built, which is the only reason it is known about. The
+  prerenderer failed to write `public/nfl-higher-lower/index.html` with a Windows UNKNOWN
+  error and left the snapshot **deleted**, not stale: a plain `writeFileSync` truncates
+  its target before it writes a byte, so a write that cannot finish takes the old page
+  with it. That build exited 1 and nothing shipped, but that is luck about WHEN the write
+  failed rather than a property of the write. A snapshot is the only document a crawler
+  ever sees for its route, so losing one has to mean the page is stale and never that the
+  page is gone.
+  **The fix is the standard one and it is now a module.** `scripts/lib/atomicWrite.mjs`
+  writes the bytes to a temp file beside the target and renames over it. A rename inside
+  one directory is atomic on every filesystem this project runs on, so a reader sees
+  either the whole old document or the whole new one and never a truncated half. If the
+  write throws the target was never touched, and the temp is removed, so a failed run
+  cannot leave litter in `public/` for somebody to commit by accident. The temp sits
+  BESIDE the target on purpose: a temp in the system temp directory would make the last
+  step a copy across filesystems and reintroduce exactly the partial write this removes.
+  **It is a separate module because the guarantee deserves a test that somebody will
+  actually run.** A check that has to drive a headless browser over 145 routes to reach
+  the write is a check nobody runs, which is precisely why nothing was watching this
+  before. `simPrerender` section 15 exercises it directly against a scratch directory in
+  a few milliseconds and with no browser: it writes, it replaces, it rides out a hold that clears, it throws
+  rather than damage the page when a hold never clears, it does not retry a genuine error,
+  the previous page is still there and unchanged afterwards, no temp file is left behind,
+  and `prerender.mjs` is still routing its snapshots through it, because if it stops doing
+  that none of the rest means anything. The retry checks **count rename attempts rather
+  than timing them**, because a timing assertion against a 15ms backoff is a coin toss on
+  a busy machine.
+  **The failure is injected through a seam, and the first attempt at that proved nothing.**
+  There is no portable way to make a real disk write fail on demand, so `writeFileAtomic`
+  takes an optional io object that every real caller leaves alone. The first version of
+  the stub simply threw, which left the target untouched even for the truncating write, so
+  the control passed and the section was only ever testing the happy path. A real failed
+  write TRUNCATES AND THEN FAILS. The stub does that now, and
+  `SIM_PRERENDER_CONTROL=truncwrite` puts the pre 420 write back and section 15 reports the
+  right sentence: a failed snapshot write damaged the previous page instead of leaving it
+  alone. That is the repo's own rule about controls, learned again: a control that changes
+  nothing is green for the wrong reason.
+  **Both controls are inverted now, and the noindex one was quietly broken by this round.**
+  A control has to prove a specific check, so "the run went red" is not a result if the red
+  could have come from anywhere. `truncwrite` therefore reports `control: green` and exits
+  0 only when the failures came from section 15 and nothing else failed, matching what
+  `noindex` already did for section 14. Finding that also turned up a real defect this
+  round had introduced: the noindex control captured its failure boundary above section 14,
+  and section 15 was appended BELOW it, so a genuine section 15 regression was counted as
+  the control's own expected catch. The control run printed the FAIL line and then declared
+  itself green and exited 0. The boundary is a pair of markers now, so any section added
+  after 14 lands in "elsewhere" by default, which is the safe direction. The plain run was
+  never affected, so the node suite would still have caught a regression, but the control
+  run named as a gate in this entry was proving nothing.
+  **The round was widened once the class was understood, and the worst case was not the
+  one that bit.** Checking the other writers of shipped artifacts found four more on the
+  same truncating write: `genSitemap.mjs` writes `public/sitemap.xml` and
+  `scripts/data/lastmod.json`, and `genRetiredStubs.mjs` and `genHiddenStubs.mjs` write
+  their route documents. The ledger is the alarming one. CLAUDE.md says in as many words
+  that it is committed on purpose because it is the only memory of when each page last
+  really changed, and that losing it re-dates the whole site: a failed write there would
+  have cost 137 pages their history rather than one route its document. All four go
+  through the same module now.
+  **The first version of this paragraph claimed a check it had not done.** It said all four
+  writes had been run to prove it, with the ledger intact at 138 keys. Three had: the two
+  stub generators wrote 13 documents and `public/sitemap.xml` was rewritten. The fourth,
+  the ledger, the one this entry calls the alarming one, had not been written at all. The
+  single `genSitemap` run behind that claim was `--routes-only`, which is precisely the
+  path that skips the ledger write, and the file's timestamp was an hour older than
+  `atomicWrite.mjs` itself. The module was fine; the sentence was not. What is true now,
+  and checked rather than assumed: two full `build:seo` runs have written the ledger
+  through `writeFileAtomic`, it holds 138 keys, the two runs produced a byte identical
+  file, exactly one route's entry differs from HEAD rather than all 137, and no `.tmp`
+  file is left anywhere under `public/` or `dist/`. Worth writing down because the failure
+  was not a coding mistake, it was claiming a verification that never ran, which is the
+  same defect this session has now caught in its own work more than once.
+  **The rename needed a retry, and only measuring it said so.** The obvious worry about
+  this fix is whether renaming over an existing file is even reliable on Windows, so it
+  was measured instead of assumed, and the first answer was no: over 1,000 writes to one
+  target, **8 failed with EPERM**, every one of them because something outside this
+  project (a virus scanner, the search indexer, a sync client) held a handle on the file
+  for the instant the rename happened. Across 145 routes that is more than one dead build
+  per prerender run, so shipping it as first written would have traded a rare destructive
+  bug for a frequent build breaking one. One immediate retry barely helped, still 14 in
+  1,000, because the holder has not let go yet. Five attempts with a 1, 2, 4, 8ms backoff
+  failed **0 of 1,000**, and 993 of those still landed on the first try, so the retry
+  costs nothing when nothing is holding the file. A genuine error is not retried at all,
+  because spinning through a backoff on a bad path just delays the truth.
+  **What the retry does not fix, said plainly because it is a real behaviour change.** If
+  something holds the target open for longer than that backoff, the rename fails and the
+  build stops, where the old truncating write would have succeeded: measured at 20 out of
+  20 with a handle held open across the whole window. That is the trade this round is
+  making on purpose, and it is the right way round. A build that stops with the previous
+  page intact is recoverable; a snapshot silently deleted on a live route is not. There is
+  deliberately **no fallback to a truncating write**, since that is the bug being removed,
+  and the repo's fail closed rule says the same thing in a different context.
+  **This round ships no content change at all, and keeping it that way turned up a live
+  bug that belongs to another round.** Rebuilding to gate the work moved exactly one
+  snapshot, `/nba-connect-4`, which gained a line reading "Board: The Gauntlet". Round 420
+  changed nothing under `src/`, so nothing should have moved. The cause is the sampler:
+  the prerenderer keeps only the blocks that agree across its day 0, 5 and 11 renders, and
+  a board picked by hashing the date can agree at those three offsets by coincidence, at
+  which point a line computed from the clock is written into a page that is served for
+  weeks. The prerenderer caught it on `/nhl-connect-4` and reported leaving "Board:
+  Passports" out; it did not catch it on the others. Checking HEAD rather than assuming,
+  **`/mlb-connect-4` has been shipping "Board: Modern Era" and `/nfl-connect-4` "Board: Air
+  Raid" already**, so this is live on two pages now and is not a regression from this
+  round. The new third one was reverted along with its ledger entry and the sitemap, so
+  the committed tree carries only the write safety code and these notes, and the real fix
+  (marking the block volatile the way the rule already prescribes) is its own round rather
+  than a passenger on this one.
+  **One thing deliberately NOT claimed.** This closes the shipped artifact writers the
+  build uses. It does not audit every writeFileSync in `scripts/`, several of which write
+  caches and scratch files where a truncating failure costs nothing worth guarding.
+  Gates: tsc zero, two full `build:seo` runs at exit 0, simPrerender green plus both
+  controls reporting green for the right reason (truncwrite catching 1 finding from section
+  15 and nothing else, noindex catching 1 from section 14 and nothing else), the boundary
+  fix proved by reverting `prerender.mjs` to the truncating write and watching the noindex
+  control refuse to call itself green, all 15 built site fences green twice, 186 node
+  harnesses green, and `git diff` showing no content change under `public/` or in the
+  ledger.
 - **2026-09-02, Round 419. EVERY CLUB PLAYS SEVENTEEN GAMES.** Found while
   re-measuring Round 418, not reported by anyone, which is the only reason it was found at
   all. `buildSchedule` documented and believed a clean shape: six divisional games home

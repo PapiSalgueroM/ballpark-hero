@@ -58,7 +58,8 @@
  * Run: npm run build && node scripts/prerender.mjs
  */
 import { createServer } from 'node:http';
-import { readFileSync, existsSync, statSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
+import { writeFileAtomic } from './lib/atomicWrite.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
@@ -809,9 +810,13 @@ for (const route of unique) {
       continue;
     }
     for (const base of (CONTROL ? [DIST] : [DIST, PUBLIC])) {
-      const dir = path.join(base, route.replace(/^\//, ''));
-      mkdirSync(dir, { recursive: true });
-      writeFileSync(path.join(dir, 'index.html'), html);
+      /* Round 420: atomic. A plain writeFileSync truncates its target first,
+         so a write that fails halfway does not leave the page stale, it
+         leaves the route with NO document at all. That happened for real to
+         public/nfl-higher-lower/index.html while Round 419 was being built.
+         See scripts/lib/atomicWrite.mjs for why the temp sits beside the
+         target rather than in the OS temp directory. */
+      writeFileAtomic(path.join(base, route.replace(/^\//, ''), 'index.html'), html);
     }
     written += 1;
     if (written % 20 === 0) console.log(`   ${written}/${unique.length}`);
