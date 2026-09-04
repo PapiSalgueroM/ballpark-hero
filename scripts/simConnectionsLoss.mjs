@@ -40,7 +40,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 function runVitest(extraEnv) {
   const r = spawnSync(
     process.execPath,
-    [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', TEST],
+    [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', '--reporter=verbose', TEST],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...extraEnv, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 },
   );
   return { code: r.status, out: (r.stdout || '') + (r.stderr || '') };
@@ -78,6 +78,10 @@ console.log('1) The real hooks, rendered: a loss counts the groups the player fo
   if (!out.includes('useConnectionsLoss.test.ts')) fail('vitest did not report on the test file at all, so nothing was checked:\n' + out.slice(-1500));
   const summary = out.match(/Tests\s+(.+)/);
   console.log(`   vitest exit ${code}, ${summary ? summary[1].trim() : 'no summary line'}`);
+  /* One line per test, so the runner can see the checks ran (it reports a
+     green harness that prints fewer than four lines as EMPTY) and so a red
+     names the row and the mode that failed. */
+  for (const l of out.split('\n').filter(l => /^\s*[✓×]\s/.test(l))) console.log('   ' + l.trim());
   if (CONTROL === 'pad') {
     /* Proven only when the rewritten hook actually ran: the other three rows
        pass, and the NHL rows fail on the assertion, not on a load error. */
@@ -88,7 +92,9 @@ console.log('1) The real hooks, rendered: a loss counts the groups the player fo
   } else {
     if (code !== 0) {
       const lines = out.split('\n').filter(l => /×|FAIL|AssertionError|expected/.test(l)).slice(0, 8);
-      fail('the hook test is red:\n    ' + lines.join('\n    '));
+      /* A red with no assertion in it is vitest itself failing (a crash, a
+         port, a cache collision), which needs the raw tail to diagnose. */
+      fail('the hook test is red:\n    ' + (lines.length ? lines.join('\n    ') : 'no assertion lines, vitest output tail:\n' + out.slice(-1500)));
     }
     if (!/8 passed/.test(out)) fail(`expected all eight tests to pass, vitest says: ${summary ? summary[1].trim() : 'nothing'}`);
   }

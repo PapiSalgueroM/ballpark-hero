@@ -109,6 +109,16 @@ const LITERAL = /useGameCompletion\(\s*['"]([a-z0-9-]+)['"]|recordCompletion\(\s
 const VIA_IDENT = /useGameCompletion\(\s*([A-Za-z_$][\w$]*)\s*[,)]/g;
 const CONSTANT = /(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::\s*[^=]+)?=\s*['"]([a-z0-9-]+)['"]/g;
 const GAME_ID = /gameId:\s*['"]([a-z0-9-]+)['"]/g;
+/* ROUND 429 WIDENED THIS AGAIN, after the same gap cost points a THIRD time.
+   ResultScreen records on mount for any page that passes recordCompletionOnMount,
+   under the key it derives from share.gamePath, so those pages call neither
+   useGameCompletion nor recordCompletion and every pattern above walks past
+   them. higher-lower-transfers (Round 421 addendum), then list-quiz and
+   player-bingo (this round) were all found by section 4 or by hand, never by
+   this section. A page that opts into the mount record is now read for its
+   gamePath. */
+const ON_MOUNT = /recordCompletionOnMount/;
+const GAME_PATH = /gamePath:\s*['"]\/([a-z0-9-]+)['"]/g;
 
 function sourceKeys() {
   const found = new Set();
@@ -120,6 +130,7 @@ function sourceKeys() {
         const src = fs.readFileSync(p, 'utf8');
         for (const m of src.matchAll(LITERAL)) found.add(m[1] || m[2]);
         for (const m of src.matchAll(GAME_ID)) found.add(m[1]);
+        if (ON_MOUNT.test(src)) for (const m of src.matchAll(GAME_PATH)) found.add(m[1]);
         /* Resolve an identifier argument against the string constants declared
            in the same file. Deliberately file local: following an import would
            mean building a module graph, and every case in this repo is local. */
