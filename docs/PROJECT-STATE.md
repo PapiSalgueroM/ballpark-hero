@@ -2325,11 +2325,34 @@ six static pages, is the 124 entries in the file.*
 This is the registry `CLAUDE.md` points at. **These are the only things you may ask him about
 besides money. Everything else, decide yourself.** When one is resolved, delete it from here.
 
-1. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
+1. **THE GOOGLE SIGN IN SCREEN SHOWS HIS PERSONAL EMAIL AND THE RAW SUPABASE HOST.
+   Reported 2026-09-04 with a screenshot, his words: "this is a no go and i dont want any
+   of this info to be seen".** The consent screen a player sees reads "to continue to
+   flawuiqbvjobmkfkauhw.supabase.co" and its Developer Information panel names that host as
+   the app and anthonysalguero3010@gmail.com as the support email. NOTHING IN THIS REPO
+   CONTROLS THIS and no round can fix it: it is the Google Cloud OAuth consent screen on
+   his own account, plus a Supabase setting. He has to do it, and the exact steps are in the
+   answer given to him on 2026-09-04 (Google Cloud Console, APIs and Services, OAuth consent
+   screen: App name to DoUKnowBall, User support email and developer contact to
+   douknowball1@gmail.com, logo and douknowball.com as the authorized domain; the
+   supabase.co line itself only goes away with a Supabase custom auth domain, a paid add on,
+   which is the money part he needs to decide). Until then the site is asking players to
+   trust a URL that does not look like the site they are on, which costs sign ups.
+
+2. **Unlimited finishes on /missing-xi no longer record a completion or pay points.**
+   Round 428 moved the page onto the shared daily action log, and that shape feeds the
+   recorder the DAILY status only, which is what Missing Five, Missing Eleven and every
+   Connections game already do. So an Unlimited round on /missing-xi is now practice and
+   pays nothing, where before it paid every time. It is the consistent behaviour and it
+   closes a points farm, but it is a real change to how a signed in player earns, so he
+   should know. The wider question behind it, whether unlimited modes anywhere should count
+   toward points and the leaderboard, is his call and is unresolved across about ten games.
+
+3. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
    `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
    gitignore. Do not silently delete his research, ask him.
-2. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
-3. **The inflated points, the history.** Two leaks, both stopped forward, neither
+4. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
+5. **The inflated points, the history.** Two leaks, both stopped forward, neither
    repaired backward. Round 392 stopped the per match one: every Club Manager match used
    to add the running season score to a signed in player's points, so the top of the
    points table held 80,246 of its 87,800 from 1,586 match rows. Round 399 stopped the

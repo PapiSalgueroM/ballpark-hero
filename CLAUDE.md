@@ -143,6 +143,39 @@ This caused a full outage in July 2026. It is the single easiest way to break th
 
 ---
 
+## One engine, many sports. His standing instruction, 2026-09-04
+
+In his words: *"u can use a lot of the same formatting and such for diffrent games dont just
+made new coding if u can use a lot of the same such as using the soccer manager and career in
+other manager and career games. except obviously with info and events and everything of
+everything of said sport"*.
+
+**So: a new sport is DATA plus that sport's events, not a new engine.** Before writing a
+career, manager, dynasty, front office or grid game for a sport that does not have one, find
+the game that already does it and share its engine. Soccer Career and Club Manager are the
+deepest things on the site and they are the shape the others should reach, not files to copy
+beside.
+
+What this means in practice:
+
+- **Lift the engine into a shared module and inject the sport.** The pattern already exists
+  and works: `usePerfectLineupGeneric` drives three routes from one hook, the grid engine
+  drives four sports from one file, and `FrontOfficeSeasonClose.test.tsx` covers all four GM
+  sims because they were made to share a shape. Round 426 is the counter example: the same
+  roster refill bug had to be fixed twice, in the CFB engine and again in the CBB one, because
+  they were written as two copies of one idea.
+- **A bug found in one sport must be checked in every sport sharing the shape.** Round 426 and
+  Round 431 both started as one game and turned out to be four. Grep the sibling engines
+  before you call a fix done.
+- **What legitimately differs per sport:** the data, the calendar and season shape, the
+  competition formats, the positions and roles, the events and the language around them, the
+  records and the awards. That is where the work belongs.
+- **What must not differ:** the loop, the save shape, the daily record shape, the scoring
+  pipeline, the how to play affordance, the result screen. A player moving from the NFL
+  version to the NHL version should find the same game wearing a different sport.
+
+---
+
 ## Repo layout
 
 - `src/pages/` one component per game or screen, routed in `src/App.tsx` with `React.lazy`
