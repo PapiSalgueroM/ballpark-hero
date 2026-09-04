@@ -701,7 +701,7 @@ export function useRebuild(): RebuildState {
       ? `\nvs ${rivals[0].name} ${rivals[0].finalRating} · ${rivals[1].name} ${rivals[1].finalRating}`
       : '';
     const seasonLine = season ? `\nSeason: #${season.position} of ${season.table.length}` : '';
-    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Caretaker'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${finalFunds}M left\ndouknowball.com/rebuild`;
+    return `Rebuild: ${club.club}\n${startRating} → ${currentRating} (target ${target})\nCoach: ${coach?.name ?? 'Same man as last season'}\n${grade}${rivalLine}${seasonLine}\nSold ${sold.length} · Signed ${signed.length} · €${finalFunds}M left\ndouknowball.com/rebuild`;
   }, [phase, club, startRating, currentRating, target, grade, sold, signed, finalFunds, coach, rivals, season]);
 
   return {
