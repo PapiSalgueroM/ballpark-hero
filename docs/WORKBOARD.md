@@ -19,9 +19,48 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 425.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 430.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED AND SHIPPED 2026-09-03 late: Rounds 425, 426, 427, 429.**
+  Pushed together with this claim; the first three sat local for a day while the
+  gate ran. 425: a lost NHL, NBA or NFL Connections daily no longer claims 4/4
+  (the padded reveal list was being counted). 426: the CFB dynasty stopped
+  bricking at season five (the roster refill only ever drew linemen, so
+  heismanRace came back empty and heisman[0].name threw inside the final week
+  handler). 427: the Player Stock Market's Daily mode can start on every date
+  (dailyPrngSeed can return a negative number, which indexed START_YEARS out of
+  range and sent year=in.(NaN) to Postgres). 429: Bing and Yandex verification
+  plus explicit AI crawler groups in robots.txt, the owner's 2026-09-03 request.
+  The adversarial review of 425 to 427 confirmed the daily fixes and found four
+  things behind them, claimed as follow up parts of the same rounds, next up:
+  Baseball Connections' result line still reads the padded list (a pre-existing
+  operator precedence bug at BaseballConnections.tsx:196), unlimited mode pads
+  the same way in all four Connections hooks, a reload on the CFB recap screen
+  replays the final week and the whole postseason and double counts the season
+  (CfbDynastyBoard.tsx:109 persists round 12 with phase recap), and the CBB
+  engine carries the same refill drain as CFB. Also three comment corrections in
+  427 (the "days that already worked are untouched" claim is false for the 33
+  days a year where the old seed was a multiple of 5, and the hash reaches far
+  more than nine games through generatorFrom).
+- **Desktop lane, CLAIMED: Round 428. THE TWELVE DAILIES THAT RESET ON REFRESH.**
+  The first-impression audit's systemic annoyance: a finished daily is destroyed
+  by a page refresh and the same daily is then replayable with the answer known,
+  and every replay records a second completion and re-pays the score. A read-only
+  investigation on 2026-09-03 confirmed it on 11 of the 12 routes (/f1-driver,
+  /guess-tennis-player, /guess-nascar-driver, /missing-xi, /guess-the-year,
+  /guess-the-nation, /perfect-lineup-nba, /sports-millionaire, /minefield,
+  /sports-bingo, /gauntlet-draft; /nba-stat-line already persists and is the
+  positive control) and found four siblings with the same defect
+  (/f1-constructor, /guess-cbb-team, /guess-nfl-team, /guess-soccer-club), plus
+  /perfect-lineup-nhl and /perfect-lineup-f1 through the shared hook. Build
+  plan: harness first (scripts/simDailyReload.mjs over a vitest file with one
+  driver per route and two negative controls), a shared src/lib/dailyRecord.ts,
+  then four code paths (clue hooks restore in startGame with markRestoredFinish;
+  initializer restores for guess-the-year, minefield, bingo, perfect-lineup;
+  after-mount restores for millionaire and gauntlet; MissingXi onto the
+  useDailyPuzzle action log). Branch daily-reload, worktree .worktrees/daily-reload.
 
 - **Desktop lane, CLAIMED: Round 424. STADIUM TYCOON'S MATCH WAS NEVER
   PLAYED.** Shipped and live. The minutes-elapsed line reduced to
