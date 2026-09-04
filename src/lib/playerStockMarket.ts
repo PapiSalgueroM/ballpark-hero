@@ -29,10 +29,13 @@ import type { FormationSlot } from '@/lib/squadDeal';
  * harness drives with synthetic fixtures; fetchCampaignRows owns the two
  * real queries.
  *
- * SCORING. Your growth is placed between the worst and best per-slot
- * picks of the same offers (both computed without the budget cap, so the
- * ceiling is what an unlimited wallet could have done; your run respects
- * the 200M). 100 means you matched the unlimited best, 0 the worst.
+ * SCORING (rewritten in Round 434, see the long note above scoreCampaign).
+ * Your return is measured on the whole 200M, not on the slice of it you
+ * chose to spend, and your portfolio's final year value is placed between
+ * the worst and the best eleven that the same 200M could really have
+ * bought out of the same offers. 100 means you played the wallet
+ * perfectly, 0 means you could not have done worse with it, and cash you
+ * never spend buys nothing.
  */
 
 export const STOCK_BUDGET = 200_000_000;
@@ -319,10 +322,13 @@ export function canAfford(campaign: Campaign, slotIndex: number, candidate: Anon
 
 export interface CampaignResult {
   spend: number;
+  /** What the eleven are worth in the final year. */
   finalValue: number;
-  growth: number; /* finalValue / spend */
-  bestGrowth: number;
-  worstGrowth: number;
+  /** The return on the WHOLE wallet, not on the part you chose to deploy. */
+  growth: number;
+  /** The most and the least the same 200M could have been worth. */
+  bestValue: number;
+  worstValue: number;
   score: number;
 }
 
@@ -331,27 +337,90 @@ export function candidateRatio(c: AnonCandidate): number {
 }
 
 /**
- * Places your XI between the worst and best per-slot picks of the same
- * offers. Best and worst ignore the budget on purpose (the ceiling is what
- * an unlimited wallet could have done); your own run respected the 200M.
+ * ROUND 434: THE SCORE USED TO BE A SPEND RATIO AND THAT MADE INVESTING A
+ * MISTAKE.
+ *
+ * It placed finalValue / SPEND between the best and worst per-slot ratios, so
+ * the denominator was the money you chose to deploy rather than the money you
+ * were handed. Every pound you put to work made the denominator bigger, which
+ * meant the winning play was to keep the wallet shut. Measured over 120 seeded
+ * campaigns against the real rows: the cheapest possible XI, 25.4M of a 200M
+ * wallet, scored 95.2 out of 100 while a random picker scored 20.5 and an XI
+ * that spent the lot scored 13.2. The two stats the card prints beside the
+ * price were worse than useless against that rule, landing on the card the
+ * score rewarded 22.6 and 18.8 percent of the time against 40.7 for guessing.
+ * The game is called Invest on Stats Alone.
+ *
+ * So the score is now the return on the whole wallet. Your portfolio's final
+ * year value is placed between the WORST and the BEST eleven that the same
+ * budget could actually have bought out of the same offers. Money you never
+ * spend buys nothing, which is what makes it an investing game: 100 means you
+ * played the 200M perfectly, 0 means you could not have done worse with it.
  */
+
+interface Reach { spend: number; value: number; picks: AnonCandidate[] }
+
+/**
+ * Every XI the wallet can reach, kept as a frontier of (spend, value) pairs
+ * that nothing else beats on both counts. Slot by slot, so it is an exact
+ * search rather than a greedy one: the eleven choices interact through the
+ * budget, and picking the dearest card early really can strand a later slot.
+ *
+ * sign +1 keeps the most valuable portfolio at each spend, -1 the least.
+ * The frontier stays small because a point only survives if it beats every
+ * cheaper one (measured over 400 real campaigns: 118 points at the widest).
+ */
+function reachable(campaign: Campaign, sign: 1 | -1): Reach[] {
+  let points: Reach[] = [{ spend: 0, value: 0, picks: [] }];
+  for (const slot of campaign.slots) {
+    const grown: Reach[] = [];
+    for (const p of points) {
+      for (const c of slot.candidates) {
+        const spend = p.spend + c.price;
+        if (spend > campaign.budget) continue;
+        grown.push({ spend, value: p.value + c.final, picks: [...p.picks, c] });
+      }
+    }
+    if (grown.length === 0) {
+      /* The punt in every slot is drawn under PUNT_CEILING precisely so eleven
+         of them always fit, and simStockLive holds that against the live pool,
+         so this cannot happen. It is here because a result screen that throws
+         is worse than one that scores a stranded run off its cheapest chain. */
+      const cheapest = [...slot.candidates].sort((a, b) => a.price - b.price)[0];
+      const from = points.reduce((lo, p) => (p.spend < lo.spend ? p : lo), points[0]);
+      grown.push({ spend: from.spend + cheapest.price, value: from.value + cheapest.final, picks: [...from.picks, cheapest] });
+    }
+    grown.sort((a, b) => a.spend - b.spend || sign * (b.value - a.value));
+    const kept: Reach[] = [];
+    let edge = sign > 0 ? -Infinity : Infinity;
+    for (const p of grown) {
+      if (sign > 0 ? p.value > edge : p.value < edge) { kept.push(p); edge = p.value; }
+    }
+    points = kept;
+  }
+  return points;
+}
+
+/** The most valuable XI the budget could have bought from these offers. */
+export function bestAffordableXI(campaign: Campaign): AnonCandidate[] {
+  return reachable(campaign, 1).reduce((best, p) => (p.value > best.value ? p : best)).picks;
+}
+
+/** The least valuable one, which is the floor the score sits on. */
+export function worstAffordableXI(campaign: Campaign): AnonCandidate[] {
+  return reachable(campaign, -1).reduce((worst, p) => (p.value < worst.value ? p : worst)).picks;
+}
+
 export function scoreCampaign(campaign: Campaign, picks: AnonCandidate[]): CampaignResult {
   const spend = picks.reduce((s, c) => s + c.price, 0);
   const finalValue = picks.reduce((s, c) => s + c.final, 0);
-  const growth = spend > 0 ? finalValue / spend : 0;
-  let bestSpend = 0; let bestFinal = 0; let worstSpend = 0; let worstFinal = 0;
-  for (const slot of campaign.slots) {
-    const byRatio = [...slot.candidates].sort((a, b) => candidateRatio(b) - candidateRatio(a));
-    bestSpend += byRatio[0].price; bestFinal += byRatio[0].final;
-    const w = byRatio[byRatio.length - 1];
-    worstSpend += w.price; worstFinal += w.final;
-  }
-  const bestGrowth = bestSpend > 0 ? bestFinal / bestSpend : 1;
-  const worstGrowth = worstSpend > 0 ? worstFinal / worstSpend : 1;
-  const score = bestGrowth === worstGrowth
+  const bestValue = bestAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
+  const worstValue = worstAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
+  const growth = campaign.budget > 0 ? finalValue / campaign.budget : 0;
+  const score = bestValue === worstValue
     ? 100
-    : Math.max(0, Math.min(100, Math.round((100 * (growth - worstGrowth)) / (bestGrowth - worstGrowth))));
-  return { spend, finalValue, growth, bestGrowth, worstGrowth, score };
+    : Math.max(0, Math.min(100, Math.round((100 * (finalValue - worstValue)) / (bestValue - worstValue))));
+  return { spend, finalValue, growth, bestValue, worstValue, score };
 }
 
 /* ---------------- formatting ---------------- */
