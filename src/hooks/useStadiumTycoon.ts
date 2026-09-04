@@ -69,14 +69,37 @@ export function useStadiumTycoon() {
     setTimeout(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);
   }, []);
 
-  // The one-time away-earnings settlement, before the loop starts.
-  useEffect(() => {
+  /* Round 439: away earnings settle from the wall clock the ground has not
+     already been paid for, so a fresh load and a tab that was only
+     backgrounded go through the exact same rule and the exact same cap.
+     paidUntilRef is wall-clock ms, seeded from the save and pushed forward
+     by the loop by exactly the seconds it ticks, so live play can never be
+     billed as time away and a throttled frame cannot quietly lose an hour.
+
+     What this fixes: the settle used to run once, on mount. rAF stops dead
+     in a hidden tab, so a player who left the tab open in another window
+     came back to a single frame with dt clamped to two seconds, and the old
+     visibilitychange handler then saved with savedAt = now, so a later
+     reload could not pay for those hours either. Hours away, two seconds
+     paid, and the difference gone for good. */
+  const paidUntilRef = useRef(state.savedAt);
+  const settleAway = useCallback(() => {
     const now = Date.now();
-    const pay = offlineEarnings(stateRef.current, now);
-    if (pay > 0) {
-      setAwayPay(pay);
-      setState(s => ({ ...s, money: s.money + pay, lifetime: s.lifetime + pay, savedAt: now }));
-    }
+    const pay = offlineEarnings({ ...stateRef.current, savedAt: paidUntilRef.current }, now);
+    paidUntilRef.current = now;
+    if (pay <= 0) return;
+    setAwayPay(pay);
+    setState(s => {
+      const next = { ...s, money: s.money + pay, lifetime: s.lifetime + pay, savedAt: now };
+      // Bank it straight away: an unsaved settle would be paid a second time.
+      try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
+      return next;
+    });
+  }, []);
+
+  // The settlement for the time before this mount, before the loop starts.
+  useEffect(() => {
+    settleAway();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,6 +117,9 @@ export function useStadiumTycoon() {
       if (acc >= 0.2) {
         const use = acc;
         acc = 0;
+        // Round 439: the loop has now paid for these seconds, so the away
+        // settle must not bill for them again.
+        paidUntilRef.current += use * 1000;
         const { state: next, events } = tick(stateRef.current, use, Math.random);
         for (const e of events) reactToEvent(e);
         setState(next);
@@ -142,18 +168,27 @@ export function useStadiumTycoon() {
       }
     };
     raf = requestAnimationFrame(step);
-    const onHide = () => {
+    const saveNow = () => {
       try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(stateRef.current, Date.now())); } catch { /* ignore */ }
     };
-    document.addEventListener('visibilitychange', onHide);
-    window.addEventListener('pagehide', onHide);
+    /* Round 439: hiding banks the save, coming back settles the hours. The
+       frame clock restarts on the way back in so the return frame pays for
+       the frame and the settle pays for the time away, never both. */
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') { saveNow(); return; }
+      settleAway();
+      last = performance.now();
+      acc = 0;
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', saveNow);
     return () => {
       cancelAnimationFrame(raf);
-      document.removeEventListener('visibilitychange', onHide);
-      window.removeEventListener('pagehide', onHide);
-      onHide();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', saveNow);
+      saveNow();
     };
-  }, [pushFloater]);
+  }, [pushFloater, settleAway]);
 
   /* Round 195: the idle game counts as playing TODAY. One unscored mark
      per session, on the first meaningful action (a tap, a purchase, a
