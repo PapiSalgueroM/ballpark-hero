@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 433.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 434.
 
 ## Active claims, 2026-09-03
 
@@ -52,6 +52,25 @@ How it works:
   simStockCampaign section 6 walks 365 dates through it, control signed). Also
   429 part two: Yandex moved to the meta tag method because the host injects
   its badge into every HTML response, so the file method can never verify.
+- **Desktop lane, SHIPPED 2026-09-04: Round 433, FREE KICK, /free-kick. The first
+  game on this site you play instead of answer.** His most repeated ask and the one
+  thing he had never been given: "add more games that your actually moving the keys
+  and stuff and not simply typing and reading". Ten kicks, aim with the arrows or by
+  dragging the pitch, bend with Q and E, hold to charge a sweeping power bar. The
+  engine in src/lib/freeKick.ts is pure and deterministic and the page owns only the
+  frames, so the flight drawn is the flight scored. scripts/simFreeKick.mjs caught the
+  game's one real design flaw before it shipped: with a clean flight, top left corner
+  at full power beat a thinking player 2539 points to 1206 over 400 runs, so one button
+  was the whole game. Power costs accuracy now and skilled play leads 1.74x. The control
+  SIM_FREE_KICK_CONTROL=nospray reproduces that exact flaw rather than an invented one.
+  Playing it in a browser then found a second defect the harness structurally could not:
+  the flight ran on requestAnimationFrame alone, which a browser pauses in a hidden tab,
+  so a kick taken before switching away froze in the air and the run never moved on. It
+  is drawn by frames and settled by a timer now.
+  **NEXT FOR THIS ARC:** this engine is the start of the arcade family the spec calls
+  sections 82 to 88. The second one shares it rather than copying it, per the one engine
+  many sports rule now in CLAUDE.md.
+
 - **Desktop lane, CLAIMED 2026-09-04: Rounds 430, 431, 432, the last three audit blockers.**
   Investigated read only with reproduction and two refuters each, then built in
   parallel worktrees, harness first. 430: /fantasy-draft greys out the pool
