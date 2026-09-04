@@ -204,7 +204,7 @@ const NbaConnections = () => {
               }
               emojiGrid={lives > 0 ? `🏆 NBA Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `🏀 NBA Connections: ${foundGroups}/4 groups`}
               share={{
-                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's NBA Connections` : `today's NBA Connections`,
+                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's NBA Connections` : `${foundGroups}/4 groups on today's NBA Connections`,
                 gameName: 'NBA Connections',
                 gamePath: '/nba-connections',
               }}

@@ -112,14 +112,25 @@ export function useNhlConnections() {
   const unlimitedPuzzle = puzzlePool[unlimitedIndex % puzzlePool.length];
   const [unlimitedSolvedGroups, setUnlimitedSolvedGroups] = useState<SolvedGroup[]>([]);
   const [unlimitedLives, setUnlimitedLives] = useState(4);
+  /* Round 425 part two: the groups the board REVEALS after an unlimited loss
+     are kept apart from the groups the player found, the way the daily side
+     keeps dailySolvedGroups apart from dailySolvedGroupsFinal. Padding the
+     found list itself is what made an unlimited loss read 4/4 on the counter,
+     the result line and the share card. */
+  const [unlimitedRevealed, setUnlimitedRevealed] = useState<SolvedGroup[]>([]);
+  const unlimitedSolvedGroupsFinal = useMemo(
+    () => (unlimitedRevealed.length ? [...unlimitedSolvedGroups, ...unlimitedRevealed] : unlimitedSolvedGroups),
+    [unlimitedSolvedGroups, unlimitedRevealed],
+  );
 
   // ---- ACTIVE VALUES -------------------------------------------------------
   const puzzle       = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
-  const solvedGroups = mode === 'daily' ? dailySolvedGroupsFinal : unlimitedSolvedGroups;
+  const solvedGroups = mode === 'daily' ? dailySolvedGroupsFinal : unlimitedSolvedGroupsFinal;
   /* Round 425: groups the PLAYER actually found. solvedGroups above is
      padded with the unsolved groups when the last life goes, so the board can
      reveal them, which made every loss report 4/4 on screen and on the share
-     card. Same fix Baseball Connections already carries. */
+     card. Part two moved the unlimited padding into unlimitedRevealed, so
+     this count is honest in both modes. */
   const foundGroups = mode === 'daily' ? dailySolvedGroups.length : unlimitedSolvedGroups.length;
   const lives        = mode === 'daily' ? dailyLives : unlimitedLives;
   const gameStatus: NhlConnStatus = mode === 'daily'
@@ -191,10 +202,7 @@ export function useNhlConnections() {
         setUnlimitedLives(newLives);
         if (newLives <= 0) {
           const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => s.theme === g.theme));
-          setUnlimitedSolvedGroups(prev => [
-            ...prev,
-            ...remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })),
-          ]);
+          setUnlimitedRevealed(remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })));
         }
       }
       setShakeWrong(true);
@@ -210,6 +218,7 @@ export function useNhlConnections() {
     } else {
       setUnlimitedIndex(Math.floor(Math.random() * puzzlePool.length));
       setUnlimitedSolvedGroups([]);
+      setUnlimitedRevealed([]);
       setUnlimitedLives(4);
     }
     setSelected([]);

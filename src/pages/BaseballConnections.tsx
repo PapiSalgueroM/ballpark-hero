@@ -193,13 +193,13 @@ const BaseballConnections = () => {
               headline={lives > 0 ? 'All Groups Found!' : 'Out of Lives!'}
               statLine={
                 <>
-                  Found <span className="font-bold text-[hsl(var(--bb-red-ink))]">{solvedGroups.filter((_, i) => i < puzzle.groups.length && lives > 0 || lives <= 0).length}</span>/4 groups
+                  Found <span className="font-bold text-[hsl(var(--bb-red-ink))]">{foundGroups}</span>/4 groups
                   {lives > 0 && ` with ${lives} ${lives === 1 ? 'life' : 'lives'} remaining`}
                 </>
               }
               emojiGrid={lives > 0 ? `🏆 Baseball Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `⚾ Baseball Connections: ${foundGroups}/4 groups`}
               share={{
-                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's Baseball Connections` : `today's Baseball Connections`,
+                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's Baseball Connections` : `${foundGroups}/4 groups on today's Baseball Connections`,
                 gameName: 'Baseball Connections',
                 gamePath: '/baseball-connections',
               }}
