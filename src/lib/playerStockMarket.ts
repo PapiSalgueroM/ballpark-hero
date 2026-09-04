@@ -99,7 +99,16 @@ function mulberry32(seed: number) {
 }
 
 export function dailyCampaignSeed(): number {
-  return dailyPrngSeed(getTodayET()) ^ 0x50534d32 || 13;
+  /* Round 427: >>> 0 makes this seed unsigned HERE, at this call site only.
+     dailyPrngSeed can return a negative number (see the note at its return), and
+     a negative seed indexed START_YEARS out of bounds, which became NaN in the
+     query and left Daily mode unstartable on roughly a third of days.
+     Scoped deliberately. Fixing the shared hash instead was tried and reverted:
+     nine games seed off it, and reshuffling all of them to fix this one made
+     Sign the Player repeat a board four days running.
+     Days that already worked are untouched, because >>> 0 is the identity on a
+     positive seed. Only the days that were broken change. */
+  return ((dailyPrngSeed(getTodayET()) ^ 0x50534d32) >>> 0) || 13;
 }
 
 export function randomCampaignSeed(): number {

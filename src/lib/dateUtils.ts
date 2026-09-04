@@ -81,6 +81,23 @@ export function dailyPrngSeed(dateStr: string): number {
   h ^= h >>> 13;
   h = Math.imul(h, 3266489909) >>> 0;
   h ^= h >>> 16;
+  /* ROUND 427, A TRAP RECORDED RATHER THAN FIXED. `^=` yields a SIGNED 32 bit
+     result and this final mix, unlike every step above it, does not re-coerce
+     with >>> 0. So this CAN RETURN A NEGATIVE NUMBER: dailyPrngSeed('2026-09-03')
+     is -54366920, and 15 of 40 consecutive dates come back negative.
+     CALLERS MUST NOT INDEX AN ARRAY WITH THIS DIRECTLY. `arr[seed % arr.length]`
+     indexes negative, yields undefined, and undefined then spreads as NaN. That
+     is exactly how the Player Stock Market's Daily mode became unstartable on
+     roughly a third of days: it asked Postgres for `year=in.(NaN)` and got a 400
+     that surfaced to the player as "Couldn't open the market right now".
+     The six PRNG consumers are safe because each folds a non-positive seed back
+     into range itself (`if (s <= 0) s += 2147483646`).
+     Adding the missing >>> 0 here was tried and REVERTED (commit 13769ccb, then
+     e4890a5f). It is correct in isolation, but it changes the seed on every date
+     that previously came back negative, and simDaily caught the consequence:
+     Sign the Player then repeated the same board four days running around day 69.
+     Nine games share this hash, so changing it reshuffles eight games' puzzles to
+     fix one. Normalise at YOUR call site instead, the way dailyCampaignSeed does. */
   return (h % 2147483646) + 1;
 }
 
