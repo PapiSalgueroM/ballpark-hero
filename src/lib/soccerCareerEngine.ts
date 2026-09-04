@@ -6944,6 +6944,32 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   return s;
 }
 
+/**
+ * Round 437: the money keeps running after the boots go in the bag.
+ *
+ * The phone stays on screen for the whole retirement, and the two screens
+ * inside it make a promise every season in shipped copy: the bank says savings
+ * "pays 2.5% a season, never loses", the market says "Prices move every season
+ * whether you look or not." Neither was true once the playing career ended,
+ * because moneySeasonTick was reachable from exactly one place,
+ * simulateSeasonFinances, and that only runs in a playing season. So savings
+ * stopped compounding, every price froze to the penny, the anchor the price
+ * labels are read against stopped drifting and the statement went quiet, while
+ * the club owner path carried on paying revenue straight into the account.
+ * Measured over 86 seeded tails of 25 seasons: the market ran 0 times out of
+ * 25, and the worst vault, €18.5M at the ceremony, should have been €34.2M by
+ * the end of the tail and was still €18.5M, €15.79M short of what the bank
+ * screen had been promising it every one of those seasons.
+ *
+ * So every season in the dugout, the studio or the boardroom runs one season of
+ * market, on the same calendar the manager's awards already use.
+ */
+function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number): void {
+  const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + Math.max(1, seasonsSinceRetiring);
+  const tick = moneySeasonTick(s, year);
+  if (tick.events.length > 0) s.events = [...s.events, ...tick.events];
+}
+
 /* ─── Retirement Suggestion, player can choose to continue or retire ─── */
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   const s = { ...prev };
@@ -7070,6 +7096,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
         : "Another season out of the game. The phone stayed quiet.",
       trophy: false,
     }];
+    applyRetirementMoneySeason(s, ms.season);
     s.managerState = ms;
     return s;
   }
@@ -7221,6 +7248,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
 
   s.managerState = ms;
   s.events = [...s.events, `📋 Manager Season ${ms.season}: ${result}`];
+  applyRetirementMoneySeason(s, ms.season);
 
   return s;
 }
@@ -7291,7 +7319,8 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
   s.punditState = ps;
   s.punditEvents = [...s.punditEvents, eventText];
   s.events = [...s.events, eventText];
-  
+  applyRetirementMoneySeason(s, ps.season);
+
   return s;
 }
 
@@ -7347,7 +7376,8 @@ export function advanceOwnerSeason(prev: CareerState): CareerState {
   os.seasonResults = [...os.seasonResults, { year: os.season, club: os.club, tier: os.clubTier, result, trophy: wonTrophy }];
   s.ownerState = os;
   s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];
-  
+  applyRetirementMoneySeason(s, os.season);
+
   return s;
 }
 
