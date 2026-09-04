@@ -209,7 +209,11 @@ export function GuessNflTeamBoard() {
                 gameName: 'Guess The Pro Football Team',
                 gamePath: '/guess-nfl-team',
               }}
-              onPlayAgain={resetGame}
+              /* ROUND 428: one daily a day. Play Again on the daily card
+                 sent the player back to the selector, where Daily dealt
+                 the same team again. */
+              onPlayAgain={gameState.mode === 'daily' ? undefined : resetGame}
+              playNext={gameState.mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new team!</p> : undefined}
             />
           </div>
         )}
