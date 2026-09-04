@@ -229,8 +229,8 @@ const IdleArena = () => {
                 <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
                   <p className="text-xs text-muted-foreground leading-snug">
                     Lift the trophy and the run starts again: the points, the squad and the upgrades all go.
-                    What stays is permanent. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, four trophies
-                    at {fmt(4 * TROPHY_FLOOR)}, nine at {fmt(9 * TROPHY_FLOOR)}, and every trophy is
+                    What stays is permanent. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, two trophies
+                    at {fmt(4 * TROPHY_FLOOR)}, three at {fmt(9 * TROPHY_FLOOR)}, and every trophy is
                     +{Math.round(TROPHY_BONUS * 100)}% on everything, taps and squad alike, in every run after it.
                   </p>
                   <div className="rounded-xl border border-border bg-background/40 p-3 text-sm">
@@ -314,13 +314,13 @@ const IdleArena = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Idle Arena | DoUKnowBall"
-          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a permanent bonus, and earn at half speed for up to eight hours while the tab is closed."
+          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a permanent bonus, and earn at half speed for up to eight hours while you are away."
           howToPlay={[
             'Tap the ball to score a point',
             'Sign Ball Boys, Sunday Strikers and the rest, and they score every second for you',
             'Buy upgrades to double a line or boost everything',
             'Lift the trophy once a run has earned a million: it resets the run and pays a permanent bonus',
-            'The squad keeps scoring while you are away, at half speed, for up to eight hours',
+            'The squad keeps scoring while you are away, at half speed, for up to eight hours, tab open or shut',
           ]}
           examples={[
             'A Ball Boy costs 15 and scores 0.4 a second; the tenth one costs 53',
@@ -354,7 +354,7 @@ const IdleArena = () => {
                 <li>Own five of an archetype and its own upgrade appears. It doubles that whole line.</li>
                 <li>Earn {fmt(TROPHY_FLOOR)} in one run and you can lift the trophy. The run resets, the trophy stays, and every trophy is +{Math.round(TROPHY_BONUS * 100)}% on everything in every run after it.</li>
                 <li>Badges are +{Math.round(ACHIEVEMENT_BONUS * 100)}% each and never go away either.</li>
-                <li>Close the tab and the squad keeps scoring at {Math.round(OFFLINE_RATE * 100)}% speed for up to eight hours.</li>
+                <li>Walk away and the squad keeps scoring at {Math.round(OFFLINE_RATE * 100)}% speed for up to eight hours. Closing the tab and leaving it sitting open pay the same.</li>
               </ul>
               <p className="font-semibold text-foreground">Worked example:</p>
               <p>Your first Ball Boy is free. You tap eighteen times and sign a second one. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them start saving toward a Sunday Striker at 100. A few minutes in, the squad is scoring more in a second than your thumb did in the first minute.</p>
