@@ -84,20 +84,25 @@ export function dailyPrngSeed(dateStr: string): number {
   /* ROUND 427, A TRAP RECORDED RATHER THAN FIXED. `^=` yields a SIGNED 32 bit
      result and this final mix, unlike every step above it, does not re-coerce
      with >>> 0. So this CAN RETURN A NEGATIVE NUMBER: dailyPrngSeed('2026-09-03')
-     is -54366920, and 15 of 40 consecutive dates come back negative.
+     is -54366920, 14 of the 40 dates from 2026-09-03 come back negative, and
+     161 of the 365 that follow it (44 percent).
      CALLERS MUST NOT INDEX AN ARRAY WITH THIS DIRECTLY. `arr[seed % arr.length]`
      indexes negative, yields undefined, and undefined then spreads as NaN. That
      is exactly how the Player Stock Market's Daily mode became unstartable on
-     roughly a third of days: it asked Postgres for `year=in.(NaN)` and got a 400
-     that surfaced to the player as "Couldn't open the market right now".
-     The six PRNG consumers are safe because each folds a non-positive seed back
-     into range itself (`if (s <= 0) s += 2147483646`).
+     128 of 365 days: it asked Postgres for `year=in.(NaN)` and got a 400 that
+     surfaced to the player as "Couldn't open the market right now". (The other
+     33 negative days happened to be multiples of 5, and `arr[-0]` is `arr[0]`.)
+     Of the eight files that import this directly, six fold a non-positive seed
+     back into range themselves (`if (s <= 0) s += 2147483646`), faceOff applies
+     `>>> 0 || 1`, and playerStockMarket normalises at its call site.
      Adding the missing >>> 0 here was tried and REVERTED (commit 13769ccb, then
      e4890a5f). It is correct in isolation, but it changes the seed on every date
      that previously came back negative, and simDaily caught the consequence:
      Sign the Player then repeated the same board four days running around day 69.
-     Nine games share this hash, so changing it reshuffles eight games' puzzles to
-     fix one. Normalise at YOUR call site instead, the way dailyCampaignSeed does. */
+     Eight files import this hash directly, and generatorFrom below seeds
+     dailyIndex, shuffledRange and dailyDraw from it, so more than thirty daily
+     games move with it; changing it reshuffles all of them to fix one. Normalise
+     at YOUR call site instead, the way dailyCampaignSeed does. */
   return (h % 2147483646) + 1;
 }
 

@@ -98,17 +98,23 @@ function mulberry32(seed: number) {
   };
 }
 
-export function dailyCampaignSeed(): number {
+export function dailyCampaignSeed(dateStr: string = getTodayET()): number {
   /* Round 427: >>> 0 makes this seed unsigned HERE, at this call site only.
      dailyPrngSeed can return a negative number (see the note at its return), and
      a negative seed indexed START_YEARS out of bounds, which became NaN in the
-     query and left Daily mode unstartable on roughly a third of days.
+     query and left Daily mode unstartable on 128 of 365 days.
      Scoped deliberately. Fixing the shared hash instead was tried and reverted:
-     nine games seed off it, and reshuffling all of them to fix this one made
-     Sign the Player repeat a board four days running.
-     Days that already worked are untouched, because >>> 0 is the identity on a
-     positive seed. Only the days that were broken change. */
-  return ((dailyPrngSeed(getTodayET()) ^ 0x50534d32) >>> 0) || 13;
+     dozens of daily games seed off it through generatorFrom, and reshuffling
+     all of them to fix this one made Sign the Player repeat a board four days
+     running.
+     A day whose old seed was positive keeps its campaign, because >>> 0 is the
+     identity there. The 33 days a year whose old seed was a negative multiple
+     of 5 also worked, through START_YEARS[-0], and those move from 2016 to
+     2017. Measured over the year from 2026-09-03: 161 negative seeds, 128
+     broken days fixed, 33 working days re-dealt, 204 days untouched.
+     The date parameter exists for simStockCampaign section 6, which walks a
+     year of dates through this exact path; the page never passes one. */
+  return ((dailyPrngSeed(dateStr) ^ 0x50534d32) >>> 0) || 13;
 }
 
 export function randomCampaignSeed(): number {

@@ -20,11 +20,20 @@
  *      100, every slot's worst exactly 0, and a mixed XI lands between;
  *   5. ANONYMITY IS ENFORCED IN THE PAGE: the buying screen's source
  *      renders no candidate name, nationality or club (comment stripped),
- *      while the reveal does name every pick.
+ *      while the reveal does name every pick;
+ *   6. THE DAILY SEED LANDS ON A REAL START YEAR ON EVERY DATE (Round 427):
+ *      365 dates from 2026-09-03 walk the real dailyCampaignSeed and
+ *      startYearFor path, the seed is never negative and the year is always
+ *      one of START_YEARS. dailyPrngSeed can return a negative number, and
+ *      before Round 427 that left Daily mode unstartable on 128 of those
+ *      365 days (year=in.(NaN) to Postgres, a 400 read as "Couldn't open
+ *      the market right now").
  *
- * NEGATIVE CONTROL: SIM_STOCK_CONTROL=leaky injects a name render into a
+ * NEGATIVE CONTROLS: SIM_STOCK_CONTROL=leaky injects a name render into a
  * copy of the buying block and section 5 must go red, proving the check
- * reads what the screen would actually show.
+ * reads what the screen would actually show. SIM_STOCK_CONTROL=signed
+ * bundles a copy of the lib with the seed left signed and the lookup left
+ * unwrapped, and section 6 must go red on the 128 dates that were broken.
  *
  * Run: node scripts/simStockCampaign.mjs
  */
@@ -38,13 +47,29 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_STOCK_CONTROL || '';
-if (CONTROL && CONTROL !== 'leaky') { console.error(`SIM_STOCK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'leaky' && CONTROL !== 'signed') { console.error(`SIM_STOCK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 const TMP = os.tmpdir().replace(/\\/g, '/');
 const ENTRY = `${TMP}/stockCampaign.entry.mjs`;
 const BUNDLE = `${TMP}/stockCampaign.bundle.mjs`;
+/* Round 427: SIM_STOCK_CONTROL=signed bundles a copy of the lib with the
+   seed left signed and the start year lookup left unwrapped, the pre-fix
+   shape, and section 6 must then go red on the dates that were broken. */
+let LIB = `${ROOT}/src/lib/playerStockMarket.ts`;
+if (CONTROL === 'signed') {
+  const src = fs.readFileSync(LIB, 'utf8');
+  let regressed = src.replace('return ((dailyPrngSeed(dateStr) ^ 0x50534d32) >>> 0) || 13;', 'return (dailyPrngSeed(dateStr) ^ 0x50534d32) || 13;');
+  regressed = regressed.replace('return START_YEARS[((Math.trunc(seed) % n) + n) % n];', 'return START_YEARS[seed % n];');
+  if (regressed === src || regressed.includes('>>> 0) || 13') || regressed.includes('((Math.trunc(seed) % n) + n) % n')) {
+    console.error('control cannot run: playerStockMarket.ts is not in the shape this control rewrites');
+    process.exit(1);
+  }
+  LIB = `${TMP}/playerStockMarket.control.ts`;
+  fs.writeFileSync(LIB, regressed);
+  console.log('NEGATIVE CONTROL ON: the daily seed stays signed and the start year lookup is unwrapped');
+}
 fs.writeFileSync(ENTRY, `
-export * as sm from '${ROOT}/src/lib/playerStockMarket.ts';
+export * as sm from '${LIB}';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
 const store = new Map();
@@ -182,6 +207,29 @@ console.log('5) anonymity is enforced in the page');
   if (leaks.length > 0) fail(`the buying screen renders identity: ${leaks.join(', ')}`);
   if (!reveal.includes('c.name')) fail('the reveal no longer names the picks');
   console.log('   the buying screen renders no name, nationality or club; the reveal names every pick');
+}
+
+console.log('6) the daily seed lands on a real start year on every date of the year');
+{
+  const { dailyCampaignSeed, START_YEARS } = sm;
+  let bad = 0; let negative = 0; let first = null;
+  const start = Date.UTC(2026, 8, 3);
+  for (let d = 0; d < 365; d += 1) {
+    const dateStr = new Date(start + d * 86400000).toISOString().slice(0, 10);
+    const seed = dailyCampaignSeed(dateStr);
+    if (!(seed >= 0)) negative += 1;
+    const year = startYearFor(seed);
+    if (!START_YEARS.includes(year)) { bad += 1; if (!first) first = `${dateStr}: seed ${seed}, start year ${year}`; }
+  }
+  console.log(`   365 dates from 2026-09-03: negative seeds ${negative}, dates with no valid start year ${bad}`);
+  if (negative > 0) fail(`dailyCampaignSeed came back negative on ${negative} date(s)`);
+  if (bad > 0) fail(`${bad} date(s) have no valid start year, first: ${first}; Daily mode cannot open on those days`);
+}
+
+if (CONTROL === 'signed') {
+  if (failures > 0) { console.log(`\nsimStockCampaign control "signed": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
+  console.error('\nsimStockCampaign control "signed": changed NOTHING, the check is dead');
+  process.exit(1);
 }
 
 console.log('');
