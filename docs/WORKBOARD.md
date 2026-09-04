@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 430.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 433.
 
 ## Active claims, 2026-09-03
 
@@ -52,6 +52,20 @@ How it works:
   simStockCampaign section 6 walks 365 dates through it, control signed). Also
   429 part two: Yandex moved to the meta tag method because the host injects
   its badge into every HTML response, so the file method can never verify.
+- **Desktop lane, CLAIMED 2026-09-04: Rounds 430, 431, 432, the last three audit blockers.**
+  Investigated read only with reproduction and two refuters each, then built in
+  parallel worktrees, harness first. 430: /fantasy-draft greys out the pool
+  (PlayerPool.tsx builds the top ten shortlist before the drafted and rule
+  eligibility filters, so under Bargain Hunt 100 percent of user picks and under
+  Wonderkids 91.6 percent see zero draftable rows). 431: the four GM sims lose a
+  finished season on reload (the same defect class as the CFB recap fix in 426
+  part three, same shape of fix, with recordActivity kept where simSessionMarks
+  requires it). 432: /mlb-grid and /mlb-connect-4 fail whenever the database is
+  busy because mlb_grid_players is a view recomputing a five table aggregate
+  over 110k Lahman rows per request (138 cancellations in 24 hours, not a cold
+  cache: the trigger is concurrency on a Micro instance); it becomes a same
+  named table with RLS and a public read policy, the transfer_grade_pool
+  precedent, through a migration under supabase/migrations.
 - **Desktop lane, CLAIMED: Round 428. THE TWELVE DAILIES THAT RESET ON REFRESH.**
   The first-impression audit's systemic annoyance: a finished daily is destroyed
   by a page refresh and the same daily is then replayable with the answer known,
