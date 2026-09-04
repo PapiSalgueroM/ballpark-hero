@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Player } from '@/types/game';
-import { FORMATIONS, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
+import { FORMATIONS, playerRating, type Formation } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   fetchRebuildClubs, fetchClubSquad, fetchMarket,
@@ -12,6 +12,7 @@ import {
   planRivals, simulateRival, simulateSeason,
   isContested, warRivalIndex, rivalCapFor, nextRaise,
   spinOrder, dealReplacements, drawPunishments, applyPreset, forceSales,
+  bestFor, buildXi, xiRatingWithHoles,
   OVERDRAFT_LIMIT,
   type CoachOption, type BoardObjective, type FinEvent, type RivalResult,
   type RivalPlan, type SeasonResult, type FortuneCard, type ReplacementDeal,
@@ -112,33 +113,19 @@ export interface RebuildState {
 
 const BASE_BUDGET = 100; // €100M before any sales
 
-/** Best available player for a slot, by rating. Never Math.random(). */
-function bestFor(slot: FormationSlot, pool: Player[], used: Set<string>): Player | undefined {
-  return pool
-    .filter(p => slot.allowed.includes(p.position) && !used.has(p.name))
-    .sort((a, b) => playerRating(b) - playerRating(a))[0];
-}
-
-function buildXi(formation: Formation, pool: Player[]): (Player | undefined)[] {
-  const used = new Set<string>();
-  return formation.slots.map(slot => {
-    const p = bestFor(slot, pool, used);
-    if (p) used.add(p.name);
-    return p;
-  });
-}
-
-function xiRating(xi: (Player | undefined | null)[]): number {
-  const picked = xi.filter(Boolean) as Player[];
-  if (picked.length === 0) return 0;
-  return Math.round(picked.reduce((s, p) => s + playerRating(p), 0) / picked.length);
-}
-
-/** The reckoning's rating: an empty shirt counts 40, so a punishment sale
- *  can never raise the average by removing a below average starter. */
-function finalXiRating(xi: (Player | null)[]): number {
-  if (xi.length === 0) return 0;
-  return Math.round(xi.reduce((s, p) => s + (p ? playerRating(p) : 40), 0) / xi.length);
+/**
+ * The rating the HUD will show the second a club loads, before the player has
+ * touched anything. It has to be the HUD's own law (xiRatingWithHoles), or the
+ * run opens on a delta nobody earned.
+ *
+ * Round 435: it was not. This averaged only the shirts somebody was in, the
+ * HUD charged 40 for the empty ones, and the 15 of 66 clubs whose real squad
+ * cannot fill a 4-3-3 opened at minus 3 or minus 4 with the grade reading
+ * "You made it worse". The target was computed off the same inflated number,
+ * so those clubs were also asked for a rating 3 or 4 points too high.
+ */
+export function openingRating(formation: Formation, squad: Player[]): number {
+  return xiRatingWithHoles(buildXi(formation, squad));
 }
 
 /**
@@ -266,11 +253,11 @@ export function useRebuild(): RebuildState {
   const coachBonus = coach?.bonus ?? 0;
   const currentRating = useMemo(() => {
     if (reckoning) {
-      return Math.max(1, Math.min(99, finalXiRating(reckoning.xi) + coachBonus - reckoning.ratingPen));
+      return Math.max(1, Math.min(99, xiRatingWithHoles(reckoning.xi) + coachBonus - reckoning.ratingPen));
     }
     // Same law as the reckoning: an empty shirt plays like a 40, so leaving
     // one open shows its true cost live instead of at the whistle.
-    return startingXi.some(Boolean) ? Math.max(1, Math.min(99, finalXiRating(startingXi) + coachBonus)) : 0;
+    return startingXi.some(Boolean) ? Math.max(1, Math.min(99, xiRatingWithHoles(startingXi) + coachBonus)) : 0;
   }, [reckoning, startingXi, coachBonus]);
 
   // Round 51: the war chest scales with club size.
@@ -316,7 +303,7 @@ export function useRebuild(): RebuildState {
     const [sq, mk] = await Promise.all([fetchClubSquad(c.club), fetchMarket(c.club)]);
     setSquad(sq);
     setMarket(applyPreset(mk, preset));
-    setStartRating(xiRating(buildXi(FORMATIONS[0], sq)));
+    setStartRating(openingRating(FORMATIONS[0], sq));
     setFormationName(FORMATIONS[0].name);
     setSold([]);
     setSigned([]);
@@ -637,7 +624,7 @@ export function useRebuild(): RebuildState {
         // Season sim uses your POST-reckoning XI, coach bonus included.
         const postXiPlayers = xi.filter(Boolean) as Player[];
         const postRating = postXiPlayers.length
-          ? Math.max(1, Math.min(99, finalXiRating(xi) + (coach?.bonus ?? 0) - ratingPen))
+          ? Math.max(1, Math.min(99, xiRatingWithHoles(xi) + (coach?.bonus ?? 0) - ratingPen))
           : 0;
         const usedClubs = new Set([club.club, ...plans.map(p => p.club.club)]);
         const fillerPool = clubs.filter(c => !usedClubs.has(c.club) && c.tier === club.tier);
@@ -690,11 +677,18 @@ export function useRebuild(): RebuildState {
   }, []);
 
   /** Formation is a pre spin choice: once the wheel has drawn or resolved a
-   *  shirt the shape is locked, or the decided map would point at dead slots. */
+   *  shirt the shape is locked, or the decided map would point at dead slots.
+   *
+   *  The opening reading follows the shape, because nothing has been decided
+   *  yet. Leaving it pinned to the 4-3-3 was the last live route to the Round
+   *  435 bug: a squad with a hole in the 4-3-3 could switch to a shape it
+   *  actually fits and bank up to 4 points, and the target, which is built off
+   *  the opening reading, would not move with it. */
   const setFormation = useCallback((name: string) => {
     if (decided.size > 0 || spunSlot !== null || spinning) return;
     setFormationName(name);
-  }, [decided, spunSlot, spinning]);
+    setStartRating(openingRating(FORMATIONS.find(f => f.name === name) ?? FORMATIONS[0], squad));
+  }, [decided, spunSlot, spinning, squad]);
 
   const grade = useMemo(
     () => gradeFor(currentRating, startRating, target),
