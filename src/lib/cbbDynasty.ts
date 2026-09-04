@@ -379,12 +379,26 @@ export function cbbOffseason(st: CbbState, rng: () => number): string[] {
       keep.push(p);
     }
     t.players = keep;
+    /* Round 426 part four: top up the positions the roster is MISSING, the
+       fix the CFB engine got in part two. Indexing ROSTER_SHAPE by how many
+       players a team happens to have meant a team keeping five or more could
+       only ever draw index 5 and up (SG, SF, PF), so point guards and centers
+       drained out of every AI roster: measured over 20 seeds, 39 or 40 of the
+       40 teams had no PG after five offseasons. Nothing crashed here, because
+       poyRace has no position filter, but the roster tab showed teams with no
+       point guard and no center. The rng draws are unchanged in count and
+       order, so this only moves which position a freshman plays. */
+    const need = [...ROSTER_SHAPE];
+    for (const p of t.players) {
+      const i = need.indexOf(p.pos);
+      if (i !== -1) need.splice(i, 1);
+    }
     while (t.players.length < 8) {
       const stars = starsFor(prestige, rng);
       const ovr = clampi(prestige - 15 + stars * 1.7 + Math.floor(rng() * 5), 55, 92);
       t.players.push({
         id: fid(), name: cbbGenName(rng),
-        pos: ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],
+        pos: need.shift() ?? ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],
         cls: 'FR', ovr, pot: clampi(ovr + 6 + Math.floor(rng() * 8), ovr, 99), stars,
       });
     }
