@@ -91,7 +91,10 @@ fs.rmSync(CONTROL_DIR, { recursive: true, force: true });
  *  control that cannot find what it is replacing changes nothing, and then
  *  green means "the control never fired" rather than "the check works". */
 function patchedCopy(file, oldText, newText, outName) {
-  const src = fs.readFileSync(file, 'utf8');
+  /* Normalise first. Both needles below span several lines, and git checks this
+     repo out with CRLF, so on any fresh clone an LF needle matches nothing and
+     the control refuses to run instead of firing. */
+  const src = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   if (!src.includes(oldText)) {
     console.error(`control cannot fire: ${path.basename(file)} no longer contains the text it rewrites`);
     console.error(oldText);
