@@ -1,10 +1,34 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { GuessNflTeamState, GameMode, Difficulty, POINTS_BY_CLUE } from '@/types/guessNflTeam';
 import { getDailyNflTeamPuzzle, getRandomNflTeamPuzzle, nflTeamPuzzles } from '@/data/nflTeamPuzzles';
 import { nflTeamFacts } from '@/data/nflTeamFacts';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 const MAX_CLUES = 11;
+const SLUG = 'guess-nfl-team';
+
+const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every(x => typeof x === 'string');
+
+/* ROUND 428: today's daily record, read fail closed. Nothing was kept across
+   a refresh, so a finished daily came back as a fresh puzzle with the answer
+   already known and every replay recorded and paid the score again. The
+   pool is bundled, so only the puzzle id is stored and it must still be
+   today's pick; every field is range checked because scripts/sweepSaves.mjs
+   reloads this route with the key set to garbage. A win reveals every clue,
+   so revealedClues may sit one past MAX_CLUES. */
+function validate(f: Record<string, unknown>): GuessNflTeamState | null {
+  const puzzle = getDailyNflTeamPuzzle();
+  if (f.puzzleId !== puzzle.id) return null;
+  const { revealedClues, guesses, gameStatus, score } = f;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES + 1) return null;
+  if (!isStringArray(guesses)) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, revealedClues, guesses, gameStatus, score, mode: 'daily', difficulty: 'easy' };
+}
 
 export function useGuessNflTeam() {
   const [gameState, setGameState] = useState<GuessNflTeamState | null>(null);
@@ -19,6 +43,16 @@ export function useGuessNflTeam() {
     let puzzle;
     
     if (mode === 'daily') {
+      /* ROUND 428: a daily already played today comes back as it was left,
+         and a finished one says so before it is set, because this restore
+         runs in a click handler after mount and useGameCompletion would
+         otherwise record it as a new finish (the Round 399 double record). */
+      const saved = readDailyRecord(SLUG, getTodayET(), validate);
+      if (saved) {
+        if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+        setGameState({ ...saved, difficulty });
+        return;
+      }
       puzzle = getDailyNflTeamPuzzle();
     } else {
       puzzle = getRandomNflTeamPuzzle(excludeRelocated, conference, division);
@@ -121,6 +155,19 @@ export function useGuessNflTeam() {
   }, [gameState]);
 
   useGameCompletion('guess-nfl-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  /* ROUND 428: the daily board is kept current on every move, the fields
+     validate reads back. Unlimited and conference play are never written. */
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    writeDailyRecord(SLUG, getTodayET(), {
+      puzzleId: gameState.puzzle.id,
+      revealedClues: gameState.revealedClues,
+      guesses: gameState.guesses,
+      gameStatus: gameState.gameStatus,
+      score: gameState.score,
+    });
+  }, [gameState]);
 
   return {
     gameState,
