@@ -16,8 +16,32 @@ import {
   scoreQuestionTreeRound,
   getClubQuestion,
 } from '@/lib/clubQuestionTree';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export const MAX_CLUES = 6;
+
+const SLUG = 'guess-soccer-club';
+
+const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every(x => typeof x === 'string');
+
+/* ROUND 428: today's daily record, read fail closed. Nothing was kept across
+   a refresh, so a finished daily came back as a fresh puzzle with the answer
+   already known and every replay recorded and paid the score again. The
+   pool is whichever one loaded (the table, or the bundled fallback), so
+   only the puzzle id is stored and it is resolved against the pool in hand;
+   every field is range checked because scripts/sweepSaves.mjs reloads this
+   route with the key set to garbage. */
+function validate(f: Record<string, unknown>, pool: SoccerClubPuzzle[]): GuessSoccerClubState | null {
+  const puzzle = pool.find(p => p.id === f.puzzleId);
+  if (!puzzle) return null;
+  const { revealedClues, guesses, gameStatus, score } = f;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!isStringArray(guesses)) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, revealedClues, guesses, gameStatus, score, mode: 'daily' };
+}
 
 export function useGuessSoccerClub() {
   // ── Pool state (Supabase fetch, falls back to hardcoded soccerClubPuzzles) ──
@@ -106,6 +130,18 @@ export function useGuessSoccerClub() {
 
   const startGame = useCallback(
     (mode: GameMode, leagueFilter?: string) => {
+      if (mode === 'daily') {
+        /* ROUND 428: a daily already played today comes back as it was left,
+           and a finished one says so before it is set, because this restore
+           runs in a click handler after mount and useGameCompletion would
+           otherwise record it as a new finish (the Round 399 double record). */
+        const saved = readDailyRecord(SLUG, getTodayET(), f => validate(f, puzzlePool));
+        if (saved) {
+          if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+          setGameState(saved);
+          return;
+        }
+      }
       const puzzle = mode === 'daily' ? getDailyPuzzle() : getRandomPuzzle(leagueFilter);
       setGameState({
         puzzle,
@@ -117,7 +153,7 @@ export function useGuessSoccerClub() {
         leagueFilter,
       });
     },
-    [getDailyPuzzle, getRandomPuzzle]
+    [getDailyPuzzle, getRandomPuzzle, puzzlePool]
   );
 
   const makeGuess = useCallback(
@@ -167,6 +203,19 @@ export function useGuessSoccerClub() {
     gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost',
     gameState?.score ?? 0
   );
+
+  /* ROUND 428: the daily board is kept current on every move, the fields
+     validate reads back. Unlimited and league play are never written. */
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    writeDailyRecord(SLUG, getTodayET(), {
+      puzzleId: gameState.puzzle.id,
+      revealedClues: gameState.revealedClues,
+      guesses: gameState.guesses,
+      gameStatus: gameState.gameStatus,
+      score: gameState.score,
+    });
+  }, [gameState]);
 
   // ── Guided question-tree mode ("20 Questions" tab) ──
   // Fully separate state from classic mode's gameState above; classic
