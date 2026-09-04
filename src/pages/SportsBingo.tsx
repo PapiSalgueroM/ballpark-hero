@@ -14,8 +14,8 @@ import { fetchSquadPool } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
 import {
   BingoGame, CARD_SIZE, CPU_LEVELS, CpuLevel, FREE_INDEX, PACK_COUNT, PACK_SECONDS,
-  buildGame, claimableSquares, cpuClaims, dailySeed, lehmer, lineCount, scoreGame,
-  squareCondition,
+  buildGame, claimableSquares, cpuClaims, dailySeed, lehmer, lineCount, loadDailyBingo, saveDailyBingo,
+  scoreGame, squareCondition,
 } from '@/lib/sportsBingo';
 
 /**
@@ -38,14 +38,18 @@ type Mode = 'daily' | 'unlimited' | 'cpu';
 const SLUG = 'sports-bingo';
 
 export default function SportsBingo() {
-  const [phase, setPhase] = useState<Phase>('boot');
+  /* Round 428: a finished daily comes back finished. The marked board is
+     restored here, in the initializers, so the result screen is on the very
+     first render and the recorder (gated below) has no finish to book. */
+  const [dailyDone, setDailyDone] = useState(() => loadDailyBingo(getTodayET()));
+  const [phase, setPhase] = useState<Phase>(dailyDone ? 'done' : 'boot');
   const [pool, setPool] = useState<Player[]>([]);
   const [mode, setMode] = useState<Mode>('daily');
   const [cpuLevel, setCpuLevel] = useState<CpuLevel>('casual');
   const [game, setGame] = useState<BingoGame | null>(null);
   const [packIndex, setPackIndex] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(PACK_SECONDS);
-  const [marked, setMarked] = useState<boolean[]>([]);
+  const [marked, setMarked] = useState<boolean[]>(dailyDone?.marked ?? []);
   const [cpuMarked, setCpuMarked] = useState<boolean[]>([]);
   const [wrongSquare, setWrongSquare] = useState<number | null>(null);
   /* The CPU's stream is separate from the board's build stream so its luck
@@ -59,13 +63,22 @@ export default function SportsBingo() {
         if (cancelled) return;
         if (p.length < 100) { setPhase('error'); return; }
         setPool(p);
-        setPhase('setup');
+        /* never over a restored result */
+        setPhase(cur => (cur === 'done' ? cur : 'setup'));
       })
       .catch(() => { if (!cancelled) setPhase('error'); });
     return () => { cancelled = true; };
   }, []);
 
   const start = useCallback((m: Mode, level: CpuLevel) => {
+    if (m === 'daily' && dailyDone) {
+      /* Today's card is in the books: reopen the result, never redeal it. */
+      setMode('daily');
+      setMarked(dailyDone.marked);
+      setPhase('done');
+      return;
+    }
+    if (pool.length === 0) return;
     const seed = m === 'daily' ? dailySeed(getTodayET()) : Math.floor(Math.random() * 2147483645) + 1;
     const g = buildGame(pool, seed);
     cpuRngRef.current = lehmer(seed ^ 0x5bf03635 || 7);
@@ -77,7 +90,7 @@ export default function SportsBingo() {
     setMarked(new Array(CARD_SIZE).fill(false));
     setCpuMarked(new Array(CARD_SIZE).fill(false));
     setPhase('playing');
-  }, [pool]);
+  }, [pool, dailyDone]);
 
   const advancePack = useCallback(() => {
     if (!game) return;
@@ -134,7 +147,19 @@ export default function SportsBingo() {
   const finalScore = scoreGame(marked);
   const won = mode === 'cpu' ? mySquares > cpuSquares : mySquares >= 12;
   const isDone = phase === 'done';
-  useGameCompletion(SLUG, isDone, finalScore, mySquares);
+  /* A daily already in the books is not a finish: a reloaded or reopened
+     result never records, and the fresh one records once, in the same
+     commit that then books it below. */
+  const bookedDaily = mode === 'daily' && dailyDone !== null;
+  useGameCompletion(SLUG, isDone && !bookedDaily, finalScore, mySquares);
+
+  useEffect(() => {
+    if (!isDone || mode !== 'daily' || dailyDone) return;
+    const rec = { date: getTodayET(), marked };
+    saveDailyBingo(rec);
+    setDailyDone(rec);
+  }, [isDone, mode, dailyDone, marked]);
+  const doneSquares = dailyDone ? dailyDone.marked.filter((m, i) => m && i !== FREE_INDEX).length : 0;
 
   const emojiGrid = useMemo(() => {
     if (!isDone) return '';
@@ -188,7 +213,9 @@ export default function SportsBingo() {
               <p>While a pack is open, tap every square someone in it satisfies. When the next pack opens, the old one is gone for good.</p>
               <p>Wrong taps cost nothing but time. Squares score 3, completed lines 2 each, a full blackout lands exactly 100.</p>
             </div>
-            {modeButton('Daily card', 'One shared card and pack run per day, same for everyone', () => start('daily', cpuLevel))}
+            {dailyDone
+              ? modeButton('Daily card done', `${doneSquares} of 24 squares, ${scoreGame(dailyDone.marked)} pts. Tap to see today's card, a new one at midnight ET.`, () => start('daily', cpuLevel))
+              : modeButton('Daily card', 'One shared card and pack run per day, same for everyone', () => start('daily', cpuLevel))}
             {modeButton('Unlimited', 'A fresh random card and packs every run', () => start('unlimited', cpuLevel))}
             <div className="rounded-xl border border-border bg-surface-1 p-4">
               <p className="font-bold text-foreground mb-2">Versus the CPU</p>
@@ -286,7 +313,8 @@ export default function SportsBingo() {
             emojiGrid={emojiGrid}
             share={{ score: String(finalScore), gameName: 'Sports Bingo', gamePath: '/sports-bingo' }}
             onPlayAgain={() => setPhase('setup')}
-            playAgainLabel="New card"
+            playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New card'}
+            playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new card.</p> : undefined}
           />
         )}
 
