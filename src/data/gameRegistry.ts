@@ -109,6 +109,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/world-cup', label: 'World Cup Legends', emoji: '🏆', description: 'Guess the World Cup legend, clue by clue', isNew: true },
       // deleted 2026-08-05 per owner review: "Delete guess the club."
       // { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
+      { path: '/free-kick', label: 'Free Kick', emoji: '🥅', description: 'Aim it, bend it, beat the wall and the keeper', daily: true, isNew: true },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, isNew: true },
       { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Build the 2026 bracket and score it against how the World Cup really went', isNew: true },
       { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Create your look, sign for your boyhood club, get rich, get shady, retire a legend.', isNew: true, featured: true },
