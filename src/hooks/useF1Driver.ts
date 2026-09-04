@@ -1,13 +1,53 @@
-import { useState, useCallback } from 'react';
-import { F1DriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { F1DriverPuzzle, F1DriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
 import { getDailyF1Puzzle, getRandomF1Puzzle, resolveF1Driver } from '@/data/f1Drivers';
+import { getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
+
+const SLUG = 'f1-driver';
+
+/* ROUND 428: a finished daily vanished on refresh, and Daily Challenge then
+   dealt the same driver fresh with the answer just shown, so every replay
+   recorded a second completion and paid the score again. The daily board is
+   kept under f1-driver-daily-<date> and read back fail closed: the puzzle is
+   rebuilt from today's seeded pick rather than trusted from the store, and
+   any field out of range drops the whole record. */
+function restoreDaily(f: Record<string, unknown>, puzzle: F1DriverPuzzle): F1DriverState | null {
+  const { puzzleId, revealedClues, guesses, gameStatus, score } = f;
+  if (puzzleId !== puzzle.id) return null;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!Array.isArray(guesses) || !guesses.every(g => typeof g === 'string')) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, revealedClues, guesses: guesses as string[], gameStatus, score, mode: 'daily' };
+}
 
 export function useF1Driver() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<F1DriverState | null>(null);
 
   const startGame = useCallback((mode: 'daily' | 'unlimited') => {
     const puzzle = mode === 'daily' ? getDailyF1Puzzle() : getRandomF1Puzzle();
+    if (mode === 'daily') {
+      const saved = readDailyRecord(SLUG, todayStr, f => restoreDaily(f, puzzle));
+      if (saved) {
+        /* Restored in a handler after mount, so the completion hook is told
+           first that this finish is not a new one (Round 399). */
+        if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+        setGameState(saved);
+        return;
+      }
+    }
     setGameState({
       puzzle,
       revealedClues: 1,
@@ -63,6 +103,12 @@ export function useF1Driver() {
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
   useGameCompletion('f1-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
+    writeDailyRecord(SLUG, todayStr, { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
+  }, [gameState]);
 
   return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue };
 }

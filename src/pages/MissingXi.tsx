@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -13,6 +13,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
 import {
@@ -31,7 +32,20 @@ import {
 } from '@/lib/missingXi';
 
 type PlayMode = 'daily' | 'unlimited';
-type Phase = 'playing' | 'revealed';
+/* Round 428: the round is an append-only action log, the MissingFive shape.
+   A miss carries the name so the "Already tried" line and the duplicate
+   guard come back with it; everything the screen shows is derived from the
+   log, so restoring the log restores the exact board. The daily log lives in
+   useDailyPuzzle under missing-xi-daily-<date>, which is what keeps a
+   finished daily across a refresh and refuses a second run of it. */
+type XiAction = { t: 'miss'; name: string } | { t: 'won' } | { t: 'give' };
+const SENTINEL = [{ id: 'missing-xi-daily' }];
+
+function isXiAction(a: unknown): a is XiAction {
+  if (!a || typeof a !== 'object') return false;
+  const t = (a as { t?: unknown }).t;
+  return t === 'won' || t === 'give' || (t === 'miss' && typeof (a as { name?: unknown }).name === 'string');
+}
 
 /**
  * Missing XI: a famous, real starting lineup is shown on a simple pitch with
@@ -50,12 +64,37 @@ type Phase = 'playing' | 'revealed';
  */
 const MissingXi = () => {
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
-  const [puzzle, setPuzzle] = useState<ActivePuzzle | null>(null);
-  const [phase, setPhase] = useState<Phase>('playing');
-  const [guessesUsed, setGuessesUsed] = useState(0);
-  const [wrongGuesses, setWrongGuesses] = useState<string[]>([]);
-  const [finalScore, setFinalScore] = useState(0);
-  const [won, setWon] = useState(false);
+
+  const dailyPuzzle = useMemo<ActivePuzzle>(() => pickDailyPuzzle(), []);
+  // Drawn only inside startRun('unlimited'): a random draw in a useState
+  // initialiser is the race simPrerender section 16 refuses.
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(null);
+
+  const {
+    guesses: dailyActions,
+    addGuess: addDailyAction,
+    gameStatus: rawDailyStatus,
+    isLoading,
+  } = useDailyPuzzle<{ id: string }, XiAction>({
+    gameSlug: 'missing-xi',
+    puzzles: SENTINEL,
+    maxGuesses: 999,
+    isWon: g => g.some(a => a.t === 'won'),
+    isLost: g => g.filter(a => a.t === 'miss').length >= MAX_GUESSES || g.some(a => a.t === 'give'),
+    deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
+  });
+
+  const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>([]);
+
+  const puzzle = playMode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
+  const actions = playMode === 'daily' ? dailyActions : unlimitedActions;
+  const wrongGuesses = useMemo(() => actions.flatMap(a => (a.t === 'miss' ? [a.name] : [])), [actions]);
+  const won = actions.some(a => a.t === 'won');
+  const gaveUp = actions.some(a => a.t === 'give');
+  // A give up burns no guess slot, so the stat line reads honestly.
+  const guessesUsed = wrongGuesses.length + (won ? 1 : 0);
+  const phase = won || gaveUp || wrongGuesses.length >= MAX_GUESSES ? 'revealed' : 'playing';
+  const finalScore = won ? scoreForGuess(guessesUsed) : 0;
 
   const [inputValue, setInputValue] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<PlayerEntity | null>(null);
@@ -65,27 +104,27 @@ const MissingXi = () => {
   // the site's React error #310 rule (the loading/error UI, if any, is
   // decided entirely in the JSX below, not via an early return above a hook).
 
-  const hintLevel = Math.min(guessesUsed, MAX_GUESSES) as HintLevel;
+  const hintLevel = Math.min(wrongGuesses.length, MAX_GUESSES) as HintLevel;
 
+  // The daily is drawn from the date above and never re-dealt; only an
+  // Unlimited run draws a fresh lineup.
   const startRun = useCallback((nextMode: PlayMode) => {
     setPlayMode(nextMode);
-    const next = nextMode === 'daily' ? pickDailyPuzzle() : pickUnlimitedPuzzle();
-    setPuzzle(next);
-    setPhase('playing');
-    setGuessesUsed(0);
-    setWrongGuesses([]);
-    setFinalScore(0);
-    setWon(false);
+    if (nextMode === 'unlimited') {
+      setUnlimitedPuzzle(pickUnlimitedPuzzle());
+      setUnlimitedActions([]);
+    }
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
   }, []);
 
-  // Boot the first run on mount (daily mode by default).
-  useEffect(() => {
-    startRun('daily');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Once the daily log is finished addDailyAction is a no-op, which is what
+  // refuses a replay of today's lineup.
+  const act = useCallback((a: XiAction) => {
+    if (playMode === 'daily') addDailyAction(a);
+    else setUnlimitedActions(prev => [...prev, a]);
+  }, [playMode, addDailyAction]);
 
   const switchPlayMode = (m: PlayMode) => {
     if (m === playMode) return;
@@ -101,14 +140,8 @@ const MissingXi = () => {
   const submitGuess = () => {
     if (!selectedEntity || !puzzle || phase !== 'playing') return;
 
-    const nextGuessNumber = guessesUsed + 1;
-
     if (isCorrectGuess(selectedEntity.name, puzzle.candidate)) {
-      const points = scoreForGuess(nextGuessNumber);
-      setFinalScore(points);
-      setWon(true);
-      setGuessesUsed(nextGuessNumber);
-      setPhase('revealed');
+      act({ t: 'won' });
       return;
     }
 
@@ -122,17 +155,10 @@ const MissingXi = () => {
       return;
     }
 
-    setWrongGuesses(w => [...w, selectedEntity.name]);
-    setGuessesUsed(nextGuessNumber);
+    act({ t: 'miss', name: selectedEntity.name });
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
-
-    if (nextGuessNumber >= MAX_GUESSES) {
-      setFinalScore(0);
-      setWon(false);
-      setPhase('revealed');
-    }
   };
 
   // Give Up: reveals the missing player and ends the round at 0, without
@@ -140,14 +166,14 @@ const MissingXi = () => {
   // honestly rather than claiming guesses that were never made).
   const giveUp = () => {
     if (phase !== 'playing') return;
-    setFinalScore(0);
-    setWon(false);
-    setPhase('revealed');
+    act({ t: 'give' });
   };
 
-  const isComplete = phase === 'revealed';
-
-  useGameCompletion('missing-xi', isComplete, finalScore, won ? 1 : 0);
+  // The daily status alone, in either mode (the useConnections shape): a
+  // mode toggle never flips it, and a finish restored from storage arrives
+  // through useDailyPuzzle's markRestoredFinish handshake, so the completion
+  // is recorded once per daily and never again on a reload.
+  useGameCompletion('missing-xi', rawDailyStatus !== 'playing', finalScore, won ? 1 : 0);
 
   const emojiGrid = useMemo(() => {
     if (!puzzle) return '';
@@ -233,13 +259,13 @@ const MissingXi = () => {
           </>
         }
       >
-        {!puzzle && (
+        {(isLoading || !puzzle) && (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         )}
 
-        {puzzle && (
+        {!isLoading && puzzle && (
           <div className="space-y-5">
             <div className="bg-surface-1 border border-border rounded-2xl p-5 text-center">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
@@ -352,6 +378,7 @@ const MissingXi = () => {
                   }}
                   onPlayAgain={() => startRun('unlimited')}
                   playAgainLabel={playMode === 'daily' ? 'Play Unlimited' : 'New Lineup'}
+                  playNext={playMode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new lineup!</p> : undefined}
                 />
               </div>
             )}

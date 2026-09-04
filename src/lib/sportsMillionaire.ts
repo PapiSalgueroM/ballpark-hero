@@ -8,6 +8,7 @@ import {
   generateQuestion,
 } from '@/lib/triviaQuestionBank';
 import { getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 /**
  * Sports Millionaire: a climbing money ladder quiz built on
@@ -178,6 +179,53 @@ export function buildFreshLadder(pool: TriviaPool, mode: 'daily' | 'unlimited'):
   return mode === 'daily'
     ? generateDailyLadder(pool, getTodayET(), LADDER_SIZE)
     : generateRandomLadder(pool, LADDER_SIZE);
+}
+
+// ---------------------------------------------------------------------------
+// The daily record (Round 428)
+// ---------------------------------------------------------------------------
+
+/**
+ * One finished daily a day, kept under `sports-millionaire-daily-${date}`
+ * through src/lib/dailyRecord.ts. The page had nothing across a refresh, so
+ * a finished ladder came back at question 1 with every answer already seen
+ * in green, and each replay paid the dollar amount into the leaderboard
+ * again. These four fields are everything the result screen, the share
+ * text and the emoji grid are computed from; lifelines and poll state do
+ * not touch the result and are not kept. The read fails closed on shape:
+ * the indices are range checked against the ladder and the amount must be
+ * a finite number, or a broken record would draw "Game over: $NaN" and a
+ * grid sliced by a bad index.
+ */
+export interface MillionaireDailyRecord {
+  currentIndex: number;
+  lastCorrectIndex: number;
+  finalAmount: number;
+  walkedAway: boolean;
+}
+
+const DAILY_SLUG = 'sports-millionaire';
+
+function validateDailyRecord(fields: Record<string, unknown>): MillionaireDailyRecord | null {
+  const { currentIndex, lastCorrectIndex, finalAmount, walkedAway } = fields;
+  if (!Number.isInteger(currentIndex) || (currentIndex as number) < 0 || (currentIndex as number) >= LADDER_SIZE) return null;
+  if (!Number.isInteger(lastCorrectIndex) || (lastCorrectIndex as number) < -1 || (lastCorrectIndex as number) > (currentIndex as number)) return null;
+  if (typeof finalAmount !== 'number' || !Number.isFinite(finalAmount) || finalAmount < 0) return null;
+  if (typeof walkedAway !== 'boolean') return null;
+  return {
+    currentIndex: currentIndex as number,
+    lastCorrectIndex: lastCorrectIndex as number,
+    finalAmount,
+    walkedAway,
+  };
+}
+
+export function loadDailyRecord(dateStr: string): MillionaireDailyRecord | null {
+  return readDailyRecord(DAILY_SLUG, dateStr, validateDailyRecord);
+}
+
+export function saveDailyRecord(dateStr: string, record: MillionaireDailyRecord): void {
+  writeDailyRecord(DAILY_SLUG, dateStr, { ...record });
 }
 
 /**

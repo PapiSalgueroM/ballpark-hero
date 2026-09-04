@@ -1,5 +1,6 @@
 import { Player } from '@/types/game';
 import { dailyPrngSeed } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 /**
  * Sports Bingo (Round 323, one of the three new games from the owner's
@@ -175,6 +176,35 @@ export function buildGame(pool: Player[], seed: number): BingoGame {
 /** The daily seed: one shared card and pack sequence per ET date. */
 export function dailySeed(dateStr: string): number {
   return dailyPrngSeed(dateStr);
+}
+
+/**
+ * The finished daily, kept across a refresh (Round 428). Before this, a
+ * refresh after the result dealt the same card and the same ten packs again
+ * with every answer known, and the second run recorded a second completion.
+ * Only the marked board is kept: every number on the result screen derives
+ * from it, and the card and packs come back from the seed. Read through the
+ * shared fail closed helper (scripts/sweepSaves.mjs feeds this key garbage),
+ * and nothing here touches localStorage at module scope, because
+ * scripts/simSportsBingo.mjs bundles this file under node.
+ */
+const SLUG = 'sports-bingo';
+
+export interface DailyBingoRecord {
+  date: string;
+  marked: boolean[];
+}
+
+export function loadDailyBingo(date: string): DailyBingoRecord | null {
+  return readDailyRecord<DailyBingoRecord>(SLUG, date, f => {
+    const { marked } = f;
+    if (!Array.isArray(marked) || marked.length !== CARD_SIZE || !marked.every(x => typeof x === 'boolean')) return null;
+    return { date, marked: marked as boolean[] };
+  });
+}
+
+export function saveDailyBingo(rec: DailyBingoRecord): void {
+  writeDailyRecord(SLUG, rec.date, { marked: rec.marked });
 }
 
 /** Which squares the CURRENT pack can still claim. */

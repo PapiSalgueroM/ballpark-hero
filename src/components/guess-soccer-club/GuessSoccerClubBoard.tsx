@@ -377,9 +377,16 @@ export function GuessSoccerClubBoard() {
               gamePath="/guess-soccer-club"
             />
 
-            <Button onClick={resetGame} variant="outline" className="w-full max-w-xs mx-auto">
-              Play Again
-            </Button>
+            {/* ROUND 428: one daily a day. Play Again on the daily card
+                sent the player back to the menu, where Daily dealt the
+                same club again. */}
+            {gameState.mode === 'daily' ? (
+              <p className="text-sm text-muted-foreground">Come back tomorrow for a new club!</p>
+            ) : (
+              <Button onClick={resetGame} variant="outline" className="w-full max-w-xs mx-auto">
+                Play Again
+              </Button>
+            )}
           </div>
         )}
 

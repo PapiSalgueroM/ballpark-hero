@@ -342,6 +342,8 @@ export function GuessTheNationBoard() {
               gamePath: '/guess-the-nation',
             }}
             onPlayAgain={resetGame}
+            playAgainLabel={gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
+            playNext={gameState.mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new nation.</p> : undefined}
           />
         )}
 

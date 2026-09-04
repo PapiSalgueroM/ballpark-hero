@@ -40,9 +40,15 @@ function mulberry32(seed: number): () => number {
   };
 }
 
+/* Round 428 part two: every one of these takes the day as a parameter, so a
+   caller can pin it once at mount and be sure the rng that dealt the map, the
+   record it reads and the record it writes all name the same day. Reading the
+   clock separately inside each of them filed a run that crossed midnight ET
+   under TOMORROW, and the next day then opened already finished. The default
+   keeps every existing caller working. */
 /** The one rng every player shares for a given sport on a given ET date. */
-export function dailyConquestRng(sport: ConquestSport): () => number {
-  return mulberry32(hashString(`conquest-daily-${sport}-${getTodayET()}`));
+export function dailyConquestRng(sport: ConquestSport, dateStr: string = getTodayET()): () => number {
+  return mulberry32(hashString(`conquest-daily-${sport}-${dateStr}`));
 }
 
 export interface ConquestDailyResult {
@@ -60,12 +66,12 @@ const resultKey = (sport: ConquestSport) => `conquest-daily-result-${sport}`;
 const streakKey = (sport: ConquestSport) => `conquest-daily-streak-${sport}`;
 
 /** Today's completed daily run, or null if the player has not finished one. */
-export function loadDailyResult(sport: ConquestSport): ConquestDailyResult | null {
+export function loadDailyResult(sport: ConquestSport, dateStr: string = getTodayET()): ConquestDailyResult | null {
   try {
     const raw = localStorage.getItem(resultKey(sport));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as ConquestDailyResult;
-    return parsed.date === getTodayET() ? parsed : null;
+    return parsed.date === dateStr ? parsed : null;
   } catch {
     return null;
   }
@@ -73,13 +79,13 @@ export function loadDailyResult(sport: ConquestSport): ConquestDailyResult | nul
 
 interface StreakRecord { count: number; lastDate: string }
 
-export function loadDailyStreak(sport: ConquestSport): number {
+export function loadDailyStreak(sport: ConquestSport, dateStr: string = getTodayET()): number {
   try {
     const raw = localStorage.getItem(streakKey(sport));
     if (!raw) return 0;
     const s = JSON.parse(raw) as StreakRecord;
     // A streak survives until a full ET day is skipped.
-    const today = getTodayET();
+    const today = dateStr;
     if (s.lastDate === today) return s.count;
     const last = new Date(s.lastDate + 'T12:00:00Z').getTime();
     const now = new Date(today + 'T12:00:00Z').getTime();
@@ -91,8 +97,8 @@ export function loadDailyStreak(sport: ConquestSport): number {
 }
 
 /** Persist a finished daily run and bump the streak. Returns the new streak. */
-export function saveDailyResult(sport: ConquestSport, result: ConquestDailyResult): number {
-  const today = getTodayET();
+export function saveDailyResult(sport: ConquestSport, result: ConquestDailyResult, dateStr: string = getTodayET()): number {
+  const today = dateStr;
   let newStreak = 1;
   try {
     const raw = localStorage.getItem(streakKey(sport));

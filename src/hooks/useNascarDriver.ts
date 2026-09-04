@@ -1,9 +1,11 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { NascarDriverPuzzle, NascarDriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/nascarDriver';
 import { supabase } from '@/integrations/supabase/client';
 import { getTodayET } from '@/lib/dateUtils';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 /* ROUND 374: THE CLUES COME FROM A COMMITTED FILE NOW, AND BEFORE THIS ROUND
    THEY CAME FROM NOWHERE.
@@ -26,7 +28,34 @@ import nascarDriverPool from '@/data/nascarDrivers.json';
 
 const POOL: NascarDriverPuzzle[] = nascarDriverPool.drivers as NascarDriverPuzzle[];
 
+const SLUG = 'guess-nascar-driver';
+
+/* ROUND 428: a finished daily vanished on refresh, and Daily Challenge then
+   dealt the same driver fresh with the answer just shown, so every replay
+   recorded a second completion and paid the score again. The daily board is
+   kept under guess-nascar-driver-daily-<date> and read back fail closed: the
+   puzzle is rebuilt from today's seeded pick rather than trusted from the
+   store, and any field out of range drops the whole record. */
+function restoreDaily(f: Record<string, unknown>, puzzle: NascarDriverPuzzle): NascarDriverState | null {
+  const { puzzleId, revealedClues, guesses, gameStatus, score } = f;
+  if (puzzleId !== puzzle.id) return null;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!Array.isArray(guesses) || !guesses.every(g => typeof g === 'string')) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, revealedClues, guesses: guesses as string[], gameStatus, score, mode: 'daily' };
+}
+
 export function useNascarDriver() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<NascarDriverState | null>(null);
   const [allDrivers] = useState<NascarDriverPuzzle[]>(POOL);
   const [loading, setLoading] = useState(false);
@@ -37,7 +66,7 @@ export function useNascarDriver() {
     try {
       if (mode === 'daily') {
         /* ROUND 366: ET, not UTC. An evening ET player could be served the next day's driver while their completion filed under the current ET date, because completions.ts resolves through getEtDateString(). */
-        const today = getTodayET();
+        const today = todayStr;
         /* ROUND 374: the `nascar_daily` lookup that used to sit here is gone.
            It selected a driver_id and then fetched it with .eq('id', ...) from
            a table that HAS no id column, so it could only ever have thrown, and
@@ -52,6 +81,14 @@ export function useNascarDriver() {
         if (allDrivers.length > 0) {
           const seed = parseInt(today.replace(/-/g, ''), 10);
           const puzzle = allDrivers[seed % allDrivers.length];
+          const saved = readDailyRecord(SLUG, today, f => restoreDaily(f, puzzle));
+          if (saved) {
+            /* Restored in a handler after mount, so the completion hook is
+               told first that this finish is not a new one (Round 399). */
+            if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+            setGameState(saved);
+            return;
+          }
           setGameState({ puzzle, revealedClues: 1, guesses: [], gameStatus: 'playing', score: 0, mode });
         }
       } else {
@@ -76,7 +113,7 @@ export function useNascarDriver() {
     if (isCorrect) {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
-      const today = getTodayET();
+      const today = todayStr;
       supabase.from('nascar_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -88,7 +125,7 @@ export function useNascarDriver() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = getTodayET();
+        const today = todayStr;
         supabase.from('nascar_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,
@@ -131,6 +168,12 @@ export function useNascarDriver() {
   }, [allDrivers, gameState?.puzzle]);
 
   useGameCompletion('guess-nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
+    writeDailyRecord(SLUG, todayStr, { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
+  }, [gameState]);
 
   /* `status` stays in the shape and stays 'ready': the pool is bundled, so
      there is no fetch to be loading or to fail. `reloadDrivers` is gone with

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { supabase } from '@/integrations/supabase/client';
 import {
@@ -6,8 +6,28 @@ import {
 } from '@/types/guessTheNation';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 function getTodayStr() { return getTodayET(); }
+
+const SLUG = 'guess-the-nation';
+
+/* ROUND 428: a finished daily vanished on refresh, and Daily Challenge then
+   dealt the same nation fresh with the answer just shown, so every replay
+   recorded a second completion and paid the score again. The daily board is
+   kept under guess-the-nation-daily-<date> and read back fail closed: the
+   puzzle is the one today's seeded pick names rather than anything trusted
+   from the store, and any field out of range drops the whole record. */
+function restoreDaily(f: Record<string, unknown>, puzzle: NationPuzzle, difficulty: 'easy' | 'hard'): GuessTheNationState | null {
+  const { puzzleId, revealedClues, guesses, gameStatus, score } = f;
+  if (puzzleId !== puzzle.id) return null;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!Array.isArray(guesses) || !guesses.every(g => typeof g === 'string')) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, mode: 'daily', difficulty, revealedClues, guesses: guesses as string[], gameStatus, score };
+}
 
 function mapRow(row: any): NationPuzzle {
   return {
@@ -26,6 +46,15 @@ function mapRow(row: any): NationPuzzle {
 }
 
 export function useGuessTheNation() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a daily dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayStr()).current;
   const [countries, setCountries] = useState<NationPuzzle[]>([]);
   const [gameState, setGameState] = useState<GuessTheNationState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -89,13 +118,24 @@ export function useGuessTheNation() {
            would keep today's puzzle for the default cohort but shrink the daily
            rotation to 24 and make 58 countries permanently unreachable, which
            is the same pool-is-wrong defect in a different coat. */
-        const today = getTodayStr();
+        const today = todayStr;
         const seed = parseInt(today.replace(/-/g, ''), 10);
         puzzle = countries[seed % countries.length];
       } else {
         puzzle = pool[Math.floor(Math.random() * pool.length)];
       }
       if (!puzzle) return;
+
+      if (mode === 'daily') {
+        const saved = readDailyRecord(SLUG, todayStr, f => restoreDaily(f, puzzle, difficulty));
+        if (saved) {
+          /* Restored in a handler after mount, so the completion hook is
+             told first that this finish is not a new one (Round 399). */
+          if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+          setGameState(saved);
+          return;
+        }
+      }
 
       setGameState({
         puzzle, mode, difficulty, continentFilter,
@@ -130,7 +170,7 @@ export function useGuessTheNation() {
            player's screen, and a failure here is not worth interrupting a game
            for. .then() is what fires it; the empty callback is the point. */
         (supabase as any).from('guess_nation_scores').insert({
-          puzzle_date: getTodayStr(), clues_used: gameState.revealedClues, score, guessed: true, mode: gameState.mode,
+          puzzle_date: todayStr, clues_used: gameState.revealedClues, score, guessed: true, mode: gameState.mode,
         }).then(() => {});
       } else {
         const newRevealed = gameState.revealedClues + 1;
@@ -144,7 +184,7 @@ export function useGuessTheNation() {
           setStreak(0);
           /* ROUND 375: same thenable fix as the win path above. */
           (supabase as any).from('guess_nation_scores').insert({
-            puzzle_date: getTodayStr(), clues_used: MAX_CLUES, score: 0, guessed: false, mode: gameState.mode,
+            puzzle_date: todayStr, clues_used: MAX_CLUES, score: 0, guessed: false, mode: gameState.mode,
           }).then(() => {});
         }
       }
@@ -174,6 +214,12 @@ export function useGuessTheNation() {
   }, [countries, gameState?.puzzle]);
 
   useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
+    writeDailyRecord(SLUG, todayStr, { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
+  }, [gameState]);
 
   return { countries: validatedCountries, loading, error, retryLoad, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame };
 }

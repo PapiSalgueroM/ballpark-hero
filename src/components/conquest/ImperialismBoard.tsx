@@ -27,6 +27,12 @@ interface BracketState {
 }
 
 export default function ImperialismBoard() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT and threaded into every
+     conquestDaily call, so the rng that deals the map, the record read on
+     mount and the record written at the end all name the same day. Without it
+     a run that crossed midnight ET was filed under TOMORROW and the next day
+     opened already finished. */
+  const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('pick');
   const [favorite, setFavorite] = useState<string | null>(null);
   const [owners, setOwners] = useState<Record<string, string>>({});
@@ -45,9 +51,9 @@ export default function ImperialismBoard() {
 
   // Round 50: the real Daily Challenge. Same seeded season for every player
   // (fixtures AND results), one scored run per ET day, streaks, share line.
-  const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult('nfl'));
-  const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak('nfl'));
-  const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult('nfl') ? 'free' : 'daily'));
+  const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult('nfl', todayStr));
+  const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak('nfl', todayStr));
+  const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult('nfl', todayStr) ? 'free' : 'daily'));
   const rngRef = useRef<() => number>(Math.random);
   const dailySaved = useRef(false);
 
@@ -79,7 +85,7 @@ export default function ImperialismBoard() {
     if (phase !== 'done' || mode !== 'daily' || !champion || !favorite || dailySaved.current || dailyDone) return;
     dailySaved.current = true;
     const result: ConquestDailyResult = {
-      date: getTodayET(),
+      date: todayStr,
       team: favorite,
       score,
       empire: statesOf(owners, favorite).length,
@@ -88,7 +94,7 @@ export default function ImperialismBoard() {
       champion,
       championWasYou: champion === favorite,
     };
-    const s = saveDailyResult('nfl', result);
+    const s = saveDailyResult('nfl', result, todayStr);
     setDailyDone(result);
     setDailyStreak(s);
   }, [phase, mode, champion, favorite, score, owners, predictionHits, predictionTotal, dailyDone]);
@@ -108,7 +114,7 @@ export default function ImperialismBoard() {
   };
 
   const start = (teamId: string) => {
-    rngRef.current = mode === 'daily' ? dailyConquestRng('nfl') : Math.random;
+    rngRef.current = mode === 'daily' ? dailyConquestRng('nfl', todayStr) : Math.random;
     dailySaved.current = false;
     const seeded = seedEmpires();
     setFavorite(teamId);

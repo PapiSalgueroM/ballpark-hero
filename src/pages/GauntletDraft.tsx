@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Loader2, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -10,11 +10,12 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { fetchSquadPool, playerRating } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, runGauntlet, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -38,6 +39,14 @@ const bandClass = (r: number) =>
   : 'from-zinc-400/20 to-zinc-600/10 border-zinc-500/50';
 
 export default function GauntletDraft() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a run dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with a score
+     from boards it never dealt. Pinning is the convention useDailyPuzzle
+     already follows (its own todayStr ref). A session that crosses midnight
+     finishes the day it started; a reload after midnight deals the new day. */
+  const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
   const [mode, setMode] = useState<Mode>('daily');
@@ -61,7 +70,23 @@ export default function GauntletDraft() {
   }, []);
 
   const start = useCallback((m: Mode) => {
-    const seed = m === 'daily' ? dailyDraftSeed(getTodayET()) : Math.floor(Math.random() * 2147483645) + 1;
+    if (m === 'daily') {
+      /* Round 428: a run already in the books comes back as it was, instead
+         of the same draft being dealt again with the cup known. This restore
+         runs in a click handler after mount, exactly the false to true
+         transition useGameCompletion records, so it says what it is first. */
+      const saved = loadDailyRun(todayStr);
+      if (saved) {
+        markRestoredFinish(SLUG);
+        setMode('daily');
+        setDraft(null);
+        setRun(saved);
+        setShownMatches(saved.matches.length);
+        setPhase('done');
+        return;
+      }
+    }
+    const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
     setDraft(d);
@@ -79,6 +104,7 @@ export default function GauntletDraft() {
     setSquad(next);
     if (pickIndex + 1 >= draft.picks.length) {
       const result = runGauntlet(next);
+      if (mode === 'daily') saveDailyRun(todayStr, result);
       setRun(result);
       setPhase('running');
       return;
@@ -98,9 +124,17 @@ export default function GauntletDraft() {
   }, [phase, run, shownMatches]);
 
   const isDone = phase === 'done';
-  useGameCompletion(SLUG, isDone, run?.score ?? 0, run?.roundsCleared ?? 0);
+  /* Round 428 part two: the run is over the moment the eleventh pick lands and
+     runGauntlet returns; the reveal that follows is presentation. The recorder
+     used to wait for that reveal to finish, about seven seconds later, while
+     the record was already written above, so a player who navigated away mid
+     reveal had the day locked with the completion never booked, and the restore
+     afterwards marked itself and swallowed it for good. Booking on the run
+     itself puts the save and the completion at the same instant. */
+  useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
+  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
 
   const matchLine = (m: GauntletRun['matches'][number]) =>
     `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` +
@@ -137,7 +171,7 @@ export default function GauntletDraft() {
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">The same five card choices for everyone today</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
             </button>
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Unlimited</span>
@@ -217,7 +251,8 @@ export default function GauntletDraft() {
             emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
             share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
             onPlayAgain={() => setPhase('setup')}
-            playAgainLabel="New draft"
+            playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
+            playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
           >
             <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
               {run.matches.map((m, i) => <p key={i}>{matchLine(m)}</p>)}

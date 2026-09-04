@@ -55,6 +55,11 @@ const MODE_ICONS: Record<GameMode, typeof Dices> = {
 };
 
 const PerfectSeasonNba = () => {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT and every call below uses it.
+     Reading the clock again at save time filed a run that crossed midnight ET
+     under TOMORROW, so the next day opened already finished. The lib already
+     takes the date, this just stops the page asking twice. */
+  const todayStr = useRef(getDailyDateET()).current;
   const [mode, setMode] = useState<GameMode>('classic');
   const [phase, setPhase] = useState<Phase>('mode-select');
   const [lockedAttempt, setLockedAttempt] = useState<DailyAttemptRecord | null>(null);
@@ -110,7 +115,7 @@ const PerfectSeasonNba = () => {
   const chooseMode = (m: GameMode) => {
     setMode(m);
     if (m === 'daily') {
-      const existing = loadDailyAttempt(SPORT_KEY);
+      const existing = loadDailyAttempt(SPORT_KEY, todayStr);
       if (existing) {
         setLockedAttempt(existing);
         setPhase('daily-locked');
@@ -129,7 +134,7 @@ const PerfectSeasonNba = () => {
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
-          const theme = getDailyTheme(SPORT_KEY, getDailyDateET(), idx);
+          const theme = getDailyTheme(SPORT_KEY, todayStr, idx);
           setDailyTheme(theme);
           setIndex(applyTheme(idx, theme));
         } else if (decade) {
@@ -234,7 +239,7 @@ const PerfectSeasonNba = () => {
     setSim(result);
     // Postseason RNG: date-stable for daily (so the locked recap can replay
     // the same bracket), fresh per run otherwise.
-    setPoSeed(mode === 'daily' ? playoffSeedForDaily('nba', getDailyDateET()) : randomSeed());
+    setPoSeed(mode === 'daily' ? playoffSeedForDaily('nba', todayStr) : randomSeed());
     setRevealed(0);
     setPhase('sim');
   }, [draftDone, overall, phase, sim, mode]);
@@ -257,7 +262,7 @@ const PerfectSeasonNba = () => {
     if (mode !== 'daily' || phase !== 'done' || !sim || dailySaved.current) return;
     dailySaved.current = true;
     saveDailyAttempt(SPORT_KEY, {
-      date: getDailyDateET(),
+      date: todayStr,
       sim,
       overall: Math.round(overall),
       spins,
@@ -344,7 +349,7 @@ const PerfectSeasonNba = () => {
     ? themesForSport(SPORT_KEY).find(t => t.id === lockedAttempt.themeId) ?? null
     : null;
 
-  const dailyTag = mode === 'daily' ? `Daily · ${getDailyDateET()}\n` : '';
+  const dailyTag = mode === 'daily' ? `Daily · ${todayStr}\n` : '';
   const decadeTag = decade && mode !== 'daily' ? ` · ${decade.label} pool` : '';
   const playoffLine = playoffRun
     ? playoffRun.champion
@@ -352,7 +357,7 @@ const PerfectSeasonNba = () => {
       : `\nPlayoffs: out in the ${playoffRun.exitRound}`
     : '';
   const verificationLine = mode === 'daily' && sim
-    ? `\n${buildVerificationLine(SPORT_KEY, getDailyDateET(), dailyTheme?.id ?? null, sim.wins, sim.losses)}`
+    ? `\n${buildVerificationLine(SPORT_KEY, todayStr, dailyTheme?.id ?? null, sim.wins, sim.losses)}`
     : '';
 
   const emojiGrid = sim
@@ -716,7 +721,7 @@ const PerfectSeasonNba = () => {
                     : 'The wheel giveth, the wheel taketh.'}
                 </h2>
                 <p className="text-sm text-muted-foreground mb-3">
-                  {mode === 'daily' && `Daily · ${getDailyDateET()} · `}
+                  {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
                 {sim.perfect && (

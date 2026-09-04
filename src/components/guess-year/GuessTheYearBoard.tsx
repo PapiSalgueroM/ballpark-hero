@@ -15,7 +15,6 @@ export function GuessTheYearBoard() {
     makeGuess,
     giveUp,
     revealNextClue,
-    resetGame,
     yearRange,
     pointsForCurrentClue,
     maxClues,
@@ -231,7 +230,7 @@ export function GuessTheYearBoard() {
               gameName: 'Guess The Year',
               gamePath: '/guess-the-year',
             }}
-            onPlayAgain={resetGame}
+            playNext={<p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
           />
         )}
 

@@ -11,6 +11,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { TriviaPool, TriviaQuestion } from '@/lib/triviaQuestionBank';
 import {
   MONEY_LADDER,
@@ -25,7 +26,10 @@ import {
   buildFreshLadder,
   swapQuestion,
   buildMillionaireEmojiGrid,
+  loadDailyRecord,
+  saveDailyRecord,
   type LifelineState,
+  type MillionaireDailyRecord,
 } from '@/lib/sportsMillionaire';
 
 type PlayMode = 'daily' | 'unlimited';
@@ -66,11 +70,44 @@ const SportsMillionaire = () => {
   const [finalAmount, setFinalAmount] = useState<number | null>(null);
   const [walkedAway, setWalkedAway] = useState(false);
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* Round 428: the day is captured once per mount, the shared daily hook's
+     rule, so a run that crosses midnight is filed under the day whose
+     ladder it played; loadMillionairePool stamps the ladder at the same
+     moment. dailySaved latches the one record a daily gets. */
+  const dailySaved = useRef(false);
+  const todayStr = useRef(getTodayET()).current;
 
   // Every hook above this line, none conditional. Loading/error/done states
   // are rendered conditionally in JSX further down, not via early return.
 
+  /* Round 428: a finished daily comes back as it was on both ways in, the
+     boot effect and the Daily toggle. Both run after mount, so to
+     useGameCompletion the restore looks exactly like the player finishing,
+     and it says what it is right before the phase goes to done. */
+  const restoreDaily = useCallback((done: MillionaireDailyRecord) => {
+    setPlayMode('daily');
+    setCurrentIndex(done.currentIndex);
+    setLastCorrectIndex(done.lastCorrectIndex);
+    setFinalAmount(done.finalAmount);
+    setWalkedAway(done.walkedAway);
+    setVisibleOptions(null);
+    setCrowdPoll(null);
+    setSelectedIndex(null);
+    setWasCorrect(null);
+    dailySaved.current = true;
+    markRestoredFinish('sports-millionaire');
+    setPhase('done');
+  }, []);
+
   const startRun = useCallback((mode: PlayMode, sourcePool: TriviaPool | null) => {
+    /* Round 428 part two: an answer's reveal timer belongs to the run that
+       armed it, so starting a run cancels it. Without this, answering in
+       Unlimited and pressing Daily inside the 1.6 second lock in left a timer
+       holding the OLD question, the old index and the old lastCorrectIndex; it
+       fired over the restored daily and either recorded a second completion or
+       reopened the finished daily at the next question, playable to the million
+       and recorded again, as many times as the player cared to repeat it. */
+    if (revealTimer.current) { clearTimeout(revealTimer.current); revealTimer.current = null; }
     setPlayMode(mode);
     if (!sourcePool) return;
     const freshLadder = buildFreshLadder(sourcePool, mode);
@@ -79,6 +116,14 @@ const SportsMillionaire = () => {
       return;
     }
     setLadder(freshLadder);
+    if (mode === 'daily') {
+      const done = loadDailyRecord(todayStr);
+      if (done) {
+        restoreDaily(done);
+        return;
+      }
+    }
+    dailySaved.current = false;
     setCurrentIndex(0);
     setLastCorrectIndex(-1);
     setLifelines(freshLifelines());
@@ -89,9 +134,11 @@ const SportsMillionaire = () => {
     setFinalAmount(null);
     setWalkedAway(false);
     setPhase('playing');
-  }, []);
+  }, [restoreDaily, todayStr]);
 
-  // Boot: load the shared trivia pool once, then start daily mode.
+  // Boot: load the shared trivia pool once, then start daily mode. The two
+  // deps are a stable callback and a per mount constant, so this still runs
+  // once.
   useEffect(() => {
     let cancelled = false;
     loadMillionairePool('daily')
@@ -103,6 +150,11 @@ const SportsMillionaire = () => {
         }
         setPool(loadedPool);
         setLadder(dailyLadder);
+        const done = loadDailyRecord(todayStr);
+        if (done) {
+          restoreDaily(done);
+          return;
+        }
         setCurrentIndex(0);
         setLastCorrectIndex(-1);
         setLifelines(freshLifelines());
@@ -115,7 +167,7 @@ const SportsMillionaire = () => {
       cancelled = true;
       if (revealTimer.current) clearTimeout(revealTimer.current);
     };
-  }, []);
+  }, [restoreDaily, todayStr]);
 
   const switchPlayMode = (mode: PlayMode) => {
     if (mode === playMode || !pool) return;
@@ -200,6 +252,17 @@ const SportsMillionaire = () => {
 
   // Score = dollar amount reached (internal points), correctAnswers = questions cleared correctly.
   useGameCompletion('sports-millionaire', isComplete && playMode === 'daily', scoreForCompletion, Math.max(lastCorrectIndex + 1, 0));
+
+  /* Round 428: the one record a daily gets, written once the run ends on
+     any of its three paths (the million, a wrong answer, a walk away).
+     finalAmount is tested against null and not for truth: a walk away
+     before Q1 or a miss before the first safe haven ends on $0, and that
+     day has to lock too. */
+  useEffect(() => {
+    if (playMode !== 'daily' || phase !== 'done' || finalAmount === null || dailySaved.current) return;
+    dailySaved.current = true;
+    saveDailyRecord(todayStr, { currentIndex, lastCorrectIndex, finalAmount, walkedAway });
+  }, [playMode, phase, finalAmount, currentIndex, lastCorrectIndex, walkedAway, todayStr]);
 
   const emojiGrid = useMemo(() => {
     if (!isComplete) return '';

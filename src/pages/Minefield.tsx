@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Bomb, CalendarDays, Heart, Infinity as InfinityIcon, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { getTodayET } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
-  buildRun, daySeed, maxRunScore,
+  buildRun, daySeed, loadDailyResult, maxRunScore, saveDailyResult,
   CLEAR_BONUS, LIVES_PER_ROUND, POINTS_PER_FIND, ROUNDS_PER_RUN,
   type MinefieldRound,
 } from '@/lib/minefield';
@@ -18,14 +20,28 @@ type GameMode = 'daily' | 'unlimited';
 type Phase = 'intro' | 'playing' | 'roundEnd' | 'done';
 
 const Minefield = () => {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a run dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with a score
+     from boards it never dealt. Pinning is the convention useDailyPuzzle
+     already follows (its own todayStr ref). A session that crosses midnight
+     finishes the day it started; a reload after midnight deals the new day. */
+  const todayStr = useRef(getTodayET()).current;
+  /* Round 428: a finished daily opens on its final score. Restored here, in
+     the initializers, so useGameCompletion sees no transition and records
+     nothing on a reload, and the intro (the only way to start('daily')) is
+     not drawn again for the rest of the ET day. The boards are rebuilt from
+     the day seed so the max on the card is the real one. */
+  const [restored] = useState(() => loadDailyResult(todayStr));
   const [gameMode, setGameMode] = useState<GameMode>('daily');
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [rounds, setRounds] = useState<MinefieldRound[]>([]);
+  const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
+  const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? buildRun(daySeed()) : []));
   const [roundIdx, setRoundIdx] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
   const [lives, setLives] = useState(LIVES_PER_ROUND);
-  const [score, setScore] = useState(0);
-  const [roundsWon, setRoundsWon] = useState(0);
+  const [score, setScore] = useState(restored?.score ?? 0);
+  const [roundsWon, setRoundsWon] = useState(restored?.roundsWon ?? 0);
   const [lastMine, setLastMine] = useState<string | null>(null);
   const [roundWon, setRoundWon] = useState(false);
   const [revealDone, setRevealDone] = useState(false);
@@ -40,6 +56,22 @@ const Minefield = () => {
   const maxScore = rounds.length > 0 ? maxRunScore(rounds) : 0;
 
   const start = (gm: GameMode) => {
+    if (gm === 'daily') {
+      /* A second tab still on the intro after another tab finished the
+         daily: open the result rather than deal the boards again. This is a
+         finished state set after mount, so it says so first or the recorder
+         books it a second time (Round 399). */
+      const saved = loadDailyResult(todayStr);
+      if (saved) {
+        setGameMode('daily');
+        setRounds(buildRun(daySeed()));
+        setScore(saved.score);
+        setRoundsWon(saved.roundsWon);
+        markRestoredFinish('minefield');
+        setPhase('done');
+        return;
+      }
+    }
     setGameMode(gm);
     setRounds(buildRun(gm === 'daily' ? daySeed() : undefined));
     setRoundIdx(0);
@@ -83,6 +115,7 @@ const Minefield = () => {
 
   const nextBoard = () => {
     if (roundIdx + 1 >= rounds.length) {
+      if (gameMode === 'daily') saveDailyResult(todayStr, { score, roundsWon });
       setPhase('done');
       return;
     }
