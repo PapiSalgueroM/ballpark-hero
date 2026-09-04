@@ -279,7 +279,7 @@ export function RebuildBoard() {
           <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
           <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Coach: {coach?.name ?? 'Caretaker'} · Sold {sold.length} · Signed {signed.length} · €{finalFunds}M {finalFunds < 0 ? 'in debt' : 'left'}
+            Coach: {coach?.name ?? 'Same man as last season'} · Sold {sold.length} · Signed {signed.length} · €{finalFunds}M {finalFunds < 0 ? 'in debt' : 'left'}
           </p>
 
           {penalties.length > 0 && (

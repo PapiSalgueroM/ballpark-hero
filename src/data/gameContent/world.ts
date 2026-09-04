@@ -811,15 +811,15 @@ export const WORLD_CONTENT: GameContentMap = {
       "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
       "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
       "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
-      "Close the tab whenever you like. The squad keeps scoring at half speed for up to eight hours, and the door tells you what it made when you come back.",
+      "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back.",
     ],
     rules: [
       "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
       "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
-      "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, four at four million, nine at nine million: the square root of the millions, rounded down.",
+      "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, two at four million, three at nine million: the square root of the millions, rounded down.",
       "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
       "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
-      "Offline earnings run at half speed and stop after eight hours. Being there matters.",
+      "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
     ],
     example: [
       "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
@@ -839,7 +839,7 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Does it keep going when I close the tab?",
-        a: "Yes, at half speed for up to eight hours. The catch up is worked out from the time your last session saved, so switching phones will not carry it over, but reopening the same browser will.",
+        a: "Yes, at half speed for up to eight hours. Leaving the tab open in the background is the same deal, because a hidden tab stops running properly anyway. The catch up is worked out from the time your last session saved, so switching phones will not carry it over, but reopening the same browser will.",
       },
       {
         q: "Why are there no real players in it?",

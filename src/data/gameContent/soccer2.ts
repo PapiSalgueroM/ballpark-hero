@@ -666,7 +666,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The wallet is 200M for the whole XI, and prices are real historical market values.",
       "Candidates come only from careers the data tracks through to the present, which is stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.",
       "A slot's four candidates always span the market: one from the top of that year's range, two from the middle, and a punt the wallet can always cover.",
-      "Scoring places your growth between the worst and best per slot picks of the same offers, both computed with an unlimited wallet, so 100 means you matched the best possible eye for a trajectory and 0 the worst.",
+      "Scoring is the return on the whole 200M. What your eleven are worth today is placed between the worst and the best eleven that the same 200M could really have bought from the same offers, so 100 means you played the wallet perfectly and 0 means you could not have done worse with it.",
+      "Money you never spend buys nothing. Sitting on the wallet is not a safe play, it is a low score, because the cash you kept could have been eleven careers instead.",
     ],
     example: [
       "Summer 2018, the striker slot. One anonymous card shows age 21, value climbing 8M to 15M to 24M with 14 goals last season. Another shows age 29, 60M flat, 20 goals a year. The kid costs a third as much; you take the trajectory.",
@@ -674,7 +675,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     tips: [
       "Age plus trajectory beats raw output. A 21 year old whose value doubled twice is the market telling you something.",
-      "Do not spend the wallet early: the reserve rule keeps you solvent, but a 60M splash in year one is ten cheap seats later.",
+      "Spend the wallet, but spend it on purpose. A 60M splash in year one is ten cheap seats later, and eleven punts is a portfolio that barely moves. The reserve rule keeps you solvent either way.",
       "Keepers show no goals, so their trajectory IS the story. Watch for the steady climb.",
     ],
     faqs: [

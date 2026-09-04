@@ -271,6 +271,15 @@ function writeMoney(s: CareerState, m: MoneyState): void {
 const yearOf = (s: CareerState): number =>
   s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : 2020;
 
+/* Round 437: the in-world year, which is not the same thing as the last season
+   played. The season list stops growing at retirement, so on its own it would
+   date everything from the year he hung the boots up however many seasons in
+   the dugout, the studio or the boardroom came afterwards: twelve statement
+   lines all stamped with one year, and a card school that thinks every one of
+   those seasons is the same season. The market's own clock is what moves after
+   that, and during a playing career the two are the same number. */
+const currentYear = (s: CareerState, m: MoneyState): number => Math.max(yearOf(s), m.year);
+
 function note(m: MoneyState, year: number, text: string, amount: number): void {
   m.log.push({ y: year, t: text.slice(0, 40), a: r2(amount) });
   if (m.log.length > MAX_LEDGER) m.log.splice(0, m.log.length - MAX_LEDGER);
@@ -512,7 +521,7 @@ export function fmtM(v: number): string {
  */
 export function moneyAct(s: CareerState, action: MoneyAction): MoneyOutcome {
   const m = ensureMoney(s);
-  const year = yearOf(s);
+  const year = currentYear(s, m);
 
   if (action.t === "deposit") {
     const amount = r2(Math.min(action.amount, spendable(s)));
@@ -636,7 +645,7 @@ export function cardCap(s: CareerState): number {
 /** Whether the card school is open to this player this season, and why not. */
 export function cardStatus(s: CareerState): { open: boolean; why: string } {
   const m = ensureMoney(s);
-  const year = yearOf(s);
+  const year = currentYear(s, m);
   if (m.cShut) return { open: false, why: "The lads have stopped dealing you in. That one is closed for good." };
   if (s.netWorth < CARD_MIN_WORTH) return { open: false, why: "You are not sitting in on money you actually need." };
   if (m.cYear === year) return { open: false, why: "You have had your sitting this season. Next away trip." };

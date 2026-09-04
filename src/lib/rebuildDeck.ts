@@ -138,6 +138,11 @@ export interface BoardObjective {
   emoji: string;
   text: string;
   penaltyText: string;
+  /** Ceiling this card puts on any single signing, in millions. Declared so
+   *  the deal can see that it cannot sit next to a card demanding more. */
+  capValue?: number;
+  /** Floor one signing has to reach for this card, in millions. */
+  needValue?: number;
   check: (s: ObjectiveState) => boolean;
 }
 
@@ -158,12 +163,14 @@ const OBJECTIVE_DECK: BoardObjective[] = [
     id: 'noGalacticos', emoji: '🧾',
     text: 'No single signing over €60M',
     penaltyText: 'You blew the wage structure. The board flipped your priciest buy.',
+    capValue: 60,
     check: (s) => s.signed.every(p => p.marketValue <= 60),
   },
   {
     id: 'marquee', emoji: '⭐',
     text: 'Sign at least one player worth €70M or more',
     penaltyText: 'No marquee name, no shirt sales. The board cashed in a star to cover it.',
+    needValue: 70,
     check: (s) => s.signed.some(p => p.marketValue >= 70),
   },
   {
@@ -200,15 +207,50 @@ const OBJECTIVE_DECK: BoardObjective[] = [
   },
 ];
 
-export function dealObjectives(seed: number): BoardObjective[] {
-  const first = pick(OBJECTIVE_DECK, seed, 101);
-  let second = pick(OBJECTIVE_DECK, seed, 211);
-  let salt = 211;
-  while (second.id === first.id) {
-    salt += 97;
-    second = pick(OBJECTIVE_DECK, seed, salt);
-  }
-  return [first, second];
+/**
+ * Two demands contradict when one card's floor sits above the other's ceiling:
+ * "sign a galactico worth 80M or more" beside "no single signing over 60M" is
+ * a board asking for something no window can deliver, and the player only
+ * finds out when both punishments land. The envelope is declared on the card
+ * rather than kept as a list of known bad pairs here, so a new card is checked
+ * the day it is written instead of the day somebody remembers this function.
+ */
+function contradicts(a: BoardObjective, b: BoardObjective): boolean {
+  return (a.needValue ?? 0) > (b.capValue ?? Infinity)
+    || (b.needValue ?? 0) > (a.capValue ?? Infinity);
+}
+
+function fitsWith(card: BoardObjective, held: BoardObjective[]): boolean {
+  return held.every(h => h.id !== card.id && !contradicts(h, card));
+}
+
+/**
+ * Deal the two open cards: one Lehmer stream for the whole hand, and a card
+ * the hand can live with or the next draw.
+ *
+ * ONE stream, drawn twice, for the reason mixSeed exists (Round 333). The old
+ * deal was `seed ^ (salt * 2654435761)` modulo the deck size, and 2654435761
+ * is 1 mod 8, so both salts agreed with the seed's low three bits: 5000 seeds
+ * dealt 8 hands out of a possible 112. Two SEPARATE mixed streams were not
+ * enough either, because salts a couple of bits apart come out of the warmup a
+ * fixed distance apart, so the second card was a near function of the first
+ * and only 12 of the 28 pairs ever appeared. Successive draws off one stream
+ * reach 27 of them, and 5000 seeds deal 48 or more distinct hands per tier.
+ */
+export function dealObjectives(seed: number, held: BoardObjective[] = []): BoardObjective[] {
+  let s = mixSeed(seed, 0x6f626a);
+  const draw = (hand: BoardObjective[]): BoardObjective => {
+    for (let tries = 0; tries < 40; tries += 1) {
+      s = (s * 16807) % 2147483647;
+      const card = OBJECTIVE_DECK[Math.floor(((s - 1) / 2147483646) * OBJECTIVE_DECK.length)];
+      if (fitsWith(card, hand)) return card;
+    }
+    // The board always makes a demand: if the stream somehow never lands on a
+    // card that fits, take one that does rather than deal an impossible pair.
+    return OBJECTIVE_DECK.find(c => fitsWith(c, hand)) ?? OBJECTIVE_DECK[0];
+  };
+  const first = draw(held);
+  return [first, draw([...held, first])];
 }
 
 /* Round 51 rule: a third management card tied to the club's identity.
@@ -221,12 +263,14 @@ const IDENTITY_CARDS: Record<ClubTier, BoardObjective[]> = {
       id: 'idGalactico', emoji: '👑',
       text: 'Club identity: sign a true galactico worth €80M or more',
       penaltyText: 'A superclub with no superstar signing. The board sold a star out of spite.',
+      needValue: 80,
       check: (s) => s.signed.some(p => p.marketValue >= 80),
     },
     {
       id: 'idStatement', emoji: '📣',
       text: 'Club identity: make at least 2 signings worth €50M+ each',
       penaltyText: 'The board wanted a statement window and got a whisper.',
+      needValue: 50,
       check: (s) => s.signed.filter(p => p.marketValue >= 50).length >= 2,
     },
   ],
@@ -253,6 +297,7 @@ const IDENTITY_CARDS: Record<ClubTier, BoardObjective[]> = {
       id: 'idMoneyball', emoji: '📊',
       text: 'Club identity: no single signing over €35M',
       penaltyText: 'This club does not do big fees. The board flipped your expensive buy immediately.',
+      capValue: 35,
       check: (s) => s.signed.every(p => p.marketValue <= 35),
     },
     {
@@ -273,14 +318,17 @@ const IDENTITY_CARDS: Record<ClubTier, BoardObjective[]> = {
       id: 'idBargains', emoji: '🧺',
       text: 'Club identity: every signing €20M or less',
       penaltyText: 'One transfer blew the whole wage structure. The board hit undo.',
+      capValue: 20,
       check: (s) => s.signed.every(p => p.marketValue <= 20),
     },
   ],
 };
 
 export function dealObjectivesWithIdentity(seed: number, club: RebuildClub): BoardObjective[] {
+  // Identity is drawn first and never dropped: it is who the club is, so the
+  // two open cards are the ones that have to fit around it.
   const identity = pick(IDENTITY_CARDS[club.tier], seed, 631);
-  return [identity, ...dealObjectives(seed)];
+  return [identity, ...dealObjectives(seed, [identity])];
 }
 
 /* ---------------- Financial events ---------------- */
@@ -357,13 +405,13 @@ export function planRivals(myClub: RebuildClub, clubs: RebuildClub[], seed: numb
   ];
 }
 
-function bestFor(slot: FormationSlot, pool: Player[], used: Set<string>): Player | undefined {
+export function bestFor(slot: FormationSlot, pool: Player[], used: Set<string>): Player | undefined {
   return pool
     .filter(p => slot.allowed.includes(p.position) && !used.has(p.name))
     .sort((a, b) => playerRating(b) - playerRating(a))[0];
 }
 
-function buildXi(formation: Formation, pool: Player[]): (Player | undefined)[] {
+export function buildXi(formation: Formation, pool: Player[]): (Player | undefined)[] {
   const used = new Set<string>();
   return formation.slots.map(slot => {
     const p = bestFor(slot, pool, used);
@@ -372,10 +420,21 @@ function buildXi(formation: Formation, pool: Player[]): (Player | undefined)[] {
   });
 }
 
-function xiRating(xi: (Player | undefined)[]): number {
-  const picked = xi.filter(Boolean) as Player[];
-  if (picked.length === 0) return 0;
-  return Math.round(picked.reduce((s, p) => s + playerRating(p), 0) / picked.length);
+/**
+ * THE rating law for Rebuild, and there is only one of it on purpose.
+ *
+ * An empty shirt counts 40. That is what the board reads on the wall, what a
+ * punishment sale costs, and what an inherited hole costs, so every reading in
+ * the game has to use it. Round 435: it did not. The opening rating averaged
+ * only the shirts that had somebody in them while the live rating charged 40
+ * for the empty ones, so 15 of the 66 clubs opened 3 or 4 points down before
+ * the player had touched anything and were graded "You made it worse" for it.
+ *
+ * An XI nobody is in at all is not a rating, it is 0.
+ */
+export function xiRatingWithHoles(xi: (Player | undefined | null)[]): number {
+  if (!xi.some(Boolean)) return 0;
+  return Math.round(xi.reduce((s, p) => s + (p ? playerRating(p) : 40), 0) / xi.length);
 }
 
 /**
@@ -394,7 +453,7 @@ export function simulateRival(
 ): RivalResult {
   const formation = FORMATIONS[0];
   const startXi = buildXi(formation, rivalSquad);
-  const startRating = xiRating(startXi);
+  const startRating = xiRatingWithHoles(startXi);
 
   // Round 51: rivals get the same tier-scaled war chest you do.
   let budget = budgetFor(plan.club.tier);
@@ -437,7 +496,7 @@ export function simulateRival(
     signings.push(cand.name);
   }
 
-  const finalRating = xiRating(buildXi(formation, squad));
+  const finalRating = xiRatingWithHoles(buildXi(formation, squad));
   return { ...plan, startRating, finalRating, signings };
 }
 

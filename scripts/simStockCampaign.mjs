@@ -16,8 +16,14 @@
  *      expensive candidate canAfford allows finishes all eleven buys with
  *      the wallet never below zero, over every seed;
  *   3. DETERMINISM: one seed, one campaign, byte identical;
- *   4. SCORING IDENTITIES: buying every slot's best ratio scores exactly
- *      100, every slot's worst exactly 0, and a mixed XI lands between;
+ *   4. SCORING IDENTITIES, AGAINST A BRUTE FORCED ORACLE (rewritten in Round
+ *      434, when the score stopped being a spend ratio): every one of the
+ *      4^11 XIs is enumerated and the affordable ones kept, and the most
+ *      valuable of those must score exactly 100, the least valuable exactly
+ *      0, a mixed XI strictly between, and the cheapest possible XI below
+ *      100. The engine's own search has to agree with the oracle to the
+ *      dollar. The oracle borrows nothing from the engine, which is the
+ *      point: a check that used the engine's optimiser would test itself;
  *   5. ANONYMITY IS ENFORCED IN THE PAGE: the buying screen's source
  *      renders no candidate name, nationality or club (comment stripped),
  *      while the reveal does name every pick;
@@ -34,6 +40,9 @@
  * reads what the screen would actually show. SIM_STOCK_CONTROL=signed
  * bundles a copy of the lib with the seed left signed and the lookup left
  * unwrapped, and section 6 must go red on the 128 dates that were broken.
+ * SIM_STOCK_CONTROL=spendratio puts the Round 434 defect back, the score as
+ * a spend ratio, and section 4 must go red. Every rewrite asserts it found
+ * the text it replaces, so a control that changed nothing refuses to run.
  *
  * Run: node scripts/simStockCampaign.mjs
  */
@@ -47,7 +56,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_STOCK_CONTROL || '';
-if (CONTROL && CONTROL !== 'leaky' && CONTROL !== 'signed') { console.error(`SIM_STOCK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+const KNOWN = ['leaky', 'signed', 'spendratio'];
+if (CONTROL && !KNOWN.includes(CONTROL)) { console.error(`SIM_STOCK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 const TMP = os.tmpdir().replace(/\\/g, '/');
 const ENTRY = `${TMP}/stockCampaign.entry.mjs`;
@@ -68,6 +78,41 @@ if (CONTROL === 'signed') {
   fs.writeFileSync(LIB, regressed);
   console.log('NEGATIVE CONTROL ON: the daily seed stays signed and the start year lookup is unwrapped');
 }
+/* Round 434: SIM_STOCK_CONTROL=spendratio puts the shipped spend ratio scoring
+   back, the shape where investing could only hurt, and section 4 must go red
+   because the XI the wallet can most profitably buy stops scoring 100.
+   Normalised for line endings: the tree is CRLF on Windows and LF in a fresh
+   clone, and a multi line anchor matches neither on both. */
+if (CONTROL === 'spendratio') {
+  const src = fs.readFileSync(LIB, 'utf8').replace(/\r\n/g, '\n');
+  const oldGrowth = '  const growth = campaign.budget > 0 ? finalValue / campaign.budget : 0;';
+  const oldScore = [
+    '  const score = bestValue === worstValue',
+    '    ? 100',
+    '    : Math.max(0, Math.min(100, Math.round((100 * (finalValue - worstValue)) / (bestValue - worstValue))));',
+  ].join('\n');
+  if (!src.includes(oldGrowth) || !src.includes(oldScore)) {
+    console.error('control cannot run: playerStockMarket.ts is not in the shape this control rewrites');
+    process.exit(1);
+  }
+  const ratioScore = [
+    '  let bSpend = 0; let bFinal = 0; let wSpend = 0; let wFinal = 0;',
+    '  for (const slot of campaign.slots) {',
+    '    const byRatio = [...slot.candidates].sort((a, b) => candidateRatio(b) - candidateRatio(a));',
+    '    bSpend += byRatio[0].price; bFinal += byRatio[0].final;',
+    '    const w = byRatio[byRatio.length - 1];',
+    '    wSpend += w.price; wFinal += w.final;',
+    '  }',
+    '  const bestGrowth = bSpend > 0 ? bFinal / bSpend : 1;',
+    '  const worstGrowth = wSpend > 0 ? wFinal / wSpend : 1;',
+    '  const score = bestGrowth === worstGrowth',
+    '    ? 100',
+    '    : Math.max(0, Math.min(100, Math.round((100 * (growth - worstGrowth)) / (bestGrowth - worstGrowth))));',
+  ].join('\n');
+  LIB = `${TMP}/playerStockMarket.spendratio.ts`;
+  fs.writeFileSync(LIB, src.replace(oldGrowth, '  const growth = spend > 0 ? finalValue / spend : 0;').replace(oldScore, ratioScore));
+  console.log('NEGATIVE CONTROL ON: the spend ratio scoring is restored, section 4 must go red');
+}
 fs.writeFileSync(ENTRY, `
 export * as sm from '${LIB}';
 `);
@@ -77,7 +122,8 @@ globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) 
 const { sm } = await import(pathToFileURL(BUNDLE).href);
 const {
   CANDIDATES_PER_SLOT, FINAL_YEAR, STOCK_BUDGET, STOCK_FORMATION,
-  assembleCampaign, canAfford, offerYearFor, puntPriceOf, scoreCampaign, startYearFor,
+  assembleCampaign, bestAffordableXI, canAfford, offerYearFor, puntPriceOf,
+  scoreCampaign, startYearFor, worstAffordableXI,
 } = sm;
 
 /* Synthetic fixture rows: 40 players per position vocabulary entry, values
@@ -168,22 +214,110 @@ if (CONTROL !== 'leaky') {
     console.log(`   one seed one campaign, ${yearsSeen.size} distinct start years in 25 seeds`);
   }
 
-  console.log('4) scoring identities');
+  console.log('4) scoring identities, against a brute forced oracle');
   {
+    /* Round 434: the ends of the scale are the most and least valuable XI the
+       200M could actually have bought, so the only honest way to check them is
+       to enumerate every one of the 4^11 XIs and keep the affordable ones. The
+       oracle knows nothing about how the engine searches, which is the point:
+       a harness that borrowed the engine's own optimiser would be testing
+       itself. */
     const c = assembleCampaign(ROWS, 31337);
     if (!c) { fail('no campaign for the scoring fixture'); }
     else {
-      const ratio = x => x.final / x.price;
-      const bestXi = c.slots.map(s => [...s.candidates].sort((a, b) => ratio(b) - ratio(a))[0]);
-      const worstXi = c.slots.map(s => [...s.candidates].sort((a, b) => ratio(a) - ratio(b))[0]);
-      const mixed = c.slots.map((s, i) => s.candidates[i % s.candidates.length]);
-      const sBest = scoreCampaign(c, bestXi).score;
-      const sWorst = scoreCampaign(c, worstXi).score;
-      const sMix = scoreCampaign(c, mixed).score;
-      if (sBest !== 100) fail(`the per slot best XI scores ${sBest}, not 100`);
-      if (sWorst !== 0) fail(`the per slot worst XI scores ${sWorst}, not 0`);
-      if (!(sMix > 0 && sMix < 100)) fail(`a mixed XI scores ${sMix}, expected strictly between`);
-      console.log(`   best 100, worst 0, a mixed XI lands at ${sMix}`);
+      const cheapestFrom = new Array(c.slots.length + 1).fill(0);
+      for (let i = c.slots.length - 1; i >= 0; i -= 1) {
+        cheapestFrom[i] = cheapestFrom[i + 1] + Math.min(...c.slots[i].candidates.map(x => x.price));
+      }
+      const bruteForce = (better, seed) => {
+        let edge = seed; let keep = null; let leaves = 0;
+        const picks = new Array(c.slots.length);
+        const walk = (i, spend, value) => {
+          if (i === c.slots.length) {
+            leaves += 1;
+            if (better(value, edge)) { edge = value; keep = picks.slice(); }
+            return;
+          }
+          for (const cand of c.slots[i].candidates) {
+            const next = spend + cand.price;
+            if (next + cheapestFrom[i + 1] > c.budget) continue;
+            picks[i] = cand;
+            walk(i + 1, next, value + cand.final);
+          }
+        };
+        walk(0, 0, 0);
+        return { xi: keep, value: edge, leaves };
+      };
+      const t0 = Date.now();
+      const top = bruteForce((v, e) => v > e, -Infinity);
+      const bottom = bruteForce((v, e) => v < e, Infinity);
+      const worth = xi => xi.reduce((s, x) => s + x.final, 0);
+      const cost = xi => xi.reduce((s, x) => s + x.price, 0);
+      if (!top.xi || !bottom.xi) fail('the oracle could not find an affordable XI at all');
+      else {
+        console.log(`   ${top.leaves} affordable XIs enumerated in ${Date.now() - t0}ms: the best is worth ${Math.round(top.value / 1e6)}M for ${Math.round(cost(top.xi) / 1e6)}M, the worst ${Math.round(bottom.value / 1e6)}M`);
+        /* Halfway between the two ends, found by the same enumeration, so it
+           is an XI that provably exists rather than a hopeful hand pick: the
+           first draft used candidates[i % 4] and that happened to BE the
+           optimum on this fixture, which would have read as a scoring bug. */
+        const mid = (top.value + bottom.value) / 2;
+        const middle = bruteForce((v, e) => Math.abs(v - mid) < Math.abs(e - mid), Infinity);
+        const sBest = scoreCampaign(c, top.xi).score;
+        const sWorst = scoreCampaign(c, bottom.xi).score;
+        const sMid = scoreCampaign(c, middle.xi).score;
+        const cheapXi = c.slots.map(s => [...s.candidates].sort((a, b) => a.price - b.price)[0]);
+        const sCheap = scoreCampaign(c, cheapXi).score;
+        if (sBest !== 100) fail(`the most valuable XI the wallet can buy scores ${sBest}, not 100`);
+        if (sWorst !== 0) fail(`the least valuable XI the wallet can buy scores ${sWorst}, not 0`);
+        if (!(sMid > 0 && sMid < 100)) fail(`the middling XI scores ${sMid}, expected strictly between`);
+        if (sCheap >= 100) fail(`the cheapest possible XI scores ${sCheap}, so shutting the wallet is still the winning play`);
+        /* The engine's own search has to agree with the oracle, or the ends of
+           the scale the player is measured against are not the real ends. */
+        if (worth(bestAffordableXI(c)) !== top.value) fail(`bestAffordableXI found ${worth(bestAffordableXI(c))}, the oracle found ${top.value}`);
+        if (worth(worstAffordableXI(c)) !== bottom.value) fail(`worstAffordableXI found ${worth(worstAffordableXI(c))}, the oracle found ${bottom.value}`);
+        if (cost(bestAffordableXI(c)) > c.budget) fail('bestAffordableXI returned an XI the wallet cannot pay for');
+        console.log(`   the oracle's best scores ${sBest}, its worst ${sWorst}, the middling XI ${sMid}, the cheapest possible XI ${sCheap}`);
+
+        /* THE LAW THE WHOLE ROUND IS ABOUT, and it asks nothing about how the
+           score is computed: of two XIs the wallet can pay for, the one worth
+           more in the final year must never score lower. The old spend ratio
+           broke this thousands of times over, which is what made shutting the
+           wallet the winning play. Sampled with a stride so the walk stays
+           bounded whatever the fixture offers. */
+        const stride = Math.max(1, Math.ceil(top.leaves / 4000));
+        const sample = [];
+        {
+          let seen = 0;
+          const picks = new Array(c.slots.length);
+          const walk = (i, spend, value) => {
+            if (i === c.slots.length) {
+              if (seen % stride === 0) sample.push({ value, xi: picks.slice() });
+              seen += 1;
+              return;
+            }
+            for (const cand of c.slots[i].candidates) {
+              const next = spend + cand.price;
+              if (next + cheapestFrom[i + 1] > c.budget) continue;
+              picks[i] = cand;
+              walk(i + 1, next, value + cand.final);
+            }
+          };
+          walk(0, 0, 0);
+        }
+        const scored = sample.map(s => ({ value: s.value, score: scoreCampaign(c, s.xi).score }))
+          .sort((a, b) => a.value - b.value);
+        let inversions = 0; let worstDrop = 0;
+        for (let i = 1; i < scored.length; i += 1) {
+          if (scored[i].score < scored[i - 1].score) {
+            inversions += 1;
+            worstDrop = Math.max(worstDrop, scored[i - 1].score - scored[i].score);
+          }
+        }
+        console.log(`   ${scored.length} affordable XIs sampled (every ${stride} of ${top.leaves}): ${inversions} where a MORE valuable portfolio scored LOWER`);
+        if (inversions > 0) {
+          fail(`the score falls as the portfolio gets more valuable on ${inversions} of ${scored.length - 1} steps, worst drop ${worstDrop} points, so investing well can cost you points`);
+        }
+      }
     }
   }
 }
@@ -226,9 +360,9 @@ console.log('6) the daily seed lands on a real start year on every date of the y
   if (bad > 0) fail(`${bad} date(s) have no valid start year, first: ${first}; Daily mode cannot open on those days`);
 }
 
-if (CONTROL === 'signed') {
-  if (failures > 0) { console.log(`\nsimStockCampaign control "signed": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
-  console.error('\nsimStockCampaign control "signed": changed NOTHING, the check is dead');
+if (CONTROL === 'signed' || CONTROL === 'spendratio') {
+  if (failures > 0) { console.log(`\nsimStockCampaign control "${CONTROL}": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
+  console.error(`\nsimStockCampaign control "${CONTROL}": changed NOTHING, the check is dead`);
   process.exit(1);
 }
 
