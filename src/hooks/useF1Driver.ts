@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { F1DriverPuzzle, F1DriverState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Driver';
 import { getDailyF1Puzzle, getRandomF1Puzzle, resolveF1Driver } from '@/data/f1Drivers';
 import { getTodayET } from '@/lib/dateUtils';
@@ -25,12 +25,21 @@ function restoreDaily(f: Record<string, unknown>, puzzle: F1DriverPuzzle): F1Dri
 }
 
 export function useF1Driver() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<F1DriverState | null>(null);
 
   const startGame = useCallback((mode: 'daily' | 'unlimited') => {
     const puzzle = mode === 'daily' ? getDailyF1Puzzle() : getRandomF1Puzzle();
     if (mode === 'daily') {
-      const saved = readDailyRecord(SLUG, getTodayET(), f => restoreDaily(f, puzzle));
+      const saved = readDailyRecord(SLUG, todayStr, f => restoreDaily(f, puzzle));
       if (saved) {
         /* Restored in a handler after mount, so the completion hook is told
            first that this finish is not a new one (Round 399). */
@@ -98,7 +107,7 @@ export function useF1Driver() {
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;
     const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
-    writeDailyRecord(SLUG, getTodayET(), { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
+    writeDailyRecord(SLUG, todayStr, { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
   }, [gameState]);
 
   return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue };

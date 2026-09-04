@@ -100,6 +100,14 @@ const SportsMillionaire = () => {
   }, []);
 
   const startRun = useCallback((mode: PlayMode, sourcePool: TriviaPool | null) => {
+    /* Round 428 part two: an answer's reveal timer belongs to the run that
+       armed it, so starting a run cancels it. Without this, answering in
+       Unlimited and pressing Daily inside the 1.6 second lock in left a timer
+       holding the OLD question, the old index and the old lastCorrectIndex; it
+       fired over the restored daily and either recorded a second completion or
+       reopened the finished daily at the next question, playable to the million
+       and recorded again, as many times as the player cared to repeat it. */
+    if (revealTimer.current) { clearTimeout(revealTimer.current); revealTimer.current = null; }
     setPlayMode(mode);
     if (!sourcePool) return;
     const freshLadder = buildFreshLadder(sourcePool, mode);

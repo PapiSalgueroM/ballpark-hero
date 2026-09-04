@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
@@ -20,12 +20,20 @@ type GameMode = 'daily' | 'unlimited';
 type Phase = 'intro' | 'playing' | 'roundEnd' | 'done';
 
 const Minefield = () => {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a run dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with a score
+     from boards it never dealt. Pinning is the convention useDailyPuzzle
+     already follows (its own todayStr ref). A session that crosses midnight
+     finishes the day it started; a reload after midnight deals the new day. */
+  const todayStr = useRef(getTodayET()).current;
   /* Round 428: a finished daily opens on its final score. Restored here, in
      the initializers, so useGameCompletion sees no transition and records
      nothing on a reload, and the intro (the only way to start('daily')) is
      not drawn again for the rest of the ET day. The boards are rebuilt from
      the day seed so the max on the card is the real one. */
-  const [restored] = useState(() => loadDailyResult(getTodayET()));
+  const [restored] = useState(() => loadDailyResult(todayStr));
   const [gameMode, setGameMode] = useState<GameMode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
   const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? buildRun(daySeed()) : []));
@@ -53,7 +61,7 @@ const Minefield = () => {
          daily: open the result rather than deal the boards again. This is a
          finished state set after mount, so it says so first or the recorder
          books it a second time (Round 399). */
-      const saved = loadDailyResult(getTodayET());
+      const saved = loadDailyResult(todayStr);
       if (saved) {
         setGameMode('daily');
         setRounds(buildRun(daySeed()));
@@ -107,7 +115,7 @@ const Minefield = () => {
 
   const nextBoard = () => {
     if (roundIdx + 1 >= rounds.length) {
-      if (gameMode === 'daily') saveDailyResult(getTodayET(), { score, roundsWon });
+      if (gameMode === 'daily') saveDailyResult(todayStr, { score, roundsWon });
       setPhase('done');
       return;
     }

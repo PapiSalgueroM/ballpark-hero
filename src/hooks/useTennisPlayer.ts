@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { TennisPlayerPuzzle, TennisPlayerState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import { supabase } from '@/integrations/supabase/client';
 import { getTodayET } from '@/lib/dateUtils';
@@ -48,6 +48,15 @@ function validate(f: Record<string, unknown>): TennisPlayerState | null {
 }
 
 export function useTennisPlayer() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<TennisPlayerState | null>(null);
   const [allPlayers, setAllPlayers] = useState<TennisPlayerPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
@@ -77,7 +86,7 @@ export function useTennisPlayer() {
     try {
       if (mode === 'daily') {
         /* ROUND 366: ET, not UTC. This ran a day ahead of every other daily on the site from early evening, and puzzle_date on the scores table sat on a different calendar from the rest of the site. */
-        const today = getTodayET();
+        const today = todayStr;
         /* ROUND 428: a daily already played today comes back as it was left,
            and a finished one says so before it is set, because this restore
            runs in a click handler after mount and useGameCompletion would
@@ -133,7 +142,7 @@ export function useTennisPlayer() {
     if (isCorrect) {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
-      const today = getTodayET();
+      const today = todayStr;
       supabase.from('tennis_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -145,7 +154,7 @@ export function useTennisPlayer() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = getTodayET();
+        const today = todayStr;
         supabase.from('tennis_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,
@@ -192,7 +201,7 @@ export function useTennisPlayer() {
      validate reads back. Unlimited is never written. */
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;
-    writeDailyRecord(SLUG, getTodayET(), {
+    writeDailyRecord(SLUG, todayStr, {
       puzzle: gameState.puzzle,
       revealedClues: gameState.revealedClues,
       guesses: gameState.guesses,

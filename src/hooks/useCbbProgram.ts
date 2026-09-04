@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { CbbProgramPuzzle, CbbProgramState, MAX_CLUES, POINTS_BY_CLUE } from '@/types/cbbProgram';
 import { supabase } from '@/integrations/supabase/client';
@@ -48,6 +48,15 @@ function validate(f: Record<string, unknown>): CbbProgramState | null {
 }
 
 export function useCbbProgram() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<CbbProgramState | null>(null);
   const [allPrograms, setAllPrograms] = useState<CbbProgramPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
@@ -87,7 +96,7 @@ export function useCbbProgram() {
     setLoading(true);
     try {
       if (mode === 'daily') {
-        const today = getTodayET();
+        const today = todayStr;
         /* ROUND 428: a daily already played today comes back as it was left,
            and a finished one says so before it is set, because this restore
            runs in a click handler after mount and useGameCompletion would
@@ -145,7 +154,7 @@ export function useCbbProgram() {
       const score = POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0;
       setGameState(prev => prev ? { ...prev, guesses: newGuesses, gameStatus: 'won', score } : null);
       // Save score
-      const today = getTodayET();
+      const today = todayStr;
       supabase.from('cbb_scores').insert({
         puzzle_date: today,
         clues_used: gameState.revealedClues,
@@ -157,7 +166,7 @@ export function useCbbProgram() {
       const newRevealed = gameState.revealedClues + 1;
       const isLost = newRevealed > MAX_CLUES;
       if (isLost) {
-        const today = getTodayET();
+        const today = todayStr;
         supabase.from('cbb_scores').insert({
           puzzle_date: today,
           clues_used: MAX_CLUES,
@@ -199,7 +208,7 @@ export function useCbbProgram() {
      validate reads back. Unlimited is never written. */
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;
-    writeDailyRecord(SLUG, getTodayET(), {
+    writeDailyRecord(SLUG, todayStr, {
       puzzle: gameState.puzzle,
       revealedClues: gameState.revealedClues,
       guesses: gameState.guesses,

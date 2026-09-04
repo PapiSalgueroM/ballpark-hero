@@ -38,10 +38,18 @@ type Mode = 'daily' | 'unlimited' | 'cpu';
 const SLUG = 'sports-bingo';
 
 export default function SportsBingo() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a run dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with a score
+     from boards it never dealt. Pinning is the convention useDailyPuzzle
+     already follows (its own todayStr ref). A session that crosses midnight
+     finishes the day it started; a reload after midnight deals the new day. */
+  const todayStr = useRef(getTodayET()).current;
   /* Round 428: a finished daily comes back finished. The marked board is
      restored here, in the initializers, so the result screen is on the very
      first render and the recorder (gated below) has no finish to book. */
-  const [dailyDone, setDailyDone] = useState(() => loadDailyBingo(getTodayET()));
+  const [dailyDone, setDailyDone] = useState(() => loadDailyBingo(todayStr));
   const [phase, setPhase] = useState<Phase>(dailyDone ? 'done' : 'boot');
   const [pool, setPool] = useState<Player[]>([]);
   const [mode, setMode] = useState<Mode>('daily');
@@ -79,7 +87,7 @@ export default function SportsBingo() {
       return;
     }
     if (pool.length === 0) return;
-    const seed = m === 'daily' ? dailySeed(getTodayET()) : Math.floor(Math.random() * 2147483645) + 1;
+    const seed = m === 'daily' ? dailySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const g = buildGame(pool, seed);
     cpuRngRef.current = lehmer(seed ^ 0x5bf03635 || 7);
     setMode(m);
@@ -155,7 +163,7 @@ export default function SportsBingo() {
 
   useEffect(() => {
     if (!isDone || mode !== 'daily' || dailyDone) return;
-    const rec = { date: getTodayET(), marked };
+    const rec = { date: todayStr, marked };
     saveDailyBingo(rec);
     setDailyDone(rec);
   }, [isDone, mode, dailyDone, marked]);

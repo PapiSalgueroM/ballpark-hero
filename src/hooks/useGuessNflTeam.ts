@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { GuessNflTeamState, GameMode, Difficulty, POINTS_BY_CLUE } from '@/types/guessNflTeam';
 import { getDailyNflTeamPuzzle, getRandomNflTeamPuzzle, nflTeamPuzzles } from '@/data/nflTeamPuzzles';
 import { nflTeamFacts } from '@/data/nflTeamFacts';
@@ -31,6 +31,15 @@ function validate(f: Record<string, unknown>): GuessNflTeamState | null {
 }
 
 export function useGuessNflTeam() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal in this hook uses it. Calling the clock again at write time was the
+     bug the review caught: a daily dealt before midnight ET and finished after
+     it was filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<GuessNflTeamState | null>(null);
 
   const startGame = useCallback((
@@ -47,7 +56,7 @@ export function useGuessNflTeam() {
          and a finished one says so before it is set, because this restore
          runs in a click handler after mount and useGameCompletion would
          otherwise record it as a new finish (the Round 399 double record). */
-      const saved = readDailyRecord(SLUG, getTodayET(), validate);
+      const saved = readDailyRecord(SLUG, todayStr, validate);
       if (saved) {
         if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
         setGameState({ ...saved, difficulty });
@@ -160,7 +169,7 @@ export function useGuessNflTeam() {
      validate reads back. Unlimited and conference play are never written. */
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;
-    writeDailyRecord(SLUG, getTodayET(), {
+    writeDailyRecord(SLUG, todayStr, {
       puzzleId: gameState.puzzle.id,
       revealedClues: gameState.revealedClues,
       guesses: gameState.guesses,

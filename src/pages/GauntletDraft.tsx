@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Loader2, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -39,6 +39,14 @@ const bandClass = (r: number) =>
   : 'from-zinc-400/20 to-zinc-600/10 border-zinc-500/50';
 
 export default function GauntletDraft() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a run dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with a score
+     from boards it never dealt. Pinning is the convention useDailyPuzzle
+     already follows (its own todayStr ref). A session that crosses midnight
+     finishes the day it started; a reload after midnight deals the new day. */
+  const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
   const [mode, setMode] = useState<Mode>('daily');
@@ -67,7 +75,7 @@ export default function GauntletDraft() {
          of the same draft being dealt again with the cup known. This restore
          runs in a click handler after mount, exactly the false to true
          transition useGameCompletion records, so it says what it is first. */
-      const saved = loadDailyRun(getTodayET());
+      const saved = loadDailyRun(todayStr);
       if (saved) {
         markRestoredFinish(SLUG);
         setMode('daily');
@@ -78,7 +86,7 @@ export default function GauntletDraft() {
         return;
       }
     }
-    const seed = m === 'daily' ? dailyDraftSeed(getTodayET()) : Math.floor(Math.random() * 2147483645) + 1;
+    const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
     setDraft(d);
@@ -96,7 +104,7 @@ export default function GauntletDraft() {
     setSquad(next);
     if (pickIndex + 1 >= draft.picks.length) {
       const result = runGauntlet(next);
-      if (mode === 'daily') saveDailyRun(getTodayET(), result);
+      if (mode === 'daily') saveDailyRun(todayStr, result);
       setRun(result);
       setPhase('running');
       return;
@@ -116,10 +124,17 @@ export default function GauntletDraft() {
   }, [phase, run, shownMatches]);
 
   const isDone = phase === 'done';
-  useGameCompletion(SLUG, isDone, run?.score ?? 0, run?.roundsCleared ?? 0);
+  /* Round 428 part two: the run is over the moment the eleventh pick lands and
+     runGauntlet returns; the reveal that follows is presentation. The recorder
+     used to wait for that reveal to finish, about seven seconds later, while
+     the record was already written above, so a player who navigated away mid
+     reveal had the day locked with the completion never booked, and the restore
+     afterwards marked itself and swallowed it for good. Booking on the run
+     itself puts the save and the completion at the same instant. */
+  useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
-  const dailyDone = phase === 'setup' && loadDailyRun(getTodayET()) !== null;
+  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
 
   const matchLine = (m: GauntletRun['matches'][number]) =>
     `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` +

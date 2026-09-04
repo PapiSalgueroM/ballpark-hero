@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import {
@@ -14,9 +14,11 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 export type Phase = 'picking' | 'result';
 export type Mode = 'daily' | 'unlimited';
 
-function dailySeed(): number {
+function dailySeed(dateStr: string): number {
   // Round 52: seed off the ET date like every other daily on the site.
-  return parseInt(getTodayET().replace(/-/g, ''), 10);
+  // Round 428: the caller passes the day it pinned at mount, so the slots and
+  // the record cannot end up on different sides of midnight.
+  return parseInt(dateStr.replace(/-/g, ''), 10);
 }
 
 /* Round 428: today's finished daily, restored in the useState initializers
@@ -44,10 +46,16 @@ function loadDaily<P>(config: LineupConfig<P>, today: string): { picks: Record<n
 }
 
 export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, so the slots dealt from the
+     day seed and the record written at Simulate always name the same day. The
+     review caught the alternative: a lineup simulated after midnight ET was
+     booked under TOMORROW, and tomorrow then opened finished with yesterday
+     names dropped by index into differently constrained slots. */
+  const todayStr = useRef(getTodayET()).current;
   const size = config.formation.length;
-  const [restored] = useState(() => loadDaily(config, getTodayET()));
+  const [restored] = useState(() => loadDaily(config, todayStr));
   const [mode, setMode] = useState<Mode>('daily');
-  const [slots, setSlots] = useState<GenericSlot[]>(() => rollLineup(config, dailySeed()));
+  const [slots, setSlots] = useState<GenericSlot[]>(() => rollLineup(config, dailySeed(todayStr)));
   const [picks, setPicks] = useState<Record<number, P>>(restored?.picks ?? {});
   const [phase, setPhase] = useState<Phase>(restored ? 'result' : 'picking');
   const [result, setResult] = useState<GenericSimResult | null>(restored?.result ?? null);
@@ -59,9 +67,9 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
 
   const rollDaily = useCallback(() => {
     setMode('daily');
-    setSlots(rollLineup(config, dailySeed()));
+    setSlots(rollLineup(config, dailySeed(todayStr)));
     /* toggling back from unlimited shows the booked result, never a redeal */
-    const saved = loadDaily(config, getTodayET());
+    const saved = loadDaily(config, todayStr);
     setDailyDone(saved !== null);
     setPicks(saved?.picks ?? {});
     setResult(saved?.result ?? null);
@@ -124,7 +132,7 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
 
   useEffect(() => {
     if (mode !== 'daily' || phase !== 'result' || dailyDone) return;
-    writeDailyRecord(config.gameId, getTodayET(), { names: slots.map((s) => config.nameOf(picks[s.id])) });
+    writeDailyRecord(config.gameId, todayStr, { names: slots.map((s) => config.nameOf(picks[s.id])) });
     setDailyDone(true);
   }, [mode, phase, dailyDone, slots, picks, config]);
 

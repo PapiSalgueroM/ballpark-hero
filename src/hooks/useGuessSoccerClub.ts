@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   GuessSoccerClubState,
@@ -44,6 +44,15 @@ function validate(f: Record<string, unknown>, pool: SoccerClubPuzzle[]): GuessSo
 }
 
 export function useGuessSoccerClub() {
+  /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
+     deal below uses it. Calling the clock again at write time was the bug the
+     review caught: a daily dealt before midnight ET and finished after it was
+     filed under TOMORROW, so the next day opened already finished with
+     yesterday something on screen and that day never got dealt. Pinning is the
+     convention useDailyPuzzle already follows (its own todayStr ref).
+     A session that crosses midnight therefore finishes the day it started, and
+     a reload after midnight deals the new day fresh. */
+  const todayStr = useRef(getTodayET()).current;
   // ── Pool state (Supabase fetch, falls back to hardcoded soccerClubPuzzles) ──
   const [puzzlePool, setPuzzlePool]       = useState<SoccerClubPuzzle[]>(soccerClubPuzzles);
   const [isLoadingPool, setIsLoadingPool] = useState(true);
@@ -111,7 +120,7 @@ export function useGuessSoccerClub() {
 
   const getDailyPuzzle = useCallback((): SoccerClubPuzzle => {
     // UTC-safe: all users share same rollover at midnight ET
-    const idx = dailyIndex(getTodayET(), puzzlePool.length);
+    const idx = dailyIndex(todayStr, puzzlePool.length);
     return puzzlePool[idx];
   }, [puzzlePool]);
 
@@ -135,7 +144,7 @@ export function useGuessSoccerClub() {
            and a finished one says so before it is set, because this restore
            runs in a click handler after mount and useGameCompletion would
            otherwise record it as a new finish (the Round 399 double record). */
-        const saved = readDailyRecord(SLUG, getTodayET(), f => validate(f, puzzlePool));
+        const saved = readDailyRecord(SLUG, todayStr, f => validate(f, puzzlePool));
         if (saved) {
           if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
           setGameState(saved);
@@ -208,7 +217,7 @@ export function useGuessSoccerClub() {
      validate reads back. Unlimited and league play are never written. */
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;
-    writeDailyRecord(SLUG, getTodayET(), {
+    writeDailyRecord(SLUG, todayStr, {
       puzzleId: gameState.puzzle.id,
       revealedClues: gameState.revealedClues,
       guesses: gameState.guesses,

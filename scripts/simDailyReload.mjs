@@ -296,6 +296,71 @@ function markBeforeSet(code, slug, setter, binding = null) {
   }
 }
 
+console.log('5) Every file that files a daily record reads the clock ONCE, pinned at mount');
+{
+  /* Round 428 part two, the defect this section exists for. A route dealt its
+     puzzle from the date at mount and then called the clock AGAIN at write
+     time. A session that crossed midnight ET therefore filed the old day's
+     finished game under the NEW day's key, and the new day opened already
+     finished with yesterday's board on screen: the player lost the day. It hit
+     nine routes at once because they were each written from the same shape.
+     Sections 1 to 4 cannot see it, because every one of their assertions runs
+     inside a single pinned day.
+     The rule that catches the next one: a file that writes a daily record must
+     read the clock exactly once, and that read must be a mount pin. Which files
+     those are is DERIVED from the source (anything writing a `<slug>-daily-`
+     record), not from a list somebody remembered to update, so a game added
+     tomorrow is checked the day it ships. */
+  const CLOCK = /\b(getTodayET|getDailyDateET|getPollDayET)\s*\(\s*\)/g;
+  const PIN = /\buseRef\s*\(\s*(getTodayET|getDailyDateET|getPollDayET|getTodayStr)\s*\(\s*\)\s*\)\s*\.current\b/;
+  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt)\s*\(/;
+  const roots = ['src/hooks', 'src/pages', 'src/components'];
+  const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? walk(p) : (/\.tsx?$/.test(e.name) && !/\.test\.tsx?$/.test(e.name) ? [p] : []);
+  });
+  const suspects = [];
+  for (const root of roots) {
+    const abs = path.join(ROOT, root);
+    if (!fs.existsSync(abs)) continue;
+    for (const file of walk(abs)) {
+      const raw = fs.readFileSync(file, 'utf8');
+      const code = blankStrings(stripComments(raw));
+      if (!WRITES_A_DAILY.test(code)) continue;
+      suspects.push({ rel: path.relative(ROOT, file).replaceAll('\\', '/'), code });
+    }
+  }
+  if (suspects.length < 10) fail(`only ${suspects.length} file(s) write a daily record, which is too few to be the real set, so this section did not check anything`);
+  let pinned = 0;
+  for (const { rel, code } of suspects) {
+    const reads = code.match(CLOCK) || [];
+    /* A file may read the clock through a local wrapper (useGuessTheNation's
+       getTodayStr), so the pin is what is required, not the callee's name. */
+    if (!PIN.test(code)) {
+      fail(`${rel} writes a daily record but never pins the day at mount (useRef(getTodayET()).current), so a session crossing midnight ET files the old day under the new date`);
+      continue;
+    }
+    if (reads.length > 1) {
+      fail(`${rel} reads the clock ${reads.length} times; a daily route reads it once, into the mount pin, or the deal and the record can name different days`);
+      continue;
+    }
+    pinned += 1;
+  }
+  console.log(`   ${suspects.length} file(s) write a daily record, ${pinned} of them read the clock once at mount`);
+  /* The negative: a copy of one real file with a second clock read added back
+     must go red, or green above means the check did not look. */
+  const victim = suspects.find(s => PIN.test(s.code));
+  if (!victim) fail('the section 5 negative has no pinned file to work from');
+  else {
+    const regressed = victim.code.replace(/\bwriteDailyRecord\s*\(([^,]+),\s*todayStr\b/, '$&_UNPINNED').replace('todayStr_UNPINNED', 'getTodayET()');
+    const changed = regressed !== victim.code;
+    const reReads = (regressed.match(CLOCK) || []).length;
+    if (!changed) console.log('   (negative skipped: the sample file does not pass todayStr to writeDailyRecord, so nothing to unpin)');
+    else if (reReads > 1) console.log(`   negative: ${victim.rel} with one write unpinned reads the clock ${reReads} times, which this section rejects`);
+    else fail('the section 5 negative unpinned a write and the check stayed green, so it is dead');
+  }
+}
+
 if (failures > 0) {
   console.error(`\nsimDailyReload: ${failures} failure(s)`);
   process.exit(1);
