@@ -85,6 +85,8 @@ export default function PlayerStockMarket() {
               <p>The market opens six seasons in the past with 200M in your wallet and the 4-3-3's eleven slots to fill, two buys a year.</p>
               <p>Every candidate is anonymous: you see the position, the age, the real market value trajectory and the last two seasons of goals and assists. Never a name, a country or a club.</p>
               <p>You pay the real market value of the year you are in. After the eleventh buy the campaign jumps to today, the cards turn over, and your portfolio is worth what those careers really became.</p>
+              <p><span className="font-semibold text-foreground">How you are scored:</span> on what your eleven are worth today against the best and the worst eleven that 200M could have bought from the same offers. Money you never spend buys nothing, so the wallet is there to be used.</p>
+              <p className="text-xs">Worked example: two 8M punts that end up worth 40M each beat one 90M signing that ends up worth 45M, and both beat sitting on the cash.</p>
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily market</span>
@@ -170,8 +172,8 @@ export default function PlayerStockMarket() {
             won={result.growth >= 1}
             outcomeEmoji={result.growth >= 1.5 ? '🚀' : result.growth >= 1 ? '📈' : '📉'}
             headline={result.growth >= 1.5 ? 'The market loved you!' : result.growth >= 1 ? 'In the green' : 'The market bit back'}
-            statLine={`Spent ${formatMoney(result.spend)} between ${campaign.startYear} and ${campaign.startYear + 5}; worth ${formatMoney(result.finalValue)} in ${campaign.finalYear} (${formatPct(result.growth - 1)})`}
-            funFact={`The unlimited wallet's best picks grew ${formatPct(result.bestGrowth - 1)}; the worst shrank to ${formatPct(result.worstGrowth - 1)}.`}
+            statLine={`Put ${formatMoney(result.spend)} of your ${formatMoney(STOCK_BUDGET)} to work between ${campaign.startYear} and ${campaign.startYear + 5}; the eleven are worth ${formatMoney(result.finalValue)} in ${campaign.finalYear} (${formatPct(result.growth - 1)} on the whole wallet)`}
+            funFact={`The best eleven that 200M could have bought here would be worth ${formatMoney(result.bestValue)} today; the worst, ${formatMoney(result.worstValue)}.`}
             statRow={[{ label: 'Score', value: result.score }]}
             emojiGrid={[`📈 Player Stock Market: ${result.score} pts`, ...picks.map(c => `${c.final > c.price ? '🟩' : '🟥'} ${formatMoney(c.price)} to ${formatMoney(c.final)}`)].join('\n')}
             share={{ score: String(result.score), gameName: 'Player Stock Market', gamePath: '/player-stock-market' }}
