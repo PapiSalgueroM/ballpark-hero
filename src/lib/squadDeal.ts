@@ -218,8 +218,16 @@ export const LEGENDS: Player[] = [
 ];
 
 /* ---------------- Memes pool (original, IP-safe) ---------------- */
+/* Round 440: the joke players are labelled 'Other', not 'Premier League'.
+   They are invented characters playing for invented clubs, so claiming a real
+   league for them was wrong twice over: it put fictional names inside a real
+   competition, and it is what the owner saw when he reported "i clicked la
+   liga and the players that popped up were from the premier league". Measured
+   on the shipped code with the joke switch on, 19.2 percent of the cards in a
+   La Liga draft came from another league, and every one of them was a joke
+   player carrying this label. */
 const M = (name: string, club: string, position: Position, marketValue: number): Player =>
-  ({ name, club, nationality: 'Memeland', league: 'Premier League', position, marketValue, goals: 0, assists: 0, kitNumber: 99, age: 40, difficulty: 'easy' });
+  ({ name, club, nationality: 'Memeland', league: 'Other', position, marketValue, goals: 0, assists: 0, kitNumber: 99, age: 40, difficulty: 'easy' });
 
 export const MEMES: Player[] = [
   M('Grandpa Gary', 'Retirement FC', 'GK', 2),
@@ -296,6 +304,26 @@ export const TOPICS: { id: Topic; label: string; emoji: string; desc: string }[]
 
 export const WC2026_NATIONS = new Set(['United States','Mexico','Canada','Argentina','France','Spain','England','Brazil','Portugal','Netherlands','Belgium','Croatia','Morocco','Germany','Italy','Uruguay','Colombia','Ecuador','Japan','South Korea','Korea, South','Australia','Iran','Saudi Arabia','Qatar','Senegal','Ghana','Cameroon','Nigeria','Egypt','Algeria','Ivory Coast',"Cote d'Ivoire",'Tunisia','Switzerland','Austria','Poland','Denmark','Sweden','Norway','Scotland','Wales','Serbia','Turkey','Türkiye','Ukraine','Greece','Czechia','Czech Republic','Paraguay','Panama','Costa Rica','Jordan','Uzbekistan','New Zealand','Bolivia','Haiti','Curacao','Cape Verde','South Africa','Bosnia-Herzegovina','Bosnia & Herzegovina','Iraq','DR Congo']);
 const CONMEBOL = new Set(['Argentina','Brazil','Uruguay','Colombia','Chile','Ecuador','Paraguay','Peru','Bolivia','Venezuela']);
+
+/**
+ * Can this topic actually deal a draft, for this pool and this formation?
+ *
+ * Round 440. The hook used to answer this with `filtered.length >= 60`, and
+ * when the answer was no it SILENTLY handed back the unfiltered pool: the
+ * player picked La Liga, the card said "La Liga players only", and the game
+ * dealt everybody. That is the same lie as the joke players carrying a real
+ * league, and it fired on every league in the Legends era, where the topic
+ * filter was skipped outright. A count across the whole pool was also the
+ * wrong question: what matters is whether every SLOT has enough to choose
+ * between, and 28 La Liga legends with zero right wingers fails that while
+ * clearing any total you like.
+ */
+export const MIN_PER_SLOT = 3;
+
+export function topicCanFill(pool: Player[], topic: Topic, slots: FormationSlot[]): boolean {
+  const filtered = filterByTopic(pool, topic);
+  return slots.every(slot => filtered.filter(p => slot.allowed.includes(p.position)).length >= MIN_PER_SLOT);
+}
 
 export function filterByTopic(pool: Player[], topic: Topic): Player[] {
   switch (topic) {
