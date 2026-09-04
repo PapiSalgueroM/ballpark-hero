@@ -43,3 +43,6 @@ docs/scripts/build-connections-puzzles.py
 
 # Round 404: nflverse season roster files downloaded by scripts/lib/nflverseRosters.mjs, never committed
 scripts/.cache/
+
+# Round 435: patched source copies simRebuildEconomy.mjs writes for its negative controls, deleted the moment the bundle exists
+/.sim-control/
