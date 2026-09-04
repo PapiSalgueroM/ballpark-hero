@@ -4,6 +4,39 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
+# Round 429: the AI search crawlers named explicitly, so nobody has to
+# reason about whether the wildcard group below covers them. It does,
+# but the owner asked for the site to be citable by AI search and an
+# explicit allow is what those vendors document checking for. Answer
+# engines that link back to the page they cite are welcome; the same
+# rule as any other search engine.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
 User-agent: Twitterbot
 Allow: /
 
