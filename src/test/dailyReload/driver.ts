@@ -80,6 +80,13 @@ export interface DailyReloadDriver<Api = unknown> {
    *  state, as it appears in the file, e.g. "setGameState(saved)" or
    *  "setPhase('done')". */
   finishedSetter?: string;
+  /** Optional with restoreFile: when the restore lives in a shared hook and
+   *  its mark call names a parameter rather than a literal (useDailyPuzzle's
+   *  markRestoredFinish(gameSlug)), the repo relative file that hands the
+   *  hook its slug, e.g. 'src/pages/MissingXi.tsx'. The wrapper accepts the
+   *  call only if that file binds the parameter name to exactly one literal,
+   *  the slug, and imports the restore file's module. */
+  slugBoundIn?: string;
   /** Default 'v1': the stored JSON must carry v === 1 and date === today,
    *  the src/lib/dailyRecord.ts shape. 'legacy' for a route that predates
    *  the helper and dates only its key (nba-stat-line stores {picks}). */

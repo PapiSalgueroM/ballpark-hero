@@ -83,6 +83,7 @@ describe('daily reload', () => {
         payloadShape: d.payloadShape ?? 'v1',
         restoreFile: d.restoreFile ?? null,
         finishedSetter: d.finishedSetter ?? null,
+        slugBoundIn: d.slugBoundIn ?? null,
       }));
     }
     console.log(`DAILY_RELOAD_DRIVERS ${drivers.length} of ${discovered.length}${ONLY ? ` (ONLY=${ONLY})` : ''}`);

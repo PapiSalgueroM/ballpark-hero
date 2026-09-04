@@ -17,7 +17,8 @@
  * Restore: the page sits on useDailyPuzzle, whose mount effect restores the
  * action log and calls markRestoredFinish(gameSlug) before setting a
  * finished status, so this is a handler restore that depends on the mark.
- * restoreFile and finishedSetter name that hook and that line.
+ * restoreFile and finishedSetter name that hook and that line, and
+ * slugBoundIn names the page that hands the hook gameSlug: 'missing-xi'.
  */
 import './mocks';
 import { act, fireEvent, waitFor } from '@testing-library/react';
@@ -82,6 +83,7 @@ export default defineDriver<MountedPage>({
   restoreStyle: 'handler',
   restoreFile: 'src/hooks/useDailyPuzzle.ts',
   finishedSetter: 'setGameStatus(saved.gameStatus)',
+  slugBoundIn: 'src/pages/MissingXi.tsx',
 
   async mount() {
     const m = mountPage(<MissingXi />, '/missing-xi');

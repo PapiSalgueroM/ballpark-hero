@@ -211,7 +211,8 @@ function blankStrings(src) {
   }
   return out;
 }
-function markBeforeSet(code, slug, setter) {
+const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function markBeforeSet(code, slug, setter, binding = null) {
   const blanked = blankStrings(code);
   const setterBlanked = blankStrings(setter);
   const calls = [...blanked.matchAll(/\bmarkRestoredFinish\s*\(/g)];
@@ -233,15 +234,24 @@ function markBeforeSet(code, slug, setter) {
     else if (/^[A-Za-z_$][\w$]*$/.test(arg)) {
       const def = code.match(new RegExp(`\\b${arg}\\s*=\\s*(['"\`])([^'"\`]+)\\1`));
       if (def) resolved = def[2];
+      else if (binding) {
+        /* A shared hook marks with its own parameter (useDailyPuzzle's
+           markRestoredFinish(gameSlug)) and the page that calls it binds
+           that name. The binding file must hand exactly one literal to the
+           name and import the hook the mark lives in, so a page that binds
+           it to another slug, or to two, or never calls the hook, is red. */
+        const bound = [...new Set([...binding.code.matchAll(new RegExp(`\\b${arg}\\s*:\\s*(['"\`])([^'"\`]+)\\1`, 'g'))].map(x => x[2]))];
+        if (bound.length === 1 && binding.importsRestore) resolved = bound[0];
+      }
     }
-    if (resolved !== slug) { problems.push(`markRestoredFinish(${arg}) does not resolve to '${slug}' (a literal, or an identifier assigned that literal in the same file)`); continue; }
+    if (resolved !== slug) { problems.push(`markRestoredFinish(${arg}) does not resolve to '${slug}' (a literal, an identifier assigned that literal in the same file, or a parameter the driver's slugBoundIn file binds to exactly that literal while importing the restore module)`); continue; }
     const after = blanked.slice(close);
     const at = after.indexOf(setterBlanked);
     if (at < 0) { problems.push(`no ${setter} after markRestoredFinish(${arg})`); continue; }
     const between = after.slice(0, at);
     if (/\breturn\b/.test(between)) { problems.push(`a return sits between markRestoredFinish(${arg}) and ${setter}`); continue; }
     if (/\bfunction\b|=>\s*\{/.test(between)) { problems.push(`a new function starts between markRestoredFinish(${arg}) and ${setter}`); continue; }
-    return { ok: true, gap: at };
+    return { ok: true, gap: at, arg };
   }
   return { ok: false, why: problems.join('; ') };
 }
@@ -249,20 +259,40 @@ function markBeforeSet(code, slug, setter) {
   const dependent = rowList.filter(r => r.info.usesRestoreMark);
   if (dependent.length === 0) console.log('   no mark dependent rows today, nothing to read (this section starts working the day a handler restore row lands)');
   for (const row of dependent) {
-    const { slug, restoreFile, finishedSetter } = row.info;
+    const { slug, restoreFile, finishedSetter, slugBoundIn } = row.info;
     if (!restoreFile || !finishedSetter) { fail(`${slug}: the driver names no restoreFile or finishedSetter, the backstop cannot read it`); continue; }
     const file = path.join(ROOT, restoreFile);
     if (!fs.existsSync(file)) { fail(`${slug}: ${restoreFile} does not exist`); continue; }
     const code = stripComments(fs.readFileSync(file, 'utf8').split('\r\n').join('\n'));
-    const real = markBeforeSet(code, slug, finishedSetter);
+    let binding = null;
+    if (slugBoundIn) {
+      const boundFile = path.join(ROOT, slugBoundIn);
+      if (!fs.existsSync(boundFile)) { fail(`${slug}: ${slugBoundIn} does not exist`); continue; }
+      const restoreModule = path.basename(restoreFile).replace(/\.[cm]?[jt]sx?$/, '');
+      const boundCode = stripComments(fs.readFileSync(boundFile, 'utf8').split('\r\n').join('\n'));
+      binding = {
+        file: slugBoundIn,
+        code: boundCode,
+        importsRestore: new RegExp(`from\\s*['"][^'"]*\\/${escapeRe(restoreModule)}['"]`).test(boundCode),
+      };
+    }
+    const real = markBeforeSet(code, slug, finishedSetter, binding);
     if (!real.ok) { fail(`${slug}: ${restoreFile}: ${real.why}`); continue; }
     /* The inline negative: the same checker on a copy without the call
        must go red, or green above means "did not look". */
     const removed = code.replace(/\bmarkRestoredFinish\s*\([^)]*\)\s*;?/, '');
     if (removed === code) { fail(`${slug}: the backstop negative could not remove the mark call it just found`); continue; }
-    const without = markBeforeSet(removed, slug, finishedSetter);
+    const without = markBeforeSet(removed, slug, finishedSetter, binding);
     if (without.ok) { fail(`${slug}: the backstop stays green with the mark call removed, the check is dead`); continue; }
-    console.log(`   ${slug}: ${restoreFile} marks '${slug}' ${real.gap} chars ahead of ${finishedSetter}; red without the call`);
+    /* The binding negative: the same binding file with its literal pointed
+       at another slug must go red too, or the binding check did not look. */
+    if (binding) {
+      const pointed = binding.code.replace(new RegExp(`(\\b${real.arg}\\s*:\\s*)(['"\`])${escapeRe(slug)}\\2`), `$1$2not-${slug}$2`);
+      if (pointed === binding.code) { fail(`${slug}: the binding negative could not move the literal it just found in ${slugBoundIn}`); continue; }
+      const elsewhere = markBeforeSet(code, slug, finishedSetter, { ...binding, code: pointed });
+      if (elsewhere.ok) { fail(`${slug}: the backstop stays green with ${slugBoundIn} binding ${real.arg} to another slug, the binding check is dead`); continue; }
+    }
+    console.log(`   ${slug}: ${restoreFile} marks '${slug}' ${real.gap} chars ahead of ${finishedSetter}${binding ? ` (as ${real.arg}, bound by ${slugBoundIn})` : ''}; red without the call${binding ? ', red with the binding pointed elsewhere' : ''}`);
   }
 }
 
