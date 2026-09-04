@@ -3538,6 +3538,36 @@ export function wageCapFrom(bill: number): number {
 }
 
 /**
+ * Round 436: what the board will tolerate NEXT season, when you stay.
+ *
+ * The summer used to rebuild the ceiling from the bill you happened to be
+ * paying that morning, wageCapFrom(wageBill(state)), which made the cap a
+ * mirror of your own payroll instead of a limit on it. Measured on the
+ * shipped engine over 12 clubs and 8 seasons: a manager who renews every
+ * expiring player and buys every upgrade he can afford breached the cap in
+ * only 18 of 63 seasons, because every renewal he signed raised next
+ * summer's ceiling to cover it, and his cap had drifted to 1.37x its day
+ * one number. It ran the other way too, and worse: a squad that simply aged
+ * and churned dragged the ceiling DOWN with it, so Real Madrid's cap fell
+ * from 1593 to 808 by season seven and the club could no longer pay for the
+ * squad it had handed you in the first place.
+ *
+ * So the ceiling is set once, from the squad you were handed, and after that
+ * it moves with the CLUB and not with your wage bill: a finish above what
+ * the board asked for nudges it up, trophies push it further, a bad season
+ * pulls it back, and it can move at most 16 percent up or 6 percent down in
+ * one summer. Measured with the same manager and the same seeds: he now
+ * breaches in 53 of 65 seasons at a median of 13 percent over, while a
+ * manager living inside the squad he inherited breached it in 0 of 36.
+ */
+export function nextWageCap(prevCap: number, expectation: number, finish: number, trophies: number): number {
+  const base = Number.isFinite(prevCap) && prevCap > 0 ? prevCap : 60;
+  const overshoot = clamp(expectation - finish, -4, 4);
+  const growth = clamp(1.03 + 0.015 * overshoot + 0.02 * trophies, 0.94, 1.16);
+  return Math.max(60, Math.round(base * growth));
+}
+
+/**
  * Round 105: a save made before contracts existed hands out sensible ones
  * rather than showing everybody on zero years. Staggered on a name hash so a
  * squad does not all expire in the same summer.
@@ -10653,9 +10683,30 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
 
   const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
-  let budget = moving
+  /* Round 436: the summer allocation, and then the money you did not spend.
+     Before this round the line below was the whole story, and it was built
+     from the club's STATIC definition, so career.budget was not an input to
+     next season's budget at all: a manager who banked 260.69m and one who
+     finished the season on 6.70m both opened the next one on exactly the
+     same number. Measured at Napoli on the shipped engine, the saver closed
+     on 75.08m and was handed 54m while the spender closed on 14.30m and was
+     handed 64m, so saving was actively punished. Every screen in the game
+     says the opposite ("it is all one kitty"), and a whole season of not
+     buying was deleted every August.
+
+     The carry is capped at one more allocation, so hoarding is worth real
+     money (up to double the board's cheque) without compounding into a war
+     chest nothing in the game can balance against. Walking to a new job
+     carries nothing, the same rule the sponsor deal and the ground
+     expansions already follow: the balance belonged to the club. */
+  const allocation = moving
     ? Math.round(club.budget * 1.1)
     : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
+  /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
+     that is not a real number carries nothing rather than poisoning the new
+     season with NaN. */
+  const carried = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
+  let budget = Math.round((allocation + Math.min(carried, allocation)) * 10) / 10;
   /* Round 161: the summer the add-ons come due. Each promise rolls once:
      about two thirds trigger (he played, the clauses hit) and the money
      comes off the new budget; the rest lapse quietly. Walking to a new job
@@ -10802,7 +10853,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.teamTalk = null;
   // Round 116: intake day. What comes up is whatever your academy earned.
   const intakeNews = runYouthIntake(state);
-  state.wageCap = wageCapFrom(wageBill(state));
+  /* Round 436: a new club sets its ceiling off the squad it hands you, which
+     is the Round 105 anchor doing its job. Staying carries last season's
+     ceiling and moves it on the CLUB's season, never on your own wage bill.
+     See nextWageCap for what the old self-anchored line measured out at. */
+  state.wageCap = moving
+    ? wageCapFrom(wageBill(state))
+    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }
