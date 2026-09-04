@@ -4,6 +4,10 @@ import { CbbProgramPuzzle, CbbProgramState, MAX_CLUES, POINTS_BY_CLUE } from '@/
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
+
+const SLUG = 'guess-cbb-team';
 
 function mapRow(row: any): CbbProgramPuzzle {
   return {
@@ -19,6 +23,28 @@ function mapRow(row: any): CbbProgramPuzzle {
       row.mascot_hint,
     ],
   };
+}
+
+const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every(x => typeof x === 'string');
+
+/* ROUND 428: today's daily record, read fail closed. Nothing was kept across
+   a refresh, so a finished daily came back as a fresh puzzle with the answer
+   already known and every replay recorded and paid the score again. The
+   puzzle is stored whole because the pool is remote and cbb_daily can
+   change under a session; every field is range checked because
+   scripts/sweepSaves.mjs reloads this route with the key set to garbage. */
+function validate(f: Record<string, unknown>): CbbProgramState | null {
+  const p = f.puzzle;
+  if (!p || typeof p !== 'object' || Array.isArray(p)) return null;
+  const { id, school_name, common_names, clues } = p as Record<string, unknown>;
+  if (typeof id !== 'string' || typeof school_name !== 'string') return null;
+  if (!isStringArray(common_names) || !isStringArray(clues) || clues.length !== MAX_CLUES) return null;
+  const { revealedClues, guesses, gameStatus, score } = f;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!isStringArray(guesses)) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle: { id, school_name, common_names, clues }, revealedClues, guesses, gameStatus, score, mode: 'daily' };
 }
 
 export function useCbbProgram() {
@@ -62,6 +88,16 @@ export function useCbbProgram() {
     try {
       if (mode === 'daily') {
         const today = getTodayET();
+        /* ROUND 428: a daily already played today comes back as it was left,
+           and a finished one says so before it is set, because this restore
+           runs in a click handler after mount and useGameCompletion would
+           otherwise record it as a new finish (the Round 399 double record). */
+        const saved = readDailyRecord(SLUG, today, validate);
+        if (saved) {
+          if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+          setGameState(saved);
+          return;
+        }
         const { data: daily } = await supabase
           .from('cbb_daily')
           .select('program_id')
@@ -158,6 +194,19 @@ export function useCbbProgram() {
   }, [allPrograms, gameState?.puzzle]);
 
   useGameCompletion('guess-cbb-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  /* ROUND 428: the daily board is kept current on every move, the fields
+     validate reads back. Unlimited is never written. */
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    writeDailyRecord(SLUG, getTodayET(), {
+      puzzle: gameState.puzzle,
+      revealedClues: gameState.revealedClues,
+      guesses: gameState.guesses,
+      gameStatus: gameState.gameStatus,
+      score: gameState.score,
+    });
+  }, [gameState]);
 
   return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading, programsStatus, reloadPrograms: loadPrograms };
 }
