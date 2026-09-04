@@ -46,6 +46,8 @@ const SAVE_KEY = 'nba-front-office-save-v1';
 
 const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
+type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string | null };
+
 interface SaveShape {
   league: NbaLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
   draftClass: NbaProspect[] | null; picksLeft: number;
@@ -55,6 +57,9 @@ interface SaveShape {
      same rule as trade talks), but an ANSWERED tilt and the season's
      headline deal survive, so the next mandate honors what was said. */
   pressTilt?: -1 | 0 | 1; seasonTradeLine?: string | null;
+  /* Round 431. Present on a save written from the recap screen, so the recap
+     can be drawn again after a reload. Absent on older saves. */
+  postseason?: Postseason | null;
 }
 
 export default function NbaFrontOfficeBoard() {
@@ -106,7 +111,6 @@ export default function NbaFrontOfficeBoard() {
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
       setLeague(s.league); setMyTeam(s.myTeam);
-      setPhase(s.fired ? 'fired' : s.phase === 'recap' ? 'hub' : s.phase);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
@@ -115,6 +119,21 @@ export default function NbaFrontOfficeBoard() {
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
       setSeasonTradeLine(s.seasonTradeLine ?? null);
+      /* Round 431: a reload on the recap screen used to replay the season.
+         The save carried phase 'recap' with the league still at the final
+         round and no postseason, this effect mapped it back to 'hub', the
+         play box offered the final stretch again, and one click ran it and
+         the whole postseason a second time on a season that was already
+         closed: seasonsPlayed and titles advanced twice, every team played
+         an extra round of games, and the mandate was graded twice. The save
+         now carries the postseason, so the recap is simply drawn again. A
+         save from before this round has nothing to draw, so it opens on the
+         draft, which is where the recap's only button leads. */
+      if (s.postseason) { setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (s.fired) setPhase('fired');
+      else if (s.phase !== 'recap') setPhase(s.phase);
+      else if (s.postseason) setPhase('recap');
+      else openDraft(s.league, s.myTeam, s);
     } catch { /* fresh */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -124,10 +143,11 @@ export default function NbaFrontOfficeBoard() {
       if (!lg) return;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
-        mandate, trust, fired, pressTilt, seasonTradeLine, ...patch,
+        mandate, trust, fired, pressTilt, seasonTradeLine,
+        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
 
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
@@ -173,6 +193,11 @@ export default function NbaFrontOfficeBoard() {
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
     recordActivity('/nba-front-office');
+    /* Round 431: a season's postseason runs once. The record carries an entry
+       for this season the moment its playoffs are played, so a league that
+       already has one is a closed season being clicked again, and the answer
+       is to do nothing rather than play an extra round. */
+    if (league.champions.some(c => c.season === league.season)) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const report = simRound(lg, myTeam, Math.random);
     const newFeed = [
@@ -181,6 +206,7 @@ export default function NbaFrontOfficeBoard() {
     ];
     if (lg.round >= NBA_ROUNDS) {
       const { series: sr, champion: champ } = runNbaPlayoffs(lg, Math.random);
+      lg.champions.push({ season: lg.season, team: champ });
       setSeries(sr);
       setChampion(champ);
       const won = champ === myTeam;
@@ -192,6 +218,7 @@ export default function NbaFrontOfficeBoard() {
          as playoff appearances or wins. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
+      let gradeVerdict: string | null = null;
       if (mandate) {
         const post = seriesPostseason(sr, myTeam, 'Play-In');
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
@@ -199,6 +226,7 @@ export default function NbaFrontOfficeBoard() {
         newTrust = applied.trust; nowFired = applied.fired;
         gradeResult = grade.result;
         setTrust(applied.trust); setFired(applied.fired); setGradeLine(grade.verdict);
+        gradeVerdict = grade.verdict;
       }
       /* Round 192: the room reacts to the season that actually happened.
          A fired GM gets no presser, and a quiet, mandate-met, no-news
@@ -210,7 +238,7 @@ export default function NbaFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -219,14 +247,23 @@ export default function NbaFrontOfficeBoard() {
     persist({}, lg, myTeam);
   };
 
-  const startDraft = () => {
-    if (!league) return;
+  /* Round 431: the step after the recap, a draft class for the season just
+     closed. Shared by the recap's button and by the restore of an older save
+     written on the recap screen, which has no postseason to draw. That restore
+     passes the save's own fields as the patch, because persist's closure still
+     holds the first render's defaults while the load effect runs. */
+  const openDraft = (lg: NbaLeague, team: string, patch: Partial<SaveShape> = {}) => {
     const cls = /* Round 211: the class is drawn against every name already in the
        league, so a prospect cannot arrive sharing a name with a man on a
        roster or in the market. */
-    nbaDraftClass(Math.random, 24, leagueNames(league));
+    nbaDraftClass(Math.random, 24, leagueNames(lg));
     setDraftClass(cls); setPicksLeft(2); setPhase('draft');
-    persist({ phase: 'draft', draftClass: cls, picksLeft: 2 }, league, myTeam);
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 2 }, lg, team);
+  };
+
+  const startDraft = () => {
+    if (!league) return;
+    openDraft(league, myTeam);
   };
 
   const draftPick = (id: string) => {
@@ -260,7 +297,7 @@ export default function NbaFrontOfficeBoard() {
       setSeries([]); setChampion(''); setWonNow(false);
       setPhase('hub'); setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
       return;
     }
     setLeague(lg);

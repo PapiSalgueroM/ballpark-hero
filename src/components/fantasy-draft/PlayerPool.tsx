@@ -40,6 +40,29 @@ const POS_COLORS: Record<string, string> = {
 
 const POS_FILTERS = ['All', 'GK', 'DEF', 'MID', 'FWD'] as const;
 
+/** The rows the pool shows. With no search: the best ten that can actually be
+ *  drafted (drafted and rule-blocked players are dropped BEFORE the sort, or the
+ *  ten highest rated, exactly the ones a rule excludes, hold every slot for the
+ *  whole draft). With a search: up to twenty name matches, drafted and blocked
+ *  included, greyed with the reason. */
+export function poolShortlist(
+  players: DraftPlayer[],
+  draftedIds: Set<string>,
+  isEligible: ((p: DraftPlayer) => boolean) | undefined,
+  posFilter: string,
+  search: string,
+): DraftPlayer[] {
+  const searching = search.length >= 2;
+  const base = players.filter((p) => {
+    if (!searching && (draftedIds.has(p.id) || (isEligible && !isEligible(p)))) return false;
+    if (posFilter !== 'All' && p.position !== posFilter) return false;
+    if (searching && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+  const sorted = [...base].sort((a, b) => draftRating(b) - draftRating(a));
+  return sorted.slice(0, search.length >= 2 ? 20 : 10);
+}
+
 export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible, ineligibleReason }: PlayerPoolProps) => {
   const [search, setSearch] = useState('');
   const [posFilter, setPosFilter] = useState<string>('All');
@@ -49,15 +72,10 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
      AVAILABLE, top ten by the sitewide card rating, and the search reaches
      everyone else; a search shows up to twenty matches. The list is short
      enough to read whole, which is the point. */
-  const filtered = useMemo(() => {
-    const base = players.filter((p) => {
-      if (posFilter !== 'All' && p.position !== posFilter) return false;
-      if (search.length >= 2 && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
-      return true;
-    });
-    const sorted = [...base].sort((a, b) => draftRating(b) - draftRating(a));
-    return sorted.slice(0, search.length >= 2 ? 20 : 10);
-  }, [players, search, posFilter]);
+  const filtered = useMemo(
+    () => poolShortlist(players, draftedIds, isEligible, posFilter, search),
+    [players, draftedIds, isEligible, posFilter, search],
+  );
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-border bg-card/70 backdrop-blur-md overflow-hidden">
