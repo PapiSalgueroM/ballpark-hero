@@ -19,9 +19,49 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 434.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 440.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED 2026-09-04: Rounds 434 to 439, THE SIX BROKEN ECONOMIES.**
+  The Round 424 audit ran every game economy through a headless probe and found all
+  six unhealthy, with 14 of its 15 findings surviving adversarial verification. Round
+  424 fixed one of them, the Stadium Tycoon match clock. These are the rest, one round
+  each, harness first, each with a negative control:
+
+  **434 PLAYER STOCK MARKET**, the worst of them. The score is a spend RATIO
+  (playerStockMarket.ts:314), so investing the 200M wallet can only hurt and the
+  winning play is leaving 87 percent of it unspent. The cheapest possible XI scores
+  93.8 and finishes in the green 100 runs out of 100. The two stats printed on the
+  card also pick WORSE than random: steepest value trajectory 12.7 percent and most
+  goals plus assists 13.5 percent against random at 25, while cheapest price hits
+  67.2. Only price predicts anything, and the game is titled Invest on Stats Alone.
+
+  **435 REBUILD.** 15 of 66 clubs open 3 to 4 points down before a move is made,
+  because useRebuild.ts:319 sets startRating with a formula that ignores empty shirts
+  while the HUD uses one that scores them 40. And dealObjectivesWithIdentity
+  (rebuildDeck.ts:281) deals contradictory hands in 25 percent of runs, for example
+  sign a galactico worth 80M or more beside no single signing over 60M.
+
+  **436 CLUB MANAGER.** The transfer kitty does not survive the summer.
+  clubManager.ts:10656 rebuilds next season's budget from the club's STATIC definition
+  and never reads career.budget, so a hoarder ending on 260.69m and a spender ending
+  on 6.7m both roll over to exactly 210m. Feeding a NaN budget in still returned 210,
+  which proves the carried balance is not an input at all. This contradicts the game's
+  own rules screen, which says it is all one kitty. The wage cap also re-anchors to 115
+  percent of your own bill every summer, so it can never bind.
+
+  **437 SOCCER CAREER.** The money app freezes at retirement while the game keeps
+  paying for another 25 seasons (soccerCareerEngine.ts:7055). This is the flagship, so
+  it earns the most care.
+
+  **438 IDLE ARENA.** The declared 8 hour offline cap is never enforced on a tab left
+  open (useIdleArena.ts:45), and the Trophy panel's worked example states the inverse
+  of the real formula.
+
+  **439 STADIUM TYCOON.** Away earnings settle only on page LOAD, so a backgrounded tab
+  pays two seconds for hours away (useStadiumTycoon.ts:145).
+
 
 - **Desktop lane, CLAIMED AND SHIPPED 2026-09-03 late: Rounds 425, 426, 427, 429.**
   Pushed together with this claim; the first three sat local for a day while the
