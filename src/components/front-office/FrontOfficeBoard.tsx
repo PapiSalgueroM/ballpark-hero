@@ -50,6 +50,8 @@ const SAVE_KEY = 'front-office-save-v1';
 
 const NFL_WORDS: FoSportWords = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
 
+type Postseason = { rounds: PlayoffRound[]; champion: string; gradeLine: string | null };
+
 interface SaveShape {
   league: LeagueState;
   myTeam: string;
@@ -67,6 +69,9 @@ interface SaveShape {
      headline deal survive, so the next mandate honors what was said. */
   pressTilt?: -1 | 0 | 1;
   seasonTradeLine?: string | null;
+  /* Round 431. Present on a save written from the recap screen, so the recap
+     can be drawn again after a reload. Absent on older saves. */
+  postseason?: Postseason | null;
 }
 
 export default function FrontOfficeBoard() {
@@ -128,7 +133,6 @@ export default function FrontOfficeBoard() {
       if (!s.league || !s.myTeam) return;
       setLeague(s.league);
       setMyTeam(s.myTeam);
-      setPhase(s.fired ? 'fired' : s.phase === 'recap' ? 'hub' : s.phase);
       setTitles(s.titles ?? 0);
       setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null);
@@ -141,6 +145,21 @@ export default function FrontOfficeBoard() {
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
       setSeasonTradeLine(s.seasonTradeLine ?? null);
+      /* Round 431: a reload on the recap screen used to replay the season.
+         The save carried phase 'recap' with the league still at the final
+         week and no postseason, this effect mapped it back to 'hub', the
+         play box offered the final week again, and one click ran it and the
+         whole postseason a second time on a season that was already closed:
+         seasonsPlayed and titles advanced twice, every team played an 18th
+         game, and the mandate was graded twice. The save now carries the
+         postseason, so the recap is simply drawn again. A save from before
+         this round has nothing to draw, so it opens on the draft, which is
+         where the recap's only button leads. */
+      if (s.postseason) { setPlayoffRounds(s.postseason.rounds); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (s.fired) setPhase('fired');
+      else if (s.phase !== 'recap') setPhase(s.phase);
+      else if (s.postseason) setPhase('recap');
+      else openDraft(s.league, s.myTeam, s);
     } catch { /* fresh start */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,11 +170,12 @@ export default function FrontOfficeBoard() {
       const base: SaveShape = {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         mandate, trust, fired, pressTilt, seasonTradeLine,
+        postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
 
   const start = (abbr: string) => {
     const lg = initLeague();
@@ -214,6 +234,11 @@ export default function FrontOfficeBoard() {
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
     recordActivity('/front-office');
+    /* Round 431: a season's postseason runs once. The record carries an entry
+       for this season the moment its playoffs are played, so a league that
+       already has one is a closed season being clicked again, and the answer
+       is to do nothing rather than play an 18th week. */
+    if (league.champions.some(c => c.season === league.season)) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const injuries = injuryPass(lg.teams, Math.random);
     const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);
@@ -228,6 +253,7 @@ export default function FrontOfficeBoard() {
 
     if (lg.week >= REGULAR_WEEKS) {
       const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random);
+      lg.champions.push({ season: lg.season, team: champ });
       setPlayoffRounds(rounds);
       setChampion(champ);
       const won = champ === myTeam;
@@ -239,6 +265,7 @@ export default function FrontOfficeBoard() {
       /* Round 180: ownership grades the season against the mandate. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
+      let gradeVerdict: string | null = null;
       if (mandate) {
         const post = nflPostseason(rounds, myTeam);
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
@@ -249,6 +276,7 @@ export default function FrontOfficeBoard() {
         setTrust(applied.trust);
         setFired(applied.fired);
         setGradeLine(grade.verdict);
+        gradeVerdict = grade.verdict;
       }
       /* Round 192: the room reacts to the season that actually happened.
          A fired GM gets no presser (the door shuts with one shake), and a
@@ -259,7 +287,7 @@ export default function FrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.week += 1;
@@ -267,16 +295,25 @@ export default function FrontOfficeBoard() {
     persist({}, lg, myTeam);
   };
 
-  const startDraft = () => {
-    if (!league) return;
+  /* Round 431: the step after the recap, a draft class for the season just
+     closed. Shared by the recap's button and by the restore of an older save
+     written on the recap screen, which has no postseason to draw. That restore
+     passes the save's own fields as the patch, because persist's closure still
+     holds the first render's defaults while the load effect runs. */
+  const openDraft = (lg: LeagueState, team: string, patch: Partial<SaveShape> = {}) => {
     const cls = /* Round 211: the class is drawn against every name already in the
        league, so a prospect cannot arrive sharing a name with a man on a
        roster or in the market. */
-    generateDraftClass(Math.random, 40, leagueNames(league));
+    generateDraftClass(Math.random, 40, leagueNames(lg));
     setDraftClass(cls);
     setPicksLeft(3);
     setPhase('draft');
-    persist({ phase: 'draft', draftClass: cls, picksLeft: 3 }, league, myTeam);
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 3 }, lg, team);
+  };
+
+  const startDraft = () => {
+    if (!league) return;
+    openDraft(league, myTeam);
   };
 
   const draftProspect = (id: string) => {
@@ -334,7 +371,7 @@ export default function FrontOfficeBoard() {
       setPhase('hub');
       setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
       return;
     }
     setLeague(lg);
