@@ -69,12 +69,17 @@ export default function SportsBingo() {
     fetchSquadPool('current')
       .then(p => {
         if (cancelled) return;
-        if (p.length < 100) { setPhase('error'); return; }
+        /* Round 428 part three: the error screen never covers a finished
+           daily either. Only the success branch was guarded, so a short pool
+           or a failed fetch replaced a restored result with "Couldn't load the
+           player pool" and the player lost the card they had already filled.
+           The result is already on screen and needs no pool to stay there. */
+        if (p.length < 100) { setPhase(cur => (cur === 'done' ? cur : 'error')); return; }
         setPool(p);
         /* never over a restored result */
         setPhase(cur => (cur === 'done' ? cur : 'setup'));
       })
-      .catch(() => { if (!cancelled) setPhase('error'); });
+      .catch(() => { if (!cancelled) setPhase(cur => (cur === 'done' ? cur : 'error')); });
     return () => { cancelled = true; };
   }, []);
 

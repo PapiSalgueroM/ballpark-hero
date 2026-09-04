@@ -48,6 +48,20 @@ export function readDailyRecord<T>(
 export function writeDailyRecord(slug: string, today: string, fields: Record<string, unknown>): void {
   try {
     localStorage.setItem(dailyRecordKey(slug, today), JSON.stringify({ ...fields, v: 1, date: today }));
+    /* Round 428 part three: yesterday's record for this game goes when today's
+       is written. Nothing reads a past day (readDailyRecord refuses any date
+       but the one asked for), and without this a daily player accumulated one
+       key per game per day for ever: fifteen a day across the games on this
+       helper, which eventually fills the origin's storage and makes the write
+       above start failing silently. useDailyPuzzle prunes for the same reason
+       (its cleanupOldEntries), on the same key shape. */
+    const mine = `${slug}-daily-`;
+    const stale: string[] = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(mine) && k !== dailyRecordKey(slug, today)) stale.push(k);
+    }
+    for (const k of stale) localStorage.removeItem(k);
   } catch {
     /* storage full or blocked: the game still plays, it just will not survive a refresh */
   }

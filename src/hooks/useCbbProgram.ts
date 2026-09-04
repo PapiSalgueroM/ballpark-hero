@@ -32,7 +32,7 @@ const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every
    already known and every replay recorded and paid the score again. The
    puzzle is stored whole because the pool is remote and cbb_daily can
    change under a session; every field is range checked because
-   scripts/sweepSaves.mjs reloads this route with the key set to garbage. */
+   scripts/simDailyReload.mjs assertion 5 reloads this route with the key set to garbage. */
 function validate(f: Record<string, unknown>): CbbProgramState | null {
   const p = f.puzzle;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return null;
