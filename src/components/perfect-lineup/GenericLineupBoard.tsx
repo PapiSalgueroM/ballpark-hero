@@ -198,13 +198,18 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
             emojiGrid={slotGradesToEmoji(game.result.slotGrades)}
           />
 
-          <button
-            onClick={game.mode === 'daily' ? game.reset : game.rollUnlimited}
-            className="mt-2 inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border bg-card text-foreground font-semibold hover:bg-accent transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            {game.mode === 'daily' ? 'Edit Lineup' : 'New Lineup'}
-          </button>
+          {game.mode === 'daily' ? (
+            /* Round 428: a daily result is final, so no Edit Lineup here */
+            <p className="mt-2 text-sm text-muted-foreground">That's your lineup for today. Come back tomorrow for a new one.</p>
+          ) : (
+            <button
+              onClick={game.rollUnlimited}
+              className="mt-2 inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border bg-card text-foreground font-semibold hover:bg-accent transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+              New Lineup
+            </button>
+          )}
         </div>
       )}
 
