@@ -74,7 +74,12 @@ function play({ tapsPerSec, trophies = 0, seconds, stopAt = Infinity, openingTap
   for (t = 1; t <= seconds; t++) {
     played = t;
     for (let i = 0; i < tapsPerSec; i++) s = A.tap(s);
-    s = A.tick(s, t * 1000).state;
+    /* Round 438: advance the clock at the cadence the hook actually installs.
+       A one second step used to be fine and is not any more: a gap that big is
+       how the engine now tells a tab nobody is watching from somebody sitting
+       there, so driving in second long jumps would measure the away rules and
+       call them the game. */
+    for (let k = 1; k <= 1000 / A.TICK_MS; k++) s = A.tick(s, (t - 1) * 1000 + k * A.TICK_MS).state;
     for (let guard = 0; guard < 20; guard++) {
       const b = bestBuy(s);
       if (!b) break;

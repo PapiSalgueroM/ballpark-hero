@@ -2,11 +2,12 @@
  * Round 288: the running arena. The engine is src/lib/idleArena.ts; this is
  * the clock, the save and the floaters.
  *
- * The clock ticks every 100ms off the real time (not a fixed step), so a
- * throttled background tab that fires late still credits the right amount.
- * The save is written every five seconds and on unload, and the offline
- * catch up runs exactly once, on load, against the timestamp the last
- * session wrote.
+ * The clock ticks every 100ms off the real time (not a fixed step). Round 438:
+ * a tick that lands hours late did not measure hours of play, it measured a tab
+ * that was hidden, frozen or asleep, so tick pays that gap as away time (half
+ * rate, eight hours an absence) exactly as a closed tab is paid. The save is
+ * written every five seconds and on unload, and the load path runs the same
+ * away rule against the timestamp the last session wrote.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { recordCompletion } from '@/lib/completions';

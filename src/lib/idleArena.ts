@@ -20,10 +20,36 @@
 
 export const SAVE_KEY = 'dukb-idle-arena-v1';
 export const TICK_MS = 100;
-/** the most a closed tab keeps earning for */
+/** the most one absence keeps earning for, whether the tab was closed or open */
 export const OFFLINE_CAP_MS = 8 * 3600 * 1000;
 /** offline earning runs at half speed, because being there should matter */
 export const OFFLINE_RATE = 0.5;
+/**
+ * Round 438: a gap longer than this means the clock stopped rather than ran,
+ * so the time in it is away time and is paid as away time.
+ *
+ * An open tab is not the same thing as somebody watching it. A hidden tab gets
+ * its timers clamped to a second and then to a minute, a frozen or discarded
+ * tab stops firing at all, and a sleeping machine stops everything, so the tick
+ * that lands afterwards carries hours in a single dt. Until this round that dt
+ * was paid in full at full rate with no cap, so a tab left open for a day paid
+ * six times what closing it for the same day paid (a full 24 hours against
+ * 8 hours at half speed), and the game's own tip, "eight hours at half speed is
+ * four hours of income you did not have to be there for", described something
+ * the game did not do.
+ *
+ * 750ms, from measured headroom rather than taste. Chromium delivering a 100ms
+ * interval on a live page: worst gap 112ms of 300 with an idle main thread, and
+ * 201ms of 271 with a 200ms task blocking every second. A live tab's gap is its
+ * own longest synchronous task plus the interval, and nothing on this page
+ * blocks for a fifth of a second, so 750ms is three and a half times the
+ * measured worst. It sits under the 1000ms floor every browser clamps a hidden
+ * tab's timers to, so a backgrounded tab is caught on its first tick rather
+ * than after whatever grace the browser happens to give it. The two errors are
+ * not the same size: calling a live gap away costs the player under a second of
+ * full rate income, and calling an absence live pays a parked tab all night.
+ */
+export const AWAY_AFTER_MS = 750;
 /** the trophy formula starts paying at this many points earned in one run */
 export const TROPHY_FLOOR = 1_000_000;
 /** each trophy is a permanent bonus on everything */
@@ -125,6 +151,8 @@ export interface ArenaState {
   runs: number;
   ach: string[];
   lastTick: number;
+  /** away time already paid for in the absence being served, against the cap */
+  awayMs: number;
   started: number;
 }
 
@@ -134,7 +162,7 @@ export function newState(now: number = Date.now()): ArenaState {
   const owned: Record<string, number> = {};
   for (const g of GENERATORS) owned[g.id] = 0;
   owned.ballboy = 1;
-  return { v: 1, points: 0, earned: 0, allTime: 0, taps: 0, owned, upgrades: [], trophies: 0, runs: 0, ach: [], lastTick: now, started: now };
+  return { v: 1, points: 0, earned: 0, allTime: 0, taps: 0, owned, upgrades: [], trophies: 0, runs: 0, ach: [], lastTick: now, awayMs: 0, started: now };
 }
 
 const finite = (n: unknown, fallback = 0): number => (typeof n === 'number' && Number.isFinite(n) && n >= 0 ? n : fallback);
@@ -162,6 +190,7 @@ export function loadSave(raw: string | null, now: number = Date.now()): ArenaSta
       runs: Math.floor(finite(p.runs)),
       ach: Array.isArray(p.ach) ? [...new Set(p.ach.filter((a): a is string => typeof a === 'string' && knownAch.has(a)))] : [],
       lastTick: finite(p.lastTick, now) || now,
+      awayMs: Math.min(finite(p.awayMs), OFFLINE_CAP_MS),
       started: finite(p.started, now) || now,
     };
   } catch {
@@ -252,19 +281,39 @@ export function tap(s: ArenaState): ArenaState {
   return withAch({ ...s, points: s.points + v, earned: s.earned + v, allTime: s.allTime + v, taps: s.taps + 1 });
 }
 
-/** advance the clock; returns the new state and what was earned */
+/**
+ * Advance the clock; returns the new state and what was earned.
+ *
+ * A gap the length of a tick is somebody sitting there watching, and that is
+ * paid in real time at full rate for as long as they care to watch: it is an
+ * idle game, the whole point is that it never stops. A gap of hours is not
+ * somebody watching, it is a tab that was hidden, throttled, frozen or asleep,
+ * so it goes through the same away rule a closed tab does.
+ */
 export function tick(s: ArenaState, now: number): { state: ArenaState; earned: number } {
-  const dt = Math.max(0, (now - s.lastTick) / 1000);
-  const earned = totalRate(s) * dt;
-  return { state: withAch({ ...s, points: s.points + earned, earned: s.earned + earned, allTime: s.allTime + earned, lastTick: now }), earned };
+  const gap = Math.max(0, now - s.lastTick);
+  if (gap > AWAY_AFTER_MS) {
+    const { state, earned } = applyOffline(s, now);
+    return { state, earned };
+  }
+  const earned = totalRate(s) * (gap / 1000);
+  return { state: withAch({ ...s, points: s.points + earned, earned: s.earned + earned, allTime: s.allTime + earned, lastTick: now, awayMs: 0 }), earned };
 }
 
-/** what a closed tab earned: capped, and at half rate */
+/**
+ * What an absence earned: half rate, and eight hours of it at most.
+ *
+ * The cap counts the whole absence rather than each gap inside it, because a
+ * backgrounded tab wakes up once a minute and would otherwise collect a fresh
+ * eight hours every time it did. `awayMs` is the meter; the first live tick
+ * after somebody comes back sets it to zero, so the next absence is a new one.
+ */
 export function applyOffline(s: ArenaState, now: number): { state: ArenaState; earned: number; seconds: number } {
-  const away = Math.max(0, Math.min(now - s.lastTick, OFFLINE_CAP_MS));
+  const left = Math.max(0, OFFLINE_CAP_MS - s.awayMs);
+  const away = Math.min(Math.max(0, now - s.lastTick), left);
   const seconds = away / 1000;
   const earned = totalRate(s) * seconds * OFFLINE_RATE;
-  return { state: withAch({ ...s, points: s.points + earned, earned: s.earned + earned, allTime: s.allTime + earned, lastTick: now }), earned, seconds };
+  return { state: withAch({ ...s, points: s.points + earned, earned: s.earned + earned, allTime: s.allTime + earned, lastTick: now, awayMs: s.awayMs + away }), earned, seconds };
 }
 
 export function buyGen(s: ArenaState, genId: string, n = 1): ArenaState {
