@@ -18,6 +18,8 @@
  * Preston North End (Beckham loan 1995).
  */
 
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+
 export interface MinefieldCategory {
   id: string;
   title: string;
@@ -543,4 +545,31 @@ export function maxRunScore(rounds: MinefieldRound[]): number {
     (sum, r) => sum + r.tiles.filter(t => !t.isMine).length * POINTS_PER_FIND + CLEAR_BONUS,
     0,
   );
+}
+
+/* ------- the finished daily, kept across a refresh (Round 428) ------ */
+/* Before this, a refresh after the final score dealt the same three boards
+ * again with every mine already revealed, and the second run recorded a
+ * second completion. Only the finish is kept (score and boards cleared);
+ * the boards themselves are rebuilt from the day seed. Read through the
+ * shared fail closed helper: scripts/sweepSaves.mjs feeds this key garbage,
+ * and a score that is not a finite number would render as NaN pts. */
+const SLUG = 'minefield';
+
+export interface MinefieldDailyResult {
+  score: number;
+  roundsWon: number;
+}
+
+export function loadDailyResult(today: string): MinefieldDailyResult | null {
+  return readDailyRecord<MinefieldDailyResult>(SLUG, today, f => {
+    const { score, roundsWon } = f;
+    if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+    if (typeof roundsWon !== 'number' || !Number.isInteger(roundsWon) || roundsWon < 0 || roundsWon > ROUNDS_PER_RUN) return null;
+    return { score, roundsWon };
+  });
+}
+
+export function saveDailyResult(today: string, result: MinefieldDailyResult): void {
+  writeDailyRecord(SLUG, today, { score: result.score, roundsWon: result.roundsWon });
 }
