@@ -17,9 +17,14 @@ type Tab = 'team' | 'play' | 'rankings' | 'standings';
 
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
+type Postseason = { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[] };
+
 interface SaveShape {
   st: CfbState; phase: Phase;
   recruits: CfbRecruit[] | null; portal: CfbRecruit[] | null;
+  /* Round 426 part three: present on a save written from the recap screen,
+     so the recap can be drawn again after a reload. Absent on older saves. */
+  postseason?: Postseason | null;
 }
 
 export default function CfbDynastyBoard() {
@@ -33,12 +38,31 @@ export default function CfbDynastyBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${lastGames.length}:${lastGames[0]?.home ?? ''}:${lastGames[0]?.away ?? ''}`,
   );
-  const [postseason, setPostseason] = useState<{ ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[] } | null>(null);
+  const [postseason, setPostseason] = useState<Postseason | null>(null);
   const [recruits, setRecruits] = useState<CfbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CfbRecruit[] | null>(null);
   const [wonNow, setWonNow] = useState(false);
 
   useGameCompletion('cfb-dynasty', wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
+
+  const persist = useCallback((state: CfbState, ph: Phase, rec: CfbRecruit[] | null, por: CfbRecruit[] | null, post: Postseason | null = null) => {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ st: state, phase: ph, recruits: rec, portal: por, postseason: post } satisfies SaveShape));
+    } catch { /* full */ }
+  }, []);
+
+  /* The step after the recap: an NIL budget, a recruiting class and a portal
+     pool for the season just closed. Shared by the recap's button and by the
+     restore of an older save that was written on the recap screen. */
+  const openRecruiting = useCallback((source: CfbState) => {
+    const state: CfbState = JSON.parse(JSON.stringify(source));
+    state.nil = nilBudgetFor(CFB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
+    const cls = cfbRecruitClass(Math.random);
+    const por = cfbPortalPool(Math.random);
+    setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
+    setFeed([`💰 NIL budget: ${state.nil} points. Land your class, raid the portal, then run it back.`]);
+    persist(state, 'recruit', cls, por);
+  }, [persist]);
 
   useEffect(() => {
     try {
@@ -47,17 +71,26 @@ export default function CfbDynastyBoard() {
       const s = JSON.parse(raw) as SaveShape;
       if (!s.st?.myTeam) return;
       setSt(s.st);
-      setPhase(s.phase === 'recap' ? 'season' : s.phase);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
+      /* Round 426 part three: a reload on the recap screen used to replay the
+         season. The save carried phase 'recap' with round still 12 and no
+         postseason, this effect mapped it back to 'season', the button read
+         "Final week + the Playoff" again, and one click ran the final week
+         and the whole postseason a second time on a season that was already
+         closed: seasonsPlayed and natties advanced twice, the natty could be
+         won twice, and every team played a 13th game. The save now carries
+         the postseason, so the recap is simply drawn again. A save from
+         before this round has nothing to draw, so it opens on the recruiting
+         trail, which is where the recap's only button leads. */
+      if (s.phase === 'recap') {
+        if (s.postseason) { setPostseason(s.postseason); setPhase('recap'); }
+        else openRecruiting(s.st);
+      } else {
+        setPhase(s.phase);
+      }
     } catch { /* fresh */ }
-  }, []);
-
-  const persist = useCallback((state: CfbState, ph: Phase, rec: CfbRecruit[] | null, por: CfbRecruit[] | null) => {
-    try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ st: state, phase: ph, recruits: rec, portal: por } satisfies SaveShape));
-    } catch { /* full */ }
-  }, []);
+  }, [openRecruiting]);
 
   const label = (id: string) => CFB_SCHOOL_MAP.get(id)?.name ?? id;
 
@@ -85,6 +118,12 @@ export default function CfbDynastyBoard() {
       lines.push(`${won ? '✅' : '❌'} Week ${state.round}: ${won ? 'beat' : 'lost to'} ${label(opp)} ${us}-${them}${myGame.conference ? ' (conference)' : ''}.`);
     }
     if (state.round >= CFB_ROUNDS) {
+      /* Round 426 part three: a season's postseason runs once. The record
+         carries an entry for this season the moment it is played, so a
+         state that already has one is a closed season being clicked again
+         (an old save restored on the recap, or a double click), and the
+         answer is to do nothing rather than play a 13th week. */
+      if (state.natties.some(n => n.season === state.season)) return;
       const post = runCfbPostseason(state, Math.random);
       const heisman = heismanRace(state, Math.random);
       /* Round 426: heismanRace can legitimately come back EMPTY, and indexing
@@ -102,11 +141,12 @@ export default function CfbDynastyBoard() {
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
       setWonNow(won);
-      setPostseason({ ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman });
+      const closed: Postseason = { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
+      setPostseason(closed);
       setPhase('recap');
       setSt(state);
       setFeed(lines);
-      persist(state, 'recap', null, null);
+      persist(state, 'recap', null, null, closed);
       return;
     }
     state.round += 1;
@@ -117,13 +157,7 @@ export default function CfbDynastyBoard() {
 
   const startRecruiting = () => {
     if (!st) return;
-    const state: CfbState = JSON.parse(JSON.stringify(st));
-    state.nil = nilBudgetFor(CFB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
-    const cls = cfbRecruitClass(Math.random);
-    const por = cfbPortalPool(Math.random);
-    setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
-    setFeed([`💰 NIL budget: ${state.nil} points. Land your class, raid the portal, then run it back.`]);
-    persist(state, 'recruit', cls, por);
+    openRecruiting(st);
   };
 
   const sign = (r: CfbRecruit, fromPortal: boolean) => {
