@@ -6,8 +6,28 @@ import {
 } from '@/types/guessTheNation';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 function getTodayStr() { return getTodayET(); }
+
+const SLUG = 'guess-the-nation';
+
+/* ROUND 428: a finished daily vanished on refresh, and Daily Challenge then
+   dealt the same nation fresh with the answer just shown, so every replay
+   recorded a second completion and paid the score again. The daily board is
+   kept under guess-the-nation-daily-<date> and read back fail closed: the
+   puzzle is the one today's seeded pick names rather than anything trusted
+   from the store, and any field out of range drops the whole record. */
+function restoreDaily(f: Record<string, unknown>, puzzle: NationPuzzle, difficulty: 'easy' | 'hard'): GuessTheNationState | null {
+  const { puzzleId, revealedClues, guesses, gameStatus, score } = f;
+  if (puzzleId !== puzzle.id) return null;
+  if (typeof revealedClues !== 'number' || !Number.isInteger(revealedClues) || revealedClues < 1 || revealedClues > MAX_CLUES) return null;
+  if (!Array.isArray(guesses) || !guesses.every(g => typeof g === 'string')) return null;
+  if (gameStatus !== 'playing' && gameStatus !== 'won' && gameStatus !== 'lost') return null;
+  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  return { puzzle, mode: 'daily', difficulty, revealedClues, guesses: guesses as string[], gameStatus, score };
+}
 
 function mapRow(row: any): NationPuzzle {
   return {
@@ -97,6 +117,17 @@ export function useGuessTheNation() {
       }
       if (!puzzle) return;
 
+      if (mode === 'daily') {
+        const saved = readDailyRecord(SLUG, getTodayStr(), f => restoreDaily(f, puzzle, difficulty));
+        if (saved) {
+          /* Restored in a handler after mount, so the completion hook is
+             told first that this finish is not a new one (Round 399). */
+          if (saved.gameStatus !== 'playing') markRestoredFinish(SLUG);
+          setGameState(saved);
+          return;
+        }
+      }
+
       setGameState({
         puzzle, mode, difficulty, continentFilter,
         revealedClues: 1, guesses: [], gameStatus: 'playing', score: 0,
@@ -174,6 +205,12 @@ export function useGuessTheNation() {
   }, [countries, gameState?.puzzle]);
 
   useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+
+  useEffect(() => {
+    if (gameState?.mode !== 'daily') return;
+    const { puzzle, revealedClues, guesses, gameStatus, score } = gameState;
+    writeDailyRecord(SLUG, getTodayStr(), { puzzleId: puzzle.id, revealedClues, guesses, gameStatus, score });
+  }, [gameState]);
 
   return { countries: validatedCountries, loading, error, retryLoad, gameState, streak, currentBadge, pointsForCurrentClue, startGame, makeGuess, giveUp, revealHint, resetGame };
 }
