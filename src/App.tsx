@@ -12,6 +12,7 @@ import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
 import Index from "./pages/Index";
 const Footle = lazy(() => import("./pages/Footle"));
+const FreeKick = lazy(() => import("./pages/FreeKick"));
 const CareerGame = lazy(() => import("./pages/CareerGame"));
 const HigherLower = lazy(() => import("./pages/HigherLower"));
 const Connections = lazy(() => import("./pages/Connections"));
@@ -292,6 +293,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
+        <Route path="/free-kick" element={<FreeKick />} />
         <Route path="/career" element={<CareerGame />} />
         <Route path="/higher-lower" element={<HigherLower />} />
         <Route path="/connections" element={<Connections />} />

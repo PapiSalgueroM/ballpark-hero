@@ -41,8 +41,8 @@
     "date": "2026-09-02"
   },
   "/build-your-xi": {
-    "hash": "30a1e189323a5732",
-    "date": "2026-09-02"
+    "hash": "3ec7b1e5eea2ea29",
+    "date": "2026-09-04"
   },
   "/career": {
     "hash": "3cb3b3f74b7bd08c",
@@ -93,8 +93,8 @@
     "date": "2026-08-31"
   },
   "/connections": {
-    "hash": "8859770fc07dad42",
-    "date": "2026-08-25"
+    "hash": "8c2bf0265e2f04fd",
+    "date": "2026-09-04"
   },
   "/conquest": {
     "hash": "e3b18e86d00e7c88",
@@ -121,8 +121,8 @@
     "date": "2026-08-25"
   },
   "/emoji-guess": {
-    "hash": "0e88e3de962448f6",
-    "date": "2026-09-02"
+    "hash": "acb33971e1dc4236",
+    "date": "2026-09-04"
   },
   "/f1-constructor": {
     "hash": "fe1769f6cd60c81f",
@@ -145,8 +145,8 @@
     "date": "2026-08-29"
   },
   "/football-connect-4": {
-    "hash": "00e8be9203610879",
-    "date": "2026-09-02"
+    "hash": "380f661515ccfd48",
+    "date": "2026-09-04"
   },
   "/football-grid": {
     "hash": "22af3b5a7fc95f4e",
@@ -155,6 +155,10 @@
   "/footle": {
     "hash": "47703854b363dd58",
     "date": "2026-09-01"
+  },
+  "/free-kick": {
+    "hash": "e890e3158e3bbd38",
+    "date": "2026-09-04"
   },
   "/front-office": {
     "hash": "495a651e3f18ed5e",
@@ -257,8 +261,8 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "4fdd36adbc24be36",
-    "date": "2026-09-03"
+    "hash": "fecbc85ed3bcd992",
+    "date": "2026-09-04"
   },
   "/mlb-connect-4": {
     "hash": "7fad83a61216a551",
@@ -333,8 +337,8 @@
     "date": "2026-08-27"
   },
   "/nba-stat-line": {
-    "hash": "90885f15c6cafd58",
-    "date": "2026-08-30"
+    "hash": "4f010cd71c4e1e82",
+    "date": "2026-09-04"
   },
   "/nfl-career": {
     "hash": "22bc35a92b7f5acd",
@@ -465,8 +469,8 @@
     "date": "2026-08-25"
   },
   "/soccer": {
-    "hash": "3b0fbc66269a791a",
-    "date": "2026-09-02"
+    "hash": "acf829479cfad9eb",
+    "date": "2026-09-04"
   },
   "/soccer-career": {
     "hash": "70ecca0c076b8ba3",

@@ -825,4 +825,36 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       { q: 'Is there online multiplayer?', a: 'Not yet. Online rooms need real backend work, so today it is the CPU or two people passing one screen.' },
     ],
   },
+  '/free-kick': {
+    intro: [
+      "Every other game here asks you a question. This one asks you to hit it. Ten free kicks, a wall that grows, and a keeper who leans one way before you strike.",
+      "Aim across the goal, bend it with the inside or the outside, and stop the power bar where you dare. Smash it and it sprays. Roll it and he reaches it. The corners are the only safe place and they are the hardest to find.",
+    ],
+    howToPlay: [
+      "Aim with the arrow keys, or drag the pitch with a finger or the mouse.",
+      "Q and E bend the flight. The slower you hit it, the more it bends.",
+      "Hold space, or hold the strike button, to charge. The power bar sweeps up and down and you get the number you let go on.",
+      "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.",
+    ],
+    rules: [
+      "Power beats the keeper but costs accuracy, and the cost grows faster than the power does, so a full blooded strike misses far more than it scores.",
+      "The wall only blocks what stays low. Lift it and the wall is irrelevant, but the keeper is not.",
+      "Goals pay by distance, by the size of the wall you beat and by how close to the corner you finished. A tap into the middle pays least.",
+      "The daily deals the same ten kicks to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+    ],
+    example: [
+      "Kick one is a penalty with nobody in the wall. The temptation is to smash it; the points are in rolling it into a corner where the keeper is not.",
+      "Kick seven is twenty metres out with four in the wall and the keeper leaning right. Lift it over the wall, bend it back toward the left post, and take about two thirds power so the bend still has time to work.",
+    ],
+    tips: [
+      "Watch the keeper before you strike. He is already leaning, and the far side is the side he left you.",
+      "Two thirds power is usually the best trade: enough to reach from distance, slow enough to bend and straight enough to land where you aimed.",
+      "Height beats the wall, width beats the keeper. From distance with a big wall you need both, which is why those kicks pay the most.",
+    ],
+    faqs: [
+      { q: 'Is the daily the same for everyone?', a: 'Yes. The ten kicks come from the date, so every player gets the same run, and your score is kept for the day.' },
+      { q: 'Do I need a keyboard?', a: 'No. Drag the pitch to aim and let go to strike, which works the same on a phone.' },
+      { q: 'Why did my perfect corner go wide?', a: 'Because of how hard you hit it. Power sprays the ball off the spot you picked, and near the post there is no room to spray into.' },
+    ],
+  },
 };

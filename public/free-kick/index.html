@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Free Kick: Bend One Into the Top Corner | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Free Kick","item":"https://douknowball.com/free-kick"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the daily the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. The ten kicks come from the date, so every player gets the same run, and your score is kept for the day."}},{"@type":"Question","name":"Do I need a keyboard?","acceptedAnswer":{"@type":"Answer","text":"No. Drag the pitch to aim and let go to strike, which works the same on a phone."}},{"@type":"Question","name":"Why did my perfect corner go wide?","acceptedAnswer":{"@type":"Answer","text":"Because of how hard you hit it. Power sprays the ball off the spot you picked, and near the post there is no room to spray into."}},{"@type":"Question","name":"Is Free Kick free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Free Kick is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Free Kick: Bend One Into the Top Corner | DoUKnowBall","description":"The first DoUKnowBall game you actually play rather than answer. Aim, bend it and time your power over ten free kicks, past a growing wall and a keeper who reads you. Daily and unlimited, free, no account needed.","url":"https://douknowball.com/free-kick","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/free-kick" data-rh="true"><meta name="description" content="The first DoUKnowBall game you actually play rather than answer. Aim, bend it and time your power over ten free kicks, past a growing wall and a keeper who reads you. Daily and unlimited, free, no account needed." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/free-kick" data-rh="true"><meta property="og:title" content="Free Kick: Bend One Into the Top Corner | DoUKnowBall" data-rh="true"><meta property="og:description" content="The first DoUKnowBall game you actually play rather than answer. Aim, bend it and time your power over ten free kicks, past a growing wall and a keeper who reads you. Daily and unlimited, free, no account needed." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Free Kick: Bend One Into the Top Corner | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="The first DoUKnowBall game you actually play rather than answer. Aim, bend it and time your power over ten free kicks, past a growing wall and a keeper who reads you. Daily and unlimited, free, no account needed." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Free Kick</h1>
+<p>Ten kicks. Aim it, bend it, and stop the power bar where you dare.</p>
+<p>Ten free kicks. Pick your corner.</p>
+<p>Aim with the arrow keys or drag the pitch, bend it with Q and E, then hold space to charge and let go to strike. Power beats the keeper but sprays wide, so the corners are worth more than the middle and a smashed one is worth nothing at all.</p>
+<p>The wall gets bigger, the keepers get better and you get further out. Ten kicks, one run.</p>
+<h2>Free Kick: The Set Piece Game | DoUKnowBall</h2>
+<p>Ten free kicks, one run. Aim across the goal, bend the ball with the outside or inside of your foot, and time the power bar. Blast it and it sprays wide, roll it and the keeper reaches it. Every kick moves further out with more men in the wall. Plays in the browser, free, no account needed.</p>
+<p>Every other game here asks you a question. This one asks you to hit it. Ten free kicks, a wall that grows, and a keeper who leans one way before you strike.</p>
+<p>Aim across the goal, bend it with the inside or the outside, and stop the power bar where you dare. Smash it and it sprays. Roll it and he reaches it. The corners are the only safe place and they are the hardest to find.</p>
+<h2>How to play Free Kick</h2>
+<li>Aim with the arrow keys, or drag the pitch with a finger or the mouse.</li>
+<li>Q and E bend the flight. The slower you hit it, the more it bends.</li>
+<li>Hold space, or hold the strike button, to charge. The power bar sweeps up and down and you get the number you let go on.</li>
+<li>Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.</li>
+<h2>Rules to know</h2>
+<li>Power beats the keeper but costs accuracy, and the cost grows faster than the power does, so a full blooded strike misses far more than it scores.</li>
+<li>The wall only blocks what stays low. Lift it and the wall is irrelevant, but the keeper is not.</li>
+<li>Goals pay by distance, by the size of the wall you beat and by how close to the corner you finished. A tap into the middle pays least.</li>
+<li>The daily deals the same ten kicks to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.</li>
+<h2>Example walkthrough</h2>
+<p>Kick one is a penalty with nobody in the wall. The temptation is to smash it; the points are in rolling it into a corner where the keeper is not.</p>
+<p>Kick seven is twenty metres out with four in the wall and the keeper leaning right. Lift it over the wall, bend it back toward the left post, and take about two thirds power so the bend still has time to work.</p>
+<h2>Strategy tips</h2>
+<li>Watch the keeper before you strike. He is already leaning, and the far side is the side he left you.</li>
+<li>Two thirds power is usually the best trade: enough to reach from distance, slow enough to bend and straight enough to land where you aimed.</li>
+<li>Height beats the wall, width beats the keeper. From distance with a big wall you need both, which is why those kicks pay the most.</li>
+<h2>Free Kick FAQ</h2>
+<h3>Is the daily the same for everyone?</h3>
+<p>Yes. The ten kicks come from the date, so every player gets the same run, and your score is kept for the day.</p>
+<h3>Do I need a keyboard?</h3>
+<p>No. Drag the pitch to aim and let go to strike, which works the same on a phone.</p>
+<h3>Why did my perfect corner go wide?</h3>
+<p>Because of how hard you hit it. Power sprays the ball off the spot you picked, and near the post there is no room to spray into.</p>
+<h3>Is Free Kick free to play?</h3>
+<p>Yes. Free Kick is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/soccer-grid">⚽ Soccer Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/world-cup-bracket">🌍 2026 Bracket Build the 2026 bracket and score it against how the World Cup really went</a>
+<a href="/soccer-career">⚽ Soccer Career Create your look, sign for your boyhood club, get rich, get shady, retire a legend.</a>
+<a href="/nfl-higher-lower">📊 NFL Higher or Lower Which star scored more career touchdowns?</a>
+<a href="/baseball-career">⚾ Career Path Guess the baseball player</a>
+<a href="/puck-detective">🏒 Puck Detective Guess the mystery NHL player with attribute clues</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
