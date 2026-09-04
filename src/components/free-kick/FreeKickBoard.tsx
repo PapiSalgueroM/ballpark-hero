@@ -16,6 +16,10 @@ const SLUG = 'free-kick';
 type Mode = 'daily' | 'unlimited';
 type Phase = 'intro' | 'aiming' | 'flying' | 'kickEnd' | 'done';
 
+/* How long the ball is in the air, in milliseconds. One number, used by the
+   drawing and by the timer that settles the kick, so they cannot disagree. */
+const FLIGHT_MS = 700;
+
 /* The goalmouth in view units. Everything on screen is derived from these, so
    the drawing and the rules read the same geometry. */
 const VIEW_W = 360;
@@ -66,6 +70,7 @@ export default function FreeKickBoard() {
 
   const rngRef = useRef<() => number>(lehmer(1));
   const rafRef = useRef<number | null>(null);
+  const settleRef = useRef<number | null>(null);
   const savedRef = useRef(restored !== null);
 
   const setup = kicks[kickIdx] ?? null;
@@ -127,19 +132,37 @@ export default function FreeKickBoard() {
       setPhase('kickEnd');
       return;
     }
+    /* The flight is DRAWN by animation frames and SETTLED by a timer, on
+       purpose. A browser pauses requestAnimationFrame in a hidden tab, so a
+       player who switched away mid kick came back to a ball frozen in the air
+       and a game that never moved on. The timer is throttled in a background
+       tab but it still fires, so the kick always lands. */
     const started = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - started) / 700);
-      setFlight(t);
-      if (t < 1) { rafRef.current = requestAnimationFrame(tick); return; }
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+      setFlight(1);
       setScore(s => s + r.points);
       if (r.scored) setGoals(g => g + 1);
       setPhase('kickEnd');
     };
+    const tick = (now: number) => {
+      if (settled) return;
+      const t = Math.min(1, (now - started) / FLIGHT_MS);
+      setFlight(t);
+      if (t < 1) { rafRef.current = requestAnimationFrame(tick); return; }
+      settle();
+    };
     rafRef.current = requestAnimationFrame(tick);
+    settleRef.current = window.setTimeout(settle, FLIGHT_MS + 60);
   }, [phase, setup, aimX, aimY, power, curve]);
 
-  useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); }, []);
+  useEffect(() => () => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    if (settleRef.current) window.clearTimeout(settleRef.current);
+  }, []);
 
   const nextKick = useCallback(() => {
     if (kickIdx + 1 >= ROUNDS_PER_RUN) { setPhase('done'); return; }
