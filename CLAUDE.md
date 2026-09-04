@@ -636,6 +636,21 @@ These are not preferences, they are the exposure.
   serving `dist/` by hand too.
 - Playwright `click()` scrolls first, which interacts with the no-scroll rule.
 
+- **Removing a worktree whose `node_modules` is a junction DELETES the real `node_modules`.**
+  Learned 2026-09-04, and it cost a false green. The parallel build pattern gives every
+  worktree a Windows junction to the main tree's `node_modules`; a recursive delete
+  (`git worktree remove`, `rm -rf`) descends into that junction and empties
+  `C:Usersanthoallpark-hero
+ode_modules`, leaving the directory present but with zero
+  entries. **Unlink the junction first**, which removes the link without following it:
+  PowerShell `[System.IO.Directory]::Delete('<worktree>
+ode_modules', $false)`, then remove
+  the worktree. `npm install` restores it in a couple of minutes if it has already happened.
+  **The trap inside the trap:** with the binary gone,
+  `node_modules/.bin/tsc --noEmit -p tsconfig.app.json && echo "tsc zero"` can still print
+  the success line, because the shell reports the pipeline rather than the missing binary.
+  Read the exit code, never an echo that follows a gate.
+
 ---
 
 ## Web browsing
