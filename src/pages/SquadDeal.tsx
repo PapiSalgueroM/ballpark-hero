@@ -129,20 +129,39 @@ const SquadDeal = () => {
           </div>
         </div>
 
-        {g.era === 'current' && (
-          <div className="mb-8">
-            <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2 text-center">Topic</div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-2xl mx-auto">
-              {TOPICS.map(t => (
-                <button key={t.id} onClick={() => g.setTopic(t.id)} className={cn('rounded-xl border p-3 text-left transition-all', g.topic === t.id ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary')}>
+        {/* Round 440: the topic picker shows in BOTH eras now, and a topic that
+            cannot fill the chosen formation is greyed with the reason instead of
+            being quietly swapped for the whole pool the moment you press start.
+            Legends used to hide this block entirely and ignore the topic, so a
+            player who picked La Liga got all 94 legends and was never told. */}
+        <div className="mb-8">
+          <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2 text-center">Topic</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-2xl mx-auto">
+            {TOPICS.map(t => {
+              const playable = g.playableTopics === null || g.playableTopics.includes(t.id);
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => { if (playable) g.setTopic(t.id); }}
+                  disabled={!playable}
+                  title={playable ? undefined : `Not enough ${t.label} players to fill a ${g.formation.name} in this era`}
+                  className={cn(
+                    'rounded-xl border p-3 text-left transition-all',
+                    !playable
+                      ? 'bg-card border-border opacity-40 cursor-not-allowed'
+                      : g.topic === t.id ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',
+                  )}
+                >
                   <div className="text-lg"><FlagFromEmoji emoji={t.emoji} size={18} /></div>
-                  <div className={cn('text-xs font-bold mt-0.5', g.topic === t.id ? 'text-primary' : 'text-foreground')}>{t.label}</div>
-                  <div className="text-[10px] text-muted-foreground">{t.desc}</div>
+                  <div className={cn('text-xs font-bold mt-0.5', g.topic === t.id && playable ? 'text-primary' : 'text-foreground')}>{t.label}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {playable ? t.desc : `Not enough for a ${g.formation.name} here`}
+                  </div>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        )}
+        </div>
 
         <div className="text-center">
           <button onClick={g.startDraft} className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:opacity-90 transition-opacity">Start Building <ChevronRight className="w-5 h-5" /></button>

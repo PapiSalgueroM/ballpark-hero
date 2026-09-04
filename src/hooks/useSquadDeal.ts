@@ -3,7 +3,7 @@ import { Player } from '@/types/game';
 import {
   Formation, FORMATIONS, Era, MEMES, EXTRA_DEALS, ExtraOption,
   fetchSquadPool, buildCandidates, bankerOffer, simulateSquad, SquadResult,
-  loadLeaderboard, saveScore, LeaderEntry, Topic, filterByTopic, ratingFor,
+  loadLeaderboard, saveScore, LeaderEntry, Topic, TOPICS, filterByTopic, topicCanFill, ratingFor,
 } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
@@ -54,7 +54,14 @@ export function useSquadDeal() {
     setPhase('loading');
     const f = FORMATIONS[formationIndex];
     const raw = await fetchSquadPool(era);
-    const p = era === 'legends' ? raw : (() => { const f = filterByTopic(raw, topic); return f.length >= 60 ? f : raw; })();
+    /* Round 440: the topic the player picked is the topic they get, in BOTH
+       eras. This used to skip the filter entirely for legends and, for the
+       current era, fall back to the unfiltered pool whenever the filter came
+       back under sixty, without saying so. The page now only offers a topic
+       that can fill the chosen formation (topicCanFill), so there is nothing
+       left to fall back from: if the filter holds here it deals, and if it
+       does not the option was never selectable. */
+    const p = topicCanFill(raw, topic, f.slots) ? filterByTopic(raw, topic) : raw;
     setPool(p);
     setSquad(f.slots.map(() => null));
     setActiveSlot(null);
@@ -62,6 +69,32 @@ export function useSquadDeal() {
     setResult(null);
     setPhase('draft');
   }, [era, topic, formationIndex]);
+
+  /* Round 440: which topics can actually deal, for the era and formation on
+     screen right now. The page greys the rest instead of the game quietly
+     dealing something else. Loaded once per era, cached, and never blocking:
+     until it resolves every topic stays selectable, which is the old
+     behaviour and not a regression. */
+  const [playableTopics, setPlayableTopics] = useState<Topic[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setPlayableTopics(null);
+    fetchSquadPool(era)
+      .then(raw => {
+        if (cancelled) return;
+        const slots = FORMATIONS[formationIndex].slots;
+        const ok = TOPICS.filter(t => topicCanFill(raw, t.id, slots)).map(t => t.id);
+        setPlayableTopics(ok);
+        /* If the topic already chosen cannot fill the era or formation the
+           player has just switched to, move the selection back to All World
+           rather than leaving a greyed out topic selected and dealing
+           something else from under it. This is the last door the silent
+           fallback could have come back through. */
+        setTopic(cur => (ok.includes(cur) ? cur : 'all'));
+      })
+      .catch(() => { if (!cancelled) setPlayableTopics(null); });
+    return () => { cancelled = true; };
+  }, [era, formationIndex]);
 
   const memesPool = memesOn ? MEMES : [];
 
@@ -194,7 +227,7 @@ export function useSquadDeal() {
   useGameCompletion('squad-deal', phase === 'done' && !!result, result?.rating ?? 0, 0);
 
   return {
-    phase, era, setEra, memesOn, setMemesOn, formationIndex, setFormationIndex, formation,
+    phase, era, setEra, memesOn, setMemesOn, formationIndex, setFormationIndex, formation, playableTopics,
     startDraft, pool, squad, activeSlot, selectSlot,
     currentSlot: activeSlot !== null ? formation.slots[activeSlot] : null,
     candidates, keptIdx, eliminated, selected, slotPhase, opensThisRound, offer, bankerCalling, finalIndices,
