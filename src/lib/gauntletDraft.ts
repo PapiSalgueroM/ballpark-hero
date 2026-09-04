@@ -2,6 +2,7 @@ import { Player } from '@/types/game';
 import { FORMATIONS, Formation, FormationSlot, playerRating } from '@/lib/squadDeal';
 import { eligiblePositions } from '@/lib/worldXi';
 import { dailyPrngSeed } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 /**
  * Gauntlet Draft (Round 328, the third and last of the owner's three new
@@ -194,4 +195,59 @@ export function runGauntlet(squad: (Player | null)[]): GauntletRun {
   const champion = cleared === GAUNTLET_ROUNDS.length;
   const score = Math.min(100, cleared * 16 + (champion ? 20 : 0));
   return { rating, matches, roundsCleared: cleared, champion, score };
+}
+
+/**
+ * Round 428: the one attempt a day, kept. The page saves the finished run
+ * under `gauntlet-draft-daily-${date}` (src/lib/dailyRecord.ts) the moment
+ * the eleventh pick decides it, and start('daily') restores it instead of
+ * dealing the same draft again with the cup already known. Only the run is
+ * stored: the result screen, the share text and the emoji grid all derive
+ * from it. The read fails closed: every round is rebuilt from
+ * GAUNTLET_ROUNDS by index, every number is range checked, and a run whose
+ * rounds cleared, champion flag or score do not follow from its matches is
+ * refused, so a tampered or broken record deals a fresh daily rather than
+ * drawing a screen that adds up to nothing.
+ */
+const DAILY_SLUG = 'gauntlet-draft';
+
+function validateDailyRun(fields: Record<string, unknown>): GauntletRun | null {
+  const raw = fields.run;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const run = raw as Record<string, unknown>;
+  const { rating, roundsCleared, champion, score } = run;
+  if (!Number.isInteger(rating) || (rating as number) < 0 || (rating as number) > 99) return null;
+  if (!Array.isArray(run.matches) || run.matches.length < 1 || run.matches.length > GAUNTLET_ROUNDS.length) return null;
+  const goals = (g: unknown) => Number.isInteger(g) && (g as number) >= 0 && (g as number) <= 9;
+  const matches: GauntletMatch[] = [];
+  for (let i = 0; i < run.matches.length; i += 1) {
+    const m = run.matches[i] as Record<string, unknown> | null;
+    if (!m || typeof m !== 'object' || Array.isArray(m)) return null;
+    if (!goals(m.yourGoals) || !goals(m.theirGoals)) return null;
+    if (m.wonOnPens !== null && typeof m.wonOnPens !== 'boolean') return null;
+    if (typeof m.won !== 'boolean') return null;
+    /* the run only goes on while it is being won */
+    if (!m.won && i < run.matches.length - 1) return null;
+    matches.push({
+      round: GAUNTLET_ROUNDS[i],
+      yourGoals: m.yourGoals as number,
+      theirGoals: m.theirGoals as number,
+      wonOnPens: m.wonOnPens as boolean | null,
+      won: m.won,
+    });
+  }
+  const cleared = matches.filter(m => m.won).length;
+  const consistent = roundsCleared === cleared
+    && champion === (cleared === GAUNTLET_ROUNDS.length)
+    && score === Math.min(100, cleared * 16 + (champion ? 20 : 0));
+  if (!consistent) return null;
+  return { rating: rating as number, matches, roundsCleared: cleared, champion: champion as boolean, score: score as number };
+}
+
+export function loadDailyRun(date: string): GauntletRun | null {
+  return readDailyRecord(DAILY_SLUG, date, validateDailyRun);
+}
+
+export function saveDailyRun(date: string, run: GauntletRun): void {
+  writeDailyRecord(DAILY_SLUG, date, { run });
 }

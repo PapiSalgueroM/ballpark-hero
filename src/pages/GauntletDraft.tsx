@@ -10,11 +10,12 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { fetchSquadPool, playerRating } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, runGauntlet, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -61,6 +62,22 @@ export default function GauntletDraft() {
   }, []);
 
   const start = useCallback((m: Mode) => {
+    if (m === 'daily') {
+      /* Round 428: a run already in the books comes back as it was, instead
+         of the same draft being dealt again with the cup known. This restore
+         runs in a click handler after mount, exactly the false to true
+         transition useGameCompletion records, so it says what it is first. */
+      const saved = loadDailyRun(getTodayET());
+      if (saved) {
+        markRestoredFinish(SLUG);
+        setMode('daily');
+        setDraft(null);
+        setRun(saved);
+        setShownMatches(saved.matches.length);
+        setPhase('done');
+        return;
+      }
+    }
     const seed = m === 'daily' ? dailyDraftSeed(getTodayET()) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
@@ -79,6 +96,7 @@ export default function GauntletDraft() {
     setSquad(next);
     if (pickIndex + 1 >= draft.picks.length) {
       const result = runGauntlet(next);
+      if (mode === 'daily') saveDailyRun(getTodayET(), result);
       setRun(result);
       setPhase('running');
       return;
@@ -101,6 +119,7 @@ export default function GauntletDraft() {
   useGameCompletion(SLUG, isDone, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
+  const dailyDone = phase === 'setup' && loadDailyRun(getTodayET()) !== null;
 
   const matchLine = (m: GauntletRun['matches'][number]) =>
     `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` +
@@ -137,7 +156,7 @@ export default function GauntletDraft() {
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">The same five card choices for everyone today</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
             </button>
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Unlimited</span>
@@ -217,7 +236,8 @@ export default function GauntletDraft() {
             emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
             share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
             onPlayAgain={() => setPhase('setup')}
-            playAgainLabel="New draft"
+            playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
+            playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
           >
             <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
               {run.matches.map((m, i) => <p key={i}>{matchLine(m)}</p>)}

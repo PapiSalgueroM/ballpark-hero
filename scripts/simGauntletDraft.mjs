@@ -16,10 +16,17 @@
  *      XI almost never does;
  *   4. SCORING: a full run is exactly 100, an instant exit exactly 0, and
  *      the score never decreases with another round survived.
+ *   5. THE DAILY LOCK (Round 428): a finished daily run saved under its
+ *      date reads back byte identical, another date reads nothing, and a
+ *      record that is tampered, stale or wreckage reads null so the page
+ *      deals a fresh daily instead of drawing a screen that adds up to
+ *      nothing.
  *
- * NEGATIVE CONTROL: SIM_GAUNTLET_CONTROL=flatdeal collapses the band spread
+ * NEGATIVE CONTROLS: SIM_GAUNTLET_CONTROL=flatdeal collapses the band spread
  * in a bundled copy (every card drawn from one band) and section 1's
- * genuine-choice floor must go red.
+ * genuine-choice floor must go red. SIM_GAUNTLET_CONTROL=blindload removes
+ * the validator's consistency check in a bundled copy and section 5's
+ * tampered record must then load.
  *
  * Run: node scripts/simGauntletDraft.mjs
  */
@@ -33,7 +40,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_GAUNTLET_CONTROL || '';
-if (CONTROL && CONTROL !== 'flatdeal') { console.error(`SIM_GAUNTLET_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'flatdeal' && CONTROL !== 'blindload') { console.error(`SIM_GAUNTLET_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 const TMP = os.tmpdir().replace(/\\/g, '/');
 const ENTRY = `${TMP}/gauntletDraft.entry.mjs`;
@@ -48,6 +55,14 @@ if (CONTROL === 'flatdeal') {
   fs.writeFileSync(libPath, src.replace(needle, 'for (const [lo, hi] of [[0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6]] as const) {'));
   console.log('NEGATIVE CONTROL ON: the band spread collapsed in a bundled copy, the genuine-choice floor must now go red');
 }
+if (CONTROL === 'blindload') {
+  const src = fs.readFileSync(libPath, 'utf8');
+  const needle = 'if (!consistent) return null;';
+  if (!src.includes(needle)) { console.error('control run: the consistency check to remove is not in the source, refusing to run a dead control'); process.exit(1); }
+  libPath = `${TMP}/gauntletDraft.control.ts`;
+  fs.writeFileSync(libPath, src.replace(needle, 'if (!consistent && false) return null;'));
+  console.log('NEGATIVE CONTROL ON: the daily record validator no longer checks that the run adds up, the tampered record must now load');
+}
 fs.writeFileSync(ENTRY, `
 export * as gd from '${libPath}';
 export { players as POOL } from '${ROOT}/src/data/players.ts';
@@ -57,7 +72,7 @@ execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --pla
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { gd, POOL, playerRating } = await import(pathToFileURL(BUNDLE).href);
-const { GAUNTLET_ROUNDS, buildDraft, dailyDraftSeed, runGauntlet } = gd;
+const { GAUNTLET_ROUNDS, buildDraft, dailyDraftSeed, runGauntlet, loadDailyRun, saveDailyRun } = gd;
 
 const draftWith = (draft, chooser) => draft.picks.map(pick => chooser(pick.choices));
 const best = choices => [...choices].sort((a, b) => playerRating(b) - playerRating(a))[0];
@@ -153,6 +168,42 @@ console.log('4) scoring identities');
   if (!full.champion && full.score !== full.roundsCleared * 16) fail(`an exit at ${full.roundsCleared} scored ${full.score}`);
   if (GAUNTLET_ROUNDS.length * 16 + 20 !== 100) fail('the scoring arithmetic no longer lands a champion on exactly 100');
   console.log('   16 a round, 20 for the trophy, a champion is exactly 100');
+}
+
+console.log('5) the daily lock: the saved run comes back, nothing else does');
+{
+  const today = '2026-09-04';
+  const key = `gauntlet-draft-daily-${today}`;
+  const run = runGauntlet(draftWith(buildDraft(POOL, dailyDraftSeed(today)), best));
+  localStorage.clear();
+  saveDailyRun(today, run);
+  if (JSON.stringify(loadDailyRun(today)) !== JSON.stringify(run)) fail('the saved run did not read back byte identical');
+  if (loadDailyRun('2026-09-05') !== null) fail("another date read today's run");
+  const tampered = JSON.parse(localStorage.getItem(key));
+  tampered.run.roundsCleared = GAUNTLET_ROUNDS.length;
+  tampered.run.champion = true;
+  tampered.run.score = 100;
+  localStorage.setItem(key, JSON.stringify(tampered));
+  const tamperedLoaded = loadDailyRun(today) !== null;
+  if (CONTROL === 'blindload') {
+    if (tamperedLoaded) { console.log('simGauntletDraft control: green. Without the consistency check a run claiming the trophy on its matches loaded.'); process.exit(0); }
+    console.error('simGauntletDraft control: RED. The tampered run was still refused with the check removed.');
+    process.exit(1);
+  }
+  if (tamperedLoaded) fail('a run whose trophy and score do not follow from its matches loaded');
+  const wreckage = [
+    'not json at all {', '{"v":1,"cash":12', '{"v":999,"version":999}', '{}', 'null', '[]',
+    JSON.stringify({ v: 1, date: '2026-09-03', run }),
+    JSON.stringify({ v: 1, date: today, run: { ...run, matches: [] } }),
+    JSON.stringify({ v: 1, date: today, run: { ...run, rating: 'NaN pts' } }),
+  ];
+  for (const form of wreckage) {
+    localStorage.setItem(key, form);
+    let out;
+    try { out = loadDailyRun(today); } catch (e) { fail(`loadDailyRun threw on ${form}: ${e.message}`); continue; }
+    if (out !== null) fail(`a broken record read as a run: ${form}`);
+  }
+  console.log(`   round trip byte identical, another date null, a tampered run refused, ${wreckage.length} broken records refused without throwing`);
 }
 
 console.log('');
