@@ -34,16 +34,24 @@ How it works:
   range and sent year=in.(NaN) to Postgres). 429: Bing and Yandex verification
   plus explicit AI crawler groups in robots.txt, the owner's 2026-09-03 request.
   The adversarial review of 425 to 427 confirmed the daily fixes and found four
-  things behind them, claimed as follow up parts of the same rounds, next up:
-  Baseball Connections' result line still reads the padded list (a pre-existing
-  operator precedence bug at BaseballConnections.tsx:196), unlimited mode pads
-  the same way in all four Connections hooks, a reload on the CFB recap screen
-  replays the final week and the whole postseason and double counts the season
-  (CfbDynastyBoard.tsx:109 persists round 12 with phase recap), and the CBB
-  engine carries the same refill drain as CFB. Also three comment corrections in
-  427 (the "days that already worked are untouched" claim is false for the 33
-  days a year where the old seed was a multiple of 5, and the hash reaches far
-  more than nine games through generatorFrom).
+  things behind them, ALL SHIPPED THE SAME NIGHT as follow up parts of the same
+  rounds: 425 part two (unlimited mode counted the padded reveal list in all
+  four Connections hooks, Baseball's result line read it through an operator
+  precedence slip, the loss share text carried no count; fenced by
+  scripts/simConnectionsLoss.mjs over the real hooks, control pad), 426 part
+  three (a reload on the CFB recap screen replayed the final week and the
+  whole postseason and double counted the season; the save carries the
+  postseason now, older saves open on the recruiting trail, and the handler
+  refuses a second postseason for a season already in natties; tested by
+  src/components/cfb-dynasty/CfbDynastyBoard.test.tsx), 426 part four (the CBB
+  refill had the same drain: 39 or 40 of 40 teams without a point guard after
+  five offseasons), 426 part five (scripts/simCfbDynasty.mjs over both engines
+  and the board test, controls drain and replay, replacing the orphaned
+  scripts/cfbDynastyTest.ts that nothing ran), and 427 part five (the two
+  notes the review proved wrong corrected, dailyCampaignSeed takes a date, and
+  simStockCampaign section 6 walks 365 dates through it, control signed). Also
+  429 part two: Yandex moved to the meta tag method because the host injects
+  its badge into every HTML response, so the file method can never verify.
 - **Desktop lane, CLAIMED: Round 428. THE TWELVE DAILIES THAT RESET ON REFRESH.**
   The first-impression audit's systemic annoyance: a finished daily is destroyed
   by a page refresh and the same daily is then replayable with the answer known,
