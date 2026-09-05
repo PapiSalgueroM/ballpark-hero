@@ -16,6 +16,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
+import { FlagFromEmoji } from '@/components/FlagImg';
 import {
   pickDailyPuzzle,
   pickUnlimitedPuzzle,
@@ -24,7 +25,10 @@ import {
   hintForLevel,
   scoreForGuess,
   buildEmojiGrid,
+  pitchLayout,
   MAX_GUESSES,
+  PITCH_ASPECT,
+  PITCH_TILE_HEIGHT_PX,
   XI_ROSTER_NAMES,
   XI_SEARCH_OPTIONS,
   type ActivePuzzle,
@@ -278,7 +282,12 @@ const MissingXi = () => {
                   sides"): each side's country flag rides the score line, in
                   the order the line itself names them. flagForClub returns ''
                   for an unknown club, so a miss skips the flag rather than
-                  showing a wrong one. */}
+                  showing a wrong one.
+                  Round 444, he asked for the same thing again ("add flags of
+                  the two teams competing or something"), because on Windows he
+                  never saw one: these were printed as emoji, and Windows has
+                  no colour font for them, so Spain came out as "ES". Real
+                  flagcdn images now, the same fix Career Ladder's clubs got. */}
               {(() => {
                 const { team, opponent, scoreLine } = puzzle.lineup;
                 const teamFirst = scoreLine.toLowerCase().startsWith(team.toLowerCase());
@@ -286,9 +295,13 @@ const MissingXi = () => {
                 const rightFlag = flagForClub(teamFirst ? opponent : team);
                 return (
                   <p className="text-sm text-muted-foreground mb-1">
-                    {leftFlag && <span className="mr-1.5">{leftFlag}</span>}
+                    {leftFlag && (
+                      <span className="mr-1.5"><FlagFromEmoji emoji={leftFlag} size={16} /></span>
+                    )}
                     {scoreLine}
-                    {rightFlag && <span className="ml-1.5">{rightFlag}</span>}
+                    {rightFlag && (
+                      <span className="ml-1.5"><FlagFromEmoji emoji={rightFlag} size={16} /></span>
+                    )}
                   </p>
                 );
               })()}
@@ -419,8 +432,12 @@ const MissingXi = () => {
  */
 function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: boolean }) {
   const { lineup, candidate } = puzzle;
+  const tiles = pitchLayout(lineup.slots);
   return (
-    <div className="relative w-full aspect-[3/4] max-w-md mx-auto rounded-2xl border-2 border-correct/40 bg-gradient-to-b from-correct/10 to-correct/5 overflow-hidden">
+    <div
+      className="relative w-full max-w-md mx-auto rounded-2xl border-2 border-correct/40 bg-gradient-to-b from-correct/10 to-correct/5 overflow-hidden"
+      style={{ aspectRatio: PITCH_ASPECT }}
+    >
       {/* Simple pitch markings, purely decorative, no crests/logos. */}
       <div className="absolute inset-x-0 top-1/2 border-t border-correct/20" />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-correct/20" />
@@ -429,29 +446,28 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
 
       {lineup.slots.map((slot, i) => {
         const isBlank = i === candidate.slotIndex;
-        /* Round 319, owner review: bubbles overlapped. A fixed 26% tile is
-           wider than the 18% gap between three centre backs, so neighbours
-           in the same row painted over each other. The width now comes from
-           the row itself: never wider than the nearest same-row neighbour's
-           distance, with a floor so a name still fits. */
-        const rowMates = lineup.slots.filter((s, j) => j !== i && Math.abs(s.y - slot.y) < 8);
-        const minGap = rowMates.reduce((m, s) => Math.min(m, Math.abs(s.x - slot.x)), 100);
-        const widthPct = Math.min(26, Math.max(15, minGap - 1));
+        /* Round 444: where the bubble sits, how wide it is and how tall it is
+           all come out of missingXi.ts now, because they are three parts of
+           one sum and scripts/simMissingXiLayout.mjs has to be able to build
+           the same rectangles the screen draws. See the pitch geometry section
+           there for what was wrong with the old width-only rule. */
+        const tile = tiles[i];
         return (
           <div
             key={i}
-            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5"
-            style={{ left: `${slot.x}%`, top: `${slot.y}%`, width: `${widthPct}%` }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+            style={{ left: `${tile.x}%`, top: `${tile.y}%`, width: `${tile.widthPct}%` }}
           >
             <div
               className={cn(
-                'relative w-full rounded-lg px-1.5 py-1 text-center border shadow-sm',
+                'relative w-full rounded-lg px-1.5 text-center border shadow-sm flex flex-col justify-center overflow-hidden',
                 isBlank
                   ? revealed
                     ? 'bg-primary/20 border-primary animate-pop-correct'
                     : 'bg-destructive/10 border-destructive/50'
                   : 'bg-card border-border',
               )}
+              style={{ height: PITCH_TILE_HEIGHT_PX }}
             >
               {/* Round 251: the pulse used to sit on the whole tile, which
                   dimmed the text with it (the contrast sweep measured the
@@ -460,9 +476,14 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
               {isBlank && !revealed && (
                 <span aria-hidden="true" className="absolute inset-0 rounded-lg bg-destructive/15 animate-pulse pointer-events-none" />
               )}
+              {/* Round 444: both lines are pinned to a tight line height and
+                  the desktop step up is one point rather than two, so the
+                  bubble's content fits inside PITCH_TILE_HEIGHT_PX at every
+                  screen size and the number the harness measures is the
+                  number the page draws. */}
               <p
                 className={cn(
-                  'text-[10px] md:text-xs font-bold leading-tight truncate',
+                  'text-[10px] md:text-[11px] font-bold leading-[1.15] truncate',
                   isBlank && !revealed ? 'text-destructive' : 'text-foreground',
                 )}
               >
@@ -471,7 +492,7 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
               {/* Round 215: the slot chips sit on the pitch tint, not on a
                   card, and the muted grey measured 3.97 there. One shade up
                   clears the bar on every slot state. */}
-              <p className="text-[9px] md:text-[10px] text-[hsl(215,15%,68%)] uppercase tracking-wide">
+              <p className="text-[9px] leading-[1.15] text-[hsl(215,15%,68%)] uppercase tracking-wide">
                 {slot.position}
               </p>
             </div>

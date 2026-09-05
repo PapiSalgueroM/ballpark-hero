@@ -5689,6 +5689,182 @@ export const XI_SEARCH_OPTIONS: Omit<SearchPlayersOptions, 'query' | 'signal'> =
 };
 
 // ---------------------------------------------------------------------------
+// Pitch geometry
+// ---------------------------------------------------------------------------
+/*
+ * Round 444, his note: "when it comes to the lineuo itself the bubbles are
+ * overlapping and i dont want that". Round 319 was already sent to fix this
+ * and its own comment in MissingXi.tsx said it had, which is why the numbers
+ * live out here now with a harness on them instead of inside the component.
+ * Measured over all 169 lineups with the rectangles actually built:
+ *
+ *     320 wide: 155 overlapping bubble pairs across 77 of the 169 lineups,
+ *               worst pair 13.2px into each other
+ *     390 wide: 6 pairs across 3 lineups, worst 10.6px
+ *     430 wide: 6 pairs across 3 lineups, worst 11.8px
+ *
+ * Two things were wrong with the Round 319 rule, and they pull in opposite
+ * directions, which is why it looked reasonable:
+ *
+ *   1. IT ONLY LOOKED SIDEWAYS, AT A ROW IT DEFINED AS 8 APART. Two bubbles
+ *      overlap when their rectangles overlap, and the rectangle is as tall as
+ *      the bubble, which on a 320 wide phone was 36px against a 380px pitch,
+ *      nearly 10 percent. A 4-3-3's holding midfielder sits 6 to 8 from the
+ *      two central midfielders, so it was not counted as their neighbour, kept
+ *      its full width, and painted straight through them.
+ *   2. IT HAD A FLOOR OF 15 PERCENT. Where the real gap was under 15 the floor
+ *      won and guaranteed the overlap the rule existed to prevent.
+ *
+ * What replaces it. The band is DERIVED from how tall a bubble actually is, on
+ * the narrowest screen the site supports, which is where a fixed pixel height
+ * eats the largest share of the box. Two bubbles closer than that vertically
+ * can touch, so they have to be separated some other way. Two more things
+ * changed with it because the arithmetic does not work otherwise: the bubble
+ * is shorter (one tight line for the name, one for the position, a fixed 26px)
+ * and the pitch is taller (0.68, which is also closer to a real 105 by 68
+ * pitch than 0.75 was). The old 3:4 box with the old 36px bubble made the band
+ * 10.5 percent, and the 2005 Liverpool XI has a centre forward and a striker
+ * stacked at the same x exactly 10 apart, which no width on earth separates.
+ *
+ * And the part that is not just "make them narrower". Shrinking alone WORKS
+ * and it is what the first build did, and it left the 2012 Milan front three
+ * at 24.4px on a 320 phone, which is one and a half characters. That is not a
+ * fix, it is the same information loss wearing a different shape. So a pair
+ * that is too close sideways to keep a readable width gets nudged APART
+ * VERTICALLY first, by the smallest amount that clears the band, and only then
+ * does the width come from whoever is still beside it. The nudges are small
+ * (the harness reports the largest) and they never reorder the pitch.
+ *
+ * scripts/simMissingXiLayout.mjs builds every bubble rectangle from these
+ * exact numbers, at 320, 390 and 430, for every lineup in this file, and fails
+ * if any pair of them touches or if any bubble drops below a readable width.
+ */
+
+/** Box width divided by box height. A real pitch is about 105 by 68, so this is truer than the 0.75 it replaces as well as being taller. */
+export const PITCH_ASPECT = 0.68;
+
+/** Rendered height of one name bubble in CSS pixels, set on the element itself so this number and the DOM cannot drift apart. */
+export const PITCH_TILE_HEIGHT_PX = 26;
+
+/** Clear space every bubble keeps from its neighbours, in CSS pixels at the narrowest supported screen. */
+export const PITCH_CLEARANCE_PX = 4;
+
+/** Widest a bubble is ever drawn, in percent of the box width. */
+export const PITCH_TILE_MAX_WIDTH_PCT = 26;
+
+/** Narrowest screen the site supports. The bubble is a fixed pixel height, so the box is shortest here and the band is widest here. */
+export const PITCH_MIN_VIEWPORT_PX = 320;
+
+/** The pitch draws a 2px border (border-2), and an absolutely positioned child's percentages resolve against the PADDING box, so the usable area is 4px smaller each way. */
+export const PITCH_BORDER_PX = 2;
+
+/**
+ * The area a bubble's percentages actually resolve against, at a given
+ * viewport width. The page column is max-w-4xl inside px-4 and the pitch is
+ * max-w-md inside that, then aspect-ratio sets the height off the border box
+ * and the border comes back off both. Every number in this function is a class
+ * on the elements in MissingXi.tsx, and section 5 of the layout harness reads
+ * them back out of that file so a class change cannot leave this behind.
+ */
+export function pitchBoxSize(viewportPx: number): { width: number; height: number } {
+  const column = Math.min(896, viewportPx - 32);
+  const outer = Math.min(448, column);
+  return {
+    width: outer - PITCH_BORDER_PX * 2,
+    height: outer / PITCH_ASPECT - PITCH_BORDER_PX * 2,
+  };
+}
+
+const WORST_BOX = pitchBoxSize(PITCH_MIN_VIEWPORT_PX);
+
+/** Vertical distance (percent of box height) inside which two bubbles can touch, so the narrower one has to give way sideways. */
+export const PITCH_ROW_BAND_PCT =
+  ((PITCH_TILE_HEIGHT_PX + PITCH_CLEARANCE_PX) / WORST_BOX.height) * 100;
+
+/** Sideways clear space between two bubbles, in percent of box width. */
+export const PITCH_TILE_GAP_PCT = (PITCH_CLEARANCE_PX / WORST_BOX.width) * 100;
+
+/**
+ * The narrowest a bubble may be drawn, in CSS pixels at the narrowest screen.
+ * The blank tile has to be able to say WHICH position is missing, because the
+ * search box asks the player for exactly that ("Who's the missing CAM?"), so
+ * the floor is the widest position label (three uppercase characters of the
+ * 9px line, under 7px each) plus the tile's own px-1.5 padding and its border.
+ */
+export const PITCH_TILE_MIN_WIDTH_PX = 34;
+
+/** The same floor as a share of the box. */
+export const PITCH_TILE_MIN_WIDTH_PCT = (PITCH_TILE_MIN_WIDTH_PX / WORST_BOX.width) * 100;
+
+/** One bubble's box: where it is centred and how wide it is drawn, all in percent of the pitch. */
+export interface PitchTile {
+  x: number;
+  y: number;
+  widthPct: number;
+}
+
+/**
+ * Where every bubble in a lineup goes and how wide it is, in slot order.
+ *
+ * Two steps, and the order matters. First, any pair sitting too close sideways
+ * to both keep a readable width is pushed apart vertically, by half the
+ * shortfall each, until it clears the band. The push is symmetric about the
+ * pair's own midpoint and follows the sign of the gap the curated data already
+ * has, so a striker never ends up behind a midfielder. Second, a bubble is as
+ * wide as it can be without reaching anyone still inside its band: the
+ * distance to the nearest of them, less the clearance.
+ *
+ * There is deliberately NO floor on the returned width. A floor is what broke
+ * the Round 319 rule: where the real gap was smaller than the floor, the floor
+ * won and drew the overlap anyway. The floor here is enforced by moving slots
+ * BEFORE the width is worked out, never by overriding it afterwards.
+ */
+export function pitchLayout(slots: XiSlot[]): PitchTile[] {
+  const ys = slots.map(s => s.y);
+  /* Closer than this sideways and shrinking cannot save the pair, because the
+     two half widths plus the clearance already do not fit between them. */
+  const tooCloseSideways = PITCH_TILE_MIN_WIDTH_PCT + PITCH_TILE_GAP_PCT;
+  /* A hair past the band, so a float that lands exactly on it still counts as
+     clear when the width step compares with >=. */
+  const NUDGE = 1e-9;
+
+  for (let pass = 0; pass < 50; pass++) {
+    let moved = false;
+    for (let i = 0; i < slots.length; i++) {
+      for (let j = i + 1; j < slots.length; j++) {
+        if (Math.abs(slots[i].x - slots[j].x) >= tooCloseSideways) continue;
+        const gap = ys[i] - ys[j];
+        if (Math.abs(gap) >= PITCH_ROW_BAND_PCT) continue;
+        const push = (PITCH_ROW_BAND_PCT - Math.abs(gap)) / 2 + NUDGE;
+        /* Keep whoever the data puts nearer his own goal nearer his own goal.
+           Two slots on exactly the same spot fall back to slot order, which is
+           the order the lineup is written in (back to front). */
+        const sign = gap !== 0 ? gap : slots[i].y - slots[j].y;
+        const dir = sign !== 0 ? Math.sign(sign) : -1;
+        ys[i] += dir * push;
+        ys[j] -= dir * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+
+  return slots.map((slot, i) => {
+    let nearest = 100;
+    for (let j = 0; j < slots.length; j++) {
+      if (i === j) continue;
+      if (Math.abs(ys[j] - ys[i]) >= PITCH_ROW_BAND_PCT) continue;
+      nearest = Math.min(nearest, Math.abs(slots[j].x - slot.x));
+    }
+    return {
+      x: slot.x,
+      y: ys[i],
+      widthPct: Math.max(0, Math.min(PITCH_TILE_MAX_WIDTH_PCT, nearest - PITCH_TILE_GAP_PCT)),
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Daily / Unlimited puzzle selection
 // ---------------------------------------------------------------------------
 
