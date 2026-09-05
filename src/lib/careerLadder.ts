@@ -229,6 +229,14 @@ export function flagForNationality(nationality: string | null | undefined): stri
  */
 export const CLUB_COUNTRY: Array<[string, string]> = [
   // Order-sensitive entries FIRST (substring collisions)
+  /* Round 460: three more collisions, found when Transfer Path's Europe only
+     rule read this table for every club in the career pool. "Argentinos
+     Juniors" matched 'gent' and flew a Belgian flag, "Rangers" matched
+     'angers' and flew a French one, and "Sporting Gijón" matched 'sporting'
+     (Lisbon). Queens Park Rangers sits ahead of Rangers so the shorter name
+     cannot take it. */
+  ['argentinos juniors', '🇦🇷'], ['queens park rangers', '🏴󠁧󠁢󠁥󠁮󠁧󠁿'], ['rangers', '🏴󠁧󠁢󠁳󠁣󠁴󠁿'],
+  ['sporting gijon', '🇪🇸'],
   ['inter miami', '🇺🇸'], ['internacional', '🇧🇷'], ['barcelona sc', '🇪🇨'],
   ['atletico nacional', '🇨🇴'], ['sporting cristal', '🇵🇪'], ['sporting kansas', '🇺🇸'],
   ['america de cali', '🇨🇴'], ['america mineiro', '🇧🇷'], ['club america', '🇲🇽'],

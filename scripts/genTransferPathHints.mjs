@@ -9,22 +9,43 @@
  * id|a|b|old_min. Output is supabase/migrations/20260826_transfer_path_hints_temporal.sql,
  * one UPDATE per puzzle, keyed by puzzle_id, applied through the console.
  *
- * Re-run after any change to the career tables, then apply the new file and
- * run simTransferPathHints against the live tables.
+ * Round 460: the same derivation under each special rule. Active players
+ * only and Europe only are filters on the pool (src/lib/transferPathModes.ts,
+ * the file the page searches through, bundled here so the generator cannot
+ * disagree with the game about what "active" or "European" means). Each rule
+ * gets its own graph, the same search, and its own minimum and hint, written
+ * to supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql as
+ * one UPDATE per puzzle over the <rule>_min_steps and <rule>_hint columns.
+ * A pair with no path under a rule is written as null on purpose.
+ *
+ * Re-run after any change to the career tables, then apply the new files and
+ * run simTransferPathHints and simTransferPathModes against the live tables.
  *
  * Run: node scripts/genTransferPathHints.mjs
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { buildGraph, deriveHint, expandCompactCareers, hintProblems } from './lib/transferPathHints.mjs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { build } from 'esbuild';
+import { MODE_RULES, buildGraph, deriveHint, expandCompactCareers, hintProblems, modeMigrationSql, modeValuesRow, ruleProblems } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PULL = path.join(ROOT, 'scripts/data/transferPathPull');
 const OUT = path.join(ROOT, 'supabase/migrations/20260826_transfer_path_hints_temporal.sql');
+const MODE_OUT = path.join(ROOT, 'supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql');
+
+/* The page's own rule filters and its fallback pools, bundled once. The
+   fallback puzzle file is read here and rewritten at the end of this run. */
+const SRC = path.join(ROOT, 'src').replaceAll('\\', '/');
+const ENTRY = path.join(os.tmpdir(), 'gen-tph-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'gen-tph-bundle.mjs');
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\n`);
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
+const site = await import(pathToFileURL(BUNDLE).href);
 
 const players = expandCompactCareers(fs.readFileSync(path.join(PULL, 'careers.txt'), 'utf8'));
-const puzzles = fs.readFileSync(path.join(PULL, 'puzzles.txt'), 'utf8').split('\n').filter(Boolean).map(l => {
+const puzzles = fs.readFileSync(path.join(PULL, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => {
   const [id, a, b, min] = l.split('|');
   return { id, a, b, oldMin: Number(min) };
 });
@@ -69,36 +90,84 @@ for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-945']) {
   if (p) { const d = deriveHint(graph, p.a, p.b); console.log(`  ${id}: ${p.oldMin} -> ${d.minSteps}, ${d.path.join(' > ')}\n     "${d.hint}"`); }
 }
 
+/* Round 460: every pair again under each special rule. The pool is filtered
+   by the page's own playersUnderRule, the search and the wording are the
+   ones above, and a pair the rule cannot connect is stored as null. */
+const ruleGraphs = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(players, rule))]));
+const modeHeader = [
+  '-- Round 460: Transfer Path\'s special rules. Every <rule>_min_steps and <rule>_hint below is',
+  '-- derived by scripts/genTransferPathHints.mjs on the graph left after the rule\'s own filter',
+  '-- (src/lib/transferPathModes.ts: active players only keeps players with a season touching',
+  `-- ${site.ACTIVE_YEAR}, Europe only keeps seasons at European clubs) from the 2026-08-26 pull in`,
+  '-- scripts/data/transferPathPull/. Each row carries the minimum and the two clubs the hint',
+  '-- names under each rule; the UPDATE rebuilds the hint text from them (the wording mirrors',
+  '-- hintText in scripts/lib/transferPathHints.mjs, and simTransferPathModes proves the live',
+  '-- text equals it row by row). A null minimum means the rule has no path for that puzzle.',
+  '-- Do not edit by hand; re-run the generator.',
+];
+const modeStats = Object.fromEntries(MODE_RULES.map(rule => [rule, { players: ruleGraphs[rule].names.length, withPath: 0, byMin: {} }]));
+const valueRows = [];
+for (const p of puzzles) {
+  const derived = {};
+  for (const rule of MODE_RULES) {
+    const d = deriveHint(ruleGraphs[rule], p.a, p.b);
+    derived[rule] = d;
+    const problems = ruleProblems(ruleGraphs[rule], p.a, p.b, d ? { minSteps: d.minSteps, hint: d.hint } : null);
+    if (problems.length) { console.error(`  GENERATOR CONTRADICTS ITS OWN FENCE on ${p.id} under ${rule}: ${problems.join('; ')}`); process.exit(1); }
+    if (d && /[\u2013\u2014]/.test(d.hint)) { console.error(`  long dash in ${p.id} under ${rule}`); process.exit(1); }
+    if (d) { modeStats[rule].withPath += 1; modeStats[rule].byMin[d.minSteps] = (modeStats[rule].byMin[d.minSteps] ?? 0) + 1; }
+  }
+  valueRows.push(modeValuesRow(p.id, derived));
+}
+fs.writeFileSync(MODE_OUT, [...modeHeader, 'begin;', modeMigrationSql(valueRows), 'commit;'].join('\n') + '\n');
+console.log(`wrote ${path.relative(ROOT, MODE_OUT)}: ${puzzles.length} updates, per rule ${JSON.stringify(modeStats)}`);
+
 /* The fallback pool the page shows when the table is down is a different,
    smaller graph (src/data/careerPlayers.ts, 151 players), so the fallback
-   puzzles get their own derivation from it. Puzzles with no path there are
-   dropped from the fallback, never guessed. */
+   puzzles get their own derivation from it, under every rule. Puzzles with
+   no classic path there are dropped from the fallback, never guessed; a
+   puzzle with no path under a special rule carries null for that rule. */
 {
-  const { build } = await import('esbuild');
-  const { pathToFileURL } = await import('node:url');
-  const entry = '/tmp/gen-tph-entry.mjs', out = '/tmp/gen-tph-bundle.mjs';
-  globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-  fs.writeFileSync(entry, `export { default as fallbackPuzzles } from '${ROOT}/src/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${ROOT}/src/data/careerPlayers.ts';\n`);
-  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
-  const site = await import(pathToFileURL(out).href);
   const fg = buildGraph(site.fallbackPlayers);
+  const fRule = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(site.fallbackPlayers, rule))]));
   const kept = [], dropped = [];
   for (const p of site.fallbackPuzzles) {
     const d = deriveHint(fg, p.playerA, p.playerB);
     if (!d) { dropped.push(p.id); continue; }
     const problems = hintProblems(fg, p.playerA, p.playerB, d.minSteps, d.hint);
     if (problems.length) { console.error(`  fallback ${p.id}: ${problems.join('; ')}`); process.exit(1); }
-    kept.push({ id: p.id, playerA: p.playerA, playerB: p.playerB, minSteps: d.minSteps, oneOptimalPath: d.path, hint: d.hint });
+    const entry = { id: p.id, playerA: p.playerA, playerB: p.playerB, minSteps: d.minSteps, oneOptimalPath: d.path, hint: d.hint };
+    for (const rule of MODE_RULES) {
+      const r = deriveHint(fRule[rule], p.playerA, p.playerB);
+      entry[rule] = r ? { minSteps: r.minSteps, oneOptimalPath: r.path, hint: r.hint } : null;
+      const rp = ruleProblems(fRule[rule], p.playerA, p.playerB, r ? { minSteps: r.minSteps, hint: r.hint } : null);
+      if (rp.length) { console.error(`  fallback ${p.id} under ${rule}: ${rp.join('; ')}`); process.exit(1); }
+    }
+    kept.push(entry);
   }
   const js = s => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-  const body = kept.map(p => `  {\n    id: ${js(p.id)}, playerA: ${js(p.playerA)}, playerB: ${js(p.playerB)}, minSteps: ${p.minSteps},\n    oneOptimalPath: [${p.oneOptimalPath.map(js).join(', ')}],\n    hint: ${js(p.hint)},\n  },`).join('\n');
-  const file = `export interface TransferPathPuzzle {
+  const ruleJs = r => r ? `{ minSteps: ${r.minSteps}, oneOptimalPath: [${r.oneOptimalPath.map(js).join(', ')}], hint: ${js(r.hint)} }` : 'null';
+  const body = kept.map(p => `  {\n    id: ${js(p.id)}, playerA: ${js(p.playerA)}, playerB: ${js(p.playerB)}, minSteps: ${p.minSteps},\n    oneOptimalPath: [${p.oneOptimalPath.map(js).join(', ')}],\n    hint: ${js(p.hint)},\n${MODE_RULES.map(rule => `    ${rule}: ${ruleJs(p[rule])},\n`).join('')}  },`).join('\n');
+  const file = `/** A pair's minimum and hint under one rule, with the path they were read from. */
+export interface TransferPathRuleHint {
+  minSteps: number;
+  oneOptimalPath?: string[];
+  hint: string;
+}
+
+export interface TransferPathPuzzle {
   id: string;
   playerA: string;
   playerB: string;
   minSteps: number;
   oneOptimalPath?: string[];
   hint: string;
+  /** Round 460: the same pair under each special rule (src/lib/transferPathModes.ts),
+   *  null where the rule leaves no path. Optional only so a puzzle built by hand in a
+   *  test can leave them out; this file and the fetcher always set both, and a missing
+   *  entry reads as no path, never as a path. */
+  active?: TransferPathRuleHint | null;
+  europe?: TransferPathRuleHint | null;
 }
 
 /**
@@ -106,6 +175,8 @@ for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-945']) {
  * Round 294: every minimum, path and hint below is derived from
  * src/data/careerPlayers.ts (the fallback player pool) under the game's own
  * rule, same club in the same season, by scripts/genTransferPathHints.mjs.
+ * Round 460: the special rule entries are derived the same way on the
+ * fallback pool after that rule's filter.
  * GENERATED: do not edit by hand, re-run the generator. The live table is
  * derived the same way from the live career tables and carries its own
  * hints, which differ where the pools differ.
@@ -117,5 +188,6 @@ ${body}
 export default transferPathPuzzles;
 `;
   fs.writeFileSync(path.join(ROOT, 'src/data/transferPathPuzzles.ts'), file);
-  console.log(`rewrote src/data/transferPathPuzzles.ts: ${kept.length} fallback puzzles kept${dropped.length ? `, dropped (no path on the fallback pool): ${dropped.join(', ')}` : ''}`);
+  const fStats = MODE_RULES.map(rule => `${rule} ${kept.filter(p => p[rule]).length}`).join(', ');
+  console.log(`rewrote src/data/transferPathPuzzles.ts: ${kept.length} fallback puzzles kept (with a path under ${fStats})${dropped.length ? `, dropped (no path on the fallback pool): ${dropped.join(', ')}` : ''}`);
 }
