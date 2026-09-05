@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 465.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 470.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
@@ -34,8 +34,44 @@ How it works:
   454, 455, 456, 457 and 458 all SHIPPED 2026-09-05; 452 was verification only. Their claims
   below stand as the record of what each one was.)
 
-- **Desktop lane, CLAIMED 2026-09-05 night: Rounds 459 to 463.** Five more off the item by
-  item ledger, built in parallel worktrees behind one merge and gate pass.
+- **Desktop lane, CLAIMED 2026-09-05 afternoon: Rounds 465 to 469.** The next five off the
+  item by item ledger, five builders in parallel worktrees behind one merge and gate pass
+  (the script is `docs/workflows/owner-list-465-469.workflow.js`). Three of them touch
+  `src/lib/clubManager.ts` and build on Round 462, which is on main.
+  **465 CLUB MANAGER METERS AND TABLE**, his words: "Two meters, always visible: board
+  patience (how close to fired) and fan mood" and "Table: show goals for and against as
+  25-23 alongside GD"; both meters derived from the engine's own state, the board meter
+  being the very number the sacking rule reads.
+  **466 CLUB MANAGER CALENDAR**, his words: "Calendar: click any day and sim to it (keep the
+  four fast forwards), bigger emojis, match days name the opponent, transfer window open and
+  close clearly marked"; sim to a day through the engine's own loop, never a second copy.
+  **467 CLUB MANAGER FACILITIES AND FINANCES**, his words: "Facilities: dressing room,
+  stadium, training ground, medical, each level 1 to 10, big clubs start high, small clubs
+  start near zero, upgrades cost real money and help the squad" and "Finances: ticket and
+  concession pricing with fan and board reactions, sponsor offers (good and bad brands, local
+  or global, negotiable), a full projected finances screen"; a versioned save migration.
+  **468 SOCCER CAREER TRAINING DRILLS**, his words: "More position specific training
+  minigames, harder: two axis wall shot timing, defender tackle timing on a moving ball
+  (click the ball not the feet), keeper hold-and-drag glove save dives"; on the shared arcade
+  engine under Free Kick and Buzzer Beater, each drill feeding growth within potential.
+  **469 THE NFL CAREER BROUGHT UP TO THE SOCCER CAREER LOOP**, his words: "Bring the whole
+  Soccer Career and Club Manager depth to NFL, NBA, MLB, NHL and the GM games ... The gap
+  between the soccer career and the NFL career is visible to a casual eye; close it"; the
+  money app, the social feed, a generated rival and the badges lifted into a shared module
+  with NFL data injected, never a copy.
+
+- **Desktop lane, claimed 2026-09-05 night and SHIPPED 2026-09-05 afternoon: Rounds 459 to
+  463.** Five more off the item by item ledger, built in parallel worktrees behind one merge
+  and gate pass, then an adversarial review (ten lenses, three skeptics per finding) whose
+  seven confirmed findings landed as one review fixes commit before the push: the soccer
+  conquest recorded under a slug no registry lookup resolved (the daily chip never ticked),
+  Real Madrid, Barcelona and Torino painted in their crest's gold and Atlético in their
+  shorts' navy, a tile calling a fragment of a squad its squad value, Active players only
+  telling a player a real footballer had retired when the career table was merely behind,
+  Clue Auction's guide still promising a top 300 secret, an Inter category refusing two men
+  whose only Inter season was a loan, and a Rebuild table whose bidding war rivals wore the
+  CPU seats' names. What the review found and left open is listed under Open bugs in
+  `docs/PROJECT-STATE.md`.
   **459 THE SOCCER CONQUEST**, his words: "Then add a soccer conquest covering the top five
   leagues, fully working", on the Round 457 shared renderer with a Europe region geometry,
   a symmetric adjacency table and documented club colours, names and colours only.
