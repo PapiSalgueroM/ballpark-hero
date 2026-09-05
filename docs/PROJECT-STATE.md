@@ -48,7 +48,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | P1 9, Build Your XI accepts a keeper at CM and Marcelo at LB | DONE | Round 442; the keeper case is absolute, the full back case follows verified history |
 | P1 10, Sign the Player prices Svilar at 162M | DONE | Round 315 (pricing) and Round 441 (the auction itself could not be finished) |
 | P1 11, the social gram tells a goalkeeper to score | DONE | Round 319 |
-| P1 12, Trade Finder offence only, rosters outdated | PART | Round 416 replenishes the defence; "rosters outdated" is unverified |
+| P1 12, Trade Finder offence only, rosters outdated | DONE | Round 416 baked a defence into every club and replenishes it every offseason; the roster file (src/data/frontOfficePlayers.ts) was regenerated on 2026-09-02 from the nflverse 2026 season release (2902 rows read, 514 players kept), so the rosters are the current season's |
 | P1 13, the Billion Dollar Game prices at 890M | DONE | Round 415 |
 | Delete Overrated or Underrated and Tier List | DONE | Round 314 |
 | Leaderboard names, random by default | DONE | Round 318 |
@@ -58,7 +58,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Report a bug as a real pipeline | DONE | Round 316 kinds, Round 446 delivery tracking; email proved live |
 | Flags, never abbreviations, everywhere | PART | Round 444 for Career Ladder and Missing XI; a sitewide sweep is open |
 | Polls more engaging | OPEN, design | measured 2026-09-05: daily_polls holds 234 rows dated 2026-07-06 to 2026-10-05 with 63 still to come, and poll_votes takes 50 to 150 votes a day (629 in the last week), so the data is healthy and this is a design ask, not an empty section |
-| Profile page accurate for every game | OPEN, unverified | |
+| Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, one shared engine |
