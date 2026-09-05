@@ -249,10 +249,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
           <div ref={stripRef} className="mt-2 rounded-lg border border-primary/40 bg-primary/5 p-2" data-testid="cm-calendar-day">
             <div className="text-[11px] font-bold text-foreground">{shortDate(selected.date)}{selected.isToday ? ' · today' : ''}</div>
             <div className="text-[11px] text-foreground/90">{dayEmoji(selected) ? `${dayEmoji(selected)} ` : ''}{dayLine(selected)}</div>
-            {windowLine && <div className="text-[10px] text-gold mt-0.5">🔓 {windowLine}</div>}
-            {selected.kind === 'window' && (
-              <div className="text-[10px] text-gold mt-0.5">🔓 Deadline day is your {WINDOW_MATCH_WEEKS.january}rd match after it opens.</div>
-            )}
+            {windowLine && <div className="text-[10px] text-gold mt-0.5">{selected.deadline ? '🔒' : '🔓'} {windowLine}</div>}
             <div className="mt-1.5 flex items-center gap-2">
               {selectedTarget !== null ? (
                 <button

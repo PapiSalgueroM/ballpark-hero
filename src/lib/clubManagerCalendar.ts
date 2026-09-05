@@ -263,7 +263,9 @@ export interface CalendarDay {
 export interface SeasonDays {
   worldYear: number;
   entryDates: CalDate[];
-  /** The date of the next entry to play, the calendar's idea of today. */
+  /** The calendar's idea of today: the date of the next entry that is mine
+   *  (a match or the window), skipping a midweek the world plays without
+   *  me, so the outline sits on the next thing that happens to my club. */
   today: CalDate;
   seasonStart: CalDate;
   seasonEnd: CalDate;
@@ -350,7 +352,13 @@ export function seasonDays(state: CareerState): SeasonDays {
   const entryDates = dateOfEntries(worldYear, state.calendar);
   const seasonStart = seasonKickoff(worldYear);
   const seasonEnd = entryDates[entryDates.length - 1] ?? seasonStart;
-  const today = entryDates[Math.min(state.week, state.calendar.length - 1)] ?? seasonStart;
+  let todayIdx = Math.min(state.week, state.calendar.length - 1);
+  for (let w = state.week; w < state.calendar.length; w++) {
+    const entry = state.calendar[w];
+    if (entry.type === 'window' || fixtureFor(state, entry)) { todayIdx = w; break; }
+  }
+  const today = entryDates[todayIdx] ?? seasonStart;
+  const todayKey = dateKey(today);
   const windows = windowSpans(state);
   const played = new Map<number, { res: FormResult; opp: string; comp: string; home: boolean | null; score: string; competition?: Competition }>();
   for (const r of state.resultLog ?? []) played.set(r.week, { res: r.res, opp: r.opp, comp: r.comp, home: r.home, score: r.score, competition: r.competition });
@@ -371,7 +379,7 @@ export function seasonDays(state: CareerState): SeasonDays {
   state.calendar.forEach((entry, w) => {
     const date = entryDates[w];
     const key = dateKey(date);
-    const isToday = w === state.week;
+    const isToday = key === todayKey;
     const past = w < state.week;
     if (entry.type === 'window') {
       entryDays.set(key, { date, key, weekIdx: w, kind: 'window', windowOpens: 'january', windowOpen: true, isToday, past });
