@@ -48,7 +48,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     howToPlay: [
       "Pick a market restriction first: the open market, the top five leagues only, under 25s only, wonderkids only (21 and under) or the bargain bin (nobody over 30 million). It locks the moment you pick a club.",
-      "Pick one of 66 real clubs, tiered from elite down to modest. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+      "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
       "Hire a manager or keep the man you have for free. Each of the three candidates gets more out of one kind of player (the under 25s, the over 30s, the defence or the attack), and the number beside each name is what your XI reads with him in charge.",
       "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
       "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",

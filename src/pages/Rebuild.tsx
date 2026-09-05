@@ -17,7 +17,7 @@ export default function Rebuild() {
       <RebuildBoard />
       <GameSeoContent
         title="Rebuild Challenge | DoUKnowBall"
-        description="Choose any of 66 real clubs and inherit their actual 2026 squad and market values. Two envelopes land first, the board's and the finance department's, then a wheel draws your XI one shirt at a time: keep the man or sell him, fund the next move, and answer to the board when the music stops. The target scales to the club, because dragging Genk up is a different job to squeezing more out of Real Madrid."
+        description="Choose a real club with a complete 2026 squad and inherit its actual players and market values. Two envelopes land first, the board's and the finance department's, then a wheel draws your XI one shirt at a time: keep the man or sell him, fund the next move, and answer to the board when the music stops. The target scales to the club, because dragging Genk up is a different job to squeezing more out of Real Madrid."
         howToPlay={[
           'Pick a market restriction (open, top five leagues, under 25s, wonderkids or the bargain bin), then a club. Tiers run from elite (Real Madrid, Arsenal) to modest (Southampton, Genk).',
           'Open the envelopes: the board\'s, with its mood, its money and its demands, and one of fifteen finance envelopes you pick blind. Then hire a manager or keep the man you have.',

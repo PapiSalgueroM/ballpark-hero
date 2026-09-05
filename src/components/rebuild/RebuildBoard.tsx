@@ -3,7 +3,7 @@ import { Check, Copy, RotateCcw } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, type PerkKind } from '@/lib/rebuildDeck';
+import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, type PerkKind, type ManagerProfile } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -23,6 +23,17 @@ const TIER_STYLE: Record<ClubTier, string> = {
 };
 
 const PERK_KINDS: PerkKind[] = ['rescout', 'discount', 'noWar'];
+
+/* The manager's lift in words, never a "+N rating" label: who it lands on
+   and roughly how hard. The XI reading beside it is the honest number. */
+const LIFT_WORD: Record<number, string> = { 3: 'Big lift', 2: 'Real lift', 1: 'Small lift' };
+const PROFILE_WORD: Record<ManagerProfile, string> = {
+  youth: 'the under 25s',
+  veterans: 'the over 30s',
+  defence: 'the back line',
+  attack: 'the front line',
+  none: '',
+};
 
 function potLine(delta: number): string {
   if (delta > 0) return `€${delta}M into the pot`;
@@ -269,6 +280,9 @@ export function RebuildBoard() {
               </span>
               <span className="ml-3 shrink-0 text-right">
                 <span className="block text-sm font-bold text-primary">XI reads {managerReading(m)}</span>
+                {m.profile !== 'none' && (
+                  <span className="block text-[10px] text-muted-foreground">{LIFT_WORD[m.lift] ?? 'A lift'} for {PROFILE_WORD[m.profile]}</span>
+                )}
                 <span className="block text-[11px] text-gold">{m.cost === 0 ? 'Free' : `€${m.cost}M`}</span>
               </span>
             </button>
