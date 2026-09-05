@@ -7,6 +7,7 @@ interface UclBracketCardProps {
 }
 
 const ROUND_LABEL: Record<UclKoRound, string> = {
+  R16: 'Round of 16',
   QF: 'Quarter-finals',
   SF: 'Semi-finals',
   F: 'Final',
@@ -24,7 +25,8 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
   const bracket = career.uclBracket;
   if (!bracket || bracket.length === 0) return null;
 
-  const rounds: UclKoRound[] = ['QF', 'SF', 'F'];
+  // Round 462: an era bracket opens with the round of 16 it really had.
+  const rounds: UclKoRound[] = bracket.some(t => t.round === 'R16') ? ['R16', 'QF', 'SF', 'F'] : ['QF', 'SF', 'F'];
   const champion = bracket.find(t => t.round === 'F')?.winner ?? null;
 
   const side = (name: string, tie: UclTie, isHome: boolean) => {
@@ -66,14 +68,15 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
         )}
       </div>
 
-      {rounds.map(r => {
+      {rounds.map((r, i) => {
         const ties = bracket.filter(t => t.round === r).sort((a, b) => a.slot - b.slot);
         if (ties.length === 0) {
+          const before = rounds[i - 1] ?? 'QF';
           return (
             <div key={r}>
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">{ROUND_LABEL[r]}</div>
               <div className="text-[10px] text-muted-foreground px-2 py-1.5 border border-dashed border-border rounded-lg">
-                Waiting on the {r === 'SF' ? 'quarter-finals' : 'semi-finals'}.
+                Waiting on the {ROUND_LABEL[before].toLowerCase()}.
               </div>
             </div>
           );

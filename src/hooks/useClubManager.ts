@@ -3,7 +3,7 @@ import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/complet
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
-  buildMarket, buyPlayer, autoPickXI, nextFixture, sortedTable,
+  buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
   startNegotiation, makeOffer, walkAway, respondApproach, setTicketTier, expandGround, signSponsor,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
@@ -56,7 +56,7 @@ export function useClubManager() {
     [career],
   );
   const tableRows: TableRow[] = useMemo(
-    () => (career ? sortedTable(career.table) : []),
+    () => (career ? sortedLeagueTable(career) : []),
     [career],
   );
   const myPosition = useMemo(

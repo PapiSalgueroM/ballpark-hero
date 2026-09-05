@@ -1265,7 +1265,7 @@ const ClubManager = () => {
                   <UclGroupsCard career={c} onClubClick={setClubView} />
                   {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-                      ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : 'Quarter-final'}</span>
+                      ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : c.uclKoRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span>
                     </div>
                   )}
                   {c.uclKoRound === 'won' && (

@@ -12,12 +12,14 @@ interface LeagueTableCardProps {
   preseason?: boolean;
   /** Round 74: tap any club to open its detail screen (the rival viewer). */
   onClubClick?: (club: string) => void;
+  /** Round 462: how level points were split, printed under the rows. */
+  footnote?: string;
 }
 
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -62,6 +64,9 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
           </div>
         );
       })}
+      {footnote && (
+        <p className="text-[9px] text-muted-foreground pt-1.5">{footnote}</p>
+      )}
     </div>
   );
 }
