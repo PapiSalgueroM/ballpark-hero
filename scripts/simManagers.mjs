@@ -39,7 +39,10 @@ const ENTRY = path.join(os.tmpdir(), 'managers.entry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'managers.bundle.mjs');
 let cmPath = `${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts`;
 if (CONTROL) {
-  const src = fs.readFileSync(cmPath, 'utf8');
+  // A Windows checkout writes the engine with CRLF, and a needle spelt with
+  // bare newlines never matched it, so the control refused to run on every
+  // desktop build. Normalise first, as the harness rules say.
+  const src = fs.readFileSync(cmPath, 'utf8').replace(/\r\n/g, '\n');
   const needle = 'ensurePress(state);\n  ensureManagers(state);\n  state.wageCap';
   if (!src.includes(needle)) { console.error('control run: the startCareer ensure call to sever is not in the source, refusing a dead control'); process.exit(1); }
   cmPath = path.join(os.tmpdir(), 'clubManager.severed.ts').replaceAll('\\', '/');
