@@ -41,7 +41,12 @@ export const TERRITORY_ADJACENCY: Record<string, string[]> = {
   ND: ['MN', 'MT', 'SD'],
   NE: ['CO', 'IA', 'KS', 'MO', 'SD', 'WY'],
   NH: ['MA', 'ME', 'VT'],
-  NJ_N: ['CT', 'NY', 'NJ_S'],
+  // Round 457: this row listed CT (no land border, that is the Sound, and CT
+  // never listed NJ_N back) and missed PA_E (which lists NJ_N). The two one
+  // way edges made blob merging depend on iteration order and let North
+  // Jersey attack Connecticut across the water. Every row is symmetric now,
+  // and simConquestMap holds it that way.
+  NJ_N: ['NJ_S', 'NY', 'PA_E'],
   NJ_S: ['NJ_N', 'DE'],
   NM: ['AZ', 'CO', 'OK', 'TX_N', 'TX_S'],
   NV: ['AZ', 'CA_N', 'CA_S', 'ID', 'OR', 'UT'],
@@ -66,6 +71,38 @@ export const TERRITORY_ADJACENCY: Record<string, string[]> = {
   WV: ['KY', 'MD', 'OH_NE', 'OH_SW', 'PA_W', 'VA'],
   WY: ['CO', 'ID', 'MT', 'NE', 'SD', 'UT'],
 };
+
+/**
+ * Round 457: the NBA, MLB and NHL maps draw NBA_STATES, which swaps CA_N for
+ * CA_NW (Bay Area) and CA_NE (Sacramento Valley) and TX_S for TX_E (East
+ * Texas) and TX_CS (Central and South Texas). Those four regions had no
+ * adjacency at all, so on three of the four maps they could never merge into
+ * an empire's blob and never counted as bordering anything. Their borders
+ * were read off the drawn paths on 2026-09-05 (CA_NW meets Oregon along the
+ * coast and CA_NE along the inland half, CA_NE carries the Nevada border, the
+ * two share the valley line at x=32; TX_E takes Louisiana, TX_CS keeps the El
+ * Paso corner with New Mexico, both sit under TX_N). Built from the NFL table
+ * so the two never drift apart on the fifty two regions they share.
+ */
+export const NBA_TERRITORY_ADJACENCY: Record<string, string[]> = (() => {
+  const swap: Record<string, string[]> = { CA_N: ['CA_NW', 'CA_NE'], TX_S: ['TX_E', 'TX_CS'] };
+  const out: Record<string, string[]> = {};
+  for (const [id, neighbours] of Object.entries(TERRITORY_ADJACENCY)) {
+    if (id in swap) continue;
+    out[id] = neighbours.flatMap(n => swap[n] ?? [n]);
+  }
+  // The split borders themselves, and the parents' outside borders divided
+  // between the halves that actually touch them.
+  out.CA_NW = ['CA_NE', 'CA_S', 'OR'];
+  out.CA_NE = ['CA_NW', 'CA_S', 'NV', 'OR'];
+  out.TX_E = ['LA', 'TX_CS', 'TX_N'];
+  out.TX_CS = ['NM', 'TX_E', 'TX_N'];
+  out.OR = ['CA_NW', 'CA_NE', 'ID', 'NV', 'WA'];
+  out.NV = ['AZ', 'CA_NE', 'CA_S', 'ID', 'OR', 'UT'];
+  out.LA = ['AR', 'MS', 'TX_E', 'TX_N'];
+  out.NM = ['AZ', 'CO', 'OK', 'TX_N', 'TX_CS'];
+  return out;
+})();
 
 /** Parses an SVG path `d` string's numeric coordinate pairs into a bounding box. */
 export function pathBoundingBox(d: string): { minX: number; minY: number; maxX: number; maxY: number } {
@@ -115,6 +152,7 @@ export interface TeamBlob {
 export function computeTeamBlobs(
   territories: Record<string, string | null>,
   geomById: Map<string, TerritoryGeom>,
+  adjacency: Record<string, string[]> = TERRITORY_ADJACENCY,
 ): TeamBlob[] {
   const visited = new Set<string>();
   const blobs: TeamBlob[] = [];
@@ -130,7 +168,7 @@ export function computeTeamBlobs(
     while (queue.length) {
       const cur = queue.shift()!;
       memberIds.push(cur);
-      const neighbors = TERRITORY_ADJACENCY[cur] || [];
+      const neighbors = adjacency[cur] || [];
       for (const n of neighbors) {
         if (territories[n] === teamId && !visited.has(n)) {
           visited.add(n);

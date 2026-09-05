@@ -1,3 +1,7 @@
+import { NBA_STATES } from '@/data/usStatesPaths';
+import { NBA_TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
+import type { ConquestMapSport } from '@/lib/conquestMapLook';
+
 // MLB Conquest data (2026-08-05, the every-sport Imperialism push).
 // 30 real franchises, official primary colors, editorial strength ratings
 // written in the 2026 offseason: anchors are the Dodgers' back-to-back
@@ -63,6 +67,17 @@ export const MLB_TEAMS: MlbTeam[] = [
 ];
 
 export const MLB_TEAM_MAP = new Map(MLB_TEAMS.map(t => [t.id, t]));
+
+/** Round 457: what MLB injects into the shared conquest map. Data only. The
+ *  territory set is the NBA one (same 58 US regions, see the header). */
+export const MLB_CONQUEST_MAP: ConquestMapSport = {
+  key: 'mlb',
+  regions: NBA_STATES,
+  adjacency: NBA_TERRITORY_ADJACENCY,
+  teams: MLB_TEAMS,
+  viewBox: { width: 590, height: 310 },
+  regionNoun: 'territory',
+};
 
 /** Clubs that start with no territory (see the header note). */
 export const MLB_INVADERS = ['TOR', 'SDP'];

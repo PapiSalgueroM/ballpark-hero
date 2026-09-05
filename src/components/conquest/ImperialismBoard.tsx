@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarDays, Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
-import ConquestMap from '@/components/conquest/ConquestMap';
+import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from '@/components/conquest/ConquestRegionMap';
 import ShareButtons from '@/components/game/ShareButtons';
-import { NFL_TEAMS, TEAM_MAP, isLightColor } from '@/data/conquestData';
+import { NFL_TEAMS, TEAM_MAP, NFL_CONQUEST_MAP, isLightColor } from '@/data/conquestData';
 import {
   REGULAR_WEEKS, PLAYOFF_LABELS,
   seedEmpires, randomPairings, resolveGame, buildHeadlines,
@@ -47,7 +47,6 @@ export default function ImperialismBoard() {
   const [madePlayoffs, setMadePlayoffs] = useState(false);
   const [records, setRecords] = useState<ImpRecords>({});
   const [showStandings, setShowStandings] = useState(false);
-  const [flipped, setFlipped] = useState<Set<string>>(new Set());
 
   // Round 50: the real Daily Challenge. Same seeded season for every player
   // (fixtures AND results), one scored run per ET day, streaks, share line.
@@ -77,6 +76,23 @@ export default function ImperialismBoard() {
     () => (favorite ? finalScore(favorite, owners, predictionHits, champion, madePlayoffs) : 0),
     [favorite, owners, predictionHits, champion, madePlayoffs],
   );
+
+  // Round 457: the shared map reads the takeover off the ownership change
+  // itself (Round 92's flipped list only ever reached the NFL map), and it is
+  // told which fight to spotlight: the featured game before the roll, its
+  // result after.
+  const takeover = useOwnerTakeover(owners, phase !== 'pick');
+  const featuredGame = featured && lastWeek
+    ? lastWeek.games.find(g => (g.home === featured[0] && g.away === featured[1]) || (g.home === featured[1] && g.away === featured[0]))
+    : undefined;
+  const battleView: ConquestBattleView | null = featured && (phase === 'preview' || phase === 'recap')
+    ? {
+        attacker: featured[0],
+        defender: featured[1],
+        stage: phase === 'preview' ? 'pending' : 'resolved',
+        winner: phase === 'recap' ? featuredGame?.winner ?? null : null,
+      }
+    : null;
 
   useGameCompletion('conquest-imperialism', phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0);
 
@@ -139,9 +155,6 @@ export default function ImperialismBoard() {
     for (const [h, a] of pairings) {
       games.push(resolveGame(h, a, next, rngRef.current));
     }
-    // Round 92: hand the map every territory that changed hands this week so
-    // the annexation animates as one sweeping takeover.
-    setFlipped(new Set(games.flatMap(g => g.flipped ?? [])));
     const nextRecords = applyRecords(records, games);
     setRecords(nextRecords);
 
@@ -321,16 +334,7 @@ export default function ImperialismBoard() {
       </div>
 
       {/* map */}
-      <ConquestMap
-        territories={owners}
-        attackingTeam={phase === 'recap' && featured ? featured[0] : null}
-        defendingTeam={phase === 'recap' && featured ? featured[1] : null}
-        phase={phase === 'recap' ? 'battle' : 'ready'}
-        powerupStates={new Set()}
-        invincibleTeams={new Set()}
-        territoryStolenState={null}
-        flippedStates={flipped}
-      />
+      <ConquestRegionMap sport={NFL_CONQUEST_MAP} owners={owners} battle={battleView} takeover={takeover} />
 
       {landless.length > 0 && (
         <p className="text-center text-[11px] text-muted-foreground">

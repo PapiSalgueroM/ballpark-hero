@@ -1,3 +1,7 @@
+import { NBA_STATES } from '@/data/usStatesPaths';
+import { NBA_TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
+import type { ConquestMapSport } from '@/lib/conquestMapLook';
+
 // NHL Conquest data (2026-08-05, the every-sport Imperialism push).
 // Mirrors conquestDataNba.ts shape. 32 real franchises, official primary
 // colors, editorial strength ratings written in the 2026 offseason:
@@ -61,6 +65,17 @@ export const NHL_TEAMS: NhlTeam[] = [
 ];
 
 export const NHL_TEAM_MAP = new Map(NHL_TEAMS.map(t => [t.id, t]));
+
+/** Round 457: what the NHL injects into the shared conquest map. Data only. The
+ *  territory set is the NBA one (same 58 US regions, see the header). */
+export const NHL_CONQUEST_MAP: ConquestMapSport = {
+  key: 'nhl',
+  regions: NBA_STATES,
+  adjacency: NBA_TERRITORY_ADJACENCY,
+  teams: NHL_TEAMS,
+  viewBox: { width: 590, height: 310 },
+  regionNoun: 'territory',
+};
 
 /** Clubs that start with no territory (see the header note). */
 export const NHL_INVADERS = ['TOR', 'OTT', 'EDM', 'VAN', 'BUF'];

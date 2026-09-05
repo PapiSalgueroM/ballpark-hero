@@ -1,7 +1,11 @@
+import { NBA_STATES } from '@/data/usStatesPaths';
+import { NBA_TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
+import type { ConquestMapSport } from '@/lib/conquestMapLook';
+
 // NBA Conquest dataset (item 90, first multi-sport variant). Parallel to
 // conquestData.ts (NFL) by design: same shapes (NbaPlayer mirrors
 // ConquestPlayer, NbaTeam mirrors NFLTeam) so useConquestNba.ts and
-// ConquestBoardNba/ConquestMapNba can reuse every pure helper in
+// ConquestBoardNba and the shared ConquestRegionMap can reuse every pure helper in
 // conquestBattle.ts, conquestMapGeometry.ts, and conquestPowerups.ts
 // unchanged. NFL's conquestData.ts is never imported here and never
 // imports this file, so /conquest cannot regress from anything in this
@@ -462,6 +466,16 @@ export const NBA_TEAMS: NbaTeam[] = [
 ];
 
 export const NBA_TEAM_MAP = new Map(NBA_TEAMS.map(t => [t.id, t]));
+
+/** Round 457: what the NBA injects into the shared conquest map. Data only. */
+export const NBA_CONQUEST_MAP: ConquestMapSport = {
+  key: 'nba',
+  regions: NBA_STATES,
+  adjacency: NBA_TERRITORY_ADJACENCY,
+  teams: NBA_TEAMS,
+  viewBox: { width: 590, height: 310 },
+  regionNoun: 'territory',
+};
 
 // ── Territory assignment (item 90) ──
 // Reuses the SAME US map / sub-territory set as NFL Conquest (usStatesPaths.ts,

@@ -1,5 +1,6 @@
 // NBA Conquest board (item 90). Parallel to ConquestBoard.tsx, wired to
-// useConquestNba/ConquestMapNba/conquestDataNba instead of the NFL modules.
+// useConquestNba/conquestDataNba instead of the NFL modules; the map itself
+// is the shared ConquestRegionMap since Round 457.
 // Layout and interaction structure are kept intentionally identical to
 // ConquestBoard.tsx (same panels, same modal flow, same order) so a player
 // who already knows NFL Conquest can play this variant with zero relearning;
@@ -9,8 +10,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
-import ConquestMapNba from './ConquestMapNba';
-import { NBA_TEAM_MAP, NBA_TEAMS, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
+import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
+import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
 import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -267,6 +268,29 @@ export default function ConquestBoardNba() {
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
   const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
 
+  // Round 457: what the shared map shows of the fight (see ConquestBoard.tsx).
+  const takeover = useOwnerTakeover(game.territories, game.turn > 0);
+  const battleView: ConquestBattleView | null = (() => {
+    if (game.phase === 'animating') {
+      if (!teamRevealed || !game.attackingTeam) return null;
+      return {
+        attacker: game.attackingTeam,
+        defender: dirRevealed ? game.defendingTeam : null,
+        stage: 'pending',
+        targetRegion: dirRevealed ? game.targetState : null,
+      };
+    }
+    if (game.phase === 'battle' && game.attackingTeam) {
+      return {
+        attacker: game.attackingTeam,
+        defender: game.defendingTeam,
+        stage: game.boxScore ? 'resolved' : 'live',
+        winner: game.boxScore ? game.battleResult?.winner ?? null : null,
+      };
+    }
+    return null;
+  })();
+
   const winsByTeam = new Map<string, number>();
   for (const e of game.gameLog) {
     if (e.defender !== 'neutral' && e.defender !== 'powerup') {
@@ -277,11 +301,11 @@ export default function ConquestBoardNba() {
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
       {/* Map */}
-      <ConquestMapNba
-        territories={game.territories}
-        attackingTeam={game.attackingTeam}
-        defendingTeam={game.defendingTeam}
-        phase={game.phase}
+      <ConquestRegionMap
+        sport={NBA_CONQUEST_MAP}
+        owners={game.territories}
+        battle={battleView}
+        takeover={takeover}
         powerupStates={game.powerupStates}
         invincibleTeams={game.invincibleTeams}
         territoryStolenState={game.territoryStolenState}
