@@ -17,6 +17,7 @@ import {
 import type { MatchFacts } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
+import { simToWeek as runSimToWeek, weekAfterMatches } from '@/lib/clubManagerCalendar';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -209,49 +210,44 @@ export function useClubManager() {
      faster... simulate through date or play match or whatever." Quick sim
      plays a run of fixtures back to back and only stops early for the things
      that genuinely need you: the transfer window, or the end of the season.
-     The final match still surfaces its report so the run has a payoff. */
-  const quickSim = useCallback((entries: number) => {
+     The final match still surfaces its report so the run has a payoff.
+     Round 399: a sacking ends the run too.
+     Round 466: the loop itself now lives in src/lib/clubManagerCalendar.ts
+     (simToWeek), because a tap on any day of the calendar runs the very same
+     loop to that day, and it also stops when a club's approach lands. This
+     runs it to a week and does what the screens need with how it stopped. */
+  const simToWeek = useCallback((targetWeek: number) => {
     if (!career) return;
-    let state = career;
-    let lastReport: MatchWeekReport | null = null;
-    for (let i = 0; i < entries; i++) {
-      if (state.week >= state.calendar.length) break;
-      /* Round 93's fast forward plays a run of fixtures back to back, so it
-         asks for the whole match at once. A dressing room ten times over is
-         not a fast forward. */
-      const res = playNextEntry(state, { skipHalftime: true });
-      state = res.state;
-      if (res.kind === 'window') {
-        setCareer(state);
-        setActiveTab('transfers');
-        setPhase('hub');
-        return;
-      }
-      if (res.kind === 'seasonOver') {
-        const { state: done, summary: sm } = finishSeason(state);
-        recordCompletion('/club-manager', sm.seasonScore);
-        setCareer(done);
-        setSummary(sm);
-        setPhase('seasonEnd');
-        return;
-      }
-      if (res.kind === 'match' && res.report) lastReport = res.report;
-      /* Round 399: a sacking ends the run. playMyMatch only sets state.sacked
-         and nothing in this loop read it, so a manager sacked in a fast
-         forward kept playing to the window with every later result counted.
-         The report of the match that got him sacked shows, and the next
-         continue hands him to the wilderness like a played match does. */
-      if (state.sacked) break;
+    const run = runSimToWeek(career, targetWeek);
+    if (run.halt === 'window') {
+      setCareer(run.state);
+      setActiveTab('transfers');
+      setPhase('hub');
+      return;
     }
-    setCareer(state);
-    if (lastReport) {
+    if (run.halt === 'seasonOver') {
+      const { state: done, summary: sm } = finishSeason(run.state);
+      recordCompletion('/club-manager', sm.seasonScore);
+      setCareer(done);
+      setSummary(sm);
+      setPhase('seasonEnd');
+      return;
+    }
+    setCareer(run.state);
+    if (run.lastReport) {
       // Round 157: a fast-forwarded run still counts as playing today.
-      recordActivity('/club-manager', currentSeasonScore(state));
+      recordActivity('/club-manager', currentSeasonScore(run.state));
       recordStreakDay('/club-manager');
-      setReport(lastReport);
+      setReport(run.lastReport);
       setPhase('matchResult');
     }
   }, [career]);
+
+  /** The older "n games" fast forward: the same loop, run to the week after the n-th thing that involves me. */
+  const quickSim = useCallback((entries: number) => {
+    if (!career) return;
+    simToWeek(weekAfterMatches(career, entries));
+  }, [career, simToWeek]);
 
   const continueFromReport = useCallback(() => {
     if (!career) return;
@@ -473,7 +469,7 @@ export function useClubManager() {
   }, []);
 
   return {
-    quickSim,
+    quickSim, simToWeek,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,

@@ -1695,7 +1695,9 @@ export interface LiveMatch {
 
 export interface PlayResult {
   state: CareerState;
-  kind: 'window' | 'match' | 'seasonOver' | 'halftime';
+  /** Round 466: 'reached' only ever comes back to a caller that passed
+   *  untilWeek, when the week pointer got there without a match to play. */
+  kind: 'window' | 'match' | 'seasonOver' | 'halftime' | 'reached';
   report?: MatchWeekReport;
   live?: LiveMatch;
 }
@@ -2628,11 +2630,11 @@ export function clubDefFor(name: string): ClubDef {
 }
 
 const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
-const CUP_LABELS: Record<CupRound, string> = {
+export const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 const UCL_ORDER: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
-const UCL_LABELS: Record<UclKoRound, string> = {
+export const UCL_LABELS: Record<UclKoRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
@@ -7409,8 +7411,10 @@ function uclKoVenue(round: UclKoRound): boolean | null {
   return round === 'R16' || round === 'QF' ? true : round === 'SF' ? false : null;
 }
 
-/** Does this calendar entry involve my club right now? */
-function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
+/** Does this calendar entry involve my club right now? Exported since
+ *  Round 466 so the calendar can tell a cup round I am out of from one
+ *  whose draw is still to come. */
+export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
   switch (entry.type) {
     case 'league': return true;
     case 'window': return true;
@@ -8360,15 +8364,18 @@ function applyResult(table: TableRow[], home: string, away: string, hg: number, 
   }
 }
 
-interface MyFixture {
+export interface MyFixture {
   competition: Competition;
   compLabel: string;
   opponent: string;
   home: boolean | null;
 }
 
-/** Resolves what my club is playing for a given entry (null if not involved). */
-function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
+/** Resolves what my club is playing for a given entry (null if not involved).
+ *  Exported since Round 466: the calendar names the opponent on every match
+ *  day ahead from this, so the grid can never disagree with the fixture the
+ *  engine will put out. */
+export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
   if (!entryInvolvesMe(state, entry)) return null;
   if (entry.type === 'league') {
     const pairs = roundPairs(state.leagueClubs, entry.round);
@@ -10111,7 +10118,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
@@ -10133,6 +10140,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensurePairLedger(state);
   ensureUclCalendar(state);
   while (state.week < state.calendar.length) {
+    /* Round 466: a sim to a day stops at the first entry the day does not
+       cover. The entries before it have been played or skipped through this
+       same loop, so a tap on a quiet Tuesday never plays the match after it. */
+    if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
       state.week += 1;

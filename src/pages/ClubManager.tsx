@@ -177,6 +177,7 @@ const ClubManager = () => {
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
+              <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens on the first Saturday of the new year; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
               <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition. Above it all run the award races: the league's golden boot board, a player of the season watch scored by one formula for everyone, and the Ballon d'Or conversation, all settled with the season and named in your season review.</p>
@@ -1197,9 +1198,11 @@ const ClubManager = () => {
               )}
 
               {/* Round 158: the season as a real month calendar, with training
-                  cones, window markers and the long fast forward. */}
+                  cones, window markers and the long fast forward. Round 466:
+                  any day can be tapped and simmed to, through the same loop
+                  the fast forwards use. */}
               {hubPanel === 'calendar' && (
-                <CalendarScreen career={c} onQuickSim={g.quickSim} onSetTraining={g.setTraining} />
+                <CalendarScreen career={c} onSimTo={g.simToWeek} onSetTraining={g.setTraining} />
               )}
 
               {hubPanel === 'academy' && (

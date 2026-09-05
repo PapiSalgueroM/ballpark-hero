@@ -239,6 +239,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
       "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
       "Play the match, read the report, answer the press, and manage the dressing room between games.",
+      "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
       "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
       "Keep the confidence meter alive, hit the board's objectives, collect trophies, and roll into next season while the whole world ages around you.",
     ],
@@ -272,6 +273,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Are the players real?",
         a: "Yes, with real market values, in both eras. The only invented players are the ones the game clearly marks: youth padding, deep-future projections, and the starting squad of a club you create yourself.",
+      },
+      {
+        q: "When do the transfer windows close?",
+        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens on the first Saturday of the new year and shuts after your third match from there. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
       },
     ],
   },
