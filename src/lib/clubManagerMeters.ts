@@ -171,14 +171,6 @@ export function fanMeter(state: CareerState): Meter {
   return { value, shown: Math.round(value), ...fanBand(value, t.resultsSeen) };
 }
 
-/** The label under a ticket tier on the Finances desk, so the desk says what
- *  the meter does: "+4 with the fans", "-5 with the fans". */
-export function ticketFanLabel(tier: number): string {
-  const term = FAN_TICKET_TERMS[tier as 0 | 1 | 2] ?? 0;
-  if (term === 0) return 'The fans do not mind';
-  return `${term > 0 ? '+' : ''}${term} with the fans`;
-}
-
 function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v));
 }
