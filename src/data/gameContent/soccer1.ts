@@ -43,34 +43,36 @@ export const SOCCER_CONTENT_1: GameContentMap = {
 
   '/rebuild': {
     intro: [
-      "Rebuild Challenge drops you into a real club's 2026 squad with a war chest sized to the badge and a wheel that decides which shirt you judge next. Spin, keep or sell the man it lands on, and leave the place better.",
-      "The target scales with the job: elite squads need a nudge, modest ones a renovation. The board deals its demands up front, a fortune card swings the books, punishment cards wait for every miss, and two AI managers rebuild rivals beside you.",
+      "Rebuild Challenge drops you into a real club's 2026 squad with a pot sized to the badge and a wheel that decides which shirt you judge next. Spin, keep or sell the man it lands on, and leave the place better than you found it.",
+      "The target scales with the job: elite squads need a nudge, modest ones a renovation. Two envelopes land before the first spin, the board's and the finance department's, more arrive as the window goes on, punishment cards wait behind every missed demand, and two computer managers rebuild rival clubs beside you.",
     ],
     howToPlay: [
-      "Pick a market restriction first: the open market, the top five leagues only, or under 25s only. It locks the moment you pick a club.",
-      "Pick one of 63 real clubs, tiered from elite down to modest, and choose a manager: keep the man you have for free, or pay for one of three better names.",
-      "Flip one of ten fortune cards. Takeovers, lawsuits, anything from +60 to -35 million.",
+      "Pick a market restriction first: the open market, the top five leagues only, under 25s only, wonderkids only (21 and under) or the bargain bin (nobody over 30 million). It locks the moment you pick a club.",
+      "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+      "Hire a manager or keep the man you have for free. Each of the three candidates gets more out of one kind of player (the under 25s, the over 30s, the defence or the attack), and the number beside each name is what your XI reads with him in charge.",
       "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
-      "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring a marquee, a solid buy and a cheap seat, and promoting a fit from your own squad costs nothing.",
+      "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
       "When all eleven shirts are settled, the final whistle brings the reckoning, the rivals' windows and the season sim.",
     ],
     rules: [
-      "Budgets scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. Sales add to it, coach fees, war premiums and money swings eat it.",
+      "Pots scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. The board's envelope then adds or takes up to 35 million depending on its mood (scaled to the club), sales add to it, and the manager's fee, war premiums and bad envelopes eat it.",
+      "The board's mood runs from horrible to great. A great board drops one demand and tops the pot up. A horrible board cuts the pot and adds a fourth demand. Where a club's own money story is documented (Barcelona's sponsorship deal) the envelope says so; everywhere else the board speaks in general terms.",
       "The wallet can run 60 million past zero. Finish in debt and settled shirts are force sold at random, each swapped for the cheapest fit going, until the books balance.",
-      "The board's demands are dealt up front, one tied to the club's identity. Every miss draws a punishment card from a five card deck, without replacement: a forced flagship sale, a random exit, a 25 million fine, a dressing room mutiny worth two rating points, and exactly one card that lets it slide.",
-      "Every second deal fires a finance event, from a 40 million TV windfall to a 25 million sponsor scandal, on top of whatever your fortune card did.",
+      "Demands are things like three under 25s, two marquee buys, a clearout or money in the bank. They are judged on the window as you closed it, before the board's own clawback. Every miss draws a punishment card from a five card deck, without replacement: a forced sale of your best, a random exit, a 25 million clawback, a dressing room turn worth two rating points, and exactly one card that lets it go.",
+      "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a perk (a fresh scouts' list, 20 percent off your next signing, no bidding war on your next buy).",
       "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away, and a man you walk away from is gone from your market for good.",
-      "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest.",
+      "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest. A manager's lift only lands on the players who fit him, so no hire covers the target on its own.",
     ],
     example: [
-      "A modest club with a 74 rated XI makes the target 81 on a 65 million budget. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
+      "A modest club with a 74 rated XI makes the target 81 on a 65 million pot. The board is in a plain mood, the finance envelope is a sell on clause worth 20 million, and you hire the youth coach for 5 million. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
       "Three spins later the wheel finds your 84 rated striker. Keep him and the rating holds, sell him and 70 million funds two upgrades elsewhere. You keep him, finish 12 million in debt, and one forced sale later the XI still lands on 82. Job Done.",
     ],
     tips: [
-      "Read the board's demands before the first spin. Under 25 demands change who the scouts' marquee should be.",
+      "Read the board's demands before the first spin. Three under 25s changes who the scouts' marquee should be, and so does the manager you hired.",
       "Sell early, spend late. Money banked from the first spins buys real answers when the wheel finds your weakest shirts.",
       "The overdraft is a tool, not a plan. Two or three forced sales can undo a whole window's work.",
       "Walk away from wars over players you only half want. Overpaying twice sinks rebuilds.",
+      "A 40 overall in one shirt costs you about four rating points across the XI. Promote from the bench first if anyone fits.",
     ],
     faqs: [
       {
@@ -78,8 +80,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         a: "A seeded order fixed when you pick the club, hidden from you, every shirt exactly once. There is no re-spinning to reach your striker early.",
       },
       {
-        q: "What is the fortune card?",
-        a: "After hiring your coach the board hands you ten face-down envelopes and you flip exactly one. Best case is a 60 million takeover, worst is a 35 million hidden clause. The deck order is seeded per run, so there is no re-rolling your luck.",
+        q: "What is in the envelopes?",
+        a: "The board's envelope carries its mood, a change to the pot and the demands. The finance envelope is one of fifteen you pick blind: best case is a 60 million takeover, worst is a 35 million clause nobody read, and three of them hold a perk instead of money. The deck order is seeded per run, so there is no re-rolling your luck.",
       },
       {
         q: "What happens if I miss a board demand?",
@@ -90,8 +92,12 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         a: "Target plus 3 or more is Legendary Rebuild, hitting it is Job Done, improving short of it is Some Progress. Level or worse, the game says so.",
       },
       {
+        q: "Are the managers real people?",
+        a: "No. The three candidates are generated, with a name, a style and a fee, because this game will not put a rating on a real manager it cannot back with a record. Real names as hire options are on the list for a later round, once there is documented data behind them.",
+      },
+      {
         q: "Who are the rival managers?",
-        a: "Two AI personas who rebuild same tier clubs after your window closes, then face you in a simulated six team season, ten games each.",
+        a: "Two computer personas who rebuild same tier clubs after your window closes, then face you in a simulated six team season, ten games each.",
       },
     ],
   },

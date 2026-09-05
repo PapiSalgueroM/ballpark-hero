@@ -47,9 +47,10 @@
  *
  * NEGATIVE CONTROLS, one per defect, each restoring the real Round 434 code:
  *   SIM_REBUILD_ECONOMY_CONTROL=mismatch    puts the old two-formula opening
- *                                           back in useRebuild.ts. Section 1
- *                                           must FAIL on 207 of the 594
- *                                           openings, worst delta minus 9.
+ *                                           back in rebuildLoop.ts (the engine
+ *                                           the hook wraps since Round 456).
+ *                                           Section 1 must FAIL on 207 of the
+ *                                           594 openings, worst delta minus 9.
  *   SIM_REBUILD_ECONOMY_CONTROL=unfiltered  puts the old unfiltered deal back
  *                                           in rebuildDeck.ts. Section 2 must
  *                                           FAIL on contradictions AND on
@@ -78,7 +79,10 @@ if (CONTROL && CONTROL !== 'mismatch' && CONTROL !== 'unfiltered') {
 
 /* ---------- module paths, patched in place for a control ---------- */
 
-const HOOK_SRC = `${ROOT}/src/hooks/useRebuild.ts`;
+/* Round 456: the opening reading moved out of the hook and into the pure
+   engine, src/lib/rebuildLoop.ts, with the rest of the rules. The hook is a
+   wrapper now, so this harness pins the engine's call sites instead. */
+const HOOK_SRC = `${ROOT}/src/lib/rebuildLoop.ts`;
 const DECK_SRC = `${ROOT}/src/lib/rebuildDeck.ts`;
 
 /* A control's patched copy has to sit inside the worktree, or esbuild cannot
@@ -118,7 +122,7 @@ if (CONTROL === 'mismatch') {
   if (picked.length === 0) return 0;
   return Math.round(picked.reduce((s, p) => s + playerRating(p), 0) / picked.length);
 }`,
-    'simRebuildEconomy.control.useRebuild.ts',
+    'simRebuildEconomy.control.rebuildLoop.ts',
   );
 }
 
@@ -206,16 +210,16 @@ console.log('\n1. THE OPENING READING');
    reads its own documentation proves nothing. */
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 const hookCode = stripComments(fs.readFileSync(HOOK_SRC, 'utf8'));
-if (!hookCode.includes('setStartRating(openingRating(FORMATIONS[0], sq))')) {
-  fail('useRebuild no longer stores startRating from openingRating(), so section 1 is measuring the wrong function');
+if (!hookCode.includes('const startRating = openingRating(formation, setup.squad);')) {
+  fail('createRun no longer stores startRating from openingRating(), so section 1 is measuring the wrong function');
 }
-if (!hookCode.includes('xiRatingWithHoles(startingXi)')) {
-  fail('the live rating memo no longer reads xiRatingWithHoles(startingXi), so this harness models a HUD that does not exist');
+if (!/const xi = xiOf\(s\);[\s\S]{0,200}xiRatingWithHoles\(xi, lift\)/.test(hookCode)) {
+  fail('the live rating (ratingOf) no longer reads xiRatingWithHoles over xiOf(s), so this harness models a HUD that does not exist');
 }
 /* The shape is a pre spin choice, so the opening reading has to follow it.
    Without this line a squad with a hole in the 4-3-3 banks free points by
    switching to a shape it fits, and the target does not move with it. */
-if (!/setFormationName\(name\);\s*setStartRating\(openingRating\(/.test(hookCode)) {
+if (!/export function setFormation\([\s\S]{0,900}const startRating = openingRating\(formation, s\.squad\);/.test(hookCode)) {
   fail('setFormation no longer re-takes the opening reading, so a shape change hands out a delta nobody earned');
 }
 
