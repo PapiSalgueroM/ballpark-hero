@@ -19,9 +19,51 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 440.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 446.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED 2026-09-04: Rounds 441 to 445.** Five items straight off his
+  2026-08-28 review, weighted to the ones he described precisely and the one thing he has
+  asked for more than anything else.
+
+  **441 SIGN THE PLAYER, the auction he actually described.** He wrote the format out in
+  full and the game does something else. His words: a random position is drawn, the second
+  best player in the lot is revealed at a list price, bidding starts, two or more bidders
+  means a war, one bidder wins at the list price, nobody means the price drops until
+  somebody bites. Every position goes up once before the best player in the room is
+  auctioned, and the endgame is the last two bidders on him. Also: the opening prices are
+  absurd (162M for a player he named), so ratings and values must be checked against the
+  real rows.
+
+  **442 BUILD YOUR XI, the positions are not checked.** His words: he put Marcelo at left
+  back "when he hasnt played there in a minute" and Ter Stegen, a goalkeeper, at centre
+  mid. A keeper in midfield is the clearest possible correctness bug. The site already has
+  a position family rule that World XI uses (eligiblePositions and fitsSlot in worldXi.ts,
+  tightened in Rounds 319 and 345), so this is a shared rule to reuse, not a new one to
+  invent. He also says the simulation is bland compared with the other games.
+
+  **443 DATA CORRECTNESS, the sweep he asked for.** His words: "u gotta make sure all data
+  is correct across the whole website because in this game in the who am i game u have
+  rodris age listed as zero and his value as zero". A zero age is not a wrong number, it is
+  a missing one being rendered as a fact. Find every place a missing value is printed as a
+  real one, fix the rendering so it says nothing rather than zero, and fence it so the next
+  empty column cannot reach a player. Also: he says Who Am I is slow to load, and a couple
+  of seconds is where people leave.
+
+  **444 THE SMALL GAME FIXES HE LISTED.** Rarity Round must explain before the first guess
+  that you are hunting the least picked answer (he says the goal is not stated). Career
+  Ladder wants the flag of the country each club plays in. Missing XI wants the two teams
+  identified by flag or colour, and its lineup bubbles overlap. Each is small, each is his,
+  and together they are a round.
+
+  **445 THE SECOND ARCADE GAME, ON THE FREE KICK ENGINE.** Round 433 shipped the first game
+  on this site you play rather than answer, and CLAUDE.md now carries the one engine many
+  sports rule. This round proves that rule: the second arcade game SHARES src/lib/freeKick
+  physics rather than copying it, so the aim, power, spray and keeper logic is lifted into
+  something both games use. His ask, repeated more than any other: "add more games that
+  your actually moving the keys and stuff and not simply typing and reading".
+
 
 - **Desktop lane, SHIPPED 2026-09-04: Rounds 434 to 440. All six broken economies plus Squad Deal.** Every one measured before and after, every one fenced with a control that reproduces the defect it fixed. 434: the Player Stock Market score was a spend ratio, so the cheapest XI scored 95.2 and refusing to invest was the winning play; the score is return on the whole 200M wallet now, judged against the most and least valuable elevens that wallet could actually have bought, and every printed stat beats guessing where two of them used to lose to it. 435: 15 of 66 Rebuild clubs opened points down before a move (207 of 594 openings), and a quarter of boards demanded two things no window could deliver; both closed, plus the Caretaker copy he named. 436: the Club Manager kitty survives the summer, so a saver opens on 1.54 times the spender kitty instead of both landing on exactly 210m, and the wage ceiling stopped being a mirror of your own payroll. 437: the Soccer Career money app kept paying through retirement, 523.91M of it across 86 measured tails. 438: Idle Arena leaving the tab open no longer beats closing it, and the Trophy panel stopped teaching the inverse of its own formula. 439: Stadium Tycoon settles away earnings when the tab comes back, not only on load. 440: the league you pick in Squad Deal is the league you get, in both eras. Gate: 202 of 202 harnesses green, tsc zero, six routes played in a browser.
   The Round 424 audit ran every game economy through a headless probe and found all
