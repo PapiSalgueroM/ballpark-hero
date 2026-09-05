@@ -669,7 +669,7 @@ current:**
 | File | Status |
 |---|---|
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |
-| `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. |
+| `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. Since 2026-09-05 it also carries **his 2026-08-28 list item by item** (under the 2026-08-28 owner feedback section): every item he asked for with DONE, PART, OPEN or OWNER DECISION and the round behind it. That table is the backlog; pick the next round from it and move the row when you ship. |
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
 | `docs/WORKBOARD.md` | **LIVE.** The two-lane task board: claims before building, round numbers reserved here. |
 | `docs/OWNER-ADSENSE-RECOVERY-2026-08-30.md` | **HISTORICAL INPUT, RECOVERY SUBMITTED.** The owner's AdSense recovery addendum, written the hour Google rejected the site for "Low value content". Round 400 completed its two deliverables and the authorized review was submitted on 2026-09-02. Current status lives in the workboard and readiness record. It does NOT replace the master spec. |
