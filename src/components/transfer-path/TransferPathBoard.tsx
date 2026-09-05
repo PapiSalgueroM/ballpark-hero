@@ -1,6 +1,6 @@
 import { FlagImg } from '@/components/FlagImg';
 import { useState, useMemo } from 'react';
-import { useTransferPath } from '@/hooks/useTransferPath';
+import { useTransferPath, type TransferPathRefusal } from '@/hooks/useTransferPath';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -9,6 +9,7 @@ import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSear
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { ACTIVE_YEAR, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
 import { cn } from '@/lib/utils';
 
 
@@ -19,6 +20,7 @@ import { cn } from '@/lib/utils';
 export function TransferPathBoard() {
   const {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
+    rule, activeRule, setRule, ruleLocked, dailyRuleBlocked, ruleAvailability, optimal, hint,
     addPlayer, giveUp, revealPath, switchToUnlimited, nextPuzzle,
     getAllPlayerNames, getPlayerNationality,
     isLoadingPool, isLoading,
@@ -39,14 +41,21 @@ export function TransferPathBoard() {
     [chain, puzzle.playerB],
   );
 
+  /* Round 460: the refusal says which rule refused, not just that the link failed. */
+  const refusalText = (name: string, reason: TransferPathRefusal | undefined) => {
+    const last = chain[chain.length - 1];
+    if (reason === 'duplicate') return `${name} is already in the path`;
+    if (reason === 'retired') return `${name} has no ${ACTIVE_YEAR} season, and this rule allows active players only`;
+    if (reason === 'outside-europe') return `${name} only links to ${last} through a club outside Europe`;
+    return `${name} was never at the same club as ${last} in the same season`;
+  };
+
   const handleSelect = (name: string) => {
     setInput('');
     setError('');
     const result = addPlayer(name);
     if (!result.ok) {
-      setError(result.reason === 'duplicate'
-        ? `${name} is already in the path`
-        : `${name} was never at the same club as ${chain[chain.length - 1]} in the same season`);
+      setError(refusalText(name, result.reason));
       setLastRejected({ name, after: chain[chain.length - 1] });
     }
   };
@@ -65,6 +74,10 @@ export function TransferPathBoard() {
   const isWon = status === 'won';
   const steps = chain.length - 1;
   const emojiChain = chain.map(() => '⚽').join('→');
+  const ruleOn = activeRule !== 'classic';
+  /* The daily's score counts against the everyday minimum whatever rule is on
+     (one shared puzzle, one leaderboard), so say so where the two differ. */
+  const dailyScoredElsewhere = mode === 'daily' && ruleOn && optimal !== puzzle.minSteps;
 
   // This check must live BELOW every hook. Returning early above the hooks
   // changes the hook count between renders and crashes with React error #310.
@@ -82,19 +95,64 @@ export function TransferPathBoard() {
       title="TRANSFER PATH"
       subtitle="Name teammates to connect the two players in as few steps as possible."
       headerExtra={
-        <div className="mt-1 flex items-center justify-center gap-2">
-          <p className="text-xs text-muted-foreground">
-            {mode === 'daily' ? '📅 Daily Challenge' : `♾️ Unlimited #${unlimitedIndex + 1}`}
-          </p>
-          <HowToPlayPopover title="How to Play Transfer Path" floatingTrigger={false} className="p-1">
-            <div className="space-y-3 text-left">
-              <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
-              <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
-              <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
-              <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
-              <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
+        <div className="mt-1 space-y-2">
+          <div className="flex items-center justify-center gap-2">
+            <p className="text-xs text-muted-foreground">
+              {mode === 'daily'
+                ? '📅 Daily Challenge'
+                : `♾️ Unlimited #${unlimitedIndex + 1}${rule !== 'classic' ? ` · ${RULE_LABEL[rule]} (${ruleAvailability[rule]} puzzles)` : ''}`}
+            </p>
+            <HowToPlayPopover title="How to Play Transfer Path" floatingTrigger={false} className="p-1">
+              <div className="space-y-3 text-left">
+                <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
+                <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
+                <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
+                <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
+                <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
+                <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, has a {ACTIVE_YEAR} season. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
+                <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
+              </div>
+            </HowToPlayPopover>
+          </div>
+          <div role="group" aria-label="Special rules" className="flex flex-wrap justify-center gap-1.5">
+            {TRANSFER_PATH_RULES.map(r => {
+              const off = ruleLocked || ruleAvailability[r] === 0;
+              return (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRule(r)}
+                  aria-pressed={rule === r}
+                  disabled={off}
+                  title={ruleLocked ? 'Rules lock once today\'s chain has started' : ruleAvailability[r] === 0 ? 'No puzzle carries this rule yet' : undefined}
+                  className={cn(
+                    'rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors',
+                    rule === r
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40',
+                    off && 'opacity-60 cursor-not-allowed',
+                  )}
+                >
+                  {RULE_LABEL[r]}
+                </button>
+              );
+            })}
+          </div>
+          {ruleLocked && (
+            <p className="text-[10px] text-muted-foreground">Special rules lock once today's chain has started. Unlimited takes any rule.</p>
+          )}
+          {dailyRuleBlocked && (
+            <div className="rounded-xl border border-dashed border-border bg-card px-3 py-2 text-xs text-muted-foreground space-y-1.5">
+              <p>Today's pair has no route under {RULE_LABEL[rule]}, so the daily plays the everyday rule.</p>
+              <button
+                type="button"
+                onClick={() => { switchToUnlimited(); setInput(''); setError(''); setShowHint(false); }}
+                className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors"
+              >
+                Play unlimited under {RULE_LABEL[rule]}
+              </button>
             </div>
-          </HowToPlayPopover>
+          )}
         </div>
       }
     >
@@ -114,8 +172,13 @@ export function TransferPathBoard() {
             </div>
           </div>
           <p className="text-[10px] text-center text-muted-foreground mt-2">
-            Optimal: {puzzle.minSteps} step{puzzle.minSteps > 1 ? 's' : ''}
+            Optimal: {optimal} step{optimal > 1 ? 's' : ''}{ruleOn ? ` under ${RULE_LABEL[activeRule]}` : ''}
           </p>
+          {dailyScoredElsewhere && (
+            <p className="text-[10px] text-center text-muted-foreground mt-0.5">
+              The everyday optimal is {puzzle.minSteps}, and that is what today's score counts against.
+            </p>
+          )}
         </div>
 
         {/* Chain built so far */}
@@ -207,7 +270,7 @@ export function TransferPathBoard() {
               </button>
             )}
             {showHint && (
-              <p className="text-xs text-center text-muted-foreground italic">💡 {puzzle.hint}</p>
+              <p className="text-xs text-center text-muted-foreground italic">💡 {hint}</p>
             )}
             <GiveUpButton onGiveUp={giveUp} label="Give up and see a path" />
           </div>
@@ -220,10 +283,14 @@ export function TransferPathBoard() {
             outcomeEmoji="🎉"
             headline="Connected!"
             statLine={<span className="text-2xl font-display font-bold text-primary">{score} pts</span>}
-            funFact={<>Your path: {steps} step{steps > 1 ? 's' : ''} · Optimal: {puzzle.minSteps}</>}
+            funFact={<>
+              Your path: {steps} step{steps > 1 ? 's' : ''} · Optimal: {optimal}
+              {ruleOn ? ` under ${RULE_LABEL[activeRule]}` : ''}
+              {dailyScoredElsewhere ? `, scored against the everyday ${puzzle.minSteps}` : ''}
+            </>}
             emojiGrid={emojiChain}
             share={{
-              score: `${score} pts (${steps} steps)`,
+              score: `${score} pts (${steps} steps${ruleOn ? `, ${RULE_LABEL[activeRule]}` : ''})`,
               gameName: 'Transfer Path',
               gamePath: '/transfer-path',
             }}
@@ -242,7 +309,7 @@ export function TransferPathBoard() {
 
         <ReportQuestion
           gameType="transfer-path"
-          gameContext={{ puzzleId: puzzle.id, playerA: puzzle.playerA, playerB: puzzle.playerB, chain, lastRejected }}
+          gameContext={{ puzzleId: puzzle.id, playerA: puzzle.playerA, playerB: puzzle.playerB, rule: activeRule, chain, lastRejected }}
         />
       </div>
 
