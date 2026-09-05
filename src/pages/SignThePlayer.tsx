@@ -10,10 +10,11 @@ import { FlagImg } from '@/components/FlagImg';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, DECAY_FLOOR, DECAY_STEP, START_BUDGET,
-  aiValuation, assignmentFee, auctionScore, buildAuctionPool, createBidders,
-  orderLots, simulateShowdown,
-  type AuctionPlayer, type AuctionTheme, type Bidder, type ShowdownResult,
+  AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, START_BUDGET,
+  applySale, auctionScore, buildAuctionPool, createBidders,
+  decayFloorFor, decaySnapper, fillOpenChairs, nextDecayPrice,
+  orderLots, runRivalBids, simulateShowdown,
+  type AuctionPlayer, type AuctionTheme, type Bidder, type BidderId, type ShowdownResult,
 } from '@/lib/auctionHouse';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -41,6 +42,10 @@ const SignThePlayer = () => {
   const [weakFills, setWeakFills] = useState<AuctionPlayer[]>([]);
   const [decaying, setDecaying] = useState(false);
   const timer = useRef<number | null>(null);
+  /* Round 441: a lot withdrawn unsold joins the end of auction fill list, so
+     two squads short of the same position never sign the same man. A ref, not
+     state, because the settle timer reads it after the closure was captured. */
+  const unsold = useRef<AuctionPlayer[]>([]);
 
   const you = bidders.find(b => b.id === 'you')!;
   const lot = lots[lotIndex] ?? null;
@@ -63,6 +68,7 @@ const SignThePlayer = () => {
     const { lots: ordered, weakFills: fills } = orderLots(pool);
     setBidders(createBidders());
     setWeakFills(fills);
+    unsold.current = [];
     setLots(ordered.map(l => ({ player: l.player, kind: 'auction' as const, pass: l.pass, headline: l.headline })));
     setLotIndex(0);
     setResult(null);
@@ -72,37 +78,15 @@ const SignThePlayer = () => {
 
   const eligible = useCallback((b: Bidder, p: AuctionPlayer) => b.squad[p.slotKey] === null && b.budget >= 5, []);
 
-  useEffect(() => {
-    if (phase !== 'auction' || !lot) return;
-    const active = new Set(bidders.filter(b => eligible(b, lot.player)).map(b => b.id));
-    setActiveIds(active);
-    setPrice(lot.player.basePrice);
-    setLeader(null);
-    setLog(l => [`🔨 LOT ${lotIndex + 1}: ${lot.player.name} (${lot.player.rating}) opens at ${money(lot.player.basePrice)}.`, ...l].slice(0, 30));
-    if (!active.has('you')) setAiThinking(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, lotIndex, lots]);
-
   const advance = useCallback(() => {
     if (lotIndex + 1 >= lots.length) {
       /* Round 327, "fill the roster then settle it in a sim": every hole
-         left when the last hammer falls is filled from the weak band at the
-         assignment fee, budget floored at zero. Nobody plays the showdown
-         a man short. */
+         left when the last hammer falls is filled at the assignment fee,
+         budget floored at zero. Nobody plays the showdown a man short.
+         Round 441: and nobody signs a man another squad already has, so the
+         withdrawn lots join the journeymen in the fill list. */
       setBidders(prev => {
-        const filled = prev.map(b => {
-          let budget = b.budget;
-          const squad = { ...b.squad };
-          for (const slot of AUCTION_SLOTS) {
-            if (squad[slot.key] !== null) continue;
-            const fill = weakFills.find(w => w.slotKey === slot.key);
-            if (!fill) continue;
-            const fee = Math.min(assignmentFee(fill), Math.max(0, budget));
-            budget = Math.max(0, budget - fee);
-            squad[slot.key] = fill;
-          }
-          return { ...b, budget, squad };
-        });
+        const filled = fillOpenChairs(prev, [...weakFills, ...unsold.current]);
         setResult(simulateShowdown(filled));
         return filled;
       });
@@ -114,7 +98,7 @@ const SignThePlayer = () => {
     }
   }, [lotIndex, lots.length, weakFills]);
 
-  const settleLot = useCallback((winnerId: Bidder['id'] | null, finalPrice: number) => {
+  const settleLot = useCallback((winnerId: BidderId | null, finalPrice: number) => {
     if (!lot) return;
     const soldTo = winnerId;
     const soldFor = finalPrice;
@@ -124,15 +108,12 @@ const SignThePlayer = () => {
     if (soldTo) {
       const finalTo = soldTo;
       const price2 = soldFor;
-      setBidders(prev => prev.map(b => b.id !== finalTo ? b : ({
-        ...b,
-        budget: Math.max(0, b.budget - price2),
-        squad: { ...b.squad, [lot.player.slotKey]: lot.player },
-      })));
+      setBidders(prev => applySale(prev, lot.player, finalTo, price2));
       const w = bidders.find(b => b.id === finalTo);
       setLog(l => [`✅ SOLD! ${lot.player.name} to ${w?.name} for ${money(price2)}.`, ...l].slice(0, 30));
     } else {
-      setLog(l => [`🪦 UNSOLD. ${lot.player.name} found no takers even at ${money(finalPrice)}. The lot is withdrawn.`, ...l].slice(0, 30));
+      if (!unsold.current.some(p => p.name === lot.player.name)) unsold.current = [...unsold.current, lot.player];
+      setLog(l => [`🪦 UNSOLD. ${lot.player.name} found no takers even at ${money(finalPrice)}. The lot is withdrawn, he goes on the fill list.`, ...l].slice(0, 30));
     }
     setDecaying(false);
     setAiThinking(false);
@@ -147,21 +128,14 @@ const SignThePlayer = () => {
     if (!lot) return;
     setDecaying(true);
     setLeader(null);
-    const floor = Math.max(5, Math.round(lot.player.basePrice * DECAY_FLOOR));
+    const floor = decayFloorFor(lot.player.basePrice);
     const step = (p: number) => {
-      const next = Math.round(p * DECAY_STEP);
+      const next = nextDecayPrice(p);
       if (next <= floor) { settleLot(null, p); return; }
       setPrice(next);
       setLog(l => [`📉 No takers. The price falls to ${money(next)}.`, ...l].slice(0, 30));
-      for (const b of bidders) {
-        if (b.id === 'you' || b.squad[lot.player.slotKey] !== null || b.budget < next) continue;
-        const val = aiValuation(b, lot.player, slotsLeftAfter);
-        const discount = 1 - next / lot.player.basePrice;
-        if (next <= val && Math.random() < 0.25 + discount) {
-          window.setTimeout(() => settleLot(b.id, next), 500);
-          return;
-        }
-      }
+      const snapper = decaySnapper(bidders, lot.player, next, slotsLeftAfter);
+      if (snapper) { window.setTimeout(() => settleLot(snapper, next), 500); return; }
       timer.current = window.setTimeout(() => step(next), 950);
     };
     timer.current = window.setTimeout(() => step(fromPrice), 950);
@@ -175,56 +149,33 @@ const SignThePlayer = () => {
     settleLot('you', price);
   };
 
-  const runAis = useCallback((currentPrice: number, currentLeader: Bidder['id'] | null, active: Set<Bidder['id']>) => {
+  const runAis = useCallback((currentPrice: number, currentLeader: BidderId | null, active: Set<BidderId>) => {
     if (!lot) return;
     setAiThinking(true);
-    // Compute the whole rival battle upfront, then REPLAY it raise by raise
-    // so the room feels live: each bid lands on its own beat, not in a dump.
-    let p = currentPrice;
-    let lead = currentLeader;
-    const act = new Set(active);
-    interface Ev { text: string; price: number; leader: Bidder['id'] | null }
-    const events: Ev[] = [];
-    let moved = true;
-    while (moved) {
-      moved = false;
-      for (const b of bidders) {
-        if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
-        const val = aiValuation(b, lot.player, slotsLeftAfter);
-        const step = p >= 200 ? 25 : p >= 80 ? 10 : 5;
-        if (p + step <= val && b.budget >= p + step) {
-          p += step;
-          lead = b.id;
-          events.push({ text: `${b.emoji} ${b.name} bids ${money(p)}!`, price: p, leader: lead });
-          moved = true;
-        } else {
-          act.delete(b.id);
-          events.push({ text: `${b.emoji} ${b.name} is OUT.`, price: p, leader: lead });
-        }
-      }
-      if (act.has('you')) break;
-    }
+    /* Round 441: the whole rival exchange is computed by the engine (see
+       runRivalBids in auctionHouse), then REPLAYED raise by raise here so the
+       room feels live: each bid lands on its own beat, not in a dump. */
+    const ex = runRivalBids({
+      lot: lot.player, bidders, active, price: currentPrice, leader: currentLeader, slotsLeftAfter,
+    });
     const finish = () => {
-      setActiveIds(new Set(act));
+      setActiveIds(new Set(ex.active));
       setAiThinking(false);
-      const remaining = [...act];
-      if (!act.has('you') && remaining.length <= 1) {
-        if (lead) settleLot(lead, p);
-        else startDecay(p);
-      }
-      else if (act.has('you') && remaining.length === 1 && lead === 'you') settleLot('you', p);
+      if (ex.outcome === 'sold' && ex.winner) settleLot(ex.winner, ex.price);
+      else if (ex.outcome === 'decay') startDecay(ex.price);
     };
     const stepPlay = (i: number) => {
-      if (i >= events.length) { finish(); return; }
-      const ev = events[i];
+      if (i >= ex.events.length) { finish(); return; }
+      const ev = ex.events[i];
+      const b = bidders.find(x => x.id === ev.bidderId);
       setPrice(ev.price);
       setLeader(ev.leader);
-      setLog(l => [ev.text, ...l].slice(0, 30));
+      setLog(l => [ev.kind === 'bid' ? `${b?.emoji} ${b?.name} bids ${money(ev.price)}!` : `${b?.emoji} ${b?.name} is OUT.`, ...l].slice(0, 30));
       timer.current = window.setTimeout(() => stepPlay(i + 1), 460 + Math.random() * 340);
     };
-    if (events.length === 0) { finish(); return; }
+    if (ex.events.length === 0) { finish(); return; }
     timer.current = window.setTimeout(() => stepPlay(0), 350);
-  }, [lot, bidders, slotsLeftAfter, settleLot]);
+  }, [lot, bidders, slotsLeftAfter, settleLot, startDecay]);
 
   const userBid = (step: number) => {
     if (!lot || phase !== 'auction' || aiThinking || !activeIds.has('you')) return;
@@ -251,13 +202,28 @@ const SignThePlayer = () => {
     else runAis(price, leader, act);
   };
 
-  const youActive = activeIds.has('you');
+  /* Opening a lot. Round 441 moved this below runAis so it can start the
+     rivals ITSELF when you have no say in this one.
+     THE BUG IT KILLS: the rivals used to be started by a second effect keyed
+     on whether you were active, and an effect keyed on a flag only fires when
+     that flag CHANGES. Two lots in a row you could not bid on, which is any
+     two positions you already own coming up back to back in the second pass,
+     and the room simply stopped: no buttons, nothing on a timer, no way to
+     reach the showdown. Measured in jsdom on this page, the auction died on
+     lot 13 of 22. */
   useEffect(() => {
-    if (phase === 'auction' && lot && lot.kind === 'auction' && !youActive && aiThinking) {
-      runAis(price, leader, activeIds);
+    if (phase !== 'auction' || !lot) return;
+    const active = new Set(bidders.filter(b => eligible(b, lot.player)).map(b => b.id));
+    setActiveIds(active);
+    setPrice(lot.player.basePrice);
+    setLeader(null);
+    setLog(l => [`🔨 LOT ${lotIndex + 1}: ${lot.player.name} (${lot.player.rating}) opens at ${money(lot.player.basePrice)}.`, ...l].slice(0, 30));
+    if (!active.has('you')) {
+      setAiThinking(true);
+      runAis(lot.player.basePrice, null, active);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, lotIndex, youActive]);
+  }, [phase, lotIndex, lots]);
 
   const score = result ? auctionScore(result, you) : 0;
   useGameCompletion('sign-the-player', phase === 'showdown' && !!result, score, result?.champion === 'you' ? 1 : 0);
@@ -461,7 +427,7 @@ const SignThePlayer = () => {
           howToPlay={[
             'Pick a theme: Current Stars, All-Time Legends, or World Cup 2026. The room only ever shows the running order as positions; a player is revealed the moment his lot opens.',
             'Pass one is a lot per position in a random order, pass two is the elite band, and the single most valuable player is held back to headline the close.',
-            'Every lot opens at real list price. If two or more bidders want him it is a war in £5M/£10M/£25M steps; if nobody bites the price falls step by step, and you can snap the bargain any time before the floor withdraws the lot.',
+            'Every lot opens at real list price. Two or more bidders and it is a war in £5M/£10M/£25M steps; exactly one bidder and he takes him at the list price; nobody at all and the price falls step by step, and you can snap the bargain any time before the floor withdraws the lot.',
             'When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, and the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
           ]}
           examples={[
