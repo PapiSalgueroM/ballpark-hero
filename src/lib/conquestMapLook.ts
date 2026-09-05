@@ -45,6 +45,12 @@ export interface ConquestMapSport {
   viewBox: { width: number; height: number };
   /** What one region is called in this sport's copy: "state", "territory". */
   regionNoun: string;
+  /** Round 459: label size relative to the US maps. The renderer sizes a
+   *  label for a state, and a hex cartogram's regions are a third of that
+   *  width, so at 1 the codes of neighbouring single hex empires ran into
+   *  each other on a phone (measured 2026-09-05: a three letter code at the
+   *  phone size is 19 units wide on a 21 unit hex). Default 1. */
+  labelScale?: number;
 }
 
 export const LOOK_KINDS = ['plain', 'stripes', 'stripesBack', 'dots', 'cross', 'bars'] as const;

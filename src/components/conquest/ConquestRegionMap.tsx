@@ -149,7 +149,7 @@ export default function ConquestRegionMap({
     const team = teamById.get(blob.teamId);
     const single = blob.memberIds.length === 1;
     const anchor = single ? geomById.get(blob.memberIds[0]) : null;
-    const fontSize = blobFontSize(blob.totalArea, blob.memberIds.length) + 1;
+    const fontSize = (blobFontSize(blob.totalArea, blob.memberIds.length) + 1) * (sport.labelScale ?? 1);
     const width = 0.85 * Math.max(...blob.memberIds.map(id => geomById.get(id)?.width ?? 0));
     return {
       teamId: blob.teamId,

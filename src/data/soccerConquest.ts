@@ -679,6 +679,9 @@ export const SOCCER_CONQUEST_MAP: ConquestMapSport = {
   teams: MAP_TEAMS,
   viewBox: built.viewBox,
   regionNoun: 'region',
+  /* A three letter code at 0.8 is 15 units wide on a 21 unit hex, so two
+     single hex empires side by side keep a gap between their codes. */
+  labelScale: 0.8,
 };
 
 const IMP_TEAMS: ImperialismTeam[] = SOCCER_CLUBS.map(c => ({
