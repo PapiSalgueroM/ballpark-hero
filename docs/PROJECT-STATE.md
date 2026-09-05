@@ -67,7 +67,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Soccer Career arc | ONGOING | Round 438 retirement money; the flagship earns the most work |
 | Career Ladder flags | DONE | Round 444 |
 | Who Am I slow load; more puzzles; accuracy meter | PART | Round 443 load (10 requests, 446 KiB); puzzles and meter open |
-| Alphabet Sprint verify end to end; say full names count | OPEN | |
+| Alphabet Sprint verify end to end; say full names count | DONE | copy since Round 319 (the full name lead sentence); verified 2026-09-05 with a real browser play of the route, 14 interactions clean, no findings |
 | Conquest map presentation | OPEN | |
 | NEW Search and Discard | DONE | shipped 2026-08-29 |
 | NEW Sports Bingo | DONE | shipped 2026-08-29 |

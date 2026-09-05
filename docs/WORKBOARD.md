@@ -19,9 +19,35 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 450.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 454.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, CLAIMED 2026-09-05: Rounds 450 to 452.** Three items straight off the
+  item by item ledger in `docs/PROJECT-STATE.md`.
+
+  **450 PLAYER BINGO TRANSFERS.** Four player reports between 2026-08-30 and 2026-09-04,
+  all saying the same thing: transfers are out of date. The table's 2026 rows are an
+  autumn 2025 snapshot and the verified overlay that reached them in Round 393 holds 46
+  moves. This round widens it with two source verified completed summer 2026 moves for
+  the pool the games draw, applies them by migration, and proves it with simTransferOverlay.
+  Anything that cannot be verified to that standard is listed as a gap, never filled.
+
+  **451 CLUB MANAGER, HIS P1 2 AND P1 3.** The league table broken mid season on a 2005/06
+  Barcelona save, and the Cups tab listing the Copa del Rey as alive while rendering the
+  Champions League. No round has touched either. Reproduce against the real engine first,
+  fix the cause, fence it, and check whether the GM and dynasty sims share the shape.
+
+  **452 ALPHABET SPRINT, HIS TWO LINES.** "verify it works end to end; say clearly that
+  full names count." The copy half was done in Round 319 (the full name lead sentence);
+  this is the verification half, a real browser play of the route, with a fix if it finds
+  anything. DONE 2026-09-05: 14 interactions clean, no findings, nothing to fix.
+
+  **453 FLAGS BESIDE EVERY NATIONALITY.** His words: "Flags, never country abbreviations,
+  everywhere on the site." Seventeen render sites print a nationality as bare text and Dart
+  Draft carries three letter codes. Every one gets the site's flag component beside the
+  name, never a code in place of a name, with a source fence so the next page cannot ship
+  a bare one.
 
 - **Desktop lane, Rounds 446 to 449, claimed and SHIPPED 2026-09-04 and 2026-09-05.** Four
   rounds built directly off his messages during the 441 to 445 batch, each one a thing he
