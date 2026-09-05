@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Loader2, Lock } from 'lucide-react';
-import { FlagImg } from '@/components/FlagImg';
+import { FlagImg, FlagFromEmoji } from '@/components/FlagImg';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -469,8 +469,25 @@ const CareerLadder = () => {
                 >
                   <span className="text-[10px] font-bold text-primary w-6 shrink-0">#{i + 1}</span>
                   <div className="min-w-0 flex-1">
+                    {/* Round 444, his note: "just include the flags of the
+                        country the team plays in". They were already worked
+                        out. flagForClub was built for the same request on
+                        2026-08-05 and its own comment quotes it, and the row
+                        printed what it returned. What it returns is an EMOJI,
+                        and Windows ships no colour font for flag emoji, so a
+                        regional indicator pair renders as the bare letters
+                        (Spain as "ES") and England's tag sequence collapses to
+                        a plain black flag. He was looking at letters and black
+                        flags and correctly read that as no flags. That is the
+                        exact case src/lib/flagUtils.ts was written for, so the
+                        ladder draws real flagcdn images now. An unknown club
+                        still gets nothing rather than a guessed country. */}
                     <div className="font-semibold text-foreground text-sm truncate">
-                      {flagForClub(s.club) && <span className="mr-1.5">{flagForClub(s.club)}</span>}
+                      {flagForClub(s.club) && (
+                        <span className="mr-1.5">
+                          <FlagFromEmoji emoji={flagForClub(s.club)} size={16} />
+                        </span>
+                      )}
                       {s.club}
                     </div>
                     <div className="text-xs text-muted-foreground truncate">

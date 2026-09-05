@@ -129,7 +129,10 @@ export function careerScore(stintsShown: number, wrongGuesses: number, totalStin
 // of) the country, so we only map to a flag when the string contains a known
 // country name as a whole word. Most specific entries sit first so compound
 // names like "Equatorial Guinea" never fall through to "Guinea".
-const COUNTRY_FLAGS: Array<[string, string]> = [
+/* Round 444: exported so scripts/simMissingXiLayout.mjs can check every flag in
+   these tables against the real flagcdn resolver, rather than trusting that a
+   glyph typed into a 200 row table is a flag emoji. */
+export const COUNTRY_FLAGS: Array<[string, string]> = [
   ['equatorial guinea', '🇬🇶'],
   ['guinea-bissau', '🇬🇼'],
   ['northern ireland', '🇬🇧'],
@@ -224,13 +227,18 @@ export function flagForNationality(nationality: string | null | undefined): stri
  * to the country-name scan. Returns '' when unknown so rows can skip the flag
  * instead of showing a wrong one.
  */
-const CLUB_COUNTRY: Array<[string, string]> = [
+export const CLUB_COUNTRY: Array<[string, string]> = [
   // Order-sensitive entries FIRST (substring collisions)
   ['inter miami', '🇺🇸'], ['internacional', '🇧🇷'], ['barcelona sc', '🇪🇨'],
   ['atletico nacional', '🇨🇴'], ['sporting cristal', '🇵🇪'], ['sporting kansas', '🇺🇸'],
   ['america de cali', '🇨🇴'], ['america mineiro', '🇧🇷'], ['club america', '🇲🇽'],
   ['al nassr', '🇸🇦'], ['austria wien', '🇦🇹'], ['austria vienna', '🇦🇹'],
   ['atletico mineiro', '🇧🇷'], ['athletico paranaense', '🇧🇷'], ['atletico madrid', '🇪🇸'],
+  /* Round 444: matching is substring, so the club's own long form
+     ("Atlético de Madrid", which normalises to "atletico de madrid") never
+     matched the entry above it and one of the biggest clubs in Europe was
+     flagless everywhere flagForClub is used. */
+  ['atletico de madrid', '🇪🇸'],
   ['red bull bragantino', '🇧🇷'], ['red bull salzburg', '🇦🇹'], ['rb leipzig', '🇩🇪'],
   ['york city', '🇺🇸'], ['toronto', '🇨🇦'], ['montreal', '🇨🇦'], ['vancouver', '🇨🇦'],
   ['wellington phoenix', '🇳🇿'],
@@ -363,6 +371,11 @@ const CLUB_COUNTRY: Array<[string, string]> = [
   ['como', '🇮🇹'], ['padova', '🇮🇹'], ['perugia', '🇮🇹'], ['pescara', '🇮🇹'],
   ['piacenza', '🇮🇹'], ['pisa', '🇮🇹'], ['ravenna', '🇮🇹'], ['venezia', '🇮🇹'],
   ['marsala', '🇮🇹'], ['leffe', '🇮🇹'],
+  /* Round 444: the only two sides on a Missing XI score line with no flag,
+     both Inter's Serie A opponents on a title-clinching day. FC Crotone is
+     Crotone, Calabria (Wikipedia, plus its own season pages); Siena FC is
+     Siena, Tuscany (Wikipedia, Wikidata Q2756). */
+  ['crotone', '🇮🇹'], ['siena', '🇮🇹'],
   ['eibar', '🇪🇸'], ['hercules', '🇪🇸'],
   ['alverca', '🇵🇹'], ['salgueiros', '🇵🇹'],
   ['den bosch', '🇳🇱'], ['haarlem', '🇳🇱'], ['willem ii', '🇳🇱'],

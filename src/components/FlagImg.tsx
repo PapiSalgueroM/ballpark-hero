@@ -168,9 +168,31 @@ export function FlagFromEmoji({ emoji, size = 20 }: { emoji: string; size?: numb
     return <span className="inline-block align-middle">{emoji}</span>;
   }
   const h = Math.round(size * 0.75);
+  /* Round 444: this asked flagcdn for "{size*2}x{h*2}", which is bug 1 in the
+     note above FlagImg living on in the function right below it. flagcdn only
+     serves a fixed set of pairs, so the URL was valid only when the arithmetic
+     happened to land on one. Probed on 2026-09-04: size 16 and 20 ask for
+     32x24 and 40x30 and both return 200, but size 14 asks for 28x22 and size
+     18 asks for 36x28 and both return 404, and onError hides the image, so
+     those two sizes rendered nothing at all. That is every flag in Clue
+     Auction, Puck Detective and Soccer Career's money line (14) and in
+     Olympics, Player Bingo and Squad Deal (18). It asks by WIDTH now, the same
+     way FlagImg has since Round 106, which flagcdn always honours.
+
+     England goes through the inline drawing so the two components draw the
+     same England. Note for whoever reads Round 106's bug 2 next: flagcdn's
+     gb-eng is NOT blank any more. w40 came back 122 bytes on 2026-09-04 as it
+     did then, but decoding it gives 240 red pixels of 960, a real St George
+     cross. INLINE_FLAGS is kept here for consistency with FlagImg, not because
+     the CDN file is empty. */
+  const inline = INLINE_FLAGS[iso];
+  if (inline) {
+    return <span className="inline-flex align-middle shrink-0">{inline(size, h)}</span>;
+  }
+  const cdnWidth = CDN_WIDTHS.find(w => w >= size * 2) ?? CDN_WIDTHS[CDN_WIDTHS.length - 1];
   return (
     <img
-      src={`https://flagcdn.com/${size * 2}x${h * 2}/${iso}.png`}
+      src={`https://flagcdn.com/w${cdnWidth}/${iso}.png`}
       alt={trimmed}
       className="inline-block align-middle"
       style={{ width: size, height: h }}
