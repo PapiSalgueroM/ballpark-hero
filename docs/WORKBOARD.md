@@ -19,7 +19,14 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 455.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 456.
+
+- **Desktop lane, CLAIMED 2026-09-05: Round 455, World XI "more in the season report".** His
+  words: "More in the season report." The report gains what the sim already knows and did
+  not say: the 38 match record, the longest unbeaten run, the gap to the top or the margin
+  as champions, and the player of the season by the sim's own rating. No new random draws,
+  so every seed's season replays exactly as before with more said about it, and no line
+  about a real player is anything but a simulated result.
 
 ## Active claims, 2026-09-03
 
