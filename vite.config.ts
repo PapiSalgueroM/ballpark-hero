@@ -87,9 +87,18 @@ const inlineSnapshotAssets = (root: string) => {
        cap so a browser that will never boot the app gets the whole page, and
        crawlers read the DOM either way. Injected here so every build applies
        it to every snapshot without rewriting the committed files. */
+    /* Round 448: the dim was not enough, he filmed it again coming back from
+       Google sign in. The boot now shows the mark on a full cover (#dukb-boot)
+       placed inside #root so React's mount removes it; the snapshot text stays
+       under it, capped, and the noscript rule hides the cover and lifts the
+       cap. Old committed snapshots still carry the Round 314 pair, so it is
+       stripped here before the new one goes in, and the cover is spliced in
+       right after #root opens. */
+    const oldCalmBoot = /<style>#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}<\/style>\s*<noscript><style>#dukb-snapshot\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>\s*/g;
     const calmBoot =
-      `<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>` +
-      `<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>`;
+      `<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>` +
+      `<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>`;
+    const bootCover = `<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>`;
     const inject =
       calmBoot + "\n    " +
       styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" onload="this.media='all'">`).join("\n    ") +
@@ -108,7 +117,11 @@ const inlineSnapshotAssets = (root: string) => {
         try { html = fs.readFileSync(f, "utf8"); } catch { continue; }
         if (!html.includes("/prerender-boot.js")) { skipped += 1; continue; }
         if (html.includes("/assets/")) { skipped += 1; continue; }
-        const out = html.replace("</head>", `  ${inject}\n  </head>`);
+        let out = html.replace(oldCalmBoot, "").replace("</head>", `  ${inject}\n  </head>`);
+        /* Round 448: the cover goes in once, as #root's first child. A snapshot
+           the prerenderer already wrote in the new shape carries it and is
+           left alone. */
+        if (!out.includes('id="dukb-boot"')) out = out.replace('<div id="root">', `<div id="root">\n${bootCover}`);
         if (out === html) { skipped += 1; continue; }
         fs.writeFileSync(f, out);
         touched += 1;

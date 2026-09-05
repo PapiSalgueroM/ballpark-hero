@@ -759,12 +759,20 @@ for (const route of unique) {
          so the rule holds whether a snapshot is old or new; a duplicate of an
          identical rule is harmless. Cap and dim until React mounts, noscript
          lifts it for a browser that never will. */
-      '<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>',
-      '<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>',
+      /* Round 448: the dim was not enough, he filmed it again ("the balck
+         screen and all that text"). A booting browser now sees the mark on
+         a full cover (#dukb-boot) inside #root, which React's mount removes;
+         the snapshot text stays underneath for crawlers, capped so nothing
+         scrolls, and the noscript rule hides the cover and lifts the cap for
+         a browser that will never boot. The build plugin rewrites the old
+         pair into this shape on existing snapshots (vite.config.ts). */
+      '<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>',
+      '<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>',
       '<script src="/prerender-boot.js" defer></script>',
       '</head>',
       '<body>',
       '<div id="root">',
+      '<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>',
       '<div id="dukb-snapshot">',
       payload.body,
       '</div>',

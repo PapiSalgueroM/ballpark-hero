@@ -133,39 +133,54 @@ console.log(`   ${stubs.length} signposts, ${stubTags} touched`);
    content from no-JS readers, the noscript without the cap does nothing.
    NEGATIVE CONTROL: SNAP_CONTROL=flash strips the pair from one page in
    memory and this section must go red. */
-console.log('6) the calm boot: one dimmed screenful before React, the whole page without JS');
+/* Round 448: the dim was not enough. He filmed the dimmed wall again coming
+   back from Google sign in ("the balck screen and all that text"), so the
+   moment before React now shows a full cover with the mark (#dukb-boot)
+   inside #root, and the copy sits under it, capped. The noscript rule hides
+   the cover and lifts the cap. Three parts now, all required, on every
+   built page and on the home template. The control strips the COVER, which
+   is the part whose absence he would film. */
+console.log('6) the calm boot: the mark on a cover before React, the whole page without JS');
 {
   const CONTROL = process.env.SNAP_CONTROL || '';
   if (CONTROL && CONTROL !== 'flash') { console.error(`SNAP_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
-  const capRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}/;
-  const liftRe = /<noscript><style>#dukb-snapshot\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>/;
+  const coverRe = /<div id="dukb-boot" aria-hidden="true"><img src="\/logo-mark\.svg"[^>]*><\/div>/;
+  const coverCssRe = /#dukb-boot\{position:fixed;inset:0;[^}]*\}/;
+  const capRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden\}/;
+  const liftRe = /<noscript><style>#dukb-boot\{display:none\}#dukb-snapshot\{max-height:none;overflow:visible\}<\/style><\/noscript>/;
+  const dimRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}/;
   let calm = 0;
   let controlArmed = false;
   for (const [route, htmlIn] of snaps) {
     let html = htmlIn;
     if (CONTROL === 'flash' && !controlArmed) {
-      if (!capRe.test(html)) { console.error(`control found nothing to strip on /${route}`); process.exit(1); }
-      html = html.replace(capRe, '');
+      if (!coverRe.test(html)) { console.error(`control found nothing to strip on /${route}`); process.exit(1); }
+      html = html.replace(coverRe, '');
       controlArmed = true;
-      console.log(`   NEGATIVE CONTROL ON: the cap stripped from /${route} in memory, this section must go red`);
+      console.log(`   NEGATIVE CONTROL ON: the cover stripped from /${route} in memory, this section must go red`);
     }
+    const hasCover = coverRe.test(html) && coverCssRe.test(html);
     const hasCap = capRe.test(html);
     const hasLift = liftRe.test(html);
-    if (hasCap && hasLift) { calm += 1; continue; }
-    if (!hasCap) fail(`/${route} ships without the boot cap, so the raw text wall is back on it`);
-    else fail(`/${route} caps the snapshot but lost the noscript lift, hiding content from no-JS readers`);
+    if (hasCover && hasCap && hasLift) { calm += 1; continue; }
+    if (!hasCover) fail(`/${route} ships without the boot cover, so the wall of text is back on it${dimRe.test(html) ? ' (it still carries the Round 314 dim, which he filmed)' : ''}`);
+    else if (!hasCap) fail(`/${route} has the cover but lost the cap, so the document scrolls under it`);
+    else fail(`/${route} has the cover but lost the noscript rule, hiding the whole page from no-JS readers`);
   }
   const home = readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  if (!/#dukb-home-copy\{max-height:100vh;overflow:hidden;opacity:\.45\}/.test(home)) {
-    fail('the built home page lost its #dukb-home-copy cap, the page he actually filmed');
+  if (!(coverRe.test(home) && coverCssRe.test(home))) {
+    fail('the built home page has no boot cover, the page he actually filmed');
   }
-  if (!/<noscript><style>#dukb-home-copy\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>/.test(home)) {
-    fail('the built home page lost the noscript lift for its static copy');
+  if (!/#dukb-home-copy\{max-height:100vh;overflow:hidden\}/.test(home)) {
+    fail('the built home page lost its #dukb-home-copy cap');
+  }
+  if (!/<noscript><style>#dukb-boot\{display:none\}#dukb-home-copy\{max-height:none;overflow:visible\}<\/style><\/noscript>/.test(home)) {
+    fail('the built home page lost the noscript rule that hides the cover and lifts the cap');
   }
   if (!/<div id="dukb-home-copy">/.test(home)) {
     fail('the built home page has no #dukb-home-copy wrapper, so the cap styles nothing');
   }
-  console.log(`   ${calm} of ${snaps.length} shipped pages carry the calm boot, and the home template carries its own`);
+  console.log(`   ${calm} of ${snaps.length} shipped pages carry the cover, and the home template carries its own`);
   if (CONTROL === 'flash') {
     if (failures > 0) { console.log(`simSnapshotAssets control: green. The stripped cap was reported (${failures} finding).`); process.exit(0); }
     console.error('simSnapshotAssets control: RED. A stripped cap went unreported.'); process.exit(1);
