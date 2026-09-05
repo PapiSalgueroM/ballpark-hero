@@ -119,7 +119,32 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     setFieldErrors({});
     setFormError(null);
     setTouched(false);
+    /* Round 448, his words: "if u go to login and then go back or sign up
+       and then go back it leaves the google thing just loading". The Google
+       handler leaves its spinner on because on success the whole page is
+       about to leave for Google, and it did not get a say in what happens
+       when the player presses Back on Google's account picker. The browser
+       restores this page from its back-forward cache with every piece of
+       React state exactly as it was, spinner included, and since this modal
+       never unmounts nothing ever turned it off. Every open starts clean. */
+    setGoogleLoading(false);
+    setAppleLoading(false);
   }, [isOpen, defaultTab]);
+
+  /* Round 448, the other half of the same bug: Back from Google restores the
+     page from the back-forward cache with the modal still open, so the reset
+     above (which runs on open) never fires. A restored page announces itself
+     with pageshow and persisted set, and that is the moment to take the
+     spinner off a button the player can see again. */
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      setGoogleLoading(false);
+      setAppleLoading(false);
+    };
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, []);
 
   const switchTab = (next: 'login' | 'signup') => {
     setTab(next);
