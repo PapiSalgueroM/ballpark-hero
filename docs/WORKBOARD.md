@@ -19,7 +19,8 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 459.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 459. (Rounds 450, 451, 453, 454, 455, 456, 457 and 458 all SHIPPED 2026-09-05; 452
+  was verification only. Their claims below stand as the record of what each one was.)
 
 - **Desktop lane, CLAIMED 2026-09-05: Round 458, the Player Stock Market in the format he
   described.** His words: "redesign on the format of the referenced video: start seasons
