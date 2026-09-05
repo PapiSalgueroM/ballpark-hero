@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Player Stock Market: open a past season, buy on stats alone, then roll the years forward.</strong> The market now opens in one real season, 2015 to 2022 (the daily fixes it, unlimited lets you pick), with 200M and the 4-3-3's eleven slots to fill one position at a time. Every card shows that season's numbers and nothing else: position, age, matches, goals, assists, cards and the real price, never a name, a country or a club, and the card itself does not even carry those fields any more. When the XI is full the seasons roll forward one at a time to the latest one, each step showing what every holding is worth against what it was, and a player with no row for a year says so instead of getting a number made up for him. Then the names turn over. The seasons on offer are the ones the data can actually finish: every slot has at least 18 real choices in every offered season, 2014 falls short at centre back, and a permanent check holds both. Behind it the page reads one small joined view instead of nine whole seasons, so the market opens on one request (three for the deepest season) and about a tenth of a megabyte, where it used to take about forty requests and seven megabytes. <Link to="/player-stock-market" className="text-primary hover:underline">Open the market</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">August 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">Two games retired, and the front door got sharper.</strong> Overrated or Underrated and Tier List are gone, straight from the owner's full site review: two buttons is not a game, and a ranking screen you play once is not one either. Old links live on, the versus game's address hands you to Face Off and the tier page brings you home. And the home page greeting is now seven words instead of a paragraph: 100+ free games across every sport, all playable without an account, which has the added virtue of being exactly true.</li>

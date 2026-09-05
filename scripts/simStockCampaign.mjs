@@ -1,45 +1,42 @@
-/* Player Stock Market, Round 329: the anonymous campaign holds its own laws.
+/* Player Stock Market, Round 329, rebuilt for the Round 458 format: the
+ * anonymous campaign holds its own laws.
  *
  * The owner's spec: start seasons back, move year by year, show stats only,
  * never name, country or club, buy position by position until a full XI.
  *
  * WHAT IT HOLDS. The engine (assembleCampaign and the scoring) is PURE over
- * injected rows, so this harness drives it with SYNTHETIC fixture rows,
- * invented names like "Fixture Forward 041" that ship nowhere; the real
- * game's rows come from player_market_values at runtime. The laws:
+ * injected rows, so this harness drives it with SYNTHETIC fixture rows in
+ * the shape of the player_market_tracked view, invented names like "Fixture
+ * CF 041" that ship nowhere; the real game's rows come from the view at
+ * runtime, and scripts/simStockFormat.mjs holds the format's laws against
+ * the saved real rows. The laws here:
  *   1. ASSEMBLY, over 200 seeds: eleven slots in formation order, four
- *      candidates each, nobody dealt twice, two buys a year across six
- *      years, every candidate priced at the offer year and resolvable at
- *      the final year, every candidate actually fitting its slot;
+ *      cards each, nobody dealt twice, every card priced at the start
+ *      season and resolvable at the final one, every card fitting its slot,
+ *      and no card carrying an identity field;
  *   2. THE LOCK PROOF: the punts of all eleven slots always fit the 200M
  *      wallet together, and a greedy buyer who always takes the most
- *      expensive candidate canAfford allows finishes all eleven buys with
- *      the wallet never below zero, over every seed;
+ *      expensive card canAfford allows finishes all eleven buys with the
+ *      wallet never below zero, over every seed;
  *   3. DETERMINISM: one seed, one campaign, byte identical;
- *   4. SCORING IDENTITIES, AGAINST A BRUTE FORCED ORACLE (rewritten in Round
- *      434, when the score stopped being a spend ratio): every one of the
- *      4^11 XIs is enumerated and the affordable ones kept, and the most
- *      valuable of those must score exactly 100, the least valuable exactly
- *      0, a mixed XI strictly between, and the cheapest possible XI below
- *      100. The engine's own search has to agree with the oracle to the
- *      dollar. The oracle borrows nothing from the engine, which is the
- *      point: a check that used the engine's optimiser would test itself;
- *   5. ANONYMITY IS ENFORCED IN THE PAGE: the buying screen's source
- *      renders no candidate name, nationality or club (comment stripped),
- *      while the reveal does name every pick;
- *   6. THE DAILY SEED LANDS ON A REAL START YEAR ON EVERY DATE (Round 427):
- *      365 dates from 2026-09-03 walk the real dailyCampaignSeed and
- *      startYearFor path, the seed is never negative and the year is always
- *      one of START_YEARS. dailyPrngSeed can return a negative number, and
- *      before Round 427 that left Daily mode unstartable on 128 of those
- *      365 days (year=in.(NaN) to Postgres, a 400 read as "Couldn't open
- *      the market right now").
+ *   4. SCORING IDENTITIES, AGAINST A BRUTE FORCED ORACLE (Round 434): every
+ *      one of the 4^11 XIs is enumerated and the affordable ones kept, and
+ *      the most valuable of those must score exactly 100, the least
+ *      valuable exactly 0, a mixed XI strictly between, and the cheapest
+ *      possible XI below 100. The engine's own search has to agree with the
+ *      oracle to the dollar. The oracle borrows nothing from the engine;
+ *   5. ANONYMITY IS ENFORCED IN THE PAGE: from the buying screen through
+ *      the season steps the source renders no name, nationality, club or
+ *      identity lookup (comments stripped), while the reveal names every
+ *      holding;
+ *   6. THE DAILY SEED LANDS ON AN OFFERED SEASON ON EVERY DATE (Round 427):
+ *      365 dates walk the real dailyCampaignSeed and startYearFor path, the
+ *      seed is never negative and the year is always one of START_YEARS.
  *
  * NEGATIVE CONTROLS: SIM_STOCK_CONTROL=leaky injects a name render into a
- * copy of the buying block and section 5 must go red, proving the check
- * reads what the screen would actually show. SIM_STOCK_CONTROL=signed
- * bundles a copy of the lib with the seed left signed and the lookup left
- * unwrapped, and section 6 must go red on the 128 dates that were broken.
+ * copy of the season step block and section 5 must go red.
+ * SIM_STOCK_CONTROL=signed bundles a copy of the lib with the seed left
+ * signed and the lookup left unwrapped, and section 6 must go red.
  * SIM_STOCK_CONTROL=spendratio puts the Round 434 defect back, the score as
  * a spend ratio, and section 4 must go red. Every rewrite asserts it found
  * the text it replaces, so a control that changed nothing refuses to run.
@@ -113,26 +110,28 @@ if (CONTROL === 'spendratio') {
   fs.writeFileSync(LIB, src.replace(oldGrowth, '  const growth = spend > 0 ? finalValue / spend : 0;').replace(oldScore, ratioScore));
   console.log('NEGATIVE CONTROL ON: the spend ratio scoring is restored, section 4 must go red');
 }
-fs.writeFileSync(ENTRY, `
-export * as sm from '${LIB}';
-`);
+fs.writeFileSync(ENTRY, [
+  'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, key: () => null, length: 0 };',
+  `export const sm = await import('${LIB}');`,
+].join('\n'));
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
-const store = new Map();
-globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { sm } = await import(pathToFileURL(BUNDLE).href);
 const {
-  CANDIDATES_PER_SLOT, FINAL_YEAR, STOCK_BUDGET, STOCK_FORMATION,
-  assembleCampaign, bestAffordableXI, canAfford, offerYearFor, puntPriceOf,
+  CANDIDATES_PER_SLOT, STOCK_BUDGET, STOCK_FORMATION, START_YEARS,
+  assembleCampaign, bestAffordableXI, canAfford, puntPriceOf,
   scoreCampaign, startYearFor, worstAffordableXI,
 } = sm;
 
-/* Synthetic fixture rows: 40 players per position vocabulary entry, values
-   walking a seeded path 2014..2026. Invented names, shipped nowhere. */
+/* Synthetic fixture rows in the tracked view's shape: 40 players per
+   position, one start season, a final season value each. Invented names,
+   shipped nowhere. */
 function lehmer(seed) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
   return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
 }
+const START = 2018;
+const FINAL = 2026;
 const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST', 'CF'];
 function fixtureRows(seed) {
   const rng = lehmer(seed);
@@ -141,52 +140,52 @@ function fixtureRows(seed) {
   for (const pos of POSITIONS) {
     for (let n = 0; n < 40; n += 1) {
       id += 1;
-      const name = `Fixture ${pos} ${id}`;
-      let value = 2_000_000 + Math.floor(rng() * 60_000_000);
-      const age0 = 17 + Math.floor(rng() * 12);
-      for (let year = 2014; year <= 2026; year += 1) {
-        value = Math.max(500_000, Math.round(value * (0.75 + rng() * 0.6)));
-        rows.push({
-          player_name: name, club: 'Fixture FC', position: pos, age: age0 + (year - 2014),
-          nationality: 'Fixtureland', year, market_value_usd: value,
-          goals: Math.floor(rng() * 20), assists: Math.floor(rng() * 12),
-        });
-      }
+      const price = 2_000_000 + Math.floor(rng() * 60_000_000);
+      rows.push({
+        player_name: `Fixture ${pos} ${id}`, position: pos, age: 17 + Math.floor(rng() * 16),
+        matches: pos === 'RB' ? null : Math.floor(rng() * 45), goals: Math.floor(rng() * 20), assists: Math.floor(rng() * 12),
+        yellow_cards: Math.floor(rng() * 10), red_cards: rng() < 0.1 ? 1 : 0,
+        market_value_usd: price, year: START, final_year: FINAL,
+        final_value_usd: Math.max(500_000, Math.round(price * (0.4 + rng() * 2.2))),
+      });
     }
   }
   return rows;
 }
 const ROWS = fixtureRows(4242);
+const IDENTITY = /name|club|nation|country|flag/i;
 
 if (CONTROL !== 'leaky') {
   console.log('1) assembly law, 200 seeds');
   {
     let bad = 0;
     for (let seed = 1; seed <= 200; seed += 1) {
-      const c = assembleCampaign(ROWS, seed);
+      const c = assembleCampaign(ROWS, seed, START);
       if (!c) { bad += 1; if (bad <= 3) fail(`seed ${seed}: no campaign assembled`); continue; }
       if (c.slots.length !== STOCK_FORMATION.slots.length) fail(`seed ${seed}: ${c.slots.length} slots`);
+      if (c.startYear !== START || c.finalYear !== FINAL) fail(`seed ${seed}: seasons ${c.startYear} to ${c.finalYear}`);
       const names = new Set();
       c.slots.forEach((s, i) => {
-        if (s.offerYear !== offerYearFor(c.startYear, i)) fail(`seed ${seed}: slot ${i} offered in ${s.offerYear}`);
         if (s.candidates.length !== CANDIDATES_PER_SLOT) fail(`seed ${seed}: slot ${i} dealt ${s.candidates.length}`);
         for (const cand of s.candidates) {
-          if (names.has(cand.name)) fail(`seed ${seed}: ${cand.name} dealt twice`);
-          names.add(cand.name);
-          if (!(cand.price > 0) || !(cand.final > 0)) fail(`seed ${seed}: a candidate without a price or a final value`);
-          if (cand.series.length === 0 || cand.series[cand.series.length - 1].year !== s.offerYear) fail(`seed ${seed}: a series not ending at the offer year`);
+          const name = c.identities[cand.id];
+          if (!name) fail(`seed ${seed}: card ${cand.id} has no identity behind it`);
+          if (names.has(name)) fail(`seed ${seed}: ${name} dealt twice`);
+          names.add(name);
+          if (!(cand.price > 0) || !(cand.final > 0)) fail(`seed ${seed}: a card without a price or a final value`);
           if (!(s.slot.allowed).includes(cand.position)) fail(`seed ${seed}: a ${cand.position} dealt for ${s.slot.label}`);
+          for (const k of Object.keys(cand)) if (IDENTITY.test(k)) fail(`seed ${seed}: a card carries the field "${k}"`);
         }
       });
     }
-    if (bad === 0) console.log('   200 campaigns: 11 slots, 4 fitting candidates each, nobody twice, two buys a year, every card resolvable');
+    if (bad === 0) console.log('   200 campaigns: 11 slots, 4 fitting cards each, nobody twice, every card priced and resolvable, no identity on any card');
   }
 
   console.log('2) the lock proof: the wallet can always finish');
   {
     let broke = 0;
     for (let seed = 1; seed <= 200; seed += 1) {
-      const c = assembleCampaign(ROWS, seed);
+      const c = assembleCampaign(ROWS, seed, START);
       if (!c) continue;
       const puntTotal = c.slots.reduce((s, slot) => s + puntPriceOf(slot), 0);
       if (puntTotal > STOCK_BUDGET) { broke += 1; fail(`seed ${seed}: the punts alone cost ${puntTotal}`); continue; }
@@ -204,14 +203,14 @@ if (CONTROL !== 'leaky') {
 
   console.log('3) determinism');
   {
-    const fp = c => c.startYear + '|' + c.slots.map(s => s.candidates.map(x => `${x.name}:${x.price}`).join(',')).join(';');
-    const a = assembleCampaign(ROWS, 777);
-    const b = assembleCampaign(ROWS, 777);
+    const fp = c => c.startYear + '|' + c.slots.map(s => s.candidates.map(x => `${c.identities[x.id]}:${x.price}`).join(',')).join(';');
+    const a = assembleCampaign(ROWS, 777, START);
+    const b = assembleCampaign(ROWS, 777, START);
     if (!a || !b || fp(a) !== fp(b)) fail('the same seed assembled two different campaigns');
     const yearsSeen = new Set();
     for (let seed = 1; seed <= 25; seed += 1) yearsSeen.add(startYearFor(seed));
     if (yearsSeen.size < 4) fail(`only ${yearsSeen.size} distinct start years across 25 seeds`);
-    console.log(`   one seed one campaign, ${yearsSeen.size} distinct start years in 25 seeds`);
+    console.log(`   one seed one campaign, ${yearsSeen.size} distinct start seasons in 25 seeds (${START_YEARS.length} offered)`);
   }
 
   console.log('4) scoring identities, against a brute forced oracle');
@@ -222,7 +221,7 @@ if (CONTROL !== 'leaky') {
        oracle knows nothing about how the engine searches, which is the point:
        a harness that borrowed the engine's own optimiser would be testing
        itself. */
-    const c = assembleCampaign(ROWS, 31337);
+    const c = assembleCampaign(ROWS, 31337, START);
     if (!c) { fail('no campaign for the scoring fixture'); }
     else {
       const cheapestFrom = new Array(c.slots.length + 1).fill(0);
@@ -257,9 +256,7 @@ if (CONTROL !== 'leaky') {
       else {
         console.log(`   ${top.leaves} affordable XIs enumerated in ${Date.now() - t0}ms: the best is worth ${Math.round(top.value / 1e6)}M for ${Math.round(cost(top.xi) / 1e6)}M, the worst ${Math.round(bottom.value / 1e6)}M`);
         /* Halfway between the two ends, found by the same enumeration, so it
-           is an XI that provably exists rather than a hopeful hand pick: the
-           first draft used candidates[i % 4] and that happened to BE the
-           optimum on this fixture, which would have read as a scoring bug. */
+           is an XI that provably exists rather than a hopeful hand pick. */
         const mid = (top.value + bottom.value) / 2;
         const middle = bruteForce((v, e) => Math.abs(v - mid) < Math.abs(e - mid), Infinity);
         const sBest = scoreCampaign(c, top.xi).score;
@@ -278,12 +275,10 @@ if (CONTROL !== 'leaky') {
         if (cost(bestAffordableXI(c)) > c.budget) fail('bestAffordableXI returned an XI the wallet cannot pay for');
         console.log(`   the oracle's best scores ${sBest}, its worst ${sWorst}, the middling XI ${sMid}, the cheapest possible XI ${sCheap}`);
 
-        /* THE LAW THE WHOLE ROUND IS ABOUT, and it asks nothing about how the
-           score is computed: of two XIs the wallet can pay for, the one worth
-           more in the final year must never score lower. The old spend ratio
-           broke this thousands of times over, which is what made shutting the
-           wallet the winning play. Sampled with a stride so the walk stays
-           bounded whatever the fixture offers. */
+        /* THE LAW THE WHOLE ROUND 434 WAS ABOUT, and it asks nothing about how
+           the score is computed: of two XIs the wallet can pay for, the one
+           worth more in the final season must never score lower. Sampled with
+           a stride so the walk stays bounded whatever the fixture offers. */
         const stride = Math.max(1, Math.ceil(top.leaves / 4000));
         const sample = [];
         {
@@ -322,30 +317,35 @@ if (CONTROL !== 'leaky') {
   }
 }
 
-console.log('5) anonymity is enforced in the page');
+console.log('5) anonymity is enforced in the page, from the first buy to the last season step');
 {
   const strip = t => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ');
-  let src = strip(fs.readFileSync(`${ROOT}/src/pages/PlayerStockMarket.tsx`, 'utf8'));
-  const buyStart = src.indexOf("phase === 'buying'");
-  const buyEnd = src.indexOf("phase === 'done'");
-  if (buyStart === -1 || buyEnd === -1 || buyEnd <= buyStart) { console.error('the page no longer has the buying and done blocks this check reads, rewrite the check'); process.exit(1); }
-  let buying = src.slice(buyStart, buyEnd);
-  if (CONTROL === 'leaky') buying += ' <span>{c.name}</span> ';
-  const reveal = src.slice(buyEnd);
-  const leaks = ['c.name', 'c.nationality', 'c.club', '.name}', '.nationality}', '.club}'].filter(n => buying.includes(n));
+  const src = strip(fs.readFileSync(`${ROOT}/src/pages/PlayerStockMarket.tsx`, 'utf8'));
+  /* The JSX blocks, anchored on the brace: the component body also tests
+     phase === 'buying' for the current slot, and reads identities by name
+     to fetch the seasons, which renders nothing and is not the screen. */
+  const buyStart = src.indexOf("{phase === 'buying'");
+  const stepStart = src.indexOf("{phase === 'stepping'");
+  const doneStart = src.indexOf("{phase === 'done'");
+  if (buyStart === -1 || stepStart === -1 || doneStart === -1 || !(buyStart < stepStart && stepStart < doneStart)) { console.error('the page no longer has the buying, stepping and done blocks in that order, rewrite the check'); process.exit(1); }
+  let hidden = src.slice(buyStart, doneStart);
+  if (CONTROL === 'leaky') hidden += ' <span>{h.name}</span> ';
+  const reveal = src.slice(doneStart);
+  const LEAKS = ['c.name', 'c.nationality', 'c.club', 'h.name', 'h.nationality', 'h.club', '.name}', '.nationality}', '.club}', 'identityOf(', 'identities['];
+  const leaks = LEAKS.filter(n => hidden.includes(n));
   if (CONTROL === 'leaky') {
     if (leaks.length > 0) { console.log(`simStockCampaign control: green. The planted name render was caught (${leaks.join(', ')}).`); process.exit(0); }
-    console.error('simStockCampaign control: RED. A planted name render in the buying screen went unseen.');
+    console.error('simStockCampaign control: RED. A planted name render between the first buy and the reveal went unseen.');
     process.exit(1);
   }
-  if (leaks.length > 0) fail(`the buying screen renders identity: ${leaks.join(', ')}`);
-  if (!reveal.includes('c.name')) fail('the reveal no longer names the picks');
-  console.log('   the buying screen renders no name, nationality or club; the reveal names every pick');
+  if (leaks.length > 0) fail(`the buying or stepping screen renders identity: ${leaks.join(', ')}`);
+  if (!reveal.includes('h.name')) fail('the reveal no longer names the holdings');
+  console.log('   nothing between the first buy and the reveal renders a name, nationality, club or identity lookup; the reveal names every holding');
 }
 
-console.log('6) the daily seed lands on a real start year on every date of the year');
+console.log('6) the daily seed lands on an offered season on every date of the year');
 {
-  const { dailyCampaignSeed, START_YEARS } = sm;
+  const { dailyCampaignSeed } = sm;
   let bad = 0; let negative = 0; let first = null;
   const start = Date.UTC(2026, 8, 3);
   for (let d = 0; d < 365; d += 1) {
@@ -355,9 +355,9 @@ console.log('6) the daily seed lands on a real start year on every date of the y
     const year = startYearFor(seed);
     if (!START_YEARS.includes(year)) { bad += 1; if (!first) first = `${dateStr}: seed ${seed}, start year ${year}`; }
   }
-  console.log(`   365 dates from 2026-09-03: negative seeds ${negative}, dates with no valid start year ${bad}`);
+  console.log(`   365 dates from 2026-09-03: negative seeds ${negative}, dates with no offered season ${bad}`);
   if (negative > 0) fail(`dailyCampaignSeed came back negative on ${negative} date(s)`);
-  if (bad > 0) fail(`${bad} date(s) have no valid start year, first: ${first}; Daily mode cannot open on those days`);
+  if (bad > 0) fail(`${bad} date(s) have no offered season, first: ${first}; Daily mode cannot open on those days`);
 }
 
 if (CONTROL === 'signed' || CONTROL === 'spendratio') {

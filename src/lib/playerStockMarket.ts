@@ -1,41 +1,45 @@
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { getTodayET, dailyPrngSeed } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { FORMATIONS, normalizePosition } from '@/lib/squadDeal';
 import type { FormationSlot } from '@/lib/squadDeal';
 
 /**
- * Player Stock Market, rebuilt in Round 329 to the owner's spec from the
- * 08-28 review, the "invested in footballers using only their stats"
- * format: "start seasons back, move year by year, show stats only, never
- * name, country or club, buy position by position until a full XI."
+ * Player Stock Market, rebuilt in Round 458 to the owner's format from the
+ * 08-28 review: "start seasons back, move year by year, show stats only,
+ * never name, country or club, buy position by position until a full XI."
  *
- * THE CAMPAIGN. You start six seasons back with a 200M wallet and the
- * 4-3-3's eleven slots to fill, two buys a year. Each buy deals four
- * ANONYMOUS candidates who fit the slot: you see the position, the age,
- * the three year market value trajectory and the last two seasons of
- * goals and assists, and NOTHING that names them, no name, no country,
- * no club. You pay a candidate's real market value at the offer year.
- * When the eleventh buy lands, the campaign jumps to the present, every
- * card turns over, and your portfolio is worth whatever those careers
- * really became.
+ * THE CAMPAIGN. The market opens in one past season (2015 to 2022, the
+ * daily fixes it, unlimited lets you choose or rolls one) with a 200M
+ * wallet and the 4-3-3's eleven slots to fill, position by position. Each
+ * slot deals four ANONYMOUS cards from that season: position, age, matches,
+ * goals, assists, cards and the price, which is that season's real market
+ * value. Nothing on a card identifies the man; the card TYPE has no name,
+ * club or nationality field at all, the identities live beside the
+ * campaign and are only read at the reveal. When the eleventh buy lands
+ * the years roll forward one at a time to the latest season and every
+ * holding's value moves as it really moved, then the names turn over.
  *
- * DATA LAW. Every number is a real row from player_market_values (values,
- * goals, assists, 2004 to 2026); nothing is authored. Candidates are
- * filtered to careers the data tracks through to the final year, which is
- * stated in the guide: you are picking among players whose story the
- * table can actually finish, and a value can still crater. The engine is
- * split so assembleCampaign is PURE over injected rows, which is what the
- * harness drives with synthetic fixtures; fetchCampaignRows owns the two
- * real queries.
+ * DATA LAW. Every number is a real row of player_market_values. The pool
+ * comes from the player_market_tracked view (Round 458), which is that
+ * table joined to itself: rows of the start season whose player still has
+ * a row in the latest full season, carrying that latest value. The join
+ * is the whole reason the view exists: the Round 329 engine read eight
+ * whole seasons plus the final one to find the overlap, measured at 39 to
+ * 42 paged requests and 6.6 to 7.2 MB before a card could be dealt, and
+ * the page now reads one to three pages of the overlap alone (549 rows and
+ * 119 KiB for a 2016 start, gzipped on the wire). The year by year values
+ * come from one query for the eleven holdings after the XI is bought.
+ * Where a holding has no row for a year, the step says so; nothing is ever
+ * interpolated.
  *
- * SCORING (rewritten in Round 434, see the long note above scoreCampaign).
- * Your return is measured on the whole 200M, not on the slice of it you
- * chose to spend, and your portfolio's final year value is placed between
- * the worst and the best eleven that the same 200M could really have
- * bought out of the same offers. 100 means you played the wallet
- * perfectly, 0 means you could not have done worse with it, and cash you
- * never spend buys nothing.
+ * SCORING (Round 434, unchanged in shape). Your return is measured on the
+ * whole 200M, not on the slice you chose to spend: the eleven's value in
+ * the final season is placed between the worst and the best eleven the
+ * same wallet could really have bought from the same offers. 100 means you
+ * played the wallet perfectly, 0 means you could not have done worse with
+ * it, and cash you never spend buys nothing.
  */
 
 export const STOCK_BUDGET = 200_000_000;
@@ -43,33 +47,74 @@ export const STOCK_BUDGET = 200_000_000;
  *  always fit the 200M wallet with room over. */
 export const PUNT_CEILING = 8_000_000;
 export const CANDIDATES_PER_SLOT = 4;
-export const FINAL_YEAR = 2026;
-export const START_YEARS = [2016, 2017, 2018, 2019, 2020] as const;
+/** A start season row has to be worth this much to be dealt at all. */
+export const POOL_FLOOR = 2_000_000;
+/**
+ * The seasons the market can open in. The floor is MEASURED, not chosen:
+ * scripts/simStockFormat.mjs counts, for every slot of the formation, the
+ * real players of the season who fit the slot, are worth the pool floor
+ * and are still tracked in the latest season, and requires at least four
+ * deals' worth (16) in every slot. 2014 fails that floor at centre back
+ * (27 tracked centre backs shared by two slots) and is the harness's proof
+ * that the floor bites; 2015 is the first season that clears it. The
+ * ceiling is a design choice: a start needs at least four year steps to
+ * be a story, so the latest start is four seasons before the final one.
+ */
+export const START_YEARS = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022] as const;
 export const STOCK_FORMATION = FORMATIONS[0]; /* 4-3-3 */
+export const STOCK_SLUG = 'player-stock-market';
 
-export interface AnonCandidate {
-  /** Hidden until the reveal. */
-  name: string;
-  club: string;
-  nationality: string;
-  /** Shown while buying. */
+/** One row of the player_market_tracked view for the start season. */
+export interface TrackedRow {
+  player_name: string;
+  position: string | null;
+  age: number | null;
+  matches: number | null;
+  goals: number | null;
+  assists: number | null;
+  yellow_cards: number | null;
+  red_cards: number | null;
+  market_value_usd: number | null;
+  year: number;
+  final_year: number;
+  final_value_usd: number | null;
+}
+
+/** One row of player_market_values_dedup for a holding, one per year. */
+export interface HistoryRow {
+  player_name: string;
+  year: number;
+  market_value_usd: number | null;
+  club: string | null;
+  nationality: string | null;
+}
+
+/**
+ * What the buying screen sees. Deliberately NO name, club, nationality,
+ * country or flag field: the type is the fence, and the harness reads the
+ * keys of every dealt card to hold it.
+ */
+export interface StockCard {
+  /** Opaque, unique within the campaign; the reveal looks the identity up by it. */
+  id: string;
   position: string;
-  age: number;
-  /** Market value trajectory, oldest first, ending at the offer year. */
-  series: { year: number; value: number }[];
-  /** Goals and assists, the two seasons ending at the offer year. Keepers
-   *  legitimately show zeros; the trajectory is their story. */
-  output: { year: number; goals: number; assists: number }[];
-  /** What you pay: the real market value at the offer year. */
+  age: number | null;
+  /** Null where the season's row carries no appearance count (right backs
+   *  before 2019 in the source), shown as not recorded rather than filled. */
+  matches: number | null;
+  goals: number;
+  assists: number;
+  yellowCards: number;
+  redCards: number;
+  /** What you pay: the real market value in the start season. */
   price: number;
-  /** The real market value at FINAL_YEAR. Hidden until the reveal. */
+  /** The real market value in the final season. Never rendered while buying. */
   final: number;
 }
 
 export interface CampaignSlot {
   slot: FormationSlot;
-  offerYear: number;
-  candidates: AnonCandidate[];
+  candidates: StockCard[];
 }
 
 export interface Campaign {
@@ -77,18 +122,8 @@ export interface Campaign {
   finalYear: number;
   budget: number;
   slots: CampaignSlot[];
-}
-
-export interface MarketRow {
-  player_name: string;
-  club: string | null;
-  position: string | null;
-  age: number | null;
-  nationality: string | null;
-  year: number;
-  market_value_usd: number | null;
-  goals: number | null;
-  assists: number | null;
+  /** card id -> player name. Read at the reveal and nowhere else. */
+  identities: Record<string, string>;
 }
 
 function mulberry32(seed: number) {
@@ -110,11 +145,6 @@ export function dailyCampaignSeed(dateStr: string = getTodayET()): number {
      dozens of daily games seed off it through generatorFrom, and reshuffling
      all of them to fix this one made Sign the Player repeat a board four days
      running.
-     A day whose old seed was positive keeps its campaign, because >>> 0 is the
-     identity there. The 33 days a year whose old seed was a negative multiple
-     of 5 also worked, through START_YEARS[-0], and those move from 2016 to
-     2017. Measured over the year from 2026-09-03: 161 negative seeds, 128
-     broken days fixed, 33 working days re-dealt, 204 days untouched.
      The date parameter exists for simStockCampaign section 6, which walks a
      year of dates through this exact path; the page never passes one. */
   return ((dailyPrngSeed(dateStr) ^ 0x50534d32) >>> 0) || 13;
@@ -128,72 +158,61 @@ export function startYearFor(seed: number): number {
   /* Round 427: never hand back undefined. A negative seed made `seed % length`
      negative, this returned undefined, and the undefined start year turned into
      NaN in the query string, so the Daily market asked Postgres for
-     `year=in.(NaN)` and got a 400. The player saw "Couldn't open the market
-     right now", which reads like a network problem and is not one.
-     Part three of this round normalises the seed in dailyCampaignSeed, so this
-     is unreachable from Daily mode. It is guarded anyway because the failure mode is
-     a silent 400 rather than a visible error: the mode simply refuses to start
-     and nothing on screen says why. Wrapping the modulo keeps a stray seed in
-     range instead, and a non finite one falls back to the first year. */
+     `year=in.(NaN)` and got a 400. Guarded here as well as at the seed because
+     the failure mode is a silent 400 rather than a visible error. */
   const n = START_YEARS.length;
   if (!Number.isFinite(seed)) return START_YEARS[0];
   return START_YEARS[((Math.trunc(seed) % n) + n) % n];
 }
 
-/** Slot i is offered in year startYear + floor(i / 2): two buys a season,
- *  eleven buys across six calendar years. */
-export function offerYearFor(startYear: number, slotIndex: number): number {
-  return startYear + Math.floor(slotIndex / 2);
-}
-
 /**
- * PURE assembly over injected rows. Per slot, in formation order: the
- * candidates are players whose normalized position the slot accepts, who
- * have a value at the offer year AND at the final year, drawn seeded from
- * value bands (one expensive, two middling, one punt) so the wallet always
- * has real decisions, deduped across the whole campaign. The punt band
- * also guarantees every slot keeps at least one candidate a nearly empty
- * wallet can still afford.
+ * PURE assembly over injected rows of ONE start season. Per slot, in
+ * formation order: the candidates are players whose normalized position
+ * the slot accepts, worth the pool floor, with a final season value, drawn
+ * seeded from value bands (one expensive, two middling, one punt) so the
+ * wallet always has real decisions, deduped across the whole campaign, and
+ * dealt in a seeded order so the price band cannot be read off the
+ * position of a card. The punt band also guarantees every slot keeps at
+ * least one candidate a nearly empty wallet can still afford.
  */
-export function assembleCampaign(rows: MarketRow[], seed: number): Campaign | null {
-  const startYear = startYearFor(seed);
+export function assembleCampaign(rows: TrackedRow[], seed: number, startYear: number): Campaign | null {
   const rng = mulberry32(seed);
 
-  /* (name|year) -> best row for that year */
-  const byNameYear = new Map<string, MarketRow>();
+  /* name -> best row for the start season */
+  const byName = new Map<string, TrackedRow>();
+  let finalYear = 0;
   for (const r of rows) {
-    if (!r.player_name || !r.market_value_usd) continue;
-    const k = `${r.player_name}|${r.year}`;
-    const prev = byNameYear.get(k);
-    if (!prev || (prev.market_value_usd ?? 0) < r.market_value_usd) byNameYear.set(k, r);
+    if (r.year !== startYear || !r.player_name || !r.market_value_usd || !r.final_value_usd) continue;
+    if (r.final_year <= startYear) continue;
+    if (finalYear === 0) finalYear = r.final_year;
+    else if (r.final_year !== finalYear) return null; /* two final seasons in one pool: not a pool */
+    const prev = byName.get(r.player_name);
+    if (!prev || (prev.market_value_usd ?? 0) < r.market_value_usd) byName.set(r.player_name, r);
   }
-  const at = (name: string, year: number) => byNameYear.get(`${name}|${year}`);
+  if (finalYear === 0) return null;
 
   const used = new Set<string>();
   const slots: CampaignSlot[] = [];
+  const identities: Record<string, string> = {};
   for (let i = 0; i < STOCK_FORMATION.slots.length; i += 1) {
     const slot = STOCK_FORMATION.slots[i];
-    const offerYear = offerYearFor(startYear, i);
-    const fits = [...byNameYear.values()]
-      .filter(r => r.year === offerYear
-        && !used.has(r.player_name)
-        && (r.market_value_usd ?? 0) >= 2_000_000
-        && at(r.player_name, FINAL_YEAR) !== undefined)
+    const fits = [...byName.values()]
+      .filter(r => !used.has(r.player_name) && (r.market_value_usd ?? 0) >= POOL_FLOOR)
       .filter(r => {
         const pos = normalizePosition(r.position || '');
         return pos !== null && (slot.allowed as string[]).includes(pos);
       })
-      .sort((a, b) => (b.market_value_usd ?? 0) - (a.market_value_usd ?? 0));
+      .sort((a, b) => (b.market_value_usd ?? 0) - (a.market_value_usd ?? 0) || (a.player_name < b.player_name ? -1 : 1));
     if (fits.length < CANDIDATES_PER_SLOT) return null;
 
-    const band = (lo: number, hi: number): MarketRow => {
+    const band = (lo: number, hi: number): TrackedRow => {
       const a = Math.floor(lo * fits.length);
       const b = Math.max(a + 1, Math.floor(hi * fits.length));
       const pool = fits.slice(a, b).filter(r => !used.has(r.player_name));
       const src = pool.length ? pool : fits.filter(r => !used.has(r.player_name));
       return src[Math.floor(rng() * src.length)];
     };
-    const picked: MarketRow[] = [];
+    const picked: TrackedRow[] = [];
     for (const [lo, hi] of [[0, 0.1], [0.15, 0.45], [0.35, 0.7]] as const) {
       let c = band(lo, hi);
       let hops = 0;
@@ -205,97 +224,87 @@ export function assembleCampaign(rows: MarketRow[], seed: number): Campaign | nu
        under PUNT_CEILING, so eleven punts always fit comfortably inside
        the wallet and a run can never strand a slot unaffordable (the page
        reserves the future punts' prices before allowing a splashy buy;
-       the harness proves the arithmetic over hundreds of seeds). */
+       simStockCampaign proves the arithmetic over hundreds of seeds). */
     const cheapFirst = fits.filter(r => !used.has(r.player_name)).sort((a, b) => (a.market_value_usd ?? 0) - (b.market_value_usd ?? 0));
     const puntPool = cheapFirst.filter(r => (r.market_value_usd ?? 0) <= PUNT_CEILING);
-    const punt = (puntPool.length ? puntPool : cheapFirst)[Math.floor(rng() * Math.max(1, Math.min(6, (puntPool.length ? puntPool : cheapFirst).length)))];
+    const puntSrc = puntPool.length ? puntPool : cheapFirst;
+    const punt = puntSrc[Math.floor(rng() * Math.max(1, Math.min(6, puntSrc.length)))];
     if (punt && !picked.includes(punt)) { picked.push(punt); used.add(punt.player_name); }
     if (picked.length < CANDIDATES_PER_SLOT) return null;
 
-    const candidates: AnonCandidate[] = picked.map(r => {
-      const series: { year: number; value: number }[] = [];
-      for (let y = offerYear - 2; y <= offerYear; y += 1) {
-        const row = at(r.player_name, y);
-        if (row?.market_value_usd) series.push({ year: y, value: row.market_value_usd });
-      }
-      const output: { year: number; goals: number; assists: number }[] = [];
-      for (let y = offerYear - 1; y <= offerYear; y += 1) {
-        const row = at(r.player_name, y);
-        if (row) output.push({ year: y, goals: row.goals ?? 0, assists: row.assists ?? 0 });
-      }
+    /* Seeded deal order: [expensive, mid, mid, punt] would print the band on
+       the card's position, and "always take the first card" would be the
+       spend it all buyer in disguise. */
+    for (let k = picked.length - 1; k > 0; k -= 1) {
+      const j = Math.floor(rng() * (k + 1));
+      [picked[k], picked[j]] = [picked[j], picked[k]];
+    }
+
+    const candidates: StockCard[] = picked.map((r, k) => {
+      const id = `s${i}c${k}`;
+      identities[id] = r.player_name;
       return {
-        name: r.player_name,
-        club: r.club ?? 'Unknown',
-        nationality: r.nationality ?? 'Unknown',
+        id,
         position: normalizePosition(r.position || '') ?? 'CM',
-        age: r.age ?? 0,
-        series,
-        output,
+        age: r.age ?? null,
+        matches: r.matches ?? null,
+        goals: r.goals ?? 0,
+        assists: r.assists ?? 0,
+        yellowCards: r.yellow_cards ?? 0,
+        redCards: r.red_cards ?? 0,
         price: r.market_value_usd!,
-        final: at(r.player_name, FINAL_YEAR)!.market_value_usd!,
+        final: r.final_value_usd!,
       };
     });
-    slots.push({ slot, offerYear, candidates });
+    slots.push({ slot, candidates });
   }
-  return { startYear, finalYear: FINAL_YEAR, budget: STOCK_BUDGET, slots };
+  return { startYear, finalYear, budget: STOCK_BUDGET, slots, identities };
 }
 
-/** The two real queries. Pool rows for the six offer years, then full
- *  histories for every pooled name so series, output and finals resolve. */
-export async function fetchCampaignRows(startYear: number): Promise<MarketRow[] | null> {
+/**
+ * The start season pool: one query, one to three pages. The view joins
+ * the season's rows to the latest full season, so every row it returns
+ * can be finished, and the floor keeps the page to the rows a card can be
+ * dealt from (2015: about 430 rows and one page; 2022: about 2,200 and
+ * three). Ordered on a unique pair so the pages cannot overlap.
+ */
+export async function fetchStartSeasonPool(startYear: number): Promise<TrackedRow[] | null> {
   try {
-    const offerYears = Array.from({ length: 6 }, (_, i) => startYear + i);
-    const COLUMNS = 'player_name, club, position, age, nationality, year, market_value_usd, goals, assists';
-
-    /* ROUND 364: THIS USED TO ASK FOR 4,000 ROWS AND SILENTLY GET 1,000, WHICH
-       BROKE THE GAME'S ECONOMY.
-       PostgREST caps every select at 1,000 rows no matter what .limit() says.
-       Measured against live data: Content-Range 0-999/24939. Because the sort
-       is value descending, the query asked for players from $2,000,000 up and
-       the cheapest row it could ever return was $38,000,000, so 73 percent of
-       the intended pool was thrown away (18,211 of those 24,939 rows sit in the
-       $2m to $8m band). The consequence was not a thin pool, it was a broken
-       promise: PUNT_CEILING is $8,000,000, so the punt filter below could never
-       match anything and the code silently substituted the cheapest available
-       instead. The comment on the punt says eleven punts always fit inside the
-       wallet and a run can never strand a slot unaffordable; eleven punts at
-       $38m is $418m against a $200m budget, so that guarantee was false against
-       live data. simStockCampaign could not see any of it, because it drives
-       assembleCampaign with injected fixtures that do contain cheap players.
-       Paged properly now, through the same helper the rest of the site uses.
-       The year span covers startYear - 2 so the three year price series each
-       offer draws has its history. */
-    const seriesYears = [startYear - 2, startYear - 1, ...offerYears];
-    const { data: poolRows, error: e1 } = await fetchAllRows<MarketRow>((from, to) =>
+    const { data, error } = await fetchAllRows<TrackedRow>((from, to) =>
       supabase
-        .from('player_market_values')
-        .select(COLUMNS)
-        .in('year', seriesYears)
-        .gte('market_value_usd', 2_000_000)
-        /* Deterministic and unique: fetchAllRows pages with .range(), so an
-           ambiguous order can overlap or skip rows between pages. */
+        .from('player_market_tracked')
+        .select('player_name, position, age, matches, goals, assists, yellow_cards, red_cards, market_value_usd, year, final_year, final_value_usd')
+        .eq('year', startYear)
+        .gte('market_value_usd', POOL_FLOOR)
         .order('player_name', { ascending: true })
-        .order('year', { ascending: true })
+        .order('id', { ascending: true })
         .range(from, to),
     );
-    if (e1 || !poolRows || poolRows.length < 200) return null;
+    if (error || !data || data.length < 100) return null;
+    return data as TrackedRow[];
+  } catch {
+    return null;
+  }
+}
 
-    /* The final year decides who is eligible at all (see the at(name,
-       FINAL_YEAR) test in assembleCampaign) and supplies the closing price.
-       Fetched as a whole year rather than filtered to a list of names: the old
-       code capped that list at 900 of the pool's 7,525 distinct names, so even
-       with the paging fixed above, every cheap player would have failed the
-       eligibility test and been dropped again. */
-    const { data: finalRows, error: e2 } = await fetchAllRows<MarketRow>((from, to) =>
-      supabase
-        .from('player_market_values')
-        .select(COLUMNS)
-        .eq('year', FINAL_YEAR)
-        .order('player_name', { ascending: true })
-        .range(from, to),
-    );
-    if (e2 || !finalRows) return null;
-    return [...poolRows, ...finalRows] as MarketRow[];
+/**
+ * The year by year rows for the holdings: one query for all eleven, every
+ * season from the start to the final one, from the dedup view so a name
+ * has one row a year (the dearest, the same rule the tracked view uses for
+ * the final season).
+ */
+export async function fetchHoldingHistories(names: string[], fromYear: number, toYear: number): Promise<HistoryRow[] | null> {
+  try {
+    const { data, error } = await supabase
+      .from('player_market_values_dedup')
+      .select('player_name, year, market_value_usd, club, nationality')
+      .in('player_name', names)
+      .gte('year', fromYear)
+      .lte('year', toYear)
+      .order('player_name', { ascending: true })
+      .order('year', { ascending: true });
+    if (error || !data) return null;
+    return data as HistoryRow[];
   } catch {
     return null;
   }
@@ -314,8 +323,112 @@ export function reserveAfter(campaign: Campaign, slotIndex: number): number {
   return sum;
 }
 
-export function canAfford(campaign: Campaign, slotIndex: number, candidate: AnonCandidate, remaining: number): boolean {
+export function canAfford(campaign: Campaign, slotIndex: number, candidate: StockCard, remaining: number): boolean {
   return candidate.price + reserveAfter(campaign, slotIndex) <= remaining;
+}
+
+/* ---------------- the years, and the reveal ---------------- */
+
+export interface Holding {
+  slot: string;
+  position: string;
+  age: number | null;
+  price: number;
+  final: number;
+  /** The reveal. */
+  name: string;
+  club: string;
+  nationality: string;
+  /** One entry per season from startYear to finalYear, in order. Null
+   *  where the table has no row for that player and year. */
+  series: (number | null)[];
+}
+
+export interface StepLine {
+  holding: number;
+  /** This season's real value, or null when there is no row. */
+  value: number | null;
+  /** The last value the table knew before this season (the price at the
+   *  start), so a move can be shown even after a gap. */
+  prev: number;
+}
+
+export interface YearStep {
+  year: number;
+  lines: StepLine[];
+  /** How many of the eleven have a row this season. */
+  known: number;
+  /** The sum of the values that exist this season. */
+  total: number;
+}
+
+/** name -> year -> the dearest row for that year. */
+function indexHistories(rows: HistoryRow[]): Map<string, Map<number, HistoryRow>> {
+  const byName = new Map<string, Map<number, HistoryRow>>();
+  for (const r of rows) {
+    if (!r.player_name) continue;
+    let years = byName.get(r.player_name);
+    if (!years) { years = new Map(); byName.set(r.player_name, years); }
+    const prev = years.get(r.year);
+    if (!prev || (prev.market_value_usd ?? 0) < (r.market_value_usd ?? 0)) years.set(r.year, r);
+  }
+  return byName;
+}
+
+/**
+ * The real value of one player in one season, or null when the table has
+ * no row. This is the only place a year's value comes from, and it never
+ * fills a gap: a season with no row is a season with no row.
+ */
+export function valueAt(index: Map<string, Map<number, HistoryRow>>, name: string, year: number): number | null {
+  const row = index.get(name)?.get(year);
+  const v = row?.market_value_usd ?? null;
+  return v !== null && v > 0 ? v : null;
+}
+
+export function identityOf(campaign: Campaign, card: StockCard): string {
+  return campaign.identities[card.id] ?? 'Unknown';
+}
+
+/** The eleven holdings with their real season by season values. */
+export function buildHoldings(campaign: Campaign, picks: StockCard[], histories: HistoryRow[]): Holding[] {
+  const index = indexHistories(histories);
+  return picks.map((card, i) => {
+    const name = identityOf(campaign, card);
+    const startRow = index.get(name)?.get(campaign.startYear);
+    const series: (number | null)[] = [];
+    for (let y = campaign.startYear; y <= campaign.finalYear; y += 1) series.push(valueAt(index, name, y));
+    return {
+      slot: campaign.slots[i].slot.label,
+      position: card.position,
+      age: card.age,
+      price: card.price,
+      final: card.final,
+      name,
+      club: startRow?.club ?? 'Unknown',
+      nationality: startRow?.nationality ?? 'Unknown',
+      series,
+    };
+  });
+}
+
+/** One step per season after the start, each holding's move that season. */
+export function yearSteps(holdings: Holding[], startYear: number, finalYear: number): YearStep[] {
+  const steps: YearStep[] = [];
+  const last = holdings.map(h => h.price);
+  for (let y = startYear + 1; y <= finalYear; y += 1) {
+    const k = y - startYear;
+    const lines: StepLine[] = holdings.map((h, i) => {
+      const value = h.series[k] ?? null;
+      const line = { holding: i, value, prev: last[i] };
+      if (value !== null) last[i] = value;
+      return line;
+    });
+    const known = lines.filter(l => l.value !== null).length;
+    const total = lines.reduce((s, l) => s + (l.value ?? 0), 0);
+    steps.push({ year: y, lines, known, total });
+  }
+  return steps;
 }
 
 /* ---------------- scoring ---------------- */
@@ -332,7 +445,7 @@ export interface CampaignResult {
   score: number;
 }
 
-export function candidateRatio(c: AnonCandidate): number {
+export function candidateRatio(c: StockCard): number {
   return c.final / c.price;
 }
 
@@ -346,19 +459,16 @@ export function candidateRatio(c: AnonCandidate): number {
  * meant the winning play was to keep the wallet shut. Measured over 120 seeded
  * campaigns against the real rows: the cheapest possible XI, 25.4M of a 200M
  * wallet, scored 95.2 out of 100 while a random picker scored 20.5 and an XI
- * that spent the lot scored 13.2. The two stats the card prints beside the
- * price were worse than useless against that rule, landing on the card the
- * score rewarded 22.6 and 18.8 percent of the time against 40.7 for guessing.
- * The game is called Invest on Stats Alone.
+ * that spent the lot scored 13.2.
  *
- * So the score is now the return on the whole wallet. Your portfolio's final
+ * So the score is the return on the whole wallet. Your portfolio's final
  * year value is placed between the WORST and the BEST eleven that the same
  * budget could actually have bought out of the same offers. Money you never
  * spend buys nothing, which is what makes it an investing game: 100 means you
  * played the 200M perfectly, 0 means you could not have done worse with it.
  */
 
-interface Reach { spend: number; value: number; picks: AnonCandidate[] }
+interface Reach { spend: number; value: number; picks: StockCard[] }
 
 /**
  * Every XI the wallet can reach, kept as a frontier of (spend, value) pairs
@@ -367,8 +477,6 @@ interface Reach { spend: number; value: number; picks: AnonCandidate[] }
  * budget, and picking the dearest card early really can strand a later slot.
  *
  * sign +1 keeps the most valuable portfolio at each spend, -1 the least.
- * The frontier stays small because a point only survives if it beats every
- * cheaper one (measured over 400 real campaigns: 118 points at the widest).
  */
 function reachable(campaign: Campaign, sign: 1 | -1): Reach[] {
   let points: Reach[] = [{ spend: 0, value: 0, picks: [] }];
@@ -402,16 +510,16 @@ function reachable(campaign: Campaign, sign: 1 | -1): Reach[] {
 }
 
 /** The most valuable XI the budget could have bought from these offers. */
-export function bestAffordableXI(campaign: Campaign): AnonCandidate[] {
+export function bestAffordableXI(campaign: Campaign): StockCard[] {
   return reachable(campaign, 1).reduce((best, p) => (p.value > best.value ? p : best)).picks;
 }
 
 /** The least valuable one, which is the floor the score sits on. */
-export function worstAffordableXI(campaign: Campaign): AnonCandidate[] {
+export function worstAffordableXI(campaign: Campaign): StockCard[] {
   return reachable(campaign, -1).reduce((worst, p) => (p.value < worst.value ? p : worst)).picks;
 }
 
-export function scoreCampaign(campaign: Campaign, picks: AnonCandidate[]): CampaignResult {
+export function scoreCampaign(campaign: Campaign, picks: StockCard[]): CampaignResult {
   const spend = picks.reduce((s, c) => s + c.price, 0);
   const finalValue = picks.reduce((s, c) => s + c.final, 0);
   const bestValue = bestAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
@@ -421,6 +529,49 @@ export function scoreCampaign(campaign: Campaign, picks: AnonCandidate[]): Campa
     ? 100
     : Math.max(0, Math.min(100, Math.round((100 * (finalValue - worstValue)) / (bestValue - worstValue))));
   return { spend, finalValue, growth, bestValue, worstValue, score };
+}
+
+/* ---------------- the finished run, and the daily record ---------------- */
+
+/** Everything the result screen needs, so a finished daily comes back from
+ *  storage without a network call and is byte identical to the fresh one. */
+export interface StockFinish extends CampaignResult {
+  startYear: number;
+  finalYear: number;
+  budget: number;
+  holdings: Holding[];
+}
+
+export function finishCampaign(campaign: Campaign, picks: StockCard[], holdings: Holding[]): StockFinish {
+  return { ...scoreCampaign(campaign, picks), startYear: campaign.startYear, finalYear: campaign.finalYear, budget: campaign.budget, holdings };
+}
+
+const num = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const str = (v: unknown): v is string => typeof v === 'string';
+
+function validateFinish(fields: Record<string, unknown>): StockFinish | null {
+  const f = fields as Partial<StockFinish>;
+  if (!num(f.startYear) || !num(f.finalYear) || !num(f.budget) || !num(f.spend) || !num(f.finalValue)
+    || !num(f.growth) || !num(f.bestValue) || !num(f.worstValue) || !num(f.score)) return null;
+  if (!Array.isArray(f.holdings) || f.holdings.length !== STOCK_FORMATION.slots.length) return null;
+  const span = f.finalYear - f.startYear + 1;
+  if (span < 2) return null;
+  for (const h of f.holdings as unknown[]) {
+    if (!h || typeof h !== 'object') return null;
+    const x = h as Partial<Holding>;
+    if (!str(x.slot) || !str(x.position) || !str(x.name) || !str(x.club) || !str(x.nationality)) return null;
+    if (!num(x.price) || !num(x.final) || !(x.age === null || num(x.age))) return null;
+    if (!Array.isArray(x.series) || x.series.length !== span || !x.series.every(v => v === null || num(v))) return null;
+  }
+  return f as StockFinish;
+}
+
+export function loadDailyResult(date: string): StockFinish | null {
+  return readDailyRecord(STOCK_SLUG, date, validateFinish);
+}
+
+export function saveDailyResult(date: string, finish: StockFinish): void {
+  writeDailyRecord(STOCK_SLUG, date, { ...finish });
 }
 
 /* ---------------- formatting ---------------- */
