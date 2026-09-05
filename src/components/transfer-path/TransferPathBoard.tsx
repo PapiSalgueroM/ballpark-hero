@@ -9,7 +9,7 @@ import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSear
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { ACTIVE_YEAR, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
+import { ACTIVE_YEAR, RULE_BLURB, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
 import { cn } from '@/lib/utils';
 
 
@@ -124,7 +124,7 @@ export function TransferPathBoard() {
                   onClick={() => setRule(r)}
                   aria-pressed={rule === r}
                   disabled={off}
-                  title={ruleLocked ? 'Rules lock once today\'s chain has started' : ruleAvailability[r] === 0 ? 'No puzzle carries this rule yet' : undefined}
+                  title={ruleLocked ? 'Rules lock once today\'s chain has started' : ruleAvailability[r] === 0 ? 'No puzzle carries this rule yet' : RULE_BLURB[r]}
                   className={cn(
                     'rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors',
                     rule === r
