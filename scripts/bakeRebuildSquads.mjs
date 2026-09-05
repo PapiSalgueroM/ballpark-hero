@@ -65,3 +65,31 @@ for (const c of clubRows) {
 const dest = path.join(ROOT, 'scripts/data/rebuildSquads.json');
 fs.writeFileSync(dest, JSON.stringify(out));
 console.log(`\nwrote ${out.clubs.length} clubs to ${dest}`);
+
+/* Round 456: the market too, so scripts/simRebuildLoop.mjs can deal the
+   scouts' three from the pool the game really reads. Mirrors fetchMarket in
+   src/lib/fetchRebuild.ts: game_player_pool, year 2026, every row, ordered by
+   value descending. The row is baked RAW (position string, dollars) and the
+   harness runs the shipped buildMarket over it, the same as the page does. */
+const market = [];
+for (let from = 0; ; from += 1000) {
+  const { data, error } = await supabase
+    .from('game_player_pool')
+    .select('player_name, position, age, nationality, club, market_value_usd')
+    .eq('year', 2026)
+    .order('market_value_usd', { ascending: false })
+    .order('player_name', { ascending: true })
+    .range(from, from + 999);
+  if (error) {
+    console.error('market pull failed', error);
+    process.exit(1);
+  }
+  if (!data || data.length === 0) break;
+  for (const r of data) {
+    market.push([r.player_name, r.position || '', r.age ?? 0, r.nationality || '', r.club || '', r.market_value_usd ?? 0]);
+  }
+  if (data.length < 1000) break;
+}
+const marketDest = path.join(ROOT, 'scripts/data/rebuildMarket.json');
+fs.writeFileSync(marketDest, JSON.stringify({ pulled: out.pulled, rows: market }));
+console.log(`wrote ${market.length} market rows to ${marketDest}`);
