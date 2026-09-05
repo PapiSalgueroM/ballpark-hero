@@ -75,6 +75,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', addedOn: '2026-07-01' },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', addedOn: '2026-07-02' },
       { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race', addedOn: '2026-07-09', featured: true },
+      { path: '/soccer-conquest', label: 'Soccer Conquest', emoji: '🗺️', description: 'Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent', daily: true, addedOn: '2026-09-05' },
       { path: '/stadium-tycoon', label: 'Stadium Tycoon', emoji: '🏟️', description: 'Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom', addedOn: '2026-08-17' },
       { path: '/wonderkid-factory', label: 'Wonderkid Factory', emoji: '🔭', description: 'Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment', addedOn: '2026-08-21' },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', addedOn: '2026-07-02' },
