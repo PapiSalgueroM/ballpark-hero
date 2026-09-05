@@ -2,6 +2,42 @@ import type { GameContentMap } from './types';
 
 // Pro basketball game guides. Casual human tone, no em dashes anywhere.
 export const BASKETBALL_CONTENT: GameContentMap = {
+  '/buzzer-beater': {
+    intro: [
+      "Most of this site asks you a question. This one asks you to make the shot. Ten jump shots, you back up on every single one, and there is a hand coming at you on nine of them.",
+      "The whole game is the arc. A basket is a hole you drop the ball into from above, so how steeply the ball arrives decides how much room it has. Come in flat and there is almost nothing to go through. Come in steep and there is room, but you have to throw it harder to get there, and a hard release goes where it wants rather than where you pointed it.",
+    ],
+    howToPlay: [
+      "Set the arc with the up and down arrows, or by dragging up and down on the court. The readout shows the angle you are shooting at.",
+      "Fade off the closeout with left and right. The ring in the corner shows where you are pointing across the hoop.",
+      "Hold space, or hold the shoot button, to load the strength bar, and let go. The bar sweeps up and down and you get the number you release on.",
+      "Ten shots a run, from the free throw line out past the arc, with a higher hand in your face every time.",
+    ],
+    rules: [
+      "The ring is 18 inches across on the inside and the ball is a little under 9 and a half, which is the real difference and the reason arc matters. Seen along your shot the ring keeps its width but loses its depth, so the room you have to be short or long shrinks as the shot flattens and runs out entirely near 32 degrees.",
+      "The strength bar is absolute, not a percentage of what this shot needs. The right place to stop it is different from the free throw line than it is from the arc, so there is no single spot that works all night.",
+      "A hard release sprays. It costs you accuracy side to side and a little pace either way, and the cost grows faster than the strength does, so the top of the bar is where the misses live.",
+      "The hand only blocks what stays low. Go over it, or fade off it, and either way you have given something up to do it.",
+      "Baskets pay by distance, by the hand you shot over and by how cleanly the ball went through. A free throw pays least.",
+      "The daily deals the same ten shots to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+    ],
+    example: [
+      "Shot one is a free throw with nobody near you. It only needs a gentle release, so a big arc costs you nothing: put it up around 60 degrees, stop the bar low, and the ball comes down almost on top of the ring with plenty of room.",
+      "Shot ten is 8.6 metres out with a hand reaching over three metres, closing to within a metre of you. That same 60 degree arc now has to be thrown hard enough to spray, so flatten it a little, clear the hand by the smallest margin you dare, and accept that this one is close to a coin flip. It is also worth about three times what the free throw paid.",
+    ],
+    tips: [
+      "High from close, flatter as you back up. It is the opposite of what feels right, and it is the single biggest thing to learn here.",
+      "Read the dashed line before you load the bar. It shows the shape this release would take with nothing going wrong, so if it is already passing under the ring, fix the arc rather than hoping.",
+      "The angle readout after every shot is the honest feedback. Anything under about 40 degrees was never going in, however well you aimed it.",
+      "Fading is expensive. Only fade when the hand is genuinely too high to go over, because every centimetre of fade is a centimetre off the middle of the ring.",
+    ],
+    faqs: [
+      { q: 'Is the daily the same for everyone?', a: 'Yes. The ten shots come from the date, so every player gets the same run, and your score is kept for the day.' },
+      { q: 'Do I need a keyboard?', a: 'No. Drag the court to set the arc and the fade, then let go to shoot, which works the same on a phone.' },
+      { q: 'Why did a shot that looked perfect rattle out?', a: 'Almost always the angle. Check the entry number on the result: a flat shot is aiming at a slot rather than a hole, and there is barely a centimetre in it.' },
+      { q: 'Is the physics real?', a: 'The flight and the rim geometry are, and so are the rim, ball and release heights. The tolerances are widened on purpose, because nobody hits a centimetre with a sweeping bar and a thumb.' },
+    ],
+  },
   '/perfect-season-nba': {
     intro: [
       "The wheel owns your draft board. Every spin stops on a real NBA team season, 1950s to today, and you take exactly one player from that roster.",
