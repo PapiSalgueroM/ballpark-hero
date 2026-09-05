@@ -9475,6 +9475,27 @@ export type Database = {
         }
         Relationships: []
       }
+      player_market_tracked: {
+        Row: {
+          age: number | null
+          assists: number | null
+          club: string | null
+          final_value_usd: number | null
+          final_year: number | null
+          goals: number | null
+          id: number | null
+          market_value_usd: number | null
+          matches: number | null
+          nationality: string | null
+          player_name: string | null
+          position: string | null
+          rank: number | null
+          red_cards: number | null
+          year: number | null
+          yellow_cards: number | null
+        }
+        Relationships: []
+      }
       player_market_values_dedup: {
         Row: {
           age: number | null

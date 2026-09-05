@@ -130,7 +130,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI out of mystery boxes', addedOn: '2026-06-23' },
       { path: '/search-and-discard', label: 'Search and Discard', emoji: '🔎', description: 'The squad duel: keep one, bin two, settle it in a season', addedOn: '2026-08-29' },
       { path: '/gauntlet-draft', label: 'Gauntlet Draft', emoji: '⚔️', description: 'Pick your XI five cards at a time, then survive a five round cup', daily: true, addedOn: '2026-08-29' },
-      { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Buy 3 players at real past values, then the market moves a real year', daily: true, addedOn: '2026-07-22' },
+      { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Open a past season, buy an XI on stats alone, then roll the years forward', daily: true, addedOn: '2026-07-22' },
       // deleted 2026-08-05 per owner review: he asked for the standalone box
       // game to go and for Squad Deal to stay.
       // { path: '/deal-or-no-deal', label: 'Mystery Box', emoji: '💼', description: 'Bank or gamble against the Banker', isNew: true },
