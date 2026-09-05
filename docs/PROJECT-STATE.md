@@ -57,7 +57,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | How to play popup on first open plus "?" | PART | RulesGate exists on every game; the other lane has an uncommitted change making it once per route (2026-09-05) |
 | Report a bug as a real pipeline | DONE | Round 316 kinds, Round 446 delivery tracking; email proved live |
 | Flags, never abbreviations, everywhere | PART | Round 444 for Career Ladder and Missing XI; a sitewide sweep is open |
-| Polls more engaging | OPEN | |
+| Polls more engaging | OPEN, design | measured 2026-09-05: daily_polls holds 234 rows dated 2026-07-06 to 2026-10-05 with 63 still to come, and poll_votes takes 50 to 150 votes a day (629 in the last week), so the data is healthy and this is a design ask, not an empty section |
 | Profile page accurate for every game | OPEN, unverified | |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
