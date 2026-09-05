@@ -61,6 +61,8 @@
  *      rivals only when your own eligibility changed, section 8 red
  *   SIM_SIGNAUCTION_CONTROL=stepover    restores the self raise, section 3 red
  *   SIM_SIGNAUCTION_CONTROL=sharedfill  restores the shared journeyman, section 5 red
+ *   SIM_SIGNAUCTION_CONTROL=nowalk      restores the Round 441 room where no rival
+ *     ever passes on a lot, so his "if zero" case cannot happen; section 4c red
  *   SIM_SIGNAUCTION_CONTROL=ratingprice restores the pre Round 315 rating
  *      opening, which reopens Mile Svilar at exactly the 162 million the owner
  *      reported, section 6 red
@@ -80,7 +82,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 const ROWS_FILE = `${ROOT}/scripts/data/auctionMarketRows.json`;
 const LIB = `${ROOT}/src/lib/auctionHouse.ts`;
 const REFRESH = process.argv.includes('--refresh');
-const CONTROLS = ['stepover', 'sharedfill', 'ratingprice', 'hangwiring'];
+const CONTROLS = ['stepover', 'sharedfill', 'ratingprice', 'hangwiring', 'nowalk'];
 const CONTROL = process.env.SIM_SIGNAUCTION_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_SIGNAUCTION_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -116,6 +118,11 @@ if (CONTROL && CONTROL !== 'hangwiring') {
       'const anchored = p.marketValue > 5 ? Math.round(p.marketValue) : Math.round((rating - 55) * 3);',
       'const anchored = Math.round((rating - 55) * 6);',
       'the pre Round 315 rating opening restored: the curve the owner reported at 162 million',
+    ],
+    nowalk: [
+      'return rand() < WALK_AWAY_ODDS[lot.tier];',
+      'return false;',
+      'the Round 441 room restored: no rival ever passes on a lot, so his "if zero" case cannot happen',
     ],
   };
   const [needle, replacement, note] = needles[CONTROL];
@@ -417,13 +424,34 @@ console.log('4) nobody wants him, so the price falls, and the fall is bounded');
   if (decays < 50) fail(`only ${decays} of ${offered} re offered lots found no taker, too few to hold a law on`);
   else console.log(`   ${decays} unwanted lots of ${offered} re offered fell: ${takenLow} snapped up cheap, ${withdrawn} withdrawn at the floor, worst fall ${worstSteps} steps of a possible ${maxStepsAllowed}`);
 
-  /* 4c: how often his "if zero" case is reached in ordinary play. A rival's
-     floor valuation is 1.28 x list x 0.88 personality x 1.15 need x 0.85
-     noise = 1.10 x list before the tier bonus, so no rival can ever decline a
-     lot on VALUE: only an empty wallet makes him walk. Reported rather than
-     retuned, because the level of the room is a balance call and not a bug. */
+  /* 4c: how often his "if zero" case is reached in ordinary play. Round 441
+     measured it at 0 of 5280 lots and explained why: a rival's floor
+     valuation was 1.28 x list x 0.88 personality x 1.15 need x 0.85 noise =
+     1.10 x list before the tier bonus, so no rival could decline a lot on
+     VALUE and only an empty wallet made him walk. Round 454 gave each rival
+     a plan: on each lot he could bid on he may pass before valuing it, with
+     odds by tier (WALK_AWAY_ODDS), so an unwanted lot is a thing that
+     happens. THE LAW is measured where it can be seen: in the 'pass' runs,
+     where you never bid, the share of lots that fall must sit in a band.
+     Measured on the day it was set: 85 decays across all 240 runs, all of
+     them in the 80 pass runs (you bid on every lot under 'open' and
+     'chase'), 4.8 percent of pass run lots, about one per auction. The floor
+     of the band is 2 percent (the defect is 0 and the measurement is more
+     than twice the floor); the ceiling is 20 percent, past which the room is
+     not an auction any more. */
+  const passRuns = runs.filter(r => r.policy === 'pass');
+  const passLots = passRuns.reduce((n, r) => n + r.lots.length, 0);
+  const passDecays = passRuns.reduce((n, r) => n + r.sales.filter(s => s.phase === 'decay').length, 0);
   const inPlay = runs.reduce((n, r) => n + r.sales.filter(s => s.phase === 'decay').length, 0);
-  console.log(`   reachability in ordinary play: ${inPlay} of ${runs.length * runs[0].lots.length} lots decayed, because a rival's floor valuation is 1.10x list before his tier bonus`);
+  const share = passLots ? passDecays / passLots : 0;
+  console.log(`   reachability in ordinary play: ${inPlay} of ${runs.length * runs[0].lots.length} lots decayed; in the ${passRuns.length} runs where you never bid, ${passDecays} of ${passLots} (${(100 * share).toFixed(1)}%)`);
+  if (share < 0.02) fail(`his "if zero" case is reached on ${(100 * share).toFixed(1)}% of lots when you sit out, which is the Round 441 room where no rival ever walks away`);
+  if (share > 0.2) fail(`${(100 * share).toFixed(1)}% of lots go unwanted when you sit out, which is not an auction any more`);
+  if (CONTROL === 'nowalk') {
+    if (share < 0.02) { console.log(`simSignThePlayerAuction control: green. No rival ever walks away, and his "if zero" case vanished: ${passDecays} of ${passLots} lots decayed when you sat out.`); process.exit(0); }
+    console.error(`simSignThePlayerAuction control: RED. Lots still decayed (${passDecays} of ${passLots}) with walking away switched off.`);
+    process.exit(1);
+  }
 }
 
 console.log('5) every roster fills, and no man signs for two clubs in the same league');

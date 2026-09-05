@@ -195,6 +195,26 @@ export function assignmentFee(p: AuctionPlayer): number {
 export const DECAY_STEP = 0.9;
 export const DECAY_FLOOR = 0.3;
 
+/* Round 454: a rival can sit a lot out. His format, word for word: "if zero
+ * then there price goes down a little and more and more until someone
+ * decided they want him". Round 441 measured that case at 0 of 5280 lots in
+ * ordinary play, and the reason was arithmetic: a rival's FLOOR valuation is
+ * 1.28 x list x 0.88 personality x 1.15 need x 0.85 noise = 1.10 x list, so
+ * no rival could ever decline a lot on value and only an empty wallet made
+ * him walk. Real rooms are not like that: a club with a plan passes on a
+ * player who is not in it. So each rival, on each lot he could bid on, first
+ * decides whether the man is on his list at all, and the odds of passing run
+ * by tier: the best player in the room is almost never passed on, a weak
+ * lot often is. The draw comes from the same seeded generator as everything
+ * else, so a seed still replays. Measured on 240 driven auctions, see
+ * scripts/simSignThePlayerAuction.mjs section 4c for the band it holds. */
+export const WALK_AWAY_ODDS: Record<AuctionPlayer['tier'], number> = { great: 0.04, good: 0.2, weak: 0.5 };
+
+/** Whether a rival passes on a lot before valuing it, drawn from the room's own generator. */
+export function walksAway(lot: AuctionPlayer, rand: () => number): boolean {
+  return rand() < WALK_AWAY_ODDS[lot.tier];
+}
+
 /* Round 327, the owner's running order: pass one is a lot per position from
  * the middle band in a random order, pass two the elite band, and the single
  * most valuable player in the room is held back to headline the final lot.
@@ -274,6 +294,13 @@ export function runRivalBids(args: {
     moved = false;
     for (const b of bidders) {
       if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
+      /* Round 454: a rival who has not bid yet may pass on the man entirely.
+         Only before his first bid: once he is in, he is in on value. */
+      if (lead !== b.id && !events.some(e => e.kind === 'bid' && e.bidderId === b.id) && walksAway(lot, rand)) {
+        act.delete(b.id);
+        events.push({ kind: 'out', bidderId: b.id, price: p, leader: lead });
+        continue;
+      }
       const val = aiValuation(b, lot, slotsLeftAfter, rand);
       /* Round 441, his format to the letter: "if its just one then they win
          the player for the listed price". A lot nobody leads is OPENED at
