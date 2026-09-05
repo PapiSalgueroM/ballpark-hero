@@ -41,8 +41,12 @@
     "date": "2026-09-02"
   },
   "/build-your-xi": {
-    "hash": "3ec7b1e5eea2ea29",
-    "date": "2026-09-04"
+    "hash": "2f630c3fe3857405",
+    "date": "2026-09-05"
+  },
+  "/buzzer-beater": {
+    "hash": "3e4cce6a85e6deda",
+    "date": "2026-09-05"
   },
   "/career": {
     "hash": "3cb3b3f74b7bd08c",
@@ -69,20 +73,20 @@
     "date": "2026-08-29"
   },
   "/cfb-higher-lower": {
-    "hash": "8897b028987d6e81",
-    "date": "2026-08-25"
+    "hash": "c21907a0a8c3e360",
+    "date": "2026-09-05"
   },
   "/champ-or-not": {
-    "hash": "9da6141b57803e30",
-    "date": "2026-09-02"
+    "hash": "50ec7802b70c6816",
+    "date": "2026-09-05"
   },
   "/club-manager": {
     "hash": "c7d29b9ee8b5656d",
     "date": "2026-08-25"
   },
   "/clue-auction": {
-    "hash": "f279992096af1d1d",
-    "date": "2026-08-25"
+    "hash": "90473fa23cb82339",
+    "date": "2026-09-05"
   },
   "/college": {
     "hash": "5ab33e14857307b5",
@@ -105,8 +109,8 @@
     "date": "2026-08-25"
   },
   "/conquest-nba": {
-    "hash": "bf7be5f9041b5739",
-    "date": "2026-08-25"
+    "hash": "16a856a2dbfd8d0a",
+    "date": "2026-09-05"
   },
   "/conquest-nhl": {
     "hash": "e23b26636641ae93",
@@ -121,8 +125,8 @@
     "date": "2026-08-25"
   },
   "/emoji-guess": {
-    "hash": "acb33971e1dc4236",
-    "date": "2026-09-04"
+    "hash": "4643037d3afa666f",
+    "date": "2026-09-05"
   },
   "/f1-constructor": {
     "hash": "fe1769f6cd60c81f",
@@ -233,16 +237,16 @@
     "date": "2026-08-31"
   },
   "/idle-arena": {
-    "hash": "e68845ba93f61380",
-    "date": "2026-08-25"
+    "hash": "a5b06fd4ef82897f",
+    "date": "2026-09-05"
   },
   "/leaderboard": {
     "hash": "047e537f426b730b",
     "date": "2026-08-25"
   },
   "/list-quiz": {
-    "hash": "6a96036a3818394d",
-    "date": "2026-08-27"
+    "hash": "61f20988b285f283",
+    "date": "2026-09-05"
   },
   "/minefield": {
     "hash": "d4f42fdcb8b8b866",
@@ -261,12 +265,12 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "fecbc85ed3bcd992",
-    "date": "2026-09-04"
+    "hash": "12a1515a46edba6c",
+    "date": "2026-09-05"
   },
   "/mlb-connect-4": {
-    "hash": "7fad83a61216a551",
-    "date": "2026-09-02"
+    "hash": "776ac948837eb57f",
+    "date": "2026-09-05"
   },
   "/mlb-front-office": {
     "hash": "31544af6c42ea0f7",
@@ -313,8 +317,8 @@
     "date": "2026-08-25"
   },
   "/nba-front-office": {
-    "hash": "64b3027f0a89ac62",
-    "date": "2026-08-25"
+    "hash": "6540373a6e2a8bf7",
+    "date": "2026-09-05"
   },
   "/nba-grid": {
     "hash": "a1ded92bc1153386",
@@ -329,8 +333,8 @@
     "date": "2026-08-25"
   },
   "/nba-my-career": {
-    "hash": "88e756be3531720a",
-    "date": "2026-08-30"
+    "hash": "dcc3bebac01e700d",
+    "date": "2026-09-05"
   },
   "/nba-starting-5": {
     "hash": "2b384f95c747731e",
@@ -413,16 +417,16 @@
     "date": "2026-08-29"
   },
   "/player-stock-market": {
-    "hash": "eb61654a764a08c7",
-    "date": "2026-08-29"
+    "hash": "2c68f81abb963fb3",
+    "date": "2026-09-05"
   },
   "/privacy": {
     "hash": "c5ce53c0d9914a56",
     "date": "2026-09-02"
   },
   "/pro-basketball": {
-    "hash": "a14bbea850a7ceba",
-    "date": "2026-08-30"
+    "hash": "1e7a4d781e5e1ba5",
+    "date": "2026-09-05"
   },
   "/pro-football": {
     "hash": "78b68bc674127695",
@@ -441,8 +445,8 @@
     "date": "2026-08-29"
   },
   "/rarity-round": {
-    "hash": "f36947754976353f",
-    "date": "2026-09-03"
+    "hash": "f0ed97bf63d074ec",
+    "date": "2026-09-05"
   },
   "/rebuild": {
     "hash": "e993379b029c3e48",
@@ -461,8 +465,8 @@
     "date": "2026-08-29"
   },
   "/sign-the-player": {
-    "hash": "b2368716ea621bd6",
-    "date": "2026-08-29"
+    "hash": "1a12e01f6b99651f",
+    "date": "2026-09-05"
   },
   "/silverware-sort": {
     "hash": "fefc1520bef1dab8",
