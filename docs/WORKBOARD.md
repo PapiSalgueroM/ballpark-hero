@@ -19,7 +19,15 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 457.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 458.
+
+- **Desktop lane, CLAIMED 2026-09-05: Round 457, Conquest's map rebuilt to the format.** His
+  words: "the map presentation is far behind the imperialism style videos the format comes
+  from ... screenshot the FORMAT (region map, team territories, takeover flow) and rebuild
+  the visuals. Original colors and names only, never logos." Four conquest routes carry four
+  map components and two hooks, the four copies of one idea shape; this round builds ONE map
+  renderer and takeover flow that all four share, with the sport injected. The soccer
+  conquest across the top five leagues is the round after, on the same renderer.
 
 - **Desktop lane, CLAIMED 2026-09-05: Round 456, Rebuild's new core loop.** His words, in
   full in `docs/TWEAKS-2026-08-28.md` under Rebuild: the copy reads AI written; starting XI
