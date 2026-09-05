@@ -172,6 +172,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Pro Basketball',
     emoji: '🏀',
     games: [
+      { path: '/buzzer-beater', label: 'Buzzer Beater', emoji: '🏀', description: 'Pick the arc, beat the hand, drop ten jump shots', daily: true, isNew: true },
       { path: '/perfect-season-nba', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin team seasons, draft a six man rotation', isNew: true },
       { path: '/stat-detective', label: 'Stat Detective', emoji: '🔎', description: 'Name the player behind the mystery stat line', isNew: true },
       { path: '/nba-stat-line', label: 'NBA Stat Line', emoji: '📊', description: 'Blend five real seasons into a target per 36 line', daily: true, isNew: true },

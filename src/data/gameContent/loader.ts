@@ -38,6 +38,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/mlb-my-career': 'baseball',
   '/perfect-season-mlb': 'baseball',
   /* basketball */
+  '/buzzer-beater': 'basketball',
   '/conquest-nba': 'basketball',
   '/missing-five': 'basketball',
   '/nba-career': 'basketball',

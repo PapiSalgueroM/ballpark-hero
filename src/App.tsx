@@ -13,6 +13,7 @@ import { Footer } from "@/components/game/Footer";
 import Index from "./pages/Index";
 const Footle = lazy(() => import("./pages/Footle"));
 const FreeKick = lazy(() => import("./pages/FreeKick"));
+const BuzzerBeater = lazy(() => import("./pages/BuzzerBeater"));
 const CareerGame = lazy(() => import("./pages/CareerGame"));
 const HigherLower = lazy(() => import("./pages/HigherLower"));
 const Connections = lazy(() => import("./pages/Connections"));
@@ -294,6 +295,7 @@ const AppContent = () => {
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
         <Route path="/free-kick" element={<FreeKick />} />
+        <Route path="/buzzer-beater" element={<BuzzerBeater />} />
         <Route path="/career" element={<CareerGame />} />
         <Route path="/higher-lower" element={<HigherLower />} />
         <Route path="/connections" element={<Connections />} />
