@@ -105,7 +105,10 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
       "When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.",
       "Make the offseason call: train skills or body, fix the knee or play through it, take the envelope or report it.",
+      "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.",
       "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+      "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+      "Collect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts of your career say so.",
       "Retire, or get forced out, and face the legacy verdict.",
     ],
     rules: [
@@ -118,6 +121,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "The depth chart is real: the man ahead of you is as good as your team is, camps have memory (a starter is not benched over a small gap, a backup does not need a miracle), backup quarterbacks hold clipboards, and signing with a stacked contender can cost a mid player the job. Kickers never sit.",
       "The press reads your actual season: win it all and you take the podium, collapse and you face the accountability scrum, ride the bench and someone asks the role question. Every presser is three answers, safe, honest or fiery, and the fiery one genuinely gambles your fanbase.",
       "The 2005 throwback is a sealed world: all 32 franchises exactly as they stood that season, verified against the real records, and every draft, trade and signing stays inside it. Contracts pay 2005 money, about a third of today's.",
+      "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
+      "The fans nag you for the thing your position is judged on and never the other way round: a quarterback hears touchdowns, a corner hears lock down that side, a kicker hears just make the kicks.",
     ],
     example: [
       "You make a Dual Threat quarterback and go 12th overall to a shaky roster. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
@@ -149,6 +154,18 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         q: "What decides the legacy verdict?",
         a: "Rings, MVPs, All-Pro nods, seasons played, and stat totals, on a scale from cup of coffee to inner circle immortal.",
+      },
+      {
+        q: "What is in the Bank?",
+        a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the locker room card school, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars.",
+      },
+      {
+        q: "Who is my rival?",
+        a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can win a ring before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated.",
+      },
+      {
+        q: "How do I earn badges?",
+        a: "By doing the thing. Each of the 25 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, ten thousand yards, five full seasons without a missed game, a million dollars to your name. The three single season badges sit just under the real records, 5,000 passing yards against Peyton Manning's 5,477, 2,000 rushing yards against Eric Dickerson's 2,105 and 20 sacks against Myles Garrett's 23, and the ten All-Pro badge is the mark Jerry Rice and Jim Otto share.",
       },
     ],
   },

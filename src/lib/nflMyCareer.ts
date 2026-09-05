@@ -27,6 +27,13 @@ import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
+/* Round 469: the money app, the same engine Soccer Career's bank and market
+   run on (careerMoney.ts), bound to dollars in nflCareerMoney.ts. That file
+   imports this one for the CareerState type only, so there is no cycle at
+   runtime: the tick is called through the function below, never at module
+   scope. */
+import type { MoneyState } from './careerMoney';
+import { nflMoneySeasonTick } from './nflCareerMoney';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -237,6 +244,15 @@ export interface CareerState {
       means starter, so every old save and every existing sim path keeps
       its exact behavior. Kickers are always starters. */
   role?: 'starter' | 'backup';
+  /** Round 469: the savings account, the market and the statement, on the
+      same engine as Soccer Career's. Absent on a pre-469 save and repaired
+      lazily by ensureNflMoney, so an old save opens on every screen with its
+      market at par. */
+  money?: MoneyState;
+  /** Round 469: the last dozen headlines the season wrote, kept on the save
+      so the News screen does not forget the career on reload. Absent on a
+      pre-469 save. */
+  headlines?: string[];
 }
 
 export interface CareerEvent {
@@ -640,6 +656,12 @@ export function progress(c: CareerState, rng: () => number): string[] {
   const upkeep = c.yearlyCosts ?? 0;
   const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
   c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
+  /* Round 469: the money app's season, after the pay and the upkeep have
+     landed, the same place in the loop Soccer Career runs it. Savings pays,
+     every price moves, and a balance the upkeep has pushed under the floor
+     is covered out of savings and then holdings before anything else sees
+     it. Its own random stream, so nothing here shifts the season's rng. */
+  for (const line of nflMoneySeasonTick(c).events) notes.push(line);
   return notes;
 }
 
