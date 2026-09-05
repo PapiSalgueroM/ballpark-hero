@@ -163,8 +163,14 @@ console.log('1b) Every league-relative giant is told to win it');
   /* And the sanity mirror: clubs miles off their league's top XI must NOT be
      told to win it, or the band stopped meaning anything. Measured gaps on
      2026-08-17: Aberdeen 13.7, Hearts 13.7, Basaksehir 11.1, Casa Pia deep
-     in the primeira tail. */
-  const NOT_TITLE = ['Aberdeen', 'Hearts', 'Başakşehir', 'Casa Pia', 'St Mirren', 'Kortrijk', 'Roma', 'Napoli', 'Atalanta', 'Tottenham'];
+     in the primeira tail. Re-measured 2026-09-05 after Round 450 re-baked the
+     rosters from the verified summer window: Roma's XI is 83.3, 2.20 behind
+     Inter's 85.5 and inside the 2.5 band, so Roma's board demands the title
+     by the engine's own rule and left this list; Fiorentina at 4.00 took the
+     Serie A seat. Napoli 2.90, Atalanta 3.10, Tottenham 2.70 still sit
+     outside. When a re-bake moves a club across the band, re-measure before
+     touching the rule: this list is the mirror, not the law. */
+  const NOT_TITLE = ['Aberdeen', 'Hearts', 'Başakşehir', 'Casa Pia', 'St Mirren', 'Kortrijk', 'Fiorentina', 'Napoli', 'Atalanta', 'Tottenham'];
   for (const name of GIANTS) {
     const league = REAL_LEAGUES.find(l => l.clubs.includes(name));
     if (!league) { fail(`${name} is in the giants list but not in any league`); continue; }

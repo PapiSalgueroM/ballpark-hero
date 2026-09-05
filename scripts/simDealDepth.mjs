@@ -15,7 +15,9 @@
  *  5. The sell-on rides the signing, and when he is later sold the old club
  *     takes its cut off the top, exactly the promised percentage.
  *  6. Add-ons come due in later summers at roughly the stated rate, never
- *     for a manager who moved clubs.
+ *     for a manager who moved clubs. The rate is measured on the summer
+ *     roll alone, many seeds over each closed season, not on whole seasons
+ *     (see section 5 for why).
  * Run: node scripts/simDealDepth.mjs
  */
 import { execSync } from 'node:child_process';
@@ -150,9 +152,38 @@ console.log('4) The sell-on clause pays the old club on resale');
 /* ---------- 6. Add-ons come due at roughly the stated rate ---------- */
 console.log('5) Add-ons come due across summers at about the stated rate');
 {
+  /* Until 2026-09-05 this section played thirty whole seeded seasons and
+     counted the summers whose headlines carried the add-on, and read 11 of
+     30 the day Round 450 re-baked the rosters, while the roll itself,
+     measured alone on one closed season, sat at 0.68 over 300 seeds. The
+     thirty seasons were measuring something else on top of the roll: a
+     seeded Everton season that ends with the manager gone, or with the
+     ledger emptied before the summer, has no roll to count, and the re-bake
+     moved how many of the thirty ended that way. So the season is only the
+     way to a closed state now; the RATE is measured on the roll alone, ten
+     fresh seeds per closed season with the manager still at Everton and
+     the promise still pending, and the band comes from the binomial on the
+     rolls actually made. A season that closes without a roll to make is
+     reported, never counted, and fewer than a hundred rolls is a failure of
+     its own, because a rate over a handful of rolls is a coin toss dressed
+     as a rule.
+
+     And the trigger is read off the BUDGET, not the headline. The summer
+     feed is capped at eight lines and the add-on line is prepended before
+     the manager merry-go-round (Round 308) and the promotion lines (Round
+     310) are, so in a busy summer it drops off the end of the feed and the
+     old signal read "no trigger" for a summer that paid. Measured 2026-09-05:
+     the headline showed in 144 of 300 rolls while the money left in 200 of
+     them. The same closed season is rolled twice under one seed, once with
+     the promise and once with the ledger empty; the promise came due exactly
+     when the budget with it is lower, because nothing else between the two
+     runs draws before the roll. */
+  let rolls = 0;
   let triggered = 0;
-  const trials = 30;
-  for (let t = 0; t < trials; t++) {
+  let unrollable = 0;
+  const seasons = 30;
+  const perSeason = 10;
+  for (let t = 0; t < seasons; t++) {
     Math.random = seeded(500 + t * 7);
     let s = startCareer('Everton');
     s = { ...s, pendingAddOns: [{ name: 'Test Signing', to: 'Fulham', amount: 6 }] };
@@ -165,15 +196,32 @@ console.log('5) Add-ons come due across summers at about the stated rate');
       if (r.kind === 'seasonOver') break;
     }
     const fin = finishSeason(s);
-    const next = startNextSeason(fin.state);
-    if ((next.pendingAddOns ?? []).length !== 0) fail('the add-on ledger was not settled over the summer');
-    if ((next.aiHeadlines ?? []).some(h => h.includes('add-ons came due'))) triggered += 1;
+    if (fin.state.clubName !== 'Everton' || (fin.state.pendingAddOns ?? []).length === 0) { unrollable += 1; continue; }
+    let headlines = 0;
+    for (let k = 0; k < perSeason; k++) {
+      const seed = 90001 + (t * perSeason + k) * 7919;
+      Math.random = seeded(seed);
+      const next = startNextSeason(fin.state);
+      Math.random = seeded(seed);
+      const without = startNextSeason({ ...fin.state, pendingAddOns: [] });
+      if ((next.pendingAddOns ?? []).length !== 0) fail('the add-on ledger was not settled over the summer');
+      if (!(next.budget <= without.budget)) fail(`a pending add-on left the new budget higher (${next.budget} against ${without.budget} with no promise)`);
+      rolls += 1;
+      const paid = next.budget < without.budget;
+      if (paid) triggered += 1;
+      const said = (next.aiHeadlines ?? []).some(h => h.includes('add-ons came due'));
+      if (said) headlines += 1;
+      if (said && !paid) fail('the summer feed announced add-ons that took no money');
+    }
+    if (t === 0) console.log(`   season 1: the money left in ${triggered} of ${perSeason} rolls and the feed said so in ${headlines} (the feed is capped at eight lines)`);
   }
-  /* 0.65 per roll over 30 trials: binomial sd ~2.6, so [12, 27] is over
-     three sigma each side. Outside that band the rate is broken, not
-     unlucky. */
-  console.log(`   add-ons triggered in ${triggered}/${trials} summers`);
-  if (triggered < 12 || triggered > 27) fail(`add-ons came due ${triggered}/${trials}, far from the 0.65 rate`);
+  const mean = 0.65 * rolls;
+  const sd = Math.sqrt(rolls * 0.65 * 0.35);
+  const lo = Math.floor(mean - 3 * sd);
+  const hi = Math.ceil(mean + 3 * sd);
+  console.log(`   add-ons triggered in ${triggered}/${rolls} summer rolls (${rolls ? (triggered / rolls).toFixed(3) : 'none'}); ${unrollable} of ${seasons} seasons closed with no roll to make; three sigma band [${lo}, ${hi}]`);
+  if (rolls < 100) fail(`only ${rolls} summer rolls were measurable, the season no longer closes with the manager in place`);
+  else if (triggered < lo || triggered > hi) fail(`add-ons came due ${triggered}/${rolls}, far from the 0.65 rate`);
 }
 
 Math.random = REAL_RANDOM;

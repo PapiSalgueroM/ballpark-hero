@@ -95,7 +95,11 @@ const PINS = [
   ['src/pages/GuessTheGolfer.tsx', /<FlagImg name=\{golfer\.nationality\}[^>]*showLabel/],
   ['src/pages/GuessTransferValue.tsx', /<FlagImg name=\{target\.nationality\}[^>]*showLabel/],
   ['src/pages/HigherLower.tsx', /<FlagImg name=\{player\.nationality\}[^>]*showLabel/],
-  ['src/pages/PlayerStockMarket.tsx', /<FlagImg name=\{c\.nationality\}[^>]*showLabel/],
+  /* PlayerStockMarket.tsx carried a pin here until Round 458 rebuilt the game
+     in the owner's format, where a card shows numbers only and never a name,
+     club, country or flag, so the page no longer prints a nationality at all
+     and there is nothing on it for this harness to hold. The pin refused the
+     whole run for a day before anyone read the reason. */
   ['src/pages/SearchAndDiscard.tsx', /<FlagImg name=\{p\.nationality\}[^>]*showLabel/],
   ['src/pages/SoccerCareer.tsx', /<strong><FlagImg name=\{career\.nationality\}[^>]*showLabel/],
   ['src/pages/SoccerCareer.tsx', /Age \{career\.age\} · <FlagImg name=\{career\.nationality\}[^>]*showLabel/],
