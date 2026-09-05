@@ -76,7 +76,8 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Player Stock Market format | PART | Round 434 fixed the scoring; the format is open |
 | Stadium Tycoon depth | PART | Round 439 away rules; depth open |
 | Wonderkid merge | OPEN | |
-| Transfer Path special rules | PART | Round 408 |
+| Transfer Path special rule modes (active players only, Europe only) | OPEN | Round 408 was a different fix (a player already in the chain is refused); the modes do not exist yet, and each one changes the search rule, so the hints must be re-derived per mode |
+| World XI: eligibility from real positions, more in the season report, respin count customizable | PART | eligibility Rounds 319 and 345 (shared with Build Your XI in Round 442); the respin budget picker already exists on the page; more in the season report is open, and Round 449 removed the invented conduct line from it |
 | Fantasy Draft scrolling | DONE | Round 326 |
 | Missing XI flags or colours, overlapping bubbles | DONE | Round 444 |
 | Rarity Round explain the goal before the guess | DONE | Round 444 |
