@@ -10,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { groupByConfederation } from "@/lib/confederationGroups";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
@@ -1720,10 +1721,17 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <Select value={nationality} onValueChange={setNationality}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose nationality" /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
-              {NATIONALITIES.map(n => (
-                <SelectItem key={n} value={n}>
-                  <span className="flex items-center gap-2">{n}<FlagImg name={n} size={18} /></span>
-                </SelectItem>
+              {/* Round 453: over a hundred nations is a long scroll, so they
+                  sit under their confederation, the way qualifying groups them. */}
+              {groupByConfederation(NATIONALITIES, n => n).map(g => (
+                <SelectGroup key={g.conf}>
+                  <SelectLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{g.label}</SelectLabel>
+                  {g.items.map(n => (
+                    <SelectItem key={n} value={n}>
+                      <span className="flex items-center gap-2">{n}<FlagImg name={n} size={18} /></span>
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               ))}
             </SelectContent>
           </Select>
@@ -2175,7 +2183,7 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
       <div className="flex justify-center"><FlagImg name={career.nationality} size={48} /></div>
       <h3 className="text-2xl font-black tracking-tight">INTERNATIONAL DEBUT</h3>
       <p className="text-sm text-muted-foreground">
-        {career.playerName} has been called up to the <strong>{career.nationality}</strong> national team!
+        {career.playerName} has been called up to the <strong><FlagImg name={career.nationality} size={14} showLabel /></strong> national team!
       </p>
       <div className="flex items-center justify-center gap-3 text-sm">
         <span><FlagImg name={career.nationality} size={24} /></span>
@@ -3504,7 +3512,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <FlagImg name={career.nationality} size={24} />
               <span className="truncate min-w-0">{career.playerName}</span>
             </h1>
-            <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · {career.nationality}</p>
+            <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · <FlagImg name={career.nationality} size={12} showLabel /></p>
           </div>
         </div>
         <div className="flex items-center gap-2 ml-auto">

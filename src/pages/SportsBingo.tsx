@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, Package, Timer } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
@@ -266,7 +267,7 @@ export default function SportsBingo() {
                   <div key={p.name} className="flex items-baseline justify-between gap-2 text-sm">
                     <span className="font-semibold text-foreground truncate">{p.name}</span>
                     <span className="text-[11px] text-muted-foreground shrink-0">
-                      {p.position} · {p.age > 0 ? `${p.age}y · ` : ''}{p.nationality} · {p.league} · {p.marketValue}M
+                      {p.position} · {p.age > 0 ? `${p.age}y · ` : ''}<FlagImg name={p.nationality} size={11} showLabel /> · {p.league} · {p.marketValue}M
                       {p.goals + p.assists > 0 ? ` · ${p.goals}g ${p.assists}a` : ''}
                     </span>
                   </div>

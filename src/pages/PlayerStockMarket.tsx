@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Loader2, TrendingUp, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
@@ -190,7 +191,7 @@ export default function PlayerStockMarket() {
               {picks.map((c, i) => (
                 <p key={i} className="text-muted-foreground">
                   <span className={cn('font-semibold', c.final > c.price ? 'text-correct' : 'text-destructive')}>{c.name}</span>
-                  {' '}({c.nationality}, {c.club}): {formatMoney(c.price)} in {campaign.slots[i].offerYear} to {formatMoney(c.final)} today, {formatPct(candidateRatio(c) - 1)}
+                  {' '}(<FlagImg name={c.nationality} size={12} showLabel />, {c.club}): {formatMoney(c.price)} in {campaign.slots[i].offerYear} to {formatMoney(c.final)} today, {formatPct(candidateRatio(c) - 1)}
                 </p>
               ))}
             </div>

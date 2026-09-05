@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { UfcFighter } from '@/types/ufc';
 import { Search } from 'lucide-react';
 import { smartMatch, smartScore, highlightMatches } from '@/lib/smartSearch';
+import { FlagImg } from '@/components/FlagImg';
 
 interface UfcFighterSearchProps {
   fighters: UfcFighter[];
@@ -83,7 +84,7 @@ export function UfcFighterSearch({ fighters, guessedNames, onSelect }: UfcFighte
               className={`w-full text-left px-5 py-3 transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl ${idx === highlightIndex ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
               <span className="font-medium text-foreground">{renderName(fighter.name)}</span>
-              <span className="text-xs text-muted-foreground ml-2">{fighter.weightClass} · {fighter.nationality}</span>
+              <span className="text-xs text-muted-foreground ml-2">{fighter.weightClass} · <FlagImg name={fighter.nationality} size={12} showLabel /></span>
             </button>
           ))}
         </div>

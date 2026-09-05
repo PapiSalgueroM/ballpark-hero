@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
    so a 2010 name never wears a 2026 flag. */
 import { nationalityOf } from '@/data/playerNationalities';
 import { FlagImg } from '@/components/FlagImg';
+import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
 import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
@@ -436,7 +437,13 @@ export function TransferScreen({
               data-nat-filter
             >
               <option value="any">Any nation</option>
-              {marketNations.map(([nat, n]) => <option key={nat} value={nat}>{nat} ({n})</option>)}
+              {/* Round 453: up to 132 nations in one dropdown, so each sits
+                  under its confederation, busiest first inside the group. */}
+              {groupByConfederation(marketNations, ([nat]) => nat).map(g => (
+                <optgroup key={g.conf} label={g.label}>
+                  {g.items.map(([nat, n]) => <option key={nat} value={nat}>{nat} ({n})</option>)}
+                </optgroup>
+              ))}
             </select>
             <select
               value={sortKey}

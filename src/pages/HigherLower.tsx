@@ -1,4 +1,5 @@
 import { useHigherLower } from '@/hooks/useHigherLower';
+import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
@@ -187,7 +188,7 @@ function PlayerCard({
       <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
         <div className="text-center mb-4">
           <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
-            {player.isIcon ? '⭐ Icon' : player.nationality}
+            {player.isIcon ? '⭐ Icon' : <FlagImg name={player.nationality} size={12} showLabel />}
           </div>
           <h3 className="text-xl md:text-2xl font-bold text-foreground font-display">
             {player.name}

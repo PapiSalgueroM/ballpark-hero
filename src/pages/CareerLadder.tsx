@@ -599,7 +599,7 @@ const CareerLadder = () => {
                     <span className="text-left">
                       <span className="block font-bold text-foreground">{activePlayer.name}</span>
                       <span className="block text-xs text-muted-foreground">
-                        {activePlayer.position} · {activePlayer.nationality} · {total} stints
+                        {activePlayer.position} · <FlagImg name={activePlayer.nationality} size={12} showLabel /> · {total} stints
                       </span>
                     </span>
                   </div>
