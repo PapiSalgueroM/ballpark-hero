@@ -19,9 +19,23 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 450.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 452 (450 is the other lane's
+  round-450-transfers branch, 451 shipped by the desktop lane).
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, Round 451, claimed and SHIPPED 2026-09-05.** THE TWO CLUB MANAGER P1s,
+  PROVEN ON HIS SAVE. Items 2 and 3 of his 2026-08-28 list (every other era league frozen on
+  "pre-season, alphabetical order" with La Liga listed twice, and the Cups tab naming the
+  Copa del Rey while showing Europe under it) were marked OPEN and unverified in
+  PROJECT-STATE. Round 312 had fixed both causes the day he reported them; this round
+  reproduces his exact 2005/06 Barcelona save to his exact week through the engine's own
+  loop, the dressing room path included, with the pre-312 loop (120 findings) and the
+  pre-312 panel as its two controls, and leaves scripts/simClubManagerEraMidSeason.mjs as
+  the fence. Both table rows now read DONE, verified. Three things named as not done in the
+  PROJECT-STATE entry: head to head tiebreaks for Spain and Italy (no per pair results in
+  the engine), the group tables vanishing from the tab at the knockouts, and the era
+  Champions League format (his item 4).
 
 - **Desktop lane, Rounds 446 to 449, claimed and SHIPPED 2026-09-04 and 2026-09-05.** Four
   rounds built directly off his messages during the 441 to 445 batch, each one a thing he
