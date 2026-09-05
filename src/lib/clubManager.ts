@@ -3495,26 +3495,43 @@ function emptyRow(club: string): TableRow {
  *           head? How every major football competition ranks teams level on
  *           points". Serie A: Wikipedia "Serie A" (the same four steps for
  *           every place since 2005-06) and Goal.com, "How is Serie A title
- *           decided when teams finish level". From 2022-23 a level TITLE in
- *           Italy is a play-off match and every other place stays head to
- *           head; the play-off is not simulated, a level title here splits
- *           on the same four steps.
- *  gdGf     England and Germany. Overall goal difference, then goals scored,
- *           then points in the matches between the clubs. Premier League:
- *           premierleague.com, "Could the Premier League title be won on goal
- *           difference", and Wikipedia "Premier League" (competition
- *           format). Bundesliga: Wikipedia "Bundesliga" (competition format)
- *           and Goal.com, "What happens if teams are level on points in the
- *           Bundesliga and 2. Bundesliga after matchday 34". The 2005 and
+ *           decided when teams finish level". From 2022-23 a level title, or
+ *           a level last safe place (17th), in Italy is a one game play-off
+ *           and every other place stays head to head; the play-off is not
+ *           simulated, so those places split on the same four steps here.
+ *  gdGf     England. Overall goal difference, then goals scored, then points
+ *           in the matches between the clubs (then away goals in those games
+ *           and a play-off, neither simulated). premierleague.com, "Could the
+ *           Premier League title be won on goal difference", and Sky Sports,
+ *           "Premier League: How teams will be separated if level on points
+ *           and goal difference and why play-off is possible". The 2005 and
  *           2010 Premier League settled a dead heat on all three by play-off,
  *           which is not simulated, so the modern third step stands in.
+ *  gdGfAgg  Germany. Overall goal difference, then goals scored, then the
+ *           head to head record (then away goals in those games, then away
+ *           goals over the season, neither simulated): bundesliga.com,
+ *           "Bundesliga Matchday 34 permutations" (goal difference, goals
+ *           scored, then the head to head record), and Goal.com, "What
+ *           happens if teams are level on points in the Bundesliga and 2.
+ *           Bundesliga after matchday 34", which spells the record out as
+ *           "the aggregate result from their home-and-away matches", the
+ *           reading the next step (away goals in those games) only makes
+ *           sense under. Wikipedia "Bundesliga" reads that same step as
+ *           points. This engine reads the aggregate, and says so here
+ *           rather than pretending the sources agree.
  *  gdH2h    France. Overall goal difference, then points in the matches
  *           between the clubs, then goal difference in those matches, then
- *           wins: the LFP's order from 2025-26, reported by OneFootball, "Why
- *           Lyon are third ahead of Lille under Ligue One tiebreak rules"
- *           (April 2026), and Footboom, "Ligue 1 updates tiebreaker rules for
- *           2025-26 season". Before that season Ligue 1 read goals scored
- *           second (Wikipedia "Ligue 1"), which no era of this game plays.
+ *           goals scored, then wins (then away wins, discipline and lots,
+ *           none simulated): the LFP's order from 2025-26, in its own words
+ *           on ligue1.com, "Égalité au classement : modification des
+ *           critères de départage" (différence entre buts inscrits et
+ *           encaissés, points lors des confrontations directes, différences
+ *           de buts lors des confrontations directes, meilleure attaque,
+ *           nombre de victoires, victoires à l'extérieur), and reported by
+ *           EVECT, "Les règles changent, comment départager les clubs en cas
+ *           d'égalité" (April 2026). Before that season Ligue 1 read goals
+ *           scored second (Wikipedia "Ligue 1"), which no era of this game
+ *           plays.
  *  gdGfOnly Everywhere else: goal difference, then goals scored. The order
  *           this engine has always used, and the only step it can take for a
  *           league whose order has not been verified. The Championship and
@@ -3528,12 +3545,12 @@ function emptyRow(club: string): TableRow {
  * game between them, and are read only when all of those games have been
  * played.
  */
-export type TiebreakRule = 'h2h' | 'gdGf' | 'gdH2h' | 'gdGfOnly';
+export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly';
 const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = {
   laliga: 'h2h', laliga2005: 'h2h', laliga2010: 'h2h', laliga2015: 'h2h',
   seriea: 'h2h', seriea2015: 'h2h',
   premier: 'gdGf', premier2005: 'gdGf', premier2010: 'gdGf', premier2015: 'gdGf',
-  bundesliga: 'gdGf',
+  bundesliga: 'gdGfAgg',
   ligue1: 'gdH2h',
 };
 export function leagueTiebreak(leagueId: string | undefined): TiebreakRule {
@@ -3574,7 +3591,8 @@ function orderLevel(level: TableRow[], rule: TiebreakRule, pairs: Record<string,
     switch (rule) {
       case 'h2h': return [h.pts, h.gd, gd, r.gf];
       case 'gdGf': return [gd, r.gf, h.pts];
-      case 'gdH2h': return [gd, h.pts, h.gd, r.w];
+      case 'gdGfAgg': return [gd, r.gf, h.gd];
+      case 'gdH2h': return [gd, h.pts, h.gd, r.gf, r.w];
       default: return [gd, r.gf];
     }
   };
@@ -3643,8 +3661,10 @@ export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: R
       return `Level on points splits on head to head (points, then goals, between the clubs) once both games have been played, then overall goal difference, then goals scored.${pending}`;
     case 'gdGf':
       return 'Level on points splits on goal difference, then goals scored, then head to head once both games have been played.';
+    case 'gdGfAgg':
+      return 'Level on points splits on goal difference, then goals scored, then the aggregate of the two games between the clubs once both have been played.';
     case 'gdH2h':
-      return `Level on points splits on goal difference, then head to head (points, then goals, between the clubs) once both games have been played, then wins.${pending}`;
+      return `Level on points splits on goal difference, then head to head (points, then goals, between the clubs) once both games have been played, then goals scored, then wins.${pending}`;
     default:
       return 'Level on points splits on goal difference, then goals scored.';
   }

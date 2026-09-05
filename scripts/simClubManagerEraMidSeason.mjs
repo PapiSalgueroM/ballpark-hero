@@ -247,9 +247,10 @@ function checkWorld(bucket, label, s, isEra) {
     out.rows += checkTable(bucket, `${label}, ${lg.name}`, w.table, lg.clubs, w.round);
   }
   /* Information for the record, never asserted: how often the final table
-     has neighbours level on points. Spain and Italy split those on head to
-     head, which the engine does not keep (it stores no per pair results), so
-     every level pair here is split on goal difference instead. */
+     has neighbours level on points. Round 462 splits those on head to head
+     in Spain and Italy from the season's pair ledger; simClubManagerEraUcl
+     section 4 holds that order. The bare sortedTable read here is the goal
+     difference order every group table still uses. */
   if (myPlayed === myTotal) {
     const sorted = sortedTable(s.table);
     for (let i = 1; i < sorted.length; i++) {
@@ -270,10 +271,22 @@ function checkHeal(bucket, label, s, isEra, tally) {
     w.round = 0;
     for (const r of w.table) { r.w = 0; r.d = 0; r.l = 0; r.gf = 0; r.ga = 0; r.pts = 0; }
   }
-  const healed = playNextEntry(frozen, { skipHalftime: true }).state;
-  if (healed.live || healed.sacked) return;
+  /* The catch up runs on a league round. Round 462 put an era save's
+     Champions League round of 16 right after league round 19, so at this
+     checkpoint the next step is my European tie in every career that
+     qualified, and the step that heals is the first LEAGUE step, which is
+     the contract syncWorld actually makes. Bounded: a league round is never
+     more than a couple of entries away. */
+  const played = leaguePlayed(frozen);
+  let healed = frozen;
+  let steps = 0;
+  while (leaguePlayed(healed) === played && steps++ < 4) {
+    healed = playNextEntry(healed, { skipHalftime: true }).state;
+    if (healed.live || healed.sacked) return;
+  }
+  if (leaguePlayed(healed) === played) { note(bucket, `${label}: no league round within ${steps} steps of the frozen save`); return; }
   const before = Object.values(frozen.world ?? {}).length;
-  const o = checkWorld(bucket, `${label}, frozen save after one step`, healed, isEra);
+  const o = checkWorld(bucket, `${label}, frozen save after its next league round`, healed, isEra);
   tally.healed += before;
   tally.rows += o.rows;
 }
@@ -341,8 +354,12 @@ function checkProjection(label, s, ctx) {
   if (s.uclKoRound !== null) {
     if (ctx.drawChecked) return;
     ctx.drawChecked = true;
-    const inDraw = (s.uclBracket ?? []).some(t => t.round === 'QF' && (t.home === s.clubName || t.away === s.clubName));
-    if ((pos <= 2) !== inDraw) note('proj', `${label}: I finished ${pos}${pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th'} in Group A and the real quarter final draw ${inDraw ? 'has' : 'does not have'} me`);
+    /* Round 462: the first knockout round is the round of 16 in an era that
+       played one, the quarter finals otherwise; the draw checked is whichever
+       the engine seeds first. */
+    const first = cm.uclFirstKoRound(s);
+    const inDraw = (s.uclBracket ?? []).some(t => t.round === first && (t.home === s.clubName || t.away === s.clubName));
+    if ((pos <= 2) !== inDraw) note('proj', `${label}: I finished ${pos}${pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th'} in Group A and the real ${first === 'R16' ? 'round of 16' : 'quarter final'} draw ${inDraw ? 'has' : 'does not have'} me`);
     return;
   }
   if (g.matchday < 1 || g.matchday === ctx.lastMd) return;
@@ -443,8 +460,8 @@ function section(title, bucket, lines, extra) {
 
 section('1) His save, his week: 2005/06 Barcelona, three matches through the dressing room, then the window, round 19 and the final whistle', 'world', [
   `${era.checkpoints} world checkpoints over 11 era careers (${era.threeMatchWeeks} of them his three match week): ${era.rows} table rows across ${era.leagues} other league tables checked, ${era.frozen} still reading pre-season`,
-  `${era.healed} world leagues zeroed the way the old engine left them and put through one step of the engine`,
-  `final tables: ${era.adjacentLevel} of ${era.adjacentPairs} neighbouring pairs level on points, all split on goal difference (Spain and Italy split those on head to head, which the engine does not keep)`,
+  `${era.healed} world leagues zeroed the way the old engine left them and put through the engine to its next league round`,
+  `final tables: ${era.adjacentLevel} of ${era.adjacentPairs} neighbouring pairs level on points (Spain and Italy split those on head to head since Round 462, held by simClubManagerEraUcl)`,
 ], () => {
   if (era.checkpoints < 40) note('world', `only ${era.checkpoints} era checkpoints, the sample is too thin to mean anything (floor 40, measured 55)`);
   if (era.threeMatchWeeks < 8) note('world', `only ${era.threeMatchWeeks} three match weeks checked (floor 8, measured 11)`);
