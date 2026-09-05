@@ -13,6 +13,8 @@ import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { isNewGame } from '@/lib/newBadge';
+import { getTodayET } from '@/lib/dateUtils';
 import { SPORT_HUBS } from '@/lib/sportHub';
 
 /** Round 270: the hub that gathers this category, or null when it has none. */
@@ -682,6 +684,11 @@ const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
 
 /* ─── GAME CARD ─── */
 function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?: number; revealIndex?: number }) {
+  /* Round 447: the NEW badge is derived from the day the game shipped, not
+     read from a flag ("u call like everything new": 111 of 131 tiles wore
+     it). The day is pinned once at mount, the same rule every daily game
+     follows, so the tiles cannot disagree with each other across midnight. */
+  const todayStr = useRef(getTodayET()).current;
   return (
     <Link
       to={game.path}
@@ -699,7 +706,7 @@ function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?:
               Daily
             </span>
           )}
-          {game.isNew && (
+          {isNewGame(game.addedOn, todayStr) && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/15 text-gold">
               <Sparkles className="w-3 h-3" />
               New
