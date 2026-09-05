@@ -10,7 +10,6 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { fetchWhoAmIPool } from '@/lib/whoAmI';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 import {
@@ -20,7 +19,7 @@ import {
   SprintModeId,
   SprintPlayer,
   modeById,
-  buildSprintPool,
+  fetchSprintPool,
   playableLetters,
   drawLetter,
   resolveSprintGuess,
@@ -69,8 +68,9 @@ const AlphabetSprint = () => {
 
   const boot = useCallback(async () => {
     setPhase('boot');
-    const data = await fetchWhoAmIPool();
-    const sprintPool = data ? buildSprintPool(data.pool) : [];
+    /* Round 464: the whole current season, not Who Am I's 500. See
+       fetchSprintPool for the report that caused it. */
+    const sprintPool = (await fetchSprintPool()) ?? [];
     if (sprintPool.length < 50) {
       setPhase('error');
       return;
