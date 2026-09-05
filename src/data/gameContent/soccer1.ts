@@ -364,7 +364,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Scoring is 1 point per correct player, and every 5th correct answer in a row pays 2.",
       "Surnames decide the letter: Kylian Mbappe answers M, not K, and suffixes are skipped, so Vinicius Junior counts under V.",
       "Letters are weighted by how many unused players they hold, never repeat back to back, and any letter with fewer than 5 pool players never appears.",
-      "The pool is roughly 500 of the most valuable current players. Cover every playable letter for Gold, 75 percent for Silver, 50 percent for Bronze.",
+      "The pool is every named player in this season's market table, about 5,500 of them, so if he is playing somewhere real right now he counts. Cover every playable letter for Gold, 75 percent for Silver, 50 percent for Bronze.",
     ],
     example: [
       "Classic mode, 45 seconds. M drops and Mbappe is in before the letter finishes animating. S brings Saka, B brings Bellingham, and the streak builds.",
@@ -379,7 +379,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     faqs: [
       {
         q: "Why was my answer rejected?",
-        a: "Usually the surname does not start with the shown letter, the player was already used this run, or he is outside the pool of about 500 current stars. Accents and hyphens are forgiven.",
+        a: "Usually the surname does not start with the shown letter, the player was already used this run, or he is not in this season's market table (about 5,500 current players; retired players and youth prospects without a value are not in it). Accents and hyphens are forgiven.",
       },
       {
         q: "Do impossible letters like Q or X come up?",

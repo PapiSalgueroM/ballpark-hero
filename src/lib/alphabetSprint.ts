@@ -1,4 +1,6 @@
 import { normalizeName, WhoAmIPlayer } from '@/lib/whoAmI';
+import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 /**
  * Alphabet Sprint (timed surname quickfire)
@@ -98,6 +100,74 @@ export function buildSprintPool(pool: WhoAmIPlayer[]): SprintPlayer[] {
     out.push({ name: p.name, surname, letter, nationality: p.nationality, club: p.club, value: p.value });
   }
   return out;
+}
+
+/* Round 464: the sprint gets its own pool, the whole current season.
+ *
+ * A player wrote in on 2026-09-05: "Bug: wont exept anything". The mechanics
+ * were fine (a live run took "Allister" for A and moved on), but the pool
+ * was Who Am I's top 500 by market value, borrowed because it was there, and
+ * this game asks you to name ANY footballer whose surname starts with a
+ * letter. A fan who knows the game names real players outside the 500 all
+ * day and gets "That doesn't match" for every one of them. Measured on the
+ * live table on 2026-09-05: the 2026 season carries 5,496 named players, so
+ * the 500 accepted about one real answer in eleven, and letters like I (3
+ * of 71), Q (2 of 13) and U (4 of 26) barely existed.
+ *
+ * The pool is now every 2026 row of player_market_values_dedup with a
+ * value, one row per player, paged through fetchAllRows in name order. That
+ * is a bigger fetch than 500 rows, which is why it selects four columns and
+ * nothing else; scripts/simAlphabetSprint.mjs measures it. */
+export interface SprintPoolRow {
+  player_name: string;
+  nationality: string | null;
+  club: string | null;
+  market_value_usd: number | null;
+}
+
+/** The season the sprint draws from. One place, so the harness and the page agree. */
+export const SPRINT_SEASON = 2026;
+
+/** Maps raw season rows into sprint players, dropping anything unbucketable or nameless. */
+export function rowsToSprintPool(rows: SprintPoolRow[]): SprintPlayer[] {
+  const out: SprintPlayer[] = [];
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const name = (r.player_name || '').trim();
+    if (!name || seen.has(name)) continue;
+    const surname = surnameOf(name);
+    const letter = letterOf(surname);
+    if (!letter) continue;
+    /* A surname that is a single initial ("Abdul Rabeeh A K" in the 2026
+       rows) cannot be typed as a surname: the matcher needs two characters,
+       so he would sit on the wheel as an answer nobody can give. Left out. */
+    if (surname.length < 2) continue;
+    seen.add(name);
+    out.push({
+      name,
+      surname,
+      letter,
+      nationality: r.nationality || '',
+      club: r.club || '',
+      value: Math.round((r.market_value_usd || 0) / 1_000_000),
+    });
+  }
+  return out;
+}
+
+/** Every named player of the current season with a value, as sprint players. Null when the read failed. */
+export async function fetchSprintPool(): Promise<SprintPlayer[] | null> {
+  const { data, error } = await fetchAllRows<SprintPoolRow>((from, to) =>
+    supabase
+      .from('player_market_values_dedup')
+      .select('player_name, nationality, club, market_value_usd')
+      .eq('year', SPRINT_SEASON)
+      .gt('market_value_usd', 0)
+      .order('player_name', { ascending: true })
+      .range(from, to),
+  );
+  if (error || !data) return null;
+  return rowsToSprintPool(data);
 }
 
 /** Players per letter across the given list. */
