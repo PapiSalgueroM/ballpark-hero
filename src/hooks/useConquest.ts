@@ -314,6 +314,10 @@ export function useConquest() {
   const [powerupUseType, setPowerupUseType] = useState<PowerupId | null>(null);
   const [freeAgentList, setFreeAgentList] = useState<FreeAgent[]>([]);
   const [territoryStolenState, setTerritoryStolenState] = useState<string | null>(null);
+  // Round 457: the unclaimed state an attack is heading for, so the shared
+  // map can ring the target before the claim lands. Null when the target is
+  // a team (the whole empire is then the target) or nothing is in flight.
+  const [targetState, setTargetState] = useState<string | null>(null);
   // Choosable power-up targets: which team is resolving a targeted power-up,
   // and (for territory steal) the legal border-state candidates.
   const [powerupTeam, setPowerupTeam] = useState<string | null>(null);
@@ -761,6 +765,7 @@ export function useConquest() {
     setDirection(firstAttemptDir);
     setDefendingTeam(null);
     setBattleResult(null);
+    setTargetState(target.type === 'neutral' ? target.stateId : null);
     setPhase('animating');
     setAnimStartTime(Date.now());
 
@@ -771,6 +776,7 @@ export function useConquest() {
 
       const claimState = () => {
         setTerritories(prev => ({ ...prev, [stateId]: team }));
+        setTargetState(null);
         setTurn(t => t + 1);
 
         // Unoccupied-state capture bonus (item 84): grabbing a neutral state
@@ -1037,6 +1043,7 @@ export function useConquest() {
     setPhase('ready');
     setAttackingTeam(null);
     setDirection(null);
+    setTargetState(null);
     setDefendingTeam(null);
     setBattleResult(null);
     setGameLog([]);
@@ -1072,7 +1079,7 @@ export function useConquest() {
     animStartTime, noEnemyMsg, powerupStates,
     // Powerup system
     teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
-    pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
+    pendingPowerup, powerupUseType, freeAgentList, territoryStolenState, targetState,
     powerupTeam, stealCandidates,
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,

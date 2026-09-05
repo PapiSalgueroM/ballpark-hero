@@ -249,6 +249,9 @@ export function useConquestNba() {
   const [powerupUseType, setPowerupUseType] = useState<PowerupId | null>(null);
   const [freeAgentList, setFreeAgentList] = useState<FreeAgent[]>([]);
   const [territoryStolenState, setTerritoryStolenState] = useState<string | null>(null);
+  // Round 457: the unclaimed territory an attack is heading for, so the shared
+  // map can ring the target before the claim lands.
+  const [targetState, setTargetState] = useState<string | null>(null);
 
   const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
   const [playByPlayActive, setPlayByPlayActive] = useState(false);
@@ -557,6 +560,7 @@ export function useConquestNba() {
     setDirection(firstAttemptDir);
     setDefendingTeam(null);
     setBattleResult(null);
+    setTargetState(target.type === 'neutral' ? target.stateId : null);
     setPhase('animating');
     setAnimStartTime(Date.now());
 
@@ -567,6 +571,7 @@ export function useConquestNba() {
 
       const claimState = () => {
         setTerritories(prev => ({ ...prev, [stateId]: team }));
+        setTargetState(null);
         setTurn(t => t + 1);
 
         setPowerRankDrift(prev => ({
@@ -782,6 +787,7 @@ export function useConquestNba() {
     setPhase('ready');
     setAttackingTeam(null);
     setDirection(null);
+    setTargetState(null);
     setDefendingTeam(null);
     setBattleResult(null);
     setGameLog([]);
@@ -814,7 +820,7 @@ export function useConquestNba() {
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
     animStartTime, noEnemyMsg, powerupStates,
     teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
-    pendingPowerup, powerupUseType, freeAgentList, territoryStolenState,
+    pendingPowerup, powerupUseType, freeAgentList, territoryStolenState, targetState,
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     stealModalOpen, pendingBattleApply, playerConfirmed,
     powerRankings,

@@ -1,3 +1,7 @@
+import { NFL_STATES } from '@/data/usStatesPaths';
+import { TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
+import type { ConquestMapSport } from '@/lib/conquestMapLook';
+
 export const POWER_UP_STATES = new Set(['WY', 'MT', 'ND', 'SD', 'VT', 'NH']);
 
 export interface StatePos {
@@ -493,6 +497,16 @@ export const NFL_TEAMS: NFLTeam[] = [
 ];
 
 export const TEAM_MAP = new Map(NFL_TEAMS.map(t => [t.id, t]));
+
+/** Round 457: what the NFL injects into the shared conquest map. Data only. */
+export const NFL_CONQUEST_MAP: ConquestMapSport = {
+  key: 'nfl',
+  regions: NFL_STATES,
+  adjacency: TERRITORY_ADJACENCY,
+  teams: NFL_TEAMS,
+  viewBox: { width: 590, height: 310 },
+  regionNoun: 'state',
+};
 
 // Initial territory assignments, 32 teams each get 1 home state/sub-territory.
 // Shared-state teams get their own real-geography sub-territory (item 83),

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarDays, Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
-import ConquestMapNhl from '@/components/conquest/ConquestMapNhl';
+import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from '@/components/conquest/ConquestRegionMap';
 import ShareButtons from '@/components/game/ShareButtons';
-import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
+import { NHL_TEAMS, NHL_TEAM_MAP, NHL_CONQUEST_MAP } from '@/data/conquestDataNhl';
 import { isLightColor } from '@/data/conquestData';
 import {
   NHL_REGULAR_ROUNDS, NHL_PLAYOFF_LABELS,
@@ -77,6 +77,21 @@ export default function ImperialismBoardNhl() {
     () => (favorite ? nhlFinalScore(favorite, owners, predictionHits, champion, madePlayoffs) : 0),
     [favorite, owners, predictionHits, champion, madePlayoffs],
   );
+
+  // Round 457: the shared map reads the takeover off the ownership change and
+  // spotlights the featured game before the roll and its result after.
+  const takeover = useOwnerTakeover(owners, phase !== 'pick');
+  const featuredGame = featured && lastRound
+    ? lastRound.games.find(g => (g.home === featured[0] && g.away === featured[1]) || (g.home === featured[1] && g.away === featured[0]))
+    : undefined;
+  const battleView: ConquestBattleView | null = featured && (phase === 'preview' || phase === 'recap')
+    ? {
+        attacker: featured[0],
+        defender: featured[1],
+        stage: phase === 'preview' ? 'pending' : 'resolved',
+        winner: phase === 'recap' ? featuredGame?.winner ?? null : null,
+      }
+    : null;
 
   useGameCompletion('conquest-nhl-imperialism', phase === 'done', score, favorite ? nhlStatesOf(owners, favorite).length : 0);
 
@@ -318,15 +333,7 @@ export default function ImperialismBoardNhl() {
       </div>
 
       {/* map */}
-      <ConquestMapNhl
-        territories={owners}
-        attackingTeam={phase === 'recap' && featured ? featured[0] : null}
-        defendingTeam={phase === 'recap' && featured ? featured[1] : null}
-        phase={phase === 'recap' ? 'battle' : 'ready'}
-        powerupStates={new Set()}
-        invincibleTeams={new Set()}
-        territoryStolenState={null}
-      />
+      <ConquestRegionMap sport={NHL_CONQUEST_MAP} owners={owners} battle={battleView} takeover={takeover} />
 
       {landless.length > 0 && (
         <p className="text-center text-[11px] text-muted-foreground">

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useConquest, PowerRankEntry } from '@/hooks/useConquest';
-import ConquestMap from './ConquestMap';
-import { TEAM_MAP, NFL_TEAMS, DIRECTIONS, DIR_LABELS, isLightColor, ConquestFreeAgentCandidate } from '@/data/conquestData';
+import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
+import { TEAM_MAP, NFL_TEAMS, NFL_CONQUEST_MAP, DIRECTIONS, DIR_LABELS, isLightColor, ConquestFreeAgentCandidate } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -302,6 +302,32 @@ export default function ConquestBoard() {
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
   const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
 
+  // Round 457: what the shared map shows of the fight. The attacker is named
+  // once the spinner settles, the target once the direction is called, the
+  // result once the box score is in. The takeover comes off the territory
+  // change itself; a reset back to the opening map is not one.
+  const takeover = useOwnerTakeover(game.territories, game.turn > 0);
+  const battleView: ConquestBattleView | null = (() => {
+    if (game.phase === 'animating') {
+      if (!teamRevealed || !game.attackingTeam) return null;
+      return {
+        attacker: game.attackingTeam,
+        defender: dirRevealed ? game.defendingTeam : null,
+        stage: 'pending',
+        targetRegion: dirRevealed ? game.targetState : null,
+      };
+    }
+    if (game.phase === 'battle' && game.attackingTeam) {
+      return {
+        attacker: game.attackingTeam,
+        defender: game.defendingTeam,
+        stage: game.boxScore ? 'resolved' : 'live',
+        winner: game.boxScore ? game.battleResult?.winner ?? null : null,
+      };
+    }
+    return null;
+  })();
+
   // Battle wins per team (real battles only, neutral/powerup claims don't count).
   // In this elimination game a "loss" removes the team, so wins are the live record.
   const winsByTeam = new Map<string, number>();
@@ -314,11 +340,11 @@ export default function ConquestBoard() {
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
       {/* Map */}
-      <ConquestMap
-        territories={game.territories}
-        attackingTeam={game.attackingTeam}
-        defendingTeam={game.defendingTeam}
-        phase={game.phase}
+      <ConquestRegionMap
+        sport={NFL_CONQUEST_MAP}
+        owners={game.territories}
+        battle={battleView}
+        takeover={takeover}
         powerupStates={game.powerupStates}
         invincibleTeams={game.invincibleTeams}
         territoryStolenState={game.territoryStolenState}
