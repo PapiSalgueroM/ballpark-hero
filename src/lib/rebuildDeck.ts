@@ -604,7 +604,7 @@ export interface RivalResult extends RivalPlan {
   signings: string[];
 }
 
-const RIVAL_PERSONAS: { name: string; emoji: string }[] = [
+export const RIVAL_PERSONAS: { name: string; emoji: string }[] = [
   { name: 'The Shark', emoji: '\u{1F988}' },
   { name: 'The Professor', emoji: '\u{1F393}' },
   { name: 'The Spreadsheet', emoji: '\u{1F4CA}' },
@@ -790,6 +790,8 @@ export interface SeasonTeam {
   rating: number;
   isYou?: boolean;
   isRival?: boolean;
+  /** Round 461: which seat at the table this row is, when it is one. Fillers carry none. */
+  seat?: number;
 }
 
 export interface SeasonRow extends SeasonTeam {
@@ -823,6 +825,60 @@ function goalsFrom(exp: number, rnd: () => number): number {
   return g;
 }
 
+export interface SeasonGame { home: SeasonRow; away: SeasonRow; hg: number; ag: number }
+
+/** One fixture list through one goal model. Round 461: the single seat season
+ *  and the shared table season both play through here, so the two can never
+ *  drift apart on what a rating point is worth. Rows are updated in place. */
+function playFixtures(rows: SeasonRow[], fixtures: [number, number][], rnd: () => number): SeasonGame[] {
+  const games: SeasonGame[] = [];
+  for (const [i, j] of fixtures) {
+    const home = rows[i], away = rows[j];
+    const diff = home.rating - away.rating;
+    const hg = goalsFrom(Math.max(0.35, 1.5 + diff / 13), rnd);
+    const ag = goalsFrom(Math.max(0.35, 1.2 - diff / 13), rnd);
+    home.gf += hg; home.ga += ag; away.gf += ag; away.ga += hg;
+    if (hg > ag) { home.w++; away.l++; home.pts += 3; }
+    else if (ag > hg) { away.w++; home.l++; away.pts += 3; }
+    else { home.d++; away.d++; home.pts++; away.pts++; }
+    games.push({ home, away, hg, ag });
+  }
+  return games;
+}
+
+/** Everyone against everyone, home and away, in table order: the shape the
+ *  single seat season has played since it was written. Kept as is so a one
+ *  seat run replays byte for byte. */
+function everyPairing(n: number): [number, number][] {
+  const out: [number, number][] = [];
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) if (i !== j) out.push([i, j]);
+  return out;
+}
+
+/** A calendar, round by round (the circle method), then the reverse fixtures.
+ *  Every team plays once a round, so a run of results is a run in time and
+ *  "longest unbeaten" means what it says. */
+export function roundRobinCalendar(n: number): [number, number][] {
+  const teams = Array.from({ length: n }, (_, i) => i);
+  if (n % 2 === 1) teams.push(-1);
+  const half = teams.length / 2;
+  const firstLeg: [number, number][] = [];
+  for (let round = 0; round < teams.length - 1; round++) {
+    for (let k = 0; k < half; k++) {
+      const a = teams[k];
+      const b = teams[teams.length - 1 - k];
+      if (a === -1 || b === -1) continue;
+      // Alternate home advantage so the fixed first team does not host every round.
+      firstLeg.push(round % 2 === 0 ? [a, b] : [b, a]);
+    }
+    teams.splice(1, 0, teams.pop() as number);
+  }
+  return [...firstLeg, ...firstLeg.map(([h, a]): [number, number] => [a, h])];
+}
+
+const tableOrder = (a: SeasonRow, b: SeasonRow): number =>
+  b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf;
+
 /**
  * A 6-team mini league season, double round robin (10 games each): you, your
  * two rivals, and three neutral clubs of your tier. Fully seeded, so the
@@ -847,23 +903,9 @@ export function simulateSeason(
     rows.push(mk({ name: c.club, clubName: c.club, emoji: '\u{1F3DF}️', rating: FILLER_BASE[c.tier] + jitter }));
   }
 
-  interface Game { home: SeasonRow; away: SeasonRow; hg: number; ag: number }
-  const games: Game[] = [];
-  for (let i = 0; i < rows.length; i++) {
-    for (let j = 0; j < rows.length; j++) {
-      if (i === j) continue;
-      const home = rows[i], away = rows[j];
-      const diff = home.rating - away.rating;
-      const hg = goalsFrom(Math.max(0.35, 1.5 + diff / 13), rnd);
-      const ag = goalsFrom(Math.max(0.35, 1.2 - diff / 13), rnd);
-      home.gf += hg; home.ga += ag; away.gf += ag; away.ga += hg;
-      if (hg > ag) { home.w++; away.l++; home.pts += 3; }
-      else if (ag > hg) { away.w++; home.l++; away.pts += 3; }
-      else { home.d++; away.d++; home.pts++; away.pts++; }
-      games.push({ home, away, hg, ag });
-    }
-  }
-  rows.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf);
+  type Game = SeasonGame;
+  const games = playFixtures(rows, everyPairing(rows.length), rnd);
+  rows.sort(tableOrder);
   const position = rows.findIndex(r => r.isYou) + 1;
   const yourRow = rows[position - 1];
 
@@ -914,6 +956,126 @@ export function simulateSeason(
     : 'A long season. The board has noticed.';
 
   return { table: rows, position, highlights, goldenBoot, yourTopScorer, yourAssistKing, headline };
+}
+
+/* ---------------- Round 461: the shared season, every seat's finished XI in one league ---------------- */
+
+export interface SharedSeasonTeam {
+  seat: number;
+  name: string;
+  emoji: string;
+  clubName: string;
+  rating: number;
+  startRating: number;
+  xi: Player[];
+}
+
+export interface SquadRecord {
+  seat: number;
+  /** The widest win as a scoreline, or null when the squad never won. */
+  biggestWin: string | null;
+  /** The longest run of games without defeat, in games. */
+  longestUnbeaten: number;
+  /** The squad's top scorer from the sim: a real name, simulated goals, nothing else about him. */
+  topScorer: { player: string; goals: number } | null;
+}
+
+export interface Trophy {
+  emoji: string;
+  title: string;
+  /** The seat that lifted it, or null when a filler club did. */
+  seat: number | null;
+  winner: string;
+  detail: string;
+}
+
+export interface SharedSeasonResult {
+  table: SeasonRow[];
+  /** Finishing position per seat, 1 based, in seat order. */
+  positions: number[];
+  records: SquadRecord[];
+  trophies: Trophy[];
+  /** The game of the season, as a scoreline. */
+  thriller: string;
+  /** Games each team played. */
+  gamesEach: number;
+}
+
+const SCORING_POSITIONS = ['ST', 'CF', 'LW', 'RW', 'CAM'];
+
+/**
+ * The finished XIs of every seat in one league, plus neutral clubs to make
+ * the numbers up, home and away on a real calendar. Same goal model as the
+ * single seat season (playFixtures), fully seeded. Every line it produces
+ * is a result or a tally: a real player can score in it and nothing else.
+ */
+export function simulateSharedSeason(teams: SharedSeasonTeam[], fillerClubs: RebuildClub[], seed: number): SharedSeasonResult {
+  const rnd = lcg(mixSeed(seed, 0x736561));
+  const mk = (t: SeasonTeam): SeasonRow => ({ ...t, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 });
+  const rows: SeasonRow[] = teams.map(t => mk({ name: t.name, clubName: t.clubName, emoji: t.emoji, rating: t.rating, seat: t.seat }));
+  for (const c of fillerClubs) {
+    const jitter = Math.floor(rnd() * 5) - 2;
+    rows.push(mk({ name: c.club, clubName: c.club, emoji: '\u{1F3DF}️', rating: FILLER_BASE[c.tier] + jitter }));
+  }
+  const games = playFixtures(rows, roundRobinCalendar(rows.length), rnd);
+  const standing = [...rows].sort(tableOrder);
+  const positions = teams.map(t => standing.findIndex(r => r.seat === t.seat) + 1);
+  const line = (g: SeasonGame) => `${g.home.emoji} ${g.home.name} ${g.hg}-${g.ag} ${g.away.name} ${g.away.emoji}`;
+
+  const records: SquadRecord[] = teams.map((t, k) => {
+    const row = rows[k];
+    let best: SeasonGame | null = null;
+    let bestMargin = 0;
+    let bestFor = 0;
+    let run = 0;
+    let longest = 0;
+    for (const g of games) {
+      const isHome = g.home === row;
+      if (!isHome && g.away !== row) continue;
+      const gf = isHome ? g.hg : g.ag;
+      const ga = isHome ? g.ag : g.hg;
+      const margin = gf - ga;
+      if (margin > 0 && (margin > bestMargin || (margin === bestMargin && gf > bestFor))) { best = g; bestMargin = margin; bestFor = gf; }
+      if (margin >= 0) { run += 1; if (run > longest) longest = run; } else run = 0;
+    }
+    const biggestWin = best
+      ? (best.home === row ? `${best.hg}-${best.ag} v ${best.away.clubName}` : `${best.ag}-${best.hg} at ${best.home.clubName}`)
+      : null;
+    const attackers = t.xi.filter(p => SCORING_POSITIONS.includes(p.position)).sort((a, b) => playerRating(b) - playerRating(a));
+    const outfield = t.xi.filter(p => p.position !== 'GK').sort((a, b) => playerRating(b) - playerRating(a));
+    const scorer = attackers[0] ?? outfield[0];
+    const share = attackers[0] ? 0.42 : 0.22;
+    const topScorer = scorer ? { player: scorer.name, goals: Math.max(1, Math.round(row.gf * (share + rnd() * 0.14))) } : null;
+    return { seat: t.seat, biggestWin, longestUnbeaten: longest, topScorer };
+  });
+
+  const nameOf = (r: SeasonRow) => (r.seat === undefined ? r.clubName : `${r.name}, ${r.clubName}`);
+  const trophies: Trophy[] = [];
+  const champ = standing[0];
+  trophies.push({ emoji: '\u{1F3C6}', title: 'League title', seat: champ.seat ?? null, winner: nameOf(champ), detail: `${champ.pts} points from ${(rows.length - 1) * 2} games` });
+  const boot = records.filter(r => r.topScorer).sort((a, b) => b.topScorer!.goals - a.topScorer!.goals)[0];
+  if (boot && boot.topScorer) {
+    const team = teams.find(t => t.seat === boot.seat)!;
+    trophies.push({ emoji: '\u{1F45F}', title: 'Golden Boot', seat: boot.seat, winner: boot.topScorer.player, detail: `${boot.topScorer.goals} goals for ${team.name}` });
+  }
+  const wall = [...rows].sort((a, b) => a.ga - b.ga || b.pts - a.pts)[0];
+  trophies.push({ emoji: '\u{1F9F1}', title: 'Best defence', seat: wall.seat ?? null, winner: nameOf(wall), detail: `${wall.ga} conceded` });
+  /* Only handed out when somebody actually climbed: a table where every
+     window made things worse has no rebuild of the year, and saying "80 to
+     79" under a trophy reads as a joke at the player's expense. */
+  const climber = [...teams].sort((a, b) => (b.rating - b.startRating) - (a.rating - a.startRating) || b.rating - a.rating)[0];
+  if (climber && climber.rating > climber.startRating) {
+    trophies.push({ emoji: '\u{1F4C8}', title: 'Rebuild of the year', seat: climber.seat, winner: `${climber.name}, ${climber.clubName}`, detail: `${climber.startRating} to ${climber.rating} over the window` });
+  }
+  const thrillerGame = [...games].sort((a, b) => (b.hg + b.ag) - (a.hg + a.ag))[0];
+  return {
+    table: standing,
+    positions,
+    records,
+    trophies,
+    thriller: thrillerGame ? line(thrillerGame) : '',
+    gamesEach: (rows.length - 1) * 2,
+  };
 }
 
 /* ---------------- Round 333: the spin loop (owner's core loop spec) ---------------- */

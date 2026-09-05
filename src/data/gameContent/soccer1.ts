@@ -45,16 +45,20 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     intro: [
       "Rebuild Challenge drops you into a real club's 2026 squad with a pot sized to the badge and a wheel that decides which shirt you judge next. Spin, keep or sell the man it lands on, and leave the place better than you found it.",
       "The target scales with the job: elite squads need a nudge, modest ones a renovation. Two envelopes land before the first spin, the board's and the finance department's, more arrive as the window goes on, punishment cards wait behind every missed demand, and two computer managers rebuild rival clubs beside you.",
+      "Up to four can play on one phone: pass and play, against the CPU, or a mix. Each seat rebuilds its own club through the same window, then every finished XI plays one simulated season, with a table, records and trophies at the end.",
     ],
     howToPlay: [
+      "Say who is playing: just you, or two to four seats on one phone. Seat one is you; tap any other seat to make it a friend (pass and play) or the CPU. The seats lock once the first club is picked.",
       "Pick a market restriction first: the open market, the top five leagues only, under 25s only, wonderkids only (21 and under) or the bargain bin (nobody over 30 million). It locks the moment you pick a club.",
-      "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+      "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
       "Hire a manager or keep the man you have for free. Each of the three candidates gets more out of one kind of player (the under 25s, the over 30s, the defence or the attack), and the number beside each name is what your XI reads with him in charge.",
       "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
       "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
-      "When all eleven shirts are settled, the final whistle brings the reckoning, the rivals' windows and the season sim.",
+      "When all eleven shirts are settled, the final whistle brings the reckoning: on your own, the rivals' windows and the season sim follow at once. At a fuller table your window shuts, a hand over screen asks for the next player (or the CPU plays its whole window on the spot), and the season kicks off when the last window is shut.",
     ],
     rules: [
+      "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
+      "The shared season is every finished XI plus neutral clubs from the first pick's tier to make six, home and away on a real calendar, with the same goal model as the solo season. It hands out the title, the Golden Boot, the best defence and Rebuild of the year, and records each squad's biggest win, longest unbeaten run and top scorer. Every line is a simulated result or tally and nothing more.",
       "Pots scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. The board's envelope then adds or takes up to 35 million depending on its mood (scaled to the club), sales add to it, and the manager's fee, war premiums and bad envelopes eat it.",
       "The board's mood runs from horrible to great. A great board drops one demand and tops the pot up. A horrible board cuts the pot and adds a fourth demand. Where a club's own money story is documented (Barcelona's sponsorship deal) the envelope says so; everywhere else the board speaks in general terms.",
       "The wallet can run 60 million past zero. Finish in debt and settled shirts are force sold at random, each swapped for the cheapest fit going, until the books balance.",
@@ -98,6 +102,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Who are the rival managers?",
         a: "Two computer personas who rebuild same tier clubs after your window closes, then face you in a simulated six team season, ten games each.",
+      },
+      {
+        q: "Can I play with friends?",
+        a: "Yes, on one phone. Pick two to four seats before the first club, make each extra seat a friend or the CPU, and pass the phone between windows. The CPU seat plays the same thinking policy the game's own test harness measures, so it reads the board, prices the scouts' bands and walks away from wars it cannot win. Online play across two phones is not built yet.",
       },
     ],
   },
