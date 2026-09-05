@@ -10,18 +10,15 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getTodayET } from '@/lib/dateUtils';
+import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';
 
 interface ReportQuestionProps {
   gameType: string;
   gameContext?: Record<string, unknown>;
 }
 
-const REPORT_REASONS = [
-  'Wrong answer',
-  'Outdated info',
-  'Duplicate question',
-  'Other',
-];
+/* Round 446: one shared list, see reportKinds.ts for why. */
+const REPORT_REASONS = REPORT_KINDS_QUESTION;
 
 const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => {
   const [open, setOpen] = useState(false);

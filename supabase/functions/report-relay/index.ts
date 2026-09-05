@@ -55,11 +55,19 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-    const { error: dbError } = await supabase.from("question_reports").insert({
-      game_type: gameType,
-      game_context: ctx,
-      description: desc,
-    });
+    /* Round 446: the row is written FIRST and its id kept, so the delivery
+       answer can be written back onto it below. The order matters: the durable
+       copy must never wait on the mail provider, because the mail leg is best
+       effort and the row is the thing that must not be lost. */
+    const { data: inserted, error: dbError } = await supabase
+      .from("question_reports")
+      .insert({
+        game_type: gameType,
+        game_context: ctx,
+        description: desc,
+      })
+      .select("id")
+      .single();
 
     // 2) Email to the owner, best effort. Never fail the request over email.
     let emailed = false;
@@ -95,6 +103,20 @@ Deno.serve(async (req: Request) => {
       emailed = resp.ok && String(body?.success) === "true";
     } catch (_e) {
       /* best effort only */
+    }
+
+    /* Round 446: record whether it actually reached him, on the row itself.
+       Before this, `emailed` was computed and handed to the browser, which
+       threw it away, so "have any of my reports ever reached my inbox" was an
+       unanswerable question about every row in the table. It is answerable now,
+       and the admin screen prints it. This write is best effort too: a report
+       already safely stored must never be lost over its own bookkeeping. */
+    if (inserted?.id) {
+      try {
+        await supabase.from("question_reports").update({ emailed }).eq("id", inserted.id);
+      } catch (_e) {
+        /* the report is already stored; the flag is a nice to have */
+      }
     }
 
     return json({ ok: !dbError, emailed });

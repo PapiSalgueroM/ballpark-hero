@@ -13,6 +13,10 @@ interface Report {
   resolved: boolean;
   resolved_at: string | null;
   created_at: string;
+  /* Round 446: did the relay get a confirmed email delivery for this one?
+     null on every row written before that round, which is honest: unknown,
+     not false. */
+  emailed: boolean | null;
 }
 
 const AdminReports = () => {
@@ -151,6 +155,24 @@ const AdminReports = () => {
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {new Date(report.created_at).toLocaleDateString()} {new Date(report.created_at).toLocaleTimeString()}
+                      </span>
+                      {/* Round 446: whether this one reached the inbox, which
+                          is the half of "where do these go" that nothing used
+                          to record. */}
+                      <span
+                        className={cn(
+                          "text-xs px-2 py-0.5 rounded",
+                          report.emailed === true && "bg-primary/10 text-primary",
+                          report.emailed === false && "bg-destructive/10 text-destructive",
+                          report.emailed === null && "bg-muted text-muted-foreground",
+                        )}
+                        title={
+                          report.emailed === true ? "The relay confirmed delivery to douknowball1@gmail.com"
+                            : report.emailed === false ? "The relay tried and the mail provider did not confirm delivery. The inbox may still need its one time activation."
+                            : "Filed before Round 446 started recording delivery, so this is genuinely unknown"
+                        }
+                      >
+                        {report.emailed === true ? "emailed" : report.emailed === false ? "not emailed" : "delivery unknown"}
                       </span>
                     </div>
                     <p className="text-sm text-foreground">{report.description}</p>
