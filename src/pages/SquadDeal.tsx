@@ -84,7 +84,11 @@ const SquadDeal = () => {
       <PageSeo title="Squad Deal: Mystery Box Team Builder | DoUKnowBall"
         description="Build a full XI out of mystery boxes: pick a case per position, dodge the Banker, add a manager, stadium and fans, then simulate your squad."
         path="/squad-deal" />
-      <GameShell width="wide">
+      <GameShell
+        width="wide"
+        showReportQuestion
+        reportGameType="squad-deal"
+      >
         {inner}
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
         <GameSeoContent

@@ -17,6 +17,7 @@ const PerfectLineupNhl = () => {
         emoji="🏒"
         title="Perfect Lineup: NHL"
         subtitle="Build a dream line: LW, C, RW, two defensemen and a goalie, but constrained slots only accept a player from that team or era. Then simulate the game and share your result."
+        showReportQuestion
       >
         <GenericLineupBoard config={NHL_LINEUP_CONFIG} />
 

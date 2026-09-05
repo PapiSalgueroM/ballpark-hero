@@ -8,7 +8,6 @@ import { GameNav } from '@/components/game/GameNav';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
 import { normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -308,10 +307,12 @@ const RarityRound = () => {
         description="Name a valid answer as obscure as possible, or flip to Crowd Says and name the most famous answer you can. Five rounds, real soccer data, free to play."
         path="/rarity-round"
       />
-      <GameShell help="none"
+      <GameShell
+        help="none"
         width="narrow"
         title="RARITY ROUND"
         subtitle={goalLine}
+        showReportQuestion
         headerExtra={
           <>
             <HowToPlayPopover title="How to Play Rarity Round">
@@ -615,10 +616,6 @@ const RarityRound = () => {
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="rarity-round" />
-        </div>
 
         <GameSeoContent
           pageHasOwnH1

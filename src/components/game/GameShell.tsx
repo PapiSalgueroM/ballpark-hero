@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
+import ReportQuestion from '@/components/game/ReportQuestion';
 
 interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
@@ -25,6 +27,15 @@ interface GameShellProps {
    *  rules control (RulesGate, a hand built popover) pass 'none' so no
    *  page ever shows two question marks. */
   help?: 'auto' | 'none';
+  /** Put a game-local issue report button under the game content.
+   *  Defaults to false so pages with own report flows keep one control.
+   */
+  showReportQuestion?: boolean;
+  /** Override the report game_type if slug naming cannot be inferred from the
+   *  route path. */
+  reportGameType?: string;
+  /** Optional context for issue reports from this game route. */
+  reportGameContext?: Record<string, unknown>;
 }
 
 /**
@@ -33,7 +44,21 @@ interface GameShellProps {
  * <main id="dukb-main" className="min-h-screen bg-background"><GameNavbar />...<Footer /></main>
  * boilerplate per R5 spec 3.1.
  */
-export function GameShell({ width, title, emoji, subtitle, headerExtra, children, className, help = 'auto' }: GameShellProps) {
+export function GameShell({
+  width,
+  title,
+  emoji,
+  subtitle,
+  headerExtra,
+  children,
+  className,
+  help = 'auto',
+  showReportQuestion = false,
+  reportGameType,
+  reportGameContext,
+}: GameShellProps) {
+  const { pathname } = useLocation();
+
   return (
     /* Round 306: the id the skip link points at. The doc comment above always
        promised it; the JSX never had it, so on 69 game pages the site's one
@@ -58,7 +83,7 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
             through this shell, unless the page carries its own. Sits in the
             relative container's top left; RulesGate historically takes the
             top right. */}
-        {help === 'auto' && <GameHelp />}
+        {help === 'auto' && <GameHelp side="right" />}
         {title && (
           <header className="text-center mb-6 md:mb-8">
             {/* Round 263: this heading made six game pages scroll sideways on a
@@ -84,6 +109,17 @@ export function GameShell({ width, title, emoji, subtitle, headerExtra, children
           </header>
         )}
         {children}
+        {showReportQuestion && (
+          <div className="mt-8">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+              Report a problem
+            </p>
+            <ReportQuestion
+              gameType={reportGameType || pathname.replace(/^\//, '')}
+              gameContext={reportGameContext}
+            />
+          </div>
+        )}
         {/* Round 313: no Footer here. App.tsx renders the one global footer
             on every route (the Round 49 rule); this shell adding its own put
             two stacked footers on every game page, which the owner

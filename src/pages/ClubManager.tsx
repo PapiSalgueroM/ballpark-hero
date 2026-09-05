@@ -162,7 +162,12 @@ const ClubManager = () => {
         description="Pick a real club, set your tactics, work the transfer market and survive the sack race across full 38-game seasons, cup runs and the Champions League."
         path="/club-manager"
       />
-      <GameShell help="none" width="wide">
+      <GameShell
+        help="none"
+        width="wide"
+        showReportQuestion
+        reportGameType="club-manager"
+      >
         <div className="relative">
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">

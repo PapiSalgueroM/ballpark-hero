@@ -51,6 +51,8 @@ const GridArchive = ({ sport }: { sport: string }) => {
         width="narrow"
         title={`${data.label.toUpperCase()} GRID ARCHIVE`}
         subtitle={`Past daily boards from ${oldest} to ${newest}, with the players who solve them`}
+        showReportQuestion
+        reportGameType={`${sport}-grid-archive`}
       >
         <div className="max-w-2xl mx-auto">
           <p className="text-sm text-muted-foreground leading-relaxed">

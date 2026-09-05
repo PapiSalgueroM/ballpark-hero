@@ -344,7 +344,7 @@ export default function Index() {
           PageSeo block, which is how this was caught. */}
       <PageSeo
         title="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
-        description="100+ free sports trivia games, daily sports quizzes and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. No login required."
+        description={`${TOTAL_GAMES} free sports trivia games, daily sports quizzes and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. No login required.`}
         path="/"
       />
       <HomeTileStyles />
@@ -388,7 +388,7 @@ export default function Index() {
                 claim stays phrased as what is true, every game plays without
                 one. The legal disclaimer lives in the footer, never here. */}
             <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-4">
-              100+ free games across every sport. All playable without an account.
+              {`${TOTAL_GAMES} free games across every sport. All playable without an account.`}
             </p>
 
             {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).

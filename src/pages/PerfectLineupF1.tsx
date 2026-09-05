@@ -17,6 +17,7 @@ const PerfectLineupF1 = () => {
         emoji="🏎️"
         title="Perfect Lineup: F1"
         subtitle="Assemble a five-driver dream squad, but constrained slots only accept a driver from that team, era, or country. Then simulate a season and share your result."
+        showReportQuestion
       >
         <GenericLineupBoard config={F1_LINEUP_CONFIG} />
 

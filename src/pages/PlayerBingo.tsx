@@ -8,7 +8,6 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { RulesGate } from '@/components/game/RulesGate';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
@@ -241,10 +240,12 @@ const PlayerBingo = () => {
         description="Fill a 5x5 bingo board of hard football criteria. Real players are revealed by name only, one at a time. Complete a row, column, or diagonal to call bingo before three wrong placements end your game."
         path="/player-bingo"
       />
-      <GameShell help="none"
+      <GameShell
+        help="none"
         width="wide"
         title="PLAYER BINGO"
         subtitle="Complete a row, column, or diagonal, then keep the board alive for bonus lines and a blackout."
+        showReportQuestion
         headerExtra={
           <>
             <RulesGate title="How to Play Player Bingo" floatingTrigger>
@@ -456,10 +457,6 @@ const PlayerBingo = () => {
         <style>{'@keyframes pb-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }'}</style>
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="player-bingo" />
-        </div>
 
         <GameSeoContent
           pageHasOwnH1

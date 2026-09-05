@@ -286,6 +286,7 @@ const PerfectLineup = () => {
         emoji="⚽"
         title="PERFECT LINEUP"
         subtitle="Build the best XI you can, but every constrained slot only accepts a player from that league or country."
+        showReportQuestion
         headerExtra={
           <>
             <HowToPlayPopover title="How to Play Perfect Lineup">

@@ -5,7 +5,6 @@ import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -77,7 +76,13 @@ export default function PlayerStockMarket() {
         description="Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became."
         path="/player-stock-market"
       />
-      <GameShell width="narrow" title="Player Stock Market" emoji="📈" subtitle="200M, six seasons back, and nothing but the numbers.">
+      <GameShell
+        width="narrow"
+        title="Player Stock Market"
+        emoji="📈"
+        subtitle="200M, six seasons back, and nothing but the numbers."
+        showReportQuestion
+      >
         {phase === 'setup' && (
           <div className="space-y-4 max-w-sm mx-auto">
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
@@ -193,9 +198,6 @@ export default function PlayerStockMarket() {
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType={SLUG} />
-        </div>
 
         <GameSeoContent
           pageHasOwnH1

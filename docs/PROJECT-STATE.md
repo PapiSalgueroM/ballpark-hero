@@ -14,6 +14,7 @@ an area moves; the round numbers stay for traceability.
 | Indexing and SEO | 45% | Titles, H1s and descriptions on every grid page checked 2026-09-01; sitemap lastmod derived. |
 | Profiles and leaderboard | 45% | Both point leaks stopped forward (392 per match, 399 per visit); the history repair is an owner decision, now 596,072 points across 152 accounts. |
 | AdSense recovery | 100% submitted | Round 400 is live. Live route and crawler-render checks passed, the sitemap was resubmitted successfully with 137 pages, all ten priority URLs were queued, and AdSense says Review requested. Google's decision is pending. |
+| In game reporting UX | 78% | Round 447: game pages now use the shared report flow in GameShell on the latest touched games, with board context passed for game-specific issues and a standard placement pattern before SEO footer blocks. |
 | Club Manager | 24% | Quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
 | Soccer Career | 10% | Per season ping is activity not completion (392); feature work deferred by the operating contract. |
 | Multiplayer foundation | 5% | Not started. |

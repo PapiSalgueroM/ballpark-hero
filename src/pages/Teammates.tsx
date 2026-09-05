@@ -41,6 +41,8 @@ const Teammates = () => {
         width="narrow"
         title="TEAMMATES OR NOT?"
         subtitle="Did these two players ever play on the same team?"
+        showReportQuestion
+        reportGameType="teammates-or-not"
         headerExtra={
           <>
             {!gameOver && (

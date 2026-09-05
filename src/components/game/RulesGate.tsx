@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { useState, useEffect, ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -34,14 +35,25 @@ export function RulesGate({
   triggerLabel = 'How to play',
   className,
 }: RulesGateProps) {
-  const [open, setOpen] = useState(true);
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+  const localStorageKey = `rules-gate-seen:${pathname}`;
 
-  // Every mount re-shows the rules, per the owner's sitewide convention.
-  // Kept as an effect (rather than just the useState initializer) so the
-  // intent is explicit and future readers don't have to infer it from a
-  // bare `useState(true)`.
+  // The rules dialog remains visible on first entry to a game route, then
+  // turns into a reusable "?" button. This stays on the same path so
+  // first-timers do not get the pop-up every single visit, but a returning
+  // player still has a fast way to reopen it.
   useEffect(() => {
-    setOpen(true);
+    try {
+      if (typeof window === 'undefined') return;
+      const seen = localStorage.getItem(localStorageKey);
+      if (!seen) {
+        setOpen(true);
+        localStorage.setItem(localStorageKey, '1');
+      }
+    } catch {
+      // Storage is not available in every browser mode.
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

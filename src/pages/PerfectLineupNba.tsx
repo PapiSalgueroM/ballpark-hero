@@ -17,6 +17,7 @@ const PerfectLineupNba = () => {
         title="Perfect Lineup: NBA"
         emoji="🏀"
         subtitle="Build the best starting five you can, but constrained slots only accept a player from that team or era. Then simulate the game and share your result."
+        showReportQuestion
       >
         <GenericLineupBoard config={NBA_LINEUP_CONFIG} />
 

@@ -98,6 +98,7 @@ const GuessTheCollege = () => {
         title="GUESS THE COLLEGE"
         subtitle="Identify the D1 school from progressive clues"
         headerExtra={<GuessCollegeHowToPlay />}
+        showReportQuestion
       >
           {/* Mode selector */}
           <div className="flex justify-center gap-2 mb-3">
