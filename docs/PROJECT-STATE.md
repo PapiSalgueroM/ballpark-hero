@@ -38,8 +38,8 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Item | Status | Where |
 |---|---|---|
 | P1 1, the ticker shows nothing | DONE | Rounds 311, 317, 332, 414; confirmed 318 fixtures, 19 live on 2026-09-03 |
-| P1 2, Club Manager league tables broken mid season (2005/06 Barcelona save) | OPEN, unverified | no round names it; reproduce on an era save first |
-| P1 3, the Cups tab lists Copa del Rey alive but renders the Champions League | OPEN, unverified | Round 310 touched cup opponents; the tab itself is unchecked |
+| P1 2, Club Manager league tables broken mid season (2005/06 Barcelona save) | DONE, verified | Round 312 fixed it the day he reported it (syncWorld walked the modern league ids); Round 451 reproduced his exact save and week against the engine, with the old loop as the control (120 findings), and fenced it in simClubManagerEraMidSeason |
+| P1 3, the Cups tab lists Copa del Rey alive but renders the Champions League | DONE, verified | Round 312 mounted the cup bracket and split the panel; Round 451 renders both cards through react-dom/server on his states and checks the tab's alive flags against the bracket at 646 steps, with the unmounted card as the control |
 | P1 4, Champions League group count 4 vs the real 8 | DONE | Round 342, the real 32 club fields per era |
 | P1 5, double footer | DONE | Round 313 |
 | P1 6, boot flash of raw text | DONE, twice | Round 314 dimmed it; he filmed the dim; Round 448 covers it with the mark |
@@ -2735,6 +2735,45 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-05, Round 451. THE TWO CLUB MANAGER P1s FROM HIS 08-28 LIST WERE ALREADY FIXED,
+  AND NOW THAT IS PROVEN ON HIS SAVE.** Items 2 and 3 of `docs/TWEAKS-2026-08-28.md` sat in
+  the table above as OPEN, unverified, because no round had named them. Round 312 had in fact
+  fixed both the day he reported them: `syncWorld` walked the modern league list (ids
+  `premier`, `laliga`) while an era world is keyed `premier2005`, so no era world league ever
+  played a round, every other table read "pre-season, alphabetical order" and the picker
+  offered a second zero point La Liga; and the cups panel had never mounted `CupBracketCard`,
+  so the UCL groups sat straight under the Copa line. What nobody had done was drive his exact
+  save to his exact week and ask what his screenshots asked.
+  **`scripts/simClubManagerEraMidSeason.mjs` does.** 2005/06 Barcelona through `startCareer`,
+  the first three matches through the dressing room path (kick off, interval, resume), then
+  the January window, round 19 and the final whistle, over eight Barcelona careers plus
+  Chelsea 2005, Barcelona 2010 and Juventus 2015. At 55 checkpoints and 2760 table rows across
+  60 other league tables: games played equal rounds passed, points equal three wins plus
+  draws, goals for equal goals against, wins equal losses, positions in `sortedTable`'s
+  order, every world league on the round my own progress puts it on, one name per league in
+  the picker, and zero tables reading pre-season. A save zeroed the way the old engine left
+  it heals in one step (12 leagues). The Cups tab's own alive flags agree with the bracket at
+  646 steps (the cup carried on without me on 274 of them; 1133 looks at a passed cup round
+  found it settled with the next round drawn), both cards render through react-dom/server
+  naming the cup and all sixteen Spanish clubs and never a European opponent (44 renders),
+  and the projected quarter finals carry my club exactly when Group A's table has it top two
+  (60 matchdays, second in 20 of them, 12 real draws agreeing).
+  **Controls, both refusing to run if the rewrite finds nothing:** `CM_ERA_CONTROL=world`
+  puts the pre-312 loop back in a bundled copy and reports 120 findings, every one his
+  symptom, with the modern world still moving; `CM_ERA_CONTROL=cupspanel` removes the mount
+  in memory and reports the pre-312 panel.
+  **Not done, named rather than guessed at.** Spain and Italy split level points on head to
+  head and the engine keeps no per pair results (37 of 209 neighbouring pairs in the final
+  tables were level and were split on goal difference); the group tables leave the tab once
+  the knockouts start (`UclGroupsCard` returns null after the draw), where his item 3 asked
+  for the table AND the bracket; and the era Champions League still runs eight groups straight
+  into quarter finals, which is his item 4 and not this round.
+  **Siblings checked** under the one engine rule: `cfbDynasty` and `cbbDynasty` walk
+  `CFB_CONFS` and `CBB_CONFS` against each school's own `conf` string, measured 0 orphans over
+  44 and 40 schools; the four GM sims keep one flat teams record, so the keyed world shape
+  that failed here does not exist there.
+  Gates: tsc zero, simClubManagerBudget PASS, simManagers all green, simNoRivalNames 0
+  findings, the new harness PASS with both controls green.
 - **2026-09-02, Round 400 LIVE AND REVIEW SUBMITTED. ADS LOAD ONLY WHERE A PAGE
   DELIBERATELY OWNS A SLOT.** The August 30 content audit found no measured thin-copy defect,
   but it did not test which routes could load the AdSense account script. With

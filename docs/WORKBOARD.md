@@ -30,6 +30,19 @@ How it works:
 
 ## Active claims, 2026-09-03
 
+- **Desktop lane, Round 451, claimed and SHIPPED 2026-09-05.** THE TWO CLUB MANAGER P1s,
+  PROVEN ON HIS SAVE. Items 2 and 3 of his 2026-08-28 list (every other era league frozen on
+  "pre-season, alphabetical order" with La Liga listed twice, and the Cups tab naming the
+  Copa del Rey while showing Europe under it) were marked OPEN and unverified in
+  PROJECT-STATE. Round 312 had fixed both causes the day he reported them; this round
+  reproduces his exact 2005/06 Barcelona save to his exact week through the engine's own
+  loop, the dressing room path included, with the pre-312 loop (120 findings) and the
+  pre-312 panel as its two controls, and leaves scripts/simClubManagerEraMidSeason.mjs as
+  the fence. Both table rows now read DONE, verified. Three things named as not done in the
+  PROJECT-STATE entry: head to head tiebreaks for Spain and Italy (no per pair results in
+  the engine), the group tables vanishing from the tab at the knockouts, and the era
+  Champions League format (his item 4).
+
 - **Desktop lane, CLAIMED 2026-09-05: Rounds 450 to 452.** Three items straight off the
   item by item ledger in `docs/PROJECT-STATE.md`.
 
