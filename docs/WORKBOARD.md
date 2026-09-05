@@ -19,7 +19,16 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 458.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 459.
+
+- **Desktop lane, CLAIMED 2026-09-05: Round 458, the Player Stock Market in the format he
+  described.** His words: "redesign on the format of the referenced video: start seasons
+  back, move year by year, show stats only, never name, country or club, buy position by
+  position until a full XI." Round 434 fixed the scoring (return on the whole wallet); this
+  is the format: pick a start season, see nothing but a player's numbers for that season,
+  buy one per position until the XI is full, then step year by year to the present and watch
+  the values move, and only then learn who you bought. The table already carries every
+  season from 2004 with the stats, so nothing is invented.
 
 - **Desktop lane, CLAIMED 2026-09-05: Round 457, Conquest's map rebuilt to the format.** His
   words: "the map presentation is far behind the imperialism style videos the format comes
