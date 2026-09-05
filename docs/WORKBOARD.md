@@ -19,7 +19,16 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 456.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 457.
+
+- **Desktop lane, CLAIMED 2026-09-05: Round 456, Rebuild's new core loop.** His words, in
+  full in `docs/TWEAKS-2026-08-28.md` under Rebuild: the copy reads AI written; starting XI
+  only on screen, spin for position, keep or sell the drawn player, selling is final and
+  offers three replacements at three prices plus a fourth option, promote from bench free;
+  board and finance envelopes up front, more as you go, board demands like three under 25s;
+  end with negative money and positions are force sold at random; miss the board and draw a
+  punishment card, one safe in the deck; "take a 40 overall" instead of "trialist"; more
+  players, more powerups, restriction presets. Multiplayer named for a later round.
 
 - **Desktop lane, CLAIMED 2026-09-05: Round 455, World XI "more in the season report".** His
   words: "More in the season report." The report gains what the sim already knows and did

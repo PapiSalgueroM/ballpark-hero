@@ -40,7 +40,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | P1 1, the ticker shows nothing | DONE | Rounds 311, 317, 332, 414; confirmed 318 fixtures, 19 live on 2026-09-03 |
 | P1 2, Club Manager league tables broken mid season (2005/06 Barcelona save) | DONE, verified | Round 312 fixed it the day he reported it (syncWorld walked the modern league ids); Round 451 reproduced his exact save and week against the engine, with the old loop as the control (120 findings), and fenced it in simClubManagerEraMidSeason |
 | P1 3, the Cups tab lists Copa del Rey alive but renders the Champions League | DONE, verified | Round 312 mounted the cup bracket and split the panel; Round 451 renders both cards through react-dom/server on his states and checks the tab's alive flags against the bracket at 646 steps, with the unmounted card as the control |
-| P1 4, Champions League group count 4 vs the real 8 | DONE | Round 342, the real 32 club fields per era |
+| P1 4, Champions League group count 4 vs the real 8 | PART | Round 342 gave every era its real 32 club field and eight groups; Round 451 found the era competition still goes from the groups straight to the quarter finals with no round of 16, and that the group tables vanish from the Cups tab once the knockouts start. Also open from Round 451: level points are split on goal difference everywhere, where Spain and Italy use head to head, which needs a per pair results ledger (a save shape change) |
 | P1 5, double footer | DONE | Round 313 |
 | P1 6, boot flash of raw text | DONE, twice | Round 314 dimmed it; he filmed the dim; Round 448 covers it with the mark |
 | P1 7, Who Am I age 0 and value 0 | DONE | Round 443, plus Footle and Career Ladder printing absent numbers |
