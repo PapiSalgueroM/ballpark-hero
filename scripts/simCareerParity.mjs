@@ -545,6 +545,7 @@ const NEVER = {
     K: /\btouchdowns?\b|\btackles?\b|\bsacks?\b|\bcatch(es)?\b|\bthrows for\b|\bthrow him\b|\byards\b|\binterceptions?\b|\bthe ball\b/i,
   },
 };
+/* The en and em dash, as escapes, so this file carries neither. */
 const DASH = /[–—]/;
 
 const socialSeen = { soccer: 0, nfl: 0 };
