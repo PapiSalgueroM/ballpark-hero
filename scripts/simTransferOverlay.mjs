@@ -109,9 +109,10 @@ console.log('2) The table says what the overlay says, for every entry with a 202
       if (r.club !== e.db) fail(`${e.name}: the 2026 row says ${r.club}, the verified move says ${e.db}`);
     }
   }
-  /* Round 399: a floor, because an empty answer used to read as green. 45 of
-     46 entries have a 2026 row today (Griezmann is the one that does not). */
-  if (checked < 45) fail(`only ${checked} entries could be checked against a 2026 row, the table answered short`);
+  /* Round 399: a floor, because an empty answer used to read as green. Round
+     450: 240 of 241 entries have a 2026 row today (Griezmann is the one that
+     does not). */
+  if (checked < 240) fail(`only ${checked} entries could be checked against a 2026 row, the table answered short`);
   console.log(`   ${checked} entries checked against their 2026 row; ${missing.length} have no 2026 row: ${missing.join(', ') || 'none'}`);
 }
 
@@ -119,9 +120,19 @@ section = 3;
 console.log('3) Every db spelling is a club the 2026 rows carry');
 {
   const wanted = [...new Set(overlay.map(e => e.db).filter(Boolean))];
-  const clubList = wanted.map(c => `"${c.replace(/"/g, '\\"')}"`).join(',');
-  const found = await rest(`player_market_values?select=club&year=eq.2026&club=in.(${encodeURIComponent(clubList)})&limit=1000`);
-  const present = new Set(found.map(r => r.club));
+  /* Round 450: one existence probe per spelling. The old single query pulled
+     every 2026 ROW at the wanted clubs and PostgREST caps an answer at 1,000
+     rows, so once the overlay named 80 clubs the answer was cut off and
+     "Abha Club" (one row) read as missing while Diallo's own row said Abha.
+     A probe per club cannot be cut off, and a misspelling still gets an
+     empty answer, which is what the typo control needs. */
+  const present = new Set();
+  for (let i = 0; i < wanted.length; i += 10) {
+    await Promise.all(wanted.slice(i, i + 10).map(async c => {
+      const r = await rest(`player_market_values?select=club&year=eq.2026&club=eq.${encodeURIComponent(c)}&limit=1`);
+      if (r.length > 0) present.add(c);
+    }));
+  }
   for (const c of wanted) if (!present.has(c)) fail(`"${c}" is not a club spelling in the 2026 rows (typo, or a club the table does not carry)`);
   console.log(`   ${wanted.length} spellings, ${wanted.filter(c => present.has(c)).length} present`);
 }
