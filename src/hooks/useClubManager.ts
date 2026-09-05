@@ -5,7 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
-  startNegotiation, makeOffer, walkAway, respondApproach, setTicketTier, expandGround, signSponsor,
+  startNegotiation, makeOffer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
@@ -17,6 +17,10 @@ import {
 import type { MatchFacts } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
+import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
+import type { FacilityId } from '@/lib/clubManagerFacilities';
+import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '@/lib/clubManagerFinances';
+import type { ConcessionTier } from '@/lib/clubManagerFinances';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -321,16 +325,28 @@ export function useClubManager() {
     setCareer(prev => (prev ? respondApproach(prev, commit) : prev));
   }, []);
 
-  /* Round 171: the finance desk. */
+  /* Round 171: the finance desk. Round 467: a price change carries the fans'
+     and the board's reaction with it, and food has a price of its own. */
   const setTickets = useCallback((tier: 0 | 1 | 2) => {
-    setCareer(prev => (prev ? setTicketTier(prev, tier) : prev));
+    setCareer(prev => (prev ? setTicketPolicy(prev, tier) : prev));
+  }, []);
+  const setConcessions = useCallback((tier: ConcessionTier) => {
+    setCareer(prev => (prev ? setConcessionTier(prev, tier) : prev));
   }, []);
   const expandStadium = useCallback(() => {
     setCareer(prev => (prev ? expandGround(prev) ?? prev : prev));
   }, []);
-  /* Round 200: the commercial desk. */
+  /* Round 200: the commercial desk. Round 467: it negotiates, and it signs
+     the offer as it stands on the desk, pushes and bad brands included. */
   const takeSponsor = useCallback((offerId: string) => {
-    setCareer(prev => (prev ? signSponsor(prev, offerId) ?? prev : prev));
+    setCareer(prev => (prev ? acceptSponsor(prev, offerId) ?? prev : prev));
+  }, []);
+  const pushSponsorOffer = useCallback((offerId: string) => {
+    setCareer(prev => (prev ? pushSponsor(prev, offerId) ?? prev : prev));
+  }, []);
+  /* Round 467: the facilities desk. */
+  const buyFacility = useCallback((id: FacilityId) => {
+    setCareer(prev => (prev ? upgradeClubFacility(prev, id) ?? prev : prev));
   }, []);
   /* Round 202: the country. */
   const acceptNation = useCallback(() => {
@@ -480,7 +496,7 @@ export function useClubManager() {
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, answerApproach, setTickets, expandStadium, takeSponsor, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

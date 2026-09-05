@@ -249,6 +249,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
       "Board confidence starts at 60 of 100 and swings with results, cup runs and position against expectation. At zero you are sacked.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
+      "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
+      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and costs the fans mood every week), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
     ],
     example: [
       "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
@@ -272,6 +274,14 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Are the players real?",
         a: "Yes, with real market values, in both eras. The only invented players are the ones the game clearly marks: youth padding, deep-future projections, and the starting squad of a club you create yourself.",
+      },
+      {
+        q: "Do wages come out of my transfer budget?",
+        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers and facility upgrades are the lines that move the kitty.",
+      },
+      {
+        q: "Are the sponsors real companies?",
+        a: "No. Every brand on the desk is invented, the good ones and the bad ones, and a harness checks the whole list against real sponsors, kit makers and bookmakers.",
       },
     ],
   },
