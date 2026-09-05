@@ -19,7 +19,14 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 464.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 465.
+
+- **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
+  morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
+  Am I's 500 most valuable players, so a fan naming real players outside it was refused
+  every time (16 percent of the season's surnames accepted, letters I, Q and U never on the
+  wheel). The pool is the whole 2026 season now (5,494 players, 25 letters, 100 percent of
+  the season's surnames accepted), with the game's first harness holding it.
   NUMBER COLLISION ON RECORD: the other lane committed d3babc1d on main labelled "Round 447"
   (RulesGate once per route plus report flow hookups on seven pages) while the desktop lane
   held 447 for the NEW badge. Both are shipped and both are fine; the label is the only

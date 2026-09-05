@@ -86,6 +86,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Since the list: Player Bingo transfers outdated (four reports, 2026-08-30 to 2026-09-04) | DONE | Round 450: 195 more two source verified summer 2026 moves written to the table, 241 in the overlay, every pool player who moved this summer covered |
 | Since the list: the Google screen says flawuiqbvjobmkfkauhw.supabase.co | OWNER DECISION, MONEY | see Decisions owed |
 | Since the list: Apple sign in | OWNER DECISION, MONEY | see Decisions owed |
+| Since the list: a player's report "Alphabet Sprint wont exept anything" (2026-09-05) | DONE | Round 464: the pool was Who Am I's top 500, so real players outside it were refused (16 percent of the season's surnames accepted); it is the whole 2026 season now, 5,494 players, 100 percent accepted, verified in a real browser |
 
 ## Owner feedback, 2026-08-26 (the 51 page tweaks document, sent after Round 294 went live)
 
