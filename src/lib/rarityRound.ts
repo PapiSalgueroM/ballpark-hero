@@ -644,6 +644,37 @@ export function totalScore(rounds: RoundResult[]): number {
 }
 
 /**
+ * The one line that says what you are actually trying to do, in the mode you
+ * are actually in.
+ *
+ * Round 444, his note: "u should explain before even putting a guess that your
+ * meant to guess the least chosen player and or the most popular player
+ * depending on the game". Round 319 did put a goal line on the board, but it
+ * was 12px grey-on-card prose under the category hint, one of five lines in
+ * that card, and it never named the mode it was describing. Two modes share
+ * one page and one title, so "which one am I in and which way do points run"
+ * is the only question a first-timer has, and it was the smallest text on the
+ * screen.
+ *
+ * It lives here rather than in the page so the board strip and the "?" say the
+ * same words, and so scripts/simMissingXiLayout.mjs section 4 can
+ * check that the words a player reads come from the same place the scoring
+ * direction does. scoreRound is the authority on which way points run; if that
+ * ever flips (it has once, the 2026-07-15 inversion), this line has to flip
+ * with it or the game lies to the player before he types.
+ */
+export function objectiveLine(mode: RarityMode): string {
+  return mode === 'rarity'
+    ? 'Name the player the FEWEST people would think of. Fewer points is better.'
+    : 'Name the player the MOST people would think of. More points is better.';
+}
+
+/** The mode's own name, spelt once so the toggle, the header and the result screen cannot disagree. */
+export function modeName(mode: RarityMode): string {
+  return mode === 'rarity' ? 'Rarity Round' : 'Crowd Says';
+}
+
+/**
  * The board reveal for a finished round: the answer the mode was chasing, plus
  * a handful of near-ideal alternatives. Pool is already ranked 1..n by fame, so
  * 'rarity' wants the tail and 'crowd' wants the head.
