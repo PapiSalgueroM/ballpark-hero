@@ -67,6 +67,16 @@ export interface TeamLook {
  * and purple on purple); NHL has 18 pairs under 5 including three clubs on the
  * exact same red. At 12 the greedy assignment below needs 4, 5, 4 and 6 looks
  * for NFL, NBA, MLB and NHL, so six kinds cover every league with no overflow.
+ *
+ * Round 459 put 96 football clubs on one map and measured the same rule: the
+ * reds alone are a cluster of twenty (Liverpool has 19 near twins), twelve
+ * kinds would have been needed, and 38 pairs were indistinguishable at six.
+ * Twelve patterns on one red is not a map anyone can read, so a look is now
+ * a KIND and an ACCENT together: red and white stripes are not red and black
+ * stripes. The accent is the club's documented second colour where it has
+ * one, then the neutral that reads on the base, then the other neutral, and
+ * the greedy assignment varies the kind first and the accent only when every
+ * kind is spoken for in that accent.
  */
 export const CLASH_DISTANCE = 12;
 
@@ -107,32 +117,58 @@ export function colorDistance(a: string, b: string): number {
   return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]);
 }
 
+/** The accents a club may wear, best first: its documented second colour, the
+ *  neutral that reads on its base, the other neutral. Twins of the base are out. */
+function accentCandidates(team: ConquestMapTeam, clash: number): string[] {
+  const light = isLightHex(team.color);
+  const out: string[] = [];
+  for (const c of [team.secondaryColor, light ? '#111111' : '#ffffff', light ? '#ffffff' : '#111111']) {
+    if (c && !out.includes(c) && colorDistance(c, team.color) >= clash) out.push(c);
+  }
+  return out;
+}
+
 /**
- * Greedy look assignment in team order: a team takes the first kind not
- * already held by an earlier team whose base colour is within CLASH_DISTANCE.
+ * Greedy look assignment in team order: a team takes the first kind, in its
+ * best accent, not already held by an earlier team whose base colour is
+ * within CLASH_DISTANCE in an accent within CLASH_DISTANCE; plain counts as
+ * one kind with no accent, so a cluster of twins holds at most one plain.
  * The result depends only on the team list, so a club looks the same on every
- * turn of every game, and any two near twins in the league carry different
- * kinds whether or not they ever share a border.
+ * turn of every game, and any two near twins in the league carry looks that
+ * can be told apart whether or not they ever share a border.
  */
 export function assignTeamLooks(teams: readonly ConquestMapTeam[], clash = CLASH_DISTANCE): Map<string, TeamLook> {
   const looks = new Map<string, TeamLook>();
   for (const team of teams) {
-    const taken = new Set<LookKind>();
+    const twins: TeamLook[] = [];
     for (const [, placed] of looks) {
-      if (colorDistance(placed.color, team.color) < clash) taken.add(placed.kind);
+      if (colorDistance(placed.color, team.color) < clash) twins.push(placed);
     }
-    const kind = LOOK_KINDS.find(k => !taken.has(k)) ?? LOOK_KINDS[LOOK_KINDS.length - 1];
+    const accents = accentCandidates(team, clash);
+    let kind: LookKind | null = null;
+    let accent = accents[0];
+    outer: for (const candidate of accents) {
+      for (const k of LOOK_KINDS) {
+        const held = k === 'plain'
+          ? twins.some(p => p.kind === 'plain')
+          : twins.some(p => p.kind === k && colorDistance(p.accent, candidate) < clash);
+        if (!held) { kind = k; accent = candidate; break outer; }
+      }
+    }
+    if (!kind) kind = LOOK_KINDS[LOOK_KINDS.length - 1];
     const light = isLightHex(team.color);
-    let accent = team.secondaryColor;
-    if (!accent || colorDistance(accent, team.color) < clash) accent = light ? '#111111' : '#ffffff';
     looks.set(team.id, { teamId: team.id, color: team.color, kind, accent, ink: light ? '#111111' : '#ffffff' });
   }
   return looks;
 }
 
-/** True when two looks can be told apart on a border: bases far enough apart, or different kinds. */
+/** True when two looks can be told apart on a border: bases far enough apart,
+ *  different kinds, or the same patterned kind in accents far enough apart. */
 export function looksDistinct(a: TeamLook, b: TeamLook, clash = CLASH_DISTANCE): boolean {
-  return a.kind !== b.kind || colorDistance(a.color, b.color) >= clash;
+  if (colorDistance(a.color, b.color) >= clash) return true;
+  if (a.kind !== b.kind) return true;
+  if (a.kind === 'plain') return false;
+  return colorDistance(a.accent, b.accent) >= clash;
 }
 
 /** The name where it fits the territory at the phone size, else the code. */

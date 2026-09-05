@@ -36,6 +36,12 @@
  *   6. ONE LABEL PER EMPIRE, name or code, and the reduced motion rule in the
  *      rendered style turns the takeover into a plain colour change.
  *
+ * Round 459 added the fifth sport, the 96 club Soccer Conquest, and with it
+ * the accent rule: a patterned look is its kind AND its accent, so section 2
+ * reads the accent back off the pattern def and calls two fills alike only
+ * when kind, base and accent all agree (plain has no accent). Measured before
+ * the rule: 38 pairs of the 96 clubs indistinguishable at six kinds.
+ *
  * NEGATIVE CONTROLS (SIM_CONQUEST_MAP_CONTROL=...), each refusing to run if
  * its rewrite changes nothing:
  *   private   adds an in-memory copy of one sport's old private renderer to
@@ -104,6 +110,7 @@ export { NFL_CONQUEST_MAP } from '${ROOT}/src/data/conquestData.ts';
 export { NBA_CONQUEST_MAP, INITIAL_TERRITORIES_NBA } from '${ROOT}/src/data/conquestDataNba.ts';
 export { MLB_CONQUEST_MAP, INITIAL_TERRITORIES_MLB } from '${ROOT}/src/data/conquestDataMlb.ts';
 export { NHL_CONQUEST_MAP, INITIAL_TERRITORIES_NHL } from '${ROOT}/src/data/conquestDataNhl.ts';
+export { SOCCER_CONQUEST_MAP, INITIAL_TERRITORIES_SOCCER } from '${ROOT}/src/data/soccerConquest.ts';
 export { seedEmpires } from '${ROOT}/src/lib/imperialism.ts';
 import React from '${ROOT}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT}/node_modules/react-dom/server.node.js';
@@ -124,6 +131,7 @@ const SPORTS = [
   { spec: mod.NBA_CONQUEST_MAP, seed: () => ({ ...mod.INITIAL_TERRITORIES_NBA }) },
   { spec: mod.MLB_CONQUEST_MAP, seed: () => ({ ...mod.INITIAL_TERRITORIES_MLB }) },
   { spec: mod.NHL_CONQUEST_MAP, seed: () => ({ ...mod.INITIAL_TERRITORIES_NHL }) },
+  { spec: mod.SOCCER_CONQUEST_MAP, seed: () => ({ ...mod.INITIAL_TERRITORIES_SOCCER }) },
 ];
 for (const { spec } of SPORTS) {
   if (!spec || !Array.isArray(spec.regions) || !Array.isArray(spec.teams) || !spec.adjacency) { console.error('a sport spec is missing its regions, teams or adjacency'); process.exit(1); }
@@ -147,8 +155,10 @@ function resolveFill(html, fill) {
   const def = html.slice(open, close);
   const attrs = tags(def, 'pattern')[0] || {};
   const base = tags(def, 'rect')[0] || {};
-  return { color: (base.fill || '').toLowerCase(), kind: attrs['data-kind'], team: attrs['data-team'] };
+  return { color: (base.fill || '').toLowerCase(), kind: attrs['data-kind'], team: attrs['data-team'], accent: (attrs['data-accent'] || '').toLowerCase() };
 }
+/** Round 459: the rendered rule, same as looksDistinct but read off the markup. */
+const alike = (la, lb, d) => la.kind === lb.kind && d < CLASH_DISTANCE && (la.kind === 'plain' || colorDistance(la.accent, lb.accent) < CLASH_DISTANCE);
 
 /* ---------- seeded game states ---------- */
 function mulberry32(a) {
@@ -220,7 +230,7 @@ const states = new Map(); // sport key -> [{prev, next}]
             continue;
           }
           const want = looks.get(owner);
-          if (!want || resolved.color !== want.color.toLowerCase() || resolved.kind !== want.kind || (resolved.team && resolved.team !== owner) || got[0]['data-owner'] !== owner) { wrongLook += 1; continue; }
+          if (!want || resolved.color !== want.color.toLowerCase() || resolved.kind !== want.kind || (resolved.kind !== 'plain' && resolved.accent !== want.accent.toLowerCase()) || (resolved.team && resolved.team !== owner) || got[0]['data-owner'] !== owner) { wrongLook += 1; continue; }
           if (resolved.kind !== 'plain') patternedRegions += 1;
           rendLook.set(region.id, resolved);
         }
@@ -233,7 +243,7 @@ const states = new Map(); // sport key -> [{prev, next}]
           const d = colorDistance(la.color, lb.color);
           minAny = Math.min(minAny, d);
           if (la.kind === 'plain' && lb.kind === 'plain') { plainPairs += 1; minPlain = Math.min(minPlain, d); }
-          if (la.kind === lb.kind && d < CLASH_DISTANCE) lookAlike += 1;
+          if (alike(la, lb, d)) lookAlike += 1;
         }
         const next = nextState(owners, spec, rng);
         list.push({ prev: owners, next });
@@ -242,7 +252,7 @@ const states = new Map(); // sport key -> [{prev, next}]
     }
     states.set(spec.key, list);
   }
-  console.log(`   ${rendered} states rendered across four sports, ${regionsSeen} region draws, ${patternedRegions} of them patterned`);
+  console.log(`   ${rendered} states rendered across ${SPORTS.length} sports, ${regionsSeen} region draws, ${patternedRegions} of them patterned`);
   console.log(`   regions with other than one fill: ${multi}; fills not matching the owner's look: ${wrongLook}`);
   console.log(`   ${borderPairs} borders between different owners, ${lookAlike} look alike; nearest plain-on-plain border dE ${minPlain === Infinity ? 'n/a' : minPlain.toFixed(1)} over ${plainPairs} (floor ${CLASH_DISTANCE}); nearest border of any kind dE ${minAny === Infinity ? 'n/a' : minAny.toFixed(1)}`);
   if (rendered < SEEDS * TURNS * SPORTS.length) fail(`only ${rendered} states rendered`);
@@ -326,7 +336,7 @@ console.log('3) The takeover marks exactly the flipped regions, and spreads from
 }
 
 /* ---------- 4: one component, four sports; nobody else draws regions ---------- */
-console.log('4) The four sports go through the same component, and no other file draws regions');
+console.log(`4) The ${SPORTS.length} sports go through the same component, and no other file draws regions`);
 {
   for (const { spec, seed } of SPORTS) {
     const root = tags(render(ConquestRegionMap, { sport: spec, owners: seed() }), 'svg')[0] || {};

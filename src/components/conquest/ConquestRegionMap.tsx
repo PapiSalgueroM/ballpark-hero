@@ -234,6 +234,7 @@ export default function ConquestRegionMap({
               id={`${uid}-p-${look.teamId}`}
               data-team={look.teamId}
               data-kind={look.kind}
+              data-accent={look.accent}
               patternUnits="userSpaceOnUse"
               width={look.kind === 'dots' ? 5 : 4.5}
               height={look.kind === 'dots' ? 5 : 4.5}

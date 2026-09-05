@@ -345,124 +345,126 @@ export interface SoccerClubColours {
   secondaryColor?: string;
   /** True when no documented colour could be sourced and a neutral tint stands in. */
   neutral?: boolean;
+  /** True when only one reference documents the colour (the entry names it). */
+  single?: boolean;
 }
 
 /**
- * Documented club colours, two references each. Source A is the palette list
- * at footylogos.com/color-codes (read 2026-09-05), which carries every club
- * below unless the entry says otherwise; source B is teamcolorcodes.com's
- * per club page for the same club, and for Serie A infysia.com's Serie A
- * palette guide. The base colour is source A's first colour, unless source
- * B's first colour also appears in source A's palette (within a small colour
- * distance), in which case that colour is the base, because B lists shirt
- * colours first and A sometimes leads with a crest accent. The secondary is
- * the next colour in source A's palette. Clubs marked neutral could not be
- * sourced from two references on 2026-09-05 and wear a generated tint that
- * is nobody's colour; replace the tint the day a second source is found,
- * never with a guess.
+ * Documented club colours, two references each where the web had two on
+ * 2026-09-05. The entry's trailing note names the references: FL is the
+ * palette list at footylogos.com/color-codes, TCC is teamcolorcodes.com's
+ * club page, INF is infysia.com's Serie A palette guide, BCC is
+ * brandcolorcode.com, LT is logotyp.us, BP is brandpalettes.com, SC is
+ * schemecolor.com, ENC is encycolorpedia.com, SFC is sportsfancovers.com,
+ * SFO is sportsfoundation.org, BF is brandfetch.com, CE is crispedge.com,
+ * DYW is designyourway.net. The first named is source A, the second source
+ * B, and the block is DERIVED from the two lists by one rule, applied by a
+ * script rather than a hand: the base is source A's first colour, unless
+ * source B's first colour also appears in A's palette (within CIE76 20), in
+ * which case that colour is the base, because B lists shirt colours first
+ * where A sometimes leads with a crest accent; the secondary is the first
+ * colour in either list further than CLASH_DISTANCE from the base. A club
+ * marked single has one reference only, and one marked neutral has none
+ * worth using: it wears a generated tint that is nobody's colour until a
+ * reference is found. Never a guess.
  */
 export const SOCCER_CLUB_COLOURS: Record<string, SoccerClubColours> = {
-  // Premier League
-  ARS: { color: '#EF0107', secondaryColor: '#9C824A' },
-  AVL: { color: '#000000', neutral: true },
-  BOU: { color: '#000000', neutral: true },
-  BRE: { color: '#E30613', secondaryColor: '#FBB800' },
-  BHA: { color: '#005DAA', secondaryColor: '#FFFFFF' },
-  CHE: { color: '#001489', secondaryColor: '#FFFFFF' },
-  COV: { color: '#000000', neutral: true },
-  CRY: { color: '#0055A5', secondaryColor: '#FFFFFF' },
-  EVE: { color: '#00009E', secondaryColor: '#FFFFFF' },
-  FUL: { color: '#CC0000', secondaryColor: '#FFFFFF' },
-  HUL: { color: '#000000', neutral: true },
-  IPS: { color: '#000000', neutral: true },
-  LEE: { color: '#FFE003', secondaryColor: '#0060A9' },
-  LIV: { color: '#E51C25' },
-  MCI: { color: '#6CADDF', secondaryColor: '#00285E' },
-  MUN: { color: '#C1040B', secondaryColor: '#FFE500' },
-  NEW: { color: '#231F20', secondaryColor: '#FFFFFF' },
-  NFO: { color: '#DD0000' },
-  SUN: { color: '#EB172B', secondaryColor: '#FFFFFF' },
-  TOT: { color: '#132257' },
-  // La Liga
-  ALA: { color: '#0232A0', secondaryColor: '#FFFFFF' },
-  ATH: { color: '#EE2523', secondaryColor: '#FFFFFF' },
-  ATM: { color: '#282A6F', secondaryColor: '#E8151E' },
-  BAR: { color: '#A50044', secondaryColor: '#004D98' },
-  BET: { color: '#00954C', secondaryColor: '#FFFFFF' },
-  CEL: { color: '#6DACE5', secondaryColor: '#D50032' },
-  DEP: { color: '#000000', neutral: true },
-  ELC: { color: '#C5112E', secondaryColor: '#1B458F' },
-  ESP: { color: '#0077BD', secondaryColor: '#E01517' },
-  GET: { color: '#000000', neutral: true },
-  LEV: { color: '#B4053F', secondaryColor: '#005CA5' },
-  MAL: { color: '#000000', neutral: true },
-  OSA: { color: '#CB2725', secondaryColor: '#2C1A69' },
-  RAC: { color: '#000000', neutral: true },
-  RAY: { color: '#E3361D', secondaryColor: '#C0AE33' },
-  RMA: { color: '#FEBE10', secondaryColor: '#00529F' },
-  RSO: { color: '#143C8B', secondaryColor: '#FFFFFF' },
-  SEV: { color: '#000000', neutral: true },
-  VAL: { color: '#E23C07', secondaryColor: '#FFE524' },
-  VIL: { color: '#FFD733', secondaryColor: '#EE0028' },
-  // Serie A
-  ATA: { color: '#0D68B1', secondaryColor: '#FFFFFF' },
-  BOL: { color: '#1B2838', secondaryColor: '#9F1F33' },
-  CAG: { color: '#B01028', secondaryColor: '#082242' },
-  COM: { color: '#10416A', secondaryColor: '#FFFFFF' },
-  FIO: { color: '#61358B', secondaryColor: '#FFFFFF' },
-  FRO: { color: '#000000', neutral: true },
-  GEN: { color: '#002942', secondaryColor: '#AB131C' },
-  INT: { color: '#00239C', secondaryColor: '#FFFFFF' },
-  JUV: { color: '#000000', secondaryColor: '#FFFFFF' },
-  LAZ: { color: '#74D1EA', secondaryColor: '#FFFFFF' },
-  LEC: { color: '#263B63', secondaryColor: '#D5B978' },
-  MIL: { color: '#E4002B', secondaryColor: '#101820' },
-  MNZ: { color: '#000000', neutral: true },
-  NAP: { color: '#00ABE7', secondaryColor: '#FFFFFF' },
-  PAR: { color: '#FFCF01', secondaryColor: '#24338A' },
-  ROM: { color: '#980A2B', secondaryColor: '#FBB900' },
-  SAS: { color: '#1EA451', secondaryColor: '#000000' },
-  TOR: { color: '#8B2A1F', secondaryColor: '#ECAC00' },
-  UDI: { color: '#000000', secondaryColor: '#FFFFFF' },
-  VEN: { color: '#000000', neutral: true },
-  // Bundesliga
-  AUG: { color: '#BA3733', secondaryColor: '#FFFFFF' },
-  B04: { color: '#FF0000', secondaryColor: '#FFFF00' },
-  BAY: { color: '#ED0038', secondaryColor: '#286CFD' },
-  BVB: { color: '#FFD900', secondaryColor: '#000000' },
-  BMG: { color: '#000000', secondaryColor: '#FFFFFF' },
-  SGE: { color: '#E1020C', secondaryColor: '#FFFFFF' },
-  SCF: { color: '#000000', secondaryColor: '#FFFFFF' },
-  HSV: { color: '#1E5CB3', secondaryColor: '#FFFFFF' },
-  TSG: { color: '#1961B5', secondaryColor: '#FFFFFF' },
-  KOE: { color: '#E20613', secondaryColor: '#FFFFFF' },
-  M05: { color: '#AE0F0A', secondaryColor: '#FFFFFF' },
-  RBL: { color: '#DD0741', secondaryColor: '#FFFFFF' },
-  S04: { color: '#000000', neutral: true },
-  ELV: { color: '#000000', neutral: true },
-  PAD: { color: '#000000', neutral: true },
-  VFB: { color: '#D40723', secondaryColor: '#FFDC00' },
-  FCU: { color: '#E30613', secondaryColor: '#FFDD00' },
-  SVW: { color: '#1D9053', secondaryColor: '#FFFFFF' },
-  // Ligue 1
-  ANG: { color: '#140E0B', secondaryColor: '#FFFFFF' },
-  AJA: { color: '#1C4F9C', secondaryColor: '#FFFFFF' },
-  BST: { color: '#ED1C24', secondaryColor: '#231F20' },
-  HAC: { color: '#89C2EB', secondaryColor: '#213255' },
-  LEM: { color: '#000000', neutral: true },
-  RCL: { color: '#B71315', secondaryColor: '#FFC700' },
-  LIL: { color: '#E01E13', secondaryColor: '#24216A' },
-  LOR: { color: '#EA670B', secondaryColor: '#1B1615' },
-  LYO: { color: '#0F23AA', secondaryColor: '#E5202E' },
-  MAR: { color: '#0B61AD', secondaryColor: '#FFFFFF' },
-  ASM: { color: '#FF002E', secondaryColor: '#FFFFFF' },
-  NCE: { color: '#ED1C24', secondaryColor: '#231F20' },
-  PFC: { color: '#000000', neutral: true },
-  PSG: { color: '#004170', secondaryColor: '#E30613' },
-  REN: { color: '#E13327', secondaryColor: '#000000' },
-  STR: { color: '#009FE3', secondaryColor: '#DC2F34' },
-  TFC: { color: '#695188', secondaryColor: '#38284F' },
-  TRO: { color: '#006EB2', secondaryColor: '#DC9D0F' },
+  ARS: { color: '#EF0107', secondaryColor: '#9C824A' }, // FL, TCC
+  AVL: { color: '#660033', secondaryColor: '#95BFE5' }, // TCC, BCC
+  BOU: { color: '#DA291C', secondaryColor: '#B50E12' }, // TCC, SFO
+  BRE: { color: '#D20000', secondaryColor: '#FBB800' }, // FL, BCC
+  BHA: { color: '#0057B8', secondaryColor: '#005DAA' }, // FL, TCC
+  CHE: { color: '#001489', secondaryColor: '#FFFFFF' }, // FL, TCC
+  COV: { color: '#059DD9', secondaryColor: '#FFFFFF' }, // TCC, LT
+  CRY: { color: '#1B458F', secondaryColor: '#FFFFFF' }, // FL, TCC
+  EVE: { color: '#00009E', secondaryColor: '#FFFFFF' }, // FL, TCC
+  FUL: { color: '#000000', secondaryColor: '#CC0000' }, // FL, TCC
+  HUL: { color: '#F18A01', secondaryColor: '#000000' }, // TCC, LT
+  IPS: { color: '#3A64A3', secondaryColor: '#FFFFFF', single: true }, // ENC only
+  LEE: { color: '#FFCD00', secondaryColor: '#0060A9' }, // FL, TCC
+  LIV: { color: '#C8102E', secondaryColor: '#E51C25' }, // FL, TCC
+  MCI: { color: '#6CABDD', secondaryColor: '#00285E' }, // FL, TCC
+  MUN: { color: '#DA291C', secondaryColor: '#FFE500' }, // FL, TCC
+  NEW: { color: '#241F20', secondaryColor: '#FFFFFF' }, // FL, TCC
+  NFO: { color: '#DD0000', secondaryColor: '#FFFFFF' }, // FL, TCC
+  SUN: { color: '#EB172B', secondaryColor: '#FFFFFF' }, // FL, LT
+  TOT: { color: '#132257' }, // FL, TCC
+  ALA: { color: '#0232A0', secondaryColor: '#FFFFFF' }, // FL, TCC
+  ATH: { color: '#FFFFFF', secondaryColor: '#EE2523' }, // FL, TCC
+  ATM: { color: '#272E61', secondaryColor: '#282A6F' }, // FL, TCC
+  BAR: { color: '#EDBB00', secondaryColor: '#A50044' }, // FL, TCC
+  BET: { color: '#0BB363', secondaryColor: '#FFFFFF' }, // FL, TCC
+  CEL: { color: '#8AC3EE', secondaryColor: '#D50032' }, // FL, TCC
+  DEP: { color: '#000000', neutral: true }, // neutral: the one reference found (TCC) lists crest estimates, purple and gold, for a club that plays in blue and white; no second reference
+  ELC: { color: '#C5112E', secondaryColor: '#1B458F' }, // FL, BCC
+  ESP: { color: '#0077BD', secondaryColor: '#E01517' }, // FL, TCC
+  GET: { color: '#005D9F', secondaryColor: '#C43A2F' }, // TCC, BCC
+  LEV: { color: '#B4053F', secondaryColor: '#005CA5' }, // FL, TCC
+  MAL: { color: '#5EA9DD', secondaryColor: '#FFFFFF', single: true }, // CE only; malagacf.com names blue and white without a code
+  OSA: { color: '#CB2725', secondaryColor: '#2C1A69' }, // FL, TCC
+  RAC: { color: '#48BF5F', secondaryColor: '#FFFFFF', single: true }, // LT only
+  RAY: { color: '#E53027', secondaryColor: '#C0AE33' }, // FL, LT
+  RMA: { color: '#FEBE10', secondaryColor: '#00529F' }, // FL, TCC
+  RSO: { color: '#FFFFFF', secondaryColor: '#143C8B' }, // FL, TCC
+  SEV: { color: '#D70F21', secondaryColor: '#FFFFFF' }, // TCC, BCC
+  VAL: { color: '#E23C07', secondaryColor: '#FFE524' }, // FL, TCC
+  VIL: { color: '#005187', secondaryColor: '#FFD733' }, // FL, TCC
+  ATA: { color: '#005CA9', secondaryColor: '#FFFFFF' }, // FL, INF
+  BOL: { color: '#A32638', secondaryColor: '#1B2838' }, // FL, INF
+  CAG: { color: '#C4122E', secondaryColor: '#082242' }, // FL, INF
+  COM: { color: '#10416A', secondaryColor: '#FFFFFF' }, // FL, INF
+  FIO: { color: '#5B2D90', secondaryColor: '#FFFFFF' }, // FL, INF
+  FRO: { color: '#004393', secondaryColor: '#FFDD00' }, // BCC, LT
+  GEN: { color: '#A71930', secondaryColor: '#002942' }, // FL, INF
+  INT: { color: '#00239C', secondaryColor: '#FFFFFF' }, // FL, INF
+  JUV: { color: '#000000', secondaryColor: '#FFFFFF' }, // FL, INF
+  LAZ: { color: '#9BD3F7', secondaryColor: '#74D1EA' }, // FL, INF
+  LEC: { color: '#263B63', secondaryColor: '#D5B978' }, // FL, INF
+  MIL: { color: '#D71920', secondaryColor: '#101820' }, // FL, INF
+  MNZ: { color: '#EC173A', secondaryColor: '#FFFFFF' }, // BCC, LT
+  NAP: { color: '#0081C6', secondaryColor: '#00ABE7' }, // FL, INF
+  PAR: { color: '#F2D13D', secondaryColor: '#FFCF01' }, // FL, INF
+  ROM: { color: '#8E1F2F', secondaryColor: '#FBB900' }, // FL, INF
+  SAS: { color: '#00843D', secondaryColor: '#1EA451' }, // FL, INF
+  TOR: { color: '#ECAC00', secondaryColor: '#8B2A1F' }, // FL, INF
+  UDI: { color: '#7F7F7F', secondaryColor: '#8B7D37' }, // FL, INF
+  VEN: { color: '#C46200', secondaryColor: '#436817' }, // BCC, LT
+  AUG: { color: '#BA3733', secondaryColor: '#FFFFFF' }, // FL, TCC
+  B04: { color: '#E32221', secondaryColor: '#FF0000' }, // FL, TCC
+  BAY: { color: '#ED0038', secondaryColor: '#286CFD' }, // FL, TCC
+  BVB: { color: '#FDE100', secondaryColor: '#000000' }, // FL, TCC
+  BMG: { color: '#000000', secondaryColor: '#FFFFFF' }, // FL, TCC
+  SGE: { color: '#E1000F', secondaryColor: '#FFFFFF' }, // FL, TCC
+  SCF: { color: '#000000', secondaryColor: '#FFFFFF' }, // FL, TCC
+  HSV: { color: '#1E5CB3', secondaryColor: '#FFFFFF' }, // FL, BCC
+  TSG: { color: '#1961B5', secondaryColor: '#FFFFFF' }, // FL, TCC
+  KOE: { color: '#ED1C24', secondaryColor: '#FFFFFF' }, // FL, TCC
+  M05: { color: '#C3141E', secondaryColor: '#FFFFFF' }, // FL, TCC
+  RBL: { color: '#DD013F', secondaryColor: '#FFFFFF' }, // FL, TCC
+  S04: { color: '#004D9D', secondaryColor: '#FFFFFF' }, // BCC, BP
+  ELV: { color: '#000000', secondaryColor: '#D1BD8A', single: true }, // BF only, which lists straw and black and names black and white as the club colours
+  PAD: { color: '#005CA8', secondaryColor: '#FFFFFF', single: true }, // ENC only
+  VFB: { color: '#E32219', secondaryColor: '#FFDC00' }, // FL, TCC
+  FCU: { color: '#EB1923', secondaryColor: '#FFDD00' }, // FL, TCC
+  SVW: { color: '#1D9053', secondaryColor: '#FFFFFF' }, // FL, SC
+  ANG: { color: '#000000', secondaryColor: '#FFFFFF' }, // FL, TCC
+  AJA: { color: '#1C4F9C', secondaryColor: '#FFFFFF' }, // FL, BCC
+  BST: { color: '#ED1C24', secondaryColor: '#231F20' }, // FL, TCC
+  HAC: { color: '#003259', secondaryColor: '#89C2EB' }, // FL, BCC
+  LEM: { color: '#FFBF00', secondaryColor: '#FFFFFF' }, // SFC, DYW
+  RCL: { color: '#EC1C24', secondaryColor: '#B71315' }, // FL, TCC
+  LIL: { color: '#E01E13', secondaryColor: '#24216A' }, // FL, TCC
+  LOR: { color: '#F58113', secondaryColor: '#1B1615' }, // FL, TCC
+  LYO: { color: '#DA0812', secondaryColor: '#0F23AA' }, // FL, TCC
+  MAR: { color: '#0B61AD', secondaryColor: '#FFFFFF' }, // FL, TCC
+  ASM: { color: '#E51B22', secondaryColor: '#FFFFFF' }, // FL, TCC
+  NCE: { color: '#000000', secondaryColor: '#ED1C24' }, // FL, TCC
+  PFC: { color: '#0C183F', secondaryColor: '#0680BE', single: true }, // BCC only
+  PSG: { color: '#004170', secondaryColor: '#E30613' }, // FL, TCC
+  REN: { color: '#E13327', secondaryColor: '#000000' }, // FL, TCC
+  STR: { color: '#009FE3', secondaryColor: '#DC2F34' }, // FL, TCC
+  TFC: { color: '#3F2A56', secondaryColor: '#695188' }, // FL, BCC
+  TRO: { color: '#006EB2', secondaryColor: '#DC9D0F' }, // TCC, LT
 };
 
 /** A tint that is nobody's colour: low saturation, mid lightness, hue from the id. */
