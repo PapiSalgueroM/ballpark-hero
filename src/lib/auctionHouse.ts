@@ -164,7 +164,7 @@ export function createBidders(): Bidder[] {
 }
 
 /** What an AI thinks a player is worth (£M). */
-export function aiValuation(b: Bidder, p: AuctionPlayer, slotsLeftAfterThis: number): number {
+export function aiValuation(b: Bidder, p: AuctionPlayer, slotsLeftAfterThis: number, rand: () => number = Math.random): number {
   /* Round 327: basePrice rose from 0.8x to 1.0x of market value, so the
      multiplier fell from 1.6 to 1.28 and every rival still values a player
      at exactly the number it always did. */
@@ -173,11 +173,16 @@ export function aiValuation(b: Bidder, p: AuctionPlayer, slotsLeftAfterThis: num
   // keep a reserve: don't spend into being unable to pay assignment fees later
   const reserve = slotsLeftAfterThis * 12;
   const cap = Math.max(0, b.budget - reserve);
-  const noise = 0.85 + Math.random() * 0.35;
+  const noise = 0.85 + rand() * 0.35;
   return Math.min(cap, Math.round(base * b.personality * need * noise));
 }
 
 export const BID_STEPS = [5, 10, 25] as const;
+
+/** The raise a rival makes at a given price, the same ladder BID_STEPS gives you. */
+export function bidStepFor(price: number): number {
+  return price >= 200 ? 25 : price >= 80 ? 10 : 5;
+}
 
 /** Assignment fee for a leftover fill player (0.48 of the new 1.0x base is
  *  the same absolute fee the old 0.6 of 0.8x charged). */
@@ -216,6 +221,156 @@ export function orderLots(pool: AuctionPlayer[], rand: () => number = Math.rando
     ],
     weakFills: pool.filter(p => p.tier === 'weak'),
   };
+}
+
+/* ---------------- one lot, the room's half ----------------
+ * Round 441. All of this used to sit inside SignThePlayer.tsx, which meant
+ * the rules of the room were the one part of the auction no harness could
+ * read. It lives here now, exactly as the page ran it save for the opening
+ * bid fix below, and the page replays the events it returns.
+ */
+
+export type BidderId = Bidder['id'];
+
+export interface BidEvent {
+  kind: 'bid' | 'out';
+  bidderId: BidderId;
+  price: number;
+  leader: BidderId | null;
+}
+
+export interface Exchange {
+  events: BidEvent[];
+  /** Who is still in when the rivals stop. */
+  active: BidderId[];
+  price: number;
+  leader: BidderId | null;
+  /** 'sold' the hammer falls now, 'decay' nobody wanted him at list price, 'open' you still have a say. */
+  outcome: 'sold' | 'decay' | 'open';
+  winner: BidderId | null;
+}
+
+/**
+ * The rivals answer the current price. Each raise is computed up front so the
+ * page can replay them one beat at a time.
+ */
+export function runRivalBids(args: {
+  lot: AuctionPlayer;
+  bidders: Bidder[];
+  active: Iterable<BidderId>;
+  price: number;
+  leader: BidderId | null;
+  slotsLeftAfter: number;
+  rand?: () => number;
+}): Exchange {
+  const { lot, bidders, slotsLeftAfter } = args;
+  const rand = args.rand ?? Math.random;
+  const act = new Set<BidderId>(args.active);
+  const events: BidEvent[] = [];
+  let p = args.price;
+  let lead = args.leader;
+  let moved = true;
+  while (moved) {
+    moved = false;
+    for (const b of bidders) {
+      if (b.id === 'you' || !act.has(b.id) || lead === b.id) continue;
+      const val = aiValuation(b, lot, slotsLeftAfter, rand);
+      /* Round 441, his format to the letter: "if its just one then they win
+         the player for the listed price". A lot nobody leads is OPENED at
+         list, the way your own open button does it. Before this a rival with
+         no one to beat still raised himself one step, so every uncontested
+         lot in the room sold 5, 10 or 25 million over the number on the
+         card, and the one case his spec is most explicit about was the one
+         case the room never played. */
+      const target = lead === null ? p : p + bidStepFor(p);
+      if (target <= val && b.budget >= target) {
+        p = target;
+        lead = b.id;
+        events.push({ kind: 'bid', bidderId: b.id, price: p, leader: lead });
+        moved = true;
+      } else {
+        act.delete(b.id);
+        events.push({ kind: 'out', bidderId: b.id, price: p, leader: lead });
+      }
+    }
+    if (act.has('you')) break;
+  }
+  const remaining = [...act];
+  let outcome: Exchange['outcome'] = 'open';
+  let winner: BidderId | null = null;
+  if (!act.has('you') && remaining.length <= 1) {
+    if (lead) { outcome = 'sold'; winner = lead; } else outcome = 'decay';
+  } else if (act.has('you') && remaining.length === 1 && lead === 'you') {
+    outcome = 'sold';
+    winner = 'you';
+  }
+  return { events, active: remaining, price: p, leader: lead, outcome, winner };
+}
+
+/** The price a decaying lot is withdrawn at. */
+export function decayFloorFor(basePrice: number): number {
+  return Math.max(5, Math.round(basePrice * DECAY_FLOOR));
+}
+
+/** One step down the decay. */
+export function nextDecayPrice(price: number): number {
+  return Math.round(price * DECAY_STEP);
+}
+
+/** Which rival, if any, snaps a decaying lot at this price. The deeper the discount, the harder to resist. */
+export function decaySnapper(
+  bidders: Bidder[],
+  lot: AuctionPlayer,
+  price: number,
+  slotsLeftAfter: number,
+  rand: () => number = Math.random,
+): BidderId | null {
+  for (const b of bidders) {
+    if (b.id === 'you' || b.squad[lot.slotKey] !== null || b.budget < price) continue;
+    const val = aiValuation(b, lot, slotsLeftAfter, rand);
+    const discount = 1 - price / lot.basePrice;
+    if (price <= val && rand() < 0.25 + discount) return b.id;
+  }
+  return null;
+}
+
+/**
+ * The end of auction fill. Every open chair takes a body so nobody plays the
+ * showdown a man short.
+ *
+ * Round 441: a body nobody else has. The fill used to hand the same
+ * journeyman to every squad still missing that position, so a withdrawn lot
+ * put one real man in two of the three teams in the same mini league. The
+ * pool has exactly enough: a position only leaves a second chair open when
+ * one of its two lots found no taker, and a withdrawn lot goes back into
+ * `fillPool`, so the count always works out.
+ */
+export function fillOpenChairs(bidders: Bidder[], fillPool: AuctionPlayer[]): Bidder[] {
+  const taken = new Set<string>();
+  for (const b of bidders) for (const p of Object.values(b.squad)) if (p) taken.add(p.name);
+  return bidders.map(b => {
+    let budget = b.budget;
+    const squad = { ...b.squad };
+    for (const slot of AUCTION_SLOTS) {
+      if (squad[slot.key] !== null) continue;
+      const fill = fillPool.find(w => w.slotKey === slot.key && !taken.has(w.name));
+      if (!fill) continue;
+      taken.add(fill.name);
+      const fee = Math.min(assignmentFee(fill), Math.max(0, budget));
+      budget = Math.max(0, budget - fee);
+      squad[slot.key] = fill;
+    }
+    return { ...b, budget, squad };
+  });
+}
+
+/** Hand a settled lot to its buyer. */
+export function applySale(bidders: Bidder[], lot: AuctionPlayer, winner: BidderId, price: number): Bidder[] {
+  return bidders.map(b => b.id !== winner ? b : ({
+    ...b,
+    budget: Math.max(0, b.budget - price),
+    squad: { ...b.squad, [lot.slotKey]: lot },
+  }));
 }
 
 /* ---------------- showdown sim ---------------- */
