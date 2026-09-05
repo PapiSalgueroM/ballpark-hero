@@ -96,6 +96,7 @@ const SignThePlayer = lazy(() => import("./pages/SignThePlayer"));
 const ConquestNba = lazy(() => import("./pages/ConquestNba"));
 const ConquestNhl = lazy(() => import("./pages/ConquestNhl"));
 const ConquestMlb = lazy(() => import("./pages/ConquestMlb"));
+const SoccerConquest = lazy(() => import("./pages/SoccerConquest"));
 const FrontOffice = lazy(() => import("./pages/FrontOffice"));
 const NflMyCareer = lazy(() => import("./pages/NflMyCareer"));
 const NbaFrontOffice = lazy(() => import("./pages/NbaFrontOffice"));
@@ -396,6 +397,7 @@ const AppContent = () => {
         <Route path="/conquest-nba" element={<ConquestNba />} />
         <Route path="/conquest-nhl" element={<ConquestNhl />} />
         <Route path="/conquest-mlb" element={<ConquestMlb />} />
+        <Route path="/soccer-conquest" element={<SoccerConquest />} />
         <Route path="/front-office" element={<FrontOffice />} />
         <Route path="/nfl-my-career" element={<NflMyCareer />} />
         <Route path="/nba-front-office" element={<NbaFrontOffice />} />

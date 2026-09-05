@@ -445,6 +445,46 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
   },
 
+  '/soccer-conquest': {
+    intro: [
+      "The imperialism map format comes to football. Ninety six clubs from the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 sit on one map of Europe, every region starts in the hands of the nearest club of its own country, and when two clubs meet the winner takes everything the loser owns.",
+      "Nothing here is typed. Club strength is real squad market value, so Real Madrid open as the giants and a promoted side like Le Mans opens as the long shot, which is exactly the club you want to be riding when the upset lands.",
+    ],
+    howToPlay: [
+      "Pick your club from all 96, grouped by league. The tile shows the squad value its strength comes from.",
+      "Each matchday pairs the whole continent into 48 games. Before it plays, call your club's game. The card shows each side's win odds.",
+      "Play the matchday. Winners annex everything the losers held, and the map redraws in one swing.",
+      "Survive 10 matchdays. The top 8 empires by region make the playoffs, record breaking ties.",
+      "Win the Quarter-finals, the Semi-finals and the Imperial Final to rule the map.",
+    ],
+    rules: [
+      "10 regular matchdays, then an 8 club knockout bracket.",
+      "154 regions: 96 club home areas plus the countryside between them, which opens in the hands of the nearest club of the same country.",
+      "Scoring: 25 points per correct call, 3 per region held at the end, 200 for the crown, 50 for making the playoffs.",
+      "Wiped out clubs keep playing, and one win takes back a whole empire.",
+      "Level games go to penalties, so there are no draws, ever.",
+      "Strength is the 2026 squad market value on record, mapped onto the same 55 to 95 band the other conquest maps use. Clubs with only a handful of players on record sit at the floor and their tile says partial data.",
+      "The Daily Challenge deals every player the same date seeded season: same opening map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+    ],
+    example: [
+      "You ride Brentford. Matchday 1 pairs you with Bayern Munich, the odds sit under fifty, you call the upset anyway and it lands on penalties: Bavaria is yours.",
+      "By matchday 6 you hold a strip from west London to the Alps, then lose the lot to Lecce in ninety minutes. Matchday 8 you take an empire back off Genoa, sneak in as the eighth seed, and the bracket gets interesting.",
+    ],
+    tips: [
+      "Call games with the odds, not your heart. The percentages come from real squad values.",
+      "Landless is one good night from owning a coastline. Do not panic when you get wiped.",
+      "Check the standings late. Seeding goes by regions, so the last matchdays are about protecting your count.",
+      "A big empire gets overextended and a landless club fights harder, so a giant on a losing run is beatable.",
+    ],
+    faqs: [
+      { q: "How does the Daily Challenge work?", a: "Everyone gets the same season today: identical opening map, identical fixtures, identical results. Your score comes from which club you back and how well you call its games. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited." },
+      { q: "Where do the strengths come from?", a: "From the 2026 squad market values on record for each club, summed and mapped onto a 55 to 95 band. Nothing is hand rated. Promoted clubs with few players on record sit at the floor and say partial data on their tile." },
+      { q: "Why is the map made of hexagons?", a: "It is a cartogram: every region is one hex, laid out so the five countries sit where they do in Europe. Club home hexes are named after the real district the ground is in, the rest after the real countryside between them." },
+      { q: "Can the season end early?", a: "Yes. If one club annexes every region before matchday 10, total conquest crowns it immediately." },
+      { q: "How do the playoffs work?", a: "The top 8 empires seed a knockout: Quarter-finals, Semi-finals, then the Imperial Final. Regions decide seeding, record breaks ties." },
+    ],
+  },
+
   '/soccer-career': {
     intro: [
       "Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict.",
