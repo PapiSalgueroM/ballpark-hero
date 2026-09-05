@@ -178,10 +178,111 @@ export function hintProblems(graph, a, b, minSteps, hint) {
   return out;
 }
 
+/* ── Round 460: the special rules ─────────────────────────────────────────
+   Active players only and Europe only are filters on the player pool
+   (src/lib/transferPathModes.ts, shared with the page), so each rule gets
+   its own graph, the same search, and its own stored (minimum, hint) in the
+   puzzle table's <rule>_min_steps and <rule>_hint columns. A pair with no
+   path under a rule is stored as null on purpose: the page then offers a
+   puzzle that has one instead of a hint into a refusal. The writer and the
+   parser sit side by side so the fence reads exactly what the generator
+   wrote. */
+export const MODE_RULES = ['active', 'europe'];
+
+const sqlQuote = s => `'${String(s).replace(/'/g, "''")}'`;
+const sqlOrNull = s => (s === null || s === undefined ? 'null' : sqlQuote(s));
+
+/* The migration carries, per puzzle and per rule, the minimum and the two
+   clubs the hint names (first link, last link), and the UPDATE below rebuilds
+   the hint text in SQL from those plus the pair's own names, which the table
+   already holds. That keeps the file a third of the size of full hint text,
+   which is what let it be applied by hand through the database tools. The
+   wording lives in hintText above; the SQL mirrors it, and simTransferPathModes
+   proves the live text equals hintText's on every row, so the mirror cannot
+   drift unnoticed. */
+export function modeValuesRow(id, derived) {
+  const cells = [sqlQuote(id)];
+  for (const rule of MODE_RULES) {
+    const d = derived[rule];
+    cells.push(d ? String(d.minSteps) : 'null', sqlOrNull(d ? d.first : null), sqlOrNull(d ? d.last : null));
+  }
+  return `  (${cells.join(', ')})`;
+}
+
+function hintSql(rule) {
+  const min = `v.${rule.slice(0, 1)}_min`, first = `v.${rule.slice(0, 1)}_first`, last = `v.${rule.slice(0, 1)}_last`;
+  return [
+    `    case`,
+    `      when ${min} is null then null`,
+    `      when ${min} = 1 then 'Direct link. They were at ' || ${first} || ' together.'`,
+    `      when ${min} = 2 and ${first} = ${last} then 'One middle man does it. He was at ' || ${first} || ' with ' || t.player_a || ' and, in another season, at ' || ${last} || ' with ' || t.player_b || '.'`,
+    `      when ${min} = 2 then 'One middle man does it. He was at ' || ${first} || ' with ' || t.player_a || ' and at ' || ${last} || ' with ' || t.player_b || '.'`,
+    `      else (case ${min} when 3 then 'Two' when 4 then 'Three' when 5 then 'Four' else (${min} - 1)::text end) || ' middle men at least. The first was at ' || ${first} || ' with ' || t.player_a || '; the last was at ' || ${last} || ' with ' || t.player_b || '.'`,
+    `    end`,
+  ].join('\n');
+}
+
+/** the whole statement: one VALUES row per puzzle, one UPDATE over all of them */
+export function modeMigrationSql(valueRows) {
+  const cols = ['puzzle_id', ...MODE_RULES.flatMap(r => [`${r.slice(0, 1)}_min`, `${r.slice(0, 1)}_first`, `${r.slice(0, 1)}_last`])];
+  return [
+    `with v(${cols.join(', ')}) as (values`,
+    valueRows.join(',\n'),
+    ')',
+    'update public.transfer_path_puzzles t set',
+    ...MODE_RULES.flatMap((rule, i) => [
+      `  ${rule}_min_steps = v.${rule.slice(0, 1)}_min::smallint,`,
+      `  ${rule}_hint =\n${hintSql(rule)}${i < MODE_RULES.length - 1 ? ',' : ''}`,
+    ]),
+    'from v',
+    'where t.puzzle_id = v.puzzle_id;',
+  ].join('\n');
+}
+
+const MODE_VALUES_RE = /^\s*\('((?:[^']|'')*)', (\d+|null), (?:'((?:[^']|'')*)'|null), (?:'((?:[^']|'')*)'|null), (\d+|null), (?:'((?:[^']|'')*)'|null), (?:'((?:[^']|'')*)'|null)\),?$/gm;
+
+/**
+ * puzzle id -> { active, europe }, each { minSteps, hint, first, last } or
+ * null, the hint rebuilt with hintText from the row's clubs and the pair's
+ * names (`pairs`: id -> { a, b }). CRLF is folded first.
+ */
+export function parseModeMigration(sql, pairs) {
+  const unquote = s => s.replace(/''/g, "'");
+  const rows = new Map();
+  for (const m of String(sql).replaceAll('\r\n', '\n').matchAll(MODE_VALUES_RE)) {
+    const id = unquote(m[1]);
+    const pair = pairs.get(id);
+    const entry = (min, first, last) => {
+      if (min === 'null') return null;
+      const steps = Number(min);
+      const f = unquote(first ?? ''), l = unquote(last ?? '');
+      return { minSteps: steps, first: f, last: l, hint: pair ? hintText(pair.a, pair.b, steps, f, l) : '' };
+    };
+    rows.set(id, { active: entry(m[2], m[3], m[4]), europe: entry(m[5], m[6], m[7]) });
+  }
+  return rows;
+}
+
+/**
+ * Every way a stored rule entry can be wrong on the rule's graph: a null
+ * where the search finds a path, a path where the search finds none, or a
+ * (minimum, hint) that fails the classic checks on that graph.
+ */
+export function ruleProblems(graph, a, b, stored) {
+  const truth = graph.keys.has(a) && graph.keys.has(b) ? distances(graph, a).get(b) : undefined;
+  if (stored === null) return truth === undefined ? [] : [`stored as no path under the rule, the search finds one in ${truth}`];
+  if (truth === undefined) return ['stored as a path under the rule where the search finds none'];
+  return hintProblems(graph, a, b, stored.minSteps, stored.hint);
+}
+
 /** the compact career text pulled through the database console: `Name|Club:2007-2009;Club:1995c` */
 export function expandCompactCareers(text) {
   const players = [];
-  for (const line of String(text).split('\n')) {
+  /* Round 460: a fresh Windows checkout is CRLF. The trailing \r used to ride
+     into the LAST spell of every line, "Miami United:2016c\r" no longer ended
+     in c and its year became NaN, so 16 late career spells silently vanished
+     from the graph on this side while the migration was derived with them. */
+  for (const line of String(text).replaceAll('\r\n', '\n').split('\n')) {
     if (!line.trim()) continue;
     const bar = line.indexOf('|');
     const name = line.slice(0, bar);

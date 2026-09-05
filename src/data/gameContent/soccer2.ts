@@ -619,12 +619,15 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Keep connecting to the most recent name in your chain.",
       "Reach the target to win. If a new player also links to the target, the chain closes automatically.",
       "Stuck? Take the hint, or give up to see a full working path.",
+      "Want it harder? Pick a special rule above the card: Active players only, or Europe only. The optimal on the card changes with the rule.",
     ],
     rules: [
       "A valid link is the same club in the same season, not the same club ever.",
       "Scoring starts at 1000 for the optimal path and drops 100 per extra step, with a floor of 0.",
       "Invalid names cost nothing. No attempt limit, no timer.",
       "One shared daily puzzle, plus unlimited practice puzzles.",
+      "Active players only: every name in the chain, the start and the target included, has a 2026 season. Europe only: every club a link goes through is a European club. Each rule has its own optimal, worked out on the players that rule leaves in play.",
+      "A special rule reaches the daily only when today's pair has a route under it; otherwise the daily plays the everyday rule and the rule waits for you in unlimited. The daily score still counts steps against the everyday optimal, so a rule is a harder road to the same finish line. Unlimited scores against the rule's own optimal.",
     ],
     example: [
       "Say it is Steven Gerrard to Lionel Messi, optimal in 2 steps. Gerrard played with Luis Suarez at Liverpool, and Suarez spent years beside Messi at Barcelona, so you type Suarez and the chain autocompletes for the full 1000.",
@@ -648,6 +651,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         q: "How is it scored?",
         a: "1000 points for matching the optimal step count shown up front, minus 100 for each extra step your chain took.",
+      },
+      {
+        q: "Why does a name get refused under a special rule when the two really were teammates?",
+        a: "Because the rule removed it. Under Active players only a retired teammate is off the board, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
       },
     ],
   },
