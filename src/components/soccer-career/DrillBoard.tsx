@@ -480,8 +480,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
             <>
               <line x1={0} y1={VIEW_H * 0.5} x2={VIEW_W} y2={VIEW_H * 0.5} stroke="hsl(0 0% 85%)" strokeWidth={0.6} opacity={0.35} />
               <circle cx={VIEW_W / 2} cy={VIEW_H * 0.5} r={30} fill="none" stroke="hsl(0 0% 85%)" strokeWidth={0.6} opacity={0.35} />
-              <Figure x={feet.x * VIEW_W} y={feet.y * VIEW_H} tint="attacker" tilt={tk.dir * 8} scale={1.3} />
-              <circle cx={ball.x * VIEW_W} cy={ball.y * VIEW_H + 9} r={4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
+              {/* The figure's feet, not its origin, sit on the rules' feet
+                  point, and the ball is drawn exactly where the rules have it:
+                  the first draft drew the ball 9 units under the rules' point
+                  so it sat at the drawn feet, and a player tapping the ball he
+                  could see was 0.043 off in y, the whole reach at the top of
+                  the ladder. Measured in the browser pass on 2026-09-05. */}
+              <Figure x={feet.x * VIEW_W} y={feet.y * VIEW_H - 11} tint="attacker" tilt={tk.dir * 8} scale={1.3} />
+              <circle cx={ball.x * VIEW_W} cy={ball.y * VIEW_H} r={4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
               {phase === 'playing' && (
                 <circle cx={cursor.x * VIEW_W} cy={cursor.y * VIEW_H} r={9} fill="none" stroke="hsl(var(--primary))" strokeWidth={1.4} strokeDasharray="3 3" opacity={0.8} />
               )}
@@ -545,7 +551,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
         })()}
       </svg>
 
-      <div ref={revealRef}>
+      {/* The card under the board keeps one minimum height across ready and
+          playing, because the dialog is centred: when the ready card was
+          replaced by a shorter control card the whole dialog re-centred and
+          the board jumped 24 pixels the moment the round began, measured on
+          2026-09-05 at 390 wide. A timing drill cannot have its board move
+          under the thumb that just pressed Start. 132 covers the tallest
+          ready card (the wall shot's, three lines at 390 wide). */}
+      <div ref={revealRef} className="min-h-[132px]">
         {phase === 'ready' && (
           <div className="rounded-2xl border border-border bg-card p-3 text-center">
             <p className="text-[12px] text-muted-foreground">

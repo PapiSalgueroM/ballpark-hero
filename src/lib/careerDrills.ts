@@ -245,6 +245,13 @@ export function maxWallShotScore(run: WallShotSetup[]): number {
 /* The tackle is played on a unit screen: x runs 0 to 1 left to right, y runs
    0 to 1 top to bottom, and the attacker enters from just off one edge. */
 export const TACKLE_EDGE = 0.15;
+/* The board is wider than it is tall (360 by 210 view units), so a unit of y
+   is shorter on screen than a unit of x. Every distance below scales y by
+   this, which makes the reach a circle on the screen the player taps rather
+   than an ellipse squashed to a bit over half its height. Found by the
+   browser pass on 2026-09-05, tapping the drawn ball and missing. */
+export const TACKLE_ASPECT = 7 / 12;
+const tackleDist = (ax: number, ay: number, bx: number, by: number) => Math.hypot(ax - bx, (ay - by) * TACKLE_ASPECT);
 
 export interface TackleSetup {
   /** Screen widths per second. */
@@ -331,7 +338,7 @@ export function buildTackleRun(seed: number): TackleSetup[] {
     const touchLen = Math.round((0.20 - t * 0.10) * 100) / 100;
     const touchPeriod = Math.round((0.9 - t * 0.45) * 100) / 100;
     const touchPhase = Math.round(rng() * 100) / 100;
-    const reach = Math.round((0.09 - t * 0.045) * 1000) / 1000;
+    const reach = Math.round((0.08 - t * 0.038) * 1000) / 1000;
     const who = speed >= 0.8 ? 'a flyer' : speed >= 0.62 ? 'a quick one' : 'a plodder';
     const touch = touchLen <= 0.13 ? 'close control' : touchLen <= 0.17 ? 'tidy feet' : 'heavy touches';
     return { speed, dir, lane, touchLen, touchPeriod, touchPhase, reach, label: `${who}, ${touch}` };
@@ -348,8 +355,8 @@ export function makeTackle(input: TackleInput, setup: TackleSetup): TackleResult
   if (t < 0 || t >= tackleDeadline(setup)) {
     return { ...base, won: false, foul: false, late: true, points: 0, verdict: 'He is gone. Never got near him.' };
   }
-  const dBall = Math.hypot(input.x - ball.x, input.y - ball.y);
-  const dFeet = Math.hypot(input.x - feet.x, input.y - feet.y);
+  const dBall = tackleDist(input.x, input.y, ball.x, ball.y);
+  const dFeet = tackleDist(input.x, input.y, feet.x, feet.y);
 
   /* The man, not the ball. */
   if (dFeet < TACKLE_FEET && dFeet <= dBall) {

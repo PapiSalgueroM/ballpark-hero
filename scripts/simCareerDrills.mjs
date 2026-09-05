@@ -256,7 +256,7 @@ function playRun(drill, seed, strategy) {
 }
 
 /* The floors, set from measured headroom (2026-09-05, 300 runs each): skilled
-   sat at 9.04x the best fixed wall shot, 5.98x the best fixed tackle and
+   sat at 9.04x the best fixed wall shot, 4.36x the best fixed tackle and
    6.46x the best fixed dive, named or swept. Free Kick's floor is 1.35
    against a measured margin near 2x; these sit at 2.5, well under the
    weakest of the three and well over the 1.0 a one input drill shows, so a
