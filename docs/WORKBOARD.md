@@ -19,12 +19,32 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 459.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 464.
   NUMBER COLLISION ON RECORD: the other lane committed d3babc1d on main labelled "Round 447"
   (RulesGate once per route plus report flow hookups on seven pages) while the desktop lane
   held 447 for the NEW badge. Both are shipped and both are fine; the label is the only
-  clash. Read the next free number here before numbering anything. (Rounds 450, 451, 453, 454, 455, 456, 457 and 458 all SHIPPED 2026-09-05; 452
-  was verification only. Their claims below stand as the record of what each one was.)
+  clash. Read the next free number here before numbering anything. (Rounds 450, 451, 453,
+  454, 455, 456, 457 and 458 all SHIPPED 2026-09-05; 452 was verification only. Their claims
+  below stand as the record of what each one was.)
+
+- **Desktop lane, CLAIMED 2026-09-05 night: Rounds 459 to 463.** Five more off the item by
+  item ledger, built in parallel worktrees behind one merge and gate pass.
+  **459 THE SOCCER CONQUEST**, his words: "Then add a soccer conquest covering the top five
+  leagues, fully working", on the Round 457 shared renderer with a Europe region geometry,
+  a symmetric adjacency table and documented club colours, names and colours only.
+  **460 TRANSFER PATH RULE MODES**, his words: "add special rule modes (active players only,
+  Europe only)"; each mode changes the search rule, so the hints are re-derived per mode.
+  **461 REBUILD MULTIPLAYER**, his words: "same screen pass and play, online, or vs CPU, up
+  to 3 or 4 players, and the finished squads sim a season together with records and
+  trophies shown"; pass and play and vs CPU this round on the seat ready engine, online
+  named for later.
+  **462 CLUB MANAGER'S ERA CHAMPIONS LEAGUE**, his item 4 completed: a round of 16 between
+  the eight groups and the quarter finals, the group tables staying on the Cups tab through
+  the knockouts, and head to head tiebreaks for Spain and Italy on a per pair results
+  ledger.
+  **463 MORE PUZZLES**, his words for Who Am I, Missing XI and Rarity Round: "more puzzles",
+  "many more puzzles", "keep the puzzles coming", plus the Who Am I accuracy meter; every
+  lineup two source verified, nothing invented. 452
 
 - **Desktop lane, CLAIMED 2026-09-05: Round 458, the Player Stock Market in the format he
   described.** His words: "redesign on the format of the referenced video: start seasons
