@@ -531,6 +531,13 @@ console.log('\n5. THE SEASON TRACKS THE SQUADS');
       const seat = t.seats.find(s => s.index === boot.seat);
       if (!seat || !seat.run.reckoning.xi.some(p => p && p.name === boot.winner)) trophiesOff += 1;
     }
+    /* Rebuild of the year goes to a seat that climbed, and only when one did. */
+    const climb = season.trophies.find(x => x.title === 'Rebuild of the year');
+    const bestRise = Math.max(...t.seats.map(s => loop.ratingOf(s.run) - s.run.startRating));
+    if (climb) {
+      const seat = t.seats.find(s => s.index === climb.seat);
+      if (!seat || loop.ratingOf(seat.run) - seat.run.startRating !== bestRise || bestRise <= 0) trophiesOff += 1;
+    } else if (bestRise > 0) trophiesOff += 1;
     for (const x of season.trophies) if (CONDUCT.test(x.winner) || CONDUCT.test(x.detail) || CONDUCT.test(x.title)) conduct += 1;
     if (CONDUCT.test(season.thriller)) conduct += 1;
   }

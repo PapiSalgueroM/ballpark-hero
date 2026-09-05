@@ -1060,8 +1060,11 @@ export function simulateSharedSeason(teams: SharedSeasonTeam[], fillerClubs: Reb
   }
   const wall = [...rows].sort((a, b) => a.ga - b.ga || b.pts - a.pts)[0];
   trophies.push({ emoji: '\u{1F9F1}', title: 'Best defence', seat: wall.seat ?? null, winner: nameOf(wall), detail: `${wall.ga} conceded` });
+  /* Only handed out when somebody actually climbed: a table where every
+     window made things worse has no rebuild of the year, and saying "80 to
+     79" under a trophy reads as a joke at the player's expense. */
   const climber = [...teams].sort((a, b) => (b.rating - b.startRating) - (a.rating - a.startRating) || b.rating - a.rating)[0];
-  if (climber) {
+  if (climber && climber.rating > climber.startRating) {
     trophies.push({ emoji: '\u{1F4C8}', title: 'Rebuild of the year', seat: climber.seat, winner: `${climber.name}, ${climber.clubName}`, detail: `${climber.startRating} to ${climber.rating} over the window` });
   }
   const thrillerGame = [...games].sort((a, b) => (b.hg + b.ag) - (a.hg + a.ag))[0];
