@@ -420,6 +420,18 @@ export interface SeasonReport {
   injuries: SeasonInjury[];
   transferHeadline: string;
   narrative: string[];
+  /* Round 455, his "more in the season report": the things the sim already
+     knew and never said. None of these draws from the generator, so a
+     squad's season reads exactly as it did before, with more said about it. */
+  record: { wins: number; draws: number; losses: number };
+  /** Longest run of matches without defeat, from the sim's own sequence. */
+  unbeatenRun: number;
+  /** Points behind the top of the table, or 0 as champions. */
+  gapToTop: number;
+  /** Points clear of second place when champions, otherwise 0. */
+  marginAsChampion: number;
+  /** The XI's best player by the sim's own rating, a result and never a claim. */
+  playerOfSeason: { name: string; rating: number } | null;
 }
 
 /** Simple hash of the squad's names into a stable non-negative seed. */
@@ -505,11 +517,15 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   let wins = 0;
   let draws = 0;
   let losses = 0;
+  /* Round 455: the unbeaten run is read off the same rolls, no extra draw. */
+  let unbeatenRun = 0;
+  let currentRun = 0;
   for (let i = 0; i < LEAGUE_MATCHES; i++) {
     const roll = rand();
-    if (roll < winP) { points += 3; wins++; }
-    else if (roll < winP + drawP) { points += 1; draws++; }
-    else { losses++; }
+    if (roll < winP) { points += 3; wins++; currentRun++; }
+    else if (roll < winP + drawP) { points += 1; draws++; currentRun++; }
+    else { losses++; currentRun = 0; }
+    if (currentRun > unbeatenRun) unbeatenRun = currentRun;
   }
 
   // Table position: rank this points total against 19 simulated rivals whose
@@ -594,7 +610,24 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     positionLine,
     `Finished ${ordinal(tablePosition)} with ${points} points (${wins}W ${draws}D ${losses}L).`,
   ];
+  /* Round 455, his "more in the season report". Everything below is read off
+     numbers the sim already produced, so no new draw and no changed season. */
+  const bestRival = rivalPoints.length ? Math.max(...rivalPoints) : 0;
+  const gapToTop = tablePosition === 1 ? 0 : Math.max(0, bestRival - points);
+  const marginAsChampion = tablePosition === 1 ? Math.max(0, points - bestRival) : 0;
+  let playerOfSeason: SeasonReport['playerOfSeason'] = null;
+  playerRatings.forEach((r, i) => {
+    if (!playerOfSeason || r > playerOfSeason.rating) playerOfSeason = { name: players[i].name, rating: Math.round(r) };
+  });
+
+  if (tablePosition === 1) {
+    narrative.push(marginAsChampion > 0 ? `Won it by ${marginAsChampion} point${marginAsChampion === 1 ? '' : 's'}.` : 'Level on points at the top, and it went your way.');
+  } else {
+    narrative.push(`${gapToTop} point${gapToTop === 1 ? '' : 's'} off the top.`);
+  }
+  narrative.push(`Longest unbeaten run: ${unbeatenRun} game${unbeatenRun === 1 ? '' : 's'}.`);
   if (topScorer) narrative.push(`${topScorer.name} top-scored with ${topScorer.goals} goals.`);
+  if (playerOfSeason) narrative.push(`Player of the season: ${playerOfSeason.name} (rating ${playerOfSeason.rating}).`);
   if (trophies.length) narrative.push(`Silverware: ${trophies.join(', ')}.`);
   else narrative.push('No silverware this year. There is always next season.');
   for (const inj of injuries) narrative.push(`Injury: ${inj.name} out for ${inj.weeksOut} weeks.`);
@@ -609,6 +642,11 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     injuries,
     transferHeadline,
     narrative,
+    record: { wins, draws, losses },
+    unbeatenRun,
+    gapToTop,
+    marginAsChampion,
+    playerOfSeason,
   };
 }
 
