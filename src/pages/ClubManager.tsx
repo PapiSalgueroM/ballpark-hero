@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money, confidenceLabel,
+  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
@@ -30,6 +30,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClubForm';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
+import { MetersStrip } from '@/components/club-manager/MetersStrip';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { UclGroupsCard } from '@/components/club-manager/UclGroupsCard';
 import { CupBracketCard } from '@/components/club-manager/CupBracketCard';
@@ -188,7 +189,7 @@ const ClubManager = () => {
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out. Whatever you did not spend comes with you into the summer. The board still writes its own cheque every August and your balance rolls on top of it, up to one more season's worth, so a quiet year can open a window with double the board's money. You cannot bank five quiet seasons into one giant one though: anything past that gets taken back. Leave the club and the balance stays behind, the same as the sponsor deal and the ground you built, because it was always the club's money.</p>
               <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
               <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
-              <p>📉 <span className="font-semibold text-foreground">Watch the board confidence meter.</span> Fall too far below expectations and you're sacked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
+              <p>📉 <span className="font-semibold text-foreground">Two meters sit under the club name on every tab: the board and the fans.</span> Tap either one to swap its words for the number out of 100. The board meter is the sack race itself, nothing prettier: it opens at 60 in your first season and anywhere from 35 to 82 after that depending on how the last one went, a win adds about 4, a defeat takes about 4.5 (more at a giant, more again when the papers have turned on you), the table against what the club expects moves it a little every league week, a cup exit or a promise to the press you broke costs extra, and at zero you are sacked. Safe is 60 and above. Under pressure is 10 to 59. Under 10 it reads One bad week from the sack, and it means it: a single week has been measured taking more than 10 off, because a defeat, the table, a cup exit and a promise to the press broken can all land in the same seven days. Between matches nothing can sack you: a press answer or a handshake with another club can drain the board to its last point, and the next result decides. The fan meter is read off what fans actually feel: this season's results weighted towards the recent ones (the biggest term, worth 34 points either way), your league position against the club's own expectation (2.5 a place, capped at 15), the ticket policy on the Finances desk (fair prices +4, premium -5) and every trophy lifted this season (+8 each, up to 16), all on top of a base of 55. Singing is 65 and above, Grumbling is 40 to 64, Turning is under 40, and Hopeful is what they are before a ball is kicked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
               <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
             </div>
           </HowToPlayPopover>
@@ -839,8 +840,6 @@ const ClubManager = () => {
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
   const c = g.career;
-  const conf = Math.round(c.boardConfidence);
-  const confTone = conf >= 60 ? 'bg-emerald-500' : conf >= 30 ? 'bg-yellow-500' : 'bg-red-500';
   /* Round 202: does a federation want him this season? Recomputed on every
      render because it depends on the record, which moves every week. */
   const nationOffer = nationOfferFor(c);
@@ -904,15 +903,9 @@ const ClubManager = () => {
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
         </div>
-        <div className="max-w-xs mx-auto mt-2">
-          <div className="flex items-center justify-between text-[9px] text-muted-foreground mb-0.5">
-            <span>Board confidence · {confidenceLabel(conf)}</span>
-            <span className="font-bold">{conf}/100</span>
-          </div>
-          <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-            <div className={cn('h-full rounded-full transition-all', confTone)} style={{ width: `${Math.max(3, conf)}%` }} />
-          </div>
-        </div>
+        {/* Round 465: the board and the fans, on every tab, words by default
+            and the number on tap. */}
+        <MetersStrip career={c} />
       </header>
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
