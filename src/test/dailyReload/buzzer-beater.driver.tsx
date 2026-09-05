@@ -5,30 +5,13 @@
  * Daily deals ten shots seeded from the pinned ET day, and each shot is
  * loaded by holding the shoot button and released by letting go.
  *
- * Two things this driver freezes, both of them animation rather than game,
- * for the same reason minefield.driver shortens its reveal timeout:
- *
- *   matchMedia is stubbed to report prefers-reduced-motion. That is a real
- *   supported path, not a fiction: useArcadeFlight settles the shot in the
- *   same tick under reduced motion instead of flying for 780 ms. Ten shots
- *   of real flight would blow vitest's five second budget on its own, and
- *   exercising the reduced motion path here is worth having anyway.
- *
- *   A short setInterval does not schedule, which freezes the strength bar's
- *   sweep. React batches the mouse down and the mouse up into one render so
- *   the sweep should never start, but if it ever did start the released
- *   strength would depend on how long the machine took, and assertion 2
- *   compares two runs byte for byte. Belt and braces on a real flake.
- *
- * Every shot therefore goes at the strength the board opens with, which is
- * deterministic and is nowhere near right for most of the ten, so the run
- * finishes with a low honest score. This driver is here to prove the record
- * survives a refresh and is never paid twice, not to prove the game is
- * winnable: scripts/simBuzzerBeater.mjs does that.
+ * See ./arcadeGlobals for the two globals this freezes and why, both of them
+ * shared with the Free Kick row because both games run on the same engine.
  */
 import './mocks';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
+import { freezeArcadeGlobals } from './arcadeGlobals';
 import { button, click, findButton, mountPage, type MountedPage } from './harness';
 import { ROUNDS_PER_RUN } from '@/lib/buzzerBeater';
 import BuzzerBeater from '@/pages/BuzzerBeater';
@@ -78,35 +61,12 @@ export default defineDriver<Api>({
   restoreStyle: 'initializer',
 
   async mount() {
-    const realMatch = window.matchMedia;
-    const stubMatch = ((query: string) => ({
-      matches: /prefers-reduced-motion/.test(query),
-      media: query,
-      onchange: null,
-      addListener() {},
-      removeListener() {},
-      addEventListener() {},
-      removeEventListener() {},
-      dispatchEvent: () => false,
-    })) as unknown as typeof window.matchMedia;
-    window.matchMedia = stubMatch;
-
-    const realInterval = window.setInterval;
-    const frozen = ((handler: TimerHandler, ms?: number, ...rest: unknown[]) =>
-      (typeof ms === 'number' && ms <= 40 ? 0 : realInterval(handler, ms, ...rest))) as typeof window.setInterval;
-    window.setInterval = frozen;
-
+    const restoreGlobals = freezeArcadeGlobals();
     const m = mountPage(<BuzzerBeater />, '/buzzer-beater');
     await waitFor(() => {
       if (!findButton(m.container, /^Today's ten$/) && !doneCard(m)) throw new Error('buzzer beater has not drawn its intro or its result');
     });
-    return {
-      ...m,
-      restoreGlobals: () => {
-        if (window.matchMedia === stubMatch) window.matchMedia = realMatch;
-        if (window.setInterval === frozen) window.setInterval = realInterval;
-      },
-    };
+    return { ...m, restoreGlobals };
   },
 
   enterDaily,
