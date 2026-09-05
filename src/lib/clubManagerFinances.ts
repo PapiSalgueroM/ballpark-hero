@@ -473,7 +473,7 @@ export type SponsorRep = 'good' | 'bad';
    trust writes to the paper about: bookmakers, lenders, vapes, a crypto
    exchange. */
 export const BAD_SPONSOR_BRANDS = [
-  'Lucky Ninety Bets', 'Fastcash Loans', 'Vapour Lane', 'Redline Crypto Exchange',
+  'Lucky Ninety Bets', 'Fastcash Loans', 'Vapour Lane', 'Redline Coin Exchange',
   'Goldrush Casino', 'Quickfire Wagers', 'Nightowl Energy Drinks', 'Skyhigh Payday',
 ];
 

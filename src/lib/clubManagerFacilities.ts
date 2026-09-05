@@ -6,9 +6,9 @@
  * Four levels, all stored on the save under `facilities`, none typed per
  * club: the day one level comes from the club's tier and its market value
  * (ClubDef.budget is squad value times 0.16, capped 8 to 200), which is the
- * same stature every other money rule in the engine already reads. Tier 4
- * on the floor budget opens on 1 and 2, a tier 1 giant opens on 8 to 10,
- * and the 268 of 330 modern clubs sitting on the 8m floor open on 1 and 2.
+ * same stature every other money rule in the engine already reads. A tier
+ * 4 club on the 8m floor opens on 1 across the board, a tier 1 giant on 8
+ * to 10, and the 268 of 330 modern clubs sitting on that floor open on 1.
  *
  * Every effect is a lift on top of the calibrated game and reaches exactly
  * nothing at level 1, so a club that never opens this desk plays the game
@@ -107,21 +107,24 @@ function eraMoney(state: Pick<CareerState, 'eraId'>): number {
 }
 
 /**
- * Day one levels from stature alone: the tier sets the base (8, 6, 4, 2),
- * the market value nudges it by one either way, the stadium sits one above
- * the base and the dressing room one below. Deterministic, so the harness
- * can say what a club opens on.
+ * Day one levels from stature alone: the tier sets the base (8, 6, 4, 1),
+ * the market value nudges it one up when the squad is worth more than the
+ * tier's norm and one down when the club sits on the 8m floor, and the
+ * stadium sits one above the rest. Tier drives it rather than money alone
+ * because an era giant is valued at a fraction of a modern one (2010 Man
+ * Utd carries a 50m budget against 108m today) and is still a giant.
+ * Deterministic, so the harness can say what a club opens on.
  */
 export function facilityStartLevels(def: Pick<ClubDef, 'tier' | 'budget'>): Record<FacilityId, number> {
-  const tierBase = [8, 6, 4, 2][def.tier - 1] ?? 2;
-  const stature = clamp((def.budget - 8) / 192, 0, 1);
-  const valueAdj = Math.round(stature * 2) - 1;
+  const tierBase = [8, 6, 4, 1][def.tier - 1] ?? 1;
+  const tierNorm = [150, 85, 45, 15][def.tier - 1] ?? 15;
+  const valueAdj = def.budget >= tierNorm ? 1 : def.budget <= 8 ? -1 : 0;
   const base = tierBase + valueAdj;
   return {
     stadium: lvl(base + 1),
     trainingGround: lvl(base),
     medical: lvl(base),
-    dressingRoom: lvl(base - 1),
+    dressingRoom: lvl(base),
   };
 }
 
