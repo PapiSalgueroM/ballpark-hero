@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loader2, Search, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
@@ -201,7 +202,7 @@ export default function SearchAndDiscard() {
                     <span className="block text-lg font-black text-primary">{playerRating(p)}</span>
                     <span className="block text-[11px] font-bold text-foreground leading-tight">{p.name}</span>
                     <span className="block text-[9px] text-muted-foreground mt-0.5">
-                      {p.position} · {p.nationality}
+                      {p.position} · <FlagImg name={p.nationality} size={10} showLabel />
                     </span>
                     <span className="block text-[9px] text-muted-foreground">{p.club} · {p.marketValue}M</span>
                     {!fitsSomewhere && <span className="block text-[9px] text-destructive mt-0.5">No open slot fits</span>}

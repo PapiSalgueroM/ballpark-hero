@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, type ReactNode } from 'react';
 import { useGuessTransferValue } from '@/hooks/useGuessTransferValue';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 import { Minus, Plus } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -121,7 +122,7 @@ const GuessTransferValue = () => {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-6 text-center">
-                <Stat label="Nationality" value={target.nationality} />
+                <Stat label="Nationality" value={<FlagImg name={target.nationality} size={14} showLabel />} />
                 <Stat label="Age" value={String(target.age || '-')} />
                 <Stat label="Matches" value={String(target.matches || 0)} />
                 <Stat label="Goals" value={String(target.goals || 0)} />
@@ -290,7 +291,7 @@ const GuessTransferValue = () => {
   );
 };
 
-const Stat = ({ label, value }: { label: string; value: string }) => (
+const Stat = ({ label, value }: { label: string; value: ReactNode }) => (
   <div className="bg-background/50 border border-border rounded-lg p-2">
     <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</div>
     <div className="text-sm font-semibold text-foreground truncate">{value}</div>

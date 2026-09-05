@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toTitleCase } from '@/lib/smartSearch';
+import { FlagImg } from '@/components/FlagImg';
 
 interface PlayerSuggestion {
   name: string;
@@ -101,7 +102,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
                 }`}
               >
                 <span className="font-medium">{p.name}</span>
-                <span className="text-xs text-muted-foreground truncate ml-2">{p.nationality} · {p.position}</span>
+                <span className="text-xs text-muted-foreground truncate ml-2"><FlagImg name={p.nationality} size={12} showLabel /> · {p.position}</span>
               </li>
             ))}
           </ul>

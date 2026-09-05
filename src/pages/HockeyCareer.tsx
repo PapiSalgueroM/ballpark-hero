@@ -172,7 +172,7 @@ const HockeyCareer = () => {
               statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
               funFact={
                 <>
-                  💡 Did you know? {player!.name} ({player!.country}) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
+                  💡 Did you know? {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
                 </>
               }
               statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}

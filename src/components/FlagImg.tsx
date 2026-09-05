@@ -69,6 +69,15 @@ export const FLAG_CODES: Record<string, string> = {
   "Barbados": "bb", "St. Kitts & Nevis": "kn", "Grenada": "gd",
   "Seychelles": "sc", "Martinique": "mq", "Chad": "td", "Burundi": "bi",
   "Yemen": "ye", "Mauritania": "mr", "Saint-Martin": "mf",
+  /* Round 453: the two nationalities the golf and UFC pools print that had no
+     flag yet. ISO 3166-1 alpha-2 codes, both served by flagcdn (probed
+     2026-09-05, w40 returns 200 for je and kg). */
+  "Jersey": "je", "Kyrgyzstan": "kg",
+  /* Round 453, found by simNationalityFlags: Soccer Career's club table names
+     Al Ain's country "UAE", which had no entry here, so an offer from Al Ain
+     showed the letters where every other club shows a flag. Monaco and
+     Malaysia are the other two club countries in that table with no flag. */
+  "UAE": "ae", "Monaco": "mc", "Malaysia": "my",
 };
 
 /* ─── Round 106: flags that actually appear ───
@@ -117,7 +126,10 @@ function emojiFor(code: string): string {
 
 export function FlagImg({ name, size = 20, showLabel = false }: { name: string; size?: number; showLabel?: boolean }) {
   const code = FLAG_CODES[name];
-  if (!code) return <span className="inline-block align-middle text-xs">{name}</span>;
+  /* Round 453: a nationality with no flag renders as its name alone, never a
+     wrong flag and never a placeholder. When the caller asked for the label
+     it keeps the caller's text size instead of shrinking to text-xs. */
+  if (!code) return <span className={showLabel ? 'inline-block align-middle' : 'inline-block align-middle text-xs'}>{name}</span>;
   const h = Math.round(size * 0.75);
   const inline = INLINE_FLAGS[code];
   const emoji = emojiFor(code);

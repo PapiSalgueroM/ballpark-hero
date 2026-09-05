@@ -56,7 +56,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | World Cup Bracket, keep or repurpose | OWNER DECISION | still listed; he was unsure |
 | How to play popup on first open plus "?" | PART | RulesGate exists on every game; the other lane has an uncommitted change making it once per route (2026-09-05) |
 | Report a bug as a real pipeline | DONE | Round 316 kinds, Round 446 delivery tracking; email proved live |
-| Flags, never abbreviations, everywhere | PART | Round 444 for Career Ladder and Missing XI; a sitewide sweep is open |
+| Flags, never abbreviations, everywhere | DONE | Round 444 for Career Ladder and Missing XI; Round 453 swept the rest: every printed nationality renders through FlagImg with its name beside the flag (17 bare sites plus 2 country lines to 0), simNationalityFlags fences it, and the two long lists (Soccer Career's picker, Club Manager's market filter) sit under their confederation |
 | Polls more engaging | OPEN | |
 | Profile page accurate for every game | OPEN, unverified | |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |

@@ -12,6 +12,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import { fetchSquadPool, playerRating } from '@/lib/squadDeal';
+import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
@@ -202,7 +203,7 @@ export default function GauntletDraft() {
                     <span className="block text-[8px] font-bold uppercase tracking-widest text-muted-foreground">{p.position}</span>
                     <span className="block text-xs font-bold text-foreground leading-tight mt-1">{p.name}</span>
                     <span className="block text-[9px] text-muted-foreground mt-0.5">{p.club}</span>
-                    <span className="block text-[9px] text-muted-foreground">{p.nationality} · {p.marketValue}M</span>
+                    <span className="block text-[9px] text-muted-foreground"><FlagImg name={p.nationality} size={10} showLabel /> · {p.marketValue}M</span>
                   </button>
                 );
               })}

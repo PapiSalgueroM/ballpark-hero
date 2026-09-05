@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, type ReactNode } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
+import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -34,7 +35,7 @@ function norm(s: string): string {
   );
 }
 
-function clueList(g: GolfLegend): string[] {
+function clueList(g: GolfLegend): ReactNode[] {
   const initials = g.name
     .split(/\s+/)
     .map((w) => w[0]?.toUpperCase())
@@ -42,7 +43,7 @@ function clueList(g: GolfLegend): string[] {
     .join('.');
   return [
     `Won majors between ${g.firstWin} and ${g.lastWin}`,
-    `Nationality: ${g.nationality}`,
+    <>Nationality: <FlagImg name={g.nationality} size={14} showLabel /></>,
     `Career majors: ${g.majors}`,
     `Has won: ${g.tournaments.join(', ')}`,
     `Initials: ${initials}.`,
@@ -236,7 +237,7 @@ const GuessTheGolfer = () => {
                 ? <span className="text-2xl font-display font-bold text-primary">{score} pts</span>
                 : <span className="text-sm text-muted-foreground">{golfer.majors} majors, {golfer.firstWin}-{golfer.lastWin}</span>
             }
-            funFact={`${golfer.nationality} · won the ${golfer.tournaments.join(', ')}`}
+            funFact={<><FlagImg name={golfer.nationality} size={14} showLabel /> · won the {golfer.tournaments.join(', ')}</>}
             emojiGrid={phase === 'won' ? `⛳ got it in ${cluesShown} ${cluesShown === 1 ? 'clue' : 'clues'}` : '⛳ stumped today'}
             share={{
               score: phase === 'won' ? `${score} pts in ${cluesShown} clues` : 'stumped',

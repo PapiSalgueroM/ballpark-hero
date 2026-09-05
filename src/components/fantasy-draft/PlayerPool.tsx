@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 import { playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 
@@ -149,7 +150,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
                   {player.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {player.nationality}
+                  <FlagImg name={player.nationality} size={12} showLabel />
                   {typeof player.age === 'number' ? ` • ${player.age}` : ''}
                 </p>
               </div>

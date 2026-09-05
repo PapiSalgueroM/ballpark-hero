@@ -8,6 +8,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FlagImg } from '@/components/FlagImg';
 
 /**
  * First game in the Golf tab (owner 2026-08-05). Stat axis is career MAJOR
@@ -96,7 +97,7 @@ const GolfHigherLower = () => {
                   <span className="text-3xl">⛳</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {player.nationality} · majors {player.firstWin}-{player.lastWin}
+                    <FlagImg name={player.nationality} size={12} showLabel /> · majors {player.firstWin}-{player.lastWin}
                   </span>
 
                   {showingResult ? (
