@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 454.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 455.
 
 ## Active claims, 2026-09-03
 
@@ -42,6 +42,12 @@ How it works:
   full names count." The copy half was done in Round 319 (the full name lead sentence);
   this is the verification half, a real browser play of the route, with a fix if it finds
   anything. DONE 2026-09-05: 14 interactions clean, no findings, nothing to fix.
+
+  **454 SIGN THE PLAYER, THE "IF ZERO" CASE.** Shipped 2026-09-05. Round 441 measured his
+  "if zero then the price goes down" case at 0 of 5280 lots because no rival could decline a
+  lot on value. Each rival now has a plan and may pass on a lot by tier (4, 20 and 50
+  percent); when you sit out, 4.3 percent of lots fall to the decay phase, about one per
+  auction, held in a 2 to 20 percent band with a control that restores the old room.
 
   **453 FLAGS BESIDE EVERY NATIONALITY.** His words: "Flags, never country abbreviations,
   everywhere on the site." Seventeen render sites print a nationality as bare text and Dart
