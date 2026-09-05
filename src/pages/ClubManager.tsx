@@ -13,8 +13,12 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  TICKET_TIERS, groundUpgradeCost, gatePricePerFan, sponsorOffers, nationOfferFor,
+  nationOfferFor,
 } from '@/lib/clubManager';
+import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
+import { booksOf, fanMoodLabel, projectFinances } from '@/lib/clubManagerFinances';
+import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
+import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
 import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
 import { ManagerForm } from '@/components/club-manager/ManagerForm';
@@ -87,7 +91,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -186,8 +190,9 @@ const ClubManager = () => {
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
               <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,600 real players are on the market at their real values, each one wearing his real nationality's flag, and the deep filters go all the way down: position group or exact position, age, price, selling league, nationality (132 real nations, drawn from your world's own market) and four sorts. Stay under budget and keep at least 14 players.</p>
               <p>📝 <span className="font-semibold text-foreground">Every player is on a real deal.</span> Wages sit on a curve, and the board sets a weekly ceiling taken off the squad they handed you on day one. It moves with the club's season after that, up a bit when you beat what they asked for and further for a trophy, back down after a bad one, and it never moves with your own wage bill, so signing big does not talk them into paying for it. Contracts tick down: a man you never sit down with walks for free in the summer, with his sale value already collapsed. The contracts desk on the Squad tab re-signs anyone in his final year, two ways: the full-wage deal, or 12 percent cheaper with a release clause written in at 1.5 times his value that day. The clause is a real exit door. Any club can pay it, it cannot be rejected or blocked, an unanswered one executes itself on deadline day, and the only way to delete it is a full price renewal later. Grow a star past his own clause and the phone will ring.</p>
-              <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts three shirt sponsor offers on the table whenever the club has no deal, and they are three different shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. The offers grow as the club does: stature, the league, Europe and the trophy cabinet all count. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
-              <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage.</span> Every home crowd pays a gate into the transfer kitty: attendance times your ticket prices. The Finances desk sets the policy (fair prices fill the ground for less a head, premium squeezes more from fewer) and expands the ground up to three times, each one growing your crowds from the next home game. The board reads ambition into a bigger ground, and it is all one kitty: gates in, transfers, scouts, the academy and the builders out. Whatever you did not spend comes with you into the summer. The board still writes its own cheque every August and your balance rolls on top of it, up to one more season's worth, so a quiet year can open a window with double the board's money. You cannot bank five quiet seasons into one giant one though: anything past that gets taken back. Leave the club and the balance stays behind, the same as the sponsor deal and the ground you built, because it was always the club's money.</p>
+              <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts four shirt sponsor offers on the table whenever the club has no deal. Three are honest brands in three shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish, each marked local or global. The fourth is a bad brand (a bookmaker, a lender, that sort) paying 1.35 times the safe cheque: the fans lose 6 mood the day you sign and 8 off their target every week it runs, and the board like the money by a point. Every offer takes a push: ask for more and the brand comes up six percent, ask once too often and it walks for the season. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
+              <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage, and the fans have a say.</span> Every home crowd pays the transfer kitty: attendance times the money a head, which is your ticket price plus food and drink at your prices. Fair tickets and cheap food lift the fans' mood, premium anything costs it, and the mood moves your home crowd, 0.9 times when they are furious and 1.1 when they are singing; the board go the other way, a point of confidence for premium tickets and a point off for fair ones. The Finances desk also projects the season's books to the last day: tickets, food, the sponsor and deals in, player wages, staff wages, travel, deals and the builders out. Wages and travel are running costs the board covers, so they never leave the kitty; the wage ceiling on the contracts desk is how the board keeps them honest. It is all one kitty otherwise: gates in, transfers, scouts, the academy and the facilities out. Whatever you did not spend rolls into the summer on top of the board's new cheque, up to one more season's worth. Leave the club and the balance stays behind, the same as the sponsor deal and the facilities, because it was always the club's money.</p>
+              <p>🏗️ <span className="font-semibold text-foreground">Four facilities, level 1 to 10.</span> Stadium, training ground, medical and dressing room, on the Facilities desk. A club opens where its stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Every level is a lift on the game you already play and level 1 does nothing at all: the training ground speeds growth for anyone with room under his ceiling (nobody grows past it), medical writes injuries for fewer weeks (never under one), the dressing room brings unhappy players back toward content between games, and the stadium lifts the food and drink money a head, with the first three levels you buy also growing the crowd. Upgrades come out of the transfer kitty and get dearer every level, so a small club cannot build a level 10 anything in a season.</p>
               <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
               <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
               <p>📉 <span className="font-semibold text-foreground">Two meters sit under the club name on every tab: the board and the fans.</span> Tap either one to swap its words for the number out of 100. The board meter is the sack race itself, nothing prettier: it opens at 60 in your first season and anywhere from 35 to 82 after that depending on how the last one went, a win adds about 4, a defeat takes about 4.5 (more at a giant, more again when the papers have turned on you), the table against what the club expects moves it a little every league week, a cup exit or a promise to the press you broke costs extra, and at zero you are sacked. Safe is 60 and above. Under pressure is 10 to 59. Under 10 it reads One bad week from the sack, and it means it: a single week has been measured taking more than 10 off, because a defeat, the table, a cup exit and a promise to the press broken can all land in the same seven days. Between matches nothing can sack you: a press answer or a handshake with another club can drain the board to its last point, and the next result decides. The fan meter is read off what fans actually feel: this season's results weighted towards the recent ones (the biggest term, worth 34 points either way), your league position against the club's own expectation (2.5 a place, capped at 15), the ticket policy on the Finances desk (fair prices +4, premium -5) and every trophy lifted this season (+8 each, up to 16), all on top of a base of 55. Singing is 65 and above, Grumbling is 40 to 64, Turning is under 40, and Hopeful is what they are before a ball is kicked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
@@ -208,7 +213,8 @@ const ClubManager = () => {
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
-            'Run the money: gate receipts from every home crowd, a ticket policy, three ground expansions, and a shirt sponsor chosen from three real shapes (the biggest cheque, a title bonus, or four locked in seasons).',
+            'Run the money: gate receipts from every home crowd, ticket and food prices the fans and the board react to, a shirt sponsor from three honest shapes or one bad brand that pays more and costs the fans, each one negotiable, and a projection of the season\'s books to the last day.',
+            'Build the club: stadium, training ground, medical and dressing room, each level 1 to 10, paid from the kitty, each one a small real lift on the squad.',
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
@@ -1080,9 +1086,21 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="💰" title="Finances"
-                value={c.finance?.lastGate ? `Gate ${money(c.finance.lastGate)}` : money(c.budget)}
-                sub={c.finance?.seasonGate ? `${money(c.finance.seasonGate)} gate money this season` : 'Tickets, the gate, the ground'}
+                value={(() => {
+                  const r = projectFinances(c).resultProjected;
+                  return `${r < 0 ? '-' : '+'}${money(Math.abs(r))} projected`;
+                })()}
+                sub={`Fans ${fanMoodLabel(booksOf(c).fanMood).toLowerCase()} · prices, sponsor, the books`}
                 onClick={() => setHubPanel('finance')}
+              />
+              <HubTile
+                icon="🏗️" title="Facilities"
+                value={(() => {
+                  const f = facilitiesOf(c);
+                  return `Level ${FACILITY_IDS.map(id => f[id]).join(' · ')}`;
+                })()}
+                sub="Stadium, training, medical, dressing room"
+                onClick={() => setHubPanel('facilities')}
               />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
@@ -1275,123 +1293,22 @@ const ClubManager = () => {
                 </div>
               )}
 
+              {/* Round 171: the finance desk, his CM-8. Round 200: the sponsor.
+                  Round 467: the projection, food prices, the push and the bad
+                  brand, all in FinancesScreen. */}
               {hubPanel === 'finance' && (
-                <div className="space-y-2">
-                  {/* Round 171: the finance desk, his CM-8. */}
-                  <div className="bg-card border border-border rounded-xl p-3">
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💰 The books</div>
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <div>
-                        <div className="text-sm font-bold font-display text-foreground">{money(c.budget)}</div>
-                        <div className="text-[9px] text-muted-foreground">Transfer kitty</div>
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold font-display text-emerald-400">{c.finance?.seasonGate ? money(c.finance.seasonGate) : money(0)}</div>
-                        <div className="text-[9px] text-muted-foreground">Gate money this season</div>
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold font-display text-foreground">{c.finance?.lastGate ? money(c.finance.lastGate) : '-'}</div>
-                        <div className="text-[9px] text-muted-foreground">Last home gate</div>
-                      </div>
-                    </div>
-                    <p className="text-[9px] text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about {gatePricePerFan(c) > 0 ? `£${gatePricePerFan(c)}` : ''} a head at your prices. Scouts and the academy spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
-                  </div>
-
-                  <div className="bg-card border border-border rounded-xl p-3">
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🎟️ Ticket policy</div>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {TICKET_TIERS.map((tt, i) => (
-                        <button
-                          key={tt.label}
-                          onClick={() => g.setTickets(i as 0 | 1 | 2)}
-                          className={cn(
-                            'rounded-lg border p-2 text-left transition-colors',
-                            (c.finance?.ticketTier ?? 1) === i ? 'border-primary bg-primary/10' : 'border-border bg-background/40 hover:border-primary',
-                          )}
-                        >
-                          <div className="text-base">{tt.emoji}</div>
-                          <div className="text-[11px] font-bold text-foreground">{tt.label}</div>
-                          <div className="text-[9px] text-muted-foreground mt-0.5">{tt.blurb}</div>
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-[9px] text-muted-foreground mt-1.5">Cheaper seats pull a bigger, louder crowd for less money a head. Premium squeezes more from fewer. Change it any week.</p>
-                  </div>
-
-                  {/* Round 200: the commercial desk, the last line of his
-                      Club Manager list. Three shapes, not three numbers. */}
-                  <div data-sponsor-desk className="bg-card border border-border rounded-xl p-3">
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🤝 Shirt sponsor</div>
-                    {c.sponsor ? (
-                      <>
-                        <p className="text-xs text-foreground">
-                          <span className="font-bold">{c.sponsor.brand}</span> pay {money(c.sponsor.perSeason)} a season.
-                          {c.sponsor.bonus > 0 && c.sponsor.bonusFor
-                            ? ` Plus ${money(c.sponsor.bonus)} for ${c.sponsor.bonusFor === 'title' ? 'winning the league' : c.sponsor.bonusFor === 'europe' ? 'reaching Europe' : 'a top half finish'}.`
-                            : ' No bonuses, just the cheque.'}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground mt-1">
-                          {c.sponsor.yearsLeft === 1 ? 'Final season of the deal.' : `${c.sponsor.yearsLeft} seasons left.`} Paid so far: <span className="font-bold text-foreground">{money(c.sponsor.paid)}</span>.
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-[10px] text-muted-foreground mb-2">
-                          Three offers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs.
-                        </p>
-                        <div className="space-y-1.5">
-                          {sponsorOffers(c).map(o => (
-                            <div key={o.id} data-sponsor-offer={o.id} className="rounded-lg border border-border bg-background/40 p-2">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-[11px] font-bold text-foreground truncate">{o.brand}</span>
-                                <span className="text-[11px] font-bold text-gold tabular-nums shrink-0">{money(o.perSeason)}/season</span>
-                              </div>
-                              <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">
-                                {o.pitch} {o.years} season{o.years === 1 ? '' : 's'}.
-                                {o.bonus > 0 && o.bonusFor ? ` Bonus ${money(o.bonus)} for ${o.bonusFor === 'title' ? 'the title' : o.bonusFor === 'europe' ? 'Europe' : 'a top half finish'}.` : ''}
-                              </p>
-                              <button
-                                onClick={() => g.takeSponsor(o.id)}
-                                className="mt-1.5 w-full py-1.5 rounded-lg text-[11px] font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-                              >
-                                Sign with {o.brand.split(' ')[0]}
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="bg-card border border-border rounded-xl p-3">
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🏗️ The ground</div>
-                    <p className="text-xs text-foreground mb-1.5">
-                      Expansions bought here: <span className="font-bold">{c.finance?.groundUpgrades ?? 0} of 3</span>.
-                      {c.customClub && c.clubName === c.customClub.name && c.customClub.capacity
-                        ? ` ${c.customClub.stadium} holds ${(c.customClub.capacity + (c.finance?.groundUpgrades ?? 0) * 6000).toLocaleString()} now.`
-                        : ' Each one grows your home crowds about 12 percent, from the very next home game.'}
-                    </p>
-                    {groundUpgradeCost(c) !== null ? (
-                      <button
-                        onClick={g.expandStadium}
-                        disabled={c.budget < (groundUpgradeCost(c) ?? Infinity)}
-                        className={cn(
-                          'w-full py-2 rounded-lg text-xs font-bold transition-colors',
-                          c.budget >= (groundUpgradeCost(c) ?? Infinity)
-                            ? 'bg-primary text-primary-foreground hover:opacity-90'
-                            : 'bg-secondary text-muted-foreground cursor-not-allowed',
-                        )}
-                      >
-                        🏗️ Expand the ground for {money(groundUpgradeCost(c) ?? 0)}
-                      </button>
-                    ) : (
-                      <p className="text-[10px] text-muted-foreground">The ground is as big as this club can build it. The board is very proud of the brochure.</p>
-                    )}
-                    <p className="text-[9px] text-muted-foreground mt-1.5">Paid from the transfer kitty. The board reads ambition into it. Expansions belong to the club: move on and the new job starts at their ground, as it is.</p>
-                  </div>
-                </div>
+                <FinancesScreen
+                  career={c}
+                  onTickets={g.setTickets}
+                  onConcessions={g.setConcessions}
+                  onSponsor={g.takeSponsor}
+                  onPush={g.pushSponsorOffer}
+                />
               )}
 
+              {/* Round 467: the facilities desk. The ground card that lived on
+                  the finance desk is the stadium level here now. */}
+              {hubPanel === 'facilities' && <FacilitiesScreen career={c} onUpgrade={g.buyFacility} />}
               {hubPanel === 'stats' && <StatsScreen career={c} />}
 
               {hubPanel === 'trophies' && (

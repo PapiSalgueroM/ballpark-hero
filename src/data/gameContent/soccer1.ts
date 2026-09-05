@@ -251,6 +251,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: it opens at 60 in your first season, anywhere from 35 to 82 after that depending on how the last one went, and swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
       "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
+      "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
+      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and costs the fans mood every week), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
     ],
     example: [
       "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
@@ -278,6 +280,14 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "When do the transfer windows close?",
         a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens on the first Saturday of the new year and shuts after your third match from there. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
+      },
+      {
+        q: "Do wages come out of my transfer budget?",
+        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers and facility upgrades are the lines that move the kitty.",
+      },
+      {
+        q: "Are the sponsors real companies?",
+        a: "No. Every brand on the desk is invented, the good ones and the bad ones, and a harness checks the whole list against real sponsors, kit makers and bookmakers.",
       },
     ],
   },
