@@ -200,8 +200,12 @@ export function openWindow(t: TableState, data: TableData, clubs: RebuildClub[])
   }
   const market = others.length === 0 ? base : base.filter(p => !otherClubs.has(p.club) && !taken.has(p.name));
   const rivalPool = others.length === 0 ? clubs : clubs.filter(c => !otherClubs.has(c.club));
+  /* A persona sitting at this table is never a seat's bidding war rival:
+     otherwise a man is announced as joining The Shark's club when The
+     Shark's own seat never gets him. */
+  const avoidPersonas = t.seats.filter(s => s.kind === 'cpu').map(s => s.name);
   let run = loop.createRun({
-    club: seat.club, clubs: rivalPool, squad, market, preset: data.preset, seed: seatSeed(seat.club, t.salt),
+    club: seat.club, clubs: rivalPool, squad, market, preset: data.preset, seed: seatSeed(seat.club, t.salt), avoidPersonas,
   });
   if (seat.kind === 'cpu') run = playCpuWindow(run);
   const seats = t.seats.map(s => (s.index === seat.index ? { ...s, run } : s));

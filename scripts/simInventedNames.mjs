@@ -58,6 +58,10 @@ const GENERATORS = [
   { file: 'src/lib/mlbFrontOffice.ts', first: 'FA_FIRST', last: 'FA_LAST', what: 'MLB free agents' },
   { file: 'src/lib/nbaFrontOffice.ts', first: 'FA_FIRST', last: 'FA_LAST', what: 'NBA free agents' },
   { file: 'src/lib/nhlFrontOffice.ts', first: 'FA_FIRST', last: 'FA_LAST', what: 'NHL free agents' },
+  /* Round 456 replaced the six real coaches Rebuild used to rate and joke
+     about with generated managers drawn from these two banks; section 4 found
+     the banks unregistered when the suite ran after Round 464. */
+  { file: 'src/lib/rebuildDeck.ts', first: 'MANAGER_FIRST', last: 'MANAGER_LAST', what: 'Rebuild managers' },
 ];
 
 const bankOf = (src, name) => {

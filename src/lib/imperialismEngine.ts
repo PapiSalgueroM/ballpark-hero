@@ -60,6 +60,8 @@ export interface ImperialismSport {
   roundNoun: string;
   /** "state", "territory", "region". */
   regionNoun: string;
+  /** The short form a standings row prints beside the count ("st" for states, "hex" on the soccer map). Defaults to the noun's first two letters, which is how the NFL board wrote "12 st". */
+  regionShort?: string;
   /** Overall points the home side is spotted. */
   homeEdge: number;
   /** Logistic divisor on the overall gap: 22 makes a 10 point gap about 70/30. */

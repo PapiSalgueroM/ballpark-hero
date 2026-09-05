@@ -412,7 +412,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "The bank starts at 100 and doubles as your final score. Wrong guesses cost 10 each.",
       "Clue prices: nationality 25, current club 35, one former club 30, club initial 20, position 15, age bracket 10, value band 10, career club count 10.",
       "The menu totals 155 against your 100, so buying everything is impossible, and a clue can only be bought while you hold more than its price.",
-      "The secret is one of the top 300 current players by value. Clues with no real data, like a former club for a one club man, show as unavailable rather than invented.",
+      "The secret is one of the top 400 current players by value. Clues with no real data, like a former club for a one club man, show as unavailable rather than invented.",
     ],
     example: [
       "You open with the two cheapest clues. Age bracket says 21 to 24, value band says 80 to 120 million dollars. That is a short list of wonderkids, and you still hold 80.",
@@ -430,7 +430,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
       {
         q: "Who can the secret player be?",
-        a: "One of the top 300 current players by market value, the same pool the Who Am I game uses. New cases never repeat the previous secret, and your best win saves on this device.",
+        a: "One of the top 400 current players by market value, the same pool the Who Am I game uses. New cases never repeat the previous secret, and your best win saves on this device.",
       },
     ],
   },

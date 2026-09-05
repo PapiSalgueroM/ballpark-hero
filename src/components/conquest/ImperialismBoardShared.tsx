@@ -417,7 +417,7 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
                     {i + 1}. {label(tid)}
                   </span>
                   <span className="ml-2 shrink-0 text-muted-foreground">
-                    {counts.get(tid)} {sport.regionNoun.slice(0, 2)} · {recordLabel(records[tid])}
+                    {counts.get(tid)} {sport.regionShort ?? sport.regionNoun.slice(0, 2)} · {recordLabel(records[tid])}
                     {(records[tid]?.streak ?? 0) >= 3 ? ' 🔥' : (records[tid]?.streak ?? 0) <= -3 ? ' 🧊' : ''}
                   </span>
                 </div>

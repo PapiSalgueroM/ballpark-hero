@@ -9,7 +9,7 @@ import { TRANSFER_PATH_PLAYER_SOURCE, type PlayerEntity } from '@/lib/playerSear
 import { RotateCcw, ArrowRight, Lightbulb } from 'lucide-react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { ACTIVE_YEAR, RULE_BLURB, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
+import { ACTIVE_SEASON_LABEL, RULE_BLURB, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
 import { cn } from '@/lib/utils';
 
 
@@ -45,7 +45,7 @@ export function TransferPathBoard() {
   const refusalText = (name: string, reason: TransferPathRefusal | undefined) => {
     const last = chain[chain.length - 1];
     if (reason === 'duplicate') return `${name} is already in the path`;
-    if (reason === 'retired') return `${name} has no ${ACTIVE_YEAR} season, and this rule allows active players only`;
+    if (reason === 'retired') return `Our career records stop before ${ACTIVE_SEASON_LABEL} for ${name}, so Active players only leaves him out`;
     if (reason === 'outside-europe') return `${name} only links to ${last} through a club outside Europe`;
     return `${name} was never at the same club as ${last} in the same season`;
   };
@@ -109,7 +109,7 @@ export function TransferPathBoard() {
                 <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
                 <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
                 <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
-                <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, has a {ACTIVE_YEAR} season. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
+                <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, has a {ACTIVE_SEASON_LABEL} season on our career records; a player whose record here stops earlier is off the board, retired or not. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
                 <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
               </div>
             </HowToPlayPopover>
@@ -138,6 +138,8 @@ export function TransferPathBoard() {
               );
             })}
           </div>
+          {/* The blurb used to live only in the buttons' title attribute, which a phone never shows. */}
+          <p className="text-[10px] text-muted-foreground">{RULE_BLURB[rule]}</p>
           {ruleLocked && (
             <p className="text-[10px] text-muted-foreground">Special rules lock once today's chain has started. Unlimited takes any rule.</p>
           )}

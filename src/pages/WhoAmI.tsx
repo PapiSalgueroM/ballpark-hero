@@ -611,7 +611,7 @@ const WhoAmI = () => {
           title="Who Am I? The Secret Footballer Game"
           description="Guess the secret footballer. You can search any soccer player, big name or obscure, and every guess gets a similarity score from 0 to 100 built on nationality, position, club, age and market value. Score gets higher the closer you are. 100 means you found him."
           howToPlay={[
-            'A secret footballer is picked from around 200 current stars.',
+            'A secret footballer is picked from the top 400 current players by market value.',
             'Type at least two letters and pick any real player, from anywhere in the game, to guess.',
             'Each guess gets a 0 to 100 similarity score plus clue chips for nationality, position, club, age and value.',
             'Arrows show whether the secret player is older or younger, worth more or worth less.',

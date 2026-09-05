@@ -50,12 +50,22 @@ export const RULE_LABEL: Record<TransferPathRule, string> = {
 
 export const RULE_BLURB: Record<TransferPathRule, string> = {
   classic: 'Any teammate counts: same club, same season.',
-  active: 'Every name in the chain must be playing in 2026, the start and the target included.',
+  active: 'Every name in the chain must have a 2025-26 season on our career records, the start and the target included.',
   europe: 'Every club a link goes through must be a European club.',
 };
 
 /** The year a career row must touch for its player to count as active. */
 export const ACTIVE_YEAR = 2026;
+
+/**
+ * The season a player must be on record for, in the form the page prints
+ * ("2025-26"). The words on the page say "on our career records" on purpose:
+ * the career table is a pull, and the review of Round 460 found players who
+ * are plainly still playing (Jan Oblak among them) whose rows stop at
+ * 2024-25, so a refusal must never tell a player that a real footballer has
+ * retired. It says what the records hold, which is the only thing it knows.
+ */
+export const ACTIVE_SEASON_LABEL = `${ACTIVE_YEAR - 1}-${String(ACTIVE_YEAR).slice(-2)}`;
 
 /** "2025-2026" spans 2025 to 2026, "2026" is a calendar season. Anything else spans nothing. */
 export function seasonSpan(season: string): [number, number] | null {

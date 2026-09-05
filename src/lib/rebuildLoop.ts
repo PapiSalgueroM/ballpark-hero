@@ -110,6 +110,8 @@ export interface RunSetup {
   preset: RebuildPreset;
   /** Defaults to the club name's hash, so a club plays out the same run each time. */
   seed?: number;
+  /** Personas seated at the table (Round 461), which never double as this run's war rivals. */
+  avoidPersonas?: string[];
 }
 
 /**
@@ -177,7 +179,7 @@ export function createRun(setup: RunSetup): RunState {
     discounts: 0,
     actions: 0,
     perks: { rescout: 0, discount: 0, noWar: 0 },
-    rivalPlans: planRivals(setup.club, setup.clubs, seed),
+    rivalPlans: planRivals(setup.club, setup.clubs, seed, setup.avoidPersonas ?? []),
     war: null,
     reckoning: null,
   };

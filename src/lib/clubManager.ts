@@ -3495,10 +3495,12 @@ function emptyRow(club: string): TableRow {
  *           head? How every major football competition ranks teams level on
  *           points". Serie A: Wikipedia "Serie A" (the same four steps for
  *           every place since 2005-06) and Goal.com, "How is Serie A title
- *           decided when teams finish level". From 2022-23 a level title, or
- *           a level last safe place (17th), in Italy is a one game play-off
- *           and every other place stays head to head; the play-off is not
- *           simulated, so those places split on the same four steps here.
+ *           decided when teams finish level". From 2022-23 a level title in
+ *           Italy is a one game play-off, and a level last safe place (17th)
+ *           was a one game play-off in 2022-23 only (Spezia v Verona) and a
+ *           two legged tie from 2023-24; every other place stays head to
+ *           head. Neither play-off is simulated, so those places split on
+ *           the same four steps here.
  *  gdGf     England. Overall goal difference, then goals scored, then points
  *           in the matches between the clubs (then away goals in those games
  *           and a play-off, neither simulated). premierleague.com, "Could the

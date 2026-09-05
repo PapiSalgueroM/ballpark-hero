@@ -41,7 +41,7 @@ const SoccerConquest = () => {
               'Le Mans, back in Ligue 1 after sixteen years, start as the longest shot on the map',
               'Six London clubs start shoulder to shoulder on the same six hexes',
               'Cagliari hold Sardinia, an island nobody can march to',
-              'Strasbourg and Elversberg face each other across the Rhine',
+              'Strasbourg and Freiburg face each other across the Rhine',
             ]}
           />
           <GameNav />

@@ -89,6 +89,13 @@ import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
  * holds winners only, 76 rows; league golden boots and World Cup winners:
  * no table). scripts/simRarityPools.mjs counts each nationality and
  * position pool against the view independently on every run.
+ *
+ * The review of that expansion found the same shape one level down: a
+ * season split between two clubs is stored as one row whose club string is
+ * both names joined by " / ", so a man whose only Inter season was such a
+ * loan (Vrsaljko, Cédric Soares) was refused by an eq pool on "Inter Milan".
+ * fetchClubPool now takes the bare string and both loan shapes, for every
+ * club category, old and new.
  */
 
 // ---------------------------------------------------------------------------
@@ -281,7 +288,14 @@ function fetchClubPool(club: string) {
       (from, to) => supabase
         .from('player_market_values')
         .select('player_name, market_value_usd')
-        .eq('club', club)
+        /* A season split between two clubs is one row whose club string is
+           both names joined by " / " (Sime Vrsaljko's 2018-19 is "Atlético de
+           Madrid / Inter Milan"), and a man whose only season at a club was
+           such a loan carried no row with the bare string, so an eq pool
+           refused him, the very defect the Round 463 note rejected Juventus
+           for. The pool takes the bare string and both loan shapes. The "*"
+           is the wildcard the API expects inside an or filter. */
+        .or(`club.eq."${club}",club.like."${club} / *",club.like."* / ${club}"`)
         .order('market_value_usd', { ascending: false })
         .order('player_name', { ascending: true })
         .range(from, to),

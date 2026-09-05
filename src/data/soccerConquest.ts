@@ -13,10 +13,12 @@ import type { ImperialismSport, ImperialismTeam } from '@/lib/imperialismEngine'
  * laid out so that England sits north of France across an empty Channel row,
  * Spain hangs south west of France off the Pyrenees, Germany sits east of
  * France across the Rhine, and Italy south east of France with an empty Alps
- * row under Germany. Ninety six hexes are club home areas, named after the
- * real district or region the ground is in (Trafford, Chamartín, Sinsheim,
- * Rome North), and the rest are connective regions named after the real
- * countryside between them (Cumbria, Auvergne, La Mancha, Thuringia, Umbria).
+ * row under Germany. Ninety six hexes are club home areas, most named after
+ * the real district or region the ground is in (Trafford, Chamartín,
+ * Sinsheim) and, where two clubs share a city, after its halves (Milan
+ * North, Rome South), and the rest are connective regions named after the
+ * real countryside between them (Cumbria, Auvergne, La Mancha, Thuringia,
+ * Umbria).
  * Every connective region opens in the hands of the nearest club of its own
  * country, hex distance, ties to the earlier club in the table, which is the
  * "nearest stadium" seeding the NFL map uses. The geometry and the border
@@ -358,15 +360,19 @@ export interface SoccerClubColours {
  * schemecolor.com, ENC is encycolorpedia.com, SFC is sportsfancovers.com,
  * SFO is sportsfoundation.org, BF is brandfetch.com, CE is crispedge.com,
  * DYW is designyourway.net. The first named is source A, the second source
- * B, and the block is DERIVED from the two lists by one rule, applied by a
- * script rather than a hand: the base is source A's first colour, unless
- * source B's first colour also appears in A's palette (within CIE76 20), in
- * which case that colour is the base, because B lists shirt colours first
- * where A sometimes leads with a crest accent; the secondary is the first
- * colour in either list further than CLASH_DISTANCE from the base. A club
- * marked single has one reference only, and one marked neutral has none
- * worth using: it wears a generated tint that is nobody's colour until a
- * reference is found. Never a guess.
+ * B, and the block was read off the two lists by hand on 2026-09-05 under
+ * one rule: the base is source A's first colour, unless source B's first
+ * colour also appears in A's palette (within CIE76 20), in which case that
+ * colour is the base, because B lists shirt colours first where A sometimes
+ * leads with a crest accent; the secondary is the first colour in either
+ * list further than CLASH_DISTANCE from the base. The review of Round 459
+ * found four clubs where both lists lead with a crest or shorts colour, so
+ * the rule painted Real Madrid, Barcelona and Torino in their crest's gold
+ * and Atlético in their shorts' navy; those four wear the shirt colour from
+ * the same lists instead, because the owner asked for original colours and
+ * a gold Real Madrid is not that. A club marked single has one reference
+ * only, and one marked neutral has none worth using: it wears a generated
+ * tint that is nobody's colour until a reference is found. Never a guess.
  */
 export const SOCCER_CLUB_COLOURS: Record<string, SoccerClubColours> = {
   ARS: { color: '#EF0107', secondaryColor: '#9C824A' }, // FL, TCC
@@ -391,8 +397,8 @@ export const SOCCER_CLUB_COLOURS: Record<string, SoccerClubColours> = {
   TOT: { color: '#132257' }, // FL, TCC
   ALA: { color: '#0232A0', secondaryColor: '#FFFFFF' }, // FL, TCC
   ATH: { color: '#FFFFFF', secondaryColor: '#EE2523' }, // FL, TCC
-  ATM: { color: '#272E61', secondaryColor: '#282A6F' }, // FL, TCC
-  BAR: { color: '#EDBB00', secondaryColor: '#A50044' }, // FL, TCC
+  ATM: { color: '#E8151E', secondaryColor: '#FFFFFF' }, // FL, TCC: the red and white of the shirt, not the shorts' navy
+  BAR: { color: '#A50044', secondaryColor: '#004D98' }, // FL, TCC: the blaugrana, not the crest's gold
   BET: { color: '#0BB363', secondaryColor: '#FFFFFF' }, // FL, TCC
   CEL: { color: '#8AC3EE', secondaryColor: '#D50032' }, // FL, TCC
   DEP: { color: '#000000', neutral: true }, // neutral: the one reference found (TCC) lists crest estimates, purple and gold, for a club that plays in blue and white; no second reference
@@ -404,7 +410,7 @@ export const SOCCER_CLUB_COLOURS: Record<string, SoccerClubColours> = {
   OSA: { color: '#CB2725', secondaryColor: '#2C1A69' }, // FL, TCC
   RAC: { color: '#48BF5F', secondaryColor: '#FFFFFF', single: true }, // LT only
   RAY: { color: '#E53027', secondaryColor: '#C0AE33' }, // FL, LT
-  RMA: { color: '#FEBE10', secondaryColor: '#00529F' }, // FL, TCC
+  RMA: { color: '#FFFFFF', secondaryColor: '#00529F' }, // FL, TCC: the white shirt, not the crest's gold
   RSO: { color: '#FFFFFF', secondaryColor: '#143C8B' }, // FL, TCC
   SEV: { color: '#D70F21', secondaryColor: '#FFFFFF' }, // TCC, BCC
   VAL: { color: '#E23C07', secondaryColor: '#FFE524' }, // FL, TCC
@@ -426,7 +432,7 @@ export const SOCCER_CLUB_COLOURS: Record<string, SoccerClubColours> = {
   PAR: { color: '#F2D13D', secondaryColor: '#FFCF01' }, // FL, INF
   ROM: { color: '#8E1F2F', secondaryColor: '#FBB900' }, // FL, INF
   SAS: { color: '#00843D', secondaryColor: '#1EA451' }, // FL, INF
-  TOR: { color: '#ECAC00', secondaryColor: '#8B2A1F' }, // FL, INF
+  TOR: { color: '#8B2A1F', secondaryColor: '#ECAC00' }, // FL, INF: the granata shirt, not the crest's gold
   UDI: { color: '#7F7F7F', secondaryColor: '#8B7D37' }, // FL, INF
   VEN: { color: '#C46200', secondaryColor: '#436817' }, // BCC, LT
   AUG: { color: '#BA3733', secondaryColor: '#FFFFFF' }, // FL, TCC
@@ -639,7 +645,7 @@ export const SOCCER_CLUBS: SoccerClub[] = CLUB_ROWS.map(([id, name, country, hom
 
 export const SOCCER_CLUB_MAP = new Map(SOCCER_CLUBS.map(c => [c.id, c]));
 
-/** Clubs whose 2026 value rests on fewer than PARTIAL_ROWS rows: strength is the floor, the tile says so. */
+/** Clubs whose 2026 value rests on fewer than PARTIAL_ROWS rows: rated on what is there, and the tile says partial data. */
 export const SOCCER_CONQUEST_PARTIAL: string[] = SOCCER_CLUBS.filter(c => c.partial).map(c => c.id);
 
 /* ------------------------------------------------------------------ */
@@ -689,7 +695,10 @@ const IMP_TEAMS: ImperialismTeam[] = SOCCER_CLUBS.map(c => ({
   name: c.name,
   overall: c.overall,
   group: c.league,
-  sub: `${formatSquadValue(c.valueUsd)} squad${c.partial ? ', partial data' : ''}`,
+  /* The sum covers the players the table values, which for a smaller club is
+     a fragment of the squad (Sevilla had 11 rows in the 2026 pull), so the
+     tile says how many rather than calling the fragment a squad value. */
+  sub: `${formatSquadValue(c.valueUsd)}, ${c.valueRows} player${c.valueRows === 1 ? '' : 's'} valued${c.partial ? ', partial data' : ''}`,
 }));
 
 export const SOCCER_REGULAR_ROUNDS = 10;
@@ -709,6 +718,7 @@ export const SOCCER_IMPERIALISM: ImperialismSport = {
   playoffLabels: ['Quarter-finals', 'Semi-finals', 'Imperial Final'],
   roundNoun: 'Matchday',
   regionNoun: 'region',
+  regionShort: 'hex',
   homeEdge: 2,
   /* 28 rather than the NFL's 22: football is the lower scoring sport and the
      upset is its whole point, so a ten point gap is about 70/30 and the top

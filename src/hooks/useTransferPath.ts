@@ -19,9 +19,11 @@ import {
 export type TransferPathMode = 'daily' | 'unlimited';
 export type { TransferPathRule };
 
-/** Why a name was refused: already in the chain, not playing in 2026 under the
- *  active rule, or linked only through a club outside Europe under the Europe
- *  rule. No reason means the two never shared a club in the same season. */
+/** Why a name was refused: already in the chain, no 2025-26 season on the
+ *  career records under the active rule (which is what the records hold, not
+ *  a claim that the man retired), or linked only through a club outside
+ *  Europe under the Europe rule. No reason means the two never shared a club
+ *  in the same season. */
 export type TransferPathRefusal = 'duplicate' | 'retired' | 'outside-europe';
 
 type TransferAction =

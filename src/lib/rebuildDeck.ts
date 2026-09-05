@@ -70,8 +70,11 @@ const MANAGER_FIRST = [
 const MANAGER_LAST = [
   'Halvorsen', 'Brandvik', 'Kessler', 'Oyelaran', 'Marchetti', 'Lindqvist', 'Petrakis', 'Dvorak',
   'Castellanos', 'Wieczorek', 'Amsel', 'Ferrando', 'Kovalenko', 'Bakker', 'Saether', 'Okonkwo',
-  'Rasmussen', 'Varela', 'Zoric', 'Mendonca',
+  'Rasmussen', 'Tuominen', 'Zoric', 'Mendonca',
 ];
+/* Varela left this bank when simInventedNames found that Bruno plus Varela
+   names a real goalkeeper; every pairing of the two banks must belong to
+   nobody real, and that harness checks the cross product on every run. */
 
 const PROFILE_LINES: Record<Exclude<ManagerProfile, 'none'>, { emoji: string; lines: string[] }> = {
   youth: {
@@ -609,10 +612,24 @@ export const RIVAL_PERSONAS: { name: string; emoji: string }[] = [
   { name: 'The Professor', emoji: '\u{1F393}' },
   { name: 'The Spreadsheet', emoji: '\u{1F4CA}' },
   { name: 'The Agent', emoji: '\u{1F576}️' },
+  /* Two more than the four seats a table can hold, so that with three CPU
+     seats taken there are still two personas free for a seat's bidding
+     wars. Before this, at a table the human's war rivals were drawn from
+     the same four names as the CPU seats, and a man was announced as
+     joining The Shark's club when The Shark's seat never got him. */
+  { name: 'The Scout', emoji: '\u{1F52D}' },
+  { name: 'The Accountant', emoji: '\u{1F9EE}' },
 ];
 
-/** Two rival clubs near the player's pick in the tier list, plus personas. */
-export function planRivals(myClub: RebuildClub, clubs: RebuildClub[], seed: number): RivalPlan[] {
+/**
+ * Two rival clubs near the player's pick in the tier list, plus personas.
+ * `avoidPersonas` names the personas seated at the table (Round 461), which
+ * never double as a seat's war rivals; with fewer than two left the whole
+ * list is used rather than a war with one rival.
+ */
+export function planRivals(myClub: RebuildClub, clubs: RebuildClub[], seed: number, avoidPersonas: string[] = []): RivalPlan[] {
+  const free = RIVAL_PERSONAS.filter(p => !avoidPersonas.includes(p.name));
+  const personas = free.length >= 2 ? free : RIVAL_PERSONAS;
   const others = clubs.filter(c => c.club !== myClub.club);
   const sameTier = others.filter(c => c.tier === myClub.tier);
   const pool = sameTier.length >= 2 ? sameTier : others;
@@ -624,12 +641,12 @@ export function planRivals(myClub: RebuildClub, clubs: RebuildClub[], seed: numb
     salt += 53;
     b = pick(pool, seed, salt);
   }
-  const p1 = pick(RIVAL_PERSONAS, seed, 301);
-  let p2 = pick(RIVAL_PERSONAS, seed, 401);
+  const p1 = pick(personas, seed, 301);
+  let p2 = pick(personas, seed, 401);
   let psalt = 401;
   while (p2.name === p1.name) {
     psalt += 31;
-    p2 = pick(RIVAL_PERSONAS, seed, psalt);
+    p2 = pick(personas, seed, psalt);
   }
   return [
     { ...p1, club: a },

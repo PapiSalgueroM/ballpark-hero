@@ -40,6 +40,13 @@ export const COMPLETION_SLUG_TO_PATH: Record<string, string> = {
   'conquest-mlb-imperialism': '/conquest-mlb',
   'conquest-nba-imperialism': '/conquest-nba',
   'conquest-nhl-imperialism': '/conquest-nhl',
+  /* Round 459 added the soccer map on the shared board, which records under
+     the sport's gameId (src/data/soccerConquest.ts) rather than a quoted
+     literal, so the scanners that read call sites for slugs never saw it and
+     the review of that round found the Round 376 defect back: the daily chip
+     never ticked, Most Played dropped the game and the Daily Legend badge
+     could not be won. simDailyLegend is the fence that catches it. */
+  'conquest-soccer-imperialism': '/soccer-conquest',
   /* Round 305 moved the Quiz Board to /quiz-board and kept its original name
      for the localStorage prefix and the Supabase table, because changing those
      is a migration. The completion slug is the same identifier and stays too,

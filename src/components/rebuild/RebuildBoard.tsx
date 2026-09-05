@@ -114,7 +114,7 @@ export function RebuildBoard() {
     const takenBy = new Map(seats.filter(s => s.club).map(s => [s.club!.club, s]));
 
     return (
-      <div className="mx-auto max-w-2xl px-4 py-8">
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
           {solo || !seat ? 'Pick a club to rebuild' : `${seat.emoji} ${seat.name}, pick your club`}
         </p>
