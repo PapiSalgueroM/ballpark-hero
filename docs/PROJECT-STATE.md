@@ -28,6 +28,64 @@ new game requests, and a stack of P1 bugs he hit live. **The full transcription 
 document below.** The first wave is claimed by lane in `docs/WORKBOARD.md`: bugs first,
 his order within a lane.
 
+### His 2026-08-28 list, item by item (kept current; last reconciled 2026-09-05)
+
+He asked twice: "how much of this have u fixed?" and "remember to do all the things ive asked
+you to do previosuly". This table is the answer, and it is the backlog. DONE means shipped and
+live with a fence; PART means the measurable half shipped and the rest is named; OPEN means
+nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28.md`.
+
+| Item | Status | Where |
+|---|---|---|
+| P1 1, the ticker shows nothing | DONE | Rounds 311, 317, 332, 414; confirmed 318 fixtures, 19 live on 2026-09-03 |
+| P1 2, Club Manager league tables broken mid season (2005/06 Barcelona save) | OPEN, unverified | no round names it; reproduce on an era save first |
+| P1 3, the Cups tab lists Copa del Rey alive but renders the Champions League | OPEN, unverified | Round 310 touched cup opponents; the tab itself is unchecked |
+| P1 4, Champions League group count 4 vs the real 8 | DONE | Round 342, the real 32 club fields per era |
+| P1 5, double footer | DONE | Round 313 |
+| P1 6, boot flash of raw text | DONE, twice | Round 314 dimmed it; he filmed the dim; Round 448 covers it with the mark |
+| P1 7, Who Am I age 0 and value 0 | DONE | Round 443, plus Footle and Career Ladder printing absent numbers |
+| P1 8, Squad Deal La Liga deals Premier League players | DONE | Round 440, three silent causes |
+| P1 9, Build Your XI accepts a keeper at CM and Marcelo at LB | DONE | Round 442; the keeper case is absolute, the full back case follows verified history |
+| P1 10, Sign the Player prices Svilar at 162M | DONE | Round 315 (pricing) and Round 441 (the auction itself could not be finished) |
+| P1 11, the social gram tells a goalkeeper to score | DONE | Round 319 |
+| P1 12, Trade Finder offence only, rosters outdated | PART | Round 416 replenishes the defence; "rosters outdated" is unverified |
+| P1 13, the Billion Dollar Game prices at 890M | DONE | Round 415 |
+| Delete Overrated or Underrated and Tier List | DONE | Round 314 |
+| Leaderboard names, random by default | DONE | Round 318 |
+| Home hero headline too long | DONE | Round 314 |
+| World Cup Bracket, keep or repurpose | OWNER DECISION | still listed; he was unsure |
+| How to play popup on first open plus "?" | PART | RulesGate exists on every game; the other lane has an uncommitted change making it once per route (2026-09-05) |
+| Report a bug as a real pipeline | DONE | Round 316 kinds, Round 446 delivery tracking; email proved live |
+| Flags, never abbreviations, everywhere | PART | Round 444 for Career Ladder and Missing XI; a sitewide sweep is open |
+| Polls more engaging | OPEN | |
+| Profile page accurate for every game | OPEN, unverified | |
+| A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
+| Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
+| More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, one shared engine |
+| More animation across every sim | OPEN | |
+| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | OPEN | Round 436 fixed the summer budget wipe; the arc itself is the largest open item on the site |
+| Soccer Career arc | ONGOING | Round 438 retirement money; the flagship earns the most work |
+| Career Ladder flags | DONE | Round 444 |
+| Who Am I slow load; more puzzles; accuracy meter | PART | Round 443 load (10 requests, 446 KiB); puzzles and meter open |
+| Alphabet Sprint verify end to end; say full names count | OPEN | |
+| Conquest map presentation | OPEN | |
+| NEW Search and Discard | DONE | shipped 2026-08-29 |
+| NEW Sports Bingo | DONE | shipped 2026-08-29 |
+| NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy Draft; not yet one per sport |
+| Rebuild format (starting XI, spin for position) | PART | Round 435 fixed the economy; the format rewrite is open |
+| Player Stock Market format | PART | Round 434 fixed the scoring; the format is open |
+| Stadium Tycoon depth | PART | Round 439 away rules; depth open |
+| Wonderkid merge | OPEN | |
+| Transfer Path special rules | PART | Round 408 |
+| Fantasy Draft scrolling | DONE | Round 326 |
+| Missing XI flags or colours, overlapping bubbles | DONE | Round 444 |
+| Rarity Round explain the goal before the guess | DONE | Round 444 |
+| Since the list: "u call like everything new" | DONE | Round 447 |
+| Since the list: black screen of text on login, Google spinner stuck | DONE | Round 448 |
+| Since the list: Player Bingo transfers outdated (four reports, 2026-08-30 to 2026-09-04) | OPEN, NEXT | the 46 entry verified overlay reached the table in Round 393; widen it with two source verified summer 2026 moves |
+| Since the list: the Google screen says flawuiqbvjobmkfkauhw.supabase.co | OWNER DECISION, MONEY | see Decisions owed |
+| Since the list: Apple sign in | OWNER DECISION, MONEY | see Decisions owed |
+
 ## Owner feedback, 2026-08-26 (the 51 page tweaks document, sent after Round 294 went live)
 
 **This list outranks everything below it. Work it top to bottom, in his order.** The document
@@ -855,6 +913,7 @@ true on the date above; re-measure rather than quoting them.
 
 | | |
 |---|---|
+| **CURRENT HEAD, CHECKED 2026-09-05. THIS SUPERSEDES THE OLD HEAD ROWS BELOW.** | `709d35c1` = **Rounds 441 to 449**, all live at douknowball.com. **441** Sign the Player runs the auction he described: two thirds of auctions could not be finished (a rival start keyed on a flag that never flipped), an uncontested lot sold over its list price, and the end of auction fill put one man in two squads; his 162M Svilar was the pre Round 315 rating curve, already gone, now pinned. **442** Build Your XI stops accepting a goalkeeper outfield (1.58 million player slot decisions, 0 keepers outfield, 0 outfielders in goal, the World XI rule shared through positionFit.ts), the empty search box on USA and South Korea is fixed, and the result screen says something after the AI paragraph. **443** the data sweep he asked for: three games printed numbers the database does not have (Footle kit numbers, Career Ladder assists, Who Am I age and value), 1375 of 1507 pool players have no squad number and now say so; Who Am I boots on 10 requests and 446 KiB. **444** Rarity Round states which way the points run before the first guess, Career Ladder shows a real flag beside every club (116 of 117 club strings), Missing XI bubbles no longer overlap at 320, 390 or 430 wide across every formation (the Round 319 rule had 155 overlapping pairs at 320). **445** Buzzer Beater at /buzzer-beater, ten jump shots on the Free Kick engine lifted into a shared arcade module (Free Kick byte identical after the lift): skilled 5.35x the best fixed release, cap 3012 measured over 800 dates. **446** the report button reaches him and says so (question_reports.emailed, both buttons share one list of kinds; the email leg was proved live and he pasted the proof). **447** the NEW badge means new: 111 of 131 entries carried isNew; every live entry records addedOn from git and the badge is derived for 14 days. **448** the black screen of text after Google sign in is a cover showing the mark on every page (template, prerenderer and build plugin), and the Google spinner resets on open and on return from the back forward cache. **449** World XI no longer prints invented conduct about a real named footballer (400 seeded seasons, 800 lines naming a player, none beside a conduct verb), and Build Your XI shows the same report. Gate on the 441 to 445 batch: 208 of 208 harnesses green in one run, vitest 163 of 163, eight routes played in a browser; each later round gated alone with the build and all eighteen generated site fences green on the merged main. **Two traps this stretch, both written down: a merge can refuse over a file that differs from HEAD only by CRLF (clear it with git show HEAD:path, after checking for real diffs), and the other lane had twelve files of REAL uncommitted work in the main tree (RulesGate once per route plus showReportQuestion hookups, mtime 2026-09-05 02:38) which this lane left alone and did not commit.** Next free number is 450. |
 | **CURRENT HEAD, CHECKED 2026-09-04 LATE. THIS SUPERSEDES THE OLD HEAD ROWS BELOW.** | `236f913e` = **Rounds 434 to 440**, the six broken game economies plus Squad Deal, all live. The Round 424 audit found every game economy on the site unhealthy and 14 of its 15 findings survived adversarial verification; Round 424 fixed one and these fixed the rest. Highlights, all measured: the Player Stock Market rewarded refusing to invest (cheapest XI 95.2, spend it all 13.2) and now rewards return on the whole wallet with every card stat beating a guess; Club Manager kitties survive the summer; Soccer Career stopped freezing the money app while paying 523.91M through retirement; Idle Arena and Stadium Tycoon keep the away rules they print. Gate: tsc zero, 202 of 202 node harnesses green in one run, six routes played in a browser. **A trap worth knowing, it cost a false green: removing a git worktree whose node_modules is a Windows junction DELETES the real node_modules it points at, and `node_modules/.bin/tsc ... && echo zero` then prints success from a missing binary. Unlink the junction with rmdir before removing a worktree, and read the exit code.** Next free number is 441. |
 | HEAD CHECKED 2026-09-04 EVENING, SUPERSEDED | `fed40615` = **Round 433, Free Kick**, live at douknowball.com/free-kick and verified serving from deployment 1313603b. It is the first game on the site a player controls rather than answers, and it is the start of the arcade family the spec calls sections 82 to 88. Under it, all shipped and live the same day: **Round 428** (a finished daily survives a refresh and refuses a replay across fifteen games, plus the midnight ET date pin across 22 files, which the adversarial review caught as a regression the branch itself had introduced), **Round 430** (the Fantasy Draft pool no longer greys itself out: under Bargain Hunt 100 percent of user picks had nothing draftable on the default view), **Round 431** (all four GM sims keep a finished season through a reload), **Round 432** (/mlb-grid and /mlb-connect-4 answer under load: mlb_grid_players is a real table now, burst median 3.2 seconds down to 255 milliseconds), and **Round 429** (Bing and Yandex verification plus explicit AI crawler groups). Gate: exact TypeScript at zero throughout; the full node suite green at 194 harnesses on the Round 428 merge; on the Free Kick merge two reds, both named rather than re-run away, one being simIndexNow correctly demanding the sitemap floor be raised for the new page (done in part three) and one being simNflGridData refusing on the nflfastr statement timeout and passing on its own immediately after. Free Kick was played end to end in a real browser at 430 by 900 before it shipped, ten kicks driven through the keyboard handlers, and its daily was confirmed to survive a refresh. **Round 434 is the next free number.** |
 | HEAD CHECKED 2026-09-04 EARLY, SUPERSEDED | `dde0b313` = **Round 427 part five**, on top of 426 parts three to five, 425 part two and 429 part two, all pushed and published together the same night as the wave before them. What landed: a lost Connections game counts the groups the player found in both modes and all four games, with Baseball's result line and the loss share text fixed (425 part two, fence scripts/simConnectionsLoss.mjs over the real hooks, 8 of 8, control pad fires); a reload on the CFB recap screen draws the recap again instead of re-arming the final week and double counting the season, older saves open on the recruiting trail, and a closed season cannot be played twice (426 part three, src/components/cfb-dynasty/CfbDynastyBoard.test.tsx 3 of 3); the CBB refill tops up missing positions like CFB (426 part four); scripts/simCfbDynasty.mjs fences both college engines over 20 seeds and 8 seasons plus the board test, replacing the orphaned scripts/cfbDynastyTest.ts (426 part five, controls drain and replay: 76 empty Heisman races and 16,421 holes on the old refill); the Round 427 notes corrected and simStockCampaign section 6 walking 365 dates through the real daily seed path (427 part five, control signed: 161 negative seeds and 128 broken dates on the old code, 0 and 0 now); and Yandex verification moved to the meta tag because the host injects its badge into every HTML response (429 part two). Gate on this head: exact TypeScript at zero, the full node suite run on the code (190 harnesses: 188 green, and the two reds were the runner reporting the new three line Connections wrapper as EMPTY, fixed in 429 part three, and simLeaderboardCaps finding Name Them All with scores and no allowlist row, a live table gap repaired in the same part; both green under the runner afterwards, and a full re-run of the suite on the pushed head came back 190 of 190 green), the seventeen generated site fences green on the rebuilt head, every new harness with a negative control that fires. **Round 428, the twelve dailies that reset on refresh, is claimed and next**: the plan is on the board; the parallel build workflow for it died on the account's session limit (resets 2:50am ET on 2026-09-04) and it is being built by hand in the meantime. |
@@ -2324,6 +2383,18 @@ exactly: 118 registry paths, minus the retired `/deal-or-no-deal` redirect, plus
 six static pages, is the 124 entries in the file.*
 
 ### Decisions owed by Anthony
+
+**Two money decisions, 2026-09-05, both from his login screenshots. Neither is code.**
+
+1. **"to continue to flawuiqbvjobmkfkauhw.supabase.co" on the Google sign in screen.** Google
+   prints the domain the sign in returns to, and with Supabase auth that is the project
+   domain. The documented fix is a Supabase custom domain (an add on, about $10 a month on
+   the Pro plan) so the screen says auth.douknowball.com; setting the app name and logo on
+   the Google Cloud OAuth consent screen (free) improves the header but does not change that
+   line. His call: pay for the custom domain, or leave it.
+2. **Apple sign in.** The code path already exists and is switched off
+   (`src/lib/authProviders.ts`, `apple: false`). Turning it on needs a paid Apple Developer
+   account ($99 a year), a Services ID and a key configured in Supabase. His call.
 
 This is the registry `CLAUDE.md` points at. **These are the only things you may ask him about
 besides money. Everything else, decide yourself.** When one is resolved, delete it from here.

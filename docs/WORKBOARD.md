@@ -19,9 +19,34 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 446.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 450.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, Rounds 446 to 449, claimed and SHIPPED 2026-09-04 and 2026-09-05.** Four
+  rounds built directly off his messages during the 441 to 445 batch, each one a thing he
+  had just said.
+
+  **446 THE REPORT BUTTON REACHES HIM, AND SAYS SO.** His words: "where do those issues go
+  and how can i read them". Both report buttons now share one list of kinds (Wrong answer,
+  Wrong info, Bug, Idea, Other, plus Duplicate question on the per question one), and every
+  report records whether the relay got a confirmed email delivery (question_reports.emailed,
+  printed on /admin/reports). Measured live: the email leg works, he pasted the proof.
+
+  **447 THE NEW BADGE MEANS NEW.** His words: "u call like everything new". 111 of 131
+  entries carried isNew: true. The flag is gone; every live entry records addedOn, the day
+  its page first landed in git, and the badge is derived for 14 days. Seven tiles today.
+
+  **448 THE BLACK SCREEN OF TEXT AFTER GOOGLE SIGN IN, AND THE SPINNER.** His words with
+  two screenshots. The Round 314 dim was still a wall of text; every page now boots on a
+  cover showing the mark, written by the template, the prerenderer and the build plugin,
+  and the auth modal clears its spinners on open and on return from the back forward cache.
+
+  **449 NO INVENTED CONDUCT ABOUT A REAL PLAYER.** Found by the Round 442 builder: World
+  XI printed lines like "{name} handed in a transfer request after a bust-up with the board"
+  about a real, named footballer drawn from the XI. The lines are about the club and the
+  window now and the player is only ever his role; Build Your XI shows the same report;
+  scripts/simNoInventedConduct.mjs runs the real engine over 400 seasons and holds it.
 
 - **Desktop lane, CLAIMED 2026-09-04: Rounds 441 to 445.** Five items straight off his
   2026-08-28 review, weighted to the ones he described precisely and the one thing he has
