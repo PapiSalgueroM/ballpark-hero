@@ -668,6 +668,7 @@ current:**
 
 | File | Status |
 |---|---|
+| `docs/HANDOFF-2026-09-05.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the desktop lane left the build on the night of 2026-09-05: what is live, the in flight batch (Rounds 459 to 463 on `owner-list-459-463`) and how to land it, the next batch scripted in `docs/workflows/`, every trap hit that night with its fix, and the decisions owed. Read it right after this file. |
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |
 | `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. Since 2026-09-05 it also carries **his 2026-08-28 list item by item** (under the 2026-08-28 owner feedback section): every item he asked for with DONE, PART, OPEN or OWNER DECISION and the round behind it. That table is the backlog; pick the next round from it and move the row when you ship. |
 | `docs/LEGAL_REVIEW.md` | **LIVE.** Still governs what assets may appear on the site. |
