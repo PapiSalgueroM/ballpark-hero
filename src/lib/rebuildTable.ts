@@ -43,6 +43,10 @@ export interface Seat {
   run: RunState | null;
 }
 
+/** A seat as the page sees it: everything but the run, so no screen can
+ *  reach another seat's board by accident. The hook hands the board these. */
+export type SeatView = Omit<Seat, 'run'>;
+
 export type TablePhase = 'clubs' | 'handover' | 'window' | 'season';
 
 export interface TableState {
@@ -145,6 +149,11 @@ export function activeSeat(t: TableState): Seat | null {
   return t.seats[t.turn] ?? null;
 }
 
+/** Every seat without its run: what the page is allowed to hold. */
+export function seatViewsOf(t: TableState): SeatView[] {
+  return t.seats.map(s => ({ index: s.index, kind: s.kind, name: s.name, emoji: s.emoji, club: s.club }));
+}
+
 /** The run on the board right now: only while a window is open, never during a hand over. */
 export function activeRun(t: TableState): RunState | null {
   return t.phase === 'window' ? (t.seats[t.turn]?.run ?? null) : null;
@@ -162,10 +171,12 @@ export function playCpuWindow(run: RunState): RunState {
 
 /**
  * Opens the window of the seat in the chair. Its market is the single player
- * market for its club with every other seat's squad and every earlier seat's
- * signings cut out by name, so no two seats can end the window holding the
- * same man. Its persona rivals never rebuild a club somebody at the table
- * holds. A CPU seat plays its window here and now.
+ * market for its club with every other seat's squad cut out, and every man an
+ * earlier seat holds at the whistle, signed, or lost to a rival cut out by
+ * name, so no two seats can end the window holding the same man and a man who
+ * left for a rival's club does not turn up on the next seat's list. Its
+ * persona rivals never rebuild a club somebody at the table holds. A CPU seat
+ * plays its window here and now.
  */
 export function openWindow(t: TableState, data: TableData, clubs: RebuildClub[]): TableState {
   if (t.phase !== 'handover') return t;
@@ -181,6 +192,11 @@ export function openWindow(t: TableState, data: TableData, clubs: RebuildClub[])
     if (o.club) otherClubs.add(o.club.club);
     for (const p of data.squads.get(o.club?.club ?? '') ?? []) taken.add(p.name);
     for (const p of o.run?.signed ?? []) taken.add(p.name);
+    for (const n of Object.keys(o.run?.lost ?? {})) taken.add(n);
+    /* The reckoning's forced sales swap in the cheapest market fit, who is
+       never in `signed`; without this line two seats in debt end the window
+       holding the same cheap man (7 of 240 tables, measured by the harness). */
+    for (const p of o.run?.reckoning?.xi ?? []) if (p) taken.add(p.name);
   }
   const market = others.length === 0 ? base : base.filter(p => !otherClubs.has(p.club) && !taken.has(p.name));
   const rivalPool = others.length === 0 ? clubs : clubs.filter(c => !otherClubs.has(c.club));

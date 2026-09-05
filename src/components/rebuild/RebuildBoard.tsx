@@ -223,13 +223,12 @@ export function RebuildBoard() {
     );
   }
 
-  if (!seat) return null;
-
   // ---- The hand over (Round 461) ----
   // One seat: the squad is still coming down, same loading card as always.
   // More seats: the phone changes hands here. Nothing of the last window is
   // on this screen, only the numbers each shut window closed on.
   if (phase === 'handover') {
+    if (!seat) return null;
     if (solo) {
       return (
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
@@ -238,11 +237,12 @@ export function RebuildBoard() {
         </div>
       );
     }
+    const first = scoreboard.length === 0;
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <div className="rounded-2xl border border-primary/40 bg-card p-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {seat.kind === 'cpu' ? 'A CPU window' : 'Pass the phone'}
+            {seat.kind === 'cpu' ? 'A CPU window' : first ? 'First up' : 'Pass the phone'}
           </p>
           <div className="mt-2 text-5xl">{seat.emoji}</div>
           <p className="mt-2 font-display text-2xl font-black text-foreground">{seat.name}</p>
@@ -254,7 +254,9 @@ export function RebuildBoard() {
           ) : (
             <>
               <p className="mt-3 text-sm text-muted-foreground">
-                Everyone else, eyes off the screen. The last window is shut and none of it is showing.
+                {first
+                  ? 'Everyone else, eyes off the screen while this window is open.'
+                  : 'Everyone else, eyes off the screen. The last window is shut and none of it is showing.'}
               </p>
               <button
                 onClick={takeSeat}
@@ -374,7 +376,7 @@ export function RebuildBoard() {
     );
   }
 
-  if (!club || !run) return null;
+  if (!seat || !club || !run) return null;
 
   const seatTag = !solo ? (
     <p className="text-center text-[10px] font-semibold uppercase tracking-wider text-primary">

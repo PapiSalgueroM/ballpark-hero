@@ -12,7 +12,7 @@ import {
 import * as loop from '@/lib/rebuildLoop';
 import type { RunState, ObjectiveView } from '@/lib/rebuildLoop';
 import * as table from '@/lib/rebuildTable';
-import type { TableState, TableData, Seat, SeatKind } from '@/lib/rebuildTable';
+import type { TableState, TableData, SeatView, SeatKind } from '@/lib/rebuildTable';
 
 /**
  * Round 456: the hook is a thin wrapper now. Every rule lives in
@@ -52,10 +52,11 @@ export interface RebuildState {
   reset: () => void;
   /** The whole run as plain data, null until a window is open. */
   run: RunState | null;
-  // the table (Round 461)
-  seats: Seat[];
+  // the table (Round 461). Seats come without their runs: the board holds no
+  // way to reach another seat's window, so a hand over cannot show one.
+  seats: SeatView[];
   /** The seat in the chair: picking, about to open, open, or just shut. */
-  seat: Seat | null;
+  seat: SeatView | null;
   solo: boolean;
   setSeatKinds: (kinds: SeatKind[]) => void;
   /** The human in the chair opens their window from the hand over screen. */
@@ -138,7 +139,8 @@ export function useRebuild(): RebuildState {
   }, []);
 
   const run = table.activeRun(tbl);
-  const seat = table.activeSeat(tbl);
+  const seats = useMemo(() => table.seatViewsOf(tbl), [tbl]);
+  const seat = seats[tbl.turn] ?? null;
   const solo = tbl.seats.length === 1;
   const phase: Phase = tbl.phase === 'clubs' ? 'pick-club'
     : tbl.phase === 'handover' ? 'handover'
@@ -374,7 +376,7 @@ export function useRebuild(): RebuildState {
   return {
     phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
-    seats: tbl.seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
+    seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
