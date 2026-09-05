@@ -4,6 +4,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, type PerkKind, type ManagerProfile } from '@/lib/rebuildDeck';
+import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -41,10 +42,13 @@ function potLine(delta: number): string {
   return 'No change to the pot';
 }
 
+const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
+
 export function RebuildBoard() {
   const {
     phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
     run,
+    seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager, setFormation,
@@ -54,8 +58,9 @@ export function RebuildBoard() {
   } = useRebuild();
   // Round 61: the owner's no scroll rule. Every phase change (envelopes, spin,
   // results) pulls the new screen into view instead of leaving the player
-  // looking at the old one.
-  const revealRef = useRevealScroll<HTMLDivElement>(phase);
+  // looking at the old one. Round 461: a hand over is a phase change too, and
+  // so is the next seat's window, so the key carries the seat.
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}|${seat?.index ?? 0}`);
   const [copied, setCopied] = useState(false);
 
   // Round 333: while the wheel spins, the highlight cycles the unresolved
@@ -90,21 +95,80 @@ export function RebuildBoard() {
   }
 
   // ---- Club picker ----
-  if (phase === 'pick-club' || !run) {
+  if (phase === 'pick-club') {
     const byTier: Record<string, typeof clubs> = {};
     for (const c of clubs) (byTier[c.tier] ??= []).push(c);
     const order: ClubTier[] = ['elite', 'strong', 'mid', 'modest'];
+    // Round 461: who is at the table, settled before the first pick and locked by it.
+    const kinds: SeatKind[] = seats.map(s => s.kind);
+    const seatsLocked = seats.some(s => s.club);
+    const setCount = (n: number) => {
+      const next = kinds.slice(0, n);
+      while (next.length < n) next.push('human');
+      setSeatKinds(next);
+    };
+    const toggleSeat = (i: number) => {
+      if (i === 0) return;
+      setSeatKinds(kinds.map((k, j) => (j === i ? (k === 'cpu' ? 'human' : 'cpu') : k)));
+    };
+    const takenBy = new Map(seats.filter(s => s.club).map(s => [s.club!.club, s]));
 
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
-          Pick a club to rebuild
+          {solo || !seat ? 'Pick a club to rebuild' : `${seat.emoji} ${seat.name}, pick your club`}
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
           Bigger clubs hand you a bigger pot. Two envelopes land first, then you spin for one
           shirt at a time: keep the man you draw or sell him for good, and answer to the board
           at the end.
         </p>
+
+        <div className="mt-4 rounded-xl border border-border bg-card p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Who's playing{seatsLocked ? ', locked' : ', up to four on one phone'}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {SEAT_COUNTS.map(n => (
+              <button
+                key={n}
+                onClick={() => setCount(n)}
+                disabled={seatsLocked}
+                className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors disabled:opacity-60 ${
+                  seats.length === n ? 'border-primary bg-primary/10 text-foreground' : 'border-border text-muted-foreground hover:border-primary/40'
+                }`}
+              >
+                {n === 1 ? 'Just me' : `${n} players`}
+              </button>
+            ))}
+          </div>
+          {!solo && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {seats.map((s, i) => (
+                <button
+                  key={s.index}
+                  onClick={() => toggleSeat(i)}
+                  disabled={i === 0 || seatsLocked}
+                  aria-label={i === 0 ? `${s.name}, you` : `${s.name}, ${s.kind === 'cpu' ? 'CPU' : 'human'}, tap to switch`}
+                  className={`rounded-lg border px-2 py-1.5 text-left text-xs transition-colors disabled:opacity-70 ${
+                    s.kind === 'cpu' ? 'border-gold/40 bg-gold/5' : 'border-border bg-background'
+                  }`}
+                >
+                  <span className="block font-bold text-foreground">{s.emoji} {s.name}</span>
+                  <span className="block text-[10px] text-muted-foreground">
+                    {i === 0 ? 'You, on this phone' : s.kind === 'cpu' ? 'CPU, tap for a human' : 'Human, tap for the CPU'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {!solo && (
+            <p className="mt-2 text-[10px] text-muted-foreground">
+              Pass and play: each of you picks a club, then the windows run one at a time on this
+              phone. When every window shuts, the finished XIs play one season together.
+            </p>
+          )}
+        </div>
 
         <div className="mt-4 rounded-xl border border-border bg-card p-3">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -133,18 +197,22 @@ export function RebuildBoard() {
                 {TIER_LABEL[tier]} · €{TIER_BUDGET[tier]}M pot
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {byTier[tier].map(c => (
-                  <button
-                    key={c.club}
-                    onClick={() => chooseClub(c)}
-                    className="rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50"
-                  >
-                    <p className="truncate text-sm font-bold text-foreground">{c.club}</p>
-                    <p className="text-[11px] text-muted-foreground">
-                      {c.squadSize} players · €{c.squadValueM}M
-                    </p>
-                  </button>
-                ))}
+                {byTier[tier].map(c => {
+                  const taker = takenBy.get(c.club);
+                  return (
+                    <button
+                      key={c.club}
+                      onClick={() => chooseClub(c)}
+                      disabled={!!taker}
+                      className="rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50 disabled:opacity-50"
+                    >
+                      <p className="truncate text-sm font-bold text-foreground">{c.club}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {taker ? `${taker.emoji} ${taker.name} has it` : `${c.squadSize} players · €${c.squadValueM}M`}
+                      </p>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : null
@@ -155,16 +223,164 @@ export function RebuildBoard() {
     );
   }
 
-  if (!club) return null;
+  if (!seat) return null;
 
-  if (loading) {
+  // ---- The hand over (Round 461) ----
+  // One seat: the squad is still coming down, same loading card as always.
+  // More seats: the phone changes hands here. Nothing of the last window is
+  // on this screen, only the numbers each shut window closed on.
+  if (phase === 'handover') {
+    if (solo) {
+      return (
+        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+          <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
+          <p className="mt-4 text-sm text-muted-foreground">Loading {seat.club?.club ?? 'the'}'s squad…</p>
+        </div>
+      );
+    }
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-        <p className="mt-4 text-sm text-muted-foreground">Loading {club.club}'s squad…</p>
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+        <div className="rounded-2xl border border-primary/40 bg-card p-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {seat.kind === 'cpu' ? 'A CPU window' : 'Pass the phone'}
+          </p>
+          <div className="mt-2 text-5xl">{seat.emoji}</div>
+          <p className="mt-2 font-display text-2xl font-black text-foreground">{seat.name}</p>
+          <p className="text-sm text-muted-foreground">{seat.club?.club ?? 'No club yet'}</p>
+          {seat.kind === 'cpu' ? (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {loading ? 'Loading the squads…' : `${seat.name} is doing the whole window right now.`}
+            </p>
+          ) : (
+            <>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Everyone else, eyes off the screen. The last window is shut and none of it is showing.
+              </p>
+              <button
+                onClick={takeSeat}
+                disabled={loading}
+                className="mt-4 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+              >
+                {loading ? 'Loading the squads…' : `I'm ${seat.name}, open my window`}
+              </button>
+            </>
+          )}
+          {scoreboard.length > 0 && (
+            <div className="mt-5 rounded-xl border border-border bg-background p-3 text-left">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Windows shut so far</p>
+              {scoreboard.map(s => (
+                <p key={s.index} className="mt-1 flex items-center justify-between text-xs text-foreground">
+                  <span className="truncate">{s.emoji} {s.name} · {s.club}</span>
+                  <span className={`ml-2 shrink-0 font-bold ${s.after >= s.target ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                    {s.before} → {s.after}
+                  </span>
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+        <GameNav currentPath="/rebuild" />
       </div>
     );
   }
+
+  // ---- The shared season (Round 461): every seat's finished XI in one league ----
+  if (phase === 'season') {
+    if (!sharedSeason) return null;
+    const seatRows = seats.filter(s => s.club);
+    return (
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+        <div className="rounded-2xl border border-border bg-card p-4">
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">📅 The season, simulated</p>
+          <p className="mt-1 text-center text-sm text-muted-foreground">
+            Every finished XI in one league, {sharedSeason.gamesEach} games each, home and away.
+            The results are a sim of the squads you built and nothing more.
+          </p>
+
+          <div className="mt-3 overflow-hidden rounded-lg border border-border">
+            <div className="grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 bg-background px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground">
+              <span>#</span><span>Club</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>Pts</span>
+            </div>
+            {sharedSeason.table.map((r, i) => (
+              <div
+                key={`${r.name}|${r.clubName}`}
+                className={`grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
+                  r.seat !== undefined ? 'bg-primary/10 font-bold text-foreground' : 'text-muted-foreground'
+                }`}
+              >
+                <span>{i + 1}</span>
+                <span className="truncate">{r.emoji} {r.seat !== undefined ? `${r.name} · ${r.clubName}` : r.clubName}</span>
+                <span>{r.w}</span><span>{r.d}</span><span>{r.l}</span>
+                <span>{r.gf - r.ga > 0 ? '+' : ''}{r.gf - r.ga}</span>
+                <span>{r.pts}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 rounded-xl border border-gold/40 bg-gold/5 p-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">The trophies</p>
+            {sharedSeason.trophies.map(t => (
+              <p key={t.title} className="mt-1 text-xs text-foreground">
+                {t.emoji} <span className="font-bold">{t.title}:</span> {t.winner}
+                <span className="text-muted-foreground"> ({t.detail})</span>
+              </p>
+            ))}
+          </div>
+
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {seatRows.map((s, k) => {
+              const rec = sharedSeason.records.find(r => r.seat === s.index);
+              const pos = sharedSeason.positions[k];
+              return (
+                <div key={s.index} className="rounded-xl border border-border bg-background p-3">
+                  <p className="flex items-center justify-between text-sm font-bold text-foreground">
+                    <span className="truncate">{s.emoji} {s.name} · {s.club?.club}</span>
+                    <span className="ml-2 shrink-0 text-primary">#{pos}</span>
+                  </p>
+                  {rec && (
+                    <div className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">
+                      <p>🔥 Biggest win: <span className="text-foreground">{rec.biggestWin ?? 'none all season'}</span></p>
+                      <p>🛡️ Longest unbeaten: <span className="text-foreground">{rec.longestUnbeaten} {rec.longestUnbeaten === 1 ? 'game' : 'games'}</span></p>
+                      <p>⚽ Top scorer: <span className="text-foreground">{rec.topScorer ? `${rec.topScorer.player}, ${rec.topScorer.goals} goals` : 'nobody scored'}</span></p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {sharedSeason.thriller && (
+            <p className="mt-3 text-center text-xs text-muted-foreground">🎢 Game of the season: {sharedSeason.thriller}</p>
+          )}
+
+          <div className="mt-5 flex justify-center gap-2">
+            <button
+              onClick={copyShare}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            >
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? 'Copied!' : 'Share the season'}
+            </button>
+            <button
+              onClick={reset}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground"
+            >
+              <RotateCcw className="h-4 w-4" /> New game
+            </button>
+          </div>
+        </div>
+        <GameNav currentPath="/rebuild" />
+      </div>
+    );
+  }
+
+  if (!club || !run) return null;
+
+  const seatTag = !solo ? (
+    <p className="text-center text-[10px] font-semibold uppercase tracking-wider text-primary">
+      {seat.emoji} {seat.name} · {club.club}
+    </p>
+  ) : null;
 
   // ---- The two envelopes (Round 456) ----
   if (phase === 'envelopes') {
@@ -172,6 +388,7 @@ export function RebuildBoard() {
     const card = run.financeCard;
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+        {seatTag}
         <p className="text-center font-display text-xl font-bold text-foreground">
           Two envelopes on the desk
         </p>
@@ -255,6 +472,7 @@ export function RebuildBoard() {
   if (phase === 'manager') {
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+        {seatTag}
         <p className="text-center font-display text-xl font-bold text-foreground">
           Pick your manager
         </p>
@@ -312,6 +530,71 @@ export function RebuildBoard() {
   if (phase === 'done') {
     const hit = currentRating >= target;
     const penalties = run.reckoning?.notes ?? [];
+
+    // Round 461: at a fuller table the whistle shuts this seat's window and
+    // the phone moves on. The season waits for the last seat.
+    if (!solo) {
+      const next = seats[seat.index + 1] ?? null;
+      const isCpu = seat.kind === 'cpu';
+      return (
+        <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+          <div className="rounded-2xl border border-border bg-card p-6 text-center">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+              {seat.emoji} {seat.name}{isCpu ? "'s window, played by the CPU" : "'s window is shut"}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">{club.club}</p>
+            <div className="mt-3 flex items-center justify-center gap-4">
+              <div>
+                <p className="text-[11px] text-muted-foreground">Before</p>
+                <p className="font-display text-4xl font-black text-muted-foreground">{startRating}</p>
+              </div>
+              <span className="text-2xl text-muted-foreground">→</span>
+              <div>
+                <p className="text-[11px] text-muted-foreground">After</p>
+                <p className={`font-display text-5xl font-black ${hit ? 'text-emerald-500' : 'text-destructive'}`}>
+                  {currentRating}
+                </p>
+              </div>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
+            <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
+            </p>
+            {(run.sold.length > 0 || run.signed.length > 0) && (
+              <div className="mt-3 rounded-xl border border-border bg-background p-3 text-left text-xs">
+                {run.sold.length > 0 && (
+                  <p className="text-muted-foreground">
+                    <span className="font-semibold text-destructive">Out:</span> {run.sold.map(p => `${p.name} (€${p.marketValue}M)`).join(', ')}
+                  </p>
+                )}
+                {run.signed.length > 0 && (
+                  <p className="mt-1 text-muted-foreground">
+                    <span className="font-semibold text-emerald-500">In:</span> {run.signed.map(p => `${p.name} (€${p.marketValue}M)`).join(', ')}
+                  </p>
+                )}
+              </div>
+            )}
+            {penalties.length > 0 && (
+              <div className="mt-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left">
+                <p className="text-xs font-semibold uppercase tracking-wider text-destructive">What the board did</p>
+                {penalties.map((p, i) => (
+                  <p key={i} className="mt-1 text-xs text-muted-foreground">{p}</p>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={passOn}
+              className="mt-5 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+            >
+              {next ? `Pass to ${next.name}` : 'Kick off the season'}
+            </button>
+          </div>
+          <GameNav currentPath="/rebuild" />
+        </div>
+      );
+    }
+
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <div className="rounded-2xl border border-border bg-card p-6 text-center">
@@ -453,6 +736,9 @@ export function RebuildBoard() {
   return (
     <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-6">
       <div className="rounded-2xl border border-border bg-card p-4">
+        {!solo && (
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-primary">{seat.emoji} {seat.name}'s window</p>
+        )}
         <div className="flex items-center justify-between">
           <div>
             <p className="font-display text-lg font-black text-foreground">{club.club}</p>

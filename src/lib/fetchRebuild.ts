@@ -98,6 +98,13 @@ export async function fetchClubSquad(club: string): Promise<Player[]> {
  * buildMarket so the harness deals from the same market the page does.
  */
 export async function fetchMarket(excludeClub: string): Promise<Player[]> {
+  return marketFromRows(await fetchMarketRows(), excludeClub);
+}
+
+/** Round 461: the raw pool, fetched once, so a table of several clubs can
+ *  cut one market per seat (marketFromRows) without paging the pool again
+ *  for every seat. */
+export async function fetchMarketRows(): Promise<MarketRow[]> {
   try {
     const { data, error } = await fetchAllRows<MarketRow>(
       (from, to) =>
@@ -109,10 +116,14 @@ export async function fetchMarket(excludeClub: string): Promise<Player[]> {
           .order('player_name', { ascending: true })
           .range(from, to),
     );
-
     if (error || !data) return [];
-    return buildMarket(data, excludeClub, (name, club) => getEnrichment(name, club).league);
+    return data;
   } catch {
     return [];
   }
+}
+
+/** The market for one club from rows already fetched: everyone not at that club. */
+export function marketFromRows(rows: MarketRow[], excludeClub: string): Player[] {
+  return buildMarket(rows, excludeClub, (name, club) => getEnrichment(name, club).league);
 }

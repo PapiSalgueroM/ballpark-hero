@@ -108,6 +108,7 @@ const BUNDLE = `${TMP}/rebuildLoop.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 export * as deck from '${deckPath}';
 export * as loop from '${LOOP_SRC}';
+export * as policy from '${ROOT}/src/lib/rebuildPolicy.ts';
 export { FORMATIONS, playerRating, normalizePosition } from '${ROOT}/src/lib/squadDeal.ts';
 export { getEnrichment } from '${ROOT}/src/data/footleEnrichment.ts';
 `);
@@ -121,7 +122,7 @@ try {
 }
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { deck, loop, FORMATIONS, playerRating, normalizePosition, getEnrichment } = await import(pathToFileURL(BUNDLE).href);
+const { deck, loop, policy, FORMATIONS, playerRating, normalizePosition, getEnrichment } = await import(pathToFileURL(BUNDLE).href);
 
 /* ---------- fixtures ---------- */
 
@@ -164,173 +165,11 @@ console.log(`Rebuild loop: ${CLUBS.length} clubs, ${MARKET_ROWS.length} market r
 const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
 const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : NaN; };
 
-function dearestAffordable(s, ceiling) {
-  return s.deal.offers.filter(p => loop.offerPrice(s, p) <= ceiling).sort((a, b) => loop.offerPrice(s, b) - loop.offerPrice(s, a))[0];
-}
-
-const KEEP_ALL = {
-  name: 'keep everything',
-  finance: () => 0,
-  manager: () => deck.KEEP_MANAGER.id,
-  spun: () => 'keep',
-  deal: s => (s.deal.bench[0] ? { kind: 'promote', name: s.deal.bench[0].name } : { kind: 'forty' }),
-  war: () => 'walk',
-};
-
-const SELL_ALL = {
-  name: 'sell everything',
-  finance: () => 0,
-  manager: s => s.managerOptions.reduce((a, b) => (b.cost > a.cost ? b : a)).id,
-  spun: () => 'sell',
-  deal: s => {
-    const best = dearestAffordable(s, loop.spendCeilingOf(s));
-    if (best) return { kind: 'offer', name: best.name };
-    if (s.deal.bench[0]) return { kind: 'promote', name: s.deal.bench[0].name };
-    return { kind: 'forty' };
-  },
-  war: s => (deck.nextRaise(s.war.price) <= loop.spendCeilingOf(s) ? 'raise' : 'walk'),
-};
-
-/* The thinking policy reads the board. Every demand is plain data, so it can
-   count how many signings and sales it still owes, which value cap it must
-   stay under, and which kind of man (young, marquee, a compatriot) the next
-   deal should favour. That is what a player who reads the envelope does; the
-   dumb policies never look at it. */
-const SIGNINGS_OWED = { busy: 3, pressureFour: 4, youth: 2, youth3: 3, idCore: 2, sameNation: 2, marquee: 1, marquee2: 2, idGalactico: 1, idStatement: 2, idUpgrade: 1 };
-const SALES_OWED = { clearout: 2, pressureClearout: 3, idFlip: 1 };
-function boardRead(s) {
-  const unmet = new Set(loop.objectivesOf(s).filter(o => !o.met).map(o => o.objective.id));
-  let signings = 0;
-  let sales = 0;
-  for (const id of unmet) {
-    if (SIGNINGS_OWED[id]) signings = Math.max(signings, SIGNINGS_OWED[id] - s.signed.length);
-    if (SALES_OWED[id]) sales = Math.max(sales, SALES_OWED[id] - s.sold.length);
-  }
-  const cap = Math.min(...s.board.demands.map(o => o.capValue ?? Infinity));
-  const reserve = unmet.has('pressureBank') ? 20 : unmet.has('inTheBlack') ? 0 : -deck.OVERDRAFT_LIMIT / 2;
-  return { unmet, signings, sales, cap, reserve };
-}
-
-/* What the scouts' three bands typically hold for a shirt: the median value
-   and rating of the top 8 percent, the 25 to 55 percent band and the bottom
-   20 percent of the market's fits, which is how dealReplacements deals. A
-   player who has seen a few lists knows roughly what each price buys. */
-const bandCache = new Map();
-function bandView(s, slotIdx) {
-  const key = `${s.club.club}|${s.formation.name}|${slotIdx}`;
-  if (bandCache.has(key)) return bandCache.get(key);
-  const slot = s.formation.slots[slotIdx];
-  const fits = s.market.filter(p => slot.allowed.includes(p.position)).sort((a, b) => b.marketValue - a.marketValue);
-  const band = (lo, hi) => fits.slice(Math.floor(lo * fits.length), Math.max(Math.floor(lo * fits.length) + 1, Math.floor(hi * fits.length)));
-  const view = { marquee: band(0, 0.08), solid: band(0.25, 0.55), cheap: band(0.8, 1) };
-  bandCache.set(key, view);
-  return view;
-}
-
-/** The rating a sale of this shirt would probably buy with `cash`, less the
- *  man's own rating: for each band, the median rating of the members the
- *  cash reaches, counted only when the cash reaches at least a third of the
- *  band, because the draw inside a band is random. */
-function expectedGain(s, slotIdx, cash) {
-  const inc = s.baseXi[slotIdx];
-  const r = inc ? playerRating(inc) : 40;
-  const view = bandView(s, slotIdx);
-  let best = 0;
-  for (const members of [view.marquee, view.solid, view.cheap]) {
-    const reach = members.filter(p => p.marketValue <= cash);
-    if (members.length && reach.length * 3 >= members.length) best = Math.max(best, median(reach.map(playerRating)));
-  }
-  return best - r;
-}
-
-const THINKING = {
-  name: 'thinking',
-  finance: () => 0,
-  manager: s => {
-    /* The hire that lifts the XI most, if he is worth a fifth of the pot or less. */
-    const budget = loop.budgetOf(s);
-    const now = loop.ratingOf(s, null);
-    let best = deck.KEEP_MANAGER.id;
-    let bestGain = 0;
-    for (const m of s.managerOptions) {
-      const gain = loop.ratingOf(s, m) - now;
-      if (m.cost <= budget * 0.2 && gain > bestGain) { best = m.id; bestGain = gain; }
-    }
-    return best;
-  },
-  spun: s => {
-    const inc = s.baseXi[s.spun];
-    const xi = loop.xiOf(s).filter(Boolean);
-    const avg = mean(xi.map(playerRating));
-    const r = playerRating(inc);
-    const cash = loop.budgetOf(s) + inc.marketValue;
-    const read = boardRead(s);
-    const remaining = s.formation.slots.length - s.settledCount;
-    const isStar = r >= avg + 4;
-    /* The board is owed deals and the shirts are running out: sell anyone but a star. */
-    if ((read.sales > 0 || read.signings > 0) && remaining <= read.sales + read.signings + 2 && !isStar && cash >= 12) return 'sell';
-    /* A flip demand wants one big sale. */
-    if (read.unmet.has('idFlip') && inc.marketValue >= 25 && !isStar) return 'sell';
-    /* Sell when the sale plus the pot probably buys a better man AND the
-       fallback (the solid band, if the marquee draw is out of reach) does not
-       cost much: a list is a random draw, so the downside has to be bounded. */
-    const spend = cash - Math.max(0, read.reserve);
-    if (expectedGain(s, s.spun, spend) >= 2) {
-      const solid = bandView(s, s.spun).solid.filter(p => p.marketValue <= spend);
-      const fallback = solid.length ? median(solid.map(playerRating)) : 40;
-      if (fallback >= r - 2) return 'sell';
-    }
-    return 'keep';
-  },
-  deal: s => {
-    const inc = s.baseXi[s.spun];
-    const floor = inc ? playerRating(inc) : 40;
-    const budget = loop.budgetOf(s);
-    const read = boardRead(s);
-    const signedNations = new Set(s.signed.map(p => p.nationality));
-    const lift = s.manager && s.manager.lift > 0 ? p => (deck.managerFits(s.manager.profile, p) ? s.manager.lift : 0) : () => 0;
-    const score = p => {
-      let v = playerRating(p) + lift(p);
-      if (read.unmet.has('youth') && p.age > 0 && p.age <= 23) v += 4;
-      if (read.unmet.has('youth3') && p.age > 0 && p.age <= 24) v += 4;
-      if (read.unmet.has('idCore') && p.age > 0 && p.age <= 26) v += 4;
-      if (read.unmet.has('marquee') && p.marketValue >= 70) v += 5;
-      if (read.unmet.has('marquee2') && p.marketValue >= 60) v += 5;
-      if (read.unmet.has('idGalactico') && p.marketValue >= 80) v += 6;
-      if (read.unmet.has('idStatement') && p.marketValue >= 50) v += 5;
-      if (read.unmet.has('sameNation') && signedNations.has(p.nationality)) v += 4;
-      if (read.unmet.has('prime') && p.age > 29) v -= 8;
-      return v;
-    };
-    /* Share the pot across the shirts still likely to need a buy: the weak
-       links not yet spun plus the inherited holes. One shirt may take up to
-       twice its share, never the whole pot with weak shirts still to come. */
-    const room = budget - read.reserve;
-    /* Keep a cheap seat's worth of money back for every shirt still worth selling. */
-    const pending = s.order.slice(s.settledCount + 1).filter(i => !s.baseXi[i] || expectedGain(s, i, room + s.baseXi[i].marketValue) >= 2).length;
-    const spendable = Math.max(Math.min(room, 6), room - pending * 6);
-    const offers = s.deal.offers
-      .filter(p => loop.offerPrice(s, p) <= spendable && p.marketValue <= read.cap)
-      .sort((a, b) => score(b) - score(a) || loop.offerPrice(s, a) - loop.offerPrice(s, b));
-    const best = offers[0];
-    const bench = s.deal.bench[0];
-    const benchR = bench ? playerRating(bench) + lift(bench) : 0;
-    const bestR = best ? playerRating(best) + lift(best) : 0;
-    if (best && score(best) > benchR + 1 && bestR >= floor - 1) return { kind: 'offer', name: best.name };
-    if (bench && benchR >= floor - 2 && read.signings === 0) return { kind: 'promote', name: bench.name };
-    if (best && bestR > benchR) return { kind: 'offer', name: best.name };
-    if (bench) return { kind: 'promote', name: bench.name };
-    /* Nothing affordable within the pot: a cheap man beats a 40 overall, even on the overdraft. */
-    const cheap = s.deal.offers.filter(p => loop.offerPrice(s, p) <= loop.spendCeilingOf(s) && p.marketValue <= read.cap).sort((a, b) => loop.offerPrice(s, a) - loop.offerPrice(s, b))[0];
-    if (cheap && loop.offerPrice(s, cheap) <= 12) return { kind: 'offer', name: cheap.name };
-    if (loop.canRedeal(s) && s.dealAttempt < 2) return { kind: 'redeal' };
-    return { kind: 'forty' };
-  },
-  war: s => {
-    const next = deck.nextRaise(s.war.price);
-    return next <= loop.budgetOf(s) && next <= s.war.player.marketValue * 1.3 ? 'raise' : 'walk';
-  },
-};
+/* Round 461: the three policies (keep everything, sell everything, thinking)
+   moved into src/lib/rebuildPolicy.ts so the multiplayer table's CPU seat
+   plays the very same thinking policy this harness measures. They are read
+   back out of the bundle here; this file holds no copy of them. */
+const { KEEP_ALL, SELL_ALL, THINKING } = policy;
 
 /* ---------- the driver ---------- */
 
@@ -342,52 +181,22 @@ function setupFor(clubName, seed) {
 /** Plays one run to the whistle. Every refused move is a finding: the policy
  *  asked for something legal, so the engine handing the same object back
  *  means the rules and the policy disagree about what is legal. */
-function playRun(setup, policy, watch = {}) {
+function playRun(setup, pol, watch = {}) {
   let s = loop.createRun(setup);
   const deals = [];
   let steps = 0;
-  const step = (next, what) => {
-    if (next === s) throw new Error(`${policy.name} at ${setup.club.club}: "${what}" was refused with the same state back (phase ${s.phase}, spun ${s.spun}, deal ${!!s.deal}, war ${!!s.war})`);
-    s = next;
-  };
   while (s.phase !== 'done') {
     steps += 1;
-    if (steps > 800) throw new Error(`${policy.name} at ${setup.club.club}: the run did not end in 800 steps`);
-    if (s.phase === 'envelopes') {
-      if (s.financeCard) step(loop.toManager(s), 'toManager');
-      else step(loop.pickFinance(s, policy.finance(s)), 'pickFinance');
-      continue;
-    }
-    if (s.phase === 'manager') { step(loop.hireManager(s, policy.manager(s)), 'hireManager'); continue; }
-    if (s.war) {
-      if (s.war.outcome !== 'live') { step(loop.clearWar(s), 'clearWar'); continue; }
-      if (s.war.leader === 'you') { step(loop.rivalReply(s), 'rivalReply'); continue; }
-      if (policy.war(s) === 'raise') {
-        const raised = loop.raise(s);
-        if (raised !== s) { s = raised; continue; }
-      }
-      step(loop.walk(s), 'walk');
-      continue;
-    }
-    if (s.deal) {
+    if (steps > 800) throw new Error(`${pol.name} at ${setup.club.club}: the run did not end in 800 steps`);
+    /* A list is logged as the policy sees it: after any war on it has cleared. */
+    if (s.deal && !s.war) {
       deals.push({ slot: s.spun, offers: s.deal.offers.map(p => ({ name: p.name, price: loop.offerPrice(s, p), value: p.marketValue })), bench: s.deal.bench.map(p => p.name), afterSale: !!s.baseXi[s.spun], attempt: s.dealAttempt, tier: setup.club.tier });
       if (watch.onDeal) watch.onDeal(s);
-      const a = policy.deal(s);
-      if (a.kind === 'offer') step(loop.takeOffer(s, a.name), `takeOffer ${a.name}`);
-      else if (a.kind === 'promote') step(loop.promote(s, a.name), `promote ${a.name}`);
-      else if (a.kind === 'redeal') step(loop.redeal(s), 'redeal');
-      else step(loop.takeForty(s), 'takeForty');
-      continue;
     }
-    if (s.spun !== null) {
-      if (policy.spun(s) === 'sell') {
-        step(loop.sell(s), 'sell');
-        if (watch.onSell) watch.onSell(s);
-      } else step(loop.keep(s), 'keep');
-      continue;
-    }
-    if (s.settledCount < s.formation.slots.length) { step(loop.spinNext(s), 'spinNext'); continue; }
-    step(loop.blowWhistle(s), 'blowWhistle');
+    const { what, next } = policy.policyMove(s, pol);
+    if (next === s) throw new Error(`${pol.name} at ${setup.club.club}: "${what}" was refused with the same state back (phase ${s.phase}, spun ${s.spun}, deal ${!!s.deal}, war ${!!s.war})`);
+    if (what === 'sell' && watch.onSell) watch.onSell(next);
+    s = next;
   }
   return { state: s, deals, steps };
 }
