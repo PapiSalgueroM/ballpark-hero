@@ -471,14 +471,14 @@ const LineupBuilder = () => {
                   </div>
 
                   <div className="grid gap-1.5 text-sm">
-                    {/* The engine also writes a transfer saga line. It stays on
-                        World XI and does not come here: it is an invented
-                        transfer about a real, named footballer, and inventing a
-                        transfer is the one thing this repo's data rule names
-                        outright. Everything else in the report is a simulated
-                        result of a squad the player built himself. */}
+                    {/* Round 449: the transfer saga line comes here too now.
+                        Round 442 kept it off this page because it named a
+                        real footballer in an invented bust-up; the engine's
+                        lines are about the club and the window now, and the
+                        player is only ever his role, so both pages show the
+                        same report. scripts/simNoInventedConduct.mjs holds
+                        that. */}
                     {seasonReport.narrative
-                      .filter((line) => line !== seasonReport.transferHeadline)
                       .map((line, i) => (
                         <p key={i} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2 text-foreground/90">
                           {line}
