@@ -63,6 +63,32 @@ import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
  * flawuiqbvjobmkfkauhw immediately before this expansion: Chelsea FC 200,
  * Paris Saint-Germain 189, Manchester City 170, Germany 1323, England 1175,
  * Right Winger 2152, $50M+ 341.
+ *
+ * ROUND 463 EXPANSION (2026-09-05), his note "More puzzles": 20 categories
+ * added to the 16, bringing the total to 36, every one on the same three
+ * factories and the same tag views, so scoring, caching and the filtered
+ * dropdown are untouched. A category was only added where the table serves
+ * its WHOLE pool under one string, measured that day:
+ *   clubs (distinct players ever on a row with that exact club string)
+ *     Inter Milan 209, Tottenham Hotspur 190, AC Milan 187, Liverpool FC 187,
+ *     Atletico de Madrid 182, Manchester United 161, Borussia Dortmund 161
+ *   nationalities (player_nationality_peaks, one row per player and tag)
+ *     Italy 1571, Spain 1542, France 1266, Netherlands 672, Portugal 635,
+ *     Belgium 568
+ *   positions (player_position_peaks, one row per player and tag)
+ *     Centre-Back 2437, Right-Back 2284, Left-Back 2284, Central Midfield
+ *     2263, Attacking Midfield 2240, Left Winger 2090, Defensive Midfield 1967
+ * Rejected, with the measurement: Juventus (six men who played there, de
+ * Ligt among them, only ever carry the short string "Juventus", so an eq
+ * pool on "Juventus FC" would refuse a right answer), Bayern Munich (eight
+ * men only under "FC Bayern Munich", same defect), Right Midfield, Left
+ * Midfield and Second Striker (the tag is assigned to wingers and forwards
+ * inconsistently, so "Name a left midfielder" refuses most left wingers,
+ * which is a refusal the player cannot reason about), and every award or
+ * competition category the tables do not carry (podium finishers: ballon_dor
+ * holds winners only, 76 rows; league golden boots and World Cup winners:
+ * no table). scripts/simRarityPools.mjs counts each nationality and
+ * position pool against the view independently on every run.
  */
 
 // ---------------------------------------------------------------------------
@@ -551,6 +577,208 @@ export const CATEGORIES: RarityCategory[] = [
     sourceConfig: {
       ...SOCCER_MARKET_VALUE_SOURCE,
       filters: [{ column: 'position', op: 'eq', value: 'Right Winger' }],
+    },
+  },
+  // Round 463: the twenty below. See the ROUND 463 EXPANSION note at the top
+  // of this file for the pool sizes measured on the day and what was rejected.
+  {
+    id: 'club-liverpool',
+    prompt: 'Name a player who has played for Liverpool',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-liverpool', fetchClubPool('Liverpool FC')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Liverpool FC' }],
+    },
+  },
+  {
+    id: 'club-man-united',
+    prompt: 'Name a player who has played for Manchester United',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-man-united', fetchClubPool('Manchester United')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Manchester United' }],
+    },
+  },
+  {
+    id: 'club-inter',
+    prompt: 'Name a player who has played for Inter Milan',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-inter', fetchClubPool('Inter Milan')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Inter Milan' }],
+    },
+  },
+  {
+    id: 'club-ac-milan',
+    prompt: 'Name a player who has played for AC Milan',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-ac-milan', fetchClubPool('AC Milan')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'AC Milan' }],
+    },
+  },
+  {
+    id: 'club-dortmund',
+    prompt: 'Name a player who has played for Borussia Dortmund',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-dortmund', fetchClubPool('Borussia Dortmund')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Borussia Dortmund' }],
+    },
+  },
+  {
+    id: 'club-atletico',
+    prompt: 'Name a player who has played for Atletico Madrid',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-atletico', fetchClubPool('Atlético de Madrid')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Atlético de Madrid' }],
+    },
+  },
+  {
+    id: 'club-tottenham',
+    prompt: 'Name a player who has played for Tottenham Hotspur',
+    hint: 'Any season in our records counts.',
+    fetchPool: cachedPool('club-tottenham', fetchClubPool('Tottenham Hotspur')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'club', op: 'eq', value: 'Tottenham Hotspur' }],
+    },
+  },
+  {
+    id: 'nationality-spain',
+    prompt: 'Name a Spanish footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-spain', fetchNationalityPool('Spain')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Spain' }],
+    },
+  },
+  {
+    id: 'nationality-france',
+    prompt: 'Name a French footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-france', fetchNationalityPool('France')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'France' }],
+    },
+  },
+  {
+    id: 'nationality-italy',
+    prompt: 'Name an Italian footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-italy', fetchNationalityPool('Italy')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Italy' }],
+    },
+  },
+  {
+    id: 'nationality-netherlands',
+    prompt: 'Name a Dutch footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-netherlands', fetchNationalityPool('Netherlands')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Netherlands' }],
+    },
+  },
+  {
+    id: 'nationality-portugal',
+    prompt: 'Name a Portuguese footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-portugal', fetchNationalityPool('Portugal')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Portugal' }],
+    },
+  },
+  {
+    id: 'nationality-belgium',
+    prompt: 'Name a Belgian footballer',
+    hint: 'Current or former, any club.',
+    fetchPool: cachedPool('nationality-belgium', fetchNationalityPool('Belgium')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'nationality', op: 'eq', value: 'Belgium' }],
+    },
+  },
+  {
+    id: 'position-centre-back',
+    prompt: 'Name a centre-back',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-centre-back', fetchPositionPool('Centre-Back')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Centre-Back' }],
+    },
+  },
+  {
+    id: 'position-right-back',
+    prompt: 'Name a right-back',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-right-back', fetchPositionPool('Right-Back')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Right-Back' }],
+    },
+  },
+  {
+    id: 'position-left-back',
+    prompt: 'Name a left-back',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-left-back', fetchPositionPool('Left-Back')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Left-Back' }],
+    },
+  },
+  {
+    id: 'position-central-midfielder',
+    prompt: 'Name a central midfielder',
+    hint: 'Any club, any era in our records. The box to box kind, not the holder or the number ten.',
+    fetchPool: cachedPool('position-central-midfielder', fetchPositionPool('Central Midfield')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Central Midfield' }],
+    },
+  },
+  {
+    id: 'position-defensive-midfielder',
+    prompt: 'Name a defensive midfielder',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-defensive-midfielder', fetchPositionPool('Defensive Midfield')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Defensive Midfield' }],
+    },
+  },
+  {
+    id: 'position-attacking-midfielder',
+    prompt: 'Name an attacking midfielder',
+    hint: 'Any club, any era in our records. The number ten.',
+    fetchPool: cachedPool('position-attacking-midfielder', fetchPositionPool('Attacking Midfield')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Attacking Midfield' }],
+    },
+  },
+  {
+    id: 'position-left-winger',
+    prompt: 'Name a left winger',
+    hint: 'Any club, any era in our records.',
+    fetchPool: cachedPool('position-left-winger', fetchPositionPool('Left Winger')),
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'position', op: 'eq', value: 'Left Winger' }],
     },
   },
 ];

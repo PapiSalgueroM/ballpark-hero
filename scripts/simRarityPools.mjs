@@ -44,7 +44,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RARITY_CONTROL || '';
-if (CONTROL && CONTROL !== 'truncate') {
+if (CONTROL && CONTROL !== 'truncate' && CONTROL !== 'blindcount') {
   console.error(`RARITY_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -85,15 +85,37 @@ const { CATEGORIES } = await import(pathToFileURL(BUNDLE).href);
    ROUND 387: the nationality and position pools count on the tag views (one
    row per player and tag), because that is what the pools now read and what
    the filtered dropdown offers.
-   Derived from the category id, so a category added later without an entry here
+   ROUND 463: the value comes from the category's own eq filter, the exact
+   string the dropdown and the pool both send, instead of the id suffix. The
+   suffix was "brazil" and the view holds "Brazil", so every one of these
+   counts came back 0 and the ratio test passed on nothing: section 2 had been
+   reporting "5 of 5 checkable pools match" while checking no pool at all
+   (measured 2026-09-05: nationality-brazil against the view returned 0 rows;
+   with the filter value it returns 1,722). A zero count is now a failure in
+   its own right, and RARITY_CONTROL=blindcount sends the old suffix so that
+   guard is proven to fire. The $50M category is elite-50m, not the
+   fifty-million this used to look for.
+   Derived from the category, so a category added later without a filter here
    is reported rather than silently skipped. */
 const enc = encodeURIComponent;
+function eqFilter(cat) {
+  const f = cat.sourceConfig && Array.isArray(cat.sourceConfig.filters) ? cat.sourceConfig.filters : [];
+  return f.length === 1 && f[0].op === 'eq' ? f[0] : null;
+}
 function expectedQuery(cat) {
   const id = cat.id;
-  if (id.startsWith('nationality-')) return `player_nationality_peaks?select=player_name&nationality=eq.${enc(cat.answerNoun || id.replace('nationality-', ''))}`;
-  if (id.startsWith('position-')) return `player_position_peaks?select=player_name&position=eq.${enc(cat.answerNoun || id.replace('position-', ''))}`;
+  const f = eqFilter(cat);
+  const blind = CONTROL === 'blindcount';
+  if (id.startsWith('nationality-')) {
+    const value = blind || !f ? id.replace('nationality-', '') : f.value;
+    return `player_nationality_peaks?select=player_name&nationality=eq.${enc(value)}`;
+  }
+  if (id.startsWith('position-')) {
+    const value = blind || !f ? id.replace('position-', '') : f.value;
+    return `player_position_peaks?select=player_name&position=eq.${enc(value)}`;
+  }
   if (id === 'elite-100m') return 'player_peak_values?select=player_name&peak_value_usd=gte.100000000';
-  if (id === 'fifty-million') return 'player_peak_values?select=player_name&peak_value_usd=gte.50000000';
+  if (id === 'elite-50m') return 'player_peak_values?select=player_name&peak_value_usd=gte.50000000';
   return null;
 }
 
@@ -112,6 +134,9 @@ for (const cat of CATEGORIES) {
 
 if (CONTROL === 'truncate') {
   console.log('   NEGATIVE CONTROL ON: every pool re-capped at 1,000 entries, which is what production did, sections 1 and 2 must go red');
+}
+if (CONTROL === 'blindcount') {
+  console.log('   NEGATIVE CONTROL ON: section 2 asks the view for the id suffix ("brazil") instead of the filter value ("Brazil"), the pre-Round-463 shape; its zero-count guard must go red');
 }
 
 console.log('1) no pool is sitting on the page cap');
@@ -137,6 +162,13 @@ console.log('2) each pool matches what the database independently says');
     const got = sizes.find(s => s.id === cat.id);
     if (want === null || !got) continue;
     checked += 1;
+    /* Round 463: a count of zero is not a match, it is a question the database
+       was never really asked. */
+    if (want === 0) {
+      wrong += 1;
+      if (wrong <= 4) fail(`${cat.id}: the database says the pool is EMPTY, so the expected query is not asking for what the game serves (${got.n})`);
+      continue;
+    }
     /* rankPool dedupes by NORMALISED name, so a couple of accent variants
        collapsing is expected and fine; a factor of eight is not. */
     const ratio = got.n / Math.max(want, 1);
@@ -197,6 +229,11 @@ console.log('');
 if (CONTROL === 'truncate') {
   if (failures > 0) { console.log(`simRarityPools control: green. Re-capping the pools was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error('simRarityPools control: RED. Every pool was cut to 1,000 and nothing noticed.');
+  process.exit(1);
+}
+if (CONTROL === 'blindcount') {
+  if (failures > 0) { console.log(`simRarityPools control: green. Counting the id suffix instead of the filter value was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
+  console.error('simRarityPools control: RED. Section 2 counted nothing and called it a match.');
   process.exit(1);
 }
 if (failures > 0) { console.error(`simRarityPools: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
