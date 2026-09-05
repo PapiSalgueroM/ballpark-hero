@@ -348,11 +348,12 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
           goals: row.goals ?? 0,
           assists: row.assists ?? 0,
           position,
-          // No kit-number data for players this obscure; 0 is the existing
-          // "unknown" convention getEnrichment uses. getEnrichment itself is
-          // deliberately NOT called here: a name collision with a famous entry
-          // (e.g. a youth "Gabriel Jesus") would poison league/kit data.
-          kitNumber: 0,
+          // No kit-number data for players this obscure; null is the "no
+          // squad number on file" value getEnrichment returns. getEnrichment
+          // itself is deliberately NOT called here: a name collision with a
+          // famous entry (e.g. a youth "Gabriel Jesus") would poison
+          // league/kit data.
+          kitNumber: null,
           age: row.age,
           marketValue: Math.round(row.market_value_usd / 1_000_000),
           difficulty: 'insane',

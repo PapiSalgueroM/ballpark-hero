@@ -7,10 +7,37 @@ export interface PositionSlot {
   label: string;
 }
 
+/**
+ * Round 442: what the dropdown row the player picked actually said about him.
+ *
+ * These are the player_market_values columns the autocomplete already fetches
+ * (PlayerEntity.meta), carried onto the slot instead of into a side map keyed
+ * by name. The side map was already losing players: the validator can hand back
+ * a different `fullName` and the slot gets renamed, after which a name-keyed
+ * lookup misses and the pick silently stopped counting for chemistry.
+ *
+ * Every field is optional because a pick typed rather than chosen has none of
+ * it. Nothing here is invented: it is the row, or it is absent.
+ */
+export interface PickMeta {
+  /** Untouched player_market_values.position, e.g. "Goalkeeper". */
+  rawPosition?: string;
+  /** Normalized primary role from that value, once squadDeal's map has seen it. */
+  position?: PositionRole;
+  club?: string;
+  nationality?: string;
+  /** market_value_usd on the row the search kept (his highest-valued season). */
+  value?: number;
+  age?: number;
+  /** Year of that row, so the result screen can say which season it is quoting. */
+  year?: number;
+}
+
 export interface FilledSlot extends PositionSlot {
   playerName: string;
   assignedTeam: string;
   isNation: boolean;
+  pick?: PickMeta;
 }
 
 export interface TeamAssignment {

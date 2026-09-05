@@ -1,8 +1,10 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
-import type { Formation, FilledSlot, GamePhase, AIVerdict, TeamAssignment } from '@/types/lineupBuilder';
+import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
+import { checkLineupPick } from '@/lib/positionFit';
+import { normalizePosition } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useLineupBuilder() {
@@ -70,7 +72,7 @@ export function useLineupBuilder() {
   }, [filledCount, startSpin]);
 
   const submitPlayer = useCallback(
-    async (inputName: string) => {
+    async (inputName: string, pickMeta?: PickMeta) => {
       let playerName = inputName;
       if (selectedPositionIndex === null || !currentTeam) return;
       const position = positions[selectedPositionIndex];
@@ -82,6 +84,26 @@ export function useLineupBuilder() {
       );
       if (isDuplicate) {
         setValidationError(`${playerName.trim()} is already in your lineup!`);
+        return;
+      }
+
+      /* Round 442: the position gate, on the row the player picked, before any
+         network call. The owner put ter Stegen at CM and the game took him,
+         because the only position rule Build Your XI had was a sentence in the
+         validate-player prompt asking a language model not to allow it. A
+         prompt is a request. This is the same shared rule World XI uses and the
+         same deterministic shape the NBA lineup builder has had since it stopped
+         double-judging picks. Refusing here costs nothing: no guess is burned,
+         no request is spent, the slot stays open. */
+      const positionCheck = checkLineupPick(
+        playerName.trim(),
+        position.role,
+        position.label,
+        pickMeta?.rawPosition,
+        normalizePosition,
+      );
+      if (!positionCheck.ok) {
+        setValidationError(positionCheck.reason ?? 'That player does not fit this position.');
         return;
       }
 
@@ -160,6 +182,10 @@ export function useLineupBuilder() {
         playerName: playerName.trim(),
         assignedTeam: currentTeam.name,
         isNation: currentTeam.isNation,
+        /* Carried on the slot, not in a name-keyed side map: the line above can
+           rename this pick to the validator's fullName and a name lookup would
+           then miss him. */
+        ...(pickMeta ? { pick: pickMeta } : {}),
       };
 
       setFilledSlots((prev) => {

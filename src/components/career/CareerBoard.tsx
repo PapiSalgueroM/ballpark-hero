@@ -1,4 +1,5 @@
 import { CareerSeason } from '@/types/career';
+import { careerCellValue, type CareerColumnKey } from '@/lib/careerBoardCells';
 import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
 
@@ -9,7 +10,7 @@ interface CareerBoardProps {
   gameOver: boolean;
 }
 
-const COLUMNS = [
+const COLUMNS: { key: CareerColumnKey; label: string; emoji: string }[] = [
   { key: 'season', label: 'SEASON', emoji: '📅' },
   { key: 'club', label: 'CLUB', emoji: '🏟️' },
   { key: 'appearances', label: 'APPS', emoji: '🎽' },
@@ -74,30 +75,7 @@ export function CareerBoard({ career, revealedCells, onReveal, gameOver }: Caree
                 return <CoveredCell key={col.key} onClick={() => onReveal(cellKey)} label={`Reveal ${col.label.toLowerCase()} for career row ${rowIdx + 1}`} />;
               }
 
-              let value = '';
-
-              switch (col.key) {
-                case 'season':
-                  value = s.season;
-                  break;
-                case 'club':
-                  value = s.club;
-                  break;
-                case 'appearances':
-                  value = String(s.appearances);
-                  break;
-                case 'goals':
-                  value = String(s.goals);
-                  break;
-                case 'assists':
-                  value = String(s.assists);
-                  break;
-                case 'marketValue':
-                  value = `$${s.marketValue}M`;
-                  break;
-              }
-
-              return <RevealedCell key={col.key} value={value} />;
+              return <RevealedCell key={col.key} value={careerCellValue(s, col.key)} />;
             })}
           </div>
         ))}

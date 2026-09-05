@@ -50,10 +50,25 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           </section>
 
           <section>
+            <h3 className="font-bold text-foreground mb-2">🧤 Positions Have To Fit</h3>
+            <ul className="space-y-1.5 text-muted-foreground">
+              <li>• A slot takes a player who plays there or right next to it</li>
+              <li>• Full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other</li>
+              <li>• A keeper only ever goes in goal, and only a keeper goes in goal</li>
+            </ul>
+            <div className="mt-2 space-y-1 rounded-lg bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
+              <p><span className="text-correct font-semibold">Works:</span> Barcelona, CM slot, Sergio Busquets (a defensive mid, same family)</p>
+              <p><span className="text-correct font-semibold">Works:</span> Real Madrid, RB slot, Sergio Ramos (a centre back can shift out)</p>
+              <p><span className="text-destructive font-semibold">Refused:</span> Barcelona, CM slot, Marc-André ter Stegen (he is a goalkeeper)</p>
+            </div>
+          </section>
+
+          <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Rating & Sharing</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Submit your finished team for an <span className="text-primary font-semibold">AI rating</span></li>
-              <li>• Get a score, a headline, and a breakdown</li>
+              <li>• Then a <span className="text-foreground font-semibold">season report</span>: squad rating, where you finish, points, trophies and a top scorer</li>
+              <li>• Every player is judged at his peak, so retired legends are not punished for being retired</li>
               <li>• Share your lineup and challenge friends to beat it</li>
             </ul>
           </section>

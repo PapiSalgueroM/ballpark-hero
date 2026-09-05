@@ -10,12 +10,13 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     howToPlay: [
       "Pick a theme: Current Stars, All-Time Legends, or World Cup 2026.",
       "Pass one is a lot per position from the middle band in a random order; pass two is the elite band, with the single most valuable player held back to headline the close. Until a position has come up, the room shows the running order, never the names.",
-      "Bid in steps of 5, 10, or 25 million, or pass.",
+      "Bid in steps of 5, 10, or 25 million, or pass. If you are the only one who wants him, you get him at the list price.",
       "When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, so nobody plays the showdown a man short.",
       "Once all three squads hit 11, the showdown simulates the league and crowns a champion.",
     ],
     rules: [
       "Every bidder starts with 1 billion pounds. Twenty two auction lots cover the 11 positions twice, middle band then elite, and eleven journeymen fill whatever stays open at the end.",
+      "Two bidders or more on the same lot and it is a war, so it always finishes above list. Exactly one bidder and he takes him for the list price, not a penny over.",
       "If nobody bids at list price, the price falls step by step; anyone can snap it mid fall, and a lot that reaches thirty percent of list is withdrawn unsold.",
       "An end of auction fill costs just under half the player's list price, minimum 5 million.",
       "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
@@ -259,7 +260,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   '/build-your-xi': {
     intro: [
       "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot.",
-      "When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report. No two teams ever come out alike.",
+      "When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
     ],
     howToPlay: [
       "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
@@ -270,6 +271,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     rules: [
       "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
+      "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
       "No duplicate players across your XI.",
       "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
       "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
@@ -294,8 +296,12 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         a: "Yes, rerolls are unlimited, and each spin picks a team not already used in your lineup.",
       },
       {
+        q: "Can I put a goalkeeper in midfield?",
+        a: "No. The game checks each pick's own position against the slot before anything else, so a keeper is refused everywhere except goal and nobody else can take the goal. Nearby positions are fine: a centre back can shift to right back, a defensive mid can fill a CM slot.",
+      },
+      {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Brutal verdicts make the best screenshots.",
+        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Every player is judged at his peak, so retired greats are not marked down for being retired.",
       },
     ],
   },

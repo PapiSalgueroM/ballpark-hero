@@ -23,6 +23,8 @@ import {
   buildEmojiGrid,
   roundSummaryLine,
   buildReveal,
+  objectiveLine,
+  modeName,
   type RarityMode,
   type RarityCategory,
   type PoolEntry,
@@ -255,11 +257,14 @@ const RarityRound = () => {
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 
-  const modeLabel = rarityMode === 'rarity' ? 'Rarity Round' : 'Crowd Says';
-  const goalLine =
-    rarityMode === 'rarity'
-      ? 'Name a valid answer that as few people would think of as possible. Lower score wins.'
-      : 'Name the most obvious, famous answer you can. Higher score wins.';
+  const modeLabel = modeName(rarityMode);
+  const modeEmoji = rarityMode === 'rarity' ? '🕵️' : '📢';
+  /* Round 444. Two lines, two jobs, so neither is a repeat of the other. This
+     one sits above the mode toggle, before you have picked a mode, so it says
+     what the two modes are for. The strip on the board below says which way
+     points run in the mode you actually landed in, and that one comes from
+     objectiveLine so it cannot drift from the scoring. */
+  const goalLine = `Five rounds, five categories. ${modeName('rarity')} rewards the answer nobody thinks of, ${modeName('crowd')} rewards the one everybody does.`;
 
   const resultHeadline =
     rarityMode === 'rarity'
@@ -310,11 +315,34 @@ const RarityRound = () => {
         headerExtra={
           <>
             <HowToPlayPopover title="How to Play Rarity Round">
+              {/* Round 444: the "?" opens on the objective for the mode you
+                  are actually in, not on a description of the search box. Same
+                  sentence as the board strip, from objectiveLine. */}
               <section>
-                <h3 className="font-bold text-foreground mb-2">🎯 The idea</h3>
+                <h3 className="font-bold text-foreground mb-2">🎯 What you're trying to do</h3>
+                <p className="font-bold text-primary mb-2">
+                  {modeEmoji} You're in {modeLabel}. {objectiveLine(rarityMode)}
+                </p>
                 <p className="text-muted-foreground">
                   Each round shows a category, like "Name a Ballon d'Or winner." Pick any real, valid
                   answer using the search box. You cannot submit a name that doesn't fit the category.
+                </p>
+              </section>
+              {/* The two ends of this example were checked against the live
+                  ballon_dor pool on 2026-09-04: Messi ranks 1st by fame and
+                  Cristiano Ronaldo 3rd of 47, worth 100 and 96 points, and the
+                  1950s winners are the last three in the order, worth 4, 2 and
+                  0. No hard numbers in the copy, because the pool grows by one
+                  every December. */}
+              <section>
+                <h3 className="font-bold text-foreground mb-2">💡 Worked example</h3>
+                <p className="text-muted-foreground">
+                  Take "Name a Ballon d'Or winner." Nearly everyone says Messi or Ronaldo, and those two
+                  sit right at the top of the fame order, so they are worth close to the full 100 points.
+                  The winners from the 1950s sit at the bottom and are worth close to none.{' '}
+                  {rarityMode === 'rarity'
+                    ? 'In Rarity Round you want the 1950s guy, because you are adding up as few points as you can.'
+                    : 'In Crowd Says you want Messi, because you are adding up as many points as you can.'}
                 </p>
               </section>
               <section>
@@ -417,13 +445,20 @@ const RarityRound = () => {
                 {currentCategory.prompt}
               </p>
               <p className="text-sm text-muted-foreground">{currentCategory.hint}</p>
-              {/* Round 319, owner review: the goal stated before the first
-                  guess, on the board itself rather than only in the "?" popup. */}
-              <p className="mt-2 text-xs font-semibold text-primary">
-                {rarityMode === 'rarity'
-                  ? 'The goal: a real answer as few people would think of. Fewer points is better.'
-                  : 'The goal: the answer most people would say. More points is better.'}
-              </p>
+              {/* Round 319 did put the goal on the board here, as a 12px line
+                  under the hint and the smallest text in the card, and Round
+                  444 is him asking for it again:
+                  "u should explain before even putting a guess that your meant
+                  to guess the least chosen player and or the most popular
+                  player depending on the game". So it stops being the smallest
+                  line in the card, it names the mode it is describing, and the
+                  sentence itself comes from objectiveLine, which the "?" reads
+                  too, so the two cannot drift apart. */}
+              <div className="mt-3 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2">
+                <p className="text-sm font-bold text-primary">
+                  {modeEmoji} {modeLabel}: {objectiveLine(rarityMode)}
+                </p>
+              </div>
             </div>
 
             {phase === 'loading-round' && (

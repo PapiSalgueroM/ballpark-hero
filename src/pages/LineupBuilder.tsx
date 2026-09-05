@@ -8,7 +8,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
-import { clubSearchTerm } from '@/data/lineupTeams';
+import { clubSearchTerm, nationSearchTerm } from '@/data/lineupTeams';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -18,6 +18,9 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { StatTile } from '@/components/game/StatTile';
+import { normalizePosition, playerRating } from '@/lib/squadDeal';
+import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -49,11 +52,6 @@ const LineupBuilder = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showRules, setShowRules] = useState(false);
-  // Additive chemistry display only: PlayerAutocomplete's onSelect hands us
-  // club/nationality metadata that useLineupBuilder's FilledSlot never
-  // stores, so it is captured here by normalized name and looked up again
-  // once a slot is confirmed. Existing scoring/verdict logic is untouched.
-  const [pickedMeta, setPickedMeta] = useState<Record<string, { club?: string; nationality?: string }>>({});
 
   useEffect(() => {
     const seen = localStorage.getItem('lineup-rules-seen');
@@ -85,31 +83,97 @@ const LineupBuilder = () => {
     return {
       ...SOCCER_MARKET_VALUE_SOURCE,
       filters: currentTeam.isNation
-        ? [{ column: 'nationality', op: 'eq', value: currentTeam.name }]
+        ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
         : [{ column: 'club', op: 'ilike', value: clubSearchTerm(currentTeam.name) }],
     };
   }, [currentTeam]);
 
+  /* Round 442: the whole dropdown row rides along to the hook now. It is what
+     the position gate reads, and it is what the season report is built from,
+     so it has to survive the validator renaming the pick. */
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
-    setPickedMeta((prev) => ({
-      ...prev,
-      [normalizeName(entity.name)]: { club: entity.meta.club, nationality: entity.meta.nationality },
-    }));
-    await submitPlayer(entity.name);
+    const raw = typeof entity.meta.position === 'string' ? entity.meta.position : undefined;
+    await submitPlayer(entity.name, {
+      rawPosition: raw,
+      position: (raw ? normalizePosition(raw.trim()) : null) ?? undefined,
+      club: entity.meta.club,
+      nationality: entity.meta.nationality,
+      value: typeof entity.meta.value === 'number' ? entity.meta.value : undefined,
+      age: typeof entity.meta.age === 'number' ? entity.meta.age : undefined,
+      year: typeof entity.meta.year === 'number' ? entity.meta.year : undefined,
+    });
     setPlayerInput('');
   };
 
   const chemistry = useMemo(
     () =>
       computeChemistry(
-        filledSlotsArray.map((slot) => {
-          const meta = pickedMeta[normalizeName(slot.playerName)];
-          return { name: slot.playerName, club: meta?.club, nationality: meta?.nationality };
-        }),
+        filledSlotsArray.map((slot) => ({
+          name: slot.playerName,
+          club: slot.pick?.club,
+          nationality: slot.pick?.nationality,
+        })),
       ),
-    [filledSlotsArray, pickedMeta]
+    [filledSlotsArray]
   );
+
+  /* Round 442, his "the simulation wasnt that good like other games and the
+     details were bland". The result was one AI paragraph and a list of names.
+     Everything below is built from the row each pick came from (position, market
+     value, age, season), so it is the same data the search already showed him
+     and nothing here is invented.
+     The season itself is World XI's engine, not a second one: same rating
+     curve, same win-probability table, same seeding, so a squad rated 84 here
+     and 84 there plays the same season. */
+  const ratedXi = useMemo(
+    () =>
+      filledSlotsArray.map((slot) => {
+        const value = slot.pick?.value ?? 0;
+        const age = slot.pick?.age;
+        return {
+          slot,
+          value,
+          rating: value > 0 ? playerRating({ marketValue: value / 1_000_000, age: age ?? 27 } as Parameters<typeof playerRating>[0]) : null,
+        };
+      }),
+    [filledSlotsArray]
+  );
+
+  /* The sim needs a value for every man, and every pick comes from a dropdown
+     row that has one, so this is a guard rather than a common case: if a squad
+     ever reaches the result screen without values, it gets the verdict and no
+     invented season. */
+  const seasonReport = useMemo(() => {
+    if (phase !== 'result' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)) return null;
+    const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
+      name: slot.playerName,
+      country: slot.pick?.nationality ?? '',
+      position: slot.pick?.position ?? slot.role,
+      club: slot.pick?.club ?? '',
+      value,
+      age: slot.pick?.age,
+    }));
+    return simulateWorldXiSeason(squad, formation ?? '4-3-3');
+  }, [phase, ratedXi, formation]);
+
+  /* Which third of the pitch this XI is actually built on, averaged from the
+     same card ratings. Slots are bucketed by the slot the player filled, not by
+     his own position, because that is the shape of the team he picked. */
+  const lineStrength = useMemo(() => {
+    const buckets: Record<'Defence' | 'Midfield' | 'Attack', number[]> = { Defence: [], Midfield: [], Attack: [] };
+    for (const { slot, rating } of ratedXi) {
+      if (rating === null) continue;
+      const role = slot.role;
+      if (role === 'GK' || role === 'CB' || role === 'LB' || role === 'RB' || role === 'LWB' || role === 'RWB') buckets.Defence.push(rating);
+      else if (role === 'LW' || role === 'RW' || role === 'ST' || role === 'CF') buckets.Attack.push(rating);
+      else buckets.Midfield.push(rating);
+    }
+    return (Object.keys(buckets) as (keyof typeof buckets)[]).map((line) => ({
+      line,
+      avg: buckets[line].length ? Math.round(buckets[line].reduce((a, b) => a + b, 0) / buckets[line].length) : null,
+    }));
+  }, [ratedXi]);
 
   // Clear input when validation succeeds (position changes)
   const [lastPos, setLastPos] = useState<number | null>(null);
@@ -328,9 +392,13 @@ const LineupBuilder = () => {
               headline={verdict.rating}
               statLine={<span className="font-semibold">{verdict.headline}</span>}
               funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
-              emojiGrid={`Build Your XI: ${formation} rated ${verdict.rating}`}
+              emojiGrid={
+                seasonReport
+                  ? `Build Your XI: ${formation} rated ${verdict.rating}\nSeason sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)}`
+                  : `Build Your XI: ${formation} rated ${verdict.rating}`
+              }
               share={{
-                score: verdict.rating,
+                score: seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
                 gameName: 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}
@@ -339,11 +407,26 @@ const LineupBuilder = () => {
               <div className="bg-secondary/30 rounded-2xl p-4 mb-2 text-left">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
                 <div className="space-y-1.5">
-                  {filledSlotsArray.map((slot, i) => (
-                    <div key={i} className="flex items-center gap-3 bg-card/60 rounded-lg px-3 py-2 text-sm">
+                  {ratedXi.map(({ slot, rating }, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-card/60 rounded-lg px-3 py-2 text-sm">
                       <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
-                      <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
-                      <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
+                      <span className="flex-1 min-w-0">
+                        <span className="font-semibold text-foreground block truncate">{slot.playerName}</span>
+                        <span className="text-[11px] text-muted-foreground block truncate">
+                          {/* His own position, and the year of the season this
+                              value and rating come from. Both are the row he
+                              picked, so "why is he rated that" has an answer on
+                              screen. */}
+                          {slot.pick?.position && slot.pick.position !== slot.role
+                            ? `${slot.pick.position} covering at ${slot.label}`
+                            : slot.pick?.position ?? ''}
+                          {slot.pick?.year ? ` · ${slot.pick.year} value` : ''}
+                        </span>
+                      </span>
+                      {rating !== null && (
+                        <span className="text-xs font-bold text-gold shrink-0 tabular-nums">{rating}</span>
+                      )}
+                      <span className="text-xs text-muted-foreground shrink-0 max-w-[32%] truncate">
                         {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
                       </span>
                     </div>
@@ -357,6 +440,53 @@ const LineupBuilder = () => {
                   </div>
                 )}
               </div>
+
+              {seasonReport && (
+                <div className="rounded-2xl border border-primary/30 bg-surface-1 p-4 mb-2 text-left">
+                  <div className="text-center mb-3">
+                    <div className="text-2xl mb-1">📋</div>
+                    <h3 className="text-base font-bold text-primary font-display">Season Report</h3>
+                    <p className="text-xs text-muted-foreground">One season with this XI, every player at his peak</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                    <StatTile label="Squad Rating" value={`${seasonReport.squadRating}/100`} state="correct" />
+                    <StatTile
+                      label="League Finish"
+                      value={`${ordinal(seasonReport.tablePosition)} / 20`}
+                      state={seasonReport.tablePosition <= 4 ? 'correct' : seasonReport.tablePosition <= 10 ? 'close' : 'incorrect'}
+                    />
+                    <StatTile label="Points" value={seasonReport.points} state="pending" />
+                    <StatTile
+                      label="Trophies"
+                      value={seasonReport.trophies.length}
+                      state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {lineStrength.map(({ line, avg }) => (
+                      <StatTile key={line} label={line} value={avg ?? '-'} state="pending" />
+                    ))}
+                  </div>
+
+                  <div className="grid gap-1.5 text-sm">
+                    {/* The engine also writes a transfer saga line. It stays on
+                        World XI and does not come here: it is an invented
+                        transfer about a real, named footballer, and inventing a
+                        transfer is the one thing this repo's data rule names
+                        outright. Everything else in the report is a simulated
+                        result of a squad the player built himself. */}
+                    {seasonReport.narrative
+                      .filter((line) => line !== seasonReport.transferHeadline)
+                      .map((line, i) => (
+                        <p key={i} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2 text-foreground/90">
+                          {line}
+                        </p>
+                      ))}
+                  </div>
+                </div>
+              )}
             </ResultScreen>
           </div>
         )}
@@ -378,6 +508,7 @@ const LineupBuilder = () => {
             "CM from Manchester City: Rodri",
             "RW from Arsenal: Bukayo Saka",
             "ST from Bayern Munich: Harry Kane",
+            "Refused: a goalkeeper in a CM slot, because a keeper only goes in goal",
             "Formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1"
           ]}
         />

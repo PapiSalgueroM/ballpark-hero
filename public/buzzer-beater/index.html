@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Buzzer Beater: Ten Jump Shots, One Run | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Buzzer Beater","item":"https://douknowball.com/buzzer-beater"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the daily the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. The ten shots come from the date, so every player gets the same run, and your score is kept for the day."}},{"@type":"Question","name":"Do I need a keyboard?","acceptedAnswer":{"@type":"Answer","text":"No. Drag the court to set the arc and the fade, then let go to shoot, which works the same on a phone."}},{"@type":"Question","name":"Why did a shot that looked perfect rattle out?","acceptedAnswer":{"@type":"Answer","text":"Almost always the angle. Check the entry number on the result: a flat shot is aiming at a slot rather than a hole, and there is barely a centimetre in it."}},{"@type":"Question","name":"Is the physics real?","acceptedAnswer":{"@type":"Answer","text":"The flight and the rim geometry are, and so are the rim, ball and release heights. The tolerances are widened on purpose, because nobody hits a centimetre with a sweeping bar and a thumb."}},{"@type":"Question","name":"Is Buzzer Beater free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Buzzer Beater is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Buzzer Beater: Ten Jump Shots, One Run | DoUKnowBall","description":"The basketball game you actually play. Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up every time. Real rim and ball sizes, so a flat shot has nothing to go through. Daily and unlimited, free, no account needed.","url":"https://douknowball.com/buzzer-beater","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/buzzer-beater" data-rh="true"><meta name="description" content="The basketball game you actually play. Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up every time. Real rim and ball sizes, so a flat shot has nothing to go through. Daily and unlimited, free, no account needed." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/buzzer-beater" data-rh="true"><meta property="og:title" content="Buzzer Beater: Ten Jump Shots, One Run | DoUKnowBall" data-rh="true"><meta property="og:description" content="The basketball game you actually play. Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up every time. Real rim and ball sizes, so a flat shot has nothing to go through. Daily and unlimited, free, no account needed." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Buzzer Beater: Ten Jump Shots, One Run | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="The basketball game you actually play. Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up every time. Real rim and ball sizes, so a flat shot has nothing to go through. Daily and unlimited, free, no account needed." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
+<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Buzzer Beater</h1>
+<p>Ten jump shots. Pick the arc, beat the hand, and stop the bar where you dare.</p>
+<p>Ten shots. The horn on every one.</p>
+<p>Set the arc with the up and down arrows, fade off the hand with left and right, then hold space to load the shot and let go. The ring is a hole you drop the ball into, so a flat one has almost nothing to go through and a high one has room.</p>
+<p>You back up every shot and the closeout gets higher. Ten shots, one run.</p>
+<h2>Buzzer Beater: The Jump Shot Game | DoUKnowBall</h2>
+<p>Ten jump shots, one run, and you back up on every one. Set the arc, fade off the closeout and stop the strength bar in the right place. The rim and the ball are their real sizes, so the hole shrinks as your shot flattens and a line drive has almost nothing to go through. Plays in the browser, free, no account needed.</p>
+<p>Most of this site asks you a question. This one asks you to make the shot. Ten jump shots, you back up on every single one, and there is a hand coming at you on nine of them.</p>
+<p>The whole game is the arc. A basket is a hole you drop the ball into from above, so how steeply the ball arrives decides how much room it has. Come in flat and there is almost nothing to go through. Come in steep and there is room, but you have to throw it harder to get there, and a hard release goes where it wants rather than where you pointed it.</p>
+<h2>How to play Buzzer Beater</h2>
+<li>Set the arc with the up and down arrows, or by dragging up and down on the court. The readout shows the angle you are shooting at.</li>
+<li>Fade off the closeout with left and right. The ring in the corner shows where you are pointing across the hoop.</li>
+<li>Hold space, or hold the shoot button, to load the strength bar, and let go. The bar sweeps up and down and you get the number you release on.</li>
+<li>Ten shots a run, from the free throw line out past the arc, with a higher hand in your face every time.</li>
+<h2>Rules to know</h2>
+<li>The ring is 18 inches across on the inside and the ball is a little under 9 and a half, which is the real difference and the reason arc matters. Seen along your shot the ring keeps its width but loses its depth, so the room you have to be short or long shrinks as the shot flattens and runs out entirely near 32 degrees.</li>
+<li>The strength bar is absolute, not a percentage of what this shot needs. The right place to stop it is different from the free throw line than it is from the arc, so there is no single spot that works all night.</li>
+<li>A hard release sprays. It costs you accuracy side to side and a little pace either way, and the cost grows faster than the strength does, so the top of the bar is where the misses live.</li>
+<li>The hand only blocks what stays low. Go over it, or fade off it, and either way you have given something up to do it.</li>
+<li>Baskets pay by distance, by the hand you shot over and by how cleanly the ball went through. A free throw pays least.</li>
+<li>The daily deals the same ten shots to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.</li>
+<h2>Example walkthrough</h2>
+<p>Shot one is a free throw with nobody near you. It only needs a gentle release, so a big arc costs you nothing: put it up around 60 degrees, stop the bar low, and the ball comes down almost on top of the ring with plenty of room.</p>
+<p>Shot ten is 8.6 metres out with a hand reaching over three metres, closing to within a metre of you. That same 60 degree arc now has to be thrown hard enough to spray, so flatten it a little, clear the hand by the smallest margin you dare, and accept that this one is close to a coin flip. It is also worth about three times what the free throw paid.</p>
+<h2>Strategy tips</h2>
+<li>High from close, flatter as you back up. It is the opposite of what feels right, and it is the single biggest thing to learn here.</li>
+<li>Read the dashed line before you load the bar. It shows the shape this release would take with nothing going wrong, so if it is already passing under the ring, fix the arc rather than hoping.</li>
+<li>The angle readout after every shot is the honest feedback. Anything under about 40 degrees was never going in, however well you aimed it.</li>
+<li>Fading is expensive. Only fade when the hand is genuinely too high to go over, because every centimetre of fade is a centimetre off the middle of the ring.</li>
+<h2>Buzzer Beater FAQ</h2>
+<h3>Is the daily the same for everyone?</h3>
+<p>Yes. The ten shots come from the date, so every player gets the same run, and your score is kept for the day.</p>
+<h3>Do I need a keyboard?</h3>
+<p>No. Drag the court to set the arc and the fade, then let go to shoot, which works the same on a phone.</p>
+<h3>Why did a shot that looked perfect rattle out?</h3>
+<p>Almost always the angle. Check the entry number on the result: a flat shot is aiming at a slot rather than a hole, and there is barely a centimetre in it.</p>
+<h3>Is the physics real?</h3>
+<p>The flight and the rim geometry are, and so are the rim, ball and release heights. The tolerances are widened on purpose, because nobody hits a centimetre with a sweeping bar and a thumb.</p>
+<h3>Is Buzzer Beater free to play?</h3>
+<p>Yes. Buzzer Beater is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/perfect-season-nba">🏆 82-0 Perfect Season Spin team seasons, draft a six man rotation</a>
+<a href="/stat-detective">🔎 Stat Detective Name the player behind the mystery stat line</a>
+<a href="/nba-stat-line">📊 NBA Stat Line Blend five real seasons into a target per 36 line</a>
+<a href="/mlb-grid">🔲 MLB Franchise Grid Fill the 3×3 with legends who match both teams</a>
+<a href="/f1-driver">🏎️ Guess The F1 Driver Guess the mystery F1 driver from clues</a>
+<a href="/hof-or-bust">🏆 Hall of Fame or Bust? Is this player a legend or a letdown?</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -30,6 +30,13 @@
      runs and one button was the whole game. The control refuses to run if the
      rewrite changed nothing.
 
+   ROUND 445 MOVED THE LINE THE CONTROL REWRITES. The spray law now lives in
+   src/lib/arcade.ts, shared with Buzzer Beater, and freeKick.ts holds only its
+   own prices for it. So the control rewrites those prices instead of the
+   formula, and it copies arcade.ts into the temp directory beside the
+   rewritten rules file so the bundler can still resolve the import. arcade.ts
+   imports nothing for exactly this reason.
+
    Run: node scripts/simFreeKick.mjs
 */
 import { execSync } from 'node:child_process';
@@ -50,10 +57,12 @@ const TMP = os.tmpdir().replace(/\\/g, '/');
 let LIB = `${ROOT_URL}/src/lib/freeKick.ts`;
 if (CONTROL === 'nospray') {
   const src = fs.readFileSync(path.join(ROOT, 'src/lib/freeKick.ts'), 'utf8');
-  const from = 'const magnitude = aim.power * aim.power * 0.34 + (setup.distance - 11) * 0.011;';
+  const from = 'export const SPRAY: SprayConfig = { power: 0.34, distance: 0.011, vertical: 0.7 };';
   if (!src.includes(from)) { console.error('control cannot run: freeKick.ts is not in the shape this control rewrites'); process.exit(1); }
   LIB = `${TMP}/freeKick.control.ts`;
-  fs.writeFileSync(LIB, src.replace(from, 'const magnitude = 0;'));
+  /* arcade.ts goes next to the rewritten copy so `./arcade` still resolves. */
+  fs.copyFileSync(path.join(ROOT, 'src/lib/arcade.ts'), `${TMP}/arcade.ts`);
+  fs.writeFileSync(LIB, src.replace(from, 'export const SPRAY: SprayConfig = { power: 0, distance: 0, vertical: 0.7 };'));
   console.log('NEGATIVE CONTROL ON: power costs no accuracy, the shape the game was first written in');
 }
 const ENTRY = `${TMP}/freeKick.entry.mjs`;
