@@ -380,7 +380,10 @@ function checkRender(label, s, ctx) {
   if (!uclHtml.includes('UCL Group A')) note('render', `${label}: the UCL card does not show Group A`);
   for (const c of s.uclGroup?.opponents ?? []) if (!uclHtml.includes(c)) note('render', `${label}: the UCL card never prints my group opponent ${c}`);
   if (uclHtml.includes(lg.cupName)) note('render', `${label}: the UCL card mentions the ${lg.cupName}`);
-  if (!uclHtml.includes('Projected quarter-finals')) note('render', `${label}: the UCL card has no projected quarter finals`);
+  /* Round 462: an era with a round of 16 projects that round; the heading
+     names whichever round the engine will actually seed. */
+  const projected = cm.uclFirstKoRound(s) === 'R16' ? 'Projected round of 16' : 'Projected quarter-finals';
+  if (!uclHtml.includes(projected)) note('render', `${label}: the UCL card has no "${projected}"`);
 }
 
 /* ---------- the driver: one career, every checkpoint ---------- */

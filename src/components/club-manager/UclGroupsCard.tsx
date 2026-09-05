@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { sortedTable, projectedUclBracket } from '@/lib/clubManager';
+import { sortedTable, projectedUclBracket, uclFirstKoRound } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 
@@ -19,19 +19,28 @@ interface UclGroupsCardProps {
  * below shows the field the engine will actually seed (Round 312: top two
  * per group when the groups are few, winners crossed with runners-up), so a
  * table change IS a draw change.
+ *
+ * Round 462: the tables stay up once the knockouts start. This card used to
+ * return null the moment the draw was made, so the final group tables
+ * vanished from the tab the week they were settled, where his item 3 asked
+ * for the table AND the bracket. Now the groups read as final and the
+ * bracket sits under them. In an era with a round of 16 the projection is
+ * all sixteen, drawn the way that era's draw worked.
  */
 export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
   const [pick, setPick] = useState('A');
   const group = career.uclGroup;
-  if (!group || career.uclKoRound !== null) return null;
+  if (!group) return null;
 
   const world = career.uclWorld ?? [];
   const letters = ['A', ...world.map(g => g.letter)];
   const activeRows = pick === 'A'
     ? sortedTable(group.table)
     : sortedTable(world.find(g => g.letter === pick)?.table ?? []);
-  const projection = projectedUclBracket(career);
+  const knockouts = career.uclKoRound !== null;
+  const projection = knockouts ? null : projectedUclBracket(career);
   const preseason = group.matchday === 0;
+  const roundOf16 = uclFirstKoRound(career) === 'R16';
 
   return (
     <div className="space-y-2">
@@ -55,15 +64,21 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
       <LeagueTableCard
         rows={activeRows}
         myClub={career.clubName}
-        title={`⭐ UCL Group ${pick} · MD${group.matchday}/6${pick === 'A' ? ' · yours' : ''}`}
+        title={`⭐ UCL Group ${pick} · ${knockouts ? 'final table' : `MD${group.matchday}/6`}${pick === 'A' ? ' · yours' : ''}`}
         preseason={preseason}
         onClubClick={onClubClick}
       />
 
+      {knockouts && (
+        <p className="text-[9px] text-muted-foreground px-1">
+          The groups are done. These final tables stay up, and the knockout bracket is below.
+        </p>
+      )}
+
       {projection && projection.length > 0 && (
         <div className="bg-card border border-border rounded-2xl p-3">
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-            Projected quarter-finals
+            {roundOf16 ? 'Projected round of 16' : 'Projected quarter-finals'}
           </div>
           <div className="grid gap-1.5 sm:grid-cols-2">
             {projection.map((p, i) => (
@@ -85,7 +100,9 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
           <p className="text-[9px] text-muted-foreground mt-1.5">
             {preseason
               ? 'If the groups ended right now. Nobody has kicked a ball, so this is just the draw order.'
-              : 'If the groups ended today: everyone currently in a qualifying place, winners drawn against runners-up where the groups send both through. This locks in after matchday 6.'}
+              : roundOf16
+                ? 'If the groups ended today: every group winner drawn against a runner-up, never from the same group and never from the same country, the way the draw worked in this era. This locks in after matchday 6.'
+                : 'If the groups ended today: everyone currently in a qualifying place, winners drawn against runners-up where the groups send both through. This locks in after matchday 6.'}
           </p>
         </div>
       )}

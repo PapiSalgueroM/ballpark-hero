@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
-  money, sortedTable, isPartialClub, TIER_INFO,
+  money, sortedLeagueTable, isPartialClub, TIER_INFO,
   projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf,
@@ -52,7 +52,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
     return label.charAt(0).toLowerCase() + label.slice(1);
   }, [clubName, career.eraId]);
 
-  const table = sortedTable(career.table);
+  const table = sortedLeagueTable(career);
   const rowIdx = table.findIndex(r => r.club === clubName);
   const row = rowIdx >= 0 ? table[rowIdx] : null;
   const inMyLeague = careerLeagueOf(career).clubs.includes(clubName);
