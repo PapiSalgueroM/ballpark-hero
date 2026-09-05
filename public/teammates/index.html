@@ -183,18 +183,31 @@
        sees one dimmed screenful, which reads as the site loading rather than
        a broken page. React replaces #root's children on mount, so the capped
        wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
   
   <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/teammates" data-rh="true"><meta name="description" content="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/teammates" data-rh="true"><meta property="og:title" content="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall" data-rh="true"><meta property="og:description" content="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
-<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
-<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
 <div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
 <a href="/">DOUKNOWBALL</a>
@@ -239,6 +252,7 @@
 <a href="/football-connect-4">🔴 Connect 4 Soccer trivia meets Connect 4</a>
 <a href="/guess-the-golfer">⛳ Guess The Golfer A mystery major champion, six clues, fewer is better</a>
 <a href="/sign-the-player">🔨 Sign the Player A blind auction: outbid two AI moguls, £1B each, then sim the showdown</a>
+<p>Report a problem</p>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>

@@ -56,7 +56,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Player Stock Market","item":"https://douknowball.com/player-stock-market"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are the numbers real?","acceptedAnswer":{"@type":"Answer","text":"Yes, every price, trajectory and outcome is a real row from the market value history the rest of the site runs on, 2004 to 2026. Nothing is authored."}},{"@type":"Question","name":"Why can I never see the names while buying?","acceptedAnswer":{"@type":"Answer","text":"That is the game. Knowing the name would be the answer; the format is investing on stats alone, and the reveal at the end names everyone."}},{"@type":"Question","name":"Can I go bankrupt mid draft?","acceptedAnswer":{"@type":"Answer","text":"No. Every slot always deals a punt the wallet can cover, and the buy button reserves the future punts' prices before letting you splash."}},{"@type":"Question","name":"Is Player Stock Market free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Player Stock Market is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Player Stock Market: Invest on Stats Alone | DoUKnowBall","description":"Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became.","url":"https://douknowball.com/player-stock-market","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Player Stock Market","item":"https://douknowball.com/player-stock-market"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are the numbers real?","acceptedAnswer":{"@type":"Answer","text":"Yes, every price, stat and season value is a real row from the market value history the rest of the site runs on. Nothing is authored, and a season with no row says so."}},{"@type":"Question","name":"Why can I never see the names while buying?","acceptedAnswer":{"@type":"Answer","text":"That is the game. Knowing the name would be the answer; the format is investing on stats alone, and the reveal at the end names everyone."}},{"@type":"Question","name":"Which seasons can the market open in?","acceptedAnswer":{"@type":"Answer","text":"2015 to 2022. Earlier seasons do not carry enough players the data still tracks today to give real choice at every position, and a later start would be too short a story to roll through."}},{"@type":"Question","name":"Can I go bankrupt mid draft?","acceptedAnswer":{"@type":"Answer","text":"No. Every slot always deals a punt the wallet can cover, and the buy button reserves the future punts' prices before letting you splash."}},{"@type":"Question","name":"Is Player Stock Market free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Player Stock Market is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Player Stock Market: Invest on Stats Alone | DoUKnowBall","description":"Open the market in a past season with 200M. Every card is anonymous: position, age, matches, goals, assists, cards and the real price, never a name, country or club. Buy position by position until the XI is full, then roll forward year by year and see what those careers became.","url":"https://douknowball.com/player-stock-market","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -183,69 +183,90 @@
        sees one dimmed screenful, which reads as the site loading rather than
        a broken page. React replaces #root's children on mount, so the capped
        wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
   
   <noscript></noscript>
   
   
-<link rel="canonical" href="https://douknowball.com/player-stock-market" data-rh="true"><meta name="description" content="Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/player-stock-market" data-rh="true"><meta property="og:title" content="Player Stock Market: Invest on Stats Alone | DoUKnowBall" data-rh="true"><meta property="og:description" content="Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Player Stock Market: Invest on Stats Alone | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Start six seasons back with 200M. Every candidate is anonymous: position, age, real value trajectory and output, never a name, country or club. Buy position by position until the XI is full, then jump to today and see what those careers became." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<link rel="canonical" href="https://douknowball.com/player-stock-market" data-rh="true"><meta name="description" content="Open the market in a past season with 200M. Every card is anonymous: position, age, matches, goals, assists, cards and the real price, never a name, country or club. Buy position by position until the XI is full, then roll forward year by year and see what those careers became." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/player-stock-market" data-rh="true"><meta property="og:title" content="Player Stock Market: Invest on Stats Alone | DoUKnowBall" data-rh="true"><meta property="og:description" content="Open the market in a past season with 200M. Every card is anonymous: position, age, matches, goals, assists, cards and the real price, never a name, country or club. Buy position by position until the XI is full, then roll forward year by year and see what those careers became." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Player Stock Market: Invest on Stats Alone | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Open the market in a past season with 200M. Every card is anonymous: position, age, matches, goals, assists, cards and the real price, never a name, country or club. Buy position by position until the XI is full, then roll forward year by year and see what those careers became." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
-<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
-<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
 <div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>📈Player Stock Market</h1>
-<p>200M, six seasons back, and nothing but the numbers.</p>
+<p>200M, a past season, and nothing but the numbers.</p>
 <p>How to play</p>
-<p>The market opens six seasons in the past with 200M in your wallet and the 4-3-3's eleven slots to fill, two buys a year.</p>
-<p>Every candidate is anonymous: you see the position, the age, the real market value trajectory and the last two seasons of goals and assists. Never a name, a country or a club.</p>
-<p>You pay the real market value of the year you are in. After the eleventh buy the campaign jumps to today, the cards turn over, and your portfolio is worth what those careers really became.</p>
-<p>How you are scored: on what your eleven are worth today against the best and the worst eleven that 200M could have bought from the same offers. Money you never spend buys nothing, so the wallet is there to be used.</p>
-<p>Worked example: two 8M punts that end up worth 40M each beat one 90M signing that ends up worth 45M, and both beat sitting on the cash.</p>
+<p>The market opens in a past season with 200M in your wallet and the 4-3-3's eleven slots to fill, one position at a time.</p>
+<p>Every card is anonymous: position, age, matches, goals, assists, cards and the price, which is that season's real market value. Never a name, a country or a club.</p>
+<p>When the XI is full the years roll forward one at a time to the latest season, and every holding moves as it really moved. Then the names turn over.</p>
+<p>How you are scored: on what your eleven are worth at the end against the best and the worst eleven that 200M could have bought from the same cards. Money you never spend buys nothing, so the wallet is there to be used.</p>
+<p>Unlimited</p>
+<p>Pick the season the market opens in, or let it roll one.</p>
 <h2>Player Stock Market: Invest on Stats Alone</h2>
-<p>The anonymous portfolio game: start six seasons back with 200M, and every candidate shows only a position, an age, a real market value trajectory and two seasons of output, never a name, country or club. Buy position by position until the XI is full, then jump to the present and learn what those careers became. All values are real market history.</p>
-<p>The Player Stock Market rebuilt as the anonymous portfolio game: the market opens six real seasons in the past, hands you 200M, and asks you to fill the 4-3-3's eleven slots buying on nothing but the numbers.</p>
-<p>Every candidate is anonymous while you shop. You see the position, the age, the three year market value trajectory and the last two seasons of goals and assists. Never a name, a country or a club, because knowing who a player is would be the whole answer.</p>
-<p>After the eleventh buy the campaign jumps to today, the cards turn over, and your portfolio is worth what those eleven careers really became. Every value on every card is real market history.</p>
+<p>The anonymous portfolio game: open the market in a past season with 200M, and every card shows only a position, an age, that season's matches, goals, assists and cards, and the real price, never a name, country or club. Buy position by position until the XI is full, roll forward one season at a time to the present, and learn what those careers became. All values are real market history.</p>
+<p>The Player Stock Market is the anonymous portfolio game: the market opens in a real past season, hands you 200M, and asks you to fill the 4-3-3's eleven slots on nothing but the numbers.</p>
+<p>Every card is anonymous while you shop. You see the position, the age, and that season's matches, goals, assists and cards, plus the price, which is the player's real market value that year. Never a name, a country or a club, because knowing who a player is would be the whole answer.</p>
+<p>When the XI is full the years roll forward one at a time to the latest season, every holding moves as it really moved, and only then do the cards turn over. Every number on every screen is real market history.</p>
 <h2>How to play Player Stock Market</h2>
-<li>Pick the daily market (the same campaign for everyone today) or unlimited.</li>
-<li>The market opens six seasons back. Two buys a year: each buy deals four anonymous candidates who fit the current slot, from an expensive bet to a cheap punt.</li>
-<li>Read the trajectories and the output, then buy exactly one at their real market value of that year. The wallet always reserves enough for the remaining slots' punts, so a run can never strand you.</li>
-<li>After the eleventh buy the reveal names every pick and prices the portfolio at today's real values.</li>
+<li>Pick the daily market (the same season and the same cards for everyone today) or unlimited, where you choose the season the market opens in, 2015 to 2022, or let it roll one.</li>
+<li>Fill the XI position by position. Each slot deals four anonymous cards from the opening season, from an expensive bet to a cheap punt. Read the age, the matches and the output, then buy exactly one at its real price.</li>
+<li>The wallet always reserves enough for the remaining slots' punts, so a run can never strand you.</li>
+<li>After the eleventh buy, step through the seasons one at a time. Each step shows what every holding is worth that year against what it was, and says plainly when a player has no row for a year rather than making one up.</li>
+<li>At the end the reveal names all eleven, prices the portfolio at the latest season's real values, and scores the run.</li>
 <h2>Rules to know</h2>
-<li>The wallet is 200M for the whole XI, and prices are real historical market values.</li>
-<li>Candidates come only from careers the data tracks through to the present, which is stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.</li>
-<li>A slot's four candidates always span the market: one from the top of that year's range, two from the middle, and a punt the wallet can always cover.</li>
-<li>Scoring is the return on the whole 200M. What your eleven are worth today is placed between the worst and the best eleven that the same 200M could really have bought from the same offers, so 100 means you played the wallet perfectly and 0 means you could not have done worse with it.</li>
+<li>The wallet is 200M for the whole XI, and prices are real market values from the opening season.</li>
+<li>Cards come only from careers the data tracks through to the latest season, stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.</li>
+<li>A slot's four cards always span the market: one from the top of that season's range, two from the middle, and a punt the wallet can always cover. They are dealt in a shuffled order, so the price band cannot be read off where a card sits.</li>
+<li>Scoring is the return on the whole 200M. What your eleven are worth at the end is placed between the worst and the best eleven that the same 200M could really have bought from the same cards, so 100 means you played the wallet perfectly and 0 means you could not have done worse with it.</li>
 <li>Money you never spend buys nothing. Sitting on the wallet is not a safe play, it is a low score, because the cash you kept could have been eleven careers instead.</li>
+<li>A season with no row for a player is shown as exactly that. Nothing is ever filled in between two real values.</li>
 <h2>Example walkthrough</h2>
-<p>Summer 2018, the striker slot. One anonymous card shows age 21, value climbing 8M to 15M to 24M with 14 goals last season. Another shows age 29, 60M flat, 20 goals a year. The kid costs a third as much; you take the trajectory.</p>
-<p>The reveal says the kid was a future superstar bought at 24M and worth six times that today, and your 200M portfolio closes at 310M, a 55 percent gain and a score in the eighties.</p>
+<p>The market opens in 2018, the striker slot. One card reads age 21, 34 matches, 14 goals, 6 assists, 24M. Another reads age 29, 41 matches, 22 goals, 5 assists, 60M. The kid costs less than half; you take the age and the rate.</p>
+<p>You step through 2019, 2020 and on, watching the 24M card climb past the 60M one, and the reveal says the kid became a superstar worth several times what you paid. The portfolio closes well over 200M and the score lands in the eighties.</p>
 <h2>Strategy tips</h2>
-<li>Age plus trajectory beats raw output. A 21 year old whose value doubled twice is the market telling you something.</li>
-<li>Spend the wallet, but spend it on purpose. A 60M splash in year one is ten cheap seats later, and eleven punts is a portfolio that barely moves. The reserve rule keeps you solvent either way.</li>
-<li>Keepers show no goals, so their trajectory IS the story. Watch for the steady climb.</li>
+<li>Age is the loudest number on the card. A 21 year old with real minutes is the market telling you where it is going; a 31 year old at 60M is a value with mostly one direction left.</li>
+<li>Read the rate, not the raw count. Ten goals in 20 matches beats fourteen in 40.</li>
+<li>Spend the wallet, but spend it on purpose. A 60M splash is ten cheap seats later, and eleven punts is a portfolio that barely moves. The reserve rule keeps you solvent either way.</li>
+<li>Keepers and defenders show few goals, so age and matches are their story.</li>
+<li>Yes, a fan might guess who the 130M card is. The game is won on the cheap seats, where age and the rate are the only edge you have.</li>
 <h2>Player Stock Market FAQ</h2>
 <h3>Are the numbers real?</h3>
-<p>Yes, every price, trajectory and outcome is a real row from the market value history the rest of the site runs on, 2004 to 2026. Nothing is authored.</p>
+<p>Yes, every price, stat and season value is a real row from the market value history the rest of the site runs on. Nothing is authored, and a season with no row says so.</p>
 <h3>Why can I never see the names while buying?</h3>
 <p>That is the game. Knowing the name would be the answer; the format is investing on stats alone, and the reveal at the end names everyone.</p>
+<h3>Which seasons can the market open in?</h3>
+<p>2015 to 2022. Earlier seasons do not carry enough players the data still tracks today to give real choice at every position, and a later start would be too short a story to roll through.</p>
 <h3>Can I go bankrupt mid draft?</h3>
 <p>No. Every slot always deals a punt the wallet can cover, and the buy button reserves the future punts' prices before letting you splash.</p>
 <h3>Is Player Stock Market free to play?</h3>
 <p>Yes. Player Stock Market is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/budget-builder">💵 $1B Budget Builder One billion dollars, real values, eleven slots. Spend it well</a>
-<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Flip your fortune, commit your cuts, survive the board</a>
+<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board</a>
 <a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
 <a href="/perfect-season-nfl">🏆 17-0 Perfect Season Draft an offense across eras, run the table</a>
 <a href="/perfect-season-nhl">🏆 82-0 Perfect Season Spin franchises and eras, chase 82-0</a>
 <a href="/perfect-season-nba">🏆 82-0 Perfect Season Spin team seasons, draft a six man rotation</a>
+<p>Report a problem</p>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>

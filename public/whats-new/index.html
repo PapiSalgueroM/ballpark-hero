@@ -183,22 +183,37 @@
        sees one dimmed screenful, which reads as the site loading rather than
        a broken page. React replaces #root's children on mount, so the capped
        wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
   
   <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/whats-new" data-rh="true"><meta name="description" content="The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/whats-new" data-rh="true"><meta property="og:title" content="What's New | DoUKnowBall Updates" data-rh="true"><meta property="og:description" content="The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="What's New | DoUKnowBall Updates" data-rh="true"><meta name="twitter:description" content="The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
-<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
-<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
 <div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <a href="/">Back to the games</a>
 <h1>What's New</h1>
 <p>The running log of what changed around here, newest first. We ship a lot. If something looks off after an update, hit the Report a bug button in the footer and we will get on it.</p>
+<h2>September 2026</h2>
+<li>Player Stock Market: open a past season, buy on stats alone, then roll the years forward. The market now opens in one real season, 2015 to 2022 (the daily fixes it, unlimited lets you pick), with 200M and the 4-3-3's eleven slots to fill one position at a time. Every card shows that season's numbers and nothing else: position, age, matches, goals, assists, cards and the real price, never a name, a country or a club, and the card itself does not even carry those fields any more. When the XI is full the seasons roll forward one at a time to the latest one, each step showing what every holding is worth against what it was, and a player with no row for a year says so instead of getting a number made up for him. Then the names turn over. The seasons on offer are the ones the data can actually finish: every slot has at least 18 real choices in every offered season, 2014 falls short at centre back, and a permanent check holds both. Behind it the page reads one small joined view instead of nine whole seasons, so the market opens on one request (three for the deepest season) and about a tenth of a megabyte, where it used to take about forty requests and seven megabytes. <a href="/player-stock-market">Open the market</a>.</li>
 <h2>August 2026</h2>
 <li>Two games retired, and the front door got sharper. Overrated or Underrated and Tier List are gone, straight from the owner's full site review: two buttons is not a game, and a ranking screen you play once is not one either. Old links live on, the versus game's address hands you to Face Off and the tier page brings you home. And the home page greeting is now seven words instead of a paragraph: 100+ free games across every sport, all playable without an account, which has the added virtue of being exactly true.</li>
 <li>New game: Gauntlet Draft, the draft mode. A formation is drawn and each of its eleven slots deals you five real players, a genuine star down to a bargain, in our own card frames. You keep exactly one per slot, no player is ever dealt twice, and then the cup begins: five knockout rounds against ever stronger invented opposition, rated 70 up to 89, with extra time and penalties when the ninety minutes are level. The run is decided entirely by the squad you drafted, so the same XI always runs the same gauntlet and every pick is the game. One shared daily draft for everyone, unlimited redrafts, 16 points a round survived and exactly 100 for the trophy, which even a perfect draft lifts only about one run in eight. This is the third and last of the three new games from the owner's review, all shipped this week. <a href="/gauntlet-draft">Run the gauntlet</a>.</li>

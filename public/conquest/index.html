@@ -183,18 +183,31 @@
        sees one dimmed screenful, which reads as the site loading rather than
        a broken page. React replaces #root's children on mount, so the capped
        wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
   
   <noscript></noscript>
   
   
 <link rel="canonical" href="https://douknowball.com/conquest" data-rh="true"><meta name="description" content="Territory conquest with NFL teams. Draft players and conquer the US map. Strategy meets football trivia." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/conquest" data-rh="true"><meta property="og:title" content="NFL Conquest - Territory Control Football Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Territory conquest with NFL teams. Draft players and conquer the US map. Strategy meets football trivia." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NFL Conquest - Territory Control Football Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Territory conquest with NFL teams. Draft players and conquer the US map. Strategy meets football trivia." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
 <style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
-<style>#dukb-snapshot{max-height:100vh;overflow:hidden;opacity:.45}</style>
-<noscript><style>#dukb-snapshot{max-height:none;overflow:visible;opacity:1}</style></noscript>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
 <script src="/prerender-boot.js" defer></script>
 </head>
 <body>
 <div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
 <a href="/">DOUKNOWBALL</a>
