@@ -53,8 +53,8 @@
     "date": "2026-08-25"
   },
   "/career-ladder": {
-    "hash": "0409233fbe2fe975",
-    "date": "2026-08-25"
+    "hash": "6c5dec55d924ee3c",
+    "date": "2026-09-05"
   },
   "/cbb-dynasty": {
     "hash": "c6f70132708020e9",
@@ -81,7 +81,7 @@
     "date": "2026-09-05"
   },
   "/club-manager": {
-    "hash": "6585956e3fc8e60e",
+    "hash": "a2edba324cbaf367",
     "date": "2026-09-05"
   },
   "/clue-auction": {
@@ -209,7 +209,7 @@
     "date": "2026-08-25"
   },
   "/higher-lower": {
-    "hash": "2335565808d7b77b",
+    "hash": "f0328ab1bd61a809",
     "date": "2026-09-05"
   },
   "/hockey": {
@@ -265,7 +265,7 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "12a1515a46edba6c",
+    "hash": "f391f8f118c086b0",
     "date": "2026-09-05"
   },
   "/mlb-connect-4": {
@@ -445,11 +445,11 @@
     "date": "2026-08-29"
   },
   "/rarity-round": {
-    "hash": "f174c64e12a8e333",
+    "hash": "61846399e3d316c1",
     "date": "2026-09-05"
   },
   "/rebuild": {
-    "hash": "d7fcf95595d6a3d5",
+    "hash": "c94e756cec19b226",
     "date": "2026-09-05"
   },
   "/records": {
@@ -473,12 +473,16 @@
     "date": "2026-09-05"
   },
   "/soccer": {
-    "hash": "437064806558992d",
+    "hash": "bfeb7bc359309621",
     "date": "2026-09-05"
   },
   "/soccer-career": {
     "hash": "70ecca0c076b8ba3",
     "date": "2026-08-25"
+  },
+  "/soccer-conquest": {
+    "hash": "f35e5783e3949b15",
+    "date": "2026-09-05"
   },
   "/soccer-grid": {
     "hash": "0a981bb30ac03886",
@@ -521,8 +525,8 @@
     "date": "2026-09-02"
   },
   "/transfer-path": {
-    "hash": "783b1e31037061ec",
-    "date": "2026-08-29"
+    "hash": "fada53758b534559",
+    "date": "2026-09-05"
   },
   "/ufc": {
     "hash": "bcefffecfeafe9f4",
@@ -537,8 +541,8 @@
     "date": "2026-09-05"
   },
   "/who-am-i": {
-    "hash": "204de96d0f751dea",
-    "date": "2026-08-25"
+    "hash": "c8d9b0e1afb1c729",
+    "date": "2026-09-05"
   },
   "/whod-they-beat": {
     "hash": "53e33564a7e9e2e1",
