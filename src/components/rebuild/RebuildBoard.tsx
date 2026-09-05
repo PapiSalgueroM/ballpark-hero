@@ -3,7 +3,7 @@ import { Check, Copy, RotateCcw } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET } from '@/lib/rebuildDeck';
+import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, type PerkKind } from '@/lib/rebuildDeck';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -22,22 +22,26 @@ const TIER_STYLE: Record<ClubTier, string> = {
   modest: 'text-muted-foreground',
 };
 
+const PERK_KINDS: PerkKind[] = ['rescout', 'discount', 'noWar'];
+
+function potLine(delta: number): string {
+  if (delta > 0) return `€${delta}M into the pot`;
+  if (delta < 0) return `€${-delta}M out of the pot`;
+  return 'No change to the pot';
+}
+
 export function RebuildBoard() {
   const {
-    phase, loading, clubs, club, squad, formation, setFormation,
-    startingXi, startRating, currentRating, target, budget, sold, signed,
-    chooseClub, finish, reset, grade, shareText,
-    fortuneDeck, flippedFortune, flippedIndex, flipFortune, confirmFortune,
-    preset, setPreset,
-    spunSlot, spinning, spinsDone, spinsTotal,
-    spin, keepSpun, sellSpun,
-    deal, takeReplacement, promoteBench, leaveEmpty, redealSpun,
-    decided, finalFunds,
-    coachOptions, keepCoach, coach, pickCoach,
-    objectives, finLog, penalties, rivals, rivalsLoading,
-    war, raiseWar, walkAway, overpaid, season,
+    phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
+    run,
+    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
+    managerReading, offerPrice, canRedeal,
+    pickFinance, toManager, hireManager, keepManager, setFormation,
+    spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
+    thinking, raiseWar, walkAway,
+    finish, rivals, rivalsLoading, season,
   } = useRebuild();
-  // Round 61: the owner's no scroll rule. Every phase change (fortune, spin,
+  // Round 61: the owner's no scroll rule. Every phase change (envelopes, spin,
   // results) pulls the new screen into view instead of leaving the player
   // looking at the old one.
   const revealRef = useRevealScroll<HTMLDivElement>(phase);
@@ -46,14 +50,16 @@ export function RebuildBoard() {
   // Round 333: while the wheel spins, the highlight cycles the unresolved
   // shirts so the reveal reads as a draw, not a jump cut.
   const [flash, setFlash] = useState<number | null>(null);
+  const slotCount = run?.formation.slots.length ?? 0;
+  const decided = run?.decided;
   useEffect(() => {
-    if (!spinning) { setFlash(null); return; }
-    const open = formation.slots.map((_, i) => i).filter(i => !decided.has(i));
+    if (!spinning || !decided) { setFlash(null); return; }
+    const open = Array.from({ length: slotCount }, (_, i) => i).filter(i => !(i in decided));
     if (open.length === 0) return;
     let k = 0;
     const t = window.setInterval(() => { k += 1; setFlash(open[k % open.length]); }, 110);
     return () => window.clearInterval(t);
-  }, [spinning, formation, decided]);
+  }, [spinning, slotCount, decided]);
 
   const copyShare = async () => {
     try {
@@ -73,7 +79,7 @@ export function RebuildBoard() {
   }
 
   // ---- Club picker ----
-  if (phase === 'pick-club') {
+  if (phase === 'pick-club' || !run) {
     const byTier: Record<string, typeof clubs> = {};
     for (const c of clubs) (byTier[c.tier] ??= []).push(c);
     const order: ClubTier[] = ['elite', 'strong', 'mid', 'modest'];
@@ -84,16 +90,16 @@ export function RebuildBoard() {
           Pick a club to rebuild
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          The rules: bigger clubs hand you a bigger war chest, then you spin for one
-          position at a time. Keep the man you draw or sell him for good, and answer
-          to the board at the end.
+          Bigger clubs hand you a bigger pot. Two envelopes land first, then you spin for one
+          shirt at a time: keep the man you draw or sell him for good, and answer to the board
+          at the end.
         </p>
 
         <div className="mt-4 rounded-xl border border-border bg-card p-3">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             Market restriction, locked once you pick a club
           </p>
-          <div className="mt-2 grid grid-cols-3 gap-2">
+          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
             {REBUILD_PRESETS.map(p => (
               <button
                 key={p.id}
@@ -113,7 +119,7 @@ export function RebuildBoard() {
           byTier[tier]?.length ? (
             <div key={tier} className="mt-6">
               <p className={`mb-2 text-xs font-semibold uppercase tracking-wider ${TIER_STYLE[tier]}`}>
-                {TIER_LABEL[tier]} · €{TIER_BUDGET[tier]}M budget
+                {TIER_LABEL[tier]} · €{TIER_BUDGET[tier]}M pot
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {byTier[tier].map(c => (
@@ -149,35 +155,121 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Coach hire (owner 2026-08-05) ----
-  if (phase === 'pick-coach') {
+  // ---- The two envelopes (Round 456) ----
+  if (phase === 'envelopes') {
+    const board = run.board;
+    const card = run.financeCard;
+    return (
+      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
+        <p className="text-center font-display text-xl font-bold text-foreground">
+          Two envelopes on the desk
+        </p>
+        <p className="mt-1 text-center text-sm text-muted-foreground">
+          The board's is open already. The finance one is yours to pick, and you pick it blind.
+        </p>
+
+        <div className="mt-5 rounded-2xl border border-gold/40 bg-gold/5 p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">From the board</p>
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-2xl">{board.emoji}</span>
+            <p className="font-display text-lg font-black text-foreground">{board.title}</p>
+          </div>
+          <p className="mt-1 text-sm text-muted-foreground">{board.text}</p>
+          <p className={`mt-2 text-sm font-bold ${board.delta > 0 ? 'text-emerald-500' : board.delta < 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
+            {potLine(board.delta)}
+          </p>
+          <p className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-gold">
+            The demands. Each miss draws a punishment card
+          </p>
+          <ul className="mt-1 space-y-1">
+            {board.demands.map(o => (
+              <li key={o.id} className="text-sm text-foreground">{o.emoji} {o.text}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-border bg-card p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            From the finance department: pick one of {run.financeDeck.length}
+          </p>
+          <div className="mt-3 grid grid-cols-5 gap-2">
+            {run.financeDeck.map((c, i) => {
+              const isFlipped = run.financeIndex === i;
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => pickFinance(i)}
+                  disabled={!!card}
+                  aria-label={isFlipped ? c.title : `Envelope ${i + 1}`}
+                  className={`aspect-[3/4] rounded-xl border-2 text-2xl font-black transition-all duration-300 ${
+                    isFlipped
+                      ? 'scale-110 border-gold bg-gold/15'
+                      : card
+                        ? 'border-border bg-card opacity-40'
+                        : 'border-border bg-card hover:scale-105 hover:border-gold/60'
+                  }`}
+                >
+                  {isFlipped ? c.emoji : '✉️'}
+                </button>
+              );
+            })}
+          </div>
+          {card && (
+            <div className="mt-4 rounded-2xl border border-gold/40 bg-background p-4 text-center animate-in fade-in zoom-in-90 duration-500">
+              <div className="text-4xl">{card.emoji}</div>
+              <p className="mt-1 font-display text-xl font-black text-foreground">{card.title}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{card.text}</p>
+              {card.perk ? (
+                <p className="mt-2 font-display text-2xl font-black text-primary">{PERK_LABEL[card.perk].emoji} {PERK_LABEL[card.perk].short}</p>
+              ) : (
+                <p className={`mt-2 font-display text-3xl font-black ${card.delta >= 0 ? 'text-emerald-500' : 'text-destructive'}`}>
+                  {card.delta >= 0 ? '+' : ''}€{card.delta}M
+                </p>
+              )}
+              <button
+                onClick={toManager}
+                className="mt-4 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              >
+                Now hire a manager
+              </button>
+            </div>
+          )}
+        </div>
+        <GameNav currentPath="/rebuild" />
+      </div>
+    );
+  }
+
+  // ---- The manager ----
+  if (phase === 'manager') {
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-center font-display text-xl font-bold text-foreground">
           Pick your manager
         </p>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          Keep the man you have for free, or spend transfer money on a better one.
-          A better manager lifts your final squad rating.
+          Keep the man you have for free, or pay for one of three. Each gets more out of one
+          kind of player, and the number beside each name is what your XI reads with him in
+          charge today. €{budget}M in the pot.
         </p>
 
         <div className="mt-5 grid gap-2">
-          {[...coachOptions, keepCoach].map(c => (
+          {[...run.managerOptions, keepManager].map(m => (
             <button
-              key={c.id}
-              onClick={() => pickCoach(c)}
+              key={m.id}
+              onClick={() => hireManager(m)}
               className="flex items-center justify-between rounded-xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/50"
             >
               <span className="flex min-w-0 items-center gap-3">
-                <span className="text-2xl">{c.emoji}</span>
+                <span className="text-2xl">{m.emoji}</span>
                 <span className="min-w-0">
-                  <span className="block truncate text-sm font-bold text-foreground">{c.name}</span>
-                  <span className="block truncate text-[11px] text-muted-foreground">{c.desc}</span>
+                  <span className="block truncate text-sm font-bold text-foreground">{m.name}</span>
+                  <span className="block truncate text-[11px] text-muted-foreground">{m.line}</span>
                 </span>
               </span>
               <span className="ml-3 shrink-0 text-right">
-                <span className="block text-sm font-bold text-primary">{c.bonus >= 3 ? 'The full lift' : c.bonus === 2 ? 'A real lift' : c.bonus === 1 ? 'A small lift' : 'No change'}</span>
-                <span className="block text-[11px] text-gold">{c.cost === 0 ? 'Free' : `€${c.cost}M`}</span>
+                <span className="block text-sm font-bold text-primary">XI reads {managerReading(m)}</span>
+                <span className="block text-[11px] text-gold">{m.cost === 0 ? 'Free' : `€${m.cost}M`}</span>
               </span>
             </button>
           ))}
@@ -202,61 +294,10 @@ export function RebuildBoard() {
     );
   }
 
-  // ---- Fortune card flip (Round 51: pick one of ten) ----
-  if (phase === 'fortune') {
-    return (
-      <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
-        <p className="text-center font-display text-xl font-bold text-foreground">
-          The board hands you ten envelopes
-        </p>
-        <p className="mt-1 text-center text-sm text-muted-foreground">
-          One holds a takeover. One holds a lawsuit. Flip exactly one card and live with it.
-        </p>
-        <div className="mt-5 grid grid-cols-5 gap-2">
-          {fortuneDeck.map((card, i) => {
-            const isFlipped = flippedIndex === i;
-            return (
-              <button
-                key={card.id}
-                onClick={() => flipFortune(i)}
-                disabled={!!flippedFortune}
-                className={`aspect-[3/4] rounded-xl border-2 text-2xl font-black transition-all duration-300 ${
-                  isFlipped
-                    ? 'scale-110 border-gold bg-gold/15'
-                    : flippedFortune
-                      ? 'border-border bg-card opacity-40'
-                      : 'border-border bg-card hover:scale-105 hover:border-gold/60'
-                }`}
-              >
-                {isFlipped ? card.emoji : '❓'}
-              </button>
-            );
-          })}
-        </div>
-        {flippedFortune && (
-          <div className="mt-5 rounded-2xl border border-gold/40 bg-card p-5 text-center animate-in fade-in zoom-in-90 duration-500">
-            <div className="text-4xl">{flippedFortune.emoji}</div>
-            <p className="mt-1 font-display text-xl font-black text-foreground">{flippedFortune.title}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{flippedFortune.text}</p>
-            <p className={`mt-2 font-display text-3xl font-black ${flippedFortune.delta >= 0 ? 'text-emerald-500' : 'text-destructive'}`}>
-              {flippedFortune.delta >= 0 ? '+' : ''}€{flippedFortune.delta}M
-            </p>
-            <button
-              onClick={confirmFortune}
-              className="mt-4 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
-            >
-              To the wheel
-            </button>
-          </div>
-        )}
-        <GameNav currentPath="/rebuild" />
-      </div>
-    );
-  }
-
   // ---- Done ----
   if (phase === 'done') {
     const hit = currentRating >= target;
+    const penalties = run.reckoning?.notes ?? [];
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         <div className="rounded-2xl border border-border bg-card p-6 text-center">
@@ -279,12 +320,12 @@ export function RebuildBoard() {
           <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
           <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Coach: {coach?.name ?? 'Same man as last season'} · Sold {sold.length} · Signed {signed.length} · €{finalFunds}M {finalFunds < 0 ? 'in debt' : 'left'}
+            Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
           </p>
 
           {penalties.length > 0 && (
             <div className="mt-4 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left">
-              <p className="text-xs font-semibold uppercase tracking-wider text-destructive">Board reckoning</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-destructive">What the board did</p>
               {penalties.map((p, i) => (
                 <p key={i} className="mt-1 text-xs text-muted-foreground">{p}</p>
               ))}
@@ -296,11 +337,11 @@ export function RebuildBoard() {
               🏁 The other managers' windows
             </p>
             {rivalsLoading && (
-              <p className="mt-2 text-xs text-muted-foreground">The rivals are finishing their paperwork...</p>
+              <p className="mt-2 text-xs text-muted-foreground">The rivals are still doing their deals...</p>
             )}
             {rivals && rivals.length > 0 && (
               <div className="mt-2 space-y-2">
-                {[{ name: 'You', emoji: '🫵', club: { club: club.club }, startRating, finalRating: currentRating, signings: signed.map(s => s.name) }, ...rivals]
+                {[{ name: 'You', emoji: '🫵', club: { club: club.club }, startRating, finalRating: currentRating, signings: run.signed.map(s => s.name) }, ...rivals]
                   .sort((a, b) => b.finalRating - a.finalRating)
                   .map((r, i) => (
                     <div key={r.name} className={`flex items-center justify-between rounded-lg border px-3 py-2 ${r.name === 'You' ? 'border-primary/50 bg-primary/5' : 'border-border'}`}>
@@ -320,7 +361,7 @@ export function RebuildBoard() {
               </div>
             )}
             {!rivalsLoading && (!rivals || rivals.length === 0) && (
-              <p className="mt-2 text-xs text-muted-foreground">The rivals ghosted this window.</p>
+              <p className="mt-2 text-xs text-muted-foreground">The rivals sat this window out.</p>
             )}
           </div>
 
@@ -361,7 +402,7 @@ export function RebuildBoard() {
                   <p>⚽ Your top scorer: <b>{season.yourTopScorer.player}</b>, {season.yourTopScorer.goals} goals</p>
                 )}
                 {season.yourAssistKing && (
-                  <p>🎯 Your assist king: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</p>
+                  <p>🎯 Your top assister: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</p>
                 )}
               </div>
             </div>
@@ -389,13 +430,11 @@ export function RebuildBoard() {
   }
 
   // ---- The spin loop (Round 333: the owner's core loop) ----
+  const { formation, spun, deal, war, sold, signed, overpaid, post, perks, settledCount } = run;
   const onTrack = currentRating >= target;
-  const incumbent = spunSlot !== null ? startingXi[spunSlot] : null;
-  const spentAllSpins = spinsDone >= spinsTotal;
-  const spendCeiling = budget + OVERDRAFT_LIMIT;
-  const dealDeadEnd = !!deal
-    && !deal.offers.some(p => p.marketValue <= spendCeiling)
-    && deal.bench.length === 0;
+  const incumbent = spun !== null ? startingXi[spun] : null;
+  const spentAllSpins = settledCount >= formation.slots.length;
+  const heldPerks = PERK_KINDS.filter(k => perks[k] > 0);
 
   return (
     <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-6">
@@ -419,7 +458,7 @@ export function RebuildBoard() {
       </div>
 
       <div className="mt-3 flex items-center gap-2">
-        {spinsDone === 0 && spunSlot === null && !spinning && (
+        {settledCount === 0 && spun === null && !spinning && (
           <select
             value={formation.name}
             onChange={e => setFormation(e.target.value)}
@@ -430,12 +469,12 @@ export function RebuildBoard() {
           </select>
         )}
         <span className="text-xs font-semibold text-muted-foreground">
-          {spinsDone} of {spinsTotal} shirts settled
+          {settledCount} of {formation.slots.length} shirts settled
         </span>
         {!spentAllSpins && (
           <button
             onClick={spin}
-            disabled={spinning || spunSlot !== null || !!war}
+            disabled={spinning || spun !== null || !!war}
             className="ml-auto rounded-full bg-primary px-6 py-2 text-sm font-black tracking-wide text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             {spinning ? 'SPINNING…' : 'SPIN'}
@@ -444,14 +483,15 @@ export function RebuildBoard() {
         {spentAllSpins && (
           <button
             onClick={finish}
-            className="ml-auto rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+            disabled={!!war}
+            className="ml-auto rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             Final whistle
           </button>
         )}
       </div>
 
-      {/* Board objectives, live checklist */}
+      {/* Board demands, live checklist */}
       {objectives.length > 0 && (
         <div className="mt-3 rounded-xl border border-gold/40 bg-gold/5 p-3">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Board demands, each miss draws a punishment card</p>
@@ -463,16 +503,33 @@ export function RebuildBoard() {
         </div>
       )}
 
-      {/* Money news feed */}
-      {finLog.length > 0 && (
+      {/* Perks in hand */}
+      {heldPerks.length > 0 && (
+        <div className="mt-3 rounded-xl border border-primary/40 bg-primary/5 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">In your pocket</p>
+          {heldPerks.map(k => (
+            <p key={k} className="mt-1 text-xs text-foreground">
+              {PERK_LABEL[k].emoji} <span className="font-semibold">{PERK_LABEL[k].short}{perks[k] > 1 ? ` x${perks[k]}` : ''}</span>
+              <span className="text-muted-foreground">: {PERK_LABEL[k].long}</span>
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Envelopes that arrived as you went */}
+      {post.length > 0 && (
         <div className="mt-3 rounded-xl border border-border bg-card p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">💸 Money news</p>
-          {finLog.slice(-3).map((ev, i) => (
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">✉️ In the post</p>
+          {post.slice(-3).map((ev, i) => (
             <p key={i} className="mt-1 text-xs text-muted-foreground">
               {ev.emoji} {ev.text}{' '}
-              <span className={ev.delta >= 0 ? 'font-bold text-emerald-500' : 'font-bold text-destructive'}>
-                {ev.delta >= 0 ? '+' : ''}€{ev.delta}M
-              </span>
+              {ev.perk ? (
+                <span className="font-bold text-primary">{PERK_LABEL[ev.perk].short}</span>
+              ) : (
+                <span className={ev.delta >= 0 ? 'font-bold text-emerald-500' : 'font-bold text-destructive'}>
+                  {ev.delta >= 0 ? '+' : ''}€{ev.delta}M
+                </span>
+              )}
             </p>
           ))}
         </div>
@@ -485,8 +542,8 @@ export function RebuildBoard() {
         {formation.slots.map((slot, i) => {
           const p = startingXi[i];
           const last = p ? p.name.split(' ').slice(-1)[0] : null;
-          const isSettled = decided.has(i);
-          const isSpun = spunSlot === i;
+          const isSettled = i in run.decided;
+          const isSpun = spun === i;
           const isFlash = flash === i;
           return (
             <div
@@ -501,9 +558,10 @@ export function RebuildBoard() {
             >
               <span className="block text-[8px] font-bold uppercase text-muted-foreground">{slot.label}</span>
               <span className="block max-w-[64px] truncate text-[10px] font-semibold text-foreground">
-                {last ?? (isSpun ? 'OPEN' : 'EMPTY')}
+                {last ?? (isSpun ? 'OPEN' : isSettled ? '40 overall' : 'EMPTY')}
               </span>
               {p && <span className="block text-[9px] font-bold text-primary">{playerRating(p)}</span>}
+              {!p && isSettled && <span className="block text-[9px] font-bold text-muted-foreground">40</span>}
               {isSettled && <span className="block text-[8px] font-bold text-emerald-400">✓</span>}
             </div>
           );
@@ -511,10 +569,10 @@ export function RebuildBoard() {
       </div>
 
       {/* The drawn shirt: keep him or sell him, and selling is final */}
-      {spunSlot !== null && !deal && incumbent && (
+      {spun !== null && !deal && incumbent && (
         <div className="mt-4 rounded-2xl border border-gold/50 bg-card p-4 animate-in fade-in zoom-in-95 duration-300">
           <p className="text-center text-[10px] font-bold uppercase tracking-widest text-gold">
-            The wheel lands on {formation.slots[spunSlot].label}
+            The wheel lands on {formation.slots[spun].label}
           </p>
           <div className="mt-2 flex items-center justify-center gap-2">
             <FlagImg name={incumbent.nationality} size={16} />
@@ -538,22 +596,25 @@ export function RebuildBoard() {
             </button>
           </div>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">
-            Selling is final. The scouts bring three priced options and the bench is free.
+            Selling is final. The scouts bring three prices, the bench is free, and a 40 overall is always there.
           </p>
         </div>
       )}
 
-      {/* The replacement deal: three priced men plus the free bench */}
-      {spunSlot !== null && deal && (
+      {/* The replacement deal: three priced men, the free bench, the 40 overall */}
+      {spun !== null && deal && (
         <div className="mt-4 rounded-2xl border border-border bg-card p-4">
           <p className="text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-            {incumbent ? `Fill the ${formation.slots[spunSlot].label} shirt` : `The ${formation.slots[spunSlot].label} shirt was already empty, fill it`}
+            {incumbent ? `Fill the ${formation.slots[spun].label} shirt` : `The ${formation.slots[spun].label} shirt was already empty, fill it`}
           </p>
           {deal.offers.length > 0 && (
             <div className="mt-3 space-y-1.5">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">The scouts' three</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
+                The scouts' three{perks.discount > 0 ? ', 20% off the one you take' : ''}
+              </p>
               {deal.offers.map(p => {
-                const affordable = p.marketValue <= spendCeiling;
+                const price = offerPrice(p);
+                const affordable = price <= spendCeiling;
                 return (
                   <button
                     key={p.name}
@@ -570,7 +631,10 @@ export function RebuildBoard() {
                     </span>
                     <span className="ml-2 shrink-0 text-right">
                       <span className="block text-sm font-bold text-primary">{playerRating(p)}</span>
-                      <span className="block text-[10px] text-gold">€{p.marketValue}M</span>
+                      <span className="block text-[10px] text-gold">
+                        {price < p.marketValue && <span className="mr-1 text-muted-foreground line-through">€{p.marketValue}M</span>}
+                        €{price}M
+                      </span>
                     </span>
                   </button>
                 );
@@ -599,9 +663,11 @@ export function RebuildBoard() {
               ))}
             </div>
           )}
-          {dealDeadEnd && (
+          {canRedeal && (
             <div className="mt-3 text-center">
-              <p className="text-xs text-muted-foreground">Nobody on the list is gettable with the money left.</p>
+              <p className="text-xs text-muted-foreground">
+                {perks.rescout > 0 ? 'You have a fresh list in your pocket.' : 'Nobody on the list is gettable with the money left.'}
+              </p>
               <button
                 onClick={redealSpun}
                 className="mt-2 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:border-primary/50"
@@ -611,11 +677,11 @@ export function RebuildBoard() {
             </div>
           )}
           <button
-            onClick={leaveEmpty}
+            onClick={takeForty}
             disabled={!!war}
             className="mt-3 w-full rounded-lg border border-border/60 px-3 py-2 text-center text-[11px] text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-40"
           >
-            Leave the shirt empty. An empty shirt plays like a 40.
+            Take a 40 overall for this shirt
           </button>
         </div>
       )}
@@ -636,7 +702,7 @@ export function RebuildBoard() {
           )}
           {overpaid > 0 && (
             <p className="mt-1 text-muted-foreground">
-              <span className="font-semibold text-gold">War premiums:</span> €{overpaid}M over market value
+              <span className="font-semibold text-gold">Paid over value in wars:</span> €{overpaid}M
             </p>
           )}
         </div>
@@ -655,9 +721,9 @@ export function RebuildBoard() {
             <p className="text-center text-xs font-semibold text-muted-foreground">
               {war.outcome === 'won' ? '✅ DEAL DONE'
                 : war.outcome === 'lost' ? '❌ DEAL LOST'
-                : war.thinking ? `${war.rival.emoji} ${war.rival.name} is thinking…`
+                : thinking ? `${run.rivalPlans[war.rivalIdx].emoji} ${run.rivalPlans[war.rivalIdx].name} is thinking…`
                 : war.leader === 'you' ? 'Your bid leads'
-                : `${war.rival.emoji} ${war.rival.name} leads`}
+                : `${run.rivalPlans[war.rivalIdx].emoji} ${run.rivalPlans[war.rivalIdx].name} leads`}
             </p>
             <div className="mt-3 max-h-32 space-y-1 overflow-y-auto rounded-lg border border-border bg-background p-2">
               {[...war.log].reverse().map((l, i) => (
@@ -669,20 +735,20 @@ export function RebuildBoard() {
                 <div className="mt-4 flex justify-center gap-2">
                   <button
                     onClick={raiseWar}
-                    disabled={war.thinking || war.leader === 'you' || nextRaise(war.price) > spendCeiling}
+                    disabled={thinking || war.leader === 'you' || nextRaise(war.price) > spendCeiling}
                     className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
                   >
                     Bid €{nextRaise(war.price)}M
                   </button>
                   <button
                     onClick={walkAway}
-                    disabled={war.thinking || war.leader === 'you'}
+                    disabled={thinking || war.leader === 'you'}
                     className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground disabled:opacity-40"
                   >
                     Walk away
                   </button>
                 </div>
-                {war.leader === 'rival' && !war.thinking && nextRaise(war.price) > spendCeiling && (
+                {war.leader === 'rival' && !thinking && nextRaise(war.price) > spendCeiling && (
                   <p className="mt-2 text-center text-[11px] text-destructive">
                     Even the overdraft cannot cover the next bid. Walk, or lose him anyway.
                   </p>
