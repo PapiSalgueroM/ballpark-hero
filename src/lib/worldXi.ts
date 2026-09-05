@@ -445,14 +445,34 @@ function ratingToOverall(rating: number): number {
   return 40 + (clamped / 100) * 59;
 }
 
+/* Round 449: no real footballer's name goes into one of these. The old six
+   put a named, real player at the centre of an invented bust-up, an invented
+   transfer request, agents leaking interest, a rejected bid: conduct, not a
+   simulated result. A simulated season can say a real player scored twelve
+   in your XI, because the whole screen is plainly a sim of a squad you built.
+   It cannot say he fell out with the board, because that is a claim about the
+   man, and CLAUDE.md names invented transfers and invented words in a real
+   person's mouth as the exposure that matters most. The lines are about the
+   club and the window now, and the player is only ever "your keeper" or
+   "your forward", the role his drawn position gives him. */
 const TRANSFER_SAGA_TEMPLATES = [
-  '{name} handed in a transfer request after a bust-up with the board.',
-  'Reports linked {name} with a shock exit all winter, but the move fell through on deadline day.',
-  'A release clause row over {name} rumbled on for months before a new deal was signed.',
-  '{name} rejected a club-record bid, insisting the trophy hunt was not finished.',
-  'Agents for {name} leaked interest from three leagues to force a bumper new contract.',
-  'A medical was booked, then cancelled, then booked again in the {name} saga that dominated deadline day.',
+  'The board turned down a club record bid for your {role} in January and made a point of saying so.',
+  'Two clubs chased your {role} all winter. Neither got past the first phone call.',
+  'Your {role} signed a new deal in March, which ended a month of noise.',
+  'A release clause in the {role} contract kept the rumour mill busy until deadline day passed quietly.',
+  'Deadline day came and went with your {role} still in the building, which is all anyone here wanted.',
+  'A loan bid for your {role} arrived on the last day of the window and did not get a reply.',
 ];
+
+/** The role a drawn player plays in a saga line, from his position and never his name. */
+function sagaRoleFor(position: string | undefined): string {
+  const p = (position || '').toUpperCase();
+  if (p === 'GK') return 'keeper';
+  if (/^(CB|LB|RB|LWB|RWB|DEF|D)$/.test(p) || p.startsWith('CB')) return 'defender';
+  if (/^(CDM|CM|CAM|LM|RM|DM|AM|MID|M)$/.test(p)) return 'midfielder';
+  if (/^(ST|CF|LW|RW|FWD|FW|F)$/.test(p)) return 'forward';
+  return 'starter';
+}
 
 /**
  * Deterministic season sim seeded by the finished XI. Squad rating comes from
@@ -553,10 +573,12 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     weeksOut: 2 + Math.floor(rand() * 10),
   }));
 
-  // Transfer saga headline, starring a random squad member.
+  // Transfer saga headline about a random squad member's ROLE, never his
+  // name (Round 449). Both draws stay in this order so every seed's season
+  // reads the same as before the change.
   const sagaPlayer = players[Math.floor(rand() * players.length)];
   const template = TRANSFER_SAGA_TEMPLATES[Math.floor(rand() * TRANSFER_SAGA_TEMPLATES.length)];
-  const transferHeadline = sagaPlayer ? template.replace('{name}', sagaPlayer.name) : 'A quiet transfer window, for once.';
+  const transferHeadline = sagaPlayer ? template.replace('{role}', sagaRoleFor(sagaPlayer.position)) : 'A quiet transfer window, for once.';
 
   const positionLine = tablePosition === 1
     ? `${formationName} title winners. Champions of the league.`
