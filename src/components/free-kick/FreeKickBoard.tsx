@@ -4,15 +4,19 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
-import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
 import {
   buildRun, daySeed, lehmer, maxRunScore, takeShot, wallSpan,
   ROUNDS_PER_RUN, type KickSetup, type ShotResult,
 } from '@/lib/freeKick';
 
 const SLUG = 'free-kick';
+/* The field the count is stored under. It has been `goals` since Round 433 and
+   renaming it would throw away the record of anyone who already played today. */
+const COUNT_FIELD = 'goals';
 type Mode = 'daily' | 'unlimited';
 type Phase = 'intro' | 'aiming' | 'flying' | 'kickEnd' | 'done';
 
@@ -32,34 +36,21 @@ const GOAL_BOT = 150;
 const toViewX = (x: number) => GOAL_L + ((x + 1) / 2) * (GOAL_R - GOAL_L);
 const toViewY = (y: number) => GOAL_BOT - y * (GOAL_BOT - GOAL_TOP);
 
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-interface DailyRecord { score: number; goals: number }
-
 export default function FreeKickBoard() {
   /* Round 428's rule: the day is pinned at mount and every read, write and
      deal uses it, so a run that crosses midnight ET stays on the day it
      started instead of being filed under tomorrow. */
   const todayStr = useRef(getTodayET()).current;
-  const [restored] = useState<DailyRecord | null>(() =>
-    readDailyRecord<DailyRecord>(SLUG, todayStr, f =>
-      typeof f.score === 'number' && Number.isFinite(f.score) &&
-      typeof f.goals === 'number' && f.goals >= 0 && f.goals <= ROUNDS_PER_RUN
-        ? { score: f.score, goals: f.goals }
-        : null),
-  );
+  const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN));
 
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
   const [kicks, setKicks] = useState<KickSetup[]>(() => (restored ? buildRun(daySeed(todayStr)) : []));
   const [kickIdx, setKickIdx] = useState(restored ? ROUNDS_PER_RUN - 1 : 0);
   const [score, setScore] = useState(restored?.score ?? 0);
-  const [goals, setGoals] = useState(restored?.goals ?? 0);
+  const [goals, setGoals] = useState(restored?.count ?? 0);
   const [result, setResult] = useState<ShotResult | null>(null);
-  const [flight, setFlight] = useState(0);
+  const { progress: flight, launch, reset: resetFlight } = useArcadeFlight(FLIGHT_MS);
 
   /* Aim, power and curve: the three things the player actually controls. */
   const [aimX, setAimX] = useState(0);
@@ -69,8 +60,6 @@ export default function FreeKickBoard() {
   const [charging, setCharging] = useState(false);
 
   const rngRef = useRef<() => number>(lehmer(1));
-  const rafRef = useRef<number | null>(null);
-  const settleRef = useRef<number | null>(null);
   const savedRef = useRef(restored !== null);
 
   const setup = kicks[kickIdx] ?? null;
@@ -99,12 +88,13 @@ export default function FreeKickBoard() {
       setMode('daily');
       setKicks(buildRun(daySeed(todayStr)));
       setScore(restored.score);
-      setGoals(restored.goals);
+      setGoals(restored.count);
       setPhase('done');
       return;
     }
     const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     rngRef.current = lehmer(seed ^ 0x5eed1234);
+    resetFlight();
     setMode(m);
     setKicks(buildRun(seed));
     setKickIdx(0);
@@ -114,7 +104,7 @@ export default function FreeKickBoard() {
     setAimX(0); setAimY(0.5); setCurve(0); setPower(0.6);
     savedRef.current = false;
     setPhase('aiming');
-  }, [restored, todayStr]);
+  }, [restored, todayStr, resetFlight]);
 
   const strike = useCallback(() => {
     if (phase !== 'aiming' || !setup) return;
@@ -122,62 +112,32 @@ export default function FreeKickBoard() {
     const r = takeShot({ x: aimX, y: aimY, power, curve }, setup, rngRef.current);
     setResult(r);
     setPhase('flying');
-    setFlight(0);
     /* The flight is drawn from the path the rules already computed, so what
-       the player watches is what was scored, never a separate animation. */
-    if (prefersReducedMotion()) {
-      setFlight(1);
+       the player watches is what was scored, never a separate animation. The
+       frames and the backup timer live in useArcadeFlight, shared with Buzzer
+       Beater since Round 445, along with the reduced motion path. */
+    launch(() => {
       setScore(s => s + r.points);
       if (r.scored) setGoals(g => g + 1);
       setPhase('kickEnd');
-      return;
-    }
-    /* The flight is DRAWN by animation frames and SETTLED by a timer, on
-       purpose. A browser pauses requestAnimationFrame in a hidden tab, so a
-       player who switched away mid kick came back to a ball frozen in the air
-       and a game that never moved on. The timer is throttled in a background
-       tab but it still fires, so the kick always lands. */
-    const started = performance.now();
-    let settled = false;
-    const settle = () => {
-      if (settled) return;
-      settled = true;
-      if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
-      setFlight(1);
-      setScore(s => s + r.points);
-      if (r.scored) setGoals(g => g + 1);
-      setPhase('kickEnd');
-    };
-    const tick = (now: number) => {
-      if (settled) return;
-      const t = Math.min(1, (now - started) / FLIGHT_MS);
-      setFlight(t);
-      if (t < 1) { rafRef.current = requestAnimationFrame(tick); return; }
-      settle();
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    settleRef.current = window.setTimeout(settle, FLIGHT_MS + 60);
-  }, [phase, setup, aimX, aimY, power, curve]);
-
-  useEffect(() => () => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    if (settleRef.current) window.clearTimeout(settleRef.current);
-  }, []);
+    });
+  }, [phase, setup, aimX, aimY, power, curve, launch]);
 
   const nextKick = useCallback(() => {
+    resetFlight();
     if (kickIdx + 1 >= ROUNDS_PER_RUN) { setPhase('done'); return; }
     setKickIdx(i => i + 1);
     setResult(null);
     setAimX(0); setAimY(0.5); setCurve(0); setPower(0.6);
     setPhase('aiming');
-  }, [kickIdx]);
+  }, [kickIdx, resetFlight]);
 
   /* Save the finished daily once, so a refresh brings back the score instead
      of dealing the same ten kicks again with the keeper already read. */
   useEffect(() => {
     if (phase !== 'done' || mode !== 'daily' || savedRef.current) return;
     savedRef.current = true;
-    writeDailyRecord(SLUG, todayStr, { score, goals });
+    writeArcadeRun(SLUG, todayStr, COUNT_FIELD, { score, count: goals });
   }, [phase, mode, score, goals, todayStr]);
 
   /* Keyboard: this is the point of the game, so it is a first class input and

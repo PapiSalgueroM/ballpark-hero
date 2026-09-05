@@ -19,11 +19,23 @@
  * The goal frame is measured in metres and the pitch is drawn from it, so the
  * numbers below read like a real goal: 7.32 wide, 2.44 high, taken from the
  * penalty spot out to 25 metres depending on the round.
+ *
+ * ROUND 445 MOVED THE SHARED HALF OUT AND CHANGED NOTHING ELSE. The seeded
+ * generator, the day seed, the spray law and the ladder builder now live in
+ * src/lib/arcade.ts, because the second arcade game runs on the same four
+ * things and the owner's instruction is one engine, many sports. Every number
+ * below is the number Round 433 shipped, in the same order, so a seed plays
+ * the same ten kicks it always did.
  */
+import {
+  buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
+  ROUNDS_PER_RUN, type SprayConfig,
+} from './arcade';
+
+export { daySeed, lehmer, ROUNDS_PER_RUN };
 
 export const GOAL_WIDTH = 7.32;
 export const GOAL_HEIGHT = 2.44;
-export const ROUNDS_PER_RUN = 10;
 
 /** Where the ball ends up, in goal coordinates: x is -1 (left post) to 1 (right post), y is 0 (grass) to 1 (bar). */
 export interface ShotResult {
@@ -66,38 +78,21 @@ export interface Aim {
   curve: number;
 }
 
-/* A small deterministic generator, the site's usual Lehmer, so a seed plays
-   the same ten kicks for everyone and a harness can replay a run exactly. */
-export function lehmer(seed: number): () => number {
-  let s = Math.trunc(seed) % 2147483647;
-  if (s <= 0) s += 2147483646;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-
 /** The ten kicks of a run: further out, more men in the wall, better keepers. */
 export function buildRun(seed: number): KickSetup[] {
-  const rng = lehmer(seed);
-  const kicks: KickSetup[] = [];
-  for (let i = 0; i < ROUNDS_PER_RUN; i += 1) {
-    const t = i / (ROUNDS_PER_RUN - 1);
+  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
     const distance = Math.round((11 + t * 14) * 10) / 10;
     const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
     const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
     const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
-    kicks.push({
+    return {
       distance,
       wallSize,
       keeperSkill,
       keeperLean,
       label: i === 0 ? 'Penalty spot, no wall' : `${distance} m, ${wallSize} in the wall`,
-    });
-  }
-  return kicks;
+    };
+  });
 }
 
 /**
@@ -126,14 +121,19 @@ export function flightPath(aim: Aim, setup: KickSetup, spray: { x: number; y: nu
  * from the first draft: with a clean flight, "top left corner, full power"
  * beat a thinking player 2539 points to 1206 over 400 runs, which
  * scripts/simFreeKick.mjs section 2 caught before the game ever shipped. A
- * harder strike now sprays further from the spot you picked, and it grows with
- * the square of power, so the last fifth of the bar is where the miss lives.
+ * harder strike sprays further from the spot you picked, and it grows with the
+ * square of power, so the last fifth of the bar is where the miss lives.
  * Distance adds a little of its own. The result is a real triangle: power
  * beats the keeper, placement beats the post, and you cannot have both.
+ *
+ * The rule itself is arcade.ts's, shared with Buzzer Beater since Round 445.
+ * These three numbers are this game's prices for it, and they are the numbers
+ * Round 433 measured. simFreeKick's negative control rewrites this line.
  */
+export const SPRAY: SprayConfig = { power: 0.34, distance: 0.011, vertical: 0.7 };
+
 export function sprayFor(aim: Aim, setup: KickSetup, rng: () => number): { x: number; y: number } {
-  const magnitude = aim.power * aim.power * 0.34 + (setup.distance - 11) * 0.011;
-  return { x: (rng() * 2 - 1) * magnitude, y: (rng() * 2 - 1) * magnitude * 0.7 };
+  return arcadeSpray(aim.power, setup.distance - 11, SPRAY, rng);
 }
 
 /** Where the keeper commits, given the shot and this round's keeper. */
@@ -226,9 +226,3 @@ export function maxRunScore(kicks: KickSetup[]): number {
   );
 }
 
-export function daySeed(dateStr: string): number {
-  /* Round 428's rule: the caller pins the day and passes it, so the kicks a
-     player is dealt and anything filed about them always name the same date. */
-  const digits = dateStr.replace(/-/g, '');
-  return (parseInt(digits, 10) % 2147483647) || 7;
-}
