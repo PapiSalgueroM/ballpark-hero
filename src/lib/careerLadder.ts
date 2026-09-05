@@ -387,6 +387,9 @@ export const CLUB_COUNTRY: Array<[string, string]> = [
   ['csa', '🇧🇷'], ['mogi mirim', '🇧🇷'], ['santa cruz', '🇧🇷'], ['sao caetano', '🇧🇷'],
   ['uniao sao joao', '🇧🇷'],
   ['cerro porteno', '🇵🇾'], ['cerro', '🇺🇾'], ['platense', '🇦🇷'], ['barranquilla', '🇨🇴'],
+  /* Round 463: the one Missing XI club string with no flag (a Chilean
+     starter's club at the time). Club Deportivo Huachipato, Talcahuano. */
+  ['huachipato', '🇨🇱'],
   ['miami united', '🇺🇸'], ['miami fc', '🇺🇸'], ['new york cosmos', '🇺🇸'],
 ];
 
