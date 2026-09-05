@@ -5115,7 +5115,10 @@ export function answerPress(career: CareerState, optionIdx: number): CareerState
     }
     return out;
   });
-  state.boardConfidence = clamp(state.boardConfidence + opt.board, 0, 100);
+  /* Round 465: only a result can sack you. An answer can take the board to
+     its last point, never to zero, because zero IS the sack in the header
+     meter and nothing between matches hands the manager to the wilderness. */
+  state.boardConfidence = clamp(state.boardConfidence + opt.board, 1, 100);
   press.mood = clamp(press.mood + opt.mood, 0, 100);
   press.nextFire += opt.fire ?? 0;
   press.nextSharpen += opt.sharpen ?? 0;
@@ -9370,6 +9373,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       ].slice(0, 8);
     }
   }
+  /* Round 465: a broken promise above can spend the last of it AFTER the
+     check that sacks, so a manager could finish the week on zero and still
+     be in a job. The header meter reads this number and says zero is the
+     sack (src/lib/clubManagerMeters.ts), so the check runs once more here. */
+  if (!state.sacked && state.boardConfidence <= 0) {
+    state.sacked = true;
+    events.push('📉 The board has seen enough. You are relieved of your duties.');
+  }
   // The talk only ever covered the match it was given for.
   state.teamTalk = null;
 
@@ -10583,7 +10594,8 @@ export function respondApproach(career: CareerState, commit: boolean): CareerSta
   state.approach = null;
   if (commit) {
     state.pendingMove = { club: app.club, blurb: app.blurb };
-    state.boardConfidence = clamp(state.boardConfidence - 6, 0, 100);
+    // Round 465: to the last point, never to zero; see answerPress.
+    state.boardConfidence = clamp(state.boardConfidence - 6, 1, 100);
     state.aiHeadlines = [
       `🤝 Done deal for the summer: you will take over at ${app.club} when the season ends. The ${state.clubName} board heard it from the radio, and they are furious.`,
       ...state.aiHeadlines,

@@ -30,8 +30,8 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
   return (
     <div className="bg-card border border-border rounded-2xl p-3 md:p-4">
       {title && <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{title}</div>}
-      <div className="grid grid-cols-[1.6rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2.2rem] gap-x-1 text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border/60">
-        <span>#</span><span>Club</span><span className="text-center">W</span><span className="text-center">D</span><span className="text-center">L</span><span className="text-center">GD</span><span className="text-right">Pts</span>
+      <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.4rem_1.4rem_2.7rem_2rem_2.2rem] gap-x-1 text-[10px] text-muted-foreground uppercase tracking-wide pb-1 border-b border-border/60">
+        <span>#</span><span>Club</span><span className="text-center">W</span><span className="text-center">D</span><span className="text-center">L</span><span className="text-center">GF-GA</span><span className="text-center">GD</span><span className="text-right">Pts</span>
       </div>
       {onClubClick && (
         <p className="text-[9px] text-muted-foreground pt-1">Tap any club to scout their full squad.</p>
@@ -44,7 +44,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
             key={r.club}
             onClick={onClubClick ? () => onClubClick(r.club) : undefined}
             className={cn(
-              'grid grid-cols-[1.6rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2.2rem] gap-x-1 items-center text-xs py-1.5 border-b border-border/30 last:border-0',
+              'grid grid-cols-[1.4rem_1fr_1.4rem_1.4rem_1.4rem_2.7rem_2rem_2.2rem] gap-x-1 items-center text-xs py-1.5 border-b border-border/30 last:border-0',
               mine && 'bg-primary/10 rounded-md -mx-1 px-1',
               onClubClick && 'cursor-pointer hover:bg-secondary/40 rounded-md -mx-1 px-1 transition-colors',
             )}
@@ -57,6 +57,10 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
             <span className="text-center text-muted-foreground">{r.w}</span>
             <span className="text-center text-muted-foreground">{r.d}</span>
             <span className="text-center text-muted-foreground">{r.l}</span>
+            {/* Round 465, his words: "show goals for and against as 25-23
+                alongside GD". The pair is the row's own gf and ga, so the
+                difference beside it is always what these two make. */}
+            <span className="text-center text-muted-foreground text-[11px] tabular-nums" data-goals={`${r.gf}-${r.ga}`}>{r.gf}-{r.ga}</span>
             <span className={cn('text-center', gd > 0 ? 'text-emerald-400' : gd < 0 ? 'text-red-400' : 'text-muted-foreground')}>
               {gd > 0 ? `+${gd}` : gd}
             </span>
