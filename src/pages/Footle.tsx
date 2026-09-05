@@ -274,7 +274,12 @@ const Index = () => {
                   key={key}
                   label={FOOTLE_CELL_LABELS[key]}
                   value={bestGuess.cells[key].value}
-                  state={bestGuess.cells[key].status}
+                  /* Round 443: StatTile has no spoken verdict, only a colour,
+                     and its 'incorrect' is the same neutral grey the board
+                     paints an unknown. So the new status maps onto it here
+                     rather than widening a tile six other games share. The
+                     value already reads "?", which is the honest part. */
+                  state={bestGuess.cells[key].status === 'unknown' ? 'incorrect' : bestGuess.cells[key].status}
                   direction={bestGuess.cells[key].arrow ?? null}
                   className="min-w-[80px]"
                 />
