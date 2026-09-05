@@ -465,7 +465,8 @@ const WhoAmI = () => {
 
             {/* #40: difficulty tiers by peak market value. Easy = most famous
                 third of the secret pool, Hard = least famous third, Normal =
-                the full 200-player secret pool. */}
+                the full secret pool (SECRET_POOL_SIZE in whoAmI.ts, 400 since
+                Round 463). */}
             <div className="mt-4 text-center">
               <p className="text-xs text-muted-foreground mb-2">How famous is the secret player?</p>
               <div className="flex items-center justify-center gap-2">

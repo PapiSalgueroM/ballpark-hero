@@ -163,13 +163,24 @@ export const AGE_RANGE = 12;
 /** Value points fall linearly to zero across this many log10 units (1 = 10x apart). */
 export const VALUE_LOG_RANGE = 1;
 
-export const POOL_SIZE = 500; // notable current-ish players kept in the guessable pool
-// Owner task 60 (2026-08-05): "lots more puzzles". The secret pool grows
-// 200 -> 300, which adds a hundred fresh, less-obvious secrets to Who Am I
-// AND Clue Auction (it draws from the same pickSecret pool). Value bands in
-// clueAuction were checked against the wider spread: the sub-$45M band just
-// absorbs the new tail.
-export const SECRET_POOL_SIZE = 300; // the secret is always drawn from the top of the pool
+// Round 463, his 2026-08-28 note: "more puzzles". The pool grows 500 -> 600
+// and the secret pool 300 -> 400, so a hundred more current players can be
+// the answer (and can be drawn by Clue Auction, which uses the same
+// pickSecret). Measured against the live 2026 rows on 2026-09-05 before the
+// change: the 300th seat by current value was $32M, the 400th $27M, the 500th
+// $24M and the 600th $22M, so every new secret is a first team player at a
+// top flight club, and the new seats still sit under the $45M floor of Clue
+// Auction's lowest value band, which absorbs them the way it absorbed the
+// 2026-08-05 growth. The boot cost of the wider pool is held by
+// scripts/simNoZeroFacts.mjs section 4 (14 requests, 800 KiB) and its rank
+// order by the exhaustive sweep in the same section.
+export const POOL_SIZE = 600; // notable current-ish players kept in the guessable pool
+// Owner task 60 (2026-08-05): "lots more puzzles". The secret pool grew
+// 200 -> 300 then, which added a hundred fresh, less-obvious secrets to Who
+// Am I AND Clue Auction (it draws from the same pickSecret pool). Value bands
+// in clueAuction were checked against the wider spread: the sub-$45M band
+// just absorbs the new tail.
+export const SECRET_POOL_SIZE = 400; // the secret is always drawn from the top of the pool
 
 // #40: prominence tiers for the secret pick, unlimited/practice play only
 // (this game has no separate daily mode; Casual/Expert guess budgets are

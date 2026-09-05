@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { worldLeagueDefs, careerLeagueOf, sortedTable, leagueRounds, LEAGUE_NATIONS } from '@/lib/clubManager';
+import { worldLeagueDefs, careerLeagueOf, sortedWorldTable, leagueRounds, leagueTiebreak, tiebreakFootnote, LEAGUE_NATIONS } from '@/lib/clubManager';
 import type { CareerState, TableRow } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { FlagImg } from '@/components/FlagImg';
@@ -39,10 +39,12 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   const active = leagues.find(l => l.id === pick) ?? myLeague;
   const mine = active.id === myLeague.id;
   const world = career.world?.[active.id];
+  // Round 462: every table in its own league's order (Spain and Italy split
+  // level points on head to head), and the footnote says which order.
   const rows: TableRow[] = mine
     ? myRows
     : world
-      ? sortedTable(world.table)
+      ? sortedWorldTable(career, active.id, world.table)
       // Pre-season: the league exists before its first round is simulated.
       : [...active.clubs]
           .sort((a, b) => a.localeCompare(b))
@@ -52,6 +54,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
     : world?.round ?? 0;
   const total = leagueRounds(active.clubs.length);
   const preseason = rows.length > 0 && rows.every(r => r.w + r.d + r.l === 0);
+  const footnote = preseason ? undefined : tiebreakFootnote(leagueTiebreak(active.id), rows, career.pairResults?.[active.id]);
 
   return (
     <div className="space-y-2">
@@ -83,6 +86,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
               : `${active.name} · round ${Math.min(played, total)} of ${total}`}
             preseason={preseason}
             onClubClick={onClubClick}
+            footnote={footnote}
           />
           {preseason && (
             <p className="text-[9px] text-muted-foreground px-1">

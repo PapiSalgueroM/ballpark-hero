@@ -8630,7 +8630,11 @@ export type Database = {
       }
       transfer_path_puzzles: {
         Row: {
+          active_hint: string | null
+          active_min_steps: number | null
           created_at: string
+          europe_hint: string | null
+          europe_min_steps: number | null
           hint: string
           id: string
           min_steps: number
@@ -8640,7 +8644,11 @@ export type Database = {
           sort_order: number
         }
         Insert: {
+          active_hint?: string | null
+          active_min_steps?: number | null
           created_at?: string
+          europe_hint?: string | null
+          europe_min_steps?: number | null
           hint: string
           id?: string
           min_steps: number
@@ -8650,7 +8658,11 @@ export type Database = {
           sort_order: number
         }
         Update: {
+          active_hint?: string | null
+          active_min_steps?: number | null
           created_at?: string
+          europe_hint?: string | null
+          europe_min_steps?: number | null
           hint?: string
           id?: string
           min_steps?: number
