@@ -203,7 +203,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Keep triangulating until you name him or run dry.",
     ],
     rules: [
-      "The secret is always one of the top 300 current players by market value. Guesses can be anyone among over 27,000 names.",
+      "The secret is always one of the top 400 current players by market value. Guesses can be anyone among over 27,000 names.",
       "Weights: nationality 22, position group 18 plus 10 for the exact position, same club 25, shared former club 10, up to 15 for age closeness, up to 20 for value closeness.",
       "Age points hit zero at 12 years apart, value points hit zero once the values are 10 times apart.",
       "Only the right player scores 100. Everyone else caps at 99.",
@@ -450,7 +450,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     rules: [
       "Each answer scores 0 to 100 by fame rank in the category's full pool: the most famous valid answer scores 100, the most obscure 0.",
       "In Rarity mode points are bad and 0 across 5 rounds is the perfect Goalless run. In Crowd Says points are good and 500 is the ceiling.",
-      "The daily set changes every day at midnight Eastern Time, drawn from 15 categories covering clubs, nationalities, positions, price tags and Ballon d'Or winners.",
+      "The daily set changes every day at midnight Eastern Time, drawn from 36 categories covering clubs, nationalities, positions, price tags and Ballon d'Or winners.",
       "Only valid answers can be locked in, so the risk is never being wrong, only being obvious.",
     ],
     example: [
@@ -490,7 +490,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "3 guesses per puzzle: 100 points on the first, 70 on the second, 40 on the third, 0 for a miss or a give up.",
       "Hints add new information only: a club lineup hints the missing player's nationality, a national team lineup hints his club at the time, then comes the first letter of his surname.",
       "The daily puzzle is the same lineup and same blanked player for everyone, changing at midnight Eastern Time.",
-      "Unlimited draws from an archive of over 160 hand checked real lineups, with the blanked position varying between runs. Repeating a name you already tried never burns a guess.",
+      "Unlimited draws from an archive of over 200 hand checked real lineups, with the blanked position varying between runs. Repeating a name you already tried never burns a guess.",
     ],
     example: [
       "The card reads 2011 Champions League Final, Barcelona 3-1 Manchester United, Wembley. The blank sits at centre back beside Pique. Puyol is the reflex answer, but he started that night on the bench.",
