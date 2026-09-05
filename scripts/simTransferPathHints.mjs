@@ -40,11 +40,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { buildGraph, distances, expandCompactCareers, hintProblems, parseHint, sharedClub } from './lib/transferPathHints.mjs';
+import { MODE_RULES, buildGraph, distances, expandCompactCareers, hintProblems, parseHint, parseModeMigration, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
-if (CONTROL && !['stale', 'club', 'min', 'direct'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const fail = m => { failures += 1; if (failures <= 25) console.error('  FAIL: ' + m); };
 
@@ -103,6 +103,7 @@ export { default as fallbackPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/da
 export { careerPlayers as fallbackPlayers } from '${ROOT.replaceAll('\\', '/')}/src/data/careerPlayers.ts';
 export { fetchCareerPlayers } from '${ROOT.replaceAll('\\', '/')}/src/lib/fetchCareerPlayers.ts';
 export { fetchTransferPathPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/lib/fetchTransferPathPuzzles.ts';
+export { playersUnderRule } from '${ROOT.replaceAll('\\', '/')}/src/lib/transferPathModes.ts';
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(OUT).href);
@@ -141,6 +142,43 @@ console.log('3) the live tables, through the site\'s own fetchers');
     const alisson = players.find(p => p.name === 'Alisson');
     if (alisson && alisson.career.some(s => s.club === 'Roma' && /^201[45]-/.test(s.season))) fail('the "Alisson" row still has Roma seasons before 2016');
     console.log(`   ${checked} live puzzles checked on ${graph.names.length} live players`);
+    /* Round 460: the special rule columns, each on the graph its rule leaves.
+       A row that disagrees with the search under ANY rule goes red here. */
+    for (const rule of MODE_RULES) {
+      const rg = buildGraph(site.playersUnderRule(players, rule));
+      let withPath = 0;
+      for (const p of puzzles) {
+        const entry = p[rule] ?? null;
+        if (entry) withPath += 1;
+        for (const pr of ruleProblems(rg, p.playerA, p.playerB, entry ? { minSteps: entry.minSteps, hint: entry.hint } : null)) fail(`live ${p.id} under ${rule}: ${pr}`);
+      }
+      console.log(`   ${puzzles.length} live puzzles checked under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
+    }
+  }
+}
+
+console.log('5) the special rule migration against the pull, per rule');
+{
+  const pull = path.join(ROOT, 'scripts/data/transferPathPull');
+  const players = expandCompactCareers(fs.readFileSync(path.join(pull, 'careers.txt'), 'utf8'));
+  const pairs = new Map(fs.readFileSync(path.join(pull, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => { const [id, a, b] = l.split('|'); return [id, { a, b }]; }));
+  const stored = parseModeMigration(fs.readFileSync(path.join(ROOT, 'supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql'), 'utf8'), pairs);
+  if (stored.size !== pairs.size) fail(`the mode migration carries ${stored.size} rows for ${pairs.size} pulled puzzles`);
+  if (CONTROL === 'mode') {
+    const r = stored.get('tpa-945');
+    if (!r || !r.europe) { console.error('control cannot run: tpa-945 has no Europe entry to plant on'); process.exit(1); }
+    r.europe = { ...r.europe, minSteps: r.europe.minSteps + 1 };
+    console.log(`   NEGATIVE CONTROL ON: tpa-945 carries a typed Europe minimum of ${r.europe.minSteps}, this section must go red`);
+  }
+  for (const rule of MODE_RULES) {
+    const rg = buildGraph(site.playersUnderRule(players, rule));
+    let withPath = 0;
+    for (const [id, { a, b }] of pairs) {
+      const entry = stored.get(id)?.[rule] ?? null;
+      if (entry) withPath += 1;
+      for (const pr of ruleProblems(rg, a, b, entry)) fail(`mode migration ${id} under ${rule} (${a} to ${b}): ${pr}`);
+    }
+    console.log(`   ${pairs.size} puzzles checked under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
   }
 }
 
