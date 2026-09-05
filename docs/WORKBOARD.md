@@ -19,9 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 450.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 451.
 
 ## Active claims, 2026-09-03
+
+- **Desktop lane, Round 450, claimed and SHIPPED 2026-09-05.** THE REST OF THE SUMMER
+  2026 WINDOW REACHES THE TABLE. Four report button messages between 2026-08-30 and
+  2026-09-04 said Player Bingo's transfers were outdated. Round 393's 46 verified moves
+  were a fraction of a window; this pass adds 195 more, two source verified (ESPN and
+  Sky's club by club lists for the Premier League, official club or league sites plus
+  ESPN, AP or Sky for the rest), covering every player in the 467 player Sign the Player
+  and Player Bingo pool who moved this summer, written by a 195 statement migration and
+  held by simTransferOverlay (floor 240 of 241, both controls fire). Rosters re-baked.
 
 - **Desktop lane, Rounds 446 to 449, claimed and SHIPPED 2026-09-04 and 2026-09-05.** Four
   rounds built directly off his messages during the 441 to 445 batch, each one a thing he

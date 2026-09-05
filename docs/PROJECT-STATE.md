@@ -82,7 +82,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Rarity Round explain the goal before the guess | DONE | Round 444 |
 | Since the list: "u call like everything new" | DONE | Round 447 |
 | Since the list: black screen of text on login, Google spinner stuck | DONE | Round 448 |
-| Since the list: Player Bingo transfers outdated (four reports, 2026-08-30 to 2026-09-04) | OPEN, NEXT | the 46 entry verified overlay reached the table in Round 393; widen it with two source verified summer 2026 moves |
+| Since the list: Player Bingo transfers outdated (four reports, 2026-08-30 to 2026-09-04) | DONE | Round 450: 195 more two source verified summer 2026 moves written to the table, 241 in the overlay, every pool player who moved this summer covered |
 | Since the list: the Google screen says flawuiqbvjobmkfkauhw.supabase.co | OWNER DECISION, MONEY | see Decisions owed |
 | Since the list: Apple sign in | OWNER DECISION, MONEY | see Decisions owed |
 
@@ -2734,6 +2734,44 @@ today rather than adding alongside them.
 
 ## Change log for this file
 
+- **2026-09-05, Round 450. THE REST OF THE SUMMER 2026 WINDOW REACHES THE MARKET
+  VALUE TABLE.** Four players used the report button between 2026-08-30 and
+  2026-09-04 to say Player Bingo's clubs were stale ("need to fix new transfers
+  and world cup players"), and they were right: Round 393 had written 46
+  verified moves into the autumn 2025 snapshot, and a summer window is several
+  hundred. This pass took the 467 player pool Sign the Player and Player Bingo
+  share (the top 1,000 rows since 2024, each name's newest row, top 500 by
+  value) and worked through every player in it who moved between June and the
+  2026-09-01 deadline, then the rest of the Premier League's ins and outs.
+  **195 moves added, 241 in the overlay**, each with two named sources: every
+  Premier League move on both ESPN's and Sky Sports' club by club lists
+  (2026-09-04 and 2026-09-03), the rest on the official club or league site
+  plus ESPN, AP or Sky, recorded on each block in
+  `scripts/transferOverlay2026.mjs`. A loan that ended with the parent club
+  keeping the player (Endrick, Rashford, Vitor Reis, Pavard, Boniface,
+  Ferguson, Douglas Luiz, Nico Gonzalez) is written as the parent club and was
+  checked against ESPN's 2026-27 squad page for that club. Written by
+  `supabase/migrations/20260905_round_450_transfer_windows_2026_summer.sql`,
+  195 statements; a second one line migration corrects Zubimendi's lone
+  'Arsenal' row to 'Arsenal FC' (the Round 315 short spelling trap, sitting at
+  number 42 in the pool). **Left out as unverified, on purpose:** Sancho (a
+  Palmeiras deal reported, never announced), Veltman, Reiss Nelson and Ortega
+  (the outlets disagree), Almada, Lenglet, Fran Garcia and Ceballos (one source
+  each). Julian Alvarez and Gakpo did not move; both sagas ended with the player
+  staying. **The fence caught itself:** simTransferOverlay section 3 pulled
+  every 2026 row at the wanted clubs in one query and PostgREST caps an answer
+  at 1,000 rows, so with 80 clubs named "Abha Club" (one row) read as missing
+  while Diallo's own row said Abha; it now probes one spelling at a time. Floor
+  raised to 240 of 241 rows checked. Before the migration the harness was red
+  on exactly the 195 new rows, after it green, both controls fire. Rosters
+  re-baked from the updated table (239 overlay moves applied, Troyes joins the
+  partial list after Detourbet left it). **The Alvarez and Messi report
+  (2026-08-30):** the tile was "Played with Messi" and the rule is and was a
+  club year overlap, so Alvarez (Argentina teammates only) fails it; Round 381
+  had already relabelled it "Messi club teammate" on 2026-09-01, after that
+  report was filed, so nothing further to fix. **Honest limits:** ages in the
+  2026 rows are still autumn 2025; moves below the pool outside the Premier
+  League were taken only where a second named source was cheap to find.
 - **2026-09-02, Round 400 LIVE AND REVIEW SUBMITTED. ADS LOAD ONLY WHERE A PAGE
   DELIBERATELY OWNS A SLOT.** The August 30 content audit found no measured thin-copy defect,
   but it did not test which routes could load the AdSense account script. With

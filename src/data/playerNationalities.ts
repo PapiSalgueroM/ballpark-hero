@@ -2,7 +2,7 @@
    One map per sealed world, because a name is not a person: the 2010
    Aaron Ramsey is Welsh, the modern one is English, and a single map
    would invent one of them. Provenance, year windows and the fail-closed
-   rules live in the bake script's header. 6312 entries total. */
+   rules live in the bake script's header. 6314 entries total. */
 
 export const NATIONALITY_BY_WORLD: Record<string, Record<string, string>> = {
 now: {
@@ -30,6 +30,7 @@ now: {
   'Abdoulie Sanyang': 'The Gambia',
   'Abdoullah Ba': 'France',
   'Abdukodir Khusanov': 'Uzbekistan',
+  'Abdul Fatawu': 'Ghana',
   'Abdul Mumin': 'Ghana',
   'Abdul Rahman Baba': 'Ghana',
   'Abdulrahman Ghareeb': 'Saudi Arabia',
@@ -110,7 +111,6 @@ now: {
   'Alejandro Grimaldo': 'Spain',
   'Alejandro Iturbe': 'Spain',
   'Alejandro Rego': 'Spain',
-  'Alejo Veliz': 'Argentina',
   'Aleksa Terzic': 'Serbia',
   'Aleksandar Mitrović': 'Serbia',
   'Aleksandr Golovin': 'Russia',
@@ -1010,6 +1010,7 @@ now: {
   'Evander': 'Brazil',
   'Evanilson': 'Brazil',
   'Evann Guessand': 'Cote d\'Ivoire',
+  'Ewen Jaouen': 'France',
   'Exequiel Palacios': 'Argentina',
   'Ezechiel Banzuzi': 'Netherlands',
   'Ezekiel Alladoh': 'Ghana',
@@ -1561,6 +1562,7 @@ now: {
   'Jeremie Frimpong': 'Netherlands',
   'Jeremy Agbonifo': 'Sweden',
   'Jeremy Arévalo': 'Ecuador',
+  'Jeremy Monga': 'England',
   'Jeremy Ngakia': 'DR Congo',
   'Jeremy Sarmiento': 'Ecuador',
   'Jeremy Toljan': 'Germany',
