@@ -48,3 +48,26 @@ const CLUB_SEARCH_ALIASES: Record<string, string> = {
 export function clubSearchTerm(clubName: string): string {
   return CLUB_SEARCH_ALIASES[clubName] ?? clubName;
 }
+
+/**
+ * Round 442. The nation filter is an exact `eq` on player_market_values
+ * .nationality, and two of the 25 nations above are spelled differently in the
+ * table, so the search box came back empty for every letter typed and the slot
+ * was a dead end. Measured on flawuiqbvjobmkfkauhw, 2026-09-04:
+ * nationality = 'USA' returns 0 players and 'United States' returns 349;
+ * 'South Korea' returns 0 and 'Korea, South' returns 175. The spinner deals 11
+ * of the 55 teams per game, so one of the two turned up in about 36% of games
+ * and handed the player a slot he could not fill by any spelling.
+ *
+ * The labels stay as they are: they are what the flag strip and the copy show.
+ * Only the query term changes, the same way the club aliases above work.
+ */
+const NATION_SEARCH_ALIASES: Record<string, string> = {
+  'USA': 'United States',
+  'South Korea': 'Korea, South',
+};
+
+/** Returns the exact value to filter player_market_values.nationality by. */
+export function nationSearchTerm(nationName: string): string {
+  return NATION_SEARCH_ALIASES[nationName] ?? nationName;
+}

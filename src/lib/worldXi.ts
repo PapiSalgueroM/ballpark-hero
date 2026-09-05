@@ -3,6 +3,7 @@ import { Position } from '@/types/game';
 import { Formation, FormationSlot, normalizePosition, playerRating } from '@/lib/squadDeal';
 import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
+import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -116,68 +117,27 @@ export function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-// Multi-position eligibility. A player's stored position is just their PRIMARY
-// role; real footballers cover a family of positions. Owner hit this: Raphinha
-// plays LW at Barca but RW for Brazil and was rejected for a RW slot.
-// ALT_POSITIONS lists the extra positions each primary role can cover:
-//   - wingers and wide mids are valid on BOTH flanks (LW<->RW, LM<->RM, and a
-//     winger covers the same-side wide-mid role and vice versa),
-//   - full-backs <-> wing-backs on the same side (plus the opposite full-back,
-//     which the old mirror already allowed and we keep),
-//   - CM covers CDM and CAM slots and vice versa (via the shared CM role),
-//   - CF and ST are interchangeable.
-const ALT_POSITIONS: Partial<Record<Position, Position[]>> = {
-  LW: ['RW', 'LM'], RW: ['LW', 'RM'],
-  LM: ['RM', 'LW'], RM: ['LM', 'RW'],
-  LB: ['LWB', 'RB'], RB: ['RWB', 'LB'],
-  LWB: ['LB', 'RWB'], RWB: ['RB', 'LWB'],
-  CM: ['CDM', 'CAM'],
-  CDM: ['CM'], CAM: ['CM'],
-  ST: ['CF'], CF: ['ST'],
-};
-
-const ALL_POSITIONS: Position[] = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST'];
-
-/** Every position this player can take a slot for: primary + family alternates. */
-export function eligiblePositions(pos: Position): Position[] {
-  return [pos, ...(ALT_POSITIONS[pos] ?? [])];
-}
-
-/* Round 319, off the owner's review: "a LWB filling a RW slot". The shared
-   formation data gives every wide slot the same set, because a 4-4-2 wide
-   MID slot and a 3-5-2 wing-back slot genuinely take wing-backs. A front
-   line winger slot does not: here the RW and LW slots narrow to wingers and
-   wide mids only, which also cuts the family chain that let LWB reach RW
-   through RWB. squadDeal's own games keep their looser sets on purpose,
-   this is World XI's stricter read of the same data. */
-function slotAllowed(slot: FormationSlot): Position[] {
-  if (slot.label === 'RW') return ['RW', 'RM'];
-  if (slot.label === 'LW') return ['LW', 'LM'];
-  return slot.allowed;
-}
+/* Round 442: the eligibility rule moved to `src/lib/positionFit.ts` so Build
+   Your XI can hold the same one (it had none of its own and took a goalkeeper
+   at centre mid). Nothing about the rule changed in the move. The family table,
+   the Round 319 front-line narrowing and the Round 345 history path all live
+   there now, with the goalkeeper boundary written out at the top of fitsAllowed
+   instead of being an accident of GK having no family alternates. These four
+   exports keep their names and their behaviour because WorldXi.tsx,
+   gauntletDraft, searchDiscard and simWorldXiPositions all import them. */
+export { eligiblePositions, ALL_POSITIONS };
 
 export function fitsSlot(p: WxPlayer, slot: FormationSlot): boolean {
-  const allowed = slotAllowed(slot);
-  if (eligiblePositions(p.position).some(pos => allowed.includes(pos))) return true;
-  /* Round 345: verified history widens eligibility, exactly and only to the
-     positions the player's own rows have carried. Direct membership, no
-     family chain, so history can never reopen the LWB-to-RW hole Round 319
-     closed. */
-  return (p.positionsPlayed ?? []).some(pos => allowed.includes(pos));
+  return fitsAllowed(p.position, slotAllowedPositions(slot.label, slot.allowed), p.positionsPlayed);
 }
 
 /**
- * "ST / CF" style summary of what a slot accepts. Computed from the EFFECTIVE
- * accepted set (any position whose family reaches one of the slot's allowed
- * positions), so the copy matches what fitsSlot actually lets through, e.g. a
- * RW slot lists LW because wingers count on both flanks.
+ * "ST / CF" style summary of what a slot accepts, matching what fitsSlot
+ * actually lets through (a RW slot lists LW because wingers count on both
+ * flanks).
  */
 export function allowedLabel(slot: FormationSlot): string {
-  const allowed = slotAllowed(slot);
-  const effective = ALL_POSITIONS.filter(pos =>
-    eligiblePositions(pos).some(alt => allowed.includes(alt)),
-  );
-  return effective.join(' / ');
+  return allowedLabelFor(slotAllowedPositions(slot.label, slot.allowed));
 }
 
 /** Friendly rejection line for a player who is real but plays elsewhere. */
@@ -576,7 +536,18 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
 
   // Injuries: 1-2 random squad members, plausible weeks-out range.
   const injuryCount = 1 + (rand() < 0.5 ? 1 : 0);
-  const shuffledForInjury = shuffle(players);
+  /* Round 442: drawn from the SEEDED generator, not Math.random. This sim
+     promises the same season for the same XI, which is the whole point of
+     seeding it off the squad, and the injury draw was quietly breaking that
+     promise: two people with the identical eleven got different men injured,
+     and a player who screenshotted his report could not reproduce it himself.
+     Everything else in here already ran off rand(). Build Your XI shows this
+     report too now, so the promise had to be true in both games. */
+  const shuffledForInjury = [...players];
+  for (let i = shuffledForInjury.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [shuffledForInjury[i], shuffledForInjury[j]] = [shuffledForInjury[j], shuffledForInjury[i]];
+  }
   const injuries: SeasonInjury[] = shuffledForInjury.slice(0, Math.min(injuryCount, players.length)).map(p => ({
     name: p.name,
     weeksOut: 2 + Math.floor(rand() * 10),
