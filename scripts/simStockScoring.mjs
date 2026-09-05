@@ -1,64 +1,63 @@
 /**
  * Round 434: the Player Stock Market has to reward investing well.
+ * Round 458: the same laws, held on the format's new cards.
  *
- * WHAT WAS WRONG. The score was a SPEND RATIO. scoreCampaign placed
- * finalValue / spend between the best and worst per-slot ratio, so the
- * denominator was the money you chose to deploy rather than the money you
- * were given. Every pound you invested made the denominator bigger, which
- * meant the winning play was to leave the wallet shut. Measured against the
- * real rows over 400 seeded campaigns: the cheapest possible XI (25.2M of a
- * 200M wallet) scored 96.0 out of 100 and finished in the green in every
- * single run, while the random picker scored 18.0. The two stats the card
- * prints beside the price picked WORSE than random for the slot the score
- * actually rewarded: steepest value trajectory landed on it 31.1 percent of
- * the time and most goals plus assists 30.8, against 32.1 for picking at
- * random. Only the price predicted anything, and the price was in the
- * denominator. The game is called Invest on Stats Alone.
+ * WHAT WAS WRONG IN ROUND 434. The score was a SPEND RATIO. scoreCampaign
+ * placed finalValue / spend between the best and worst per-slot ratio, so
+ * the denominator was the money you chose to deploy rather than the money
+ * you were given. Every pound you invested made the denominator bigger,
+ * which meant the winning play was to leave the wallet shut. Measured
+ * against the real rows over 400 seeded campaigns: the cheapest possible XI
+ * (25.2M of a 200M wallet) scored 96.0 out of 100 and finished in the green
+ * in every single run, while the random picker scored 18.0. The game is
+ * called Invest on Stats Alone.
  *
  * WHAT IT IS NOW. The score is the return on the WHOLE wallet: what your
- * eleven are worth in the final year, placed between the worst and the best
- * eleven that the same 200M could actually have bought from the same offers
- * (an exact search over the eleven slots, budget respected). Cash you never
- * spend buys nothing, so hoarding scores near the floor, and the printed
- * stats decide the rest.
+ * eleven are worth in the final season, placed between the worst and the
+ * best eleven that the same 200M could actually have bought from the same
+ * cards (an exact search over the eleven slots, budget respected). Cash you
+ * never spend buys nothing, so hoarding scores near the floor, and the
+ * printed stats decide the rest.
  *
  * WHY THIS HARNESS USES THE REAL ROWS. simStockCampaign drives the engine
  * with synthetic fixtures, which is right for assembly and the wallet lock,
- * and it is structurally incapable of answering the question here. Whether an
- * age, a trajectory or a two season output line predicts a 2026 valuation is
- * a fact about football, not about the code, and a fixture built from a
- * random walk has no such fact in it to find. So this one fetches
- * player_market_values through the real fetch and measures outcomes.
+ * and it is structurally incapable of answering the question here. Whether
+ * an age, an appearance count or an output line predicts a later valuation
+ * is a fact about football, not about the code, and a fixture built from a
+ * random walk has no such fact in it to find. So this one runs on the saved
+ * real rows (scripts/data/stockMarketPools.json, pulled through the engine's
+ * own fetch; refresh with node scripts/simStockFormat.mjs --refresh) and
+ * measures outcomes.
  *
  * THE LAWS, every floor set from measured headroom:
- *   1. THE CEILING IS SPENT, NOT HOARDED. The best eleven the wallet can buy
- *      deploys most of the 200M (measured 194.9M mean, 97 percent).
+ *   1. THE CEILING IS SPENT, NOT HOARDED. The best scoring buyer deploys
+ *      most of the 200M.
  *   2. HOARDING IS NOT THE WINNING PLAY. The cheapest possible XI scores
- *      BELOW the random picker (measured 19.2 against 33.5; it used to be
- *      96.0 against 18.0).
+ *      BELOW the random picker (it used to be 96.0 against 18.0).
  *   3. READING THE CARD BEATS GUESSING. An XI picked on the printed age
- *      beats the random picker on the mean and campaign by campaign
- *      (measured 65.1 against 33.5, ahead on 367 of 400 campaigns).
+ *      beats the random picker on the mean and campaign by campaign.
  *   4. EVERY PRINTED STAT CARRIES SIGNAL. Per slot, picking the youngest,
- *      the steepest trajectory or the most goal contributions lands on the
- *      card the score rewards more often than one in four (measured 40.2,
- *      40.8 and 38.9 percent). This section knows nothing about the scoring
- *      formula: it swaps each candidate into a fixed XI and asks the shipped
- *      scoreCampaign which swap it likes best, so it measures the game's own
- *      answer whatever the rule is.
+ *      the most matches or the most goal contributions lands on the card
+ *      the score rewards more often than guessing. This section knows
+ *      nothing about the scoring formula: it swaps each card into a fixed
+ *      XI and asks the shipped scoreCampaign which swap it likes best, so
+ *      it measures the game's own answer whatever the rule is. The cards
+ *      line (yellow and red) is measured and printed in both directions
+ *      but not asserted: it is on the card as a season fact a fan reads
+ *      with the matches, not as a tip, and the measurement says why.
  *
  * NEGATIVE CONTROL: STOCK_SCORING_CONTROL=spendratio bundles a copy of the
  * lib with the spend ratio scoring restored exactly as it shipped, and
  * sections 1, 2 and 4 must go red. The rewrite asserts it found the text it
  * replaces, so a control that changed nothing refuses to run.
  *
- * Run: node scripts/simStockScoring.mjs   (needs the database)
+ * Run: node scripts/simStockScoring.mjs
  */
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { bundleStockEngine, loadStockData } from './lib/stockMarketData.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const TMP = os.tmpdir().replace(/\\/g, '/');
@@ -111,44 +110,21 @@ if (CONTROL === 'spendratio') {
   console.log('NEGATIVE CONTROL ON: the spend ratio scoring is restored, sections 1, 2 and 4 must go red');
 }
 
-const ENTRY = `${TMP}/stockScoring.entry.mjs`;
-const BUNDLE = `${TMP}/stockScoring.bundle.mjs`;
-/* Dynamic import so the localStorage shim runs before the Supabase client's
-   module scope reads it. A static `export * as` is hoisted above the shim. */
-fs.writeFileSync(ENTRY, [
-  'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
-  `export const sm = await import('${LIB}');`,
-].join('\n'));
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
-const { sm } = await import(pathToFileURL(BUNDLE).href);
-const { assembleCampaign, canAfford, fetchCampaignRows, scoreCampaign, startYearFor, STOCK_BUDGET } = sm;
+const { sm } = await bundleStockEngine(LIB, `stockScoring${CONTROL}`);
+const { assembleCampaign, canAfford, scoreCampaign, START_YEARS, STOCK_BUDGET } = sm;
+const data = await loadStockData();
 
-/* Seeds chosen so that seed % 5 walks three different start years, because
-   assembleCampaign derives its own year from the seed and a harness that
-   fetches one year and assembles another finds nothing. */
-const SEEDS = [];
-for (let i = 1; i <= 40; i += 1) for (const off of [0, 2, 4]) SEEDS.push(i * 5 * 7919 + off);
-const BY_YEAR = new Map();
-for (const s of SEEDS) {
-  const y = startYearFor(s);
-  if (!BY_YEAR.has(y)) BY_YEAR.set(y, []);
-  BY_YEAR.get(y).push(s);
-}
-
+/* Fifty seeds in every offered season, the same campaigns simStockFormat plays. */
 const camps = [];
-for (const [year, seeds] of [...BY_YEAR.entries()].sort((a, b) => a[0] - b[0])) {
-  const rows = await fetchCampaignRows(year);
-  if (!rows) {
-    console.log('CAMPAIGN ROWS UNREACHABLE. NOTHING WAS CHECKED.');
-    console.error('simStockScoring: the real fetch returned null, which is itself worth investigating');
-    process.exit(1);
-  }
+for (const year of START_YEARS) {
+  const rows = data.pools[year];
+  if (!rows) { console.error(`no saved pool for ${year}; run node scripts/simStockFormat.mjs --refresh`); process.exit(1); }
   let built = 0;
-  for (const seed of seeds) {
-    const c = assembleCampaign(rows, seed);
+  for (let s = 1; s <= 50; s += 1) {
+    const c = assembleCampaign(rows, s * 7919 + year, year);
     if (c) { camps.push(c); built += 1; }
   }
-  console.log(`start year ${year}: ${rows.length} rows, ${built} of ${seeds.length} campaigns assembled`);
+  console.log(`start season ${year}: ${rows.length} saved rows, ${built} of 50 campaigns assembled`);
 }
 if (camps.length < 100) { console.error(`simStockScoring: only ${camps.length} campaigns assembled, too thin to measure`); process.exit(1); }
 
@@ -158,14 +134,21 @@ function lehmer(seed) {
   if (s <= 0) s += 2147483646;
   return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
 }
-const trajectory = c => (c.series.length >= 2 ? c.series[c.series.length - 1].value / c.series[0].value : 1);
-const contributions = c => c.output.reduce((t, o) => t + o.goals + o.assists, 0);
+const contributions = c => c.goals + c.assists;
+/* The output line read the way the guide says to read it: goals plus
+   assists PER MATCH. A card whose matches were never recorded has no rate
+   and sorts last. */
+const rateOf = c => (c.matches === null ? -1 : contributions(c) / Math.max(1, c.matches));
+const cardsOf = c => c.yellowCards + 3 * c.redCards;
 const RULES = {
   cheapest: (a, b) => a.price - b.price,
   dearest: (a, b) => b.price - a.price,
-  youngest: (a, b) => (a.age || 99) - (b.age || 99),
-  steepest: (a, b) => trajectory(b) - trajectory(a),
+  youngest: (a, b) => (a.age ?? 99) - (b.age ?? 99),
+  mostMatches: (a, b) => (b.matches ?? -1) - (a.matches ?? -1),
   mostOutput: (a, b) => contributions(b) - contributions(a),
+  bestRate: (a, b) => rateOf(b) - rateOf(a),
+  fewestCards: (a, b) => cardsOf(a) - cardsOf(b),
+  mostCards: (a, b) => cardsOf(b) - cardsOf(a),
 };
 const rng = lehmer(20260904);
 const PICKERS = {
@@ -173,7 +156,7 @@ const PICKERS = {
   'random XI': cs => cs[Math.floor(rng() * cs.length)],
   'spend it all XI': cs => [...cs].sort(RULES.dearest)[0],
   'age reader XI': cs => [...cs].sort(RULES.youngest)[0],
-  'trajectory reader XI': cs => [...cs].sort(RULES.steepest)[0],
+  'matches reader XI': cs => [...cs].sort(RULES.mostMatches)[0],
   'output reader XI': cs => [...cs].sort(RULES.mostOutput)[0],
 };
 
@@ -250,16 +233,31 @@ console.log('3) reading the card beats guessing');
 
 console.log('4) every stat printed on the card carries signal');
 {
-  /* For each slot, swap each of its four candidates into an otherwise fixed
-     XI and ask the SHIPPED score which swap it likes best. That is the card
-     the game rewards, whatever the scoring rule happens to be. */
-  const hits = { youngest: 0, steepest: 0, mostOutput: 0, cheapest: 0, dearest: 0 };
+  /* For each slot, swap each of its four cards into an otherwise fixed XI
+     and ask the SHIPPED score which swap it likes best. That is the card the
+     game rewards, whatever the scoring rule happens to be. */
+  /* A stat can only be read where the four cards print DIFFERENT values for
+     it: four keepers at 0 goals, or four right backs whose matches were never
+     recorded, hand the reader a tie broken by deal order, which is a guess
+     wearing the stat's name. So every rule is measured on the slots where
+     its own value varies, against a random pick drawn once per slot and
+     scored on those same slots. Round 458: the first draft measured output
+     over every slot and read 30.7 against 26.9, five of eleven slots being
+     defenders and a keeper. */
+  const KEY = {
+    cheapest: c => c.price, dearest: c => c.price,
+    youngest: c => c.age ?? -1, mostMatches: c => c.matches ?? -1,
+    mostOutput: contributions, bestRate: rateOf, fewestCards: cardsOf, mostCards: cardsOf,
+  };
+  const hits = Object.fromEntries(Object.keys(RULES).map(k => [k, 0]));
+  const readable = Object.fromEntries(Object.keys(RULES).map(k => [k, 0]));
+  const randOn = Object.fromEntries(Object.keys(RULES).map(k => [k, 0]));
   let slots = 0;
-  let randomHits = 0;
   for (const c of camps) {
     const base = playCampaign(c, cs => [...cs].sort(RULES.cheapest)[0]);
     for (let i = 0; i < c.slots.length; i += 1) {
-      const scored = c.slots[i].candidates.map(cand => {
+      const cands = c.slots[i].candidates;
+      const scored = cands.map(cand => {
         const trial = [...base];
         trial[i] = cand;
         const spend = trial.reduce((s, x) => s + x.price, 0);
@@ -268,24 +266,44 @@ console.log('4) every stat printed on the card carries signal');
       });
       const top = Math.max(...scored.map(s => s.score));
       const winners = new Set(scored.filter(s => s.score === top).map(s => s.cand));
-      if (winners.size === c.slots[i].candidates.length) continue; /* every swap ties: nothing to read */
+      if (winners.size === cands.length) continue; /* every swap ties: nothing to read */
       slots += 1;
+      const guess = cands[Math.floor(rng() * cands.length)];
       for (const [name, cmp] of Object.entries(RULES)) {
-        if (winners.has([...c.slots[i].candidates].sort(cmp)[0])) hits[name] += 1;
+        if (new Set(cands.map(KEY[name])).size < 2) continue; /* the stat reads the same on every card */
+        readable[name] += 1;
+        if (winners.has([...cands].sort(cmp)[0])) hits[name] += 1;
+        if (winners.has(guess)) randOn[name] += 1;
       }
-      if (winners.has(c.slots[i].candidates[Math.floor(rng() * c.slots[i].candidates.length)])) randomHits += 1;
     }
   }
-  const rate = k => (100 * hits[k]) / slots;
-  const randRate = (100 * randomHits) / slots;
+  const rate = k => (100 * hits[k]) / readable[k];
+  const randRate = k => (100 * randOn[k]) / readable[k];
+  const line = k => `${rate(k).toFixed(1)}% against ${randRate(k).toFixed(1)}% guessing on ${readable[k]} readable slots`;
   /* The baseline is MEASURED rather than assumed to be one in four, because
      several swaps can tie at the top and a tie counts for every rule that
      picked one of them, which lifts every rate including the guesser's. */
-  console.log(`   ${slots} slots where the swaps disagree. Picking at random lands on the card the score rewards ${randRate.toFixed(1)} percent of the time.`);
-  console.log(`   youngest ${rate('youngest').toFixed(1)}%, steepest trajectory ${rate('steepest').toFixed(1)}%, most goal contributions ${rate('mostOutput').toFixed(1)}%, cheapest ${rate('cheapest').toFixed(1)}%, dearest ${rate('dearest').toFixed(1)}%`);
-  for (const k of ['youngest', 'steepest', 'mostOutput']) {
-    if (rate(k) < randRate + 5) {
-      fail(`reading "${k}" off the card lands on the card the score rewards ${rate(k).toFixed(1)} percent of the time against ${randRate.toFixed(1)} for guessing, so that stat is printed for nothing`);
+  console.log(`   ${slots} slots where the swaps disagree.`);
+  console.log(`   youngest ${line('youngest')}`);
+  console.log(`   most matches ${line('mostMatches')}`);
+  console.log(`   most goal contributions ${line('mostOutput')}`);
+  console.log(`   best rate, contributions per match ${line('bestRate')}`);
+  console.log(`   cheapest ${line('cheapest')}; dearest ${line('dearest')}`);
+  console.log(`   the cards line, measured and not asserted: fewest cards ${line('fewestCards')}; most cards ${line('mostCards')}`);
+  /* Floors from each stat's own measured headroom (2026-09-05, 400
+     campaigns on the saved rows): youngest +15.7 and most matches +9.5 over
+     guessing, so 5 is well under both. The output line is thinner: goals
+     plus assists +4.0 (30.9 against 26.9 on 3,963 slots, about five
+     standard errors, so it is signal and not noise) and the per match rate
+     +3.5. A season's output is on the card because a season card without
+     goals is not the format he asked for, and its floor is 2, half of what
+     it measures; the spend ratio control drives it to -14.6, so the floor
+     still separates a healthy game from a broken one. */
+  const FLOOR = { youngest: 5, mostMatches: 5, mostOutput: 2 };
+  for (const k of ['youngest', 'mostMatches', 'mostOutput']) {
+    if (readable[k] < 500) fail(`only ${readable[k]} slots where "${k}" can be read, too few to measure`);
+    if (rate(k) < randRate(k) + FLOOR[k]) {
+      fail(`reading "${k}" off the card lands on the card the score rewards ${rate(k).toFixed(1)} percent of the time against ${randRate(k).toFixed(1)} for guessing, under its floor of +${FLOOR[k]}, so that stat is printed for nothing`);
     }
   }
 }
