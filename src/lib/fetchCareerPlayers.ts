@@ -7,7 +7,9 @@ interface SeasonRow {
   season: string;
   club: string;
   goals: number;
-  assists: number;
+  /* Null in 173 rows: those leagues did not record assists in those seasons.
+     It rides through as null so the board can say so, see careerBoardCells. */
+  assists: number | null;
   appearances: number;
   market_value: number;
   sort_order: number;

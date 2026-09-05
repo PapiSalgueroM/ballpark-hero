@@ -61,6 +61,34 @@ function compareNumeric(guessVal: number, targetVal: number, threshold: number, 
   return { value: display, status, arrow };
 }
 
+/**
+ * Round 443. Squad numbers are hand entered in src/data/footleEnrichment.ts
+ * and 1,375 of the 1,507 players in the live pool are not in it, including
+ * Vinicius Junior and every one of the 1,200 obscure "insane" tier players.
+ * Those arrive as kitNumber null (0 before this round), and the tile used to
+ * print that as a number, paint it GREEN whenever the guess was also unknown,
+ * and draw a higher/lower arrow pointing at it. Three separate claims about a
+ * number nobody on either side of the guess has.
+ *
+ * An unknown squad number on either side now reads "?" and stays neutral: no
+ * match, no arrow, no direction. Nothing is invented and nothing is hidden,
+ * the tile just says it does not know. scripts/simNoZeroFacts.mjs section 1
+ * scores every combination through compareGuess and fails on any of the three.
+ *
+ * The status is 'unknown' rather than 'incorrect' because the board speaks its
+ * verdict as well as painting it (see GameBoard's sr-only span, added in Round
+ * 306): "incorrect" would have a screen reader announce "question mark, wrong"
+ * about a comparison nobody can make. Both paint the same neutral grey.
+ */
+function compareKitNumber(guess: number | null, target: number | null): CellResult {
+  const guessKnown = typeof guess === 'number' && guess > 0;
+  const targetKnown = typeof target === 'number' && target > 0;
+  if (!guessKnown || !targetKnown) {
+    return { value: guessKnown ? String(guess) : '?', status: 'unknown' };
+  }
+  return compareNumeric(guess as number, target as number, 3);
+}
+
 function comparePosition(guess: string, target: string): CellResult {
   if (guess === target) return { value: guess, status: 'correct' };
   const guessGroup = positionGroupMap[guess] || 'Unknown';
@@ -79,7 +107,7 @@ export function compareGuess(guess: Player, target: Player): GuessResult {
       goals: compareNumeric(guess.goals, target.goals, 3),
       assists: compareNumeric(guess.assists, target.assists, 3),
       position: comparePosition(guess.position, target.position),
-      kitNumber: compareNumeric(guess.kitNumber, target.kitNumber, 3),
+      kitNumber: compareKitNumber(guess.kitNumber, target.kitNumber),
       age: compareNumeric(guess.age, target.age, 2),
       marketValue: compareNumeric(guess.marketValue, target.marketValue, 5, `$${guess.marketValue}M`),
     },

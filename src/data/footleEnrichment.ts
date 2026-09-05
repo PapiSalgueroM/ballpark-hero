@@ -6,7 +6,8 @@ import type { League } from '@/types/game';
 //
 // Source: extracted from src/data/players.ts (marketValue >= 5).
 // When a player is NOT in this map the CLUB_TO_LEAGUE fallback is used for
-// league and kitNumber defaults to 0.
+// league and the kit number comes back null, meaning "no squad number on
+// file". Footle's KIT # tile reads "?" for those rather than stating one.
 //
 // TODO Round 3+: migrate this to a Supabase player_enrichment table so kit
 //                numbers stay current without code deploys.
@@ -432,12 +433,13 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
 
 /**
  * Returns kit number and league for a player fetched from Supabase.
- * Falls back to club-derived league and kitNumber=0 for unknowns.
+ * Falls back to a club-derived league, and to a null kit number for anyone
+ * the hand list below does not carry.
  */
 export function getEnrichment(
   playerName: string,
   club: string
-): { kitNumber: number; league: League } {
+): { kitNumber: number | null; league: League } {
   /* Round 315: the CLUB decides the league, and only then the hand entry.
      The old order returned the per-player entry first, so anyone in the hand
      list who has moved since it was written kept their old league forever,
@@ -447,8 +449,12 @@ export function getEnrichment(
      than present in the wrong one. */
   const direct = footleEnrichment[playerName];
   const fromClub = CLUB_TO_LEAGUE[club];
+  /* Round 443: a player who is not in the hand list has no squad number on
+     file, and 1,375 of the live pool's 1,507 players are in that position.
+     null says so; the 0 this used to return was printed by Footle's KIT #
+     tile as though it were his number. */
   return {
-    kitNumber: direct?.kitNumber ?? 0,
+    kitNumber: direct?.kitNumber ?? null,
     league: fromClub ?? direct?.league ?? 'Other',
   };
 }

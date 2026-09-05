@@ -105,6 +105,9 @@ const WhoAmI = () => {
     setSecret(prev => pickSecret(buildWhoAmISecretPool(difficulty, data.pool), prev?.name));
     setGuesses([]);
     setGuessInput('');
+    /* Round 443: the "couldn't pull up his season" line is per guess, so a new
+       round must not open with the last round's failure still on screen. */
+    setLookupFailed(false);
     setPhase('playing');
   };
 
@@ -114,14 +117,36 @@ const WhoAmI = () => {
   // WIDE-POOL GUESSING note in src/lib/whoAmI.ts for the full root cause and
   // fix writeup. The secret itself is still drawn from the curated pool, so
   // this only widens what you're ALLOWED to guess, not what the answer can be.
-  const submitGuess = (entity: PlayerEntity) => {
-    if (phase !== 'playing' || !data || !secret) return;
+  /* Round 443: the guessed player's current row is fetched when the guess is
+     made instead of being downloaded for all 9,000 current players at boot.
+     The ref, not the state, guards a second submit, because setChecking does
+     not reach this closure. A lookup that fails costs the player nothing: the
+     guess is refused with a line to try again rather than scored against a
+     club and a value nobody fetched. */
+  const checkingRef = useRef(false);
+  const [checking, setChecking] = useState(false);
+  const [lookupFailed, setLookupFailed] = useState(false);
+  const submitGuess = async (entity: PlayerEntity) => {
+    if (phase !== 'playing' || !data || !secret || checkingRef.current) return;
     if (guessedNames.has(normalizeName(entity.name))) return;
-    const p = whoAmIPlayerFromEntity(entity);
+    checkingRef.current = true;
+    setChecking(true);
+    setLookupFailed(false);
+    /* Cleared here, not after the lookup: PlayerAutocomplete sets the box to
+       the picked name and its own search effect reopens the dropdown on any
+       value 2 characters or longer, so leaving the name sitting there across
+       an await flashes the list back open under the player. */
+    setGuessInput('');
+    const p = await whoAmIPlayerFromEntity(entity);
+    checkingRef.current = false;
+    setChecking(false);
+    if (!p) {
+      setLookupFailed(true);
+      return;
+    }
     const breakdown = scoreGuess(p, secret, data.clubHistory);
     const next = [...guesses, { player: p, breakdown }];
     setGuesses(next);
-    setGuessInput('');
     if (breakdown.isExact) {
       setPhase('won');
     } else if (next.length >= budget) {
@@ -498,6 +523,12 @@ const WhoAmI = () => {
                 validateOnly
                 autoFocus
               />
+              {checking && <p className="mt-2 text-xs text-muted-foreground text-center">Checking his season...</p>}
+              {lookupFailed && (
+                <p className="mt-2 text-xs text-destructive text-center">
+                  Couldn't pull up his season just then, so that one doesn't count. Pick him again.
+                </p>
+              )}
             </div>
 
             <div className="flex justify-center mb-4">

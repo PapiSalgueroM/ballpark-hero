@@ -25,6 +25,9 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
     correct: 'bg-correct text-correct-foreground',
     close: 'bg-close text-close-foreground',
     incorrect: 'bg-incorrect text-incorrect-foreground',
+    // Round 443: same neutral grey as a miss, because it is equally no help.
+    // What separates it is the word underneath, not the colour.
+    unknown: 'bg-incorrect text-incorrect-foreground',
   };
 
   return (
@@ -39,9 +42,18 @@ function CellComponent({ cell, animDelay }: { cell: CellResult; animDelay: numbe
       {/* Round 306: the verdict is spoken, not only painted. Green, yellow
           and red backgrounds carried right, close and wrong to sighted
           players and nobody else; the sr-only word rides in the same cell so
-          a screen reader hears "Brazil, correct" instead of just "Brazil". */}
+          a screen reader hears "Brazil, correct" instead of just "Brazil".
+          Round 443: 'unknown' says so rather than saying wrong, because a
+          missing squad number is not a miss, it is a comparison the game
+          cannot make. */}
       <span className="sr-only">
-        {cell.status === 'correct' ? ', correct' : cell.status === 'close' ? ', close' : ', wrong'}
+        {cell.status === 'correct'
+          ? ', correct'
+          : cell.status === 'close'
+          ? ', close'
+          : cell.status === 'unknown'
+          ? ', not on file'
+          : ', wrong'}
       </span>
       {cell.arrow && (
         <span className="text-[10px] mt-0.5 opacity-80">
