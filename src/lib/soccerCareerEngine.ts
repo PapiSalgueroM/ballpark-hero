@@ -86,7 +86,9 @@ import { getRealismEvents } from "./soccerCareerRealism";
 /* Round 473: the critic. soccerCareerCritic imports TYPES from here only, so
    this is a one way runtime edge and there is no cycle, the same contract
    soccerCareerRealism keeps. */
-import { getCriticEvents, soccerCriticArticle } from "./soccerCareerCritic";
+import { getCriticEvents, soccerCriticArticle, soccerCriticDisgraceArticle } from "./soccerCareerCritic";
+/* Round 473: the signature boot, same one way runtime edge. */
+import { getBootEvents } from "./soccerCareerBoot";
 import {
   runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
   nationStrength as intlNationStrength, confederationOf, pickSquad,
@@ -762,6 +764,10 @@ export interface CareerState {
   lifestyleCostPerYear: number;
   socialMediaFollowers: number;
   sponsorshipIncome: number;
+  /** Round 473: yearly branding money you built yourself, kept across the
+   *  season roll because sponsorshipIncome is recomputed from scratch every
+   *  year and anything added straight to it was wiped before it paid. */
+  sponsorBonus?: number;
   properties: string[];
   investments: string[];
   consecutiveDeficitYears: number;
@@ -1599,7 +1605,11 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
     }
     case "sponsor_scandal": {
       if (choiceIndex === 0) {
-        s.sponsorshipIncome = Math.max(0, s.sponsorshipIncome - 3);
+        /* Round 473: this used to take 3 off sponsorshipIncome, which is
+           recomputed from scratch at the top of every season, so the deal you
+           publicly walked away from was back in your account by the summer.
+           The deal itself is what ends. */
+        s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) - 3) * 100) / 100;
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.events = [...s.events, "✂️ Cut ties with the sponsor publicly. Lost €3M/year, popularity +15."];
       } else if (choiceIndex === 1) {
@@ -2367,6 +2377,10 @@ export function repairCareer<T extends CareerState>(state: T): T {
      silently stop being billed for the way it lives. */
   const legacyLifestyle = s as unknown as { lifestyleLevel?: string };
   if (legacyLifestyle.lifestyleLevel === "Billionaire") s.lifestyleLevel = "Untouchable";
+  /* Round 473: branding money you built yourself. Absent on every save
+     written before this round, which is right: those careers never had it. */
+  const bonus = Number(s.sponsorBonus);
+  s.sponsorBonus = Number.isFinite(bonus) ? clamp(Math.round(bonus * 100) / 100, -20, 60) : 0;
   const legacyCover = s as unknown as Record<string, unknown>;
   if (legacyCover.fifaCoverAccepted === true) s.coverAthleteAccepted = true; // rival-names-allow: old save field name, read only
   if (legacyCover.pendingFifaCoverEvent === true) s.pendingCoverAthleteEvent = true; // rival-names-allow: old save field name, read only
@@ -2572,8 +2586,20 @@ function calcLifestyleCost(level: LifestyleLevel): number {
   }
 }
 
-function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null, activeSponsorship?: SponsorshipTier | null): number {
-  let income = 0;
+/* Round 473: `bonus` is the branding you built yourself, and it is here
+   because without it the branding line quietly did not work. Two events sold a
+   permanent yearly income (trademarking your celebration, "+€300k/yr", and
+   launching the podcast, "+€200k/yr") by adding to s.sponsorshipIncome, and
+   this function overwrites that field from scratch in simulateSeasonFinances
+   at the top of every season, so neither bump was ever paid out once. The
+   money now lands in a pot the recompute reads instead of a field it flattens.
+   Optional on the save, so a career written before this loads untouched with
+   no bonus, which is exactly what it had. */
+function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null, activeSponsorship?: SponsorshipTier | null, bonus = 0): number {
+  /* The bonus can be negative, because walking away from a deal on principle
+     is one of the things it records. The total is floored at zero at the
+     bottom instead, so a lost deal is a real loss and never a negative wage. */
+  let income = bonus;
   // Base sponsorship from popularity
   if (popularity >= 80) income += 2;
   else if (popularity >= 60) income += 1;
@@ -2586,7 +2612,7 @@ function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number,
   else if (sponsorDeal === "Adidas" || sponsorDeal === "Kinetiq") income += 1.5;
   // Tiered sponsorship from social media actions
   income += getSponsorshipIncome(activeSponsorship || null);
-  return Math.round(income * 100) / 100;
+  return Math.round(Math.max(0, income) * 100) / 100;
 }
 
 function growSocialMedia(state: CareerState, season: SeasonRecord): number {
@@ -2613,7 +2639,7 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
   // Wage income (52 weeks, in millions)
   const wageIncome = (s.weeklyWage * 52) / 1_000_000;
   // Sponsorship income
-  s.sponsorshipIncome = Math.round(calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship) * personalitySponsorMult(s.personality) * sponsorItemMult(s) * 100) / 100;
+  s.sponsorshipIncome = Math.round(calcSponsorshipIncome(s.popularity, s.socialMediaFollowers, s.sponsorDeal, s.activeSponsorship, s.sponsorBonus ?? 0) * personalitySponsorMult(s.personality) * sponsorItemMult(s) * 100) / 100;
   const grossIncome = wageIncome + s.sponsorshipIncome;
   // Round 49: the agent takes a yearly cut of wage + sponsorship income
   const agentCut = Math.round(grossIncome * agentIncomeCutRate(s.agentId) * 100) / 100;
@@ -4576,10 +4602,18 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.popularity = clamp(s.popularity - 35, 0, 100);
     s.integrityBonus -= 30;
     s.events.push(`⚖️ CONVICTED. Fraud, bribery, and one very confused judge reading out the submarine receipts. €${confiscated.toFixed(1)}M seized, 1 year inside.`);
+    /* Round 473: the column runs on this day too. The conviction paper
+       replaces the whole newspaper and returns early, so before this the one
+       man who had written about the career every season since it turned pro
+       went quiet on the biggest day of it. */
+    const disgrace = soccerCriticDisgraceArticle(s, NEWSPAPERS);
     s.pendingNews = [{
       newspaper: "The Daily Sport", type: "negative",
       headline: `GUILTY: ${s.playerName} Going To Prison`,
       body: `The fall is complete. ${s.playerName} was convicted on all counts after prosecutors traced years of unexplained income. The courtroom sketch artist gave them enormous sad eyes and the internet made it a meme within the hour.`,
+    }, {
+      newspaper: disgrace.paper, type: "negative",
+      headline: disgrace.headline, body: disgrace.body,
     }];
     s.phase = "newspaper";
     return s;
@@ -5561,7 +5595,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 24, emoji: "🌍", title: "Brand Ambassador!", description: "You are offered a role as brand ambassador for your country.",
       category: "life", choices: [
         { label: "Accept the role", emoji: "✔️", color: "bg-emerald-600", consequence: "Followers +2M, Sponsorship income boost",
-          apply: s => { s.popularity = clamp(s.popularity + 20, 0, 100); s.socialMediaFollowers += 2; s.sponsorshipIncome += 1; s.events = [...s.events, "🌍 Became brand ambassador"]; return s; } },
+          apply: s => { s.popularity = clamp(s.popularity + 20, 0, 100); s.socialMediaFollowers += 2; s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 1) * 100) / 100; s.events = [...s.events, "🌍 Became brand ambassador"]; return s; } },
         { label: "Decline: too distracting", emoji: "✋", color: "bg-muted", consequence: "Focus on football",
           apply: s => { s.events = [...s.events, "🌍 Declined brand ambassador role"]; return s; } },
       ] },
@@ -5590,7 +5624,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 28, emoji: "🏦", title: "Financial Advisor", description: "Your financial advisor recommends diversifying into real estate funds.",
       category: "life", choices: [
         { label: "Invest €1M", emoji: "🏦", color: "bg-blue-600", consequence: "Steady returns: +€150k/year",
-          apply: s => { s.netWorth -= 1; s.investments = [...s.investments, "Real Estate Fund"]; s.sponsorshipIncome += 0.15; s.events = [...s.events, "🏦 Invested in real estate fund"]; return s; } },
+          apply: s => { s.netWorth -= 1; s.investments = [...s.investments, "Real Estate Fund"]; s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.15) * 100) / 100; s.events = [...s.events, "🏦 Invested in real estate fund"]; return s; } },
         { label: "Keep cash liquid", emoji: "💵", color: "bg-muted", consequence: "No investment made",
           apply: s => { s.events = [...s.events, "🏦 Kept cash instead of investing"]; return s; } },
       ] },
@@ -5604,7 +5638,7 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 30, emoji: "🎮", title: "Gaming Brand Deal!", description: "A gaming company offers you a brand deal to stream and promote their games.",
       category: "life", choices: [
         { label: "Sign the deal: €300k/year", emoji: "🎮", color: "bg-purple-600", consequence: "Income +€300k, Followers +1M",
-          apply: s => { s.sponsorshipIncome += 0.3; s.socialMediaFollowers += 1; s.events = [...s.events, "🎮 Signed gaming brand deal"]; return s; } },
+          apply: s => { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.3) * 100) / 100; s.socialMediaFollowers += 1; s.events = [...s.events, "🎮 Signed gaming brand deal"]; return s; } },
         { label: "Not my thing", emoji: "✋", color: "bg-muted", consequence: "Stay focused on football",
           apply: s => { s.events = [...s.events, "🎮 Declined gaming brand deal"]; return s; } },
       ] },
@@ -5682,6 +5716,10 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     // Round 473: the critic (id 500). Self gating like the rest: it only
     // appears once a career, and only once he has actually turned on you.
     ...getCriticEvents(state),
+    /* Round 473: the signature boot (id 501). The follower mark comes off
+       SPONSORSHIP_TIERS rather than being repeated at it, so moving that
+       table moves the boot with it. */
+    ...getBootEvents(state, (SPONSORSHIP_TIERS.find(t => t.tier === "global_ambassador")?.minFollowers ?? 15_000_000) / 1_000_000),
   ];
 }
 
@@ -5733,6 +5771,22 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
       const ev = all.find(e => e.id === pid);
       if (ev) picked.unshift(ev);
     }
+  }
+  /* Round 473: the column about you is the same kind of beat. It can only
+     ever happen once a career and only once he has turned on you, and left in
+     the general draw against roughly 180 other events it turned up in one
+     career in sixty five, which is not a story anybody would ever see. */
+  if (!picked.some(e => e.id === 500)) {
+    const column = all.find(e => e.id === 500);
+    if (column) picked.unshift(column);
+  }
+  /* And the signature boot (501), for the same reason: it is gated on being
+     an 84 overall at 25 with six seasons behind you and a global following,
+     so by the time it is on the table it has been earned and it should not
+     then have to win a raffle. */
+  if (!picked.some(e => e.id === 501)) {
+    const boot = all.find(e => e.id === 501);
+    if (boot) picked.unshift(boot);
   }
   return picked;
 }

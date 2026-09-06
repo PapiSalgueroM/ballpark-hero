@@ -156,10 +156,12 @@ export interface SoccerBadgeFacts {
   wealth: number;
   /** Followers, in millions. */
   followers: number;
-  /** The two follower marks the engine's own sponsorship table sets, so these
-   *  badges move with that table instead of repeating numbers at it. */
-  bootDealAt: number;
+  /** The follower mark the engine's own sponsorship table sets for your own
+   *  merchandise line, so the badge moves with that table instead of
+   *  repeating a number at it. */
   merchLineAt: number;
+  /** A boot with your name on the sole, from Round 473's branding peak. */
+  signatureBoot: boolean;
   /** Serious injuries come back from, and games played after the first one. */
   seriousInjuries: number;
   appsAfterFirstSerious: number;
@@ -195,6 +197,10 @@ export const SOCCER_BADGES: BadgeDef<SoccerBadgeFacts>[] = [
   { id: 'comeback', emoji: '🩹', label: 'Came back', blurb: 'A hundred games after the injury that was meant to finish you.', test: f => f.seriousInjuries >= 1 && f.appsAfterFirstSerious >= 100 },
   { id: 'first_million', emoji: '🪙', label: 'First million', blurb: 'A million to your name: cash, what you own and the market together.', test: f => f.wealth >= 1 },
   { id: 'hundred_million', emoji: '💰', label: 'A hundred million', blurb: 'A hundred million to your name, everything added up.', test: f => f.wealth >= 100 },
-  { id: 'boot_deal', emoji: '👟', label: 'Global boot deal', blurb: 'Enough people follow you that a boot company came calling.', test: f => f.followers >= f.bootDealAt },
+  /* Not the Global Boot Deal from the sponsorship ladder: measured over 120
+     seeded careers every single one of them cleared its five million follower
+     mark, usually in their early twenties, so it is a rung and not a peak.
+     This is the boot with your name on the sole. */
+  { id: 'signature_boot', emoji: '👟', label: 'Your own boot', blurb: 'A boot with your name on the sole, in every country they sell in.', test: f => f.signatureBoot },
   { id: 'merch_line', emoji: '👕', label: 'Your own merch line', blurb: 'Your name on the shirt, and none of it is the club shop.', test: f => f.followers >= f.merchLineAt },
 ];

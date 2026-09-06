@@ -85,8 +85,8 @@ export interface CriticFacts {
    *  a second time. */
   popularity: number;
   /** What the player did about him, once, ever: 0 nothing, 1 answered him
-   *  back in public, 2 said nothing and let the football talk, 3 invited him
-   *  in to watch a week of training. */
+   *  back in public, 2 said nothing and told him to judge the next season on
+   *  its own, 3 invited him in to watch a week of training. */
   answered: number;
 }
 
@@ -103,10 +103,14 @@ export function criticScore(f: CriticFacts): number {
   const n = f.recentRatings.length;
   if (n === 0) return 50;
   /* "Let the football answer" is the one choice that changes how he reads
-     you: the most recent season counts double, so a good one converts him
-     fast and a bad one buries you. */
-  const w = (i: number): number => (f.answered === 2 && i === n - 1 ? 2 : 1);
-  const wsum = f.recentRatings.reduce((a, _, i) => a + w(i), 0);
+     you: his verdict becomes the season you told him to wait for and nothing
+     else, so a good one converts him in one go and a bad one buries you in
+     one go. Weighting it double instead of exclusively was the first draft,
+     and simCareerLife measured it moving the final verdict by 0.4 points on
+     average, because the newest season is usually close to the mean of the
+     last three anyway. A button that does nothing is worse than no button. */
+  const w = (i: number): number => (f.answered === 2 ? (i === n - 1 ? 1 : 0) : 1);
+  const wsum = f.recentRatings.reduce((a, _, i) => a + w(i), 0) || 1;
   const meanRating = f.recentRatings.reduce((a, r, i) => a + r * w(i), 0) / wsum;
   const meanApps = f.recentApps.length
     ? f.recentApps.reduce((a, v, i) => a + v * w(i), 0) / wsum

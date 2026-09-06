@@ -14,6 +14,7 @@
 import type { CareerState } from "./soccerCareerEngine";
 import { getCareerTotals, SPONSORSHIP_TIERS } from "./soccerCareerEngine";
 import { moneyWealth } from "./soccerMoney";
+import { hasSignatureBoot } from "./soccerCareerBoot";
 import { SOCCER_BADGES, earnedBadges } from "./careerBadges";
 import type { BadgeDef, SoccerBadgeFacts, SoccerSeasonFact } from "./careerBadges";
 
@@ -68,8 +69,8 @@ export function soccerBadgeFacts(c: CareerState): SoccerBadgeFacts {
     },
     wealth: Math.round(((c.netWorth ?? 0) + (c.totalAssetValue ?? 0) + moneyWealth(c)) * 100) / 100,
     followers: c.socialMediaFollowers ?? 0,
-    bootDealAt: tierAt("nike_adidas", 5),
     merchLineAt: tierAt("merchandise_line", 30),
+    signatureBoot: hasSignatureBoot(c),
     seriousInjuries: serious.length,
     appsAfterFirstSerious,
   };

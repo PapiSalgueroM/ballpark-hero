@@ -102,8 +102,11 @@ export function soccerCriticNow(c: CareerState): { score: number; stance: Critic
 /** The column the season just gone earns, for the newspaper. `papers` is the
  *  engine's own masthead list, handed in so this file stays types only. */
 export function soccerCriticArticle(c: CareerState, season: SeasonRecord, papers: string[]): { paper: string; headline: string; body: string; hostile: boolean } | null {
-  const played = playedSeasons(c);
-  if (played.length === 0) return null;
+  /* A season that is not filed as a playing year (a year inside, a year the
+     record calls something else) still happened and he still writes about it,
+     so the season in hand is the fallback. Without this, simCareerLife found
+     one newspaper in 971 going out with no column in it. */
+  const played = playedSeasons(c).length ? playedSeasons(c) : [season];
   const { stance } = stanceAfter(c, played, played.length - 1);
   const name = soccerCriticName(c);
   const col = criticColumn(name, season.year, stance, seasonClause(c.position, season));
@@ -121,6 +124,28 @@ export function soccerCriticArticle(c: CareerState, season: SeasonRecord, papers
   };
 }
 
+/* Round 473: the conviction replaces the whole newspaper and returns early,
+   which meant the one man who had written about you every season since you
+   turned pro went silent on the single biggest day of the story.
+   simCareerLife section 8 found four papers in 970 like that. */
+const DISGRACE = [
+  (c: string) => `${c} has written about you every season since you turned pro. This week he filed four hundred words, none of them about football, and the last line was that he should have asked harder questions sooner.`,
+  (c: string) => `${c} pulled every column he ever wrote about you and printed the dates beside the charges. He did not editorialise. He did not need to.`,
+  (c: string) => `${c} wrote that he had spent a decade arguing about your first touch with people who now want to talk about something else entirely.`,
+];
+
+/** The column on the day it all comes out. */
+export function soccerCriticDisgraceArticle(c: CareerState, papers: string[]): { paper: string; headline: string; body: string } {
+  const name = soccerCriticName(c);
+  const played = playedSeasons(c);
+  const year = played.length ? played[played.length - 1].year : (c.seasons?.[0]?.year ?? 2020);
+  return {
+    paper: criticPaper(`${c.playerName}|${c.nationality}|${played[0]?.year ?? year}`, papers),
+    headline: `THE COLUMN: ${name} Has Been Writing About You For Years. Never Like This`,
+    body: DISGRACE[Math.abs(year) % DISGRACE.length](name),
+  };
+}
+
 /* ─── the one thing you can do about him ─────────────────────────────────── */
 
 /**
@@ -132,8 +157,9 @@ export function soccerCriticArticle(c: CareerState, season: SeasonRecord, papers
  *   answer back   he is invested now, so every season after this counts
  *                 harder with him in both directions, and he starts four
  *                 points colder for having been answered.
- *   say nothing   your next season counts double with him. A good one
- *                 converts him in one go; a bad one buries you in one go.
+ *   say nothing   from here his verdict is the season you told him to wait
+ *                 for and nothing else. A good one converts him in one go; a
+ *                 bad one buries you in one go.
  *   invite him in he softens for good, and the dressing room hates that you
  *                 let a journalist watch them work.
  */
@@ -170,7 +196,7 @@ export function getCriticEvents(state: CareerState): RandomEvent[] {
       },
       {
         label: "Say nothing. Let next season answer him", emoji: "🤐", color: "bg-blue-600",
-        consequence: "Nothing today. Your next season counts double with him, good or bad",
+        consequence: "Nothing today. From now on he judges the season in front of him and nothing else, good or bad",
         apply: s => {
           setFlag(s, CRITIC_FLAG, 2);
           s.events = [...s.events, `🤐 Said nothing about ${name}'s column. Next season is the reply`];

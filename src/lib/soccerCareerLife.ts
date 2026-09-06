@@ -219,7 +219,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your goggles celebration is everywhere. A lawyer suggests trademarking it for merch.",
       category: "life", choices: [
         { label: "Trademark it", emoji: "®️", color: "bg-emerald-600", consequence: "Sponsorship income +€300k/yr",
-          apply: s => { s.sponsorshipIncome += 0.3; s.events = [...s.events, "®️ Trademarked your celebration. The merch prints money"]; return s; } },
+          apply: s => { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.3) * 100) / 100; s.events = [...s.events, "®️ Trademarked your celebration. The merch prints money"]; return s; } },
         { label: "Let the kids use it free", emoji: "❤️", color: "bg-blue-600", consequence: "Integrity +4, playgrounds everywhere copy you",
           apply: s => { s.integrityBonus += 4; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "❤️ Kept the celebration free for every playground on earth"]; return s; } },
       ] });
@@ -541,7 +541,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Every player has a podcast now. Yours would be called whatever you want, and sponsors are already lining up.",
       category: "life", choices: [
         { label: "Launch it", emoji: "🎙️", color: "bg-emerald-600", consequence: "Sponsorship income +€200k/yr, occasional hot take backlash",
-          apply: s => { setFlag(s, "podcast", 1); s.sponsorshipIncome += 0.2; s.events = [...s.events, "🎙️ Launched the podcast. Episode one: surprisingly good"]; return s; } },
+          apply: s => { setFlag(s, "podcast", 1); s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.2) * 100) / 100; s.events = [...s.events, "🎙️ Launched the podcast. Episode one: surprisingly good"]; return s; } },
         { label: "The world has enough podcasts", emoji: "🛑", color: "bg-muted", consequence: "A rare and noble restraint",
           apply: s => { s.integrityBonus += 1; s.events = [...s.events, "🛑 Declined to start a podcast. Historians will thank you"]; return s; } },
       ] });
