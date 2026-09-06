@@ -137,6 +137,13 @@ export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateSt
   }
 }
 
+/** Is there a daily going today that the player has not finished? The two
+ *  mode-select routes ask before they decide which screen to open on. */
+export function hasUnfinishedDaily(sport: ConquestSport, dateStr: string = getTodayET()): boolean {
+  const run = loadDailyRun(sport, dateStr);
+  return !!run && !run.done;
+}
+
 /** Today's completed daily run, or null if the player has not finished one. */
 export function loadDailyResult(sport: ConquestSport, dateStr: string = getTodayET()): ConquestDailyResult | null {
   const run = loadDailyRun(sport, dateStr);

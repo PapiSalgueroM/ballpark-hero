@@ -10,12 +10,15 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConquestHowToPlayNba } from '@/components/conquest/ConquestHowToPlayNba';
 import { HelpCircle } from 'lucide-react';
+import { hasUnfinishedDaily } from '@/lib/conquestDaily';
 
 type ConquestMode = 'select' | 'imperialism' | 'arcade';
 
 const ConquestNba = () => {
   const [showHelp, setShowHelp] = useState(false);
-  const [mode, setMode] = useState<ConquestMode>('select');
+  /* Round 476: a daily left half played opens straight back on the board it
+     was left on, rather than on the mode chooser with the run one tap away. */
+  const [mode, setMode] = useState<ConquestMode>(() => (hasUnfinishedDaily('nba') ? 'imperialism' : 'select'));
 
   useEffect(() => {
     if (mode !== 'arcade') return;
