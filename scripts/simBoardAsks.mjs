@@ -381,6 +381,44 @@ console.log('4) A save written before this round opens and is repaired');
     }
   }
   console.log('   every ask on the first 40 saves carries its own grading line');
+  /* A club you founded is a save shape too, and it is the one where the
+     league, the squad and the money are all made at the founding rather
+     than baked, so it is the one most likely to hand the builder something
+     it did not expect. */
+  const CREST = { shape: 0, pattern: 2, color1: '#7c3aed', color2: '#f8fafc', initials: 'RA' };
+  let customChecked = 0;
+  for (const leagueId of ['premier', 'eredivisie', 'scottish']) {
+    for (const budgetTier of ['small', 'mid', 'big']) {
+      const spec = { name: 'Real Anthony', stadium: 'Salguero Park', crest: { ...CREST }, budgetTier, leagueId, replacedClub: '' };
+      let st;
+      try {
+        st = startCareer('Real Anthony', 'now', spec);
+      } catch (e) {
+        fail(`a founded club in ${leagueId} on a ${budgetTier} budget threw building its board: ${e.message}`);
+        continue;
+      }
+      const mine = (st.boardObjectives ?? []).filter(o => isBoardAsk(o.id));
+      if (mine.length === 0) {
+        fail(`a founded club in ${leagueId} on a ${budgetTier} budget got no asks at all`);
+        continue;
+      }
+      for (const o of mine) {
+        customChecked += 1;
+        const target = satisfier(o, buildMarket(st), st.budget, st.eraId);
+        if (!target) {
+          fail(`founded club in ${leagueId} (${budgetTier}, pot ${st.budget}): nothing meets "${o.label}"`);
+          continue;
+        }
+        const next = buyPlayer(st, target);
+        if (!next) { fail(`founded club could not sign ${target.name} at ${target.price}`); continue; }
+        st = next;
+        const status = objectiveStatuses(st).find(x => x.objective.id === o.id);
+        if (!status || status.status !== 'done') fail(`founded club met "${o.label}" and it grades ${status ? status.status : 'missing'}`);
+      }
+    }
+  }
+  console.log(`   ${customChecked} asks on nine founded clubs (three leagues, three budgets) all met by signing somebody`);
+  if (customChecked < 12) fail(`only ${customChecked} founded club asks checked, that path barely ran`);
 }
 
 /* ================================================================== */

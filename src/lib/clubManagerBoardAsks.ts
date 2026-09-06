@@ -442,13 +442,13 @@ export function askExplainer(objective: BoardObjective): string | null {
   if (!isBoardAsk(objective.id)) return null;
   switch (objective.id) {
     case 'natQuota':
-      return `Counts everyone on the books from ${objective.country ?? 'that country'}, loans out aside. Anybody whose country we do not have on file counts for nobody.`;
+      return `Counts everyone in your squad from ${objective.country ?? 'that country'}. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.`;
     case 'veterans':
-      return `Counts everyone on the books aged ${objective.minAge ?? VETERAN_AGE} or over.`;
+      return `Counts everyone in your squad aged ${objective.minAge ?? VETERAN_AGE} or over. A player you have in on loan does not count.`;
     case 'posGap':
-      return 'Any signing in that line does it, loans included. It is the thinnest part of your squad.';
+      return 'Any signing in that line does it, loans included. It is the thinnest part of your squad right now.';
     case 'youngStar':
-      return 'A permanent signing only, and it is his age and rating on the market screen that count.';
+      return 'A permanent signing only. He counts once he is in your squad at that age and that rating or better.';
     case 'marquee':
       return 'One fee, not a season of them. Loans and free transfers do not count.';
     default:
