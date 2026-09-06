@@ -15,7 +15,13 @@ export interface MostPlayedEntry {
 // especially right after launch before the table has real volume.
 const FALLBACK_PATHS = ['/soccer-grid', '/perfect-season-nba', '/transfer-path'];
 
-const MIN_COMPLETIONS_TO_QUALIFY = 5;
+/* A floor on PEOPLE, not on rows. Round 481: the function ranked by count(*)
+   and the simulations record a completion per season, so one person leaving
+   Club Manager running outranked a game hundreds of people really played.
+   Measured 2026-09-06: 9,822 rows today from 185 people, club-manager 4,469
+   rows from 32 of them, mlb-front-office 434 rows from 2, which put it third
+   on this list. Three different people is a defensible bar for "played". */
+const MIN_PLAYERS_TO_QUALIFY = 3;
 const TOP_N = 3;
 
 function gameByPath(path: string): GameDef | undefined {
@@ -33,8 +39,9 @@ function buildFallback(): MostPlayedEntry[] {
  * Wave 3 / item #11: "Most Played Today" wired to public.game_completions.
  *
  * Queries today's rows (UTC, matching the table's `completed_on` default),
- * asks the database for the top 3 games of the day with at least
- * MIN_COMPLETIONS_TO_QUALIFY completions, via the most_played_today function.
+ * asks the database for the top 3 games of the day by how many DIFFERENT
+ * people played them, with at least MIN_PLAYERS_TO_QUALIFY of them, via the
+ * most_played_today function.
  * It used to select the day's rows and group them here, which was correct only
  * while a day stayed under PostgREST's 1,000 row cap. It stopped being correct
  * and said nothing. See the note at the call site.
@@ -67,7 +74,7 @@ export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean 
            order to count them. The function joins game_score_caps, which is
            Round 360's allowlist, so an invented game key cannot trend either. */
         const { data, error } = await (supabase.rpc as any)('most_played_today', {
-          p_min: MIN_COMPLETIONS_TO_QUALIFY,
+          p_min: MIN_PLAYERS_TO_QUALIFY,
           p_limit: TOP_N,
         });
 
