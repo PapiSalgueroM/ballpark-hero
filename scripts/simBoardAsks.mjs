@@ -35,6 +35,11 @@
  *     Section 5 must go red.
  *   BOARD_ASKS_CONTROL=nomigrate ensureBoardAsks does nothing, the shape a
  *     save from before this round would be left in. Section 4 must go red.
+ *   BOARD_ASKS_CONTROL=flavour   the board's own answers stop moving
+ *     anything: the money never lands in the pot and the word given is
+ *     never marked, which is a message that reads well and does nothing,
+ *     the exact shape the owner's line about choices that move futures
+ *     was written against. Section 7 must go red.
  * Each control refuses to run if its rewrite found nothing to rewrite.
  *
  * Numbers, measured on this tree 2026-09-06 (the harness prints all of them):
@@ -47,6 +52,9 @@
  *   position lines a board can ask for    4 of 4       floor 4
  *   inbox messages harvested              see output   floor 40
  *   new sender kinds seen                 5 of 5       nothing less passes
+ *   founded club asks, all met            18 of 18     floor 12
+ *   next season opens after a promise     67.5 kept, 64.5 no word,
+ *                                         61.5 broken  kept > none > broken
  *
  * Run: node scripts/simBoardAsks.mjs
  */
@@ -62,7 +70,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.BOARD_ASKS_CONTROL || '';
-if (CONTROL && !['typed', 'quote', 'nomigrate'].includes(CONTROL)) {
+if (CONTROL && !['typed', 'quote', 'nomigrate', 'flavour'].includes(CONTROL)) {
   console.error(`BOARD_ASKS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -129,6 +137,19 @@ if (CONTROL === 'nomigrate') {
   ]], 'boardAsks.nomigrate.ts', 'the save repair');
   console.log('NEGATIVE CONTROL ON: a save from before this round is never repaired; section 4 must go red');
 }
+if (CONTROL === 'flavour') {
+  enginePath = rewrite(ENGINE_SRC, [
+    [
+      '      const add = Math.max(0, msg.fundAmount ?? 0);',
+      '      const add = 0 * Math.max(0, msg.fundAmount ?? 0);',
+    ],
+    [
+      '      boardObjectives = (boardObjectives ?? []).map(o => (o.id === msg.askId ? { ...o, promised: true } : o));',
+      '      boardObjectives = (boardObjectives ?? []).map(o => o);',
+    ],
+  ], 'clubManager.flavour.ts', "the board's own answers");
+  console.log('NEGATIVE CONTROL ON: the board money never lands and the word given is never marked; section 7 must go red');
+}
 
 /* ---- bundle the REAL modules ---- */
 const ENTRY = `${TMP}/boardAsks.${process.pid}.entry.mjs`;
@@ -155,7 +176,7 @@ const { cm, asks, nations, fin } = await import(pathToFileURL(BUNDLE).href);
 const {
   REAL_LEAGUES, playableClubs, CM_ERAS, eraLeaguesFor, eraPlayableClubs,
   startCareer, buildMarket, buyPlayer, objectiveStatuses, groupOf, loadCareer,
-  playNextEntry, answerMessage,
+  playNextEntry, answerMessage, finishSeason, startNextSeason,
 } = cm;
 const { setTicketPolicy } = fin;
 const { isBoardAsk, askCandidates, askExplainer } = asks;
@@ -527,6 +548,110 @@ console.log('6) The words on every ask label');
   }
   console.log(`   ${labels} ask labels checked, ${shapes.size} distinct shapes`);
   if (shapes.size < 5) fail(`only ${shapes.size} distinct ask shapes across the world`);
+}
+
+/* ================================================================== */
+console.log('7) Every answer in the inbox moves a number that has a screen');
+/* ================================================================== */
+/* Written because section 5 answers every message and asserts nothing
+   about what the answer DID, so a build where the five new effects were
+   quietly no-ops would have sailed through it. His line for this round was
+   "choices that actually move relationships and futures", so each effect is
+   fired here on a real career and the number behind it is compared before
+   and after. */
+{
+  const base = startCareer('Everton');
+  const withMsg = (career, msg) => ({
+    ...career,
+    inbox: [{ id: 'm1', playerName: 'x', playerId: '', kind: 'boardChase', text: 't', options: [{ label: 'a', effect: 'listen' }], week: 1, ...msg }],
+  });
+  const ask = (base.boardObjectives ?? []).find(o => isBoardAsk(o.id));
+  if (!ask) fail('Everton got no board ask at all, so nothing below could be tested');
+
+  // The board: money, a word, or no.
+  const fundMsg = withMsg(base, { askId: ask.id, fundAmount: 12, options: [{ label: 'fund', effect: 'fundAsk' }] });
+  const funded = answerMessage(fundMsg, 'm1', 0);
+  if (Math.round((funded.budget - base.budget) * 10) / 10 !== 12) {
+    fail(`taking the board's money moved the pot by ${(funded.budget - base.budget).toFixed(1)} instead of 12`);
+  }
+  if (funded.boardConfidence !== base.boardConfidence - 1) fail('taking the board money did not cost a point of patience');
+  if (!funded.inbox[0].resolved) fail('answering left no outcome line in the inbox');
+
+  const promiseMsg = withMsg(base, { askId: ask.id, options: [{ label: 'word', effect: 'promiseAsk' }] });
+  const promised = answerMessage(promiseMsg, 'm1', 0);
+  if (!(promised.boardObjectives ?? []).find(o => o.id === ask.id && o.promised)) {
+    fail('giving the board your word did not mark the ask on the board screen');
+  }
+
+  const dropMsg = withMsg(base, { askId: ask.id, options: [{ label: 'no', effect: 'dropAsk' }] });
+  const dropped = answerMessage(dropMsg, 'm1', 0);
+  if ((dropped.boardObjectives ?? []).some(o => o.id === ask.id)) fail('refusing the ask left it on the board');
+  if (dropped.boardConfidence !== base.boardConfidence - 3) fail('refusing the ask cost no patience');
+
+  // The agent: a real contract, on the contracts desk's own terms.
+  const client = base.squad.find(pl => !pl.onLoan && !pl.isYouth);
+  const short = { ...base, squad: base.squad.map(pl => (pl.id === client.id ? { ...pl, contractYears: 1 } : pl)) };
+  const renewMsg = withMsg(short, { kind: 'agent', playerId: client.id, options: [{ label: 'sign', effect: 'renewDeal' }] });
+  const renewed = answerMessage(renewMsg, 'm1', 0);
+  const after = renewed.squad.find(pl => pl.id === client.id);
+  if ((after.contractYears ?? 0) <= 1) fail('signing the agent client up did not extend his deal');
+  if (renewed.budget >= short.budget) fail('the renewal cost nothing out of the kitty');
+  const runMsg = withMsg(short, { kind: 'agent', playerId: client.id, options: [{ label: 'run', effect: 'letItRun' }] });
+  const ran = answerMessage(runMsg, 'm1', 0);
+  if (ran.squad.find(pl => pl.id === client.id).morale >= client.morale) fail('letting the deal run cost him no morale');
+
+  // The assistant: the training plan itself.
+  const plan = { intensity: 'double', focus: 'youth' };
+  const planMsg = withMsg(base, { kind: 'coachTip', planOffer: plan, options: [{ label: 'set', effect: 'setPlan' }] });
+  const planned = answerMessage(planMsg, 'm1', 0);
+  if (!planned.training || planned.training.intensity !== 'double' || planned.training.focus !== 'youth') {
+    fail('taking the assistant\u2019s advice did not set the training plan');
+  }
+
+  // The supporters: the ticket price on the finances desk.
+  const premium = setTicketPolicy(base, 2);
+  if ((premium.finance?.ticketTier ?? 1) !== 2) fail('the fixture could not put the ground on premium prices');
+  const fanMsg = withMsg(premium, { kind: 'fanGroup', options: [{ label: 'freeze', effect: 'freezePrices' }] });
+  const frozen = answerMessage(fanMsg, 'm1', 0);
+  if ((frozen.finance?.ticketTier ?? 9) !== 1) fail('freezing the prices did not move the ticket policy');
+
+  // The reporter: the press mood and the dressing room.
+  const pressed = { ...base, press: { ...(base.press ?? {}), mood: 50, pending: null, lastWeek: -9, answered: 0, ducked: 0, nextFire: 0, nextSharpen: 0, promised: false, toneRun: 0 } };
+  const backMsg = withMsg(pressed, { kind: 'reporter', options: [{ label: 'back', effect: 'backSquad' }] });
+  const backed = answerMessage(backMsg, 'm1', 0);
+  if (backed.press.mood !== 53) fail(`backing the squad moved the press mood to ${backed.press.mood} instead of 53`);
+  const meanMorale = a => a.reduce((x, pl) => x + pl.morale, 0) / a.length;
+  if (meanMorale(backed.squad) <= meanMorale(pressed.squad)) fail('backing the squad lifted nobody in the dressing room');
+  const duckMsg = withMsg(pressed, { kind: 'reporter', options: [{ label: 'duck', effect: 'deflect' }] });
+  const ducked = answerMessage(duckMsg, 'm1', 0);
+  if (ducked.press.mood !== 48) fail(`ducking the reporter moved the press mood to ${ducked.press.mood} instead of 48`);
+  console.log('   the pot, the board meter, a contract, the training plan, the ticket price, the press mood and the dressing room all moved');
+
+  /* And the future: a word kept opens next season warmer than a word
+     broken, three points a promise, on the same finished season. */
+  let played = base;
+  for (let i = 0; i < 120 && played.week < played.calendar.length; i++) {
+    played = playNextEntry(played, { skipHalftime: true }).state;
+    if (played.sacked) break;
+  }
+  if (played.sacked || played.week < played.calendar.length) {
+    console.log('   (the promise settlement fixture was sacked or ran short, so it was measured on a doctored season instead)');
+  }
+  const done = finishSeason({ ...played, week: played.calendar.length, sacked: false }).state;
+  const marked = id => ({ ...done, boardObjectives: (done.boardObjectives ?? []).map(o => (o.id === id ? { ...o, promised: true } : o)) });
+  const graded = objectiveStatuses(done);
+  const hit = graded.find(x => x.status === 'done');
+  const missed = graded.find(x => x.status === 'failed');
+  if (!hit || !missed) {
+    fail('the finished season has no objective both hit and missed, so the promise settlement could not be measured');
+  } else {
+    const kept = startNextSeason(marked(hit.objective.id)).boardConfidence;
+    const broken = startNextSeason(marked(missed.objective.id)).boardConfidence;
+    const neutral = startNextSeason(done).boardConfidence;
+    console.log(`   next season opens on ${kept} after a word kept, ${neutral} with no word given, ${broken} after one broken`);
+    if (!(kept > neutral)) fail(`a word kept opens next season on ${kept}, no better than the ${neutral} of never promising`);
+    if (!(broken < neutral)) fail(`a word broken opens next season on ${broken}, no worse than the ${neutral} of never promising`);
+  }
 }
 
 console.log('');
