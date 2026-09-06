@@ -41,12 +41,12 @@ import {
 import type { ClubFacilities } from '@/lib/clubManagerFacilities';
 import {
   concessionPerFan, ensureBooks, fanCrowdMult, noteAwayTrip, noteHomeGate, noteSponsorIncome,
-  rolloverBooks, tickBooks,
+  rolloverBooks, setTicketPolicy, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
-import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks } from '@/lib/clubManagerBoardAsks';
+import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 
 /**
  * Club Manager engine.
@@ -528,14 +528,23 @@ export interface ResultLogEntry {
   competition?: Competition;
 }
 
-export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole';
+export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole'
+  /* Round 474: the five senders who are not in your squad. Every one of these
+     moves a number that already has a screen: the pot, the board meter, a
+     contract, the training plan, the ticket price, the press mood. */
+  | 'fundAsk' | 'promiseAsk' | 'dropAsk'
+  | 'renewDeal' | 'letItRun'
+  | 'setPlan' | 'holdPlan'
+  | 'freezePrices' | 'holdPrices'
+  | 'backSquad' | 'deflect';
 
-/** Round 73: players slide into your DMs. */
+/** Round 73: players slide into your DMs. Round 474: so does everyone else. */
 export interface PlayerMessage {
   id: string;
   playerName: string;
   playerId: string;
-  kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk';
+  kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk'
+    | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
@@ -543,6 +552,16 @@ export interface PlayerMessage {
   resolved?: string;
   /** Round 127: the rung the setRole option would move him to. */
   roleOffer?: SquadRole;
+  /** Round 474: who is talking, when it is not somebody in your squad. A role
+   *  ("The board", "Supporters trust") or a generated person, never a real
+   *  one, because these carry words and a real man never said them. */
+  from?: string;
+  /** Round 474, boardChase: which board ask this message is about. */
+  askId?: BoardObjective['id'];
+  /** Round 474, boardChase: what the board would put in the pot, in £m. */
+  fundAmount?: number;
+  /** Round 474, coachTip: the plan the coach is arguing for. */
+  planOffer?: TrainingPlan;
 }
 
 /* ---------- Round 116: the academy, the scouts and the training ground ---------- */
@@ -634,6 +653,10 @@ export interface BoardObjective {
   target: number;
   /** Rival club name, only on the rival objective. */
   rivalName?: string;
+  /** Round 474: you told the board to their face this one was getting done.
+   *  Settled at the rollover: kept it and next season opens warmer, broke it
+   *  and it opens colder. */
+  promised?: boolean;
   /** Round 474, natQuota: the country being counted. */
   country?: string;
   /** Round 474, veterans: where "experienced" starts. */
@@ -5662,6 +5685,190 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
   });
 }
 
+/* ================================================================== */
+/* Round 474: the other five people who write to you                  */
+/* ================================================================== */
+
+/**
+ * The inbox used to be one room: somebody in your squad, once a match, about
+ * himself. His words: "The messages inbox needs a major update: more kinds of
+ * messages, choices that actually move relationships and futures."
+ *
+ * So there are five more senders, and the rule for all of them is that the
+ * choice moves a number that ALREADY HAS A SCREEN, so what you decided is
+ * still readable a month later instead of being a line of flavour that
+ * evaporates the moment you tap it:
+ *
+ *   THE BOARD chase an ask you have not met. Take their money and the pot
+ *     grows and the board meter drops; give them your word and the ask is
+ *     marked on the board screen and settles at the rollover; tell them no
+ *     and the ask comes off the board and costs you three points now.
+ *   AN AGENT (generated, never a real person) about a client of his in your
+ *     squad whose deal is nearly up. Renew it on the contracts desk terms, or
+ *     let it run and watch his sell value collapse, which the market screen
+ *     already prices.
+ *   YOUR ASSISTANT on the training plan, when the plan really is wrong for
+ *     the squad in front of him. Taking his advice sets it.
+ *   THE SUPPORTERS TRUST on the ticket price, when it is on premium. Freezing
+ *     it moves the fan meter and the gate, both of which have screens.
+ *   A REPORTER (generated) on whether the squad is good enough. Backing them
+ *     publicly lifts the dressing room and the press mood; ducking it costs
+ *     press mood, which is the patience the board lends you on a bad day.
+ *
+ * Nobody real is quoted anywhere in here. Where a message is about one of your
+ * own players it narrates the facts (his deal, his age, his rating), and the
+ * two people who speak are both generated.
+ */
+const COACH_TIP_MIN_WEEK = 4;
+
+/** The board's own line about an ask, by which ask it is. */
+function askChaseLine(objective: BoardObjective, clubName: string): string {
+  switch (objective.id) {
+    case 'natQuota':
+      return `The board want a word about the squad. Their line is that ${clubName} should look more like the country it plays in, and the objective they set you ("${objective.label}") is not close.`;
+    case 'veterans':
+      return `The board have been talking about the dressing room. They think it is short of somebody who has seen a relegation fight, and they set you an objective about it: "${objective.label}".`;
+    case 'posGap':
+      return `The board have had the recruitment people in. Their read matches yours, the squad is thin in one line, and the objective still stands: "${objective.label}".`;
+    case 'youngStar':
+      return `The board want to know where the next sellable asset is coming from. Their objective was "${objective.label}", and nobody has arrived.`;
+    case 'marquee':
+      return `The board want a name on the shirt sales. They asked for one signing worth talking about ("${objective.label}") and the window has been quiet.`;
+    default:
+      return `The board want to know what is happening with "${objective.label}".`;
+  }
+}
+
+/** Rolled after each match: somebody who is not in your squad wants you. */
+function generateClubMessage(state: CareerState): void {
+  const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
+  if (unresolved >= 3) return;
+  if (Math.random() > 0.3) return;
+  const seed = `${state.clubName}|${state.season}|${state.week}`;
+
+  /* 1. The board, chasing an unmet ask, once the season is old enough for
+        the silence to be a story. */
+  const asks = objectiveStatuses(state).filter(s => isBoardAsk(s.objective.id));
+  const chasing = asks.find(s => s.status !== 'done');
+  const alreadyChased = (state.inbox ?? []).some(m => m.kind === 'boardChase');
+  if (chasing && !alreadyChased && state.week >= state.calendar.length * 0.25 && Math.random() < 0.45) {
+    const fund = Math.max(1, Math.round(state.budget * 0.25 * 10) / 10);
+    pushMessage(state, {
+      playerName: 'The board',
+      from: 'The board',
+      playerId: '',
+      kind: 'boardChase',
+      askId: chasing.objective.id,
+      fundAmount: fund,
+      text: askChaseLine(chasing.objective, state.clubName),
+      options: [
+        { label: `Ask them for ${money(fund)}`, effect: 'fundAsk' },
+        { label: 'Give them your word', effect: 'promiseAsk' },
+        { label: 'Tell them it is not happening', effect: 'dropAsk' },
+      ],
+    });
+    return;
+  }
+
+  /* 2. An agent about a client of his who is a year off walking for nothing. */
+  const expiring = state.squad
+    .filter(p => !p.onLoan && !p.isYouth && (p.contractYears ?? 9) <= 1 && p.rating >= 70)
+    .sort((a, b) => b.rating - a.rating)[0];
+  if (expiring && Math.random() < 0.5) {
+    const terms = renewalTerms(expiring);
+    const agent = makeGeneratedName(`agent|${seed}|${expiring.id}`);
+    pushMessage(state, {
+      playerName: expiring.name,
+      from: `${agent}, agent`,
+      playerId: expiring.id,
+      kind: 'agent',
+      text: `An agent has been in touch about ${expiring.name}, who is ${expiring.age} and has a year left. The desk prices a new deal at ${money(terms.fee)} up front on ${terms.wage}k a week for ${terms.years} years. Say nothing and he can talk to anyone in the summer.`,
+      options: [
+        { label: `Sign him up for ${money(terms.fee)}`, effect: 'renewDeal' },
+        { label: 'Let it run', effect: 'letItRun' },
+      ],
+    });
+    return;
+  }
+
+  /* 3. Your assistant, but only when the plan really is wrong. Doubling the
+        sessions with a knackered squad, or coasting on light with kids who
+        need the work. */
+  const plan = state.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
+  const avgFit = state.squad.length
+    ? state.squad.reduce((s, p) => s + p.fitness, 0) / state.squad.length
+    : 100;
+  const kids = state.squad.filter(p => p.age <= 21 && (p.potential ?? p.rating) > p.rating + 3).length;
+  let tip: { text: string; offer: TrainingPlan; label: string } | null = null;
+  if (plan.intensity === 'double' && avgFit < 74) {
+    tip = {
+      text: `Your assistant has the fitness numbers in front of him. The squad is averaging ${Math.round(avgFit)} percent and you have them on double sessions. He wants it dialled back before somebody pulls up.`,
+      offer: { intensity: 'normal', focus: plan.focus },
+      label: 'Dial it back to normal',
+    };
+  } else if (plan.intensity === 'light' && avgFit > 88) {
+    tip = {
+      text: `Your assistant thinks you are leaving work on the table. The squad is averaging ${Math.round(avgFit)} percent fitness on light sessions and he reckons there is a level up in them.`,
+      offer: { intensity: 'normal', focus: plan.focus },
+      label: 'Step it up to normal',
+    };
+  } else if (plan.focus !== 'youth' && kids >= 3) {
+    tip = {
+      text: `Your assistant has been watching the under 21s. ${kids} of them are still improving and the plan is not pointed at them. He wants the week built around the kids.`,
+      offer: { intensity: plan.intensity, focus: 'youth' },
+      label: 'Point the week at the kids',
+    };
+  }
+  if (tip && state.week >= COACH_TIP_MIN_WEEK && Math.random() < 0.5) {
+    pushMessage(state, {
+      playerName: 'Your assistant',
+      from: 'Your assistant',
+      playerId: '',
+      kind: 'coachTip',
+      planOffer: tip.offer,
+      text: tip.text,
+      options: [
+        { label: tip.label, effect: 'setPlan' },
+        { label: 'The plan stands', effect: 'holdPlan' },
+      ],
+    });
+    return;
+  }
+
+  /* 4. The supporters trust, but only when there is something to complain
+        about: the ground is on premium prices. */
+  if ((state.finance?.ticketTier ?? 1) === 2 && Math.random() < 0.5) {
+    pushMessage(state, {
+      playerName: 'Supporters trust',
+      from: 'Supporters trust',
+      playerId: '',
+      kind: 'fanGroup',
+      text: `The supporters trust have written to the club about the ticket price. They are on premium and the letter is polite, long, and copied to every local paper in the city.`,
+      options: [
+        { label: 'Put the prices back to standard', effect: 'freezePrices' },
+        { label: 'The prices stand', effect: 'holdPrices' },
+      ],
+    });
+    return;
+  }
+
+  /* 5. A reporter, on whether this squad is good enough. */
+  if (state.press && Math.random() < 0.6) {
+    const writer = makeGeneratedName(`writer|${seed}`);
+    pushMessage(state, {
+      playerName: 'A reporter',
+      from: `${writer}, local paper`,
+      playerId: '',
+      kind: 'reporter',
+      text: `A reporter from the local paper is running a piece on whether this squad is good enough for what the board have asked of you. He wants a line from you before it goes out.`,
+      options: [
+        { label: 'Back the squad publicly', effect: 'backSquad' },
+        { label: 'Nothing to say', effect: 'deflect' },
+      ],
+    });
+  }
+}
+
 /** Answer a message. Pure: returns the new state. */
 export function answerMessage(career: CareerState, messageId: string, optionIdx: number): CareerState {
   const inbox = career.inbox ?? [];
@@ -5673,6 +5880,14 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
   let squad = career.squad;
   let budget = career.budget;
   let promisedStarts = career.promisedStarts ?? [];
+  /* Round 474: the five club senders move things outside the squad, so the
+     answer carries them too. Everything here is a copy; nothing is mutated. */
+  let boardConfidence = career.boardConfidence;
+  let boardObjectives = career.boardObjectives;
+  let training = career.training;
+  let press = career.press;
+  let finance = career.finance;
+  let books = career.books;
   let resolved = '';
   const bump = (id: string, delta: number) => {
     squad = squad.map(p => (p.id === id ? { ...p, morale: clamp(p.morale + delta, 5, 99) } : p));
@@ -5734,6 +5949,83 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       bump(msg.playerId, 2);
       resolved = 'You let it slide. Football is meant to be fun.';
       break;
+
+    /* ---- Round 474: the board ---- */
+    case 'fundAsk': {
+      const add = Math.max(0, msg.fundAmount ?? 0);
+      budget = Math.round((budget + add) * 10) / 10;
+      /* To the last point and never to zero, the Round 465 rule: only a final
+         whistle sacks anybody, and nothing between matches may hand the
+         header meter a zero over a manager who is playing on Saturday. */
+      boardConfidence = clamp(boardConfidence - 1, 1, 100);
+      resolved = `${money(add)} into the pot, and they made a point of writing down that they had done it. A point off their patience.`;
+      break;
+    }
+    case 'promiseAsk': {
+      boardObjectives = (boardObjectives ?? []).map(o => (o.id === msg.askId ? { ...o, promised: true } : o));
+      resolved = 'You gave them your word. It is on the board screen now, and it settles in the summer either way.';
+      break;
+    }
+    case 'dropAsk': {
+      boardObjectives = (boardObjectives ?? []).filter(o => o.id !== msg.askId);
+      boardConfidence = clamp(boardConfidence - 3, 1, 100);
+      resolved = 'The ask is off the board. So are three points of their patience.';
+      break;
+    }
+
+    /* ---- Round 474: the agent ---- */
+    case 'renewDeal': {
+      const applied = renewContract({ ...career, squad, budget }, msg.playerId);
+      if (applied) {
+        squad = applied.squad;
+        budget = applied.budget;
+        resolved = 'Signed. His deal is off the danger list and the contracts desk says so.';
+      } else {
+        bump(msg.playerId, -5);
+        resolved = 'You cannot cover the signing on fee, so the deal still runs down and he knows it.';
+      }
+      break;
+    }
+    case 'letItRun': {
+      bump(msg.playerId, -6);
+      resolved = 'You let it run. Every club in Europe can talk to him in the summer, and the market prices him at less than half from here.';
+      break;
+    }
+
+    /* ---- Round 474: the assistant ---- */
+    case 'setPlan': {
+      if (msg.planOffer) training = { ...msg.planOffer };
+      resolved = 'The training screen is set to what he asked for.';
+      break;
+    }
+    case 'holdPlan':
+      resolved = 'The plan stands. He said his piece and got on with it.';
+      break;
+
+    /* ---- Round 474: the supporters ---- */
+    case 'freezePrices': {
+      const applied = setTicketPolicy({ ...career, squad, budget, boardConfidence, finance, books }, 1);
+      finance = applied.finance;
+      books = applied.books;
+      boardConfidence = applied.boardConfidence;
+      resolved = 'Back to standard prices. The fan meter moves, and so does the money coming through the turnstile.';
+      break;
+    }
+    case 'holdPrices':
+      resolved = 'The prices stand. The trust ran the letter anyway.';
+      break;
+
+    /* ---- Round 474: the reporter ---- */
+    case 'backSquad': {
+      squad = squad.map(p => ({ ...p, morale: clamp(p.morale + 2, 5, 99) }));
+      press = press ? { ...press, mood: clamp(press.mood + 3, 0, 100) } : press;
+      resolved = 'You backed them in print. The dressing room read it and so did the press box.';
+      break;
+    }
+    case 'deflect':
+      press = press ? { ...press, mood: clamp(press.mood - 2, 0, 100) } : press;
+      resolved = 'You gave him nothing. The piece ran anyway, and it was not kind.';
+      break;
   }
 
   return {
@@ -5741,6 +6033,12 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
     squad,
     budget,
     promisedStarts,
+    boardConfidence,
+    boardObjectives,
+    training,
+    press,
+    finance,
+    books,
     inbox: inbox.map(m => (m.id === messageId ? { ...m, resolved } : m)),
   };
 }
@@ -9381,6 +9679,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     state.promisedStarts = stillOwed;
   }
   generatePlayerMessage(state, xi, won, margin);
+  // Round 474: and the five people who are not in your squad.
+  generateClubMessage(state);
 
   /* ----- board confidence ----- */
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
@@ -11176,6 +11476,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // starting confidence.
   const objs = summary?.objectives ?? [];
   const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
+  /* Round 474: and a word given to the board over the season settles here,
+     on top of the ordinary hit or miss. The season is over when this runs,
+     so objectiveStatuses is final; keeping your word opens next season three
+     points warmer per promise and breaking it three points colder. */
+  const promiseNet = objectiveStatuses(career)
+    .filter(s => s.objective.promised)
+    .reduce((n, s) => n + (s.status === 'done' ? 1 : -1), 0);
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
@@ -11340,7 +11647,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2, 35, 82),
+    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82),
     sacked: false,
     squad,
     xiIds: [],

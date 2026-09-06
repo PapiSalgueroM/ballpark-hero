@@ -18,6 +18,7 @@ import {
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
+import { askExplainer, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
 import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
 import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
@@ -1055,7 +1056,7 @@ const ClubManager = () => {
               <HubTile
                 icon="📩" title="Inbox" accent={unreadCount > 0}
                 value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={latestMsg ? latestMsg.playerName : 'No messages yet'}
+                sub={latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1192,7 +1193,7 @@ const ClubManager = () => {
                     <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
                   </div>
                   <div className="space-y-1.5">
-                    {objStatuses.map(({ objective, status }) => (
+                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
                       <div key={objective.id} className="flex items-center justify-between gap-2">
                         <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
                         <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
@@ -1201,6 +1202,32 @@ const ClubManager = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Round 474: the two asks you go out and DO, kept apart from
+                      the demands the season hands you, with the line that says
+                      how each one is judged so nobody has to guess. */}
+                  {objStatuses.some(s => isBoardAsk(s.objective.id)) && (
+                    <div className="mt-3 pt-2.5 border-t border-border">
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
+                        🛒 In the market
+                      </div>
+                      <div className="space-y-2">
+                        {objStatuses.filter(s => isBoardAsk(s.objective.id)).map(({ objective, status }) => (
+                          <div key={objective.id}>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs text-foreground min-w-0">{objective.label}</span>
+                              <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
+                                {OBJ_CHIP[status].label}
+                              </span>
+                            </div>
+                            <p className="text-[9px] text-muted-foreground mt-0.5 leading-relaxed">
+                              {objective.promised ? 'You gave them your word on this one. ' : ''}
+                              {askExplainer(objective)}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
