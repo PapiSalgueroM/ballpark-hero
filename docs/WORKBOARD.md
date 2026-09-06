@@ -731,7 +731,13 @@ critic's item; these are the rest, unclaimed.
   `tennis_grand_slam_winners` holds 1,019 rows, so the last 19 are never seen and Raducanu is
   told she never won a slam.
 
-- **NASCAR CHAIN: 17 of its 25 starting drivers cannot be answered at all**, so the run ends on
+- **DONE, Round 488. NASCAR CHAIN: starting drivers who could not be answered at all.**
+  CORRECTION to the audit's number: it is 7 of 25 with no span, not 17, plus a larger group of
+  champions whose spans were a single season (Harvick 2014 to 2014 against a real 2001 to 2023).
+  nascar_drivers is a stub, so the span is now DERIVED from recorded wins, poles and titles,
+  taking every starter from 18 of 25 to 25 of 25. It is a lower bound on purpose. Fence
+  `scripts/simNascarChainSpans.mjs`, controls `titlesonly` and `sourceblind`.
+  ORIGINAL FINDING: 17 of its 25 starting drivers cannot be answered at all, so the run ends on
   the first guess. The rule is "won a Cup title in a season the current driver raced" and the
   span comes from `nascar_drivers.first_year/last_year`.
 
@@ -751,7 +757,20 @@ critic's item; these are the rest, unclaimed.
   `if (!dbPosition) return true;` and 3,510 of 5,135 rows have a NULL position, which is not
   random: it is every legend in the table. The site's own bref table holds the answer.
 
-- **SOCCER GRID, two shapes this repo has now fixed twice elsewhere.** A club cell is matched
+- **PART DONE, Round 489. SOCCER GRID.** Three things were fixed: five club labels that NOBODY
+  could satisfy (87 of 1,883 cells, 4.6 percent of the board: PSG, Bayer Leverkusen, Celta Vigo,
+  Rennes, LA Galaxy), seven cached refusals of real players that would have been served forever,
+  and the Paulinho defect ("Vitinha" is three men, and one man's debut year was deciding another
+  man's hard NO). Fence `scripts/simSoccerGridLabels.mjs`, controls `noalias`, `deadlabel`.
+  **STILL OPEN, and measured so nobody has to re-derive it:** the matcher still accepts a
+  DIFFERENT club, so the Barcelona square still takes an Espanyol player. A naive tightening was
+  tested against all 100 labels and KILLS 27 of them outright, including Porto, Arsenal, Santos
+  and River Plate, which have no exact match in the table at all. The fix is an explicit map of
+  all 100 labels to the exact stored strings, the way Round 483 wrote out 30 for Build Your XI.
+  Also still open: the name lookup is an accent-sensitive ilike, and 17,222 of the table's 80,586
+  rows (21 percent) have an accented name. It is masked today because the CACHE key folds
+  accents, so whoever types it with the accent first serves everyone after.
+  ORIGINAL FINDING: two shapes this repo has now fixed twice elsewhere. A club cell is matched
   by substring in BOTH directions (`soccer-grid-validate:138`), so the Barcelona square accepts
   Espanyol players, which is Round 483's defect in another file. And a club-by-club cell is
   confirmed from two different men's rows (`:145`), which is Round 482's Paulinho defect in
