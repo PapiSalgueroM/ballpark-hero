@@ -5,6 +5,7 @@ import { careerPlayers as fallbackPlayers } from '@/data/careerPlayers';
 import type { CareerPlayer } from '@/types/career';
 import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
+import { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '@/lib/transferPathGraph';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
@@ -75,25 +76,6 @@ export interface TransferPathState {
   getAllPlayerNames: () => string[];
   getPlayerNationality: (name: string) => string;
   getPlayerClubs: (name: string) => Set<string>;
-}
-
-/** name -> Set of `club::season`, the key the link rule is judged on */
-function clubSeasonsOf(players: CareerPlayer[]): Map<string, Set<string>> {
-  const map = new Map<string, Set<string>>();
-  for (const p of players) {
-    map.set(p.name, new Set(p.career.map(s => `${s.club}::${s.season}`)));
-  }
-  return map;
-}
-
-function shareClub(keys: Map<string, Set<string>>, a: string, b: string): string | null {
-  const csA = keys.get(a);
-  const csB = keys.get(b);
-  if (!csA || !csB) return null;
-  for (const key of csA) {
-    if (csB.has(key)) return key.split('::')[0]; // club name of a shared season
-  }
-  return null;
 }
 
 export function useTransferPath(): TransferPathState {
@@ -237,19 +219,8 @@ export function useTransferPath(): TransferPathState {
     [playerToClubSeasons],
   );
 
-  // club::season -> players who were there. Powers the give-up path search.
-  const seasonIndex = useMemo(() => {
-    const idx = new Map<string, string[]>();
-    for (const p of rulePlayers) {
-      for (const s of p.career) {
-        const k = `${s.club}::${s.season}`;
-        const arr = idx.get(k);
-        if (arr) arr.push(p.name);
-        else idx.set(k, [p.name]);
-      }
-    }
-    return idx;
-  }, [rulePlayers]);
+  // The same keys the other way round: who holds each one. Powers the give-up path search.
+  const seasonIndex = useMemo(() => buildSeasonIndex(playerToClubSeasons), [playerToClubSeasons]);
 
   /** BFS shortest path through the temporal-teammate graph. */
   const findPath = useMemo(
@@ -263,24 +234,21 @@ export function useTransferPath(): TransferPathState {
         const cur = queue.shift()!;
         const keys = playerToClubSeasons.get(cur);
         if (!keys) continue;
-        for (const key of keys) {
-          const club = key.split('::')[0];
-          for (const nb of seasonIndex.get(key) ?? []) {
-            if (seen.has(nb)) continue;
-            seen.add(nb);
-            prev.set(nb, { via: cur, club });
-            if (nb === to) {
-              const path: RevealStep[] = [];
-              let at: string | null = to;
-              while (at) {
-                const pr = prev.get(at);
-                path.unshift({ player: at, club: pr ? pr.club : null });
-                at = pr ? pr.via : null;
-              }
-              return path;
+        for (const { name: nb, club } of linkedFrom(seasonIndex, keys)) {
+          if (seen.has(nb)) continue;
+          seen.add(nb);
+          prev.set(nb, { via: cur, club });
+          if (nb === to) {
+            const path: RevealStep[] = [];
+            let at: string | null = to;
+            while (at) {
+              const pr = prev.get(at);
+              path.unshift({ player: at, club: pr ? pr.club : null });
+              at = pr ? pr.via : null;
             }
-            queue.push(nb);
+            return path;
           }
+          queue.push(nb);
         }
       }
       return null;
