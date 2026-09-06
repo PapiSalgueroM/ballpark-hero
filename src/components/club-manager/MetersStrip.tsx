@@ -33,7 +33,13 @@ function MeterBar({ name, meter, numbers, onToggle }: { name: string; meter: Met
       onClick={onToggle}
       aria-pressed={numbers}
       aria-label={`${name}: ${meter.shown} out of 100, ${meter.band}. Tap to swap the words and the number.`}
-      className="block w-full text-left rounded-md focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+      /* py-1.5 is the thumb, not the look: measured at 390 by 844 the button
+         was 175 by 22px and the how to play tells the player to tap it,
+         under the 30px floor every tap target on this site is held to. The
+         padding takes it to 34 without moving a pixel of what is drawn, and
+         to 34 rather than exactly 30 because a sub pixel layout landed the
+         first try on 29.98 and read as under the floor. */
+      className="block w-full text-left rounded-md py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
       data-cm-meter={name.toLowerCase()}
       data-cm-value={meter.shown}
     >
