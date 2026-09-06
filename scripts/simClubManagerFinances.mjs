@@ -192,7 +192,20 @@ function checkSums(p, where) {
 console.log('1) Every projection and every closed ledger adds up, week after week');
 {
   let checked = 0, sacked = 0, finals = 0;
-  for (const [i, club] of ['Real Madrid', 'Manchester City', 'Arsenal', floorClub].entries()) {
+  /* Eight clubs, not four. Every assertion below is per club and unchanged;
+     what needed widening is the SAMPLE, because the two guards under the
+     loop want 120 weekly projections and two seasons that reach the last
+     day, and a season only reaches the last day if the manager is not
+     sacked first. Four careers cannot carry that: measured over 125 seeded
+     first seasons the manager is sacked in 12.8 percent of them on this
+     tree and 10.4 percent on the tree before Rounds 470 to 474, so a fixed
+     set of four is one unlucky draw away from red on healthy code, which is
+     exactly what the Rounds 470 to 474 merge produced (3 of the 4 sacked,
+     115 projections, 1 final, while every sum and every ledger identity in
+     the section passed). Eight clubs is the same check on twice the
+     evidence. */
+  const section1Clubs = ['Real Madrid', 'Manchester City', 'Arsenal', floorClub, 'Everton', 'Napoli', 'Brentford', 'Atlético Madrid'];
+  for (const [i, club] of section1Clubs.entries()) {
     withStream(10 + i, () => {
       const end = playSeason(startCareer(club), s => { checkSums(projectFinances(s), `${club} week ${s.week}`); checked++; });
       const c = closeLedger(end);
@@ -207,7 +220,7 @@ console.log('1) Every projection and every closed ledger adds up, week after wee
   }
   if (checked < 120) fail(`only ${checked} weekly projections checked`);
   if (finals < 2) fail(`only ${finals} seasons reached the last day (${sacked} sacked)`);
-  console.log(`   ${checked} weekly projections and 4 closed ledgers, every total the sum of its lines; on the ${finals} seasons that reached the last day the final projection equals the ledger (${sacked} sacked early)`);
+  console.log(`   ${checked} weekly projections and ${section1Clubs.length} closed ledgers, every total the sum of its lines; on the ${finals} seasons that reached the last day the final projection equals the ledger (${sacked} sacked early)`);
 }
 
 /* ---------- 2. The kitty identity ---------- */
