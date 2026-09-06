@@ -2429,6 +2429,29 @@ roadmap when a round touches the game named:
   cap (scoreGuess returns min(99, total) for a non exact guess). Say so in the header or
   measure the raw total instead.
 
+**THE COMPLETIONS TABLE SWEEP, 2026-09-06. Three real defects and four things cleared, and
+the cleared ones are worth as much as the findings because they stop a future round hunting
+them.** The method, which is cheap and worth repeating: ask the table which games stopped
+being played, which keys can score, and whether "most played" means what it says.
+FOUND AND FIXED: an invented key on the leaderboard allowlist (Round 480), and Most Played
+Today ranking rows instead of people (Round 481). FOUND AND SPECCED: Build Your XI dead,
+below.
+CLEARED, each measured rather than assumed:
+- **Overrated or Underrated, Tier List and Guess The Club** all stopped dead, and all three
+  were deleted on his own instruction (the registry carries the date and the quote).
+- **The five Connect 4 games and CBB Grid have never recorded a single completion, ever, and
+  they are not broken.** /football-connect-4 loads clean in a browser with no page errors and
+  a playable board. It is a TWO PLAYER pass and play trivia game, so finishing one needs two
+  people at one device, which is why the number is zero rather than small. That is a product
+  signal, not a bug: five live games nobody ever finishes. Worth his eye when the roadmap
+  next reaches them, and worth nobody's afternoon before then.
+- **The leaderboard is sound** and the season simulations do not inflate it: global_leaderboard
+  takes one capped score per player per game per day, so 1,453 Club Manager seasons in a day
+  count once.
+- **A slug can appear in game_completions that no code ever wrote**, because that table is
+  writable by the anon key by design. nrl-my-career did on 2026-09-05. It earns nothing (no
+  cap row) and Round 480's new check is what keeps it that way.
+
 **BUILD YOUR XI IS DEAD IN PRODUCTION, found 2026-09-06 by reading the completions table
 rather than by anyone reporting it.** 15 to 27 completions a day through 2026-08-28, then
 nothing: 215 in a fourteen day window against 1 in the seven days since, while the site does
