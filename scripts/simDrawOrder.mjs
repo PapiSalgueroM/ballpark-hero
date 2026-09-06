@@ -101,10 +101,10 @@ const RANDOM_SEED = 284;
    disagree mean the page is unstable at one clock, which is a real finding of
    its own and is reported rather than averaged away. */
 const TAKES = Math.max(2, Number(process.env.TAKES || 3));
-/* Per RENDER, not per route: each of the six renders a route needs races this
-   on its own, so the name and the message both say render. Without a budget one
-   wedged navigation stalls the sweep and it neither passes nor fails, which is
-   the least useful thing a check can do. */
+/* Per RENDER, not per route: every render a route needs, TAKES of them at each
+   of the two offsets, races this on its own, so the name and the message both
+   say render. Without a budget one wedged navigation stalls the sweep and it
+   neither passes nor fails, which is the least useful thing a check can do. */
 const RENDER_BUDGET_MS = Number(process.env.RENDER_BUDGET_MS || 150000);
 
 if (CONTROL && CONTROL !== 'drawdep') {
@@ -194,6 +194,20 @@ for (const m of appSrc.matchAll(/<Route\s+path=["']([^"']+)["']\s+element=\{<(\w
   const [, routePath, comp] = m;
   if (lazyOf.has(comp)) routeEntry.set(routePath, lazyOf.get(comp));
 }
+/* COUNT THE PATHS IN THE SOURCE AND FAIL WHEN THE COUNT MOVES. A size floor
+   catches a parse that broke completely and misses the one that matters: a
+   handful of routes written in some other shape would be dropped in silence,
+   and a raw drawing page among them would then be reported as reaching no
+   route, which reads like good news. So every <Route path= in the file must be
+   matched by the regex above, whether or not its element is lazy. Measured on
+   2026-09-06: 162 route lines, 162 matched, 149 of them lazy components that
+   get walked, and the 13 that are not are the home page, eleven redirects and
+   the 404, none of which can render a hook into a snapshot. */
+const routeLines = (appSrc.match(/<Route\s+path=/g) || []).length;
+const matched = [...appSrc.matchAll(/<Route\s+path=["'][^"']+["']\s+element=\{<\w+/g)].length;
+if (routeLines !== matched) {
+  fail(`src/App.tsx has ${routeLines} route lines but this harness's pattern matched only ${matched} of them, so ${routeLines - matched} route(s) are being dropped in silence and a raw drawing page among them would look like it reaches no route`);
+}
 if (routeEntry.size < 50) {
   fail(`only ${routeEntry.size} routes were read out of src/App.tsx, which is far fewer than this app has, so the route parse is broken and the sweep would silently cover almost nothing`);
 }
@@ -234,7 +248,13 @@ const atRisk = [];
 const raiserOf = new Map();
 for (const [routePath, spec] of routeEntry) {
   const entryFile = resolveImport(spec, path.join(SRC, 'App.tsx'));
-  if (!entryFile) continue;
+  if (!entryFile) {
+    /* Same reason as the route line count above: a page module this cannot
+       resolve is a route that never gets walked, and a silent skip here would
+       hide a raw draw rather than report one. */
+    fail(`${routePath} names the page module ${spec} and this harness could not resolve it to a file, so that route was never walked and a raw draw on it would go unseen`);
+    continue;
+  }
   const hits = [...graphOf(entryFile)].filter(f => rawDrawFiles.has(f));
   if (hits.length) { atRisk.push(routePath); raiserOf.set(routePath, hits); }
 }
@@ -242,7 +262,7 @@ atRisk.sort();
 
 const rendered = new Set(atRisk.flatMap(r => raiserOf.get(r)));
 const orphan = [...rawDrawFiles].filter(f => !rendered.has(f)).sort();
-console.log(`   ${routeEntry.size} routes read from src/App.tsx, ${atRisk.length} of them render a file that still draws raw`);
+console.log(`   ${matched} of ${routeLines} route lines in src/App.tsx matched, ${routeEntry.size} of them lazy pages that get walked, ${atRisk.length} rendering a file that still draws raw`);
 if (orphan.length) {
   console.log(`   ${orphan.length} raw drawing file(s) reach no route at all, so no snapshot can carry them: ${orphan.join(', ')}`);
 }
@@ -342,9 +362,9 @@ async function render(route, burn) {
      /connections and /footle, two renders at the SAME offset gave the same 70
      tags with the order differing. Comparing the raw innerHTML therefore
      reports that noise as instability and the real question never gets asked.
-     It is noise and not signal: across the last twelve builds of eight of
-     these routes the saved heads hold 33 distinct values counted in order and
-     the same 33 counted as sets, so not one saved head has ever differed by
+     It is noise and not signal: across the last twelve builds of all 22 of
+     these routes the saved heads hold 90 distinct values counted in order and
+     the same 90 counted as sets, so not one saved head has ever differed by
      order alone. Sorting drops the artifact and keeps every content change. */
   const head = await page.evaluate(() =>
     [...document.head.children]
