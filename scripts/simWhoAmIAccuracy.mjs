@@ -14,6 +14,15 @@
      1. The target scores exactly 100 against itself, and no other player in
         the pool can reach 100 against it: the meter's only "you got it" value
         is reserved for the answer.
+        HALF OF THAT IS A CAP, NOT A MEASUREMENT, and saying so is the point.
+        scoreGuess returns `isExact ? 100 : Math.min(99, ...)`, so no wrong
+        guess can reach 100 whatever the weights do; the raw total can pass
+        110 and the cap eats it. What this section really measures is the
+        OTHER half, that every player scores 100 against himself, which the
+        exact99 control breaks. The highest non answer score is printed on
+        every run because that number is the honest signal: if it sits at 99
+        the cap is doing the work and the weights are too generous, and the
+        round that reweights them should read it here first.
      2. DOMINANCE. Take a target and two guesses A and B where A shares every
         discrete attribute B shares (nationality, position group, exact
         position, club level: same club beats a past shared club beats none)
@@ -39,6 +48,13 @@
 
    MEASURED on 2026-09-05 against the live pool of 600 (this is where the
    floors come from, each set well under the measurement, not at it):
+     section 1, added 2026-09-06 when the claim above was corrected: 6 of
+       47,920 wrong guesses, 0.013 percent, sit on the 99 ceiling rather than
+       being scored by the weights (the highest is Raúl Asencio against Dean
+       Huijsen, two Real Madrid centre backs of an age). So the cap is real
+       but it is doing almost nothing, and the weights do not want a look on
+       this evidence. It is printed on every run so the next person can see
+       whether that is still true rather than trusting this line.
      section 2: 72,500 dominated pairs, 27,650 differing on a discrete
        attribute, 0 the wrong way round.
      section 3 shares: gap of 1 or more 0.954 over 122,709 pairs, gap of 2 or
@@ -197,7 +213,7 @@ console.log('1) The answer scores exactly 100 against itself, and nobody else ca
     if (s !== 100) { notHundred += 1; if (!firstNot) firstNot = `${p.name} scores ${s} against himself`; }
   }
   const TARGETS = 80;
-  let impostors = 0, firstImpostor = '', highest = 0, highestWhere = '', compared = 0;
+  let impostors = 0, firstImpostor = '', highest = 0, highestWhere = '', compared = 0, atCap = 0;
   for (let i = 0; i < TARGETS; i++) {
     const t = pool[Math.floor(rand() * secretSize)];
     for (const g of pool) {
@@ -206,9 +222,18 @@ console.log('1) The answer scores exactly 100 against itself, and nobody else ca
       compared += 1;
       if (s >= 100) { impostors += 1; if (!firstImpostor) firstImpostor = `${g.name} scores ${s} against ${t.name}`; }
       if (s > highest) { highest = s; highestWhere = `${g.name} against ${t.name}`; }
+      if (s === 99) atCap += 1;
     }
   }
   console.log(`   ${pool.length} self scores checked, ${compared} other players scored against ${TARGETS} secrets; highest non answer ${highest} (${highestWhere})`);
+  /* THE CAP'S SHADOW. The 99 above is the ceiling doing the work, not the
+     weights, so the number worth watching is how many guesses the ceiling is
+     holding down: every one of them reads the same to a player who is not
+     actually close in the same way. It is printed rather than failed on
+     because there is no measured floor for it yet and a threshold picked by
+     feel is the coin toss this file's own rules ban. If it climbs, the
+     weights want a look, and that round starts here. */
+  console.log(`   ${atCap} of ${compared} wrong guesses (${(atCap / compared * 100).toFixed(3)} percent) are sat on the 99 ceiling rather than scored by the weights`);
   if (notHundred > 0) fail(`${notHundred} players do not score 100 against themselves: ${firstNot}`);
   if (impostors > 0) fail(`${impostors} wrong guesses reached 100: ${firstImpostor}`);
   if (notHundred === 0 && impostors === 0) console.log('   only the answer reaches 100');
