@@ -37,6 +37,17 @@ import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { careerHubTiles } from '@/lib/careerHub';
 import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';
 import TrophyCase from '@/components/us-career/TrophyCase';
+/* Round 470: the money app, the gram, the rival card and the badges, on the
+   same engines Soccer Career and the NFL career run (careerMoney,
+   careerSocial, careerBadges), bound to baseball in mlbCareerMoney.ts and
+   mlbCareerLoop.ts. */
+import MoneyApp from '@/components/us-career/MoneyApp';
+import { SocialGram, RivalCard, BadgeGrid } from '@/components/us-career/SocialPanel';
+import type { MoneyAction } from '@/lib/careerMoney';
+import { MLB_MONEY, mlbMoneyAct, mlbMoneyWealth } from '@/lib/mlbCareerMoney';
+import { mlbEarnedBadges, mlbFanComments, mlbFollowers, mlbHeadlinesFor } from '@/lib/mlbCareerLoop';
+import { MLB_BADGES } from '@/lib/careerBadges';
+import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -57,6 +68,9 @@ export default function MlbMyCareerBoard() {
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news'>('none');
+  /* Round 470: the News box opens on three screens, the paper, the gram and
+     the rival, so the hub keeps its five boxes (simCareerHub holds that). */
+  const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
   const [career, setCareer] = useState<MlbCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
@@ -158,6 +172,7 @@ export default function MlbMyCareerBoard() {
         awards: [], teamResult: 'SUSPENDED', salary: 0,
       };
       c.seasons.push(banned);
+      c.headlines = pushHeadlines(c.headlines, mlbHeadlinesFor(c, banned));
       const banNotes = mlbProgress(c, Math.random);
       setLastLine(banned);
       setCareer(c);
@@ -201,6 +216,9 @@ export default function MlbMyCareerBoard() {
     const campNote = mlbCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simMlbSeason(c, teamQuality, Math.random);
     const progressNotes = mlbProgress(c, Math.random);
+    /* Round 470: the paper writes the season up, position aware, and the
+       lines stay on the save so the News screen survives a reload. */
+    c.headlines = pushHeadlines(c.headlines, mlbHeadlinesFor(c, line));
     setLastLine(line);
     /* Round 186: the curtain. Every string in it is one the engine already
        wrote; the true stat line is on screen from frame one. */
@@ -293,6 +311,22 @@ export default function MlbMyCareerBoard() {
     const res = pushFaOffer(faWindow, idx, mlbFaPushArgs(career, Math.random));
     setFaWindow(res.window);
     setTalkLine(res.line);
+  };
+
+  /* Round 470: every money tap rides on one handler, the way the soccer
+     phone's and the NFL board's do. The engine refuses rather than throws when
+     the numbers do not work, so a refused tap changes nothing and writes
+     nothing. Persisted as 'season' because the money app only opens from the
+     hub. */
+  const handleMoney = (action: MoneyAction) => {
+    if (!career) return;
+    const c: MlbCareerState = JSON.parse(JSON.stringify(career));
+    const res = mlbMoneyAct(c, action);
+    if (!res.ok) return;
+    setCareer(c);
+    const line = res.event ?? (res.toast ? `💰 ${res.toast}.` : null);
+    if (line) setFeed(f => [line, ...f].slice(0, 8));
+    persist(c, 'season', teamQuality);
   };
 
   const retireNow = () => {
@@ -470,6 +504,13 @@ export default function MlbMyCareerBoard() {
           <p className="mt-1 text-sm font-semibold text-gold">{legacy.verdict}</p>
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {legacy.bullets.map((b, i) => <p key={i}>{b}</p>)}
+            {/* Round 470: the badges the career earned, on the retirement card. */}
+            {(() => {
+              const earned = mlbEarnedBadges(career);
+              return earned.length > 0
+                ? <p className="pt-1 text-gold">{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
+                : null;
+            })()}
           </div>
           <div className="mt-3 flex items-center justify-center gap-3 text-sm">
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Legacy <b className="text-gold">{legacy.score}</b></span>
@@ -516,14 +557,16 @@ export default function MlbMyCareerBoard() {
           onBack={() => setPanel('none')}
         />
         {panel === 'bank' && (
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-border bg-card p-3 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Net worth</p>
-              <p className="text-2xl font-black text-gold">${(career.netWorth ?? 0).toFixed(1)}M</p>
-              <p className="text-[10px] text-muted-foreground">${career.salary}M a year, {Math.max(0, career.contractYears)} years left on the deal</p>
-            </div>
-            <MlbShopPanel career={career} onBuy={id => { const res = buyMlbItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); }} />
-          </div>
+          /* Round 470: the money app. Savings, the market, the statement and
+             the card school on the engine the flagship's phone runs, with the
+             Round 58 shop as its fourth tab. */
+          <MoneyApp
+            host={career}
+            sport={MLB_MONEY}
+            incomeLine={`$${career.salary}M a year, ${Math.max(0, career.contractYears)} year${Math.max(0, career.contractYears) === 1 ? '' : 's'} left on the deal`}
+            onMoney={handleMoney}
+            shop={<MlbShopPanel career={career} onBuy={id => { const res = buyMlbItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
+          />
         )}
         {panel === 'stats' && (
           <div className="space-y-3">
@@ -565,16 +608,59 @@ export default function MlbMyCareerBoard() {
           </div>
         )}
         {panel === 'trophies' && (
-          <TrophyCase seasons={career.seasons} rings={career.rings} ringWord="ring" />
+          <div className="space-y-3">
+            <TrophyCase seasons={career.seasons} rings={career.rings} ringWord="ring" />
+            {/* Round 470: the peaks between the trophies. Evaluated on every
+                render off the save, so a badge can never be stale. */}
+            <BadgeGrid defs={MLB_BADGES} earned={mlbEarnedBadges(career)} />
+          </div>
         )}
         {panel === 'news' && (
-          <div className="rounded-2xl border border-border bg-card p-3">
-            {feed.length === 0 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">Quiet week. Play a season and the headlines write themselves.</p>
-            ) : (
-              <div className="space-y-1.5 text-xs text-muted-foreground">
-                {feed.map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">{n}</p>)}
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-1">
+              {([['headlines', '📰 Paper'], ['fans', '📸 SocialGram'], ['rival', '🪞 Rival']] as const).map(([k, label]) => (
+                <button
+                  key={k}
+                  onClick={() => setNewsTab(k)}
+                  className={cn('rounded-lg px-1 py-1.5 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {newsTab === 'headlines' && (
+              <div className="space-y-3">
+                <div className="rounded-2xl border border-border bg-card p-3">
+                  <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">This week</p>
+                  {feed.length === 0 ? (
+                    <p className="py-4 text-center text-xs text-muted-foreground">Quiet week. Play a season and the headlines write themselves.</p>
+                  ) : (
+                    <div className="space-y-1.5 text-xs text-muted-foreground">
+                      {feed.map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">{n}</p>)}
+                    </div>
+                  )}
+                </div>
+                {(career.headlines ?? []).length > 0 && (
+                  <div className="rounded-2xl border border-border bg-card p-3">
+                    <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Back pages</p>
+                    <div className="space-y-1.5 text-xs text-foreground">
+                      {(career.headlines ?? []).map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">📰 {n}</p>)}
+                    </div>
+                  </div>
+                )}
               </div>
+            )}
+            {newsTab === 'fans' && (
+              <SocialGram
+                followers={fmtFollowers(mlbFollowers(career))}
+                standing={career.fanbase}
+                standingLabel="Fanbase"
+                comments={mlbFanComments(career)}
+                headlines={(career.headlines ?? []).slice(0, 3)}
+              />
+            )}
+            {newsTab === 'rival' && (
+              <RivalCard rival={career.rival} myName={career.name} teamLabel={mlbTeamLabelOf(career.rival?.team ?? '', career.eraId)} ringWord="ring" />
             )}
           </div>
         )}
@@ -591,7 +677,9 @@ export default function MlbMyCareerBoard() {
     morale: career.morale,
     health: career.health,
     fanbase: career.fanbase,
-    netWorth: career.netWorth ?? 0,
+    /* Round 470: everything you have, cash plus savings plus holdings, the
+       number the money app's headline prints. */
+    netWorth: Math.round(((career.netWorth ?? 0) + mlbMoneyWealth(career)) * 10) / 10,
     salary: career.salary,
     yearlyCosts: career.yearlyCosts ?? 0,
     contractYears: Math.max(0, career.contractYears),
@@ -606,7 +694,9 @@ export default function MlbMyCareerBoard() {
     rings: career.rings,
     ringWord: 'ring',
     honours: [{ label: 'MVP or Cy Young awards', n: career.mvpCys }, { label: 'All-Star nods', n: career.allStars }],
-    headlines: feed,
+    /* The week's feed while there is one; after a reload, the paper kept on
+       the save, so the box does not forget the career. */
+    headlines: feed.length ? feed : (career.headlines ?? []),
   });
 
   /* ------------------------------ season hub ------------------------------ */
