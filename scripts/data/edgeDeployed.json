@@ -1,0 +1,42 @@
+{
+  "_comment": "Round 485. The sha256 of each function's repo index.ts at the moment it was last deployed, line endings normalised. See scripts/simEdgeSync.mjs for why this exists: evaluate-lineup sat for months with a repo file that looked correct and a deployed file that did not. When you deploy a function, update its entry here in the same commit.",
+  "synced": {
+    "validate-player": {
+      "sha256": "5cbe0e745f36ce85210b348a87079d14a5953cbaed4d8debbe798a574092d9c2",
+      "version": 11,
+      "date": "2026-09-06"
+    },
+    "evaluate-lineup": {
+      "sha256": "f1dbebaa834bd88955888559cf76302aea16eb370f98d2c01c6775888fc4cbef",
+      "version": 5,
+      "date": "2026-09-06"
+    }
+  },
+  "unverified": [
+    "analyze-squads",
+    "cbb-daily",
+    "college-grid-validate",
+    "fantasy-draft-daily",
+    "football-connect4-suggest",
+    "football-connect4-validate",
+    "football-grid-validate",
+    "guess-nation-daily",
+    "mlb-connect4-validate",
+    "nascar-chain-validate",
+    "nascar-daily",
+    "nba-chain-validate",
+    "nba-connect4-validate",
+    "nba-evaluate-lineup",
+    "nba-suggest-players",
+    "nba-validate-player",
+    "nfl-connect4-validate",
+    "nhl-connect4-validate",
+    "report-relay",
+    "scores-poll",
+    "simulate-season",
+    "soccer-grid-validate",
+    "suggest-players",
+    "tennis-chain-validate",
+    "tennis-daily"
+  ]
+}

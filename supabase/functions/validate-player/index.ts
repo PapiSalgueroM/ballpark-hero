@@ -286,11 +286,10 @@ serve(async (req) => {
           .eq("country", country)
           .limit(400);
         /* The squad table marks the armband inside the name: "Lionel Messi ( captain )"
-           is how Messi is stored in all three of his Argentina squads, and 102 rows
-           carry it. It is the ONLY annotation in the table (checked 2026-09-06), and
-           it lands on exactly the men a player is most likely to type, so comparing
-           the raw string would have missed Messi, Kane and every other captain while
-           working for their reserves. */
+           is how Messi was stored in all three of his Argentina squads, and 102 rows
+           carried it. Round 484 moved the captaincy into its own column, but the
+           stripping stays: the cleaning lives in a migration and a re-import of this
+           table would put the armband straight back into the names. */
         const squadName = (n: string) => flat(String(n ?? "").replace(/\([^)]*\)/g, " "));
         const capped = (squad ?? []).some((s: { player_name: string }) => squadName(s.player_name) === folded);
         /* The cap and the position come from two tables, so they cannot come
@@ -331,10 +330,34 @@ serve(async (req) => {
     });
     let resp = await callAI();
     if (resp.status === 429) {
-      await new Promise((r) => setTimeout(r, 1200));
+      /* ROUND 485 CORRECTS ROUND 482 HERE. The free tier limits requests per
+         MINUTE and per DAY and both answer 429, and this code assumed the day,
+         so a player who hit a sixty second window was told to come back
+         TOMORROW and the client took the search box away.
+         The logs settle which it actually is: on 2026-09-06 the refusals
+         arrive in bursts two seconds apart (17:49:01, :03, :05, :07, :09, :11
+         and again at 18:12), which is the shape of a per-minute window and not
+         of a spent day, and the 1200ms retry could never have cleared one.
+         So the body is read and believed rather than guessed at, and it is
+         logged, because nobody could see which limit was firing. */
+      const body1 = await resp.text().catch(() => "");
+      const looksDaily = (s: string) => /per\s*day|perday|requests_per_day/i.test(s);
+      if (looksDaily(body1)) {
+        console.log(`ai refused 429 DAY: ${body1.slice(0, 200)}`);
+        return unverified(true);
+      }
+      /* Not the day, or not sure. One short retry, then hand it back as an
+         ordinary retryable refusal: the player keeps the search box and can
+         try again, which is true and is what the minute limit deserves. */
+      await new Promise((r) => setTimeout(r, 3000));
       resp = await callAI();
+      if (resp.status === 429) {
+        const body2 = await resp.text().catch(() => "");
+        const day = looksDaily(body2);
+        console.log(`ai refused 429 ${day ? "DAY" : "MINUTE-or-unknown"}: ${(body2 || body1).slice(0, 200)}`);
+        return unverified(day);
+      }
     }
-    if (resp.status === 429) { console.log("ai refused: status 429 twice, the day allowance is spent"); return unverified(true); }
     if (!resp.ok) { console.log(`ai refused: status ${resp.status}`); return unverified(); }
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content || "";
