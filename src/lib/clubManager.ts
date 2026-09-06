@@ -9279,7 +9279,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
        in a FINAL table, which is exactly the ordering this round exists to
        stop. */
     const rest = group.opponents.filter((_, i) => i !== idx);
-    const others = entry.round < 3 ? rest : [rest[1], rest[0]];
+    const others = rest.length === 2 && entry.round >= 3 ? [rest[1], rest[0]] : rest;
     if (others.length === 2) {
       const [hg, ag] = simAiMatch(state, others[0], others[1]);
       applyResult(group.table, others[0], others[1], hg, ag);
