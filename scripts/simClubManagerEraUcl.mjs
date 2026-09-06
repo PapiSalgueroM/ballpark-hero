@@ -1,6 +1,7 @@
 /* Club Manager: an era's Champions League plays the round of 16 it really
-   had, the group tables stay up once the knockouts start, and level points
-   split the way each league says.
+   had, the group tables stay up once the knockouts start, the GROUP tables
+   split level points the way the Champions League says, and the league
+   tables the way each league says.
 
    Round 462. His item 4 (docs/TWEAKS-2026-08-28.md) completed, plus the
    three gaps Round 451 measured and named rather than built:
@@ -49,7 +50,33 @@
         put after the window and before the quarter finals and never before
         the week reached, and the season plays out with a round of 16. Every
         wrong ledger shape is dropped rather than trusted. A modern save is
-        left exactly as it was.
+        left exactly as it was. Round 478: a save stripped of its GROUP
+        ledger too opens with the group results gone, falls back to goal
+        difference, says so under the rows, and plays its groups out.
+     6) THE GROUP TABLE'S OWN ORDER (Round 478). Every group of every era
+        career, mine and the seven beside it, at EVERY matchday and again at
+        the final whistle: the table the engine hands the card and the field
+        it seeds the round of 16 from are one order, and that order is the
+        one the Champions League regulations give (head to head points, then
+        head to head goal difference, then head to head goals, reapplied to
+        any smaller subset still level, then overall goal difference and
+        goals scored), computed here from the ledger rather than read back
+        off the module. The ledger holds every group fixture played and
+        nothing else (2 games a night per group), every entry names two
+        clubs of one group, and every club's points and goals in the table
+        add up from its own results. A modern save reads the league phase
+        order instead (goal difference, then goals scored, no head to head,
+        because a league phase club plays eight of the other 35). Crafted
+        tables put the rule beyond doubt: two clubs where the head to head
+        and the goal difference disagree, three clubs where two of them are
+        level on the whole mini league and split on their own two games,
+        a pair that has met only once, and the footnote wording for both
+        orders. And the source is counted: nothing in the engine or in a
+        Club Manager card may sort a group table any other way.
+        The MEASUREMENT, which is the round's headline: how many groups end
+        with clubs level on points, how many of those the head to head puts
+        in a different order from goal difference, and how many change who
+        tops the group and therefore who hosts the deciding leg.
 
    Negative controls (house rule: prove the checks can fail, and refuse to
    run if the rewrite finds nothing to rewrite; CRLF normalised first):
@@ -64,6 +91,12 @@
        rule reads goal difference then goals scored, the pre-462 sort.
        Section 4 must go red (measured: every level pair the head to head
        had turned now sits the wrong way round).
+     CM_UCL_CONTROL=uclgd   bundles a copy of the engine whose group sorter
+       hands back sortedTable(rows), which is the pre-478 group order to the
+       character: overall goal difference then goals scored, no ledger read.
+       Section 6 must go red (measured: 102 findings, one for every group
+       night whose level clubs the head to head had put the other way round,
+       plus both measurement floors falling to zero).
 
    Sample floors are measured counts with headroom, set after the first runs
    and recorded beside each check.
@@ -83,12 +116,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_UCL_CONTROL || '';
-if (CONTROL && !['nor16', 'vanish', 'gdonly'].includes(CONTROL)) {
+if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd'].includes(CONTROL)) {
   console.error(`CM_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
-const buckets = { format: [], draw: [], render: [], h2h: [], migrate: [] };
+const buckets = { format: [], draw: [], render: [], h2h: [], migrate: [], groups: [] };
 const note = (bucket, m) => buckets[bucket].push(m);
 const lf = s => s.replaceAll('\r\n', '\n');
 
@@ -128,6 +161,17 @@ if (CONTROL === 'gdonly') {
     'clubManagerEraUcl.gdonly.ts', 'the head to head key');
   console.log('NEGATIVE CONTROL ON: Spain and Italy split level points on goal difference again, the pre-462 sort; section 4 must go red');
 }
+if (CONTROL === 'uclgd') {
+  /* Round 478: the pre-478 group order, restored at the one line every
+     group table now goes through. Not a copy of the module, the integration
+     point, so the card and the round of 16 seeding regress together exactly
+     the way they shipped before this round. */
+  enginePath = rewrite(ENGINE,
+    '  return sortedUclGroupTable(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);\n',
+    '  return sortedTable(rows);\n',
+    'clubManagerEraUcl.uclgd.ts', 'the group sorter');
+  console.log('NEGATIVE CONTROL ON: every Champions League group sorts on goal difference then goals scored again, the pre-478 order; section 6 must go red');
+}
 
 /* The engine and the two real cards in one CommonJS bundle (the
    simClubManagerEraMidSeason recipe). A rewritten card still imports the
@@ -154,7 +198,18 @@ const {
   startCareer, playNextEntry, sortedTable, sortedLeagueTable, sortedWorldTable, careerLeagueOf, worldLeagueDefs,
   leagueTiebreak, tiebreakFootnote, uclFirstKoRound, uclRoundOf16Draw, saveCareer, loadCareer, clearCareer,
   ERA_UCL_FIELDS, LEAGUE_NATIONS,
+  /* Round 478 */
+  sortedUclGroup, uclGroupRule, uclGroupTiebreakFootnote,
 } = cm;
+/* Round 478: the one PairLedger key the whole group stage is recorded
+   under. Read off the module rather than retyped, so a rename cannot leave
+   this harness quietly reading nothing. */
+const GROUP_LEDGER = (() => {
+  const src = lf(fs.readFileSync(path.join(ROOT, 'src', 'lib', 'clubManagerUclGroups.ts'), 'utf8'));
+  const m = src.match(/export const UCL_GROUP_LEDGER = '([^']+)'/);
+  if (!m) { console.error('cannot read UCL_GROUP_LEDGER out of clubManagerUclGroups.ts'); process.exit(1); }
+  return m[1];
+})();
 
 /* ---------- driving the engine the way the page does ---------- */
 function playUntil(s, stop, onStep) {
@@ -201,7 +256,7 @@ function checkFormat(tag, s, koStart, isEra) {
       }
       if (br.some(t => t.winner === null)) note('format', `${tag}: a tie is still unplayed at the final whistle`);
       if (koStart) {
-        const pos = sortedTable(koStart.uclGroup.table).findIndex(r => r.club === s.clubName) + 1;
+        const pos = sortedUclGroup(koStart, koStart.uclGroup.table).findIndex(r => r.club === s.clubName) + 1;
         const want = pos <= 2 ? 'R16' : 'out';
         if (koStart.uclKoRound !== want) note('format', `${tag}: I finished ${pos} in Group A and the knockouts opened with uclKoRound ${koStart.uclKoRound} rather than ${want}`);
       }
@@ -224,7 +279,8 @@ function checkDraw(tag, s, tally) {
   const runners = new Map();
   const groupOf = new Map();
   for (const g of groups) {
-    const rows = sortedTable(g.table).map(r => r.club);
+    /* Round 478: the group's own order, the one the engine seeds from. */
+    const rows = sortedUclGroup(s, g.table).map(r => r.club);
     winners.set(rows[0], g.letter);
     runners.set(rows[1], g.letter);
     for (const c of rows) groupOf.set(c, g.letter);
@@ -275,6 +331,15 @@ function checkRender(tag, s, tally) {
   for (const c of s.uclGroup?.opponents ?? []) if (!groupsHtml.includes(c)) note('render', `${tag}: the groups card never prints my group opponent ${c}`);
   for (const g of s.uclWorld ?? []) if (!groupsHtml.includes(`Group ${g.letter}`)) note('render', `${tag}: the groups card lost Group ${g.letter}`);
   if (/Projected (quarter-finals|round of 16)/.test(groupsHtml)) note('render', `${tag}: the groups card still projects a draw that has already been made`);
+  /* Round 478: and it says how level points were split, the way the league
+     tables do. Which of the two orders is asserted in section 6 on states
+     nothing has rewritten; here the question is only whether the card prints
+     the engine's footnote at all, because a control that regresses the
+     engine reaches this harness's copy and not the card's, and the card is
+     the thing section 3 is about. */
+  if (s.uclGroup && !/(games between the level clubs first|splits on goal difference, then goals scored)/.test(groupsHtml)) {
+    note('render', `${tag}: the groups card prints no footnote saying how level points in a group were split`);
+  }
   const r16 = (s.uclBracket ?? []).filter(t => t.round === 'R16');
   if (r16.length) {
     if (!bracketHtml.includes('Round of 16')) note('render', `${tag}: the bracket card has no round of 16`);
@@ -518,16 +583,336 @@ function checkMigration(tally) {
   }
 }
 
+/* ---------- 6. Round 478: the group table's own order ---------- */
+
+/** Every group of one save, mine first, with the clubs that are in it. */
+function groupsOf(s) {
+  const out = [];
+  if (s.uclGroup) out.push({ letter: 'A', clubs: [s.clubName, ...s.uclGroup.opponents], table: s.uclGroup.table });
+  for (const g of s.uclWorld ?? []) out.push({ letter: g.letter, clubs: g.clubs, table: g.table });
+  return out;
+}
+
+/**
+ * The mini league of every game among a run of level clubs, written here
+ * from the regulations (points, goal difference, goals scored in the
+ * matches between the teams in question) and read out of the ledger. Null
+ * when a pair of them has not met twice, which is when the rule cannot be
+ * applied and the engine must fall back.
+ */
+function groupMini(run, pairs) {
+  const line = new Map();
+  for (const r of run) {
+    let pts = 0;
+    let gd = 0;
+    let gf = 0;
+    for (const o of run) {
+      if (o.club === r.club) continue;
+      const home = pairs[`${r.club}|${o.club}`];
+      const away = pairs[`${o.club}|${r.club}`];
+      if (!home || !away) return null;
+      pts += home[0] > home[1] ? 3 : home[0] === home[1] ? 1 : 0;
+      pts += away[1] > away[0] ? 3 : away[0] === away[1] ? 1 : 0;
+      gd += (home[0] - home[1]) + (away[1] - away[0]);
+      gf += home[0] + away[1];
+    }
+    line.set(r.club, { pts, gd, gf });
+  }
+  return line;
+}
+
+const byOverallGd = run => [...run].sort((a, b) =>
+  (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.club.localeCompare(b.club));
+
+/**
+ * The order the regulations give, built here rather than read back off the
+ * module under test: points; then, among a run level on points, the mini
+ * league of the games between them, with those same criteria reapplied to
+ * any SMALLER subset still level on all three; then, for a subset nothing
+ * has separated, overall goal difference and goals scored. A save that does
+ * not play the group stage (the modern one, standing in for the league
+ * phase) has no head to head step at all.
+ */
+function expectedGroupOrder(rows, pairs, groupStage) {
+  const level = run => {
+    const line = groupMini(run, pairs);
+    if (!line) return byOverallGd(run);
+    const k = r => line.get(r.club);
+    const s = [...run].sort((a, b) => {
+      const x = k(a);
+      const y = k(b);
+      return y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || a.club.localeCompare(b.club);
+    });
+    const out = [];
+    let i = 0;
+    while (i < s.length) {
+      const x = k(s[i]);
+      let j = i + 1;
+      while (j < s.length) {
+        const y = k(s[j]);
+        if (y.pts !== x.pts || y.gd !== x.gd || y.gf !== x.gf) break;
+        j += 1;
+      }
+      const sub = s.slice(i, j);
+      if (sub.length === 1) out.push(sub[0]);
+      else if (sub.length < run.length) out.push(...level(sub));
+      else out.push(...byOverallGd(sub));
+      i = j;
+    }
+    return out;
+  };
+  const byPts = [...rows].sort((a, b) => b.pts - a.pts || a.club.localeCompare(b.club));
+  const out = [];
+  let i = 0;
+  while (i < byPts.length) {
+    let j = i + 1;
+    while (j < byPts.length && byPts[j].pts === byPts[i].pts) j += 1;
+    const run = byPts.slice(i, j);
+    out.push(...(run.length === 1 ? run : groupStage ? level(run) : byOverallGd(run)));
+    i = j;
+  }
+  return out;
+}
+
+/** Every group of one save against the rule, and the measurement. */
+function checkGroupOrder(tag, s, tally, final) {
+  if (!s.uclGroup) return;
+  const pairs = s.pairResults?.[GROUP_LEDGER] ?? {};
+  const groupStage = uclGroupRule(s) === 'groupStage';
+  const wantRule = eraUclHasR16Local(s) ? 'groupStage' : 'leaguePhase';
+  if (uclGroupRule(s) !== wantRule) note('groups', `${tag}: a ${s.eraId ?? 'modern'} save sorts its groups on the ${uclGroupRule(s)} order rather than ${wantRule}`);
+  const all = groupsOf(s);
+  const md = s.uclGroup.matchday;
+  /* Two games a night in every group, and nothing else in the ledger. */
+  const want = 2 * all.length * md;
+  const have = Object.keys(pairs).length;
+  if (have !== want) note('groups', `${tag}: after ${md} group nights the ledger holds ${have} of ${want} fixtures across ${all.length} groups`);
+  const clubOfGroup = new Map();
+  for (const g of all) for (const c of g.clubs) clubOfGroup.set(c, g.letter);
+  for (const k of Object.keys(pairs)) {
+    const [h, a] = k.split('|');
+    if (!clubOfGroup.has(h) || !clubOfGroup.has(a)) { note('groups', `${tag}: the group ledger names ${k}, which is not two clubs of the draw`); continue; }
+    if (clubOfGroup.get(h) !== clubOfGroup.get(a)) note('groups', `${tag}: the group ledger names ${k}, two clubs of different groups`);
+  }
+  for (const g of all) {
+    tally.groupTables += 1;
+    const engine = sortedUclGroup(s, g.table).map(r => r.club);
+    const want2 = expectedGroupOrder(g.table, pairs, groupStage).map(r => r.club);
+    if (engine.join() !== want2.join()) {
+      note('groups', `${tag}: Group ${g.letter} after ${md} nights reads ${engine.join(', ')} where the competition's own order is ${want2.join(', ')} (the reported gap)`);
+    }
+    /* The table and the ledger are the same season: every club's points and
+       goals add up from its own recorded results. */
+    if (final) {
+      for (const c of g.clubs) {
+        let pts = 0;
+        let gf = 0;
+        let ga = 0;
+        for (const o of g.clubs) {
+          if (o === c) continue;
+          const h = pairs[`${c}|${o}`];
+          const a = pairs[`${o}|${c}`];
+          if (h) { gf += h[0]; ga += h[1]; pts += h[0] > h[1] ? 3 : h[0] === h[1] ? 1 : 0; }
+          if (a) { gf += a[1]; ga += a[0]; pts += a[1] > a[0] ? 3 : a[0] === a[1] ? 1 : 0; }
+        }
+        const row = g.table.find(r => r.club === c);
+        if (row && (row.pts !== pts || row.gf !== gf || row.ga !== ga)) {
+          note('groups', `${tag}: Group ${g.letter} ${c} reads ${row.pts} pts ${row.gf}:${row.ga} in the table and ${pts} pts ${gf}:${ga} in the ledger`);
+        }
+      }
+      /* The measurement: what the head to head actually changed. */
+      const plain = sortedTable(g.table).map(r => r.club);
+      let level = false;
+      const byPts = [...g.table].sort((a, b) => b.pts - a.pts);
+      for (let i = 1; i < byPts.length; i++) if (byPts[i].pts === byPts[i - 1].pts) level = true;
+      tally.finalGroups += 1;
+      if (level) tally.groupsLevel += 1;
+      if (plain.join() !== engine.join()) tally.groupsTurned += 1;
+      if (plain[0] !== engine[0]) tally.winnerChanged += 1;
+    }
+  }
+  /* The field the round of 16 is seeded from IS this order. Round 462 takes
+     rows[0] and rows[1] of every group, so a table and a bracket that
+     disagreed would be the whole reported defect wearing a different hat. */
+  if (final && s.uclBracket?.some(t => t.round === 'R16') && all.length >= 8) {
+    const seeded = new Set();
+    for (const t of s.uclBracket.filter(t => t.round === 'R16')) { seeded.add(t.home); seeded.add(t.away); }
+    for (const g of all.slice(0, 8)) {
+      const rows = sortedUclGroup(s, g.table).map(r => r.club);
+      for (const c of rows.slice(0, 2)) {
+        if (!seeded.has(c)) note('groups', `${tag}: Group ${g.letter} finished with ${rows[0]} and ${rows[1]} in the top two and ${c} is not in the round of 16 (the reported gap)`);
+      }
+      for (const c of rows.slice(2)) {
+        if (seeded.has(c)) note('groups', `${tag}: Group ${g.letter} sent ${c} to the round of 16 from ${rows.indexOf(c) + 1}th`);
+      }
+      tally.seededGroups += 1;
+    }
+  }
+}
+
+/** The era predicate the harness needs, read the way the format section
+ *  already reads it, so this check does not become a second opinion. */
+function eraUclHasR16Local(s) {
+  return uclFirstKoRound(s) === 'R16';
+}
+
+/** Crafted tables, so the rule is proved and not only agreed with. */
+function checkGroupRule(tally) {
+  const era = { eraId: 'era2005', pairResults: {} };
+  const modern = { eraId: undefined, pairResults: {} };
+  const mk = (club, w, d, l, gf, ga, pts) => ({ club, w, d, l, gf, ga, pts });
+  /* Two level on points. Blue has the better goal difference by a mile;
+     Red won both games between them. The group stage takes Red. */
+  const two = [
+    mk('Red', 3, 1, 2, 8, 7, 10),
+    mk('Blue', 3, 1, 2, 14, 4, 10),
+    mk('Green', 1, 1, 4, 4, 12, 4),
+  ];
+  const met = { 'Red|Blue': [2, 0], 'Blue|Red': [0, 1] };
+  const order = (state, rows, pairs) => sortedUclGroup({ ...state, pairResults: { [GROUP_LEDGER]: pairs } }, rows).map(r => r.club).join(',');
+  if (order(era, two, met) !== 'Red,Blue,Green') note('groups', `the group stage: Red won both games and still sits below Blue (${order(era, two, met)}) (the reported gap)`);
+  if (order(modern, two, met) !== 'Blue,Red,Green') note('groups', `the league phase: goal difference should come first with no head to head step (${order(modern, two, met)})`);
+  /* Met once only: the rule is not readable yet and the fall back is goal
+     difference, the same convention the league tables use. */
+  if (order(era, two, { 'Red|Blue': [2, 0] }) !== 'Blue,Red,Green') note('groups', `the group stage with one game played: should fall back to goal difference (${order(era, two, { 'Red|Blue': [2, 0] })})`);
+  if (order(era, two, {}) !== 'Blue,Red,Green') note('groups', `the group stage with no ledger: should fall back to goal difference (${order(era, two, {})})`);
+  /* The reapplication step, which is the one a three way tie needs. Theta,
+     Iota and Kappa finish level on 10 points. The mini league of the six
+     games between them takes Kappa clear on 9 points, and leaves Theta and
+     Iota level on ALL THREE of its numbers (4 points, -1, 3 scored), so the
+     regulations reapply those same three to the subset that is still level,
+     which here is Theta and Iota's own two games: Theta won one and drew the
+     other. Overall goal difference says the opposite (Iota +7, Theta +1,
+     Kappa 0), so nothing but the rule can produce this order. */
+  const three = [
+    mk('Theta', 3, 1, 2, 5, 4, 10),
+    mk('Iota', 3, 1, 2, 11, 4, 10),
+    mk('Kappa', 3, 1, 2, 3, 3, 10),
+    mk('Lambda', 1, 1, 4, 2, 10, 4),
+  ];
+  const trio = {
+    'Theta|Iota': [2, 1], 'Iota|Theta': [1, 1],
+    'Theta|Kappa': [0, 1], 'Kappa|Theta': [1, 0],
+    'Iota|Kappa': [1, 0], 'Kappa|Iota': [1, 0],
+    'Theta|Lambda': [1, 0], 'Lambda|Theta': [0, 1],
+    'Iota|Lambda': [4, 0], 'Lambda|Iota': [0, 4],
+    'Kappa|Lambda': [0, 0], 'Lambda|Kappa': [2, 0],
+  };
+  /* The fixture has to be the shape the check claims, or the check is not
+     testing the reapplication at all. */
+  const line = groupMini(three.slice(0, 3), trio);
+  const flat = line && ['pts', 'gd', 'gf'].every(k => line.get('Theta')[k] === line.get('Iota')[k]);
+  if (!flat) note('groups', 'the crafted three way table does not leave Theta and Iota level on the whole mini league, so it is not testing the reapplication');
+  if (line && line.get('Kappa').pts <= line.get('Theta').pts) note('groups', 'the crafted three way table does not separate Kappa on the mini league, so the subset left level is all three and nothing is reapplied');
+  const pairOnly = groupMini(three.slice(0, 2), trio);
+  if (!pairOnly || pairOnly.get('Theta').pts <= pairOnly.get('Iota').pts) note('groups', 'the crafted three way table does not split Theta and Iota on their own two games');
+  const gdOf = c => { const r = three.find(x => x.club === c); return r.gf - r.ga; };
+  if (!(gdOf('Iota') > gdOf('Theta') && gdOf('Theta') > gdOf('Kappa'))) note('groups', 'the crafted three way table does not make overall goal difference disagree with the rule, so it proves nothing');
+  const got = order(era, three, trio);
+  if (got !== 'Kappa,Theta,Iota,Lambda') note('groups', `the reapplication to a subset still level: wanted Kappa, Theta, Iota, Lambda and got ${got}`);
+  if (order(modern, three, trio) !== 'Iota,Theta,Kappa,Lambda') note('groups', `the league phase on the same table should read overall goal difference (${order(modern, three, trio)})`);
+  /* The footnotes name the order that sorted the rows. */
+  const footEra = uclGroupTiebreakFootnote({ ...era, pairResults: { [GROUP_LEDGER]: met } }, two);
+  const footMod = uclGroupTiebreakFootnote({ ...modern, pairResults: { [GROUP_LEDGER]: met } }, two);
+  if (!/games between the level clubs first/.test(footEra)) note('groups', `the group stage footnote does not name the head to head step: "${footEra}"`);
+  if (/games between the level clubs/.test(footMod)) note('groups', `the league phase footnote claims a head to head step it does not have: "${footMod}"`);
+  if (/not met twice/.test(footEra)) note('groups', `the group stage footnote reports a waiting pair after both games were played: "${footEra}"`);
+  const footOne = uclGroupTiebreakFootnote({ ...era, pairResults: { [GROUP_LEDGER]: { 'Red|Blue': [2, 0] } } }, two);
+  if (!/1 level pair has not met twice/.test(footOne)) note('groups', `the group stage footnote does not say the pair has not met twice: "${footOne}"`);
+  tally.crafted = 6;
+}
+
+/**
+ * The source, counted. A group table sorted anywhere else, by anything
+ * else, is the defect coming back through a door nobody watched, so the
+ * number of places that sort at all is held rather than the shape of the
+ * ones this round happened to touch.
+ */
+function checkGroupPaths() {
+  const engine = lf(fs.readFileSync(ENGINE, 'utf8'));
+  const cards = fs.readdirSync(path.join(ROOT, 'src', 'components', 'club-manager'))
+    .filter(f => f.endsWith('.tsx'))
+    .map(f => [f, lf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', f), 'utf8'))]);
+  const count = (src, needle) => src.split(needle).length - 1;
+  /* Measured on the shipped tree: sortedTable is declared once and called at
+     the three league helpers; sortedUclGroup is declared once and called at
+     the five places a group's standing is read (two in the seeding field,
+     one in the winners-only branch, one in the round of 16 field, one at the
+     final whistle). If either number moves, a new path is reading a table
+     and somebody has to say which order it should read. */
+  const plain = count(engine, 'sortedTable(');
+  const group = count(engine, 'sortedUclGroup(');
+  if (plain !== 4) note('groups', `clubManager.ts calls sortedTable in ${plain} places rather than 4 (one declaration and the three league helpers); if a new one sorts a Champions League group it must use sortedUclGroup`);
+  if (group !== 6) note('groups', `clubManager.ts names sortedUclGroup in ${group} places rather than 6 (one declaration and the five group reads); a new group reader must be checked against this section`);
+  for (const [f, src] of cards) {
+    if (count(src, 'sortedTable(')) note('groups', `${f} sorts a table with the plain sortedTable; a Club Manager card showing a group must use sortedUclGroup`);
+  }
+  const cardGroup = cards.reduce((n, [, src]) => n + count(src, 'sortedUclGroup('), 0);
+  if (cardGroup !== 1) note('groups', `the Club Manager cards call sortedUclGroup in ${cardGroup} places rather than 1 (the groups card)`);
+}
+
+/** A save from before this round: the group results are gone, the fall back
+ *  is honest, and the groups play out. */
+function checkGroupMigration(tally) {
+  let s = startCareer('Barcelona', 'era2005');
+  s = playUntil(s, st => (st.uclGroup?.matchday ?? 0) >= 4);
+  if (s.sacked || (s.uclGroup?.matchday ?? 0) < 4) { note('groups', 'could not reach the fourth group night for the pre-478 save'); return; }
+  const old = clone(s);
+  if (!Object.keys(old.pairResults?.[GROUP_LEDGER] ?? {}).length) note('groups', 'the fresh save carried no group ledger to strip, so this check is not testing anything');
+  delete old.pairResults[GROUP_LEDGER];
+  saveCareer(old);
+  const back = loadCareer();
+  clearCareer();
+  if (!back) { note('groups', 'the pre-478 save would not load'); return; }
+  if (Object.keys(back.pairResults?.[GROUP_LEDGER] ?? {}).length) note('groups', 'the pre-478 save invented group results it never played');
+  /* With nothing to read, every group falls back to goal difference and the
+     footnote says which pairs are waiting. */
+  const g = back.uclGroup;
+  const plain = sortedTable(g.table).map(r => r.club).join();
+  if (sortedUclGroup(back, g.table).map(r => r.club).join() !== plain) note('groups', 'a pre-478 save with an empty group ledger did not fall back to goal difference');
+  let levelPairs = 0;
+  const sorted = sortedUclGroup(back, g.table);
+  for (let i = 1; i < sorted.length; i++) if (sorted[i].pts === sorted[i - 1].pts) levelPairs += 1;
+  const foot = uclGroupTiebreakFootnote(back, g.table);
+  if (levelPairs > 0 && !/not met twice/.test(foot)) note('groups', `the pre-478 group table has ${levelPairs} level pairs with an empty ledger and the footnote does not say so: "${foot}"`);
+  /* And it plays out: the nights still to come are recorded, the ones
+     already played are not reconstructed. */
+  const end = playUntil(back, st => (st.uclGroup?.matchday ?? 0) >= 6);
+  const have = Object.keys(end.pairResults?.[GROUP_LEDGER] ?? {}).length;
+  const groups = 1 + (end.uclWorld?.length ?? 0);
+  if (!(have > 0 && have < 2 * groups * 6)) note('groups', `a save that lost its group ledger mid season ended the groups with ${have} of ${2 * groups * 6} fixtures; it should hold the rest and nothing before`);
+  if (end.uclKoRound === null) note('groups', 'the pre-478 save never settled its group stage');
+  tally.migratedGroups += 1;
+}
+
 /* ---------- the driver ---------- */
-const tally = { careers: 0, sacked: 0, ties: 0, countryChecked: 0, draws: 0, renders: 0, levelPairs: 0, byH2hPts: 0, byH2hGd: 0, byGd: 0, turned: 0, englishPairs: 0, tables: 0, migrated: 0, shapes: 0 };
+const tally = {
+  careers: 0, sacked: 0, ties: 0, countryChecked: 0, draws: 0, renders: 0, levelPairs: 0,
+  byH2hPts: 0, byH2hGd: 0, byGd: 0, turned: 0, englishPairs: 0, tables: 0, migrated: 0, shapes: 0,
+  /* Round 478 */
+  groupTables: 0, finalGroups: 0, groupsLevel: 0, groupsTurned: 0, winnerChanged: 0,
+  seededGroups: 0, crafted: 0, migratedGroups: 0, groupNights: 0,
+};
 function runCareer(tag, club, eraId) {
   const isEra = !!eraId;
   let koStart = null;
   let s = eraId ? startCareer(club, eraId) : startCareer(club);
-  s = playUntil(s, () => false, st => { if (!koStart && st.uclKoRound !== null) koStart = clone(st); });
+  /* Round 478: every group of every save is read on every group night, not
+     only at the final whistle, so the mid group fall back is walked too. */
+  let seenMd = -1;
+  s = playUntil(s, () => false, st => {
+    if (!koStart && st.uclKoRound !== null) koStart = clone(st);
+    const md = st.uclGroup?.matchday ?? -1;
+    if (md > seenMd && md >= 1 && md <= 6) {
+      seenMd = md;
+      tally.groupNights += 1;
+      checkGroupOrder(`${tag} after group night ${md}`, st, tally, md >= 6);
+    }
+  });
   if (s.sacked) { tally.sacked += 1; return; }
   tally.careers += 1;
   checkFormat(tag, s, koStart, isEra);
+  if (s.uclGroup) checkGroupOrder(`${tag} at the final whistle`, s, tally, false);
   if (isEra && s.uclGroup) {
     if (!koStart) note('format', `${tag}: the knockouts never started`);
     else {
@@ -551,12 +936,37 @@ const ERA_CAREERS = [
   ['Juventus 2015 career 2', 'Juventus', 'era2015'],
   ['Barcelona 2015', 'Barcelona', 'era2015'],
   ['Arsenal 2015', 'Arsenal', 'era2015'],
+  /* Round 478 widened the list. The group order is measured rather than
+     asserted, and twelve careers put 36 level groups in front of the check
+     where the floors below want room under three seeds, so the sample is
+     roughly tripled. It costs about eight seconds. */
+  ['Arsenal 2005', 'Arsenal', 'era2005'],
+  ['Juventus 2005 career 1', 'Juventus', 'era2005'],
+  ['Juventus 2005 career 2', 'Juventus', 'era2005'],
+  ['Real Madrid 2005 career 2', 'Real Madrid', 'era2005'],
+  ['Chelsea 2005 career 2', 'Chelsea', 'era2005'],
+  ['Real Madrid 2010 career 1', 'Real Madrid', 'era2010'],
+  ['Real Madrid 2010 career 2', 'Real Madrid', 'era2010'],
+  ['Arsenal 2010', 'Arsenal', 'era2010'],
+  ['Juventus 2010', 'Juventus', 'era2010'],
+  ['Chelsea 2010 career 2', 'Chelsea', 'era2010'],
+  ['Barcelona 2010 career 3', 'Barcelona', 'era2010'],
+  ['Chelsea 2015 career 1', 'Chelsea', 'era2015'],
+  ['Chelsea 2015 career 2', 'Chelsea', 'era2015'],
+  ['Real Madrid 2015 career 1', 'Real Madrid', 'era2015'],
+  ['Real Madrid 2015 career 2', 'Real Madrid', 'era2015'],
+  ['Barcelona 2015 career 2', 'Barcelona', 'era2015'],
+  ['Juventus 2015 career 3', 'Juventus', 'era2015'],
+  ['Arsenal 2015 career 2', 'Arsenal', 'era2015'],
 ];
 for (const [tag, club, era] of ERA_CAREERS) runCareer(tag, club, era);
 runCareer('Real Madrid (modern control)', 'Real Madrid');
 runCareer('Arsenal (modern control)', 'Arsenal');
 checkRule();
 checkMigration(tally);
+checkGroupRule(tally);
+checkGroupPaths();
+checkGroupMigration(tally);
 
 /* ---------- the report ---------- */
 let failures = 0;
@@ -592,6 +1002,25 @@ section('4) Level points split on head to head in Spain and Italy, on goal diffe
 section('5) A pre migration save loads, is repaired honestly and plays out', 'migrate', [
   `${tally.migrated} pre migration era save played to the final whistle with its round of 16; ${tally.shapes} wrong ledger shapes dropped; the modern save untouched`,
 ]);
+section('6) A Champions League group is sorted by the Champions League rule, and the round of 16 is seeded from that order', 'groups', [
+  `${tally.groupTables} group tables read across ${tally.groupNights} group nights, every one against the regulations' order rebuilt here from the ledger; ${tally.seededGroups} final groups checked against the round of 16 field; ${tally.crafted} crafted tables; ${tally.migratedGroups} pre-478 save played its groups out with the results it lost left lost`,
+  `THE MEASUREMENT: of ${tally.finalGroups} groups at the final whistle, ${tally.groupsLevel} finished with clubs level on points, the head to head put ${tally.groupsTurned} of them in a different order from goal difference, and ${tally.winnerChanged} of those changed who topped the group and therefore who hosts the deciding leg of the round of 16`,
+], () => {
+  if (tally.groupTables < 1200) note('groups', `only ${tally.groupTables} group tables read (floor 1200)`);
+  if (tally.seededGroups < 180) note('groups', `only ${tally.seededGroups} final groups checked against the round of 16 field (floor 180)`);
+  if (tally.migratedGroups < 1) note('groups', 'the pre-478 group ledger migration never ran');
+  if (tally.crafted < 6) note('groups', 'the crafted group tables did not run');
+  /* Floors from the measured spread, not from a number that felt right.
+     Over its own seed and SIM_SEED 1 to 5 the shipped engine produced 248 to
+     256 final groups, 88 to 104 of them with clubs level on points, 25 to 33
+     reordered by the head to head and 6 to 14 with a new group winner. Every
+     floor sits well under the lowest of those six runs, because a run that
+     drops through one of them is not a bad night, it is the rule going
+     unread. */
+  if (tally.groupsLevel < 60) note('groups', `only ${tally.groupsLevel} of ${tally.finalGroups} final groups ended with clubs level on points (floor 60, measured 88 to 104), too few to know the rule is being exercised`);
+  if (tally.groupsTurned < 15) note('groups', `the head to head reordered only ${tally.groupsTurned} groups against goal difference (floor 15, measured 25 to 33), too few to know it is being read`);
+  if (tally.winnerChanged < 2) note('groups', `the head to head changed the group winner in only ${tally.winnerChanged} groups (floor 2, measured 6 to 14), which is the outcome this round exists for`);
+});
 
 console.log('');
 if (CONTROL === 'nor16') {
@@ -606,6 +1035,10 @@ if (CONTROL === 'vanish') {
 if (CONTROL === 'gdonly') {
   if (buckets.h2h.length > 0) { console.log(`simClubManagerEraUcl control: green. The goal difference only sort was reported (${buckets.h2h.length} findings).`); process.exit(0); }
   console.error('simClubManagerEraUcl control: RED. The pre-462 sort went unreported.'); process.exit(1);
+}
+if (CONTROL === 'uclgd') {
+  if (buckets.groups.length > 0) { console.log(`simClubManagerEraUcl control: green. The pre-478 group order was reported (${buckets.groups.length} findings in section 6).`); process.exit(0); }
+  console.error('simClubManagerEraUcl control: RED. Every Champions League group sorted on goal difference again and section 6 said nothing.'); process.exit(1);
 }
 if (failures > 0) { console.error(`\nsimClubManagerEraUcl: ${failures} FAILURE(S)`); process.exit(1); }
 console.log('simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, and Spain and Italy split level points on head to head.');
