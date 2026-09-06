@@ -678,6 +678,43 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **TRANSFER PATH REFUSES REAL TEAMMATES AT SIX CLUBS, AND IT IS PROBABLY WHAT A PLAYER
+  REPORTED ON 2026-09-06. Measured and specced the same day; take this one first.**
+  The graph links two players only on an identical `club::season` string, and the career
+  table writes the same club in two styles: seventeen clubs carry both calendar year rows
+  ("2020") and split season rows ("2020-2021"), sometimes for the same player (Julián
+  Álvarez's River Plate spell is 2018-2019, 2019-2020, 2020, 2021, 2022). Where the two
+  styles meet, real teammates never link and the game says they were never at the same club
+  in the same season.
+  **The eight pairs it refuses today, every one of them real, measured by SQL over the live
+  table:** Enzo Fernández and Julián Álvarez (River Plate 2020 to 2022), Neymar and Robinho
+  (Santos 2010), Andrea Pirlo and David Villa (New York City FC 2015-16), Hugo Lloris and
+  Olivier Giroud (LAFC 2024), Cafu with Roberto Carlos and with Rivaldo (Palmeiras 1995-96),
+  Adriano with Roberto Carlos and with Ronaldo (Corinthians 2011; the Ronaldo one is tight,
+  he retired that February, and the year granularity cannot tell, which is true of the
+  existing rule too and not made worse here).
+  **Why it is probably the report.** The 15:18 UTC report on /transfer-path said only "Bug",
+  and its board context has the chain ending on Julián Álvarez with the target Moisés
+  Caicedo. Álvarez to Enzo Fernández (River) to Caicedo (both Chelsea) finishes that puzzle,
+  and the first of those two links is exactly the one this defect refuses. The earlier note
+  under Open bugs in `docs/PROJECT-STATE.md` closed that report as not a defect on the
+  strength of the one rejection the context records (Lukaku after Diego Costa, correctly
+  refused); that conclusion was right about Lukaku and incomplete about the report.
+  **THE RULE, and the trap.** Do NOT expand every spell into one key per calendar year: at a
+  European club that links a man who left in the summer of 2020 to one who arrived in it,
+  which invents teammates and is worse than the bug. The rule is asymmetric and only fires
+  where the styles differ: two spells at the same club link when their season strings are
+  equal (today's rule, untouched), OR when one is a calendar year Y and the other is a split
+  season whose range contains Y. Measured against the live table that adds exactly the eight
+  pairs above and nothing else. It needs the same change in BOTH graph builders, which are
+  deliberately identical today: `buildGraph` in `scripts/lib/transferPathHints.mjs` and
+  `clubSeasonsOf`/`shareClub` in `src/hooks/useTransferPath.ts`, and a plain Set of strings
+  cannot express it, so both need a shape that keeps the calendar years and the split ranges
+  apart. The hint text names a club and a season, so decide what it says for a crossed pair.
+  Then re-derive every hint under every rule with `scripts/genTransferPathHints.mjs`, ship
+  the migration, and hold `simTransferPathHints` and `simTransferPathModes` green: they exist
+  to catch a stored minimum that disagrees with the search, and this changes the search.
+
 - **THE CONQUEST DAILY CAN BE REPLAYED WITH THE ANSWERS KNOWN, ON ALL FIVE MAPS. Specced
   2026-09-06, ready for a builder, and it is a points exploit rather than a polish item.**
   Found by the review of Rounds 459 to 463 and left open because it is a round of its own.

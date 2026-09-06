@@ -2438,9 +2438,18 @@ name Romelu Lukaku after Diego Costa. The refusal is right: Costa was at Chelsea
 the same season. The puzzle itself is sound too, checked rather than assumed: the stored
 minimum of 2 and the hint ("at Atletico Madrid with Griezmann and at Chelsea with Caicedo")
 are Joao Felix, Atletico 2021-22 and Chelsea 2024-25, both real. The player wandered four
-men deep inside Atletico and never left. Nothing to fix; if a second report on this shape
-arrives, the thing to look at is whether the board should say when a chain is going in
-circles.
+men deep inside Atletico and never left.
+
+**CORRECTION, same day, after a second look: that conclusion was right about Lukaku and
+incomplete about the report.** The context records only the LAST name refused, so it says
+nothing about what else was tried, and the chain ends on Julian Alvarez. Alvarez to Enzo
+Fernandez (River Plate) to Caicedo (both at Chelsea) finishes that puzzle in two, and the
+first of those links is refused by a real defect measured the same afternoon: the graph
+links players only on an identical club and season string, seventeen clubs carry both
+calendar year and split season rows, and where the two styles meet real teammates never
+link. Eight famous pairs are refused today, Neymar and Robinho at Santos and Pirlo and
+Villa at New York City among them. It is specced with the measurement and the exact rule
+in the Inbox of `docs/WORKBOARD.md` and it should be the next round taken.
 
 **Read `public.question_reports` first.** Since the site has had traffic, people have been
 using the footer button and the per game report button, and the rows were sitting unread:
