@@ -19,7 +19,11 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 475.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 487.
+  Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
+  ahead of 475 to 479, because those seven came out of live measurement that day (the
+  completions table sweep and the site wide audit) while 475 to 479 were already scripted
+  in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
