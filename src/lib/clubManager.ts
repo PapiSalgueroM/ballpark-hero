@@ -8821,11 +8821,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      either side can be printed on the same clock tick. */
   const takenMinutes = new Set<number>();
   const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(
-    state, xi, myGoals, h1My, live?.h1My, takenMinutes,
+    state, xi, myGoals, h1My, live.h1My, takenMinutes,
   );
   /* Round 158: same for the opposition, whose first half lines were decided
-     at kick off on a watched match. */
-  const oppScorers = live?.h1Opp && live.h1Opp.length === h1Opp
+     at kick off. A save paused at the interval before those lines existed
+     still has none, so both of these keep their fallback. */
+  const oppScorers = live.h1Opp && live.h1Opp.length === h1Opp
     ? (() => {
       for (const l of live.h1Opp) takenMinutes.add(l.minute);
       return [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId, takenMinutes)];
@@ -9498,15 +9499,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (approachLine) events.push(approachLine);
 
   /* Round 157: halftime substitutions, read off the live match the manager
-     actually paused. On a fast forward there are none, honestly. */
+     actually paused. On a quick sim or a fast forward nobody was in the
+     dressing room, so the eleven that finished is the eleven that started and
+     this comes back empty, honestly. */
   const subLines: SubLine[] = [];
-  if (live) {
-    for (let i = 0; i < live.startXi.length; i++) {
-      if (live.onPitch[i] !== live.startXi[i]) {
-        const off = state.squad.find(p => p.id === live.startXi[i]);
-        const on = state.squad.find(p => p.id === live.onPitch[i]);
-        if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
-      }
+  for (let i = 0; i < live.startXi.length; i++) {
+    if (live.onPitch[i] !== live.startXi[i]) {
+      const off = state.squad.find(p => p.id === live.startXi[i]);
+      const on = state.squad.find(p => p.id === live.onPitch[i]);
+      if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
     }
   }
   // Round 169: the crowd and the venue, like his match app models carry.
