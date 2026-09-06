@@ -68,6 +68,12 @@ page.on('console', m => {
 });
 
 const screen = async () => (await page.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+/* Round 472: WHICH screen this is, read off the page's own heading rather
+   than off the whole body. Every page on this site carries its guide copy
+   at the bottom, so a sentence about the two ways to play a match answered
+   for the match screen itself and this harness walked into a live viewer it
+   thought was a hub. The heading is the only thing that says where you are. */
+const heading = async () => ((await page.locator('h1').first().innerText().catch(() => '')) || '').trim().toUpperCase();
 
 async function tap(rx, label) {
   const b = page.getByRole('button', { name: rx }).first();
@@ -197,7 +203,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
 
   /* --- half time: this is the Round 119 screen, and the reason this harness
          exists at all. Work it the way a manager would. --- */
-  if (/HALF TIME/i.test(t)) {
+  const where = await heading();
+  /* In the live viewer the heading stays MATCH LIVE through the interval, so
+     the dressing room is the viewer plus a way into the second half. */
+  if (where === 'HALF TIME' || (where === 'MATCH LIVE' && /Second half/i.test(t))) {
     halftimes++;
     const score = (t.match(/(\d+)-(\d+)/) || []);
     lastHt = { my: Number(score[1]), opp: Number(score[2]) };
@@ -244,7 +253,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
          sits ABOVE the full time branch on purpose, because the viewer draws
          its own FULL TIME across the pitch and the way on from there is the
          report button rather than a Continue. --- */
-  if (/MATCH LIVE/i.test(t)) {
+  if (where === 'MATCH LIVE') {
     if (await tap(/full report/i, 'full report out of the live viewer')) {
       await page.waitForTimeout(600);
       continue;
@@ -258,7 +267,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
     break;
   }
 
-  if (/FULL TIME/i.test(t)) {
+  if (where === 'FULL TIME') {
     fullTimes++;
     /* The two screens are oriented differently and comparing them naively is
        wrong. The half time screen always puts YOUR club on the left, because
@@ -317,7 +326,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
 
   /* --- Round 157: the Match Centre, once. Facts, form, the engine's own
          odds and the optional talk all live here now. --- */
-  if (!centreChecked && /Match Centre/i.test(t) && !/FULL TIME|HALF TIME/i.test(t)) {
+  if (!centreChecked && /Match Centre/i.test(t) && where !== 'FULL TIME' && where !== 'HALF TIME') {
     centreChecked = true;
     if (await tapText(/Match Centre/i, 'the match centre')) {
       const tc = await screen();
@@ -339,7 +348,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
   /* --- Round 158: the month calendar, once: grid, cones, policy, the long
          fast forward. Walked before anything is played so the month on
          screen is August with the season ahead of it. --- */
-  if (!calChecked && /Calendar/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
+  if (!calChecked && /Calendar/i.test(t) && !['FULL TIME', 'HALF TIME', 'MATCH LIVE'].includes(where)) {
     calChecked = true;
     if (await tapText(/Calendar/i, 'the calendar tile')) {
       await page.waitForTimeout(600);
@@ -361,12 +370,12 @@ for (let step = 0; step < MAX_STEPS; step++) {
   /* --- Round 158: watch a match live, once, all the way through: viewer,
          speed controls, skip to the break, the embedded dressing room, the
          second half replay, the full report handoff. --- */
-  if (!watchChecked && centreChecked && quickSimChecked && /Play Live/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
+  if (!watchChecked && centreChecked && quickSimChecked && /Play Live/i.test(t) && !['FULL TIME', 'HALF TIME', 'MATCH LIVE'].includes(where)) {
     watchChecked = true;
     if (await tapText(/Play Live/i, 'play it live')) {
       await page.waitForTimeout(900);
       let tw = await screen();
-      if (!/MATCH LIVE/i.test(tw)) note('BROKEN ', 'playing it live did not open the live viewer');
+      if (await heading() !== 'MATCH LIVE') note('BROKEN ', 'playing it live did not open the live viewer');
       if (!/4x/.test(tw)) note('BROKEN ', 'no speed controls on the live viewer');
       if (!/Balance of play/i.test(tw)) note('BROKEN ', 'no balance of play strip on the viewer');
       await tapText(/^4x$/, '4x speed');
@@ -380,11 +389,11 @@ for (let step = 0; step < MAX_STEPS; step++) {
         await page.waitForTimeout(800);
         if (await tap(/skip/i, 'skip to full time')) await page.waitForTimeout(800);
         tw = await screen();
-        if (!/Full report|FULL TIME/i.test(tw)) note('BROKEN ', 'the live viewer never reached full time');
+        if (!/Full report/i.test(tw)) note('BROKEN ', 'the live viewer never reached full time');
         if (await tap(/full report/i, 'full report')) {
           await page.waitForTimeout(600);
           tw = await screen();
-          if (!/FULL TIME/i.test(tw)) note('BROKEN ', 'full report did not open the full time card');
+          if (await heading() !== 'FULL TIME') note('BROKEN ', 'full report did not open the full time card');
         }
       }
     }
@@ -392,12 +401,12 @@ for (let step = 0; step < MAX_STEPS; step++) {
   }
 
   /* --- Round 157: quick sim, once. One tap, full report, no interval. --- */
-  if (!quickSimChecked && centreChecked && /Quick Sim/i.test(t) && !/FULL TIME|HALF TIME/i.test(t)) {
+  if (!quickSimChecked && centreChecked && /Quick Sim/i.test(t) && where !== 'FULL TIME' && where !== 'HALF TIME') {
     quickSimChecked = true;
     if (await tapText(/Quick Sim/i, 'quick sim')) {
       await page.waitForTimeout(700);
       const tq = await screen();
-      if (!/FULL TIME/i.test(tq)) note('BROKEN ', 'quick sim did not land on a full time report');
+      if (await heading() !== 'FULL TIME') note('BROKEN ', 'quick sim did not land on a full time report');
       if (!/Match stats/i.test(tq)) note('BROKEN ', 'the quick sim report carries no stats block');
       if (!/Possession/i.test(tq)) note('BROKEN ', 'no possession line on the report');
       if (!/Expected goals/i.test(tq)) note('BROKEN ', 'no expected goals line on the report');
