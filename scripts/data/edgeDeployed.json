@@ -15,6 +15,11 @@
       "sha256": "ff45b1710d623cbd5763ce7ab91864a92b3c73728585c2230bdc853a0b2a54ab",
       "version": 7,
       "date": "2026-09-06"
+    },
+    "tennis-chain-validate": {
+      "sha256": "dc8df742548a54e50bfd2399539b457841f917caa3bd00ed0b204540b96d65af",
+      "version": 8,
+      "date": "2026-09-06"
     }
   },
   "unverified": [
@@ -40,7 +45,6 @@
     "simulate-season",
     "soccer-grid-validate",
     "suggest-players",
-    "tennis-chain-validate",
     "tennis-daily"
   ]
 }

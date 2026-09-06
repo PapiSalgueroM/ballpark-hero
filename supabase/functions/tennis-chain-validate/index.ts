@@ -107,15 +107,40 @@ serve(async (req) => {
     }
 
     const supabase = createClient(url, key);
-    const { data, error } = await supabase
-      .from("tennis_grand_slam_winners")
-      .select("champion, year, tournament");
-
-    if (error || !data) {
-      return json({ valid: false, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
+    /* ROUND 487: PAGED, and that is the whole fix.
+       PostgREST caps a select at 1,000 rows and says nothing about it, and
+       tennis_grand_slam_winners holds 1,019. The unbounded select above read
+       the first thousand and silently never saw the last nineteen, which are
+       every women's US Open champion from 2007 to 2025. Measured against
+       production on 2026-09-06: Emma Raducanu, Bianca Andreescu and Sloane
+       Stephens each came back "has never won a Grand Slam singles title",
+       because that title is their only one and it sat in the invisible tail.
+       Serena Williams, Naomi Osaka, Coco Gauff, Iga Swiatek and Aryna
+       Sabalenka lost their US Open rows too and only survived on their other
+       slams.
+       The order matters as much as the paging: without one, PostgREST pages an
+       unordered result and can repeat or skip rows between pages. */
+    const rows: { champion: string; year: number; tournament: string }[] = [];
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await supabase
+        .from("tennis_grand_slam_winners")
+        .select("champion, year, tournament")
+        .order("year", { ascending: true })
+        .order("tournament", { ascending: true })
+        .order("champion", { ascending: true })
+        .range(from, from + 999);
+      if (error) {
+        return json({ valid: false, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
+      }
+      const page = data ?? [];
+      rows.push(...page);
+      if (page.length < 1000) break;
+      if (from > 20000) break;
     }
 
-    const rows = data as { champion: string; year: number; tournament: string }[];
+    if (rows.length === 0) {
+      return json({ valid: false, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
+    }
     const g = norm(guessedPlayer);
     const c = norm(currentPlayer);
 
