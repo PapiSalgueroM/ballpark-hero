@@ -83,6 +83,10 @@ import {
 import type { PlayerPhysique, AttrShape, BuildEffects } from "./soccerCareerAttributes";
 import { getCorruptionEvents } from "./soccerCareerCorruption";
 import { getRealismEvents } from "./soccerCareerRealism";
+/* Round 473: the critic. soccerCareerCritic imports TYPES from here only, so
+   this is a one way runtime edge and there is no cycle, the same contract
+   soccerCareerRealism keeps. */
+import { getCriticEvents, soccerCriticArticle } from "./soccerCareerCritic";
 import {
   runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
   nationStrength as intlNationStrength, confederationOf, pickSquad,
@@ -5345,13 +5349,29 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         body: `${season.goals} goals at ${s.age}. Nutritionists want the meal plan, scientists want the bloodwork, defenders want it to stop. "I will retire when it stops being fun," ${name} smiled, ominously, at everyone under 30.` }) },
   ];
 
-  const eligible = templates.filter(t => t.check());
-  if (eligible.length === 0) return [];
+  /* Round 473: the column runs every season, because "headlines at every
+     step" is on his list and until now nobody was ever on the other side of
+     them. The paper never gets taller than it already could: the templates
+     used to hand back one story or two, and now the column takes the second
+     slot, so it is always the column plus one story and never three cards. */
+  const out: NewsArticle[] = [];
+  const column = soccerCriticArticle(s, season, NEWSPAPERS);
+  if (column) {
+    out.push({
+      newspaper: column.paper,
+      type: column.hostile ? "negative" : "positive",
+      headline: column.headline,
+      body: column.body,
+    });
+  }
 
-  const count = eligible.length >= 2 && Math.random() < 0.5 ? 2 : 1;
+  const eligible = templates.filter(t => t.check());
+  if (eligible.length === 0) return out;
+
+  const count = out.length === 0 && eligible.length >= 2 && Math.random() < 0.5 ? 2 : 1;
   const shuffled = eligible.sort(() => Math.random() - 0.5).sort((a, b) => b.weight - a.weight);
-  const selected = shuffled.slice(0, count);
-  return selected.map(t => t.gen());
+  for (const t of shuffled.slice(0, count)) out.push(t.gen());
+  return out;
 }
 
 /* ─── Dismiss newspaper ─── */
@@ -5659,6 +5679,9 @@ function getAllEvents(state: CareerState): RandomEvent[] {
     // (ids 400+). Both self-gate, so no eligibility rules are needed here.
     ...getCorruptionEvents(state),
     ...getRealismEvents(state),
+    // Round 473: the critic (id 500). Self gating like the rest: it only
+    // appears once a career, and only once he has actually turned on you.
+    ...getCriticEvents(state),
   ];
 }
 

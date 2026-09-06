@@ -49,11 +49,16 @@ import { fanComments as fanCommentsFor } from "@/lib/careerSocial";
    the page's own light theme tokens. Same case, same rules, phone clothes. */
 import { SOCCER_BADGES } from "@/lib/careerBadges";
 import { soccerEarnedBadges } from "@/lib/soccerCareerBadges";
+/* Round 473: the critic. Everything on his screen is recomputed from the
+   seasons on the save, so there is nothing stored and an old save opens with
+   his whole back catalogue already written. */
+import { soccerCriticName, soccerCriticNow, soccerCriticColumns } from "@/lib/soccerCareerCritic";
+import { STANCE_LABEL } from "@/lib/careerCritic";
 import type { SpendingCategory } from "@/lib/soccerCareerEngine";
 
 type AppId =
   | "home" | "messages" | "thread" | "contacts" | "contact" | "news"
-  | "bank" | "social" | "player" | "life" | "peaks"
+  | "bank" | "social" | "player" | "life" | "peaks" | "column"
   | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
@@ -116,15 +121,20 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
      the facts of the career, so there is no save field to go stale and an old
      save shows exactly what it earned. */
   const earnedPeaks = useMemo(() => soccerEarnedBadges(career), [career]);
+  const criticName = soccerCriticName(career);
+  const criticNow = useMemo(() => soccerCriticNow(career), [career]);
+  const criticStanceLabel = STANCE_LABEL[criticNow.stance];
+  const columns = useMemo(() => soccerCriticColumns(career, 4), [career]);
 
   /* Tile rule: small tiles, each one opening its own screen with a back
-     button. Twelve of them fit on the handset at 390 wide, four rows of three,
-     without the home screen becoming a page you scroll, which is the whole
-     point of tiles. */
+     button. Thirteen of them fit on the handset at 390 wide, five rows of
+     three, without the home screen becoming a page you scroll, which is the
+     whole point of tiles. */
   const APPS: { id: AppId; label: string; emoji: string; badge?: number }[] = [
     { id: "messages", label: "Messages", emoji: "💬", badge: waiting },
     { id: "contacts", label: "Contacts", emoji: "👥" },
     { id: "news", label: "SportsFeed", emoji: "📰" },
+    { id: "column", label: "The Column", emoji: "🗞️" },
     { id: "bank", label: "Bank", emoji: "🏦" },
     { id: "market", label: "Market", emoji: "📈" },
     { id: "shop", label: "My Life", emoji: "🛒" },
@@ -399,6 +409,31 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                     )}
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-sm font-black">{season.assists}</div><div className="text-[9px] text-white/50">assists</div></div>
                   </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {app === "column" && (
+            <>
+              <AppHeader title="🗞️ The Column" backLabel="Home" onBack={() => setApp("home")} />
+              <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-center space-y-1.5">
+                  <div className="text-2xl">{criticStanceLabel.emoji}</div>
+                  <div className="text-sm font-black">{criticName}</div>
+                  <div className={`text-[11px] font-bold ${criticStanceLabel.color}`}>{criticStanceLabel.label}</div>
+                  <Meter value={criticNow.score} color={criticNow.score >= 50 ? "bg-emerald-500" : "bg-red-500"} />
+                  <div className="text-[10px] text-white/50">He has written about you since the day you turned pro.</div>
+                </div>
+                {columns.length === 0 ? (
+                  <p className="text-center text-xs text-white/50 py-8">He has not filed anything about you yet. Play a season.</p>
+                ) : (
+                  columns.map(col => (
+                    <div key={col.year} className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                      <div className="text-[9px] uppercase tracking-widest text-white/40 font-bold">{col.year}</div>
+                      <p className="text-[11px] leading-snug pt-0.5">{col.line}</p>
+                    </div>
+                  ))
                 )}
               </div>
             </>
