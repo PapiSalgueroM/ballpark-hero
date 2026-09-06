@@ -37,13 +37,17 @@
  * WHAT IT MEASURES, against a baseline, deterministically. An extra initialiser
  * firing advances the seeded generator by exactly one draw. So render the page
  * with prerender.mjs's seed, render it again with that generator advanced by
- * one, and diff the readable blocks. A page whose readable output is identical
- * under both cannot have its snapshot moved by the race, whatever its
- * initialisers look like. A page whose output MOVES has readable content that
- * depends on the draw order, and that is only safe while every draw feeding its
- * React state goes through firstDraw. Moving is therefore NOT a failure by
- * itself: /higher-lower moves and is correct, because it draws once per mount.
- * The failure is the JOIN, a page that moves while still holding a raw draw.
+ * one, and diff BOTH HALVES OF WHAT A SNAPSHOT KEEPS: the head, which is saved
+ * verbatim, and the readable blocks, which the body is rebuilt from. Reading
+ * only the body would be half a check, because a picked value reaching a
+ * Helmet title or a JSON-LD block moves the saved page without changing one
+ * readable block. A page identical in both under both offsets cannot have its
+ * snapshot moved by the race, whatever its initialisers look like. A page that
+ * MOVES has content that depends on the draw order, and that is only safe while
+ * every draw feeding its React state goes through firstDraw. Moving is
+ * therefore NOT a failure by itself: /higher-lower moves and is correct,
+ * because it draws once per mount. The failure is the JOIN, a page that moves
+ * while still holding a raw draw.
  *
  * WHY NOT JUST RE-RUN playRenderStability. That one renders repeatedly at one
  * clock and catches the race only when React actually retries during the run,
@@ -61,12 +65,14 @@
  *
  * NEGATIVE CONTROL, judged on its output and not its exit code:
  *   DRAW_ORDER_CONTROL=drawdep
- * puts a readable paragraph on every at risk page whose text is taken from the
- * seeded generator, so it reads differently at the two offsets. That is the
- * shipped shape of the defect, readable content that moves with the draw order
- * on a page that still draws raw. The injection is asserted to have landed on
- * every route, because a control that changes nothing is green for the wrong
- * reason, and every at risk route must then be reported as moved.
+ * puts TWO planted defects on every at risk page, one per half of the check: a
+ * readable paragraph whose text is taken from the seeded generator, and a head
+ * meta tag whose content is taken from the same generator. Both are the shipped
+ * shape of the defect, a picked value that moves with the draw order on a page
+ * that still draws raw, one where the prerenderer rebuilds and one where it
+ * copies verbatim. Both injections are asserted to have landed on every route,
+ * because a control that changes nothing is green for the wrong reason, and
+ * both must then be reported as moved on every at risk route.
  *
  *   node scripts/simDrawOrder.mjs
  *   ONLY=/connections,/footle node scripts/simDrawOrder.mjs
@@ -274,10 +280,17 @@ const initScript = burn => `(() => {
   })();
 })();`;
 
-/* The control reads the SEEDED generator on purpose, so its paragraph differs
+/* The control reads the SEEDED generator on purpose, so what it plants differs
    between the two offsets exactly the way a picked name would. Drawing from the
    real generator instead would make it differ between any two renders, which is
-   playRenderStability's defect and not this one. */
+   playRenderStability's defect and not this one.
+
+   IT PLANTS IN BOTH HALVES, because the check has two halves and a control that
+   only covers one of them leaves the other proven by nothing. The paragraph is
+   the body defect, a picked value rendered into a readable block. The meta tag
+   is the head defect, a picked value reaching a Helmet tag, which moves the
+   saved page without changing a single readable block. Both must be reported or
+   the control is red. */
 const CONTROL_MARK = 'draw order control ';
 const controlScript = `(() => {
   addEventListener('DOMContentLoaded', () => {
@@ -285,6 +298,10 @@ const controlScript = `(() => {
     p.id = 'draw-order-control';
     p.textContent = ${JSON.stringify(CONTROL_MARK)} + Math.random();
     document.body.appendChild(p);
+    const m = document.createElement('meta');
+    m.setAttribute('name', 'draw-order-control');
+    m.setAttribute('content', ${JSON.stringify(CONTROL_MARK)} + Math.random());
+    document.head.appendChild(m);
   });
 })();`;
 
@@ -309,6 +326,31 @@ async function render(route, burn) {
     await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   }
   await page.waitForTimeout(SETTLE_MS);
+  /* THE HEAD COUNTS TOO, and reading only the body would have been half a
+     check. scripts/prerender.mjs keeps each page's head VERBATIM and rebuilds
+     only the body from readable blocks, so a picked value reaching a Helmet
+     title, description or JSON-LD block moves the saved page without touching
+     a single readable body block. Today no page does that (all 23 pass
+     PageSeo hardcoded literals and GameSeoContent builds its schema from the
+     registry and the guide file), which is exactly the kind of thing that is
+     true until somebody makes it false. Asset URLs are not stripped because
+     both offsets read the SAME dist, so the hashes are identical and any
+     difference here is the draw.
+
+     SORTED, and that is measured rather than convenient. Helmet inserts head
+     tags in an order that varies from one render to the next: probed on
+     /connections and /footle, two renders at the SAME offset gave the same 70
+     tags with the order differing. Comparing the raw innerHTML therefore
+     reports that noise as instability and the real question never gets asked.
+     It is noise and not signal: across the last twelve builds of eight of
+     these routes the saved heads hold 33 distinct values counted in order and
+     the same 33 counted as sets, so not one saved head has ever differed by
+     order alone. Sorting drops the artifact and keeps every content change. */
+  const head = await page.evaluate(() =>
+    [...document.head.children]
+      .map(el => el.outerHTML.replace(/\s+/g, ' ').trim())
+      .sort()
+      .join('\n'));
   const blocks = await page.evaluate(() => {
     /* Same first move as scripts/prerender.mjs: anything marked
        data-no-prerender is live or dated on purpose, never reaches a snapshot,
@@ -326,7 +368,7 @@ async function render(route, burn) {
       .filter(Boolean);
   });
   await ctx.close();
-  return blocks;
+  return { blocks, head };
 }
 
 /* Takes at one offset must agree with each other before the two offsets are
@@ -341,18 +383,21 @@ async function stableTake(route, burn) {
   }
   const first = JSON.stringify(takes[0]);
   const agree = takes.every(t => JSON.stringify(t) === first);
-  return { blocks: takes[0], agree };
+  return { blocks: takes[0].blocks, head: takes[0].head, agree };
 }
 
 const failuresBefore = failures;
 console.log('');
 console.log(`2) the same page at the seeded generator and at that generator advanced by one draw`);
 console.log(`   ${routes.length} route(s), ${TAKES} takes at each of the two offsets${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
-if (CONTROL === 'drawdep') console.log('   NEGATIVE CONTROL ON: every at risk page carries a paragraph drawn from the seeded generator, and every one must be reported as moved');
+if (CONTROL === 'drawdep') console.log('   NEGATIVE CONTROL ON: every at risk page carries a paragraph AND a head meta tag drawn from the seeded generator, and both must be reported as moved on every one');
 
 let movedCount = 0;
+let headMovedCount = 0;
 let controlLanded = 0;
 let controlNamed = 0;
+let controlHeadLanded = 0;
+let controlHeadNamed = 0;
 let checked = 0;
 
 for (const route of routes) {
@@ -376,12 +421,21 @@ for (const route of routes) {
   const b = new Set(off.blocks);
   const gone = [...a].filter(x => !b.has(x));
   const added = [...b].filter(x => !a.has(x));
+  const headMoved = base.head !== off.head;
+  if (headMoved) {
+    headMovedCount += 1;
+    fail(`${route} has HEAD content that moves with the draw order, and a snapshot keeps the head verbatim, so this reaches the saved page even though no readable body block changed. ${(raiserOf.get(route) || []).join(', ') || 'A file it renders'} still draws raw into React state`);
+  }
   const moved = gone.length > 0 || added.length > 0;
   if (CONTROL === 'drawdep') {
     const landed = [...a].some(x => x.startsWith(CONTROL_MARK));
     if (landed) controlLanded += 1;
     else fail(`${route}: the control paragraph never reached the page, so a green result on it would mean the control did not fire rather than that the check works`);
     if (moved && [...gone, ...added].some(x => x.startsWith(CONTROL_MARK))) controlNamed += 1;
+    const headLanded = base.head.includes('draw-order-control') && off.head.includes('draw-order-control');
+    if (headLanded) controlHeadLanded += 1;
+    else fail(`${route}: the control meta tag never reached the head, so the head half of this check would be proven by nothing`);
+    if (headMoved) controlHeadNamed += 1;
   }
   if (moved) {
     movedCount += 1;
@@ -392,9 +446,16 @@ for (const route of routes) {
   }
 }
 
-console.log(`   ${checked} route(s) checked, ${movedCount} whose readable blocks move when the generator is advanced by one draw`);
-if (!movedCount && !CONTROL) {
-  console.log('   every at risk page renders the same readable blocks at both offsets, so its raw draw cannot reach a snapshot');
+console.log(`   ${checked} route(s) checked, ${movedCount} whose readable blocks move when the generator is advanced by one draw, ${headMovedCount} whose head moves`);
+/* Only claim it held if it held, and count the routes that were actually
+   answered rather than the ones that were attempted. An unconditional
+   reassurance under a FAIL is how a reader skims a red run and sees green,
+   which is the lesson simPrerender section 15 carries. */
+if (!failures && !CONTROL) {
+  console.log('   every at risk page serves the same head and the same readable blocks at both offsets,');
+  console.log('   which is both halves of what a snapshot keeps, so its raw draw cannot reach one');
+} else if (!CONTROL) {
+  console.log('   the sweep did NOT come back clean, see the failure(s) above');
 }
 
 await browser.close();
@@ -406,14 +467,16 @@ if (CONTROL === 'drawdep') {
      simPrerender's controls are: under this control the sweep is SUPPOSED to go
      red, so a clean sweep is the bug. */
   const clean = failuresBefore === 0;
-  if (controlLanded === routes.length && controlNamed === routes.length && clean) {
-    console.log(`simDrawOrder control: green. The planted defect fired on all ${routes.length} at risk route(s):`);
-    console.log('   the control paragraph landed on every one of them, and every one was reported as moving with the draw order.');
-    console.log('   So a page whose readable content follows the draw order IS caught, and a green run means the check worked.');
+  const n = routes.length;
+  if (controlLanded === n && controlNamed === n && controlHeadLanded === n && controlHeadNamed === n && clean) {
+    console.log(`simDrawOrder control: green. Both planted defects fired on all ${n} at risk route(s):`);
+    console.log(`   the control paragraph landed on ${controlLanded}/${n} and was reported as moving with the draw order on ${controlNamed}/${n},`);
+    console.log(`   and the control meta tag landed in the head on ${controlHeadLanded}/${n} and moved the head on ${controlHeadNamed}/${n}.`);
+    console.log('   So both halves of what a snapshot keeps ARE checked, and a green run means the check worked.');
     process.exit(0);
   }
-  console.error(`simDrawOrder control: RED. Landed on ${controlLanded}/${routes.length}, named on ${controlNamed}/${routes.length}, other failures ${failuresBefore}.`);
-  console.error('   The control must land everywhere and be reported everywhere, or green means nothing.');
+  console.error(`simDrawOrder control: RED. Body landed ${controlLanded}/${n}, body named ${controlNamed}/${n}, head landed ${controlHeadLanded}/${n}, head named ${controlHeadNamed}/${n}, other failures ${failuresBefore}.`);
+  console.error('   Both planted defects must land everywhere and be reported everywhere, or green means nothing.');
   process.exit(1);
 }
 
