@@ -669,27 +669,54 @@ console.log('7) Every answer in the inbox moves a number that has a screen');
   }
 
   /* And the future: a word kept opens next season warmer than a word
-     broken, three points a promise, on the same finished season. */
-  let played = base;
-  for (let i = 0; i < 120 && played.week < played.calendar.length; i++) {
-    played = playNextEntry(played, { skipHalftime: true }).state;
-    if (played.sacked) break;
+     broken, three points a promise, on the same finished season.
+
+     The fixture is CHOSEN rather than taken, and that is the whole trick.
+     startNextSeason clamps next season's opening confidence to 35..82, a
+     promise is worth three points inside it, and a season bad enough to sit
+     on the floor is a season where a promise provably cannot move anything:
+     kept, neutral and broken all come back 35 and the two assertions below
+     read as "the promise does nothing" when what really happened is that
+     the check could not see. Measured on the merged Rounds 470 to 474 tree:
+     the filename seed and SIM_SEED=3 land on the floor, SIM_SEED=2 reads
+     53.5/50.5/47.5 and SIM_SEED=4 reads 78/75/72, so on this one fixture the
+     check was a coin toss dressed as a rule. So walk a fixed list of clubs
+     and settle the promise on the first season that finishes with the board
+     far enough off both bounds for three points to show, refusing to run if
+     none of them does. The two assertions are untouched and the clubs are
+     fixed, so nothing here is a rerun until green. */
+  const PROMISE_ROOM = 3;
+  const fixtures = ['Everton', 'Napoli', 'Brentford', 'Sevilla', 'Wolfsburg'];
+  let settled = null;
+  const tried = [];
+  for (const club of fixtures) {
+    let played = club === 'Everton' ? base : startCareer(club);
+    for (let i = 0; i < 120 && played.week < played.calendar.length; i++) {
+      played = playNextEntry(played, { skipHalftime: true }).state;
+      if (played.sacked) break;
+    }
+    const done = finishSeason({ ...played, week: played.calendar.length, sacked: false }).state;
+    const graded = objectiveStatuses(done);
+    const hit = graded.find(x => x.status === 'done');
+    const missed = graded.find(x => x.status === 'failed');
+    if (!hit || !missed) { tried.push(`${club}: nothing both hit and missed`); continue; }
+    const neutral = startNextSeason(done).boardConfidence;
+    if (!(neutral > 35 + PROMISE_ROOM && neutral < 82 - PROMISE_ROOM)) {
+      tried.push(`${club}: opens on ${neutral}, against the clamp`);
+      continue;
+    }
+    settled = { club, done, hit, missed, neutral, short: played.sacked || played.week < played.calendar.length };
+    break;
   }
-  if (played.sacked || played.week < played.calendar.length) {
-    console.log('   (the promise settlement fixture was sacked or ran short, so it was measured on a doctored season instead)');
-  }
-  const done = finishSeason({ ...played, week: played.calendar.length, sacked: false }).state;
-  const marked = id => ({ ...done, boardObjectives: (done.boardObjectives ?? []).map(o => (o.id === id ? { ...o, promised: true } : o)) });
-  const graded = objectiveStatuses(done);
-  const hit = graded.find(x => x.status === 'done');
-  const missed = graded.find(x => x.status === 'failed');
-  if (!hit || !missed) {
-    fail('the finished season has no objective both hit and missed, so the promise settlement could not be measured');
+  if (!settled) {
+    fail(`no fixture finished a season the board could be moved from, so the promise settlement was never measured (${tried.join('; ')})`);
   } else {
+    const { club, done, hit, missed, neutral, short } = settled;
+    if (short) console.log(`   (${club} was sacked or ran short, so the settlement was measured on a doctored season)`);
+    const marked = id => ({ ...done, boardObjectives: (done.boardObjectives ?? []).map(o => (o.id === id ? { ...o, promised: true } : o)) });
     const kept = startNextSeason(marked(hit.objective.id)).boardConfidence;
     const broken = startNextSeason(marked(missed.objective.id)).boardConfidence;
-    const neutral = startNextSeason(done).boardConfidence;
-    console.log(`   next season opens on ${kept} after a word kept, ${neutral} with no word given, ${broken} after one broken`);
+    console.log(`   next season opens on ${kept} after a word kept, ${neutral} with no word given, ${broken} after one broken (settled on ${club}${tried.length ? `, after ${tried.join('; ')}` : ''})`);
     if (!(kept > neutral)) fail(`a word kept opens next season on ${kept}, no better than the ${neutral} of never promising`);
     if (!(broken < neutral)) fail(`a word broken opens next season on ${broken}, no worse than the ${neutral} of never promising`);
   }
