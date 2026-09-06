@@ -678,6 +678,37 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **DONE, Round 483: Build Your XI's search box stops offering players who were never at
+  the club.** The other half of 482, and the Transfer Path shape from Round 294 again: the
+  game suggested a name and its own validator then refused it. The pool was a substring
+  `ilike` on the club label, so Barcelona offered 448 players of whom 194 ever played there
+  (RCD Espanyol Barcelona, Barcelona SC Guayaquil), Porto offered 410 against 221 (Gremio
+  Foot-Ball Porto Alegrense) and Newcastle offered Newcastle United Jets of Australia. It is
+  an exact match on the stored names now, sharing Round 482's fenced list. Proved in a
+  browser: a Juventus slot, fifteen suggestions, every one a real Juventus player.
+  `src/lib/playerSearch.ts` gained an `in` op that every game's autocomplete can use.
+
+- **INBOX, MEASURED AND SPECCED, NOT CLAIMED: the nation half of the same bug.**
+  Build Your XI asks who played FOR a country and its dropdown holds everyone who COULD
+  have, because the filter is `nationality`. Measured 2026-09-06: Argentina offers 1,567
+  names and 76 have ever been named in a squad we hold; Brazil 1,702 against 53; Italy 1,571
+  against ZERO, because we hold no Italy squad at all.
+  **Why Round 483 did not just filter it.** The only proof of a cap in the database is
+  `national_team_squads`, which runs 2018 to 2026 only and misses Italy entirely, so
+  filtering to it would leave empty and unfillable slots. Round 442 was spent fixing exactly
+  that failure and must not be undone.
+  **The fix.** A two-source pool: proven internationals (the squad lists) ranked first, then
+  nationality as the fallback so the pool is never empty. `PlayerSourceConfig` in
+  `src/lib/playerSearch.ts` takes one table and cannot express that today, so the round is a
+  search change plus a game change, not a one line filter swap. Ranking the squad names
+  first also maximises the free answers, because those are exactly the picks the validator
+  can now confirm without the model.
+  **Beware the data.** `national_team_squads` is shifted a column in 2,724 of its 2,784 rows
+  (its `club` holds a birth date, its `position` a shirt number) and it writes captains as
+  "Lionel Messi ( captain )". Only `country` and `player_name` are safe to read, and the
+  parenthetical must be stripped. `scripts/simValidatePlayerRecords.mjs` section 6 already
+  guards the stripping.
+
 - **DONE, Round 482: Build Your XI answers from our own records before it asks the AI.**
   It was dead in production (215 completions in a fortnight against 1 in the following week,
   four of six live validator calls returning `exhausted`), and it was the free allowance, not

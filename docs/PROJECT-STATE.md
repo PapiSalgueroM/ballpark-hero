@@ -2490,6 +2490,21 @@ nations, Italy being the one hole. Fence: `scripts/simValidatePlayerRecords.mjs`
 records cannot confirm still need the model, so a paid tier would finish the job here and
 would end the same problem for every other AI checked game.
 
+**ROUND 483, the other half of the same defect: the search box was offering players who were
+never at the club.** The pool was scoped with a substring `ilike` on the club label, so
+Barcelona offered 448 different players of whom 194 ever played there (RCD Espanyol
+Barcelona, Barcelona SC Guayaquil), Porto offered 410 against 221 (Gremio Foot-Ball Porto
+Alegrense), and Newcastle offered Newcastle United Jets of Australia. The game suggested a
+name and its own validator then refused it, which is the Transfer Path defect of Round 294
+in different clothes. It is an exact match on the stored names now, sharing Round 482's
+fenced list, and `src/lib/playerSearch.ts` gained an `in` op every game can use. Proved in a
+browser at 390 wide: a Juventus slot, fifteen suggestions, every one a real Juventus player.
+**The nation half is the same bug and is NOT fixed**: the game asks who played for a country
+and the pool is everyone with the passport (Argentina 1,567 names against 76 ever in a squad
+we hold, Italy 1,571 against zero). Filtering to the squad lists would empty slots, which is
+the Round 442 failure, so the real fix is a two-source pool that ranks proven internationals
+first and falls back to nationality. Specced in the Inbox of `docs/WORKBOARD.md`.
+
 **Two data problems found on the way and deliberately NOT acted on, because nothing shipped
 reads them.** Worth a round of their own, worth nobody's panic.
 - `national_team_squads` is **shifted a column in 2,724 of its 2,784 rows**: `club` holds a
