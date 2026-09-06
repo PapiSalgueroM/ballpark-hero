@@ -55,8 +55,12 @@
  *   candidate headroom, worst per ask     natQuota 6, veterans 139, posGap 51,
  *                                         youngStar 5, marquee 3   floor 2
  *   position lines a board can ask for    4 of 4       floor 4
- *   inbox messages harvested              see output   floor 40
- *   new sender kinds seen                 5 of 5       nothing less passes
+ *   inbox messages harvested              180 over 6 careers   floor 60
+ *   each new sender kind seen             agent 26, boardChase 12,
+ *                                         coachTip 5, fanGroup 2,
+ *                                         reporter 10          floor 2 each
+ *   board meter moves in answerMessage    2, both floored at 1  floor 2 found,
+ *                                                               none unfloored
  *   founded club asks, all met            18 of 18     floor 12
  *   next season opens after a promise     67.5 kept, 64.5 no word,
  *                                         61.5 broken  kept > none > broken
