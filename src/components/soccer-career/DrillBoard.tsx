@@ -45,7 +45,7 @@ type AnySetup = WallShotSetup | TackleSetup | GloveSetup;
 type AnyInput = WallShotInput | TackleInput | GloveInput;
 type AnyResult = WallShotResult | TackleResult | GloveResult;
 
-interface DrillRecord { score: number; count: number; banked: boolean }
+interface DrillRecord { score: number; count: number; banked: boolean; rounds: number }
 
 /* How long the resolve is drawn for, in milliseconds. */
 const FLIGHT_MS = 700;
@@ -74,7 +74,14 @@ function readRecord(slug: string, today: string): DrillRecord | null {
     if (typeof f.score !== 'number' || !Number.isFinite(f.score)) return null;
     if (typeof f.count !== 'number' || !Number.isFinite(f.count) || f.count < 0 || f.count > ROUNDS_PER_RUN) return null;
     if (typeof f.banked !== 'boolean') return null;
-    return { score: f.score, count: f.count, banked: f.banked };
+    /* `rounds` is how many of the ten have been settled, and it is what
+       stops today's ten being dealt twice. A record written before this
+       field existed is a finished run, which is the only thing the old code
+       could write. Fails closed on anything else, like every field here. */
+    const rounds = f.rounds === undefined ? ROUNDS_PER_RUN : f.rounds;
+    if (typeof rounds !== 'number' || !Number.isInteger(rounds) || rounds < 0 || rounds > ROUNDS_PER_RUN) return null;
+    if (rounds < ROUNDS_PER_RUN && f.banked === true) return null;
+    return { score: f.score, count: f.count, banked: f.banked, rounds };
   });
 }
 
@@ -172,13 +179,27 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
 
   const start = useCallback((m: Mode) => {
     if (m === 'daily' && record) {
-      savedRef.current = true;
+      /* Today's ten are dealt once. A run that was walked away from part way
+         comes back where it was left, with the rounds already settled behind
+         it, because the alternative is the exploit the daily record shape
+         exists to stop: press back on round nine, press Today's ten again,
+         and the same seeded ten are dealt from the start with every spray
+         and every keeper dive already known. The seed is the date, so the
+         deal cannot change; only the record can stop it being replayed. */
+      const done = record.rounds >= ROUNDS_PER_RUN;
+      savedRef.current = done;
       setMode('daily');
-      setSetups(buildRun(kind, drillSeed(kind, todayStr)));
-      setIdx(ROUNDS_PER_RUN - 1);
+      const seed = drillSeed(kind, todayStr);
+      rngRef.current = lehmer(seed ^ 0x5eed1234);
+      setSetups(buildRun(kind, seed));
+      setIdx(done ? ROUNDS_PER_RUN - 1 : record.rounds);
       setScore(record.score);
       setCount(record.count);
-      setPhase('done');
+      setFouls(0);
+      setResult(null); setInput(null);
+      resetFlight();
+      resetControls();
+      setPhase(done ? 'done' : 'ready');
       return;
     }
     const seed = m === 'daily' ? drillSeed(kind, todayStr) : Math.floor(Math.random() * 2147483645) + 1;
@@ -237,18 +258,26 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     setPhase('ready');
   }, [idx, resetFlight, resetControls]);
 
-  /* Today's run is recorded once, so a refresh brings the score back instead
-     of dealing the same ten rounds again with the answers known. */
+  /* Today's run is written after EVERY round, not just at the end, so a
+     refresh or a press of the back button brings it back where it was
+     instead of dealing the same ten again with the answers known. The
+     finished run is written once and never rewritten (savedRef), which is
+     what keeps a banked record from being reopened. */
   useEffect(() => {
-    if (phase !== 'done' || mode !== 'daily' || savedRef.current) return;
-    savedRef.current = true;
-    const rec = { score, count, banked: false };
+    if (mode !== 'daily' || savedRef.current) return;
+    if (phase !== 'roundEnd' && phase !== 'done') return;
+    const rounds = phase === 'done' ? ROUNDS_PER_RUN : Math.min(ROUNDS_PER_RUN, idx + 1);
+    if (phase === 'done') savedRef.current = true;
+    const rec = { score, count, banked: false, rounds };
     writeDailyRecord(meta.slug, todayStr, rec);
     setRecord(rec);
-  }, [phase, mode, score, count, meta.slug, todayStr]);
+  }, [phase, mode, score, count, idx, meta.slug, todayStr]);
 
   const bank = useCallback(() => {
-    if (!record || record.banked || !canBank) return;
+    /* Only a finished run banks. Since the record is written after every
+       round, a part played run is a real record now, and without this a
+       player could settle one good round and bank the session on it. */
+    if (!record || record.banked || record.rounds < ROUNDS_PER_RUN || !canBank) return;
     onBank(kind, record.count);
     const rec = { ...record, banked: true };
     writeDailyRecord(meta.slug, todayStr, rec);
@@ -371,13 +400,15 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           </p>
           {record && (
             <p className="mt-2 text-[11px] font-bold text-sky-300">
-              Today: {record.count} of {ROUNDS_PER_RUN} {meta.verb}, {record.score} points{record.banked ? ', banked' : ''}.
+              {record.rounds < ROUNDS_PER_RUN
+                ? `Today: ${record.rounds} of ${ROUNDS_PER_RUN} rounds played, ${record.count} ${meta.verb}, ${record.score} points so far.`
+                : `Today: ${record.count} of ${ROUNDS_PER_RUN} ${meta.verb}, ${record.score} points${record.banked ? ', banked' : ''}.`}
             </p>
           )}
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Button onClick={() => start('daily')} className="flex-1 gap-2">
-            <CalendarDays className="h-4 w-4" /> {record ? "Today's result" : "Today's ten"}
+            <CalendarDays className="h-4 w-4" /> {!record ? "Today's ten" : record.rounds < ROUNDS_PER_RUN ? "Finish today's ten" : "Today's result"}
           </Button>
           <Button variant="secondary" onClick={() => start('unlimited')} className="flex-1 gap-2">
             <InfinityIcon className="h-4 w-4" /> Practice

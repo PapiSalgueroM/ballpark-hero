@@ -2,9 +2,13 @@ import { cn } from '@/lib/utils';
 import { TICKET_TIERS, gatePricePerFan, money } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, fanMoodLabel, projectFinances,
+  CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
   sponsorTable, ticketPerFan, ticketReaction,
 } from '@/lib/clubManagerFinances';
+/* The one word about the fans anywhere on the game, the same one the header
+   meter prints. This desk used to print a second one from its own stored
+   number and the two disagreed on screen. */
+import { fanMeter } from '@/lib/clubManagerMeters';
 import type { ConcessionTier, ProjectionLine } from '@/lib/clubManagerFinances';
 
 /* ─── Round 467: the finances desk. ───
@@ -97,7 +101,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
       <div className="bg-card border border-border rounded-xl p-3" data-pricing-desk>
         <div className="flex items-baseline justify-between gap-2 mb-1.5">
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider">🎟️ Prices</div>
-          <div className="text-[9px] text-muted-foreground" data-fan-mood={books.fanMood}>Fans: <span className="font-bold text-foreground">{fanMoodLabel(books.fanMood)}</span></div>
+          <div className="text-[9px] text-muted-foreground" data-fan-mood={fanMeter(c).shown}>Fans: <span className="font-bold text-foreground">{fanMeter(c).band}</span></div>
         </div>
         <div className="grid grid-cols-3 gap-1.5">
           {TICKET_TIERS.map((tt, i) => (
@@ -147,7 +151,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             </p>
             <p className="text-[10px] text-muted-foreground mt-1">
               {c.sponsor.yearsLeft === 1 ? 'Final season of the deal.' : `${c.sponsor.yearsLeft} seasons left.`} Paid so far: <span className="font-bold text-foreground">{money(c.sponsor.paid)}</span>.
-              {c.sponsor.rep === 'bad' ? ' The fans hate the shirt: 8 off the mood target every week it runs.' : ''}
+              {c.sponsor.rep === 'bad' ? ' The fans hate the shirt: 6 off the meter for as long as you wear it, and the ground thins out.' : ''}
             </p>
           </>
         ) : (

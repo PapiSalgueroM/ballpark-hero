@@ -27,9 +27,11 @@
  * THE THREE DRILLS, and who gets which (drillForPosition):
  *
  *   WALL SHOT, for CM, CAM, LW, RW and ST. Two axis aim (across and up) and
- *   one timed press. Five men stand in a wall taller than you can clip from
- *   this range, and a gap in it opens and closes on a cycle: the men step
- *   apart and back together. You aim through where the gap will be, set your
+ *   one timed press. A wall stands taller than you can clip from this range,
+ *   and a gap in it opens and closes on a cycle: the men step apart and back
+ *   together. The rules know the gap, not a count of men, and the board
+ *   draws as many as the wall needs on each side of it, so do not write a
+ *   number here that the drawing then has to honour. You aim through where the gap will be, set your
  *   power, and release as it opens. Pace reaches the wall sooner (wallTravel)
  *   and sprays wider (WALL_SPRAY, Free Kick's prices), so a smashed one
  *   arrives on time and misses the gap it was aimed at. Behind the wall a

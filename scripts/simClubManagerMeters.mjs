@@ -83,7 +83,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_METERS_CONTROL || '';
-if (CONTROL && !['decor', 'promise', 'deaf', 'nogoals'].includes(CONTROL)) {
+if (CONTROL && !['decor', 'promise', 'deaf', 'nogoals', 'desk'].includes(CONTROL)) {
   console.error(`CM_METERS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -108,9 +108,11 @@ function pearson(xs, ys) {
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const METERS = path.join(ROOT, 'src', 'lib', 'clubManagerMeters.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'LeagueTableCard.tsx');
+const SRC_FIN = path.join(ROOT, 'src', 'lib', 'clubManagerFinances.ts');
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
 let metersPath = `${ROOT_URL}/src/lib/clubManagerMeters.ts`;
 let cardPath = `${ROOT_URL}/src/components/club-manager/LeagueTableCard.tsx`;
+let finPath = `${ROOT_URL}/src/lib/clubManagerFinances.ts`;
 function rewrite(file, edits, outName, what) {
   let src = lf(fs.readFileSync(file, 'utf8'));
   for (const [from, to] of edits) {
@@ -147,6 +149,13 @@ if (CONTROL === 'deaf') {
     'clubManagerMeters.deaf.ts', 'the fan results weight');
   console.log('NEGATIVE CONTROL ON: the fan meter ignores results; section 3 must go red');
 }
+if (CONTROL === 'desk') {
+  finPath = rewrite(SRC_FIN, [[
+    '  state.boardConfidence = clamp(state.boardConfidence + (tier === 0 ? -1 : tier === 2 ? 1 : 0), 1, 100);\n',
+    '  state.boardConfidence = clamp(state.boardConfidence + (tier === 0 ? -1 : tier === 2 ? 1 : 0), 0, 100);\n',
+  ]], 'clubManagerFinances.desk.ts', "the ticket desk's board floor");
+  console.log("NEGATIVE CONTROL ON: the finance desk shipped with the pre-465 floor of zero, so fair tickets on a last point read Sacked over a manager in a job; section 2's desk probes must go red");
+}
 if (CONTROL === 'nogoals') {
   cardPath = rewrite(CARD, [[
     '            <span className="text-center text-muted-foreground text-[11px] tabular-nums" data-goals={`${r.gf}-${r.ga}`}>{r.gf}-{r.ga}</span>\n',
@@ -166,6 +175,7 @@ const BUNDLE = `${TMP}/clubManagerMeters.${process.pid}.bundle.cjs`;
 fs.writeFileSync(ENTRY, `
 export * as cm from '${enginePath}';
 export * as meters from '${metersPath}';
+export * as fin from '${finPath}';
 export { LeagueTableCard } from '${cardPath}';
 import React from '${ROOT_URL}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT_URL}/node_modules/react-dom/server.node.js';
@@ -177,7 +187,7 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs -
 });
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, meters, LeagueTableCard, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, meters, fin, LeagueTableCard, render } = createRequire(import.meta.url)(BUNDLE);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, answerPress, respondApproach,
   sortedLeagueTable, sortedWorldTable, sortedTable, careerLeagueOf, worldLeagueDefs,
@@ -352,6 +362,44 @@ for (const base of [...keptStates.mid, ...keptStates.promiseProbes]) {
 }
 console.log(`   ${pressProbes} press answers from half a point (${pressNegative} of them the board disliked) and ${handshakes} handshakes from three: none reached zero`);
 if (pressNegative < 3) fail(`only ${pressNegative} press options the board dislike were probed, the floor was barely exercised`);
+
+/* THE DESKS, and this is the check that was missing. This section used to
+   probe the press and the approach only, the two paths this round changed,
+   so when Round 467's finance desk shipped beside it with the old floor of
+   zero, a manager on his last point who chose fair prices sat on 0 reading
+   "Sacked" while still employed and every gate stayed green. A check written
+   for the paths one round touched cannot see the path the next round adds,
+   so this one asks the question of EVERY exported function that moves board
+   confidence between matches: the answer must never be zero. Anything new
+   that docks the board and is not listed here fails the count below. */
+const DESK_PATHS = [
+  ['fair tickets', s => fin.setTicketPolicy(s, 0)],
+  ['premium tickets', s => fin.setTicketPolicy(s, 2)],
+  ['standard tickets', s => fin.setTicketPolicy(s, 1)],
+  ['cheap food', s => fin.setConcessionTier(s, 0)],
+  ['premium food', s => fin.setConcessionTier(s, 2)],
+  ['the bad shirt', s => fin.acceptSponsor(s, 'bad') ?? s],
+];
+let deskProbes = 0, deskDocks = 0;
+for (const base of [...keptStates.mid, ...keptStates.promiseProbes].slice(0, 6)) {
+  for (const [label, act] of DESK_PATHS) {
+    for (const conf of [0.3, 0.5, 1, 1.5]) {
+      const s0 = clone(base);
+      s0.boardConfidence = conf;
+      const s = act(s0) ?? s0;
+      deskProbes += 1;
+      if (s.boardConfidence < conf) deskDocks += 1;
+      if (s.sacked) fail(`${label} sacked ${s0.clubName} between matches`);
+      if (!(s.boardConfidence > 0)) fail(`${label} from ${conf} left the board on ${s.boardConfidence}, and zero IS the sack in the header`);
+      holdMeter(`desk probe ${s0.clubName} ${label} from ${conf}`, s);
+    }
+  }
+}
+console.log(`   ${deskProbes} finance desk switches from a last point or less (${deskDocks} of them docked the board): none reached zero`);
+if (deskDocks < 4) fail(`only ${deskDocks} desk switches took board confidence away, so the floor was not exercised`);
+/* The count is the ratchet: a desk that grows a new switch has to come here. */
+const DESK_MOVERS = (fs.readFileSync(SRC_FIN, 'utf-8').match(/state\.boardConfidence = clamp\(/g) ?? []).length;
+if (DESK_MOVERS !== 2) fail(`the finance module now writes board confidence in ${DESK_MOVERS} places, not the 2 this section probes; add the new one to DESK_PATHS`);
 
 /* ---------- 3. the fan meter moves with results ---------- */
 console.log('3) The fan meter moves with results the way a fan would');

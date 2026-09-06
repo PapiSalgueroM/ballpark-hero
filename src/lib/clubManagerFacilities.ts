@@ -7,8 +7,12 @@
  * club: the day one level comes from the club's tier and its market value
  * (ClubDef.budget is squad value times 0.16, capped 8 to 200), which is the
  * same stature every other money rule in the engine already reads. A tier
- * 4 club on the 8m floor opens on 1 across the board, a tier 1 giant on 8
- * to 10, and the 268 of 330 modern clubs sitting on that floor open on 1.
+ * 4 club on the 8m floor opens on 1 across the board and a tier 1 giant on 8
+ * to 10. How many clubs sit where is a measurement, not a number to type
+ * here and let drift: scripts/simClubManagerFacilities.mjs walks every
+ * playable modern and era club on every run and prints it (470 clubs, 28
+ * tier 1 all on 8 or more, 249 on the floor budget all on 2 or less, as it
+ * printed on 2026-09-05).
  *
  * Every effect is a lift on top of the calibrated game and reaches exactly
  * nothing at level 1, so a club that never opens this desk plays the game

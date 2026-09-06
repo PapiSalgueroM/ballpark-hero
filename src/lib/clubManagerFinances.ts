@@ -13,14 +13,20 @@
  *   exactly crowd times money a head, nothing else touches the kitty on a
  *   match day) keeps holding. The stadium facility lifts the per head figure.
  *
- *   FAN MOOD. One number, 0 to 100, opening on 50. Every week it moves 15
- *   percent of the way to a target built from your prices, your sponsor and
- *   the last five results, and it reaches exactly 50 on standard prices, a
- *   clean sponsor and level form, which is where the crowd multiplier reads
- *   exactly 1. Fair prices and cheap food lift it, premium anything costs
- *   it, a bad sponsor drags on it, and it feeds the home crowd (0.9x on the
- *   floor, 1.1x on the ceiling). Round 465 builds the meter; this is the
- *   number under it.
+ *   THE GATE, and it is NOT the fan mood. One number, 0 to 100, opening on
+ *   50, stored as `books.fanMood` because a save carries that key and
+ *   renaming it would cost every mid season ledger on disk. Every week it
+ *   moves 15 percent of the way to a target built from your prices, your
+ *   sponsor and the last five results, and it reaches exactly 50 on standard
+ *   prices, a clean sponsor and level form, which is where the crowd
+ *   multiplier reads exactly 1. It is slow on purpose: a crowd does not turn
+ *   up or stay away the day after a result. It feeds the home crowd (0.9x on
+ *   the floor, 1.1x on the ceiling) and nothing else.
+ *   THE FAN MOOD the player reads is Round 465's header meter and only that
+ *   (src/lib/clubManagerMeters.ts). This round first shipped its own words
+ *   for this number, and the two sat an inch apart on the hub saying
+ *   different things, which is what the review of the batch found. Nothing
+ *   here labels this number now, and nothing should.
  *
  *   THE BOARD reads money: premium prices buy a point of confidence when
  *   set, fair prices cost one, and a bad sponsor's cheque buys one.
@@ -31,8 +37,8 @@
  *   a walked brand stays walked for the season. A fourth offer comes from a
  *   bad brand (bookmakers, lenders, the like, every one invented and checked
  *   against real companies by simSponsors): it pays 1.35x the safe cheque,
- *   costs the fans eight points of mood every week it runs, and the shirt
- *   says so on the desk.
+ *   takes six off the fan meter for as long as the shirt carries it and
+ *   eight off where the gate is heading, and the desk says so.
  *
  *   THE LEDGER. Player wages (the weekly bill the contracts desk already
  *   prices, charged per calendar week), staff wages (from the academy's
@@ -201,8 +207,22 @@ const TICKET_MOOD = [8, 0, -8];
 const CONCESSION_MOOD = [5, 0, -6];
 export const BAD_SPONSOR_MOOD = -8;
 
-/** Where the mood is heading: prices, the shirt and the last five results. */
-export function fanMoodTarget(state: CareerState): number {
+/**
+ * Where the GATE is heading: prices, the shirt and the last five results.
+ *
+ * This number is not the fan mood the player reads. The mood is the header
+ * meter (src/lib/clubManagerMeters.ts, fanMeter), it is derived fresh on
+ * every render and it is the only thing anywhere that puts a word to how the
+ * supporters feel. This one is slower and unlabelled: how full the ground is
+ * running, drifting a sixth of the way toward the target every week, because
+ * a crowd does not turn up or stay away the day after a result. It moves the
+ * gate and nothing else. Do not print it, and do not write a function that
+ * turns it into a word: the one that existed (fanMoodLabel, deleted here)
+ * put a second, contradicting fan mood on the same screen as the meter, one
+ * saying Turning while the other said Onside, which is what the review of
+ * this round found.
+ */
+export function gateMoodTarget(state: CareerState): number {
   const books = booksOf(state);
   const ticket = TICKET_MOOD[state.finance?.ticketTier ?? 1] ?? 0;
   const food = CONCESSION_MOOD[books.concessionTier] ?? 0;
@@ -211,24 +231,19 @@ export function fanMoodTarget(state: CareerState): number {
   return clamp(FAN_MOOD_START + ticket + food + shirt + form, 0, 100);
 }
 
-export function fanMoodLabel(mood: number): string {
-  if (mood >= 75) return 'Singing your name';
-  if (mood >= 60) return 'Onside';
-  if (mood >= 45) return 'Waiting to see';
-  if (mood >= 30) return 'Grumbling';
-  return 'Furious';
-}
-
-/** What the fans and the board make of a ticket price, for the screen. */
+/** What the fans and the board make of a ticket price, for the screen. The
+ *  fan numbers are the header meter's own terms (FAN_TICKET_TERMS), because
+ *  that meter is the only fan mood on the game and the desk must not quote a
+ *  different one. */
 export function ticketReaction(tier: 0 | 1 | 2): { fans: string; board: string } {
-  if (tier === 0) return { fans: 'Fans warm to it (+8 on the mood target, +3 the day you set it).', board: 'The board docks a point of confidence the day you set it.' };
-  if (tier === 2) return { fans: 'Fans cool on it (-8 on the mood target, -4 the day you set it).', board: 'The board adds a point of confidence the day you set it.' };
+  if (tier === 0) return { fans: 'Fans warm to it (+4 on the meter, and the ground fills up over the weeks).', board: 'The board docks a point of confidence the day you set it.' };
+  if (tier === 2) return { fans: 'Fans cool on it (-5 on the meter, and the ground empties over the weeks).', board: 'The board adds a point of confidence the day you set it.' };
   return { fans: 'Fans are neutral.', board: 'The board are neutral.' };
 }
 
 export function concessionReaction(tier: ConcessionTier): { fans: string; board: string } {
-  if (tier === 0) return { fans: 'Fans warm to it (+5 on the mood target, +2 the day you set it).', board: 'The board shrug.' };
-  if (tier === 2) return { fans: 'Fans cool on it (-6 on the mood target, -3 the day you set it).', board: 'The board shrug.' };
+  if (tier === 0) return { fans: 'Fans warm to it (+3 on the meter).', board: 'The board shrug.' };
+  if (tier === 2) return { fans: 'Fans cool on it (-4 on the meter).', board: 'The board shrug.' };
   return { fans: 'Fans are neutral.', board: 'The board are neutral.' };
 }
 
@@ -242,7 +257,16 @@ export function setTicketPolicy(career: CareerState, tier: 0 | 1 | 2): CareerSta
   const books = cloneBooks(state);
   books.fanMood = clamp(round1(books.fanMood + (tier === 0 ? 3 : tier === 2 ? -4 : 0)), 0, 100);
   state.books = books;
-  state.boardConfidence = clamp(state.boardConfidence + (tier === 0 ? -1 : tier === 2 ? 1 : 0), 0, 100);
+  /* The floor is 1, not 0, because since Round 465 ZERO IS THE SACK: the
+     header meter reads this number and prints "Sacked" at zero, and the
+     engine only ever sacks anybody at a final whistle. This desk shipped
+     beside that round with the old floor of 0, so a manager on his last
+     point who chose fair prices sat on 0 reading "Sacked" while still in a
+     job and still playing. Every between-matches path that takes board
+     confidence away floors at 1 for that reason (answerPress and
+     respondApproach in clubManager.ts do the same); the ones that add can
+     clamp where they like. */
+  state.boardConfidence = clamp(state.boardConfidence + (tier === 0 ? -1 : tier === 2 ? 1 : 0), 1, 100);
   return state;
 }
 
@@ -285,7 +309,7 @@ export function tickBooks(state: CareerState): void {
   s.weeks += 1;
   s.playerWages = round3(s.playerWages + wageBill(state) / 1000);
   s.staffWages = round3(s.staffWages + staffWagesWeekly(state) / 1000);
-  const target = fanMoodTarget(state);
+  const target = gateMoodTarget(state);
   books.fanMood = clamp(round1(books.fanMood + (target - books.fanMood) * 0.15), 0, 100);
 }
 
@@ -471,10 +495,24 @@ export type SponsorRep = 'good' | 'bad';
 /* Invented, like SPONSOR_BRANDS in the engine. simSponsors reads this bank
    too and fails on any real company. The shapes are the ones a supporters'
    trust writes to the paper about: bookmakers, lenders, vapes, a crypto
-   exchange. */
+   exchange.
+   THE FIRST DRAFT OF THIS BANK NAMED SIX REAL COMPANIES, found by the review
+   of this round on 2026-09-05 and every one of them checked on the web:
+   Goldrush is a licensed South African casino and bookmaker, FastCash is a
+   lender, Quickfire is a gambling software business Games Global bought from
+   Microgaming, NightOwl is a drinks brand and an Australian shop chain,
+   RedLine Coin is a crypto firm in Ohio, and Skyhigh is a security company.
+   They collided because they were written the way a real bookmaker names
+   itself: a marketing idiom, two everyday words pushed together (gold rush,
+   quick fire, fast cash, night owl, red line, sky high). The good bank next
+   door has never collided because its words are coined instead. So the rule
+   for anything added here is the good bank's rule, and simSponsors holds it:
+   a coined word plus the trade, never an idiom, and the name searched on the
+   web before it ships. Every name below was searched on 2026-09-05 and
+   returns no company in its trade. */
 export const BAD_SPONSOR_BRANDS = [
-  'Lucky Ninety Bets', 'Fastcash Loans', 'Vapour Lane', 'Redline Coin Exchange',
-  'Goldrush Casino', 'Quickfire Wagers', 'Nightowl Energy Drinks', 'Skyhigh Payday',
+  'Lucky Ninety Bets', 'Pellmoor Credit', 'Vapour Lane', 'Ashmill Coin Exchange',
+  'Marlstone Casino', 'Ravensmoor Wagers', 'Cobblewick Energy Drinks',
 ];
 
 export interface SponsorTableOffer extends SponsorOffer {

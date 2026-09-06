@@ -252,7 +252,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
       "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
-      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and costs the fans mood every week), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
     ],
     example: [
       "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
@@ -279,7 +279,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
       {
         q: "When do the transfer windows close?",
-        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens on the first Saturday of the new year and shuts after your third match from there. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
+        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens in January and shuts after your third match from there, on the first Saturday of the new year in most leagues and a little later in a long one like the 24 club Championship, whose fixture list reaches January on its own. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
       },
       {
         q: "Do wages come out of my transfer budget?",

@@ -245,11 +245,56 @@ console.log('7) No sponsor on this site is a real company');
     'macron', 'kappa', 'new balance', 'bet365', 'betano', 'stake', 'cinch', 'vodafone', 'etisalat',
     'sportsbet', 'fly better', 'visit', 'turkish airlines', 'jeep', 'socios', 'binance', 'crypto',
     'amazon', 'google', 'apple', 'samsung', 'siemens', 'bosch', 'shell', 'total', 'bp ',
+    /* The six this list did not have on 2026-09-05, when the review of Round
+       467 searched the bad bank name by name and found all six trading:
+       Goldrush (South African casino and bookmaker), FastCash (lender),
+       Quickfire (gambling software, Games Global), NightOwl (drinks and an
+       Australian shop chain), RedLine Coin (crypto), Skyhigh (security). */
+    'goldrush', 'gold rush', 'fastcash', 'fast cash', 'quickfire', 'nightowl', 'night owl',
+    'redline', 'red line', 'skyhigh', 'sky high',
+    /* And the rest of the trades the bad bank draws from, which this list
+       only ever covered for Europe: bookmakers, lenders, vapes, crypto and
+       the energy drinks. */
+    'betway', 'hollywoodbets', 'sportingbet', '1xbet', '22bet', 'dafabet', 'fun88', 'w88',
+    'paddy power', 'william hill', 'ladbrokes', 'coral', 'betfair', 'unibet', 'betfred',
+    'sky bet', 'betvictor', 'bwin', 'pinnacle', 'draftkings', 'fanduel', 'wonga', 'quickquid',
+    'lendup', 'satsuma', 'cashnetusa', 'speedy cash', 'advance america', 'juul', 'vuse',
+    'elfbar', 'elf bar', 'geekvape', 'coinbase', 'kraken', 'red bull', 'monster', 'celsius',
+    'lucozade', 'gatorade', 'powerade',
   ];
   for (const b of brands) {
     const low = b.toLowerCase();
     for (const r of REAL) {
       if (low.includes(r)) fail(`"${b}" contains the name of a real company (${r.trim()})`);
+    }
+  }
+  /* THE SHAPE, NOT THE LIST. A list of real companies can only ever catch the
+     one somebody already found, and this one missed six. What every one of
+     the six had in common is how it was BUILT: a marketing idiom, two
+     everyday words pushed together, which is exactly how a real bookmaker or
+     payday lender names itself, so a name written that way is competing for
+     the same words as a real firm and collides sooner or later. The good bank
+     has never collided in eleven rounds because its words are coined
+     (Northgate, Verdanta, Halcyon, Ironvale). So a brand may not be built
+     from two of the words the trade markets itself with. This fires on
+     "Goldrush", "Quickfire", "Fastcash", "Nightowl", "Skyhigh" and "Redline"
+     and leaves the good bank alone, because "north" plus "gate" and "fox"
+     plus "glove" are not selling anything. */
+  const PITCH = [
+    'gold', 'rush', 'quick', 'fire', 'fast', 'cash', 'night', 'owl', 'sky', 'high', 'red',
+    'line', 'lucky', 'star', 'king', 'win', 'bet', 'play', 'spin', 'jack', 'ace', 'mega',
+    'super', 'turbo', 'prime', 'royal', 'power', 'max', 'top', 'big', 'hot', 'live', 'bonus',
+    'jackpot', 'cheap', 'easy', 'instant', 'rapid', 'swift', 'boost', 'rocket', 'moon',
+  ];
+  for (const b of brands) {
+    for (const token of b.toLowerCase().split(/\s+/)) {
+      for (const a of PITCH) {
+        if (!token.startsWith(a) || token === a) continue;
+        const rest = token.slice(a.length);
+        if (PITCH.includes(rest)) {
+          fail(`"${b}" is built like a real bookmaker's name ("${a}" plus "${rest}"), which is how the six real companies got into this bank. Coin a word instead, the way the good bank does, and search it before it ships.`);
+        }
+      }
     }
   }
   if (new Set(brands).size !== brands.length) fail('a brand is listed twice');

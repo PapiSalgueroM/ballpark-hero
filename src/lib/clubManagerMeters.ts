@@ -20,13 +20,31 @@
  *
  * THE FAN METER is derived, because the engine keeps no fan mood of its own
  * and Round 465 was not going to invent a second hidden number for the
- * board to read. It is built from four things a fan actually feels:
+ * board to read. It is built from six things a fan actually feels:
  *   results, recency weighted over this season's fixtures (the big term);
  *   the table against what the club expects of itself;
  *   the ticket policy on the Finances desk;
+ *   what a pie and a cup of tea cost in the ground;
+ *   whether the shirt carries a sponsor the supporters are ashamed of;
  *   trophies lifted this season.
  * The same harness measures how it tracks points per game over many seasons
  * and holds the correlation above a floor set from that measurement.
+ *
+ * ONE FAN MOOD ON SCREEN, AND THIS IS IT. Round 467's finance desk shipped
+ * beside this round with a stored number of its own that it also called the
+ * fan mood, with its own five band vocabulary, and the hub tile and the
+ * pricing desk printed that one while the header printed this one. The
+ * review of the batch found the two disagreeing in words on the same screen
+ * for more than half the weeks of an ordinary season: "Turning" up here,
+ * "Onside" an inch below. Every place that says a word about the fans now
+ * says this meter's word, and the food prices and the shabby shirt, the two
+ * things the desk knew that this meter did not, are terms below.
+ * What the desk still keeps is a SLOWER number, and it is not a mood: it is
+ * how full the ground is running, which drifts toward the same things over
+ * weeks because a crowd does not turn up or stay away the day after a
+ * result. Nothing labels it, nothing prints it as a feeling, and it moves
+ * the gate and nothing else. See the note over gateMood in
+ * src/lib/clubManagerFinances.ts.
  */
 import type { CareerState, FormResult } from '@/lib/clubManager';
 import { eraClubDefFor, leaguePosition } from '@/lib/clubManager';
@@ -92,6 +110,11 @@ export const FAN_TABLE_PER_PLACE = 2.5;
 export const FAN_TABLE_CAP = 15;
 /** Fair prices, standard, premium, indexed like TICKET_TIERS. */
 export const FAN_TICKET_TERMS = [4, 0, -5] as const;
+/** Cheap, normal, gouging, indexed like CONCESSION_TIERS. A pie matters less
+ *  than a ticket, which is why these are smaller than the ticket terms. */
+export const FAN_FOOD_TERMS = [3, 0, -4] as const;
+/** A shirt the supporters are ashamed of, worth about a bad month of food. */
+export const FAN_BAD_SHIRT = -6;
 /** Per trophy lifted this season, and the most they will add. */
 export const FAN_TROPHY_TERM = 8;
 export const FAN_TROPHY_CAP = 16;
@@ -126,6 +149,8 @@ export interface FanTerms {
   results: number;
   table: number;
   tickets: number;
+  food: number;
+  shirt: number;
   trophies: number;
   resultsSeen: number;
 }
@@ -157,19 +182,31 @@ export function fanTerms(state: CareerState): FanTerms {
   const tier = state.finance?.ticketTier;
   const ticketsTerm = tier === 0 || tier === 1 || tier === 2 ? FAN_TICKET_TERMS[tier] : FAN_TICKET_TERMS[1];
 
+  /* Read off the books rather than imported from the finance module, which
+     imports this one: a save from before the books existed, or a mangled
+     block, is standard prices and no shame, which is what a fan with nothing
+     to go on feels. */
+  const food = (state.books as { concessionTier?: unknown } | undefined)?.concessionTier;
+  const foodTerm = food === 0 || food === 1 || food === 2 ? FAN_FOOD_TERMS[food] : FAN_FOOD_TERMS[1];
+  const shirtTerm = state.sponsor?.rep === 'bad' ? FAN_BAD_SHIRT : 0;
+
   const lifted = Array.isArray(state.trophies)
     ? state.trophies.filter(t => t && t.season === state.season).length
     : 0;
   const trophiesTerm = Math.min(FAN_TROPHY_CAP, lifted * FAN_TROPHY_TERM);
 
-  return { results: resultsTerm, table: tableTerm, tickets: ticketsTerm, trophies: trophiesTerm, resultsSeen: results.length };
+  return {
+    results: resultsTerm, table: tableTerm, tickets: ticketsTerm,
+    food: foodTerm, shirt: shirtTerm, trophies: trophiesTerm, resultsSeen: results.length,
+  };
 }
 
 export function fanMeter(state: CareerState): Meter {
   const t = fanTerms(state);
-  const value = clamp(FAN_BASE + t.results + t.table + t.tickets + t.trophies, 0, 100);
+  const value = clamp(FAN_BASE + t.results + t.table + t.tickets + t.food + t.shirt + t.trophies, 0, 100);
   return { value, shown: Math.round(value), ...fanBand(value, t.resultsSeen) };
 }
+
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v));

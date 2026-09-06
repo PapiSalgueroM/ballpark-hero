@@ -92,15 +92,29 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
     [grid, selectedKey],
   );
   const selectedTarget = selected ? targetWeekForDate(days.entryDates, c.week, selected.date) : null;
-  /* What a sim to the selected day would play: every match day between now and it. */
+  /* What a sim to the selected day would play. A run stops at a transfer
+     window on the way (simToWeek halts on one, because a window needs the
+     manager), so the count stops there too: the strip used to promise every
+     match up to the target and the run could hand back three of them. */
+  const stopWeek = useMemo(() => {
+    if (selectedTarget === null) return null;
+    let stop = selectedTarget;
+    for (const [, day] of days.entryDays) {
+      if (day.kind === 'window' && day.weekIdx !== null && day.weekIdx >= c.week && day.weekIdx < stop) stop = day.weekIdx;
+    }
+    return stop;
+  }, [days, c.week, selectedTarget]);
   const matchesToSelected = useMemo(() => {
-    if (selectedTarget === null) return 0;
+    if (stopWeek === null) return 0;
+    const selectedTargetWeek = stopWeek;
     let n = 0;
     for (const day of days.entryDays.values()) {
-      if (day.kind === 'match' && !day.potential && day.weekIdx !== null && day.weekIdx >= c.week && day.weekIdx < selectedTarget) n += 1;
+      if (day.kind === 'match' && !day.potential && day.weekIdx !== null && day.weekIdx >= c.week && day.weekIdx < selectedTargetWeek) n += 1;
     }
     return n;
-  }, [days, c.week, selectedTarget]);
+  }, [days, c.week, stopWeek]);
+  /** True when a window will stop the run before the day you tapped. */
+  const stopsAtWindow = selectedTarget !== null && stopWeek !== null && stopWeek < selectedTarget;
   /* The strip appears under the grid; on a phone that can sit below the fold. */
   const stripRef = useRevealScroll<HTMLDivElement>(`cal-day:${selectedKey ?? ''}`, { skipFirst: true });
 
@@ -266,6 +280,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
               {selectedTarget !== null && (
                 <span className="text-[9px] text-muted-foreground">
                   {matchesToSelected === 0 ? 'no match on the way' : matchesToSelected === 1 ? 'plays 1 match' : `plays ${matchesToSelected} matches`}
+                  {stopsAtWindow ? ', then stops at the window' : ''}
                 </span>
               )}
             </div>

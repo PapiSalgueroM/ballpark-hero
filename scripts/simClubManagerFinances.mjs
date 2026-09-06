@@ -119,7 +119,7 @@ const cm = mod.engine;
 const fin = mod.desk;
 const { startCareer, playNextEntry, finishSeason, startNextSeason, loadCareer, sponsorOffers, signSponsor } = cm;
 const {
-  projectFinances, closeLedger, booksOf, ensureBooks, isValidBooks, tickBooks, fanCrowdMult, fanMoodTarget,
+  projectFinances, closeLedger, booksOf, ensureBooks, isValidBooks, tickBooks, fanCrowdMult, gateMoodTarget,
   setTicketPolicy, setConcessionTier, sponsorTable, pushSponsor, acceptSponsor, FAN_MOOD_START,
   SPONSOR_PUSH_STEP, BAD_SPONSOR_MULT, BAD_SPONSOR_MOOD,
 } = fin;
@@ -286,7 +286,7 @@ console.log('4) Prices move the fans and the board by the numbers the desk print
   const b = booksOf(s);
   if (b.fanMood !== FAN_MOOD_START) fail(`a fresh save opens on ${b.fanMood} mood, not ${FAN_MOOD_START}`);
   if (fanCrowdMult(s) !== 1) fail(`a fresh save's crowd multiplier is ${fanCrowdMult(s)}, not exactly 1`);
-  if (fanMoodTarget(s) !== FAN_MOOD_START) fail(`a fresh save's mood target is ${fanMoodTarget(s)}`);
+  if (gateMoodTarget(s) !== FAN_MOOD_START) fail(`a fresh save's mood target is ${gateMoodTarget(s)}`);
   const conf = s.boardConfidence;
   const fair = setTicketPolicy(s, 0);
   if (!near(booksOf(fair).fanMood, b.fanMood + 3, 0.001)) fail(`fair tickets moved the fans ${booksOf(fair).fanMood - b.fanMood}, promised +3`);
@@ -304,7 +304,7 @@ console.log('4) Prices move the fans and the board by the numbers the desk print
   const drift = (st, weeks) => { const c = clone(st); for (let i = 0; i < weeks; i++) tickBooks(c); return c; };
   const warm = setConcessionTier(setTicketPolicy(s, 0), 0);
   const cold = setConcessionTier(setTicketPolicy(s, 2), 2);
-  const warmT = fanMoodTarget(warm), coldT = fanMoodTarget(cold);
+  const warmT = gateMoodTarget(warm), coldT = gateMoodTarget(cold);
   if (warmT !== FAN_MOOD_START + 13) fail(`fair tickets and cheap food put the target on ${warmT}, designed ${FAN_MOOD_START + 13}`);
   if (coldT !== FAN_MOOD_START - 14) fail(`premium everything put the target on ${coldT}, designed ${FAN_MOOD_START - 14}`);
   const w12 = drift(warm, 12), c12 = drift(cold, 12);
@@ -316,7 +316,7 @@ console.log('4) Prices move the fans and the board by the numbers the desk print
   if (!near(fanCrowdMult(floor), 0.9, 0.0001) || !near(fanCrowdMult(ceil), 1.1, 0.0001)) fail(`the crowd multiplier runs ${fanCrowdMult(floor)} to ${fanCrowdMult(ceil)}, designed 0.9 to 1.1`);
   const winning = { ...s, form: ['W', 'W', 'W', 'W', 'W'] };
   const losing = { ...s, form: ['L', 'L', 'L', 'L', 'L'] };
-  if (fanMoodTarget(winning) !== FAN_MOOD_START + 10 || fanMoodTarget(losing) !== FAN_MOOD_START - 10) fail(`five wins and five defeats put the target on ${fanMoodTarget(winning)} and ${fanMoodTarget(losing)}`);
+  if (gateMoodTarget(winning) !== FAN_MOOD_START + 10 || gateMoodTarget(losing) !== FAN_MOOD_START - 10) fail(`five wins and five defeats put the target on ${gateMoodTarget(winning)} and ${gateMoodTarget(losing)}`);
   console.log(`   fresh save 50 mood, crowd x1; fair tickets +3 fans -1 board, premium -4 fans +1 board, cheap food +2, premium food -3; twelve weeks warm ${wm} (target ${warmT}), cold ${cmood} (target ${coldT}); crowd x0.9 to x1.1; five wins +10 on the target`);
 }
 
@@ -380,7 +380,7 @@ console.log('5) Four offers, a six percent push, a brand that walks, and a signi
     if (dirty.sponsor?.rep !== 'bad') fail('the bad deal is not marked bad');
     if (!near(booksOf(dirty).fanMood, mood - 6, 0.001)) fail(`the bad brand moved the fans ${booksOf(dirty).fanMood - mood}, promised -6`);
     if (dirty.boardConfidence !== conf + 1) fail(`the bad brand moved the board ${dirty.boardConfidence - conf}, promised +1`);
-    if (fanMoodTarget(dirty) !== fanMoodTarget(s) + BAD_SPONSOR_MOOD) fail(`the bad shirt moved the mood target ${fanMoodTarget(dirty) - fanMoodTarget(s)}, designed ${BAD_SPONSOR_MOOD}`);
+    if (gateMoodTarget(dirty) !== gateMoodTarget(s) + BAD_SPONSOR_MOOD) fail(`the bad shirt moved the mood target ${gateMoodTarget(dirty) - gateMoodTarget(s)}, designed ${BAD_SPONSOR_MOOD}`);
     if (!near(dirty.budget - s.budget, bad.perSeason, 0.011)) fail('the bad brand did not pay what it said');
   }
   /* The engine's own three shape signing still works beside the desk. */

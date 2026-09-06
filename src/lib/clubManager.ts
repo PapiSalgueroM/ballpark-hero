@@ -11620,6 +11620,15 @@ export function loadCareer(): CareerState | null {
        club's day one levels and fresh books before any screen reads them. */
     ensureFacilities(parsed);
     ensureBooks(parsed);
+    /* Round 465's rule, repaired on the way in: zero board confidence IS the
+       sack, so a save that carries zero without being sacked is a save the
+       engine never sacked, written by a build whose between-matches paths
+       could still take the last point off. It opens on its last point rather
+       than on a header that reads "Sacked" over a manager who is playing on
+       Saturday. */
+    if (!parsed.sacked && typeof parsed.boardConfidence === 'number' && parsed.boardConfidence <= 0) {
+      parsed.boardConfidence = 1;
+    }
     /* Round 154: the custom club's identity is rebuilt from the save the
        moment it is opened, measured against the squad as saved, and cleared
        just as firmly when the save is a normal one, so a stale registration
