@@ -256,7 +256,11 @@ export function LiveSimScreen({
             'text-[10px] font-bold px-2 py-0.5 rounded-full',
             stage === 'done' ? 'bg-secondary text-muted-foreground' : 'bg-red-500/15 text-red-400',
           )}>
-            {stage === 'done' ? 'FT' : `LIVE ${Math.min(90, Math.floor(clock))}'`}
+            {/* Round 472: the whistle went after the board went up, so the
+                badge says when. The number is the report's own. */}
+            {stage === 'done'
+              ? (report?.detail?.added ? `FT 90+${report.detail.added.h2}'` : 'FT')
+              : `LIVE ${Math.min(90, Math.floor(clock))}'`}
           </div>
         </div>
         <div className="flex items-center justify-center gap-3 mt-1">
@@ -323,12 +327,14 @@ export function LiveSimScreen({
         )}
       </div>
 
-      {/* flow strip: the engine's balance of play, goals push it around */}
+      {/* flow strip: the engine's balance of play, goals push it around.
+          Round 472: with the other club's name on it rather than "Them", the
+          same rule the full time report now follows. */}
       <div className="bg-card border border-border rounded-xl p-2.5">
-        <div className="flex items-center justify-between text-[9px] text-muted-foreground uppercase tracking-wider mb-1">
-          <span className="text-primary normal-case font-bold">{career.clubName}</span>
-          <span>Balance of play</span>
-          <span className="normal-case font-bold">Them</span>
+        <div className="flex items-center justify-between gap-2 text-[9px] text-muted-foreground uppercase tracking-wider mb-1">
+          <span className="text-primary normal-case font-bold truncate">{career.clubName}</span>
+          <span className="shrink-0">Balance of play</span>
+          <span className="normal-case font-bold truncate">{opponent}</span>
         </div>
         <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary">
           <div className="bg-primary" style={{ width: `${Math.round(possMine * 100)}%`, transition: 'width 0.8s' }} />

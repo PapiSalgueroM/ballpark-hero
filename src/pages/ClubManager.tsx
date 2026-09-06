@@ -185,7 +185,7 @@ const ClubManager = () => {
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens in January, on the first Saturday of the new year in most leagues and a little later in one long enough to reach January on its own; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
-              <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
+              <p>📊 <span className="font-semibold text-foreground">One match, two ways through it.</span> Play Live puts it on the pitch as moving circles at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break, where the subs, the shape and the team talk are yours. Quick Sim plays the same match without you and goes straight to the report. It really is the same match: both ways kick off through the same engine, so the only thing the live one adds is your say at half time. The report gives you the scoreline with the stoppage time both halves ran to, scorers, cards, injuries, possession as the two shares of the ball, shots, expected goals, a momentum graph drawn from who had the chances in each ten minutes, and every player's rating on both sides. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition. Above it all run the award races: the league's golden boot board, a player of the season watch scored by one formula for everyone, and the Ballon d'Or conversation, all settled with the season and named in your season review.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
@@ -941,8 +941,7 @@ const ClubManager = () => {
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
                 onQuickSim={() => { setHubPanel(null); g.quickPlay(); }}
-                onWatch={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
-                onPlay={() => { setHubPanel(null); g.play(); }}
+                onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
               />
             </div>
@@ -983,30 +982,27 @@ const ClubManager = () => {
                 </div>
                 {/* Round 157: the team talk moved into the Match Centre, because
                     the owner said it was being pushed on him before every match.
-                    The hub keeps the two ways to play: quick sim the result, or
-                    play it with the half time stop. Facts, form, head-to-head
-                    and the talk all live one tap away. */}
-                <div className="mt-3 grid grid-cols-3 gap-1.5 max-w-sm mx-auto">
+                    Facts, form, head-to-head and the talk all live one tap away.
+                    Round 472: and the hub keeps the two ways through a match
+                    rather than three. Play Match and Watch Live were the same
+                    fixture with the pitch drawn or not drawn, so they are one
+                    button, and the engine plays the same match whichever of
+                    the two you take. */}
+                <div className="mt-3 grid grid-cols-2 gap-2 max-w-sm mx-auto">
+                  <button
+                    onClick={() => { setWatchMode(true); g.play(); }}
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    <Play className="w-4 h-4" /> Play Live
+                  </button>
                   <button
                     onClick={g.quickPlay}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
                   >
                     ⚡ Quick Sim
                   </button>
-                  {/* Round 158: the little circles. Watch the match play out. */}
-                  <button
-                    onClick={() => { setWatchMode(true); g.play(); }}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-xs sm:text-sm hover:opacity-90 transition-opacity"
-                  >
-                    📺 Watch Live
-                  </button>
-                  <button
-                    onClick={g.play}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
-                  >
-                    <Play className="w-3.5 h-3.5" /> Play Match
-                  </button>
                 </div>
+                <p className="mt-1.5 text-[9px] text-muted-foreground">On the pitch with the break in your hands, or straight to the report. Same match either way.</p>
                 <button
                   onClick={() => setHubPanel('matchCentre')}
                   className="mt-2 text-[11px] font-bold text-primary hover:underline"

@@ -7,12 +7,12 @@ import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Cele
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
-function StatBar({ label, mine, theirs, decimals = 0 }: {
-  label: string; mine: number; theirs: number; decimals?: number;
+function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
+  label: string; mine: number; theirs: number; decimals?: number; suffix?: string;
 }) {
   const total = mine + theirs;
   const myShare = total > 0 ? (mine / total) * 100 : 50;
-  const fmt = (n: number) => decimals ? n.toFixed(decimals) : String(n);
+  const fmt = (n: number) => (decimals ? n.toFixed(decimals) : String(n)) + suffix;
   return (
     <div>
       <div className="flex items-center justify-between text-[10px] mb-0.5">
@@ -31,8 +31,11 @@ function StatBar({ label, mine, theirs, decimals = 0 }: {
 /** The full stats block, only when the report carries the Round 157 detail. */
 function StatsBlock({ stats }: { stats: MatchStats }) {
   return (
-    <div className="space-y-2 text-left">
-      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} />
+    <div className="space-y-2">
+      {/* Round 472: possession wears its percent sign on both sides, because
+          the two numbers are a split of one hundred and a bare "58" against a
+          bare "42" reads as a count of something. */}
+      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} suffix="%" />
       <StatBar label="Shots" mine={stats.shots} theirs={stats.oppShots} />
       <StatBar label="On target" mine={stats.onTarget} theirs={stats.oppOnTarget} />
       <StatBar label="Expected goals" mine={stats.xg} theirs={stats.oppXg} decimals={2} />
@@ -49,6 +52,8 @@ function StatsBlock({ stats }: { stats: MatchStats }) {
  * data did not move, only the picture.
  */
 function MomentumArea({ momentum }: { momentum: number[] }) {
+  /* Round 472: the series is written onto the element it draws, so a harness
+     can hold the picture to the sim's own numbers rather than to a shape. */
   const W = 100;
   const H = 40;
   const MID = H / 2;
@@ -67,7 +72,13 @@ function MomentumArea({ momentum }: { momentum: number[] }) {
   line += ` L ${pts[pts.length - 1].x} ${pts[pts.length - 1].y}`;
   const area = `${line} L ${W} ${MID} L 0 ${MID} Z`;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-10" preserveAspectRatio="none" aria-hidden="true">
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full h-10"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      data-cm-momentum={momentum.join(' ')}
+    >
       <defs>
         <clipPath id="cmMomUp"><rect x="0" y="0" width={W} height={MID} /></clipPath>
         <clipPath id="cmMomDown"><rect x="0" y={MID} width={W} height={MID} /></clipPath>
@@ -101,6 +112,10 @@ interface MatchReportCardProps {
  */
 export function MatchReportCard({ report, clubName, onContinue }: MatchReportCardProps) {
   const r = report;
+  /* Round 472. His words: real team names, never "them". The other club is on
+     the report twice already, as home or away, so every heading that used to
+     say Them says who it means. */
+  const opponent = r.home === clubName ? r.away : r.home;
   const resultTone = r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
   const resultWord = r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
   /* Round 157: the ratings list folds away because ten rows of numbers is a
@@ -140,7 +155,21 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             🏟️ {detail.venue === 'home' ? 'Your ground' : detail.venue === 'away' ? 'Away day' : 'Neutral venue'}
             {' · '}crowd {detail.attendance.toLocaleString()}
             {detail.capacity ? ` of ${detail.capacity.toLocaleString()}` : ''}
-            {detail.added ? ` · +${detail.added.h1}' & +${detail.added.h2}' added` : ''}
+          </div>
+        )}
+        {/* Round 472: the clock, read the way a scoreboard reads it. His
+            words: stoppage time shown the way the big score apps do it. Both
+            halves ran past their whistle, so both say by how much instead of
+            the report printing a bare 90 and calling that the match. */}
+        {detail?.added && (
+          <div className="flex items-center justify-center gap-2 mb-2 text-[10px] text-muted-foreground">
+            <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums" data-cm-added="h1">
+              45+{detail.added.h1}&apos;
+            </span>
+            <span className="uppercase tracking-wider text-[8px]">Full time</span>
+            <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums" data-cm-added="h2">
+              90+{detail.added.h2}&apos;
+            </span>
           </div>
         )}
         {/* Laid out at final size from frame one; only opacity moves in. */}
@@ -148,22 +177,26 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
           {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : ''}
         </h2>
 
+        {/* Round 472: both names sit centred over their own half of the
+            scoreboard. They used to be pushed in against the score, which left
+            one club ragged on a narrow phone and was the last text on this
+            card that was not centred. */}
         <div className="flex items-center justify-center gap-3">
-          <div className="flex-1 text-right">
+          <div className="flex-1 min-w-0">
             <div className={cn('text-sm font-bold truncate', r.home === clubName ? 'text-primary' : 'text-foreground')}>{r.home}</div>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-secondary font-display text-2xl font-bold text-foreground shrink-0 tabular-nums">
             {r.homeGoals} - {r.awayGoals}
           </div>
-          <div className="flex-1 text-left">
+          <div className="flex-1 min-w-0">
             <div className={cn('text-sm font-bold truncate', r.away === clubName ? 'text-primary' : 'text-foreground')}>{r.away}</div>
           </div>
         </div>
 
         {(r.myScorers.length > 0 || r.oppScorers.length > 0) && (
-          <div className="grid grid-cols-2 gap-3 mt-4 text-left">
+          <div className="grid grid-cols-2 gap-3 mt-4">
             <div>
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">{clubName} scorers</div>
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{clubName}</div>
               {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: `${0.35 + i * 0.14}s` }}>
@@ -173,7 +206,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               ))}
             </div>
             <div>
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">Them</div>
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
               {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.oppScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: `${0.45 + i * 0.14}s` }}>⚽ {sc.name} {sc.minute}'</p>
@@ -217,10 +250,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             the sim from the same lambdas the goals were drawn from. */}
         {detail && (
           <div className="mt-4 bg-surface-2 border border-border/60 rounded-xl p-3">
-            <div className="flex items-center justify-between text-[9px] text-muted-foreground uppercase tracking-wider mb-2">
-              <span className="text-primary font-bold normal-case">{clubName}</span>
-              <span>Match stats</span>
-              <span className="font-bold normal-case">Them</span>
+            <div className="flex items-center justify-between gap-2 text-[9px] text-muted-foreground uppercase tracking-wider mb-2">
+              <span className="text-primary font-bold normal-case truncate">{clubName}</span>
+              <span className="shrink-0">Match stats</span>
+              <span className="font-bold normal-case truncate">{opponent}</span>
             </div>
             <StatsBlock stats={detail.stats} />
             {/* Round 169: momentum as one continuous flow, us above the
@@ -228,12 +261,19 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 Round 178: possession and shots ride ON the chart now, the
                 same numbers the stats block carries, read from one place. */}
             <div className="mt-3">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-[10px] font-bold text-primary tabular-nums">{detail.stats.possession}%</span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Balance of play</span>
-                <span className="text-[10px] font-bold text-muted-foreground tabular-nums">{100 - detail.stats.possession}%</span>
+              {/* Round 472: the two shares of the ball, both wearing a percent
+                  sign and both under the name of the club that had it, so
+                  they read as one hundred split two ways. */}
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-[10px] font-bold text-primary tabular-nums" data-cm-poss="mine">{detail.stats.possession}%</span>
+                <span className="text-[9px] text-muted-foreground uppercase tracking-wider shrink-0">Balance of play</span>
+                <span className="text-[10px] font-bold text-muted-foreground tabular-nums" data-cm-poss="theirs">{100 - detail.stats.possession}%</span>
               </div>
               <MomentumArea momentum={detail.momentum} />
+              <div className="flex items-center justify-between gap-2 text-[8px] text-muted-foreground/80 uppercase tracking-wider">
+                <span className="truncate">{clubName} on top</span>
+                <span className="truncate">{opponent} on top</span>
+              </div>
               <div className="flex justify-between text-[8px] text-muted-foreground/70">
                 <span>0'</span><span>45'</span><span>90'</span>
               </div>
@@ -248,7 +288,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
 
         {/* Round 157: the man of the match, and everyone's number behind him. */}
         {detail && motm && (
-          <div className="mt-3 text-left bg-surface-2 border border-border/60 rounded-xl p-3">
+          <div className="mt-3 bg-surface-2 border border-border/60 rounded-xl p-3">
             <div className="flex items-center justify-between">
               <div className="text-[11px] text-foreground">
                 ⭐ <span className="font-bold">{motm.name}</span>
@@ -260,9 +300,9 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 The opposition sheet only exists when their world can field a
                 real eleven; thin worlds keep the old one-liner. */}
             {detail.oppRatings && detail.oppRatings.length > 0 ? (
-              <div className="mt-2 grid grid-cols-2 gap-2 text-left">
+              <div className="mt-2 grid grid-cols-2 gap-2">
                 <div>
-                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5">Our top rated</div>
+                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{clubName} best</div>
                   {detail.myRatings.slice(0, 3).map((p, i) => (
                     <div key={i} className="flex items-center gap-1 text-[10px]">
                       <span className="text-foreground truncate">{p.name}</span>
@@ -271,7 +311,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                   ))}
                 </div>
                 <div>
-                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5">Their top rated</div>
+                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{opponent} best</div>
                   {detail.oppRatings.slice(0, 3).map((p, i) => (
                     <div key={i} className="flex items-center gap-1 text-[10px]">
                       <span className="text-muted-foreground truncate">{p.name}</span>
@@ -282,7 +322,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 </div>
               </div>
             ) : detail.oppBest ? (
-              <div className="text-[10px] text-muted-foreground mt-1">Their danger man on the day: {detail.oppBest}</div>
+              <div className="text-[10px] text-muted-foreground mt-1">{opponent}’s danger man on the day: {detail.oppBest}</div>
             ) : null}
             <button
               onClick={() => setShowRatings(v => !v)}
@@ -310,7 +350,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 {/* Round 178: the other dressing room's full sheet. */}
                 {detail.oppRatings && detail.oppRatings.length > 0 && (
                   <>
-                    <div className="text-[8px] text-muted-foreground uppercase tracking-wider pt-1.5">{r.won || r.drawn ? 'Them' : 'Them (they enjoyed it more)'}</div>
+                    <div className="text-[8px] text-muted-foreground uppercase tracking-wider pt-1.5 truncate">{r.won || r.drawn ? opponent : `${opponent} (they enjoyed it more)`}</div>
                     {detail.oppRatings.map((p, i) => (
                       <div key={`o${i}`} className="flex items-center gap-2 text-[10px]">
                         <span className="w-7 shrink-0 text-muted-foreground">{p.pos}</span>
@@ -333,7 +373,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         )}
 
         {r.events.length > 0 && (
-          <div className="mt-4 text-left bg-surface-2 border border-border/60 rounded-xl p-3">
+          <div className="mt-4 bg-surface-2 border border-border/60 rounded-xl p-3">
             {r.events.map((e, i) => (
               <p key={i} className="text-[11px] text-foreground py-0.5 cm-rise" style={{ animationDelay: `${0.5 + i * 0.1}s` }}>{e}</p>
             ))}

@@ -46,14 +46,13 @@ interface MatchCentreProps {
   talkRead: string | null;
   talkStale: boolean;
   onQuickSim: () => void;
-  /** Round 158: open the animated live viewer. */
-  onWatch: () => void;
-  onPlay: () => void;
+  /** Round 158's animated viewer, which Round 472 made the one live way in. */
+  onLive: () => void;
   onBack: () => void;
 }
 
 export function MatchCentre({
-  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onWatch, onPlay, onBack,
+  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onLive, onBack,
 }: MatchCentreProps) {
   const f = facts;
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
@@ -156,29 +155,27 @@ export function MatchCentre({
       {/* The talk, if you want one. Optional by design. */}
       <TeamTalkRow tone={tone} onTone={onTone} read={talkRead} when="before kick off" stale={talkStale} />
 
-      {/* Actions */}
-      <div className="grid grid-cols-3 gap-1.5">
+      {/* Actions. Round 472: one match, two ways through it. There used to be
+          three buttons here and two of them were the same fixture with the
+          theatre turned off, so Play Match and Watch Live are one thing now:
+          play it live. Same seed, same result either way, so choosing the
+          quick one costs you nothing but the ninety minutes. */}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={onLive}
+          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
+        >
+          <Play className="w-4 h-4" /> Play Live
+        </button>
         <button
           onClick={onQuickSim}
-          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs hover:bg-secondary/70 transition-colors"
+          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
         >
-          <Zap className="w-3.5 h-3.5" /> Quick Sim
-        </button>
-        <button
-          onClick={onWatch}
-          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-xs hover:opacity-90 transition-opacity"
-        >
-          📺 Watch Live
-        </button>
-        <button
-          onClick={onPlay}
-          className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs hover:bg-secondary/70 transition-colors"
-        >
-          <Play className="w-3.5 h-3.5" /> Play Match
+          <Zap className="w-4 h-4" /> Quick Sim
         </button>
       </div>
       <p className="text-[9px] text-muted-foreground text-center">
-        Quick Sim plays it in one shot and shows the full report. Watch Live shows the match as moving circles at your chosen speed, with the dressing room at the break. Play Match skips the theatre and stops at half time.
+        Play Live puts it on the pitch at your speed, with the dressing room at the break and subs and shape in your hands. Quick Sim plays the same match without you and goes straight to the report. Same match either way.
       </p>
     </div>
   );
