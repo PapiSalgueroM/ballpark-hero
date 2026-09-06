@@ -5,12 +5,13 @@ import type { ConquestSport } from './conquestDaily';
  * Round 459: ONE imperialism engine, and the sport is injected.
  *
  * src/lib/imperialism.ts, imperialismNba.ts, imperialismMlb.ts and
- * imperialismNhl.ts are four copies of one idea that differ only in the team
- * table they read, the number of rounds, the playoff labels, the scoreline
- * shape and the flavour of the headlines (measured 2026-09-05: the MLB and
- * NHL files diff in 60 lines out of 216, every one of them a renamed
- * identifier or a sport noun). That is the counter example CLAUDE.md names,
- * and a fifth copy for soccer would have made it worse.
+ * imperialismNhl.ts were four copies of one idea that differed only in the
+ * team table they read, the number of rounds, the playoff labels, the
+ * scoreline shape and the flavour of the headlines (measured 2026-09-05: the
+ * MLB and NHL files diffed in 60 lines out of 216, every one of them a
+ * renamed identifier or a sport noun). That is the counter example CLAUDE.md
+ * names, and a fifth copy for soccer would have made it worse. Round 476
+ * deleted all four.
  *
  * Every function here takes the sport as data. The canonical imperialism
  * rules do not change per sport:
