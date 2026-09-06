@@ -178,40 +178,82 @@ serve(async (req) => {
       );
     }
 
-    // The current driver's active span. Prefer the drivers table; fall back to
-    // the span of their own title years if they are not listed there.
+    /* ROUND 488: THE RACING SPAN IS DERIVED FROM RESULTS, because the column
+       that was supposed to hold it is empty.
+       nascar_drivers has 83 rows and every statistical column is null in all of
+       them: 79 have no first_year or last_year at all, and the four that do hold
+       19 and 20, a year truncated to its first two digits. So the old code fell
+       back to the span of the driver's own TITLE years, which is not a career.
+       Kevin Harvick's span was therefore 2014 to 2014, one season, against a
+       real career of 2001 to 2023, so nearly every true link to him was refused.
+       Martin Truex Jr. was 2017 to 2017. And a driver who never won a title had
+       no span at all, so seven of the twenty five starting drivers (Carl
+       Edwards, Dale Earnhardt Jr., Denny Hamlin, Jeff Burton, Kasey Kahne, Mark
+       Martin, Ryan Newman) could not be answered at all and the run ended on the
+       first guess.
+       The seasons a driver is RECORDED in are real and are already here: race
+       wins, pole positions and titles. Measured 2026-09-06, that gives all 25
+       starters a span, and the spans are close to the true careers (Harvick 2001
+       to 2022, Earnhardt Jr. 2000 to 2016, Hamlin 2006 to 2025).
+       It is a LOWER BOUND and deliberately so: a career starts before the first
+       win and ends after the last, so this can still refuse a true link at the
+       very edges. Refusing what cannot be proven is the direction this validator
+       is supposed to fail in. Nothing here is invented.
+       The three queries are filtered by name rather than reading whole tables,
+       which also keeps nascar_race_results (2,104 rows) clear of the 1,000 row
+       cap that Round 487 found hiding Grand Slam champions. */
     const curRow = drivers.find((d) => resolve(d.driver_name) === c);
-    let firstYear = curRow?.first_year ?? null;
-    let lastYear = curRow?.last_year ?? null;
+    const curProper =
+      curRow?.driver_name ??
+      champs.find((r) => resolve(r.driver_name) === c)?.driver_name ??
+      currentDriver.trim();
+    const nameCandidates = [...new Set([curProper, currentDriver.trim()])];
 
-    if (firstYear == null || lastYear == null) {
-      const curTitles = champs.filter((r) => resolve(r.driver_name) === c).map((r) => r.year);
-      if (curTitles.length > 0) {
-        firstYear = firstYear ?? Math.min(...curTitles);
-        lastYear = lastYear ?? Math.max(...curTitles);
+    const [winRes, cupWinRes, poleRes] = await Promise.all([
+      supabase.from("nascar_race_results").select("year").in("winner", nameCandidates),
+      supabase.from("nascar_cup_races").select("year").in("winning_driver", nameCandidates),
+      supabase.from("nascar_cup_races").select("year").in("pole_winner", nameCandidates),
+    ]);
+
+    const seasons: number[] = [];
+    for (const r of champs) if (resolve(r.driver_name) === c) seasons.push(r.year);
+    for (const set of [winRes.data, cupWinRes.data, poleRes.data]) {
+      for (const row of (set ?? []) as { year: number | null }[]) {
+        if (typeof row.year === "number") seasons.push(row.year);
       }
     }
+    /* the stored span is believed only when it is a real year, for the reason
+       in the comment above. */
+    const sane = (y: number | null | undefined) =>
+      typeof y === "number" && y >= 1900 && y <= 2100 ? y : null;
+    const storedFirst = sane(curRow?.first_year);
+    const storedLast = sane(curRow?.last_year);
+    if (storedFirst != null) seasons.push(storedFirst);
+    if (storedLast != null) seasons.push(storedLast);
 
-    if (firstYear == null || lastYear == null) {
+    if (seasons.length === 0) {
       return json(
         {
           valid: false,
-          reason: `We do not have career dates for ${currentDriver}, so this link cannot be verified.`,
+          reason: `We have no recorded seasons for ${currentDriver}, so this link cannot be verified.`,
           fullName: properName,
         },
         corsHeaders,
       );
     }
 
+    const firstYear = Math.min(...seasons);
+    const lastYear = Math.max(...seasons);
+
     // Valid when the guessed driver took a title in a season the current driver raced.
-    const beatYears = titleYears.filter((y) => y >= firstYear! && y <= lastYear!);
+    const beatYears = titleYears.filter((y) => y >= firstYear && y <= lastYear);
 
     if (beatYears.length === 0) {
       const span = titleYears.join(", ");
       return json(
         {
           valid: false,
-          reason: `${properName} won the title in ${span}, none of them while ${currentDriver} was racing in the Cup Series.`,
+          reason: `${properName} won the title in ${span}, none of them between ${firstYear} and ${lastYear}, the seasons we have ${currentDriver} on record for.`,
           fullName: properName,
         },
         corsHeaders,

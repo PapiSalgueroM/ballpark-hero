@@ -20,6 +20,11 @@
       "sha256": "dc8df742548a54e50bfd2399539b457841f917caa3bd00ed0b204540b96d65af",
       "version": 8,
       "date": "2026-09-06"
+    },
+    "nascar-chain-validate": {
+      "sha256": "bb3315bd6978e9035cbb36eae2aa5cede90ecf54e771b949f24f16fb0fbb0c3e",
+      "version": 6,
+      "date": "2026-09-06"
     }
   },
   "unverified": [
@@ -32,7 +37,6 @@
     "football-grid-validate",
     "guess-nation-daily",
     "mlb-connect4-validate",
-    "nascar-chain-validate",
     "nascar-daily",
     "nba-connect4-validate",
     "nba-evaluate-lineup",
