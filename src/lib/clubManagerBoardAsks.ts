@@ -13,10 +13,14 @@
  *
  *   NATIONALITY  one more player from the club's own country than it already
  *                has. The country comes from the league (LEAGUE_NATIONS) and
- *                the player's country comes from src/data/clubManagerNations.ts,
- *                which is a pull from the same Supabase rows the ratings and
- *                values came out of. A player the table has no country for
- *                counts for nobody: unknown is never a guess.
+ *                the player's from Round 194's per world nationality map
+ *                (src/data/playerNationalities.ts), which is the same source
+ *                the transfer screen's nation filter and flags read. Per
+ *                world matters here as much as it does there: the 2010 Aaron
+ *                Ramsey is Welsh and the modern one is English, so an ask
+ *                counted off one flat map would be counting the wrong men in
+ *                an era save. A player the map has no country for counts for
+ *                nobody: unknown is never a guess.
  *   EXPERIENCE   one more player aged 30 or over than the club already has.
  *   POSITION     a signing in the thinnest line in the squad.
  *   YOUNG STAR   a signing 21 or under at a rating floor read off the market.
@@ -54,7 +58,7 @@ import type { BoardObjective, CareerState, CMPlayer, MarketPlayer, ObjectiveStat
 import {
   LEAGUE_NATIONS, SQUAD_LIMIT, buildMarket, careerLeagueOf, groupOf, money,
 } from '@/lib/clubManager';
-import { nationOfPlayer } from '@/data/clubManagerNations';
+import { nationalityOf } from '@/data/playerNationalities';
 
 /** Bump when the shape of a stored ask changes so old saves rebuild theirs. */
 export const BOARD_ASKS_VERSION = 1;
@@ -123,10 +127,11 @@ export function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'cu
   return LEAGUE_NATION_ALIAS[raw] ?? raw;
 }
 
-/** Squad members who count towards a country quota. A generated player and a
- *  player the pull has no country for both count for nobody, on purpose. */
-function fromCountry(squad: CMPlayer[], country: string): number {
-  return squad.filter(p => !p.onLoan && nationOfPlayer(p.name) === country).length;
+/** Squad members who count towards a country quota, read in the save's own
+ *  world. A generated player and a player the map has no country for both
+ *  count for nobody, on purpose. */
+function fromCountry(squad: CMPlayer[], country: string, eraId: string | undefined): number {
+  return squad.filter(p => !p.onLoan && nationalityOf(eraId, p.name) === country).length;
 }
 
 /* ================================================================== */
@@ -167,8 +172,8 @@ export function askCandidates(career: CareerState): AskCandidate[] {
   /* ---- nationality ---- */
   const country = clubCountry(career);
   if (country) {
-    const have = fromCountry(squad, country);
-    const pool = affordable.filter(p => nationOfPlayer(p.name) === country);
+    const have = fromCountry(squad, country, career.eraId);
+    const pool = affordable.filter(p => nationalityOf(career.eraId, p.name) === country);
     /* Two spare targets, not one: the market screen sells to other clubs too
        and a single reachable name is a coin flip dressed as an objective. */
     if (pool.length >= 2 && room >= 1 && have + 1 <= SQUAD_LIMIT) {
@@ -409,7 +414,7 @@ export function askStatus(career: CareerState, objective: BoardObjective): Objec
   let met = false;
 
   if (objective.id === 'natQuota') {
-    met = !!objective.country && fromCountry(squad, objective.country) >= objective.target;
+    met = !!objective.country && fromCountry(squad, objective.country, career.eraId) >= objective.target;
   } else if (objective.id === 'veterans') {
     const age = objective.minAge ?? VETERAN_AGE;
     met = squad.filter(p => !p.onLoan && p.age >= age).length >= objective.target;
