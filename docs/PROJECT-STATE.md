@@ -2410,11 +2410,17 @@ roadmap when a round touches the game named:
   and being re-dated twice for a change nobody made. That is the Round 421 race dropping
   the block, not re-rolling it, which is the worse failure and the one CLAUDE.md warns
   about. The hook now draws the pair once per mount through src/lib/firstDraw.ts and is off
-  RAW_RANDOM_BASELINE (24 files down to 23). **The other 23 are still there**, and four of
-  them (/missing-eleven, /missing-five, /missing-nine, /rank-em) are named in that fence's
-  own comment as probably losing real content the same way. The measurement that would
-  settle it is the one just done here: read the last dozen builds of each snapshot in git
-  and look for a block that comes and goes.
+  RAW_RANDOM_BASELINE (24 files down to 23).
+  **And the four routes that fence's own comment suspected are CLEARED, measured the same
+  way.** Reading the last fourteen builds of each snapshot and counting its readable blocks:
+  /missing-eleven, /missing-five and /missing-nine are steady on every count, and /rank-em
+  moved one paragraph once, fourteen builds ago, and has held since, which is a copy edit
+  and not a race. /higher-lower was the only one of the five that swung, on exactly the two
+  headings, in exactly one build. So the fence's note that those four "may be losing real
+  content to this race" is answered: they are not. The other 23 files on the baseline are
+  still raw draws and should be tidied when their game is next touched, but nothing is
+  bleeding while they sit there. The measurement is a dozen lines of git history reading
+  and it is the one to reach for the next time a snapshot is accused of moving.
 - **Missing XI, "club at the time" convention for a summer tournament.** Nacho's Euro 2024
   semi-final entry says Real Madrid, which he had left in June 2024; Strinić's 2018 entry
   says Sampdoria the same way. Decide the convention (club of the season just finished, or
