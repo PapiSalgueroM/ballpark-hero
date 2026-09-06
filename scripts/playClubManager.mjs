@@ -30,7 +30,9 @@ import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
-const MAX_STEPS = Number(process.env.MAX_STEPS || 260);
+/* Round 472: a match is two skips longer than it was, because Play Match and
+   Watch Live merged into one live flow, so the season needs more steps. */
+const MAX_STEPS = Number(process.env.MAX_STEPS || 420);
 const V = !!process.env.VERBOSE;
 
 const findings = [];
@@ -168,6 +170,8 @@ if (!/Season 1/i.test(t)) {
 /* ---------- play a season ---------- */
 console.log('2) Playing a season through the interface');
 let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, seasonEnd = false, sacked = false;
+/* Round 472: how many times the live viewer was skipped through. */
+let liveSkips = 0;
 let lastHt = null;
 /* Round 157: the two new match-day surfaces get walked once each. */
 let centreChecked = false, quickSimChecked = false;
@@ -229,6 +233,29 @@ for (let step = 0; step < MAX_STEPS; step++) {
       break;
     }
     continue;
+  }
+
+  /* --- Round 472: the live viewer is the one way to play a match out now,
+         so the season walk goes through it rather than past it. Play Match
+         and Watch Live were the same fixture with the pitch drawn or not
+         drawn, and they are one button. A manager in a hurry presses skip,
+         which is what this does: skip to the break, work the dressing room
+         in the branch above, skip to the whistle, take the full report. This
+         sits ABOVE the full time branch on purpose, because the viewer draws
+         its own FULL TIME across the pitch and the way on from there is the
+         report button rather than a Continue. --- */
+  if (/MATCH LIVE/i.test(t)) {
+    if (await tap(/full report/i, 'full report out of the live viewer')) {
+      await page.waitForTimeout(600);
+      continue;
+    }
+    if (await tap(/skip/i, 'skip ahead in the live viewer')) {
+      await page.waitForTimeout(700);
+      liveSkips++;
+      continue;
+    }
+    note('STUCK  ', 'the live viewer offered neither a skip nor a way out');
+    break;
   }
 
   if (/FULL TIME/i.test(t)) {
@@ -297,6 +324,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
       if (!/Engine odds/i.test(tc)) note('BROKEN ', 'the match centre shows no engine odds line');
       if (!/Form/i.test(tc)) note('BROKEN ', 'the match centre shows no form guide');
       if (!/Quick Sim/i.test(tc)) note('BROKEN ', 'the match centre offers no quick sim');
+      if (!/Play Live/i.test(tc)) note('BROKEN ', 'the match centre offers no way to play it live');
+      /* Round 472: two ways through a match and no more. The third button was
+         the same fixture as one of the other two. */
+      if (/Watch Live|Play Match/i.test(tc)) note('BROKEN ', 'the match centre still offers the old third way into a match');
       if (!/Team talk/i.test(tc)) note('BROKEN ', 'the team talk is not in the match centre');
       if (!await tap(/Club home/i, 'back out of the match centre')) {
         note('BROKEN ', 'no way back out of the match centre');
@@ -330,12 +361,12 @@ for (let step = 0; step < MAX_STEPS; step++) {
   /* --- Round 158: watch a match live, once, all the way through: viewer,
          speed controls, skip to the break, the embedded dressing room, the
          second half replay, the full report handoff. --- */
-  if (!watchChecked && centreChecked && quickSimChecked && /Watch Live/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
+  if (!watchChecked && centreChecked && quickSimChecked && /Play Live/i.test(t) && !/FULL TIME|HALF TIME|MATCH LIVE/i.test(t)) {
     watchChecked = true;
-    if (await tapText(/Watch Live/i, 'watch live')) {
+    if (await tapText(/Play Live/i, 'play it live')) {
       await page.waitForTimeout(900);
       let tw = await screen();
-      if (!/MATCH LIVE/i.test(tw)) note('BROKEN ', 'watch live did not open the live viewer');
+      if (!/MATCH LIVE/i.test(tw)) note('BROKEN ', 'playing it live did not open the live viewer');
       if (!/4x/.test(tw)) note('BROKEN ', 'no speed controls on the live viewer');
       if (!/Balance of play/i.test(tw)) note('BROKEN ', 'no balance of play strip on the viewer');
       await tapText(/^4x$/, '4x speed');
@@ -404,7 +435,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
   }
 
   // otherwise: get back to the hub and press play
-  if (!await tap(/play match|play next|^play$|next fixture/i, 'play')) {
+  if (!await tap(/play live|play match|play next|^play$|next fixture/i, 'play')) {
     if (!await tap(/back to club|hub|home/i, 'back to the hub')) {
       if (!await tap(/continue|next/i, 'continue')) {
         /* A stuck report that does not say what was on offer is a report you
@@ -425,7 +456,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
 }
 
 const ending = seasonEnd ? 'played the season out' : sacked ? 'was sacked, which is a real ending' : 'ran out of steps';
-console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows`);
+console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows, ${liveSkips} skips through the live viewer`);
 console.log(`   ending: ${ending}`);
 if (!seasonEnd && !sacked && fullTimes < 5) note('SHALLOW', `only reached ${fullTimes} matches, so most of the season was never exercised`);
 if (fullTimes < 5) note('SHALLOW', `only ${fullTimes} matches were played, which is too few to have exercised much`);

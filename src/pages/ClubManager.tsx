@@ -123,7 +123,12 @@ const ClubManager = () => {
   const [clubView, setClubView] = useState<string | null>(null);
   /* Round 158: watching the match live instead of jumping between screens.
      While this is on, the halftime and full time phases render inside the
-     animated viewer; turning it off drops back to the classic screens. */
+     animated viewer; turning it off drops back to the classic screens.
+     Round 472: Play Live turns it on and Quick Sim turns it off, both of
+     them, every time. Before that the quick sim only ever set the phase, so
+     a live match that ended somewhere other than the full report (a January
+     window landing on the same tap) left this on, and the next quick sim
+     animated ninety minutes at a player who had asked not to watch. */
   const [watchMode, setWatchMode] = useState(false);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
@@ -940,7 +945,7 @@ const ClubManager = () => {
                 onTone={g.talk}
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
-                onQuickSim={() => { setHubPanel(null); g.quickPlay(); }}
+                onQuickSim={() => { setHubPanel(null); setWatchMode(false); g.quickPlay(); }}
                 onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
               />
@@ -997,7 +1002,7 @@ const ClubManager = () => {
                     <Play className="w-4 h-4" /> Play Live
                   </button>
                   <button
-                    onClick={g.quickPlay}
+                    onClick={() => { setWatchMode(false); g.quickPlay(); }}
                     data-cm-way="quick"
                     className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
                   >
