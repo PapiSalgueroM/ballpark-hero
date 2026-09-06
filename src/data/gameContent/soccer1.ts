@@ -241,10 +241,13 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Play the match, read the report, answer the press, and manage the dressing room between games.",
       "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
       "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+      "Meet the two asks your board makes in the market. They are on the board screen under In the market, with the line that says how each is judged, and every number in them is worked out from your squad, your pot and your era.",
       "Keep the confidence meter alive, hit the board's objectives, collect trophies, and roll into next season while the whole world ages around you.",
     ],
     rules: [
       "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+      "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+      "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
       "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
       "Each past era is a sealed world: real squads and values from its own year, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
       "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
@@ -284,6 +287,14 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Do wages come out of my transfer budget?",
         a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers and facility upgrades are the lines that move the kitty.",
+      },
+      {
+        q: "The board wants a signing I cannot afford. Is that a bug?",
+        a: "It should never happen, and there is a harness that walks every club in every era to prove it. Both asks are worked out from the market that save really has and the money you really hold, with spare targets on top, and the two together are checked against your pot before either goes on the board. If you genuinely cannot see a way to meet one, report it: the board is meant to ask for hard things, not impossible ones."
+      },
+      {
+        q: "Why does the board ask for a 21 year old rated 80 rather than one who will reach 90?",
+        a: "Because you can see age and rating on the market screen and you cannot see potential, so an ask about potential would be a lottery ticket rather than a target. The ceiling is still what the board is buying: a signing of 21 or under can add up to ten rating points as he grows, and about one in twelve is carrying a lot more than that."
       },
       {
         q: "Are the sponsors real companies?",
