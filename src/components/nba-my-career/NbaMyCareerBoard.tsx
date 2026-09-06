@@ -108,6 +108,14 @@ export default function NbaMyCareerBoard() {
     `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}`,
   );
 
+  /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
+     scroll rule like every other one. Measured on a 390 by 844 phone before
+     this line existed: tapping News from the bottom of the hub left the page
+     at scrollY 443 with the panel's own back button 246px above the fold, so
+     the player landed underneath the screen he had just opened. The hook does
+     nothing when the top of the panel is already readable. */
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
+
   const done = phase === 'retired';
   useGameCompletion('nba-my-career', done, career ? nbaLegacyOf(career).score : 0);
 
@@ -546,7 +554,7 @@ export default function NbaMyCareerBoard() {
   if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
-      <div className="space-y-3">
+      <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
           title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : '\u{1F4F0} News Feed'}
           onBack={() => setPanel('none')}

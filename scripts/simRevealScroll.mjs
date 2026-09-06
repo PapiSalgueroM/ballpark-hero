@@ -53,7 +53,7 @@ const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SWEEP_BASE || process.env.BASE || 'http://127.0.0.1:4173';
@@ -155,7 +155,12 @@ export { engine };
   return bundle;
 }
 
-const { engine } = await import(seedSoccerSave());
+/* Round 470: the bundle path goes through pathToFileURL. A bare Windows path
+   is not a URL node's ESM loader will take ("Received protocol 'c:'"), so this
+   harness had thrown before its first check on every Windows checkout since it
+   was written, exactly the way simManagers' control did until Round 469. The
+   check itself is untouched. */
+const { engine } = await import(pathToFileURL(seedSoccerSave()).href);
 const { initCareer, advanceYouthYear, FALLBACK_CLUBS } = engine;
 let soccerSave = initCareer(
   'Playtest', 'England', 'ST', '2020s',
