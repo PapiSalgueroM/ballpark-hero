@@ -8512,9 +8512,24 @@ function buildMatchDetail(args: {
   const oppFouls = ri(6, 14);
 
   /* The timeline: everything above, in minute order, ready to replay. */
-  /* Round 169: the referee's board, like his match app models show. Pure
-     clock flavor, deterministic in range, never touching event minutes. */
-  const added = { h1: ri(1, 4), h2: ri(2, 6) };
+  /* Round 169: the referee's board.
+     Round 472: and now it is worked out from what actually stopped the game
+     in that half, goals, cards and injuries, rather than rolled out of
+     nothing. Subs are left out on purpose: the only ones this sim makes
+     happen in the dressing room, and a break does not stop a running clock.
+     A one goal half still gets a board, because there is always a bit. */
+  const stoppages = (from: number, to: number): number => {
+    let n = 0;
+    for (const sc of args.myScorers) if (sc.minute > from && sc.minute <= to) n += 1;
+    for (const sc of args.oppScorers) if (sc.minute > from && sc.minute <= to) n += 1;
+    for (const c of args.cards) if (c.minute > from && c.minute <= to) n += 1;
+    for (const inj of args.injuries) if (inj.minute > from && inj.minute <= to) n += 1;
+    return n;
+  };
+  const added = {
+    h1: clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
+    h2: clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+  };
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
@@ -8535,11 +8550,30 @@ function buildMatchDetail(args: {
   };
   timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
-  /* Momentum: the base flow is the lambda gap, goals spike it their way. */
+  /* Momentum, Round 472. His words: it has to read as up and down swings.
+     It did not, and the reason was in the maths rather than the drawing: the
+     old series was the lambda gap plus a tenth of noise, so every bucket of a
+     good afternoon sat on the same side of the line at nearly the same height
+     and the chart was a flat bar an inch above centre.
+     A real ten minutes belongs to whoever had the chances in it, and this
+     match already knows how many chances there were, so the shots on the
+     stats block are dealt out across the nine buckets and each bucket is read
+     off the ones that landed in it. A spell nobody had a shot in drifts
+     toward the better side rather than sitting on it, and a goal still spikes
+     it. Nothing new is invented: the same shots the report prints are the
+     shots the graph is drawn from. */
   const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
+  const BUCKETS = 9;
+  const myChances: number[] = new Array(BUCKETS).fill(0);
+  const oppChances: number[] = new Array(BUCKETS).fill(0);
+  for (let s = 0; s < shots; s++) myChances[ri(0, BUCKETS - 1)] += 1;
+  for (let s = 0; s < oppShots; s++) oppChances[ri(0, BUCKETS - 1)] += 1;
   const momentum: number[] = [];
-  for (let b = 0; b < 9; b++) {
-    let v = base + (Math.random() * 0.3 - 0.15);
+  for (let b = 0; b < BUCKETS; b++) {
+    const had = myChances[b] + oppChances[b];
+    let v = had > 0
+      ? 0.74 * ((myChances[b] - oppChances[b]) / had) + 0.26 * base
+      : 0.45 * base + (Math.random() * 0.24 - 0.12);
     const lo = b * 10;
     const hi = lo + 10;
     for (const sc of args.myScorers) if (sc.minute > lo && sc.minute <= hi) v += 0.45;
@@ -8674,7 +8708,7 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
-function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch): MatchWeekReport {
+function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
   const club = clubDefFor(state.clubName);
   const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
@@ -8694,8 +8728,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
-     them out in. Without one, this is the single shot match it always was, so
-     fast forwarding a run of fixtures behaves exactly as before. */
+     them out in.
+     Round 472: and there is always a first half now. Every way of playing a
+     match goes through kickOff, so the branch that used to draw a whole match
+     in one go, the one the fast forward took, is gone with the second engine
+     it was. */
   let xi: CMPlayer[];
   let mine: number;
   let myGoals: number;
@@ -8714,7 +8751,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
      here so the full time morale swing can settle up for each of them. */
   const press135 = state.press;
   const preTone: TalkTone | null = state.teamTalk ?? null;
-  const halfTone: TalkTone | null = live ? (live.talk ?? null) : null;
+  const halfTone: TalkTone | null = live.talk ?? null;
   const fire = press135?.nextFire ?? 0;
   const sharpen = press135?.nextSharpen ?? 0;
   let preFit = 0;
@@ -8725,70 +8762,45 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
      match would be one where he never does. The ONLY difference between the
      two paths is whether you got a say at the interval. */
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  if (live) {
-    const started = squadByIds(state, live.startXi);
-    const second = squadByIds(state, live.onPitch);
-    /* Round 135: the fit of the pre match talk is judged on the eleven who
-       kicked off, and the half time one on the state of the match the men still
-       out there are walking back into. Whichever talk is NEWER is the one in
-       their ears for the second half; the older one has been overtaken by
-       events. Both are settled up separately at the final whistle, because they
-       were two separate things you said. */
-    preFit = talkWeight(state, preTone, preMatchTarget(
-      myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
-    ));
-    const htTarget = halftimeTarget(
-      live.myGoals, live.oppGoals,
-      myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
-    );
-    halfFit = talkWeight(state, halfTone, htTarget);
-    const inForce = halfTone
-      ? halfFit
-      : talkWeight(state, preTone, preMatchTarget(
-          myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
-        ));
-    mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
-    const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
-    const opp2 = oppositionShape(live.oppGoals, live.myGoals);
-    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
-    const m2 = poisson(l2m);
-    const o2 = poisson(l2o);
-    myGoals = live.myGoals + m2;
-    oppGoals = live.oppGoals + o2;
-    h1My = live.myGoals;
-    h1Opp = live.oppGoals;
-    /* First half lambdas were saved at kick off. A save paused at the interval
-       before they existed falls back to the second half's shape, which is the
-       closest number the sim still holds. */
-    lamMine = (live.lamMine ?? l2m) + l2m;
-    lamOpp = (live.lamOpp ?? l2o) + l2o;
-    // Anyone who was on the pitch at any point can appear on the scoresheet.
-    const ids = [...new Set([...live.startXi, ...live.onPitch])];
-    xi = squadByIds(state, ids);
-  } else {
-    xi = effectiveXI(state);
-    /* Fast forward, or a save from before the interval existed. The pre match
-       talk covers both halves because there was never a chance to give another,
-       which is exactly how it behaves when you play the match out and say
-       nothing at the break. */
-    const preEdge = myMatchStrength(state, xi) + venue - oppS;
-    preFit = talkWeight(state, preTone, preMatchTarget(preEdge, xiMood(state, xi), state.form));
-    mine = myMatchStrength(state, xi) + preFit * TALK_EDGE + sharpen;
-    const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-    const [l1m, l1o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk, ment.def + oppAtk);
-    const m1 = poisson(l1m);
-    const o1 = poisson(l1o);
-    const opp2 = oppositionShape(o1, m1);
-    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
-    const m2 = poisson(l2m);
-    const o2 = poisson(l2o);
-    myGoals = m1 + m2;
-    oppGoals = o1 + o2;
-    h1My = m1;
-    h1Opp = o1;
-    lamMine = l1m + l2m;
-    lamOpp = l1o + l2o;
-  }
+  const started = squadByIds(state, live.startXi);
+  const second = squadByIds(state, live.onPitch);
+  /* Round 135: the fit of the pre match talk is judged on the eleven who
+     kicked off, and the half time one on the state of the match the men still
+     out there are walking back into. Whichever talk is NEWER is the one in
+     their ears for the second half; the older one has been overtaken by
+     events. Both are settled up separately at the final whistle, because they
+     were two separate things you said. */
+  preFit = talkWeight(state, preTone, preMatchTarget(
+    myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
+  ));
+  const htTarget = halftimeTarget(
+    live.myGoals, live.oppGoals,
+    myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
+  );
+  halfFit = talkWeight(state, halfTone, htTarget);
+  const inForce = halfTone
+    ? halfFit
+    : talkWeight(state, preTone, preMatchTarget(
+        myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
+      ));
+  mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
+  const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
+  const opp2 = oppositionShape(live.oppGoals, live.myGoals);
+  const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+  const m2 = poisson(l2m);
+  const o2 = poisson(l2o);
+  myGoals = live.myGoals + m2;
+  oppGoals = live.oppGoals + o2;
+  h1My = live.myGoals;
+  h1Opp = live.oppGoals;
+  /* First half lambdas were saved at kick off. A save paused at the interval
+     before they existed falls back to the second half's shape, which is the
+     closest number the sim still holds. */
+  lamMine = (live.lamMine ?? l2m) + l2m;
+  lamOpp = (live.lamOpp ?? l2o) + l2o;
+  // Anyone who was on the pitch at any point can appear on the scoresheet.
+  const ids = [...new Set([...live.startXi, ...live.onPitch])];
+  xi = squadByIds(state, ids);
 
   let decidedBy: 'regular' | 'pens' = 'regular';
   let won = myGoals > oppGoals;
@@ -10257,14 +10269,21 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     /* Round 119: stop at the interval unless the caller asked not to. Round
        93's fast forward plays three, five or ten fixtures back to back and
        would stop being a fast forward if every one of them opened a dressing
-       room, so it passes skipHalftime and gets the old single shot match. */
+       room, so it passes skipHalftime.
+       Round 472: and skipHalftime now means exactly that, the same match with
+       nobody in the dressing room, rather than a second way of playing one.
+       Before this round the quick sim drew its own two halves in its own
+       order while the live path drew the first at kick off, so the same
+       fixture on the same seed could end 2-1 one way and 0-0 the other and
+       the game had two engines wearing one name. Everything kicks off here
+       now; the ONLY thing the interval adds is your say in it. */
+    const live = kickOff(state, entry);
     if (!opts?.skipHalftime) {
-      const live = kickOff(state, entry);
       state.live = live;
       return { state, kind: 'halftime', live };
     }
-    const report = playMyMatch(state, entry);
-    state.week += 1;
+    const report = playMyMatch(state, entry, live);
+    state.week = live.week + 1;
     return { state, kind: 'match', report };
   }
   return { state, kind: 'seasonOver' };
