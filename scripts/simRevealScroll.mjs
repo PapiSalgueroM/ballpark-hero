@@ -460,7 +460,18 @@ function printRow(r, tag) {
    in a round whose whole subject is scrolling people did not ask for. */
 const PLAN = [
   { route: '/soccer-career', steps: 12, deep: true, seed: `localStorage.setItem('soccerCareerSave', ${JSON.stringify(JSON.stringify(soccerSave))});` },
-  { route: '/club-manager', steps: 16 },
+  /* Round 470: deep as well, and the reason is a measurement rather than a
+     preference. The comment on the deep branch above claims two independent
+     sources of PROOF, and there was only ever one, because only Soccer Career
+     asked for it. Run three times on identical code the moment this harness
+     could run at all on Windows, it came back green, red, red, always on the
+     same line: "not one press brought unreadable content into view". Whether
+     any press happened to rescue something was left to the games' own
+     randomness, which is a coin toss dressed as a rule. Club Manager is the
+     other game with panels taller than the phone, so it walks to the bottom
+     of the page before every third press too and the proof stops depending on
+     one lucky draw. */
+  { route: '/club-manager', steps: 16, deep: true },
   { route: '/dart-draft', steps: 10 },
   { route: '/cfb-dynasty', steps: 12 },
   { route: '/clue-auction', steps: 10 },

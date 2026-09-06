@@ -648,7 +648,11 @@ export default function NflMyCareerBoard() {
                 <button
                   key={k}
                   onClick={() => setNewsTab(k)}
-                  className={cn('rounded-lg px-1 py-1.5 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
+                  /* Round 470: py-2, not py-1.5. Measured at 390 by 844
+                     these three came out 117 by 29px, a shade under the 30px
+                     floor every tap target on this site is held to, and they
+                     are the only way between the News box's three screens. */
+                  className={cn('rounded-lg px-1 py-2 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
                 >
                   {label}
                 </button>
