@@ -110,7 +110,11 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
             key={t.key}
             onClick={() => { setTab(t.key); setAsset(null); }}
             className={cn(
-              'rounded-lg px-1 py-1.5 text-[11px] font-bold transition-all',
+              /* py-2, not py-1.5: measured at 390 by 844 these four came out
+                 87 by 29px, a shade under the 30px floor every tap target on
+                 this site is held to, and they are the only way between the
+                 app's four screens. */
+              'rounded-lg px-1 py-2 text-[11px] font-bold transition-all',
               tab === t.key ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground',
             )}
           >
