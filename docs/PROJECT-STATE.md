@@ -2499,11 +2499,24 @@ name and its own validator then refused it, which is the Transfer Path defect of
 in different clothes. It is an exact match on the stored names now, sharing Round 482's
 fenced list, and `src/lib/playerSearch.ts` gained an `in` op every game can use. Proved in a
 browser at 390 wide: a Juventus slot, fifteen suggestions, every one a real Juventus player.
-**The nation half is the same bug and is NOT fixed**: the game asks who played for a country
-and the pool is everyone with the passport (Argentina 1,567 names against 76 ever in a squad
-we hold, Italy 1,571 against zero). Filtering to the squad lists would empty slots, which is
-the Round 442 failure, so the real fix is a two-source pool that ranks proven internationals
-first and falls back to nationality. Specced in the Inbox of `docs/WORKBOARD.md`.
+**ROUND 484 finished the nation half the same day.** The game asks who played for a country
+and the pool was everyone with the passport (Argentina 1,567 names against the 76 ever named
+in a squad we hold, Italy 1,571 against zero). It RANKS rather than filters, because the squad
+lists run 2018 to 2026 and carry no Italy, so filtering would leave unfillable slots and hand
+back the Round 442 failure. `src/lib/playerSearch.ts` gained `boostNames` (any game can use
+it) ranked below matchRank so a boost can never hide the man being spelled out. The armband
+left the data first: 102 rows stored captains as "Lionel Messi ( captain )", and the migration
+moves that into an `is_captain` column instead of deleting it. Measured as the outcome a
+player sees: across eleven query and nation pairs the top eight held 16 proven internationals
+before and 20 after, improving on three, with all 25 nations still fillable.
+
+**Security posture checked while the DDL was in hand**, per the CLAUDE.md rule to read the
+advisor's FUNCTION warnings and not only its table ones. All four SECURITY DEFINER functions
+in `public` are accounted for: `app_secret` and `handle_new_user` are unreachable by anon and
+authenticated, `has_role` is the standard RLS helper, and `admin_exists` is a deliberate probe
+with its own migration and its own harness. Every table with RLS on and no policy is a backup
+or a service-role-only table (`ai_validation_cache`, `live_scores_runs`), which is closed and
+not open. Nothing resembling the `exec_sql` hole of 2026-08-25.
 
 **Two data problems found on the way and deliberately NOT acted on, because nothing shipped
 reads them.** Worth a round of their own, worth nobody's panic.

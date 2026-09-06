@@ -688,26 +688,22 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   browser: a Juventus slot, fifteen suggestions, every one a real Juventus player.
   `src/lib/playerSearch.ts` gained an `in` op that every game's autocomplete can use.
 
-- **INBOX, MEASURED AND SPECCED, NOT CLAIMED: the nation half of the same bug.**
-  Build Your XI asks who played FOR a country and its dropdown holds everyone who COULD
-  have, because the filter is `nationality`. Measured 2026-09-06: Argentina offers 1,567
-  names and 76 have ever been named in a squad we hold; Brazil 1,702 against 53; Italy 1,571
-  against ZERO, because we hold no Italy squad at all.
-  **Why Round 483 did not just filter it.** The only proof of a cap in the database is
-  `national_team_squads`, which runs 2018 to 2026 only and misses Italy entirely, so
-  filtering to it would leave empty and unfillable slots. Round 442 was spent fixing exactly
-  that failure and must not be undone.
-  **The fix.** A two-source pool: proven internationals (the squad lists) ranked first, then
-  nationality as the fallback so the pool is never empty. `PlayerSourceConfig` in
-  `src/lib/playerSearch.ts` takes one table and cannot express that today, so the round is a
-  search change plus a game change, not a one line filter swap. Ranking the squad names
-  first also maximises the free answers, because those are exactly the picks the validator
-  can now confirm without the model.
-  **Beware the data.** `national_team_squads` is shifted a column in 2,724 of its 2,784 rows
-  (its `club` holds a birth date, its `position` a shirt number) and it writes captains as
-  "Lionel Messi ( captain )". Only `country` and `player_name` are safe to read, and the
-  parenthetical must be stripped. `scripts/simValidatePlayerRecords.mjs` section 6 already
-  guards the stripping.
+- **DONE, Round 484: the nation half, finished rather than left.** Build Your XI asked who
+  played FOR a country while its dropdown held everyone who COULD have. Measured 2026-09-06:
+  Argentina offered 1,567 names against the 76 ever named in a squad we hold, Brazil 1,702
+  against 53, Italy 1,571 against zero.
+  **It ranks, it does not filter, and that is the design not a compromise.** The squad lists
+  run 2018 to 2026 and carry no Italy, so filtering would leave unfillable slots, which is the
+  failure Round 442 was spent removing. Proven internationals are lifted above everything of
+  the same match quality and the rest stay reachable underneath.
+  `src/lib/playerSearch.ts` gained `boostNames`, usable by any game, ranked deliberately BELOW
+  matchRank so a boosted substring can never outrank an exact match on what was typed.
+  The armband had to leave the data first: `national_team_squads` stored captains as
+  "Lionel Messi ( captain )" (102 rows, the only annotation in the table), and the migration
+  moves the captaincy into an `is_captain` column rather than deleting it with the words.
+  MEASURED as the outcome: across eleven query and nation pairs the top eight held 16 proven
+  internationals before and 20 after, improving on three, and all 25 nations still have a
+  fillable pool. Fence section 8, control `noboost`.
 
 - **DONE, Round 482: Build Your XI answers from our own records before it asks the AI.**
   It was dead in production (215 completions in a fortnight against 1 in the following week,

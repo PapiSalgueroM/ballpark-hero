@@ -234,6 +234,25 @@ export interface SearchPlayersOptions {
   limit?: number;
   /** Normalized names to exclude from results (e.g. players already picked). */
   exclude?: Set<string>;
+  /**
+   * Round 484. NORMALIZED names that are known to satisfy the slot's real rule,
+   * ranked above everything else of the same match quality. It changes the
+   * ORDER only: it adds nobody to the pool and removes nobody from it.
+   *
+   * Build Your XI is why it exists. Its nation slots ask who has PLAYED FOR a
+   * country and the only pool wide enough to keep every slot fillable is
+   * everyone who holds the passport, which is roughly twenty times too big:
+   * Argentina offers 1,567 names and 76 have ever been named in a squad we
+   * hold. Filtering to the proven ones would empty slots instead (we hold no
+   * Italy squad at all), which is the failure Round 442 was spent removing, so
+   * the proven ones are lifted to the top of the list the player actually
+   * looks at and the rest stay reachable underneath.
+   *
+   * Deliberately ranked BELOW matchRank: a boosted substring match must never
+   * outrank an exact match on what the player typed, or the boost would start
+   * hiding the man he is spelling out.
+   */
+  boostNames?: Set<string>;
   /** Abort signal so an in-flight request can be cancelled by a newer one. */
   signal?: AbortSignal;
 }
@@ -462,8 +481,14 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
         };
       });
 
+    const boost = options.boostNames;
     entities.sort((a, b) => {
       if (a.matchRank !== b.matchRank) return a.matchRank - b.matchRank;
+      if (boost && boost.size > 0) {
+        const ab = boost.has(a.key) ? 0 : 1;
+        const bb = boost.has(b.key) ? 0 : 1;
+        if (ab !== bb) return ab - bb;
+      }
       return b.prominence - a.prominence;
     });
 

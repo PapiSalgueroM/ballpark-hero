@@ -116,6 +116,24 @@ const NATION_SEARCH_ALIASES: Record<string, string> = {
   'South Korea': 'Korea, South',
 };
 
+/**
+ * How national_team_squads spells the game's twenty five nations, which is NOT
+ * how player_market_values.nationality spells them. Only 'USA' differs here;
+ * 'South Korea' is written that way in the squad table and as 'Korea, South' in
+ * the market values one, which is why there are two maps and not one.
+ *
+ * Round 484 uses this to lift men who have actually been named in a squad to
+ * the top of a nation slot's suggestions. The lists cover 2018 to 2026 only and
+ * hold no Italy at all, so they are a boost and never a filter: a nation with
+ * no list simply gets no boost and keeps the pool it has.
+ */
+const NATION_SQUAD_NAMES: Record<string, string> = { USA: 'United States' };
+
+/** Returns the value to filter national_team_squads.country by. */
+export function nationSquadTerm(nationName: string): string {
+  return NATION_SQUAD_NAMES[nationName] ?? nationName;
+}
+
 /** Returns the exact value to filter player_market_values.nationality by. */
 export function nationSearchTerm(nationName: string): string {
   return NATION_SEARCH_ALIASES[nationName] ?? nationName;
