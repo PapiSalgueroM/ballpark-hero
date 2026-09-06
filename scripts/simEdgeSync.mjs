@@ -124,10 +124,10 @@ console.log('2) nothing recorded as deployed has been edited since');
 console.log('3) the unverified list is a ratchet');
 {
   /* Measured 2026-09-06: 25 functions had never been checked against what is
-     actually deployed, and Rounds 486 to 488 confirmed nba-chain-validate, tennis-chain-validate and nascar-chain-validate, leaving 22. The number may fall and must never rise, because the
+     actually deployed, and Rounds 486 to 489 confirmed the nba, tennis, nascar and soccer grid validators, leaving 21. The number may fall and must never rise, because the
      only way it rises is somebody adding a function and declining to confirm
      it, or moving a confirmed one back to make this file quiet. */
-  const BASELINE = 22;
+  const BASELINE = 21;
   if (unverified.size > BASELINE) {
     fail(`the unverified list has grown from ${BASELINE} to ${unverified.size}: confirm the new function against production rather than adding it here`);
   }

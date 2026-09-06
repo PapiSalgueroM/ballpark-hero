@@ -132,10 +132,47 @@ function positionBucket(pos: string | null): string | null {
   return null;
 }
 
+/* ROUND 489: five of the grid's own club labels could not be satisfied by
+   ANYBODY, which is 87 of its 1,883 club cells, 4.6 percent of the board.
+   Measured 2026-09-06 by running the live rule below over all 4,931 stored club
+   strings and all 100 labels the 710 puzzles use:
+     "PSG"              25 cells, stored as Paris Saint-Germain
+     "Bayer Leverkusen" 21 cells, stored as Bayer 04 Leverkusen
+     "Celta Vigo"       17 cells, stored as Celta de Vigo
+     "Rennes"           17 cells, stored as Stade Rennais FC
+     "LA Galaxy"         7 cells, stored as Los Angeles Galaxy
+   Each fails for the same reason: the substring test cannot cross an inserted
+   word. "bayer leverkusen" is not inside "bayer 04 leverkusen", and neither
+   contains the other. A player dealt one of those rows could not fill it with
+   any spelling of any player, and the game never said why.
+   Build Your XI already knew three of these five: src/data/lineupTeams.ts has
+   carried PSG and Bayer Leverkusen aliases since Round 442. The knowledge
+   existed in one game and not in its neighbour.
+   The aliases are EXACT and additive: they only ever add a match, so nothing
+   that works today can break, and a reserve side stays out because
+   "paris saint germain b" is not the alias. Tightening the loose rule so the
+   Barcelona square stops accepting Espanyol is the other half and is specced
+   separately, because a naive tightening kills 27 of the 100 labels. */
+const CLUB_ALIASES: Record<string, string[]> = {
+  "psg": ["Paris Saint-Germain"],
+  "bayer leverkusen": ["Bayer 04 Leverkusen"],
+  "celta vigo": ["Celta de Vigo"],
+  "rennes": ["Stade Rennais FC"],
+  "la galaxy": ["Los Angeles Galaxy"],
+};
+
 function clubMatches(stintClub: string, wanted: string): boolean {
-  const a = norm(stintClub), b = norm(wanted);
-  if (!a || !b) return false;
-  return a === b || a.includes(b) || b.includes(a);
+  const b = norm(wanted);
+  if (!b) return false;
+  const aliases = (CLUB_ALIASES[b] ?? []).map(norm);
+  /* A season split between two clubs is stored as "A / B", so each side is
+     read on its own. That can only add matches: no label contains a slash. */
+  return String(stintClub || "").split(" / ").some((part) => {
+    const a = norm(part);
+    if (!a) return false;
+    if (a === b || a.includes(b) || b.includes(a)) return true;
+    return aliases.includes(a);
+  });
 }
 
 function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean): Verdict {
@@ -244,7 +281,23 @@ serve(async (req) => {
 
     const debutYear = stints.length ? (stints[0].debut_year ?? Math.min(...stints.map((s) => s.first_year))) : 0;
     const debutAge = stints.length ? stints[0].debut_age : null;
-    const careerComplete = stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
+    /* ROUND 489: A NAME IS NOT A PERSON, and careerComplete is what turns that
+       into a wrong answer. It is read off stints[0] and it is the switch that
+       lets a missing club become a definite NO rather than an honest "we do not
+       know". When one name covers several men those rows are several careers,
+       and one man's debut year then decides another man's verdict.
+       Measured 2026-09-06: "Vitinha" is three men in this table, a Brazilian
+       winger at Feirense in 2008 and two Portuguese players, and the PSG
+       midfielder's move is not in the table at all. The grid answered "Vitinha
+       does not satisfy Played for PSG" as a hard, cached NO, on the strength of
+       a different man's debut year.
+       So when the fetched rows carry more than one nationality they are more
+       than one person, and nothing here is allowed to say a hard no. The
+       criterion falls through as unknown, which is the fail-closed direction:
+       the guess is not counted rather than wrongly refused and remembered. */
+    const identities = new Set(stints.map((s) => norm(s.nationality ?? "")).filter(Boolean));
+    const oneManOnly = identities.size <= 1;
+    const careerComplete = oneManOnly && stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
 
     let rowV = evaluate(rowCrit, stints, careerComplete);
     let colV = evaluate(colCrit, stints, careerComplete);

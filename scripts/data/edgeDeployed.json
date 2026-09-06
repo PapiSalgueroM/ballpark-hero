@@ -25,6 +25,11 @@
       "sha256": "bb3315bd6978e9035cbb36eae2aa5cede90ecf54e771b949f24f16fb0fbb0c3e",
       "version": 6,
       "date": "2026-09-06"
+    },
+    "soccer-grid-validate": {
+      "sha256": "d94ef1fd154f06025a718a14a9a8dbe4127d3949f8ec022b82e2b8286d78ffcd",
+      "version": 21,
+      "date": "2026-09-06"
     }
   },
   "unverified": [
@@ -47,7 +52,6 @@
     "report-relay",
     "scores-poll",
     "simulate-season",
-    "soccer-grid-validate",
     "suggest-players",
     "tennis-daily"
   ]
