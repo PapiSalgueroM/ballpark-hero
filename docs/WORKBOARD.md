@@ -678,6 +678,47 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **BUILD YOUR XI IS DEAD IN PRODUCTION RIGHT NOW, AND THE FIX IS FREE. Found and reproduced
+  live 2026-09-06 by reading the completions table. Take it before anything else in this
+  list.**
+  **The measurement.** The game recorded 15 to 27 completions a day through 2026-08-28, then
+  6 on the 29th, then nothing: 215 completions in one fourteen day window against 1 in the
+  seven days since, while the site as a whole does about 20,000 completions a day and every
+  other AI checked game grew over the same period (World XI 18 to 107, Clue Auction 5 to 39,
+  soccer grid steady). It is not traffic and it is not the season.
+  **The cause, reproduced by calling the live validator six times in a row on 2026-09-06:**
+  four of the six came back `exhausted: true`, "Answer checking has used up its allowance
+  for today". Filling a lineup needs ELEVEN validations in a row, so the game is
+  unfinishable for most of the day. Round 413 already found this on 2026-09-02, made the
+  refusal honest and raised the token cap, but honest and dead is still dead: the root
+  cause is that the free Gemini allowance cannot serve this site's traffic.
+  **Why this game and not the grids: the grids CACHE and this one does not.** Calling
+  `college-grid-validate` three times with the same answer returns `cached: true` on the
+  second and third and spends nothing; the deployed `validate-player` (version 8, read
+  2026-09-06) has no cache at all, so every pick by every player spends an allowance call.
+  **THE FIX, and none of it costs money.**
+  1. ANSWER FROM THE DATABASE FIRST. `player_market_values` holds 5,496 rows for 2026 across
+     1,200 clubs with a position on every one, which is exactly what the prompt asks the
+     model ("has this player played for this club, and does he fit this position"). Arsenal's
+     squad is in there with real positions. A current player at a current club needs no AI at
+     all. The AI stays for what the table cannot answer: historic sides, national teams, a
+     player who has moved.
+  2. CACHE the AI answer the way the grid validators already do. The triple of player, club
+     and position is a stable answer.
+  **The rule that must not bend while doing it (CLAUDE.md, the July 2026 P1):** a validator
+  fails closed. A database hit is verification, not a fail open, but a database MISS must
+  fall through to the AI and an AI failure must still return
+  `{valid:false, unverified:true}`. Never accept on error.
+  Harness: hold that a current player at his real club validates with zero AI calls, that a
+  wrong club is refused from the table alone, that a table miss reaches the AI, that an AI
+  failure still fails closed, and that the cache never returns a verdict for a different
+  triple. Keep simQuotaHonesty green. Then deploy through the Supabase MCP and keep
+  `supabase/functions/validate-player/index.ts` in step with what is deployed.
+  **The money question, and it is the owner's alone.** Even with both fixes the tail still
+  needs the model, and the free Gemini allowance is what the site has outgrown. A paid tier
+  would end this class of failure for every AI checked game. Do not spend anything without
+  him; the two fixes above are worth doing either way and may make it unnecessary.
+
 - **TRANSFER PATH REFUSES REAL TEAMMATES AT SIX CLUBS, AND IT IS PROBABLY WHAT A PLAYER
   REPORTED ON 2026-09-06. Measured and specced the same day; take this one first.**
   The graph links two players only on an identical `club::season` string, and the career

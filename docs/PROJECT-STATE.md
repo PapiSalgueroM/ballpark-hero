@@ -2429,6 +2429,20 @@ roadmap when a round touches the game named:
   cap (scoreGuess returns min(99, total) for a non exact guess). Say so in the header or
   measure the raw total instead.
 
+**BUILD YOUR XI IS DEAD IN PRODUCTION, found 2026-09-06 by reading the completions table
+rather than by anyone reporting it.** 15 to 27 completions a day through 2026-08-28, then
+nothing: 215 in a fourteen day window against 1 in the seven days since, while the site does
+about 20,000 completions a day and every other AI checked game grew. Reproduced live the
+same afternoon: six calls to the validator, four came back "used up its allowance for
+today", and a lineup needs eleven in a row. Round 413 found this on 2026-09-02 and made the
+refusal honest, which is not the same as fixing it. The grids survive because they cache
+their answers and this validator does not, and the fix is free: answer from
+`player_market_values` first (5,496 rows for 2026 with club and position, which is what the
+prompt asks the model) and cache the rest. Specced in full in the Inbox of
+`docs/WORKBOARD.md`, including the rule that a table miss must still reach the AI and an AI
+failure must still fail closed. **The money half is Anthony's alone: the free allowance is
+what the site has outgrown, and a paid tier would end this for every AI checked game.**
+
 **A report investigated on 2026-09-06 and closed as not a defect, left unresolved in the
 table so he sees it too.** `/transfer-path`, 15:18 UTC, description "Bug" and nothing else,
 but the board context carried everything needed: puzzle tpa-199 (Griezmann to Caicedo,
