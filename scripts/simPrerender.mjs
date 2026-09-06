@@ -789,9 +789,11 @@ const failuresAfter15 = failures;
    So these are debt, not damage, and the thing to guard is the moment that
    stops being true: turning one of those spans into a heading would silently
    hand that page the /higher-lower bug. scripts/simDrawOrder.mjs is that guard.
-   It fails on the JOIN, a page whose readable content follows the draw order
-   while it still holds a raw draw, and it derives its route list from App.tsx
-   and the import graph every run rather than carrying a typed one.
+   It fails on the JOIN, a page whose snapshot content follows the draw order
+   while it still holds a raw draw, and it checks both halves of what a
+   snapshot keeps, the head that is copied verbatim and the readable blocks the
+   body is rebuilt from. It derives its route list from App.tsx and the import
+   graph every run rather than carrying a typed one.
    This list is a RATCHET, not an amnesty: anything not on it fails, and a file
    that leaves the list must be removed from it, so the debt can only shrink. */
 const RAW_RANDOM_BASELINE = new Set([

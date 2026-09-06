@@ -1,6 +1,6 @@
 /**
  * Round 479: A PAGE THAT STILL DRAWS RAW INTO REACT STATE MUST NOT HAVE
- * READABLE CONTENT THAT MOVES WITH THE DRAW ORDER.
+ * SNAPSHOT CONTENT, HEAD OR READABLE BLOCK, THAT MOVES WITH THE DRAW ORDER.
  *
  * WHY THIS EXISTS, and it is a join of two facts rather than either one alone.
  *
@@ -414,9 +414,17 @@ for (const route of routes) {
   }
   checked += 1;
   if (!base.agree || !off.agree) {
-    fail(`${route} does not render the same readable blocks twice at ONE offset, so the draw order question cannot be answered on it. That is instability at a single clock: run scripts/playRenderStability.mjs on this route`);
+    fail(`${route} does not serve the same head and readable blocks on every take at ONE offset, so the draw order question cannot be answered on it. That is instability at a single clock: run scripts/playRenderStability.mjs on this route`);
     continue;
   }
+  /* THE ORDERED SEQUENCE DECIDES, and the sets are only for the message.
+     playRenderStability shipped with a set comparison and had to be corrected
+     for exactly this: scripts/prerender.mjs preserves the ORDER of the blocks
+     it writes and it preserves duplicates, so two blocks swapping places, or a
+     line appearing twice instead of once, rewrites the saved page while the
+     set of texts is unchanged. Deciding on the set would call that identical
+     and would be the same mistake a second time. */
+  const moved = JSON.stringify(base.blocks) !== JSON.stringify(off.blocks);
   const a = new Set(base.blocks);
   const b = new Set(off.blocks);
   const gone = [...a].filter(x => !b.has(x));
@@ -424,9 +432,8 @@ for (const route of routes) {
   const headMoved = base.head !== off.head;
   if (headMoved) {
     headMovedCount += 1;
-    fail(`${route} has HEAD content that moves with the draw order, and a snapshot keeps the head verbatim, so this reaches the saved page even though no readable body block changed. ${(raiserOf.get(route) || []).join(', ') || 'A file it renders'} still draws raw into React state`);
+    fail(`${route} has HEAD content that moves with the draw order, and a snapshot keeps the head verbatim, so this reaches the saved page and a body only check would have missed it. ${(raiserOf.get(route) || []).join(', ') || 'A file it renders'} still draws raw into React state`);
   }
-  const moved = gone.length > 0 || added.length > 0;
   if (CONTROL === 'drawdep') {
     const landed = [...a].some(x => x.startsWith(CONTROL_MARK));
     if (landed) controlLanded += 1;
@@ -441,16 +448,21 @@ for (const route of routes) {
     movedCount += 1;
     const why = (raiserOf.get(route) || []).join(', ');
     fail(`${route} has readable content that moves with the draw order while ${why || 'a file it renders'} still draws raw into React state, so a discarded render advances the seeded generator and the saved page changes for nothing. Route it through src/lib/firstDraw.ts`);
+    if (!gone.length && !added.length) {
+      console.error('      the same block texts came back in a different ORDER or with a different number of repeats, which a snapshot preserves');
+    }
     for (const g of gone.slice(0, 3)) console.error(`      was: ${g.slice(0, 90)}`);
     for (const x of added.slice(0, 3)) console.error(`      now: ${x.slice(0, 90)}`);
   }
 }
 
 console.log(`   ${checked} route(s) checked, ${movedCount} whose readable blocks move when the generator is advanced by one draw, ${headMovedCount} whose head moves`);
-/* Only claim it held if it held, and count the routes that were actually
-   answered rather than the ones that were attempted. An unconditional
-   reassurance under a FAIL is how a reader skims a red run and sees green,
-   which is the lesson simPrerender section 15 carries. */
+/* Only claim it held if it held. An unconditional reassurance under a FAIL is
+   how a reader skims a red run and sees green, which is the lesson
+   simPrerender section 15 carries, so this reads the failure count and not
+   just the two movement counts: a route that could not be rendered, or that
+   disagreed with itself at one offset, moved nothing and was also not
+   answered. */
 if (!failures && !CONTROL) {
   console.log('   every at risk page serves the same head and the same readable blocks at both offsets,');
   console.log('   which is both halves of what a snapshot keeps, so its raw draw cannot reach one');
