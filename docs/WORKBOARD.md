@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 470.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 475.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
@@ -34,10 +34,42 @@ How it works:
   454, 455, 456, 457 and 458 all SHIPPED 2026-09-05; 452 was verification only. Their claims
   below stand as the record of what each one was.)
 
-- **Desktop lane, CLAIMED 2026-09-05 afternoon: Rounds 465 to 469.** The next five off the
-  item by item ledger, five builders in parallel worktrees behind one merge and gate pass
-  (the script is `docs/workflows/owner-list-465-469.workflow.js`). Three of them touch
-  `src/lib/clubManager.ts` and build on Round 462, which is on main.
+- **Desktop lane, CLAIMED 2026-09-06: Rounds 470 to 474.** The next five off the item by
+  item ledger, five builders in parallel worktrees behind one merge and gate pass (the
+  script is `docs/workflows/owner-list-470-474.workflow.js`). Three touch Club Manager and
+  build on Rounds 465 to 467.
+  **470 THE NBA, MLB AND NHL CAREERS ON THE SHARED MODULES**, his words: "Bring the whole
+  Soccer Career and Club Manager depth to NFL, NBA, MLB, NHL and the GM games ... The gap
+  between the soccer career and the NFL career is visible to a casual eye; close it."
+  Round 469 built the shared money app, social feed, rival and badge case and bound the
+  NFL; each remaining sport is a binding the size of one file, so all three go together.
+  **471 CLUB MANAGER STAFF**, his words: "Staff: hire and fire attack, defense,
+  goalkeeping coaches, lead scout, and promote from the academy staff. Generated people
+  with generated portrait art, each with levels and potential. Rivals can poach them; you
+  can match offers a limited number of times."
+  **472 THE MATCH SCREEN**, his words: the quick sim screen with stoppage time, possession
+  as percentages, real club names never "them", centred text and a momentum graph that
+  swings, plus the merge of Play Match and Watch Live into one flow. The full eleven a
+  side animation is named for a later round rather than half built here.
+  **473 SOCCER CAREER AUDITED AGAINST HIS LIFE SIM LIST**, his words: "Much of this exists;
+  audit against this list and fill every gap." The audit is the first deliverable, then the
+  biggest gaps in his order, on the flagship that takes one in five pageviews.
+  **474 BOARD ASKS THAT NAME A REAL TARGET AND THE INBOX**, his words: "Board asks get
+  specific: nationality quotas (usually the club's own country), experience counts,
+  position targets, a 90+ potential signing, a 100m+ marquee buy scaled to era" and "The
+  messages inbox needs a major update: more kinds of messages, choices that actually move
+  relationships and futures." Every ask must be reachable in the save that makes it.
+
+- **Desktop lane, claimed 2026-09-05 afternoon and SHIPPED 2026-09-05 night: Rounds 465 to
+  469.** The next five off the item by item ledger, five builders in parallel worktrees
+  behind one merge and gate pass (the script is
+  `docs/workflows/owner-list-465-469.workflow.js`), then an adversarial review whose three
+  confirmed defects and eight smaller findings landed before the push: the finance desk
+  could leave an employed manager reading Sacked, six of the eight bad sponsor brands were
+  real companies (Goldrush, FastCash, Quickfire, NightOwl, RedLine Coin, Skyhigh), two fan
+  moods with two vocabularies sat on one screen, and today's ten drills could be dealt
+  twice. What the review left open is under Open bugs in `docs/PROJECT-STATE.md`. Three of
+  them touch `src/lib/clubManager.ts` and build on Round 462.
   **465 CLUB MANAGER METERS AND TABLE**, his words: "Two meters, always visible: board
   patience (how close to fired) and fan mood" and "Table: show goals for and against as
   25-23 alongside GD"; both meters derived from the engine's own state, the board meter
