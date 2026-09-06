@@ -714,7 +714,17 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
-- **COLLEGE GRID HAS RECORDED NOTHING FOR 37 DAYS.** Last completion 2026-07-31, 34 all time
+- **DONE, Round 490. COLLEGE GRID had recorded nothing for 37 days.** The game was not broken,
+  its checker was blind: `scripts/simCollegeGrid.mjs` has always proved every square answerable
+  from four tables the VALIDATOR never opened. Draft, Heisman and All-American are now answered
+  from data, taking the criteria that need no model from 275 to 350 of 450, about a third of
+  cells to about three fifths. **A harness that knows more than the code it guards is a shape
+  worth looking for elsewhere.** The draft `round` column is corrupt (8,767 of 11,417 rows
+  marked round 1 have an impossible pick), so the first round is DERIVED from where round two
+  starts, exact across seven decades. National Champion, Pro Bowler and Hall of Famer stay with
+  the model because the data genuinely is not here. Fence `scripts/simCollegeGridFromData.mjs`,
+  controls `roundcol` and `sourceblind`.
+  ORIGINAL FINDING: Last completion 2026-07-31, 34 all time
   from 24 people. Independently confirmed. The audit's cause: two thirds of every board can
   only be answered by the free Gemini allowance. Same shape as Build Your XI before Round 482,
   and the same fix applies, `nfl_player_team_stints` already holds the team half.
