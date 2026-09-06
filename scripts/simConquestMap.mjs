@@ -111,7 +111,7 @@ export { NBA_CONQUEST_MAP, INITIAL_TERRITORIES_NBA } from '${ROOT}/src/data/conq
 export { MLB_CONQUEST_MAP, INITIAL_TERRITORIES_MLB } from '${ROOT}/src/data/conquestDataMlb.ts';
 export { NHL_CONQUEST_MAP, INITIAL_TERRITORIES_NHL } from '${ROOT}/src/data/conquestDataNhl.ts';
 export { SOCCER_CONQUEST_MAP, INITIAL_TERRITORIES_SOCCER } from '${ROOT}/src/data/soccerConquest.ts';
-export { seedEmpires } from '${ROOT}/src/lib/imperialism.ts';
+export { seedNflEmpires as seedEmpires } from '${ROOT}/src/data/conquestSports.ts';
 import React from '${ROOT}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT}/node_modules/react-dom/server.node.js';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
@@ -363,7 +363,9 @@ console.log(`4) The ${SPORTS.length} sports go through the same component, and n
     if (/<path\b/.test(src)) fail(`${name} draws an SVG path of its own`);
     if (/from ['"](\.\/|@\/components\/conquest\/)ConquestMap(Nba|Mlb|Nhl)?['"]/.test(src)) fail(`${name} still imports a private map component`);
   }
-  const boards = ['ConquestBoard.tsx', 'ConquestBoardNba.tsx', 'ImperialismBoard.tsx', 'ImperialismBoardNba.tsx', 'ImperialismBoardMlb.tsx', 'ImperialismBoardNhl.tsx'];
+  /* Round 476 folded the four private imperialism boards into the shared one,
+     so the boards that must render the shared map are the arcade pair plus it. */
+  const boards = ['ConquestBoard.tsx', 'ConquestBoardNba.tsx', 'ImperialismBoardShared.tsx'];
   for (const b of boards) {
     const src = files.get(b);
     if (!src) { fail(`${b} is missing`); continue; }

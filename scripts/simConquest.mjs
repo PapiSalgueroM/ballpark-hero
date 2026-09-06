@@ -6,6 +6,10 @@
  *  - runaway superpowers get checked (overextension is real)
  *  - landless teams genuinely recover sometimes (last stand is real)
  *  - the swing is always inside its cap, and probabilities stay legal
+ * Round 476: the four private imperialism engines were folded into
+ * src/lib/imperialismEngine.ts and the NFL is now injected as data from
+ * src/data/conquestSports.ts, so this reads the module the routes actually
+ * run instead of a copy that no page imports any more.
  * Run: node scripts/simConquest.mjs
  */
 import { execSync } from 'node:child_process';
@@ -15,20 +19,26 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SRC = ROOT.split(String.fromCharCode(92)).join('/') + '/src';
 const ENTRY = path.join(os.tmpdir(), 'cqEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'cq.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const imp = await import('${ROOT.replaceAll('\\', '/')}/src/lib/imperialism.ts');
+const imp = await import('${ROOT.replaceAll('\\', '/')}/src/lib/imperialismEngine.ts');
 const mom = await import('${ROOT.replaceAll('\\', '/')}/src/lib/conquestMomentum.ts');
-export { imp, mom };
+const sports = await import('${SRC}/data/conquestSports.ts');
+export { imp, mom, sports };
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { imp, mom } = await import(pathToFileURL(BUNDLE).href);
-const { seedEmpires, randomPairings, resolveGame, empireCounts, landlessTeams, statesOf, emptyRecords, applyRecords, homeWinProb, REGULAR_WEEKS } = imp;
+const { imp, mom, sports } = await import(pathToFileURL(BUNDLE).href);
+const { seedEmpires, randomPairings, resolveGame, empireCounts, landlessTeams, statesOf, emptyRecords, applyRecords, homeWinProb } = imp;
 const { momentumAdjust, applyMomentum, MAX_SWING } = mom;
+/* The NFL sport as the routes inject it, so the numbers below are the ones
+   /conquest actually plays with. */
+const SPORT = sports.NFL_IMPERIALISM;
+const REGULAR_WEEKS = SPORT.regularRounds;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -81,10 +91,10 @@ console.log('3) Landless teams fight harder');
 console.log('4) Ratings still decide most games');
 {
   // Best vs worst, worst holding a big empire: the good team should still win most.
-  const strongFav = homeWinProb('KC', 'CAR');
+  const strongFav = homeWinProb(SPORT, 'KC', 'CAR');
   // A healthy (not overextended) rival empire is the case where the map bites
   // hardest; a bloated 60 percent empire is deliberately self-cancelling.
-  const withMap = homeWinProb('KC', 'CAR', { homeLand: 0, awayLand: 40, totalLand: 100, awayStreak: 4 });
+  const withMap = homeWinProb(SPORT, 'KC', 'CAR', { homeLand: 0, awayLand: 40, totalLand: 100, awayStreak: 4 });
   console.log(`   KC over CAR: ${strongFav.toFixed(3)} raw -> ${withMap.toFixed(3)} vs a healthy rival empire`);
   if (withMap <= 0.5) fail('the map should tilt games, not invert them');
   if (Math.abs(strongFav - withMap) < 0.02) fail('the map made no difference at all');
@@ -97,24 +107,23 @@ console.log('5) 40 seeded seasons');
   for (let s = 0; s < 40; s++) {
     try {
       const rng = mulberry(1000 + s);
-      const owners = seedEmpires();
-      // The real board pairs EVERY team each week (NFL_TEAMS), landless
-      // included, which is what makes the last stand rule reachable.
-      const teamIds = [...new Set(Object.values(seedEmpires()))];
-      let records = emptyRecords(teamIds);
+      const owners = seedEmpires(SPORT);
+      // The real board pairs EVERY team each week, landless included, which
+      // is what makes the last stand rule reachable.
+      let records = emptyRecords(SPORT);
       let everLandless = new Set();
       let leaderAtHalf = null;
       for (let w = 1; w <= REGULAR_WEEKS; w++) {
-        const pairs = randomPairings(teamIds, rng);
+        const pairs = randomPairings(SPORT, rng);
         const games = [];
-        for (const [h, a] of pairs) games.push(resolveGame(h, a, owners, rng, records));
+        for (const [h, a] of pairs) games.push(resolveGame(SPORT, h, a, owners, rng, records));
         records = applyRecords(records, games);
-        for (const t of landlessTeams(owners)) everLandless.add(t);
+        for (const t of landlessTeams(SPORT, owners)) everLandless.add(t);
         if (w === Math.floor(REGULAR_WEEKS / 2)) {
-          leaderAtHalf = [...empireCounts(owners).entries()].sort((x, y) => y[1] - x[1])[0]?.[0] ?? null;
+          leaderAtHalf = [...empireCounts(SPORT, owners).entries()].sort((x, y) => y[1] - x[1])[0]?.[0] ?? null;
         }
       }
-      const finalCounts = [...empireCounts(owners).entries()].sort((x, y) => y[1] - x[1]);
+      const finalCounts = [...empireCounts(SPORT, owners).entries()].sort((x, y) => y[1] - x[1]);
       const finalLeader = finalCounts[0]?.[0];
       champs.add(finalLeader);
       // did anyone who was wiped out claw back territory by the end?

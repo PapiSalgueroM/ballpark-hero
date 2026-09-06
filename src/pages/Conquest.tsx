@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import ConquestBoard from '@/components/conquest/ConquestBoard';
-import ImperialismBoard from '@/components/conquest/ImperialismBoard';
+import ImperialismBoardShared from '@/components/conquest/ImperialismBoardShared';
+import { NFL_CONQUEST_GAME, NFL_IMPERIALISM } from '@/data/conquestSports';
+import { NFL_CONQUEST_MAP } from '@/data/conquestData';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -90,7 +92,7 @@ const Conquest = () => {
             </div>
           )}
 
-          {mode === 'imperialism' && <ImperialismBoard />}
+          {mode === 'imperialism' && <ImperialismBoardShared sport={NFL_IMPERIALISM} map={NFL_CONQUEST_MAP} game={NFL_CONQUEST_GAME} />}
           {mode === 'arcade' && <ConquestBoard />}
           <GameSeoContent
           pageHasOwnH1
