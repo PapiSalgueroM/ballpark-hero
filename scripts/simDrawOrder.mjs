@@ -131,8 +131,10 @@ const allSrc = [];
 
 const rel = f => path.relative(ROOT, f).split(path.sep).join('/');
 const rawDrawFiles = new Set();
+let scanned = 0;
 for (const f of allSrc) {
   if (f.endsWith(path.join('lib', 'firstDraw.ts'))) continue;
+  scanned += 1;
   const code = stripComments(fs.readFileSync(f, 'utf8'));
   for (const m of code.matchAll(RAW)) {
     const hit = m[0].replace(/\s+/g, ' ');
@@ -167,7 +169,9 @@ for (const f of baseline) {
     fail(`${f} is on simPrerender's RAW_RANDOM_BASELINE but this harness's scan does not see a raw draw in it, so the two scans have drifted and this sweep is smaller than it claims`);
   }
 }
-console.log(`   ${allSrc.length} source files scanned, ${rawDrawFiles.size} still draw raw, ${baseline.length} on simPrerender's frozen baseline`);
+/* scanned, not allSrc.length: src/lib/firstDraw.ts is skipped above, the same
+   way simPrerender section 16 skips it, so the two report the same number. */
+console.log(`   ${scanned} source files scanned, ${rawDrawFiles.size} still draw raw, ${baseline.length} on simPrerender's frozen baseline`);
 
 /* ---- 2. ROUTE TO PAGE TO IMPORT GRAPH ----------------------------------- */
 const appSrc = fs.readFileSync(path.join(SRC, 'App.tsx'), 'utf8').replace(/\r\n/g, '\n');
