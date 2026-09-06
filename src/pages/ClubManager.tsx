@@ -19,6 +19,7 @@ import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_MATCHES_PER_SEASON, STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
+import { askExplainer, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
 import { StaffScreen } from '@/components/club-manager/StaffScreen';
 import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
@@ -189,6 +190,8 @@ const ClubManager = () => {
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
+              <p>🛒 <span className="font-semibold text-foreground">And two of them are things you go and buy.</span> On top of the season demands, every board makes two specific asks a year, drawn from five shapes and worked out from your club and your era rather than written down: get one more player from your own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating the market says you can reach, or spend a set fee or more on one signing. Every threshold is read off the market you actually have and the money you actually hold, so a big club today gets told to spend nine figures and a modest one in 2005 gets told to spend a few million, and the two asks together never cost more than the pot. That rating floor on the young one is where this game keeps headroom: a signing of 21 or under can still add up to ten rating points, and about one in twelve is carrying a lot more than that. The board screen shows the two under In the market, with the line that says how each one is graded.</p>
+              <p>📩 <span className="font-semibold text-foreground">The inbox is not just your players any more.</span> The board chase an ask you have not met, and you can take their money (a quarter of the kitty, and a point off their patience), give them your word (marked on the board screen, and worth three points of next season's opening confidence either way) or tell them no, which drops the ask and costs three points now. An agent writes about a client of his in your squad with a year left, priced at the contracts desk's own terms, and signing him takes his sale value back off the floor that a last year on a deal puts it on. Your assistant argues about the training plan, but only when the plan really is wrong for the squad in front of him. The supporters trust write about the ticket price when it is on premium. A reporter wants a line on whether the squad is good enough, and backing them lifts every player's morale and the press mood. Every one of those moves a number with a screen behind it, so what you decided in October is still readable in April.</p>
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens in January, on the first Saturday of the new year in most leagues and a little later in one long enough to reach January on its own; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
@@ -219,6 +222,7 @@ const ClubManager = () => {
             'Pick your era: 2026-27 with real squads, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
             'Pick your nation, league and club (330 clubs across 20 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
+            'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
@@ -1062,7 +1066,7 @@ const ClubManager = () => {
               <HubTile
                 icon="📩" title="Inbox" accent={unreadCount > 0}
                 value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={latestMsg ? latestMsg.playerName : 'No messages yet'}
+                sub={latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1217,7 +1221,7 @@ const ClubManager = () => {
                     <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
                   </div>
                   <div className="space-y-1.5">
-                    {objStatuses.map(({ objective, status }) => (
+                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
                       <div key={objective.id} className="flex items-center justify-between gap-2">
                         <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
                         <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
@@ -1226,6 +1230,32 @@ const ClubManager = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Round 474: the two asks you go out and DO, kept apart from
+                      the demands the season hands you, with the line that says
+                      how each one is judged so nobody has to guess. */}
+                  {objStatuses.some(s => isBoardAsk(s.objective.id)) && (
+                    <div className="mt-3 pt-2.5 border-t border-border">
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
+                        🛒 In the market
+                      </div>
+                      <div className="space-y-2">
+                        {objStatuses.filter(s => isBoardAsk(s.objective.id)).map(({ objective, status }) => (
+                          <div key={objective.id}>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs text-foreground min-w-0">{objective.label}</span>
+                              <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
+                                {OBJ_CHIP[status].label}
+                              </span>
+                            </div>
+                            <p className="text-[9px] text-muted-foreground mt-0.5 leading-relaxed">
+                              {objective.promised ? 'You gave them your word on this one. ' : ''}
+                              {askExplainer(objective)}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
