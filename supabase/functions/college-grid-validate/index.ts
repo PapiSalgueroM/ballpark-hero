@@ -143,10 +143,45 @@ serve(async (req) => {
       .ilike("player_name", sanitized.player).limit(40);
     const stints = (data ?? []) as { player_name: string; position: string | null; college: string | null }[];
 
+    /* The three tables the harness has always used and this function never did.
+       All three are CONFIRM ONLY, like the colleges: a hit says yes, a miss says
+       nothing and falls through to the model. */
+    const [draftRes, heisRes, aaRes] = await Promise.all([
+      sb.from("nfl_draft_picks").select("year, round, pick").ilike("player_name", sanitized.player).limit(5),
+      sb.from("cfb_heisman_winners").select("year").ilike("winner", sanitized.player).limit(3),
+      sb.from("cfb_all_americans").select("year").ilike("player_name", sanitized.player).limit(5),
+    ]);
+    let roundOneEnds: number | null = null;
+    const draftYear = (draftRes.data ?? [])[0]?.year;
+    if (draftYear != null) {
+      const { data: r2 } = await sb.from("nfl_draft_picks")
+        .select("pick").eq("year", draftYear).eq("round", 2)
+        .order("pick", { ascending: true }).limit(1);
+      const firstOfRoundTwo = (r2 ?? [])[0]?.pick;
+      if (typeof firstOfRoundTwo === "number" && firstOfRoundTwo > 1) roundOneEnds = firstOfRoundTwo - 1;
+    }
+
     if (stints.length > 0) {
       const properName = stints[0].player_name;
       const schools = [...new Set(stints.flatMap((s) => schoolsOf(s.college)))];
       const positions = stints.map((s) => norm(s.position ?? "")).filter(Boolean);
+
+      /* ROUND 490: THE HARNESS ALREADY KNEW WHAT THIS FUNCTION DID NOT.
+         College Grid recorded its last completion on 2026-07-31 and nothing for
+         the 37 days after. scripts/simCollegeGrid.mjs proves every square of
+         every board has a real answer, and it proves it from four tables this
+         validator never opened: nfl_draft_picks, cfb_heisman_winners,
+         cfb_all_americans and cfb_national_champions. So the answers existed and
+         the checker could not see them, and every one of those cells fell
+         through to a free AI allowance that is spent most of the day.
+         Measured over the 450 criteria on the 75 boards: 275 (61 percent) were
+         answerable from data, and a cell needs BOTH of its criteria, so only
+         about a third of the board could ever be settled without the model.
+         Draft (44), Heisman (12) and All-American (19) bring that to 350 of 450,
+         which is about three fifths of cells. */
+      const draft = (draftRes.data ?? [])[0] as { year: number | null; round: number | null; pick: number | null } | undefined;
+      const heisman = (heisRes.data ?? []).length > 0;
+      const allAmerican = (aaRes.data ?? []).length > 0;
 
       const evaluate = (label: string): Verdict => {
         const l = norm(label);
@@ -154,7 +189,25 @@ serve(async (req) => {
           if (positions.length === 0) return "unknown";
           return positions.some((p) => POSITIONS[l].includes(p)) ? true : "unknown";
         }
-        if (/heisman|all american|national champion|pick|undrafted|conference/.test(l)) return "unknown";
+        if (/heisman/.test(l)) return heisman ? true : "unknown";
+        if (/all american/.test(l)) return allAmerican ? true : "unknown";
+        if (/top 10 pick|top ten pick/.test(l)) {
+          /* The overall pick number is trustworthy and needs no interpretation. */
+          return draft?.pick != null && draft.pick <= 10 ? true : "unknown";
+        }
+        if (/first round pick/.test(l)) {
+          /* THE ROUND COLUMN IS NOT USABLE and this is not a style choice.
+             Measured 2026-09-06: 8,767 of the 11,417 rows marked round 1 carry
+             an impossible pick number, up to 487, because the scrape defaults an
+             unparsed round to 1. The 1982 draft alone has 83 of them, picks 252
+             to 257 filed as first rounders. Rounds 2 to 8 are internally
+             consistent, so the boundary is DERIVED from them: round one is every
+             pick before round two begins, and that number is in the data itself
+             (33 in 2025, 32 in 2000, 26 in 1990, 27 in 1970). Nothing is typed. */
+          if (draft?.pick == null || roundOneEnds == null) return "unknown";
+          return draft.pick <= roundOneEnds ? true : "unknown";
+        }
+        if (/national champion|undrafted|conference/.test(l)) return "unknown";
         if (schools.length === 0) return "unknown";
         const wanted = COLLEGE_ALIASES[l] ?? [l];
         return schools.some((s) => wanted.includes(s)) ? true : "unknown";

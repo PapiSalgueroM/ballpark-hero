@@ -30,12 +30,16 @@
       "sha256": "d94ef1fd154f06025a718a14a9a8dbe4127d3949f8ec022b82e2b8286d78ffcd",
       "version": 21,
       "date": "2026-09-06"
+    },
+    "college-grid-validate": {
+      "sha256": "1f6c43b0972fe1393aa289e803fb3eb928c9bef7250939e7c48c78146f010af4",
+      "version": 15,
+      "date": "2026-09-06"
     }
   },
   "unverified": [
     "analyze-squads",
     "cbb-daily",
-    "college-grid-validate",
     "fantasy-draft-daily",
     "football-connect4-suggest",
     "football-connect4-validate",
