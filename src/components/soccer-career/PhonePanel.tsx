@@ -43,11 +43,17 @@ import {
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { moneyWealth } from "@/lib/soccerMoney";
 import { fanComments as fanCommentsFor } from "@/lib/careerSocial";
+/* Round 473: the badge case. The table and the evaluator are the shared ones
+   the NFL career already reads (careerBadges.ts); only the drawing is local,
+   because the handset is a dark screen and the shared BadgeGrid is drawn in
+   the page's own light theme tokens. Same case, same rules, phone clothes. */
+import { SOCCER_BADGES } from "@/lib/careerBadges";
+import { soccerEarnedBadges } from "@/lib/soccerCareerBadges";
 import type { SpendingCategory } from "@/lib/soccerCareerEngine";
 
 type AppId =
   | "home" | "messages" | "thread" | "contacts" | "contact" | "news"
-  | "bank" | "social" | "player" | "life"
+  | "bank" | "social" | "player" | "life" | "peaks"
   | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
@@ -106,9 +112,15 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     [career, phase],
   );
 
+  /* Round 473: the badges are evaluated every time the case is opened, from
+     the facts of the career, so there is no save field to go stale and an old
+     save shows exactly what it earned. */
+  const earnedPeaks = useMemo(() => soccerEarnedBadges(career), [career]);
+
   /* Tile rule: small tiles, each one opening its own screen with a back
-     button. Eleven of them fit on the handset at 390 wide without the home
-     screen becoming a page you scroll, which is the whole point of tiles. */
+     button. Twelve of them fit on the handset at 390 wide, four rows of three,
+     without the home screen becoming a page you scroll, which is the whole
+     point of tiles. */
   const APPS: { id: AppId; label: string; emoji: string; badge?: number }[] = [
     { id: "messages", label: "Messages", emoji: "💬", badge: waiting },
     { id: "contacts", label: "Contacts", emoji: "👥" },
@@ -120,6 +132,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     { id: "cards", label: "Cards", emoji: "🃏" },
     { id: "social", label: "SocialGram", emoji: "📸" },
     { id: "player", label: "My Player", emoji: "⭐" },
+    { id: "peaks", label: "Peaks", emoji: "🎖️" },
     { id: "life", label: "Life", emoji: kt.emoji },
   ];
 
@@ -387,6 +400,33 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-sm font-black">{season.assists}</div><div className="text-[9px] text-white/50">assists</div></div>
                   </div>
                 )}
+              </div>
+            </>
+          )}
+
+          {app === "peaks" && (
+            <>
+              <AppHeader title="🎖️ Peaks" backLabel="Home" onBack={() => setApp("home")} />
+              <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+                  <div className="text-3xl font-black">{earnedPeaks.length}<span className="text-white/40 text-lg"> / {SOCCER_BADGES.length}</span></div>
+                  <div className="text-[10px] text-white/50">career peaks earned</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {SOCCER_BADGES.map(b => {
+                    const on = earnedPeaks.some(e => e.id === b.id);
+                    return (
+                      <div key={b.id} className={`rounded-xl border p-2 ${on ? "border-amber-400/50 bg-amber-400/10" : "border-white/10 bg-white/5 opacity-55"}`}>
+                        <div className="flex items-center gap-1.5 text-[10.5px] font-black leading-tight">
+                          <span className="text-sm">{on ? b.emoji : "🔒"}</span>
+                          <span className="truncate">{b.label}</span>
+                        </div>
+                        <p className="mt-0.5 text-[9px] leading-snug text-white/55">{b.blurb}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-center text-[9px] text-white/40">Nothing here is stored. Every one is worked out from what you have actually done.</p>
               </div>
             </>
           )}

@@ -420,7 +420,13 @@ export interface InternationalStats {
   failedQualifications?: number;
 }
 
-export type LifestyleLevel = "Humble" | "Comfortable" | "Wealthy" | "Superstar" | "Billionaire";
+/* Round 473: the top band used to be called "Billionaire" and it was reached
+   at a net worth of 500, which is half a billion euros, so the game called a
+   player a billionaire on half the money and the newspaper printed the same
+   claim in a headline. Words match code: the band is now named for the way it
+   feels rather than for a number it cannot support. repairCareer migrates the
+   old string, the way the Round 133 sponsorship rename did. */
+export type LifestyleLevel = "Humble" | "Comfortable" | "Wealthy" | "Superstar" | "Untouchable";
 
 export interface FamilyStatus {
   isMarried: boolean;
@@ -2351,6 +2357,12 @@ export function repairCareer<T extends CareerState>(state: T): T {
      players silently lose a 25M a year deal they had already earned. */
   const legacySponsor = s as unknown as { activeSponsorship?: string };
   if (legacySponsor.activeSponsorship === 'fifa_cover') s.activeSponsorship = 'cover_athlete';
+  /* Round 473 renamed the top lifestyle band off a number the game cannot
+     reach. A save written before that carries the old string, which matches
+     no case in calcLifestyleCost, so without this line an old rich save would
+     silently stop being billed for the way it lives. */
+  const legacyLifestyle = s as unknown as { lifestyleLevel?: string };
+  if (legacyLifestyle.lifestyleLevel === "Billionaire") s.lifestyleLevel = "Untouchable";
   const legacyCover = s as unknown as Record<string, unknown>;
   if (legacyCover.fifaCoverAccepted === true) s.coverAthleteAccepted = true; // rival-names-allow: old save field name, read only
   if (legacyCover.pendingFifaCoverEvent === true) s.pendingCoverAthleteEvent = true; // rival-names-allow: old save field name, read only
@@ -2539,7 +2551,7 @@ function calcMarketValue(overall: number, age: number, _position: string, _socia
 const BIG_NATIONS = ["England", "Spain", "France", "Germany", "Brazil", "Argentina", "USA", "Mexico", "Japan", "Italy"];
 
 function calcLifestyleLevel(netWorth: number): LifestyleLevel {
-  if (netWorth >= 500) return "Billionaire";
+  if (netWorth >= 500) return "Untouchable";
   if (netWorth >= 50) return "Superstar";
   if (netWorth >= 10) return "Wealthy";
   if (netWorth >= 2) return "Comfortable";
@@ -2548,7 +2560,7 @@ function calcLifestyleLevel(netWorth: number): LifestyleLevel {
 
 function calcLifestyleCost(level: LifestyleLevel): number {
   switch (level) {
-    case "Billionaire": return 5;
+    case "Untouchable": return 5;
     case "Superstar": return 2;
     case "Wealthy": return 0.8;
     case "Comfortable": return 0.2;
@@ -5317,10 +5329,16 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `THE FEUD: ${name} vs ${s.rival!.name} Is Football's Coldest War`,
         body: `No handshake. No eye contact. One suspiciously timed unfollow. The rivalry between ${name} and ${s.rival!.name} now has its own fan wikis, timeline threads, and at least one university thesis.` }) },
-    { weight: 0.5, check: () => s.lifestyleLevel === "Billionaire" || s.netWorth >= 500,
+    /* Round 473: this used to say "crossed into billionaire territory" and it
+       fired at a net worth of 500, which is half a billion, and 500 is a
+       number 120 seeded careers never once reached (the richest got to 252).
+       So the milestone is now the one the money in this game can actually
+       produce, it counts the same three pots the badge case counts, and it
+       states a fact rather than an amount nobody has. */
+    { weight: 0.5, check: () => s.netWorth + (s.totalAssetValue || 0) + moneyWealth(s) >= 100,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
-        headline: `THE BILLION CLUB: ${name} Is Officially Richer Than The Club That Pays Them`,
-        body: `Forbes confirmed it this week: ${name}'s empire, boots, brands, buildings and businesses, has crossed into billionaire territory. The club's owner reportedly asked THEM for a loan. It was declined, politely.` }) },
+        headline: `NINE FIGURES: ${name}'s Money Now Works Harder Than ${name} Does`,
+        body: `Boots, brands, buildings and a market account: added up, what ${name} is worth is a nine figure number. The accountant replied to the news with one line and a full stop. Nobody in the dressing room has stopped bringing it up since.` }) },
     { weight: 0.5, check: () => s.age >= 36 && season.goals >= 15,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
         headline: `AGELESS: ${s.age}-Year-Old ${name} Refuses To Read The Calendar`,
