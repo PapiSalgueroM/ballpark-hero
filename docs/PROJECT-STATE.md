@@ -2403,11 +2403,18 @@ roadmap when a round touches the game named:
   the same order. And the league table footnote can miss a level run of three or more clubs
   that fell through to goal difference because only a non adjacent pair is unplayed
   (tiebreakFootnote counts adjacent pairs, orderLevel counts every pair).
-- **Higher or Lower's snapshot carries two frozen player names** ("Martin Ødegaard",
-  "Toni Kroos" as headings) because the opening pair is drawn with Math.random inside a
-  useState initialiser (one of the 24 files frozen in RAW_RANDOM_BASELINE); every build:seo
-  that runs the prerenderer re-rolls and re-dates the page. Fix through src/lib/firstDraw.ts
-  and take the file off the baseline.
+- **Higher or Lower's opening pair: FIXED 2026-09-06, and the review's reading of it was
+  wrong in a way worth keeping.** It said the snapshot re-rolls the two names on every
+  build. The twelve build history says otherwise: the pair held at the same two names in
+  eleven builds and VANISHED in the twelfth, the page showing a crawler no players at all
+  and being re-dated twice for a change nobody made. That is the Round 421 race dropping
+  the block, not re-rolling it, which is the worse failure and the one CLAUDE.md warns
+  about. The hook now draws the pair once per mount through src/lib/firstDraw.ts and is off
+  RAW_RANDOM_BASELINE (24 files down to 23). **The other 23 are still there**, and four of
+  them (/missing-eleven, /missing-five, /missing-nine, /rank-em) are named in that fence's
+  own comment as probably losing real content the same way. The measurement that would
+  settle it is the one just done here: read the last dozen builds of each snapshot in git
+  and look for a block that comes and goes.
 - **Missing XI, "club at the time" convention for a summer tournament.** Nacho's Euro 2024
   semi-final entry says Real Madrid, which he had left in June 2024; Strinić's 2018 entry
   says Sampdoria the same way. Decide the convention (club of the season just finished, or

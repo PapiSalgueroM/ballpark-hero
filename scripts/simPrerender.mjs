@@ -788,7 +788,6 @@ const RAW_RANDOM_BASELINE = new Set([
   'src/hooks/useFootballDraft.ts',
   'src/hooks/useGame.ts',
   'src/hooks/useGolfHL.ts',
-  'src/hooks/useHigherLower.ts',
   'src/hooks/useHockeyCareer.ts',
   'src/hooks/useMlbHL.ts',
   'src/hooks/useNbaCareer.ts',

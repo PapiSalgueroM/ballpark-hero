@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { HigherLowerPlayer } from '@/types/higherLower';
 import { higherLowerPlayers } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { makeFirstDraw } from '@/lib/firstDraw';
 
 type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
 
@@ -72,9 +73,35 @@ function getStreakReaction(streak: number): { emoji: string; message: string } {
   ]) };
 }
 
+/**
+ * Round 421's rule, applied to the opening pair: a random pick that seeds
+ * React state is drawn ONCE PER MOUNT, not once per render attempt, because
+ * React may begin a render, throw it away and start again, and the retry
+ * draws again. Here that showed up in the saved page: the prerenderer seeds
+ * Math.random identically on every sample so a random pick freezes the same
+ * way in every build, which only holds while the draws happen in the same
+ * ORDER, and a second run of these two initialisers moved every draw after
+ * them. /higher-lower shipped two frozen names in its snapshot and was
+ * rewritten and re-dated by a build that changed nothing, and lastmod is the
+ * only re-crawl lever this site has.
+ *
+ * The PAIR is drawn together and held together, which is the bit the memo
+ * could not do one call at a time: the second player is chosen against the
+ * first (never the same man, and at least one stat where the first is not
+ * behind), so two independent memos could hold two picks that were never
+ * chosen for each other.
+ */
+const firstPair = makeFirstDraw(() => {
+  const first = getRandomPlayer([]);
+  return { first, second: getRandomPlayer([first.name], first) };
+});
+
 export function useHigherLower() {
-  const [currentPlayer, setCurrentPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([]));
-  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(() => getRandomPlayer([currentPlayer.name], currentPlayer));
+  const [currentPlayer, setCurrentPlayer] = useState<HigherLowerPlayer>(() => firstPair.get().first);
+  const [nextPlayer, setNextPlayer] = useState<HigherLowerPlayer>(() => firstPair.get().second);
+  /* The release is the effect itself, not a cleanup: the pick is held only
+     from the first render attempt to the commit that used it. */
+  useEffect(firstPair.release, []);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [gameStatus, setGameStatus] = useState<'playing' | 'lost'>('playing');
