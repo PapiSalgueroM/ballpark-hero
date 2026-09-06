@@ -8,7 +8,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
-import { clubTableNames, nationSearchTerm } from '@/data/lineupTeams';
+import { clubTableNames, nationSearchTerm, nationSquadTerm } from '@/data/lineupTeams';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -17,6 +17,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { supabase } from '@/integrations/supabase/client';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
@@ -65,6 +66,36 @@ const LineupBuilder = () => {
     () => new Set(filledSlotsArray.map((slot) => normalizeName(slot.playerName))),
     [filledSlotsArray]
   );
+
+  /* Round 484: the men this country has actually named in a squad, lifted to
+     the top of the nation slot's suggestions.
+
+     The nation pool has to stay wide or slots become unfillable (Round 442),
+     but wide means wrong-shaped: the game asks who has PLAYED FOR a country and
+     the pool is everyone who holds the passport. Argentina offers 1,567 names
+     and 76 of them have ever been named in a squad we hold; Italy offers 1,571
+     and we hold no Italy squad at all. Filtering would empty Italy. Ranking
+     costs nothing and puts the eight names the player actually sees in the
+     right order, and those are exactly the picks the validator can now confirm
+     from our own records without spending an AI call.
+
+     A country we hold no list for gets an empty set and the old order, which is
+     why this is a boost and never a filter. */
+  const [cappedNames, setCappedNames] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (!currentTeam?.isNation) { setCappedNames(new Set()); return; }
+    let live = true;
+    (async () => {
+      const { data } = await supabase
+        .from('national_team_squads')
+        .select('player_name')
+        .eq('country', nationSquadTerm(currentTeam.name))
+        .limit(400);
+      if (!live) return;
+      setCappedNames(new Set((data ?? []).map((r) => normalizeName(r.player_name)).filter(Boolean)));
+    })().catch(() => { if (live) setCappedNames(new Set()); });
+    return () => { live = false; };
+  }, [currentTeam]);
 
   /* Scope the autocomplete pool to the slot's assigned club or nation, so a
      player who does not meet the slot's constraint cannot be selected at all.
@@ -302,7 +333,7 @@ const LineupBuilder = () => {
                         value={playerInput}
                         onChange={setPlayerInput}
                         onSelect={handleSelectPlayer}
-                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers }}
+                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={isValidating}
                         autoFocus

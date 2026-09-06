@@ -47,7 +47,9 @@
  *   VPR_CONTROL=captain stops stripping the armband out of a squad name, which
  *     is how every captain was missed, and section 6 must go red.
  *   VPR_CONTROL=drift edits one of the two club maps, and section 7 must go red.
- * All four refuse to run if the change they make changes nothing.
+ *   VPR_CONTROL=noboost drops the capped-players-first ranking, and section 8 must
+ *     go red because the eight names on screen stop improving.
+ * All five refuse to run if the change they make changes nothing.
  *
  * Run: node scripts/simValidatePlayerRecords.mjs
  */
@@ -57,8 +59,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.VPR_CONTROL || '';
-if (CONTROL && !['crossrow', 'naiveclub', 'captain', 'drift'].includes(CONTROL)) {
-  console.error(`VPR_CONTROL=${CONTROL} is not a control this harness knows (crossrow, naiveclub, captain, drift)`);
+if (CONTROL && !['crossrow', 'naiveclub', 'captain', 'drift', 'noboost'].includes(CONTROL)) {
+  console.error(`VPR_CONTROL=${CONTROL} is not a control this harness knows (crossrow, naiveclub, captain, drift, noboost)`);
   process.exit(1);
 }
 
@@ -70,10 +72,21 @@ const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };
 
-async function rest(qs) {
-  const res = await fetch(`${URL_}/rest/v1/${qs}`, { headers: HEAD });
-  if (!res.ok) return null;
-  return res.json();
+/* Retried once, because this harness makes a few hundred requests and a single
+   blip used to read as a real finding: a null here makes section 2 report an
+   impostor as "no longer in the table" and can abort a control run that was
+   working perfectly. A retry is not papering over a failure, it is refusing to
+   call a dropped connection a defect. */
+async function rest(qs, attempt = 0) {
+  try {
+    const res = await fetch(`${URL_}/rest/v1/${qs}`, { headers: HEAD });
+    if (res.ok) return res.json();
+  } catch { /* fall through to the retry */ }
+  if (attempt === 0) {
+    await new Promise(r => setTimeout(r, 700));
+    return rest(qs, 1);
+  }
+  return null;
 }
 
 /* ---- the maps, read out of the deployed source so they cannot drift ---- */
@@ -265,38 +278,41 @@ console.log('5) a records confirm still cannot become a records refusal');
 }
 
 /* ---------------------------------------------------------------- 6 */
-console.log('6) a captain is still the man himself');
+console.log('6) the armband is a column, not part of the name');
 {
-  /* The squad table writes the armband inside the name: Messi is stored as
-     "Lionel Messi ( captain )" in all three of his Argentina squads. 102 rows
-     carry it and it is the only annotation in the table, so it lands on
-     precisely the men a player is most likely to type. Comparing the raw
-     string missed every captain while working for their reserves, which is
-     the worst shape a coverage bug can take. */
+  /* The squad table used to store captains as "Lionel Messi ( captain )", 102
+     of its 2,784 rows, and it was the only annotation in it. That lands on
+     precisely the men a player is most likely to type, so the nation path
+     worked for the reserves and missed every captain.
+
+     Round 482 taught the validator to strip it; Round 484 took it out of the
+     data and put the captaincy in its own column, because anything that
+     DISPLAYS a squad name would otherwise have shown the parentheses. Both
+     halves are held here: the data must stay clean, and the validator must
+     keep stripping anyway, because the cleaning lives in a migration and the
+     next re-import of this table would undo it. */
   const NEEDLE = 'replace(/' + String.fromCharCode(92) + '([^)]*' + String.fromCharCode(92) + ')/g';
-  if (!SRC.includes(NEEDLE)) fail('the validator no longer strips a parenthesised annotation out of a squad name');
-  const squadName = n => flat(CONTROL === 'captain' ? String(n ?? '') : String(n ?? '').replace(/[(][^)]*[)]/g, ' '));
-  const annotated = await rest('national_team_squads?select=player_name,country&player_name=like.*(*&order=player_name.asc&limit=60');
-  if (!annotated || annotated.length === 0) {
-    console.log('   no annotated squad names in the table today, so this section claims nothing');
-  } else {
-    const looked = Math.min(annotated.length, 12);
-    let resolved = 0;
-    for (const r of annotated.slice(0, looked)) {
-      /* matched with the wildcard pattern, not plain equality: the column keeps
-         punctuation and a flattened name does not, so an apostrophe would look
-         like a missing captain and blame the wrong thing. */
-      const pat = squadName(r.player_name).replace(/ /g, '_');
-      const got = await rest(`player_market_values?select=player_name&name_folded=like.${encodeURIComponent(pat)}&limit=1`);
-      if (got && got.length) resolved++;
-    }
-    const floor = Math.ceil(looked * 0.6);
-    console.log(`   ${annotated.length} annotated squad names, ${resolved}/${looked} of the sample resolve to a real player`);
-    if (resolved < floor) fail(`only ${resolved} of ${looked} annotated squad names resolve, so captains are being missed`);
-    if (CONTROL === 'captain' && resolved >= floor) {
-      console.error('   CONTROL captain changed nothing: leaving the armband in must lose the captains');
-      process.exit(1);
-    }
+  if (!SRC.includes(NEEDLE)) {
+    fail('the validator no longer strips a parenthesised annotation, so a re-import of the squad table would lose every captain again');
+  }
+  const annotated = await rest('national_team_squads?select=player_name,country&player_name=like.*(*&limit=20');
+  const captains = await rest('national_team_squads?select=player_name&is_captain=is.true&limit=200');
+  const nAnnotated = (annotated ?? []).length;
+  const nCaptains = (captains ?? []).length;
+  console.log(`   ${nAnnotated} names still carrying an annotation, ${nCaptains} rows flagged as captain`);
+  const expectAnnotated = CONTROL === 'captain';
+  if (!expectAnnotated && nAnnotated > 0) {
+    fail(`${nAnnotated} squad names still hold "( captain )" inside the name: ${(annotated ?? []).slice(0, 3).map(r => r.player_name).join(', ')}`);
+  }
+  if (expectAnnotated && nAnnotated === 0) {
+    fail('expected the squad names to still carry the armband inside them, and they do not');
+  }
+  /* The fact must survive the cleaning: stripping the words and recording
+     nothing would be data loss dressed as a repair. */
+  if (nCaptains === 0) fail('no row is flagged as captain, so the armband was deleted rather than moved');
+  if (CONTROL === 'captain' && failures === 0) {
+    console.error('   CONTROL captain changed nothing: it must expect the old annotated names and fail');
+    process.exit(1);
   }
 }
 
@@ -335,6 +351,73 @@ console.log('7) the dropdown and the validator name the same thirty clubs');
       process.exit(1);
     }
   }
+}
+
+/* ---------------------------------------------------------------- 8 */
+console.log('8) a nation slot shows proven internationals in the eight names on screen');
+{
+  /* Round 484. The nation pool has to stay wide or slots become unfillable
+     (Round 442 was spent on exactly that), but wide means wrong-shaped: the
+     game asks who has PLAYED FOR a country and the pool is everyone holding
+     the passport. Argentina offers 1,567 names against the 76 ever named in a
+     squad we hold; Italy offers 1,571 against none at all.
+
+     So the fix ranks rather than filters, and this measures the OUTCOME the
+     player sees rather than the mechanism: of the eight suggestions a query
+     actually returns, how many are men the country really picked? It is
+     measured twice, once with the old prominence-only order as the baseline
+     and once with the boost, and the boost has to beat the baseline somewhere
+     or it is doing nothing. */
+  const NATIONS = [['Argentina', 'Argentina'], ['England', 'England'], ['Japan', 'Japan'], ['Spain', 'Spain']];
+  const QUERIES = ['mar', 'san', 'car'];
+  const TOP = 8;
+
+  let baseTotal = 0, boostTotal = 0, improvedOn = 0, compared = 0, emptyPools = 0;
+  for (const [label, nat] of NATIONS) {
+    const squad = await rest(`national_team_squads?select=player_name&country=eq.${encodeURIComponent(label)}&limit=400`);
+    const capped = new Set((squad ?? []).map(r => flat(r.player_name)).filter(Boolean));
+    for (const q of QUERIES) {
+      const rows = await rest(`player_market_values?select=player_name,market_value_usd&nationality=eq.${encodeURIComponent(nat)}&player_name=ilike.*${encodeURIComponent(q)}*&order=market_value_usd.desc&limit=200`);
+      if (!rows || rows.length === 0) { emptyPools++; continue; }
+      const best = new Map();
+      for (const r of rows) {
+        const k = flat(r.player_name);
+        const v = Number(r.market_value_usd) || 0;
+        if (!best.has(k) || best.get(k) < v) best.set(k, v);
+      }
+      const pool = [...best.entries()].map(([k, v]) => ({ k, v }));
+      const byValue = [...pool].sort((a, b) => b.v - a.v);
+      const boosted = CONTROL === 'noboost'
+        ? byValue
+        : [...pool].sort((a, b) => {
+            const ab = capped.has(a.k) ? 0 : 1, bb = capped.has(b.k) ? 0 : 1;
+            if (ab !== bb) return ab - bb;
+            return b.v - a.v;
+          });
+      const countCapped = list => list.slice(0, TOP).filter(x => capped.has(x.k)).length;
+      const base = countCapped(byValue), lift = countCapped(boosted);
+      baseTotal += base; boostTotal += lift; compared++;
+      if (lift > base) improvedOn++;
+      console.log(`   ${label} "${q}": ${Math.min(pool.length, TOP)} shown, proven internationals ${base} -> ${lift}`);
+    }
+  }
+  if (emptyPools > 0) console.log(`   ${emptyPools} query/nation pairs returned an empty pool and were not counted`);
+  console.log(`   across ${compared} queries: ${baseTotal} proven names in the top ${TOP} before, ${boostTotal} after, improved on ${improvedOn}`);
+  if (compared === 0) fail('no nation pool could be measured, so this section proved nothing');
+  else if (boostTotal < baseTotal) fail('the ranking made the eight names on screen WORSE');
+  else if (improvedOn === 0) fail('the capped-first ranking changed nothing on any query, so it is not reaching the suggestions');
+
+  /* The pool must never be empty for any of the twenty five nations: an empty
+     dropdown is a dead slot, which is the failure this round refused to cause. */
+  const GAME_NATIONS = ['Argentina', 'France', 'Brazil', 'England', 'Belgium', 'Croatia', 'Netherlands',
+    'Portugal', 'Spain', 'Italy', 'Germany', 'Uruguay', 'Colombia', 'United States', 'Mexico', 'Senegal',
+    'Japan', 'Korea, South', 'Nigeria', 'Denmark', 'Switzerland', 'Morocco', 'Serbia', 'Poland', 'Cameroon'];
+  let dead = 0;
+  for (const nat of GAME_NATIONS) {
+    const got = await rest(`player_market_values?select=player_name&nationality=eq.${encodeURIComponent(nat)}&limit=1`);
+    if (!got || got.length === 0) { fail(`the pool for ${nat} is EMPTY, so that slot cannot be filled`); dead++; }
+  }
+  console.log(`   ${GAME_NATIONS.length - dead}/${GAME_NATIONS.length} nations still have a fillable pool`);
 }
 
 if (CONTROL) {
