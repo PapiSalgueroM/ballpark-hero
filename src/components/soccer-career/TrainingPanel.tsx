@@ -15,8 +15,13 @@ import { useEffect, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import type { TrainingDrill } from "@/lib/soccerCareerEngine";
+import DrillBoard from "./DrillBoard";
+import { DRILL_META, drillForPosition, type DrillKind } from "@/lib/careerDrills";
 
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result";
+/* Round 468: "arcade" is the position drill, played on the shared arcade
+   engine in DrillBoard. It sits beside the Round 81 tiles rather than
+   replacing them, and it banks through its own rule (applyDrillResult). */
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade";
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
@@ -35,10 +40,12 @@ function keeperPick(): number {
   return 4;
 }
 
-export default function TrainingPanel({ career, available, onComplete, onClose }: {
+export default function TrainingPanel({ career, available, onComplete, onDrill, onClose }: {
   career: CareerState;
   available: boolean;
   onComplete: (drill: TrainingDrill, score: number) => void;
+  /** Round 468: a banked position drill, wins out of ten. */
+  onDrill: (kind: DrillKind, count: number) => void;
   onClose: () => void;
 }) {
   const [screen, setScreen] = useState<Screen>("menu");
@@ -281,6 +288,24 @@ export default function TrainingPanel({ career, available, onComplete, onClose }
 
         {screen === "menu" && (
           <div className="p-4 space-y-3">
+            {/* Round 468: the drill your position actually plays, on the arcade
+                engine. Always open, because practice is unlimited; only today's
+                ten bank, and only while the season's session is still there. */}
+            {(() => {
+              const k = drillForPosition(career.position);
+              const m = DRILL_META[k];
+              return (
+                <button onClick={() => setScreen("arcade")}
+                  className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
+                  <span className="text-3xl">{m.emoji}</span>
+                  <span className="flex-1">
+                    <span className="block text-sm font-black">{m.name} <span className="ml-1 align-middle rounded bg-emerald-500 px-1.5 py-0.5 text-[9px] font-black text-black">NEW</span></span>
+                    <span className="block text-[10px] text-muted-foreground">Your {career.position} drill. Trains {m.statLabel}. Today's ten count, practice is free.</span>
+                  </span>
+                  <span className="text-muted-foreground">›</span>
+                </button>
+              );
+            })()}
             {!available ? (
               <div className="rounded-xl border border-border bg-muted/10 p-6 text-center space-y-1">
                 <div className="text-3xl">😮‍💨</div>
@@ -306,6 +331,10 @@ export default function TrainingPanel({ career, available, onComplete, onClose }
               </>
             )}
           </div>
+        )}
+
+        {screen === "arcade" && (
+          <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />
         )}
 
         {screen === "dribbling" && (

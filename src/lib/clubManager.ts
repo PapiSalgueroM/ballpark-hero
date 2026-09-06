@@ -32,6 +32,18 @@ import {
   makeGeneratedName,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
+/* Round 467: the facilities and the books. Both modules import from this
+   file and this file calls into them; nothing on either side runs at module
+   scope, which is the house rule for a cycle. */
+import {
+  ensureFacilities, injurySpell, rolloverFacilities, tickFacilities, trainingGroundGrowthMult,
+} from '@/lib/clubManagerFacilities';
+import type { ClubFacilities } from '@/lib/clubManagerFacilities';
+import {
+  concessionPerFan, ensureBooks, fanCrowdMult, noteAwayTrip, noteHomeGate, noteSponsorIncome,
+  rolloverBooks, tickBooks,
+} from '@/lib/clubManagerFinances';
+import type { ClubBooks } from '@/lib/clubManagerFinances';
 
 /**
  * Club Manager engine.
@@ -1270,6 +1282,10 @@ export interface SponsorDeal {
   yearsLeft: number;
   /** Total paid out by this deal so far, in millions, for the desk. */
   paid: number;
+  /** Round 467: a bad brand costs the fans mood every week it runs. Absent on older deals, read as good. */
+  rep?: 'good' | 'bad';
+  /** Round 467: local or global, for the desk. */
+  reach?: 'local' | 'global';
 }
 
 /* Invented brands. Nothing here is a real company: the harness enumerates
@@ -1335,6 +1351,13 @@ export function sponsorOffers(state: CareerState): SponsorOffer[] {
 export function signSponsor(career: CareerState, offerId: string): CareerState | null {
   const offer = sponsorOffers(career).find(o => o.id === offerId);
   if (!offer || career.sponsor) return null;
+  return signSponsorWith(career, offer);
+}
+
+/** Round 467: the signing itself, split out so a negotiated or bad brand
+ *  offer (clubManagerFinances) signs on exactly the same terms as the
+ *  three shapes. The caller has already checked there is no deal. */
+export function signSponsorWith(career: CareerState, offer: SponsorOffer): CareerState {
   const state: CareerState = { ...career };
   state.sponsor = {
     brand: offer.brand, shape: offer.shape, perSeason: offer.perSeason,
@@ -1382,7 +1405,9 @@ export function gatePricePerFan(state: CareerState): number {
   const def = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
   const base = [38, 30, 24, 18][def.tier - 1] ?? 18;
   const tier = TICKET_TIERS[state.finance?.ticketTier ?? 1];
-  return Math.round(base * tier.priceMult * (eraHist ? 0.75 : 1) * 100) / 100;
+  /* Round 467: food and drink a head rides on the same number, so a home
+     gate stays exactly crowd times money a head (simFinance section 1). */
+  return Math.round((base * tier.priceMult * (eraHist ? 0.75 : 1) + concessionPerFan(state)) * 100) / 100;
 }
 
 /** What the next ground expansion costs, in millions, or null at the cap. */
@@ -1640,6 +1665,14 @@ export interface CareerState {
    *  clubs; leagues outside the pyramids never get an entry. Registered
    *  into the engine on load exactly like customClub. */
   leagueOverrides?: Record<string, string[]>;
+  /** Round 467: the four club facilities, level 1 to 10. Absent on a save
+   *  from before the desk existed and repaired by ensureFacilities to the
+   *  club's day one levels; fails closed on shape. See clubManagerFacilities. */
+  facilities?: ClubFacilities;
+  /** Round 467: the books, the fans and the sponsor desk's pushes. Absent on
+   *  an older save and repaired by ensureBooks; fails closed on shape. See
+   *  clubManagerFinances. */
+  books?: ClubBooks;
 }
 
 export type NextFixtureInfo =
@@ -1695,7 +1728,9 @@ export interface LiveMatch {
 
 export interface PlayResult {
   state: CareerState;
-  kind: 'window' | 'match' | 'seasonOver' | 'halftime';
+  /** Round 466: 'reached' only ever comes back to a caller that passed
+   *  untilWeek, when the week pointer got there without a match to play. */
+  kind: 'window' | 'match' | 'seasonOver' | 'halftime' | 'reached';
   report?: MatchWeekReport;
   live?: LiveMatch;
 }
@@ -2628,11 +2663,11 @@ export function clubDefFor(name: string): ClubDef {
 }
 
 const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
-const CUP_LABELS: Record<CupRound, string> = {
+export const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 const UCL_ORDER: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
-const UCL_LABELS: Record<UclKoRound, string> = {
+export const UCL_LABELS: Record<UclKoRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
@@ -5115,7 +5150,10 @@ export function answerPress(career: CareerState, optionIdx: number): CareerState
     }
     return out;
   });
-  state.boardConfidence = clamp(state.boardConfidence + opt.board, 0, 100);
+  /* Round 465: only a result can sack you. An answer can take the board to
+     its last point, never to zero, because zero IS the sack in the header
+     meter and nothing between matches hands the manager to the wilderness. */
+  state.boardConfidence = clamp(state.boardConfidence + opt.board, 1, 100);
   press.mood = clamp(press.mood + opt.mood, 0, 100);
   press.nextFire += opt.fire ?? 0;
   press.nextSharpen += opt.sharpen ?? 0;
@@ -7409,8 +7447,10 @@ function uclKoVenue(round: UclKoRound): boolean | null {
   return round === 'R16' || round === 'QF' ? true : round === 'SF' ? false : null;
 }
 
-/** Does this calendar entry involve my club right now? */
-function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
+/** Does this calendar entry involve my club right now? Exported since
+ *  Round 466 so the calendar can tell a cup round I am out of from one
+ *  whose draw is still to come. */
+export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boolean {
   switch (entry.type) {
     case 'league': return true;
     case 'window': return true;
@@ -8321,9 +8361,12 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const cost = played ? 20 + ri(0, 8) : 0;
     const fitness = clamp(p.fitness + recovery - cost, 20, 100);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
-    if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = ri(1, 3);
+    if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     return { ...p, fitness, injuryWeeks };
   });
+  // Round 467: the dressing room's recovery and the week's books.
+  tickFacilities(state);
+  tickBooks(state);
   tickScouting(state);
 }
 
@@ -8360,15 +8403,19 @@ function applyResult(table: TableRow[], home: string, away: string, hg: number, 
   }
 }
 
-interface MyFixture {
+export interface MyFixture {
   competition: Competition;
   compLabel: string;
   opponent: string;
   home: boolean | null;
 }
 
-/** Resolves what my club is playing for a given entry (null if not involved). */
-function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
+/** Resolves what my club is playing for a given entry (null if not involved).
+ *  Exported since Round 466: the calendar names the opponent on every match
+ *  day ahead from this, so the grid can never disagree with the fixture the
+ *  engine will put out. Round 467 reads it too, so the books can count the
+ *  fixtures the club is certain of. */
+export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
   if (!entryInvolvesMe(state, entry)) return null;
   if (entry.type === 'league') {
     const pairs = roundPairs(state.leagueClubs, entry.round);
@@ -8600,12 +8647,14 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
      Away days and neutral finals are somebody else's till. */
   const myGround = venue === 'home';
   const fin = myGround ? state.finance : undefined;
-  const crowdMult = myGround ? (TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * (1 + 0.12 * (fin?.groundUpgrades ?? 0))) : 1;
+  /* Round 467: and MY fans' mood, exactly 1 at the mood every save opens on. */
+  const fans = myGround ? fanCrowdMult(state) : 1;
+  const crowdMult = myGround ? (TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * (1 + 0.12 * (fin?.groundUpgrades ?? 0)) * fans) : 1;
   const custom = state.customClub && hostName === state.customClub.name ? state.customClub : null;
   if (custom && custom.capacity) {
     /* The chosen ground genuinely grows: 6,000 seats per expansion. */
     const cap = custom.capacity + (myGround ? (fin?.groundUpgrades ?? 0) * 6000 : 0);
-    const att = Math.min(cap, Math.round(ri(Math.round(cap * 0.74), cap) * TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult));
+    const att = Math.min(cap, Math.round(ri(Math.round(cap * 0.74), cap) * TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * fans));
     return { attendance: att, capacity: cap, venue };
   }
   const eraHist = !!state.eraId && isHistoricEra(state.eraId);
@@ -9153,7 +9202,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     const victim = pick(xi);
     const p = state.squad.find(x => x.id === victim.id);
     if (p) {
-      p.injuryWeeks = ri(1, 5);
+      // Round 467: the medical staff read the same draw and write it shorter.
+      p.injuryWeeks = injurySpell(state, ri(1, 5));
       injuryLines.push({ name: p.name, minute: ri(8, 85), weeks: p.injuryWeeks });
       events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
     }
@@ -9370,6 +9420,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
       ].slice(0, 8);
     }
   }
+  /* Round 465: a broken promise above can spend the last of it AFTER the
+     check that sacks, so a manager could finish the week on zero and still
+     be in a job. The header meter reads this number and says zero is the
+     sack (src/lib/clubManagerMeters.ts), so the check runs once more here. */
+  if (!state.sacked && state.boardConfidence <= 0) {
+    state.sacked = true;
+    events.push('📉 The board has seen enough. You are relieved of your duties.');
+  }
   // The talk only ever covered the match it was given for.
   state.teamTalk = null;
 
@@ -9449,6 +9507,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     const gate = Math.round((crowd.attendance * gatePricePerFan(state)) / 1e6 * 100) / 100;
     state.budget = Math.round((state.budget + gate) * 100) / 100;
     state.finance = { ...fin, seasonGate: Math.round((fin.seasonGate + gate) * 100) / 100, lastGate: gate };
+    // Round 467: the same gate, split into tickets and food for the books.
+    noteHomeGate(state, crowd.attendance, gate);
+  } else if (crowd.venue === 'away') {
+    // Round 467: an away day goes in the books as travel. Nothing leaves the kitty.
+    noteAwayTrip(state, fx.competition);
   }
   const detail = buildMatchDetail({
     myGoals, oppGoals, lamMine, lamOpp,
@@ -9653,8 +9716,10 @@ export const FACILITY_INFO: Record<FacilityKind, { label: string; blurb: string;
     emoji: '\u{1F9E2}',
   },
   facilities: {
-    label: 'Training ground',
-    blurb: 'The building itself. Lifts intake quality and helps everyone squeeze more out of the week.',
+    /* Round 467: the first team's training ground is one of the four club
+       facilities now, so this youth building says what it is. */
+    label: 'Academy building',
+    blurb: 'The youth building itself. Lifts intake quality and helps everyone squeeze more out of the week.',
     emoji: '\u{1F3DF}\uFE0F',
   },
 };
@@ -9953,7 +10018,9 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const coaching = career.academy?.coaching ?? 8;
   const facilities = career.academy?.facilities ?? 8;
   const staff = 0.72 + coaching * 0.022 + facilities * 0.011;
-  return clamp(headroom * minutes * intensity * focus * staff, 0.1, 2.6);
+  /* Round 467: the training ground, exactly 1 at level 1, inside the same
+     clamp and still under agePlayer's cap at the ceiling. */
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career), 0.1, 2.6);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
@@ -10111,7 +10178,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
@@ -10132,7 +10199,14 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // from before either existed.
   ensurePairLedger(state);
   ensureUclCalendar(state);
+  // Round 467: and the facilities and the books.
+  ensureFacilities(state);
+  ensureBooks(state);
   while (state.week < state.calendar.length) {
+    /* Round 466: a sim to a day stops at the first entry the day does not
+       cover. The entries before it have been played or skipped through this
+       same loop, so a tap on a quiet Tuesday never plays the match after it. */
+    if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
       state.week += 1;
@@ -10583,7 +10657,8 @@ export function respondApproach(career: CareerState, commit: boolean): CareerSta
   state.approach = null;
   if (commit) {
     state.pendingMove = { club: app.club, blurb: app.blurb };
-    state.boardConfidence = clamp(state.boardConfidence - 6, 0, 100);
+    // Round 465: to the last point, never to zero; see answerPress.
+    state.boardConfidence = clamp(state.boardConfidence - 6, 1, 100);
     state.aiHeadlines = [
       `🤝 Done deal for the summer: you will take over at ${app.club} when the season ends. The ${state.clubName} board heard it from the radio, and they are furious.`,
       ...state.aiHeadlines,
@@ -11395,6 +11470,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.finance = moving || !career.finance
     ? undefined
     : { ...career.finance, seasonGate: 0, lastGate: null };
+  /* Round 467: the facilities and the books follow the same rule, and the
+     books close BEFORE the sponsor block below so the new season's sponsor
+     money lands in the new season's ledger. */
+  rolloverFacilities(state, career, moving);
+  rolloverBooks(state, career, moving);
   /* Round 200: the sponsor's year ticks over here. The bonus for the season
      just finished is paid FIRST, off the position that season really
      reached, then a year comes off the deal and the next year's guaranteed
@@ -11416,6 +11496,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     if (earned) { credit += deal.bonus; paid += deal.bonus; }
     if (yearsLeft > 0) { credit += deal.perSeason; paid += deal.perSeason; }
     state.budget = Math.round((state.budget + credit) * 100) / 100;
+    // Round 467: into the new season's books, bonus and guaranteed money alike.
+    noteSponsorIncome(state, credit);
     state.sponsor = yearsLeft > 0 ? { ...deal, yearsLeft, paid } : null;
     if (earned) {
       state.aiHeadlines = [
@@ -11533,6 +11615,11 @@ export function loadCareer(): CareerState | null {
        both before any screen reads the table or the calendar. */
     ensurePairLedger(parsed);
     ensureUclCalendar(parsed);
+    /* Round 467: the facilities and the books, both fail closed on shape, so
+       a save from before either existed (or a mangled block) opens on the
+       club's day one levels and fresh books before any screen reads them. */
+    ensureFacilities(parsed);
+    ensureBooks(parsed);
     /* Round 154: the custom club's identity is rebuilt from the save the
        moment it is opened, measured against the squad as saved, and cleared
        just as firmly when the save is a normal one, so a stale registration

@@ -228,6 +228,14 @@ console.log('7) No sponsor on this site is a real company');
   const m = src.match(/const SPONSOR_BRANDS[^=]*=\s*\[([\s\S]*?)\];/);
   const brands = m ? [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]) : [];
   if (brands.length < 12) fail(`only ${brands.length} brands, offers would repeat constantly`);
+  /* Round 467: the bad brands on the desk (clubManagerFinances) are held to
+     the same wall. Bookmakers and lenders are exactly the shapes a real
+     name would slip into. */
+  const finSrc = fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerFinances.ts'), 'utf-8');
+  const mb = finSrc.match(/const BAD_SPONSOR_BRANDS[^=]*=\s*\[([\s\S]*?)\];/);
+  const badBrands = mb ? [...mb[1].matchAll(/'([^']+)'/g)].map(x => x[1]) : [];
+  if (badBrands.length < 4) fail(`only ${badBrands.length} bad brands found in clubManagerFinances.ts`);
+  brands.push(...badBrands);
   /* Real shirt sponsors, kit makers and the betting firms that cover half
      the shirts in Europe. A brand only has to CONTAIN one of these to fail:
      "Emirates Freight" would be as wrong as "Emirates". */

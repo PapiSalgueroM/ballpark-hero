@@ -239,6 +239,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
       "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
       "Play the match, read the report, answer the press, and manage the dressing room between games.",
+      "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
       "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
       "Keep the confidence meter alive, hit the board's objectives, collect trophies, and roll into next season while the whole world ages around you.",
     ],
@@ -247,8 +248,11 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
       "Each past era is a sealed world: real squads and values from its own year, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
       "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
-      "Board confidence starts at 60 of 100 and swings with results, cup runs and position against expectation. At zero you are sacked.",
+      "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: it opens at 60 in your first season, anywhere from 35 to 82 after that depending on how the last one went, and swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
+      "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
+      "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
+      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and costs the fans mood every week), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
     ],
     example: [
       "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
@@ -263,7 +267,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     faqs: [
       {
         q: "How exactly do I get sacked?",
-        a: "The confidence meter hits zero. Losses and sitting below the expected position drain it, while wins, trophies and cup runs refill it.",
+        a: "The board meter in the header hits zero at a final whistle. Losses, sitting below the expected position, cup exits and promises to the press you broke drain it, while wins, trophies and cup runs refill it. Tap the meter for the number: under 10 it reads One bad week from the sack, and one bad week can genuinely take that much.",
       },
       {
         q: "Does my career save?",
@@ -272,6 +276,18 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Are the players real?",
         a: "Yes, with real market values, in both eras. The only invented players are the ones the game clearly marks: youth padding, deep-future projections, and the starting squad of a club you create yourself.",
+      },
+      {
+        q: "When do the transfer windows close?",
+        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens on the first Saturday of the new year and shuts after your third match from there. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
+      },
+      {
+        q: "Do wages come out of my transfer budget?",
+        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers and facility upgrades are the lines that move the kitty.",
+      },
+      {
+        q: "Are the sponsors real companies?",
+        a: "No. Every brand on the desk is invented, the good ones and the bad ones, and a harness checks the whole list against real sponsors, kit makers and bookmakers.",
       },
     ],
   },

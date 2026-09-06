@@ -65,6 +65,7 @@ import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
+import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 /* Round 131: height, weight and the specifics under each family. */
 import {
@@ -1003,6 +1004,12 @@ export default function SoccerCareer() {
     setCareer(prev => (prev ? applyTrainingResult(prev, drill, score) : prev));
   }, []);
 
+  // Round 468: the position drill on the arcade engine banks through its own
+  // rule, which respects the ceiling; the count is wins out of ten.
+  const handleDrillComplete = useCallback((kind: DrillKind, count: number) => {
+    setCareer(prev => (prev ? applyDrillResult(prev, kind, count) : prev));
+  }, []);
+
   const handleConfirmNewCareer = () => {
     localStorage.removeItem(SAVE_KEY);
     setCareer(null);
@@ -1150,6 +1157,7 @@ export default function SoccerCareer() {
                 career={career}
                 available={trainingAvailable(career)}
                 onComplete={handleTrainingComplete}
+                onDrill={handleDrillComplete}
                 onClose={() => setTrainingOpen(false)}
               />
             )}

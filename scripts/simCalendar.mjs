@@ -12,6 +12,11 @@
  *  - every engine week lands on a Saturday, across the December year wrap
  *  - leap and non-leap Februaries
  *  - a real save's season span: kicks off mid August, ends April to June
+ * Round 466 moved the date maths into src/lib/clubManagerCalendar.ts (the
+ * screen imports it from there now), so this reads that module. The January
+ * window entry takes the first Saturday of the new year since that round,
+ * which section 3's ordering and Saturday checks cover; the window's own
+ * placement is measured in scripts/simClubManagerCalendar.mjs.
  * Run: node scripts/simCalendar.mjs
  */
 import { execSync } from 'node:child_process';
@@ -26,11 +31,11 @@ const BUNDLE = path.join(os.tmpdir(), 'cmCal.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const cal = await import('${ROOT.replaceAll('\\', '/')}/src/components/club-manager/CalendarScreen.tsx');
+const cal = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerCalendar.ts');
 const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const mods = { cal, cm };
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --jsx=automatic`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --jsx=automatic --alias:@=${ROOT.replaceAll('\\', '/')}/src`, { stdio: 'inherit' });
 
 const { cal, cm } = (await import(pathToFileURL(BUNDLE).href)).mods;
 const { dayOfWeek, daysInMonth, seasonKickoff, dateOfWeek, dateOfEntries } = cal;

@@ -500,6 +500,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
       "Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.",
       "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+      "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
       "Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.",
       "Spend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.",
       "Retire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.",
@@ -513,6 +514,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
       "There is no cap on your starting overall, but a high start eats the room you had to grow into, and if you are already world class as a teenager you pick up far more injuries before you turn 24.",
       "Your ceiling is not welded shut. Two seasons in a row that are both elite and decorated, while you are already pressed against it, buy one point back at a time. 99 is the hard wall and nothing gets past it.",
+      "A position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.",
       "Height and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.",
       "Morale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
       "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
@@ -526,7 +528,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     tips: [
       "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
-      "There is no training menu. Growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
+      "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
       "Money matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.",
       "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
       "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
@@ -654,7 +656,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Why does a name get refused under a special rule when the two really were teammates?",
-        a: "Because the rule removed it. Under Active players only a teammate with no 2025-26 season on our career records is off the board, which catches every retired player and the few whose records here stop early, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
+        a: "Because the rule removed it. With Active players on, only a teammate with no 2025-26 season on our career records is off the board, which catches every retired player and the few whose records here stop early, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
       },
     ],
   },
