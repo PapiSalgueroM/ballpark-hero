@@ -168,12 +168,19 @@ export function runFingerprint(r: RunState): string {
   ].join('|');
 }
 
-/** Is this table a finish the site would record: the solo run home, or every
- *  seat's window shut and the shared season played. The hook asks before it
- *  applies a restore, because a finish read back from storage is not a new
- *  finish (src/lib/restoredFinish.ts). */
+/**
+ * Is this table a finish the site would record: the solo run home with its
+ * window still on the board, or every seat's window shut and the shared
+ * season played. The hook asks before it applies a restore, because a finish
+ * read back from storage is not a new finish (src/lib/restoredFinish.ts).
+ *
+ * This is the hook's own `complete` written once. It has to stay that, so
+ * the window check on the solo side is not decoration: a solo table only
+ * ever reads 'done' while its window is open, and marking a restore the hook
+ * will not call complete would leave a mark for the next finish to swallow.
+ */
 export function isFinishedTable(t: TableState): boolean {
-  if (t.seats.length === 1) return t.seats[0].run?.phase === 'done';
+  if (t.seats.length === 1) return t.phase === 'window' && t.seats[0].run?.phase === 'done';
   return t.phase === 'season';
 }
 

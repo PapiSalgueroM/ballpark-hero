@@ -456,7 +456,11 @@ export function useRebuild(): RebuildState {
   const firstHumanRun = tbl.seats.find(s => s.kind === 'human')?.run ?? null;
   const scored = solo ? run : firstHumanRun;
   const scoredRating = scored ? loop.ratingOf(scored) : 0;
-  const complete = solo ? phase === 'done' : phase === 'season';
+  /* Round 477: one definition of finished, in src/lib/rebuildSave.ts, because
+     the restore has to ask the same question this line does. Two copies of it
+     drift, and a restore that marked a finish this line did not call complete
+     would leave a mark sitting for the next real finish to swallow. */
+  const complete = isFinishedTable(tbl);
   useGameCompletion('rebuild', complete, Math.max(0, scoredRating * 10), scored && scoredRating >= scored.target ? 1 : 0);
 
   const shareText = useMemo(() => {

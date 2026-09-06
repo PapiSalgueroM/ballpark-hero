@@ -18,7 +18,9 @@
  *      has to be identical in everything a player can see: every seat's
  *      fingerprint, XI, rating, budget, funds, grade, board demands met, war
  *      log, open scouts' list, reckoning notes, rival personas, and the
- *      shared season once it has been played.
+ *      shared season once it has been played. A run saved between your bid
+ *      and the rival's answer has to come back answerable, which is the one
+ *      point in the loop where the page, not the engine, held the next move.
  *   2) A TAMPERED OR TRUNCATED SAVE OPENS FRESH. The six kinds of wreckage
  *      scripts/sweepSaves.mjs pours into every key on the site, truncations
  *      at nine depths, and dozens of targeted mutations (versions, seat
@@ -66,6 +68,15 @@
  *                                        sections 1, 2 and 6 must FAIL
  *   SIM_REBUILD_SAVE_CONTROL=nomark      the hook's markRestoredFinish call
  *                                        removed: section 5 must FAIL
+ *   SIM_REBUILD_SAVE_CONTROL=twofinishes the hook decides a finish with its
+ *                                        own copy of the rule, the shape it
+ *                                        shipped before this round, instead
+ *                                        of the one the restore asks:
+ *                                        section 5 must FAIL
+ *   SIM_REBUILD_SAVE_CONTROL=nowarheal   the hook's recovery of a war saved
+ *                                        mid thought removed, leaving the
+ *                                        reply only inside raiseWar's own
+ *                                        timer: section 1 must FAIL
  *
  * Run: node scripts/simRebuildSave.mjs
  */
@@ -84,7 +95,7 @@ let section = 1;
 const fail = m => { failures[section] += 1; console.error(`  FAIL: ${m}`); };
 const total = () => SECTIONS.reduce((t, n) => t + failures[n], 0);
 
-const CONTROLS = ['trustshape', 'partial', 'endonly', 'missmove', 'nomark'];
+const CONTROLS = ['trustshape', 'partial', 'endonly', 'missmove', 'nomark', 'twofinishes', 'nowarheal'];
 const CONTROL = process.env.SIM_REBUILD_SAVE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_REBUILD_SAVE_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -163,6 +174,20 @@ if (CONTROL === 'missmove') {
     '',
   ]], CONTROL_FILE);
   console.log('NEGATIVE CONTROL ON: applyMove has lost its sell case');
+}
+if (CONTROL === 'twofinishes') {
+  hookSrc = rewrite('useRebuild.ts', hookSrc, [[
+    '  const complete = isFinishedTable(tbl);',
+    "  const complete = solo ? phase === 'done' : phase === 'season';",
+  ]]);
+  console.log('NEGATIVE CONTROL ON: the hook decides a finish with its own copy of the rule');
+}
+if (CONTROL === 'nowarheal') {
+  hookSrc = rewrite('useRebuild.ts', hookSrc, [[
+    '    const t = window.setTimeout(() => act({ k: \'reply\' }, loop.rivalReply), 700);\n    return () => window.clearTimeout(t);',
+    '    return undefined;',
+  ]]);
+  console.log("NEGATIVE CONTROL ON: a war saved between your bid and the rival's answer has nothing to answer it");
 }
 if (CONTROL === 'nomark') {
   hookSrc = rewrite('useRebuild.ts', hookSrc, [[
@@ -353,6 +378,11 @@ function playTable({ kinds, salt, preset, pol, onStep, formationAt = null }) {
     const run = table.activeRun(sess.table);
     if (!run) throw new Error('a window is open with no run');
     if (run.phase === 'done') {
+      /* A one seat table stops here, exactly as the page does: the pass on
+         button lives in the fuller table's result screen only, so a solo run
+         sits at phase window with its window shut for good. Driving it into
+         a season here would test a state no player can reach. */
+      if (kinds.length === 1) break;
       const closed = table.closeWindow(sess.table, CLUBS);
       if (closed === sess.table) throw new Error('closeWindow refused');
       step(closed);
@@ -381,6 +411,7 @@ console.log('1) a save written at any point restores the same run');
 section = 1;
 
 const restoredHandover = [];
+const pendingWars = [];
 let deepChecks = 0;
 let deepTables = 0;
 let longestSeat = 0;
@@ -416,6 +447,8 @@ for (const cfg of DEEP) {
            the phone changing hands is exactly the moment a save must not put
            the last player's board back on screen. */
         if (back.table.phase === 'handover') restoredHandover.push(back.table);
+        const r = table.activeRun(back.table);
+        if (r?.war?.outcome === 'live' && r.war.leader === 'you') pendingWars.push(r);
       },
     });
   } catch (e) {
@@ -475,6 +508,23 @@ console.log(`   wide: ${wideChecks} saves taken and restored across ${finishedTa
 console.log(`   a seat's window took ${avgMoves} moves on average and ${longestSeat} at the longest, against a cap of ${save.MAX_MOVES_PER_SEAT}`);
 if (longestSeat * 2 > save.MAX_MOVES_PER_SEAT) fail(`the move cap ${save.MAX_MOVES_PER_SEAT} leaves no headroom over the ${longestSeat} a real window needed`);
 if (deepChecks < 500) fail(`only ${deepChecks} deep saves were taken, too few to mean anything`);
+
+/* A war saved between your bid and the rival's answer. The rival's reply used
+   to live only inside raiseWar's own timer, so a run restored at this exact
+   point came back with the ball in his court and no way to give it back:
+   raising again is refused while you lead, and so is walking. The engine has
+   to be able to move each of these on, and the hook has to have somewhere
+   other than raiseWar that calls it. */
+if (pendingWars.length === 0) fail('no save landed between a bid and the answer, so the war restore is untested');
+let stuck = 0;
+for (const r of pendingWars) if (loop.rivalReply(r) === r) stuck += 1;
+if (stuck > 0) fail(`${stuck} of ${pendingWars.length} restored wars cannot be moved on by the engine`);
+{
+  const hook = stripComments(hookSrc);
+  const replies = (hook.match(/loop\.rivalReply/g) || []).length;
+  if (replies < 2) fail(`the hook calls loop.rivalReply ${replies} time(s): a war restored mid thought has nothing to answer it`);
+}
+console.log(`   ${pendingWars.length} saves landed between a bid and the rival's answer, and every one of them can be answered`);
 if (restoredFinished.length < WIDE_TABLES / 2) fail(`only ${restoredFinished.length} finished tables restored, expected about ${WIDE_TABLES}`);
 
 /* =================== 2) a tampered or truncated save opens fresh =================== */
@@ -724,7 +774,16 @@ section = 5;
   if (completion.indexOf('consumeRestoredFinish(') > completion.indexOf('recordCompletion(')) {
     fail('useGameCompletion no longer consumes the restore mark before it records');
   }
-  console.log('   the hook announces the restore before it applies it, and the completion hook still consumes the mark first');
+  /* One definition of finished. The restore marks on isFinishedTable, so the
+     line that feeds useGameCompletion has to be the same call and not a second
+     copy of the rule: two copies drift, and a mark left unconsumed is a mark
+     the next real finish walks into. */
+  const complete = /const complete = ([^;]+);/.exec(hook);
+  if (!complete) fail('the hook has no complete expression feeding useGameCompletion any more');
+  else if (complete[1].trim() !== 'isFinishedTable(tbl)') {
+    fail(`the hook decides a finish with "${complete[1].trim()}" while the restore decides it with isFinishedTable, so the two can drift`);
+  }
+  console.log('   the hook announces the restore before it applies it, decides a finish the same way the restore does, and the completion hook still consumes the mark first');
 }
 
 /* =================== 6) every action the hook can reach is saved =================== */
