@@ -7291,16 +7291,21 @@ export function uclFirstKoRound(state: Pick<CareerState, 'eraId'>): UclKoRound {
 /* ---------- Round 478: the group table's own order ---------- */
 
 /**
- * Which of the competition's two orders this save's groups read. The same
- * answer that decides the format decides the tiebreak, because they are the
- * same fact: a save playing eight groups into a round of 16 is a save in the
- * group stage era (2003-04 to 2023-24), and that era read the games between
- * the level clubs first. A modern save stands in for the league phase, which
- * has no head to head step. See src/lib/clubManagerUclGroups.ts for both
- * orders and the sources behind them.
+ * Which of the competition's three orders this save's groups read. A save
+ * that does not play eight groups into a round of 16 is standing in for the
+ * league phase, which has no head to head step at all. A save that does
+ * reads the games between the level clubs first, and the two group stage
+ * worlds this engine starts careers in do that differently: 2005-06 and
+ * 2010-11 read points, goal difference and then away goals between them,
+ * while 2015-16 reads goals scored inside that block and reapplies it to a
+ * subset still level. Each is verified against its own season, so the line
+ * below is drawn where the verification is rather than at whatever season
+ * the rule really changed in, and src/lib/clubManagerUclGroups.ts says so
+ * and carries the sources.
  */
 export function uclGroupRule(state: Pick<CareerState, 'eraId'>): UclGroupRule {
-  return eraUclHasR16(state.eraId) ? 'groupStage' : 'leaguePhase';
+  if (!eraUclHasR16(state.eraId)) return 'leaguePhase';
+  return eraById(state.eraId!).startYear >= 2015 ? 'h2hFull' : 'h2hAway';
 }
 
 type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'>;
