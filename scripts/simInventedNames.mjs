@@ -65,6 +65,9 @@ const GENERATORS = [
      about with generated managers drawn from these two banks; section 4 found
      the banks unregistered when the suite ran after Round 464. */
   { file: 'src/lib/rebuildDeck.ts', first: 'MANAGER_FIRST', last: 'MANAGER_LAST', what: 'Rebuild managers' },
+  /* Round 473: the columnist who follows a career. Broadsheet bylines rather
+     than footballer names, on purpose, and checked here like everything else. */
+  { file: 'src/lib/careerCritic.ts', first: 'CRITIC_FIRST', last: 'CRITIC_LAST', what: 'career critics' },
 ];
 
 const bankOf = (src, name) => {

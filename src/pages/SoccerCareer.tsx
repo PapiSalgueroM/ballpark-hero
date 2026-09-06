@@ -2556,10 +2556,10 @@ function SquadDepthCard({ chart }: { chart: DepthChart }) {
 
 function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
   const lifestyleEmoji: Record<string, string> = {
-    "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Billionaire": "👑",
+    "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Untouchable": "👑",
   };
   const lifestyleColor: Record<string, string> = {
-    "Humble": "text-muted-foreground", "Comfortable": "text-blue-400", "Wealthy": "text-emerald-400", "Superstar": "text-amber-400", "Billionaire": "text-yellow-300",
+    "Humble": "text-muted-foreground", "Comfortable": "text-blue-400", "Wealthy": "text-emerald-400", "Superstar": "text-amber-400", "Untouchable": "text-yellow-300",
   };
   const nwColor = career.netWorth >= 50 ? "text-yellow-300" : career.netWorth >= 10 ? "text-emerald-400" : career.netWorth >= 1 ? "text-blue-400" : career.netWorth < 0 ? "text-red-400" : "text-muted-foreground";
 
