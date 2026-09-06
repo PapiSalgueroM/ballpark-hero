@@ -43,11 +43,22 @@ import {
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { moneyWealth } from "@/lib/soccerMoney";
 import { fanComments as fanCommentsFor } from "@/lib/careerSocial";
+/* Round 473: the badge case. The table and the evaluator are the shared ones
+   the NFL career already reads (careerBadges.ts); only the drawing is local,
+   because the handset is a dark screen and the shared BadgeGrid is drawn in
+   the page's own light theme tokens. Same case, same rules, phone clothes. */
+import { SOCCER_BADGES } from "@/lib/careerBadges";
+import { soccerEarnedBadges } from "@/lib/soccerCareerBadges";
+/* Round 473: the critic. Everything on his screen is recomputed from the
+   seasons on the save, so there is nothing stored and an old save opens with
+   his whole back catalogue already written. */
+import { soccerCriticName, soccerCriticNow, soccerCriticColumns } from "@/lib/soccerCareerCritic";
+import { STANCE_LABEL } from "@/lib/careerCritic";
 import type { SpendingCategory } from "@/lib/soccerCareerEngine";
 
 type AppId =
   | "home" | "messages" | "thread" | "contacts" | "contact" | "news"
-  | "bank" | "social" | "player" | "life"
+  | "bank" | "social" | "player" | "life" | "peaks" | "column"
   | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
@@ -106,13 +117,26 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     [career, phase],
   );
 
+  /* Round 473: the badges are evaluated every time the case is opened, from
+     the facts of the career, so there is no save field to go stale and an old
+     save shows exactly what it earned. */
+  const earnedPeaks = useMemo(() => soccerEarnedBadges(career), [career]);
+  const criticName = soccerCriticName(career);
+  const criticNow = useMemo(() => soccerCriticNow(career), [career]);
+  const criticStanceLabel = STANCE_LABEL[criticNow.stance];
+  const columns = useMemo(() => soccerCriticColumns(career, 4), [career]);
+
   /* Tile rule: small tiles, each one opening its own screen with a back
-     button. Eleven of them fit on the handset at 390 wide without the home
-     screen becoming a page you scroll, which is the whole point of tiles. */
+     button. Round 473 took this from eleven tiles to thirteen and the fifth
+     row of three fell off the bottom of the handset, so the grid is four
+     across now: thirteen tiles are four rows, they all fit on the screen at
+     390 wide without it becoming a page you scroll, and there is room for
+     three more before anybody has to think about this again. */
   const APPS: { id: AppId; label: string; emoji: string; badge?: number }[] = [
     { id: "messages", label: "Messages", emoji: "💬", badge: waiting },
     { id: "contacts", label: "Contacts", emoji: "👥" },
     { id: "news", label: "SportsFeed", emoji: "📰" },
+    { id: "column", label: "The Column", emoji: "🗞️" },
     { id: "bank", label: "Bank", emoji: "🏦" },
     { id: "market", label: "Market", emoji: "📈" },
     { id: "shop", label: "My Life", emoji: "🛒" },
@@ -120,6 +144,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     { id: "cards", label: "Cards", emoji: "🃏" },
     { id: "social", label: "SocialGram", emoji: "📸" },
     { id: "player", label: "My Player", emoji: "⭐" },
+    { id: "peaks", label: "Peaks", emoji: "🎖️" },
     { id: "life", label: "Life", emoji: kt.emoji },
   ];
 
@@ -173,16 +198,16 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                   {fmtMoney(career.netWorth + moneyWealth(career))} to your name
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-4 gap-2">
                 {APPS.map(a => (
                   <button key={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-0.5 group">
-                    <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
+                    <div className="w-[52px] h-[52px] rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
                       {a.emoji}
                     </div>
                     {a.badge ? (
-                      <span className="absolute -top-1 right-2 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
+                      <span className="absolute -top-1 right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
                     ) : null}
-                    <span className="text-[9.5px] font-bold text-white/80">{a.label}</span>
+                    <span className="text-[8.5px] font-bold text-white/80 leading-tight text-center">{a.label}</span>
                   </button>
                 ))}
               </div>
@@ -387,6 +412,58 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-sm font-black">{season.assists}</div><div className="text-[9px] text-white/50">assists</div></div>
                   </div>
                 )}
+              </div>
+            </>
+          )}
+
+          {app === "column" && (
+            <>
+              <AppHeader title="🗞️ The Column" backLabel="Home" onBack={() => setApp("home")} />
+              <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-center space-y-1.5">
+                  <div className="text-2xl">{criticStanceLabel.emoji}</div>
+                  <div className="text-sm font-black">{criticName}</div>
+                  <div className={`text-[11px] font-bold ${criticStanceLabel.color}`}>{criticStanceLabel.label}</div>
+                  <Meter value={criticNow.score} color={criticNow.score >= 50 ? "bg-emerald-500" : "bg-red-500"} />
+                  <div className="text-[10px] text-white/50">He has written about you since the day you turned pro.</div>
+                </div>
+                {columns.length === 0 ? (
+                  <p className="text-center text-xs text-white/50 py-8">He has not filed anything about you yet. Play a season.</p>
+                ) : (
+                  columns.map(col => (
+                    <div key={col.year} className="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
+                      <div className="text-[9px] uppercase tracking-widest text-white/40 font-bold">{col.year}</div>
+                      <p className="text-[11px] leading-snug pt-0.5">{col.line}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+
+          {app === "peaks" && (
+            <>
+              <AppHeader title="🎖️ Peaks" backLabel="Home" onBack={() => setApp("home")} />
+              <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+                  <div className="text-3xl font-black">{earnedPeaks.length}<span className="text-white/40 text-lg"> / {SOCCER_BADGES.length}</span></div>
+                  <div className="text-[10px] text-white/50">career peaks earned</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {SOCCER_BADGES.map(b => {
+                    const on = earnedPeaks.some(e => e.id === b.id);
+                    return (
+                      <div key={b.id} className={`rounded-xl border p-2 ${on ? "border-amber-400/50 bg-amber-400/10" : "border-white/10 bg-white/5 opacity-55"}`}>
+                        <div className="flex items-start gap-1.5 text-[10.5px] font-black leading-tight">
+                          <span className="text-sm leading-none">{on ? b.emoji : "🔒"}</span>
+                          <span>{b.label}</span>
+                        </div>
+                        <p className="mt-0.5 text-[9px] leading-snug text-white/55">{b.blurb}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-center text-[9px] text-white/40">Nothing here is stored. Every one is worked out from what you have actually done.</p>
               </div>
             </>
           )}

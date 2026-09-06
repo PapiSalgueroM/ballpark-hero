@@ -37,6 +37,17 @@ import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { careerHubTiles } from '@/lib/careerHub';
 import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';
 import TrophyCase from '@/components/us-career/TrophyCase';
+/* Round 470: the money app, the gram, the rival card and the badges, on the
+   same engines Soccer Career and the NFL career run (careerMoney,
+   careerSocial, careerBadges), bound to basketball in nbaCareerMoney.ts and
+   nbaCareerLoop.ts. */
+import MoneyApp from '@/components/us-career/MoneyApp';
+import { SocialGram, RivalCard, BadgeGrid } from '@/components/us-career/SocialPanel';
+import type { MoneyAction } from '@/lib/careerMoney';
+import { NBA_MONEY, nbaMoneyAct, nbaMoneyWealth } from '@/lib/nbaCareerMoney';
+import { nbaEarnedBadges, nbaFanComments, nbaFollowers, nbaHeadlinesFor } from '@/lib/nbaCareerLoop';
+import { NBA_BADGES } from '@/lib/careerBadges';
+import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -57,6 +68,9 @@ export default function NbaMyCareerBoard() {
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news'>('none');
+  /* Round 470: the News box opens on three screens, the paper, the gram and
+     the rival, so the hub keeps its five boxes (simCareerHub holds that). */
+  const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
   const [career, setCareer] = useState<NbaCareerState | null>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
   const [nameInput, setNameInput] = useState('');
@@ -93,6 +107,14 @@ export default function NbaMyCareerBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}`,
   );
+
+  /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
+     scroll rule like every other one. Measured on a 390 by 844 phone before
+     this line existed: tapping News from the bottom of the hub left the page
+     at scrollY 443 with the panel's own back button 246px above the fold, so
+     the player landed underneath the screen he had just opened. The hook does
+     nothing when the top of the panel is already readable. */
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
 
   const done = phase === 'retired';
   useGameCompletion('nba-my-career', done, career ? nbaLegacyOf(career).score : 0);
@@ -160,6 +182,7 @@ export default function NbaMyCareerBoard() {
         ppg: 0, rpg: 0, apg: 0, awards: [], teamResult: 'SUSPENDED', salary: 0,
       };
       c.seasons.push(banned);
+      c.headlines = pushHeadlines(c.headlines, nbaHeadlinesFor(c, banned));
       const banNotes = nbaProgress(c, Math.random);
       setLastLine(banned);
       setCareer(c);
@@ -203,6 +226,9 @@ export default function NbaMyCareerBoard() {
     const campNote = nbaCampBattle(c, teamQuality, Math.random);
     const { line, notes } = simNbaSeason(c, teamQuality, Math.random);
     const progressNotes = nbaProgress(c, Math.random);
+    /* Round 470: the paper writes the season up, position aware, and the
+       lines stay on the save so the News screen survives a reload. */
+    c.headlines = pushHeadlines(c.headlines, nbaHeadlinesFor(c, line));
     setLastLine(line);
     /* Round 186: the curtain. Every string in it is one the engine already
        wrote; the true stat line is on screen from frame one. */
@@ -295,6 +321,22 @@ export default function NbaMyCareerBoard() {
     const res = pushFaOffer(faWindow, idx, nbaFaPushArgs(career, Math.random));
     setFaWindow(res.window);
     setTalkLine(res.line);
+  };
+
+  /* Round 470: every money tap rides on one handler, the way the soccer
+     phone's and the NFL board's do. The engine refuses rather than throws when
+     the numbers do not work, so a refused tap changes nothing and writes
+     nothing. Persisted as 'season' because the money app only opens from the
+     hub. */
+  const handleMoney = (action: MoneyAction) => {
+    if (!career) return;
+    const c: NbaCareerState = JSON.parse(JSON.stringify(career));
+    const res = nbaMoneyAct(c, action);
+    if (!res.ok) return;
+    setCareer(c);
+    const line = res.event ?? (res.toast ? `💰 ${res.toast}.` : null);
+    if (line) setFeed(f => [line, ...f].slice(0, 8));
+    persist(c, 'season', teamQuality);
   };
 
   const retireNow = () => {
@@ -465,6 +507,13 @@ export default function NbaMyCareerBoard() {
           <p className="mt-1 text-sm font-semibold text-gold">{legacy.verdict}</p>
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {legacy.bullets.map((b, i) => <p key={i}>{b}</p>)}
+            {/* Round 470: the badges the career earned, on the retirement card. */}
+            {(() => {
+              const earned = nbaEarnedBadges(career);
+              return earned.length > 0
+                ? <p className="pt-1 text-gold">{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
+                : null;
+            })()}
           </div>
           <div className="mt-3 flex items-center justify-center gap-3 text-sm">
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Legacy <b className="text-gold">{legacy.score}</b></span>
@@ -505,20 +554,22 @@ export default function NbaMyCareerBoard() {
   if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
-      <div className="space-y-3">
+      <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
           title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : '\u{1F4F0} News Feed'}
           onBack={() => setPanel('none')}
         />
         {panel === 'bank' && (
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-border bg-card p-3 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Net worth</p>
-              <p className="text-2xl font-black text-gold">${(career.netWorth ?? 0).toFixed(1)}M</p>
-              <p className="text-[10px] text-muted-foreground">${career.salary}M a year, {Math.max(0, career.contractYears)} years left on the deal</p>
-            </div>
-            <NbaShopPanel career={career} onBuy={id => { const res = buyNbaItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); }} />
-          </div>
+          /* Round 470: the money app. Savings, the market, the statement and
+             the card school on the engine the flagship's phone runs, with the
+             Round 57 shop as its fourth tab. */
+          <MoneyApp
+            host={career}
+            sport={NBA_MONEY}
+            incomeLine={`$${career.salary}M a year, ${Math.max(0, career.contractYears)} year${Math.max(0, career.contractYears) === 1 ? '' : 's'} left on the deal`}
+            onMoney={handleMoney}
+            shop={<NbaShopPanel career={career} onBuy={id => { const res = buyNbaItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
+          />
         )}
         {panel === 'stats' && (
           <div className="space-y-3">
@@ -560,16 +611,63 @@ export default function NbaMyCareerBoard() {
           </div>
         )}
         {panel === 'trophies' && (
-          <TrophyCase seasons={career.seasons} rings={career.rings} ringWord="ring" />
+          <div className="space-y-3">
+            <TrophyCase seasons={career.seasons} rings={career.rings} ringWord="ring" />
+            {/* Round 470: the peaks between the trophies. Evaluated on every
+                render off the save, so a badge can never be stale. */}
+            <BadgeGrid defs={NBA_BADGES} earned={nbaEarnedBadges(career)} />
+          </div>
         )}
         {panel === 'news' && (
-          <div className="rounded-2xl border border-border bg-card p-3">
-            {feed.length === 0 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">Quiet week. Play a season and the headlines write themselves.</p>
-            ) : (
-              <div className="space-y-1.5 text-xs text-muted-foreground">
-                {feed.map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">{n}</p>)}
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-1">
+              {([['headlines', '📰 Paper'], ['fans', '📸 SocialGram'], ['rival', '🪞 Rival']] as const).map(([k, label]) => (
+                <button
+                  key={k}
+                  onClick={() => setNewsTab(k)}
+                  /* Round 470: py-2, not py-1.5. Measured at 390 by 844
+                     these three came out 117 by 29px, a shade under the 30px
+                     floor every tap target on this site is held to, and they
+                     are the only way between the News box's three screens. */
+                  className={cn('rounded-lg px-1 py-2 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {newsTab === 'headlines' && (
+              <div className="space-y-3">
+                <div className="rounded-2xl border border-border bg-card p-3">
+                  <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">This week</p>
+                  {feed.length === 0 ? (
+                    <p className="py-4 text-center text-xs text-muted-foreground">Quiet week. Play a season and the headlines write themselves.</p>
+                  ) : (
+                    <div className="space-y-1.5 text-xs text-muted-foreground">
+                      {feed.map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">{n}</p>)}
+                    </div>
+                  )}
+                </div>
+                {(career.headlines ?? []).length > 0 && (
+                  <div className="rounded-2xl border border-border bg-card p-3">
+                    <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Back pages</p>
+                    <div className="space-y-1.5 text-xs text-foreground">
+                      {(career.headlines ?? []).map((n, i) => <p key={i} className="rounded-lg bg-background px-2 py-1.5">📰 {n}</p>)}
+                    </div>
+                  </div>
+                )}
               </div>
+            )}
+            {newsTab === 'fans' && (
+              <SocialGram
+                followers={fmtFollowers(nbaFollowers(career))}
+                standing={career.fanbase}
+                standingLabel="Fanbase"
+                comments={nbaFanComments(career)}
+                headlines={(career.headlines ?? []).slice(0, 3)}
+              />
+            )}
+            {newsTab === 'rival' && (
+              <RivalCard rival={career.rival} myName={career.name} teamLabel={nbaTeamLabelOf(career.rival?.team ?? '', career.eraId)} ringWord="ring" />
             )}
           </div>
         )}
@@ -586,7 +684,9 @@ export default function NbaMyCareerBoard() {
     morale: career.morale,
     health: career.health,
     fanbase: career.fanbase,
-    netWorth: career.netWorth ?? 0,
+    /* Round 470: everything you have, cash plus savings plus holdings, the
+       number the money app's headline prints. */
+    netWorth: Math.round(((career.netWorth ?? 0) + nbaMoneyWealth(career)) * 10) / 10,
     salary: career.salary,
     yearlyCosts: career.yearlyCosts ?? 0,
     contractYears: Math.max(0, career.contractYears),
@@ -601,7 +701,9 @@ export default function NbaMyCareerBoard() {
     rings: career.rings,
     ringWord: 'ring',
     honours: [{ label: 'MVPs', n: career.mvps }, { label: 'All-NBA nods', n: career.allNbas }],
-    headlines: feed,
+    /* The week's feed while there is one; after a reload, the paper kept on
+       the save, so the box does not forget the career. */
+    headlines: feed.length ? feed : (career.headlines ?? []),
   });
 
   /* ------------------------------ season hub ------------------------------ */

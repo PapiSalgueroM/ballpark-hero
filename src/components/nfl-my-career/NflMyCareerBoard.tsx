@@ -109,6 +109,14 @@ export default function NflMyCareerBoard() {
     `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}`,
   );
 
+  /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
+     scroll rule like every other one. Measured on a 390 by 844 phone before
+     this line existed: tapping News from the bottom of the hub left the page
+     at scrollY 443 with the panel's own back button 246px above the fold, so
+     the player landed underneath the screen he had just opened. The hook does
+     nothing when the top of the panel is already readable. */
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
+
   const done = phase === 'retired';
   useGameCompletion('nfl-my-career', done, career ? legacyOf(career).score : 0);
 
@@ -569,7 +577,7 @@ export default function NflMyCareerBoard() {
   if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
     return (
-      <div className="space-y-3">
+      <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
           title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : '\u{1F4F0} News Feed'}
           onBack={() => setPanel('none')}
@@ -640,7 +648,11 @@ export default function NflMyCareerBoard() {
                 <button
                   key={k}
                   onClick={() => setNewsTab(k)}
-                  className={cn('rounded-lg px-1 py-1.5 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
+                  /* Round 470: py-2, not py-1.5. Measured at 390 by 844
+                     these three came out 117 by 29px, a shade under the 30px
+                     floor every tap target on this site is held to, and they
+                     are the only way between the News box's three screens. */
+                  className={cn('rounded-lg px-1 py-2 text-[11px] font-bold transition-all', newsTab === k ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground hover:text-foreground')}
                 >
                   {label}
                 </button>

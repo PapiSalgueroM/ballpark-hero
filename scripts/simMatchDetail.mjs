@@ -305,11 +305,26 @@ console.log('5) Assists are real teammates, stoppage and attendance stay in band
         && e.minute === sc.minute && e.text === `${sc.name} (assist: ${sc.assist})`);
       if (!row) fail(`the timeline does not carry ${sc.name}'s assist`);
     }
-    // The referee's board stays in its bands and the clock rows carry it.
+    /* The referee's board and the clock rows that carry it. Round 472 made
+       the board a count of what stopped the game rather than a free roll, so
+       this asks the stronger question: does the number on the board match the
+       half it was held up at the end of? The engine adds a base (1 in the
+       first half, 2 in the second), one minute per stoppage in that half
+       (goals either side, cards, injuries; halftime subs are not play
+       stoppages) and a roll of 0 to 1 or 0 to 2, then caps at 5 and 8. */
     if (!d.added) fail('no stoppage time on the detail');
     else {
-      if (d.added.h1 < 1 || d.added.h1 > 4) fail(`h1 stoppage ${d.added.h1} out of band`);
-      if (d.added.h2 < 2 || d.added.h2 > 6) fail(`h2 stoppage ${d.added.h2} out of band`);
+      const stops = (from, to) => d.timeline.filter(e =>
+        e.minute > from && e.minute <= to
+        && (e.kind === 'goal' || e.kind === 'yellow' || e.kind === 'red' || e.kind === 'injury')).length;
+      const h1Lo = Math.min(5, 1 + stops(0, 45));
+      const h2Lo = Math.min(8, 2 + stops(45, 90));
+      if (d.added.h1 < h1Lo || d.added.h1 > Math.min(5, h1Lo + 1)) {
+        fail(`h1 stoppage ${d.added.h1} for a half with ${stops(0, 45)} stoppages in it`);
+      }
+      if (d.added.h2 < h2Lo || d.added.h2 > Math.min(8, h2Lo + 2)) {
+        fail(`h2 stoppage ${d.added.h2} for a half with ${stops(45, 90)} stoppages in it`);
+      }
       const ht = d.timeline.find(e => e.kind === 'halftime');
       const ft = d.timeline.find(e => e.kind === 'fulltime');
       if (!ht || !ht.text.includes(`+${d.added.h1}'`)) fail('half time row does not show its stoppage');

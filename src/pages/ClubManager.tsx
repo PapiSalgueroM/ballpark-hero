@@ -18,7 +18,10 @@ import {
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
+import { STAFF_MATCHES_PER_SEASON, STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
+import { askExplainer, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
+import { StaffScreen } from '@/components/club-manager/StaffScreen';
 import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
 import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
@@ -92,7 +95,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -123,7 +126,12 @@ const ClubManager = () => {
   const [clubView, setClubView] = useState<string | null>(null);
   /* Round 158: watching the match live instead of jumping between screens.
      While this is on, the halftime and full time phases render inside the
-     animated viewer; turning it off drops back to the classic screens. */
+     animated viewer; turning it off drops back to the classic screens.
+     Round 472: Play Live turns it on and Quick Sim turns it off, both of
+     them, every time. Before that the quick sim only ever set the phase, so
+     a live match that ended somewhere other than the full report (a January
+     window landing on the same tap) left this on, and the next quick sim
+     animated ninety minutes at a player who had asked not to watch. */
   const [watchMode, setWatchMode] = useState(false);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
@@ -182,10 +190,12 @@ const ClubManager = () => {
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
+              <p>🛒 <span className="font-semibold text-foreground">And two of them are things you go and buy.</span> On top of the season demands, every board makes two specific asks a year, drawn from five shapes and worked out from your club and your era rather than written down: get one more player from your own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating the market says you can reach, or spend a set fee or more on one signing. Every threshold is read off the market you actually have and the money you actually hold, so a big club today gets told to spend nine figures and a modest one in 2005 gets told to spend a few million, and the two asks together never cost more than the pot. That rating floor on the young one is where this game keeps headroom: a signing of 21 or under can still add up to ten rating points, and about one in twelve is carrying a lot more than that. The board screen shows the two under In the market, with the line that says how each one is graded.</p>
+              <p>📩 <span className="font-semibold text-foreground">The inbox is not just your players any more.</span> The board chase an ask you have not met, and you can take their money (a quarter of the kitty, and a point off their patience), give them your word (marked on the board screen, and worth three points of next season's opening confidence either way) or tell them no, which drops the ask and costs three points now. An agent writes about a client of his in your squad with a year left, priced at the contracts desk's own terms, and signing him takes his sale value back off the floor that a last year on a deal puts it on. Your assistant argues about the training plan, but only when the plan really is wrong for the squad in front of him. The supporters trust write about the ticket price when it is on premium. A reporter wants a line on whether the squad is good enough, and backing them lifts every player's morale and the press mood. Every one of those moves a number with a screen behind it, so what you decided in October is still readable in April.</p>
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens in January, on the first Saturday of the new year in most leagues and a little later in one long enough to reach January on its own; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
-              <p>📊 <span className="font-semibold text-foreground">Play it your way.</span> Quick Sim gives you the full result in one tap: scorers, cards, injuries, possession, shots, expected goals, momentum and every player's rating. Watch Live plays the match as moving circles on a pitch at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break. Play Match skips the theatre and stops at half time. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
+              <p>📊 <span className="font-semibold text-foreground">One match, two ways through it.</span> Play Live puts it on the pitch as moving circles at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break, where the subs, the shape and the team talk are yours. Quick Sim plays the same match without you and goes straight to the report. It really is the same match: both ways kick off through the same engine, so the only thing the live one adds is your say at half time. The report gives you the scoreline with the stoppage time both halves ran to, scorers, cards, injuries, possession as the two shares of the ball, shots, expected goals, a momentum graph drawn from who had the chances in each ten minutes, and every player's rating on both sides. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition. Above it all run the award races: the league's golden boot board, a player of the season watch scored by one formula for everyone, and the Ballon d'Or conversation, all settled with the season and named in your season review.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
@@ -194,6 +204,7 @@ const ClubManager = () => {
               <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts four shirt sponsor offers on the table whenever the club has no deal. Three are honest brands in three shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish, each marked local or global. The fourth is a bad brand (a bookmaker, a lender, that sort) paying 1.35 times the safe cheque: the fans lose 6 mood the day you sign and 8 off their target every week it runs, and the board like the money by a point. Every offer takes a push: ask for more and the brand comes up six percent, ask once too often and it walks for the season. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage, and the fans have a say.</span> Every home crowd pays the transfer kitty: attendance times the money a head, which is your ticket price plus food and drink at your prices. Fair tickets and cheap food lift the fans' mood, premium anything costs it, and the mood moves your home crowd, 0.9 times when they are furious and 1.1 when they are singing; the board go the other way, a point of confidence for premium tickets and a point off for fair ones. The Finances desk also projects the season's books to the last day: tickets, food, the sponsor and deals in, player wages, staff wages, travel, deals and the builders out. Wages and travel are running costs the board covers, so they never leave the kitty; the wage ceiling on the contracts desk is how the board keeps them honest. It is all one kitty otherwise: gates in, transfers, scouts, the academy and the facilities out. Whatever you did not spend rolls into the summer on top of the board's new cheque, up to one more season's worth. Leave the club and the balance stays behind, the same as the sponsor deal and the facilities, because it was always the club's money.</p>
               <p>🏗️ <span className="font-semibold text-foreground">Four facilities, level 1 to 10.</span> Stadium, training ground, medical and dressing room, on the Facilities desk. A club opens where its stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Every level is a lift on the game you already play and level 1 does nothing at all: the training ground speeds growth for anyone with room under his ceiling (nobody grows past it), medical writes injuries for fewer weeks (never under one), the dressing room brings unhappy players back toward content between games, and the stadium lifts the food and drink money a head, with the first three levels you buy also growing the crowd. Upgrades come out of the transfer kitty and get dearer every level, so a small club cannot build a level 10 anything in a season.</p>
+              <p>🧑‍🏫 <span className="font-semibold text-foreground">Four people on the staff, and rivals want them.</span> An attack coach, a defence coach, a goalkeeping coach and a lead scout, all made up, each with a level 1 to 10 and a ceiling he can still reach. A club opens where its stature puts it, the same as the facilities. Each one is a lift and level 1 does nothing at all, so an empty chair costs you nothing you already had: the attack coach speeds up the forwards and the number ten, the defence coach the back line and the holding midfielder, the keepers get their own man, and the middle of the park splits the two coaches between them. Nobody grows past his ceiling whoever is coaching him. The lead scout is the one who reads the trip reports, so the boys your scouts come home with have a little more in them. Their wages are a running cost the board covers; hiring costs a fee and paying somebody off costs severance, and both come out of the kitty and show up on the Finances desk. You can also promote from your own academy staff for nothing: he starts lower than anyone on the shortlist and has the furthest to grow, and how good he is comes off your academy's coaching level. Rival clubs come in for the good ones on their own schedule, and you get {STAFF_MATCHES_PER_SEASON} matches a season: match the money and he stays on a quarter more wages, or let him go and the job opens. Ignore an approach for two weeks and he leaves anyway. The staff belong to the club, so a new job starts on the new club's people.</p>
               <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
               <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
               <p>📉 <span className="font-semibold text-foreground">Two meters sit under the club name on every tab: the board and the fans.</span> Tap either one to swap its words for the number out of 100. The board meter is the sack race itself, nothing prettier: it opens at 60 in your first season and anywhere from 35 to 82 after that depending on how the last one went, a win adds about 4, a defeat takes about 4.5 (more at a giant, more again when the papers have turned on you), the table against what the club expects moves it a little every league week, a cup exit or a promise to the press you broke costs extra, and at zero you are sacked. Safe is 60 and above. Under pressure is 10 to 59. Under 10 it reads One bad week from the sack, and it means it: a single week has been measured taking more than 10 off, because a defeat, the table, a cup exit and a promise to the press broken can all land in the same seven days. Between matches nothing can sack you: a press answer, a handshake with another club or a switch on the Finances desk can drain the board to its last point, and the next result decides. The fan meter is read off what fans actually feel: this season's results weighted towards the recent ones (the biggest term, worth 34 points either way), your league position against the club's own expectation (2.5 a place, capped at 15), the ticket policy on the Finances desk (fair prices +4, premium -5), what a pie costs in the ground (cheap +3, premium -4), a shirt sponsor they are ashamed of (-6) and every trophy lifted this season (+8 each, up to 16), all on top of a base of 55. Singing is 65 and above, Grumbling is 40 to 64, Turning is under 40, and Hopeful is what they are before a ball is kicked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
@@ -211,11 +222,13 @@ const ClubManager = () => {
             'Pick your era: 2026-27 with real squads, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
             'Pick your nation, league and club (330 clubs across 20 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
+            'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
             'Run the money: gate receipts from every home crowd, ticket and food prices the fans and the board react to, a shirt sponsor from three honest shapes or one bad brand that pays more and costs the fans, each one negotiable, and a projection of the season\'s books to the last day.',
             'Build the club: stadium, training ground, medical and dressing room, each level 1 to 10, paid from the kitty, each one a small real lift on the squad.',
+            'Run the staff room: an attack coach, a defence coach, a goalkeeping coach and a lead scout, hired, promoted from your academy or paid off, each one growing his own part of the squad, with rivals coming in for the good ones and a limited number of offers you can match.',
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
@@ -940,9 +953,8 @@ const ClubManager = () => {
                 onTone={g.talk}
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
-                onQuickSim={() => { setHubPanel(null); g.quickPlay(); }}
-                onWatch={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
-                onPlay={() => { setHubPanel(null); g.play(); }}
+                onQuickSim={() => { setHubPanel(null); setWatchMode(false); g.quickPlay(); }}
+                onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
               />
             </div>
@@ -983,30 +995,29 @@ const ClubManager = () => {
                 </div>
                 {/* Round 157: the team talk moved into the Match Centre, because
                     the owner said it was being pushed on him before every match.
-                    The hub keeps the two ways to play: quick sim the result, or
-                    play it with the half time stop. Facts, form, head-to-head
-                    and the talk all live one tap away. */}
-                <div className="mt-3 grid grid-cols-3 gap-1.5 max-w-sm mx-auto">
+                    Facts, form, head-to-head and the talk all live one tap away.
+                    Round 472: and the hub keeps the two ways through a match
+                    rather than three. Play Match and Watch Live were the same
+                    fixture with the pitch drawn or not drawn, so they are one
+                    button, and the engine plays the same match whichever of
+                    the two you take. */}
+                <div className="mt-3 grid grid-cols-2 gap-2 max-w-sm mx-auto">
                   <button
-                    onClick={g.quickPlay}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
+                    onClick={() => { setWatchMode(true); g.play(); }}
+                    data-cm-way="live"
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    <Play className="w-4 h-4" /> Play Live
+                  </button>
+                  <button
+                    onClick={() => { setWatchMode(false); g.quickPlay(); }}
+                    data-cm-way="quick"
+                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
                   >
                     ⚡ Quick Sim
                   </button>
-                  {/* Round 158: the little circles. Watch the match play out. */}
-                  <button
-                    onClick={() => { setWatchMode(true); g.play(); }}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-xs sm:text-sm hover:opacity-90 transition-opacity"
-                  >
-                    📺 Watch Live
-                  </button>
-                  <button
-                    onClick={g.play}
-                    className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-xs sm:text-sm hover:bg-secondary/70 transition-colors"
-                  >
-                    <Play className="w-3.5 h-3.5" /> Play Match
-                  </button>
                 </div>
+                <p className="mt-1.5 text-[9px] text-muted-foreground">On the pitch with the break in your hands, or straight to the report. Same match either way.</p>
                 <button
                   onClick={() => setHubPanel('matchCentre')}
                   className="mt-2 text-[11px] font-bold text-primary hover:underline"
@@ -1055,7 +1066,7 @@ const ClubManager = () => {
               <HubTile
                 icon="📩" title="Inbox" accent={unreadCount > 0}
                 value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={latestMsg ? latestMsg.playerName : 'No messages yet'}
+                sub={latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1102,6 +1113,24 @@ const ClubManager = () => {
                 })()}
                 sub="Stadium, training, medical, dressing room"
                 onClick={() => setHubPanel('facilities')}
+              />
+              {/* Round 471: the staff desk. Accented while a rival has an
+                  approach on the table, because that one is on a clock. */}
+              <HubTile
+                icon="🧑‍🏫" title="Staff" accent={!!staffOf(c).poach}
+                value={(() => {
+                  const st = staffOf(c);
+                  if (st.poach) return `📞 ${st.poach.club} calling`;
+                  const empty = STAFF_POST_IDS.filter(p => !st[p]);
+                  return empty.length ? `${empty.length} post${empty.length === 1 ? '' : 's'} open` : `Level ${STAFF_POST_IDS.map(p => st[p]?.level ?? 0).join(' · ')}`;
+                })()}
+                sub={(() => {
+                  const st = staffOf(c);
+                  if (st.poach) return `They want your ${STAFF_POST_INFO[st.poach.postId].short.toLowerCase()} man`;
+                  const empty = STAFF_POST_IDS.filter(p => !st[p]);
+                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouting';
+                })()}
+                onClick={() => setHubPanel('staff')}
               />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
@@ -1192,7 +1221,7 @@ const ClubManager = () => {
                     <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
                   </div>
                   <div className="space-y-1.5">
-                    {objStatuses.map(({ objective, status }) => (
+                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
                       <div key={objective.id} className="flex items-center justify-between gap-2">
                         <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
                         <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
@@ -1201,6 +1230,32 @@ const ClubManager = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Round 474: the two asks you go out and DO, kept apart from
+                      the demands the season hands you, with the line that says
+                      how each one is judged so nobody has to guess. */}
+                  {objStatuses.some(s => isBoardAsk(s.objective.id)) && (
+                    <div className="mt-3 pt-2.5 border-t border-border">
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
+                        🛒 In the market
+                      </div>
+                      <div className="space-y-2">
+                        {objStatuses.filter(s => isBoardAsk(s.objective.id)).map(({ objective, status }) => (
+                          <div key={objective.id}>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs text-foreground min-w-0">{objective.label}</span>
+                              <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
+                                {OBJ_CHIP[status].label}
+                              </span>
+                            </div>
+                            <p className="text-[9px] text-muted-foreground mt-0.5 leading-relaxed">
+                              {objective.promised ? 'You gave them your word on this one. ' : ''}
+                              {askExplainer(objective)}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1310,6 +1365,18 @@ const ClubManager = () => {
               {/* Round 467: the facilities desk. The ground card that lived on
                   the finance desk is the stadium level here now. */}
               {hubPanel === 'facilities' && <FacilitiesScreen career={c} onUpgrade={g.buyFacility} />}
+
+              {/* Round 471: the staff desk. Four generated men, the rival on
+                  the phone, and the promotion out of the academy. */}
+              {hubPanel === 'staff' && (
+                <StaffScreen
+                  career={c}
+                  onHire={g.appointStaff}
+                  onSack={g.payOffStaff}
+                  onMatch={g.matchStaff}
+                  onLetGo={g.letStaffGo}
+                />
+              )}
               {hubPanel === 'stats' && <StatsScreen career={c} />}
 
               {hubPanel === 'trophies' && (

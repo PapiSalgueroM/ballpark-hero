@@ -42,7 +42,9 @@
  *
  *   THE LEDGER. Player wages (the weekly bill the contracts desk already
  *   prices, charged per calendar week), staff wages (from the academy's
- *   coaching, recruitment and building levels and the scouts on the road),
+ *   coaching, recruitment and building levels, the scouts on the road and,
+ *   since Round 471, the four men on the staff desk), staff fees (what
+ *   hiring and paying off those four costs, which DOES leave the kitty),
  *   travel (per away trip, dearer for a bigger club and for Europe), the
  *   gate split into tickets and concessions, sponsor money as it lands, and
  *   transfers in and out from the season's deals. Wages and travel are the
@@ -66,6 +68,9 @@ import {
   money, signSponsorWith, sponsorOffers, wageBill,
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
+/* Round 471: the four staff posts pay a wage every week and cost fees when
+   you change them, so both belong in this ledger. */
+import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -97,6 +102,8 @@ export interface ClosedLedger extends SeasonLedger {
   transferIn: number;
   transferOut: number;
   facilities: number;
+  /** Round 471: fees and severance on the staff desk. */
+  staffFees: number;
   income: number;
   spend: number;
   result: number;
@@ -282,7 +289,12 @@ export function setConcessionTier(career: CareerState, tier: ConcessionTier): Ca
 
 /* ---------- the running costs ---------- */
 
-/** Staff wages a week in thousands: the academy's people and the scouts on the road. */
+/**
+ * Staff wages a week in thousands: the academy's people, the scouts on the
+ * road, and since Round 471 the four men on the staff desk, whose own wages
+ * already carry the era's money so they are added after the scaling rather
+ * than through it.
+ */
 export function staffWagesWeekly(state: CareerState): number {
   const a = state.academy;
   const coaching = a?.coaching ?? 8;
@@ -290,7 +302,7 @@ export function staffWagesWeekly(state: CareerState): number {
   const building = a?.facilities ?? 8;
   const scouts = a?.scouts?.length ?? 0;
   const k = 20 + 3 * coaching + 2 * recruitment + 2 * building + 6 * scouts;
-  return Math.round(k * (eraHistOf(state) ? ERA_MONEY : 1));
+  return Math.round(k * (eraHistOf(state) ? ERA_MONEY : 1)) + staffPayrollWeekly(state);
 }
 
 /** One away trip in millions: dearer for a bigger club, dearer again for Europe. */
@@ -420,6 +432,10 @@ export function projectFinances(state: CareerState): FinanceProjection {
   const transferIn = round2(signings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0));
   const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee, 0));
   const facilities = facilitiesOf(state).seasonSpend;
+  /* Round 471: fees and severance on the staff desk. It leaves the kitty, so
+     it has to appear here: money that goes and shows up nowhere is a lie the
+     projection would tell every week. */
+  const staffFees = round2(staffOf(state).seasonSpend);
 
   const income: ProjectionLine[] = [
     { id: 'tickets', label: 'Tickets', actual: round2(s.tickets), projected: round2(s.tickets + ticketsLeft), kitty: true, note: `${left.home} certain home game${left.home === 1 ? '' : 's'} left` },
@@ -433,6 +449,7 @@ export function projectFinances(state: CareerState): FinanceProjection {
     { id: 'travel', label: 'Travel', actual: round2(s.travel), projected: round2(s.travel + travelLeft), kitty: false, note: `${left.away} certain away trip${left.away === 1 ? '' : 's'} left` },
     { id: 'transferOut', label: 'Players bought', actual: transferOut, projected: transferOut, kitty: true, note: 'assumes no more deals' },
     { id: 'facilities', label: 'Facilities', actual: round2(facilities), projected: round2(facilities), kitty: true },
+    { id: 'staffFees', label: 'Staff fees', actual: staffFees, projected: staffFees, kitty: true, note: 'hires and pay offs' },
   ];
   const sum = (lines: ProjectionLine[], k: 'actual' | 'projected') => round2(lines.reduce((n, l) => n + l[k], 0));
   const incomeActual = sum(income, 'actual');
@@ -464,9 +481,10 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const transferIn = round2(signings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0));
   const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee, 0));
   const facilities = round2(facilitiesOf(state).seasonSpend);
+  const staffFees = round2(staffOf(state).seasonSpend);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);
-  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities);
-  return { ...s, transferIn, transferOut, facilities, income, spend, result: round2(income - spend) };
+  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees);
+  return { ...s, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
 }
 
 /**

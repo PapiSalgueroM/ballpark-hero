@@ -22,6 +22,8 @@ import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilit
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '@/lib/clubManagerFinances';
 import type { ConcessionTier } from '@/lib/clubManagerFinances';
+import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
+import type { StaffPostId } from '@/lib/clubManagerStaff';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -344,6 +346,19 @@ export function useClubManager() {
   const buyFacility = useCallback((id: FacilityId) => {
     setCareer(prev => (prev ? upgradeClubFacility(prev, id) ?? prev : prev));
   }, []);
+  /* Round 471: the staff desk. Four posts, and the rival on the phone. */
+  const appointStaff = useCallback((post: StaffPostId, candidateId: string) => {
+    setCareer(prev => (prev ? hireStaff(prev, post, candidateId) ?? prev : prev));
+  }, []);
+  const payOffStaff = useCallback((post: StaffPostId) => {
+    setCareer(prev => (prev ? sackStaff(prev, post) ?? prev : prev));
+  }, []);
+  const matchStaff = useCallback(() => {
+    setCareer(prev => (prev ? matchStaffOffer(prev) ?? prev : prev));
+  }, []);
+  const letStaffGo = useCallback(() => {
+    setCareer(prev => (prev ? releaseToPoacher(prev) ?? prev : prev));
+  }, []);
   /* Round 202: the country. */
   const acceptNation = useCallback(() => {
     setCareer(prev => (prev ? takeNationJob(prev) : prev));
@@ -493,6 +508,7 @@ export function useClubManager() {
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    appointStaff, payOffStaff, matchStaff, letStaffGo,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

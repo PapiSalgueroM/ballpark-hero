@@ -41,9 +41,17 @@ import {
 import type { ClubFacilities } from '@/lib/clubManagerFacilities';
 import {
   concessionPerFan, ensureBooks, fanCrowdMult, noteAwayTrip, noteHomeGate, noteSponsorIncome,
-  rolloverBooks, tickBooks,
+  rolloverBooks, setTicketPolicy, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
+/* Round 471: the four staff posts, same cycle, same rule. */
+import {
+  coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,
+} from '@/lib/clubManagerStaff';
+import type { ClubStaff } from '@/lib/clubManagerStaff';
+/* Round 474: the five specific board asks, built and graded there for the
+   same reason the facilities and the books live in their own files. */
+import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 
 /**
  * Club Manager engine.
@@ -525,14 +533,23 @@ export interface ResultLogEntry {
   competition?: Competition;
 }
 
-export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole';
+export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole'
+  /* Round 474: the five senders who are not in your squad. Every one of these
+     moves a number that already has a screen: the pot, the board meter, a
+     contract, the training plan, the ticket price, the press mood. */
+  | 'fundAsk' | 'promiseAsk' | 'dropAsk'
+  | 'renewDeal' | 'letItRun'
+  | 'setPlan' | 'holdPlan'
+  | 'freezePrices' | 'holdPrices'
+  | 'backSquad' | 'deflect';
 
-/** Round 73: players slide into your DMs. */
+/** Round 73: players slide into your DMs. Round 474: so does everyone else. */
 export interface PlayerMessage {
   id: string;
   playerName: string;
   playerId: string;
-  kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk';
+  kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk'
+    | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
@@ -540,6 +557,16 @@ export interface PlayerMessage {
   resolved?: string;
   /** Round 127: the rung the setRole option would move him to. */
   roleOffer?: SquadRole;
+  /** Round 474: who is talking, when it is not somebody in your squad. A role
+   *  ("The board", "Supporters trust") or a generated person, never a real
+   *  one, because these carry words and a real man never said them. */
+  from?: string;
+  /** Round 474, boardChase: which board ask this message is about. */
+  askId?: BoardObjective['id'];
+  /** Round 474, boardChase: what the board would put in the pot, in £m. */
+  fundAmount?: number;
+  /** Round 474, coachTip: the plan the coach is arguing for. */
+  planOffer?: TrainingPlan;
 }
 
 /* ---------- Round 116: the academy, the scouts and the training ground ---------- */
@@ -618,15 +645,34 @@ export interface TrainingPlan {
   focus: TrainingFocus;
 }
 
-/** Round 70: one board demand for the season. Round 140: more of them. */
+/** Round 70: one board demand for the season. Round 140: more of them.
+ *  Round 474: and the five specific asks, which are built and graded in
+ *  src/lib/clubManagerBoardAsks.ts. Their extra fields are optional because
+ *  every objective shape shares this one record. */
 export interface BoardObjective {
-  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend';
+  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend'
+    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee';
   /** What the board wants, e.g. "Qualify for the Europa League". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
   target: number;
   /** Rival club name, only on the rival objective. */
   rivalName?: string;
+  /** Round 474: you told the board to their face this one was getting done.
+   *  Settled at the rollover: kept it and next season opens warmer, broke it
+   *  and it opens colder. */
+  promised?: boolean;
+  /** Round 474, natQuota: the country being counted. */
+  country?: string;
+  /** Round 474, veterans: where "experienced" starts. */
+  minAge?: number;
+  /** Round 474, posGap: the line the board wants filled. */
+  posGroup?: PosGroup;
+  /** Round 474, youngStar: the age ceiling and the rating floor. */
+  maxAge?: number;
+  minRating?: number;
+  /** Round 474, marquee: the fee one signing has to reach, in £m. */
+  feeMin?: number;
 }
 
 export type ObjectiveStatus = 'onTrack' | 'behind' | 'done' | 'failed';
@@ -1524,6 +1570,10 @@ export interface CareerState {
   pendingSummary: SeasonSummary | null;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
+  /** Round 474: which shape of specific ask this save's objectives were built
+   *  with. Absent on a save from before the asks existed, which is what
+   *  ensureBoardAsks repairs, once. */
+  boardAsksVersion?: number;
   /** Round 70: the cup round we were knocked out at (for objective grading). */
   cupExit?: CupRound | null;
   /** Round 70: the UCL stage we were knocked out at (for objective grading). */
@@ -1673,6 +1723,11 @@ export interface CareerState {
    *  an older save and repaired by ensureBooks; fails closed on shape. See
    *  clubManagerFinances. */
   books?: ClubBooks;
+  /** Round 471: the four staff posts, the approach on the desk and the
+   *  matches left. Absent on a save from before the desk existed and
+   *  repaired by ensureStaff to the club's day one men; fails closed on
+   *  shape. See clubManagerStaff. */
+  staff?: ClubStaff;
 }
 
 export type NextFixtureInfo =
@@ -2779,9 +2834,11 @@ const POS_DEF: Position[] = ['CB', 'LB', 'RB', 'LWB', 'RWB'];
 const POS_MID: Position[] = ['CDM', 'CM', 'CAM', 'LM', 'RM'];
 const POS_ATT: Position[] = ['LW', 'RW', 'ST', 'CF'];
 
-type PosGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
+/* Round 474: exported so the board asks module reads the SAME grouping the
+   squad builder and the match engine do, rather than a second copy of it. */
+export type PosGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
 
-function groupOf(pos: Position): PosGroup {
+export function groupOf(pos: Position): PosGroup {
   if (pos === 'GK') return 'GK';
   if (POS_DEF.includes(pos)) return 'DEF';
   if (POS_MID.includes(pos)) return 'MID';
@@ -5638,6 +5695,191 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
   });
 }
 
+/* ================================================================== */
+/* Round 474: the other five people who write to you                  */
+/* ================================================================== */
+
+/**
+ * The inbox used to be one room: somebody in your squad, once a match, about
+ * himself. His words: "The messages inbox needs a major update: more kinds of
+ * messages, choices that actually move relationships and futures."
+ *
+ * So there are five more senders, and the rule for all of them is that the
+ * choice moves a number that ALREADY HAS A SCREEN, so what you decided is
+ * still readable a month later instead of being a line of flavour that
+ * evaporates the moment you tap it:
+ *
+ *   THE BOARD chase an ask you have not met. Take their money and the pot
+ *     grows and the board meter drops; give them your word and the ask is
+ *     marked on the board screen and settles at the rollover; tell them no
+ *     and the ask comes off the board and costs you three points now.
+ *   AN AGENT (generated, never a real person) about a client of his in your
+ *     squad whose deal is nearly up. A last year on a deal has already cut
+ *     his sell value to 45 percent (sellValue's runDown), so signing him is
+ *     what takes it back off that floor and letting it run is what leaves it
+ *     there, with him free to talk to anyone in the summer.
+ *   YOUR ASSISTANT on the training plan, when the plan really is wrong for
+ *     the squad in front of him. Taking his advice sets it.
+ *   THE SUPPORTERS TRUST on the ticket price, when it is on premium. Freezing
+ *     it moves the fan meter and the gate, both of which have screens.
+ *   A REPORTER (generated) on whether the squad is good enough. Backing them
+ *     publicly lifts the dressing room and the press mood; ducking it costs
+ *     press mood, which is the patience the board lends you on a bad day.
+ *
+ * Nobody real is quoted anywhere in here. Where a message is about one of your
+ * own players it narrates the facts (his deal, his age, his rating), and the
+ * two people who speak are both generated.
+ */
+const COACH_TIP_MIN_WEEK = 4;
+
+/** The board's own line about an ask, by which ask it is. */
+function askChaseLine(objective: BoardObjective, clubName: string): string {
+  switch (objective.id) {
+    case 'natQuota':
+      return `The board want a word about the squad. Their line is that ${clubName} should look more like the country it plays in, and the objective they set you ("${objective.label}") is not close.`;
+    case 'veterans':
+      return `The board have been talking about the dressing room. They think it is short of somebody who has seen a relegation fight, and they set you an objective about it: "${objective.label}".`;
+    case 'posGap':
+      return `The board have had the recruitment people in. Their read matches yours, the squad is thin in one line, and the objective still stands: "${objective.label}".`;
+    case 'youngStar':
+      return `The board want to know where the next sellable asset is coming from. Their objective was "${objective.label}", and nobody has arrived.`;
+    case 'marquee':
+      return `The board want a name on the shirt sales. They asked for one signing worth talking about ("${objective.label}") and the window has been quiet.`;
+    default:
+      return `The board want to know what is happening with "${objective.label}".`;
+  }
+}
+
+/** Rolled after each match: somebody who is not in your squad wants you. */
+function generateClubMessage(state: CareerState): void {
+  const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
+  if (unresolved >= 3) return;
+  if (Math.random() > 0.3) return;
+  const seed = `${state.clubName}|${state.season}|${state.week}`;
+
+  /* 1. The board, chasing an unmet ask, once the season is old enough for
+        the silence to be a story. */
+  const asks = objectiveStatuses(state).filter(s => isBoardAsk(s.objective.id));
+  const chasing = asks.find(s => s.status !== 'done');
+  const alreadyChased = (state.inbox ?? []).some(m => m.kind === 'boardChase');
+  if (chasing && !alreadyChased && state.week >= state.calendar.length * 0.25 && Math.random() < 0.45) {
+    const fund = Math.max(1, Math.round(state.budget * 0.25 * 10) / 10);
+    pushMessage(state, {
+      playerName: 'The board',
+      from: 'The board',
+      playerId: '',
+      kind: 'boardChase',
+      askId: chasing.objective.id,
+      fundAmount: fund,
+      text: askChaseLine(chasing.objective, state.clubName),
+      options: [
+        { label: `Ask them for ${money(fund)}`, effect: 'fundAsk' },
+        { label: 'Give them your word', effect: 'promiseAsk' },
+        { label: 'Tell them it is not happening', effect: 'dropAsk' },
+      ],
+    });
+    return;
+  }
+
+  /* 2. An agent about a client of his who is a year off walking for nothing. */
+  const expiring = state.squad
+    .filter(p => !p.onLoan && !p.isYouth && (p.contractYears ?? 9) <= 1 && p.rating >= 70)
+    .sort((a, b) => b.rating - a.rating)[0];
+  if (expiring && Math.random() < 0.5) {
+    const terms = renewalTerms(expiring);
+    const agent = makeGeneratedName(`agent|${seed}|${expiring.id}`);
+    pushMessage(state, {
+      playerName: expiring.name,
+      from: `${agent}, agent`,
+      playerId: expiring.id,
+      kind: 'agent',
+      text: `An agent has been in touch about ${expiring.name}, who is ${expiring.age} and has a year left. The desk prices a new deal at ${money(terms.fee)} up front on ${terms.wage}k a week for ${terms.years} years. Say nothing and he can talk to anyone in the summer.`,
+      options: [
+        { label: `Sign him up for ${money(terms.fee)}`, effect: 'renewDeal' },
+        { label: 'Let it run', effect: 'letItRun' },
+      ],
+    });
+    return;
+  }
+
+  /* 3. Your assistant, but only when the plan really is wrong. Doubling the
+        sessions with a knackered squad, or coasting on light with kids who
+        need the work. */
+  const plan = state.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
+  const avgFit = state.squad.length
+    ? state.squad.reduce((s, p) => s + p.fitness, 0) / state.squad.length
+    : 100;
+  const kids = state.squad.filter(p => p.age <= 21 && (p.potential ?? p.rating) > p.rating + 3).length;
+  let tip: { text: string; offer: TrainingPlan; label: string } | null = null;
+  if (plan.intensity === 'double' && avgFit < 74) {
+    tip = {
+      text: `Your assistant has the fitness numbers in front of him. The squad is averaging ${Math.round(avgFit)} percent and you have them on double sessions. He wants it dialled back before somebody pulls up.`,
+      offer: { intensity: 'normal', focus: plan.focus },
+      label: 'Dial it back to normal',
+    };
+  } else if (plan.intensity === 'light' && avgFit > 88) {
+    tip = {
+      text: `Your assistant thinks you are leaving work on the table. The squad is averaging ${Math.round(avgFit)} percent fitness on light sessions and he reckons there is a level up in them.`,
+      offer: { intensity: 'normal', focus: plan.focus },
+      label: 'Step it up to normal',
+    };
+  } else if (plan.focus !== 'youth' && kids >= 3) {
+    tip = {
+      text: `Your assistant has been watching the under 21s. ${kids} of them are still improving and the plan is not pointed at them. He wants the week built around the kids.`,
+      offer: { intensity: plan.intensity, focus: 'youth' },
+      label: 'Point the week at the kids',
+    };
+  }
+  if (tip && state.week >= COACH_TIP_MIN_WEEK && Math.random() < 0.5) {
+    pushMessage(state, {
+      playerName: 'Your assistant',
+      from: 'Your assistant',
+      playerId: '',
+      kind: 'coachTip',
+      planOffer: tip.offer,
+      text: tip.text,
+      options: [
+        { label: tip.label, effect: 'setPlan' },
+        { label: 'The plan stands', effect: 'holdPlan' },
+      ],
+    });
+    return;
+  }
+
+  /* 4. The supporters trust, but only when there is something to complain
+        about: the ground is on premium prices. */
+  if ((state.finance?.ticketTier ?? 1) === 2 && Math.random() < 0.5) {
+    pushMessage(state, {
+      playerName: 'Supporters trust',
+      from: 'Supporters trust',
+      playerId: '',
+      kind: 'fanGroup',
+      text: `The supporters trust have written to the club about the ticket price. They are on premium and the letter is polite, long, and copied to every local paper in the city.`,
+      options: [
+        { label: 'Put the prices back to standard', effect: 'freezePrices' },
+        { label: 'The prices stand', effect: 'holdPrices' },
+      ],
+    });
+    return;
+  }
+
+  /* 5. A reporter, on whether this squad is good enough. */
+  if (state.press && Math.random() < 0.6) {
+    const writer = makeGeneratedName(`writer|${seed}`);
+    pushMessage(state, {
+      playerName: 'A reporter',
+      from: `${writer}, local paper`,
+      playerId: '',
+      kind: 'reporter',
+      text: `A reporter from the local paper is running a piece on whether this squad is good enough for what the board have asked of you. He wants a line from you before it goes out.`,
+      options: [
+        { label: 'Back the squad publicly', effect: 'backSquad' },
+        { label: 'Nothing to say', effect: 'deflect' },
+      ],
+    });
+  }
+}
+
 /** Answer a message. Pure: returns the new state. */
 export function answerMessage(career: CareerState, messageId: string, optionIdx: number): CareerState {
   const inbox = career.inbox ?? [];
@@ -5649,6 +5891,14 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
   let squad = career.squad;
   let budget = career.budget;
   let promisedStarts = career.promisedStarts ?? [];
+  /* Round 474: the five club senders move things outside the squad, so the
+     answer carries them too. Everything here is a copy; nothing is mutated. */
+  let boardConfidence = career.boardConfidence;
+  let boardObjectives = career.boardObjectives;
+  let training = career.training;
+  let press = career.press;
+  let finance = career.finance;
+  let books = career.books;
   let resolved = '';
   const bump = (id: string, delta: number) => {
     squad = squad.map(p => (p.id === id ? { ...p, morale: clamp(p.morale + delta, 5, 99) } : p));
@@ -5710,6 +5960,83 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       bump(msg.playerId, 2);
       resolved = 'You let it slide. Football is meant to be fun.';
       break;
+
+    /* ---- Round 474: the board ---- */
+    case 'fundAsk': {
+      const add = Math.max(0, msg.fundAmount ?? 0);
+      budget = Math.round((budget + add) * 10) / 10;
+      /* To the last point and never to zero, the Round 465 rule: only a final
+         whistle sacks anybody, and nothing between matches may hand the
+         header meter a zero over a manager who is playing on Saturday. */
+      boardConfidence = clamp(boardConfidence - 1, 1, 100);
+      resolved = `${money(add)} into the pot, and they made a point of writing down that they had done it. A point off their patience.`;
+      break;
+    }
+    case 'promiseAsk': {
+      boardObjectives = (boardObjectives ?? []).map(o => (o.id === msg.askId ? { ...o, promised: true } : o));
+      resolved = 'You gave them your word. It is on the board screen now, and it settles in the summer either way.';
+      break;
+    }
+    case 'dropAsk': {
+      boardObjectives = (boardObjectives ?? []).filter(o => o.id !== msg.askId);
+      boardConfidence = clamp(boardConfidence - 3, 1, 100);
+      resolved = 'The ask is off the board. So are three points of their patience.';
+      break;
+    }
+
+    /* ---- Round 474: the agent ---- */
+    case 'renewDeal': {
+      const applied = renewContract({ ...career, squad, budget }, msg.playerId);
+      if (applied) {
+        squad = applied.squad;
+        budget = applied.budget;
+        resolved = 'Signed. His deal is off the danger list and the contracts desk says so.';
+      } else {
+        bump(msg.playerId, -5);
+        resolved = 'You cannot cover the signing on fee, so the deal still runs down and he knows it.';
+      }
+      break;
+    }
+    case 'letItRun': {
+      bump(msg.playerId, -6);
+      resolved = 'You let it run. Every club in Europe can talk to him in the summer, and the market prices him at less than half from here.';
+      break;
+    }
+
+    /* ---- Round 474: the assistant ---- */
+    case 'setPlan': {
+      if (msg.planOffer) training = { ...msg.planOffer };
+      resolved = 'The training screen is set to what he asked for.';
+      break;
+    }
+    case 'holdPlan':
+      resolved = 'The plan stands. He said his piece and got on with it.';
+      break;
+
+    /* ---- Round 474: the supporters ---- */
+    case 'freezePrices': {
+      const applied = setTicketPolicy({ ...career, squad, budget, boardConfidence, finance, books }, 1);
+      finance = applied.finance;
+      books = applied.books;
+      boardConfidence = applied.boardConfidence;
+      resolved = 'Back to standard prices. The fan meter moves, and so does the money coming through the turnstile.';
+      break;
+    }
+    case 'holdPrices':
+      resolved = 'The prices stand. The trust ran the letter anyway.';
+      break;
+
+    /* ---- Round 474: the reporter ---- */
+    case 'backSquad': {
+      squad = squad.map(p => ({ ...p, morale: clamp(p.morale + 2, 5, 99) }));
+      press = press ? { ...press, mood: clamp(press.mood + 3, 0, 100) } : press;
+      resolved = 'You backed them in print. The dressing room read it and so did the press box.';
+      break;
+    }
+    case 'deflect':
+      press = press ? { ...press, mood: clamp(press.mood - 2, 0, 100) } : press;
+      resolved = 'You gave him nothing. The piece ran anyway, and it was not kind.';
+      break;
   }
 
   return {
@@ -5717,6 +6044,12 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
     squad,
     budget,
     promisedStarts,
+    boardConfidence,
+    boardObjectives,
+    training,
+    press,
+    finance,
+    books,
     inbox: inbox.map(m => (m.id === messageId ? { ...m, resolved } : m)),
   };
 }
@@ -7897,6 +8230,11 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
   const seasonDone = career.week >= career.calendar.length;
   return objs.map(objective => {
+    /* Round 474: the five specific asks grade in their own module, on the
+       same seasonDone line every shape below uses, so a board ask is final
+       at the final whistle exactly like a league place is. */
+    const asked = askStatus(career, objective);
+    if (asked) return { objective, status: asked };
     let status: ObjectiveStatus = 'onTrack';
     if (objective.id === 'league') {
       const met = myPos <= objective.target;
@@ -8367,6 +8705,9 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
   tickBooks(state);
+  /* Round 471: an approach on the staff desk runs down, or a rival comes in
+     for one of yours. Hashed, so it adds no draw to the week's stream. */
+  tickStaff(state);
   tickScouting(state);
 }
 
@@ -8512,9 +8853,24 @@ function buildMatchDetail(args: {
   const oppFouls = ri(6, 14);
 
   /* The timeline: everything above, in minute order, ready to replay. */
-  /* Round 169: the referee's board, like his match app models show. Pure
-     clock flavor, deterministic in range, never touching event minutes. */
-  const added = { h1: ri(1, 4), h2: ri(2, 6) };
+  /* Round 169: the referee's board.
+     Round 472: and now it is worked out from what actually stopped the game
+     in that half, goals, cards and injuries, rather than rolled out of
+     nothing. Subs are left out on purpose: the only ones this sim makes
+     happen in the dressing room, and a break does not stop a running clock.
+     A one goal half still gets a board, because there is always a bit. */
+  const stoppages = (from: number, to: number): number => {
+    let n = 0;
+    for (const sc of args.myScorers) if (sc.minute > from && sc.minute <= to) n += 1;
+    for (const sc of args.oppScorers) if (sc.minute > from && sc.minute <= to) n += 1;
+    for (const c of args.cards) if (c.minute > from && c.minute <= to) n += 1;
+    for (const inj of args.injuries) if (inj.minute > from && inj.minute <= to) n += 1;
+    return n;
+  };
+  const added = {
+    h1: clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
+    h2: clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+  };
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
@@ -8535,11 +8891,30 @@ function buildMatchDetail(args: {
   };
   timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
-  /* Momentum: the base flow is the lambda gap, goals spike it their way. */
+  /* Momentum, Round 472. His words: it has to read as up and down swings.
+     It did not, and the reason was in the maths rather than the drawing: the
+     old series was the lambda gap plus a tenth of noise, so every bucket of a
+     good afternoon sat on the same side of the line at nearly the same height
+     and the chart was a flat bar an inch above centre.
+     A real ten minutes belongs to whoever had the chances in it, and this
+     match already knows how many chances there were, so the shots on the
+     stats block are dealt out across the nine buckets and each bucket is read
+     off the ones that landed in it. A spell nobody had a shot in drifts
+     toward the better side rather than sitting on it, and a goal still spikes
+     it. Nothing new is invented: the same shots the report prints are the
+     shots the graph is drawn from. */
   const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
+  const BUCKETS = 9;
+  const myChances: number[] = new Array(BUCKETS).fill(0);
+  const oppChances: number[] = new Array(BUCKETS).fill(0);
+  for (let s = 0; s < shots; s++) myChances[ri(0, BUCKETS - 1)] += 1;
+  for (let s = 0; s < oppShots; s++) oppChances[ri(0, BUCKETS - 1)] += 1;
   const momentum: number[] = [];
-  for (let b = 0; b < 9; b++) {
-    let v = base + (Math.random() * 0.3 - 0.15);
+  for (let b = 0; b < BUCKETS; b++) {
+    const had = myChances[b] + oppChances[b];
+    let v = had > 0
+      ? 0.74 * ((myChances[b] - oppChances[b]) / had) + 0.26 * base
+      : 0.45 * base + (Math.random() * 0.24 - 0.12);
     const lo = b * 10;
     const hi = lo + 10;
     for (const sc of args.myScorers) if (sc.minute > lo && sc.minute <= hi) v += 0.45;
@@ -8674,7 +9049,7 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
-function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch): MatchWeekReport {
+function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
   const club = clubDefFor(state.clubName);
   const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
@@ -8694,8 +9069,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
-     them out in. Without one, this is the single shot match it always was, so
-     fast forwarding a run of fixtures behaves exactly as before. */
+     them out in.
+     Round 472: and there is always a first half now. Every way of playing a
+     match goes through kickOff, so the branch that used to draw a whole match
+     in one go, the one the fast forward took, is gone with the second engine
+     it was. */
   let xi: CMPlayer[];
   let mine: number;
   let myGoals: number;
@@ -8714,7 +9092,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
      here so the full time morale swing can settle up for each of them. */
   const press135 = state.press;
   const preTone: TalkTone | null = state.teamTalk ?? null;
-  const halfTone: TalkTone | null = live ? (live.talk ?? null) : null;
+  const halfTone: TalkTone | null = live.talk ?? null;
   const fire = press135?.nextFire ?? 0;
   const sharpen = press135?.nextSharpen ?? 0;
   let preFit = 0;
@@ -8725,70 +9103,45 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
      match would be one where he never does. The ONLY difference between the
      two paths is whether you got a say at the interval. */
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  if (live) {
-    const started = squadByIds(state, live.startXi);
-    const second = squadByIds(state, live.onPitch);
-    /* Round 135: the fit of the pre match talk is judged on the eleven who
-       kicked off, and the half time one on the state of the match the men still
-       out there are walking back into. Whichever talk is NEWER is the one in
-       their ears for the second half; the older one has been overtaken by
-       events. Both are settled up separately at the final whistle, because they
-       were two separate things you said. */
-    preFit = talkWeight(state, preTone, preMatchTarget(
-      myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
-    ));
-    const htTarget = halftimeTarget(
-      live.myGoals, live.oppGoals,
-      myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
-    );
-    halfFit = talkWeight(state, halfTone, htTarget);
-    const inForce = halfTone
-      ? halfFit
-      : talkWeight(state, preTone, preMatchTarget(
-          myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
-        ));
-    mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
-    const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
-    const opp2 = oppositionShape(live.oppGoals, live.myGoals);
-    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
-    const m2 = poisson(l2m);
-    const o2 = poisson(l2o);
-    myGoals = live.myGoals + m2;
-    oppGoals = live.oppGoals + o2;
-    h1My = live.myGoals;
-    h1Opp = live.oppGoals;
-    /* First half lambdas were saved at kick off. A save paused at the interval
-       before they existed falls back to the second half's shape, which is the
-       closest number the sim still holds. */
-    lamMine = (live.lamMine ?? l2m) + l2m;
-    lamOpp = (live.lamOpp ?? l2o) + l2o;
-    // Anyone who was on the pitch at any point can appear on the scoresheet.
-    const ids = [...new Set([...live.startXi, ...live.onPitch])];
-    xi = squadByIds(state, ids);
-  } else {
-    xi = effectiveXI(state);
-    /* Fast forward, or a save from before the interval existed. The pre match
-       talk covers both halves because there was never a chance to give another,
-       which is exactly how it behaves when you play the match out and say
-       nothing at the break. */
-    const preEdge = myMatchStrength(state, xi) + venue - oppS;
-    preFit = talkWeight(state, preTone, preMatchTarget(preEdge, xiMood(state, xi), state.form));
-    mine = myMatchStrength(state, xi) + preFit * TALK_EDGE + sharpen;
-    const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-    const [l1m, l1o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk, ment.def + oppAtk);
-    const m1 = poisson(l1m);
-    const o1 = poisson(l1o);
-    const opp2 = oppositionShape(o1, m1);
-    const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment.atk + homeAtk + opp2.def, ment.def + oppAtk + opp2.atk);
-    const m2 = poisson(l2m);
-    const o2 = poisson(l2o);
-    myGoals = m1 + m2;
-    oppGoals = o1 + o2;
-    h1My = m1;
-    h1Opp = o1;
-    lamMine = l1m + l2m;
-    lamOpp = l1o + l2o;
-  }
+  const started = squadByIds(state, live.startXi);
+  const second = squadByIds(state, live.onPitch);
+  /* Round 135: the fit of the pre match talk is judged on the eleven who
+     kicked off, and the half time one on the state of the match the men still
+     out there are walking back into. Whichever talk is NEWER is the one in
+     their ears for the second half; the older one has been overtaken by
+     events. Both are settled up separately at the final whistle, because they
+     were two separate things you said. */
+  preFit = talkWeight(state, preTone, preMatchTarget(
+    myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
+  ));
+  const htTarget = halftimeTarget(
+    live.myGoals, live.oppGoals,
+    myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
+  );
+  halfFit = talkWeight(state, halfTone, htTarget);
+  const inForce = halfTone
+    ? halfFit
+    : talkWeight(state, preTone, preMatchTarget(
+        myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
+      ));
+  mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
+  const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
+  const opp2 = oppositionShape(live.oppGoals, live.myGoals);
+  const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+  const m2 = poisson(l2m);
+  const o2 = poisson(l2o);
+  myGoals = live.myGoals + m2;
+  oppGoals = live.oppGoals + o2;
+  h1My = live.myGoals;
+  h1Opp = live.oppGoals;
+  /* First half lambdas were saved at kick off. A save paused at the interval
+     before they existed falls back to the second half's shape, which is the
+     closest number the sim still holds. */
+  lamMine = (live.lamMine ?? l2m) + l2m;
+  lamOpp = (live.lamOpp ?? l2o) + l2o;
+  // Anyone who was on the pitch at any point can appear on the scoresheet.
+  const ids = [...new Set([...live.startXi, ...live.onPitch])];
+  xi = squadByIds(state, ids);
 
   let decidedBy: 'regular' | 'pens' = 'regular';
   let won = myGoals > oppGoals;
@@ -8809,11 +9162,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
      either side can be printed on the same clock tick. */
   const takenMinutes = new Set<number>();
   const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(
-    state, xi, myGoals, h1My, live?.h1My, takenMinutes,
+    state, xi, myGoals, h1My, live.h1My, takenMinutes,
   );
   /* Round 158: same for the opposition, whose first half lines were decided
-     at kick off on a watched match. */
-  const oppScorers = live?.h1Opp && live.h1Opp.length === h1Opp
+     at kick off. A save paused at the interval before those lines existed
+     still has none, so both of these keep their fallback. */
+  const oppScorers = live.h1Opp && live.h1Opp.length === h1Opp
     ? (() => {
       for (const l of live.h1Opp) takenMinutes.add(l.minute);
       return [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId, takenMinutes)];
@@ -9352,6 +9706,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
     state.promisedStarts = stillOwed;
   }
   generatePlayerMessage(state, xi, won, margin);
+  // Round 474: and the five people who are not in your squad.
+  generateClubMessage(state);
 
   /* ----- board confidence ----- */
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
@@ -9486,15 +9842,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live?: LiveMatch)
   if (approachLine) events.push(approachLine);
 
   /* Round 157: halftime substitutions, read off the live match the manager
-     actually paused. On a fast forward there are none, honestly. */
+     actually paused. On a quick sim or a fast forward nobody was in the
+     dressing room, so the eleven that finished is the eleven that started and
+     this comes back empty, honestly. */
   const subLines: SubLine[] = [];
-  if (live) {
-    for (let i = 0; i < live.startXi.length; i++) {
-      if (live.onPitch[i] !== live.startXi[i]) {
-        const off = state.squad.find(p => p.id === live.startXi[i]);
-        const on = state.squad.find(p => p.id === live.onPitch[i]);
-        if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
-      }
+  for (let i = 0; i < live.startXi.length; i++) {
+    if (live.onPitch[i] !== live.startXi[i]) {
+      const off = state.squad.find(p => p.id === live.startXi[i]);
+      const on = state.squad.find(p => p.id === live.onPitch[i]);
+      if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
     }
   }
   // Round 169: the crowd and the venue, like his match app models carry.
@@ -9865,8 +10221,13 @@ function tickScouting(state: CareerState): void {
     if (Math.random() < 0.02 + s.network * 0.018) {
       // Better networks reach further into a country, and the country itself
       // sets the base level of what there is to find.
+      /* Round 471: the lead scout reads the trip properly, so what comes
+         back has a little more in it. Zero on an empty post and at level 1,
+         inside the clamp the trip already used, and added AFTER the draws so
+         it moves no seeded stream. */
       let potential = clamp(
-        52 + Math.round((region.youth - 60) * 0.42) + ri(0, 12) + Math.round(s.network * 1.4),
+        52 + Math.round((region.youth - 60) * 0.42) + ri(0, 12) + Math.round(s.network * 1.4)
+        + scoutQualityBonus(state),
         54, 93,
       );
       if (Math.random() < 0.06) potential = clamp(potential + ri(3, 8), 54, 95);
@@ -10019,8 +10380,11 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const facilities = career.academy?.facilities ?? 8;
   const staff = 0.72 + coaching * 0.022 + facilities * 0.011;
   /* Round 467: the training ground, exactly 1 at level 1, inside the same
-     clamp and still under agePlayer's cap at the ceiling. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career), 0.1, 2.6);
+     clamp and still under agePlayer's cap at the ceiling.
+     Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
+     in the same place for the same reason. The training ground lifts the
+     whole squad, the coach lifts his half of the pitch. */
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, 2.6);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
@@ -10162,6 +10526,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
+  /* Round 474: and the two specific asks, read off the squad you have just
+     been handed and the market this world really has. */
+  state.boardObjectives = [...state.boardObjectives, ...buildBoardAsks(state)];
+  state.boardAsksVersion = BOARD_ASKS_VERSION;
   // Round 163: the rest of the Champions League draw exists from day one.
   state.uclWorld = initUclWorld(state);
   // Round 165: the golden boot race starts at zero with the season.
@@ -10202,6 +10570,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 467: and the facilities and the books.
   ensureFacilities(state);
   ensureBooks(state);
+  // Round 471: and the four staff posts.
+  ensureStaff(state);
+  // Round 474: and a save from before the board asked for anything specific.
+  ensureBoardAsks(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
@@ -10257,14 +10629,21 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     /* Round 119: stop at the interval unless the caller asked not to. Round
        93's fast forward plays three, five or ten fixtures back to back and
        would stop being a fast forward if every one of them opened a dressing
-       room, so it passes skipHalftime and gets the old single shot match. */
+       room, so it passes skipHalftime.
+       Round 472: and skipHalftime now means exactly that, the same match with
+       nobody in the dressing room, rather than a second way of playing one.
+       Before this round the quick sim drew its own two halves in its own
+       order while the live path drew the first at kick off, so the same
+       fixture on the same seed could end 2-1 one way and 0-0 the other and
+       the game had two engines wearing one name. Everything kicks off here
+       now; the ONLY thing the interval adds is your say in it. */
+    const live = kickOff(state, entry);
     if (!opts?.skipHalftime) {
-      const live = kickOff(state, entry);
       state.live = live;
       return { state, kind: 'halftime', live };
     }
-    const report = playMyMatch(state, entry);
-    state.week += 1;
+    const report = playMyMatch(state, entry, live);
+    state.week = live.week + 1;
     return { state, kind: 'match', report };
   }
   return { state, kind: 'seasonOver' };
@@ -11141,6 +11520,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // starting confidence.
   const objs = summary?.objectives ?? [];
   const objNet = objs.reduce((s, o) => s + (o.hit ? 1 : -1), 0);
+  /* Round 474: and a word given to the board over the season settles here,
+     on top of the ordinary hit or miss. The season is over when this runs,
+     so objectiveStatuses is final; keeping your word opens next season three
+     points warmer per promise and breaking it three points colder. */
+  const promiseNet = objectiveStatuses(career)
+    .filter(s => s.objective.promised)
+    .reduce((n, s) => n + (s.status === 'done' ? 1 : -1), 0);
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
@@ -11305,7 +11691,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2, 35, 82),
+    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82),
     sacked: false,
     squad,
     xiIds: [],
@@ -11475,6 +11861,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      money lands in the new season's ledger. */
   rolloverFacilities(state, career, moving);
   rolloverBooks(state, career, moving);
+  /* Round 471: and the staff, who belong to the club too. Stay and they
+     carry a year better where there was room, with the matches reset; move
+     and the new club hands you its own. */
+  rolloverStaff(state, career, moving);
   /* Round 200: the sponsor's year ticks over here. The bonus for the season
      just finished is paid FIRST, off the position that season really
      reached, then a year comes off the deal and the next year's guaranteed
@@ -11546,6 +11936,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     }
   }
 
+  /* Round 474: the specific asks are appended HERE and not up beside
+     buildBoardObjectives, because the marquee ask is read off the pot and
+     the pot is not settled until the sponsor's cheque above has landed. */
+  state.boardObjectives = [...(state.boardObjectives ?? []), ...buildBoardAsks(state)];
+  state.boardAsksVersion = BOARD_ASKS_VERSION;
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
@@ -11620,6 +12015,9 @@ export function loadCareer(): CareerState | null {
        club's day one levels and fresh books before any screen reads them. */
     ensureFacilities(parsed);
     ensureBooks(parsed);
+    /* Round 471: and the staff desk, for the same reason: the hub tile reads
+       the four posts before a ball is kicked. */
+    ensureStaff(parsed);
     /* Round 465's rule, repaired on the way in: zero board confidence IS the
        sack, so a save that carries zero without being sacked is a save the
        engine never sacked, written by a build whose between-matches paths
@@ -11645,6 +12043,10 @@ export function loadCareer(): CareerState | null {
        feature, so every league lookup on every screen answers with the
        divisions this save actually plays. */
     registerLeagueOverrides(parsed.leagueOverrides ?? null);
+    /* Round 474: the specific asks, LAST, because the country an ask counts
+       and the market it is measured against both read the league, and the
+       league is not settled until the two registrations above have run. */
+    ensureBoardAsks(parsed);
     return parsed;
   } catch {
     return null;

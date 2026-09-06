@@ -50,6 +50,9 @@ const GENERATORS = [
   { file: 'src/lib/careerRival.ts', first: 'FIRST', last: 'LAST', what: 'career rivals' },
   { file: 'src/lib/clubManager.ts', first: 'YOUTH_FIRST', last: 'YOUTH_LAST', what: 'academy kids' },
   { file: 'src/lib/clubManager.ts', first: 'SCOUT_FIRST', last: 'SCOUT_LAST', what: 'scouts' },
+  /* Round 471: the four men on the Club Manager staff desk, and the men on
+     every shortlist they are hired off. */
+  { file: 'src/lib/clubManagerStaff.ts', first: 'STAFF_FIRST', last: 'STAFF_LAST', what: 'Club Manager staff' },
   /* Runtime-guarded: makeGeneratedName re-rolls the surname until the pair
      is not a real player, so its raw cross-product legitimately contains
      collisions (Bruno + Fernandes among them) that it can never emit.
@@ -62,6 +65,9 @@ const GENERATORS = [
      about with generated managers drawn from these two banks; section 4 found
      the banks unregistered when the suite ran after Round 464. */
   { file: 'src/lib/rebuildDeck.ts', first: 'MANAGER_FIRST', last: 'MANAGER_LAST', what: 'Rebuild managers' },
+  /* Round 473: the columnist who follows a career. Broadsheet bylines rather
+     than footballer names, on purpose, and checked here like everything else. */
+  { file: 'src/lib/careerCritic.ts', first: 'CRITIC_FIRST', last: 'CRITIC_LAST', what: 'career critics' },
 ];
 
 const bankOf = (src, name) => {
