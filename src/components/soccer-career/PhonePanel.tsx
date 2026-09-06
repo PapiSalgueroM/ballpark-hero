@@ -127,9 +127,11 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
   const columns = useMemo(() => soccerCriticColumns(career, 4), [career]);
 
   /* Tile rule: small tiles, each one opening its own screen with a back
-     button. Thirteen of them fit on the handset at 390 wide, five rows of
-     three, without the home screen becoming a page you scroll, which is the
-     whole point of tiles. */
+     button. Round 473 took this from eleven tiles to thirteen and the fifth
+     row of three fell off the bottom of the handset, so the grid is four
+     across now: thirteen tiles are four rows, they all fit on the screen at
+     390 wide without it becoming a page you scroll, and there is room for
+     three more before anybody has to think about this again. */
   const APPS: { id: AppId; label: string; emoji: string; badge?: number }[] = [
     { id: "messages", label: "Messages", emoji: "💬", badge: waiting },
     { id: "contacts", label: "Contacts", emoji: "👥" },
@@ -196,16 +198,16 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                   {fmtMoney(career.netWorth + moneyWealth(career))} to your name
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-4 gap-2">
                 {APPS.map(a => (
                   <button key={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-0.5 group">
-                    <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
+                    <div className="w-[52px] h-[52px] rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
                       {a.emoji}
                     </div>
                     {a.badge ? (
-                      <span className="absolute -top-1 right-2 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
+                      <span className="absolute -top-1 right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black flex items-center justify-center">{a.badge}</span>
                     ) : null}
-                    <span className="text-[9.5px] font-bold text-white/80">{a.label}</span>
+                    <span className="text-[8.5px] font-bold text-white/80 leading-tight text-center">{a.label}</span>
                   </button>
                 ))}
               </div>
@@ -452,9 +454,9 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                     const on = earnedPeaks.some(e => e.id === b.id);
                     return (
                       <div key={b.id} className={`rounded-xl border p-2 ${on ? "border-amber-400/50 bg-amber-400/10" : "border-white/10 bg-white/5 opacity-55"}`}>
-                        <div className="flex items-center gap-1.5 text-[10.5px] font-black leading-tight">
-                          <span className="text-sm">{on ? b.emoji : "🔒"}</span>
-                          <span className="truncate">{b.label}</span>
+                        <div className="flex items-start gap-1.5 text-[10.5px] font-black leading-tight">
+                          <span className="text-sm leading-none">{on ? b.emoji : "🔒"}</span>
+                          <span>{b.label}</span>
                         </div>
                         <p className="mt-0.5 text-[9px] leading-snug text-white/55">{b.blurb}</p>
                       </div>

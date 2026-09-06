@@ -83,7 +83,12 @@ export function playedSeasons(c: CareerState): SeasonRecord[] {
  */
 export function soccerCriticColumns(c: CareerState, limit = 4): CriticColumn[] {
   const played = playedSeasons(c);
-  const name = soccerCriticName(c);
+  /* Surname only here. His screen puts his full name at the top of it, and a
+     list of four columns that each say "Marguerite Netherfield" in the middle
+     reads like a form letter. The newspaper uses the full name, because there
+     he arrives with no introduction. */
+  const full = soccerCriticName(c);
+  const name = full.split(" ").slice(-1)[0] || full;
   const out: CriticColumn[] = [];
   for (let i = played.length - 1; i >= 0 && out.length < limit; i -= 1) {
     const { stance } = stanceAfter(c, played, i);
