@@ -166,7 +166,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums" data-cm-added="h1">
               45+{detail.added.h1}&apos;
             </span>
-            <span className="uppercase tracking-wider text-[8px]">Full time</span>
+            <span className="uppercase tracking-wider text-[8px]">Added time</span>
             <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums" data-cm-added="h2">
               90+{detail.added.h2}&apos;
             </span>
@@ -270,9 +270,12 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 <span className="text-[10px] font-bold text-muted-foreground tabular-nums" data-cm-poss="theirs">{100 - detail.stats.possession}%</span>
               </div>
               <MomentumArea momentum={detail.momentum} />
+              {/* Which half of the chart belongs to whom. The arrows do the
+                  work: left and right would read as time, and time is the row
+                  underneath. */}
               <div className="flex items-center justify-between gap-2 text-[8px] text-muted-foreground/80 uppercase tracking-wider">
-                <span className="truncate">{clubName} on top</span>
-                <span className="truncate">{opponent} on top</span>
+                <span className="truncate">▲ {clubName}</span>
+                <span className="truncate">▼ {opponent}</span>
               </div>
               <div className="flex justify-between text-[8px] text-muted-foreground/70">
                 <span>0'</span><span>45'</span><span>90'</span>
