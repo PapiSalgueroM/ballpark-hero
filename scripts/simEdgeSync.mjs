@@ -124,10 +124,10 @@ console.log('2) nothing recorded as deployed has been edited since');
 console.log('3) the unverified list is a ratchet');
 {
   /* Measured 2026-09-06: 25 functions had never been checked against what is
-     actually deployed. The number may fall and must never rise, because the
+     actually deployed, and Round 486 confirmed nba-chain-validate, leaving 24. The number may fall and must never rise, because the
      only way it rises is somebody adding a function and declining to confirm
      it, or moving a confirmed one back to make this file quiet. */
-  const BASELINE = 25;
+  const BASELINE = 24;
   if (unverified.size > BASELINE) {
     fail(`the unverified list has grown from ${BASELINE} to ${unverified.size}: confirm the new function against production rather than adding it here`);
   }

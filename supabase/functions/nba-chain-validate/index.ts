@@ -17,9 +17,28 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
  * when BOTH players are still active at the 2024 edge we defer rather than
  * wrongly reject. Everything else is decided from data.
  *
- * Round 316 note: this file was stale in the repo (it still showed the old
- * LLM fail-open version) while THIS deterministic version had been deployed
- * since July. Synced from the deployed v5 per the source-of-truth rule.
+ * ROUND 486: THE LOOKUP WAS ACCENT BLIND, SO THE BIGGEST NAMES IN THE MODERN
+ * GAME COULD NOT BE ANSWERED AT ALL.
+ *
+ * Measured against production on 2026-09-06: "Nikola Jokic", "Luka Doncic" and
+ * "Nikola Vucevic" each came back "does not appear in our NBA records
+ * (1949-2024)", while Durant and Curry resolved normally. The game had been
+ * played that same day.
+ *
+ * TWO causes, and repairing either alone would have changed nothing.
+ *  1. The names were double encoded in the table ("Nikola JokiÄ‡"), 393 rows
+ *     across 144 people here and 902 across the same 144 in
+ *     bref_nba_player_seasons. Repaired by migration in this round.
+ *  2. THIS function folded accents in norm() and then fetched with
+ *     .ilike("player_name", ...) against the RAW column, so "Jokic" would have
+ *     missed "Jokić" even after the repair.
+ *
+ * The prefilter now reads the name_folded column, which is filled with exactly
+ * this file's norm(): lowercase, unaccented, punctuation flattened, spaces
+ * collapsed. It also searches the last word of the RESOLVED name rather than of
+ * the typed text, which fixes the nicknames as a side effect: "wemby" used to
+ * be looked up as the literal string "wemby" and matched nobody, although the
+ * table below has mapped it to Victor Wembanyama all along.
  */
 
 const allowedOrigins = [
@@ -51,8 +70,20 @@ function isRateLimited(ip: string) {
   return e.count > 40;
 }
 
+/* Letters with NO canonical decomposition, so stripping combining marks cannot
+   reach them and the class below would turn each into a space. Found by the
+   Round 486 fence, which compared this fold against the database's: "Ömer Aşık"
+   folded to "omer as k" here and "omer asik" there, because the Turkish dotless
+   i is a letter in its own right rather than an i with something added. Same for
+   the German sharp s, the Polish barred l and the Scandinavian slashed o.
+   Turkish ş and ğ and İ are NOT here: those do decompose, and NFD handles them. */
+const TRANSLIT: Record<string, string> = {
+  "ı": "i", "ß": "ss", "ø": "o", "ł": "l", "đ": "d", "æ": "ae", "œ": "oe", "þ": "th", "ð": "d",
+};
+
 const norm = (s: string) =>
-  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+  (s || "").toLowerCase().replace(/[ıßøłđæœþð]/g, (c) => TRANSLIT[c] ?? c)
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
 
 const NICKNAMES: Record<string, string> = {
   kd: "kevin durant", bron: "lebron james", lebron: "lebron james", wemby: "victor wembanyama",
@@ -72,11 +103,27 @@ function json(body: unknown, corsHeaders: Record<string, string>, status = 200) 
 
 async function lookup(sb: any, name: string): Promise<Stint[]> {
   const target = resolve(name);
-  const { data } = await sb
+  const COLS = "player_name, team, first_season, last_season";
+  /* The last word of the RESOLVED name, against the folded column. Resolved so
+     a nickname is searched as the man it names; folded so an accent cannot hide
+     him. */
+  const token = target.split(" ").slice(-1)[0] || target;
+  let { data, error } = await sb
     .from("nba_player_team_stints")
-    .select("player_name, team, first_season, last_season")
-    .ilike("player_name", `%${name.trim().split(/\s+/).slice(-1)[0]}%`)
+    .select(COLS)
+    .ilike("name_folded", `%${token}%`)
     .limit(400);
+  if (error) {
+    /* The folded column is filled by migration. If it is ever missing, fall
+       back to the old raw search rather than answering "no such player" for
+       everybody, which is the one failure this round exists to end. */
+    console.log(`nba-chain-validate: name_folded unavailable (${error.message}), falling back to the raw column`);
+    ({ data } = await sb
+      .from("nba_player_team_stints")
+      .select(COLS)
+      .ilike("player_name", `%${name.trim().split(/\s+/).slice(-1)[0]}%`)
+      .limit(400));
+  }
   const rows = (data ?? []) as Stint[];
   const exact = rows.filter((r) => resolve(r.player_name) === target);
   if (exact.length > 0) return exact;

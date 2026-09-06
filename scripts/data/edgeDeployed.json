@@ -10,6 +10,11 @@
       "sha256": "f1dbebaa834bd88955888559cf76302aea16eb370f98d2c01c6775888fc4cbef",
       "version": 5,
       "date": "2026-09-06"
+    },
+    "nba-chain-validate": {
+      "sha256": "ff45b1710d623cbd5763ce7ab91864a92b3c73728585c2230bdc853a0b2a54ab",
+      "version": 7,
+      "date": "2026-09-06"
     }
   },
   "unverified": [
@@ -24,7 +29,6 @@
     "mlb-connect4-validate",
     "nascar-chain-validate",
     "nascar-daily",
-    "nba-chain-validate",
     "nba-connect4-validate",
     "nba-evaluate-lineup",
     "nba-suggest-players",
