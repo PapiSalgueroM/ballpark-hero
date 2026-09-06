@@ -33,6 +33,10 @@ export function nflBadgeFacts(c: CareerState): NflBadgeFacts {
       passYds: t.passYds, rushYds: t.rushYds, recYds: t.recYds, recTd: t.recTd,
       sacks: Math.round(sacks * 10) / 10, picks, tackles, fgMade,
     },
+    /* Round 470: what a full season is, moved onto the facts so the iron man
+       badge reads the same field in all four American careers. 17 is the
+       whole schedule, so this is the Round 469 test unchanged. */
+    fullSeasons: c.seasons.filter(s => s.games >= 17).length,
     wealth: Math.round(((c.netWorth ?? 0) + nflMoneyWealth(c)) * 100) / 100,
     retired: c.retired,
     hof: c.retired && legacyOf(c).hof,
