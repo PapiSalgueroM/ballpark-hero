@@ -44,6 +44,9 @@ import {
   rolloverBooks, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
+/* Round 474: the five specific board asks, built and graded there for the
+   same reason the facilities and the books live in their own files. */
+import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks } from '@/lib/clubManagerBoardAsks';
 
 /**
  * Club Manager engine.
@@ -618,15 +621,30 @@ export interface TrainingPlan {
   focus: TrainingFocus;
 }
 
-/** Round 70: one board demand for the season. Round 140: more of them. */
+/** Round 70: one board demand for the season. Round 140: more of them.
+ *  Round 474: and the five specific asks, which are built and graded in
+ *  src/lib/clubManagerBoardAsks.ts. Their extra fields are optional because
+ *  every objective shape shares this one record. */
 export interface BoardObjective {
-  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend';
+  id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend'
+    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee';
   /** What the board wants, e.g. "Qualify for the Europa League". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
   target: number;
   /** Rival club name, only on the rival objective. */
   rivalName?: string;
+  /** Round 474, natQuota: the country being counted. */
+  country?: string;
+  /** Round 474, veterans: where "experienced" starts. */
+  minAge?: number;
+  /** Round 474, posGap: the line the board wants filled. */
+  posGroup?: PosGroup;
+  /** Round 474, youngStar: the age ceiling and the rating floor. */
+  maxAge?: number;
+  minRating?: number;
+  /** Round 474, marquee: the fee one signing has to reach, in £m. */
+  feeMin?: number;
 }
 
 export type ObjectiveStatus = 'onTrack' | 'behind' | 'done' | 'failed';
@@ -1524,6 +1542,10 @@ export interface CareerState {
   pendingSummary: SeasonSummary | null;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
+  /** Round 474: which shape of specific ask this save's objectives were built
+   *  with. Absent on a save from before the asks existed, which is what
+   *  ensureBoardAsks repairs, once. */
+  boardAsksVersion?: number;
   /** Round 70: the cup round we were knocked out at (for objective grading). */
   cupExit?: CupRound | null;
   /** Round 70: the UCL stage we were knocked out at (for objective grading). */
@@ -2779,9 +2801,11 @@ const POS_DEF: Position[] = ['CB', 'LB', 'RB', 'LWB', 'RWB'];
 const POS_MID: Position[] = ['CDM', 'CM', 'CAM', 'LM', 'RM'];
 const POS_ATT: Position[] = ['LW', 'RW', 'ST', 'CF'];
 
-type PosGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
+/* Round 474: exported so the board asks module reads the SAME grouping the
+   squad builder and the match engine do, rather than a second copy of it. */
+export type PosGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
 
-function groupOf(pos: Position): PosGroup {
+export function groupOf(pos: Position): PosGroup {
   if (pos === 'GK') return 'GK';
   if (POS_DEF.includes(pos)) return 'DEF';
   if (POS_MID.includes(pos)) return 'MID';
@@ -7897,6 +7921,11 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
   const seasonDone = career.week >= career.calendar.length;
   return objs.map(objective => {
+    /* Round 474: the five specific asks grade in their own module, on the
+       same seasonDone line every shape below uses, so a board ask is final
+       at the final whistle exactly like a league place is. */
+    const asked = askStatus(career, objective);
+    if (asked) return { objective, status: asked };
     let status: ObjectiveStatus = 'onTrack';
     if (objective.id === 'league') {
       const met = myPos <= objective.target;
@@ -10162,6 +10191,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
+  /* Round 474: and the two specific asks, read off the squad you have just
+     been handed and the market this world really has. */
+  state.boardObjectives = [...state.boardObjectives, ...buildBoardAsks(state)];
+  state.boardAsksVersion = BOARD_ASKS_VERSION;
   // Round 163: the rest of the Champions League draw exists from day one.
   state.uclWorld = initUclWorld(state);
   // Round 165: the golden boot race starts at zero with the season.
@@ -10202,6 +10235,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 467: and the facilities and the books.
   ensureFacilities(state);
   ensureBooks(state);
+  // Round 474: and a save from before the board asked for anything specific.
+  ensureBoardAsks(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
@@ -11546,6 +11581,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     }
   }
 
+  /* Round 474: the specific asks are appended HERE and not up beside
+     buildBoardObjectives, because the marquee ask is read off the pot and
+     the pot is not settled until the sponsor's cheque above has landed. */
+  state.boardObjectives = [...(state.boardObjectives ?? []), ...buildBoardAsks(state)];
+  state.boardAsksVersion = BOARD_ASKS_VERSION;
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
@@ -11645,6 +11685,10 @@ export function loadCareer(): CareerState | null {
        feature, so every league lookup on every screen answers with the
        divisions this save actually plays. */
     registerLeagueOverrides(parsed.leagueOverrides ?? null);
+    /* Round 474: the specific asks, LAST, because the country an ask counts
+       and the market it is measured against both read the league, and the
+       league is not settled until the two registrations above have run. */
+    ensureBoardAsks(parsed);
     return parsed;
   } catch {
     return null;
