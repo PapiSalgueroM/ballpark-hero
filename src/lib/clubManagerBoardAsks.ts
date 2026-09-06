@@ -121,7 +121,7 @@ function niceFloor(m: number): number {
 }
 
 /** The club's own country, or null where the league has none on file. */
-export function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string | null {
+function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string | null {
   const raw = LEAGUE_NATIONS[careerLeagueOf(career).id];
   if (!raw) return null;
   return LEAGUE_NATION_ALIAS[raw] ?? raw;
