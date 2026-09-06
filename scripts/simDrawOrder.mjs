@@ -95,7 +95,11 @@ const RANDOM_SEED = 284;
    disagree mean the page is unstable at one clock, which is a real finding of
    its own and is reported rather than averaged away. */
 const TAKES = Math.max(2, Number(process.env.TAKES || 3));
-const ROUTE_BUDGET_MS = Number(process.env.ROUTE_BUDGET_MS || 150000);
+/* Per RENDER, not per route: each of the six renders a route needs races this
+   on its own, so the name and the message both say render. Without a budget one
+   wedged navigation stalls the sweep and it neither passes nor fails, which is
+   the least useful thing a check can do. */
+const RENDER_BUDGET_MS = Number(process.env.RENDER_BUDGET_MS || 150000);
 
 if (CONTROL && CONTROL !== 'drawdep') {
   console.error(`DRAW_ORDER_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -332,11 +336,11 @@ async function stableTake(route, burn) {
   for (let i = 0; i < TAKES; i += 1) {
     takes.push(await Promise.race([
       render(route, burn),
-      new Promise((_, rej) => setTimeout(() => rej(new Error(`route budget of ${ROUTE_BUDGET_MS}ms exceeded`)), ROUTE_BUDGET_MS)),
+      new Promise((_, rej) => setTimeout(() => rej(new Error(`render budget of ${RENDER_BUDGET_MS}ms exceeded`)), RENDER_BUDGET_MS)),
     ]));
   }
-  const first = takes[0].join(' ');
-  const agree = takes.every(t => t.join(' ') === first);
+  const first = JSON.stringify(takes[0]);
+  const agree = takes.every(t => JSON.stringify(t) === first);
   return { blocks: takes[0], agree };
 }
 
