@@ -656,7 +656,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Why does a name get refused under a special rule when the two really were teammates?",
-        a: "Because the rule removed it. Under Active players only a teammate with no 2025-26 season on our career records is off the board, which catches every retired player and the few whose records here stop early, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
+        a: "Because the rule removed it. With Active players on, only a teammate with no 2025-26 season on our career records is off the board, which catches every retired player and the few whose records here stop early, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
       },
     ],
   },
