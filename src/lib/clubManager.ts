@@ -5704,9 +5704,10 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
  *     marked on the board screen and settles at the rollover; tell them no
  *     and the ask comes off the board and costs you three points now.
  *   AN AGENT (generated, never a real person) about a client of his in your
- *     squad whose deal is nearly up. Renew it on the contracts desk terms, or
- *     let it run and watch his sell value collapse, which the market screen
- *     already prices.
+ *     squad whose deal is nearly up. A last year on a deal has already cut
+ *     his sell value to 45 percent (sellValue's runDown), so signing him is
+ *     what takes it back off that floor and letting it run is what leaves it
+ *     there, with him free to talk to anyone in the summer.
  *   YOUR ASSISTANT on the training plan, when the plan really is wrong for
  *     the squad in front of him. Taking his advice sets it.
  *   THE SUPPORTERS TRUST on the ticket price, when it is on premium. Freezing
