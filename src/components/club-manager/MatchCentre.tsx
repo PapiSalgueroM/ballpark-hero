@@ -163,12 +163,14 @@ export function MatchCentre({
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={onLive}
+          data-cm-way="live"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
         >
           <Play className="w-4 h-4" /> Play Live
         </button>
         <button
           onClick={onQuickSim}
+          data-cm-way="quick"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
         >
           <Zap className="w-4 h-4" /> Quick Sim
