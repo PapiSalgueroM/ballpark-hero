@@ -46,9 +46,9 @@
  * see whether he had hit it. The ask is graded on what the market screen
  * really shows, age and rating, and it is labelled as exactly that. The
  * ceiling is still what the board is buying, because that is where this
- * engine puts headroom (a 21 year old's roll adds up to ten, and up to
- * twenty five for the one in twelve carrying something special), and the
- * guide says so in those words.
+ * engine puts headroom: rollPotential gives a 20 or 21 year old up to ten
+ * points of it and anybody under 20 up to fifteen, and the one in twelve
+ * carrying something special adds up to nine more on top of that.
  *
  * ADDITIVE ON PURPOSE. Nothing in here is stored beyond the objectives the
  * save already carries, plus one version number so an old save can be
