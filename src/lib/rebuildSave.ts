@@ -364,7 +364,7 @@ export function restoreTable(save: RebuildSave, clubs: RebuildClub[], data: Tabl
 
   if (save.phase === 'clubs') {
     if (t.phase !== 'clubs' || t.turn !== save.turn) return null;
-    if (save.seats.some(s => s.moves.length > 0)) return null;
+    if (save.seats.some(s => s.moves.length > 0 || s.fp !== null)) return null;
     return { table: t, moves };
   }
 
@@ -394,6 +394,13 @@ export function restoreTable(save: RebuildSave, clubs: RebuildClub[], data: Tabl
     if (save.seats[i].moves.length > 0 || save.seats[i].fp !== null) return null;
   }
   if (save.phase === 'handover' && save.seats[save.turn].moves.length > 0) return null;
+  /* A seat the save says had a window open has to have one back, and a seat
+     it says never opened must not have one. Without this a save with its turn
+     nudged down by one restores a table that has quietly lost a whole seat's
+     finished run. */
+  for (let i = 0; i < save.seats.length; i += 1) {
+    if ((t.seats[i].run !== null) !== (save.seats[i].fp !== null)) return null;
+  }
   if (t.phase !== save.phase || t.turn !== save.turn) return null;
   return { table: t, moves };
 }
