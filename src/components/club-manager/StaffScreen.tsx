@@ -111,7 +111,10 @@ export function StaffScreen({ career, onHire, onSack, onMatch, onLetGo }: StaffS
                     <div className="text-xs text-foreground truncate">
                       {info.emoji} {person ? person.name : `${info.label}: nobody`}
                     </div>
-                    <div className="text-[9px] text-muted-foreground truncate">
+                    {/* Not truncated: on a 390 wide phone the level, the
+                        ceiling and the wage do not fit on one line, and a
+                        wage cut off mid word is worse than a second line. */}
+                    <div className="text-[9px] text-muted-foreground">
                       {person
                         ? `${info.label} · level ${person.level}/${STAFF_MAX}, can reach ${person.potential} · ${staffWageLine(career, person)}${person.academy ? ' · came up from the academy' : ''}`
                         : info.blurb}
@@ -158,7 +161,7 @@ export function StaffScreen({ career, onHire, onSack, onMatch, onLetGo }: StaffS
                 <Portrait person={c.person} size={34} />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs text-foreground truncate">{c.person.name}</div>
-                  <div className="text-[9px] text-muted-foreground truncate">
+                  <div className="text-[9px] text-muted-foreground">
                     Level {c.person.level}, can reach {c.person.potential} · {c.person.wage}k a week · {c.from}
                   </div>
                 </div>

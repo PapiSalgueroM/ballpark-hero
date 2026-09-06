@@ -49,8 +49,9 @@
         one men, a garbage block loads through loadCareer, and a stay keeps
         the staff while a move drops them.
      8) nobody on the staff is a real footballer: the whole cross product of
-        the two banks against every real name the worlds carry, and every
-        name the module actually emits is one of those pairings.
+        the two banks against every real name the worlds carry, every name
+        the module actually emits is one of those pairings, and no two men
+        in one staff room or on one shortlist share a name.
 
    Negative controls (house rule: prove the checks can fail):
      CM_STAFF_CONTROL=nolift bundles a copy of the engine with the coach
@@ -767,6 +768,25 @@ console.log('8) Every name the desk can print, against every real player the wor
       for (const c of staffShortlist(s, post)) emitted.add(c.person.name);
     }
   }
+  /* And nobody in one room shares either half of his name with anybody else
+     in it: four hundred pairings over four posts and four shortlists collide
+     often enough that two men called Bram sat one above the other on the
+     desk, and the desk salts the key until both halves are free. */
+  let rooms = 0, clashes = 0;
+  const halves = names => names.flatMap(n => n.split(' '));
+  const dupe = names => new Set(halves(names)).size !== halves(names).length;
+  for (const club of clubs) {
+    const s = startCareer(club);
+    const desk = STAFF_POST_IDS.map(p => staffIn(s, p)?.name).filter(Boolean);
+    if (dupe(desk)) { clashes++; if (clashes === 1) fail(`${club}'s staff room: ${desk.join(' | ')}`); }
+    rooms++;
+    for (const post of STAFF_POST_IDS) {
+      const names = [...desk, ...staffShortlist(s, post).map(c => c.person.name)];
+      if (dupe(names)) { clashes++; if (clashes === 1) fail(`${club}'s ${post} shortlist: ${names.join(' | ')}`); }
+      rooms++;
+    }
+  }
+  if (clashes) fail(`${clashes} of ${rooms} staff rooms and shortlists carry two men sharing a first name or a surname`);
   const strays = [...emitted].filter(n => !combos.has(n));
   if (strays.length) fail(`${strays.length} staff names came from somewhere other than the two banks: ${strays.slice(0, 4).join(' | ')}`);
   if (emitted.size < 100) fail(`only ${emitted.size} distinct staff names emitted over ${clubs.length} clubs`);
@@ -788,7 +808,7 @@ console.log('8) Every name the desk can print, against every real player the wor
   const pct = Math.round((postGrowthMult(onlyPost(startCareer('Everton'), 'attack', STAFF_MAX), 'attack') - 1) * 1000) / 10;
   if (!line.includes(String(pct))) fail(`the desk's own line says "${line}" while the multiplier is ${pct}% faster`);
   if (staffEffectLine(emptyAll(startCareer('Everton')), 'attack').includes('%')) fail('an empty chair claims a percentage');
-  console.log(`   ${combos.size} possible staff names, 0 belong to any of the ${real.size} real men in the worlds; ${emitted.size} names emitted across ${clubs.length} clubs, all off the two banks; ${dashes} dashes in the round's ${files.length} new files`);
+  console.log(`   ${combos.size} possible staff names, 0 belong to any of the ${real.size} real men in the worlds; ${emitted.size} names emitted across ${clubs.length} clubs, all off the two banks; ${rooms} staff rooms and shortlists with no two men sharing either half of a name; ${dashes} dashes in the round's ${files.length} new files`);
 }
 
 console.log('');

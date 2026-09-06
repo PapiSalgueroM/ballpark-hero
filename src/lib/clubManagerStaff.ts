@@ -185,18 +185,52 @@ function staffName(key: string): string {
   return `${STAFF_FIRST[sHash32(`f|${key}`) % STAFF_FIRST.length]} ${STAFF_LAST[sHash32(`l|${key}`) % STAFF_LAST.length]}`;
 }
 
+/**
+ * A name nobody in this room is already using. Four hundred pairings over
+ * four posts plus four shortlists means a collision every so often, and two
+ * men called Bram sitting one above the other on the same desk reads like a
+ * bug. Salts the key until the pair is free, and gives up after twenty tries
+ * rather than looping.
+ */
+function freeStaffName(key: string, taken: Set<string>): string {
+  /* Each half counts on its own: two men called Bram one above the other on
+     the same desk is what this is for, and so is two men called Ilving. */
+  const clash = (n: string): boolean => n.split(' ').some(part => taken.has(part));
+  let name = staffName(key);
+  for (let salt = 1; salt <= 24 && clash(name); salt++) name = staffName(`${key}|${salt}`);
+  if (clash(name)) {
+    /* Salting is a lottery and a lottery loses sometimes: at eight names in
+       a room roughly one draw in twenty thousand still clashes after all
+       twenty four tries, which over every club on the site is about one
+       shortlist. This walks the banks from a hashed start instead, and with
+       twenty of each against at most nine men in a room it cannot fail. */
+    const start = sHash32(`fb|${key}`);
+    const free = (bank: string[], offset: number): string => {
+      for (let n = 0; n < bank.length; n++) {
+        const v = bank[(start + offset + n) % bank.length];
+        if (!taken.has(v)) return v;
+      }
+      return bank[start % bank.length];
+    };
+    name = `${free(STAFF_FIRST, 0)} ${free(STAFF_LAST, 7)}`;
+  }
+  for (const part of name.split(' ')) taken.add(part);
+  taken.add(name);
+  return name;
+}
+
 /** What he earns at that level, in thousands a week. */
 export function staffWage(level: number, historic: boolean): number {
   return Math.max(1, Math.round((3 + 2.1 * clamp(level, 1, STAFF_MAX)) * (historic ? ERA_MONEY : 1)));
 }
 
 /** A man built from a key, at a level you hand it. Pure. */
-function makePerson(key: string, level: number, season: number, historic: boolean, academy: boolean): StaffPerson {
+function makePerson(key: string, level: number, season: number, historic: boolean, academy: boolean, taken: Set<string>): StaffPerson {
   const lv = clamp(Math.round(level), 1, STAFF_MAX);
   const head = academy ? hi(`ph|${key}`, 3, 6) : hi(`ph|${key}`, 0, 3);
   return {
     id: `st-${sHash32(key).toString(36)}`,
-    name: staffName(key),
+    name: freeStaffName(key, taken),
     level: lv,
     potential: clamp(lv + head, lv, STAFF_MAX),
     wage: staffWage(lv, historic),
@@ -224,8 +258,9 @@ function defaultStaff(state: CareerState): ClubStaff {
   const def = careerDef(state);
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   const season = state.season ?? 1;
+  const taken = new Set<string>();
   const person = (post: StaffPostId): StaffPerson =>
-    makePerson(`day1|${state.clubName}|${state.eraId ?? 'now'}|${post}`, staffStartLevel(def, state.clubName, post), season, historic, false);
+    makePerson(`day1|${state.clubName}|${state.eraId ?? 'now'}|${post}`, staffStartLevel(def, state.clubName, post), season, historic, false, taken);
   return {
     v: STAFF_VERSION,
     attack: person('attack'),
@@ -378,11 +413,18 @@ export function staffShortlist(state: CareerState, post: StaffPostId): StaffCand
   /* A bigger club attracts a better name, the same stature ladder the day
      one men come off, and the three are spread around it. */
   const anchor = staffStartLevel(def, state.clubName, post);
+  /* Nobody on the list shares a name with anybody else on it, or with the
+     three men already on the desk. */
+  const taken = new Set<string>();
+  for (const id of STAFF_POST_IDS) {
+    const held = st[id]?.name;
+    if (held) for (const part of held.split(' ')) taken.add(part);
+  }
   const out: StaffCandidate[] = [];
   for (let i = 0; i < 3; i++) {
     const key = `${seed}|${i}`;
     const level = clamp(anchor + hi(`sp|${key}`, -2, 2), 1, STAFF_MAX);
-    const person = makePerson(key, level, season, historic, false);
+    const person = makePerson(key, level, season, historic, false, taken);
     out.push({
       person,
       fee: round1(Math.max(0.2, 0.2 + 0.28 * level * (historic ? ERA_MONEY : 1))),
@@ -392,7 +434,7 @@ export function staffShortlist(state: CareerState, post: StaffPostId): StaffCand
   const coaching = state.academy?.coaching ?? 8;
   const promoteKey = `${seed}|academy`;
   out.push({
-    person: makePerson(promoteKey, clamp(Math.round(coaching / 4), 1, 5), season, historic, true),
+    person: makePerson(promoteKey, clamp(Math.round(coaching / 4), 1, 5), season, historic, true, taken),
     fee: 0,
     from: 'On the academy staff already',
   });
@@ -608,23 +650,32 @@ export function staffEffectLine(state: CareerState, post: StaffPostId): string {
       : `Boys found on the road top out up to ${bonus} higher.`;
   }
   const pct = Math.round((postGrowthMult(state, post) - 1) * 1000) / 10;
-  const who = post === 'goalkeeping' ? 'Keepers' : post === 'attack' ? 'The forwards' : 'The back line';
+  const who = post === 'goalkeeping' ? 'Keepers grow' : post === 'attack' ? 'The forwards grow' : 'The back line grows';
+  /* Only the two outfield coaches share the middle of the park, so the
+     keepers' line must not promise the midfield anything. */
+  const half = post === 'goalkeeping' ? '' : ' Midfield gets half of it.';
   return pct <= 0
-    ? `${who} grow at the club's own rate. No lift yet.`
-    : `${who} grow ${pct}% faster where there is room. Midfield gets half of it.`;
+    ? `${who} at the club's own rate. No lift yet.`
+    : `${who} ${pct}% faster where there is room.${half}`;
 }
 
 /**
- * The portrait: five flat shapes in a 64 by 64 box, every one of them a
- * rectangle, a circle or a rounded box, all of it a pure function of his id.
- * No photograph, no likeness, nothing traced from anybody. Self contained,
- * so it renders the same on the shortlist and on the desk.
+ * The portrait: flat shapes in a 64 by 64 box, every one of them a
+ * rectangle, a circle, an arc or a rounded box, all of it a pure function of
+ * his id. No photograph, no likeness, nothing traced from anybody. Self
+ * contained, so it renders the same on the shortlist and on the desk.
+ *
+ * The ground is one constant slate rather than his shirt colour, because a
+ * dark head on a dark shirt read as a blob at 40 pixels: the shirt is the
+ * shoulders now and every skin tone has the same ground behind it. Hair is
+ * an arc across the crown that stops at y=23, three pixels clear of the
+ * eyes, because a hair CIRCLE big enough to look like hair covered the face.
  */
 export function staffPortraitSvg(person: Pick<StaffPerson, 'id'>, size = 44): string {
   const h = sHash32(`art|${person.id}`);
-  const skins = ['#f2d3b6', '#e0b48c', '#c68a5f', '#9a6440', '#6f4630'];
+  const skins = ['#f2d3b6', '#e0b48c', '#c68a5f', '#9a6440', '#7c5138'];
   const hairs = ['#241c17', '#4a3524', '#7a5330', '#b0863f', '#8e8e8e', '#d9d3c7'];
-  const shirts = ['#1f3f6d', '#2f6d4a', '#6d2f3f', '#4a3f6d', '#2f5d6d', '#5d4a2f'];
+  const shirts = ['#2c5591', '#3a8a5e', '#8f3d50', '#5e518d', '#3c7688', '#7a6238'];
   const skin = skins[h % skins.length];
   const hair = hairs[(h >> 3) % hairs.length];
   const shirt = shirts[(h >> 7) % shirts.length];
@@ -632,16 +683,18 @@ export function staffPortraitSvg(person: Pick<StaffPerson, 'id'>, size = 44): st
   const beard = ((h >> 14) % 3) === 0;
   const glasses = ((h >> 17) % 4) === 0;
   const parts = [
-    `<rect x="0" y="0" width="64" height="64" rx="10" fill="${shirt}"/>`,
-    `<circle cx="32" cy="52" r="18" fill="rgba(255,255,255,0.14)"/>`,
+    `<rect x="0" y="0" width="64" height="64" rx="10" fill="#232a36"/>`,
+    `<circle cx="32" cy="56" r="20" fill="${shirt}"/>`,
+    `<rect x="27" y="38" width="10" height="8" fill="${skin}"/>`,
     `<circle cx="32" cy="27" r="14" fill="${skin}"/>`,
   ];
-  if (hairStyle === 0) parts.push(`<path d="M18 25a14 14 0 0 1 28 0v-3a14 14 0 0 0-28 0z" fill="${hair}"/>`);
-  else if (hairStyle === 1) parts.push(`<rect x="18" y="13" width="28" height="9" rx="4.5" fill="${hair}"/>`);
-  else parts.push(`<circle cx="32" cy="18" r="13" fill="${hair}"/><rect x="18" y="18" width="28" height="4" fill="${hair}"/>`);
-  if (beard) parts.push(`<rect x="23" y="31" width="18" height="8" rx="4" fill="${hair}" opacity="0.85"/>`);
-  parts.push(`<circle cx="27" cy="26" r="1.7" fill="#1b1b1b"/><circle cx="37" cy="26" r="1.7" fill="#1b1b1b"/>`);
-  if (glasses) parts.push(`<rect x="23" y="22.5" width="18" height="7" rx="3.5" fill="none" stroke="#1b1b1b" stroke-width="1.4" opacity="0.8"/>`);
+  /* The crown, an arc over the top of the head that never reaches the eyes. */
+  if (hairStyle === 0) parts.push(`<path d="M18.6 23A14 14 0 0 1 45.4 23Z" fill="${hair}"/>`);
+  else if (hairStyle === 1) parts.push(`<path d="M19.9 20A14 14 0 0 1 44.1 20Z" fill="${hair}"/>`);
+  else parts.push(`<path d="M18.6 23A14 14 0 0 1 45.4 23Z" fill="${hair}"/><rect x="18.4" y="23" width="3.2" height="8" fill="${hair}"/><rect x="42.4" y="23" width="3.2" height="8" fill="${hair}"/>`);
+  if (beard) parts.push(`<rect x="23" y="31" width="18" height="9" rx="4.5" fill="${hair}" opacity="0.9"/>`);
+  parts.push(`<circle cx="27" cy="27" r="1.7" fill="#1b1b1b"/><circle cx="37" cy="27" r="1.7" fill="#1b1b1b"/>`);
+  if (glasses) parts.push(`<rect x="22.5" y="23.5" width="19" height="7" rx="3.5" fill="none" stroke="#1b1b1b" stroke-width="1.4" opacity="0.85"/>`);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="staff portrait">${parts.join('')}</svg>`;
 }
 
