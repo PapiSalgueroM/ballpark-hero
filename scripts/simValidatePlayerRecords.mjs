@@ -46,7 +46,8 @@
  *     written to avoid, and section 2 must go red.
  *   VPR_CONTROL=captain stops stripping the armband out of a squad name, which
  *     is how every captain was missed, and section 6 must go red.
- * All three refuse to run if the change they make changes nothing.
+ *   VPR_CONTROL=drift edits one of the two club maps, and section 7 must go red.
+ * All four refuse to run if the change they make changes nothing.
  *
  * Run: node scripts/simValidatePlayerRecords.mjs
  */
@@ -56,8 +57,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.VPR_CONTROL || '';
-if (CONTROL && !['crossrow', 'naiveclub', 'captain'].includes(CONTROL)) {
-  console.error(`VPR_CONTROL=${CONTROL} is not a control this harness knows (crossrow, naiveclub, captain)`);
+if (CONTROL && !['crossrow', 'naiveclub', 'captain', 'drift'].includes(CONTROL)) {
+  console.error(`VPR_CONTROL=${CONTROL} is not a control this harness knows (crossrow, naiveclub, captain, drift)`);
   process.exit(1);
 }
 
@@ -294,6 +295,43 @@ console.log('6) a captain is still the man himself');
     if (resolved < floor) fail(`only ${resolved} of ${looked} annotated squad names resolve, so captains are being missed`);
     if (CONTROL === 'captain' && resolved >= floor) {
       console.error('   CONTROL captain changed nothing: leaving the armband in must lose the captains');
+      process.exit(1);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------- 7 */
+console.log('7) the dropdown and the validator name the same thirty clubs');
+{
+  /* The list lives twice because an edge function cannot import from src, and
+     two copies of a fact drift. This is the same guard simSchema keeps over
+     the home page's JSON-LD and the registry. It matters more than it looks:
+     if the dropdown offers a club string the validator does not know, every
+     pick from that club goes to the model instead of being answered free, and
+     nothing else in the build would say so. */
+  const CLIENT_SRC = fs.readFileSync(path.join(ROOT, 'src', 'data', 'lineupTeams.ts'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
+  const at = CLIENT_SRC.indexOf('const CLUB_TABLE_NAMES');
+  if (at < 0) { fail('the dropdown no longer carries CLUB_TABLE_NAMES'); }
+  else {
+    const open = CLIENT_SRC.indexOf('{', at);
+    let depth = 0, end = -1;
+    for (let i = open; i < CLIENT_SRC.length; i++) {
+      if (CLIENT_SRC[i] === '{') depth++;
+      else if (CLIENT_SRC[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+    }
+    let client = new Function(`return (${CLIENT_SRC.slice(open, end + 1)})`)();
+    if (CONTROL === 'drift') client = { ...client, Barcelona: ['FC Barcelona', 'RCD Espanyol Barcelona'] };
+    const asFlat = m => Object.fromEntries(Object.entries(m).map(([k, v]) => [flat(k), [...v].sort().join('|')]));
+    const a = asFlat(client), b = asFlat(CLUB_STRINGS);
+    const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
+    let drifted = 0;
+    for (const k of keys) {
+      if (a[k] !== b[k]) { fail(`"${k}" differs: the dropdown says ${a[k] ?? '(absent)'} and the validator says ${b[k] ?? '(absent)'}`); drifted++; }
+    }
+    console.log(`   ${keys.length} clubs compared, ${drifted} disagreement(s)`);
+    if (CONTROL === 'drift' && drifted === 0) {
+      console.error('   CONTROL drift changed nothing: the two maps must disagree');
       process.exit(1);
     }
   }

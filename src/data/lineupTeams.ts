@@ -29,24 +29,73 @@ export function getRandomTeamAssignments(count = 11): TeamAssignment[] {
 }
 
 /**
- * player_market_values.club stores some clubs under a different name than
- * the short label used for team assignments here (verified via execute_sql
- * on flawuiqbvjobmkfkauhw, 2026-07-06): a plain ilike('%PSG%') or
- * ilike('%Bayer Leverkusen%') returns zero rows even though the club exists,
- * because the stored value is the fuller/official name. Every other club in
- * `clubs` above substring-matches its stored value directly, so only the
- * mismatches need an entry here. Used to build the autocomplete's club
- * filter so a slot's suggestion pool is never accidentally empty.
+ * THE EXACT STRINGS player_market_values USES FOR THE THIRTY CLUBS ABOVE.
+ *
+ * Round 483. Until this round the dropdown scoped its pool with a substring
+ * `ilike` on the club label, and the comment that used to live here admitted
+ * it matched "Real Madrid Castilla" as a reserve variant. Measured on the
+ * table 2026-09-06, it was much worse than that: the pool for Barcelona
+ * offered 448 different players and 194 of them ever played for Barcelona,
+ * because the same match also returns RCD Espanyol Barcelona (427 rows) and
+ * Barcelona SC Guayaquil. Porto offered 410 against 221, most of the excess
+ * being Gremio Foot-Ball Porto Alegrense. Arsenal picked up Arsenal Tula and
+ * Arsenal Kyiv, Liverpool picked up Liverpool FC Montevideo, and Newcastle
+ * picked up Newcastle United Jets, who play in Australia.
+ *
+ * That is the shape Transfer Path was fixed for in Round 294: the game
+ * SUGGESTS a name and its own validator then refuses it. Here the player
+ * types three letters, takes the name the game offered him, and is told it is
+ * wrong, which reads as the game being broken rather than the player being.
+ *
+ * Reserve and academy sides are deliberately absent (Real Madrid Castilla, FC
+ * Porto B, Ajax Amsterdam U21, Juventus Next Gen, FC Barcelona Atletic): they
+ * are different teams. Five clubs are stored under two names and both are
+ * listed. A season split between two clubs is stored as "A / B" and an exact
+ * match misses those, which costs 37 rows out of 15,444 (0.24 percent): those
+ * men can still be typed in full and the validator still accepts them, they
+ * are simply not suggested.
+ *
+ * THIS LIST IS DUPLICATED in supabase/functions/validate-player/index.ts,
+ * which cannot import from src. simValidatePlayerRecords section 7 holds the
+ * two copies identical, the same way simSchema holds the home page's JSON-LD
+ * against the registry's.
  */
-const CLUB_SEARCH_ALIASES: Record<string, string> = {
-  'PSG': 'Paris Saint-Germain',
-  'Atlético Madrid': 'Atlético de Madrid',
-  'Bayer Leverkusen': 'Bayer 04 Leverkusen',
+export const CLUB_TABLE_NAMES: Record<string, string[]> = {
+  'Real Madrid': ['Real Madrid'],
+  'Barcelona': ['FC Barcelona'],
+  'Manchester City': ['Manchester City'],
+  'Liverpool': ['Liverpool FC'],
+  'Bayern Munich': ['Bayern Munich', 'FC Bayern Munich'],
+  'PSG': ['Paris Saint-Germain'],
+  'Chelsea': ['Chelsea FC'],
+  'Arsenal': ['Arsenal FC'],
+  'Manchester United': ['Manchester United'],
+  'Juventus': ['Juventus FC', 'Juventus'],
+  'AC Milan': ['AC Milan'],
+  'Inter Milan': ['Inter Milan'],
+  'Borussia Dortmund': ['Borussia Dortmund'],
+  'Atlético Madrid': ['Atlético de Madrid'],
+  'Tottenham': ['Tottenham Hotspur'],
+  'Napoli': ['SSC Napoli', 'Napoli'],
+  'Benfica': ['SL Benfica'],
+  'Porto': ['FC Porto'],
+  'Ajax': ['Ajax Amsterdam'],
+  'Bayer Leverkusen': ['Bayer 04 Leverkusen'],
+  'Roma': ['AS Roma', 'Roma'],
+  'Sevilla': ['Sevilla FC', 'Sevilla'],
+  'Sporting CP': ['Sporting CP'],
+  'Newcastle': ['Newcastle United'],
+  'Aston Villa': ['Aston Villa'],
+  'West Ham': ['West Ham United'],
+  'Marseille': ['Olympique Marseille'],
+  'Lyon': ['Olympique Lyon'],
+  'Celtic': ['Celtic FC'],
+  'Galatasaray': ['Galatasaray'],
 };
 
-/** Returns the substring to filter player_market_values.club by for a given club label. */
-export function clubSearchTerm(clubName: string): string {
-  return CLUB_SEARCH_ALIASES[clubName] ?? clubName;
+/** The exact stored club names for a club label, for an `in` filter. */
+export function clubTableNames(clubName: string): string[] {
+  return CLUB_TABLE_NAMES[clubName] ?? [clubName];
 }
 
 /**

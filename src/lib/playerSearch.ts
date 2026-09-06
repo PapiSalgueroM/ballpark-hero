@@ -214,8 +214,15 @@ export interface PlayerSourceConfig {
 
 export interface PlayerSourceFilter {
   column: string;
-  op: 'eq' | 'ilike';
-  value: string | number | boolean;
+  /**
+   * Round 483 added 'in'. A substring `ilike` on a club name is how Build Your
+   * XI's dropdown came to offer 448 players for Barcelona when 194 ever played
+   * there: "Barcelona" also matches RCD Espanyol Barcelona and Barcelona SC
+   * Guayaquil. 'in' takes the exact stored names instead, so a pool can be
+   * scoped to a club without swallowing every club whose name contains it.
+   */
+  op: 'eq' | 'ilike' | 'in';
+  value: string | number | boolean | string[];
 }
 
 export interface SearchPlayersOptions {
@@ -252,6 +259,7 @@ function applyFilters(builder: any, filters: PlayerSourceFilter[] | undefined) {
   let b = builder;
   for (const f of filters) {
     if (f.op === 'eq') b = b.eq(f.column, f.value);
+    else if (f.op === 'in') b = b.in(f.column, Array.isArray(f.value) ? f.value : [f.value]);
     else b = b.ilike(f.column, `%${f.value}%`);
   }
   return b;

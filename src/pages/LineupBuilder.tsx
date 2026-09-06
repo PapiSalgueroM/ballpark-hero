@@ -8,7 +8,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
-import { clubSearchTerm, nationSearchTerm } from '@/data/lineupTeams';
+import { clubTableNames, nationSearchTerm } from '@/data/lineupTeams';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -66,25 +66,36 @@ const LineupBuilder = () => {
     [filledSlotsArray]
   );
 
-  // Scope the autocomplete pool to the current slot's assigned club/nation so
-  // it is impossible to select a player who doesn't meet the slot's
-  // constraint (previously the search covered every player in
-  // player_market_values with no team filter, so any real player's name
-  // would show up and be accepted regardless of the assigned team). Filters
-  // on `nationality` (stored as a clean exact value like "Argentina") use an
-  // eq match; `club` is filtered with ilike because the table stores fuller
-  // club names for some entries (e.g. "FC Barcelona", "Real Madrid Castilla"
-  // as a loan/reserve variant) and clubSearchTerm corrects the few clubs
-  // whose short label doesn't substring-match the stored name at all (PSG,
-  // Atlético Madrid, Bayer Leverkusen; verified via execute_sql on
-  // flawuiqbvjobmkfkauhw, 2026-07-06).
+  /* Scope the autocomplete pool to the slot's assigned club or nation, so a
+     player who does not meet the slot's constraint cannot be selected at all.
+     Before this existed the search covered every player in the table with no
+     team filter and any real name was offered and accepted.
+
+     Round 483: the club leg is an EXACT match on the stored names now, not a
+     substring. Measured 2026-09-06, the substring offered 448 different
+     players for Barcelona against the 194 who ever played there (RCD Espanyol
+     Barcelona and Barcelona SC Guayaquil both contain the word), 410 for
+     Porto against 221 (Gremio Foot-Ball Porto Alegrense), and Newcastle
+     United Jets of Australia for Newcastle. The game was suggesting names its
+     own validator then refused, which is the Transfer Path defect of Round 294
+     wearing different clothes.
+
+     The nation leg is still nationality, and it is still WRONG in the same
+     way, deliberately left for its own round: the game asks who played FOR a
+     country and the pool holds everyone who could have. Argentina offers 1,567
+     names and 76 have ever been in one of our squad lists. It is not fixed
+     here because the only proof of a cap we hold runs 2018 to 2026 and has no
+     Italy at all, so filtering to it would empty slots rather than correct
+     them, and Round 442 was spent fixing exactly that. The fix is a pool that
+     puts proven internationals first and falls back to nationality, which the
+     shared search config cannot express today. */
   const teamScopedSource: PlayerSourceConfig | null = useMemo(() => {
     if (!currentTeam) return null;
     return {
       ...SOCCER_MARKET_VALUE_SOURCE,
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
-        : [{ column: 'club', op: 'ilike', value: clubSearchTerm(currentTeam.name) }],
+        : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
     };
   }, [currentTeam]);
 
