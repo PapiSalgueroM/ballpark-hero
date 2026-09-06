@@ -1,0 +1,30 @@
+-- Round 480: one invented key comes off the leaderboard allowlist.
+--
+-- game_score_caps is the allowlist: a key with a row can score, a key without
+-- one earns nothing forever. The 20260830 migration that built it says so, and
+-- says that is the whole defence against the first attack it names, somebody
+-- inventing a game key and posting completions under it: "an invented key
+-- cannot be in the list".
+--
+-- One was. `draft-duel`, cap 83, two completions dated 2026-08-29. Searched on
+-- 2026-09-06 with `git log --all --remotes -S"draft-duel" -- src` after
+-- fetching every remote branch: it returns nothing, in any ref, at any time.
+-- No code in this repo has ever recorded under that key, so no player can ever
+-- have earned those points by playing anything. The rows exist because
+-- game_completions is writable by the anon key on purpose (that is why caps
+-- exist at all) and because the allowlist was seeded partly from the data,
+-- so a posted key legitimised itself.
+--
+-- This is NOT the case the migration protects when it says a retired game must
+-- keep its cap or real historical points vanish. That rule is about games that
+-- existed and were removed, and the three of those the same check surfaced
+-- (darts, darts-501, stadium-draft) keep their caps and are now declared in
+-- RETIRED_COMPLETION_SLUGS with the commits that added and removed them.
+-- draft-duel is the other thing entirely: a key that was never a game.
+--
+-- scripts/simLeaderboardCaps.mjs section 6 is the fence that found it and the
+-- one that stops the next one: it walks the allowlist back to the source, which
+-- nothing did before, so an orphan row sat unnoticed. It fails on any
+-- allowlisted key no code can send unless that key is declared a retirement
+-- with a reason.
+delete from public.game_score_caps where game = 'draft-duel';

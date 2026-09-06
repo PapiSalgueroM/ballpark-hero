@@ -167,6 +167,22 @@ const caps = await rest('game_score_caps?select=game,max_score&limit=2000');
 const capped = new Set(caps.map(c => c.game));
 const denoms = await rest('game_denominators?select=game,max_score&limit=2000');
 
+/* The keys a real player's client can produce: what the source sends today,
+   plus the retirements somebody wrote down and gave a reason. Everything else
+   in the completions table got there because that table is writable by the
+   anon key on purpose, so it is a posted key and not a played one. Sections 4
+   and 6 both need this and must agree on it: 4 refuses to let a real game's
+   points be dropped, 6 refuses to let an invented key score, and when they
+   disagreed about draft-duel it was because one of them was calling a posted
+   key a player. Read out of the source rather than bundled: this harness has
+   never needed a bundler and one declaration list is not worth one. */
+const slugSrc = fs.readFileSync(path.join(ROOT, 'src', 'data', 'completionSlugs.ts'), 'utf8');
+const retiredBlock = slugSrc.match(/RETIRED_COMPLETION_SLUGS[^=]*=\s*\{([\s\S]*?)\n\};/);
+if (!retiredBlock) fail('RETIRED_COMPLETION_SLUGS is not where this file reads it, so no retirement is excused and sections 4 and 6 below are not trustworthy');
+const declared = new Set([...(retiredBlock ? retiredBlock[1] : '').matchAll(/'([a-z0-9-]+)'\s*:/g)].map(m => m[1]));
+if (retiredBlock && declared.size < 5) fail(`only ${declared.size} retirements were parsed out of completionSlugs.ts, so the parse is off`);
+const sendable = new Set([...keys, ...declared]);
+
 console.log('1) every key the source can send is allowlisted');
 {
   const missing = [...keys].filter(k => !capped.has(k)).sort();
@@ -212,7 +228,13 @@ console.log('4) nothing that already has scores was left out');
   played.delete('qa-test');
   /* A truncated or refused walk must not read as "nothing orphaned". */
   if (played.size < 100) fail(`only ${played.size} scoring games were enumerated, which is too few to be the real set, so this section did not actually check anything`);
-  const orphaned = [...played].filter(g => !capped.has(g)).sort();
+  /* A key no code can send and nobody declared is a POSTED key, not a played
+     one, so its "scores" are not points anyone earned and dropping its cap
+     takes nothing from anybody. Without this, removing an invented key's cap
+     (which section 6 demands) makes this section fail for protecting it. */
+  const orphaned = [...played].filter(g => !capped.has(g) && sendable.has(g)).sort();
+  const posted = [...played].filter(g => !capped.has(g) && !sendable.has(g)).sort();
+  if (posted.length) console.log(`   ignoring ${posted.length} key(s) no code can send and nobody declared, whose rows were posted rather than played: ${posted.join(', ')}`);
   console.log(`   ${played.size} keys carry real scores, ${orphaned.length} of them uncovered`);
   for (const o of orphaned.slice(0, 10)) {
     fail(`"${o}" has recorded scores but no cap row, so points players really earned stopped counting`);
@@ -229,6 +251,31 @@ console.log('5) the allowlist itself refuses an anonymous write');
   console.log(`   anonymous insert into game_score_caps answered ${r.status}`);
   if (r.ok) {
     fail('the anon key can write to game_score_caps, so an attacker can allowlist their own game key. A row named anon-write-probe now needs deleting by hand.');
+  }
+}
+
+console.log('6) nothing on the allowlist is a key no code can send');
+{
+  /* THE REVERSE OF SECTION 1, AND IT WAS MISSING. Section 1 walks source to
+     allowlist: every key the client can send must have a row. Nothing walked
+     allowlist to source, so a row for a key NO code can send sat there
+     unnoticed, and a row is exactly what grants scoring. The caps migration
+     says an invented key "cannot be in the list", which is the whole defence
+     against attack 1, and on 2026-09-06 one was: draft-duel, cap 83, two
+     completions, and `git log --all -S"draft-duel" -- src` returns nothing in
+     any branch at any time. The completions table is writable by the anon key
+     by design (that is why caps exist at all), so anyone can post any slug;
+     what must never happen is that slug also being allowlisted.
+     Legitimate keys the source cannot send are the RETIRED games, whose caps
+     are kept ON PURPOSE so real historical points do not vanish (the
+     migration's own rule). They are declared, with a reason each, in
+     RETIRED_COMPLETION_SLUGS in src/data/completionSlugs.ts, so this section
+     reads that rather than a list of its own: a retirement is a decision
+     somebody wrote down, and an undeclared orphan is this defect. */
+  const orphans = [...capped].filter(g => !sendable.has(g)).sort();
+  console.log(`   ${capped.size} allowlisted keys, ${keys.size} the source can send, ${declared.size} declared retirements, ${orphans.length} named by nobody`);
+  for (const o of orphans.slice(0, 10)) {
+    fail(`"${o}" is on the allowlist and no code in this repo can send it, so anybody who posts that key earns points for a game that does not exist. Either declare it in RETIRED_COMPLETION_SLUGS with the reason its cap is kept, or drop its row.`);
   }
 }
 

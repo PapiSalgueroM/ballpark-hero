@@ -73,6 +73,23 @@ export const RETIRED_COMPLETION_SLUGS: Record<string, string> = {
   'nba-lineup': 'renamed to nba-starting-5, historical rows only',
   'tennis-player': 'renamed to guess-tennis-player, historical rows only',
   'blind-rank': 'renamed to rank-em, historical rows only',
+  /* Round 480: these three carry a score cap on purpose and no code can send
+     them, which is the shape simLeaderboardCaps section 6 now refuses unless
+     it is written down here. Their caps are KEPT deliberately, the rule the
+     caps migration states: dropping a retired game's cap makes points real
+     players really earned vanish. Verified in git rather than taken from the
+     migration's word: Stadium Draft was added by 38e35142 and removed with
+     three other games by 9b31163c, and Darts was added by 2c5d4f72 and
+     removed by the same commit. */
+  'stadium-draft': 'Stadium Draft, added 38e35142 and removed by 9b31163c with three other weak games; its cap is kept so its historical points still count',
+  'darts': 'the Darts 501 game, added 2c5d4f72 and removed by 9b31163c; cap kept for the same reason',
+  /* The one of the three whose own history is thin: the slug never appears in
+     src in any ref, so it is presumably how the Darts game keyed its
+     completions from outside the pattern the scanner reads, or an early
+     spelling. The caps migration lists it among the retirees it deliberately
+     kept, and its rows stop when that game went, so it is declared on that
+     authority and flagged here rather than quietly assumed. */
+  'darts-501': 'the same Darts game under a second key; named in the 20260830 caps migration as a deliberate retiree, though the slug itself is not in any source ref',
 };
 
 /**
