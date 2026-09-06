@@ -678,6 +678,95 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+### THE SITE WIDE AUDIT, 2026-09-06. 53 agents, six blind angles, two adversarial lenses per finding.
+
+Run after Rounds 482 and 483 on the repo's own rule that a bug found in one sport must be
+checked in every sport sharing the shape. The two shapes were: a validator spending an AI call
+on a question the database answers, and a pool that suggests what its own validator refuses.
+21 findings survived; only 2 of 46 verification votes refuted anything. **Nothing below is
+claimed, all of it is measured, and the measurements are in the finding.** Round 485 took the
+critic's item; these are the rest, unclaimed.
+
+- **NBA CHAIN: THREE OF THE BIGGEST NAMES IN THE MODERN NBA CANNOT BE ANSWERED. Independently
+  reproduced against production 2026-09-06, take this one first.** Jokic, Doncic and Vucevic
+  all return "does not appear in our NBA records (1949-2024)" while Durant and Curry resolve
+  normally. The game recorded 259 completions from 84 people and was played today.
+  **TWO causes, and fixing only the first does nothing.**
+  1. The names are double encoded: `nba_player_team_stints` holds 393 rows across 144 people
+     as "Nikola JokiÄ", "Dario Å ariÄ", "Dennis SchrÃ¶der"; `bref_nba_player_seasons` holds
+     902 rows across 144. Every other player-name table on the site is CLEAN (I censused 53 of
+     them; the apparent hits in `player_market_values` and `bootroom_player_trajectory` are
+     false positives, "Ânderson Polga" and "Ângelo" being correctly spelled Portuguese).
+     Repair: `convert_from(convert_to(name,'LATIN1'),'UTF8')`, except 56 rows where a lost
+     non-breaking space needs restoring first (`replace(name,'Å ','Å'||chr(160))`), which
+     recovers Šarūnas Jasikevičius and Bruno Šundov exactly.
+  2. **The lookup is accent blind and this is the deeper half.** `nba-chain-validate:78`
+     prefilters with `.ilike("player_name", '%<last typed word>%')` on the RAW column and only
+     folds accents afterwards in JS, so "Jokic" misses "Jokić" even once the encoding is fixed.
+     The same shape is in `college-grid-validate:143`, `football-grid-validate:142` and
+     `soccer-grid-validate:232` and `:237`. The pattern to copy is Round 482's: fold to the
+     column's own shape, and fall back to a wildcard pattern.
+  `bref_nba_player_seasons` also feeds `nbaHLPlayers`, `localLineupEval`, `nbaStatLine`,
+  `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
+  in several other games too.
+
+- **COLLEGE GRID HAS RECORDED NOTHING FOR 37 DAYS.** Last completion 2026-07-31, 34 all time
+  from 24 people. Independently confirmed. The audit's cause: two thirds of every board can
+  only be answered by the free Gemini allowance. Same shape as Build Your XI before Round 482,
+  and the same fix applies, `nfl_player_team_stints` already holds the team half.
+
+- **TENNIS CHAIN: PostgREST's 1,000 row cap silently hides every women's US Open champion.**
+  `tennis-chain-validate:111` selects with no `.range()` and no `.limit()` and
+  `tennis_grand_slam_winners` holds 1,019 rows, so the last 19 are never seen and Raducanu is
+  told she never won a slam.
+
+- **NASCAR CHAIN: 17 of its 25 starting drivers cannot be answered at all**, so the run ends on
+  the first guess. The rule is "won a Cup title in a season the current driver raced" and the
+  span comes from `nascar_drivers.first_year/last_year`.
+
+- **NBA STARTING 5, two findings, both upheld with corrections.** (a) `NBA_PLAYER_SOURCE_V2`
+  sets `nameColumn:'last_name'` with no `firstNameColumn`, so typing a full name returns
+  nothing on every slot: "LeBron James" 0, "Kobe Bryant" 0, only the bare surname works, and
+  the box is `validateOnly` so a suggestion click is the only way to fill a slot. The fixed
+  source already exists in the shared library and the chain and connect4 games use it. The
+  surname workaround is itself lossy: 426 rows are unreachable because a teammate shares a
+  surname, and "Curry" on a Warriors slot returns Seth, not Stephen. (b) The slot is scoped by
+  a one-team-per-player snapshot column, so 6,155 of 8,880 alumni-franchise pairs (69.3%) are
+  unreachable: the Miami slot cannot take LeBron or Shaq, the Golden State slot cannot take
+  Durant, and the challenge is a career-points race, so the pool withholds the best legitimate
+  answer for every franchise.
+
+- **NBA LINEUP'S POSITION GATE IS OFF FOR 68% OF THE TABLE.** `useNbaLineup.ts:64` reads
+  `if (!dbPosition) return true;` and 3,510 of 5,135 rows have a NULL position, which is not
+  random: it is every legend in the table. The site's own bref table holds the answer.
+
+- **SOCCER GRID, two shapes this repo has now fixed twice elsewhere.** A club cell is matched
+  by substring in BOTH directions (`soccer-grid-validate:138`), so the Barcelona square accepts
+  Espanyol players, which is Round 483's defect in another file. And a club-by-club cell is
+  confirmed from two different men's rows (`:145`), which is Round 482's Paulinho defect in
+  another file, and the false accept is then cached forever.
+
+- **GUESS THE FOOTBALL CLUB: 36 of 364 puzzles show a league clue that contradicts the league
+  stored in their own row**, and the dropdown offers six club aliases it then scores wrong for
+  the club that owns them.
+
+- **FOOTLE: the same-continent yellow tile never fires for 16% of the pool** and fires wrongly
+  for Guinea-Bissau, and the kit-number tile grades against hand-typed squad numbers from clubs
+  the player has already left. The guard added for the league in Round 315 was never applied to
+  the number.
+
+- **BUILD YOUR XI'S POSITION GATE NEVER READS `player_verified_positions`**, so it refuses 88
+  picks that World XI accepts using the same shared rule module, which already takes the
+  verified history as an optional argument. Related: "Second Striker" collapses to CF on the
+  client and maps to CAM in the validator, so the CAM slot refuses every classic number 10.
+
+- **THE OTHER AI CALLS, from the completeness critic.** `nba-evaluate-lineup` and
+  `simulate-season` were both serving deterministic fallbacks when probed. Round 485 fixed
+  `evaluate-lineup` and found the cause is the free daily quota being spent site wide; these
+  two still need checking against their DEPLOYED source, not their repo files, and
+  `scripts/simEdgeSync.mjs` now records which functions have been confirmed.
+
+
 - **DONE, Round 483: Build Your XI's search box stops offering players who were never at
   the club.** The other half of 482, and the Transfer Path shape from Round 294 again: the
   game suggested a name and its own validator then refused it. The pool was a substring
