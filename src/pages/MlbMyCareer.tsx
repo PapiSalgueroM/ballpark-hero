@@ -33,6 +33,8 @@ const MlbMyCareer = () => {
               'Pick your league first: today\'s MLB, or the 2004 throwback with the Expos in Montreal and the Anaheim Angels.',
               'Play each season for a realistic stat line driven by rating, health and team quality.',
               'One big decision arrives every offseason: contracts, trades, surgeries, fame.',
+              'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the clubhouse card school and the shop.',
+              'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 26 badges, lit off the facts of your career.',
               'Stack awards and rings, fight the aging curve, and retire to the verdict.',
             ]}
             examples={[

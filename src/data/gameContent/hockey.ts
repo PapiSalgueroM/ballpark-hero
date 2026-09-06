@@ -330,6 +330,9 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
       "Pick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+      "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school at the back of the plane is one sitting a season on odds that are printed before you sit in.",
+      "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+      "Collect badges in the Trophy Case: 23 of them, from a first Cup and the Calder to 500 goals, a 50 goal season and $100M to your name, each lit the moment the facts of your career say so.",
       "Get drafted by a real club; your slot reflects your starting ability.",
       "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
       "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
@@ -344,6 +347,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "The press reads your actual season: lift the Cup and you take the podium, miss badly and you face the scrum, sit down the lineup and the role question finds you. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
       "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
       "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
+      "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the boys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
+      "The fans nag you for the thing your position is judged on and never the other way round: a center hears more points, a winger hears bury more chances, the man on the blue line hears move the puck and keep it out, and a goalie only ever hears make the saves.",
       "One career saves automatically in your browser; a new one replaces it.",
     ],
     example: [
@@ -376,6 +381,18 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         q: "Can I start in a different era?",
         a: "Yes. The create screen has a 2006-07 throwback: the 30 team league with the Atlanta Thrashers and the Phoenix Coyotes, before Vegas, Seattle or Utah existed. An era career never meets a franchise that did not exist then.",
+      },
+      {
+        q: "What is in the Bank?",
+        a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the card school at the back of the plane, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars.",
+      },
+      {
+        q: "Who is my rival?",
+        a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can lift a Cup before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated.",
+      },
+      {
+        q: "How do I earn badges?",
+        a: "By doing the thing. Each of the 23 badges is a test on the facts of your career, checked every time you open the case: a Cup, a major, 500 goals, 1,000 points, a million dollars to your name. The single season badges sit under the real records and say so: 50 goals against Wayne Gretzky's 92 in 1981-82, 100 points against his 215 in 1985-86, and a 40 win season against the 48 that Martin Brodeur and Braden Holtby share.",
       },
     ],
   },

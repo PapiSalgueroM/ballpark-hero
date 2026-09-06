@@ -222,6 +222,9 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Create your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.",
       "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
       "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+      "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the clubhouse is one sitting a season on odds that are printed before you sit in.",
+      "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+      "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to 500 home runs, 3,000 strikeouts and $100M to your name, each lit the moment the facts of your career say so.",
       "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
       "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
       "Handle the offseason event: winter training, surgery calls, trade rumors.",
@@ -235,6 +238,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "The press reads your actual season: a ring puts you on the podium, missing October badly puts you in the scrum, a bench year brings the role question. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
       "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
       "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
+      "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
+      "The fans nag you for the thing your position is judged on and never the other way round: a starter hears go deeper into games, a closer hears shut the door, a catcher hears more pop from behind the plate. No arm is ever asked for home runs, no bat is ever asked for an ERA, and the three spots with no speed in them are never asked to run.",
       "One career at a time, saved automatically in your browser.",
     ],
     example: [
@@ -252,6 +257,9 @@ export const BASEBALL_CONTENT: GameContentMap = {
       { q: "Is the player real?", a: "No, the prospect is fictional on purpose. The 30 teams are real, the career is yours." },
       { q: "Why am I on the bench?", a: "Because the veteran is better, for now. Late picks usually open as bench bats or long-relief arms behind an incumbent whose level tracks the roster. Grow your rating and you take the job in spring. Relievers never sit; the bullpen ladder is about whether you become the closer, which is your archetype's fight." },
       { q: "Can I start in a different era?", a: "Yes. The create screen has a 2004 throwback: the league in the Expos' last Montreal summer, with the Anaheim Angels, the Florida Marlins, the Tampa Bay Devil Rays and the Oakland Athletics. An era career never meets a franchise identity that did not exist then." },
+      { q: "What is in the Bank?", a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the clubhouse card school, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars." },
+      { q: "Who is my rival?", a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can win a ring before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated." },
+      { q: "How do I earn badges?", a: "By doing the thing. Each of the 26 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP or a Cy Young, 500 home runs, 300 wins, a million dollars to your name. The single season badges sit under the real records because the sim's own ceilings do: 50 home runs against the record 73, a .330 average when nobody has hit .400 since Ted Williams' .406 in 1941, and 50 stolen bases against the record 130. The strikeout badge is the real 3,000 club, and the career record there is Nolan Ryan's 5,714." },
     ],
   },
 
