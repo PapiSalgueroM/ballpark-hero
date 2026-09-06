@@ -40,6 +40,11 @@
  *     never marked, which is a message that reads well and does nothing,
  *     the exact shape the owner's line about choices that move futures
  *     was written against. Section 7 must go red.
+ *   BOARD_ASKS_CONTROL=unfloored one of the two new ways an inbox answer
+ *     takes board confidence away loses its floor of one, which is Round
+ *     465's rule that only a final whistle sacks anybody and the exact
+ *     defect the review of Rounds 465 to 469 found on the finance desk.
+ *     Section 7's source count must go red.
  * Each control refuses to run if its rewrite found nothing to rewrite.
  *
  * Numbers, measured on this tree 2026-09-06 (the harness prints all of them):
@@ -70,7 +75,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.BOARD_ASKS_CONTROL || '';
-if (CONTROL && !['typed', 'quote', 'nomigrate', 'flavour'].includes(CONTROL)) {
+if (CONTROL && !['typed', 'quote', 'nomigrate', 'flavour', 'unfloored'].includes(CONTROL)) {
   console.error(`BOARD_ASKS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -82,6 +87,8 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    with bare newlines, so normalise before matching. The Round 469 gate fix
    went in for exactly this. */
 const lf = s => s.replace(/\r\n/g, '\n');
+/** Where the next top level function starts, in a normalised source. */
+const NL_EXPORT = '\nexport function ';
 
 const ASKS_SRC = path.join(ROOT, 'src', 'lib', 'clubManagerBoardAsks.ts');
 const ENGINE_SRC = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
@@ -149,6 +156,13 @@ if (CONTROL === 'flavour') {
     ],
   ], 'clubManager.flavour.ts', "the board's own answers");
   console.log('NEGATIVE CONTROL ON: the board money never lands and the word given is never marked; section 7 must go red');
+}
+if (CONTROL === 'unfloored') {
+  enginePath = rewrite(ENGINE_SRC, [[
+    '      boardConfidence = clamp(boardConfidence - 3, 1, 100);',
+    '      boardConfidence = clamp(boardConfidence - 3, 0, 100);',
+  ]], 'clubManager.unfloored.ts', 'the refuse-the-ask dock');
+  console.log("NEGATIVE CONTROL ON: refusing a board ask can take the board to zero between matches; section 7's source count must go red");
 }
 
 /* ---- bundle the REAL modules ---- */
@@ -626,6 +640,29 @@ console.log('7) Every answer in the inbox moves a number that has a screen');
   const ducked = answerMessage(duckMsg, 'm1', 0);
   if (ducked.press.mood !== 48) fail(`ducking the reporter moved the press mood to ${ducked.press.mood} instead of 48`);
   console.log('   the pot, the board meter, a contract, the training plan, the ticket price, the press mood and the dressing room all moved');
+
+  /* Round 465's rule, asked of every path rather than the two this round
+     happened to write: zero board confidence IS the sack and only a final
+     whistle may reach it, so nothing inside answerMessage may clamp the
+     board to a floor below one. This counts them in the source instead of
+     probing the two it knows about, so the round after this one cannot add
+     a third way to dock the board and walk past the check. The engine read
+     here is the file the control rewrites, so the control moves it too. */
+  const engineSrc = lf(fs.readFileSync(CONTROL === 'unfloored' ? enginePath : ENGINE_SRC, 'utf8'));
+  const fnStart = engineSrc.indexOf('export function answerMessage(');
+  if (fnStart < 0) {
+    fail('answerMessage is not in clubManager.ts under that name any more, so the board floor check could not run');
+  } else {
+    const nextFn = engineSrc.indexOf(NL_EXPORT, fnStart + 10);
+    const body = engineSrc.slice(fnStart, nextFn > 0 ? nextFn : engineSrc.length);
+    const docks = [...body.matchAll(/boardConfidence = clamp\(([^;]*)\);/g)].map(m => m[1]);
+    const unfloored = docks.filter(d => !/,\s*1,\s*100\s*$/.test(d));
+    console.log(`   ${docks.length} places in answerMessage move the board meter, ${docks.length - unfloored.length} of them floored at one`);
+    if (docks.length < 2) fail(`only ${docks.length} board meter move(s) found in answerMessage, the source check is looking in the wrong place`);
+    for (const d of unfloored) {
+      fail(`an inbox answer can take the board below its last point: clamp(${d.trim().slice(0, 60)})`);
+    }
+  }
 
   /* And the future: a word kept opens next season warmer than a word
      broken, three points a promise, on the same finished season. */
