@@ -14,8 +14,10 @@
         difference, actual and projected alike, and the closed ledger the
         same way.
      2) the kitty identity. A passive manager (no deals, no scouts, no
-        builders) plays a whole season, and the kitty's movement equals
-        tickets plus food plus sponsor money to the pound. Wages, staff and
+        builders, no staff changes) plays a whole season, and the kitty's
+        movement equals tickets plus food plus sponsor money to the pound;
+        Round 471's staff fees are a kitty line of their own and sit at zero
+        for a manager who never changes his staff. Wages, staff and
         travel are in the ledger and NOT in that sum, which is what the
         screen says: the engine has never taken them out of the kitty and
         this section is what stops anybody quietly starting.
@@ -195,7 +197,7 @@ console.log('1) Every projection and every closed ledger adds up, week after wee
       const end = playSeason(startCareer(club), s => { checkSums(projectFinances(s), `${club} week ${s.week}`); checked++; });
       const c = closeLedger(end);
       if (!near(c.tickets + c.concessions + c.sponsor + c.transferIn, c.income, 0.011)) fail(`${club}: closed income does not sum`);
-      if (!near(c.playerWages + c.staffWages + c.travel + c.transferOut + c.facilities, c.spend, 0.011)) fail(`${club}: closed spend does not sum`);
+      if (!near(c.playerWages + c.staffWages + c.travel + c.transferOut + c.facilities + c.staffFees, c.spend, 0.011)) fail(`${club}: closed spend does not sum`);
       if (!near(c.income - c.spend, c.result, 0.011)) fail(`${club}: closed result is not income minus spend`);
       if (!complete(end)) { sacked++; return; }
       finals++;
@@ -218,7 +220,7 @@ console.log('2) The kitty moves by tickets, food and sponsor money and nothing e
       s = acceptSponsor(s, 'safe') ?? s;
       const end = playSeason(s);
       const c = closeLedger(end);
-      const kittyLines = c.tickets + c.concessions + c.sponsor + c.transferIn - c.transferOut - c.facilities;
+      const kittyLines = c.tickets + c.concessions + c.sponsor + c.transferIn - c.transferOut - c.facilities - c.staffFees;
       const moved = end.budget - start;
       if (!near(moved, kittyLines, 0.6)) fail(`${club}: the kitty moved ${moved.toFixed(2)}m, the kitty lines say ${kittyLines.toFixed(2)}m`);
       if (!(c.playerWages > 0 && c.staffWages > 0 && c.travel > 0)) fail(`${club}: the ledger has no running costs (${c.playerWages}/${c.staffWages}/${c.travel})`);

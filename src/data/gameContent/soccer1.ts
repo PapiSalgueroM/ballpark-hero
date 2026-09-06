@@ -241,6 +241,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Play the match, read the report, answer the press, and manage the dressing room between games.",
       "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
       "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+      "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
       "Keep the confidence meter alive, hit the board's objectives, collect trophies, and roll into next season while the whole world ages around you.",
     ],
     rules: [
@@ -252,7 +253,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
       "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
       "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
-      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings and facilities out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+      "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings, facilities and staff fees out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+      "The staff room holds four made up people: an attack coach, a defence coach, a goalkeeping coach and a lead scout, each with a level 1 to 10 and a ceiling he can still reach, each starting where the club's stature puts it. Level 1 does nothing at all and neither does an empty chair, so the desk can only ever add. The attack coach speeds up the forwards and the number ten, the defence coach the back line and the holding midfielder, the goalkeeping coach the keepers, and the two coaches split the middle of the park between them, with nobody ever growing past his own ceiling. The lead scout lifts what your scouts bring back from the road. Hiring costs a fee and paying somebody off costs severance, both from the transfer kitty, or you can promote from your own academy staff for nothing and grow him yourself. Rival clubs come in for the good ones, you can match two offers a season, and an approach you ignore for two weeks takes the man with it.",
     ],
     example: [
       "You take Newcastle and the board asks you to qualify for the Europa League. A summer winger signing and a cup run to the semis keep confidence healthy even in seventh.",
@@ -283,7 +285,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
       {
         q: "Do wages come out of my transfer budget?",
-        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers and facility upgrades are the lines that move the kitty.",
+        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers, facility upgrades and the fees and pay offs on the staff desk are the lines that move the kitty.",
       },
       {
         q: "Are the sponsors real companies?",

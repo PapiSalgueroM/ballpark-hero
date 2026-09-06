@@ -44,6 +44,11 @@ import {
   rolloverBooks, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
+/* Round 471: the four staff posts, same cycle, same rule. */
+import {
+  coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,
+} from '@/lib/clubManagerStaff';
+import type { ClubStaff } from '@/lib/clubManagerStaff';
 
 /**
  * Club Manager engine.
@@ -1673,6 +1678,11 @@ export interface CareerState {
    *  an older save and repaired by ensureBooks; fails closed on shape. See
    *  clubManagerFinances. */
   books?: ClubBooks;
+  /** Round 471: the four staff posts, the approach on the desk and the
+   *  matches left. Absent on a save from before the desk existed and
+   *  repaired by ensureStaff to the club's day one men; fails closed on
+   *  shape. See clubManagerStaff. */
+  staff?: ClubStaff;
 }
 
 export type NextFixtureInfo =
@@ -8367,6 +8377,9 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
   tickBooks(state);
+  /* Round 471: an approach on the staff desk runs down, or a rival comes in
+     for one of yours. Hashed, so it adds no draw to the week's stream. */
+  tickStaff(state);
   tickScouting(state);
 }
 
@@ -9865,8 +9878,13 @@ function tickScouting(state: CareerState): void {
     if (Math.random() < 0.02 + s.network * 0.018) {
       // Better networks reach further into a country, and the country itself
       // sets the base level of what there is to find.
+      /* Round 471: the lead scout reads the trip properly, so what comes
+         back has a little more in it. Zero on an empty post and at level 1,
+         inside the clamp the trip already used, and added AFTER the draws so
+         it moves no seeded stream. */
       let potential = clamp(
-        52 + Math.round((region.youth - 60) * 0.42) + ri(0, 12) + Math.round(s.network * 1.4),
+        52 + Math.round((region.youth - 60) * 0.42) + ri(0, 12) + Math.round(s.network * 1.4)
+        + scoutQualityBonus(state),
         54, 93,
       );
       if (Math.random() < 0.06) potential = clamp(potential + ri(3, 8), 54, 95);
@@ -10019,8 +10037,11 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const facilities = career.academy?.facilities ?? 8;
   const staff = 0.72 + coaching * 0.022 + facilities * 0.011;
   /* Round 467: the training ground, exactly 1 at level 1, inside the same
-     clamp and still under agePlayer's cap at the ceiling. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career), 0.1, 2.6);
+     clamp and still under agePlayer's cap at the ceiling.
+     Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
+     in the same place for the same reason. The training ground lifts the
+     whole squad, the coach lifts his half of the pitch. */
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, 2.6);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
@@ -10202,6 +10223,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 467: and the facilities and the books.
   ensureFacilities(state);
   ensureBooks(state);
+  // Round 471: and the four staff posts.
+  ensureStaff(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
@@ -11475,6 +11498,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      money lands in the new season's ledger. */
   rolloverFacilities(state, career, moving);
   rolloverBooks(state, career, moving);
+  /* Round 471: and the staff, who belong to the club too. Stay and they
+     carry a year better where there was room, with the matches reset; move
+     and the new club hands you its own. */
+  rolloverStaff(state, career, moving);
   /* Round 200: the sponsor's year ticks over here. The bonus for the season
      just finished is paid FIRST, off the position that season really
      reached, then a year comes off the deal and the next year's guaranteed
@@ -11620,6 +11647,9 @@ export function loadCareer(): CareerState | null {
        club's day one levels and fresh books before any screen reads them. */
     ensureFacilities(parsed);
     ensureBooks(parsed);
+    /* Round 471: and the staff desk, for the same reason: the hub tile reads
+       the four posts before a ball is kicked. */
+    ensureStaff(parsed);
     /* Round 465's rule, repaired on the way in: zero board confidence IS the
        sack, so a save that carries zero without being sacked is a save the
        engine never sacked, written by a build whose between-matches paths
