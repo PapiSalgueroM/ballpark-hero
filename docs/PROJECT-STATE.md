@@ -2490,6 +2490,31 @@ nations, Italy being the one hole. Fence: `scripts/simValidatePlayerRecords.mjs`
 records cannot confirm still need the model, so a paid tier would finish the job here and
 would end the same problem for every other AI checked game.
 
+**ROUNDS 470 TO 474 LANDED AND ARE LIVE (2026-09-06 night).** Five builders in parallel
+worktrees behind one merge and gate pass, 42 commits, 58 files, about 8,000 lines. The NBA,
+MLB and NHL careers now run on the SAME shared modules as Soccer Career and the NFL (the
+money app, the social feed, the rival and the badge case), which is the owner's "one engine,
+many sports" instruction rather than four more copies: every rule stayed in careerMoney.ts,
+careerSocial.ts, careerBadges.ts and careerRival.ts and each sport got a thin binding.
+Club Manager gained a staff desk, the match screen merged quick sim and watch live into one
+flow, Soccer Career was audited against his life sim list, and board asks now name a target
+that can actually be bought. Five new harnesses shipped with it (simCareerParity,
+simClubManagerStaff, simMatchScreen, simCareerLife, simBoardAsks), all green, and
+simCareerParity carries five controls. Six snapshots regenerated and no more, which is the
+lastmod ledger behaving. All fifteen snapshot and SEO harnesses green against the rebuilt
+tree. Deployed and proved live.
+
+**ROUND 486: Jokic, Doncic and Vucevic were unanswerable in NBA Chain.** Found by the audit,
+reproduced against production first. THREE causes, and repairing any one alone changed
+nothing: the names were double encoded in two NBA tables (144 people, and one of those tables
+also feeds five other games, so the names were being DISPLAYED broken there too); the lookup
+folded accents in JS but searched the raw column; and the JS fold could not handle a letter
+with no canonical decomposition, so "Omer Asik" became "omer as k". 53 player-name tables were
+censused before anything was repaired, because the naive detector flags correctly spelled
+Portuguese ("Anderson Polga", "Angelo") and a repair driven by it would have corrupted real
+names. Fixing the lookup also fixed the nicknames: "wemby" had never matched anybody.
+Fence `scripts/simNbaChainNames.mjs`, controls `nofold` and `rawmatch`, both firing.
+
 **ROUND 483, the other half of the same defect: the search box was offering players who were
 never at the club.** The pool was scoped with a substring `ilike` on the club label, so
 Barcelona offered 448 different players of whom 194 ever played there (RCD Espanyol
