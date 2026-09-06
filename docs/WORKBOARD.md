@@ -678,6 +678,32 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **THE CONQUEST DAILY CAN BE REPLAYED WITH THE ANSWERS KNOWN, ON ALL FIVE MAPS. Specced
+  2026-09-06, ready for a builder, and it is a points exploit rather than a polish item.**
+  Found by the review of Rounds 459 to 463 and left open because it is a round of its own.
+  The daily is written only when the run reaches the final screen (the effect at phase
+  'done' in `src/components/conquest/ImperialismBoardShared.tsx` and the same effect in the
+  four private boards, `ImperialismBoard.tsx`, `Mlb`, `Nba`, `Nhl`). Nothing is persisted
+  between the first pick and that screen, and `start()` re-seeds the run from the date, so a
+  player who reloads on the last matchday is dealt the identical season back with every
+  result already known and can call all thirteen games right, for about ninety percent of
+  the cap. `/soccer-conquest`, `/conquest`, `/conquest-mlb`, `/conquest-nba` and
+  `/conquest-nhl` all share this.
+  **The shape of the fix, which is the shape Round 468's drills already needed and Round 428
+  wrote down: record the daily AS IT GOES, not when it ends.** The cheap and correct version
+  is an action log rather than a state dump: the season is seeded from the date, so the club
+  the player rode plus each matchday's call replays the run exactly. On mount, replay the log
+  and drop the player back where they were. `src/lib/conquestDaily.ts` is the one place the
+  record shape lives, so the log goes there and each board gains the same few lines, and the
+  soccer board being shared means four of the five come from one edit only if the four
+  private boards are moved onto `ImperialismBoardShared` first, which is worth doing in the
+  same round (Round 459 already proved the shared board carries a sport).
+  **The harness** must play a daily to matchday N, reload, and hold that the restored run is
+  the same run and that no sequence of reloads records a second completion or a score above
+  the one the honest run earned, with a control that removes the log and goes red. Note while
+  you are in there: `conquestDaily.ts` keeps its own pre Round 428 key and payload, and the
+  commit that claims it uses "the Round 428 record shape" is wrong about that.
+
 - **MUCH LATER COSMETIC IDEA, owner request 2026-09-01:** a customizable site
   mascot like the small coding pets, with animal choices and sport animations
   such as dribbling a basketball, juggling a soccer ball or playing with a
