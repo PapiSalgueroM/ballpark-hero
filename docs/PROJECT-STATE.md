@@ -2433,9 +2433,9 @@ roadmap when a round touches the game named:
 the cleared ones are worth as much as the findings because they stop a future round hunting
 them.** The method, which is cheap and worth repeating: ask the table which games stopped
 being played, which keys can score, and whether "most played" means what it says.
-FOUND AND FIXED: an invented key on the leaderboard allowlist (Round 480), and Most Played
-Today ranking rows instead of people (Round 481). FOUND AND SPECCED: Build Your XI dead,
-below.
+FOUND AND FIXED: an invented key on the leaderboard allowlist (Round 480), Most Played
+Today ranking rows instead of people (Round 481), and Build Your XI dead on a spent AI
+allowance (Round 482).
 CLEARED, each measured rather than assumed:
 - **Overrated or Underrated, Tier List and Guess The Club** all stopped dead, and all three
   were deleted on his own instruction (the registry carries the date and the quote).
@@ -2452,19 +2452,55 @@ CLEARED, each measured rather than assumed:
   writable by the anon key by design. nrl-my-career did on 2026-09-05. It earns nothing (no
   cap row) and Round 480's new check is what keeps it that way.
 
-**BUILD YOUR XI IS DEAD IN PRODUCTION, found 2026-09-06 by reading the completions table
-rather than by anyone reporting it.** 15 to 27 completions a day through 2026-08-28, then
-nothing: 215 in a fourteen day window against 1 in the seven days since, while the site does
-about 20,000 completions a day and every other AI checked game grew. Reproduced live the
-same afternoon: six calls to the validator, four came back "used up its allowance for
-today", and a lineup needs eleven in a row. Round 413 found this on 2026-09-02 and made the
-refusal honest, which is not the same as fixing it. The grids survive because they cache
-their answers and this validator does not, and the fix is free: answer from
-`player_market_values` first (5,496 rows for 2026 with club and position, which is what the
-prompt asks the model) and cache the rest. Specced in full in the Inbox of
-`docs/WORKBOARD.md`, including the rule that a table miss must still reach the AI and an AI
-failure must still fail closed. **The money half is Anthony's alone: the free allowance is
-what the site has outgrown, and a paid tier would end this for every AI checked game.**
+**BUILD YOUR XI WAS DEAD IN PRODUCTION, found 2026-09-06 by reading the completions table
+rather than by anyone reporting it. FIXED THE SAME DAY, Round 482, and it cost nothing.**
+15 to 27 completions a day through 2026-08-28, then nothing: 215 in a fourteen day window
+against 1 in the seven days since, while every other AI checked game grew. Reproduced live:
+six calls to the validator, four came back "used up its allowance for today", and a lineup
+needs eleven in a row. Round 413 found this on 2026-09-02 and made the refusal honest,
+which is not the same as fixing it.
+
+The fix is that the validator now answers from `player_market_values` first, then from a
+cache, and only then from the model, which is what the two grid validators have always
+done. **The records may only ever CONFIRM**: a miss could be a spelling, a nickname, a year
+or a club the table does not carry, so it falls through to the model, and a model that
+cannot answer still returns unverified. Nothing accepts on error.
+
+Four things the table does that would each have shipped a wrong answer, all measured:
+- **A name is not a person.** Seven men are on file as Paulinho; one played central midfield
+  for Barcelona and another is a left-back, so the club and the position must come from the
+  SAME ROW, which is one man in one season.
+- **A loose club match is a wrong answer waiting.** Barcelona also matches RCD Espanyol
+  Barcelona, Porto also matches Gremio Foot-Ball Porto Alegrense, Newcastle also matches
+  Newcastle United Jets of Australia. All thirty clubs are written out against the table's
+  exact strings, reserves and academies excluded.
+- **name_folded keeps punctuation** (`marc-andre ter stegen`, `n'golo kante`), so a fold
+  that flattened it would have missed both men in silence.
+- **The squad table hides the armband inside the name.** Messi is stored as
+  "Lionel Messi ( captain )" in all three Argentina squads and 102 rows carry it, so before
+  it was stripped the nation path worked for reserves and missed every captain.
+
+Measured after: 14 of 14 hand-checked true pairs confirm without the model, 0 of 10 false
+pairs confirm, and eight live probes came back valid from records with the allowance still
+spent for the day. Coverage is 159 to 217 distinct players per club and 24 of the 25
+nations, Italy being the one hole. Fence: `scripts/simValidatePlayerRecords.mjs`, controls
+`crossrow`, `naiveclub` and `captain`, all three firing. Deployed as validate-player v10.
+
+**The money half is still Anthony's alone**, and it is now smaller but not gone: picks the
+records cannot confirm still need the model, so a paid tier would finish the job here and
+would end the same problem for every other AI checked game.
+
+**Two data problems found on the way and deliberately NOT acted on, because nothing shipped
+reads them.** Worth a round of their own, worth nobody's panic.
+- `national_team_squads` is **shifted a column in 2,724 of its 2,784 rows**: `club` holds a
+  birth date and `position` holds a shirt number. The names survived (86 percent resolve
+  into the market values table across six countries), which is why the nation path reads
+  `country` and `player_name` and nothing else. Round 482 is the first shipped code to read
+  that table at all.
+- `person_key` is **NULL on all 141,916 rows** of `player_market_values`, which
+  `docs/PLAYER_IDENTITY_KEYS_TASK15.md` already records as expected (only split identities
+  were ever keyed). It is named here because it looks like the obvious fix for the Paulinho
+  problem and it is not one.
 
 **A report investigated on 2026-09-06 and closed as not a defect, left unresolved in the
 table so he sees it too.** `/transfer-path`, 15:18 UTC, description "Bug" and nothing else,

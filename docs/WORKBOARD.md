@@ -678,46 +678,23 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- **BUILD YOUR XI IS DEAD IN PRODUCTION RIGHT NOW, AND THE FIX IS FREE. Found and reproduced
-  live 2026-09-06 by reading the completions table. Take it before anything else in this
-  list.**
-  **The measurement.** The game recorded 15 to 27 completions a day through 2026-08-28, then
-  6 on the 29th, then nothing: 215 completions in one fourteen day window against 1 in the
-  seven days since, while the site as a whole does about 20,000 completions a day and every
-  other AI checked game grew over the same period (World XI 18 to 107, Clue Auction 5 to 39,
-  soccer grid steady). It is not traffic and it is not the season.
-  **The cause, reproduced by calling the live validator six times in a row on 2026-09-06:**
-  four of the six came back `exhausted: true`, "Answer checking has used up its allowance
-  for today". Filling a lineup needs ELEVEN validations in a row, so the game is
-  unfinishable for most of the day. Round 413 already found this on 2026-09-02, made the
-  refusal honest and raised the token cap, but honest and dead is still dead: the root
-  cause is that the free Gemini allowance cannot serve this site's traffic.
-  **Why this game and not the grids: the grids CACHE and this one does not.** Calling
-  `college-grid-validate` three times with the same answer returns `cached: true` on the
-  second and third and spends nothing; the deployed `validate-player` (version 8, read
-  2026-09-06) has no cache at all, so every pick by every player spends an allowance call.
-  **THE FIX, and none of it costs money.**
-  1. ANSWER FROM THE DATABASE FIRST. `player_market_values` holds 5,496 rows for 2026 across
-     1,200 clubs with a position on every one, which is exactly what the prompt asks the
-     model ("has this player played for this club, and does he fit this position"). Arsenal's
-     squad is in there with real positions. A current player at a current club needs no AI at
-     all. The AI stays for what the table cannot answer: historic sides, national teams, a
-     player who has moved.
-  2. CACHE the AI answer the way the grid validators already do. The triple of player, club
-     and position is a stable answer.
-  **The rule that must not bend while doing it (CLAUDE.md, the July 2026 P1):** a validator
-  fails closed. A database hit is verification, not a fail open, but a database MISS must
-  fall through to the AI and an AI failure must still return
-  `{valid:false, unverified:true}`. Never accept on error.
-  Harness: hold that a current player at his real club validates with zero AI calls, that a
-  wrong club is refused from the table alone, that a table miss reaches the AI, that an AI
-  failure still fails closed, and that the cache never returns a verdict for a different
-  triple. Keep simQuotaHonesty green. Then deploy through the Supabase MCP and keep
-  `supabase/functions/validate-player/index.ts` in step with what is deployed.
-  **The money question, and it is the owner's alone.** Even with both fixes the tail still
-  needs the model, and the free Gemini allowance is what the site has outgrown. A paid tier
-  would end this class of failure for every AI checked game. Do not spend anything without
-  him; the two fixes above are worth doing either way and may make it unnecessary.
+- **DONE, Round 482: Build Your XI answers from our own records before it asks the AI.**
+  It was dead in production (215 completions in a fortnight against 1 in the following week,
+  four of six live validator calls returning `exhausted`), and it was the free allowance, not
+  the game. The validator now reads `player_market_values` first, then a cache, then the
+  model, which is what the grid validators always did. The records may only CONFIRM: a miss
+  falls through to the model and a model that cannot answer still fails closed, so the July
+  2026 P1 rule is honoured rather than bent. Four table traps were measured and handled: a
+  name is not a person (seven Paulinhos, so club and position must come from one row), a
+  loose club match swallows Espanyol as Barcelona and Newcastle Jets as Newcastle, the folded
+  name column keeps hyphens and apostrophes, and the squad table hides "( captain )" inside
+  the name of exactly the men people guess. 14 of 14 true pairs confirm, 0 of 10 false pairs
+  do, eight live probes came back valid from records with the day's allowance still spent.
+  Fence `scripts/simValidatePlayerRecords.mjs`, controls `crossrow`, `naiveclub`, `captain`.
+  Deployed validate-player v10.
+  **The money question is still the owner's alone and is now smaller, not gone.** Picks the
+  records cannot confirm still need the model, so a paid tier would finish this and would end
+  the same failure for every other AI checked game. Nothing has been spent.
 
 - **TRANSFER PATH REFUSES REAL TEAMMATES AT SIX CLUBS, AND IT IS PROBABLY WHAT A PLAYER
   REPORTED ON 2026-09-06. Measured and specced the same day; take this one first.**
