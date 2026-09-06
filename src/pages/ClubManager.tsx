@@ -18,7 +18,9 @@ import {
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
+import { STAFF_MATCHES_PER_SEASON, STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
+import { StaffScreen } from '@/components/club-manager/StaffScreen';
 import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
 import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
@@ -92,7 +94,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -194,6 +196,7 @@ const ClubManager = () => {
               <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts four shirt sponsor offers on the table whenever the club has no deal. Three are honest brands in three shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish, each marked local or global. The fourth is a bad brand (a bookmaker, a lender, that sort) paying 1.35 times the safe cheque: the fans lose 6 mood the day you sign and 8 off their target every week it runs, and the board like the money by a point. Every offer takes a push: ask for more and the brand comes up six percent, ask once too often and it walks for the season. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
               <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage, and the fans have a say.</span> Every home crowd pays the transfer kitty: attendance times the money a head, which is your ticket price plus food and drink at your prices. Fair tickets and cheap food lift the fans' mood, premium anything costs it, and the mood moves your home crowd, 0.9 times when they are furious and 1.1 when they are singing; the board go the other way, a point of confidence for premium tickets and a point off for fair ones. The Finances desk also projects the season's books to the last day: tickets, food, the sponsor and deals in, player wages, staff wages, travel, deals and the builders out. Wages and travel are running costs the board covers, so they never leave the kitty; the wage ceiling on the contracts desk is how the board keeps them honest. It is all one kitty otherwise: gates in, transfers, scouts, the academy and the facilities out. Whatever you did not spend rolls into the summer on top of the board's new cheque, up to one more season's worth. Leave the club and the balance stays behind, the same as the sponsor deal and the facilities, because it was always the club's money.</p>
               <p>🏗️ <span className="font-semibold text-foreground">Four facilities, level 1 to 10.</span> Stadium, training ground, medical and dressing room, on the Facilities desk. A club opens where its stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Every level is a lift on the game you already play and level 1 does nothing at all: the training ground speeds growth for anyone with room under his ceiling (nobody grows past it), medical writes injuries for fewer weeks (never under one), the dressing room brings unhappy players back toward content between games, and the stadium lifts the food and drink money a head, with the first three levels you buy also growing the crowd. Upgrades come out of the transfer kitty and get dearer every level, so a small club cannot build a level 10 anything in a season.</p>
+              <p>🧑‍🏫 <span className="font-semibold text-foreground">Four people on the staff, and rivals want them.</span> An attack coach, a defence coach, a goalkeeping coach and a lead scout, all made up, each with a level 1 to 10 and a ceiling he can still reach. A club opens where its stature puts it, the same as the facilities. Each one is a lift and level 1 does nothing at all, so an empty chair costs you nothing you already had: the attack coach speeds up the forwards and the number ten, the defence coach the back line and the holding midfielder, the keepers get their own man, and the middle of the park splits the two coaches between them. Nobody grows past his ceiling whoever is coaching him. The lead scout is the one who reads the trip reports, so the boys your scouts come home with have a little more in them. Their wages are a running cost the board covers; hiring costs a fee and paying somebody off costs severance, and both come out of the kitty and show up on the Finances desk. You can also promote from your own academy staff for nothing: he starts lower than anyone on the shortlist and has the furthest to grow, and how good he is comes off your academy's coaching level. Rival clubs come in for the good ones on their own schedule, and you get {STAFF_MATCHES_PER_SEASON} matches a season: match the money and he stays on a quarter more wages, or let him go and the job opens. Ignore an approach for two weeks and he leaves anyway. The staff belong to the club, so a new job starts on the new club's people.</p>
               <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
               <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
               <p>📉 <span className="font-semibold text-foreground">Two meters sit under the club name on every tab: the board and the fans.</span> Tap either one to swap its words for the number out of 100. The board meter is the sack race itself, nothing prettier: it opens at 60 in your first season and anywhere from 35 to 82 after that depending on how the last one went, a win adds about 4, a defeat takes about 4.5 (more at a giant, more again when the papers have turned on you), the table against what the club expects moves it a little every league week, a cup exit or a promise to the press you broke costs extra, and at zero you are sacked. Safe is 60 and above. Under pressure is 10 to 59. Under 10 it reads One bad week from the sack, and it means it: a single week has been measured taking more than 10 off, because a defeat, the table, a cup exit and a promise to the press broken can all land in the same seven days. Between matches nothing can sack you: a press answer, a handshake with another club or a switch on the Finances desk can drain the board to its last point, and the next result decides. The fan meter is read off what fans actually feel: this season's results weighted towards the recent ones (the biggest term, worth 34 points either way), your league position against the club's own expectation (2.5 a place, capped at 15), the ticket policy on the Finances desk (fair prices +4, premium -5), what a pie costs in the ground (cheap +3, premium -4), a shirt sponsor they are ashamed of (-6) and every trophy lifted this season (+8 each, up to 16), all on top of a base of 55. Singing is 65 and above, Grumbling is 40 to 64, Turning is under 40, and Hopeful is what they are before a ball is kicked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
@@ -216,6 +219,7 @@ const ClubManager = () => {
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
             'Run the money: gate receipts from every home crowd, ticket and food prices the fans and the board react to, a shirt sponsor from three honest shapes or one bad brand that pays more and costs the fans, each one negotiable, and a projection of the season\'s books to the last day.',
             'Build the club: stadium, training ground, medical and dressing room, each level 1 to 10, paid from the kitty, each one a small real lift on the squad.',
+            'Run the staff room: an attack coach, a defence coach, a goalkeeping coach and a lead scout, hired, promoted from your academy or paid off, each one growing his own part of the squad, with rivals coming in for the good ones and a limited number of offers you can match.',
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
@@ -1103,6 +1107,24 @@ const ClubManager = () => {
                 sub="Stadium, training, medical, dressing room"
                 onClick={() => setHubPanel('facilities')}
               />
+              {/* Round 471: the staff desk. Accented while a rival has an
+                  approach on the table, because that one is on a clock. */}
+              <HubTile
+                icon="🧑‍🏫" title="Staff" accent={!!staffOf(c).poach}
+                value={(() => {
+                  const st = staffOf(c);
+                  if (st.poach) return `📞 ${st.poach.club} calling`;
+                  const empty = STAFF_POST_IDS.filter(p => !st[p]);
+                  return empty.length ? `${empty.length} post${empty.length === 1 ? '' : 's'} open` : `Level ${STAFF_POST_IDS.map(p => st[p]?.level ?? 0).join(' · ')}`;
+                })()}
+                sub={(() => {
+                  const st = staffOf(c);
+                  if (st.poach) return `They want your ${STAFF_POST_INFO[st.poach.postId].short.toLowerCase()} man`;
+                  const empty = STAFF_POST_IDS.filter(p => !st[p]);
+                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouting';
+                })()}
+                onClick={() => setHubPanel('staff')}
+              />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
                 value={c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
@@ -1310,6 +1332,18 @@ const ClubManager = () => {
               {/* Round 467: the facilities desk. The ground card that lived on
                   the finance desk is the stadium level here now. */}
               {hubPanel === 'facilities' && <FacilitiesScreen career={c} onUpgrade={g.buyFacility} />}
+
+              {/* Round 471: the staff desk. Four generated men, the rival on
+                  the phone, and the promotion out of the academy. */}
+              {hubPanel === 'staff' && (
+                <StaffScreen
+                  career={c}
+                  onHire={g.appointStaff}
+                  onSack={g.payOffStaff}
+                  onMatch={g.matchStaff}
+                  onLetGo={g.letStaffGo}
+                />
+              )}
               {hubPanel === 'stats' && <StatsScreen career={c} />}
 
               {hubPanel === 'trophies' && (
