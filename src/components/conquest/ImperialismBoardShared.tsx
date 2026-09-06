@@ -8,13 +8,13 @@ import {
   type ImperialismSport, type ImperialismTeam, type ImperialismGameSpec,
 } from '@/lib/imperialismEngine';
 import {
-  startRun, playRound, continueRun, replayRun, runScore, roundLabel as labelOfRound,
-  featuredPairing, featuredResult, type ConquestRun,
+  startRun, playRound, continueRun, runScore, roundLabel as labelOfRound,
+  featuredPairing, featuredResult, restoreDailyRun, dailyRunRecord, type ConquestRun,
 } from '@/lib/conquestRun';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
-  dailyConquestRng, loadDailyRun, saveDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  dailyConquestRng, saveDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
   type ConquestDailyResult,
 } from '@/lib/conquestDaily';
 import { getTodayET } from '@/lib/dateUtils';
@@ -53,14 +53,6 @@ interface Session {
   rng: () => number;
 }
 
-/** Pick up an unfinished daily for today, or start on the pick screen. */
-function restoreDaily(sport: ImperialismSport, todayStr: string): Session | null {
-  const saved = loadDailyRun(sport.key, todayStr);
-  if (!saved || saved.done || !sport.teams.some(t => t.id === saved.team)) return null;
-  const rng = dailyConquestRng(sport.key, todayStr);
-  return { run: replayRun(sport, saved.team, saved.picks, rng), rng };
-}
-
 export default function ImperialismBoardShared({ sport, map, game }: Props) {
   /* Round 428 part two: TODAY IS PINNED AT MOUNT and threaded into every
      conquestDaily call, so the rng that deals the map, the record read on
@@ -69,7 +61,7 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   /* The whole season in one value, with the rng that dealt it. Restoring in
      the initialiser means a reloaded daily is already in place before the
      first paint, and useGameCompletion never sees a false finish. */
-  const [session, setSession] = useState<Session | null>(() => restoreDaily(sport, todayStr));
+  const [session, setSession] = useState<Session | null>(() => restoreDailyRun(sport, todayStr));
   const [prediction, setPrediction] = useState<string | null>(null);
   const [showStandings, setShowStandings] = useState(false);
 
@@ -159,8 +151,9 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
     /* The club goes down before the first ball is kicked: it is half of what
        replays the run, and a reload between the pick and the first call must
        come back to the same club. */
-    if (mode === 'daily') saveDailyRun(sport.key, { team: teamId, picks: [], done: false, result: null }, todayStr);
-    setSession({ run: startRun(sport, teamId, rng), rng });
+    const opened = startRun(sport, teamId, rng);
+    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(opened), todayStr);
+    setSession({ run: opened, rng });
     setPrediction(null);
     setShowStandings(false);
   };
@@ -171,7 +164,7 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
     /* Written in the same breath as the roll. Writing it on Continue instead
        would let a player read the result, reload, and call it again knowing
        the answer, which is the whole defect. */
-    if (mode === 'daily') saveDailyRun(sport.key, { team: next.favorite, picks: next.picks, done: false, result: null }, todayStr);
+    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(next), todayStr);
     setSession({ run: next, rng: session.rng });
     setPrediction(null);
   };

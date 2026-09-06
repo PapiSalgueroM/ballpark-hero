@@ -3,7 +3,8 @@
  *
  * WHAT WAS WRONG. `daily_completions.game_slug` is whatever each game's own
  * `useGameCompletion(...)` call passes, and SIX of those are not registry
- * paths. The four Conquest boards record as `<sport>-imperialism`, the Quiz
+ * paths. The Conquest routes record as `<sport>-imperialism` (five of them,
+ * off one shared board since Round 476), the Quiz
  * Board still records under the original route name it carried before Round 305
  * renamed it, and Guess The Club records as `guess-soccer-club-questions`.
  *

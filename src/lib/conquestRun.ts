@@ -1,3 +1,4 @@
+import { dailyConquestRng, loadDailyRun, type ConquestDailyRun } from './conquestDaily';
 import {
   seedEmpires, randomPairings, resolveGame, buildHeadlines, emptyRecords, applyRecords,
   empireCounts, playoffSeeds, totalConquest, finalScore,
@@ -174,4 +175,29 @@ export function replayRun(sport: ImperialismSport, favorite: string, picks: stri
 
 export function runScore(run: ConquestRun): number {
   return finalScore(run.favorite, run.owners, run.hits, run.champion, run.madePlayoffs);
+}
+
+/** The run as the daily record holds it: the club, the calls, nothing else. */
+export function dailyRunRecord(run: ConquestRun): ConquestDailyRun {
+  return { team: run.favorite, picks: run.picks, done: false, result: null };
+}
+
+/**
+ * Pick a daily back up where the player left it, or null for the pick screen.
+ *
+ * The board and scripts/simConquestDaily.mjs both go through this, so the
+ * harness measures the restore the routes actually use rather than a copy of
+ * it. A finished day is deliberately NOT restored: the board shows the result
+ * card and free play instead, so no sequence of reloads can walk back into a
+ * scoring run. A record naming a club the sport does not have is refused the
+ * same way every other read here fails closed.
+ */
+export function restoreDailyRun(
+  sport: ImperialismSport,
+  todayStr: string,
+): { run: ConquestRun; rng: () => number } | null {
+  const saved = loadDailyRun(sport.key, todayStr);
+  if (!saved || saved.done || !sport.teams.some(t => t.id === saved.team)) return null;
+  const rng = dailyConquestRng(sport.key, todayStr);
+  return { run: replayRun(sport, saved.team, saved.picks, rng), rng };
 }
