@@ -719,7 +719,14 @@ critic's item; these are the rest, unclaimed.
   only be answered by the free Gemini allowance. Same shape as Build Your XI before Round 482,
   and the same fix applies, `nfl_player_team_stints` already holds the team half.
 
-- **TENNIS CHAIN: PostgREST's 1,000 row cap silently hides every women's US Open champion.**
+- **DONE, Round 487. TENNIS CHAIN: PostgREST's 1,000 row cap silently hid every women's US Open champion.**
+  Fixed by paging the read (with an explicit order, without which paging repeats or skips rows).
+  Raducanu, Andreescu, Stephens, Pennetta and Stosur had vanished entirely because that title is
+  their only one. All 27 functions were swept for the same shape: 16 unbounded selects, only the
+  tennis one over the cap, next largest table 281 rows. Fence `scripts/simUnboundedSelects.mjs`
+  measures every unbounded select against its LIVE table size and fails at 900, so it fires on the
+  next table to grow rather than on this one. Controls `lowcap` and `unpaged`.
+  ORIGINAL FINDING:
   `tennis-chain-validate:111` selects with no `.range()` and no `.limit()` and
   `tennis_grand_slam_winners` holds 1,019 rows, so the last 19 are never seen and Raducanu is
   told she never won a slam.
