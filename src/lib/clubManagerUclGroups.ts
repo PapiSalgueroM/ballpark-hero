@@ -216,7 +216,8 @@ export function sortedUclGroupTable(
     let j = i + 1;
     while (j < byPts.length && byPts[j].pts === byPts[i].pts) j += 1;
     const run = byPts.slice(i, j);
-    if (run.length === 1 || rule === 'leaguePhase') out.push(...(run.length === 1 ? run : byOverall(run)));
+    if (run.length === 1) out.push(run[0]);
+    else if (rule === 'leaguePhase') out.push(...byOverall(run));
     else out.push(...orderHeadToHead(run, pairs ?? {}, rule === 'h2hFull'));
     i = j;
   }
