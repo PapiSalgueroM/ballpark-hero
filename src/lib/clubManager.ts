@@ -1988,6 +1988,9 @@ export interface LiveMatch {
   /** The formation the eleven kicked off in, so a paused match keeps its
    *  shape whatever the tactics tab is set to in the meantime. */
   formationIndex?: number;
+  /** Round 505: the duty on each slot at kick off, frozen with the shape,
+   *  so a shape switch on the tab during a paused match moves no duty. */
+  duties?: (Duty | null)[];
   /** The share of the ball's own roll per half, drawn once, so a change
    *  moves the figure only through the football it redrew. */
   possNoise?: [number, number];
@@ -6944,7 +6947,9 @@ export function loanOutPlayer(career: CareerState, playerId: string, toClub?: st
     setPieces: setPiecesWithout(career.setPieces, playerId),
     seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee, loan: true }],
     incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
-    loanedOut: [...(career.loanedOut ?? []), { player: { ...p, transferStatus: undefined }, club, fee, season: career.season }],
+    /* Round 505: a season away does not count toward a second position, and
+       a frozen block coming home a year later would say it did. */
+    loanedOut: [...(career.loanedOut ?? []), { player: { ...p, transferStatus: undefined, retraining: undefined }, club, fee, season: career.season }],
     careerStats: { ...career.careerStats },
     transferLog: [...(career.transferLog ?? [])],
   };
@@ -8985,14 +8990,13 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
     if (!p || !isAvailable(p) || used.has(p.id)) {
-      /* Round 505: the best available fit, and a position he has retrained
-         into counts as a fit. */
+      /* Round 505: the best available man for the slot as the match will
+         read him, his rating less the price he pays there (a natural fit
+         pays nothing, so he still comes first at equal rating), and a
+         position he has retrained into counts as natural. */
       p = state.squad
         .filter(x => isAvailable(x) && !used.has(x.id))
-        .sort((a, b) =>
-          (heldPositions(b).some(pos => slot.allowed.includes(pos)) ? 1 : 0)
-          - (heldPositions(a).some(pos => slot.allowed.includes(pos)) ? 1 : 0)
-          || b.rating - a.rating)[0];
+        .sort((a, b) => (b.rating - fitPenalty(b, slot)) - (a.rating - fitPenalty(a, slot)) || b.rating - a.rating)[0];
     }
     if (p) {
       used.add(p.id);
@@ -9022,6 +9026,13 @@ function liveFormationOf(state: CareerState, live: LiveMatch): Formation {
   return FORMATIONS[live.formationIndex ?? state.formationIndex] ?? FORMATIONS[0];
 }
 
+/** The duty on a live slot: the one frozen at kick off, or the tab's for a
+ *  save paused before the match remembered them. */
+function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
+  if (live.duties) return live.duties[slotIdx] ?? null;
+  return slotDuty(state, liveFormationOf(state, live), slotIdx);
+}
+
 /**
  * Round 505: the men behind a live list of ids (onPitch, startXi) paired
  * with the slot each one is standing in. The lists are in slot order, so a
@@ -9034,7 +9045,7 @@ function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onP
   const out: XiSlot[] = [];
   ids.forEach((id, i) => {
     const p = state.squad.find(x => x.id === id);
-    if (p) out.push({ p, slot: formation.slots[i] ?? null, duty: slotDuty(state, formation, i) });
+    if (p) out.push({ p, slot: formation.slots[i] ?? null, duty: liveDutyAt(state, live, i) });
   });
   return out;
 }
@@ -9201,7 +9212,9 @@ function creditMyScorers(
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
     let assistedBy: string | null = null;
-    if (Math.random() < 0.7) {
+    /* Round 505: a penalty or a direct free kick has no assist. The roll is
+       still taken so the seeded stream reads the same either way. */
+    if (Math.random() < 0.7 && !line.penalty && !line.freeKick) {
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
@@ -10292,6 +10305,11 @@ export interface LiveFeedEvent {
   side: 'me' | 'opp' | 'none';
   kind: 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime';
   text: string;
+  /** Round 505: a corner's flank, and a goal or a save from the spot or a
+   *  free kick, carried here so no screen has to re-key the play list. */
+  flank?: 'left' | 'right';
+  penalty?: boolean;
+  freeKick?: boolean;
 }
 
 /**
@@ -10302,11 +10320,17 @@ export interface LiveFeedEvent {
  */
 export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   const out: LiveFeedEvent[] = [];
-  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name });
-  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name });
+  const flags = (g: { penalty?: boolean; freeKick?: boolean }): Partial<LiveFeedEvent> => ({
+    ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
+  });
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g) });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
     if (e.goal) continue;
-    out.push({ minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who });
+    out.push({
+      minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who,
+      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}),
+    });
   }
   for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
   for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
@@ -10876,7 +10900,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     /* Round 505: the duty he was on at that minute, off the slot he stood in. */
     (minute, p) => {
       const i = myOnPitchAt(live, minute).indexOf(p.id);
-      return i >= 0 ? slotDuty(state, liveFormationOf(state, live), i) : null;
+      return i >= 0 ? liveDutyAt(state, live, i) : null;
     },
   );
   const myScorers: ScorerLine[] = myLines.map((l, i) => ({
@@ -12379,6 +12403,7 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     shapeChanges: [],
     minute: 0,
     formationIndex: state.formationIndex,
+    duties: (FORMATIONS[state.formationIndex] ?? FORMATIONS[0]).slots.map((_, i) => slotDuty(state, FORMATIONS[state.formationIndex] ?? FORMATIONS[0], i)),
     possNoise: [ri(-3, 3), ri(-3, 3)],
   };
   /* Round 158: the first half's scorers, decided now so the live viewer
