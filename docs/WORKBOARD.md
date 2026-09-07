@@ -833,6 +833,26 @@ critic's item; these are the rest, unclaimed.
   the first guess. The rule is "won a Cup title in a season the current driver raced" and the
   span comes from `nascar_drivers.first_year/last_year`.
 
+- **DONE, Round 495. TRANSFER PATH's daily record lost the winning step on every win, and so did
+  the score card and the shared score.** `useDailyPuzzle.addGuess` closed over the `guesses`
+  state array, so a handler adding more than one guess in one tick had every call rebuild
+  `[...guesses, guess]` from the SAME base and only the last survived. The synchronous write went
+  out from that same stale array. Reproduced live on 2026-09-06: Griezmann to Caicedo, optimal 2,
+  two names typed, the second also linking to the target so the chain auto closed at three steps.
+  The board said "1 step" and paid 1000; the record held one step and the win. The true chain was
+  three steps and is worth 900. Fixed in the SHARED engine with synchronous refs for the log and
+  the status, so consecutive calls compose, the write stays synchronous and the saved shape is
+  untouched (no migration). **The caller sweep found a second live instance nobody had reported:**
+  `useCareerGame.giveHint` reveals four cells with a `forEach` over `addDailyAction`, so Career
+  Path's hint was revealing and charging ONE cell instead of four. Both are fixed by the one
+  change. The other 17 multi-call sites are mutually exclusive if/else branches and were never
+  affected; `CareerLadder.tsx` had a comment describing this exact race and had worked around it
+  by hand, which is now corrected. Fence `scripts/simDailyRecord.mjs` over
+  `src/test/dailyRecord.test.tsx`, which plays the real hooks into real localStorage and requires
+  the record to replay the exact chain and the exact score. Its section 1 carries no game at all
+  (three calls in a tick, then a loop of four), so it holds for a daily written tomorrow. Control
+  `stale` puts the three pre-495 lines back and all three sections go red on it.
+
 - **PART DONE, Round 494. NBA STARTING 5.** The FULL NAME half is fixed: there were two search
   configs for the same table and the lineup carried the copy without `firstNameColumn`, so it
   searched surnames alone. Reproduced with the real search: "LeBron James" 0 rows, "Kobe
