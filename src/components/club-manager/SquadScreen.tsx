@@ -26,6 +26,26 @@ export function MadeUpTag({ className }: { className?: string }) {
   );
 }
 
+/** Round 505: the positions a man has learned on top of his own, as small chips. Only ever earned in this save. */
+export function SecondPositionChips({ p, className }: { p: CMPlayer; className?: string }) {
+  const extra = p.secondaryPositions ?? [];
+  if (!extra.length) return null;
+  return (
+    <>
+      {extra.map(pos => (
+        <span
+          key={pos}
+          data-cm-second-position={pos}
+          title="Learned in this save through retraining"
+          className={cn('text-[8px] font-bold text-sky-300 border border-sky-400/50 rounded px-1 shrink-0', className)}
+        >
+          {pos}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function ratingTint(r: number): string {
   if (r >= 78) return 'text-primary';
   if (r >= 70) return 'text-emerald-400';
@@ -80,9 +100,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null }: SquadScre
               {inXI.has(p.id) && <span className="text-[8px] font-bold text-primary border border-primary/50 rounded px-1 shrink-0">XI</span>}
               {/* Round 505: the armband, and any position he has learned in this save. */}
               {captainId === p.id && <span data-cm-captain-badge="1" title="Captain" className="text-[8px] font-bold text-yellow-400 border border-yellow-400/60 rounded px-1 shrink-0">C</span>}
-              {(p.secondaryPositions ?? []).map(pos => (
-                <span key={pos} data-cm-second-position={pos} title="Learned in this save through retraining" className="text-[8px] font-bold text-sky-300 border border-sky-400/50 rounded px-1 shrink-0">{pos}</span>
-              ))}
+              <SecondPositionChips p={p} />
               {p.onLoan && <span className="text-[8px] font-bold text-muted-foreground border border-border rounded px-1 shrink-0">LOAN</span>}
               {/* Round 94: what you have told the market about him. */}
               {p.transferStatus === 'listed' && <span className="text-[8px] font-bold text-gold border border-gold/60 rounded px-1 shrink-0">LISTED</span>}

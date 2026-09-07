@@ -52,3 +52,6 @@ scripts/.cache/
 # are never repo content, and one committed by accident would ship the very
 # defect its harness exists to catch.
 src/hooks/__control_*.ts
+# Round 505: the same for the Club Manager engine copies simLiveMatch and
+# simTacticsEngine write (they live under .sim-control now, this is the belt).
+src/lib/__control_*.ts

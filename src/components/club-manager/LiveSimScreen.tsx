@@ -477,7 +477,13 @@ export function LiveSimScreen({
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
       const m = Math.round(e.minute);
-      const x = extras.get(`${e.kind}:${e.side}:${e.minute}:${e.text}`);
+      /* Round 505 review: the event's own flank and spot flags first. Two
+         corners can share kind, side, minute and taker with different
+         flanks, and the keyed lookup below cannot tell them apart; it stays
+         only as the fallback for a feed line that carries none of them. */
+      const x: Extra | undefined = e.flank || e.penalty || e.freeKick
+        ? { flank: e.flank, penalty: e.penalty, freeKick: e.freeKick }
+        : extras.get(`${e.kind}:${e.side}:${e.minute}:${e.text}`);
       switch (e.kind) {
         case 'goal':
           big = {

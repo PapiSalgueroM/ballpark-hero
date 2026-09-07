@@ -35,17 +35,24 @@ const MD: Position[] = ['CM', 'CDM', 'CAM'];
 const WR: Position[] = ['RW', 'RM', 'RWB'];
 const WL: Position[] = ['LW', 'LM', 'LWB'];
 const FW: Position[] = ['ST', 'CF'];
+const DM: Position[] = ['CDM', 'CM'];
+const AM: Position[] = ['CAM', 'CM'];
+const AMF: Position[] = ['CAM', 'CF', 'CM'];
+/** Round 505: the allowed set behind each slot label, one copy. Club Manager
+ *  builds its extra shapes from these so a slot called CM grades a man the
+ *  same way in every shape on the site; a change here reaches all of them. */
+export const SLOT_ALLOWED: Record<'DC' | 'DR' | 'DL' | 'MD' | 'DM' | 'AM' | 'AMF' | 'WR' | 'WL' | 'FW', Position[]> = { DC, DR, DL, MD, DM, AM, AMF, WR, WL, FW };
 
 export const FORMATIONS: Formation[] = [
   { name: '4-3-3', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('CM', MD, 70, 50), s('CM', MD, 50, 54), s('CM', MD, 30, 50), s('RW', WR, 80, 24), s('ST', FW, 50, 18), s('LW', WL, 20, 24)] },
   { name: '4-4-2', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('RM', WR, 82, 48), s('CM', MD, 60, 52), s('CM', MD, 40, 52), s('LM', WL, 18, 48), s('ST', FW, 60, 20), s('ST', FW, 40, 20)] },
-  { name: '4-2-3-1', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('CDM', ['CDM', 'CM'], 62, 56), s('CDM', ['CDM', 'CM'], 38, 56), s('RW', WR, 80, 34), s('CAM', ['CAM', 'CM'], 50, 36), s('LW', WL, 20, 34), s('ST', FW, 50, 16)] },
-  { name: '4-1-2-1-2', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('CDM', ['CDM', 'CM'], 50, 60), s('CM', MD, 68, 46), s('CM', MD, 32, 46), s('CAM', ['CAM', 'CM'], 50, 32), s('ST', FW, 60, 18), s('ST', FW, 40, 18)] },
+  { name: '4-2-3-1', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('CDM', DM, 62, 56), s('CDM', DM, 38, 56), s('RW', WR, 80, 34), s('CAM', AM, 50, 36), s('LW', WL, 20, 34), s('ST', FW, 50, 16)] },
+  { name: '4-1-2-1-2', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('CDM', DM, 50, 60), s('CM', MD, 68, 46), s('CM', MD, 32, 46), s('CAM', AM, 50, 32), s('ST', FW, 60, 18), s('ST', FW, 40, 18)] },
   { name: '4-5-1', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('RM', WR, 84, 44), s('CM', MD, 64, 50), s('CM', MD, 50, 52), s('CM', MD, 36, 50), s('LM', WL, 16, 44), s('ST', FW, 50, 18)] },
   { name: '3-5-2', slots: [G(), s('CB', DC, 68, 74), s('CB', DC, 50, 76), s('CB', DC, 32, 74), s('RWB', WR, 86, 50), s('CM', MD, 64, 54), s('CM', MD, 50, 56), s('CM', MD, 36, 54), s('LWB', WL, 14, 50), s('ST', FW, 60, 20), s('ST', FW, 40, 20)] },
   { name: '3-4-3', slots: [G(), s('CB', DC, 68, 74), s('CB', DC, 50, 76), s('CB', DC, 32, 74), s('RM', WR, 84, 50), s('CM', MD, 60, 54), s('CM', MD, 40, 54), s('LM', WL, 16, 50), s('RW', WR, 78, 22), s('ST', FW, 50, 18), s('LW', WL, 22, 22)] },
   { name: '5-3-2', slots: [G(), s('RWB', WR, 88, 64), s('CB', DC, 68, 76), s('CB', DC, 50, 78), s('CB', DC, 32, 76), s('LWB', WL, 12, 64), s('CM', MD, 66, 50), s('CM', MD, 50, 52), s('CM', MD, 34, 50), s('ST', FW, 60, 20), s('ST', FW, 40, 20)] },
-  { name: '4-4-1-1', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('RM', WR, 82, 48), s('CM', MD, 60, 52), s('CM', MD, 40, 52), s('LM', WL, 18, 48), s('CAM', ['CAM', 'CF', 'CM'], 50, 32), s('ST', FW, 50, 16)] },
+  { name: '4-4-1-1', slots: [G(), s('RB', DR, 84, 70), s('CB', DC, 62, 74), s('CB', DC, 38, 74), s('LB', DL, 16, 70), s('RM', WR, 82, 48), s('CM', MD, 60, 52), s('CM', MD, 40, 52), s('LM', WL, 18, 48), s('CAM', AMF, 50, 32), s('ST', FW, 50, 16)] },
 ];
 
 /* ---------------- Rating ---------------- */
