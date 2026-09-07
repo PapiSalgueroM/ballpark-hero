@@ -868,8 +868,16 @@ critic's item; these are the rest, unclaimed.
   confirmed from two different men's rows (`:145`), which is Round 482's Paulinho defect in
   another file, and the false accept is then cached forever.
 
-- **GUESS THE FOOTBALL CLUB: 36 of 364 puzzles show a league clue that contradicts the league
-  stored in their own row**, and the dropdown offers six club aliases it then scores wrong for
+- **DONE, Round 492. GUESS THE FOOTBALL CLUB: 36 of 364 puzzles told a second division club it
+  played in the top division** (Championship 24, 2. Bundesliga 7, Serie B 4, J2 League 1), and
+  four more showed a doubled apostrophe, a SQL escape written into the data instead of consumed
+  by the parser. All normalised to one phrasing. The tier list is explicit on purpose: Serie B
+  is a second division and Serie A is not, but 'First League' is a top flight in Bulgaria.
+  Fence `scripts/simGuessSoccerClubHints.mjs`, controls `topdivision` and `escapes`.
+  **STILL OPEN from the same finding:** the dropdown offers six club aliases it then scores
+  wrong for the club that owns them. That half was not touched.
+  ORIGINAL FINDING: 36 of 364 puzzles show a league clue that contradicts the league
+  stored in their own row, and the dropdown offers six club aliases it then scores wrong for
   the club that owns them.
 
 - **FOOTLE: the same-continent yellow tile never fires for 16% of the pool** and fires wrongly
