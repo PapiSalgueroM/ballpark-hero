@@ -11,35 +11,68 @@
  * A user reported exactly that on 2026-08-19 (tp-19, "Wrong answer").
  *
  * Everything here is pure and shared by the generator (genTransferPathHints)
- * and the fence (simTransferPathHints): the same key rule as the hook,
- * `${club}::${season}`, the same breadth first search, and one deterministic
- * shortest path per puzzle, so a hint can be written from it and checked
- * against it.
+ * and the fence (simTransferPathHints): the same key rule as the hook, the
+ * same breadth first search, and one deterministic shortest path per puzzle,
+ * so a hint can be written from it and checked against it.
+ *
+ * Round 475: the key rule stopped being one string. The career table writes
+ * the same club in two styles, split seasons ("2020-2021") at European clubs
+ * and calendar years ("2020") in South and North America, and where they met
+ * real teammates never linked. Two spells link when their season strings are
+ * EQUAL, or when one is a calendar year Y and the other is a split season
+ * running through Y; two split seasons that merely share a year never link,
+ * because at a European club that would invent teammates out of a summer
+ * transfer. src/lib/transferPathGraph.ts carries the same rule for the page,
+ * and scripts/simTransferPathSeasons.mjs fails if the two graphs disagree
+ * about a single player.
  */
 
-/** name -> Set of `club::season`, exactly the hook's playerToClubSeasons */
+const CALENDAR_SEASON = /^\d{4}$/;
+
+/** the keys one spell contributes: written out, calendar year, and the years a split runs through */
+function addSpell(keys, club, season) {
+  const written = String(season).trim();
+  keys.exact.add(`${club}::${season}`);
+  if (CALENDAR_SEASON.test(written)) { keys.calendar.add(`${club}::${written}`); return; }
+  const m = /^(\d{4})-(\d{4})$/.exec(written);
+  if (!m) return;
+  for (let year = Number(m[1]); year <= Number(m[2]); year += 1) keys.span.add(`${club}::${year}`);
+}
+
+/** name -> { exact, calendar, span }, exactly the hook's playerToClubSeasons */
 export function buildGraph(players) {
   const keys = new Map();
   for (const p of players) {
     if (!p || typeof p.name !== 'string' || !Array.isArray(p.career)) continue;
-    const set = keys.get(p.name) ?? new Set();
-    for (const s of p.career) if (s && s.club && s.season) set.add(`${s.club}::${s.season}`);
-    keys.set(p.name, set);
+    const k = keys.get(p.name) ?? { exact: new Set(), calendar: new Set(), span: new Set() };
+    for (const s of p.career) if (s && s.club && s.season) addSpell(k, s.club, s.season);
+    keys.set(p.name, k);
   }
-  /* club::season -> players there, then neighbours with the clubs they shared
-     (earliest shared season first, so the club named in a hint is stable) */
-  const at = new Map();
-  for (const [name, set] of keys) for (const k of set) (at.get(k) ?? at.set(k, []).get(k)).push(name);
+  /* key -> players who hold it, one index per bucket, then neighbours with the
+     clubs they shared (earliest shared season first, so the club named in a
+     hint is stable) */
+  const at = { exact: new Map(), calendar: new Map(), span: new Map() };
+  for (const [name, k] of keys) for (const bucket of ['exact', 'calendar', 'span']) for (const key of k[bucket]) (at[bucket].get(key) ?? at[bucket].set(key, []).get(key)).push(name);
   const adj = new Map();
-  for (const [k, names] of at) {
+  const link = (a, b, club, season) => {
+    if (a === b) return;
+    const row = adj.get(a) ?? adj.set(a, new Map()).get(a);
+    const shared = row.get(b) ?? row.set(b, []).get(b);
+    if (!shared.some(s => s.club === club && s.season === season)) shared.push({ club, season });
+  };
+  const clubOf = key => key.slice(0, key.indexOf('::'));
+  const seasonOf = key => key.slice(key.indexOf('::') + 2);
+  for (const [key, names] of at.exact) {
     if (names.length < 2) continue;
-    const [club, season] = k.split('::');
-    for (const a of names) for (const b of names) {
-      if (a === b) continue;
-      const row = adj.get(a) ?? adj.set(a, new Map()).get(a);
-      const shared = row.get(b) ?? row.set(b, []).get(b);
-      shared.push({ club, season });
-    }
+    for (const a of names) for (const b of names) link(a, b, clubOf(key), seasonOf(key));
+  }
+  /* the crossed link, and the only one: a calendar year meets a split season
+     that runs through it. The season written down is the calendar year, which
+     is the one true for both men. */
+  for (const [key, names] of at.calendar) {
+    const spanned = at.span.get(key);
+    if (!spanned) continue;
+    for (const a of names) for (const b of spanned) { link(a, b, clubOf(key), seasonOf(key)); link(b, a, clubOf(key), seasonOf(key)); }
   }
   for (const row of adj.values()) for (const list of row.values()) list.sort(bySeasonThenClub);
   return { keys, adj, names: [...keys.keys()].sort() };
