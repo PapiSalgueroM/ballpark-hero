@@ -682,6 +682,36 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **OPEN, MEASURED, NOT DIAGNOSED: `playGames` stalls deterministically on `/college-grid`.**
+  Found 2026-09-07 while browser checking the routes Rounds 499 to 501 touched. Recorded here
+  rather than fixed, because what it is could not be established and guessing would waste the next
+  round.
+
+  **What is established.** The page is NOT blank and NOT broken: it renders a complete board
+  (Safety / First Round Pick / All-American against Georgia / Clemson / Penn State, "Correct: 0/9",
+  "Guesses left: 15") with all nine cells present as real buttons. `playGames` nonetheless reports
+  `STALL ... tried 4 different controls by step 13 and none of them moved the game forward` on
+  2 runs of 2, so it is deterministic rather than flaky. The controls it names are chrome
+  ("+", "Cookie choices", "Dark mode"), so it never reached a text input.
+
+  **What is ruled out.** It is not this session's work: no commit here touched
+  `src/pages/CollegeGrid.tsx`, `src/hooks/useCollegeGrid.ts` or `src/components/college-grid/`
+  (last change was Round 407), and the Round 501 change was to the EDGE FUNCTION only, where it
+  made a refusal MORE lenient. It is also not the rules gate on its own: `/soccer-grid` shows the
+  same "How to Play" gate on the first cell click and PASSES the same harness.
+
+  **A dead end worth writing down so it is not repeated.** Driving the dialog with
+  `element.click()` and with synthetic PointerEvent/KeyboardEvent sequences does NOT close it,
+  which looks exactly like an undismissable modal and is not one. The same non-dismissal happens on
+  `/soccer-grid`, which passes the harness, so the dialog is a Radix component that only responds
+  to a real browser click. **A synthetic-event probe cannot prove a modal is stuck.** The test was
+  abandoned because the Browser pane was hidden and real clicks could not be issued.
+
+  **What the next attempt needs:** a VISIBLE browser pane (or Playwright directly) to dismiss the
+  gate with a real click and see whether a cell then opens a guess dialog with a text input, and a
+  run of `playGames ONLY=/college-grid` against a build from before this session to establish
+  whether the stall is new at all.
+
 - **MEASURED, NOT YET FIXED: the prerenderer's three-clock intersection can KEEP date driven
   content when the value space is small, and two pages re-date themselves in the sitemap because
   of it.** Found 2026-09-07 while checking why a build that only changed one link in `index.html`
