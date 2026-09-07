@@ -9,12 +9,15 @@ export interface NbaFilledSlot extends NbaPositionSlot {
   /** Full "First Last" display name, shown in the court layout, review and result screens. */
   playerName: string;
   /**
-   * Last-name-only form (nba_players_extended_v2's searched/matched column,
-   * see NBA_PLAYER_SOURCE_V2 in useNbaLineup.ts), kept alongside the full
-   * playerName so the autocomplete's exclude set can stay keyed on the same
-   * shape as entity.name during search. Never rendered directly.
+   * The key the autocomplete's exclude set is built from, so a player already
+   * picked cannot come back in the suggestions. It has to be the same shape
+   * searchPlayers compares against, and Round 494 changed that shape: the
+   * lineup now uses the shared NBA source, which searches both name columns,
+   * so entity.name is the whole "First Last" name rather than the surname
+   * alone. The field was called lastNameForExclude while it held a surname
+   * and was renamed with its meaning. Never rendered directly.
    */
-  lastNameForExclude: string;
+  excludeName: string;
   assignedTeam: string;
   statValue?: number | string;
 }
