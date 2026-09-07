@@ -52,6 +52,11 @@ import type { ClubStaff } from '@/lib/clubManagerStaff';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 478: the Champions League orders a level group table by its own
+   rule, not a league one. That module imports nothing but types from here,
+   so there is no cycle at all. */
+import { UCL_GROUP_LEDGER, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';
+import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 
 /**
  * Club Manager engine.
@@ -7199,8 +7204,8 @@ function eraEuroPool(eraId: string): string[] {
  *  groups cannot honestly supply them. */
 function uclSeededField(state: CareerState): string[] {
   const ranked: string[][] = [];
-  if (state.uclGroup) ranked.push(sortedTable(state.uclGroup.table).map(r => r.club));
-  for (const g of state.uclWorld ?? []) ranked.push(sortedTable(g.table).map(r => r.club));
+  if (state.uclGroup) ranked.push(sortedUclGroup(state, state.uclGroup.table).map(r => r.club));
+  for (const g of state.uclWorld ?? []) ranked.push(sortedUclGroup(state, g.table).map(r => r.club));
   const winners = ranked.map(rows => rows[0]).filter((c): c is string => !!c);
   if (winners.length >= 8) {
     /* Round 342: with the verified fields the era draw fills all eight
@@ -7211,7 +7216,7 @@ function uclSeededField(state: CareerState): string[] {
        slot, so the projection people watch all group stage is the bracket
        they get. */
     const field = winners.slice(0, 8);
-    const myRows = state.uclGroup ? sortedTable(state.uclGroup.table).map(r => r.club) : [];
+    const myRows = state.uclGroup ? sortedUclGroup(state, state.uclGroup.table).map(r => r.club) : [];
     if (myRows[1] === state.clubName && !field.includes(state.clubName)) field[7] = state.clubName;
     return field;
   }
@@ -7283,6 +7288,47 @@ export function uclFirstKoRound(state: Pick<CareerState, 'eraId'>): UclKoRound {
   return eraUclHasR16(state.eraId) ? 'R16' : 'QF';
 }
 
+/* ---------- Round 478: the group table's own order ---------- */
+
+/**
+ * Which of the competition's three orders this save's groups read. A save
+ * that does not play eight groups into a round of 16 is standing in for the
+ * league phase, which has no head to head step at all. A save that does
+ * reads the games between the level clubs first, and the two group stage
+ * worlds this engine starts careers in do that differently: 2005-06 and
+ * 2010-11 read points, goal difference and then away goals between them,
+ * while 2015-16 reads goals scored inside that block and reapplies it to a
+ * subset still level. Each is verified against its own season, so the line
+ * below is drawn where the verification is rather than at whatever season
+ * the rule really changed in, and src/lib/clubManagerUclGroups.ts says so
+ * and carries the sources.
+ */
+export function uclGroupRule(state: Pick<CareerState, 'eraId'>): UclGroupRule {
+  if (!eraUclHasR16(state.eraId)) return 'leaguePhase';
+  return eraById(state.eraId!).startYear >= 2015 ? 'h2hFull' : 'h2hAway';
+}
+
+type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'>;
+
+/** One group table, in that competition's order. EVERY read of a group's
+ *  standing goes through this, my own group and the seven the engine plays
+ *  beside it, so the table on screen and the field the round of 16 is seeded
+ *  from can never be two different orders. */
+export function sortedUclGroup(state: UclGroupSortState, rows: TableRow[]): TableRow[] {
+  return sortedUclGroupTable(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
+}
+
+/** The line under a group table saying how level points were split. */
+export function uclGroupTiebreakFootnote(state: UclGroupSortState, rows: TableRow[]): string {
+  return uclGroupFootnote(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
+}
+
+/** Round 478: record one group stage result, mine or any other group's. */
+function noteUclPair(state: CareerState, home: string, away: string, hg: number, ag: number): void {
+  ensurePairLedger(state);
+  noteUclGroupResult(state.pairResults!, home, away, hg, ag);
+}
+
 /**
  * The association a club plays under, for the "never the same country"
  * rule of the round of 16 draw: the era field's country for every verified
@@ -7315,7 +7361,7 @@ function uclRoundOf16Field(state: CareerState): UclR16Field | null {
   const runnersUp: string[] = [];
   const groupOf = new Map<string, string>();
   for (const g of groups.slice(0, 8)) {
-    const rows = sortedTable(g.table).map(r => r.club);
+    const rows = sortedUclGroup(state, g.table).map(r => r.club);
     if (rows.length < 2) return null;
     winners.push(rows[0]);
     runnersUp.push(rows[1]);
@@ -7589,6 +7635,9 @@ function advanceUclWorld(state: CareerState): void {
       for (const [h, a] of groupFixtures(g.clubs, g.matchday)) {
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(g.table, h, a, hg, ag);
+        // Round 478: and into the ledger, because this group's own order
+        // reads the games between its level clubs.
+        noteUclPair(state, h, a, hg, ag);
         noteForm(state, h, a, hg, ag);
       }
       g.matchday += 1;
@@ -9217,15 +9266,29 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const group = state.uclGroup;
     const idx = entry.round % 3;
     const myHome = fx.home === true;
-    applyResult(group.table,
-      myHome ? state.clubName : fx.opponent,
-      myHome ? fx.opponent : state.clubName,
+    const gHome = myHome ? state.clubName : fx.opponent;
+    const gAway = myHome ? fx.opponent : state.clubName;
+    applyResult(group.table, gHome, gAway,
       myHome ? myGoals : oppGoals,
       myHome ? oppGoals : myGoals);
-    const others = group.opponents.filter((_, i) => i !== idx);
+    // Round 478: both of tonight's group games go into the ledger, because
+    // Group A's own order reads the games between its level clubs.
+    noteUclPair(state, gHome, gAway, myHome ? myGoals : oppGoals, myHome ? oppGoals : myGoals);
+    /* Round 478: the other two of my group swap ends on the return leg, the
+       way my own three fixtures already do (matchdays 0 to 2 are the first
+       meetings, 3 to 5 the returns). They never did, so the same club was at
+       home in both of their games, and the pair only ever produced one of
+       the two results the head to head rule needs to read. Group A's own
+       ledger came back 9 fixtures deep where the seven groups beside it were
+       12, and a level pair of my two opponents fell back to goal difference
+       in a FINAL table, which is exactly the ordering this round exists to
+       stop. */
+    const rest = group.opponents.filter((_, i) => i !== idx);
+    const others = rest.length === 2 && entry.round >= 3 ? [rest[1], rest[0]] : rest;
     if (others.length === 2) {
       const [hg, ag] = simAiMatch(state, others[0], others[1]);
       applyResult(group.table, others[0], others[1], hg, ag);
+      noteUclPair(state, others[0], others[1], hg, ag);
       noteForm(state, others[0], others[1], hg, ag);
       otherResults.push({ home: others[0], away: others[1], hg, ag });
     }
@@ -9233,7 +9296,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     // Round 163: the other seven groups play their matchday the same night.
     advanceUclWorld(state);
     if (group.matchday >= 6) {
-      const pos = sortedTable(group.table).findIndex(r => r.club === state.clubName) + 1;
+      const pos = sortedUclGroup(state, group.table).findIndex(r => r.club === state.clubName) + 1;
       if (pos <= 2) {
         // Round 95: a real bracket, with my name in it. Round 462: sixteen
         // clubs and a round of 16 in the eras that played one, and the
