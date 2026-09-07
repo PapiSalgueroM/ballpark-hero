@@ -1,5 +1,6 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
+import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -4800,7 +4801,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // the seasons already in the book at this club, so 2 means he is playing
   // his third year there. Leaders and academy sons get the nod sooner, and
   // a loan season never hands out a parent club's armband.
-  if (!(s.isClubCaptain ?? false) && !s.loan && s.age >= 24 && s.overall >= 76) {
+  if (!(s.isClubCaptain ?? false) && !s.loan && s.age >= CAPTAIN_MIN_AGE && s.overall >= CAPTAIN_MIN_RATING) {
     const tenure = s.seasons.filter(ss => ss.club === s.currentClub && ss.type === "playing").length;
     if (tenure >= 2) {
       const chance = 0.18

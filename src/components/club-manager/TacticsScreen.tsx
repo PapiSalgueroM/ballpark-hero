@@ -1,7 +1,7 @@
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Wand2, X } from 'lucide-react';
+import { ChevronDown, Wand2, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
   slotPosition, defensiveLineY, lineLabel,
@@ -9,7 +9,7 @@ import {
   SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
-import { ratingTint } from '@/components/club-manager/SquadScreen';
+import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
@@ -122,6 +122,21 @@ export function TacticsScreen({
   const [benchPick, setBenchPick] = useState<string | null>(null);
   const [dutySlot, setDutySlot] = useState<number | null>(null);
   const [spKey, setSpKey] = useState<SetPieceKey | null>(null);
+  /* Round 505 review: the bench and the set pieces are tiles under the pitch
+     that open one at a time, so the tab is the pitch plus two headers rather
+     than a long stack with a scroll list inside it. */
+  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | null>(null);
+
+  /* Round 505 review: a shape switch leaves nothing half tapped behind. The
+     spot you picked, the bench man you held, the open duty sheet and an
+     Escaped picker's slot all point at slots of the old shape, so they go
+     with it. */
+  useEffect(() => {
+    setSelSlot(null);
+    setBenchPick(null);
+    setDutySlot(null);
+    setOpenSlot(null);
+  }, [career.formationIndex]);
 
   const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
   const xi = resolveXI(career);
@@ -246,6 +261,7 @@ export function TacticsScreen({
     }
     setSelSlot(i);
     setOpenSlot(i);
+    setOpenTile('bench');
   };
 
   /** A tap on a bench man: into the spot you tapped first, or held for the spot you tap next. */
@@ -257,6 +273,7 @@ export function TacticsScreen({
       return;
     }
     setBenchPick(prev => (prev === p.id ? null : p.id));
+    setOpenTile('bench');
   };
 
   /* Round 505: the picker lists the whole available squad same position
@@ -275,11 +292,25 @@ export function TacticsScreen({
      orders it for that spot; with no spot picked it is simply best first.
      Either way the men who cannot play this week sit at the back, greyed. */
   const bench: CMPlayer[] = useMemo(() => {
-    const list = benchFor(career, undefined, selSlot ?? undefined);
+    /* This tab edits the PICKED eleven, so its bench is read off that even
+       while a match is paused (a save reloaded at the interval lands in the
+       hub with career.live set). Off the live match, benchFor would list
+       the men not on the pitch and a man who came on at the break vanished
+       from the tab. */
+    const list = benchFor({ ...career, live: undefined }, undefined, selSlot ?? undefined);
     if (selSlot !== null) return list;
     return [...list].sort((a, b) => (isAvailable(a) ? 0 : 1) - (isAvailable(b) ? 0 : 1) || b.rating - a.rating);
   }, [career, selSlot]);
   const benchSlot = selSlot !== null ? formation.slots[selSlot] : null;
+
+  /* A held bench man who is no longer on the bench (the auto pick took him,
+     a swap put him out there) is not held any more. */
+  useEffect(() => {
+    if (benchPick !== null && !bench.some(p => p.id === benchPick)) setBenchPick(null);
+  }, [bench, benchPick]);
+
+  const tileRef = useRevealScroll<HTMLDivElement>(`tile:${openTile ?? ''}`, { enabled: openTile !== null, skipFirst: false });
+  const spPicked = SET_PIECE_KEYS.filter(k => !!career.setPieces?.[k]).length;
 
   /* The keeper boundary is the one placement worth a sentence of its own. */
   const keeperWarnings: string[] = [];
@@ -469,8 +500,12 @@ export function TacticsScreen({
                 data-cm-duty-value={d ?? ''}
                 aria-label={`Duty for ${sl.label}: ${d ? DUTY_INFO[d].label : 'none set'}. Tap to change.`}
                 onClick={() => setDutySlot(dutySlot === i ? null : i)}
+                /* A calm chip sits above a calm token (15 over 10): in 5-3-2
+                   and 5-4-1 the middle centre back's chip lands on the top of
+                   the keeper's token, and under it a tap opened the GK picker.
+                   A lifted token (30) and a drop target (20) still ride over it. */
                 className={cn(
-                  'cm-chip absolute z-[5] px-1 rounded-full border text-[7px] font-bold leading-[13px] whitespace-nowrap',
+                  'cm-chip absolute z-[15] px-1 rounded-full border text-[7px] font-bold leading-[13px] whitespace-nowrap',
                   d ? 'bg-primary/15 border-primary/60 text-primary' : 'bg-card/80 border-border text-muted-foreground',
                   dutySlot === i && 'ring-2 ring-primary',
                   !ready && 'cm-still',
@@ -615,13 +650,32 @@ export function TacticsScreen({
         )}
       </div>
 
-      {/* Round 505: the bench, under the pitch, ordered for the spot you tapped. */}
-      <div className="bg-card border border-border rounded-xl p-3" data-cm-bench-list={selSlot ?? ''}>
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
-            Bench{benchSlot ? <span className="text-primary normal-case"> for {benchSlot.label}, same position first</span> : ' and reserves'}
-          </div>
-          {(selSlot !== null || benchPick !== null) && (
+      {/* Round 505: the bench, a tile under the pitch, ordered for the spot
+          you tapped. A tapped spot or a held bench man opens it on its own,
+          and it is the whole list once open: no scroll box inside a tile. */}
+      <div ref={openTile === 'bench' ? tileRef : undefined} data-cm-tile="bench" data-cm-tile-open={openTile === 'bench' ? '1' : undefined}>
+        <button
+          type="button"
+          data-cm-tile-btn="bench"
+          aria-expanded={openTile === 'bench'}
+          onClick={() => setOpenTile(openTile === 'bench' ? null : 'bench')}
+          className={cn(
+            'w-full flex items-center justify-between gap-2 rounded-xl border bg-card px-3 min-h-[44px] text-left transition-colors',
+            openTile === 'bench' ? 'border-primary rounded-b-none' : 'border-border hover:border-primary/50',
+          )}
+        >
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider min-w-0 truncate">
+            Bench <span className="text-foreground font-bold" data-cm-bench-count={bench.length}>{bench.length}</span>
+            {benchSlot
+              ? <span className="text-primary normal-case"> for {benchSlot.label}, same position first</span>
+              : benchMan ? <span className="text-primary normal-case"> holding {lastName(benchMan.name)}</span> : null}
+          </span>
+          <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', openTile === 'bench' && 'rotate-180')} />
+        </button>
+        {openTile === 'bench' && (
+        <div className="bg-card border border-t-0 border-primary rounded-b-xl p-3" data-cm-bench-list={selSlot ?? ''}>
+        {(selSlot !== null || benchPick !== null) && (
+          <div className="flex items-center justify-end mb-1.5">
             <button
               type="button"
               data-cm-bench-clear="1"
@@ -630,10 +684,10 @@ export function TacticsScreen({
             >
               Clear
             </button>
-          )}
-        </div>
+          </div>
+        )}
         {bench.length === 0 && <p className="text-[10px] text-muted-foreground">Everybody is in the eleven.</p>}
-        <div className="space-y-0.5 max-h-72 overflow-y-auto">
+        <div className="space-y-0.5">
           {bench.map(p => {
             const avail = isAvailable(p);
             const grade = benchSlot ? fitGrade(p, benchSlot) : null;
@@ -658,9 +712,7 @@ export function TacticsScreen({
                 <span className="flex-1 min-w-0">
                   <span className={cn('block text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>
                     {p.name}
-                    {(p.secondaryPositions ?? []).map(sp2 => (
-                      <span key={sp2} className="ml-1 text-[8px] font-bold text-sky-300 border border-sky-400/50 rounded px-1">{sp2}</span>
-                    ))}
+                    <SecondPositionChips p={p} className="ml-1" />
                   </span>
                   <span className="block text-[9px] text-muted-foreground">
                     {avail
@@ -673,12 +725,32 @@ export function TacticsScreen({
             );
           })}
         </div>
+        </div>
+        )}
       </div>
 
-      {/* Round 505: the armband and the set piece takers. */}
-      <div className="bg-card border border-border rounded-xl p-3" data-cm-setpieces="1">
+      {/* Round 505: the armband and the set piece takers, the second tile. */}
+      <div ref={openTile === 'setpieces' ? tileRef : undefined} data-cm-tile="setpieces" data-cm-tile-open={openTile === 'setpieces' ? '1' : undefined}>
+        <button
+          type="button"
+          data-cm-tile-btn="setpieces"
+          aria-expanded={openTile === 'setpieces'}
+          onClick={() => { setOpenTile(openTile === 'setpieces' ? null : 'setpieces'); setSpKey(null); }}
+          className={cn(
+            'w-full flex items-center justify-between gap-2 rounded-xl border bg-card px-3 min-h-[44px] text-left transition-colors',
+            openTile === 'setpieces' ? 'border-primary rounded-b-none' : 'border-border hover:border-primary/50',
+          )}
+        >
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider min-w-0 truncate">
+            Set pieces <span className="text-foreground font-bold" data-cm-sp-count={spPicked}>{spPicked}/{SET_PIECE_KEYS.length}</span>
+            {byId(captainId) && <span className="text-primary normal-case"> captain {lastName(byId(captainId)!.name)}</span>}
+          </span>
+          <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', openTile === 'setpieces' && 'rotate-180')} />
+        </button>
+        {openTile === 'setpieces' && (
+        <div className="bg-card border border-t-0 border-primary rounded-b-xl p-3" data-cm-setpieces="1">
         <div className="flex items-center justify-between mb-1">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Captain and set pieces</div>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Captain and takers</div>
           <button
             type="button"
             data-cm-sp-auto="1"
@@ -712,7 +784,7 @@ export function TacticsScreen({
               {open && (
                 <div ref={spRef} className="mt-1 mb-2 rounded-lg border border-border/60 p-2" data-cm-sp-list={k}>
                   <p className="text-[9px] text-muted-foreground mb-1">{SET_PIECE_INFO[k].blurb}</p>
-                  <div className="space-y-0.5 max-h-56 overflow-y-auto">
+                  <div className="space-y-0.5">
                     {setPieceCandidates(career, k).map(p => (
                       <button
                         key={p.id}
@@ -741,6 +813,8 @@ export function TacticsScreen({
         <p className="text-[9px] text-muted-foreground mt-1">
           A corner goes to that flag's man while he is on the pitch, a penalty or a direct free kick is the taker's goal, and the armband takes a point off what a defeat costs the eleven.
         </p>
+        </div>
+        )}
       </div>
 
       {/* Slot picker dialog, still the fallback for anyone who cannot drag */}

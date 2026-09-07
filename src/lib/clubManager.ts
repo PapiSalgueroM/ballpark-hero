@@ -13,7 +13,8 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
 import type { Player, Position } from '@/types/game';
-import { FORMATIONS as SHARED_FORMATIONS, playerRating } from '@/lib/squadDeal';
+import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadDeal';
+import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import type { Formation, FormationSlot } from '@/lib/squadDeal';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
@@ -334,26 +335,19 @@ export type UclKoState = UclKoRound | 'out' | 'won' | null;
  * squadDeal's nine. Every one has eleven slots, exactly one keeper at
  * (50, 90), and y values pitchLineOf reads as the line the name says:
  * keeper above 86, defence 62 to 86, midfield 40 to 62, attack under 40.
- * The allowed sets are the shared ones so the position rule reads the
- * same in every shape.
+ * The allowed sets are imported from squadDeal's SLOT_ALLOWED, not copied,
+ * so the position rule reads the same in every shape and a change to a
+ * list reaches the nine and the eight together.
  */
 const cmSlot = (label: string, allowed: Position[], x: number, y: number): FormationSlot => ({ label, allowed, x, y });
 const CM_GK = (): FormationSlot => cmSlot('GK', ['GK'], 50, 90);
-const CM_DC: Position[] = ['CB'];
-const CM_DR: Position[] = ['RB', 'RWB', 'CB'];
-const CM_DL: Position[] = ['LB', 'LWB', 'CB'];
-const CM_MD: Position[] = ['CM', 'CDM', 'CAM'];
-const CM_DM: Position[] = ['CDM', 'CM'];
-const CM_AM: Position[] = ['CAM', 'CM'];
-const CM_WR: Position[] = ['RW', 'RM', 'RWB'];
-const CM_WL: Position[] = ['LW', 'LM', 'LWB'];
-const CM_FW: Position[] = ['ST', 'CF'];
+const { DC: CM_DC, DR: CM_DR, DL: CM_DL, MD: CM_MD, DM: CM_DM, AM: CM_AM, AMF: CM_AMF, WR: CM_WR, WL: CM_WL, FW: CM_FW } = SLOT_ALLOWED;
 
 export const CM_FORMATIONS: Formation[] = [
   ...SHARED_FORMATIONS,
   { name: '4-3-3 holding', slots: [CM_GK(), cmSlot('RB', CM_DR, 84, 70), cmSlot('CB', CM_DC, 62, 74), cmSlot('CB', CM_DC, 38, 74), cmSlot('LB', CM_DL, 16, 70), cmSlot('CDM', CM_DM, 50, 58), cmSlot('CM', CM_MD, 68, 46), cmSlot('CM', CM_MD, 32, 46), cmSlot('RW', CM_WR, 80, 24), cmSlot('ST', CM_FW, 50, 18), cmSlot('LW', CM_WL, 20, 24)] },
   { name: '4-2-2-2', slots: [CM_GK(), cmSlot('RB', CM_DR, 84, 70), cmSlot('CB', CM_DC, 62, 74), cmSlot('CB', CM_DC, 38, 74), cmSlot('LB', CM_DL, 16, 70), cmSlot('CDM', CM_DM, 62, 56), cmSlot('CDM', CM_DM, 38, 56), cmSlot('CAM', CM_AM, 66, 36), cmSlot('CAM', CM_AM, 34, 36), cmSlot('ST', CM_FW, 60, 18), cmSlot('ST', CM_FW, 40, 18)] },
-  { name: '3-4-2-1', slots: [CM_GK(), cmSlot('CB', CM_DC, 68, 74), cmSlot('CB', CM_DC, 50, 76), cmSlot('CB', CM_DC, 32, 74), cmSlot('RWB', CM_WR, 86, 50), cmSlot('CM', CM_MD, 60, 54), cmSlot('CM', CM_MD, 40, 54), cmSlot('LWB', CM_WL, 14, 50), cmSlot('CAM', ['CAM', 'CF', 'CM'], 64, 34), cmSlot('CAM', ['CAM', 'CF', 'CM'], 36, 34), cmSlot('ST', CM_FW, 50, 16)] },
+  { name: '3-4-2-1', slots: [CM_GK(), cmSlot('CB', CM_DC, 68, 74), cmSlot('CB', CM_DC, 50, 76), cmSlot('CB', CM_DC, 32, 74), cmSlot('RWB', CM_WR, 86, 50), cmSlot('CM', CM_MD, 60, 54), cmSlot('CM', CM_MD, 40, 54), cmSlot('LWB', CM_WL, 14, 50), cmSlot('CAM', CM_AMF, 64, 34), cmSlot('CAM', CM_AMF, 36, 34), cmSlot('ST', CM_FW, 50, 16)] },
   { name: '4-1-4-1', slots: [CM_GK(), cmSlot('RB', CM_DR, 84, 70), cmSlot('CB', CM_DC, 62, 74), cmSlot('CB', CM_DC, 38, 74), cmSlot('LB', CM_DL, 16, 70), cmSlot('CDM', CM_DM, 50, 60), cmSlot('RM', CM_WR, 84, 44), cmSlot('CM', CM_MD, 62, 48), cmSlot('CM', CM_MD, 38, 48), cmSlot('LM', CM_WL, 16, 44), cmSlot('ST', CM_FW, 50, 18)] },
   { name: '5-4-1', slots: [CM_GK(), cmSlot('RWB', CM_WR, 88, 64), cmSlot('CB', CM_DC, 68, 76), cmSlot('CB', CM_DC, 50, 78), cmSlot('CB', CM_DC, 32, 76), cmSlot('LWB', CM_WL, 12, 64), cmSlot('RM', CM_WR, 82, 46), cmSlot('CM', CM_MD, 60, 50), cmSlot('CM', CM_MD, 40, 50), cmSlot('LM', CM_WL, 18, 46), cmSlot('ST', CM_FW, 50, 18)] },
   { name: '4-3-1-2', slots: [CM_GK(), cmSlot('RB', CM_DR, 84, 70), cmSlot('CB', CM_DC, 62, 74), cmSlot('CB', CM_DC, 38, 74), cmSlot('LB', CM_DL, 16, 70), cmSlot('CM', CM_MD, 68, 52), cmSlot('CM', CM_MD, 50, 56), cmSlot('CM', CM_MD, 32, 52), cmSlot('CAM', CM_AM, 50, 34), cmSlot('ST', CM_FW, 60, 18), cmSlot('ST', CM_FW, 40, 18)] },
@@ -9615,7 +9609,7 @@ const SET_PIECE_PREFERENCE: Record<Exclude<SetPieceKey, 'captain'>, Position[][]
 export function setPieceCandidates(state: CareerState, key: SetPieceKey): CMPlayer[] {
   const pool = state.squad.filter(p => !p.onLoan);
   if (key === 'captain') {
-    const tier = (p: CMPlayer): number => (!p.isYouth && p.age >= 24 && p.rating >= 76 ? 0 : !p.isYouth ? 1 : 2);
+    const tier = (p: CMPlayer): number => (!p.isYouth && p.age >= CAPTAIN_MIN_AGE && p.rating >= CAPTAIN_MIN_RATING ? 0 : !p.isYouth ? 1 : 2);
     return [...pool].sort((a, b) => tier(a) - tier(b) || (b.rating + b.age) - (a.rating + a.age) || a.name.localeCompare(b.name));
   }
   const tiers = SET_PIECE_PREFERENCE[key];

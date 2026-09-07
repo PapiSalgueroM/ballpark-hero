@@ -11,6 +11,7 @@ import type {
 import { ALL_POSITIONS } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { SecondPositionChips } from '@/components/club-manager/SquadScreen';
 
 interface TrainingScreenProps {
   career: CareerState;
@@ -31,26 +32,6 @@ function rateLabel(rate: number): { text: string; cls: string } {
   if (rate >= 1.15) return { text: 'Improving fast', cls: 'text-emerald-400' };
   if (rate >= 0.75) return { text: 'Ticking along', cls: 'text-yellow-400' };
   return { text: 'Going nowhere', cls: 'text-muted-foreground' };
-}
-
-/** Round 505: the positions a man has learned on top of his own, as small chips. Only ever earned in this save. */
-export function SecondPositionChips({ p, className }: { p: CMPlayer; className?: string }) {
-  const extra = p.secondaryPositions ?? [];
-  if (!extra.length) return null;
-  return (
-    <>
-      {extra.map(pos => (
-        <span
-          key={pos}
-          data-cm-second-position={pos}
-          title="Learned in this save through retraining"
-          className={cn('text-[8px] font-bold text-sky-300 border border-sky-400/50 rounded px-1 shrink-0', className)}
-        >
-          {pos}
-        </span>
-      ))}
-    </>
-  );
 }
 
 function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
