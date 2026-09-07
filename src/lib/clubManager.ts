@@ -13682,6 +13682,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      carry a year better where there was room, with the matches reset; move
      and the new club hands you its own. */
   rolloverStaff(state, career, moving);
+  /* Round 505: the armband and the set piece jobs are the club's too. A
+     manager who moves starts on the new club's own picks, and a job naming a
+     man who left over the summer is refilled here rather than on the first
+     match day, so the tactics tab never shows a departed captain. */
+  if (moving) state.setPieces = undefined;
+  ensureSetPieces(state);
   /* Round 200: the sponsor's year ticks over here. The bonus for the season
      just finished is paid FIRST, off the position that season really
      reached, then a year comes off the deal and the next year's guaranteed
