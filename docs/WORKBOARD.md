@@ -838,6 +838,51 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
+- **DONE, Round 500. All three chain games ended your run and filed the score when they could not
+  CHECK your answer, breaking a rule CLAUDE.md states outright.** The rule is "Connect4 and chain
+  hooks reject without ending the game on network errors." Each of the three hooks carried a
+  correct FAIL CLOSED comment sitting over a catch block that could not fire.
+
+  **Why the catch could not fire.** Every infrastructure failure in these validators answers HTTP
+  **200** with a bare `{valid:false}`. A 200 is not a thrown error, so it sailed past the catch,
+  landed in the branch that handles a wrong answer, ended the run and filed the score through
+  `useGameCompletion`. The validators' own reason strings said "so this cannot be counted" and then
+  the client counted it. Twelve return sites across the three files now carry `unverified: true`:
+  nine saying "cannot be counted" (missing service key, PostgREST error mid-page, empty read,
+  unhandled exception) and three rate limiter 429s. **Sport verdicts deliberately do NOT carry the
+  flag**, and the fence fails if one ever does: marking a real "were never teammates" as unverified
+  would hand out free retries forever, which is the opposite mistake.
+
+  **Worse in NBA Chain, and it needed no outage at all.** `useNbaChain` used a raw fetch with **no
+  `resp.ok` check anywhere**, so the validator's own rate limiter (429, "Slow down a moment and try
+  again") was parsed straight into the verdict. A fast typist could end their own game.
+
+  **And the deferral the validator added on purpose was nullified.** `nba-chain-validate` returns
+  `{valid:false, coverageGap:true}` when both men are still active at the 2024 data edge, precisely
+  so a pairing the data cannot settle is NOT judged. **Nothing in `src` read that flag** (grep: 0
+  hits). Measured over the live table: 569 players sit at the 2024 edge and 148,608 of their
+  161,596 pairs (92 percent) land on that branch. Alperen Sengun and Kevin Durant are real Houston
+  teammates in 2025-26, so answering correctly ended your game.
+
+  Deployed tennis-chain-validate v9, nascar-chain-validate v7, nba-chain-validate v8, all recorded
+  in the ledger. `simChainFailClosed` holds four things, the last against production and costing
+  nothing: the Sengun/Durant pairing still comes back as a deferral, so the branch this round
+  exists to honour is provably reachable. Controls `bareverdict` (12 findings) and `endsrun` (3).
+
+  **A harness mistake worth keeping.** Section 2's first draft read a fixed 700 characters from the
+  `unverified` flag to decide whether that branch ended the game. That window slid onto the NEXT
+  block, so the answer depended on how long the comment above it was: Tennis passed and NBA failed
+  on identical, correct code. It brace-matches the real branch now. A window that can slide onto
+  the neighbouring block is not a check, it is a coin toss.
+
+  **STILL OPEN, deliberately out of scope and measured rather than changed.** Two more refusals are
+  data-coverage gaps wearing verdict clothing, the same idea as `coverageGap` but with no flag:
+  `tennis-chain-validate` "We have no Grand Slam record for X, so this link cannot be verified" and
+  `nba-chain-validate` "We have no NBA record for X, so this link cannot be verified". Both are
+  about the CURRENT player, the one the GAME put in the chain, so ending the run there punishes the
+  player for the game's own gap. Not changed here because the frequency was not measured; measure
+  it before flagging them.
+
 - **DONE, Round 499. Soccer Career's phone could text you 23 invented first-person lines under a
   REAL footballer's name.** Found by the multi-agent defect hunt and independently re-measured
   before acting. This is the line CLAUDE.md calls the one that matters most, and it had been

@@ -104,7 +104,7 @@ serve(async (req) => {
     req.headers.get("cf-connecting-ip") ||
     "unknown";
   if (isRateLimited(clientIp)) {
-    return json({ valid: false, reason: "Slow down a moment and try again." }, corsHeaders, 429);
+    return json({ valid: false, unverified: true, reason: "Slow down a moment and try again." }, corsHeaders, 429);
   }
 
   try {
@@ -123,7 +123,7 @@ serve(async (req) => {
     if (!supabaseUrl || !serviceKey) {
       // Fail CLOSED: never hand out a free point because config is missing.
       return json(
-        { valid: false, reason: "Validator unavailable right now, so this one cannot be counted." },
+        { valid: false, unverified: true, reason: "Validator unavailable right now, so this one cannot be counted." },
         corsHeaders,
       );
     }
@@ -137,7 +137,7 @@ serve(async (req) => {
 
     if (champRes.error || !champRes.data) {
       return json(
-        { valid: false, reason: "Could not reach the championship records, so this cannot be counted." },
+        { valid: false, unverified: true, reason: "Could not reach the championship records, so this cannot be counted." },
         corsHeaders,
       );
     }
@@ -273,7 +273,7 @@ serve(async (req) => {
     console.error("nascar-chain-validate error:", err);
     // Fail CLOSED.
     return json(
-      { valid: false, reason: "Something went wrong verifying that one, so it cannot be counted." },
+      { valid: false, unverified: true, reason: "Something went wrong verifying that one, so it cannot be counted." },
       corsHeaders,
     );
   }

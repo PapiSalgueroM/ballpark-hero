@@ -141,7 +141,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) return json({ valid: false, reason: "Slow down a moment and try again." }, corsHeaders, 429);
+  if (isRateLimited(ip)) return json({ valid: false, unverified: true, reason: "Slow down a moment and try again." }, corsHeaders, 429);
 
   try {
     const { previousPlayer, newPlayer } = await req.json();
@@ -154,7 +154,7 @@ serve(async (req) => {
 
     const url = Deno.env.get("SUPABASE_URL");
     const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    if (!url || !key) return json({ valid: false, reason: "Validator unavailable, so this cannot be counted." }, corsHeaders);
+    if (!url || !key) return json({ valid: false, unverified: true, reason: "Validator unavailable, so this cannot be counted." }, corsHeaders);
     const sb = createClient(url, key);
 
     if (resolve(previousPlayer) === resolve(newPlayer)) {
@@ -223,6 +223,6 @@ serve(async (req) => {
     );
   } catch (err) {
     console.error("nba-chain-validate error:", err);
-    return json({ valid: false, reason: "Something went wrong verifying that one, so it cannot be counted." }, corsHeaders);
+    return json({ valid: false, unverified: true, reason: "Something went wrong verifying that one, so it cannot be counted." }, corsHeaders);
   }
 });

@@ -85,7 +85,7 @@ serve(async (req) => {
     req.headers.get("cf-connecting-ip") ||
     "unknown";
   if (isRateLimited(ip)) {
-    return json({ valid: false, reason: "Slow down a moment and try again." }, corsHeaders, 429);
+    return json({ valid: false, unverified: true, reason: "Slow down a moment and try again." }, corsHeaders, 429);
   }
 
   try {
@@ -103,7 +103,7 @@ serve(async (req) => {
     const url = Deno.env.get("SUPABASE_URL");
     const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!url || !key) {
-      return json({ valid: false, reason: "Validator unavailable, so this cannot be counted." }, corsHeaders);
+      return json({ valid: false, unverified: true, reason: "Validator unavailable, so this cannot be counted." }, corsHeaders);
     }
 
     const supabase = createClient(url, key);
@@ -130,7 +130,7 @@ serve(async (req) => {
         .order("champion", { ascending: true })
         .range(from, from + 999);
       if (error) {
-        return json({ valid: false, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
+        return json({ valid: false, unverified: true, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
       }
       const page = data ?? [];
       rows.push(...page);
@@ -139,7 +139,7 @@ serve(async (req) => {
     }
 
     if (rows.length === 0) {
-      return json({ valid: false, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
+      return json({ valid: false, unverified: true, reason: "Could not reach the Grand Slam records, so this cannot be counted." }, corsHeaders);
     }
     const g = norm(guessedPlayer);
     const c = norm(currentPlayer);
@@ -194,6 +194,6 @@ serve(async (req) => {
     );
   } catch (err) {
     console.error("tennis-chain-validate error:", err);
-    return json({ valid: false, reason: "Something went wrong verifying that one, so it cannot be counted." }, corsHeaders);
+    return json({ valid: false, unverified: true, reason: "Something went wrong verifying that one, so it cannot be counted." }, corsHeaders);
   }
 });

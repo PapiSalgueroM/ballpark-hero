@@ -121,6 +121,17 @@ export function useNbaChain() {
           }
         );
 
+        /* ROUND 500: the response STATUS is a fact this hook was throwing away.
+           There was no resp.ok check anywhere here, so the validator's own rate
+           limiter (HTTP 429, body {valid:false, reason:"Slow down a moment"})
+           was parsed straight into the verdict below and ended the run. No
+           outage required: a fast typist could end their own game. */
+        if (!resp.ok) {
+          setIsValidating(false);
+          setValidationError("Couldn't verify that link right now, please try again.");
+          return;
+        }
+
         const result = await resp.json();
         const displayName = result.fullName || trimmed;
         const normalizedDisplayName = normalizeName(displayName);
@@ -141,6 +152,25 @@ export function useNbaChain() {
           const finalScore = chain.length - 1;
           if (finalScore > bestStreak) { setBestStreak(finalScore); saveBestStreak(finalScore); }
           setIsValidating(false);
+          return;
+        }
+
+        /* ROUND 500: A DEFERRAL IS NOT A WRONG ANSWER.
+           nba-chain-validate carries a branch added on purpose so a pairing the
+           data cannot settle is NOT judged: when both men are still active at
+           the 2024 data edge it answers {valid:false, coverageGap:true} with a
+           reason explaining the records stop in 2024. Nothing in src read that
+           flag (grep: 0 hits), so the deferral ended the run and filed the
+           score, nullifying the whole branch. Measured 2026-09-07 over the live
+           table: 569 players sit at the 2024 edge, and 148,608 of their 161,596
+           pairs (92 percent) land on this branch. Alperen Sengun and Kevin
+           Durant are real Houston teammates in 2025-26, and answering that
+           correctly ended your game.
+           The same treatment covers every infrastructure failure, which now
+           says unverified rather than a bare false. */
+        if (result.unverified || result.coverageGap) {
+          setIsValidating(false);
+          setValidationError(result.reason || "Couldn't verify that link right now, please try again.");
           return;
         }
 

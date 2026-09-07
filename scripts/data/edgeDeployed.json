@@ -12,19 +12,19 @@
       "date": "2026-09-06"
     },
     "nba-chain-validate": {
-      "sha256": "ff45b1710d623cbd5763ce7ab91864a92b3c73728585c2230bdc853a0b2a54ab",
-      "version": 7,
-      "date": "2026-09-06"
+      "sha256": "ea05cc652d9e361e69f636feab23c96c594a20bc78955501615a69a65b7af6d5",
+      "version": 8,
+      "date": "2026-09-07"
     },
     "tennis-chain-validate": {
-      "sha256": "dc8df742548a54e50bfd2399539b457841f917caa3bd00ed0b204540b96d65af",
-      "version": 8,
-      "date": "2026-09-06"
+      "sha256": "1f354eb5698db3cd3df733441e84bcda9db729d080fa6c7c2f80358339150364",
+      "version": 9,
+      "date": "2026-09-07"
     },
     "nascar-chain-validate": {
-      "sha256": "bb3315bd6978e9035cbb36eae2aa5cede90ecf54e771b949f24f16fb0fbb0c3e",
-      "version": 6,
-      "date": "2026-09-06"
+      "sha256": "7ce093a7dd3b0b457deed74e5c403717d0a12141cf28255e406fd9abb96e9ecb",
+      "version": 7,
+      "date": "2026-09-07"
     },
     "soccer-grid-validate": {
       "sha256": "28fd94bc64d74f491711627b6159bcea5038b4ca1de76ed32aad208097dc808a",

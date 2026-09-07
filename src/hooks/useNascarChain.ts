@@ -115,6 +115,18 @@ export function useNascarChain() {
           rawScore: newRawScore,
           usedDrivers: new Set([...prev.usedDrivers, fullName.toLowerCase()]),
         }) : null);
+      } else if (data.unverified) {
+        /* ROUND 500: A DEFERRAL IS NOT A WRONG ANSWER, AND THIS BRANCH IS WHERE
+           IT WAS BEING TURNED INTO ONE.
+           The catch below already carries the right rule and the right comment,
+           but it only runs on a THROWN error. Every infrastructure failure in
+           the validator answers HTTP 200 with {valid:false}, so it sailed past
+           the catch, landed in the else, ended the run and filed the score
+           through useGameCompletion. The validator's own text said "so this
+           cannot be counted" and then the client counted it.
+           Same treatment as the catch: say so, leave the chain untouched, burn
+           nothing. */
+        toast.error(data.reason || "Couldn't verify that guess right now, please try again.");
       } else {
         const chainLength = gameState.chain.length - 1;
         setGameState(prev => prev ? ({
