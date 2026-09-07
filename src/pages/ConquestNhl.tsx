@@ -1,9 +1,11 @@
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
-import ImperialismBoardNhl from '@/components/conquest/ImperialismBoardNhl';
+import ImperialismBoardShared from '@/components/conquest/ImperialismBoardShared';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { NHL_CONQUEST_GAME, NHL_IMPERIALISM } from '@/data/conquestSports';
+import { NHL_CONQUEST_MAP } from '@/data/conquestDataNhl';
 
 const ConquestNhl = () => {
   return (
@@ -24,7 +26,7 @@ const ConquestNhl = () => {
               five landless invaders are always one win from taking it all.
             </p>
           </div>
-          <ImperialismBoardNhl />
+          <ImperialismBoardShared sport={NHL_IMPERIALISM} map={NHL_CONQUEST_MAP} game={NHL_CONQUEST_GAME} />
           <GameSeoContent
           pageHasOwnH1
             title="NHL Conquest: Imperialism Territory Game"

@@ -1,9 +1,11 @@
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
-import ImperialismBoardMlb from '@/components/conquest/ImperialismBoardMlb';
+import ImperialismBoardShared from '@/components/conquest/ImperialismBoardShared';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { MLB_CONQUEST_GAME, MLB_IMPERIALISM } from '@/data/conquestSports';
+import { MLB_CONQUEST_MAP } from '@/data/conquestDataMlb';
 
 const ConquestMlb = () => {
   return (
@@ -24,7 +26,7 @@ const ConquestMlb = () => {
               back, and two landless invaders are always one win from taking it all.
             </p>
           </div>
-          <ImperialismBoardMlb />
+          <ImperialismBoardShared sport={MLB_IMPERIALISM} map={MLB_CONQUEST_MAP} game={MLB_CONQUEST_GAME} />
           <GameSeoContent
           pageHasOwnH1
             title="MLB Conquest: Imperialism Territory Game"

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { sortedTable, projectedUclBracket, uclFirstKoRound } from '@/lib/clubManager';
+import { sortedUclGroup, uclGroupTiebreakFootnote, projectedUclBracket, uclFirstKoRound } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 
@@ -26,6 +26,13 @@ interface UclGroupsCardProps {
  * for the table AND the bracket. Now the groups read as final and the
  * bracket sits under them. In an era with a round of 16 the projection is
  * all sixteen, drawn the way that era's draw worked.
+ *
+ * Round 478: every table here is ordered by the competition's own rule
+ * (sortedUclGroup), which puts the games between clubs level on points
+ * ahead of goal difference in the group stage era, and the footnote under
+ * the rows names that rule the way the league tables already do. It is the
+ * same order the round of 16 is seeded from, so the club shown top of a
+ * group is the club that gets the home leg.
  */
 export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
   const [pick, setPick] = useState('A');
@@ -34,9 +41,10 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
 
   const world = career.uclWorld ?? [];
   const letters = ['A', ...world.map(g => g.letter)];
-  const activeRows = pick === 'A'
-    ? sortedTable(group.table)
-    : sortedTable(world.find(g => g.letter === pick)?.table ?? []);
+  const activeTable = pick === 'A'
+    ? group.table
+    : world.find(g => g.letter === pick)?.table ?? [];
+  const activeRows = sortedUclGroup(career, activeTable);
   const knockouts = career.uclKoRound !== null;
   const projection = knockouts ? null : projectedUclBracket(career);
   const preseason = group.matchday === 0;
@@ -67,6 +75,7 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
         title={`⭐ UCL Group ${pick} · ${knockouts ? 'final table' : `MD${group.matchday}/6`}${pick === 'A' ? ' · yours' : ''}`}
         preseason={preseason}
         onClubClick={onClubClick}
+        footnote={preseason ? undefined : uclGroupTiebreakFootnote(career, activeTable)}
       />
 
       {knockouts && (

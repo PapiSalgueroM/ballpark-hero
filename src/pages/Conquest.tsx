@@ -2,18 +2,23 @@ import { useState, useEffect } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import ConquestBoard from '@/components/conquest/ConquestBoard';
-import ImperialismBoard from '@/components/conquest/ImperialismBoard';
+import ImperialismBoardShared from '@/components/conquest/ImperialismBoardShared';
+import { NFL_CONQUEST_GAME, NFL_IMPERIALISM } from '@/data/conquestSports';
+import { NFL_CONQUEST_MAP } from '@/data/conquestData';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConquestHowToPlay } from '@/components/conquest/ConquestHowToPlay';
 import { HelpCircle } from 'lucide-react';
+import { hasUnfinishedDaily } from '@/lib/conquestDaily';
 
 type ConquestMode = 'select' | 'imperialism' | 'arcade';
 
 const Conquest = () => {
   const [showHelp, setShowHelp] = useState(false);
-  const [mode, setMode] = useState<ConquestMode>('select');
+  /* Round 476: a daily left half played opens straight back on the board it
+     was left on, rather than on the mode chooser with the run one tap away. */
+  const [mode, setMode] = useState<ConquestMode>(() => (hasUnfinishedDaily('nfl') ? 'imperialism' : 'select'));
 
   useEffect(() => {
     if (mode !== 'arcade') return;
@@ -90,7 +95,7 @@ const Conquest = () => {
             </div>
           )}
 
-          {mode === 'imperialism' && <ImperialismBoard />}
+          {mode === 'imperialism' && <ImperialismBoardShared sport={NFL_IMPERIALISM} map={NFL_CONQUEST_MAP} game={NFL_CONQUEST_GAME} />}
           {mode === 'arcade' && <ConquestBoard />}
           <GameSeoContent
           pageHasOwnH1

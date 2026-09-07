@@ -66,6 +66,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a perk (a fresh scouts' list, 20 percent off your next signing, no bidding war on your next buy).",
       "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away, and a man you walk away from is gone from your market for good.",
       "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest. A manager's lift only lands on the players who fit him, so no hire covers the target on its own.",
+      "The run is written to this phone after every move, not at the end, so a refresh or a locked screen comes back to the same window, and at a table to the same seats and the same seat's turn. One run at a time, on that phone only. Starting again clears it, and a save that cannot be read back exactly opens a fresh run rather than a half restored one.",
     ],
     example: [
       "A modest club with a 74 rated XI makes the target 81 on a 65 million pot. The board is in a plain mood, the finance envelope is a sell on clause worth 20 million, and you hire the youth coach for 5 million. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
@@ -106,6 +107,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         q: "Can I play with friends?",
         a: "Yes, on one phone. Pick two to four seats before the first club, make each extra seat a friend or the CPU, and pass the phone between windows. The CPU seat plays the same thinking policy the game's own test harness measures, so it reads the board, prices the scouts' bands and walks away from wars it cannot win. Online play across two phones is not built yet.",
+      },
+      {
+        q: "Can I put the phone down in the middle of a window?",
+        a: "Yes. Every move is saved to that phone as you make it, so a refresh, a locked screen or a closed tab comes back to the same window: the same club, the same money, the same settled shirts, the same demands, and at a table the same seats and whoever's turn it was. One run is kept at a time and it never leaves the phone, so starting again clears it and picking the game up on another device starts fresh.",
       },
     ],
   },

@@ -147,6 +147,12 @@ const { cm, CupBracketCard, UclGroupsCard, render } = createRequire(import.meta.
 const {
   startCareer, playNextEntry, resumeMatch, sortedTable, worldLeagueDefs, careerLeagueOf,
   leagueRounds, projectedUclBracket, ERA_LEAGUES,
+  /* Round 478: a Champions League group is ordered by the competition's own
+     rule, which reads the games between clubs level on points before goal
+     difference, so the top two of a group is not what a bare sortedTable
+     says any more and this harness must ask the engine the same question the
+     seeding asks. */
+  sortedUclGroup,
 } = cm;
 
 /* ---------- driving the engine the way the page does ---------- */
@@ -350,7 +356,7 @@ function checkCups(label, s, ctx) {
 function checkProjection(label, s, ctx) {
   if (s.live || !s.uclGroup) return;
   const g = s.uclGroup;
-  const pos = sortedTable(g.table).findIndex(r => r.club === s.clubName) + 1;
+  const pos = sortedUclGroup(s, g.table).findIndex(r => r.club === s.clubName) + 1;
   if (s.uclKoRound !== null) {
     if (ctx.drawChecked) return;
     ctx.drawChecked = true;
@@ -372,10 +378,10 @@ function checkProjection(label, s, ctx) {
   if (pos <= 2 && !inProj) note('proj', `${label}: my club is ${pos === 1 ? 'top' : 'second'} of Group A at MD${g.matchday} and missing from the projected quarter finals (the reported bug)`);
   if (pos > 2 && inProj) note('proj', `${label}: my club is ${pos}th of Group A at MD${g.matchday} and still projected through`);
   const groupOf = new Map(g.table.map(r => [r.club, 'A']));
-  const topTwo = new Set(sortedTable(g.table).slice(0, 2).map(r => r.club));
+  const topTwo = new Set(sortedUclGroup(s, g.table).slice(0, 2).map(r => r.club));
   for (const w of s.uclWorld ?? []) {
     for (const c of w.clubs) groupOf.set(c, w.letter);
-    for (const r of sortedTable(w.table).slice(0, 2)) topTwo.add(r.club);
+    for (const r of sortedUclGroup(s, w.table).slice(0, 2)) topTwo.add(r.club);
   }
   const clubs = proj.flatMap(p => [p.home, p.away]);
   if (new Set(clubs).size !== clubs.length) note('proj', `${label}: a club is projected into two quarter finals at MD${g.matchday}`);

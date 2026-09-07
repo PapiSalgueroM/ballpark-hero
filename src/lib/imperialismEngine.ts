@@ -5,12 +5,13 @@ import type { ConquestSport } from './conquestDaily';
  * Round 459: ONE imperialism engine, and the sport is injected.
  *
  * src/lib/imperialism.ts, imperialismNba.ts, imperialismMlb.ts and
- * imperialismNhl.ts are four copies of one idea that differ only in the team
- * table they read, the number of rounds, the playoff labels, the scoreline
- * shape and the flavour of the headlines (measured 2026-09-05: the MLB and
- * NHL files diff in 60 lines out of 216, every one of them a renamed
- * identifier or a sport noun). That is the counter example CLAUDE.md names,
- * and a fifth copy for soccer would have made it worse.
+ * imperialismNhl.ts were four copies of one idea that differed only in the
+ * team table they read, the number of rounds, the playoff labels, the
+ * scoreline shape and the flavour of the headlines (measured 2026-09-05: the
+ * MLB and NHL files diffed in 60 lines out of 216, every one of them a
+ * renamed identifier or a sport noun). That is the counter example CLAUDE.md
+ * names, and a fifth copy for soccer would have made it worse. Round 476
+ * deleted all four.
  *
  * Every function here takes the sport as data. The canonical imperialism
  * rules do not change per sport:
@@ -22,9 +23,9 @@ import type { ConquestSport } from './conquestDaily';
  * What a sport injects: the clubs and their strengths, the opening map, the
  * round count and labels, the scoreline shape, and the nouns.
  *
- * Soccer is the first sport on it (Round 459). The four older copies still
- * drive their own routes; moving them onto this module is a data change per
- * sport, not an engine change, and is the follow up this round leaves open.
+ * Soccer was the first sport on it (Round 459). Round 476 moved the other
+ * four here as data (src/data/conquestSports.ts) and deleted the four copies,
+ * so all five routes now run this file and a fix lands once.
  */
 
 export interface ImperialismTeam {
@@ -43,8 +44,11 @@ export interface ImperialismTeam {
 export interface ImperialismScoreShape {
   /** A decided game: the winner's score and the loser's score. */
   pair(rng: () => number): [number, number];
-  /** The loser's score when the game went to the tie breaker, given the winner's. */
-  tieBreak(winner: number): number;
+  /** The loser's score when the game went to the tie breaker, given the
+   *  winner's. Basketball's overtime margin is itself a draw, so the rng is
+   *  handed over; a sport whose tie breaker is fixed (a one goal game, a
+   *  shoot out) ignores it and consumes nothing. */
+  tieBreak(winner: number, rng: () => number): number;
   /** What the recap prints after the score: "OT", "pens". */
   tieBreakLabel: string;
 }
@@ -58,6 +62,9 @@ export interface ImperialismSport {
   playoffLabels: readonly [string, string, string];
   /** "Week", "Round", "Matchday". */
   roundNoun: string;
+  /** What one competitor is called: "club" on the soccer map, "team" on the
+   *  four US maps. Defaults to "club", which is what Round 459 shipped. */
+  teamNoun?: string;
   /** "state", "territory", "region". */
   regionNoun: string;
   /** The short form a standings row prints beside the count ("st" for states, "hex" on the soccer map). Defaults to the noun's first two letters, which is how the NFL board wrote "12 st". */
@@ -75,6 +82,19 @@ export interface ImperialismSport {
     eraseTail: string;
     quiet: string;
   };
+}
+
+/** What a route calls itself. Lives here so a sport's data file can name it
+ *  without reaching into a component (Round 476). */
+export interface ImperialismGameSpec {
+  /** "Soccer Conquest" */
+  name: string;
+  /** "/soccer-conquest" */
+  path: string;
+  /** The completion key the leaderboard caps know, e.g. conquest-soccer-imperialism. */
+  gameId: string;
+  /** The pick screen blurb. */
+  pitch: string;
 }
 
 export interface ImpGame {
@@ -168,7 +188,7 @@ export function resolveGame(
   const loser = winner === home ? away : home;
   const overtime = Math.abs(roll - pHome) < sport.tieBreakWindow;
   let [w, l] = sport.score.pair(rng);
-  if (overtime) l = sport.score.tieBreak(w);
+  if (overtime) l = sport.score.tieBreak(w, rng);
   const homeScore = winner === home ? w : l;
   const awayScore = winner === home ? l : w;
 

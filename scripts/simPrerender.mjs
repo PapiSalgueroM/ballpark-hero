@@ -769,13 +769,31 @@ const failuresAfter15 = failures;
    and this guard then found twenty four files it had missed, which is the
    whole argument for a guard over a hand written list: the round's own list
    said five, then six, and the code said twenty four.
-   They are NOT all harmless. /missing-eleven, /missing-five, /missing-nine and
-   /rank-em pick with getRandom..., not from the date, yet the prerenderer
-   reports their blocks as "changing with the date" and drops them, so those
-   pages may be losing real content to this race rather than to the calendar.
-   That is a measurement Round 422 should make, not a claim to make here.
-   Two of them (useHigherLower) seed from OTHER component state, so they cannot
-   take a module level memo unchanged and need their own thinking.
+   THE MEASUREMENT HAS NOW BEEN MADE, so the old warning here has been replaced
+   rather than left standing. It read that /missing-eleven, /missing-five,
+   /missing-nine and /rank-em might be losing real content to this race. They
+   are not. Round 479 measured every file on this list two ways: the last twelve
+   builds of each of their routes read out of git and counted, and each page
+   rendered at the prerenderer's seed against the same page with that generator
+   advanced by one draw, which is what a second initialiser firing does. Not one
+   of the twenty two routes moved.
+   The reason is that their picks are INVISIBLE to a snapshot, which is an
+   accident and not a guarantee. The eight sibling Higher or Lower pages render
+   the two picked names in a span, and a snapshot keeps only readable blocks, so
+   the names were never in the saved page; /higher-lower used an h3, which is
+   exactly why it was the one page the race could damage, and it was fixed and
+   left this list on 2026-09-06. The connections, career, Footle, Olympics,
+   missing and rank pages all seed UNLIMITED mode from the draw and open in
+   daily, so the pick renders nothing until a player switches, which a crawler
+   never does. src/hooks/useFootballDraft.ts reaches no route at all.
+   So these are debt, not damage, and the thing to guard is the moment that
+   stops being true: turning one of those spans into a heading would silently
+   hand that page the /higher-lower bug. scripts/simDrawOrder.mjs is that guard.
+   It fails on the JOIN, a page whose snapshot content follows the draw order
+   while it still holds a raw draw, and it checks both halves of what a
+   snapshot keeps, the head that is copied verbatim and the readable blocks the
+   body is rebuilt from. It derives its route list from App.tsx and the import
+   graph every run rather than carrying a typed one.
    This list is a RATCHET, not an amnesty: anything not on it fails, and a file
    that leaves the list must be removed from it, so the debt can only shrink. */
 const RAW_RANDOM_BASELINE = new Set([
