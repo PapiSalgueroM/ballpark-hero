@@ -838,6 +838,61 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
+- **DONE, Round 498. Two soccer games could not reach a player whose name carries an accent, or a
+  hyphen.** `soccer-grid-validate` (full name lookup and surname fallback) and Round 497's new
+  confirm-only pass in `football-connect4-validate` both read `soccer_player_club_stints` with
+  `.ilike` against the RAW `player_name` column. This is the SAME defect Round 486 fixed for the
+  NBA table, on a different table, found by grepping the siblings the way the standing rule says
+  to. One `name_folded` column serves both games.
+
+  **Measured 2026-09-07 over all 80,586 rows and 27,851 distinct names:** 6,270 distinct names
+  (22.5 percent) change under folding and could not be reached by any plain spelling, across
+  18,833 rows. 313 of them carry a letter with NO canonical decomposition (Turkish dotless i,
+  Danish ae and slashed o, Polish barred l), so NFD alone still misses them and the transliteration
+  table is required rather than tidy. Proved rather than argued: `ilike` with the folded spelling
+  returned no rows for 5 of 5 sampled names against the live endpoint.
+
+  **IT IS NOT ONLY ACCENTS, which is the part that would have been missed by calling it an accent
+  fix.** The fold flattens anything that is not a letter or a digit, so "Aaron Wan-Bissaka" was
+  unreachable by typing "aaron wan bissaka" with no accent involved anywhere. The hyphen alone did
+  it.
+
+  Deployed: soccer-grid-validate v22, football-connect4-validate v12, both recorded in the ledger.
+  Verified live: 6 of 6 accented players (Alexis Sánchez, Álvaro Arbeloa, Ángel Di María and
+  others) now answer `source: "records"` in Connect 4 from their PLAIN spelling, and the grid
+  resolves them too. `simSoccerStintNameFold` holds four things, including the one Round 486 was
+  built around: the DATABASE fold and the shipped JS fold agree on all 80,586 rows. Controls
+  `notranslit` (reproduces the exact Round 486 disagreement, "abdulkerim bardakc" against
+  "abdulkerim bardakci") and `rawcolumn`. `simConnect4ClubRecords` section 5 was widened in the
+  same round: its candidate pool used to exclude accented names BECAUSE they were a known miss, so
+  it was testing only the easy 78 percent; the pool is now 950 players of whom 219 carry a
+  character the fold changes.
+
+  **STILL OPEN, measured in the same pass and not fixed, because each needs its own migration.**
+  The identical raw-column lookup is in three more places on American football tables, where the
+  punctuation half bites hardest because of names like A.J. and De'Von:
+    `nfl_player_team_stints`  835 of 14,555 names (5.7 percent) unreachable. Read by BOTH
+      college-grid-validate AND football-grid-validate, so one column fixes two games.
+    `nfl_draft_picks`         3,961 of 25,885 names (15.3 percent).
+    `cfb_all_americans`       222 of 1,140 names (19.5 percent).
+    `cfb_heisman_winners`     4 of 90.
+  Two extra facts worth carrying into that round. First, the SAME PERSON is spelled differently
+  across these tables ("A.J. Arcuri" in stints, "A. J. Arcuri" in draft picks), and folding
+  collapses both to "a j arcuri", so the column fixes the cross-table join as well as the lookup.
+  Second, `cfb_all_americans` literally stores a scraped footnote asterisk in the name
+  ("Adrian Peterson *", "Abdul Carter *"), which folding hides but which is a DATA defect in its
+  own right and should be cleaned rather than only folded around.
+  `nba-chain-validate` line 124 also matches the raw column, but that one is a DELIBERATE fallback
+  for when name_folded is unavailable and is correct as written; do not "fix" it.
+
+- **MEASURED, NOT A ROUND: 2 of the soccer grid's 1,888 club cells cannot be satisfied by anybody.**
+  Re-ran Round 489's measurement on 2026-09-07 over the real 710 puzzles (105 distinct
+  "Played for" labels, extracted from `rows_json` and `cols_json`). Round 489's five are genuinely
+  fixed. What remains is two malformed labels rather than a matcher problem:
+  "Played for Boca Juniors or River Plate" (an OR the club matcher cannot express) and
+  "Played for England at a World Cup" (a national team parsed as a club). One cell each, 0.1
+  percent of the board. Worth a data fix, not worth a round of its own.
+
 - **DONE, Round 497. Soccer Connect 4, the biggest consumer of the shared AI quota, now answers
   its club squares from our own tables.** This is the item that sat in the inbox as MEASURED AND
   DESIGNED, NOT YET SHIPPED; it is shipped and deployed as version 11. The free Gemini allowance

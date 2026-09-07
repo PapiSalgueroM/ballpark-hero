@@ -250,13 +250,18 @@ console.log('5) the DEPLOYED function answers club squares from records, and a m
   };
 
   const labelText = new Map(labels.map(l => [norm(l), l]));
-  /* ASCII only: the lookup is ilike on the raw column and therefore accent
-     sensitive, a limit this round states rather than hides, so an accented
-     name would be a known miss and not evidence of anything. */
+  /* ROUND 498 widened this. It used to be ASCII only, because the lookup was
+     ilike against the RAW column and an accented name was a known miss, so
+     including one would have been evidence of nothing. The lookup now matches
+     the folded column, so accented names are exactly as answerable as plain
+     ones and are included on purpose: 6,270 of the table's 27,851 distinct
+     names carry something the fold changes, and excluding them would test only
+     the easy 78 percent. */
   const candidates = [...byPlayer.entries()]
-    .filter(([name, set]) => set.size >= 2 && !/[^\x20-\x7e]/.test(name))
+    .filter(([name, set]) => set.size >= 2)
     .map(([name, set]) => [name, [...set]]);
-  console.log(`   ${candidates.length} players in the table played for 2 or more mapped clubs`);
+  const accentedCount = candidates.filter(([n]) => /[^ -~]/.test(n)).length;
+  console.log(`   ${candidates.length} players in the table played for 2 or more mapped clubs, ${accentedCount} of them with a character the fold changes`);
   if (candidates.length < 10) fail(`only ${candidates.length} candidate players, which is too few to conclude anything`);
 
   let fromRecords = 0, fromCache = 0, missed = 0, tried = 0;

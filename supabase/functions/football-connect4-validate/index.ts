@@ -48,9 +48,12 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${norm(player)}|$
 
    CONFIRM ONLY, and the asymmetry is the whole safety argument. A hit PROVES
    the attribute. A miss proves NOTHING and must fall through to the model,
-   because the table is not complete: 17,222 of its 80,586 rows (21 percent)
-   carry an accented name and this lookup is accent sensitive, so a real player
-   can be missed. That caps the saving and it does not cost a wrong answer.
+   because the table is not complete: it is a scrape, not a register, and a real
+   player can simply be absent from it. That caps the saving and it costs no
+   wrong answers.
+   (Round 497 named the accent sensitive lookup as the main cause of misses.
+   Round 498 removed that cause, see below, so this no longer reads as a live
+   limit. What remains is ordinary incompleteness.)
 
    THE MAP IS EXACT, NEVER A SUBSTRING. Derived and checked on 2026-09-06
    against all 4,931 stored club values over 80,586 rows, which are 4,774
@@ -63,6 +66,27 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${norm(player)}|$
    adds a word. The table also holds a placeholder club literally named "---"
    (Göksel Gencer 2007, Alexander Manninger 2011), which an exact map ignores by
    construction and a substring rule would not. */
+/* ROUND 498: the name lookup stops being blind to accents AND punctuation.
+   Round 497's pass read the stint table with .ilike against the RAW column, so
+   a player typed in plain letters never reached a stored accented name. That is
+   the same defect Round 486 fixed for the NBA table, on a different table.
+   Measured over all 80,586 rows and 27,851 distinct names: 6,270 names (22.5
+   percent) change under folding and were unreachable, 18,833 rows. 313 of them
+   carry a letter with NO canonical decomposition (Turkish dotless i, Danish ae
+   and slashed o, Polish barred l), so NFD alone still misses them and this
+   table is required rather than tidy. And it is not only accents: the fold
+   flattens anything that is not a letter or digit, so "Aaron Wan-Bissaka" was
+   unreachable by typing "aaron wan bissaka" with no accent involved at all.
+   foldName is SEPARATE from norm() on purpose: norm builds the cache keys, and
+   changing it would orphan every verdict already paid for. */
+const TRANSLIT: Record<string, string> = {
+  "ı": "i", "ß": "ss", "ø": "o", "ł": "l", "đ": "d", "æ": "ae", "œ": "oe", "þ": "th", "ð": "d",
+};
+const foldName = (s: string) =>
+  (s || "").toLowerCase().replace(/[ıßøłđæœþð]/g, (c) => TRANSLIT[c] ?? c)
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ")
+    .replace(/\s+/g, " ").trim();
+
 const C4_CLUB_STRINGS: Record<string, string[]> = {
   "ac milan": ["AC Milan"],
   "arsenal": ["Arsenal FC"],
@@ -109,7 +133,7 @@ async function confirmClubAttribute(
   try {
     const { data } = await sb.from("soccer_player_club_stints")
       .select("player_name, club")
-      .ilike("player_name", playerName.trim())
+      .eq("name_folded", foldName(playerName))
       .limit(400);
     for (const row of (data ?? [])) {
       const r = row as { player_name?: string; club?: string };

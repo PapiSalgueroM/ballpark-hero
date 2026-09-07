@@ -65,8 +65,21 @@ function isRateLimited(ip: string) {
   return e.count > 30;
 }
 
+/* ROUND 498: the transliteration step this fold was missing.
+   Postgres unaccent folds the letters that have NO canonical decomposition
+   (Turkish dotless i, German sharp s, Danish ae and slashed o, Polish barred
+   l); NFD cannot touch them, because there is nothing to decompose. So without
+   this table "Ömer Aşık" folds to "omer asik" in the database column and
+   "omer as k" here, and no typed spelling could ever reach him. Round 486 hit
+   exactly this on the NBA table and the ruling was that the DATABASE is right
+   and the function is corrected to match. norm() does not build the cache key
+   (cacheKeyOf does, separately), so correcting it orphans nothing. */
+const TRANSLIT: Record<string, string> = {
+  "ı": "i", "ß": "ss", "ø": "o", "ł": "l", "đ": "d", "æ": "ae", "œ": "oe", "þ": "th", "ð": "d",
+};
 const norm = (s: string) =>
-  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+  (s || "").toLowerCase().replace(/[ıßøłđæœþð]/g, (c) => TRANSLIT[c] ?? c)
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
 
 const DEMONYM: Record<string, string> = {
   dutch: "netherlands", french: "france", brazilian: "brazil", english: "england",
@@ -265,13 +278,17 @@ serve(async (req) => {
   const COLS = "player_name, club, nationality, position, first_year, last_year, debut_year, debut_age";
 
   try {
+    /* ROUND 498: matched on the folded column, not the raw one. Measured over
+       all 80,586 rows: 6,270 of 27,851 distinct names (22.5 percent) could not
+       be reached by any plain spelling, and it is not only accents, a hyphen
+       does it too ("Aaron Wan-Bissaka"). */
     const { data } = await sb.from("soccer_player_club_stints").select(COLS)
-      .ilike("player_name", sanitized.player).limit(60);
+      .eq("name_folded", norm(sanitized.player)).limit(60);
     let stints = (data ?? []) as Stint[];
 
     if (stints.length === 0 && sanitized.player.trim().split(/\s+/).length === 1) {
       const { data: bySurname } = await sb.from("soccer_player_club_stints").select(COLS)
-        .ilike("player_name", `% ${sanitized.player.trim()}`).limit(60);
+        .like("name_folded", `% ${norm(sanitized.player)}`).limit(60);
       const names = new Set((bySurname ?? []).map((r: { player_name: string }) => norm(r.player_name)));
       if (names.size === 1) stints = (bySurname ?? []) as Stint[];
     }
