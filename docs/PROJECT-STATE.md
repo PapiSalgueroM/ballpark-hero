@@ -3085,7 +3085,17 @@ today rather than adding alongside them.
   passed; simLiveMatch green plain and under SIM_SEED 1, 2, 3, all five controls firing on
   exactly their sections; simMatchScreen, simLiveSim, simHalftime, simMatchDetail and the whole
   Club Manager family green on the new engine; simNoRivalNames 0 findings; a full season played
-  through the real screens at 430 and at 390 wide, 0 findings each; FULL_SUITE_PLACEHOLDER.
+  through the real screens at 430 and at 390 wide, 0 findings each; the full suite (`runAllSims`, 256 harnesses) with 21 skipped for want of a database in this
+  lane, 25 red for the same reason (every one a 403 on the database host or a deployed function
+  this sandbox cannot reach, the set the workboard has carried since Round 356), simNewBadge red on
+  a clean checkout of main too (a git date drift outside this lane, recorded in the Inbox), and
+  simClubManagerCalendar green after a gate fix of its own: its section 3 ended the engine run on a
+  sacking and then read the missing January window as a calendar fault, a coin toss the old stream
+  happened to win (about one seeded season in ten loses the job that early on either engine,
+  measured over 40 seasons a club, and the new engine sacks LESS: Everton 11 of 40 against 15,
+  Arsenal 7 against 12), so a sacked career is re-run on the next seed the way the Round 471 and
+  474 gate fixes did. One more environment finding for the board: simFootleKitNumbers hangs the
+  suite for an hour in this lane (a database fetch with no timeout), recorded in the Inbox.
   **Not done, named:** five substitutions in the modern era (the cap stays at three everywhere,
   simHalftime pins it); opposition injuries and straight reds (they hold no per player state);
   a formation change during play (the shape changes, the formation does not, Round 505 owns
