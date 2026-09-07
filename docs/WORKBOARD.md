@@ -29,7 +29,7 @@ How it works:
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Verified against origin
+  2026-09-07: Rounds 503 to 508. next: Round 505 (Claude Code lane).** Verified against origin
   before claiming: main is `8edc2896`, Round 502, so 503 is the next free number.
   **503 RELIABILITY, DONE 2026-09-07, on the branch with a PR open.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
@@ -40,10 +40,26 @@ How it works:
   schedule a 600ms shake timer with no cleanup, so an unmount mid shake sets state on a dead
   component and the full vitest run prints "window is not defined" at random (the open bug
   1bc0ab47 recorded); fenced with a fake timer test and a control that puts the bare timer back.
-  **504 CLUB MANAGER LIVE MATCH V1**, his words: "Ball at players' feet, both teams with names and
+  **504 CLUB MANAGER LIVE MATCH V1, DONE 2026-09-07, on the branch with a PR open.** His words: "Ball at players' feet, both teams with names and
   numbers on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live
   stats visible during play, subs and tactics at any moment, the AI opponent also subs." Built on
-  the Round 472 merged flow, never a second match screen.
+  the Round 472 merged flow, never a second match screen. Every ask
+  in his sentence is on the pitch: the engine commits each half as a stream (goals, chances,
+  corners, throw ins, fouls, cards, an injury, the other dugout's subs, every one with a minute
+  and the man on the ball), the report's stats block is COUNTED off that stream so the live
+  counter at 90 and the report are one number, both elevens carry names and the classic 1 to 11
+  numbers (no roster holds real shirt numbers, and the copy says so), the ball sits at a
+  carrier's feet, the side in possession pushes up and the other drops back, you tap one of
+  your dots at any minute to bring somebody on or change the shape and the rest of the half is
+  redrawn off the change (three changes a match, the Round 119 identity: Poisson over a half is
+  Poisson over the minutes left of it), the other dugout fields a named eleven and bench off
+  the era roster and makes one to three subs a match, and a save closed mid match is picked
+  back up rather than kicked off again. Fence simLiveMatch (nine sections, controls noplay,
+  nocut, rekick, nooppsubs, statsroll); simMatchScreen, simLiveSim, simHalftime, simMatchDetail
+  and the whole Club Manager family green on the new engine; a full season played in a real
+  browser at 430 and at 390 wide, 0 findings each.
+  Named as not done: five subs in the modern era, opposition injuries and straight reds, a
+  formation change during play (505 owns tactics), a shootout scene, goal celebrations.
   **505 CLUB MANAGER TACTICS DEPTH**, his words: "subs and reserves listed under the pitch, tap one
   player then another to swap. Out of position penalties, position retraining over weeks ...
   Captain, corner takers left and right, free kick and penalty takers ... Player roles: attacking
