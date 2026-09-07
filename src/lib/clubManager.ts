@@ -817,9 +817,47 @@ export interface OtherResult { home: string; away: string; hg: number; ag: numbe
    here is recomputed by the UI, because two computations drift and the rule
    in this repo is that the screen never lies about the sim. */
 
-export interface CardLine { name: string; minute: number; kind: 'yellow' | 'red'; }
-export interface SubLine { off: string; on: string; minute: number; }
-export interface InjuryLine { name: string; minute: number; weeks: number; }
+export interface CardLine {
+  name: string; minute: number; kind: 'yellow' | 'red';
+  /** Round 504: his id, so the whistle settles the right man. */
+  id?: string;
+  /** Round 504: opposition lines only, true for a man the game made up. */
+  gen?: boolean;
+  /** Round 504: a red that was a second yellow (a one match ban) rather
+   *  than a straight red (one or two). */
+  second?: boolean;
+}
+export interface SubLine {
+  off: string; on: string; minute: number;
+  /** Round 504: the ids behind the names, so the pitch can be rebuilt at any minute. */
+  offId?: string; onId?: string;
+  /** Round 504: opposition lines only, true when the man coming on or going
+   *  off is one the game made up (a projected world), so every screen can
+   *  say so the way the ratings sheet does. */
+  onGen?: boolean; offGen?: boolean;
+}
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; }
+
+export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul';
+
+/** Round 504: one moment of play the engine committed, so the live viewer
+ *  shows the same chances the report counts. A goal is a shot with `goal`
+ *  set and mirrors its scorer line minute for minute; a shot on target that
+ *  is not a goal is a save. `who` is the man on the ball (the shooter, the
+ *  fouler, the taker), or '' when the opposition has no named eleven. */
+export interface PlayEvent {
+  minute: number;
+  side: 'me' | 'opp';
+  kind: PlayKind;
+  who: string;
+  on?: boolean;
+  goal?: boolean;
+  /** Shots only: this chance's share of the half's expected goals, 2dp. */
+  xg?: number;
+}
+
+/** Round 504: one opposition player on the day, from the era roster. */
+export interface OppXiLine { n: string; p: Position; r: number; g?: boolean; }
 
 export interface MatchStats {
   /** My share of the ball, 0-100. Theirs is 100 minus this. */
@@ -884,6 +922,23 @@ export interface MatchDetail {
   capacity?: number | null;
   /** Whose ground it was. */
   venue?: 'home' | 'away' | 'neutral';
+  /** Round 504: every chance, corner, throw in and foul the engine
+   *  committed, in minute order, both sides. The stats block above is
+   *  COUNTED off this list (liveStatsAt), so a live counter and the report
+   *  cannot differ. */
+  play?: PlayEvent[];
+  /** Round 504: possession per half, the two numbers the match figure averages. */
+  possHalves?: [number, number];
+  /** Round 504: the other dugout's substitutions and bookings, named from
+   *  the era roster. The opposition is still a club level strength in the
+   *  sim, so these are the football on the screen and the report and carry
+   *  no season consequences, and a like for like change on their bench does
+   *  not move the club's number. */
+  oppSubs?: SubLine[];
+  oppCards?: CardLine[];
+  /** Round 504: the opposition eleven that kicked off, in formation slot order. */
+  oppXi?: OppXiLine[];
+  oppFormationIndex?: number;
 }
 
 export interface MatchWeekReport {
@@ -1784,7 +1839,57 @@ export interface LiveMatch {
       this round; the report falls back to picking them at full time. */
   h1My?: { id: string; name: string; minute: number }[];
   h1Opp?: ScorerLine[];
+  /* ---- Round 504: the live match, committed half by half. Every field is
+     optional so a save paused before this round still resolves (the whistle
+     draws what is missing, see ensureFirstHalf). ---- */
+  /** The other eleven and bench, picked at kick off from the era roster, in
+   *  their formation's slot order. Absent for a thin club with no named
+   *  eleven, and then their dots carry no names. */
+  oppXi?: OppXiLine[];
+  oppBench?: OppXiLine[];
+  oppFormationIndex?: number;
+  /** The first half's play, cards, injury and share of the ball, decided at kick off. */
+  h1Play?: PlayEvent[];
+  h1Cards?: CardLine[];
+  h1OppCards?: CardLine[];
+  h1Injuries?: InjuryLine[];
+  possH1?: number;
+  /** The second half, decided when it starts (live) or at the whistle (quick
+   *  sim), by the one function drawSecondHalf. */
+  h2Drawn?: boolean;
+  lam2Mine?: number;
+  lam2Opp?: number;
+  h2My?: { id: string; name: string; minute: number }[];
+  h2Opp?: ScorerLine[];
+  h2Play?: PlayEvent[];
+  h2Cards?: CardLine[];
+  h2OppCards?: CardLine[];
+  h2Injuries?: InjuryLine[];
+  possH2?: number;
+  /** The other dugout's substitutions, drawn with the second half. */
+  oppSubs?: SubLine[];
+  /** My substitutions, at the minute each one was made. */
+  subs?: SubLine[];
+  /** Shape changes, at their minutes, so the record says when. */
+  shapeChanges?: { minute: number; mentality: Mentality }[];
+  /** The clock the match stands at: the last minute the manager acted at,
+   *  or the restart. The viewer resumes a paused save from here. */
+  minute?: number;
+  /** The formation the eleven kicked off in, so a paused match keeps its
+   *  shape whatever the tactics tab is set to in the meantime. */
+  formationIndex?: number;
+  /** The share of the ball's own roll per half, drawn once, so a change
+   *  moves the figure only through the football it redrew. */
+  possNoise?: [number, number];
+  /** The lambda in force over each stretch of a half, so a half that was
+   *  redrawn twice still sums its expected goals exactly: lamMine and
+   *  lam2Mine are these lists summed by length. */
+  h1Segs?: LamSegment[];
+  h2Segs?: LamSegment[];
 }
+
+/** Round 504: a stretch of a half and the full half lambdas that were in force over it. */
+export interface LamSegment { from: number; to: number; lamMine: number; lamOpp: number; }
 
 export interface PlayResult {
   state: CareerState;
@@ -8631,6 +8736,9 @@ function creditMyScorers(
   state: CareerState,
   xi: CMPlayer[],
   lines: { id: string; name: string; minute: number }[],
+  /** Round 504: who was on the pitch when the goal went in, so a man who
+   *  came on in the 80th cannot be credited with setting up the 10th. */
+  onPitchAt?: (minute: number) => CMPlayer[],
 ): { goalCounts: Map<string, number>; assistCounts: Map<string, number>; assistNames: (string | null)[] } {
   const goalCounts = new Map<string, number>();
   const assistCounts = new Map<string, number>();
@@ -8646,7 +8754,8 @@ function creditMyScorers(
     }
     let assistedBy: string | null = null;
     if (Math.random() < 0.7) {
-      const others = xi.filter(p => p.id !== line.id && p.position !== 'GK');
+      const there = onPitchAt ? onPitchAt(line.minute) : xi;
+      const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => scorerWeight(p) * 0.6 + 0.5);
       if (assister) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
@@ -8660,35 +8769,10 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateMyScorers(
-  state: CareerState,
-  xi: CMPlayer[],
-  goals: number,
-  firstHalfGoals: number,
-  presetH1?: { id: string; name: string; minute: number }[],
-  taken: Set<number> = new Set(),
-): { lines: ScorerLine[]; goalCounts: Map<string, number>; assistCounts: Map<string, number> } {
-  const h1 = clamp(firstHalfGoals, 0, goals);
-  /* Round 158: a live match decided its first half scorers at kick off, so
-     the viewer's first half and the full time report are the same football.
-     Everything else picks them here, exactly as before. */
-  const h1Lines = presetH1 && presetH1.length === h1
-    ? presetH1
-    : pickMyScorerLines(xi, h1, 1, 45, taken);
-  /* A preset first half already happened, so its minutes are spoken for. */
-  if (presetH1 && presetH1.length === h1) for (const l of h1Lines) taken.add(l.minute);
-  const h2Lines = pickMyScorerLines(xi, goals - h1, 46, 90, taken);
-  const full = [...h1Lines, ...h2Lines];
-  const { goalCounts, assistCounts, assistNames } = creditMyScorers(state, xi, full);
-  return {
-    lines: full.map((l, i) => ({ name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined })),
-    goalCounts,
-    assistCounts,
-  };
-}
-
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set()): ScorerLine[] {
-  const minutes = splitMinutes(goals, firstHalfGoals, taken);
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number]): ScorerLine[] {
+  /* Round 504: a segment of a half asks for its own window; the whole match
+     shape splits at the interval as before. */
+  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken) : splitMinutes(goals, firstHalfGoals, taken);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -8712,6 +8796,894 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
     lines.push({ name, minute: minutes[g] });
   }
   return lines;
+}
+
+/* ================================================================== */
+/* Round 504: the live match, committed half by half                    */
+/* ================================================================== */
+/*
+ * His words: "Ball at players' feet, both teams with names and numbers on
+ * their dots, players cover the whole pitch, throw ins, corners and fouls
+ * exist. Live stats visible during play, subs and tactics at any moment,
+ * the AI opponent also subs."
+ *
+ * The rule this sits under is the one the viewer has carried since Round
+ * 158: the screen never lies about the sim. So nothing below is drawn by
+ * the viewer. Each half is COMMITTED by the engine (kick off decides the
+ * first, the second is decided when it starts) as goals, chances, corners,
+ * throw ins, fouls, cards, an injury and the other dugout's substitutions,
+ * every one with a minute, and the report's stats block is counted off the
+ * same list the viewer walks (liveStatsAt), so the counter on screen at 90
+ * and the number on the report are one number.
+ *
+ * A change the manager makes at minute M keeps every event at or before M
+ * and redraws the rest of the half off the eleven and the shape he just
+ * chose. That is the Round 119 identity again: Poisson(L) over a half is
+ * Poisson(L * k / 45) over the k minutes left of it, and the goals already
+ * drawn before M are exactly the thinning of the same process. A manager
+ * who changes nothing gets precisely the match the quick sim draws, in the
+ * same order, which simMatchScreen section 6 holds and simLiveMatch proves
+ * from the other side.
+ *
+ * The opposition is still a club strength number, as it always was. Its
+ * eleven, its bench, its bookings and its substitutions are named from the
+ * era roster and are real football on the screen and the report, but a
+ * like for like change in the other dugout does not move a club level
+ * strength, and the comment on MatchDetail.oppSubs says so.
+ */
+
+/** Chance weight for an opposition player, the shape scorerWeight uses. */
+function oppShotWeight(p: OppXiLine): number {
+  const base =
+    p.p === 'ST' || p.p === 'CF' ? 5 :
+    p.p === 'LW' || p.p === 'RW' ? 3.6 :
+    p.p === 'CAM' ? 3 :
+    p.p === 'LM' || p.p === 'RM' ? 2.2 :
+    p.p === 'CM' ? 1.6 :
+    p.p === 'CDM' ? 0.9 :
+    p.p === 'GK' ? 0.02 : 0.55;
+  return base * Math.pow(p.r / 70, 2);
+}
+
+/** Who gives away fouls and picks up cards: the back line and the holder. */
+const foulWeightPos = (pos: Position): number =>
+  pos === 'GK' ? 0.1 : groupOf(pos) === 'DEF' ? 2.2 : pos === 'CDM' ? 2.4 : groupOf(pos) === 'MID' ? 1.4 : 0.8;
+
+/** Who takes a corner: the wide men and the creator. */
+const cornerWeightPos = (pos: Position): number =>
+  pos === 'CAM' || pos === 'LM' || pos === 'RM' || pos === 'LW' || pos === 'RW' ? 3 : pos === 'CM' ? 1.5 : pos === 'GK' ? 0 : 0.5;
+
+/** Who takes a throw in: the full backs, then the rest of the back line. */
+const throwWeightPos = (pos: Position): number =>
+  pos === 'LB' || pos === 'RB' || pos === 'LWB' || pos === 'RWB' ? 4 : groupOf(pos) === 'DEF' ? 2 : groupOf(pos) === 'MID' ? 1 : pos === 'GK' ? 0 : 0.3;
+
+/** weightedPick for anything with a weight, the same draw shape. */
+function weightedPickAny<T>(items: T[], weight: (t: T) => number): T | null {
+  if (!items.length) return null;
+  const weights = items.map(weight);
+  const total = weights.reduce((s, w) => s + w, 0);
+  if (total <= 0) return pick(items);
+  let roll = Math.random() * total;
+  for (let i = 0; i < items.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return items[i];
+  }
+  return items[items.length - 1];
+}
+
+const lineOfPosition = (p: Position): PitchLine =>
+  p === 'GK' ? 'keeper' : groupOf(p) === 'DEF' ? 'defence' : groupOf(p) === 'MID' ? 'midfield' : 'attack';
+
+/** The formation whose lines best fit an eleven's positions; 4-4-2 on a tie. */
+function bestFormationFor(xi: OppXiLine[]): number {
+  const want = { defence: 0, midfield: 0, attack: 0 };
+  for (const p of xi) {
+    const line = lineOfPosition(p.p);
+    if (line !== 'keeper') want[line] += 1;
+  }
+  let best = 1;
+  let bestGap = Infinity;
+  FORMATIONS.forEach((f, i) => {
+    const has = { defence: 0, midfield: 0, attack: 0 };
+    for (const sl of f.slots) {
+      const line = pitchLineOf(sl);
+      if (line !== 'keeper') has[line] += 1;
+    }
+    const gap = Math.abs(has.defence - want.defence) + Math.abs(has.midfield - want.midfield) + Math.abs(has.attack - want.attack);
+    if (gap < bestGap) { bestGap = gap; best = i; }
+  });
+  return best;
+}
+
+/** The eleven in the formation's slot order: each slot takes the best unused man from its line. */
+function intoSlots(xi: OppXiLine[], formation: Formation): OppXiLine[] {
+  const used = new Set<number>();
+  const out: OppXiLine[] = [];
+  for (const slot of formation.slots) {
+    const line = pitchLineOf(slot);
+    let idx = xi.findIndex((p, i) => !used.has(i) && lineOfPosition(p.p) === line);
+    if (idx < 0) idx = xi.findIndex((p, i) => !used.has(i) && (line === 'keeper' ? p.p === 'GK' : p.p !== 'GK'));
+    if (idx < 0) idx = xi.findIndex((_, i) => !used.has(i));
+    if (idx < 0) break;
+    used.add(idx);
+    out.push(xi[idx]);
+  }
+  return out;
+}
+
+/**
+ * The opposition's eleven and bench for today, from the same era roster
+ * their scorers have always been drawn from. A named eleven with a keeper or
+ * nothing: a thin club (CM_PARTIAL) whose roster cannot field one gets no
+ * invented sheet, exactly the rule the Round 178 ratings sheet already
+ * follows, and the viewer then shows unlabelled dots for them.
+ */
+function pickOppSquad(roster: ProjectedPlayer[]): { xi: OppXiLine[]; bench: OppXiLine[]; formationIndex: number } | null {
+  const byR = [...roster].sort((a, b) => b.r - a.r);
+  const line = (pl: ProjectedPlayer): OppXiLine => ({ n: pl.n, p: pl.p, r: pl.r, ...(pl.g ? { g: true } : {}) });
+  const taken = new Set<string>();
+  const take = (into: OppXiLine[], want: (p: ProjectedPlayer) => boolean, count: number, cap: number): void => {
+    for (const pl of byR) {
+      if (count <= 0 || into.length >= cap) return;
+      if (taken.has(pl.n) || !want(pl)) continue;
+      into.push(line(pl));
+      taken.add(pl.n);
+      count -= 1;
+    }
+  };
+  const xi: OppXiLine[] = [];
+  take(xi, p => p.p === 'GK', 1, 11);
+  take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
+  take(xi, p => groupOf(p.p) === 'MID', 4, 11);
+  take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
+  take(xi, p => p.p !== 'GK', 11, 11);
+  if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+  const bench: OppXiLine[] = [];
+  take(bench, p => p.p === 'GK', 1, 7);
+  take(bench, p => groupOf(p.p) === 'DEF', 2, 7);
+  take(bench, p => groupOf(p.p) === 'MID', 2, 7);
+  take(bench, p => groupOf(p.p) === 'ATT', 2, 7);
+  take(bench, p => p.p !== 'GK', 7, 7);
+  const formationIndex = bestFormationFor(xi);
+  return { xi: intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]), bench, formationIndex };
+}
+
+/** Opposition scorers from the men actually on their pitch, weighted like ours. */
+function pickOppScorerLines(onPitch: OppXiLine[], count: number, lo: number, hi: number, taken: Set<number>): ScorerLine[] {
+  const minutes = distinctMinutes(count, lo, hi, taken);
+  const outfield = onPitch.filter(p => p.p !== 'GK');
+  const lines: ScorerLine[] = [];
+  for (let g = 0; g < count; g++) {
+    const scorer = weightedPickAny(outfield.length ? outfield : onPitch, oppShotWeight);
+    if (!scorer) break;
+    lines.push({ name: scorer.n, minute: minutes[g] });
+  }
+  return lines;
+}
+
+/** (1 - 0.1168)^2 = 0.78: the 22 percent injury chance a match the sim has always carried, per half. */
+const INJURY_PER_HALF = 0.1168;
+/** Round 205 trimmed the straight red to 6 percent a match; half of that a half. */
+const STRAIGHT_RED_PER_HALF = 0.03;
+
+/**
+ * My side's cards for the minutes (from, to] of a half. The Round 205 rules
+ * are unchanged: the second yellow is a red, most of the time the referee
+ * books somebody else instead, a straight red never goes to a booked man.
+ * `booked` and `dismissed` carry across segments so a man booked in the
+ * first half can walk in the second.
+ */
+function drawSegmentCards(
+  onPitchAt: (minute: number) => CMPlayer[], from: number, to: number, maxYellows: number,
+  booked: Map<string, number>, dismissed: Set<string>,
+): CardLine[] {
+  const len = (to - from) / 45;
+  const lo = from + 1;
+  const lines: CardLine[] = [];
+  const weight = (p: CMPlayer): number => foulWeightPos(p.position);
+  const yellows = Math.round(ri(0, maxYellows) * len);
+  for (let i = 0; i < yellows; i++) {
+    /* The minute first, then whoever is still on the pitch at that minute:
+       a man who limped off in the 20th is not booked in the 40th. */
+    const minute = ri(lo, to);
+    const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.id));
+    if (!eligible.length) continue;
+    const victim = weightedPick(eligible, weight);
+    if (!victim) continue;
+    const first = booked.get(victim.id);
+    if (first === undefined) {
+      booked.set(victim.id, minute);
+      lines.push({ name: victim.name, id: victim.id, minute, kind: 'yellow' });
+    } else if (minute <= first || Math.random() >= SECOND_YELLOW_CHANCE) {
+      /* A second yellow has to come AFTER the first, and most of the time the
+         referee books somebody else instead. Without this the collision rate
+         of the draw itself would decide how often men walk. */
+      const clean = eligible.filter(p => !booked.has(p.id));
+      const other = clean.length ? weightedPick(clean, weight) : null;
+      if (other) {
+        booked.set(other.id, minute);
+        lines.push({ name: other.name, id: other.id, minute, kind: 'yellow' });
+      }
+    } else {
+      /* Second yellow: it still counts as a booking in his season figures,
+         because it is one, and it also sends him off. */
+      dismissed.add(victim.id);
+      lines.push({ name: victim.name, id: victim.id, minute, kind: 'red', second: true });
+    }
+  }
+  if (Math.random() < STRAIGHT_RED_PER_HALF * len) {
+    /* A man already off for two yellows cannot also be sent off, and a man
+       already carrying a booking cannot take a STRAIGHT red: on the timeline
+       a yellow followed by a red is a second yellow to anyone reading it. */
+    const minute = ri(lo, to);
+    const clean = onPitchAt(minute).filter(p => !dismissed.has(p.id) && !booked.has(p.id));
+    const outfield = clean.filter(p => p.position !== 'GK');
+    const hothead = clean.length ? pick(outfield.length ? outfield : clean) : null;
+    if (hothead) {
+      dismissed.add(hothead.id);
+      lines.push({ name: hothead.name, id: hothead.id, minute, kind: 'red' });
+    }
+  }
+  return lines.sort((a, b) => a.minute - b.minute);
+}
+
+/** The other side's bookings, by name. No consequences follow them (the sim
+ *  holds no per player state for the opposition), so no straight red either;
+ *  a second booking still sends the man off, because that is what a second
+ *  booking is. */
+function drawSegmentOppCards(
+  onPitchAt: (minute: number) => OppXiLine[], from: number, to: number, maxYellows: number,
+  booked: Map<string, number>, dismissed: Set<string>,
+): CardLine[] {
+  const len = (to - from) / 45;
+  const lo = from + 1;
+  const lines: CardLine[] = [];
+  const weight = (p: OppXiLine): number => foulWeightPos(p.p);
+  const yellows = Math.round(ri(0, maxYellows) * len);
+  for (let i = 0; i < yellows; i++) {
+    /* The minute first, then whoever is on their pitch at that minute. */
+    const minute = ri(lo, to);
+    const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.n));
+    if (!eligible.length) continue;
+    const victim = weightedPickAny(eligible, weight);
+    if (!victim) continue;
+    const first = booked.get(victim.n);
+    if (first === undefined) {
+      booked.set(victim.n, minute);
+      lines.push({ name: victim.n, minute, kind: 'yellow', ...(victim.g ? { gen: true } : {}) });
+    } else if (Math.random() >= SECOND_YELLOW_CHANCE || minute <= first) {
+      const clean = eligible.filter(p => !booked.has(p.n));
+      const other = clean.length ? weightedPickAny(clean, weight) : null;
+      if (other) {
+        booked.set(other.n, minute);
+        lines.push({ name: other.n, minute, kind: 'yellow', ...(other.g ? { gen: true } : {}) });
+      }
+    } else {
+      dismissed.add(victim.n);
+      lines.push({ name: victim.n, minute, kind: 'red', second: true, ...(victim.g ? { gen: true } : {}) });
+    }
+  }
+  return lines.sort((a, b) => a.minute - b.minute);
+}
+
+/** One injury roll for the minutes (from, to] of a half, at the match's long standing rate. */
+function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number): InjuryLine | null {
+  const len = (to - from) / 45;
+  if (!onPitch.length) return null;
+  if (Math.random() >= 1 - Math.pow(1 - INJURY_PER_HALF, len)) return null;
+  const victim = pick(onPitch);
+  // Round 467: the medical staff read the same draw and write it shorter.
+  const weeks = injurySpell(state, ri(1, 5));
+  return { name: victim.name, id: victim.id, minute: ri(from + 1, to), weeks };
+}
+
+/**
+ * Round 205's rule, applied where the exits are now drawn: nobody leaves the
+ * pitch before his own last goal, and a sending off comes after any booking
+ * the same man already carries, never on the same tick.
+ */
+function fixExits(cards: CardLine[], injuries: InjuryLine[], goals: { name: string; minute: number }[], to: number): void {
+  const lastGoal = new Map<string, number>();
+  for (const g of goals) lastGoal.set(g.name, Math.max(lastGoal.get(g.name) ?? 0, g.minute));
+  for (const inj of injuries) {
+    const g = lastGoal.get(inj.name);
+    if (g !== undefined && inj.minute < g) inj.minute = g;
+  }
+  const bookedAt = new Map<string, number>();
+  for (const c of cards) if (c.kind === 'yellow') bookedAt.set(c.name, Math.max(bookedAt.get(c.name) ?? 0, c.minute));
+  for (const c of cards) {
+    if (c.kind !== 'red') continue;
+    const g = lastGoal.get(c.name);
+    if (g !== undefined && c.minute < g) c.minute = g;
+    const y = bookedAt.get(c.name);
+    if (y !== undefined && c.minute <= y) c.minute = Math.min(to, y + 1);
+  }
+  cards.sort((a, b) => a.minute - b.minute);
+}
+
+interface SegmentPlayIn {
+  from: number; to: number;
+  /** The segment's own lambdas, already scaled to its length. */
+  lamMine: number; lamOpp: number;
+  myGoals: { name: string; minute: number }[];
+  oppGoals: ScorerLine[];
+  /** Who is on my pitch at a minute of the stretch. */
+  mineAt: (minute: number) => CMPlayer[];
+  /** Who is on theirs, or null when they have no named eleven. */
+  oppAt: (minute: number) => OppXiLine[] | null;
+  myCards: CardLine[];
+  oppCards: CardLine[];
+}
+
+/**
+ * The play of a segment: every chance (a goal is a chance with `goal` set),
+ * corners, fouls and throw ins, with minutes and the man on the ball. The
+ * counts are the same shapes the Round 157 stats block rolled at full time
+ * (shots off expected goals plus a little, corners off shots, fouls in a
+ * band with at least two per booking), drawn per segment so they can be
+ * counted live, and every booking is a foul at the booking's minute by the
+ * man booked. Every other event picks its minute first and then the man
+ * from whoever is on the pitch at that minute. Expected goals is shared out
+ * over the chances by quality (a goal 3, a save 1.5, a miss 1), so the xG
+ * counter climbs with the chances and lands on the number the report prints.
+ */
+function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
+  const len = (inp.to - inp.from) / 45;
+  const lo = inp.from + 1;
+  const hi = inp.to;
+  const out: PlayEvent[] = [];
+  const round2 = (n: number): number => Math.round(n * 100) / 100;
+  type Pickers = { shooter: (m: number) => string; taker: (m: number) => string; thrower: (m: number) => string; fouler: (m: number) => string };
+  const forSide = (
+    side: 'me' | 'opp', lam: number, goals: { name: string; minute: number }[], cards: CardLine[], pk: Pickers,
+  ): void => {
+    const xgSeg = Math.max(0.03, 0.55 * lam + 0.45 * goals.length + (Math.random() * 0.5 - 0.22) * len);
+    const shots = clamp(Math.round(xgSeg * 5.5) + Math.round(ri(1, 3) * len), goals.length, 14);
+    const others = shots - goals.length;
+    const onTarget = Math.round(others * 0.36);
+    const chances: PlayEvent[] = goals.map(g => ({ minute: g.minute, side, kind: 'shot', who: g.name, on: true, goal: true }));
+    for (let i = 0; i < others; i++) {
+      const minute = ri(lo, hi);
+      chances.push({ minute, side, kind: 'shot', who: pk.shooter(minute), on: i < onTarget });
+    }
+    const w = (c: PlayEvent): number => (c.goal ? 3 : c.on ? 1.5 : 1);
+    const totalW = chances.reduce((t, c) => t + w(c), 0);
+    for (const c of chances) c.xg = Math.max(0.01, round2((xgSeg * w(c)) / totalW));
+    out.push(...chances);
+    const corners = clamp(Math.round(shots * 0.5 + ri(-1, 1) * len), 0, 8);
+    for (let i = 0; i < corners; i++) {
+      const minute = ri(lo, hi);
+      out.push({ minute, side, kind: 'corner', who: pk.taker(minute) });
+    }
+    const fouls = Math.max(Math.round(ri(3, 7) * len), cards.length * 2);
+    for (const c of cards) out.push({ minute: c.minute, side, kind: 'foul', who: c.name });
+    for (let i = cards.length; i < fouls; i++) {
+      const minute = ri(lo, hi);
+      out.push({ minute, side, kind: 'foul', who: pk.fouler(minute) });
+    }
+    const throws = Math.round(ri(5, 10) * len);
+    for (let i = 0; i < throws; i++) {
+      const minute = ri(lo, hi);
+      out.push({ minute, side, kind: 'throwin', who: pk.thrower(minute) });
+    }
+  };
+  const myName = (p: CMPlayer | null): string => (p ? p.name : '');
+  const myPick = (m: number, weight: (p: CMPlayer) => number, outfieldOnly: boolean): string => {
+    const on = inp.mineAt(m);
+    const pool = outfieldOnly ? on.filter(p => p.position !== 'GK') : on;
+    return myName(weightedPick(pool.length ? pool : on, weight));
+  };
+  forSide('me', inp.lamMine, inp.myGoals, inp.myCards, {
+    shooter: m => myPick(m, scorerWeight, true),
+    taker: m => myPick(m, p => cornerWeightPos(p.position) * (p.rating / 70), true),
+    thrower: m => myPick(m, p => throwWeightPos(p.position), true),
+    fouler: m => myPick(m, p => foulWeightPos(p.position), false),
+  });
+  const oppName = (p: OppXiLine | null): string => (p ? p.n : '');
+  const oppPick = (m: number, weight: (p: OppXiLine) => number, outfieldOnly: boolean): string => {
+    const on = inp.oppAt(m);
+    if (!on || !on.length) return '';
+    const pool = outfieldOnly ? on.filter(p => p.p !== 'GK') : on;
+    return oppName(weightedPickAny(pool.length ? pool : on, weight));
+  };
+  forSide('opp', inp.lamOpp, inp.oppGoals, inp.oppCards, {
+    shooter: m => oppPick(m, oppShotWeight, true),
+    taker: m => oppPick(m, p => cornerWeightPos(p.p) * (p.r / 70), true),
+    thrower: m => oppPick(m, p => throwWeightPos(p.p), true),
+    fouler: m => oppPick(m, p => foulWeightPos(p.p), false),
+  });
+  const ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
+  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+}
+
+/** The expected goals a half actually carried: each stretch's full half lambda by its share of the 45. */
+function effectiveLambdas(segs: LamSegment[]): { lamMine: number; lamOpp: number } {
+  let lamMine = 0;
+  let lamOpp = 0;
+  for (const seg of segs) {
+    const share = Math.max(0, seg.to - seg.from) / 45;
+    lamMine += seg.lamMine * share;
+    lamOpp += seg.lamOpp * share;
+  }
+  return { lamMine, lamOpp };
+}
+
+/** Cut a half's stretches at `minute` and start a new one from there with the lambdas now in force. */
+function recutSegments(segs: LamSegment[] | undefined, fallback: LamSegment, minute: number, to: number, lamMine: number, lamOpp: number): LamSegment[] {
+  const kept = (segs && segs.length ? segs : [fallback])
+    .filter(seg => seg.from < minute)
+    .map(seg => ({ ...seg, to: Math.min(seg.to, minute) }));
+  return [...kept, { from: minute, to, lamMine, lamOpp }];
+}
+
+/** A half's share of the ball off its lambdas: the Round 157 formula on one
+ *  half's numbers. The roll is drawn once per half at kick off and kept
+ *  (LiveMatch.possNoise), so a change during the half moves the figure only
+ *  through the football it redrew; a save from before the roll existed
+ *  draws it here. */
+function possessionOf(lamMine: number, lamOpp: number, noise?: number): number {
+  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3))), 28, 72);
+}
+
+/** Everyone of mine who has left the pitch for good: sent off, or limped off. */
+function offPitchIds(live: LiveMatch): Set<string> {
+  const off = new Set<string>();
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id) off.add(c.id);
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id) off.add(inj.id);
+  return off;
+}
+
+const bookedMapOf = (cards: CardLine[], key: (c: CardLine) => string | undefined): Map<string, number> => {
+  const m = new Map<string, number>();
+  for (const c of cards) {
+    const k = key(c);
+    if (c.kind === 'yellow' && k) m.set(k, c.minute);
+  }
+  return m;
+};
+const dismissedOf = (cards: CardLine[], key: (c: CardLine) => string | undefined): Set<string> => {
+  const s = new Set<string>();
+  for (const c of cards) {
+    const k = key(c);
+    if (c.kind === 'red' && k) s.add(k);
+  }
+  return s;
+};
+
+/** The opposition eleven on the pitch at a minute, in slot order, with their subs applied. */
+export function oppOnPitchAt(live: LiveMatch, minute: number): OppXiLine[] {
+  if (!live.oppXi) return [];
+  const xi = [...live.oppXi];
+  for (const s of live.oppSubs ?? []) {
+    if (s.minute >= minute) continue;
+    const i = xi.findIndex(p => p.n === s.off);
+    const on = (live.oppBench ?? []).find(b => b.n === s.on);
+    if (i >= 0 && on) xi[i] = on;
+  }
+  return xi;
+}
+
+/** My eleven on the pitch at a minute (ids in slot order), with my subs applied. */
+export function myOnPitchAt(live: LiveMatch, minute: number): string[] {
+  const ids = [...live.startXi];
+  for (const s of live.subs ?? []) {
+    /* Strictly after the minute he was replaced in: he played that minute. */
+    if (s.minute >= minute || !s.offId || !s.onId) continue;
+    const i = ids.indexOf(s.offId);
+    if (i >= 0) ids[i] = s.onId;
+  }
+  return ids;
+}
+
+/**
+ * Squad numbers for the day. No roster the game holds carries a real shirt
+ * number and a real player's number is a checkable fact, so these are the
+ * classic 1 to 11 by slot (the keeper 1) and 12 onward for the bench in
+ * squad order, and the help copy says exactly that. Deterministic, so the
+ * same save prints the same numbers every time.
+ */
+export function squadNumbers(career: CareerState, live: LiveMatch): Map<string, number> {
+  const map = new Map<string, number>();
+  live.startXi.forEach((id, i) => map.set(id, i + 1));
+  let n = 12;
+  for (const p of career.squad) if (!map.has(p.id)) map.set(p.id, n++);
+  return map;
+}
+
+/**
+ * The other dugout's substitutions for the minutes (from, to]: one to three
+ * a match, from their own bench, like for like when the game is level, a
+ * forward for a defender when they are behind and the reverse when they are
+ * two clear. Subs already made at or before `from` are kept. A man is never
+ * taken off before his last goal.
+ */
+function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: number[]): SubLine[] {
+  const made = (live.oppSubs ?? []).filter(s => s.minute <= from);
+  const room = MAX_HALFTIME_SUBS - made.length;
+  if (!live.oppXi || !live.oppBench || room <= 0) return made;
+  const len = (to - from) / 45;
+  const lo = Math.max(from + 1, 56);
+  const hi = Math.min(to, 88);
+  if (lo > hi) return made;
+  const count = Math.min(room, Math.round(ri(1, 3) * len));
+  if (count <= 0) return made;
+  const keep: LiveMatch = { ...live, oppSubs: made };
+  const onPitch = oppOnPitchAt(keep, to);
+  const usedOn = new Set(made.map(s => s.on));
+  const bench = live.oppBench.filter(b => !usedOn.has(b.n));
+  const cards = allOppCards(live);
+  const dismissed = dismissedOf(cards, c => c.name);
+  const lastCard = new Map<string, number>();
+  for (const c of cards) lastCard.set(c.name, Math.max(lastCard.get(c.name) ?? 0, c.minute));
+  const myGoalMinutes = [...(live.h1My ?? []), ...(live.h2My ?? [])].map(g => g.minute);
+  const theirGoalMinutes = [...(live.h1Opp ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute), ...oppGoalMinutes];
+  const minutes = distinctMinutes(count, lo, hi, new Set());
+  const subs: SubLine[] = [];
+  /* A man who has just come on is not hooked again in the same draw. */
+  const cameOn = new Set<string>(made.map(s => s.on));
+  for (const m of minutes) {
+    const mine = myGoalMinutes.filter(g => g <= m).length;
+    const theirs = theirGoalMinutes.filter(g => g <= m).length;
+    const behind = theirs < mine;
+    const cruising = theirs - mine >= 2;
+    /* Never a man they have lost to a red, never before a booking he took,
+       never a man who came on. */
+    const pool = onPitch.filter(p => p.p !== 'GK' && !dismissed.has(p.n) && !cameOn.has(p.n) && (lastCard.get(p.n) ?? 0) < m);
+    if (!pool.length) continue;
+    const off = weightedPickAny(pool, p =>
+      (behind ? (groupOf(p.p) === 'DEF' ? 3 : p.p === 'CDM' ? 2.5 : 1) : cruising ? (groupOf(p.p) === 'ATT' ? 3 : 1) : 1)
+      * (lastCard.has(p.n) ? 1.8 : 1));
+    if (!off) continue;
+    const want: PosGroup = behind ? 'ATT' : cruising ? 'DEF' : groupOf(off.p);
+    const onIdx = (() => {
+      const same = bench.findIndex(b => b.p !== 'GK' && groupOf(b.p) === want);
+      return same >= 0 ? same : bench.findIndex(b => b.p !== 'GK');
+    })();
+    if (onIdx < 0) continue;
+    const on = bench[onIdx];
+    bench.splice(onIdx, 1);
+    const slot = onPitch.findIndex(p => p.n === off.n);
+    if (slot >= 0) onPitch[slot] = on;
+    cameOn.add(on.n);
+    subs.push({ off: off.n, on: on.n, minute: m, ...(on.g ? { onGen: true } : {}), ...(off.g ? { offGen: true } : {}) });
+  }
+  return [...made, ...subs];
+}
+
+/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: CMPlayer[], mentality: Mentality): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+  const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
+  const press = state.press;
+  const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
+  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
+  const ment = MENT_MOD[mentality] ?? MENT_MOD.balanced;
+  const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
+  const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  return { lamMine, lamOpp, mine, oppS };
+}
+
+/**
+ * The second half's lambdas, the Round 119 and 121 formula: whichever talk
+ * is newer is in their ears, the other dugout reacts to the score, the
+ * shape is whatever the manager sent them out in.
+ */
+function secondHalfLambdas(
+  state: CareerState, fx: MyFixture, live: LiveMatch, xi: CMPlayer[], scoreMine: number, scoreOpp: number,
+): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+  const oppS = strengthOf(state, fx.opponent);
+  const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
+  const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
+  const press = state.press;
+  const fire = press?.nextFire ?? 0;
+  const sharpen = press?.nextSharpen ?? 0;
+  const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
+  const preTone: TalkTone | null = state.teamTalk ?? null;
+  const halfTone: TalkTone | null = live.talk ?? null;
+  const edge = myMatchStrength(state, xi) + venue - oppS;
+  const htTarget = halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(state, xi));
+  const halfFit = talkWeight(state, halfTone, htTarget);
+  const inForce = halfTone
+    ? halfFit
+    : talkWeight(state, preTone, preMatchTarget(edge, xiMood(state, xi), state.form));
+  const mine = myMatchStrength(state, xi) + inForce * TALK_EDGE + sharpen;
+  const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
+  const opp2 = oppositionShape(scoreOpp, scoreMine);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+  return { lamMine, lamOpp, mine, oppS };
+}
+
+/** Where my scorers, injury and cards for a segment get drawn, both halves, one shape. */
+function drawMySegment(
+  state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, lamMine: number,
+  maxYellows: number, taken: Set<number>,
+): { goals: { id: string; name: string; minute: number }[]; cards: CardLine[]; injuries: InjuryLine[] } {
+  const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken);
+  const allCards = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])];
+  const booked = bookedMapOf(allCards, c => c.id);
+  const dismissed = dismissedOf(allCards, c => c.id);
+  /* The injury first, after his last goal, so the cards below can be drawn
+     off whoever is still standing at the booking's minute. */
+  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to);
+  const injuries = inj ? [inj] : [];
+  fixExits([], injuries, goals, to);
+  const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
+  const cards = drawSegmentCards(onPitchAt, from, to, maxYellows, booked, dismissed);
+  fixExits(cards, injuries, goals, to);
+  return { goals, cards, injuries };
+}
+
+const goalMinutesOf = (live: LiveMatch): Set<number> => new Set([
+  ...(live.h1My ?? []).map(g => g.minute), ...(live.h1Opp ?? []).map(g => g.minute),
+  ...(live.h2My ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute),
+]);
+
+const allOppCards = (live: LiveMatch): CardLine[] => [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])];
+
+/** The opposition on the pitch at a minute, minus anyone they have lost to a red by then. */
+function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
+  if (!live.oppXi) return null;
+  const gone = new Set<string>();
+  for (const c of allOppCards(live)) if (c.kind === 'red' && c.minute <= minute) gone.add(c.name);
+  return oppOnPitchAt(live, minute).filter(p => !gone.has(p.n));
+}
+
+/**
+ * One stretch of a half, (from, to], drawn in the order the football
+ * needs: my goals, cards and injury; their goals off the eleven they start
+ * the stretch with; then the other dugout's changes, which read the score
+ * as it stands at each minute; then their bookings and every piece of play,
+ * each picking its minute FIRST and the man on the ball from whoever is on
+ * the pitch at that minute, so a man who has gone off never takes a throw
+ * in and a man who came on does. Everything is appended to the half's
+ * lists on the live match. The same function serves kick off, the restart,
+ * and a redraw after a change, so the two ways of playing a match cannot
+ * draw in two orders.
+ */
+function drawSegment(
+  state: CareerState, live: LiveMatch, fx: MyFixture, half: 1 | 2,
+  from: number, to: number, segM: number, segO: number,
+): void {
+  const off = offPitchIds(live);
+  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const taken = goalMinutesOf(live);
+  const maxYellows = half === 1 ? 1 : 2;
+  const me = drawMySegment(state, live, xi, from, to, segM, maxYellows, taken);
+  const oppStart = oppAt(live, from);
+  const byMinute = <T extends { minute: number }>(a: T, b: T): number => a.minute - b.minute;
+  if (half === 1) {
+    live.h1My = [...(live.h1My ?? []), ...me.goals].sort(byMinute);
+    live.h1Cards = [...(live.h1Cards ?? []), ...me.cards];
+    live.h1Injuries = [...(live.h1Injuries ?? []), ...me.injuries];
+  } else {
+    live.h2My = [...(live.h2My ?? []), ...me.goals].sort(byMinute);
+    live.h2Cards = [...(live.h2Cards ?? []), ...me.cards];
+    live.h2Injuries = [...(live.h2Injuries ?? []), ...me.injuries];
+  }
+  let oppGoals: ScorerLine[];
+  let oppCards: CardLine[] = [];
+  if (!oppStart) {
+    oppGoals = generateOppScorers(fx.opponent, poisson(segO), 0, yearsOn(state), state.eraId, taken, [from + 1, to]);
+    live.oppSubs = drawOppSubs(live, from, to, []);
+  } else {
+    /* Their goals' MINUTES first (the other dugout reads the score as it
+       stands), then their bookings off whoever is on their pitch at each
+       minute, then their changes (never a man already sent off, never
+       before a booking he took), and only then the scorers' names, off the
+       eleven on the pitch at each goal's minute, so a man off their bench
+       can score and a man who came off cannot. */
+    const oppGoalMinutes = distinctMinutes(poisson(segO), from + 1, to, taken);
+    const prior = allOppCards(live);
+    oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name));
+    if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
+    else live.h2OppCards = [...(live.h2OppCards ?? []), ...oppCards];
+    live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes);
+    oppGoals = oppGoalMinutes.map(minute => {
+      const there = oppAt(live, minute) ?? oppStart;
+      const on = there.filter(p => p.p !== 'GK');
+      const scorer = weightedPickAny(on.length ? on : there, oppShotWeight);
+      return { name: scorer ? scorer.n : oppStart[0].n, minute };
+    });
+    /* A dismissal never sits before the same man's goal (fixExits moves the
+       red, never the goal). */
+    fixExits(oppCards, [], oppGoals, to);
+  }
+  if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
+  else live.h2Opp = [...(live.h2Opp ?? []), ...oppGoals].sort(byMinute);
+  /* Mine at a minute: the stretch's eleven minus anyone who has since walked or limped off. */
+  const exits = new Map<string, number>();
+  for (const c of me.cards) if (c.kind === 'red' && c.id) exits.set(c.id, c.minute);
+  for (const inj of me.injuries) if (inj.id) exits.set(inj.id, Math.min(exits.get(inj.id) ?? 99, inj.minute));
+  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? 99) > m);
+  const play = drawSegmentPlay({
+    from, to, lamMine: segM, lamOpp: segO,
+    myGoals: me.goals, oppGoals,
+    mineAt, oppAt: oppStart ? (m => oppAt(live, m)) : (() => null),
+    myCards: me.cards, oppCards,
+  });
+  if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
+  else live.h2Play = [...(live.h2Play ?? []), ...play];
+}
+
+/**
+ * The second half, decided in one place whichever way the match is played:
+ * the viewer asks for it when the manager sends them back out, the quick sim
+ * and a fast forward ask for it at the whistle. Same function, same draws,
+ * same order, so the two ways cannot disagree.
+ */
+function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
+  const fx = fixtureFor(state, entry)!;
+  const off = offPitchIds(live);
+  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, live.myGoals, live.oppGoals);
+  live.h2Segs = [{ from: 45, to: 90, lamMine, lamOpp }];
+  live.lam2Mine = lamMine;
+  live.lam2Opp = lamOpp;
+  live.h2My = [];
+  live.h2Opp = [];
+  live.h2Cards = [];
+  live.h2OppCards = [];
+  live.h2Injuries = [];
+  live.h2Play = [];
+  live.oppSubs = [];
+  drawSegment(state, live, fx, 2, 45, 90, lamMine, lamOpp);
+  live.possH2 = possessionOf(lamMine, lamOpp, live.possNoise?.[1]);
+  live.h2Drawn = true;
+}
+
+/**
+ * A first half for a save paused at the interval before the pieces existed
+ * (Round 158's lines, Round 504's play). Drawn now, off the eleven that
+ * kicked off, so the whistle has one shape to settle whichever era the
+ * save was made in.
+ */
+function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
+  const fx = fixtureFor(state, entry)!;
+  const started = squadByIds(state, live.startXi);
+  if (live.lamMine === undefined || live.lamOpp === undefined) {
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, started, live.mentality);
+    if (live.lamMine === undefined) live.lamMine = lamMine;
+    if (live.lamOpp === undefined) live.lamOpp = lamOpp;
+  }
+  const taken = new Set<number>();
+  if (!live.h1My || live.h1My.length !== live.myGoals) {
+    live.h1My = pickMyScorerLines(started, live.myGoals, 1, 45, taken);
+  } else {
+    for (const l of live.h1My) taken.add(l.minute);
+  }
+  if (!live.h1Opp || live.h1Opp.length !== live.oppGoals) {
+    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken);
+  }
+  if (!live.h1Play) {
+    const booked = new Map<string, number>();
+    const dismissed = new Set<string>();
+    const inj = drawSegmentInjury(state, started, 0, 45);
+    const injuries = inj ? [inj] : [];
+    fixExits([], injuries, live.h1My, 45);
+    const cards = drawSegmentCards(m => started.filter(p => !injuries.some(x => x.id === p.id && x.minute < m)), 0, 45, 1, booked, dismissed);
+    fixExits(cards, injuries, live.h1My, 45);
+    live.h1Cards = cards;
+    live.h1OppCards = [];
+    live.h1Injuries = injuries;
+    const exits = new Map<string, number>();
+    for (const c of cards) if (c.kind === 'red' && c.id) exits.set(c.id, c.minute);
+    for (const x of injuries) if (x.id) exits.set(x.id, Math.min(exits.get(x.id) ?? 99, x.minute));
+    live.h1Play = drawSegmentPlay({
+      from: 0, to: 45, lamMine: live.lamMine, lamOpp: live.lamOpp,
+      myGoals: live.h1My, oppGoals: live.h1Opp,
+      mineAt: m => started.filter(p => (exits.get(p.id) ?? 99) > m), oppAt: () => null,
+      myCards: cards, oppCards: [],
+    });
+    live.possH1 = possessionOf(live.lamMine, live.lamOpp);
+  }
+}
+
+const keepUpTo = <T extends { minute: number }>(xs: T[] | undefined, minute: number): T[] => (xs ?? []).filter(x => x.minute <= minute);
+
+/** Keep what happened at or before `minute` in the first half and redraw the rest. */
+function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch, minute: number): void {
+  const fx = fixtureFor(state, entry)!;
+  live.h1My = keepUpTo(live.h1My, minute);
+  live.h1Opp = keepUpTo(live.h1Opp, minute);
+  live.h1Play = keepUpTo(live.h1Play, minute);
+  live.h1Cards = keepUpTo(live.h1Cards, minute);
+  live.h1OppCards = keepUpTo(live.h1OppCards, minute);
+  live.h1Injuries = keepUpTo(live.h1Injuries, minute);
+  const off = offPitchIds(live);
+  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality);
+  const share = (45 - minute) / 45;
+  live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
+  ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
+  drawSegment(state, live, fx, 1, minute, 45, lamMine * share, lamOpp * share);
+  live.myGoals = (live.h1My ?? []).length;
+  live.oppGoals = (live.h1Opp ?? []).length;
+  live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0]);
+  live.read = halftimeRead(state, xi, live.myGoals, live.oppGoals, mine, oppS);
+}
+
+/** Keep what happened at or before `minute` in the second half and redraw the rest. */
+function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch, minute: number): void {
+  const fx = fixtureFor(state, entry)!;
+  live.h2My = keepUpTo(live.h2My, minute);
+  live.h2Opp = keepUpTo(live.h2Opp, minute);
+  live.h2Play = keepUpTo(live.h2Play, minute);
+  live.h2Cards = keepUpTo(live.h2Cards, minute);
+  live.h2OppCards = keepUpTo(live.h2OppCards, minute);
+  live.h2Injuries = keepUpTo(live.h2Injuries, minute);
+  live.oppSubs = keepUpTo(live.oppSubs, minute);
+  const off = offPitchIds(live);
+  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const scoreMine = live.myGoals + live.h2My.length;
+  const scoreOpp = live.oppGoals + live.h2Opp.length;
+  const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, scoreMine, scoreOpp);
+  const share = (90 - minute) / 45;
+  live.h2Segs = recutSegments(live.h2Segs, { from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }, minute, 90, lamMine, lamOpp);
+  ({ lamMine: live.lam2Mine, lamOpp: live.lam2Opp } = effectiveLambdas(live.h2Segs));
+  drawSegment(state, live, fx, 2, minute, 90, lamMine * share, lamOpp * share);
+  live.possH2 = possessionOf(live.lam2Mine, live.lam2Opp, live.possNoise?.[1]);
+}
+
+export interface LiveFeedEvent {
+  minute: number;
+  side: 'me' | 'opp' | 'none';
+  kind: 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime';
+  text: string;
+}
+
+/**
+ * Everything the engine has committed for this match so far, in minute
+ * order, for the viewer to walk. A shot on target that was not a goal is a
+ * save; a goal comes from its scorer line and its chance is left out, so
+ * nothing is listed twice.
+ */
+export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
+  const out: LiveFeedEvent[] = [];
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name });
+  for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
+    if (e.goal) continue;
+    out.push({ minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who });
+  }
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
+  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) out.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
+  for (const s of live.subs ?? []) out.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  for (const s of live.oppSubs ?? []) out.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time' });
+  const ORDER: Record<LiveFeedEvent['kind'], number> = {
+    throwin: 0, foul: 1, corner: 2, shot: 3, save: 3, goal: 4, yellow: 5, red: 5, injury: 5, sub: 6, halftime: 7,
+  };
+  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+}
+
+/**
+ * The stats block as it stands at a minute, counted off the committed play.
+ * The report's stats ARE this function at 90, so a counter on the live
+ * screen and the number on the report are the same number by construction.
+ * Possession is the first half's share, then the running average of the two
+ * halves' shares, which lands on the match figure at the whistle.
+ */
+export function liveStatsAt(
+  live: Pick<LiveMatch, 'h1Play' | 'h2Play' | 'possH1' | 'possH2'>, minute: number,
+): MatchStats {
+  const m = Math.max(0, Math.min(90, minute));
+  const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(e => e.minute <= m);
+  const count = (side: 'me' | 'opp', f: (e: PlayEvent) => boolean): number => play.filter(e => e.side === side && f(e)).length;
+  const xgOf = (side: 'me' | 'opp'): number => Math.round(play.filter(e => e.side === side && e.kind === 'shot').reduce((s, e) => s + (e.xg ?? 0), 0) * 100) / 100;
+  const p1 = live.possH1 ?? 50;
+  const p2 = live.possH2 ?? p1;
+  const possession = m <= 45 ? p1 : Math.round((p1 * 45 + p2 * (m - 45)) / m);
+  const isShot = (e: PlayEvent): boolean => e.kind === 'shot';
+  const onTargetOf = (e: PlayEvent): boolean => e.kind === 'shot' && (!!e.on || !!e.goal);
+  return {
+    possession,
+    shots: count('me', isShot), oppShots: count('opp', isShot),
+    onTarget: count('me', onTargetOf), oppOnTarget: count('opp', onTargetOf),
+    xg: xgOf('me'), oppXg: xgOf('opp'),
+    corners: count('me', e => e.kind === 'corner'), oppCorners: count('opp', e => e.kind === 'corner'),
+    fouls: count('me', e => e.kind === 'foul'), oppFouls: count('opp', e => e.kind === 'foul'),
+  };
 }
 
 /** Weekly recovery tick: injuries count down, everyone else freshens up. */
@@ -8876,36 +9848,38 @@ function buildMatchDetail(args: {
    *  opposition ratings sheet. The caller passes the same source the
    *  opposition scorers are drawn from, so the two can never disagree. */
   oppRoster?: { n: string; p: Position; r: number; g?: boolean }[];
+  /** Round 504: the committed play both halves, the two halves' possession,
+   *  and the other side's eleven, bench, subs and bookings. */
+  play: PlayEvent[];
+  possHalves: [number, number];
+  oppXi?: OppXiLine[];
+  oppBench?: OppXiLine[];
+  oppFormationIndex?: number;
+  oppSubs: SubLine[];
+  oppCards: CardLine[];
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
 
-  /* xG tracks both the process (the lambda the goals were drawn from) and the
-     finishing (the goals that actually went in), like shot-based xG does. */
-  const xg = Math.max(0.05, round2(0.55 * lamMine + 0.45 * myGoals + (Math.random() * 0.5 - 0.22)));
-  const oppXg = Math.max(0.05, round2(0.55 * lamOpp + 0.45 * oppGoals + (Math.random() * 0.5 - 0.22)));
-
-  const possession = clamp(Math.round(50 + (lamMine - lamOpp) * 9 + ri(-3, 3)), 28, 72);
-
-  const shotsFor = (x: number, goals: number): number =>
-    clamp(Math.round(x * 5.5 + ri(2, 6)), Math.max(goals, 1), 28);
-  const shots = shotsFor(xg, myGoals);
-  const oppShots = shotsFor(oppXg, oppGoals);
-  const onTargetFor = (all: number, goals: number): number =>
-    clamp(goals + Math.round((all - goals) * 0.36), goals, all);
-  const onTarget = onTargetFor(shots, myGoals);
-  const oppOnTarget = onTargetFor(oppShots, oppGoals);
-  const corners = clamp(Math.round(shots * 0.5 + ri(-1, 2)), 0, 15);
-  const oppCorners = clamp(Math.round(oppShots * 0.5 + ri(-1, 2)), 0, 15);
-  const myYellows = args.cards.filter(c => c.kind === 'yellow').length;
-  const fouls = Math.max(ri(6, 14), myYellows * 2);
-  const oppFouls = ri(6, 14);
+  /* Round 504: the stats block is COUNTED off the committed play, the same
+     list the live viewer walks, through the one function that reads it. The
+     Round 157 formulas (xG off the lambdas and the goals, shots off xG,
+     corners off shots, fouls in a band) now shape each segment's draw
+     instead of a full time total, so a counter on screen and the number
+     here cannot differ. */
+  const stats = liveStatsAt({
+    h1Play: args.play.filter(e => e.minute <= 45),
+    h2Play: args.play.filter(e => e.minute > 45),
+    possH1: args.possHalves[0],
+    possH2: args.possHalves[1],
+  }, 90);
+  const { onTarget } = stats;
 
   /* The timeline: everything above, in minute order, ready to replay. */
   /* Round 169: the referee's board.
      Round 472: and now it is worked out from what actually stopped the game
-     in that half, goals, cards and injuries, rather than rolled out of
-     nothing. Subs are left out on purpose: the only ones this sim makes
+     in that half, goals, cards (both sides since Round 504) and injuries,
+     rather than rolled out of nothing. Subs are left out on purpose: the only ones this sim makes
      happen in the dressing room, and a break does not stop a running clock.
      A one goal half still gets a board, because there is always a bit. */
   const stoppages = (from: number, to: number): number => {
@@ -8913,6 +9887,8 @@ function buildMatchDetail(args: {
     for (const sc of args.myScorers) if (sc.minute > from && sc.minute <= to) n += 1;
     for (const sc of args.oppScorers) if (sc.minute > from && sc.minute <= to) n += 1;
     for (const c of args.cards) if (c.minute > from && c.minute <= to) n += 1;
+    /* Round 504: their bookings stop the game as surely as ours. */
+    for (const c of args.oppCards) if (c.minute > from && c.minute <= to) n += 1;
     for (const inj of args.injuries) if (inj.minute > from && inj.minute <= to) n += 1;
     return n;
   };
@@ -8930,6 +9906,9 @@ function buildMatchDetail(args: {
   for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
   for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
   for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  /* Round 504: the other dugout's cards and changes sit on the same clock. */
+  for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
+  for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
   timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
   if (args.decidedBy === 'pens') {
     timeline.push({ minute: 90, side: args.won ? 'me' : 'opp', kind: 'pens', text: args.won ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
@@ -8946,18 +9925,23 @@ function buildMatchDetail(args: {
      good afternoon sat on the same side of the line at nearly the same height
      and the chart was a flat bar an inch above centre.
      A real ten minutes belongs to whoever had the chances in it, and this
-     match already knows how many chances there were, so the shots on the
-     stats block are dealt out across the nine buckets and each bucket is read
-     off the ones that landed in it. A spell nobody had a shot in drifts
+     match already knows how many chances there were, so each bucket is read
+     off the shots that landed in it. A spell nobody had a shot in drifts
      toward the better side rather than sitting on it, and a goal still spikes
      it. Nothing new is invented: the same shots the report prints are the
-     shots the graph is drawn from. */
+     shots the graph is drawn from.
+     Round 504: and the shots now carry their own minutes, so a bucket holds
+     the chances that really fell in those ten minutes rather than a share
+     dealt out at random at the whistle. */
   const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
   const BUCKETS = 9;
   const myChances: number[] = new Array(BUCKETS).fill(0);
   const oppChances: number[] = new Array(BUCKETS).fill(0);
-  for (let s = 0; s < shots; s++) myChances[ri(0, BUCKETS - 1)] += 1;
-  for (let s = 0; s < oppShots; s++) oppChances[ri(0, BUCKETS - 1)] += 1;
+  for (const e of args.play) {
+    if (e.kind !== 'shot') continue;
+    const b = clamp(Math.floor((e.minute - 1) / 10), 0, BUCKETS - 1);
+    if (e.side === 'me') myChances[b] += 1; else oppChances[b] += 1;
+  }
   const momentum: number[] = [];
   for (let b = 0; b < BUCKETS; b++) {
     const had = myChances[b] + oppChances[b];
@@ -8974,39 +9958,50 @@ function buildMatchDetail(args: {
   /* ----- Round 178: the opposition ratings sheet ----- */
   /* Built from the opponent's own projected roster (the same source their
      scorers are drawn from), so a rated name is always a name that world
-     really holds, at that era, in that projected year. The XI is scorers
-     first (a man who scored was provably on the pitch), then the best
-     available in a sane shape. Only a full eleven ships: a thin club whose
+     really holds, at that era, in that projected year. Round 504: when the
+     eleven was picked at kick off, the sheet IS that eleven plus whoever
+     came off their bench, so the dots on the live pitch and the names on
+     the report are one team. The Round 178 picker stays for a save from
+     before the eleven existed. Only a full eleven ships: a thin club whose
      roster cannot field one gets no invented sheet. */
   let oppRatings: PlayerRatingLine[] | undefined;
   {
-    const roster = args.oppRoster ?? [];
     const scorerNames = new Set(args.oppScorers.map(s => s.name));
-    const xi: { n: string; p: Position; g?: boolean }[] = [];
+    let xi: { n: string; p: Position; g?: boolean }[] = [];
     const taken = new Set<string>();
-    for (const pl of roster) {
-      if (scorerNames.has(pl.n) && !taken.has(pl.n)) { xi.push(pl); taken.add(pl.n); }
-    }
-    const fill = (want: (p: { p: Position }) => boolean, count: number): void => {
-      for (const pl of roster) {
-        if (xi.length >= 11) return;
-        if (taken.has(pl.n) || !want(pl)) continue;
-        if (count-- <= 0) return;
-        xi.push(pl); taken.add(pl.n);
+    if (args.oppXi) {
+      xi = [...args.oppXi];
+      for (const s of args.oppSubs) {
+        const on = (args.oppBench ?? []).find(b => b.n === s.on);
+        if (on && !xi.some(p => p.n === on.n)) xi.push(on);
       }
-    };
-    fill(p => p.p === 'GK', 1);
-    fill(p => groupOf(p.p) === 'DEF', 4);
-    fill(p => groupOf(p.p) === 'MID', 4 - Math.min(3, args.oppScorers.length));
-    fill(p => groupOf(p.p) === 'ATT', 3);
-    // Whatever shape is left, take the best remaining outfielders.
-    for (const pl of roster) {
-      if (xi.length >= 11) break;
-      if (!taken.has(pl.n) && pl.p !== 'GK') { xi.push(pl); taken.add(pl.n); }
+      for (const p of xi) taken.add(p.n);
+    } else {
+      const roster = args.oppRoster ?? [];
+      for (const pl of roster) {
+        if (scorerNames.has(pl.n) && !taken.has(pl.n)) { xi.push(pl); taken.add(pl.n); }
+      }
+      const fill = (want: (p: { p: Position }) => boolean, count: number): void => {
+        for (const pl of roster) {
+          if (xi.length >= 11) return;
+          if (taken.has(pl.n) || !want(pl)) continue;
+          if (count-- <= 0) return;
+          xi.push(pl); taken.add(pl.n);
+        }
+      };
+      fill(p => p.p === 'GK', 1);
+      fill(p => groupOf(p.p) === 'DEF', 4);
+      fill(p => groupOf(p.p) === 'MID', 4 - Math.min(3, args.oppScorers.length));
+      fill(p => groupOf(p.p) === 'ATT', 3);
+      // Whatever shape is left, take the best remaining outfielders.
+      for (const pl of roster) {
+        if (xi.length >= 11) break;
+        if (!taken.has(pl.n) && pl.p !== 'GK') { xi.push(pl); taken.add(pl.n); }
+      }
     }
     // Every scorer accounted for and a full eleven, or no sheet at all.
     const allScorersIn = [...scorerNames].every(n => taken.has(n));
-    if (xi.length === 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
+    if (xi.length >= 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
       const theirGoalsBy = new Map<string, number>();
       for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
       const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !args.won : oppGoals > myGoals;
@@ -9036,10 +10031,7 @@ function buildMatchDetail(args: {
   }
 
   return {
-    stats: {
-      possession, shots, oppShots, onTarget, oppOnTarget,
-      xg, oppXg, corners, oppCorners, fouls, oppFouls,
-    },
+    stats,
     cards: [...args.cards].sort((a, b) => a.minute - b.minute),
     injuries: args.injuries,
     subs: args.subs,
@@ -9052,6 +10044,11 @@ function buildMatchDetail(args: {
     attendance: args.attendance,
     capacity: args.capacity ?? null,
     venue: args.venue,
+    play: args.play,
+    possHalves: args.possHalves,
+    oppSubs: args.oppSubs,
+    oppCards: args.oppCards,
+    ...(args.oppXi ? { oppXi: args.oppXi, oppFormationIndex: args.oppFormationIndex } : {}),
   };
 }
 
@@ -9113,8 +10110,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     state.squad.filter(p => isAvailable(p) && !p.onLoan).map(p => p.id),
   );
   const oppS = strengthOf(state, fx.opponent);
-  const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
-  const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
@@ -9123,75 +10118,52 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      match goes through kickOff, so the branch that used to draw a whole match
      in one go, the one the fast forward took, is gone with the second engine
      it was. */
-  let xi: CMPlayer[];
-  let mine: number;
-  let myGoals: number;
-  let oppGoals: number;
+  /* Round 504: every match is committed half by half now. The first half
+     was decided at kick off (and a save paused before those pieces existed
+     gets them drawn here, off the eleven that kicked off). The second half
+     was decided when the manager sent them back out, or is decided here
+     for a quick sim and a fast forward, by the same function in the same
+     order, so the two ways cannot disagree (simMatchScreen section 6). The
+     whistle no longer draws football; it settles what was drawn. */
+  ensureFirstHalf(state, entry, live);
+  if (!live.h2Drawn) drawSecondHalf(state, entry, live);
+  const h1My = live.myGoals;
+  const h1Opp = live.oppGoals;
+  const myGoals = h1My + (live.h2My ?? []).length;
+  const oppGoals = h1Opp + (live.h2Opp ?? []).length;
   /* Round 157: the summed expected-goals lambdas for the whole match, read
-     off the exact draws below. They seed the stats block on the report. */
-  let lamMine = 0;
-  let lamOpp = 0;
-  /* And the first half's share of the goals, so scorer minutes can never
-     contradict the halftime scoreboard. */
-  let h1My = 0;
-  let h1Opp = 0;
+     off the exact process the goals were drawn from. They seed the report. */
+  const lamMine = (live.lamMine ?? 0) + (live.lam2Mine ?? 0);
+  const lamOpp = (live.lamOpp ?? 0) + (live.lam2Opp ?? 0);
   /* Round 135: what was said, and what it was worth. The pre match talk covers
      the whole match unless you said something else at the interval, in which
      case the newer one is the one in the players' ears. Both are remembered
      here so the full time morale swing can settle up for each of them. */
-  const press135 = state.press;
   const preTone: TalkTone | null = state.teamTalk ?? null;
   const halfTone: TalkTone | null = live.talk ?? null;
-  const fire = press135?.nextFire ?? 0;
-  const sharpen = press135?.nextSharpen ?? 0;
-  let preFit = 0;
-  let halfFit = 0;
-  /* Round 121: every match is two halves now, whichever way it is played. It
-     has to be, or fast forwarding a fixture and playing it out would be two
-     different games: the opposition only reacts at a break, so a single shot
-     match would be one where he never does. The ONLY difference between the
-     two paths is whether you got a say at the interval. */
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   const started = squadByIds(state, live.startXi);
   const second = squadByIds(state, live.onPitch);
   /* Round 135: the fit of the pre match talk is judged on the eleven who
      kicked off, and the half time one on the state of the match the men still
-     out there are walking back into. Whichever talk is NEWER is the one in
-     their ears for the second half; the older one has been overtaken by
-     events. Both are settled up separately at the final whistle, because they
-     were two separate things you said. */
-  preFit = talkWeight(state, preTone, preMatchTarget(
+     out there are walking back into. Both are settled up separately at the
+     final whistle, because they were two separate things you said. */
+  const preFit = talkWeight(state, preTone, preMatchTarget(
     myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
   ));
-  const htTarget = halftimeTarget(
+  const halfFit = talkWeight(state, halfTone, halftimeTarget(
     live.myGoals, live.oppGoals,
     myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
-  );
-  halfFit = talkWeight(state, halfTone, htTarget);
-  const inForce = halfTone
-    ? halfFit
-    : talkWeight(state, preTone, preMatchTarget(
-        myMatchStrength(state, second) + venue - oppS, xiMood(state, second), state.form,
-      ));
-  mine = myMatchStrength(state, second) + inForce * TALK_EDGE + sharpen;
-  const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
-  const opp2 = oppositionShape(live.oppGoals, live.myGoals);
-  const [l2m, l2o] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
-  const m2 = poisson(l2m);
-  const o2 = poisson(l2o);
-  myGoals = live.myGoals + m2;
-  oppGoals = live.oppGoals + o2;
-  h1My = live.myGoals;
-  h1Opp = live.oppGoals;
-  /* First half lambdas were saved at kick off. A save paused at the interval
-     before they existed falls back to the second half's shape, which is the
-     closest number the sim still holds. */
-  lamMine = (live.lamMine ?? l2m) + l2m;
-  lamOpp = (live.lamOpp ?? l2o) + l2o;
+  ));
+  /* The strength the shootout reads: the eleven that finished, no draws. */
+  const offAtEnd = offPitchIds(live);
+  const { mine } = secondHalfLambdas(state, fx, live, second.filter(p => !offAtEnd.has(p.id)), live.myGoals, live.oppGoals);
   // Anyone who was on the pitch at any point can appear on the scoresheet.
-  const ids = [...new Set([...live.startXi, ...live.onPitch])];
-  xi = squadByIds(state, ids);
-
+  const ids = [...new Set([
+    ...live.startXi, ...live.onPitch,
+    ...(live.subs ?? []).map(sb => sb.onId).filter((id): id is string => !!id),
+  ])];
+  const xi = squadByIds(state, ids);
   let decidedBy: 'regular' | 'pens' = 'regular';
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
@@ -9207,21 +10179,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const events: string[] = [];
   let trophyWon: string | null = null;
 
-  /* Round 205: one minute book for the whole match, so no two goals on
-     either side can be printed on the same clock tick. */
-  const takenMinutes = new Set<number>();
-  const { lines: myScorers, goalCounts, assistCounts } = generateMyScorers(
-    state, xi, myGoals, h1My, live.h1My, takenMinutes,
+  /* Round 504: the scorers were committed with their halves; the whistle
+     credits them once (Round 158's rule) and draws the assists, from the
+     men who were on the pitch when each goal went in. */
+  const myLines = [...(live.h1My ?? []), ...(live.h2My ?? [])];
+  const { goalCounts, assistCounts, assistNames } = creditMyScorers(
+    state, xi, myLines, minute => {
+      const gone = liveGoneIds(live, minute - 1);
+      return squadByIds(state, myOnPitchAt(live, minute)).filter(p => !gone.has(p.id));
+    },
   );
-  /* Round 158: same for the opposition, whose first half lines were decided
-     at kick off. A save paused at the interval before those lines existed
-     still has none, so both of these keep their fallback. */
-  const oppScorers = live.h1Opp && live.h1Opp.length === h1Opp
-    ? (() => {
-      for (const l of live.h1Opp) takenMinutes.add(l.minute);
-      return [...live.h1Opp, ...generateOppScorers(fx.opponent, oppGoals - h1Opp, 0, yearsOn(state), state.eraId, takenMinutes)];
-    })()
-    : generateOppScorers(fx.opponent, oppGoals, h1Opp, yearsOn(state), state.eraId, takenMinutes);
+  const myScorers: ScorerLine[] = myLines.map((l, i) => ({ name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined }));
+  const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
@@ -9437,67 +10406,40 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     }
     ratingLines[bestIdx].motm = true;
   }
-  // Yellow cards: 0-3 a match, defenders and holders pick up most of them.
-  const cardLines: CardLine[] = [];
-  const yellows = ri(0, 3);
-  /* Round 205: the second yellow is a red, which is how football works and
-     which this game did not do. Roughly one match in ten used to hand the
-     same man two yellows and leave him on the pitch, printed one above the
-     other on the timeline. Now the second one dismisses him, with the
-     suspension a sending off carries, and he takes no further part. */
-  const yellowMinutes = new Map<string, number>();
-  const dismissed = new Set<string>();
-  for (let i = 0; i < yellows; i++) {
-    const eligible = xi.filter(p => !dismissed.has(p.id));
-    if (!eligible.length) break;
-    const victim = weightedPick(eligible, p =>
-      p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8);
-    if (!victim) continue;
-    const sq = state.squad.find(p => p.id === victim.id);
-    const first = yellowMinutes.get(victim.id);
-    if (first === undefined) {
-      const minute = ri(12, 88);
-      yellowMinutes.set(victim.id, minute);
-      if (sq) {
-        sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
-        bumpComp(sq, l => { l.yellows += 1; });
-      }
-      cardLines.push({ name: victim.name, minute, kind: 'yellow' });
-    } else if (Math.random() >= SECOND_YELLOW_CHANCE) {
-      /* Most of the time the referee books somebody else instead. Without
-         this the collision rate of the draw itself would decide how often
-         men walk, and that rate is high: about one match in ten used to
-         hand the same man two cards. */
-      const clean = eligible.filter(p => !yellowMinutes.has(p.id));
-      const other = clean.length ? weightedPick(clean, p =>
-        p.position === 'GK' ? 0.1 : groupOf(p.position) === 'DEF' ? 2.2 : p.position === 'CDM' ? 2.4 : groupOf(p.position) === 'MID' ? 1.4 : 0.8) : null;
-      if (other) {
-        const minute = ri(12, 88);
-        yellowMinutes.set(other.id, minute);
-        const osq = state.squad.find(p => p.id === other.id);
-        if (osq) {
-          osq.seasonYellows = (osq.seasonYellows ?? 0) + 1;
-          bumpComp(osq, l => { l.yellows += 1; });
-        }
-        cardLines.push({ name: other.name, minute, kind: 'yellow' });
-      }
-    } else {
+  /* Round 504: the cards were drawn with their halves (the Round 205 rules,
+     second yellow and all, live in drawSegmentCards now). The whistle
+     settles them: the booking on his season line, the ban for a red. */
+  const cardLines: CardLine[] = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]
+    .map(c => ({ ...c }))
+    .sort((a, b) => a.minute - b.minute);
+  for (const c of cardLines) {
+    const sq = c.id ? state.squad.find(p => p.id === c.id) : state.squad.find(p => p.name === c.name);
+    if (!sq) continue;
+    if (c.kind === 'yellow') {
+      sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+      bumpComp(sq, l => { l.yellows += 1; });
+    } else if (c.second) {
       /* Second yellow: it still counts as a booking in his season figures,
-         because it is one, and it also sends him off. Always after the
-         first, never before it. */
-      const minute = first >= 90 ? 90 : ri(first + 1, 90);
-      dismissed.add(victim.id);
-      if (sq) {
-        sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
-        sq.seasonReds = (sq.seasonReds ?? 0) + 1;
-        bumpComp(sq, l => { l.yellows += 1; l.reds += 1; });
-        /* A second yellow is a one match ban, not the two a straight red
-           can carry, and an injured man is already unavailable. */
-        if (sq.injuryWeeks === 0) sq.suspendedMatches = Math.max(sq.suspendedMatches ?? 0, 1);
-      }
-      cardLines.push({ name: victim.name, minute, kind: 'red' });
-      events.push(`🟥 ${victim.name} picked up a second yellow and walked.`);
+         because it is one, and it also sends him off. A second yellow is a
+         one match ban, not the two a straight red can carry, and an injured
+         man is already unavailable. */
+      sq.seasonYellows = (sq.seasonYellows ?? 0) + 1;
+      sq.seasonReds = (sq.seasonReds ?? 0) + 1;
+      bumpComp(sq, l => { l.yellows += 1; l.reds += 1; });
+      if (sq.injuryWeeks === 0) sq.suspendedMatches = Math.max(sq.suspendedMatches ?? 0, 1);
+      events.push(`🟥 ${sq.name} picked up a second yellow and walked.`);
+    } else {
+      sq.suspendedMatches = ri(1, 2);
+      sq.seasonReds = (sq.seasonReds ?? 0) + 1;
+      bumpComp(sq, l => { l.reds += 1; });
+      events.push(`🟥 ${sq.name} was sent off, suspended for ${sq.suspendedMatches} match${sq.suspendedMatches > 1 ? 'es' : ''}.`);
     }
+  }
+  /* Round 504: the other side's dismissals get a line too. Theirs are only
+     ever second yellows (the sim holds no per player state for them, so no
+     straight red and no ban to track), and the line says which side. */
+  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) {
+    if (c.kind === 'red') events.push(`🟥 ${c.name} picked up a second yellow and walked. ${fx.opponent} finished a man short.`);
   }
 
   /* ----- squad after-effects ----- */
@@ -9614,73 +10556,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     if (p) p.suspendedMatches = Math.max(0, p.suspendedMatches - 1);
   }
 
-  const injuryLines: InjuryLine[] = [];
-  if (xi.length && Math.random() < 0.22) {
-    const victim = pick(xi);
-    const p = state.squad.find(x => x.id === victim.id);
-    if (p) {
-      // Round 467: the medical staff read the same draw and write it shorter.
-      p.injuryWeeks = injurySpell(state, ri(1, 5));
-      injuryLines.push({ name: p.name, minute: ri(8, 85), weeks: p.injuryWeeks });
-      events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
-    }
-  }
-  /* Round 205: 0.08 before this round, when a second yellow could not send
-     anybody off. Trimmed so that adding second yellows leaves the total
-     number of men walking roughly where the game already had it, rather
-     than quietly doubling every squad's suspension load. */
-  if (xi.length && Math.random() < 0.06) {
-    /* Round 205: a man already off for two yellows cannot also be sent off,
-       and a man already carrying a booking cannot take a STRAIGHT red: on
-       the timeline a yellow followed by a red is a second yellow to anyone
-       reading it, so the two paths are kept apart at the source rather than
-       producing a dismissal whose card says one thing and whose report line
-       says another. With at most three bookings in an eleven there is
-       always somebody clean to send off. */
-    const onPitch = xi.filter(p => !dismissed.has(p.id) && !yellowMinutes.has(p.id));
-    const outfield = onPitch.filter(p => p.position !== 'GK');
-    const hothead = onPitch.length ? pick(outfield.length ? outfield : onPitch) : null;
-    const p = hothead ? state.squad.find(x => x.id === hothead.id) : null;
-    if (p && p.injuryWeeks === 0) {
-      dismissed.add(hothead.id);
-      p.suspendedMatches = ri(1, 2);
-      p.seasonReds = (p.seasonReds ?? 0) + 1;
-      bumpComp(p, l => { l.reds += 1; });
-      cardLines.push({ name: p.name, minute: ri(25, 88), kind: 'red' });
-      events.push(`🟥 ${p.name} was sent off, suspended for ${p.suspendedMatches} match${p.suspendedMatches > 1 ? 'es' : ''}.`);
-    }
-  }
-
-  /* Round 205: nobody leaves the pitch before his own last goal.
-     Injuries and sendings off were drawn on their own clocks, blind to the
-     goal minutes drawn earlier, so about one match in fifty printed a man
-     limping off in the 33rd minute and scoring in the 88th. The exit is the
-     flavour and the goal is the thing you care about, so the exit moves,
-     never the goal, and it moves to his last goal's minute at the earliest,
-     which is always a legal spot on a 90 minute clock. */
-  {
-    const lastGoal = new Map<string, number>();
-    for (const sc of myScorers) {
-      lastGoal.set(sc.name, Math.max(lastGoal.get(sc.name) ?? 0, sc.minute));
-    }
-    for (const inj of injuryLines) {
-      const g = lastGoal.get(inj.name);
-      if (g !== undefined && inj.minute < g) inj.minute = g;
-    }
-    /* A sending off also comes after any booking the same man already has,
-       and never on the same tick as it: a straight red for a man who is
-       already carrying a yellow reads as a second yellow otherwise. */
-    const bookedAt = new Map<string, number>();
-    for (const c of cardLines) {
-      if (c.kind === 'yellow') bookedAt.set(c.name, Math.max(bookedAt.get(c.name) ?? 0, c.minute));
-    }
-    for (const c of cardLines) {
-      if (c.kind !== 'red') continue;
-      const g = lastGoal.get(c.name);
-      if (g !== undefined && c.minute < g) c.minute = g;
-      const y = bookedAt.get(c.name);
-      if (y !== undefined && c.minute <= y) c.minute = Math.min(90, y + 1);
-    }
+  /* Round 504: the injury was drawn with its half too, and it already sits
+     after the man's last goal (fixExits). The whistle writes the weeks. */
+  const injuryLines: InjuryLine[] = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])].map(inj => ({ ...inj }));
+  for (const inj of injuryLines) {
+    const p = inj.id ? state.squad.find(x => x.id === inj.id) : state.squad.find(x => x.name === inj.name);
+    if (!p) continue;
+    p.injuryWeeks = inj.weeks;
+    events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
   }
 
   // Round 73: the season's fixture log feeds the calendar card.
@@ -9908,14 +10791,22 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      actually paused. On a quick sim or a fast forward nobody was in the
      dressing room, so the eleven that finished is the eleven that started and
      this comes back empty, honestly. */
-  const subLines: SubLine[] = [];
-  for (let i = 0; i < live.startXi.length; i++) {
-    if (live.onPitch[i] !== live.startXi[i]) {
-      const off = state.squad.find(p => p.id === live.startXi[i]);
-      const on = state.squad.find(p => p.id === live.onPitch[i]);
-      if (off && on) subLines.push({ off: off.name, on: on.name, minute: 46 });
-    }
-  }
+  /* Round 504: at the minute each one was made, on the pitch or in the
+     dressing room. A save from before the list existed still reads the
+     difference between who started and who finished, at the break. */
+  const subLines: SubLine[] = live.subs
+    ? live.subs.map(sb => ({ off: sb.off, on: sb.on, minute: sb.minute }))
+    : (() => {
+      const out: SubLine[] = [];
+      for (let i = 0; i < live.startXi.length; i++) {
+        if (live.onPitch[i] !== live.startXi[i]) {
+          const off = state.squad.find(p => p.id === live.startXi[i]);
+          const on = state.squad.find(p => p.id === live.onPitch[i]);
+          if (off && on) out.push({ off: off.name, on: on.name, minute: 46 });
+        }
+      }
+      return out;
+    })();
   // Round 169: the crowd and the venue, like his match app models carry.
   const crowd = matchAttendance(state, fx);
   /* Round 171: a home gate pays the kitty: crowd times the average spend
@@ -9942,6 +10833,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     attendance: crowd.attendance, capacity: crowd.capacity, venue: crowd.venue,
     // Round 178: same era-aware source their scorers came from.
     oppRoster: projectedRoster(fx.opponent, yearsOn(state), state.eraId ?? 'now'),
+    // Round 504: the committed play, both halves, and the other dugout.
+    play: [...(live.h1Play ?? []), ...(live.h2Play ?? [])],
+    possHalves: [live.possH1 ?? 50, live.possH2 ?? live.possH1 ?? 50],
+    oppXi: live.oppXi, oppBench: live.oppBench, oppFormationIndex: live.oppFormationIndex,
+    oppSubs: live.oppSubs ?? [],
+    oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first
@@ -10642,6 +11539,14 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        cover. The entries before it have been played or skipped through this
        same loop, so a tap on a quiet Tuesday never plays the match after it. */
     if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
+    /* Round 504: a match already kicked off and paused (the save closed mid
+       match) is picked back up, never kicked off a second time over the top
+       of itself. The quick sim finishes it without you, which is what a
+       quick sim is. */
+    if (state.live && state.live.week === state.week) {
+      if (!opts?.skipHalftime) return { state, kind: 'halftime', live: state.live };
+      return resumeMatch(state);
+    }
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
       state.week += 1;
@@ -10725,25 +11630,20 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   const fx = fixtureFor(state, entry)!;
   const xi = effectiveXI(state);
   /* Round 135: whatever you said before kick off, and whatever you said into a
-     microphone this week, is on the pitch with them for the first half. */
-  const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
-  const press = state.press;
-  const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
-  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
-  const ment = MENT_MOD[state.mentality] ?? MENT_MOD.balanced;
-  const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
-  const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
-  /* Round 157: keep the half's lambdas on the live match, so the full time
+     microphone this week, is on the pitch with them for the first half.
+     Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
-  const myGoals = poisson(lamMine);
-  const oppGoals = poisson(lamOpp);
-
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality);
   const ids = xi.map(p => p.id);
-  return {
+  /* Round 504: the other eleven, picked before anyone scores, so their
+     scorers are men who are on the pitch and the report rates the same
+     eleven the pitch showed. Null for a thin club, and then their scorers
+     come from the roster the way they always did. */
+  const squad = pickOppSquad(projectedRoster(fx.opponent, yearsOn(state), state.eraId ?? 'now'));
+  const live: LiveMatch = {
     week: state.week,
-    myGoals,
-    oppGoals,
+    myGoals: 0,
+    oppGoals: 0,
     startXi: ids,
     onPitch: [...ids],
     subsUsed: 0,
@@ -10751,22 +11651,36 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
     opponent: fx.opponent,
     compLabel: fx.compLabel,
     home: fx.home,
-    read: halftimeRead(state, xi, myGoals, oppGoals, mine, oppS),
+    read: '',
     talk: null,
     lamMine,
     lamOpp,
-    /* Round 158: the first half's scorers, decided now so the live viewer
-       shows the same football the full time report will. Stats are credited
-       once, at the whistle, never here. */
-    /* Round 205: the live viewer's first half shares one minute book too. */
-    ...(() => {
-      const taken = new Set<number>();
-      return {
-        h1My: pickMyScorerLines(xi, myGoals, 1, 45, taken),
-        h1Opp: generateOppScorers(fx.opponent, oppGoals, oppGoals, yearsOn(state), state.eraId, taken),
-      };
-    })(),
+    h1My: [],
+    h1Opp: [],
+    ...(squad ? { oppXi: squad.xi, oppBench: squad.bench, oppFormationIndex: squad.formationIndex } : {}),
+    h1Play: [],
+    h1Cards: [],
+    h1OppCards: [],
+    h1Injuries: [],
+    h1Segs: [{ from: 0, to: 45, lamMine, lamOpp }],
+    h2Drawn: false,
+    subs: [],
+    shapeChanges: [],
+    minute: 0,
+    formationIndex: state.formationIndex,
+    possNoise: [ri(-3, 3), ri(-3, 3)],
   };
+  /* Round 158: the first half's scorers, decided now so the live viewer
+     shows the same football the full time report will. Stats are credited
+     once, at the whistle, never here. Round 504: and the rest of the half
+     with them: cards, an injury, every chance, corner, foul and throw in,
+     with minutes, through the one segment draw every half uses. */
+  drawSegment(state, live, fx, 1, 0, 45, lamMine, lamOpp);
+  live.myGoals = (live.h1My ?? []).length;
+  live.oppGoals = (live.h1Opp ?? []).length;
+  live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0]);
+  live.read = halftimeRead(state, xi, live.myGoals, live.oppGoals, mine, oppS);
+  return live;
 }
 
 /**
@@ -10797,13 +11711,38 @@ function halftimeRead(
   return 'Nothing between the sides. Whoever blinks first at the restart loses this.';
 }
 
+/** Round 504: everyone of mine who has left this match for good by a
+ *  minute: taken off, sent off, or down injured. None of them come back. */
+export function liveGoneIds(live: LiveMatch, minute: number): Set<string> {
+  const gone = new Set<string>();
+  for (const s of live.subs ?? []) if (s.offId && s.minute <= minute) gone.add(s.offId);
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && inj.minute <= minute) gone.add(inj.id);
+  return gone;
+}
+
+/** Round 504: the clock only ever moves forward, and this is how the
+ *  viewer tells the save where it stands (the interval, a pause) so a
+ *  reload picks the match up there rather than at kick off. */
+export function markLiveMinute(career: CareerState, minute: number): CareerState {
+  const live = career.live;
+  if (!live || !Number.isFinite(minute)) return career;
+  const m = Math.floor(Math.max(0, Math.min(90, minute)));
+  if (m <= (live.minute ?? 0)) return career;
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  if (state.live) state.live.minute = m;
+  return state;
+}
+
 /** The bench, worst-to-best, for the halftime screen. */
 export function benchForHalftime(career: CareerState): CMPlayer[] {
   const live = career.live;
   if (!live) return [];
   const on = new Set(live.onPitch);
+  /* Round 504: a man taken off, sent off or down injured does not come back. */
+  const gone = liveGoneIds(live, 90);
   return career.squad
-    .filter(p => !on.has(p.id) && isAvailable(p))
+    .filter(p => !on.has(p.id) && !gone.has(p.id) && isAvailable(p))
     .sort((a, b) => b.rating - a.rating);
 }
 
@@ -10816,28 +11755,96 @@ export function tiringAtHalftime(career: CareerState): CMPlayer[] {
     .sort((a, b) => a.fitness - b.fitness);
 }
 
+/** Three changes a match, on the pitch or in the dressing room. */
 export const MAX_HALFTIME_SUBS = 3;
+export const MAX_SUBS = MAX_HALFTIME_SUBS;
 
-/** Swap one player for another at the break. Returns null if it is not allowed. */
-export function makeHalftimeSub(career: CareerState, outId: string, inId: string): CareerState | null {
+export type LiveChange =
+  | { kind: 'sub'; outId: string; inId: string }
+  | { kind: 'shape'; mentality: Mentality };
+
+/**
+ * Round 504: a change at any minute. The sub or the shape is recorded at
+ * that minute, and everything the engine had committed after it is redrawn
+ * off the eleven and the shape you just chose: the first half from that
+ * minute to the break, or the second half from that minute to the whistle.
+ * Nothing before it moves. At the interval (45, or 46 before the second half
+ * is drawn) there is nothing to redraw, because the second half has not
+ * been decided yet and will read your changes when it is. Returns null when
+ * the change is not allowed: no match on, the third sub already made, the
+ * man is not on the pitch or the one coming on is not fit.
+ */
+export function changeLive(career: CareerState, minute: number, change: LiveChange): CareerState | null {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
-  if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
-  const idx = live.onPitch.indexOf(outId);
-  if (idx < 0) return null;
-  if (live.onPitch.includes(inId)) return null;
-  const coming = state.squad.find(p => p.id === inId);
-  if (!coming || !isAvailable(coming)) return null;
-  live.onPitch[idx] = inId;
-  live.subsUsed += 1;
+  if (!Number.isFinite(minute) || minute < 0 || minute > 90) return null;
+  // Never earlier than the last thing that happened; a clock only runs forward.
+  const m = Math.floor(Math.max(minute, live.minute ?? 0));
+  if (change.kind === 'sub') {
+    if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
+    const idx = live.onPitch.indexOf(change.outId);
+    if (idx < 0) return null;
+    if (live.onPitch.includes(change.inId)) return null;
+    /* A man who has been sent off cannot be replaced; that is the rule. Only
+       a red the clock has reached counts: the half is committed ahead of
+       the clock, and a red drawn for later is redrawn with the rest. */
+    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && c.minute <= m);
+    if (reds.length) return null;
+    /* And nobody comes back on: not a man already taken off, not a man who
+       limped off. */
+    if (liveGoneIds(live, m).has(change.inId)) return null;
+    const coming = state.squad.find(p => p.id === change.inId);
+    if (!coming || !isAvailable(coming)) return null;
+    const going = state.squad.find(p => p.id === change.outId);
+    live.onPitch[idx] = change.inId;
+    live.subsUsed += 1;
+    live.subs = [...(live.subs ?? []), {
+      off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
+    }];
+  } else {
+    live.mentality = change.mentality;
+    state.mentality = change.mentality;
+    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality }];
+  }
+  live.minute = m;
+  const entry = state.calendar[live.week];
+  if (entry && m < 45) recutFirstHalf(state, entry, live, m);
+  else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);
   return state;
+}
+
+/**
+ * Round 504: the second half, drawn when you send them back out, so the
+ * viewer walks a second half that is already football and a change in the
+ * 70th minute has something to redraw. The quick sim never calls this; the
+ * whistle draws the half itself, by the same function.
+ */
+export function startSecondHalf(career: CareerState): CareerState | null {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  const live = state.live;
+  if (!live) return null;
+  if (!live.h2Drawn) {
+    const entry = state.calendar[live.week];
+    if (!entry) return null;
+    ensureFirstHalf(state, entry, live);
+    drawSecondHalf(state, entry, live);
+  }
+  live.minute = Math.max(46, live.minute ?? 0);
+  return state;
+}
+
+/** Swap one player for another at the break. Returns null if it is not allowed. */
+export function makeHalftimeSub(career: CareerState, outId: string, inId: string): CareerState | null {
+  /* Round 504: the same change, made in the dressing room, recorded at the
+     restart the way the report has always printed it. */
+  return changeLive(career, 46, { kind: 'sub', outId, inId });
 }
 
 /** Change the shape of the second half. */
 export function setHalftimeMentality(career: CareerState, mentality: Mentality): CareerState {
+  if (career.live) return changeLive(career, 46, { kind: 'shape', mentality }) ?? career;
   const state: CareerState = JSON.parse(JSON.stringify(career));
-  if (state.live) state.live.mentality = mentality;
   state.mentality = mentality;
   return state;
 }

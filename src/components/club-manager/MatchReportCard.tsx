@@ -123,6 +123,22 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
   const [showRatings, setShowRatings] = useState(false);
   const detail = r.detail ?? null;
   const motm = detail?.myRatings.find(x => x.motm) ?? null;
+  /* Round 504: the other dugout's bookings and substitutions sit beside
+     mine, each chip tagged with who it belongs to so a yellow for their
+     winger and a yellow for my own full back never read as the same column.
+     The tag is the club's initials for a multi word name and the name itself
+     for a one word one, muted, because the full name on every chip would wrap
+     a phone twice over. */
+  const oppCards = detail?.oppCards ?? [];
+  const oppSubs = detail?.oppSubs ?? [];
+  const oppTag = (() => {
+    const words = opponent.split(/\s+/).filter(Boolean);
+    if (words.length <= 1) return opponent.slice(0, 10);
+    return words.slice(0, 3).map(w => w[0]).join('').toUpperCase();
+  })();
+  const hasChips = !!detail && (
+    detail.cards.length > 0 || detail.injuries.length > 0 || detail.subs.length > 0 || oppCards.length > 0 || oppSubs.length > 0
+  );
 
   /* The staged reveal, second draft. The first draft counted the score up
      from 0-0, and playClubManager flagged it within the hour: for a moment
@@ -217,7 +233,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
 
         {/* Round 157: cards, injuries and subs with their minutes, right under
             the scorers where a matchday app puts them. */}
-        {detail && (detail.cards.length > 0 || detail.injuries.length > 0 || detail.subs.length > 0) && (
+        {detail && hasChips && (
           <div className="flex flex-wrap justify-center gap-1.5 mt-3">
             {detail.cards.map((c, i) => (
               <span key={`c${i}`} className={cn(
@@ -235,6 +251,19 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             {detail.subs.map((s, i) => (
               <span key={`s${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
                 <span className="text-emerald-400">▲ {s.on}</span> <span className="text-red-400">▼ {s.off}</span> {s.minute}'
+              </span>
+            ))}
+            {oppCards.map((c, i) => (
+              <span key={`oc${i}`} data-cm-opp-chip="card" className={cn(
+                'text-[10px] rounded-full px-2 py-0.5 border',
+                c.kind === 'red' ? 'bg-red-500/10 border-red-500/30 text-red-400/80' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500/80',
+              )}>
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> {c.kind === 'red' ? '🟥' : '🟨'} {c.name}{c.gen && <MadeUpTag className="ml-1" />} {c.minute}'
+              </span>
+            ))}
+            {oppSubs.map((s, i) => (
+              <span key={`os${i}`} data-cm-opp-chip="sub" className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary/60 border-border/60 text-muted-foreground">
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> <span className="text-emerald-400/80">▲ {s.on}</span>{s.onGen && <MadeUpTag className="ml-1" />} <span className="text-red-400/80">▼ {s.off}</span>{s.offGen && <MadeUpTag className="ml-1" />} {s.minute}'
               </span>
             ))}
           </div>

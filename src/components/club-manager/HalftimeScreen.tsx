@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchForHalftime, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf } from '@/lib/clubManager';
+import { benchForHalftime, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
@@ -49,6 +49,14 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
   const tired = new Set(tiringAtHalftime(career).map(p => p.id));
   const subsLeft = MAX_HALFTIME_SUBS - live.subsUsed;
   const started = new Set(live.startXi);
+  /* Round 504: a man sent off in the first half is still in the eleven the
+     save holds, and the engine refuses a sub for him, so his row says so and
+     does nothing. A man down injured and not yet replaced is the one change
+     worth making, so his row stays live and says why. Same set the engine
+     draws from (liveGoneIds), split by cause. */
+  const gone = liveGoneIds(live, 45);
+  const sentOff = new Set((live.h1Cards ?? []).filter(c => c.kind === 'red' && c.id && c.minute <= 45).map(c => c.id as string));
+  const injured = new Set((live.h1Injuries ?? []).filter(inj => inj.id && inj.minute <= 45).map(inj => inj.id as string));
 
   const press = pressOf(career);
   const venue = live.home === true ? 'at home' : live.home === false ? 'away' : 'neutral';
@@ -115,15 +123,18 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
           {onPitch.map(p => {
             const isTired = tired.has(p.id);
             const cameOn = !started.has(p.id);
+            const isSentOff = gone.has(p.id) && sentOff.has(p.id);
+            const isDown = !isSentOff && gone.has(p.id) && injured.has(p.id);
+            const locked = subsLeft === 0 || cameOn || isSentOff;
             return (
               <button
                 key={p.id}
                 onClick={() => setPicking(picking === p.id ? null : p.id)}
-                disabled={subsLeft === 0 || cameOn}
+                disabled={locked}
                 className={cn(
                   'w-full flex items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors',
                   picking === p.id ? 'border-primary bg-primary/10' : 'border-transparent hover:border-border',
-                  (subsLeft === 0 || cameOn) && 'opacity-40',
+                  locked && 'opacity-40',
                 )}
               >
                 <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">
@@ -132,6 +143,8 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
                 <span className="flex-1 min-w-0">
                   <span className="block text-xs text-foreground truncate">
                     {p.name} {cameOn && <span className="text-[9px] text-primary">on at the break</span>}
+                    {isSentOff && <span className="text-[9px] text-destructive"> 🟥 sent off</span>}
+                    {isDown && <span className="text-[9px] text-yellow-400"> 🩹 down, needs replacing</span>}
                   </span>
                   <span className="block text-[9px] text-muted-foreground">
                     {p.rating} rated {'·'} <span className={fitnessTone(p.fitness)}>{Math.round(p.fitness)} fit</span>

@@ -12,9 +12,10 @@ import {
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
+  changeLive, startSecondHalf, markLiveMinute,
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
-import type { MatchFacts } from '@/lib/clubManager';
+import type { MatchFacts, LiveChange } from '@/lib/clubManager';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, weekAfterMatches } from '@/lib/clubManagerCalendar';
@@ -460,6 +461,10 @@ export function useClubManager() {
     setCareer(prev => (prev ? setHalftimeMentality(prev, m) : prev));
   }, []);
 
+  /* Round 504: secondHalf is the FINISH of a live match now. The classic half
+     time screen still calls it straight from the break (the whistle draws the
+     second half itself), and the live viewer calls it when its clock reaches
+     90 on a second half that startSecondHalfLive already drew. */
   const secondHalf = useCallback(() => {
     if (!career) return;
     const res = resumeMatch(career);
@@ -474,6 +479,29 @@ export function useClubManager() {
       setPhase('hub');
     }
   }, [career]);
+
+  /* Round 504: the second half is drawn when you send them back out, so the
+     viewer walks football that is already decided and a change in the 70th
+     minute has something to redraw. */
+  const startSecondHalfLive = useCallback(() => {
+    setCareer(prev => (prev ? startSecondHalf(prev) ?? prev : prev));
+  }, []);
+
+  /* Round 504: a sub or a shape change at any minute of a live match. The
+     engine keeps everything at or before that minute and redraws the rest of
+     the half off the eleven and the shape you just chose. */
+  const changeAt = useCallback((minute: number, change: LiveChange) => {
+    setCareer(prev => (prev ? changeLive(prev, minute, change) ?? prev : prev));
+  }, []);
+
+  /* Round 504: where the clock stands, so a save closed in the 30th minute
+     opens again in the 30th rather than at the last change. The viewer calls
+     it at the interval and when the page is hidden, never on a tick, because
+     every career write goes to localStorage. The engine hands back the same
+     object when nothing moves, so React skips the write. */
+  const markMinute = useCallback((minute: number) => {
+    setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
+  }, []);
 
   /* ---------- Round 135: the microphone and the dressing room ---------- */
   /* Tapping the tone you already picked takes it back, so a mis-tap is not a
@@ -512,7 +540,7 @@ export function useClubManager() {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
-    subAtHalftime, shapeAtHalftime, secondHalf,
+    subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,
   };

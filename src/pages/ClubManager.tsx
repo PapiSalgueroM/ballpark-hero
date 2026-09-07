@@ -195,7 +195,7 @@ const ClubManager = () => {
               <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
               <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens in January, on the first Saturday of the new year in most leagues and a little later in one long enough to reach January on its own; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
               <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter.</p>
-              <p>📊 <span className="font-semibold text-foreground">One match, two ways through it.</span> Play Live puts it on the pitch as moving circles at 0.5x to 4x speed, with goals, cards and subs landing at their real minutes and the dressing room at the break, where the subs, the shape and the team talk are yours. Quick Sim plays the same match without you and goes straight to the report. It really is the same match: both ways kick off through the same engine, so the only thing the live one adds is your say at half time. The report gives you the scoreline with the stoppage time both halves ran to, scorers, cards, injuries, possession as the two shares of the ball, shots, expected goals, a momentum graph drawn from who had the chances in each ten minutes, and every player's rating on both sides. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
+              <p>📊 <span className="font-semibold text-foreground">One match, two ways through it.</span> Play Live puts both elevens on the pitch as dots with names and numbers, at 0.5x to 4x speed. The numbers are the classic 1 to 11 by position, the keeper wearing 1, and 12 up for the bench: no roster the game holds carries real shirt numbers, so it does not invent any. The ball sits at a player's feet and passes between them, and the chances, saves, corners, throw ins and fouls land at their real minutes, with goals, cards and subs on both sides, and your injuries. Under the pitch the live stats count up as it goes: possession, shots and shots on target, expected goals, corners and fouls for both clubs, and at the whistle they are exactly the report's numbers, because the report is counted off the same list. You can pause at any minute, tap one of your players and bring somebody on or change the shape (three changes a match, and the other dugout makes its own), and the rest of the half is redrawn off the change. The break is still the dressing room, where the subs, the shape and the team talk are yours. Quick Sim plays the same match without you and goes straight to the report. It really is the same match: both ways kick off through the same engine, so the only thing the live one adds is your say while it is on. The report gives you the scoreline with the stoppage time both halves ran to, scorers, cards and subs on both sides, your injuries, possession as the two shares of the ball, shots, expected goals, a momentum graph drawn from who had the chances in each ten minutes, and every player's rating on both sides. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
               <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition. Above it all run the award races: the league's golden boot board, a player of the season watch scored by one formula for everyone, and the Ballon d'Or conversation, all settled with the season and named in your season review.</p>
               <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
               <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
@@ -599,8 +599,12 @@ const ClubManager = () => {
   /* The animated viewer owns both match phases while watch mode is on: the
      first half plays out, the interval is the real dressing room embedded,
      the second half replays the report's own timeline, and Full report
-     hands over to the classic full time card. */
-  if (watchMode && g.career && (g.phase === 'halftime' || g.phase === 'matchResult')) {
+     hands over to the classic full time card. A second half that has been
+     drawn is always watched here, watch mode or not: the classic dressing
+     room below settles its talk at the whistle, after the football it was
+     meant to change, so leaving the viewer mid second half must land back
+     in the viewer. */
+  if (g.career && (watchMode || g.career.live?.h2Drawn) && (g.phase === 'halftime' || g.phase === 'matchResult')) {
     const liveClub = clubDefFor(g.career.clubName);
     return shell(
       <div ref={revealRef}>
@@ -616,6 +620,9 @@ const ClubManager = () => {
           onShape={g.shapeAtHalftime}
           onTalk={g.halftimeTalk}
           onSecondHalf={g.secondHalf}
+          onStartSecondHalf={g.startSecondHalfLive}
+          onChange={g.changeAt}
+          onMark={g.markMinute}
           onExit={() => setWatchMode(false)}
         />
       </div>
@@ -1007,7 +1014,10 @@ const ClubManager = () => {
                     data-cm-way="live"
                     className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
                   >
-                    <Play className="w-4 h-4" /> Play Live
+                    {/* Round 504: a match paused mid way (the save closed with
+                        the clock running) is picked back up where it stood,
+                        never kicked off again, so the button says so. */}
+                    <Play className="w-4 h-4" /> {c.live && c.live.week === c.week ? 'Resume match' : 'Play Live'}
                   </button>
                   <button
                     onClick={() => { setWatchMode(false); g.quickPlay(); }}
