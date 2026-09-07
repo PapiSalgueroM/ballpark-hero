@@ -1,18 +1,30 @@
 /* ────────────────────────────────────────────────────────────────────────────
-   conquestDaily.ts (Round 50)
-   Makes the Conquest daily badge REAL for all four sports. One shared,
+   conquestDaily.ts (Round 50, rewritten Round 476)
+   Makes the Conquest daily badge REAL for all five sports. One shared,
    date-seeded Imperialism season per sport per day: every player on earth
-   gets the same Voronoi start, the same fixtures, and the same results,
-   so the skill is picking the right empire and calling games. One scored
-   attempt per day, with streaks and a share line. Free play stays exactly
-   as it was.
+   gets the same start, the same fixtures, and the same results, so the skill
+   is picking the right empire and calling games. One scored attempt per day,
+   with streaks and a share line. Free play stays exactly as it was.
 
-   Determinism note: the imperialism libs already accept an rng parameter in
+   Determinism note: the imperialism engine accepts an rng parameter in
    randomPairings/resolveGame, and the sim consumes rolls in fixture order,
    which player predictions never touch. Seeding that rng with the ET date
    makes the whole season identical for everyone.
+
+   Round 476, THE RUN IS RECORDED AS IT GOES. Until this round nothing was
+   written down between the first pick and the final screen, so a player who
+   reloaded on the last matchday was dealt the identical season back with
+   every result already known and could call every game right. What is
+   written after each settled round is an ACTION LOG rather than a state
+   dump: the club the player rode plus the winner they called each round,
+   which src/lib/conquestRun.ts replays into the exact run. It lives on the
+   shared Round 428 record shape (src/lib/dailyRecord.ts), so the key is
+   `conquest-<sport>-daily-<YYYY-MM-DD>`, the read fails closed on shape, and
+   scripts/sweepSaves.mjs finds it like every other daily. The pre Round 428
+   key it used to write is migrated forward on the first read of the day.
    ──────────────────────────────────────────────────────────────────────────── */
 import { getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 /* Round 459 added soccer: the fifth sport on the same daily shape. */
 export type ConquestSport = 'nfl' | 'nba' | 'mlb' | 'nhl' | 'soccer';
@@ -63,19 +75,79 @@ export interface ConquestDailyResult {
   championWasYou: boolean;
 }
 
-const resultKey = (sport: ConquestSport) => `conquest-daily-result-${sport}`;
+/** The daily slug for a sport, on the shared `<slug>-daily-<date>` key shape. */
+export const dailySlug = (sport: ConquestSport) => `conquest-${sport}`;
+/** The key this file wrote before Round 476, read once and migrated forward. */
+const legacyResultKey = (sport: ConquestSport) => `conquest-daily-result-${sport}`;
 const streakKey = (sport: ConquestSport) => `conquest-daily-streak-${sport}`;
 
-/** Today's completed daily run, or null if the player has not finished one. */
-export function loadDailyResult(sport: ConquestSport, dateStr: string = getTodayET()): ConquestDailyResult | null {
+/** Today's run: the club, every call made so far, and the result once it ends. */
+export interface ConquestDailyRun {
+  team: string;
+  /** The winner called on each settled round, in order. Replays the season. */
+  picks: string[];
+  done: boolean;
+  result: ConquestDailyResult | null;
+}
+
+function validResult(v: unknown): ConquestDailyResult | null {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
+  const r = v as Record<string, unknown>;
+  const strings = ['date', 'team', 'champion'] as const;
+  const numbers = ['score', 'empire', 'calls', 'callsTotal'] as const;
+  if (strings.some(k => typeof r[k] !== 'string' || !r[k])) return null;
+  if (numbers.some(k => typeof r[k] !== 'number' || !Number.isFinite(r[k] as number))) return null;
+  if (typeof r.championWasYou !== 'boolean') return null;
+  return r as unknown as ConquestDailyResult;
+}
+
+/** Today's run in progress or finished, or null. Fails closed on any shape. */
+export function loadDailyRun(sport: ConquestSport, dateStr: string = getTodayET()): ConquestDailyRun | null {
+  const fresh = readDailyRecord<ConquestDailyRun>(dailySlug(sport), dateStr, fields => {
+    if (typeof fields.team !== 'string' || !fields.team) return null;
+    if (!Array.isArray(fields.picks) || fields.picks.some(p => typeof p !== 'string' || !p)) return null;
+    if (typeof fields.done !== 'boolean') return null;
+    const result = fields.result == null ? null : validResult(fields.result);
+    if (fields.result != null && !result) return null;
+    if (fields.done && !result) return null;
+    return { team: fields.team, picks: fields.picks as string[], done: fields.done, result };
+  });
+  if (fresh) return fresh;
+  /* The migration: a run finished today under the pre Round 428 key, before
+     this build shipped. It carries no call log, so it can only ever be read
+     as a finished run, which is exactly what it is. */
   try {
-    const raw = localStorage.getItem(resultKey(sport));
+    const raw = localStorage.getItem(legacyResultKey(sport));
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as ConquestDailyResult;
-    return parsed.date === dateStr ? parsed : null;
+    const result = validResult(JSON.parse(raw));
+    if (!result || result.date !== dateStr) return null;
+    return { team: result.team, picks: [], done: true, result };
   } catch {
     return null;
   }
+}
+
+/** Write the run as it stands. Called after the pick and after every round. */
+export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateStr: string = getTodayET()): void {
+  writeDailyRecord(dailySlug(sport), dateStr, { team: run.team, picks: run.picks, done: run.done, result: run.result });
+  try {
+    localStorage.removeItem(legacyResultKey(sport));
+  } catch {
+    /* storage blocked: the old key is unreadable anyway */
+  }
+}
+
+/** Is there a daily going today that the player has not finished? The two
+ *  mode-select routes ask before they decide which screen to open on. */
+export function hasUnfinishedDaily(sport: ConquestSport, dateStr: string = getTodayET()): boolean {
+  const run = loadDailyRun(sport, dateStr);
+  return !!run && !run.done;
+}
+
+/** Today's completed daily run, or null if the player has not finished one. */
+export function loadDailyResult(sport: ConquestSport, dateStr: string = getTodayET()): ConquestDailyResult | null {
+  const run = loadDailyRun(sport, dateStr);
+  return run && run.done ? run.result : null;
 }
 
 interface StreakRecord { count: number; lastDate: string }
@@ -97,8 +169,14 @@ export function loadDailyStreak(sport: ConquestSport, dateStr: string = getToday
   }
 }
 
-/** Persist a finished daily run and bump the streak. Returns the new streak. */
-export function saveDailyResult(sport: ConquestSport, result: ConquestDailyResult, dateStr: string = getTodayET()): number {
+/** Persist a finished daily run and bump the streak. Returns the new streak.
+ *  The call log goes in with it, so the finished run still replays. */
+export function saveDailyResult(
+  sport: ConquestSport,
+  result: ConquestDailyResult,
+  dateStr: string = getTodayET(),
+  picks: string[] = [],
+): number {
   const today = dateStr;
   let newStreak = 1;
   try {
@@ -115,10 +193,10 @@ export function saveDailyResult(sport: ConquestSport, result: ConquestDailyResul
       }
     }
     localStorage.setItem(streakKey(sport), JSON.stringify({ count: newStreak, lastDate: today } satisfies StreakRecord));
-    localStorage.setItem(resultKey(sport), JSON.stringify(result));
   } catch {
-    /* storage unavailable (private mode): the run still plays, it just won't lock or streak */
+    /* storage unavailable (private mode): the run still plays, it just won't streak */
   }
+  saveDailyRun(sport, { team: result.team, picks, done: true, result }, today);
   return newStreak;
 }
 

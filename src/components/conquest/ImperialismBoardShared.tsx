@@ -4,41 +4,42 @@ import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from '@/
 import ShareButtons from '@/components/game/ShareButtons';
 import { isLightHex, type ConquestMapSport } from '@/lib/conquestMapLook';
 import {
-  seedEmpires, randomPairings, resolveGame, buildHeadlines, empireCounts, landlessTeams, statesOf,
-  playoffSeeds, totalConquest, homeWinProb, teamLabel, finalScore, emptyRecords, applyRecords, recordLabel,
-  regionNoun, type ImperialismSport, type ImperialismTeam, type ImpGame, type ImpRoundResult, type ImpRecords,
+  empireCounts, landlessTeams, statesOf, homeWinProb, teamLabel, recordLabel, regionNoun,
+  type ImperialismSport, type ImperialismTeam, type ImperialismGameSpec,
 } from '@/lib/imperialismEngine';
-import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  dailyConquestRng, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  startRun, playRound, continueRun, runScore, roundLabel as labelOfRound,
+  featuredPairing, featuredResult, restoreDailyRun, dailyRunRecord, type ConquestRun,
+} from '@/lib/conquestRun';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
+import {
+  dailyConquestRng, saveDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
   type ConquestDailyResult,
 } from '@/lib/conquestDaily';
 import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
 
 /**
- * Round 459: ONE imperialism board, and the sport is injected.
+ * ONE imperialism board, and the sport is injected.
  *
- * ImperialismBoard.tsx, ImperialismBoardNba.tsx, ImperialismBoardMlb.tsx and
- * ImperialismBoardNhl.tsx are four copies of this screen (the MLB and NHL
- * files differ in 218 lines of 511, all of them renamed imports and sport
- * nouns). This is the same screen with the sport as data: the pick, the
- * shared map, the standings, the call, the recap, the crown, the daily record
- * in the Round 428 shape. A player moving from the MLB version to this one
- * finds the same game wearing different clubs. Soccer is the first sport on
- * it; the four older boards can move here as data.
+ * Round 459 built it for soccer out of four copies of one screen. Round 476
+ * moved the other four sports onto it as data (src/data/conquestSports.ts)
+ * and deleted ImperialismBoard.tsx, ImperialismBoardNba.tsx,
+ * ImperialismBoardMlb.tsx and ImperialismBoardNhl.tsx, so /conquest,
+ * /conquest-nba, /conquest-mlb, /conquest-nhl and /soccer-conquest are all
+ * this file. A player moving from the MLB version to the soccer one finds
+ * the same game wearing different clubs.
+ *
+ * Round 476 also closed the daily exploit that made the move worth doing
+ * first. The season is seeded from the date, so a player who reloaded on the
+ * last matchday was dealt the identical season back with every result known
+ * and could call all of them right, for about ninety percent of the cap, on
+ * all five routes. The run is now recorded AS IT GOES: the club plus every
+ * call, written after the pick and after every settled round, replayed on
+ * mount by src/lib/conquestRun.ts. The calls already made are locked, so a
+ * reload returns the player to the recap they were reading and nothing more.
  */
-
-export interface ImperialismGameSpec {
-  /** "Soccer Conquest" */
-  name: string;
-  /** "/soccer-conquest" */
-  path: string;
-  /** The completion key the leaderboard caps know, e.g. conquest-soccer-imperialism. */
-  gameId: string;
-  /** The pick screen blurb. */
-  pitch: string;
-}
 
 interface Props {
   sport: ImperialismSport;
@@ -46,11 +47,10 @@ interface Props {
   game: ImperialismGameSpec;
 }
 
-type Phase = 'pick' | 'preview' | 'recap' | 'done';
-
-interface BracketState {
-  round: number;          // 0 QF, 1 SF, 2 Final
-  alive: string[];        // teams still in the playoff
+/** The run plus the rng that dealt it. They move together or the replay lies. */
+interface Session {
+  run: ConquestRun;
+  rng: () => number;
 }
 
 export default function ImperialismBoardShared({ sport, map, game }: Props) {
@@ -58,19 +58,11 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
      conquestDaily call, so the rng that deals the map, the record read on
      mount and the record written at the end all name the same day. */
   const todayStr = useRef(getTodayET()).current;
-  const [phase, setPhase] = useState<Phase>('pick');
-  const [favorite, setFavorite] = useState<string | null>(null);
-  const [owners, setOwners] = useState<Record<string, string>>({});
-  const [round, setRound] = useState(1);
-  const [bracket, setBracket] = useState<BracketState | null>(null);
-  const [pairings, setPairings] = useState<[string, string][]>([]);
+  /* The whole season in one value, with the rng that dealt it. Restoring in
+     the initialiser means a reloaded daily is already in place before the
+     first paint, and useGameCompletion never sees a false finish. */
+  const [session, setSession] = useState<Session | null>(() => restoreDailyRun(sport, todayStr));
   const [prediction, setPrediction] = useState<string | null>(null);
-  const [predictionHits, setPredictionHits] = useState(0);
-  const [predictionTotal, setPredictionTotal] = useState(0);
-  const [lastRound, setLastRound] = useState<ImpRoundResult | null>(null);
-  const [champion, setChampion] = useState<string | null>(null);
-  const [madePlayoffs, setMadePlayoffs] = useState(false);
-  const [records, setRecords] = useState<ImpRecords>({});
   const [showStandings, setShowStandings] = useState(false);
 
   // Round 50: the Daily Challenge. Same seeded season for every player
@@ -78,8 +70,14 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult(sport.key, todayStr));
   const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak(sport.key, todayStr));
   const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult(sport.key, todayStr) ? 'free' : 'daily'));
-  const rngRef = useRef<() => number>(Math.random);
   const dailySaved = useRef(false);
+
+  const run = session?.run ?? null;
+  const phase = run?.phase ?? 'pick';
+  const favorite = run?.favorite ?? null;
+  const owners = useMemo(() => run?.owners ?? {}, [run]);
+  const records = run?.records ?? {};
+  const picksMade = run?.picks.length ?? 0;
 
   const teamById = useMemo(() => new Map(sport.teams.map(t => [t.id, t])), [sport]);
   const colorOf = useMemo(() => {
@@ -100,31 +98,16 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   const counts = useMemo(() => empireCounts(sport, owners), [sport, owners]);
   const total = Object.keys(owners).length;
   const landless = useMemo(() => landlessTeams(sport, owners), [sport, owners]);
-  const inPlayoffs = bracket !== null;
-  const roundLabel = inPlayoffs ? sport.playoffLabels[bracket!.round] : `${sport.roundNoun} ${round}`;
+  const inPlayoffs = run?.bracket != null;
+  const roundLabel = run ? labelOfRound(sport, run) : '';
 
-  /** The game the user predicts: their team's game, else the biggest clash. */
-  const featured = useMemo(() => {
-    if (!pairings.length) return null;
-    const mine = favorite ? pairings.find(([h, a]) => h === favorite || a === favorite) : undefined;
-    if (mine) return mine;
-    return [...pairings].sort(
-      (p, q) =>
-        (counts.get(q[0])! + counts.get(q[1])!) - (counts.get(p[0])! + counts.get(p[1])!),
-    )[0];
-  }, [pairings, favorite, counts]);
-
-  const score = useMemo(
-    () => (favorite ? finalScore(favorite, owners, predictionHits, champion, madePlayoffs) : 0),
-    [favorite, owners, predictionHits, champion, madePlayoffs],
-  );
+  const featured = useMemo(() => (run ? featuredPairing(sport, run) : null), [sport, run]);
+  const score = run ? runScore(run) : 0;
 
   // Round 457: the shared map reads the takeover off the ownership change and
   // spotlights the featured game before the roll and its result after.
   const takeover = useOwnerTakeover(owners, phase !== 'pick');
-  const featuredGame = featured && lastRound
-    ? lastRound.games.find(g => (g.home === featured[0] && g.away === featured[1]) || (g.home === featured[1] && g.away === featured[0]))
-    : undefined;
+  const featuredGame = run ? featuredResult(run, featured) : undefined;
   const battleView: ConquestBattleView | null = featured && (phase === 'preview' || phase === 'recap')
     ? {
         attacker: featured[0],
@@ -136,122 +119,65 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
 
   useGameCompletion(game.gameId, phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0);
 
+  /* Round 476: the call card sits under the map, the wiped-out line, the
+     standings toggle and, in the recap, a list of every game. Measured on a
+     390 by 844 phone before this: the first thing to press after picking a
+     club was off the bottom of the screen. The reveal ref puts each new step
+     back in view without moving the page when it is already readable. */
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}-${picksMade}`);
+
   // Lock in the daily result the moment the season ends.
   useEffect(() => {
-    if (phase !== 'done' || mode !== 'daily' || !champion || !favorite || dailySaved.current || dailyDone) return;
+    if (!run || phase !== 'done' || mode !== 'daily' || !run.champion || dailySaved.current || dailyDone) return;
     dailySaved.current = true;
     const result: ConquestDailyResult = {
       date: todayStr,
-      team: favorite,
+      team: run.favorite,
       score,
-      empire: statesOf(owners, favorite).length,
-      calls: predictionHits,
-      callsTotal: predictionTotal,
-      champion,
-      championWasYou: champion === favorite,
+      empire: statesOf(run.owners, run.favorite).length,
+      calls: run.hits,
+      callsTotal: run.picks.length,
+      champion: run.champion,
+      championWasYou: run.champion === run.favorite,
     };
-    const s = saveDailyResult(sport.key, result, todayStr);
+    const s = saveDailyResult(sport.key, result, todayStr, run.picks);
     setDailyDone(result);
     setDailyStreak(s);
-  }, [phase, mode, champion, favorite, score, owners, predictionHits, predictionTotal, dailyDone, sport.key, todayStr]);
-
-  const rollPairings = (br: BracketState | null) => {
-    if (br) {
-      const seeds = br.alive;
-      const pairs: [string, string][] = [];
-      for (let i = 0; i < seeds.length / 2; i++) {
-        pairs.push([seeds[i], seeds[seeds.length - 1 - i]]);
-      }
-      setPairings(pairs);
-    } else {
-      setPairings(randomPairings(sport, rngRef.current));
-    }
-    setPrediction(null);
-  };
+  }, [run, phase, mode, score, dailyDone, sport.key, todayStr]);
 
   const start = (teamId: string) => {
-    rngRef.current = mode === 'daily' ? dailyConquestRng(sport.key, todayStr) : Math.random;
+    const rng = mode === 'daily' ? dailyConquestRng(sport.key, todayStr) : Math.random;
     dailySaved.current = false;
-    setFavorite(teamId);
-    setOwners(seedEmpires(sport));
-    setRound(1);
-    setBracket(null);
-    setChampion(null);
-    setMadePlayoffs(false);
-    setPredictionHits(0);
-    setPredictionTotal(0);
-    setLastRound(null);
-    setRecords(emptyRecords(sport));
-    setShowStandings(false);
-    setPhase('preview');
-    setPairings(randomPairings(sport, rngRef.current));
+    /* The club goes down before the first ball is kicked: it is half of what
+       replays the run, and a reload between the pick and the first call must
+       come back to the same club. */
+    const opened = startRun(sport, teamId, rng);
+    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(opened), todayStr);
+    setSession({ run: opened, rng });
     setPrediction(null);
+    setShowStandings(false);
   };
 
-  const playRound = () => {
-    const next = { ...owners };
-    const games: ImpGame[] = [];
-    for (const [h, a] of pairings) {
-      games.push(resolveGame(sport, h, a, next, rngRef.current, records));
-    }
-    const nextRecords = applyRecords(records, games);
-    setRecords(nextRecords);
-
-    // prediction bookkeeping on the featured game
-    if (featured && prediction) {
-      const fg = games.find(g => (g.home === featured[0] && g.away === featured[1]) || (g.home === featured[1] && g.away === featured[0]));
-      setPredictionTotal(t => t + 1);
-      if (fg && fg.winner === prediction) setPredictionHits(h => h + 1);
-    }
-
-    setLastRound({ round, label: roundLabel, games, headlines: buildHeadlines(sport, games, next, nextRecords) });
-    setOwners(next);
-
-    // advance season state
-    if (inPlayoffs) {
-      const winners = games.map(g => g.winner);
-      if (bracket!.round >= 2 || winners.length === 1) {
-        setChampion(winners[0]);
-        setPhase('recap');
-        return;
-      }
-      const nb = { round: bracket!.round + 1, alive: winners };
-      setBracket(nb);
-      setPhase('recap');
-      return;
-    }
-
-    const wiped = totalConquest(next);
-    if (wiped) {
-      setChampion(wiped);
-      setPhase('recap');
-      return;
-    }
-
-    if (round >= sport.regularRounds) {
-      const seeds = playoffSeeds(sport, next, nextRecords);
-      setMadePlayoffs(favorite !== null && seeds.includes(favorite));
-      setBracket({ round: 0, alive: seeds });
-    } else {
-      setRound(r => r + 1);
-    }
-    setPhase('recap');
+  const play = () => {
+    if (!session || !prediction) return;
+    const next = playRound(sport, session.run, prediction, session.rng);
+    /* Written in the same breath as the roll. Writing it on Continue instead
+       would let a player read the result, reload, and call it again knowing
+       the answer, which is the whole defect. */
+    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(next), todayStr);
+    setSession({ run: next, rng: session.rng });
+    setPrediction(null);
   };
 
   const continueOn = () => {
-    if (champion) { setPhase('done'); return; }
-    rollPairings(bracket);
-    setPhase('preview');
+    if (!session) return;
+    setSession({ run: continueRun(sport, session.run, session.rng), rng: session.rng });
+    setPrediction(null);
   };
 
   const reset = () => {
-    setPhase('pick');
-    setFavorite(null);
-    setOwners({});
-    setPairings([]);
-    setLastRound(null);
-    setBracket(null);
-    setChampion(null);
+    setSession(null);
+    setPrediction(null);
   };
 
   const chip = (teamId: string, extra?: string) => {
@@ -269,9 +195,11 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   };
 
   const regionCountLabel = (n: number) => `${n} ${regionNoun(sport, n)}`;
+  /* "club" on the soccer map, "team" on the four US maps. */
+  const teamNoun = sport.teamNoun ?? 'club';
 
   /* ---------------- pick screen ---------------- */
-  if (phase === 'pick') {
+  if (!run) {
     const playedToday = mode === 'daily' && dailyDone;
     return (
       <div className="space-y-4">
@@ -323,11 +251,11 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
         ) : (
           <>
             <div className="rounded-2xl border border-border bg-card p-4 text-center">
-              <p className="font-display text-lg font-bold text-foreground">Pick your club</p>
+              <p className="font-display text-lg font-bold text-foreground">Pick your {teamNoun}</p>
               <p className="mt-1 text-xs text-muted-foreground">{game.pitch}</p>
               {mode === 'daily' && (
                 <p className="mt-2 text-[11px] font-semibold text-gold">
-                  🗓️ Daily Challenge: every player gets today's exact fixtures and results. Pick the right empire, call the games, post your score. One scored run per day.
+                  🗓️ Daily Challenge: every player gets today's exact fixtures and results. Pick the right empire, call the games, post your score. One scored run per day, and it picks up where you left off if you close the tab.
                 </p>
               )}
             </div>
@@ -364,14 +292,14 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground">
-          {inPlayoffs ? sport.playoffLabels[bracket!.round] : `${sport.roundNoun} ${round}/${sport.regularRounds}`}
+          {inPlayoffs ? roundLabel : `${sport.roundNoun} ${run.round}/${sport.regularRounds}`}
         </span>
         {favorite && chip(favorite)}
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">
           Your empire: <b className={myStates === 0 ? 'text-destructive' : 'text-primary'}>{myStates}</b>/{total}
         </span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">
-          Picks: <b className="text-gold">{predictionHits}</b>/{predictionTotal}
+          Picks: <b className="text-gold">{run.hits}</b>/{run.picks.length}
         </span>
       </div>
 
@@ -427,131 +355,134 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
         </div>
       )}
 
-      {/* preview: prediction + play */}
-      {phase === 'preview' && featured && (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-            <Swords className="mr-1 inline h-3.5 w-3.5" />
-            {favorite && (featured[0] === favorite || featured[1] === favorite) ? `Your game this ${sport.roundNoun.toLowerCase()}. Call it.` : `Game of the ${sport.roundNoun.toLowerCase()}. Call it.`}
-          </p>
-          <div className="mt-3 flex items-center justify-center gap-2">
-            {[featured[0], featured[1]].map((tid, i) => {
-              const p = i === 0 ? homeWinProb(sport, featured[0], featured[1]) : 1 - homeWinProb(sport, featured[0], featured[1]);
-              return (
-                <button
-                  key={tid}
-                  onClick={() => setPrediction(tid)}
-                  className={cn(
-                    'flex-1 max-w-[220px] rounded-xl border-2 px-3 py-3 transition-all',
-                    prediction === tid ? 'border-gold bg-gold/10 scale-[1.02]' : 'border-border bg-background hover:border-primary/50',
-                  )}
-                >
-                  <span className="block h-1.5 w-full rounded-full" style={{ background: colorOf(tid) }} />
-                  <span className="mt-1.5 block truncate text-sm font-bold text-foreground">{label(tid)}</span>
-                  <span className="block text-[10px] text-muted-foreground">
-                    {regionCountLabel(counts.get(tid) ?? 0)} · {recordLabel(records[tid])} · {Math.round(p * 100)}% to win
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <button
-            onClick={playRound}
-            disabled={!prediction}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
-          >
-            <Flag className="h-4 w-4" /> Play {roundLabel}
-          </button>
-          {!prediction && <p className="mt-2 text-[10px] text-muted-foreground">Pick a winner first. +25 score per correct call.</p>}
-        </div>
-      )}
-
-      {/* recap */}
-      {phase === 'recap' && lastRound && (
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <p className="text-center text-sm font-bold text-foreground">{lastRound.label} results</p>
-          <div className="mt-2 space-y-1">
-            {lastRound.headlines.map((h, i) => (
-              <p key={i} className="text-center text-xs text-muted-foreground">{h}</p>
-            ))}
-          </div>
-          <div className="mt-3 grid max-h-48 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {lastRound.games.map((g, i) => {
-              const involved = favorite && (g.home === favorite || g.away === favorite);
-              return (
-                <div
-                  key={i}
-                  className={cn(
-                    'flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]',
-                    involved ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background',
-                  )}
-                >
-                  <span className={cn('truncate', g.winner === g.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>
-                    {label(g.home)} {g.homeScore}
-                  </span>
-                  <span className="px-1 text-muted-foreground/60">·</span>
-                  <span className={cn('truncate', g.winner === g.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>
-                    {g.awayScore} {label(g.away)}
-                  </span>
-                  <span className="ml-1 shrink-0 text-gold">{g.swing > 0 ? `+${g.swing}` : ''}{g.overtime ? ` ${sport.score.tieBreakLabel}` : ''}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-3 text-center">
+      {/* the step to press: kept in view on a phone by the reveal ref */}
+      <div ref={revealRef}>
+        {/* preview: prediction + play */}
+        {phase === 'preview' && featured && (
+          <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
+              <Swords className="mr-1 inline h-3.5 w-3.5" />
+              {favorite && (featured[0] === favorite || featured[1] === favorite) ? `Your game this ${sport.roundNoun.toLowerCase()}. Call it.` : `Game of the ${sport.roundNoun.toLowerCase()}. Call it.`}
+            </p>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              {[featured[0], featured[1]].map((tid, i) => {
+                const p = i === 0 ? homeWinProb(sport, featured[0], featured[1]) : 1 - homeWinProb(sport, featured[0], featured[1]);
+                return (
+                  <button
+                    key={tid}
+                    onClick={() => setPrediction(tid)}
+                    className={cn(
+                      'flex-1 max-w-[220px] rounded-xl border-2 px-3 py-3 transition-all',
+                      prediction === tid ? 'border-gold bg-gold/10 scale-[1.02]' : 'border-border bg-background hover:border-primary/50',
+                    )}
+                  >
+                    <span className="block h-1.5 w-full rounded-full" style={{ background: colorOf(tid) }} />
+                    <span className="mt-1.5 block truncate text-sm font-bold text-foreground">{label(tid)}</span>
+                    <span className="block text-[10px] text-muted-foreground">
+                      {regionCountLabel(counts.get(tid) ?? 0)} · {recordLabel(records[tid])} · {Math.round(p * 100)}% to win
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             <button
-              onClick={continueOn}
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              onClick={play}
+              disabled={!prediction}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
             >
-              {champion ? 'See the final map' : 'Continue'}
+              <Flag className="h-4 w-4" /> Play {roundLabel}
             </button>
+            {!prediction && <p className="mt-2 text-[10px] text-muted-foreground">Pick a winner first. +25 score per correct call.</p>}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* done */}
-      {phase === 'done' && champion && (
-        <div className="rounded-2xl border border-gold/50 bg-card p-5 text-center">
-          <Crown className="mx-auto h-10 w-10 text-gold" />
-          <p className="mt-2 font-display text-2xl font-black text-foreground">
-            {label(champion)} rule the map
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {champion === favorite
-              ? 'Your empire. Your dynasty. Absolute scenes.'
-              : favorite && myStates > 0
-                ? `Your ${label(favorite)} held ${regionCountLabel(myStates)} to the end.`
-                : 'Your club ended the season wiped off the map. Brutal format.'}
-          </p>
-          <div className="mt-3 flex items-center justify-center gap-3 text-sm">
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">Empire <b className="text-primary">{myStates}</b></span>
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">Calls <b className="text-gold">{predictionHits}/{predictionTotal}</b></span>
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{score}</b></span>
-            {mode === 'daily' && dailyStreak >= 2 && (
-              <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+        {/* recap */}
+        {phase === 'recap' && run.lastRound && (
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-center text-sm font-bold text-foreground">{run.lastRound.label} results</p>
+            <div className="mt-2 space-y-1">
+              {run.lastRound.headlines.map((h, i) => (
+                <p key={i} className="text-center text-xs text-muted-foreground">{h}</p>
+              ))}
+            </div>
+            <div className="mt-3 grid max-h-48 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+              {run.lastRound.games.map((g, i) => {
+                const involved = favorite && (g.home === favorite || g.away === favorite);
+                return (
+                  <div
+                    key={i}
+                    className={cn(
+                      'flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]',
+                      involved ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background',
+                    )}
+                  >
+                    <span className={cn('truncate', g.winner === g.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>
+                      {label(g.home)} {g.homeScore}
+                    </span>
+                    <span className="px-1 text-muted-foreground/60">·</span>
+                    <span className={cn('truncate', g.winner === g.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>
+                      {g.awayScore} {label(g.away)}
+                    </span>
+                    <span className="ml-1 shrink-0 text-gold">{g.swing > 0 ? `+${g.swing}` : ''}{g.overtime ? ` ${sport.score.tieBreakLabel}` : ''}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-3 text-center">
+              <button
+                onClick={continueOn}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              >
+                {run.champion ? 'See the final map' : 'Continue'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* done */}
+        {phase === 'done' && run.champion && (
+          <div className="rounded-2xl border border-gold/50 bg-card p-5 text-center">
+            <Crown className="mx-auto h-10 w-10 text-gold" />
+            <p className="mt-2 font-display text-2xl font-black text-foreground">
+              {label(run.champion)} rule the map
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {run.champion === favorite
+                ? 'Your empire. Your dynasty. Absolute scenes.'
+                : favorite && myStates > 0
+                  ? `Your ${label(favorite)} held ${regionCountLabel(myStates)} to the end.`
+                  : `Your ${teamNoun} ended the season wiped off the map. Brutal format.`}
+            </p>
+            <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Empire <b className="text-primary">{myStates}</b></span>
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Calls <b className="text-gold">{run.hits}/{run.picks.length}</b></span>
+              <span className="rounded-full border border-border bg-background px-3 py-1.5">Score <b className="text-gold">{score}</b></span>
+              {mode === 'daily' && dailyStreak >= 2 && (
+                <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
+              )}
+            </div>
+            {mode === 'daily' && (
+              <p className="mt-2 text-[11px] text-muted-foreground">🗓️ Daily done. A fresh map drops at midnight Eastern.</p>
             )}
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+              <button
+                onClick={() => { if (mode === 'daily') setMode('free'); reset(); }}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
+              >
+                <RotateCcw className="h-4 w-4" /> {mode === 'daily' ? 'Free play' : 'New season'}
+              </button>
+              <ShareButtons
+                gameName={game.name}
+                gamePath={game.path}
+                score={`${score} pts`}
+                customText={mode === 'daily' && dailyDone
+                  ? dailyShareText(game.name, game.path, dailyDone, dailyStreak, label(run.champion), favorite ? label(favorite) : teamNoun)
+                  : `${game.name} 🗺️ ${label(run.champion)} took the whole map. My ${favorite ? label(favorite) : teamNoun} finished with ${regionCountLabel(myStates)} and I called ${run.hits}/${run.picks.length} games. Score ${score}. douknowball.com${game.path}`}
+              />
+            </div>
           </div>
-          {mode === 'daily' && (
-            <p className="mt-2 text-[11px] text-muted-foreground">🗓️ Daily done. A fresh map drops at midnight Eastern.</p>
-          )}
-          <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button
-              onClick={() => { if (mode === 'daily') setMode('free'); reset(); }}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground"
-            >
-              <RotateCcw className="h-4 w-4" /> {mode === 'daily' ? 'Free play' : 'New season'}
-            </button>
-            <ShareButtons
-              gameName={game.name}
-              gamePath={game.path}
-              score={`${score} pts`}
-              customText={mode === 'daily' && dailyDone
-                ? dailyShareText(game.name, game.path, dailyDone, dailyStreak, label(champion), favorite ? label(favorite) : 'club')
-                : `${game.name} 🗺️ ${label(champion)} took the whole map. My ${favorite ? label(favorite) : 'club'} finished with ${regionCountLabel(myStates)} and I called ${predictionHits}/${predictionTotal} games. Score ${score}. douknowball.com${game.path}`}
-            />
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

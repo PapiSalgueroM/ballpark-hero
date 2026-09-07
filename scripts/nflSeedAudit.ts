@@ -1,8 +1,9 @@
 (globalThis as any).localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const run = async () => {
-  const { seedEmpires, statesOf } = await import('@/lib/imperialism');
+  const { statesOf } = await import('@/lib/imperialismEngine');
+  const { seedNflEmpires } = await import('@/data/conquestSports');
   const { NFL_TEAMS } = await import('@/data/conquestData');
-  const owners = seedEmpires();
+  const owners = seedNflEmpires();
   const total = Object.keys(owners).length;
   console.log('territories:', total);
   const landless = NFL_TEAMS.filter(t => statesOf(owners, t.id).length === 0).map(t => t.id);
