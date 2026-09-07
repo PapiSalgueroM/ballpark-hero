@@ -1,5 +1,21 @@
 # Project state
 
+## Live as of 2026-09-07
+
+Head `04ad4f10`, **deployed to douknowball.com and verified live** (the home page
+now serves `href="/quiz-board"` where it served `href="/jeopardy"`, which is the
+Round 496 fix; all eight probed routes answer 200 and the sitemap dates `/` to
+2026-09-07). Rounds 495 to 501 shipped, plus the 475-479 batch merged.
+
+Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
+football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
+tennis-chain-validate v9, nascar-chain-validate v7, nba-chain-validate v8. One
+migration applied: `name_folded` on `soccer_player_club_stints`.
+
+The one thing NOT closed: `playGames` stalls deterministically on `/college-grid`.
+It is open and undiagnosed on the workboard, with what was ruled out and what the
+next attempt needs. The page itself renders a complete board and answers 200.
+
 ## Progress by area (orientation, not arithmetic)
 
 The owner asked on 2026-09-01 to be able to see whether the giant project is
