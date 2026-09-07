@@ -885,7 +885,18 @@ critic's item; these are the rest, unclaimed.
   the player has already left. The guard added for the league in Round 315 was never applied to
   the number.
 
-- **BUILD YOUR XI'S POSITION GATE NEVER READS `player_verified_positions`**, so it refuses 88
+- **DONE, Round 493. Build Your XI's position gate never read `player_verified_positions`.**
+  Both games use the same module and `fitsAllowed` has taken the history since Round 345;
+  World XI passed it and `checkLineupPick` dropped it, so the shared rule was strict for one
+  game and not the other. MEASURED with the real module bundled against the live table: 94 of
+  945 player-and-slot pairs were refused when the history allows them, all real football.
+  **The audit said 88 and my own first pass said 165; the correct figure is 94.** The first
+  number was wrong because the curated primary is stored as "Central Midfield" while the rule
+  takes "CM", so every 'before' answer was false for the wrong reason. The goalkeeper boundary
+  was the one thing this could have broken and the fence proves it exhaustively: 225
+  combinations with an all-positions history, 0 crossings. Fence
+  `scripts/simLineupVerifiedPositions.mjs`, controls `nohistory` and `nowire`.
+  ORIGINAL FINDING:, so it refuses 88
   picks that World XI accepts using the same shared rule module, which already takes the
   verified history as an optional argument. Related: "Second Striker" collapses to CF on the
   client and maps to CAM in the validator, so the CAM slot refuses every classic number 10.
