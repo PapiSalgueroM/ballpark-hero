@@ -16,8 +16,13 @@
          La Liga and Serie A use head to head, and the engine kept no per pair
          results to read.
 
-   Sections, every era career driven through startCareer and playNextEntry
-   the way the page drives them, never a hand built state:
+   Round 478 added section 6, because Round 462 fixed (c) for the LEAGUE
+   tables and left the Champions League groups on the same wrong order it
+   had just seeded the round of 16 from. A group could name the wrong winner
+   and the whole bracket hung off that name.
+
+   Sections, every career driven through startCareer and playNextEntry the
+   way the page drives them, never a hand built state:
      1) THE FORMAT. Every era save's calendar carries exactly one round of 16
         week, after the January window and before the quarter finals; the
         bracket at the final whistle is eight, four, two, one; the first
@@ -53,26 +58,34 @@
         left exactly as it was. Round 478: a save stripped of its GROUP
         ledger too opens with the group results gone, falls back to goal
         difference, says so under the rows, and plays its groups out.
-     6) THE GROUP TABLE'S OWN ORDER (Round 478). Every group of every era
-        career, mine and the seven beside it, at EVERY matchday and again at
-        the final whistle: the table the engine hands the card and the field
-        it seeds the round of 16 from are one order, and that order is the
-        one the Champions League regulations give (head to head points, then
-        head to head goal difference, then head to head goals, reapplied to
-        any smaller subset still level, then overall goal difference and
-        goals scored), computed here from the ledger rather than read back
-        off the module. The ledger holds every group fixture played and
-        nothing else (2 games a night per group), every entry names two
-        clubs of one group, and every club's points and goals in the table
-        add up from its own results. A modern save reads the league phase
-        order instead (goal difference, then goals scored, no head to head,
-        because a league phase club plays eight of the other 35). Crafted
-        tables put the rule beyond doubt: two clubs where the head to head
-        and the goal difference disagree, three clubs where two of them are
-        level on the whole mini league and split on their own two games,
-        a pair that has met only once, and the footnote wording for both
-        orders. And the source is counted: nothing in the engine or in a
-        Club Manager card may sort a group table any other way.
+     6) THE GROUP TABLE'S OWN ORDER (Round 478). Every group of every career,
+        mine and the seven beside it, at EVERY matchday and again at the
+        final whistle: the table the engine hands the card and the field it
+        seeds the round of 16 from are one order, and that order is the one
+        the regulations of THAT SAVE'S OWN SEASON give, rebuilt here from the
+        ledger rather than read back off the module. There are three, and the
+        harness holds each save against the one its era should be on:
+          2005-06 and 2010-11: points between the level clubs, then goal
+            difference between them, then goals scored away from home
+            between them, then overall goal difference and goals scored, and
+            no reapplication step because neither season had one;
+          2015-16: points, goal difference, goals scored and away goals
+            between them, then those four reapplied to any SMALLER subset
+            still level, then overall goal difference and goals scored;
+          modern: goal difference then goals scored, standing in for the
+            league phase, which has no head to head step because a league
+            phase club plays eight of the other 35.
+        The ledger holds every group fixture played and nothing else (2 games
+        a night per group), every entry names two clubs of one group, and
+        every club's points and goals in the table add up from its own
+        results. Crafted tables put the rules beyond doubt, each put through
+        all three worlds: two clubs the head to head and the goal difference
+        disagree about; a pair that drew both games and can only be split on
+        away goals; three clubs the 2015 world and the 2005 world order
+        DIFFERENTLY off the same results; a pair that has met only once; and
+        the footnote wording of each world. And the source is counted:
+        nothing in the engine or in a Club Manager card may sort a group
+        table any other way.
         The MEASUREMENT, which is the round's headline: how many groups end
         with clubs level on points, how many of those the head to head puts
         in a different order from goal difference, and how many change who
