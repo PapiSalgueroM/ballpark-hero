@@ -1875,6 +1875,11 @@ export interface CareerState {
    *  null means "pick for me" and is filled the same way at the next match.
    *  See SetPieces. */
   setPieces?: SetPieces;
+  /** Round 505: one duty (or null) per formation slot, by index, so a sub
+   *  into a slot inherits it. Read through slotDuty, which drops an entry
+   *  the slot's own line does not offer, so a shape change cannot leave a
+   *  poacher's duty on a centre back. Absent on an older save. */
+  xiDuties?: (Duty | null)[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -3792,6 +3797,9 @@ export interface XiSlot {
   /** Null only for a man whose slot the formation cannot name (a save whose
    *  eleven outgrew its shape), and then he pays no penalty. */
   slot: FormationSlot | null;
+  /** The slot's duty, validated for the slot, null when none is set. A sub
+   *  into the slot inherits it because it lives on the slot, not the man. */
+  duty: Duty | null;
 }
 
 export interface XiFitReport {
@@ -3823,6 +3831,149 @@ export function xiFitReport(career: CareerState): XiFitReport {
   const raw = sum / n;
   const penalty = pen / n;
   return { rating: Math.round(raw - penalty), raw: Math.round(raw * 10) / 10, penalty: Math.round(penalty * 10) / 10, grades };
+}
+
+/* ---------- Round 505: duties, what each slot is asked to do ---------- */
+
+/**
+ * A duty is the job a SLOT carries, not a label on a man: an attacking full
+ * back, a sweeper keeper, a false nine. Not to be confused with SquadRole,
+ * which is the playing time promise and lives on the player.
+ */
+export type Duty =
+  | 'sweeper' | 'shotStopper'
+  | 'stopper' | 'cover'
+  | 'attackingFullBack' | 'holdingFullBack'
+  | 'anchor' | 'deepPlaymaker'
+  | 'boxToBox' | 'playmaker'
+  | 'creator' | 'shadowStriker'
+  | 'winger' | 'insideForward'
+  | 'poacher' | 'targetMan' | 'falseNine';
+
+export type DutyLine = 'keeper' | 'centreBack' | 'fullBack' | 'holdingMid' | 'centralMid' | 'attackingMid' | 'wide' | 'striker';
+
+export const DUTIES_BY_LINE: Record<DutyLine, Duty[]> = {
+  keeper: ['sweeper', 'shotStopper'],
+  centreBack: ['stopper', 'cover'],
+  fullBack: ['attackingFullBack', 'holdingFullBack'],
+  holdingMid: ['anchor', 'deepPlaymaker'],
+  centralMid: ['boxToBox', 'playmaker'],
+  attackingMid: ['creator', 'shadowStriker'],
+  wide: ['winger', 'insideForward'],
+  striker: ['poacher', 'targetMan', 'falseNine'],
+};
+
+export const DUTY_INFO: Record<Duty, { label: string; blurb: string }> = {
+  sweeper: { label: 'Sweeper keeper', blurb: 'Starts high and clears up behind the line. More of the ball, more risk.' },
+  shotStopper: { label: 'Shot stopper', blurb: 'Stays on his line and stops what comes.' },
+  stopper: { label: 'Stopper', blurb: 'Steps out to meet the striker early.' },
+  cover: { label: 'Cover', blurb: 'Drops off and sweeps up behind his partner.' },
+  attackingFullBack: { label: 'Attacking full back', blurb: 'Bombs on and overlaps. More going forward, more space behind him.' },
+  holdingFullBack: { label: 'Holding full back', blurb: 'Stays home and tucks in beside the centre backs.' },
+  anchor: { label: 'Anchor', blurb: 'Sits in front of the back line and breaks things up.' },
+  deepPlaymaker: { label: 'Deep playmaker', blurb: 'Sits deep and starts the moves from there.' },
+  boxToBox: { label: 'Box to box', blurb: 'Runs both ways all afternoon.' },
+  playmaker: { label: 'Playmaker', blurb: 'Everything goes through him.' },
+  creator: { label: 'Creator', blurb: 'Finds the pass in the last third.' },
+  shadowStriker: { label: 'Shadow striker', blurb: 'Plays off the front man and arrives late in the box.' },
+  winger: { label: 'Winger', blurb: 'Stays wide, beats his man and crosses.' },
+  insideForward: { label: 'Inside forward', blurb: 'Cuts in off the flank looking for the goal himself.' },
+  poacher: { label: 'Poacher', blurb: 'Lives in the box and finishes what comes his way.' },
+  targetMan: { label: 'Target man', blurb: 'Holds it up and brings the others into play.' },
+  falseNine: { label: 'False nine', blurb: 'Drops into midfield and pulls the defence out of shape.' },
+};
+
+/**
+ * What one man on a duty adds, in the MENT_MOD convention: atk goes on my
+ * side's boost, def on theirs, so a positive def means we concede more.
+ * Summed over the eleven and capped by DUTY_BOOST_CAP, which keeps the whole
+ * eleven's duties under a third of one mentality step (attacking is 0.42).
+ * The numbers are small on purpose: a duty is a flavour of a shape, not a
+ * second mentality dial.
+ */
+export const DUTY_EFFECT: Record<Duty, { atk: number; def: number }> = {
+  sweeper: { atk: 0.01, def: 0.01 },
+  shotStopper: { atk: 0, def: -0.01 },
+  stopper: { atk: 0.005, def: -0.01 },
+  cover: { atk: -0.005, def: -0.015 },
+  attackingFullBack: { atk: 0.03, def: 0.025 },
+  holdingFullBack: { atk: -0.01, def: -0.025 },
+  anchor: { atk: -0.01, def: -0.03 },
+  deepPlaymaker: { atk: 0.02, def: -0.01 },
+  boxToBox: { atk: 0.015, def: 0 },
+  playmaker: { atk: 0.025, def: 0.01 },
+  creator: { atk: 0.03, def: 0.01 },
+  shadowStriker: { atk: 0.03, def: 0.015 },
+  winger: { atk: 0.025, def: 0.01 },
+  insideForward: { atk: 0.03, def: 0.015 },
+  poacher: { atk: 0.02, def: 0.01 },
+  targetMan: { atk: 0.015, def: 0 },
+  falseNine: { atk: 0.02, def: -0.005 },
+};
+export const DUTY_BOOST_CAP = 0.12;
+
+/** Who gets on the end of things: multiplies the scorer weight of a man on that duty. */
+export const DUTY_SCORING: Partial<Record<Duty, number>> = {
+  poacher: 1.4, insideForward: 1.25, shadowStriker: 1.2, falseNine: 1.1, targetMan: 0.9,
+};
+/** And who lays them on: multiplies the assist weight. */
+export const DUTY_ASSISTING: Partial<Record<Duty, number>> = { targetMan: 1.3 };
+
+export const dutyScoringMult = (d: Duty | null | undefined): number => (d ? DUTY_SCORING[d] ?? 1 : 1);
+export const dutyAssistMult = (d: Duty | null | undefined): number => (d ? DUTY_ASSISTING[d] ?? 1 : 1);
+
+/** Which set of duties a slot offers, off its label, with the pitch line as the fallback for a label this table does not know. */
+export function dutyLineOf(slot: FormationSlot): DutyLine {
+  switch (slot.label) {
+    case 'GK': return 'keeper';
+    case 'CB': return 'centreBack';
+    case 'RB': case 'LB': case 'RWB': case 'LWB': return 'fullBack';
+    case 'CDM': return 'holdingMid';
+    case 'CM': return 'centralMid';
+    case 'CAM': return 'attackingMid';
+    case 'RW': case 'LW': case 'RM': case 'LM': return 'wide';
+    case 'ST': case 'CF': return 'striker';
+    default: {
+      const line = pitchLineOf(slot);
+      return line === 'keeper' ? 'keeper' : line === 'defence' ? 'centreBack' : line === 'midfield' ? 'centralMid' : 'striker';
+    }
+  }
+}
+
+export function dutyOptions(slot: FormationSlot): Duty[] {
+  return DUTIES_BY_LINE[dutyLineOf(slot)];
+}
+
+/** The duty on a slot of a formation, or null when none is set or the slot's line does not offer the one stored. */
+export function slotDuty(state: CareerState, formation: Formation, slotIdx: number): Duty | null {
+  const d = state.xiDuties?.[slotIdx] ?? null;
+  const slot = formation.slots[slotIdx];
+  if (!d || !slot) return null;
+  return dutyOptions(slot).includes(d) ? d : null;
+}
+
+/** Set (or clear, with null) the duty on a slot of the current shape. Null back for a slot that does not exist or a duty its line does not offer. Pure. */
+export function setDuty(career: CareerState, slotIdx: number, duty: Duty | null): CareerState | null {
+  const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
+  const slot = formation.slots[slotIdx];
+  if (!slot) return null;
+  if (duty !== null && !dutyOptions(slot).includes(duty)) return null;
+  const xiDuties: (Duty | null)[] = [...(career.xiDuties ?? [])];
+  while (xiDuties.length < formation.slots.length) xiDuties.push(null);
+  xiDuties[slotIdx] = duty;
+  return { ...career, xiDuties };
+}
+
+/** The eleven's duties summed and capped, ready to add to the half's boosts. Zero for an eleven with none set. */
+export function dutyBoost(xi: XiSlot[]): { atk: number; def: number } {
+  let atk = 0;
+  let def = 0;
+  for (const x of xi) {
+    if (!x.duty) continue;
+    atk += DUTY_EFFECT[x.duty].atk;
+    def += DUTY_EFFECT[x.duty].def;
+  }
+  return { atk: clamp(atk, -DUTY_BOOST_CAP, DUTY_BOOST_CAP), def: clamp(def, -DUTY_BOOST_CAP, DUTY_BOOST_CAP) };
 }
 
 /* ---------- Round 505: retraining a second position ---------- */
@@ -8845,7 +8996,7 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     }
     if (p) {
       used.add(p.id);
-      out.push({ p, slot });
+      out.push({ p, slot, duty: slotDuty(state, formation, i) });
     }
   });
   return out;
@@ -8883,12 +9034,18 @@ function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onP
   const out: XiSlot[] = [];
   ids.forEach((id, i) => {
     const p = state.squad.find(x => x.id === id);
-    if (p) out.push({ p, slot: formation.slots[i] ?? null });
+    if (p) out.push({ p, slot: formation.slots[i] ?? null, duty: slotDuty(state, formation, i) });
   });
   return out;
 }
 
 const men = (xi: XiSlot[]): CMPlayer[] => xi.map(x => x.p);
+
+/** The duty of each man in a paired eleven, by id, for the scorer and assist weights. */
+function dutyLookup(xi: XiSlot[]): (p: CMPlayer) => Duty | null {
+  const byId = new Map<string, Duty | null>(xi.map(x => [x.p.id, x.duty]));
+  return p => byId.get(p.id) ?? null;
+}
 
 /** Match-day strength: XI ratings scaled by fitness + morale, plus form. */
 /**
@@ -9004,13 +9161,15 @@ function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>)
  *  crediting anybody twice. */
 function pickMyScorerLines(
   xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
+  /** Round 505: the duty of a man in his slot, for the scorer weight. */
+  dutyOf?: (p: CMPlayer) => Duty | null,
 ): MyGoalLine[] {
   /* Round 205: distinct, and sharing the match's minute book with the
      opposition so no two goals anywhere land on the same clock. */
   const minutes = distinctMinutes(count, minLo, minHi, taken);
   const lines: MyGoalLine[] = [];
   for (let g = 0; g < count; g++) {
-    const scorer = weightedPick(xi, scorerWeight);
+    const scorer = weightedPick(xi, p => scorerWeight(p) * dutyScoringMult(dutyOf?.(p)));
     if (!scorer) break;
     lines.push({ id: scorer.id, name: scorer.name, minute: minutes[g] });
   }
@@ -9026,6 +9185,8 @@ function creditMyScorers(
   /** Round 504: who was on the pitch when the goal went in, so a man who
    *  came on in the 80th cannot be credited with setting up the 10th. */
   onPitchAt?: (minute: number) => CMPlayer[],
+  /** Round 505: the duty a man was on at that minute, for the assist weight. */
+  dutyAt?: (minute: number, p: CMPlayer) => Duty | null,
 ): { goalCounts: Map<string, number>; assistCounts: Map<string, number>; assistNames: (string | null)[] } {
   const goalCounts = new Map<string, number>();
   const assistCounts = new Map<string, number>();
@@ -9043,7 +9204,7 @@ function creditMyScorers(
     if (Math.random() < 0.7) {
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
-      const assister = weightedPick(others, p => scorerWeight(p) * 0.6 + 0.5);
+      const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
       if (assister) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
@@ -9565,6 +9726,8 @@ interface SegmentPlayIn {
   oppGoals: ScorerLine[];
   /** Round 505: my takers, so a corner or a penalty goes to the assigned man when he is out there. */
   setPieces?: SetPieces | null;
+  /** Round 505: the duty of a man in his slot, for who takes the chances. */
+  myDuty?: (p: CMPlayer) => Duty | null;
   /** Who is on my pitch at a minute of the stretch. */
   mineAt: (minute: number) => CMPlayer[];
   /** Who is on theirs, or null when they have no named eleven. */
@@ -9649,9 +9812,10 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
   };
   /* Round 505: the assigned man's name when he is on my pitch at that minute, else null and the weighted pick decides. */
   const assigned = (key: SetPieceKey, m: number): string | null => assignedOnPitch(inp.setPieces, key, inp.mineAt(m))?.name ?? null;
+  const myShotWeight = (p: CMPlayer): number => scorerWeight(p) * dutyScoringMult(inp.myDuty?.(p));
   forSide('me', inp.lamMine, inp.myGoals, inp.myCards, {
-    shooter: m => myPick(m, scorerWeight, true),
-    penTaker: m => assigned('penalties', m) ?? myPick(m, scorerWeight, true),
+    shooter: m => myPick(m, myShotWeight, true),
+    penTaker: m => assigned('penalties', m) ?? myPick(m, myShotWeight, true),
     taker: (m, flank) => assigned(flank === 'left' ? 'cornersLeft' : 'cornersRight', m)
       ?? myPick(m, p => cornerWeightPos(p.position) * (p.rating / 70), true),
     thrower: m => myPick(m, p => throwWeightPos(p.position), true),
@@ -9838,7 +10002,9 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const ment = MENT_MOD[mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk, ment.def + oppAtk);
+  /* Round 505: the duties, wherever the mentality is. */
+  const duty = dutyBoost(xi);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
   return { lamMine, lamOpp, mine, oppS };
 }
 
@@ -9868,16 +10034,18 @@ function secondHalfLambdas(
   const mine = myMatchStrength(state, xi) + inForce * TALK_EDGE + sharpen;
   const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
   const opp2 = oppositionShape(scoreOpp, scoreMine);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def, ment2.def + oppAtk + opp2.atk);
+  /* Round 505: the duties, the same way the first half adds them. */
+  const duty = dutyBoost(xi);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
   return { lamMine, lamOpp, mine, oppS };
 }
 
 /** Where my scorers, injury and cards for a segment get drawn, both halves, one shape. */
 function drawMySegment(
   state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, lamMine: number,
-  maxYellows: number, taken: Set<number>,
+  maxYellows: number, taken: Set<number>, dutyOf?: (p: CMPlayer) => Duty | null,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
-  const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken);
+  const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken, dutyOf);
   /* Round 505: from the spot or a free kick, credited to the taker, before
      the exits below are drawn so fixExits keeps him on past his goal. */
   markSetPieceGoals(state.setPieces, goals, xi);
@@ -9927,10 +10095,14 @@ function drawSegment(
   from: number, to: number, segM: number, segO: number,
 ): void {
   const off = offPitchIds(live);
-  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  /* Round 505: the eleven with their slots, so each man's duty rides on his
+     slot and a sub into it inherits the job. */
+  const pairs = livePairs(state, live).filter(x => !off.has(x.p.id));
+  const xi = men(pairs);
+  const dutyOf = dutyLookup(pairs);
   const taken = goalMinutesOf(live);
   const maxYellows = half === 1 ? 1 : 2;
-  const me = drawMySegment(state, live, xi, from, to, segM, maxYellows, taken);
+  const me = drawMySegment(state, live, xi, from, to, segM, maxYellows, taken, dutyOf);
   const oppStart = oppAt(live, from);
   const byMinute = <T extends { minute: number }>(a: T, b: T): number => a.minute - b.minute;
   if (half === 1) {
@@ -9984,6 +10156,7 @@ function drawSegment(
     mineAt, oppAt: oppStart ? (m => oppAt(live, m)) : (() => null),
     myCards: me.cards, oppCards,
     setPieces: state.setPieces ?? null,
+    myDuty: dutyOf,
   });
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
@@ -10025,6 +10198,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const fx = fixtureFor(state, entry)!;
   const startedSlots = livePairs(state, live, live.startXi);
   const started = men(startedSlots);
+  const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
     const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality);
     if (live.lamMine === undefined) live.lamMine = lamMine;
@@ -10032,7 +10206,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   }
   const taken = new Set<number>();
   if (!live.h1My || live.h1My.length !== live.myGoals) {
-    live.h1My = pickMyScorerLines(started, live.myGoals, 1, 45, taken);
+    live.h1My = pickMyScorerLines(started, live.myGoals, 1, 45, taken, dutyOf);
     markSetPieceGoals(state.setPieces, live.h1My, started);
   } else {
     for (const l of live.h1My) taken.add(l.minute);
@@ -10061,6 +10235,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
       mineAt: m => started.filter(p => (exits.get(p.id) ?? 99) > m), oppAt: () => null,
       myCards: cards, oppCards: [],
       setPieces: state.setPieces ?? null,
+      myDuty: dutyOf,
     });
     live.possH1 = possessionOf(live.lamMine, live.lamOpp);
   }
@@ -10697,6 +10872,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     state, xi, myLines, minute => {
       const gone = liveGoneIds(live, minute - 1);
       return squadByIds(state, myOnPitchAt(live, minute)).filter(p => !gone.has(p.id));
+    },
+    /* Round 505: the duty he was on at that minute, off the slot he stood in. */
+    (minute, p) => {
+      const i = myOnPitchAt(live, minute).indexOf(p.id);
+      return i >= 0 ? slotDuty(state, liveFormationOf(state, live), i) : null;
     },
   );
   const myScorers: ScorerLine[] = myLines.map((l, i) => ({
@@ -12499,9 +12679,11 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
     const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
     /* The full-match lambdas, exactly as the two halves will draw them
-       (before any team talk, which has not been given yet). */
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk, 0.12, 4.2);
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk, 0.12, 4.2);
+       (before any team talk, which has not been given yet). Round 505: the
+       duties go in here too, so the odds are the engine's own. */
+    const duty = dutyBoost(xi);
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2);
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2);
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
