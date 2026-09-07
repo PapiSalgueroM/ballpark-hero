@@ -108,7 +108,7 @@ const mod = await import(pathToFileURL(BUNDLE).href);
 const { checkLineupPick, fitsAllowed, SLOT_ALLOWED_BY_ROLE, ALL_POSITIONS } = mod.fit;
 const { normalizePosition } = mod.squadDeal;
 const { fitsSlot, simulateWorldXiSeason } = mod.worldXi;
-const { clubs, nations, clubSearchTerm, nationSearchTerm } = mod.teams;
+const { clubs, nations, clubTableNames, nationSearchTerm } = mod.teams;
 const { FORMATIONS } = mod.lineupTypes;
 const { searchPlayers, SOCCER_MARKET_VALUE_SOURCE, normalizeName } = mod.search;
 const supabase = mod.supabase;
@@ -132,9 +132,15 @@ async function fetchTeamPool(team) {
   const best = new Map();
   for (let page = 0; page < 14; page++) {
     let q = supabase.from('player_market_values').select(cols);
+    /* ROUND 501: the club leg is an EXACT `in` over the stored club names, not a
+       loose ilike. Round 484 changed the page to clubTableNames() precisely so
+       a "Barcelona" slot stops accepting Barcelona SC Guayaquil, and this
+       harness was still mirroring the old rule, so it was measuring a pool the
+       game no longer offers. It also just broke outright, because
+       clubSearchTerm stopped existing. */
     q = team.isNation
       ? q.eq('nationality', nationSearchTerm(team.name))
-      : q.ilike('club', `%${clubSearchTerm(team.name)}%`);
+      : q.in('club', clubTableNames(team.name));
     const { data, error } = await q.order('id', { ascending: true }).range(page * PAGE, page * PAGE + PAGE - 1);
     if (error) return null;
     const rows = data ?? [];
@@ -179,7 +185,7 @@ console.log("1) the owner's case: a Barcelona search for ter Stegen, then every 
 {
   const source = {
     ...SOCCER_MARKET_VALUE_SOURCE,
-    filters: [{ column: 'club', op: 'ilike', value: clubSearchTerm('Barcelona') }],
+    filters: [{ column: 'club', op: 'in', value: clubTableNames('Barcelona') }],
   };
   const { results, error } = await searchPlayers({ source, query: 'ter stegen', limit: 8 });
   if (error) fail(`the real search errored: ${error}`);

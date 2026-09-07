@@ -838,6 +838,45 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
+- **DONE, Round 501. The three failures the full 250-harness suite turned up, all of them real.**
+  The suite had not been run end to end for a while and it earned its keep: two of the three were
+  defects THIS session introduced or exposed, and the third was a live wrong answer.
+
+  **(1) `simLineupPositions` crashed: `clubSearchTerm is not a function`.** Round 484 replaced the
+  loose `clubSearchTerm` with `clubTableNames()` and an EXACT `in` match, precisely so a
+  "Barcelona" slot stops accepting Barcelona SC Guayaquil. The harness was never updated, so it
+  both crashed and, before it crashed, had been mirroring a pool the game no longer offers. It now
+  queries the way the page does.
+
+  **(2) `simQuotaHonesty`: a check that had gone stale was ENFORCING A BUG.** It demanded the
+  literal one-liner `if (resp.status === 429) return unverified(true);`, which ASSUMES a second 429
+  means the day's allowance is gone. Round 485 disproved that from the edge logs: the free tier
+  limits per MINUTE and per DAY and both answer 429, the refusals arrived two seconds apart (a
+  per-minute window), and a player who hit one was told to come back TOMORROW and lost the search
+  box. validate-player was corrected to read the body. **The check then failed the corrected file
+  and passed the two that still guessed.** A check that fails the fix and passes the bug is worse
+  than no check. It now asks the intent, and the Round 485 correction is ported to
+  `soccer-grid-validate` and `college-grid-validate`, which had both been guessing all along.
+
+  **(3) `simSoccerGridLabels`: Vitinha was still hard-refused for "Played for PSG", and the cause
+  was NOT the one the harness named.** It called it a stale cached verdict; deleting the row did
+  not fix it, which is what made the real cause visible. The stint table holds eight rows for
+  "Vitinha" and **not one of them is PSG**, so the records pass cannot settle it and it goes to the
+  model, which trips the Round 407 name-agreement guard. That guard was right to refuse the point
+  and WRONG in the shape of its refusal: a hard `valid:false`, **written to the cache**, so one
+  failure to agree on a name became a permanent no served to everybody afterwards. He really did
+  play for PSG. It now answers `unverified` and is not cached, which the grid hooks already treat
+  as a no-penalty retry. Same fix applied to `college-grid-validate`, which had the identical
+  branch.
+
+  Deployed soccer-grid-validate v23 and college-grid-validate v16, both recorded in the ledger.
+  All four affected harnesses green, and `simQuotaHonesty`'s three controls (`blind`, `lenient`,
+  `mute`) all fire.
+
+  **Worth carrying forward: two of these three were checks that had drifted away from the code they
+  guard, and both were silent about it.** One crashed only because a symbol vanished; had the
+  rename kept the name, it would have gone on measuring the wrong rule indefinitely.
+
 - **DONE, Round 500. All three chain games ended your run and filed the score when they could not
   CHECK your answer, breaking a rule CLAUDE.md states outright.** The rule is "Connect4 and chain
   hooks reject without ending the game on network errors." Each of the three hooks carried a

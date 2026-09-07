@@ -239,11 +239,30 @@ serve(async (req) => {
       body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 800 }),
     });
     let resp = await callAI();
+    /* ROUND 501 PORTS ROUND 485'S CORRECTION HERE, where it was always needed
+       too. The free tier limits requests per MINUTE and per DAY and BOTH answer
+       429, and this code assumed the day. So a player who hit a sixty second
+       window was told to come back TOMORROW. Round 485's logs settled which it
+       actually is: on 2026-09-06 the refusals arrived in bursts two seconds
+       apart, which is the shape of a per-minute window and not of a spent day,
+       and a short retry could never clear one. Read the body and believe it
+       rather than guessing. */
     if (resp.status === 429) {
-      await new Promise((r) => setTimeout(r, 1200));
+      const body1 = await resp.text().catch(() => "");
+      const looksDaily = (s: string) => /per\s*day|perday|requests_per_day/i.test(s);
+      if (looksDaily(body1)) {
+        console.log(`ai refused 429 DAY: ${body1.slice(0, 200)}`);
+        return unverified(true);
+      }
+      await new Promise((r) => setTimeout(r, 3000));
       resp = await callAI();
+      if (resp.status === 429) {
+        const body2 = await resp.text().catch(() => "");
+        const day = looksDaily(body2);
+        console.log(`ai refused 429 ${day ? "DAY" : "MINUTE-or-unknown"}: ${(body2 || body1).slice(0, 200)}`);
+        return unverified(day);
+      }
     }
-    if (resp.status === 429) return unverified(true);
     if (!resp.ok) return unverified();
     const data = await resp.json();
     const content = data.choices?.[0]?.message?.content?.trim() || "";
@@ -258,9 +277,15 @@ serve(async (req) => {
     const guessTokens = norm(sanitized.player).split(" ").filter((t) => t.length > 2);
     const nameTokens = norm(String(result.fullName || "")).split(" ").filter((t) => t.length > 2);
     const sameName = nameTokens.length === 0 || nameTokens.some((t) => guessTokens.includes(t));
-    const verdict = result.valid && !sameName
-      ? { valid: false, reason: "That name did not match a player we could verify.", fullName: null }
-      : { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+    /* ROUND 501: the same correction as the soccer grid, on the same shape.
+       A name the model and the player could not agree on is a failure to
+       verify, not a definite no, and caching it makes that failure permanent
+       for everybody afterwards. Unverified is honest, the grid hooks treat it
+       as a no-penalty retry, and it is not written to the cache. */
+    if (result.valid && !sameName) {
+      return json({ valid: false, unverified: true, reason: "That name did not match a player we could verify.", fullName: null }, corsHeaders);
+    }
+    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
     return json(verdict, corsHeaders);
   } catch {

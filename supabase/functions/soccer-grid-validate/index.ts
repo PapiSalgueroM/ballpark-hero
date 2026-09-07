@@ -373,11 +373,30 @@ serve(async (req) => {
       body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 800 }),
     });
     let resp = await callAI();
+    /* ROUND 501 PORTS ROUND 485'S CORRECTION HERE, where it was always needed
+       too. The free tier limits requests per MINUTE and per DAY and BOTH answer
+       429, and this code assumed the day. So a player who hit a sixty second
+       window was told to come back TOMORROW. Round 485's logs settled which it
+       actually is: on 2026-09-06 the refusals arrived in bursts two seconds
+       apart, which is the shape of a per-minute window and not of a spent day,
+       and a short retry could never clear one. Read the body and believe it
+       rather than guessing. */
     if (resp.status === 429) {
-      await new Promise((r) => setTimeout(r, 1200));
+      const body1 = await resp.text().catch(() => "");
+      const looksDaily = (s: string) => /per\s*day|perday|requests_per_day/i.test(s);
+      if (looksDaily(body1)) {
+        console.log(`ai refused 429 DAY: ${body1.slice(0, 200)}`);
+        return unverified(true);
+      }
+      await new Promise((r) => setTimeout(r, 3000));
       resp = await callAI();
+      if (resp.status === 429) {
+        const body2 = await resp.text().catch(() => "");
+        const day = looksDaily(body2);
+        console.log(`ai refused 429 ${day ? "DAY" : "MINUTE-or-unknown"}: ${(body2 || body1).slice(0, 200)}`);
+        return unverified(day);
+      }
     }
-    if (resp.status === 429) return unverified(true);
     /* Round 407: the status of a refused AI call is the one fact the logs
        need to tell a dead key from a spent day; it carries no secret. */
     if (!resp.ok) { console.log(`ai refused: status ${resp.status}`); return unverified(); }
@@ -394,9 +413,23 @@ serve(async (req) => {
     const guessTokens = norm(sanitized.player).split(" ").filter((t) => t.length > 2);
     const nameTokens = norm(String(result.fullName || "")).split(" ").filter((t) => t.length > 2);
     const sameName = nameTokens.length === 0 || nameTokens.some((t) => guessTokens.includes(t));
-    const verdict = result.valid && !sameName
-      ? { valid: false, reason: "That name did not match a player we could verify.", fullName: null }
-      : { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+    /* ROUND 501: A NAME WE COULD NOT AGREE ON IS NOT A DEFINITE NO, AND IT MUST
+       NOT BE REMEMBERED AS ONE.
+       This branch fires when the model answered valid but settled on a name
+       sharing no token with what the player typed, which is the Round 407 guard
+       and is right to refuse the point. What was wrong is the SHAPE of the
+       refusal: a hard valid:false, cached forever. Measured 2026-09-07 on
+       "Vitinha" for Played for PSG: the stint table holds eight rows for that
+       name and not one of them is PSG, so the records pass cannot settle it and
+       it goes to the model, which trips this guard, and the hard no was then
+       served from cache to every player afterwards. He really did play for PSG.
+       Unverified is the honest answer, the grid hooks already treat it as a
+       no-penalty retry, and it is NOT cached, because an unverified answer is a
+       state of the world rather than a fact about the player. */
+    if (result.valid && !sameName) {
+      return json({ valid: false, unverified: true, reason: "That name did not match a player we could verify.", fullName: null });
+    }
+    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
     return json(verdict);
   } catch (err) {

@@ -27,14 +27,14 @@
       "date": "2026-09-07"
     },
     "soccer-grid-validate": {
-      "sha256": "28fd94bc64d74f491711627b6159bcea5038b4ca1de76ed32aad208097dc808a",
-      "version": 22,
+      "sha256": "6aad2815f8211560f9d4b3ac2bf74c1704ca0ffa80fd3778909eb15ab1d5d611",
+      "version": 23,
       "date": "2026-09-07"
     },
     "college-grid-validate": {
-      "sha256": "1f6c43b0972fe1393aa289e803fb3eb928c9bef7250939e7c48c78146f010af4",
-      "version": 15,
-      "date": "2026-09-06"
+      "sha256": "ce927fee00d00122bd59881b2580b26e918c6f9aada60487c05e3fde187a771f",
+      "version": 16,
+      "date": "2026-09-07"
     },
     "football-connect4-validate": {
       "sha256": "2c47fb623f91bcfdf30f88a1c20dc545755026ab4710b102239a291b06e500f3",

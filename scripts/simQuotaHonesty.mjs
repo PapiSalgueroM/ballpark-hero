@@ -63,10 +63,10 @@ for (const v of VALIDATORS) {
   const f = v.file;
   let code = stripComments(read(f));
   if (CONTROL === 'blind' && f.includes('soccer')) {
-    const cut = code.replace(/\s*if \(resp\.status === 429\)[^\n]*return unverified\(true\);/, '');
-    if (cut === code) abort('control cannot run: the soccer validator has no second 429 branch to remove');
+    const cut = code.replace(/looksDaily/g, 'neverDaily');
+    if (cut === code) abort('control cannot run: the soccer validator does not read the 429 body');
     code = cut;
-    console.log('   NEGATIVE CONTROL ON: the second 429 branch removed from the soccer validator, in memory');
+    console.log('   NEGATIVE CONTROL ON: the soccer validator no longer reads the 429 body, in memory');
   }
   if (CONTROL === 'lenient' && f.includes('soccer')) {
     const cut = code.replace('result.valid && !sameName', 'false');
@@ -77,8 +77,25 @@ for (const v of VALIDATORS) {
   if (!/const unverified = \(exhausted = false\) =>/.test(code)) fail(`${f}: the refusal helper does not take an exhausted flag`);
   if (!/exhausted,/.test(code) || !/allowance for today/.test(code)) fail(`${f}: the refusal does not carry exhausted or name the allowance`);
   if (!/if \(resp\.status === 429\) \{/.test(code)) fail(`${f}: a 429 is not retried once`);
-  if (!/if \(resp\.status === 429\)[^\n]*return unverified\(true\);/.test(code)) fail(`${f}: a second 429 does not return unverified(true)`);
-  const secondAt = code.search(/if \(resp\.status === 429\)[^\n]*return unverified\(true\);/);
+  /* ROUND 501 REPLACES A CHECK THAT HAD GONE STALE AND WAS ENFORCING A BUG.
+     It used to demand the literal one-liner `if (resp.status === 429) return
+     unverified(true);`, which ASSUMES a second 429 means the day is gone. Round
+     485 proved that assumption wrong from the edge logs: the free tier limits
+     per MINUTE and per DAY and both answer 429, the refusals arrived two
+     seconds apart (a per-minute window), and a player who hit one was told to
+     come back TOMORROW and lost the search box. validate-player was corrected
+     to read the body; this check then FAILED THE CORRECTED FILE and passed the
+     two that still guessed. A check that fails the fix and passes the bug is
+     worse than no check at all.
+     What it asks now is the intent: an exhausted DAY still returns
+     unverified(true), the day is DECIDED FROM THE RESPONSE BODY rather than
+     assumed, and it all comes before the generic refusal. */
+  const blind = /if \(resp\.status === 429\)\s*return unverified\(true\);/.test(code);
+  if (blind) fail(`${f}: a second 429 is assumed to be the day's allowance without reading the body, so a per-minute limit tells the player to come back tomorrow (Round 485 measured this happening)`);
+  if (!/looksDaily/.test(code)) fail(`${f}: nothing reads the 429 body to tell a per-minute limit from a spent day`);
+  if (!/return unverified\(true\);/.test(code)) fail(`${f}: a spent day never returns unverified(true)`);
+  if (!/return unverified\(day\);/.test(code)) fail(`${f}: after the retry the refusal does not carry what the body actually said`);
+  const secondAt = code.indexOf('looksDaily');
   const genericAt = code.indexOf('if (!resp.ok)');
   if (secondAt >= 0 && genericAt >= 0 && secondAt > genericAt) fail(`${f}: the generic refusal comes before the exhausted one, so exhausted can never fire`);
   /* Round 407, the two findings the logs handed back once refusals were
