@@ -295,6 +295,28 @@ export function useDailyPuzzle<T, G>(
   // supabasePuzzle arrives and puzzleIndex changes.
   const loadedForIndex = useRef<number | null>(null);
 
+  /* Round 495: the guess log and the status are mirrored in refs that move
+     synchronously, and addGuess reads those instead of the values its closure
+     captured at render time.
+
+     WHY. One handler may add more than one guess in a single tick. Transfer
+     Path records the step, then the target's own step when the new name also
+     links to the target, then the win, all from one addPlayer call; Career
+     Path's hint reveals four cells in a forEach. Every one of those calls used
+     to read the SAME render's `guesses` array, so each rebuilt [...guesses,
+     guess] from the same base and only the last one survived. The persisted
+     record was written from that same stale array on the last call, so a won
+     Transfer Path daily dropped the last name the player typed and scored the
+     short chain it had kept rather than the one actually played.
+
+     The refs are what makes consecutive calls compose. The write stays
+     synchronous, because progress has to survive an immediate close, and the
+     saved shape is untouched, so no migration is needed. Every place that sets
+     guesses or gameStatus sets its ref in the same breath; there is no other
+     writer. */
+  const guessesRef = useRef<G[]>(guesses);
+  const statusRef = useRef<'playing' | 'won' | 'lost'>(gameStatus);
+
   useEffect(() => {
     // Already loaded for this puzzle, skip
     if (loadedForIndex.current === puzzleIndex) return;
@@ -312,17 +334,21 @@ export function useDailyPuzzle<T, G>(
     );
 
     if (saved) {
+      guessesRef.current = saved.guesses;
       setGuesses(saved.guesses);
       /* Round 399: a finished status read back from storage is not a new
          finish. Say so before setting it, or useGameCompletion sees the
          same false to true transition a real finish makes and records the
          game again on every reload. */
       if (saved.gameStatus !== 'playing') markRestoredFinish(gameSlug);
+      statusRef.current = saved.gameStatus;
       setGameStatus(saved.gameStatus);
     } else {
       // No valid saved state, start fresh (also covers supabasePuzzle arriving
       // and changing puzzleIndex mid-session: reset to clean state for new puzzle)
+      guessesRef.current = [];
       setGuesses([]);
+      statusRef.current = 'playing';
       setGameStatus('playing');
     }
 
@@ -335,9 +361,12 @@ export function useDailyPuzzle<T, G>(
 
   const addGuess = useCallback(
     (guess: G) => {
-      if (gameStatus !== 'playing' || puzzle == null) return;
+      // Both reads are refs, not the closure: a second call in this same tick
+      // has to see what the first one just added, and has to be refused if the
+      // first one ended the game.
+      if (statusRef.current !== 'playing' || puzzle == null) return;
 
-      const newGuesses = [...guesses, guess];
+      const newGuesses = [...guessesRef.current, guess];
       let newStatus: 'playing' | 'won' | 'lost' = 'playing';
 
       if (isWon(newGuesses, puzzle)) {
@@ -349,13 +378,15 @@ export function useDailyPuzzle<T, G>(
         newStatus = 'lost';
       }
 
+      guessesRef.current = newGuesses;
+      statusRef.current = newStatus;
       setGuesses(newGuesses);
       setGameStatus(newStatus);
 
       // Write synchronously so progress survives an immediate page close
       writePersistedState(storageKey, todayStr, puzzleIndex, newGuesses, newStatus);
     },
-    [guesses, gameStatus, puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
+    [puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
   );
 
   const reset = useCallback(() => {
@@ -364,6 +395,8 @@ export function useDailyPuzzle<T, G>(
     } catch {
       // ignore
     }
+    guessesRef.current = [];
+    statusRef.current = 'playing';
     setGuesses([]);
     setGameStatus('playing');
   }, [storageKey]);

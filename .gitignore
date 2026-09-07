@@ -46,3 +46,9 @@ scripts/.cache/
 
 # Round 435: patched source copies simRebuildEconomy.mjs writes for its negative controls, deleted the moment the bundle exists
 /.sim-control/
+
+# Deliberately broken copies of a real hook, written by a harness for its
+# negative control and deleted on exit (simTycoonAway, simDailyRecord). They
+# are never repo content, and one committed by accident would ship the very
+# defect its harness exists to catch.
+src/hooks/__control_*.ts

@@ -20,6 +20,14 @@ export default defineConfig({
       ...(process.env.TYCOON_AWAY_CONTROL === "loadonly"
         ? { "@/hooks/useStadiumTycoon": path.resolve(__dirname, "./src/hooks/__control_useStadiumTycoon.ts") }
         : {}),
+      /* Round 495 negative control. scripts/simDailyRecord.mjs writes a copy of
+         the daily engine carrying the pre 495 stale closure reads in addGuess
+         and sets this variable, so src/test/dailyRecord.test.tsx can be pointed
+         at the real defect and proved to go red on it. Same ordering rule as
+         above: it has to sit over "@". Off in every ordinary run. */
+      ...(process.env.DAILY_RECORD_CONTROL === "stale"
+        ? { "@/hooks/useDailyPuzzle": path.resolve(__dirname, "./src/hooks/__control_useDailyPuzzle.ts") }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

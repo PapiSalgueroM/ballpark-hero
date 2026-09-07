@@ -251,9 +251,9 @@ const CareerLadder = () => {
 
     if (mode === 'daily') {
       // A single action; isLost (wrong-count >= MAX_GUESSES) derives the loss
-      // state from the updated log, so no separate 'lost' dispatch is needed
-      // (and dispatching two actions here would race against addGuess's
-      // stale-closure-per-call read of guesses, see useDailyPuzzle.ts).
+      // state from the updated log, so no separate 'lost' dispatch is needed.
+      // (Two actions here would be safe as of Round 495: addGuess composes
+      // consecutive calls in one tick. It was not safe before that.)
       addDailyAction({ t: 'wrong', name });
     } else {
       const nextWrong = [...wrongGuesses, name];
