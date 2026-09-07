@@ -4,7 +4,56 @@ import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } 
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { checkLineupPick } from '@/lib/positionFit';
+import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
+
+/* The project URL and public key are hardcoded on purpose: CLAUDE.md records
+   that Lovable injects VITE_SUPABASE_* pointing at a DELETED project, so these
+   must never be read from the environment. */
+const SUPABASE_REST = "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y";
+
+/* ROUND 493: the verified history the position gate was throwing away.
+   checkLineupPick has always been able to take it and this caller never passed
+   it, while World XI passes it at worldXi.ts:131, so the same shared rule
+   answered two different ways depending on which game asked and Build Your XI
+   was the strict one for no reason. Measured over the 134 curated players and
+   all 15 slot roles: 94 of 945 player-and-slot pairs were being refused when the
+   history allows them, all of it real football (Amad Diallo at right wing-back,
+   Alex Baena at CAM, Anthony Gordon at striker).
+
+   The guard is World XI's, copied rather than invented: the curated row is only
+   believed when its PRIMARY matches the position on the row the player picked.
+   player_verified_positions is keyed by name and a name is not a person, so a
+   same-named player in a different role must earn nothing from it. The
+   goalkeeper boundary needs no guard here because fitsAllowed puts it above
+   both widening paths. */
+async function verifiedSecondaries(name: string, primary: Position | null): Promise<Position[]> {
+  if (!name || !primary) return [];
+  try {
+    /* Read with a plain fetch, the way this file already reaches the edge
+       functions below. The typed client refuses the table outright:
+       player_verified_positions exists in the database and is absent from the
+       generated types, so `supabase.from` rejects the name at compile time.
+       Regenerating those types is a change to a 200-plus table file and is not
+       this round's business. */
+    const res = await fetch(
+      `${SUPABASE_REST}/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.${encodeURIComponent(name)}&limit=1`,
+      { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } },
+    );
+    if (!res.ok) return [];
+    const rows = (await res.json()) as { primary_position: string | null; secondary_positions: unknown }[];
+    const row = rows[0];
+    if (!row?.primary_position) return [];
+    if (normalizePosition(String(row.primary_position).trim()) !== primary) return [];
+    const raw = Array.isArray(row.secondary_positions)
+      ? row.secondary_positions
+      : String(row.secondary_positions ?? '').split(/[;,/]/);
+    return raw.map((x) => String(x).trim()).filter(Boolean) as Position[];
+  } catch {
+    return [];
+  }
+}
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 export function useLineupBuilder() {
@@ -95,13 +144,30 @@ export function useLineupBuilder() {
          same deterministic shape the NBA lineup builder has had since it stopped
          double-judging picks. Refusing here costs nothing: no guess is burned,
          no request is spent, the slot stays open. */
-      const positionCheck = checkLineupPick(
+      let positionCheck = checkLineupPick(
         playerName.trim(),
         position.role,
         position.label,
         pickMeta?.rawPosition,
         normalizePosition,
       );
+      /* The history is only looked up when the plain rule is about to REFUSE,
+         so an ordinary pick still costs no request at all and the Round 442
+         property holds. */
+      if (!positionCheck.ok) {
+        const primary = pickMeta?.rawPosition ? normalizePosition(pickMeta.rawPosition.trim()) : null;
+        const played = await verifiedSecondaries(playerName.trim(), primary);
+        if (played.length > 0) {
+          positionCheck = checkLineupPick(
+            playerName.trim(),
+            position.role,
+            position.label,
+            pickMeta?.rawPosition,
+            normalizePosition,
+            played,
+          );
+        }
+      }
       if (!positionCheck.ok) {
         setValidationError(positionCheck.reason ?? 'That player does not fit this position.');
         return;

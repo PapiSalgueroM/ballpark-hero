@@ -682,6 +682,88 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **MEASURED AND DESIGNED, NOT YET SHIPPED: Soccer Connect 4 is the biggest consumer of the
+  shared AI quota, and three quarters of what it asks is in our own tables.**
+  Take this one when there is room to edit `supabase/functions/football-connect4-validate/index.ts`
+  in place. Everything below is measured; nothing is left to work out.
+
+  **Why it matters more than its own completion count.** The free Gemini allowance is a DAILY
+  one shared by every AI checked game on the site, so the biggest consumer starves the rest.
+  Measured on `ai_validation_cache` 2026-09-06, verdicts written in the last 14 days:
+  football-connect4 407, soccer-grid 192, college-grid 145, nba-connect4 82, nfl-connect4 35,
+  nhl-connect4 32, football-grid 23, mlb-connect4 16. Connect 4 is more than double the next
+  one. Those are only the SUCCESSFUL calls, because a failure is never cached, so the real
+  spend is higher. Round 482 stopped Build Your XI eating the quota; this is what eats it now.
+
+  **What it asks.** `src/types/footballConnect4.ts` holds 104 attribute uses across 46 distinct
+  attributes: 76 of the 104 are "Played for X" club attributes (73 percent), 14 honours, 7
+  nationality, 7 league. The club half is exactly what `soccer_player_club_stints` answers for
+  Soccer Grid already, and this function does not open that table at all.
+
+  **The validator is otherwise well built and must not be rewritten.** Round 379 already
+  decomposes a verdict into two single-attribute facts and caches those separately, which is
+  why a player seen on any board answers cheaply on the next one. The change is ADDITIVE: a
+  confirm-only pass inserted after the attribute-fact lookup and before the `cacheOnly` check.
+  A club hit makes that attribute true; a miss says NOTHING and falls through to the model,
+  because the table is not complete. When both attributes resolve true, answer without the AI;
+  otherwise still call it, and in either case write the attributes that WERE determined into
+  the fact cache so later cells get them free.
+
+  **The club map, derived and checked against all 4,931 stored club strings on 2026-09-06.**
+  It must be EXACT, not a substring match: the loose rule Soccer Grid uses would accept Berekum
+  Chelsea FC for Chelsea, Barcelona SC Guayaquil for Barcelona and Liverpool FC Montevideo for
+  Liverpool, and a confirm-only pass that over-accepts is a wrong answer, not a missing one.
+  Reserve and youth sides are deliberately absent. All 29 labels resolve; three needed a hand
+  written alias (Leverkusen, Newcastle, Tottenham) because the stored name adds a word.
+
+      "ac milan": ["AC Milan"],
+      "arsenal": ["Arsenal FC"],
+      "atletico madrid": ["Atlético Madrid"],
+      "barcelona": ["Barcelona", "FC Barcelona"],
+      "bayern munich": ["Bayern Munich", "FC Bayern Munich"],
+      "chelsea": ["Chelsea FC"],
+      "dortmund": ["Borussia Dortmund"],
+      "fiorentina": ["ACF Fiorentina"],
+      "inter milan": ["Inter Milan"],
+      "juventus": ["Juventus FC", "Juventus"],
+      "lazio": ["Lazio", "SS Lazio"],
+      "leverkusen": ["Bayer 04 Leverkusen"],
+      "liverpool": ["Liverpool", "Liverpool FC"],
+      "man city": ["Manchester City"],
+      "man united": ["Manchester United"],
+      "napoli": ["SSC Napoli", "Napoli"],
+      "newcastle": ["Newcastle United"],
+      "psg": ["Paris Saint-Germain"],
+      "rb leipzig": ["RB Leipzig"],
+      "real madrid": ["Real Madrid"],
+      "real sociedad": ["Real Sociedad"],
+      "roma": ["AS Roma", "Roma"],
+      "schalke": ["FC Schalke 04"],
+      "sevilla": ["Sevilla FC", "Sevilla"],
+      "stuttgart": ["VfB Stuttgart"],
+      "tottenham": ["Tottenham Hotspur"],
+      "valencia": ["Valencia CF"],
+      "villarreal": ["Villarreal CF"],
+      "wolfsburg": ["VfL Wolfsburg"],
+
+  A stored club may be two clubs joined by " / " for a split season, so split on that and read
+  each side, the way Round 489 does in the grid.
+
+  **Known limits to state rather than discover later.** The name lookup would be
+  `ilike(player_name, ...)` on the raw column, which is accent sensitive, and 17,222 of the
+  table's 80,586 rows (21 percent) carry an accented name. That is survivable here because the
+  pass is confirm-only, but it caps the saving. And the table holds a placeholder club literally
+  named `---` (Göksel Gencer 2007, Alexander Manninger 2011); the exact map ignores it by
+  construction, which is one more reason the map must not be a substring rule.
+
+  **WHY IT WAS NOT SHIPPED ON 2026-09-06.** The change is about forty lines, but the only way
+  to deploy an edge function here is to send the whole file, and this one is 358 lines that are
+  mostly a prompt full of accented names, a euro sign, bullets and nested quotes. Retyping it
+  to add forty lines risks altering the prompt in a way no gate would catch, and the prompt is
+  what every uncached answer depends on. Editing the file in place and deploying is the right
+  way to do this, and the analysis above is the part that would otherwise have to be redone.
+
+
 ### THE SITE WIDE AUDIT, 2026-09-06. 53 agents, six blind angles, two adversarial lenses per finding.
 
 Run after Rounds 482 and 483 on the repo's own rule that a bug found in one sport must be
@@ -786,8 +868,16 @@ critic's item; these are the rest, unclaimed.
   confirmed from two different men's rows (`:145`), which is Round 482's Paulinho defect in
   another file, and the false accept is then cached forever.
 
-- **GUESS THE FOOTBALL CLUB: 36 of 364 puzzles show a league clue that contradicts the league
-  stored in their own row**, and the dropdown offers six club aliases it then scores wrong for
+- **DONE, Round 492. GUESS THE FOOTBALL CLUB: 36 of 364 puzzles told a second division club it
+  played in the top division** (Championship 24, 2. Bundesliga 7, Serie B 4, J2 League 1), and
+  four more showed a doubled apostrophe, a SQL escape written into the data instead of consumed
+  by the parser. All normalised to one phrasing. The tier list is explicit on purpose: Serie B
+  is a second division and Serie A is not, but 'First League' is a top flight in Bulgaria.
+  Fence `scripts/simGuessSoccerClubHints.mjs`, controls `topdivision` and `escapes`.
+  **STILL OPEN from the same finding:** the dropdown offers six club aliases it then scores
+  wrong for the club that owns them. That half was not touched.
+  ORIGINAL FINDING: 36 of 364 puzzles show a league clue that contradicts the league
+  stored in their own row, and the dropdown offers six club aliases it then scores wrong for
   the club that owns them.
 
 - **FOOTLE: the same-continent yellow tile never fires for 16% of the pool** and fires wrongly
@@ -795,7 +885,18 @@ critic's item; these are the rest, unclaimed.
   the player has already left. The guard added for the league in Round 315 was never applied to
   the number.
 
-- **BUILD YOUR XI'S POSITION GATE NEVER READS `player_verified_positions`**, so it refuses 88
+- **DONE, Round 493. Build Your XI's position gate never read `player_verified_positions`.**
+  Both games use the same module and `fitsAllowed` has taken the history since Round 345;
+  World XI passed it and `checkLineupPick` dropped it, so the shared rule was strict for one
+  game and not the other. MEASURED with the real module bundled against the live table: 94 of
+  945 player-and-slot pairs were refused when the history allows them, all real football.
+  **The audit said 88 and my own first pass said 165; the correct figure is 94.** The first
+  number was wrong because the curated primary is stored as "Central Midfield" while the rule
+  takes "CM", so every 'before' answer was false for the wrong reason. The goalkeeper boundary
+  was the one thing this could have broken and the fence proves it exhaustively: 225
+  combinations with an all-positions history, 0 crossings. Fence
+  `scripts/simLineupVerifiedPositions.mjs`, controls `nohistory` and `nowire`.
+  ORIGINAL FINDING:, so it refuses 88
   picks that World XI accepts using the same shared rule module, which already takes the
   verified history as an optional argument. Related: "Second Striker" collapses to CF on the
   client and maps to CAM in the validator, so the CAM slot refuses every classic number 10.

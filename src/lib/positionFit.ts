@@ -147,12 +147,32 @@ export function checkLineupPick(
   slotLabel: string,
   rawPosition: string | null | undefined,
   normalize: (raw: string) => Position | null,
+  /* ROUND 493: the verified history, which this function has been throwing away.
+     fitsAllowed has taken it since Round 345 and its docstring calls it
+     "optional verified history", World XI passes it at worldXi.ts:131, and this
+     caller never did. So the same module answered two different ways depending
+     on which game asked, and Build Your XI was the strict one for no reason.
+     Measured 2026-09-06 over the 134 curated players and all 15 slot roles: 94
+     of the 945 player-and-slot pairs turn from REFUSED into allowed, and every
+     one of them is real football that the game was rejecting. Amad Diallo is a
+     right winger who has played right wing-back; Alex Baena is a left winger who
+     has played CAM; Anthony Gordon is a left winger who has played striker.
+     (The first attempt at that measurement said 165 and was wrong: the curated
+     primary_position is stored the way the market table spells it, "Central
+     Midfield", while fitsAllowed takes the short code, so every "before" answer
+     was false for the wrong reason. Normalising the primary first, as this
+     function already does, gives 94.)
+     The goalkeeper boundary is NOT at risk and does not need repeating here:
+     fitsAllowed puts it above both widening paths on purpose, so a keeper still
+     cannot reach an outfield slot however long his history is. Measured on the
+     same run: 0 pairs where that could happen. */
+  played?: Position[],
 ): LineupPickCheck {
   const allowed = SLOT_ALLOWED_BY_ROLE[slotRole];
   if (!allowed) return { ok: true };
   const primary = rawPosition ? normalize(rawPosition.trim()) : null;
   if (!primary) return { ok: true };
-  if (fitsAllowed(primary, allowed)) return { ok: true };
+  if (fitsAllowed(primary, allowed, played)) return { ok: true };
   return {
     ok: false,
     reason: primary === 'GK'
