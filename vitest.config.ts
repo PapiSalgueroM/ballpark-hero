@@ -32,6 +32,14 @@ export default defineConfig({
       ...(process.env.POLL_FIXTURES
         ? { "@/data/pollFixtures": path.resolve(process.env.POLL_FIXTURES) }
         : {}),
+      /* Round 503 negative control. scripts/simDailyRecord.mjs writes a copy of
+         the daily engine carrying the pre 503 stale closure reads in addGuess
+         and sets this variable, so src/test/dailyRecord.test.tsx can be pointed
+         at the real defect and proved to go red on it. Same ordering rule as
+         above: it has to sit over "@". Off in every ordinary run. */
+      ...(process.env.DAILY_RECORD_CONTROL === "stale"
+        ? { "@/hooks/useDailyPuzzle": path.resolve(__dirname, "./src/hooks/__control_useDailyPuzzle.ts") }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

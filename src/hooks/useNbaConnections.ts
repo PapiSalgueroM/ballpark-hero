@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { nbaConnectionsPuzzles } from '@/data/nbaConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
@@ -165,6 +165,17 @@ export function useNbaConnections() {
   // ---- SHARED LOCAL STATE --------------------------------------------------
   const [selected, setSelected] = useState<string[]>([]);
   const [shakeWrong, setShakeWrong] = useState(false);
+  /* Round 503: the shake timer is held so it can be cleared. The 600ms
+     timeout used to be fire and forget, so an unmount mid shake (a route
+     change, a test teardown) set state on a component that no longer
+     existed, and the full vitest run printed "window is not defined"
+     whenever the callback landed after jsdom was torn down. A second wrong
+     guess inside the window replaces the first timer, so the shake always
+     ends 600ms after the LAST miss rather than the first. */
+  const shakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (shakeTimer.current !== null) clearTimeout(shakeTimer.current);
+  }, []);
 
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: NbaConnMode) => {
@@ -208,7 +219,11 @@ export function useNbaConnections() {
         }
       }
       setShakeWrong(true);
-      setTimeout(() => setShakeWrong(false), 600);
+      if (shakeTimer.current !== null) clearTimeout(shakeTimer.current);
+      shakeTimer.current = setTimeout(() => {
+        shakeTimer.current = null;
+        setShakeWrong(false);
+      }, 600);
     }
   }, [mode, selected, gameStatus, puzzle, solvedGroups, unlimitedLives, unlimitedSolvedGroups, addDailyAction]);
 

@@ -19,11 +19,48 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 487.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 509 (checked against origin/main on
+  2026-09-07: main is `8edc2896`, Round 502, so the 487 this line used to say was stale; 487 to
+  502 shipped on 2026-09-06 and 2026-09-07. The Claude Code lane holds 503 to 508, see its
+  claim below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
+
+- **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
+  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Verified against origin
+  before claiming: main is `8edc2896`, Round 502, so 503 is the next free number.
+  **503 RELIABILITY, DONE 2026-09-07, on the branch with a PR open.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
+  transplanted onto current main rather than merged (the branch is stale and is not merged whole):
+  (a) `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a handler adding more than
+  one guess in one tick kept only the last, which is why a won Transfer Path daily recorded and paid
+  the short chain and Career Path's hint recorded one cell of four; fenced by simDailyRecord over the
+  real hooks with a `stale` control. (b) The four Connections hooks (NBA, NFL, NHL, Baseball)
+  schedule a 600ms shake timer with no cleanup, so an unmount mid shake sets state on a dead
+  component and the full vitest run prints "window is not defined" at random (the open bug
+  1bc0ab47 recorded); fenced with a fake timer test and a control that puts the bare timer back.
+  **504 CLUB MANAGER LIVE MATCH V1**, his words: "Ball at players' feet, both teams with names and
+  numbers on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live
+  stats visible during play, subs and tactics at any moment, the AI opponent also subs." Built on
+  the Round 472 merged flow, never a second match screen.
+  **505 CLUB MANAGER TACTICS DEPTH**, his words: "subs and reserves listed under the pitch, tap one
+  player then another to swap. Out of position penalties, position retraining over weeks ...
+  Captain, corner takers left and right, free kick and penalty takers ... Player roles: attacking
+  or holding fullbacks, sweeper keeper ... Sub suggestions ordered by same position first."
+  **506 CLUB MANAGER TRANSFERS AND PERSONAL TERMS**, his words: "a valuation staffer whose accuracy
+  depends on level ... YOU type the bid; extreme lowballs can end talks entirely; sell on clauses,
+  player swaps, a closeness meter, limited patience per negotiation. Loans with option and release
+  figures. Then personal terms: length, wages, add ons, role promises, everything."
+  **507 and 508** are reserved for what those three leave named as not done, or the next item off
+  the ledger if they finish clean.
+  FILE AREA: `src/lib/clubManager*.ts`, `src/components/club-manager/*`, `src/pages/ClubManager.tsx`,
+  `src/hooks/useClubManager.ts`, `scripts/simClubManager*.mjs`, `scripts/simMatchScreen.mjs`,
+  `scripts/playClubManager.mjs`; for 503 only, `src/hooks/useDailyPuzzle.ts`, the four
+  `src/hooks/use*Connections.ts` hooks, `src/pages/CareerLadder.tsx` and `vitest.config.ts`.
+  NOT TOUCHING, Codex owns them: Round 502 publication and verification, the `/college-grid`
+  playGames stall, the prerender three clock date content bug, the measured correctness queue,
+  first open help, profile and scoring verification, and the three Inbox items marked CODEX below.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
@@ -681,6 +718,13 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 (empty as of 2026-08-30, everything through ccc4c583 is live)
 
 ## Inbox (unclaimed)
+
+- **CODEX LANE OWNS THESE THREE. Recorded here so they are not lost (they came from the end of the
+  Round 502 handoff, relayed 2026-09-07), and the Claude Code lane does not touch them unless this
+  line reassigns one.** (1) The four My Career boards re-credit legacy score on repeat visits.
+  (2) Seven `career_seasons` rows assign goals to players after they had left the club. (3) NBA
+  Conquest over-punishes attackers that lose. Codex verifies and fixes all three in its scoring and
+  correctness lane.
 
 - **OPEN, MEASURED, NOT DIAGNOSED: `playGames` stalls deterministically on `/college-grid`.**
   Found 2026-09-07 while browser checking the routes Rounds 499 to 501 touched. Recorded here
