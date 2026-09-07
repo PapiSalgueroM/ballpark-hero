@@ -735,6 +735,26 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **MEASURED 2026-09-07, NOT FIXED, Footle area (not the Claude Code lane's files):
+  `scripts/simFootleKitNumbers.mjs` hangs the full suite in the cloud sandbox.** It fetches
+  `player_market_values` straight off the database (line 75) and the sandbox's egress proxy
+  never answers that host, so the child sat at 0.1 percent CPU for an hour inside
+  `runAllSims` holding one of the runner's slots until it was killed by hand. The runner's
+  own database probe reports a harness that SAYS nothing was checked as SKIPPED, but this one
+  never gets to say anything. The fix shape is the one the four older database harnesses
+  use: an `AbortSignal.timeout` on the fetch and a fail closed sentence, so the runner can
+  skip it loudly in a lane with no database. Owner of the file decides; recorded here so the
+  next cloud suite run does not lose an hour to it.
+
+- **MEASURED 2026-09-07, NOT FIXED, not the Claude Code lane's files: `scripts/simNewBadge.mjs`
+  is red on a clean checkout of main in the cloud clone.** "120 typed date(s) disagree with git:
+  /budget-builder says 2026-07-21, git says 2026-09-05; /rebuild says 2026-07-21, git says
+  2026-09-05; /dart-draft says 2026-07-10, git says 2026-09-05". The typed `addedOn` dates look
+  right (those pages are months old) and git's answer of 2026-09-05 for 120 pages is the day the
+  459 to 463 batch merged, so the harness's "first landed in git" query is reading a merge or a
+  move rather than the page's first commit. Whoever owns the NEW badge should check the git
+  query (a `--follow` or a first parent walk) before trusting the board on the desktop either.
+
 - **CODEX LANE OWNS THESE THREE. Recorded here so they are not lost (they came from the end of the
   Round 502 handoff, relayed 2026-09-07), and the Claude Code lane does not touch them unless this
   line reassigns one.** (1) The four My Career boards re-credit legacy score on repeat visits.
