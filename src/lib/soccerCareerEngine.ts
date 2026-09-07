@@ -2348,6 +2348,12 @@ export function careerBuildEffects(s: CareerState): BuildEffects {
 export function repairCareer<T extends CareerState>(state: T): T {
   if (!state || typeof state !== "object") return state;
   const s = state as CareerState;
+  /* ROUND 502: rescue a save that is ALREADY stranded. Fixing dismissNewspaper
+     stops new careers dying, and does nothing for anyone whose career died
+     before this shipped: their phase is season_summary with no pendingSummary,
+     it is in localStorage, and every reload restores the same blank screen.
+     This is the only place that runs on load, so it is where they come back. */
+  if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
   if (!s.primeType) s.primeType = rollPrimeType();
   /* Round 217: saves from before the loan move have neither field. Null is
      the exact old behaviour: no loan running, no offers pending. */
@@ -5412,7 +5418,25 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 export function dismissNewspaper(prev: CareerState): CareerState {
   const s = { ...prev };
   s.pendingNews = [];
-  s.phase = "season_summary";
+  /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
+     SITTING THERE.
+     The newspaper phase is reachable from exactly ONE place, the corruption
+     conviction in advanceProSeason, and that branch returns early WITHOUT
+     pushing a season record and without setting pendingSummary (dismissSummary
+     nulls it at the end of the previous season). So this unconditional hop to
+     season_summary landed on a screen SoccerCareer.tsx only renders when
+     pendingSummary is truthy, and whose phase is not in showActionButton, so
+     there was no board, no Next Season and no Retire. The state is written to
+     localStorage on every change and the loader never touched phase, so a
+     reload restored the same dead screen. The only escape was New Career,
+     which DELETES the save.
+     It was not rare or unlucky: conviction is the only way in here, so every
+     conviction did it, and the trial fires on a 50 percent roll once heat is
+     at 90.
+     Guarded by shape rather than by naming the one offender: never leave the
+     player on a screen that cannot draw. If there is nothing to summarise,
+     hand the career back in the phase that has the buttons. */
+  s.phase = s.pendingSummary ? "season_summary" : "playing";
   return s;
 }
 

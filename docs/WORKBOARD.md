@@ -868,6 +868,45 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
+- **DONE, Round 502. A corruption conviction ended a Soccer Career permanently, with the player
+  still at the keyboard and the save intact but unusable.** The flagship, and the worst class of
+  bug on it: not a wrong number, a lost career.
+
+  **The path.** `advanceProSeason`'s conviction branch returns early without pushing a season
+  record and without setting `pendingSummary` (`dismissSummary` nulls it at the end of the previous
+  season). `dismissNewspaper` then moved UNCONDITIONALLY to `season_summary`. `SoccerCareer.tsx`
+  renders that phase only under `career.phase === "season_summary" && career.pendingSummary`, and
+  `showActionButton` lists youth, playing, manager_season, pundit_season and owner_season, so there
+  was no board, no Next Season and no Retire. State is written to localStorage on every change and
+  the loader never touched `phase`, so a reload restored the same blank screen. **The only escape
+  was New Career, which deletes the save.** Reachable by buying one repeatable EUR 0.25M item seven
+  times (7 x 15 heat, clamped to 100, minus the fixed 8 cooling = 92), then a 50 percent roll.
+
+  **The fix, in two halves.** `dismissNewspaper` now sends the player to `season_summary` only when
+  there is something to summarise and to `playing` otherwise, guarded by SHAPE rather than by
+  naming the one offender. And `repairCareer` heals a save that is ALREADY stranded, because fixing
+  the transition does nothing for a career that died before it shipped and those saves reload
+  straight back into the blank screen.
+
+  **A MEASUREMENT MISTAKE OF MINE, kept in the harness because it is the interesting part.** The
+  first version of the check identified a conviction as `phase === "newspaper"` and was FLAKY, 4
+  runs of 5 disagreeing with the fifth. The cause: there are TWO entrances to the newspaper phase
+  and only one strands. `soccerCareerEngine.ts:5043` is a normal season that produced news
+  (`s.phase = news.length > 0 ? "newspaper" : "season_summary"`), which sets `pendingSummary` on the
+  line above and is completely fine; `:4624` is the conviction, which sets none. **A grep for a
+  literal `phase = "newspaper"` finds only the second, because the first is a ternary**, which is
+  how the first draft came to believe there was one entrance. Measured across 40 careers: 26 of the
+  newspapers it caught were convictions and 14 were ordinary news. The check identifies a
+  conviction by its own side effect now (`prisonSeasons` going to 1), and it asserts the OTHER half
+  too: an ordinary news season must still reach its summary, so the fix cannot have been a blanket
+  redirect that ate a screen.
+
+  `simCareerNoDeadEnd` also holds the general form, which is what would have caught this class
+  without anyone knowing about corruption: every phase string the ENGINE can assign must be a phase
+  the PAGE can draw (20 of 20 today). Controls `strand` (2 findings) and `noheal` (1). Stable 5 runs
+  of 5. simSoccerCareer and simCareerLife green, build green, playGames /soccer-career 14
+  interactions clean.
+
 - **DONE, Round 501. The three failures the full 250-harness suite turned up, all of them real.**
   The suite had not been run end to end for a while and it earned its keep: two of the three were
   defects THIS session introduced or exposed, and the third was a live wrong answer.
