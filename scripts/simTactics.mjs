@@ -62,7 +62,7 @@ const launchOrSkip = async (name) => {
       console.log(`   SKIPPED ${name}, it is not installed here: ${line}`);
       return null;
     }
-    throw new Error(`${name} is installed and failed to launch, which is a red and not a skip: ${line}`);
+    throw new Error(`${name} is installed and failed to launch, which is a red and not a skip: ${line}; TMPDIR is ${process.env.TMPDIR?.length ?? 0} chars`);
   }
 };
 

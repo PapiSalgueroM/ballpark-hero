@@ -36,20 +36,35 @@
         fully natural eleven paying nothing: penalty 0 and the same rounded
         plain average the header printed before this round. Then the
         OUTCOME on common random numbers (withSeed(k) for every arm): arm A
-        the club's natural eleven, arm B the same eleven with the keeper and
-        the striker swapped (a keeper grade both ways), arm F one full back
-        moved to the other flank (a family grade both ways). The first half
-        lambda is exact and must order A above F above B on every fixture;
-        the first half's goals for are drawn by the first divergent draw
-        (Poisson is monotone in lambda under a shared uniform stream) so A
-        may never score fewer than F, nor F fewer than B, on any seed, and A
-        must out score B on a measured share of seeds; over the full match B
-        must score fewer and concede more than A by more than three paired
-        standard errors, and F's means must sit inside the band A to B
-        widened by two standard errors either side (a family penalty is
-        four rating points over eleven men, about 0.02 goals a match, which
-        no sane sample can order on its own; the lambda and the first half
-        carry the exact ordering instead).
+        the eleven that will kick off (effectiveXIWithSlots, because a hurt
+        man in the picked list is replaced at kick off and a swap made on
+        that list would lose its penalty on the pitch), arm B the same
+        eleven with the keeper and the striker swapped (a keeper grade both
+        ways, off two natural slots), arm F one man moved to the other flank
+        (the full backs first, then the wing backs, wingers or wide
+        midfielders, the first pair of natural men that grades family on at
+        least one once swapped and nothing worse; the shared RB slot allows
+        a CB, so two centre backs at full back read natural on either flank
+        and the wide men move instead). BOTH halves' lambdas are read
+        exactly: the first off each arm's halftime save, the second off arm
+        A's halftime save with the same ids swapped inside live.onPitch and
+        startSecondHalf's lam2Mine (the list is in slot order, so the
+        interval score, the talk and the men are identical across the three
+        reads), ordered A above F above B on every club in both halves (A
+        above F relaxed to at least when every man whose family grade is the
+        F arm has gone off in the first half, which has not happened on any
+        seed measured). The first half's goals for are drawn by the first
+        divergent draw (Poisson is monotone in lambda under a shared uniform
+        stream) so A may never score fewer than F, nor F fewer than B, on
+        any seed, and A must out score B on a measured share of seeds; over
+        the full match B must score fewer and concede more than A by more
+        than three paired standard errors, and F's means must sit inside the
+        band A to B widened by two standard errors either side (a family
+        penalty is two to four rating points over eleven men, about 0.01 to
+        0.02 goals a match, which no sane sample can order on its own; the
+        lambdas and the first half carry the exact ordering instead). At least three
+        clubs must field the arms (four is the cap, and four fielded on
+        every seed measured, six clubs fieldable on most).
      2) Retraining. startRetraining refuses a keeper either way, a position
         he holds, and a second retraining while one runs; retrainWeeks
         agrees with this file's own formula (6 family, 10 same line, 16
@@ -65,31 +80,47 @@
         squad member not on loan, the captain aged 24 plus and rated 76 plus
         when the squad has one, the two corner jobs different men; setSetPiece
         refuses a missing man, a man on loan and a keeper for a taker job;
-        over quick sims every corner of mine carries a flank and goes to the
-        assigned man for that flag whenever he was on the pitch (share
-        printed, floor below), every penalty and free kick goal is credited
-        to the assigned taker whenever he was on the pitch (counts printed,
-        floor 0 misses); shootoutTakerEdge equals the clamped formula and
-        never leaves plus or minus SHOOTOUT_TAKER_EDGE_CAP; on common random
-        numbers the same defeat costs every man who played exactly one
-        morale point less with the captain out there and the captain two,
-        nobody else moves, and a win or a draw moves only the captain, by
-        one; and a sale (acceptBid) or a loan out clears every job that
-        named him while a sale of another man leaves them alone.
+        over quick sims every corner of mine carries a flank, EACH flag is
+        rolled (each at least 35 percent of my corners) and each flag's own
+        taker takes it whenever he was on the pitch (the left taker on left
+        corners, the right taker on right corners, share per flag printed,
+        floor below, never pooled, so a roll that collapses to one side or a
+        right job nobody reads goes red), every penalty and free kick goal
+        is credited to the assigned taker whenever he was on the pitch
+        (counts printed, floor 0 misses), and every saved penalty is taken
+        by the penalties man whenever he was on the pitch (saved penalties
+        floored, measured 9 to 18 per 150 quick sims); shootoutTakerEdge
+        equals the clamped formula and never leaves plus or minus
+        SHOOTOUT_TAKER_EDGE_CAP; on common random numbers the same defeat
+        costs every man who played exactly one morale point less with the
+        captain out there and the captain two, nobody else moves, and a win
+        or a draw moves only the captain, by one; and a sale (acceptBid) or
+        a loan out clears every job that named him while a sale of another
+        man leaves them alone.
      4) Duties. dutyOptions matches DUTIES_BY_LINE through this file's own
         label to line map on every slot of every shape, setDuty refuses a
         duty the line does not offer and a slot that is not there, slotDuty
         drops a stored duty the slot's line does not offer; dutyBoost equals
         the summed DUTY_EFFECT clamped to plus or minus DUTY_BOOST_CAP on
         random assignments (the clamp exercised), the cap is 0.12 and sits
-        under the smallest mentality step read off the engine's MENT_MOD;
-        and the OUTCOME on common random numbers: an eleven with attacking
-        full backs and a poacher against the same eleven with holding full
-        backs and a target man scores more and concedes more over the full
-        match by more than three paired standard errors, never scores fewer
-        in the first half on any seed, and the poacher's share of the
-        eleven's goals sits above the target man's by more than three
-        binomial standard errors.
+        under the smallest mentality step read off the engine's MENT_MOD.
+        Then the arms: an eleven with attacking full backs and a poacher
+        against the same eleven with holding full backs and a target man.
+        The fence is the exact lambda read, BOTH halves: lamMine and lamOpp
+        off each arm's halftime save for the first, lam2Mine and lam2Opp off
+        arm A's halftime save with B's duties written over xiDuties and the
+        live.duties the kick off froze for the second, A above B on every
+        club for both numbers in both halves (attacking full backs score
+        more and concede more). The OUTCOME on common random numbers is
+        printed and gated only where the tail allows: the paired full match
+        gaps must be positive (their se is printed; on 2000 seeds the goals
+        for gap ranged 3.3 to 6.1 se over eight seeds, so a gate at 3 was a
+        coin toss), A never scores fewer in the first half on any seed and
+        scores more on a measured share, the poacher's share of the eleven's
+        goals sits above the target man's by more than three binomial
+        standard errors, and of the goals somebody else scored the target
+        man sets up a larger share than the poacher does, by more than three
+        (DUTY_ASSISTING is measured here and nowhere else).
      5) Bench. benchFor(career, outId) on every slot of every CM shape between
         matches: every man not in the eleven is listed, the available first,
         then natural before family before the rest by this file's own grade,
@@ -100,48 +131,84 @@
      6) Formations. CM_FORMATIONS has 17 entries, indexes 0 to 8 identical to
         squadDeal's FORMATIONS (names, labels, allowed sets, coordinates),
         every entry 11 slots with exactly one GK at (50, 90), no two slots at
-        one point, and every slot's pitchLineOf band (read both through the
+        one point, every slot's pitchLineOf band (read both through the
         export and off the y thresholds by hand) the band its label names:
         GK keeper, CB and full backs defence, wing backs defence or midfield
         (the 3-5-2 family stands them at y 42 to 50 and always has), CDM, CM
         and wide midfielders midfield, CAM midfield or attack (every CAM the
         shared nine ship sits at y 32 to 36 and always has), RW, LW, ST and
-        CF attack.
+        CF attack; and every slot of every variant (index 9 up) carries, by
+        value, the allowed set of a shared slot with the same label, every
+        variant label exists in the nine, and the nine's two CAM sets (the
+        plain one and the one that takes a CF) are the only two a variant
+        CAM may carry, so the position rule cannot drift between the nine
+        and the eight.
      7) Round 504 still holds: the same seeded fixture played live (kick off,
         startSecondHalf, resumeMatch) and quick (skipHalftime) gives the same
-        report down to the JSON of the play, on simLiveMatch section 6's keys.
+        report down to the JSON of the play, on simLiveMatch section 6's keys,
+        with two duties set and read back on every club first (a refused
+        setDuty is a failure, not a silent replay without them).
 
    Negative controls, TACTICS_CONTROL=<name>. Each rewrites a copy of the
-   engine before bundling, refuses to run if the string it rewrites is not
-   there, and passes only when the section it names went red and nothing
-   else did:
+   engine before bundling (the copy lives under .sim-control/tactics, which
+   is gitignored, never in src), refuses to run unless the string it
+   rewrites occurs exactly once, and passes only when the section it names
+   went red and nothing else did:
      nofit      FIT_PENALTY all zero. Section 1 must go red (the ordering,
-                the lambda ordering, the first half share, the full match
-                gap) and nothing else may.
+                both halves' lambda ordering, the first half share, the
+                full match gap) and nothing else may.
+     fit2nd     secondHalfLambdas reads every man with a null slot, so the
+                penalty reaches the first half and not the second. Section
+                1 must go red (the second half lambda ordering only; the
+                full match gap halves and stays green) and nothing else may.
      notaker    assignedOnPitch never finds the assigned man, so the weighted
-                pick takes every corner and every penalty. Section 3 must go
-                red (the corner share, the crediting) and nothing else may.
-     noduty     dutyBoost returns zero and DUTY_SCORING is empty. Section 4
-                must go red (the boost equality, the outcome, the share) and
-                nothing else may.
+                pick takes every corner, every penalty and every saved
+                penalty. Section 3 must go red (the shares per flag, the
+                crediting, the saved penalties) and nothing else may.
+     leftonly   the corner flank roll always says left (the roll is still
+                taken, so the stream is the same). Section 3 must go red
+                (the right flag's share of corners and its taker's count)
+                and nothing else may.
+     noduty     dutyBoost returns zero, DUTY_SCORING and DUTY_ASSISTING are
+                empty. Section 4 must go red (the boost equality, both
+                halves' lambdas, the outcome, the two shares) and nothing
+                else may.
+     duty2nd    the dutyBoost call in secondHalfLambdas is replaced by zero,
+                the first half untouched. Section 4 must go red (the second
+                half lambda reads only) and nothing else may.
      noretrain  tickWeek no longer counts weeksLeft down. Section 2 must go
                 red (the countdown never completes) and nothing else may.
 
-   Thresholds, measured on this harness's own seed and under SIM_SEED=1, 2
-   and 3 (2026-09-07; SIM_SEED is folded into every seed the harness draws
-   with, so each value is a different sample). The measured values are in
-   the block at the end of this comment, filled in from the runs.
+   Thresholds, measured on SIM_SEED 0 (the harness's own seed) to 7
+   (2026-09-07, after the Round 505 review; SIM_SEED is folded into every
+   seed the harness draws with, so each value is a different sample):
+     clubs fielding the three fit arms                       floor 3 (cap 4)
      seeds where A out scores B in the first half (fit)     floor 3 percent
-     corners to the assigned man when on the pitch          floor 90 percent
-     seeds where A out scores B in the first half (duty)    floor 3 percent
-     (nofit and noduty measure 0 percent on the two shares; notaker measures
-      the weighted pick's share of corners, well under the floor)
+     each flag's share of my corners                        floor 35 percent
+     each flag's taker on that flag's corners               floor 90 percent
+     saved penalties per 150 quick sims                     floor 4
+     seeds where A out scores B in the first half (duty)    floor 2 percent
+     poacher share above target man share                   more than 3 se
+     target man set up share above poacher set up share     more than 3 se
+     (nofit and noduty measure 0 percent on the two first half shares and a
+      zero gap on the two duty shares; notaker measures the weighted pick's
+      share of corners, well under the floor; leftonly measures 0 right
+      corners)
 
-   MEASURED (own seed, SIM_SEED=1, 2, 3):
-     fit: keeper swap gap for / against in paired se       7.8 to 9.0 for, 7.7 to 8.9 against (seeds 1 to 3), floor 3
-     fit: first half A above B share                       6.8 to 7.5 percent (floor 3)
-     duty: gap for / against in paired se, poacher share   5.3 to 6.1 for, 5.8 to 8.1 against; poacher 34.7 to 36.9 against target man 26.9 to 29.2
-     corners to the assigned man                           100 percent on every seed (floor 90)
+   MEASURED (SIM_SEED 0 to 7, eight runs):
+     fit: clubs fieldable / arms used                       4 to 6 of 6 fieldable, 4 arms on every seed (floor 3)
+     fit: lambda gap A to B, first half / second half       0.070 on every club; 0.039 to 0.077
+     fit: keeper swap gap for / against in paired se        7.2 to 9.8 for, 5.4 to 10.2 against (gate 3)
+     fit: first half A above B share                        5.4 to 7.5 percent (floor 3)
+     corners per flag                                       left 480 to 604, right 496 to 576 of 1001 to 1180 (47 to 53 percent each, floor 35)
+     each flag's taker on its corners                       100 percent on every seed (floor 90)
+     saved penalties per 150 quick sims / by the taker      9 to 18, every one by the taker with him on (floor 4)
+     duty: lambda gap A over B mine, first / second half    0.042 to 0.043; 0.022 to 0.043 (all above 0)
+     duty: lambda gap A over B theirs, first / second half  0.006 to 0.055; 0.030 to 0.055 (all above 0)
+     duty: gap for / against in paired se (6000 seeds)      7.7 to 9.8 for, 11.4 to 15.6 against (sign gated, se printed)
+     duty: first half A above B share                       3.7 to 4.7 percent (floor 2)
+     duty: poacher share / target man share                 34.9 to 36.8 against 27.2 to 29.5, 11.0 to 13.7 se apart (gate 3)
+     duty: target man set up share / poacher set up share   18.6 to 19.9 against 15.0 to 16.3, 5.2 to 6.7 se apart (gate 3)
 
    Run: node scripts/simTacticsEngine.mjs
 */
@@ -190,8 +257,39 @@ const CONTROLS = {
         'export const DUTY_SCORING: Partial<Record<Duty, number>> = {\n  poacher: 1.4, insideForward: 1.25, shadowStriker: 1.2, falseNine: 1.1, targetMan: 0.9,\n};\n',
         'export const DUTY_SCORING: Partial<Record<Duty, number>> = {};\n',
       ],
+      [
+        'export const DUTY_ASSISTING: Partial<Record<Duty, number>> = { targetMan: 1.3 };\n',
+        'export const DUTY_ASSISTING: Partial<Record<Duty, number>> = {};\n',
+      ],
     ],
-    note: 'duties move nothing and pick nobody; section 4 must go red',
+    note: 'duties move nothing, pick nobody and set nobody up; section 4 must go red',
+  },
+  duty2nd: {
+    must: [4], also: [],
+    what: 'the dutyBoost call in secondHalfLambdas',
+    edits: [[
+      '  const duty = dutyBoost(xi);\n  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ',
+      '  const duty = { atk: 0, def: 0 }; void xi;\n  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ',
+    ]],
+    note: 'the duties reach the first half and not the second; section 4 must go red on the second half lambda',
+  },
+  fit2nd: {
+    must: [1], also: [],
+    what: 'the first line of secondHalfLambdas',
+    edits: [[
+      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  const oppS = strengthOf(state, fx.opponent);\n',
+      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  xi = xi.map(x => ({ ...x, slot: null }));\n  const oppS = strengthOf(state, fx.opponent);\n',
+    ]],
+    note: 'the second half reads every man as natural (a null slot pays nothing); section 1 must go red on the second half lambda',
+  },
+  leftonly: {
+    must: [3], also: [],
+    what: 'the flank roll in drawSegmentPlay',
+    edits: [[
+      "      const flank: Flank = Math.random() < 0.5 ? 'left' : 'right';\n",
+      "      const flank: Flank = Math.random() < 2 ? 'left' : 'right';\n",
+    ]],
+    note: 'every corner comes from the left flag (the roll is still taken, so the stream is the same); section 3 must go red on the right flag',
   },
   noretrain: {
     must: [2], also: [],
@@ -211,6 +309,13 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 /* ---- the engine, regressed in a copy beside the original when a control asks ---- */
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
+/* Under the ignored .sim-control, in a folder of its own, the way
+   simRebuildSave and simRebuildSeats keep theirs. Every import in the
+   engine is an @ alias, so the copy resolves from anywhere the bundler is
+   told about. It used to sit in src/lib, and a copy whose exit handler
+   never ran (a killed run) then sat in the tree for tsc, every src guard
+   and git add -A to read a deliberately broken engine as the real one. */
+const CONTROL_DIR = path.join(ROOT, '.sim-control', 'tactics');
 const ENTRY = `${TMP}/tacticsEngine.${process.pid}.entry.mjs`;
 const BUNDLE = `${TMP}/tacticsEngine.${process.pid}.bundle.mjs`;
 let controlCopy = null;
@@ -228,13 +333,15 @@ if (CONTROL) {
   const spec = CONTROLS[CONTROL];
   let src = engineSource;
   for (const [from, to] of spec.edits) {
-    if (!src.includes(from)) {
-      console.error(`control cannot run: ${spec.what} is not in the shape TACTICS_CONTROL=${CONTROL} rewrites (${from.slice(0, 70).replaceAll('\n', '\\n')}...)`);
+    const hits = src.split(from).length - 1;
+    if (hits !== 1) {
+      console.error(`control cannot run: ${spec.what} occurs ${hits} times in the engine and TACTICS_CONTROL=${CONTROL} rewrites it exactly once (${from.slice(0, 70).replaceAll('\n', '\\n')}...)`);
       process.exit(1);
     }
     src = src.replace(from, to);
   }
-  controlCopy = path.join(ROOT, 'src', 'lib', `__control_clubManager.${CONTROL}.${process.pid}.ts`);
+  fs.mkdirSync(CONTROL_DIR, { recursive: true });
+  controlCopy = path.join(CONTROL_DIR, `__control_clubManager.${CONTROL}.${process.pid}.ts`);
   fs.writeFileSync(controlCopy, src);
   enginePath = controlCopy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON (${CONTROL}): ${spec.note}`);
@@ -441,48 +548,103 @@ begin(1, 'Fit: every man is read in his slot, and the wrong slot shows in the fo
 
   /* 1c: the outcome, three arms on common random numbers. */
   const SEEDS_PER_CLUB = 600;
+  const ARMS_FLOOR = 3;
+  const FLANK_PAIRS = [['RB', 'LB'], ['RWB', 'LWB'], ['RW', 'LW'], ['RM', 'LM']];
   const arms = [];
+  let fieldable = 0;
   for (const m of material) {
     const f = CM_FORMATIONS[m.pre.formationIndex];
     const st = f.slots.findIndex(s => s.label === 'ST');
-    const rb = f.slots.findIndex(s => s.label === 'RB' || s.label === 'RWB');
-    const lb = f.slots.findIndex(s => s.label === 'LB' || s.label === 'LWB');
-    if (st < 0 || rb < 0 || lb < 0) continue;
-    const A = m.pre;
+    if (st < 0) continue;
+    /* Arm A is the eleven that will kick off, not the eleven that was
+       picked: a man who is hurt or banned is replaced at kick off by the
+       best available fit for his slot, and a swap made on the picked list
+       would be undone on the pitch with its penalty silently gone. */
+    const A = { ...m.pre, xiIds: effectiveXIWithSlots(m.pre).map(x => x.p.id) };
+    const gA = xiFitReport(A).grades;
     const B = swapXi(A, 0, st);
-    const F = swapXi(A, rb, lb);
     const gB = xiFitReport(B).grades;
-    const gF = xiFitReport(F).grades;
-    /* The keeper swap grades keeper on both men. The flank swap grades family
-       on at least one (the shared RB slot allows a CB and autoPickXI takes
-       the best rated fit, so most elevens carry a centre back at right back
-       who reads natural on the other flank too) and nothing worse. */
-    if (gB.filter(g => g === 'keeper').length !== 2) continue;
-    if (!gF.includes('family') || gF.some(g => g === 'wrong' || g === 'keeper')) continue;
+    /* The keeper swap grades keeper on both men, off two natural slots. */
+    if (!(gA[0] === 'natural' && gA[st] === 'natural' && gB[0] === 'keeper' && gB[st] === 'keeper')) continue;
+    /* The flank swap: the two full backs first, then the wing backs, the
+       wingers, the wide midfielders, the first pair of natural men that
+       grades family on at least one of the two once swapped and nothing
+       worse. The shared RB slot allows a CB and autoPickXI takes the best
+       rated fit, so a club whose two full backs are both centre backs reads
+       natural on either flank and has to move its wide men instead. */
+    let F = null;
+    let flankPair = null;
+    let swapped = null;
+    let familyIds = null;
+    for (const [r, l] of FLANK_PAIRS) {
+      const ri = f.slots.findIndex(s => s.label === r);
+      const li = f.slots.findIndex(s => s.label === l);
+      if (ri < 0 || li < 0 || gA[ri] !== 'natural' || gA[li] !== 'natural') continue;
+      const cand = swapXi(A, ri, li);
+      const g = xiFitReport(cand).grades;
+      const two = [g[ri], g[li]];
+      if (!two.includes('family') || !two.every(x => x === 'natural' || x === 'family')) continue;
+      F = cand;
+      flankPair = `${r}/${l}`;
+      swapped = [ri, li];
+      familyIds = swapped.filter(i => g[i] === 'family').map(i => cand.xiIds[i]);
+      break;
+    }
+    if (!F) continue;
     /* And the eleven that kicks off must be the eleven that was graded:
-       xiFitReport reads the picked ids, kickOff reads effectiveXIWithSlots,
-       and a man who is hurt or banned is replaced at kick off by a fit for
-       his slot, which would silently take the penalty off the pitch. */
+       xiFitReport reads the picked ids, kickOff reads effectiveXIWithSlots. */
     const intact = s => J(effectiveXIWithSlots(s).map(x => x.p.id)) === J(s.xiIds);
     if (!intact(A) || !intact(B) || !intact(F)) continue;
-    if (arms.length < 4) arms.push({ ...m, A, B, F, familyGrades: gF.filter(g => g === 'family').length });
+    fieldable += 1;
+    if (arms.length < 4) arms.push({ ...m, A, B, F, st, flankPair, swapped, familyIds, familyGrades: familyIds.length });
   }
-  if (arms.length < 3) fail(`only ${arms.length} clubs could field the three arms`);
+  if (arms.length < ARMS_FLOOR) fail(`only ${arms.length} clubs could field the three arms (${fieldable} of ${material.length} fieldable, floor ${ARMS_FLOOR})`);
   let seeds = 0;
   let h1Greater = 0;
   let h1Wrong = 0;
+  let read2 = 0;
+  let familyOff = 0;
   const forA = []; const forB = []; const forF = [];
   const agA = []; const agB = []; const agF = [];
   const lamGaps = [];
+  const lam2Gaps = [];
   for (const arm of arms) {
     const ctx = arm.club;
-    /* The lambda, exact: the halftime save carries the first half's. */
-    const lam = s => withSeed(arm.seed, () => playNextEntry(s)).state.live?.lamMine;
-    const lA = num(`${ctx} lamMine A`, lam(arm.A));
-    const lB = num(`${ctx} lamMine B`, lam(arm.B));
-    const lF = num(`${ctx} lamMine F`, lam(arm.F));
+    /* The first half lambda, exact: the halftime save carries it. */
+    const half = s => withSeed(arm.seed, () => playNextEntry(s));
+    const hA = half(arm.A);
+    const hB = half(arm.B);
+    const hF = half(arm.F);
+    if ([hA, hB, hF].some(h => h.kind !== 'halftime' || !h.state.live)) { fail(`${ctx}: the arms came back ${hA.kind}/${hB.kind}/${hF.kind} instead of pausing at the interval`); continue; }
+    const lA = num(`${ctx} lamMine A`, hA.state.live.lamMine);
+    const lB = num(`${ctx} lamMine B`, hB.state.live.lamMine);
+    const lF = num(`${ctx} lamMine F`, hF.state.live.lamMine);
     if (!(lA > lF && lF > lB)) fail(`${ctx}: first half lambda natural ${lA.toFixed(4)}, family ${lF.toFixed(4)}, keeper swap ${lB.toFixed(4)} is not ordered A above F above B`);
     lamGaps.push(lA - lB);
+    /* The second half lambda, exact, read the same way: arm A's halftime
+       save with the same ids swapped inside live.onPitch (the list is in
+       slot order, so a swap there is the swap on the sheet), so the
+       interval score, the talk and the men are identical across the three
+       reads and only the slots differ. A man sent off or hurt in the first
+       half is off the pitch in every arm alike: A above B and F above B stay
+       strict whatever happened, and A above F is strict unless every man
+       whose family grade IS the F arm has gone, when the two arms are the
+       same eleven and may tie. */
+    const live = hA.state.live;
+    if (J(live.onPitch) !== J(arm.A.xiIds)) fail(`${ctx}: live.onPitch ${J(live.onPitch)} is not the eleven in slot order ${J(arm.A.xiIds)}`);
+    if (live.h2Drawn) fail(`${ctx}: the halftime save already carries a second half`);
+    const swapOn = (ht, ia, ib) => { const s = clone(ht); [s.live.onPitch[ia], s.live.onPitch[ib]] = [s.live.onPitch[ib], s.live.onPitch[ia]]; return s; };
+    const lam2 = s => withSeed(arm.seed + 1, () => startSecondHalf(s))?.live?.lam2Mine;
+    const l2A = num(`${ctx} lam2Mine A`, lam2(hA.state));
+    const l2B = num(`${ctx} lam2Mine B`, lam2(swapOn(hA.state, 0, arm.st)));
+    const l2F = num(`${ctx} lam2Mine F`, lam2(swapOn(hA.state, arm.swapped[0], arm.swapped[1])));
+    const gone = new Set([...(live.h1Cards ?? []).filter(c => c.kind === 'red' && c.id).map(c => c.id), ...(live.h1Injuries ?? []).map(i => i.id).filter(Boolean)]);
+    const familyOn = arm.familyIds.filter(id => !gone.has(id)).length;
+    if (!familyOn) familyOff += 1;
+    if (!(l2A > l2B && l2F > l2B)) fail(`${ctx}: second half lambda natural ${l2A.toFixed(4)}, family ${l2F.toFixed(4)}, keeper swap ${l2B.toFixed(4)} does not put the keeper swap under both`);
+    if (familyOn ? !(l2A > l2F) : !(l2A >= l2F)) fail(`${ctx}: second half lambda natural ${l2A.toFixed(4)} is not ${familyOn ? 'above' : 'at least'} family ${l2F.toFixed(4)} (${familyOn} of ${arm.familyIds.length} family men still on)`);
+    read2 += 1;
+    lam2Gaps.push(l2A - l2B);
     for (let k = 0; k < SEEDS_PER_CLUB; k++) {
       const seed = 100000 + seeds * 17;
       seeds += 1;
@@ -490,13 +652,14 @@ begin(1, 'Fit: every man is read in his slot, and the wrong slot shows in the fo
       const rB = quick(arm.B, seed);
       const rF = quick(arm.F, seed);
       if (rA.kind !== 'match' || rB.kind !== 'match' || rF.kind !== 'match') { fail(`${ctx} seed ${seed}: an arm came back ${rA.kind}/${rB.kind}/${rF.kind}`); continue; }
-      const hA = h1Goals(rA); const hB = h1Goals(rB); const hF = h1Goals(rF);
-      if (!(hA >= hF && hF >= hB)) { h1Wrong += 1; fail(`${ctx} seed ${seed}: first half goals natural ${hA}, family ${hF}, keeper swap ${hB} on one stream`); }
-      if (hA > hB) h1Greater += 1;
+      const hA1 = h1Goals(rA); const hB1 = h1Goals(rB); const hF1 = h1Goals(rF);
+      if (!(hA1 >= hF1 && hF1 >= hB1)) { h1Wrong += 1; fail(`${ctx} seed ${seed}: first half goals natural ${hA1}, family ${hF1}, keeper swap ${hB1} on one stream`); }
+      if (hA1 > hB1) h1Greater += 1;
       forA.push(rA.report.myScorers.length); forB.push(rB.report.myScorers.length); forF.push(rF.report.myScorers.length);
       agA.push(rA.report.oppScorers.length); agB.push(rB.report.oppScorers.length); agF.push(rF.report.oppScorers.length);
     }
   }
+  if (read2 < arms.length) fail(`the second half lambda was read on ${read2} of ${arms.length} arms`);
   const dFor = forA.map((g, i) => g - forB[i]);
   const dAg = agB.map((g, i) => g - agA[i]);
   const seFor = seOf(dFor);
@@ -512,7 +675,8 @@ begin(1, 'Fit: every man is read in his slot, and the wrong slot shows in the fo
   const seG = Math.max(seOf(agF), seAg);
   if (!(mean(forF) >= mean(forB) - 2 * seF && mean(forF) <= mean(forA) + 2 * seF)) fail(`the family arm scored ${mean(forF).toFixed(3)} a match, outside the band ${mean(forB).toFixed(3)} to ${mean(forA).toFixed(3)} widened by two standard errors (${(2 * seF).toFixed(3)})`);
   if (!(mean(agF) >= mean(agA) - 2 * seG && mean(agF) <= mean(agB) + 2 * seG)) fail(`the family arm conceded ${mean(agF).toFixed(3)} a match, outside the band ${mean(agA).toFixed(3)} to ${mean(agB).toFixed(3)} widened by two standard errors (${(2 * seG).toFixed(3)})`);
-  console.log(`   ${seeds} seeds over ${arms.length} clubs (family arm ${arms.map(a => a.familyGrades).join('/')} family grades), common random numbers: goals for natural ${mean(forA).toFixed(3)}, family ${mean(forF).toFixed(3)}, keeper swap ${mean(forB).toFixed(3)} (paired gap ${mean(dFor).toFixed(3)}, ${tFor.toFixed(1)} se, needs 3); against ${mean(agA).toFixed(3)}, ${mean(agF).toFixed(3)}, ${mean(agB).toFixed(3)} (gap ${mean(dAg).toFixed(3)}, ${tAg.toFixed(1)} se, needs 3); first half lambda gap ${Math.min(...lamGaps).toFixed(3)} to ${Math.max(...lamGaps).toFixed(3)} ordered A, F, B on every club; first half goals never out of order (${h1Wrong} seeds), natural above keeper swap on ${pct(h1Greater, seeds)} percent (floor ${Math.round(H1_SHARE_FLOOR * 100)})`);
+  const range = a => (a.length ? `${Math.min(...a).toFixed(3)} to ${Math.max(...a).toFixed(3)}` : 'n/a');
+  console.log(`   ${seeds} seeds over ${arms.length} clubs (${fieldable} of ${material.length} could field the arms, floor ${ARMS_FLOOR}; flank swap ${arms.map(a => `${a.flankPair} ${a.familyGrades}`).join(', ')} family grades), common random numbers: goals for natural ${mean(forA).toFixed(3)}, family ${mean(forF).toFixed(3)}, keeper swap ${mean(forB).toFixed(3)} (paired gap ${mean(dFor).toFixed(3)}, ${tFor.toFixed(1)} se, needs 3); against ${mean(agA).toFixed(3)}, ${mean(agF).toFixed(3)}, ${mean(agB).toFixed(3)} (gap ${mean(dAg).toFixed(3)}, ${tAg.toFixed(1)} se, needs 3); lambda gap A to B first half ${range(lamGaps)}, second half ${range(lam2Gaps)}, ordered A, F, B on every club both halves (${read2} second halves read, ${familyOff} with the family man off); first half goals never out of order (${h1Wrong} seeds), natural above keeper swap on ${pct(h1Greater, seeds)} percent (floor ${Math.round(H1_SHARE_FLOOR * 100)})`);
 }
 
 /* ---------- 2. retraining ---------- */
@@ -712,13 +876,14 @@ begin(3, 'Set pieces: the armband and the takers reach the stream');
   let matches = 0;
   let cornersMine = 0;
   let flanked = 0;
-  let takerOn = 0;
-  let takerRight = 0;
+  const perFlank = { left: { corners: 0, takerOn: 0, takerRight: 0 }, right: { corners: 0, takerOn: 0, takerRight: 0 } };
   let pens = 0;
   let fks = 0;
   let eligible = 0;
   let credited = 0;
   let savedPens = 0;
+  let savedOn = 0;
+  let savedRight = 0;
   let oppFlags = 0;
   for (const m of material) {
     const s0 = clone(m.pre);
@@ -738,16 +903,27 @@ begin(3, 'Set pieces: the armband and the takers reach the stream');
       const onAt = (p, minute) => startXi.has(p.id) && (exits.get(p.id) ?? 99) > minute;
       for (const e of d.play) {
         if (e.side !== 'me') continue;
-        if (e.kind === 'shot' && e.penalty && !e.goal) savedPens += 1;
+        /* A saved penalty: the assigned taker steps up when he is out there. */
+        if (e.kind === 'shot' && e.penalty && !e.goal) {
+          savedPens += 1;
+          const taker = byId(s0, sp.penalties);
+          if (taker && nameCount.get(taker.name) === 1 && onAt(taker, e.minute)) {
+            savedOn += 1;
+            if (e.who === taker.name) savedRight += 1;
+            else fail(`${m.club} seed ${seed}: the penalty saved at ${e.minute} was taken by ${e.who} with ${taker.name} on the pitch`);
+          }
+        }
         if (e.kind !== 'corner') continue;
         cornersMine += 1;
         if (e.flank !== 'left' && e.flank !== 'right') { fail(`${m.club} seed ${seed}: a corner at ${e.minute} with flank ${J(e.flank)}`); continue; }
         flanked += 1;
+        const fl = perFlank[e.flank];
+        fl.corners += 1;
         const taker = byId(s0, e.flank === 'left' ? sp.cornersLeft : sp.cornersRight);
         if (!taker || nameCount.get(taker.name) !== 1) continue;
         if (!onAt(taker, e.minute)) continue;
-        takerOn += 1;
-        if (e.who === taker.name) takerRight += 1;
+        fl.takerOn += 1;
+        if (e.who === taker.name) fl.takerRight += 1;
       }
       for (const g of r.report.myScorers) {
         if (!g.penalty && !g.freeKick) continue;
@@ -763,14 +939,27 @@ begin(3, 'Set pieces: the armband and the takers reach the stream');
       for (const g of r.report.oppScorers) if (g.penalty || g.freeKick) oppFlags += 1;
     }
   }
+  /* Per flag, not pooled: a flank roll that collapses to one side, or a
+     right corner job nobody reads, must show. Each flag measured 47 to 53
+     percent of my corners over SIM_SEED 0 to 7 (1001 to 1180 corners a
+     run) and its taker took every one with him on the pitch; saved
+     penalties 9 to 18 per 150 quick sims across those seeds. */
   const CORNER_FLOOR = 0.9;
-  const cornerShare = takerOn ? takerRight / takerOn : 0;
+  const FLANK_FLOOR = 0.35;
+  const SAVED_PEN_FLOOR = 4;
   if (matches < 30) fail(`only ${matches} quick sims`);
   if (flanked !== cornersMine) fail(`${cornersMine - flanked} of my ${cornersMine} corners carry no flank`);
-  if (takerOn < 50) fail(`the assigned taker was on the pitch for only ${takerOn} corners`);
-  if (!(cornerShare >= CORNER_FLOOR)) fail(`the assigned man took ${takerRight} of ${takerOn} corners with him on the pitch (${pct(takerRight, takerOn)} percent), floor ${Math.round(CORNER_FLOOR * 100)}`);
+  for (const flank of ['left', 'right']) {
+    const fl = perFlank[flank];
+    if (!(fl.corners >= FLANK_FLOOR * cornersMine)) fail(`${fl.corners} of my ${cornersMine} corners came from the ${flank} flag (${pct(fl.corners, cornersMine)} percent), floor ${Math.round(FLANK_FLOOR * 100)}`);
+    if (fl.takerOn < 25) fail(`the ${flank} corner taker was on the pitch for only ${fl.takerOn} ${flank} corners`);
+    if (!(fl.takerOn && fl.takerRight / fl.takerOn >= CORNER_FLOOR)) fail(`the ${flank} corner taker took ${fl.takerRight} of ${fl.takerOn} ${flank} corners with him on the pitch (${pct(fl.takerRight, fl.takerOn)} percent), floor ${Math.round(CORNER_FLOOR * 100)}`);
+  }
   if (eligible < 3) fail(`only ${eligible} penalty or free kick goals had the taker on the pitch, too few to prove the crediting`);
-  console.log(`   ${matches} quick sims: ${cornersMine} corners of mine every one with a flank, the assigned man took ${takerRight} of ${takerOn} with him on the pitch (${pct(takerRight, takerOn)} percent, floor ${Math.round(CORNER_FLOOR * 100)}); ${pens} penalty and ${fks} free kick goals, ${credited} of ${eligible} credited to the taker with him on the pitch (floor: all), ${savedPens} saved penalties, ${oppFlags} of theirs flagged; ${filled} jobs filled on ${material.length} fresh saves`);
+  if (!(savedPens >= SAVED_PEN_FLOOR)) fail(`only ${savedPens} saved penalties over ${matches} quick sims, floor ${SAVED_PEN_FLOOR}`);
+  if (savedOn < 3) fail(`the penalty taker was on the pitch for only ${savedOn} saved penalties, too few to prove who stepped up`);
+  const L = perFlank.left; const R = perFlank.right;
+  console.log(`   ${matches} quick sims: ${cornersMine} corners of mine every one with a flank, ${L.corners} left and ${R.corners} right (floor ${Math.round(FLANK_FLOOR * 100)} percent each); the left taker took ${L.takerRight} of ${L.takerOn} left corners and the right taker ${R.takerRight} of ${R.takerOn} right corners with him on the pitch (${pct(L.takerRight, L.takerOn)} and ${pct(R.takerRight, R.takerOn)} percent, floor ${Math.round(CORNER_FLOOR * 100)}); ${pens} penalty and ${fks} free kick goals, ${credited} of ${eligible} credited to the taker with him on the pitch (floor: all); ${savedPens} saved penalties (floor ${SAVED_PEN_FLOOR}), ${savedRight} of ${savedOn} taken by the taker with him on the pitch (floor: all); ${oppFlags} of theirs flagged; ${filled} jobs filled on ${material.length} fresh saves`);
 
   /* 3d: the shootout edge. */
   {
@@ -957,15 +1146,19 @@ begin(4, 'Duties: what a slot is asked to do moves the football, a little');
     else if (!(DUTY_BOOST_CAP < Math.min(...steps))) fail(`the duty cap ${DUTY_BOOST_CAP} is not under the smallest mentality step ${Math.min(...steps)}`);
     console.log(`   ${slots} slots offer exactly their line's duties (${new Set(allDuties).size} duties), refusals hold, a duty the slot's line does not offer is dropped; dutyBoost equals the summed effects clamped on ${checks} random elevens (${clamped} past the cap, largest ${maxAbs.toFixed(3)}, cap ${DUTY_BOOST_CAP} under the smallest mentality step ${steps.length ? Math.min(...steps) : 'n/a'})`);
   }
-  /* 4c: the outcome on common random numbers. */
-  const SEEDS_PER_CLUB = 500;
+  /* 4c: the outcome on common random numbers, and the lambdas exactly. */
+  const SEEDS_PER_CLUB = 1500;
   let seeds = 0;
   let h1Wrong = 0;
   let h1Greater = 0;
   const forA = []; const forB = []; const agA = []; const agB = [];
   let stA = 0; let stB = 0;
   let goalsA = 0; let goalsB = 0;
+  let setUpA = 0; let setUpB = 0;
+  let othersA = 0; let othersB = 0;
   let armsUsed = 0;
+  let lamRead = 0;
+  const lam1Gaps = []; const lam2Gaps = []; const opp1Gaps = []; const opp2Gaps = [];
   for (const m of material) {
     if (armsUsed >= 4) break;
     const base = { ...m.pre, formationIndex: 0, xiIds: autoPickXI(m.pre.squad, CM_FORMATIONS[0]) };
@@ -978,22 +1171,62 @@ begin(4, 'Duties: what a slot is asked to do moves the football, a little');
     const stMan = effectiveXIWithSlots(A)[9]?.p;
     if (!stMan || effectiveXIWithSlots(B)[9]?.p.id !== stMan.id) { fail(`${m.club}: the striker slot is not the same man in both arms`); continue; }
     armsUsed += 1;
+    /* The lambdas, exact, both halves. The first half off the halftime
+       save each arm produces on one seed. The second half off arm A's
+       halftime save with B's duties in place of A's: the kick off freezes
+       the eleven's duties on the live match (live.duties), the tab's list
+       (xiDuties) is what a save from before that reads, so both are set,
+       and the interval score, the talk and the men are then identical
+       between the two reads. Attacking full backs score more AND concede
+       more, so lamMine and lamOpp must both sit above B's in both halves. */
+    const hA = withSeed(m.seed, () => playNextEntry(A));
+    const hB = withSeed(m.seed, () => playNextEntry(B));
+    if (hA.kind !== 'halftime' || hB.kind !== 'halftime' || !hA.state.live || !hB.state.live) { fail(`${m.club}: the arms came back ${hA.kind}/${hB.kind} instead of pausing at the interval`); }
+    else {
+      const l1A = num(`${m.club} lamMine attacking`, hA.state.live.lamMine);
+      const l1B = num(`${m.club} lamMine holding`, hB.state.live.lamMine);
+      const o1A = num(`${m.club} lamOpp attacking`, hA.state.live.lamOpp);
+      const o1B = num(`${m.club} lamOpp holding`, hB.state.live.lamOpp);
+      if (!(l1A > l1B)) fail(`${m.club}: first half lamMine with attacking full backs and a poacher ${l1A.toFixed(4)} is not above holding with a target man ${l1B.toFixed(4)}`);
+      if (!(o1A > o1B)) fail(`${m.club}: first half lamOpp with attacking full backs ${o1A.toFixed(4)} is not above holding ${o1B.toFixed(4)}`);
+      const htB = clone(hA.state);
+      htB.xiDuties = [...B.xiDuties];
+      if (htB.live.duties) htB.live.duties = [...B.xiDuties];
+      const second = s => withSeed(m.seed + 1, () => startSecondHalf(s))?.live;
+      const s2A = second(hA.state);
+      const s2B = second(htB);
+      const l2A = num(`${m.club} lam2Mine attacking`, s2A?.lam2Mine);
+      const l2B = num(`${m.club} lam2Mine holding`, s2B?.lam2Mine);
+      const o2A = num(`${m.club} lam2Opp attacking`, s2A?.lam2Opp);
+      const o2B = num(`${m.club} lam2Opp holding`, s2B?.lam2Opp);
+      if (!(l2A > l2B)) fail(`${m.club}: second half lamMine with attacking full backs and a poacher ${l2A.toFixed(4)} is not above holding with a target man ${l2B.toFixed(4)}`);
+      if (!(o2A > o2B)) fail(`${m.club}: second half lamOpp with attacking full backs ${o2A.toFixed(4)} is not above holding ${o2B.toFixed(4)}`);
+      lam1Gaps.push(l1A - l1B); lam2Gaps.push(l2A - l2B); opp1Gaps.push(o1A - o1B); opp2Gaps.push(o2A - o2B);
+      lamRead += 1;
+    }
     for (let k = 0; k < SEEDS_PER_CLUB; k++) {
       const seed = 700000 + seeds * 11;
       seeds += 1;
       const rA = quick(A, seed);
       const rB = quick(B, seed);
       if (rA.kind !== 'match' || rB.kind !== 'match') { fail(`${m.club} seed ${seed}: an arm came back ${rA.kind}/${rB.kind}`); continue; }
-      const hA = h1Goals(rA); const hB = h1Goals(rB);
-      if (hA < hB) { h1Wrong += 1; fail(`${m.club} seed ${seed}: the attacking duties scored ${hA} in the first half, the holding ones ${hB}, on one stream`); }
-      if (hA > hB) h1Greater += 1;
+      const hA1 = h1Goals(rA); const hB1 = h1Goals(rB);
+      if (hA1 < hB1) { h1Wrong += 1; fail(`${m.club} seed ${seed}: the attacking duties scored ${hA1} in the first half, the holding ones ${hB1}, on one stream`); }
+      if (hA1 > hB1) h1Greater += 1;
       forA.push(rA.report.myScorers.length); forB.push(rB.report.myScorers.length);
       agA.push(rA.report.oppScorers.length); agB.push(rB.report.oppScorers.length);
       goalsA += rA.report.myScorers.length; goalsB += rB.report.myScorers.length;
       stA += rA.report.myScorers.filter(s => s.name === stMan.name).length;
       stB += rB.report.myScorers.filter(s => s.name === stMan.name).length;
+      /* The assists: of the goals somebody else scored (the ones he could
+         have set up), how many the striker did set up. */
+      othersA += rA.report.myScorers.filter(s => s.name !== stMan.name).length;
+      othersB += rB.report.myScorers.filter(s => s.name !== stMan.name).length;
+      setUpA += rA.report.myScorers.filter(s => s.name !== stMan.name && s.assist === stMan.name).length;
+      setUpB += rB.report.myScorers.filter(s => s.name !== stMan.name && s.assist === stMan.name).length;
     }
   }
+  if (lamRead < armsUsed) fail(`the lambdas were read on ${lamRead} of ${armsUsed} arms`);
   const dFor = forA.map((g, i) => g - forB[i]);
   const dAg = agA.map((g, i) => g - agB[i]);
   const tFor = mean(dFor) / seOf(dFor);
@@ -1002,14 +1235,30 @@ begin(4, 'Duties: what a slot is asked to do moves the football, a little');
   const shareB = goalsB ? stB / goalsB : 0;
   const seShare = Math.sqrt((shareA * (1 - shareA)) / Math.max(1, goalsA) + (shareB * (1 - shareB)) / Math.max(1, goalsB));
   const tShare = (shareA - shareB) / seShare;
-  const H1_SHARE_FLOOR = 0.03;
-  if (seeds < 400) fail(`only ${seeds} seeds compared`);
-  if (!(tFor > 3)) fail(`attacking full backs and a poacher scored ${mean(forA).toFixed(3)} a match against ${mean(forB).toFixed(3)} holding with a target man: gap ${mean(dFor).toFixed(3)} is ${tFor.toFixed(1)} standard errors, needs 3`);
-  if (!(tAg > 3)) fail(`attacking full backs and a poacher conceded ${mean(agA).toFixed(3)} a match against ${mean(agB).toFixed(3)}: gap ${mean(dAg).toFixed(3)} is ${tAg.toFixed(1)} standard errors, needs 3`);
+  const setA = othersA ? setUpA / othersA : 0;
+  const setB = othersB ? setUpB / othersB : 0;
+  const seSet = Math.sqrt((setA * (1 - setA)) / Math.max(1, othersA) + (setB * (1 - setB)) / Math.max(1, othersB));
+  const tSet = (setB - setA) / seSet;
+  /* The fence is the exact lambda read above. The paired full match gaps
+     are printed as the outcome and gated on their sign only (on 2000 seeds
+     healthy code measured 3.3 to 6.1 se on goals for across eight seeds, so
+     a gate at 3 was a coin toss on the tail; on 6000 they read 7.7 to 9.8).
+     The first half share floor is measured 3.7 to 4.7 percent on 6000
+     seeds (binomial se about 0.25), and the two share gaps are gated from
+     their measured tails, 11.0 to 13.7 se and 5.2 to 6.7 se over SIM_SEED 0
+     to 7, in the header. */
+  const H1_SHARE_FLOOR = 0.02;
+  const SCORER_GAP_SE = 3;
+  const ASSIST_GAP_SE = 3;
+  if (seeds < 1200) fail(`only ${seeds} seeds compared`);
+  if (!(mean(dFor) > 0)) fail(`attacking full backs and a poacher scored ${mean(forA).toFixed(3)} a match against ${mean(forB).toFixed(3)} holding with a target man: the paired gap ${mean(dFor).toFixed(3)} is not positive`);
+  if (!(mean(dAg) > 0)) fail(`attacking full backs and a poacher conceded ${mean(agA).toFixed(3)} a match against ${mean(agB).toFixed(3)}: the paired gap ${mean(dAg).toFixed(3)} is not positive`);
   if (!(h1Greater / seeds >= H1_SHARE_FLOOR)) fail(`the attacking duties out scored the holding ones in the first half on ${pct(h1Greater, seeds)} percent of seeds, floor ${Math.round(H1_SHARE_FLOOR * 100)}`);
-  if (!(tShare > 3)) fail(`the poacher took ${pct(stA, goalsA)} percent of the goals, the target man ${pct(stB, goalsB)}: ${tShare.toFixed(1)} standard errors apart, needs 3`);
+  if (!(tShare > SCORER_GAP_SE)) fail(`the poacher took ${pct(stA, goalsA)} percent of the goals, the target man ${pct(stB, goalsB)}: ${tShare.toFixed(1)} standard errors apart, needs ${SCORER_GAP_SE}`);
+  if (!(tSet > ASSIST_GAP_SE)) fail(`the target man set up ${pct(setUpB, othersB)} percent of the goals others scored, the poacher ${pct(setUpA, othersA)}: ${tSet.toFixed(1)} standard errors apart, needs ${ASSIST_GAP_SE}`);
   if (!(DUTY_SCORING.poacher > 1 && DUTY_SCORING.targetMan < 1)) fail(`DUTY_SCORING reads poacher ${DUTY_SCORING.poacher}, target man ${DUTY_SCORING.targetMan}`);
-  console.log(`   ${seeds} seeds over ${armsUsed} clubs, common random numbers: goals for ${mean(forA).toFixed(3)} against ${mean(forB).toFixed(3)} (paired gap ${mean(dFor).toFixed(3)}, ${tFor.toFixed(1)} se, needs 3), goals against ${mean(agA).toFixed(3)} against ${mean(agB).toFixed(3)} (gap ${mean(dAg).toFixed(3)}, ${tAg.toFixed(1)} se, needs 3), first half never fewer (${h1Wrong} seeds), more on ${pct(h1Greater, seeds)} percent (floor ${Math.round(H1_SHARE_FLOOR * 100)}); the striker slot took ${pct(stA, goalsA)} percent of ${goalsA} goals as a poacher and ${pct(stB, goalsB)} of ${goalsB} as a target man (${tShare.toFixed(1)} se apart, needs 3)`);
+  const range = a => (a.length ? `${Math.min(...a).toFixed(3)} to ${Math.max(...a).toFixed(3)}` : 'n/a');
+  console.log(`   ${seeds} seeds over ${armsUsed} clubs, common random numbers: lambda gap attacking over holding, mine ${range(lam1Gaps)} first half and ${range(lam2Gaps)} second, theirs ${range(opp1Gaps)} and ${range(opp2Gaps)}, above zero on every club both halves (${lamRead} read); goals for ${mean(forA).toFixed(3)} against ${mean(forB).toFixed(3)} (paired gap ${mean(dFor).toFixed(3)}, ${tFor.toFixed(1)} se), goals against ${mean(agA).toFixed(3)} against ${mean(agB).toFixed(3)} (gap ${mean(dAg).toFixed(3)}, ${tAg.toFixed(1)} se), first half never fewer (${h1Wrong} seeds), more on ${pct(h1Greater, seeds)} percent (floor ${Math.round(H1_SHARE_FLOOR * 100)}); the striker slot took ${pct(stA, goalsA)} percent of ${goalsA} goals as a poacher and ${pct(stB, goalsB)} of ${goalsB} as a target man (${tShare.toFixed(1)} se apart, needs ${SCORER_GAP_SE}), and set up ${pct(setUpB, othersB)} percent of the ${othersB} goals others scored as a target man against ${pct(setUpA, othersA)} of ${othersA} as a poacher (${tSet.toFixed(1)} se apart, needs ${ASSIST_GAP_SE})`);
 }
 
 /* ---------- 5. the bench ---------- */
@@ -1126,7 +1375,34 @@ begin(6, 'Club Manager has seventeen shapes, the shared nine first and unchanged
     if (shape.reduce((a, b) => a + b, 0) !== 10) fail(`${f.name} does not add up to ten outfielders`);
     if (!(inBand('attack') >= shape.at(-1) && inBand('attack') <= rest)) fail(`${f.name} stands ${inBand('attack')} in the attack band for a name whose last number is ${shape.at(-1)} of ${rest} after the back line`);
   }
-  console.log(`   ${CM_FORMATIONS.length} shapes, indexes 0 to 8 byte identical to squadDeal's nine, ${slots} slots each shape eleven with one GK at (50, 90), no two slots at one point, ${bandsChecked} bands read off pitchLineOf and the thresholds agree and match their labels, every name's back line is its defence band and its numbers add to ten`);
+  /* The variants carry the nine's allowed sets by value, label for label,
+     so a slot called CM grades a man the same way in every shape on the
+     site. The nine carry two CAM sets (the plain one and the one that
+     takes a CF), and a variant CAM must be one of those two. */
+  const sharedSets = new Map();
+  for (const f of SHARED) {
+    for (const s of f.slots) {
+      if (!sharedSets.has(s.label)) sharedSets.set(s.label, new Set());
+      sharedSets.get(s.label).add(J(s.allowed));
+    }
+  }
+  const VARIANT_LABELS = ['RB', 'CB', 'LB', 'CDM', 'CM', 'CAM', 'RW', 'LW', 'ST', 'RWB', 'LWB', 'RM', 'LM'];
+  for (const l of VARIANT_LABELS) if (!sharedSets.has(l)) fail(`no slot in the shared nine is labelled ${l}`);
+  if ((sharedSets.get('CAM')?.size ?? 0) !== 2) fail(`the shared nine carry ${sharedSets.get('CAM')?.size ?? 0} CAM allowed sets, expected two`);
+  let variantSlots = 0;
+  const variantLabels = new Set();
+  for (let i = 9; i < CM_FORMATIONS.length; i++) {
+    const f = CM_FORMATIONS[i];
+    for (const s of f.slots) {
+      variantSlots += 1;
+      variantLabels.add(s.label);
+      const sets = sharedSets.get(s.label);
+      if (!sets) { fail(`${f.name} ${s.label}: no slot in the shared nine carries that label`); continue; }
+      if (!sets.has(J(s.allowed))) fail(`${f.name} ${s.label} allows ${J(s.allowed)}, the shared nine allow ${[...sets].join(' or ')} at that label`);
+    }
+  }
+  for (const l of variantLabels) if (!VARIANT_LABELS.includes(l) && l !== 'GK') fail(`the variants use a label this file did not expect, ${l}`);
+  console.log(`   ${CM_FORMATIONS.length} shapes, indexes 0 to 8 byte identical to squadDeal's nine, ${slots} slots each shape eleven with one GK at (50, 90), no two slots at one point, ${bandsChecked} bands read off pitchLineOf and the thresholds agree and match their labels, every name's back line is its defence band and its numbers add to ten; ${variantSlots} variant slots over ${CM_FORMATIONS.length - 9} shapes carry the allowed set of a shared slot with the same label (${variantLabels.size} labels, every one in the nine, the two CAM sets included)`);
 }
 
 /* ---------- 7. one match, two ways ---------- */
@@ -1145,12 +1421,20 @@ begin(7, 'Round 504 still holds: the same seeded fixture live and quick gives th
     play: r.detail?.play,
   });
   let pairs = 0;
+  let dutied = 0;
   const scorelines = new Set();
   for (const m of material) {
-    /* With duties and a hand picked set piece block on, so the new fields ride the same draw both ways. */
-    let pre = { ...m.pre };
-    pre = setDuty(pre, 1, dutyOptions(CM_FORMATIONS[pre.formationIndex].slots[1])[0]) ?? pre;
-    pre = setDuty(pre, 9, dutyOptions(CM_FORMATIONS[pre.formationIndex].slots[9])[0]) ?? pre;
+    /* With duties and a hand picked set piece block on, so the new fields
+       ride the same draw both ways. A refusal here is a failure: a replay
+       without the duties would still print this line. */
+    const f7 = CM_FORMATIONS[m.pre.formationIndex];
+    const d1 = dutyOptions(f7.slots[1])[0];
+    const d9 = dutyOptions(f7.slots[9])[0];
+    let pre = setDuty({ ...m.pre }, 1, d1);
+    if (pre) pre = setDuty(pre, 9, d9);
+    if (!pre) { fail(`${m.club}: setDuty refused ${d1} on slot 1 or ${d9} on slot 9, so the replay would have run without duties`); continue; }
+    if (slotDuty(pre, f7, 1) !== d1 || slotDuty(pre, f7, 9) !== d9) { fail(`${m.club}: the duties read back ${J([slotDuty(pre, f7, 1), slotDuty(pre, f7, 9)])} before the replay, not ${J([d1, d9])}`); continue; }
+    dutied += 1;
     for (let k = 0; k < 6; k++) {
       const seed = m.seed + 900 + k * 3;
       const liveRun = withSeed(seed, () => {
@@ -1174,7 +1458,8 @@ begin(7, 'Round 504 still holds: the same seeded fixture live and quick gives th
   }
   if (pairs < 20) fail(`only ${pairs} fixtures replayed both ways`);
   if (scorelines.size < 4) fail(`the ${pairs} pairs produced only ${scorelines.size} distinct scorelines`);
-  console.log(`   ${pairs} fixtures replayed both ways with duties and takers on, ${scorelines.size} distinct scorelines, every pair identical down to the JSON of the play and the flags on the scorer lines`);
+  if (dutied < material.length) fail(`the duties were set and read back on ${dutied} of ${material.length} clubs`);
+  console.log(`   ${pairs} fixtures replayed both ways with duties (set and read back on ${dutied} clubs) and takers on, ${scorelines.size} distinct scorelines, every pair identical down to the JSON of the play and the flags on the scorer lines`);
 }
 
 /* ---------- the verdict ---------- */
