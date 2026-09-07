@@ -671,10 +671,10 @@ begin(1, 'Fit: every man is read in his slot, and the wrong slot shows in the fo
   if (!(tFor > 3)) fail(`the keeper swap scored ${mean(forB).toFixed(3)} a match against the natural eleven's ${mean(forA).toFixed(3)}: gap ${mean(dFor).toFixed(3)} is ${tFor.toFixed(1)} standard errors, needs 3`);
   if (!(tAg > 3)) fail(`the keeper swap conceded ${mean(agB).toFixed(3)} a match against the natural eleven's ${mean(agA).toFixed(3)}: gap ${mean(dAg).toFixed(3)} is ${tAg.toFixed(1)} standard errors, needs 3`);
   if (!(h1Greater / seeds >= H1_SHARE_FLOOR)) fail(`the natural eleven out scored the keeper swap in the first half on ${pct(h1Greater, seeds)} percent of seeds, floor ${Math.round(H1_SHARE_FLOOR * 100)}`);
-  const seF = Math.max(seOf(forF), seFor);
-  const seG = Math.max(seOf(agF), seAg);
-  if (!(mean(forF) >= mean(forB) - 2 * seF && mean(forF) <= mean(forA) + 2 * seF)) fail(`the family arm scored ${mean(forF).toFixed(3)} a match, outside the band ${mean(forB).toFixed(3)} to ${mean(forA).toFixed(3)} widened by two standard errors (${(2 * seF).toFixed(3)})`);
-  if (!(mean(agF) >= mean(agA) - 2 * seG && mean(agF) <= mean(agB) + 2 * seG)) fail(`the family arm conceded ${mean(agF).toFixed(3)} a match, outside the band ${mean(agA).toFixed(3)} to ${mean(agB).toFixed(3)} widened by two standard errors (${(2 * seG).toFixed(3)})`);
+  /* The family arm's goal means are printed, not banded: a band widened by
+     standard errors gets easier the fewer seeds it is fed, which is the
+     non significance assertion CLAUDE.md forbids. The fence on the family
+     arm is the exact lambda ordering A above F above B in both halves. */
   const range = a => (a.length ? `${Math.min(...a).toFixed(3)} to ${Math.max(...a).toFixed(3)}` : 'n/a');
   console.log(`   ${seeds} seeds over ${arms.length} clubs (${fieldable} of ${material.length} could field the arms, floor ${ARMS_FLOOR}; flank swap ${arms.map(a => `${a.flankPair} ${a.familyGrades}`).join(', ')} family grades), common random numbers: goals for natural ${mean(forA).toFixed(3)}, family ${mean(forF).toFixed(3)}, keeper swap ${mean(forB).toFixed(3)} (paired gap ${mean(dFor).toFixed(3)}, ${tFor.toFixed(1)} se, needs 3); against ${mean(agA).toFixed(3)}, ${mean(agF).toFixed(3)}, ${mean(agB).toFixed(3)} (gap ${mean(dAg).toFixed(3)}, ${tAg.toFixed(1)} se, needs 3); lambda gap A to B first half ${range(lamGaps)}, second half ${range(lam2Gaps)}, ordered A, F, B on every club both halves (${read2} second halves read, ${familyOff} with the family man off); first half goals never out of order (${h1Wrong} seeds), natural above keeper swap on ${pct(h1Greater, seeds)} percent (floor ${Math.round(H1_SHARE_FLOOR * 100)})`);
 }
@@ -1250,7 +1250,12 @@ begin(4, 'Duties: what a slot is asked to do moves the football, a little');
   const H1_SHARE_FLOOR = 0.02;
   const SCORER_GAP_SE = 3;
   const ASSIST_GAP_SE = 3;
+  /* 1500 seeds a club means one club clears the seeds floor alone, so the
+     club count needs its own floor the way section 1c has one (4 of 4 on
+     SIM_SEED 0 to 7). */
+  const DUTY_ARMS_FLOOR = 3;
   if (seeds < 1200) fail(`only ${seeds} seeds compared`);
+  if (armsUsed < DUTY_ARMS_FLOOR) fail(`only ${armsUsed} clubs carried the two duty arms, floor ${DUTY_ARMS_FLOOR}`);
   if (!(mean(dFor) > 0)) fail(`attacking full backs and a poacher scored ${mean(forA).toFixed(3)} a match against ${mean(forB).toFixed(3)} holding with a target man: the paired gap ${mean(dFor).toFixed(3)} is not positive`);
   if (!(mean(dAg) > 0)) fail(`attacking full backs and a poacher conceded ${mean(agA).toFixed(3)} a match against ${mean(agB).toFixed(3)}: the paired gap ${mean(dAg).toFixed(3)} is not positive`);
   if (!(h1Greater / seeds >= H1_SHARE_FLOOR)) fail(`the attacking duties out scored the holding ones in the first half on ${pct(h1Greater, seeds)} percent of seeds, floor ${Math.round(H1_SHARE_FLOOR * 100)}`);
