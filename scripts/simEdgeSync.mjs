@@ -127,7 +127,7 @@ console.log('3) the unverified list is a ratchet');
      actually deployed, and Rounds 486 to 490 confirmed the nba, tennis, nascar, soccer grid and college grid validators, leaving 20. The number may fall and must never rise, because the
      only way it rises is somebody adding a function and declining to confirm
      it, or moving a confirmed one back to make this file quiet. */
-  const BASELINE = 20;
+  const BASELINE = 19;
   if (unverified.size > BASELINE) {
     fail(`the unverified list has grown from ${BASELINE} to ${unverified.size}: confirm the new function against production rather than adding it here`);
   }

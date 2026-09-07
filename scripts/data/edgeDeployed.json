@@ -35,6 +35,11 @@
       "sha256": "1f6c43b0972fe1393aa289e803fb3eb928c9bef7250939e7c48c78146f010af4",
       "version": 15,
       "date": "2026-09-06"
+    },
+    "football-connect4-validate": {
+      "sha256": "b1db913eaaf8e129e5554ce5b76d082560504162931a507b128bb444c1fb2bd2",
+      "version": 11,
+      "date": "2026-09-07"
     }
   },
   "unverified": [
@@ -42,7 +47,6 @@
     "cbb-daily",
     "fantasy-draft-daily",
     "football-connect4-suggest",
-    "football-connect4-validate",
     "football-grid-validate",
     "guess-nation-daily",
     "mlb-connect4-validate",

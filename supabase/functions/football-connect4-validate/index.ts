@@ -30,6 +30,100 @@ const cacheKeyOf = (p: string, r: string, c: string) => norm(`${p}|${r}|${c}`);
    asked to report the two attributes separately so both answers are kept. */
 const attrKeyOf = (player: string, attribute: string) => `attr|${norm(player)}|${norm(attribute)}`;
 
+/* ROUND 497: THE CLUB HALF OF THIS BOARD IS IN OUR OWN TABLES, SO STOP ASKING
+   A MODEL FOR IT.
+   The free Gemini allowance is a DAILY one shared by every AI checked game on
+   the site, so the biggest consumer starves the rest. Measured on
+   ai_validation_cache 2026-09-06 over verdicts written in the previous 14 days:
+   football-connect4 407, soccer-grid 192, college-grid 145, nba-connect4 82,
+   nfl-connect4 35, nhl-connect4 32, football-grid 23, mlb-connect4 16. This
+   game is more than double the next one, and those are only the SUCCESSFUL
+   calls because a failure is never cached, so the real spend is higher.
+   src/types/footballConnect4.ts uses "Played for X" 92 times across 29
+   distinct club labels, and soccer_player_club_stints already answers exactly
+   that for Soccer Grid. This function did not open the table at all.
+   (The board note this round was planned from said 76 of 104 uses. Counted
+   again here: the club figure is 92 over 29 labels, which is exact because
+   "Played for " is unambiguous, so that is the number kept.)
+
+   CONFIRM ONLY, and the asymmetry is the whole safety argument. A hit PROVES
+   the attribute. A miss proves NOTHING and must fall through to the model,
+   because the table is not complete: 17,222 of its 80,586 rows (21 percent)
+   carry an accented name and this lookup is accent sensitive, so a real player
+   can be missed. That caps the saving and it does not cost a wrong answer.
+
+   THE MAP IS EXACT, NEVER A SUBSTRING. Derived and checked on 2026-09-06
+   against all 4,931 stored club values over 80,586 rows, which are 4,774
+   distinct clubs once split on " / ". The loose rule Soccer Grid uses would
+   accept Berekum Chelsea FC for Chelsea, Barcelona SC Guayaquil for Barcelona
+   and Liverpool FC Montevideo for Liverpool, and a confirm-only pass that
+   over-accepts is a WRONG ANSWER rather than a missing one. Reserve and youth
+   sides are deliberately absent. All 29 board labels resolve; three needed a
+   hand written alias (Leverkusen, Newcastle, Tottenham) because the stored name
+   adds a word. The table also holds a placeholder club literally named "---"
+   (Göksel Gencer 2007, Alexander Manninger 2011), which an exact map ignores by
+   construction and a substring rule would not. */
+const C4_CLUB_STRINGS: Record<string, string[]> = {
+  "ac milan": ["AC Milan"],
+  "arsenal": ["Arsenal FC"],
+  "atletico madrid": ["Atlético Madrid"],
+  "barcelona": ["Barcelona", "FC Barcelona"],
+  "bayern munich": ["Bayern Munich", "FC Bayern Munich"],
+  "chelsea": ["Chelsea FC"],
+  "dortmund": ["Borussia Dortmund"],
+  "fiorentina": ["ACF Fiorentina"],
+  "inter milan": ["Inter Milan"],
+  "juventus": ["Juventus FC", "Juventus"],
+  "lazio": ["Lazio", "SS Lazio"],
+  "leverkusen": ["Bayer 04 Leverkusen"],
+  "liverpool": ["Liverpool", "Liverpool FC"],
+  "man city": ["Manchester City"],
+  "man united": ["Manchester United"],
+  "napoli": ["SSC Napoli", "Napoli"],
+  "newcastle": ["Newcastle United"],
+  "psg": ["Paris Saint-Germain"],
+  "rb leipzig": ["RB Leipzig"],
+  "real madrid": ["Real Madrid"],
+  "real sociedad": ["Real Sociedad"],
+  "roma": ["AS Roma", "Roma"],
+  "schalke": ["FC Schalke 04"],
+  "sevilla": ["Sevilla FC", "Sevilla"],
+  "stuttgart": ["VfB Stuttgart"],
+  "tottenham": ["Tottenham Hotspur"],
+  "valencia": ["Valencia CF"],
+  "villarreal": ["Villarreal CF"],
+  "wolfsburg": ["VfL Wolfsburg"],
+};
+
+/* Returns the player's stored name when the stint table PROVES the attribute,
+   and null in every other case including every error. Null means "ask the
+   model", never "no". */
+async function confirmClubAttribute(
+  playerName: string,
+  attribute: string,
+): Promise<string | null> {
+  const m = /^\s*played\s+for\s+(.+?)\s*$/i.exec(attribute);
+  if (!m) return null;
+  const want = C4_CLUB_STRINGS[norm(m[1])];
+  if (!want) return null;
+  try {
+    const { data } = await sb.from("soccer_player_club_stints")
+      .select("player_name, club")
+      .ilike("player_name", playerName.trim())
+      .limit(400);
+    for (const row of (data ?? [])) {
+      const r = row as { player_name?: string; club?: string };
+      /* A stored club may be two clubs joined by " / " for a split season, so
+         read each side, the way Round 489 does in the grid. */
+      for (const part of String(r.club ?? "").split(" / ")) {
+        if (want.includes(part.trim())) return r.player_name || playerName;
+      }
+    }
+  } catch { return null; }
+  return null;
+}
+
+
 const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
@@ -129,12 +223,18 @@ serve(async (req) => {
     /* Then the two single attribute facts. If BOTH are known this answers with
        no AI call at all, which is the whole point: a player already seen on any
        other board is very likely to be answerable here for nothing. */
+    let knownFullName = playerName;
+    let rowKnown: boolean | null = null;
+    let colKnown: boolean | null = null;
     try {
       const { data: facts } = await sb.from("ai_validation_cache").select("cache_key, verdict")
         .eq("game", CACHE_GAME).in("cache_key", [rowKey, colKey]);
       const byKey = new Map((facts ?? []).map((f: { cache_key: string; verdict: unknown }) => [f.cache_key, f.verdict as Record<string, unknown>]));
       const rowFact = byKey.get(rowKey);
       const colFact = byKey.get(colKey);
+      if (rowFact) rowKnown = rowFact.match === true;
+      if (colFact) colKnown = colFact.match === true;
+      knownFullName = (rowFact?.fullName as string) || (colFact?.fullName as string) || playerName;
       if (rowFact && colFact) {
         const rowOk = rowFact.match === true;
         const colOk = colFact.match === true;
@@ -149,6 +249,48 @@ serve(async (req) => {
         }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     } catch { /* cache down -> fall through to AI */ }
+
+    /* ROUND 497: the confirm-only records pass, inserted between the fact
+       lookup above and the cacheOnly check below so both keep working exactly
+       as they did. It is ADDITIVE: Round 379's decomposition is not touched.
+       Anything the table proves is written into the SAME fact cache the model
+       writes, so the next board asking about that player gets it free even for
+       an attribute this pass cannot answer. */
+    const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
+    if (rowKnown === null) {
+      const proved = await confirmClubAttribute(playerName, rowAttribute);
+      if (proved) {
+        rowKnown = true;
+        knownFullName = proved;
+        determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: proved } });
+      }
+    }
+    if (colKnown === null) {
+      const proved = await confirmClubAttribute(playerName, columnAttribute);
+      if (proved) {
+        colKnown = true;
+        knownFullName = proved;
+        determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: proved } });
+      }
+    }
+    if (determined.length > 0) {
+      try { await sb.from("ai_validation_cache").upsert(determined); } catch { /* non-fatal */ }
+    }
+    /* Answered without the AI only when BOTH halves are determined. A false
+       here is never a records miss: it is a model verdict this cache already
+       paid for, exactly the verdict the block above would have returned had it
+       held both halves. A records miss leaves its half null and falls through. */
+    if (rowKnown !== null && colKnown !== null) {
+      return new Response(JSON.stringify({
+        valid: rowKnown && colKnown,
+        reason: {
+          [rowAttribute]: rowKnown ? "Verified from our club records." : "This player does not match this attribute.",
+          [columnAttribute]: colKnown ? "Verified from our club records." : "This player does not match this attribute.",
+        },
+        fullName: knownFullName,
+        source: "records",
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     /* Round 397: verification harnesses can prove cache coverage without ever
        spending an AI request. The public game does not send this flag. */
