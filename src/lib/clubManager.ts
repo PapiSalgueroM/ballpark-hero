@@ -18,7 +18,7 @@ import type { Formation, FormationSlot } from '@/lib/squadDeal';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
-import { fitsAllowed } from '@/lib/positionFit';
+import { ALL_POSITIONS, eligiblePositions, fitsAllowed } from '@/lib/positionFit';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -497,7 +497,14 @@ export interface CMPlayer {
    * not add a second one it cannot source. Absent until he earns one.
    */
   secondaryPositions?: Position[];
+  /** Round 505: the position he is learning right now, and how far along
+   *  he is. One at a time. Absent when he is not learning one. */
+  retraining?: Retraining;
 }
+
+/** Round 505: a second position in progress. weeksTotal is what it was
+ *  quoted at, so a progress bar can be drawn off the two numbers. */
+export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
 
@@ -3816,6 +3823,66 @@ export function xiFitReport(career: CareerState): XiFitReport {
   const raw = sum / n;
   const penalty = pen / n;
   return { rating: Math.round(raw - penalty), raw: Math.round(raw * 10) / 10, penalty: Math.round(penalty * 10) / 10, grades };
+}
+
+/* ---------- Round 505: retraining a second position ---------- */
+
+export const MAX_SECONDARY_POSITIONS = 2;
+export const RETRAIN_MIN_WEEKS = 4;
+
+/**
+ * Weeks to learn `to`: 6 for a position in the family of one he already
+ * holds (the shared position rule, read both ways), 10 for one on the same
+ * line, 16 across lines; half as long again past thirty; shortened by the
+ * training ground, the same multiplier growth reads, and never under
+ * RETRAIN_MIN_WEEKS. Pure, so the screen can print the estimate.
+ */
+export function retrainWeeks(state: CareerState, p: CMPlayer, to: Position): number {
+  const held = heldPositions(p);
+  const family = held.some(pos => eligiblePositions(pos).includes(to) || eligiblePositions(to).includes(pos));
+  const sameLine = held.some(pos => groupOf(pos) === groupOf(to));
+  const base = family ? 6 : sameLine ? 10 : 16;
+  const age = p.age > 30 ? 1.5 : 1;
+  return Math.max(RETRAIN_MIN_WEEKS, Math.round((base * age) / trainingGroundGrowthMult(state)));
+}
+
+/** Why a retraining cannot start, in the words the screen would use, or null when it can. */
+export function retrainRefusal(p: CMPlayer | undefined, to: Position): string | null {
+  if (!p) return 'He is not in your squad.';
+  if (p.position === 'GK' || to === 'GK') return 'Keepers stay keepers, and nobody else goes in goal.';
+  if (!ALL_POSITIONS.includes(to)) return 'That is not a position.';
+  if (heldPositions(p).includes(to)) return `He already plays ${to}.`;
+  if (p.retraining) return `He is already learning ${p.retraining.to}. Stop that first if you want him on something else.`;
+  return null;
+}
+
+/**
+ * Put a man to work on a second position. Outfield to outfield only, one
+ * at a time, never a position he already holds. Null when refused, see
+ * retrainRefusal. Pure: a copy comes back and the week's tick counts it
+ * down. A real footballer starts with no second position, so everything a
+ * squad carries here was earned in this save.
+ */
+export function startRetraining(career: CareerState, playerId: string, to: Position): CareerState | null {
+  const p = career.squad.find(x => x.id === playerId);
+  if (retrainRefusal(p, to)) return null;
+  const weeksTotal = retrainWeeks(career, p!, to);
+  return {
+    ...career,
+    squad: career.squad.map(x => (x.id === playerId ? { ...x, retraining: { to, weeksLeft: weeksTotal, weeksTotal } } : x)),
+  };
+}
+
+/** Call it off. The weeks are gone; nothing is kept. Pure. */
+export function stopRetraining(career: CareerState, playerId: string): CareerState {
+  return {
+    ...career,
+    squad: career.squad.map(x => {
+      if (x.id !== playerId || !x.retraining) return x;
+      const { retraining: _dropped, ...rest } = x;
+      return rest;
+    }),
+  };
 }
 
 export function autoPickXI(squad: CMPlayer[], formation: Formation): (string | null)[] {
@@ -10135,6 +10202,8 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   const recoveryMod = plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1;
   const flat = plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4;
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
+  /* Round 505: anyone who finished learning a second position this week. */
+  const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
     const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
@@ -10142,8 +10211,24 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const fitness = clamp(p.fitness + recovery - cost, 20, 100);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
-    return { ...p, fitness, injuryWeeks };
+    const out: CMPlayer = { ...p, fitness, injuryWeeks };
+    /* Round 505: a week of work on a second position. At zero it joins
+       his list, the oldest one beyond two making way, and the papers say
+       so. Hashed off nothing: no draw, so the week's stream is untouched. */
+    if (p.retraining) {
+      const weeksLeft = p.retraining.weeksLeft - 1;
+      if (weeksLeft <= 0) {
+        const to = p.retraining.to;
+        out.secondaryPositions = [...(p.secondaryPositions ?? []).filter(pos => pos !== to && pos !== p.position), to].slice(-MAX_SECONDARY_POSITIONS);
+        delete out.retraining;
+        learned.push(`🎯 ${p.name} is comfortable at ${to} now. ${p.retraining.weeksTotal} weeks of work on the training ground and it has stuck.`);
+      } else {
+        out.retraining = { ...p.retraining, weeksLeft };
+      }
+    }
+    return out;
   });
+  if (learned.length) state.aiHeadlines = [...learned, ...state.aiHeadlines].slice(0, 8);
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
   tickBooks(state);
