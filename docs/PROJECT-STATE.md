@@ -2366,6 +2366,17 @@ open (each verified against the code; the seven the review confirmed and could b
 an hour landed with the batch as the review fixes commit).** Pick from here before the
 roadmap when a round touches the game named:
 
+- **`useConnectionsLoss.test.ts` leaves a live 600ms timer at teardown, so the full vitest run
+  intermittently prints "window is not defined".** Found in Round 495 while checking that round
+  for regressions, and worth recording because it looks exactly like a real failure and is not
+  one. The test drives wrong guesses, `useNflConnections.ts:211` schedules
+  `setTimeout(() => setShakeWrong(false), 600)`, nothing cancels it, and the test finishes long
+  before it fires. Whether the callback lands after jsdom is torn down depends on whole-run
+  scheduling: measured 8 errors on one full run and 0 on the next two, identical code, and 0
+  whenever the file runs alone or with only one other. It never fails the run (exit 0, all tests
+  pass) so nothing catches it. The real fix is in the hooks, not the test: the four Connections
+  hooks all schedule that shake timeout with no cleanup, so an unmount mid-shake sets state on a
+  dead component. Clear it in a `useEffect` cleanup and the test noise goes with it.
 - **Transfer Path, every rule: season keys mix calendar and split styles at 17 clubs**
   (LAFC, New York City FC, LA Galaxy, River Plate, Racing Club, Santos, Vasco, Flamengo,
   Corinthians, São Paulo, Palmeiras, Fluminense, Boca, Argentinos, Athletico Paranaense,
