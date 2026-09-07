@@ -375,7 +375,7 @@ console.log('6) Their eleven get rated too, honestly');
      sheet must exist for every match, hold a real eleven, and agree with
      the football that was played. */
   let c = startCareer('Everton');
-  let seen = 0, guard6 = 0, scorerChecks = 0, gkChecks = 0;
+  let seen = 0, guard6 = 0, scorerChecks = 0, gkChecks = 0, sheetsWithSubs = 0;
   while (seen < 12 && guard6 < 60) {
     guard6 += 1;
     const res = playNextEntry(c, { skipHalftime: true });
@@ -390,7 +390,14 @@ console.log('6) Their eleven get rated too, honestly');
     const d = res.report.detail;
     seen += 1;
     if (!d.oppRatings) { fail(`match ${seen}: a dense league opponent shipped no ratings sheet`); continue; }
-    if (d.oppRatings.length !== 11) fail(`match ${seen}: opposition sheet holds ${d.oppRatings.length}, an XI is eleven`);
+    /* Round 504: the sheet is the eleven that kicked off plus every man who
+       came off their bench, because the other dugout makes changes now. */
+    const cameOn = (d.oppSubs ?? []).length;
+    if (d.oppRatings.length !== 11 + cameOn) fail(`match ${seen}: opposition sheet holds ${d.oppRatings.length}, an XI is eleven plus the ${cameOn} who came on`);
+    if (cameOn > 0) sheetsWithSubs += 1;
+    for (const sb of d.oppSubs ?? []) {
+      if (!d.oppRatings.some(p => p.name === sb.on)) fail(`match ${seen}: ${sb.on} came on for them and is not on the sheet`);
+    }
     if (!d.oppRatings.some(p => p.pos === 'GK')) fail(`match ${seen}: no keeper on the opposition sheet`);
     for (const p of d.oppRatings) {
       if (!isNum(p.rating) || p.rating < 4.5 || p.rating > 10) fail(`match ${seen}: opp rating ${p.rating} for ${p.name}`);
@@ -419,7 +426,11 @@ console.log('6) Their eleven get rated too, honestly');
     }
   }
   if (seen < 12) fail(`only ${seen} matches sampled for opposition sheets`);
-  console.log(`   ${seen} sheets checked: XIs of 11, ${scorerChecks} scorers all on the pitch, ${gkChecks} clean-sheet keepers floored right`);
+  /* The other dugout draws about 1.9 subs a named match (simLiveMatch's
+     header carries the measurement), so twelve league sheets with nobody
+     coming on is a broken engine, not luck. */
+  if (sheetsWithSubs === 0) fail(`none of the ${seen} league sheets lists a man who came on for them`);
+  console.log(`   ${seen} sheets checked: eleven starters plus their subs (${sheetsWithSubs} sheets with men who came on, floor 1), ${scorerChecks} scorers all on the pitch, ${gkChecks} clean-sheet keepers floored right`);
 
   /* The honesty edge: an opponent whose world cannot field a real eleven
      (a KNOWN_EMPTY youth-padded club) must ship NO sheet rather than an

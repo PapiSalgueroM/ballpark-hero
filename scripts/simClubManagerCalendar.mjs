@@ -294,15 +294,25 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
   let predicted = 0, augustHeld = 0;
   const gaps = { summer: [], janOpen: [], janOpenBig: [], janClose: [] };
   SAVES.forEach((pick, i) => {
-    const s = fresh(pick, 3000 + i);
+    /* Round 504: a manager sacked before January ends the engine run below
+       with no January window to compare, which is the game working (about
+       one seeded season in ten loses the job that early on either engine,
+       measured 40 seasons a club) and not the calendar. The check is the
+       grid against the engine's own window dates, so a sacked career is
+       re-run on the next seed rather than read as a red. Same shape as the
+       Round 471 and 474 gate fixes. */
+    let attempt = 0;
+    let s, spans0, summer0, jan0, days0, dates, st, summerShut, janShut, janOpened, janLive;
+    while (true) {
+    s = fresh(pick, 3000 + i + 1000 * attempt);
     if (s.windowWeeksLeft !== WINDOW_MATCH_WEEKS.summer) fail(`${pick[0]}: a fresh save opens the summer with ${s.windowWeeksLeft} match weeks, the module says ${WINDOW_MATCH_WEEKS.summer}`);
-    const spans0 = windowSpans(s);
-    const summer0 = spans0.find(w => w.kind === 'summer');
-    const jan0 = spans0.find(w => w.kind === 'january');
+    spans0 = windowSpans(s);
+    summer0 = spans0.find(w => w.kind === 'summer');
+    jan0 = spans0.find(w => w.kind === 'january');
     if (!summer0 || summer0.openWeek !== 0 || summer0.deadlineWeek === null) { fail(`${pick[0]}: no summer window span on a fresh save`); return; }
     if (!jan0 || jan0.deadlineWeek === null) { fail(`${pick[0]}: no January window span on a fresh save`); return; }
-    const days0 = seasonDays(s);
-    const dates = days0.entryDates;
+    days0 = seasonDays(s);
+    dates = days0.entryDates;
     const summerDay = days0.entryDays.get(dateKey(dates[summer0.deadlineWeek]));
     if (!summerDay || summerDay.deadline !== 'summer') fail(`${pick[0]}: the summer deadline day is not marked on the grid`);
     const janOpenDay = days0.entryDays.get(dateKey(dates[jan0.openWeek]));
@@ -320,7 +330,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     if (openDays < 14 || openDays > 45) fail(`${pick[0]}: ${openDays} days drawn open for the summer window, expected 14 to 45`);
 
     // Run the engine and note the entry on which each window actually shut.
-    let st = s, summerShut = null, janShut = null, janOpened = null, janLive = null;
+    st = s; summerShut = null; janShut = null; janOpened = null; janLive = null;
     for (let k = 0; k < 80 && st.week < st.calendar.length && !st.sacked; k++) {
       const before = st.transferWindow;
       const res = playNextEntry(st, { skipHalftime: true });
@@ -335,6 +345,10 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
       }
       if (before === 'january' && st.transferWindow === null && janShut === null) { janShut = st.week - 1; break; }
     }
+    if (st.sacked && janShut === null && attempt < 6) { attempt += 1; continue; }
+    break;
+    }
+    if (attempt > 0) console.log(`   ${pick[0]}: sacked before January on ${attempt} seed(s), re-run on the next; a sacking is the game working, not the calendar`);
     if (summerShut !== summer0.deadlineWeek) fail(`${pick[0]}: the grid put the summer deadline on entry ${summer0.deadlineWeek}, the engine shut the market on entry ${summerShut}`);
     else predicted += 1;
     if (janOpened !== jan0.openWeek) fail(`${pick[0]}: the grid opens January on entry ${jan0.openWeek}, the engine opened it on ${janOpened}`);

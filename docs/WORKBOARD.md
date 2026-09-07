@@ -20,7 +20,7 @@ How it works:
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 510 (checked against origin/main on
-  2026-09-07: main is `a1a162e6`, Round 503. The Claude Code lane holds 504 to 508 and the
+  2026-09-07: main is `7af40013`, Round 504. The Claude Code lane holds 505 to 508 and the
   Codex lane holds 509, see both claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
@@ -28,8 +28,8 @@ How it works:
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Round 503 is merged on
-  origin/main at `a1a162e6`; 504 to 508 remain claimed here.
+  2026-09-07: Rounds 503 to 508. next: Round 505 (Claude Code lane).** Rounds 503 and 504 are
+  merged on origin/main at `7af40013`; 505 to 508 remain claimed here.
   **503 RELIABILITY, DONE 2026-09-07, merged on origin/main.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
   (a) `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a handler adding more than
@@ -39,10 +39,26 @@ How it works:
   schedule a 600ms shake timer with no cleanup, so an unmount mid shake sets state on a dead
   component and the full vitest run prints "window is not defined" at random (the open bug
   1bc0ab47 recorded); fenced with a fake timer test and a control that puts the bare timer back.
-  **504 CLUB MANAGER LIVE MATCH V1**, his words: "Ball at players' feet, both teams with names and
+  **504 CLUB MANAGER LIVE MATCH V1, DONE 2026-09-07, on the branch with a PR open.** His words: "Ball at players' feet, both teams with names and
   numbers on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live
   stats visible during play, subs and tactics at any moment, the AI opponent also subs." Built on
-  the Round 472 merged flow, never a second match screen.
+  the Round 472 merged flow, never a second match screen. Every ask
+  in his sentence is on the pitch: the engine commits each half as a stream (goals, chances,
+  corners, throw ins, fouls, cards, an injury, the other dugout's subs, every one with a minute
+  and the man on the ball), the report's stats block is COUNTED off that stream so the live
+  counter at 90 and the report are one number, both elevens carry names and the classic 1 to 11
+  numbers (no roster holds real shirt numbers, and the copy says so), the ball sits at a
+  carrier's feet, the side in possession pushes up and the other drops back, you tap one of
+  your dots at any minute to bring somebody on or change the shape and the rest of the half is
+  redrawn off the change (three changes a match, the Round 119 identity: Poisson over a half is
+  Poisson over the minutes left of it), the other dugout fields a named eleven and bench off
+  the era roster and makes one to three subs a match, and a save closed mid match is picked
+  back up rather than kicked off again. Fence simLiveMatch (nine sections, controls noplay,
+  nocut, rekick, nooppsubs, statsroll); simMatchScreen, simLiveSim, simHalftime, simMatchDetail
+  and the whole Club Manager family green on the new engine; a full season played in a real
+  browser at 430 and at 390 wide, 0 findings each.
+  Named as not done: five subs in the modern era, opposition injuries and straight reds, a
+  formation change during play (505 owns tactics), a shootout scene, goal celebrations.
   **505 CLUB MANAGER TACTICS DEPTH**, his words: "subs and reserves listed under the pitch, tap one
   player then another to swap. Out of position penalties, position retraining over weeks ...
   Captain, corner takers left and right, free kick and penalty takers ... Player roles: attacking
@@ -763,6 +779,26 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   stay empty until the identity-safe replacement deploys. The code now proves 78 active
   identities and 203 recoverable paths, with a guarded restore migration deliberately held until
   the frontend deploy. No retroactive score subtraction was performed.
+
+- **MEASURED 2026-09-07, NOT FIXED, Footle area (not the Claude Code lane's files):
+  `scripts/simFootleKitNumbers.mjs` hangs the full suite in the cloud sandbox.** It fetches
+  `player_market_values` straight off the database (line 75) and the sandbox's egress proxy
+  never answers that host, so the child sat at 0.1 percent CPU for an hour inside
+  `runAllSims` holding one of the runner's slots until it was killed by hand. The runner's
+  own database probe reports a harness that SAYS nothing was checked as SKIPPED, but this one
+  never gets to say anything. The fix shape is the one the four older database harnesses
+  use: an `AbortSignal.timeout` on the fetch and a fail closed sentence, so the runner can
+  skip it loudly in a lane with no database. Owner of the file decides; recorded here so the
+  next cloud suite run does not lose an hour to it.
+
+- **MEASURED 2026-09-07, NOT FIXED, not the Claude Code lane's files: `scripts/simNewBadge.mjs`
+  is red on a clean checkout of main in the cloud clone.** "120 typed date(s) disagree with git:
+  /budget-builder says 2026-07-21, git says 2026-09-05; /rebuild says 2026-07-21, git says
+  2026-09-05; /dart-draft says 2026-07-10, git says 2026-09-05". The typed `addedOn` dates look
+  right (those pages are months old) and git's answer of 2026-09-05 for 120 pages is the day the
+  459 to 463 batch merged, so the harness's "first landed in git" query is reading a merge or a
+  move rather than the page's first commit. Whoever owns the NEW badge should check the git
+  query (a `--follow` or a first parent walk) before trusting the board on the desktop either.
 
 - **ROUND 509 FIXES THE `/college-grid` STALL IN THE TEST DRIVER, PENDING PR AND DEPLOY.** The
   page was healthy. `playGames` skipped any input whose label contained `search`, which excluded

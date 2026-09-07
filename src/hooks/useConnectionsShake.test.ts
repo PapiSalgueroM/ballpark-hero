@@ -48,7 +48,7 @@ const HOOKS: Array<[string, AnyHook]> = [
 
 /* Only the two timer functions are faked. Promises, microtasks and Date stay
    real so the hooks' puzzle load settles the way it does in a browser. */
-const FAKE = { toFake: ['setTimeout', 'clearTimeout'] as ['setTimeout', 'clearTimeout'] };
+const FAKE: Parameters<typeof vi.useFakeTimers>[0] = { toFake: ['setTimeout', 'clearTimeout'] };
 
 async function settle() {
   await act(async () => { await Promise.resolve(); });
