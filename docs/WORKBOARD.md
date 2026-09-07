@@ -833,7 +833,21 @@ critic's item; these are the rest, unclaimed.
   the first guess. The rule is "won a Cup title in a season the current driver raced" and the
   span comes from `nascar_drivers.first_year/last_year`.
 
-- **NBA STARTING 5, two findings, both upheld with corrections.** (a) `NBA_PLAYER_SOURCE_V2`
+- **PART DONE, Round 494. NBA STARTING 5.** The FULL NAME half is fixed: there were two search
+  configs for the same table and the lineup carried the copy without `firstNameColumn`, so it
+  searched surnames alone. Reproduced with the real search: "LeBron James" 0 rows, "Kobe
+  Bryant" 0 rows. And 715 of 5,135 rows share a surname with a teammate across all 32 teams,
+  so "Curry" returned ONE row called "curry". The copy was DELETED rather than corrected, so
+  one table has one config. Fence `scripts/simNbaLineupSearch.mjs`, control `surnameonly`.
+  **STILL OPEN, the second half:** the slot is scoped by a one-team-per-player snapshot
+  column, so 6,155 of 8,880 alumni-franchise pairs (69 percent) are unreachable, and the
+  Miami slot cannot take LeBron. That needs the franchise history in `nba_player_stats.teams`
+  and is a different, larger change.
+  **ALSO OPEN:** the position gate treats a NULL position as eligible for every slot, which is
+  3,510 of 5,135 rows. The code documents that as deliberate (blocking on missing data would
+  make most of the table unusable), so the fix is to FILL the gap from the bref table rather
+  than to flip the policy.
+  ORIGINAL FINDING: two findings, both upheld with corrections. (a) `NBA_PLAYER_SOURCE_V2`
   sets `nameColumn:'last_name'` with no `firstNameColumn`, so typing a full name returns
   nothing on every slot: "LeBron James" 0, "Kobe Bryant" 0, only the bare surname works, and
   the box is `validateOnly` so a suggestion click is the only way to fill a slot. The fixed
