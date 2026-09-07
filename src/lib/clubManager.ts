@@ -860,6 +860,9 @@ export interface ScorerLine {
   /** Round 169: who set it up, when somebody did. Credited at the same
    *  moment the assist lands on his season line, so the two agree. */
   assist?: string;
+  /** Round 505: from the spot, or a direct free kick. */
+  penalty?: boolean;
+  freeKick?: boolean;
 }
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
@@ -909,6 +912,23 @@ export interface PlayEvent {
   goal?: boolean;
   /** Shots only: this chance's share of the half's expected goals, 2dp. */
   xg?: number;
+  /** Round 505, corners only: which flag it was taken from. */
+  flank?: 'left' | 'right';
+  /** Round 505, shots only: from the spot (a goal, or a save). */
+  penalty?: boolean;
+  /** Round 505, goals only: a direct free kick. */
+  freeKick?: boolean;
+}
+
+/** Round 505: one of my goals as the halves commit it: who, when, and
+ *  whether it came from the spot or a free kick, in which case `id` and
+ *  `name` are the assigned taker's when he was on the pitch. */
+export interface MyGoalLine {
+  id: string;
+  name: string;
+  minute: number;
+  penalty?: boolean;
+  freeKick?: boolean;
 }
 
 /** Round 504: one opposition player on the day, from the era roster. */
@@ -1843,6 +1863,29 @@ export interface CareerState {
    *  repaired by ensureStaff to the club's day one men; fails closed on
    *  shape. See clubManagerStaff. */
   staff?: ClubStaff;
+  /** Round 505: the armband and the set piece takers, by player id. Absent
+   *  on a save from before they existed and filled by ensureSetPieces; a
+   *  null means "pick for me" and is filled the same way at the next match.
+   *  See SetPieces. */
+  setPieces?: SetPieces;
+}
+
+/* ---------- Round 505: the armband and the set piece takers ---------- */
+
+export type SetPieceKey = 'captain' | 'cornersLeft' | 'cornersRight' | 'freeKicks' | 'penalties';
+
+/**
+ * Player ids, or null for "pick for me". One truth: the id lives here and
+ * nowhere else, a sale, a release or a loan out clears every job naming the
+ * man (the Soccer Career captaincy rule: it never travels), and a man on
+ * loan never holds one.
+ */
+export interface SetPieces {
+  captain: string | null;
+  cornersLeft: string | null;
+  cornersRight: string | null;
+  freeKicks: string | null;
+  penalties: string | null;
 }
 
 export type NextFixtureInfo =
@@ -1892,7 +1935,7 @@ export interface LiveMatch {
       full time report reuses these exact lines (and credits the season stats
       once, at the whistle). Absent on a save paused at the interval before
       this round; the report falls back to picking them at full time. */
-  h1My?: { id: string; name: string; minute: number }[];
+  h1My?: MyGoalLine[];
   h1Opp?: ScorerLine[];
   /* ---- Round 504: the live match, committed half by half. Every field is
      optional so a save paused before this round still resolves (the whistle
@@ -1914,7 +1957,7 @@ export interface LiveMatch {
   h2Drawn?: boolean;
   lam2Mine?: number;
   lam2Opp?: number;
-  h2My?: { id: string; name: string; minute: number }[];
+  h2My?: MyGoalLine[];
   h2Opp?: ScorerLine[];
   h2Play?: PlayEvent[];
   h2Cards?: CardLine[];
@@ -6423,6 +6466,7 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
     if (swap) {
       signed.squad = signed.squad.filter(p => p.id !== swap.id);
       signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
+      signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
       signed.goneNames = [...signed.goneNames, swap.name];
       const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
       signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
@@ -6540,6 +6584,8 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     budget: Math.round((career.budget + netFee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    /* Round 505: the armband and the set pieces never travel. */
+    setPieces: setPiecesWithout(career.setPieces, playerId),
     seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: netFee }],
     incomingBids: bids.filter(b => b.playerId !== playerId),
     careerStats: { ...career.careerStats },
@@ -6676,6 +6722,8 @@ export function loanOutPlayer(career: CareerState, playerId: string, toClub?: st
     budget: Math.round((career.budget + fee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    /* Round 505: the armband and the set pieces never travel. */
+    setPieces: setPiecesWithout(career.setPieces, playerId),
     seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee, loan: true }],
     incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
     loanedOut: [...(career.loanedOut ?? []), { player: { ...p, transferStatus: undefined }, club, fee, season: career.season }],
@@ -8889,11 +8937,11 @@ function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>)
  *  crediting anybody twice. */
 function pickMyScorerLines(
   xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
-): { id: string; name: string; minute: number }[] {
+): MyGoalLine[] {
   /* Round 205: distinct, and sharing the match's minute book with the
      opposition so no two goals anywhere land on the same clock. */
   const minutes = distinctMinutes(count, minLo, minHi, taken);
-  const lines: { id: string; name: string; minute: number }[] = [];
+  const lines: MyGoalLine[] = [];
   for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, scorerWeight);
     if (!scorer) break;
@@ -8907,7 +8955,7 @@ function pickMyScorerLines(
 function creditMyScorers(
   state: CareerState,
   xi: CMPlayer[],
-  lines: { id: string; name: string; minute: number }[],
+  lines: MyGoalLine[],
   /** Round 504: who was on the pitch when the goal went in, so a man who
    *  came on in the 80th cannot be credited with setting up the 10th. */
   onPitchAt?: (minute: number) => CMPlayer[],
@@ -9273,12 +9321,183 @@ function fixExits(cards: CardLine[], injuries: InjuryLine[], goals: { name: stri
   cards.sort((a, b) => a.minute - b.minute);
 }
 
+/* ---------- Round 505: set pieces, the engine side ---------- */
+
+export const SET_PIECE_KEYS: SetPieceKey[] = ['captain', 'cornersLeft', 'cornersRight', 'freeKicks', 'penalties'];
+
+export const SET_PIECE_INFO: Record<SetPieceKey, { label: string; blurb: string }> = {
+  captain: { label: 'Captain', blurb: 'Wears the armband. The eleven take a defeat a little better with him out there, and the job does him good.' },
+  cornersLeft: { label: 'Corners, left', blurb: 'Takes every corner from the left flag while he is on the pitch.' },
+  cornersRight: { label: 'Corners, right', blurb: 'Takes every corner from the right flag while he is on the pitch.' },
+  freeKicks: { label: 'Free kicks', blurb: 'Steps up for a direct free kick, and it is his goal when one goes in.' },
+  penalties: { label: 'Penalties', blurb: 'Takes the penalties, in the match and in a shootout, where his rating shifts the odds a touch.' },
+};
+
+/** Share of goals that came from the spot, and from a direct free kick, and
+ *  share of saves that were a saved penalty. Decided when the chance is
+ *  built; the goal count never moves, only who is credited. */
+const PENALTY_GOAL_SHARE = 0.08;
+const FREE_KICK_GOAL_SHARE = 0.04;
+const SAVED_PENALTY_SHARE = 0.02;
+/** The most a penalty taker's rating can move a shootout, either way. */
+export const SHOOTOUT_TAKER_EDGE_CAP = 0.06;
+/** The armband: a defeat costs the eleven one point less with him out there
+ *  (never past zero), and he gains one a match for carrying it. */
+const CAPTAIN_DEFEAT_RELIEF = 1;
+const CAPTAIN_MATCH_LIFT = 1;
+
+function isValidSetPieces(sp: unknown): sp is SetPieces {
+  if (!sp || typeof sp !== 'object') return false;
+  return SET_PIECE_KEYS.every(k => {
+    const v = (sp as Record<string, unknown>)[k];
+    return v === null || typeof v === 'string';
+  });
+}
+
+/* Who each job goes to by default, in tiers: the design's list first, a
+   sensible second choice, then the rest of the outfield. */
+const SET_PIECE_PREFERENCE: Record<Exclude<SetPieceKey, 'captain'>, Position[][]> = {
+  cornersLeft: [['LW', 'LM', 'RW', 'RM', 'CAM'], ['CM', 'LWB', 'RWB']],
+  cornersRight: [['RW', 'RM', 'LW', 'LM', 'CAM'], ['CM', 'RWB', 'LWB']],
+  freeKicks: [['CAM', 'CM', 'LW', 'RW', 'LM', 'RM'], ['CDM', 'ST', 'CF']],
+  penalties: [['ST', 'CF'], ['CAM', 'LW', 'RW']],
+};
+
+/**
+ * Everyone who could hold a job, best first: the preferred positions, then
+ * the second choice, then the rest, by rating inside a tier. The captain's
+ * tiers are the design's: 24 or older, 76 or better, not a youth player and
+ * not on loan, ranked on rating plus age; then any grown man; then anyone.
+ * A man on loan is never listed. Deterministic (ties on name), so a screen
+ * can call it at render time and the auto pick is the head of this list.
+ */
+export function setPieceCandidates(state: CareerState, key: SetPieceKey): CMPlayer[] {
+  const pool = state.squad.filter(p => !p.onLoan);
+  if (key === 'captain') {
+    const tier = (p: CMPlayer): number => (!p.isYouth && p.age >= 24 && p.rating >= 76 ? 0 : !p.isYouth ? 1 : 2);
+    return [...pool].sort((a, b) => tier(a) - tier(b) || (b.rating + b.age) - (a.rating + a.age) || a.name.localeCompare(b.name));
+  }
+  const tiers = SET_PIECE_PREFERENCE[key];
+  const tier = (p: CMPlayer): number => {
+    const i = tiers.findIndex(t => t.includes(p.position));
+    return i < 0 ? tiers.length : i;
+  };
+  return pool
+    .filter(p => p.position !== 'GK')
+    .sort((a, b) => tier(a) - tier(b) || b.rating - a.rating || a.name.localeCompare(b.name));
+}
+
+function autoSetPiecePick(state: CareerState, key: SetPieceKey, exclude?: string | null): string | null {
+  const c = setPieceCandidates(state, key);
+  return (c.find(p => p.id !== exclude) ?? c[0])?.id ?? null;
+}
+
+/**
+ * The set piece block, repaired: a block from before this round is built,
+ * a mangled one is rebuilt, a job naming a man who has left or is on loan
+ * is cleared, and every empty job is handed to the auto pick. The two
+ * corner jobs go to two different men where the squad allows it. Called
+ * before every match and on load, the way ensureStaff is.
+ */
+export function ensureSetPieces(state: CareerState): SetPieces {
+  const sp: SetPieces = isValidSetPieces(state.setPieces)
+    ? state.setPieces
+    : { captain: null, cornersLeft: null, cornersRight: null, freeKicks: null, penalties: null };
+  const here = (id: string | null): boolean => !!id && state.squad.some(p => p.id === id && !p.onLoan);
+  for (const k of SET_PIECE_KEYS) if (!here(sp[k])) sp[k] = null;
+  if (!sp.captain) sp.captain = autoSetPiecePick(state, 'captain');
+  if (!sp.cornersLeft) sp.cornersLeft = autoSetPiecePick(state, 'cornersLeft', sp.cornersRight);
+  if (!sp.cornersRight) sp.cornersRight = autoSetPiecePick(state, 'cornersRight', sp.cornersLeft);
+  if (!sp.freeKicks) sp.freeKicks = autoSetPiecePick(state, 'freeKicks');
+  if (!sp.penalties) sp.penalties = autoSetPiecePick(state, 'penalties');
+  state.setPieces = sp;
+  return sp;
+}
+
+/**
+ * Hand a job to a man, or clear it (null: the auto pick fills it before the
+ * next match). Null back when the man is not in the squad, is on loan, or is
+ * a keeper asked to take a set piece. Pure: a copy comes back.
+ */
+export function setSetPiece(career: CareerState, key: SetPieceKey, playerId: string | null): CareerState | null {
+  if (!SET_PIECE_KEYS.includes(key)) return null;
+  if (playerId !== null) {
+    const p = career.squad.find(x => x.id === playerId);
+    if (!p || p.onLoan) return null;
+    if (key !== 'captain' && p.position === 'GK') return null;
+  }
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  const sp = ensureSetPieces(state);
+  sp[key] = playerId;
+  return state;
+}
+
+/** Every job re-picked from scratch by the default rule. Pure. */
+export function autoSetPieces(career: CareerState): CareerState {
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  state.setPieces = { captain: null, cornersLeft: null, cornersRight: null, freeKicks: null, penalties: null };
+  ensureSetPieces(state);
+  return state;
+}
+
+/** The block with every job naming `playerId` cleared, for the moment he leaves. */
+export function setPiecesWithout(sp: SetPieces | undefined, playerId: string): SetPieces | undefined {
+  if (!isValidSetPieces(sp)) return sp;
+  const out: SetPieces = { ...sp };
+  for (const k of SET_PIECE_KEYS) if (out[k] === playerId) out[k] = null;
+  return out;
+}
+
+/** The assigned man for a job when he is among `on` (the men on my pitch at that minute), else null. */
+function assignedOnPitch(sp: SetPieces | null | undefined, key: SetPieceKey, on: CMPlayer[]): CMPlayer | null {
+  const id = sp?.[key] ?? null;
+  if (!id) return null;
+  return on.find(p => p.id === id) ?? null;
+}
+
+/** What the penalty taker's rating is worth in a shootout: 0.004 a point either side of 75, capped. Zero with nobody assigned. */
+export function shootoutTakerEdge(taker: CMPlayer | null | undefined): number {
+  if (!taker) return 0;
+  return clamp((taker.rating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);
+}
+
+/**
+ * A share of my goals come from the spot or a direct free kick, decided as
+ * the goal is built, and the assigned taker is credited when he is on the
+ * pitch (`on` is the segment's eleven, before its exits are drawn, and
+ * fixExits then keeps him on past the goal). The goal count never moves.
+ */
+function markSetPieceGoals(sp: SetPieces | null | undefined, goals: MyGoalLine[], on: CMPlayer[]): void {
+  for (const g of goals) {
+    const roll = Math.random();
+    const key: SetPieceKey | null = roll < PENALTY_GOAL_SHARE ? 'penalties' : roll < PENALTY_GOAL_SHARE + FREE_KICK_GOAL_SHARE ? 'freeKicks' : null;
+    if (!key) continue;
+    if (key === 'penalties') g.penalty = true; else g.freeKick = true;
+    const taker = assignedOnPitch(sp, key, on);
+    if (taker) {
+      g.id = taker.id;
+      g.name = taker.name;
+    }
+  }
+}
+
+/** The same shares for their goals, flags only: the sim holds no takers for them. */
+function markOppSetPieceGoals(goals: ScorerLine[]): void {
+  for (const g of goals) {
+    const roll = Math.random();
+    if (roll < PENALTY_GOAL_SHARE) g.penalty = true;
+    else if (roll < PENALTY_GOAL_SHARE + FREE_KICK_GOAL_SHARE) g.freeKick = true;
+  }
+}
+
 interface SegmentPlayIn {
   from: number; to: number;
   /** The segment's own lambdas, already scaled to its length. */
   lamMine: number; lamOpp: number;
-  myGoals: { name: string; minute: number }[];
+  myGoals: { name: string; minute: number; penalty?: boolean; freeKick?: boolean }[];
   oppGoals: ScorerLine[];
+  /** Round 505: my takers, so a corner or a penalty goes to the assigned man when he is out there. */
+  setPieces?: SetPieces | null;
   /** Who is on my pitch at a minute of the stretch. */
   mineAt: (minute: number) => CMPlayer[];
   /** Who is on theirs, or null when they have no named eleven. */
@@ -9305,18 +9524,32 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
   const hi = inp.to;
   const out: PlayEvent[] = [];
   const round2 = (n: number): number => Math.round(n * 100) / 100;
-  type Pickers = { shooter: (m: number) => string; taker: (m: number) => string; thrower: (m: number) => string; fouler: (m: number) => string };
+  type Flank = 'left' | 'right';
+  type Pickers = {
+    shooter: (m: number) => string;
+    /** Round 505: who steps up when a chance is a penalty. */
+    penTaker: (m: number) => string;
+    taker: (m: number, flank: Flank) => string;
+    thrower: (m: number) => string;
+    fouler: (m: number) => string;
+  };
   const forSide = (
-    side: 'me' | 'opp', lam: number, goals: { name: string; minute: number }[], cards: CardLine[], pk: Pickers,
+    side: 'me' | 'opp', lam: number, goals: SegmentPlayIn['myGoals'], cards: CardLine[], pk: Pickers,
   ): void => {
     const xgSeg = Math.max(0.03, 0.55 * lam + 0.45 * goals.length + (Math.random() * 0.5 - 0.22) * len);
     const shots = clamp(Math.round(xgSeg * 5.5) + Math.round(ri(1, 3) * len), goals.length, 14);
     const others = shots - goals.length;
     const onTarget = Math.round(others * 0.36);
-    const chances: PlayEvent[] = goals.map(g => ({ minute: g.minute, side, kind: 'shot', who: g.name, on: true, goal: true }));
+    const chances: PlayEvent[] = goals.map(g => ({
+      minute: g.minute, side, kind: 'shot', who: g.name, on: true, goal: true,
+      ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
+    }));
     for (let i = 0; i < others; i++) {
       const minute = ri(lo, hi);
-      chances.push({ minute, side, kind: 'shot', who: pk.shooter(minute), on: i < onTarget });
+      const on = i < onTarget;
+      /* Round 505: a save can be a saved penalty, taken by the assigned man. */
+      const pen = on && Math.random() < SAVED_PENALTY_SHARE;
+      chances.push({ minute, side, kind: 'shot', who: pen ? pk.penTaker(minute) : pk.shooter(minute), on, ...(pen ? { penalty: true } : {}) });
     }
     const w = (c: PlayEvent): number => (c.goal ? 3 : c.on ? 1.5 : 1);
     const totalW = chances.reduce((t, c) => t + w(c), 0);
@@ -9325,7 +9558,9 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     const corners = clamp(Math.round(shots * 0.5 + ri(-1, 1) * len), 0, 8);
     for (let i = 0; i < corners; i++) {
       const minute = ri(lo, hi);
-      out.push({ minute, side, kind: 'corner', who: pk.taker(minute) });
+      /* Round 505: which flag, rolled per corner, and the taker for that flag. */
+      const flank: Flank = Math.random() < 0.5 ? 'left' : 'right';
+      out.push({ minute, side, kind: 'corner', who: pk.taker(minute, flank), flank });
     }
     const fouls = Math.max(Math.round(ri(3, 7) * len), cards.length * 2);
     for (const c of cards) out.push({ minute: c.minute, side, kind: 'foul', who: c.name });
@@ -9345,9 +9580,13 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     const pool = outfieldOnly ? on.filter(p => p.position !== 'GK') : on;
     return myName(weightedPick(pool.length ? pool : on, weight));
   };
+  /* Round 505: the assigned man's name when he is on my pitch at that minute, else null and the weighted pick decides. */
+  const assigned = (key: SetPieceKey, m: number): string | null => assignedOnPitch(inp.setPieces, key, inp.mineAt(m))?.name ?? null;
   forSide('me', inp.lamMine, inp.myGoals, inp.myCards, {
     shooter: m => myPick(m, scorerWeight, true),
-    taker: m => myPick(m, p => cornerWeightPos(p.position) * (p.rating / 70), true),
+    penTaker: m => assigned('penalties', m) ?? myPick(m, scorerWeight, true),
+    taker: (m, flank) => assigned(flank === 'left' ? 'cornersLeft' : 'cornersRight', m)
+      ?? myPick(m, p => cornerWeightPos(p.position) * (p.rating / 70), true),
     thrower: m => myPick(m, p => throwWeightPos(p.position), true),
     fouler: m => myPick(m, p => foulWeightPos(p.position), false),
   });
@@ -9360,6 +9599,7 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
   };
   forSide('opp', inp.lamOpp, inp.oppGoals, inp.oppCards, {
     shooter: m => oppPick(m, oppShotWeight, true),
+    penTaker: m => oppPick(m, oppShotWeight, true),
     taker: m => oppPick(m, p => cornerWeightPos(p.p) * (p.r / 70), true),
     thrower: m => oppPick(m, p => throwWeightPos(p.p), true),
     fouler: m => oppPick(m, p => foulWeightPos(p.p), false),
@@ -9569,8 +9809,11 @@ function secondHalfLambdas(
 function drawMySegment(
   state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, lamMine: number,
   maxYellows: number, taken: Set<number>,
-): { goals: { id: string; name: string; minute: number }[]; cards: CardLine[]; injuries: InjuryLine[] } {
+): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
   const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken);
+  /* Round 505: from the spot or a free kick, credited to the taker, before
+     the exits below are drawn so fixExits keeps him on past his goal. */
+  markSetPieceGoals(state.setPieces, goals, xi);
   const allCards = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])];
   const booked = bookedMapOf(allCards, c => c.id);
   const dismissed = dismissedOf(allCards, c => c.id);
@@ -9660,6 +9903,7 @@ function drawSegment(
        red, never the goal). */
     fixExits(oppCards, [], oppGoals, to);
   }
+  markOppSetPieceGoals(oppGoals);
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
   else live.h2Opp = [...(live.h2Opp ?? []), ...oppGoals].sort(byMinute);
   /* Mine at a minute: the stretch's eleven minus anyone who has since walked or limped off. */
@@ -9672,6 +9916,7 @@ function drawSegment(
     myGoals: me.goals, oppGoals,
     mineAt, oppAt: oppStart ? (m => oppAt(live, m)) : (() => null),
     myCards: me.cards, oppCards,
+    setPieces: state.setPieces ?? null,
   });
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
@@ -9721,11 +9966,13 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const taken = new Set<number>();
   if (!live.h1My || live.h1My.length !== live.myGoals) {
     live.h1My = pickMyScorerLines(started, live.myGoals, 1, 45, taken);
+    markSetPieceGoals(state.setPieces, live.h1My, started);
   } else {
     for (const l of live.h1My) taken.add(l.minute);
   }
   if (!live.h1Opp || live.h1Opp.length !== live.oppGoals) {
     live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken);
+    markOppSetPieceGoals(live.h1Opp);
   }
   if (!live.h1Play) {
     const booked = new Map<string, number>();
@@ -9746,6 +9993,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
       myGoals: live.h1My, oppGoals: live.h1Opp,
       mineAt: m => started.filter(p => (exits.get(p.id) ?? 99) > m), oppAt: () => null,
       myCards: cards, oppCards: [],
+      setPieces: state.setPieces ?? null,
     });
     live.possH1 = possessionOf(live.lamMine, live.lamOpp);
   }
@@ -10345,7 +10593,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let advanced = won;
   if (isKnockout && drawn) {
     decidedBy = 'pens';
-    const penWin = Math.random() < clamp(0.5 + (mine - oppS) * 0.012, 0.2, 0.8);
+    /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
+    const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
+    const penWin = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
     won = penWin;
     drawn = false;
     advanced = penWin;
@@ -10364,7 +10614,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       return squadByIds(state, myOnPitchAt(live, minute)).filter(p => !gone.has(p.id));
     },
   );
-  const myScorers: ScorerLine[] = myLines.map((l, i) => ({ name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined }));
+  const myScorers: ScorerLine[] = myLines.map((l, i) => ({
+    name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
+    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}),
+  }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
   for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
@@ -10628,6 +10881,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      morale more than players with none, and in three of the eight runs the gap
      was under one and a half. Leaving your best striker out was free. */
   const moraleShift = won ? 5 : drawn ? -1 : -6;
+  /* Round 505: the armband. With the captain out there a defeat costs the
+     men who played one point less, bounded at zero so a loss can never
+     turn into a gain, and he himself takes one point for every match he
+     plays with it on. Nobody else's number moves. */
+  const captainId = state.setPieces?.captain ?? null;
+  const captainPlayed = !!captainId && xiIdSet.has(captainId);
+  const shiftFor = (p: CMPlayer): number => {
+    let shift = moraleShift;
+    if (captainPlayed && !won && !drawn && xiIdSet.has(p.id)) shift = Math.min(0, shift + CAPTAIN_DEFEAT_RELIEF);
+    if (captainPlayed && p.id === captainId) shift += CAPTAIN_MATCH_LIFT;
+    return shift;
+  };
   const ranks = seniorRanks(state.squad);
   const standingOf = (p: CMPlayer): number => {
     const rank = ranks.get(p.id);
@@ -10641,7 +10906,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const withWindow = { ...p, lastTen };
     return {
       ...withWindow,
-      morale: clamp(p.morale + moraleShift + promiseMoraleDelta(withWindow, standingOf(p)), 5, 99),
+      morale: clamp(p.morale + shiftFor(p) + promiseMoraleDelta(withWindow, standingOf(p)), 5, 99),
     };
   });
 
@@ -11672,6 +11937,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.cupBracket = buildCupBracket(state);
   state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
+  /* Round 505: day one armband and takers, so the tactics screen has them before a ball is kicked. */
+  ensureSetPieces(state);
   generateHeadlines(state);
   return state;
 }
@@ -11709,6 +11976,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureStaff(state);
   // Round 474: and a save from before the board asked for anything specific.
   ensureBoardAsks(state);
+  // Round 505: and the armband and the set piece takers.
+  ensureSetPieces(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
@@ -13299,6 +13568,9 @@ export function loadCareer(): CareerState | null {
     /* Round 471: and the staff desk, for the same reason: the hub tile reads
        the four posts before a ball is kicked. */
     ensureStaff(parsed);
+    /* Round 505: and the armband and the takers, for the same reason: the
+       tactics screen reads them before a ball is kicked. */
+    ensureSetPieces(parsed);
     /* Round 465's rule, repaired on the way in: zero board confidence IS the
        sack, so a save that carries zero without being sacked is a save the
        engine never sacked, written by a build whose between-matches paths
