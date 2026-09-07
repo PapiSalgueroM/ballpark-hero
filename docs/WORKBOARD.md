@@ -29,9 +29,9 @@ How it works:
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 503 (Claude Code lane).** Verified against origin
+  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Verified against origin
   before claiming: main is `8edc2896`, Round 502, so 503 is the next free number.
-  **503 RELIABILITY.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
+  **503 RELIABILITY, DONE 2026-09-07, on the branch with a PR open.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
   (a) `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a handler adding more than
   one guess in one tick kept only the last, which is why a won Transfer Path daily recorded and paid

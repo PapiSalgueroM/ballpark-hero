@@ -16,6 +16,13 @@ The one thing NOT closed: `playGames` stalls deterministically on `/college-grid
 It is open and undiagnosed on the workboard, with what was ruled out and what the
 next attempt needs. The page itself renders a complete board and answers 200.
 
+**Round 503 is on branch `claude/ballpark-hero-code-lane-sa1p6b` with a PR open, not yet on
+main (2026-09-07, Claude Code lane).** The shared daily engine now records every guess a
+handler adds in one tick (Transfer Path daily wins were recording and paying the short chain,
+Career Path's hint recorded one cell of four), and the four Connections hooks clear their shake
+timer on unmount. Change log entry below. The Claude Code lane holds Rounds 503 to 508 on the
+workboard; 504 to 506 are the Club Manager live match, tactics depth and transfer arc.
+
 ## Progress by area (orientation, not arithmetic)
 
 The owner asked on 2026-09-01 to be able to see whether the giant project is
@@ -2992,6 +2999,61 @@ today rather than adding alongside them.
 ---
 
 ## Change log for this file
+
+- **2026-09-07, Round 503 (Claude Code lane). A DAILY IS RECORDED AS IT GOES, AND A SHAKE TIMER
+  DIES WITH ITS COMPONENT.** Two reliability fixes transplanted from the unmerged branch
+  `claude/hopeful-herschel-e8bcee` (commits 7c41c37a and 1bc0ab47, which had numbered the first one
+  Round 495 before that number shipped on main as the Footle fix). The branch is stale and was NOT
+  merged; only the focused change was carried over and re-verified on the Round 502 head.
+  **The daily engine.** `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a
+  handler that added more than one guess in one tick rebuilt `[...guesses, guess]` from the SAME
+  base on every call and only the last survived, and the synchronous write went out from that same
+  stale array. Measured live 2026-09-06 on Transfer Path: Griezmann to Caicedo, optimal 2, two
+  names typed, the second also linked to the target so the chain auto closed at three steps; the
+  board said "1 step" and paid 1000, the stored record held one step and the win, and the true
+  chain was worth 900. Every Transfer Path daily win was affected and a direct win on the target
+  dropped the winning name. The sweep of all 40 consumers found a second live instance nobody had
+  reported: `useCareerGame.giveHint` reveals four cells with a forEach over `addDailyAction`, so
+  Career Path's hint was revealing and charging ONE cell instead of four. The fix is in the engine,
+  not the callers: the log and the status are mirrored in refs that move synchronously and
+  `addGuess` reads those, so consecutive calls compose. The write stays synchronous and the saved
+  shape is byte identical, so no migration. `CareerLadder.tsx` carried a comment describing this
+  exact race and a hand workaround (one action per handler); the workaround stays and the comment
+  is corrected, because a comment describing a live bug tells the next person not to fix it.
+  **Fence:** `scripts/simDailyRecord.mjs` over `src/test/dailyRecord.test.tsx` drives the REAL
+  hooks into jsdom's real localStorage. Section 1 carries no game at all (three calls in a tick,
+  then a loop of four, then a win mid tick that must be refused rather than appended), so it holds
+  for a daily written tomorrow. Section 2 plays the reproduction through the real Transfer Path
+  hook and requires the record to replay the exact chain and the score to be what that chain earns
+  under the game's own rule (900). Section 3 holds the Career Path hint at four recorded cells.
+  Control `DAILY_RECORD_CONTROL=stale` writes a copy of the engine with the three pre 503 lines put
+  back, asserting each is present first, and points the suite at it through the alias in
+  `vitest.config.ts`; all three sections go red on it (section 1 reports `[{n:3}]` where it wants
+  three entries).
+  **The Connections shake timer.** NHL, NBA, NFL and Baseball Connections answered a wrong guess
+  with `setShakeWrong(true)` and a bare `setTimeout(() => setShakeWrong(false), 600)` that nothing
+  cleared, so an unmount inside the window set state on a dead component, and the full vitest run
+  printed "window is not defined" at random: 8 errors on one run, 0 on the next two, same code,
+  exit 0 every time, which is exactly why it sat unfixed. Soccer Connections has no shake timer and
+  was checked. The handle lives in a ref now, cleared on unmount and replaced by the next miss, so
+  the shake ends 600ms after the LAST miss rather than the first. **Fence:**
+  `scripts/simConnectionsShake.mjs` over `src/hooks/useConnectionsShake.test.ts`, fake timers,
+  counting live timers on all four hooks: one after a miss, still one after a second miss, zero
+  once the shake ends, zero after an unmount mid shake. One measurement worth keeping: jsdom's own
+  `localStorage.setItem` schedules a 0ms timer when the daily record is written, so the count after
+  one miss read 2 until the test flushed it; a count that does not flush it fences jsdom, not the
+  hook. Control `SIM_CONNECTIONS_SHAKE_CONTROL=bare` puts the bare timer back in a copy of the NHL
+  hook and removes the cleanup; the NHL rows go red (1 live timer after unmount) while the other
+  three rows stay green.
+  **Gates:** tsc zero, `npm run build` green, full vitest 179 passed with ZERO "window is not
+  defined" lines, simDailyRecord green with its control firing on all three sections,
+  simConnectionsShake green with its control firing, simConnectionsLoss green, simNoRivalNames 0
+  findings. No dist or snapshot changes, so the snapshot harnesses were not in scope.
+  **The audit numbers the owner relayed on 2026-09-07, recorded so the next session has them:**
+  the 2026-08-28 list stands at 88 DONE, 51 PART, 59 OPEN across 198 clauses (about 57 percent
+  with half credit for PART); the strict master spec audit at 32 DONE, 214 PART, 69 OPEN and 43
+  policy or constrained across 358 sections (about 44 percent). A PART item is not finished; its
+  named missing half is the work.
 
 - **2026-09-05, Round 451. THE TWO CLUB MANAGER P1s FROM HIS 08-28 LIST WERE ALREADY FIXED,
   AND NOW THAT IS PROVEN ON HIS SAVE.** Items 2 and 3 of `docs/TWEAKS-2026-08-28.md` sat in
