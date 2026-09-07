@@ -838,6 +838,43 @@ critic's item; these are the rest, unclaimed.
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
 
+- **DONE, Round 499. Soccer Career's phone could text you 23 invented first-person lines under a
+  REAL footballer's name.** Found by the multi-agent defect hunt and independently re-measured
+  before acting. This is the line CLAUDE.md calls the one that matters most, and it had been
+  shipping since the era rival was written.
+
+  **The mechanism.** `getEraRivalName` (`src/lib/careerEras.ts`) was
+  `pick(era.rivalFirsts) + " " + pick(RIVAL_LASTS)`, with no guard. The rival is not a background
+  name: `soccerPhone.ts` titles a chat thread with it, `PhonePanel.tsx` renders the rival's lines
+  as chat bubbles under that header, and the engine narrates 18 rivalry events with it. One legacy
+  message routed onto the same thread (`penalty_gift`) offers to gift you a penalty, so the
+  collision could show a real professional appearing to propose fixing a match, which is the worse
+  ALLEGATION class the repo's own guard already treats separately.
+
+  **Measured 2026-09-07** against 8,835 real names harvested from `src/data` and the four sealed
+  Club Manager worlds: 8 era pools of 20 firsts x 25 surnames = 4,000 combinations, of which **36
+  are real men, 18 distinct**. Xavi Hernández, Thiago Silva, Fernando Torres, Diego Costa, Theo
+  Hernández and Florian Müller among them. Several are shipped elsewhere on this site as guessable
+  players, so one site would both ask you to identify the man and text you as him.
+  (The hunt agent reported 4 pools and 2,000 combinations; counted again here it is 8 pools and
+  4,000. The distinct-name figure of 18 matches.)
+
+  **Why nothing caught it, which is the reusable part.** `simInventedNames` enumerates every
+  registered generator, but its section 4 scan finds banks declared as `const *FIRST*`. These
+  firsts are an object PROPERTY, `rivalFirsts` on each EraDef, so the bank was **structurally
+  invisible to the register** and shipped unchecked. `simNoInventedQuotes` builds its never-quote
+  set from the Club Manager rosters only and never sees a name minted at runtime.
+
+  **The fix** is the pattern `clubManagerEras.ts` already uses for `makeGeneratedName`: walk the
+  surname bank until the pair is not a real man. The blocklist is the MECHANISM, not the
+  guarantee. `simInventedNames` section 2c is the guarantee, and it holds three things: all 4,000
+  combinations enumerated against the live harvest with zero emittable, no STALE blocklist entry
+  (so the list cannot grow into a place where dead names hide a live one), and 32,000 live rolls
+  of the actual shipped function across 8 eras producing 1,982 distinct names and zero real ones.
+  That last one matters because a guard that returned one safe name forever would also score zero
+  real, so the section fails if variety collapses. Control `INVENTED_RIVAL_CONTROL=unguarded`
+  empties the blocklist and goes red naming the real men.
+
 - **DONE, Round 498. Two soccer games could not reach a player whose name carries an accent, or a
   hyphen.** `soccer-grid-validate` (full name lookup and surname fallback) and Round 497's new
   confirm-only pass in `football-connect4-validate` both read `soccer_player_club_stints` with

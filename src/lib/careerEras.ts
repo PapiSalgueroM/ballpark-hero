@@ -402,8 +402,49 @@ export function getEraUclOpponents(year: number): string[] {
 
 /* ─── Era rival identity ─── */
 const RIVAL_LASTS = ["Silva", "Fernández", "Müller", "Santos", "Rossi", "Andersen", "Johansson", "López", "Martínez", "Hernández", "Dubois", "Weber", "Petrov", "Nielsen", "Eriksen", "Moreno", "Torres", "Schmidt", "Costa", "Bernard", "Okafor", "Diallo", "van den Berg", "Kovač", "Ferreira"];
+/* ROUND 499: THIS GENERATOR COULD MINT A REAL FOOTBALLER, AND THEN TEXT YOU
+   AS HIM.
+   The career rival is not a background name. src/lib/soccerPhone.ts titles a
+   chat thread with it and PhonePanel renders 23 invented first-person lines
+   underneath, and the engine narrates 18 rivalry events using it, including an
+   injury and a crowd banner. One of the legacy messages routed onto that same
+   thread is an offer to gift you a penalty, which is an invented proposal to
+   manipulate a match. Putting invented words in a REAL person's mouth is the
+   line CLAUDE.md calls the one that matters most, and an invented ALLEGATION
+   about conduct is the worse class of it.
+   Measured 2026-09-07 over the shipped banks against 8,835 real names harvested
+   from src/data and the four sealed Club Manager worlds: the 8 era pools of 20
+   firsts x 25 surnames are 4,000 combinations, of which 36 are real people,
+   covering 18 DISTINCT men. Xavi Hernandez, Thiago Silva, Fernando Torres,
+   Diego Costa, Theo Hernandez and Florian Muller are among them, and this site
+   ships several of them as guessable players elsewhere, so one site would both
+   ask you to identify the man and text you as him.
+   Why nothing caught it: simInventedNames enumerates every registered
+   generator, but its scan looks for a bank declared as `const *FIRST*`, and
+   these firsts are an object PROPERTY (rivalFirsts) on each EraDef, so it was
+   structurally invisible. simNoInventedQuotes builds its never-quote set from
+   the Club Manager rosters only and never sees a name minted at runtime here.
+   The fix is the one clubManagerEras.ts already uses for makeGeneratedName:
+   walk the surname bank until the pair is not a real man. The blocklist is the
+   mechanism, NOT the guarantee: simInventedNames now enumerates all 4,000
+   combinations against the live harvest, so a name that becomes real later
+   turns the suite red rather than shipping. */
+const RIVAL_NAME_COLLISIONS = new Set([
+  "Iván López", "Fernando Torres", "Diego Rossi", "Diego López", "Diego Costa",
+  "Andrés Fernández", "Sergio Fernández", "Theo Hernández", "Paulo Costa",
+  "Paulo Ferreira", "Ángel López", "Marco Rossi", "Thiago Silva",
+  "Florian Müller", "Pablo López", "Pablo Hernández", "Xavi Hernández", "Xavi Torres",
+]);
 export function getEraRivalName(year: number): string {
-  return pick(eraDefFor(year).rivalFirsts) + " " + pick(RIVAL_LASTS);
+  const first = pick(eraDefFor(year).rivalFirsts);
+  const start = Math.floor(Math.random() * RIVAL_LASTS.length);
+  for (let i = 0; i < RIVAL_LASTS.length; i++) {
+    const name = `${first} ${RIVAL_LASTS[(start + i) % RIVAL_LASTS.length]}`;
+    if (!RIVAL_NAME_COLLISIONS.has(name)) return name;
+  }
+  /* Unreachable while any surname is clean for this first name, and the
+     harness proves at least one always is. */
+  return `${first} ${RIVAL_LASTS[start]}`;
 }
 
 /* ─── Era-correct transfer market: tier overrides + clubs that did not exist yet ─── */

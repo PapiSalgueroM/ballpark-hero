@@ -188,6 +188,116 @@ export { makeGeneratedName } from '${ROOT.replaceAll('\\', '/')}/src/lib/clubMan
   console.log(`   20,000 rolls, ${seen.size} distinct invented names, ${hits} real ones; ${eraFirst.length}x${eraLast.length} pairings checked against the whole site, ${listed.size} listed, ${uncovered.length} uncovered`);
 }
 
+/* ---------- 2c. The career rival, the bank the register could not see ---------- */
+console.log('2c) The Soccer Career rival can never be a real footballer');
+{
+  /* ROUND 499. This bank was invisible to section 4's scan, which looks for a
+     bank declared as `const *FIRST*`. These firsts are an object PROPERTY,
+     `rivalFirsts` on each EraDef in src/lib/careerEras.ts, so nothing here saw
+     them and the generator shipped unchecked from the day it was written.
+
+     It matters more than a background name. soccerPhone.ts titles a chat
+     thread with this name and PhonePanel renders 23 invented first-person
+     lines under it, the engine narrates 18 rivalry events with it, and one
+     legacy message routed onto the same thread offers to gift you a penalty,
+     which is an invented proposal to manipulate a match. Measured before the
+     fix: 36 of the 4,000 combinations were real men, 18 distinct, Xavi
+     Hernandez and Thiago Silva among them.
+
+     The blocklist inside careerEras.ts is the MECHANISM. This section is the
+     GUARANTEE: it enumerates every combination the generator could emit and
+     checks it against the live harvest, so a name that becomes real later
+     turns this red instead of shipping. It also fails on a STALE blocklist
+     entry, so the list cannot quietly grow into a place where dead names hide
+     a live one. */
+  const src = read('src/lib/careerEras.ts');
+  const lastsM = src.match(/const RIVAL_LASTS = \[([\s\S]*?)\];/);
+  const blockM = src.match(/const RIVAL_NAME_COLLISIONS = new Set\(\[([\s\S]*?)\]\);/);
+  if (!lastsM) fail('RIVAL_LASTS is gone from careerEras.ts, so this check found nothing to check');
+  else if (!blockM) fail('RIVAL_NAME_COLLISIONS is gone from careerEras.ts, so the rival generator is unguarded again');
+  else {
+    const LASTS = [...lastsM[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
+    /* NEGATIVE CONTROL: INVENTED_RIVAL_CONTROL=unguarded empties the blocklist,
+       reproducing exactly what shipped before Round 499, so this section goes red
+       naming the real men the rival generator could become. */
+    const RIVAL_CONTROL = process.env.INVENTED_RIVAL_CONTROL || '';
+    const BLOCKED = RIVAL_CONTROL === 'unguarded'
+      ? new Set()
+      : new Set([...blockM[1].matchAll(/"([^"]+)"/g)].map(m => m[1]));
+    const pools = [...src.matchAll(/rivalFirsts: \[([^\]]*)\]/g)]
+      .map(m => [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]));
+    if (pools.length === 0 || LASTS.length === 0) fail('no rival name banks were parsed, so this section proved nothing');
+
+    let combos = 0, emittableReal = 0, blockedReal = 0;
+    const shown = [];
+    for (const pool of pools) {
+      for (const f of pool) {
+        /* every surname this first name could actually be paired with */
+        const clean = LASTS.filter(l => !BLOCKED.has(`${f} ${l}`));
+        if (clean.length === 0) {
+          fail(`every surname is blocked for the first name "${f}", so the generator falls back to emitting a real man`);
+        }
+        for (const l of LASTS) {
+          combos += 1;
+          const name = `${f} ${l}`;
+          if (!real.has(name)) continue;
+          if (BLOCKED.has(name)) { blockedReal += 1; continue; }
+          emittableReal += 1;
+          if (shown.length < 8) shown.push(name);
+        }
+      }
+    }
+    shown.forEach(n => fail(`the career rival generator can emit "${n}", who is a real man this site ships, and the phone will text you 23 invented lines under his name`));
+    if (emittableReal > shown.length) fail(`and ${emittableReal - shown.length} more real names the rival generator can still emit`);
+
+    /* a blocklist entry that is no longer real is dead weight that makes the
+       list look more protective than it is */
+    const stale = [...BLOCKED].filter(n => !real.has(n));
+    stale.slice(0, 5).forEach(n => fail(`RIVAL_NAME_COLLISIONS blocks "${n}", who is not a real name anywhere on the site any more; drop it rather than letting the list drift`));
+    console.log(`   ${pools.length} era pools x ${LASTS.length} surnames = ${combos} combinations; ${blockedReal} real names blocked, ${emittableReal} still emittable, ${stale.length} stale entries`);
+    if (blockedReal === 0 && RIVAL_CONTROL !== 'unguarded') fail('the blocklist blocks nothing real, so either the harvest broke or the guard is pointing at the wrong bank');
+    if (RIVAL_CONTROL === 'unguarded' && emittableReal === 0) {
+      console.error('   CONTROL unguarded changed nothing: emptying the blocklist must expose real names');
+      process.exit(1);
+    }
+  }
+  /* The static half above proves what the BANKS could produce. This proves what
+     the SHIPPED FUNCTION actually emits, by calling it, the way section 2b does
+     for the era filler. A guard that is correct on paper and wired up wrong
+     would pass the enumeration and fail here. */
+  {
+    const ENTRY = path.join(os.tmpdir(), 'rivalNameEntry.mjs');
+    const BUNDLE = path.join(os.tmpdir(), 'rivalName.bundle.mjs');
+    fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+export { getEraRivalName } from '${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts';
+`);
+    execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+    const { getEraRivalName } = await import(pathToFileURL(BUNDLE).href);
+    const YEARS = [1994, 1999, 2004, 2009, 2014, 2019, 2024, 2028];
+    const seen = new Set();
+    let emitted = 0, realHits = 0;
+    const badShown = [];
+    for (const y of YEARS) {
+      for (let i = 0; i < 4000; i++) {
+        const n = getEraRivalName(y);
+        emitted += 1;
+        seen.add(n);
+        if (real.has(n)) {
+          realHits += 1;
+          if (badShown.length < 5) badShown.push(`${n} (year ${y})`);
+        }
+      }
+    }
+    badShown.forEach(n => fail(`getEraRivalName actually emitted a real footballer: ${n}`));
+    if (realHits > badShown.length) fail(`and ${realHits - badShown.length} more real emissions`);
+    console.log(`   ${emitted} live rolls across ${YEARS.length} eras, ${seen.size} distinct names, ${realHits} of them real`);
+    /* A guard that returned one safe name forever would also score 0 real. */
+    if (seen.size < 200) fail(`only ${seen.size} distinct rival names in ${emitted} rolls, so the guard collapsed the variety instead of protecting it`);
+  }
+
+}
+
 /* ---------- 3. A generated name is never mistaken for a real one ---------- */
 console.log('3) The two banks that were caught stay caught');
 {
