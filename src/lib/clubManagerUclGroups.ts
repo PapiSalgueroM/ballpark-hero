@@ -41,10 +41,13 @@
  *               goal difference and overall goals scored (then away goals
  *               over the group, wins, away wins, disciplinary points and the
  *               club coefficient, none of which this engine keeps). Two
- *               sources for the full twelve step list: Wikipedia, "2015-16
- *               UEFA Champions League group stage", and Wikipedia, "2018-19
- *               UEFA Champions League group stage", which cites it as
- *               Regulations article 17.01. A third, CBS Sports, "Champions
+ *               sources for the full twelve step list, and the same caveat as
+ *               above applies to them: they are two seasons on one publisher
+ *               rather than two publishers, though the second names the
+ *               primary document. Wikipedia, "2015-16 UEFA Champions League
+ *               group stage", and Wikipedia, "2018-19 UEFA Champions League
+ *               group stage", which cites it as Regulations article 17.01.
+ *               A third, CBS Sports, "Champions
  *               League: How a rare tiebreaker cost PSG first in group and
  *               could result in a tougher knockout draw" (December 2022),
  *               walks the SHAPE down a real group rather than the whole
