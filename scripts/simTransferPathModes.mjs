@@ -23,8 +23,10 @@
         the graph: under active every name on it has a season touching
         ACTIVE_YEAR, under Europe every link's shared club is European, and
         every link is a same club same season link on the everyday graph. The
-        share of puzzles with a path under each rule is measured and floored
-        from headroom (2026-09-05: active 236 of 902, Europe 902 of 902).
+        share of Europe puzzles with a path is measured and floored from
+        headroom (2026-09-07: Europe 872 of 885). Active may be zero while
+        unverified 2025-26 career rows stay quarantined, and the page disables
+        that rule when it has no eligible puzzle.
         ACTIVE_YEAR is checked against the pull: a season ending after it
         means the constant is stale.
      2) THE FALLBACK THE PAGE SHOWS WHEN THE TABLE IS DOWN, PER RULE.
@@ -40,7 +42,7 @@
 
    NEGATIVE CONTROLS, each refusing to run if its rewrite changed nothing:
      TPM_CONTROL=min plants a typed Europe minimum one step too high on
-       tpa-945 in the parsed migration; section 1 must go red on that row.
+       tpa-944 in the parsed migration; section 1 must go red on that row.
      TPM_CONTROL=abroad rewrites a COPY of transferPathModes.ts so Saudi and
        United States clubs count as European, builds section 1's graph through
        the copy, and keeps the link walk on the real module: a Europe chain
@@ -61,14 +63,15 @@ import {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src').replaceAll('\\', '/');
 const CONTROL = process.env.TPM_CONTROL || '';
+const LOCAL_ONLY = process.env.TRANSFER_PATH_LOCAL_ONLY === '1';
 if (CONTROL && !['min', 'abroad'].includes(CONTROL)) { console.error(`TPM_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const findings = [];
 const fail = m => { failures += 1; findings.push(m); if (failures <= 25) console.error('  FAIL: ' + m); };
 
-/* measured 2026-09-05 on the 902 puzzle pull: active 236 (26.2 percent), Europe 902 */
-const SHARE_FLOOR = { active: 0.2, europe: 0.95 };
-const PUZZLE_FLOOR = 902;
+/* measured 2026-09-07 on the corrected 885 puzzle pull: Europe 872 */
+const SHARE_FLOOR = { europe: 0.95 };
+const PUZZLE_FLOOR = 885;
 const MIGRATION = path.join(ROOT, 'supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql');
 
 /* ── the real module, and under the abroad control a rewritten copy for the graph ── */
@@ -135,10 +138,10 @@ console.log('1) the mode migration against the pull it was made from, per rule')
   console.log(`   ${players.length} players in the pull, ${active} with a season touching ${real.ACTIVE_YEAR}, latest season ends ${latest}`);
 
   if (CONTROL === 'min') {
-    const r = stored.get('tpa-945');
-    if (!r || !r.europe) { console.error('control cannot run: tpa-945 has no Europe entry to plant on'); process.exit(1); }
+    const r = stored.get('tpa-944');
+    if (!r || !r.europe) { console.error('control cannot run: tpa-944 has no Europe entry to plant on'); process.exit(1); }
     r.europe = { ...r.europe, minSteps: r.europe.minSteps + 1 };
-    console.log(`   NEGATIVE CONTROL ON: tpa-945 carries a typed Europe minimum of ${r.europe.minSteps}, this section must go red`);
+    console.log(`   NEGATIVE CONTROL ON: tpa-944 carries a typed Europe minimum of ${r.europe.minSteps}, this section must go red`);
   }
 
   const everyday = buildGraph(players);
@@ -160,7 +163,7 @@ console.log('1) the mode migration against the pull it was made from, per rule')
     }
     const share = withPath / pairs.size;
     console.log(`   ${rule}: ${graph.names.length} players in the graph, ${withPath} of ${pairs.size} puzzles have a path (${(share * 100).toFixed(1)} percent), ${walked} shortest chains walked; by minimum ${JSON.stringify(byMin)}`);
-    if (share < SHARE_FLOOR[rule]) fail(`${rule}: only ${(share * 100).toFixed(1)} percent of puzzles have a path, the floor is ${SHARE_FLOOR[rule] * 100} percent`);
+    if (SHARE_FLOOR[rule] !== undefined && share < SHARE_FLOOR[rule]) fail(`${rule}: only ${(share * 100).toFixed(1)} percent of puzzles have a path, the floor is ${SHARE_FLOOR[rule] * 100} percent`);
   }
 }
 
@@ -188,6 +191,9 @@ console.log('2) the fallback the page shows when the table is down, per rule');
 
 console.log('3) the live table, through the site\'s own fetcher');
 {
+  if (LOCAL_ONLY) {
+    console.log('   SKIPPED BY TRANSFER_PATH_LOCAL_ONLY=1. Live is not claimed checked.');
+  } else {
   let players = [], puzzles = [];
   try {
     const warn = console.warn; console.warn = () => {};
@@ -218,6 +224,7 @@ console.log('3) the live table, through the site\'s own fetcher');
       console.log(`   ${rule}: ${same} of ${puzzles.length} live rows equal the migration text for text, ${withPath} with a path, on ${graph.names.length} live players`);
     }
   }
+  }
 }
 
 console.log('4) the source: the page filters through the same module');
@@ -235,7 +242,7 @@ console.log('4) the source: the page filters through the same module');
 
 console.log('');
 if (CONTROL) {
-  const specific = CONTROL === 'abroad' ? findings.some(f => /a Europe chain runs through/.test(f)) : findings.some(f => /tpa-945 under europe/.test(f) && /the search says/.test(f));
+  const specific = CONTROL === 'abroad' ? findings.some(f => /a Europe chain runs through/.test(f)) : findings.some(f => /tpa-944 under europe/.test(f) && /the search says/.test(f));
   if (failures > 0 && specific) { console.log(`simTransferPathModes control (${CONTROL}): green. The planted defect was reported (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error(`simTransferPathModes control (${CONTROL}): RED. ${failures ? 'Findings came, but not the one the control plants.' : 'The planted defect went unreported.'}`); process.exit(1);
 }

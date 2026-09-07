@@ -22,6 +22,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { recordActivity } from '@/lib/completions';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
@@ -140,7 +141,9 @@ export default function NbaMyCareerBoard() {
       const co = ensureCoachCareer(s.coach, 'nba');
       coachRef.current = co;
       setCoach(co);
-      setPhase(!s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired');
+      const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
+      if (restoredPhase === 'retired') markRestoredFinish('nba-my-career');
+      setPhase(restoredPhase);
     } catch { /* fresh */ }
   }, []);
 

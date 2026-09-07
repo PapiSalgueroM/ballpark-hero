@@ -23,6 +23,8 @@
         real hook: mounting already complete records nothing, a restored
         finish records nothing and a later real one records once, a witnessed
         finish records once, a reset and a new finish records again.
+        src/test/myCareerRestore.test.tsx mounts all four real My Career boards
+        with retired saves and proves that opening them pays nothing again.
      2. THE LIB'S DIRECT CALLERS, AS CODE. Every recordCompletion call outside
         the hook sits in an event handler or a guarded mount that a replay
         legitimately reaches, never at module scope and never in a bare
@@ -40,7 +42,8 @@
                                      while the other three pass on the copy.
      SIM_COMPLETION_CONTROL=restore  a copy of the hook that ignores the
                                      restore mark; the restored case must fail
-                                     while the other three pass.
+                                     while the other three pass, and all four
+                                     saved My Career cases must fail too.
      SIM_COMPLETION_CONTROL=silent   the daily hook's mark call removed in
                                      memory; section 3 must go red.
    Each control refuses to run if what it rewrites is not there, and is
@@ -55,7 +58,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_COMPLETION_CONTROL || '';
-const TEST = 'src/hooks/useGameCompletion.test.ts';
+const TESTS = ['src/hooks/useGameCompletion.test.ts', 'src/test/myCareerRestore.test.tsx'];
 const failures = { 1: 0, 2: 0, 3: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
@@ -64,7 +67,7 @@ const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
 function runVitest(extraEnv) {
-  const r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', TEST],
+  const r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', ...TESTS],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...extraEnv, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
   return { code: r.status, out: (r.stdout || '') + (r.stderr || '') };
 }
@@ -89,7 +92,7 @@ console.log('1) The real hook, rendered: a restored finish records nothing, a wi
   }
   let code, out;
   try { ({ code, out } = runVitest(env)); } finally { if (copy) fs.rmSync(path.dirname(copy), { recursive: true, force: true }); }
-  if (!out.includes('useGameCompletion.test.ts')) abort('vitest did not report on the test file at all, so nothing was checked:\n' + out.slice(-1500));
+  if (!TESTS.every(test => out.includes(path.basename(test)))) abort('vitest did not report on both completion test files, so nothing was checked:\n' + out.slice(-1500));
   const summary = out.match(/Tests\s+(.+)/);
   console.log(`   vitest exit ${code}, ${summary ? summary[1].trim() : 'no summary line'}`);
   if (CONTROL === 'mount' || CONTROL === 'restore') {
@@ -101,10 +104,23 @@ console.log('1) The real hook, rendered: a restored finish records nothing, a wi
     const target = { mount: 'mounts already finished', restore: 'daily puzzle hook restored' }[CONTROL];
     const loaded = others.every(n => new RegExp('✓.*' + n).test(out));
     if (!loaded) abort('control cannot run: the other three tests did not pass on the copy, so a red here is a load error and not the check');
+    if (CONTROL === 'restore') {
+      const careerMisses = ['NFL', 'NBA', 'MLB', 'NHL'].filter(label => !new RegExp(`×.*'${label}'.*does not repay a retired save`).test(out));
+      if (careerMisses.length) abort(`control cannot run: the restore regression did not make these real board cases fail: ${careerMisses.join(', ')}`);
+      const positiveLeaks = [
+        ['/nfl-my-career', 80],
+        ['/nba-my-career', 95],
+        ['/mlb-my-career', 85],
+        ['/nhl-my-career', 85],
+      ];
+      const wrongLeaks = positiveLeaks.filter(([slug, score]) => !new RegExp(`"${slug}",[\\s\\S]{0,100}\\b${score},`).test(out));
+      if (wrongLeaks.length) abort(`control cannot run: these regressed boards did not expose their positive legacy payment: ${wrongLeaks.map(([slug]) => slug).join(', ')}`);
+      console.log('   all four saved My Career board cases fail with restore consumption disabled, as they should');
+    }
     if (new RegExp('×.*' + target).test(out) && /AssertionError|expected/.test(out)) fail(`with the "${CONTROL}" control on, the "${target}" case fails on its assertion, as it should`);
   } else {
     if (code !== 0) fail('the hook test is red:\n    ' + out.split('\n').filter(l => /×|FAIL|AssertionError|expected/.test(l)).slice(0, 8).join('\n    '));
-    if (!/4 passed/.test(out)) fail(`expected all four tests to pass, vitest says: ${summary ? summary[1].trim() : 'nothing'}`);
+    if (!/8 passed/.test(out)) fail(`expected all eight tests to pass, vitest says: ${summary ? summary[1].trim() : 'nothing'}`);
   }
 }
 

@@ -43,7 +43,7 @@ const transferPathPuzzles: TransferPathPuzzle[] = [
     id: 'tp-2', playerA: 'Lionel Messi', playerB: 'Neymar', minSteps: 1,
     oneOptimalPath: ['Lionel Messi', 'Neymar'],
     hint: 'Direct link. They were at Barcelona together.',
-    active: { minSteps: 1, oneOptimalPath: ['Lionel Messi', 'Neymar'], hint: 'Direct link. They were at Barcelona together.' },
+    active: null,
     europe: { minSteps: 1, oneOptimalPath: ['Lionel Messi', 'Neymar'], hint: 'Direct link. They were at Barcelona together.' },
   },
   {
@@ -120,15 +120,15 @@ const transferPathPuzzles: TransferPathPuzzle[] = [
     id: 'tp-13', playerA: 'Son Heung-min', playerB: 'Karim Benzema', minSteps: 2,
     oneOptimalPath: ['Son Heung-min', 'Gareth Bale', 'Karim Benzema'],
     hint: 'One middle man does it. He was at Tottenham with Son Heung-min and at Real Madrid with Karim Benzema.',
-    active: { minSteps: 3, oneOptimalPath: ['Son Heung-min', 'Harry Kane', 'Luka Modrić', 'Karim Benzema'], hint: 'Two middle men at least. The first was at Tottenham with Son Heung-min; the last was at Real Madrid with Karim Benzema.' },
+    active: null,
     europe: { minSteps: 2, oneOptimalPath: ['Son Heung-min', 'Gareth Bale', 'Karim Benzema'], hint: 'One middle man does it. He was at Tottenham with Son Heung-min and at Real Madrid with Karim Benzema.' },
   },
   {
     id: 'tp-14', playerA: 'Mohamed Salah', playerB: 'Zlatan Ibrahimović', minSteps: 3,
-    oneOptimalPath: ['Mohamed Salah', 'Alexander Isak', 'Sandro Tonali', 'Zlatan Ibrahimović'],
-    hint: 'Two middle men at least. The first was at Liverpool with Mohamed Salah; the last was at AC Milan with Zlatan Ibrahimović.',
+    oneOptimalPath: ['Mohamed Salah', 'Federico Chiesa', 'Angel Di María', 'Zlatan Ibrahimović'],
+    hint: 'Two middle men at least. The first was at Liverpool with Mohamed Salah; the last was at PSG with Zlatan Ibrahimović.',
     active: null,
-    europe: { minSteps: 3, oneOptimalPath: ['Mohamed Salah', 'Alexander Isak', 'Sandro Tonali', 'Zlatan Ibrahimović'], hint: 'Two middle men at least. The first was at Liverpool with Mohamed Salah; the last was at AC Milan with Zlatan Ibrahimović.' },
+    europe: { minSteps: 3, oneOptimalPath: ['Mohamed Salah', 'Federico Chiesa', 'Angel Di María', 'Zlatan Ibrahimović'], hint: 'Two middle men at least. The first was at Liverpool with Mohamed Salah; the last was at PSG with Zlatan Ibrahimović.' },
   },
   {
     id: 'tp-15', playerA: 'Steven Gerrard', playerB: 'Erling Haaland', minSteps: 3,

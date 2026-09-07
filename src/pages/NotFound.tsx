@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { FEATURED_GAMES, ALL_GAMES, TOTAL_GAMES } from "@/data/gameRegistry";
+import { FEATURED_GAMES, ALL_GAMES, GAME_COUNT_LABEL } from "@/data/gameRegistry";
 
 /* Round 53: a real 404 instead of the stock template. Branded, helpful, and
    noindexed so search engines never waste crawl budget on dead ends. */
@@ -60,7 +60,7 @@ const NotFound = () => {
           to="/"
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
         >
-          {`See all ${TOTAL_GAMES} games`}
+          {`See all ${GAME_COUNT_LABEL} games`}
         </Link>
       </div>
     </div>

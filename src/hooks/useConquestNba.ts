@@ -679,6 +679,19 @@ export function useConquestNba() {
     const loserIsInvincible = invincibleTeams.has(result.loser);
     applyPowerRankUpdate(result.winner, result.loser);
 
+    // The defender is always at home. A losing attacker is repelled, so no
+    // territory changes hands and a saved shield is not spent.
+    if (result.loser === attacker) {
+      setTurn(t => t + 1);
+      setGameLog(prev => [...prev, {
+        turn: prev.length + 1, attacker, defender,
+        winner: result.winner,
+        score: `${result.winScore}-${result.loseScore} · away raid repelled`,
+      }]);
+      setPhase('ready');
+      return;
+    }
+
     if (loserIsInvincible) {
       setInvincibleTeams(prev => {
         const next = new Set(prev);

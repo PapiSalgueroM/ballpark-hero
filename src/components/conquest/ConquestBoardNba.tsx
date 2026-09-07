@@ -514,7 +514,11 @@ export default function ConquestBoardNba() {
               </div>
 
               <div className="text-center text-sm text-muted-foreground pt-1">
-                {loseTeam?.city} {loseTeam?.name} eliminated, all territory conquered
+                {game.battleResult.loser === game.attackingTeam
+                  ? `Raid repelled: ${loseTeam?.city} ${loseTeam?.name} lose no territory on an away defeat`
+                  : game.invincibleTeams.has(game.battleResult.loser)
+                    ? `🛡️ ${loseTeam?.city} ${loseTeam?.name} survive: invincibility protects their territory`
+                    : `${loseTeam?.city} ${loseTeam?.name} eliminated: home territory conquered`}
               </div>
 
               {game.playerConfirmed && (

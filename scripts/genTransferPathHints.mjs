@@ -85,7 +85,7 @@ if (unreachable) { console.error(`${unreachable} puzzle(s) have no path; the mig
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, lines.join('\n') + '\n');
 console.log(`wrote ${path.relative(ROOT, OUT)}: ${puzzles.length} updates, minimum changed on ${minChanged}, by minimum ${JSON.stringify(byMin)}`);
-for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-945']) {
+for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-944']) {
   const p = puzzles.find(x => x.id === id);
   if (p) { const d = deriveHint(graph, p.a, p.b); console.log(`  ${id}: ${p.oldMin} -> ${d.minSteps}, ${d.path.join(' > ')}\n     "${d.hint}"`); }
 }

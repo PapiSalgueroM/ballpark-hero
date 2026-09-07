@@ -71,7 +71,6 @@ tpa-79|Bukayo Saka|Yassine Bounou|3
 tpa-80|Antoine Griezmann|Victor Osimhen|3
 tpa-81|Lorenzo Insigne|Ousmane Dembélé|3
 tpa-82|Cristian Pulisic|Giorgio Chiellini|3
-tpa-83|Jonathan David|Moussa Diaby|3
 tpa-84|Manuel Neuer|Rodri|2
 tpa-86|Dani Carvajal|Phil Foden|3
 tpa-87|Gianluigi Donnarumma|Yaya Touré|2
@@ -94,13 +93,11 @@ tpa-104|Bernardo Silva|Kalidou Koulibaly|2
 tpa-105|Florian Wirtz|Khvicha Kvaratskhelia|3
 tpa-106|Jamal Musiala|Luis Suárez|3
 tpa-107|Leroy Sané|Paul Pogba|3
-tpa-108|Andrés Iniesta|Jonathan David|4
 tpa-109|Kobbie Mainoo|Martin Ødegaard|2
 tpa-110|Ederson|Mohamed Salah|3
 tpa-111|Antoine Griezmann|Marcelo|3
 tpa-112|Alisson Becker|Leroy Sané|2
 tpa-113|Arjen Robben|Sadio Mané|2
-tpa-114|Jonathan David|Joshua Kimmich|3
 tpa-115|Erling Haaland|Raphaël Varane|2
 tpa-116|Harry Kane|Yaya Touré|2
 tpa-117|Kevin De Bruyne|Pedri|2
@@ -159,7 +156,6 @@ tpa-173|Dani Alves|Romelu Lukaku|2
 tpa-174|Rodri|Romelu Lukaku|2
 tpa-175|David Alaba|Neymar|3
 tpa-176|Vinícius Tobias|Wayne Rooney|3
-tpa-177|Jonathan David|Rodri|4
 tpa-178|João Cancelo|Steven Gerrard|2
 tpa-179|Didier Drogba|Ederson|3
 tpa-180|Antoine Griezmann|Diogo Jota|3
@@ -169,7 +165,6 @@ tpa-183|Andrea Pirlo|Ederson|3
 tpa-184|Didier Drogba|Jordi Alba|2
 tpa-185|Alejandro Garnacho|Kevin De Bruyne|3
 tpa-186|Arturo Vidal|Xavi Simons|3
-tpa-187|Jonathan David|Karim Benzema|3
 tpa-188|Bradley Barcola|Leroy Sané|3
 tpa-189|Federico Valverde|Ivan Rakitić|3
 tpa-190|Gonzalo Higuaín|Mikel Oyarzabal|3
@@ -244,8 +239,6 @@ tpa-263|Andrés Iniesta|Fernando Torres|2
 tpa-264|Thiago Silva|Victor Osimhen|2
 tpa-265|Enzo Fernández|Karim Benzema|2
 tpa-266|Gianluigi Buffon|Thibaut Courtois|2
-tpa-267|Arda Güler|Jonathan David|4
-tpa-268|Florian Wirtz|Jonathan David|3
 tpa-269|Didier Drogba|Yaya Touré|2
 tpa-270|Dani Carvajal|Franck Ribéry|2
 tpa-271|Phil Foden|Warren Zaïre-Emery|3
@@ -256,7 +249,6 @@ tpa-275|Darwin Núñez|Mikel Oyarzabal|2
 tpa-276|Bukayo Saka|Hugo Lloris|3
 tpa-277|Alexander Isak|Raphaël Varane|2
 tpa-279|Dries Mertens|Steven Gerrard|3
-tpa-280|Jonathan David|Steven Gerrard|4
 tpa-281|Gerard Piqué|Thibaut Courtois|2
 tpa-282|Sergio Ramos|Xavi Simons|3
 tpa-283|Declan Rice|Didier Drogba|3
@@ -288,7 +280,6 @@ tpa-311|Martin Ødegaard|Warren Zaïre-Emery|2
 tpa-312|Gareth Bale|Jordi Alba|3
 tpa-313|Phil Foden|Robert Lewandowski|2
 tpa-314|Marquinhos|Sadio Mané|3
-tpa-315|Endrick|Jonathan David|4
 tpa-316|Memphis Depay|Radamel Falcao|2
 tpa-317|Alexis Sánchez|Erling Haaland|2
 tpa-318|Jan Oblak|Joshua Kimmich|3
@@ -316,7 +307,6 @@ tpa-339|N'Golo Kanté|Wayne Rooney|3
 tpa-340|Khvicha Kvaratskhelia|Luka Modrić|2
 tpa-341|Arturo Vidal|Steven Gerrard|2
 tpa-342|Alisson|Ivan Rakitić|3
-tpa-343|Alphonso Davies|Jonathan David|3
 tpa-344|Gonzalo Higuaín|Wayne Rooney|2
 tpa-345|Erling Haaland|Nabil Fekir|4
 tpa-346|Bernardo Silva|Warren Zaïre-Emery|2
@@ -328,7 +318,6 @@ tpa-352|Mesut Özil|Sadio Mané|2
 tpa-354|Ivan Rakitić|Son Heung-min|3
 tpa-355|Memphis Depay|Sergio Ramos|3
 tpa-356|Frank Lampard|Joshua Kimmich|2
-tpa-357|Jonathan David|Marcelo|3
 tpa-358|Frank Lampard|Marquinhos|3
 tpa-359|Andrés Iniesta|Romelu Lukaku|2
 tpa-360|Enzo Fernández|Son Heung-min|3
@@ -733,7 +722,6 @@ tpa-783|Frank Lampard|Leroy Sané|2
 tpa-784|Lamine Yamal|Rafael Leão|3
 tpa-785|Rodrygo|Rúben Dias|3
 tpa-786|Endrick|Thiago Silva|2
-tpa-787|Jonathan David|Luis Suárez|4
 tpa-788|Vinícius Júnior|Xavi Hernández|3
 tpa-789|Estêvão|Gareth Bale|3
 tpa-790|Sergio Agüero|Trent Alexander-Arnold|3
@@ -784,11 +772,9 @@ tpa-840|Jamal Musiala|Victor Osimhen|2
 tpa-841|Alisson|Giorgio Chiellini|2
 tpa-842|Eden Hazard|Lamine Yamal|3
 tpa-843|Keylor Navas|Phil Foden|3
-tpa-844|Jonathan David|Lamine Yamal|4
 tpa-846|Darwin Núñez|Rafael Leão|3
 tpa-847|Hugo Lloris|Rafael Leão|2
 tpa-848|Lorenzo Insigne|Nabil Fekir|4
-tpa-849|Bukayo Saka|Jonathan David|4
 tpa-850|Alexander Isak|Robin van Persie|3
 tpa-851|Angel Di María|N'Golo Kanté|2
 tpa-852|Dani Alves|Steven Gerrard|2
@@ -839,7 +825,6 @@ tpa-899|Dries Mertens|Yaya Touré|3
 tpa-900|Declan Rice|Son Heung-min|3
 tpa-901|Gianluigi Donnarumma|Lamine Yamal|2
 tpa-902|Dani Carvajal|Endrick|2
-tpa-903|Jonathan David|Mikel Oyarzabal|4
 tpa-905|Andrea Pirlo|Diego Costa|3
 tpa-906|Alexis Sánchez|Xavi Simons|3
 tpa-907|Ciro Immobile|Cristiano Ronaldo|3
@@ -851,7 +836,6 @@ tpa-912|Kobbie Mainoo|Lamine Yamal|2
 tpa-913|Kalidou Koulibaly|Vinícius Tobias|3
 tpa-914|Kyle Walker|Ousmane Dembélé|2
 tpa-915|Antoine Griezmann|Marquinhos|2
-tpa-916|Jonathan David|Viktor Gyökeres|4
 tpa-917|Ciro Immobile|Sadio Mané|3
 tpa-918|Endrick|Wayne Rooney|3
 tpa-919|Victor Osimhen|Yassine Bounou|2
@@ -876,7 +860,6 @@ tpa-941|Dusan Vlahović|Jan Oblak|4
 tpa-942|Gianluigi Donnarumma|Nabil Fekir|3
 tpa-943|Neymar|Thomas Müller|3
 tpa-944|Florian Wirtz|Rodrygo|3
-tpa-945|Jan Oblak|Jonathan David|5
 tpa-946|Christian Eriksen|Giorgio Chiellini|2
 tpa-947|Diego Costa|Xavi Simons|4
 tpa-948|Christian Eriksen|Neymar|2

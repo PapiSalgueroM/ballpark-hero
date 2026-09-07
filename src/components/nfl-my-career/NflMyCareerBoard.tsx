@@ -27,6 +27,7 @@ import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import { Confetti, CountUp } from '@/components/soccer-career/CareerFx';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { recordActivity } from '@/lib/completions';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';
@@ -141,7 +142,9 @@ export default function NflMyCareerBoard() {
       const co = ensureCoachCareer(s.coach, 'nfl');
       coachRef.current = co;
       setCoach(co);
-      setPhase(!s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired');
+      const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
+      if (restoredPhase === 'retired') markRestoredFinish('nfl-my-career');
+      setPhase(restoredPhase);
     } catch { /* fresh */ }
   }, []);
 

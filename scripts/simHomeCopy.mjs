@@ -19,8 +19,8 @@
  *   1. EVERY NUMBER IN THE BLOCK IS TRUE. The counts are read out of the
  *      prose and compared against the registry the site renders from, not
  *      against a grep of a file.
- *   2. A FLOOR IS A FLOOR, AND A FLOOR STAYS USEFUL. "More than 110" must be
- *      under the real count, and it must be within a sane distance of it,
+ *   2. A FLOOR IS A FLOOR, AND A FLOOR STAYS USEFUL. "120+" must be under
+ *      the real count, and it must be within a sane distance of it,
  *      because a floor forty games behind reality is not much better than one
  *      ahead of it. Both directions fail.
  *   3. EVERY LINK GOES SOMEWHERE. Each href in the block must be a real route
@@ -88,7 +88,7 @@ const WORDS = {
   ten: 10, fifteen: 15, twenty: 20, 'twenty five': 25, thirty: 30, forty: 40,
   fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100,
 };
-/** Read "more than 110" or "more than twenty five" into a number. */
+/** Read "120+", "more than 110" or "more than twenty five" into a number. */
 function floorsIn(s) {
   const out = [];
   /* case insensitive on purpose: the sentence that opens the block starts
@@ -97,7 +97,10 @@ function floorsIn(s) {
   for (const m of s.matchAll(/more than ([a-z ]+?|\d+)(?= )/gi)) {
     const raw = m[1].trim().toLowerCase();
     const n = /^\d+$/.test(raw) ? Number(raw) : WORDS[raw] ?? null;
-    if (n !== null) out.push({ n, phrase: m[0] });
+    if (n !== null) out.push({ n, phrase: m[0], inclusive: false });
+  }
+  for (const m of s.matchAll(/\b(\d+)\+(?= )/g)) {
+    out.push({ n: Number(m[1]), phrase: m[0], inclusive: true });
   }
   return out;
 }
@@ -112,7 +115,7 @@ for (const sentence of sentences) {
   const actual = isSoccer ? soccerGames : totalGames;
   const label = isSoccer ? 'soccer games' : 'games in total';
   for (const f of floors) {
-    if (f.n >= actual) {
+    if (f.inclusive ? f.n > actual : f.n >= actual) {
       fail(`the page claims "${f.phrase}" ${label} and there are ${actual}`);
     } else if (actual - f.n > Math.max(15, actual * 0.2)) {
       fail(`"${f.phrase}" ${label} is ${actual - f.n} behind the real ${actual}, so the floor has stopped being useful`);
@@ -120,8 +123,11 @@ for (const sentence of sentences) {
     if (isSoccer) checkedSoccer = true; else checkedTotal = true;
   }
 }
-if (!checkedTotal) fail('no "more than N" claim about the total game count was found to check');
+if (!checkedTotal) fail('no rounded floor claim about the total game count was found to check');
 if (!checkedSoccer) fail('no "more than N" claim about soccer was found to check');
+if (!/\b\d+\+ free sports games\b/i.test(text)) {
+  fail('the total game count is not written as a rounded N+ claim');
+}
 
 /* every bare number in the block gets eyeballed too, so a future edit cannot
    sneak an exact count past the floor rule */
