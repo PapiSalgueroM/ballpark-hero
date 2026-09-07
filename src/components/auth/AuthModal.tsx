@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { OAUTH_PROVIDERS, ANY_OAUTH_ENABLED } from '@/lib/authProviders';
+import { renderGoogleIdentityButton } from '@/lib/googleIdentity';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -82,6 +83,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [googleError, setGoogleError] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -91,6 +93,12 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
      that collects an email, so it is the one place to ask. */
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const { signIn, signUp } = useAuth();
+  const [googleButtonElement, setGoogleButtonElement] = useState<HTMLDivElement | null>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   // Re-validates a single field on the fly once the form has been submitted
   // once (touched), so the player gets immediate feedback while fixing a
@@ -120,22 +128,19 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     setFormError(null);
     setTouched(false);
     /* Round 448, his words: "if u go to login and then go back or sign up
-       and then go back it leaves the google thing just loading". The Google
-       handler leaves its spinner on because on success the whole page is
-       about to leave for Google, and it did not get a say in what happens
-       when the player presses Back on Google's account picker. The browser
-       restores this page from its back-forward cache with every piece of
-       React state exactly as it was, spinner included, and since this modal
-       never unmounts nothing ever turned it off. Every open starts clean. */
+       and then go back it leaves the google thing just loading". Google now
+       uses a popup, but Apple can still leave the page and the Google library
+       itself has a loading state. Since this modal never unmounts, every open
+       still starts clean. */
     setGoogleLoading(false);
+    setGoogleError(false);
     setAppleLoading(false);
   }, [isOpen, defaultTab]);
 
-  /* Round 448, the other half of the same bug: Back from Google restores the
-     page from the back-forward cache with the modal still open, so the reset
-     above (which runs on open) never fires. A restored page announces itself
-     with pageshow and persisted set, and that is the moment to take the
-     spinner off a button the player can see again. */
+  /* Round 448, the other half of the same bug: a redirecting provider can
+     restore the page from the back-forward cache with the modal still open,
+     so the reset above never fires. A restored page announces itself with
+     pageshow and persisted set, which is when both provider states reset. */
   useEffect(() => {
     const onPageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return;
@@ -145,6 +150,60 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     window.addEventListener('pageshow', onPageShow);
     return () => window.removeEventListener('pageshow', onPageShow);
   }, []);
+
+  useEffect(() => {
+    if (!isOpen || !OAUTH_PROVIDERS.google || !googleButtonElement) return;
+
+    const container = googleButtonElement;
+    let active = true;
+    container.replaceChildren();
+    setGoogleLoading(true);
+    setGoogleError(false);
+
+    const acceptCredential = async (token: string | null, nonce: string) => {
+      if (!active) return;
+      if (!token) {
+        toast.error('Google did not return a sign in token. Try again or use email instead.');
+        setGoogleLoading(false);
+        return;
+      }
+
+      setGoogleLoading(true);
+      try {
+        const { error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token,
+          nonce,
+        });
+        if (error) {
+          toast.error('Could not sign in with Google. Try again or use email instead.');
+          return;
+        }
+        toast.success("You're signed in!");
+        onCloseRef.current();
+      } catch {
+        toast.error('Could not sign in with Google. Try again or use email instead.');
+      } finally {
+        if (active) setGoogleLoading(false);
+      }
+    };
+
+    renderGoogleIdentityButton(container, acceptCredential)
+      .then(() => {
+        if (active) setGoogleLoading(false);
+      })
+      .catch(() => {
+        if (!active) return;
+        setGoogleLoading(false);
+        setGoogleError(true);
+        toast.error('Google sign in could not load. Use email instead or try again later.');
+      });
+
+    return () => {
+      active = false;
+      container.replaceChildren();
+    };
+  }, [isOpen, googleButtonElement]);
 
   const switchTab = (next: 'login' | 'signup') => {
     setTab(next);
@@ -214,30 +273,6 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    // Native Supabase OAuth. The old path went through the Lovable auth
-    // gateway, which mints tokens for a retired backend project, so the
-    // session it produced was always rejected and nobody could ever
-    // actually sign in with Google. This goes straight to Supabase; when
-    // the Google provider is switched on in the dashboard it works with
-    // no further code changes.
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) {
-      const providerOff = /not enabled|unsupported provider/i.test(error.message);
-      toast.error(
-        providerOff
-          ? 'Google sign-in is getting an upgrade. Use email + password for now, it takes 10 seconds.'
-          : 'Could not start Google sign-in. Try email + password instead.'
-      );
-      setGoogleLoading(false);
-    }
-    // On success the browser redirects to Google, so leave the spinner on.
-  };
-
   const handleAppleSignIn = async () => {
     setAppleLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
@@ -299,11 +334,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
           </DialogTitle>
         </DialogHeader>
 
-        <p className="text-center text-sm text-muted-foreground -mt-2">
+        <DialogDescription className="text-center text-sm text-muted-foreground -mt-2">
           {tab === 'login'
             ? 'Good to see you again. Log in and pick your streak back up.'
             : "First time here? It's free and takes 10 seconds. Streaks, points and world rank only count once you have an account."}
-        </p>
+        </DialogDescription>
 
         <div className="space-y-4 py-4">
           {/* Social sign-in buttons only render for providers that are
@@ -311,36 +346,24 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
               A button for an unconfigured provider hard-redirects the whole
               page to a raw JSON error, so hidden > broken. */}
           {OAUTH_PROVIDERS.google && (
-          <Button
-            variant="outline"
-            className="w-full h-12 text-base gap-3"
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading || appleLoading}
-          >
-            {googleLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
+          <div className="relative flex min-h-11 w-full items-center justify-center">
+            <div
+              ref={setGoogleButtonElement}
+              className={googleLoading || googleError ? 'invisible flex w-full justify-center' : 'flex w-full justify-center'}
+              aria-hidden={googleLoading || googleError}
+            />
+            {googleLoading && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-md border border-input" role="status" aria-live="polite">
+                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                <span className="sr-only">Loading Google sign in</span>
+              </div>
             )}
-            Continue with Google
-          </Button>
+            {googleError && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-md border border-input text-sm text-muted-foreground" role="alert">
+                Google sign in unavailable
+              </div>
+            )}
+          </div>
           )}
 
           {OAUTH_PROVIDERS.apple && (

@@ -43,7 +43,7 @@ const transferPathPuzzles: TransferPathPuzzle[] = [
     id: 'tp-2', playerA: 'Lionel Messi', playerB: 'Neymar', minSteps: 1,
     oneOptimalPath: ['Lionel Messi', 'Neymar'],
     hint: 'Direct link. They were at Barcelona together.',
-    active: null,
+    active: { minSteps: 1, oneOptimalPath: ['Lionel Messi', 'Neymar'], hint: 'Direct link. They were at Barcelona together.' },
     europe: { minSteps: 1, oneOptimalPath: ['Lionel Messi', 'Neymar'], hint: 'Direct link. They were at Barcelona together.' },
   },
   {

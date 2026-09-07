@@ -296,6 +296,58 @@ export function parseModeMigration(sql, pairs) {
   return rows;
 }
 
+const ACTIVE_RESTORE_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
+
+/** puzzle id -> exact endpoint tuple and verified active minimum plus hint */
+export function parseActiveRestoreMigration(sql) {
+  const normalized = String(sql).replaceAll('\r\n', '\n');
+  const start = normalized.indexOf('  for desired in');
+  const end = normalized.indexOf('\n    ) as rows(puzzle_id, player_a, player_b, active_min_steps, active_hint)', start);
+  if (start < 0 || end < 0) return new Map();
+  const rows = new Map();
+  const unquote = value => value.replace(/''/g, "'");
+  for (const match of normalized.slice(start, end).matchAll(ACTIVE_RESTORE_ROW_RE)) {
+    rows.set(unquote(match[1]), {
+      a: unquote(match[2]),
+      b: unquote(match[3]),
+      minSteps: Number(match[4]),
+      hint: unquote(match[5]),
+    });
+  }
+  return rows;
+}
+
+/** exact deletions and retained six-field rows from the quarantine companion */
+export function parseTransferPathCompanionMigration(sql) {
+  const normalized = String(sql).replaceAll('\r\n', '\n');
+  const desiredMarker = normalized.indexOf('  for desired in');
+  const rejectedBlock = desiredMarker < 0 ? '' : normalized.slice(0, desiredMarker);
+  const desiredBlock = desiredMarker < 0 ? '' : normalized.slice(desiredMarker);
+  const rejected = [];
+  const desired = [];
+  const unquote = value => value.replace(/''/g, "'");
+  const nullableNumber = value => value === 'null::smallint' ? null : Number(value);
+  const nullableText = value => value === 'null::text' ? null : unquote(value.slice(1, -1));
+  const rejectedRow = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)'\),?$/gm;
+  const desiredRow = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)', (null::smallint|\d+), (null::text|'(?:[^']|'')*'), (null::smallint|\d+), (null::text|'(?:[^']|'')*')\),?$/gm;
+  let match;
+  while ((match = rejectedRow.exec(rejectedBlock))) rejected.push({
+    id: unquote(match[1]), playerA: unquote(match[2]), playerB: unquote(match[3]),
+  });
+  while ((match = desiredRow.exec(desiredBlock))) desired.push({
+    id: unquote(match[1]),
+    playerA: unquote(match[2]),
+    playerB: unquote(match[3]),
+    minSteps: Number(match[4]),
+    hint: unquote(match[5]),
+    activeMinSteps: nullableNumber(match[6]),
+    activeHint: nullableText(match[7]),
+    europeMinSteps: nullableNumber(match[8]),
+    europeHint: nullableText(match[9]),
+  });
+  return { rejected, desired };
+}
+
 /**
  * Every way a stored rule entry can be wrong on the rule's graph: a null
  * where the search finds a path, a path where the search finds none, or a
@@ -308,7 +360,7 @@ export function ruleProblems(graph, a, b, stored) {
   return hintProblems(graph, a, b, stored.minSteps, stored.hint);
 }
 
-/** the compact career text pulled through the database console: `Name|Club:2007-2009;Club:1995c` */
+/** compact career text: `Name|Nationality|Club:2007-2009;Club:1995c` */
 export function expandCompactCareers(text) {
   const players = [];
   /* Round 460: a fresh Windows checkout is CRLF. The trailing \r used to ride
@@ -318,9 +370,12 @@ export function expandCompactCareers(text) {
   for (const line of String(text).replaceAll('\r\n', '\n').split('\n')) {
     if (!line.trim()) continue;
     const bar = line.indexOf('|');
+    const secondBar = line.indexOf('|', bar + 1);
     const name = line.slice(0, bar);
+    const nationality = secondBar === -1 ? '' : line.slice(bar + 1, secondBar);
+    const compactCareer = line.slice(secondBar === -1 ? bar + 1 : secondBar + 1);
     const career = [];
-    for (const spell of line.slice(bar + 1).split(';')) {
+    for (const spell of compactCareer.split(';')) {
       const colon = spell.lastIndexOf(':');
       const club = spell.slice(0, colon);
       let years = spell.slice(colon + 1);
@@ -329,7 +384,7 @@ export function expandCompactCareers(text) {
       const [y0, y1] = years.includes('-') ? years.split('-').map(Number) : [Number(years), Number(years)];
       for (let y = y0; y <= y1; y++) career.push({ club, season: calendar ? String(y) : `${y}-${y + 1}` });
     }
-    players.push({ name, career });
+    players.push({ name, nationality, career });
   }
   return players;
 }

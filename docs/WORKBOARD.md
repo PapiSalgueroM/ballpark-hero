@@ -19,19 +19,18 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 509 (checked against origin/main on
-  2026-09-07: main is `8edc2896`, Round 502, so the 487 this line used to say was stale; 487 to
-  502 shipped on 2026-09-06 and 2026-09-07. The Claude Code lane holds 503 to 508, see its
-  claim below).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 510 (checked against origin/main on
+  2026-09-07: main is `a1a162e6`, Round 503. The Claude Code lane holds 504 to 508 and the
+  Codex lane holds 509, see both claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Verified against origin
-  before claiming: main is `8edc2896`, Round 502, so 503 is the next free number.
-  **503 RELIABILITY, DONE 2026-09-07, on the branch with a PR open.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
+  2026-09-07: Rounds 503 to 508. next: Round 504 (Claude Code lane).** Round 503 is merged on
+  origin/main at `a1a162e6`; 504 to 508 remain claimed here.
+  **503 RELIABILITY, DONE 2026-09-07, merged on origin/main.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
   (a) `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a handler adding more than
   one guess in one tick kept only the last, which is why a won Transfer Path daily recorded and paid
@@ -61,6 +60,41 @@ How it works:
   NOT TOUCHING, Codex owns them: Round 502 publication and verification, the `/college-grid`
   playGames stall, the prerender three clock date content bug, the measured correctness queue,
   first open help, profile and scoring verification, and the three Inbox items marked CODEX below.
+
+  **NONBLOCKING ADSENSE FOLLOW-UP FOR THE CLUB MANAGER LANE.** The 2026-09-07 mobile placement
+  audit measured the nearest Club Manager control 104px from its ad. Google's game-page
+  recommendation is 150px from gameplay controls. Address this while working in the claimed
+  Club Manager files, then rerun the placement harness. The rest of the site-side AdSense audit
+  is clean; Google still makes the approval decision.
+
+  **NEW OWNER REQUEST FOR THE CLUB MANAGER LANE, 2026-09-07.** Add first and second legs to
+  Champions League knockout ties whenever that season's real format uses two legs. Also design
+  live starting points that let the player take over a club midway through a real past or current
+  season and try to turn it around. The live-start request is a large data feature, so standings,
+  results, squads and the takeover date must come from verified sources rather than reconstructed
+  or invented history.
+
+- **Codex lane, Round 509, CLAIMED 2026-09-07. IMPLEMENTATION COMMITTED LOCALLY, FINAL
+  VERIFICATION, PR, MERGE AND DEPLOY STILL PENDING. next: Round 510 (Codex lane).** This batch
+  stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score
+  again on every visit; repels a losing NBA Conquest attacker instead of deleting it; fixes the
+  College Grid browser player's false stall; connects the Soccer Career wall and strengthens
+  the drill controls; and anchors prerender sampling to one fixed date so host calendar changes
+  cannot rewrite stable snapshots. It also changes every Poll of the Day to exactly two named
+  choices with the exact team prompt `Who you got?` or player prompt
+  `Who ranks higher all time?`, removes C and D, blocks repeated stocked matchups, and uses
+  `120+` for the marketing count. The two poll migrations are already live with 58 upcoming
+  rows and zero off-format or repeated matchups. Both career quarantines are live, so all 77
+  projected 2025-2026 rows are gone. The companion Transfer Path repair is live with 17
+  unreachable puzzles removed, 885 retained hint rows refreshed, and unsafe Active Players
+  hints empty until the identity-safe replacement deploys. The replacement now verifies 78
+  active identities and has a guarded restore for the 203 paths they can complete. It remains
+  unapplied until the frontend is live. The batch also replaces Google's hosted Supabase
+  redirect with the official popup and ID-token flow, keeps the login journey on
+  douknowball.com, and corrects the report-data disclosure in Privacy. The tested Google code
+  remains behind a false production flag, so no button, divider or Google script can appear
+  until Branding uses douknowball1@gmail.com. Round 509 also reran the full
+  site-side AdSense readiness audit; Google still decides approval.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
@@ -719,83 +753,29 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- **CODEX LANE OWNS THESE THREE. Recorded here so they are not lost (they came from the end of the
-  Round 502 handoff, relayed 2026-09-07), and the Claude Code lane does not touch them unless this
-  line reassigns one.** (1) The four My Career boards re-credit legacy score on repeat visits.
-  (2) Seven `career_seasons` rows assign goals to players after they had left the club. (3) NBA
-  Conquest over-punishes attackers that lose. Codex verifies and fixes all three in its scoring and
-  correctness lane.
+- **ROUND 509 OWNS THE THREE ROUND 502 HANDOFF FINDINGS. CODE IS COMPLETE LOCALLY AND PENDING
+  PR AND DEPLOY.** The four restored retired My Career saves are marked as restored before their
+  retired phase renders, so legacy score cannot pay again on a visit. The NBA Conquest attacker
+  now retreats after a lost away attack and keeps its territory. The career review expanded from
+  seven visibly false rows to the entire 77-row generated 2025-2026 projection tranche. All 77
+  exact rows are quarantined live, and the companion Transfer Path repair is live with 17
+  unreachable puzzles removed and 885 retained hints refreshed. Unsafe Active Players hints
+  stay empty until the identity-safe replacement deploys. The code now proves 78 active
+  identities and 203 recoverable paths, with a guarded restore migration deliberately held until
+  the frontend deploy. No retroactive score subtraction was performed.
 
-- **OPEN, MEASURED, NOT DIAGNOSED: `playGames` stalls deterministically on `/college-grid`.**
-  Found 2026-09-07 while browser checking the routes Rounds 499 to 501 touched. Recorded here
-  rather than fixed, because what it is could not be established and guessing would waste the next
-  round.
+- **ROUND 509 FIXES THE `/college-grid` STALL IN THE TEST DRIVER, PENDING PR AND DEPLOY.** The
+  page was healthy. `playGames` skipped any input whose label contained `search`, which excluded
+  College Grid's real answer field, `Search for a player`. The driver now classifies inputs by
+  observed behavior, keeps true filters out, and reaches 14 interactions with zero findings on
+  College Grid and Fantasy Draft. Its control restores the old skip and reproduces the stall.
 
-  **What is established.** The page is NOT blank and NOT broken: it renders a complete board
-  (Safety / First Round Pick / All-American against Georgia / Clemson / Penn State, "Correct: 0/9",
-  "Guesses left: 15") with all nine cells present as real buttons. `playGames` nonetheless reports
-  `STALL ... tried 4 different controls by step 13 and none of them moved the game forward` on
-  2 runs of 2, so it is deterministic rather than flaky. The controls it names are chrome
-  ("+", "Cookie choices", "Dark mode"), so it never reached a text input.
-
-  **What is ruled out.** It is not this session's work: no commit here touched
-  `src/pages/CollegeGrid.tsx`, `src/hooks/useCollegeGrid.ts` or `src/components/college-grid/`
-  (last change was Round 407), and the Round 501 change was to the EDGE FUNCTION only, where it
-  made a refusal MORE lenient. It is also not the rules gate on its own: `/soccer-grid` shows the
-  same "How to Play" gate on the first cell click and PASSES the same harness.
-
-  **A dead end worth writing down so it is not repeated.** Driving the dialog with
-  `element.click()` and with synthetic PointerEvent/KeyboardEvent sequences does NOT close it,
-  which looks exactly like an undismissable modal and is not one. The same non-dismissal happens on
-  `/soccer-grid`, which passes the harness, so the dialog is a Radix component that only responds
-  to a real browser click. **A synthetic-event probe cannot prove a modal is stuck.** The test was
-  abandoned because the Browser pane was hidden and real clicks could not be issued.
-
-  **What the next attempt needs:** a VISIBLE browser pane (or Playwright directly) to dismiss the
-  gate with a real click and see whether a cell then opens a guess dialog with a text input, and a
-  run of `playGames ONLY=/college-grid` against a build from before this session to establish
-  whether the stall is new at all.
-
-- **MEASURED, NOT YET FIXED: the prerenderer's three-clock intersection can KEEP date driven
-  content when the value space is small, and two pages re-date themselves in the sitemap because
-  of it.** Found 2026-09-07 while checking why a build that only changed one link in `index.html`
-  also rewrote `/missing-xi` and `/emoji-guess`.
-
-  **What changed:** position labels. `/missing-xi` went RW to RB, LW to LB, and gained a CM.
-  `/emoji-guess` gained a `<p>Player</p>`. Nothing about the round touched either page.
-
-  **What it is NOT, both ruled out with the tools built for exactly this ambiguity, so nobody
-  repeats the work.** It is not a render race: `playRenderStability` renders both routes 5 times
-  at the SAME clock and both said the same thing every time, 0 unstable. It is not raw
-  `Math.random`: `prerender.mjs` replaces `Math.random` with a seeded generator using the same
-  seed (`RANDOM_SEED = 284`) on every sample AND every run, precisely so a random pick is frozen
-  identically build to build, and neither page is in `RAW_RANDOM_BASELINE`.
-
-  **What it is.** The prerenderer draws each route at days 0, 5 and 11 from the REAL current date
-  and keeps only blocks all three agree on. `/missing-xi` correctly dropped 19 blocks that vary
-  with the date ("Today's lineup, 2026-09-07", the competition name). But the FORMATION SLOT
-  LABELS survived, because `src/lib/missingXi.ts` holds 217 lineups over only a handful of
-  distinct formations, so three different daily puzzles routinely share one formation and the
-  labels agree by coincidence. On a day when the three samples happen to share a DIFFERENT
-  formation, the intersection keeps that instead and the file is rewritten. The content is
-  genuinely date driven; the intersection just cannot see it.
-
-  **Why it matters and why it is small.** It is the crying-wolf problem `scripts/data/lastmod.json`
-  exists to end, at a volume of 2 pages rather than 127, so it is not urgent. But a lastmod that
-  moves for a coincidence is exactly the signal Google says it may ignore a sitemap for, and this
-  site's indexing case is the thing it can least afford to weaken (Search Console 2026-09-06: 58
-  indexed, 91 not).
-
-  **The shape of the fix, not yet chosen.** Note that CLAUDE.md already records this same
-  coincidence being hit once before, on `/mlb-connect-4`, and the fix applied then was seeding
-  `Math.random`, which does nothing for DATE seeded content. So the seeded-random fix is not the
-  answer here and reaching for it again would waste the round. Candidates: sample more than three
-  clocks, or spread the offsets so a small pool cannot coincide; or mark the block
-  `data-no-prerender` (cheap, known offender only, and CLAUDE.md's standing warning is that a
-  check written for a known offender cannot find the next one); or, best, have the prerenderer
-  detect that a block's value came from a date seeded draw at all. Whatever is chosen, the guard
-  must be measured against a rebuild on two different simulated calendar days, because that is the
-  only thing that reproduces it.
+- **ROUND 509 FIXES THE PRERENDER CALENDAR DRIFT, PENDING PR AND DEPLOY.** The three sample
+  offsets now start from one fixed snapshot epoch rather than the host's current date, while the
+  browser timezone is fixed to America/New_York and seeded randomness is unchanged. The calendar
+  anchor harness proves all three clocks are byte-identical across different host dates and has
+  separate controls for relative dates, a missing installer, and a missing timezone. The final
+  full build and snapshot hash pass remain part of Round 509's verification gate.
 
 - **SHIPPED IN ROUND 497, see the DONE entry below. Kept for its measurements.** Soccer Connect 4
   was the biggest consumer of the shared AI quota, and three quarters of what it asks is in our

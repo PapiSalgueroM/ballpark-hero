@@ -20,12 +20,10 @@ import {
 export type TransferPathMode = 'daily' | 'unlimited';
 export type { TransferPathRule };
 
-/** Why a name was refused: already in the chain, no 2025-26 season on the
- *  career records under the active rule (which is what the records hold, not
- *  a claim that the man retired), or linked only through a club outside
- *  Europe under the Europe rule. No reason means the two never shared a club
- *  in the same season. */
-export type TransferPathRefusal = 'duplicate' | 'retired' | 'outside-europe';
+/** Why a name was refused: already in the chain, outside the verified active
+ *  identity set, or linked only through a club outside Europe. No reason means
+ *  the two never shared a club in the same season. */
+export type TransferPathRefusal = 'duplicate' | 'unverified-active' | 'outside-europe';
 
 type TransferAction =
   | { t: 'step'; player: string; club: string }
@@ -338,7 +336,7 @@ export function useTransferPath(): TransferPathState {
     const sharedClub = playersShareClub(lastInChain, name);
     if (!sharedClub) {
       if (activeRule === 'active' && everydayClubSeasons.has(name) && !activeNames.has(name)) {
-        return { ok: false, club: null, reason: 'retired' };
+        return { ok: false, club: null, reason: 'unverified-active' };
       }
       if (activeRule === 'europe' && shareClub(everydayClubSeasons, lastInChain, name)) {
         return { ok: false, club: null, reason: 'outside-europe' };

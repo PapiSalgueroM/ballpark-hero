@@ -3,20 +3,17 @@
  * every Transfer Path puzzle.
  *
  * Input is the pull taken through the database console on 2026-08-26 and
- * kept in scripts/data/transferPathPull/ (the sandbox cannot reach Supabase
- * itself): careers.txt is every career_players row with its career_seasons
- * compacted to spells, puzzles.txt is every transfer_path_puzzles row as
- * id|a|b|old_min. Output is supabase/migrations/20260826_transfer_path_hints_temporal.sql,
- * one UPDATE per puzzle, keyed by puzzle_id, applied through the console.
+ * kept in scripts/data/transferPathPull/: careers.txt is every career_players
+ * row with its career_seasons compacted to spells, puzzles.txt is every
+ * retained transfer_path_puzzles row as id|a|b|old_min. Applied migrations are
+ * immutable. Current classic and Europe truth is checked against the companion.
  *
  * Round 460: the same derivation under each special rule. Active players
  * only and Europe only are filters on the pool (src/lib/transferPathModes.ts,
  * the file the page searches through, bundled here so the generator cannot
- * disagree with the game about what "active" or "European" means). Each rule
- * gets its own graph, the same search, and its own minimum and hint, written
- * to supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql as
- * one UPDATE per puzzle over the <rule>_min_steps and <rule>_hint columns.
- * A pair with no path under a rule is written as null on purpose.
+ * disagree with the game about what "active" or "European" means). The
+ * already applied Round 460 and quarantine migrations are immutable. Current
+ * verified active results are written only to the separate restore migration.
  *
  * Re-run after any change to the career tables, then apply the new files and
  * run simTransferPathHints and simTransferPathModes against the live tables.
@@ -28,23 +25,74 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { MODE_RULES, buildGraph, deriveHint, expandCompactCareers, hintProblems, modeMigrationSql, modeValuesRow, ruleProblems } from './lib/transferPathHints.mjs';
+import { MODE_RULES, buildGraph, deriveHint, expandCompactCareers, hintProblems, ruleProblems } from './lib/transferPathHints.mjs';
+import { deriveVerifiedActiveIdentities, parseWorldCupIdentities, verifiedActiveModule } from './lib/transferPathActiveIdentities.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PULL = path.join(ROOT, 'scripts/data/transferPathPull');
-const OUT = path.join(ROOT, 'supabase/migrations/20260826_transfer_path_hints_temporal.sql');
-const MODE_OUT = path.join(ROOT, 'supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql');
+const COMPANION_OUT = path.join(ROOT, 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql');
+const ACTIVE_RESTORE_OUT = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const ACTIVE_OUT = path.join(ROOT, 'src/data/transferPathVerifiedActive.ts');
 
-/* The page's own rule filters and its fallback pools, bundled once. The
-   fallback puzzle file is read here and rewritten at the end of this run. */
+/* Active identity evidence is generated before the page's rule module is
+   bundled, because that module imports the generated set. */
 const SRC = path.join(ROOT, 'src').replaceAll('\\', '/');
-const ENTRY = path.join(os.tmpdir(), 'gen-tph-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'gen-tph-bundle.mjs');
+const ROOT_URL = ROOT.replaceAll('\\', '/');
+const PRE_ENTRY = path.join(os.tmpdir(), 'gen-tph-active-entry.mjs');
+const PRE_BUNDLE = path.join(os.tmpdir(), 'gen-tph-active-bundle.mjs');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+fs.writeFileSync(PRE_ENTRY, `export { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { transferPathIdentityKey } from '${SRC}/lib/transferPathIdentity.ts';\nexport { TRANSFER_OVERLAY_2026 as overlay } from '${ROOT_URL}/scripts/transferOverlay2026.mjs';\n`);
+await build({ entryPoints: [PRE_ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: PRE_BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
+const seed = await import(pathToFileURL(PRE_BUNDLE).href + `?v=${Date.now()}`);
+const worldCupRows = parseWorldCupIdentities(fs.readFileSync(path.join(ROOT, 'supabase/migrations/20260901_round_389_world_cup_2026_squads.sql'), 'utf8'));
+const staleRows = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/staleSweep2026.json'), 'utf8')).active;
+const careerPullPath = path.join(PULL, 'careers.txt');
+const compactLines = fs.readFileSync(careerPullPath, 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean);
+const careerNameUniverse = compactLines.map(line => ({ name: line.slice(0, line.indexOf('|')) }));
+const activeIdentities = deriveVerifiedActiveIdentities({
+  careerPlayers: seed.fallbackPlayers,
+  careerNameUniverse,
+  worldCupRows,
+  staleRows,
+  overlayRows: seed.overlay,
+  identityKey: seed.transferPathIdentityKey,
+});
+if (activeIdentities.length !== 78) {
+  console.error(`verified active identity count changed from 78 to ${activeIdentities.length}; review the evidence matches before regenerating`);
+  process.exit(1);
+}
+fs.writeFileSync(ACTIVE_OUT, verifiedActiveModule(activeIdentities));
+console.log(`wrote ${path.relative(ROOT, ACTIVE_OUT)}: ${activeIdentities.length} normalized name plus nationality identities`);
+
+/* careers.txt carries nationality only for identities in the generated active
+   set. Every other line stays in its older two-field form, which is deliberate:
+   an unknown nationality can never turn a raw-name match into an active player. */
+const activeByName = new Map();
+for (const identity of activeIdentities) {
+  const normalizedName = seed.transferPathIdentityKey(identity.name, '').split('|')[0];
+  const matches = activeByName.get(normalizedName) ?? [];
+  matches.push(identity);
+  activeByName.set(normalizedName, matches);
+}
+const annotatedLines = compactLines.map(line => {
+  const firstBar = line.indexOf('|');
+  const secondBar = line.indexOf('|', firstBar + 1);
+  const name = line.slice(0, firstBar);
+  const career = line.slice(secondBar === -1 ? firstBar + 1 : secondBar + 1);
+  const normalizedName = seed.transferPathIdentityKey(name, '').split('|')[0];
+  const matches = activeByName.get(normalizedName) ?? [];
+  return matches.length === 1 ? `${name}|${matches[0].nationality}|${career}` : `${name}|${career}`;
+});
+fs.writeFileSync(careerPullPath, annotatedLines.join('\n') + '\n');
+
+/* The page's own rule filters and fallback pools are bundled after the active
+   identities exist. The fallback puzzle file is rewritten at the end. */
+const ENTRY = path.join(os.tmpdir(), 'gen-tph-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'gen-tph-bundle.mjs');
 fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
-const site = await import(pathToFileURL(BUNDLE).href);
+const site = await import(pathToFileURL(BUNDLE).href + `?v=${Date.now()}`);
 
-const players = expandCompactCareers(fs.readFileSync(path.join(PULL, 'careers.txt'), 'utf8'));
+const players = expandCompactCareers(fs.readFileSync(careerPullPath, 'utf8'));
 const puzzles = fs.readFileSync(path.join(PULL, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => {
   const [id, a, b, min] = l.split('|');
   return { id, a, b, oldMin: Number(min) };
@@ -53,23 +101,8 @@ const graph = buildGraph(players);
 console.log(`${players.length} players, ${graph.names.length} in the graph, ${puzzles.length} puzzles`);
 
 const q = s => `'${String(s).replace(/'/g, "''")}'`;
-/* Corrections to the career tables that the pull in careers.txt already
-   carries, so the hints below are derived from the corrected graph. Each one
-   names its source. Add here, patch careers.txt the same way, re-run. */
-const CORRECTIONS = [
-  {
-    why: 'Alisson joined Roma in July 2016 (from Internacional); the row named "Alisson" carried Roma seasons from 2014, which put him in the same dressing room as Ashley Cole. The row named "Alisson Becker" was already right. The duplicate name itself is left alone because the daily picks in Career Ladder and the Career game index the pool.',
-    sql: "delete from public.career_seasons s using public.career_players p where p.id = s.player_id and p.player_name = 'Alisson' and s.club = 'Roma' and s.season in ('2014-2015', '2015-2016');",
-  },
-];
-const lines = [
-  '-- Round 294: every Transfer Path minimum and hint re-derived under the game\'s own rule',
-  '-- (same club, same season). Generated by scripts/genTransferPathHints.mjs from the',
-  '-- 2026-08-26 pull in scripts/data/transferPathPull/. Do not edit by hand; re-run the generator.',
-  'begin;',
-  ...CORRECTIONS.flatMap(c => [`-- ${c.why}`, c.sql]),
-];
 let unreachable = 0, minChanged = 0, byMin = {};
+const classicById = new Map();
 for (const p of puzzles) {
   const d = deriveHint(graph, p.a, p.b);
   if (!d) { unreachable += 1; console.error(`  UNREACHABLE: ${p.id} ${p.a} -> ${p.b}`); continue; }
@@ -78,35 +111,24 @@ for (const p of puzzles) {
   if (/[\u2013\u2014]/.test(d.hint)) { console.error(`  long dash in ${p.id}`); process.exit(1); }
   if (d.minSteps !== p.oldMin) minChanged += 1;
   byMin[d.minSteps] = (byMin[d.minSteps] ?? 0) + 1;
-  lines.push(`update public.transfer_path_puzzles set min_steps = ${d.minSteps}, hint = ${q(d.hint)} where puzzle_id = ${q(p.id)};`);
+  classicById.set(p.id, d);
 }
-lines.push('commit;');
-if (unreachable) { console.error(`${unreachable} puzzle(s) have no path; the migration was not written`); process.exit(1); }
-fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, lines.join('\n') + '\n');
-console.log(`wrote ${path.relative(ROOT, OUT)}: ${puzzles.length} updates, minimum changed on ${minChanged}, by minimum ${JSON.stringify(byMin)}`);
+if (unreachable) { console.error(`${unreachable} puzzle(s) have no path; current truth was not accepted`); process.exit(1); }
+console.log(`derived current classic truth: ${puzzles.length} rows, minimum changed on ${minChanged}, by minimum ${JSON.stringify(byMin)}`);
 for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-944']) {
   const p = puzzles.find(x => x.id === id);
   if (p) { const d = deriveHint(graph, p.a, p.b); console.log(`  ${id}: ${p.oldMin} -> ${d.minSteps}, ${d.path.join(' > ')}\n     "${d.hint}"`); }
 }
 
-/* Round 460: every pair again under each special rule. The pool is filtered
-   by the page's own playersUnderRule, the search and the wording are the
-   ones above, and a pair the rule cannot connect is stored as null. */
+/* Derive every pair under each special rule. The applied Round 460 migration
+   stays immutable. Current active rows go only to the new restore migration. */
 const ruleGraphs = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(players, rule))]));
-const modeHeader = [
-  '-- Round 460: Transfer Path\'s special rules. Every <rule>_min_steps and <rule>_hint below is',
-  '-- derived by scripts/genTransferPathHints.mjs on the graph left after the rule\'s own filter',
-  '-- (src/lib/transferPathModes.ts: active players only keeps players with a season touching',
-  `-- ${site.ACTIVE_YEAR}, Europe only keeps seasons at European clubs) from the 2026-08-26 pull in`,
-  '-- scripts/data/transferPathPull/. Each row carries the minimum and the two clubs the hint',
-  '-- names under each rule; the UPDATE rebuilds the hint text from them (the wording mirrors',
-  '-- hintText in scripts/lib/transferPathHints.mjs, and simTransferPathModes proves the live',
-  '-- text equals it row by row). A null minimum means the rule has no path for that puzzle.',
-  '-- Do not edit by hand; re-run the generator.',
-];
+if (ruleGraphs.active.names.length !== 78) {
+  console.error(`the annotated pull activates ${ruleGraphs.active.names.length} players, expected the 78 verified identities`);
+  process.exit(1);
+}
 const modeStats = Object.fromEntries(MODE_RULES.map(rule => [rule, { players: ruleGraphs[rule].names.length, withPath: 0, byMin: {} }]));
-const valueRows = [];
+const modesById = new Map();
 for (const p of puzzles) {
   const derived = {};
   for (const rule of MODE_RULES) {
@@ -117,10 +139,132 @@ for (const p of puzzles) {
     if (d && /[\u2013\u2014]/.test(d.hint)) { console.error(`  long dash in ${p.id} under ${rule}`); process.exit(1); }
     if (d) { modeStats[rule].withPath += 1; modeStats[rule].byMin[d.minSteps] = (modeStats[rule].byMin[d.minSteps] ?? 0) + 1; }
   }
-  valueRows.push(modeValuesRow(p.id, derived));
+  modesById.set(p.id, derived);
 }
-fs.writeFileSync(MODE_OUT, [...modeHeader, 'begin;', modeMigrationSql(valueRows), 'commit;'].join('\n') + '\n');
-console.log(`wrote ${path.relative(ROOT, MODE_OUT)}: ${puzzles.length} updates, per rule ${JSON.stringify(modeStats)}`);
+if (modeStats.active.withPath !== 203) {
+  console.error(`verified active puzzle count changed from 203 to ${modeStats.active.withPath}; review the identity evidence and graph before writing mode migrations`);
+  process.exit(1);
+}
+console.log(`derived current special-rule truth for ${puzzles.length} puzzles: ${JSON.stringify(modeStats)}`);
+
+/* The applied quarantine companion stays immutable. Verify its retained rows
+   still equal current classic and Europe truth, with active deliberately null. */
+{
+  const ruleCells = derived => derived
+    ? `${derived.minSteps}, ${q(derived.hint)}`
+    : 'null::smallint, null::text';
+  const rows = puzzles.map(p => {
+    const classic = classicById.get(p.id);
+    const modes = modesById.get(p.id);
+    return `      (${q(p.id)}, ${q(p.a)}, ${q(p.b)}, ${classic.minSteps}, ${q(classic.hint)}, ${ruleCells(null)}, ${ruleCells(modes.europe)})`;
+  });
+  let companion = fs.readFileSync(COMPANION_OUT, 'utf8').replaceAll('\r\n', '\n');
+  const desired = companion.indexOf('  for desired in');
+  const startMarker = '    from (values\n';
+  const start = companion.indexOf(startMarker, desired);
+  const endMarker = '\n    ) as rows(\n      puzzle_id, player_a, player_b, min_steps, hint,';
+  const end = companion.indexOf(endMarker, start);
+  if (desired < 0 || start < 0 || end < 0) {
+    console.error('the pending companion migration no longer has the retained VALUES block the generator owns');
+    process.exit(1);
+  }
+  const actualRows = companion.slice(start + startMarker.length, end);
+  const expectedRows = rows.join(',\n');
+  if (actualRows !== expectedRows) {
+    console.error(`the applied companion migration no longer matches ${rows.length} current classic and Europe rows with active null; create a new migration instead of rewriting it`);
+    process.exit(1);
+  }
+  console.log(`verified immutable ${path.relative(ROOT, COMPANION_OUT)}: ${rows.length} guarded retained rows, active hints stay null for the staged rollout`);
+}
+
+/* Active hints return in their own fail-closed migration after the identity
+   frontend is live. It accepts only the null state written by the companion,
+   checks every id and endpoint, and refuses a partial or out-of-order apply. */
+{
+  const rows = puzzles.flatMap(p => {
+    const active = modesById.get(p.id).active;
+    return active ? [`      (${q(p.id)}, ${q(p.a)}, ${q(p.b)}, ${active.minSteps}, ${q(active.hint)})`] : [];
+  });
+  if (rows.length !== 203) {
+    console.error(`verified active puzzle count changed from 203 to ${rows.length}; review the identity evidence before writing the restore migration`);
+    process.exit(1);
+  }
+  const restore = [
+    '-- Restore Transfer Path Active Players Only after the verified-identity frontend is live.',
+    '-- Generated by scripts/genTransferPathHints.mjs from the same 78 normalized name plus',
+    '-- nationality identities used by src/lib/transferPathModes.ts. Apply only after the',
+    '-- quarantine companion has cleared active hints on all 885 retained puzzles.',
+    '',
+    'begin;',
+    '',
+    'do $migration$',
+    'declare',
+    '  desired record;',
+    '  matching_rows integer;',
+    '  updated_this_row integer;',
+    '  updated_rows integer := 0;',
+    'begin',
+    '  select count(*) into matching_rows from public.transfer_path_puzzles;',
+    "  if matching_rows <> 885 then raise exception 'Expected 885 retained Transfer Path rows before active restore, found %', matching_rows; end if;",
+    '',
+    '  for desired in',
+    '    select *',
+    '    from (values',
+    rows.join(',\n'),
+    '    ) as rows(puzzle_id, player_a, player_b, active_min_steps, active_hint)',
+    '  loop',
+    '    select count(*) into matching_rows',
+    '    from public.transfer_path_puzzles p',
+    '    where p.puzzle_id = desired.puzzle_id',
+    '      and p.player_a = desired.player_a',
+    '      and p.player_b = desired.player_b',
+    '      and p.active_min_steps is null',
+    '      and p.active_hint is null;',
+    '',
+    "    if matching_rows <> 1 then raise exception 'Expected one exact null active row for %, found %', desired.puzzle_id, matching_rows; end if;",
+    '',
+    '    update public.transfer_path_puzzles p',
+    '    set active_min_steps = desired.active_min_steps::smallint,',
+    '        active_hint = desired.active_hint',
+    '    where p.puzzle_id = desired.puzzle_id',
+    '      and p.player_a = desired.player_a',
+    '      and p.player_b = desired.player_b',
+    '      and p.active_min_steps is null',
+    '      and p.active_hint is null;',
+    '',
+    '    get diagnostics updated_this_row = row_count;',
+    '    updated_rows := updated_rows + updated_this_row;',
+    '  end loop;',
+    '',
+    "  if updated_rows <> 203 then raise exception 'Expected to restore 203 verified active rows, updated %', updated_rows; end if;",
+    '',
+    '  select count(*) into matching_rows',
+    '  from public.transfer_path_puzzles p',
+    '  where p.active_min_steps is not null and p.active_hint is not null;',
+    "  if matching_rows <> 203 then raise exception 'Expected 203 complete active hints after restore, found %', matching_rows; end if;",
+    '',
+    '  if exists (',
+    '    select 1 from public.transfer_path_puzzles p',
+    '    where (p.active_min_steps is null) <> (p.active_hint is null)',
+    "  ) then raise exception 'Transfer Path has a partial active hint after restore'; end if;",
+    'end',
+    '$migration$;',
+    '',
+    'commit;',
+    '',
+  ].join('\n');
+  if (fs.existsSync(ACTIVE_RESTORE_OUT)) {
+    const existing = fs.readFileSync(ACTIVE_RESTORE_OUT, 'utf8').replaceAll('\r\n', '\n');
+    if (existing !== restore) {
+      console.error(`the existing active restore migration differs from current truth; create a new dated migration instead of rewriting ${path.relative(ROOT, ACTIVE_RESTORE_OUT)}`);
+      process.exit(1);
+    }
+    console.log(`verified immutable ${path.relative(ROOT, ACTIVE_RESTORE_OUT)}: ${rows.length} exact verified-active restores`);
+  } else {
+    fs.writeFileSync(ACTIVE_RESTORE_OUT, restore);
+    console.log(`wrote new ${path.relative(ROOT, ACTIVE_RESTORE_OUT)}: ${rows.length} exact verified-active restores`);
+  }
+}
 
 /* The fallback pool the page shows when the table is down is a different,
    smaller graph (src/data/careerPlayers.ts, 151 players), so the fallback

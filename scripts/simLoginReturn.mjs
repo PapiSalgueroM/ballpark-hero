@@ -1,20 +1,20 @@
-/* Coming back from Google lands on the site, not on a wall of text or a
-   spinner that never stops.
+/* A full auth return lands on the site, not on a wall of text or a spinner
+   that never stops.
 
    Round 448. His words, with two screenshots: "that thing still shows when u
    log in into douknowball with the balck screen and all that text and i dont
    want taht ... also if u go to login and then go back or sign up and then go
    back it leaves the google thing just loading."
 
-   Two defects, one journey. Sign in with Google leaves the site for Google's
-   account picker and comes back through a FULL RELOAD of the home document,
-   so the moment before React mounts is the first thing a player sees after
-   choosing an account. Round 314 had capped and dimmed the crawler copy in
-   that moment; a dimmed wall of grey paragraphs on a dark screen is still a
-   wall of text, and he filmed it. And if the player presses Back on Google's
-   picker instead, the browser restores the page from its back-forward cache
-   with every piece of React state intact, spinner included, and nothing ever
-   turned it off.
+   Two defects, one journey. At the time, sign in with Google left the site and
+   came back through a FULL RELOAD of the home document, so the moment before
+   React mounted was the first thing a player saw after choosing an account.
+   Google now uses a popup, but Apple and password links can still make a full
+   auth return, so the cold-load fence remains useful. Round 314 had capped and
+   dimmed the crawler copy in that moment; a dimmed wall of grey paragraphs on
+   a dark screen was still a wall of text, and he filmed it. A browser can also
+   restore the page from its back-forward cache with React state intact, so
+   provider loading states must still reset.
 
    WHAT THIS HOLDS:
      1) The home template carries a boot splash (#dukb-boot) that sits over
@@ -31,7 +31,7 @@
         and none hits the copy.
      5) The auth modal turns its Google and Apple spinners off every time it
         opens, and again on pageshow when the page was restored from the
-        back-forward cache, which is exactly the Back from Google case.
+        back-forward cache.
 
    Negative controls:
      LOGIN_RETURN_CONTROL=wall   removes the splash element from the template
@@ -70,7 +70,7 @@ if (CONTROL === 'stuck') {
   const needle = "window.addEventListener('pageshow', onPageShow);";
   if (!modal.includes(needle)) { console.error('control cannot run: the modal has no pageshow listener to remove'); process.exit(1); }
   modal = modal.replace(needle, '/* listener removed by the control */');
-  console.log('NEGATIVE CONTROL ON: the modal no longer listens for the page coming back from Google');
+  console.log('NEGATIVE CONTROL ON: the modal no longer listens for a restored auth page');
 }
 
 /* A guard that reads source must read the code, not the comments. */
@@ -154,7 +154,7 @@ console.log('5) the auth modal turns its spinners off on open and on return from
   }
   const hasListener = /addEventListener\('pageshow'/.test(mod);
   const handler = /const onPageShow = \(e[^)]*\) => \{[\s\S]*?\};/.exec(mod)?.[0] ?? '';
-  if (!hasListener) fail('the modal never listens for pageshow, so Back from Google restores a spinner nothing turns off');
+  if (!hasListener) fail('the modal never listens for pageshow, so a restored auth page can keep a spinner running');
   if (!/e\.persisted/.test(handler)) fail('the pageshow handler does not check persisted, so it fires on every ordinary load');
   if (!/setGoogleLoading\(false\)/.test(handler) || !/setAppleLoading\(false\)/.test(handler)) fail('the pageshow handler does not clear both spinners');
   if (!failures) console.log('   both spinners reset on open, and on a restored page');
@@ -167,4 +167,4 @@ if (CONTROL) {
   process.exit(1);
 }
 if (failures > 0) { console.error(`\nsimLoginReturn: ${failures} failure(s)`); process.exit(1); }
-console.log('\nsimLoginReturn: green. Coming back from Google shows the mark, then the site, and the button is ready if you come back early.');
+console.log('\nsimLoginReturn: green. A full auth return shows the mark, then the site, and provider buttons reset after a restored page.');
