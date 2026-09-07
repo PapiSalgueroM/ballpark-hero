@@ -52,8 +52,17 @@ const launch = (name) => name === 'chromium'
 const launchOrSkip = async (name) => {
   try { return await launch(name); }
   catch (e) {
-    console.log(`   SKIPPED ${name}, it is not installed here: ${String(e).split('\n')[0].slice(0, 90)}`);
-    return null;
+    const line = String(e).split('\n')[0].slice(0, 120);
+    /* Round 505: only a browser that is genuinely not here is a skip. A
+       browser that is installed and dies on launch is a red, because a
+       skip here reads as ALL TACTICS CHECKS PASSED with nothing checked,
+       which is how this guard hid that it had been parking on the dugout
+       form since Round 303. */
+    if (/doesn't exist|not installed|Executable|ENOENT/i.test(line)) {
+      console.log(`   SKIPPED ${name}, it is not installed here: ${line}`);
+      return null;
+    }
+    throw new Error(`${name} is installed and failed to launch, which is a red and not a skip: ${line}`);
   }
 };
 
@@ -79,6 +88,12 @@ async function openTactics(ctx) {
   await page.waitForTimeout(400);
   await page.getByRole('button', { name: /Take the job/i }).first().click({ timeout: 6000 });
   await page.waitForTimeout(1100);
+  /* Round 505: since Round 303 the picker asks who is in the dugout after the
+     job is taken, and this guard had parked on that form ever since (the
+     Tactics tab never came). Skip it, the way a player who just wants to
+     manage does. */
+  await page.getByRole('button', { name: /Skip: just manage/i }).first().click({ timeout: 6000 }).catch(() => {});
+  await page.waitForTimeout(800);
   await page.getByRole('tab', { name: /Tactics/i }).click({ timeout: 6000 });
   await page.waitForTimeout(800);
   await page.locator('[data-cm-pitch]').scrollIntoViewIfNeeded();

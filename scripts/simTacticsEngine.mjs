@@ -138,10 +138,10 @@
       the weighted pick's share of corners, well under the floor)
 
    MEASURED (own seed, SIM_SEED=1, 2, 3):
-     fit: keeper swap gap for / against in paired se       see the run log
-     fit: first half A above B share                       see the run log
-     duty: gap for / against in paired se, poacher share   see the run log
-     corners to the assigned man                           see the run log
+     fit: keeper swap gap for / against in paired se       7.8 to 9.0 for, 7.7 to 8.9 against (seeds 1 to 3), floor 3
+     fit: first half A above B share                       6.8 to 7.5 percent (floor 3)
+     duty: gap for / against in paired se, poacher share   5.3 to 6.1 for, 5.8 to 8.1 against; poacher 34.7 to 36.9 against target man 26.9 to 29.2
+     corners to the assigned man                           100 percent on every seed (floor 90)
 
    Run: node scripts/simTacticsEngine.mjs
 */
