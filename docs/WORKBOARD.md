@@ -682,8 +682,50 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
-- **MEASURED AND DESIGNED, NOT YET SHIPPED: Soccer Connect 4 is the biggest consumer of the
-  shared AI quota, and three quarters of what it asks is in our own tables.**
+- **MEASURED, NOT YET FIXED: the prerenderer's three-clock intersection can KEEP date driven
+  content when the value space is small, and two pages re-date themselves in the sitemap because
+  of it.** Found 2026-09-07 while checking why a build that only changed one link in `index.html`
+  also rewrote `/missing-xi` and `/emoji-guess`.
+
+  **What changed:** position labels. `/missing-xi` went RW to RB, LW to LB, and gained a CM.
+  `/emoji-guess` gained a `<p>Player</p>`. Nothing about the round touched either page.
+
+  **What it is NOT, both ruled out with the tools built for exactly this ambiguity, so nobody
+  repeats the work.** It is not a render race: `playRenderStability` renders both routes 5 times
+  at the SAME clock and both said the same thing every time, 0 unstable. It is not raw
+  `Math.random`: `prerender.mjs` replaces `Math.random` with a seeded generator using the same
+  seed (`RANDOM_SEED = 284`) on every sample AND every run, precisely so a random pick is frozen
+  identically build to build, and neither page is in `RAW_RANDOM_BASELINE`.
+
+  **What it is.** The prerenderer draws each route at days 0, 5 and 11 from the REAL current date
+  and keeps only blocks all three agree on. `/missing-xi` correctly dropped 19 blocks that vary
+  with the date ("Today's lineup, 2026-09-07", the competition name). But the FORMATION SLOT
+  LABELS survived, because `src/lib/missingXi.ts` holds 217 lineups over only a handful of
+  distinct formations, so three different daily puzzles routinely share one formation and the
+  labels agree by coincidence. On a day when the three samples happen to share a DIFFERENT
+  formation, the intersection keeps that instead and the file is rewritten. The content is
+  genuinely date driven; the intersection just cannot see it.
+
+  **Why it matters and why it is small.** It is the crying-wolf problem `scripts/data/lastmod.json`
+  exists to end, at a volume of 2 pages rather than 127, so it is not urgent. But a lastmod that
+  moves for a coincidence is exactly the signal Google says it may ignore a sitemap for, and this
+  site's indexing case is the thing it can least afford to weaken (Search Console 2026-09-06: 58
+  indexed, 91 not).
+
+  **The shape of the fix, not yet chosen.** Note that CLAUDE.md already records this same
+  coincidence being hit once before, on `/mlb-connect-4`, and the fix applied then was seeding
+  `Math.random`, which does nothing for DATE seeded content. So the seeded-random fix is not the
+  answer here and reaching for it again would waste the round. Candidates: sample more than three
+  clocks, or spread the offsets so a small pool cannot coincide; or mark the block
+  `data-no-prerender` (cheap, known offender only, and CLAUDE.md's standing warning is that a
+  check written for a known offender cannot find the next one); or, best, have the prerenderer
+  detect that a block's value came from a date seeded draw at all. Whatever is chosen, the guard
+  must be measured against a rebuild on two different simulated calendar days, because that is the
+  only thing that reproduces it.
+
+- **SHIPPED IN ROUND 497, see the DONE entry below. Kept for its measurements.** Soccer Connect 4
+  was the biggest consumer of the shared AI quota, and three quarters of what it asks is in our
+  own tables.
   Take this one when there is room to edit `supabase/functions/football-connect4-validate/index.ts`
   in place. Everything below is measured; nothing is left to work out.
 
@@ -795,6 +837,92 @@ critic's item; these are the rest, unclaimed.
   `bref_nba_player_seasons` also feeds `nbaHLPlayers`, `localLineupEval`, `nbaStatLine`,
   `perfectSeasonNba` and `statDetective`, so 144 players are being DISPLAYED with broken names
   in several other games too.
+
+- **DONE, Round 497. Soccer Connect 4, the biggest consumer of the shared AI quota, now answers
+  its club squares from our own tables.** This is the item that sat in the inbox as MEASURED AND
+  DESIGNED, NOT YET SHIPPED; it is shipped and deployed as version 11. The free Gemini allowance
+  is a DAILY one shared by every AI checked game, so the biggest consumer starves the rest, and
+  Connect 4 was more than double the next (407 verdicts in 14 days against soccer-grid's 192),
+  counting only the SUCCESSFUL calls because a failure is never cached. The boards use
+  "Played for X" 92 times across 29 distinct club labels and `soccer_player_club_stints` already
+  answers exactly that for Soccer Grid; the function did not open the table at all. The change is
+  ADDITIVE: Round 379's decomposition into two single attribute facts is untouched and a
+  confirm-only pass sits between that lookup and the `cacheOnly` guard, writing anything the table
+  proves into the SAME fact cache the model writes so the next board gets it free.
+  **Confirm only, and the asymmetry is the safety argument:** a hit proves the attribute, a miss
+  proves nothing and falls through to the model, because 17,222 of the table's 80,586 rows carry
+  an accented name and the lookup is accent sensitive. **The map is EXACT, never a substring**,
+  checked against all 4,931 stored club values (4,774 distinct once split on " / "): the loose rule
+  Soccer Grid uses would accept Berekum Chelsea FC for Chelsea and RCD Espanyol Barcelona, the
+  city rival, for Barcelona, and a confirm-only pass that over-accepts is a WRONG answer rather
+  than a missing one, wrong silently because the model never gets to correct it.
+  `simConnect4ClubRecords` holds five things, the last against production with `cacheOnly` on so
+  it can never spend an AI request. Controls `substring`, `dropmap`, `denyonmiss`.
+
+  **THREE HARNESS MISTAKES FROM THIS ROUND, kept in the file rather than quietly fixed, because
+  all three were GREEN or confidently red while proving nothing.** (1) The live section hardcoded
+  a player and went red on its second run: the smoke test that proved the deploy had already
+  cached him, and the cache is read BEFORE the records pass, so a fixed subject reports correct
+  code as broken forever after. (2) The fix for that asked the cache which subjects were already
+  answered and skipped them. **That query returns empty ALWAYS: `ai_validation_cache` is not
+  readable with the anon key, only with the service role the edge function holds.** The skip was a
+  silent no-op. A permission failure that reads as "nothing is cached" is the worst shape a check
+  can have, because it looks like a clean answer. It now asks the FUNCTION and classifies every
+  reply (records / cache / nobody) instead of hunting for one that suits. (3) A transient 500
+  mid-scan left the club inventory empty and sections 2 and 3 reported 38 confident findings
+  saying every club in the map was missing from the table; the scan now retries and then REFUSES
+  TO RUN rather than turning an outage into findings.
+
+  **Still open on this game:** the accent-blind lookup. 17,222 of 80,586 stint rows carry an
+  accented name, so those players are a known miss and always cost an AI call. `name_folded`
+  exists on other tables and is the shape to copy.
+
+- **DONE, Round 496. The home page was spending one of its outbound votes on a URL that only
+  bounces, and Search Console had a bucket for it.** GSC on 2026-09-06 read the sitemap clean
+  (140 of 140, Success) and reported 58 indexed against 91 not, split 71 "Discovered, currently
+  not indexed", 17 "Crawled, currently not indexed", and 3 "Page with redirect" on Validation
+  FAILED. `index.html`, the static home copy block, linked to `/jeopardy`, which is a
+  `<Navigate>` to `/quiz-board`. The home page is the most crawled document on the domain and it
+  is NOT prerendered, so that link sits in the raw HTML every crawler gets first.
+  **Why every existing guard passed it:** `simInternalLinks` section 3 and `simHomeCopy` section 3
+  both check an href is "a real route in App.tsx" and both build that set with
+  `/path="([^"]+)"/`, which a `<Route path="/jeopardy" element={<Navigate .../>}>` matches. They
+  were written against DEAD links, and a redirecting link is not dead, it is alive and pointed at
+  the wrong thing. The `/jeopardy` route STAYS (its localStorage prefix and Supabase table are on
+  the `LIVE_IDENTIFIERS` allowlist and an old bookmark should still land); what changed is that
+  nothing votes for it. Side effect: the home page no longer ships that word to a crawler at all.
+  `simNoRedirectLinks` holds four things over the 140 shipped documents: no document links to a
+  redirecting route, no sitemap entry is one, no redirect points at another redirect, and nothing
+  sits more than 4 clicks from home. Controls `relink` (reproduces the shipped defect exactly)
+  and `nohome` (strands 9 pages, proving the walk follows links rather than reading the sitemap
+  back).
+
+  **RULED OUT IN THE SAME PASS, so nobody re-chases it.** The link graph is HEALTHY and the 71
+  discovered-not-crawled pages are not starved of links. Measured over all 140 shipped documents:
+  zero orphans, every page carries at least 2 inbound links, and the deepest page on the site is
+  3 clicks from home (the four grid archives; everything else is 1 or 2). **Adding more internal
+  links will not move that bucket.** "Discovered, currently not indexed" means Google knows the
+  address and has not spent a fetch on it, which on a young domain with 149 known URLs is crawl
+  budget and site-level quality, not structure. The 17 in "Crawled, currently not indexed" are
+  the ones Google DID fetch and declined, and those are the honest quality signal worth watching.
+
+- **DONE, Round 495. Footle graded guesses against squad numbers from clubs the player had
+  left.** The KIT # tile GRADES, so a stale number marks a correct guess wrong. The numbers come
+  from a hand-typed list in `src/data/footleEnrichment.ts`, one per player, belonging to whichever
+  club he was at the day it was typed. Round 315 found this exact problem in the LEAGUE field of
+  the same entries and fixed it by deriving the league from the current club; the kit number never
+  got that guard. Measured against the live 2026 pool: 221 in the hand list, 195 of them in the
+  pool, and 37 of those, nearly one in five, have changed league since it was written. Salah's 11
+  is Liverpool's and the pool has him at Trabzonspor; Luis Diaz's 7 is Liverpool's and he is at
+  Bayern Munich; Gabriel Jesus's 9 is Arsenal's and he is at Barcelona. The entry records the
+  league it was written with, so a disagreement with the league the CURRENT club maps to is proof
+  of a move and the number drops to null, which the tile already renders as "?" via the Round 443
+  path. **Stated limit, in the code and the harness rather than glossed:** a move WITHIN one
+  league is not caught, because the entry does not record the club it was written against.
+  `simFootleKitNumbers` holds all three halves against the live pool: no mover carries a number
+  (37 of 37 clear), the 158 who did not move all keep theirs so the guard corrected the feature
+  instead of deleting it, and no number is 0. Control `trusting` reads the entry directly, the
+  way the code did before, and goes red naming the real movers.
 
 - **DONE, Round 490. COLLEGE GRID had recorded nothing for 37 days.** The game was not broken,
   its checker was blind: `scripts/simCollegeGrid.mjs` has always proved every square answerable
