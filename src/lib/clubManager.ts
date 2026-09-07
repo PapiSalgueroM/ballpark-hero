@@ -15,6 +15,10 @@ import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import type { Formation, FormationSlot } from '@/lib/squadDeal';
+/* Round 505: the one position rule the lineup games share, so an out of
+   position man here is graded by the same family table World XI uses.
+   positionFit imports nothing but types, so there is no cycle. */
+import { fitsAllowed } from '@/lib/positionFit';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -442,6 +446,13 @@ export interface CMPlayer {
    * them, off the top.
    */
   sellOnOwed?: { club: string; pct: number };
+  /**
+   * Round 505: positions he has learned on top of his own, through
+   * retraining (at most two, oldest dropped). A real footballer starts with
+   * NONE: the data carries one verified position per man and this game does
+   * not add a second one it cannot source. Absent until he earns one.
+   */
+  secondaryPositions?: Position[];
 }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
@@ -3644,12 +3655,89 @@ export function isAvailable(p: CMPlayer): boolean {
   return p.injuryWeeks <= 0 && p.suspendedMatches <= 0;
 }
 
+/* ---------- Round 505: fit, and the price of playing a man out of position ---------- */
+
+/**
+ * How well a man fits a slot. 'natural' is a position he holds (his own, or
+ * one he has retrained into) in the slot's own list. 'family' is the shared
+ * position rule: a winger on the other flank, a full back at wing back, a
+ * CM at CDM. 'wrong' is anything else outfield, ten defenders included,
+ * because the owner wants the freedom and the engine wants a price for it.
+ * 'keeper' is the goalkeeper boundary crossed either way, and it is checked
+ * first so no widening can reach around it.
+ */
+export type FitGrade = 'natural' | 'family' | 'wrong' | 'keeper';
+
+/** Rating points taken off THAT MAN ONLY in the match strength. A fully
+ *  natural eleven pays nothing, so the Round 95 rule holds: my club is on
+ *  the same scale as an AI club with the identical squad. */
+export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 2, wrong: 6, keeper: 14 };
+
+/** Every position he can call his own: the one he plays plus any he has learned. */
+export function heldPositions(p: CMPlayer): Position[] {
+  return [p.position, ...(p.secondaryPositions ?? [])];
+}
+
+export function fitGrade(p: CMPlayer, slot: FormationSlot): FitGrade {
+  const slotIsGoal = slot.allowed.includes('GK');
+  if (slotIsGoal !== (p.position === 'GK')) return 'keeper';
+  const held = heldPositions(p);
+  if (held.some(pos => slot.allowed.includes(pos))) return 'natural';
+  if (held.some(pos => fitsAllowed(pos, slot.allowed))) return 'family';
+  return 'wrong';
+}
+
+/** The penalty for a man in a slot; nothing when the slot is unknown. */
+export function fitPenalty(p: CMPlayer, slot: FormationSlot | null | undefined): number {
+  return slot ? FIT_PENALTY[fitGrade(p, slot)] : 0;
+}
+
+/** A man and the slot he is standing in, which is what the strength reads now. */
+export interface XiSlot {
+  p: CMPlayer;
+  /** Null only for a man whose slot the formation cannot name (a save whose
+   *  eleven outgrew its shape), and then he pays no penalty. */
+  slot: FormationSlot | null;
+}
+
+export interface XiFitReport {
+  /** The adjusted average the tactics header shows: raw minus the penalties, rounded. */
+  rating: number;
+  /** The plain average of the picked men's ratings. */
+  raw: number;
+  /** Penalty points per man, averaged over the eleven, 1dp. */
+  penalty: number;
+  /** One grade per slot, null for an empty one. */
+  grades: (FitGrade | null)[];
+}
+
+/** The picked eleven's fit, slot by slot, and the number the header should print. */
+export function xiFitReport(career: CareerState): XiFitReport {
+  const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
+  const ps = resolveXI(career);
+  const grades = ps.map((p, i) => (p && formation.slots[i] ? fitGrade(p, formation.slots[i]) : null));
+  let sum = 0;
+  let pen = 0;
+  let n = 0;
+  ps.forEach((p, i) => {
+    if (!p) return;
+    n += 1;
+    sum += p.rating;
+    pen += fitPenalty(p, formation.slots[i] ?? null);
+  });
+  if (!n) return { rating: 0, raw: 0, penalty: 0, grades };
+  const raw = sum / n;
+  const penalty = pen / n;
+  return { rating: Math.round(raw - penalty), raw: Math.round(raw * 10) / 10, penalty: Math.round(penalty * 10) / 10, grades };
+}
+
 export function autoPickXI(squad: CMPlayer[], formation: Formation): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
   for (const slot of formation.slots) {
+    /* Round 505: a position he has retrained into is his too. */
     const fits = squad
-      .filter(p => isAvailable(p) && !used.has(p.id) && slot.allowed.includes(p.position))
+      .filter(p => isAvailable(p) && !used.has(p.id) && heldPositions(p).some(pos => slot.allowed.includes(pos)))
       .sort((a, b) => b.rating - a.rating);
     let chosen: CMPlayer | null = fits[0] ?? null;
     if (!chosen) {
@@ -3672,10 +3760,11 @@ export function resolveXI(career: CareerState): (CMPlayer | null)[] {
   return career.xiIds.map(id => (id ? career.squad.find(p => p.id === id) ?? null : null));
 }
 
+/** Round 505: the FIT ADJUSTED average, the same figure the match strength
+ *  is built on, so the header never promises an eleven the engine will not
+ *  field. A fully natural eleven prints exactly its plain average. */
 export function xiAverageRating(career: CareerState): number {
-  const ps = resolveXI(career).filter((p): p is CMPlayer => !!p);
-  if (!ps.length) return 0;
-  return Math.round(ps.reduce((s, p) => s + p.rating, 0) / ps.length);
+  return xiFitReport(career).rating;
 }
 
 function emptyRow(club: string): TableRow {
@@ -4903,7 +4992,7 @@ function xiMood(state: CareerState, xi: CMPlayer[]): number {
 export function matchEdge(career: CareerState): number | null {
   const fx = nextFixture(career);
   if (fx.kind !== 'match') return null;
-  const xi = effectiveXI(career);
+  const xi = effectiveXIWithSlots(career);
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   return myMatchStrength(career, xi) + venue - fx.oppStrength;
 }
@@ -4986,10 +5075,10 @@ function talkFit(tone: TalkTone, target: number): number {
 export function talkTargetNow(career: CareerState): number | null {
   const live = career.live;
   if (live) {
-    const second = squadByIds(career, live.onPitch);
+    const second = livePairs(career, live);
     const venue = live.home === true ? 3 : live.home === false ? -1.5 : 0;
     const edge = myMatchStrength(career, second) + venue - strengthOf(career, live.opponent);
-    return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, second));
+    return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, men(second)));
   }
   const edge = matchEdge(career);
   if (edge === null) return null;
@@ -8578,26 +8667,33 @@ function simAiMatch(state: CareerState, home: string, away: string): [number, nu
  * The XI that actually takes the field: the picked XI with unavailable or
  * missing players auto-replaced by the best available fit for that slot.
  */
-function effectiveXI(state: CareerState): CMPlayer[] {
+export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
   const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
   const used = new Set<string>();
-  const out: CMPlayer[] = [];
+  const out: XiSlot[] = [];
   formation.slots.forEach((slot, i) => {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
     if (!p || !isAvailable(p) || used.has(p.id)) {
+      /* Round 505: the best available fit, and a position he has retrained
+         into counts as a fit. */
       p = state.squad
         .filter(x => isAvailable(x) && !used.has(x.id))
         .sort((a, b) =>
-          (slot.allowed.includes(b.position) ? 1 : 0) - (slot.allowed.includes(a.position) ? 1 : 0) ||
-          b.rating - a.rating)[0];
+          (heldPositions(b).some(pos => slot.allowed.includes(pos)) ? 1 : 0)
+          - (heldPositions(a).some(pos => slot.allowed.includes(pos)) ? 1 : 0)
+          || b.rating - a.rating)[0];
     }
     if (p) {
       used.add(p.id);
-      out.push(p);
+      out.push({ p, slot });
     }
   });
   return out;
+}
+
+function effectiveXI(state: CareerState): CMPlayer[] {
+  return effectiveXIWithSlots(state).map(x => x.p);
 }
 
 /** Round 119: the players behind a list of ids, in that order, skipping any gone. */
@@ -8609,6 +8705,31 @@ function squadByIds(state: CareerState, ids: string[]): CMPlayer[] {
   }
   return out;
 }
+
+/** The shape a live match is being played in: the one it kicked off in, or
+ *  the tactics tab's for a save paused before the match remembered it. */
+function liveFormationOf(state: CareerState, live: LiveMatch): Formation {
+  return FORMATIONS[live.formationIndex ?? state.formationIndex] ?? FORMATIONS[0];
+}
+
+/**
+ * Round 505: the men behind a live list of ids (onPitch, startXi) paired
+ * with the slot each one is standing in. The lists are in slot order, so a
+ * man's index IS his slot, and a sub into a slot takes that slot over. A
+ * man whose id is gone from the squad is skipped, not shifted, so the men
+ * after him keep their slots.
+ */
+function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onPitch): XiSlot[] {
+  const formation = liveFormationOf(state, live);
+  const out: XiSlot[] = [];
+  ids.forEach((id, i) => {
+    const p = state.squad.find(x => x.id === id);
+    if (p) out.push({ p, slot: formation.slots[i] ?? null });
+  });
+  return out;
+}
+
+const men = (xi: XiSlot[]): CMPlayer[] => xi.map(x => x.p);
 
 /** Match-day strength: XI ratings scaled by fitness + morale, plus form. */
 /**
@@ -8622,11 +8743,18 @@ function squadByIds(state: CareerState, ids: string[]): CMPlayer[] {
  * itself, an exhausted and unhappy one a few points below, and neither is a
  * hidden tax on being the human in the dugout.
  */
-function myMatchStrength(state: CareerState, xi: CMPlayer[]): number {
+/*
+ * Round 505: and each man is read IN HIS SLOT. A man out of position gives
+ * up FIT_PENALTY rating points, on himself only, so a fully natural eleven
+ * is exactly the eleven Round 95 priced and ten defenders is a choice with
+ * a bill rather than a refusal. Deterministic, so the Poisson split
+ * simHalftime measures is untouched.
+ */
+function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
   if (!xi.length) return 40;
-  const avg = xi.reduce((s, p) => s + p.rating, 0) / xi.length;
-  const fit = xi.reduce((s, p) => s + p.fitness, 0) / xi.length;
-  const mor = xi.reduce((s, p) => s + p.morale, 0) / xi.length;
+  const avg = xi.reduce((s, x) => s + x.p.rating - fitPenalty(x.p, x.slot), 0) / xi.length;
+  const fit = xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length;
+  const mor = xi.reduce((s, x) => s + x.p.morale, 0) / xi.length;
   const condition = clamp((fit - 78) * 0.14 + (mor - 68) * 0.06, -7, 4);
   const formBonus = state.form.reduce((s, f) => s + (f === 'W' ? 0.7 : f === 'L' ? -0.7 : 0), 0);
   return avg + condition + formBonus;
@@ -9351,7 +9479,7 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
 }
 
 /** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: CMPlayer[], mentality: Mentality): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -9369,7 +9497,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: CMPlayer[], men
  * shape is whatever the manager sent them out in.
  */
 function secondHalfLambdas(
-  state: CareerState, fx: MyFixture, live: LiveMatch, xi: CMPlayer[], scoreMine: number, scoreOpp: number,
+  state: CareerState, fx: MyFixture, live: LiveMatch, xi: XiSlot[], scoreMine: number, scoreOpp: number,
 ): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const oppS = strengthOf(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
@@ -9381,11 +9509,11 @@ function secondHalfLambdas(
   const preTone: TalkTone | null = state.teamTalk ?? null;
   const halfTone: TalkTone | null = live.talk ?? null;
   const edge = myMatchStrength(state, xi) + venue - oppS;
-  const htTarget = halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(state, xi));
+  const htTarget = halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(state, men(xi)));
   const halfFit = talkWeight(state, halfTone, htTarget);
   const inForce = halfTone
     ? halfFit
-    : talkWeight(state, preTone, preMatchTarget(edge, xiMood(state, xi), state.form));
+    : talkWeight(state, preTone, preMatchTarget(edge, xiMood(state, men(xi)), state.form));
   const mine = myMatchStrength(state, xi) + inForce * TALK_EDGE + sharpen;
   const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
   const opp2 = oppositionShape(scoreOpp, scoreMine);
@@ -9514,7 +9642,7 @@ function drawSegment(
 function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
   const fx = fixtureFor(state, entry)!;
   const off = offPitchIds(live);
-  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
   const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, live.myGoals, live.oppGoals);
   live.h2Segs = [{ from: 45, to: 90, lamMine, lamOpp }];
   live.lam2Mine = lamMine;
@@ -9539,9 +9667,10 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
  */
 function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
   const fx = fixtureFor(state, entry)!;
-  const started = squadByIds(state, live.startXi);
+  const startedSlots = livePairs(state, live, live.startXi);
+  const started = men(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, started, live.mentality);
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality);
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -9590,7 +9719,7 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1OppCards = keepUpTo(live.h1OppCards, minute);
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
-  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
   const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality);
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
@@ -9599,7 +9728,7 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
   live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0]);
-  live.read = halftimeRead(state, xi, live.myGoals, live.oppGoals, mine, oppS);
+  live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
 }
 
 /** Keep what happened at or before `minute` in the second half and redraw the rest. */
@@ -9613,7 +9742,7 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   live.h2Injuries = keepUpTo(live.h2Injuries, minute);
   live.oppSubs = keepUpTo(live.oppSubs, minute);
   const off = offPitchIds(live);
-  const xi = squadByIds(state, live.onPitch).filter(p => !off.has(p.id));
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
   const scoreMine = live.myGoals + live.h2My.length;
   const scoreOpp = live.oppGoals + live.h2Opp.length;
   const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, scoreMine, scoreOpp);
@@ -10142,22 +10271,24 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const preTone: TalkTone | null = state.teamTalk ?? null;
   const halfTone: TalkTone | null = live.talk ?? null;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  const started = squadByIds(state, live.startXi);
-  const second = squadByIds(state, live.onPitch);
+  /* Round 505: both elevens with their slots, the way the strength reads them now. */
+  const started = livePairs(state, live, live.startXi);
+  const second = livePairs(state, live);
   /* Round 135: the fit of the pre match talk is judged on the eleven who
      kicked off, and the half time one on the state of the match the men still
      out there are walking back into. Both are settled up separately at the
      final whistle, because they were two separate things you said. */
   const preFit = talkWeight(state, preTone, preMatchTarget(
-    myMatchStrength(state, started) + venue - oppS, xiMood(state, started), state.form,
+    myMatchStrength(state, started) + venue - oppS, xiMood(state, men(started)), state.form,
   ));
   const halfFit = talkWeight(state, halfTone, halftimeTarget(
     live.myGoals, live.oppGoals,
-    myMatchStrength(state, second) + venue - oppS, xiMood(state, second),
+    myMatchStrength(state, second) + venue - oppS, xiMood(state, men(second)),
   ));
   /* The strength the shootout reads: the eleven that finished, no draws. */
   const offAtEnd = offPitchIds(live);
-  const { mine } = secondHalfLambdas(state, fx, live, second.filter(p => !offAtEnd.has(p.id)), live.myGoals, live.oppGoals);
+  const finished = second.filter(x => !offAtEnd.has(x.p.id));
+  const { mine } = secondHalfLambdas(state, fx, live, finished, live.myGoals, live.oppGoals);
   // Anyone who was on the pitch at any point can appear on the scoresheet.
   const ids = [...new Set([
     ...live.startXi, ...live.onPitch,
@@ -11628,13 +11759,15 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  */
 function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   const fx = fixtureFor(state, entry)!;
-  const xi = effectiveXI(state);
+  /* Round 505: the eleven WITH their slots, because the strength reads a
+     man in his slot now. */
+  const xi = effectiveXIWithSlots(state);
   /* Round 135: whatever you said before kick off, and whatever you said into a
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
   const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality);
-  const ids = xi.map(p => p.id);
+  const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
      eleven the pitch showed. Null for a thin club, and then their scorers
@@ -11679,7 +11812,7 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
   live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0]);
-  live.read = halftimeRead(state, xi, live.myGoals, live.oppGoals, mine, oppS);
+  live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
   return live;
 }
 
@@ -11689,12 +11822,12 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
  * untouched engine untouched.
  */
 function talkEdgeFor(
-  state: CareerState, xi: CMPlayer[], fx: MyFixture, tone: TalkTone | null,
+  state: CareerState, xi: XiSlot[], fx: MyFixture, tone: TalkTone | null,
 ): number {
   if (!tone) return 0;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   const edge = myMatchStrength(state, xi) + venue - strengthOf(state, fx.opponent);
-  const target = preMatchTarget(edge, xiMood(state, xi), state.form);
+  const target = preMatchTarget(edge, xiMood(state, men(xi)), state.form);
   return talkWeight(state, tone, target) * TALK_EDGE;
 }
 
@@ -11927,7 +12060,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     const fx = fixtureFor(career, entry);
     if (!fx) continue;
 
-    const xi = effectiveXI(career);
+    const xi = effectiveXIWithSlots(career);
     const mine = myMatchStrength(career, xi);
     const oppS = strengthOf(career, fx.opponent);
     const ment = MENT_MOD[career.mentality] ?? MENT_MOD.balanced;
