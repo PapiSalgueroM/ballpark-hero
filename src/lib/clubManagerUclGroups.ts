@@ -40,17 +40,23 @@
  *               REAPPLIED to any smaller subset still level, then overall
  *               goal difference and overall goals scored (then away goals
  *               over the group, wins, away wins, disciplinary points and the
- *               club coefficient, none of which this engine keeps). Three
- *               sources: Wikipedia, "2015-16 UEFA Champions League group
- *               stage"; Wikipedia, "2018-19 UEFA Champions League group
- *               stage", which cites the same list as Regulations article
- *               17.01; and CBS Sports, "Champions League: How a rare
- *               tiebreaker cost PSG first in group and could result in a
- *               tougher knockout draw" (December 2022), which walks the
- *               order down a real group: Benfica and PSG were level on
- *               points, on their head to head, on overall goal difference
- *               and on goals scored, and away goals over the whole group
- *               gave Benfica first place.
+ *               club coefficient, none of which this engine keeps). Two
+ *               sources for the full twelve step list: Wikipedia, "2015-16
+ *               UEFA Champions League group stage", and Wikipedia, "2018-19
+ *               UEFA Champions League group stage", which cites it as
+ *               Regulations article 17.01. A third, CBS Sports, "Champions
+ *               League: How a rare tiebreaker cost PSG first in group and
+ *               could result in a tougher knockout draw" (December 2022),
+ *               walks the SHAPE down a real group rather than the whole
+ *               list: Benfica and PSG were level on points, on their head to
+ *               head, on overall goal difference and on goals scored, and
+ *               away goals over the whole group gave Benfica first place.
+ *               It is cited for the head to head block coming before the
+ *               overall numbers and not for the away goals step inside that
+ *               block, because by 2022-23 that step was gone (Wikipedia,
+ *               "2022-23 UEFA Champions League group stage": head to head
+ *               away goals "no longer applied as a tiebreaker starting from
+ *               last season", while total away goals stayed).
  *
  *  leaguePhase  The modern (non era) save, which stands in for the 36 club
  *               league phase of 2024-25 onwards. NO head to head step at
@@ -73,8 +79,11 @@
  * starts in 2005-06, 2010-11 or 2015-16 and wears its own season's format
  * for its whole life, the way eraUclHasR16 already commits a save to eight
  * groups and a round of 16 for the whole career. Each of the three is
- * verified against its own season. An era added later than 2015 gets the
- * 2015-16 order, which the 2018-19 source confirms held on into that period.
+ * verified against its own season. An era added for a season between 2015-16
+ * and 2020-21 gets the 2015-16 order, which the 2018-19 source confirms was
+ * still in force. AN ERA ADDED FOR 2021-22 OR LATER NEEDS ITS OWN ENTRY:
+ * UEFA abolished away goals that summer and the head to head away goals step
+ * went with it, so h2hFull would be one step wrong for those three seasons.
  * A run still exactly level after every step above falls to the club name,
  * the same last resort the league sort uses.
  *
