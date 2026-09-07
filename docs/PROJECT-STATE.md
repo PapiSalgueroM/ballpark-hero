@@ -32,6 +32,12 @@ timer cleanup. Round 504 turns Club Manager's live match into a committed footba
 both elevens, the ball, set pieces, fouls, live stats and in-match changes. Change log entries
 below. The Claude Code lane still holds Rounds 505 to 508 on the workboard.
 
+**Round 505 is on branch `claude/ballpark-hero-code-lane-sa1p6b` with a PR open (Claude Code lane):
+the tactics depth (a man read in his slot, the bench under the pitch ordered for the spot,
+seventeen shapes, the armband and the takers, a duty on every slot, a second position learned
+over weeks), fenced by simTacticsEngine. Change log entry below. 506 is the transfer arc with
+personal terms.**
+
 **Round 509 is complete and verified in the local Codex branch, pending its final commit, PR and
 deploy.**
 Its College Grid finding was a false stall in `playGames`, not a broken page. The rest of its
@@ -52,7 +58,7 @@ an area moves; the round numbers stay for traceability.
 | Profiles and leaderboard | 45% | Rounds 392 and 399 stopped the earlier per-match and per-visit leaks. Round 509 also stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score on every visit, but that code is pending PR and deploy. The measured leak is 61,964 points across 30 accounts; no retroactive subtraction was performed. The broader history repair remains an owner decision. |
 | AdSense recovery | 100% submitted, site-side ready | Round 400 is live and the review is submitted. The 2026-09-07 re-audit passed 17 AdSense, legal, SEO, crawler, content and brand checks; all 14 negative controls fired; 140 of 140 live sitemap routes were clean; 139 substantive documents carried publisher verification; all 75 `AdBanner` callers use slot `7540487748`; and the live representative browser checks found no accidental noindex, orphan or page error. One nonblocking Club Manager spacing follow-up is assigned to its claimed lane. This is site-side readiness, not an approval guarantee. Google still decides. |
 | In game reporting UX | 78% | Round 447: game pages now use the shared report flow in GameShell on the latest touched games, with board context passed for game-specific issues and a standard placement pattern before SEO footer blocks. |
-| Club Manager | 46% | Round 504: the live match is football, each half committed as a stream the viewer walks and the report is counted off, both elevens named and numbered, the ball at a carrier's feet, corners and throw ins and fouls, live stats, a sub or shape change at any minute with the rest of the half redrawn, and the other dugout's own subs; fenced by simLiveMatch (nine sections, five controls). Before it, Rounds 465 to 467: two meters on every tab (the board meter is the sacking number itself, the fans move with results at r = 0.93 against points per game), goals for and against on every table, a calendar you tap to sim to any day on the one loop the four fast forwards use, four facilities with start levels derived from the club's tier and money and effects that are real and bounded, ticket and concession pricing with fan and board reactions, generated sponsors, and a projected finances screen whose lines sum. Before them, Round 462: the era Champions League plays its round of 16, the group tables stay up through the knockouts, and level points split the way each league says (Spain and Italy head to head) on a per pair ledger with a save migration. Before it: quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
+| Club Manager | 49% | Round 505: the tactics tab reads the way the match does (a man read in his slot at 0, 2, 6 or 14 rating points on him alone, the bench under the pitch ordered same position first, seventeen shapes that carry the eleven across, the armband and four takers that reach the stream, a duty on every slot capped at 0.12, a second position learned over counted weeks and real players starting with none), fenced by simTacticsEngine with seven controls and the Round 114 pitch guard brought back from a false green. Before it, Round 504: the live match is football, each half committed as a stream the viewer walks and the report is counted off, both elevens named and numbered, the ball at a carrier's feet, corners and throw ins and fouls, live stats, a sub or shape change at any minute with the rest of the half redrawn, and the other dugout's own subs; fenced by simLiveMatch (nine sections, five controls). Before it, Rounds 465 to 467: two meters on every tab (the board meter is the sacking number itself, the fans move with results at r = 0.93 against points per game), goals for and against on every table, a calendar you tap to sim to any day on the one loop the four fast forwards use, four facilities with start levels derived from the club's tier and money and effects that are real and bounded, ticket and concession pricing with fan and board reactions, generated sponsors, and a projected finances screen whose lines sum. Before them, Round 462: the era Champions League plays its round of 16, the group tables stay up through the knockouts, and level points split the way each league says (Spain and Italy head to head) on a per pair ledger with a save migration. Before it: quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
 | Soccer Career | 16% | Round 468 added three position specific training drills you actually play. Round 509's branch connects the wall visually without changing its legal gap, replays the real daily wall draws across 90 dates and 900 rounds with zero unwinnable walls, and adds controls for the two previously unfenced sections. That code is pending PR and deploy. Round 469 lifted the money app, social feed, rival and badge shapes into shared modules so the US careers can reach the same loop. Per season ping is activity, not completion (392). |
 | Multiplayer foundation | 12% | Round 461: Rebuild seats two to four players at one table on one phone (pass and play or CPU) with one shared season. Online play across two phones is the next step and needs the account layer. |
 
@@ -113,9 +119,9 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | OPEN | |
-| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs). Still open from his list: start options, leagues and eras depth, manager XP, media, the tactics list (Round 505, claimed) and the transfers rework with personal terms (Round 506, claimed) |
+| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining). Still open from his list: start options, leagues and eras depth, manager XP, media, the transfers rework with personal terms (Round 506, claimed) |
 | Soccer Career arc | ONGOING | Round 438 retirement money; Round 468 the three training drills you play; the flagship earns the most work |
-| Bring the Soccer Career depth to the NFL career, then the other US careers | PART | Round 469: the money app (Round 134 and 437 rules verbatim behind a sport descriptor), the social feed, a generated rival and a badge case lifted out of Soccer Career into shared modules (careerMoney, careerSocial, careerBadges) and bound to the NFL career, with simCareerParity driving both real engines over forty seeded careers a sport. Still open: interactive rivalry events, an inbox, the phase depth between seasons (soccer 22, NFL 7), rookie scale and cap era contracts, and the NBA, MLB and NHL bindings (each the size of nflCareerMoney.ts) |
+| Bring the Soccer Career depth to the NFL career, then the other US careers | PART | Round 469: the money app (Round 134 and 437 rules verbatim behind a sport descriptor), the social feed, a generated rival and a badge case lifted out of Soccer Career into shared modules (careerMoney, careerSocial, careerBadges) and bound to the NFL career, with simCareerParity driving both real engines over forty seeded careers a sport. Still open: interactive rivalry events, an inbox, the phase depth between seasons (soccer 22, NFL 7), rookie scale and cap era contracts, (the NBA, MLB and NHL bindings shipped in Round 470, nbaCareerMoney.ts and its two siblings) |
 | Career Ladder flags | DONE | Round 444 |
 | Who Am I slow load; more puzzles; accuracy meter | DONE | Round 443 load (10 requests, 446 KiB); Round 463 grew the pool 500 to 600 and the secret pool 300 to 400, and the meter is measured rather than trusted: simWhoAmIAccuracy runs the real scorer over the real pool and holds that the answer alone scores 100, that sharing more of the six attributes scores higher at three gap sizes, and that the five hottest guesses share far more with the secret than five random players do |
 | Alphabet Sprint verify end to end; say full names count | DONE | copy since Round 319 (the full name lead sentence); verified 2026-09-05 with a real browser play of the route, 14 interactions clean, no findings |
@@ -128,7 +134,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Stadium Tycoon depth | PART | Round 439 away rules; depth open |
 | Wonderkid merge | OPEN | |
 | Transfer Path special rule modes (active players only, Europe only) | PART, RECOVERY READY FOR DEPLOY | Round 460's shared rule engine is live. Round 509 found that its active coverage relied on an unverified 77-row 2025-2026 projection tranche. All 77 rows are now quarantined live, 17 paths made unreachable by that correction are gone, and all 885 retained hints are refreshed. The replacement verifies 78 active identities by normalized name plus nationality and can safely restore 203 of 885 paths after the matching frontend deploys. Its guarded restore migration remains unapplied on purpose. Europe mode retains 872 verified hints. |
-| World XI: eligibility from real positions, more in the season report, respin count customizable | PART | eligibility Rounds 319 and 345 (shared with Build Your XI in Round 442); the respin budget picker already exists on the page; more in the season report is open, and Round 449 removed the invented conduct line from it |
+| World XI: eligibility from real positions, more in the season report, respin count customizable | PART | eligibility Rounds 319 and 345 (shared with Build Your XI in Round 442); the respin budget picker already exists on the page; more in the season report shipped in Round 455 (worldXi.ts), and Round 449 removed the invented conduct line from it |
 | Fantasy Draft scrolling | DONE | Round 326 |
 | Missing XI flags or colours, overlapping bubbles | DONE | Round 444 |
 | Rarity Round explain the goal before the guess | DONE | Round 444 |
@@ -2413,9 +2419,6 @@ remains).**
   because the row marks your club with a star prefix and Round 465's column trim was
   measured without it. src/components/club-manager/LeagueTableCard.tsx around line 56;
   measure it in a browser at 390 before changing the template again.
-- **useClubManager still exports quickSim with no caller** since Round 466 rewired the
-  calendar and the four fast forwards onto simToWeek. Dead the moment it landed; delete it
-  with the next round that touches the hook.
 - **The two Soccer Career drill findings are fixed in the Round 509 branch, pending deploy.**
   The harness has controls for both previously unfenced sections and replays the real daily
   wall draws. The wall's overlapping shoulder spans now read as one wall while the existing
@@ -2453,20 +2456,10 @@ roadmap when a round touches the game named:
   graph, and proves 203 of 885 puzzles have a valid Active Players path. The guarded restore
   migration is ready but stays unapplied until the matching frontend is live. Do not restore
   projected stats simply to make the mode look populated.
-- **Every Conquest map (NFL, MLB, NBA, NHL, soccer): the daily can be replayed with
-  foreknowledge by reloading before the final screen.** The daily is written only at phase
-  done and the run is re-seeded from the date, so a reload mid season replays identical
-  results with the calls already known, for about 90 percent of the cap. The record shape
-  predates Round 428 (conquestDaily.ts keeps its own key). One shared fix on the board:
-  persist the daily's calls per matchday and restore them on mount, on ImperialismBoardShared
-  and the four private boards, or move the four onto the shared board first.
 - **Every Conquest map: the first move can sit below the fold on a phone** once a club is
   picked (the call card renders after the map, the legend and the standings toggle, with no
   reveal scroll on the shared board or the four private ones). The no scroll rule wants the
   next step in view on its own.
-- **Rebuild at a table: nothing about a table is saved**, so a four seat pass and play
-  session is lost on any refresh or back swipe. The solo run was never saved either; the
-  first save shape for Rebuild needs a version and a fail closed loader from day one.
 - **Club Manager, era Champions League group tables rank level clubs on goal difference**
   where the real group stage from 2003-04 to 2023-24 used head to head first, so the round
   of 16 seeding can read the wrong group winner. Pre existing; Round 462 seeded the draw on
@@ -3135,6 +3128,105 @@ today rather than adding alongside them. Every new poll must obey all of these r
   files, 194 tests, all green. The full sim board exercised 262 harnesses; the five reports that
   were not initially green were three weak one-line evidence outputs, one transient live database
   fetch and one static quote-check false positive. Each was repaired or cleared and rerun green.
+- **2026-09-07, Round 505 (Claude Code lane). THE TACTICS TAB READS THE WAY THE MATCH DOES.**
+  His words: "subs and reserves listed under the pitch, tap one player then another to swap. Out
+  of position penalties, position retraining over weeks, but full freedom to place anyone
+  anywhere (ten defenders if you want). Captain, corner takers left and right, free kick and
+  penalty takers. Way more formations and variants. Player roles: attacking or holding fullbacks,
+  sweeper keeper, and so on. Sub suggestions ordered by same position first." Every clause
+  shipped; the pieces that make each one honest are below.
+  **A man is read in his slot.** `fitGrade` grades every man against his slot the way the site's
+  one position rule (`positionFit.ts`) already does: natural (his own position, or one he has
+  learned), family (the ALT_POSITIONS cover, a winger on the other flank), wrong, or the keeper
+  boundary crossed. `FIT_PENALTY` takes 0, 2, 6 or 14 rating points off that man only, wherever
+  the engine reads my eleven: kick off, both halves, every redraw after a change, the shootout,
+  the talk, the odds on the Match Centre. A fully natural eleven pays nothing, so the Round 95
+  rule (my club on the same scale as an AI club) is untouched. Ten defenders stays allowed. The
+  tactics header prints the adjusted figure with the cost named, and every token wears its grade.
+  **Seventeen shapes.** `CM_FORMATIONS` keeps the nine shared entries at their indexes (a saved
+  `formationIndex` means what it did) and adds eight variants; Club Manager's own `FORMATIONS`
+  export points at it and no other game imports it from there. A switch carries the eleven across
+  by slot label before the engine's own auto pick fills what is left, and a duty travels with the
+  man when the new slot's line offers it.
+  **The bench under the pitch.** `benchFor` orders the men who hold the slot first, then the
+  family, then the rest, fitness then rating inside a tier, and leaves out anyone who has left a
+  live match (`liveGoneIds`). Tap a bench man then a spot, or a spot then a bench man; the drag to
+  swap and the picker dialog stay. The dressing room and the live change sheet order the same way.
+  **The armband and the four takers.** `setPieces` on the save (captain, corners left and right,
+  free kicks, penalties), auto picked by `ensureSetPieces` (a captain aged 24 plus and rated 76
+  plus where the squad has one, never a man on loan, never a keeper for a taker job), settable,
+  and cleared from every job when the man is sold, swapped or loaned out, and at the summer
+  rollover. They reach the Round 504 stream: a corner carries its flank and goes to that flank's
+  taker when he is on the pitch (1002 of 1002 measured), eight percent of my goals are penalties
+  and four percent free kicks credited to the taker (the goal count never changes), two percent
+  of on target saves are saved penalties, the shootout gains a bounded taker edge (plus or minus
+  0.06), and the captain's men lose one morale point less after a defeat (never past zero) while
+  he gains one a match. The same one truth and never travels rules the Soccer Career captaincy
+  harness enforces, written for this engine rather than pointed at the other.
+  **A second position learned over counted weeks.** `startRetraining` on the training desk:
+  outfield to outfield only, one at a time, 6 weeks for a family position, 10 same line, 16
+  across lines, times 1.5 past thirty, shortened by the training ground and never under 4;
+  `tickWeek` counts it down and a headline says when he has it; two kept; the earned position
+  reads natural on the pitch. Real players start with none, ever: a second position is a fact
+  about a real footballer that the data does not hold, so it is only ever earned in this save.
+  **Seventeen duties.** Sweeper keeper or shot stopper, stopper or cover, attacking or holding
+  full back, anchor or deep playmaker, box to box or playmaker, creator or shadow striker, winger
+  or inside forward, poacher, target man or false nine, one per slot, each a small attack and
+  defence contribution summed over the eleven and clamped to plus or minus 0.12 (a mentality step
+  is 0.42), plus scorer and assist weights (a poacher takes 35 percent of the eleven's goals from
+  the striker slot against 27 as a target man). A sub into a slot inherits its duty.
+  **Fence:** `scripts/simTacticsEngine.mjs`, seven sections: 27,115 man and slot pairs graded as
+  the position rule says and the penalty ordered; 2,400 seeded matches on common random numbers
+  with a keeper and striker swap scoring fewer (8.8 standard errors) and conceding more (8.3), the
+  flank swap between them; retraining quoted, counted, finished, capped and refused where it
+  should be; 30 jobs filled honestly, 1,005 corners every one with a flank, 26 of 26 penalty and
+  free kick goals to the taker, the shootout edge clamped, the captain's relief exact on 420 of
+  420 rows; attacking full backs and a poacher against holding full backs and a target man
+  scoring more and conceding more by more than five standard errors with the boost never past
+  the cap; the bench order on every slot of every shape; every shape eleven men with one keeper in
+  the right bands; and Round 504's live equals quick identity still holding with duties and takers
+  on. Controls `nofit`, `notaker`, `noduty`, `noretrain`, each flipping only its section. Named
+  simTacticsEngine because `scripts/simTactics.mjs` is the Round 114 browser guard for the pitch,
+  which turned out to have been parking on the dugout form since Round 303 and reading any launch
+  failure as a browser that was not installed, so it printed a pass with nothing checked; it skips
+  the form now, a crash is a red, and it passes on the rewritten screen (drag, touch, picker,
+  mentality animation, reduced motion).
+  **What the adversarial review found and what changed** (four lenses over the diff, engine,
+  screens, harness, rules; 26 findings, every one measured before it was believed). Engine: a
+  penalty or a direct free kick carried an assist on 12 of 18 spot kick goals, so a set piece
+  goal has no assist now; a shape switch on the tactics tab while a match was paused at the
+  interval re-indexed the duties under the live formation, so `LiveMatch.duties` is frozen at
+  kick off and `liveDutyAt` reads it; a retraining rode out on loan frozen at its quoted weeks
+  and resumed a season later, so `loanOutPlayer` strips it; the replacement for a hurt man was
+  ranked by raw rating so a wrong grade 83 beat a family grade 82 who would have played at 80
+  against 77, so `effectiveXIWithSlots` ranks by rating less the fit price; the live feed
+  carries the corner's flank and the spot kick flags so no screen re-keys the play list.
+  Screens: the formation carry now tries the same label, then the same duty line, then the
+  same pitch line, then any free slot, so the ten defenders survive a switch and a duty travels
+  with the man; the duty chip on the middle centre back in a five sits above the keeper token;
+  a held bench pick, a tapped spot and an open duty sheet clear on a shape switch; the tactics
+  bench never runs in live mode; the bench and the set pieces are collapsed tiles at 390 wide.
+  Harness: section 1 reads the second half lambda exactly the way it reads the first, so a
+  penalty that reaches one half only goes red (control `fit2nd`); section 4 reads both halves'
+  lambdas for the duty arms (control `duty2nd`) and measures assists (`DUTY_ASSISTING`) as well
+  as goals; section 3 floors each flank and checks the taker per flag (control `leftonly`) and
+  fences the saved penalty and its taker; arm A is built off the eleven that kicks off so the
+  intact filter no longer reddens healthy code on some seeds; section 7 fails loudly on a
+  refused duty; section 6 checks every variant slot's allowed set against the shared slot of
+  the same label; every control copy lives under the ignored `.sim-control/` and
+  `src/lib/__control_*.ts` is ignored as the belt. Rules: the slot lists are imported from
+  `squadDeal.SLOT_ALLOWED` rather than copied, the armband rule (24 and older, 76 and better)
+  lives once in `src/lib/captaincy.ts` and both engines read it, the second position chip is one
+  component, and the hook's dead `quickSim` is gone as the open bug asked.
+  **Ledger hygiene in the same round**, from the backlog read that ranked 507 onward: the NBA,
+  MLB and NHL money bindings row (shipped Round 470), the World XI season report row (shipped
+  Round 455), and two open bugs closed by Rounds 476 (the Conquest daily recorded as it goes)
+  and 477 (Rebuild's save) are corrected rather than built twice.
+  **Gates:** `node_modules/.bin/tsc --noEmit -p tsconfig.app.json` at zero (run last, after every edit), `npm run build` green with 148 snapshots inlined and the tree clean afterwards (no snapshot moved), vitest 15 files and 179 tests, simTacticsEngine plain (0 FAIL) and all seven controls each red in its own section and nowhere else (nofit and fit2nd on 1, noretrain on 2, notaker and leftonly on 3, noduty and duty2nd on 4), SIM_SEED 1, 2 and 5 green on the shipped bytes and 0 to 7 measured for the header, simLiveMatch plain and its nooppsubs control with the copies resolving from `.sim-control/` and nothing left behind, the Round 114 pitch guard simTactics on the served build (33 checks, ALL TACTICS CHECKS PASSED, chromium ran), a full season played through the screens at 390 by 844 and at 430 by 932 (0 findings each), the whole Club Manager family plus simRoles, vitest and the rival names guard green on the worktree before the rebase, and the full suite in the main tree: running at the time of this commit, its line recorded in the gate pass commit that follows. Adversarial review of the whole diff over four lenses (engine, screens, harness, rules; 26 findings) with every code finding fixed in the round and an independent re-verification of the harness fences: the verifier wrote six engine regressions of its own (the fit penalty and the duty boost dropped from the second half only, the flank collapsed to the left, the saved penalty share at zero, the penalty taker falling back to the weighted pick, an all ones assist table) and every one reddened only its section, and its two harness notes (a band on the family arm that asserted non significance, and a seeds floor in section 4 that one club could clear alone) are fixed in the round, with plain, nofit, noduty and SIM_SEED=5 re-run green on the fixed bytes. Browser harnesses run with the default TMPDIR: a long private one kills Chromium at launch, and since this round that is a red rather than a skip..
+  **Not done, named:** the tactics header grades the picked eleven while the match reads the
+  effective one (a hurt man's replacement is graded on the pitch, not on the tab); no width,
+  pressing or tempo instructions (the spec's section 40); no opposition duties; a formation
+  change during play is still by the live change sheet's shapes rather than the seventeen.
 - **2026-09-07, Round 504 (Claude Code lane). THE LIVE MATCH IS FOOTBALL NOW, AND YOU CAN
   MANAGE IT AT ANY MINUTE.** His words: "Ball at players' feet, both teams with names and numbers
   on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live stats
