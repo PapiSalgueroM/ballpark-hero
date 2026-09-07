@@ -5,7 +5,7 @@ import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { normalizeName, displayName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 
 /**
  * NBA player source for the autocomplete/validation layer.
@@ -23,27 +23,34 @@ import { normalizeName, displayName, type PlayerEntity, type PlayerSourceConfig 
  * `first_name` is carried in metaColumns so the suggestion row still shows
  * full context ("Stephen | G | Golden State Warriors").
  */
-export const NBA_PLAYER_SOURCE_V2: PlayerSourceConfig = {
-  table: 'nba_players_extended_v2',
-  nameColumn: 'last_name',
-  metaColumns: {
-    firstName: 'first_name',
-    team: 'team',
-    position: 'position',
-  },
-  ilikeLimit: 200,
-  prominenceLimit: 1000,
-};
-
-/**
- * Builds the per-slot autocomplete source: same table, filtered to the
- * currently assigned NBA team so the suggestion dropdown only ever offers
- * players who actually played there. This is what makes bad picks
- * unselectable at entry time instead of being caught after submit.
+/* ROUND 494: THE LOCAL COPY IS GONE AND THIS USES THE SHARED SOURCE.
+ * There were two configs for the SAME table. src/lib/playerSearch.ts exports
+ * NBA_PLAYER_SOURCE with firstNameColumn:'first_name' and a prominence order,
+ * and NBA Chain and NBA Connect 4 both use it. This file carried its own copy
+ * without those fields, so the lineup game searched last_name ALONE.
+ *
+ * What that did to a player: the box says "Type a player name..." and it is
+ * mounted validateOnly, so a suggestion click is the only way to fill a slot.
+ * Typing the name he is thinking of returned nothing. "LeBron James" nothing,
+ * "Kobe Bryant" nothing, "Stephen Curry" nothing. Only a bare surname worked,
+ * and nothing on screen said so. Progressive typing made it look broken rather
+ * than strict: "Le" gave rows, "LeB" gave Kleber, "LeBr" onward gave none.
+ *
+ * And the surname workaround was itself lossy, because the candidate key was
+ * the surname: two players who share one on the same team collapsed into a
+ * single arbitrary row. Measured 2026-09-06 on nba_players_extended_v2: 715 of
+ * its 5,135 rows share a surname with a teammate, across all 32 teams. Golden
+ * State holds Seth Curry (id 114) and Stephen Curry (115); the Lakers hold
+ * LeBron James (237) and Bronny James (1028046517). Typing "Curry" returned one
+ * row and the player could not tell which Curry he was picking or reach the
+ * other.
+ *
+ * Deleting the copy rather than adding the missing fields to it is the point:
+ * one config for one table cannot drift again.
  */
 export function buildTeamFilteredNbaSource(teamName: string): PlayerSourceConfig {
   return {
-    ...NBA_PLAYER_SOURCE_V2,
+    ...NBA_PLAYER_SOURCE,
     filters: [{ column: 'team', op: 'eq', value: teamName }],
   };
 }
@@ -74,30 +81,6 @@ export function isPositionEligibleForSlot(dbPosition: string | null | undefined,
   });
 }
 
-/**
- * Builds "First Last" from a search result whose entity.name is only the
- * last name (see NBA_PLAYER_SOURCE_V2's docstring above: nba_players_extended_v2
- * has no full_name column, so last_name is the searchable/matching column
- * and first_name rides along in entity.meta.firstName). This does not touch
- * matching/search at all - that already happened against last_name inside
- * searchPlayers() before this function ever runs; it only changes what text
- * is shown for an already-selected player.
- *
- * displayName() (same title-casing helper playerSearch.ts uses to build
- * entity.name itself) is reused here so "STEPHEN" -> "Stephen" the same way
- * "CURRY" -> "Curry" already does, keeping first and last name casing
- * consistent with each other.
- *
- * Falls back to entity.name alone (last name only) when first_name is
- * missing from the row, which happens for a small minority of the 5135 rows
- * in nba_players_extended_v2, rather than showing an awkward leading space
- * or "undefined Curry".
- */
-export function buildFullDisplayName(entity: PlayerEntity): string {
-  const rawFirst = typeof entity.meta.firstName === 'string' ? entity.meta.firstName.trim() : '';
-  if (!rawFirst) return entity.name;
-  return `${displayName(rawFirst)} ${entity.name}`;
-}
 
 export function useNbaLineup() {
   const [phase, setPhase] = useState<NbaGamePhase>('challenge');
@@ -122,18 +105,16 @@ export function useNbaLineup() {
     );
   }, [filledSlots]);
 
-  // Normalized names already in the lineup, for autocomplete's `exclude` set.
-  // This must stay keyed on the same shape as entity.name during search
-  // (last name only, since nba_players_extended_v2 has no full_name column
-  // and last_name is the searched/matched column - see NBA_PLAYER_SOURCE_V2's
-  // docstring), NOT the full "First Last" display name now stored in
-  // NbaFilledSlot.playerName, or the exclude set would stop matching what
-  // searchPlayers() actually compares against and previously-picked players
-  // could reappear in suggestions. lastNameForExclude is carried on the slot
-  // alongside the full playerName precisely so this stays correct without
-  // re-deriving a last name from a full display string.
+  /* Normalized names already in the lineup, for autocomplete's `exclude` set.
+     It must be keyed on the same shape searchPlayers compares against, or a
+     player already picked comes back in the suggestions. Round 494 changed that
+     shape: the source now carries firstNameColumn, so entity.name is the whole
+     "First Last" name rather than the surname alone, and the key follows it.
+     The field was called lastNameForExclude while it held a surname and is
+     called excludeName now that it does not, because a name that lies about
+     its contents is how the next bug gets written. */
   const filledNormalizedNames = useMemo(
-    () => new Set(Array.from(filledSlots.values()).map((s) => normalizeName(s.lastNameForExclude))),
+    () => new Set(Array.from(filledSlots.values()).map((s) => normalizeName(s.excludeName))),
     [filledSlots]
   );
 
@@ -217,7 +198,10 @@ export function useNbaLineup() {
       const position = NBA_POSITIONS[selectedPosition];
       if (!position) return;
 
-      const fullDisplayName = buildFullDisplayName(entity);
+      /* entity.name is already "First Last": the shared source builds it from
+         both columns. Round 494 removed the helper that used to prepend the
+         first name, which would now produce "Stephen Stephen Curry". */
+      const fullDisplayName = entity.name;
 
       const normalized = normalizeName(entity.name);
       if (filledNormalizedNames.has(normalized)) {
@@ -271,7 +255,7 @@ export function useNbaLineup() {
       const slot: NbaFilledSlot = {
         ...position,
         playerName: fullDisplayName,
-        lastNameForExclude: entity.name,
+        excludeName: entity.name,
         assignedTeam: currentTeam.name,
         statValue,
       };

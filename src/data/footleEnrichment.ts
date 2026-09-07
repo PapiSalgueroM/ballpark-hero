@@ -449,12 +449,37 @@ export function getEnrichment(
      than present in the wrong one. */
   const direct = footleEnrichment[playerName];
   const fromClub = CLUB_TO_LEAGUE[club];
-  /* Round 443: a player who is not in the hand list has no squad number on
-     file, and 1,375 of the live pool's 1,507 players are in that position.
-     null says so; the 0 this used to return was printed by Footle's KIT #
-     tile as though it were his number. */
+  const league = fromClub ?? direct?.league ?? 'Other';
+
+  /* ROUND 495: THE SAME GUARD ROUND 315 GAVE THE LEAGUE, NOW GIVEN TO THE
+     NUMBER. Round 315 stopped trusting the hand-typed league because "anyone in
+     the hand list who has moved since it was written kept their old league
+     forever". The kit number has exactly that problem and never got the fix: it
+     is one number, typed once, belonging to whichever club he was at that day.
+
+     The entry records the league it was written with, so a disagreement with the
+     league his CURRENT club maps to is proof he has moved, and his stored number
+     is the old club's. Measured 2026-09-06 over the live 2026 pool: 195 of the
+     221 hand-list players are in it and 37 of those, nearly one in five, have
+     changed league. Salah's 11 is Liverpool's and the pool has him at
+     Trabzonspor; Luis Diaz's 7 is Liverpool's and he is at Bayern Munich;
+     Gabriel Jesus's 9 is Arsenal's and he is at Barcelona. Footle's KIT # tile
+     GRADES a guess against that number, so it was marking answers against a
+     fact that had stopped being true.
+
+     A null is not a gap here, it is the honest answer, and the tile already
+     renders it as "?" (Round 443 built that path for the 1,375 players who were
+     never in the list at all).
+
+     WHAT THIS DOES NOT CATCH, stated rather than discovered later: a move
+     WITHIN one league. Arsenal to Chelsea keeps the league, so the stale number
+     survives. Catching that needs the club the number was written against, which
+     the entry does not record, and adding it is a data change rather than a
+     rule change. */
+  const movedLeagueSinceWritten = !!direct && !!fromClub && fromClub !== direct.league;
+
   return {
-    kitNumber: direct?.kitNumber ?? null,
-    league: fromClub ?? direct?.league ?? 'Other',
+    kitNumber: movedLeagueSinceWritten ? null : (direct?.kitNumber ?? null),
+    league,
   };
 }
