@@ -11867,16 +11867,50 @@ export function markLiveMinute(career: CareerState, minute: number): CareerState
   return state;
 }
 
-/** The bench, worst-to-best, for the halftime screen. */
-export function benchForHalftime(career: CareerState): CMPlayer[] {
-  const live = career.live;
-  if (!live) return [];
-  const on = new Set(live.onPitch);
-  /* Round 504: a man taken off, sent off or down injured does not come back. */
-  const gone = liveGoneIds(live, 90);
+/**
+ * Round 505: the bench, ordered for the slot you are filling. Same slot
+ * first (a position he holds is in the slot's list), then the family (the
+ * shared position rule: a winger for the other flank, a full back at wing
+ * back), then everybody else; inside a tier the freshest man first, then
+ * the best. Pass the man coming off (`outId`, found in the lineup) or the
+ * slot itself (`slotIdx`); with neither, one tier, fitness then rating.
+ *
+ * With a match on, the pool is everyone not on the pitch, not gone from it
+ * (taken off, sent off, limped off: nobody comes back) and fit to come on.
+ * Between matches it is everyone not in the picked eleven, with the men who
+ * cannot play this week at the back so the tactics screen can grey them.
+ * No draw anywhere in here: it runs at render time.
+ */
+export function benchFor(career: CareerState, outId?: string, slotIdx?: number): CMPlayer[] {
+  const live = career.live ?? null;
+  const formation = live ? liveFormationOf(career, live) : (FORMATIONS[career.formationIndex] ?? FORMATIONS[0]);
+  const lineup: (string | null)[] = live ? live.onPitch : career.xiIds;
+  let idx = slotIdx;
+  if (idx === undefined && outId) {
+    const i = lineup.indexOf(outId);
+    if (i >= 0) idx = i;
+  }
+  const slot = idx !== undefined ? formation.slots[idx] ?? null : null;
+  const on = new Set(lineup.filter((id): id is string => !!id));
+  const gone = live ? liveGoneIds(live, 90) : new Set<string>();
+  const tierOf = (p: CMPlayer): number => {
+    if (!slot) return 2;
+    const g = fitGrade(p, slot);
+    return g === 'natural' ? 0 : g === 'family' ? 1 : 2;
+  };
   return career.squad
-    .filter(p => !on.has(p.id) && !gone.has(p.id) && isAvailable(p))
-    .sort((a, b) => b.rating - a.rating);
+    .filter(p => !on.has(p.id) && !gone.has(p.id) && (!live || isAvailable(p)))
+    .sort((a, b) =>
+      (isAvailable(a) ? 0 : 1) - (isAvailable(b) ? 0 : 1)
+      || tierOf(a) - tierOf(b)
+      || b.fitness - a.fitness
+      || b.rating - a.rating);
+}
+
+/** The bench for the halftime screen: benchFor with no slot, so one tier, freshest then best. */
+export function benchForHalftime(career: CareerState): CMPlayer[] {
+  if (!career.live) return [];
+  return benchFor(career);
 }
 
 /** Who is flagging: the players a manager would actually think about hooking. */
