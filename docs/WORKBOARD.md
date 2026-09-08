@@ -16,6 +16,14 @@ Conquest results moving the streak backward. Preserve pinned puzzle dates, same-
 tab protection and normal forward cleanup. Claude retains 506 to 508 and the root
 checkout. The reviewed PR 63 candidate is untouched.
 
+Round 513 is implemented at `64fdea29` plus comment correction `fef84b82`, with
+51 focused tests, six negative controls, build/type gates, all 15 generated-site
+fences and native two-date browser verification passing. Broad verification is
+not complete: full Vitest ended 359 pass/2 fail in unchanged Attack UI tests; the
+isolated file repeats the timeout and follow-on save mismatch. The confirmation
+test passes alone. Full node suite remains deferred for shared machine capacity.
+Keep this as a draft candidate. Details: docs/midnight-save-verification-2026-09-08.md.
+
 **OWNER REVIEW CHECKPOINT, 2026-09-08.** Anthony wants to review the whole website when
 Codex and Claude reach a stable stopping point. Finish the current bounded batch and its
 verification, then pause new feature expansion for his review. Do not wait for the whole
@@ -914,6 +922,19 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **REPRODUCED 2026-09-08, HOMEPAGE CAN GO BLANK WHEN STORAGE ENUMERATION IS DENIED.**
+  Read-only Chromium checks on the reviewed port-4178 build compared a normal home
+  with a context where only `localStorage.length` throws SecurityError and all
+  storage methods remain native. Normal: 8 root children, 158 internal game links,
+  zero page errors. Denied enumeration reproduced twice: zero root children, zero
+  body text, no H1 or game links, one uncaught SecurityError and no recovery screen.
+  `Index.tsx:189-190` enumerates length/key outside its catch, called by the mount
+  effect at line 231. Separately, denying the window.localStorage getter prevented
+  app boot and left only static home copy; that broader case is not yet traced to
+  every startup caller. Fix and test the exact enumeration crash first, then trace
+  denied getter and consent access without claiming that one catch fixes all storage.
+  User storage, source and published site were untouched by the probe.
+
 - **2026-09-07 CONQUEST FOLLOW-UP, SOURCE AUDIT ONLY.** The next NFL/NBA pass should
   reproduce and fence invisible NBA regions (`CA_N`, `TX_S`), moved players falling
   back to unknown position/rating 75, and the NBA power path sharing an NFL free-agent
@@ -939,16 +960,17 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
   checked. All 17 transport regression cases passed. A fresh live audit read 5,496 players,
   found zero stale kit numbers among 37 movers, and preserved all 158 stayers' numbers.
 
-- **MEASURED 2026-09-07, DAILY SAVE CLEANUP CAN DELETE A NEWER DAY.** writeDailyRecord removes
+- **ROUND 513 CLAIMED 2026-09-08, DAILY SAVE CLEANUP CAN DELETE A NEWER DAY.** writeDailyRecord removes
   every date other than the one being written. An old tab pinned to September 7 can therefore
   delete September 8's record after it exists. Separate from Round 510's same-day Conquest
   locks. The duplicate load-effect cleanup in useDailyPuzzle is affected too, but its ordinary
   late addGuess write does not prune newer keys. The Conquest result helper can move its
   lastDate backward, while the board's serial stale-commit guard blocks the simple late-finish
-  case. A post-commit suspension interleaving still needs a board reproduction. Exact helper
-  output and distinctions: docs/midnight-save-probe-2026-09-07.md. Next scope: preserve newer saves with
-  bounded exact-slug cleanup and monotonic, serialized streak writes, with real-helper and
-  hook regression tests. No fix claimed yet. See docs/PROJECT-STATE.md, Open bugs.
+  case. The post-commit suspension interleaving is now reproduced and fixed by the
+  sport-wide in-lock finalization, with native browser coverage. Exact original helper
+  output: docs/midnight-save-probe-2026-09-07.md. Implementation and focused checks
+  are complete; broader gates remain open as recorded at the top of this board.
+  See docs/midnight-save-verification-2026-09-08.md. Nothing from this round is live.
 
 - **MEASURED 2026-09-07, NOT FIXED, not the Claude Code lane's files: `scripts/simNewBadge.mjs`
   is red on a clean checkout of main in the cloud clone.** "120 typed date(s) disagree with git:
