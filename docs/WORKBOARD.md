@@ -1,5 +1,21 @@
 # Work board
 
+**Round 522, Codex, scoped verification complete September 8:** cross-profile load isolation in
+`.worktrees/round-522-profile-isolation`, branch
+`codex/round-522-profile-isolation`, based on Round 521 `77ad583f` (draft PR72).
+Per-load optional defaults, stale-response guards and matching loaded identity
+stop A's data and minutes carrying into B. Failed preferences are unavailable
+and cannot write; a successful retry resumes the stored value. Sixteen real
+isolation tests, eight average tests, 26 exact source controls, both type
+gates/build, all fifteen generated-site fences, ActivityDays and SessionMarks
+pass. Built isolation passes eight cases/two clipping controls; unchanged
+average checks pass 28 states. Final review clear. Only exact local synthetic
+writes occurred. Evidence: docs/profile-isolation-2026-09-08.md. Preview 4196.
+Preserved average scope, actual saves/accounts, backend, dates and providers.
+No full default suite, root edits, merge or publication. Next free: 523,
+candidate header avatar/initial identity isolation. The mixed daily calendars
+need a separate coordinated scope, not a reader-only date substitution.
+
 **Round 521, Codex, scoped verification complete September 8:** own-profile average scope in
 `.worktrees/round-521-profile-average`, branch `codex/round-521-profile-average`,
 based on Round 520 `9865eb3e` (draft PR71). Profile now pairs local points/plays,

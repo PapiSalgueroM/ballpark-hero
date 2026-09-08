@@ -1,5 +1,38 @@
 # Project state
 
+## Round 522 profile isolation, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-522-profile-isolation`, branch
+`codex/round-522-profile-isolation`, based on completed Round 521 `77ad583f`
+(draft PR72). Profile loads now replace missing optional data, ignore stale
+lookups/detail batches/ranks and wait for the matching loaded account before
+writing profile minutes. Editor and badge identity follow the loaded profile.
+Failed preferences reads are visibly unavailable and cannot write, while
+successful empty rows still start at zero. No historical data was repaired.
+
+All sixteen isolation cases, eight average cases and 26 exact source controls
+pass. Both type gates, build, all fifteen generated-site fences, ActivityDays
+and SessionMarks pass. Built isolation passes eight cases at 390/1440 and two
+actual-clipping controls; the average matrix passes 28 states at four widths.
+Only four explicitly expected synthetic minute POSTs were captured locally,
+none transmitted. Main reran focused controls and inspected screenshots.
+Final review cleared its failed-preferences finding and found no other
+actionable issue. Initial test/type/geometry errors remain documented in
+docs/profile-isolation-2026-09-08.md. Preview 4196 serves index-CE_EUMo0.js.
+No account restoration, backend/provider changes, broad default suite,
+merge or publication. Keep all earlier worktrees/previews intact.
+
+Next bounded candidate: profile header avatars/initials can fall back to the
+visiting account when another player has no photo/name. This is source-proven,
+not yet rendered or fixed. The separate daily-count audit found mixed Eastern
+local and UTC server buckets, but Profile's UTC query agrees with the current
+writer. Do not change only the reader or invent a historical date conversion.
+Calendar alignment needs its own coordinated scope.
+
+Root remains Claude's. His press sampling experiment is active; do not touch
+its source, harness or process. Cutoff remains 17:46:50 UTC. Next free round:
+523, verify before claiming.
+
 ## Round 521 profile average, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-521-profile-average`, branch

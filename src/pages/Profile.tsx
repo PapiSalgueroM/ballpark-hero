@@ -172,22 +172,28 @@ export default function Profile() {
   const [favouritePlayer, setFavouritePlayer] = useState('');
   const [timeSpent, setTimeSpent] = useState(0);
   const [prefsSaving, setPrefsSaving] = useState(false);
+  const [prefsReadReady, setPrefsReadReady] = useState(false);
 
-  const isOwnProfile = !username || (profile?.username === username);
+  const isOwnProfile = !username || (profile?.user_id === user?.id && profile?.username === username);
 
   /* ── Data loading ── */
   useEffect(() => {
     if (authLoading) return;
+    let cancelled = false;
 
     const loadProfile = async () => {
       setLoading(true);
+      setEditing(false);
+      setPrefsReadReady(false);
       let targetUserId: string | null = null;
 
       if (username) {
         const { data: profileData } = await supabase
           .from('profiles').select('*').eq('username', username).maybeSingle();
+        if (cancelled) return;
         if (profileData) {
           setViewingProfile(profileData);
+          setEditForm({ display_name: profileData.display_name || '', username: profileData.username || '' });
           targetUserId = profileData.user_id;
         } else {
           navigate('/');
@@ -197,23 +203,26 @@ export default function Profile() {
         }
       } else if (user) {
         targetUserId = user.id;
-        if (profile) {
+        if (profile?.user_id === user.id) {
           setViewingProfile(profile);
           setEditForm({ display_name: profile.display_name || '', username: profile.username || '' });
         } else {
           const { data: fp } = await supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
+          if (cancelled) return;
           if (fp) {
             setViewingProfile(fp);
             setEditForm({ display_name: (fp as any).display_name || '', username: (fp as any).username || '' });
           } else {
+            const displayName = user.user_metadata?.full_name || user.user_metadata?.name || null;
             setViewingProfile({
               user_id: user.id,
-              display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+              display_name: displayName,
               username: null,
               avatar_url: user.user_metadata?.avatar_url || null,
               current_streak: 0, longest_streak: 0, total_games_played: 0,
               total_correct_answers: 0, all_time_score: 0, created_at: user.created_at,
             });
+            setEditForm({ display_name: displayName || '', username: '' });
           }
         }
       } else {
@@ -239,23 +248,23 @@ export default function Profile() {
         supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
         supabase.from('user_preferences').select('*').eq('user_id', targetUserId).maybeSingle(),
       ]);
+      if (cancelled) return;
 
       setBestScores(scoresRes.data || []);
       setRecentGames((recentRes.data || []) as unknown as RecentGame[]);
-      if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
+      setUserScoreData((userScoreRes.data as any) ?? null);
       setServerTotalGames(gamesCountRes.count ?? 0);
       setPlayedGameTypes((gameTypesRes.data || []).map((r: any) => r.game_type));
-      if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
-      if (todayRes.data) setDailyGameSlugs(todayRes.data.map((c: any) => c.game_slug));
+      setSavedBracket(bracketRes.data?.[0] ?? null);
+      setDailyGameSlugs((todayRes.data || []).map((c: any) => c.game_slug));
 
       // Preferences
-      if (prefsRes.data) {
-        const p = prefsRes.data as any;
-        setFavouriteGame(p.favourite_game || '');
-        setFavouriteTeam(p.favourite_team || '');
-        setFavouritePlayer(p.favourite_player || '');
-        setTimeSpent(p.time_spent_minutes || 0);
-      }
+      const p = prefsRes.data as any;
+      setPrefsReadReady(!prefsRes.error);
+      setFavouriteGame(p?.favourite_game || '');
+      setFavouriteTeam(p?.favourite_team || '');
+      setFavouritePlayer(p?.favourite_player || '');
+      setTimeSpent(p?.time_spent_minutes || 0);
 
       /* Round 301, audit finding 4: the old rank query downloaded EVERY
          user_scores row with no limit, so it pulled the whole table on each
@@ -270,6 +279,7 @@ export default function Profile() {
           .from('user_scores')
           .select('*', { count: 'exact', head: true })
           .gt('total_points', myPoints);
+        if (cancelled) return;
         setLeaderboardRank((aboveCount ?? 0) + 1);
       } else {
         setLeaderboardRank(null);
@@ -279,29 +289,30 @@ export default function Profile() {
     };
 
     loadProfile();
+    return () => { cancelled = true; };
   }, [username, user, profile, authLoading, navigate]);
 
   /* ── Badges (#103): own-profile only, local-first, loaded once profile/auth is settled ── */
   useEffect(() => {
     // Round 301, audit finding 10: reset to the all-locked seed, never [],
     // so any consumer of badges.length keeps a real denominator.
-    if (authLoading || !isOwnProfile) { setBadges(BADGE_DEFS.map(def => ({ ...def, earned: false }))); return; }
+    if (authLoading || loading || !isOwnProfile || viewingProfile?.user_id !== user?.id) { setBadges(BADGE_DEFS.map(def => ({ ...def, earned: false }))); return; }
     let cancelled = false;
-    getBadgeState(profile).then(result => {
+    getBadgeState(viewingProfile).then(result => {
       if (!cancelled) setBadges(result);
     });
     return () => { cancelled = true; };
-  }, [authLoading, isOwnProfile, profile]);
+  }, [authLoading, loading, isOwnProfile, viewingProfile, user?.id]);
 
   /* ── Time tracking (increment every minute while this page is visible) ── */
-  /* Round 301, audit finding 11: one interval, created once on mount and
-     cleaned up on unmount. The old version listed timeSpent as an effect
+  /* One interval for the settled own profile, paused during identity/data
+     reloads and cleaned up on unmount. The old version listed timeSpent as an effect
      dependency, so every tick tore the interval down and rebuilt it, and
      its async closure wrote a stale timeSpent + 1 (a lost-update race with
      the value loaded from preferences). Functional setState reads the live
      value, and the write fires with the exact number it just computed. */
   useEffect(() => {
-    if (!user || !isOwnProfile) return;
+    if (authLoading || loading || !user || !isOwnProfile || viewingProfile?.user_id !== user.id || !prefsReadReady) return;
     const interval = setInterval(() => {
       if (document.visibilityState !== 'visible') return;
       setTimeSpent(prev => {
@@ -315,11 +326,11 @@ export default function Profile() {
       });
     }, 60_000);
     return () => clearInterval(interval);
-  }, [user, isOwnProfile]);
+  }, [user, isOwnProfile, authLoading, loading, viewingProfile?.user_id, prefsReadReady]);
 
   /* ── Save personal info ── */
   const savePreferences = useCallback(async (field: string, value: string) => {
-    if (!user) return;
+    if (authLoading || loading || !user || !isOwnProfile || viewingProfile?.user_id !== user.id || !prefsReadReady) return;
     setPrefsSaving(true);
     const { error } = await supabase.from('user_preferences').upsert(
       { user_id: user.id, [field]: value, updated_at: new Date().toISOString() } as any,
@@ -328,7 +339,7 @@ export default function Profile() {
     if (error) toast.error('Failed to save');
     else toast.success('Saved!');
     setPrefsSaving(false);
-  }, [user]);
+  }, [user, authLoading, loading, isOwnProfile, viewingProfile?.user_id, prefsReadReady]);
 
   /* ── Save profile edits ── */
   const handleSave = async () => {
@@ -616,6 +627,7 @@ export default function Profile() {
                     <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Game</label>
                     <Select
                       value={favouriteGame}
+                      disabled={!prefsReadReady}
                       onValueChange={val => { setFavouriteGame(val); savePreferences('favourite_game', val); }}
                     >
                       <SelectTrigger className="h-9"><SelectValue placeholder="Pick a game..." /></SelectTrigger>
@@ -631,6 +643,7 @@ export default function Profile() {
                     <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Team</label>
                     <Input
                       value={favouriteTeam}
+                      disabled={!prefsReadReady}
                       onChange={e => setFavouriteTeam(e.target.value)}
                       onBlur={() => savePreferences('favourite_team', favouriteTeam)}
                       placeholder="e.g. Real Madrid"
@@ -642,6 +655,7 @@ export default function Profile() {
                     <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Favourite Player</label>
                     <Input
                       value={favouritePlayer}
+                      disabled={!prefsReadReady}
                       onChange={e => setFavouritePlayer(e.target.value)}
                       onBlur={() => savePreferences('favourite_player', favouritePlayer)}
                       placeholder="e.g. Messi"
@@ -649,6 +663,7 @@ export default function Profile() {
                     />
                   </div>
                 </div>
+                {!prefsReadReady && <p role="status" className="text-xs text-muted-foreground mt-2">Couldn't load your info. Refresh to try again.</p>}
                 {prefsSaving && <p className="text-xs text-muted-foreground mt-2 animate-pulse">Saving…</p>}
               </CardContent>
             </Card>
@@ -675,7 +690,7 @@ export default function Profile() {
               // counter's only writer is the interval above, which ticks
               // while this page is open, so it measures time on the profile
               // page, not time playing games.
-              { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time on profile' },
+              { icon: <Clock className="w-5 h-5 text-emerald-400" />, value: !prefsReadReady ? 'Unavailable' : timeSpent > 60 ? `${Math.floor(timeSpent / 60)}h ${timeSpent % 60}m` : `${timeSpent}m`, label: 'Time on profile', small: !prefsReadReady },
               // Owner Aug 2026: consecutive days visited ("days in a row"),
               // not a lifetime total. Own-profile only: this browser's visit
               // history has no meaning when looking at someone else's profile.
