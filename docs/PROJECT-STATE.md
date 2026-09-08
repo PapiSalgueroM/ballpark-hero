@@ -3050,6 +3050,59 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
+- **2026-09-08, ADVERSARIAL REVIEW OF ROUNDS 506 AND 507, and the twenty defects it found in
+  work that had already passed every gate.** Five independent lenses over the branch diff (save
+  compatibility, whether the football comes out right, transfer exploits, the screens, and
+  whether the new fences are real), then three skeptics per finding told to REFUTE it, with only
+  a 2 of 3 survival counting. 27 raw, 20 confirmed. **Every one of them was in code whose type
+  gate, harnesses and browser walks were green.** That is the fifth round running where this
+  review has found something the harnesses did not, and the argument for running it before a
+  merge rather than after.
+
+  **THE ONE THAT WOULD HAVE BROKEN EVERY SAVE IN FLIGHT.** Round 507's AI only knockout week
+  read `(entry.uclLeg ?? 1) === legs`. Every career the live build saved carries one knockout
+  week per round with NO `uclLeg`, and nothing migrates it: `ensureUclCalendar` only inserts a
+  MISSING round of 16 week and never touches the quarter or semi finals. So the test was
+  `1 === 2`, `advanceUclBracket` was never called, and the moment the manager's own club went out
+  of Europe the bracket froze: later rounds never seeded, no European champion, all season, until
+  the next summer rebuilt the calendar. Three verifiers reproduced it independently with their
+  own bundles. The doc comment two lines away promised the opposite ("every reader treats absent
+  as the only leg"), so the code had contradicted its own contract from the moment it was
+  written. **The harness could not have caught it**: `simClubManagerEraUcl`'s migration section
+  builds a PRE-462 save with no round of 16 week at all, which `ensureUclCalendar` then repairs
+  with both legs. The shape that breaks is the one in between, and it is the one everybody is
+  playing. `simUclLegs` section 5 now plays a genuine downgraded legacy calendar in all three
+  eras and requires a European champion, with control `legacyguard` restoring the exact bug.
+
+  **THE OTHER DISQUALIFYING ONE.** Round 506 split a transfer into a fee table and a terms table
+  but validated the part exchange man only at the fee, and the Loan out and Accept bid buttons
+  sit on the same screen. So he could be sent elsewhere between the two and the deal still
+  finish: the seller had priced him into the package, `settleAgreedDeal` found him gone and
+  skipped the transfer, and the discount survived him. A man promised in an open deal is no
+  longer available to anybody else, and the settlement refuses outright if he has gone.
+
+  **A FOOTBALL CORRECTNESS INVERSION.** `drawUclRoundOf16`'s own comment says the seeded club
+  hosts the deciding leg. Round 507 made leg one the home leg, so the group winner got the first
+  leg at home and the decider away, the inverse of the real competition. The runner-up takes
+  `tie.home` on a two legged draw now, and the harness reads the format rather than asserting a
+  fixed side, because asserting the old side is what let it invert.
+
+  **SIX MORE SERIOUS.** A second leg decided on penalties reported the shootout off the ninety
+  minutes, so losing 1-0 and winning the shootout printed "Heartbreak from the spot" and handed
+  the opposition the winner's ratings. `counterTerms` ratcheted his wage demand UP to your own
+  over offer, inverting the mechanic the file describes. The signing on fee left the kitty and
+  appeared in no line of the books. `offerTerms` returned null when the squad filled to 30, and
+  the hook's `?? prev` turned that into a button that did nothing at all. The closeness meter sat
+  on "They will take this" while a rival was ahead and the engine was about to refuse, because
+  `makeOffer` checks the rival BEFORE it asks `offerVerdict`. And four minor ones: resumed
+  patience, a wage cap fallback of 0 inventing a breach, `valuationLine` dropping the currency,
+  and a wage box that could not be cleared.
+
+  **A HARNESS THAT WAS DEFENDING A BUG.** `playDealDesk` matched `worth 45m to 58m` and went RED
+  on the corrected output once `valuationLine` started using `money()`. A check written from the
+  implementation rather than from what the screen ought to say will do that, and it is worth
+  saying plainly rather than quietly widening the pattern.
+
 - **2026-09-08, Round 507 (Claude Code lane, desktop), CHAMPIONS LEAGUE TWO LEGGED KNOCKOUT
   TIES. On branch `round-507-ucl-two-legs`, stacked on 506, not merged and not live.** His
   2026-09-07 request: "Add first and second legs to Champions League knockout ties whenever that
