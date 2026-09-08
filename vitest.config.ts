@@ -53,6 +53,18 @@ export default defineConfig({
       ...(process.env.DAILY_RECORD_CONTROL === "stale"
         ? { "@/hooks/useDailyPuzzle": path.resolve(__dirname, "./src/hooks/__control_useDailyPuzzle.ts") }
         : {}),
+      ...(process.env.MIDNIGHT_RECORD_CONTROL
+        ? { "@/lib/dailyRecord": path.resolve(process.env.MIDNIGHT_RECORD_CONTROL) }
+        : {}),
+      ...(process.env.MIDNIGHT_HOOK_CONTROL
+        ? { "@/hooks/useDailyPuzzle": path.resolve(process.env.MIDNIGHT_HOOK_CONTROL) }
+        : {}),
+      ...(process.env.MIDNIGHT_CONQUEST_CONTROL
+        ? {
+          "@/lib/conquestDaily": path.resolve(process.env.MIDNIGHT_CONQUEST_CONTROL),
+          "../lib/conquestDaily": path.resolve(process.env.MIDNIGHT_CONQUEST_CONTROL),
+        }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

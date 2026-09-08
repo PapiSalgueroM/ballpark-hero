@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { getTodayET, dailyIndex } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import { pruneOlderDailyRecords } from '@/lib/dailyRecord';
 
 // ---------------------------------------------------------------------------
 // Schema version
@@ -233,23 +234,6 @@ function writePersistedState<G>(
   }
 }
 
-function cleanupOldEntries(gameSlug: string, currentKey: string): void {
-  try {
-    const prefix = `${gameSlug}-daily-`;
-    const toRemove: string[] = [];
-    // Collect first, modifying localStorage while iterating is unsafe
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith(prefix) && key !== currentKey) {
-        toRemove.push(key);
-      }
-    }
-    toRemove.forEach((k) => localStorage.removeItem(k));
-  } catch {
-    // localStorage unavailable (e.g. storage disabled), skip
-  }
-}
-
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -323,7 +307,7 @@ export function useDailyPuzzle<T, G>(
     loadedForIndex.current = puzzleIndex;
 
     // Remove yesterday's (and older) entries for this game slug
-    cleanupOldEntries(gameSlug, storageKey);
+    pruneOlderDailyRecords(gameSlug, todayStr);
 
     // Restore saved progress if the stored entry is valid for today's puzzle
     const saved = readPersistedState(
