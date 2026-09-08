@@ -1,9 +1,13 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Footer } from './Footer';
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+  localStorage.clear();
+});
 
 function drawFooter() {
   return render(<MemoryRouter><Footer /></MemoryRouter>);
@@ -52,5 +56,45 @@ describe('compact footer', () => {
       '/soccer', '/pro-football', '/pro-basketball', '/baseball', '/hockey', '/college',
     ]));
     expect(within(info).getByText(/All team names, competition names, logos and trademarks/)).toBeVisible();
+  });
+
+  it('reports a failed cookie-choice removal without claiming it was cleared', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new DOMException('Storage blocked', 'SecurityError');
+    });
+    drawFooter();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cookie choices' }));
+
+    expect(localStorage.getItem('cookie-consent')).toBe('accepted');
+    expect(screen.getByRole('alert')).toHaveTextContent("We couldn't confirm that your cookie choice was cleared. Check this site's storage settings and try again.");
+    expect(screen.getByRole('alert')).not.toHaveTextContent(/vendors? (?:are|stay) off/i);
+  });
+
+  it('treats a no-op cookie-choice removal as a failure', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => undefined);
+    drawFooter();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cookie choices' }));
+
+    expect(localStorage.getItem('cookie-consent')).toBe('accepted');
+    expect(screen.getByRole('alert')).toBeVisible();
+  });
+
+  it('reports an unverifiable cookie-choice removal when the confirmation read fails', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    const read = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Storage blocked', 'SecurityError');
+    });
+    drawFooter();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cookie choices' }));
+
+    expect(read).toHaveBeenCalledWith('cookie-consent');
+    expect(screen.getByRole('alert')).toBeVisible();
+    read.mockRestore();
+    expect(localStorage.getItem('cookie-consent')).toBeNull();
   });
 });

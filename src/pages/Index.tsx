@@ -186,17 +186,22 @@ function getPopularFallbackGames(): GameDef[] {
 function countPlayedGames(): number {
   const today = new Date().toISOString().slice(0, 10);
   let count = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      try {
-        const val = localStorage.getItem(key);
-        if (val) {
-          const parsed = JSON.parse(val);
-          if (parsed.status && parsed.status !== 'playing') count++;
-        }
-      } catch { /* not a game key */ }
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.includes(today)) {
+        try {
+          const val = localStorage.getItem(key);
+          if (val) {
+            const parsed = JSON.parse(val);
+            if (parsed.status && parsed.status !== 'playing') count++;
+          }
+        } catch { /* not a game key */ }
+      }
     }
+  } catch {
+    // Storage enumeration can be blocked even when reading individual keys works.
+    return 0;
   }
   return count;
 }

@@ -1,0 +1,33 @@
+diff --git a/node_modules/@supabase/auth-js/dist/main/lib/helpers.js b/node_modules/@supabase/auth-js/dist/main/lib/helpers.js
+index 0a8637f..ab778cd 100644
+--- a/node_modules/@supabase/auth-js/dist/main/lib/helpers.js
++++ b/node_modules/@supabase/auth-js/dist/main/lib/helpers.js
+@@ -67,6 +67,7 @@ const supportsLocalStorage = () => {
+     }
+     const randomKey = `lswt-${Math.random()}${Math.random()}`;
+     try {
++        globalThis.localStorage.getItem(randomKey);
+         globalThis.localStorage.setItem(randomKey, randomKey);
+         globalThis.localStorage.removeItem(randomKey);
+         localStorageWriteTests.tested = true;
+diff --git a/node_modules/@supabase/auth-js/dist/module/lib/helpers.js b/node_modules/@supabase/auth-js/dist/module/lib/helpers.js
+index fd20006..9ff0619 100644
+--- a/node_modules/@supabase/auth-js/dist/module/lib/helpers.js
++++ b/node_modules/@supabase/auth-js/dist/module/lib/helpers.js
+@@ -47,6 +47,7 @@ export const supportsLocalStorage = () => {
+     }
+     const randomKey = `lswt-${Math.random()}${Math.random()}`;
+     try {
++        globalThis.localStorage.getItem(randomKey);
+         globalThis.localStorage.setItem(randomKey, randomKey);
+         globalThis.localStorage.removeItem(randomKey);
+         localStorageWriteTests.tested = true;
+diff --git a/node_modules/@supabase/auth-js/src/lib/helpers.ts b/node_modules/@supabase/auth-js/src/lib/helpers.ts
+index 659e82d..93298a5 100644
+--- a/node_modules/@supabase/auth-js/src/lib/helpers.ts
++++ b/node_modules/@supabase/auth-js/src/lib/helpers.ts
+@@ -59,3 +59,4 @@ export const supportsLocalStorage = () => {
+   try {
++    globalThis.localStorage.getItem(randomKey)
+     globalThis.localStorage.setItem(randomKey, randomKey)
+     globalThis.localStorage.removeItem(randomKey)

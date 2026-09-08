@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
@@ -5,17 +6,26 @@ import { SPORT_HUBS } from '@/lib/sportHub';
 
 /* Round 285: every visitor gets a way back to the cookie banner. Consent that
    can be given in one click and withdrawn only by finding the browser's site
-   data screen is not much of a choice, and the privacy policy now promises
-   this link by name. Clearing the stored answer and reloading is the whole
-   mechanism: CookieConsent shows the banner whenever no answer is stored, and
-   index.html only loads the ad script when the stored answer is 'accepted', so
-   a reload with no answer is a page with no advertising code on it. */
-function resetCookieChoice() {
-  try { localStorage.removeItem('cookie-consent'); } catch { /* storage blocked: nothing was stored */ }
-  window.location.reload();
-}
-
+   data screen is not much of a choice, and the privacy policy promises this
+   link by name. Reload only after storage confirms that the answer is gone. */
 export function Footer() {
+  const [cookieResetFailed, setCookieResetFailed] = useState(false);
+
+  const resetCookieChoice = () => {
+    try {
+      localStorage.removeItem('cookie-consent');
+      if (localStorage.getItem('cookie-consent') !== null) {
+        setCookieResetFailed(true);
+        return;
+      }
+    } catch {
+      setCookieResetFailed(true);
+      return;
+    }
+    setCookieResetFailed(false);
+    window.location.reload();
+  };
+
   /* data-site-chrome: this is on every page, so the prerenderer keeps it out
      of the text the sitemap dates a page by (Round 286). A footer change is
      not a reason for Google to recrawl 126 pages. */
@@ -30,6 +40,11 @@ export function Footer() {
         <button type="button" onClick={resetCookieChoice} className="underline hover:text-foreground transition-colors">Cookie choices</button>
         <ThemeToggle variant="footer" />
       </nav>
+      {cookieResetFailed && (
+        <p role="alert" className="mx-auto max-w-lg leading-relaxed">
+          We couldn't confirm that your cookie choice was cleared. Check this site's storage settings and try again.
+        </p>
+      )}
       <details className="mx-auto max-w-2xl">
         <summary className="mx-auto w-fit min-h-11 cursor-pointer content-center rounded px-3 underline hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Site info</summary>
         <div className="space-y-4 pt-2">
