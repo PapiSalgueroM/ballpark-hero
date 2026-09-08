@@ -344,6 +344,27 @@ describe('strict saved snapshots', () => {
     fakeCapture.lastResult!.capturedPlayers[0].rating = 1;
     expect(parseAttackSave(fakeCapture)).toBeNull();
   });
+  it.each([0, 1000])('rejects a resolved target belonging to an unrelated survivor for seed %s', seed => {
+    const recap = advanceAttack(target(seed));
+    expect(parseAttackSave(recap)).not.toBeNull();
+    const unrelatedTarget = clone(recap);
+    unrelatedTarget.targetRegion = 'far';
+    unrelatedTarget.lastResult!.targetRegion = 'far';
+    expect(unrelatedTarget).not.toEqual(recap);
+    expect(unrelatedTarget.owners.far).toBe('C');
+    expect(parseAttackSave(unrelatedTarget)).toBeNull();
+  });
+  it('rejects an attacker victory target absent from the changed regions', () => {
+    const recap = advanceAttack(target());
+    expect(parseAttackSave(recap)).not.toBeNull();
+    const unchangedTarget = clone(recap);
+    unchangedTarget.targetRegion = 'west';
+    unchangedTarget.lastResult!.targetRegion = 'west';
+    expect(unchangedTarget).not.toEqual(recap);
+    expect(unchangedTarget.owners.west).toBe('A');
+    expect(unchangedTarget.lastResult!.changedRegions).toEqual(['east']);
+    expect(parseAttackSave(unchangedTarget)).toBeNull();
+  });
 });
 
 describe('production mutation controls', () => {

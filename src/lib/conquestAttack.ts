@@ -291,6 +291,8 @@ function validResult(state: AttackState): boolean {
   } else {
     if (!result.defender || !ids.has(result.defender) || result.defender === result.attacker || !result.loser || !ids.has(result.loser)) return false;
     if (![result.attacker, result.defender].includes(result.winner) || ![result.attacker, result.defender].includes(result.loser) || result.winner === result.loser) return false;
+    if (state.owners[result.targetRegion] !== result.winner) return false;
+    if (result.winner === result.attacker && !result.changedRegions.includes(result.targetRegion)) return false;
     if (Object.values(state.owners).includes(result.loser) || !result.score || result.attackerWinProbability === null) return false;
     const deciding = result.score.shootout ?? result.score;
     if (deciding.attacker === deciding.defender || (deciding.attacker > deciding.defender) !== (result.winner === result.attacker)) return false;
