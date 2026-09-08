@@ -1,5 +1,20 @@
 # Work board
 
+## New owner feedback, September 8
+
+Full intake: docs/owner-feedback-2026-09-08.md. This adds ticker freshness and sport
+coverage, persistent profile stats, improved share cards, Google/Apple signup,
+sports-style default names, varied human-worded emoji polls, compact game/footer
+layout and broader current-era Club Manager leagues. The new poll request
+supersedes the older team-vs-team-only rule. All remaining original/master items stay.
+
+**Round 514, Codex, CLAIMED September 8:** shared page comfort in
+`codex/round-514-page-comfort`, isolated `.worktrees/round-514-page-comfort`, based
+on `671ffc0c`. Compact guide presentation, one next-game section and centered
+footer report action, with discoverable policy links and full legal text retained.
+Do not overlap Claude's Club Manager files or AdBanner. Ticker/account read-only
+audits inform the next rounds. No DB/OAuth/publication changes in this round.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
@@ -59,7 +74,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 514 (513 claimed September 8; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 515 (514 claimed September 8; checked against origin/main on
   2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
   506 to 508 and the Codex lane holds 510 to 512, see the claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06

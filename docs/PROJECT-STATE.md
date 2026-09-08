@@ -1,5 +1,16 @@
 # Project state
 
+## New feedback and active Round 514, 2026-09-08
+
+Anthony's newest tweaks are captured completely in docs/owner-feedback-2026-09-08.md.
+This includes a deliberate reversal of team-vs-team-only polls and a preference
+for compact pages with popup help rather than long mandatory guide scrolling.
+Codex claims shared page/footer comfort in `.worktrees/round-514-page-comfort`
+on `codex/round-514-page-comfort`, based on `671ffc0c`. Ticker and account audits
+are read-only parallel work. Claude's root Club Manager edits stay untouched.
+Round 513's broad verification failures and queued homepage storage-crash fixes
+remain open. This new claim does not imply any new code is implemented or live.
+
 ## Active follow-up, 2026-09-08
 
 Anthony's latest direction is "just keep going and work on other things".
