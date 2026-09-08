@@ -22,10 +22,14 @@ const Conquest = () => {
 
   useEffect(() => {
     if (mode !== 'arcade') return;
-    const seen = localStorage.getItem('conquest-how-to-play-seen');
-    if (!seen) {
+    try {
+      const seen = localStorage.getItem('conquest-how-to-play-seen');
+      if (!seen) {
+        setShowHelp(true);
+        localStorage.setItem('conquest-how-to-play-seen', 'true');
+      }
+    } catch {
       setShowHelp(true);
-      localStorage.setItem('conquest-how-to-play-seen', 'true');
     }
   }, [mode]);
 

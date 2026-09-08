@@ -1,5 +1,28 @@
 # Project state
 
+## Round 529 Conquest help storage fallback, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-529-conquest-help`, branch
+`codex/round-529-conquest-help`, base528 `5dd96456` (draft PR79).
+Implementation `60452e81`, draft PR80: https://github.com/PapiSalgueroM/ballpark-hero/pull/80.
+NBA and NFL Arcade instructions now survive blocked storage getter/read/write
+without changing seen flags or the mode flow. Both original route crashes were
+reproduced in real-page tests and the prior built app. Twelve focused cases,
+eighteen exact source controls (twenty intended failures), both exact types,
+build and all fifteen generated-site fences pass. Built phone/desktop matrix
+passes sixteen states and four dead-button controls. Main inspected settled
+screenshots and reran the focused harness. Independent review clear.
+Evidence: docs/conquest-help-2026-09-08.md. Preview4206 serves index-Bm5MbPff.js.
+No sports data, snapshots, ledger, dependencies, root edits, backend/account
+writes, full suite, merge or publication. Preserve every existing preview.
+
+Next free530: NBA Free Agency traps eliminated favorites and accepts repeated
+signings. An independent real-hook seed530 reproduction showed two same-tick
+Westbrook signings, duplicate roster entries, two logs and +4 drift from one
+cooldown. The weakest-player lookup also misses acquired-player metadata.
+Repair the active-team picker, eligible pool and once-only signing transition;
+preserve three settled battles and the +2 bump. See forthcoming round claim.
+
 ## Round 528 explicit harness selection, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-528-explicit-sims`, branch
