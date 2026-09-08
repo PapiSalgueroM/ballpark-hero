@@ -71,7 +71,7 @@ const ENTRY = `${TMP}/uclLegs.entry.mjs`;
 const BUNDLE = `${TMP}/uclLegs.bundle.mjs`;
 
 const CONTROL = process.env.UCL_LEGS_CONTROL || '';
-const KNOWN = ['oneleg', 'noaway', 'alwaysaway', 'legone'];
+const KNOWN = ['oneleg', 'noaway', 'alwaysaway', 'legone', 'legacyguard'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`UCL_LEGS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -99,6 +99,14 @@ if (CONTROL) {
     swap('  return uclSeasonYear(eraId) <= UCL_AWAY_GOALS_LAST_YEAR;', '  return false;');
   } else if (CONTROL === 'alwaysaway') {
     swap('  return uclSeasonYear(eraId) <= UCL_AWAY_GOALS_LAST_YEAR;', '  return true;');
+  } else if (CONTROL === 'legacyguard') {
+    /* Restores the exact regression Round 507 shipped: treat a calendar entry
+       with no uclLeg as leg one of two, so a legacy save never settles its
+       bracket. Section 5 must go red on every era. */
+    swap(
+      '        if (!entry.uclLeg || entry.uclLeg >= legs) advanceUclBracket(state, entry.uclRound);',
+      '        if (legs === 1 || (entry.uclLeg ?? 1) === legs) advanceUclBracket(state, entry.uclRound);',
+    );
   } else if (CONTROL === 'legone') {
     swap(
       "  tie.legs = 2;\n  if (leg === 1) {",
@@ -321,8 +329,67 @@ console.log('3) A round of 16 tie is two weeks at opposite grounds, and half of 
   if (seasons === 0) fail('no era reached a second round of 16 leg, so nothing in this section was measured');
 }
 
-/* ---------- 5. A one legged round, and a bracket from before Round 507 ---------- */
-console.log('4) The final is one match, and a legless tie still settles');
+/* ---------- 5. THE SHAPE EVERY SAVE IN FLIGHT ACTUALLY HAS ---------- */
+console.log('5) A calendar written before Round 507 still plays its whole knockout');
+{
+  /*
+   * This section exists because Round 507 shipped a disqualifying regression
+   * past a green harness and the adversarial review found it.
+   *
+   * Every career the live build saved carries ONE uclKo week per round with no
+   * uclLeg field, and nothing migrates it: ensureUclCalendar only inserts a
+   * MISSING round of 16 week and returns early when one is already there, and
+   * it never touches the quarter or semi finals. The first version of the AI
+   * only guard read `(entry.uclLeg ?? 1) === legs`, which on such an entry is
+   * 1 === 2, so advanceUclBracket was never called and the bracket froze the
+   * moment the manager's own club went out: later rounds never seeded, no
+   * European champion, all season.
+   *
+   * simClubManagerEraUcl's migration section could not catch it, because it
+   * builds a PRE-462 save by deleting the round of 16 weeks entirely, which
+   * ensureUclCalendar then repairs with both legs. The shape that breaks is the
+   * one in between, and it is the one everybody is playing.
+   */
+  let checked = 0;
+  for (const era of ERAS.filter(e => e.id)) {
+    let s = startCareer('Valencia', era.id);
+    /* Downgrade to the pre-507 calendar: drop every second leg and strip the
+       leg marker off what is left, which is exactly what the old build wrote. */
+    s.calendar = s.calendar
+      .filter(e => !(e.type === 'uclKo' && e.uclLeg === 2))
+      .map(e => (e.type === 'uclKo' ? { type: e.type, round: e.round, uclRound: e.uclRound } : e));
+    if (!s.calendar.some(e => e.type === 'uclKo' && e.uclRound === 'R16' && e.uclLeg === undefined)) {
+      fail(`${era.year}: the harness could not build a legacy calendar to test`);
+      continue;
+    }
+    let guard = 0;
+    while (guard < 400) {
+      guard += 1;
+      if (!s.calendar || s.week >= s.calendar.length) break;
+      const r = playNextEntry(s, { skipHalftime: true });
+      if (!r || !r.state) break;
+      s = r.state;
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    const br = s.uclBracket ?? [];
+    const settled = round => br.filter(t => t.round === round && t.winner).length;
+    const seeded = round => br.filter(t => t.round === round).length;
+    checked += 1;
+    console.log(`   ${era.year} legacy calendar: R16 ${settled('R16')}/${seeded('R16')}, QF ${settled('QF')}/${seeded('QF')}, SF ${settled('SF')}/${seeded('SF')}, F ${settled('F')}/${seeded('F')}, exit ${s.uclKoRound}`);
+    /* The bracket must reach a champion whatever happened to my own club. */
+    const champion = br.find(t => t.round === 'F')?.winner ?? null;
+    if (seeded('R16') > 0 && settled('R16') !== seeded('R16')) {
+      fail(`${era.year}: a legacy calendar left ${seeded('R16') - settled('R16')} round of 16 ties unsettled`);
+    }
+    if (!champion) {
+      fail(`${era.year}: a legacy calendar produced no European champion, so the bracket froze`);
+    }
+  }
+  if (checked === 0) fail('no era could be downgraded to a legacy calendar, so this section measured nothing');
+}
+
+/* ---------- 6. A one legged round, and a bracket from before Round 507 ---------- */
+console.log('6) The final is one match, and a legless tie still settles');
 {
   if (uclLegsFor('era2005', 'F') !== 1 || uclLegsFor(undefined, 'F') !== 1) {
     fail('the final is not a single match in every era');

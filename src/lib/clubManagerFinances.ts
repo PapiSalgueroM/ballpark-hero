@@ -430,7 +430,10 @@ export function projectFinances(state: CareerState): FinanceProjection {
   const travelLeft = round2(travelCost(state, 'league') * (left.away - left.euroAway) + travelCost(state, 'uclGroup') * left.euroAway);
   const signings = state.seasonSignings ?? [];
   const transferIn = round2(signings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0));
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee, 0));
+  /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
+     the books count both. It is a separate field because the fee column is what the
+     selling club got and the news feed prints that number. */
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
   const facilities = facilitiesOf(state).seasonSpend;
   /* Round 471: fees and severance on the staff desk. It leaves the kitty, so
      it has to appear here: money that goes and shows up nowhere is a lie the
@@ -479,7 +482,10 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const s = booksOf(state).season;
   const signings = state.seasonSignings ?? [];
   const transferIn = round2(signings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0));
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee, 0));
+  /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
+     the books count both. It is a separate field because the fee column is what the
+     selling club got and the news feed prints that number. */
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);

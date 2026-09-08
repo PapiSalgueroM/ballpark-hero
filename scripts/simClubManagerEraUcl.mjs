@@ -320,8 +320,20 @@ function checkDraw(tag, s, tally) {
   for (const t of ties) {
     tally.ties += 1;
     for (const c of [t.home, t.away]) { if (seen.has(c)) note('draw', `${tag}: ${c} is in two round of 16 ties`); seen.add(c); }
-    if (!winners.has(t.home)) note('draw', `${tag}: ${t.home} is at home in the round of 16 without winning a group`);
-    if (!runners.has(t.away)) note('draw', `${tag}: ${t.away} is away in the round of 16 without finishing second in a group`);
+    /* Round 507: the seeding reward is hosting the DECIDING leg, and which end
+       of the tie that is depends on how many legs are played. Leg one is at
+       tie.home and leg two at tie.away, so with two legs the group winner is
+       tie.away and the runner-up is tie.home; with one leg the winner is
+       tie.home as it always was. The check reads the format rather than a fixed
+       side, because asserting the old side is what let the seeding get inverted
+       in the first place. */
+    const seedIsAway = uclLegsFor(s.eraId, 'R16') === 2;
+    const seed = seedIsAway ? t.away : t.home;
+    const other = seedIsAway ? t.home : t.away;
+    const seedWhere = seedIsAway ? 'hosting the second leg' : 'at home';
+    const otherWhere = seedIsAway ? 'hosting the first leg' : 'away';
+    if (!winners.has(seed)) note('draw', `${tag}: ${seed} is ${seedWhere} in the round of 16 without winning a group`);
+    if (!runners.has(other)) note('draw', `${tag}: ${other} is ${otherWhere} in the round of 16 without finishing second in a group`);
     if (groupOf.get(t.home) === groupOf.get(t.away)) note('draw', `${tag}: ${t.home} v ${t.away} pairs Group ${groupOf.get(t.home)} against itself`);
     const ch = countryOf(s, t.home);
     const ca = countryOf(s, t.away);

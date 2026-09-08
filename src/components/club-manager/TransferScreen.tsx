@@ -17,7 +17,7 @@ import {
   termsVerdict, valuationLine, wageRoom, wageRoomLine,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
-import { ROLE_INFO, ROLE_LADDER, wageBill } from '@/lib/clubManager';
+import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapFrom } from '@/lib/clubManager';
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -120,6 +120,12 @@ export function TransferScreen({
   /* Round 506: the personal terms you are putting to him. Null until the fee
      is agreed, then seeded from what his agent opened with. */
   const [terms, setTerms] = useState<PersonalTerms | null>(null);
+  /* Round 507 fix: the wage box holds TEXT while you are typing in it. It held
+     a number clamped with Math.max(1, ...), so backspacing to empty snapped the
+     controlled value to 1 with the cursor after it, and the next keystroke
+     produced 180 out of an intended 80. The bid box above never had this
+     because it keeps its own string, which is the shape copied here. */
+  const [wageText, setWageText] = useState('');
 
   const windowOpen = career.transferWindow !== null;
   const neg = career.negotiation ?? null;
@@ -146,7 +152,7 @@ export function TransferScreen({
   useEffect(() => {
     if (!wantKey) return;
     const want = career.negotiation?.terms?.want;
-    if (want) setTerms({ ...want });
+    if (want) { setTerms({ ...want }); setWageText(String(want.wage)); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wantKey]);
 
@@ -225,6 +231,15 @@ export function TransferScreen({
   const typedVerdict = neg && neg.status === 'open' && neg.phase !== 'terms'
     ? offerVerdict(typedPackage, neg.theirAsk)
     : 'counter';
+  /* Round 507 fix: makeOffer runs the beat the rival check BEFORE it asks
+     offerVerdict, and returns early when the package does not beat the rival's
+     cash. The meter only read offerVerdict, so with a rival ahead it could sit
+     on emerald saying "They will take this" about an offer the engine was
+     about to refuse, with a 30 percent chance of losing the player outright for
+     dithering. The screen has to know about the rival too. */
+  const behindRival = !!neg && neg.status === 'open' && neg.phase !== 'terms'
+    && !!neg.rivalBidder && neg.rivalOffer !== null && typedBid > 0
+    && typedPackage <= neg.rivalOffer;
   const bidTooBig = typedBid > career.budget;
 
   /* Round 506: what his side would say to the sheet on the table right now. */
@@ -239,7 +254,13 @@ export function TransferScreen({
   const signOnRoom = neg?.phase === 'terms'
     ? Math.round((career.budget - (neg.agreedFee ?? 0)) * 10) / 10
     : 0;
-  const room = terms ? wageRoom(Math.round(wageBill(career)), career.wageCap ?? 0, terms.wage) : null;
+  /* Round 507 fix: falling back to a cap of 0 was this file inventing a breach.
+     wageCap is optional and is only filled by ensureContracts, which loadCareer
+     does NOT call, so a save opened straight onto the transfer tab had no cap
+     and every wage read as over the ceiling. Every other reader in the repo
+     falls back to wageCapFrom(bill), and so does this one now. */
+  const bill = Math.round(wageBill(career));
+  const room = terms ? wageRoom(bill, career.wageCap ?? wageCapFrom(bill), terms.wage) : null;
   const roomLine = room ? wageRoomLine(room) : '';
 
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
@@ -388,11 +409,13 @@ export function TransferScreen({
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[9px] text-muted-foreground uppercase tracking-wider">How close you are</span>
                   <span className={cn('text-[10px] font-bold',
-                    typedVerdict === 'agreed' ? 'text-emerald-400'
+                    behindRival ? 'text-red-400'
+                      : typedVerdict === 'agreed' ? 'text-emerald-400'
                       : typedVerdict === 'walkout' ? 'text-red-400'
                       : typedVerdict === 'insulted' ? 'text-yellow-400' : 'text-foreground',
                   )}>
                     {typedBid <= 0 ? 'Name your price'
+                      : behindRival ? `${neg.rivalBidder} are still ahead`
                       : typedVerdict === 'agreed' ? 'They will take this'
                       : typedVerdict === 'walkout' ? 'They will end the talks'
                       : typedVerdict === 'insulted' ? 'They will be insulted'
@@ -402,7 +425,8 @@ export function TransferScreen({
                 <div className="h-1.5 rounded-full bg-secondary overflow-hidden" role="presentation">
                   <div
                     className={cn('h-full rounded-full transition-all',
-                      typedVerdict === 'agreed' ? 'bg-emerald-500'
+                      behindRival ? 'bg-red-500'
+                        : typedVerdict === 'agreed' ? 'bg-emerald-500'
                         : typedVerdict === 'walkout' ? 'bg-red-500'
                         : typedVerdict === 'insulted' ? 'bg-yellow-500' : 'bg-primary',
                     )}
@@ -502,8 +526,14 @@ export function TransferScreen({
                     inputMode="numeric"
                     min={1}
                     step={5}
-                    value={terms.wage}
-                    onChange={e => setTerms({ ...terms, wage: Math.max(1, Math.round(parseFloat(e.target.value) || 0)) })}
+                    value={wageText}
+                    onChange={e => {
+                      const raw = e.target.value;
+                      setWageText(raw);
+                      const n = Math.round(parseFloat(raw));
+                      if (Number.isFinite(n) && n >= 1) setTerms({ ...terms, wage: n });
+                    }}
+                    onBlur={() => setWageText(String(terms.wage))}
                     aria-label="Weekly wage in thousands"
                     className="h-7 flex-1 text-[11px]"
                   />

@@ -808,7 +808,20 @@ export interface MarketPlayer {
   generated?: boolean;
 }
 
-export interface TransferRecord { dir: 'in' | 'out'; name: string; fee: number; loan?: boolean; }
+export interface TransferRecord {
+  dir: 'in' | 'out';
+  name: string;
+  fee: number;
+  loan?: boolean;
+  /**
+   * Round 507: the signing on fee paid to the player, in millions, kept apart
+   * from the transfer fee paid to his club. It comes out of the same kitty, so
+   * the finance desk has to count it, but it is NOT part of what the selling
+   * club got and must never be reported as the transfer fee. Absent on every
+   * record written before Round 507 and on every deal without one.
+   */
+  bonus?: number;
+}
 
 /* ---------- Round 71: the transfer market grows a brain ---------- */
 
@@ -7002,7 +7015,20 @@ export function offerTerms(career: CareerState, offer: PersonalTerms): CareerSta
 
   if (verdict === 'agreed') {
     const signed = settleAgreedDeal(career, neg, clean);
-    if (!signed) return null;
+    /* Round 507 fix: a refusal has to SAY something. This returned null, and
+       the hook does `offerTerms(prev, terms) ?? prev`, so the button did
+       nothing at all: no note, no patience spent, no explanation, on a screen
+       whose other buttons can fill the squad to 30 or move the part exchange
+       man while the terms table is open. Silence on a control the player just
+       pressed reads as a broken game. */
+    if (!signed) {
+      const why = career.squad.length >= 30
+        ? 'The squad is full at 30. Someone has to leave before he can sign.'
+        : (neg.agreedExtras?.swapId && !career.squad.some(p => p.id === neg.agreedExtras?.swapId))
+          ? 'The player you put in the deal is no longer here, so the fee no longer stands.'
+          : 'The deal cannot be completed as it stands.';
+      return { ...career, negotiation: { ...neg, terms: { ...talk, offer: clean, note: why } } };
+    }
     return signed;
   }
 
@@ -7054,12 +7080,34 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
   const amount = neg.agreedFee ?? 0;
   const extras = neg.agreedExtras;
   const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
+  /* Round 507 fix, the belt to canLeaveSquad's braces: if the seller priced a
+     man into this package and he is not in the squad any more, the deal cannot
+     complete at this fee. Refusing is the honest answer, because quietly
+     signing the arrival without sending him is the discount for nothing that
+     the review found. canLeaveSquad is deliberately NOT re-run on him here: he
+     is locked precisely because he is promised to this deal, so asking it again
+     would refuse every part exchange. */
+  if (extras?.swapId && !swap) return null;
   const signed = completeSigning(career, neg.player, amount, false, terms);
   if (!signed) return null;
   if (terms.bonus > 0) {
     signed.budget = Math.round((signed.budget - terms.bonus) * 10) / 10;
+    /* Round 507 fix: the signing on fee left the kitty and appeared in no line
+       of the club's books, because the finance desk reads seasonSignings and
+       that row only carried the transfer fee. On a real signing it is not small
+       (wage times years times 0.045), so the projection was understating the
+       season's spend by that much on every deal done at the terms table. It
+       rides on the row as its own field rather than being added to `fee`, since
+       `fee` is what the selling club got and the news feed prints it. */
+    const last = signed.seasonSignings[signed.seasonSignings.length - 1];
+    if (last && last.dir === 'in' && last.name === neg.player.name) {
+      signed.seasonSignings = [
+        ...signed.seasonSignings.slice(0, -1),
+        { ...last, bonus: terms.bonus },
+      ];
+    }
   }
-  if (swap && canLeaveSquad(career, swap)) {
+  if (swap) {
     signed.squad = signed.squad.filter(p => p.id !== swap.id);
     signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
     signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
@@ -7254,6 +7302,19 @@ export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
   if (career.squad.length <= 14) return false;
   if (p.onLoan) return false;             // he belongs to someone else
   if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
+  /* Round 507 fix: he cannot go two places at once. Round 506 split a transfer
+     into a fee table and a terms table, and the part exchange man was only
+     checked at the fee. Between the two the manager sits on the same screen as
+     Loan out now and Accept bid, so he could send the swapped player somewhere
+     else and then finish the deal: the seller had already priced his 24.7m into
+     the package, settleAgreedDeal found him gone and skipped the transfer, and
+     the discount survived him. That is a striker bought at a third off and a
+     squad member who never left. Promised in an open deal means not available
+     to anybody else until that deal is settled or dead. */
+  const promised = career.negotiation?.status === 'open'
+    ? career.negotiation.agreedExtras?.swapId ?? career.negotiation.lastExtras?.swapId
+    : undefined;
+  if (promised && promised === p.id) return false;
   return true;
 }
 
@@ -8355,10 +8416,24 @@ function seededRng(seedText: string): () => number {
  * backtracking when a later runner-up would be left without one. A real
  * field always admits a draw under both rules; if one ever did not, the
  * association rule is dropped first and the group rule last, which is the
- * only honest order to break them in. The group winner is the home side:
- * the seeded club hosts the deciding leg, and this engine plays one.
+ * only honest order to break them in.
+ *
+ * WHICH CLUB IS home. The seeded club, the group winner, hosts the DECIDING
+ * leg. That was written when this engine played a single match, so the winner
+ * was simply the home side. Round 507 made the knockout two legs, where leg one
+ * is at tie.home and leg two at tie.away, and leaving the winner as home
+ * therefore handed him the FIRST leg at home and the decider away, which is the
+ * inverse of the reward and the inverse of the real competition. So on a two
+ * legged draw the runner-up takes tie.home and hosts leg one, and the winner
+ * takes tie.away and hosts the second. On a one legged draw nothing moves and
+ * the winner still hosts. Found by the adversarial review, which read the old
+ * comment and noticed the code no longer matched it.
  */
-function drawUclRoundOf16(field: UclR16Field, countryOf: (club: string) => string | null): { home: string; away: string }[] {
+function drawUclRoundOf16(
+  field: UclR16Field,
+  countryOf: (club: string) => string | null,
+  twoLegs = false,
+): { home: string; away: string }[] {
   const { winners, runnersUp, groupOf } = field;
   const rng = seededRng(`ucl-r16|${winners.join(',')}|${runnersUp.join(',')}`);
   const order = <T,>(arr: T[]): T[] => {
@@ -8396,7 +8471,12 @@ function drawUclRoundOf16(field: UclR16Field, countryOf: (club: string) => strin
     return step(0) ? pick : null;
   };
   const pick = search('both') ?? search('group') ?? search('none') ?? new Map<string, string>();
-  return ruOrder.map((ru, i) => ({ home: pick.get(ru) ?? wOrder[i], away: ru }));
+  return ruOrder.map((ru, i) => {
+    const winner = pick.get(ru) ?? wOrder[i];
+    /* leg one is at tie.home, leg two at tie.away, so the seeded club takes
+       tie.away when there are two legs and tie.home when there is one. */
+    return twoLegs ? { home: ru, away: winner } : { home: winner, away: ru };
+  });
 }
 
 /** The round of 16 the current group tables draw, or null when this save
@@ -8405,7 +8485,7 @@ function drawUclRoundOf16(field: UclR16Field, countryOf: (club: string) => strin
 export function uclRoundOf16Draw(state: CareerState): { home: string; away: string }[] | null {
   if (!eraUclHasR16(state.eraId)) return null;
   const r16 = uclRoundOf16Field(state);
-  return r16 ? drawUclRoundOf16(r16, c => uclClubCountry(state, c)) : null;
+  return r16 ? drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2) : null;
 }
 
 /** Build the first knockout round. Round 462: an era with a round of 16
@@ -8419,7 +8499,7 @@ function buildUclBracket(state: CareerState, includeMe: boolean): UclTie[] {
   if (eraUclHasR16(state.eraId) && state.calendar.some(e => e.type === 'uclKo' && e.uclRound === 'R16')) {
     const r16 = uclRoundOf16Field(state);
     if (r16) {
-      return drawUclRoundOf16(r16, c => uclClubCountry(state, c)).map((t, i) => ({
+      return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2).map((t, i) => ({
         round: 'R16' as const, slot: i, home: t.home, away: t.away,
         homeGoals: null, awayGoals: null, winner: null,
         mine: t.home === state.clubName || t.away === state.clubName,
@@ -8671,7 +8751,7 @@ export function projectedUclBracket(state: CareerState): { home: string; away: s
   // qualifier does.
   if (eraUclHasR16(state.eraId)) {
     const r16 = uclRoundOf16Field(state);
-    if (r16) return drawUclRoundOf16(r16, c => uclClubCountry(state, c));
+    if (r16) return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2);
   }
   // Round 312: project the field the engine will actually seed, top two per
   // group when the groups are few, so a second placed club sees itself in
@@ -11029,7 +11109,10 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
        leg one is at tie.home and leg two is at tie.away and nothing else in
        the state knows which way round tonight is. A one legged round that is
        not the round of 16 keeps the fixed pattern it has always used. */
-    const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2;
+    /* Round 507: a legacy week carries no uclLeg and IS the whole tie, so it
+       must not be read as leg one of two. Every reader of uclLeg keys off the
+       field being present, not off what the era's format would say. */
+    const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
     const tie = (twoLegs || entry.uclRound === 'R16')
       ? state.uclBracket?.find(t => t.round === entry.uclRound && t.mine)
       : undefined;
@@ -11418,6 +11501,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       decidedBy = 'pens';
       const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
       advanced = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+      /* Round 507 fix: once decidedBy is 'pens', four separate places read
+         `won` as "won the SHOOTOUT" and not as "won the ninety minutes": the
+         minute 90 timeline entry, the "Nerves of steel" versus "Heartbreak
+         from the spot" line, the opposition's player ratings (theyWon =
+         !won), and the report headline's (PENS) suffix. The single leg path
+         below rewrites both fields for exactly that reason. Leaving tonight's
+         scoreline here meant a second leg lost 1-0 on the night and won on
+         penalties reported a shootout defeat, which is the opposite of what
+         happened. Found by the adversarial review. */
+      won = advanced;
+      drawn = false;
     } else {
       advanced = (out.winner === 'home') === iAmHome;
     }
@@ -12874,9 +12968,21 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       if (entry.type === 'uclKo' && entry.uclRound && state.uclBracket) {
         /* Round 507: on a week I am not part of, the rest of the round still
            plays, but only once the tie is actually over. Settling on the first
-           leg would show every other club through a week early. */
+           leg would show every other club through a week early.
+           THE ABSENT CASE IS THE OLD ONE AND MUST STAY THE OLD ONE. A calendar
+           written before Round 507 carries one knockout week per round with no
+           uclLeg at all, and nothing migrates it: ensureUclCalendar only ever
+           inserts a MISSING round of 16 week and returns early when one is
+           already there, and it never touches the quarter or semi finals. The
+           first version of this guard read `(entry.uclLeg ?? 1) === legs`,
+           which on a legacy entry is 1 === 2, so advanceUclBracket was never
+           called and every save in flight lost its Champions League the moment
+           its own club went out: the bracket froze, the later rounds were never
+           seeded, and no European champion was crowned until the next season
+           rebuilt the calendar. The adversarial review caught it and three
+           verifiers reproduced it independently. */
         const legs = uclLegsFor(state.eraId, entry.uclRound);
-        if (legs === 1 || (entry.uclLeg ?? 1) === legs) advanceUclBracket(state, entry.uclRound);
+        if (!entry.uclLeg || entry.uclLeg >= legs) advanceUclBracket(state, entry.uclRound);
       }
       // Round 102: and so does the cup.
       if (entry.type === 'cup' && entry.cupRound && state.cupBracket) {
@@ -14432,6 +14538,19 @@ export function loadCareer(): CareerState | null {
     /* Round 505: and the armband and the takers, for the same reason: the
        tactics screen reads them before a ball is kicked. */
     ensureSetPieces(parsed);
+    /* Round 507: a negotiation frozen mid haggle by a build that charged
+       patience only for an insult, resumed by a build that charges for every
+       answer. Its opener was 2 or 3 where the new one is 4 or 5, so two
+       ordinary counter offers finished it and put the target in coldNames for
+       the rest of the window, which reads as the game refusing to sell you
+       anybody. The negotiation is transient and has no ensure of its own, so
+       the repair is here: give a fee table that is still open the new budget
+       less whatever it has already spent, and never take patience away. */
+    const openNeg = parsed.negotiation;
+    if (openNeg && openNeg.status === 'open' && openNeg.phase !== 'terms') {
+      const owed = Math.max(1, OPENING_PATIENCE_MIN - Math.max(0, openNeg.stage));
+      if (openNeg.patience < owed) openNeg.patience = owed;
+    }
     /* Round 465's rule, repaired on the way in: zero board confidence IS the
        sack, so a save that carries zero without being sacked is a save the
        engine never sacked, written by a build whose between-matches paths

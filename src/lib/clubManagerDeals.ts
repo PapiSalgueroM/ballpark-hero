@@ -22,6 +22,7 @@
  * put a blank page on a route.
  */
 import type { CareerState, CMPlayer, MarketPlayer, SquadRole } from '@/lib/clubManager';
+import { money } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
 
 /* ================================================================== */
@@ -105,11 +106,20 @@ export function valuationBand(state: CareerState, mp: MarketPlayer): ValuationRe
   return { low, high, spread, exact: false };
 }
 
-/** One line for the screen: the read, and how much to trust it. */
+/**
+ * One line for the screen: the read, and how much to trust it.
+ *
+ * Round 507 fix: this used a bare `${n}m` template and replaced a call to
+ * money() on both the market row and the negotiation header, so a row read
+ * "worth 45m to 58m" with no currency beside a "Their ask: 45m" that had one,
+ * and a cheap target read "worth 0.3m to 0.5m" where the rest of the screen
+ * says 300k. money() is the one formatter and this line uses it like everything
+ * else does.
+ */
 export function valuationLine(state: CareerState, mp: MarketPlayer): string {
   const read = valuationBand(state, mp);
-  if (read.exact) return `worth ${read.low}m`;
-  return `worth ${read.low}m to ${read.high}m`;
+  if (read.exact) return `worth ${money(read.low)}`;
+  return `worth ${money(read.low)} to ${money(read.high)}`;
 }
 
 /* ================================================================== */
@@ -366,9 +376,15 @@ export function termsCloseness(want: PersonalTerms, offer: PersonalTerms): numbe
 export function counterTerms(want: PersonalTerms, offer: PersonalTerms): PersonalTerms {
   const wageGap = Math.max(0, want.wage - offer.wage);
   const next: PersonalTerms = { ...want };
-  /* He will come down about a third of the way on wage, once, and never
-     below what you offered. */
-  next.wage = Math.max(offer.wage, want.wage - Math.round(wageGap * 0.34));
+  /* He comes down about a third of the way on wage, once, never below what you
+     offered and NEVER ABOVE WHAT HE OPENED ON.
+     The Math.min is the fix for a real defect the adversarial review found.
+     Without it, an offer whose wage is already above his ask made wageGap zero
+     and the Math.max floor became your own number, so his stated demand ROSE to
+     meet it: overpay on wage to buy him down a rung and his counter moved the
+     deal further away, which inverts the one thing this file says the rung is
+     for. Both invariants are now enforced rather than just described. */
+  next.wage = Math.min(want.wage, Math.max(offer.wage, want.wage - Math.round(wageGap * 0.34)));
   /* If the rung is the problem he says so by holding it, since the rung is
      the one thing he will not sell cheaply. */
   next.role = want.role;
