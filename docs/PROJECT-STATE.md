@@ -1,5 +1,43 @@
 # Project state
 
+## Live as of 2026-09-08 evening: Rounds 506, 507, 508 and 513 are merged and published
+
+**`origin/main` is `f62d5901` and that is what douknowball.com is serving.** Deployment
+`72ab35b7-c521-44eb-94b5-0a75b0b1772c`, called only after Lovable's `latest_commit_sha` already
+equalled `f62d5901`, which is the ordering that matters: deploying before it matches publishes
+the previous commit.
+
+Proven live rather than assumed, with the before and after both measured:
+
+| | before | after |
+|---|---|---|
+| home bundle | `index-Czr-I-vX.js` | `index-CvGo0Pjf.js` |
+| engine chunk | `clubManager-DBzLyI5I.js` (705,229 bytes) | `clubManager-BL483uAm.js` (722,663 bytes) |
+| "Sellers open nearer" | 0 | 1 |
+| "Ducking the press costs" | 0 | 1 |
+| "Manager level" | 0 | 1 |
+| "Man Management" | 0 | 1 |
+| "Only pays once you set duties" | 0 | 1 |
+| "Sweeper keeper" (Round 505) | 1 | 1 |
+
+The last row is the one that says nothing regressed. Routes rechecked after the deploy and all
+200 with their own H1 and their own canonical: `/`, `/club-manager`, `/soccer-career`, `/footle`,
+`/squad-deal`, `/privacy`, `/transfer-path`, `/front-office`, `/nba-front-office`,
+`/mlb-front-office`, `/nhl-front-office`, `/soccer-conquest`, `/idle-arena`.
+
+**What went out.** 506 (transfers rework and personal terms, plus a sitewide ad placement
+change), 507 (two legged Champions League knockout ties per era format), 508 (a loan out
+carrying the same option to buy and recall figure a loan in has) and 513 (manager XP and the
+seven skill trees). Gates: tsc zero, build clean, 266 harnesses with 265 green, the browser walks
+`playClubManager` (0 findings), `playDealDesk` and `playAdRoutes` all green, and two adversarial
+review passes plus a third on Round 513.
+
+**The one red, and it is not from this work.** `simConnect4ClubRecords` fails on "not one pair
+was answered from records". Proven not ours three ways: this work touches zero connect4 files,
+all three files that harness reads are byte identical to what main had before the merge, and the
+harness queries the DEPLOYED edge function over the network so its verdict depends on live
+Supabase state. It was red the same way earlier in the day. Left for the lane that owns connect4.
+
 ## Live as of 2026-09-08, and a note for whoever picks this up next
 
 **Round 505 is published and verified live. Nothing merged is unpublished any more.**

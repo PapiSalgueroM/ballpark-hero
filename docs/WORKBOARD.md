@@ -71,7 +71,15 @@ Four things, in the order they can hurt you.
    already, in a sandbox, and died with the session. See the block below. Push after the first
    commit of a round, not at the end of it.
 
-- **Claude Code lane, CLAIMED 2026-09-08: Round 513, manager XP and the seven skill trees.**
+- **MERGED AND LIVE 2026-09-08 evening: Rounds 506, 507, 508 and 513.** `origin/main` is
+  `f62d5901` and douknowball.com is serving it, deployment
+  `72ab35b7-c521-44eb-94b5-0a75b0b1772c`. Proven by chunk diff rather than assumed: the engine
+  chunk moved from `clubManager-DBzLyI5I.js` to `clubManager-BL483uAm.js` and five Round 513
+  strings went from 0 occurrences to 1, while Round 505's "Sweeper keeper" stayed at 1, which
+  is the row that says nothing regressed. Thirteen routes rechecked, all 200 with their own H1
+  and canonical. Details in `docs/PROJECT-STATE.md`.
+
+- **Claude Code lane, Round 513, manager XP and the seven skill trees. DONE AND LIVE.**
   Spec section 28, which `docs/SPEC-RECONCILIATION.md` line 330 recorded as "No manager XP or
   skill tree exists in Club Manager". On the SAME branch as 506 to 508 (`round-507-ucl-two-legs`),
   so merging that branch ships this too. next free number after this: 514.
