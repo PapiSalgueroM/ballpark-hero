@@ -96,6 +96,34 @@ Four things, in the order they can hurt you.
   because `dutyBoost` sums the duties and 0 times 1.5 is 0. Three of eight clubs came back byte
   identical for that reason. Each tile now says the condition out loud.
 
+  **THE ADVERSARIAL REVIEW FOUND A DISQUALIFYING DEFECT, AND THE VOTE DROPPED IT 0 OF 3.**
+  Six lenses, three refuters a finding, 26 raised and 19 confirmed. Every gate in the round was
+  green while all of this was true.
+  - **The one that mattered, and the one the vote threw away.** The Negotiation tree raised BOTH
+    numbers Round 506's anti lowball guarantee is built from: up to +0.20 on the convergence
+    fraction and up to +2 on the seller's patience, uncapped. Measured over Round 506's own
+    sweep, repeating 0.76 of the ask went from 0 agreed and 23 out of patience at zero points to
+    17 agreed and ZERO out of patience at three. From three points nothing at any multiple
+    anywhere in the sweep ran out of patience: one skill point switched the whole mechanic off.
+    `simClubManagerDeals` section 3 sweeps exactly those multiples and would have failed its own
+    shape assertion, but it runs a fresh career and a fresh career has no points, so the defect
+    was only reachable by a manager who had played long enough to earn three. The tree now talks
+    the opening premium down instead, and `simManagerXp` section 8 fences the guarantee with a
+    full board.
+  - Media was a units error: a cushion in whole points subtracted from a cost of 1.2, so it was
+    bought out by the second point and points 3, 4 and 5 changed no number in the game. It was
+    also applied to only one of the two no-show paths, re-opening an asymmetry the constant's own
+    comment says must never come back.
+  - Youth wasted points 1, 2 and 4 to a `Math.floor`, and died entirely on a well funded academy.
+  - Season XP for overperformance was measured against the club the manager was moving TO while
+    the finish was at the club he LEFT, so taking a better job deleted XP the season had earned.
+  - Two were my own harness bugs: the duty picker sorted on `atk + def` when a positive `def`
+    means the OPPOSITION gets it, and the per club seed keyed on `club.length`, which collides
+    for Napoli/Wolves and Ajax/Roma.
+  **The standing lesson holds and should be read before trusting a vote here: a dropped finding
+  is unconfirmed, not refuted.** The worst defect in this round was dropped unanimously, and it
+  took twenty minutes of measurement against the engine to show it was real.
+
 - **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT.**
   Rounds 503, 504 and 505 are merged on origin/main and 505 is live. **506, 507 and 508 are all
   built and pushed on one stacked branch, `round-507-ucl-two-legs`, 30 plus commits, not merged
