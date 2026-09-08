@@ -4202,8 +4202,13 @@ function orderLevel(level: TableRow[], rule: TiebreakRule, pairs: Record<string,
 /**
  * Points first, then each run of level clubs in the league's own order.
  * Without a context this is the order it always was (goal difference, then
- * goals scored), which every UCL group and every harness that sorts a bare
- * table still reads; pass tableSortContext(...) for a league table.
+ * goals scored), which a harness sorting a bare league table still reads;
+ * pass tableSortContext(...) for a league table. A Champions League group
+ * is NOT read through this: sortedUclGroup applies the competition's own
+ * rule (Round 478), the round of 16 is seeded from that order, and the two
+ * disagree whenever a club level on points won the head to head and lost
+ * the goal difference, which is how simEraWorldTables misread Juventus in
+ * the Round 505 gate pass.
  */
 export function sortedTable(rows: TableRow[], ctx?: TableSortContext): TableRow[] {
   const rule = ctx?.rule ?? 'gdGfOnly';
