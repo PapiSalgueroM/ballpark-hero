@@ -124,6 +124,15 @@ Four things, in the order they can hurt you.
   is unconfirmed, not refuted.** The worst defect in this round was dropped unanimously, and it
   took twenty minutes of measurement against the engine to show it was real.
 
+  **GATES AFTER THE FIXES, 2026-09-08, all on a frozen tree.** tsc zero. `simManagerXp` green
+  with eight sections, and all SIX negative controls fire (`notneutral` 8 fails, `freepoints`
+  2, `nocap` 2, `flatlevels` 34, `deadgate` 1, `saturate` 4). Green with EXIT=0:
+  `simClubManagerDeals`, `simAcademy`, `simClubManagerFinances`, `simRoles`, `simClubManager`,
+  `simTransfers`, `simDealDepth`, `simUclLegs`, `simTacticsEngine`. `simPress` returned
+  EXIT=124, which is a TIMEOUT under the sweep's own CPU load and not a verdict; it is being
+  re-run solo with a longer budget because it is the harness most affected by the duckPress
+  fix. Still to do before merge: `npm run build`, the browser walks, and the full 265 suite.
+
 - **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT.**
   Rounds 503, 504 and 505 are merged on origin/main and 505 is live. **506, 507 and 508 are all
   built and pushed on one stacked branch, `round-507-ucl-two-legs`, 30 plus commits, not merged
