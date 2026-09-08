@@ -4,6 +4,18 @@ One page, two lanes. Read this before picking work, write here before building. 
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
 
+**NEW OWNER DIRECTION, 2026-09-08.** Anthony said "just keep going and work on other things".
+Continue bounded improvements in a separate worktree while preserving the reviewed
+Rounds 510 to 512 candidate and its remaining verification. This supersedes the earlier
+pause on new work below. No merge or publish is authorized by this direction.
+
+**Round 513 (Codex), CLAIMED 2026-09-08.** Cross-midnight daily save safety.
+Branch `codex/round-513-midnight-saves`, isolated `.worktrees/round-513-midnight-saves`,
+based on `21f7090b`. Fix older-tab cleanup deleting newer daily records and older
+Conquest results moving the streak backward. Preserve pinned puzzle dates, same-day
+tab protection and normal forward cleanup. Claude retains 506 to 508 and the root
+checkout. The reviewed PR 63 candidate is untouched.
+
 **OWNER REVIEW CHECKPOINT, 2026-09-08.** Anthony wants to review the whole website when
 Codex and Claude reach a stable stopping point. Finish the current bounded batch and its
 verification, then pause new feature expansion for his review. Do not wait for the whole
@@ -35,7 +47,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 513 (checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 514 (513 claimed September 8; checked against origin/main on
   2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
   506 to 508 and the Codex lane holds 510 to 512, see the claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
