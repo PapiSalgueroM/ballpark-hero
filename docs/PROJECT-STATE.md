@@ -3103,6 +3103,34 @@ today rather than adding alongside them. Every new poll must obey all of these r
   implementation rather than from what the screen ought to say will do that, and it is worth
   saying plainly rather than quietly widening the pattern.
 
+  **AND THE SEVEN THE VOTE DROPPED, SIX OF WHICH WERE REAL.** They were re-read by hand instead
+  of being treated as disproved, which is the standing lesson from 2026-09-05. One was already
+  closed by a fix made earlier in the same pass. The other six are fixed:
+  a level 10 lead scout could never quote a figure, because `valuationSpread` bottomed out at
+  0.021 against a threshold of 0.02, so `ValuationRead.exact` was always false and the game's
+  most expensive recruitment department did nothing the docs promised (slope 0.035 now; measured
+  level 10 band width falls from 2.1 percent of value to 0.0);
+  `AD_CONTROL_GAP_PX` cleared its 150px floor by two pixels and only because every current mount
+  happens to pass `mt-8`, so the component's promise was false for any page written with `mt-4`
+  (150 now, and measured after: /club-manager 254px, /squad-deal 182px, /footle 550px);
+  `playAdRoutes` section 10 had no committed control, and `ADROUTES_CONTROL=adgap` now removes
+  the padding from the SERVED bundle, anchored on the shape of the style object because the
+  constant minifies to a one letter name, putting the two routes back to exactly the 104px and
+  32px the original audit measured;
+  `simUclLegs` section 2 passed literal booleans into `uclTieOutcome` and so never called
+  `uclAwayGoalsApply` at all, while the header credited it as the strongest signal that the era
+  rule is read (it takes the rule from the eras now, and `noaway` goes from 4 findings to 7);
+  `simClubManagerDeals` section 4 had a floor of 8 on a measurement of 8 with a third of its
+  attempts structurally unable to produce a sample, since a 12 to 45 price band is unsatisfiable
+  against 80 percent of an 11m budget (band is relative to the club's money now, 12 of 12 on
+  four seeds, floor 10);
+  and `simUclLegs` section 3 only failed at ZERO era seasons, so a bad seed left the played half
+  of the harness resting on one career (floor 2).
+
+  **THE HOUSEKEEPING LESSON.** The review's verifiers write reproduction scripts into `scripts/`
+  and do not clean up, and `git add -A scripts/` swept them into a commit twice in one session.
+  Name the files being committed while a review is running, and read `git show --stat` after.
+
 - **2026-09-08, Round 507 (Claude Code lane, desktop), CHAMPIONS LEAGUE TWO LEGGED KNOCKOUT
   TIES. On branch `round-507-ucl-two-legs`, stacked on 506, not merged and not live.** His
   2026-09-07 request: "Add first and second legs to Champions League knockout ties whenever that
