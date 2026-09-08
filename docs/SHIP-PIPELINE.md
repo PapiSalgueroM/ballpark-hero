@@ -494,6 +494,9 @@ Copy this into the round and tick it off.
       network calls or writes; this is not process isolation or write authorization.
       All required selected checks must be green, **and the reported harness count must
       match what you expect**. A silently skipped harness can look green by being absent.
+      An unavailable node check must explicitly exit 77, print `NOTHING WAS CHECKED`,
+      and agree with an unavailable database probe to be SKIP. Other failure exits
+      remain failures. Do not opt legacy data checks in without reviewing their abort.
 - [ ] `sweepGames` / `playGames` run if the round touched UI (`ENGINES=chromium`)
 - [ ] Verified every changed file with the **Read/Grep tools**, not bash
 - [ ] Zip built, content assertions written to fail closed, both directions where relevant

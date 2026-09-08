@@ -128,7 +128,7 @@ function run(file, extraEnv = {}) {
         verdict = 'EMPTY';
         why = `printed ${lines} line${lines === 1 ? '' : 's'}, so its checks did not run`;
       }
-      resolve({ file, verdict, why, ms, lines, out });
+      resolve({ file, verdict, why, ms, lines, out, code });
     });
   });
 }
@@ -158,41 +158,18 @@ function report(results) {
   }
 }
 
-/* ROUND 356: A HARNESS THAT COULD NOT REACH THE DATABASE IS NOT A FAILING
- * HARNESS, AND IT IS NOT A PASSING ONE EITHER.
+/* Round 537: a no-work sentence cannot override a failed child process.
+ * A deliberately unavailable node harness must exit 77, report NOTHING WAS
+ * CHECKED, and agree with the runner's unavailable database probe to be SKIP.
+ * Ordinary failure exits remain FAIL even if they printed that sentence
+ * before an assertion or runtime error. DB_PROBE=reachable keeps 77 a failure.
  *
- * Four harnesses read the live database (R344 simValueFreshness, R345
- * simWorldXiPositions, R353 simSoccerGridTiers, R354 simGridArchive) and the
- * count climbs with every data-backed fence. The cloud sandbox's egress proxy
- * answers that host with a 403, so in that lane all four fail every single
- * run, and a board that is permanently four-red stops being read, which costs
- * far more than the four checks do.
- *
- * The fix is not a list of harness names here. This file's own rule is that
- * sniffing beats a list that goes stale, and a text sniff would miss half of
- * them anyway: two reach the database indirectly, through app libs, and never
- * mention it. What every one of them DOES do is say so in its output, in the
- * words its author chose, before exiting non-zero:
- *
- *     DATABASE UNREACHABLE. NOTHING WAS CHECKED.
- *     SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
- *     NBA GRID DATA UNREACHABLE. NOTHING WAS CHECKED.
- *     SOCCER GRID POOL UNREACHABLE OR TOO SMALL. NOTHING WAS CHECKED.
- *
- * So the harness is believed when it says it checked nothing, and the runner
- * checks the claim rather than taking it: it probes the database ONCE itself.
- *
- *   database unreachable  -> that harness is SKIPPED, with the reason printed.
- *   database reachable    -> it stays a FAILURE, because there the sentence
- *                            means the data broke, not that the sandbox did.
- *
- * A skip is never counted as a pass, is listed by name, and is repeated in the
- * closing line, because Round 100's lesson is that a run covering less than it
- * appears to reads as "everything is fine" when it is not. On the desktop lane,
- * where the database answers, this changes nothing at all.
- *
- * DB_PROBE=reachable forces the reachable branch, which turns the skips back
- * into the four failures and proves the probe is what suppresses them. */
+ * Round 356 inferred skips from prose alone. Legacy callers still exit 1 and
+ * now remain failures until individually reviewed: an empty or small pool,
+ * a failed later batch, and unavailable transport are different outcomes.
+ * Only a pre-check availability abort belongs on the explicit skip path.
+ * Skips stay named and excluded from the pass count. This classifies results;
+ * it does not isolate child networking, storage or process lifetime. */
 const NOTHING_CHECKED = /NOTHING WAS CHECKED/i;
 
 async function databaseReachable() {
@@ -230,7 +207,7 @@ const skipped = [];
 console.log(`Running ${nodeGroup.length} node harness${nodeGroup.length === 1 ? '' : 'es'}`);
 const nodeResults = await pool(nodeGroup, 3, (f) => run(f));
 for (const r of nodeResults) {
-  if (r.verdict === 'FAIL' && !db.ok && NOTHING_CHECKED.test(r.out)) {
+  if (r.verdict === 'FAIL' && r.code === 77 && !db.ok && NOTHING_CHECKED.test(r.out)) {
     r.verdict = 'SKIP';
     r.why = `it reached no database and said so, and the database is unreachable here (${db.why})`;
   }

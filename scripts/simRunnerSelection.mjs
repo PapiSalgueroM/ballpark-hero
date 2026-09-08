@@ -49,7 +49,8 @@ console.log('Synthetic fixture started');
 console.log('Synthetic fixture ran');
 console.log('Synthetic fixture checked');
 console.log(mode === 'nothing' ? 'DATABASE UNREACHABLE. NOTHING WAS CHECKED.' : 'Synthetic fixture completed');
-if (mode === 'badexit' || mode === 'nothing') process.exit(7);
+if (mode === 'badexit') process.exit(7);
+if (mode === 'nothing') process.exit(77);
 `;
   fs.writeFileSync(path.join(scripts, 'simAlpha.mjs'), child('alpha'));
   fs.writeFileSync(path.join(scripts, 'simBeta.mjs'), child('beta'));
@@ -108,7 +109,7 @@ try {
   if (CONTROL === 'environment') replaceExact("const OWN_CONTROLS = ['ONLY', 'BROWSER'];", 'const OWN_CONTROLS = [];');
   if (CONTROL === 'childexit') replaceExact("let verdict = code === 0 ? 'PASS' : 'FAIL';", "let verdict = 'PASS';");
   if (CONTROL === 'quiet') replaceExact('const MIN_LINES = 4;', 'const MIN_LINES = 0;');
-  if (CONTROL === 'skip') replaceExact("r.verdict === 'FAIL' && !db.ok && NOTHING_CHECKED.test(r.out)", "r.verdict === 'FAIL' && db.ok && NOTHING_CHECKED.test(r.out)");
+  if (CONTROL === 'skip') replaceExact("r.verdict === 'FAIL' && r.code === 77 && !db.ok && NOTHING_CHECKED.test(r.out)", "r.verdict === 'FAIL' && r.code === 77 && db.ok && NOTHING_CHECKED.test(r.out)");
   if (CONTROL === 'runtime') replaceExact("const ROOT = path.resolve(HERE, '..');", "const ROOT = path.resolve(HERE, '..');\nthrow new Error('Synthetic unexpected runner runtime');");
   const absent = {
     unset: {}, empty: { env: { ONLY: '' } }, spaces: { env: { ONLY: '   ' } }, commas: { env: { ONLY: ', ,  ,' } },

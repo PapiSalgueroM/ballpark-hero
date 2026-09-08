@@ -1,5 +1,25 @@
 # Project state
 
+## Round 537 explicit runner skip contract, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-537-runner-skip-contract`, branch
+`codex/round-537-runner-skip-contract`, base 536 `bde9110f` (draft PR87),
+claim `eb8db65c`. Copied-runner witnesses reproduce two failed children
+being mislabeled SKIP and producing a successful runner exit. SKIP now
+requires explicit exit77, the no-work marker and an unavailable database
+probe. Ordinary failure exits stay failures. No legacy data caller is
+automatically opted in; partial results and malformed/small pools must not
+be hidden. All ten new and 21 prior synthetic cases pass through the selected
+runner. Six new controls produce 24 intended failures, the migrated old skip
+control produces its original two, and unexpected runtime errors reject.
+Both exact types, build (34.95 seconds), all fifteen site checks and
+independent source review pass. Entry bundle remains index-C-uiq91h.js;
+preview4213 stays available. Evidence:
+docs/runner-skip-contract-2026-09-08.md. No app or sports-data changes, no
+network/process isolation claim. Preserve root, worktrees and previews.
+Draft PR only, no backend/account writes, broad suite, main merge or publish.
+Next free 538: verified minimal NBA post-unmount callback cleanup.
+
 ## Round 536 NFL player-steal settlement, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-536-nfl-steal-settlement`, branch
