@@ -420,7 +420,9 @@ export default function Profile() {
   const longestStreak = isOwnProfile
     ? globalLongestStreak
     : (userScoreData?.longest_streak ?? 0);
-  const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
+  const averageScore = isOwnProfile
+    ? (localTotalPlays > 0 ? Math.round(localTotalPoints / localTotalPlays) : 'Not yet')
+    : (totalGames > 0 ? Math.round(totalPoints / totalGames) : 0);
 
   /* Round 301, audit findings 7 and 13: both halves count DISTINCT games
      completed today, the local slug set for instant credit and the server's
@@ -668,7 +670,7 @@ export default function Profile() {
               ...(favouriteSportEntry
                 ? [{ icon: <Star className="w-5 h-5 text-purple-400" />, value: favouriteSportEntry[0], label: 'Fav Sport', small: true }]
                 : []),
-              { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score' },
+              { icon: <Target className="w-5 h-5 text-sky-400" />, value: averageScore, label: 'Avg Score', scope: isOwnProfile ? 'This browser' : undefined },
               // Round 301, audit finding 11: honest label. The minutes
               // counter's only writer is the interval above, which ticks
               // while this page is open, so it measures time on the profile
@@ -686,6 +688,7 @@ export default function Profile() {
                   <div className="mx-auto w-fit">{stat.icon}</div>
                   <p className={`font-bold text-foreground ${stat.small ? 'text-xs' : 'text-xl'}`}>{stat.value}</p>
                   <p className="text-[10px] text-muted-foreground leading-tight">{stat.label}</p>
+                  {stat.scope && <p className="text-[10px] text-muted-foreground leading-tight">{stat.scope}</p>}
                 </CardContent>
               </Card>
             ))}

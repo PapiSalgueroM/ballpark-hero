@@ -2,16 +2,28 @@
 
 ## Round 521 profile average, September 8, 2026
 
-CLAIMED in `.worktrees/round-521-profile-average`, branch
+Scoped verification complete in `.worktrees/round-521-profile-average`, branch
 `codex/round-521-profile-average`, based on completed Round 520 `9865eb3e`
-(draft PR71). Scope only the own-profile average: pair this browser's points
-and plays, label its scope, and show Not yet for no local plays. The current
-expression divides max(server points, browser points) by browser plays. A
-synthetic server 550/local 50/one-play fixture therefore displays 550, not 50.
-Reproduce through the real component before fixing. Keep Total Points, other
-profiles, account history/restoration, today counts, date boundaries and all
-backend/provider behavior unchanged. Reject writes in mocked tests. No real
-accounts or production records may be touched. Next free round: 522.
+(draft PR71). The own-profile average now pairs this browser's points and
+plays, labels This browser, and shows Not yet for no local plays. The
+synthetic server 550/local 50/one-play fixture now displays 50, not 550.
+Total Points, other profiles, history/restoration, today counts, dates and
+backend/provider behavior are unchanged. Eight real-component tests and all
+eleven exact source controls pass. Both type gates, build, fifteen generated
+site fences, ActivityDays and SessionMarks pass. The built browser matrix
+passes 28 states at 320/390/430/1440 plus value/scope/actual-clipping controls.
+Initial type-test and geometry-harness errors remain documented, not credited
+as green. Review also tightened the clipping control to isolate that exact
+condition. Main inspected screenshots and independently reran focused checks.
+Final review has no remaining actionable findings. Preview 4194 serves
+index-DfNBd-Iv.js and stays preserved. Full evidence is in
+docs/profile-average-2026-09-08.md. Next free round: 522.
+
+Next: reproduce the separate cross-profile load problem with mocked deferred
+responses. Empty B results can retain A's stats/preferences/bracket; old
+responses can overwrite B or redirect. The own-profile timer can then save
+A's displayed minutes under B. Fix defaults, stale-load guards and timer
+readiness, without historical repair or any real backend/account writes.
 
 Round 520 is clean and pushed, draft PR71, with scoped gates complete and
 preview 4192 preserved. Its dependency audit reports zero vulnerabilities;
