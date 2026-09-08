@@ -1,5 +1,27 @@
 # Project state
 
+## Round 522 profile isolation, September 8, 2026
+
+CLAIMED in `.worktrees/round-522-profile-isolation`, branch
+`codex/round-522-profile-isolation`, based on completed Round 521 `77ad583f`
+(draft PR72). Reproduce a signed-in player viewing A then using My Profile
+to return to B. Empty B scores/preferences/bracket currently retain A's
+values. Old async responses can overwrite a newer profile or redirect it.
+The own-profile minute timer may then save A's displayed minutes under B.
+
+Main owns Profile.tsx and coordination docs. A focused test author owns only
+Profile.isolation.test.tsx and simProfileIsolation.mjs. All backend operations
+are synthetic, with expected writes captured locally and unexpected calls
+rejected. Reproduce before fixing per-load defaults, stale-response guards
+and loaded-identity timer readiness. Keep Round 521's averages unchanged.
+No account restoration, history repair, backend/provider changes or real
+account/data writes. No broad default suite, merge or publication.
+
+Round 521 is clean/pushed with scoped gates complete and draft PR72. Preserve
+preview 4194 and all earlier worktrees/previews. Root remains Claude's,
+tracked-clean at 73d61f54 in the latest check. Cutoff remains 17:46:50 UTC.
+Next free round: 523, verify before claiming.
+
 ## Round 521 profile average, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-521-profile-average`, branch

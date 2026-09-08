@@ -1,5 +1,16 @@
 # Work board
 
+**Round 522, Codex, CLAIMED September 8:** cross-profile load isolation in
+`.worktrees/round-522-profile-isolation`, branch
+`codex/round-522-profile-isolation`, based on Round 521 `77ad583f` (draft PR72).
+Reproduce optional-data carryover and late-response overwrites with the real
+Profile and synthetic deferred backend reads. Main owns Profile.tsx and docs;
+test author owns Profile.isolation.test.tsx and simProfileIsolation.mjs.
+Clear per-load optional data, cancel stale responses and gate the minute writer
+on the settled current own-profile identity. Capture only mocked writes.
+Preserve average scope, actual saves/accounts, backend, dates and providers.
+No full default suite, root edits, merge or publication. Next free: 523.
+
 **Round 521, Codex, scoped verification complete September 8:** own-profile average scope in
 `.worktrees/round-521-profile-average`, branch `codex/round-521-profile-average`,
 based on Round 520 `9865eb3e` (draft PR71). Profile now pairs local points/plays,
