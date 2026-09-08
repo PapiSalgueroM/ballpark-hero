@@ -13,6 +13,10 @@ commit, preview, checks and unfinished work. Claude's Round 506 checkpoint is pu
 built-site fences pass, while its full node suite is still pending. That branch is not
 merged or published. Copero research and proposed priorities are in
 `docs/copero-reference-audit-2026-09-08.md`.
+Claude is now active in the root checkout on `round-507-ucl-two-legs`, observed
+September 8 at `98fae6a4` with uncommitted engine changes. His separate full node
+suite is running. The Codex lane must not edit that checkout or claim both lanes
+have reached the review checkpoint yet.
 
 How it works:
 
@@ -69,7 +73,7 @@ How it works:
   browser at 430 and at 390 wide, 0 findings each.
   Named as not done: five subs in the modern era, opposition injuries and straight reds, a
   formation change during play (505 owns tactics), a shootout scene, goal celebrations.
-  **505 CLUB MANAGER TACTICS DEPTH, DONE 2026-09-07, on the branch with a PR open.** His words: "subs and reserves listed under the pitch, tap one
+  **505 CLUB MANAGER TACTICS DEPTH, merged on main at d1c541b3, publication not verified.** His words: "subs and reserves listed under the pitch, tap one
   player then another to swap. Out of position penalties, position retraining over weeks ...
   Captain, corner takers left and right, free kick and penalty takers ... Player roles: attacking
   or holding fullbacks, sweeper keeper ... Sub suggestions ordered by same position first."
@@ -129,11 +133,18 @@ How it works:
   `.worktrees/round-511-midnight-saves`: sourced geographic homes, generated game regions,
   directional elimination, captured players, simulated upgrades and a separate durable
   Attack save. The existing Daily Season and its scoring path remain intact. Scoped types,
-  build, 121 Attack tests over 20 actual-map seeds, all existing Conquest sims and all 15
+  build, 125 focused Attack tests with a separate 20-seed map run, existing Conquest sims and all 15
   built-site fences pass. The final scoped browser pass also passes 55 assertions across
-  all four required widths and a complete 160-action UI run. Whole-branch node and Vitest
-  gates, the 152-route guest sweep and independent Task 4 review are still running. This
-  local preview is a review candidate, not a whole-site all-clear.
+  all four required widths and a complete 160-action UI run. Task 4 review passed.
+  Final fix `edc31320` closes the whole-branch malformed-save and reopenable-rules
+  findings; its single scoped re-review is clean. Full Vitest now passes 342/342
+  across 28 files in the isolated sequential run, with unchanged assertions and
+  timeout budgets. Final Chromium repeats the 160-action finish, exact reload,
+  save, tab and pointer checks; new recovery/help checks pass at all four widths.
+  The first node run and guest sweep were canceled before completion. The final
+  152-route sweep is running, followed by a fresh 266-node-harness run. Use isolated
+  test temporary directories and stagger heavy groups. This local preview is a
+  review candidate, not a whole-site all-clear.
   La Liga, Europe, World and NFL/NBA powers remain open and are not enabled by the research
   files. Stop feature expansion after this bounded batch for Anthony's review. No merge,
   publish, DNS or Club Manager change. Plan:
@@ -158,7 +169,8 @@ How it works:
   Worktree: .worktrees/round-511-midnight-saves, branch codex/round-511-midnight-saves.
   No publication or host change. The root Round 510 full run completed with 263 PASS
   and one EMPTY wrapper report despite 23 underlying outcomes passing. Its wrapper fix
-  and focused recheck remain in the separate Round 510 checkout.
+  and focused recheck landed in `0e3f9183` and are integrated into Round 512 at `6b0c9cff`.
+  That does not turn the earlier full run into a green run.
 
 - **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FINAL GATE RUNNING.** Finish the Google URL-level audit, reconcile
   stale open bugs against current code, and repair the confirmed Footle kit-number harness

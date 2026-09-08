@@ -55,4 +55,34 @@ The final Chromium pass repeated all 55 acceptance assertions at 320, 390, 430 a
 
 The type gate, two production builds, 121 focused Attack outcomes over 20 actual-map seeds, existing Conquest sims, scoped prerender, sitemap generation and all 15 built-site fences pass. The Attack wrapper's changed revision transition fails the intended existing assertion. The older shared-map fence was updated to require exactly the Daily Season renderer plus the separate Attack renderer, and its private third-renderer control still fails.
 
-This remains a local review candidate. Independent Task 4 review, the 266-harness full node suite, full Vitest and the 152-route guest sweep are still running. No merge, publication, database, DNS or host change has occurred.
+This remains a local review candidate. Independent Task 4 review passed. No merge, publication, database, DNS or host change has occurred.
+
+## Whole-branch review and first broad runs
+
+The independent review of all 19 commits from `d1c541b3` through `6b0c9cff` found no Critical issue. Its Important malformed-save reproduction shifted one region and its anchor in a valid two-cell fixture: parsing accepted two living clubs with no legal launch, and the next spin threw. This was not reproduced from ordinary generated-map play. Its Minor finding was incomplete reopenable help: elimination, inherited captures, final country upgrade and the approved frontier fallback were missing. Both findings are assigned together to the single final fix wave.
+
+The first full Vitest attempt returned 332 passed and six failed out of 338 tests across 28 files, plus a worker `onTaskUpdate` timeout. Four failures were test timeouts; two were later assertions in those files. The attempt ran alongside CPU-heavy node tests and browsers, so contention is a hypothesis, not a proven disposition. The controller canceled its 266-node-harness run before completion and stopped the 152-route guest sweep after its first navigation timeout and 40 checks. Neither incomplete run is counted as green.
+
+Read-only process inspection found Claude's separate full node suite running in the root checkout. At least one existing harness, `simEras`, uses fixed `os.tmpdir()` paths, establishing a cross-checkout collision risk without proving it caused the failures. Further Codex tests use unique task-specific `TEMP` and `TMP` directories. Do not stop Claude's jobs or modify his dirty Round 507 checkout.
+
+An unchanged diagnostic rerun of `src/hooks/useClubManager.test.ts` and `src/components/conquest/ImperialismBoardShared.test.tsx`, with `--maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose`, passed all seven tests in 9.63 seconds. Assertions and timeout budgets were unchanged. This resolves those focused reproductions, not the outstanding whole-suite gate. The full Vitest and node suites, final fix review and completed broad browser sweep remain open.
+
+## Final fix and current verified candidate
+
+Commit `edc31320` rejects any non-champion save with a living club that has no legal launch. Champion recap and finished saves still load. A changed two-cell fixture asserts the ring/anchor movement actually changed the save, verifies both origins are null, and checks rejection. Its production mutation control disables the exact new guard and the behavioral test fails. Board regressions first failed for absent damaged-save recovery and missing help, then passed after the correction. Recovery retains the original stored bytes until an explicit choice. The question-mark help now includes elimination, whole-empire transfer, inherited captures, final +4 instead of +2, cap 99 and the app-specific frontier fallback. The short intro is unchanged.
+
+The single final re-review closed both findings and found no direct new breakage or out-of-scope observation. No second final fix wave was needed.
+
+- Engine: 94/94 passed. Board: 16/16 passed, including the existing full-map UI test in 19.116 seconds within its unchanged 30-second budget. Save: all four cases passed again in the final full suite.
+- Map: 11/11 passed over seeds 0 through 19, with 805 resolutions and 3,220 transitions. Seed 9 retained the moved HUL launch. All runs finished with valid champion saves. Median transition 2.49ms, p95 31.38ms.
+- Types and production build passed. Scoped prerender wrote one route with no date-dependent blocks; sitemap retained all 140 dates and no generated content changed. A fence run between prerender and the required final build caught missing route module wiring. The final build restored that wiring, then all 15 generated-site fences passed, including the browser boot fence. Existing build and shared-dialog warnings remain nonblocking.
+- Final full Vitest: 28 files and 342 tests passed in 128.91 seconds on the final code. Command: `node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=dot`. Assertions and timeout budgets were unchanged. This replaces neither the recorded failed first attempt nor the independent node harness gate.
+- Final Chromium: the changed disconnected-save fixture initially failed to open recovery against the prior build. On the final build, recovery, byte preservation, complete reopenable help and unsaved play passed at 320, 390, 430 and 1440. No page error or horizontal overflow was observed. The controller inspected settled phone help screenshots at the top and bottom; the first screenshot had caught the opening animation, so the capture now waits for that animation to finish.
+- Final Chromium also repeated a full 160-action seed 9 game, exact finished-state JSON and reload, no local ranked completion, quota failure and exact retry, competing tabs, Daily Season entry precedence, both save namespaces, active damaged-save recovery, real map inspection, captured drag and outside-release/no-button re-entry. All passed.
+
+The final 152-route guest sweep is running. A fresh isolated 266-node-harness run follows it. Both must have actual results before a broad all-clear. Claude's Round 506 has not been integrated or jointly tested here, and his root Round 507 checkout remains untouched. No merge or publication.
+
+## Implementation rulings retained for owner review
+
+1. Start with verified England, not an incomplete World label. Broader coordinates and roster coverage remain open. Cost if this priority is wrong: another league may need to be built before extending England; the engine remains reusable.
+2. If a home cannot launch across connected land, use the nearest playable owned anchor measured from that home, with lexical region-ID ties. This fixes the reproduced seed 9 dead end without sea jumps or arbitrary opponents. It is an explicit app interpretation. Cost if the owner prefers another frontier rule: change that rule before release and recheck saved-origin behavior.

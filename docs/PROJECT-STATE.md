@@ -19,8 +19,9 @@ Draft PR 61 holds this work: https://github.com/PapiSalgueroM/ballpark-hero/pull
 Code commit 7df896e1 passed the type, build, unit, targeted-control and browser gates below.
 The full 264-node-harness run finished with 263 PASS and one EMPTY: simConquestTabs
 printed only three lines, below the runner's four-line minimum, although all 23
-underlying test outcomes passed. The root checkout owns the wrapper correction and
-focused recheck. PR 61 stays draft; merging current main also needs its documentation
+underlying test outcomes passed. Commit `0e3f9183` corrected the wrapper and passed
+the focused recheck; that correction is integrated into Round 512 at `6b0c9cff`.
+PR 61 stays draft; merging its older branch with current main needs documentation
 conflicts reconciled. Do not call that first full run green.
 
 Round 511's bounded copy change is verified locally, not published: Soccer Conquest
@@ -40,18 +41,33 @@ carry captured players and apply simulated rating upgrades. The separate
 map without rerolling; Attack is unlimited and gives no ranked points. The existing
 96 club Daily Season, daily key, scoring and completion path are unchanged.
 
-The integrated wrapper reports 121 real Vitest outcomes across engine, map, save and
-board files, including 20 actual-map seeds; its changed revision-transition control
-fails the intended invariant. Existing Conquest sims pass after `simConquestMap`
+The focused engine, map, save and board files now pass 125 real Vitest outcomes.
+The separate 20-seed map run completed 3,220 transitions and 805 resolutions.
+The integrated wrapper and its changed revision-transition control were verified
+at `6b0c9cff`; the final full wrapper run remains part of the pending node suite.
+Existing Conquest sims pass after `simConquestMap`
 was narrowed to permit exactly the shared five-sport renderer and the separate Attack
 renderer; its private third-renderer control remains red. Types, both production
 builds, scoped prerender, sitemap regeneration and all 15 built-site fences pass.
-The final whole-branch node and Vitest suites plus independent Task 4 review are
-still running. The scoped final Chromium pass is clean: 55 assertions at 320, 390,
+Independent Task 4 and whole-branch reviews are complete. The final fix `edc31320`
+rejects malformed disconnected saves and completes the question-mark rules.
+The single scoped re-review closed both findings with no new breakage. The first
+full Vitest attempt failed six tests during parallel workloads; the final isolated,
+sequential run now passes all 342 tests in 28 files in 128.91 seconds, with unchanged
+assertions and timeout budgets. The first node run and guest sweep were canceled
+before completion, not green. The final 152-route guest sweep is running, and the
+fresh 266-node-harness run follows it. Isolate test temporary directories from
+Claude's concurrent checkout and stagger heavy groups. The integrated Chromium
+pass is clean: 55 assertions at 320, 390,
 430 and 1440 pixels, zero opening-label overlaps, exact Daily and Attack save
 precedence, a full 160-action UI finish matching the engine snapshot, and the
 quota, retry, competing-tab and pointer regressions. Treat the working preview as
-a review candidate, not a whole-site all-clear. La Liga, Europe, World and NFL/NBA powers remain open. La Liga location
+a review candidate. After `edc31320`, Chromium repeated all 160 actions with an exact
+finished snapshot, daily-entry precedence and both namespaces, active save recovery,
+competing tabs, quota/retry and pointer controls. The new disconnected-save recovery
+and complete reopenable help pass at all four widths, preserving damaged bytes.
+The controller also visually inspected the settled phone help, top and bottom.
+This is not a whole-site all-clear. La Liga, Europe, World and NFL/NBA powers remain open. La Liga location
 research does not enable that preset, including the unsettled current Rayo venue.
 Stop new feature expansion after this bounded batch for Anthony's review. No merge,
 publication, database, DNS or host change.
@@ -88,6 +104,13 @@ personal terms.**
 published.** Its scoped Club Manager checks and 15 built-site fences pass. The full node
 suite is still pending, so this is Claude's review checkpoint rather than a whole-site
 all-clear. The branch also changes shared ad spacing; do not pull it into Round 512.
+Read-only local inspection on September 8 found Claude actively working in the root
+checkout on `round-507-ucl-two-legs` at `98fae6a4`, with uncommitted Club Manager
+engine changes. Do not infer that Claude has paused or touch that checkout.
+A read-only merge simulation of `6b0c9cff` with `7b53c3b4` found conflicts only in
+`docs/PROJECT-STATE.md` and `docs/WORKBOARD.md`, not code. This is not a combined
+build, merge or joint test result. Both lanes still need their own gates and a
+tested combined preview before the whole-site owner checkpoint.
 
 **Round 509 is complete, merged through PR 60 and verified live.**
 Its College Grid finding was a false stall in `playGames`, not a broken page. The rest of its
