@@ -16,7 +16,7 @@ export interface AttackState {
   version: 1; rulesVersion: 1; setup: AttackSetup; rng: number; revision: number;
   owners: Record<string, string | null>; teams: AttackTeam[];
   phase: 'team' | 'direction' | 'target' | 'recap' | 'finished';
-  selectedTeam: string | null; bearing: number | null; targetRegion: string | null;
+  selectedTeam: string | null; originRegion: string | null; bearing: number | null; targetRegion: string | null;
   lastResult: AttackResult | null; champion: string | null;
 }
 const copy = <T,>(value: T): T => structuredClone(value);
@@ -28,10 +28,10 @@ export function createAttack(setup: AttackSetup): AttackState {
   const state: AttackState = {
     version: 1, rulesVersion: 1, setup: copy(setup), rng: setup.seed, revision: 0,
     owners: Object.fromEntries(setup.regions.map(region => [region.id, region.initialOwner])),
-    teams: copy(setup.teams), phase: 'team', selectedTeam: null, bearing: null,
+    teams: copy(setup.teams), phase: 'team', selectedTeam: null, originRegion: null, bearing: null,
     targetRegion: null, lastResult: null, champion: null,
   };
-  if (state.teams.some(team => !hasDirection(state, team.id))) throw new Error('A team has no legal land direction.');
+  if (state.teams.some(team => !attackOrigin(state, team.id))) throw new Error('A team has no legal land direction.');
   return state;
 }
 
@@ -48,11 +48,14 @@ function inside(point: Point, rings: Point[][]): boolean {
 }
 
 export function rayTarget(state: AttackState, teamId: string, bearing: number): string | null {
+  const origin = state.selectedTeam === teamId && state.originRegion ? state.originRegion : attackOrigin(state, teamId);
+  return origin ? rayTargetFromRegion(state, teamId, bearing, origin) : null;
+}
+
+export function rayTargetFromRegion(state: AttackState, teamId: string, bearing: number, originId: string): string | null {
   if (!Number.isInteger(bearing) || bearing < 0 || bearing >= 360) return null;
-  const team = state.teams.find(t => t.id === teamId);
-  const originRegion = state.setup.regions.find(r => r.id === team?.homeRegion && state.owners[r.id] === teamId)
-    ?? state.setup.regions.find(r => state.owners[r.id] === teamId);
-  if (!originRegion) return null;
+  const originRegion = state.setup.regions.find(region => region.id === originId);
+  if (!originRegion || state.owners[originId] !== teamId) return null;
   const origin = originRegion.anchor;
   const angle = bearing * Math.PI / 180;
   const direction: Point = [Math.sin(angle), -Math.cos(angle)];
@@ -122,9 +125,20 @@ function bearings(state: AttackState, teamId: string): { bearing: number; target
   }
   return options;
 }
-function hasDirection(state: AttackState, teamId: string): boolean {
-  for (let bearing = 0; bearing < 360; bearing++) if (rayTarget(state, teamId, bearing)) return true;
-  return false;
+export function attackOrigin(state: AttackState, teamId: string): string | null {
+  const team = state.teams.find(team => team.id === teamId);
+  const home = state.setup.regions.find(region => region.id === team?.homeRegion);
+  if (!home) return null;
+  const candidates = state.setup.regions.filter(region => state.owners[region.id] === teamId).sort((a, b) => {
+    const distance = (region: AttackRegion) => Math.hypot(region.anchor[0] - home.anchor[0], region.anchor[1] - home.anchor[1]);
+    return distance(a) - distance(b) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  });
+  // Keep the owned home first even if another region shares its anchor.
+  if (state.owners[home.id] === teamId) candidates.sort((a, b) => a.id === home.id ? -1 : b.id === home.id ? 1 : 0);
+  for (const region of candidates) {
+    for (let bearing = 0; bearing < 360; bearing++) if (rayTargetFromRegion(state, teamId, bearing, region.id)) return region.id;
+  }
+  return null;
 }
 function bestPlayer(state: AttackState, players: AttackPlayer[]): AttackPlayer {
   const highest = Math.max(...players.map(player => player.rating));
@@ -143,6 +157,8 @@ export function advanceAttack(state: AttackState): AttackState {
   next.revision++;
   if (state.phase === 'team') {
     next.selectedTeam = pick(next, living(next)).id;
+    next.originRegion = attackOrigin(next, next.selectedTeam);
+    if (!next.originRegion) throw new Error('This team has no legal land direction.');
     next.phase = 'direction';
   } else if (state.phase === 'direction') {
     const options = bearings(next, next.selectedTeam!);
@@ -154,6 +170,7 @@ export function advanceAttack(state: AttackState): AttackState {
     else {
       next.phase = 'team';
       next.selectedTeam = null;
+      next.originRegion = null;
       next.bearing = null;
       next.targetRegion = null;
       next.lastResult = null;
@@ -232,7 +249,7 @@ const resultSchema = z.object({
 const stateSchema = z.object({
   version: z.literal(1), rulesVersion: z.literal(1), setup: setupSchema, rng: uintSchema, revision: z.number().int().min(0).max(2304),
   owners: z.record(idSchema, idSchema.nullable()), teams: z.array(teamSchema).min(2).max(64),
-  phase: z.enum(['team', 'direction', 'target', 'recap', 'finished']), selectedTeam: idSchema.nullable(),
+  phase: z.enum(['team', 'direction', 'target', 'recap', 'finished']), selectedTeam: idSchema.nullable(), originRegion: idSchema.nullable(),
   bearing: z.number().int().min(0).max(359).nullable(), targetRegion: idSchema.nullable(), lastResult: resultSchema.nullable(), champion: idSchema.nullable(),
 }).strict();
 const record = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
@@ -347,15 +364,17 @@ export function parseAttackSave(value: unknown): AttackState | null {
       if (alive.length !== 1 || alive[0].id !== state.champion || Object.values(state.owners).some(owner => owner !== state.champion) || !['recap', 'finished'].includes(state.phase)) return null;
     } else if (alive.length < 2 || state.phase === 'finished') return null;
     if (state.phase === 'team') {
-      if (state.selectedTeam !== null || state.bearing !== null || state.targetRegion !== null || state.lastResult !== null) return null;
+      if (state.selectedTeam !== null || state.originRegion !== null || state.bearing !== null || state.targetRegion !== null || state.lastResult !== null) return null;
     } else {
-      if (!state.selectedTeam || !teamIds.has(state.selectedTeam)) return null;
+      if (!state.selectedTeam || !teamIds.has(state.selectedTeam) || !state.originRegion || !(state.originRegion in state.owners)) return null;
       if (state.phase === 'direction' || state.phase === 'target') {
         if (!alive.some(team => team.id === state.selectedTeam) || state.lastResult !== null) return null;
+        if (state.originRegion !== attackOrigin(state, state.selectedTeam)) return null;
         if (state.phase === 'direction') {
-          if (state.bearing !== null || state.targetRegion !== null || !hasDirection(state, state.selectedTeam)) return null;
+          if (state.bearing !== null || state.targetRegion !== null) return null;
         } else if (state.bearing === null || state.targetRegion === null || rayTarget(state, state.selectedTeam, state.bearing) !== state.targetRegion) return null;
-      } else if (state.bearing === null || state.targetRegion === null || !state.lastResult || !validResult(state)) return null;
+      } else if (state.bearing === null || state.targetRegion === null || !state.lastResult || !validResult(state)
+        || state.owners[state.originRegion] !== state.lastResult.winner) return null;
     }
     if (state.revision === 0 && (state.rng !== state.setup.seed || state.setup.regions.some(region => state.owners[region.id] !== region.initialOwner)
       || currentPlayers.some(player => player.rating !== originalPlayers.get(player.id)!.rating))) return null;

@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { ModuleKind, transpileModule } from 'typescript';
 import { describe, expect, it } from 'vitest';
 import * as realEngine from './conquestAttack';
-import { attackStrength, advanceAttack, createAttack, parseAttackSave, rayTarget, type AttackSetup, type AttackState } from './conquestAttack';
+import { attackStrength, attackOrigin, advanceAttack, createAttack, parseAttackSave, rayTarget, rayTargetFromRegion, type AttackSetup, type AttackState } from './conquestAttack';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 function setup(seed = 7): AttackSetup {
@@ -26,12 +26,72 @@ function initial(seed = 7): AttackState {
   return {
     version: 1, rulesVersion: 1, setup: snapshot, rng: seed, revision: 0,
     owners: Object.fromEntries(snapshot.regions.map(r => [r.id, r.initialOwner])),
-    teams: clone(snapshot.teams), phase: 'team', selectedTeam: null, bearing: null,
+    teams: clone(snapshot.teams), phase: 'team', selectedTeam: null, originRegion: null, bearing: null,
     targetRegion: null, lastResult: null, champion: null,
   };
 }
 
+function cornerSetup(): AttackSetup {
+  const source = setup();
+  source.bounds = { width: 40, height: 30 };
+  source.regions = [
+    ['home', 0, 0, 'A'], ['z', 0, 20, 'A'], ['a', 20, 0, 'A'],
+    ['blocked', 10, 10, 'A'], ['east', 30, 0, 'B'], ['far', 10, 20, 'C'],
+  ].map(([id, x, y, owner]) => ({
+    id: String(id), name: String(id), anchor: [Number(x) + 5, Number(y) + 5], initialOwner: String(owner),
+    rings: [[[Number(x), Number(y)], [Number(x) + 10, Number(y)], [Number(x) + 10, Number(y) + 10], [Number(x), Number(y) + 10]]],
+  }));
+  source.teams[0].homeRegion = 'home';
+  source.regions[3].anchor = [13, 13];
+  source.regions[3].rings = [[[12, 12], [14, 12], [14, 14], [12, 14]]];
+  return source;
+}
+
 describe('snapshot and geometric targets', () => {
+  it('commits the home launch and keeps its saved origin through attacker defeat', () => {
+    const direction = advanceAttack(initial());
+    expect(direction.originRegion).toBe(direction.teams.find(team => team.id === direction.selectedTeam)!.homeRegion);
+    const action = { ...target(1000), originRegion: 'west' };
+    const recap = advanceAttack(action);
+    expect(recap.lastResult!.winner).toBe('B');
+    expect(recap.originRegion).toBe('west');
+    expect(recap.owners.west).toBe('B');
+    expect(parseAttackSave(recap)).toEqual(recap);
+    expect(advanceAttack(recap).originRegion).toBeNull();
+  });
+  it('refuses fabricated and stale saved origins before resolution', () => {
+    const direction = advanceAttack(initial());
+    expect(parseAttackSave(direction)).toEqual(direction);
+    const fabricated = { ...direction, originRegion: 'missing' };
+    expect(fabricated).not.toEqual(direction);
+    expect(parseAttackSave(fabricated)).toBeNull();
+    expect(parseAttackSave(target())).toEqual(target());
+    const state = { ...target(), originRegion: 'middle' };
+    expect(state.owners.middle).toBe('A');
+    expect(parseAttackSave(state)).toBeNull();
+  });
+  it('uses the nearest playable owned anchor with lexical ties, excluding blocked closer anchors', () => {
+    const state = createAttack(cornerSetup());
+    expect(Array.from({ length: 360 }, (_, angle) => rayTargetFromRegion(state, 'A', angle, 'home')).every(target => target === null)).toBe(true);
+    expect(attackOrigin(state, 'A')).toBe('a');
+    state.setup.regions.reverse();
+    expect(attackOrigin(state, 'A')).toBe('a');
+    const direction = advanceAttack(state);
+    expect(direction.selectedTeam).toBe('A');
+    expect(direction.originRegion).toBe('a');
+    expect(rayTarget(direction, 'A', 90)).toBe('east');
+    expect(parseAttackSave(direction)).toEqual(direction);
+    const stale = { ...direction, originRegion: 'z' };
+    expect(stale).not.toEqual(direction);
+    expect(parseAttackSave(stale)).toBeNull();
+  });
+  it('rejects a recap origin still owned by a surviving unrelated club', () => {
+    const recap = advanceAttack(target());
+    expect(parseAttackSave(recap)).toEqual(recap);
+    const damaged = { ...recap, originRegion: 'far' };
+    expect(damaged).not.toEqual(recap);
+    expect(parseAttackSave(damaged)).toBeNull();
+  });
   it('creates an independent snapshot and initial state without modifying setup', () => {
     const source = setup();
     expect(createAttack(source)).toEqual(initial());
@@ -96,7 +156,7 @@ describe('snapshot and geometric targets', () => {
 function target(rng = 0, region = 'east'): AttackState {
   const state = initial();
   state.owners.middle = 'A';
-  return { ...state, rng, phase: 'target', selectedTeam: 'A', bearing: 90, targetRegion: region, revision: 2 };
+  return { ...state, rng, phase: 'target', selectedTeam: 'A', originRegion: 'west', bearing: 90, targetRegion: region, revision: 2 };
 }
 
 describe('deterministic actions', () => {
@@ -370,6 +430,30 @@ describe('strict saved snapshots', () => {
 describe('production mutation controls', () => {
   type Engine = typeof import('./conquestAttack');
   const controls: [string, string, string, (engine: Engine) => void][] = [
+    ['origin committed at team selection', 'next.originRegion = attackOrigin(next, next.selectedTeam);', 'next.originRegion = null;', engine => {
+      expect(engine.advanceAttack(initial()).originRegion).toBe('west');
+    }],
+    ['nearest playable origin', 'return distance(a) - distance(b)', 'return distance(b) - distance(a)', engine => {
+      const source = cornerSetup(); source.regions[1].anchor[1] = 24;
+      expect(engine.attackOrigin(engine.createAttack(source), 'A')).toBe('z');
+    }],
+    ['lexical origin tie', 'a.id < b.id ? -1 : a.id > b.id ? 1 : 0', 'a.id < b.id ? 1 : a.id > b.id ? -1 : 0', engine => {
+      expect(engine.attackOrigin(engine.createAttack(cornerSetup()), 'A')).toBe('a');
+    }],
+    ['origin retained on defeat', 'const next = copy(state);', 'const next = copy(state); next.originRegion = null;', engine => {
+      expect(engine.advanceAttack(target(1000)).originRegion).toBe('west');
+    }],
+    ['origin cleared after recap', 'next.originRegion = null;', 'next.originRegion = state.originRegion;', engine => {
+      expect(engine.advanceAttack(engine.advanceAttack(target())).originRegion).toBeNull();
+    }],
+    ['stale origin rejected', 'if (state.originRegion !== attackOrigin(state, state.selectedTeam)) return null;', 'if (false) return null;', engine => {
+      const state = target(); state.originRegion = 'middle';
+      expect(engine.parseAttackSave(state)).toBeNull();
+    }],
+    ['resolved origin ownership', '|| state.owners[state.originRegion] !== state.lastResult.winner', '|| false', engine => {
+      const state = engine.advanceAttack(target()); state.originRegion = 'far';
+      expect(engine.parseAttackSave(state)).toBeNull();
+    }],
     ['snapshot isolation', 'setup: copy(setup)', 'setup', engine => {
       const source = setup();
       engine.createAttack(source).setup.regions[0].anchor[0] = 1;
@@ -399,7 +483,7 @@ describe('production mutation controls', () => {
       expect(engine.advanceAttack(state).selectedTeam).not.toBe('B');
     }],
     ['legal bearing wheel', 'if (targetRegion) options.push', 'if (true) options.push', engine => {
-      const state = initial(); state.phase = 'direction'; state.selectedTeam = 'A'; state.rng = 1000; state.revision = 1;
+      const state = initial(); state.phase = 'direction'; state.selectedTeam = 'A'; state.originRegion = 'west'; state.rng = 1000; state.revision = 1;
       const next = engine.advanceAttack(state);
       expect(next.targetRegion).not.toBeNull();
     }],
