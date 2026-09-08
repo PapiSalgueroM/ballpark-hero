@@ -62,3 +62,15 @@ publication, account/backend writes or new sports data. Next540 candidate is
 the independently reproduced Soccer Attack pending-retry/unsaved-choice race.
 A separate audit found simSoccerGridTiers still reports false success when a
 later page fails; retain that as follow-up, not a claim fixed by this round.
+## Final review follow-up
+
+Independent review cleared production and the browser flow. It found that
+fixture assertions thrown inside the real fetch's catch could be swallowed.
+The harness now retains unexpected-query receipts outside that catch. A
+caught-query control proves those errors reject with exit1, including when
+all required-null assertions otherwise pass. All27 normal cases and both
+source controls were rerun and pass; both runtime rejection controls exit1.
+Logs use the `dukb-round539-world-xi-*-final.log` suffix and
+`dukb-round539-pool-final.log`. Returned optional-history errors remain
+fail-soft; rejected optional promises retain the existing outer-catch behavior.
+No product changes or rebuild were needed for this harness correction.

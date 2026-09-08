@@ -18,6 +18,8 @@ const controls = {
     '      if (!r.error && r.data) rows.push(...(r.data as PoolRow[]));'],
   optional: ['    const playedByName = new Map', '    if (verifiedRes.error) return null;\n    const playedByName = new Map'],
   runtime: ['  try {\n    const cols =', "  throw new Error('Unexpected World XI runtime control');\n  try {\n    const cols ="],
+  caughtquery: ['      if (r.error || !r.data) return null;',
+    "      if (r.error || !r.data) { try { await supabase.from('fixture_unexpected').select('*'); } catch {} return null; }"],
 };
 if (CONTROL && !Object.hasOwn(controls, CONTROL)) throw new Error(`Unknown control: ${CONTROL}`);
 const parent = fs.realpathSync(os.tmpdir());
@@ -34,7 +36,8 @@ try {
     source = source.replace(from, to);
     console.log(`CONTROL ${CONTROL}: changed one exact source anchor in memory`);
   }
-  const responses = new Map(), requests = [];
+  const responses = new Map(), requests = [], mockFaults = [];
+  const rejectFixture = message => { mockFaults.push(message); throw new Error(message); };
   const ok = data => ({ error: null, data });
   const fixture = worldXiPoolFixture();
   globalThis.__worldXiFixtureClient = {
@@ -42,18 +45,18 @@ try {
       let year, range;
       const query = {
         select: () => query, gt: () => query, order: () => query,
-        eq: (column, value) => { assert.equal(column, 'year'); year = value; return query; },
+        eq: (column, value) => { if (column !== 'year') rejectFixture(`Unexpected column: ${column}`); year = value; return query; },
         range: (start, end) => { range = [start, end]; return query; },
         limit: () => query,
         then(resolve, reject) {
           const key = table === 'player_verified_positions' ? 'verified' : year === 2025 ? 'previous' : `current:${range?.[0]}`;
-          assert.ok(responses.has(key), `Unexpected query: ${table}/${year}/${range}`);
+          if (!responses.has(key)) rejectFixture(`Unexpected query: ${table}/${year}/${range}`);
           requests.push(key);
           const result = responses.get(key);
           return (result instanceof Error ? Promise.reject(result) : Promise.resolve(result)).then(resolve, reject);
         },
       };
-      assert.ok(['player_market_values', 'player_verified_positions'].includes(table));
+      if (!['player_market_values', 'player_verified_positions'].includes(table)) rejectFixture(`Unexpected table: ${table}`);
       return query;
     },
   };
@@ -145,6 +148,7 @@ try {
     }
   }
   assert.equal(networkAttempts, 0, 'No network request may be attempted');
+  assert.deepEqual(mockFaults, [], 'Caught fixture faults must still reject');
   assert.equal(failures, 0, 'Unexpected failures');
   assert.equal(expected, cases.filter(test => CONTROL && test.control === CONTROL).length);
   console.log(`PASS: ${cases.length} World XI pool cases; ${expected} exact controlled failures; zero network attempts`);
