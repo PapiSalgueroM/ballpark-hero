@@ -1,5 +1,15 @@
 # Work board
 
+**Round 516, Codex, CLAIMED September 8:** combined local review candidate in
+`.worktrees/round-516-review-candidate`, branch `codex/round-516-review-candidate`.
+Start from Round 514 `ebca3ead`, carry over Round 515's tested startup fixes,
+retain both dependency sets and the verified Round 514 snapshots, then verify
+the combined build. No new game rules or provider/database changes. Do not
+build in the root checkout: Claude has uncommitted Round 508 work there.
+Round 515's one full node run remains active and its dist stays untouched.
+This is a draft review candidate, not permission to merge or publish.
+Next free round: 517.
+
 **Round 515, Codex, verification recorded September 8:** startup storage safety, isolated
 `.worktrees/round-515-storage-startup`, branch `codex/round-515-storage-startup`,
 based on main `a4579db3`. Auth startup, homepage enumeration, streak reminder and
