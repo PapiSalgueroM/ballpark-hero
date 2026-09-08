@@ -24,6 +24,7 @@
 import type { CareerState, CMPlayer, MarketPlayer, SquadRole } from '@/lib/clubManager';
 import { money } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
+import { valuationTighten } from '@/lib/clubManagerXp';
 
 /* ================================================================== */
 /* 1. The valuation desk                                              */
@@ -69,7 +70,11 @@ export const VALUATION_EXACT_AT = 0.02;
  */
 export function valuationSpread(state: CareerState): number {
   const level = staffLevel(state, 'scout');
-  return Math.max(VALUATION_EXACT_AT, VALUATION_SPREAD_MAX - 0.035 * (level - 1));
+  /* Round 513: the Recruitment tree reads the same band the lead scout does,
+     rather than adding a second one beside it. Zero points is zero tightening,
+     so a manager who has spent nothing gets exactly the desk Round 506 built. */
+  const fromTrees = valuationTighten(state);
+  return Math.max(VALUATION_EXACT_AT, VALUATION_SPREAD_MAX - 0.035 * (level - 1) - fromTrees);
 }
 
 /** FNV-1a, the hash clubManagerStaff already uses, so no draw is spent here. */

@@ -63,6 +63,9 @@ import {
   loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
 import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
+/* Round 513: manager XP and the seven trees, in their own file for the same
+   reason the deals and the staff are in theirs. */
+import { addXp, convergenceEdge, dutyEdge, ensureXp, extraPatience, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthReportEdge } from '@/lib/clubManagerXp';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -4080,7 +4083,11 @@ export function setDuty(career: CareerState, slotIdx: number, duty: Duty | null)
 }
 
 /** The eleven's duties summed and capped, ready to add to the half's boosts. Zero for an eleven with none set. */
-export function dutyBoost(xi: XiSlot[]): { atk: number; def: number } {
+/* Round 513: the Tactics tree multiplies what a set of duties is worth. The
+   caller passes the career so the edge is read off the same state the rest of
+   the engine reads, and dutyEdge is exactly 1 at zero points, so an untouched
+   manager gets Round 505 duties unchanged. */
+export function dutyBoost(xi: XiSlot[], career?: CareerState): { atk: number; def: number } {
   let atk = 0;
   let def = 0;
   for (const x of xi) {
@@ -4088,7 +4095,9 @@ export function dutyBoost(xi: XiSlot[]): { atk: number; def: number } {
     atk += DUTY_EFFECT[x.duty].atk;
     def += DUTY_EFFECT[x.duty].def;
   }
-  return { atk: clamp(atk, -DUTY_BOOST_CAP, DUTY_BOOST_CAP), def: clamp(def, -DUTY_BOOST_CAP, DUTY_BOOST_CAP) };
+  const edge = career ? dutyEdge(career) : 1;
+  const cap = DUTY_BOOST_CAP * edge;
+  return { atk: clamp(atk * edge, -cap, cap), def: clamp(def * edge, -cap, cap) };
 }
 
 /* ---------- Round 505: retraining a second position ---------- */
@@ -5801,7 +5810,10 @@ function maybeAskPress(state: CareerState): void {
     if (state.week - press.lastWeek > 4) {
       press.pending = null;
       press.ducked += 1;
-      press.mood = clamp(press.mood - PRESS_NO_SHOW, 0, 100);
+      /* Round 513: the Media tree holds the press room up when you have not
+         fronted up, and only ever softens a fall. Zero points is the full cost
+         Round 315 set. */
+      press.mood = clamp(press.mood - Math.max(0, PRESS_NO_SHOW - pressCushion(state)), 0, 100);
     }
     return;
   }
@@ -6814,7 +6826,9 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
          costs patience now instead of only an insult. Measured in
          simClubManagerDeals: on the old 2 or 3 with the new cost a fair
          haggler ran out of table before the ask had finished falling. */
-      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD),
+      /* Round 513: the Negotiation tree buys rounds at the table, on top of
+         the seller's own patience. Zero points adds nothing. */
+      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD) + extraPatience(career),
       myOffer: null,
       theirAsk,
       status: 'open',
@@ -6974,7 +6988,7 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
      of simClubManagerDeals for the measurement. */
   next.theirAsk = Math.max(
     Math.round(packageValue * 1.02 * 10) / 10,
-    Math.round((next.theirAsk - (next.theirAsk - packageValue) * ASK_CONVERGENCE) * 10) / 10,
+    Math.round((next.theirAsk - (next.theirAsk - packageValue) * (ASK_CONVERGENCE + convergenceEdge(career))) * 10) / 10,
   );
   next.note = pick(SELLER_COUNTER);
 
@@ -10767,7 +10781,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   /* Round 505: the duties, wherever the mentality is. */
-  const duty = dutyBoost(xi);
+  const duty = dutyBoost(xi, state);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
   return { lamMine, lamOpp, mine, oppS };
 }
@@ -10799,7 +10813,7 @@ function secondHalfLambdas(
   const ment2 = MENT_MOD[live.mentality] ?? MENT_MOD.balanced;
   const opp2 = oppositionShape(scoreOpp, scoreMine);
   /* Round 505: the duties, the same way the first half adds them. */
-  const duty = dutyBoost(xi);
+  const duty = dutyBoost(xi, state);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
   return { lamMine, lamOpp, mine, oppS };
 }
@@ -12035,7 +12049,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const withWindow = { ...p, lastTen };
     return {
       ...withWindow,
-      morale: clamp(p.morale + shiftFor(p) + promiseMoraleDelta(withWindow, standingOf(p)), 5, 99),
+      /* Round 513: the Man Management tree absorbs part of a broken promise.
+         It only ever softens a NEGATIVE swing, so a manager cannot use it to
+         farm morale by over promising, and it is zero at zero points. */
+      morale: clamp(p.morale + shiftFor(p) + (() => {
+        const d = promiseMoraleDelta(withWindow, standingOf(p));
+        return d < 0 ? d * (1 - promiseCushion(state)) : d;
+      })(), 5, 99),
     };
   });
 
@@ -12383,7 +12403,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      his CM-8 asked for, and it makes the ticket policy a real decision. */
   if (crowd.venue === 'home') {
     const fin = ensureFinance(state);
-    const gate = Math.round((crowd.attendance * gatePricePerFan(state)) / 1e6 * 100) / 100;
+    /* Round 513: the Finance tree lifts the money a head, so it moves the gate
+       ONCE, before it is both banked and recorded, and the books cannot end up
+       disagreeing with the budget. gateEdge is exactly 1 at zero points. */
+    const gate = Math.round((crowd.attendance * gatePricePerFan(state) * gateEdge(state)) / 1e6 * 100) / 100;
     state.budget = Math.round((state.budget + gate) * 100) / 100;
     state.finance = { ...fin, seasonGate: Math.round((fin.seasonGate + gate) * 100) / 100, lastGate: gate };
     // Round 467: the same gate, split into tickets and food for the books.
@@ -12798,7 +12821,10 @@ function runYouthIntake(state: CareerState): string[] {
   if (a.recruitment >= 8) count += 1;
   if (a.recruitment >= 14) count += 1;
   if (Math.random() < a.recruitment / 26) count += 1;
-  const judgement = clamp(Math.round(a.coaching / 4), 1, 5);
+  /* Round 513: the Youth tree sharpens the intake report, on the same 1 to 5
+     scale the academy already uses and inside its own clamp, so zero points is
+     the report Round 315 shipped. */
+  const judgement = clamp(Math.round(a.coaching / 4) + youthReportEdge(state), 1, 5);
   const flag = '\u{1F3E0}';
   let best = 0;
   for (let i = 0; i < count; i++) {
@@ -13104,6 +13130,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureBooks(state);
   // Round 471: and the four staff posts.
   ensureStaff(state);
+  ensureXp(state);
   // Round 474: and a save from before the board asked for anything specific.
   ensureBoardAsks(state);
   // Round 505: and the armband and the set piece takers.
@@ -13563,7 +13590,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     /* The full-match lambdas, exactly as the two halves will draw them
        (before any team talk, which has not been given yet). Round 505: the
        duties go in here too, so the odds are the engine's own. */
-    const duty = dutyBoost(xi);
+    const duty = dutyBoost(xi, career);
     const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2);
     const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2);
     let pWin = 0, pDraw = 0, pLoss = 0;
@@ -14322,6 +14349,33 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
 
   const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
+
+  /* Round 513: what the season was worth to the manager himself. Every figure
+     here is one the rollover already knows, which is the point: XP is a reading
+     of the season that just happened, not a second scoring system running
+     beside it. Computed here where the numbers live and applied to the new
+     state further down, the same shape the loan returns use. */
+  const myTableRow = sortedLeagueTable(career).find(r => r.club === career.clubName);
+  const euroRoundsReached = career.uclKoRound === 'won' ? 4
+    : career.uclExit === 'F' ? 4
+    : career.uclExit === 'SF' ? 3
+    : career.uclExit === 'QF' ? 2
+    : career.uclExit === 'R16' ? 1
+    : 0;
+  const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0);
+  const seasonOut = career.seasonSignings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0);
+  const xpAward = seasonXp({
+    wins: myTableRow ? myTableRow.w : 0,
+    trophies: seasonTrophyCount,
+    objectivesMet: objectiveStatuses(career).filter(o => o.status === 'done').length,
+    placesAboveExpectation: Math.max(0, club.expectation - prevPos),
+    /* Named as not done: nothing counts an academy promotion over a season yet,
+       so this source pays nothing until something does. It is wired rather than
+       dropped so the shape is right when a counter exists. */
+    youthPromoted: 0,
+    euroRoundsReached,
+    soldMoreThanBought: seasonOut > seasonIn,
+  });
   /* Round 436: the summer allocation, and then the money you did not spend.
      Before this round the line below was the whole story, and it was built
      from the club's STATIC definition, so career.budget was not an input to
@@ -14680,6 +14734,20 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       pushNews(state, { name: sale.name, from: state.clubName, to: sale.club, fee: sale.fee });
     }
   }
+  /* Round 513: the manager banks the season. This follows him to a new job on
+     purpose, unlike the balance and the sponsor: what he LEARNED is his, and
+     the whole point of the trees is a career rather than a spell at one club. */
+  if (xpAward.total > 0) {
+    state.managerXp = addXp(ensureXp(state), xpAward.total);
+    const beforeLevel = levelFor(xpOf(career).xp);
+    const afterLevel = levelFor(state.managerXp.xp);
+    if (afterLevel > beforeLevel) {
+      state.aiHeadlines = [
+        `\u{1F396} Manager level ${afterLevel}. ${afterLevel - beforeLevel} point${afterLevel - beforeLevel === 1 ? '' : 's'} to spend.`,
+        ...state.aiHeadlines,
+      ].slice(0, 8);
+    }
+  }
   /* Round 308: the merry-go-round's news, same seat as the add-ons and for
      the same reason. */
   if (managerNews.length) state.aiHeadlines = [...managerNews, ...state.aiHeadlines].slice(0, 8);
@@ -14750,6 +14818,10 @@ export function loadCareer(): CareerState | null {
     /* Round 471: and the staff desk, for the same reason: the hub tile reads
        the four posts before a ball is kicked. */
     ensureStaff(parsed);
+    /* Round 513: the manager's own progression. Registered in BOTH loadCareer
+       and playNextEntry, because a screen can be opened before a ball is
+       kicked and engine only repair is not enough. */
+    ensureXp(parsed);
     /* Round 505: and the armband and the takers, for the same reason: the
        tactics screen reads them before a ball is kicked. */
     ensureSetPieces(parsed);

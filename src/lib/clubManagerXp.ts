@@ -147,6 +147,28 @@ export function xpOf(state: CareerState): ManagerXp {
   return isValidXp(state.managerXp) ? state.managerXp : defaultXp();
 }
 
+/**
+ * The block, repaired in place when missing or mangled. Fails closed on shape,
+ * the way ensureStaff does: anything unrecognised is replaced by a fresh block
+ * rather than clamped, because a half valid points map is not something to
+ * guess at.
+ *
+ * IDEMPOTENT, and that is not decoration: every ensure in this engine runs at
+ * least twice on a normal load (loadCareer, then playNextEntry), and the
+ * documented Round 127 bug was a repair that was not, which produced "a save
+ * that will not settle".
+ */
+export function ensureXp(state: CareerState): ManagerXp {
+  if (!isValidXp(state.managerXp)) state.managerXp = defaultXp();
+  return state.managerXp as ManagerXp;
+}
+
+/** Add a season's earnings. Pure: returns the new block, never mutates. */
+export function addXp(block: ManagerXp, amount: number): ManagerXp {
+  const add = Number.isFinite(amount) && amount > 0 ? Math.round(amount) : 0;
+  return { ...block, xp: block.xp + add };
+}
+
 /** How many points this tree has, which is the only input every effect takes. */
 export function treePoints(state: CareerState, tree: SkillTree): number {
   const n = xpOf(state).points[tree];
