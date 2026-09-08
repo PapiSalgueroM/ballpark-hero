@@ -2,6 +2,8 @@
 
 ## Round 539 complete, September 8, 2026
 
+Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
+
 Codex owns the verified World XI required-player-page repair in
 `.worktrees/round-539-world-xi-pool`, branch `codex/round-539-world-xi-pool`,
 base538 `db9766d9`, claim `90c8fe8f`. Required errors/null data now reject the

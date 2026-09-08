@@ -3,6 +3,8 @@
 September 8, 2026. Branch `codex/round-539-world-xi-pool`, base538
 `db9766d9`, claim `90c8fe8f`. Draft-only work, no backend or account writes.
 
+Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
+
 ## Repair and scope
 
 `fetchWorldXiPool` previously appended only successful required query responses.

@@ -2,6 +2,8 @@
 
 ## Round 539 World XI complete pool, September 8, 2026
 
+Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
+
 Verified in `.worktrees/round-539-world-xi-pool`, branch
 `codex/round-539-world-xi-pool`, base538 `db9766d9`, claim `90c8fe8f`.
 Required player-page failures now use the existing retry screen instead of
