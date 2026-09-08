@@ -35,7 +35,7 @@ const {
   REAL_LEAGUES, NATIONS, playableClubs, clubPreviewRating, startCareer, playNextEntry,
   finishSeason, startNextSeason, buildMarket, buyPlayer, objectiveStatuses,
   xiAverageRating, sortedTable, leagueOf, nextFixture,
-  startNegotiation, makeOffer, walkAway, payClause, releaseClauseOf, loanIn, loanEligible,
+  startNegotiation, makeOffer, offerTerms, walkAway, payClause, releaseClauseOf, loanIn, loanEligible,
   loanFeeOf, activeLoans, acceptBid, rejectBid,
 } = cm;
 
@@ -264,6 +264,29 @@ console.log('6) Negotiations and the deadline-day machinery');
       rounds += 1;
       if (rounds > 30) { fail('negotiation never terminated in 30 rounds'); break; }
       const neg = s.negotiation;
+      /* Round 506: the clubs agreeing opens his personal terms table, and
+         nobody has signed until that closes too. This walker takes what his
+         agent asks for, so the fee half below keeps measuring what it always
+         measured: convergence, collapse, hijacks and the money. The terms
+         table has its own harness. */
+      if (neg.phase === 'terms') {
+        const want = neg.terms.want;
+        /* The fee and the signing bonus come out of the same budget, so a
+           walker that spent almost everything on the fee cannot also meet the
+           bonus. Offer what is actually left: the deal then either closes or
+           runs his agent out of patience, and either way it terminates. */
+        const room = Math.max(0, Math.round((s.budget - (neg.agreedFee ?? 0)) * 10) / 10);
+        const settled = offerTerms(s, { ...want, bonus: Math.min(want.bonus, room) });
+        if (!settled) { fail('offerTerms returned null on an open terms table'); break; }
+        if (settled.negotiation && settled.negotiation.phase === 'terms'
+            && settled.negotiation.status === 'open'
+            && settled.negotiation.terms.patience === neg.terms.patience) {
+          fail('an offer of terms neither closed, countered nor cost patience');
+          break;
+        }
+        s = settled;
+        continue;
+      }
       const roll = Math.random();
       if (roll < 0.15) { s = walkAway(s); walked += 1; break; }
       const mult = roll < 0.35 ? 0.7 : roll < 0.7 ? 0.88 : roll < 0.9 ? 0.97 : 1.0;

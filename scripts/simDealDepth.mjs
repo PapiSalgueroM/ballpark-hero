@@ -40,11 +40,35 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm -
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, startNextSeason, finishSeason, buildMarket, startNegotiation, makeOffer,
-  dealPackageValue, acceptBid, sellValue, playNextEntry,
+  dealPackageValue, acceptBid, sellValue, playNextEntry, offerTerms,
 } = cm;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+
+/*
+ * Round 506: agreeing a fee is the middle of a transfer now, not the end of
+ * one. makeOffer hands over to the personal terms table and nobody has signed
+ * anything until his side says yes, so every section below that used to assert
+ * 'agreed' straight off a fee now closes the second table first. Offering him
+ * exactly what askingTerms put on the sheet scores 1.0, which is the agree
+ * line, so this helper is the shortest honest way through and it leaves the
+ * structure assertions underneath measuring exactly what they always did.
+ */
+function closeTerms(state, label) {
+  if (!state || !state.negotiation) { fail(`${label}: no negotiation to close`); return null; }
+  const neg = state.negotiation;
+  if (neg.phase !== 'terms' || !neg.terms) {
+    fail(`${label}: the fee agreed but no terms table opened (phase ${neg.phase}, status ${neg.status})`);
+    return null;
+  }
+  const settled = offerTerms(state, neg.terms.want);
+  if (!settled || settled.negotiation.status !== 'agreed') {
+    fail(`${label}: his own asking terms were refused (status ${settled?.negotiation?.status})`);
+    return null;
+  }
+  return settled;
+}
 const seeded = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 const REAL_RANDOM = Math.random;
 
@@ -67,14 +91,32 @@ console.log('1) Extras-free offers behave as they always did');
   const ask = state.negotiation.theirAsk;
   if (dealPackageValue(state, ask, 12.3) !== 12.3) fail('a pure cash package must equal the cash');
   if (dealPackageValue(state, ask, 12.3, {}) !== 12.3) fail('empty extras must equal the cash');
-  // Meeting the ask still closes instantly.
-  const done = makeOffer(state, ask);
-  if (!done || done.negotiation.status !== 'agreed') fail(`meeting the ask did not close (status ${done?.negotiation?.status})`);
-  // And an insult still burns patience.
+  // Meeting the ask still settles the clubs, and the terms table then closes it.
+  const feeAgreed = makeOffer(state, ask);
+  if (!feeAgreed || feeAgreed.negotiation.phase !== 'terms') {
+    fail(`meeting the ask did not agree the fee (phase ${feeAgreed?.negotiation?.phase}, status ${feeAgreed?.negotiation?.status})`);
+  }
+  if (feeAgreed && feeAgreed.squad.some(p => p.name === feeAgreed.negotiation.player.name)) {
+    fail('a player joined the squad on the fee alone, before his terms were agreed');
+  }
+  const done = closeTerms(feeAgreed, 'meeting the ask');
+  if (done && done.negotiation.status !== 'agreed') fail(`meeting the ask did not close (status ${done.negotiation.status})`);
+  // An insult still burns patience.
   const { state: s2 } = freshDeal(12);
-  const low = makeOffer(s2, s2.negotiation.theirAsk * 0.5);
+  const low = makeOffer(s2, s2.negotiation.theirAsk * 0.65);
   if (!low || (low.negotiation.status === 'open' && low.negotiation.patience >= s2.negotiation.patience)) {
     fail('a lowball no longer burns patience');
+  }
+  /* Round 506: and an extreme one ends the conversation on the spot rather
+     than costing a point of patience, which is the whole of his "extreme
+     lowballs can end talks entirely". */
+  const { state: s3 } = freshDeal(13);
+  const insulting = makeOffer(s3, s3.negotiation.theirAsk * 0.4);
+  if (!insulting || insulting.negotiation.status !== 'collapsed') {
+    fail(`40 percent of the ask did not end the talks (status ${insulting?.negotiation?.status})`);
+  }
+  if (insulting && !(insulting.coldNames ?? []).includes(s3.negotiation.player.name)) {
+    fail('a walkout did not put him on the cold list');
   }
 }
 
@@ -88,12 +130,20 @@ console.log('2) Add-ons close a deal cash alone could not, and only cash leaves 
   const pkg = dealPackageValue(state, ask, cash, { addOn });
   if (pkg < ask * 0.97) fail(`test arithmetic wrong: package ${pkg} under the line for ask ${ask}`);
   const before = state.budget;
-  const done = makeOffer(state, cash, { addOn });
+  const feeAgreed = makeOffer(state, cash, { addOn });
+  /* Round 506: the signing bonus his agent asks for comes out of the same
+     transfer budget as the fee, so the up-front total is the cash plus that
+     bonus. The point of this check is unchanged: the ADD-ON must not be in it. */
+  const signOn = feeAgreed?.negotiation?.terms?.want?.bonus ?? 0;
+  const done = closeTerms(feeAgreed, 'cash 90 percent plus add-ons');
   if (!done || done.negotiation.status !== 'agreed') {
     fail(`cash 90 percent plus add-ons did not close (status ${done?.negotiation?.status})`);
   } else {
     const spent = Math.round((before - done.budget) * 10) / 10;
-    if (spent !== cash) fail(`budget moved by ${spent}, cash was ${cash}: add-ons must not be paid up front`);
+    const expected = Math.round((cash + signOn) * 10) / 10;
+    if (spent !== expected) {
+      fail(`budget moved by ${spent}, cash plus the ${signOn}m signing bonus was ${expected}: add-ons must not be paid up front`);
+    }
     const q = done.pendingAddOns ?? [];
     if (q.length !== 1 || Math.abs(q[0].amount - addOn) > 0.01) fail('the add-on did not join the pending queue');
     if (!done.squad.some(p => p.name === done.negotiation.player.name)) fail('the signed player is not in the squad');
@@ -108,7 +158,7 @@ console.log('3) A part-exchange player leaves and stays gone');
   const swap = [...state.squad].sort((a, b) => sellValue(b) - sellValue(a))[2];
   const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
   const cash = Math.max(0.1, Math.round((ask - swapVal) * 10) / 10);
-  const done = makeOffer(state, cash, { swapId: swap.id });
+  const done = closeTerms(makeOffer(state, cash, { swapId: swap.id }), 'cash plus part exchange');
   if (!done || done.negotiation.status !== 'agreed') {
     fail(`cash plus part exchange did not close (status ${done?.negotiation?.status})`);
   } else {
@@ -126,7 +176,7 @@ console.log('4) The sell-on clause pays the old club on resale');
   const sellOnPct = 20;
   const bonus = dealPackageValue(state, ask, 0, { sellOnPct });
   const cash = Math.max(0.1, Math.round((ask - bonus) * 10) / 10);
-  const done = makeOffer(state, cash, { sellOnPct });
+  const done = closeTerms(makeOffer(state, cash, { sellOnPct }), 'cash plus sell-on');
   if (!done || done.negotiation.status !== 'agreed') {
     fail(`cash plus sell-on did not close (status ${done?.negotiation?.status})`);
   } else {

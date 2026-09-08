@@ -5,7 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
-  startNegotiation, makeOffer, walkAway, respondApproach, expandGround,
+  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
@@ -23,6 +23,7 @@ import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/l
 import { simToWeek as runSimToWeek } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
+import type { PersonalTerms } from '@/lib/clubManagerDeals';
 import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '@/lib/clubManagerFinances';
 import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
@@ -404,6 +405,21 @@ export function useClubManager() {
     setCareer(prev => (prev ? walkAway(prev) : prev));
   }, []);
 
+  /* Round 506: the second table. A fee being agreed no longer signs anybody,
+     so this is the call that actually finishes a transfer. */
+  const proposeTerms = useCallback((terms: PersonalTerms) => {
+    setCareer(prev => (prev ? offerTerms(prev, terms) ?? prev : prev));
+  }, []);
+
+  /* Round 506: the two loan figures agreed when he arrived. */
+  const buyLoanee = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? exerciseLoanOption(prev, playerId) ?? prev : prev));
+  }, []);
+
+  const endLoanEarly = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? breakLoan(prev, playerId) ?? prev : prev));
+  }, []);
+
   /* Round 168: answer the mid-season approach from the Manager panel. */
   const answerApproach = useCallback((commit: boolean) => {
     setCareer(prev => (prev ? respondApproach(prev, commit) : prev));
@@ -621,7 +637,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,

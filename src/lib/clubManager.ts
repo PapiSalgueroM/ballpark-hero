@@ -54,6 +54,15 @@ import {
   coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,
 } from '@/lib/clubManagerStaff';
 import type { ClubStaff } from '@/lib/clubManagerStaff';
+/* Round 506: the deal desk, in its own file for the same reason the staff and
+   the board asks are in theirs. Every export is pure and nothing here is read
+   at module scope, which is what keeps the cycle between the two files safe. */
+import {
+  MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN, OPENING_PATIENCE_SPREAD,
+  askingTerms, counterTerms, dealCloseness, loanTermsFor, offerVerdict, patienceCost,
+  termsNote, termsVerdict,
+} from '@/lib/clubManagerDeals';
+import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -833,6 +842,36 @@ export interface Negotiation {
   lastExtras?: DealExtras;
   /** Round 161: what the whole package read as to the seller. */
   lastPackage?: number;
+  /** Round 506: what the last offer scored on the closeness meter, 0 to 100,
+      judged against the ask as it stood when the offer was made rather than
+      the one it moved to afterwards. */
+  lastCloseness?: number;
+  /**
+   * Round 506: which table you are sitting at. Absent means the fee table,
+   * which is what every save written before Round 506 carries and what a
+   * fresh negotiation opens on. A negotiation is transient (nulled at
+   * startCareer, at the window close, by walkAway and by the signing), so
+   * these fields need no ensure and no save version bump.
+   */
+  phase?: 'fee' | 'terms';
+  /** Round 506: the fee both clubs shook on, held while his terms are agreed. */
+  agreedFee?: number;
+  /** Round 506: the structure that fee came with, settled at the signing. */
+  agreedExtras?: DealExtras;
+  /** Round 506: the personal terms table, once the clubs are done. */
+  terms?: TermsTalk;
+}
+
+/** Round 506: the second table. His side, your side, and how close they are. */
+export interface TermsTalk {
+  /** What he is asking for right now. Comes down as he gives ground. */
+  want: import('@/lib/clubManagerDeals').PersonalTerms;
+  /** Your last offer, or null before you have made one. */
+  offer: import('@/lib/clubManagerDeals').PersonalTerms | null;
+  /** Rounds his agent will take before walking. */
+  patience: number;
+  /** What his side just said. */
+  note: string;
 }
 
 /** An AI club bidding for one of MY players while the window is open. */
@@ -5874,8 +5913,24 @@ function trackDealExtremes(state: CareerState, dir: 'in' | 'out', name: string, 
   }
 }
 
-/** Shared signing mechanics for instant buys, negotiations, clauses, loans. */
-function completeSigning(career: CareerState, mp: MarketPlayer, fee: number, loan = false): CareerState | null {
+/**
+ * Shared signing mechanics for instant buys, negotiations, clauses, loans.
+ *
+ * Round 506: `terms` and `loanTerms` are both optional and both absent on
+ * every path that existed before this round, so an instant buy, a met release
+ * clause and a bare loan all still produce byte for byte the player they
+ * always did: four years (two at 31 plus), the wage off wageFor, and no role,
+ * which ensureRoles fills in later. Only a deal that came through the personal
+ * terms table carries what he was actually promised.
+ */
+function completeSigning(
+  career: CareerState,
+  mp: MarketPlayer,
+  fee: number,
+  loan = false,
+  terms?: PersonalTerms,
+  loanTerms?: LoanTerms,
+): CareerState | null {
   if (career.transferWindow === null) return null;
   if (fee > career.budget) return null;
   if (career.squad.length >= 30) return null;
@@ -5896,10 +5951,23 @@ function completeSigning(career: CareerState, mp: MarketPlayer, fee: number, loa
     value: mp.value,
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
-    contractYears: loan ? 1 : (mp.age >= 31 ? 2 : 4),
+    contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
     wage: 0,
   };
-  player.wage = wageFor(player);
+  player.wage = terms ? terms.wage : wageFor(player);
+  if (terms && !loan) {
+    /* Round 506: what he was told, kept on him. The rung goes straight into
+       Round 127's ladder, so the pride guard, the settlement price for going
+       back on it and the weekly morale swing all pick it up with no new
+       machinery at all. */
+    player.role = terms.role;
+    player.signedTerms = { years: terms.years, wage: terms.wage, role: terms.role, season: career.season };
+  }
+  if (loan) {
+    player.loanFrom = mp.club;
+    if (loanTerms?.optionFee !== undefined) player.loanOptionFee = loanTerms.optionFee;
+    if (loanTerms?.breakFee !== undefined) player.loanBreakFee = loanTerms.breakFee;
+  }
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
@@ -5961,11 +6029,82 @@ export function loanFeeOf(mp: MarketPlayer): number {
   return Math.max(0.3, Math.round((mp.value ?? mp.price) * 0.08 * 10) / 10);
 }
 
-/** Take a player on loan until the end of the season (2 loan slots). */
-export function loanIn(career: CareerState, mp: MarketPlayer): CareerState | null {
+/**
+ * Take a player on loan until the end of the season (2 loan slots).
+ *
+ * Round 506: the loan carries his "option and release figures" now. Both are
+ * quoted by loanTermsFor and both are written onto the player, along with the
+ * club he belongs to, which the engine could not say before this round because
+ * onLoan was a bare boolean. Passing no terms is still allowed and still
+ * produces exactly the loan the game shipped for five hundred rounds.
+ */
+export function loanIn(career: CareerState, mp: MarketPlayer, withTerms = true): CareerState | null {
   if (!loanEligible(career, mp)) return null;
   if (activeLoans(career) >= 2) return null;
-  return completeSigning(career, mp, loanFeeOf(mp), true);
+  const fee = loanFeeOf(mp);
+  const terms = withTerms ? loanTermsFor(mp, fee) : undefined;
+  return completeSigning(career, mp, fee, true, undefined, terms);
+}
+
+/**
+ * Round 506: buy him outright, at the figure agreed when he arrived. The
+ * option is exercised during a window rather than at the rollover, because the
+ * rollover drops every loanee unconditionally in one line (squad.filter(p =>
+ * !p.onLoan)) and a season boundary is the wrong place to ask a manager for a
+ * decision he cannot see coming.
+ */
+export function exerciseLoanOption(career: CareerState, playerId: string): CareerState | null {
+  if (career.transferWindow === null) return null;
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || !p.onLoan) return null;
+  const fee = p.loanOptionFee;
+  if (fee === undefined) return null;
+  if (fee > career.budget) return null;
+  const from = p.loanFrom ?? 'his club';
+  const bought: CMPlayer = {
+    ...p,
+    onLoan: undefined,
+    loanFrom: undefined,
+    loanOptionFee: undefined,
+    loanBreakFee: undefined,
+    contractYears: p.age >= 31 ? 2 : 4,
+    wage: wageFor(p),
+  };
+  const state: CareerState = {
+    ...career,
+    budget: Math.round((career.budget - fee) * 10) / 10,
+    squad: career.squad.map(x => (x.id === playerId ? bought : x)),
+    seasonSignings: [...career.seasonSignings, { dir: 'in', name: p.name, fee }],
+    transferLog: [...(career.transferLog ?? [])],
+  };
+  pushNews(state, { name: p.name, from, to: state.clubName, fee });
+  trackDealExtremes(state, 'in', p.name, fee);
+  return state;
+}
+
+/**
+ * Round 506: send him back early, at the release figure agreed when he
+ * arrived. Frees the loan slot and the wage. He stays in goneNames, so the
+ * market does not offer him back the same window.
+ */
+export function breakLoan(career: CareerState, playerId: string): CareerState | null {
+  if (career.transferWindow === null) return null;
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || !p.onLoan) return null;
+  const fee = p.loanBreakFee;
+  if (fee === undefined) return null;
+  if (fee > career.budget) return null;
+  const home = p.loanFrom ?? 'his club';
+  const state: CareerState = {
+    ...career,
+    budget: Math.round((career.budget - fee) * 10) / 10,
+    squad: career.squad.filter(x => x.id !== playerId),
+    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    setPieces: setPiecesWithout(career.setPieces, playerId),
+    transferLog: [...(career.transferLog ?? [])],
+  };
+  pushNews(state, { name: p.name, from: state.clubName, to: home, fee: 0, loan: true });
+  return state;
 }
 
 /* ================================================================== */
@@ -6605,10 +6744,15 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
     negotiation: {
       player: mp,
       stage: 0,
-      patience: 2 + ri(0, 1),
+      /* Round 506: 4 or 5 rounds rather than 2 or 3, because every answer
+         costs patience now instead of only an insult. Measured in
+         simClubManagerDeals: on the old 2 or 3 with the new cost a fair
+         haggler ran out of table before the ask had finished falling. */
+      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD),
       myOffer: null,
       theirAsk,
       status: 'open',
+      phase: 'fee',
       rivalBidder: null,
       rivalOffer: null,
       note: pick(SELLER_OPENERS),
@@ -6649,6 +6793,11 @@ export function dealPackageValue(career: CareerState, ask: number, amount: numbe
 export function makeOffer(career: CareerState, amount: number, extras?: DealExtras): CareerState | null {
   const neg = career.negotiation;
   if (!neg || neg.status !== 'open') return null;
+  /* Round 506: once the clubs have shaken hands the fee is closed and the only
+     table left is his. Without this an offer made while the terms panel was
+     open re-ran the whole fee negotiation underneath it, agreed a second time,
+     and reopened the terms table with his demands reset. */
+  if (neg.phase === 'terms') return null;
   if (career.transferWindow === null) return null;
   amount = Math.round(amount * 10) / 10;
   if (amount > career.budget) {
@@ -6690,51 +6839,62 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
     return { ...career, negotiation: next };
   }
 
-  // Deal done: the PACKAGE meets the ask.
-  if (packageValue >= next.theirAsk * 0.97) {
-    const signed = completeSigning(career, next.player, amount);
-    if (!signed) return null;
-    /* Round 161: settle the structure. The swapped man leaves with the deal,
-       the sell-on rides on the new arrival, the add-ons join the queue. */
-    if (swap) {
-      signed.squad = signed.squad.filter(p => p.id !== swap.id);
-      signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
-      signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
-      signed.goneNames = [...signed.goneNames, swap.name];
-      const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
-      signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
-      pushNews(signed, { name: swap.name, from: career.clubName, to: next.player.club, fee: swapVal });
-    }
-    const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
-    if (sellOnPct > 0) {
-      signed.squad = signed.squad.map(p =>
-        p.name === next.player.name ? { ...p, sellOnOwed: { club: next.player.club, pct: sellOnPct } } : p);
-    }
-    const addOn = clamp(Math.round((extras?.addOn ?? 0) * 10) / 10, 0, 40);
-    if (addOn > 0) {
-      signed.pendingAddOns = [...(signed.pendingAddOns ?? []), { name: next.player.name, to: next.player.club, amount: addOn }];
-    }
-    const bits: string[] = [`${money(amount)} up front`];
-    if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
-    if (sellOnPct > 0) bits.push(`a ${sellOnPct} percent sell-on`);
-    if (swap) bits.push(`${swap.name} going the other way`);
-    signed.negotiation = {
-      ...next, status: 'agreed',
-      note: `Done: ${bits.join(', ')}. Welcome to ${career.clubName}, ${next.player.name}.`,
+  /* Round 506: one verdict function, four answers, shared with the screen so
+     the meter you watched while typing cannot disagree with what happens when
+     you press send. The agree line at 0.97 is Round 161's and has not moved. */
+  const verdict = offerVerdict(packageValue, next.theirAsk);
+  next.lastCloseness = dealCloseness(packageValue, next.theirAsk);
+
+  /* His "extreme lowballs can end talks entirely". Under 0.55 of the ask they
+     do not counter, do not take another call, and he goes cold for the window.
+     Before this round no number was low enough to do that: the worst an offer
+     could do was cost one patience. */
+  if (verdict === 'walkout') {
+    return {
+      ...career,
+      negotiation: {
+        ...next, status: 'collapsed',
+        note: `They ended the conversation. ${money(amount)} for ${next.player.name} was not worth answering.`,
+      },
+      coldNames: [...(career.coldNames ?? []), next.player.name],
     };
-    return signed;
+  }
+
+  /* The clubs agree. Nobody has signed anything: the fee is held and the
+     second table opens, which is where every arrival before this round
+     skipped straight to a hard coded four year deal on a wage the manager was
+     never shown. */
+  if (verdict === 'agreed') {
+    next.phase = 'terms';
+    next.agreedFee = amount;
+    next.agreedExtras = extras && (extras.addOn || extras.sellOnPct || extras.swapId) ? { ...extras } : undefined;
+    next.terms = {
+      want: askingTerms(next.player),
+      offer: null,
+      patience: 3,
+      note: `${next.player.club} will do business at ${money(amount)}. Now he has to want to come.`,
+    };
+    next.note = `Fee agreed at ${money(amount)}. His agent is waiting.`;
+    return { ...career, negotiation: next };
+  }
+
+  /* Round 506: every answer costs patience now, double for an insult. It used
+     to cost nothing unless you insulted them, and because the counter branch
+     floors the ask at 1.02 of your package against an agree line of 0.97,
+     repeating one unchanged offer closed any non-lowball deal in at most three
+     rounds for free. That is what made his "limited patience" clause a defect
+     rather than an absence. */
+  next.patience -= patienceCost(verdict);
+  if (next.patience <= 0) {
+    return {
+      ...career,
+      negotiation: { ...next, status: 'collapsed', note: 'They walked away from the table. Deal dead this window.' },
+      coldNames: [...(career.coldNames ?? []), next.player.name],
+    };
   }
 
   // Insulting lowball, judged on the whole package.
-  if (packageValue < next.theirAsk * 0.75) {
-    next.patience -= 1;
-    if (next.patience <= 0) {
-      return {
-        ...career,
-        negotiation: { ...next, status: 'collapsed', note: 'They walked away from the table. Deal dead this window.' },
-        coldNames: [...(career.coldNames ?? []), next.player.name],
-      };
-    }
+  if (verdict === 'insulted') {
     next.theirAsk = Math.round(next.theirAsk * 1.04 * 10) / 10;
     next.note = pick(SELLER_INSULTED);
     return { ...career, negotiation: next };
@@ -6767,6 +6927,136 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
   }
 
   return { ...career, negotiation: next };
+}
+
+/**
+ * Round 506: the personal terms table, his "then personal terms: length,
+ * wages, add ons, role promises, everything".
+ *
+ * Nothing about this existed. Every arrival went through completeSigning,
+ * which hard coded the length, took the wage off a formula the manager was
+ * never shown, and left the role undefined so ensureRoles quietly decided
+ * later what you had supposedly promised him. A fee being agreed is now the
+ * middle of a transfer rather than the end of one.
+ *
+ * Returns the career unchanged with a note when the offer is unaffordable,
+ * the settled career when he signs, and a career whose negotiation has
+ * collapsed when his agent walks. Null only when there is no terms table open,
+ * which is the same shape makeOffer uses.
+ */
+export function offerTerms(career: CareerState, offer: PersonalTerms): CareerState | null {
+  const neg = career.negotiation;
+  if (!neg || neg.status !== 'open' || neg.phase !== 'terms' || !neg.terms) return null;
+  if (career.transferWindow === null) return null;
+  const talk = neg.terms;
+  const clean: PersonalTerms = {
+    years: clamp(Math.round(offer.years), MIN_TERMS_YEARS, MAX_TERMS_YEARS),
+    wage: Math.max(1, Math.round(offer.wage)),
+    bonus: Math.max(0, Math.round(offer.bonus * 10) / 10),
+    role: offer.role,
+  };
+  const fee = neg.agreedFee ?? 0;
+  /* The signing bonus comes out of the same transfer budget as the fee, so
+     the two are checked together rather than one at a time. */
+  if (fee + clean.bonus > career.budget) {
+    return {
+      ...career,
+      negotiation: {
+        ...neg,
+        terms: { ...talk, offer: clean, note: `The fee and a ${money(clean.bonus)} bonus come to more than the budget.` },
+      },
+    };
+  }
+
+  const verdict = termsVerdict(talk.want, clean);
+
+  if (verdict === 'agreed') {
+    const signed = settleAgreedDeal(career, neg, clean);
+    if (!signed) return null;
+    return signed;
+  }
+
+  if (verdict === 'walkout') {
+    return {
+      ...career,
+      negotiation: {
+        ...neg, status: 'collapsed',
+        note: termsNote('walkout', talk.want, clean),
+        terms: { ...talk, offer: clean, patience: 0, note: termsNote('walkout', talk.want, clean) },
+      },
+      coldNames: [...(career.coldNames ?? []), neg.player.name],
+    };
+  }
+
+  const patience = talk.patience - (verdict === 'insulted' ? 2 : 1);
+  if (patience <= 0) {
+    return {
+      ...career,
+      negotiation: {
+        ...neg, status: 'collapsed',
+        note: 'His agent stopped taking your calls. He is not signing this window.',
+        terms: { ...talk, offer: clean, patience: 0, note: 'His agent stopped taking your calls.' },
+      },
+      coldNames: [...(career.coldNames ?? []), neg.player.name],
+    };
+  }
+
+  /* He gives ground rather than repeating himself, so the table can actually
+     be closed by somebody who is close and stubborn. He never asks for more
+     than he opened on. */
+  const want = verdict === 'counter' ? counterTerms(talk.want, clean) : talk.want;
+  return {
+    ...career,
+    negotiation: {
+      ...neg,
+      terms: { want, offer: clean, patience, note: termsNote(verdict, talk.want, clean) },
+    },
+  };
+}
+
+/**
+ * Round 161's settlement, moved to where the deal now actually completes. The
+ * swapped man leaves with the deal, the sell-on rides on the new arrival, the
+ * add-ons join the queue, and the signing bonus comes off the budget on top of
+ * the fee. Not exported: the only way to reach it is through the terms table.
+ */
+function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: PersonalTerms): CareerState | null {
+  const amount = neg.agreedFee ?? 0;
+  const extras = neg.agreedExtras;
+  const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
+  const signed = completeSigning(career, neg.player, amount, false, terms);
+  if (!signed) return null;
+  if (terms.bonus > 0) {
+    signed.budget = Math.round((signed.budget - terms.bonus) * 10) / 10;
+  }
+  if (swap && canLeaveSquad(career, swap)) {
+    signed.squad = signed.squad.filter(p => p.id !== swap.id);
+    signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
+    signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
+    signed.goneNames = [...signed.goneNames, swap.name];
+    const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
+    signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
+    pushNews(signed, { name: swap.name, from: career.clubName, to: neg.player.club, fee: swapVal });
+  }
+  const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
+  if (sellOnPct > 0) {
+    signed.squad = signed.squad.map(p =>
+      p.name === neg.player.name ? { ...p, sellOnOwed: { club: neg.player.club, pct: sellOnPct } } : p);
+  }
+  const addOn = clamp(Math.round((extras?.addOn ?? 0) * 10) / 10, 0, 40);
+  if (addOn > 0) {
+    signed.pendingAddOns = [...(signed.pendingAddOns ?? []), { name: neg.player.name, to: neg.player.club, amount: addOn }];
+  }
+  const bits: string[] = [`${money(amount)} up front`];
+  if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
+  if (sellOnPct > 0) bits.push(`a ${sellOnPct} percent sell-on`);
+  if (swap) bits.push(`${swap.name} going the other way`);
+  bits.push(`${terms.years} years at ${terms.wage}k a week`);
+  signed.negotiation = {
+    ...neg, status: 'agreed', phase: 'terms',
+    note: `Done: ${bits.join(', ')}. Welcome to ${career.clubName}, ${neg.player.name}.`,
+  };
+  return signed;
 }
 
 /** Walk away. If a rival was circling, they usually take him. */
