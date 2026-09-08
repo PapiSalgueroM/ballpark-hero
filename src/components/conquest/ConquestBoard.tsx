@@ -684,13 +684,14 @@ export default function ConquestBoard() {
               color={winTeam?.color || '#333'}
               rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
               teamId={game.battleResult?.winner || ''}
-              upgradedPlayer={game.upgradedPlayer}
+              upgradedPlayer={game.battleUpgrades[game.battleResult?.winner || '']}
             />
             <RosterTable
               title={`${loseTeam?.name || 'Loser'}'s Roster`}
               color={loseTeam?.color || '#333'}
               rosterNames={game.rosters[game.battleResult?.loser || ''] || []}
               teamId={game.battleResult?.loser || ''}
+              upgradedPlayer={game.battleUpgrades[game.battleResult?.loser || '']}
             />
           </div>
         </DialogContent>
@@ -719,10 +720,14 @@ export default function ConquestBoard() {
                   {pendingTeam?.name}
                 </span>
               </div>
+              {game.powerupUnavailableReason && (
+                <p role="status" className="text-sm text-muted-foreground">{game.powerupUnavailableReason}</p>
+              )}
               <div className="flex gap-3 justify-center pt-2">
                 <button
                   onClick={game.usePowerupNow}
-                  className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold hover:opacity-90 transition-opacity"
+                  disabled={!!game.powerupUnavailableReason}
+                  className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   ⚡ Use Now
                 </button>
@@ -930,13 +935,13 @@ export default function ConquestBoard() {
       )}
 
       {/* Upgrade active indicator */}
-      {game.upgradeActiveTeam && game.upgradedPlayer && (
-        <div className="text-center animate-in fade-in">
+      {Object.entries(game.teamUpgrades).map(([teamId, player]) => (
+        <div key={teamId} className="text-center animate-in fade-in">
           <div className="inline-block px-4 py-2 rounded-lg bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 text-xs font-semibold">
-            ⬆️ {game.upgradedPlayer} boosted to 99 OVR for {TEAM_MAP.get(game.upgradeActiveTeam)?.name}'s next battle
+            ⬆️ {player} boosted to 99 OVR for {TEAM_MAP.get(teamId)?.name}'s next battle
           </div>
         </div>
-      )}
+      ))}
 
       {/* Game log */}
       {game.gameLog.length > 0 && (

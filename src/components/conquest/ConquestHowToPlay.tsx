@@ -49,7 +49,7 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             <ul className="space-y-1.5 text-muted-foreground">
               <li>🛡️ <span className="text-foreground">Invincibility:</span> Survive one home loss without losing territory</li>
               <li>✍️ <span className="text-foreground">Free Agent:</span> Choose an offered player for the awarded team</li>
-              <li>⬆️ <span className="text-foreground">Upgrade:</span> Choose a roster player, or pick randomly, to boost to 99 OVR for the next battle</li>
+              <li>⬆️ <span className="text-foreground">Upgrade:</span> Choose a roster player, or pick randomly, to boost to 99 OVR for that team's next actual battle</li>
               <li>🐐 <span className="text-foreground">Legend:</span> Add a franchise legend to the roster</li>
               <li>🗺️ <span className="text-foreground">Territory Steal:</span> Choose a bordering enemy state, or use the random option, to claim it for free</li>
             </ul>
@@ -61,6 +61,9 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             </p>
             <p className="text-muted-foreground mt-1.5">
               For example, earn Upgrade on a lightning state. Save it, then tap that team's saved Upgrade between turns. Choose Use Now to pick a player, or Back to Power to keep the card for later.
+            </p>
+            <p className="text-muted-foreground mt-1.5">
+              Neutral claims and other teams' battles keep your upgrade queued. Different teams can each have their own upgrades. If a team already has an upgrade queued, choose Save for Later on its next Upgrade card.
             </p>
           </section>
 

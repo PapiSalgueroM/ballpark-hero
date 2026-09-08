@@ -26,6 +26,7 @@ function fixture(overrides: Partial<ReturnType<typeof useConquest>> = {}) {
     phase: 'steal', turn: 3, territories: { MO: 'KC', NY: 'BUF' }, rosters: { KC: [], BUF: [] },
     eliminated: [], gameLog: [], visiblePlays: [], powerupStates: new Set(),
     invincibleTeams: new Set(), teamSavedPowerups: {}, pendingPowerup: null, powerupUseType: null,
+    teamUpgrades: {}, battleUpgrades: {}, powerupUnavailableReason: null,
     freeAgentList: [], stealCandidates: [], animStartTime: 0,
     attackingTeam: 'KC', defendingTeam: 'BUF', direction: 'E', battleResult: { winner: 'KC', loser: 'BUF', winScore: 24, loseScore: 17 },
     stealModalOpen: true, pendingBattleApply: null, targetState: null, territoryStolenState: null, boxScore: null,
@@ -70,7 +71,7 @@ describe('NFL acquired roster cards', () => {
   });
   it('retains original cards, own legends and queued upgrade display', () => {
     const player = TEAM_MAP.get('KC')!.players![0], legend = TEAM_LEGENDS.KC;
-    fixture({ rosters: { KC: [player.name, legend.name], BUF: [] }, upgradedPlayer: player.name });
+    fixture({ rosters: { KC: [player.name, legend.name], BUF: [] }, battleUpgrades: { KC: player.name } });
     render(<ConquestBoard />);
     const original = rowCells("Chiefs's Roster", player.name), legendCells = rowCells("Chiefs's Roster", legend.name);
     check(original[0]!.includes('⬆️') && original[1] === player.position && original[2] === '99' && original[3] === player.keyStat, 'ORIGINAL: owner card and queued upgrade display remain intact');

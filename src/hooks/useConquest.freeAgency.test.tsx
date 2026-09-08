@@ -32,7 +32,7 @@ function seeded(seed: number) { return () => {
 function mount() { return renderHook(() => useConquest()); }
 function snapshot(game: Game) { return JSON.stringify({ favorite: game.favoriteTeam, rosters: game.rosters,
   signed: game.signedFreeAgents, log: game.gameLog, cooldown: game.conquestsSinceSign, rankings: game.powerRankings(),
-  upgradeOwner: game.upgradeActiveTeam, upgradePlayer: game.upgradedPlayer }); }
+  teamUpgrades: game.teamUpgrades, battleUpgrades: game.battleUpgrades }); }
 function select(view: View, id: string | null = 'BUF') { act(() => view.result.current.setFavoriteTeam(id)); }
 function offered(view: View, index = 0) {
   const player = view.result.current.freeAgencyPool()[index]; check(player, 'SETUP: a canonical player is available'); return player;
@@ -214,11 +214,11 @@ describe('NFL free agency outcomes', () => {
       const upgraded = upgradeWeakest ? waived : [...view.result.current.rosters[owner]].sort((a, b) => rating(b) - rating(a))[0];
       check(upgradeWeakest || upgraded !== waived, 'SETUP: the preserved upgrade is on a stronger player');
       act(() => view.result.current.usePowerupNow()); act(() => view.result.current.chooseUpgradePlayer(upgraded)); select(view, owner);
-      check(view.result.current.upgradedPlayer === upgraded && view.result.current.upgradeActiveTeam === owner, 'SETUP: an actual earned Upgrade is queued');
+      check(view.result.current.teamUpgrades[owner] === upgraded, 'SETUP: an actual earned Upgrade is queued');
       act(() => view.result.current.signFreeAgencyCandidate(offered(view)));
       check(!view.result.current.rosters[owner].includes(waived), 'WAIVER: signing replaces the expected weakest player');
-      check(upgradeWeakest ? view.result.current.upgradedPlayer === null && view.result.current.upgradeActiveTeam === null
-        : view.result.current.upgradedPlayer === upgraded && view.result.current.upgradeActiveTeam === owner,
+      check(upgradeWeakest ? !view.result.current.teamUpgrades[owner]
+        : view.result.current.teamUpgrades[owner] === upgraded,
       upgradeWeakest ? 'WAIVED UPGRADE: the outgoing player loses its queued upgrade' : 'KEPT UPGRADE: a retained player keeps its queued upgrade');
       view.unmount(); vi.clearAllTimers();
     }
