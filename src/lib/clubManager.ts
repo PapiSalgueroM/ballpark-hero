@@ -1109,6 +1109,13 @@ export interface CalendarEntry {
   round: number;
   cupRound?: CupRound;
   uclRound?: UclKoRound;
+  /**
+   * Round 507: which leg of a two legged Champions League tie this week is.
+   * Absent on a one legged round and on every calendar written before Round
+   * 507, and every reader treats absent as the only leg, so a save in flight
+   * keeps playing the ties it was already halfway through.
+   */
+  uclLeg?: 1 | 2;
 }
 
 export interface UclGroupState {
@@ -1164,6 +1171,24 @@ export interface UclTie {
   mine: boolean;
   /** Level after normal time, settled on penalties. */
   pens?: boolean;
+  /**
+   * Round 507: how many legs this tie is played over, 1 or 2. Absent on every
+   * bracket written before Round 507 and on every single leg round, and every
+   * reader treats absent as 1, so an old save's bracket still renders and still
+   * settles exactly as it did.
+   */
+  legs?: 1 | 2;
+  /**
+   * Round 507: the two legs, BOTH stored in this tie's orientation with
+   * tie.home first, whichever ground they were played on. Leg one is at
+   * tie.home and leg two is at tie.away. Keeping one orientation is what lets
+   * uclTieOutcome work out the away goals without every caller having to
+   * remember which way round leg two was.
+   */
+  leg1?: { homeGoals: number; awayGoals: number };
+  leg2?: { homeGoals: number; awayGoals: number };
+  /** Round 507: the tie was separated by away goals rather than aggregate. */
+  byAwayGoals?: boolean;
 }
 
 export interface SeasonRecord {
@@ -7681,15 +7706,27 @@ function roundPairs(clubs: string[], round: number): [string, string][] {
  *  has it. */
 const UCL_R16_MARK = 0.5;
 
-function buildCalendar(leagueSize: number, r16 = false): CalendarEntry[] {
+/* Round 507: how far after the first leg the second one sits, as a fraction of
+   the league season. About a league round and a half, which keeps every second
+   leg clear of the next round's first leg at every league size the game has. */
+const UCL_SECOND_LEG_GAP = 0.035;
+
+function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
   const at = (f: number): number => Math.max(0, Math.min(rounds - 1, Math.round(rounds * f)));
+  /* Round 507: a second leg lands at least one league round after its first,
+     so the two never collapse into the same week at a small league size. */
+  const after = (f: number): number => Math.max(at(f) + 1, at(f + UCL_SECOND_LEG_GAP));
   const marks = {
     ucl: [at(0.05), at(0.13), at(0.21), at(0.27), at(0.32), at(0.39)],
     cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(UCL_R16_MARK),
     uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87), uclF: at(0.92),
+    uclR16b: after(UCL_R16_MARK), uclQFb: after(0.58), uclSFb: after(0.76),
+  };
+  const pushKo = (list: CalendarEntry[], round: UclKoRound, leg: 1 | 2): void => {
+    list.push({ type: 'uclKo', round: 0, uclRound: round, ...(twoLegKo ? { uclLeg: leg } : {}) });
   };
   const cal: CalendarEntry[] = [];
   let md = 0;
@@ -7703,11 +7740,16 @@ function buildCalendar(leagueSize: number, r16 = false): CalendarEntry[] {
     if (r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
     if (r === marks.window) cal.push({ type: 'window', round: 0 });
     // Round 462: only an era whose real format had one plays a round of 16.
-    if (r16 && r === marks.uclR16) cal.push({ type: 'uclKo', round: 0, uclRound: 'R16' });
-    if (r === marks.uclQF) cal.push({ type: 'uclKo', round: 0, uclRound: 'QF' });
+    if (r16 && r === marks.uclR16) pushKo(cal, 'R16', 1);
+    if (r16 && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
+    if (r === marks.uclQF) pushKo(cal, 'QF', 1);
+    if (twoLegKo && r === marks.uclQFb) pushKo(cal, 'QF', 2);
     if (r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
-    if (r === marks.uclSF) cal.push({ type: 'uclKo', round: 0, uclRound: 'SF' });
+    if (r === marks.uclSF) pushKo(cal, 'SF', 1);
+    if (twoLegKo && r === marks.uclSFb) pushKo(cal, 'SF', 2);
     if (r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
+    /* The final is one match at a neutral venue in every era on offer, so it
+       never gets a second leg however twoLegKo is set. */
     if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
   }
   return cal;
@@ -7733,6 +7775,20 @@ export function ensureUclCalendar(state: CareerState): void {
   const mark = Math.max(0, Math.min(rounds - 1, Math.round(rounds * UCL_R16_MARK)));
   const after = state.calendar.findIndex(e => e.type === 'league' && e.round === mark);
   const idx = Math.max(after < 0 ? state.calendar.length : after + 1, state.week);
+  /* Round 507: a repaired calendar has to put in as many legs as this save's
+     season plays, or a two legged era would repair itself into a one legged
+     round of 16 and settle the tie on a single match. The second leg goes in
+     right after the first for the same reason the original insert is where it
+     is: this is a repair for a save already in flight, not a fresh season, so
+     it is placed as late as the week allows rather than spread out. */
+  const legs = uclLegsFor(state.eraId, 'R16');
+  if (legs === 2) {
+    state.calendar.splice(idx, 0,
+      { type: 'uclKo', round: 0, uclRound: 'R16', uclLeg: 1 },
+      { type: 'uclKo', round: 0, uclRound: 'R16', uclLeg: 2 },
+    );
+    return;
+  }
   state.calendar.splice(idx, 0, { type: 'uclKo', round: 0, uclRound: 'R16' });
 }
 
@@ -8099,6 +8155,87 @@ export function eraUclHasR16(eraId: string | undefined): boolean {
   return year >= UCL_R16_FIRST_YEAR && year <= UCL_R16_LAST_YEAR;
 }
 
+/* ---------- Round 507: two legged knockout ties ---------- */
+
+/*
+ * His ask: "Add first and second legs to Champions League knockout ties
+ * whenever that season's real format uses two legs." The clause that matters
+ * is the last one, so none of this is a hard coded boolean: a competition
+ * format is data by season here, which is the lesson the four groups versus
+ * eight cost, and these read the save's own year exactly the way
+ * eraUclHasR16 above already does.
+ *
+ * The rules, two source verified on 2026-09-08 against UEFA's own announcement
+ * and Sky Sports, with ESPN and Goal agreeing:
+ *
+ *   - the round of 16, the quarter finals and the semi finals are played over
+ *     two legs; the final is one match at a neutral venue;
+ *   - the away goals tiebreak ran from 1965 and was ABOLISHED for every UEFA
+ *     club competition from the 2021/22 season. After that a level aggregate
+ *     goes straight to extra time and then penalties, and away goals carry no
+ *     extra weight in extra time either.
+ *
+ * So the three historic eras here (2005, 2010, 2015) all played away goals and
+ * the modern save does not. That falls out of the year rather than being typed
+ * per era, so an era added later gets the right answer without anybody
+ * remembering this comment.
+ */
+
+/** The last season, by its starting year, whose ties used away goals. */
+const UCL_AWAY_GOALS_LAST_YEAR = 2020;
+/** Two legged knockout ties predate every era this game offers. */
+const UCL_TWO_LEG_FIRST_YEAR = 1955;
+
+/** The starting year of the season this save is playing. */
+function uclSeasonYear(eraId: string | undefined): number {
+  return eraId && isHistoricEra(eraId) ? eraById(eraId).startYear : CM_BASE_YEAR;
+}
+
+/** How many legs this save's competition plays in a given round. */
+export function uclLegsFor(eraId: string | undefined, round: UclKoRound): 1 | 2 {
+  /* The final has been a single match at a neutral venue for the whole life of
+     the competition, so it is one leg in every era on offer here. */
+  if (round === 'F') return 1;
+  return uclSeasonYear(eraId) >= UCL_TWO_LEG_FIRST_YEAR ? 2 : 1;
+}
+
+/** Whether a level aggregate is split by away goals in this save's season. */
+export function uclAwayGoalsApply(eraId: string | undefined): boolean {
+  return uclSeasonYear(eraId) <= UCL_AWAY_GOALS_LAST_YEAR;
+}
+
+/**
+ * Who goes through, reading the tie the way the competition reads it.
+ *
+ * Both legs are stored in the TIE's orientation, tie.home first, and leg two is
+ * played at tie.away's ground. So the goals that count as away goals are the
+ * ones tie.away scored in leg one and the ones tie.home scored in leg two, and
+ * writing that down here once is what stops every caller getting it backwards.
+ *
+ * Returns null for the winner when the tie is still level after everything the
+ * era's rules can separate it by, which is the engine's signal for penalties.
+ */
+export function uclTieOutcome(
+  tie: Pick<UclTie, 'leg1' | 'leg2'>,
+  awayGoalsRule: boolean,
+): { homeAgg: number; awayAgg: number; winner: 'home' | 'away' | null; byAwayGoals: boolean } {
+  const l1 = tie.leg1 ?? { homeGoals: 0, awayGoals: 0 };
+  const l2 = tie.leg2 ?? { homeGoals: 0, awayGoals: 0 };
+  const homeAgg = l1.homeGoals + l2.homeGoals;
+  const awayAgg = l1.awayGoals + l2.awayGoals;
+  if (homeAgg !== awayAgg) {
+    return { homeAgg, awayAgg, winner: homeAgg > awayAgg ? 'home' : 'away', byAwayGoals: false };
+  }
+  if (awayGoalsRule) {
+    const homeAway = l2.homeGoals;   // scored at tie.away's ground
+    const awayAway = l1.awayGoals;   // scored at tie.home's ground
+    if (homeAway !== awayAway) {
+      return { homeAgg, awayAgg, winner: homeAway > awayAway ? 'home' : 'away', byAwayGoals: true };
+    }
+  }
+  return { homeAgg, awayAgg, winner: null, byAwayGoals: false };
+}
+
 /** The first knockout round this save's Champions League plays. */
 export function uclFirstKoRound(state: Pick<CareerState, 'eraId'>): UclKoRound {
   return eraUclHasR16(state.eraId) ? 'R16' : 'QF';
@@ -8310,6 +8447,30 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
   for (const t of bracket) {
     if (t.round !== round || t.winner) continue;
     if (t.mine) continue;                     // my tie is settled by my match
+    const legs = uclLegsFor(state.eraId, t.round);
+    if (legs === 2) {
+      /* Round 507: two matches, the second at the other ground, and the tie
+         read by the competition's own rule for this season. simAiMatch returns
+         the goals in the order it was handed the clubs, so leg two comes back
+         reversed and is turned back into this tie's orientation here rather
+         than at the four places that read it. */
+      const [h1, a1] = simAiMatch(state, t.home, t.away);
+      const [a2, h2] = simAiMatch(state, t.away, t.home);
+      t.legs = 2;
+      t.leg1 = { homeGoals: h1, awayGoals: a1 };
+      t.leg2 = { homeGoals: h2, awayGoals: a2 };
+      const out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+      t.homeGoals = out.homeAgg;
+      t.awayGoals = out.awayAgg;
+      t.byAwayGoals = out.byAwayGoals || undefined;
+      if (out.winner === null) {
+        t.pens = true;
+        t.winner = Math.random() < 0.5 ? t.home : t.away;
+      } else {
+        t.winner = out.winner === 'home' ? t.home : t.away;
+      }
+      continue;
+    }
     const [hg, ag] = simAiMatch(state, t.home, t.away);
     t.homeGoals = hg;
     t.awayGoals = ag;
@@ -8349,13 +8510,47 @@ function myUclOpponent(state: CareerState, round: UclKoRound): string | null {
   return tie.home === state.clubName ? tie.away : tie.home;
 }
 
-function recordMyUclTie(state: CareerState, round: UclKoRound, opponent: string, myGoals: number, oppGoals: number, iWon: boolean): void {
+function recordMyUclTie(
+  state: CareerState,
+  round: UclKoRound,
+  opponent: string,
+  myGoals: number,
+  oppGoals: number,
+  iWon: boolean,
+  leg: 1 | 2 = 1,
+  twoLegs = false,
+): void {
   const tie = state.uclBracket?.find(t => t.round === round && t.mine);
   if (!tie) return;
+  /* The tie's own orientation, not tonight's. Leg two is played at tie.away,
+     but it is STORED home first like leg one, so uclTieOutcome can read the
+     away goals without every caller having to remember which way round it was. */
   const iAmHome = tie.home === state.clubName;
-  tie.homeGoals = iAmHome ? myGoals : oppGoals;
-  tie.awayGoals = iAmHome ? oppGoals : myGoals;
-  if (myGoals === oppGoals) tie.pens = true;
+  const tonight = {
+    homeGoals: iAmHome ? myGoals : oppGoals,
+    awayGoals: iAmHome ? oppGoals : myGoals,
+  };
+  if (!twoLegs) {
+    tie.homeGoals = tonight.homeGoals;
+    tie.awayGoals = tonight.awayGoals;
+    if (myGoals === oppGoals) tie.pens = true;
+    tie.winner = iWon ? state.clubName : opponent;
+    return;
+  }
+  tie.legs = 2;
+  if (leg === 1) {
+    /* Round 507: a first leg is recorded and nothing else. No winner, no
+       penalties, and the headline score stays null so the bracket can tell a
+       tie that is half played from one that is over. */
+    tie.leg1 = tonight;
+    return;
+  }
+  tie.leg2 = tonight;
+  const out = uclTieOutcome(tie, uclAwayGoalsApply(state.eraId));
+  tie.homeGoals = out.homeAgg;
+  tie.awayGoals = out.awayAgg;
+  tie.byAwayGoals = out.byAwayGoals || undefined;
+  if (out.winner === null) tie.pens = true;
   tie.winner = iWon ? state.clubName : opponent;
 }
 
@@ -10830,12 +11025,24 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
     if (!opponent) return null;
     // Round 462: in the round of 16 the group winner hosts, which the draw
     // wrote into the tie; the later rounds keep the fixed pattern.
-    const tie = entry.uclRound === 'R16' ? state.uclBracket?.find(t => t.round === 'R16' && t.mine) : undefined;
+    /* Round 507: a two legged tie has to read its venue off the tie, because
+       leg one is at tie.home and leg two is at tie.away and nothing else in
+       the state knows which way round tonight is. A one legged round that is
+       not the round of 16 keeps the fixed pattern it has always used. */
+    const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2;
+    const tie = (twoLegs || entry.uclRound === 'R16')
+      ? state.uclBracket?.find(t => t.round === entry.uclRound && t.mine)
+      : undefined;
+    const leg = entry.uclLeg ?? 1;
+    const atHome = tie
+      ? (leg === 2 ? tie.away === state.clubName : tie.home === state.clubName)
+      : uclKoVenue(entry.uclRound);
+    const legLabel = twoLegs && entry.uclLeg ? ` · ${leg === 1 ? 'first leg' : 'second leg'}` : '';
     return {
       competition: 'uclKo',
-      compLabel: `Champions League · ${UCL_LABELS[entry.uclRound]}`,
+      compLabel: `Champions League · ${UCL_LABELS[entry.uclRound]}${legLabel}`,
       opponent,
-      home: tie ? tie.home === state.clubName : uclKoVenue(entry.uclRound),
+      home: atHome,
     };
   }
   return null;
@@ -11110,7 +11317,19 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
 function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
   const club = clubDefFor(state.clubName);
-  const isKnockout = fx.competition === 'cup' || fx.competition === 'uclKo';
+  /* Round 507: what tonight is, in a two legged tie. A FIRST leg is not a
+     knockout match in the sense the shootout code means: a draw is a perfectly
+     good first leg result and nobody goes out. Only the second leg settles
+     anything, and it settles on the aggregate rather than on tonight. */
+  const uclLeg = fx.competition === 'uclKo' && entry.uclRound
+    ? {
+        round: entry.uclRound,
+        leg: entry.uclLeg ?? 1,
+        twoLegs: uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg,
+      }
+    : null;
+  const firstLegTonight = !!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1;
+  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo') && !firstLegTonight;
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -11182,7 +11401,27 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
   let advanced = won;
-  if (isKnockout && drawn) {
+  /* Round 507: on a second leg the tie decides, not the match. Tonight's own
+     result is left alone on purpose, because it is what the stats, the morale
+     and the record are about: you can lose a second leg 1-0 and still be in the
+     semi finals, and the report should say both of those things. */
+  if (uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) {
+    const tie = state.uclBracket?.find(t => t.round === uclLeg.round && t.mine);
+    const iAmHome = tie ? tie.home === state.clubName : true;
+    const leg1 = tie?.leg1 ?? { homeGoals: 0, awayGoals: 0 };
+    const leg2 = {
+      homeGoals: iAmHome ? myGoals : oppGoals,
+      awayGoals: iAmHome ? oppGoals : myGoals,
+    };
+    const out = uclTieOutcome({ leg1, leg2 }, uclAwayGoalsApply(state.eraId));
+    if (out.winner === null) {
+      decidedBy = 'pens';
+      const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
+      advanced = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+    } else {
+      advanced = (out.winner === 'home') === iAmHome;
+    }
+  } else if (isKnockout && drawn) {
     decidedBy = 'pens';
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
     const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
@@ -11343,11 +11582,24 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
 
   if (fx.competition === 'uclKo') {
     const koRound = entry.uclRound!;
+    const twoLegs = !!uclLeg && uclLeg.twoLegs;
     // Round 95: my result goes into the bracket, then the rest of that round
     // is played out so the picture is complete before the next draw.
-    recordMyUclTie(state, koRound, fx.opponent, myGoals, oppGoals, advanced);
-    advanceUclBracket(state, koRound);
-    if (advanced) {
+    recordMyUclTie(state, koRound, fx.opponent, myGoals, oppGoals, advanced, twoLegs ? uclLeg.leg : 1, twoLegs);
+    /* Round 507: half a tie settles nothing. The rest of the round waits too,
+       so the bracket does not show every other club through while my own tie is
+       still one match old, which is also how the real weeks run. */
+    const halfWayThrough = twoLegs && uclLeg.leg === 1;
+    if (!halfWayThrough) advanceUclBracket(state, koRound);
+    if (halfWayThrough) {
+      const tie = state.uclBracket?.find(t => t.round === koRound && t.mine);
+      const iAmHome = tie ? tie.home === state.clubName : true;
+      const mineAgg = iAmHome ? (tie?.leg1?.homeGoals ?? myGoals) : (tie?.leg1?.awayGoals ?? myGoals);
+      const theirsAgg = iAmHome ? (tie?.leg1?.awayGoals ?? oppGoals) : (tie?.leg1?.homeGoals ?? oppGoals);
+      events.push(
+        `⭐ First leg of the ${UCL_LABELS[koRound].toLowerCase()} done, ${mineAgg}-${theirsAgg}. The second leg is ${iAmHome ? 'away' : 'at home'}.`,
+      );
+    } else if (advanced) {
       const i = UCL_ORDER.indexOf(koRound);
       if (koRound === 'F') {
         state.uclKoRound = 'won';
@@ -12455,7 +12707,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     leagueClubs,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id)),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2),
     clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
@@ -12620,7 +12872,11 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       }
       // Round 95: the Champions League runs whether or not I am still in it.
       if (entry.type === 'uclKo' && entry.uclRound && state.uclBracket) {
-        advanceUclBracket(state, entry.uclRound);
+        /* Round 507: on a week I am not part of, the rest of the round still
+           plays, but only once the tie is actually over. Settling on the first
+           leg would show every other club through a week early. */
+        const legs = uclLegsFor(state.eraId, entry.uclRound);
+        if (legs === 1 || (entry.uclLeg ?? 1) === legs) advanceUclBracket(state, entry.uclRound);
       }
       // Round 102: and so does the cup.
       if (entry.type === 'cup' && entry.cupRound && state.cupBracket) {
@@ -13847,7 +14103,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueClubs,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId)),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2),
     clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
