@@ -17,6 +17,19 @@ interface AdBannerProps {
 
 // Reserve vertical space up front so the ad slot does not shift page
 // content when it loads (Core Web Vitals CLS + accidental-click prevention).
+/**
+ * Round 506: how far the slot is held from whatever sits above it, in pixels.
+ *
+ * Google's game page guidance is 150px between an ad and the controls a player
+ * is tapping, and the reason is accidental clicks rather than taste. Measured
+ * at 390 wide on the built site on 2026-09-08, before this existed: the nearest
+ * control was 104px above the slot on /club-manager (an era picker) and 32px
+ * above it on /squad-deal (the Start Building button). Every caller passes
+ * `mt-8`, which is 32px, so 120 here puts the floor at 152px everywhere while
+ * leaving pages that already had room alone.
+ */
+export const AD_CONTROL_GAP_PX = 120;
+
 const MIN_HEIGHT_BY_FORMAT: Record<string, number> = {
   horizontal: 100,
   rectangle: 250,
@@ -148,7 +161,18 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
     <div
       data-dukb-manual-ad=""
       className={`ad-container flex flex-col items-center justify-center my-6 gap-1 ${className}`}
-      style={{ minHeight }}
+      /* Round 506: the padding is what holds the slot away from the game's own
+         controls, and it is inline rather than a class because every one of the
+         76 mounts passes its own className and a Tailwind margin class there
+         would be a merge argument nobody can see the result of. Measured at 390
+         wide on the built site before this: the nearest control sat 104px above
+         the slot on /club-manager and 32px above it on /squad-deal, against
+         Google's 150px recommendation for a game page. Adding the gap here
+         rather than at 76 call sites means a page added next month cannot
+         reintroduce it. Fenced by playAdRoutes section 10, which measures to the
+         ins rather than to this wrapper, because the wrapper's own top has not
+         moved and a check reading it would pass forever. */
+      style={{ minHeight, paddingTop: AD_CONTROL_GAP_PX }}
     >
       {state === 'filled' && (
         <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70 select-none">

@@ -41,6 +41,13 @@ const PORT = Number(process.env.ADROUTES_PORT || 4196);
 const BASE = (suppliedBase || `http://127.0.0.1:${PORT}`).replace(/\/$/, '');
 const ADSENSE_URL = 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
 
+/* Round 506: Google's game page recommendation, in pixels, and the three
+   routes section 10 measures it on. Keep this in step with AD_CONTROL_GAP_PX in
+   src/components/ads/AdBanner.tsx: that constant is the lever, this is the rule
+   it has to satisfy. */
+const AD_CONTROL_GAP_FLOOR = 150;
+const AD_GAP_ROUTES = ['/club-manager', '/squad-deal', '/footle'];
+
 const ZERO_REQUEST_ROUTES = [
   { path: '/about', kind: 'trust page' },
   { path: '/privacy', kind: 'legal' },
@@ -291,6 +298,25 @@ async function storedConsentVisit(browser, pathname, injectGlobalLoader = false,
       queue: Array.isArray(window.adsbygoogle) ? window.adsbygoogle.length : 0,
       slotPresent: document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle') !== null,
       mobileSlotWidth: document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle')?.getBoundingClientRect().width ?? 0,
+      /* Round 506: how far the AD ITSELF sits from the nearest thing a player
+         can tap above it. Measured to the ins rather than to the wrapper on
+         purpose: the gap is held by padding inside the wrapper, so measuring
+         the container would report the old number and pass forever. */
+      controlGapPx: (() => {
+        const ins = document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle');
+        if (!ins) return null;
+        const adTop = ins.getBoundingClientRect().top + window.scrollY;
+        let best = null;
+        for (const el of document.querySelectorAll('button, a[href], input, select, textarea, [role="button"]')) {
+          const r = el.getBoundingClientRect();
+          if (r.width <= 0 || r.height <= 0) continue;
+          const bottom = r.bottom + window.scrollY;
+          if (bottom > adTop) continue;
+          const gap = adTop - bottom;
+          if (best === null || gap < best) best = gap;
+        }
+        return best === null ? null : Math.round(best);
+      })(),
     }));
     let desktopSlotWidth = 0;
     if (state.slotPresent) {
@@ -656,6 +682,29 @@ try {
     check(transition.after.scripts === 1, `private route to /footle kept exactly one AdSense script (${transition.after.scripts})`);
     check(transition.after.queue === 1, `private route to /footle queued exactly one manual slot (${transition.after.queue})`);
     check(transition.after.slots === 1, `private route to /footle rendered exactly one manual slot (${transition.after.slots})`);
+
+    /*
+     * Round 506. Google's game page guidance is 150px between an ad and the
+     * controls a player is tapping, and the reason is accidental clicks rather
+     * than taste. Measured at 390 wide on the built site on 2026-09-08, before
+     * AD_CONTROL_GAP_PX existed: /club-manager sat at 104px (an era picker) and
+     * /squad-deal at 32px (the Start Building button), against 400px on
+     * /footle. All 76 mounts pass the same `mt-8`, so this was never one page's
+     * problem and the gap is held in AdBanner rather than at the call sites.
+     * After: 224px, 152px and 520px. The three routes here are the two that
+     * were worst and the one that was already fine, so the check would notice
+     * both a regression and an over-correction.
+     */
+    console.log('\n10) the slot sits clear of the controls a player is tapping');
+    for (const route of AD_GAP_ROUTES) {
+      const visit = await storedConsentVisit(browser, route);
+      check(visit.state.slotPresent, `${route} rendered its manual slot to measure against`);
+      const gap = visit.state.controlGapPx;
+      check(
+        gap !== null && gap >= AD_CONTROL_GAP_FLOOR,
+        `${route} left ${gap === null ? 'no measurable' : `${gap}px`} between the nearest control and the ad (floor ${AD_CONTROL_GAP_FLOOR}px)`,
+      );
+    }
   }
 } catch (error) {
   runError = error;
