@@ -29,6 +29,19 @@ export default defineConfig({
       ...(process.env.CONQUEST_NBA_BOARD
         ? { "@/components/conquest/ConquestBoardNba": path.resolve(process.env.CONQUEST_NBA_BOARD) }
         : {}),
+      /* Conquest tab controls reach both route aliases and sibling imports. */
+      ...(process.env.CONQUEST_TABS_STORE
+        ? {
+          "@/lib/conquestDaily": path.resolve(process.env.CONQUEST_TABS_STORE),
+          "./conquestDaily": path.resolve(process.env.CONQUEST_TABS_STORE),
+        }
+        : {}),
+      ...(process.env.CONQUEST_TABS_BOARD
+        ? {
+          "@/components/conquest/ImperialismBoardShared": path.resolve(process.env.CONQUEST_TABS_BOARD),
+          "./ImperialismBoardShared": path.resolve(process.env.CONQUEST_TABS_BOARD),
+        }
+        : {}),
       ...(process.env.POLL_FIXTURES
         ? { "@/data/pollFixtures": path.resolve(process.env.POLL_FIXTURES) }
         : {}),
