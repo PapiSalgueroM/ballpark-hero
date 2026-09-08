@@ -47,14 +47,20 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
           <section>
             <h3 className="font-bold text-foreground mb-2">⚡ Power-Ups</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>🛡️ <span className="text-foreground">Invincibility:</span> Survive one loss without losing territory</li>
-              <li>✍️ <span className="text-foreground">Free Agent:</span> Sign a top available player</li>
-              <li>⬆️ <span className="text-foreground">Upgrade:</span> Boost a random player to 99 OVR</li>
+              <li>🛡️ <span className="text-foreground">Invincibility:</span> Survive one home loss without losing territory</li>
+              <li>✍️ <span className="text-foreground">Free Agent:</span> Choose an offered player for the awarded team</li>
+              <li>⬆️ <span className="text-foreground">Upgrade:</span> Choose a roster player, or pick randomly, to boost to 99 OVR for the next battle</li>
               <li>🐐 <span className="text-foreground">Legend:</span> Add a franchise legend to the roster</li>
-              <li>🗺️ <span className="text-foreground">Territory Steal:</span> Claim a bordering enemy state for free</li>
+              <li>🗺️ <span className="text-foreground">Territory Steal:</span> Choose a bordering enemy state, or use the random option, to claim it for free</li>
             </ul>
             <p className="text-muted-foreground mt-1.5">
-              Power-ups appear on ⚡ marked states. Use them now or save for later (max 2 saved).
+              Claim a ⚡ marked neutral state to earn a power for that team. Keep up to 2 saved powers per team in this run. Saving a third replaces the oldest. Tap a team's saved power between turns to reopen it.
+            </p>
+            <p className="text-muted-foreground mt-1.5">
+              Use Now opens the player or state picker when a choice is needed. Back to Power keeps the card. Closing a picker also returns to the card. Closing the power card saves it for later. Saved powers clear when you start a new run.
+            </p>
+            <p className="text-muted-foreground mt-1.5">
+              For example, earn Upgrade on a lightning state. Save it, then tap that team's saved Upgrade between turns. Choose Use Now to pick a player, or Back to Power to keep the card for later.
             </p>
           </section>
 

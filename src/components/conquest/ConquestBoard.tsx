@@ -3,7 +3,7 @@ import { useConquest, PowerRankEntry } from '@/hooks/useConquest';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
 import { TEAM_MAP, NFL_TEAMS, NFL_CONQUEST_MAP, DIRECTIONS, DIR_LABELS, isLightColor, ConquestFreeAgentCandidate } from '@/data/conquestData';
 import { TEAM_LEGENDS } from '@/data/conquestPowerups';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
 import { HOME_FIELD_BUMP } from '@/lib/conquestBattle';
 import { getNflRosterPlayer } from '@/lib/conquestRosterNfl';
@@ -260,6 +260,7 @@ function StatCategory({ label, attLine, defLine, attColor, defColor }: {
 
 export default function ConquestBoard() {
   const game = useConquest();
+  const powerActionsReady = game.phase === 'ready' && !game.pendingPowerup && !game.powerupUseType;
   const [now, setNow] = useState(Date.now());
   const playLogRef = useRef<HTMLDivElement>(null);
 
@@ -609,7 +610,7 @@ export default function ConquestBoard() {
       )}
 
       {/* Start button */}
-      {game.phase === 'ready' && (
+      {powerActionsReady && (
         <div className="flex justify-center">
           <button
             onClick={game.startBattle}
@@ -696,10 +697,11 @@ export default function ConquestBoard() {
       </Dialog>
 
       {/* Powerup Received Modal */}
-      <Dialog open={game.phase === 'powerup_received' && !!game.pendingPowerup} onOpenChange={() => {}}>
+      <Dialog open={game.phase === 'powerup_received' && !!game.pendingPowerup} onOpenChange={open => { if (!open) game.savePowerupForLater(); }}>
         <DialogContent className="max-w-md bg-card border-border text-foreground">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">⚡ Power-Up Found!</DialogTitle>
+            <DialogDescription className="text-center">{pendingTeam?.name}'s power. Closing this card saves it for this run.</DialogDescription>
           </DialogHeader>
           {game.pendingPowerup && (
             <div className="text-center space-y-4">
@@ -740,15 +742,17 @@ export default function ConquestBoard() {
       </Dialog>
 
       {/* Free Agent Signing Modal */}
-      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={() => {}}>
+      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={open => { if (!open) game.cancelPowerupUse(); }}>
         <DialogContent className="max-w-lg bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">✍️ Sign a Free Agent</DialogTitle>
+            <DialogDescription className="text-center">Choose a player for {t(game.powerupTeam)?.name}. Back to Power keeps this card.</DialogDescription>
           </DialogHeader>
           <p className="text-sm text-muted-foreground text-center mb-2">
             Choose a player to add to <span className="font-bold text-foreground">{t(game.powerupTeam)?.name || 'your team'}</span>'s roster:
           </p>
           <div className="space-y-1.5 max-h-80 overflow-y-auto">
+            {game.freeAgentList.length === 0 && <p className="text-sm text-muted-foreground text-center">No offered players are available.</p>}
             {game.freeAgentList.map(fa => (
               <button
                 key={fa.name}
@@ -762,19 +766,22 @@ export default function ConquestBoard() {
               </button>
             ))}
           </div>
+          <button onClick={game.cancelPowerupUse} className="min-h-8 px-4 py-2 rounded-lg border border-border text-sm font-semibold hover:bg-muted">Back to Power</button>
         </DialogContent>
       </Dialog>
 
       {/* Territory Steal Target Chooser: pick which bordering enemy state to claim */}
-      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'territory_steal'} onOpenChange={() => {}}>
+      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'territory_steal'} onOpenChange={open => { if (!open) game.cancelPowerupUse(); }}>
         <DialogContent className="max-w-md bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🗺️ Steal a Territory</DialogTitle>
+            <DialogDescription className="text-center">Choose a bordering state for {t(game.powerupTeam)?.name}. Back to Power keeps this card.</DialogDescription>
           </DialogHeader>
           <p className="text-sm text-muted-foreground text-center mb-2">
             Pick a border state for <span className="font-bold text-foreground">{t(game.powerupTeam)?.name}</span> to claim:
           </p>
           <div className="space-y-1.5 max-h-72 overflow-y-auto">
+            {game.stealCandidates.length === 0 && <p className="text-sm text-muted-foreground text-center">No bordering states are available.</p>}
             {game.stealCandidates.map(c => {
               const owner = TEAM_MAP.get(c.ownerId);
               return (
@@ -802,19 +809,22 @@ export default function ConquestBoard() {
               🎲 Auto-pick for me
             </button>
           </div>
+          <button onClick={game.cancelPowerupUse} className="min-h-8 px-4 py-2 rounded-lg border border-border text-sm font-semibold hover:bg-muted">Back to Power</button>
         </DialogContent>
       </Dialog>
 
       {/* Upgrade Player Chooser: pick which roster player gets the 99 OVR boost */}
-      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'upgrade'} onOpenChange={() => {}}>
+      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'upgrade'} onOpenChange={open => { if (!open) game.cancelPowerupUse(); }}>
         <DialogContent className="max-w-md bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">⬆️ Upgrade a Player</DialogTitle>
+            <DialogDescription className="text-center">Choose a roster player for {t(game.powerupTeam)?.name}. Back to Power keeps this card.</DialogDescription>
           </DialogHeader>
           <p className="text-sm text-muted-foreground text-center mb-2">
             Pick a <span className="font-bold text-foreground">{t(game.powerupTeam)?.name}</span> player to boost to 99 OVR for the next battle:
           </p>
           <div className="space-y-1.5 max-h-72 overflow-y-auto">
+            {(game.rosters[game.powerupTeam || ''] || []).length === 0 && <p className="text-sm text-muted-foreground text-center">No roster players are available.</p>}
             {(game.rosters[game.powerupTeam || ''] || []).map(player => {
               const playerData = getNflRosterPlayer(player, game.powerupTeam || '');
               return (
@@ -841,6 +851,7 @@ export default function ConquestBoard() {
               🎲 Random player
             </button>
           </div>
+          <button onClick={game.cancelPowerupUse} className="min-h-8 px-4 py-2 rounded-lg border border-border text-sm font-semibold hover:bg-muted">Back to Power</button>
         </DialogContent>
       </Dialog>
 
@@ -866,6 +877,7 @@ export default function ConquestBoard() {
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
             Standings <span className="normal-case font-normal text-[10px]">· 🗺️ territories · ✅ wins</span>
           </h4>
+          {aliveIds.some(id => game.teamSavedPowerups[id]?.length) && <p className="text-[11px] text-muted-foreground text-center mb-2">Saved powers last for this run. Tap one between turns.</p>}
           <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto text-xs">
             {aliveIds
               .map(id => ({ id, count: game.getTeamTerritoryCount(id), wins: winsByTeam.get(id) || 0, team: TEAM_MAP.get(id)! }))
@@ -873,16 +885,22 @@ export default function ConquestBoard() {
               .map(({ id, count, wins, team }) => {
                 const saved = game.teamSavedPowerups[id] || [];
                 return (
-                  <div key={id} className="flex items-center gap-1.5 px-2 py-1 rounded">
+                  <div key={id} className="flex flex-wrap items-center gap-1.5 px-2 py-1 rounded">
                     <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: team.color }} />
-                    <span className="text-foreground font-medium truncate">{team.name}</span>
+                    <span className="text-foreground font-medium truncate min-w-0 flex-1">{team.name}</span>
                     {game.invincibleTeams.has(id) && <span className="text-[10px]">🛡️</span>}
-                    {saved.map((pu, i) => (
-                      <span key={i} className="text-[10px]" title={pu.label}>{pu.icon}</span>
-                    ))}
                     <span className="text-muted-foreground ml-auto whitespace-nowrap" title="Territories · battle wins">
                       🗺️{count} ✅{wins}
                     </span>
+                    {saved.length > 0 && <div className="flex w-full flex-wrap gap-1">
+                      {saved.map((pu, i) => (
+                        <button key={i} onClick={() => game.useSavedPowerup(id, i)} disabled={!powerActionsReady}
+                          aria-label={`Open ${team.name} saved ${pu.label}, slot ${i + 1}`} title={pu.label}
+                          className="min-h-8 min-w-8 px-2 rounded-lg border border-border text-[10px] hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed">
+                          {pu.icon} {pu.label}
+                        </button>
+                      ))}
+                    </div>}
                   </div>
                 );
               })}
