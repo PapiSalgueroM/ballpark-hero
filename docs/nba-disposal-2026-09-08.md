@@ -4,6 +4,8 @@ Worktree `.worktrees/round-538-nba-disposal`, branch
 `codex/round-538-nba-disposal`, base 537 `426cc673` (draft PR88).
 Claim `ec203cf9`. Preserve Claude's root at `b0c339b1` and all earlier
 worktrees and previews.
+Implementation `56162e3c4b715e2c8a32783e716aa1e305e239f7`.
+Draft PR89: https://github.com/PapiSalgueroM/ballpark-hero/pull/89.
 
 ## Original-map baseline
 

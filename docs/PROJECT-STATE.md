@@ -4,7 +4,9 @@
 
 Scoped verification complete in `.worktrees/round-538-nba-disposal`, branch
 `codex/round-538-nba-disposal`, base 537 `426cc673` (draft PR88), claim
-`ec203cf9`. Original-map real-hook evidence shows an unused player-choice
+`ec203cf9`, implementation `56162e3c`.
+Draft PR89: https://github.com/PapiSalgueroM/ballpark-hero/pull/89.
+Original-map real-hook evidence shows an unused player-choice
 callback can schedule and execute a confirmation after unmount. Cleanup now
 invalidates the pending-battle ref before clearing timers. Existing accepted
 timer, repeated-choice, later-battle and reset behavior remains. The unchanged
