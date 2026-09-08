@@ -2,16 +2,26 @@
 
 ## Round 528 explicit harness selection, September 8, 2026
 
-CLAIMED in `.worktrees/round-528-explicit-sims`, branch
+Scoped verification complete in `.worktrees/round-528-explicit-sims`, branch
 `codex/round-528-explicit-sims`, base527 `e012beec` (draft PR78).
-Make runAllSims refuse an empty ONLY list before any database probe, child
-harness or browser server starts. Explicit named lists keep existing behavior.
-This is an accidental-run guard, not network isolation or permission to run
-production-writing probes. A copied runner in a marker-only temporary fixture
-will prove default refusal and explicit selection without executing real probes.
-Main owns runner/docs, test author owns simRunnerSelection, review is read-only.
-No root edits, production writes, default real suite, merge or publication.
-Preserve all previous worktrees/previews. Next free529.
+runAllSims now refuses an empty ONLY list before any database probe, child
+harness or browser server starts. Explicit reviewed lists preserve existing
+selection, aliases, child environment cleanup, browser opt-in and failure
+reporting. This prevents accidental broad execution; selected harnesses can
+still use the network, and full process isolation remains unresolved.
+
+The old behavior was reproduced only in a copied runner with synthetic
+intercepted requests and marker children. All21 fixture cases pass. Six exact
+source controls produce18 intended failures; unexpected runtime errors are
+rejected. The new harness runs as node work through the actual selected runner.
+Both exact types, build and all fifteen generated-site fences pass. Independent
+review clear. Evidence: docs/runner-selection-2026-09-08.md. No app, package,
+lockfile, snapshot or ledger changes; entry bundle remains index-BXbTBTnd.js.
+
+Tracked CLAUDE.md and pipeline guidance now require explicit selection. The
+untracked root AGENTS.md was preserved. No real default suite, production
+writes, root edits, merge or publication. NBA preview4205 and every prior
+worktree/preview remain. Next free529.
 
 **Round 527, Codex resumed task, scoped verification complete September 8:**
 NBA Arcade visible power rewards, bank/reopen controls, owner-specific
