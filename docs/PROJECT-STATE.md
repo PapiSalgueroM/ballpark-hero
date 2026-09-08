@@ -3083,20 +3083,46 @@ today rather than adding alongside them. Every new poll must obey all of these r
   fee negotiation underneath it, agreed a second time and reset his demands. `simClubManager`
   caught it as 57 negotiations that never terminated.
 
-  **GATES.** tsc zero, `npm run build` clean, `playClubManager` played a full season through the
-  real screens at 0 findings. `simClubManagerDeals` is the new fence: seven sections, five
-  negative controls, each firing on its own section (nofog 2 findings, nowalkout 1, freehaggle
-  2, nohandoff 17, freeterms 1), green on the default seed and SIM_SEED 1 to 3.
-  `simClubManager`, `simDealDepth`, `simTransfers`, `simContracts`, `simReleaseClause`,
-  `simBoardAsks` and `simRoles` all green. `simDealDepth` and `simClubManager` were taught the
-  two table flow rather than the flow bent back to them, and `simDealDepth` gained two checks it
+  **THE ADSENSE FOLLOW-UP THE BOARD HANDED THIS LANE, AND WHY IT GREW.** The 2026-09-07 audit
+  measured the nearest Club Manager control 104px from its ad against Google's 150px game page
+  recommendation. Reproduced exactly at 390 wide on the built site, and then found not to be a
+  Club Manager problem at all: all 76 `AdBanner` mounts pass the same `mt-8`, and `/squad-deal`
+  measured 32px, the Start Building button practically touching the slot, against `/footle` at
+  400px. `AD_CONTROL_GAP_PX` holds the gap in the component rather than at 76 call sites, as
+  inline padding rather than a Tailwind class because every caller passes its own className.
+  After: 224px, 152px, 520px. Fenced by `playAdRoutes` section 10, which measures to the `ins`
+  and not to the wrapper, because the padding is inside the wrapper and a guard reading the
+  wrapper would report the old number forever. Proven red by setting the constant to 0 and
+  rebuilding: exactly the two broken routes fail, naming their original 104px and 32px.
+
+  **GATES.** tsc zero, `npm run build` clean. `playClubManager` played a full season through the
+  real screens at 0 findings. `simClubManagerDeals` is the new engine fence: seven sections,
+  five negative controls, each firing on its own section (nofog 2 findings, nowalkout 1,
+  freehaggle 2, nohandoff 17, freeterms 1), green on the default seed and SIM_SEED 1 to 3.
+  `playDealDesk` is the new browser fence: 22 checks at 390 wide with control
+  `DEAL_DESK_CONTROL=nometer`, which rewrites the served chunk and takes down exactly the two
+  checks that read the meter. `simClubManager`, `simDealDepth`, `simTransfers`, `simContracts`,
+  `simReleaseClause`, `simBoardAsks`, `simRoles` and `playAdRoutes` all green, and all 15
+  built-site fences green on the fresh build (`simAdsense`, `simBrand`, `simHeadTags`,
+  `simHiddenPages`, `simHubs`, `simIndexNow`, `simIndexing`, `simInternalLinks`,
+  `simNoRivalNames`, `simPrerender`, `simPrerenderBoot`, `simRetiredRoutes`, `simSchema`,
+  `simSitemap`, `simSnapshotAssets`). `simDealDepth` and `simClubManager` were taught the two
+  table flow rather than the flow bent back to them, and `simDealDepth` gained two checks it
   could not make before: that nobody joins the squad on the fee alone, and that 40 percent of
   the ask ends the talks and goes cold.
 
+  **A SECOND DEFECT THE BROWSER WALK FOUND, MINE.** The two meters did not speak the same
+  language: the fee meter has five states and warns before you insult a seller, the terms meter
+  had two and never warned you were about to insult the agent, even though `termsVerdict`
+  computes it and `offerTerms` acts on it. Both now say the same five things in the same four
+  colours.
+
   **NAMED AS NOT DONE.** The AI clubs do not negotiate personal terms with your players when
   they bid, an outgoing loan still carries no option or release figure (only incoming ones do),
-  the option to buy is exercised in a window rather than offered at the rollover, and the full
-  node suite has not been run on this branch yet.
+  and the option to buy is exercised in a window rather than offered at the rollover. The
+  borrowed player's Sell tab line (On loan from, Buy him, Send him back) is covered in the
+  engine by `simClubManagerDeals` section 6 but is unwalked by any browser harness, because
+  reaching it needs a completed loan and a rollover.
 
 - **2026-09-07, Round 509 (Codex lane), CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
   PENDING.** This is one correctness and presentation batch, not a claim
