@@ -1,10 +1,13 @@
 # Work board
 
-**Round 518, Codex, CLAIMED September 8:** ticker handoff visibility in
+**Round 518, Codex, scoped verification complete September 8:** ticker handoff visibility in
 `.worktrees/round-518-ticker-handoffs`, branch `codex/round-518-ticker-handoffs`,
-based on Round 517 `5c5f84e7`. Own TopTicker and its scoped outcome/browser tests.
-Bound each scrolling pass to the active sport, remove the clipping width cap,
-hold the final score before handoff, and preserve pause and reduced-motion access.
+based on Round 517 `5c5f84e7`. Each pass is bounded to the active sport, without
+the clipping width cap. Final-score reading time, independent pauses and reduced
+motion access are verified at four widths, with eleven exact-failure controls.
+Review-driven feed/focus lifecycle fixes pass. The real built-app walk and its
+blocked-resume control pass. Exact types/build, all fifteen generated-site
+fences and both ticker sims pass. Preview 4188 serves `index-CN0RkAol.js`.
 No feed, pagination, polling interval, sports data, provider, account or game
 engine changes. Root stays Claude's; preview 4186 stays frozen. Next free: 519.
 

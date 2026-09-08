@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type Ref } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { SPORT_HUB, SPORT_TAG, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
 
@@ -119,9 +119,9 @@ function ScoreCard({ row, hub }: { row: LiveScoreRow; hub: string }) {
   );
 }
 
-function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
+function SportBox({ group, open, activeRef }: { group: SportGroup; open: boolean; activeRef?: Ref<HTMLSpanElement> }) {
   return (
-    <span data-no-prerender="true" className="inline-flex items-center h-full">
+    <span ref={activeRef} data-no-prerender="true" className="inline-flex items-center h-full shrink-0">
       <Link
         to={group.hub}
         data-sport-box=""
@@ -130,8 +130,7 @@ function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
         {group.tag}
       </Link>
       <span
-        className="inline-flex items-center h-full overflow-hidden transition-[max-width,opacity] duration-500 ease-in-out"
-        style={{ maxWidth: open ? '4000px' : '0px', opacity: open ? 1 : 0 }}
+        className="inline-flex items-center h-full"
         aria-hidden={!open}
       >
         {open && group.rows.map(r => <ScoreCard key={r.id} row={r} hub={group.hub} />)}
@@ -151,12 +150,20 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
      over the strip or keyboard focus inside it parks the wire on the open
      sport; leaving lets it run again. Reduced motion still shows everything
      at once with no cycling at all. */
-  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
   /* Round 307: the promised pause button, a deliberate stop that survives
      the pointer leaving. Hover pause and button pause are separate states
      so mousing away does not undo an explicit choice. */
   const [userPaused, setUserPaused] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const activeGroupRef = useRef<HTMLSpanElement>(null);
+  const boundsRef = useRef({ start: 0, end: 0 });
+  const cycleRef = useRef<{ sport: string; position: number; holdLeft: number; atEnd: boolean } | null>(null);
+  const open = groups.length ? idx % groups.length : 0;
+  const activeGroup = groups[open];
 
   useEffect(() => {
     try {
@@ -170,27 +177,77 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     }
   }, []);
 
-  /* Round 317, his report "the ticker isnt moving": it wasn't, in the way
-     that counts. The old loop held each sport's box perfectly still for up
-     to 14 seconds and then swapped, and once Round 311 loaded the full day
-     ahead a sport carries twenty plus cards, so everything past the screen
-     edge was unreachable and the strip read as parked. The wire now GLIDES
-     the way the cable bottom line he named does: a short hold to read the
-     label, then a steady crawl through every card, and the handoff to the
-     next sport when the last card has passed. A group that fits on screen
-     holds for its old dwell instead. Reduced motion keeps the everything
-     open, nothing moving layout. */
-  const lastIdxRef = useRef(-1);
-  useEffect(() => {
-    if (reducedMotion || paused || userPaused || groups.length === 0) return undefined;
+  /* Removing a focused score or hiding the strip need not dispatch blur.
+     Reconcile these pauses with the remaining, visible DOM after updates. */
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const reconcile = () => {
+      const visible = !!section?.getClientRects().length;
+      setFocused(visible && section!.contains(document.activeElement));
+      if (!visible) setHovered(false);
+    };
+    reconcile();
+    if (!section) return undefined;
+    const observer = new ResizeObserver(reconcile);
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [groups, pathname]);
+
+  /* Each pass belongs to the active sport, not the collapsed labels around
+     it. Measure before paint and again when content or viewport size changes. */
+  useLayoutEffect(() => {
     const vp = viewportRef.current;
+    const box = activeGroupRef.current;
     if (!vp) return undefined;
-    const fresh = lastIdxRef.current !== idx;
-    lastIdxRef.current = idx;
-    if (fresh) vp.scrollLeft = 0;
-    /* a fresh sport gets the reading hold; a resume after hover or pause
-       picks up mid glide almost at once */
-    let holdLeft = fresh ? 1500 : 350;
+    if (reducedMotion || !activeGroup || !box) {
+      cycleRef.current = null;
+      setOverflows(false);
+      if (!reducedMotion) vp.scrollLeft = 0;
+      return undefined;
+    }
+    const measure = () => {
+      const cards = box.querySelectorAll('[data-score-card]');
+      const lastCard = cards[cards.length - 1];
+      if (!lastCard) return;
+      const left = vp.getBoundingClientRect().left + vp.clientLeft;
+      const physicalMax = Math.max(0, vp.scrollWidth - vp.clientWidth);
+      const start = Math.min(physicalMax, Math.max(0, box.getBoundingClientRect().left - left + vp.scrollLeft));
+      const end = Math.min(physicalMax, Math.max(start, lastCard.getBoundingClientRect().right - left + vp.scrollLeft - vp.clientWidth));
+      boundsRef.current = { start, end };
+      const fits = end - start <= 4;
+      setOverflows(!fits);
+      if (cycleRef.current?.sport !== activeGroup.sport) {
+        vp.scrollLeft = start;
+        cycleRef.current = { sport: activeGroup.sport, position: vp.scrollLeft, holdLeft: fits ? dwellMs(activeGroup.rows.length) : 1500, atEnd: fits };
+      } else {
+        vp.scrollLeft = Math.min(end, Math.max(start, vp.scrollLeft));
+        const cycle = cycleRef.current;
+        cycle.position = vp.scrollLeft;
+        if (cycle.atEnd && !fits && cycle.position < end - 1) {
+          cycle.atEnd = false;
+          cycle.holdLeft = 0;
+        } else if (!cycle.atEnd && fits) {
+          cycle.atEnd = true;
+          cycle.holdLeft = dwellMs(activeGroup.rows.length);
+        }
+      }
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(vp);
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, [activeGroup, reducedMotion, pathname]);
+
+  /* Keep remaining reading time through pauses, then crawl every score.
+     The final card gets its own visible hold before a handoff or restart. */
+  useEffect(() => {
+    if (reducedMotion || hovered || focused || userPaused || groups.length === 0) return undefined;
+    const vp = viewportRef.current;
+    const cycle = cycleRef.current;
+    if (!vp || !cycle) return undefined;
+    vp.scrollLeft = cycle.atEnd ? boundsRef.current.end : Math.min(boundsRef.current.end, Math.max(boundsRef.current.start, vp.scrollLeft));
+    cycle.position = vp.scrollLeft;
     /* Round 336, his report: "the ticker is moving really slow". 55 was
        measured live at 60 px/s, which on a 3000px day-ahead slate is nearly
        a minute per pass. Doubled, and the reading hold trimmed to match.
@@ -201,45 +258,40 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     const SPEED = 75; // px per second, the cable crawl
     let raf = 0;
     let last: number | null = null;
-    let settled = 0;
     const step = (ts: number) => {
       if (last == null) last = ts;
       const dt = Math.min(100, ts - last);
       last = ts;
-      if (holdLeft > 0) {
-        holdLeft -= dt;
+      if (cycle.holdLeft > 0) {
+        cycle.holdLeft = Math.max(0, cycle.holdLeft - dt);
         raf = requestAnimationFrame(step);
         return;
       }
-      const maxScroll = vp.scrollWidth - vp.clientWidth;
-      if (maxScroll <= 4) {
-        /* fits on screen: nothing to glide, so hold for the old dwell */
-        settled += dt;
-        if (settled >= dwellMs(groups[idx % groups.length]?.rows.length ?? 0) && groups.length > 1) {
-          setIdx(i => (i + 1) % groups.length);
-          return;
-        }
-        raf = requestAnimationFrame(step);
-        return;
-      }
-      vp.scrollLeft = vp.scrollLeft + (SPEED * dt) / 1000;
-      if (vp.scrollLeft >= maxScroll - 1) {
+      const { start, end } = boundsRef.current;
+      if (cycle.atEnd) {
         if (groups.length > 1) {
           setIdx(i => (i + 1) % groups.length);
           return;
         }
-        /* a one sport wire loops itself: hold at the end, then restart */
-        vp.scrollLeft = 0;
-        holdLeft = 1500;
+        if (end - start > 4) {
+          vp.scrollLeft = start;
+          cycle.position = vp.scrollLeft;
+          cycle.atEnd = false;
+          cycle.holdLeft = 1500;
+        }
+      } else {
+        cycle.position = Math.min(end, cycle.position + (SPEED * dt) / 1000);
+        vp.scrollLeft = cycle.position;
+        if (cycle.position >= end - 1) {
+          cycle.atEnd = true;
+          cycle.holdLeft = 1500;
+        }
       }
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [idx, groups, reducedMotion, paused, userPaused]);
-
-  /* A feed refresh can shrink the group list under the pointer. */
-  const open = groups.length ? idx % groups.length : 0;
+  }, [idx, groups, reducedMotion, hovered, focused, userPaused, pathname]);
 
   if (HIDDEN_PREFIXES.some(p => pathname.startsWith(p))) return null;
 
@@ -258,13 +310,14 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
        finger never pauses this way (the explicit pause button and the
        keyboard focus pause both remain). */
     <section
+      ref={sectionRef}
       data-site-chrome=""
       className={`${home ? '' : 'hidden md:block'} bg-[hsl(var(--ticker))] border-b border-border/60 overflow-hidden h-8 relative`}
       aria-label="Live scores ticker"
-      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPaused(true); }}
-      onPointerLeave={(e) => { if (e.pointerType === 'mouse') setPaused(false); }}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setHovered(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === 'mouse') setHovered(false); }}
+      onFocus={() => setFocused(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
     >
       <div className="flex items-center h-full">
         <span data-live-chip="" className="shrink-0 z-10 h-full inline-flex items-center gap-1.5 px-3 bg-primary text-primary-foreground text-[10px] font-black tracking-[0.18em] uppercase">
@@ -275,7 +328,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
             Effective dwell also pauses under hover and focus; this button is
             the explicit choice that sticks. Hidden when there is nothing to
             cycle, because a pause button on a still strip is a lie. */}
-        {groups.length > 1 && !reducedMotion && (
+        {(groups.length > 1 || overflows) && !reducedMotion && (
           <button
             type="button"
             onClick={() => setUserPaused(p => !p)}
@@ -293,7 +346,22 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
             <span aria-hidden="true">{userPaused ? '▶' : '⏸'}</span>
           </button>
         )}
-        <div ref={viewportRef} className="flex-1 overflow-hidden h-full" aria-live="off">
+        <div
+          ref={viewportRef}
+          className={`flex-1 min-w-0 h-full ${reducedMotion ? 'overflow-x-auto' : 'overflow-hidden'}`}
+          aria-live="off"
+          onFocus={(e) => {
+            if (!reducedMotion) return;
+            const vp = e.currentTarget;
+            const target = e.target.getBoundingClientRect();
+            const left = vp.getBoundingClientRect().left + vp.clientLeft;
+            if (target.left < left || target.width > vp.clientWidth) {
+              vp.scrollLeft += target.left - left;
+            } else if (target.right > left + vp.clientWidth) {
+              vp.scrollLeft += target.right - left - vp.clientWidth;
+            }
+          }}
+        >
           <div className="flex items-center h-full w-max">
             {groups.length === 0 && (
               <span data-no-prerender="true" className="inline-flex items-center h-full px-3 text-[11px] text-muted-foreground whitespace-nowrap">
@@ -302,7 +370,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
             )}
             {reducedMotion
               ? groups.map(g => <SportBox key={g.sport} group={g} open />)
-              : groups.map((g, i) => <SportBox key={g.sport} group={g} open={i === open} />)}
+              : groups.map((g, i) => <SportBox key={g.sport} group={g} open={i === open} activeRef={i === open ? activeGroupRef : undefined} />)}
           </div>
         </div>
       </div>

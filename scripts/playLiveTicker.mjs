@@ -22,6 +22,7 @@
  *
  * NEGATIVE CONTROL: TICKER_CONTROL=dim fades the card text to half alpha in
  * the browser; section 3 must go red.
+ * TICKER_CONTROL=resume blocks the resume click; only its motion check must fail.
  *
  * Run: node scripts/lib/hostLikeServer.mjs dist 4173 &
  *      node scripts/playLiveTicker.mjs
@@ -30,9 +31,10 @@ import pw from './lib/playwrightLoader.mjs';
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const CONTROL = process.env.TICKER_CONTROL || '';
-if (CONTROL && CONTROL !== 'dim') { console.error(`TICKER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['dim', 'resume'].includes(CONTROL)) { console.error(`TICKER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
-const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); if (!ok) failures += 1; };
+const failedChecks = [];
+const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); if (!ok) { failures += 1; failedChecks.push(what); } };
 
 const BAR = '[aria-label="Live scores ticker"]';
 const today = new Date();
@@ -250,24 +252,39 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       return { s0, s1: vp.scrollLeft };
     }, BAR);
     say(Math.abs(pausedRead.s1 - pausedRead.s0) < 2, `pause parks the wire (${pausedRead.s0.toFixed(0)} to ${pausedRead.s1.toFixed(0)}px over 2.5s)`);
+    if (CONTROL === 'resume') {
+      await pauseBtn.evaluate(button => {
+        if (button.getAttribute('aria-pressed') !== 'true') throw new Error('resume control needs a paused ticker');
+        button.dataset.blockedResume = '0';
+        button.addEventListener('click', event => {
+          button.dataset.blockedResume = String(Number(button.dataset.blockedResume) + 1);
+          event.stopImmediatePropagation();
+        }, { capture: true, once: true });
+      });
+    }
     await pauseBtn.click();
+    if (CONTROL === 'resume') {
+      const blocked = await pauseBtn.getAttribute('data-blocked-resume');
+      if (blocked !== '1' || await pauseBtn.getAttribute('aria-pressed') !== 'true') {
+        throw new Error('resume control changed nothing');
+      }
+      console.log('   NEGATIVE CONTROL ON: resume click blocked once, only its motion check must fail');
+    }
     /* move the pointer OFF the strip, as a person does, then measure */
     await p4.mouse.move(700, 500);
-    /* Round 336 doubled the crawl, so a start-to-end read can straddle the
-       wrap (the wire reaches the end and restarts at zero, which read as
-       "went backwards, not moving"). Sampled instead: a parked wire reads
-       identical at every sample, a gliding one shows a real step somewhere,
-       and the wrap itself is the biggest step of all. */
+    /* Read movement across the whole window, excluding backward wraps.
+       A 75 px/s crawl advances about 34 px per 450 ms sample, so the old
+       biggest-step threshold of 50 depended on a wrap or a delayed sample. */
     const resumed = await p4.evaluate(async (sel) => {
       const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
       const seen = [vp.scrollLeft];
       for (let i = 0; i < 8; i++) { await new Promise(r => setTimeout(r, 450)); seen.push(vp.scrollLeft); }
-      let biggestStep = 0;
-      for (let i = 1; i < seen.length; i++) biggestStep = Math.max(biggestStep, Math.abs(seen[i] - seen[i - 1]));
-      return { seen: seen.map(x => Math.round(x)), biggestStep, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
+      let forwardDistance = 0;
+      for (let i = 1; i < seen.length; i++) forwardDistance += Math.max(0, seen[i] - seen[i - 1]);
+      return { seen: seen.map(x => Math.round(x)), forwardDistance, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
     }, BAR);
     say(!resumed.focusInStrip, 'the resume click left no sticky focus inside the strip');
-    say(resumed.biggestStep > 50, `resume actually resumes (path ${resumed.seen.join(' > ')}, biggest step ${resumed.biggestStep.toFixed(0)}px)`);
+    say(resumed.forwardDistance > 100, `resume actually resumes (path ${resumed.seen.join(' > ')}, forward distance ${resumed.forwardDistance.toFixed(0)}px)`);
   }
   await c4.close();
 
@@ -328,6 +345,12 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
 
 await browser.close();
 console.log('');
+if (CONTROL === 'resume') {
+  if (failedChecks.length === 1 && failedChecks[0].startsWith('resume actually resumes (')) {
+    console.log('playLiveTicker control: green. Only the blocked resume motion check failed.'); process.exit(0);
+  }
+  console.error('playLiveTicker control: RED. Expected only the blocked resume motion check to fail.'); process.exit(1);
+}
 if (CONTROL === 'dim') {
   if (failures > 0) { console.log(`playLiveTicker control: green. The faded text was reported (${failures} finding).`); process.exit(0); }
   console.error('playLiveTicker control: RED. Half alpha text on the cards went unreported.'); process.exit(1);
