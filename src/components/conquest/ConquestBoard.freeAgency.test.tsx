@@ -141,4 +141,3 @@ describe('NFL free agency panel', () => {
     check(!!screen.queryByText(/after your third settled battle.*3 more settled battles.*neutral state does not count/), 'EXAMPLE: guide distinguishes battles from neutral claims');
   });
 });
-

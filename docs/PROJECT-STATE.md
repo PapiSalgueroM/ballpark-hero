@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-531-nfl-free-agency`, branch
 `codex/round-531-nfl-free-agency`, base530 `18e83e9a` (draft PR81).
+Implementation `d730be87`, draft PR82: https://github.com/PapiSalgueroM/ballpark-hero/pull/82.
 NFL signing and team changes now require a ready turn with no unresolved
 power choice. Current-pool validation and consumed callback guards prevent
 duplicate or stale roster/log/rating writes. Surviving-team choices retain

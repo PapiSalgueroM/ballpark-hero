@@ -7,7 +7,9 @@ useConquest.ts and ConquestBoard.tsx, plus the pool's unsupported static
 availability prose in conquestData.ts, accurate help, focused tests,
 negative controls and bounded browser verification. Worktree
 `.worktrees/round-531-nfl-free-agency`, branch `codex/round-531-nfl-free-agency`,
-base530 `18e83e9a` (draft PR81). Rejected repeated or stale signings, required
+base530 `18e83e9a` (draft PR81).
+Implementation `d730be87`, draft PR82: https://github.com/PapiSalgueroM/ballpark-hero/pull/82.
+Rejected repeated or stale signings, required
 canonical live-pool candidates and surviving favorites, and locked actions
 while a turn or reward is unresolved. Preserved the existing NFL team-change
 flow, dynamic eliminated-roster pool, weakest-player lookup and three-battle

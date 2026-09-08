@@ -131,3 +131,10 @@ Phone: `%TEMP%/dukb-nfl-free-agency-sHe7Pq/report.json`.
 Desktop: `%TEMP%/dukb-nfl-free-agency-qeoGLE/report.json`.
 Main inspected phone help, signing and elimination, plus desktop signing.
 The final browser syntax check and shipped-name fence also pass.
+
+Implementation `d730be87`, stacked draft PR82:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/82.
+Base is Round 530's final checkpoint `18e83e9a` (draft PR81). A trailing
+blank line in the new UI test was removed during the handoff checkpoint;
+this changes no executable test or product code. Preview4208 remains.
+No merge or live publication was performed.
