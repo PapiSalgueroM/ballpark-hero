@@ -295,7 +295,7 @@ export function useConquestNba() {
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
   const addTimeout = (fn: () => void, ms: number) => { timeoutsRef.current.push(window.setTimeout(fn, ms)); };
 
-  useEffect(() => () => clearTimeouts(), []);
+  useEffect(() => () => { pendingBattleRef.current = null; clearTimeouts(); }, []);
 
   const aliveTeams = useCallback(() => getAliveTeamsFrom(territories), [territories]);
 
