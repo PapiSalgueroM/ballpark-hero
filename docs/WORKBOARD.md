@@ -1,13 +1,17 @@
 # Work board
 
-**Round 520, Codex, CLAIMED September 8:** targeted build-tool dependency safety
+**Round 520, Codex, scoped verification complete September 8:** targeted build-tool dependency safety
 in `.worktrees/round-520-dependency-safety`, branch
 `codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
-Own package.json, package-lock.json, narrowly needed compatibility changes and
-local regression checks. Preserve the pinned Supabase patch and existing
-snapshots. Recheck advisory fixes and peer support, record the failing audit,
-then verify clean install, exact types, build, local browser behavior and all
-fifteen generated-site fences. Do not run the broad default suite because it
+Only Vite's direct manifest range changes; the targeted lock updates now report
+zero audit vulnerabilities, down from five affected packages. The pinned SDK
+and patch remain unchanged. Clean install, both type gates, build, all fifteen
+generated-site fences, flagship weight, query/storage tests and controls pass.
+Built storage/cookie/ticker browser checks pass. New Records/archive/emitted-CSS
+checks pass in production and dev with all eight controls, plus a wrong-server
+negative probe. Preview 4192 serves index-DqHV_WlN.js. Full evidence and initial
+harness corrections are in docs/dependency-safety-2026-09-08.md.
+Do not run the broad default suite because it
 includes production writes; a fetch-only guard does not provide isolation.
 Root and all existing previews are untouched. Next free round: 521.
 
