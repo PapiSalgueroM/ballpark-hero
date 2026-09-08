@@ -2,26 +2,34 @@
 
 ## Round 526 NBA Arcade visible territories, September 8, 2026
 
-CLAIMED in `.worktrees/round-526-nba-visible-regions`, branch
-`codex/round-526-nba-visible-regions`, from settled Round524 `f51cbe5e`.
-The resumed Round524 task owns Round525 (simLoginReturn). This original task
-owns only526, coordinated directly with that task. Root still belongs to Claude.
+Scoped verification complete in `.worktrees/round-526-nba-visible-regions`,
+branch `codex/round-526-nba-visible-regions`, based on settled Round 524
+`f51cbe5e` (draft PR75). One initializer now uses the 58 rendered NBA regions,
+not 60 shared positions. Real seed 18 reproduced a hidden CA_N target and
+claim before the fix. All existing visible assignments, actual reset and
+Arcade losing-attacker retreat behavior remain.
 
-Source audit: NBA Arcade initializes60 shared positions while the map draws58
-NBA_STATES. Hidden parent regions CA_N/TX_S become neutral power locations and
-can be claimed for invisible ownership and a rating bonus. Reproduce the real
-hook and fix only initialization to use the rendered region list. Preserve
-all58 existing assignments, away-loss behavior, reset and battle rules. All
-visible NBA land starts owned, so no initial neutral power locations remain.
-Do not invent neutral regions, new power rules, facts or a new mode.
+Five real-hook tests, five exact source controls with 20 intended failures,
+both exact types, build and all fifteen built-site fences pass. Built phone
+and desktop walks pass a real battle, result, player selection, turn advance
+and reload restart. The missing-path control fires on an actual SVG node.
+Main reran focused source controls and the phone walk, inspected screenshots,
+and received a clear independent review. Full evidence and initial harness
+corrections are in docs/nba-visible-regions-2026-09-08.md. Preview 4204 serves
+index-DqWhZa_V.js. Only exact synthetic backend reads, no real writes.
 
-Main owns useConquestNba.ts/docs. Test author owns
-useConquestNba.regions.test.tsx/simConquestNbaRegions.mjs; browser author owns
-playConquestNbaRegions.mjs. Exact transport-denied fixtures, real hook turns,
-negative controls, types/build, all fifteen built-site fences and phone/desktop
-check before draft push. No default full suite, backend writes, merge or publish.
-Preserve every existing worktree/preview. Original cutoff17:46:50UTC remains.
-Next free527, verify before claiming. Checkpoint instead of rushing at cutoff.
+Publication dependency: ordinary Arcade power acquisition depended on the
+two hidden neutral regions. All valid regions start owned, so powers cannot
+be acquired in ordinary new runs after this correction. A separate visible
+acquisition rule and matching help/marketing copy must land before treating
+this mode as ready to publish. Do not silently add land or rewrite battle
+rules. The owner's power-up request remains unfinished.
+
+The resumed task finished Round 525 (simLoginReturn) separately at a3e02238;
+this branch does not contain that sibling change. Keep both lanes and Claude's
+root untouched. Preserve every worktree and preview. No default full suite,
+merge or publication. Overnight cutoff: 17:46:50 UTC, then checkpoint and
+pause the existing automation. Next free round: 527, verify before claiming.
 
 ## Round 524 saved bracket profile summary, September 8, 2026
 
@@ -43,10 +51,10 @@ No saved-bracket writer/loader, storage, sports data, real account or backend
 changes. Draft only, no default full-suite pass, merge or publication.
 
 Root belongs to Claude. Preserve all previous worktrees and previews.
-The user resumed the interrupted work on September 8. Next free round: 525,
-verify before claiming. Bounded next repair: simLoginReturn bypasses the
-shared browser loader and lacks complete local request interception. The
-default broad suite still includes production probes and must not be run.
+The user resumed the interrupted work on September 8. The separate resumed
+task subsequently completed the simLoginReturn repair as Round 525 at
+a3e02238. Its sibling branch is not included here. The default broad suite
+still includes production probes and must not be run.
 
 ## Round 523 profile avatar identity, September 8, 2026
 
