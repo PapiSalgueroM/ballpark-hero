@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 513 (checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 514 (513 claimed by the Claude Code lane 2026-09-08; checked against origin/main on
   2026-09-08). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
 
@@ -71,7 +71,32 @@ Four things, in the order they can hurt you.
    already, in a sandbox, and died with the session. See the block below. Push after the first
    commit of a round, not at the end of it.
 
-- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT. next: Round 513.**
+- **Claude Code lane, CLAIMED 2026-09-08: Round 513, manager XP and the seven skill trees.**
+  Spec section 28, which `docs/SPEC-RECONCILIATION.md` line 330 recorded as "No manager XP or
+  skill tree exists in Club Manager". On the SAME branch as 506 to 508 (`round-507-ucl-two-legs`),
+  so merging that branch ships this too. next free number after this: 514.
+  Built: `src/lib/clubManagerXp.ts` (pure, seven trees, five points each, every effect the
+  identity at zero), `scripts/simManagerXp.mjs` (six sections, four negative controls),
+  `XpScreen.tsx` mounted on the club hub, `spendSkillPoint` through the hook, and all seven
+  trees wired into numbers the engine already read.
+  **A MEASUREMENT WORTH READING BEFORE ANYONE TUNES THIS.** A maxed manager was held against an
+  untouched one, paired single seasons from a byte identical start under the same seed, and the
+  results edge is NOISE: over four independent seed bases at 160 pairs each the points per game
+  gap came out +0.008, -0.006, -0.011 and +0.038, so the SIGN FLIPS. An earlier 96 pair run
+  showed +0.037 and would have been written up as "the trees work" if it had not been repeated.
+  What IS stable is the money: budget after one season was 126.8, 126.8, 127.0, 126.9 untouched
+  against 131.0, 131.0, 130.9, 131.1 maxed, so the Finance tree pays about 4m a season at every
+  base. And a maxed manager still loses about a quarter of his matches (25.19, 26.32, 25.08,
+  25.76 percent). **So the balance section asserts what was measured and nothing else**: the
+  Finance tree measurably pays, a maxed manager still loses, and the trees do not swing league
+  results. It does NOT assert that a maxed manager wins more, because he does not, measurably.
+  A separate finding for the owner is in the note below.
+  **Also found by that measurement, and fixed:** six of the seven trees pay nothing unless you
+  use the system they multiply, and Tactics pays LITERALLY zero to an eleven with no duties set,
+  because `dutyBoost` sums the duties and 0 times 1.5 is 0. Three of eight clubs came back byte
+  identical for that reason. Each tile now says the condition out loud.
+
+- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT.**
   Rounds 503, 504 and 505 are merged on origin/main and 505 is live. **506, 507 and 508 are all
   built and pushed on one stacked branch, `round-507-ucl-two-legs`, 30 plus commits, not merged
   and not live.** The branch name predates 508 landing on it; do not read it as covering only 507.
@@ -84,17 +109,21 @@ Four things, in the order they can hurt you.
   every one fixed, and the second pass found one repair that was worse than the bug it replaced
   (a second leg lost 0-3 and won on penalties was being logged as a win, with the opponent given
   a defeat in their own form guide).
-  THE ONE OPEN GATE: the 265 harness suite came back with six reds, five of them a Supabase
-  outage that cleared on a rerun and one, `simConnect4ClubRecords`, pre-existing and in another
-  lane's files. The sixth, `simPress`, is under investigation and is the only thing holding the
-  merge. It PASSES on origin/main and FAILS here, so it did move, but the failing check is a per
-  club bar of 0.5 against a two sigma error of 1.73, and the harness's OWN comment says a per
-  club bar "sits right on top of its own error and would eventually flap" and that the
-  significance bar belongs on the pooled set. The pooled bar passes here with room (2.41 against
-  2se 1.47). Section 4 ignores SIM_SEED and draws from fixed seeds, so its stability is being
-  measured by varying its own seed base on unchanged code. **No threshold is being touched until
-  that spread says it may be.** The owner's instruction on 2026-09-08 was explicit: follow the
-  evidence, do not weaken checks to get green.
+  GATE THAT WAS OPEN, NOW CLOSED: `simPress` was the only thing holding the merge. It passed on
+  origin/main and failed here, so it had genuinely moved, but the failing check was a per club
+  bar of 0.5 against a two sigma error of 1.73, and the harness's OWN comment said a per club bar
+  "sits right on top of its own error and would eventually flap". Resolved by MEASUREMENT rather
+  than by lowering it: four seed bases were run against ONE unchanged engine and the same code
+  scored Man City 0.34, 2.65, 1.74 and 1.02, so it passed at three bases and failed at one. That
+  is a coin toss, not a rule. It was replaced with two checks the measurement supports, and the
+  harness is green. **No threshold was moved to make a red go away.**
+
+  **NEW OPEN GATE, 2026-09-08: `simRoles` is RED and is being diagnosed, not worked around.**
+  It returned EXIT=1 on this branch. It is genuinely a candidate for being ours: section 5 is
+  the promise and morale check and Round 513 wrapped `promiseMoraleDelta` in a cushion, and
+  Round 508 put a promise lock in `canLeaveSquad`. Both are in this branch's files. The run is
+  reproducing now and the failing section will be read before anything is changed. Do not merge
+  this branch until that is understood.
 
   **READ THIS BEFORE PICKING 506, 507 OR 508 UP AGAIN.** A claude.ai/code session built
   Round 506 (transfers, nine engine commits through personal terms), Round 507 (Soccer Career
