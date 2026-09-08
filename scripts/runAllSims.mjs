@@ -227,6 +227,57 @@ for (const r of nodeResults) {
     r.why = `it reached no database and said so, and the database is unreachable here (${db.why})`;
   }
 }
+
+/* ROUND 514: THE THIRD CASE ROUND 356 DID NOT HAVE A BRANCH FOR, AND IT IS THE
+ * ONE THAT ACTUALLY HAPPENS ON THE DESKTOP LANE.
+ *
+ * Round 356 split "the harness checked nothing" two ways: the sandbox cannot
+ * reach the database at all (skip), or it can and therefore the data broke
+ * (fail). Both branches key off ONE probe taken before any harness starts, with
+ * nothing else running.
+ *
+ * The case neither branch fits is a database that is reachable in general and
+ * momentarily was not for one harness: a timeout, a reset, a rate limit while
+ * the suite leans on the same REST endpoint from several harnesses at once.
+ * The probe at the top said reachable, so the harness is called a FAILURE, and
+ * the failure is a lie. Measured twice on 2026-09-08: five harnesses red that
+ * way in the morning, then simNoZeroFacts and simSoccerGridLabels in the
+ * evening, all of them green the moment they were re-run on their own. The
+ * second time cost an hour of reading cascading nonsense (simSoccerGridLabels
+ * reports every club as unfillable when the table read fails, because every
+ * club IS unfillable against an empty read).
+ *
+ * A suite that cries wolf twice in one day stops being read, which is exactly
+ * the cost Round 356 was written to avoid.
+ *
+ * So: a harness that says it checked nothing, on a lane where the database
+ * answers, gets ONE re-run, ALONE, after the pool has drained and the pressure
+ * is off. Nothing is weakened by this. A real data break fails the retry too,
+ * because the data is still broken. A transient failure passes it, and a pass
+ * on the retry is a real pass: the checks ran and they held. Every retry is
+ * printed either way, because Round 100's rule is that a run must never cover
+ * less than it appears to. */
+const retried = [];
+for (const r of nodeResults) {
+  if (r.verdict !== 'FAIL' || !db.ok || !NOTHING_CHECKED.test(r.out)) continue;
+  const again = await databaseReachable();
+  console.log(`
+  retrying ${r.file}: it said it checked nothing, and the database answers here (${again.why}). Running it alone.`);
+  const second = await run(r.file);
+  retried.push({ file: r.file, before: 'FAIL', after: second.verdict });
+  r.out = second.out;
+  r.verdict = second.verdict;
+  r.ms = second.ms;
+  r.lines = second.lines;
+  r.why = second.verdict === 'PASS'
+    ? 'first run said it reached no database; it passed when re-run on its own'
+    : (second.why || 'failed again when re-run on its own, so this is not a blip');
+  if (second.verdict === 'PASS') {
+    console.log(`  ${r.file} passed on its own, so the first result was the database being momentarily unreachable, not a finding.`);
+  } else {
+    console.log(`  ${r.file} failed again on its own, so this is real and not a blip.`);
+  }
+}
 report(nodeResults);
 failures.push(...nodeResults.filter((r) => r.verdict !== 'PASS' && r.verdict !== 'SKIP'));
 skipped.push(...nodeResults.filter((r) => r.verdict === 'SKIP'));
