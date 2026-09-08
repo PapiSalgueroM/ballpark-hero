@@ -19,17 +19,32 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 510 (checked against origin/main on
-  2026-09-07: main is `7af40013`, Round 504. The Claude Code lane holds 505 to 508 and the
-  Codex lane holds 509, see both claims below).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 513 (checked against origin/main on
+  2026-09-08: main is `d1c541b3`, Round 505. The Claude Code lane holds 506 to 508 and the
+  Codex lane holds 509 to 512, see both claims below. 509 to 512 are not on main: they sit
+  on `codex/round-509-quality-batch`, `codex/round-510-reliability-followup`,
+  `codex/round-511-midnight-saves` and `codex/round-512-conquest-attack`, and the board text
+  on those branches says 511 where this copy says 513. Trust the branch list, not either
+  number, until they merge).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
-- **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 506 (Claude Code lane).** Rounds 503 and 504 are
-  merged on origin/main at `7af40013`; 505 to 508 remain claimed here.
+- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. next: Round 506, being built on
+  the desktop on branch `round-506-cm-transfers` from 2026-09-08.** Rounds 503, 504 and 505 are
+  all merged on origin/main at `d1c541b3`; 506 to 508 remain claimed here.
+
+  **READ THIS BEFORE PICKING 506, 507 OR 508 UP AGAIN.** A claude.ai/code session built
+  Round 506 (transfers, nine engine commits through personal terms), Round 507 (Soccer Career
+  injury and recovery) and Round 508 (the shared GM engine golden capture) on 2026-09-07 and
+  then hit its session limit. **None of that work survived.** It lived in that sandbox's own
+  worktrees, was never pushed, and there is no branch, no reflog entry and no dangling commit
+  for any of the three anywhere in this repo: checked with `git log --all --grep`, `git reflog
+  --all`, `git stash list` and `git fsck --lost-found` on 2026-09-08. Round 505 survived only
+  because it was pushed and merged. 506 is therefore a rebuild from the spec below, not a
+  resume. The lesson worth keeping: on a sandbox lane, push the branch after the first commit
+  of a round, not at the end of it.
   **503 RELIABILITY, DONE 2026-09-07, merged on origin/main.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
   (a) `useDailyPuzzle.addGuess` closed over the `guesses` state array, so a handler adding more than
@@ -91,6 +106,50 @@ How it works:
   depends on level ... YOU type the bid; extreme lowballs can end talks entirely; sell on clauses,
   player swaps, a closeness meter, limited patience per negotiation. Loans with option and release
   figures. Then personal terms: length, wages, add ons, role promises, everything."
+
+  SCOPE, settled 2026-09-08 by reading the engine against his sentence clause by clause, so the
+  rebuild does not redo Round 161. **Three of the nine clauses are already shipped and must be
+  left alone:** sell-on clauses, player swaps and add-ons are `DealExtras` (clubManager.ts:794)
+  weighed by `dealPackageValue` (6614), built in Round 161. **The other six are genuinely
+  missing:**
+  1. THE VALUATION DESK. There is no fog anywhere between a market player's baked value and what
+     the screen prints: `askingPrice` and `marketBase` are pure and cached across careers, and
+     TransferScreen prints `money(m.value)` verbatim. The only accuracy layer in the whole game
+     is `reportBand` (11842) on a youth prospect's ceiling, off a scout's `judgement`. So the
+     staffer's read of a fee is new, and the Round 95 rule applies: no effect that cannot reach
+     its neutral value at level 1 or on an empty post.
+  2. YOU TYPE THE BID. There is no numeric field. Offers are four preset buttons built by
+     `offerBtn` (TransferScreen.tsx:177): Lowball at 0.72 of the ask, Haggle at 0.88, Split it,
+     and Meet ask / Beat rival. The only `<Input>` in the file is the buy-tab search box.
+  3. AN EXTREME LOWBALL ENDING TALKS. Today a lowball is anything under 0.75 of the ask and it
+     only costs one patience; the deal dies at patience 0, never on the insult itself.
+  4. THE CLOSENESS METER. Patience renders as dots; nothing shows how near the two numbers are.
+  5. PATIENCE THAT BINDS. Measured in the read: patience is spent ONLY on the lowball branch,
+     while the counter branch floors the ask at 1.02 of your package and agreement needs 0.97,
+     so repeating one unchanged offer closes any non-lowball deal in at most three rounds at no
+     cost. Haggling is currently free. That is the defect under his "limited patience" clause.
+  6. LOANS WITH OPTION AND RELEASE FIGURES. A loan is a one-off fee and a fixed one season,
+     unwound unconditionally at the rollover (13385, 13564). No option to buy, no obligation,
+     no wage split, no recall or break figure, and `onLoan` is a bare boolean that does not
+     even record the parent club.
+  7. PERSONAL TERMS. None exist at all. Every arrival funnels through `completeSigning` (5864),
+     which hard-codes `contractYears` (4, or 2 at 31+), takes `wage` from `wageFor`, leaves
+     `role` undefined so `ensureRoles` silently assigns it later, and reads neither `wageBill`
+     nor `wageCap`. `buyPlayer` is one line. The manager is never shown the wage: `wage` does
+     not appear once in TransferScreen.tsx.
+  WHAT IT REUSES RATHER THAN REBUILDS: the role ladder, `ROLE_INFO[role].promise` (a written
+  human line per rung), `deservedRole`/`standingGap` (the Round 127 guard that stops
+  under-promising being farmed), `roleChangeCost` (six weeks of his wage per rung dropped),
+  `setSquadRole`, `promiseMoraleDelta` and the inbox's existing `setRole`/`promise` effects.
+  The promise half is built and measured; only the signing table is missing.
+  ARCHITECTURE: the new maths goes in a new `src/lib/clubManagerDeals.ts` beside
+  `clubManagerStaff.ts` and `clubManagerBoardAsks.ts` rather than into the 13k line engine, and
+  clubManager.ts calls it at four seams (startNegotiation, makeOffer, completeSigning, loanIn).
+  SAVE RULE, from the migration read: a new field INSIDE `Negotiation` needs no migration at all
+  (it is transient, nulled at startCareer, at the window close, at walkAway and at the summer),
+  but anything that must outlive the window needs the full optional-plus-`ensure` treatment
+  registered in BOTH `loadCareer` (13819) and `playNextEntry` (12239), and `SAVE_VERSION` must
+  NOT be bumped: a bump deletes every live career.
   **507 and 508** are reserved for what those three leave named as not done, or the next item off
   the ledger if they finish clean.
   FILE AREA: `src/lib/clubManager*.ts`, `src/components/club-manager/*`, `src/pages/ClubManager.tsx`,
