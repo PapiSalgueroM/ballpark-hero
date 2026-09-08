@@ -1,17 +1,25 @@
 # Work board
 
-## Round 533 claimed, September 8, 2026
+## Round 533 complete, September 8, 2026
 
 Codex owns the NFL Arcade reward action lifecycle in useConquest.ts and
 ConquestBoard.tsx, focused on current-owner, phase, canonical-choice and
 once-only action guards, plus usable reward controls and bounded checks.
 Worktree `.worktrees/round-533-nfl-powers`, branch
 `codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).
-Reproduce actual earned-reward failures before edits. Preserve the NFL
-reward inventory cap, pool, random-choice fallback and battle formulas.
-No new player data or changes to upgrade lifetime/stacking in this round.
-Verify focused hook/UI cases and controls, real built playthroughs, both
-exact types, build and all fifteen site checks. Root belongs to Claude.
+Actual earned-reward failures reproduced before edits. Current phase,
+owner, offered-choice and consumed-callback guards now protect rewards.
+Saved cards reopen visibly, card dismissal saves and picker exits return to
+the card. The final territory power ends the game once without a timer
+reopening it. The inventory cap, pool, random fallback and formulas remain.
+No new player data or upgrade lifetime/stacking change in this round.
+Twenty-five new cases, 70 source controls with 133 intended failures,
+both exact types, build, all fifteen site checks and 83 prior cases pass.
+Phone/desktop each pass seven actual turns and the full reward flow; both
+dead-button controls pass. Main visual and independent source review clear.
+Evidence: docs/nfl-powers-2026-09-08.md. Preview4210 preserved.
+Next free534: reproduced NFL queued upgrade loss on an unrelated turn.
+Root belongs to Claude.
 Preserve every prior worktree and preview. Draft PR only, no backend/account
 writes, broad suite, main merge or publication.
 

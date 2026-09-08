@@ -279,8 +279,12 @@ export function useConquest() {
   const freeAgencyToken = {};
   const freeAgencyTokenRef = useRef<object | null>(freeAgencyToken);
   freeAgencyTokenRef.current = freeAgencyToken;
+  const rewardActionToken = {};
+  const rewardActionTokenRef = useRef<object | null>(rewardActionToken);
+  rewardActionTokenRef.current = rewardActionToken;
   const setPhase = useCallback((next: Phase) => {
     freeAgencyTokenRef.current = null;
+    rewardActionTokenRef.current = null;
     phaseRef.current = next;
     setPhaseState(next);
   }, []);
@@ -348,7 +352,10 @@ export function useConquest() {
   const [signedFreeAgents, setSignedFreeAgents] = useState<string[]>([]);
   const freeAgencyActionReady = phase === 'ready' && !pendingPowerup && !powerupUseType;
 
-  useEffect(() => () => { freeAgencyTokenRef.current = null; }, []);
+  useEffect(() => () => {
+    freeAgencyTokenRef.current = null;
+    rewardActionTokenRef.current = null;
+  }, []);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -456,16 +463,33 @@ export function useConquest() {
     return pool.sort((a, b) => b.overall - a.overall);
   }, [territories, rosters, eliminated, favoriteTeam]);
 
-  // Execute a powerup immediately
+  const canResolvePowerup = useCallback((expectedPhase: Phase, type?: PowerupId) => {
+    return rewardActionTokenRef.current === rewardActionToken && phaseRef.current === expectedPhase
+      && !!pendingPowerup && getAliveTeamsFrom(territories).includes(pendingPowerup.teamId)
+      && (!type || (powerupUseType === type && pendingPowerup.powerup.id === type
+        && powerupTeam === pendingPowerup.teamId));
+  }, [rewardActionToken, pendingPowerup, territories, powerupUseType, powerupTeam]);
+
+  const finishPowerup = useCallback(() => {
+    rewardActionTokenRef.current = null;
+    setPendingPowerup(null);
+    setPowerupUseType(null);
+    setPowerupTeam(null);
+    setFreeAgentList([]);
+    setStealCandidates([]);
+    setPhase('ready');
+  }, [setPhase]);
+
+  // Execute the current reward after its decision has been consumed.
   const executePowerup = useCallback((teamId: string, puId: PowerupId) => {
     switch (puId) {
       case 'invincibility':
+        finishPowerup();
         setInvincibleTeams(prev => new Set([...prev, teamId]));
         setGameLog(prev => [...prev, {
           turn: prev.length + 1, attacker: teamId, defender: 'powerup',
           winner: teamId, score: '🛡️ Invincibility activated!',
         }]);
-        setPhase('ready');
         break;
 
       case 'free_agent':
@@ -480,7 +504,7 @@ export function useConquest() {
         // chooseUpgradePlayer() with no argument keeps the old random
         // auto-pick alive as the fallback code path.
         const roster = rosters[teamId] || [];
-        if (roster.length === 0) { setPhase('ready'); break; }
+        if (roster.length === 0) { finishPowerup(); break; }
         setPowerupTeam(teamId);
         setPowerupUseType('upgrade');
         setPhase('powerup_use');
@@ -488,6 +512,7 @@ export function useConquest() {
       }
 
       case 'legend': {
+        finishPowerup();
         const legend = TEAM_LEGENDS[teamId];
         if (legend && !(rosters[teamId] || []).includes(legend.name)) {
           setRosters(prev => ({
@@ -499,7 +524,6 @@ export function useConquest() {
             winner: teamId, score: `🐐 ${legend.name} joins the roster!`,
           }]);
         }
-        setPhase('ready');
         break;
       }
 
@@ -518,59 +542,53 @@ export function useConquest() {
           setPowerupUseType('territory_steal');
           setPhase('powerup_use');
         } else {
+          finishPowerup();
           setGameLog(prev => [...prev, {
             turn: prev.length + 1, attacker: teamId, defender: 'powerup',
             winner: teamId, score: '🗺️ No border states to steal!',
           }]);
-          setPhase('ready');
         }
         break;
       }
     }
-  }, [territories, rosters, buildFreeAgentList]);
+  }, [territories, rosters, buildFreeAgentList, finishPowerup]);
 
   // Resolve the Upgrade power-up for the chosen player (or a random roster
   // player when called with no argument, the auto-pick fallback).
   const chooseUpgradePlayer = useCallback((playerName?: string) => {
-    if (!powerupTeam) return;
+    if (!canResolvePowerup('powerup_use', 'upgrade') || !powerupTeam) return;
     const roster = rosters[powerupTeam] || [];
     if (roster.length === 0) {
-      setPowerupTeam(null);
-      setPowerupUseType(null);
-      setPhase('ready');
+      finishPowerup();
       return;
     }
-    const player = playerName && roster.includes(playerName)
-      ? playerName
-      : roster[Math.floor(Math.random() * roster.length)];
+    if (playerName !== undefined && !roster.includes(playerName)) return;
+    const player = playerName ?? roster[Math.floor(Math.random() * roster.length)];
+    finishPowerup();
     setUpgradeActiveTeam(powerupTeam);
     setUpgradedPlayer(player);
     setGameLog(prev => [...prev, {
       turn: prev.length + 1, attacker: powerupTeam, defender: 'powerup',
       winner: powerupTeam, score: `⬆️ ${player} upgraded to 99 OVR!`,
     }]);
-    setPowerupTeam(null);
-    setPowerupUseType(null);
-    setPhase('ready');
-  }, [powerupTeam, rosters]);
+  }, [powerupTeam, rosters, canResolvePowerup, finishPowerup]);
 
   // Resolve the Territory Steal power-up for the chosen border state (or a
   // random candidate when called with no argument, the auto-pick fallback).
   const stealTerritoryTarget = useCallback((stateId?: string) => {
-    if (!powerupTeam) return;
-    if (stealCandidates.length === 0) {
-      setPowerupTeam(null);
-      setPowerupUseType(null);
-      setPhase('ready');
+    if (!canResolvePowerup('powerup_use', 'territory_steal') || !powerupTeam) return;
+    const candidates = findBorderEnemyStates(powerupTeam, territories);
+    if (candidates.length === 0) {
+      finishPowerup();
       return;
     }
-    const chosen = stateId && stealCandidates.some(c => c.stateId === stateId)
-      ? stateId
-      : stealCandidates[Math.floor(Math.random() * stealCandidates.length)].stateId;
+    if (stateId !== undefined && !candidates.includes(stateId)) return;
+    const chosen = stateId ?? candidates[Math.floor(Math.random() * candidates.length)];
     const teamId = powerupTeam;
     const prevOwner = territories[chosen];
     const stateName = stealCandidates.find(c => c.stateId === chosen)?.stateName || chosen;
 
+    finishPowerup();
     setTerritoryStolenState(chosen);
     setTerritories(prev => ({ ...prev, [chosen]: teamId }));
 
@@ -582,33 +600,27 @@ export function useConquest() {
     }
 
     setGameLog(prev => [...prev, {
-      turn: prev.length + 1, attacker: teamId, defender: prevOwner || 'neutral',
+      turn: prev.length + 1, attacker: teamId, defender: 'powerup',
       winner: teamId, score: `🗺️ Stole ${stateName} from ${prevOwner ? (TEAM_MAP.get(prevOwner)?.name || prevOwner) : 'neutral'}!`,
     }]);
 
-    setStealCandidates([]);
-    setPowerupTeam(null);
-    setPowerupUseType(null);
-
-    // Clear animation after a moment
-    addTimeout(() => {
-      setTerritoryStolenState(null);
-      setPhase('ready');
-    }, 1500);
-  }, [powerupTeam, stealCandidates, territories]);
+    if (getAliveTeamsFrom(updatedTerr).length <= 1) setPhase('gameover');
+    addTimeout(() => setTerritoryStolenState(null), 1500);
+  }, [powerupTeam, stealCandidates, territories, canResolvePowerup, finishPowerup]);
 
   // Called when user chooses "Use Now" on powerup received modal
   const usePowerupNow = useCallback(() => {
-    if (!pendingPowerup) return;
+    if (!canResolvePowerup('powerup_received') || !pendingPowerup) return;
     const { teamId, powerup } = pendingPowerup;
-    setPendingPowerup(null);
+    rewardActionTokenRef.current = null;
     executePowerup(teamId, powerup.id);
-  }, [pendingPowerup, executePowerup]);
+  }, [pendingPowerup, executePowerup, canResolvePowerup]);
 
   // Called when user chooses "Save for Later"
   const savePowerupForLater = useCallback(() => {
-    if (!pendingPowerup) return;
+    if (!canResolvePowerup('powerup_received') || !pendingPowerup) return;
     const { teamId, powerup } = pendingPowerup;
+    finishPowerup();
     setTeamSavedPowerups(prev => {
       const current = prev[teamId] || [];
       if (current.length >= 2) {
@@ -617,29 +629,41 @@ export function useConquest() {
       }
       return { ...prev, [teamId]: [...current, { id: powerup.id, label: powerup.label, icon: powerup.icon }] };
     });
-    setPendingPowerup(null);
-    setPhase('ready');
-  }, [pendingPowerup]);
+  }, [pendingPowerup, canResolvePowerup, finishPowerup]);
 
   // Use a saved powerup
   const useSavedPowerup = useCallback((teamId: string, index: number) => {
+    if (rewardActionTokenRef.current !== rewardActionToken || phaseRef.current !== 'ready'
+      || pendingPowerup || powerupUseType || !getAliveTeamsFrom(territories).includes(teamId)) return;
     const saved = teamSavedPowerups[teamId];
     if (!saved || !saved[index]) return;
     freeAgencyTokenRef.current = null;
+    rewardActionTokenRef.current = null;
     const pu = saved[index];
     setTeamSavedPowerups(prev => ({
       ...prev,
       [teamId]: prev[teamId].filter((_, i) => i !== index),
     }));
     setPendingPowerup({ teamId, powerup: POWERUPS.find(p => p.id === pu.id)! });
-  }, [teamSavedPowerups]);
+    setPhase('powerup_received');
+  }, [rewardActionToken, teamSavedPowerups, territories, pendingPowerup, powerupUseType]);
 
-  // Sign a free agent (called from free agent modal). powerupTeam is the
-  // team actually using the power-up (set by executePowerup), so a saved
-  // power-up used later can't mis-credit whoever happens to be attacking.
+  const cancelPowerupUse = useCallback(() => {
+    if (!powerupUseType || !canResolvePowerup('powerup_use', powerupUseType)) return;
+    setPowerupUseType(null);
+    setPowerupTeam(null);
+    setFreeAgentList([]);
+    setStealCandidates([]);
+    setPhase('powerup_received');
+  }, [powerupUseType, canResolvePowerup]);
+
+  // The current reward's owner signs an eligible card from its picker.
   const signFreeAgent = useCallback((playerName: string) => {
-    const teamId = powerupTeam || pendingPowerup?.teamId || attackingTeam;
-    if (!teamId) return;
+    if (!canResolvePowerup('powerup_use', 'free_agent') || !powerupTeam
+      || !freeAgentList.some(player => player.name === playerName)
+      || getAliveTeamsFrom(territories).some(id => (rosters[id] || []).includes(playerName))) return;
+    const teamId = powerupTeam;
+    finishPowerup();
     setRosters(prev => ({
       ...prev,
       [teamId]: [...(prev[teamId] || []), playerName],
@@ -648,10 +672,7 @@ export function useConquest() {
       turn: prev.length + 1, attacker: teamId, defender: 'powerup',
       winner: teamId, score: `✍️ Signed ${playerName}!`,
     }]);
-    setPowerupTeam(null);
-    setPowerupUseType(null);
-    setPhase('ready');
-  }, [powerupTeam, pendingPowerup, attackingTeam]);
+  }, [powerupTeam, freeAgentList, territories, rosters, canResolvePowerup, finishPowerup]);
 
   // Set (or change) which team the Free Agency tab (item 87) signs for.
   // Pass null to clear the pick and navigate back to the team picker.
@@ -697,6 +718,7 @@ export function useConquest() {
     }
 
     freeAgencyTokenRef.current = null;
+    rewardActionTokenRef.current = null;
     setRosters(prev => ({
       ...prev,
       [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), available.name],
@@ -719,11 +741,15 @@ export function useConquest() {
   }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool, upgradeActiveTeam, upgradedPlayer]);
 
   const startBattle = useCallback(() => {
+    if (rewardActionTokenRef.current !== rewardActionToken || phaseRef.current !== 'ready'
+      || pendingPowerup || powerupUseType) return;
+    rewardActionTokenRef.current = null;
     const alive = getAliveTeamsFrom(territories);
     if (alive.length <= 1) { setPhase('gameover'); return; }
 
     clearTimeouts();
     setNoEnemyMsg(null);
+    setTerritoryStolenState(null);
 
     // Clear upgrade after one battle if it was active
     if (upgradeActiveTeam) {
@@ -884,7 +910,7 @@ export function useConquest() {
         addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides]);
+  }, [rewardActionToken, pendingPowerup, powerupUseType, territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides]);
 
   // Power rankings update (item 86): a battle win nudges the winner's O/D up
   // and the loser's down by a small clamped amount, and both teams' in-run
@@ -1044,6 +1070,7 @@ export function useConquest() {
   const reset = useCallback(() => {
     clearTimeouts();
     freeAgencyTokenRef.current = null;
+    rewardActionTokenRef.current = null;
     setTerritories(buildInitialTerritories());
     setRosters(buildInitialRosters());
     setEliminated([]);
@@ -1103,7 +1130,7 @@ export function useConquest() {
     // Actions
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
-    chooseUpgradePlayer, stealTerritoryTarget,
+    chooseUpgradePlayer, stealTerritoryTarget, cancelPowerupUse,
     openStealModal, closeStealModal, skipSteal,
   };
 }

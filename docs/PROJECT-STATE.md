@@ -1,5 +1,35 @@
 # Project state
 
+## Round 533 NFL reward action lifecycle, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-533-nfl-powers`, branch
+`codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).
+Earned rewards now resolve once for their current owner, phase and offered
+choice. Saved cards open visibly, card Close/Escape saves, and picker
+Close/Escape/Back preserves the card. Saved controls have accessible labels
+and 32px touch targets. Another turn cannot interrupt an unresolved reward.
+The final territory power ends the game immediately; its highlight timer
+cannot reopen the game or disturb a later card. Existing two-slot inventory,
+random fallback and battle formulas remain. No new sports facts.
+
+Nine real-hook, fifteen Board/help and one declared initial-map victory case
+pass. Seventy new source controls produce 133 intended failures; runtime and
+backend probes are rejected. Four changed531 controls remain exact. Both
+types, build, all 15 site checks and 83 prior NFL/NBA/help cases pass. The
+selected runner executes all 25 new cases. The natural final-state scout
+found no final-power witness; the declared initial-map test is labeled
+separately. Phone and desktop each pass seven real turns, five battles,
+two neutral claims and the complete earned/saved reward flow, plus both
+dead-button controls. Main visual and independent source reviews are clear.
+Evidence: docs/nfl-powers-2026-09-08.md. Preview4210 serves
+index-b5c2B-SM.js. Root remains tracked-clean at 72fb8f92. No snapshots,
+ledger, dependency changes, backend/account writes, broad suite, main merge
+or publication. Preserve every previous worktree and preview.
+Next free534: reproduced NFL upgrade loss during an unrelated SEA neutral
+claim after CIN earned and armed its reward. Use separate team queues and
+current-battle snapshots, with actual owner/battle consumption and no odds
+tuning. Broad-suite process isolation remains separate.
+
 ## Round 532 NFL acquired roster cards, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-532-nfl-roster-cards`,

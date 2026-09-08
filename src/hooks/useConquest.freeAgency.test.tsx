@@ -191,15 +191,15 @@ describe('NFL free agency outcomes', () => {
     check(!view.result.current.rosters.BUF.includes(low!.name) && view.result.current.freeAgencyPool().some(player => player.name === low!.name) && view.result.current.signedFreeAgents.includes(low!.name), 'RELEASED: signing history does not hide a candidate who was waived');
   });
 
-  it('blocks signing while a saved reward remains on a ready-phase card', () => {
+  it('blocks signing while a saved reward is reopened for a decision', () => {
     const view = mount(); advance(view); reward(view, 'invincibility');
     const owner = view.result.current.pendingPowerup!.teamId;
     act(() => view.result.current.savePowerupForLater()); select(view, owner);
     const index = view.result.current.teamSavedPowerups[owner].length - 1, player = offered(view), old = view.result.current.signFreeAgencyCandidate;
     act(() => { view.result.current.useSavedPowerup(owner, index); old(player); });
-    check(view.result.current.phase === 'ready' && !!view.result.current.pendingPowerup && view.result.current.signedFreeAgents.length === 0, 'SAVED TOKEN: reopening a saved card invalidates a same-tick signing');
+    check(view.result.current.phase === 'powerup_received' && !!view.result.current.pendingPowerup && view.result.current.signedFreeAgents.length === 0, 'SAVED CARD: reopening a saved card displays its decision before further signing');
     const card = snapshot(view.result.current); act(() => view.result.current.signFreeAgencyCandidate(player)); select(view, null);
-    check(!view.result.current.freeAgencyActionReady && !view.result.current.canSignFreeAgent() && snapshot(view.result.current) === card, 'PENDING: a ready-phase power card blocks both docked actions');
+    check(!view.result.current.freeAgencyActionReady && !view.result.current.canSignFreeAgent() && snapshot(view.result.current) === card, 'PENDING: a received power card blocks both docked actions');
     const cardOld = view.result.current.signFreeAgencyCandidate;
     act(() => { view.result.current.usePowerupNow(); cardOld(player); });
     check(view.result.current.signedFreeAgents.length === 0 && view.result.current.canSignFreeAgent(), 'READY TRANSITION: resolving a card cannot revive its earlier signing callback');
