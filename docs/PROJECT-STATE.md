@@ -1,5 +1,26 @@
 # Project state
 
+## Live as of 2026-09-08
+
+**Round 505 is now published and verified live, and that closes the pending publish gap.**
+The owner lifted the publishing hold on 2026-09-08 and `deploy_project` was called with
+Lovable's `latest_commit_sha` already equal to `origin/main` (`d1c541b3`), which is the
+ordering that matters: deploying before that matches builds the previous commit. Deployment
+`c1aa95ec-9a08-4935-a8b8-29fe9abd12c4`.
+
+Proven live rather than assumed, because a deploy returning "pending" is not evidence:
+the home page's bundle moved from `/assets/index-CMh_jnNL.js` to `/assets/index-Czr-I-vX.js`,
+and the engine chunk moved from `clubManager-CRvtBti4.js` to `clubManager-DBzLyI5I.js`. The
+old chunk contained "Sweeper keeper" ZERO times and the new one contains it once, along with
+"Shot stopper", "Inside forward" and the star man's promise line, all of which are Round 505
+duties. Six routes rechecked after the deploy (`/`, `/club-manager`, `/soccer-career`,
+`/footle`, `/squad-deal`, `/privacy`): all 200, each with its own H1 and no noindex.
+
+So 503, 504 and 509 were already live and 505 now is. **506 and 507 are NOT live and are not
+even merged**: they sit on `round-506-cm-transfers` and `round-507-ucl-two-legs` with their
+full node suite and adversarial review still running at the time of the deploy. Nothing
+unreviewed was published.
+
 ## Live as of 2026-09-07
 
 Head `04ad4f10`, **deployed to douknowball.com and verified live** (the home page

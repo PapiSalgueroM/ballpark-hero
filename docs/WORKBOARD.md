@@ -43,12 +43,18 @@ How it works:
 
 Four things, in the order they can hurt you.
 
-1. **PUBLISHING IS ON HOLD BY THE OWNER, decided 2026-09-08.** Do not call `deploy_project` and
-   do not publish the Lovable project, whatever any older doc says about shipping happening
-   without him. He is rechecking the live build against the branches himself first, and he will
-   say when. `docs/OPERATING-CONTRACT-2026-08.md` and the 2026-08-26 standing instruction both
-   read as blanket permission to publish; this decision is newer than both and beats them until
-   he lifts it.
+1. **PUBLISHING: THE HOLD WAS LIFTED THE SAME DAY AND ROUND 505 IS NOW LIVE.** The owner put
+   publishing on hold on 2026-09-08 and lifted it a few hours later ("publish all u can"), so
+   `deploy_project` was called once, with Lovable's `latest_commit_sha` already equal to
+   `origin/main` (`d1c541b3`). That ordering is the rule worth keeping: deploying before the
+   sha matches publishes the PREVIOUS commit, which is how the live site once served a stale
+   build for weeks. Verified live afterwards rather than assumed, since the call returns
+   "pending": the engine chunk moved from `clubManager-CRvtBti4.js` (zero occurrences of
+   "Sweeper keeper") to `clubManager-DBzLyI5I.js` (one, plus the other Round 505 duties), and
+   six routes came back 200 with their own H1 and no noindex. Details in
+   `docs/PROJECT-STATE.md` under "Live as of 2026-09-08".
+   **What was NOT published, deliberately: Rounds 506 and 507.** They are not merged, their
+   full node suite and adversarial review were still running, and nothing unreviewed went out.
 
 2. **ROUND 506 IS ON A BRANCH AND CHANGES A SITEWIDE COMPONENT.** Branch
    `round-506-cm-transfers`, ten commits, not merged. Most of it is confined to Club Manager,
@@ -942,8 +948,13 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ### PENDING PUBLISH
 
-- **Rounds 503 and 504 are merged on origin/main at `7af40013` but are not in the live
-  deployment checked above.** Round 509 is merged locally with both and remains on its Codex
+- **CLEARED 2026-09-08. Nothing merged is unpublished any more.** Rounds 503, 504 and 509 were
+  already live; Round 505 went live on 2026-09-08 and was verified by the engine chunk changing
+  and carrying the Round 505 duty strings the old one did not. The only unpublished work is
+  Rounds 506 and 507, which are not merged either, and Rounds 510 to 512 on the Codex branches.
+  The old text of this section is left below for its history.
+- (Historical) Rounds 503 and 504 are merged on origin/main at `7af40013` but are not in the
+  live deployment checked above. Round 509 is merged locally with both and remains on its Codex
   branch until the combined gates, PR and merge finish.
 
 ## Inbox (unclaimed)
