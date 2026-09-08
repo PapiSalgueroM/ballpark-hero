@@ -54,6 +54,7 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 - [ ] Adapter reuses existing SOCCER_CLUBS colours/values and CM_ROSTERS documented player pool for the included clubs, without loading the Club Manager engine. Use explicit existing name aliases where required. No age/value fields need shipping in Attack, only names and simulated ratings. Fail the league data gate if any included club has no usable original roster. Preserve source dataset date in dataVersion.
 - [ ] Run focused geometry/adapter tests and measure full seeded engine runs on the actual generated map. Reject unreachable living clubs or endless direction states. Do not silently fall back to nearest arbitrary opponent.
   - Check concave coast trapping after captures, not only opening positions. If a reproducible map state has no home-based legal ray, report that seed before changing the launch-origin contract. Measure transition runtime and serialized save size on this actual dataset as well.
+  - Approved correction after seed 9 trapped HUL at revision 151: launch from the owned home when it has a legal direction. Otherwise choose the closest owned region anchor with a legal direction, measured from the original home anchor, with region ID lexical order breaking equal distances. Never choose an opponent by distance and never jump water. Commit `originRegion: string | null` in AttackState at team selection, preserve it through target/recap/finished and clear it for the next team phase. It is null only in team phase. Task 2 may update the engine and focused engine tests for this correction. Validate the committed origin against legal ownership and the deterministic choice before resolution, and against result-winner ownership after resolution. The UI must draw from that saved anchor and explain when the launch has moved. This is an explicit app interpretation for concave-map playability, not a claimed rule observed in the video.
 
 ## Task 3: Playable board and isolated durable progress
 
@@ -63,10 +64,12 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 
 - [ ] Add an Attack mode beside the existing Daily Season entry. An unfinished old daily still resumes automatically and stays selectable. New Attack uses its own key dukb-conquest-attack-soccer-v1. No old key or score callback is reused.
 - [ ] Test board action persistence before reveal. A failed write keeps the prior visible state and exposes Retry, never a fresh seed. A second tab with a newer revision causes restore/conflict messaging rather than overwriting. Serialize writes with Web Locks where available; if safe persistence is unavailable, explicitly offer an unsaved session without claiming it will resume.
+  - Do not silently overwrite a damaged or unsupported save. Offer a clearly labelled new run or an unsaved session. Resetting an unfinished valid run requires the player's explicit confirmation. Persist the committed originRegion as well as the result so an eliminated attacker's launch point remains correct in the recap.
 - [ ] Render the big geographic map with white neutral land, blue sea, team colours, dark borders and legible text markers. Tap a region to inspect its owner and roster. Use a compact inspect panel/drawer, not a permanent full-roster stack. Provide zoom, reset view, and pan controls that work by touch and keyboard.
   - Keep the current action and result close to the map. On wide screens use the map beside a compact control panel; on phones avoid a full-roster stack and overlapping London labels. An accessible club list must offer the same inspection as tapping small map regions. The direction arrow must use the engine's actual launch point, not a shifted label position.
 - [ ] Show distinct team wheel and direction wheel stages. Outcome is committed before animation; reduced-motion skips animation only. The next action is disabled during animation. Show the selected attacker, target and ray before resolving. Result panel derives scores, captures, upgrades and territory change exclusively from lastResult.
 - [ ] Before a first run show short rules and one worked fictional example. Reopen from a question-mark button. Say this is the English-league first slice, not the requested complete World mode. Explain generated game borders, simulated ratings, legal-angle selection and no ranked points.
+  - Show one help control for the selected mode, not both the old generic guide and a second Attack guide. Keep the initial rules concise enough that the map is visible before starting. Use the existing site fonts and controls around the reference's blue-water, white-land map.
 - [ ] Test full play, reload at each phase, controls with keyboard, storage failure, competing tabs and finishing exactly once without ranked completion. Browser-check at 320, 390, 430 and 1440 with no horizontal overflow, 30px minimum tap targets and result visibility without page jumps.
 
 ## Task 4: Integration gates, metadata and review
@@ -80,7 +83,7 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 
 ## Execution record
 
-- [ ] Task 1 complete
+- [x] Task 1 complete (807ca0e3, 81 focused tests, review clean)
 - [ ] Task 2 complete
 - [ ] Task 3 complete
 - [ ] Task 4 complete

@@ -34,11 +34,21 @@ while designing the new versioned Attack mode. No hosting or publication change.
 Round 512 is in progress on `codex/round-512-conquest-attack` in the isolated
 `.worktrees/round-511-midnight-saves` checkout. Engine commit `cd82bc57` adds
 directional territory attacks, elimination, captured players, game-rating upgrades
-and strict self-contained saves. Its 78 focused tests (17 production mutation
-controls) and app type gate pass; independent engine review is running. The 20
+and strict self-contained saves. Review follow-up `807ca0e3` closes an inconsistent
+recap target, bringing the focused suite to 81 passing tests (17 production
+mutation controls); independent engine review is clean. The 20
 English ground locations are sourced in `docs/conquest-premier-locations-2026-09-07.md`.
-The geographic generator, playable board and production integration are still in
-progress. The existing local preview does not yet contain the new Attack board.
+Actual-map seed 9 exposed a home-ray dead end after territorial captures. Commit
+`3b7c7467` adds the sourced geographic map and saved owned-territory launch fallback,
+with the exact contract in `docs/superpowers/plans/2026-09-07-conquest-attack.md`.
+The engine/map suite has 103 passing tests (24 production engine controls), and
+20 full actual-map seeds complete. App types and offline generator reproduction
+pass; independent map review is running. The playable board and production
+integration are still in progress. The existing
+local preview does not yet contain the new Attack board. La Liga location research
+is also recorded in `docs/conquest-laliga-locations-2026-09-07.md`, but Rayo's
+unsettled current venue remains a gate for that future preset. Do not treat the
+research as an enabled league.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
