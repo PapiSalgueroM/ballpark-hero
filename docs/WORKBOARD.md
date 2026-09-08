@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-528-explicit-sims`, branch
 `codex/round-528-explicit-sims`, base527 `e012beec` (draft PR78).
+Implementation `c3b37559`, draft PR79: https://github.com/PapiSalgueroM/ballpark-hero/pull/79.
 runAllSims now refuses an empty ONLY list before any database probe, child
 harness or browser server starts. Explicit reviewed lists preserve existing
 selection, aliases, child environment cleanup, browser opt-in and failure

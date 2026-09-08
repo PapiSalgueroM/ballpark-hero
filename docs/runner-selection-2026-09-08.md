@@ -1,5 +1,7 @@
 # Round 528: explicit harness selection
 
+Implementation `c3b37559`, draft PR79: https://github.com/PapiSalgueroM/ballpark-hero/pull/79.
+
 Base527 e012beec, draft PR78. The default runner currently discovers every
 node harness, including production write/cache probes documented in the state
 file. Require a nonempty ONLY list before any probing or subprocess work.
