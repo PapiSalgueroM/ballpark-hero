@@ -1,5 +1,20 @@
 # Work board
 
+## Round 532 claimed, September 8, 2026
+
+Codex owns the NFL Arcade acquired-player metadata repair in conquestBattle.ts,
+useConquest.ts and ConquestBoard.tsx, using one small shared roster resolver.
+Worktree `.worktrees/round-532-nfl-roster-cards`, branch
+`codex/round-532-nfl-roster-cards`, base531 `e5642529` (draft PR82).
+Restore existing positions and game ratings for acquired players in battles,
+rosters and player-choice dialogs. Keep current-team original and legend
+priority, plus existing global source precedence for ambiguous names. No new
+player data, rule tuning, activation tracking or power lifetime changes.
+Verify original-roster output stability, acquired role outcomes, focused UI,
+negative controls, both exact types, build and all fifteen site checks.
+Root belongs to Claude. Preserve all prior worktrees and previews. Draft PR
+only, no backend/account writes, broad suite, main merge or publication.
+
 ## Round 531 complete, September 8, 2026
 
 Codex owns NFL Arcade Free Agency action guards and phase-aware controls in
