@@ -22,7 +22,11 @@ export function StreakReminder() {
     const state = getStreakState();
     setStreak(state.global.current);
     setPlayedToday(state.global.lastDate === today);
-    setDismissed(localStorage.getItem('streak-reminder-dismissed') === today);
+    try {
+      setDismissed(localStorage.getItem('streak-reminder-dismissed') === today);
+    } catch {
+      setDismissed(true);
+    }
   }, []);
 
   // Only nudge when there is a streak still alive (kept through yesterday) that
@@ -32,7 +36,9 @@ export function StreakReminder() {
 
   const handleDismiss = () => {
     setDismissed(true);
-    localStorage.setItem('streak-reminder-dismissed', getEtDateString());
+    try {
+      localStorage.setItem('streak-reminder-dismissed', getEtDateString());
+    } catch { /* dismissal still applies to this visit */ }
   };
 
   return (

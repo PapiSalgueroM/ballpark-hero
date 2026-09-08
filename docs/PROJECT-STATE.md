@@ -3,16 +3,29 @@
 ## Startup safety follow-up, September 8, 2026
 
 Anthony asked to keep improving the site, with AdSense readiness the priority.
-Round 515 is claimed in `.worktrees/round-515-storage-startup` on
-`codex/round-515-storage-startup`, based on main `a4579db3`. It will address the
+Round 515 is implemented in `.worktrees/round-515-storage-startup` on
+`codex/round-515-storage-startup`, based on main `a4579db3`. It addresses the
 measured homepage and cookie-control crashes when localStorage access or methods
-throw. No production change or verification result is claimed yet.
+throw. Fourteen focused tests passed after RED reproduction, including real auth
+startup with read denial, healthy saved-session restoration and consent remaining
+off when a write fails. Real browser injection then found an earlier SDK import
+crash when reads fail but writes work. A fifteenth isolated test reproduced it
+and passes with a three-line versioned auth-js capability-probe patch. The SDK
+remains at 2.95.3, now pinned; no existing resolved dependency version changed.
+Clean npm ci applied the patch, and the final exact type/build passed. Expanded
+controls, real-browser replay and all fifteen generated-site fences are running
+against the settled patched build. No database or publication change.
+Details: docs/storage-startup-verification-2026-09-08.md. Next free round: 516.
 
 Round 514 remains separate and unpublished: compact guide/footer and one stable
 next-game section. Eleven focused tests, type/build, a six-route four-width browser
 walk and seven raw no-JavaScript snapshot checks passed. Independent review then
 found more pages losing next-game links, so its full snapshot generation was
-stopped and that coverage gap is being repaired before further generation.
+stopped. That gap is now repaired: all 121 registered routes pass the navigation
+inventory, the six-route four-width layout matrix passes and nine targeted browser
+controls fail their exact intended assertions. Source is pushed at `c2b36643`
+in draft PR65 against Round 513.
+Full snapshot generation is running again, followed by its final generated gates.
 The full Conquest UI timeout on the earlier candidate remains under investigation.
 Claude's root checkout and all his work are untouched.
 

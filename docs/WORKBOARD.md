@@ -4,15 +4,18 @@
 
 Round 515 is claimed on `codex/round-515-storage-startup`, based on main
 `a4579db3`, in `.worktrees/round-515-storage-startup`. Scope: the measured homepage
-and cookie-control crashes when browser storage is blocked. Inspect the Supabase
-client's default storage support before changing its explicit localStorage option.
-Keep persistence working where available, do not shim all game saves into memory,
-and do not enable optional scripts when a consent write fails. No database,
-provider, billing or publication changes. Claim is pushed before implementation.
+and cookie-control crashes when browser storage is blocked. The implementation
+preserves normal sessions and game saves, and failed consent writes keep vendors
+off. Browser tests also exposed an SDK import-time read; a versioned patch adds
+the missing guarded read probe. SDK version 2.95.3 is unchanged and now pinned.
+Clean install, final type/build and source review passed. Expanded controls and
+the final browser/generated-site checks are running. No database, provider,
+billing or publication changes. The claim was pushed before implementation.
 
 The separate Round 514 page-comfort candidate is still in verification. A review
-found additional missing next-game callers, so its full prerender was stopped for
-repair. Do not modify its source or generated files from this round. Rounds 510 to
+found additional missing next-game callers. The repair passes all 121 routes and
+is pushed in draft PR65; full prerender is running again. Do not modify its source
+or generated files from this round. Rounds 510 to
 514 are reserved by Codex; Claude retains 506 to 508 and the root checkout.
 Next free round: 516. Older free-round numbers below are stale.
 
