@@ -1,5 +1,27 @@
 # Project state
 
+## Round 523 profile avatar identity, September 8, 2026
+
+CLAIMED in `.worktrees/round-523-profile-avatar`, branch
+`codex/round-523-profile-avatar`, based on completed Round 522 `2b60a88d`
+(draft PR73). Reproduce another player's missing avatar or display name
+falling back to the signed-in visitor's avatar/email initial. Keep own-account
+fallbacks and saved profile-avatar precedence. No saved identity, auth protocol,
+share-card redesign, calendar changes or backend/account writes.
+
+Main owns Profile.tsx and coordination docs. The focused test author owns
+Profile.avatar.test.tsx and simProfileAvatar.mjs; the browser author owns
+playProfileAvatar.mjs. Use synthetic data-URI avatars, exact mocked reads,
+local-only share captures, denied transport, and real component/browser
+behavior. Reproduce before fixing; prove each guard with exact controls.
+Run both types, build, related profile regressions and all generated-site
+fences, then independent review before draft push. No broad default suite.
+
+Root belongs to Claude, currently 27d0d08b with a modified simPress harness
+and an active measurement. Leave that tree and its processes alone. Preserve
+every earlier worktree/preview including Round 522 on 4196. Cutoff remains
+17:46:50 UTC. Next free round: 524, verify before claiming.
+
 ## Round 522 profile isolation, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-522-profile-isolation`, branch

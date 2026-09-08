@@ -1,5 +1,16 @@
 # Work board
 
+**Round 523, Codex, CLAIMED September 8:** profile header avatar and initial
+identity in `.worktrees/round-523-profile-avatar`, branch
+`codex/round-523-profile-avatar`, based on Round 522 `2b60a88d` (draft PR73).
+Reproduce cross-profile auth metadata/email fallback with synthetic accounts,
+then bind fallback to matching viewed/account identity. Preserve own defaults
+and saved avatar precedence. Main owns Profile.tsx/docs; test author owns
+Profile.avatar.test.tsx/simProfileAvatar.mjs; browser author playProfileAvatar.mjs.
+No share redesign, calendar changes, production writes, broad suite, root edits,
+merge or publish. Claude's root simPress measurement stays untouched.
+Next free round: 524, verify before claiming.
+
 **Round 522, Codex, scoped verification complete September 8:** cross-profile load isolation in
 `.worktrees/round-522-profile-isolation`, branch
 `codex/round-522-profile-isolation`, based on Round 521 `77ad583f` (draft PR72).
