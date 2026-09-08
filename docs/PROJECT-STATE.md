@@ -1,5 +1,25 @@
 # Project state
 
+## Round 521 profile average, September 8, 2026
+
+CLAIMED in `.worktrees/round-521-profile-average`, branch
+`codex/round-521-profile-average`, based on completed Round 520 `9865eb3e`
+(draft PR71). Scope only the own-profile average: pair this browser's points
+and plays, label its scope, and show Not yet for no local plays. The current
+expression divides max(server points, browser points) by browser plays. A
+synthetic server 550/local 50/one-play fixture therefore displays 550, not 50.
+Reproduce through the real component before fixing. Keep Total Points, other
+profiles, account history/restoration, today counts, date boundaries and all
+backend/provider behavior unchanged. Reject writes in mocked tests. No real
+accounts or production records may be touched. Next free round: 522.
+
+Round 520 is clean and pushed, draft PR71, with scoped gates complete and
+preview 4192 preserved. Its dependency audit reports zero vulnerabilities;
+that is not a whole-site security or AdSense guarantee. Default full suite
+remains forbidden overnight because of production write/cache probes. Root
+was tracked-clean at 73d61f54 at 11:38 UTC with Claude's simPress running.
+Do not edit root, stop its processes, merge or publish. Cutoff: 17:46:50 UTC.
+
 ## Round 520 dependency safety, September 8, 2026
 
 Scoped verification is complete in `.worktrees/round-520-dependency-safety`, branch

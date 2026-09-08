@@ -1,5 +1,15 @@
 # Work board
 
+**Round 521, Codex, CLAIMED September 8:** own-profile average scope in
+`.worktrees/round-521-profile-average`, branch `codex/round-521-profile-average`,
+based on Round 520 `9865eb3e` (draft PR71). Main owns only Profile.tsx and
+coordination docs. Focused tests use the real component with mocked auth and
+backend boundaries. Pair local points/plays, label This browser, show Not yet
+when no local plays exist. Leave other profiles and total points unchanged.
+No account restoration, historical repair, date changes, provider changes or
+production writes. Do not run the default broad suite. Root and all previous
+previews stay untouched. Next free round: 522.
+
 **Round 520, Codex, scoped verification complete September 8:** targeted build-tool dependency safety
 in `.worktrees/round-520-dependency-safety`, branch
 `codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
