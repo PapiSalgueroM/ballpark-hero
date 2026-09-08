@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { ScorePredictorBoard } from '@/components/score-predictor/ScorePredictorBoard';
 
 export default function ScorePredictor() {
@@ -30,6 +31,7 @@ export default function ScorePredictor() {
           "Cleveland vs Golden State (2016 Finals G7) → 93-89"
         ]}
       />
+      <GameNav />
     </>
   );
 }

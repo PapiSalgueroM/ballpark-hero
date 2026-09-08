@@ -1,5 +1,36 @@
 # Work board
 
+**Round 515, Codex, verification recorded September 8:** startup storage safety, isolated
+`.worktrees/round-515-storage-startup`, branch `codex/round-515-storage-startup`,
+based on main `a4579db3`. Auth startup, homepage enumeration, streak reminder and
+cookie controls now survive blocked storage. Head `9918a6dd`, draft PR66, has
+15 focused passes, five unit controls, 46 browser checks, the vendor control,
+clean install, type/build and all fifteen generated-site fences green. Full node
+integration remains open. No game save shim, database/provider/billing changes
+or publication. Next free round: 516.
+Round 514's navigation repair passes all 121 routes. Full prerender finished with
+145 written, zero failures and three expected account-only refusals. Final
+generated-site verification passed for draft PR65, including 16 focused tests,
+the 121-route final inventory, the four-width layout matrix, all fifteen fences,
+disclosure capture and its control, and the related-game graph. Two test-harness
+issues discovered by the fences were fixed and their controls proven. Generated
+snapshots and the sitemap ledger are pushed at `348fa545`. No merge or publish.
+
+## New owner feedback, September 8
+
+Full intake: docs/owner-feedback-2026-09-08.md. This adds ticker freshness and sport
+coverage, persistent profile stats, improved share cards, Google/Apple signup,
+sports-style default names, varied human-worded emoji polls, compact game/footer
+layout and broader current-era Club Manager leagues. The new poll request
+supersedes the older team-vs-team-only rule. All remaining original/master items stay.
+
+**Round 514, Codex, CLAIMED September 8:** shared page comfort in
+`codex/round-514-page-comfort`, isolated `.worktrees/round-514-page-comfort`, based
+on `671ffc0c`. Compact guide presentation, one next-game section and centered
+footer report action, with discoverable policy links and full legal text retained.
+Do not overlap Claude's Club Manager files or AdBanner. Ticker/account read-only
+audits inform the next rounds. No DB/OAuth/publication changes in this round.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
@@ -59,7 +90,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 514 (513 claimed September 8; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 515 (514 claimed September 8; checked against origin/main on
   2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
   506 to 508 and the Codex lane holds 510 to 512, see the claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06

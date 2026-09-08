@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Star, HelpCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HubTiles, HubPanelHeader, HubTile } from '@/components/hub/HubTiles';
@@ -276,6 +277,7 @@ const WonderkidFactory = () => {
           title="Wonderkid Factory"
           description="Run a youth academy: scouts bring in generated kids, coaches grow them toward hidden ceilings, and you decide when to cash out. Deadline day surges, reputation stars and six regions to climb."
         />
+        <GameNav />
       </main>
 
       {/* rules modal, shown before first play and reopenable from the ? */}

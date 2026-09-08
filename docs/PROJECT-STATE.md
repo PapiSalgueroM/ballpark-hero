@@ -1,5 +1,93 @@
 # Project state
 
+## Review correction and startup follow-up, September 8, 2026
+
+Round 514 source is pushed at `c2b36643` in draft PR65, still unpublished. The compact
+footer, full guide text in closed native disclosures and stable Play next graph
+passed the initial focused tests, build/type checks, six routes at four widths,
+and seven raw no-JavaScript snapshot checks. Independent review then found a real
+regression: 18 additional registered routes had no next-game section in their
+initial state. Full snapshot generation was stopped rather than called complete.
+
+The corrected source now adds 13 missing page callers and moves five conditional
+boards' navigation to their pages, removing six descendant copies. Nine caller
+tests and the type gate pass. A fresh build passed in 52.93 seconds. The full
+121-route browser inventory passes, as do the six-route four-width layout matrix
+and nine assertion-specific browser controls against preview 4184. Full snapshot
+generation completed: 145 routes written, zero failures and three expected
+account-only refusals. Clock sampling removed 56 changing blocks across 14 routes.
+The final focused rerun passed 16 tests in four files. Stub and sitemap generation
+passed: 140 URLs, with 127 changed pages dated today and 13 unchanged dates kept.
+The final build passed in 41.59 seconds with 2,839 modules. All fifteen
+generated-site fences now pass. The first fence pass found two harness issues:
+the component scan treated a test fixture as production, and the legal-name
+fixture lacked the existing governing-body context. Both are corrected without
+weakening the guards. A new duplicate-component control and the existing missing-h1
+control each fail only their intended assertion. The final 121-route inventory
+and four-width layout matrix pass again, including the legal-truncation control.
+The disclosure fixture and related-link graph fence pass. Generated snapshots,
+sitemap, ledger and final harness fixes are committed and pushed at `348fa545`.
+No merge or publish
+is included in this round; full integration remains open.
+
+Round 515 is separate on `codex/round-515-storage-startup`, based on main
+`a4579db3`, in `.worktrees/round-515-storage-startup`. Head `9918a6dd` is pushed
+in draft PR66.
+It fixes measured startup failures from blocked browser storage in auth setup,
+the homepage, streak reminder and cookie controls. Browser testing found an
+import-time SDK read before the app could start, now covered by a versioned
+three-line capability-probe patch with Supabase pinned to the same 2.95.3 version.
+Clean install, 15 focused cases, five exact unit controls, 46 browser checks,
+the browser vendor control, exact type/build, independent review and all fifteen
+generated-site fences pass. No existing resolved dependency version changed.
+Full node integration remains open. No database, provider, billing or publication change.
+Next free round: 516. Claude's root checkout remains untouched.
+
+The latest isolated replay of the unchanged Conquest full-map UI test passed in
+29.632 seconds against its 30-second limit, leaving 368 ms of headroom. This does
+not erase the earlier failures or establish a full-suite pass. The seeded game
+needs 160 actions, so the earlier 32-click probe covered only one fifth of it.
+The map geometry stays fixed; save, recap and roster work and broad test queries
+need profiling before choosing an optimization. See
+docs/conquest-ui-timing-2026-09-08.md. The older suite PID 52872 ended, and most
+remaining Node processes were runtime helpers, not stuck workers. A single new
+264-harness regression run is active in Round 515, session 95111, PID 56308,
+started at 04:21 Eastern on September 8. Do not duplicate
+it or build over its dist. Other lanes and their browser audits remain untouched.
+
+## New feedback and active Round 514, 2026-09-08
+
+Anthony's newest tweaks are captured completely in docs/owner-feedback-2026-09-08.md.
+This includes a deliberate reversal of team-vs-team-only polls and a preference
+for compact pages with popup help rather than long mandatory guide scrolling.
+Codex claims shared page/footer comfort in `.worktrees/round-514-page-comfort`
+on `codex/round-514-page-comfort`, based on `671ffc0c`. Ticker and account audits
+are read-only parallel work. Claude's root Club Manager edits stay untouched.
+Round 513's broad verification failures and queued homepage storage-crash fixes
+remain open. This new claim does not imply any new code is implemented or live.
+
+The owner then asked about a forwarded AdSense/revenue assessment. Fresh public
+checks of seven representative HTML routes plus ads.txt all returned 200; each
+HTML route had one real H1, its own canonical, publisher ID and no noindex.
+This verifies the readable-shell/policy-page foundation, not whole-site gameplay,
+form delivery, legal compliance or approval. See
+docs/adsense-assessment-status-2026-09-08.md for findings and unsupported numerical
+claims in that document. Anthony then made AdSense readiness the priority and
+asked how to use his Gemini Pro subscription. Proposed read-only reviewer role:
+docs/gemini-review-handoff-2026-09-08.md. No Gemini connection or billing was enabled.
+
+Round 514 footer implementation now passes all three focused tests after their
+earlier RED run. Report comes first; policy/cookie links remain exposed; Site info
+holds all secondary links and the unchanged full disclaimer. Navigation/guide
+implementation and prerender disclosure preservation are in progress. Full
+integration/build/browser checks are still required, and nothing is published.
+Consent and isolated ad-spacing findings are recorded in
+docs/adsense-consent-followup-2026-09-08.md. The dual consent flow needs an actual
+Google CMP check, not just the existing empty-script ad test. Current dashboard
+content could not be read because browser attachment failed. A fresh process
+check found no runAllSims or Vitest process, superseding the old capacity note
+below without claiming Claude's suite passed.
+
 ## Active follow-up, 2026-09-08
 
 Anthony's latest direction is "just keep going and work on other things".

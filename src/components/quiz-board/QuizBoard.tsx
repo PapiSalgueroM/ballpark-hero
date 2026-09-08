@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy, X } from 'lucide-react';
-import { GameNav } from '@/components/game/GameNav';
 import { VALUES } from '@/lib/fetchQuizBoard';
 import { useQuizBoard } from '@/hooks/useQuizBoard';
 
@@ -164,7 +163,6 @@ export function QuizBoard() {
         </div>
       )}
 
-      <GameNav currentPath="/quiz-board" />
     </div>
   );
 }

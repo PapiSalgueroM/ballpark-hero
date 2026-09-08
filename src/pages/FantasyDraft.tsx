@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -455,6 +456,7 @@ const FantasyDraft = () => {
             "Snake draft: You pick 1st, AI picks 2nd & 3rd, you pick 4th & 5th..."
           ]}
         />
+        <GameNav />
       </div>
     </>
   );

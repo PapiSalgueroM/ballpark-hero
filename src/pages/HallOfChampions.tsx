@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import { Star, HelpCircle, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -46,7 +47,8 @@ const HallOfChampions = () => {
   }, []);
 
   const seo = (
-    <GameSeoContent
+    <>
+      <GameSeoContent
       pageHasOwnH1
       title="Hall of Champions | DoUKnowBall"
       description="An idle museum built entirely on real championship history. Ten wings, hundreds of real title-winning teams from 1889 to today, each plaque checked against the same audited record books the rest of the site runs on."
@@ -62,7 +64,9 @@ const HallOfChampions = () => {
         'Finishing a wing hangs a permanent plaque worth +25% income that survives every rededication',
         'Anniversary weekends triple admissions for a few seconds, and the archive vault makes them last longer',
       ]}
-    />
+      />
+      <GameNav />
+    </>
   );
 
   if (loadState !== 'ready' || !s) {

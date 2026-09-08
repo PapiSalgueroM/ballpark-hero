@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import { BallIqBoard } from '@/components/ball-iq/BallIqBoard';
 
@@ -33,6 +34,7 @@ export default function BallIq() {
           'Below 70, Does not know ball',
         ]}
       />
+      <GameNav />
     </>
   );
 }

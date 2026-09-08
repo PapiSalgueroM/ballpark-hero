@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy } from 'lucide-react';
-import { GameNav } from '@/components/game/GameNav';
 import { useBallIq } from '@/hooks/useBallIq';
 
 export function BallIqBoard() {
@@ -90,7 +89,6 @@ export function BallIqBoard() {
           })}
         </div>
 
-        <GameNav currentPath="/ball-iq" />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -634,6 +635,7 @@ const DartDraft = () => {
             'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
         />
+        <GameNav />
       </div>
     </>
   );

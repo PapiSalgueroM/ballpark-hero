@@ -1,4 +1,5 @@
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -41,6 +42,7 @@ const FreeKick = () => (
             'The keeper who leans left has left you the right hand side, if you can find it under pressure.',
           ]}
         />
+        <GameNav />
       </main>
     </div>
   </>

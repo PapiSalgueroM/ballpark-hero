@@ -20,7 +20,19 @@ export function Footer() {
      of the text the sitemap dates a page by (Round 286). A footer change is
      not a reason for Google to recrawl 126 pages. */
   return (
-    <footer data-site-chrome="" className="mt-12 pb-8 text-center text-xs text-muted-foreground space-y-3">
+    <footer data-site-chrome="" className="mt-6 space-y-2 px-4 pb-6 text-center text-xs text-muted-foreground">
+      <div className="flex justify-center [&>button]:min-h-11">
+        <ReportSiteIssue />
+      </div>
+      <nav aria-label="Policies and preferences" className="flex flex-wrap items-center justify-center gap-x-4 [&>a]:inline-flex [&>a]:min-h-11 [&>a]:items-center [&>button]:min-h-11">
+        <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
+        <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
+        <button type="button" onClick={resetCookieChoice} className="underline hover:text-foreground transition-colors">Cookie choices</button>
+        <ThemeToggle variant="footer" />
+      </nav>
+      <details className="mx-auto max-w-2xl">
+        <summary className="mx-auto w-fit min-h-11 cursor-pointer content-center rounded px-3 underline hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Site info</summary>
+        <div className="space-y-4 pt-2">
       <p className="max-w-lg mx-auto leading-relaxed">
         All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall
       </p>
@@ -34,7 +46,7 @@ export function Footer() {
           has never indexed. The list is read from sportHub.ts so a seventh hub
           lands here on its own; simInternalLinks holds every hub to the same
           floor. */}
-      <nav aria-label="Sports" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
+      <nav aria-label="Sports" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 [&_a]:inline-flex [&_a]:min-h-11 [&_a]:items-center">
         {SPORT_HUBS.map((hub, i) => (
           <span key={hub.route} className="inline-flex items-center gap-x-3">
             {i > 0 && <span aria-hidden="true">·</span>}
@@ -44,7 +56,7 @@ export function Footer() {
           </span>
         ))}
       </nav>
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
+      <nav aria-label="About the site" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 [&>a]:inline-flex [&>a]:min-h-11 [&>a]:items-center">
         <Link to="/about" className="underline hover:text-foreground transition-colors">
           About
         </Link>
@@ -72,30 +84,12 @@ export function Footer() {
           Leaderboard
         </Link>
         <span>·</span>
-        <Link to="/privacy" className="underline hover:text-foreground transition-colors">
-          Privacy Policy
-        </Link>
-        <span>·</span>
-        <Link to="/terms" className="underline hover:text-foreground transition-colors">
-          Terms of Service
-        </Link>
-          <span>·</span>
           <Link to="/accessibility" className="underline hover:text-foreground transition-colors">
             Accessibility
           </Link>
-        <span>·</span>
-        <button
-          type="button"
-          onClick={resetCookieChoice}
-          className="underline hover:text-foreground transition-colors"
-        >
-          Cookie choices
-        </button>
-        <span>·</span>
-        <ThemeToggle variant="footer" />
-        <span>·</span>
-        <ReportSiteIssue />
-      </div>
+      </nav>
+        </div>
+      </details>
     </footer>
   );
 }

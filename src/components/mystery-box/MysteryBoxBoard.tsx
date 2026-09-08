@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy, Package, Trash2 } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
-import { GameNav } from '@/components/game/GameNav';
 import { playerRating } from '@/lib/squadDeal';
 import { TOTAL_PACKS, useMysteryBox } from '@/hooks/useMysteryBox';
 import type { PackTier } from '@/lib/fetchPackPool';
@@ -215,7 +214,6 @@ export function MysteryBoxBoard() {
         </Link>
       </div>
 
-      <GameNav currentPath="/mystery-box" />
     </div>
   );
 }

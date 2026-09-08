@@ -5,7 +5,6 @@ import { NationSearch } from './NationSearch';
 import GuessTheNationHowToPlay from './GuessTheNationHowToPlay';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import { GameNav } from '@/components/game/GameNav';
 import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
 import { Trophy, Loader2 } from 'lucide-react';
@@ -158,7 +157,6 @@ export function GuessTheNationBoard() {
             </div>
           </div>
 
-          <GameNav />
         </div>
       </div>
     );
@@ -348,7 +346,6 @@ export function GuessTheNationBoard() {
           />
         )}
 
-        <GameNav />
       </GameShell>
     </div>
   );

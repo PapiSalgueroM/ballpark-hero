@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -437,6 +438,7 @@ const SignThePlayer = () => {
             'Keep powder dry for the headline lot: the best player in the room always sells last',
           ]}
         />
+        <GameNav />
       </div>
     </>
   );

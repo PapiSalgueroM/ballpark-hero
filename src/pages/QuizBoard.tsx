@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import { QuizBoard } from '@/components/quiz-board/QuizBoard';
 
@@ -33,6 +34,7 @@ export default function QuizBoardPage() {
           '$1000, the ones your dad would get and you wouldn\'t',
         ]}
       />
+      <GameNav />
     </>
   );
 }

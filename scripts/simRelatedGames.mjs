@@ -6,7 +6,7 @@
  * deterministic graph (src/lib/relatedGames.ts): a ring through the page's
  * own category, one link into the next category so categories form a
  * cycle, and two hash-spread variety picks, rendered as real tiles on
- * every game page through GameSeoContent.
+ * every game page through GameNav.
  *
  * Measured at build time (2026-08-19, 107 games): out-degree 4 to 6,
  * inbound minimum 2, median 5, maximum 13, zero orphans, and a BFS from

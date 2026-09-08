@@ -3,6 +3,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import GenericLineupBoard from '@/components/perfect-lineup/GenericLineupBoard';
 import { NBA_LINEUP_CONFIG } from '@/data/nbaPerfectLineupPool';
 import { GameShell } from '@/components/game/GameShell';
+import { GameNav } from '@/components/game/GameNav';
 
 const PerfectLineupNba = () => {
   return (
@@ -37,6 +38,7 @@ const PerfectLineupNba = () => {
             'A "1990s" guard slot accepts any guard from that era.',
           ]}
         />
+        <GameNav />
       </GameShell>
     </>
   );
