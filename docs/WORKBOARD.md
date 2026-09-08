@@ -1,5 +1,26 @@
 # Work board
 
+## Codex startup safety, claimed September 8, 2026
+
+Round 515 is claimed on `codex/round-515-storage-startup`, based on main
+`a4579db3`, in `.worktrees/round-515-storage-startup`. Scope: the measured homepage
+and cookie-control crashes when browser storage is blocked. The implementation
+preserves normal sessions and game saves, and failed consent writes keep vendors
+off. Browser tests also exposed an SDK import-time read; a versioned patch adds
+the missing guarded read probe. SDK version 2.95.3 is unchanged and now pinned.
+Clean install, final type/build and source review passed. All 15 focused tests,
+five unit controls, 46 browser checks, the vendor control and all fifteen
+generated-site fences pass. Source is pushed at `5729e43d` in draft PR66;
+full node integration remains open. No database, provider, billing or publication
+changes. The claim was pushed before implementation.
+
+The separate Round 514 page-comfort candidate is still in verification. A review
+found additional missing next-game callers. The repair passes all 121 routes and
+is pushed in draft PR65; full prerender is running again. Do not modify its source
+or generated files from this round. Rounds 510 to
+514 are reserved by Codex; Claude retains 506 to 508 and the root checkout.
+Next free round: 516. Older free-round numbers below are stale.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").

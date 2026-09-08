@@ -1,5 +1,49 @@
 # Project state
 
+## Startup safety follow-up, September 8, 2026
+
+Anthony asked to keep improving the site, with AdSense readiness the priority.
+Round 515 is implemented in `.worktrees/round-515-storage-startup` on
+`codex/round-515-storage-startup`, based on main `a4579db3`. It addresses the
+measured homepage and cookie-control crashes when localStorage access or methods
+throw. Fourteen focused tests passed after RED reproduction, including real auth
+startup with read denial, healthy saved-session restoration and consent remaining
+off when a write fails. Real browser injection then found an earlier SDK import
+crash when reads fail but writes work. A fifteenth isolated test reproduced it
+and passes with a three-line versioned auth-js capability-probe patch. The SDK
+remains at 2.95.3, now pinned; no existing resolved dependency version changed.
+Clean npm ci applied the patch, and the final exact type/build passed. All 15
+focused tests, five targeted unit controls, 46 real-browser checks, the browser
+vendor control and all fifteen generated-site fences pass on the settled build.
+The SDK control first passed with its copied package intact, then reproduced the
+import crash when only the probe was removed. Source is pushed at `5729e43d`
+in draft PR66. The full node suite remains an integration gate; no merge,
+database change, publication or AdSense approval is claimed.
+Details: docs/storage-startup-verification-2026-09-08.md. Next free round: 516.
+
+Round 514 remains separate and unpublished: compact guide/footer and one stable
+next-game section. Eleven focused tests, type/build, a six-route four-width browser
+walk and seven raw no-JavaScript snapshot checks passed. Independent review then
+found more pages losing next-game links, so its full snapshot generation was
+stopped. That gap is now repaired: all 121 registered routes pass the navigation
+inventory, the six-route four-width layout matrix passes and nine targeted browser
+controls fail their exact intended assertions. Source is pushed at `c2b36643`
+in draft PR65 against Round 513.
+Final code, snapshots, sitemap and ledger are now pushed at `348fa545` in PR65.
+Full generation wrote 145 routes with zero failures and three expected hidden
+account-only refusals. Sixteen focused tests, the repeated 121-route inventory,
+four-width layout walk and all fifteen generated-site fences pass. Two harness
+issues found at the last gate were fixed with controls, not bypassed.
+The latest isolated Conquest full-map test passed in 29.632 seconds against its
+unchanged 30-second limit, so its earlier timing failures remain under investigation.
+Claude's root checkout and all his work are untouched.
+
+One full regression run is active on this Round 515 candidate: 264 node harnesses,
+session 95111, PID 56308, started 04:21 Eastern on September 8. It is not a pass
+until its closing output is read. Do not rebuild dist or start another full run.
+The older suite PID 52872 ended; process count alone was misleading because most
+remaining Node processes were runtime helpers, not orphaned test workers.
+
 ## Live as of 2026-09-08, and a note for whoever picks this up next
 
 **Round 505 is published and verified live. Nothing merged is unpublished any more.**
