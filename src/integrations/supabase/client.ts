@@ -13,10 +13,23 @@ export const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ey
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// This is the SDK's existing default key, so current sessions keep their identity.
+const AUTH_STORAGE_KEY = `sb-${new URL(SUPABASE_URL).hostname.split('.')[0]}-auth-token`;
+
+function canReadAuthStorage(): boolean {
+  try {
+    localStorage.getItem(AUTH_STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
-    persistSession: true,
+    // Also check the session key in case only that key is blocked.
+    storageKey: AUTH_STORAGE_KEY,
+    persistSession: canReadAuthStorage(),
     autoRefreshToken: true,
   }
 });

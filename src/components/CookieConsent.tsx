@@ -5,11 +5,16 @@ import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScri
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const consent = localStorage.getItem('cookie-consent');
-    if (!consent) setVisible(true);
+    try {
+      const consent = localStorage.getItem('cookie-consent');
+      if (!consent) setVisible(true);
+    } catch {
+      setVisible(true);
+    }
   }, []);
 
   /* A withdrawal in another tab reloads this one so vendor code that already
@@ -62,13 +67,21 @@ export function CookieConsent() {
   }, [visible]);
 
   const saveChoice = (choice: 'accepted' | 'essential') => {
-    localStorage.setItem('cookie-consent', choice);
+    try {
+      localStorage.setItem('cookie-consent', choice);
+    } catch {
+      // Essential only can dismiss for this visit. Failed acceptance never loads vendors.
+      if (choice === 'essential') setVisible(false);
+      else setSaveFailed(true);
+      return false;
+    }
     window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
     setVisible(false);
+    return true;
   };
 
   const accept = () => {
-    saveChoice('accepted');
+    if (!saveChoice('accepted')) return;
     // Start analytics in this session. The ad loader also runs, but it stays
     // off until AdBanner renders a deliberate slot after this state change.
     loadConsentedScripts();
@@ -141,6 +154,11 @@ export function CookieConsent() {
           </button>
         </div>
       </div>
+      {saveFailed && (
+        <p role="alert" className="max-w-3xl mx-auto mt-2 text-sm text-center text-muted-foreground">
+          Your browser couldn't save that choice. Ads and analytics stay off. Try again or choose Essential only.
+        </p>
+      )}
     </div>,
     document.body,
   );
