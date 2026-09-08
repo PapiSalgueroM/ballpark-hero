@@ -4,7 +4,7 @@
 
 Codex owns the reproduced Soccer Attack queued-save/unsaved-choice race.
 Worktree `.worktrees/round-540-attack-save-choice`, branch
-`codex/round-540-attack-save-choice`, base539 `7e25f00f` (draft PR90).
+`codex/round-540-attack-save-choice`, base539 `060d7096` (draft PR90), including its reviewed fixture guard.
 A pending retry can resolve after unsaved play was chosen and restore another
 tab's run over it. Lock unsaved choices while a commit is active, retaining
 ordinary available unsaved play. Use real generated states, queued Web Locks,
