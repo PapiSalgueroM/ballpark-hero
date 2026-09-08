@@ -129,9 +129,22 @@ Four things, in the order they can hurt you.
   2, `nocap` 2, `flatlevels` 34, `deadgate` 1, `saturate` 4). Green with EXIT=0:
   `simClubManagerDeals`, `simAcademy`, `simClubManagerFinances`, `simRoles`, `simClubManager`,
   `simTransfers`, `simDealDepth`, `simUclLegs`, `simTacticsEngine`. `simPress` returned
-  EXIT=124, which is a TIMEOUT under the sweep's own CPU load and not a verdict; it is being
-  re-run solo with a longer budget because it is the harness most affected by the duckPress
-  fix. Still to do before merge: `npm run build`, the browser walks, and the full 265 suite.
+  EXIT=124, which is a TIMEOUT under the sweep's own CPU load and not a verdict. Re-run SOLO it
+  is green: `ALL PRESS AND TEAM TALK CHECKS PASSED`, and the section that matters most for this
+  round reported Manchester City over 150 paired seasons at **0.00 points apart** between
+  ducking the press and never opening the room, which is the Round 315 invariant the fix
+  restored.
+
+  **FULL SUITE, 2026-09-08 after the fixes: 266 harnesses, 265 green, ONE red, and it is not
+  ours.** `simConnect4ClubRecords` fails on "not one pair was answered from records". Proven
+  three ways rather than assumed: this branch touches zero connect4 files; all three files the
+  harness reads (`supabase/functions/football-connect4-validate/index.ts`,
+  `src/integrations/supabase/client.ts`, `src/types/footballConnect4.ts`) are byte identical to
+  `origin/main`; and the harness queries the DEPLOYED edge function over the network, so its
+  verdict depends on live Supabase state and not on any branch. It was red the same way earlier
+  in the day, before any of this round existed. **For the lane that owns connect4:** the club
+  records answer path is not answering for any pair the table proves, which reads like a
+  deployment or data condition on the live function rather than a code regression.
 
 - **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT.**
   Rounds 503, 504 and 505 are merged on origin/main and 505 is live. **506, 507 and 508 are all
