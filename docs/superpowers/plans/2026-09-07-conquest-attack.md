@@ -88,4 +88,5 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 - [x] Task 2 complete (3b7c7467, 103 focused tests, 20 real-map seeds, review clean)
 - [x] Task 3 complete (49664f18, focused board 14 tests plus four save tests, browser regressions, review clean)
 - [x] Task 4 implementation and review complete (6b0c9cff, final fix edc31320, clean scoped re-review, full Vitest 342/342, final browser play passed)
-- [ ] Final broad guest sweep and 266-node-harness run completed and recorded
+- [x] Final broad guest sweep completed: 152 routes, three widths, 456 checks, zero findings
+- [ ] Final 266-node-harness run completed and recorded (held for capacity after an incomplete start; no Codex suite active)

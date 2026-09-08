@@ -80,16 +80,22 @@ The single final re-review closed both findings and found no direct new breakage
 - Final Chromium: the changed disconnected-save fixture initially failed to open recovery against the prior build. On the final build, recovery, byte preservation, complete reopenable help and unsaved play passed at 320, 390, 430 and 1440. No page error or horizontal overflow was observed. The controller inspected settled phone help screenshots at the top and bottom; the first screenshot had caught the opening animation, so the capture now waits for that animation to finish.
 - Final Chromium also repeated a full 160-action seed 9 game, exact finished-state JSON and reload, no local ranked completion, quota failure and exact retry, competing tabs, Daily Season entry precedence, both save namespaces, active damaged-save recovery, real map inspection, captured drag and outside-release/no-button re-entry. All passed.
 
-The final 152-route guest sweep is running. A fresh isolated 266-node-harness run follows it. Both must have actual results before a broad all-clear. Claude's Round 506 has not been integrated or jointly tested here, and his root Round 507 checkout remains untouched. No merge or publication.
+The final guest sweep now passes: 152 routes at 320, 390 and 1440 pixels, 456 checks, zero findings. It does not cover tablets or another browser engine, and it checks opening pages, not every game's full play loop. Claude's changes have not been integrated or jointly tested here. No merge or publication.
 
-## Active broad verification jobs, September 8
+## Broad verification jobs, updated September 8 at 01:33 Eastern
 
 Draft PR 63 backs up the reviewed candidate and incorporates the older PR 61 changes:
 https://github.com/PapiSalgueroM/ballpark-hero/pull/63. It remains draft, unmerged and unpublished.
 
-The guest sweep is tool session `11480`, node process `18220` created at 01:16:40 Eastern. It writes `.superpowers/sdd/2026-09-07-conquest-attack/site-sweep-final.log`. Coordinator session `8842` is already running `finish-broad-gates.ps1` in that same scratch directory. It waits for the exact sweep process, refuses a reused process ID, verifies production code still matches `edc31320`, then runs the complete node suite in a unique temporary directory. It writes `full-node-final.log`, ending with `FULL_NODE_EXIT`. A process finishing is not proof its checks passed. Inspect the recorded outcomes.
+Guest sweep session `11480`, node process `18220`, completed with exit 0 and the closing line `Swept 152 routes across 1 engines and 3 viewports (456 checks). 0 findings.` Its log is `.superpowers/sdd/2026-09-07-conquest-attack/site-sweep-final.log`.
 
-Do not start another sweep or full node suite. Do not rebuild while a running suite reads `dist`. Keep the scratch directory while either job needs it. The existing Website review checkpoint follow-up is active and points at these jobs, this worktree and the Claude-status requirement; unchanged state stays quiet.
+Coordinator session `8842` was stopped just as the sweep finished and the full node suite began. Its log contains only `Running 266 node harnesses`; this is an incomplete attempt, not a pass or 266 measured failures. Read-only process inspection confirmed only Claude's two pre-existing full suites remained. The coordinator is retired and refuses to restart. Do not use it. The full node gate remains open.
+
+A resource check counted 181 Node processes, but that count does not establish how many are busy. A Windows processor snapshot reported 99% load; subsequent three-second performance-counter samples reported 46.0%, 45.7% and 48.4%, with 2.8GB physical memory free out of 15.7GB. Four Claude-owned simulation children dominated the sampled CPU usage. No other process was stopped. The large Codex suite is held until the other suites settle and resources permit a clean isolated run.
+
+The final Attack revision negative control was repeated on `edc31320`: offline generation passed, the exact revision transition was changed, the existing invariant failed, and the wrapper recognized that intended failure with exit 0. Temporary control files were removed and the tracked tree stayed clean.
+
+The Website review checkpoint follow-up is active, points at this worktree and the completed sweep, and will resume the remaining node gate without duplicate jobs when capacity permits. It also tracks Claude's pending review and final season browser walk. Do not rebuild while a running suite reads `dist`. Keep the scratch evidence until broad verification is recorded and archived; unchanged state stays quiet.
 
 ## Implementation rulings retained for owner review
 

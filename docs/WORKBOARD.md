@@ -13,9 +13,11 @@ commit, preview, checks and unfinished work. Claude's Round 506 checkpoint is pu
 built-site fences pass, while its full node suite is still pending. That branch is not
 merged or published. Copero research and proposed priorities are in
 `docs/copero-reference-audit-2026-09-08.md`.
-Claude is now active in the root checkout on `round-507-ucl-two-legs`, observed
-September 8 at `98fae6a4` with uncommitted engine changes. His separate full node
-suite is running. The Codex lane must not edit that checkout or claim both lanes
+Claude's root checkout was observed at `b1a63961` on `round-507-ucl-two-legs`
+at 01:26 Eastern September 8, with tracked files clean and two untracked repro
+scripts belonging to him. Two full suites are active, and Anthony forwarded that
+the 506/507 adversarial review and final season browser walk remain pending.
+The Codex lane must not edit that checkout or claim both lanes
 have reached the review checkpoint yet.
 
 How it works:
@@ -144,8 +146,12 @@ How it works:
   timeout budgets. Final Chromium repeats the 160-action finish, exact reload,
   save, tab and pointer checks; new recovery/help checks pass at all four widths.
   The first node run and guest sweep were canceled before completion. The final
-  152-route sweep is running, with the fresh 266-node-harness run already queued
-  behind that process. Do not start duplicate jobs. Use isolated
+  guest sweep now passes 456 checks across all 152 routes and three widths, zero
+  findings. The final revision control also passes by failing the intended invariant.
+  The coordinator briefly started the fresh 266-node run, but the controller stopped
+  that new job for machine load. It is incomplete, not green. The existing follow-up
+  will start a fresh run when Claude's existing suites settle and capacity permits.
+  No Codex full suite is active. Do not restart the retired coordinator or duplicate jobs. Use isolated
   test temporary directories and stagger heavy groups. This local preview is a
   review candidate, not a whole-site all-clear.
   La Liga, Europe, World and NFL/NBA powers remain open and are not enabled by the research

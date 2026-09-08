@@ -45,8 +45,9 @@ map without rerolling; Attack is unlimited and gives no ranked points. The exist
 
 The focused engine, map, save and board files now pass 125 real Vitest outcomes.
 The separate 20-seed map run completed 3,220 transitions and 805 resolutions.
-The integrated wrapper and its changed revision-transition control were verified
-at `6b0c9cff`; the final full wrapper run remains part of the pending node suite.
+The integrated wrapper was verified at `6b0c9cff`; its revision-transition control
+was repeated successfully on final code `edc31320`, failing the intended invariant.
+The final full wrapper run remains part of the pending node suite.
 Existing Conquest sims pass after `simConquestMap`
 was narrowed to permit exactly the shared five-sport renderer and the separate Attack
 renderer; its private third-renderer control remains red. Types, both production
@@ -57,9 +58,13 @@ The single scoped re-review closed both findings with no new breakage. The first
 full Vitest attempt failed six tests during parallel workloads; the final isolated,
 sequential run now passes all 342 tests in 28 files in 128.91 seconds, with unchanged
 assertions and timeout budgets. The first node run and guest sweep were canceled
-before completion, not green. The final 152-route guest sweep is running, and an
-already-started coordinator queues the fresh 266-node-harness run after it. Do not
-launch duplicate suites. Active job and log details are in the QA report. Isolate test temporary directories from
+before completion, not green. The final guest sweep passed: 152 routes at 320,
+390 and 1440 pixels, 456 checks, zero findings. Its coordinator briefly started the
+266-node suite before the controller stopped that new run for machine load. That
+attempt is incomplete, not a pass. No Codex full suite is active; the review-checkpoint
+follow-up will start it when the existing Claude suites settle and capacity permits.
+Do not restart the retired coordinator or launch duplicate suites. Job and log
+details are in the QA report. Isolate test temporary directories from
 Claude's concurrent checkout and stagger heavy groups. The integrated Chromium
 pass is clean: 55 assertions at 320, 390,
 430 and 1440 pixels, zero opening-label overlaps, exact Daily and Attack save
@@ -107,12 +112,18 @@ personal terms.**
 published.** Its scoped Club Manager checks and 15 built-site fences pass. The full node
 suite is still pending, so this is Claude's review checkpoint rather than a whole-site
 all-clear. The branch also changes shared ad spacing; do not pull it into Round 512.
-Read-only local inspection on September 8 found Claude actively working in the root
-checkout on `round-507-ucl-two-legs` at `98fae6a4`, with uncommitted Club Manager
-engine changes. Do not infer that Claude has paused or touch that checkout.
+Read-only inspection at 01:26 Eastern on September 8 found Claude's root checkout
+on `round-507-ucl-two-legs` at `b1a63961`, matching its remote. Tracked files were
+clean, with two untracked repro scripts belonging to him. Two full suites remained
+active; their buffered results were not independently available. The older suite
+started before the Round 507 commits, so its completion alone cannot verify the
+final tree. Anthony forwarded that the 506/507 adversarial review and full-season
+browser walk are still pending. Round 508 is scoped, not built in the inspected
+state. Do not infer Claude has paused or modify his checkout or repro scripts.
 A read-only merge simulation of `6b0c9cff` with `7b53c3b4` found conflicts only in
 `docs/PROJECT-STATE.md` and `docs/WORKBOARD.md`, not code. This is not a combined
-build, merge or joint test result. Both lanes still need their own gates and a
+build, merge or joint test result. Repeating the diagnostic against Round 507
+`b1a63961` again found only the same two documentation conflicts. Both lanes still need their own gates and a
 tested combined preview before the whole-site owner checkpoint.
 
 **Round 509 is complete, merged through PR 60 and verified live.**
