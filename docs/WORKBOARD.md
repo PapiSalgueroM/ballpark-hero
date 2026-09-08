@@ -84,7 +84,7 @@ Four things, in the order they can hurt you.
   results edge is NOISE: over four independent seed bases at 160 pairs each the points per game
   gap came out +0.008, -0.006, -0.011 and +0.038, so the SIGN FLIPS. An earlier 96 pair run
   showed +0.037 and would have been written up as "the trees work" if it had not been repeated.
-  What IS stable is the money: budget after one season was 126.8, 126.8, 127.0, 126.9 untouched
+  What IS stable is the money: over ten runs the gap was 3.3 to 4.4m, budget after one season 126.8, 126.8, 127.0, 126.9 untouched
   against 131.0, 131.0, 130.9, 131.1 maxed, so the Finance tree pays about 4m a season at every
   base. And a maxed manager still loses about a quarter of his matches (25.19, 26.32, 25.08,
   25.76 percent). **So the balance section asserts what was measured and nothing else**: the
@@ -118,12 +118,15 @@ Four things, in the order they can hurt you.
   is a coin toss, not a rule. It was replaced with two checks the measurement supports, and the
   harness is green. **No threshold was moved to make a red go away.**
 
-  **NEW OPEN GATE, 2026-09-08: `simRoles` is RED and is being diagnosed, not worked around.**
-  It returned EXIT=1 on this branch. It is genuinely a candidate for being ours: section 5 is
-  the promise and morale check and Round 513 wrapped `promiseMoraleDelta` in a cushion, and
-  Round 508 put a promise lock in `canLeaveSquad`. Both are in this branch's files. The run is
-  reproducing now and the failing section will be read before anything is changed. Do not merge
-  this branch until that is understood.
+  **A RED THAT WAS MINE, AND NOT THE CODE'S, 2026-09-08.** `simRoles` returned EXIT=1 and looked
+  like a real candidate: section 5 is the promise and morale check, Round 513 wrapped
+  `promiseMoraleDelta` in a cushion and Round 508 put a promise lock in `canLeaveSquad`, both in
+  this branch's files. Re-run on a FROZEN tree it is green, all eleven sections, "ALL ROLE CHECKS
+  PASSED". The cause was that the batch was launched and then source files were edited while it
+  ran, which is the documented trap: a harness bundles the tree at the moment it starts, so
+  editing `src` mid-run mixes two trees and the result means nothing. **The rule is already
+  written down and was broken anyway, so it is worth restating: freeze the tree, THEN run.** A
+  red produced that way is not evidence of anything and must be re-run before it is diagnosed.
 
   **READ THIS BEFORE PICKING 506, 507 OR 508 UP AGAIN.** A claude.ai/code session built
   Round 506 (transfers, nine engine commits through personal terms), Round 507 (Soccer Career

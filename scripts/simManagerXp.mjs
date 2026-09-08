@@ -413,26 +413,26 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
    * part. A first pass over 96 paired seasons gave the maxed arm +0.037 points
    * per game and looked exactly like proof the trees work. Repeated over four
    * INDEPENDENT seed bases at 160 pairs each it came out +0.008, -0.006, -0.011
-   * and +0.038. The sign flips. The +0.037 was one lucky base, and a threshold
+   * and +0.038, and over six more bases at 48 pairs it ran -0.038 to +0.100.
+   * The sign flips. The +0.037 was one lucky base, and a threshold
    * anywhere near it would have been Round 284's coin toss dressed as a rule.
    * So this section does not assert it. That is a finding, not a gap.
    *
    * Two things DID survive repetition, and they are what is asserted here:
    *
    *  - THE MONEY. Budget after one season, untouched against maxed, came out
-   *    126.8/131.0, 126.8/131.0, 127.0/130.9, 126.9/131.1 at 160 pairs and
-   *    127.2/130.9, 126.7/131.1 at 48. A gap of 3.7 to 4.4m, every base, every
-   *    size. The Finance tree is the one tree that pays whatever else you do,
+   *    126.8/131.0, 126.8/131.0, 127.0/130.9, 126.9/131.1 at 160 pairs, and six
+   *    more bases at 48 pairs. A gap of 3.3 to 4.4m, every base, every size. The Finance tree is the one tree that pays whatever else you do,
    *    because home gates happen on their own, and it is measurable for exactly
    *    that reason.
-   *  - HE STILL LOSES. 25.19, 26.32, 25.08, 25.76, 23.19, 26.31 percent of
-   *    matches lost across those same runs. This is the check that actually
+   *  - HE STILL LOSES. Between 23.19 and 28.47 percent of matches lost across
+   *    all ten runs. This is the check that actually
    *    protects twelve rounds of balance tuning, and it does it far better than
    *    a points per game ceiling would, because it is stable at this sample size
    *    and a points per game gap is not.
    *
    * The floors are set from that measured headroom, not from a feel: the money
-   * floor sits 2.2m under the smallest gap ever measured, and the defeat floor
+   * floor sits 1.8m under the smallest gap ever measured, and the defeat floor
    * sits 8 points under the lowest loss rate ever measured.
    *
    * The paired design matters and cost a run to find. Comparing whole CAREERS
@@ -563,27 +563,27 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
   console.log(`   points per game ${bPPG.toFixed(3)} untouched, ${xPPG.toFixed(3)} maxed, gap ${xPPG - bPPG >= 0 ? '+' : ''}${(xPPG - bPPG).toFixed(3)} (NOT asserted on, see the note above)`);
 
   /* 7a. The trees are wired to something. Measured gap 3.7 to 4.4m over six
-     runs at two sample sizes, so a floor of 1.5 has better than 2m of headroom
-     under the smallest one ever seen. XP_CONTROL=deadgate kills gateEdge and
+     runs at two sample sizes, so a floor of 1.5 sits 1.8m under the smallest
+     one ever seen. XP_CONTROL=deadgate kills gateEdge and
      must trip this. */
   if (!(moneyGap >= 1.5)) {
-    fail(`a maxed manager finished the season only ${moneyGap.toFixed(1)}m ahead (floor 1.5m; measured 3.7 to 4.4 over six runs), so the Finance tree is not reaching the gate`);
+    fail(`a maxed manager finished the season only ${moneyGap.toFixed(1)}m ahead (floor 1.5m; measured 3.3 to 4.4 over ten runs), so the Finance tree is not reaching the gate`);
   }
   /* And the other way, because a gate edge that ran away would also be a bug.
      Measured max 4.4m, so 12 is nearly three times the largest ever seen. */
   if (moneyGap > 12) {
-    fail(`a maxed manager finished ${moneyGap.toFixed(1)}m ahead (ceiling 12m; measured 3.7 to 4.4), so the gate edge has run away`);
+    fail(`a maxed manager finished ${moneyGap.toFixed(1)}m ahead (ceiling 12m; measured 3.3 to 4.4), so the gate edge has run away`);
   }
 
   /* 7b. THE ONE THAT PROTECTS THE BALANCE. A fully invested manager must still
-     be able to lose. Measured 23.19 to 26.32 percent over six runs, so a floor
+     be able to lose. Measured 23.19 to 28.47 percent over ten runs, so a floor
      of 15 sits eight points under the lowest ever seen. */
   if (!(lossRate >= 0.15)) {
-    fail(`the maxed manager lost only ${(100 * lossRate).toFixed(2)} percent of his matches (floor 15; measured 23.2 to 26.3 over six runs), so the trees have taken defeat off the table`);
+    fail(`the maxed manager lost only ${(100 * lossRate).toFixed(2)} percent of his matches (floor 15; measured 23.2 to 28.5 over ten runs), so the trees have taken defeat off the table`);
   }
 
   /* 7c. A sanity ceiling on the results gap, and deliberately a loose one. The
-     gap is NOISE at this sample size (measured -0.011 to +0.100 across six runs,
+     gap is NOISE at this sample size (measured -0.038 to +0.100 across ten runs,
      sign flipping), so anything tight here would flap. One full point per game
      is roughly a maxed manager taking thirty eight more league points a season,
      which is a different game and not noise. Do not tighten this without
