@@ -41,7 +41,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         q: "Do I need an account?",
-        a: "No. Signing in with email or Google is optional and only matters for saved stats and leaderboards.",
+        a: "No. Signing in is optional and only matters for saved stats and leaderboards.",
       },
     ],
   },

@@ -57,6 +57,8 @@ const GOAL_L = 60;
 const GOAL_R = 300;
 const GOAL_TOP = 34;
 const GOAL_BOT = 150;
+const WALL_MAN_STEP = 0.22;
+const WALL_MAN_HALF_STEP = WALL_MAN_STEP / 2;
 const toViewX = (x: number) => GOAL_L + ((x + 1) / 2) * (GOAL_R - GOAL_L);
 const toViewY = (y: number) => GOAL_BOT - y * (GOAL_BOT - GOAL_TOP);
 /* Metres to view units, for the keeper's goal: the frame is 7.32 by 2.44. */
@@ -102,9 +104,14 @@ function Figure({ x, y, tint, tilt = 0, scale = 1 }: { x: number; y: number; tin
   const head = tint === 'wall' ? 'hsl(210 60% 62%)' : tint === 'keeper' ? 'hsl(45 90% 62%)' : tint === 'attacker' ? 'hsl(0 65% 62%)' : 'hsl(150 55% 58%)';
   const body = tint === 'wall' ? 'hsl(210 60% 52%)' : tint === 'keeper' ? 'hsl(45 85% 52%)' : tint === 'attacker' ? 'hsl(0 65% 50%)' : 'hsl(150 55% 46%)';
   const legs = tint === 'wall' ? 'hsl(210 40% 40%)' : tint === 'keeper' ? 'hsl(45 60% 40%)' : tint === 'attacker' ? 'hsl(0 45% 38%)' : 'hsl(150 40% 34%)';
+  /* Wall figures stand 0.22 goal units apart. Their shoulder span reaches
+     exactly halfway to the next man, with a small overlap for antialiasing,
+     so each side reads as one wall while the moving gap stays visible. */
+  const wallShoulderHalfWidth = (WALL_MAN_HALF_STEP * ((GOAL_R - GOAL_L) / 2)) / scale + 0.4;
   return (
     <g transform={`translate(${x} ${y}) rotate(${tilt}) scale(${scale})`}>
       <circle cy={-19} r={4.4} fill={head} />
+      {tint === 'wall' && <rect x={-wallShoulderHalfWidth} y={-12.5} width={wallShoulderHalfWidth * 2} height={5} rx={2.5} fill={body} />}
       <rect x={-5} y={-15} width={10} height={16} rx={3} fill={body} />
       <rect x={-4.5} y={0} width={3.4} height={9} rx={1.5} fill={legs} />
       <rect x={1.1} y={0} width={3.4} height={9} rx={1.5} fill={legs} />
@@ -467,8 +474,8 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           const gap = wallGapAt(w, tDraw);
           const men: number[] = [];
           for (let k = 0; k < 6; k += 1) {
-            const left = w.gapCentre - gap - 0.11 - 0.22 * k;
-            const right = w.gapCentre + gap + 0.11 + 0.22 * k;
+            const left = w.gapCentre - gap - WALL_MAN_HALF_STEP - WALL_MAN_STEP * k;
+            const right = w.gapCentre + gap + WALL_MAN_HALF_STEP + WALL_MAN_STEP * k;
             if (left > -0.98) men.push(left);
             if (right < 0.98) men.push(right);
           }

@@ -432,7 +432,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "Do I need an account?",
-        a: "Not to build a bracket; it stores in your browser as you go. Signing in with email or Google is only for saving a bracket to a share link others can open.",
+        a: "Not to build a bracket; it stores in your browser as you go. Signing in is only for saving a bracket to a share link others can open.",
       },
       {
         q: "Are the groups real?",
@@ -537,7 +537,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "How do I save my career?",
-        a: "Automatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account (email or Google) adds site stats and leaderboards, but the career lives on your device.",
+        a: "Automatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account adds site stats and leaderboards, but the career lives on your device.",
       },
       {
         q: "How do I win the Ballon d'Or?",
@@ -628,7 +628,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Scoring starts at 1000 for the optimal path and drops 100 per extra step, with a floor of 0.",
       "Invalid names cost nothing. No attempt limit, no timer.",
       "One shared daily puzzle, plus unlimited practice puzzles.",
-      "Active players only: every name in the chain, the start and the target included, has a 2026 season. Europe only: every club a link goes through is a European club. Each rule has its own optimal, worked out on the players that rule leaves in play.",
+      "Active players only: every name in the chain, the start and the target included, is in our verified 2026 active-player records. Europe only: every club a link goes through is a European club. Each rule has its own optimal, worked out on the players that rule leaves in play.",
       "A special rule reaches the daily only when today's pair has a route under it; otherwise the daily plays the everyday rule and the rule waits for you in unlimited. The daily score still counts steps against the everyday optimal, so a rule is a harder road to the same finish line. Unlimited scores against the rule's own optimal.",
     ],
     example: [
@@ -656,7 +656,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Why does a name get refused under a special rule when the two really were teammates?",
-        a: "Because the rule removed it. With Active players on, only a teammate with no 2025-26 season on our career records is off the board, which catches every retired player and the few whose records here stop early, and under Europe only a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
+        a: "Because the rule removed it. With Active players on, anyone outside the verified 2026 active-player records is off the board. With Europe only enabled, a season shared at a club outside Europe does not count as a link. The refusal says which rule got in the way.",
       },
     ],
   },

@@ -60,6 +60,7 @@
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { writeFileAtomic } from './lib/atomicWrite.mjs';
+import { SAMPLE_DAYS, clockScript } from './lib/prerenderClock.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
@@ -71,21 +72,21 @@ const PUBLIC = path.join(ROOT, 'public');
 const PORT = Number(process.env.PRERENDER_PORT || 4310);
 /** how long to let a page draw before the snapshot is taken */
 const SETTLE_MS = Number(process.env.PRERENDER_SETTLE || 3500);
-/* ROUND 284: THE CLOCK SAMPLES, in days from the real date. Every route is
-   drawn once at each and only the blocks all three renders agree on are
-   written. Five days crosses a daily rotation without crossing a season, a
-   transfer window or a year, which is the same shift playSnapshotDrift
-   settled on. Eleven days is a different weekday from both of the others and
-   more than a week clear of the first, so a puzzle keyed to the weekday or
-   to the week cannot agree with all three by luck.
+/* ROUND 284: THE CLOCK SAMPLES. Every route is drawn once at each and only
+   the blocks all three renders agree on are written. Five days crosses a
+   daily rotation without crossing a season, a transfer window or a year.
+   Eleven days is a different weekday from both of the others and more than a
+   week clear of the first, so a puzzle keyed to the weekday or to the week
+   cannot agree with all three by luck. Round 509 pins those samples to one
+   permanent date. A small pool can make all three samples agree by chance,
+   but any content that survives that coincidence now stays byte identical on
+   future builds instead of falsely re-dating its page.
    All three are always drawn. Drawing the third only where the first two
    disagree would save about ten minutes a run and reopen exactly that hole:
    a page keyed only to the week can agree with itself five days apart, and
    nothing would then ask for the sample that catches it. The run reports
    what the third sample removed over and above the second, so the cost of
    keeping it stays measured rather than assumed. */
-const SAMPLE_DAYS = [0, 5, 11];
-
 if (!existsSync(path.join(DIST, 'index.html'))) {
   console.error('No dist/index.html. Run npm run build first.');
   process.exit(1);
@@ -280,29 +281,6 @@ if (CONTROL) console.log('NEGATIVE CONTROL ON: the prerender flag is NOT set, ou
    generator, the same seed on every sample and every run, before any page
    code runs. Date driven content is still caught by the three clocks; random
    content is simply frozen the same way every time. */
-const RANDOM_SEED = 284;
-const clockScript = days => `(() => {
-  ${CONTROL === 'noflag' ? '' : 'window.__DUKB_PRERENDER__ = true;'}
-  (function () {
-    let s = ${RANDOM_SEED} | 0;
-    Math.random = function () {
-      s = (s + 0x6D2B79F5) | 0;
-      let t = Math.imul(s ^ (s >>> 15), 1 | s);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  })();
-  const SHIFT = ${days} * 86400000;
-  if (SHIFT === 0) return;
-  const RealDate = Date;
-  const D = function (...a) { return a.length ? new RealDate(...a) : new RealDate(RealDate.now() + SHIFT); };
-  D.now = () => RealDate.now() + SHIFT;
-  D.parse = RealDate.parse;
-  D.UTC = RealDate.UTC;
-  D.prototype = RealDate.prototype;
-  globalThis.Date = D;
-})();`;
-
 async function freshPage() {
   for (const p of pages) { try { await p.context().close(); } catch { /* already gone */ } }
   pages = [];
@@ -312,8 +290,11 @@ async function freshPage() {
     args: ['--no-sandbox'],
   });
   for (const days of SAMPLE_DAYS) {
-    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-    await ctx.addInitScript(clockScript(days));
+    const ctx = await browser.newContext({
+      viewport: { width: 1280, height: 900 },
+      timezoneId: 'America/New_York',
+    });
+    await ctx.addInitScript(clockScript(days, { setPrerenderFlag: CONTROL !== 'noflag' }));
     const page = await ctx.newPage();
 
     /* No visitor's state may end up in a file every visitor receives. The

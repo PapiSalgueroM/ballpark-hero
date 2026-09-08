@@ -165,18 +165,33 @@ async function settle(page) {
 const IGNORE_CONSOLE = /ERR_CERT|ERR_QUIC|ERR_NAME|Failed to load resource|blocked by CORS policy|Access-Control-Allow-Origin|net::ERR_FAILED/i;
 
 const PREFIXES = ['mar', 'ro', 'de'];
+const PLAY_GAMES_CONTROL = process.env.PLAY_GAMES_CONTROL || '';
+if (PLAY_GAMES_CONTROL && PLAY_GAMES_CONTROL !== 'skip-search-answer') {
+  throw new Error(`Unknown PLAY_GAMES_CONTROL: ${PLAY_GAMES_CONTROL}`);
+}
+let searchAnswerControlHits = 0;
 
 async function answerInput(page, tryClick, step) {
   const inputs = page.locator('input[type="text"]:visible, input:not([type]):visible');
   const count = Math.min(await inputs.count().catch(() => 0), 3);
   for (let i = 0; i < count; i++) {
     const inp = inputs.nth(i);
-    const hint = [
-      await inp.getAttribute('placeholder').catch(() => ''),
-      await inp.getAttribute('aria-label').catch(() => ''),
-    ].join(' ');
-    // An explicit search box is never a gate, so leave it alone entirely.
-    if (/\bsearch\b|\bfilter\b/i.test(hint)) continue;
+    /* The name of an input cannot tell us whether it filters a list or submits
+       an answer. College Grid calls its answer box "Search for a player".
+       Typing below supplies the evidence: a new suggestion or an enabled
+       submit control means answer, while a true filter is restored untouched.
+       The control brings back the old name based guess and must reproduce the
+       College Grid stall. */
+    if (PLAY_GAMES_CONTROL === 'skip-search-answer') {
+      const hint = [
+        await inp.getAttribute('placeholder').catch(() => ''),
+        await inp.getAttribute('aria-label').catch(() => ''),
+      ].join(' ');
+      if (/\bsearch\b|\bfilter\b/i.test(hint)) {
+        searchAnswerControlHits += 1;
+        continue;
+      }
+    }
     if (((await inp.inputValue().catch(() => 'x')) || '').trim() !== '') continue;
     let unlockedGate = false;
 
@@ -384,20 +399,9 @@ async function playOnce(game) {
       const tryClick = async (loc, label) => {
         try { await loc.click({ timeout: 3000 }); clicked = true; pressed = label; acted += 1; return true; } catch { return false; }
       };
-      /* Creation screens gate the primary button behind a required name, so
-         fill an empty text box before deciding nothing is clickable. Two
-         limits on that, both of which cost a false finding to learn.
-
-         Only on the first step. Typing on every step meant that on any game
-         with a live search box the harness re-entered "Playtest" before each
-         press, which filters the list to nothing, and then every control it
-         pressed afterwards changed nothing because there was nothing left to
-         change. /fantasy-draft reported a stall across five position filters
-         that way; pressed by hand the same filters take the screen from 15224
-         characters to 4131. The game was never the problem.
-
-         And never a search or filter box. Those are not gates, they are the
-         opposite: typing in one takes options away. */
+      /* Creation and answer screens can gate the primary button behind text.
+         answerInput distinguishes those from a filter by what typing changes,
+         and restores a true filter before this loop chooses a control. */
       if (!clicked) clicked = await answerInput(page, tryClick, s);
       // A shadcn Select is a combobox, not a button, and several creation
       // screens gate progress behind one. Open it and take the first option.
@@ -596,6 +600,12 @@ for (const game of GAMES) {
 }
 
 await browser.close();
+if (PLAY_GAMES_CONTROL === 'skip-search-answer') {
+  if (searchAnswerControlHits === 0) {
+    throw new Error('PLAY_GAMES_CONTROL=skip-search-answer did not reach a matching input');
+  }
+  console.log(`Control skipped ${searchAnswerControlHits} search named answer boxes.`);
+}
 console.log(`\nPlayed ${GAMES.length} games. ${findings.length} findings, ${skipped.length} the harness could not drive.`);
 fs.writeFileSync('/tmp/play.json', JSON.stringify({ findings, skipped }, null, 1));
 process.exit(findings.length === 0 ? 0 : 1);

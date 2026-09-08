@@ -55,6 +55,10 @@
      fixed press still has to land on a ball whose lane and speed change
      every round, so the position axis alone keeps the tackle a game and the
      foul rule is there for the feel of it, not the margin.
+     SIM_CAREER_DRILLS_CONTROL=staledaily removes the date from drillSeed,
+     so today and tomorrow deal the same ten rounds. Section 1 fires.
+     SIM_CAREER_DRILLS_CONTROL=flatladder gives every round the opening
+     round's difficulty. Section 3 fires for all three drills.
 
      ONE CONTROL WRITTEN FIRST WAS DEAD AND IS RECORDED HERE, the way
      simBuzzerBeater records its own. "nospray" zeroed the wall shot's spray,
@@ -88,33 +92,61 @@ const CONTROLS = {
     from: 'export const WALL_UNSIGHTED = 0.45;',
     to: 'export const WALL_UNSIGHTED = 1;',
     note: 'the keeper behind the wall sees the shot as well as one in the open, the shape the wall shot was first written in',
+    sections: [2, 4, 6],
   },
   alwaysopen: {
     from: '  return Math.max(0, Math.sin(2 * Math.PI * (t / setup.period + setup.phase)));',
     to: '  return 1;',
     note: 'the wall gap never shuts, so the timing press is decorative',
+    sections: [5],
   },
   freeloose: {
     from: 'export const TACKLE_LOOSE = 0.35;',
     to: 'export const TACKLE_LOOSE = 0;',
     note: 'the ball at his feet is no longer his, so going through it is no longer a foul',
+    sections: [5],
+  },
+  staledaily: {
+    from: '  return ((daySeed(dateStr) * 7919 + KIND_SALT[kind]) % 2147483646) + 1;',
+    to: '  return (KIND_SALT[kind] % 2147483646) + 1;',
+    note: 'the date is removed from drillSeed, so every day deals the same run',
+    sections: [1],
+  },
+  flatladder: {
+    from: '  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng) => {',
+    to: '  return buildLadder(seed, ROUNDS_PER_RUN, (_t, rng) => {\n    const t = 0;',
+    occurrences: 3,
+    note: 'all ten rounds use the opening difficulty, so the ladder never gets harder',
+    sections: [3],
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_CAREER_DRILLS_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let activeSection = 0;
+const failuresBySection = new Map();
+const fail = m => {
+  failures += 1;
+  failuresBySection.set(activeSection, (failuresBySection.get(activeSection) || 0) + 1);
+  console.error('  FAIL: ' + m);
+};
+const beginSection = (number, title) => {
+  activeSection = number;
+  console.log(`${number}) ${title}`);
+};
 
 const TMP = os.tmpdir().replace(/\\/g, '/');
 let LIB = `${ROOT_URL}/src/lib/careerDrills.ts`;
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   const src = fs.readFileSync(path.join(ROOT, 'src/lib/careerDrills.ts'), 'utf8').replace(/\r\n/g, '\n');
-  if (!src.includes(c.from)) { console.error('control cannot run: careerDrills.ts is not in the shape this control rewrites'); process.exit(1); }
+  const occurrences = src.split(c.from).length - 1;
+  const expectedOccurrences = c.occurrences || 1;
+  if (occurrences !== expectedOccurrences) { console.error(`control cannot run: expected ${expectedOccurrences} matching careerDrills.ts line(s), found ${occurrences}`); process.exit(1); }
   /* The copy lives in the temp directory, so its relative imports are
      rewritten to point back at the real modules beside the original. */
-  const rewritten = src
-    .replace(c.from, c.to)
+  const controlled = expectedOccurrences === 1 ? src.replace(c.from, c.to) : src.replaceAll(c.from, c.to);
+  const rewritten = controlled
     .replace("from './arcade'", `from '${ROOT_URL}/src/lib/arcade'`)
     .replace("from './freeKick'", `from '${ROOT_URL}/src/lib/freeKick'`)
     .replace("from './soccerCareerEngine'", `from '${ROOT_URL}/src/lib/soccerCareerEngine'`);
@@ -223,7 +255,21 @@ const DRILLS = {
     build: buildWallShotRun, max: maxWallShotScore,
     play: (input, setup, rng) => { const r = takeWallShot(input, setup, rng); return { won: r.won, points: r.points, r }; },
     skilled: WALL_SKILLED, spam: WALL_SPAM, grid: WALL_GRID,
-    sweep: setup => { const out = []; for (let xi = -9; xi <= 9; xi += 2) for (let yi = 1; yi <= 9; yi += 2) for (const power of [0.5, 0.75, 1]) for (let p = 0; p <= 2.4; p += 0.2) out.push({ x: xi / 10, y: yi / 10, power, press: p }); return out; },
+    sweep: setup => {
+      const out = [];
+      /* Keep the broad bad-to-good grid so the "not free" half sees misses. */
+      for (let xi = -9; xi <= 9; xi += 2) for (let yi = 1; yi <= 9; yi += 2) for (const power of [0.5, 0.75, 1]) for (let p = 0; p <= 2.4; p += 0.2) out.push({ x: xi / 10, y: yi / 10, power, press: p });
+      /* A slit can sit between that grid's 0.2-wide aim marks. Search the
+         legal space around this round's actual gap and opening instead of
+         calling a continuous shot impossible because the harness aimed too
+         coarsely. */
+      for (let xi = -8; xi <= 8; xi += 1) for (let yi = 4; yi <= 19; yi += 1) for (let pi = 8; pi <= 20; pi += 1) {
+        const power = pi / 20;
+        const peak = wallNextPeak(setup, wallTravel(power));
+        out.push({ x: setup.gapCentre + xi / 40, y: yi / 20, power, press: peak - wallTravel(power) });
+      }
+      return out;
+    },
   },
   tackle: {
     build: buildTackleRun, max: maxTackleScore,
@@ -255,6 +301,33 @@ function playRun(drill, seed, strategy) {
   return { score, count, per, run };
 }
 
+/* Capture the exact random stream a real daily wall-shot run consumes, one
+   round at a time. The winnability sweep can then replay that round's own
+   spray and keeper draw for every legal input instead of inventing a
+   different run with a fixed lehmer(99) generator. */
+function wallDailyDraws(seed, run) {
+  const dailyRng = lehmer(seed ^ 0x5eed1234);
+  return run.map(setup => {
+    const draws = [];
+    const record = () => {
+      const value = dailyRng();
+      draws.push(value);
+      return value;
+    };
+    takeWallShot({ x: 0, y: 0.5, power: 0.65, press: 0 }, setup, record);
+    return draws;
+  });
+}
+
+function replayWallDraws(draws) {
+  let cursor = 0;
+  const rng = () => {
+    if (cursor >= draws.length) throw new Error('wall shot consumed more random draws than the daily run recorded');
+    return draws[cursor++];
+  };
+  return { rng, consumed: () => cursor };
+}
+
 /* The floors, set from measured headroom (2026-09-05, 300 runs each): skilled
    sat at 9.04x the best fixed wall shot, 4.36x the best fixed tackle and
    6.46x the best fixed dive, named or swept. Free Kick's floor is 1.35
@@ -264,7 +337,7 @@ function playRun(drill, seed, strategy) {
    press optimal would not. */
 const RATIO_FLOOR = { wallshot: 2.5, tackle: 2.5, gloves: 2.5 };
 
-console.log('1) one seed, one run: the daily is the same ten rounds for everybody at that position');
+beginSection(1, 'one seed, one run: the daily is the same ten rounds for everybody at that position');
 {
   for (const [kind, drill] of Object.entries(DRILLS)) {
     const a = JSON.stringify(drill.build(drillSeed(kind, '2026-09-05')));
@@ -282,7 +355,7 @@ console.log('1) one seed, one run: the daily is the same ten rounds for everybod
   if (drillForPosition('GK') !== 'gloves' || drillForPosition('CB') !== 'tackle' || drillForPosition('CDM') !== 'tackle' || drillForPosition('ST') !== 'wallshot' || drillForPosition('CM') !== 'wallshot') fail('a position is not routed to the drill the guide says it gets');
 }
 
-console.log('2) skill beats spam: reading the round is worth more than any one fixed input, named or swept');
+beginSection(2, 'skill beats spam: reading the round is worth more than any one fixed input, named or swept');
 const skilledCounts = {};
 for (const [kind, drill] of Object.entries(DRILLS)) {
   const skilled = [];
@@ -318,7 +391,7 @@ for (const [kind, drill] of Object.entries(DRILLS)) {
   if (skilledCount > 9) fail(`${kind}: a skilled player wins ${skilledCount.toFixed(1)} of ${ROUNDS_PER_RUN}, so there is nothing to lose`);
 }
 
-console.log('3) the run gets harder: the last three rounds are meaner than the first three');
+beginSection(3, 'the run gets harder: the last three rounds are meaner than the first three');
 for (const [kind, drill] of Object.entries(DRILLS)) {
   const early = [];
   const late = [];
@@ -333,26 +406,37 @@ for (const [kind, drill] of Object.entries(DRILLS)) {
   if (!(e > l + 0.05)) fail(`${kind}: the last three convert at ${(l * 100).toFixed(0)}% against the first three at ${(e * 100).toFixed(0)}%, so the run does not get harder`);
 }
 
-console.log('4) every round is winnable and none of them is free');
+beginSection(4, 'every round is winnable and none of them is free');
 for (const [kind, drill] of Object.entries(DRILLS)) {
-  const run = drill.build(drillSeed(kind, '2026-09-05'));
+  const sampleDate = '2026-09-05';
+  const seed = drillSeed(kind, sampleDate);
+  const run = drill.build(seed);
+  const dailyDraws = kind === 'wallshot' ? wallDailyDraws(seed, run) : null;
   let unwinnable = 0;
   let free = 0;
   let swept = 0;
-  for (const setup of run) {
+  for (let round = 0; round < run.length; round += 1) {
+    const setup = run[round];
     const inputs = drill.sweep(setup);
     swept = inputs.length;
     let won = 0;
-    for (const input of inputs) if (drill.play(input, setup, lehmer(99)).won) won += 1;
+    for (const input of inputs) {
+      if (dailyDraws) {
+        const replay = replayWallDraws(dailyDraws[round]);
+        if (drill.play(input, setup, replay.rng).won) won += 1;
+        if (replay.consumed() !== dailyDraws[round].length) fail(`wallshot: round ${round + 1} consumed ${replay.consumed()} of its ${dailyDraws[round].length} daily random draws`);
+      } else if (drill.play(input, setup, lehmer(99)).won) won += 1;
+    }
     if (won === 0) { unwinnable += 1; console.log(`   UNWINNABLE ${kind}: ${setup.label}`); }
     if (won === inputs.length) { free += 1; console.log(`   FREE ${kind}: ${setup.label}`); }
   }
-  console.log(`   ${kind}: ${run.length} rounds swept over about ${swept} inputs each: ${unwinnable} unwinnable, ${free} free`);
+  const drawNote = dailyDraws ? ` on ${sampleDate}'s ${dailyDraws.reduce((n, draws) => n + draws.length, 0)} real draws` : '';
+  console.log(`   ${kind}: ${run.length} rounds swept over about ${swept} inputs each${drawNote}: ${unwinnable} unwinnable, ${free} free`);
   if (unwinnable > 0) fail(`${kind}: ${unwinnable} round(s) cannot be won by any input`);
   if (free > 0) fail(`${kind}: ${free} round(s) are won by every input, so they ask nothing`);
 }
 
-console.log('5) the mechanics are the ones the copy describes');
+beginSection(5, 'the mechanics are the ones the copy describes');
 {
   /* The wall: shut blocks, open passes, pace arrives sooner. */
   const w = buildWallShotRun(drillSeed('wallshot', '2026-09-05'))[2];
@@ -405,7 +489,7 @@ console.log('5) the mechanics are the ones the copy describes');
   if (!late.late || late.saved) fail('a dive that started after the ball crossed was not called late');
 }
 
-console.log('6) growth is bounded and respects headroom: at most +2, never past the ceiling, once a season');
+beginSection(6, 'growth is bounded and respects headroom: at most +2, never past the ceiling, once a season');
 {
   const state = (overall, potential, extra = {}) => ({
     overall, potential, potentialEarned: 0, position: 'ST', morale: 50, events: [],
@@ -457,8 +541,12 @@ console.log('6) growth is bounded and respects headroom: at most +2, never past 
 }
 
 if (CONTROL) {
-  if (failures > 0) { console.log(`\ncontrol "${CONTROL}": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
-  console.error(`\ncontrol "${CONTROL}": changed NOTHING, the check is dead`);
+  const missingSections = CONTROLS[CONTROL].sections.filter(section => !failuresBySection.has(section));
+  if (failures > 0 && missingSections.length === 0) {
+    console.log(`\ncontrol "${CONTROL}": ${failures} failure(s) fired, including section(s) ${CONTROLS[CONTROL].sections.join(', ')}, the check works`);
+    process.exit(0);
+  }
+  console.error(`\ncontrol "${CONTROL}": did not fire section(s) ${missingSections.join(', ') || CONTROLS[CONTROL].sections.join(', ')}, the check is dead`);
   process.exit(1);
 }
 if (failures > 0) { console.error(`\nsimCareerDrills: ${failures} failure(s)`); process.exit(1); }

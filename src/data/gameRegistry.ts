@@ -331,3 +331,4 @@ export const ALL_GAMES = CATEGORIES.flatMap(c => c.games);
 /** The deep sims showcased at the top of the home page, in display order. */
 export const FEATURED_GAMES = ALL_GAMES.filter(g => g.featured);
 export const TOTAL_GAMES = ALL_GAMES.length;
+export const GAME_COUNT_LABEL = `${Math.floor(TOTAL_GAMES / 10) * 10}+`;

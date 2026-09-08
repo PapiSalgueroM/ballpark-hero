@@ -4,6 +4,8 @@ import { flagForClub } from '@/lib/careerLadder';
 import { flagEmojiToIso } from '@/lib/flagUtils';
 import { FLAG_CODES } from '@/components/FlagImg';
 import { confederationFor } from '@/lib/confederationGroups';
+import { VERIFIED_ACTIVE_IDENTITIES } from '@/data/transferPathVerifiedActive';
+import { transferPathIdentityKey } from '@/lib/transferPathIdentity';
 
 /* Round 460: Transfer Path's special rules, from the owner's 2026-08-28 review
    ("fine; add special rule modes (active players only, Europe only)").
@@ -19,10 +21,10 @@ import { confederationFor } from '@/lib/confederationGroups';
    checks every stored row against a search built through this file.
 
    ACTIVE PLAYERS ONLY. Every name in the chain, the start and the target
-   included, must have a career row that touches ACTIVE_YEAR. The constant is
-   pinned rather than read from a clock (nothing computed from a clock goes
-   into a saved page), and simTransferPathModes fails the moment the career
-   tables carry a season past it, which is the signal to move it.
+   included, must match a normalized name plus nationality in the generated
+   verified-active set. That set comes only from committed two-source evidence.
+   Career seasons never decide this rule, because an unverified projected row
+   is not evidence that a player is active.
 
    EUROPE ONLY. Every club a link goes through must be a European club. What
    counts as European is read from data the repo already carries, none of it
@@ -50,22 +52,12 @@ export const RULE_LABEL: Record<TransferPathRule, string> = {
 
 export const RULE_BLURB: Record<TransferPathRule, string> = {
   classic: 'Any teammate counts: same club, same season.',
-  active: 'Every name in the chain must have a 2025-26 season on our career records, the start and the target included.',
+  active: 'Every name in the chain must be in our verified 2026 active-player records, the start and the target included.',
   europe: 'Every club a link goes through must be a European club.',
 };
 
-/** The year a career row must touch for its player to count as active. */
+/** The evidence year for the generated verified-active identity set. */
 export const ACTIVE_YEAR = 2026;
-
-/**
- * The season a player must be on record for, in the form the page prints
- * ("2025-26"). The words on the page say "on our career records" on purpose:
- * the career table is a pull, and the review of Round 460 found players who
- * are plainly still playing (Jan Oblak among them) whose rows stop at
- * 2024-25, so a refusal must never tell a player that a real footballer has
- * retired. It says what the records hold, which is the only thing it knows.
- */
-export const ACTIVE_SEASON_LABEL = `${ACTIVE_YEAR - 1}-${String(ACTIVE_YEAR).slice(-2)}`;
 
 /** "2025-2026" spans 2025 to 2026, "2026" is a calendar season. Anything else spans nothing. */
 export function seasonSpan(season: string): [number, number] | null {
@@ -75,13 +67,8 @@ export function seasonSpan(season: string): [number, number] | null {
   return [start, m[2] ? Number(m[2]) : start];
 }
 
-export function seasonTouchesYear(season: string, year: number): boolean {
-  const span = seasonSpan(season);
-  return span !== null && span[0] <= year && year <= span[1];
-}
-
-export function isActivePlayer(player: Pick<CareerPlayer, 'career'>): boolean {
-  return player.career.some(s => seasonTouchesYear(s.season, ACTIVE_YEAR));
+export function isActivePlayer(player: Pick<CareerPlayer, 'name' | 'nationality'>): boolean {
+  return VERIFIED_ACTIVE_IDENTITIES.has(transferPathIdentityKey(player.name, player.nationality));
 }
 
 /** ISO codes that count as Europe on top of the UEFA member list. See the note at the top. */

@@ -109,7 +109,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       },
       {
         q: "Do I need an account?",
-        a: "No. A free account with email or Google is optional and only matters for keeping your stats.",
+        a: "No. A free account is optional and only matters for keeping your stats.",
       },
     ],
   },

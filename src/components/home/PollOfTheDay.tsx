@@ -11,20 +11,20 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
  * - Polls rotate at NOON Eastern (getPollDayET), so match-day polls show up
  *   the day of the match: e.g. the France vs Morocco quarterfinal poll
  *   appears from 12pm ET on matchday until 12pm ET the next day.
- * - Supports 2-4 options per poll (daily_polls option_c/option_d added for
- *   4-way polls like the Golden Boot race).
+ * - Every poll is one head to head with exactly two choices. Older database
+ *   rows can still carry option_c or option_d, but the home page ignores them.
  * - Real flag IMAGES via FlagImg (option_*_flag holds a country name), not
  *   emoji, Windows renders flag emoji as bare letter codes, which is what
  *   the owner was seeing ("just showing the abbreviation of the flag").
- * - Voting: one row into public.poll_votes (poll_key, choice in a|b|c|d),
+ * - Voting: one row into public.poll_votes (poll_key, choice in a|b),
  *   localStorage anti-repeat guard per poll_key (courtesy, not security).
  * - Fallback: if the poll day has no daily_polls rows, deterministically
  *   pick from the legacy POLLS fixture pool so the section never renders
  *   empty.
  */
 
-type ChoiceKey = 'a' | 'b' | 'c' | 'd';
-const CHOICE_KEYS: ChoiceKey[] = ['a', 'b', 'c', 'd'];
+type ChoiceKey = 'a' | 'b';
+const CHOICE_KEYS: ChoiceKey[] = ['a', 'b'];
 
 interface PollOption {
   choice: ChoiceKey;
@@ -45,7 +45,7 @@ const FALLBACK_COUNT = 2;
 function readStoredVote(pollKey: string): ChoiceKey | null {
   try {
     const raw = localStorage.getItem(VOTE_KEY_PREFIX + pollKey);
-    return raw === 'a' || raw === 'b' || raw === 'c' || raw === 'd' ? raw : null;
+    return raw === 'a' || raw === 'b' ? raw : null;
   } catch {
     return null;
   }
@@ -115,9 +115,10 @@ export function PollOfTheDay() {
           };
           push('a', r.option_a, r.option_a_emoji, r.option_a_flag);
           push('b', r.option_b, r.option_b_emoji, r.option_b_flag);
-          push('c', r.option_c, r.option_c_emoji, r.option_c_flag);
-          push('d', r.option_d, r.option_d_emoji, r.option_d_flag);
-          return { key: r.poll_key as string, question: r.question as string, options };
+          const question = r.question === 'Who you got?'
+            ? 'Who you got?'
+            : 'Who ranks higher all time?';
+          return { key: r.poll_key as string, question, options };
         }).filter((p) => p.options.length >= 2);
 
         setPolls(items.length > 0 ? items : fallbackPolls(pollDay));
@@ -151,7 +152,7 @@ export function PollOfTheDay() {
 type VoteCounts = Record<ChoiceKey, number>;
 
 function emptyCounts(): VoteCounts {
-  return { a: 0, b: 0, c: 0, d: 0 };
+  return { a: 0, b: 0 };
 }
 
 function PollCard({ poll }: { poll: PollItem }) {

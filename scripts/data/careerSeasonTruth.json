@@ -1,0 +1,2181 @@
+{
+  "checked": "2026-09-07",
+  "policy": "A quarantined row stays absent until club, goals, assists, appearances and market value each have two independent sources. A transfer season may need multiple club rows.",
+  "batchEvidence": {
+    "id": "career-2025-2026-generated-seed",
+    "season": "2025-2026",
+    "classification": "generated projection tranche, not verified completed-season data",
+    "decision": "Quarantine the full seed-derived tranche. This does not claim every tuple is individually false. It records that none of the batch can be treated as completed-season fact without new verification.",
+    "counts": {
+      "liveSeedTuples": 77,
+      "fallbackProjectionTuples": 77,
+      "samePlayerNames": 77,
+      "exactSeedFallbackMatches": 73,
+      "seedFallbackVariants": 4,
+      "firstMigrationTuples": 8,
+      "secondMigrationTuples": 69,
+      "preservedResearchedLiveTuples": 27
+    },
+    "sourceSnapshot": {
+      "file": "src/data/careerPlayers.ts",
+      "commit": "8edc289680b3ee555e834a390aedf252c42f5280"
+    },
+    "seedMigration": "supabase/migrations/20260525000003_career_seed.sql",
+    "quarantineMigrations": [
+      {
+        "file": "supabase/migrations/20260907165757_quarantine_false_career_seasons.sql",
+        "tupleCount": 8
+      },
+      {
+        "file": "supabase/migrations/20260907170317_quarantine_seeded_career_season_projections.sql",
+        "tupleCount": 69
+      }
+    ],
+    "authoringBatches": [
+      {
+        "date": "2026-02-09",
+        "tupleCount": 21,
+        "commits": [
+          "e020636608456454bbf57ba7cb961a1949a61189"
+        ]
+      },
+      {
+        "date": "2026-02-11",
+        "tupleCount": 31,
+        "commits": [
+          "7f22ffa229d7fd8a20fefd117102874933111911"
+        ]
+      },
+      {
+        "date": "2026-03-10",
+        "tupleCount": 12,
+        "commits": [
+          "d32738bfaeff6f241f8af06c79d8b89a36eb2715",
+          "61c183a5662f7465622fa76f90445c444d4b9d26",
+          "ef6bddd23a19b5a0a7bdd933b2403d67ffb815df",
+          "0845e3b67c7485789fa5408310805b1dee345c25",
+          "ad027adde62d55e6ba5444f8b64ddd4666e3b37a",
+          "ccc5263ed76d8e67bb90bf0ec531e803700bc588",
+          "ac2be7f58decc3b59f6ac9cb5ba9729fa540fa20",
+          "82779aa8e379f5cc19c3f96d9df0e95eea9435a8",
+          "790bca6d01c6eb72f1cda622bcacc8ba9a723ad3",
+          "614a8e7149f59c1441f7b4bc24301b280786fc77",
+          "48b1a45a98f416b49fccf0e2f1c33ff96315f65a",
+          "f2635572e4d1f8a6b5cb3a50ad90f2f7433a17b1"
+        ]
+      },
+      {
+        "date": "2026-04-10",
+        "tupleCount": 13,
+        "commits": [
+          "3d9a3780ac629a774135e458803b4870950052a6",
+          "03f824329f7fa985cb9b7df11072825f9b7e947a",
+          "a7fc882de8d0daa924577faa716acd9a0da59280",
+          "df9accc8a835a3b2b81c04b65200735eb42c6a6a",
+          "91ea8b1c9e1200ecca65aff92997217e5a14f028"
+        ]
+      }
+    ],
+    "evidence": [
+      "Git history shows the 77 final fallback tuples were first authored from 2026-02-09 through 2026-04-10. Every authoring batch predates completion of the 2025-2026 season.",
+      "The 2026-05-25 seed migration names src/data/careerPlayers.ts as its source and materializes the same 77 player names. Seventy-three tuples match exactly and four use alternate values from duplicate resolution.",
+      "The seed-derived live rows share the database creation timestamp 2026-05-26 05:33:00.489436+00. The 27 preserved rows were inserted separately from 2026-07-08 through 2026-07-10.",
+      "Ten distinct seed or fallback tuples have independent source evidence disproving their club assignment. Those examples confirm the batch is unsafe, while the quarantine remains explicitly provenance-based."
+    ],
+    "seedFallbackVariants": [
+      {
+        "player": "Jude Bellingham",
+        "liveSeed": {
+          "player": "Jude Bellingham",
+          "season": "2025-2026",
+          "club": "Real Madrid",
+          "goals": 15,
+          "assists": 10,
+          "appearances": 36,
+          "marketValue": 150,
+          "sortOrder": 6
+        },
+        "fallbackProjection": {
+          "player": "Jude Bellingham",
+          "season": "2025-2026",
+          "club": "Real Madrid",
+          "goals": 11,
+          "assists": 7,
+          "appearances": 25,
+          "marketValue": 180
+        }
+      },
+      {
+        "player": "Pedri",
+        "liveSeed": {
+          "player": "Pedri",
+          "season": "2025-2026",
+          "club": "Barcelona",
+          "goals": 5,
+          "assists": 7,
+          "appearances": 35,
+          "marketValue": 100,
+          "sortOrder": 6
+        },
+        "fallbackProjection": {
+          "player": "Pedri",
+          "season": "2025-2026",
+          "club": "Barcelona",
+          "goals": 5,
+          "assists": 8,
+          "appearances": 25,
+          "marketValue": 100
+        }
+      },
+      {
+        "player": "Cole Palmer",
+        "liveSeed": {
+          "player": "Cole Palmer",
+          "season": "2025-2026",
+          "club": "Chelsea",
+          "goals": 16,
+          "assists": 10,
+          "appearances": 36,
+          "marketValue": 120,
+          "sortOrder": 5
+        },
+        "fallbackProjection": {
+          "player": "Cole Palmer",
+          "season": "2025-2026",
+          "club": "Chelsea",
+          "goals": 15,
+          "assists": 10,
+          "appearances": 25,
+          "marketValue": 130
+        }
+      },
+      {
+        "player": "Alejandro Garnacho",
+        "liveSeed": {
+          "player": "Alejandro Garnacho",
+          "season": "2025-2026",
+          "club": "Manchester United",
+          "goals": 9,
+          "assists": 6,
+          "appearances": 35,
+          "marketValue": 50,
+          "sortOrder": 3
+        },
+        "fallbackProjection": {
+          "player": "Alejandro Garnacho",
+          "season": "2025-2026",
+          "club": "Napoli",
+          "goals": 6,
+          "assists": 4,
+          "appearances": 22,
+          "marketValue": 32
+        }
+      }
+    ],
+    "transferPathImpact": {
+      "careerPullFile": "scripts/data/transferPathPull/careers.txt",
+      "puzzlePullFile": "scripts/data/transferPathPull/puzzles.txt",
+      "retainedPuzzleCount": 885,
+      "quarantinedPuzzleIds": [
+        "tpa-83",
+        "tpa-108",
+        "tpa-114",
+        "tpa-177",
+        "tpa-187",
+        "tpa-267",
+        "tpa-268",
+        "tpa-280",
+        "tpa-315",
+        "tpa-343",
+        "tpa-357",
+        "tpa-787",
+        "tpa-844",
+        "tpa-849",
+        "tpa-903",
+        "tpa-916",
+        "tpa-945"
+      ],
+      "quarantinedPuzzles": [
+        { "id": "tpa-83", "playerA": "Jonathan David", "playerB": "Moussa Diaby" },
+        { "id": "tpa-108", "playerA": "Andrés Iniesta", "playerB": "Jonathan David" },
+        { "id": "tpa-114", "playerA": "Jonathan David", "playerB": "Joshua Kimmich" },
+        { "id": "tpa-177", "playerA": "Jonathan David", "playerB": "Rodri" },
+        { "id": "tpa-187", "playerA": "Jonathan David", "playerB": "Karim Benzema" },
+        { "id": "tpa-267", "playerA": "Arda Güler", "playerB": "Jonathan David" },
+        { "id": "tpa-268", "playerA": "Florian Wirtz", "playerB": "Jonathan David" },
+        { "id": "tpa-280", "playerA": "Jonathan David", "playerB": "Steven Gerrard" },
+        { "id": "tpa-315", "playerA": "Endrick", "playerB": "Jonathan David" },
+        { "id": "tpa-343", "playerA": "Alphonso Davies", "playerB": "Jonathan David" },
+        { "id": "tpa-357", "playerA": "Jonathan David", "playerB": "Marcelo" },
+        { "id": "tpa-787", "playerA": "Jonathan David", "playerB": "Luis Suárez" },
+        { "id": "tpa-844", "playerA": "Jonathan David", "playerB": "Lamine Yamal" },
+        { "id": "tpa-849", "playerA": "Bukayo Saka", "playerB": "Jonathan David" },
+        { "id": "tpa-903", "playerA": "Jonathan David", "playerB": "Mikel Oyarzabal" },
+        { "id": "tpa-916", "playerA": "Jonathan David", "playerB": "Viktor Gyökeres" },
+        { "id": "tpa-945", "playerA": "Jan Oblak", "playerB": "Jonathan David" }
+      ],
+      "generatedFiles": [
+        {
+          "file": "supabase/migrations/20260826_transfer_path_hints_temporal.sql",
+          "retainedRows": 885,
+          "changedExistingRows": 81,
+          "removedRows": 17
+        },
+        {
+          "file": "supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql",
+          "retainedRows": 885,
+          "changedExistingRows": 265,
+          "removedRows": 17
+        },
+        {
+          "file": "src/data/transferPathPuzzles.ts",
+          "retainedRows": 20,
+          "changedExistingRows": 3,
+          "removedRows": 0
+        }
+      ],
+      "liveCompanionMigration": {
+        "file": "supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql",
+        "deletedRows": 17,
+        "refreshedRows": 885,
+        "refreshedFields": [
+          "min_steps",
+          "hint",
+          "active_min_steps",
+          "active_hint",
+          "europe_min_steps",
+          "europe_hint"
+        ]
+      },
+      "liveCompanionUpdate": "Apply the companion migration with the career quarantine. It deletes the 17 now-unreachable puzzle rows and refreshes the retained classic and mode hints from the generated files."
+    }
+  },
+  "liveSeedRows": [
+    {
+      "player": "Cristiano Ronaldo",
+      "season": "2025-2026",
+      "club": "Al-Nassr",
+      "goals": 12,
+      "assists": 2,
+      "appearances": 20,
+      "marketValue": 8,
+      "sortOrder": 21
+    },
+    {
+      "player": "Lionel Messi",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 18,
+      "marketValue": 10,
+      "sortOrder": 21
+    },
+    {
+      "player": "Neymar",
+      "season": "2025-2026",
+      "club": "Santos",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 16,
+      "marketValue": 5,
+      "sortOrder": 16
+    },
+    {
+      "player": "Robert Lewandowski",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 14,
+      "assists": 3,
+      "appearances": 25,
+      "marketValue": 10,
+      "sortOrder": 16
+    },
+    {
+      "player": "Kylian Mbappé",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 20,
+      "assists": 5,
+      "appearances": 28,
+      "marketValue": 180,
+      "sortOrder": 10
+    },
+    {
+      "player": "Erling Haaland",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 20,
+      "assists": 3,
+      "appearances": 25,
+      "marketValue": 180,
+      "sortOrder": 7
+    },
+    {
+      "player": "Mohamed Salah",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 17,
+      "assists": 12,
+      "appearances": 28,
+      "marketValue": 40,
+      "sortOrder": 13
+    },
+    {
+      "player": "Harry Kane",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 22,
+      "assists": 6,
+      "appearances": 28,
+      "marketValue": 65,
+      "sortOrder": 14
+    },
+    {
+      "player": "Vinícius Júnior",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 15,
+      "assists": 8,
+      "appearances": 28,
+      "marketValue": 200,
+      "sortOrder": 8
+    },
+    {
+      "player": "Luka Modrić",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 2,
+      "sortOrder": 17
+    },
+    {
+      "player": "Kevin De Bruyne",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 5,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 18,
+      "sortOrder": 14
+    },
+    {
+      "player": "Karim Benzema",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 8,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 5,
+      "sortOrder": 18
+    },
+    {
+      "player": "Paulo Dybala",
+      "season": "2025-2026",
+      "club": "Roma",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 18,
+      "marketValue": 8,
+      "sortOrder": 13
+    },
+    {
+      "player": "Son Heung-min",
+      "season": "2025-2026",
+      "club": "Tottenham",
+      "goals": 12,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 28,
+      "sortOrder": 15
+    },
+    {
+      "player": "Jude Bellingham",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 15,
+      "assists": 10,
+      "appearances": 36,
+      "marketValue": 150,
+      "sortOrder": 6
+    },
+    {
+      "player": "Bukayo Saka",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 13,
+      "assists": 10,
+      "appearances": 25,
+      "marketValue": 160,
+      "sortOrder": 7
+    },
+    {
+      "player": "Phil Foden",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 8,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 120,
+      "sortOrder": 8
+    },
+    {
+      "player": "Pedri",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 5,
+      "assists": 7,
+      "appearances": 35,
+      "marketValue": 100,
+      "sortOrder": 6
+    },
+    {
+      "player": "Lamine Yamal",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 12,
+      "assists": 13,
+      "appearances": 25,
+      "marketValue": 200,
+      "sortOrder": 3
+    },
+    {
+      "player": "Marcus Rashford",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 18,
+      "marketValue": 35,
+      "sortOrder": 10
+    },
+    {
+      "player": "Thibaut Courtois",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 22,
+      "sortOrder": 14
+    },
+    {
+      "player": "Virgil van Dijk",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 2,
+      "assists": 2,
+      "appearances": 25,
+      "marketValue": 20,
+      "sortOrder": 12
+    },
+    {
+      "player": "Jadon Sancho",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 22,
+      "sortOrder": 8
+    },
+    {
+      "player": "Antoine Griezmann",
+      "season": "2025-2026",
+      "club": "Atlético Madrid",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 12,
+      "sortOrder": 16
+    },
+    {
+      "player": "Bruno Fernandes",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 40,
+      "sortOrder": 10
+    },
+    {
+      "player": "Declan Rice",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 5,
+      "assists": 6,
+      "appearances": 25,
+      "marketValue": 100,
+      "sortOrder": 8
+    },
+    {
+      "player": "Rodri",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 1,
+      "assists": 2,
+      "appearances": 15,
+      "marketValue": 120,
+      "sortOrder": 9
+    },
+    {
+      "player": "Gavi",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 4,
+      "assists": 6,
+      "appearances": 34,
+      "marketValue": 70,
+      "sortOrder": 5
+    },
+    {
+      "player": "Achraf Hakimi",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 4,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 55,
+      "sortOrder": 8
+    },
+    {
+      "player": "Rafael Leão",
+      "season": "2025-2026",
+      "club": "AC Milan",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 22,
+      "marketValue": 75,
+      "sortOrder": 7
+    },
+    {
+      "player": "Alphonso Davies",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 2,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 55,
+      "sortOrder": 7
+    },
+    {
+      "player": "Federico Valverde",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 5,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 120,
+      "sortOrder": 7
+    },
+    {
+      "player": "Angel Di María",
+      "season": "2025-2026",
+      "club": "Benfica",
+      "goals": 3,
+      "assists": 5,
+      "appearances": 20,
+      "marketValue": 2,
+      "sortOrder": 18
+    },
+    {
+      "player": "Luis Suárez",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 8,
+      "assists": 4,
+      "appearances": 18,
+      "marketValue": 2,
+      "sortOrder": 16
+    },
+    {
+      "player": "N'Golo Kanté",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 6,
+      "sortOrder": 12
+    },
+    {
+      "player": "Pierre-Emerick Aubameyang",
+      "season": "2025-2026",
+      "club": "Marseille",
+      "goals": 5,
+      "assists": 2,
+      "appearances": 18,
+      "marketValue": 2,
+      "sortOrder": 14
+    },
+    {
+      "player": "Bernardo Silva",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 5,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 60,
+      "sortOrder": 11
+    },
+    {
+      "player": "Jamal Musiala",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 12,
+      "assists": 8,
+      "appearances": 25,
+      "marketValue": 150,
+      "sortOrder": 5
+    },
+    {
+      "player": "Florian Wirtz",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 14,
+      "assists": 12,
+      "appearances": 25,
+      "marketValue": 170,
+      "sortOrder": 5
+    },
+    {
+      "player": "Victor Osimhen",
+      "season": "2025-2026",
+      "club": "Galatasaray",
+      "goals": 15,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 70,
+      "sortOrder": 6
+    },
+    {
+      "player": "Trent Alexander-Arnold",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 1,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 70,
+      "sortOrder": 9
+    },
+    {
+      "player": "Riyad Mahrez",
+      "season": "2025-2026",
+      "club": "Al-Ahli",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 5,
+      "sortOrder": 12
+    },
+    {
+      "player": "Alexander Isak",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 18,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 120,
+      "sortOrder": 8
+    },
+    {
+      "player": "Darwin Núñez",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 12,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 50,
+      "sortOrder": 6
+    },
+    {
+      "player": "Martin Ødegaard",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 8,
+      "assists": 9,
+      "appearances": 22,
+      "marketValue": 100,
+      "sortOrder": 10
+    },
+    {
+      "player": "Sergio Busquets",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 2,
+      "sortOrder": 17
+    },
+    {
+      "player": "Marquinhos",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 2,
+      "assists": 1,
+      "appearances": 22,
+      "marketValue": 25,
+      "sortOrder": 13
+    },
+    {
+      "player": "Cole Palmer",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 16,
+      "assists": 10,
+      "appearances": 36,
+      "marketValue": 120,
+      "sortOrder": 5
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 30,
+      "sortOrder": 9
+    },
+    {
+      "player": "Romelu Lukaku",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 10,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 15,
+      "sortOrder": 14
+    },
+    {
+      "player": "Raheem Sterling",
+      "season": "2025-2026",
+      "club": "Feyenoord",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 15,
+      "marketValue": 10,
+      "sortOrder": 13
+    },
+    {
+      "player": "Cristian Pulisic",
+      "season": "2025-2026",
+      "club": "AC Milan",
+      "goals": 9,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 38,
+      "sortOrder": 10
+    },
+    {
+      "player": "André Onana",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 25,
+      "sortOrder": 8
+    },
+    {
+      "player": "Gianluigi Donnarumma",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 32,
+      "sortOrder": 10
+    },
+    {
+      "player": "Joshua Kimmich",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 3,
+      "assists": 8,
+      "appearances": 25,
+      "marketValue": 55,
+      "sortOrder": 10
+    },
+    {
+      "player": "Rodrygo",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 10,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 90,
+      "sortOrder": 6
+    },
+    {
+      "player": "Leroy Sané",
+      "season": "2025-2026",
+      "club": "Galatasaray",
+      "goals": 7,
+      "assists": 5,
+      "appearances": 20,
+      "marketValue": 25,
+      "sortOrder": 10
+    },
+    {
+      "player": "Enzo Fernández",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 7,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 75,
+      "sortOrder": 6
+    },
+    {
+      "player": "Khvicha Kvaratskhelia",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 9,
+      "assists": 7,
+      "appearances": 22,
+      "marketValue": 80,
+      "sortOrder": 4
+    },
+    {
+      "player": "Dusan Vlahović",
+      "season": "2025-2026",
+      "club": "Juventus",
+      "goals": 10,
+      "assists": 2,
+      "appearances": 22,
+      "marketValue": 55,
+      "sortOrder": 7
+    },
+    {
+      "player": "Jonathan David",
+      "season": "2025-2026",
+      "club": "Juventus",
+      "goals": 10,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 55,
+      "sortOrder": 7
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 9,
+      "assists": 6,
+      "appearances": 35,
+      "marketValue": 50,
+      "sortOrder": 3
+    },
+    {
+      "player": "Federico Chiesa",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 18,
+      "sortOrder": 9
+    },
+    {
+      "player": "Sandro Tonali",
+      "season": "2025-2026",
+      "club": "Newcastle",
+      "goals": 4,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 50,
+      "sortOrder": 6
+    },
+    {
+      "player": "Viktor Gyökeres",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 18,
+      "assists": 5,
+      "appearances": 25,
+      "marketValue": 100,
+      "sortOrder": 6
+    },
+    {
+      "player": "Xavi Simons",
+      "season": "2025-2026",
+      "club": "Tottenham",
+      "goals": 10,
+      "assists": 9,
+      "appearances": 22,
+      "marketValue": 90,
+      "sortOrder": 3
+    },
+    {
+      "player": "Estêvão",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 50,
+      "sortOrder": 2
+    },
+    {
+      "player": "Endrick",
+      "season": "2025-2026",
+      "club": "Lyon",
+      "goals": 10,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 35,
+      "sortOrder": 3
+    },
+    {
+      "player": "Moussa Diaby",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 8,
+      "assists": 6,
+      "appearances": 20,
+      "marketValue": 22,
+      "sortOrder": 7
+    },
+    {
+      "player": "Nico Williams",
+      "season": "2025-2026",
+      "club": "Athletic Bilbao",
+      "goals": 9,
+      "assists": 10,
+      "appearances": 34,
+      "marketValue": 75,
+      "sortOrder": 4
+    },
+    {
+      "player": "Kobbie Mainoo",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 3,
+      "assists": 4,
+      "appearances": 30,
+      "marketValue": 60,
+      "sortOrder": 2
+    },
+    {
+      "player": "Rasmus Højlund",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 14,
+      "assists": 5,
+      "appearances": 33,
+      "marketValue": 55,
+      "sortOrder": 4
+    },
+    {
+      "player": "Pau Cubarsí",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 2,
+      "assists": 1,
+      "appearances": 34,
+      "marketValue": 80,
+      "sortOrder": 2
+    },
+    {
+      "player": "Warren Zaïre-Emery",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 6,
+      "assists": 5,
+      "appearances": 35,
+      "marketValue": 70,
+      "sortOrder": 3
+    },
+    {
+      "player": "Bradley Barcola",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 35,
+      "marketValue": 75,
+      "sortOrder": 4
+    },
+    {
+      "player": "Moisés Caicedo",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 2,
+      "assists": 3,
+      "appearances": 34,
+      "marketValue": 90,
+      "sortOrder": 4
+    },
+    {
+      "player": "Arda Güler",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 32,
+      "marketValue": 60,
+      "sortOrder": 4
+    }
+  ],
+  "fallbackProjectionRows": [
+    {
+      "player": "Cristiano Ronaldo",
+      "season": "2025-2026",
+      "club": "Al-Nassr",
+      "goals": 12,
+      "assists": 2,
+      "appearances": 20,
+      "marketValue": 8
+    },
+    {
+      "player": "Lionel Messi",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 18,
+      "marketValue": 10
+    },
+    {
+      "player": "Neymar",
+      "season": "2025-2026",
+      "club": "Santos",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 16,
+      "marketValue": 5
+    },
+    {
+      "player": "Robert Lewandowski",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 14,
+      "assists": 3,
+      "appearances": 25,
+      "marketValue": 10
+    },
+    {
+      "player": "Kylian Mbappé",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 20,
+      "assists": 5,
+      "appearances": 28,
+      "marketValue": 180
+    },
+    {
+      "player": "Erling Haaland",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 20,
+      "assists": 3,
+      "appearances": 25,
+      "marketValue": 180
+    },
+    {
+      "player": "Mohamed Salah",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 17,
+      "assists": 12,
+      "appearances": 28,
+      "marketValue": 40
+    },
+    {
+      "player": "Harry Kane",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 22,
+      "assists": 6,
+      "appearances": 28,
+      "marketValue": 65
+    },
+    {
+      "player": "Vinícius Júnior",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 15,
+      "assists": 8,
+      "appearances": 28,
+      "marketValue": 200
+    },
+    {
+      "player": "Luka Modrić",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 2
+    },
+    {
+      "player": "Kevin De Bruyne",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 5,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 18
+    },
+    {
+      "player": "Karim Benzema",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 8,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 5
+    },
+    {
+      "player": "Paulo Dybala",
+      "season": "2025-2026",
+      "club": "Roma",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 18,
+      "marketValue": 8
+    },
+    {
+      "player": "Son Heung-min",
+      "season": "2025-2026",
+      "club": "Tottenham",
+      "goals": 12,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 28
+    },
+    {
+      "player": "Jude Bellingham",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 11,
+      "assists": 7,
+      "appearances": 25,
+      "marketValue": 180
+    },
+    {
+      "player": "Bukayo Saka",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 13,
+      "assists": 10,
+      "appearances": 25,
+      "marketValue": 160
+    },
+    {
+      "player": "Phil Foden",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 8,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 120
+    },
+    {
+      "player": "Pedri",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 5,
+      "assists": 8,
+      "appearances": 25,
+      "marketValue": 100
+    },
+    {
+      "player": "Lamine Yamal",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 12,
+      "assists": 13,
+      "appearances": 25,
+      "marketValue": 200
+    },
+    {
+      "player": "Marcus Rashford",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 18,
+      "marketValue": 35
+    },
+    {
+      "player": "Thibaut Courtois",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 22
+    },
+    {
+      "player": "Virgil van Dijk",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 2,
+      "assists": 2,
+      "appearances": 25,
+      "marketValue": 20
+    },
+    {
+      "player": "Jadon Sancho",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 22
+    },
+    {
+      "player": "Antoine Griezmann",
+      "season": "2025-2026",
+      "club": "Atlético Madrid",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 12
+    },
+    {
+      "player": "Bruno Fernandes",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 40
+    },
+    {
+      "player": "Declan Rice",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 5,
+      "assists": 6,
+      "appearances": 25,
+      "marketValue": 100
+    },
+    {
+      "player": "Rodri",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 1,
+      "assists": 2,
+      "appearances": 15,
+      "marketValue": 120
+    },
+    {
+      "player": "Achraf Hakimi",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 4,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 55
+    },
+    {
+      "player": "Rafael Leão",
+      "season": "2025-2026",
+      "club": "AC Milan",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 22,
+      "marketValue": 75
+    },
+    {
+      "player": "Alphonso Davies",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 2,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 55
+    },
+    {
+      "player": "Federico Valverde",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 5,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 120
+    },
+    {
+      "player": "Angel Di María",
+      "season": "2025-2026",
+      "club": "Benfica",
+      "goals": 3,
+      "assists": 5,
+      "appearances": 20,
+      "marketValue": 2
+    },
+    {
+      "player": "Luis Suárez",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 8,
+      "assists": 4,
+      "appearances": 18,
+      "marketValue": 2
+    },
+    {
+      "player": "N'Golo Kanté",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 6
+    },
+    {
+      "player": "Pierre-Emerick Aubameyang",
+      "season": "2025-2026",
+      "club": "Marseille",
+      "goals": 5,
+      "assists": 2,
+      "appearances": 18,
+      "marketValue": 2
+    },
+    {
+      "player": "Bernardo Silva",
+      "season": "2025-2026",
+      "club": "Manchester City",
+      "goals": 5,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 60
+    },
+    {
+      "player": "Jamal Musiala",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 12,
+      "assists": 8,
+      "appearances": 25,
+      "marketValue": 150
+    },
+    {
+      "player": "Florian Wirtz",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 14,
+      "assists": 12,
+      "appearances": 25,
+      "marketValue": 170
+    },
+    {
+      "player": "Victor Osimhen",
+      "season": "2025-2026",
+      "club": "Galatasaray",
+      "goals": 15,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 70
+    },
+    {
+      "player": "Trent Alexander-Arnold",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 1,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 70
+    },
+    {
+      "player": "Riyad Mahrez",
+      "season": "2025-2026",
+      "club": "Al-Ahli",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 5
+    },
+    {
+      "player": "Alexander Isak",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 18,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 120
+    },
+    {
+      "player": "Darwin Núñez",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 12,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 50
+    },
+    {
+      "player": "Martin Ødegaard",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 8,
+      "assists": 9,
+      "appearances": 22,
+      "marketValue": 100
+    },
+    {
+      "player": "Sergio Busquets",
+      "season": "2025-2026",
+      "club": "Inter Miami",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 2
+    },
+    {
+      "player": "Marquinhos",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 2,
+      "assists": 1,
+      "appearances": 22,
+      "marketValue": 25
+    },
+    {
+      "player": "Cole Palmer",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 15,
+      "assists": 10,
+      "appearances": 25,
+      "marketValue": 130
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 30
+    },
+    {
+      "player": "Romelu Lukaku",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 10,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 15
+    },
+    {
+      "player": "Raheem Sterling",
+      "season": "2025-2026",
+      "club": "Feyenoord",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 15,
+      "marketValue": 10
+    },
+    {
+      "player": "Cristian Pulisic",
+      "season": "2025-2026",
+      "club": "AC Milan",
+      "goals": 9,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 38
+    },
+    {
+      "player": "André Onana",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 25
+    },
+    {
+      "player": "Gianluigi Donnarumma",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 32
+    },
+    {
+      "player": "Joshua Kimmich",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 3,
+      "assists": 8,
+      "appearances": 25,
+      "marketValue": 55
+    },
+    {
+      "player": "Rodrygo",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 10,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 90
+    },
+    {
+      "player": "Leroy Sané",
+      "season": "2025-2026",
+      "club": "Galatasaray",
+      "goals": 7,
+      "assists": 5,
+      "appearances": 20,
+      "marketValue": 25
+    },
+    {
+      "player": "Enzo Fernández",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 7,
+      "assists": 8,
+      "appearances": 22,
+      "marketValue": 75
+    },
+    {
+      "player": "Khvicha Kvaratskhelia",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 9,
+      "assists": 7,
+      "appearances": 22,
+      "marketValue": 80
+    },
+    {
+      "player": "Dusan Vlahović",
+      "season": "2025-2026",
+      "club": "Juventus",
+      "goals": 10,
+      "assists": 2,
+      "appearances": 22,
+      "marketValue": 55
+    },
+    {
+      "player": "Jonathan David",
+      "season": "2025-2026",
+      "club": "Juventus",
+      "goals": 10,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 55
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 32
+    },
+    {
+      "player": "Federico Chiesa",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 5,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 18
+    },
+    {
+      "player": "Sandro Tonali",
+      "season": "2025-2026",
+      "club": "Newcastle",
+      "goals": 4,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 50
+    },
+    {
+      "player": "Viktor Gyökeres",
+      "season": "2025-2026",
+      "club": "Arsenal",
+      "goals": 18,
+      "assists": 5,
+      "appearances": 25,
+      "marketValue": 100
+    },
+    {
+      "player": "Xavi Simons",
+      "season": "2025-2026",
+      "club": "Tottenham",
+      "goals": 10,
+      "assists": 9,
+      "appearances": 22,
+      "marketValue": 90
+    },
+    {
+      "player": "Estêvão",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 50
+    },
+    {
+      "player": "Endrick",
+      "season": "2025-2026",
+      "club": "Lyon",
+      "goals": 10,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 35
+    },
+    {
+      "player": "Moussa Diaby",
+      "season": "2025-2026",
+      "club": "Al-Ittihad",
+      "goals": 8,
+      "assists": 6,
+      "appearances": 20,
+      "marketValue": 22
+    },
+    {
+      "player": "Gavi",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 4,
+      "assists": 6,
+      "appearances": 34,
+      "marketValue": 70
+    },
+    {
+      "player": "Nico Williams",
+      "season": "2025-2026",
+      "club": "Athletic Bilbao",
+      "goals": 9,
+      "assists": 10,
+      "appearances": 34,
+      "marketValue": 75
+    },
+    {
+      "player": "Kobbie Mainoo",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 3,
+      "assists": 4,
+      "appearances": 30,
+      "marketValue": 60
+    },
+    {
+      "player": "Rasmus Højlund",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 14,
+      "assists": 5,
+      "appearances": 33,
+      "marketValue": 55
+    },
+    {
+      "player": "Pau Cubarsí",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "goals": 2,
+      "assists": 1,
+      "appearances": 34,
+      "marketValue": 80
+    },
+    {
+      "player": "Warren Zaïre-Emery",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 6,
+      "assists": 5,
+      "appearances": 35,
+      "marketValue": 70
+    },
+    {
+      "player": "Bradley Barcola",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 10,
+      "assists": 7,
+      "appearances": 35,
+      "marketValue": 75
+    },
+    {
+      "player": "Moisés Caicedo",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 2,
+      "assists": 3,
+      "appearances": 34,
+      "marketValue": 90
+    },
+    {
+      "player": "Arda Güler",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 7,
+      "assists": 6,
+      "appearances": 32,
+      "marketValue": 60
+    }
+  ],
+  "preservedResearchedLiveRows": [
+    {
+      "player": "Alexis Mac Allister",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 5,
+      "assists": 7,
+      "appearances": 55,
+      "marketValue": 85,
+      "sortOrder": 10,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Álvaro Morata",
+      "season": "2025-2026",
+      "club": "Como",
+      "goals": 2,
+      "assists": 2,
+      "appearances": 25,
+      "marketValue": 8,
+      "sortOrder": 17,
+      "observedCreatedAt": "2026-07-10T22:43:42.11523+00:00"
+    },
+    {
+      "player": "Bruno Guimarães",
+      "season": "2025-2026",
+      "club": "Newcastle",
+      "goals": 9,
+      "assists": 6,
+      "appearances": 41,
+      "marketValue": 75,
+      "sortOrder": 12,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Cody Gakpo",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 9,
+      "assists": 6,
+      "appearances": 52,
+      "marketValue": 60,
+      "sortOrder": 9,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "David de Gea",
+      "season": "2025-2026",
+      "club": "Fiorentina",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 46,
+      "marketValue": 3,
+      "sortOrder": 15,
+      "observedCreatedAt": "2026-07-08T21:31:14.416012+00:00"
+    },
+    {
+      "player": "David Luiz",
+      "season": "2025-2026",
+      "club": "Pafos",
+      "goals": 4,
+      "assists": 1,
+      "appearances": 33,
+      "marketValue": 1,
+      "sortOrder": 22,
+      "observedCreatedAt": "2026-07-10T22:45:13.36009+00:00"
+    },
+    {
+      "player": "Dominik Szoboszlai",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 13,
+      "assists": 12,
+      "appearances": 53,
+      "marketValue": 90,
+      "sortOrder": 10,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Emiliano Martínez",
+      "season": "2025-2026",
+      "club": "Aston Villa",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 44,
+      "marketValue": 15,
+      "sortOrder": 17,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Isco",
+      "season": "2025-2026",
+      "club": "Real Betis",
+      "goals": 3,
+      "assists": 3,
+      "appearances": 18,
+      "marketValue": 8,
+      "sortOrder": 15,
+      "observedCreatedAt": "2026-07-10T22:43:26.592575+00:00"
+    },
+    {
+      "player": "Jack Grealish",
+      "season": "2025-2026",
+      "club": "Everton",
+      "goals": 2,
+      "assists": 6,
+      "appearances": 22,
+      "marketValue": 20,
+      "sortOrder": 13,
+      "observedCreatedAt": "2026-07-08T22:42:54.147943+00:00"
+    },
+    {
+      "player": "James Milner",
+      "season": "2025-2026",
+      "club": "Brighton",
+      "goals": 1,
+      "assists": 0,
+      "appearances": 9,
+      "marketValue": 1,
+      "sortOrder": 24,
+      "observedCreatedAt": "2026-07-10T22:44:31.591125+00:00"
+    },
+    {
+      "player": "Jamie Vardy",
+      "season": "2025-2026",
+      "club": "Cremonese",
+      "goals": 12,
+      "assists": 3,
+      "appearances": 33,
+      "marketValue": 2,
+      "sortOrder": 18,
+      "observedCreatedAt": "2026-07-10T22:44:23.969871+00:00"
+    },
+    {
+      "player": "Jordan Henderson",
+      "season": "2025-2026",
+      "club": "Brentford",
+      "goals": 0,
+      "assists": 2,
+      "appearances": 30,
+      "marketValue": 3,
+      "sortOrder": 19,
+      "observedCreatedAt": "2026-07-10T22:44:37.560531+00:00"
+    },
+    {
+      "player": "Juan Mata",
+      "season": "2025-2026",
+      "club": "Melbourne Victory",
+      "goals": 2,
+      "assists": 3,
+      "appearances": 22,
+      "marketValue": 1,
+      "sortOrder": 20,
+      "observedCreatedAt": "2026-07-10T22:44:01.861081+00:00"
+    },
+    {
+      "player": "Julián Álvarez",
+      "season": "2025-2026",
+      "club": "Atlético Madrid",
+      "goals": 20,
+      "assists": 9,
+      "appearances": 49,
+      "marketValue": 100,
+      "sortOrder": 8,
+      "observedCreatedAt": "2026-07-08T22:42:54.147943+00:00"
+    },
+    {
+      "player": "Koke",
+      "season": "2025-2026",
+      "club": "Atlético Madrid",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 30,
+      "marketValue": 5,
+      "sortOrder": 16,
+      "observedCreatedAt": "2026-07-10T22:43:48.725781+00:00"
+    },
+    {
+      "player": "Lautaro Martínez",
+      "season": "2025-2026",
+      "club": "Inter Milan",
+      "goals": 22,
+      "assists": 6,
+      "appearances": 41,
+      "marketValue": 85,
+      "sortOrder": 11,
+      "observedCreatedAt": "2026-07-08T22:42:54.147943+00:00"
+    },
+    {
+      "player": "Luis Díaz",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 26,
+      "assists": 19,
+      "appearances": 51,
+      "marketValue": 70,
+      "sortOrder": 12,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Marco Verratti",
+      "season": "2025-2026",
+      "club": "Al-Duhail",
+      "goals": 0,
+      "assists": 4,
+      "appearances": 25,
+      "marketValue": 10,
+      "sortOrder": 16,
+      "observedCreatedAt": "2026-07-10T22:43:15.303437+00:00"
+    },
+    {
+      "player": "Mario Götze",
+      "season": "2025-2026",
+      "club": "Eintracht Frankfurt",
+      "goals": 0,
+      "assists": 2,
+      "appearances": 18,
+      "marketValue": 3,
+      "sortOrder": 16,
+      "observedCreatedAt": "2026-07-10T22:43:09.984726+00:00"
+    },
+    {
+      "player": "Michael Olise",
+      "season": "2025-2026",
+      "club": "Bayern Munich",
+      "goals": 22,
+      "assists": 28,
+      "appearances": 52,
+      "marketValue": 150,
+      "sortOrder": 7,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Nicolò Barella",
+      "season": "2025-2026",
+      "club": "Inter Milan",
+      "goals": 3,
+      "assists": 8,
+      "appearances": 45,
+      "marketValue": 50,
+      "sortOrder": 12,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Olivier Giroud",
+      "season": "2025-2026",
+      "club": "Lille",
+      "goals": 11,
+      "assists": 1,
+      "appearances": 44,
+      "marketValue": 1,
+      "sortOrder": 22,
+      "observedCreatedAt": "2026-07-08T22:42:54.147943+00:00"
+    },
+    {
+      "player": "Ollie Watkins",
+      "season": "2025-2026",
+      "club": "Aston Villa",
+      "goals": 21,
+      "assists": 5,
+      "appearances": 54,
+      "marketValue": 45,
+      "sortOrder": 13,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    },
+    {
+      "player": "Pedro",
+      "season": "2025-2026",
+      "club": "Lazio",
+      "goals": 6,
+      "assists": 3,
+      "appearances": 30,
+      "marketValue": 1,
+      "sortOrder": 17,
+      "observedCreatedAt": "2026-07-10T22:44:17.626942+00:00"
+    },
+    {
+      "player": "Philippe Coutinho",
+      "season": "2025-2026",
+      "club": "Vasco da Gama",
+      "goals": 6,
+      "assists": 5,
+      "appearances": 30,
+      "marketValue": 5,
+      "sortOrder": 20,
+      "observedCreatedAt": "2026-07-10T22:42:41.764224+00:00"
+    },
+    {
+      "player": "Vitinha",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 7,
+      "assists": 8,
+      "appearances": 50,
+      "marketValue": 100,
+      "sortOrder": 6,
+      "observedCreatedAt": "2026-07-08T23:10:23.28852+00:00"
+    }
+  ],
+  "individuallyDisprovenRows": [
+    {
+      "player": "Luka Modrić",
+      "season": "2025-2026",
+      "club": "Real Madrid",
+      "goals": 1,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 2,
+      "sortOrder": 17,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.acmilan.com/en/news/articles/extra/2025-07-14/official-statement-luka-modric",
+        "https://www.bbc.co.uk/sport/football/articles/cj3rpyejml1o"
+      ]
+    },
+    {
+      "player": "Jadon Sancho",
+      "season": "2025-2026",
+      "club": "Chelsea",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 20,
+      "marketValue": 22,
+      "sortOrder": 8,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.premierleague.com/en/news/4405710/jadon-sancho-joins-villa-on-loan-from-man-utd",
+        "https://www.bbc.co.uk/sport/football/articles/c07p7ne0k30o"
+      ]
+    },
+    {
+      "player": "Angel Di María",
+      "season": "2025-2026",
+      "club": "Benfica",
+      "goals": 3,
+      "assists": 5,
+      "appearances": 20,
+      "marketValue": 2,
+      "sortOrder": 18,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.slbenfica.pt/pt-pt/agora/noticias/2025/05/29/clube-benfica-comunicado-futebol-di-maria",
+        "https://rosariocentral.com/noticia/angel-di-maria-vuelve-a-casa/"
+      ]
+    },
+    {
+      "player": "Darwin Núñez",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 12,
+      "assists": 5,
+      "appearances": 22,
+      "marketValue": 50,
+      "sortOrder": 6,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.liverpoolfc.com/news/darwin-nunez-completes-permanent-transfer-al-hilal",
+        "https://alhilal.com/en/news/al-hilal-signs-uruguay-striker-darwin-nunez-from-liverpool"
+      ]
+    },
+    {
+      "player": "André Onana",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 25,
+      "sortOrder": 8,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.trabzonspor.org.tr/tr/haberler/kamuoyuna-duyuru-28-11-09-2025",
+        "https://www.tff.org/Default.aspx?kisiId=2827326&pageId=526"
+      ]
+    },
+    {
+      "player": "Gianluigi Donnarumma",
+      "season": "2025-2026",
+      "club": "PSG",
+      "goals": 0,
+      "assists": 0,
+      "appearances": 22,
+      "marketValue": 32,
+      "sortOrder": 10,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://www.psg.fr/en/content/pr-gianluigi-donnarumma-joins-manchester-city/",
+        "https://www.bbc.co.uk/sport/football/articles/c6262dv8712o"
+      ]
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 9,
+      "assists": 6,
+      "appearances": 35,
+      "marketValue": 50,
+      "sortOrder": 3,
+      "live": true,
+      "fallback": false,
+      "sources": [
+        "https://www.chelseafc.com/en/news/article/chelsea-complete-alejandro-garnacho-signing",
+        "https://www.premierleague.com/en/news/4401968"
+      ]
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "season": "2024-2025",
+      "club": "Napoli",
+      "goals": 4,
+      "assists": 3,
+      "appearances": 18,
+      "marketValue": 30,
+      "sortOrder": null,
+      "live": false,
+      "fallback": true,
+      "sources": [
+        "https://www.chelseafc.com/en/news/article/chelsea-complete-alejandro-garnacho-signing",
+        "https://www.premierleague.com/en/news/4401968"
+      ]
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "season": "2025-2026",
+      "club": "Napoli",
+      "goals": 6,
+      "assists": 4,
+      "appearances": 22,
+      "marketValue": 32,
+      "sortOrder": null,
+      "live": false,
+      "fallback": true,
+      "sources": [
+        "https://www.chelseafc.com/en/news/article/chelsea-complete-alejandro-garnacho-signing",
+        "https://www.premierleague.com/en/news/4401968"
+      ]
+    },
+    {
+      "player": "Rasmus Højlund",
+      "season": "2025-2026",
+      "club": "Manchester United",
+      "goals": 14,
+      "assists": 5,
+      "appearances": 33,
+      "marketValue": 55,
+      "sortOrder": 4,
+      "live": true,
+      "fallback": true,
+      "sources": [
+        "https://sscnapoli.it/en/sscn-ufficiale-lingaggio-di-hojlund/",
+        "https://www.bbc.co.uk/sport/football/articles/czxyxlp5pxzo"
+      ]
+    }
+  ]
+}

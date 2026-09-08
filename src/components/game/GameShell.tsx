@@ -9,8 +9,10 @@ interface GameShellProps {
   /** Two width variants only: narrow (max-w-2xl) for 1-2 column comparison/card games,
    *  wide (max-w-4xl) for search+board games. */
   width: 'narrow' | 'wide';
-  /** Game title shown as the page's <h1>. Omit to render no heading block at all. */
+  /** Game title. It is the page h1 by default. Omit to render no heading block. */
   title?: string;
+  /** Use level 2 only when another component on the page owns the single h1. */
+  headingLevel?: 1 | 2;
   /** Optional emoji shown above the title. */
   emoji?: string;
   /** One-line goal statement rendered under the title (spec 3.2's goal line). */
@@ -47,6 +49,7 @@ interface GameShellProps {
 export function GameShell({
   width,
   title,
+  headingLevel = 1,
   emoji,
   subtitle,
   headerExtra,
@@ -58,6 +61,7 @@ export function GameShell({
   reportGameContext,
 }: GameShellProps) {
   const { pathname } = useLocation();
+  const TitleHeading = headingLevel === 2 ? 'h2' : 'h1';
 
   return (
     /* Round 306: the id the skip link points at. The doc comment above always
@@ -96,10 +100,10 @@ export function GameShell({
                 than starting at their largest, and break-words lets a title made
                 of several words wrap instead of shoving. Measured after the
                 change at 320, 390 and 1440. */}
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold tracking-[0.1em] sm:tracking-[0.15em] uppercase text-primary mb-2 break-words">
+            <TitleHeading className="text-3xl sm:text-4xl md:text-6xl font-display font-bold tracking-[0.1em] sm:tracking-[0.15em] uppercase text-primary mb-2 break-words">
               {emoji && <span className="mr-2">{emoji}</span>}
               {title}
-            </h1>
+            </TitleHeading>
             {subtitle && (
               <p className="text-sm md:text-base text-muted-foreground max-w-md mx-auto">
                 {subtitle}

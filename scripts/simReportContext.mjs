@@ -19,12 +19,16 @@
      3. An inventory, printed and not failed: how many pages pass an empty
         context or none at all. Measured on 2026-09-01 so the next reader
         knows whether it moved.
+     4. The privacy page accurately discloses the category, text, page, date
+        and limited game context already sent by the shared report flow.
 
    Negative controls (house rule: prove each check can fail):
      SIM_REPORT_CONTROL=nopath   deletes the path line from the component
                                  source in memory; section 1 must go red.
      SIM_REPORT_CONTROL=footle   restores Footle's old element in memory;
                                  section 2 must go red.
+     SIM_REPORT_CONTROL=privacy  removes the automatic context disclosure;
+                                 section 4 must go red.
    Each asserts it changed something before running.
 
    Run: node scripts/simReportContext.mjs
@@ -37,7 +41,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_REPORT_CONTROL || '';
 let failures = 0;
 let section = 0;
-const bySection = { 1: 0, 2: 0, 3: 0 };
+const bySection = { 1: 0, 2: 0, 3: 0, 4: 0 };
 const fail = m => { failures += 1; bySection[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 
@@ -106,8 +110,35 @@ console.log('3) Inventory: what the other pages send (printed, not failed)');
   console.log('   every one of them now carries the route and the date through the component');
 }
 
+section = 4;
+console.log('4) The privacy page says what the report flow already sends');
+{
+  let source = fs.readFileSync(path.join(ROOT, 'src/pages/PrivacyPolicy.tsx'), 'utf8');
+  const contextPhrase = 'the page, the date in Eastern Time, and limited in-game details';
+  if (CONTROL === 'privacy') {
+    if (!source.includes(contextPhrase)) abort('control cannot run: the context disclosure it is meant to remove is not there');
+    const changed = source.replace(contextPhrase, 'the page');
+    if (changed === source) abort('control cannot run: removing the context disclosure changed nothing');
+    source = changed;
+  }
+  const reported = source.match(/<li><strong>Reported issues:<\/strong>[\s\S]*?<\/li>/)?.[0] ?? '';
+  const formSubmit = source.match(/<li><strong>FormSubmit:<\/strong>[\s\S]*?<\/li>/)?.[0] ?? '';
+  for (const [label, text] of [['Reported issues', reported], ['FormSubmit', formSubmit]]) {
+    if (!text) { fail(`${label} disclosure is missing`); continue; }
+    if (!/categor/i.test(text)) fail(`${label} does not disclose the selected report category`);
+    if (!/text/i.test(text)) fail(`${label} does not disclose the text the visitor types`);
+    if (!/page/i.test(text)) fail(`${label} does not disclose the page path`);
+    if (!/date/i.test(text)) fail(`${label} does not disclose the Eastern date`);
+    if (!/limited in-game details/i.test(text)) fail(`${label} does not disclose the limited game context`);
+  }
+  if (/Only the report text you typed and the page you were on are sent/i.test(formSubmit)) {
+    fail('FormSubmit still claims only text and page are sent');
+  }
+  console.log('   category, typed text, page, Eastern date and limited game details disclosed on both lines');
+}
+
 if (CONTROL) {
-  const target = { nopath: 1, footle: 2 }[CONTROL];
+  const target = { nopath: 1, footle: 2, privacy: 4 }[CONTROL];
   if (!target) abort(`unknown control "${CONTROL}"`);
   const fired = bySection[target];
   if (fired > 0) { console.log(`\ncontrol "${CONTROL}": ${fired} failure(s) fired in section ${target} as expected, the check works`); process.exit(0); }

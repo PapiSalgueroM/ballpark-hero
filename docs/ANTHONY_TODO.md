@@ -1,4 +1,4 @@
-# Anthony TODO — updated 2026-07-10 ~2:30am by overnight autopilot
+# Anthony TODO, updated 2026-09-07
 
 ## Nothing is blocking. Everything below is optional/awareness.
 
@@ -27,17 +27,21 @@
    work to GitHub" button. Claude runs it itself when you\'re around to
    approve screen control; double-click it yourself anytime.
 
-## URGENT: Turn Google login on (5 minutes, only you can do this)
-Google sign-in was broken at the root: the old code went through Lovable's auth gateway, which issues tokens for the deleted backend project. I rewrote it to use Supabase directly, but the Google provider is switched OFF in the live project, and turning it on needs YOUR Google account:
+## Google login branding, one outside dashboard step left
 
-1. Go to https://console.cloud.google.com/apis/credentials (any Google account works, use your main one).
-2. Create a project if asked, then: Create Credentials > OAuth client ID > Web application.
-   - If it asks you to configure the consent screen first: External, app name DoUKnowBall, add your email, save through the steps.
-3. Authorized JavaScript origins: add `https://douknowball.com` and `https://flawuiqbvjobmkfkauhw.supabase.co`
-4. Authorized redirect URIs: add exactly `https://flawuiqbvjobmkfkauhw.supabase.co/auth/v1/callback`
-5. Copy the Client ID and Client Secret it gives you.
-6. Go to https://supabase.com/dashboard/project/flawuiqbvjobmkfkauhw/auth/providers > Google > toggle ON > paste Client ID + Secret > Save.
+Google's provider remains configured, but Round 509 keeps the public button hidden until the
+branding below is clean. Its tested replacement removes the hosted Supabase redirect and uses
+Google's official popup directly on `douknowball.com`, so no paid custom auth domain is needed.
+The live OAuth client already authorizes the site origin and the real button rendered cleanly.
 
-The moment you hit Save, the Google button on the site starts working. Zero code changes needed. Until then, email + password sign-up works today (I fixed the missing database trigger that was silently breaking account profiles).
+The remaining personal email in Google's Developer Information box is controlled only by the
+Google Auth Platform Branding page for the existing `DoUKnowBall Web` client:
 
-Also worth 2 minutes while you are in there: Authentication > URL Configuration > set Site URL to `https://douknowball.com` and add it to Redirect URLs. That makes sure email confirmation links land on your domain.
+1. Set App name to `DoUKnowBall`.
+2. Set User support email and Developer contact to `douknowball1@gmail.com`.
+3. Set Homepage to `https://douknowball.com`, Privacy to `https://douknowball.com/privacy`,
+   Terms to `https://douknowball.com/terms`, and Authorized domain to `douknowball.com`.
+4. Use the existing square site icon, publish the branding, and submit brand verification.
+
+Leave the current Supabase Google provider enabled. No client secret belongs in this repo or in
+a chat.

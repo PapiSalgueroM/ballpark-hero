@@ -12,40 +12,43 @@
    that quietly lets a chain through a club or a player it was meant to remove.
 
    What it holds:
-     1) THE MODE MIGRATION AGAINST THE PULL IT WAS MADE FROM, PER RULE. The
-        VALUES rows in supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql
-        are parsed, the graph is rebuilt through the page's own
+     1) THE CURRENT STORED RULE ROWS AGAINST THE PULL, PER RULE. Europe comes
+        from the applied quarantine companion and active comes from the new
+        verified restore. The graph is rebuilt through the page's own
         playersUnderRule (bundled from the real module), and for every puzzle
         and rule: null means the search finds no path, a number means the
         search's minimum, and the hint promises that many steps and names a
         first and last club a shortest path really uses. Then the derived
         shortest path is walked link by link with the REAL module, apart from
-        the graph: under active every name on it has a season touching
-        ACTIVE_YEAR, under Europe every link's shared club is European, and
+        the graph: under active every name on it has a verified name plus
+        nationality identity, under Europe every link's shared club is European, and
         every link is a same club same season link on the everyday graph. The
-        share of puzzles with a path under each rule is measured and floored
-        from headroom (2026-09-05: active 236 of 902, Europe 902 of 902).
-        ACTIVE_YEAR is checked against the pull: a season ending after it
-        means the constant is stale.
+        share of puzzles with a path is measured and floored from headroom
+        (2026-09-07: Active 203 of 885, Europe 872 of 885).
      2) THE FALLBACK THE PAGE SHOWS WHEN THE TABLE IS DOWN, PER RULE.
         src/data/transferPathPuzzles.ts against src/data/careerPlayers.ts by
         the same test, and each rule's oneOptimalPath walked link by link.
-     3) THE LIVE TABLE, through the site's own fetcher. Every live row's rule
-        pair equals the migration's, text for text (which is the proof that the
-        SQL rebuilding the hint mirrors hintText), and passes the same checks
-        on the live graph. SKIPS LOUDLY when Supabase is unreachable.
+     3) THE LIVE TABLE, through the site's own fetcher plus a raw read for null
+        pair integrity. Europe equals the migration text for text. Active may
+        be in exactly one of two atomic rollout states: all 885 pairs null, or
+       all 203 verified paths restored exactly. Any partial
+        or mixed third state fails. SKIPS LOUDLY when Supabase is unreachable.
      4) THE SOURCE. The hook filters through playersUnderRule and reads
         puzzleUnderRule, the fetcher selects all four columns. Comments are
         stripped before matching.
 
    NEGATIVE CONTROLS, each refusing to run if its rewrite changed nothing:
      TPM_CONTROL=min plants a typed Europe minimum one step too high on
-       tpa-945 in the parsed migration; section 1 must go red on that row.
+       tpa-944 in the parsed migration; section 1 must go red on that row.
      TPM_CONTROL=abroad rewrites a COPY of transferPathModes.ts so Saudi and
        United States clubs count as European, builds section 1's graph through
        the copy, and keeps the link walk on the real module: a Europe chain
        through Al-Nassr or LA Galaxy must be reported, and section 1 must go
        red. CRLF is folded before the rewrite is checked.
+     TPM_CONTROL=liveidentity changes Lionel Messi's live nationality only in
+       memory. The staged-null preflight must reject the proposed restore rows.
+     TPM_CONTROL=livepuzzleid changes one live puzzle id only in memory. The
+       preflight must report the proposed restore id that disappeared.
 
    Run: node scripts/simTransferPathModes.mjs
 */
@@ -55,21 +58,23 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
-  MODE_RULES, buildGraph, distances, expandCompactCareers, parseModeMigration, ruleProblems, sharedClub, shortestPath,
+  MODE_RULES, buildGraph, distances, expandCompactCareers, parseActiveRestoreMigration, parseTransferPathCompanionMigration, ruleProblems, sharedClub, shortestPath,
 } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src').replaceAll('\\', '/');
 const CONTROL = process.env.TPM_CONTROL || '';
-if (CONTROL && !['min', 'abroad'].includes(CONTROL)) { console.error(`TPM_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+const LOCAL_ONLY = process.env.TRANSFER_PATH_LOCAL_ONLY === '1';
+if (CONTROL && !['min', 'abroad', 'liveidentity', 'livepuzzleid'].includes(CONTROL)) { console.error(`TPM_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const findings = [];
 const fail = m => { failures += 1; findings.push(m); if (failures <= 25) console.error('  FAIL: ' + m); };
 
-/* measured 2026-09-05 on the 902 puzzle pull: active 236 (26.2 percent), Europe 902 */
-const SHARE_FLOOR = { active: 0.2, europe: 0.95 };
-const PUZZLE_FLOOR = 902;
-const MIGRATION = path.join(ROOT, 'supabase/migrations/20260905_round_460_transfer_path_mode_hints.sql');
+/* measured 2026-09-07 on the corrected 885 puzzle pull: Europe 872 */
+const SHARE_FLOOR = { active: 0.22, europe: 0.95 };
+const PUZZLE_FLOOR = 885;
+const COMPANION = path.join(ROOT, 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql');
+const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
 
 /* ── the real module, and under the abroad control a rewritten copy for the graph ── */
 const TMP = os.tmpdir();
@@ -93,6 +98,8 @@ export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';
 export { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';
 export { fetchCareerPlayers } from '${SRC}/lib/fetchCareerPlayers.ts';
 export { fetchTransferPathPuzzles } from '${SRC}/lib/fetchTransferPathPuzzles.ts';
+export { fetchAllRows } from '${SRC}/lib/fetchAllRows.ts';
+export { supabase } from '${SRC}/integrations/supabase/client.ts';
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(BUNDLE).href);
@@ -114,7 +121,7 @@ function chainProblems(rule, everyday, byName, chain, clubOf) {
   }
   if (rule === 'active') for (const name of chain) {
     const p = byName.get(name);
-    if (!p || !real.isActivePlayer(p)) out.push(`an active only chain carries ${name}, who has no ${real.ACTIVE_YEAR} season`);
+    if (!p || !real.isActivePlayer(p)) out.push(`an active only chain carries ${name}, whose identity is not in the verified active set`);
   }
   return out;
 }
@@ -122,23 +129,45 @@ function chainProblems(rule, everyday, byName, chain, clubOf) {
 const pull = path.join(ROOT, 'scripts/data/transferPathPull');
 const players = expandCompactCareers(fs.readFileSync(path.join(pull, 'careers.txt'), 'utf8'));
 const pairs = new Map(fs.readFileSync(path.join(pull, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => { const [id, a, b] = l.split('|'); return [id, { a, b }]; }));
-const stored = parseModeMigration(fs.readFileSync(MIGRATION, 'utf8'), pairs);
+const companionParsed = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8'));
+const companionRows = new Map(companionParsed.desired.map(row => [row.id, row]));
+const restoreRows = parseActiveRestoreMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+const stored = new Map([...pairs].map(([id]) => {
+  const companion = companionRows.get(id);
+  const active = restoreRows.get(id);
+  return [id, {
+    active: active ? { minSteps: active.minSteps, hint: active.hint, first: null, last: null } : null,
+    europe: companion?.europeMinSteps === null || companion?.europeMinSteps === undefined
+      ? null
+      : { minSteps: companion.europeMinSteps, hint: companion.europeHint, first: null, last: null },
+  }];
+}));
 
-console.log('1) the mode migration against the pull it was made from, per rule');
+console.log('1) current stored rule rows against the pull, per rule');
 {
-  if (stored.size !== pairs.size) fail(`the migration carries ${stored.size} rows for ${pairs.size} pulled puzzles`);
+  if (companionParsed.desired.length !== companionRows.size) fail('the applied companion repeats a retained puzzle id');
+  if (companionRows.size !== pairs.size) fail(`the applied companion carries ${companionRows.size} rows for ${pairs.size} pulled puzzles`);
+  if (restoreRows.size !== 203) fail(`the separate active restore carries ${restoreRows.size} rows, expected 203`);
   if (stored.size < PUZZLE_FLOOR) fail(`${stored.size} puzzles, the floor is ${PUZZLE_FLOOR}`);
-  for (const id of stored.keys()) if (!pairs.has(id)) fail(`the migration carries ${id}, which the pull does not have`);
-  const latest = Math.max(...players.flatMap(p => p.career.map(s => real.seasonSpan(s.season)?.[1] ?? 0)));
-  if (latest > real.ACTIVE_YEAR) fail(`the pull carries a season ending in ${latest}, past ACTIVE_YEAR ${real.ACTIVE_YEAR}: move the constant`);
+  for (const row of companionParsed.desired) {
+    const pair = pairs.get(row.id);
+    if (!pair) fail(`the applied companion carries ${row.id}, which the pull does not have`);
+    else if (pair.a !== row.playerA || pair.b !== row.playerB) fail(`the applied companion ${row.id} names ${row.playerA} to ${row.playerB}, expected ${pair.a} to ${pair.b}`);
+    if (row.activeMinSteps !== null || row.activeHint !== null) fail(`the applied companion restores active fields on ${row.id}`);
+  }
+  for (const [id, row] of restoreRows) {
+    const pair = pairs.get(id);
+    if (!pair) fail(`the active restore carries ${id}, which the pull does not have`);
+    else if (pair.a !== row.a || pair.b !== row.b) fail(`the active restore ${id} names ${row.a} to ${row.b}, expected ${pair.a} to ${pair.b}`);
+  }
   const active = players.filter(real.isActivePlayer).length;
-  console.log(`   ${players.length} players in the pull, ${active} with a season touching ${real.ACTIVE_YEAR}, latest season ends ${latest}`);
+  console.log(`   ${players.length} players in the pull, ${active} with a verified ${real.ACTIVE_YEAR} identity`);
 
   if (CONTROL === 'min') {
-    const r = stored.get('tpa-945');
-    if (!r || !r.europe) { console.error('control cannot run: tpa-945 has no Europe entry to plant on'); process.exit(1); }
+    const r = stored.get('tpa-944');
+    if (!r || !r.europe) { console.error('control cannot run: tpa-944 has no Europe entry to plant on'); process.exit(1); }
     r.europe = { ...r.europe, minSteps: r.europe.minSteps + 1 };
-    console.log(`   NEGATIVE CONTROL ON: tpa-945 carries a typed Europe minimum of ${r.europe.minSteps}, this section must go red`);
+    console.log(`   NEGATIVE CONTROL ON: tpa-944 carries a typed Europe minimum of ${r.europe.minSteps}, this section must go red`);
   }
 
   const everyday = buildGraph(players);
@@ -149,18 +178,18 @@ console.log('1) the mode migration against the pull it was made from, per rule')
     const byMin = {};
     for (const [id, { a, b }] of pairs) {
       const s = stored.get(id)?.[rule] ?? null;
-      for (const p of ruleProblems(graph, a, b, s)) fail(`migration ${id} under ${rule} (${a} to ${b}): ${p}`);
+      for (const p of ruleProblems(graph, a, b, s)) fail(`stored row ${id} under ${rule} (${a} to ${b}): ${p}`);
       if (!s) continue;
       withPath += 1;
       byMin[s.minSteps] = (byMin[s.minSteps] ?? 0) + 1;
       const chain = shortestPath(graph, a, b);
       if (!chain) continue;
       walked += 1;
-      for (const p of chainProblems(rule, everyday, byName, chain, (x, y) => sharedClub(graph, x, y))) fail(`migration ${id} under ${rule}: ${p}`);
+      for (const p of chainProblems(rule, everyday, byName, chain, (x, y) => sharedClub(graph, x, y))) fail(`stored row ${id} under ${rule}: ${p}`);
     }
     const share = withPath / pairs.size;
     console.log(`   ${rule}: ${graph.names.length} players in the graph, ${withPath} of ${pairs.size} puzzles have a path (${(share * 100).toFixed(1)} percent), ${walked} shortest chains walked; by minimum ${JSON.stringify(byMin)}`);
-    if (share < SHARE_FLOOR[rule]) fail(`${rule}: only ${(share * 100).toFixed(1)} percent of puzzles have a path, the floor is ${SHARE_FLOOR[rule] * 100} percent`);
+    if (SHARE_FLOOR[rule] !== undefined && share < SHARE_FLOOR[rule]) fail(`${rule}: only ${(share * 100).toFixed(1)} percent of puzzles have a path, the floor is ${SHARE_FLOOR[rule] * 100} percent`);
   }
 }
 
@@ -188,21 +217,78 @@ console.log('2) the fallback the page shows when the table is down, per rule');
 
 console.log('3) the live table, through the site\'s own fetcher');
 {
-  let players = [], puzzles = [];
+  if (LOCAL_ONLY) {
+    console.log('   SKIPPED BY TRANSFER_PATH_LOCAL_ONLY=1. Live is not claimed checked.');
+  } else {
+  let players = [], puzzles = [], rawPuzzles = [], rawError = null;
   try {
     const warn = console.warn; console.warn = () => {};
-    [players, puzzles] = await Promise.all([site.fetchCareerPlayers(), site.fetchTransferPathPuzzles()]);
+    const raw = site.fetchAllRows((from, to) => site.supabase
+      .from('transfer_path_puzzles')
+      .select('puzzle_id, active_min_steps, active_hint')
+      .order('puzzle_id', { ascending: true })
+      .range(from, to));
+    [players, puzzles, { data: rawPuzzles, error: rawError }] = await Promise.all([site.fetchCareerPlayers(), site.fetchTransferPathPuzzles(), raw]);
     console.warn = warn;
-  } catch { players = []; puzzles = []; }
-  if (!players.length || !puzzles.length) {
+  } catch { players = []; puzzles = []; rawPuzzles = []; rawError = true; }
+  if (!players.length || !puzzles.length || rawError || !rawPuzzles.length) {
     console.log('   SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED. The migration was checked against its pull in section 1; run this where the host is reachable.');
   } else {
+    if (CONTROL === 'liveidentity') {
+      const before = players.find(player => player.name === 'Lionel Messi' && player.nationality === 'Argentina');
+      if (!before) { console.error('control cannot run: live Lionel Messi of Argentina is absent'); process.exit(1); }
+      players = players.map(player => player === before ? { ...player, nationality: 'Uruguay' } : player);
+      console.log('   NEGATIVE CONTROL ON: live Lionel Messi carries the wrong nationality before the staged restore preflight');
+    }
+    if (CONTROL === 'livepuzzleid') {
+      const before = puzzles.find(puzzle => puzzle.id === 'tpa-26');
+      if (!before) { console.error('control cannot run: live tpa-26 is absent'); process.exit(1); }
+      puzzles = puzzles.map(puzzle => puzzle === before ? { ...puzzle, id: 'control-tpa-26-missing' } : puzzle);
+      console.log('   NEGATIVE CONTROL ON: live tpa-26 is replaced in memory before the staged restore preflight');
+    }
     if (puzzles.length < PUZZLE_FLOOR) fail(`${puzzles.length} live puzzles, the floor is ${PUZZLE_FLOOR}`);
+    if (rawPuzzles.length !== puzzles.length) fail(`the raw live read has ${rawPuzzles.length} rows, the site fetcher has ${puzzles.length}`);
+    const partialActive = rawPuzzles.filter(row => (row.active_min_steps === null) !== (row.active_hint === null));
+    for (const row of partialActive.slice(0, 10)) fail(`live ${row.puzzle_id} has only half of its active hint pair`);
+    if (partialActive.length > 10) fail(`${partialActive.length} live rows have only half of their active hint pair`);
+    const liveActiveCount = rawPuzzles.filter(row => row.active_min_steps !== null && row.active_hint !== null).length;
+    const restoredActiveCount = restoreRows.size;
+    const activeLiveState = partialActive.length === 0 && liveActiveCount === 0
+      ? 'staged-null'
+      : partialActive.length === 0 && liveActiveCount === restoredActiveCount
+        ? 'restored'
+        : 'mixed';
+    if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only staged zero or restored ${restoredActiveCount} is valid`);
+    const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
+    for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) fail(`proposed active restore ${id} is absent from the live table`);
     const everyday = buildGraph(players);
     const byName = new Map(players.map(p => [p.name, p]));
     for (const rule of MODE_RULES) {
       const graph = buildGraph(real.playersUnderRule(players, rule));
       let same = 0, withPath = 0;
+      if (rule === 'active') {
+        for (const p of puzzles) {
+          const restore = restoreRows.get(p.id) ?? null;
+          const proposed = restore ? { minSteps: restore.minSteps, hint: restore.hint } : null;
+          if (restore && (restore.a !== p.playerA || restore.b !== p.playerB)) fail(`proposed active restore ${p.id} names ${restore.a} to ${restore.b}, live has ${p.playerA} to ${p.playerB}`);
+          for (const pr of ruleProblems(graph, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
+          if (proposed) {
+            withPath += 1;
+            const chain = shortestPath(graph, p.playerA, p.playerB);
+            if (chain) for (const pr of chainProblems(rule, everyday, byName, chain, (x, y) => sharedClub(graph, x, y))) fail(`proposed active restore ${p.id}: ${pr}`);
+          }
+          const live = p.active ?? null;
+          if (activeLiveState === 'staged-null') {
+            if (live !== null) fail(`live ${p.id} has an active hint during the staged-null rollout state`);
+            else same += 1;
+          } else if (activeLiveState === 'restored') {
+            if ((live === null) !== (proposed === null) || (live && (live.minSteps !== proposed.minSteps || live.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified restore row`);
+            else same += 1;
+          }
+        }
+        console.log(`   active: proposed restore checks on the live graph (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
+        continue;
+      }
       for (const p of puzzles) {
         const live = p[rule] ?? null;
         const mig = stored.get(p.id)?.[rule] ?? null;
@@ -215,8 +301,9 @@ console.log('3) the live table, through the site\'s own fetcher');
         const chain = shortestPath(graph, p.playerA, p.playerB);
         if (chain) for (const pr of chainProblems(rule, everyday, byName, chain, (x, y) => sharedClub(graph, x, y))) fail(`live ${p.id} under ${rule}: ${pr}`);
       }
-      console.log(`   ${rule}: ${same} of ${puzzles.length} live rows equal the migration text for text, ${withPath} with a path, on ${graph.names.length} live players`);
+      console.log(`   ${rule}: ${same} of ${puzzles.length} live rows equal the migration text for text, ${withPath} with a path, on ${graph.names.length} live players${rule === 'active' ? ' (restored state)' : ''}`);
     }
+  }
   }
 }
 
@@ -235,7 +322,13 @@ console.log('4) the source: the page filters through the same module');
 
 console.log('');
 if (CONTROL) {
-  const specific = CONTROL === 'abroad' ? findings.some(f => /a Europe chain runs through/.test(f)) : findings.some(f => /tpa-945 under europe/.test(f) && /the search says/.test(f));
+  const specific = CONTROL === 'abroad'
+    ? findings.some(f => /a Europe chain runs through/.test(f))
+    : CONTROL === 'liveidentity'
+      ? findings.some(f => /proposed active restore/.test(f))
+    : CONTROL === 'livepuzzleid'
+      ? findings.some(f => /proposed active restore tpa-26 is absent from the live table/.test(f))
+      : findings.some(f => /tpa-944 under europe/.test(f) && /the search says/.test(f));
   if (failures > 0 && specific) { console.log(`simTransferPathModes control (${CONTROL}): green. The planted defect was reported (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error(`simTransferPathModes control (${CONTROL}): RED. ${failures ? 'Findings came, but not the one the control plants.' : 'The planted defect went unreported.'}`); process.exit(1);
 }

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const TermsOfService = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: September 1, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: September 7, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -38,7 +39,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">4. Accounts</h2>
-          <p>You do not need an account to play any game on the Site. If you choose to create one, you can sign up with an email address and password or sign in with Google. You are responsible for keeping your login details secure and for all activity under your account.</p>
+          <p>You do not need an account to play any game on the Site. If you choose to create one, you can sign up with an email address and password{OAUTH_PROVIDERS.google ? ' or sign in with Google' : ''}. You are responsible for keeping your login details secure and for all activity under your account.</p>
           <p className="mt-2">You agree to provide accurate information when creating an account and not to create an account using someone else's identity or a name that is offensive or impersonates another person or brand. We may suspend or remove an account that violates these Terms.</p>
           <p className="mt-2">See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for details on what account data we collect and how to request its deletion.</p>
         </div>

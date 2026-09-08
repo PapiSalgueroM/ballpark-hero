@@ -1,7 +1,7 @@
 {
   "__version": 3,
   "/": {
-    "hash": "196ad6870f123d61",
+    "hash": "96c1e8d646fda611",
     "date": "2026-09-07"
   },
   "/about": {
@@ -93,8 +93,8 @@
     "date": "2026-08-31"
   },
   "/college-grid": {
-    "hash": "26fdbecf28c78161",
-    "date": "2026-08-31"
+    "hash": "93be793bbfba3c6f",
+    "date": "2026-09-07"
   },
   "/connections": {
     "hash": "8c2bf0265e2f04fd",
@@ -125,7 +125,7 @@
     "date": "2026-08-25"
   },
   "/emoji-guess": {
-    "hash": "0e88e3de962448f6",
+    "hash": "acb33971e1dc4236",
     "date": "2026-09-07"
   },
   "/f1-constructor": {
@@ -133,8 +133,8 @@
     "date": "2026-08-30"
   },
   "/f1-driver": {
-    "hash": "ae5426d601e7de1c",
-    "date": "2026-08-30"
+    "hash": "7a3cdc6f7d30dee1",
+    "date": "2026-09-07"
   },
   "/f1-higher-lower": {
     "hash": "b5ca99adf6e05b87",
@@ -265,7 +265,7 @@
     "date": "2026-08-25"
   },
   "/missing-xi": {
-    "hash": "1673639a6d959527",
+    "hash": "529bbabf883f0c83",
     "date": "2026-09-07"
   },
   "/mlb-connect-4": {
@@ -313,8 +313,8 @@
     "date": "2026-09-03"
   },
   "/nba-connections": {
-    "hash": "1bc6805c9602c9d3",
-    "date": "2026-08-25"
+    "hash": "1f8536d90211291a",
+    "date": "2026-09-07"
   },
   "/nba-front-office": {
     "hash": "6540373a6e2a8bf7",
@@ -421,8 +421,8 @@
     "date": "2026-09-05"
   },
   "/privacy": {
-    "hash": "c5ce53c0d9914a56",
-    "date": "2026-09-02"
+    "hash": "4b17851a39d91d10",
+    "date": "2026-09-07"
   },
   "/pro-basketball": {
     "hash": "1e7a4d781e5e1ba5",
@@ -477,8 +477,8 @@
     "date": "2026-09-05"
   },
   "/soccer-career": {
-    "hash": "804a17d214a4a884",
-    "date": "2026-09-06"
+    "hash": "d47614011aa60eb1",
+    "date": "2026-09-07"
   },
   "/soccer-conquest": {
     "hash": "dc337b8d4bc6d13f",
@@ -521,12 +521,12 @@
     "date": "2026-09-05"
   },
   "/terms": {
-    "hash": "b2abdbddaf5ee055",
-    "date": "2026-09-02"
+    "hash": "fc4bf2d05dfe6f8a",
+    "date": "2026-09-07"
   },
   "/transfer-path": {
-    "hash": "5bd0c80ae09ac725",
-    "date": "2026-09-06"
+    "hash": "2ff2ed0d2d66fb49",
+    "date": "2026-09-07"
   },
   "/ufc": {
     "hash": "bcefffecfeafe9f4",
@@ -537,8 +537,8 @@
     "date": "2026-08-25"
   },
   "/whats-new": {
-    "hash": "f5527ff2f9a68d7d",
-    "date": "2026-09-05"
+    "hash": "f34992a6866e0b75",
+    "date": "2026-09-07"
   },
   "/who-am-i": {
     "hash": "c8d9b0e1afb1c729",
@@ -553,8 +553,8 @@
     "date": "2026-08-29"
   },
   "/world-cup-bracket": {
-    "hash": "0dbd6f7fa0391112",
-    "date": "2026-09-02"
+    "hash": "ff74eb7f3ef852e3",
+    "date": "2026-09-07"
   },
   "/world-xi": {
     "hash": "e22988285b704328",

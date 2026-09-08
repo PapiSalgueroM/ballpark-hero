@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: September 1, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: September 7, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -25,10 +26,10 @@ const PrivacyPolicy = () => {
           <p>DoUKnowBall is completely free. There are no subscriptions, no paid features, and no in-app purchases, so we never collect or store payment information of any kind. You can also play every game without an account. If you choose to use certain features, here is what we collect:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li><strong>Local storage data:</strong> Game progress, scores, streaks, and preferences are stored in your browser's local storage on your own device and are not sent to our servers unless described below.</li>
-            <li><strong>Account data (optional):</strong> You can create an account with an email address and password, or sign in with Google. If you do, we store your email address, display name or username, avatar (if you set one), and your game scores and streaks so we can show them back to you and on leaderboards. You never need an account to play.</li>
+            <li><strong>Account data (optional):</strong> You can create an account with an email address and password{OAUTH_PROVIDERS.google ? ', or sign in with Google' : ''}. If you do, we store your email address, display name or username, avatar (if you set one), and your game scores and streaks so we can show them back to you and on leaderboards. You never need an account to play.</li>
             <li><strong>Anonymous gameplay data:</strong> Certain game modes submit gameplay data (e.g., number of clues used, final score, puzzle date) to our database. When you are not signed in, this data is not linked to your name or email. Each row does carry a display name: your profile name if you are signed in, or a random sports themed handle your browser generates and keeps in local storage (something like "IcyPoacher-42") so your scores stay yours on leaderboards. Clearing your browser's site data mints a fresh handle.</li>
             <li><strong>Grid selection data:</strong> In grid-based games, player name selections are stored to calculate rarity scores. This is not linked to your identity unless you are signed in.</li>
-            <li><strong>Reported issues:</strong> If you use the "Report" button on a game to flag a wrong or outdated answer, we store the report text you submit so we can review and fix it.</li>
+            <li><strong>Reported issues:</strong> If you use a Report button, we store the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game, such as its puzzle, mode, target, lineup, current path, or last rejected answer. This helps us reproduce the issue. The report payload does not attach your account, email address, a screenshot, or general device data.</li>
           </ul>
         </div>
 
@@ -58,12 +59,14 @@ const PrivacyPolicy = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">4. Third-Party Services</h2>
           <p>We use the following third-party services:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li><strong>Supabase:</strong> Our backend provider. It hosts our database and handles account sign-up and sign-in (email/password and Google sign-in). Account data, scores, and streaks are stored here.</li>
-            <li><strong>Google Sign-In:</strong> If you choose to sign in with Google, Google shares your name, email address, and profile picture with us to create your account. Google's own privacy policy applies to that sign-in process.</li>
+            <li><strong>Supabase:</strong> Our backend provider. It hosts our database and handles account sign-up and sign-in (email/password{OAUTH_PROVIDERS.google ? ' and Google sign-in' : ''}). Account data, scores, and streaks are stored here.</li>
+            {OAUTH_PROVIDERS.google && (
+              <li><strong>Google Sign-In:</strong> If you choose to sign in with Google, Google shares your name, email address, and profile picture with us to create your account. Google's own privacy policy applies to that sign-in process.</li>
+            )}
             <li><strong>Google AdSense:</strong> We display advertisements provided by Google AdSense, and only after you have chosen Accept on our cookie banner. We ask Google for non-personalized ads on this site, so ads are selected from the page you are viewing rather than from a profile of your browsing. Google still uses cookies for things like frequency capping and fraud prevention. Section 5 has the full advertising disclosure and every opt-out link, including <a href="https://www.google.com/settings/ads" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's Ads Settings</a>.</li>
             <li><strong>Google Analytics:</strong> We use Google Analytics 4 to see which games people play and how the Site is used, so we know what to build next. It loads only after you choose Accept on our cookie banner, and it uses cookies to tell one visit from another. Google Analytics 4 uses your IP address to work out your rough location and then discards it; it is not stored in our reports. You can also opt out of Google Analytics everywhere with <a href="https://tools.google.com/dlpage/gaoptout" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's browser add-on</a>.</li>
             <li><strong>Lovable (hosting):</strong> The Site itself is built and hosted on Lovable's platform, which serves the pages and assets you load. Like any web host, its servers receive standard technical request data (such as your IP address and browser type) in order to deliver the Site.</li>
-            <li><strong>FormSubmit:</strong> When you use a Report button, the report is relayed to our inbox through FormSubmit, an email relay service. Only the report text you typed and the page you were on are sent, nothing about your identity.</li>
+            <li><strong>FormSubmit:</strong> When you use a Report button, the report is relayed to our inbox through FormSubmit, an email relay service. The relay receives the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game. We do not attach your account, email address, a screenshot, or general device data to the report.</li>
             <li><strong>AI services (Google Gemini):</strong> Many of our games use an AI model to check answers and rate lineups. When you type an answer into a grid, board, or lineup game, the text you typed is sent through our backend to an AI model (currently Google's Gemini, reached either directly or through our hosting provider Lovable's AI gateway) so it can be verified against the category, and in games like "Build Your XI" the AI generates a rating for your team. Only the game content itself (your typed answer, player names, team names, formation data) is sent. Your name, email, account details, and device identifiers are never included, we do not use your inputs to train any model of our own, and the AI's output is only ever a validation result or rating shown back to you in the game.</li>
           </ul>
         </div>

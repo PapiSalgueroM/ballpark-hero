@@ -20,6 +20,18 @@ export default defineConfig({
       ...(process.env.TYCOON_AWAY_CONTROL === "loadonly"
         ? { "@/hooks/useStadiumTycoon": path.resolve(__dirname, "./src/hooks/__control_useStadiumTycoon.ts") }
         : {}),
+      ...(process.env.COMPLETION_HOOK
+        ? { "@/hooks/useGameCompletion": path.resolve(process.env.COMPLETION_HOOK) }
+        : {}),
+      ...(process.env.CONQUEST_NBA_HOOK
+        ? { "@/hooks/useConquestNba": path.resolve(process.env.CONQUEST_NBA_HOOK) }
+        : {}),
+      ...(process.env.CONQUEST_NBA_BOARD
+        ? { "@/components/conquest/ConquestBoardNba": path.resolve(process.env.CONQUEST_NBA_BOARD) }
+        : {}),
+      ...(process.env.POLL_FIXTURES
+        ? { "@/data/pollFixtures": path.resolve(process.env.POLL_FIXTURES) }
+        : {}),
       /* Round 503 negative control. scripts/simDailyRecord.mjs writes a copy of
          the daily engine carrying the pre 503 stale closure reads in addGuess
          and sets this variable, so src/test/dailyRecord.test.tsx can be pointed

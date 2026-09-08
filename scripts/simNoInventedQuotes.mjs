@@ -188,16 +188,23 @@ function namesIn(text) {
  */
 function violation(text, strict = false) {
   if (typeof text !== 'string' || text.length < 8) return null;
+  /* Source files contain thousands of factual and structural lines that can
+     never be speech or an allegation. Check that cheap shape first. The old
+     order compared every one of those lines with every real roster name and
+     made this guard take about eighteen minutes without changing its answer. */
+  const quoted = text.match(QUOTED) ?? [];
+  const spoken = quoted.filter(isSpeech);
+  const unquotedSpeech = UNQUOTED_SPEECH.test(deaccent(text));
+  const alleged = text.match(ALLEGATION);
+  if (spoken.length === 0 && !unquotedSpeech && !alleged) return null;
+
   const names = namesIn(text);
   if (names.length === 0) return null;
-  const quoted = text.match(QUOTED) ?? [];
-  for (const q of quoted) {
-    if (!isSpeech(q)) continue;
+  for (const q of spoken) {
     if (strict && namesIn(q).length === 0) continue;
     return `real name (${names[0]}) shares a line with quoted speech ${q.slice(0, 60)}`;
   }
-  if (UNQUOTED_SPEECH.test(deaccent(text))) return `real name (${names[0]}) hands over to a first person sentence`;
-  const alleged = text.match(ALLEGATION);
+  if (unquotedSpeech) return `real name (${names[0]}) hands over to a first person sentence`;
   if (alleged) return `real name (${names[0]}) next to alleged conduct "${alleged[0]}"`;
   return null;
 }
