@@ -3,6 +3,8 @@
 September 8, 2026. Worktree `.worktrees/round-540-attack-save-choice`, branch
 `codex/round-540-attack-save-choice`, base539 `060d7096`, claim `1d3164b3`.
 
+Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
+
 ## Change
 
 After a failed Attack save, an active Retry previously left unsaved-play

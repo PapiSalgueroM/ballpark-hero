@@ -3,6 +3,8 @@
 September 8, 2026. Found during Round 540. This issue is NOT fixed by the
 Round 540 unsaved-choice guard. It is the next Round 541 candidate.
 
+Raw-queue diagnostic ships in `34f41fad` (draft PR91).
+
 ## Actual browser reproduction
 
 The two tabs share an origin and browser context. Both reach the real seed9

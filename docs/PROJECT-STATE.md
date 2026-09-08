@@ -2,6 +2,8 @@
 
 ## Round 540 Attack save-choice guard, September 8, 2026
 
+Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
+
 Verified in `.worktrees/round-540-attack-save-choice`, branch
 `codex/round-540-attack-save-choice`, base539 `060d7096`, claim `1d3164b3`.
 All four unsaved-play choices now lock while a save is pending, and the

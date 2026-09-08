@@ -2,6 +2,8 @@
 
 ## Round 540 complete, September 8, 2026
 
+Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
+
 Codex owns the verified Attack save-choice guard in
 `.worktrees/round-540-attack-save-choice`, branch
 `codex/round-540-attack-save-choice`, base539 `060d7096`, claim `1d3164b3`.
