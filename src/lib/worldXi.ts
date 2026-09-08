@@ -175,8 +175,8 @@ interface PoolRow {
 }
 
 /**
- * Boot fetch. Returns null on any failure or on a suspiciously small pool so
- * the page can show an error state with retry.
+ * Boot fetch. Required player queries must all succeed; optional position
+ * history can be absent. A failed or small pool uses the page's retry state.
  */
 export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
   try {
@@ -226,7 +226,8 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
     }
     const rows: PoolRow[] = [];
     for (const r of results) {
-      if (!r.error && r.data) rows.push(...(r.data as PoolRow[]));
+      if (r.error || !r.data) return null;
+      rows.push(...(r.data as PoolRow[]));
     }
     if (rows.length === 0) return null;
 

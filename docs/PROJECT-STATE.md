@@ -1,5 +1,23 @@
 # Project state
 
+## Round 539 World XI complete pool, September 8, 2026
+
+Verified in `.worktrees/round-539-world-xi-pool`, branch
+`codex/round-539-world-xi-pool`, base538 `db9766d9`, claim `90c8fe8f`.
+Required player-page failures now use the existing retry screen instead of
+silently omitting players or falling back to an older record. Optional position
+history remains fail-soft. Actual-function baseline20fail/7pass becomes27pass;
+source controls earn21 exact failures and runtime errors reject. Both exact
+TypeScript checks, build32.54seconds, all15 site fences and the selected pool
+and season-report harnesses pass. Phone/desktop pass6 normal scenarios plus
+2 action controls, each accepting a player from the recovered middle page.
+Main image review is clear. Evidence: docs/world-xi-pool-2026-09-08.md.
+Preview4215 PID4980: index-DYgVTiKy.js and WorldXi-DaR_DXKt.js. Draft-only,
+no sports-data changes, backend/account writes, broad suite, merge or publish.
+Preserve root, earlier worktrees and previews. Next540: the reproduced Soccer
+Attack queued-save/unsaved-choice race. Grid-tier partial-fetch false-green
+is separately reproduced and pending.
+
 ## Round 538 NBA retired callback cleanup, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-538-nba-disposal`, branch

@@ -1,17 +1,20 @@
 # Work board
 
-## Round 539 claimed, September 8, 2026
+## Round 539 complete, September 8, 2026
 
-Codex owns the World XI required-player-page completeness repair, pending
-an actual-function baseline reproduction. Worktree `.worktrees/round-539-world-xi-pool`,
-branch `codex/round-539-world-xi-pool`, base 538 `db9766d9` (draft PR89).
-A failed required page must use the existing retry state instead of silently
-removing players. Preserve optional verified-position history and existing
-pool rules. Use synthetic local fixtures, exact negative controls, scoped
-checks and phone/desktop retry coverage. Root belongs to Claude. Preserve
-all earlier worktrees and previews. Draft PR only, no real player data,
-backend/account writes, broad suite, main merge or publication. Next free 540.
-
+Codex owns the verified World XI required-player-page repair in
+`.worktrees/round-539-world-xi-pool`, branch `codex/round-539-world-xi-pool`,
+base538 `db9766d9`, claim `90c8fe8f`. Required errors/null data now reject the
+pool and use existing Retry. Optional history remains available as a fallback.
+27 actual-function cases,21 controlled failures and runtime rejection pass;
+both exact types, build32.54seconds, all15 site checks and selected pool/report
+harnesses pass. Phone/desktop pass6 normal cases plus2 action controls, each
+making a valid pick from the recovered page. Main visual review clear.
+Evidence: docs/world-xi-pool-2026-09-08.md. Preview4215 PID4980,
+index-DYgVTiKy.js and WorldXi-DaR_DXKt.js. Draft-only, no data/backend/account
+writes, broad suite, merge or publish. Preserve root/worktrees/previews.
+Next540: reproduced Soccer Attack save-retry/unsaved-choice race. Grid-tier
+partial-fetch false-green remains a separate follow-up.
 ## Round 538 complete, September 8, 2026
 
 Codex owns the confirmed NBA Arcade post-unmount callback repair. Worktree
