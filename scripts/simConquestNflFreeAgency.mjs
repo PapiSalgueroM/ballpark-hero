@@ -58,7 +58,7 @@ const CONTROLS = {
   unmount: hook(4, 'UNMOUNT: disposed callbacks reject before reading the candidate',
     '  useEffect(() => () => { freeAgencyTokenRef.current = null; }, []);', ''),
   metadata: hook(5, 'ACQUIRED: canonical global metadata keeps the strong recruit and waives the actual weakest player',
-    '      const ovr = playerMap.get(name)?.overall ?? lookupPlayerInfo(name).overall;', '      const ovr = playerMap.get(name)?.overall ?? 75;'),
+    '      const ovr = getNflRosterPlayer(name, favoriteTeam)?.overall ?? 75;', '      const ovr = TEAM_MAP.get(favoriteTeam)?.players?.find(player => player.name === name)?.overall ?? 75;'),
   released: hook(6, 'RELEASED: signing history does not hide a candidate who was waived',
     '    const pool: ConquestFreeAgentCandidate[] = CONQUEST_FREE_AGENCY_POOL.filter(c => !activeRosterNames.has(c.name));',
     '    const pool: ConquestFreeAgentCandidate[] = CONQUEST_FREE_AGENCY_POOL.filter(c => !activeRosterNames.has(c.name) && !signedFreeAgents.includes(c.name));'),

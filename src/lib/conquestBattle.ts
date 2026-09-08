@@ -1,5 +1,5 @@
 import { TEAM_MAP, ConquestPlayer } from '@/data/conquestData';
-import { TEAM_LEGENDS } from '@/data/conquestPowerups';
+import { getNflRosterPlayer } from '@/lib/conquestRosterNfl';
 import { winProbability } from '@/lib/perfectSeason';
 
 /* ── Types ── */
@@ -48,15 +48,7 @@ export interface BattleSimulation {
 /* ── Helpers ── */
 
 function getPlayersByPos(roster: string[], teamId: string) {
-  const team = TEAM_MAP.get(teamId);
-  const legend = TEAM_LEGENDS[teamId];
-  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
-
-  if (legend && roster.includes(legend.name) && !playerMap.has(legend.name)) {
-    playerMap.set(legend.name, { name: legend.name, position: legend.position, overall: 99, keyStat: 'Legend' });
-  }
-
-  const all = roster.map(name => playerMap.get(name) || { name, position: '?', overall: 75, keyStat: '' });
+  const all = roster.map(name => getNflRosterPlayer(name, teamId) || { name, position: '?', overall: 75, keyStat: '' });
 
   return {
     qbs: all.filter(p => p.position === 'QB'),

@@ -11,6 +11,7 @@ import {
   FREE_AGENTS, TEAM_LEGENDS, FreeAgent,
 } from '@/data/conquestPowerups';
 import { simulateDetailedBattle, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattle';
+import { getNflRosterPlayer } from '@/lib/conquestRosterNfl';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
@@ -128,27 +129,6 @@ function buildInitialRosters(): Record<string, string[]> {
       : [...t.roster];
   });
   return r;
-}
-
-// Global name -> position/overall lookup so players keep their real card no
-// matter how they travel between rosters (steals, signings, eliminations).
-// First listing wins: team tables, then power-up FREE_AGENTS, then the Free
-// Agency tab pool, then franchise legends.
-const PLAYER_INFO = new Map<string, { position: string; overall: number }>();
-NFL_TEAMS.forEach(t => (t.players || []).forEach(p => {
-  if (!PLAYER_INFO.has(p.name)) PLAYER_INFO.set(p.name, { position: p.position, overall: p.overall });
-}));
-FREE_AGENTS.forEach(fa => {
-  if (!PLAYER_INFO.has(fa.name)) PLAYER_INFO.set(fa.name, { position: fa.position, overall: fa.overall });
-});
-CONQUEST_FREE_AGENCY_POOL.forEach(c => {
-  if (!PLAYER_INFO.has(c.name)) PLAYER_INFO.set(c.name, { position: c.position, overall: c.overall });
-});
-Object.values(TEAM_LEGENDS).forEach(l => {
-  if (!PLAYER_INFO.has(l.name)) PLAYER_INFO.set(l.name, { position: l.position, overall: l.overall });
-});
-function lookupPlayerInfo(name: string): { position: string; overall: number } {
-  return PLAYER_INFO.get(name) || { position: '?', overall: 75 };
 }
 
 // Get team's geographic center using real lat/lon coordinates
@@ -420,14 +400,17 @@ export function useConquest() {
   );
 
   // Build the free agent list: base free agents + eliminated team players not on active rosters
-  const buildFreeAgentList = useCallback(() => {
+  const buildFreeAgentList = useCallback((teamId: string) => {
     const activeRosterNames = new Set<string>();
     const alive = getAliveTeamsFrom(territories);
     for (const tid of alive) {
       for (const name of (rosters[tid] || [])) activeRosterNames.add(name);
     }
 
-    const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name));
+    const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name)).map(fa => {
+      const card = getNflRosterPlayer(fa.name, teamId)!;
+      return { name: fa.name, position: card.position, overall: card.overall };
+    });
     const seen = new Set(agents.map(x => x.name));
 
     // Add eliminated teams' players from their FINAL roster (not the static
@@ -437,7 +420,7 @@ export function useConquest() {
       for (const name of (rosters[elimId] || [])) {
         if (activeRosterNames.has(name) || seen.has(name)) continue;
         seen.add(name);
-        const info = lookupPlayerInfo(name);
+        const info = getNflRosterPlayer(name, teamId) || { position: '?', overall: 75 };
         agents.push({ name, position: info.position, overall: info.overall });
       }
     }
@@ -448,7 +431,7 @@ export function useConquest() {
   // Live pool for the docked Free Agency tab: the curated veteran pool plus
   // every eliminated team's final-roster players, minus anyone currently on
   // an alive roster. Eliminated-team players carry their real card via
-  // lookupPlayerInfo, so a player stolen in battle re-enters free agency if
+  // getNflRosterPlayer, so a player stolen in battle re-enters free agency if
   // the team that stole them later falls.
   const freeAgencyPool = useCallback((): ConquestFreeAgentCandidate[] => {
     const activeRosterNames = new Set<string>();
@@ -465,13 +448,13 @@ export function useConquest() {
       for (const name of (rosters[elimId] || [])) {
         if (activeRosterNames.has(name) || seen.has(name)) continue;
         seen.add(name);
-        const info = lookupPlayerInfo(name);
+        const info = getNflRosterPlayer(name, favoriteTeam || '') || { position: '?', overall: 75 };
         pool.push({ name, position: info.position, overall: info.overall, blurb: `Hit the market when the ${teamName} fell` });
       }
     }
 
     return pool.sort((a, b) => b.overall - a.overall);
-  }, [territories, rosters, eliminated]);
+  }, [territories, rosters, eliminated, favoriteTeam]);
 
   // Execute a powerup immediately
   const executePowerup = useCallback((teamId: string, puId: PowerupId) => {
@@ -486,7 +469,7 @@ export function useConquest() {
         break;
 
       case 'free_agent':
-        setFreeAgentList(buildFreeAgentList());
+        setFreeAgentList(buildFreeAgentList(teamId));
         setPowerupTeam(teamId);
         setPowerupUseType('free_agent');
         setPhase('powerup_use');
@@ -692,8 +675,8 @@ export function useConquest() {
   }, [freeAgencyToken, freeAgencyActionReady, favoriteTeam, territories, conquestsSinceSign]);
 
   // Sign a Free Agency tab candidate (item 87) to the favorite team: drops
-  // the current weakest roster player (lowest overall, via conquestData's
-  // player table with the same 75-overall fallback conquestBattle.ts uses
+  // the current weakest roster player (lowest overall, via the shared roster
+  // lookup with the same 75-overall fallback conquestBattle.ts uses
   // for unlisted names) and adds the candidate in their place, plus a small
   // clamped drift bump via the same clampDrift/POWER_RANK_CLAMP system that
   // backs battle wins and expansion bonuses, so this stays one coherent
@@ -706,12 +689,10 @@ export function useConquest() {
     const roster = rosters[favoriteTeam] || [];
     if (roster.length === 0) return;
 
-    const team = TEAM_MAP.get(favoriteTeam);
-    const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
     let weakestName = roster[0];
-    let weakestOvr = playerMap.get(roster[0])?.overall ?? lookupPlayerInfo(roster[0]).overall;
+    let weakestOvr = getNflRosterPlayer(roster[0], favoriteTeam)?.overall ?? 75;
     for (const name of roster) {
-      const ovr = playerMap.get(name)?.overall ?? lookupPlayerInfo(name).overall;
+      const ovr = getNflRosterPlayer(name, favoriteTeam)?.overall ?? 75;
       if (ovr < weakestOvr) { weakestOvr = ovr; weakestName = name; }
     }
 
