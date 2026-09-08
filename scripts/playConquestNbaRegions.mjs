@@ -42,7 +42,7 @@ function assertMap(state) {
   assert.ok(state.width > 250 && state.bleed <= 2, 'Map must fit the page');
 }
 async function enterArcade(page) {
-  await page.getByRole('button', { name: /Arcade The original mode/ }).click();
+  await page.getByRole('button', { name: /Arcade Play simulated battles/ }).click();
   const help = page.getByRole('button', { name: 'Start Conquering!', exact: true });
   if (await help.isVisible()) await help.click();
   await page.getByRole('button', { name: /Start Conquest/ }).waitFor();
@@ -127,6 +127,9 @@ try {
           const dialog = page.getByRole('dialog');
           await dialog.getByRole('heading', { name: /Steal a Player/ }).waitFor();
           await dialog.locator('button.w-full').first().click();
+          await page.waitForFunction(() => [...document.querySelectorAll('button')].some(b => /Save for Later|Next Battle/.test(b.textContent)));
+          const reward = page.getByRole('button', { name: /Save for Later/ });
+          if (await reward.isVisible()) await reward.click();
           await page.getByRole('button', { name: /Next Battle/ }).waitFor();
           playedBattle = true;
         } else {

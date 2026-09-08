@@ -9,7 +9,7 @@
 // depends on (geometry, adjacency, direction/compass math shape) is still
 // shared via conquestData.ts's exports (STATE_POSITIONS, DIRECTIONS,
 // DIR_ANGLES, DIR_LABELS, STATE_GEO_COORDS, isLightColor) and
-// conquestPowerups.ts's POWERUPS/getRandomPowerup/FREE_AGENTS, so nothing
+// conquestPowerups.ts's POWERUPS/getRandomPowerup, so nothing
 // sport-agnostic is copy-pasted twice.
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -24,7 +24,7 @@ import {
 import { NBA_STATES } from '@/data/usStatesPaths';
 import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
-  FREE_AGENTS, FreeAgent,
+  FreeAgent,
 } from '@/data/conquestPowerups';
 import { simulateDetailedBattleNba, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattleNba';
 
@@ -66,7 +66,7 @@ export interface PowerRankEntry {
 }
 
 export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride, ConquestFreeAgentCandidateNba };
-export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS_NBA, CONQUEST_FREE_AGENCY_POOL_NBA };
+export { POWERUPS, TEAM_LEGENDS_NBA, CONQUEST_FREE_AGENCY_POOL_NBA };
 
 const POWER_RANK_WIN_BUMP = 1.5;
 const POWER_RANK_LOSS_BUMP = -1.5;
@@ -187,11 +187,11 @@ function simulateBattle(
   attacker: string, defender: string,
   territories: Record<string, string | null>,
   rosters: Record<string, string[]>,
-  upgradeTeam?: string | null,
-  upgradedPlayer?: string | null,
+  teamUpgrades: Record<string, string>,
+  legendPlayers: ReadonlySet<string>,
   ratingOverrides?: Record<string, TeamRatingOverride>,
 ): BattleResult {
-  const sim = simulateDetailedBattleNba(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null, ratingOverrides);
+  const sim = simulateDetailedBattleNba(attacker, defender, territories, rosters, null, null, ratingOverrides, teamUpgrades, legendPlayers);
 
   const winnerId = sim.winner === 'att' ? attacker : defender;
   const loserId = sim.winner === 'att' ? defender : attacker;
@@ -230,7 +230,12 @@ export function useConquestNba() {
   const [rosters, setRosters] = useState(buildInitialRosters);
   const [eliminated, setEliminated] = useState<string[]>([]);
   const [turn, setTurn] = useState(0);
-  const [phase, setPhase] = useState<Phase>('ready');
+  const [phase, setPhaseState] = useState<Phase>('ready');
+  const phaseRef = useRef<Phase>('ready');
+  const setPhase = useCallback((next: Phase) => {
+    phaseRef.current = next;
+    setPhaseState(next);
+  }, []);
   const [attackingTeam, setAttackingTeam] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
   const [defendingTeam, setDefendingTeam] = useState<string | null>(null);
@@ -241,11 +246,16 @@ export function useConquestNba() {
   const [powerupStates, setPowerupStates] = useState<Set<string>>(() => pickRandomPowerupStates());
 
   const [teamSavedPowerups, setTeamSavedPowerups] = useState<Record<string, SavedPowerup[]>>({});
+  const savedPowerupsRef = useRef(teamSavedPowerups);
+  savedPowerupsRef.current = teamSavedPowerups;
   const [invincibleTeams, setInvincibleTeams] = useState<Set<string>>(new Set());
-  const [upgradeActiveTeam, setUpgradeActiveTeam] = useState<string | null>(null);
-  const [upgradedPlayer, setUpgradedPlayer] = useState<string | null>(null);
+  const [teamUpgrades, setTeamUpgrades] = useState<Record<string, string>>({});
+  const [battleUpgrades, setBattleUpgrades] = useState<Record<string, string>>({});
+  const [legendPlayers, setLegendPlayers] = useState<Set<string>>(new Set());
 
   const [pendingPowerup, setPendingPowerup] = useState<{ teamId: string; powerup: PowerupDef } | null>(null);
+  const pendingPowerupRef = useRef(pendingPowerup);
+  pendingPowerupRef.current = pendingPowerup;
   const [powerupUseType, setPowerupUseType] = useState<PowerupId | null>(null);
   const [freeAgentList, setFreeAgentList] = useState<FreeAgent[]>([]);
   const [territoryStolenState, setTerritoryStolenState] = useState<string | null>(null);
@@ -259,7 +269,10 @@ export function useConquestNba() {
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
   const [stealModalOpen, setStealModalOpen] = useState(false);
   const [pendingBattleApply, setPendingBattleApply] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
+  const pendingBattleRef = useRef(pendingBattleApply);
+  pendingBattleRef.current = pendingBattleApply;
   const [playerConfirmed, setPlayerConfirmed] = useState<string | null>(null);
+  const settlingBattleRef = useRef(false);
 
   const inFlightBattleRef = useRef<{ team: string; enemyId: string; result: BattleResult } | null>(null);
   const [canSkipBattle, setCanSkipBattle] = useState(false);
@@ -321,14 +334,16 @@ export function useConquestNba() {
       for (const name of (rosters[tid] || [])) activeRosterNames.add(name);
     }
 
-    const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name));
+    const agents: FreeAgent[] = [];
+    const offered = new Set<string>();
 
     for (const elimId of eliminated) {
       const team = NBA_TEAM_MAP.get(elimId);
       if (!team) continue;
       for (const p of (team.players || [])) {
-        if (!activeRosterNames.has(p.name)) {
+        if (!activeRosterNames.has(p.name) && !offered.has(p.name)) {
           agents.push({ name: p.name, position: p.position, overall: p.overall });
+          offered.add(p.name);
         }
       }
     }
@@ -336,99 +351,51 @@ export function useConquestNba() {
     return agents.sort((a, b) => b.overall - a.overall).slice(0, 30);
   }, [territories, rosters, eliminated]);
 
-  const executePowerup = useCallback((teamId: string, puId: PowerupId) => {
-    switch (puId) {
-      case 'invincibility':
-        setInvincibleTeams(prev => new Set([...prev, teamId]));
-        setGameLog(prev => [...prev, {
-          turn: prev.length + 1, attacker: teamId, defender: 'powerup',
-          winner: teamId, score: '🛡️ Invincibility activated!',
-        }]);
-        setPhase('ready');
-        break;
+  const activeRosterNames = new Set(getAliveTeamsFrom(territories).flatMap(id => rosters[id] || []));
+  const pendingLegend = pendingPowerup && TEAM_LEGENDS_NBA[pendingPowerup.teamId];
+  const powerupUnavailableReason = !pendingPowerup ? null
+    : pendingPowerup.powerup.id === 'invincibility' && invincibleTeams.has(pendingPowerup.teamId)
+      ? 'This team already has a shield. Save this one for later.'
+      : pendingPowerup.powerup.id === 'upgrade' && teamUpgrades[pendingPowerup.teamId]
+        ? 'This team already has an upgrade waiting for its next battle.'
+        : pendingPowerup.powerup.id === 'legend' && (!pendingLegend || activeRosterNames.has(pendingLegend.name))
+          ? 'This legend is already on an active roster or unavailable. Save this power for later.' : null;
+  const availablePowerupTerritories = pendingPowerup && powerupUseType === 'territory_steal'
+    ? findBorderEnemyStates(pendingPowerup.teamId, territories) : [];
 
-      case 'free_agent':
-        setFreeAgentList(buildFreeAgentList());
-        setPowerupUseType('free_agent');
-        setPhase('powerup_use');
-        break;
-
-      case 'upgrade': {
-        const roster = rosters[teamId] || [];
-        if (roster.length > 0) {
-          const player = roster[Math.floor(Math.random() * roster.length)];
-          setUpgradeActiveTeam(teamId);
-          setUpgradedPlayer(player);
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1, attacker: teamId, defender: 'powerup',
-            winner: teamId, score: `⬆️ ${player} upgraded to 99 OVR!`,
-          }]);
-        }
-        setPhase('ready');
-        break;
-      }
-
-      case 'legend': {
-        const legend = TEAM_LEGENDS_NBA[teamId];
-        if (legend && !(rosters[teamId] || []).includes(legend.name)) {
-          setRosters(prev => ({
-            ...prev,
-            [teamId]: [...(prev[teamId] || []), legend.name],
-          }));
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1, attacker: teamId, defender: 'powerup',
-            winner: teamId, score: `🐐 ${legend.name} joins the roster!`,
-          }]);
-        }
-        setPhase('ready');
-        break;
-      }
-
-      case 'territory_steal': {
-        const borderStates = findBorderEnemyStates(teamId, territories);
-        if (borderStates.length > 0) {
-          const stolenId = borderStates[Math.floor(Math.random() * borderStates.length)];
-          const prevOwner = territories[stolenId];
-          const stateName = STATE_POSITIONS.find(s => s.id === stolenId)?.name || stolenId;
-          setTerritoryStolenState(stolenId);
-          setTerritories(prev => ({ ...prev, [stolenId]: teamId }));
-
-          const updatedTerr = { ...territories, [stolenId]: teamId };
-          const ownerStatesLeft = prevOwner ? Object.values(updatedTerr).filter(t => t === prevOwner).length : 0;
-          if (prevOwner && ownerStatesLeft === 0) {
-            setEliminated(e => [...e, prevOwner]);
-          }
-
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1, attacker: teamId, defender: prevOwner || 'neutral',
-            winner: teamId, score: `🗺️ Stole ${stateName}!`,
-          }]);
-
-          addTimeout(() => {
-            setTerritoryStolenState(null);
-            setPhase('ready');
-          }, 1500);
-        } else {
-          setGameLog(prev => [...prev, {
-            turn: prev.length + 1, attacker: teamId, defender: 'powerup',
-            winner: teamId, score: '🗺️ No border states to steal!',
-          }]);
-          setPhase('ready');
-        }
-        break;
-      }
-    }
-  }, [territories, rosters, eliminated, buildFreeAgentList]);
+  const finishPowerup = useCallback(() => {
+    pendingPowerupRef.current = null;
+    setPendingPowerup(null);
+    setPowerupUseType(null);
+    setFreeAgentList([]);
+    setPhase('ready');
+  }, [setPhase]);
 
   const usePowerupNow = useCallback(() => {
-    if (!pendingPowerup) return;
+    if (phaseRef.current !== 'powerup_received' || !pendingPowerup
+      || pendingPowerupRef.current !== pendingPowerup || powerupUnavailableReason) return;
     const { teamId, powerup } = pendingPowerup;
-    setPendingPowerup(null);
-    executePowerup(teamId, powerup.id);
-  }, [pendingPowerup, executePowerup]);
+    if (['free_agent', 'upgrade', 'territory_steal'].includes(powerup.id)) {
+      if (powerup.id === 'free_agent') setFreeAgentList(buildFreeAgentList());
+      setPowerupUseType(powerup.id);
+      setPhase('powerup_use');
+      return;
+    }
+    finishPowerup();
+    if (powerup.id === 'invincibility') {
+      setInvincibleTeams(prev => new Set([...prev, teamId]));
+    } else if (powerup.id === 'legend' && pendingLegend) {
+      setRosters(prev => ({ ...prev, [teamId]: [...(prev[teamId] || []), pendingLegend.name] }));
+      setLegendPlayers(prev => new Set([...prev, pendingLegend.name]));
+    }
+    setGameLog(prev => [...prev, {
+      turn: prev.length + 1, attacker: teamId, defender: 'powerup', winner: teamId,
+      score: powerup.id === 'invincibility' ? '🛡️ Shield activated!' : `🐐 ${pendingLegend?.name} joins the roster!`,
+    }]);
+  }, [pendingPowerup, powerupUnavailableReason, pendingLegend, buildFreeAgentList, finishPowerup, setPhase]);
 
   const savePowerupForLater = useCallback(() => {
-    if (!pendingPowerup) return;
+    if (phaseRef.current !== 'powerup_received' || !pendingPowerup || pendingPowerupRef.current !== pendingPowerup) return;
     const { teamId, powerup } = pendingPowerup;
     setTeamSavedPowerups(prev => {
       const current = prev[teamId] || [];
@@ -437,24 +404,35 @@ export function useConquestNba() {
       }
       return { ...prev, [teamId]: [...current, { id: powerup.id, label: powerup.label, icon: powerup.icon }] };
     });
-    setPendingPowerup(null);
-    setPhase('ready');
-  }, [pendingPowerup]);
+    finishPowerup();
+  }, [pendingPowerup, finishPowerup]);
 
   const useSavedPowerup = useCallback((teamId: string, index: number) => {
     const saved = teamSavedPowerups[teamId];
-    if (!saved || !saved[index]) return;
+    if (phaseRef.current !== 'ready' || !getAliveTeamsFrom(territories).includes(teamId)
+      || !saved || !saved[index] || savedPowerupsRef.current[teamId]?.[index] !== saved[index]) return;
     const pu = saved[index];
     setTeamSavedPowerups(prev => ({
       ...prev,
       [teamId]: prev[teamId].filter((_, i) => i !== index),
     }));
     setPendingPowerup({ teamId, powerup: POWERUPS.find(p => p.id === pu.id)! });
-  }, [teamSavedPowerups]);
+    setPhase('powerup_received');
+  }, [teamSavedPowerups, territories, setPhase]);
+
+  const cancelPowerupUse = useCallback(() => {
+    if (phaseRef.current !== 'powerup_use' || !pendingPowerup || pendingPowerupRef.current !== pendingPowerup) return;
+    setPowerupUseType(null);
+    setFreeAgentList([]);
+    setPhase('powerup_received');
+  }, [pendingPowerup, setPhase]);
 
   const signFreeAgent = useCallback((playerName: string) => {
-    if (!pendingPowerup && !attackingTeam) return;
-    const teamId = pendingPowerup?.teamId || attackingTeam!;
+    if (phaseRef.current !== 'powerup_use' || powerupUseType !== 'free_agent' || !pendingPowerup
+      || pendingPowerupRef.current !== pendingPowerup || !freeAgentList.some(p => p.name === playerName)
+      || activeRosterNames.has(playerName)) return;
+    const { teamId } = pendingPowerup;
+    finishPowerup();
     setRosters(prev => ({
       ...prev,
       [teamId]: [...(prev[teamId] || []), playerName],
@@ -463,9 +441,42 @@ export function useConquestNba() {
       turn: prev.length + 1, attacker: teamId, defender: 'powerup',
       winner: teamId, score: `✍️ Signed ${playerName}!`,
     }]);
-    setPowerupUseType(null);
-    setPhase('ready');
-  }, [pendingPowerup, attackingTeam]);
+  }, [pendingPowerup, powerupUseType, freeAgentList, activeRosterNames, finishPowerup]);
+
+  const chooseUpgradePlayer = useCallback((playerName: string) => {
+    if (phaseRef.current !== 'powerup_use' || powerupUseType !== 'upgrade' || !pendingPowerup
+      || pendingPowerupRef.current !== pendingPowerup || teamUpgrades[pendingPowerup.teamId]
+      || !(rosters[pendingPowerup.teamId] || []).includes(playerName)) return;
+    const { teamId } = pendingPowerup;
+    finishPowerup();
+    setTeamUpgrades(prev => ({ ...prev, [teamId]: playerName }));
+    setGameLog(prev => [...prev, {
+      turn: prev.length + 1, attacker: teamId, defender: 'powerup', winner: teamId,
+      score: `⬆️ ${playerName} upgraded to 99 OVR for this team's next battle!`,
+    }]);
+  }, [pendingPowerup, powerupUseType, teamUpgrades, rosters, finishPowerup]);
+
+  const choosePowerupTerritory = useCallback((stateId: string) => {
+    if (phaseRef.current !== 'powerup_use' || powerupUseType !== 'territory_steal' || !pendingPowerup
+      || pendingPowerupRef.current !== pendingPowerup || !availablePowerupTerritories.includes(stateId)) return;
+    const { teamId } = pendingPowerup;
+    const previousOwner = territories[stateId]!;
+    const updated = { ...territories, [stateId]: teamId };
+    const aliveAfter = getAliveTeamsFrom(updated);
+    finishPowerup();
+    setTerritories(updated);
+    if (!aliveAfter.includes(previousOwner)) {
+      setEliminated(prev => [...prev, previousOwner]);
+      setTeamUpgrades(prev => Object.fromEntries(Object.entries(prev).filter(([id]) => id !== previousOwner)));
+    }
+    setTerritoryStolenState(stateId);
+    const stateName = STATE_POSITIONS.find(s => s.id === stateId)?.name || stateId;
+    setGameLog(prev => [...prev, {
+      turn: prev.length + 1, attacker: teamId, defender: 'powerup', winner: teamId, score: `🗺️ Stole ${stateName}!`,
+    }]);
+    if (aliveAfter.length <= 1) setPhase('gameover');
+    addTimeout(() => setTerritoryStolenState(null), 1500);
+  }, [pendingPowerup, powerupUseType, availablePowerupTerritories, territories, finishPowerup, setPhase]);
 
   const setFavoriteTeam = useCallback((teamId: string) => {
     setFavoriteTeamState(teamId);
@@ -510,16 +521,16 @@ export function useConquestNba() {
   }, [canSignFreeAgent, favoriteTeam, rosters]);
 
   const startBattle = useCallback(() => {
+    if (phaseRef.current !== 'ready') return;
     const alive = getAliveTeamsFrom(territories);
     if (alive.length <= 1) { setPhase('gameover'); return; }
 
     clearTimeouts();
     setNoEnemyMsg(null);
 
-    if (upgradeActiveTeam) {
-      setUpgradeActiveTeam(null);
-      setUpgradedPlayer(null);
-    }
+    settlingBattleRef.current = false;
+    setTerritoryStolenState(null);
+    setBattleUpgrades({});
 
     const team = alive[Math.floor(Math.random() * alive.length)];
 
@@ -606,7 +617,10 @@ export function useConquestNba() {
       }
     } else {
       const enemyId = target.id;
-      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides());
+      const upgrades = Object.fromEntries(Object.entries(teamUpgrades).filter(([id]) => id === team || id === enemyId));
+      const result = simulateBattle(team, enemyId, territories, rosters, upgrades, legendPlayers, buildRatingOverrides());
+      setBattleUpgrades(upgrades);
+      setTeamUpgrades(prev => Object.fromEntries(Object.entries(prev).filter(([id]) => id !== team && id !== enemyId)));
 
       const startPlayByPlay = () => {
         setBattleResult(result);
@@ -655,7 +669,7 @@ export function useConquestNba() {
         addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides]);
+  }, [territories, rosters, powerupStates, teamUpgrades, legendPlayers, buildRatingOverrides, setPhase]);
 
   const applyPowerRankUpdate = useCallback((winnerId: string, loserId: string) => {
     setPowerRankDrift(prev => ({
@@ -675,7 +689,7 @@ export function useConquestNba() {
     setConquestsSinceSign(prev => prev + 1);
   }, []);
 
-  const applyBattleResult = useCallback((attacker: string, defender: string, result: BattleResult) => {
+  const applyBattleResult = useCallback((attacker: string, defender: string, result: BattleResult, stolenPlayer?: string) => {
     const loserIsInvincible = invincibleTeams.has(result.loser);
     applyPowerRankUpdate(result.winner, result.loser);
 
@@ -687,6 +701,7 @@ export function useConquestNba() {
         turn: prev.length + 1, attacker, defender,
         winner: result.winner,
         score: `${result.winScore}-${result.loseScore} · away raid repelled`,
+        stolenPlayer,
       }]);
       setPhase('ready');
       return;
@@ -703,36 +718,31 @@ export function useConquestNba() {
         turn: prev.length + 1, attacker, defender,
         winner: result.winner,
         score: `${result.winScore}-${result.loseScore} (🛡️ ${NBA_TEAM_MAP.get(result.loser)?.name} survived!)`,
+        stolenPlayer,
       }]);
       setPhase('ready');
       return;
     }
 
-    setTerritories(prev => {
-      const newTerr = { ...prev };
-      Object.keys(newTerr).forEach(s => {
-        if (newTerr[s] === result.loser) newTerr[s] = result.winner;
-      });
-
-      const aliveAfter = getAliveTeamsFrom(newTerr);
-
-      setEliminated(e => [...e, result.loser]);
-      setTurn(t => t + 1);
-      setGameLog(prev => [...prev, {
-        turn: prev.length + 1, attacker, defender,
-        winner: result.winner,
-        score: `${result.winScore}-${result.loseScore}`,
-      }]);
-
-      if (aliveAfter.length <= 1) {
-        setPhase('gameover');
-      } else {
-        setPhase('ready');
-      }
-
-      return newTerr;
+    const newTerr = { ...territories };
+    Object.keys(newTerr).forEach(s => {
+      if (newTerr[s] === result.loser) newTerr[s] = result.winner;
     });
-  }, [rosters, invincibleTeams, applyPowerRankUpdate]);
+    const aliveAfter = getAliveTeamsFrom(newTerr);
+    setTerritories(newTerr);
+    setEliminated(e => [...e, result.loser]);
+    setTurn(t => t + 1);
+    setGameLog(prev => [...prev, {
+      turn: prev.length + 1, attacker, defender, winner: result.winner,
+      score: `${result.winScore}-${result.loseScore}`, stolenPlayer,
+    }]);
+    if (aliveAfter.length <= 1) {
+      setPhase('gameover');
+    } else {
+      setPendingPowerup({ teamId: result.winner, powerup: getRandomPowerup() });
+      setPhase('powerup_received');
+    }
+  }, [territories, invincibleTeams, applyPowerRankUpdate, setPhase]);
 
   const openStealModal = useCallback(() => {
     setStealModalOpen(true);
@@ -743,35 +753,37 @@ export function useConquestNba() {
   }, []);
 
   const stealPlayer = useCallback((playerName: string) => {
-    if (!battleResult || !pendingBattleApply) return;
+    if (phaseRef.current !== 'battle' || !battleResult || !pendingBattleApply || settlingBattleRef.current
+      || pendingBattleRef.current !== pendingBattleApply || !(rosters[battleResult.loser] || []).includes(playerName)
+      || (rosters[battleResult.winner] || []).includes(playerName)) return;
+    settlingBattleRef.current = true;
     setPlayerConfirmed(playerName);
     setStealModalOpen(false);
 
-    setTimeout(() => {
+    addTimeout(() => {
       setRosters(prev => {
         const next = { ...prev };
         next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
         next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
         return next;
       });
-      setGameLog(prev => {
-        const u = [...prev];
-        if (u.length > 0) u[u.length - 1].stolenPlayer = playerName;
-        return u;
-      });
-
-      applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+      applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result, playerName);
+      pendingBattleRef.current = null;
       setPendingBattleApply(null);
       setPlayerConfirmed(null);
       setBoxScore(null);
       setVisiblePlays([]);
     }, 1200);
-  }, [battleResult, pendingBattleApply, applyBattleResult]);
+  }, [battleResult, pendingBattleApply, rosters, applyBattleResult]);
 
   const skipSteal = useCallback(() => {
-    if (!pendingBattleApply) return;
+    if (phaseRef.current !== 'battle' || !pendingBattleApply || settlingBattleRef.current
+      || pendingBattleRef.current !== pendingBattleApply) return;
+    settlingBattleRef.current = true;
     applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+    pendingBattleRef.current = null;
     setPendingBattleApply(null);
+    setStealModalOpen(false);
     setBoxScore(null);
     setVisiblePlays([]);
   }, [pendingBattleApply, applyBattleResult]);
@@ -806,11 +818,15 @@ export function useConquestNba() {
     setGameLog([]);
     setPowerupStates(pickRandomPowerupStates());
     setTeamSavedPowerups({});
+    savedPowerupsRef.current = {};
     setInvincibleTeams(new Set());
-    setUpgradeActiveTeam(null);
-    setUpgradedPlayer(null);
+    setTeamUpgrades({});
+    setBattleUpgrades({});
+    setLegendPlayers(new Set());
     setPendingPowerup(null);
+    pendingPowerupRef.current = null;
     setPowerupUseType(null);
+    setFreeAgentList([]);
     setTerritoryStolenState(null);
     setVisiblePlays([]);
     setPlayByPlayActive(false);
@@ -818,6 +834,8 @@ export function useConquestNba() {
     setBoxScore(null);
     setStealModalOpen(false);
     setPendingBattleApply(null);
+    pendingBattleRef.current = null;
+    settlingBattleRef.current = false;
     setPlayerConfirmed(null);
     setPowerRankDrift(buildInitialPowerRankDrift());
     setPowerRankRecord({});
@@ -832,8 +850,9 @@ export function useConquestNba() {
     territories, rosters, eliminated, turn, phase,
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
     animStartTime, noEnemyMsg, powerupStates,
-    teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
+    teamSavedPowerups, invincibleTeams, teamUpgrades, battleUpgrades, legendPlayers,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState, targetState,
+    powerupUnavailableReason, availablePowerupTerritories,
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     stealModalOpen, pendingBattleApply, playerConfirmed,
     powerRankings,
@@ -843,6 +862,7 @@ export function useConquestNba() {
     canSkipBattle, skipToResult,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,
     usePowerupNow, savePowerupForLater, useSavedPowerup, signFreeAgent,
+    chooseUpgradePlayer, choosePowerupTerritory, cancelPowerupUse,
     openStealModal, closeStealModal, skipSteal,
   };
 }

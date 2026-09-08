@@ -1,5 +1,35 @@
 # Project state
 
+## Round 527 NBA Arcade visible powers, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-527-nba-powers`, branch
+`codex/round-527-nba-powers`, based on Round 526 `7c8168f8` (draft PR77).
+Implementation `da5f5453`, draft PR78: https://github.com/PapiSalgueroM/ballpark-hero/pull/78.
+Successful nonfinal attacker conquests now award one power after player choice.
+Each team can bank two powers and reopen them between battles. NBA recruits
+come from eliminated rosters; upgrades last through the owner's next battle,
+including defense; activated legends retain their modifier after transfer.
+Territory powers choose a nearby enemy region and handle final victory.
+Repeated actions and reset/unmount timers are guarded. Help and the worked
+example explain this unranked run and all five existing powers.
+
+The missing acquisition was reproduced before editing. All 37 scoped cases
+pass, plus 29 exact hook/engine controls and 16 UI controls (84 expected
+assertion failures). Unexpected runtime failures are rejected. Both exact
+types, build, scoped NBA snapshot generation and all fifteen site fences pass.
+Built phone/desktop runs use all five powers, including saved-button negative
+controls. The prior phone map/play walk and missing-region control also pass.
+Independent source/UI review cleared the eliminated-upgrade and legend-identity
+fixes. Evidence: docs/nba-powers-2026-09-08.md. Preview4205 serves
+`index-BXbTBTnd.js`.
+
+This resolves Round526's ordinary-power acquisition publication dependency.
+The owner's broader reference-video feature list remains a separate task;
+this is a repair of the existing Arcade mode. No new sports data or win-odds
+retuning. No real backend/account writes, default full suite, root edits,
+merge or publication. Preserve previous previews and sibling Round525, which
+is not in this branch. Next free528.
+
 ## Round 526 NBA Arcade visible territories, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-526-nba-visible-regions`,

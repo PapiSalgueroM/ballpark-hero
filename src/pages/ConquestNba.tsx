@@ -88,8 +88,8 @@ const ConquestNba = () => {
                 <div className="text-3xl">🎮</div>
                 <p className="mt-2 font-display text-lg font-bold text-foreground">Arcade</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  The original mode: play-by-play battles, steal a player from every beaten team,
-                  grab power-ups, and expand territory by territory until the map is yours.
+                  Play simulated battles, recruit from the losing roster, and earn a power after each
+                  conquest. Use it or save it for later. One team takes the map in this unranked run.
                 </p>
               </button>
             </div>
@@ -105,7 +105,7 @@ const ConquestNba = () => {
               "Imperialism mode: pick your team, predict their game each round, then watch all 30 results redraw the map. Winners take EVERYTHING the loser owned.",
               "Wiped off the map? Keep playing. One win takes your conqueror's whole empire back.",
               "After 14 rounds the top 8 empires enter the playoffs. Losers hand everything to the winners until one team rules America.",
-              "Arcade mode keeps the original formula: play-by-play battles, steal a player from every beaten team, grab power-ups, expand territory by territory."
+              "Arcade mode: a winning attacker takes the defender's empire and earns a power after the player choice. Use it now or save up to two per team for this run. A failed away raid keeps both empires intact."
             ]}
             examples={[
               "Denver Nuggets start in Colorado and expand across the Mountain West",
@@ -113,7 +113,7 @@ const ConquestNba = () => {
               "Los Angeles Lakers and Clippers battle for Southern California",
               "Golden State Warriors defend the Bay Area against Pacific rivals",
               "Miami Heat push north from South Florida into the Southeast",
-              "Power-ups: Free Agent Signing, Franchise Legend, Territory Steal"
+              "Arcade example: conquer an empire, save an Upgrade, then reopen it between battles and choose a player for that team's next simulated game"
             ]}
           />
           <GameNav />

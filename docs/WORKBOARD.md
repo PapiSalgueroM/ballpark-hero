@@ -1,5 +1,20 @@
 # Work board
 
+**Round 527, Codex resumed task, scoped verification complete September 8:**
+NBA Arcade visible power rewards, bank/reopen controls, owner-specific
+selection and effect lifetime, branch `codex/round-527-nba-powers`, worktree
+`.worktrees/round-527-nba-powers`, base526 `7c8168f8` (draft PR77).
+Implementation `da5f5453`, draft PR78: https://github.com/PapiSalgueroM/ballpark-hero/pull/78.
+One power per real nonfinal conquest, NBA eliminated-roster recruits,
+owner-next-battle upgrades, explicit legend activation metadata, selectable
+territory powers and reset cleanup. 37 scoped cases, 45 source controls,
+both types/build, all15 fences, built phone/desktop powers and prior map
+walk pass. Independent review clear. Evidence docs/nba-powers-2026-09-08.md;
+preview4205. Round526 acquisition dependency resolved; broader reference
+feature list still separate. No new sports facts, real backend writes,
+root edits, full suite, merge or publication. Preserve all prior worktrees,
+previews and sibling525. Next free528.
+
 **Round 526, Codex original task, scoped verification complete September 8:**
 NBA Arcade hidden-region initialization in
 `.worktrees/round-526-nba-visible-regions`, branch
