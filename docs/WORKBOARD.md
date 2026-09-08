@@ -1,5 +1,17 @@
 # Work board
 
+## Round 539 claimed, September 8, 2026
+
+Codex owns the World XI required-player-page completeness repair, pending
+an actual-function baseline reproduction. Worktree `.worktrees/round-539-world-xi-pool`,
+branch `codex/round-539-world-xi-pool`, base 538 `db9766d9` (draft PR89).
+A failed required page must use the existing retry state instead of silently
+removing players. Preserve optional verified-position history and existing
+pool rules. Use synthetic local fixtures, exact negative controls, scoped
+checks and phone/desktop retry coverage. Root belongs to Claude. Preserve
+all earlier worktrees and previews. Draft PR only, no real player data,
+backend/account writes, broad suite, main merge or publication. Next free 540.
+
 ## Round 538 complete, September 8, 2026
 
 Codex owns the confirmed NBA Arcade post-unmount callback repair. Worktree
