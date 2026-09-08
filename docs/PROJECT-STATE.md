@@ -1,5 +1,23 @@
 # Project state
 
+## Round 520 dependency safety, September 8, 2026
+
+CLAIMED in `.worktrees/round-520-dependency-safety`, branch
+`codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
+Scope: targeted build-tool security updates, preserving the pinned Supabase
+SDK patch, existing product behavior, snapshots and review previews. Verify
+the current advisories and Vite migration compatibility before changing the
+manifest or lock. Use an audit baseline, clean install, exact app types,
+build, local mocked browser checks and all fifteen generated-site fences.
+No default full-suite execution: its production write probes and validator
+cache paths violate the overnight boundary. A fetch-only guard is insufficient
+for native/browser/child-process networking; broad isolation stays unbuilt.
+
+Round 519 is pushed and draft PR70 is open, stacked on Round 518. Preview 4190
+stays frozen. Root remains Claude's and now has an observed uncommitted change
+in src/lib/clubManager.ts. Do not touch it or stop its processes. No merge,
+publish, provider, billing, production data or account changes. Next free: 521.
+
 ## Round 519 query follow-up, September 8, 2026
 
 Scoped verification is complete in `.worktrees/round-519-score-query`, branch

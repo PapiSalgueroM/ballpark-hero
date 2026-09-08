@@ -1,5 +1,16 @@
 # Work board
 
+**Round 520, Codex, CLAIMED September 8:** targeted build-tool dependency safety
+in `.worktrees/round-520-dependency-safety`, branch
+`codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
+Own package.json, package-lock.json, narrowly needed compatibility changes and
+local regression checks. Preserve the pinned Supabase patch and existing
+snapshots. Recheck advisory fixes and peer support, record the failing audit,
+then verify clean install, exact types, build, local browser behavior and all
+fifteen generated-site fences. Do not run the broad default suite because it
+includes production writes; a fetch-only guard does not provide isolation.
+Root and all existing previews are untouched. Next free round: 521.
+
 **Round 519, Codex, scoped verification complete September 8:** complete bounded score queries in
 `.worktrees/round-519-score-query`, branch `codex/round-519-score-query`, based on
 Round 518 `2e6519ac` (draft PR69). Own fetchLiveScores, its query fence and the
