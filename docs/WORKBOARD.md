@@ -19,9 +19,9 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 511 (checked against origin/main on
-  2026-09-07: main is `1ecc00eb`, Round 509. The Claude Code lane holds 505 to 508 and the
-  Codex lane holds 510, see both claims below).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 512 (checked against origin/main on
+  2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
+  506 to 508 and the Codex lane holds 510 and 511, see both claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
@@ -113,6 +113,20 @@ How it works:
   season and try to turn it around. The live-start request is a large data feature, so standings,
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
+
+- **Codex lane, Round 511, CLAIMED 2026-09-07, CONQUEST OWNER CORRECTION.** Remove the
+  player-value row count from Soccer Conquest's club tiles and matching help/SEO copy.
+  Keep actual values, internal coverage data and partial-data warnings unchanged.
+  Research the owner's final chosen reference: JarradHD, "700 Team Global Imperialism:
+  Last Team Standing Wins!", https://www.youtube.com/watch?v=BmxyYaADb0U. This replaces
+  the earlier Premier League video reference. Follow its geographic map and rules, with
+  Premier League, La Liga, Europe and World presets plus included/excluded league choices.
+  The existing fixture-prediction season is not an implementation of that request.
+  Scope now: exact-rule evidence, map/data coverage audit, bounded copy removal and a
+  buildable replacement design. Do not invent global clubs, locations, rosters or ratings.
+  Cross-midnight save work remains measured but paused for this owner correction.
+  Worktree: .worktrees/round-511-midnight-saves, branch codex/round-511-midnight-saves.
+  No publication or host change. Leave the root checkout's running Round 510 suite intact.
 
 - **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FINAL GATE RUNNING.** Finish the Google URL-level audit, reconcile
   stale open bugs against current code, and repair the confirmed Footle kit-number harness
