@@ -65,9 +65,13 @@ Four things, in the order they can hurt you.
    already, in a sandbox, and died with the session. See the block below. Push after the first
    commit of a round, not at the end of it.
 
-- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. next: Round 506, being built on
-  the desktop on branch `round-506-cm-transfers` from 2026-09-08.** Rounds 503, 504 and 505 are
-  all merged on origin/main at `d1c541b3`; 506 to 508 remain claimed here.
+- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. next: Round 508.** Rounds 503, 504
+  and 505 are merged on origin/main. 506 and 507 are BUILT AND PUSHED but not merged and not
+  live, on two stacked branches:
+  `round-506-cm-transfers` (10 commits, Club Manager transfers and personal terms, plus the
+  sitewide ad placement fix) and `round-507-ucl-two-legs` (5 commits on top of it, two legged
+  Champions League ties). 508 is claimed and scoped below, not started.
+  **Publishing is on hold by the owner as of 2026-09-08.** See the note at the top of this file.
 
   **READ THIS BEFORE PICKING 506, 507 OR 508 UP AGAIN.** A claude.ai/code session built
   Round 506 (transfers, nine engine commits through personal terms), Round 507 (Soccer Career
@@ -209,8 +213,29 @@ Four things, in the order they can hurt you.
   takeover date must come from verified sources rather than reconstructed history, so it is a
   data acquisition job before it is an engine one and it needs its own round.
 
-  **508** is reserved for what 506 and 507 leave named as not done, or the next item off
-  the ledger if they finish clean.
+  **508 A LOAN OUT CARRIES THE SAME TERMS AS A LOAN IN, CLAIMED 2026-09-08.** Straight off what
+  Round 506 named as not done, and it is a symmetry gap rather than a new idea. Round 506 gave
+  an INCOMING loan an option to buy and a release figure and taught the player who owns him;
+  an OUTGOING loan is still what it was in Round 94: `loanOutPlayer` banks a one off fee, files
+  `{ player, club, fee, season }` into `career.loanedOut`, and `returnLoanedPlayers` brings
+  everybody home unconditionally at the rollover with a development bump.
+  WHAT 508 ADDS: an option to buy the borrowing club can take up (money in, at a figure agreed
+  when he leaves), and a recall figure that lets me bring him back early when the first choice
+  in his position gets hurt. Both go on `LoanOut`, which is read in exactly one place, so the
+  change is cheap. `returnLoanedPlayers` is the single settlement point and is where an
+  exercised option is paid and the player is removed rather than returned.
+  THE TRAP TO RESPECT, recorded by the Round 506 scout: `acceptBid` RECOMPUTES a loan fee from
+  `loanOutFee` and ignores `bid.offer`. Today the two always agree because `generateBids` sets
+  the offer to exactly that, but the moment a loan carries negotiated terms that line silently
+  discards them. Fix it in the same round or the terms will not survive the AI path.
+  ALSO NAMED BY 506 AND DELIBERATELY NOT IN 508: the AI clubs do not negotiate personal terms
+  with your players when they bid. On reflection that is not really a gap in the manager's own
+  experience (what a player agrees with the club buying him is not your business), so it is
+  recorded here as considered and dropped rather than left on a list forever.
+  FILE AREA: `src/lib/clubManager.ts` (the loan block and `returnLoanedPlayers`),
+  `src/lib/clubManagerDeals.ts` (`loanTermsFor` already quotes both figures and can be reused
+  rather than copied), `src/components/club-manager/TransferScreen.tsx`, and a new section in
+  `scripts/simClubManagerDeals.mjs` beside the incoming loan one.
   FILE AREA: `src/lib/clubManager*.ts`, `src/components/club-manager/*`, `src/pages/ClubManager.tsx`,
   `src/hooks/useClubManager.ts`, `scripts/simClubManager*.mjs`, `scripts/simMatchScreen.mjs`,
   `scripts/playClubManager.mjs`; for 503 only, `src/hooks/useDailyPuzzle.ts`, the four
