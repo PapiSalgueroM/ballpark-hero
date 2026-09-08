@@ -4,6 +4,14 @@ One page, two lanes. Read this before picking work, write here before building. 
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
 
+**OWNER REVIEW CHECKPOINT, 2026-09-08.** Anthony wants to review the whole website when
+Codex and Claude reach a stable stopping point. Finish the current bounded batch and its
+verification, then pause new feature expansion for his review. Do not wait for the whole
+master list or spread a new cross-sport design first. Each lane should record its exact
+commit, preview, checks and unfinished work. Claude's shared branch is at `d1c541b3` at
+this check; unpushed progress and his stopping point remain unverified. Copero research
+and proposed priorities are in `docs/copero-reference-audit-2026-09-08.md`.
+
 How it works:
 
 - Anthony drops feedback in either chat, tablet or desktop. Whichever Claude receives it
@@ -866,6 +874,15 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **2026-09-07 CONQUEST FOLLOW-UP, SOURCE AUDIT ONLY.** The next NFL/NBA pass should
+  reproduce and fence invisible NBA regions (`CA_N`, `TX_S`), moved players falling
+  back to unknown position/rating 75, and the NBA power path sharing an NFL free-agent
+  pool. New Attack powers need explicit lifetimes and separate saves; rookie metadata
+  and current sport-specific free agents remain real-data gates. Exact paths and
+  measured coverage: `docs/conquest-next-sports-readiness-2026-09-07.md`. No fix is
+  claimed here, and existing Arcade retreat guards must not be weakened to simulate
+  the new mode's different elimination rules. Round 512 still owns the soccer board.
+
 - **ROUND 509 OWNS THE THREE ROUND 502 HANDOFF FINDINGS. MERGED THROUGH PR 60 AND VERIFIED
   LIVE.** The four restored retired My Career saves are marked as restored before their
   retired phase renders, so legacy score cannot pay again on a visit. The NBA Conquest attacker
@@ -885,8 +902,11 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 - **MEASURED 2026-09-07, DAILY SAVE CLEANUP CAN DELETE A NEWER DAY.** writeDailyRecord removes
   every date other than the one being written. An old tab pinned to September 7 can therefore
   delete September 8's record after it exists. Separate from Round 510's same-day Conquest
-  locks. The duplicate cleanup in useDailyPuzzle is affected too, and Conquest streaks can
-  move their lastDate backward on an older finish. Next scope: preserve newer saves with
+  locks. The duplicate load-effect cleanup in useDailyPuzzle is affected too, but its ordinary
+  late addGuess write does not prune newer keys. The Conquest result helper can move its
+  lastDate backward, while the board's serial stale-commit guard blocks the simple late-finish
+  case. A post-commit suspension interleaving still needs a board reproduction. Exact helper
+  output and distinctions: docs/midnight-save-probe-2026-09-07.md. Next scope: preserve newer saves with
   bounded exact-slug cleanup and monotonic, serialized streak writes, with real-helper and
   hook regression tests. No fix claimed yet. See docs/PROJECT-STATE.md, Open bugs.
 

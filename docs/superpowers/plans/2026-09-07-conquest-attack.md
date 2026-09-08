@@ -74,9 +74,10 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 
 ## Task 4: Integration gates, metadata and review
 
-**Files:** add scripts/simConquestAttack.mjs; update src/data/gameContent/soccer2.ts only to explain both actual modes; update docs/PROJECT-STATE.md, docs/WORKBOARD.md and this plan. Regenerate public/soccer-conquest/index.html, scripts/data/lastmod.json and public/sitemap.xml after verified build.
+**Files:** add scripts/simConquestAttack.mjs; update the soccer-conquest entry in src/data/gameContent/soccer2.ts and the PageSeo/GameSeoContent props in src/pages/SoccerConquest.tsx only to explain both actual modes; update docs/PROJECT-STATE.md, docs/WORKBOARD.md and this plan. Regenerate public/soccer-conquest/index.html, scripts/data/lastmod.json and public/sitemap.xml after verified build.
 
 - [ ] Harness runs the real Vitest tests and prints actual per-test outcomes, not filler lines. Its control mode must prove a changed production transition causes the intended invariant to fail.
+  - Include offline map-generator `--check` in the Attack harness. Carry the existing three-line per-assertion output fix from root commit 0e3f9183 into scripts/simConquestTabs.mjs; its missing output caused the earlier full runner's EMPTY result despite 23 passing tests. Do not lower the runner's output threshold or change tab-safety assertions.
 - [ ] Run node_modules/.bin/tsc --noEmit -p tsconfig.app.json, npm run build, focused engine/geometry/board checks, existing Conquest sims, then all 15 built-site fences after scoped prerender/sitemap/rebuild. Do not run those fences during a build.
 - [ ] Independently review task diffs for spec compliance and quality, fix material findings and recheck only their affected tests. Then run a whole-change review and browser play of the actual built mode.
 - [ ] Save verified code on the codex branch and hand off through a draft PR if the full combined suite is still pending. No merge to main or publish merely because a preview works. Update project state to distinguish playable English slice from the still-open La Liga/Europe/World and NFL/NBA powers work.
@@ -84,6 +85,6 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
 ## Execution record
 
 - [x] Task 1 complete (807ca0e3, 81 focused tests, review clean)
-- [ ] Task 2 complete
+- [x] Task 2 complete (3b7c7467, 103 focused tests, 20 real-map seeds, review clean)
 - [ ] Task 3 complete
 - [ ] Task 4 complete
