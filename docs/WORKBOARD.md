@@ -95,7 +95,10 @@ How it works:
   network stall. The fetch lacks a deadline and its failed-page continue advances the offset,
   so a failed page can also be silently omitted. Scope: `scripts/simFootleKitNumbers.mjs`, its
   regression harness, and audit/state documentation. No Club Manager files or live data writes.
-  Further gameplay work will be claimed once a remaining defect is reproduced.
+  Added after reproduction: Conquest stale-tab overwrite. Round 476 already saves single-tab
+  runs, but an older second tab can overwrite a finished daily as unfinished across all five
+  sports. Scope also includes `src/lib/conquestDaily.ts`, `conquestRun.ts`, the shared board
+  and focused tests. Preserve the existing resume flow and reject stale progress writes.
 
 - **Codex lane, Round 509, CLAIMED 2026-09-07. CODE COMPLETE, VERIFIED AND MERGED THROUGH
   PR 60 AT `1ecc00eb`. DEPLOY STILL PENDING.** This batch
