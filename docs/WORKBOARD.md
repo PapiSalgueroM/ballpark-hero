@@ -121,12 +121,19 @@ How it works:
   Last Team Standing Wins!", https://www.youtube.com/watch?v=BmxyYaADb0U. This replaces
   the earlier Premier League video reference. Follow its geographic map and rules, with
   Premier League, La Liga, Europe and World presets plus included/excluded league choices.
+  Additional owner reference: Deansworld, "NFL IMPERIALISM RETURNS in Madden 26",
+  https://www.youtube.com/watch?v=35OCnB27MWA. NFL and NBA should follow its geographic
+  map style and power-up ideas. No NBA-specific source was supplied. Exact observations,
+  inconsistencies and a proposed build contract are in
+  docs/conquest-reference-audit-2026-09-07.md. Do not imply those new modes are already built.
   The existing fixture-prediction season is not an implementation of that request.
   Scope now: exact-rule evidence, map/data coverage audit, bounded copy removal and a
   buildable replacement design. Do not invent global clubs, locations, rosters or ratings.
   Cross-midnight save work remains measured but paused for this owner correction.
   Worktree: .worktrees/round-511-midnight-saves, branch codex/round-511-midnight-saves.
-  No publication or host change. Leave the root checkout's running Round 510 suite intact.
+  No publication or host change. The root Round 510 full run completed with 263 PASS
+  and one EMPTY wrapper report despite 23 underlying outcomes passing. Its wrapper fix
+  and focused recheck remain in the separate Round 510 checkout.
 
 - **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FINAL GATE RUNNING.** Finish the Google URL-level audit, reconcile
   stale open bugs against current code, and repair the confirmed Footle kit-number harness

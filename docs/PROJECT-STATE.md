@@ -2,8 +2,10 @@
 
 ## Live as of 2026-09-07
 
-**Round 509 is published and verified live.** `origin/main` is `1ecc00eb`, merged through
-PR 60, with final code commit `4f70262e`. A fresh public check late September 7 found
+**Round 509 is published and verified live.** Its merge through PR 60 is `1ecc00eb`,
+with final code commit `4f70262e`. `origin/main` has since moved to `d1c541b3`, including
+Claude's Round 505; that later merge has not been verified published here.
+A fresh public check late September 7 found
 `/assets/index-CMh_jnNL.js`, replacing the previously observed old build. Verification read
 the executable four My Career restore guards, the NBA attacker-loss early return, both strict
 poll prompts, the exact 78 verified Transfer Path identities and the false Google provider
@@ -15,7 +17,19 @@ Round 510's Conquest same-day tab protection and harness changes remain on the C
 not live. Its distinct conflict notice is absent from the public Conquest bundle.
 Draft PR 61 holds this work: https://github.com/PapiSalgueroM/ballpark-hero/pull/61.
 Code commit 7df896e1 passed the type, build, unit, targeted-control and browser gates below.
-The full 264-node-harness run is still executing; read its closing result before merging.
+The full 264-node-harness run finished with 263 PASS and one EMPTY: simConquestTabs
+printed only three lines, below the runner's four-line minimum, although all 23
+underlying test outcomes passed. The root checkout owns the wrapper correction and
+focused recheck. PR 61 stays draft; merging current main also needs its documentation
+conflicts reconciled. Do not call that first full run green.
+
+Round 511's bounded copy change is verified locally, not published: Soccer Conquest
+no longer displays the number of players valued. Its totals and nine partial-data
+warnings remain intact. The larger owner correction is now researched, not implemented:
+geographic soccer maps with league selection, plus NFL/NBA territory maps and power-ups
+from the exact videos in docs/conquest-reference-audit-2026-09-07.md. The existing soccer
+season predictor and hex board do not satisfy that request. Preserve existing dailies
+while designing the new versioned Attack mode. No hosting or publication change.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
@@ -131,7 +145,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Career Ladder flags | DONE | Round 444 |
 | Who Am I slow load; more puzzles; accuracy meter | DONE | Round 443 load (10 requests, 446 KiB); Round 463 grew the pool 500 to 600 and the secret pool 300 to 400, and the meter is measured rather than trusted: simWhoAmIAccuracy runs the real scorer over the real pool and holds that the answer alone scores 100, that sharing more of the six attributes scores higher at three gap sizes, and that the five hottest guesses share far more with the secret than five random players do |
 | Alphabet Sprint verify end to end; say full names count | DONE | copy since Round 319 (the full name lead sentence); verified 2026-09-05 with a real browser play of the route, 14 interactions clean, no findings |
-| Conquest map presentation | DONE, NBA combat fix pending deploy | Round 457 replaced four private map components with one shared region renderer and Round 459 added Soccer Conquest on it. Round 509 fixes the NBA away-loss rule: an attacker that loses is repelled and keeps its territory and shield instead of being annihilated, while a successful attack still removes the defender. The hook and result copy are fenced separately; code is pending PR and deploy. The shared daily replay and mobile reveal issues remain open below. |
+| Conquest map presentation and creator rules | REOPENED, owner correction September 7 | Shared rendering shipped in Round 457 and the soccer hex season in Round 459, but the owner now explicitly wants geographic club territories, selectable leagues and the directional last-team-standing loop. Soccer follows JarradHD's global episode; NFL/NBA use Deansworld's geographic map and power-up ideas. Exact source evidence and data gaps are in docs/conquest-reference-audit-2026-09-07.md. The players-valued count is removed in the local Round 511 preview, not published. New map presets, attack rules and powers are not built yet. Round 509's NBA retreat rule is live in the old mode; the newly requested elimination rules must be introduced deliberately, with versioned saves and matching help. |
 | NEW Search and Discard | DONE | shipped 2026-08-29 |
 | NEW Sports Bingo | DONE | shipped 2026-08-29 |
 | NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy Draft; not yet one per sport |
@@ -3055,6 +3069,28 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
+- **2026-09-07, Round 511 (Codex lane), COPY VERIFIED LOCALLY, MAP REBUILD RESEARCHED.**
+  Removed the player-value row count from soccer club subtitles and both explanatory
+  help/FAQ promises. Actual values, strengths, coverage fields and partial warnings are
+  unchanged. Regenerated only the soccer-conquest snapshot, then the derived sitemap
+  ledger: 139 URLs retain their lastmod, one changes. Type gate, production build, all
+  217 Vitest tests and all 15 built-site fences pass on the worktree containing merged
+  Round 505. Existing dialog-description warnings remain in the unrelated daily reload
+  tests. Chromium at 390px and 1440px displays all 96 club tiles, nine partial markers,
+  no valued-player counts, no horizontal overflow and no page errors. The phone screenshot
+  was visually inspected. The five focused Conquest/map and incoming tactics-engine
+  harnesses also pass. No new sports facts imported; no database or publish action.
+
+  The owner's replacement references were identified exactly, read through primary
+  transcripts and checked at selected frames. The source audit records the map style,
+  captures, country/continent upgrades, same-pyramid water exception, powers, disaster
+  counters and observed inconsistencies. Game-design and data-guardian review exposed
+  a real scope gap: soccer is still a fixture-prediction hex board, and the local assets
+  lack verified global club coordinates and complete world rosters. Do not count research
+  as the requested gameplay being complete. Proposed next slice: versioned Attack mode
+  on the existing routes, preserving the daily, beginning with a verified league map.
+  Cross-midnight save work stays measured but deferred for this explicit owner correction.
+
 - **2026-09-07, Round 510 (Codex lane), DRAFT PR 61, FULL SIMULATION GATE PENDING.** Google URL-level evidence is
   recorded in docs/seo/indexing-audit-2026-09-07.md. The report is dated September 3:
   58 indexed, 71 discovered, 17 crawled exclusions, three alternate-domain redirects.
@@ -3075,7 +3111,9 @@ today rather than adding alongside them. Every new poll must obey all of these r
   Chromium Web Locks preserved the settled run against an old picker on all five Conquest
   routes at 390px, with no horizontal overflow or page errors. Soccer also preserved the
   daily through Free Play and reload. Browser checks blocked external network requests.
-  The full 264-harness node suite is running.
+  The full 264-harness node suite finished: 263 PASS and one EMPTY wrapper report,
+  even though the wrapper's 23 underlying tests passed. A focused wrapper-output fix
+  and recheck remain in Round 510's root checkout. This is not a new gameplay failure.
   Review also measured the separate cross-date cleanup issue recorded under Open bugs.
 
   Footle's kit audit no longer hangs on unavailable database requests or skips a failed page.

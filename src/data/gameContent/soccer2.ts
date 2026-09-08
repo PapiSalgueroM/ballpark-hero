@@ -463,7 +463,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Scoring: 25 points per correct call, 3 per region held at the end, 200 for the crown, 50 for making the playoffs.",
       "Wiped out clubs keep playing, and one win takes back a whole empire.",
       "Level games go to penalties, so there are no draws, ever.",
-      "Strength is the 2026 squad market value on record, mapped onto the same 55 to 95 band the other conquest maps use. The value is the sum of the players the table holds for that club, so every tile says how many that is, and a club with only a handful on record is rated on those few and says partial data.",
+      "Strength is the 2026 squad market value on record, mapped onto the same 55 to 95 band the other conquest maps use. Clubs with limited coverage are marked partial data.",
       "The Daily Challenge deals every player the same date seeded season: same opening map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
     ],
     example: [
@@ -478,7 +478,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     faqs: [
       { q: "How does the Daily Challenge work?", a: "Everyone gets the same season today: identical opening map, identical fixtures, identical results. Your score comes from which club you back and how well you call its games. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited." },
-      { q: "Where do the strengths come from?", a: "From the 2026 squad market values on record for each club, summed and mapped onto a 55 to 95 band. Nothing is hand rated. Every tile says how many players the sum covers, and a promoted club with only a handful on record is rated on those few and says partial data." },
+      { q: "Where do the strengths come from?", a: "From the 2026 squad market values on record for each club, summed and mapped onto a 55 to 95 band. Nothing is hand rated. Clubs with limited coverage are marked partial data." },
       { q: "Why is the map made of hexagons?", a: "It is a cartogram: every region is one hex, laid out so the five countries sit where they do in Europe. Most club home hexes are named after the real district the ground is in; where two clubs share a city, Milan and Rome, they split it north and south; the rest are named after the real countryside between them." },
       { q: "Can the season end early?", a: "Yes. If one club annexes every region before matchday 10, total conquest crowns it immediately." },
       { q: "How do the playoffs work?", a: "The top 8 empires seed a knockout: Quarter-finals, Semi-finals, then the Imperial Final. Regions decide seeding, record breaks ties." },
