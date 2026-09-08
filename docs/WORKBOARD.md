@@ -1,5 +1,16 @@
 # Work board
 
+**Round 518, Codex, scoped verification complete September 8:** ticker handoff visibility in
+`.worktrees/round-518-ticker-handoffs`, branch `codex/round-518-ticker-handoffs`,
+based on Round 517 `5c5f84e7`. Each pass is bounded to the active sport, without
+the clipping width cap. Final-score reading time, independent pauses and reduced
+motion access are verified at four widths, with eleven exact-failure controls.
+Review-driven feed/focus lifecycle fixes pass. The real built-app walk and its
+blocked-resume control pass. Exact types/build, all fifteen generated-site
+fences and both ticker sims pass. Preview 4188 serves `index-CN0RkAol.js`.
+No feed, pagination, polling interval, sports data, provider, account or game
+engine changes. Root stays Claude's; preview 4186 stays frozen. Next free: 519.
+
 **Round 517, Codex, scoped verification complete September 8:** profile activity count safety in
 `.worktrees/round-517-profile-activity`, branch `codex/round-517-profile-activity`,
 based on the verified Round 516 candidate `a7a07d30`. A career streak-day ping

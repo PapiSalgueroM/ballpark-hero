@@ -1,5 +1,32 @@
 # Project state
 
+## Round 518 ticker follow-up, September 8, 2026
+
+Scoped verification is complete in `.worktrees/round-518-ticker-handoffs`,
+branch `codex/round-518-ticker-handoffs`, based on Round 517 `5c5f84e7`.
+Each pass now starts at the active sport and ends at its final score, with
+reading time preserved through pauses. The 4,000px clipping cap is removed.
+Reduced-motion scrolling and keyboard access work across all existing sports.
+Review also caught and fixed stale focus after feed removal, refresh resetting
+manual scroll, and keyboard focus moving the resumed pass outside its bounds.
+
+The final four-width browser matrix passes, including forty-card long slates,
+one-sport restart, independent pause modes, resizing and hidden-route returns.
+All eleven source controls fail their intended assertions. The real built-app
+ticker walk passes too. Its old speed-incompatible maximum-step assertion was
+replaced with whole-window forward movement, proved by a blocked-resume control.
+Exact app types and the build pass (46.13 seconds, 2,839 modules). All fifteen
+generated-site fences and both neighboring ticker sims pass. Final bundle:
+`index-CN0RkAol.js`; preview 4188. Snapshots and sitemap ledger are unchanged.
+Independent review has no remaining actionable findings. Evidence and limits:
+docs/ticker-handoffs-2026-09-08.md.
+
+No live data, polling interval, account, provider, game engine, merge or publish
+changes. Root remains Claude's, and the review preview on 4186 stays frozen.
+Next bounded ticker issue is the sixty-row query truncating later live games,
+confirmed with a synthetic 132-row response. Keep query work separate from UI.
+The overnight cutoff is unchanged: 17:46:50 UTC. Next free round: 519.
+
 ## Overnight continuation, September 8, 2026
 
 Anthony requested eight hours of continued local work. The existing heartbeat
