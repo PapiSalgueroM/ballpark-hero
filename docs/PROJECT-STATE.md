@@ -3029,6 +3029,65 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
+- **2026-09-08, Round 507 (Claude Code lane, desktop), CHAMPIONS LEAGUE TWO LEGGED KNOCKOUT
+  TIES. On branch `round-507-ucl-two-legs`, stacked on 506, not merged and not live.** His
+  2026-09-07 request: "Add first and second legs to Champions League knockout ties whenever that
+  season's real format uses two legs."
+
+  **WHAT WAS THERE.** A knockout tie was ONE match. `UclTie` carried a single home and away
+  pair, a winner and an optional `pens` flag, and the word leg did not appear anywhere in the
+  engine.
+
+  **THE RULES, TWO SOURCE VERIFIED BEFORE ANY CODE**, because the last clause of his sentence is
+  the whole point and a competition format is data by season here (the four groups versus eight
+  lesson). R16, QF and SF are two legs and the final is one match at a neutral venue. The away
+  goals tiebreak ran from 1965 and was abolished for every UEFA club competition from the
+  2021/22 season, after which a level aggregate goes to extra time and then penalties, with away
+  goals carrying no extra weight in extra time either. Sources: UEFA's own announcement
+  (uefa.com, "Abolition of away goals rule in all UEFA club competitions") and Sky Sports
+  (2021-06-24), with ESPN and Goal agreeing. So the three historic eras (2005, 2010, 2015) play
+  away goals and the modern save does not, and that falls out of `uclSeasonYear` rather than
+  being typed per era, the way `eraUclHasR16` already works.
+
+  **WHAT A LEG CHANGES.** Both legs are stored in the TIE's orientation, home first, whichever
+  ground they were played on, and `uclTieOutcome` is the single place that knows leg two was at
+  `tie.away` and therefore which goals are the away ones. A first leg is not a knockout match in
+  the sense the shootout code means, so a draw stands and nobody goes out. A second leg settles
+  on the AGGREGATE and not on tonight, and tonight's own result is deliberately left alone,
+  because it is what the stats, the morale and the record are about: you can lose a second leg
+  and still be in the semi finals. Half a tie also stops the rest of the round settling, so the
+  bracket cannot show every other club through while mine is one match old.
+
+  **SAVE SHAPE.** `legs`, `leg1`, `leg2` and `byAwayGoals` on `UclTie` and `uclLeg` on
+  `CalendarEntry` are all optional and absent on anything written before this round, and every
+  reader treats absent as one leg. `ensureUclCalendar` repairs in as many legs as the season
+  plays, or a two legged era would have repaired itself into a one legged round of 16 and
+  settled a tie on a single match.
+
+  **GATES.** tsc zero, build clean. `simUclLegs` is the new fence: five sections, four negative
+  controls each firing on its own section (oneleg 16 findings, noaway 3, alwaysaway 1, legone
+  10). Its section 2 drives `uclTieOutcome` with the SAME two legs under both eras, which is the
+  strongest available signal that the season is really being read: level at 2-2 with the away
+  side holding the away goals 2 to 1 sends them through in 2005 and goes to penalties from
+  2021/22. `simClubManagerEraUcl` (taught the new count, and its migration section too),
+  `simEraWorldTables`, `simClubManagerCalendar` (the season grew two weeks per knockout round
+  and it did not mind) and `simClubManager` all green.
+
+  **TWO HARNESS BUGS IT FOUND IN ITSELF**, both of which would have made it green for the wrong
+  reason. Its first away goals case was 0-2 then 2-0, which is level on aggregate AND level on
+  away goals at two each, so penalties was correct in both eras and the case proved nothing: the
+  engine was right and the test was wrong. And it counted round of 16 weeks off the calendar
+  without asking whether the club was still in the competition, so a season where Barcelona went
+  out in the group read as two legs played and then reported the tie had vanished.
+
+  **NAMED AS NOT DONE.** The bigger half of his 2026-09-07 request, the live starting points that
+  drop you into a real season in progress, is deliberately not in this round: he said himself the
+  standings, results, squads and takeover date must come from verified sources rather than
+  reconstructed history, so it is a data acquisition job before it is an engine one and it needs
+  its own round. Also not done: the modern era's real format has a knockout playoff round before
+  the round of 16 and this game's modern save still starts its knockout at the quarter finals,
+  which predates this round and was left alone.
+
 - **2026-09-08, Round 506 (Claude Code lane, desktop), CLUB MANAGER TRANSFERS AND PERSONAL
   TERMS. On branch `round-506-cm-transfers`, not merged and not live.** His words: "a
   valuation staffer whose accuracy depends on level ... YOU type the bid; extreme lowballs can
