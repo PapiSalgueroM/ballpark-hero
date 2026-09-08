@@ -1,5 +1,26 @@
 # Project state
 
+## Round 536 NFL player-steal settlement, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-536-nfl-steal-settlement`, branch
+`codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86),
+claim `596b1e69`. One current pending battle now authorizes one valid
+loser-roster choice or skip. Accepted actions consume that decision before
+confirmation; reset and unmount cancel its tracked 1200ms timer. Close and
+Escape preserve the unresolved choice. Board controls share eligibility,
+including Continue when no player can be added. No player data or formula
+changes. All five unchanged original-map baseline witnesses pass after the
+fix. Both exact types, build, all fifteen site checks, 158 prior cases and
+nineteen new cases pass. Forty-four new source controls produce 79 exact
+intended failures; three migrated old controls also pass. Phone, desktop
+and both duplicate-row browser controls each pass two settled battles and
+one abandoned confirmation, with zero faults. Main phone/desktop visual
+review is clear. Evidence: docs/nfl-steal-settlement-2026-09-08.md.
+Preview 4213, PID 34964: index-C-uiq91h.js and Conquest-yIPBLjiX.js.
+Preserve root and all previous worktrees and previews. Draft PR only, no
+backend/account writes, broad suite, main merge or publication. Next free
+537. Broad-suite process isolation remains a separate open lane.
+
 ## Round 535 NFL legend card identity, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-535-nfl-legend-cards`, branch

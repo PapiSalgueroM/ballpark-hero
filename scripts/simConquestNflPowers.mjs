@@ -217,8 +217,8 @@ const CONTROLS = {
     "file": "hook",
     "test": 7,
     "message": "UNMOUNT: disposed random choices stop before consuming RNG or scheduling work",
-    "from": "  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n    rewardActionTokenRef.current = null;\n  }, []);",
-    "to": "  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n  }, []);"
+    "from": "  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n    rewardActionTokenRef.current = null;\n    pendingBattleApplyRef.current = null;\n  }, []);",
+    "to": "  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n    pendingBattleApplyRef.current = null;\n  }, []);"
   },
   "startcard": {
     "file": "hook",

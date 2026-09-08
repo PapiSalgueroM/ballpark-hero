@@ -259,6 +259,7 @@ function StatCategory({ label, attLine, defLine, attColor, defColor }: {
 export default function ConquestBoard() {
   const game = useConquest();
   const powerActionsReady = game.phase === 'ready' && !game.pendingPowerup && !game.powerupUseType;
+  const hasStealChoices = (game.rosters[game.battleResult?.loser || ''] || []).some(game.canStealPlayer);
   const [now, setNow] = useState(Date.now());
   const playLogRef = useRef<HTMLDivElement>(null);
 
@@ -580,7 +581,7 @@ export default function ConquestBoard() {
               )}
 
               {/* Choose Your Player button */}
-              {game.pendingBattleApply && !game.playerConfirmed && (game.rosters[game.battleResult?.loser || ''] || []).length > 0 && (
+              {game.stealActionReady && hasStealChoices && (
                 <div className="flex justify-center pt-2">
                   <button
                     onClick={game.openStealModal}
@@ -591,8 +592,8 @@ export default function ConquestBoard() {
                 </div>
               )}
 
-              {/* Skip if no roster to steal from */}
-              {game.pendingBattleApply && !game.playerConfirmed && (game.rosters[game.battleResult?.loser || ''] || []).length === 0 && (
+              {/* Continue if no player can be added */}
+              {game.canSkipSteal && !hasStealChoices && (
                 <div className="flex justify-center pt-2">
                   <button
                     onClick={game.skipSteal}
@@ -645,7 +646,7 @@ export default function ConquestBoard() {
       )}
 
       {/* Steal Modal */}
-      <Dialog open={game.stealModalOpen} onOpenChange={(open) => { if (!open) game.closeStealModal(); }}>
+      <Dialog open={game.stealModalOpen && game.stealActionReady} onOpenChange={(open) => { if (!open) game.closeStealModal(); }}>
         <DialogContent className="max-w-4xl bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏈 Steal a Player!</DialogTitle>
@@ -663,7 +664,8 @@ export default function ConquestBoard() {
                 <button
                   key={player}
                   onClick={() => game.stealPlayer(player)}
-                  className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+                  disabled={!game.canStealPlayer(player)}
+                  className="w-full px-4 py-3 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <span className="font-medium">{player}</span>
                   {playerData && (

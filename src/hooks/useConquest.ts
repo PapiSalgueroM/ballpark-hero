@@ -330,7 +330,12 @@ export function useConquest() {
   const [simulatingRemainder, setSimulatingRemainder] = useState(false);
   const [boxScore, setBoxScore] = useState<BoxScore | null>(null);
   const [stealModalOpen, setStealModalOpen] = useState(false);
-  const [pendingBattleApply, setPendingBattleApply] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
+  const [pendingBattleApply, setPendingBattleApplyState] = useState<{ attacker: string; defender: string; result: BattleResult } | null>(null);
+  const pendingBattleApplyRef = useRef<typeof pendingBattleApply>(null);
+  const setPendingBattleApply = useCallback((pending: typeof pendingBattleApply) => {
+    pendingBattleApplyRef.current = pending;
+    setPendingBattleApplyState(pending);
+  }, []);
   const [playerConfirmed, setPlayerConfirmed] = useState<string | null>(null);
 
   // Skip-to-result (item 89): the battle result is fully pre-computed the
@@ -362,6 +367,7 @@ export function useConquest() {
   useEffect(() => () => {
     freeAgencyTokenRef.current = null;
     rewardActionTokenRef.current = null;
+    pendingBattleApplyRef.current = null;
   }, []);
 
   const timeoutsRef = useRef<number[]>([]);
@@ -1010,46 +1016,63 @@ export function useConquest() {
     });
   }, [invincibleTeams, applyPowerRankUpdate]);
 
+  const canResolveBattle = useCallback(() => phaseRef.current === 'battle'
+    && !!pendingBattleApply && pendingBattleApplyRef.current === pendingBattleApply
+    && pendingBattleApply.result === battleResult, [pendingBattleApply, battleResult]);
+
+  const canStealPlayer = useCallback((playerName: string) => canResolveBattle()
+    && (rosters[pendingBattleApply!.result.loser] || []).includes(playerName)
+    && !(rosters[pendingBattleApply!.result.winner] || []).includes(playerName),
+  [canResolveBattle, pendingBattleApply, rosters]);
+
   const openStealModal = useCallback(() => {
+    if (!canResolveBattle()) return;
     setStealModalOpen(true);
-  }, []);
+  }, [canResolveBattle]);
 
   const closeStealModal = useCallback(() => {
+    if (!canResolveBattle()) return;
     setStealModalOpen(false);
-  }, []);
+  }, [canResolveBattle]);
 
   const stealPlayer = useCallback((playerName: string) => {
-    if (!battleResult || !pendingBattleApply) return;
+    if (!canStealPlayer(playerName)) return;
+    const pending = pendingBattleApply!;
+    const result = pending.result;
+    pendingBattleApplyRef.current = null;
     setPlayerConfirmed(playerName);
     setStealModalOpen(false);
 
     // Brief confirmation animation, then apply
-    setTimeout(() => {
+    addTimeout(() => {
       setRosters(prev => {
         const next = { ...prev };
-        next[battleResult.loser] = (next[battleResult.loser] || []).filter(p => p !== playerName);
-        next[battleResult.winner] = [...(next[battleResult.winner] || []), playerName];
+        next[result.loser] = (next[result.loser] || []).filter(p => p !== playerName);
+        next[result.winner] = [...(next[result.winner] || []), playerName];
         return next;
       });
       // Apply the battle result; the stolen player rides along so the log
       // line for THIS battle carries the steal (it used to be patched onto
       // whatever entry happened to be last, i.e. the previous battle's line).
-      applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result, playerName);
+      applyBattleResult(pending.attacker, pending.defender, result, playerName);
       setPendingBattleApply(null);
       setPlayerConfirmed(null);
       setBoxScore(null);
       setVisiblePlays([]);
     }, 1200);
-  }, [battleResult, pendingBattleApply, applyBattleResult]);
+  }, [canStealPlayer, pendingBattleApply, applyBattleResult]);
 
   // Skip steal (if loser has no roster)
   const skipSteal = useCallback(() => {
-    if (!pendingBattleApply) return;
-    applyBattleResult(pendingBattleApply.attacker, pendingBattleApply.defender, pendingBattleApply.result);
+    if (!canResolveBattle()) return;
+    const pending = pendingBattleApply!;
+    pendingBattleApplyRef.current = null;
+    setStealModalOpen(false);
+    applyBattleResult(pending.attacker, pending.defender, pending.result);
     setPendingBattleApply(null);
     setBoxScore(null);
     setVisiblePlays([]);
-  }, [pendingBattleApply, applyBattleResult]);
+  }, [canResolveBattle, pendingBattleApply, applyBattleResult]);
 
   // Skip to result (item 89): the battle is already fully simulated by the
   // time the reveal starts (see startPlayByPlay above), so skipping never
@@ -1125,6 +1148,7 @@ export function useConquest() {
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     stealModalOpen, pendingBattleApply, playerConfirmed,
+    stealActionReady: canResolveBattle(), canStealPlayer, canSkipSteal: canResolveBattle(),
     // Power rankings (item 86)
     powerRankings,
     // Free Agency tab (item 87)

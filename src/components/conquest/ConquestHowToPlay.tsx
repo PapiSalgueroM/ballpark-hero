@@ -42,6 +42,9 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             <p className="text-muted-foreground">
               When a team wins, you choose one player from the losing roster to add to the winner's team. Review the box score first, then tap <span className="text-foreground font-semibold">"Choose Your Player"</span> when ready.
             </p>
+            <p className="text-muted-foreground mt-1.5">
+              Close the picker to review the box score, then reopen it to choose one player. Your choice finishes the battle after the brief confirmation. If there are no eligible players, use Continue to finish the battle.
+            </p>
           </section>
 
           <section>
