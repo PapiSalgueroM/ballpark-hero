@@ -37,8 +37,9 @@
  *      exists, so sections 1 to 3 measured on five sports measured one code
  *      path five times over rather than five code paths once.
  *   5. SOURCE BACKSTOP. Every path in the board that produces a new run is
- *      DERIVED from the source (each function containing startRun or
- *      playRound), and each must write the log in the same function; the
+ *      DERIVED from the source (each function containing startRun,
+ *      playRound or continueRun), and each must await the guarded commit
+ *      helper before it can publish the run; the
  *      restore must sit in a useState initialiser. The count of those paths
  *      is printed and floored, so a sixth path added later cannot walk past a
  *      check written for today's two. The inline negative removes one write
@@ -331,7 +332,7 @@ console.log('4) Every conquest route renders the one shared board with a sport i
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 {
   const dir = `${ROOT}/src/components/conquest`;
-  const boards = fs.readdirSync(dir).filter(f => /^Imperialism.*\.tsx$/.test(f));
+  const boards = fs.readdirSync(dir).filter(f => /^Imperialism.*\.tsx$/.test(f) && !/\.(test|spec)\.tsx$/.test(f));
   const pages = [
     ['Conquest.tsx', 'NFL_IMPERIALISM'],
     ['ConquestNba.tsx', 'NBA_IMPERIALISM'],
@@ -361,13 +362,13 @@ const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.
 }
 
 /* ---------- 5: source backstop, with the paths derived ---------- */
-console.log('5) Every path in the board that produces a new run writes the log in the same function');
+console.log('5) Every path that produces a run awaits the guarded daily commit before publishing it');
 {
   const raw = stripComments(norm(fs.readFileSync(BOARD_SRC, 'utf8')));
   /** Every `const name = (...) => { ... }` body, by brace matching. */
   function bodies(code) {
     const out = [];
-    const re = /const\s+([A-Za-z_$][\w$]*)\s*=\s*\([^)]*\)\s*=>\s*\{/g;
+    const re = /const\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>\s*\{/g;
     let m;
     while ((m = re.exec(code))) {
       const open = m.index + m[0].length - 1;
@@ -381,25 +382,35 @@ console.log('5) Every path in the board that produces a new run writes the log i
     return out;
   }
   function audit(code) {
-    const producers = bodies(code).filter(b => /\bstartRun\s*\(|\bplayRound\s*\(/.test(b.body));
-    const unwritten = producers.filter(b => !/\bsaveDailyRun\s*\(/.test(b.body)).map(b => b.name);
+    const functions = bodies(code);
+    const producers = functions.filter(b => /\b(?:startRun|playRound|continueRun)\s*\(/.test(b.body));
+    const gates = functions.filter(b => {
+      const commit = b.body.search(/\bawait\s+commitDailyRun\s*\(/);
+      const reject = b.body.search(/if\s*\(outcome\s*!==\s*'saved'\)/);
+      const publish = b.body.search(/\bsetSession\s*\(next\)/);
+      return commit >= 0 && reject > commit && publish > reject && /\breturn\s*;/.test(b.body.slice(reject, publish));
+    });
+    const unwritten = producers.filter(b => !gates.some(g => new RegExp(`\\bawait\\s+${g.name}\\s*\\(`).test(b.body))).map(b => b.name);
     const restores = /useState<[^>]*>\(\s*\(\)\s*=>\s*restoreDailyRun\s*\(/.test(code);
     return { producers: producers.map(b => b.name), unwritten, restores };
   }
   const real = audit(raw);
   console.log(`   run producing paths: ${real.producers.join(', ') || 'none'}; without a log write: ${real.unwritten.join(', ') || 'none'}; restore sits in a useState initialiser: ${real.restores ? 'yes' : 'NO'}`);
-  if (real.producers.length < 2) fail(`only ${real.producers.length} path(s) in the board produce a run, which is fewer than the pick and the round, so this section read the wrong thing`);
+  if (real.producers.length < 3) fail(`only ${real.producers.length} path(s) produce a run, fewer than pick, play and continue, so this section read the wrong thing`);
   if (real.unwritten.length > 0) fail(`these board paths change the run without recording it: ${real.unwritten.join(', ')}`);
   if (!real.restores) fail('the board does not restore through restoreDailyRun in a useState initialiser, so a reload lands after the first paint');
-  /* The inline negative: the same audit on a copy with one write removed must
-     name that path, or green above means the audit did not look. */
-  const cut = raw.replace(/\bsaveDailyRun\s*\([^;]*\);/, '');
-  if (cut === raw) fail('the section 5 negative could not remove the write it just found');
+  /* Removing either one caller or the shared commit must expose the gap. */
+  const cut = raw.replace(/\bawait\s+accept\s*\([^;]*\);/, '');
+  if (cut === raw) fail('the section 5 negative could not remove a guarded accept call');
   else {
     const without = audit(cut);
     if (without.unwritten.length === 0) fail('the backstop stays green with a log write removed, the check is dead');
-    else console.log(`   negative: with one saveDailyRun call removed the audit names ${without.unwritten.join(', ')}, so it is reading the code`);
+    else console.log(`   negative: with one accept call removed the audit names ${without.unwritten.join(', ')}`);
   }
+  const ungated = raw.replace(/\bawait\s+commitDailyRun\s*\([^;]*\)/, "'saved'");
+  if (ungated === raw) fail('the section 5 negative could not remove the shared commit');
+  else if (audit(ungated).unwritten.length !== real.producers.length) fail('removing the shared commit did not expose every unguarded producer');
+  else console.log('   negative: removing the shared commit exposes every producer');
 }
 
 if (CONTROL) {

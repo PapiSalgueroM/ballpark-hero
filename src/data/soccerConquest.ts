@@ -695,10 +695,9 @@ const IMP_TEAMS: ImperialismTeam[] = SOCCER_CLUBS.map(c => ({
   name: c.name,
   overall: c.overall,
   group: c.league,
-  /* The sum covers the players the table values, which for a smaller club is
-     a fragment of the squad (Sevilla had 11 rows in the 2026 pull), so the
-     tile says how many rather than calling the fragment a squad value. */
-  sub: `${formatSquadValue(c.valueUsd)}, ${c.valueRows} player${c.valueRows === 1 ? '' : 's'} valued${c.partial ? ', partial data' : ''}`,
+  /* The total covers the market values on record. Keep the partial marker
+     where the available coverage is thin. */
+  sub: `${formatSquadValue(c.valueUsd)}${c.partial ? ', partial data' : ''}`,
 }));
 
 export const SOCCER_REGULAR_ROUNDS = 10;

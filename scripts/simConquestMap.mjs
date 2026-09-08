@@ -25,10 +25,10 @@
  *      precisely the regions whose owner changed, each with its old owner, and
  *      the waves spread from the winner's border: wave 0 borders land the
  *      winner already held, wave n borders wave n-1. No takeover, no overlay.
- *   4. THE FOUR SPORTS GO THROUGH THE SAME COMPONENT. The rendered root is the
- *      shared map for every sport, and in src/components/conquest no file but
- *      ConquestRegionMap.tsx draws a region path (comments stripped first, so
- *      prose cannot satisfy or trip the check), and every board imports it.
+ *   4. THE DAILY SPORTS GO THROUGH THE SAME COMPONENT. The rendered root is
+ *      shared by all five Daily Season sports. The separate geographic Soccer
+ *      Attack map is the only other component allowed to draw region paths,
+ *      and every Daily Season board imports the shared map.
  *   5. THE FIGHT IS ON THE MAP. Before the roll the attacker's regions and the
  *      target's carry role rings and a dashed arrow; a single unclaimed target
  *      rings only that region; after the roll the result chip on the winner
@@ -63,6 +63,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const CONQUEST_DIR = `${ROOT}/src/components/conquest`;
 const MAP_FILE = 'ConquestRegionMap.tsx';
+const ATTACK_MAP_FILE = 'AttackMap.tsx';
 const MAP_SRC = `${CONQUEST_DIR}/${MAP_FILE}`;
 const CONTROL = process.env.SIM_CONQUEST_MAP_CONTROL || '';
 const KNOWN_CONTROLS = ['private', 'owner', 'takeover'];
@@ -336,7 +337,7 @@ console.log('3) The takeover marks exactly the flipped regions, and spreads from
 }
 
 /* ---------- 4: one component, four sports; nobody else draws regions ---------- */
-console.log(`4) The ${SPORTS.length} sports go through the same component, and no other file draws regions`);
+console.log(`4) The ${SPORTS.length} Daily Season sports share one map, and Soccer Attack keeps its separate geographic map`);
 {
   for (const { spec, seed } of SPORTS) {
     const root = tags(render(ConquestRegionMap, { sport: spec, owners: seed() }), 'svg')[0] || {};
@@ -355,11 +356,12 @@ console.log(`4) The ${SPORTS.length} sports go through the same component, and n
     files.set('ConquestMapNba.tsx', stripComments(privateCopy));
     console.log('NEGATIVE CONTROL ON (private): an in-memory ConquestMapNba.tsx draws its own regions again, this section must go red');
   }
-  const drawers = [...files.entries()].filter(([, src]) => /<path\b/.test(src) && /\.map\(\s*region\s*=>/.test(src)).map(([n]) => n);
+  const drawers = [...files.entries()].filter(([, src]) => /<path\b/.test(src) && /\.map\(\s*region\s*=>/.test(src)).map(([n]) => n).sort();
+  const expectedDrawers = [ATTACK_MAP_FILE, MAP_FILE].sort();
   console.log(`   files in src/components/conquest: ${files.size}; files drawing region paths: ${drawers.join(', ') || 'none'}`);
-  if (drawers.length !== 1 || drawers[0] !== MAP_FILE) fail(`region paths are drawn by ${drawers.join(', ') || 'nobody'}, expected only ${MAP_FILE}`);
+  if (drawers.join() !== expectedDrawers.join()) fail(`region paths are drawn by ${drawers.join(', ') || 'nobody'}, expected ${expectedDrawers.join(', ')}`);
   for (const [name, src] of files) {
-    if (name === MAP_FILE) continue;
+    if (expectedDrawers.includes(name)) continue;
     if (/<path\b/.test(src)) fail(`${name} draws an SVG path of its own`);
     if (/from ['"](\.\/|@\/components\/conquest\/)ConquestMap(Nba|Mlb|Nhl)?['"]/.test(src)) fail(`${name} still imports a private map component`);
   }

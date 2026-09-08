@@ -54,44 +54,131 @@ it had been pushed. **Push after the first commit of a round, not at the end of 
 
 ## Live as of 2026-09-07
 
-Head `04ad4f10`, **deployed to douknowball.com and verified live** (the home page
-now serves `href="/quiz-board"` where it served `href="/jeopardy"`, which is the
-Round 496 fix; all eight probed routes answer 200 and the sitemap dates `/` to
-2026-09-07). Rounds 495 to 501 shipped, plus the 475-479 batch merged.
+**Round 509 is published and verified live.** Its merge through PR 60 is `1ecc00eb`,
+with final code commit `4f70262e`. `origin/main` has since moved to `d1c541b3`, including
+Claude's Round 505; that later merge has not been verified published here.
+A fresh public check late September 7 found
+`/assets/index-CMh_jnNL.js`, replacing the previously observed old build. Verification read
+the executable four My Career restore guards, the NBA attacker-loss early return, both strict
+poll prompts, the exact 78 verified Transfer Path identities and the false Google provider
+flag. All 140 live sitemap URLs returned 200 with one self canonical, one H1, title,
+description and no noindex. The earlier Lovable publication blocker is therefore closed.
+The publisher action was not observed by this session; do not claim Codex pressed Publish.
 
-`origin/main` is `7af40013`, Round 504. Rounds 503 and 504 are merged but are not included in
-the live deployment above. Round 509 is code complete and verified on
-`codex/round-509-quality-batch`, merged locally with Rounds 503 and 504, and still needs its final
-commit, PR, merge to main and deploy.
-None of Round 509's frontend, game-engine or prerender fixes should be called live yet.
+Round 510's Conquest same-day tab protection and harness changes remain on the Codex branch,
+not live. Its distinct conflict notice is absent from the public Conquest bundle.
+Draft PR 61 holds this work: https://github.com/PapiSalgueroM/ballpark-hero/pull/61.
+Code commit 7df896e1 passed the type, build, unit, targeted-control and browser gates below.
+The full 264-node-harness run finished with 263 PASS and one EMPTY: simConquestTabs
+printed only three lines, below the runner's four-line minimum, although all 23
+underlying test outcomes passed. Commit `0e3f9183` corrected the wrapper and passed
+the focused recheck; that correction is integrated into Round 512 at `6b0c9cff`.
+PR 61 stays draft; merging its older branch with current main needs documentation
+conflicts reconciled. Do not call that first full run green.
+
+Round 511's bounded copy change is verified locally, not published: Soccer Conquest
+no longer displays the number of players valued. Its totals and nine partial-data
+warnings remain intact. The larger owner correction is now researched, not implemented:
+geographic soccer maps with league selection, plus NFL/NBA territory maps and power-ups
+from the exact videos in docs/conquest-reference-audit-2026-09-07.md. The existing soccer
+season predictor and hex board do not satisfy that request. Preserve existing dailies
+while designing the new versioned Attack mode. No hosting or publication change.
+
+Round 512 is a local review candidate on `codex/round-512-conquest-attack` in the
+isolated `.worktrees/round-511-midnight-saves` checkout, backed up in draft PR 63:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/63. Use that combined draft for
+Rounds 510 to 512 rather than merging the older PR 61 separately. The first playable Attack
+slice uses 20 sourced English ground locations, 48 generated game regions and the
+existing documented English roster snapshot. Directional attacks eliminate clubs,
+carry captured players and apply simulated rating upgrades. The separate
+`dukb-conquest-attack-soccer-v1` save preserves every committed phase and finished
+map without rerolling; Attack is unlimited and gives no ranked points. The existing
+96 club Daily Season, daily key, scoring and completion path are unchanged.
+
+The focused engine, map, save and board files now pass 125 real Vitest outcomes.
+The separate 20-seed map run completed 3,220 transitions and 805 resolutions.
+The integrated wrapper was verified at `6b0c9cff`; its revision-transition control
+was repeated successfully on final code `edc31320`, failing the intended invariant.
+The final full wrapper run remains part of the pending node suite.
+Existing Conquest sims pass after `simConquestMap`
+was narrowed to permit exactly the shared five-sport renderer and the separate Attack
+renderer; its private third-renderer control remains red. Types, both production
+builds, scoped prerender, sitemap regeneration and all 15 built-site fences pass.
+Independent Task 4 and whole-branch reviews are complete. The final fix `edc31320`
+rejects malformed disconnected saves and completes the question-mark rules.
+The single scoped re-review closed both findings with no new breakage. The first
+full Vitest attempt failed six tests during parallel workloads; the final isolated,
+sequential run now passes all 342 tests in 28 files in 128.91 seconds, with unchanged
+assertions and timeout budgets. The first node run and guest sweep were canceled
+before completion, not green. The final guest sweep passed: 152 routes at 320,
+390 and 1440 pixels, 456 checks, zero findings. Its coordinator briefly started the
+266-node suite before the controller stopped that new run for machine load. That
+attempt is incomplete, not a pass. No Codex full suite is active; the review-checkpoint
+follow-up will start it when the existing Claude suites settle and capacity permits.
+Do not restart the retired coordinator or launch duplicate suites. Job and log
+details are in the QA report. Isolate test temporary directories from
+Claude's concurrent checkout and stagger heavy groups. The integrated Chromium
+pass is clean: 55 assertions at 320, 390,
+430 and 1440 pixels, zero opening-label overlaps, exact Daily and Attack save
+precedence, a full 160-action UI finish matching the engine snapshot, and the
+quota, retry, competing-tab and pointer regressions. Treat the working preview as
+a review candidate. After `edc31320`, Chromium repeated all 160 actions with an exact
+finished snapshot, daily-entry precedence and both namespaces, active save recovery,
+competing tabs, quota/retry and pointer controls. The new disconnected-save recovery
+and complete reopenable help pass at all four widths, preserving damaged bytes.
+The controller also visually inspected the settled phone help, top and bottom.
+This is not a whole-site all-clear. La Liga, Europe, World and NFL/NBA powers remain open. La Liga location
+research does not enable that preset, including the unsettled current Rayo venue.
+Stop new feature expansion after this bounded batch for Anthony's review. No merge,
+publication, database, DNS or host change.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
 tennis-chain-validate v9, nascar-chain-validate v7, nba-chain-validate v8. One
 migration applied: `name_folded` on `soccer_player_club_stints`.
 
-Database work that is already live ahead of the Round 509 code: `poll_head_to_head` and
+Database work live with the Round 509 code: `poll_head_to_head` and
 `unique_scheduled_poll_matchups` leave 58 upcoming polls with exactly two choices, approved
 wording and no repeated matchup in the stocked window. Both exact career quarantines are live,
 so all 77 projected 2025-2026 rows are gone and the 27 separately researched rows stay. The
 companion Transfer Path repair is also live: 17 newly unreachable puzzles were removed, all
-885 retained hints were refreshed, and unsafe Active Players hints are empty until the
-identity-safe replacement deploys.
+885 retained hints were refreshed. After the matching frontend was verified live, the held
+Active Players restore was applied as migration `20260908012949` at 9:29 p.m. Eastern:
+885 retained puzzles, 203 active hints, 872 Europe hints, zero partial active pairs, RLS on.
+The live-graph harness matches every row, and the public browser opens
+"Active players only (203 puzzles)" without completing or recording a game.
 
-**Rounds 503 and 504 are merged on origin/main at `7af40013`, not yet in the live deployment
-above (2026-09-07, Claude Code lane).** Round 503 fixes shared daily recording and Connections
+**Rounds 503 and 504 are included in the published Round 509 base (Claude Code lane).**
+Round 503 fixes shared daily recording and Connections
 timer cleanup. Round 504 turns Club Manager's live match into a committed football stream with
 both elevens, the ball, set pieces, fouls, live stats and in-match changes. Change log entries
 below. The Claude Code lane still holds Rounds 505 to 508 on the workboard.
 
-**Round 505 is on branch `claude/ballpark-hero-code-lane-sa1p6b` with a PR open (Claude Code lane):
+**Round 505 is merged on main at `d1c541b3`, publication not yet verified (Claude Code lane):
 the tactics depth (a man read in his slot, the bench under the pitch ordered for the spot,
 seventeen shapes, the armband and the takers, a duty on every slot, a second position learned
 over weeks), fenced by simTacticsEngine. Change log entry below. 506 is the transfer arc with
 personal terms.**
 
-**Round 509 is complete and verified in the local Codex branch, pending its final commit, PR and
-deploy.**
+**Round 506 is pushed at `7b53c3b4` on `origin/round-506-cm-transfers`, not merged or
+published.** Its scoped Club Manager checks and 15 built-site fences pass. The full node
+suite is still pending, so this is Claude's review checkpoint rather than a whole-site
+all-clear. The branch also changes shared ad spacing; do not pull it into Round 512.
+Read-only inspection at 01:26 Eastern on September 8 found Claude's root checkout
+on `round-507-ucl-two-legs` at `b1a63961`, matching its remote. Tracked files were
+clean, with two untracked repro scripts belonging to him. Two full suites remained
+active; their buffered results were not independently available. The older suite
+started before the Round 507 commits, so its completion alone cannot verify the
+final tree. Anthony forwarded that the 506/507 adversarial review and full-season
+browser walk are still pending. Round 508 is scoped, not built in the inspected
+state. Do not infer Claude has paused or modify his checkout or repro scripts.
+A read-only merge simulation of `6b0c9cff` with `7b53c3b4` found conflicts only in
+`docs/PROJECT-STATE.md` and `docs/WORKBOARD.md`, not code. This is not a combined
+build, merge or joint test result. Repeating the diagnostic against Round 507
+`b1a63961` again found only the same two documentation conflicts. Both lanes still need their own gates and a
+tested combined preview before the whole-site owner checkpoint.
+
+**Round 509 is complete, merged through PR 60 and verified live.**
 Its College Grid finding was a false stall in `playGames`, not a broken page. The rest of its
 status is recorded in the progress table, Open bugs and change log below.
 
@@ -106,12 +193,12 @@ an area moves; the round numbers stay for traceability.
 | P0 production bugs | both items Round 413's audit left open are closed | Round 413 audited the owner's thirteen P1 items from 2026-08-28 and found exactly two still open: the euro strings (Round 415) and the Trade Finder (Rounds 416 and 418). Both are done, so item 12's second half landed and a trade for a defender now changes how the club plays. The wording is deliberately narrow: it reports what that audit found, not a fresh claim that all thirteen are closed, which this round did not re-audit. |
 | Shared data layer and provenance | 58% | Round 509 audited the complete generated 2025-2026 career tranche instead of stopping at seven visible errors. All 77 rows were projections authored before the season finished, so the branch removes them from the fallback and records every disposition in `careerSeasonTruth.json`; 27 separately researched rows stay. Both career quarantines and the companion Transfer Path repair are live. The database now has 885 reachable puzzles, 872 Europe hints and zero unsafe Active Players hints. Round 416's derived NFL roster work still stands; ages and the pool below $60M still wait on a documented dataset. |
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
-| Indexing and SEO | 48% | Round 496, against Search Console ground truth read 2026-09-06: sitemap clean (140 of 140, Success), 58 indexed against 91 not. The home page was linking to /jeopardy, a redirect to /quiz-board, so the most crawled document on the domain spent an outbound vote on a URL that only bounces; that is the Page with redirect bucket and it is fixed and fenced. Measured in the same pass and worth not re-chasing: the link graph is healthy (zero orphans, every page 2 or more inbound, deepest page 3 clicks from home), so the 71 discovered-not-crawled pages are a crawl budget and quality question, not a structure one. |
-| Profiles and leaderboard | 45% | Rounds 392 and 399 stopped the earlier per-match and per-visit leaks. Round 509 also stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score on every visit, but that code is pending PR and deploy. The measured leak is 61,964 points across 30 accounts; no retroactive subtraction was performed. The broader history repair remains an owner decision. |
+| Indexing and SEO | 48% | Round 510 read every Search Console exclusion. The September 3 report has 58 indexed, 71 discovered, 17 crawled exclusions and three alternate-domain redirects. Eleven crawled exclusions are current indexable pages; their old crawl dates predate the prerender work. Footle's live test passed and its indexing request was accepted. After Round 509 published, all 140 live sitemap pages passed metadata, canonical, H1 and noindex checks. This proves current crawl readiness, not guaranteed indexing. Exact evidence is in docs/seo/indexing-audit-2026-09-07.md. |
+| Profiles and leaderboard | 45% | Rounds 392 and 399 stopped the earlier per-match and per-visit leaks. Round 509's four restored-retirement guards are now verified in the public bundles. The measured leak was 61,964 points across 30 accounts; no retroactive subtraction was performed. The broader history repair remains an owner decision. Round 510's separate same-day Conquest tab fix is still awaiting its final gate and publication. |
 | AdSense recovery | 100% submitted, site-side ready | Round 400 is live and the review is submitted. The 2026-09-07 re-audit passed 17 AdSense, legal, SEO, crawler, content and brand checks; all 14 negative controls fired; 140 of 140 live sitemap routes were clean; 139 substantive documents carried publisher verification; all 75 `AdBanner` callers use slot `7540487748`; and the live representative browser checks found no accidental noindex, orphan or page error. One nonblocking Club Manager spacing follow-up is assigned to its claimed lane. This is site-side readiness, not an approval guarantee. Google still decides. |
 | In game reporting UX | 78% | Round 447: game pages now use the shared report flow in GameShell on the latest touched games, with board context passed for game-specific issues and a standard placement pattern before SEO footer blocks. |
 | Club Manager | 49% | Round 505: the tactics tab reads the way the match does (a man read in his slot at 0, 2, 6 or 14 rating points on him alone, the bench under the pitch ordered same position first, seventeen shapes that carry the eleven across, the armband and four takers that reach the stream, a duty on every slot capped at 0.12, a second position learned over counted weeks and real players starting with none), fenced by simTacticsEngine with seven controls and the Round 114 pitch guard brought back from a false green. Before it, Round 504: the live match is football, each half committed as a stream the viewer walks and the report is counted off, both elevens named and numbered, the ball at a carrier's feet, corners and throw ins and fouls, live stats, a sub or shape change at any minute with the rest of the half redrawn, and the other dugout's own subs; fenced by simLiveMatch (nine sections, five controls). Before it, Rounds 465 to 467: two meters on every tab (the board meter is the sacking number itself, the fans move with results at r = 0.93 against points per game), goals for and against on every table, a calendar you tap to sim to any day on the one loop the four fast forwards use, four facilities with start levels derived from the club's tier and money and effects that are real and bounded, ticket and concession pricing with fan and board reactions, generated sponsors, and a projected finances screen whose lines sum. Before them, Round 462: the era Champions League plays its round of 16, the group tables stay up through the knockouts, and level points split the way each league says (Spain and Italy head to head) on a per pair ledger with a save migration. Before it: quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
-| Soccer Career | 16% | Round 468 added three position specific training drills you actually play. Round 509's branch connects the wall visually without changing its legal gap, replays the real daily wall draws across 90 dates and 900 rounds with zero unwinnable walls, and adds controls for the two previously unfenced sections. That code is pending PR and deploy. Round 469 lifted the money app, social feed, rival and badge shapes into shared modules so the US careers can reach the same loop. Per season ping is activity, not completion (392). |
+| Soccer Career | 16% | Round 468 added three position specific training drills you actually play. The published Round 509 batch connects the wall visually without changing its legal gap, replays the real daily wall draws across 90 dates and 900 rounds with zero unwinnable walls, and adds controls for the two previously unfenced sections. Round 469 lifted the money app, social feed, rival and badge shapes into shared modules so the US careers can reach the same loop. Per season ping is activity, not completion (392). |
 | Multiplayer foundation | 12% | Round 461: Rebuild seats two to four players at one table on one phone (pass and play or CPU) with one shared season. Online play across two phones is the next step and needs the account layer. |
 
 ### Reconciled size of the full backlog, 2026-09-07
@@ -168,7 +255,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Polls more engaging | DATABASE DONE, UI PENDING DEPLOY | Round 509 restocked 58 upcoming rows and the live table now has zero C or D choices, zero off-format prompts and zero repeated matchups. Every poll is a named participant versus participant with exactly A and B. Team polls ask exactly `Who you got?`; player polls ask exactly `Who ranks higher all time?`. The component and fixture fallback enforce the same contract once the pending Round 509 code deploys. No weird specific comparison wording. |
 | Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
-| Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
+| Indexing | GOOGLE ACTIVE, BING AND YANDEX PAUSED | His latest request reopens Google indexing only. Search Console read 2026-09-07, report dated September 3: 58 indexed, 71 discovered, 17 crawled but excluded, three redirects. The 17 include 11 current indexable pages, five deliberately excluded routes and sitemap.xml. Footle's live Google test passed and its indexing request was accepted. Exact evidence and URL lists: docs/seo/indexing-audit-2026-09-07.md. Do not run IndexNow. |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | OPEN | |
 | Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining). Still open from his list: start options, leagues and eras depth, manager XP, media, the transfers rework with personal terms (Round 506, claimed) |
@@ -177,7 +264,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Career Ladder flags | DONE | Round 444 |
 | Who Am I slow load; more puzzles; accuracy meter | DONE | Round 443 load (10 requests, 446 KiB); Round 463 grew the pool 500 to 600 and the secret pool 300 to 400, and the meter is measured rather than trusted: simWhoAmIAccuracy runs the real scorer over the real pool and holds that the answer alone scores 100, that sharing more of the six attributes scores higher at three gap sizes, and that the five hottest guesses share far more with the secret than five random players do |
 | Alphabet Sprint verify end to end; say full names count | DONE | copy since Round 319 (the full name lead sentence); verified 2026-09-05 with a real browser play of the route, 14 interactions clean, no findings |
-| Conquest map presentation | DONE, NBA combat fix pending deploy | Round 457 replaced four private map components with one shared region renderer and Round 459 added Soccer Conquest on it. Round 509 fixes the NBA away-loss rule: an attacker that loses is repelled and keeps its territory and shield instead of being annihilated, while a successful attack still removes the defender. The hook and result copy are fenced separately; code is pending PR and deploy. The shared daily replay and mobile reveal issues remain open below. |
+| Conquest map presentation and creator rules | PART, ENGLISH ATTACK REVIEW CANDIDATE | Round 512 implements the first geographic Attack slice for 20 English clubs: directional last-club-standing play, captured players, simulated upgrades and a separate durable save, while the existing scored Daily Season remains intact. The local build is a review candidate, not published. La Liga, Europe, World and NFL/NBA powers remain open; their research files do not enable them. Exact source evidence and data gaps are in docs/conquest-reference-audit-2026-09-07.md. The players-valued count remains removed in the local Round 511 preview. |
 | NEW Search and Discard | DONE | shipped 2026-08-29 |
 | NEW Sports Bingo | DONE | shipped 2026-08-29 |
 | NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy Draft; not yet one per sport |
@@ -185,7 +272,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Player Stock Market format | DONE | Round 434 fixed the scoring; Round 458 built his format: pick a start season (2015 to 2022, each measured for at least 16 real choices per slot), cards show numbers only (position, age, matches, goals, assists, cards, price) and never a name, club, country or flag, buy one per position to a full XI, step year by year on the table's real rows ("no row for 2019" where there is none), then the reveal. Boot went from 40 requests and 7 MB to 1 request and 24 KiB on the wire |
 | Stadium Tycoon depth | PART | Round 439 away rules; depth open |
 | Wonderkid merge | OPEN | |
-| Transfer Path special rule modes (active players only, Europe only) | PART, RECOVERY READY FOR DEPLOY | Round 460's shared rule engine is live. Round 509 found that its active coverage relied on an unverified 77-row 2025-2026 projection tranche. All 77 rows are now quarantined live, 17 paths made unreachable by that correction are gone, and all 885 retained hints are refreshed. The replacement verifies 78 active identities by normalized name plus nationality and can safely restore 203 of 885 paths after the matching frontend deploys. Its guarded restore migration remains unapplied on purpose. Europe mode retains 872 verified hints. |
+| Transfer Path special rule modes (active players only, Europe only) | PART, VERIFIED RECOVERY LIVE | Round 509 removed the unverified 77-row projection tranche and 17 newly unreachable paths. The verified replacement is now published. Its 78 name-plus-nationality identities support 203 restored active paths among 885 puzzles; Europe has 872. The guarded restore was applied only after frontend verification, matches the live graph exactly and opens in the public browser. Wider verified active-player coverage remains future work. |
 | World XI: eligibility from real positions, more in the season report, respin count customizable | PART | eligibility Rounds 319 and 345 (shared with Build Your XI in Round 442); the respin budget picker already exists on the page; more in the season report shipped in Round 455 (worldXi.ts), and Round 449 removed the invented conduct line from it |
 | Fantasy Draft scrolling | DONE | Round 326 |
 | Missing XI flags or colours, overlapping bubbles | DONE | Round 444 |
@@ -2448,7 +2535,7 @@ reaches a match in Club Manager (120).
 
 ## Open bugs
 
-**Round 509 code fixes that remain open on the live site until PR, merge and deploy:**
+**Round 509 follow-up: these previously open items are now verified in the live build:**
 
 - The four restored retired My Career boards can repay their legacy score on a repeat visit.
   Round 509 marks a restored finish before the retired screen renders, with four positive-score
@@ -2461,7 +2548,8 @@ reaches a match in Club Manager (120).
 - The prerender sample clocks move with the host calendar. Round 509 anchors all three to one
   fixed epoch and fixes the browser timezone, with separate controls for each installation wire.
 
-These four fixes are complete in the Round 509 branch. They are not live yet.
+These four fixes are merged through PR 60 and published. The test-driver fix is a repository
+check rather than a visitor-facing defect. The current live verification is recorded above.
 
 **Found by the adversarial review of Rounds 465 to 469 on 2026-09-05 night and left open
 (the three it confirmed and eight smaller ones landed with the batch; these are what
@@ -2498,20 +2586,39 @@ roadmap when a round touches the game named:
   club in the same season. Present since Round 294. Fix in scripts/lib/transferPathHints.mjs
   and src/hooks/useTransferPath.ts together (one key rule, both sides), then re-derive every
   hint under every rule with scripts/genTransferPathHints.mjs.
-- **Transfer Path's active-player evidence is safely disabled while its honest replacement
-  deploys.** Round 509 proved that the 77 fallback and seed rows labelled 2025-2026 were
+- **Transfer Path's verified active-player replacement is live.** Round 509 proved that
+  the 77 fallback and seed rows labelled 2025-2026 were
   authored before the season was complete and are projections, not finished-season facts.
   All 77 are quarantined live, 27 separately researched rows remain, 17 unreachable puzzles
-  are gone, and all 885 retained hints are refreshed. The live database has zero Active Players
-  hints rather than guessing from a season label. The replacement now derives 78 verified
+  are gone, and all 885 retained hints are refreshed. The replacement derives 78 verified
   identities by normalized name plus nationality, requires each raw name to be unique in the
   graph, and proves 203 of 885 puzzles have a valid Active Players path. The guarded restore
-  migration is ready but stays unapplied until the matching frontend is live. Do not restore
-  projected stats simply to make the mode look populated.
-- **Every Conquest map: the first move can sit below the fold on a phone** once a club is
-  picked (the call card renders after the map, the legend and the standings toggle, with no
-  reveal scroll on the shared board or the four private ones). The no scroll rule wants the
-  next step in view on its own.
+  was applied only after public frontend verification, as migration 20260908012949. All 203
+  paths now match the live graph and open in the public browser. No projected stats returned.
+- **Conquest single-tab reload: fixed in Round 476, this old entry was stale.** Rechecked
+  September 7: all 87 settled checkpoints across five sports replay exactly, and all 82
+  measured reload points gain zero score. The shared board records the action log as it goes.
+  A separate, real stale-tab overwrite was reproduced in Round 510: an older second tab can
+  replace a finished record as unfinished and earn 100 to 275 more points on the measured
+  date. Round 510 adds serialized expected-log commits and claims a finish before the
+  completion hook sees it. Code and focused tests are ready; publication is still pending.
+- **Daily saves, cross-date stale tabs: measured September 7, not fixed in Round 510.**
+  The shared writeDailyRecord cleanup removes every other date, including newer dates.
+  Saving September 8, then starting from a tab pinned to September 7, removed September 8's
+  record in a real-helper reproduction using isolated memory storage. Per-day Conquest locks
+  do not cover this different-date case. Follow up in src/lib/dailyRecord.ts with regression
+  tests for newer-save preservation and bounded old-record cleanup across its callers.
+  Read-only follow-up found the same cleanup in useDailyPuzzle, and Conquest's shared streak
+  can move its lastDate backward when an older pinned day finishes. Proposed next scope:
+  exact-slug cleanup retaining the newest two date records across both helpers, and monotonic
+  streak updates inside a sport-wide finish lock. Regressions must cover delayed puzzle loads,
+  descending old-tab writes, unrelated keys, finish order and normal streak extension/reset.
+- **Conquest first-step reveal: wired in Round 476.** The shared board uses useRevealScroll
+  for phase and call count. The September 7 reconciliation verified source wiring, not new
+  mobile geometry, so do not claim a fresh visual measurement from that check.
+- **Rebuild save: implemented in Round 477, this old entry was stale.** rebuildSave.ts,
+  useRebuild restore/write paths and simRebuildSave already exist. Do not build a second save
+  system based on the superseded report of refresh losing the table.
 - **Club Manager, era Champions League group tables rank level clubs on goal difference**
   where the real group stage from 2003-04 to 2023-24 used head to head first, so the round
   of 16 seeding can read the wrong group winner. Pre existing; Round 462 seeded the draw on
@@ -3081,9 +3188,73 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
-- **2026-09-07, Round 509 (Codex lane), CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
-  PENDING.** This is one correctness and presentation batch, not a claim
-  that the live site already changed.
+- **2026-09-07, Round 511 (Codex lane), COPY VERIFIED LOCALLY, MAP REBUILD RESEARCHED.**
+  Removed the player-value row count from soccer club subtitles and both explanatory
+  help/FAQ promises. Actual values, strengths, coverage fields and partial warnings are
+  unchanged. Regenerated only the soccer-conquest snapshot, then the derived sitemap
+  ledger: 139 URLs retain their lastmod, one changes. Type gate, production build, all
+  217 Vitest tests and all 15 built-site fences pass on the worktree containing merged
+  Round 505. Existing dialog-description warnings remain in the unrelated daily reload
+  tests. Chromium at 390px and 1440px displays all 96 club tiles, nine partial markers,
+  no valued-player counts, no horizontal overflow and no page errors. The phone screenshot
+  was visually inspected. The five focused Conquest/map and incoming tactics-engine
+  harnesses also pass. No new sports facts imported; no database or publish action.
+
+  The owner's replacement references were identified exactly, read through primary
+  transcripts and checked at selected frames. The source audit records the map style,
+  captures, country/continent upgrades, same-pyramid water exception, powers, disaster
+  counters and observed inconsistencies. Game-design and data-guardian review exposed
+  a real scope gap: soccer is still a fixture-prediction hex board, and the local assets
+  lack verified global club coordinates and complete world rosters. Do not count research
+  as the requested gameplay being complete. Proposed next slice: versioned Attack mode
+  on the existing routes, preserving the daily, beginning with a verified league map.
+  Cross-midnight save work stays measured but deferred for this explicit owner correction.
+
+- **2026-09-07, Round 510 (Codex lane), DRAFT PR 61, FULL SIMULATION GATE PENDING.** Google URL-level evidence is
+  recorded in docs/seo/indexing-audit-2026-09-07.md. The report is dated September 3:
+  58 indexed, 71 discovered, 17 crawled exclusions, three alternate-domain redirects.
+  Of the 17, eleven are current indexable pages, five are deliberately excluded routes and
+  one is sitemap.xml. Footle passed Google's live test and its indexing request was accepted.
+  No guarantee or claim of new indexing. Bing and Yandex remain paused.
+
+  The Conquest audit cleared the original reload bug (Round 476) and found a real successor:
+  stale tabs overwrite finished or later runs. The new store refuses rollback and divergent
+  calls; the board serializes expected-log commits with browser locks before revealing a
+  result or exposing a scoring finish. Conflicts restore saved progress. Missing storage or
+  locking stops the scored daily and offers Free Play without deleting the saved run. The
+  store and real-board regressions failed before the fix and now pass 23 focused checks.
+  Both controls fire independently: ten store rollback assertions and the board's duplicate
+  completion assertion. Full Vitest passed 24 files and 217 tests after applying a 15-second
+  timeout only to the two bounded full-season UI cases; the first 5-second run timed out
+  under suite contention. Type check, build and all 15 built-site fences passed. Native
+  Chromium Web Locks preserved the settled run against an old picker on all five Conquest
+  routes at 390px, with no horizontal overflow or page errors. Soccer also preserved the
+  daily through Free Play and reload. Browser checks blocked external network requests.
+  The full 264-harness node suite finished: 263 PASS and one EMPTY wrapper report,
+  even though the wrapper's 23 underlying tests passed. A focused wrapper-output fix
+  and recheck remain in Round 510's root checkout. This is not a new gameplay failure.
+  Review also measured the separate cross-date cleanup issue recorded under Open bugs.
+
+  Footle's kit audit no longer hangs on unavailable database requests or skips a failed page.
+  Fetch and body reads share an eight-second deadline, the same page is retried once, and exact
+  ranges/counts must prove the pool is complete. The regression moved from 2/17 to 17/17 passing
+  cases. Fresh live audit covered 5,496 players, 37 movers and zero stale squad numbers; all
+  158 stayers kept their numbers. The trusting control still exposed all 37 stale entries.
+
+  Hosting exit is only a proposal in docs/HOSTING-EXIT-PROPOSAL.md. Anthony explicitly wants
+  analytics, visible previews and control before publishing preserved. Do not auto-publish
+  ordinary work commits, move DNS, buy a plan or delete Lovable based on this assessment.
+
+  During verification the public build changed. Executable public code now confirms the
+  Round 509 restore guards, NBA retreat rule, strict polls, verified Transfer Path identities
+  and hidden Google gate. All 140 sitemap pages passed fresh raw-HTML checks. That closed the
+  earlier publish blocker and permitted the already prepared 203-path Active Players restore,
+  applied as migration 20260908012949 and rechecked against the live graph and public browser.
+  This was the held Round 509 database rollout, not a new data import.
+
+- **2026-09-07, Round 509 (Codex lane), COMPLETE, MERGED THROUGH PR 60 AND VERIFIED LIVE.**
+  Publication was confirmed during Round 510's verification, with the evidence above.
+  The staged rollout details below describe the order used, not a still-pending deployment.
 
   **THE FOUR MY CAREER REPEAT-CREDIT LEAKS.** NFL, NBA, MLB and NHL restored a retired save
   after mount, after the completion hook had decided it was a fresh finish. Opening the board
