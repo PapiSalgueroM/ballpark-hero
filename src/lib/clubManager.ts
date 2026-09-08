@@ -432,6 +432,19 @@ export interface CMPlayer {
   contractYears?: number;
   /** Round 105: what he costs you every week, in thousands. */
   wage?: number;
+  /** Round 506: the terms he actually signed, so a screen can show what he
+      was told rather than what the ladder later decided. Absent on every save
+      written before Round 506 and on everybody already in the building when
+      you took the job, which is correct: you did not promise them anything. */
+  signedTerms?: import('@/lib/clubManagerDeals').SignedTerms;
+  /** Round 506: on a loan in, the club he belongs to. onLoan was a bare
+      boolean before this round, so the engine could not say who owned him and
+      an option to buy had nobody to pay. */
+  loanFrom?: string;
+  /** Round 506: buy him outright when the loan ends, at this fee in millions. */
+  loanOptionFee?: number;
+  /** Round 506: end the loan early for this, in millions. */
+  loanBreakFee?: number;
   /** Round 193: a release clause YOU granted at a renewal, in millions. It
       bought a cheaper wage, and the price is that any club can meet it:
       a met clause cannot be rejected, and blocking him cannot kill it.
