@@ -287,7 +287,7 @@ describe('Attack map inspection and navigation', () => {
     const pointer = (target: Element, type: string, pointerId: number, clientX: number, clientY: number) => {
       const event = new Event(type, { bubbles: true });
       Object.defineProperties(event, {
-        pointerId: { value: pointerId }, clientX: { value: clientX }, clientY: { value: clientY },
+        pointerId: { value: pointerId }, buttons: { value: type === 'pointerup' ? 0 : 1 }, clientX: { value: clientX }, clientY: { value: clientY },
       });
       fireEvent(target, event);
     };
@@ -304,6 +304,33 @@ describe('Attack map inspection and navigation', () => {
     pointer(map, 'pointermove', 5, 125, 50);
     expect(capture).toHaveBeenCalledWith(5);
     expect(map.getAttribute('data-view-box')).not.toBe(beforeDrag);
+  });
+
+  it('ignores a no-button hover after an uncaptured press is released outside the map', () => {
+    const state = createAttack(compactSetup());
+    render(<AttackMap state={state} inspectedRegion="west" onInspect={() => undefined} />);
+    const map = screen.getByRole('application', { name: 'Soccer Attack map' });
+    const middle = screen.getByRole('button', { name: /middle, neutral region/i });
+    const capture = vi.fn();
+    Object.defineProperty(map, 'setPointerCapture', { configurable: true, value: capture });
+    vi.spyOn(map, 'getBoundingClientRect').mockReturnValue({
+      x: 0, y: 0, top: 0, left: 0, right: 300, bottom: 100, width: 300, height: 100, toJSON: () => ({}),
+    });
+    const pointer = (target: Element, type: string, buttons: number, clientX: number, clientY: number) => {
+      const event = new Event(type, { bubbles: true });
+      Object.defineProperties(event, {
+        pointerId: { value: 7 }, buttons: { value: buttons }, clientX: { value: clientX }, clientY: { value: clientY },
+      });
+      fireEvent(target, event);
+    };
+
+    fireEvent.keyDown(map, { key: '+' });
+    const before = map.getAttribute('data-view-box');
+    pointer(middle, 'pointerdown', 1, 100, 50);
+    pointer(map, 'pointermove', 0, 210, 50);
+
+    expect(capture).not.toHaveBeenCalled();
+    expect(map.getAttribute('data-view-box')).toBe(before);
   });
 });
 

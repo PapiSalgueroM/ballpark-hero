@@ -66,7 +66,7 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
   const bounds = state.setup.bounds;
   const [view, setView] = useState<ViewBox>({ x: 0, y: 0, width: bounds.width, height: bounds.height });
   const svgRef = useRef<SVGSVGElement>(null);
-  const drag = useRef<{ x: number; y: number; view: ViewBox; captured: boolean } | null>(null);
+  const drag = useRef<{ x: number; y: number; view: ViewBox; pointerId: number; captured: boolean } | null>(null);
   const teamById = useMemo(() => new Map(state.teams.map(team => [team.id, team])), [state.teams]);
   const regionById = useMemo(() => new Map(state.setup.regions.map(region => [region.id, region])), [state.setup.regions]);
   const viewText = `${view.x} ${view.y} ${view.width} ${view.height}`;
@@ -107,10 +107,14 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
   };
 
   const onPointerDown = (event: ReactPointerEvent<SVGSVGElement>) => {
-    drag.current = { x: event.clientX, y: event.clientY, view, captured: false };
+    drag.current = { x: event.clientX, y: event.clientY, view, pointerId: event.pointerId, captured: false };
   };
   const onPointerMove = (event: ReactPointerEvent<SVGSVGElement>) => {
-    if (!drag.current || !svgRef.current) return;
+    if (!drag.current || !svgRef.current || event.pointerId !== drag.current.pointerId) return;
+    if ((event.buttons & 1) === 0) {
+      drag.current = null;
+      return;
+    }
     const pixelX = event.clientX - drag.current.x;
     const pixelY = event.clientY - drag.current.y;
     if (!drag.current.captured && Math.hypot(pixelX, pixelY) < 4) return;
@@ -124,7 +128,12 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
     const dy = pixelY / rect.height * drag.current.view.height;
     setView(clamp({ ...drag.current.view, x: drag.current.view.x - dx, y: drag.current.view.y - dy }));
   };
-  const stopDrag = () => { drag.current = null; };
+  const stopDrag = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (drag.current?.pointerId === event.pointerId) drag.current = null;
+  };
+  const leaveMap = () => {
+    if (drag.current && !drag.current.captured) drag.current = null;
+  };
 
   const labels = useMemo(() => {
     const owned = new Map<string, AttackRegion>();
@@ -182,6 +191,7 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
           onPointerMove={onPointerMove}
           onPointerUp={stopDrag}
           onPointerCancel={stopDrag}
+          onPointerLeave={leaveMap}
           className="h-[56vh] min-h-[410px] max-h-[720px] w-full cursor-grab touch-none bg-[#4d9bc6] outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
           preserveAspectRatio="xMidYMid meet"
         >
