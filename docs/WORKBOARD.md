@@ -1,5 +1,19 @@
 # Work board
 
+## Round 536 claimed, September 8, 2026
+
+Codex owns the reproduced NFL player-steal settlement repair in useConquest
+and its Board controls. Worktree `.worktrees/round-536-nfl-steal-settlement`,
+branch `codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86).
+Five original-map real-battle failures cover invalid selections, duplicate
+settlement and confirmation callbacks surviving reset or unmount. Keep the
+existing 1200ms confirmation, Close/reopen flow and battle rules. Validate
+the current pending result and loser choice once, cancel old delayed work,
+and verify real action outcomes, UI controls, both exact types, build and all
+fifteen site checks. Root belongs to Claude. Preserve all previous worktrees
+and previews. Draft PR only, no backend/account writes, broad suite, root
+edits, main merge or publication. Next free 537.
+
 ## Round 535 complete, September 8, 2026
 
 Codex owns the NFL same-name legend/card repair, with real-action baseline
