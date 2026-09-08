@@ -54,10 +54,22 @@ export const VALUATION_SPREAD_MAX = 0.3;
 /** At or under this the desk is quoting a number, not a range. */
 export const VALUATION_EXACT_AT = 0.02;
 
-/** How loose your read of a fee is: 0.30 at level 1, 0.021 at level 10. */
+/**
+ * How loose your read of a fee is: 0.30 at level 1, and tight enough at level
+ * 10 that the desk quotes a figure rather than a band.
+ *
+ * The slope was 0.031, which bottoms out at 0.021 and is never <= the 0.02
+ * threshold, so ValuationRead.exact was ALWAYS false, valuationLine's "quotes a
+ * figure" branch was dead code, and the most expensive recruitment department
+ * the game sells still only ever gave you a range. The docs promised the
+ * opposite. 0.035 reaches the floor at level 9 and holds it at 10, so the last
+ * couple of levels are what buy you a straight answer, which is what the copy
+ * has always said they buy. Found by re-reading a finding the review's vote had
+ * dropped: unconfirmed is not refuted.
+ */
 export function valuationSpread(state: CareerState): number {
   const level = staffLevel(state, 'scout');
-  return Math.max(VALUATION_EXACT_AT, VALUATION_SPREAD_MAX - 0.031 * (level - 1));
+  return Math.max(VALUATION_EXACT_AT, VALUATION_SPREAD_MAX - 0.035 * (level - 1));
 }
 
 /** FNV-1a, the hash clubManagerStaff already uses, so no draw is spent here. */

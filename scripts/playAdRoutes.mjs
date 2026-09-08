@@ -31,10 +31,17 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.ADROUTES_CONTROL || '';
-if (CONTROL && !['global-loader', 'zero-width', 'fallback-noindex', 'accept-reload', 'stale-noindex'].includes(CONTROL)) {
+if (CONTROL && !['global-loader', 'zero-width', 'fallback-noindex', 'accept-reload', 'stale-noindex', 'adgap'].includes(CONTROL)) {
   console.error(`ADROUTES_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
+/* Round 507: section 10's negative control. It had none: the gap was proven red
+   once by hand, by editing the constant and rebuilding, which is not something
+   anybody can run again. This takes the padding back out of the SERVED bundle
+   and the section must then report exactly the two routes that were broken
+   before AD_CONTROL_GAP_PX existed. Counted so the run can prove the rewrite
+   actually happened rather than passing because it found nothing to change. */
+let adGapRewrites = 0;
 
 const suppliedBase = process.env.BASE ?? process.env.SWEEP_BASE ?? '';
 const PORT = Number(process.env.ADROUTES_PORT || 4196);
@@ -171,6 +178,26 @@ async function instrumentedContext(browser, consent, injectGlobalLoader = false)
     contentType: 'text/javascript',
     body: '',
   }));
+  if (CONTROL === 'adgap') {
+    /* The constant is minified to a one letter name, so the anchor is the SHAPE
+       of the style object rather than the number: minHeight and paddingTop
+       together appear exactly once, on the manual ad wrapper. */
+    await context.route('**/assets/*.js', async route => {
+      const res = await route.fetch();
+      const body = await res.text();
+      const hits = body.match(/minHeight:(\w+),paddingTop:(\w+)/g) ?? [];
+      if (hits.length === 0) { await route.fulfill({ response: res, body }); return; }
+      if (hits.length > 1) {
+        console.error(`adgap control: expected one ad style object in a chunk, found ${hits.length}`);
+        process.exit(1);
+      }
+      adGapRewrites += 1;
+      await route.fulfill({
+        response: res,
+        body: body.replace(/minHeight:(\w+),paddingTop:(\w+)/, 'minHeight:$1,paddingTop:0'),
+      });
+    });
+  }
   await context.route('**/pagead/js/adsbygoogle.js*', route => {
     adRequests.push(route.request().url());
     return route.fulfill({ status: 200, contentType: 'text/javascript', body: '' });
@@ -761,6 +788,22 @@ if (CONTROL === 'stale-noindex') {
     process.exit(1);
   }
   console.log('playAdRoutes control: green. The injected stale noindex suppressed the game ad and the transition assertion caught it.');
+  process.exit(0);
+}
+
+if (CONTROL === 'adgap') {
+  if (adGapRewrites === 0) {
+    console.error('adgap control: the served bundle was never rewritten, so a green run would prove nothing.');
+    process.exit(1);
+  }
+  /* Two of the three routes were under the floor before the gap existed
+     (/club-manager at 104px and /squad-deal at 32px) and /footle was fine at
+     400px, so taking the padding back out must fail exactly those two. */
+  if (failures !== 2) {
+    console.error(`playAdRoutes control: RED. Expected exactly two owned gap failures, got ${failures} (${adGapRewrites} chunk(s) rewritten).`);
+    process.exit(1);
+  }
+  console.log(`playAdRoutes control: green. Removing the gap from ${adGapRewrites} served chunk(s) put /club-manager and /squad-deal back under the floor and section 10 caught both.`);
   process.exit(0);
 }
 

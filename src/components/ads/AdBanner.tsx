@@ -24,11 +24,18 @@ interface AdBannerProps {
  * is tapping, and the reason is accidental clicks rather than taste. Measured
  * at 390 wide on the built site on 2026-09-08, before this existed: the nearest
  * control was 104px above the slot on /club-manager (an era picker) and 32px
- * above it on /squad-deal (the Start Building button). Every caller passes
- * `mt-8`, which is 32px, so 120 here puts the floor at 152px everywhere while
- * leaving pages that already had room alone.
+ * above it on /squad-deal (the Start Building button).
+ *
+ * THIS NUMBER ALONE HAS TO CLEAR THE FLOOR. It was 120, which met the 150px
+ * recommendation only because all 76 existing mounts happen to pass `mt-8`
+ * (32px), giving 152 and two pixels of headroom on a rounded, browser measured
+ * number. That is the Round 284 coin toss shape, and it made the promise below
+ * false: a page added next month written with `mt-4` would have landed at 136
+ * and reintroduced exactly the problem this constant exists to stop. At 150 the
+ * component clears the floor on its own whatever className a caller passes, so
+ * the promise is now true rather than true by luck.
  */
-export const AD_CONTROL_GAP_PX = 120;
+export const AD_CONTROL_GAP_PX = 150;
 
 const MIN_HEIGHT_BY_FORMAT: Record<string, number> = {
   horizontal: 100,

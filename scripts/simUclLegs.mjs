@@ -47,13 +47,27 @@
  *                              modern era is wrongly split on away goals.
  *   UCL_LEGS_CONTROL=legone    lets a first leg settle the tie, so section 3
  *                              finds a winner a week early.
+ *   UCL_LEGS_CONTROL=legacyguard restores the exact regression Round 507
+ *                              shipped, reading a calendar entry with no uclLeg
+ *                              as leg one of two, so section 5's legacy save
+ *                              never settles its bracket.
  * Each control refuses to run if its rewrite did not find its text.
  *
  * MEASURED. Printed every run rather than asserted as a band, because these are
- * counts of a format rather than a distribution: 4 eras read, 16 outcome cases,
- * one full season played per era to the round of 16, and every tie in that
- * round checked. A section cannot pass empty because each prints its count and
- * fails on a count of zero.
+ * counts of a format rather than a distribution: 4 eras read, 14 outcome cases,
+ * at least two era seasons played to the round of 16, and every tie in those
+ * rounds checked, plus three legacy calendars played out in section 5. A
+ * section cannot pass empty because each prints its count and fails on a count
+ * of zero.
+ *
+ * Two things in here were wrong until the review's dropped findings were read
+ * by hand, and both are worth remembering. Section 2 passed literal true and
+ * false into uclTieOutcome, so it measured the PARAMETER and never called
+ * uclAwayGoalsApply at all, while this header credited it as the strongest
+ * signal that the era rule is read: it takes the rule from the eras now.
+ * And section 3 only failed when it measured ZERO era seasons, so a seed where
+ * two of the three clubs went out early left the whole played half of the
+ * harness resting on one season.
  *
  * Run: node scripts/simUclLegs.mjs
  */
@@ -177,6 +191,20 @@ console.log('1) Every era plays the legs its own season played');
 console.log('2) The tie is read the way the competition reads it');
 {
   let cases = 0;
+  /*
+   * Round 507 follow-up: these were literal true and false, so the section
+   * measured uclTieOutcome's PARAMETER and never once called the function that
+   * decides the rule. The header credited it as the strongest signal that the
+   * era rule is really being read, and the noaway control was documented as
+   * turning it red. Neither was true: only section 1 touched uclAwayGoalsApply.
+   * The rule now comes from the eras themselves, so a control that breaks the
+   * era rule breaks these cases too, which is what the header always claimed.
+   */
+  const ERA_RULE = uclAwayGoalsApply('era2005');
+  const NOW_RULE = uclAwayGoalsApply(undefined);
+  if (ERA_RULE !== true || NOW_RULE !== false) {
+    fail(`section 2 cannot run its era split: 2005 reads ${ERA_RULE} and the modern season reads ${NOW_RULE}`);
+  }
   const check = (label, tie, awayRule, wantWinner, wantByAway = false) => {
     cases += 1;
     const out = uclTieOutcome(tie, awayRule);
@@ -189,11 +217,11 @@ console.log('2) The tie is read the way the competition reads it');
 
   // Plain aggregate, both directions, under both rules.
   const homeWins = { leg1: { homeGoals: 2, awayGoals: 0 }, leg2: { homeGoals: 0, awayGoals: 1 } };
-  check('home 2-1 on aggregate, away goals era', homeWins, true, 'home');
-  check('home 2-1 on aggregate, modern', homeWins, false, 'home');
+  check('home 2-1 on aggregate, away goals era', homeWins, ERA_RULE, 'home');
+  check('home 2-1 on aggregate, modern', homeWins, NOW_RULE, 'home');
   const awayWins = { leg1: { homeGoals: 0, awayGoals: 1 }, leg2: { homeGoals: 1, awayGoals: 3 } };
-  check('away 4-1 on aggregate, away goals era', awayWins, true, 'away');
-  check('away 4-1 on aggregate, modern', awayWins, false, 'away');
+  check('away 4-1 on aggregate, away goals era', awayWins, ERA_RULE, 'away');
+  check('away 4-1 on aggregate, modern', awayWins, NOW_RULE, 'away');
 
   /* THE CASE THAT MATTERS, and the first draft of it was wrong in a way worth
      recording: 0-2 then 2-0 is level on aggregate AND level on away goals, two
@@ -206,28 +234,28 @@ console.log('2) The tie is read the way the competition reads it');
      penalties. Same football, two answers, which is the whole point of reading
      the season rather than hard coding the rule. */
   const levelAwayEdge = { leg1: { homeGoals: 1, awayGoals: 2 }, leg2: { homeGoals: 1, awayGoals: 0 } };
-  check('2-2, away side holds the away goals 2-1, away goals era', levelAwayEdge, true, 'away', true);
-  check('2-2, away side holds the away goals 2-1, modern', levelAwayEdge, false, null);
+  check('2-2, away side holds the away goals 2-1, away goals era', levelAwayEdge, ERA_RULE, 'away', ERA_RULE);
+  check('2-2, away side holds the away goals 2-1, modern', levelAwayEdge, NOW_RULE, null);
 
   // The mirror: the home side has the away goals, 2 against 1.
   const levelHomeEdge = { leg1: { homeGoals: 0, awayGoals: 1 }, leg2: { homeGoals: 2, awayGoals: 1 } };
-  check('2-2, home side holds the away goals 2-1, away goals era', levelHomeEdge, true, 'home', true);
-  check('2-2, home side holds the away goals 2-1, modern', levelHomeEdge, false, null);
+  check('2-2, home side holds the away goals 2-1, away goals era', levelHomeEdge, ERA_RULE, 'home', ERA_RULE);
+  check('2-2, home side holds the away goals 2-1, modern', levelHomeEdge, NOW_RULE, null);
 
   // Level on aggregate AND on away goals: penalties in either era.
   const levelBoth = { leg1: { homeGoals: 0, awayGoals: 2 }, leg2: { homeGoals: 2, awayGoals: 0 } };
-  check('2-2 with two away goals each, away goals era', levelBoth, true, null);
-  check('2-2 with two away goals each, modern', levelBoth, false, null);
+  check('2-2 with two away goals each, away goals era', levelBoth, ERA_RULE, null);
+  check('2-2 with two away goals each, modern', levelBoth, NOW_RULE, null);
 
   // Dead level on everything: penalties in either era.
   const dead = { leg1: { homeGoals: 1, awayGoals: 1 }, leg2: { homeGoals: 1, awayGoals: 1 } };
-  check('1-1 and 1-1, away goals era', dead, true, null);
-  check('1-1 and 1-1, modern', dead, false, null);
+  check('1-1 and 1-1, away goals era', dead, ERA_RULE, null);
+  check('1-1 and 1-1, modern', dead, NOW_RULE, null);
 
   // A goalless tie is level in both eras.
   const goalless = { leg1: { homeGoals: 0, awayGoals: 0 }, leg2: { homeGoals: 0, awayGoals: 0 } };
-  check('0-0 and 0-0, away goals era', goalless, true, null);
-  check('0-0 and 0-0, modern', goalless, false, null);
+  check('0-0 and 0-0, away goals era', goalless, ERA_RULE, null);
+  check('0-0 and 0-0, modern', goalless, NOW_RULE, null);
 
   console.log(`   ${cases} outcomes checked, including the same two legs giving a different winner in the two eras`);
   if (cases < 12) fail(`only ${cases} outcome cases ran`);
@@ -326,7 +354,13 @@ console.log('3) A round of 16 tie is two weeks at opposite grounds, and half of 
     }
   }
   console.log(`   ${seasons} era season(s) reached both round of 16 legs, ${twoLegTies} of my ties settled over two, ${aggregatesChecked} aggregates checked against their legs`);
-  if (seasons === 0) fail('no era reached a second round of 16 leg, so nothing in this section was measured');
+  /* A floor of two rather than one: with only one era season behind it the
+     whole played half of this harness rests on a single career, and across
+     SIM_SEED 1 to 38 the count ranged from 1 to 3. Two is what the default seed
+     and the seeds checked in the Round 507 gate actually reach. */
+  if (seasons < 2) {
+    fail(`only ${seasons} era season(s) reached a second round of 16 leg, which is too few to rest this section on`);
+  }
 }
 
 /* ---------- 5. THE SHAPE EVERY SAVE IN FLIGHT ACTUALLY HAS ---------- */

@@ -76,7 +76,8 @@
  *   band contains the truth, level 1      100%           100%   (nofog)      floor 100%
  *   band contains the truth, level 10     100%           100%   (nofog)      floor 100%
  *   mean band width, lead scout level 1   29.5 to 29.7%  0.0%   (nofog)      floor 15%
- *   mean band width, lead scout level 10  2.1% on all 4  0.0%   (nofog)      ceiling 6%
+ *   mean band width, lead scout level 10  0.0% on all 4  0.0%   (nofog)      ceiling 6%
+ *   fee agreements reaching the terms     12 of 12       n/a                 floor 10
  *   offers at or under 0.50 ending talks  72 of 72       0 of 72 (nowalkout) floor all
  *   offers at or over 0.80 ending talks   0 of 96        0 of 96             ceiling none
  *   repeating 0.76 of the ask: agreed     0 on all 4     see below           none needed
@@ -244,10 +245,21 @@ function withScoutLevel(state, level) {
   return s;
 }
 
-/** Open a negotiation on a mid priced, real target. */
-function openDeal(state, lo = 12, hi = 45) {
+/**
+ * Open a negotiation on a real target this club can actually afford.
+ *
+ * The band was a fixed 12 to 45 against a ceiling of 80 percent of the budget,
+ * which is unsatisfiable at a club with 11m: Sevilla opened 0 deals out of 8
+ * every time, so a third of section 4's attempts were structurally dead rather
+ * than seed noise, and its floor of 8 was sitting exactly on a measurement of
+ * 8. The band is relative to what the club has now, so a poorer club still
+ * finds somebody and every attempt can produce a sample.
+ */
+function openDeal(state, lo, hi) {
   const market = buildMarket(state);
-  const target = market.find(m => m.price >= lo && m.price <= Math.min(hi, state.budget * 0.8) && !m.generated);
+  const top = Math.min(hi ?? 45, Math.max(1, state.budget * 0.8));
+  const bottom = Math.min(lo ?? 12, Math.max(0.5, top * 0.4));
+  const target = market.find(m => m.price >= bottom && m.price <= top && !m.generated);
   if (!target) return null;
   const opened = startNegotiation(state, target);
   if (!opened || !opened.negotiation) return null;
@@ -432,7 +444,11 @@ console.log('4) The clubs agreeing signs nobody');
     if (makeOffer(after, ask * 1.5) !== null) fail('the fee table took another offer after the clubs had agreed');
   }
   console.log(`   ${checked} fee agreements checked, none of them signed anybody`);
-  if (checked < 8) fail(`only ${checked} fee agreements reached the terms table`);
+  /* Floor 10 against a measurement of 12 on the default seed and SIM_SEED 1 to
+     3. It was 8 against a measurement of 8, which is no headroom at all, and a
+     third of the attempts could never produce a sample because the price band
+     was unsatisfiable at a poor club. Both halves of that are fixed. */
+  if (checked < 10) fail(`only ${checked} fee agreements reached the terms table, floor 10`);
 }
 
 /* ---------- 5. Personal terms ---------- */
