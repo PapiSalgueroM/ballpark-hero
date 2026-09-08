@@ -184,7 +184,32 @@ Four things, in the order they can hurt you.
   but anything that must outlive the window needs the full optional-plus-`ensure` treatment
   registered in BOTH `loadCareer` (13819) and `playNextEntry` (12239), and `SAVE_VERSION` must
   NOT be bumped: a bump deletes every live career.
-  **507 and 508** are reserved for what those three leave named as not done, or the next item off
+  **507 CHAMPIONS LEAGUE TWO LEGGED KNOCKOUT TIES, CLAIMED 2026-09-08**, straight off his
+  2026-09-07 request lower down this file: "Add first and second legs to Champions League
+  knockout ties whenever that season's real format uses two legs."
+  WHAT IS THERE NOW: a knockout tie is ONE match. `UclTie` (clubManager.ts:1153) carries a
+  single `homeGoals`/`awayGoals` pair, a winner and an optional `pens`, and `UclKoRound` is
+  `R16 | QF | SF | F`. There is no leg anywhere in the engine.
+  THE RULES, TWO SOURCE VERIFIED 2026-09-08 before a line was written, because a competition
+  format is data by season and the 4-groups-versus-8 lesson says never hard code one:
+  the round of 16, the quarter finals and the semi finals are two legs and the final is one
+  match; the away goals tiebreak ran from 1965 and was abolished for every UEFA club
+  competition from the 2021/22 season, after which a level aggregate goes straight to two
+  fifteen minute periods of extra time and then penalties. Sources: UEFA's own announcement
+  (uefa.com, "Abolition of away goals rule in all UEFA club competitions") and Sky Sports
+  (skysports.com, 2021-06-24), with ESPN and Goal agreeing.
+  WHAT THAT MEANS PER ERA IN THIS GAME: the three historic eras start in 2005, 2010 and 2015,
+  so all three played away goals; the modern era does not. That is a year rule, expressed the
+  way `UCL_R16_FIRST_YEAR`/`UCL_R16_LAST_YEAR` already express the round of 16, never a
+  per era boolean typed by hand.
+  SAVE RULE: `homeGoals`/`awayGoals` keep meaning what they mean today (the tie's headline
+  score) so an old `uclBracket` still renders, and the legs go on as optional fields.
+  NOT IN THIS ROUND, and it is the bigger half of his request: the live starting points that
+  drop you into a real season in progress. He said himself the standings, results, squads and
+  takeover date must come from verified sources rather than reconstructed history, so it is a
+  data acquisition job before it is an engine one and it needs its own round.
+
+  **508** is reserved for what 506 and 507 leave named as not done, or the next item off
   the ledger if they finish clean.
   FILE AREA: `src/lib/clubManager*.ts`, `src/components/club-manager/*`, `src/pages/ClubManager.tsx`,
   `src/hooks/useClubManager.ts`, `scripts/simClubManager*.mjs`, `scripts/simMatchScreen.mjs`,
