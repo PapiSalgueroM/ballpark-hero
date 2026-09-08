@@ -143,7 +143,7 @@ export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateSt
 }
 
 /** Claim a board transition before revealing results or recording a finish.
- * The per-day browser lock serializes tabs; the expected log rejects stale ones.
+ * The sport-wide browser lock serializes tabs across dates; the expected log rejects stale ones.
  * Without safe storage/locking the board offers free play, not an untracked daily. */
 export async function commitDailyRun(
   sport: ConquestSport,
