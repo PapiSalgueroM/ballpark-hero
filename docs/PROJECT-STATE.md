@@ -1614,6 +1614,75 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Round 513: manager XP and the seven skill trees, and the review that saved it
+
+Spec section 28, which `docs/SPEC-RECONCILIATION.md` line 330 recorded as "No manager XP or
+skill tree exists in Club Manager". XP is earned at the season rollover from figures the season
+already knows and spent across seven trees, five points each. It follows the manager to a new
+club, unlike the balance and the sponsor: the balance was the club's, what he learned is his.
+
+`src/lib/clubManagerXp.ts` is pure and every effect is the identity at zero points, so a fresh
+save, an untouched manager and every save written before this round all get exactly the game
+that shipped. Each tree moves a number the engine already read rather than adding a system
+beside it. `ensureXp` is registered in BOTH `loadCareer` and `playNextEntry` and is idempotent.
+`SAVE_VERSION` was NOT bumped: it is an optional field, and a bump deletes every live career.
+
+**Four things are worth carrying forward from this round, and three of them are about how it
+was checked rather than what it does.**
+
+**1. The balance measurement said the opposite of what the first run said.** A maxed manager
+against an untouched one over 96 paired seasons showed +0.037 points per game and looked like
+proof the trees work. Repeated over four independent seed bases at 160 pairs each it came out
++0.008, -0.006, -0.011 and +0.038: the sign flips, so the results edge is noise and the first
+run was one lucky base. The harness therefore does NOT assert that a maxed manager wins more,
+because measurement says he does not. It asserts the two things that survived repetition: the
+Finance tree pays 3.8 to 5.1m a season at every base, and a maxed manager still loses 18 to 22
+percent of his matches.
+
+An earlier attempt compared whole CAREERS and was measuring the sacking cascade rather than the
+trees, because a career that ends in season one contributes twelve matches and one that survives
+contributes a hundred and eighty.
+
+**2. The adversarial review found four real defects past green gates, and the worst one was
+dropped 0 of 3 by its own vote.** Six lenses, three refuters a finding, 26 raised, 19 confirmed.
+
+The disqualifying one: the Negotiation tree raised both numbers Round 506's anti lowball
+guarantee is built from, up to +0.20 on the convergence fraction and up to +2 on the seller's
+patience, uncapped. Measured over Round 506's own sweep, repeating 0.76 of the ask went from 0
+agreed and 23 out of patience at zero points to **17 agreed and zero out of patience at three**.
+From three points nothing at any multiple anywhere in the sweep ran out of patience: one skill
+point switched off the mechanic. `simClubManagerDeals` section 3 sweeps exactly those multiples
+and would have failed its own shape assertion, but it runs a fresh career, and a fresh career has
+no points, so the defect was reachable only by a manager who had played long enough to earn
+three. The tree now talks the seller's opening premium down instead, floored at the 1.02 of value
+the engine already guaranteed, which cannot reopen the exploit because a lowball is a fraction OF
+the ask. `simManagerXp` section 8 fences the guarantee with a full board.
+
+The other three: Media was a units error (a cushion in whole points subtracted from a cost of
+1.2, so it was bought out by the second point and 3, 4 and 5 changed nothing) and was applied to
+only one of the two no-show paths, re-opening an asymmetry the constant's own comment says must
+never come back. Youth wasted points 1, 2 and 4 to a `Math.floor` and died entirely on a well
+funded academy. Season XP for overperformance was measured against the club the manager was
+moving TO while the finish was at the club he LEFT, so taking a better job deleted XP the season
+had earned and dropping down minted XP nobody earned.
+
+**3. A 0-versus-max assertion is not enough for anything that hands out levels.** Section 3 said
+"8 of 8 effects move between an empty board and a full one" while three trees sold inert points.
+It now walks every point of every tree. `XP_CONTROL=saturate` restores the real defect and the
+output is the whole argument: the old check still reports 8 of 8 green while the new one fails on
+media points 2, 3, 4 and 5.
+
+**4. Six of the seven trees pay nothing unless you use the system they multiply**, and Tactics
+pays literally zero to an eleven with no duties set, because `dutyBoost` sums the duties and 0
+times 1.5 is 0. Three of eight clubs came back byte identical in the first measurement for that
+reason. Each tile now states its condition.
+
+Harness controls: `notneutral`, `freepoints`, `nocap`, `flatlevels`, `deadgate` (an esbuild alias
+onto the ENGINE bundle, because the engine imports the module by name and patching a copy of the
+source would prove nothing) and `saturate`.
+
+---
+
 ## Round 294: Transfer Path's hints stop describing a game that no longer exists
 
 A report from the footer button on 2026-08-19, from `/transfer-path`, said "Wrong answer" on
