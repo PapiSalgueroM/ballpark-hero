@@ -1,5 +1,32 @@
 # Project state
 
+## Round 532 NFL acquired roster cards, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-532-nfl-roster-cards`,
+branch `codex/round-532-nfl-roster-cards`, base531 `e5642529` (draft PR82).
+A shared lookup restores acquired players' existing positions, game ratings
+and key stats in battles, roster tables, Steal and Upgrade choices, waiver
+selection and recipient-aware offers. Original team-card and own-legend
+priority remain. Duplicate Diggs offers now use his original86 card.
+No new data or battle formula tuning. Name-only Peterson/Lynch legend
+ambiguity remains documented; no power activation tracking was introduced.
+
+Ten engine cases cover 320 simulations with original-roster and unknown
+fallback digests unchanged. Seven Board cases and one real-hook offer case
+pass. 42 new source controls yield 69 intended failures, with runtime/backend
+probes rejected. Both exact types, build, all 15 site checks and 54 prior
+NFL/NBA/help cases pass. The one-case wrapper's output reporting was fixed
+after the selected runner called it EMPTY; its selected rerun passes.
+The boot fence passes on rerun after one navigation timeout. Phone/desktop
+each complete two battles and two transfers with retained cards, plus DOM
+controls. Main visual and independent source review clear.
+Evidence: docs/nfl-roster-cards-2026-09-08.md. Preview4209 serves
+index-KPtWT1aL.js. No snapshots, ledger, dependencies, backend/account writes,
+broad suite, root edits, merge or publication. Preserve all prior previews
+and worktrees. Next free533: bounded NFL reward action lifecycle audit.
+
+Round531 final browser source review is also clear; draft PR82 is unchanged.
+
 ## Round 531 NFL Arcade signing safeguards, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-531-nfl-free-agency`, branch
