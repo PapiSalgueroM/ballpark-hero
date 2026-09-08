@@ -1,21 +1,22 @@
-// NBA Conquest board (item 90). Parallel to ConquestBoard.tsx, wired to
-// useConquestNba/conquestDataNba instead of the NFL modules; the map itself
-// is the shared ConquestRegionMap since Round 457.
-// Layout and interaction structure are kept intentionally identical to
-// ConquestBoard.tsx (same panels, same modal flow, same order) so a player
-// who already knows NFL Conquest can play this variant with zero relearning;
-// only sport-specific labels (stat category names, "50 states" copy, roster
-// table headers) and the box-score field mapping (points/assists/rebounds
-// instead of passing/rushing/receiving yards) differ.
+// NBA Arcade board. Battles and powers belong to useConquestNba;
+// ConquestRegionMap supplies the shared map and takeover animation.
 
 import { useState, useEffect, useRef } from 'react';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
-import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
+import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA } from '@/data/conquestDataNba';
 import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
-import { HOME_FIELD_BUMP } from '@/lib/conquestBattleNba';
+import { getNbaRosterPlayer, HOME_FIELD_BUMP } from '@/lib/conquestBattleNba';
+
+const POWER_DESCRIPTIONS = {
+  invincibility: 'Keep your territory the next time this team loses at home. Away defeats do not use the shield.',
+  free_agent: 'Choose an available player from an eliminated NBA roster to join this team.',
+  upgrade: 'Choose a roster player to use 99 OVR in this team\'s next simulated battle, attacking or defending.',
+  legend: 'Add this team\'s franchise legend at an in-game 99 OVR, if the player is not already on an active roster.',
+  territory_steal: 'Choose a nearby enemy territory to take without a battle.',
+};
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
@@ -37,12 +38,9 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
   return display;
 }
 
-function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
-  title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null;
+function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer, legendPlayers }: {
+  title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null; legendPlayers: Set<string>;
 }) {
-  const team = NBA_TEAM_MAP.get(teamId);
-  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
-  const legend = TEAM_LEGENDS_NBA[teamId];
 
   return (
     <div className="rounded-lg border border-border overflow-hidden">
@@ -61,8 +59,8 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
           </thead>
           <tbody>
             {rosterNames.map(name => {
-              const p = playerMap.get(name);
-              const isLegend = legend && name === legend.name;
+              const p = getNbaRosterPlayer(name, teamId, legendPlayers);
+              const isLegend = legendPlayers.has(name);
               const isUpgraded = name === upgradedPlayer;
               const ovr = isUpgraded ? 99 : (isLegend ? 99 : p?.overall);
               return (
@@ -72,7 +70,7 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
                     {isUpgraded && <span className="mr-0.5">⬆️</span>}
                     {name}
                   </td>
-                  <td className="px-2 py-1 text-muted-foreground">{isLegend ? legend.position : (p?.position || '-')}</td>
+                  <td className="px-2 py-1 text-muted-foreground">{p?.position || '-'}</td>
                   <td className={`px-2 py-1 text-center font-bold ${isUpgraded || isLegend ? 'text-yellow-400' : 'text-foreground'}`}>{ovr || '-'}</td>
                   <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{isLegend ? 'Legend' : (p?.keyStat || '-')}</td>
                 </tr>
@@ -267,6 +265,12 @@ export default function ConquestBoardNba() {
   const winTeam = game.battleResult ? t(game.battleResult.winner) : null;
   const loseTeam = game.battleResult ? t(game.battleResult.loser) : null;
   const pendingTeam = game.pendingPowerup ? t(game.pendingPowerup.teamId) : null;
+  const pendingRoster = game.pendingPowerup ? game.rosters[game.pendingPowerup.teamId] || [] : [];
+  const selectionTitle = game.powerupUseType === 'upgrade'
+    ? 'Choose a Player to Upgrade'
+    : game.powerupUseType === 'territory_steal'
+      ? 'Choose a Territory to Take'
+      : 'Sign a Free Agent';
 
   // Round 457: what the shared map shows of the fight (see ConquestBoard.tsx).
   const takeover = useOwnerTakeover(game.territories, game.turn > 0);
@@ -598,16 +602,15 @@ export default function ConquestBoardNba() {
           <DialogHeader>
             <DialogTitle className="text-center text-lg">🏀 Steal a Player!</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground text-center">
-            <span className="font-bold text-foreground">{winTeam?.name}</span> conquered{' '}
+          <DialogDescription className="text-sm text-muted-foreground text-center">
+            <span className="font-bold text-foreground">{winTeam?.name}</span> beat{' '}
             <span className="font-bold text-foreground">{loseTeam?.name}</span>!
             <br />Choose a player to add to {winTeam?.name}'s roster:
-          </p>
+          </DialogDescription>
 
           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
             {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
-              const loserTeamData = NBA_TEAM_MAP.get(game.battleResult?.loser || '');
-              const playerData = loserTeamData?.players?.find(p => p.name === player);
+              const playerData = getNbaRosterPlayer(player, game.battleResult?.loser || '', game.legendPlayers);
               return (
                 <button
                   key={player}
@@ -617,7 +620,7 @@ export default function ConquestBoardNba() {
                   <span className="font-medium">{player}</span>
                   {playerData && (
                     <span className="text-xs text-muted-foreground">
-                      {playerData.position} · {playerData.overall} OVR · {playerData.keyStat}
+                      {playerData.position} · {playerData.overall} OVR{playerData.keyStat ? ` · ${playerData.keyStat}` : ''}
                     </span>
                   )}
                 </button>
@@ -625,19 +628,29 @@ export default function ConquestBoardNba() {
             })}
           </div>
 
+          <button
+            onClick={game.skipSteal}
+            className="min-h-10 rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+          >
+            Skip Player
+          </button>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             <RosterTable
               title={`${winTeam?.name || 'Winner'}'s Roster`}
               color={winTeam?.color || '#333'}
               rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
               teamId={game.battleResult?.winner || ''}
-              upgradedPlayer={game.upgradedPlayer}
+              upgradedPlayer={game.battleUpgrades[game.battleResult?.winner || '']}
+              legendPlayers={game.legendPlayers}
             />
             <RosterTable
               title={`${loseTeam?.name || 'Loser'}'s Roster`}
               color={loseTeam?.color || '#333'}
               rosterNames={game.rosters[game.battleResult?.loser || ''] || []}
               teamId={game.battleResult?.loser || ''}
+              upgradedPlayer={game.battleUpgrades[game.battleResult?.loser || '']}
+              legendPlayers={game.legendPlayers}
             />
           </div>
         </DialogContent>
@@ -645,19 +658,26 @@ export default function ConquestBoardNba() {
 
       {/* Powerup Received Modal */}
       <Dialog open={game.phase === 'powerup_received' && !!game.pendingPowerup} onOpenChange={() => {}}>
-        <DialogContent className="max-w-md bg-card border-border text-foreground">
+        <DialogContent
+          className="max-w-md bg-card border-border text-foreground max-h-[90vh] overflow-y-auto [&>button]:hidden"
+          onEscapeKeyDown={event => event.preventDefault()}
+          onPointerDownOutside={event => event.preventDefault()}
+        >
           <DialogHeader>
-            <DialogTitle className="text-center text-lg">⚡ Power-Up Found!</DialogTitle>
+            <DialogTitle className="text-center text-lg">⚡ Team Power</DialogTitle>
+            <DialogDescription className="text-center">
+              Use this power for {pendingTeam?.name}, or save it for later in this run.
+            </DialogDescription>
           </DialogHeader>
           {game.pendingPowerup && (
             <div className="text-center space-y-4">
               <div className="text-5xl animate-in zoom-in-50">{game.pendingPowerup.powerup.icon}</div>
               <div>
                 <div className="font-bold text-lg text-foreground">{game.pendingPowerup.powerup.label}</div>
-                <div className="text-sm text-muted-foreground mt-1">{game.pendingPowerup.powerup.description}</div>
+                <div className="text-sm text-muted-foreground mt-1">{POWER_DESCRIPTIONS[game.pendingPowerup.powerup.id]}</div>
               </div>
               <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-                <span>Awarded to</span>
+                <span>Belongs to</span>
                 <span
                   className="px-2 py-0.5 rounded text-white font-bold"
                   style={{ backgroundColor: pendingTeam?.color || '#333' }}
@@ -665,10 +685,14 @@ export default function ConquestBoardNba() {
                   {pendingTeam?.name}
                 </span>
               </div>
-              <div className="flex gap-3 justify-center pt-2">
+              {game.powerupUnavailableReason && (
+                <p role="status" className="text-sm text-muted-foreground">{game.powerupUnavailableReason}</p>
+              )}
+              <div className="flex flex-wrap gap-3 justify-center pt-2">
                 <button
                   onClick={game.usePowerupNow}
-                  className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold hover:opacity-90 transition-opacity"
+                  disabled={!!game.powerupUnavailableReason}
+                  className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   ⚡ Use Now
                 </button>
@@ -680,24 +704,24 @@ export default function ConquestBoardNba() {
                 </button>
               </div>
               {(game.teamSavedPowerups[game.pendingPowerup.teamId] || []).length >= 2 && (
-                <p className="text-xs text-destructive">⚠️ Team already has 2 saved, oldest will be replaced</p>
+                <p className="text-xs text-destructive">⚠️ This team has 2 saved powers. Saving this one replaces the oldest.</p>
               )}
             </div>
           )}
         </DialogContent>
       </Dialog>
 
-      {/* Free Agent Signing Modal */}
-      <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={() => {}}>
+      {/* Power selection */}
+      <Dialog open={game.phase === 'powerup_use' && !!game.pendingPowerup} onOpenChange={open => { if (!open) game.cancelPowerupUse(); }}>
         <DialogContent className="max-w-lg bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle className="text-center text-lg">✍️ Sign a Free Agent</DialogTitle>
+            <DialogTitle className="text-center text-lg">{selectionTitle}</DialogTitle>
+            <DialogDescription className="text-center">
+              {pendingTeam?.name}'s power. {game.pendingPowerup && POWER_DESCRIPTIONS[game.pendingPowerup.powerup.id]}
+            </DialogDescription>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground text-center mb-2">
-            Choose a player to add to your roster:
-          </p>
           <div className="space-y-1.5 max-h-80 overflow-y-auto">
-            {game.freeAgentList.map(fa => (
+            {game.powerupUseType === 'free_agent' && game.freeAgentList.map(fa => (
               <button
                 key={fa.name}
                 onClick={() => game.signFreeAgent(fa.name)}
@@ -709,7 +733,45 @@ export default function ConquestBoardNba() {
                 </span>
               </button>
             ))}
+            {game.powerupUseType === 'upgrade' && pendingRoster.map(name => {
+              const player = getNbaRosterPlayer(name, game.pendingPowerup!.teamId, game.legendPlayers);
+              return (
+                <button
+                  key={name}
+                  onClick={() => game.chooseUpgradePlayer(name)}
+                  className="w-full px-4 py-2.5 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+                >
+                  <span className="font-medium">{name}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{player?.overall ?? '?'} → 99 OVR</span>
+                </button>
+              );
+            })}
+            {game.powerupUseType === 'territory_steal' && game.availablePowerupTerritories.map(stateId => (
+              <button
+                key={stateId}
+                onClick={() => game.choosePowerupTerritory(stateId)}
+                className="w-full px-4 py-2.5 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
+              >
+                <span className="font-medium">{NBA_CONQUEST_MAP.regions.find(region => region.id === stateId)?.name || stateId}</span>
+                <span className="text-xs text-muted-foreground">{t(game.territories[stateId])?.name}</span>
+              </button>
+            ))}
+            {game.powerupUseType === 'free_agent' && game.freeAgentList.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-3">No eliminated NBA players are available. Go back and save this power for later.</p>
+            )}
+            {game.powerupUseType === 'upgrade' && pendingRoster.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-3">This team has no player to upgrade. Go back and save this power for later.</p>
+            )}
+            {game.powerupUseType === 'territory_steal' && game.availablePowerupTerritories.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-3">No nearby enemy territory is available. Go back and save this power for later.</p>
+            )}
           </div>
+          <button
+            onClick={game.cancelPowerupUse}
+            className="min-h-10 rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
+          >
+            Back to Power
+          </button>
         </DialogContent>
       </Dialog>
 
@@ -731,6 +793,9 @@ export default function ConquestBoardNba() {
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
             Standings <span className="normal-case font-normal text-[10px]">· 🗺️ territories · ✅ wins</span>
           </h4>
+          {aliveIds.some(id => game.teamSavedPowerups[id]?.length) && (
+            <p className="text-[11px] text-muted-foreground text-center mb-2">Saved powers last for this run. Tap one between battles.</p>
+          )}
           <div className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto text-xs">
             {aliveIds
               .map(id => ({ id, count: game.getTeamTerritoryCount(id), wins: winsByTeam.get(id) || 0, team: NBA_TEAM_MAP.get(id)! }))
@@ -738,16 +803,31 @@ export default function ConquestBoardNba() {
               .map(({ id, count, wins, team }) => {
                 const saved = game.teamSavedPowerups[id] || [];
                 return (
-                  <div key={id} className="flex items-center gap-1.5 px-2 py-1 rounded">
-                    <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: team.color }} />
-                    <span className="text-foreground font-medium truncate">{team.name}</span>
-                    {game.invincibleTeams.has(id) && <span className="text-[10px]">🛡️</span>}
-                    {saved.map((pu, i) => (
-                      <span key={i} className="text-[10px]" title={pu.label}>{pu.icon}</span>
-                    ))}
-                    <span className="text-muted-foreground ml-auto whitespace-nowrap" title="Territories · battle wins">
-                      🗺️{count} ✅{wins}
-                    </span>
+                  <div key={id} className="min-w-0 px-2 py-1 rounded">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: team.color }} />
+                      <span className="text-foreground font-medium truncate">{team.name}</span>
+                      {game.invincibleTeams.has(id) && <span title="Protected on the next home defeat" className="text-[10px]">🛡️</span>}
+                      <span className="text-muted-foreground ml-auto whitespace-nowrap" title="Territories · battle wins">
+                        🗺️{count} ✅{wins}
+                      </span>
+                    </div>
+                    {saved.length > 0 && (
+                      <div className="flex gap-1 mt-1" aria-label={`${team.name} saved powers`}>
+                        {saved.map((pu, i) => (
+                          <button
+                            key={i}
+                            onClick={() => game.useSavedPowerup(id, i)}
+                            disabled={game.phase !== 'ready'}
+                            aria-label={`Open ${team.name} saved ${pu.label}, slot ${i + 1}`}
+                            title={`${pu.label}: saved this run`}
+                            className="min-h-8 min-w-8 rounded-md border border-border bg-muted text-base hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                          >
+                            {pu.icon}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -777,13 +857,13 @@ export default function ConquestBoardNba() {
       )}
 
       {/* Upgrade active indicator */}
-      {game.upgradeActiveTeam && game.upgradedPlayer && (
-        <div className="text-center animate-in fade-in">
+      {Object.entries(game.teamUpgrades).map(([teamId, player]) => (
+        <div key={teamId} className="text-center animate-in fade-in">
           <div className="inline-block px-4 py-2 rounded-lg bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 text-xs font-semibold">
-            ⬆️ {game.upgradedPlayer} boosted to 99 OVR for {NBA_TEAM_MAP.get(game.upgradeActiveTeam)?.name}'s next battle
+            ⬆️ {player}: in-game 99 OVR for {NBA_TEAM_MAP.get(teamId)?.name}'s next battle, home or away
           </div>
         </div>
-      )}
+      ))}
 
       {/* Game log */}
       {game.gameLog.length > 0 && (

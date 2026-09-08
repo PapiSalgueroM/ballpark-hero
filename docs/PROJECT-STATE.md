@@ -2,26 +2,32 @@
 
 ## Round 527 NBA Arcade visible powers, September 8, 2026
 
-CLAIMED on `codex/round-527-nba-powers` in `.worktrees/round-527-nba-powers`,
-based on Round 526 `7c8168f8` (draft PR77). The user said Keep going after the
-previous checkpoint. Main owns hook/effect logic and coordination docs; test
-author owns the new power tests/harness; UI author owns NBA board/help/page
-copy and its component tests; independent review stays read-only.
+Scoped verification complete in `.worktrees/round-527-nba-powers`, branch
+`codex/round-527-nba-powers`, based on Round 526 `7c8168f8` (draft PR77).
+Successful nonfinal attacker conquests now award one power after player choice.
+Each team can bank two powers and reopen them between battles. NBA recruits
+come from eliminated rosters; upgrades last through the owner's next battle,
+including defense; activated legends retain their modifier after transfer.
+Territory powers choose a nearby enemy region and handle final victory.
+Repeated actions and reset/unmount timers are guarded. Help and the worked
+example explain this unranked run and all five existing powers.
 
-Award one random power to the attacker after an actual conquest, after the
-player-choice step, except when the game is already won. Keep both empires
-on an away loss and preserve shields. Use now or bank up to two per team;
-reopen saved powers only while ready. Select recipients/targets explicitly,
-recruit only available players from eliminated NBA rosters, and keep upgrades
-until the owner's next simulated battle. Preserve visible-only territories,
-single consumption, reset/unmount cleanup, and the separate daily mode.
+The missing acquisition was reproduced before editing. All 37 scoped cases
+pass, plus 29 exact hook/engine controls and 16 UI controls (84 expected
+assertion failures). Unexpected runtime failures are rejected. Both exact
+types, build, scoped NBA snapshot generation and all fifteen site fences pass.
+Built phone/desktop runs use all five powers, including saved-button negative
+controls. The prior phone map/play walk and missing-region control also pass.
+Independent source/UI review cleared the eliminated-upgrade and legend-identity
+fixes. Evidence: docs/nba-powers-2026-09-08.md. Preview4205 serves
+`index-BXbTBTnd.js`.
 
-No sports-data additions, new land, real account/backend writes or changes to
-the daily save/scoring protocol. These are game modifiers, not real player
-facts. Round 525's sibling verification repair remains separate. Run real-hook
-outcome tests and exact controls, both types/build, all fifteen site fences
-and local phone/desktop play before draft push. No broad production probes,
-merge or publication. Root and earlier previews stay intact. Next free528.
+This resolves Round526's ordinary-power acquisition publication dependency.
+The owner's broader reference-video feature list remains a separate task;
+this is a repair of the existing Arcade mode. No new sports data or win-odds
+retuning. No real backend/account writes, default full suite, root edits,
+merge or publication. Preserve previous previews and sibling Round525, which
+is not in this branch. Next free528.
 
 ## Round 526 NBA Arcade visible territories, September 8, 2026
 

@@ -12,7 +12,7 @@
 // conquestBattle.ts) so the two engines share their actual math, not just
 // their file layout. NFL's conquestBattle.ts is never modified by this file.
 
-import { NBA_TEAM_MAP, NbaPlayer } from '@/data/conquestDataNba';
+import { NBA_TEAM_MAP, NbaPlayer, CONQUEST_FREE_AGENCY_POOL_NBA } from '@/data/conquestDataNba';
 import { TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
 import { compositeAttackerWinProb, HOME_FIELD_BUMP } from '@/lib/conquestBattle';
 
@@ -65,16 +65,27 @@ export { HOME_FIELD_BUMP };
 
 /* ── Helpers ── */
 
-function getPlayersByPos(roster: string[], teamId: string) {
-  const team = NBA_TEAM_MAP.get(teamId);
-  const legend = TEAM_LEGENDS_NBA[teamId];
-  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
-
-  if (legend && roster.includes(legend.name) && !playerMap.has(legend.name)) {
-    playerMap.set(legend.name, { name: legend.name, position: legend.position, overall: 99, keyStat: 'Legend' });
+export function getNbaRosterPlayer(name: string, teamId: string, legendPlayers?: ReadonlySet<string>): NbaPlayer | undefined {
+  const acquiredLegend = Object.values(TEAM_LEGENDS_NBA).find(p => p.name === name);
+  if (legendPlayers?.has(name) && acquiredLegend) {
+    return { name, position: acquiredLegend.position, overall: 99, keyStat: 'Legend' };
   }
+  const ownPlayer = NBA_TEAM_MAP.get(teamId)?.players?.find(p => p.name === name);
+  if (ownPlayer) return ownPlayer;
+  const legend = TEAM_LEGENDS_NBA[teamId];
+  if (!legendPlayers && legend?.name === name) return { name, position: legend.position, overall: 99, keyStat: 'Legend' };
+  for (const team of NBA_TEAM_MAP.values()) {
+    const player = team.players?.find(p => p.name === name);
+    if (player) return player;
+  }
+  const candidate = CONQUEST_FREE_AGENCY_POOL_NBA.find(p => p.name === name);
+  if (candidate) return { name, position: candidate.position, overall: candidate.overall, keyStat: '' };
+  if (acquiredLegend) return { name, position: acquiredLegend.position, overall: 99, keyStat: 'Legend' };
+  return undefined;
+}
 
-  const all = roster.map(name => playerMap.get(name) || { name, position: '?', overall: 75, keyStat: '' });
+function getPlayersByPos(roster: string[], teamId: string, legendPlayers?: ReadonlySet<string>) {
+  const all = roster.map(name => getNbaRosterPlayer(name, teamId, legendPlayers) || { name, position: '?', overall: 75, keyStat: '' });
 
   // NBA position buckets replace NFL's QB/RB/WR/TE/DL/LB/DB split. "Ball
   // handlers" (guards) drive the passing-equivalent stat line, "scorers"
@@ -116,13 +127,14 @@ interface PlayResult {
 function generatePlay(
   offTeamId: string, defTeamId: string,
   offRoster: string[], defRoster: string[],
-  upgradeTeam: string | null, upgradedPlayer: string | null,
+  upgrades: Record<string, string>,
+  legendPlayers?: ReadonlySet<string>,
 ): PlayResult {
-  const off = getPlayersByPos(offRoster, offTeamId);
-  const def = getPlayersByPos(defRoster, defTeamId);
+  const off = getPlayersByPos(offRoster, offTeamId, legendPlayers);
+  const def = getPlayersByPos(defRoster, defTeamId, legendPlayers);
 
   const getOvr = (p: NbaPlayer) => {
-    if ((upgradeTeam === offTeamId || upgradeTeam === defTeamId) && upgradedPlayer === p.name) return 99;
+    if (upgrades[offTeamId] === p.name || upgrades[defTeamId] === p.name) return 99;
     return p.overall;
   };
 
@@ -262,12 +274,13 @@ function generateFinalScore(
 
 function generateFullGameStats(
   teamId: string, roster: string[],
-  score: number, upgradeTeam: string | null, upgradedPlayer: string | null,
+  score: number, upgrades: Record<string, string>,
+  legendPlayers?: ReadonlySet<string>,
 ): TeamStatLine {
-  const pos = getPlayersByPos(roster, teamId);
+  const pos = getPlayersByPos(roster, teamId, legendPlayers);
 
   const getOvr = (p: NbaPlayer) => {
-    if (upgradeTeam === teamId && upgradedPlayer === p.name) return 99;
+    if (upgrades[teamId] === p.name) return 99;
     return p.overall;
   };
 
@@ -333,7 +346,10 @@ export function simulateDetailedBattleNba(
   upgradeTeam: string | null,
   upgradedPlayer: string | null,
   ratingOverrides?: Record<string, TeamRatingOverride>,
+  teamUpgrades?: Record<string, string>,
+  legendPlayers?: ReadonlySet<string>,
 ): BattleSimulation {
+  const upgrades = teamUpgrades ?? (upgradeTeam && upgradedPlayer ? { [upgradeTeam]: upgradedPlayer } : {});
   const attTeam = NBA_TEAM_MAP.get(attackerId)!;
   const defTeam = NBA_TEAM_MAP.get(defenderId)!;
   const aTerr = Object.values(territories).filter(t => t === attackerId).length;
@@ -359,7 +375,7 @@ export function simulateDetailedBattleNba(
     const defRosterFor = isAttPossession ? defRoster : attRoster;
     const side: 'att' | 'def' = isAttPossession ? 'att' : 'def';
 
-    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgradeTeam, upgradedPlayer);
+    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgrades, legendPlayers);
 
     if (side === 'att') pbpAttScore += play.points;
     else pbpDefScore += play.points;
@@ -383,8 +399,8 @@ export function simulateDetailedBattleNba(
 
   const winner: 'att' | 'def' = finalAttScore > finalDefScore ? 'att' : 'def';
 
-  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgradeTeam, upgradedPlayer);
-  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgradeTeam, upgradedPlayer);
+  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgrades, legendPlayers);
+  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgrades, legendPlayers);
 
   return {
     plays,

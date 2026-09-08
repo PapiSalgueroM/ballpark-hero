@@ -1,15 +1,18 @@
 # Work board
 
-**Round 527, Codex resumed task, CLAIMED September 8:** NBA Arcade visible
-power acquisition/use/inventory and effect lifetime, branch
-`codex/round-527-nba-powers`, worktree `.worktrees/round-527-nba-powers`,
-base 526 `7c8168f8` (draft PR77). Main owns useConquestNba/effect logic/docs;
-test author owns new power hook tests/harness; UI author owns NBA board/help/
-page and component tests. One award after real conquest, usable bank of two,
-NBA eliminated-roster recruits, next-owner-battle upgrade lifetime, single
-consumption and reset cleanup. Existing map/battle/daily rules remain.
-No new sports facts, backend/account writes, root edits, full suite, merge
-or publish. Preserve all prior previews and sibling 525. Next free528.
+**Round 527, Codex resumed task, scoped verification complete September 8:**
+NBA Arcade visible power rewards, bank/reopen controls, owner-specific
+selection and effect lifetime, branch `codex/round-527-nba-powers`, worktree
+`.worktrees/round-527-nba-powers`, base526 `7c8168f8` (draft PR77).
+One power per real nonfinal conquest, NBA eliminated-roster recruits,
+owner-next-battle upgrades, explicit legend activation metadata, selectable
+territory powers and reset cleanup. 37 scoped cases, 45 source controls,
+both types/build, all15 fences, built phone/desktop powers and prior map
+walk pass. Independent review clear. Evidence docs/nba-powers-2026-09-08.md;
+preview4205. Round526 acquisition dependency resolved; broader reference
+feature list still separate. No new sports facts, real backend writes,
+root edits, full suite, merge or publication. Preserve all prior worktrees,
+previews and sibling525. Next free528.
 
 **Round 526, Codex original task, scoped verification complete September 8:**
 NBA Arcade hidden-region initialization in
