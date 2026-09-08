@@ -2,6 +2,7 @@ import { GuessTheNationBoard } from '@/components/guess-the-nation/GuessTheNatio
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 
 export default function GuessTheNation() {
@@ -33,6 +34,7 @@ export default function GuessTheNation() {
           "Kenya: Marathon legends, Eliud Kipchoge, East African distance running"
         ]}
       />
+      <GameNav />
     </>
   );
 }

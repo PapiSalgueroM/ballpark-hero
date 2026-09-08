@@ -1,5 +1,37 @@
 # Project state
 
+## Review correction and startup follow-up, September 8, 2026
+
+Round 514 is implemented but remains uncommitted and unpublished. The compact
+footer, full guide text in closed native disclosures and stable Play next graph
+passed the initial focused tests, build/type checks, six routes at four widths,
+and seven raw no-JavaScript snapshot checks. Independent review then found a real
+regression: 18 additional registered routes had no next-game section in their
+initial state. Full snapshot generation was stopped rather than called complete.
+
+The corrected source now adds 13 missing page callers and moves five conditional
+boards' navigation to their pages, removing six descendant copies. Nine caller
+tests and the type gate pass. A fresh build passed in 52.93 seconds. The full
+121-route browser inventory and stronger assertion-specific controls are running
+against preview 4184. Full snapshot regeneration, sitemap ledger refresh, final
+build and all 15 generated-site fences remain pending. Partial snapshot edits
+from the stopped run must be regenerated, not shipped as a complete set.
+
+Round 515 is separately claimed on `codex/round-515-storage-startup`, based on main
+`a4579db3`, in `.worktrees/round-515-storage-startup`. Its claim `af77017d` is pushed.
+It fixes measured startup failures from blocked browser storage in auth setup,
+the homepage, streak reminder and cookie controls. Thirteen focused tests now
+pass after RED reproduction; type/build, real-browser verification and independent
+review are still pending. No database, provider, billing or publication change.
+Next free round: 516. Claude's root checkout remains untouched.
+
+The unchanged Conquest full-map UI test again hit its 30-second timeout when run
+alone. There were 223 other Node processes. Early 32-click progress was measured,
+but neither that nor source evidence of growing captured rosters proves the exact
+late stopping cause. Do not weaken the test or call the full gate green. A later
+process check saw a runAllSims process again, so the older no-suite note below is
+not current capacity evidence. Verify ownership before any broad run.
+
 ## New feedback and active Round 514, 2026-09-08
 
 Anthony's newest tweaks are captured completely in docs/owner-feedback-2026-09-08.md.
@@ -17,9 +49,21 @@ HTML route had one real H1, its own canonical, publisher ID and no noindex.
 This verifies the readable-shell/policy-page foundation, not whole-site gameplay,
 form delivery, legal compliance or approval. See
 docs/adsense-assessment-status-2026-09-08.md for findings and unsupported numerical
-claims in that document. Round 514 currently has three RED footer tests and no
-production edits; navigation implementation paused at a clean boundary while
-answering the new status question. Resume with Footer.test.tsx and the intake.
+claims in that document. Anthony then made AdSense readiness the priority and
+asked how to use his Gemini Pro subscription. Proposed read-only reviewer role:
+docs/gemini-review-handoff-2026-09-08.md. No Gemini connection or billing was enabled.
+
+Round 514 footer implementation now passes all three focused tests after their
+earlier RED run. Report comes first; policy/cookie links remain exposed; Site info
+holds all secondary links and the unchanged full disclaimer. Navigation/guide
+implementation and prerender disclosure preservation are in progress. Full
+integration/build/browser checks are still required, and nothing is published.
+Consent and isolated ad-spacing findings are recorded in
+docs/adsense-consent-followup-2026-09-08.md. The dual consent flow needs an actual
+Google CMP check, not just the existing empty-script ad test. Current dashboard
+content could not be read because browser attachment failed. A fresh process
+check found no runAllSims or Vitest process, superseding the old capacity note
+below without claiming Claude's suite passed.
 
 ## Active follow-up, 2026-09-08
 

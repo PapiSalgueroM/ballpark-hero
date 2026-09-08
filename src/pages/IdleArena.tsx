@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { HelpCircle, X, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HubTiles, HubPanelHeader, type HubTile } from '@/components/hub/HubTiles';
@@ -328,6 +329,7 @@ const IdleArena = () => {
             'Own five Sunday Strikers and New Boots appears, doubling every one of them',
           ]}
         />
+        <GameNav />
       </main>
 
       <style>{`

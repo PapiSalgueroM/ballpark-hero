@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
 /* Round 210: the guide arrives one sport at a time instead of every word
    of prose on the site arriving on every page. See gameContent/loader.ts. */
 import { loadGameContent } from '@/data/gameContent/loader';
 import type { GameContent } from '@/data/gameContent/types';
-// Round 181: the deterministic related-games graph (S-6 internal links).
-import { relatedGamesFor } from '@/lib/relatedGames';
 
 interface GameSeoContentProps {
   title: string;
@@ -120,14 +118,6 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
     })),
   };
 
-  /* Round 181: the old picker here took the FIRST three siblings in registry
-     order, so every page in a category pointed at the same three games and
-     most games had zero inbound internal links. relatedGamesFor builds a
-     deterministic graph instead: a ring through my category, a link into the
-     next category (so the whole site is one crawlable component, proven by
-     simRelatedGames with a real BFS), and two hash-spread variety picks. */
-  const related = relatedGamesFor(path);
-
   return (
     <section
       className="max-w-2xl mx-auto mt-12 mb-8 px-4"
@@ -151,13 +141,18 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
         </p>
       </div>
 
-      {content && (
-        <article className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-8">
-          <div className="space-y-3">
-            {content.intro.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+      {(content || (howToPlay && howToPlay.length > 0)) && (
+        <details className="mt-8 rounded-xl border border-border bg-card/40">
+          <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-foreground hover:text-primary">
+            Game guide
+          </summary>
+          {content && (
+            <article className="border-t border-border px-4 py-5 text-left text-sm text-muted-foreground leading-relaxed space-y-8">
+              <div className="space-y-3">
+                {content.intro.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
@@ -216,18 +211,20 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
               ))}
             </div>
           </div>
-        </article>
-      )}
+            </article>
+          )}
 
-      {!content && howToPlay && howToPlay.length > 0 && (
-        <div className="mt-8 text-left text-sm text-muted-foreground leading-relaxed">
-          <h2 className="text-base font-semibold text-foreground mb-3">How to play</h2>
-          <ol className="list-decimal pl-5 space-y-2">
-            {howToPlay.map((step, i) => (
-              <li key={i}>{step}</li>
-            ))}
-          </ol>
-        </div>
+          {!content && howToPlay && howToPlay.length > 0 && (
+            <div className="border-t border-border px-4 py-5 text-left text-sm text-muted-foreground leading-relaxed">
+              <h2 className="text-base font-semibold text-foreground mb-3">How to play</h2>
+              <ol className="list-decimal pl-5 space-y-2">
+                {howToPlay.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </details>
       )}
 
       {/* ROUND 281: BOTH OF THESE USED TO BE RENDERED HERE, IN THE BODY, WHERE
@@ -278,26 +275,6 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
         </Helmet>
       )}
 
-      {/* Round 181: real tiles instead of three bare text links, per the
-          tile rule. Plain anchors via Link so crawlers walk the graph. */}
-      {related.length > 0 && (
-        <nav aria-label="More games" data-related-games className="mt-10">
-          <h2 className="mb-3 text-center text-base font-semibold text-foreground">More games to play</h2>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {related.map(r => (
-              <Link
-                key={r.path}
-                to={r.path}
-                className="rounded-xl border border-border bg-card px-3 py-2.5 transition-colors hover:border-primary/50"
-              >
-                <span className="block text-lg">{r.emoji}</span>
-                <span className="mt-0.5 block truncate text-xs font-bold text-foreground">{r.label}</span>
-                <span className="mt-0.5 block text-[10px] leading-snug text-muted-foreground line-clamp-2">{r.description}</span>
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
     </section>
   );
 };

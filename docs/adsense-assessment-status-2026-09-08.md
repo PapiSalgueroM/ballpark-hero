@@ -32,9 +32,13 @@ did not submit forms, enter the AdSense dashboard or test every game loop.
 - Claude's shared ad-spacing fix is on Round 506, not confirmed merged/published.
 - Round 513 and the prior Attack candidate retain the recorded UI timeout and
   full-node-suite verification gap. No whole-site all-clear is claimed.
-- Round 514 compact layout is an active draft, not live. All three new footer
-  tests failed as intended against unchanged production: disclosure absent,
-  report below navigation, and no expandable site info. No production edits yet.
+- Round 514 compact layout is implemented as an active draft, not live. Focused
+  tests, type/build and scoped browser/raw snapshot checks passed. Independent
+  review then found 18 initial-state navigation gaps, now repaired in source.
+  Full catalog verification and final complete snapshots are still pending.
+- Round 515 startup storage safety is a separate draft. Thirteen focused tests
+  pass, including consent remaining off after a failed write. Full browser
+  verification is pending; this is not a completed Google CMP flow review.
 - Contact/report destinations and prior delivered reports exist, but fresh
   end-to-end delivery was not tested by this read-only assessment.
 - AdSense approval is unverified here; site checks do not substitute for Google's

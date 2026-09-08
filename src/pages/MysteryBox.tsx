@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import { MysteryBoxBoard } from '@/components/mystery-box/MysteryBoxBoard';
 
@@ -33,6 +34,7 @@ export default function MysteryBox() {
           'Binned three early, now every pack is a forced keep',
         ]}
       />
+      <GameNav />
     </>
   );
 }

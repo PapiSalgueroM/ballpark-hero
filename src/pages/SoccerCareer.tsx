@@ -5,6 +5,7 @@ import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/complet
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from "@/components/game/GameHelp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1182,6 +1183,7 @@ export default function SoccerCareer() {
             "Retire after 20 seasons with a legendary career score"
           ]}
         />
+        <GameNav />
       </div>
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
       {/* New Career Confirmation Dialog */}

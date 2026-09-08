@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { HofOrBustBoard } from '@/components/hof-or-bust/HofOrBustBoard';
 
 export default function HofOrBust() {
@@ -30,6 +31,7 @@ export default function HofOrBust() {
           "672 club goals, 7 Ballon d'Ors → Hall of Fame (Lionel Messi)"
         ]}
       />
+      <GameNav />
     </>
   );
 }

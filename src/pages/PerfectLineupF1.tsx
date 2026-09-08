@@ -3,6 +3,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import GenericLineupBoard from '@/components/perfect-lineup/GenericLineupBoard';
 import { F1_LINEUP_CONFIG } from '@/data/f1PerfectLineupPool';
 import { GameShell } from '@/components/game/GameShell';
+import { GameNav } from '@/components/game/GameNav';
 
 const PerfectLineupF1 = () => {
   return (
@@ -37,6 +38,7 @@ const PerfectLineupF1 = () => {
             'A "Finland" slot accepts any Finnish driver in the pool.',
           ]}
         />
+        <GameNav />
       </GameShell>
     </>
   );

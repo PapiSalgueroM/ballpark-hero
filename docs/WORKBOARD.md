@@ -1,5 +1,12 @@
 # Work board
 
+**Round 515, Codex, CLAIMED September 8:** startup storage safety, isolated
+`.worktrees/round-515-storage-startup`, branch `codex/round-515-storage-startup`,
+based on main `a4579db3`. Auth startup, homepage enumeration, streak reminder and
+cookie controls must not crash when storage is blocked. No game save shim,
+database/provider/billing changes or publication. Next free round: 516.
+Round 514 remains active for the full-catalog navigation repair and verification.
+
 ## New owner feedback, September 8
 
 Full intake: docs/owner-feedback-2026-09-08.md. This adds ticker freshness and sport

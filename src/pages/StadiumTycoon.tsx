@@ -15,6 +15,7 @@ import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, Flame, X } from 'lucide-react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
@@ -485,6 +486,7 @@ export default function StadiumTycoon() {
           title="Stadium Tycoon"
           description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
         />
+        <GameNav />
       </div>
 
       {/* Away earnings modal */}

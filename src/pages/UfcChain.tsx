@@ -2,6 +2,7 @@ import { CombatChainBoard } from '@/components/ufc-chain/CombatChainBoard';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 
 export default function UfcChain() {
@@ -33,6 +34,7 @@ export default function UfcChain() {
           "Max Holloway → Alexander Volkanovski → Islam Makhachev"
         ]}
       />
+      <GameNav />
     </>
   );
 }

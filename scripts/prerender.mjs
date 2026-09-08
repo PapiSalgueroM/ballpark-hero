@@ -61,6 +61,7 @@ import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { writeFileAtomic } from './lib/atomicWrite.mjs';
 import { SAMPLE_DAYS, clockScript } from './lib/prerenderClock.mjs';
+import { intersectPrerenderParts, renderPrerenderParts } from './lib/prerenderParts.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
@@ -405,7 +406,9 @@ async function draw(sample, route, url) {
      Nothing is added: every string below came off the rendered page.
      React clears #root on mount, so a real visitor sees this for the
      instant before the app draws over it. */
-  const captured = await page.evaluate(() => {
+  const captured = await page.evaluate(
+    /* PRERENDER_CAPTURE_CALLBACK_START */
+    () => {
       for (const el of Array.from(document.querySelectorAll('[role="dialog"]'))) el.remove();
       /* Round 258: anything the app marks data-no-prerender is live or dated
          and must not be frozen into a file that will still be on disk next
@@ -414,6 +417,13 @@ async function draw(sample, route, url) {
          a day. Same principle as leaving the database requests hanging, just
          for data that lives in the bundle rather than behind a fetch. */
       for (const el of Array.from(document.querySelectorAll('[data-no-prerender]'))) el.remove();
+      /* Round 514: native details stay closed in the player-facing page, but
+         Chromium gives every descendant an empty innerText while they are
+         closed. Open only the two disclosures whose real page copy belongs in
+         raw snapshots, then rebuild them as closed semantic details below. */
+      const DISCLOSURE = '[data-seo-content] details, footer[data-site-chrome] details';
+      const disclosures = Array.from(document.querySelectorAll(DISCLOSURE));
+      for (const details of disclosures) details.open = true;
       const esc = t => String(t)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const seen = new Set();
@@ -422,7 +432,10 @@ async function draw(sample, route, url) {
         const st = window.getComputedStyle(el);
         return st.display !== 'none' && st.visibility !== 'hidden' && Number(st.opacity) > 0.05;
       };
-      const SEL = 'h1, h2, h3, h4, p, li, a[href], td, th, blockquote';
+      const disclosureSummaries = DISCLOSURE.split(',')
+        .map(selector => `${selector.trim()} > summary`).join(', ');
+      const SEL = `h1, h2, h3, h4, p, li, a[href], td, th, blockquote,
+        ${DISCLOSURE}, ${disclosureSummaries}`;
       const BLOCK = 'h1, h2, h3, h4, p, li, td, th, blockquote';
 
       /* ROUND 269, TWO FIXES TO THIS LOOP, BOTH MEASURED FIRST.
@@ -482,12 +495,57 @@ async function draw(sample, route, url) {
          rather than landmark tags on purpose: GameShell draws each game's own
          title inside a <header>, and that is the page, not the furniture. */
       const isChrome = el => !!el.closest('[data-site-chrome]');
+      const disclosureId = details => {
+        const index = disclosures.indexOf(details);
+        const summary = details.querySelector(':scope > summary');
+        const text = (summary?.innerText || '').trim().replace(/\s+/g, ' ');
+        return `details|${index}|${text}`;
+      };
+      let activeDisclosure = null;
+      const closeDisclosure = () => {
+        if (!activeDisclosure) return;
+        const id = disclosureId(activeDisclosure);
+        parts.push({
+          s: '</details>',
+          key: `${id}|close`,
+          chrome: isChrome(activeDisclosure),
+          disclosure: id,
+          boundary: 'close',
+        });
+        activeDisclosure = null;
+      };
       for (const el of Array.from(document.querySelectorAll(SEL))) {
+        const details = el.tagName === 'DETAILS' ? el : el.closest(DISCLOSURE);
+        if (activeDisclosure && details !== activeDisclosure) closeDisclosure();
         if (!visible(el)) continue;
         const text = (el.innerText || '').trim().replace(/\s+/g, ' ');
         if (!text) continue;
         const tag = el.tagName.toLowerCase();
         const chrome = isChrome(el);
+        if (tag === 'details' && el.matches(DISCLOSURE)) {
+          activeDisclosure = el;
+          const id = disclosureId(el);
+          parts.push({
+            s: '<details>',
+            key: `${id}|open`,
+            chrome,
+            disclosure: id,
+            boundary: 'open',
+          });
+          continue;
+        }
+        if (tag === 'summary' && details) {
+          const html = inline(el);
+          if (!html) continue;
+          const id = disclosureId(details);
+          parts.push({
+            s: `<summary>${html}</summary>`,
+            key: `${id}|summary|${html}`,
+            chrome,
+            disclosure: id,
+          });
+          continue;
+        }
         if (tag === 'a') {
           /* already written out inside the paragraph or list item it sits in */
           if (consumed.has(el)) continue;
@@ -497,7 +555,11 @@ async function draw(sample, route, url) {
           const key = 'a|' + href + '|' + text;
           if (seen.has(key)) continue;
           seen.add(key);
-          parts.push({ s: `<a href="${esc(href)}">${esc(text)}</a>`, chrome });
+          parts.push({
+            s: `<a href="${esc(href)}">${esc(text)}</a>`,
+            chrome,
+            ...(details ? { disclosure: disclosureId(details) } : {}),
+          });
           continue;
         }
         const cap = el.querySelector(BLOCK) ? WRAPPER_CAP : LEAF_CAP;
@@ -529,8 +591,13 @@ async function draw(sample, route, url) {
         if (!repeatable && seen.has(key)) continue;
         if (!repeatable) seen.add(key);
         const out = tag === 'td' || tag === 'th' ? 'p' : tag === 'li' ? 'li' : tag;
-        parts.push({ s: `<${out}>${html}</${out}>`, chrome });
+        parts.push({
+          s: `<${out}>${html}</${out}>`,
+          chrome,
+          ...(details ? { disclosure: disclosureId(details) } : {}),
+        });
       }
+      closeDisclosure();
       /* the head is copied as built, minus the runtime-injected <style>
          blocks: they measured 29KB a page (four fifths of the file) and
          are duplicates of the linked stylesheet the app loads anyway. */
@@ -578,7 +645,9 @@ async function draw(sample, route, url) {
       }
       head = doc.head.innerHTML;
       return { head, parts };
-    });
+    }
+    /* PRERENDER_CAPTURE_CALLBACK_END */
+  );
   /* Park the page. An idle sample left on a game page keeps its ticker, its
      countdown and its animations running while the other two samples draw,
      which on a small machine is enough to make the settle window mean
@@ -677,12 +746,10 @@ for (const route of unique) {
        counts are kept apart so the third sample's own contribution is
        visible in the summary. */
     const first = samples[0].parts;
-    const inSecond = new Set(samples[1].parts.map(p => p.s));
-    const afterSecond = first.filter(p => inSecond.has(p.s));
+    const afterSecond = intersectPrerenderParts(first, samples[1].parts);
     let keep = afterSecond;
     for (const later of samples.slice(2)) {
-      const inLater = new Set(later.parts.map(p => p.s));
-      keep = keep.filter(p => inLater.has(p.s));
+      keep = intersectPrerenderParts(keep, later.parts);
     }
     const lostToSecond = first.length - afterSecond.length;
     const lostToThird = afterSecond.length - keep.length;
@@ -690,21 +757,13 @@ for (const route of unique) {
       volatileRoutes += 1;
       droppedBySecond += lostToSecond;
       droppedByThird += lostToThird;
-      const kept = new Set(keep.map(p => p.s));
-      const gone = first.filter(p => !kept.has(p.s));
+      const kept = new Set(keep.map(p => p.key || p.s));
+      const gone = first.filter(p => !kept.has(p.key || p.s));
       const show = gone.slice(0, 2).map(p => JSON.stringify(p.s.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
       console.log(`   ${route}: ${gone.length} block(s) change with the date and were left out: ${show}`);
     }
     /* runs of site chrome are wrapped so the sitemap can look past them */
-    const lines = [];
-    let open = false;
-    for (const p of keep) {
-      if (p.chrome && !open) { lines.push('<div data-site-chrome>'); open = true; }
-      if (!p.chrome && open) { lines.push('</div>'); open = false; }
-      lines.push(p.s);
-    }
-    if (open) lines.push('</div>');
-    const payload = { head: samples[0].head, body: lines.join('\n') };
+    const payload = { head: samples[0].head, body: renderPrerenderParts(keep) };
     const html = [
       '<!DOCTYPE html>',
       '<html lang="en">',

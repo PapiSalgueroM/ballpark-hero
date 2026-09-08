@@ -1,4 +1,5 @@
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -40,6 +41,7 @@ const BuzzerBeater = () => (
             'A hand in your face is a floor under your arc, not a reason to rush: go over it, or fade off it and give up the middle of the ring.',
           ]}
         />
+        <GameNav />
       </main>
     </div>
   </>

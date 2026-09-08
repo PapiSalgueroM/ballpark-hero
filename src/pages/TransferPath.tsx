@@ -1,6 +1,7 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { TransferPathBoard } from '@/components/transfer-path/TransferPathBoard';
+import { GameNav } from '@/components/game/GameNav';
 
 export default function TransferPath() {
   return (
@@ -16,6 +17,7 @@ export default function TransferPath() {
         title="Transfer Path: Connect Soccer Players Through Shared Clubs"
         description="Link two soccer players by walking through the clubs they share with other players. Like Six Degrees of Kevin Bacon, but for football transfers."
       />
+      <GameNav />
     </>
   );
 }

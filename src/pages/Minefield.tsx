@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameNav } from '@/components/game/GameNav';
 import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -277,6 +278,7 @@ const Minefield = () => {
             'Clear all three boards without a scratch for the flawless sweep',
           ]}
         />
+        <GameNav />
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import GenericLineupBoard from '@/components/perfect-lineup/GenericLineupBoard';
 import { NHL_LINEUP_CONFIG } from '@/data/nhlPerfectLineupPool';
 import { GameShell } from '@/components/game/GameShell';
+import { GameNav } from '@/components/game/GameNav';
 
 const PerfectLineupNhl = () => {
   return (
@@ -37,6 +38,7 @@ const PerfectLineupNhl = () => {
             'A "1990s" defenseman slot accepts any defenseman from that era.',
           ]}
         />
+        <GameNav />
       </GameShell>
     </>
   );
