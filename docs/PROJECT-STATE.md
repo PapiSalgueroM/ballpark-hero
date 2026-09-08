@@ -31,6 +31,15 @@ from the exact videos in docs/conquest-reference-audit-2026-09-07.md. The existi
 season predictor and hex board do not satisfy that request. Preserve existing dailies
 while designing the new versioned Attack mode. No hosting or publication change.
 
+Round 512 is in progress on `codex/round-512-conquest-attack` in the isolated
+`.worktrees/round-511-midnight-saves` checkout. Engine commit `cd82bc57` adds
+directional territory attacks, elimination, captured players, game-rating upgrades
+and strict self-contained saves. Its 78 focused tests (17 production mutation
+controls) and app type gate pass; independent engine review is running. The 20
+English ground locations are sourced in `docs/conquest-premier-locations-2026-09-07.md`.
+The geographic generator, playable board and production integration are still in
+progress. The existing local preview does not yet contain the new Attack board.
+
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
 tennis-chain-validate v9, nascar-chain-validate v7, nba-chain-validate v8. One
