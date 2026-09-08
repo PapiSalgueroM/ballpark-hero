@@ -1,5 +1,21 @@
 # Work board
 
+## Codex startup safety, claimed September 8, 2026
+
+Round 515 is claimed on `codex/round-515-storage-startup`, based on main
+`a4579db3`, in `.worktrees/round-515-storage-startup`. Scope: the measured homepage
+and cookie-control crashes when browser storage is blocked. Inspect the Supabase
+client's default storage support before changing its explicit localStorage option.
+Keep persistence working where available, do not shim all game saves into memory,
+and do not enable optional scripts when a consent write fails. No database,
+provider, billing or publication changes. Claim is pushed before implementation.
+
+The separate Round 514 page-comfort candidate is still in verification. A review
+found additional missing next-game callers, so its full prerender was stopped for
+repair. Do not modify its source or generated files from this round. Rounds 510 to
+514 are reserved by Codex; Claude retains 506 to 508 and the root checkout.
+Next free round: 516. Older free-round numbers below are stale.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").

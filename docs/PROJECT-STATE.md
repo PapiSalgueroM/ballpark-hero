@@ -1,5 +1,21 @@
 # Project state
 
+## Startup safety follow-up, September 8, 2026
+
+Anthony asked to keep improving the site, with AdSense readiness the priority.
+Round 515 is claimed in `.worktrees/round-515-storage-startup` on
+`codex/round-515-storage-startup`, based on main `a4579db3`. It will address the
+measured homepage and cookie-control crashes when localStorage access or methods
+throw. No production change or verification result is claimed yet.
+
+Round 514 remains separate and unpublished: compact guide/footer and one stable
+next-game section. Eleven focused tests, type/build, a six-route four-width browser
+walk and seven raw no-JavaScript snapshot checks passed. Independent review then
+found more pages losing next-game links, so its full snapshot generation was
+stopped and that coverage gap is being repaired before further generation.
+The full Conquest UI timeout on the earlier candidate remains under investigation.
+Claude's root checkout and all his work are untouched.
+
 ## Live as of 2026-09-08, and a note for whoever picks this up next
 
 **Round 505 is published and verified live. Nothing merged is unpublished any more.**
