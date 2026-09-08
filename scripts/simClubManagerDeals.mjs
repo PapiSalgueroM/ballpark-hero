@@ -53,6 +53,14 @@
  *     both are refused outside a window.
  *  7. The old paths are untouched. buyPlayer, payClause and a bare loan still
  *     produce the player they always produced.
+ *  8. Round 508: a loan OUT carries the same two figures. It is filed with an
+ *     option the borrowing club may take up and a recall figure, the recall
+ *     brings him back for exactly that figure and needs an open window, and the
+ *     option is settled at the rollover as money in rather than a player
+ *     quietly vanishing off the books.
+ *  9. Round 508: an agreed loan fee is the one that is banked. acceptBid used
+ *     to recompute it from loanOutFee and discard bid.offer, which was harmless
+ *     only because generateBids happened to set the two to the same number.
  *
  * Negative controls (house rule: prove the checks can fail):
  *   CM_DEALS_CONTROL=nofog       pins the widest band to the exact one, so
@@ -66,6 +74,14 @@
  *                                clubs agree, so section 4 finds no terms table.
  *   CM_DEALS_CONTROL=freeterms   drops the terms walkout line to zero, so
  *                                section 5 cannot make an agent leave.
+ *   CM_DEALS_CONTROL=noloanterms sends a loan out with no option and no recall
+ *                                figure, which is what a loan out was before
+ *                                Round 508: section 8 finds both missing and
+ *                                cannot recall anybody (26 findings).
+ *   CM_DEALS_CONTROL=refeeloan   puts back the line that recomputed a loan fee
+ *                                from loanOutFee and threw the agreed number
+ *                                away, so section 9 catches an approach of 3.9
+ *                                banking 0.2 (9 findings).
  * Each control refuses to run if its rewrite did not find its text.
  *
  * MEASURED BANDS. Measured 2026-09-08 on the default seed and SIM_SEED 1, 2 and
@@ -120,7 +136,7 @@ const ENTRY = `${TMP}/cmDeals.entry.mjs`;
 const BUNDLE = `${TMP}/cmDeals.bundle.mjs`;
 
 const CONTROL = process.env.CM_DEALS_CONTROL || '';
-const KNOWN = ['nofog', 'nowalkout', 'freehaggle', 'nohandoff', 'freeterms'];
+const KNOWN = ['nofog', 'nowalkout', 'freehaggle', 'nohandoff', 'freeterms', 'noloanterms', 'refeeloan'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_DEALS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -160,6 +176,20 @@ if (CONTROL) {
     deals = swap(deals, "  if (verdict === 'counter') return 1;", "  if (verdict === 'counter') return 0;", 'clubManagerDeals.ts');
   } else if (CONTROL === 'freeterms') {
     deals = swap(deals, 'export const TERMS_WALKOUT = 0.62;', 'export const TERMS_WALKOUT = 0;', 'clubManagerDeals.ts');
+  } else if (CONTROL === 'noloanterms') {
+    /* Round 508: send a loan out with no option and no recall figure, which is
+       exactly what a loan out was before this round. Section 8 must then find
+       both figures missing and be unable to recall anybody. */
+    engine = swap(engine, '        ...loanOutTermsFor(sellValue(p), fee),', '', 'clubManager.ts');
+  } else if (CONTROL === 'refeeloan') {
+    /* Round 508: put back the line that recomputed a loan fee from loanOutFee
+       and threw the agreed number away. Section 9 must catch it. */
+    engine = swap(
+      engine,
+      '    const loaned = loanOutPlayer(career, playerId, bid.club, bid.offer);',
+      '    const loaned = loanOutPlayer(career, playerId, bid.club);',
+      'clubManager.ts',
+    );
   } else if (CONTROL === 'nohandoff') {
     engine = swap(engine, "    next.phase = 'terms';", "    next.phase = 'fee';", 'clubManager.ts');
   }
@@ -192,7 +222,8 @@ const { cm, dealsMod, staffMod } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, buildMarket, startNegotiation, makeOffer, offerTerms,
   buyPlayer, payClause, releaseClauseOf, loanIn, loanEligible, loanFeeOf,
-  exerciseLoanOption, breakLoan, wageFor,
+  exerciseLoanOption, breakLoan, wageFor, loanOutPlayer, recallLoanedPlayer,
+  canLeaveSquad, acceptBid, startNextSeason, finishSeason, playNextEntry, loanOutFee,
 } = cm;
 /* The desk's own maths lives in its own module, so it is read from there. */
 const { valuationBand, valuationSpread } = dealsMod;
@@ -202,6 +233,7 @@ for (const [name, fn] of Object.entries({
   startCareer, buildMarket, startNegotiation, makeOffer, offerTerms, buyPlayer,
   payClause, releaseClauseOf, loanIn, loanEligible, loanFeeOf, exerciseLoanOption,
   breakLoan, wageFor, valuationBand, valuationSpread, staffLevel, ensureStaff,
+  loanOutPlayer, recallLoanedPlayer, canLeaveSquad, acceptBid, startNextSeason, finishSeason, playNextEntry, loanOutFee,
 })) {
   if (typeof fn !== 'function') {
     console.error(`the harness could not reach ${name}; the bundle is not the shape it expects`);
@@ -612,6 +644,118 @@ console.log('7) An instant buy and a met clause are the deals they always were')
   console.log(`   ${buys} instant buys and ${clauses} met clauses, all on the pre-506 shape`);
   if (buys < 6) fail(`only ${buys} instant buys were reachable`);
   if (clauses < 4) fail(`only ${clauses} clauses were reachable`);
+}
+
+/* ---------- 8. Round 508: a loan OUT carries the same two figures ---------- */
+console.log('8) A loan out can be recalled, and the club he is at can buy him');
+{
+  let sent = 0;
+  let recalled = 0;
+  let bought = 0;
+  let rollovers = 0;
+  for (let i = 0; i < 12; i++) {
+    const s = fresh(['Aston Villa', 'Napoli', 'Sevilla', 'Ajax'][i % 4]);
+    /* Somebody who is allowed to leave: not the last keeper, squad over 14. */
+    const man = [...s.squad].sort((a, b) => a.rating - b.rating).find(p => canLeaveSquad(s, p));
+    if (!man) continue;
+    const away = loanOutPlayer(s, man.id);
+    if (!away) continue;
+    sent += 1;
+    const entry = (away.loanedOut ?? []).find(l => l.player.id === man.id);
+    if (!entry) { fail(`${man.name} went out on loan and was not filed`); continue; }
+    if (entry.optionFee === undefined) fail(`${man.name} left with no option to buy on the deal`);
+    if (entry.recallFee === undefined) fail(`${man.name} left with no recall figure on the deal`);
+    if (away.squad.some(p => p.id === man.id)) fail(`${man.name} is still in the squad after going out on loan`);
+
+    /* The recall brings him back and costs the agreed figure. */
+    const back = recallLoanedPlayer(away, man.id);
+    if (!back) {
+      if (entry.recallFee <= away.budget) fail(`${man.name} could not be recalled with the money in the bank`);
+    } else {
+      recalled += 1;
+      if (!back.squad.some(p => p.id === man.id)) fail(`${man.name} was recalled and did not come back`);
+      if ((back.loanedOut ?? []).some(l => l.player.id === man.id)) fail(`${man.name} is in the squad AND still out on loan`);
+      const spent = Math.round((away.budget - back.budget) * 10) / 10;
+      if (spent !== entry.recallFee) fail(`the recall cost ${spent}, the figure agreed was ${entry.recallFee}`);
+    }
+    /* And it needs an open window, like every other move of a registration. */
+    if (recallLoanedPlayer({ ...away, transferWindow: null }, man.id) !== null) {
+      fail('a loan was recalled with the window shut');
+    }
+
+    /* Play the season out and see whether the option is ever taken up. */
+    let st = away;
+    let guard = 0;
+    while (guard < 300) {
+      guard += 1;
+      if (!st.calendar || st.week >= st.calendar.length) break;
+      const r = playNextEntry(st, { skipHalftime: true });
+      if (!r || !r.state) break;
+      st = r.state;
+      if (r.kind === 'seasonOver') break;
+      if (st.sacked) break;
+    }
+    if (st.sacked) continue;
+    /* The summer runs through finishSeason first: playNextEntry stops at the
+       last fixture and the rollover is a separate step. An earlier draft of
+       this section went straight to startNextSeason, measured zero rollovers,
+       and would have proved nothing about the option at all. */
+    const fin = finishSeason(st);
+    if (!fin || !fin.state) continue;
+    const before = fin.state.budget;
+    const next = startNextSeason(fin.state);
+    if (!next) continue;
+    rollovers += 1;
+    const cameHome = next.squad.some(p => p.name === man.name);
+    if (!cameHome) {
+      bought += 1;
+      /* The proof that he was BOUGHT rather than quietly lost is the headline
+         the engine writes, not the budget across the summer: startNextSeason
+         rebuilds the kitty from the board's allocation plus a capped carry and
+         then takes the add-ons off it, so the number can fall in a season the
+         option fee came in. An earlier version of this compared the two and
+         went red on a working engine. */
+      const took = (next.transferLog ?? []).some(n => n.name === man.name && n.from === next.clubName);
+      if (!took) {
+        fail(`${man.name} did not come home and no option was recorded (budget ${before} to ${next.budget})`);
+      }
+    }
+    if ((next.loanedOut ?? []).length !== 0) fail('a loan survived the rollover');
+  }
+  console.log(`   ${sent} loans sent out, ${recalled} recalled early, ${rollovers} rollovers played, ${bought} options taken up by the borrowing club`);
+  if (sent < 8) fail(`only ${sent} players could be loaned out at all`);
+  if (recalled < 8) fail(`only ${recalled} of ${sent} loans could be recalled`);
+  if (rollovers === 0) fail('no season reached a rollover, so the option was never tested');
+}
+
+/* ---------- 9. Round 508: an agreed loan fee is the one that is paid ---------- */
+console.log('9) Accepting a loan approach banks the number that was offered');
+{
+  let checked = 0;
+  for (let i = 0; i < 10 && checked < 4; i++) {
+    const s = fresh(['Aston Villa', 'Napoli', 'Sevilla'][i % 3]);
+    const man = [...s.squad].sort((a, b) => a.rating - b.rating).find(p => canLeaveSquad(s, p));
+    if (!man) continue;
+    /* A loan approach whose number is deliberately NOT loanOutFee, which is
+       what a negotiated loan will look like. acceptBid used to recompute the
+       fee and throw this away, and the two only ever agreed by luck. */
+    const offer = Math.round((loanOutFee(man) + 3.7) * 10) / 10;
+    const withBid = {
+      ...s,
+      incomingBids: [{ playerId: man.id, playerName: man.name, club: 'Benfica', offer, status: 'open', loan: true }],
+    };
+    const after = acceptBid(withBid, man.id);
+    if (!after) continue;
+    checked += 1;
+    const banked = Math.round((after.budget - s.budget) * 10) / 10;
+    if (banked !== offer) {
+      fail(`${man.name}: a loan approach of ${offer} banked ${banked} (loanOutFee says ${loanOutFee(man)})`);
+    }
+    const entry = (after.loanedOut ?? []).find(l => l.player.id === man.id);
+    if (entry && entry.fee !== offer) fail(`${man.name}: the filed loan says ${entry.fee} where ${offer} was agreed`);
+  }
+  console.log(`   ${checked} loan approaches accepted at a number that is not loanOutFee`);
+  if (checked < 3) fail(`only ${checked} loan approaches could be accepted`);
 }
 
 if (failures) {

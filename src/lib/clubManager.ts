@@ -60,7 +60,7 @@ import type { ClubStaff } from '@/lib/clubManagerStaff';
 import {
   ASK_CONVERGENCE, MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN,
   OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,
-  offerVerdict, patienceCost, termsNote, termsVerdict,
+  loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
 import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 474: the five specific board asks, built and graded there for the
@@ -412,6 +412,18 @@ export interface LoanOut {
   /** Loan fee banked when he left. */
   fee: number;
   season: number;
+  /**
+   * Round 508: what the borrowing club may buy him for when the loan ends, in
+   * millions. Absent on every loan filed before Round 508, and a loan without
+   * one simply comes home the way it always did.
+   */
+  optionFee?: number;
+  /**
+   * Round 508: what it costs YOU to bring him back early, in millions. Absent
+   * on a pre Round 508 loan, and a loan without one cannot be recalled, which
+   * is exactly the behaviour those saves already have.
+   */
+  recallFee?: number;
 }
 
 export interface CMPlayer {
@@ -7171,7 +7183,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   if (!canLeaveSquad(career, p)) return null;
   // Round 94: a loan approach sends him out for the season instead of selling.
   if (bid.loan) {
-    const loaned = loanOutPlayer(career, playerId, bid.club);
+    const loaned = loanOutPlayer(career, playerId, bid.club, bid.offer);
     if (!loaned) return null;
     return { ...loaned, incomingBids: bids.filter(b => b.playerId !== playerId) };
   }
@@ -7324,13 +7336,26 @@ export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
  * game time behind him, which for a young player is worth far more than the
  * fee (see returnLoanedPlayers).
  */
-export function loanOutPlayer(career: CareerState, playerId: string, toClub?: string): CareerState | null {
+export function loanOutPlayer(
+  career: CareerState,
+  playerId: string,
+  toClub?: string,
+  agreedFee?: number,
+): CareerState | null {
   if (career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
   if (!p || !canLeaveSquad(career, p)) return null;
   const pool = buyerPool(career);
   const club = toClub && toClub !== career.clubName ? toClub : pick(pool);
-  const fee = loanOutFee(p);
+  /* Round 508: honour the number that was actually agreed. acceptBid used to
+     recompute this from loanOutFee and throw bid.offer away, which was harmless
+     only because generateBids happened to set the two to the same figure. The
+     moment a loan carries a negotiated fee that line would have silently
+     discarded it, and the screen would have shown one number while the budget
+     took another. */
+  const fee = agreedFee !== undefined && Number.isFinite(agreedFee) && agreedFee >= 0
+    ? Math.round(agreedFee * 10) / 10
+    : loanOutFee(p);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + fee) * 10) / 10,
@@ -7342,7 +7367,18 @@ export function loanOutPlayer(career: CareerState, playerId: string, toClub?: st
     incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
     /* Round 505: a season away does not count toward a second position, and
        a frozen block coming home a year later would say it did. */
-    loanedOut: [...(career.loanedOut ?? []), { player: { ...p, transferStatus: undefined, retraining: undefined }, club, fee, season: career.season }],
+    /* Round 508: the loan carries the same two figures a loan IN has carried
+       since Round 506, quoted off what he is worth to you. */
+    loanedOut: [
+      ...(career.loanedOut ?? []),
+      {
+        player: { ...p, transferStatus: undefined, retraining: undefined },
+        club,
+        fee,
+        season: career.season,
+        ...loanOutTermsFor(sellValue(p), fee),
+      },
+    ],
     careerStats: { ...career.careerStats },
     transferLog: [...(career.transferLog ?? [])],
   };
@@ -7354,8 +7390,12 @@ export function loanOutPlayer(career: CareerState, playerId: string, toClub?: st
  * Round 94: bring the loans home. A season of real football is the single
  * best thing that can happen to a young player, and the game should say so.
  */
-function returnLoanedPlayers(career: CareerState): CMPlayer[] {
+function returnLoanedPlayers(career: CareerState): {
+  home: CMPlayer[];
+  bought: { name: string; club: string; fee: number }[];
+} {
   const out: CMPlayer[] = [];
+  const bought: { name: string; club: string; fee: number }[] = [];
   for (const l of career.loanedOut ?? []) {
     const p = l.player;
     const bump =
@@ -7366,16 +7406,66 @@ function returnLoanedPlayers(career: CareerState): CMPlayer[] {
     if (value !== undefined && bump > 0) {
       value = Math.max(0.2, Math.round(value * Math.pow(1.2, bump) * 10) / 10);
     }
-    out.push({
+    const grown: CMPlayer = {
       ...p,
       rating: clamp(p.rating + bump, 40, 95),
       value,
       morale: 76,
       transferStatus: undefined,
       onLoan: undefined,
-    });
+    };
+    /* Round 508: they only take the option up if the season was worth taking it
+       up for. A boy who grew is one they want to keep; one who did not simply
+       comes home. A loan filed before Round 508 has no option and always comes
+       home, which is the behaviour those saves already had. */
+    /* Tuned rather than guessed. The first shape (bump >= 2 or rating >= 78, at
+       a 45 percent roll) had the borrowing club keeping 23 of 40 loaned players
+       in simTransfers, so more than half of every youngster you developed was
+       lost to a clause the manager never explicitly agreed to. A loan out is
+       first and foremost a development tool in this game, and losing the boy
+       has to be the exception that makes the option interesting rather than the
+       default outcome that makes loaning out a bad idea. */
+    if (l.optionFee !== undefined && (bump >= 3 || grown.rating >= 80) && Math.random() < 0.25) {
+      bought.push({ name: p.name, club: l.club, fee: l.optionFee });
+      continue;
+    }
+    out.push(grown);
   }
-  return out;
+  return { home: out, bought };
+}
+
+/**
+ * Round 508: bring him back early, at the figure agreed when he left.
+ *
+ * The mirror of breakLoan on the way in, and the reason it exists is the same:
+ * the man in front of him gets hurt in November and a loan you cannot undo is a
+ * decision the game will not let you take back. It costs, so it is a real
+ * choice rather than a free undo, and it needs an open window like every other
+ * move of a registration.
+ */
+export function recallLoanedPlayer(career: CareerState, playerId: string): CareerState | null {
+  if (career.transferWindow === null) return null;
+  const list = career.loanedOut ?? [];
+  const entry = list.find(l => l.player.id === playerId);
+  if (!entry) return null;
+  if (entry.recallFee === undefined) return null;
+  if (entry.recallFee > career.budget) return null;
+  if (career.squad.length >= 30) return null;
+  const back: CMPlayer = {
+    ...entry.player,
+    morale: Math.max(40, (entry.player.morale ?? 70) - 6),
+    transferStatus: undefined,
+    onLoan: undefined,
+  };
+  const state: CareerState = {
+    ...career,
+    budget: Math.round((career.budget - entry.recallFee) * 10) / 10,
+    squad: [...career.squad, back],
+    loanedOut: list.filter(l => l.player.id !== playerId),
+    transferLog: [...(career.transferLog ?? [])],
+  };
+  pushNews(state, { name: back.name, from: entry.club, to: state.clubName, fee: 0, loan: true });
+  return state;
 }
 
 /**
@@ -14054,7 +14144,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
-  const homeFromLoan = returnLoanedPlayers(career);
+  /* Round 508: some of them do not come home, because the club they spent the
+     season at took up the option agreed when they left. That is money in and a
+     sale on the record, so it is settled here rather than inside the return. */
+  const loanReturn = returnLoanedPlayers(career);
+  const homeFromLoan = loanReturn.home;
   if (moving) {
     squad = buildSquad(clubName, nextYearsOn, eraId);
   } else {
@@ -14160,6 +14254,17 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      does not dodge them: the promises were the CLUB's, but this sim tracks
      one career, so they follow the save and are all settled or dropped here
      either way. */
+  /* Round 508: an option taken up on one of my loans is money in, on top of the
+     board's cheque and before the add-ons come off it. Walking to a new job
+     carries none of it, the same rule the balance and the sponsor already
+     follow: he was the old club's player and it is the old club's money. */
+  const loanOptionNews: string[] = [];
+  if (!moving) {
+    for (const sale of loanReturn.bought) {
+      budget = Math.round((budget + sale.fee) * 10) / 10;
+      loanOptionNews.push(`\u{1F4B0} ${sale.club} took up their option on ${sale.name}, ${money(sale.fee)}.`);
+    }
+  }
   const addOnNews: string[] = [];
   for (const due of career.pendingAddOns ?? []) {
     if (moving) continue; // the old club's promises stay with the old club
@@ -14464,7 +14569,19 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   generateHeadlines(state);
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
-  if (addOnNews.length) state.aiHeadlines = [...addOnNews, ...state.aiHeadlines].slice(0, 8);
+  if (addOnNews.length || loanOptionNews.length) state.aiHeadlines = [...loanOptionNews, ...addOnNews, ...state.aiHeadlines].slice(0, 8);
+  /* Round 508: an exercised option is a TRANSFER, so it goes in the transfer
+     log rather than only into the headline feed. The feed is capped at eight
+     and two more prepends follow this line, so a summer with promotion news and
+     a manager merry-go-round pushes the sale straight off the end: the first
+     version of this recorded it only as a headline and a harness checking for
+     it was red on a working engine. The log is where a player would look for it
+     anyway, beside every other deal. */
+  if (!moving) {
+    for (const sale of loanReturn.bought) {
+      pushNews(state, { name: sale.name, from: state.clubName, to: sale.club, fee: sale.fee });
+    }
+  }
   /* Round 308: the merry-go-round's news, same seat as the add-ons and for
      the same reason. */
   if (managerNews.length) state.aiHeadlines = [...managerNews, ...state.aiHeadlines].slice(0, 8);

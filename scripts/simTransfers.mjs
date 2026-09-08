@@ -153,6 +153,8 @@ console.log('2) Listing brings the market to you');
 console.log('3) Loan out, then home developed');
 {
   let bumped = 0, sampled = 0, feePaid = 0;
+  /* Round 508: loans that ended with the borrowing club taking up its option. */
+  let keptByTheirClub = 0;
   for (let i = 0; i < 40; i++) {
     let s = startCareer('Brighton');
     const kid = [...s.squad].filter(p => p.age <= 21 && !p.onLoan).sort((a, b) => b.rating - a.rating)[0];
@@ -179,9 +181,34 @@ console.log('3) Loan out, then home developed');
       if (r.kind === 'seasonOver') break;
     }
     s = finishSeason(s).state;
+    const budgetBeforeSummer = s.budget;
     s = startNextSeason(s);
     const home = s.squad.find(p => p.name === kid.name);
-    if (!home) { fail(`${kid.name} never came home from his loan`); continue; }
+    if (!home) {
+      /* Round 508: a loan out carries an option now, so a boy who did well can
+         be kept by the club he spent the season at rather than coming home.
+         That is the mechanic working, not a player going missing, but it has to
+         be PAID for: the only acceptable way to not come home is money in. This
+         check was written when every loan returned unconditionally. */
+      /* The signal is the headline the engine writes, NOT the budget across the
+         summer: startNextSeason recomputes the whole kitty from the board's new
+         allocation plus a capped carry and then takes the add-ons off it, so a
+         season where the option fee came in can still end on a smaller number
+         than it started. The first version of this check compared the two and
+         went red on a working engine, which is exactly the kind of check that
+         teaches people to ignore a harness. */
+      const took = (s.transferLog ?? []).some(n => n.name === kid.name && n.from === s.clubName);
+      if (!took) {
+        fail(`${kid.name} never came home and no option was recorded (budget ${budgetBeforeSummer} to ${s.budget})`);
+      } else {
+        /* A loan that ended in a sale is still a completed loan, so it counts
+           toward the sample. Leaving it out shrank the denominator until the
+           section reported "too few loans completed to judge" about an engine
+           that was working, which is a harness measuring its own blind spot. */
+        keptByTheirClub += 1;
+      }
+      continue;
+    }
     sampled++;
     // agePlayer also drifts young players up, so we check he is not WORSE
     // off than he left, and that the loan bump lands often.
@@ -191,7 +218,8 @@ console.log('3) Loan out, then home developed');
   }
   console.log(`   ${sampled} loans completed, ${bumped} came home with a higher rating`);
   console.log(`   average loan fee banked ${(feePaid / Math.max(1, sampled)).toFixed(2)}m`);
-  if (sampled < 30) fail('too few loans completed to judge');
+  console.log(`   ${keptByTheirClub} loans ended with the borrowing club taking up its option`);
+  if (sampled + keptByTheirClub < 30) fail(`too few loans completed to judge (${sampled} home, ${keptByTheirClub} bought)`);
   if (bumped < sampled * 0.8) fail('loans barely develop anyone');
 }
 

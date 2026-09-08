@@ -1580,6 +1580,7 @@ const ClubManager = () => {
             onProposeTerms={g.proposeTerms}
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}
+            onRecallLoanee={g.recallLoanee}
           />
         </TabsContent>
       </Tabs>

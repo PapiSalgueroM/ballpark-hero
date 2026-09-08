@@ -5,7 +5,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
-  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, walkAway, respondApproach, expandGround,
+  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
@@ -420,6 +420,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? breakLoan(prev, playerId) ?? prev : prev));
   }, []);
 
+  /* Round 508: bring one of MY loans back early, at the recall figure. */
+  const recallLoanee = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? recallLoanedPlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
   /* Round 168: answer the mid-season approach from the Manager panel. */
   const answerApproach = useCallback((commit: boolean) => {
     setCareer(prev => (prev ? respondApproach(prev, commit) : prev));
@@ -637,7 +642,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,

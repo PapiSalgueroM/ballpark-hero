@@ -245,6 +245,27 @@ export interface LoanTerms {
   breakFee?: number;
 }
 
+/**
+ * Round 508: the same two figures on a loan going the OTHER way, quoted off
+ * what he is worth to you rather than off a market price.
+ *
+ * A loan out was a one off fee and a fixed season, unwound unconditionally at
+ * the rollover, which made it a single decision with no way back and no upside
+ * beyond the development bump. The option is money in if he does well enough
+ * that the borrowing club wants to keep him; the recall figure is the way back
+ * when the man in front of him gets hurt in November.
+ */
+export function loanOutTermsFor(sellVal: number, loanFee: number): { optionFee: number; recallFee: number } {
+  /* They pay a premium over what he is worth today, for the same reason you do
+     on the way in: they are buying the right to decide at the end of a season
+     in which he may have grown. */
+  const optionFee = Math.max(0.5, Math.round(sellVal * 1.15 * 10) / 10);
+  /* Breaking your own loan costs you, so a recall is a real decision rather
+     than a free undo. Half the fee you were paid, and you keep the rest. */
+  const recallFee = Math.max(0.1, Math.round(loanFee * 0.5 * 10) / 10);
+  return { optionFee, recallFee };
+}
+
 /** The two figures on the table for a loan, both in millions. */
 export function loanTermsFor(mp: MarketPlayer, loanFee: number): Required<LoanTerms> {
   const truth = mp.value ?? mp.price;

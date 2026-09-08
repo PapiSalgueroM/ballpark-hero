@@ -70,6 +70,8 @@ interface TransferScreenProps {
   onProposeTerms: (terms: PersonalTerms) => void;
   onBuyLoanee: (playerId: string) => void;
   onEndLoanEarly: (playerId: string) => void;
+  /* Round 508: bring one of MY loans back early. */
+  onRecallLoanee: (playerId: string) => void;
 }
 
 /** Round 94: the three things you can tell the world about a player. */
@@ -96,7 +98,7 @@ export function TransferScreen({
   career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
-  onProposeTerms, onBuyLoanee, onEndLoanEarly,
+  onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
 }: TransferScreenProps) {
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
@@ -908,16 +910,44 @@ export function TransferScreen({
             <div className="bg-card border border-sky-500/30 rounded-xl p-3 space-y-1">
               <div className="text-[10px] text-sky-400 uppercase tracking-wider font-bold">🔄 Out on loan</div>
               {out.map(l => (
-                <div key={l.player.id} className="flex items-center gap-2 text-xs">
-                  <span className="flex-1 min-w-0 truncate text-foreground">
-                    <span className="font-bold">{l.player.name}</span>
-                    <span className="text-muted-foreground"> at {l.club}</span>
-                  </span>
-                  <span className={cn('font-bold font-display', ratingTint(l.player.rating))}>{l.player.rating}</span>
+                <div key={l.player.id} className="space-y-1">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="flex-1 min-w-0 truncate text-foreground">
+                      <span className="font-bold">{l.player.name}</span>
+                      <span className="text-muted-foreground"> at {l.club}</span>
+                    </span>
+                    <span className={cn('font-bold font-display', ratingTint(l.player.rating))}>{l.player.rating}</span>
+                  </div>
+                  {/* Round 508: the two figures agreed when he left, the mirror
+                      of what a loan IN has carried since Round 506. */}
+                  {(l.optionFee !== undefined || l.recallFee !== undefined) && (
+                    <div className="flex items-center gap-1.5 flex-wrap pl-1">
+                      {l.optionFee !== undefined && (
+                        <span className="text-[9px] text-muted-foreground">
+                          {l.club} can buy him for {money(l.optionFee)}
+                        </span>
+                      )}
+                      {l.recallFee !== undefined && (
+                        <button
+                          onClick={() => onRecallLoanee(l.player.id)}
+                          disabled={!windowOpen || l.recallFee > career.budget || career.squad.length >= 30}
+                          title={windowOpen
+                            ? `Bring him back now for ${money(l.recallFee)}`
+                            : 'A recall needs an open window'}
+                          className={cn('px-2 py-0.5 rounded-md text-[9px] font-bold border transition-all',
+                            windowOpen && l.recallFee <= career.budget && career.squad.length < 30
+                              ? 'bg-card border-sky-500/50 text-sky-400 hover:border-sky-400'
+                              : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
+                        >
+                          Recall · {money(l.recallFee)}
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
               <p className="text-[9px] text-muted-foreground">
-                Back in the summer. Under 25s come home with a rating bump from playing every week.
+                Back in the summer. Under 25s come home with a rating bump from playing every week, and a club that liked what it saw can take up its option instead of sending him back.
               </p>
             </div>
           )}
