@@ -20,12 +20,20 @@ How it works:
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
   and the other lane takes NNN+1. NEXT FREE NUMBER: 513 (checked against origin/main on
-  2026-09-08: main is `d1c541b3`, Round 505. The Claude Code lane holds 506 to 508 and the
-  Codex lane holds 509 to 512, see both claims below. 509 to 512 are not on main: they sit
-  on `codex/round-509-quality-batch`, `codex/round-510-reliability-followup`,
-  `codex/round-511-midnight-saves` and `codex/round-512-conquest-attack`, and the board text
-  on those branches says 511 where this copy says 513. Trust the branch list, not either
-  number, until they merge).
+  2026-09-08). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
+  both claims below.
+
+  **WHAT IS ACTUALLY ON origin/main, and a correction worth reading before you repeat my
+  mistake.** main contains every round through 505 AND Round 509, verified with
+  `git merge-base --is-ancestor origin/codex/round-509-quality-batch origin/main`. Round 510,
+  511 and 512 are not on it and still sit on their own codex branches. The head commit of main
+  is `d1c541b3`, whose subject line says "Round 505 gate pass", because 505's gate fixes landed
+  AFTER 509 merged. **So reading main's head subject as main's position is wrong and I got it
+  wrong on 2026-09-08**, reporting the whole Codex lane as unmerged when 509 was merged and
+  live. The round numbers in this repo are labels on a queue, not a sequence, and several lanes
+  merge into main out of order. Ask git whether a branch is an ancestor; never read the top
+  commit's title. The board text on the 510 to 512 branches says 511 where this copy says 513,
+  so trust the branch list over either number until they merge.
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
