@@ -992,6 +992,23 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Inbox (unclaimed)
 
+- **MEASURED 2026-09-08, NOT FIXED, not the Club Manager lane's files:
+  `scripts/simConnect4ClubRecords.mjs` is red on a full suite run and on a rerun with the
+  database reachable.** The finding is its own: "not one pair was answered from records, so the
+  new path never ran and this section proved nothing". So the section is not asserting something
+  false, it is asserting that it could not exercise the path it exists to cover, which is the
+  right way round but still a red that will sit in every suite run until somebody who owns Soccer
+  Connect 4 looks at it. Confirmed NOT to be Round 506, 507 or 508's doing: that branch changes
+  17 files and none of them contains the string connect4, checked with
+  `git diff --name-only origin/main..HEAD`.
+  Worth knowing alongside it: on the same suite run five OTHER harnesses failed purely because
+  Supabase was unreachable for a few minutes (`simCareerSeasonTruth`, `simMostPlayed`,
+  `simPlayerSearchAccents`, `simPublicWrites`, and part of the connect4 one). All four of the
+  first group went green on a rerun once the host answered again. The runner's Round 356 rule is
+  meant to mark a database-less harness SKIPPED rather than FAILED, and it did not here, so a
+  transient network drop reads as five real failures in the summary. Whoever owns the runner may
+  want the probe to re-check before it hands down a verdict.
+
 - **ROUND 509 OWNS THE THREE ROUND 502 HANDOFF FINDINGS. CODE IS COMPLETE LOCALLY AND PENDING
   PR AND DEPLOY.** The four restored retired My Career saves are marked as restored before their
   retired phase renders, so legacy score cannot pay again on a visit. The NBA Conquest attacker
