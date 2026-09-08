@@ -79,9 +79,26 @@ The four-file Conquest harness was not fully green: the 20-seed map case failed
 with a `STACK_TRACE_ERROR` stack while engine, save and all 16 UI cases passed.
 Installed Vitest code uses that placeholder stack for its timeout error. The
 same unchanged 20-seed map file passed alone in 97.831 seconds, within its
-120-second limit. A one-worker comparison is queued. No timeout or seed count
-has been relaxed. The UI short-run control is also being strengthened to reject
-unrelated runtime errors rather than trusting a missing JSON reporter field.
+120-second limit. The same four real files then passed with one worker:
+125/125 outcomes, seeded map case 111.628 seconds, full-map UI case 19.713
+seconds, total process 160.843 seconds. The harness now sets only
+`--maxWorkers=1 --minWorkers=1 --no-file-parallelism`. Its final tracked run
+passes all 125 outcomes and all 20 seeds in 148.143 seconds. The existing
+revision control also passes. No timeout, seed count or game rule changed.
+The UI short-run control now passes with an empty explicit
+runtime-error sidecar and exactly one owned assertion failure. An injected
+uncaught exception makes the harness fail even alongside that expected failure.
+
+Two reporting mistakes were corrected rather than accepted as evidence. The
+installed and locked Vitest is 3.2.7; its JSON reporter omits unhandled errors,
+so checking a nonexistent field as zero did not guard them. It also counts the
+file and nested describe as two failed suites. The corrected check asserts one
+actual failed file and one named failed case, not one internal suite. An abort
+message's fallback printed the assertion when the sidecar was empty; that was
+initially misread as an unhandled assertion. Structured diagnostics disproved
+it. The live control's sidecar is empty; the injected arm has exactly the named
+uncaught exception. All temporary control files were removed. This closes the
+scoped Conquest harness gap, not the separate whole-suite gate.
 
 The final two production fixes pass independent source review, with no concrete
 findings. The exact app type gate and rebuilt production bundle then passed:
@@ -113,11 +130,24 @@ owned failures: reload, vendor reissue and missing alert. All external requests
 were intercepted and aborted. A 390px failure screenshot was inspected and
 showed a readable alert without overlap or clipping, then was removed.
 
-All fifteen generated-site fences are awaiting the Conquest control cleanup.
+All fifteen generated-site fences pass on the final build: simAdsense, simBrand,
+simHeadTags, simHiddenPages, simHubs, simIndexNow, simIndexing, simInternalLinks,
+simNoRivalNames, simPrerender, simPrerenderBoot, simRetiredRoutes, simSchema,
+simSitemap and simSnapshotAssets. They ran serially after control cleanup.
+Key counts are 139/139 verification documents, 75 ad callers, 140 ledger-backed
+sitemap rows, zero orphan pages, 121 game FAQ/breadcrumb pages, 148/148 current
+snapshot asset sets and zero brand drift. Fresh boot port 4336 had zero failed
+requests on all three sampled snapshots and verified all 11 retired redirects.
 Initial build results above do not cover those later production changes.
 The separate Round 515 full node run started at 04:21 Eastern, session 95111,
 PID 56308. A pass there would cover that branch, not this combined candidate.
 Do not duplicate it or modify its runtime or dist.
+
+These browser checks deliberately abort external traffic. They verify local
+UI, preservation of seeded saves and attempted vendor requests, not live OAuth,
+cross-device profile history, form delivery or the published Google CMP's
+interaction with vendor code. Those remain separate checks. None of these
+results guarantees AdSense approval or means the entire game backlog is done.
 
 ## Other lane
 

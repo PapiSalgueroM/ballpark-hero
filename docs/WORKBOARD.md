@@ -1,6 +1,6 @@
 # Work board
 
-**Round 516, Codex, CLAIMED September 8:** combined local review candidate in
+**Round 516, Codex, scoped verification complete September 8:** combined local review candidate in
 `.worktrees/round-516-review-candidate`, branch `codex/round-516-review-candidate`.
 Start from Round 514 `ebca3ead`, carry over Round 515's tested startup fixes,
 retain both dependency sets and the verified Round 514 snapshots, then verify
@@ -9,8 +9,12 @@ build in the root checkout: it belongs to Claude's active Club Manager lane.
 Round 515's one full node run remains active and its dist stays untouched.
 The reviewed Footle guide and Cookie choices failures are fixed. Final type/build,
 focused tests, 50 startup browser checks, 47 cookie-reset checks, the 121-route
-layout walk and their controls pass. Final generated-site fences and the
-four-file Conquest harness remain open. No provider behavior is redesigned.
+layout walk and their controls pass. All fifteen generated-site fences pass. The
+four-file Conquest harness passes all 125 outcomes and 20 seeds with one worker,
+plus its revision and completion controls. No test timeout or game rule changed.
+Preview 4186 serves the verified local build; production fixes are backed up at
+`42953e54` in draft PR67. The separate full-suite gate is still open.
+No provider behavior is redesigned.
 This is a draft review candidate, not permission to merge or publish.
 Next free round: 517.
 

@@ -159,18 +159,26 @@ describe('Soccer Attack durable board', () => {
 
   it('plays a complete real map through the UI without ranked completion', async () => {
     save(createAttack(makeSoccerAttackSetup(9)));
-    render(<SoccerAttackBoard />);
+    const view = render(<SoccerAttackBoard />);
+    expect(view.container.querySelectorAll('section[aria-label="Attack territory map"] path[role="button"]')).toHaveLength(48);
+    let actions = 0;
     for (let step = 0; step < 220; step += 1) {
       const stored = JSON.parse(localStorage.getItem(ATTACK_SAVE_KEY)!);
       if (stored.phase === 'finished') break;
       const label = stored.phase === 'team' ? 'Spin team wheel'
         : stored.phase === 'direction' ? 'Spin direction wheel'
           : stored.phase === 'target' ? 'Play attack' : 'Continue';
-      await tap(screen.getByRole('button', { name: label }));
+      const actionPanel = view.container.querySelector<HTMLElement>('section[aria-live="polite"]');
+      if (!actionPanel) throw new Error('The Attack action panel disappeared before the map finished.');
+      await tap(within(actionPanel).getByRole('button', { name: label }));
+      actions += 1;
     }
     const finished = JSON.parse(localStorage.getItem(ATTACK_SAVE_KEY)!);
     expect(finished.phase).toBe('finished');
-    expect(screen.getByText(/rules England/i)).toBeInTheDocument();
+    expect(actions).toBe(160);
+    expect(finished.champion).not.toBeNull();
+    expect(within(view.container).getByText(/rules England/i)).toBeInTheDocument();
+    expect(view.container.querySelectorAll('section[aria-label="Attack territory map"] path[role="button"]')).toHaveLength(48);
     expect(recordCompletion).not.toHaveBeenCalled();
     cleanup();
     render(<SoccerAttackBoard />);
