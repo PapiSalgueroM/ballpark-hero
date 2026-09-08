@@ -28,6 +28,8 @@ import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '
 import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
+import { spendSkillPoint } from '@/lib/clubManagerXp';
+import type { SkillTree } from '@/lib/clubManagerXp';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
@@ -453,6 +455,11 @@ export function useClubManager() {
   const buyFacility = useCallback((id: FacilityId) => {
     setCareer(prev => (prev ? upgradeClubFacility(prev, id) ?? prev : prev));
   }, []);
+  /* Round 513: a point into a tree. One way only, so it never needs a refund
+     path, and null when there is nothing free to spend. */
+  const spendPoint = useCallback((tree: SkillTree) => {
+    setCareer(prev => (prev ? spendSkillPoint(prev, tree) ?? prev : prev));
+  }, []);
   /* Round 471: the staff desk. Four posts, and the rival on the phone. */
   const appointStaff = useCallback((post: StaffPostId, candidateId: string) => {
     setCareer(prev => (prev ? hireStaff(prev, post, candidateId) ?? prev : prev));
@@ -643,7 +650,7 @@ export function useClubManager() {
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
-    appointStaff, payOffStaff, matchStaff, letStaffGo,
+    appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

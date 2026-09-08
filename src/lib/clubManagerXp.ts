@@ -51,6 +51,19 @@ export interface TreeDef {
   blurb: string;
   /** What the fifth point has bought you, for the screen to show. */
   atMax: string;
+  /*
+   * What you have to actually be DOING for this tree to pay, which the screen
+   * shows because six of the seven pay nothing on their own.
+   *
+   * This is not decoration. Round 513's balance measurement opened with a
+   * maxed manager and an untouched one returning byte identical seasons, and
+   * the reason was that dutyBoost sums the duties on the eleven and a fresh
+   * career has none set, so Tactics was multiplying zero by 1.5 and getting
+   * zero. That is correct behaviour for a tree that scales a thing you opted
+   * into, and it is a terrible surprise for somebody who has just spent five
+   * points on it. So the tile says the condition out loud.
+   */
+  needs: string;
 }
 
 export const TREE_INFO: Record<SkillTree, TreeDef> = {
@@ -60,6 +73,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F4CB}',
     blurb: 'Your duties get more out of the men carrying them.',
     atMax: 'Duties are worth about half as much again as they are on day one.',
+    needs: 'Only pays once you set duties on the Tactics screen. With none set it does nothing at all.',
   },
   recruitment: {
     id: 'recruitment',
@@ -67,6 +81,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F50D}',
     blurb: 'Your read on what a player is worth gets tighter.',
     atMax: 'You get a figure where the desk used to give you a range.',
+    needs: 'Shows up on the valuation the transfer desk gives you.',
   },
   negotiation: {
     id: 'negotiation',
@@ -74,6 +89,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F91D}',
     blurb: 'Sellers stay at the table longer and come down faster.',
     atMax: 'Two more rounds of talks, and the ask closes half again as quickly.',
+    needs: 'Only pays while you are actually haggling for somebody.',
   },
   youth: {
     id: 'youth',
@@ -81,6 +97,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F393}',
     blurb: 'The academy finds better boys and reads them more accurately.',
     atMax: 'Intake reports are as tight as a top scout writes them.',
+    needs: 'Shows up in the academy intake report.',
   },
   manManagement: {
     id: 'manManagement',
@@ -88,6 +105,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F5E3}',
     blurb: 'A promise you break costs you less of the dressing room.',
     atMax: 'A broken promise stings about a third less than it does on day one.',
+    needs: 'Only pays when a promise goes wrong. Keep them all and it never comes up.',
   },
   finance: {
     id: 'finance',
@@ -95,6 +113,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F4B0}',
     blurb: 'Every matchday brings a little more through the gate.',
     atMax: 'About a tenth more money a head on every home crowd.',
+    needs: 'Pays on every home gate, whatever else you do.',
   },
   media: {
     id: 'media',
@@ -102,6 +121,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     emoji: '\u{1F3A4}',
     blurb: 'The press room warms to you faster and cools slower.',
     atMax: 'The papers give you the benefit of the doubt for a week longer.',
+    needs: 'Only pays on a week you skip the press.',
   },
 };
 
@@ -313,6 +333,18 @@ export function spendPoint(block: ManagerXp, tree: SkillTree): ManagerXp | null 
   const now = block.points[tree] ?? 0;
   if (now >= MAX_TREE_POINTS) return null;
   return { ...block, points: { ...block.points, [tree]: now + 1 } };
+}
+
+/**
+ * The same thing over a career, which is the shape the hook takes: return the
+ * new state or null, and `?? prev` leaves the save alone when the spend was not
+ * legal. Reading through xpOf rather than ensureXp keeps this pure, so a
+ * refused spend cannot quietly repair a save as a side effect.
+ */
+export function spendSkillPoint(career: CareerState, tree: SkillTree): CareerState | null {
+  const next = spendPoint(xpOf(career), tree);
+  if (!next) return null;
+  return { ...career, managerXp: next };
 }
 
 /* ================================================================== */

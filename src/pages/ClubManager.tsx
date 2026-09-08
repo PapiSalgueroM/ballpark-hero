@@ -55,6 +55,8 @@ import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
 import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { RolesScreen } from '@/components/club-manager/RolesScreen';
+import { XpScreen } from '@/components/club-manager/XpScreen';
+import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { PressScreen } from '@/components/club-manager/PressScreen';
 import { MatchCentre } from '@/components/club-manager/MatchCentre';
 import { LiveSimScreen } from '@/components/club-manager/LiveSimScreen';
@@ -95,7 +97,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -1143,6 +1145,22 @@ const ClubManager = () => {
                 })()}
                 onClick={() => setHubPanel('staff')}
               />
+              {/* Round 513: the manager's own progression. Accented only while
+                  a point is sitting unspent, because that is the one state the
+                  player is losing something by ignoring. */}
+              <HubTile
+                icon="🎖️" title="Skills" accent={pointsFree(xpOf(c)) > 0}
+                value={(() => {
+                  const free = pointsFree(xpOf(c));
+                  return free > 0 ? `${free} point${free === 1 ? '' : 's'} to spend` : `Level ${levelFor(xpOf(c).xp)}`;
+                })()}
+                sub={(() => {
+                  const level = levelFor(xpOf(c).xp);
+                  if (pointsFree(xpOf(c)) > 0) return `Level ${level} · seven trees open`;
+                  return level >= MAX_LEVEL ? 'Every tree filled' : 'Tactics, recruitment, money, the press';
+                })()}
+                onClick={() => setHubPanel('xp')}
+              />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
                 value={c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
@@ -1391,6 +1409,9 @@ const ClubManager = () => {
                 />
               )}
               {hubPanel === 'stats' && <StatsScreen career={c} />}
+
+              {/* Round 513: the manager's own trees, spec section 28. */}
+              {hubPanel === 'xp' && <XpScreen career={c} onSpendPoint={g.spendPoint} />}
 
               {hubPanel === 'trophies' && (
                 <div className="bg-card border border-border rounded-xl p-3">

@@ -89,6 +89,11 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
                 </span>
               </div>
               <p className="text-[9px] text-muted-foreground">{info.blurb}</p>
+              {/* What the tree needs you to be doing. Six of the seven pay
+                  nothing on their own, and Tactics pays literally zero to an
+                  eleven with no duties set, so the condition is on the tile
+                  rather than left for the player to work out from silence. */}
+              <p className="text-[9px] text-muted-foreground/80 italic">{info.needs}</p>
               {full && <p className="text-[9px] text-gold">{info.atMax}</p>}
               <button
                 onClick={() => onSpendPoint(tree)}
