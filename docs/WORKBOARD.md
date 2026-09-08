@@ -71,13 +71,30 @@ Four things, in the order they can hurt you.
    already, in a sandbox, and died with the session. See the block below. Push after the first
    commit of a round, not at the end of it.
 
-- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. next: Round 508.** Rounds 503, 504
-  and 505 are merged on origin/main. 506 and 507 are BUILT AND PUSHED but not merged and not
-  live, on two stacked branches:
-  `round-506-cm-transfers` (10 commits, Club Manager transfers and personal terms, plus the
-  sitewide ad placement fix) and `round-507-ucl-two-legs` (5 commits on top of it, two legged
-  Champions League ties). 508 is claimed and scoped below, not started.
-  **Publishing is on hold by the owner as of 2026-09-08.** See the note at the top of this file.
+- **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. ALL THREE BUILT. next: Round 513.**
+  Rounds 503, 504 and 505 are merged on origin/main and 505 is live. **506, 507 and 508 are all
+  built and pushed on one stacked branch, `round-507-ucl-two-legs`, 30 plus commits, not merged
+  and not live.** The branch name predates 508 landing on it; do not read it as covering only 507.
+  - 506 Club Manager transfers and personal terms, plus a SITEWIDE ad placement change.
+  - 507 two legged Champions League knockout ties.
+  - 508 a loan out carrying the same option to buy and recall figure a loan in has.
+  GATES SO FAR: tsc zero, build clean, `playDealDesk`, `playAdRoutes` and `playClubManager` all
+  green on the built site, and the whole Club Manager engine family green. TWO adversarial review
+  passes were run, the second one on the FIXES from the first: 38 confirmed defects between them,
+  every one fixed, and the second pass found one repair that was worse than the bug it replaced
+  (a second leg lost 0-3 and won on penalties was being logged as a win, with the opponent given
+  a defeat in their own form guide).
+  THE ONE OPEN GATE: the 265 harness suite came back with six reds, five of them a Supabase
+  outage that cleared on a rerun and one, `simConnect4ClubRecords`, pre-existing and in another
+  lane's files. The sixth, `simPress`, is under investigation and is the only thing holding the
+  merge. It PASSES on origin/main and FAILS here, so it did move, but the failing check is a per
+  club bar of 0.5 against a two sigma error of 1.73, and the harness's OWN comment says a per
+  club bar "sits right on top of its own error and would eventually flap" and that the
+  significance bar belongs on the pooled set. The pooled bar passes here with room (2.41 against
+  2se 1.47). Section 4 ignores SIM_SEED and draws from fixed seeds, so its stability is being
+  measured by varying its own seed base on unchanged code. **No threshold is being touched until
+  that spread says it may be.** The owner's instruction on 2026-09-08 was explicit: follow the
+  evidence, do not weaken checks to get green.
 
   **READ THIS BEFORE PICKING 506, 507 OR 508 UP AGAIN.** A claude.ai/code session built
   Round 506 (transfers, nine engine commits through personal terms), Round 507 (Soccer Career
