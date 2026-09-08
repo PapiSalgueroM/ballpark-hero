@@ -58,9 +58,9 @@ import type { ClubStaff } from '@/lib/clubManagerStaff';
    the board asks are in theirs. Every export is pure and nothing here is read
    at module scope, which is what keeps the cycle between the two files safe. */
 import {
-  MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN, OPENING_PATIENCE_SPREAD,
-  askingTerms, counterTerms, dealCloseness, loanTermsFor, offerVerdict, patienceCost,
-  termsNote, termsVerdict,
+  ASK_CONVERGENCE, MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN,
+  OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,
+  offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
 import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 474: the five specific board asks, built and graded there for the
@@ -6900,10 +6900,15 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
     return { ...career, negotiation: next };
   }
 
-  // A real offer: the ask moves toward the package.
+  /* A real offer: the ask moves toward the package. Round 506 slowed this from
+     0.55 to ASK_CONVERGENCE, because at 0.55 the gap closed inside three
+     counters from any offer above the insult line, which is inside the patience
+     of even the least patient seller, so charging patience changed nothing on
+     its own. See the note on ASK_CONVERGENCE for the arithmetic and section 3
+     of simClubManagerDeals for the measurement. */
   next.theirAsk = Math.max(
     Math.round(packageValue * 1.02 * 10) / 10,
-    Math.round((next.theirAsk - (next.theirAsk - packageValue) * 0.55) * 10) / 10,
+    Math.round((next.theirAsk - (next.theirAsk - packageValue) * ASK_CONVERGENCE) * 10) / 10,
   );
   next.note = pick(SELLER_COUNTER);
 

@@ -182,6 +182,30 @@ export function patienceCost(verdict: OfferVerdict): number {
   return 0;
 }
 
+/**
+ * How much of the gap the seller gives away each round.
+ *
+ * Round 161 set this at 0.55 and charging patience was not enough on its own to
+ * make the table bind, which simClubManagerDeals section 3 caught: at 0.55 the
+ * gap shrinks so fast that ANY offer above the insult line lands within three
+ * counters, which is inside the patience of even the least patient seller. So
+ * repeating one unchanged number still worked at every level, it just took a
+ * round or two longer, and his "limited patience" clause was still decorative.
+ *
+ * The arithmetic behind 0.40. Agreement needs the remaining gap under 0.0309
+ * of your offer, and the gap after n counters is (ask - offer)(1 - f)^n, so
+ * repeating an offer of m times the ask lands within n counters exactly when
+ * (1 - f)^n <= 0.0309m / (1 - m). At f = 0.40 and the three counters a patience
+ * of four allows, that is 0.216 against 0.098 at m = 0.76 and 0.227 at
+ * m = 0.88: so repeating 0.76 or 0.80 of the ask now always runs out of table,
+ * 0.84 comes down to how patient this particular seller was, and 0.88 and above
+ * still land. Measured in section 3, which sweeps exactly those five numbers.
+ *
+ * What that buys is the decision the mechanic is supposed to be about: pitch
+ * low and you have to improve, or pay near the ask and close it now.
+ */
+export const ASK_CONVERGENCE = 0.4;
+
 /* ================================================================== */
 /* 3. Loans that carry terms                                          */
 /* ================================================================== */
