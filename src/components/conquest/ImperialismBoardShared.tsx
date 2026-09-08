@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { CalendarDays, Crown, Flag, ListOrdered, RotateCcw, Swords } from 'lucide-react';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from '@/components/conquest/ConquestRegionMap';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -14,8 +14,8 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
-  dailyConquestRng, saveDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
-  type ConquestDailyResult,
+  dailyConquestRng, commitDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  type ConquestDailyResult, type ConquestDailyRun,
 } from '@/lib/conquestDaily';
 import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
@@ -70,7 +70,8 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   const [dailyDone, setDailyDone] = useState<ConquestDailyResult | null>(() => loadDailyResult(sport.key, todayStr));
   const [dailyStreak, setDailyStreak] = useState(() => loadDailyStreak(sport.key, todayStr));
   const [mode, setMode] = useState<'daily' | 'free'>(() => (loadDailyResult(sport.key, todayStr) ? 'free' : 'daily'));
-  const dailySaved = useRef(false);
+  const saving = useRef(false);
+  const [notice, setNotice] = useState('');
 
   const run = session?.run ?? null;
   const phase = run?.phase ?? 'pick';
@@ -126,53 +127,69 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
      back in view without moving the page when it is already readable. */
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}-${picksMade}`);
 
-  // Lock in the daily result the moment the season ends.
-  useEffect(() => {
-    if (!run || phase !== 'done' || mode !== 'daily' || !run.champion || dailySaved.current || dailyDone) return;
-    dailySaved.current = true;
-    const result: ConquestDailyResult = {
-      date: todayStr,
-      team: run.favorite,
-      score,
-      empire: statesOf(run.owners, run.favorite).length,
-      calls: run.hits,
-      callsTotal: run.picks.length,
-      champion: run.champion,
-      championWasYou: run.champion === run.favorite,
-    };
-    const s = saveDailyResult(sport.key, result, todayStr, run.picks);
-    setDailyDone(result);
-    setDailyStreak(s);
-  }, [run, phase, mode, score, dailyDone, sport.key, todayStr]);
+  // Save before showing a result, including the finish seen by useGameCompletion.
+  const accept = async (next: Session, expected: ConquestDailyRun | null) => {
+    if (mode === 'daily') {
+      const r = next.run;
+      const result: ConquestDailyResult | null = r.phase === 'done' && r.champion ? {
+        date: todayStr, team: r.favorite, score: runScore(r),
+        empire: statesOf(r.owners, r.favorite).length, calls: r.hits,
+        callsTotal: r.picks.length, champion: r.champion, championWasYou: r.champion === r.favorite,
+      } : null;
+      const record = result ? { team: r.favorite, picks: r.picks, done: true, result } : dailyRunRecord(r);
+      const outcome = await commitDailyRun(sport.key, expected, record, todayStr);
+      if (outcome !== 'saved') {
+        setSession(restoreDailyRun(sport, todayStr));
+        setDailyDone(loadDailyResult(sport.key, todayStr));
+        setDailyStreak(loadDailyStreak(sport.key, todayStr));
+        setPrediction(null);
+        setNotice(outcome === 'conflict'
+          ? 'Your daily moved forward in another tab. This is your saved progress.'
+          : 'Your daily could not be saved safely. Try again, or choose Free Play.');
+        return;
+      }
+      if (result) {
+        setDailyDone(result);
+        setDailyStreak(saveDailyResult(sport.key, result, todayStr, r.picks));
+      }
+    }
+    setSession(next);
+    setPrediction(null);
+    setNotice('');
+  };
 
-  const start = (teamId: string) => {
+  const start = async (teamId: string) => {
+    if (saving.current) return;
+    saving.current = true;
     const rng = mode === 'daily' ? dailyConquestRng(sport.key, todayStr) : Math.random;
-    dailySaved.current = false;
     /* The club goes down before the first ball is kicked: it is half of what
        replays the run, and a reload between the pick and the first call must
        come back to the same club. */
     const opened = startRun(sport, teamId, rng);
-    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(opened), todayStr);
-    setSession({ run: opened, rng });
-    setPrediction(null);
-    setShowStandings(false);
+    try {
+      await accept({ run: opened, rng }, null);
+      setShowStandings(false);
+    } finally { saving.current = false; }
   };
 
-  const play = () => {
-    if (!session || !prediction) return;
+  const play = async () => {
+    if (!session || !prediction || saving.current) return;
+    saving.current = true;
     const next = playRound(sport, session.run, prediction, session.rng);
     /* Written in the same breath as the roll. Writing it on Continue instead
        would let a player read the result, reload, and call it again knowing
        the answer, which is the whole defect. */
-    if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(next), todayStr);
-    setSession({ run: next, rng: session.rng });
-    setPrediction(null);
+    try {
+      await accept({ run: next, rng: session.rng }, dailyRunRecord(session.run));
+    } finally { saving.current = false; }
   };
 
-  const continueOn = () => {
-    if (!session) return;
-    setSession({ run: continueRun(sport, session.run, session.rng), rng: session.rng });
-    setPrediction(null);
+  const continueOn = async () => {
+    if (!session || saving.current) return;
+    saving.current = true;
+    try {
+      await accept({ run: continueRun(sport, session.run, session.rng), rng: session.rng }, dailyRunRecord(session.run));
+    } finally { saving.current = false; }
   };
 
   const reset = () => {
@@ -197,17 +214,27 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
   const regionCountLabel = (n: number) => `${n} ${regionNoun(sport, n)}`;
   /* "club" on the soccer map, "team" on the four US maps. */
   const teamNoun = sport.teamNoun ?? 'club';
+  const savedNotice = notice && (
+    <div role="status" className="space-y-2 text-center text-sm text-muted-foreground">
+      <p>{notice}</p>
+      <button
+        onClick={() => { if (!saving.current) { setMode('free'); reset(); setNotice(''); } }}
+        className="rounded-full border border-border px-4 py-2 font-semibold text-foreground"
+      >Free Play instead</button>
+    </div>
+  );
 
   /* ---------------- pick screen ---------------- */
   if (!run) {
     const playedToday = mode === 'daily' && dailyDone;
     return (
       <div className="space-y-4">
+        {savedNotice}
         <div className="flex items-center justify-center gap-2">
           {(['daily', 'free'] as const).map(m => (
             <button
               key={m}
-              onClick={() => setMode(m)}
+              onClick={() => { if (!saving.current) { setMode(m); setNotice(''); } }}
               className={cn(
                 'inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-bold transition-all',
                 mode === m ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground',
@@ -289,6 +316,7 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
 
   return (
     <div className="space-y-4">
+      {savedNotice}
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground">

@@ -128,12 +128,38 @@ export function loadDailyRun(sport: ConquestSport, dateStr: string = getTodayET(
 }
 
 /** Write the run as it stands. Called after the pick and after every round. */
-export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateStr: string = getTodayET()): void {
+export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateStr: string = getTodayET()): boolean {
+  const current = loadDailyRun(sport, dateStr);
+  if (current && (current.done || current.team !== run.team ||
+    current.picks.length > run.picks.length || current.picks.some((pick, i) => run.picks[i] !== pick))) return false;
   writeDailyRecord(dailySlug(sport), dateStr, { team: run.team, picks: run.picks, done: run.done, result: run.result });
+  if (JSON.stringify(loadDailyRun(sport, dateStr)) !== JSON.stringify(run)) return false;
   try {
     localStorage.removeItem(legacyResultKey(sport));
   } catch {
     /* storage blocked: the old key is unreadable anyway */
+  }
+  return true;
+}
+
+/** Claim a board transition before revealing results or recording a finish.
+ * The per-day browser lock serializes tabs; the expected log rejects stale ones.
+ * Without safe storage/locking the board offers free play, not an untracked daily. */
+export async function commitDailyRun(
+  sport: ConquestSport,
+  expected: ConquestDailyRun | null,
+  next: ConquestDailyRun,
+  dateStr: string,
+): Promise<'saved' | 'conflict' | 'unavailable'> {
+  if (typeof navigator === 'undefined' || !navigator.locks) return 'unavailable';
+  try {
+    return await navigator.locks.request(`${dailySlug(sport)}-daily-${dateStr}`, () => {
+      const current = loadDailyRun(sport, dateStr);
+      if (current?.done || JSON.stringify(current) !== JSON.stringify(expected)) return 'conflict';
+      return saveDailyRun(sport, next, dateStr) ? 'saved' : 'unavailable';
+    });
+  } catch {
+    return 'unavailable';
   }
 }
 

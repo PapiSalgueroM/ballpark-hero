@@ -49,11 +49,24 @@ Do not repeatedly submit the same URL. Google says that does not change queue
 position or priority. [URL Inspection guidance](https://support.google.com/webmasters/answer/9012289)
 and [Page indexing report guidance](https://support.google.com/webmasters/answer/7440203).
 
+## Page with redirect: all three report entries
+
+| URL | Reported last crawl |
+| --- | --- |
+| http://douknowball.com/ | 2026-09-03 |
+| https://www.douknowball.com/ | 2026-08-25 |
+| http://www.douknowball.com/ | 2026-08-24 |
+
+These are alternate domain/scheme forms, not the retired game routes. Keep
+their redirect to the preferred HTTPS apex site. The older state note tying
+this three-URL bucket to `/jeopardy` was an inference, not the observed list.
+
 ## Discovered but not indexed: all 71 report entries
 
 All show last crawled N/A. The list was read with 100 rows per page and the
-table confirmed 1-71 of 71. Presence here does not override a later noindex or
-retirement decision. Compare with the current sitemap before requesting a crawl.
+table confirmed 1-71 of 71. All 71 currently appear in the committed sitemap,
+checked against the exact URL strings. Presence here does not override a later
+noindex or retirement decision. Recheck before requesting a crawl.
 
 ```text
 /accessibility

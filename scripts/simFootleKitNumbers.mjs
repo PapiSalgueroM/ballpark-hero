@@ -36,6 +36,9 @@
  * NEGATIVE CONTROL: FOOTLE_KIT_CONTROL=trusting reads the hand entry directly,
  * the way the code did before this round, so section 1 goes red with the real
  * movers named.
+ * Round 510: each page has an eight-second fetch/body deadline and one retry
+ * at the same offset. Exact response counts must prove the pool is complete.
+ * Unavailable, empty or incomplete data fails before any kit checks run.
  *
  * Run: node scripts/simFootleKitNumbers.mjs
  */
@@ -61,6 +64,9 @@ const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-footle-kit-'));
+process.once('exit', () => {
+  try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* non-fatal */ }
+});
 const ENTRY = path.join(tmp, 'entry.ts');
 const BUNDLE = path.join(tmp, 'bundle.mjs');
 fs.writeFileSync(ENTRY, "export { footleEnrichment, getEnrichment } from '@/data/footleEnrichment';");
@@ -69,20 +75,67 @@ const M = await import(pathToFileURL(BUNDLE).href);
 
 /* The current club, from the same table and year Footle builds its pool from. */
 const rows = [];
-for (let from = 0; ; from += 1000) {
-  let page = null;
+let total = null;
+const nothingChecked = message => {
+  console.error(`FOOTLE POOL UNAVAILABLE OR INCOMPLETE: ${message}. NOTHING WAS CHECKED.`);
+  process.exit(1);
+};
+async function fetchPage(from) {
+  const controller = new AbortController();
+  let timer;
   try {
-    const r = await fetch(`${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
-      { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
-    if (r.ok) page = await r.json();
-  } catch { /* retried once below */ }
-  if (page === null) { await new Promise(r => setTimeout(r, 800)); continue; }
-  rows.push(...page);
-  if (page.length < 1000) break;
-  if (from > 20000) break;
+    return await Promise.race([
+      (async () => {
+        const response = await fetch(`${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
+          { signal: controller.signal, headers: { ...HEAD, Prefer: 'count=exact', Range: `${from}-${from + 999}` } });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const page = await response.json();
+        if (!Array.isArray(page) || page.length === 0 || page.some(row =>
+          !row || typeof row.player_name !== 'string' || !row.player_name.trim()
+          || typeof row.club !== 'string' || !row.club.trim())) {
+          throw new Error('empty or malformed player page');
+        }
+        const range = /^(\d+)-(\d+)\/(\d+)$/.exec(response.headers.get('Content-Range') || '');
+        if (!range) throw new Error('missing exact response range or total');
+        const [, first, last, count] = range.map(Number);
+        if (!Number.isSafeInteger(count) || count <= from || first !== from
+          || last !== from + page.length - 1 || page.length !== Math.min(1000, count - from)
+          || (total !== null && count !== total)) {
+          throw new Error('response range, row count or total does not match the requested page');
+        }
+        return { page, count };
+      })(),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          controller.abort();
+          reject(new Error('request or body read exceeded 8000ms'));
+        }, 8000);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+    controller.abort();
+  }
 }
+for (let from = 0; from < 22000; from += 1000) {
+  let result = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      result = await fetchPage(from);
+      break;
+    } catch (error) {
+      if (attempt === 1) nothingChecked(`offset ${from} failed twice (${error.message})`);
+      await new Promise(resolve => setTimeout(resolve, 800));
+    }
+  }
+  total = result.count;
+  rows.push(...result.page);
+  if (rows.length === total) break;
+}
+if (rows.length !== total) nothingChecked(`page limit reached with ${rows.length} of ${total} rows`);
 const clubOf = new Map(rows.map(r => [r.player_name, r.club]));
 const names = Object.keys(M.footleEnrichment);
+if (!names.some(name => clubOf.has(name))) nothingChecked('no players from the hand list are in the returned pool');
 console.log(`   ${names.length} in the hand list, ${clubOf.size} players in the 2026 pool`);
 
 console.log('1) nobody who has changed league still gets a number');
@@ -129,8 +182,6 @@ console.log('3) a number is never zero');
   console.log(`   ${zeros} players carrying kit 0`);
   if (zeros > 0) fail(`${zeros} players report kit number 0, which the tile prints as though it were a real number (the Round 443 defect)`);
 }
-
-try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* non-fatal */ }
 
 if (CONTROL) {
   console.log(`\nNEGATIVE CONTROL ${CONTROL} was on; ${failures} finding(s). A control run is expected to be red.`);
