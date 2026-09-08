@@ -5,8 +5,12 @@
 Start from Round 514 `ebca3ead`, carry over Round 515's tested startup fixes,
 retain both dependency sets and the verified Round 514 snapshots, then verify
 the combined build. No new game rules or provider/database changes. Do not
-build in the root checkout: Claude has uncommitted Round 508 work there.
+build in the root checkout: it belongs to Claude's active Club Manager lane.
 Round 515's one full node run remains active and its dist stays untouched.
+The reviewed Footle guide and Cookie choices failures are fixed. Final type/build,
+focused tests, 50 startup browser checks, 47 cookie-reset checks, the 121-route
+layout walk and their controls pass. Final generated-site fences and the
+four-file Conquest harness remain open. No provider behavior is redesigned.
 This is a draft review candidate, not permission to merge or publish.
 Next free round: 517.
 
@@ -17,7 +21,7 @@ cookie controls now survive blocked storage. Head `9918a6dd`, draft PR66, has
 15 focused passes, five unit controls, 46 browser checks, the vendor control,
 clean install, type/build and all fifteen generated-site fences green. Full node
 integration remains open. No game save shim, database/provider/billing changes
-or publication. Next free round: 516.
+or publication. Round 516 is now claimed above; next free round is 517.
 Round 514's navigation repair passes all 121 routes. Full prerender finished with
 145 written, zero failures and three expected account-only refusals. Final
 generated-site verification passed for draft PR65, including 16 focused tests,
@@ -100,7 +104,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 515 (514 claimed September 8; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 517 (516 claimed September 8; historical main check below was on
   2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
   506 to 508 and the Codex lane holds 510 to 512, see the claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06

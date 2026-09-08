@@ -6,13 +6,24 @@ Round 516 is claimed in `.worktrees/round-516-review-candidate` on
 `codex/round-516-review-candidate`, starting from Round 514 `ebca3ead`.
 The scope is integration and verification of the already-tested Round 515
 startup fixes with the compact pages and Conquest/daily-save candidate.
-Keep Round 514's generated snapshots and sitemap ledger. No combined checks
-have passed yet. Round 515's existing full node run continues separately.
+Integration caught an old Footle first-visit storage error and a Cookie choices
+reset that reloaded despite failed consent removal. Both are fixed with focused
+tests and working controls. The final exact type/build passes, as do 19 layout
+tests, the 15-test startup fence with five controls, five new Footle cases with
+their control, 50 startup browser checks, 47 cookie-reset browser checks and
+their request controls. The final 121-route/four-width layout walk and all nine
+layout controls pass. The final fifteen generated-site fences await temporary
+Conquest control cleanup. A Conquest JSON-report check is being corrected;
+the full four-file/20-seed pass remains open. Round 514's snapshots and ledger
+are unchanged. Round 515's full node run continues separately, not here.
 
-Claude's committed 506/507 branch is now `c3f69168`; its final targeted deal,
-UCL and ad-spacing checks pass, but final broad/browser/generated-site reruns
-are not all recorded. Seven dirty root files implement Round 508 and are not
-part of this review candidate. Neither lane is being merged or published.
+Claude's branch advanced to `f56dde02`, synchronized with its tracked remote.
+Round 508 is committed at `2588c89a`, followed by seven fixes from another review.
+The latest commit records exact type, UCL controls, deal and transfer checks as
+green, but final build/broad/browser/generated-site reruns are not all recorded.
+The root tracked tree was clean at 05:24 Eastern; its owner artifacts remain
+untouched. Those Club Manager changes are not part of this review candidate.
+Neither lane is being merged or published.
 Next free round: 517.
 
 ## Review correction and startup follow-up, September 8, 2026
@@ -56,7 +67,8 @@ Clean install, 15 focused cases, five exact unit controls, 46 browser checks,
 the browser vendor control, exact type/build, independent review and all fifteen
 generated-site fences pass. No existing resolved dependency version changed.
 Full node integration remains open. No database, provider, billing or publication change.
-Next free round: 516. Claude's root checkout remains untouched.
+That round reserved 516; the current next free number is 517. Claude's root
+checkout remains untouched.
 
 The latest isolated replay of the unchanged Conquest full-map UI test passed in
 29.632 seconds against its 30-second limit, leaving 368 ms of headroom. This does

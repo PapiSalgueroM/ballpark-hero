@@ -30,16 +30,108 @@ JavaScript and verify actual snapshot booting against that new build.
    Preserve the full game, final winner, ranked-score exclusion and reload checks.
 7. Record remaining broad or external checks honestly before owner review.
 
-No combined gate has passed yet. The separate Round 515 full node run started
-at 04:21 Eastern, session 95111, PID 56308. A pass there would cover that branch,
-not this combined candidate. Do not duplicate it or modify its runtime or dist.
+## Results so far
+
+The lockfile preserves all 599 Round 514 and 619 Round 515 resolutions, with
+zero missing or changed version, resolved or integrity entries. Clean npm ci
+passed, installing 544 packages and applying the auth-js 2.95.3 patch. All
+three installed module/source copies contain the guarded read probe once.
+Exact Git comparisons confirm the Round 515 implementation and harnesses,
+and the Round 514 public snapshots and lastmod ledger, are retained.
+
+The combined Conquest board file passes all 16 tests. Its full-map case took
+20.462 seconds in that final file run, within the unchanged 30-second limit.
+The profile of the original driver passed in 29.148 seconds, spending 11.46
+seconds on whole-page button queries and only 0.22 seconds parsing saved state.
+Scoping the query to the existing action panel reduced query time to 1.57
+seconds and total time to 20.374 seconds. A no-parse variant took 20.368 seconds,
+so it was discarded: the final test keeps reading the actual committed phase.
+
+The test still plays all 160 actions on the real map. It additionally verifies
+all 48 interactive regions at the start and finish, plus the champion. Existing
+ranked-score exclusion and exact reload-preservation assertions remain. A
+159-action control fails at the actual completion assertion, with phase recap
+instead of finished. No production game code or timeout was changed. This is
+a test-driver speed improvement, not evidence that the visitor's game is faster.
+The file run retained one existing Radix missing-description warning in help.
+
+The initial combined exact type gate, production build and all fifteen
+generated-site fences passed. The build transformed 2,839 modules in 47.43
+seconds, with entry `index-Bl9c41sd.js`. The page-comfort browser walk passed
+all 121 registered routes and the six-route, four-width layout matrix.
+
+The storage browser walk then failed one of 46 checks. A denied storage getter
+caused a delayed Footle first-visit effect error. Fresh traces reproduced the
+same old unguarded read on both Round 515 and this candidate. The earlier
+Round 515 browser pass was therefore a timing gap, not proof that this path
+worked: checking the URL did not wait for the first-visit effect. The repair
+and a condition-based browser wait are implemented and verified below.
+
+Review also reproduced a separate footer failure. When removal of accepted
+consent was denied, Cookie choices reloaded anyway, kept the old answer and
+issued another intercepted vendor request. The fix now reloads only after a
+successful null readback. A failed removal or unverifiable read stays put with
+an accessible, accurate error. The new focused cases failed on the old handler
+and all six footer tests pass after the fix. Real-browser normal, failure,
+retry and original-handler checks also pass on the final rebuild.
+
+The four-file Conquest harness was not fully green: the 20-seed map case failed
+with a `STACK_TRACE_ERROR` stack while engine, save and all 16 UI cases passed.
+Installed Vitest code uses that placeholder stack for its timeout error. The
+same unchanged 20-seed map file passed alone in 97.831 seconds, within its
+120-second limit. A one-worker comparison is queued. No timeout or seed count
+has been relaxed. The UI short-run control is also being strengthened to reject
+unrelated runtime errors rather than trusting a missing JSON reporter field.
+
+The final two production fixes pass independent source review, with no concrete
+findings. The exact app type gate and rebuilt production bundle then passed:
+2,839 modules in 44.39 seconds, entry `index-ChbuCbOA.js`. All 19 focused
+page-layout tests passed across Footer, GameNav, GameSeoContent and PageComfort.
+The earlier 15-test storage startup fence and all five controls also pass on
+the combined source. The new Footle fence passes five real-page cases, with
+the isolated original-effect control failing exactly the three denied-storage
+cases while both healthy cases stay green. Runtime-error sidecars are valid
+and empty, and temporary files are cleaned. The strengthened actual browser
+walk passes all 50 checks, including the visible Footle first-visit dialog,
+with zero page errors. Its injected vendor-request control fails exactly the
+two vendor guards and leaves 49 other assertions green.
+
+The final page-comfort browser walk passes all 121 registered routes and the
+six-route matrix at 320, 390, 430 and 1,440 pixels, with zero page errors or
+horizontal overflow. Each route has one valid stable six-link next-game block.
+The full legal disclosure and all 12 secondary footer links remain reachable.
+The final 390px Footle and 1,440px expanded-footer screenshots were inspected.
+All nine layout controls reproduced exactly their owned defects, including
+duplicate next-game sections, inaccessible policies and truncated legal text.
+
+The final Cookie choices browser harness passes all 47 live checks across
+normal reset, denied removal, no-op removal, unverifiable confirmation and
+successful retry. Failed cases stay put with the honest alert and no new vendor
+request; successful resets clear the value, reload and show the choices banner.
+The original-handler control passes eight checks and reproduces exactly three
+owned failures: reload, vendor reissue and missing alert. All external requests
+were intercepted and aborted. A 390px failure screenshot was inspected and
+showed a readable alert without overlap or clipping, then was removed.
+
+All fifteen generated-site fences are awaiting the Conquest control cleanup.
+Initial build results above do not cover those later production changes.
+The separate Round 515 full node run started at 04:21 Eastern, session 95111,
+PID 56308. A pass there would cover that branch, not this combined candidate.
+Do not duplicate it or modify its runtime or dist.
 
 ## Other lane
 
-Claude's committed branch is `c3f69168`. Its final targeted deal, UCL and spacing
-checks are recorded green. Its broad neighboring, browser, generated-site and
-full node evidence are not all current on the final committed bytes.
-Seven root files contain uncommitted Round 508 work and are excluded here.
+Claude's branch advanced during this verification to `f56dde02`, synchronized
+with its tracked remote. Round 508's outgoing-loan work is committed at
+`2588c89a`; the later commit repairs seven issues found in the prior fixes.
+Those include keeping the second-leg result separate from shootout advancement,
+using the saved calendar for knockout seeding, and correcting transfer locks,
+keeper protection, spending totals, patience restoration and the wage input.
+Its commit records the exact type gate, UCL checks with six controls, deal and
+transfer checks as green. A final build, broad neighboring/browser/generated-site
+rerun and full node result are not recorded for those newest bytes. The root
+tracked tree was clean at 05:24 Eastern. Its untracked owner artifacts stay
+untouched. None of those Club Manager commits are included in this candidate.
 
 ## Dependency reference check
 

@@ -40,10 +40,14 @@ const Index = () => {
 
   // Show rules on first visit
   useEffect(() => {
-    const seen = localStorage.getItem('footle-rules-seen');
-    if (!seen) {
+    try {
+      const seen = localStorage.getItem('footle-rules-seen');
+      if (!seen) {
+        setShowRules(true);
+        localStorage.setItem('footle-rules-seen', '1');
+      }
+    } catch {
       setShowRules(true);
-      localStorage.setItem('footle-rules-seen', '1');
     }
   }, []);
 

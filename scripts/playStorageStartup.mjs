@@ -171,6 +171,9 @@ async function proveHomeAndSearch(page, label, followResult = true, verifyAuthLo
     await result.click();
     await page.waitForURL(url => url.pathname === '/footle', { timeout: 10000 });
     check(new URL(page.url()).pathname === '/footle', `${label}: the search result opens its game`);
+    const firstVisitGuide = page.getByRole('dialog', { name: 'How to Play Footle' });
+    await firstVisitGuide.waitFor({ state: 'visible', timeout: 10000 });
+    check(await firstVisitGuide.isVisible(), `${label}: the Footle first-visit guide opens`);
   }
 }
 

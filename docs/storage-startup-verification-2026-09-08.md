@@ -3,6 +3,15 @@
 Branch: `codex/round-515-storage-startup`, based on main `a4579db3`.
 Worktree: `.worktrees/round-515-storage-startup`. Not merged or published.
 
+Correction from Round 516 integration: the browser pass below checked the Footle
+URL before its first-visit effect settled. A later trace reproduced an old
+unguarded guide-preference read on both branches, so the earlier zero-page-error
+result did not cover that effect. Round 516 guards the read/write, adds five
+focused tests with an original-effect control, and waits for the actual guide
+in the browser. Its final rebuilt candidate passes all 50 strengthened browser
+checks. See `docs/combined-review-verification-2026-09-08.md`. Round 515 itself
+has not been modified while its separate full node suite runs.
+
 ## Measured defects and bounded changes
 
 - `client.ts` evaluated the browser storage getter while importing the module.
