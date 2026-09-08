@@ -1,5 +1,23 @@
 # Work board
 
+**Round 526, Codex original task, scoped verification complete September 8:**
+NBA Arcade hidden-region initialization in
+`.worktrees/round-526-nba-visible-regions`, branch
+`codex/round-526-nba-visible-regions`, base 524 `f51cbe5e` (draft PR75).
+Real seed 18 reproduced an invisible CA_N claim. One-line initialization fix
+preserves 58 visible assignments, true reset and the losing-attacker rule.
+Five hook tests, five source controls with 20 intended failures, both types,
+build and all fifteen generated-site fences pass. Built phone/desktop battle,
+result, player choice, turn advance and reload restart pass, plus the actual
+missing-map-path control. Main reruns and independent review clear. Evidence:
+docs/nba-visible-regions-2026-09-08.md. Preview 4204 remains available.
+Publication dependency: powers depended on hidden neutral land. An intentional
+visible acquisition rule and matching promises are still required. Do not
+call the entire Arcade mode complete. Round 525 was finished separately by
+the resumed task at a3e02238 and is not in this branch. No real backend writes,
+full suite, root edits, merge or publication. Cutoff 17:46:50 UTC, next free
+527. Preserve all existing worktrees and previews.
+
 **Round 524, Codex, scoped verification complete September 8:** saved-bracket profile summary in
 `.worktrees/round-524-profile-bracket`, branch `codex/round-524-profile-bracket`,
 based on Round 523 `8c3d1153` (draft PR74). Current top-level string champion
@@ -10,9 +28,9 @@ browser boot fence run directly through installed Chrome. Built phone/desktop
 matrix and four exact DOM controls pass without boundary/runtime errors.
 Independent review clear; full evidence in docs/profile-bracket-2026-09-08.md.
 Local synthetic fixtures only, no save protocol/data/backend changes, root
-edits, full suite, merge or publish. Preview 4200 preserved. Next free: 525.
-Next bounded candidate: login-return harness browser portability and complete
-local template fixtures. Broad-suite process isolation remains unresolved.
+edits, full suite, merge or publish. Preview 4200 preserved. The resumed task
+subsequently completed login-return harness portability and local fixtures
+as sibling Round 525 at a3e02238. Broad-suite process isolation remains unresolved.
 
 **Round 523, Codex, scoped verification complete September 8:** profile header avatar and initial
 identity in `.worktrees/round-523-profile-avatar`, branch
