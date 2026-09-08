@@ -1,5 +1,57 @@
 # Project state
 
+## Live as of 2026-09-08, and a note for whoever picks this up next
+
+**Round 505 is published and verified live. Nothing merged is unpublished any more.**
+
+`deploy_project` was called on 2026-09-08 with Lovable's `latest_commit_sha` already equal to
+`origin/main` (`d1c541b3`). That ordering is the rule worth keeping: deploying before the sha
+matches publishes the PREVIOUS commit, which is how the live site once served a stale build for
+weeks. Deployment `c1aa95ec-9a08-4935-a8b8-29fe9abd12c4`.
+
+Verified rather than assumed, because the call returns "pending" and a pending deploy is not
+evidence. The home bundle moved from `/assets/index-CMh_jnNL.js` to `/assets/index-Czr-I-vX.js`
+and the engine chunk from `clubManager-CRvtBti4.js` to `clubManager-DBzLyI5I.js`. The old chunk
+contained "Sweeper keeper" ZERO times and the new one contains it once, alongside "Shot
+stopper", "Inside forward" and the star man's promise line, all of them Round 505 duties. Six
+routes rechecked after the deploy (`/`, `/club-manager`, `/soccer-career`, `/footle`,
+`/squad-deal`, `/privacy`): all 200, each with its own H1 and no noindex.
+
+**WHAT IS WHERE, checked by ancestry and not by reading commit titles.** `origin/main` carries
+every round through 505 plus Round 509. Confirmed with
+`git merge-base --is-ancestor origin/codex/round-509-quality-batch origin/main`. Do NOT read
+main's head subject line as main's position: the head says "Round 505 gate pass" because 505's
+gate fixes landed after 509 merged, and lanes merge out of order here, so the round numbers are
+labels on a queue rather than a sequence. That misreading cost a wrong status report on
+2026-09-08.
+
+**NOT MERGED AND NOT LIVE, all pushed and safe on their branches:**
+
+| Branch | What it is |
+|---|---|
+| `round-506-cm-transfers` | Club Manager transfers and personal terms, plus a SITEWIDE ad placement change |
+| `round-507-ucl-two-legs` | Two legged Champions League ties, stacked on top of 506 |
+| `codex/round-510-reliability-followup` | Codex lane |
+| `codex/round-511-midnight-saves` | Codex lane |
+| `codex/round-512-conquest-attack` | Codex lane |
+
+506 and 507 were deliberately not published: their full node suite and adversarial review were
+still running when the deploy went out, and nothing unreviewed was published. Their own change
+log entries live on `round-507-ucl-two-legs`, which carries both.
+
+**THE ONE THING TO KNOW BEFORE TRUSTING AN OLD LAYOUT MEASUREMENT.** Round 506 changes
+`src/components/ads/AdBanner.tsx` so every ad sits `AD_CONTROL_GAP_PX` (120px) clear of whatever
+is above it. That moves layout on all 76 pages that mount an ad, not just Club Manager. Any ad
+placement or fold measurement taken before that commit is stale on those two branches. It was
+done because the 2026-09-07 audit's 104px finding on Club Manager reproduced exactly, and
+`/squad-deal` turned out to be worse at 32px against Google's 150px game page recommendation.
+Fenced by `playAdRoutes` section 10, which measures to the `ins` element and not to the wrapper.
+
+**AND THE LESSON THAT COST A WHOLE ROUND'S WORK.** Rounds 506, 507 and 508 were built once
+before, in a claude.ai/code sandbox on 2026-09-07, and died with that session: no branch, no
+reflog entry, no stash, no dangling commit, checked four ways. Round 505 survived only because
+it had been pushed. **Push after the first commit of a round, not at the end of it.**
+
 ## Live as of 2026-09-07
 
 Head `04ad4f10`, **deployed to douknowball.com and verified live** (the home page
