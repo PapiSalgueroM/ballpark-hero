@@ -328,8 +328,19 @@ const rows = await page.evaluate(() => {
   return out;
 });
 
-const READ = /worth \d+(?:\.\d+)?m(?: to \d+(?:\.\d+)?m)?/;
-const BROKEN_READ = /worth\s*(?:m\b|to\b|undefined|NaN|£|$)/;
+/*
+ * Round 507: the read is printed through money(), so it carries a currency
+ * symbol and a unit that changes with the size (£450k, £45m, £1.2bn). These
+ * patterns were written against the first version of valuationLine, which
+ * emitted a bare "45m to 58m" with no symbol at all, sitting on the same card
+ * as a "Their ask" that had one. The adversarial review called that out, the
+ * line was fixed, and this harness had to be told: it was matching the defect.
+ * BROKEN_READ deliberately no longer treats a currency symbol as broken, and
+ * instead catches the empty and non numeric shapes it was really for.
+ */
+const MONEY = String.raw`£\d+(?:\.\d+)?(?:k|m|bn)`;
+const READ = new RegExp(`worth ${MONEY}(?: to ${MONEY})?`);
+const BROKEN_READ = /worth\s*(?:$|m\b|to\b|undefined|NaN|£\s|£(?:k|m|bn))/;
 const withRead = rows.filter(r => READ.test(r.text));
 const brokenRead = rows.filter(r => BROKEN_READ.test(r.text));
 check('1. the market offered rows to talk to', rows.length > 0, `${rows.length} rows`);
