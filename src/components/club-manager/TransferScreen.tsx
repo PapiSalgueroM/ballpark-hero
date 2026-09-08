@@ -14,7 +14,7 @@ import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } 
    what happens when you press send can never disagree. */
 import {
   MAX_TERMS_YEARS, MIN_TERMS_YEARS, dealCloseness, offerVerdict, termsCloseness,
-  termsScore, valuationLine, wageRoom, wageRoomLine,
+  termsVerdict, valuationLine, wageRoom, wageRoomLine,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
 import { ROLE_INFO, ROLE_LADDER, wageBill } from '@/lib/clubManager';
@@ -230,7 +230,12 @@ export function TransferScreen({
   /* Round 506: what his side would say to the sheet on the table right now. */
   const want = neg?.phase === 'terms' ? neg.terms?.want ?? null : null;
   const termsClose = want && terms ? termsCloseness(want, terms) : 0;
-  const termsReady = want && terms ? termsScore(want, terms) >= 1 : false;
+  /* Round 506: the two tables must speak one language. The first draft of this
+     panel only ever said "He will sign this" or a number, so a player who had
+     learned the fee meter's five words got two on the second table and was
+     never warned he was about to insult the agent, even though termsVerdict
+     computes exactly that. The browser walk found it. */
+  const termsSay = want && terms ? termsVerdict(want, terms) : 'counter';
   const signOnRoom = neg?.phase === 'terms'
     ? Math.round((career.budget - (neg.agreedFee ?? 0)) * 10) / 10
     : 0;
@@ -550,13 +555,24 @@ export function TransferScreen({
 
               <div className="flex items-center justify-between gap-2 mb-1">
                 <span className="text-[9px] text-muted-foreground uppercase tracking-wider">How he reads it</span>
-                <span className={cn('text-[10px] font-bold', termsReady ? 'text-emerald-400' : 'text-foreground')}>
-                  {termsReady ? 'He will sign this' : `${termsClose} of 100`}
+                <span className={cn('text-[10px] font-bold',
+                  termsSay === 'agreed' ? 'text-emerald-400'
+                    : termsSay === 'walkout' ? 'text-red-400'
+                    : termsSay === 'insulted' ? 'text-yellow-400' : 'text-foreground',
+                )}>
+                  {termsSay === 'agreed' ? 'He will sign this'
+                    : termsSay === 'walkout' ? 'His agent will end the meeting'
+                    : termsSay === 'insulted' ? 'He will be insulted'
+                    : `${termsClose} of 100`}
                 </span>
               </div>
               <div className="h-1.5 rounded-full bg-secondary overflow-hidden mb-2" role="presentation">
                 <div
-                  className={cn('h-full rounded-full transition-all', termsReady ? 'bg-emerald-500' : 'bg-primary')}
+                  className={cn('h-full rounded-full transition-all',
+                    termsSay === 'agreed' ? 'bg-emerald-500'
+                      : termsSay === 'walkout' ? 'bg-red-500'
+                      : termsSay === 'insulted' ? 'bg-yellow-500' : 'bg-primary',
+                  )}
                   style={{ width: `${Math.max(3, termsClose)}%` }}
                 />
               </div>
