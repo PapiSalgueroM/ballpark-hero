@@ -39,6 +39,32 @@ How it works:
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
+## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
+
+Four things, in the order they can hurt you.
+
+1. **PUBLISHING IS ON HOLD BY THE OWNER, decided 2026-09-08.** Do not call `deploy_project` and
+   do not publish the Lovable project, whatever any older doc says about shipping happening
+   without him. He is rechecking the live build against the branches himself first, and he will
+   say when. `docs/OPERATING-CONTRACT-2026-08.md` and the 2026-08-26 standing instruction both
+   read as blanket permission to publish; this decision is newer than both and beats them until
+   he lifts it.
+
+2. **ROUND 506 IS ON A BRANCH AND CHANGES A SITEWIDE COMPONENT.** Branch
+   `round-506-cm-transfers`, ten commits, not merged. Most of it is confined to Club Manager,
+   but one commit is not: `src/components/ads/AdBanner.tsx` now holds every ad
+   `AD_CONTROL_GAP_PX` (120px) clear of whatever sits above it, which moves layout on all 76
+   pages that mount an ad, not just Club Manager. If you are measuring anything about page
+   layout, ad placement or fold position and your numbers disagree with an older audit, check
+   whether you are on a tree that carries that commit. Fenced by `playAdRoutes` section 10.
+
+3. **DO NOT READ MAIN'S HEAD SUBJECT LINE AS MAIN'S POSITION.** It cost me a wrong status report
+   on 2026-09-08. See the correction in the numbering section above.
+
+4. **A ROUND THAT IS NOT PUSHED DOES NOT EXIST.** Rounds 506, 507 and 508 were built once
+   already, in a sandbox, and died with the session. See the block below. Push after the first
+   commit of a round, not at the end of it.
+
 - **Claude Code lane, CLAIMED 2026-09-07: Rounds 503 to 508. next: Round 506, being built on
   the desktop on branch `round-506-cm-transfers` from 2026-09-08.** Rounds 503, 504 and 505 are
   all merged on origin/main at `d1c541b3`; 506 to 508 remain claimed here.
