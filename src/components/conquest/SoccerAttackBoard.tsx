@@ -127,6 +127,7 @@ export default function SoccerAttackBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(`${session.state?.revision ?? 'intro'}:${notice}`);
 
   const state = session.state;
+  const recovery = session.issue;
   const teamById = useMemo(() => new Map(state?.teams.map(team => [team.id, team]) ?? []), [state?.teams]);
   const regionById = useMemo(() => new Map(state?.setup.regions.map(region => [region.id, region]) ?? []), [state?.setup.regions]);
 
@@ -177,9 +178,13 @@ export default function SoccerAttackBoard() {
     setNotice('Attack progress changed in another tab. Your latest saved run is restored.');
   };
 
-  const saveThenReveal = async (next: AttackState, nextAnimation: AnimationStage, expectedRaw = session.raw) => {
+  const saveThenReveal = async (next: AttackState, nextAnimation: AnimationStage, expectedRaw = session.raw, allowRecovery = false) => {
     if (busy.current) return;
     if (unsaved) { applyCommitted(next, null, nextAnimation); return; }
+    if (recovery && !allowRecovery) {
+      setNotice('Resolve the changed save before continuing this run.');
+      return;
+    }
     busy.current = true;
     setWorking(true);
     const attempt = { next, animation: nextAnimation, expectedRaw };
@@ -199,7 +204,7 @@ export default function SoccerAttackBoard() {
 
   const start = (replace = false) => {
     const next = pending?.next ?? openingState();
-    void saveThenReveal(next, null, replace ? session.issue?.raw ?? session.raw : session.raw);
+    void saveThenReveal(next, null, replace ? recovery?.raw ?? session.raw : session.raw, replace);
   };
 
   const retry = () => {
@@ -207,10 +212,15 @@ export default function SoccerAttackBoard() {
   };
 
   const playUnsaved = () => {
-    const next = pending?.next ?? openingState();
+    const next = pending?.next ?? state ?? openingState();
     setUnsaved(true);
     applyCommitted(next, null, pending?.animation ?? null);
     setNotice('This session is not saved and will be lost if you close or reload the page.');
+  };
+
+  const replaceDamagedSave = () => {
+    if (!state || recovery?.kind !== 'damaged') return;
+    void saveThenReveal(state, null, recovery.raw, true);
   };
 
   const newRun = () => {
@@ -229,7 +239,6 @@ export default function SoccerAttackBoard() {
     void saveThenReveal(next, nextAnimation);
   };
 
-  const recovery = session.issue;
   if (!state) {
     const recoveryText = recovery?.kind === 'damaged'
       ? 'This Attack save is damaged or unsupported. It has not been changed.'
@@ -290,7 +299,7 @@ export default function SoccerAttackBoard() {
   const inspected = inspectedRegion ? regionById.get(inspectedRegion) : null;
   const inspectedOwner = inspected ? teamById.get(state.owners[inspected.id] ?? '') : null;
   const result = state.lastResult ? resultCopy(state.lastResult, state) : null;
-  const locked = working || !!animation;
+  const locked = working || !!animation || !!recovery;
 
   return (
     <div className="relative space-y-3">
@@ -303,7 +312,16 @@ export default function SoccerAttackBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1.5">Turn {Math.floor(state.revision / 4) + 1}</span>
         {unsaved && <span className="rounded-full border border-amber-500/60 bg-amber-500/10 px-3 py-1.5 font-bold text-amber-700 dark:text-amber-300">Unsaved session</span>}
       </div>
-      {notice && (
+      {recovery && (
+        <div role="alert" className="rounded-xl border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-foreground">
+          <p>{recovery.kind === 'damaged' ? 'This Attack save changed to damaged data. It has not been overwritten.' : 'Safe browser storage is blocked. This run cannot be saved right now.'}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {recovery.kind === 'damaged' && <button type="button" onClick={replaceDamagedSave} disabled={working} className={quietButton}>Replace damaged save</button>}
+            <button type="button" onClick={playUnsaved} className={quietButton}>Continue without saving</button>
+          </div>
+        </div>
+      )}
+      {notice && !recovery && (
         <div role="status" className="rounded-xl border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-foreground">
           <p>{notice}</p>
           {pending && (

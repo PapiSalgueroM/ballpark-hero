@@ -66,7 +66,7 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
   const bounds = state.setup.bounds;
   const [view, setView] = useState<ViewBox>({ x: 0, y: 0, width: bounds.width, height: bounds.height });
   const svgRef = useRef<SVGSVGElement>(null);
-  const drag = useRef<{ x: number; y: number; view: ViewBox } | null>(null);
+  const drag = useRef<{ x: number; y: number; view: ViewBox; captured: boolean } | null>(null);
   const teamById = useMemo(() => new Map(state.teams.map(team => [team.id, team])), [state.teams]);
   const regionById = useMemo(() => new Map(state.setup.regions.map(region => [region.id, region])), [state.setup.regions]);
   const viewText = `${view.x} ${view.y} ${view.width} ${view.height}`;
@@ -107,15 +107,21 @@ export default function AttackMap({ state, inspectedRegion, onInspect }: Props) 
   };
 
   const onPointerDown = (event: ReactPointerEvent<SVGSVGElement>) => {
-    drag.current = { x: event.clientX, y: event.clientY, view };
-    event.currentTarget.setPointerCapture?.(event.pointerId);
+    drag.current = { x: event.clientX, y: event.clientY, view, captured: false };
   };
   const onPointerMove = (event: ReactPointerEvent<SVGSVGElement>) => {
     if (!drag.current || !svgRef.current) return;
+    const pixelX = event.clientX - drag.current.x;
+    const pixelY = event.clientY - drag.current.y;
+    if (!drag.current.captured && Math.hypot(pixelX, pixelY) < 4) return;
+    if (!drag.current.captured) {
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+      drag.current.captured = true;
+    }
     const rect = svgRef.current.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const dx = (event.clientX - drag.current.x) / rect.width * drag.current.view.width;
-    const dy = (event.clientY - drag.current.y) / rect.height * drag.current.view.height;
+    const dx = pixelX / rect.width * drag.current.view.width;
+    const dy = pixelY / rect.height * drag.current.view.height;
     setView(clamp({ ...drag.current.view, x: drag.current.view.x - dx, y: drag.current.view.y - dy }));
   };
   const stopDrag = () => { drag.current = null; };

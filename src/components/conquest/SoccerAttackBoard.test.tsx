@@ -198,6 +198,39 @@ describe('Soccer Attack durable board', () => {
     expect(screen.getByRole('button', { name: 'Play without saving' })).toBeInTheDocument();
     expect(localStorage.getItem(ATTACK_SAVE_KEY)).toBe('{broken');
   });
+
+  it('blocks active moves when another tab replaces the save with damaged bytes', async () => {
+    save(createAttack(makeSoccerAttackSetup(9)));
+    render(<SoccerAttackBoard />);
+    localStorage.setItem(ATTACK_SAVE_KEY, '{broken');
+    await act(async () => {
+      window.dispatchEvent(new StorageEvent('storage', { key: ATTACK_SAVE_KEY, newValue: '{broken' }));
+    });
+
+    await tap(screen.getByRole('button', { name: 'Spin team wheel' }));
+    await tap(screen.getByRole('button', { name: 'Spin team wheel' }));
+
+    expect(localStorage.getItem(ATTACK_SAVE_KEY)).toBe('{broken');
+    expect(screen.getByRole('button', { name: 'Spin team wheel' })).toBeDisabled();
+    expect(screen.getByRole('alert')).toHaveTextContent(/changed to damaged data/i);
+    expect(screen.getByRole('button', { name: 'Replace damaged save' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Continue without saving' })).toBeInTheDocument();
+  });
+
+  it('replaces damaged bytes only through the active recovery control', async () => {
+    const state = createAttack(makeSoccerAttackSetup(9));
+    save(state);
+    render(<SoccerAttackBoard />);
+    localStorage.setItem(ATTACK_SAVE_KEY, '{broken');
+    await act(async () => {
+      window.dispatchEvent(new StorageEvent('storage', { key: ATTACK_SAVE_KEY, newValue: '{broken' }));
+    });
+
+    await tap(screen.getByRole('button', { name: 'Replace damaged save' }));
+
+    expect(JSON.parse(localStorage.getItem(ATTACK_SAVE_KEY)!)).toEqual(state);
+    expect(screen.getByRole('button', { name: 'Spin team wheel' })).toBeEnabled();
+  });
 });
 
 describe('Attack map inspection and navigation', () => {
@@ -238,6 +271,39 @@ describe('Attack map inspection and navigation', () => {
     expect(map.getAttribute('data-view-box')).not.toBe(beforeClubFocus);
     expect([...view.container.querySelectorAll('svg g text')].map(node => node.textContent)).toContain('Birch Town');
     expect(localStorage.getItem(ATTACK_SAVE_KEY)).toBe(savedBefore);
+  });
+
+  it('leaves a stationary region tap uncaptured and captures only after a drag starts', () => {
+    const state = createAttack(compactSetup());
+    const inspect = vi.fn();
+    render(<AttackMap state={state} inspectedRegion="west" onInspect={inspect} />);
+    const map = screen.getByRole('application', { name: 'Soccer Attack map' });
+    const middle = screen.getByRole('button', { name: /middle, neutral region/i });
+    const capture = vi.fn();
+    Object.defineProperty(map, 'setPointerCapture', { configurable: true, value: capture });
+    vi.spyOn(map, 'getBoundingClientRect').mockReturnValue({
+      x: 0, y: 0, top: 0, left: 0, right: 300, bottom: 100, width: 300, height: 100, toJSON: () => ({}),
+    });
+    const pointer = (target: Element, type: string, pointerId: number, clientX: number, clientY: number) => {
+      const event = new Event(type, { bubbles: true });
+      Object.defineProperties(event, {
+        pointerId: { value: pointerId }, clientX: { value: clientX }, clientY: { value: clientY },
+      });
+      fireEvent(target, event);
+    };
+
+    pointer(middle, 'pointerdown', 4, 100, 50);
+    expect(capture).not.toHaveBeenCalled();
+    pointer(middle, 'pointerup', 4, 100, 50);
+    fireEvent.click(middle);
+    expect(inspect).toHaveBeenCalledWith('middle');
+
+    fireEvent.keyDown(map, { key: '+' });
+    const beforeDrag = map.getAttribute('data-view-box');
+    pointer(middle, 'pointerdown', 5, 100, 50);
+    pointer(map, 'pointermove', 5, 125, 50);
+    expect(capture).toHaveBeenCalledWith(5);
+    expect(map.getAttribute('data-view-box')).not.toBe(beforeDrag);
   });
 });
 
