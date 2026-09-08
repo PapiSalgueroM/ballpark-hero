@@ -327,7 +327,13 @@ The frontier. Claim on the board, respect the spec priority matrix (its P0 is es
 - **135 Private leagues (truncated in range)**: No private leagues, invite codes or hosted standings exist; same backend-scope decision as 134.
 - **16 Achievement system**: No generic achievement framework (IDs, XP, rarity, hidden state) exists; achievement-like flavor lives only inside individual career sims.
 - **27 Manager attributes**: No manager attribute sheet exists. Deriving attributes for a real named manager is constrained by the never-invent-facts-about-real-people rule (R331 phase three note).
-- **28 Manager XP / skill tree**: No manager XP or skill tree exists in Club Manager.
+- **28 Manager XP / skill tree**: SHIPPED, Round 513 (branch `round-507-ucl-two-legs`, not yet
+  merged at the time of writing). `src/lib/clubManagerXp.ts`, seven trees of five points, XP
+  settled at the season rollover and carried between clubs, screen on the Club Manager hub.
+  Every effect is the identity at zero points, so untouched and pre-513 saves are unchanged.
+  Read the round's entry in `docs/PROJECT-STATE.md` before extending it: its first draft passed
+  every gate while three trees sold points that changed nothing and the Negotiation tree
+  switched off Round 506's anti lowball guarantee outright.
 - **29 Staff**: No hireable staff system; only cosmetic manager-background blurbs (e.g. 'Youth coach') exist in clubManager.ts.
 - **36 Financial advisor**: No advisor estimate layer exists in Club Manager.
 - **D7 XP vs score separation**: No XP, Ball IQ or leaderboard-points system exists.
