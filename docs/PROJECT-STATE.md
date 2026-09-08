@@ -3,8 +3,9 @@
 ## Round 526 NBA Arcade visible territories, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-526-nba-visible-regions`,
-branch `codex/round-526-nba-visible-regions`, based on settled Round 524
-`f51cbe5e` (draft PR75). One initializer now uses the 58 rendered NBA regions,
+branch `codex/round-526-nba-visible-regions`, implementation `7f83b89b`, draft
+PR77 (https://github.com/PapiSalgueroM/ballpark-hero/pull/77), based on settled
+Round 524 `f51cbe5e` (draft PR75). One initializer uses the 58 rendered NBA regions,
 not 60 shared positions. Real seed 18 reproduced a hidden CA_N target and
 claim before the fix. All existing visible assignments, actual reset and
 Arcade losing-attacker retreat behavior remain.

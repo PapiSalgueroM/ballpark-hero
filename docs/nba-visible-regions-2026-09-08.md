@@ -3,6 +3,10 @@
 Claimed September 8 from Round 524 f51cbe5e. The resumed task owns 525; this
 original overnight task owns 526. No worktree or process is shared for edits.
 
+Implementation commit: 7f83b89ba610c0e38c076a321a9a93ed2c11c9fd.
+Draft PR: https://github.com/PapiSalgueroM/ballpark-hero/pull/77.
+Base is Round 524, not main; sibling Round 525 is not included.
+
 ## Scope and acceptance
 
 Source audit found 60 STATE_POSITIONS entering NBA Arcade, although its map
@@ -112,3 +116,31 @@ ConquestNba.tsx lines 92, 103, 108 and 116, and ConquestHowToPlayNba.tsx
 lines 48 through 57. Do not silently invent extra neutral land, move powers
 onto owned regions, or change the existing Arcade away-loss rule here.
 No merge, publication, backend write or real saved-game mutation occurred.
+
+## Next-pass source audit, not executed defect proofs
+
+The read-only handoff traced the dormant power paths without choosing a new
+acquisition rule. Acquisition is pickRandomPowerupStates, then the neutral
+claim's marker check, pendingPowerup and powerup_received. Consumption runs
+through usePowerupNow/executePowerup. Saved inventory caps at two and replaces
+the oldest. The separate cooldown free-agency feature is not this power path.
+
+Before making powers normally reachable, reproduce these existing risks:
+
+- useSavedPowerup is defined and exported, but has no UI caller. The standings
+  display saved icons as spans. The callback also does not open the received
+  phase, so merely adding a button would not prove a usable saved-power flow.
+- buildFreeAgentList uses shared FREE_AGENTS, not the NBA cooldown pool. Audit
+  the sport-specific eligibility before exposing that picker.
+- usePowerupNow clears pendingPowerup before a deferred free-agent selection;
+  signFreeAgent can then fall back to attackingTeam. Prove the recipient stays
+  the awarded team when those identities differ.
+- startBattle clears an active upgrade before selecting the next attacker.
+  Prove the intended upgrade lifetime and effect rather than only the badge.
+
+The future acceptance checks need a normal visible action that awards exactly
+one power, a correct team recipient, actual Use Now and Save/reopen screens,
+single consumption, capacity handling, real effect outcomes, no-effect exits,
+visible-only territory changes and timer/reset cleanup. Preserve the existing
+away-loss rule and keep transport/storage denied. These are follow-up tests
+to write, not claims that this round tested or fixed every power effect.

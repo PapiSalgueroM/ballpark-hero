@@ -3,7 +3,8 @@
 **Round 526, Codex original task, scoped verification complete September 8:**
 NBA Arcade hidden-region initialization in
 `.worktrees/round-526-nba-visible-regions`, branch
-`codex/round-526-nba-visible-regions`, base 524 `f51cbe5e` (draft PR75).
+`codex/round-526-nba-visible-regions`, implementation `7f83b89b`, draft PR77,
+base 524 `f51cbe5e` (draft PR75).
 Real seed 18 reproduced an invisible CA_N claim. One-line initialization fix
 preserves 58 visible assignments, true reset and the losing-attacker rule.
 Five hook tests, five source controls with 20 intended failures, both types,
