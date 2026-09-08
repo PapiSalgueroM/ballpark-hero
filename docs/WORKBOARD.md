@@ -219,6 +219,39 @@ Four things, in the order they can hurt you.
   takeover date must come from verified sources rather than reconstructed history, so it is a
   data acquisition job before it is an engine one and it needs its own round.
 
+  **506 AND 507 FOLLOW-UPS: THE SIX FINDINGS THE VOTE DROPPED THAT ARE REAL, CLAIMED 2026-09-08.**
+  The adversarial review raised 27 findings and 20 survived a 2 of 3 refutation vote. The seven
+  it dropped were re-read by hand afterwards rather than treated as disproved, which is the
+  standing lesson from 2026-09-05: **an unconfirmed finding is not a refuted one**. Six of the
+  seven are real. One (the quarter and semi final venue being re-read off the bracket on a
+  legacy save) was already closed by the `&& !!entry.uclLeg` fix, verified in source.
+  1. `VALUATION_EXACT_AT` IS UNREACHABLE. `valuationSpread` bottoms out at
+     `max(0.02, 0.3 - 0.031 * 9)` = 0.021 at level 10, which is never `<= 0.02`, so
+     `ValuationRead.exact` is always false, `valuationLine`'s "quotes a figure" branch is dead
+     code, and the most expensive recruitment department the game sells still only ever gives a
+     band. The docs promise the opposite. Verified by evaluating the formula.
+  2. THE AD GAP HAS TWO PIXELS OF HEADROOM AND THE COMMENT OVERCLAIMS.
+     `AD_CONTROL_GAP_PX` is 120 and the 150px floor is only met because all 76 mounts happen to
+     pass `mt-8` (32px), giving 152. A new page written with `mt-4` lands at 136 and the
+     component's own comment ("a page added next month cannot reintroduce it") is then false.
+     Two pixels on a browser measured, rounded number is the Round 284 coin toss shape. Raising
+     the constant so the component alone clears the floor makes the claim true.
+  3. `playAdRoutes` SECTION 10 HAS NO COMMITTED NEGATIVE CONTROL. It was proven red by hand by
+     setting the constant to 0 and rebuilding, which is not the same as a control anybody can
+     run later.
+  4. `simUclLegs` SECTION 2 DOES NOT TEST THE ERA RULE IT CLAIMS TO. Its helper passes literal
+     `true`/`false` into `uclTieOutcome` and never calls `uclAwayGoalsApply`, so it measures the
+     parameter rather than the season. The header's claim that `noaway` turns section 2 red is
+     therefore wrong; only section 1 covers the era rule.
+  5. `simClubManagerDeals` SECTION 4 HAS A FLOOR SITTING EXACTLY ON ITS MEASUREMENT (8 of 8 on
+     seven seeds), and a third of its attempts can never produce a sample at all: Sevilla opens
+     on an 11m budget against a price band of 12 to 45, which is unsatisfiable, so those four
+     attempts are structurally dead rather than seed noise.
+  6. `simUclLegs` SECTION 3 CAN SHRINK TO ONE ERA SEASON depending on the seed, and the header's
+     MEASURED block says 16 outcome cases where the run prints 14.
+  None of these is disqualifying, which is why they are a follow-up and not a hold on the merge,
+  but 1 and 2 are player facing and 3 to 6 are the fences being weaker than they read.
+
   **508 A LOAN OUT CARRIES THE SAME TERMS AS A LOAN IN, CLAIMED 2026-09-08.** Straight off what
   Round 506 named as not done, and it is a symmetry gap rather than a new idea. Round 506 gave
   an INCOMING loan an option to buy and a release figure and taught the player who owns him;
