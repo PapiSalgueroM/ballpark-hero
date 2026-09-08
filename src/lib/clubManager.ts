@@ -65,7 +65,7 @@ import {
 import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
-import { addXp, convergenceEdge, dutyEdge, ensureXp, extraPatience, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthReportEdge } from '@/lib/clubManagerXp';
+import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -5810,10 +5810,11 @@ function maybeAskPress(state: CareerState): void {
     if (state.week - press.lastWeek > 4) {
       press.pending = null;
       press.ducked += 1;
-      /* Round 513: the Media tree holds the press room up when you have not
-         fronted up, and only ever softens a fall. Zero points is the full cost
-         Round 315 set. */
-      press.mood = clamp(press.mood - Math.max(0, PRESS_NO_SHOW - pressCushion(state)), 0, 100);
+      /* Round 513: the Media tree softens what not fronting up costs, as a
+         FRACTION so every point moves it, and it is applied at BOTH no-show
+         sites. Charging only this one re-opened the exact asymmetry the
+         PRESS_NO_SHOW comment above says must never come back. */
+      press.mood = clamp(press.mood - PRESS_NO_SHOW * (1 - pressCushion(state)), 0, 100);
     }
     return;
   }
@@ -5870,7 +5871,9 @@ export function duckPress(career: CareerState): CareerState {
   ensurePress(state);
   const press = state.press!;
   if (!press.pending) return career;
-  press.mood = clamp(press.mood - PRESS_NO_SHOW, 0, 100);
+  /* Round 513: the same cushion as the stale question path, because these two
+     HAVE to cost the same. See the PRESS_NO_SHOW comment. */
+  press.mood = clamp(press.mood - PRESS_NO_SHOW * (1 - pressCushion(state)), 0, 100);
   press.ducked += 1;
   press.lastLine = 'Your assistant took it. He said nothing wrong and nothing at all.';
   press.pending = null;
@@ -6816,7 +6819,12 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
   if (career.squad.length >= 30) return null;
   if (career.squad.some(p => p.name === mp.name)) return null;
   if ((career.coldNames ?? []).includes(mp.name)) return null;
-  const theirAsk = Math.round(mp.price * (1.02 + Math.random() * 0.13) * 10) / 10;
+  /* Round 513: the Negotiation tree talks the seller's premium down, floored
+     at the 1.02 of value the shipped engine already guaranteed, so the ask
+     never drops below what the man is worth. One draw from Math.random either
+     way, so a seeded run is unchanged at zero points. */
+  const premium = 0.02 + Math.random() * 0.13;
+  const theirAsk = Math.round(mp.price * (1 + Math.max(0.02, premium - askEdge(career))) * 10) / 10;
   return {
     ...career,
     negotiation: {
@@ -6826,9 +6834,11 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
          costs patience now instead of only an insult. Measured in
          simClubManagerDeals: on the old 2 or 3 with the new cost a fair
          haggler ran out of table before the ask had finished falling. */
-      /* Round 513: the Negotiation tree buys rounds at the table, on top of
-         the seller's own patience. Zero points adds nothing. */
-      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD) + extraPatience(career),
+      /* Round 513 deliberately does NOT touch this. The tree used to add up to
+         two rounds here and it switched the whole mechanic off: measured over
+         the sweep in simClubManagerDeals section 3, from three points nothing
+         at any multiple ever ran out of patience. See askEdge for the table. */
+      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD),
       myOffer: null,
       theirAsk,
       status: 'open',
@@ -6988,7 +6998,7 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
      of simClubManagerDeals for the measurement. */
   next.theirAsk = Math.max(
     Math.round(packageValue * 1.02 * 10) / 10,
-    Math.round((next.theirAsk - (next.theirAsk - packageValue) * (ASK_CONVERGENCE + convergenceEdge(career))) * 10) / 10,
+    Math.round((next.theirAsk - (next.theirAsk - packageValue) * ASK_CONVERGENCE) * 10) / 10,
   );
   next.note = pick(SELLER_COUNTER);
 
@@ -12816,7 +12826,10 @@ function runYouthIntake(state: CareerState): string[] {
   if (!a) return [];
   if (a.lastIntakeSeason === state.season) return [];
   a.lastIntakeSeason = state.season;
-  const q = (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3;
+  /* Round 513: the Youth tree's continuous half. The report edge below lands
+     on a 1 to 5 integer and cannot carry five points, so this is what makes
+     every point pay. Zero points is the figure Round 116 shipped. */
+  const q = (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3 + youthIntakeEdge(state);
   let count = 1;
   if (a.recruitment >= 8) count += 1;
   if (a.recruitment >= 14) count += 1;
@@ -14215,6 +14228,36 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
+  /*
+   * Round 513: what the club he PLAYED for was expected to do, read HERE and
+   * nowhere later, because runPromotionRelegation and the custom club
+   * deregistration below both rewrite the world this has to be measured in.
+   *
+   * The first draft read it off `club`, which is the club he is moving TO
+   * whenever he accepted an offer, and compared it against prevPos, his finish
+   * at the club he just LEFT. So taking a job at a bigger club deleted the XP
+   * the season had earned (finish 5th, join a title favourite expected 1st, and
+   * max(0, 1 - 5) is nothing), and dropping down minted XP nobody earned
+   * (finish 5th, join a club expected 18th, and that is thirteen places of
+   * "overperformance" he did not achieve).
+   */
+  const playedEra = career.eraId;
+  const playedDef = playedEra && isHistoricEra(playedEra)
+    ? eraClubDefFor(career.clubName, playedEra)
+    : clubDefFor(career.clubName);
+  const playedExpectation = playedDef ? playedDef.expectation : prevPos;
+  /*
+   * Round 513: how many of his own boys he brought through THIS season, read as
+   * a difference against the all time counter Round 116 already keeps.
+   *
+   * An absent baseline means "start counting from now", NOT zero. A block
+   * written before this field existed can belong to a manager with twenty
+   * graduates behind him, and reading the baseline as 0 would pay him for all
+   * twenty in one rollover. Counted off `career`, whose season just finished,
+   * rather than off the state being built for the next one.
+   */
+  const graduatesNow = career.academyGraduates ?? 0;
+  const graduatesThisSeason = Math.max(0, graduatesNow - (xpOf(career).graduatesSeen ?? graduatesNow));
   /* Round 310: the pyramids move FIRST, before a single league lookup, so
      every leagueOf below already answers with next season's memberships.
      The euro flag of the league the season was PLAYED in is read before
@@ -14368,11 +14411,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     wins: myTableRow ? myTableRow.w : 0,
     trophies: seasonTrophyCount,
     objectivesMet: objectiveStatuses(career).filter(o => o.status === 'done').length,
-    placesAboveExpectation: Math.max(0, club.expectation - prevPos),
-    /* Named as not done: nothing counts an academy promotion over a season yet,
-       so this source pays nothing until something does. It is wired rather than
-       dropped so the shape is right when a counter exists. */
-    youthPromoted: 0,
+    placesAboveExpectation: Math.max(0, playedExpectation - prevPos),
+    youthPromoted: graduatesThisSeason,
     euroRoundsReached,
     soldMoreThanBought: seasonOut > seasonIn,
   });
@@ -14737,8 +14777,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 513: the manager banks the season. This follows him to a new job on
      purpose, unlike the balance and the sponsor: what he LEARNED is his, and
      the whole point of the trees is a career rather than a spell at one club. */
+  /* The graduate baseline advances every rollover, whether or not the season
+     paid anything, so a quiet season cannot leave its boys to be counted a
+     second time next year. addXp spreads the block, so this carries. */
+  const xpBlock = ensureXp(state);
+  xpBlock.graduatesSeen = graduatesNow;
   if (xpAward.total > 0) {
-    state.managerXp = addXp(ensureXp(state), xpAward.total);
+    state.managerXp = addXp(xpBlock, xpAward.total);
     const beforeLevel = levelFor(xpOf(career).xp);
     const afterLevel = levelFor(state.managerXp.xp);
     if (afterLevel > beforeLevel) {

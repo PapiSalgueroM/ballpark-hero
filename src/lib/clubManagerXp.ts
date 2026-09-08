@@ -17,10 +17,18 @@
  *    ignores the whole screen are all playing today's game.
  * 2. EVERY POINT MOVES A NUMBER THE GAME ALREADY READS. No tree adds a parallel
  *    system. Recruitment tightens the valuation band Round 506 built,
- *    Negotiation moves the patience and the convergence Round 506 measured, Man
- *    Management moves the promise ladder's own morale swing. That is what makes
- *    a point visible, and it is also what makes it MEASURABLE, because the
- *    harness can read the same number the engine reads.
+ *    Negotiation talks down the seller's opening premium, Man Management moves
+ *    the promise ladder's own morale swing. That is what makes a point visible,
+ *    and it is also what makes it MEASURABLE, because the harness can read the
+ *    same number the engine reads.
+ * 3. AND A THIRD, LEARNED THE HARD WAY IN THIS ROUND'S OWN REVIEW: MOVING A
+ *    NUMBER IS NOT ENOUGH IF THE NUMBER IT FEEDS CANNOT SHOW IT, AND IT IS
+ *    WORSE THAN NOTHING IF IT UNDOES A MEASURED GUARANTEE. Three of the seven
+ *    trees shipped their first draft with points that changed nothing (Media
+ *    saturated at two, Youth wasted three) and one of them, Negotiation,
+ *    silently switched off the anti lowball mechanic Round 506 built and
+ *    measured. Every effect below now says what it feeds and what stops it
+ *    running away, and the harness fences the guarantee rather than the value.
  *
  * Everything here is pure. Nothing draws from Math.random and nothing is
  * evaluated at module scope, because clubManager.ts imports this file and this
@@ -87,8 +95,8 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     id: 'negotiation',
     label: 'Negotiation',
     emoji: '\u{1F91D}',
-    blurb: 'Sellers stay at the table longer and come down faster.',
-    atMax: 'Two more rounds of talks, and the ask closes half again as quickly.',
+    blurb: 'Sellers open nearer what the player is actually worth.',
+    atMax: 'You talk about a tenth off the asking price before talks even start.',
     needs: 'Only pays while you are actually haggling for somebody.',
   },
   youth: {
@@ -96,7 +104,7 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     label: 'Youth',
     emoji: '\u{1F393}',
     blurb: 'The academy finds better boys and reads them more accurately.',
-    atMax: 'Intake reports are as tight as a top scout writes them.',
+    atMax: 'The boys who come up are noticeably better, and read more tightly.',
     needs: 'Shows up in the academy intake report.',
   },
   manManagement: {
@@ -119,9 +127,9 @@ export const TREE_INFO: Record<SkillTree, TreeDef> = {
     id: 'media',
     label: 'Media',
     emoji: '\u{1F3A4}',
-    blurb: 'The press room warms to you faster and cools slower.',
-    atMax: 'The papers give you the benefit of the doubt for a week longer.',
-    needs: 'Only pays on a week you skip the press.',
+    blurb: 'Not fronting up to the press costs you less of the room.',
+    atMax: 'Ducking the press costs about half what it does on day one.',
+    needs: 'Only pays on a week you skip the press or let the question go stale.',
   },
 };
 
@@ -138,6 +146,16 @@ export interface ManagerXp {
   xp: number;
   /** Points put into each tree. */
   points: Record<SkillTree, number>;
+  /*
+   * The all time academy graduate count as of the last rollover, so a season's
+   * promotions can be read as a difference against career.academyGraduates.
+   *
+   * OPTIONAL, and absent means "start counting from now" rather than zero. A
+   * block written before this field existed belongs to a manager who may have
+   * brought twenty boys through already, and treating an absent baseline as 0
+   * would pay him for every one of them in a single rollover.
+   */
+  graduatesSeen?: number;
 }
 
 export function defaultXp(): ManagerXp {
@@ -156,6 +174,10 @@ export function isValidXp(u: unknown): u is ManagerXp {
   if (typeof o.xp !== 'number' || !Number.isFinite(o.xp) || o.xp < 0) return false;
   const p = o.points as Record<string, unknown> | undefined;
   if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
+  /* Optional, so absent is fine, but present and not a sane number is not:
+     this block fails closed like every other field here. */
+  const g = o.graduatesSeen;
+  if (g !== undefined && (typeof g !== 'number' || !Number.isFinite(g) || g < 0)) return false;
   return SKILL_TREES.every(t => {
     const n = p[t];
     return typeof n === 'number' && Number.isInteger(n) && n >= 0 && n <= MAX_TREE_POINTS;
@@ -373,14 +395,55 @@ export function valuationTighten(state: CareerState): number {
   return treePoints(state, 'recruitment') * 0.02;
 }
 
-/** Negotiation: extra rounds a seller will sit through, 0 to 2. */
-export function extraPatience(state: CareerState): number {
-  return Math.floor(treePoints(state, 'negotiation') * 0.4);
+/*
+ * Negotiation: how much of the seller's premium this manager talks away, 0.00
+ * to 0.10, floored so the ask never drops below the 1.02 of value the shipped
+ * engine already guaranteed.
+ *
+ * THIS TREE USED TO MOVE PATIENCE AND CONVERGENCE, AND THAT WAS DISQUALIFYING.
+ * Round 506 built the haggle on one measured guarantee: repeating a lowball
+ * runs the seller out of table. Its arithmetic is in clubManagerDeals.ts and it
+ * depends on exactly two numbers, the convergence fraction f and the number of
+ * counters n. The first draft of this tree raised BOTH, and measured over the
+ * harness's own sweep the guarantee did not bend, it broke:
+ *
+ *   points   repeating 0.76 of the ask, out of 40
+ *     0      0 agreed, 23 ran out of patience     <- the shipped guarantee
+ *     1      2 agreed, 13 ran out
+ *     2      6 agreed, 10 ran out
+ *     3     17 agreed,  0 ran out                 <- patience stops binding
+ *     5     14 agreed,  0 ran out
+ *
+ * From three points NOTHING anywhere in the sweep ran out of patience, at any
+ * multiple, so the whole mechanic was switched off by a skill point. Round 506's
+ * own words for what it bought are "pitch low and you have to improve, or pay
+ * near the ask and close it now", and three points deleted that decision.
+ *
+ * So the tree stopped touching those two dials. Talking the ask down is visible,
+ * it is what a good negotiator does, and it cannot reopen the exploit: f and n
+ * are exactly what Round 506 measured, and a lowball is a fraction OF the ask,
+ * so a smaller ask does not buy more rounds.
+ */
+export function askEdge(state: CareerState): number {
+  return treePoints(state, 'negotiation') * 0.02;
 }
 
-/** Negotiation: how much faster the ask comes down, 0.00 to 0.20 on top. */
-export function convergenceEdge(state: CareerState): number {
-  return treePoints(state, 'negotiation') * 0.04;
+/*
+ * Youth: two effects, because one of them cannot carry five points on its own.
+ *
+ * The report lands on the academy's 1 to 5 INTEGER scale, already mostly spent
+ * by the coaching level, so a five point tree cannot show five distinct steps
+ * there: floor(points * 0.4) is 0, 0, 0, 1, 1, 2, which means points 1, 2 and 4
+ * bought nothing at all, and on an academy with coaching of 18 or better the
+ * consumer's own clamp swallowed the whole tree. Points are irreversible here,
+ * so selling a player three inert ones is not a rounding detail.
+ *
+ * The intake edge is the continuous half and is what makes every point pay: it
+ * goes into the quality figure the academy already computes, which drives the
+ * potential of the boys who turn up.
+ */
+export function youthIntakeEdge(state: CareerState): number {
+  return treePoints(state, 'youth') * 0.5;
 }
 
 /** Youth: added to the academy's report judgement, 0 to 2 of the 1 to 5 scale. */
@@ -398,7 +461,20 @@ export function gateEdge(state: CareerState): number {
   return 1 + treePoints(state, 'finance') * 0.02;
 }
 
-/** Media: press mood held back from falling, 0 to 5 points of it. */
+/*
+ * Media: what FRACTION of a no-show's cost is absorbed, 0.0 to 0.5.
+ *
+ * It was the raw point count, which was a units error with teeth: the thing it
+ * is subtracted from, PRESS_NO_SHOW, is 1.2. So Math.max(0, 1.2 - points) ran
+ * 1.2, 0.2, 0, 0, 0, 0 and the tree was fully bought out by the SECOND point,
+ * leaving three irreversible points that changed no number anywhere in the game
+ * while the tile went on offering them.
+ *
+ * A fraction is the right shape for the same reason promiseCushion is one: it
+ * scales the cost rather than racing it, so every point moves it and the cost
+ * never reaches zero. Capped at half, because a manager who never fronts up
+ * should always pay something.
+ */
 export function pressCushion(state: CareerState): number {
-  return treePoints(state, 'media');
+  return treePoints(state, 'media') * 0.1;
 }

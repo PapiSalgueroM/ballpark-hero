@@ -28,7 +28,10 @@
  *     point count all read as a fresh block rather than poisoning a save.
  *  5. Earning it. Every source moves the total in the right direction, and the
  *     weighting is the one the design claims: a trophy beats a season of wins.
- *  6. Balance (added once the trees are wired into the engine).
+ *  6. Pacing: is the curve a career or a wall.
+ *  7. Balance: a maxed manager against an untouched one, paired seasons.
+ *  8. A tree must not switch off a guarantee another round measured. The
+ *     Negotiation tree did exactly that and every other gate stayed green.
  *
  * Negative controls (house rule: prove the checks can fail):
  *   XP_CONTROL=notneutral  gives Tactics a lift at zero points, so section 1
@@ -118,7 +121,7 @@ const {
   SKILL_TREES, MAX_TREE_POINTS, MAX_LEVEL, TREE_INFO,
   defaultXp, isValidXp, xpOf, treePoints,
   seasonXp, xpForLevel, levelFor, pointsEarned, pointsSpent, pointsFree, levelProgress, spendPoint,
-  dutyEdge, valuationTighten, extraPatience, convergenceEdge, youthReportEdge,
+  dutyEdge, valuationTighten, askEdge, youthReportEdge, youthIntakeEdge,
   promiseCushion, gateEdge, pressCushion,
   XP_PER_WIN, XP_PER_TROPHY,
 } = xp;
@@ -126,7 +129,7 @@ const {
 for (const [name, fn] of Object.entries({
   defaultXp, isValidXp, xpOf, treePoints, seasonXp, xpForLevel, levelFor,
   pointsEarned, pointsSpent, pointsFree, levelProgress, spendPoint,
-  dutyEdge, valuationTighten, extraPatience, convergenceEdge, youthReportEdge,
+  dutyEdge, valuationTighten, askEdge, youthReportEdge, youthIntakeEdge,
   promiseCushion, gateEdge, pressCushion,
 })) {
   if (typeof fn !== 'function') {
@@ -142,9 +145,9 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const EFFECTS = [
   { name: 'dutyEdge', fn: dutyEdge, identity: 1 },
   { name: 'valuationTighten', fn: valuationTighten, identity: 0 },
-  { name: 'extraPatience', fn: extraPatience, identity: 0 },
-  { name: 'convergenceEdge', fn: convergenceEdge, identity: 0 },
+  { name: 'askEdge', fn: askEdge, identity: 0 },
   { name: 'youthReportEdge', fn: youthReportEdge, identity: 0 },
+  { name: 'youthIntakeEdge', fn: youthIntakeEdge, identity: 0 },
   { name: 'promiseCushion', fn: promiseCushion, identity: 0 },
   { name: 'gateEdge', fn: gateEdge, identity: 1 },
   { name: 'pressCushion', fn: pressCushion, identity: 0 },
@@ -487,10 +490,15 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
     for (let i = 0; i < f.slots.length; i++) {
       const opts = dutyOptions(f.slots[i]);
       if (!opts.length) continue;
+      /* atk MINUS def, and the sign matters: DUTY_EFFECT's own comment says
+         "atk goes on my side's boost, def on theirs, so a positive def means
+         we concede more". The first draft sorted on atk PLUS def and so kept
+         picking duties that armed the opposition almost as well as us. */
       const best = [...opts].sort(
-        (a, b) => (DUTY_EFFECT[b].atk + DUTY_EFFECT[b].def) - (DUTY_EFFECT[a].atk + DUTY_EFFECT[a].def),
+        (a, b) => (DUTY_EFFECT[b].atk - DUTY_EFFECT[b].def) - (DUTY_EFFECT[a].atk - DUTY_EFFECT[a].def),
       )[0];
       const nx = setDuty(s, i, best);
+      if (!nx) fail(`section 7 could not set duty ${best} on slot ${i}, so the arms are not engaged`);
       if (nx) s = nx;
     }
     return s;
@@ -515,9 +523,13 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
   let bW = 0, bL = 0, bP = 0, xW = 0, xL = 0, xP = 0;
   let bBudget = 0, xBudget = 0, budgetPairs = 0, pairs = 0;
 
-  for (const club of CLUBS) {
+  /* Indexed, not club.length: 'Napoli' and 'Wolves' are both six characters
+     and 'Ajax' and 'Roma' both four, so keying on length gave four of the
+     eight clubs a shared seed and quietly ran 36 distinct streams where the
+     count printed 48. */
+  for (const [clubIdx, club] of CLUBS.entries()) {
     for (let k = 0; k < SEEDS_PER_CLUB; k++) {
-      const seed = SEED_BASE + k * 7919 + club.length * 31;
+      const seed = SEED_BASE + k * 7919 + clubIdx * 104729;
       const root = engage(JSON.parse(JSON.stringify(withSeed(seed, () => startCareer(club)))));
 
       const baseArm = JSON.parse(JSON.stringify(root));
@@ -591,6 +603,119 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
   if (Math.abs(xPPG - bPPG) > 1.0) {
     fail(`the maxed manager is ${(xPPG - bPPG).toFixed(3)} points per game clear (ceiling 1.0), which is a different game rather than an edge`);
   }
+}
+
+/* ---------- 8. A tree must not switch off a guarantee another round measured ---------- */
+console.log('8) A maxed manager cannot buy his way out of Round 506 haggling');
+{
+  /*
+   * THE CHECK THIS ROUND WOULD HAVE SHIPPED WITHOUT, AND THE ONE THAT MATTERS
+   * MOST. Read the story before changing anything here.
+   *
+   * Round 506 built the transfer haggle on a single measured guarantee:
+   * repeating one unchanged lowball runs the seller out of table. Its arithmetic
+   * lives in clubManagerDeals.ts beside ASK_CONVERGENCE and depends on exactly
+   * two numbers, the fraction f of the gap the seller gives away each round and
+   * the number of counters n his patience allows.
+   *
+   * Round 513's FIRST DRAFT of the Negotiation tree raised both: up to +0.20 on
+   * f and up to +2 on patience, with nothing capping the sum. Measured over this
+   * very sweep, the guarantee did not bend, it broke:
+   *
+   *   points   repeating 0.76 of the ask, out of 40 attempts
+   *     0      0 agreed, 23 ran out of patience      <- the shipped guarantee
+   *     1      2 agreed, 13 ran out
+   *     2      6 agreed, 10 ran out
+   *     3     17 agreed,  0 ran out                  <- patience stops binding
+   *     5     14 agreed,  0 ran out
+   *
+   * From three points, NOTHING at any multiple anywhere in the sweep ran out of
+   * patience. One skill point deleted the decision Round 506 exists to create.
+   *
+   * Every gate was green while that was true. simClubManagerDeals section 3
+   * sweeps exactly these multiples and would have failed on its own shape
+   * assertion, but it runs a fresh career, and a fresh career has no points. The
+   * defect was reachable only by a manager who had played long enough to earn
+   * three, which no harness did. It was raised by one lens of the round's
+   * adversarial review and then DROPPED by the refuter vote, 0 of 3, which is
+   * this repo's written lesson about dropped findings arriving on schedule.
+   *
+   * So this section runs the sweep with the board FULL. It fences the GUARANTEE,
+   * not the values behind it: whatever the Negotiation tree is made to do next,
+   * a maxed manager must still be unable to make repeating a lowball work.
+   */
+  const { startCareer, buildMarket, startNegotiation, makeOffer } = engine;
+  for (const [name, fn] of Object.entries({ buildMarket, startNegotiation, makeOffer })) {
+    if (typeof fn !== 'function') {
+      console.error(`section 8 could not reach ${name} in the engine bundle`);
+      process.exit(1);
+    }
+  }
+
+  const LOWBALL = 0.76;
+  const RUNS = 40;
+  const CLUBS = ['Aston Villa', 'Napoli', 'Sevilla', 'Ajax'];
+
+  const sweepAt = points => {
+    let agreed = 0, ranOut = 0, hijacked = 0, stuck = 0, opened = 0;
+    for (let i = 0; i < RUNS; i++) {
+      const s0 = startCareer(CLUBS[i % CLUBS.length]);
+      if (points > 0) {
+        const b = defaultXp();
+        b.xp = 50_000_000;
+        for (const t of SKILL_TREES) b.points[t] = points;
+        s0.managerXp = b;
+      } else {
+        delete s0.managerXp;
+      }
+      const market = buildMarket(s0);
+      const top = Math.min(45, Math.max(1, s0.budget * 0.8));
+      const bottom = Math.min(12, Math.max(0.5, top * 0.4));
+      const target = market.find(mp => mp.price >= bottom && mp.price <= top && !mp.generated);
+      if (!target) continue;
+      let s = startNegotiation(s0, target);
+      if (!s || !s.negotiation) continue;
+      opened += 1;
+      const bid = s.negotiation.theirAsk * LOWBALL;
+      let n = 0;
+      while (s.negotiation && s.negotiation.status === 'open' && s.negotiation.phase !== 'terms') {
+        if (++n > 30) { stuck += 1; break; }
+        const next = makeOffer(s, bid);
+        if (!next) break;
+        s = next;
+      }
+      const neg = s.negotiation;
+      if (neg && neg.phase === 'terms') agreed += 1;
+      else if (neg && neg.status === 'collapsed') ranOut += 1;
+      else if (neg && neg.status === 'hijacked') hijacked += 1;
+    }
+    return { agreed, ranOut, hijacked, stuck, opened };
+  };
+
+  const base = sweepAt(0);
+  const maxed = sweepAt(MAX_TREE_POINTS);
+  console.log(`   untouched: ${base.agreed} agreed, ${base.ranOut} ran out, ${base.hijacked} hijacked, of ${base.opened} opened`);
+  console.log(`   maxed    : ${maxed.agreed} agreed, ${maxed.ranOut} ran out, ${maxed.hijacked} hijacked, of ${maxed.opened} opened`);
+
+  /* Counts first: a sweep where nothing opened proves nothing. */
+  if (base.opened < RUNS * 0.5) fail(`only ${base.opened} of ${RUNS} untouched attempts opened a deal, so section 8 measured almost nothing`);
+  if (maxed.opened < RUNS * 0.5) fail(`only ${maxed.opened} of ${RUNS} maxed attempts opened a deal, so section 8 measured almost nothing`);
+  if (base.stuck || maxed.stuck) fail(`${base.stuck + maxed.stuck} negotiations never resolved in 30 rounds`);
+
+  /*
+   * The guarantee, both arms. Measured on the fixed engine the maxed arm tracks
+   * the untouched one closely, because the tree no longer touches f or n and a
+   * lowball is a fraction OF the ask, so a smaller ask buys no extra rounds.
+   * The floor of 5 sits far under the healthy value (23 untouched, 13 even at
+   * the one point that used to be mildest) and far above the broken one, which
+   * was a flat 0 at three points and up.
+   */
+  if (!(base.ranOut >= 5)) fail(`repeating ${LOWBALL} of the ask ran an untouched seller out of patience only ${base.ranOut} times of ${base.opened} (floor 5); Round 506's guarantee is gone on its own`);
+  if (!(maxed.ranOut >= 5)) fail(`repeating ${LOWBALL} of the ask ran a MAXED manager's seller out of patience only ${maxed.ranOut} times of ${maxed.opened} (floor 5; untouched scored ${base.ranOut}); a skill tree has switched off the haggle`);
+  /* And the direct form of the exploit: a maxed manager must not be able to
+     land a repeated lowball at anything like a reliable rate. Measured 0 to 2
+     of 40 on healthy code; it was 14 to 17 when the tree moved patience. */
+  if (maxed.agreed > 8) fail(`a maxed manager landed a repeated ${LOWBALL} lowball ${maxed.agreed} times of ${maxed.opened} (ceiling 8; untouched scored ${base.agreed}), which is the free lunch Round 506 removed`);
 }
 
 if (failures) {
