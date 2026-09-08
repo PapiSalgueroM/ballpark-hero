@@ -1,5 +1,18 @@
 # Work board
 
+## Round 541 claimed, September 8, 2026
+
+Codex owns the reproduced Attack cross-tab lost-update repair. Worktree
+`.worktrees/round-541-attack-atomic-save`, branch
+`codex/round-541-attack-atomic-save`, base540 `25caf91b` (draft PR91).
+Use one authoritative IndexedDB record and a read/compare/write transaction.
+Import legacy saves once, retaining the old bytes as backup. Async startup,
+recovery and cross-tab reloads must reject stale results. Verify real browser
+transactions, migration, aborts and the unbarriered two-tab reproduction.
+Root belongs to Claude. Preserve all previous worktrees and previews.
+Draft only, no sports data/backend/account writes, broad suite, main merge
+or publication. Next free542.
+
 ## Round 540 complete, September 8, 2026
 
 Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
