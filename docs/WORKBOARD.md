@@ -5,6 +5,7 @@
 Codex owns the reproduced runner false-skip repair. Worktree
 `.worktrees/round-537-runner-skip-contract`, branch
 `codex/round-537-runner-skip-contract`, base 536 `bde9110f` (draft PR87).
+Implementation `4ad1e30a`, draft PR88: https://github.com/PapiSalgueroM/ballpark-hero/pull/88.
 Copied-runner fixtures prove a child can print the no-work phrase, crash or
 report a failed assertion, and receive SKIP with a successful runner exit.
 Require an explicit reserved skip exit, the availability marker and an

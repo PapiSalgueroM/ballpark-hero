@@ -4,7 +4,9 @@
 
 Scoped verification complete in `.worktrees/round-537-runner-skip-contract`, branch
 `codex/round-537-runner-skip-contract`, base 536 `bde9110f` (draft PR87),
-claim `eb8db65c`. Copied-runner witnesses reproduce two failed children
+claim `eb8db65c`, implementation `4ad1e30a`.
+Draft PR88: https://github.com/PapiSalgueroM/ballpark-hero/pull/88.
+Copied-runner witnesses reproduce two failed children
 being mislabeled SKIP and producing a successful runner exit. SKIP now
 requires explicit exit77, the no-work marker and an unavailable database
 probe. Ordinary failure exits stay failures. No legacy data caller is

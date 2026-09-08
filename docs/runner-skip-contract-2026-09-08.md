@@ -3,6 +3,8 @@
 Worktree `.worktrees/round-537-runner-skip-contract`, branch
 `codex/round-537-runner-skip-contract`, base 536 `bde9110f` (draft PR87).
 Claim `eb8db65c`. Root remains owned by Claude at `b0c339b1`.
+Implementation `4ad1e30a90057f86142eac123965d7e150a0e4f8`.
+Draft PR88: https://github.com/PapiSalgueroM/ballpark-hero/pull/88.
 
 ## Reproduced behavior
 
