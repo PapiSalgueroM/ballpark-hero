@@ -56,7 +56,12 @@ const ENTRY = `${TMP}/mgrXp.entry.mjs`;
 const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
-const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels'];
+const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate'];
+/* The first four rewrite clubManagerXp.ts and are read by sections 1 to 6.
+   'deadgate' patches the ENGINE bundle instead, because section 7 runs the
+   real engine and the engine imports the real module whatever we do to a copy
+   of the source. */
+const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`XP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -65,7 +70,7 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
 const XP_PATH = `${ROOT}/src/lib/clubManagerXp.ts`;
 let xpPath = XP_PATH;
 
-if (CONTROL) {
+if (SOURCE_CONTROLS.includes(CONTROL)) {
   /* The worktree checks out CRLF and the anchors are written LF, so the read is
      normalised first. Every rewrite asserts its target is present: a control
      that changes nothing reports green for the wrong reason. */
@@ -355,6 +360,237 @@ console.log('6) The trees are a long game somebody could actually walk');
   if (ten < 3) fail(`ten points arrive in ${ten.toFixed(1)} seasons, so the trees fill before the game has been played`);
   if (full < 20) fail(`the whole board fills in ${full.toFixed(1)} seasons, which is not a long game`);
   if (full > 120) fail(`the whole board takes ${full.toFixed(1)} good seasons, which nobody will ever reach`);
+}
+
+/* ================================================================== */
+/* Section 7 runs the real engine, so it gets its own bundle          */
+/* ================================================================== */
+
+/*
+ * The engine imports '@/lib/clubManagerXp' by name, so rewriting a COPY of that
+ * source (what the four source controls do) would leave the engine reading the
+ * real module and the control would change nothing. esbuild's alias is what
+ * makes a control possible here: the specific alias is matched ahead of the
+ * blanket '@' one, so the engine bundle resolves the import to the patched copy.
+ */
+const ENGINE_ENTRY = `${TMP}/mgrXpEngine.entry.mjs`;
+const ENGINE_BUNDLE = `${TMP}/mgrXpEngine.bundle.mjs`;
+
+let engineAlias = '';
+if (CONTROL === 'deadgate') {
+  let esrc = fs.readFileSync(XP_PATH, 'utf8').replaceAll('\r\n', '\n');
+  const from = "  return 1 + treePoints(state, 'finance') * 0.02;";
+  if (!esrc.includes(from)) {
+    console.error('control cannot run: gateEdge is not in the shape XP_CONTROL=deadgate rewrites');
+    console.error(`  looked for: ${from}`);
+    process.exit(1);
+  }
+  esrc = esrc.replace(from, '  return 1;');
+  const copy = `${TMP}/mgrXp.deadgate.ts`;
+  fs.writeFileSync(copy, esrc);
+  engineAlias = ` "--alias:@/lib/clubManagerXp=${copy.replaceAll('\\', '/')}"`;
+}
+
+fs.writeFileSync(ENGINE_ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+export const engine = await import('${ROOT_URL}/src/lib/clubManager.ts');
+`);
+execSync(
+  `"${ROOT}/node_modules/.bin/esbuild" "${ENGINE_ENTRY}" --bundle --format=esm --platform=node --outfile="${ENGINE_BUNDLE}" --log-level=error${engineAlias} --alias:@=${ROOT_URL}/src`,
+  { stdio: 'inherit' },
+);
+const { engine } = await import(pathToFileURL(ENGINE_BUNDLE).href);
+
+/* ---------- 7. Balance, and what the measurement would not support ---------- */
+console.log('7) A maxed manager against an untouched one, paired season by season');
+{
+  /*
+   * THE SECTION THE HEADER PROMISED, AND IT ASSERTS LESS THAN THE FIRST DRAFT
+   * WANTED IT TO. Worth reading before anybody tightens it.
+   *
+   * The obvious check is "a fully invested manager beats an untouched one".
+   * Measured, that is not true, and the way it stopped being true is the useful
+   * part. A first pass over 96 paired seasons gave the maxed arm +0.037 points
+   * per game and looked exactly like proof the trees work. Repeated over four
+   * INDEPENDENT seed bases at 160 pairs each it came out +0.008, -0.006, -0.011
+   * and +0.038. The sign flips. The +0.037 was one lucky base, and a threshold
+   * anywhere near it would have been Round 284's coin toss dressed as a rule.
+   * So this section does not assert it. That is a finding, not a gap.
+   *
+   * Two things DID survive repetition, and they are what is asserted here:
+   *
+   *  - THE MONEY. Budget after one season, untouched against maxed, came out
+   *    126.8/131.0, 126.8/131.0, 127.0/130.9, 126.9/131.1 at 160 pairs and
+   *    127.2/130.9, 126.7/131.1 at 48. A gap of 3.7 to 4.4m, every base, every
+   *    size. The Finance tree is the one tree that pays whatever else you do,
+   *    because home gates happen on their own, and it is measurable for exactly
+   *    that reason.
+   *  - HE STILL LOSES. 25.19, 26.32, 25.08, 25.76, 23.19, 26.31 percent of
+   *    matches lost across those same runs. This is the check that actually
+   *    protects twelve rounds of balance tuning, and it does it far better than
+   *    a points per game ceiling would, because it is stable at this sample size
+   *    and a points per game gap is not.
+   *
+   * The floors are set from that measured headroom, not from a feel: the money
+   * floor sits 2.2m under the smallest gap ever measured, and the defeat floor
+   * sits 8 points under the lowest loss rate ever measured.
+   *
+   * The paired design matters and cost a run to find. Comparing whole CAREERS
+   * measured the sacking cascade instead of the trees, because a career that
+   * ends in season one contributes twelve matches and one that survives
+   * contributes a hundred and eighty, so the aggregate was dominated by which
+   * arm happened to survive. One season against one season from a byte identical
+   * start under the same seed cannot be truncated that way.
+   */
+  const { startCareer, playNextEntry, setDuty, dutyOptions, DUTY_EFFECT, FORMATIONS } = engine;
+  for (const [name, fn] of Object.entries({ startCareer, playNextEntry, setDuty, dutyOptions })) {
+    if (typeof fn !== 'function') {
+      console.error(`section 7 could not reach ${name} in the engine bundle`);
+      process.exit(1);
+    }
+  }
+
+  /* The harness owns its own stream so both arms of a pair get an identical
+     draw. Same mix as scripts/lib/seedRandom.mjs. */
+  const seeded = seed => {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+  const withSeed = (seed, fn) => {
+    const saved = Math.random;
+    Math.random = seeded(seed);
+    try { return fn(); } finally { Math.random = saved; }
+  };
+
+  const maxedBlock = () => {
+    const b = defaultXp();
+    b.xp = 50_000_000;
+    for (const t of SKILL_TREES) b.points[t] = MAX_TREE_POINTS;
+    return b;
+  };
+
+  /*
+   * A manager who actually uses the tools the trees multiply. This is not
+   * padding: dutyBoost SUMS the duties set on the eleven and a fresh career has
+   * none, so Tactics multiplies zero by 1.5 and gets zero. The first attempt at
+   * this section had no engage step and three of eight clubs came back byte
+   * identical between the arms, which reads as a wiring bug and is not one.
+   */
+  const engage = s => {
+    const f = FORMATIONS[s.formationIndex] ?? FORMATIONS[0];
+    for (let i = 0; i < f.slots.length; i++) {
+      const opts = dutyOptions(f.slots[i]);
+      if (!opts.length) continue;
+      const best = [...opts].sort(
+        (a, b) => (DUTY_EFFECT[b].atk + DUTY_EFFECT[b].def) - (DUTY_EFFECT[a].atk + DUTY_EFFECT[a].def),
+      )[0];
+      const nx = setDuty(s, i, best);
+      if (nx) s = nx;
+    }
+    return s;
+  };
+
+  const oneSeason = (start, seed) => withSeed(seed, () => {
+    let s = start;
+    let guard = 0;
+    for (;;) {
+      if (++guard > 130) break;
+      const res = playNextEntry(s, { skipHalftime: true });
+      s = res.state;
+      if (res.kind === 'seasonOver') break;
+    }
+    return s;
+  });
+
+  const CLUBS = ['Real Madrid', 'Arsenal', 'Napoli', 'Wolves', 'Ajax', 'Roma', 'Newcastle', 'Brighton'];
+  const SEEDS_PER_CLUB = Number(process.env.XP_BALANCE_SEEDS || 6);
+  const SEED_BASE = Number(process.env.XP_BALANCE_BASE || 1000);
+
+  let bW = 0, bL = 0, bP = 0, xW = 0, xL = 0, xP = 0;
+  let bBudget = 0, xBudget = 0, budgetPairs = 0, pairs = 0;
+
+  for (const club of CLUBS) {
+    for (let k = 0; k < SEEDS_PER_CLUB; k++) {
+      const seed = SEED_BASE + k * 7919 + club.length * 31;
+      const root = engage(JSON.parse(JSON.stringify(withSeed(seed, () => startCareer(club)))));
+
+      const baseArm = JSON.parse(JSON.stringify(root));
+      delete baseArm.managerXp;
+      const maxArm = JSON.parse(JSON.stringify(root));
+      maxArm.managerXp = maxedBlock();
+
+      const playSeed = seed * 3 + 11;
+      const b = oneSeason(baseArm, playSeed);
+      const x = oneSeason(maxArm, playSeed);
+
+      bW += b.careerStats.wins - root.careerStats.wins;
+      bL += b.careerStats.losses - root.careerStats.losses;
+      bP += b.careerStats.played - root.careerStats.played;
+      xW += x.careerStats.wins - root.careerStats.wins;
+      xL += x.careerStats.losses - root.careerStats.losses;
+      xP += x.careerStats.played - root.careerStats.played;
+      pairs += 1;
+
+      if (Number.isFinite(b.budget) && Number.isFinite(x.budget)) {
+        bBudget += b.budget;
+        xBudget += x.budget;
+        budgetPairs += 1;
+      }
+    }
+  }
+
+  /* Counts first, so this section cannot pass by having measured nothing. */
+  console.log(`   ${pairs} paired seasons, ${bP} matches untouched and ${xP} maxed, ${budgetPairs} budget pairs`);
+  if (pairs < CLUBS.length) fail(`only ${pairs} pairs ran, so section 7 measured almost nothing`);
+  if (bP < 200 || xP < 200) fail(`only ${bP} and ${xP} matches were played, too few to read anything from`);
+  if (budgetPairs < 1) fail('no pair produced a finite budget on both arms, so the money check measured nothing');
+
+  const bBudgetMean = bBudget / Math.max(1, budgetPairs);
+  const xBudgetMean = xBudget / Math.max(1, budgetPairs);
+  const moneyGap = xBudgetMean - bBudgetMean;
+  const lossRate = xL / Math.max(1, xP);
+  const bPPG = (bW * 3 + (bP - bW - bL)) / Math.max(1, bP);
+  const xPPG = (xW * 3 + (xP - xW - xL)) / Math.max(1, xP);
+
+  console.log(`   budget after a season: ${bBudgetMean.toFixed(1)}m untouched, ${xBudgetMean.toFixed(1)}m maxed, gap ${moneyGap >= 0 ? '+' : ''}${moneyGap.toFixed(1)}m`);
+  console.log(`   the maxed manager lost ${xL} of ${xP} (${(100 * lossRate).toFixed(2)} percent)`);
+  console.log(`   points per game ${bPPG.toFixed(3)} untouched, ${xPPG.toFixed(3)} maxed, gap ${xPPG - bPPG >= 0 ? '+' : ''}${(xPPG - bPPG).toFixed(3)} (NOT asserted on, see the note above)`);
+
+  /* 7a. The trees are wired to something. Measured gap 3.7 to 4.4m over six
+     runs at two sample sizes, so a floor of 1.5 has better than 2m of headroom
+     under the smallest one ever seen. XP_CONTROL=deadgate kills gateEdge and
+     must trip this. */
+  if (!(moneyGap >= 1.5)) {
+    fail(`a maxed manager finished the season only ${moneyGap.toFixed(1)}m ahead (floor 1.5m; measured 3.7 to 4.4 over six runs), so the Finance tree is not reaching the gate`);
+  }
+  /* And the other way, because a gate edge that ran away would also be a bug.
+     Measured max 4.4m, so 12 is nearly three times the largest ever seen. */
+  if (moneyGap > 12) {
+    fail(`a maxed manager finished ${moneyGap.toFixed(1)}m ahead (ceiling 12m; measured 3.7 to 4.4), so the gate edge has run away`);
+  }
+
+  /* 7b. THE ONE THAT PROTECTS THE BALANCE. A fully invested manager must still
+     be able to lose. Measured 23.19 to 26.32 percent over six runs, so a floor
+     of 15 sits eight points under the lowest ever seen. */
+  if (!(lossRate >= 0.15)) {
+    fail(`the maxed manager lost only ${(100 * lossRate).toFixed(2)} percent of his matches (floor 15; measured 23.2 to 26.3 over six runs), so the trees have taken defeat off the table`);
+  }
+
+  /* 7c. A sanity ceiling on the results gap, and deliberately a loose one. The
+     gap is NOISE at this sample size (measured -0.011 to +0.100 across six runs,
+     sign flipping), so anything tight here would flap. One full point per game
+     is roughly a maxed manager taking thirty eight more league points a season,
+     which is a different game and not noise. Do not tighten this without
+     repeating the four base measurement: that is what stopped it being wrong. */
+  if (Math.abs(xPPG - bPPG) > 1.0) {
+    fail(`the maxed manager is ${(xPPG - bPPG).toFixed(3)} points per game clear (ceiling 1.0), which is a different game rather than an edge`);
+  }
 }
 
 if (failures) {
