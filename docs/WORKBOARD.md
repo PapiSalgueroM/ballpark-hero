@@ -1,5 +1,19 @@
 # Work board
 
+## Round 531 claim, September 8, 2026
+
+Codex owns NFL Arcade Free Agency action guards and phase-aware controls in
+useConquest.ts and ConquestBoard.tsx, plus accurate help, focused tests,
+negative controls and bounded browser verification. Worktree
+`.worktrees/round-531-nfl-free-agency`, branch `codex/round-531-nfl-free-agency`,
+base530 `18e83e9a` (draft PR81). Reject repeated or stale signings, require
+canonical live-pool candidates and surviving favorites, and lock actions
+while a turn or reward is unresolved. Preserve the existing NFL team-change
+flow, dynamic eliminated-roster pool, weakest-player lookup and three-battle
+cooldown with +2 rating drift. No battle-engine tuning or new sports facts.
+No real backend writes, broad suite, root edits, merge or publication.
+Preserve every existing worktree and preview. Next free532.
+
 ## Round 530 complete, September 8, 2026
 
 Codex owns NBA Arcade Free Agency in useConquestNba.ts, ConquestBoardNba.tsx,
