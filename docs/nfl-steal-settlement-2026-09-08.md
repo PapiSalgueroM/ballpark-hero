@@ -4,6 +4,8 @@ Worktree `.worktrees/round-536-nfl-steal-settlement`, branch
 `codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86).
 Claim `596b1e69`. Root belongs to Claude and is preserved at `b0c339b1`.
 Every previous worktree and preview remains available.
+Implementation `488dde2b298afc7750cb0b5b462e409e2e874325`.
+Draft PR87: https://github.com/PapiSalgueroM/ballpark-hero/pull/87.
 
 ## Actual baseline
 

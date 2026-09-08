@@ -4,7 +4,9 @@
 
 Scoped verification complete in `.worktrees/round-536-nfl-steal-settlement`, branch
 `codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86),
-claim `596b1e69`. One current pending battle now authorizes one valid
+claim `596b1e69`, implementation `488dde2b`.
+Draft PR87: https://github.com/PapiSalgueroM/ballpark-hero/pull/87.
+One current pending battle now authorizes one valid
 loser-roster choice or skip. Accepted actions consume that decision before
 confirmation; reset and unmount cancel its tracked 1200ms timer. Close and
 Escape preserve the unresolved choice. Board controls share eligibility,

@@ -5,6 +5,7 @@
 Codex owns the reproduced NFL player-steal settlement repair in useConquest
 and its Board controls. Worktree `.worktrees/round-536-nfl-steal-settlement`,
 branch `codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86).
+Implementation `488dde2b`, draft PR87: https://github.com/PapiSalgueroM/ballpark-hero/pull/87.
 The exact current pending result now permits one valid loser choice or skip,
 with tracked confirmation canceled on reset or unmount. Board eligibility
 and Continue follow the same authority, preserving Close/Escape and reopen.
