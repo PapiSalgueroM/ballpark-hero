@@ -26,7 +26,8 @@ weakening the guards. A new duplicate-component control and the existing missing
 control each fail only their intended assertion. The final 121-route inventory
 and four-width layout matrix pass again, including the legal-truncation control.
 The disclosure fixture and related-link graph fence pass. Generated snapshots,
-sitemap and ledger are ready for their verification commit. No merge or publish
+sitemap, ledger and final harness fixes are committed and pushed at `348fa545`.
+No merge or publish
 is included in this round; full integration remains open.
 
 Round 515 is separate on `codex/round-515-storage-startup`, based on main
@@ -50,7 +51,8 @@ The map geometry stays fixed; save, recap and roster work and broad test queries
 need profiling before choosing an optimization. See
 docs/conquest-ui-timing-2026-09-08.md. The older suite PID 52872 ended, and most
 remaining Node processes were runtime helpers, not stuck workers. A single new
-264-harness regression run is active in Round 515, session 95111. Do not duplicate
+264-harness regression run is active in Round 515, session 95111, PID 56308,
+started at 04:21 Eastern on September 8. Do not duplicate
 it or build over its dist. Other lanes and their browser audits remain untouched.
 
 ## New feedback and active Round 514, 2026-09-08

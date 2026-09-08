@@ -14,7 +14,7 @@ generated-site verification passed for draft PR65, including 16 focused tests,
 the 121-route final inventory, the four-width layout matrix, all fifteen fences,
 disclosure capture and its control, and the related-game graph. Two test-harness
 issues discovered by the fences were fixed and their controls proven. Generated
-snapshots and the sitemap ledger are ready to commit. No merge or publish.
+snapshots and the sitemap ledger are pushed at `348fa545`. No merge or publish.
 
 ## New owner feedback, September 8
 
