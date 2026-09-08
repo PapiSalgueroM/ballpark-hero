@@ -12,9 +12,13 @@ off when a write fails. Real browser injection then found an earlier SDK import
 crash when reads fail but writes work. A fifteenth isolated test reproduced it
 and passes with a three-line versioned auth-js capability-probe patch. The SDK
 remains at 2.95.3, now pinned; no existing resolved dependency version changed.
-Clean npm ci applied the patch, and the final exact type/build passed. Expanded
-controls, real-browser replay and all fifteen generated-site fences are running
-against the settled patched build. No database or publication change.
+Clean npm ci applied the patch, and the final exact type/build passed. All 15
+focused tests, five targeted unit controls, 46 real-browser checks, the browser
+vendor control and all fifteen generated-site fences pass on the settled build.
+The SDK control first passed with its copied package intact, then reproduced the
+import crash when only the probe was removed. Source is pushed at `5729e43d`
+in draft PR66. The full node suite remains an integration gate; no merge,
+database change, publication or AdSense approval is claimed.
 Details: docs/storage-startup-verification-2026-09-08.md. Next free round: 516.
 
 Round 514 remains separate and unpublished: compact guide/footer and one stable

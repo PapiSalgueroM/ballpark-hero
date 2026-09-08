@@ -8,9 +8,11 @@ and cookie-control crashes when browser storage is blocked. The implementation
 preserves normal sessions and game saves, and failed consent writes keep vendors
 off. Browser tests also exposed an SDK import-time read; a versioned patch adds
 the missing guarded read probe. SDK version 2.95.3 is unchanged and now pinned.
-Clean install, final type/build and source review passed. Expanded controls and
-the final browser/generated-site checks are running. No database, provider,
-billing or publication changes. The claim was pushed before implementation.
+Clean install, final type/build and source review passed. All 15 focused tests,
+five unit controls, 46 browser checks, the vendor control and all fifteen
+generated-site fences pass. Source is pushed at `5729e43d` in draft PR66;
+full node integration remains open. No database, provider, billing or publication
+changes. The claim was pushed before implementation.
 
 The separate Round 514 page-comfort candidate is still in verification. A review
 found additional missing next-game callers. The repair passes all 121 routes and

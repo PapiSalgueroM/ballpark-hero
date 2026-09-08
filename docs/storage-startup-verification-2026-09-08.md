@@ -95,14 +95,42 @@ because the bundled browser binary was absent, then had one non-reproduced
 `/whats-new` navigation timeout. A fresh-port replay passed every route. Those
 results describe the earlier build, not the final patched bundle.
 
-## Still pending
+## Final focused verification
 
 The final patched exact type gate and production build passed. Build output:
 2,823 modules, 53.54 seconds, entry `index-DmhtB4jm.js`. The install-time patch
 applied again successfully at the start of the build. Independent source review
 found no remaining production or consent regression after the SDK version pin.
 
-Real-browser fault injection, replayable negative controls and all fifteen
-generated-site fences are running against this settled build. Their final
-results must be recorded here.
-No whole-site or AdSense all-clear, merge or publication is claimed.
+`node scripts/simStorageStartup.mjs` passed all 15 live tests across six files.
+All five targeted controls changed their intended guard and failed only their
+owned cases: auth (1), index (2), streak reminder (2), cookie choices (3), SDK
+import (1). For the SDK arm, the copied and aliased package first passed 15/15
+with its alias marker observed; removing the read probe then reproduced only
+the import failure. Installed dependencies were not mutated. Temporary copies
+were removed through path-checked cleanup.
+
+`node scripts/playStorageStartup.mjs` passed 46 checks on the built site at port
+4185 using installed Chrome. All five localStorage fault modes fired, the home
+and game search remained usable, search opened Footle, and read-denied auth
+finished at guest controls. There were zero uncaught page errors. Failed Accept
+left the choices and explanation visible with zero vendor requests and scripts.
+Essential only dismissed for the visit and returned after reload. Healthy auth
+and game-save fixtures stayed byte-for-byte unchanged. All external requests were
+aborted, with no login, vote or form submitted.
+
+`STORAGE_STARTUP_CONTROL=vendor-request` injected one real script request, which
+was intercepted and aborted. Only the two expected vendor guards failed. The
+390px failed-Accept screenshot was visually reviewed: both buttons and the error
+message remained readable without clipping.
+
+All fifteen generated-site fences passed on this final build: simAdsense,
+simBrand, simHeadTags, simHiddenPages, simHubs, simIndexNow, simIndexing,
+simInternalLinks, simNoRivalNames, simPrerender, simPrerenderBoot,
+simRetiredRoutes, simSchema, simSitemap and simSnapshotAssets. The final
+simPrerenderBoot run used installed Chrome and fresh port 4332, with no timeout
+or failed requests. That temporary port is closed.
+
+Source is backed up at `5729e43d` in draft PR66. The full node suite remains
+an integration gate before a larger ship. No whole-site or AdSense all-clear,
+merge or publication is claimed. Round 514's compact pages are separate in PR65.
