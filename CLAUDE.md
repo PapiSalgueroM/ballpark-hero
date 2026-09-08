@@ -283,6 +283,12 @@ its behavior before running it. All required selected checks must pass before
 shipping. Note the naming rule: a harness named `test*` will be
 **silently skipped** by the runner. That is how `testBallonDorFairness.mjs` went unnoticed.
 
+Since Round 537, a node harness is classified as unavailable only when it exits
+77, prints `NOTHING WAS CHECKED`, and the runner's database probe is unavailable.
+Ordinary failure exits remain failures. Existing data harnesses are not opted
+in automatically: partial batches, invalid pools and runtime errors must stay
+failures. Review an actual pre-check availability abort before adopting exit77.
+
 Between big ships, when a round rebuilds `dist` and the snapshots in `public/`, run **all** of
 the harnesses that read those directories, not a hand picked few: `simAdsense`, `simBrand`,
 `simHeadTags`, `simHiddenPages`, `simHubs`, `simIndexNow`, `simIndexing`, `simInternalLinks`,

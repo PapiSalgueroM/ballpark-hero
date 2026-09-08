@@ -1,5 +1,28 @@
 # Work board
 
+## Round 537 complete, September 8, 2026
+
+Codex owns the reproduced runner false-skip repair. Worktree
+`.worktrees/round-537-runner-skip-contract`, branch
+`codex/round-537-runner-skip-contract`, base 536 `bde9110f` (draft PR87).
+Implementation `4ad1e30a`, draft PR88: https://github.com/PapiSalgueroM/ballpark-hero/pull/88.
+Copied-runner fixtures prove a child can print the no-work phrase, crash or
+report a failed assertion, and receive SKIP with a successful runner exit.
+Require an explicit reserved skip exit, the availability marker and an
+unreachable database. Ordinary failure exits remain failures. Legacy data
+callers are not automatically opted in because their messages conflate
+transport, partial batches and invalid or undersized pools. Verify with
+synthetic copied runners only, then selected existing harnesses. Network and
+process isolation remain separate. Ten new and 21 prior cases pass through
+the selected runner; six controls produce 24 intended failures and the old
+skip control still produces its original two. Both exact types, build and
+all fifteen site fences pass. Independent source review is clear. Evidence:
+docs/runner-skip-contract-2026-09-08.md. Entry bundle remains index-C-uiq91h.js.
+Preserve root, worktrees and preview4213.
+Draft PR only, no backend/account writes, broad suite, main merge or publish.
+Next free 538: the independently reproduced NBA post-unmount callback can
+schedule one new confirmation timer; minimal cleanup fixes its paired audit.
+
 ## Round 536 complete, September 8, 2026
 
 Codex owns the reproduced NFL player-steal settlement repair in useConquest
