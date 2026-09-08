@@ -3050,6 +3050,32 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
+- **2026-09-08, THE FULL SUITE ON ROUNDS 506 TO 508, and what its six reds actually were.**
+  Build clean, and all three browser walks green on the built site: `playDealDesk` (22 checks),
+  `playAdRoutes` (ten sections including the new ad gap one) and `playClubManager` (a full season
+  through the real screens, 0 findings). The 265 harness node suite came back with six not green,
+  and five of them were not real:
+
+  **Five were a network drop.** `simCareerSeasonTruth`, `simMostPlayed`, `simPlayerSearchAccents`
+  and `simPublicWrites` all failed with "Supabase unreachable, nothing was checked", and all four
+  went green on a rerun once the host answered (a direct probe returns 401, which is reachable
+  and unauthenticated, so the outage lasted minutes). **The runner's Round 356 rule is supposed
+  to mark a database-less harness SKIPPED rather than FAILED and it did not fire**, so a
+  transient drop reads as five real failures in the summary. Recorded in the workboard Inbox for
+  whoever owns the runner.
+
+  **One is pre-existing and belongs to another lane.** `simConnect4ClubRecords` is red on the
+  suite and on a rerun with the database up, and its own finding is that it could not exercise
+  the path it covers ("not one pair was answered from records"). Confirmed not to be these
+  rounds' doing: the branch changes 17 files and none contains the string connect4.
+
+  **One is under investigation and may be real:** `simPress` reports that handling the press and
+  the dressing room well is worth 0.34 points, "which nobody would ever feel". Round 507 makes
+  every knockout round two weeks instead of one, so a season is longer and a per season effect
+  can dilute, which is a plausible mechanism. It is being measured against the pre-506 engine
+  before anything is concluded, because a harness that moved is not the same thing as a game that
+  broke.
+
 - **2026-09-08, ADVERSARIAL REVIEW OF ROUNDS 506 AND 507, and the twenty defects it found in
   work that had already passed every gate.** Five independent lenses over the branch diff (save
   compatibility, whether the football comes out right, transfer exploits, the screens, and
