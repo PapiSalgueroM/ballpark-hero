@@ -1,5 +1,20 @@
 # Work board
 
+**Round 521, Codex, scoped verification complete September 8:** own-profile average scope in
+`.worktrees/round-521-profile-average`, branch `codex/round-521-profile-average`,
+based on Round 520 `9865eb3e` (draft PR71). Profile now pairs local points/plays,
+labels This browser, and shows Not yet when no local plays exist. Other profiles
+and Total Points are unchanged. Eight real-component cases, eleven exact source
+controls, both type gates/build, all fifteen generated-site fences, ActivityDays
+and SessionMarks pass. Built browser matrix passes 28 states across four widths
+and three exact DOM controls. Initial harness/type errors and corrections are
+recorded in docs/profile-average-2026-09-08.md. Final clipping-control review
+has no remaining findings. Preview 4194 stays preserved.
+No account restoration, historical repair, date changes, provider changes or
+production writes. Do not run the default broad suite. Root and all previous
+previews stay untouched. Next free round: 522, cross-profile optional data and
+stale-load isolation, with the profile-minute writer gated on loaded identity.
+
 **Round 520, Codex, scoped verification complete September 8:** targeted build-tool dependency safety
 in `.worktrees/round-520-dependency-safety`, branch
 `codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
