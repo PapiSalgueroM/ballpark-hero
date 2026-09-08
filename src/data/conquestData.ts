@@ -614,32 +614,28 @@ export function isLightColor(hex: string): boolean {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.5;
 }
 
-// ── Free Agency tab pool (item 87) ──
-// Hand-curated, text-only (no photos), real recent NFL free agents / cut
-// veterans, kept distinct from conquestPowerups.ts's FREE_AGENTS (which
-// feeds the existing "Free Agent Signing" power-up) so the two systems
-// never surface the exact same name in two different flows. This is the
-// pool the docked Free Agency panel offers once every 3 conquests.
+// Arcade Free Agency pool (item 87). Availability follows active rosters
+// in the run, with a signing available after every three settled battles.
 export interface ConquestFreeAgentCandidate {
   name: string;
   position: string;
   overall: number;
-  blurb: string; // one-line "why they're notable" for the panel
+  blurb?: string; // optional event from the current Arcade run
 }
 
 export const CONQUEST_FREE_AGENCY_POOL: ConquestFreeAgentCandidate[] = [
-  { name: 'Justin Simmons', position: 'S', overall: 84, blurb: 'Longtime Broncos ballhawk, cut after a decade in Denver' },
-  { name: "Za'Darius Smith", position: 'DE', overall: 82, blurb: 'Veteran edge rusher, journeyman of the last few offseasons' },
-  { name: 'Kareem Hunt', position: 'RB', overall: 80, blurb: 'Former rushing champ, bounced between rosters on short deals' },
-  { name: 'Marcus Peters', position: 'CB', overall: 79, blurb: 'Three-time Pro Bowl corner, still finding a permanent home' },
-  { name: 'Jimmy Garoppolo', position: 'QB', overall: 79, blurb: 'Ex-Super Bowl starter, now a proven backup on the market' },
-  { name: 'Leonard Fournette', position: 'RB', overall: 78, blurb: 'Super Bowl-winning bruiser back, released after a lean stretch' },
-  { name: 'Cam Akers', position: 'RB', overall: 77, blurb: 'Former playoff spark plug, traded and cut multiple times' },
-  { name: 'Robert Quinn', position: 'DE', overall: 80, blurb: 'Ex-sack leader, aging but still gets home on passing downs' },
-  { name: 'Kendall Fuller', position: 'CB', overall: 78, blurb: 'Reliable slot corner, cap casualty after a roster crunch' },
-  { name: 'Blake Martinez', position: 'LB', overall: 76, blurb: 'Former tackle machine, retired then briefly un-retired' },
-  { name: 'Melvin Ingram', position: 'DE', overall: 76, blurb: 'Well-traveled pass rusher, picked up by contenders in-season' },
-  { name: 'Duke Johnson', position: 'RB', overall: 75, blurb: 'Steady third-down back, never stuck on one roster long' },
-  { name: 'Jason Peters', position: 'OT', overall: 77, blurb: 'Future Hall of Fame tackle, still signing prove-it deals' },
-  { name: 'Ezekiel Elliott', position: 'RB', overall: 78, blurb: 'Former rushing champion, let go after his big second contract' },
+  { name: 'Justin Simmons', position: 'S', overall: 84 },
+  { name: "Za'Darius Smith", position: 'DE', overall: 82 },
+  { name: 'Kareem Hunt', position: 'RB', overall: 80 },
+  { name: 'Marcus Peters', position: 'CB', overall: 79 },
+  { name: 'Jimmy Garoppolo', position: 'QB', overall: 79 },
+  { name: 'Leonard Fournette', position: 'RB', overall: 78 },
+  { name: 'Cam Akers', position: 'RB', overall: 77 },
+  { name: 'Robert Quinn', position: 'DE', overall: 80 },
+  { name: 'Kendall Fuller', position: 'CB', overall: 78 },
+  { name: 'Blake Martinez', position: 'LB', overall: 76 },
+  { name: 'Melvin Ingram', position: 'DE', overall: 76 },
+  { name: 'Duke Johnson', position: 'RB', overall: 75 },
+  { name: 'Jason Peters', position: 'OT', overall: 77 },
+  { name: 'Ezekiel Elliott', position: 'RB', overall: 78 },
 ];

@@ -59,6 +59,16 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
           </section>
 
           <section>
+            <h3 className="font-bold text-foreground mb-2">✍️ Free Agency Panel</h3>
+            <p className="text-muted-foreground">
+              Pick a surviving team, then settle 3 battles to unlock a signing. The available player replaces your team's lowest-rated in-game player and adds a +2 team-rating bonus, subject to the run's rating caps. A queued upgrade is lost if its player is waived. Changing teams does not reset the cooldown. Finish the current turn and any pending power before changing teams or signing.
+            </p>
+            <p className="text-muted-foreground mt-1.5">
+              This Arcade pool follows the rosters in your run, including players released by eliminated teams. For example, after your third settled battle, sign one available player. The next signing unlocks after 3 more settled battles. Claiming a neutral state does not count as a settled battle.
+            </p>
+          </section>
+
+          <section>
             <h3 className="font-bold text-foreground mb-2">🗺️ Map Colors</h3>
             <p className="text-muted-foreground">
               Each team's territory is shown in their team color. Gray states are neutral, claimed automatically when targeted. Watch the map update in real time as teams expand and get eliminated.
