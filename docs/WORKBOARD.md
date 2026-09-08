@@ -1,5 +1,15 @@
 # Work board
 
+**Round526, Codex original task, CLAIMED September8:** NBA Arcade hidden-region
+initialization in `.worktrees/round-526-nba-visible-regions`, branch
+`codex/round-526-nba-visible-regions`, base524 `f51cbe5e`. The resumed task owns
+525(simLoginReturn); keep it and Claude's root untouched. Reproduce hidden
+CA_N/TX_S ownership/powers in the real hook, initialize only visibleNBA_STATES,
+preserve58 assignments and existing Arcade battle/reset rules. No new neutral
+land or powers. Main owns hook/docs; test author new regions test/sim, browser
+author playConquestNbaRegions.mjs. Local denied-transport tests only, no full
+suite, backend, merge or publication. Cutoff17:46:50UTC, next free527.
+
 **Round 524, Codex, scoped verification complete September 8:** saved-bracket profile summary in
 `.worktrees/round-524-profile-bracket`, branch `codex/round-524-profile-bracket`,
 based on Round 523 `8c3d1153` (draft PR74). Current top-level string champion

@@ -1,5 +1,28 @@
 # Project state
 
+## Round 526 NBA Arcade visible territories, September 8, 2026
+
+CLAIMED in `.worktrees/round-526-nba-visible-regions`, branch
+`codex/round-526-nba-visible-regions`, from settled Round524 `f51cbe5e`.
+The resumed Round524 task owns Round525 (simLoginReturn). This original task
+owns only526, coordinated directly with that task. Root still belongs to Claude.
+
+Source audit: NBA Arcade initializes60 shared positions while the map draws58
+NBA_STATES. Hidden parent regions CA_N/TX_S become neutral power locations and
+can be claimed for invisible ownership and a rating bonus. Reproduce the real
+hook and fix only initialization to use the rendered region list. Preserve
+all58 existing assignments, away-loss behavior, reset and battle rules. All
+visible NBA land starts owned, so no initial neutral power locations remain.
+Do not invent neutral regions, new power rules, facts or a new mode.
+
+Main owns useConquestNba.ts/docs. Test author owns
+useConquestNba.regions.test.tsx/simConquestNbaRegions.mjs; browser author owns
+playConquestNbaRegions.mjs. Exact transport-denied fixtures, real hook turns,
+negative controls, types/build, all fifteen built-site fences and phone/desktop
+check before draft push. No default full suite, backend writes, merge or publish.
+Preserve every existing worktree/preview. Original cutoff17:46:50UTC remains.
+Next free527, verify before claiming. Checkpoint instead of rushing at cutoff.
+
 ## Round 524 saved bracket profile summary, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-524-profile-bracket`, branch
