@@ -7,10 +7,11 @@ now serves `href="/quiz-board"` where it served `href="/jeopardy"`, which is the
 Round 496 fix; all eight probed routes answer 200 and the sitemap dates `/` to
 2026-09-07). Rounds 495 to 501 shipped, plus the 475-479 batch merged.
 
-`origin/main` is `7af40013`, Round 504. Rounds 503 and 504 are merged but are not included in
-the live deployment above. Round 509 is code complete and verified on
-`codex/round-509-quality-batch`, merged locally with Rounds 503 and 504, and still needs its final
-commit, PR, merge to main and deploy.
+`origin/main` is `1ecc00eb`, Round 509, merged through PR 60 on 2026-09-07. Rounds 503,
+504 and 509 are merged but are not included in the live deployment above. The final code
+commit is `4f70262e`. The authenticated preview showed the new 120+ copy and saved H1 fix.
+Publication is blocked by repeated Lovable editor timeouts, not by an unfinished code gate.
+Anthony has been asked to press Publish if his editor responds; verify live before closing it.
 None of Round 509's frontend, game-engine or prerender fixes should be called live yet.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
@@ -110,7 +111,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Polls more engaging | DATABASE DONE, UI PENDING DEPLOY | Round 509 restocked 58 upcoming rows and the live table now has zero C or D choices, zero off-format prompts and zero repeated matchups. Every poll is a named participant versus participant with exactly A and B. Team polls ask exactly `Who you got?`; player polls ask exactly `Who ranks higher all time?`. The component and fixture fallback enforce the same contract once the pending Round 509 code deploys. No weird specific comparison wording. |
 | Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
-| Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
+| Indexing | GOOGLE ACTIVE, BING AND YANDEX PAUSED | His latest request reopens Google indexing only. Search Console read 2026-09-07, report dated September 3: 58 indexed, 71 discovered, 17 crawled but excluded, three redirects. The 17 include 11 current indexable pages, five deliberately excluded routes and sitemap.xml. Footle's live Google test passed and its indexing request was accepted. Exact evidence and URL lists: docs/seo/indexing-audit-2026-09-07.md. Do not run IndexNow. |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | OPEN | |
 | Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs). Still open from his list: start options, leagues and eras depth, manager XP, media, the tactics list (Round 505, claimed) and the transfers rework with personal terms (Round 506, claimed) |

@@ -19,9 +19,9 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 510 (checked against origin/main on
-  2026-09-07: main is `7af40013`, Round 504. The Claude Code lane holds 505 to 508 and the
-  Codex lane holds 509, see both claims below).
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 511 (checked against origin/main on
+  2026-09-07: main is `1ecc00eb`, Round 509. The Claude Code lane holds 505 to 508 and the
+  Codex lane holds 510, see both claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
@@ -90,8 +90,15 @@ How it works:
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
 
-- **Codex lane, Round 509, CLAIMED 2026-09-07. CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
-  STILL PENDING. next: Round 510 (Codex lane).** This batch
+- **Codex lane, Round 510, CLAIMED 2026-09-07.** Finish the Google URL-level audit, reconcile
+  stale open bugs against current code, and repair the confirmed Footle kit-number harness
+  network stall. The fetch lacks a deadline and its failed-page continue advances the offset,
+  so a failed page can also be silently omitted. Scope: `scripts/simFootleKitNumbers.mjs`, its
+  regression harness, and audit/state documentation. No Club Manager files or live data writes.
+  Further gameplay work will be claimed once a remaining defect is reproduced.
+
+- **Codex lane, Round 509, CLAIMED 2026-09-07. CODE COMPLETE, VERIFIED AND MERGED THROUGH
+  PR 60 AT `1ecc00eb`. DEPLOY STILL PENDING.** This batch
   stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score
   again on every visit; repels a losing NBA Conquest attacker instead of deleting it; fixes the
   College Grid browser player's false stall; connects the Soccer Career wall and strengthens
@@ -775,9 +782,11 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ### PENDING PUBLISH
 
-- **Rounds 503 and 504 are merged on origin/main at `7af40013` but are not in the live
-  deployment checked above.** Round 509 is merged locally with both and remains on its Codex
-  branch until the combined gates, PR and merge finish.
+- **Rounds 503, 504 and 509 are merged on origin/main at `1ecc00eb` but are not in the live
+  deployment checked above.** All code gates are complete. The authenticated preview shows
+  the final fixes, but Lovable editor controls repeatedly time out. Anthony was asked to press
+  Publish if his editor responds. The 203-path Active Players restore stays held until the
+  matching frontend is verified live. No IndexNow submissions, per the owner's preference.
 
 ## Inbox (unclaimed)
 
