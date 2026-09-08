@@ -3,6 +3,8 @@
 Worktree `.worktrees/round-534-nfl-upgrade-lifetime`, branch
 `codex/round-534-nfl-upgrade-lifetime`, base 533 `2e34734c` (draft PR84).
 Claim `03d4a795`. Root belongs to Claude and remains untouched.
+Implementation `42eabb52`, draft PR85:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/85.
 
 ## Reproduced defect
 
@@ -135,6 +137,9 @@ each preservation screenshot. Its report also passes, with the same zero
 fault counts: `%TEMP%/dukb-nfl-upgrades-1SslP7/report.json`. Main inspected
 its owner-neutral screenshot and both normal consumed-player roster images;
 the banner wraps clearly and the upgraded card retains position and key stat.
+The final independent runtime review read all four successful artifact
+directories and confirmed every lifetime target, owner roster snapshot,
+control rejection and zero-fault count. No actionable findings remain.
 
 The initial driver planned random-sort directions in Node. Installed Chrome
 ordered that random comparator differently, so its owner-neutral prediction
@@ -150,3 +155,6 @@ Preview 4211, PID 36716, serves `index-C2ak2tWO.js` and
 `Conquest-MNngEgrY.js`. Preserve every previous worktree and preview.
 No snapshots, ledger, dependency changes, backend/account writes, root
 edits, main merge or publication.
+The final root read is tracked-clean at `b0c339b1`; Claude advanced its
+workboard from the earlier `72fb8f92` during this round. This task made no
+root changes.

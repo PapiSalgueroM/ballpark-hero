@@ -4,7 +4,9 @@
 
 Scoped verification complete in `.worktrees/round-534-nfl-upgrade-lifetime`, branch
 `codex/round-534-nfl-upgrade-lifetime`, base533 `2e34734c` (draft PR84),
-claim `03d4a795`. Per-team queues now survive neutral and unrelated turns.
+claim `03d4a795`, implementation `42eabb52`.
+Draft PR85: https://github.com/PapiSalgueroM/ballpark-hero/pull/85.
+Per-team queues now survive neutral and unrelated turns.
 The actual participants consume their upgrades when their battle is
 created, with a separate snapshot for both result roster tables. A second
 same-owner Upgrade stays saveable. Waiver, elimination and reset cleanup

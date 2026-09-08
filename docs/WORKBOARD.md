@@ -7,6 +7,7 @@ useConquest.ts, conquestBattle.ts and ConquestBoard.tsx, plus accurate
 help and bounded outcome checks. Worktree
 `.worktrees/round-534-nfl-upgrade-lifetime`, branch
 `codex/round-534-nfl-upgrade-lifetime`, base533 `2e34734c` (draft PR84).
+Implementation `42eabb52`, draft PR85: https://github.com/PapiSalgueroM/ballpark-hero/pull/85.
 Each owner's queued boost now survives neutral and unrelated turns until
 its next actual battle. Independent queues and both result roster snapshots
 preserve the right owner and player. Duplicate upgrades stay saveable.
