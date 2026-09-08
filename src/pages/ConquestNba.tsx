@@ -22,10 +22,14 @@ const ConquestNba = () => {
 
   useEffect(() => {
     if (mode !== 'arcade') return;
-    const seen = localStorage.getItem('conquest-nba-how-to-play-seen');
-    if (!seen) {
+    try {
+      const seen = localStorage.getItem('conquest-nba-how-to-play-seen');
+      if (!seen) {
+        setShowHelp(true);
+        localStorage.setItem('conquest-nba-how-to-play-seen', 'true');
+      }
+    } catch {
       setShowHelp(true);
-      localStorage.setItem('conquest-nba-how-to-play-seen', 'true');
     }
   }, [mode]);
 

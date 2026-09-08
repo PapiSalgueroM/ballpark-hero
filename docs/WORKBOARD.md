@@ -1,14 +1,19 @@
 # Work board
 
-## Round 529 claim, September 8, 2026
+## Round 529 complete, September 8, 2026
 
 Codex owns the NBA/NFL Arcade onboarding storage fallback in Conquest.tsx and
 ConquestNba.tsx, plus focused tests and browser verification. Worktree
 `.worktrees/round-529-conquest-help`, branch `codex/round-529-conquest-help`,
 base528 `5dd96456` (draft PR79). Reproduce throwing preference reads/writes,
 keep the help usable without storage, preserve the existing seen flags and
-mode flow. No game rules, daily saves, backend or account writes. Root belongs
-to Claude; preserve all existing worktrees/previews. Draft PR only. Next free530.
+mode flow. Both crashes reproduced before editing. Twelve real-page cases,
+eighteen source controls, both types/build, fifteen site fences and sixteen
+built browser states plus four DOM controls pass. Main visual pass and final
+independent review clear. Evidence: docs/conquest-help-2026-09-08.md.
+Preview4206 stays available. No game rules, daily saves, backend or account
+writes. Root belongs to Claude; preserve all existing worktrees/previews.
+Draft PR only. Next free530, NBA Free Agency control and duplicate repair.
 
 ## Round 528 explicit harness selection, September 8, 2026
 
