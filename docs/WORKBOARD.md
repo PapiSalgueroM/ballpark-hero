@@ -6,6 +6,7 @@ Codex owns the NBA/NFL Arcade onboarding storage fallback in Conquest.tsx and
 ConquestNba.tsx, plus focused tests and browser verification. Worktree
 `.worktrees/round-529-conquest-help`, branch `codex/round-529-conquest-help`,
 base528 `5dd96456` (draft PR79). Reproduce throwing preference reads/writes,
+Implementation `60452e81`, draft PR80: https://github.com/PapiSalgueroM/ballpark-hero/pull/80.
 keep the help usable without storage, preserve the existing seen flags and
 mode flow. Both crashes reproduced before editing. Twelve real-page cases,
 eighteen source controls, both types/build, fifteen site fences and sixteen

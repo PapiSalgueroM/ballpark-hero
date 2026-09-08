@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-529-conquest-help`, branch
 `codex/round-529-conquest-help`, base528 `5dd96456` (draft PR79).
+Implementation `60452e81`, draft PR80: https://github.com/PapiSalgueroM/ballpark-hero/pull/80.
 NBA and NFL Arcade instructions now survive blocked storage getter/read/write
 without changing seen flags or the mode flow. Both original route crashes were
 reproduced in real-page tests and the prior built app. Twelve focused cases,
