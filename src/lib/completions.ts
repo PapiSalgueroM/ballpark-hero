@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
+import { recordGameCompletion as recordStreakCompletion, recordGameStreakDay, getEtDateString, getStreakState } from '@/lib/streaks';
 import { nameModerationError } from '@/lib/nameModeration';
 
 /**
@@ -178,14 +178,14 @@ function getCachedDisplayName(): string | null {
  * writes the anonymous row and nothing else, and that silently stopped a
  * played match or season from keeping the header flame alive: since Round
  * 159 a season had counted as playing today. This records that day locally
- * (idempotent per day, no signed in save, no points) and the two sims call it
+ * (idempotent per day, no signed in save, no points or completed plays) and the two sims call it
  * beside their ping. The boards keep Round 301's shape and do not.
  */
 export function recordStreakDay(gamePath: string): void {
   try {
     const game = gamePath.replace(/^\//, '');
     if (!game) return;
-    recordStreakCompletion(game, new Date(), 0);
+    recordGameStreakDay(game);
   } catch {
     // Never let a tracking failure break gameplay.
   }

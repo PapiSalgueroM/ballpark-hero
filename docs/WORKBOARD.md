@@ -1,11 +1,13 @@
 # Work board
 
-**Round 517, Codex, CLAIMED September 8:** profile activity count safety in
+**Round 517, Codex, scoped verification complete September 8:** profile activity count safety in
 `.worktrees/round-517-profile-activity`, branch `codex/round-517-profile-activity`,
 based on the verified Round 516 candidate `a7a07d30`. A career streak-day ping
-currently increments completed-game totals. Separate activity days from finished
-games in `src/lib/streaks.ts` and `src/lib/completions.ts`, with outcome tests and
-negative controls. No game engine, historical totals, account restoration, date
+previously incremented completed-game totals. Activity days are now separate from
+finished games in `src/lib/streaks.ts` and `src/lib/completions.ts`. Six real-code
+cases and all six exact-failure controls pass, as do exact app types, build, all
+fifteen generated-site fences and four neighboring completion/session harnesses.
+Independent read-only review found no actionable issue. No game engine, historical totals, account restoration, date
 boundary, database or provider changes. Root remains Claude's; Round 516 remains
 the unchanged review preview. Next free round: 518.
 

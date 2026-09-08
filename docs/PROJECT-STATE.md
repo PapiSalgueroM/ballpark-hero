@@ -1,5 +1,34 @@
 # Project state
 
+## Overnight continuation, September 8, 2026
+
+Anthony requested eight hours of continued local work. The existing heartbeat
+is active every 15 minutes until 17:46:50 UTC (13:46:50 Eastern), with quiet
+routine progress and a final handoff. No merge, publish or production changes.
+Round 517 is isolated in `.worktrees/round-517-profile-activity`, based on the
+unchanged Round 516 review candidate `a7a07d30`. Its claim is `2ae7e80a`.
+
+The profile audit reproduced activity pings increasing completed-game counts:
+one 50-point finish plus three career pings became four plays with average 13.
+The bounded fix adds a streak-only recorder; actual completion accounting and
+the existing save schema remain unchanged. Six real-code cases pass, and six
+source-mutating controls prove exact assertion failures. Independent read-only
+review found no actionable issue. Exact app types, the 38.93-second build and all
+fifteen final generated-site fences pass. ScoringCoverage, CompletionOnce (eight
+tests), SessionMarks and ActivityNotCompletion (two hook tests) pass. The build's
+entry is `index-NKKSIYfc.js`; committed snapshots and the sitemap ledger are
+unchanged. This is not a whole-suite or publication all-clear.
+
+Round 515's earlier full node run ended with eight of 264 harnesses not green.
+Five could not fetch backend data, two reported validator source mismatches,
+and the LoginReturn harness was separately shown to lack its expected default
+Playwright browser. No actual sign-in failure was demonstrated. Another lane's
+full suite remains active. Do not duplicate it or use old results as verification
+of the newer candidate. See docs/overnight-audit-2026-09-08.md for evidence,
+remaining profile restoration/date issues and the prepared ticker fixes.
+Claude's root checkout and the port 4186 review preview remain untouched.
+Next free round: 518.
+
 ## Combined local review candidate, September 8, 2026
 
 Round 516 has completed scoped verification in `.worktrees/round-516-review-candidate` on
