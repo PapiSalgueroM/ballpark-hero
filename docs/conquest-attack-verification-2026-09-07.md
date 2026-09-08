@@ -82,6 +82,15 @@ The single final re-review closed both findings and found no direct new breakage
 
 The final 152-route guest sweep is running. A fresh isolated 266-node-harness run follows it. Both must have actual results before a broad all-clear. Claude's Round 506 has not been integrated or jointly tested here, and his root Round 507 checkout remains untouched. No merge or publication.
 
+## Active broad verification jobs, September 8
+
+Draft PR 63 backs up the reviewed candidate and incorporates the older PR 61 changes:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/63. It remains draft, unmerged and unpublished.
+
+The guest sweep is tool session `11480`, node process `18220` created at 01:16:40 Eastern. It writes `.superpowers/sdd/2026-09-07-conquest-attack/site-sweep-final.log`. Coordinator session `8842` is already running `finish-broad-gates.ps1` in that same scratch directory. It waits for the exact sweep process, refuses a reused process ID, verifies production code still matches `edc31320`, then runs the complete node suite in a unique temporary directory. It writes `full-node-final.log`, ending with `FULL_NODE_EXIT`. A process finishing is not proof its checks passed. Inspect the recorded outcomes.
+
+Do not start another sweep or full node suite. Do not rebuild while a running suite reads `dist`. Keep the scratch directory while either job needs it. The existing Website review checkpoint follow-up is active and points at these jobs, this worktree and the Claude-status requirement; unchanged state stays quiet.
+
 ## Implementation rulings retained for owner review
 
 1. Start with verified England, not an incomplete World label. Broader coordinates and roster coverage remain open. Cost if this priority is wrong: another league may need to be built before extending England; the engine remains reusable.

@@ -80,7 +80,7 @@ expect(rayTarget(state, 'A', 270)).toBeNull();
   - Include offline map-generator `--check` in the Attack harness. Carry the existing three-line per-assertion output fix from root commit 0e3f9183 into scripts/simConquestTabs.mjs; its missing output caused the earlier full runner's EMPTY result despite 23 passing tests. Do not lower the runner's output threshold or change tab-safety assertions.
 - [x] Run node_modules/.bin/tsc --noEmit -p tsconfig.app.json, npm run build, focused engine/geometry/board checks, existing Conquest sims, then all 15 built-site fences after scoped prerender/sitemap/rebuild. Do not run those fences during a build.
 - [x] Independently review task diffs for spec compliance and quality, fix material findings and recheck only their affected tests. Then run a whole-change review and browser play of the actual built mode.
-- [ ] Save verified code on the codex branch and hand off through a draft PR if the full combined suite is still pending. No merge to main or publish merely because a preview works. Update project state to distinguish playable English slice from the still-open La Liga/Europe/World and NFL/NBA powers work.
+- [x] Save verified code on the codex branch and hand off through a draft PR if the full combined suite is still pending. No merge to main or publish merely because a preview works. Update project state to distinguish playable English slice from the still-open La Liga/Europe/World and NFL/NBA powers work. Combined draft PR 63 created; older PR 61 points to it.
 
 ## Execution record
 

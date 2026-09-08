@@ -129,6 +129,8 @@ How it works:
   or invented history.
 
 - **Codex lane, Round 512, REVIEW CANDIDATE 2026-09-08, GEOGRAPHIC SOCCER ATTACK V1.**
+  Combined draft PR 63 holds Rounds 510 to 512; do not merge the older PR 61 separately:
+  https://github.com/PapiSalgueroM/ballpark-hero/pull/63.
   The first playable English slice is implemented on `codex/round-512-conquest-attack` in
   `.worktrees/round-511-midnight-saves`: sourced geographic homes, generated game regions,
   directional elimination, captured players, simulated upgrades and a separate durable
@@ -142,7 +144,8 @@ How it works:
   timeout budgets. Final Chromium repeats the 160-action finish, exact reload,
   save, tab and pointer checks; new recovery/help checks pass at all four widths.
   The first node run and guest sweep were canceled before completion. The final
-  152-route sweep is running, followed by a fresh 266-node-harness run. Use isolated
+  152-route sweep is running, with the fresh 266-node-harness run already queued
+  behind that process. Do not start duplicate jobs. Use isolated
   test temporary directories and stagger heavy groups. This local preview is a
   review candidate, not a whole-site all-clear.
   La Liga, Europe, World and NFL/NBA powers remain open and are not enabled by the research

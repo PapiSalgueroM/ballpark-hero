@@ -33,7 +33,9 @@ season predictor and hex board do not satisfy that request. Preserve existing da
 while designing the new versioned Attack mode. No hosting or publication change.
 
 Round 512 is a local review candidate on `codex/round-512-conquest-attack` in the
-isolated `.worktrees/round-511-midnight-saves` checkout. The first playable Attack
+isolated `.worktrees/round-511-midnight-saves` checkout, backed up in draft PR 63:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/63. Use that combined draft for
+Rounds 510 to 512 rather than merging the older PR 61 separately. The first playable Attack
 slice uses 20 sourced English ground locations, 48 generated game regions and the
 existing documented English roster snapshot. Directional attacks eliminate clubs,
 carry captured players and apply simulated rating upgrades. The separate
@@ -55,8 +57,9 @@ The single scoped re-review closed both findings with no new breakage. The first
 full Vitest attempt failed six tests during parallel workloads; the final isolated,
 sequential run now passes all 342 tests in 28 files in 128.91 seconds, with unchanged
 assertions and timeout budgets. The first node run and guest sweep were canceled
-before completion, not green. The final 152-route guest sweep is running, and the
-fresh 266-node-harness run follows it. Isolate test temporary directories from
+before completion, not green. The final 152-route guest sweep is running, and an
+already-started coordinator queues the fresh 266-node-harness run after it. Do not
+launch duplicate suites. Active job and log details are in the QA report. Isolate test temporary directories from
 Claude's concurrent checkout and stagger heavy groups. The integrated Chromium
 pass is clean: 55 assertions at 320, 390,
 430 and 1440 pixels, zero opening-label overlaps, exact Daily and Attack save
