@@ -1,5 +1,34 @@
 # Project state
 
+## Round 519 query follow-up, September 8, 2026
+
+Scoped verification is complete in `.worktrees/round-519-score-query`, branch
+`codex/round-519-score-query`, based on Round 518 `2e6519ac` (draft PR69).
+The score query no longer stops at the earliest sixty fixtures before sorting.
+It reads stable bounded pages, skips malformed individual rows, preserves valid
+scores and deduplicates IDs. HTTP/page failures and an exhausted request budget
+return no partial slate. The existing time window and refresh hook are unchanged.
+
+All 24 real-module query cases and 25 exact-failure controls pass. Exact app types,
+scoped lint, build (39.97 seconds, 2,839 modules), both ticker sims and all fifteen
+generated-site fences pass. The actual built-app ticker walk passes on an
+unchanged retry after an earlier navigation timeout, which remains documented.
+The handoff scenarios also pass at 320 and 1440px. Independent read-only review
+has no actionable findings. Preview 4190 serves `index-De_hcUyy.js`. No package,
+lockfile, snapshots or sitemap ledger changed. See docs/score-query-2026-09-08.md.
+
+IMPORTANT: no new full default suite was launched. Safety inspection found
+real production write probes in simPublicWrites, plus validator/RPC calls with
+possible cache writes. This violates the overnight no-production-writes
+boundary. Safe broad execution is the next bounded task. Missing backend gates
+must stay unverified, not silently marked passing. Read-only dependency audit
+preparation is in docs/dependency-audit-2026-09-08.md; no upgrades were made.
+
+Root remains Claude's, latest observed tracked-clean at `73d61f54`. Review
+previews 4186 and 4188 are preserved. The overnight cutoff remains 17:46:50 UTC.
+No production data, provider, account, billing, merge or publish action.
+Next free round: 520.
+
 ## Round 518 ticker follow-up, September 8, 2026
 
 Scoped verification is complete in `.worktrees/round-518-ticker-handoffs`,

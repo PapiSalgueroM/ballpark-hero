@@ -103,6 +103,19 @@ export function isShowable(r: LiveScoreRow): boolean {
   return true;
 }
 
+/* Validate the fields the ticker actually reads before filtering or sorting.
+   Missing scores stay missing, and one malformed row cannot discard the wire. */
+function isTickerRow(value: unknown): value is LiveScoreRow {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const row = value as Partial<LiveScoreRow>;
+  if (![row.id, row.sport, row.home, row.away, row.start_at].every(v => typeof v === 'string' && v.trim().length > 0)) return false;
+  // Sport maps must not resolve inherited object properties as tags or links.
+  if (Object.prototype.hasOwnProperty.call(Object.prototype, row.sport!)) return false;
+  if (!Number.isFinite(Date.parse(row.start_at!)) || typeof row.live !== 'boolean' || typeof row.finished !== 'boolean') return false;
+  if (row.status_long != null && typeof row.status_long !== 'string') return false;
+  return [row.home_score, row.away_score].every(score => score === null || (typeof score === 'number' && Number.isFinite(score)));
+}
+
 /** Twelve hour clock in the visitor's own zone, e.g. "7:05 PM". Only ever
  *  rendered live in a browser; the prerenderer never sees a score row. */
 export function startLabel(iso: string, now: Date = new Date()): string {
@@ -125,18 +138,30 @@ export async function fetchLiveScores(now: Date = new Date()): Promise<LiveScore
     const { from, to } = windowFor(now);
     const params = new URLSearchParams({
       select: '*',
-      order: 'start_at.asc',
-      limit: '60',
+      order: 'start_at.asc,id.asc',
+      limit: '200',
     });
     params.append('start_at', `gte.${from}`);
     params.append('start_at', `lte.${to}`);
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/live_scores?${params.toString()}`, {
-      headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
-    });
-    if (!res.ok) return [];
-    const data = (await res.json()) as unknown;
-    if (!Array.isArray(data)) return [];
-    return sortForTicker((data as LiveScoreRow[]).filter(isShowable));
+    const rows = new Map<string, LiveScoreRow>();
+    let offset = 0;
+    // Include empty-page confirmation in the request budget. A short page can
+    // be a server cap, not the end of the slate. Never return a partial query.
+    for (let page = 0; page < 10; page++) {
+      params.set('offset', String(offset));
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/live_scores?${params.toString()}`, {
+        headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
+      });
+      if (!res.ok) return [];
+      const data = (await res.json()) as unknown;
+      if (!Array.isArray(data)) return [];
+      if (data.length === 0) return sortForTicker([...rows.values()]);
+      for (const row of data) {
+        if (isTickerRow(row) && isShowable(row)) rows.set(row.id, row);
+      }
+      offset += data.length;
+    }
+    return [];
   } catch {
     return [];
   }

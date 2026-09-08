@@ -51,6 +51,13 @@ const ROWS = [
 
 const browser = await pw.chromium.launch();
 
+function scorePage(route, rows) {
+  const params = new URL(route.request().url()).searchParams;
+  const offset = Number(params.get('offset') || 0);
+  const limit = Number(params.get('limit') || rows.length);
+  return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rows.slice(offset, offset + limit)) });
+}
+
 async function open(withScores, reducedMotion = false) {
   const ctx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
@@ -60,7 +67,7 @@ async function open(withScores, reducedMotion = false) {
   const page = await ctx.newPage();
   await page.route('**://*.supabase.co/**', r => r.abort());
   if (withScores) {
-    await page.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(ROWS) }));
+    await page.route('**/rest/v1/live_scores*', r => scorePage(r, ROWS));
   }
   await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -209,7 +216,7 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
   const c4 = await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/New_York' });
   const p4 = await c4.newPage();
   await p4.route('**://*.supabase.co/**', r => r.abort());
-  await p4.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fat) }));
+  await p4.route('**/rest/v1/live_scores*', r => scorePage(r, fat));
   await p4.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
   await p4.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await p4.waitForFunction(sel => !!document.querySelector(sel), BAR, { timeout: 20000 }).catch(() => {});
@@ -304,7 +311,7 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     });
     const p5 = await c5.newPage();
     await p5.route('**://*.supabase.co/**', r => r.abort());
-    await p5.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fat) }));
+    await p5.route('**/rest/v1/live_scores*', r => scorePage(r, fat));
     await p5.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
     await p5.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await p5.waitForFunction(sel => {

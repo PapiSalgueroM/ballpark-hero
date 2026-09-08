@@ -1,5 +1,21 @@
 # Work board
 
+**Round 519, Codex, scoped verification complete September 8:** complete bounded score queries in
+`.worktrees/round-519-score-query`, branch `codex/round-519-score-query`, based on
+Round 518 `2e6519ac` (draft PR69). Own fetchLiveScores, its query fence and the
+existing built-app ticker's offset-aware REST fixtures. Read pages in stable
+order within the existing time window before filtering/sorting. Stop safely on
+failure or request-budget exhaustion. Reject malformed rows without inventing
+scores or discarding unrelated valid rows. Keep the five-minute hook and all
+backend/provider/account/game logic unchanged. Root belongs to Claude; previews
+4186 and 4188 remain untouched. All 24 query cases and 25 controls pass, exact
+types/build, both ticker sims and all fifteen generated-site fences pass.
+The built-app ticker walk passed on unchanged retry; its initial navigation
+timeout stays documented. Independent review has no actionable findings.
+Preview 4190 serves `index-De_hcUyy.js`. Default full-suite launch was withheld:
+it contains real production write probes and validator cache writes. Safe broad
+execution is next; do not run those probes overnight. Next free round: 520.
+
 **Round 518, Codex, scoped verification complete September 8:** ticker handoff visibility in
 `.worktrees/round-518-ticker-handoffs`, branch `codex/round-518-ticker-handoffs`,
 based on Round 517 `5c5f84e7`. Each pass is bounded to the active sport, without
