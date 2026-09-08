@@ -1,5 +1,15 @@
 # Work board
 
+**Round 524, Codex, CLAIMED September 8:** saved-bracket profile summary in
+`.worktrees/round-524-profile-bracket`, branch `codex/round-524-profile-bracket`,
+based on Round 523 `8c3d1153` (draft PR74). Reproduce missing current champion
+and malformed JSON/rendered-value crashes. Current top-level string champion
+takes precedence; preserve the two tested legacy shapes and Bracket saved/link
+fallback. Main owns Profile.tsx/docs; test author Profile.bracket.test.tsx and
+simProfileBracket.mjs; browser author playProfileBracket.mjs. Local synthetic
+fixtures only, no save protocol/data/backend changes, root edits, full suite,
+merge or publish. Preserve previews and Claude's press measurement. Next free525.
+
 **Round 523, Codex, scoped verification complete September 8:** profile header avatar and initial
 identity in `.worktrees/round-523-profile-avatar`, branch
 `codex/round-523-profile-avatar`, based on Round 522 `2b60a88d` (draft PR73).

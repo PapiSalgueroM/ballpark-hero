@@ -1,5 +1,29 @@
 # Project state
 
+## Round 524 saved bracket profile summary, September 8, 2026
+
+CLAIMED in `.worktrees/round-524-profile-bracket`, branch
+`codex/round-524-profile-bracket`, based on Round 523 `8c3d1153` (draft PR74).
+Profile reads only legacy nested champion fields, while the actual bracket
+writer saves top-level champion. Its unguarded JSON.parse can also crash the
+page on malformed legacy data. Reproduce both with synthetic fixtures before
+editing. Accept nonempty string champions only, prefer the current field,
+preserve legacy awards.champion before knockoutWinners.final, otherwise keep
+the existing Bracket saved fallback and bracket link.
+
+Main owns Profile.tsx and coordination docs. Test author owns
+Profile.bracket.test.tsx/simProfileBracket.mjs. Browser author owns
+playProfileBracket.mjs. Read-only reviewer checks the writer/reader contract,
+real-component outcomes, mutation controls and transport boundaries. No
+saved-bracket writer/loader, storage, sports data, backend/provider or real
+account changes. Use current writer-shaped and malformed synthetic fixtures.
+Both types, build, fifteen generated-site fences, related profile tests and
+built phone/desktop checks before draft push. No default full suite.
+
+Root belongs to Claude; leave his simPress experiment and processes alone.
+Preserve all previous worktrees/previews, including Round 523 on 4198. Cutoff
+17:46:50 UTC. Next free round: 525, verify before claiming.
+
 ## Round 523 profile avatar identity, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-523-profile-avatar`, branch
