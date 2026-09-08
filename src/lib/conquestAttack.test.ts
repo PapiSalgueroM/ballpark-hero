@@ -31,6 +31,23 @@ function initial(seed = 7): AttackState {
   };
 }
 
+function disconnectedSaveFixture(): { valid: AttackState; damaged: AttackState } {
+  const source = setup();
+  source.bounds.width = 25;
+  source.teams = source.teams.slice(0, 2);
+  source.teams[1].homeRegion = 'east';
+  source.regions = [source.regions[0], {
+    ...source.regions[2],
+    rings: [[[10, 0], [20, 0], [20, 10], [10, 10]]],
+    anchor: [15, 5],
+  }];
+  const valid = createAttack(source);
+  const damaged = clone(valid);
+  damaged.setup.regions[1].rings = damaged.setup.regions[1].rings.map(ring => ring.map(([x, y]) => [x + 5, y]));
+  damaged.setup.regions[1].anchor[0] += 5;
+  return { valid, damaged };
+}
+
 function cornerSetup(): AttackSetup {
   const source = setup();
   source.bounds = { width: 40, height: 30 };
@@ -393,6 +410,14 @@ describe('strict saved snapshots', () => {
     source.teams[0].homeRegion = 'missing';
     expect(() => createAttack(source)).toThrow();
   });
+  it('rejects a changed saved map that strands every living club', () => {
+    const { valid, damaged } = disconnectedSaveFixture();
+    expect(parseAttackSave(valid)).toEqual(valid);
+    expect(damaged).not.toEqual(valid);
+    expect(attackOrigin(damaged, 'A')).toBeNull();
+    expect(attackOrigin(damaged, 'B')).toBeNull();
+    expect(parseAttackSave(damaged)).toBeNull();
+  });
   it('rejects unknown result regions and invented capture ratings', () => {
     const recap = advanceAttack(target());
     expect(parseAttackSave(recap)).not.toBeNull();
@@ -521,6 +546,11 @@ describe('production mutation controls', () => {
     ['strict parser', 'export function parseAttackSave(value: unknown): AttackState | null {', 'export function parseAttackSave(value: unknown): AttackState | null { return value as AttackState;', engine => {
       const state = initial(); state.teams[0].players[0].id = 'invented';
       expect(engine.parseAttackSave(state)).toBeNull();
+    }],
+    ['playable living saves', 'if (state.champion === null && alive.some(team => !attackOrigin(state, team.id))) return null;', 'if (false) return null;', engine => {
+      const { valid, damaged } = disconnectedSaveFixture();
+      expect(damaged).not.toEqual(valid);
+      expect(engine.parseAttackSave(damaged)).toBeNull();
     }],
   ];
   it.each(controls)('%s control changes production code and fails its behavioral check', (_, from, to, check) => {

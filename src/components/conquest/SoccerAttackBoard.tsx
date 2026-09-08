@@ -69,9 +69,9 @@ function initialSession(): { state: AttackState | null; raw: string | null; issu
   return { state: null, raw: loaded.raw, issue: loaded.kind === 'empty' ? null : loaded };
 }
 
-function Rules({ compact = false }: { compact?: boolean }) {
+function Rules({ detailed = false }: { detailed?: boolean }) {
   return (
-    <div className={compact ? 'space-y-3' : 'space-y-2'}>
+    <div className={detailed ? 'space-y-3' : 'space-y-2'}>
       <div>
         <h3 className="font-bold text-foreground">The loop</h3>
         <ol className="mt-1 list-inside list-decimal space-y-1 text-muted-foreground">
@@ -80,6 +80,31 @@ function Rules({ compact = false }: { compact?: boolean }) {
           <li>Claim neutral ground or play the club hit by the ray.</li>
         </ol>
       </div>
+      {detailed && (
+        <>
+          <div>
+            <h3 className="font-bold text-foreground">Winning and capturing</h3>
+            <p className="mt-1 text-muted-foreground">
+              After a match, the loser is eliminated and the winner takes the whole empire, including every region it owned.
+            </p>
+            <p className="mt-1 text-muted-foreground">
+              The winner captures the loser's best original player, plus every player that club captured earlier. That captured-player chain moves again if the new club is later eliminated.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-foreground">Upgrades and the finish</h3>
+            <p className="mt-1 text-muted-foreground">
+              Claiming neutral land gives a best player two rating points. When the final club claims all of England, its upgrade is four points instead of two. Simulated ratings stop at 99.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-foreground">Launch points</h3>
+            <p className="mt-1 text-muted-foreground">
+              The direction wheel skips angles that leave connected land. If a club's home has no legal route, the ray starts from its nearest owned frontier with a legal route. This is this app's interpretation for keeping the map playable, not a claim about the source video.
+            </p>
+          </div>
+        </>
+      )}
       <div>
         <h3 className="font-bold text-foreground">What this map means</h3>
         <p className="mt-1 text-muted-foreground">
@@ -248,7 +273,7 @@ export default function SoccerAttackBoard() {
     return (
       <div className="relative space-y-4">
         <HowToPlayPopover title="How to play Attack" triggerSide="right" triggerLabel="Attack rules" className="top-0 right-0">
-          <Rules compact />
+          <Rules detailed />
         </HowToPlayPopover>
         {recoveryText && (
           <div role="alert" className="rounded-xl border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-foreground">
@@ -304,7 +329,7 @@ export default function SoccerAttackBoard() {
   return (
     <div className="relative space-y-3">
       <HowToPlayPopover title="How to play Attack" triggerSide="right" triggerLabel="Attack rules" className="top-0 right-0">
-        <Rules compact />
+        <Rules detailed />
       </HowToPlayPopover>
       <div className="flex flex-wrap items-center gap-2 pr-10 text-xs">
         <span className="rounded-full border border-border bg-card px-3 py-1.5 font-bold">{living} clubs left</span>

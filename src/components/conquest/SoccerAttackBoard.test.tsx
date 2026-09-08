@@ -58,6 +58,20 @@ function compactSetup(): AttackSetup {
   };
 }
 
+function disconnectedSaveFixture(): { valid: AttackState; damaged: AttackState } {
+  const source = compactSetup();
+  source.regions = [source.regions[0], {
+    ...source.regions[2],
+    rings: [[[10, 0], [20, 0], [20, 10], [10, 10]]],
+    anchor: [15, 5],
+  }];
+  const valid = createAttack(source);
+  const damaged = structuredClone(valid);
+  damaged.setup.regions[1].rings = damaged.setup.regions[1].rings.map(ring => ring.map(([x, y]) => [x + 5, y]));
+  damaged.setup.regions[1].anchor[0] += 5;
+  return { valid, damaged };
+}
+
 let actualFixtures: { frontier: AttackState; defenderWin: AttackState } | null = null;
 function attackFixtures() {
   if (actualFixtures) return actualFixtures;
@@ -197,6 +211,32 @@ describe('Soccer Attack durable board', () => {
     expect(screen.getByRole('button', { name: 'Replace damaged save' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Play without saving' })).toBeInTheDocument();
     expect(localStorage.getItem(ATTACK_SAVE_KEY)).toBe('{broken');
+  });
+
+  it('keeps disconnected save bytes until the player chooses recovery', () => {
+    const { valid, damaged } = disconnectedSaveFixture();
+    expect(damaged).not.toEqual(valid);
+    const raw = JSON.stringify(damaged);
+    localStorage.setItem(ATTACK_SAVE_KEY, raw);
+
+    render(<SoccerAttackBoard />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent(/damaged or unsupported/i);
+    expect(screen.getByRole('button', { name: 'Replace damaged save' })).toBeInTheDocument();
+    expect(localStorage.getItem(ATTACK_SAVE_KEY)).toBe(raw);
+  });
+
+  it('reopens every implemented Attack rule from the question mark help', async () => {
+    render(<SoccerAttackBoard />);
+    expect(screen.queryByText(/whole empire/i)).not.toBeInTheDocument();
+
+    await tap(screen.getByRole('button', { name: 'Attack rules' }));
+
+    const dialog = within(screen.getByRole('dialog', { name: 'How to play Attack' }));
+    expect(dialog.getByText(/loser is eliminated and the winner takes the whole empire/i)).toBeInTheDocument();
+    expect(dialog.getByText(/best original player.*every player that club captured earlier/i)).toBeInTheDocument();
+    expect(dialog.getByText(/final club.*four points instead of two.*99/i)).toBeInTheDocument();
+    expect(dialog.getByText(/nearest owned frontier.*this app's interpretation.*not a claim about the source video/i)).toBeInTheDocument();
   });
 
   it('blocks active moves when another tab replaces the save with damaged bytes', async () => {

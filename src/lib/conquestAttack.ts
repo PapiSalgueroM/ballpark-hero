@@ -356,6 +356,7 @@ export function parseAttackSave(value: unknown): AttackState | null {
     if (Object.values(state.owners).some(owner => owner !== null && !teamIds.has(owner))) return null;
     const alive = living(state);
     if (!alive.length || alive.some(team => !team.players.some(player => player.originTeam === team.id))) return null;
+    if (state.champion === null && alive.some(team => !attackOrigin(state, team.id))) return null;
     const maxTurns = state.setup.regions.filter(region => region.initialOwner === null).length + state.teams.length - 1;
     if (state.revision > maxTurns * 4) return null;
     const phaseRevision = { team: 0, direction: 1, target: 2, recap: 3, finished: 0 };
