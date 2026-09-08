@@ -236,6 +236,32 @@ Four things, in the order they can hurt you.
   takeover date must come from verified sources rather than reconstructed history, so it is a
   data acquisition job before it is an engine one and it needs its own round.
 
+  **513 MANAGER XP AND THE SKILL TREES, CLAIMED 2026-09-08.** The next item off his own Club
+  Manager list ("start options, leagues and eras depth, manager XP, media") and spec section 28.
+  Checked against `docs/SPEC-RECONCILIATION.md` first, as the rules require, and line 330 says
+  it plainly: "No manager XP or skill tree exists in Club Manager." So this is build, not
+  reconcile.
+  THE SPEC'S OWN SHAPE. XP earned from wins, trophies, board objectives, player development,
+  youth promotion, financial performance, successful transfers, derbies, European success,
+  rebuilding clubs and overperformance. Seven trees: Tactics, Recruitment, Negotiation, Youth,
+  Man Management, Finance, Media. And the line that decides whether this is worth building at
+  all: **"Every skill point must have visible gameplay effects."**
+  WHAT THAT MEANS HERE, and it is the whole design risk. Every tree already has a system under
+  it, so a skill point must move a number that system already reads rather than adding a second
+  parallel one: Tactics into the duty and mentality maths, Recruitment into the valuation band
+  Round 506 built, Negotiation into patience and the ask's convergence, Youth into the academy's
+  intake and report accuracy, Man Management into the promise ladder's morale swing, Finance into
+  the sponsor and pricing desks, Media into the press mood. Round 95's rule applies to every one
+  of them: a point spent must be a real lift and a manager who has spent nothing must be exactly
+  where the game is today, so every effect is neutral at zero points.
+  THE BALANCE TRAP TO RESPECT. A skill tree is a multiplier on a sim that is already tuned, and
+  the fastest way to ruin twelve rounds of balance is to let points stack into a manager who
+  cannot lose. The harness has to measure a fully invested manager against an untouched one over
+  hundreds of seasons and hold the gap inside a band, the way simClubManagerBudget holds the
+  saver against the spender, rather than only proving the points do something.
+  SAVE RULE: optional field plus an ensure registered in BOTH loadCareer and playNextEntry, and
+  SAVE_VERSION must not move.
+
   **506 AND 507 FOLLOW-UPS: THE SIX FINDINGS THE VOTE DROPPED THAT ARE REAL, CLAIMED 2026-09-08.**
   The adversarial review raised 27 findings and 20 survived a 2 of 3 refutation vote. The seven
   it dropped were re-read by hand afterwards rather than treated as disproved, which is the
