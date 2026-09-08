@@ -1812,6 +1812,14 @@ export interface CareerState {
   trophies: Trophy[];
   history: SeasonRecord[];
   careerStats: CareerStats;
+  /**
+   * Round 513: manager XP and the points spent across the seven skill trees.
+   * Absent on every save written before Round 513, and `xpOf` treats absent as
+   * a fresh block with nothing spent, which is exactly today's game. Written as
+   * an inline type import so this line is erased at build time and adds no
+   * runtime import to the engine.
+   */
+  managerXp?: import('@/lib/clubManagerXp').ManagerXp;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
   /** Round 70: the board's demands for this season. */
