@@ -29,9 +29,20 @@ stopped. That gap is now repaired: all 121 registered routes pass the navigation
 inventory, the six-route four-width layout matrix passes and nine targeted browser
 controls fail their exact intended assertions. Source is pushed at `c2b36643`
 in draft PR65 against Round 513.
-Full snapshot generation is running again, followed by its final generated gates.
-The full Conquest UI timeout on the earlier candidate remains under investigation.
+Final code, snapshots, sitemap and ledger are now pushed at `348fa545` in PR65.
+Full generation wrote 145 routes with zero failures and three expected hidden
+account-only refusals. Sixteen focused tests, the repeated 121-route inventory,
+four-width layout walk and all fifteen generated-site fences pass. Two harness
+issues found at the last gate were fixed with controls, not bypassed.
+The latest isolated Conquest full-map test passed in 29.632 seconds against its
+unchanged 30-second limit, so its earlier timing failures remain under investigation.
 Claude's root checkout and all his work are untouched.
+
+One full regression run is active on this Round 515 candidate: 264 node harnesses,
+session 95111, PID 56308, started 04:21 Eastern on September 8. It is not a pass
+until its closing output is read. Do not rebuild dist or start another full run.
+The older suite PID 52872 ended; process count alone was misleading because most
+remaining Node processes were runtime helpers, not orphaned test workers.
 
 ## Live as of 2026-09-08, and a note for whoever picks this up next
 

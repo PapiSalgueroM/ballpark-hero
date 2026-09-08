@@ -131,6 +131,9 @@ simRetiredRoutes, simSchema, simSitemap and simSnapshotAssets. The final
 simPrerenderBoot run used installed Chrome and fresh port 4332, with no timeout
 or failed requests. That temporary port is closed.
 
-Source is backed up at `5729e43d` in draft PR66. The full node suite remains
+Source is backed up at `5729e43d`, with final harnesses and evidence at `9918a6dd`,
+in draft PR66. The full 264-node-harness run started at 04:21 Eastern on
+September 8, session 95111 and PID 56308. Do not rebuild its dist or duplicate
+the run; read its closing output before treating it as a result. It remains
 an integration gate before a larger ship. No whole-site or AdSense all-clear,
 merge or publication is claimed. Round 514's compact pages are separate in PR65.
