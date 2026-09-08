@@ -14,7 +14,7 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
-  dailyConquestRng, commitDailyRun, loadDailyResult, loadDailyStreak, saveDailyResult, dailyShareText,
+  dailyConquestRng, commitDailyRun, loadDailyResult, loadDailyStreak, dailyShareText,
   type ConquestDailyResult, type ConquestDailyRun,
 } from '@/lib/conquestDaily';
 import { getTodayET } from '@/lib/dateUtils';
@@ -150,7 +150,7 @@ export default function ImperialismBoardShared({ sport, map, game }: Props) {
       }
       if (result) {
         setDailyDone(result);
-        setDailyStreak(saveDailyResult(sport.key, result, todayStr, r.picks));
+        setDailyStreak(loadDailyStreak(sport.key, todayStr));
       }
     }
     setSession(next);

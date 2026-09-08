@@ -27,6 +27,35 @@ export function dailyRecordKey(slug: string, date: string): string {
   return `${slug}-daily-${date}`;
 }
 
+function isCanonicalDate(date: string): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!match) return false;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (month < 1 || month > 12 || day < 1) return false;
+  const leapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const monthLengths = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return day <= monthLengths[month - 1];
+}
+
+export function pruneOlderDailyRecords(slug: string, date: string): void {
+  if (!isCanonicalDate(date)) return;
+  try {
+    const prefix = `${slug}-daily-`;
+    const stale: string[] = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(prefix)) continue;
+      const savedDate = key.slice(prefix.length);
+      if (isCanonicalDate(savedDate) && savedDate < date) stale.push(key);
+    }
+    for (const key of stale) localStorage.removeItem(key);
+  } catch {
+    /* storage blocked: cleanup is best effort */
+  }
+}
+
 export function readDailyRecord<T>(
   slug: string,
   today: string,
@@ -53,15 +82,9 @@ export function writeDailyRecord(slug: string, today: string, fields: Record<str
        but the one asked for), and without this a daily player accumulated one
        key per game per day for ever: fifteen a day across the games on this
        helper, which eventually fills the origin's storage and makes the write
-       above start failing silently. useDailyPuzzle prunes for the same reason
-       (its cleanupOldEntries), on the same key shape. */
-    const mine = `${slug}-daily-`;
-    const stale: string[] = [];
-    for (let i = 0; i < localStorage.length; i += 1) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith(mine) && k !== dailyRecordKey(slug, today)) stale.push(k);
-    }
-    for (const k of stale) localStorage.removeItem(k);
+       above start failing silently. useDailyPuzzle calls the same pruning
+       helper for the same reason and on the same key shape. */
+    pruneOlderDailyRecords(slug, today);
   } catch {
     /* storage full or blocked: the game still plays, it just will not survive a refresh */
   }

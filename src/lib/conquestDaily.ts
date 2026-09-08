@@ -143,7 +143,7 @@ export function saveDailyRun(sport: ConquestSport, run: ConquestDailyRun, dateSt
 }
 
 /** Claim a board transition before revealing results or recording a finish.
- * The per-day browser lock serializes tabs; the expected log rejects stale ones.
+ * The sport-wide browser lock serializes tabs across dates; the expected log rejects stale ones.
  * Without safe storage/locking the board offers free play, not an untracked daily. */
 export async function commitDailyRun(
   sport: ConquestSport,
@@ -153,10 +153,12 @@ export async function commitDailyRun(
 ): Promise<'saved' | 'conflict' | 'unavailable'> {
   if (typeof navigator === 'undefined' || !navigator.locks) return 'unavailable';
   try {
-    return await navigator.locks.request(`${dailySlug(sport)}-daily-${dateStr}`, () => {
+    return await navigator.locks.request(`${dailySlug(sport)}-daily`, () => {
       const current = loadDailyRun(sport, dateStr);
       if (current?.done || JSON.stringify(current) !== JSON.stringify(expected)) return 'conflict';
-      return saveDailyRun(sport, next, dateStr) ? 'saved' : 'unavailable';
+      if (!saveDailyRun(sport, next, dateStr)) return 'unavailable';
+      if (next.done && next.result) saveDailyResult(sport, next.result, dateStr, next.picks);
+      return 'saved';
     });
   } catch {
     return 'unavailable';
@@ -189,6 +191,7 @@ export function loadDailyStreak(sport: ConquestSport, dateStr: string = getToday
     const last = new Date(s.lastDate + 'T12:00:00Z').getTime();
     const now = new Date(today + 'T12:00:00Z').getTime();
     const dayGap = Math.round((now - last) / 86400000);
+    if (dayGap < 0) return 0;
     return dayGap <= 1 ? s.count : 0;
   } catch {
     return 0;
@@ -205,6 +208,7 @@ export function saveDailyResult(
 ): number {
   const today = dateStr;
   let newStreak = 1;
+  let preserveNewerStreak = false;
   try {
     const raw = localStorage.getItem(streakKey(sport));
     if (raw) {
@@ -215,10 +219,17 @@ export function saveDailyResult(
         const last = new Date(s.lastDate + 'T12:00:00Z').getTime();
         const now = new Date(today + 'T12:00:00Z').getTime();
         const dayGap = Math.round((now - last) / 86400000);
-        newStreak = dayGap === 1 ? s.count + 1 : 1;
+        if (dayGap < 0) {
+          newStreak = 0;
+          preserveNewerStreak = true;
+        } else {
+          newStreak = dayGap === 1 ? s.count + 1 : 1;
+        }
       }
     }
-    localStorage.setItem(streakKey(sport), JSON.stringify({ count: newStreak, lastDate: today } satisfies StreakRecord));
+    if (!preserveNewerStreak) {
+      localStorage.setItem(streakKey(sport), JSON.stringify({ count: newStreak, lastDate: today } satisfies StreakRecord));
+    }
   } catch {
     /* storage unavailable (private mode): the run still plays, it just won't streak */
   }

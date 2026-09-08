@@ -1,5 +1,41 @@
 # Project state
 
+## Active follow-up, 2026-09-08
+
+Anthony's latest direction is "just keep going and work on other things".
+Round 513 is claimed on `codex/round-513-midnight-saves`, based on `21f7090b`,
+in `.worktrees/round-513-midnight-saves`. It addresses the measured cross-midnight
+save cleanup and Conquest streak bugs, with shared chronological cleanup and
+the board's final streak write inside a sport-wide browser lock. Production commit
+`64fdea29` and final comment correction `fef84b82` pass 51 focused tests, six working
+negative controls, the type gate, production build, all 15 generated-site fences
+and the two-date real-browser test. Independent task and final reviews are clean
+after one minor comment correction. The integrated full Vitest run finished with
+359 passes and two failures in the unchanged SoccerAttackBoard tests: a full-map
+UI timeout followed by a cancelled-replacement save mismatch. Its 19 new midnight
+tests passed. An unchanged isolated Attack-file rerun reproduced both failures,
+while the cancelled-replacement test passes alone. Evidence points to the timed-out
+test continuing into the next one. The full-map test also times out alone on the
+unchanged prior `21f7090b` candidate, reproducing it without Round 513's changes;
+the original timeout remains unexplained.
+The full node suite is deferred while Claude's heavy suite remains active. This is a draft
+candidate, not a completed broad verification gate.
+No merge or publish is claimed. Details: docs/midnight-save-verification-2026-09-08.md.
+The branch is pushed in draft PR 64, stacked on PR 63:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/64.
+
+The reviewed Round 512 candidate, its preview on port 4178 and draft PR 63 are
+unchanged. Its full node suite remains pending while Claude's heavy suites run.
+The existing review-checkpoint follow-up now permits this separate bounded work
+and still distinguishes each branch's verification. Claude's root checkout,
+untracked files, research documents, hosting and published site are untouched.
+Anthony's latest forwarded Claude report says Round 505 is now published, with
+the publication note on main at `a4579db3`, and 140 live sitemap URLs checked.
+That supersedes the older unpublished-505 note below as a reported status, not a
+new independent live verification by this lane. The shared ad-spacing fix remains
+on Claude's unmerged Round 506 branch. The focused handoff prompt is saved in
+docs/claude-focus-handoff-2026-09-08.md.
+
 ## Live as of 2026-09-07
 
 **Round 509 is published and verified live.** Its merge through PR 60 is `1ecc00eb`,
