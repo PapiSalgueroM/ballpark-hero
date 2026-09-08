@@ -2,27 +2,28 @@
 
 ## Round 524 saved bracket profile summary, September 8, 2026
 
-CLAIMED in `.worktrees/round-524-profile-bracket`, branch
+Scoped verification complete in `.worktrees/round-524-profile-bracket`, branch
 `codex/round-524-profile-bracket`, based on Round 523 `8c3d1153` (draft PR74).
-Profile reads only legacy nested champion fields, while the actual bracket
-writer saves top-level champion. Its unguarded JSON.parse can also crash the
-page on malformed legacy data. Reproduce both with synthetic fixtures before
-editing. Accept nonempty string champions only, prefer the current field,
-preserve legacy awards.champion before knockoutWinners.final, otherwise keep
-the existing Bracket saved fallback and bracket link.
+Profile now reads the writer's top-level champion and safely handles malformed
+serialized saves, nulls and invalid champion values. Only nonempty strings
+render, with current champion first, then legacy awards.champion before
+knockoutWinners.final. The Bracket saved fallback and exact link remain.
 
-Main owns Profile.tsx and coordination docs. Test author owns
-Profile.bracket.test.tsx/simProfileBracket.mjs. Browser author owns
-playProfileBracket.mjs. Read-only reviewer checks the writer/reader contract,
-real-component outcomes, mutation controls and transport boundaries. No
-saved-bracket writer/loader, storage, sports data, backend/provider or real
-account changes. Use current writer-shaped and malformed synthetic fixtures.
-Both types, build, fifteen generated-site fences, related profile tests and
-built phone/desktop checks before draft push. No default full suite.
+Both exact types, fresh build, all 49 related Profile cases, the thirteen-case
+bracket harness and all fifteen generated-site fences pass. The scoped runner
+skips browser-classified simPrerenderBoot; its direct Chrome run separately
+passes all boot samples and retired routes. Fourteen built payload states and
+four exact DOM controls pass with zero boundary/runtime errors. Independent
+review clear. Details and source-control results are in
+docs/profile-bracket-2026-09-08.md. Preview 4200 remains available.
+No saved-bracket writer/loader, storage, sports data, real account or backend
+changes. Draft only, no default full-suite pass, merge or publication.
 
-Root belongs to Claude; leave his simPress experiment and processes alone.
-Preserve all previous worktrees/previews, including Round 523 on 4198. Cutoff
-17:46:50 UTC. Next free round: 525, verify before claiming.
+Root belongs to Claude. Preserve all previous worktrees and previews.
+The user resumed the interrupted work on September 8. Next free round: 525,
+verify before claiming. Bounded next repair: simLoginReturn bypasses the
+shared browser loader and lacks complete local request interception. The
+default broad suite still includes production probes and must not be run.
 
 ## Round 523 profile avatar identity, September 8, 2026
 
