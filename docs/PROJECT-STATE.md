@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-527-nba-powers`, branch
 `codex/round-527-nba-powers`, based on Round 526 `7c8168f8` (draft PR77).
+Implementation `da5f5453`, draft PR78: https://github.com/PapiSalgueroM/ballpark-hero/pull/78.
 Successful nonfinal attacker conquests now award one power after player choice.
 Each team can bank two powers and reopen them between battles. NBA recruits
 come from eliminated rosters; upgrades last through the owner's next battle,

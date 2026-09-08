@@ -4,6 +4,7 @@
 NBA Arcade visible power rewards, bank/reopen controls, owner-specific
 selection and effect lifetime, branch `codex/round-527-nba-powers`, worktree
 `.worktrees/round-527-nba-powers`, base526 `7c8168f8` (draft PR77).
+Implementation `da5f5453`, draft PR78: https://github.com/PapiSalgueroM/ballpark-hero/pull/78.
 One power per real nonfinal conquest, NBA eliminated-roster recruits,
 owner-next-battle upgrades, explicit legend activation metadata, selectable
 territory powers and reset cleanup. 37 scoped cases, 45 source controls,

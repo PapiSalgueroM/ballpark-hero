@@ -1,6 +1,7 @@
 # Round 527: NBA Arcade visible powers
 
 Base 526 7c8168f8, draft PR77. User resumed work September 8.
+Implementation `da5f5453`, draft PR78: https://github.com/PapiSalgueroM/ballpark-hero/pull/78.
 
 ## Design contract
 
