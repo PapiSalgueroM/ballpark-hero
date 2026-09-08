@@ -42,6 +42,10 @@
      5) the ceiling binds. An engaged manager (renews everyone, buys every
         upgrade) must breach it in a measured share of seasons, and a manager
         living inside the squad he was handed must almost never breach it.
+        Round 505 gate pass: the keeper is sacked inside two or three seasons
+        at every club on either engine, so a sacked keeper hands the club to
+        the next keeper until the club has played its seven seasons; the
+        count used to straddle its floor on the stream alone.
      6) a corrupt or pre-Round 436 balance fails closed rather than putting
         NaN into next season's kitty.
 
@@ -57,11 +61,21 @@
 
    The thresholds come from these bands, this harness run over four to six
    seeds with the engine fixed and again with each control on. Every one of
-   them sits roughly midway between the two bands rather than beside either:
-     hoard/spend opening ratio, median   fixed 1.43 to 1.62   static 0.99 to 1.03   floor 1.20
-     cap equals bill * 1.15              fixed 0% on 6 seeds  selfcap 100%          ceiling 25%
-     engaged manager breaches the cap    fixed 74 to 81%      selfcap 19 to 29%     floor 50%
-     keeper breaches the cap             fixed 0 to 5%                              ceiling 25%
+   them sits roughly midway between the two bands rather than beside either.
+   Re-measured in the Round 505 gate pass (2026-09-08) on this seed and
+   SIM_SEED 1 and 2 on the Round 505 engine and on this seed and SIM_SEED 1
+   on the Round 504 engine, after section 5 learned to hand a sacked
+   keeper's club to the next keeper (the 2026-09 bands in the old columns
+   were 1.43 to 1.62, 74 to 81% and 19 to 29%):
+     hoard/spend opening ratio, median   fixed 1.40 to 1.55   static 1.00           floor 1.20
+     cap equals bill * 1.15              fixed 0% on 5 streams selfcap 100%         ceiling 25%
+     engaged manager breaches the cap    fixed 67 to 82%      selfcap 33%           floor 50%
+     keeper breaches the cap             fixed 0 to 2%                              ceiling 25%
+     engaged seasons                     fixed 37 to 45                             floor 20
+     keeper seasons                      fixed 56 on every stream                   floor 40
+                                         (14 to 25 before the keepers, against
+                                         a floor of 15, 14 on this seed)
+     seasons a keeper lasts              505 engine 1.81 to 2.15, 504 engine 1.81 to 2.07
 
    Run: node scripts/simClubManagerBudget.mjs
 */
@@ -289,6 +303,10 @@ if (!(ratioMed >= 1.2)) fail(`the saver opens on only ${ratioMed.toFixed(2)}x th
 
 /* ---------- 4 and 5. the wage ceiling ---------- */
 console.log('4) The wage ceiling is no longer a mirror of your own bill');
+/* The engaged manager keeps the plain shape: he buys and renews, he mostly
+   keeps his job, and his sample read 35 to 45 seasons across seven streams
+   on the Round 505 engine against a floor of 20. Section 5 is where the
+   sacking bit, and the shape it needed is explained there. */
 let mirrors = 0, summers = 0;
 let engagedSeasons = 0, engagedBreaches = 0;
 const engagedPeaks = [];
@@ -315,23 +333,52 @@ if (mirrorRate > 0.25) {
 }
 
 console.log('5) The wage ceiling actually binds, and only on the manager loading it up');
-let keeperSeasons = 0, keeperBreaches = 0;
+/* Round 505 gate pass: a sacking ended a club's run here and the sample
+   floor of 15 sat on whatever the stream left. A manager who signs nobody
+   and renews nobody is sacked inside two or three seasons at every one of
+   these clubs on the Round 504 engine and on the Round 505 one (seasons per
+   keeper, 504: 3 1 2 2 3 1 2 4 for 18; 505 on this harness's seed: 2 2 2 2
+   2 1 1 2 for 14; 505 on SIM_SEED 1 to 6: 23, 23, 20, 25, 23, 22), so the
+   count straddled the floor and the old stream happened to win. A sacking
+   is the game working, not the ceiling, so a sacked keeper hands the club
+   to the next keeper on the same policy, the next draw of the stream, until
+   the club has played its seven seasons or KEEPERS keepers have been and
+   gone, the way the Round 504 gate fix re-ran a sacked career in
+   simClubManagerCalendar. The seasons before each sack still count: every
+   one was played under the policy and its bill was measured against the
+   cap. The engaged loop above does not need this: he buys, he wins, and he
+   mostly keeps his job, and a fresh keeper on a fresh cap would only dilute
+   his breach rate (measured 59 to 66 percent with lives against 64 to 82
+   without). */
+const KEEPERS = 10;
+let keeperSeasons = 0, keeperBreaches = 0, keepersSacked = 0;
 for (const club of CLUBS) {
   let s = startCareer(club);
+  let keepers = 1;
   for (let season = 1; season <= 7; season++) {
     const played = playSeason(s, 'hoard');
     s = played.state;
     keeperSeasons += 1;
     if (played.breached) keeperBreaches += 1;
-    if (s.sacked) break;
+    if (s.sacked) {
+      if (keepers >= KEEPERS) break;
+      keepers += 1;
+      keepersSacked += 1;
+      s = startCareer(club);
+      continue;
+    }
     s = startNextSeason(finishSeason(s).state);
   }
 }
 const engagedRate = engagedBreaches / Math.max(1, engagedSeasons);
 const keeperRate = keeperBreaches / Math.max(1, keeperSeasons);
 console.log(`   engaged manager breached in ${engagedBreaches}/${engagedSeasons} seasons (${(100 * engagedRate).toFixed(0)} percent, median peak bill ${median(engagedPeaks).toFixed(2)}x cap)`);
-console.log(`   manager keeping the squad he was handed breached in ${keeperBreaches}/${keeperSeasons} seasons (${(100 * keeperRate).toFixed(0)} percent)`);
-if (engagedSeasons < 20 || keeperSeasons < 15) fail(`thin sample: ${engagedSeasons} engaged seasons, ${keeperSeasons} keeper seasons`);
+console.log(`   manager keeping the squad he was handed breached in ${keeperBreaches}/${keeperSeasons} seasons (${(100 * keeperRate).toFixed(0)} percent); ${keepersSacked} sacked keeper(s) handed the club to the next, ${(keeperSeasons / (CLUBS.length + keepersSacked)).toFixed(2)} seasons a keeper`);
+/* Keeper seasons are 56 whenever no club runs through ten keepers, so the
+   floor of 40 is not a sample floor any more: it goes red only if the
+   engine starts sacking the do nothing manager inside his first season at
+   most clubs, ten times over, which would be worth knowing. */
+if (engagedSeasons < 20 || keeperSeasons < 40) fail(`thin sample: ${engagedSeasons} engaged seasons, ${keeperSeasons} keeper seasons`);
 if (!(engagedRate >= 0.5)) {
   fail(`the ceiling binds in only ${(100 * engagedRate).toFixed(0)} percent of an engaged manager's seasons (floor 50; see the header for the measured bands)`);
 }
