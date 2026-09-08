@@ -90,7 +90,7 @@ How it works:
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
 
-- **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FINAL GATE RUNNING.** Finish the Google URL-level audit, reconcile
+- **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FULL RUN REVIEWED.** Finish the Google URL-level audit, reconcile
   stale open bugs against current code, and repair the confirmed Footle kit-number harness
   network stall. The fetch lacks a deadline and its failed-page continue advances the offset,
   so a failed page can also be silently omitted. Scope: `scripts/simFootleKitNumbers.mjs`, its
@@ -106,14 +106,18 @@ How it works:
   is unavailable. Type check, build, 217 Vitest tests, both Conquest controls and all 15
   built-site fences passed. Real 390px Chromium two-tab checks used native Web Locks across
   all five sports, without save drift, overflow or page errors. Soccer also preserved the
-  saved daily through Free Play and reload. Full node suite pending.
+  saved daily through Free Play and reload. Full node suite: 263 PASS, one EMPTY from
+  the tab wrapper's three-line report despite 23 actual outcomes passing. Corrected by
+  printing each real Vitest assertion, not relaxing the runner. Focused runner and both
+  independent controls now pass.
   Footle's transport regression passes 17 fault/healthy cases. Google evidence is recorded in
   docs/seo/indexing-audit-2026-09-07.md, including Footle's accepted indexing request.
   Hosting remains a proposal only: keep analytics, visible previews and approval before
   publication. Do not switch hosting or auto-publish main commits.
   Draft: https://github.com/PapiSalgueroM/ballpark-hero/pull/61, code commit 7df896e1.
-  The full node run is still executing. Do not merge or publish until its closing result is
-  read and any findings are resolved. Current local preview: http://127.0.0.1:4173/soccer-conquest.
+  The full node run was read and its sole wrapper finding resolved. Integration with the
+  newly merged Round 505 still needs reconciliation; keep this PR draft and do not publish.
+  Current local preview: http://127.0.0.1:4173/soccer-conquest.
 
 - **Codex lane, Round 509, COMPLETE, MERGED THROUGH PR 60 AT `1ecc00eb`, VERIFIED LIVE
   LATE 2026-09-07.** This batch

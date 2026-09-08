@@ -15,7 +15,12 @@ Round 510's Conquest same-day tab protection and harness changes remain on the C
 not live. Its distinct conflict notice is absent from the public Conquest bundle.
 Draft PR 61 holds this work: https://github.com/PapiSalgueroM/ballpark-hero/pull/61.
 Code commit 7df896e1 passed the type, build, unit, targeted-control and browser gates below.
-The full 264-node-harness run is still executing; read its closing result before merging.
+The full 264-node-harness run finished with 263 PASS and one EMPTY wrapper report:
+simConquestTabs printed only three summary lines, below the runner's four-line minimum,
+although all 23 underlying outcomes passed. Its wrapper now prints each actual Vitest
+result; the focused runner recheck and both negative controls pass. The runner's guard
+was not weakened. This is a full run plus a focused correction, not a second full run.
+PR 61 stays draft while integration with the later Round 505 main is reconciled.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
@@ -3052,7 +3057,7 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
-- **2026-09-07, Round 510 (Codex lane), DRAFT PR 61, FULL SIMULATION GATE PENDING.** Google URL-level evidence is
+- **2026-09-07, Round 510 (Codex lane), DRAFT PR 61, FULL RUN REVIEWED AND WRAPPER CORRECTED.** Google URL-level evidence is
   recorded in docs/seo/indexing-audit-2026-09-07.md. The report is dated September 3:
   58 indexed, 71 discovered, 17 crawled exclusions, three alternate-domain redirects.
   Of the 17, eleven are current indexable pages, five are deliberately excluded routes and
@@ -3072,7 +3077,13 @@ today rather than adding alongside them. Every new poll must obey all of these r
   Chromium Web Locks preserved the settled run against an old picker on all five Conquest
   routes at 390px, with no horizontal overflow or page errors. Soccer also preserved the
   daily through Free Play and reload. Browser checks blocked external network requests.
-  The full 264-harness node suite is running.
+  The full 264-harness node suite completed with 263 PASS and one EMPTY, caused by
+  simConquestTabs printing three summary lines even though all 23 checks ran and passed.
+  The wrapper now reports each real assertion's status and full name from the Vitest JSON.
+  The focused runner moved from EMPTY/exit 1 to PASS/exit 0. Both independent controls
+  still prove ten store failures and the duplicate-completion board failure, respectively,
+  with the other layer green. No runner threshold or production behavior changed.
+  PR 61 remains draft until integration with the newly merged Round 505 is reconciled.
   Review also measured the separate cross-date cleanup issue recorded under Open bugs.
 
   Footle's kit audit no longer hangs on unavailable database requests or skips a failed page.
