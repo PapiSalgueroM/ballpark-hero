@@ -221,8 +221,19 @@ export function seasonXp(input: {
  * percent step means a full tree is roughly a decade of winning things, which
  * is the point: the trees are the long game, not a first season upgrade.
  */
+/*
+ * The step was 1.35 in the first draft and the harness caught it immediately:
+ * compounded over the thirty five levels the trees hold, the full board cost
+ * 41,643,757 XP. A good season pays about 580 (a trophy, a European run, twenty
+ * wins, two objectives, a promotion and a profit), so that was seventy thousand
+ * seasons and the trees would never have filled at all. 1.04 puts the first
+ * point inside a season, ten points at about eight seasons, twenty at about
+ * twenty, and the whole board at roughly fifty, which is a long tail somebody
+ * could actually walk. Section 6 measures those numbers rather than trusting
+ * this comment.
+ */
 export const XP_FIRST_LEVEL = 400;
-export const XP_LEVEL_STEP = 1.35;
+export const XP_LEVEL_STEP = 1.04;
 /** Seven trees at five points each. Nothing beyond this is earnable. */
 export const MAX_LEVEL = 1 + SKILL_TREES.length * MAX_TREE_POINTS;
 
