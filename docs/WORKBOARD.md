@@ -1,17 +1,23 @@
 # Work board
 
-## Round 535 claimed, September 8, 2026
+## Round 535 complete, September 8, 2026
 
-Codex owns the NFL same-name legend/card audit and bounded repair, starting
-with an actual reproduction. Worktree `.worktrees/round-535-nfl-legend-cards`,
+Codex owns the NFL same-name legend/card repair, with real-action baseline
+witnesses. Worktree `.worktrees/round-535-nfl-legend-cards`,
 branch `codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85).
-Keep existing player facts and game ratings. Establish earned legend card
-identity through acquisition, battle use and transfer without broad rule
-tuning. Verify outcome baselines, negative controls, visible card metadata,
-both exact types, build and all fifteen generated-site checks. Root belongs
-to Claude and is tracked-clean at `b0c339b1`. Preserve all previous worktrees
-and previews. Draft PR only, no backend/account writes, broad suite, root
-edits, main merge or publication. Next free 536.
+Earned legend identity now follows acquisition, battle use, transfer and
+market returns. Ordinary same-name cards keep their existing pool ratings.
+The existing NBA duplicate rule keeps unavailable rewards saveable. No new
+player data or formula tuning. All 26 new cases, 63 controls with 106 exact
+failures, 132 prior cases, both exact types, build and all fifteen site
+checks pass. Four browser cases each pass five turns across two fresh runs.
+Source/runtime and main visual reviews are clear. Evidence:
+docs/nfl-legends-2026-09-08.md. Preview 4212 preserved.
+Root belongs to Claude and is tracked-clean at `b0c339b1`. Preserve all
+previous worktrees and previews. Draft PR only, no backend/account writes,
+broad suite, root edits, main merge or publication. Next free 536: repair
+the independently reproduced player-steal validation, repeated settlement
+and reset/unmount timer failures.
 
 ## Round 534 complete, September 8, 2026
 

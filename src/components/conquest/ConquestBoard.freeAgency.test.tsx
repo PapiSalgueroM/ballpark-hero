@@ -27,6 +27,7 @@ function fixture(overrides: Partial<ReturnType<typeof useConquest>> = {}) {
     eliminated: [], gameLog: [], visiblePlays: [], powerupStates: new Set(),
     invincibleTeams: new Set(), teamSavedPowerups: {}, pendingPowerup: null, powerupUseType: null,
     teamUpgrades: {}, battleUpgrades: {}, powerupUnavailableReason: null,
+    legendPlayers: new Set<string>(),
     freeAgentList: [], stealCandidates: [], animStartTime: 0,
     attackingTeam: null, defendingTeam: null, direction: null, battleResult: null,
     stealModalOpen: false, pendingBattleApply: null, targetState: null, territoryStolenState: null, boxScore: null,

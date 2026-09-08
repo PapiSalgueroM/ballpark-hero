@@ -237,9 +237,10 @@ function simulateBattle(
   territories: Record<string, string | null>,
   rosters: Record<string, string[]>,
   teamUpgrades: Record<string, string>,
+  legendPlayers: ReadonlySet<string>,
   ratingOverrides?: Record<string, TeamRatingOverride>,
 ): BattleResult {
-  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, null, null, ratingOverrides, teamUpgrades);
+  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, null, null, ratingOverrides, teamUpgrades, legendPlayers);
 
   const winnerId = sim.winner === 'att' ? attacker : defender;
   const loserId = sim.winner === 'att' ? defender : attacker;
@@ -301,6 +302,7 @@ export function useConquest() {
   const [invincibleTeams, setInvincibleTeams] = useState<Set<string>>(new Set());
   const [teamUpgrades, setTeamUpgrades] = useState<Record<string, string>>({});
   const [battleUpgrades, setBattleUpgrades] = useState<Record<string, string>>({});
+  const [legendPlayers, setLegendPlayers] = useState<Set<string>>(new Set());
   
   // Powerup modal state
   const [pendingPowerup, setPendingPowerup] = useState<{ teamId: string; powerup: PowerupDef } | null>(null);
@@ -315,8 +317,12 @@ export function useConquest() {
   // and (for territory steal) the legal border-state candidates.
   const [powerupTeam, setPowerupTeam] = useState<string | null>(null);
   const [stealCandidates, setStealCandidates] = useState<StealCandidate[]>([]);
+  const pendingLegend = pendingPowerup && TEAM_LEGENDS[pendingPowerup.teamId];
+  const activeRosterNames = new Set(getAliveTeamsFrom(territories).flatMap(id => rosters[id] || []));
   const powerupUnavailableReason = pendingPowerup?.powerup.id === 'upgrade' && teamUpgrades[pendingPowerup.teamId]
-    ? 'This team already has an upgrade waiting for its next battle. Save this one for later.' : null;
+    ? 'This team already has an upgrade waiting for its next battle. Save this one for later.'
+    : pendingPowerup?.powerup.id === 'legend' && (!pendingLegend || activeRosterNames.has(pendingLegend.name))
+      ? 'This player is already on an active roster or unavailable. Save this legend power for later.' : null;
   
   // Play-by-play state
   const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
@@ -416,7 +422,7 @@ export function useConquest() {
     }
 
     const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name)).map(fa => {
-      const card = getNflRosterPlayer(fa.name, teamId)!;
+      const card = getNflRosterPlayer(fa.name, teamId, legendPlayers)!;
       return { name: fa.name, position: card.position, overall: card.overall };
     });
     const seen = new Set(agents.map(x => x.name));
@@ -428,13 +434,13 @@ export function useConquest() {
       for (const name of (rosters[elimId] || [])) {
         if (activeRosterNames.has(name) || seen.has(name)) continue;
         seen.add(name);
-        const info = getNflRosterPlayer(name, teamId) || { position: '?', overall: 75 };
+        const info = getNflRosterPlayer(name, teamId, legendPlayers) || { position: '?', overall: 75 };
         agents.push({ name, position: info.position, overall: info.overall });
       }
     }
 
     return agents.sort((a, b) => b.overall - a.overall).slice(0, 30);
-  }, [territories, rosters, eliminated]);
+  }, [territories, rosters, eliminated, legendPlayers]);
 
   // Live pool for the docked Free Agency tab: the curated veteran pool plus
   // every eliminated team's final-roster players, minus anyone currently on
@@ -456,13 +462,13 @@ export function useConquest() {
       for (const name of (rosters[elimId] || [])) {
         if (activeRosterNames.has(name) || seen.has(name)) continue;
         seen.add(name);
-        const info = getNflRosterPlayer(name, favoriteTeam || '') || { position: '?', overall: 75 };
+        const info = getNflRosterPlayer(name, favoriteTeam || '', legendPlayers) || { position: '?', overall: 75 };
         pool.push({ name, position: info.position, overall: info.overall, blurb: `Hit the market when the ${teamName} fell` });
       }
     }
 
     return pool.sort((a, b) => b.overall - a.overall);
-  }, [territories, rosters, eliminated, favoriteTeam]);
+  }, [territories, rosters, eliminated, favoriteTeam, legendPlayers]);
 
   const canResolvePowerup = useCallback((expectedPhase: Phase, type?: PowerupId) => {
     return rewardActionTokenRef.current === rewardActionToken && phaseRef.current === expectedPhase
@@ -520,6 +526,7 @@ export function useConquest() {
             ...prev,
             [teamId]: [...(prev[teamId] || []), legend.name],
           }));
+          setLegendPlayers(prev => new Set([...prev, legend.name]));
           setGameLog(prev => [...prev, {
             turn: prev.length + 1, attacker: teamId, defender: 'powerup',
             winner: teamId, score: `🐐 ${legend.name} joins the roster!`,
@@ -712,9 +719,9 @@ export function useConquest() {
     if (roster.length === 0) return;
 
     let weakestName = roster[0];
-    let weakestOvr = getNflRosterPlayer(roster[0], favoriteTeam)?.overall ?? 75;
+    let weakestOvr = getNflRosterPlayer(roster[0], favoriteTeam, legendPlayers)?.overall ?? 75;
     for (const name of roster) {
-      const ovr = getNflRosterPlayer(name, favoriteTeam)?.overall ?? 75;
+      const ovr = getNflRosterPlayer(name, favoriteTeam, legendPlayers)?.overall ?? 75;
       if (ovr < weakestOvr) { weakestOvr = ovr; weakestName = name; }
     }
 
@@ -737,7 +744,7 @@ export function useConquest() {
       winner: favoriteTeam,
       score: `✍️ Free agency: signed ${available.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
     }]);
-  }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool]);
+  }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool, legendPlayers]);
 
   const startBattle = useCallback(() => {
     if (rewardActionTokenRef.current !== rewardActionToken || phaseRef.current !== 'ready'
@@ -849,7 +856,7 @@ export function useConquest() {
     } else {
       const enemyId = target.id;
       const upgrades = Object.fromEntries(Object.entries(teamUpgrades).filter(([id]) => id === team || id === enemyId));
-      const result = simulateBattle(team, enemyId, territories, rosters, upgrades, buildRatingOverrides());
+      const result = simulateBattle(team, enemyId, territories, rosters, upgrades, legendPlayers, buildRatingOverrides());
       setBattleUpgrades(upgrades);
       setTeamUpgrades(prev => Object.fromEntries(Object.entries(prev).filter(([id]) => id !== team && id !== enemyId)));
       if (longDistanceRaid) result.longDistance = true;
@@ -908,7 +915,7 @@ export function useConquest() {
         addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [rewardActionToken, pendingPowerup, powerupUseType, territories, rosters, powerupStates, teamUpgrades, buildRatingOverrides]);
+  }, [rewardActionToken, pendingPowerup, powerupUseType, territories, rosters, powerupStates, teamUpgrades, legendPlayers, buildRatingOverrides]);
 
   // Power rankings update (item 86): a battle win nudges the winner's O/D up
   // and the loser's down by a small clamped amount, and both teams' in-run
@@ -1085,6 +1092,7 @@ export function useConquest() {
     setInvincibleTeams(new Set());
     setTeamUpgrades({});
     setBattleUpgrades({});
+    setLegendPlayers(new Set());
     setPendingPowerup(null);
     setPowerupUseType(null);
     setTerritoryStolenState(null);
@@ -1111,7 +1119,7 @@ export function useConquest() {
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
     animStartTime, noEnemyMsg, powerupStates,
     // Powerup system
-    teamSavedPowerups, invincibleTeams, teamUpgrades, battleUpgrades,
+    teamSavedPowerups, invincibleTeams, teamUpgrades, battleUpgrades, legendPlayers,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState, targetState,
     powerupTeam, stealCandidates, powerupUnavailableReason,
     // Play-by-play

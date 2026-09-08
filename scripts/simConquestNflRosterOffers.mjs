@@ -16,9 +16,9 @@ const CASES = ['offers the canonical card when a real elimination releases a dup
 const hook = (message, from, to) => ({ file: 'hook', test: 0, message, from, to });
 const CONTROLS = {
   raw: hook('OFFER: the reward advertises the canonical WR 86 card instead of the duplicate 88 card',
-    '      const card = getNflRosterPlayer(fa.name, teamId)!;', '      const card = fa;'),
+    '      const card = getNflRosterPlayer(fa.name, teamId, legendPlayers)!;', '      const card = fa;'),
   docked: hook('DOCKED: the released team card retains WR and 86 OVR',
-    "        const info = getNflRosterPlayer(name, favoriteTeam || '') || { position: '?', overall: 75 };",
+    "        const info = getNflRosterPlayer(name, favoriteTeam || '', legendPlayers) || { position: '?', overall: 75 };",
     "        const info = { position: '?', overall: 75 };"),
   runtime: hook(null, 'export function useConquest() {', "export function useConquest() {\n  throw new Error('Unexpected NFL roster-offer runtime control');"),
   backend: hook(null, 'export function useConquest() {',

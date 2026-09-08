@@ -44,23 +44,24 @@ const CASES = [
 ];
 const CONTROLS = {
   "roster": {
-    "from": "              const p = getNflRosterPlayer(name, teamId);",
+    "from": "              const p = getNflRosterPlayer(name, teamId, legendPlayers);",
     "to": "              const p = TEAM_MAP.get(teamId)?.players.find(player => player.name === name);",
     "errors": {
       "0": "ROSTER: KC keeps transferred position, rating and key stat",
       "1": "ROSTER: BUF keeps transferred position, rating and key stat",
+      "2": "LEGEND: own-team legend presentation keeps its priority",
       "3": "POOL: a pool-only player has a card with an unknown key-stat fallback"
     }
   },
   "steal": {
-    "from": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '');",
+    "from": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '', game.legendPlayers);",
     "to": "              const playerData = TEAM_MAP.get(game.battleResult?.loser || '')?.players.find(card => card.name === player);",
     "errors": {
       "5": "STEAL: transferred candidate retains position, rating and key stat"
     }
   },
   "upgrade": {
-    "from": "              const playerData = getNflRosterPlayer(player, game.powerupTeam || '');",
+    "from": "              const playerData = getNflRosterPlayer(player, game.powerupTeam || '', game.legendPlayers);",
     "to": "              const playerData = TEAM_MAP.get(game.powerupTeam || '')?.players.find(card => card.name === player);",
     "errors": {
       "6": "UPGRADE: transferred candidate retains position and rating"
@@ -88,7 +89,7 @@ const CONTROLS = {
     }
   },
   "ownlegend": {
-    "from": "              const isLegend = legend && name === legend.name;",
+    "from": "              const isLegend = p?.keyStat === 'Legend';",
     "to": "              const isLegend = false;",
     "errors": {
       "2": "LEGEND: own-team legend presentation keeps its priority"
@@ -103,15 +104,15 @@ const CONTROLS = {
     }
   },
   "unknown": {
-    "from": "              const p = getNflRosterPlayer(name, teamId);",
-    "to": "              const p = getNflRosterPlayer(name, teamId) || { name, position: '?', overall: 75, keyStat: '' };",
+    "from": "              const p = getNflRosterPlayer(name, teamId, legendPlayers);",
+    "to": "              const p = getNflRosterPlayer(name, teamId, legendPlayers) || { name, position: '?', overall: 75, keyStat: '' };",
     "errors": {
       "4": "UNKNOWN: missing cards retain explicit roster fallbacks"
     }
   },
   "unknownpicker": {
-    "from": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '');",
-    "to": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '') || { name: player, position: '?', overall: 75, keyStat: '' };",
+    "from": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '', game.legendPlayers);",
+    "to": "              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '', game.legendPlayers) || { name: player, position: '?', overall: 75, keyStat: '' };",
     "errors": {
       "4": "UNKNOWN PICKER: missing cards keep the original name-only option"
     }

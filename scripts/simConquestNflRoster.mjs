@@ -36,7 +36,7 @@ const CONTROLS = {
     "file": "engine",
     "test": 1,
     "message": "DEFENDER: the acquired 89 OVR defender retains all 32 defensive role selections",
-    "from": "getNflRosterPlayer(name, teamId) ||",
+    "from": "getNflRosterPlayer(name, teamId, legendPlayers) ||",
     "to": "TEAM_MAP.get(teamId)?.players.find(player => player.name === name) ||"
   },
   "global": {
@@ -78,15 +78,15 @@ const CONTROLS = {
     "file": "helper",
     "test": 6,
     "message": "LEGEND: a transferred franchise legend fills the defensive role in all 32 battles",
-    "from": "  if (legend) return { ...legend, overall: 99, keyStat: 'Legend' };",
-    "to": "  if (legend) return undefined;"
+    "from": "  if (!legendPlayers && legend) return { ...legend, overall: 99, keyStat: 'Legend' };",
+    "to": "  if (!legendPlayers && legend) return undefined;"
   },
   "legendcard": {
     "file": "helper",
     "test": 6,
     "message": "LEGEND CARD: transferred franchise legends keep their 99 OVR card",
-    "from": "  if (legend) return { ...legend, overall: 99, keyStat: 'Legend' };",
-    "to": "  if (legend) return { ...legend, overall: 99, keyStat: '' };"
+    "from": "  if (!legendPlayers && legend) return { ...legend, overall: 99, keyStat: 'Legend' };",
+    "to": "  if (!legendPlayers && legend) return { ...legend, overall: 99, keyStat: '' };"
   },
   "ownpriority": {
     "file": "helper",
@@ -106,7 +106,7 @@ const CONTROLS = {
     "file": "helper",
     "test": 8,
     "message": "OWN LEGEND: Peterson and Lynch use 99 OVR for their own franchises",
-    "from": "  if (ownLegend?.name === name) return { ...ownLegend, overall: 99, keyStat: 'Legend' };",
+    "from": "  if (!legendPlayers && ownLegend?.name === name) return { ...ownLegend, overall: 99, keyStat: 'Legend' };",
     "to": ""
   },
   "poolpriority": {

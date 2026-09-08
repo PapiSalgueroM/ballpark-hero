@@ -27,6 +27,7 @@ function fixture(overrides: Partial<ReturnType<typeof useConquest>> = {}) {
     rosters: { KC: TEAM_MAP.get('KC')!.players!.map(player => player.name), BUF: TEAM_MAP.get('BUF')!.players!.map(player => player.name) },
     eliminated: [], gameLog: [], visiblePlays: [], powerupStates: new Set(), invincibleTeams: new Set(),
     teamUpgrades: {}, battleUpgrades: {}, powerupUnavailableReason: null,
+    legendPlayers: new Set<string>(),
     teamSavedPowerups: {}, pendingPowerup: null, powerupUseType: null, freeAgentList: [], stealCandidates: [], animStartTime: 0,
     attackingTeam: 'BUF', defendingTeam: 'KC', direction: 'E', battleResult: { winner: 'KC', loser: 'BUF', winScore: 24, loseScore: 17 },
     stealModalOpen: false, pendingBattleApply: null, targetState: null, territoryStolenState: null, boxScore: null,

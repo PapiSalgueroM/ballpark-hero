@@ -1,5 +1,28 @@
 # Project state
 
+## Round 535 NFL legend card identity, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-535-nfl-legend-cards`, branch
+`codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85),
+claim `2ac533bb`. Pure engine and real-hook fixture witnesses reproduce
+ordinary pool cards becoming legends by franchise name, and earned legends
+losing their rating after a transfer. An explicit run-scoped activation set
+now distinguishes those cards. It follows transfers and market returns,
+clears on reset, and reaches both battle and displayed card lookups. The
+existing NBA rule keeps a legend reward saveable while its name is already
+on a surviving roster. No player data or formula tuning. All 26 new cases,
+63 controls with 106 intended failures, 132 prior cases, both exact types,
+build and all fifteen site checks pass. Phone, desktop and both DOM controls
+each pass five actual turns across two fresh scenarios, with zero faults.
+The waiver control was strengthened after a weaker ordinary card masked it;
+its original result is retained. Independent source/runtime and main visual
+reviews are clear. Evidence: docs/nfl-legends-2026-09-08.md. Preview 4212,
+PID 35496, serves index-E-_nGaLM.js and Conquest-DLXx-el3.js. Root and earlier
+worktrees and previews are preserved. Draft PR only, no broad suite,
+backend/account writes, main merge or publication. Next free 536: five
+reproduced NFL player-steal validation, repeated-settlement and reset/unmount
+timer failures, recorded separately in the evidence note.
+
 ## Round 534 NFL upgrade lifetime, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-534-nfl-upgrade-lifetime`, branch
