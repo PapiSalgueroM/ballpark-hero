@@ -1,5 +1,28 @@
 # Project state
 
+## Round 527 NBA Arcade visible powers, September 8, 2026
+
+CLAIMED on `codex/round-527-nba-powers` in `.worktrees/round-527-nba-powers`,
+based on Round 526 `7c8168f8` (draft PR77). The user said Keep going after the
+previous checkpoint. Main owns hook/effect logic and coordination docs; test
+author owns the new power tests/harness; UI author owns NBA board/help/page
+copy and its component tests; independent review stays read-only.
+
+Award one random power to the attacker after an actual conquest, after the
+player-choice step, except when the game is already won. Keep both empires
+on an away loss and preserve shields. Use now or bank up to two per team;
+reopen saved powers only while ready. Select recipients/targets explicitly,
+recruit only available players from eliminated NBA rosters, and keep upgrades
+until the owner's next simulated battle. Preserve visible-only territories,
+single consumption, reset/unmount cleanup, and the separate daily mode.
+
+No sports-data additions, new land, real account/backend writes or changes to
+the daily save/scoring protocol. These are game modifiers, not real player
+facts. Round 525's sibling verification repair remains separate. Run real-hook
+outcome tests and exact controls, both types/build, all fifteen site fences
+and local phone/desktop play before draft push. No broad production probes,
+merge or publication. Root and earlier previews stay intact. Next free528.
+
 ## Round 526 NBA Arcade visible territories, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-526-nba-visible-regions`,
