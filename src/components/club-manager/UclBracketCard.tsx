@@ -95,9 +95,25 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
                 >
                   {side(t.home, t, true)}
                   {side(t.away, t, false)}
+                  {/* Round 507: a two legged tie shows the legs under the
+                      aggregate, and shows the first leg on its own while the
+                      second is still to come, because until then the headline
+                      score is deliberately empty. */}
+                  {t.legs === 2 && t.leg1 && (
+                    <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
+                      {t.leg2
+                        ? `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}, second leg ${t.leg2.awayGoals}-${t.leg2.homeGoals} at ${t.away}.`
+                        : `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}. Second leg at ${t.away}.`}
+                    </div>
+                  )}
+                  {t.byAwayGoals && (
+                    <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
+                      Level on aggregate. {t.winner} through on away goals.
+                    </div>
+                  )}
                   {t.pens && (
                     <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
-                      Level after 90. {t.winner} win on penalties.
+                      {t.legs === 2 ? 'Level over two legs.' : 'Level after 90.'} {t.winner} win on penalties.
                     </div>
                   )}
                 </div>
