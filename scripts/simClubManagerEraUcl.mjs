@@ -213,6 +213,10 @@ const {
   ERA_UCL_FIELDS, LEAGUE_NATIONS,
   /* Round 478 */
   sortedUclGroup, uclGroupRule, uclGroupTiebreakFootnote,
+  /* Round 507: the format's own answer for how many legs a round is played
+     over, so this harness asks the engine rather than carrying a second copy
+     of a rule that is meant to live in one place. */
+  uclLegsFor, uclAwayGoalsApply, uclTieOutcome,
 } = cm;
 /* Round 478: the one PairLedger key the whole group stage is recorded
    under. Read off the module rather than retyped, so a rename cannot leave
@@ -254,8 +258,22 @@ function checkFormat(tag, s, koStart, isEra) {
   const br = s.uclBracket ?? [];
   const count = r => br.filter(t => t.round === r).length;
   if (isEra) {
-    if (r16Weeks !== 1) note('format', `${tag}: the calendar carries ${r16Weeks} round of 16 weeks rather than one (the reported gap)`);
-    else {
+    /* Round 507: the round of 16 is two legs in every era this game offers, so
+       the calendar carries one week per leg and the count the format expects
+       comes from the engine's own uclLegsFor rather than a number typed here.
+       Before Round 507 it was one week and one match, which is the shape this
+       check was written against. */
+    const wantWeeks = uclLegsFor(s.eraId, 'R16');
+    if (r16Weeks !== wantWeeks) {
+      note('format', `${tag}: the calendar carries ${r16Weeks} round of 16 weeks rather than ${wantWeeks} (the reported gap)`);
+    } else {
+      const legs = cal.filter(e => e.type === 'uclKo' && e.uclRound === 'R16');
+      if (wantWeeks === 2) {
+        const nums = legs.map(e => e.uclLeg);
+        if (nums[0] !== 1 || nums[1] !== 2) {
+          note('format', `${tag}: the two round of 16 weeks are legs ${nums.join(' and ')} rather than 1 then 2`);
+        }
+      }
       const i16 = cal.findIndex(e => e.type === 'uclKo' && e.uclRound === 'R16');
       const iWin = cal.findIndex(e => e.type === 'window');
       const iQf = cal.findIndex(e => e.type === 'uclKo' && e.uclRound === 'QF');
@@ -535,8 +553,13 @@ function checkMigration(tally) {
   if (JSON.stringify(back.pairResults) !== '{}') note('migrate', `the pre migration save opened with a ledger of ${JSON.stringify(back.pairResults)} rather than empty`);
   const idx = back.calendar.findIndex(e => e.type === 'uclKo' && e.uclRound === 'R16');
   const n16 = back.calendar.filter(e => e.type === 'uclKo' && e.uclRound === 'R16').length;
-  if (n16 !== 1) note('migrate', `the repaired calendar carries ${n16} round of 16 weeks`);
-  if (back.calendar.length !== oldLen + 1) note('migrate', `the repaired calendar has ${back.calendar.length} entries where the old one had ${oldLen}`);
+  /* Round 507: a repair has to put back as many legs as this save's season
+     plays. Repairing a two legged era into a single round of 16 week would
+     settle the tie on one match, which is the bug this expectation exists to
+     catch, so the number comes from the engine's own format rule. */
+  const wantLegs = uclLegsFor(back.eraId, 'R16');
+  if (n16 !== wantLegs) note('migrate', `the repaired calendar carries ${n16} round of 16 weeks rather than ${wantLegs}`);
+  if (back.calendar.length !== oldLen + wantLegs) note('migrate', `the repaired calendar has ${back.calendar.length} entries where the old one had ${oldLen} and ${wantLegs} leg(s) were owed`);
   const iWin = back.calendar.findIndex(e => e.type === 'window');
   const iQf = back.calendar.findIndex(e => e.type === 'uclKo' && e.uclRound === 'QF');
   if (!(idx > iWin && idx < iQf)) note('migrate', `the repaired round of 16 week sits at ${idx}, window ${iWin}, quarter finals ${iQf}`);
