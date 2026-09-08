@@ -90,7 +90,7 @@ How it works:
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
 
-- **Codex lane, Round 510, CLAIMED 2026-09-07, CODE COMPLETE, FINAL GATES RUNNING.** Finish the Google URL-level audit, reconcile
+- **Codex lane, Round 510, CLAIMED 2026-09-07, DRAFT PR 61, FINAL GATE RUNNING.** Finish the Google URL-level audit, reconcile
   stale open bugs against current code, and repair the confirmed Footle kit-number harness
   network stall. The fetch lacks a deadline and its failed-page continue advances the offset,
   so a failed page can also be silently omitted. Scope: `scripts/simFootleKitNumbers.mjs`, its
@@ -111,6 +111,9 @@ How it works:
   docs/seo/indexing-audit-2026-09-07.md, including Footle's accepted indexing request.
   Hosting remains a proposal only: keep analytics, visible previews and approval before
   publication. Do not switch hosting or auto-publish main commits.
+  Draft: https://github.com/PapiSalgueroM/ballpark-hero/pull/61, code commit 7df896e1.
+  The full node run is still executing. Do not merge or publish until its closing result is
+  read and any findings are resolved. Current local preview: http://127.0.0.1:4173/soccer-conquest.
 
 - **Codex lane, Round 509, COMPLETE, MERGED THROUGH PR 60 AT `1ecc00eb`, VERIFIED LIVE
   LATE 2026-09-07.** This batch

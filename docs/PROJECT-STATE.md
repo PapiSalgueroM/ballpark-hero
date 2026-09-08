@@ -13,6 +13,9 @@ The publisher action was not observed by this session; do not claim Codex presse
 
 Round 510's Conquest same-day tab protection and harness changes remain on the Codex branch,
 not live. Its distinct conflict notice is absent from the public Conquest bundle.
+Draft PR 61 holds this work: https://github.com/PapiSalgueroM/ballpark-hero/pull/61.
+Code commit 7df896e1 passed the type, build, unit, targeted-control and browser gates below.
+The full 264-node-harness run is still executing; read its closing result before merging.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
@@ -3049,7 +3052,7 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
-- **2026-09-07, Round 510 (Codex lane), IN VERIFICATION.** Google URL-level evidence is
+- **2026-09-07, Round 510 (Codex lane), DRAFT PR 61, FULL SIMULATION GATE PENDING.** Google URL-level evidence is
   recorded in docs/seo/indexing-audit-2026-09-07.md. The report is dated September 3:
   58 indexed, 71 discovered, 17 crawled exclusions, three alternate-domain redirects.
   Of the 17, eleven are current indexable pages, five are deliberately excluded routes and
