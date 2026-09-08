@@ -9,6 +9,16 @@ import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
 import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
+/* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
+   meter the engine judges with, so what the bar says while you are typing and
+   what happens when you press send can never disagree. */
+import {
+  MAX_TERMS_YEARS, MIN_TERMS_YEARS, dealCloseness, offerVerdict, termsCloseness,
+  termsScore, valuationLine, wageRoom, wageRoomLine,
+} from '@/lib/clubManagerDeals';
+import type { PersonalTerms } from '@/lib/clubManagerDeals';
+import { ROLE_INFO, ROLE_LADDER, wageBill } from '@/lib/clubManager';
+import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
@@ -56,6 +66,10 @@ interface TransferScreenProps {
   /* Round 94: the transfer-status controls. */
   onSetStatus: (playerId: string, status: TransferStatus | null) => void;
   onLoanOut: (playerId: string) => void;
+  /* Round 506: the personal terms table, and the two loan figures. */
+  onProposeTerms: (terms: PersonalTerms) => void;
+  onBuyLoanee: (playerId: string) => void;
+  onEndLoanEarly: (playerId: string) => void;
 }
 
 /** Round 94: the three things you can tell the world about a player. */
@@ -82,6 +96,7 @@ export function TransferScreen({
   career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
+  onProposeTerms, onBuyLoanee, onEndLoanEarly,
 }: TransferScreenProps) {
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
@@ -98,6 +113,13 @@ export function TransferScreen({
   const [addOn, setAddOn] = useState(0);
   const [sellOnPct, setSellOnPct] = useState(0);
   const [swapId, setSwapId] = useState<string | null>(null);
+  /* Round 506: his "YOU type the bid". The presets below still fire straight
+     off, because the browser walk clicks them and they are a good shortcut,
+     but the number in this box is the one the meter is reading. */
+  const [bid, setBid] = useState('');
+  /* Round 506: the personal terms you are putting to him. Null until the fee
+     is agreed, then seeded from what his agent opened with. */
+  const [terms, setTerms] = useState<PersonalTerms | null>(null);
 
   const windowOpen = career.transferWindow !== null;
   const neg = career.negotiation ?? null;
@@ -110,7 +132,23 @@ export function TransferScreen({
     setAddOn(0);
     setSellOnPct(0);
     setSwapId(null);
+    setBid('');
+    setTerms(null);
   }, [negName]);
+
+  /* Round 506: when the clubs shake hands his agent puts an opening sheet on
+     the table, and that sheet is what the panel starts from. Keyed on the
+     phase and on what he is currently asking for, so his counter moves the
+     sliders under you the way a counter should. */
+  const wantKey = neg?.phase === 'terms' && neg.terms
+    ? `${neg.terms.want.years}:${neg.terms.want.wage}:${neg.terms.want.bonus}:${neg.terms.want.role}`
+    : '';
+  useEffect(() => {
+    if (!wantKey) return;
+    const want = career.negotiation?.terms?.want;
+    if (want) setTerms({ ...want });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wantKey]);
 
   const marketLeagues = useMemo(() => {
     const names = new Set<string>();
@@ -174,6 +212,31 @@ export function TransferScreen({
     ? dealPackageValue(career, neg.theirAsk, 0, dealExtras)
     : 0;
 
+  /* Round 506: the closeness meter, read off the same two functions the
+     engine judges with. It reads the whole PACKAGE rather than the cash, so
+     adding a sell-on visibly moves the bar. */
+  const typedBid = Math.max(0, Math.round((parseFloat(bid) || 0) * 10) / 10);
+  const typedPackage = neg && neg.status === 'open' && neg.phase !== 'terms'
+    ? dealPackageValue(career, neg.theirAsk, typedBid, dealExtras)
+    : 0;
+  const typedCloseness = neg && neg.status === 'open' && neg.phase !== 'terms'
+    ? dealCloseness(typedPackage, neg.theirAsk)
+    : 0;
+  const typedVerdict = neg && neg.status === 'open' && neg.phase !== 'terms'
+    ? offerVerdict(typedPackage, neg.theirAsk)
+    : 'counter';
+  const bidTooBig = typedBid > career.budget;
+
+  /* Round 506: what his side would say to the sheet on the table right now. */
+  const want = neg?.phase === 'terms' ? neg.terms?.want ?? null : null;
+  const termsClose = want && terms ? termsCloseness(want, terms) : 0;
+  const termsReady = want && terms ? termsScore(want, terms) >= 1 : false;
+  const signOnRoom = neg?.phase === 'terms'
+    ? Math.round((career.budget - (neg.agreedFee ?? 0)) * 10) / 10
+    : 0;
+  const room = terms ? wageRoom(Math.round(wageBill(career)), career.wageCap ?? 0, terms.wage) : null;
+  const roomLine = room ? wageRoomLine(room) : '';
+
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
     <button
       key={label}
@@ -233,21 +296,23 @@ export function TransferScreen({
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
               <Handshake className="w-3.5 h-3.5" />
-              {neg.status === 'open' ? 'Negotiating' : neg.status === 'agreed' ? 'DEAL DONE' : neg.status === 'hijacked' ? 'HIJACKED' : 'DEAL COLLAPSED'}: {neg.player.name}
+              {neg.status === 'open'
+                ? (neg.phase === 'terms' ? 'Personal terms' : 'Negotiating')
+                : neg.status === 'agreed' ? 'DEAL DONE' : neg.status === 'hijacked' ? 'HIJACKED' : 'DEAL COLLAPSED'}: {neg.player.name}
             </div>
             <span className={cn('text-sm font-bold font-display', ratingTint(neg.player.rating))}>{neg.player.rating}</span>
           </div>
           <div className="text-[10px] text-muted-foreground mb-1.5">
-            {neg.player.club} · {neg.player.position} · {neg.player.age}y · worth {money(neg.player.value ?? neg.player.price)}
+            {neg.player.club} · {neg.player.position} · {neg.player.age}y · {valuationLine(career, neg.player)}
           </div>
 
-          {neg.status === 'open' && (
+          {neg.status === 'open' && neg.phase !== 'terms' && (
             <>
               <div className="flex items-center gap-3 text-[11px] mb-1">
                 <span className="text-foreground">Their ask: <span className="font-bold text-gold">{money(neg.theirAsk)}</span></span>
                 {neg.myOffer !== null && <span className="text-muted-foreground">Your last: {money(neg.myOffer)}</span>}
-                <span className="text-muted-foreground ml-auto" title="Seller patience">
-                  {'●'.repeat(Math.max(0, neg.patience))}{'○'.repeat(Math.max(0, 3 - neg.patience))}
+                <span className="text-muted-foreground ml-auto" title="Rounds they will keep talking. Every offer costs one, an insult costs two.">
+                  {'●'.repeat(Math.max(0, neg.patience))}{'○'.repeat(Math.max(0, 5 - neg.patience))}
                 </span>
               </div>
               {neg.rivalBidder && neg.rivalOffer !== null && (
@@ -309,6 +374,68 @@ export function TransferScreen({
                 )}
               </div>
 
+              {/* Round 506: his "YOU type the bid", with the closeness meter
+                  above it. The bar reads the whole package, so pressing a
+                  sell-on chip moves it without a penny changing hands, and it
+                  is the engine's own dealCloseness rather than a second
+                  opinion written for the screen. */}
+              <div className="rounded-lg border border-border/60 bg-background/40 p-2 mb-2 space-y-1.5" data-deal-desk>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider">How close you are</span>
+                  <span className={cn('text-[10px] font-bold',
+                    typedVerdict === 'agreed' ? 'text-emerald-400'
+                      : typedVerdict === 'walkout' ? 'text-red-400'
+                      : typedVerdict === 'insulted' ? 'text-yellow-400' : 'text-foreground',
+                  )}>
+                    {typedBid <= 0 ? 'Name your price'
+                      : typedVerdict === 'agreed' ? 'They will take this'
+                      : typedVerdict === 'walkout' ? 'They will end the talks'
+                      : typedVerdict === 'insulted' ? 'They will be insulted'
+                      : `${typedCloseness} of 100`}
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-secondary overflow-hidden" role="presentation">
+                  <div
+                    className={cn('h-full rounded-full transition-all',
+                      typedVerdict === 'agreed' ? 'bg-emerald-500'
+                        : typedVerdict === 'walkout' ? 'bg-red-500'
+                        : typedVerdict === 'insulted' ? 'bg-yellow-500' : 'bg-primary',
+                    )}
+                    style={{ width: `${typedBid <= 0 ? 0 : Math.max(3, typedCloseness)}%` }}
+                  />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Your bid</span>
+                  <Input
+                    type="number"
+                    inputMode="decimal"
+                    min={0}
+                    step={0.5}
+                    value={bid}
+                    onChange={e => setBid(e.target.value)}
+                    placeholder={`${Math.round(neg.theirAsk * 10) / 10}`}
+                    aria-label="Your bid in millions"
+                    className="h-7 flex-1 text-[11px]"
+                  />
+                  <span className="text-[9px] text-muted-foreground">m</span>
+                  <button
+                    onClick={() => { onOffer(typedBid, dealExtras); setBid(''); }}
+                    disabled={typedBid <= 0 || bidTooBig}
+                    className={cn('px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all',
+                      typedBid > 0 && !bidTooBig
+                        ? 'bg-primary text-primary-foreground border-primary hover:opacity-90'
+                        : 'bg-card border-border text-muted-foreground opacity-50 cursor-not-allowed')}
+                  >
+                    Offer it
+                  </button>
+                </div>
+                {bidTooBig && (
+                  <div className="text-[9px] text-red-400">
+                    That is more than the {money(career.budget)} you have.
+                  </div>
+                )}
+              </div>
+
               <div className="flex flex-wrap gap-1.5">
                 {offerBtn('Lowball', neg.theirAsk * 0.72, 'risky')}
                 {offerBtn('Haggle', neg.theirAsk * 0.88)}
@@ -316,6 +443,137 @@ export function TransferScreen({
                 {neg.rivalBidder && neg.rivalOffer !== null
                   ? offerBtn('Beat rival', Math.max(neg.rivalOffer * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus), 'close')
                   : offerBtn('Meet ask', Math.max(0.1, neg.theirAsk - structureBonus), 'close')}
+                <button
+                  onClick={onWalk}
+                  className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
+                >
+                  Walk away
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Round 506: the second table. His "then personal terms: length,
+              wages, add ons, role promises, everything". A fee being agreed
+              used to sign the player on a hard coded four year deal at a wage
+              the manager was never shown. The rung you pick here goes into
+              Round 127's ladder, so if you then leave him out he knows. */}
+          {neg.status === 'open' && neg.phase === 'terms' && want && terms && (
+            <>
+              <p className="text-[11px] italic text-muted-foreground mb-2">"{neg.terms?.note}"</p>
+              <div className="flex items-center gap-3 text-[11px] mb-1.5">
+                <span className="text-foreground">Fee agreed: <span className="font-bold text-gold">{money(neg.agreedFee ?? 0)}</span></span>
+                <span className="text-muted-foreground ml-auto" title="Rounds his agent will keep talking.">
+                  {'●'.repeat(Math.max(0, neg.terms?.patience ?? 0))}{'○'.repeat(Math.max(0, 3 - (neg.terms?.patience ?? 0)))}
+                </span>
+              </div>
+
+              <div className="rounded-lg border border-border/60 bg-background/40 p-2 mb-2 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider">He is asking</span>
+                  <span className="text-[10px] text-foreground font-bold">
+                    {want.years}y · {want.wage}k/w · {money(want.bonus)} on · {ROLE_INFO[want.role].label}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Length</span>
+                  {Array.from({ length: MAX_TERMS_YEARS - MIN_TERMS_YEARS + 1 }, (_, i) => MIN_TERMS_YEARS + i).map(y => (
+                    <button
+                      key={y}
+                      onClick={() => setTerms({ ...terms, years: y })}
+                      className={cn('px-2 py-0.5 rounded text-[9px] font-bold border transition-all',
+                        terms.years === y ? 'bg-primary/15 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
+                    >
+                      {y}y
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Wage</span>
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    step={5}
+                    value={terms.wage}
+                    onChange={e => setTerms({ ...terms, wage: Math.max(1, Math.round(parseFloat(e.target.value) || 0)) })}
+                    aria-label="Weekly wage in thousands"
+                    className="h-7 flex-1 text-[11px]"
+                  />
+                  <span className="text-[9px] text-muted-foreground">k/w</span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Signing on</span>
+                  <Input
+                    type="number"
+                    inputMode="decimal"
+                    min={0}
+                    step={0.5}
+                    value={terms.bonus}
+                    onChange={e => setTerms({ ...terms, bonus: Math.max(0, Math.round((parseFloat(e.target.value) || 0) * 10) / 10) })}
+                    aria-label="Signing bonus in millions"
+                    className="h-7 flex-1 text-[11px]"
+                  />
+                  <span className="text-[9px] text-muted-foreground">m</span>
+                </div>
+
+                <div className="flex items-start gap-1.5 flex-wrap">
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0 pt-0.5">Role</span>
+                  <div className="flex flex-wrap gap-1 flex-1">
+                    {(ROLE_LADDER as SquadRole[]).map(r => (
+                      <button
+                        key={r}
+                        onClick={() => setTerms({ ...terms, role: r })}
+                        title={ROLE_INFO[r].promise}
+                        className={cn('px-2 py-0.5 rounded text-[9px] font-bold border transition-all',
+                          terms.role === r ? 'bg-primary/15 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
+                      >
+                        {ROLE_INFO[r].emoji} {ROLE_INFO[r].label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="text-[9px] text-muted-foreground">
+                  {ROLE_INFO[terms.role].promise} Going back on it later costs you six weeks of his wage a rung.
+                </div>
+
+                {terms.bonus > signOnRoom && (
+                  <div className="text-[9px] text-red-400">
+                    The fee and this bonus come to more than the budget. You have {money(Math.max(0, signOnRoom))} left after the fee.
+                  </div>
+                )}
+                {roomLine !== '' && <div className="text-[9px] text-yellow-400">{roomLine}</div>}
+              </div>
+
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-[9px] text-muted-foreground uppercase tracking-wider">How he reads it</span>
+                <span className={cn('text-[10px] font-bold', termsReady ? 'text-emerald-400' : 'text-foreground')}>
+                  {termsReady ? 'He will sign this' : `${termsClose} of 100`}
+                </span>
+              </div>
+              <div className="h-1.5 rounded-full bg-secondary overflow-hidden mb-2" role="presentation">
+                <div
+                  className={cn('h-full rounded-full transition-all', termsReady ? 'bg-emerald-500' : 'bg-primary')}
+                  style={{ width: `${Math.max(3, termsClose)}%` }}
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  onClick={() => onProposeTerms(terms)}
+                  className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-primary text-primary-foreground border border-primary hover:opacity-90 transition-all"
+                >
+                  Put it to him
+                </button>
+                <button
+                  onClick={() => setTerms({ ...want })}
+                  className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-foreground hover:border-primary transition-all"
+                >
+                  Give him what he wants
+                </button>
                 <button
                   onClick={onWalk}
                   className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
@@ -484,7 +742,10 @@ export function TransferScreen({
                       {m.generated && <MadeUpTag />}
                     </div>
                     <div className="text-[9px] text-muted-foreground truncate">
-                      {m.club} · {m.age}y{m.value !== undefined ? <> · worth {money(m.value)}</> : null}
+                      {/* Round 506: your recruitment desk's read, not the
+                          number off the table. A weak lead scout gives you a
+                          wide band and a good one gives you a figure. */}
+                      {m.club} · {m.age}y{m.value !== undefined ? <> · {valuationLine(career, m)}</> : null}
                     </div>
                   </div>
                   <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
@@ -514,7 +775,7 @@ export function TransferScreen({
                         <button
                           onClick={() => onLoan(m)}
                           disabled={loanFeeOf(m) > career.budget}
-                          title={`Season loan for ${money(loanFeeOf(m))}`}
+                          title={`Season loan for ${money(loanFeeOf(m))}, with an option to buy and a release figure agreed up front`}
                           className={cn('flex-1 px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all',
                             loanFeeOf(m) <= career.budget ? 'border-border text-muted-foreground hover:text-foreground hover:border-primary' : 'border-border text-muted-foreground/50 cursor-not-allowed')}
                         >
@@ -668,6 +929,47 @@ export function TransferScreen({
                       <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
                     </div>
                     <div className="flex items-center gap-1 mt-1.5 pl-11 flex-wrap">
+                      {/* Round 506: a borrowed man is not for sale and cannot be
+                          listed, so his line carries the two figures agreed when
+                          he arrived instead of three pills that all refuse. */}
+                      {p.onLoan ? (
+                        <>
+                          <span className="text-[9px] text-muted-foreground">
+                            On loan from {p.loanFrom ?? 'his club'}
+                          </span>
+                          {p.loanOptionFee !== undefined && (
+                            <button
+                              onClick={() => onBuyLoanee(p.id)}
+                              disabled={!windowOpen || p.loanOptionFee > career.budget}
+                              title={windowOpen
+                                ? `Buy him outright at the figure agreed when he arrived, ${money(p.loanOptionFee)}`
+                                : 'The option can only be taken up while a window is open'}
+                              className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
+                                windowOpen && p.loanOptionFee <= career.budget
+                                  ? 'bg-card border-emerald-500/50 text-emerald-400 hover:border-emerald-400'
+                                  : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
+                            >
+                              Buy him · {money(p.loanOptionFee)}
+                            </button>
+                          )}
+                          {p.loanBreakFee !== undefined && (
+                            <button
+                              onClick={() => onEndLoanEarly(p.id)}
+                              disabled={!windowOpen || p.loanBreakFee > career.budget}
+                              title={windowOpen
+                                ? `Send him back early. The release figure agreed when he arrived is ${money(p.loanBreakFee)}`
+                                : 'The loan can only be ended while a window is open'}
+                              className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
+                                windowOpen && p.loanBreakFee <= career.budget
+                                  ? 'bg-card border-border text-muted-foreground hover:text-foreground'
+                                  : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
+                            >
+                              Send him back · {money(p.loanBreakFee)}
+                            </button>
+                          )}
+                        </>
+                      ) : (
+                        <>
                       {pill('listed', 'Transfer list')}
                       {pill('loanListed', 'Loan list')}
                       {pill('blocked', 'Not for sale')}
@@ -681,6 +983,8 @@ export function TransferScreen({
                       >
                         Loan out now +{money(loanOutFee(p))}
                       </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 );

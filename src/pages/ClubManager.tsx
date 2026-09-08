@@ -1577,6 +1577,9 @@ const ClubManager = () => {
             onRejectBid={g.rejectIncomingBid}
             onSetStatus={g.setStatus}
             onLoanOut={g.loanOut}
+            onProposeTerms={g.proposeTerms}
+            onBuyLoanee={g.buyLoanee}
+            onEndLoanEarly={g.endLoanEarly}
           />
         </TabsContent>
       </Tabs>
