@@ -1,5 +1,27 @@
 # Project state
 
+## Round 525 login-return verification portability, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-525-login-return`, branch
+`codex/round-525-login-return`, from completed Round 524 `f51cbe5e` (draft PR75).
+simLoginReturn now uses the shared Playwright loader through a static import,
+requires an actual browser measurement, and fulfills exact local template/logo
+fixtures while aborting other page requests. Existing splash/spinner checks
+remain, wall/stuck controls require exact failures, and inline page errors
+cannot earn green or successful-control credit. No product/auth/provider or
+shared runner/loader change.
+
+The original launch failure was reproduced before editing. Fresh types/build
+and all fifteen generated-site fences pass. Normal browser measurement is
+55/55 splash points, wall gives its exact four failures and stuck gives one.
+The scoped runner classifies and executes it as a browser harness. Injected
+unrelated failures and runtime errors are rejected. Independent review clear.
+Full evidence: docs/login-return-verification-2026-09-08.md. Product bundle is
+unchanged from Round 524. No login/account action, merge or publication.
+Do not run the broad production-writing suite without actual process isolation.
+Round 526 is reserved by the other Codex task for NBA Arcade visible regions.
+Root and all existing previews remain untouched. Next free round: 527.
+
 ## Round 524 saved bracket profile summary, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-524-profile-bracket`, branch
