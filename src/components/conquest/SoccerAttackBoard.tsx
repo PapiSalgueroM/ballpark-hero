@@ -237,6 +237,7 @@ export default function SoccerAttackBoard() {
   };
 
   const playUnsaved = () => {
+    if (busy.current) return;
     const next = pending?.next ?? state ?? openingState();
     setUnsaved(true);
     applyCommitted(next, null, pending?.animation ?? null);
@@ -284,7 +285,7 @@ export default function SoccerAttackBoard() {
                   Replace damaged save
                 </button>
               )}
-              <button type="button" onClick={playUnsaved} className={quietButton}>Play without saving</button>
+              <button type="button" onClick={playUnsaved} disabled={working} className={quietButton}>Play without saving</button>
             </div>
           </div>
         )}
@@ -293,7 +294,7 @@ export default function SoccerAttackBoard() {
             <p>{notice}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <button type="button" onClick={retry} disabled={working} className={quietButton}>Retry save</button>
-              <button type="button" onClick={playUnsaved} className={quietButton}>Play this run without saving</button>
+              <button type="button" onClick={playUnsaved} disabled={working} className={quietButton}>Play this run without saving</button>
             </div>
           </div>
         )}
@@ -342,7 +343,7 @@ export default function SoccerAttackBoard() {
           <p>{recovery.kind === 'damaged' ? 'This Attack save changed to damaged data. It has not been overwritten.' : 'Safe browser storage is blocked. This run cannot be saved right now.'}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {recovery.kind === 'damaged' && <button type="button" onClick={replaceDamagedSave} disabled={working} className={quietButton}>Replace damaged save</button>}
-            <button type="button" onClick={playUnsaved} className={quietButton}>Continue without saving</button>
+            <button type="button" onClick={playUnsaved} disabled={working} className={quietButton}>Continue without saving</button>
           </div>
         </div>
       )}
@@ -352,7 +353,7 @@ export default function SoccerAttackBoard() {
           {pending && (
             <div className="mt-2 flex flex-wrap gap-2">
               <button type="button" onClick={retry} disabled={working} className={quietButton}>Retry save</button>
-              <button type="button" onClick={playUnsaved} className={quietButton}>Play this run without saving</button>
+              <button type="button" onClick={playUnsaved} disabled={working} className={quietButton}>Play this run without saving</button>
             </div>
           )}
         </div>

@@ -1,5 +1,28 @@
 # Work board
 
+## Round 540 complete, September 8, 2026
+
+Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
+
+Codex owns the verified Attack save-choice guard in
+`.worktrees/round-540-attack-save-choice`, branch
+`codex/round-540-attack-save-choice`, base539 `060d7096`, claim `1d3164b3`.
+Four unsaved buttons disable during writes; a synchronous busy guard rejects
+a second native click before repaint. Six original-Board failures become six
+passes, eleven exact controls fire, and runtime/backend probes reject.
+Both exact types, build33.96seconds, all15 site fences and scoped new/prior
+harnesses pass. Phone/desktop pass normal and disabled-control walks after
+explicit native storage visibility. Main visual and independent reviews clear.
+Preview4216 PID35056, index-CwIJzwt6.js and SoccerConquest-BlgKe9ym.js.
+Evidence: docs/attack-save-choice-2026-09-08.md.
+
+Next free541: fix the separate intermittent cross-tab localStorage lost update.
+Two raw queues reproduced it; one passed. Round540's explicit visibility
+barrier does not establish durable raw-queue saves. Exact reproduction and
+transaction direction: docs/conquest-save-visibility-2026-09-08.md.
+Grid-tier incomplete-fetch false-green and Vitest dev-tool advisories remain
+other follow-ups. Draft only, no backend/account writes, broad suite, merge
+or publication. Preserve root, all worktrees and previews.
 ## Round 539 complete, September 8, 2026
 
 Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.

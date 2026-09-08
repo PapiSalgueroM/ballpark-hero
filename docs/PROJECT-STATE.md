@@ -1,5 +1,35 @@
 # Project state
 
+## Round 540 Attack save-choice guard, September 8, 2026
+
+Implementation: `34f41fad`. Draft PR91: https://github.com/PapiSalgueroM/ballpark-hero/pull/91.
+
+Verified in `.worktrees/round-540-attack-save-choice`, branch
+`codex/round-540-attack-save-choice`, base539 `060d7096`, claim `1d3164b3`.
+All four unsaved-play choices now lock while a save is pending, and the
+handler rejects a second click before React updates the disabled button.
+Idle unsaved play still reveals the exact pending move and preserves the old
+saved bytes. The six-case original-Board baseline fails all six; the repair
+passes all six. Eleven exact behavior controls and two runtime/backend
+rejection probes pass. Both exact types (including the final test typing
+repair), build33.96seconds, all15 site checks and scoped new/prior harnesses
+pass. Phone/desktop pass normal and disabled-control walks. Main visual and
+independent source/runtime reviews are clear. Preview4216 PID35056:
+index-CwIJzwt6.js and SoccerConquest-BlgKe9ym.js. Evidence:
+`docs/attack-save-choice-2026-09-08.md`.
+
+Next541 is a SEPARATE unresolved cross-tab save issue. Two raw browser queues
+showed a confirmed seed88 restart overwritten by a cached seed9 retry; one
+later diagnostic passed, so it is timing-dependent. The passing Round540
+browser walks explicitly wait for a native storage event/readback before
+releasing Retry and do not prove raw-queue durability. Reproduction, native
+receipts, primary specifications and a durable transaction direction are in
+`docs/conquest-save-visibility-2026-09-08.md`. Do not mark that defect fixed.
+Grid-tier partial-fetch false-green and the newly reported moderate Vitest
+dev-tool advisories remain separate follow-ups. No dependency changes here.
+Draft only, no data/backend/account writes, broad suite, merge or publish.
+Preserve Claude's root, every prior worktree and preview.
+
 ## Round 539 World XI complete pool, September 8, 2026
 
 Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
