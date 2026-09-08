@@ -1,5 +1,35 @@
 # Project state
 
+## Round 531 NFL Arcade signing safeguards, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-531-nfl-free-agency`, branch
+`codex/round-531-nfl-free-agency`, base530 `18e83e9a` (draft PR81).
+NFL signing and team changes now require a ready turn with no unresolved
+power choice. Current-pool validation and consumed callback guards prevent
+duplicate or stale roster/log/rating writes. Surviving-team choices retain
+the existing badge and Change team flow. A waived player's own queued
+upgrade is cleared. The three-battle cooldown, +2 bonus, dynamic eliminated
+roster pool and global weakest-player lookup are preserved. Unsupported
+static contract blurbs are removed without changing player identities or
+game ratings. No new real-world facts.
+
+Both signing defects were reproduced in the real hook, and the visible
+mid-turn Change team defect was reproduced in the prior build. Nine hook
+and fourteen UI cases pass, with 47 exact source controls producing 115
+intended failures. Both exact types, build, all fifteen generated-site
+checks and 31 prior NBA/help cases pass. Both new harnesses run through the
+actual selected runner. Phone and desktop each pass eight real battles,
+five neutral claims, two signings and actual eliminated-team recovery.
+Both dead Change controls pass. Source review and main visual review clear.
+Evidence: docs/nfl-free-agency-2026-09-08.md. Preview4208 serves
+index-Bwd-Ucls.js. No snapshot, ledger or dependency changes, real backend
+writes, default suite, root edits, merge or publication. Preserve all prior
+worktrees and previews. Next free532: acquired NFL player metadata is lost
+by the battle and roster screens. An independent 32-seed witness selects
+Montez Sweat as original CHI defender 32/32 but acquired BUF defender 0/32;
+a temporary resolver correction restores 32/32 and nine visible plays.
+No odds retuning is needed. Broad-suite process isolation remains separate.
+
 ## Round 530 NBA Arcade Free Agency, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-530-nba-free-agency`, branch

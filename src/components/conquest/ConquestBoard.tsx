@@ -129,15 +129,8 @@ function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
   );
 }
 
-// Free Agency panel (item 87): collapsible, same pattern as PowerRankingsPanel.
-// Before a favorite team is chosen, shows a compact 32-team picker. Once a
-// team is picked, lists the CONQUEST_FREE_AGENCY_POOL candidates with a Sign
-// button gated by canSignFreeAgent(); when gated, the button is disabled and
-// shows the cooldown ("Available after N more conquests" using the hook's
-// exposed freeAgencyCooldownRemaining, since the hook doesn't expose a
-// prose reason string).
 function FreeAgencyPanel({
-  favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining, pool, aliveIds,
+  favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining, pool, aliveIds, actionReady, finished,
 }: {
   favoriteTeam: string | null;
   setFavoriteTeam: (teamId: string | null) => void;
@@ -146,15 +139,21 @@ function FreeAgencyPanel({
   freeAgencyCooldownRemaining: number;
   pool: ConquestFreeAgentCandidate[];
   aliveIds: string[];
+  actionReady: boolean;
+  finished: boolean;
 }) {
-  const canSign = canSignFreeAgent();
   const favTeam = favoriteTeam ? TEAM_MAP.get(favoriteTeam) : undefined;
   const favoriteEliminated = !!favoriteTeam && !aliveIds.includes(favoriteTeam);
-  const cooldownLabel = favoriteEliminated
-    ? '💀 Your team was eliminated. Pick another team'
-    : freeAgencyCooldownRemaining > 0
-      ? `Available after ${freeAgencyCooldownRemaining} more conquest${freeAgencyCooldownRemaining === 1 ? '' : 's'}`
-      : 'Pick a team to unlock signing';
+  const canSign = actionReady && !!favoriteTeam && !favoriteEliminated && freeAgencyCooldownRemaining === 0 && canSignFreeAgent();
+  const cooldownLabel = finished
+    ? 'This run is finished. Start a new run to sign players.'
+    : !actionReady
+      ? 'Finish this turn before changing teams or signing.'
+      : favoriteEliminated
+        ? 'Your team was eliminated. Use Change team to pick a surviving team.'
+        : !favoriteTeam
+          ? 'Pick a team to unlock signing.'
+          : `Available after ${freeAgencyCooldownRemaining} more settled battle${freeAgencyCooldownRemaining === 1 ? '' : 's'}.`;
 
   return (
     <details className="rounded-xl border border-border bg-card">
@@ -162,19 +161,21 @@ function FreeAgencyPanel({
         ✍️ Free Agency
       </summary>
       <div className="px-3 pb-3">
+        <p className="text-[11px] text-muted-foreground text-center pb-2">Arcade player pool. Availability follows the rosters in this run.</p>
         {!favoriteTeam ? (
           <div className="space-y-2 py-1">
             <p className="text-[11px] text-muted-foreground text-center">Pick your team to unlock free agency</p>
             <select
               defaultValue=""
+              disabled={!actionReady}
               onChange={(e) => { if (e.target.value) setFavoriteTeam(e.target.value); }}
               aria-label="Pick your team"
-              className="w-full px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground"
+              className="w-full min-h-8 px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground disabled:opacity-40"
             >
               <option value="" disabled>Select a team...</option>
-              {NFL_TEAMS.map(t => (
+              {NFL_TEAMS.filter(t => aliveIds.includes(t.id)).map(t => (
                 <option key={t.id} value={t.id}>
-                  {t.city} {t.name}{aliveIds.includes(t.id) ? '' : ' 💀 (eliminated)'}
+                  {t.city} {t.name}
                 </option>
               ))}
             </select>
@@ -194,7 +195,8 @@ function FreeAgencyPanel({
               </span>
               <button
                 onClick={() => setFavoriteTeam(null)}
-                className="shrink-0 px-2 py-1 rounded-lg border border-border text-[10px] font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors active:scale-95"
+                disabled={!actionReady}
+                className="shrink-0 min-h-8 min-w-8 px-2 py-1 rounded-lg border border-border text-[10px] font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ← Change team
               </button>
@@ -210,27 +212,26 @@ function FreeAgencyPanel({
                       <span className="font-semibold text-foreground">{candidate.name}</span>
                       <span className="text-muted-foreground">{candidate.position} · {candidate.overall} OVR</span>
                     </div>
-                    <div className="text-muted-foreground truncate">{candidate.blurb}</div>
+                    {candidate.blurb && <div className="text-muted-foreground">{candidate.blurb}</div>}
                   </div>
                   <button
                     onClick={() => signFreeAgencyCandidate(candidate)}
                     disabled={!canSign}
+                    aria-label={`Sign ${candidate.name} for ${favTeam?.name || favoriteTeam}`}
                     title={!canSign ? cooldownLabel : undefined}
-                    className="shrink-0 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition-opacity active:scale-95 bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
+                    className="shrink-0 min-h-8 min-w-8 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition-opacity active:scale-95 bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                   >
                     Sign
                   </button>
                 </div>
               ))}
               {pool.length === 0 && (
-                <p className="text-[10px] text-muted-foreground text-center pt-1">No free agents on the market right now</p>
-              )}
-              {!canSign && (
-                <p className="text-[10px] text-muted-foreground text-center pt-1">{cooldownLabel}</p>
+                <p className="text-[10px] text-muted-foreground text-center pt-1">No players from this Arcade pool are available.</p>
               )}
             </div>
           </div>
         )}
+        {!canSign && <p role="status" className="text-[11px] text-muted-foreground text-center pt-2">{cooldownLabel}</p>}
       </div>
     </details>
   );
@@ -858,6 +859,8 @@ export default function ConquestBoard() {
         freeAgencyCooldownRemaining={game.freeAgencyCooldownRemaining}
         pool={game.freeAgencyPool()}
         aliveIds={aliveIds}
+        actionReady={game.freeAgencyActionReady}
+        finished={game.phase === 'gameover'}
       />
 
       {/* Standings: remaining teams sorted by territory then wins, + collapsible eliminated list */}
