@@ -15,10 +15,14 @@ after one minor comment correction. The integrated full Vitest run finished with
 UI timeout followed by a cancelled-replacement save mismatch. Its 19 new midnight
 tests passed. An unchanged isolated Attack-file rerun reproduced both failures,
 while the cancelled-replacement test passes alone. Evidence points to the timed-out
-test continuing into the next one; the original timeout remains unexplained.
+test continuing into the next one. The full-map test also times out alone on the
+unchanged prior `21f7090b` candidate, reproducing it without Round 513's changes;
+the original timeout remains unexplained.
 The full node suite is deferred while Claude's heavy suite remains active. This is a draft
 candidate, not a completed broad verification gate.
 No merge or publish is claimed. Details: docs/midnight-save-verification-2026-09-08.md.
+The branch is pushed in draft PR 64, stacked on PR 63:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/64.
 
 The reviewed Round 512 candidate, its preview on port 4178 and draft PR 63 are
 unchanged. Its full node suite remains pending while Claude's heavy suites run.

@@ -23,6 +23,10 @@ not complete: full Vitest ended 359 pass/2 fail in unchanged Attack UI tests; th
 isolated file repeats the timeout and follow-on save mismatch. The confirmation
 test passes alone. Full node suite remains deferred for shared machine capacity.
 Keep this as a draft candidate. Details: docs/midnight-save-verification-2026-09-08.md.
+Pushed in draft PR 64, https://github.com/PapiSalgueroM/ballpark-hero/pull/64,
+stacked on PR 63. The full-map-only check also times out on unchanged prior code
+`21f7090b`; its cause remains open. Do not interpret either baseline or isolated
+rechecks as a completed full gate.
 
 **OWNER REVIEW CHECKPOINT, 2026-09-08.** Anthony wants to review the whole website when
 Codex and Claude reach a stable stopping point. Finish the current bounded batch and its

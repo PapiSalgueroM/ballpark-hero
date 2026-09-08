@@ -3,6 +3,8 @@
 Production change: `64fdea29`. Final comment correction: `fef84b82`.
 Branch: `codex/round-513-midnight-saves`, based on the reviewed `21f7090b` candidate.
 Local build: `http://127.0.0.1:4180`. This is not the published website.
+Backup: draft PR 64, https://github.com/PapiSalgueroM/ballpark-hero/pull/64,
+stacked on PR 63's branch, not main. No merge or publish.
 
 ## What changed
 
@@ -60,6 +62,12 @@ neither failing direct-board test calls the changed Daily helpers. This strongly
 supports a lingering test continuation causing the second failure, but does not
 establish why the original complete-map test exceeded 30 seconds. The full run is
 red, not an all-clear. No assertions or timeouts were weakened.
+
+The full-map test also times out at the same unchanged 30-second limit when run
+alone on the prior `21f7090b` candidate (70.24 seconds total process time). That
+reproduces the timeout without Round 513's code changes. It does not prove resource
+contention is the cause or turn either full run green. The prior candidate and its
+preview were not edited or rebuilt for this read-only comparison.
 
 The full node suite remains pending while Claude's existing heavy suite uses the
 shared machine. Neither an incomplete run nor a deferred run is a pass. This is a
