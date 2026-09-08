@@ -1,5 +1,36 @@
 # Project state
 
+## Round 520 dependency safety, September 8, 2026
+
+Scoped verification is complete in `.worktrees/round-520-dependency-safety`, branch
+`codex/round-520-dependency-safety`, based on Round 519 `ac84b913` (draft PR70).
+Targeted build-tool updates take the current npm audit from five affected
+packages to zero reported vulnerabilities. Vite is 6.4.3, esbuild 0.25.12,
+humanfs/node 0.16.8, Browserslist 4.28.9 and selector-parser 6.1.4. The exact
+Supabase 2.95.3 pin and patch remain unchanged. Clean install, app/config type
+gates, build, all fifteen generated-site fences and flagship weight pass.
+Storage and Footle focused tests/controls pass, as do the 24 query cases and
+25 controls. Built browser storage/cookie checks, their controls and the
+actual ticker walk pass. The new production/dev rendering test covers Records,
+all four archives and emitted hover CSS; both modes and all eight controls
+pass. Review-driven corrections and initial harness failures remain recorded
+in docs/dependency-safety-2026-09-08.md. Independent final review has no findings.
+Preview 4192 serves `index-DqHV_WlN.js`; CSS is `index-C2w-JxlF.css`. Local
+dev 4193 was also tested. Existing previews and source snapshots are unchanged.
+No default full-suite execution: its production write probes and validator
+cache paths violate the overnight boundary. A fetch-only guard is insufficient
+for native/browser/child-process networking; broad isolation stays unbuilt.
+The exact source audit is in docs/test-execution-safety-2026-09-08.md.
+
+Round 519 is pushed and draft PR70 is open, stacked on Round 518. Preview 4190
+stays frozen. Root remains Claude's and now has an observed uncommitted change
+in src/lib/clubManager.ts. Do not touch it or stop its processes. No merge,
+publish, provider, billing, production data or account changes. Next free: 521.
+Next bounded issue: Profile's own average mixes account points with browser
+plays. Pair browser points/plays and label the scope, without pretending to
+restore account history or changing other players' totals. The evidence doc
+contains the synthetic 550-versus-50 fixture and a focused test plan.
+
 ## Round 519 query follow-up, September 8, 2026
 
 Scoped verification is complete in `.worktrees/round-519-score-query`, branch
