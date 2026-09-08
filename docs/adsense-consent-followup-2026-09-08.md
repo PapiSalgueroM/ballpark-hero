@@ -17,6 +17,13 @@ found, but shared script loaders do not independently check stored consent.
 CookieConsent's getItem/setItem are unguarded and can break the banner when storage
 is blocked. Its simple consent record has no timestamp or message version.
 
+Follow-up: the separate Round 515 draft PR66 fixes the storage exceptions and
+the SDK import-time read found by real-browser injection. Head `9918a6dd` passes
+15 focused cases, five unit controls, 46 browser checks, the vendor negative
+control, type/build and all fifteen generated-site fences. Failed acceptance
+left vendors off and normal stored sessions were preserved. This bounded fix
+does not change or verify the custom-banner/Google-CMP interaction described here.
+
 Google's certification requirement explicitly covers personalized ads in the
 EEA, UK and Switzerland; its current audit guidance also calls for certified
 publisher consent mechanisms. Non-personalized treatment is not itself a waiver

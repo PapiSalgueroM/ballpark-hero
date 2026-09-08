@@ -1,11 +1,20 @@
 # Work board
 
-**Round 515, Codex, CLAIMED September 8:** startup storage safety, isolated
+**Round 515, Codex, verification recorded September 8:** startup storage safety, isolated
 `.worktrees/round-515-storage-startup`, branch `codex/round-515-storage-startup`,
 based on main `a4579db3`. Auth startup, homepage enumeration, streak reminder and
-cookie controls must not crash when storage is blocked. No game save shim,
-database/provider/billing changes or publication. Next free round: 516.
-Round 514 remains active for the full-catalog navigation repair and verification.
+cookie controls now survive blocked storage. Head `9918a6dd`, draft PR66, has
+15 focused passes, five unit controls, 46 browser checks, the vendor control,
+clean install, type/build and all fifteen generated-site fences green. Full node
+integration remains open. No game save shim, database/provider/billing changes
+or publication. Next free round: 516.
+Round 514's navigation repair passes all 121 routes. Full prerender finished with
+145 written, zero failures and three expected account-only refusals. Final
+generated-site verification passed for draft PR65, including 16 focused tests,
+the 121-route final inventory, the four-width layout matrix, all fifteen fences,
+disclosure capture and its control, and the related-game graph. Two test-harness
+issues discovered by the fences were fixed and their controls proven. Generated
+snapshots and the sitemap ledger are ready to commit. No merge or publish.
 
 ## New owner feedback, September 8
 

@@ -60,7 +60,7 @@ const VIEWPORTS = [
 const SPORT_LINKS = ['/soccer', '/pro-football', '/college', '/pro-basketball', '/baseball', '/hockey'];
 const ABOUT_LINKS = ['/about', '/contact', '/whats-new', '/records', '/leaderboard', '/accessibility'];
 const LEGAL_NAMES = [
-  'NFL', 'NBA', 'UFC', 'NHL', 'MLB', 'FIFA', 'UEFA', 'Premier League',
+  'NFL', 'NBA', 'UFC', 'NHL', 'MLB, FIFA, UEFA', 'Premier League',
   'English Football League', 'LaLiga', 'Serie A', 'Bundesliga', 'Ligue 1',
   'Eredivisie', 'MLS', 'Saudi Pro League', 'IOC', 'NCAA', 'F1', 'PGA Tour',
   'NASCAR', 'ATP', 'WTA',

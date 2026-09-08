@@ -28,8 +28,8 @@ The initial audit was incomplete. A later registry-derived browser pass found
 18 more initial-state routes missing navigation after removing the SEO copy's
 related section. Thirteen had no GameNav anywhere, and five had one only inside
 later board branches. Those now have explicit page ownership; six descendant
-copies were removed from the five conditional boards. The corrected 121-route
-built inventory is required before this change is called verified.
+copies were removed from the five conditional boards. The corrected built
+inventory now passes all 121 registered routes, with one stable next-game section.
 
 The initial source count was 134 call sites across 116 files, with at most
 one rendered GameNav per route state. Multiple calls in a board are exclusive
@@ -54,7 +54,11 @@ Navigation implementation resumed after Anthony prioritized AdSense readiness.
 Footer passes its three focused tests after the initial RED run. Full guide and
 footer disclosure capture passed a real fixture with a working negative control
 and seven raw no-JavaScript snapshot checks. Full generation was stopped for the
-navigation correction above and must run again before shipping.
+navigation correction above. The replacement run finished with 145 written,
+zero failures and three expected account-only refusals. Final sitemap/build,
+16 focused tests and all fifteen generated-site gates pass. The final catalog
+inventory and six-route four-width layout walk were repeated successfully. This
+is a verified local candidate, not a published change or a full integration pass.
 
 ## Accounts
 

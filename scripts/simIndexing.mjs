@@ -35,8 +35,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
 const isPageSource = file => file.endsWith('.tsx') && !file.endsWith('.test.tsx');
 const CONTROL = process.env.SIM_INDEXING_CONTROL || '';
-if (CONTROL && CONTROL !== 'snapshot-noh1') {
-  console.error(`Unknown SIM_INDEXING_CONTROL "${CONTROL}". Use snapshot-noh1.`);
+if (CONTROL && !['snapshot-noh1', 'component-dupe'].includes(CONTROL)) {
+  console.error(`Unknown SIM_INDEXING_CONTROL "${CONTROL}". Use snapshot-noh1 or component-dupe.`);
   process.exit(1);
 }
 
@@ -220,7 +220,22 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
      is weaker than having two. So the level follows the page, and this check
      is what keeps the flag honest as pages change. */
   const PAGES_DIR = path.join(ROOT, 'src/pages');
-  const readFile = p => { try { return fs.readFileSync(p, 'utf-8'); } catch { return ''; } };
+  const componentControlFile = path.join(ROOT, 'src/components/game/Footer.tsx');
+  let componentControlFired = false;
+  const readFile = p => {
+    let source;
+    try { source = fs.readFileSync(p, 'utf-8'); } catch { return ''; }
+    if (CONTROL === 'component-dupe' && path.resolve(p) === componentControlFile) {
+      const changed = source.replace('</footer>', '<GameSeoContent />\n    </footer>');
+      if (changed === source || !changed.includes('<GameSeoContent')) {
+        fail('component-dupe control found Footer.tsx but did not add the SEO block');
+      } else {
+        componentControlFired = true;
+        return changed;
+      }
+    }
+    return source;
+  };
   const resolveImport = (spec, fromFile) => {
     let s2 = spec;
     if (s2.startsWith('@/')) s2 = path.join(ROOT, 'src', s2.slice(2));
@@ -275,10 +290,14 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const p2 = path.join(d, e.name);
       if (e.isDirectory()) walk(p2);
-      else if (e.name.endsWith('.tsx') && readFile(p2).includes('<GameSeoContent')) dupes.push(path.relative(ROOT, p2));
+      else if (isPageSource(e.name) && readFile(p2).includes('<GameSeoContent')) dupes.push(path.relative(ROOT, p2));
     }
   };
   walk(path.join(ROOT, 'src/components'));
+  const componentControlRelative = path.relative(ROOT, componentControlFile);
+  if (CONTROL === 'component-dupe' && (!componentControlFired || !dupes.includes(componentControlRelative))) {
+    fail('component-dupe control did not reach the duplicate-component assertion');
+  }
   if (dupes.length) fail(`components rendering the SEO block on top of their page: ${dupes.join(' | ')}`);
   console.log(`   ${checked} pages carry the block, ${own} have a headline of their own, ${checked - own} rely on it for their h1`);
 }

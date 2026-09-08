@@ -35,10 +35,16 @@ did not submit forms, enter the AdSense dashboard or test every game loop.
 - Round 514 compact layout is implemented as an active draft, not live. Focused
   tests, type/build and scoped browser/raw snapshot checks passed. Independent
   review then found 18 initial-state navigation gaps, now repaired in source.
-  Full catalog verification and final complete snapshots are still pending.
-- Round 515 startup storage safety is a separate draft. Thirteen focused tests
-  pass, including consent remaining off after a failed write. Full browser
-  verification is pending; this is not a completed Google CMP flow review.
+  The corrected catalog passes all 121 routes and full prerender completed with
+  145 written, zero failures and three expected account-only refusals. Final
+  generated-site verification passes for draft PR65, including all fifteen
+  fences and the repeated four-width layout walk. It remains unpublished.
+- Round 515 startup storage safety is pushed at `9918a6dd` in draft PR66.
+  Fifteen focused cases, five targeted controls, 46 browser checks, a vendor
+  negative control, type/build and all fifteen generated-site fences pass.
+  Failed consent writes kept vendors off, and the actual SDK import crash from
+  denied reads was reproduced and fixed. This is not a completed Google CMP
+  flow review or a claim that this draft is live.
 - Contact/report destinations and prior delivered reports exist, but fresh
   end-to-end delivery was not tested by this read-only assessment.
 - AdSense approval is unverified here; site checks do not substitute for Google's
