@@ -148,3 +148,8 @@ process exited 0. Its transport responses are synthetic fixtures; signing
 battles use seeded simulation and scout/replay uses a fixed random draw.
 No hook state, map ownership or battle result is substituted. The final
 browser syntax and shipped-name fence pass after the bounded script edit.
+
+Implementation `f67bbe6b`, stacked draft PR81:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/81.
+Base is Round 529's final checkpoint `dcd50886` (draft PR80). Preview4207
+remains available. No merge or live publication was performed.

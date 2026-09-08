@@ -6,6 +6,7 @@ Codex owns NBA Arcade Free Agency in useConquestNba.ts, ConquestBoardNba.tsx,
 ConquestHowToPlayNba.tsx and the pool's availability prose/schema, plus focused
 tests, controls and browser checks. Worktree `.worktrees/round-530-nba-free-agency`,
 branch `codex/round-530-nba-free-agency`, base529 `dcd50886` (draft PR80).
+Implementation `f67bbe6b`, draft PR81: https://github.com/PapiSalgueroM/ballpark-hero/pull/81.
 Fixed the eliminated-team picker, canonical active-roster eligibility,
 repeated and stale signing actions, and weakest-player metadata. Preserved
 the existing three-settled-battle cooldown and +2 rating drift. Waiving a

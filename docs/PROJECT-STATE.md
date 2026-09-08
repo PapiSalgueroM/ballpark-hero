@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-530-nba-free-agency`, branch
 `codex/round-530-nba-free-agency`, base529 `dcd50886` (draft PR80).
+Implementation `f67bbe6b`, draft PR81: https://github.com/PapiSalgueroM/ballpark-hero/pull/81.
 The surviving-team picker remains available, including after the selected
 team is eliminated. The canonical player pool excludes active roster members.
 Consumed or stale signing callbacks cannot duplicate players, logs or rating
