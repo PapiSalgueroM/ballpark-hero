@@ -2,18 +2,23 @@
 
 ## Round 525 login-return verification portability, September 8, 2026
 
-CLAIMED in `.worktrees/round-525-login-return`, branch
+Scoped verification complete in `.worktrees/round-525-login-return`, branch
 `codex/round-525-login-return`, from completed Round 524 `f51cbe5e` (draft PR75).
-Main owns simLoginReturn.mjs and coordination/evidence docs. Use the shared
-Playwright loader, require an actual browser measurement, and serve the static
-template with complete local request interception. Preserve the splash and
-spinner assertions. Prove both existing negative controls and reject unrelated
-failures. No product/auth/provider or shared runner/loader changes.
+simLoginReturn now uses the shared Playwright loader through a static import,
+requires an actual browser measurement, and fulfills exact local template/logo
+fixtures while aborting other page requests. Existing splash/spinner checks
+remain, wall/stuck controls require exact failures, and inline page errors
+cannot earn green or successful-control credit. No product/auth/provider or
+shared runner/loader change.
 
-Baseline launch-only reproduction: direct import fails on missing pinned
-Chromium; shared loader with CHROME_PATH launches installed Chrome. No page,
-login or account call was made. Fresh types/build and fifteen generated-site
-fences remain required. Do not run the broad production-writing suite.
+The original launch failure was reproduced before editing. Fresh types/build
+and all fifteen generated-site fences pass. Normal browser measurement is
+55/55 splash points, wall gives its exact four failures and stuck gives one.
+The scoped runner classifies and executes it as a browser harness. Injected
+unrelated failures and runtime errors are rejected. Independent review clear.
+Full evidence: docs/login-return-verification-2026-09-08.md. Product bundle is
+unchanged from Round 524. No login/account action, merge or publication.
+Do not run the broad production-writing suite without actual process isolation.
 Round 526 is reserved by the other Codex task for NBA Arcade visible regions.
 Root and all existing previews remain untouched. Next free round: 527.
 
