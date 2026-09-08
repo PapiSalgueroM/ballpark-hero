@@ -1,5 +1,13 @@
 # Work board
 
+**Round 525, Codex, CLAIMED September 8:** login-return harness browser
+portability and local template fixtures in `.worktrees/round-525-login-return`,
+branch `codex/round-525-login-return`, from Round 524 `f51cbe5e` (draft PR75).
+Own simLoginReturn.mjs and docs only. Shared loader, actual browser measurement,
+complete request interception, exact negative-control outcomes. No shared
+loader/runner or product changes, account/provider calls, root edits, merge or
+publish. Round 526 belongs to the other task's NBA Arcade repair. Next free527.
+
 **Round 524, Codex, scoped verification complete September 8:** saved-bracket profile summary in
 `.worktrees/round-524-profile-bracket`, branch `codex/round-524-profile-bracket`,
 based on Round 523 `8c3d1153` (draft PR74). Current top-level string champion

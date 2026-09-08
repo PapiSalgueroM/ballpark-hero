@@ -1,5 +1,22 @@
 # Project state
 
+## Round 525 login-return verification portability, September 8, 2026
+
+CLAIMED in `.worktrees/round-525-login-return`, branch
+`codex/round-525-login-return`, from completed Round 524 `f51cbe5e` (draft PR75).
+Main owns simLoginReturn.mjs and coordination/evidence docs. Use the shared
+Playwright loader, require an actual browser measurement, and serve the static
+template with complete local request interception. Preserve the splash and
+spinner assertions. Prove both existing negative controls and reject unrelated
+failures. No product/auth/provider or shared runner/loader changes.
+
+Baseline launch-only reproduction: direct import fails on missing pinned
+Chromium; shared loader with CHROME_PATH launches installed Chrome. No page,
+login or account call was made. Fresh types/build and fifteen generated-site
+fences remain required. Do not run the broad production-writing suite.
+Round 526 is reserved by the other Codex task for NBA Arcade visible regions.
+Root and all existing previews remain untouched. Next free round: 527.
+
 ## Round 524 saved bracket profile summary, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-524-profile-bracket`, branch
