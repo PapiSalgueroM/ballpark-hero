@@ -6,6 +6,7 @@ Codex owns the NFL Arcade acquired-player metadata repair in conquestBattle.ts,
 useConquest.ts and ConquestBoard.tsx, using one small shared roster resolver.
 Worktree `.worktrees/round-532-nfl-roster-cards`, branch
 `codex/round-532-nfl-roster-cards`, base531 `e5642529` (draft PR82).
+Implementation `df9e9933`, draft PR83: https://github.com/PapiSalgueroM/ballpark-hero/pull/83.
 Restore existing positions and game ratings for acquired players in battles,
 rosters and player-choice dialogs. Keep current-team original and legend
 priority, plus existing global source precedence for ambiguous names. No new

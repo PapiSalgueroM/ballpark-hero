@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-532-nfl-roster-cards`,
 branch `codex/round-532-nfl-roster-cards`, base531 `e5642529` (draft PR82).
+Implementation `df9e9933`, draft PR83: https://github.com/PapiSalgueroM/ballpark-hero/pull/83.
 A shared lookup restores acquired players' existing positions, game ratings
 and key stats in battles, roster tables, Steal and Upgrade choices, waiver
 selection and recipient-aware offers. Original team-card and own-legend

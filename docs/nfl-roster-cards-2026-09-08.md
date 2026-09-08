@@ -3,6 +3,8 @@
 Worktree `.worktrees/round-532-nfl-roster-cards`, branch
 `codex/round-532-nfl-roster-cards`, base531 `e5642529` (draft PR82).
 Claim `255a129b`. Root belongs to Claude and remains untouched.
+Implementation `df9e9933`, stacked draft PR83:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/83.
 
 ## Change
 
