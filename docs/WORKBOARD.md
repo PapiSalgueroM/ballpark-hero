@@ -1,5 +1,22 @@
 # Work board
 
+## Round 539 complete, September 8, 2026
+
+Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
+
+Codex owns the verified World XI required-player-page repair in
+`.worktrees/round-539-world-xi-pool`, branch `codex/round-539-world-xi-pool`,
+base538 `db9766d9`, claim `90c8fe8f`. Required errors/null data now reject the
+pool and use existing Retry. Optional history remains available as a fallback.
+27 actual-function cases,21 controlled failures and runtime rejection pass;
+both exact types, build32.54seconds, all15 site checks and selected pool/report
+harnesses pass. Phone/desktop pass6 normal cases plus2 action controls, each
+making a valid pick from the recovered page. Main visual review clear.
+Evidence: docs/world-xi-pool-2026-09-08.md. Preview4215 PID4980,
+index-DYgVTiKy.js and WorldXi-DaR_DXKt.js. Draft-only, no data/backend/account
+writes, broad suite, merge or publish. Preserve root/worktrees/previews.
+Next540: reproduced Soccer Attack save-retry/unsaved-choice race. Grid-tier
+partial-fetch false-green remains a separate follow-up.
 ## Round 538 complete, September 8, 2026
 
 Codex owns the confirmed NBA Arcade post-unmount callback repair. Worktree
