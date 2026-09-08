@@ -3,6 +3,8 @@
 Worktree `.worktrees/round-533-nfl-powers`, branch
 `codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).
 Claim `ad5ec9c9`. Root belongs to Claude and remains untouched.
+Implementation `c9334cca`, stacked draft PR84:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/84.
 
 ## Change
 

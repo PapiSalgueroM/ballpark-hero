@@ -4,6 +4,7 @@
 
 Scoped verification complete in `.worktrees/round-533-nfl-powers`, branch
 `codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).
+Implementation `c9334cca`, draft PR84: https://github.com/PapiSalgueroM/ballpark-hero/pull/84.
 Earned rewards now resolve once for their current owner, phase and offered
 choice. Saved cards open visibly, card Close/Escape saves, and picker
 Close/Escape/Back preserves the card. Saved controls have accessible labels

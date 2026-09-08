@@ -7,6 +7,7 @@ ConquestBoard.tsx, focused on current-owner, phase, canonical-choice and
 once-only action guards, plus usable reward controls and bounded checks.
 Worktree `.worktrees/round-533-nfl-powers`, branch
 `codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).
+Implementation `c9334cca`, draft PR84: https://github.com/PapiSalgueroM/ballpark-hero/pull/84.
 Actual earned-reward failures reproduced before edits. Current phase,
 owner, offered-choice and consumed-callback guards now protect rewards.
 Saved cards reopen visibly, card dismissal saves and picker exits return to
