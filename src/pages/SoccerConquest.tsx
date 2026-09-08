@@ -24,8 +24,8 @@ const SoccerConquest = () => {
   return (
     <>
       <PageSeo
-        title="Soccer Conquest - Top Five Leagues Imperialism Map Game | DoUKnowBall"
-        description="The imperialism map format for football. 96 clubs from the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 on one map of Europe: winners annex whole empires until one club rules the continent."
+        title="Soccer Conquest: Daily Season and England Attack | DoUKnowBall"
+        description="Play two soccer map modes: a 96 club Daily Season across Europe's top five leagues, or unlimited England Attack with direction spins, captures and saved runs."
         path={SOCCER_CONQUEST_GAME.path}
       />
       <div className="min-h-screen bg-background text-foreground">
@@ -66,20 +66,18 @@ const SoccerConquest = () => {
           <div className="mx-auto max-w-2xl">
             <GameSeoContent
               pageHasOwnH1
-              title="Soccer Conquest: Top Five Leagues Imperialism Game"
-              description="The classic imperialism map format for football. All 96 clubs of the 2026-27 Premier League, La Liga, Serie A, Bundesliga and Ligue 1 start with their home region on a map of Europe, winners annex the loser's entire empire, wiped-out clubs can storm back with one win, and a territory-seeded playoff crowns the ruler of the continent. Club strength comes from real squad market values."
+              title="Soccer Conquest: Daily Season and England Attack"
+              description="Daily Season puts all 96 clubs from the 2026-27 Premier League, La Liga, Serie A, Bundesliga and Ligue 1 into a scored daily map season. England Attack is an unlimited, unranked last-club-standing run with a saved geographic map, direction spins, player captures and simulated rating upgrades."
               howToPlay={[
-                `Pick your club from all 96, call its game each matchday, then watch all 48 results redraw the map. Winners take EVERYTHING the loser owned.`,
-                'Wiped off the map? Keep playing. One win takes a whole empire back.',
-                `After ${SOCCER_REGULAR_ROUNDS} matchdays the top 8 empires enter the playoffs: Quarter-finals, Semi-finals, then the Imperial Final.`,
-                'Level games go to penalties. No draws, ever.',
+                `Daily Season: pick one of 96 clubs, call its game each matchday, then watch all 48 results redraw the map. Winners take everything the loser owned.`,
+                `Daily Season: after ${SOCCER_REGULAR_ROUNDS} matchdays the top 8 empires enter the playoffs. Wiped-out clubs can still take an empire back.`,
+                'England Attack: spin a living club and a legal direction. Claim neutral land or play the first club reached by the ray.',
+                'England Attack: winners take the eliminated club\'s land and captured players. The run saves after every move, stays unlimited and awards no ranked points.',
               ]}
               examples={[
-                'Real Madrid open with the biggest squad value in Europe and the strongest empire',
-                'Le Mans, back in Ligue 1 after sixteen years, start as the longest shot on the map',
-                'Six London clubs start shoulder to shoulder on the same six hexes',
-                'Cagliari hold Sardinia, an island nobody can march to',
-                'Strasbourg and Freiburg face each other across the Rhine',
+                'Daily Season example: call your club\'s result, watch the whole matchday resolve, then protect enough regions to reach the top 8',
+                'England Attack example: fictional Amber Vale spins east, claims neutral land and gives its best player a simulated two-point upgrade',
+                'England Attack example: hit another club, play the simulated match, then the winner takes the loser\'s regions and captured players',
               ]}
             />
             <GameNav />

@@ -52,6 +52,9 @@ if (suites[0].assertionResults.length < 18 || suites[1].assertionResults.length 
 for (const [i, suite] of suites.entries()) {
   const passed = suite.assertionResults.filter(test => test.status === 'passed').length;
   console.log(`${TESTS[i]}: ${passed}/${suite.assertionResults.length} passed`);
+  for (const test of suite.assertionResults) {
+    console.log(`  ${test.status.toUpperCase()}: ${test.fullName}`);
+  }
 }
 const failed = cases.filter(test => test.status !== 'passed');
 if (!CONTROL) {

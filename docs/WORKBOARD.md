@@ -8,9 +8,11 @@ protocol itself lives near the top of that file ("Two subscriptions, one repo").
 Codex and Claude reach a stable stopping point. Finish the current bounded batch and its
 verification, then pause new feature expansion for his review. Do not wait for the whole
 master list or spread a new cross-sport design first. Each lane should record its exact
-commit, preview, checks and unfinished work. Claude's shared branch is at `d1c541b3` at
-this check; unpushed progress and his stopping point remain unverified. Copero research
-and proposed priorities are in `docs/copero-reference-audit-2026-09-08.md`.
+commit, preview, checks and unfinished work. Claude's Round 506 checkpoint is pushed at
+`7b53c3b4` on `origin/round-506-cm-transfers`; its scoped Club Manager checks and 15
+built-site fences pass, while its full node suite is still pending. That branch is not
+merged or published. Copero research and proposed priorities are in
+`docs/copero-reference-audit-2026-09-08.md`.
 
 How it works:
 
@@ -122,14 +124,19 @@ How it works:
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
 
-- **Codex lane, Round 512, CLAIMED 2026-09-07, GEOGRAPHIC SOCCER ATTACK V1.** The owner
-  approved continuing after the source audit. Build the first playable geographic league
-  map, directional elimination engine, captured players and upgrades, and separate saved
-  Attack runs. Preserve the existing daily and its score path. Start with verified English
-  ground locations, then extend the same design to the remaining requested maps and powers.
-  No invented coordinates or real rosters. This first slice does not claim World/NFL/NBA
-  parity. Branch codex/round-512-conquest-attack in .worktrees/round-511-midnight-saves.
-  No publish, DNS, plan or Club Manager changes. Plan:
+- **Codex lane, Round 512, REVIEW CANDIDATE 2026-09-08, GEOGRAPHIC SOCCER ATTACK V1.**
+  The first playable English slice is implemented on `codex/round-512-conquest-attack` in
+  `.worktrees/round-511-midnight-saves`: sourced geographic homes, generated game regions,
+  directional elimination, captured players, simulated upgrades and a separate durable
+  Attack save. The existing Daily Season and its scoring path remain intact. Scoped types,
+  build, 121 Attack tests over 20 actual-map seeds, all existing Conquest sims and all 15
+  built-site fences pass. The final scoped browser pass also passes 55 assertions across
+  all four required widths and a complete 160-action UI run. Whole-branch node and Vitest
+  gates, the 152-route guest sweep and independent Task 4 review are still running. This
+  local preview is a review candidate, not a whole-site all-clear.
+  La Liga, Europe, World and NFL/NBA powers remain open and are not enabled by the research
+  files. Stop feature expansion after this bounded batch for Anthony's review. No merge,
+  publish, DNS or Club Manager change. Plan:
   docs/superpowers/plans/2026-09-07-conquest-attack.md.
 
 - **Codex lane, Round 511, CLAIMED 2026-09-07, CONQUEST OWNER CORRECTION.** Remove the

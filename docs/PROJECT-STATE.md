@@ -31,24 +31,30 @@ from the exact videos in docs/conquest-reference-audit-2026-09-07.md. The existi
 season predictor and hex board do not satisfy that request. Preserve existing dailies
 while designing the new versioned Attack mode. No hosting or publication change.
 
-Round 512 is in progress on `codex/round-512-conquest-attack` in the isolated
-`.worktrees/round-511-midnight-saves` checkout. Engine commit `cd82bc57` adds
-directional territory attacks, elimination, captured players, game-rating upgrades
-and strict self-contained saves. Review follow-up `807ca0e3` closes an inconsistent
-recap target, bringing the focused suite to 81 passing tests (17 production
-mutation controls); independent engine review is clean. The 20
-English ground locations are sourced in `docs/conquest-premier-locations-2026-09-07.md`.
-Actual-map seed 9 exposed a home-ray dead end after territorial captures. Commit
-`3b7c7467` adds the sourced geographic map and saved owned-territory launch fallback,
-with the exact contract in `docs/superpowers/plans/2026-09-07-conquest-attack.md`.
-The engine/map suite has 103 passing tests (24 production engine controls), and
-20 full actual-map seeds complete. App types and offline generator reproduction
-pass; independent map review is running. The playable board and production
-integration are still in progress. The existing
-local preview does not yet contain the new Attack board. La Liga location research
-is also recorded in `docs/conquest-laliga-locations-2026-09-07.md`, but Rayo's
-unsettled current venue remains a gate for that future preset. Do not treat the
-research as an enabled league.
+Round 512 is a local review candidate on `codex/round-512-conquest-attack` in the
+isolated `.worktrees/round-511-midnight-saves` checkout. The first playable Attack
+slice uses 20 sourced English ground locations, 48 generated game regions and the
+existing documented English roster snapshot. Directional attacks eliminate clubs,
+carry captured players and apply simulated rating upgrades. The separate
+`dukb-conquest-attack-soccer-v1` save preserves every committed phase and finished
+map without rerolling; Attack is unlimited and gives no ranked points. The existing
+96 club Daily Season, daily key, scoring and completion path are unchanged.
+
+The integrated wrapper reports 121 real Vitest outcomes across engine, map, save and
+board files, including 20 actual-map seeds; its changed revision-transition control
+fails the intended invariant. Existing Conquest sims pass after `simConquestMap`
+was narrowed to permit exactly the shared five-sport renderer and the separate Attack
+renderer; its private third-renderer control remains red. Types, both production
+builds, scoped prerender, sitemap regeneration and all 15 built-site fences pass.
+The final whole-branch node and Vitest suites plus independent Task 4 review are
+still running. The scoped final Chromium pass is clean: 55 assertions at 320, 390,
+430 and 1440 pixels, zero opening-label overlaps, exact Daily and Attack save
+precedence, a full 160-action UI finish matching the engine snapshot, and the
+quota, retry, competing-tab and pointer regressions. Treat the working preview as
+a review candidate, not a whole-site all-clear. La Liga, Europe, World and NFL/NBA powers remain open. La Liga location
+research does not enable that preset, including the unsettled current Rayo venue.
+Stop new feature expansion after this bounded batch for Anthony's review. No merge,
+publication, database, DNS or host change.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
 football-connect4-validate v12, soccer-grid-validate v23, college-grid-validate v16,
@@ -77,6 +83,11 @@ the tactics depth (a man read in his slot, the bench under the pitch ordered for
 seventeen shapes, the armband and the takers, a duty on every slot, a second position learned
 over weeks), fenced by simTacticsEngine. Change log entry below. 506 is the transfer arc with
 personal terms.**
+
+**Round 506 is pushed at `7b53c3b4` on `origin/round-506-cm-transfers`, not merged or
+published.** Its scoped Club Manager checks and 15 built-site fences pass. The full node
+suite is still pending, so this is Claude's review checkpoint rather than a whole-site
+all-clear. The branch also changes shared ad spacing; do not pull it into Round 512.
 
 **Round 509 is complete, merged through PR 60 and verified live.**
 Its College Grid finding was a false stall in `playGames`, not a broken page. The rest of its
@@ -164,7 +175,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Career Ladder flags | DONE | Round 444 |
 | Who Am I slow load; more puzzles; accuracy meter | DONE | Round 443 load (10 requests, 446 KiB); Round 463 grew the pool 500 to 600 and the secret pool 300 to 400, and the meter is measured rather than trusted: simWhoAmIAccuracy runs the real scorer over the real pool and holds that the answer alone scores 100, that sharing more of the six attributes scores higher at three gap sizes, and that the five hottest guesses share far more with the secret than five random players do |
 | Alphabet Sprint verify end to end; say full names count | DONE | copy since Round 319 (the full name lead sentence); verified 2026-09-05 with a real browser play of the route, 14 interactions clean, no findings |
-| Conquest map presentation and creator rules | REOPENED, owner correction September 7 | Shared rendering shipped in Round 457 and the soccer hex season in Round 459, but the owner now explicitly wants geographic club territories, selectable leagues and the directional last-team-standing loop. Soccer follows JarradHD's global episode; NFL/NBA use Deansworld's geographic map and power-up ideas. Exact source evidence and data gaps are in docs/conquest-reference-audit-2026-09-07.md. The players-valued count is removed in the local Round 511 preview, not published. New map presets, attack rules and powers are not built yet. Round 509's NBA retreat rule is live in the old mode; the newly requested elimination rules must be introduced deliberately, with versioned saves and matching help. |
+| Conquest map presentation and creator rules | PART, ENGLISH ATTACK REVIEW CANDIDATE | Round 512 implements the first geographic Attack slice for 20 English clubs: directional last-club-standing play, captured players, simulated upgrades and a separate durable save, while the existing scored Daily Season remains intact. The local build is a review candidate, not published. La Liga, Europe, World and NFL/NBA powers remain open; their research files do not enable them. Exact source evidence and data gaps are in docs/conquest-reference-audit-2026-09-07.md. The players-valued count remains removed in the local Round 511 preview. |
 | NEW Search and Discard | DONE | shipped 2026-08-29 |
 | NEW Sports Bingo | DONE | shipped 2026-08-29 |
 | NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy Draft; not yet one per sport |
