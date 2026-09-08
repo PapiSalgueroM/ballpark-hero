@@ -19,9 +19,9 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 512 (checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 513 (checked against origin/main on
   2026-09-07: main is `d1c541b3`, including Round 505 and 509. The Claude Code lane holds
-  506 to 508 and the Codex lane holds 510 and 511, see both claims below).
+  506 to 508 and the Codex lane holds 510 to 512, see the claims below).
   Note on the ordering, so nobody reads it as a gap: 480 to 486 shipped on 2026-09-06
   ahead of 475 to 479, because those seven came out of live measurement that day (the
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
@@ -113,6 +113,16 @@ How it works:
   season and try to turn it around. The live-start request is a large data feature, so standings,
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
+
+- **Codex lane, Round 512, CLAIMED 2026-09-07, GEOGRAPHIC SOCCER ATTACK V1.** The owner
+  approved continuing after the source audit. Build the first playable geographic league
+  map, directional elimination engine, captured players and upgrades, and separate saved
+  Attack runs. Preserve the existing daily and its score path. Start with verified English
+  ground locations, then extend the same design to the remaining requested maps and powers.
+  No invented coordinates or real rosters. This first slice does not claim World/NFL/NBA
+  parity. Branch codex/round-512-conquest-attack in .worktrees/round-511-midnight-saves.
+  No publish, DNS, plan or Club Manager changes. Plan:
+  docs/superpowers/plans/2026-09-07-conquest-attack.md.
 
 - **Codex lane, Round 511, CLAIMED 2026-09-07, CONQUEST OWNER CORRECTION.** Remove the
   player-value row count from Soccer Conquest's club tiles and matching help/SEO copy.
