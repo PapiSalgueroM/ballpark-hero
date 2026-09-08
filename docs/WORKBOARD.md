@@ -1,5 +1,18 @@
 # Work board
 
+## Round 528 explicit harness selection, September 8, 2026
+
+CLAIMED in `.worktrees/round-528-explicit-sims`, branch
+`codex/round-528-explicit-sims`, base527 `e012beec` (draft PR78).
+Make runAllSims refuse an empty ONLY list before any database probe, child
+harness or browser server starts. Explicit named lists keep existing behavior.
+This is an accidental-run guard, not network isolation or permission to run
+production-writing probes. A copied runner in a marker-only temporary fixture
+will prove default refusal and explicit selection without executing real probes.
+Main owns runner/docs, test author owns simRunnerSelection, review is read-only.
+No root edits, production writes, default real suite, merge or publication.
+Preserve all previous worktrees/previews. Next free529.
+
 **Round 527, Codex resumed task, scoped verification complete September 8:**
 NBA Arcade visible power rewards, bank/reopen controls, owner-specific
 selection and effect lifetime, branch `codex/round-527-nba-powers`, worktree
