@@ -59,12 +59,12 @@ const ENTRY = `${TMP}/mgrXp.entry.mjs`;
 const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
-const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate'];
+const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate'];
 /* The first four rewrite clubManagerXp.ts and are read by sections 1 to 6.
    'deadgate' patches the ENGINE bundle instead, because section 7 runs the
    real engine and the engine imports the real module whatever we do to a copy
    of the source. */
-const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels'];
+const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`XP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -100,6 +100,13 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
     swap('  if (now >= MAX_TREE_POINTS) return null;', '');
   } else if (CONTROL === 'flatlevels') {
     swap('    step = Math.round(step * XP_LEVEL_STEP);', '');
+  } else if (CONTROL === 'saturate') {
+    /* The REAL Round 513 defect, restored: a cushion in whole points against a
+       cost of 1.2, so Math.max(0, 1.2 - n) saturates at two and points 3, 4
+       and 5 buy nothing. Section 3's per point check must catch it, and the
+       ends-only check above it must NOT, which is the whole reason that check
+       was added. */
+    swap("  return treePoints(state, 'media') * 0.1;", "  return Math.min(1, treePoints(state, 'media'));");
   }
   const copy = `${TMP}/mgrXp.control.ts`;
   fs.writeFileSync(copy, src);
@@ -268,6 +275,66 @@ console.log('3) A point cannot be conjured, and a tree cannot go past its cap');
     else moved += 1;
   }
   console.log(`   ${moved} of ${EFFECTS.length} effects move between an empty board and a full one`);
+
+  /*
+   * AND THE HALF THAT ACTUALLY CATCHES THINGS: every POINT must buy something,
+   * not just the fifth one.
+   *
+   * The check above passed while three of the seven trees were selling points
+   * that changed no number anywhere in the game. Media returned raw points into
+   * a cost of 1.2, so the ladder was 1.2, 0.2, 0, 0, 0 and the tree was bought
+   * out by the SECOND point. Youth floored a 0.4 step, so points 1, 2 and 4 did
+   * nothing. Both moved between empty and full, so both read green. Points here
+   * are irreversible, so an inert one is money taken for nothing.
+   *
+   * The assertion is per TREE rather than per effect, because a tree is allowed
+   * to have one effect that plateaus as long as another one moves: Youth's
+   * report lands on a 1 to 5 integer and genuinely cannot carry five steps, so
+   * its continuous intake edge is what has to move at each point.
+   */
+  const TREE_EFFECTS = {
+    tactics: ['dutyEdge'],
+    recruitment: ['valuationTighten'],
+    negotiation: ['askEdge'],
+    youth: ['youthReportEdge', 'youthIntakeEdge'],
+    manManagement: ['promiseCushion'],
+    finance: ['gateEdge'],
+    media: ['pressCushion'],
+  };
+  const byName = Object.fromEntries(EFFECTS.map(e => [e.name, e.fn]));
+  for (const name of Object.values(TREE_EFFECTS).flat()) {
+    if (!byName[name]) {
+      console.error(`section 3 names an effect the bundle does not export: ${name}`);
+      process.exit(1);
+    }
+  }
+  let steps = 0;
+  let deadSteps = 0;
+  for (const tree of SKILL_TREES) {
+    const names = TREE_EFFECTS[tree];
+    if (!names || !names.length) {
+      fail(`${tree} has no effect listed against it, so nothing checks what its points buy`);
+      continue;
+    }
+    const readAt = n => {
+      const b = defaultXp();
+      b.points[tree] = n;
+      return names.map(nm => byName[nm](stateWith(b)));
+    };
+    for (let n = 1; n <= MAX_TREE_POINTS; n++) {
+      steps += 1;
+      const before = readAt(n - 1);
+      const after = readAt(n);
+      if (before.every((v, i) => v === after[i])) {
+        deadSteps += 1;
+        fail(`${tree} point ${n} changes nothing: ${names.join(', ')} read ${before.join(', ')} at ${n - 1} points and the same at ${n}`);
+      }
+    }
+  }
+  console.log(`   ${steps - deadSteps} of ${steps} individual points buy something they did not at the point before`);
+  if (steps !== SKILL_TREES.length * MAX_TREE_POINTS) {
+    fail(`only ${steps} of ${SKILL_TREES.length * MAX_TREE_POINTS} points were checked one at a time`);
+  }
 }
 
 /* ---------- 4. The block fails closed ---------- */
@@ -424,18 +491,19 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
    * Two things DID survive repetition, and they are what is asserted here:
    *
    *  - THE MONEY. Budget after one season, untouched against maxed, came out
-   *    126.8/131.0, 126.8/131.0, 127.0/130.9, 126.9/131.1 at 160 pairs, and six
-   *    more bases at 48 pairs. A gap of 3.3 to 4.4m, every base, every size. The Finance tree is the one tree that pays whatever else you do,
+   *    126.8/131.0, 126.8/131.0, 127.0/130.9, 126.9/131.1. Re-measured over six
+   *    bases after the review fixes it runs 3.8 to 5.1m. Positive at every base
+   *    and every sample size this has ever been run at. The Finance tree is the one tree that pays whatever else you do,
    *    because home gates happen on their own, and it is measurable for exactly
    *    that reason.
-   *  - HE STILL LOSES. Between 23.19 and 28.47 percent of matches lost across
-   *    all ten runs. This is the check that actually
+   *  - HE STILL LOSES. 18.30 to 21.68 percent of matches lost over six bases on
+   *    the fixed engine. This is the check that actually
    *    protects twelve rounds of balance tuning, and it does it far better than
    *    a points per game ceiling would, because it is stable at this sample size
    *    and a points per game gap is not.
    *
    * The floors are set from that measured headroom, not from a feel: the money
-   * floor sits 1.8m under the smallest gap ever measured, and the defeat floor
+   * floor sits 2.3m under the smallest gap ever measured, and the defeat floor
    * sits 8 points under the lowest loss rate ever measured.
    *
    * The paired design matters and cost a run to find. Comparing whole CAREERS
@@ -575,28 +643,31 @@ console.log('7) A maxed manager against an untouched one, paired season by seaso
   console.log(`   points per game ${bPPG.toFixed(3)} untouched, ${xPPG.toFixed(3)} maxed, gap ${xPPG - bPPG >= 0 ? '+' : ''}${(xPPG - bPPG).toFixed(3)} (NOT asserted on, see the note above)`);
 
   /* 7a. The trees are wired to something. Measured gap 3.7 to 4.4m over six
-     runs at two sample sizes, so a floor of 1.5 sits 1.8m under the smallest
+     bases on the fixed engine, so a floor of 1.5 sits 2.3m under the smallest
      one ever seen. XP_CONTROL=deadgate kills gateEdge and
      must trip this. */
   if (!(moneyGap >= 1.5)) {
-    fail(`a maxed manager finished the season only ${moneyGap.toFixed(1)}m ahead (floor 1.5m; measured 3.3 to 4.4 over ten runs), so the Finance tree is not reaching the gate`);
+    fail(`a maxed manager finished the season only ${moneyGap.toFixed(1)}m ahead (floor 1.5m; measured 3.8 to 5.1 over six bases), so the Finance tree is not reaching the gate`);
   }
   /* And the other way, because a gate edge that ran away would also be a bug.
      Measured max 4.4m, so 12 is nearly three times the largest ever seen. */
   if (moneyGap > 12) {
-    fail(`a maxed manager finished ${moneyGap.toFixed(1)}m ahead (ceiling 12m; measured 3.3 to 4.4), so the gate edge has run away`);
+    fail(`a maxed manager finished ${moneyGap.toFixed(1)}m ahead (ceiling 12m; measured 3.8 to 5.1), so the gate edge has run away`);
   }
 
   /* 7b. THE ONE THAT PROTECTS THE BALANCE. A fully invested manager must still
-     be able to lose. Measured 23.19 to 28.47 percent over ten runs, so a floor
-     of 15 sits eight points under the lowest ever seen. */
-  if (!(lossRate >= 0.15)) {
-    fail(`the maxed manager lost only ${(100 * lossRate).toFixed(2)} percent of his matches (floor 15; measured 23.2 to 28.5 over ten runs), so the trees have taken defeat off the table`);
+     be able to lose. Measured 18.30 to 21.68 percent over six bases, a spread of
+     3.4 points, so the floor is 12 rather than 15: 15 sat only one spread under
+     the lowest observation, which is the shape Round 284 calls a coin toss. A
+     manager who had stopped being able to lose would be near zero, so 12 still
+     catches it with room. */
+  if (!(lossRate >= 0.12)) {
+    fail(`the maxed manager lost only ${(100 * lossRate).toFixed(2)} percent of his matches (floor 12; measured 18.3 to 21.7 over six bases), so the trees have taken defeat off the table`);
   }
 
   /* 7c. A sanity ceiling on the results gap, and deliberately a loose one. The
-     gap is NOISE at this sample size (measured -0.038 to +0.100 across ten runs,
-     sign flipping), so anything tight here would flap. One full point per game
+     gap is NOISE at this sample size (measured -0.038 to +0.100 across ten runs before the
+     duty picker was fixed, sign flipping), so anything tight here would flap. One full point per game
      is roughly a maxed manager taking thirty eight more league points a season,
      which is a different game and not noise. Do not tighten this without
      repeating the four base measurement: that is what stopped it being wrong. */
@@ -706,15 +777,17 @@ console.log('8) A maxed manager cannot buy his way out of Round 506 haggling');
    * The guarantee, both arms. Measured on the fixed engine the maxed arm tracks
    * the untouched one closely, because the tree no longer touches f or n and a
    * lowball is a fraction OF the ask, so a smaller ask buys no extra rounds.
-   * The floor of 5 sits far under the healthy value (23 untouched, 13 even at
-   * the one point that used to be mildest) and far above the broken one, which
-   * was a flat 0 at three points and up.
+   * Measured over six bases on the fixed engine: untouched ran out 13 to 21
+   * times of 40 and maxed 10 to 20, and BOTH arms agreed exactly 0 times at
+   * every base. The floor of 4 sits well under the lowest of those and the
+   * broken engine scored a flat 0 at every multiple, so it separates cleanly.
    */
-  if (!(base.ranOut >= 5)) fail(`repeating ${LOWBALL} of the ask ran an untouched seller out of patience only ${base.ranOut} times of ${base.opened} (floor 5); Round 506's guarantee is gone on its own`);
-  if (!(maxed.ranOut >= 5)) fail(`repeating ${LOWBALL} of the ask ran a MAXED manager's seller out of patience only ${maxed.ranOut} times of ${maxed.opened} (floor 5; untouched scored ${base.ranOut}); a skill tree has switched off the haggle`);
+  if (!(base.ranOut >= 4)) fail(`repeating ${LOWBALL} of the ask ran an untouched seller out of patience only ${base.ranOut} times of ${base.opened} (floor 4; measured 13 to 21 over six bases); Round 506's guarantee is gone on its own`);
+  if (!(maxed.ranOut >= 4)) fail(`repeating ${LOWBALL} of the ask ran a MAXED manager's seller out of patience only ${maxed.ranOut} times of ${maxed.opened} (floor 4; measured 10 to 20 over six bases, untouched scored ${base.ranOut}); a skill tree has switched off the haggle`);
   /* And the direct form of the exploit: a maxed manager must not be able to
-     land a repeated lowball at anything like a reliable rate. Measured 0 to 2
-     of 40 on healthy code; it was 14 to 17 when the tree moved patience. */
+     land a repeated lowball at anything like a reliable rate. Measured a flat 0
+     of 40 at every one of six bases on the fixed engine; it was 14 to 17 when
+     the tree moved patience. */
   if (maxed.agreed > 8) fail(`a maxed manager landed a repeated ${LOWBALL} lowball ${maxed.agreed} times of ${maxed.opened} (ceiling 8; untouched scored ${base.agreed}), which is the free lunch Round 506 removed`);
 }
 
