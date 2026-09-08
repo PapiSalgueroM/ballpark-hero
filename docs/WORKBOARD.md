@@ -1,5 +1,13 @@
 # Work board
 
+**Round 518, Codex, CLAIMED September 8:** ticker handoff visibility in
+`.worktrees/round-518-ticker-handoffs`, branch `codex/round-518-ticker-handoffs`,
+based on Round 517 `5c5f84e7`. Own TopTicker and its scoped outcome/browser tests.
+Bound each scrolling pass to the active sport, remove the clipping width cap,
+hold the final score before handoff, and preserve pause and reduced-motion access.
+No feed, pagination, polling interval, sports data, provider, account or game
+engine changes. Root stays Claude's; preview 4186 stays frozen. Next free: 519.
+
 **Round 517, Codex, scoped verification complete September 8:** profile activity count safety in
 `.worktrees/round-517-profile-activity`, branch `codex/round-517-profile-activity`,
 based on the verified Round 516 candidate `a7a07d30`. A career streak-day ping
