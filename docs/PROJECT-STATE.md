@@ -119,7 +119,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | OPEN | |
-| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining). Still open from his list: start options, leagues and eras depth, manager XP, media, the transfers rework with personal terms (Round 506, claimed) |
+| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining); Round 506 the transfers rework (a typed bid with a live closeness meter, a valuation desk whose read tightens with the lead scout's level, an extreme lowball that ends the talks, patience that actually binds now the ask converges at 0.40 rather than 0.55, loans carrying an option to buy and a release figure, and personal terms after every fee: length, wage, signing bonus and the rung you promise him, feeding Round 127's ladder), on `round-506-cm-transfers` and not yet merged. Still open from his list: start options, leagues and eras depth, manager XP, media |
 | Soccer Career arc | ONGOING | Round 438 retirement money; Round 468 the three training drills you play; the flagship earns the most work |
 | Bring the Soccer Career depth to the NFL career, then the other US careers | PART | Round 469: the money app (Round 134 and 437 rules verbatim behind a sport descriptor), the social feed, a generated rival and a badge case lifted out of Soccer Career into shared modules (careerMoney, careerSocial, careerBadges) and bound to the NFL career, with simCareerParity driving both real engines over forty seeded careers a sport. Still open: interactive rivalry events, an inbox, the phase depth between seasons (soccer 22, NFL 7), rookie scale and cap era contracts, (the NBA, MLB and NHL bindings shipped in Round 470, nbaCareerMoney.ts and its two siblings) |
 | Career Ladder flags | DONE | Round 444 |
@@ -3028,6 +3028,75 @@ today rather than adding alongside them. Every new poll must obey all of these r
 ---
 
 ## Change log for this file
+
+- **2026-09-08, Round 506 (Claude Code lane, desktop), CLUB MANAGER TRANSFERS AND PERSONAL
+  TERMS. On branch `round-506-cm-transfers`, not merged and not live.** His words: "a
+  valuation staffer whose accuracy depends on level ... YOU type the bid; extreme lowballs can
+  end talks entirely; sell on clauses, player swaps, a closeness meter, limited patience per
+  negotiation. Loans with option and release figures. Then personal terms: length, wages, add
+  ons, role promises, everything."
+
+  **FIRST, WHAT WAS ALREADY THERE.** Three of his nine clauses shipped in Round 161 and were
+  deliberately not rebuilt: sell-on clauses, player swaps and add-ons are `DealExtras` weighed
+  by `dealPackageValue`. Reading the engine against his sentence clause by clause before
+  writing anything is what kept this round from being a second copy of Round 161.
+
+  **A FEE AGREED IS THE MIDDLE OF A TRANSFER NOW.** `makeOffer` stops at the handshake, holds
+  the fee and the structure, and signs nobody; `offerTerms` is the call that finishes a
+  transfer. Personal terms did not exist in any form: every arrival went through
+  `completeSigning`, which hard coded four years (two at 31 plus), took the wage from `wageFor`,
+  and left `role` undefined so `ensureRoles` quietly decided later what you had supposedly
+  promised him. The word `wage` did not appear once in `TransferScreen.tsx`. The promise half is
+  NOT new and was not rebuilt: the agreed rung goes straight into Round 127's ladder, pride
+  guard, settlement price and weekly morale swing.
+
+  **THE VALUATION DESK.** There was no fog anywhere between a market player's baked value and
+  the number on screen. The lead scout is the valuation man (a fifth staff post would have made
+  `isValidStaff` fail closed on every old save and wipe the player's hires), and his level sets
+  how tight your read is: measured at 29.5 to 29.7 percent of value at level 1 and 2.1 percent
+  at level 10, with the truth inside the band on 400 of 400 players at both, because the band is
+  hashed off the player's name rather than drawn and a weak desk must be imprecise rather than
+  wrong.
+
+  **THE ONE THAT WAS A DEFECT RATHER THAN AN ABSENCE, AND THE ONE THE HARNESS CAUGHT.**
+  Patience was spent only on the lowball branch, so haggling was free. Charging every answer
+  was committed first and the new harness then proved that fix INSUFFICIENT: sweeping a
+  repeated unchanged offer from 0.76 to 0.92 of the ask found zero deals dying of impatience at
+  any level, because the ask closed 55 percent of the gap every round and any offer above the
+  insult line therefore landed within three counters, inside the patience of even the least
+  patient seller. `ASK_CONVERGENCE` drops that to 0.40 with the arithmetic written down beside
+  it. Measured over four seeds and monotone on every one: repeating 0.76 never lands and runs 9
+  to 16 sellers of 30 dry, 0.84 lands 3 to 7 times of 30, and 0.88 and over always land. The
+  commit message that claimed the patience charge alone had fixed this was wrong and the later
+  commit says so.
+
+  **ALSO.** Under 0.55 of the ask they end the conversation on the spot and he goes cold for the
+  window, which is his "extreme lowballs can end talks entirely" and had no code behind it at
+  all. You type the bid, with a live closeness meter over the box reading the engine's own
+  `dealCloseness` and `offerVerdict` rather than a second opinion written for the screen. Loans
+  carry an option to buy at 1.15 of value and a release figure at half the loan fee, both
+  written onto the player with the club he belongs to, which the engine could not name before
+  because `onLoan` was a bare boolean.
+
+  **A REAL BUG FOUND WHILE WIRING IT.** `makeOffer` only checked `status`, and status stays
+  `open` through the terms phase, so an offer made while the terms panel was up re-ran the whole
+  fee negotiation underneath it, agreed a second time and reset his demands. `simClubManager`
+  caught it as 57 negotiations that never terminated.
+
+  **GATES.** tsc zero, `npm run build` clean, `playClubManager` played a full season through the
+  real screens at 0 findings. `simClubManagerDeals` is the new fence: seven sections, five
+  negative controls, each firing on its own section (nofog 2 findings, nowalkout 1, freehaggle
+  2, nohandoff 17, freeterms 1), green on the default seed and SIM_SEED 1 to 3.
+  `simClubManager`, `simDealDepth`, `simTransfers`, `simContracts`, `simReleaseClause`,
+  `simBoardAsks` and `simRoles` all green. `simDealDepth` and `simClubManager` were taught the
+  two table flow rather than the flow bent back to them, and `simDealDepth` gained two checks it
+  could not make before: that nobody joins the squad on the fee alone, and that 40 percent of
+  the ask ends the talks and goes cold.
+
+  **NAMED AS NOT DONE.** The AI clubs do not negotiate personal terms with your players when
+  they bid, an outgoing loan still carries no option or release figure (only incoming ones do),
+  the option to buy is exercised in a window rather than offered at the rollover, and the full
+  node suite has not been run on this branch yet.
 
 - **2026-09-07, Round 509 (Codex lane), CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
   PENDING.** This is one correctness and presentation batch, not a claim
