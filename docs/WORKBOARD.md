@@ -1,5 +1,17 @@
 # Work board
 
+## Round 540 claimed, September 8, 2026
+
+Codex owns the reproduced Soccer Attack queued-save/unsaved-choice race.
+Worktree `.worktrees/round-540-attack-save-choice`, branch
+`codex/round-540-attack-save-choice`, base539 `7e25f00f` (draft PR90).
+A pending retry can resolve after unsaved play was chosen and restore another
+tab's run over it. Lock unsaved choices while a commit is active, retaining
+ordinary available unsaved play. Use real generated states, queued Web Locks,
+exact controls and phone/desktop checks. Preserve Claude's root, all previous
+worktrees and previews. Draft only, no data/backend/account writes, broad
+suite, main merge or publication. Next free541.
+
 ## Round 539 complete, September 8, 2026
 
 Implementation: `593b9f4b`. Draft PR90: https://github.com/PapiSalgueroM/ballpark-hero/pull/90.
