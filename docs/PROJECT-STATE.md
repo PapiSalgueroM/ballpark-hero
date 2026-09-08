@@ -11,6 +11,16 @@ are read-only parallel work. Claude's root Club Manager edits stay untouched.
 Round 513's broad verification failures and queued homepage storage-crash fixes
 remain open. This new claim does not imply any new code is implemented or live.
 
+The owner then asked about a forwarded AdSense/revenue assessment. Fresh public
+checks of seven representative HTML routes plus ads.txt all returned 200; each
+HTML route had one real H1, its own canonical, publisher ID and no noindex.
+This verifies the readable-shell/policy-page foundation, not whole-site gameplay,
+form delivery, legal compliance or approval. See
+docs/adsense-assessment-status-2026-09-08.md for findings and unsupported numerical
+claims in that document. Round 514 currently has three RED footer tests and no
+production edits; navigation implementation paused at a clean boundary while
+answering the new status question. Resume with Footer.test.tsx and the intake.
+
 ## Active follow-up, 2026-09-08
 
 Anthony's latest direction is "just keep going and work on other things".
