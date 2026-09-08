@@ -1,5 +1,19 @@
 # Work board
 
+## Round 538 claimed, September 8, 2026
+
+Codex owns the confirmed NBA Arcade post-unmount callback repair. Worktree
+`.worktrees/round-538-nba-disposal`, branch `codex/round-538-nba-disposal`,
+base 537 `426cc673` (draft PR88). An unused captured player choice can create
+one new 1200ms confirmation timer after unmount and execute its settlement.
+The paired original-map audit proves nulling the pending-battle ref in
+cleanup prevents that work while existing accepted-timer, repeat, next-battle
+and reset behavior remains. Keep the repair minimal, with real-hook
+regression and source controls, exact types, build and selected site/game
+checks. Preserve all earlier worktrees and previews, and Claude's root.
+Draft PR only, no new data, backend/account writes, broad suite, main merge
+or publication. Next free 539.
+
 ## Round 537 complete, September 8, 2026
 
 Codex owns the reproduced runner false-skip repair. Worktree
