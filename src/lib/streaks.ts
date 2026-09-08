@@ -169,6 +169,25 @@ function advanceEntry(entry: StreakEntry, today: string): StreakEntry {
   };
 }
 
+function advanceGameStreaks(gameSlug: string, when: Date): StreakState {
+  const today = getEtDateString(when);
+  const state = readState();
+
+  state.global = advanceEntry(state.global, today);
+
+  const perGamePrev = state.perGame[gameSlug] ?? { ...EMPTY_ENTRY };
+  state.perGame[gameSlug] = advanceEntry(perGamePrev, today);
+
+  return state;
+}
+
+/** Keeps an activity day in the streaks without adding a finished play or points. */
+export function recordGameStreakDay(gameSlug: string, when: Date = new Date()): StreakState {
+  const state = advanceGameStreaks(gameSlug, when);
+  writeState(state);
+  return state;
+}
+
 /**
  * Call this once per completed game (see the one-line hook-in inside
  * useGameCompletion.ts). Updates both the global streak and the per-game
@@ -180,13 +199,7 @@ function advanceEntry(entry: StreakEntry, today: string): StreakEntry {
  * without a second localStorage read.
  */
 export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0): StreakState {
-  const today = getEtDateString(when);
-  const state = readState();
-
-  state.global = advanceEntry(state.global, today);
-
-  const perGamePrev = state.perGame[gameSlug] ?? { ...EMPTY_ENTRY };
-  state.perGame[gameSlug] = advanceEntry(perGamePrev, today);
+  const state = advanceGameStreaks(gameSlug, when);
 
   // Lifetime totals for the Profile stats. Every finished game counts as one
   // play; scores accumulate. Round 301, audit finding 14: since Round 300 the
