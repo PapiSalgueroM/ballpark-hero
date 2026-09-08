@@ -35,7 +35,7 @@ function fixture(overrides: Partial<ReturnType<typeof useConquestNba>> = {}) {
     animStartTime: 0, attackingTeam: 'CHI', defendingTeam: 'BOS', direction: 'E',
     battleResult: null, stealModalOpen: false, pendingBattleApply: null,
     targetState: null, territoryStolenState: null, boxScore: null,
-    favoriteTeam: null, freeAgencyCooldownRemaining: 0,
+    favoriteTeam: null, freeAgencyCooldownRemaining: 0, availableFreeAgencyCandidates: [],
     aliveTeams: () => ['BOS', 'CHI'], getTeamTerritoryCount: () => 1,
     powerRankings: () => [], canSignFreeAgent: () => false,
     startBattle: vi.fn(), useSavedPowerup: vi.fn(), usePowerupNow: vi.fn(),
