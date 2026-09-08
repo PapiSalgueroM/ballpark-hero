@@ -489,9 +489,11 @@ Copy this into the round and tick it off.
       would revert fifty rounds.
 - [ ] `node_modules/.bin/tsc --noEmit -p tsconfig.app.json` at **zero** errors
 - [ ] `npm run build` clean
-- [ ] `node scripts/runAllSims.mjs` all green, **and the harness count it reports matches what
-      you expect**. A harness that is silently skipped reports as green by being absent. This
-      has happened twice.
+- [ ] Run `node scripts/runAllSims.mjs` with an explicit reviewed `ONLY` list. Empty
+      selection is refused before probing or spawning. Named checks can still perform
+      network calls or writes; this is not process isolation or write authorization.
+      All required selected checks must be green, **and the reported harness count must
+      match what you expect**. A silently skipped harness can look green by being absent.
 - [ ] `sweepGames` / `playGames` run if the round touched UI (`ENGINES=chromium`)
 - [ ] Verified every changed file with the **Read/Grep tools**, not bash
 - [ ] Zip built, content assertions written to fail closed, both directions where relevant

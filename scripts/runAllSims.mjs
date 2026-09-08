@@ -11,7 +11,7 @@
  * top of that without anyone noticing, because the only way to notice was to
  * remember to type seven filenames and read the output.
  *
- * So this runs all of them, in one command, and comes back with one number.
+ * This runs an explicitly selected set in one command and reports its results.
  *
  * It also catches the quieter version of the same problem, which cost a whole
  * afternoon in Round 124: a harness that throws on import, prints one line of
@@ -19,9 +19,12 @@
  * come back green. A harness that finishes suspiciously fast, or prints almost
  * nothing, did not run, whatever its exit code says. That is a failure here.
  *
- *   node scripts/runAllSims.mjs           the node harnesses, no browser needed
- *   node scripts/runAllSims.mjs --browser also the ones that drive a real page
  *   ONLY=simCup,simWorld node scripts/runAllSims.mjs   just those two
+ *   ONLY=playGames node scripts/runAllSims.mjs --browser   a selected browser walk
+ *
+ * Round 528: selection is required. The discovered suite includes production
+ * write/cache probes. A name is not a network sandbox or write authorization;
+ * review the selected harnesses before running them.
  *
  * The browser group needs a built site on a local port. It is opt in because it
  * takes minutes and because Playwright cannot reach the live domain from a
@@ -36,6 +39,11 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const WANT_BROWSER = process.argv.includes('--browser') || process.env.BROWSER === '1';
 const ONLY = (process.env.ONLY || '').split(',').map((s) => s.trim()).filter(Boolean);
+if (!ONLY.length) {
+  console.error('No harnesses selected. Set ONLY to a reviewed comma-separated list.');
+  console.error('The full discovered suite includes production-writing probes.');
+  process.exit(1);
+}
 const PORT = Number(process.env.PORT || 4173);
 
 /* A harness that comes back this quiet did not do any work.
