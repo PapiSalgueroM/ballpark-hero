@@ -264,10 +264,27 @@ console.log('5) the DEPLOYED function answers club squares from records, and a m
   console.log(`   ${candidates.length} players in the table played for 2 or more mapped clubs, ${accentedCount} of them with a character the fold changes`);
   if (candidates.length < 10) fail(`only ${candidates.length} candidate players, which is too few to conclude anything`);
 
+  /* THE FOURTH DESIGN, AND WHY THE THIRD EXPIRED ON A TIMER.
+     The third asked the function rather than the table, which was right, but it
+     always asked about the FIRST 40 candidates and required one of them to come
+     back "records". That worked once and then rotted, because of something
+     structural rather than incidental: the records pass WRITES every attribute
+     it proves into the fact cache, so a given player-and-attribute can exercise
+     that path exactly ONCE, EVER. Every run of this harness therefore burns the
+     subjects it used and makes the next run likelier to fail. Measured
+     2026-09-08 on correct code: 40 pairs tried, 0 from records, 40 from cache,
+     0 unanswered. Nothing was broken. The prefix was simply spent.
+     So the scan now WALKS instead of retrying a burnt prefix: it keeps going
+     down the candidate list until it has seen the records pass work, skipping
+     cache hits cheaply (they are a cacheOnly call and spend no AI). The pool is
+     the whole candidate list rather than a fixed 40, which is why the count is
+     printed: when it starts creeping toward the cap, the pool is running low. */
+  const SCAN_CAP = Math.min(candidates.length, 250);
+  const WANT_RECORDS = 3;
   let fromRecords = 0, fromCache = 0, missed = 0, tried = 0;
   let subject = null;
   const missNames = [];
-  for (const [name, clubLabels] of candidates.slice(0, 40)) {
+  for (const [name, clubLabels] of candidates.slice(0, SCAN_CAP)) {
     const rowA = `Played for ${labelText.get(clubLabels[0]) ?? clubLabels[0]}`;
     const colA = `Played for ${labelText.get(clubLabels[1]) ?? clubLabels[1]}`;
     const res = await call(name, rowA, colA);
@@ -281,12 +298,17 @@ console.log('5) the DEPLOYED function answers club squares from records, and a m
       missed += 1;
       if (missNames.length < 5) missNames.push(`${name} (${rowA} x ${colA}) -> ${JSON.stringify(res.body).slice(0, 120)}`);
     }
-    if (fromRecords >= 3 && tried >= 10) break;
+    if (fromRecords >= WANT_RECORDS && tried >= 10) break;
   }
-  console.log(`   ${tried} pairs the table proves: ${fromRecords} answered from records, ${fromCache} from cache, ${missed} answered by nobody`);
+  console.log(`   ${tried} pairs the table proves (scanned of ${candidates.length} candidates, cap ${SCAN_CAP}): ${fromRecords} answered from records, ${fromCache} from cache, ${missed} answered by nobody`);
+  /* The real failure, and it is unchanged: the table proves both halves, so
+     nobody answering means the records pass had what it needed and did not use
+     it. This one is not weakened by anything above. */
   missNames.forEach(n => fail(`the table proves both clubs and the deployed function still could not answer: ${n}`));
   if (missed > missNames.length) fail(`and ${missed - missNames.length} more unanswered pairs`);
-  if (fromRecords === 0) fail('not one pair was answered from records, so the new path never ran and this section proved nothing');
+  if (fromRecords === 0) {
+    fail(`the records pass never ran across ${tried} pairs, all of which were already cached. Either the pass is broken, or this harness has burned every subject it can reach and the scan cap of ${SCAN_CAP} needs raising against ${candidates.length} candidates. Check which: a broken pass shows unanswered pairs above, an exhausted pool shows none.`);
+  }
 
   /* ONE half missing: the miss must NOT become a denial. Repeatable by
      construction: a records miss writes no pair verdict, so nothing this call
