@@ -1,5 +1,34 @@
 # Project state
 
+## Round 523 profile avatar identity, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-523-profile-avatar`, branch
+`codex/round-523-profile-avatar`, based on completed Round 522 `2b60a88d`
+(draft PR73). Another player's missing avatar or display name no longer falls
+back to the signed-in visitor's avatar/email initial. Own-account fallbacks
+and saved profile-avatar precedence remain. No saved identity, auth protocol,
+share-card redesign, calendar changes or backend/account writes.
+
+Twelve real-component avatar cases, fourteen exact source controls, the
+sixteen isolation/eight average cases, both types, build, all fifteen
+generated-site fences, ActivityDays and SessionMarks pass. Built avatar
+checks pass eighteen states at 390/1440, six identity controls and two
+clipping controls. Related isolation passes eight states and average passes
+28. Main reran focused controls and inspected screenshots. Final independent
+review clear. Synthetic reads/share captures only, no real transport. Initial
+selector/test-control corrections are recorded in docs/profile-avatar-2026-09-08.md.
+Preview 4198 serves index-B_xhTMiA.js. No broad suite, merge or publication.
+
+Next bounded candidate: saved-bracket profile summaries ignore the current
+writer's top-level champion, and malformed legacy JSON can crash the profile.
+Read current writer-shaped synthetic fixtures safely, preserve tested legacy
+summaries and leave saving/loading protocol untouched. Not yet reproduced.
+
+Root belongs to Claude, currently 27d0d08b with a modified simPress harness
+and an active measurement. Leave that tree and its processes alone. Preserve
+every earlier worktree/preview including Round 522 on 4196. Cutoff remains
+17:46:50 UTC. Next free round: 524, verify before claiming.
+
 ## Round 522 profile isolation, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-522-profile-isolation`, branch

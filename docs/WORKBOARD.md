@@ -1,5 +1,21 @@
 # Work board
 
+**Round 523, Codex, scoped verification complete September 8:** profile header avatar and initial
+identity in `.worktrees/round-523-profile-avatar`, branch
+`codex/round-523-profile-avatar`, based on Round 522 `2b60a88d` (draft PR73).
+Auth avatar/email fallback now requires matching viewed/account identity.
+Viewed display name and username precede own email, then neutral U. Own
+defaults and saved avatar precedence remain. Twelve avatar cases, fourteen
+source controls, 24 related profile cases, both types/build, fifteen built
+fences and activity regressions pass. Browser passes eighteen avatar states,
+six identity/two clipping controls and unchanged isolation/average matrices.
+Main inspected screenshots and reran focused controls. Final review clear.
+Evidence: docs/profile-avatar-2026-09-08.md. Preview 4198 stays available.
+No share redesign, calendar changes, production writes, broad suite, root edits,
+merge or publish. Claude's root simPress measurement stays untouched.
+Next free round: 524, verify before claiming. Candidate: current saved-bracket
+champion summary and malformed legacy JSON safety, with no save protocol change.
+
 **Round 522, Codex, scoped verification complete September 8:** cross-profile load isolation in
 `.worktrees/round-522-profile-isolation`, branch
 `codex/round-522-profile-isolation`, based on Round 521 `77ad583f` (draft PR72).

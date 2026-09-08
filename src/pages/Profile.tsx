@@ -461,7 +461,9 @@ export default function Profile() {
 
   const earnedCount = badges.filter(b => b.earned).length;
 
-  const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;
+  const avatarAccount = viewingProfile?.user_id === user?.id ? user : null;
+  const avatarUrl = viewingProfile?.avatar_url || avatarAccount?.user_metadata?.avatar_url;
+  const avatarInitial = (viewingProfile?.display_name || viewingProfile?.username || avatarAccount?.email || 'U').charAt(0).toUpperCase();
 
   /* ── WC champion ── */
   let wcChampion: string | null = null;
@@ -512,7 +514,7 @@ export default function Profile() {
                     <img src={avatarUrl} alt="Avatar" className="h-18 w-18 rounded-full object-cover border-2 border-primary/40" referrerPolicy="no-referrer" style={{ width: 72, height: 72 }} />
                   ) : (
                     <div className="rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold" style={{ width: 72, height: 72 }}>
-                      {(viewingProfile.display_name || user?.email || 'U').charAt(0).toUpperCase()}
+                      {avatarInitial}
                     </div>
                   )}
                   <div className="space-y-1">
