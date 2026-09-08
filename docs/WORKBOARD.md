@@ -28,7 +28,7 @@ How it works:
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 - **Claude Code lane (claude.ai/code, branch `claude/ballpark-hero-code-lane-sa1p6b`), CLAIMED
-  2026-09-07: Rounds 503 to 508. next: Round 505 (Claude Code lane).** Rounds 503 and 504 are
+  2026-09-07: Rounds 503 to 508. next: Round 506 (Claude Code lane).** Rounds 503 and 504 are
   merged on origin/main at `7af40013`; 505 to 508 remain claimed here.
   **503 RELIABILITY, DONE 2026-09-07, merged on origin/main.** Two fixes from the unmerged branch `claude/hopeful-herschel-e8bcee`,
   transplanted onto current main rather than merged (the branch is stale and is not merged whole):
@@ -59,10 +59,34 @@ How it works:
   browser at 430 and at 390 wide, 0 findings each.
   Named as not done: five subs in the modern era, opposition injuries and straight reds, a
   formation change during play (505 owns tactics), a shootout scene, goal celebrations.
-  **505 CLUB MANAGER TACTICS DEPTH**, his words: "subs and reserves listed under the pitch, tap one
+  **505 CLUB MANAGER TACTICS DEPTH, DONE 2026-09-07, on the branch with a PR open.** His words: "subs and reserves listed under the pitch, tap one
   player then another to swap. Out of position penalties, position retraining over weeks ...
   Captain, corner takers left and right, free kick and penalty takers ... Player roles: attacking
   or holding fullbacks, sweeper keeper ... Sub suggestions ordered by same position first."
+  Every ask is on the tactics tab: a man is read in his slot (natural, family, wrong or the keeper
+  boundary crossed, priced 0, 2, 6 or 14 rating points on that man only, a fully natural eleven
+  pays nothing, ten defenders still allowed, the header prints the adjusted average and every
+  token wears its grade), the bench under the pitch ordered for the spot you tapped (same slot,
+  then the family, then the rest, fitness then rating; the dressing room and the live sheet use
+  the same list), tap a bench man then a spot or a spot then a bench man, seventeen shapes
+  grouped by back line (the shared nine at their indexes plus eight variants) with a switch that
+  carries every picked man across (same label, then the same duty line, then the same pitch line,
+  then any free slot, his duty riding along), a duty on every slot (seventeen by line, summed and
+  capped at 0.12, scorer and assist weights), the armband and four takers (auto filled on start,
+  load, every match and the summer; cleared on sale, swap and loan out; a corner goes to the
+  flag's man, 8 percent of goals from the spot and 4 from a free kick credited to the taker with
+  no assist, saved penalties, a bounded shootout edge, a point of defeat relief with the captain
+  out there), and a second position learned over 6, 10 or 16 counted weeks (times 1.5 past thirty,
+  the training ground, never under 4, two kept, keepers never, real players start with none and
+  it never rides out on loan). Fence simTacticsEngine (seven sections, controls nofit, notaker,
+  noduty, noretrain, fit2nd, duty2nd, leftonly, every one flipping only its section) plus the
+  Round 114 browser guard simTactics, which had parked on the dugout form since Round 303 and read
+  any launch failure as a browser that was not installed, so it printed a pass with nothing
+  checked; it runs again and a crash is a red. Adversarial review of the diff (engine, screens,
+  harness, rules; 26 findings) all closed in the same round. Named as not done: the tactics
+  header grades the picked eleven while the match grades the effective one; width, pressing and
+  tempo instructions; opposition duties; a shape change during play still goes through the live
+  change sheet.
   **506 CLUB MANAGER TRANSFERS AND PERSONAL TERMS**, his words: "a valuation staffer whose accuracy
   depends on level ... YOU type the bid; extreme lowballs can end talks entirely; sell on clauses,
   player swaps, a closeness meter, limited patience per negotiation. Loans with option and release

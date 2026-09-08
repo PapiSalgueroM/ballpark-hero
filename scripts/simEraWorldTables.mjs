@@ -26,10 +26,29 @@
  *   2. MODERN WORLD STILL ADVANCES (the control the fix must not break).
  *   3. THE PICKER LIST is the save's own world: era ids only, no duplicate
  *      league names, and the modern save still lists the full modern set.
- *   4. THE QUALIFIERS: at group stage end the real QF field is exactly the
- *      groups' top twos (no pool club when the groups can supply eight), and
- *      a doctored mid-group table with my club second still projects my club
- *      into the bracket, never paired inside its own group.
+ *   4. THE QUALIFIERS: at group stage end the knockout field is exactly the
+ *      groups' top twos in the COMPETITION'S OWN ORDER (no pool club when
+ *      the groups can supply eight), and a doctored mid-group table with my
+ *      club second still projects my club into the bracket, never paired
+ *      inside its own group.
+ *
+ *      Round 505 gate pass: the top twos are read through sortedUclGroup,
+ *      the order the engine seeds the round of 16 from, and no longer
+ *      through the bare sortedTable. A 2005 group splits level points on
+ *      the games between the clubs first (src/lib/clubManagerUclGroups.ts
+ *      carries the regulations, Round 478) and the bare sort splits them on
+ *      goal difference, so the two orders disagree whenever a club level on
+ *      points won the head to head and lost the goal difference. On this
+ *      harness's fixed seed that is Juventus in Group F: level with Club
+ *      Brugge on 8 points, 1-0 and 3-2 in the two meetings, goal difference
+ *      minus 8 against 0. The engine sent Juventus up, which is the rule,
+ *      and the old check called it a club that had not earned it. The Round
+ *      504 engine drew a stream with no such split and the same check was
+ *      green, so the check was a coin toss that the stream happened to win.
+ *      Every level pair is now also held against the engine's own ledger of
+ *      the games between the two clubs, so the section is not only the
+ *      engine agreeing with itself, and where the era has a round of 16 the
+ *      sixteen in it must be exactly the top twos.
  *   5. SOURCE SHAPE: syncWorld's loop reads worldLeagueDefs, checked on the
  *      comment stripped source.
  *   6. THE FLAGS: every league id in every era of ERA_LEAGUES has a nation
@@ -43,6 +62,11 @@
  * first) and section 5 must go red. WORLD_CONTROL=flagless plants an era
  * league id with no LEAGUE_NATIONS entry into the imported tables (refusing
  * to run if the id already exists anywhere) and section 6 must go red.
+ * WORLD_CONTROL=gdfield bundles an engine copy whose round of 16 field is
+ * seeded from the bare goal difference order (asserting the fixed line was
+ * present exactly once, and refusing to pass if no group on this stream
+ * splits the two orders, so the control cannot be green for having changed
+ * nothing) and section 4 must go red.
  *
  * Run: node scripts/simEraWorldTables.mjs
  */
@@ -58,15 +82,30 @@ const BUNDLE = path.join(os.tmpdir(), 'eraWorld.bundle.mjs');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.WORLD_CONTROL || '';
-if (CONTROL && CONTROL !== 'modern' && CONTROL !== 'flagless' && CONTROL !== 'field') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'modern' && CONTROL !== 'flagless' && CONTROL !== 'field' && CONTROL !== 'gdfield') { console.error(`WORLD_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
+const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
+let enginePath = ENGINE.replaceAll('\\', '/');
+if (CONTROL === 'gdfield') {
+  /* The round of 16 field seeded from the bare sort, the order a group table
+     reads when the competition's rule is forgotten. Refuses to run if the
+     fixed line is not there, exactly once, to break. */
+  const src = fs.readFileSync(ENGINE, 'utf8');
+  const fixed = 'const rows = sortedUclGroup(state, g.table).map(r => r.club);';
+  if (src.split(fixed).length !== 2) { console.error('control cannot run: the round of 16 field line is not in clubManager.ts in the shape gdfield rewrites'); process.exit(1); }
+  enginePath = path.join(os.tmpdir(), 'eraWorld.gdfield.ts').replaceAll('\\', '/');
+  fs.writeFileSync(enginePath, src.replace(fixed, 'const rows = sortedTable(g.table).map(r => r.club);'));
+  console.log('NEGATIVE CONTROL ON: the round of 16 field is seeded from the bare goal difference order in memory, section 4 must go red');
+}
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const m = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
-export const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = m;
+const m = await import('${enginePath}');
+export const { startCareer, playNextEntry, sortedTable, sortedUclGroup, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = m;
 `);
-execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { startCareer, playNextEntry, sortedTable, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = await import(pathToFileURL(BUNDLE).href);
+/* The @ alias is spelled out so a control copy of the engine written to the
+   temp dir resolves its imports back to this tree's src. */
+execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${path.join(ROOT, 'src').replaceAll('\\', '/')} --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+const { startCareer, playNextEntry, sortedTable, sortedUclGroup, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = await import(pathToFileURL(BUNDLE).href);
 
 const seeded = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 
@@ -137,16 +176,65 @@ console.log('4) the knockout field is the clubs that earned it');
   const qf = bracket.filter(t => t.round === 'QF');
   if (!era.uclGroup) fail('2005 Barcelona did not have a Champions League group at all');
   if (!qf.length) fail('no quarter final ties exist after a full season');
+  /* The top twos in the competition's own order, which is the order the
+     engine seeds the round of 16 from (uclRoundOf16Field reads
+     sortedUclGroup). The bare sortedTable splits level points on goal
+     difference and a 2005 group splits them on the games between the clubs,
+     so the two can disagree on who finished second; the harness read the
+     bare order until the Round 505 gate pass and called Juventus a club
+     that had not earned its place. */
+  const groups = [];
+  if (era.uclGroup) groups.push({ letter: 'A', table: era.uclGroup.table });
+  for (const g of era.uclWorld ?? []) groups.push({ letter: g.letter, table: g.table });
   const topTwos = new Set();
-  if (era.uclGroup) for (const r of sortedTable(era.uclGroup.table).slice(0, 2)) topTwos.add(r.club);
-  for (const g of era.uclWorld ?? []) for (const r of sortedTable(g.table).slice(0, 2)) topTwos.add(r.club);
-  const groupCount = 1 + (era.uclWorld?.length ?? 0);
+  const groupOf = new Map();
+  let splitGroups = 0, levelPairs = 0;
+  const ledger = era.pairResults?.uclGroups ?? {};
+  if (!Object.keys(ledger).length) fail('the group stage ledger (pairResults.uclGroups) is empty after a full season, so the head to head check below ran on nothing');
+  for (const g of groups) {
+    const rule = sortedUclGroup(era, g.table).map(r => r.club);
+    const bare = sortedTable(g.table).map(r => r.club);
+    for (const c of rule.slice(0, 2)) topTwos.add(c);
+    for (const c of rule) groupOf.set(c, g.letter);
+    if (rule.slice(0, 2).join('|') !== bare.slice(0, 2).join('|')) splitGroups += 1;
+    /* Independent of either sort: a club placed above a club it is level
+       with must have taken at least as many points off it over the two games
+       between them, read from the engine's own ledger. */
+    for (let i = 0; i + 1 < rule.length; i++) {
+      const a = g.table.find(r => r.club === rule[i]);
+      const b = g.table.find(r => r.club === rule[i + 1]);
+      if (!a || !b || a.pts !== b.pts) continue;
+      const ab = ledger[`${a.club}|${b.club}`];
+      const ba = ledger[`${b.club}|${a.club}`];
+      if (!ab || !ba) continue;
+      levelPairs += 1;
+      const pts = (f, ag) => (f > ag ? 3 : f === ag ? 1 : 0);
+      const ptsA = pts(ab[0], ab[1]) + pts(ba[1], ba[0]);
+      const ptsB = pts(ab[1], ab[0]) + pts(ba[0], ba[1]);
+      if (ptsA < ptsB) fail(`group ${g.letter}: ${a.club} is placed above ${b.club} on level points with fewer head to head points (${ptsA} v ${ptsB})`);
+    }
+  }
+  if (CONTROL === 'gdfield' && splitGroups === 0) { console.error('control found nothing to change: no group on this stream splits the two orders, so a field seeded from either would look the same'); process.exit(1); }
+  const groupCount = groups.length;
+  const r16 = bracket.filter(t => t.round === 'R16');
   const names = qf.flatMap(t => [t.home, t.away]);
   if (new Set(names).size !== names.length) fail(`a club appears twice in the quarter finals: ${names.join(', ')}`);
   if (topTwos.size >= 8) {
-    for (const n of names) if (!topTwos.has(n)) fail(`${n} is in the quarter finals without finishing top two of a group`);
+    if (r16.length) {
+      /* An era with a round of 16: the sixteen in it are exactly the top
+         twos, no tie pairs a group with itself, and the quarter finalists
+         are the eight who won a tie. */
+      const field = r16.flatMap(t => [t.home, t.away]);
+      if (new Set(field).size !== field.length) fail(`a club appears twice in the round of 16: ${field.join(', ')}`);
+      for (const n of field) if (!topTwos.has(n)) fail(`${n} is in the round of 16 without finishing top two of a group in the competition's order`);
+      for (const c of topTwos) if (!field.includes(c)) fail(`${c} finished top two of group ${groupOf.get(c)} and is not in the round of 16`);
+      for (const t of r16) if (groupOf.get(t.home) === groupOf.get(t.away)) fail(`round of 16 tie ${t.home} v ${t.away} pairs group ${groupOf.get(t.home)} against itself`);
+      const winners = new Set(r16.map(t => t.winner).filter(Boolean));
+      for (const n of names) if (!winners.has(n)) fail(`${n} is in the quarter finals without winning a round of 16 tie`);
+    }
+    for (const n of names) if (!topTwos.has(n)) fail(`${n} is in the quarter finals without finishing top two of a group in the competition's order`);
   }
-  console.log(`   ${groupCount} groups sent up ${names.length} quarter finalists, all from the top twos`);
+  console.log(`   ${groupCount} groups sent up ${r16.length ? `${r16.length * 2} round of 16 clubs and ` : ''}${names.length} quarter finalists, all from the top twos in the competition's order; ${levelPairs} level pair(s) held against the ledger; the bare goal difference order would have picked a different top two in ${splitGroups} group(s)`);
 
   // A doctored mid-group state: my club second, projection must include it
   // and never pair a club against its own group.
@@ -284,6 +372,10 @@ if (CONTROL === 'flagless') {
 if (CONTROL === 'field') {
   if (failures > 0) { console.log(`simEraWorldTables control: green. The misspelled field entry was reported (${failures} finding).`); process.exit(0); }
   console.error('simEraWorldTables control: RED. A field spelling that misses the rosters went unreported.'); process.exit(1);
+}
+if (CONTROL === 'gdfield') {
+  if (failures > 0) { console.log(`simEraWorldTables control: green. The round of 16 seeded from the bare order was reported (${failures} finding).`); process.exit(0); }
+  console.error('simEraWorldTables control: RED. A round of 16 seeded from the wrong order went unreported.'); process.exit(1);
 }
 if (failures > 0) { console.error(`simEraWorldTables: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.');

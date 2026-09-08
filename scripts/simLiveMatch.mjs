@@ -188,6 +188,14 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 /* ---- the engine, regressed in a copy beside the original when a control asks ---- */
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
+/* Under the ignored .sim-control, in a folder of its own, the way
+   simRebuildSave, simRebuildSeats and simTacticsEngine keep theirs. Every
+   import in the engine is an @ alias, so the copy resolves from anywhere
+   the bundler is told about. It used to sit in src/lib, and a copy whose
+   exit handler never ran (a killed run) then sat in the tree for tsc, every
+   src guard and git add -A to read a deliberately broken engine as the
+   real one. */
+const CONTROL_DIR = path.join(ROOT, '.sim-control', 'livematch');
 const ENTRY = `${TMP}/liveMatch.${process.pid}.entry.mjs`;
 const BUNDLE = `${TMP}/liveMatch.${process.pid}.bundle.mjs`;
 let controlCopy = null;
@@ -210,7 +218,8 @@ if (CONTROL) {
     }
     src = src.replace(from, to);
   }
-  controlCopy = path.join(ROOT, 'src', 'lib', `__control_clubManager.${CONTROL}.${process.pid}.ts`);
+  fs.mkdirSync(CONTROL_DIR, { recursive: true });
+  controlCopy = path.join(CONTROL_DIR, `__control_clubManager.${CONTROL}.${process.pid}.ts`);
   fs.writeFileSync(controlCopy, src);
   enginePath = controlCopy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON (${CONTROL}): ${spec.note}`);

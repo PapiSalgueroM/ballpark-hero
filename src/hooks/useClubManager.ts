@@ -13,12 +13,14 @@ import {
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
   changeLive, startSecondHalf, markLiveMinute,
+  setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   DEFAULT_ERA_ID,
 } from '@/lib/clubManager';
-import type { MatchFacts, LiveChange } from '@/lib/clubManager';
+import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
+import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { simToWeek as runSimToWeek, weekAfterMatches } from '@/lib/clubManagerCalendar';
+import { simToWeek as runSimToWeek } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import { acceptSponsor, pushSponsor, setConcessionTier, setTicketPolicy } from '@/lib/clubManagerFinances';
@@ -28,6 +30,69 @@ import type { StaffPostId } from '@/lib/clubManagerStaff';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
+
+/**
+ * Round 505: a new shape keeps the eleven you picked. Until this round a
+ * formation change threw the whole XI away and auto picked a fresh one, so a
+ * manager who had put ten defenders out on purpose (the owner's own example)
+ * lost the lot the moment he tried a different shape. Now every man carries
+ * across to the first free slot wearing his old slot's label (RB to RB, CM to
+ * CM, ST to ST), and his slot's duty travels with him because the label is
+ * the line. Whatever is still empty is filled by the engine's own auto pick
+ * over the men not already placed, so a fresh save still gets the best
+ * winger for a shape that grew a wing. Pure, no draw.
+ *
+ * The label pass alone was not enough (the Round 505 review): a man whose
+ * label the new shape does not have at all (the CDM going to a 4-4-2, the
+ * tenth defender going anywhere) fell through to the auto pick and was
+ * quietly benched, duty and all. So every man the labels did not place gets
+ * a still free slot before the auto pick runs: one on his old slot's duty
+ * line first, then one on the same band of the pitch, then any that is left,
+ * and his duty rides along wherever the new slot's line offers it.
+ */
+function carryAcross(state: CareerState, from: Formation, to: Formation): { xiIds: (string | null)[]; xiDuties: (Duty | null)[] } {
+  const oldIds = state.xiIds;
+  const oldDuties = state.xiDuties ?? [];
+  const xiIds: (string | null)[] = to.slots.map(() => null);
+  const xiDuties: (Duty | null)[] = to.slots.map(() => null);
+  const taken = new Set<number>();
+  const placed = new Set<string>();
+  const place = (i: number, j: number, id: string) => {
+    taken.add(j);
+    placed.add(id);
+    xiIds[j] = id;
+    const d = oldDuties[i] ?? null;
+    xiDuties[j] = d && dutyOptions(to.slots[j]).includes(d) ? d : null;
+  };
+  const freeSlot = (ok: (t: FormationSlot) => boolean): number => to.slots.findIndex((t, k) => !taken.has(k) && ok(t));
+  const picked = from.slots
+    .map((sl, i) => ({ sl, i, id: oldIds[i] }))
+    .filter((x): x is { sl: FormationSlot; i: number; id: string } => !!x.id && state.squad.some(p => p.id === x.id));
+  const unmatched: typeof picked = [];
+  for (const x of picked) {
+    if (placed.has(x.id)) continue;
+    const j = freeSlot(t => t.label === x.sl.label);
+    if (j < 0) { unmatched.push(x); continue; }
+    place(x.i, j, x.id);
+  }
+  for (const x of unmatched) {
+    if (placed.has(x.id)) continue;
+    const dutyLine = dutyLineOf(x.sl);
+    const pitchLine = pitchLineOf(x.sl);
+    let j = freeSlot(t => dutyLineOf(t) === dutyLine);
+    if (j < 0) j = freeSlot(t => pitchLineOf(t) === pitchLine);
+    if (j < 0) j = freeSlot(() => true);
+    if (j < 0) break;
+    place(x.i, j, x.id);
+  }
+  const empty = to.slots.map((_, j) => j).filter(j => xiIds[j] === null);
+  if (empty.length) {
+    const used = new Set(xiIds.filter((id): id is string => !!id));
+    const picks = autoPickXI(state.squad.filter(p => !used.has(p.id)), { name: to.name, slots: empty.map(j => to.slots[j]) });
+    empty.forEach((j, k) => { xiIds[j] = picks[k] ?? null; });
+  }
+  return { xiIds, xiDuties };
+}
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
@@ -126,10 +191,36 @@ export function useClubManager() {
   const setFormationIndex = useCallback((idx: number) => {
     setCareer(prev => {
       if (!prev) return prev;
-      const next = { ...prev, formationIndex: idx };
-      next.xiIds = autoPickXI(next.squad, FORMATIONS[idx]);
-      return next;
+      const to = FORMATIONS[idx];
+      if (!to || idx === prev.formationIndex) return prev;
+      const from = FORMATIONS[prev.formationIndex] ?? FORMATIONS[0];
+      const { xiIds, xiDuties } = carryAcross(prev, from, to);
+      return { ...prev, formationIndex: idx, xiIds, xiDuties };
     });
+  }, []);
+
+  /* ---------- Round 505: duties, set pieces and the second position ---------- */
+  /** The duty on a slot of the current shape, or null to clear it. The engine refuses one the slot's line does not offer. */
+  const setSlotDuty = useCallback((slotIdx: number, duty: Duty | null) => {
+    setCareer(prev => (prev ? setDuty(prev, slotIdx, duty) ?? prev : prev));
+  }, []);
+
+  /** Hand a set piece job (or the armband) to a man; null hands it back to the auto pick. */
+  const assignSetPiece = useCallback((key: SetPieceKey, playerId: string | null) => {
+    setCareer(prev => (prev ? setSetPiece(prev, key, playerId) ?? prev : prev));
+  }, []);
+
+  const autoPickSetPieces = useCallback(() => {
+    setCareer(prev => (prev ? autoSetPieces(prev) : prev));
+  }, []);
+
+  /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
+  const retrain = useCallback((playerId: string, to: Position) => {
+    setCareer(prev => (prev ? startRetraining(prev, playerId, to) ?? prev : prev));
+  }, []);
+
+  const stopRetrain = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? stopRetraining(prev, playerId) : prev));
   }, []);
 
   const setMentality = useCallback((m: Mentality) => {
@@ -249,12 +340,6 @@ export function useClubManager() {
       setPhase('matchResult');
     }
   }, [career]);
-
-  /** The older "n games" fast forward: the same loop, run to the week after the n-th thing that involves me. */
-  const quickSim = useCallback((entries: number) => {
-    if (!career) return;
-    simToWeek(weekAfterMatches(career, entries));
-  }, [career, simToWeek]);
 
   const continueFromReport = useCallback(() => {
     if (!career) return;
@@ -528,11 +613,12 @@ export function useClubManager() {
   }, []);
 
   return {
-    quickSim, simToWeek,
+    simToWeek,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,

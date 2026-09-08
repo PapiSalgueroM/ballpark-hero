@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI,
-  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchForHalftime, MAX_SUBS, liveGoneIds,
+  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -315,6 +315,29 @@ export function LiveSimScreen({
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
 
+  /* Round 505: the feed carries a name and a minute per event, so the flank
+     of a corner, a saved penalty, and a goal from the spot or a direct free
+     kick are read back off the committed play and the goal lines the feed
+     was built from, keyed the way the feed keys them. */
+  type Extra = { flank?: 'left' | 'right'; penalty?: boolean; freeKick?: boolean };
+  const extras = useMemo(() => {
+    const m = new Map<string, Extra>();
+    if (!liveNow) return m;
+    for (const e of [...(liveNow.h1Play ?? []), ...(liveNow.h2Play ?? [])]) {
+      if (e.kind === 'corner' && e.flank) m.set(`corner:${e.side}:${e.minute}:${e.who}`, { flank: e.flank });
+      else if (e.kind === 'shot' && e.on && !e.goal && e.penalty) m.set(`save:${e.side}:${e.minute}:${e.who}`, { penalty: true });
+    }
+    for (const g of [...(liveNow.h1My ?? []), ...(liveNow.h2My ?? [])]) {
+      if (g.penalty || g.freeKick) m.set(`goal:me:${g.minute}:${g.name}`, { penalty: g.penalty, freeKick: g.freeKick });
+    }
+    for (const g of [...(liveNow.h1Opp ?? []), ...(liveNow.h2Opp ?? [])]) {
+      if (g.penalty || g.freeKick) m.set(`goal:opp:${g.minute}:${g.name}`, { penalty: g.penalty, freeKick: g.freeKick });
+    }
+    return m;
+  }, [liveNow]);
+  /* Round 505: the armband, worn on the dot while he is out there. */
+  const captainId = career.setPieces?.captain ?? null;
+
   /* A save paused at the interval before the scorer lines existed: the honest
      fallback is skipping the first half's animation for that one match. */
   const canAnimateH1 = !!liveNow && liveNow.h1My !== undefined && liveNow.h1Opp !== undefined;
@@ -454,9 +477,20 @@ export function LiveSimScreen({
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
       const m = Math.round(e.minute);
+      /* Round 505 review: the event's own flank and spot flags first. Two
+         corners can share kind, side, minute and taker with different
+         flanks, and the keyed lookup below cannot tell them apart; it stays
+         only as the fallback for a feed line that carries none of them. */
+      const x: Extra | undefined = e.flank || e.penalty || e.freeKick
+        ? { flank: e.flank, penalty: e.penalty, freeKick: e.freeKick }
+        : extras.get(`${e.kind}:${e.side}:${e.minute}:${e.text}`);
       switch (e.kind) {
         case 'goal':
-          big = { segs: [{ t: 'GOAL! ' }, who, { t: ` ${m}'` }], club, tone: e.side === 'me' ? 'me' : 'opp' };
+          big = {
+            segs: [{ t: x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ' }, who, { t: ` ${m}'` }],
+            club,
+            tone: e.side === 'me' ? 'me' : 'opp',
+          };
           ballAt = { x: 50, y: e.side === 'me' ? 1.5 : 98.5 };
           break;
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${m}'` }], club, tone: 'none' }; break;
@@ -475,12 +509,13 @@ export function LiveSimScreen({
           ballAt = { x: 38 + (m % 5) * 6, y: e.side === 'me' ? 6 : 94 };
           break;
         case 'save':
-          small = [{ t: 'Save! ' }, keeperOf(e.side === 'me' ? 'opp' : 'me', e.minute)];
+          small = [{ t: x?.penalty ? 'Penalty saved! ' : 'Save! ' }, keeperOf(e.side === 'me' ? 'opp' : 'me', e.minute)];
           ballAt = { x: 50, y: e.side === 'me' ? 9.5 : 90.5 };
           break;
         case 'corner':
-          small = [{ t: `Corner, ${club}` }];
-          ballAt = { x: ballRef.current.x < 50 ? 2.5 : 97.5, y: e.side === 'me' ? 2.5 : 97.5 };
+          /* Round 505: the flank and the taker, "Corner, left, Saka"; the club when nobody is named. */
+          small = [{ t: x?.flank ? `Corner, ${x.flank}, ` : 'Corner, ' }, who];
+          ballAt = { x: x?.flank ? (x.flank === 'left' ? 2.5 : 97.5) : (ballRef.current.x < 50 ? 2.5 : 97.5), y: e.side === 'me' ? 2.5 : 97.5 };
           break;
         case 'throwin':
           small = [{ t: `Throw in, ${club}` }];
@@ -500,9 +535,9 @@ export function LiveSimScreen({
       setEventBall(ballAt);
       holdRef.current = 2;
     }
-    // The feed and the clock are the inputs; the rest are stable per render.
+    // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, feed, running, finished]);
+  }, [clock, stage, feed, extras, running, finished]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the beat: who has the ball, and the drift. The only place this file draws. ---- */
@@ -587,13 +622,14 @@ export function LiveSimScreen({
   const subsLeft = liveNow ? Math.max(0, MAX_SUBS - liveNow.subsUsed) : 0;
   const picked = picking ? career.squad.find(p => p.id === picking) ?? null : null;
   const sheetOpen = !!(picking && picked && canChange);
+  /* Round 505: ordered for the man coming off, same position first. */
   const bench: CMPlayer[] = useMemo(() => {
     if (!liveNow || !career.live) return [];
     const usedUp = new Set<string>();
     for (const s of liveNow.subs ?? []) if (s.offId) usedUp.add(s.offId);
     for (const inj of [...(liveNow.h1Injuries ?? []), ...(liveNow.h2Injuries ?? [])]) if (inj.id) usedUp.add(inj.id);
-    return benchForHalftime(career).filter(p => !usedUp.has(p.id));
-  }, [career, liveNow]);
+    return benchFor(career, picking ?? undefined).filter(p => !usedUp.has(p.id));
+  }, [career, liveNow, picking]);
 
   /* Somebody down and not yet replaced comes off the grass (that is what an
      injury is) and gets a line under the pitch instead, so the change is one
@@ -716,7 +752,8 @@ export function LiveSimScreen({
             key={d.key}
             type="button"
             data-cm-dot={d.id ?? ''}
-            aria-label={`${d.label}, number ${d.number}. Tap to bring somebody on or change the shape.`}
+            data-cm-captain={d.id && d.id === captainId ? '1' : undefined}
+            aria-label={`${d.label}, number ${d.number}${d.id && d.id === captainId ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
             disabled={!canChange || !d.id}
             onClick={() => { if (d.id) openSheet(d.id); }}
             className={cn(
@@ -731,6 +768,9 @@ export function LiveSimScreen({
             />
             <span className="text-[7px] text-white/90 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
               {d.number} {d.label}
+              {d.id && d.id === captainId && (
+                <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[8px] align-middle">C</span>
+              )}
             </span>
           </button>
         ))}

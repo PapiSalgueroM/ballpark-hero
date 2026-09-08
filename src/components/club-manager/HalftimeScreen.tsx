@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchForHalftime, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } from '@/lib/clubManager';
+import { benchFor, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
@@ -45,7 +45,9 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
   const onPitch: CMPlayer[] = live.onPitch
     .map(id => career.squad.find(p => p.id === id))
     .filter((p): p is CMPlayer => !!p);
-  const bench = benchForHalftime(career);
+  /* Round 505: the bench is ordered for the man coming off, same position
+     first, then the family, then the rest, freshest first inside a tier. */
+  const bench = benchFor(career, picking ?? undefined);
   const tired = new Set(tiringAtHalftime(career).map(p => p.id));
   const subsLeft = MAX_HALFTIME_SUBS - live.subsUsed;
   const started = new Set(live.startXi);
