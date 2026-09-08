@@ -1104,6 +1104,14 @@ export interface MatchWeekReport {
   won: boolean;
   drawn: boolean;
   decidedBy: 'regular' | 'pens';
+  /**
+   * Round 507: who won the SHOOTOUT. On a single leg tie that is the same as
+   * `won`, because the tie is the match. On a two legged tie it is not: you can
+   * lose the second leg and go through on penalties, so the report card has to
+   * be able to say "0-3" and "through on penalties" at the same time. Null when
+   * no shootout was played.
+   */
+  shootoutWon?: boolean | null;
   myScorers: ScorerLine[];
   oppScorers: ScorerLine[];
   events: string[];
@@ -7034,11 +7042,15 @@ export function offerTerms(career: CareerState, offer: PersonalTerms): CareerSta
        man while the terms table is open. Silence on a control the player just
        pressed reads as a broken game. */
     if (!signed) {
+      const swapId = neg.agreedExtras?.swapId;
+      const swapMan = swapId ? career.squad.find(p => p.id === swapId) : undefined;
       const why = career.squad.length >= 30
         ? 'The squad is full at 30. Someone has to leave before he can sign.'
-        : (neg.agreedExtras?.swapId && !career.squad.some(p => p.id === neg.agreedExtras?.swapId))
+        : (swapId && !swapMan)
           ? 'The player you put in the deal is no longer here, so the fee no longer stands.'
-          : 'The deal cannot be completed as it stands.';
+          : (swapMan && !squadCanSpare(career, swapMan))
+            ? `${swapMan.name} cannot leave now, and the fee was agreed with him in the deal.`
+            : 'The deal cannot be completed as it stands.';
       return { ...career, negotiation: { ...neg, terms: { ...talk, offer: clean, note: why } } };
     }
     return signed;
@@ -7100,6 +7112,12 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
      is locked precisely because he is promised to this deal, so asking it again
      would refuse every part exchange. */
   if (extras?.swapId && !swap) return null;
+  /* And he still has to be sparable. canLeaveSquad would refuse him for being
+     promised to THIS deal, so the squad rules are asked directly: the squad
+     floor, the last keeper, and a man who is somebody else's. Dropping this
+     check is how the settlement briefly became able to send your only
+     goalkeeper. */
+  if (swap && !squadCanSpare(career, swap)) return null;
   const signed = completeSigning(career, neg.player, amount, false, terms);
   if (!signed) return null;
   if (terms.bonus > 0) {
@@ -7323,10 +7341,35 @@ export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
      the discount survived him. That is a striker bought at a third off and a
      squad member who never left. Promised in an open deal means not available
      to anybody else until that deal is settled or dead. */
-  const promised = career.negotiation?.status === 'open'
-    ? career.negotiation.agreedExtras?.swapId ?? career.negotiation.lastExtras?.swapId
+  /* ONLY agreedExtras, never lastExtras. The first version of this lock fell
+     back to lastExtras, which makeOffer writes on EVERY offer, so a man went
+     into the deal once and was then locked for the rest of the fee phase: the
+     next offer carrying him was refused outright, dealPackageValue valued him
+     at zero, and the screen's own swap dropdown dropped him. The lock is for
+     the window between the clubs shaking hands and the player signing, and
+     agreedExtras is exactly that window: it is written when the fee is agreed
+     and cleared with the negotiation. */
+  const promised = career.negotiation?.status === 'open' && career.negotiation.phase === 'terms'
+    ? career.negotiation.agreedExtras?.swapId
     : undefined;
   if (promised && promised === p.id) return false;
+  return true;
+}
+
+/**
+ * Round 507: the squad rules alone, with the promise lock deliberately absent.
+ *
+ * settleAgreedDeal has to send the part exchange man it has already locked, so
+ * it cannot ask canLeaveSquad (which would refuse him for being promised to
+ * this very deal). Replacing that call with a bare `if (swap)` dropped the
+ * OTHER three rules with it, and the review found the hole: agree a fee with
+ * one of your two keepers in part exchange, loan the other one out while the
+ * terms table is open, and the settlement sent the last keeper too.
+ */
+function squadCanSpare(career: CareerState, p: CMPlayer): boolean {
+  if (career.squad.length <= 14) return false;
+  if (p.onLoan) return false;
+  if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
   return true;
 }
 
@@ -8387,6 +8430,28 @@ export function uclTieOutcome(
   return { homeAgg, awayAgg, winner: null, byAwayGoals: false };
 }
 
+/**
+ * Round 507 fix: does THIS SAVE actually play its round of 16 over two legs?
+ *
+ * Not the same question as what the era's format says, and the difference is a
+ * defect the review caught. A career written between Round 462 and Round 507
+ * carries ONE round of 16 week with no `uclLeg`, and nothing migrates it, so it
+ * plays a single match however many legs the season is supposed to have. The
+ * seeding swap (the group winner hosting the deciding leg) was keyed off the
+ * ERA, so on those saves the winner was handed tie.away and then played his one
+ * and only knockout match at the runner-up's ground: home advantage exactly
+ * inverted for the club that had earned it.
+ *
+ * So the draw asks the calendar, which is the only thing that knows what this
+ * save will really play, and falls back to the format for a state that has no
+ * calendar yet (the projection screen before a season is built).
+ */
+function uclR16IsTwoLegged(state: CareerState): boolean {
+  const weeks = (state.calendar ?? []).filter(e => e.type === 'uclKo' && e.uclRound === 'R16');
+  if (weeks.length === 0) return uclLegsFor(state.eraId, 'R16') === 2;
+  return weeks.some(e => e.uclLeg !== undefined);
+}
+
 /** The first knockout round this save's Champions League plays. */
 export function uclFirstKoRound(state: Pick<CareerState, 'eraId'>): UclKoRound {
   return eraUclHasR16(state.eraId) ? 'R16' : 'QF';
@@ -8575,7 +8640,7 @@ function drawUclRoundOf16(
 export function uclRoundOf16Draw(state: CareerState): { home: string; away: string }[] | null {
   if (!eraUclHasR16(state.eraId)) return null;
   const r16 = uclRoundOf16Field(state);
-  return r16 ? drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2) : null;
+  return r16 ? drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclR16IsTwoLegged(state)) : null;
 }
 
 /** Build the first knockout round. Round 462: an era with a round of 16
@@ -8589,7 +8654,7 @@ function buildUclBracket(state: CareerState, includeMe: boolean): UclTie[] {
   if (eraUclHasR16(state.eraId) && state.calendar.some(e => e.type === 'uclKo' && e.uclRound === 'R16')) {
     const r16 = uclRoundOf16Field(state);
     if (r16) {
-      return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2).map((t, i) => ({
+      return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclR16IsTwoLegged(state)).map((t, i) => ({
         round: 'R16' as const, slot: i, home: t.home, away: t.away,
         homeGoals: null, awayGoals: null, winner: null,
         mine: t.home === state.clubName || t.away === state.clubName,
@@ -8841,7 +8906,7 @@ export function projectedUclBracket(state: CareerState): { home: string; away: s
   // qualifier does.
   if (eraUclHasR16(state.eraId)) {
     const r16 = uclRoundOf16Field(state);
-    if (r16) return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclLegsFor(state.eraId, 'R16') === 2);
+    if (r16) return drawUclRoundOf16(r16, c => uclClubCountry(state, c), uclR16IsTwoLegged(state));
   }
   // Round 312: project the field the engine will actually seed, top two per
   // group when the groups are few, so a second placed club sees itself in
@@ -9533,8 +9598,14 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
     } else if (objective.id === 'netSpend') {
       /* Round 140: sell for more than you spend, graded off the season's
          actual ins and outs. Loans count at their fee, which is the cash. */
+      /* Round 507: a signing on fee comes out of the same budget as the
+         transfer fee (settleAgreedDeal debits it), so it counts against net
+         spend too. It was missed when the field was added and the finance desk
+         was taught about it: askingTerms sizes it at wage times years times
+         0.045, roughly 15m on a 60m target, so a board objective could be
+         reported as met while the kitty said otherwise. */
       const net = (career.seasonSignings ?? []).reduce(
-        (s, x) => s + (x.dir === 'out' ? x.fee : -x.fee), 0);
+        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0);
       if (seasonDone) {
         status = net >= 0 ? 'done' : 'failed';
       } else {
@@ -11233,6 +11304,9 @@ function buildMatchDetail(args: {
   cards: CardLine[]; injuries: InjuryLine[]; subs: SubLine[];
   ratings: PlayerRatingLine[];
   decidedBy: 'regular' | 'pens'; won: boolean;
+  /** Round 507: who won the SHOOTOUT, which on a two legged tie is not the
+      same thing as who won tonight. Null when there was no shootout. */
+  shootoutWon?: boolean | null;
   clubName: string; opponent: string;
   /** Round 169: crowd and clock context, computed by the caller who has the save. */
   attendance?: number; capacity?: number | null; venue?: 'home' | 'away' | 'neutral';
@@ -11303,7 +11377,11 @@ function buildMatchDetail(args: {
   for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
   timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
   if (args.decidedBy === 'pens') {
-    timeline.push({ minute: 90, side: args.won ? 'me' : 'opp', kind: 'pens', text: args.won ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
+    /* Round 507: the shootout's own result, not the night's. On a two legged
+       tie you can lose the second leg and win the shootout, so reading `won`
+       here printed the wrong club. */
+    const penWon = args.shootoutWon ?? args.won;
+    timeline.push({ minute: 90, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
   }
   timeline.push({ minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
   const KIND_ORDER: Record<TimelineKind, number> = {
@@ -11396,7 +11474,7 @@ function buildMatchDetail(args: {
     if (xi.length >= 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
       const theirGoalsBy = new Map<string, number>();
       for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
-      const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !args.won : oppGoals > myGoals;
+      const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !(args.shootoutWon ?? args.won) : oppGoals > myGoals;
       const theyDrew = myGoals === oppGoals && args.decidedBy === 'regular';
       const base = theyWon ? 7.0 : theyDrew ? 6.4 : 5.7;
       const theirCleanSheet = myGoals === 0;
@@ -11571,6 +11649,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   ])];
   const xi = squadByIds(state, ids);
   let decidedBy: 'regular' | 'pens' = 'regular';
+  /* Round 507: who won the shootout, kept apart from who won the night. */
+  let shootoutWon: boolean | null = null;
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
   let advanced = won;
@@ -11591,17 +11671,21 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       decidedBy = 'pens';
       const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
       advanced = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
-      /* Round 507 fix: once decidedBy is 'pens', four separate places read
-         `won` as "won the SHOOTOUT" and not as "won the ninety minutes": the
-         minute 90 timeline entry, the "Nerves of steel" versus "Heartbreak
-         from the spot" line, the opposition's player ratings (theyWon =
-         !won), and the report headline's (PENS) suffix. The single leg path
-         below rewrites both fields for exactly that reason. Leaving tonight's
-         scoreline here meant a second leg lost 1-0 on the night and won on
-         penalties reported a shootout defeat, which is the opposite of what
-         happened. Found by the adversarial review. */
-      won = advanced;
-      drawn = false;
+      /* Round 507, corrected after the review of the first correction. The
+         shootout's result is carried in its OWN field and `won` is left as the
+         night's result, because on a two legged tie those are different things
+         and every consumer wants a different one of them.
+         The first fix set won = advanced here, copying the single leg path. But
+         that path can only ever reclassify an actual DRAW, while a second leg
+         is drawn on the night only when the aggregate happens to be level that
+         way: it can be won or lost. So overwriting it fed the wrong result to
+         the fixture log, the form guide, careerStats, the head to head book,
+         the board confidence swing, the morale shift and every player's rating
+         base. Measured: a quarter final second leg lost 0-3 and won on
+         penalties was logged as "0-3, W", the opponent got an L in their form
+         guide for a game they had won 3-0, and every man who played got plus
+         five morale and a 7.0 rating base for a three goal defeat. */
+      shootoutWon = advanced;
     } else {
       advanced = (out.winner === 'home') === iAmHome;
     }
@@ -11610,9 +11694,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
     const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
     const penWin = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+    /* A single leg tie IS the match, so reclassifying the night here is right
+       and is long standing behaviour: the game was drawn, and a shootout win
+       counts as a win in the form guide and the record. */
     won = penWin;
     drawn = false;
     advanced = penWin;
+    shootoutWon = penWin;
   }
 
   const events: string[] = [];
@@ -11644,7 +11732,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
   });
   if (decidedBy === 'pens') {
-    events.push(won ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
+    /* The shootout, not the night. */
+    events.push((shootoutWon ?? won) ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
   }
 
   /* ----- competition bookkeeping + other results ----- */
@@ -12300,7 +12389,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     myScorers, oppScorers,
     cards: cardLines, injuries: injuryLines, subs: subLines,
     ratings: ratingLines,
-    decidedBy, won,
+    decidedBy, won, shootoutWon,
     clubName: state.clubName, opponent: fx.opponent,
     attendance: crowd.attendance, capacity: crowd.capacity, venue: crowd.venue,
     // Round 178: same era-aware source their scorers came from.
@@ -12324,6 +12413,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     won,
     drawn,
     decidedBy,
+    shootoutWon,
     myScorers,
     oppScorers,
     events,
@@ -14664,9 +14754,20 @@ export function loadCareer(): CareerState | null {
        the repair is here: give a fee table that is still open the new budget
        less whatever it has already spent, and never take patience away. */
     const openNeg = parsed.negotiation;
-    if (openNeg && openNeg.status === 'open' && openNeg.phase !== 'terms') {
+    /* GATED ON `phase` BEING ABSENT, which is the only honest marker of a save
+       written before Round 506: startNegotiation has set phase on every
+       negotiation since, and a negotiation is transient so nothing else can
+       have stripped it. Without that gate the repair ran on every load of every
+       save, and since patienceCost charges 2 for an insult while stage only
+       rises by 1, a legitimately played negotiation sits below the line: two
+       insults took patience to 1, a page refresh put it back to 2, and
+       reloading between offers refunded a point per insult. The review caught
+       it, and a repair that hands back what today's rules deliberately charged
+       is worse than the migration gap it was written for. */
+    if (openNeg && openNeg.status === 'open' && openNeg.phase === undefined) {
       const owed = Math.max(1, OPENING_PATIENCE_MIN - Math.max(0, openNeg.stage));
       if (openNeg.patience < owed) openNeg.patience = owed;
+      openNeg.phase = 'fee';
     }
     /* Round 465's rule, repaired on the way in: zero board confidence IS the
        sack, so a save that carries zero without being sacked is a save the

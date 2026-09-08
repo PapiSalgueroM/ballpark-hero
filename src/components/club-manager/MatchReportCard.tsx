@@ -118,6 +118,14 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
   const opponent = r.home === clubName ? r.away : r.home;
   const resultTone = r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
   const resultWord = r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
+  /* Round 507: on a two legged tie the night and the shootout are different
+     results, so "DEFEAT (PENS)" over a 0-3 that put you through reads as being
+     knocked out. The headline keeps the night's word, because that is the score
+     printed under it, and the shootout gets its own line saying which way it
+     went. */
+  const penLine = r.decidedBy === 'pens'
+    ? ((r.shootoutWon ?? r.won) ? 'Through on penalties' : 'Out on penalties')
+    : '';
   /* Round 157: the ratings list folds away because ten rows of numbers is a
      lot of card, but the man of the match is always on show. */
   const [showRatings, setShowRatings] = useState(false);
@@ -192,6 +200,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         <h2 className={cn('text-2xl font-display font-bold mb-3', resultTone, verdict ? 'cm-slam' : 'opacity-0')}>
           {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : ''}
         </h2>
+        {penLine && (
+          <div className={cn('text-[11px] font-bold mb-2', (r.shootoutWon ?? r.won) ? 'text-correct' : 'text-destructive')}>
+            {penLine}
+          </div>
+        )}
 
         {/* Round 472: both names sit centred over their own half of the
             scoreboard. They used to be pushed in against the score, which left

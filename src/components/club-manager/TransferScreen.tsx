@@ -617,7 +617,13 @@ export function TransferScreen({
                   Put it to him
                 </button>
                 <button
-                  onClick={() => setTerms({ ...want })}
+                  /* Round 507: the wage box has its own text state, so every
+                     path that changes terms from outside the input has to sync
+                     it. This one did not, so pressing the button after typing a
+                     number left the box showing what you typed while the deal
+                     was proposed and signed at his figure: the screen said 80k
+                     and the contract said 120k. */
+                  onClick={() => { setTerms({ ...want }); setWageText(String(want.wage)); }}
                   className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-foreground hover:border-primary transition-all"
                 >
                   Give him what he wants

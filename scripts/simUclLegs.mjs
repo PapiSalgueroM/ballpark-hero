@@ -51,6 +51,13 @@
  *                              shipped, reading a calendar entry with no uclLeg
  *                              as leg one of two, so section 5's legacy save
  *                              never settles its bracket.
+ *   UCL_LEGS_CONTROL=eraseed   restores the seeding defect the FIX review found,
+ *                              keying the two legged swap off the era format
+ *                              instead of off the calendar this save holds, so a
+ *                              one week round of 16 still hands the group winner
+ *                              tie.away and he plays his only knockout match at
+ *                              the runner-up's ground. Section 5's draw
+ *                              comparison goes red on all three eras.
  * Each control refuses to run if its rewrite did not find its text.
  *
  * MEASURED. Printed every run rather than asserted as a band, because these are
@@ -85,7 +92,7 @@ const ENTRY = `${TMP}/uclLegs.entry.mjs`;
 const BUNDLE = `${TMP}/uclLegs.bundle.mjs`;
 
 const CONTROL = process.env.UCL_LEGS_CONTROL || '';
-const KNOWN = ['oneleg', 'noaway', 'alwaysaway', 'legone', 'legacyguard'];
+const KNOWN = ['oneleg', 'noaway', 'alwaysaway', 'legone', 'legacyguard', 'eraseed'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`UCL_LEGS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -121,6 +128,16 @@ if (CONTROL) {
       '        if (!entry.uclLeg || entry.uclLeg >= legs) advanceUclBracket(state, entry.uclRound);',
       '        if (legs === 1 || (entry.uclLeg ?? 1) === legs) advanceUclBracket(state, entry.uclRound);',
     );
+  } else if (CONTROL === 'eraseed') {
+    /* Restores the seeding defect the fix review found: key the two legged
+       swap off the ERA format rather than off the calendar this save holds, so
+       a legacy one week round of 16 still hands the group winner tie.away and
+       he plays his only knockout match at the runner-up's ground. Section 5's
+       draw comparison must go red. */
+    swap(
+      '  const weeks = (state.calendar ?? []).filter(e => e.type === \'uclKo\' && e.uclRound === \'R16\');\n  if (weeks.length === 0) return uclLegsFor(state.eraId, \'R16\') === 2;\n  return weeks.some(e => e.uclLeg !== undefined);',
+      '  return uclLegsFor(state.eraId, \'R16\') === 2;',
+    );
   } else if (CONTROL === 'legone') {
     swap(
       "  tie.legs = 2;\n  if (leg === 1) {",
@@ -144,10 +161,10 @@ execSync(
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
-  startCareer, playNextEntry, uclLegsFor, uclAwayGoalsApply, uclTieOutcome,
+  startCareer, playNextEntry, uclLegsFor, uclAwayGoalsApply, uclTieOutcome, uclRoundOf16Draw,
 } = cm;
 
-for (const [name, fn] of Object.entries({ startCareer, playNextEntry, uclLegsFor, uclAwayGoalsApply, uclTieOutcome })) {
+for (const [name, fn] of Object.entries({ startCareer, playNextEntry, uclLegsFor, uclAwayGoalsApply, uclTieOutcome, uclRoundOf16Draw })) {
   if (typeof fn !== 'function') {
     console.error(`the harness could not reach ${name}; the bundle is not the shape it expects`);
     process.exit(1);
@@ -397,13 +414,24 @@ console.log('5) A calendar written before Round 507 still plays its whole knocko
       continue;
     }
     let guard = 0;
+    let endedEarly = '';
     while (guard < 400) {
       guard += 1;
       if (!s.calendar || s.week >= s.calendar.length) break;
       const r = playNextEntry(s, { skipHalftime: true });
-      if (!r || !r.state) break;
+      if (!r || !r.state) { endedEarly = 'playNextEntry stopped'; break; }
       s = r.state;
-      if (r.kind === 'seasonOver' || s.sacked) break;
+      if (s.sacked) { endedEarly = 'sacked'; break; }
+      if (r.kind === 'seasonOver') break;
+    }
+    /* A career that ended before the knockout measures nothing about the
+       bracket, and blaming the engine for it is how a harness cries wolf. The
+       first version of this section asserted on every era unconditionally and
+       reported "the bracket froze" about a season the manager was sacked in
+       week 20 of, which is the season working exactly as designed. */
+    if (endedEarly) {
+      console.log(`   ${era.year} legacy calendar: ${endedEarly} before the knockout, nothing measured`);
+      continue;
     }
     const br = s.uclBracket ?? [];
     const settled = round => br.filter(t => t.round === round && t.winner).length;
@@ -419,7 +447,55 @@ console.log('5) A calendar written before Round 507 still plays its whole knocko
       fail(`${era.year}: a legacy calendar produced no European champion, so the bracket froze`);
     }
   }
-  if (checked === 0) fail('no era could be downgraded to a legacy calendar, so this section measured nothing');
+  /* Two, not one, for the same reason section 3 has a floor of two: a single
+     surviving career is too thin to rest a section on, and sackings mean the
+     count moves with the seed. */
+  if (checked < 2) fail(`only ${checked} legacy calendar(s) reached a full season, which is too few to judge`);
+
+  /*
+   * AND THE VENUE, which is the half this section did not check and which let a
+   * real defect through. The seeded club hosts the DECIDING leg, so with two
+   * legs the group winner is tie.away and with one leg he is tie.home. The
+   * first version of the seeding swap keyed that off the ERA rather than off
+   * the calendar, so a legacy save whose round of 16 is a single match still
+   * handed the winner tie.away and he played his only knockout tie at the
+   * runner-up's ground: home advantage exactly inverted for the club that had
+   * earned it. Section 5 played those calendars and never looked.
+   *
+   * The check needs no group table: the same career drawn both ways must put
+   * the two clubs on opposite sides of every tie.
+   */
+  let compared = 0;
+  for (const era of ERAS.filter(e => e.id)) {
+    let s = startCareer('Barcelona', era.id);
+    let guard = 0;
+    while (guard < 400 && (s.uclGroup?.matchday ?? 0) < 6) {
+      guard += 1;
+      if (!s.calendar || s.week >= s.calendar.length) break;
+      const r = playNextEntry(s, { skipHalftime: true });
+      if (!r || !r.state) break;
+      s = r.state;
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    const native = uclRoundOf16Draw(s);
+    if (!native || native.length === 0) continue;
+    const legacy = uclRoundOf16Draw({
+      ...s,
+      calendar: s.calendar
+        .filter(e => !(e.type === 'uclKo' && e.uclLeg === 2))
+        .map(e => (e.type === 'uclKo' ? { type: e.type, round: e.round, uclRound: e.uclRound } : e)),
+    });
+    if (!legacy || legacy.length !== native.length) { fail(`${era.year}: the legacy draw had ${legacy?.length} ties against ${native.length}`); continue; }
+    compared += 1;
+    for (let i = 0; i < native.length; i++) {
+      if (native[i].home !== legacy[i].away || native[i].away !== legacy[i].home) {
+        fail(`${era.year} tie ${i}: two legs give ${native[i].home} v ${native[i].away} and one leg gives ${legacy[i].home} v ${legacy[i].away}, which is not the same tie the other way up`);
+        break;
+      }
+    }
+  }
+  console.log(`   ${compared} era draws compared two legged against one legged: the seeded club swaps ends`);
+  if (compared < 2) fail(`only ${compared} draws could be compared, too few to judge the seeding`);
 }
 
 /* ---------- 6. A one legged round, and a bracket from before Round 507 ---------- */
