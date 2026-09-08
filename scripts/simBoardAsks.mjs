@@ -55,10 +55,18 @@
  *   candidate headroom, worst per ask     natQuota 6, veterans 139, posGap 51,
  *                                         youngStar 5, marquee 3   floor 2
  *   position lines a board can ask for    4 of 4       floor 4
- *   inbox messages harvested              180 over 6 careers   floor 60
- *   each new sender kind seen             agent 26, boardChase 12,
- *                                         coachTip 5, fanGroup 2,
- *                                         reporter 10          floor 2 each
+ *   inbox messages harvested              260 to 292 over 10 careers   floor 60
+ *                                         (Round 505 gate pass: this seed and
+ *                                         SIM_SEED 1 to 8 on the Round 505
+ *                                         engine; 295 to 338 on the 504 one)
+ *   each new sender kind seen             agent 36 to 48, boardChase 13 to 20,
+ *                                         coachTip 5 to 9, fanGroup 6 to 15,
+ *                                         reporter 13 to 23    floor 2 each
+ *                                         (on the old six careers fanGroup
+ *                                         read 2, 9 and 1 across three streams
+ *                                         and coachTip 1 on SIM_SEED 2, both
+ *                                         sitting on the floor)
+ *   trust letters on standard prices      0 in 12 streams      none passes
  *   board meter moves in answerMessage    2, both floored at 1  floor 2 found,
  *                                                               none unfloored
  *   founded club asks, all met            18 of 18     floor 12
@@ -481,7 +489,17 @@ console.log('5) The inbox: five new senders, and nobody real is quoted');
      The board quotes its own objective back at you and nothing else, so this
      is the whole allowlist for quoted text below. */
   const labelSet = new Set();
-  const clubs = ['Everton', 'Barcelona', 'Napoli', 'Celtic', 'Ajax', 'Lyon'];
+  /* Round 505 gate pass: ten careers rather than six. The supporters trust
+     writes only on premium prices, only when the board, an agent and the
+     assistant all stayed quiet that week, and on a coin flip after that, so
+     on three premium careers its count was 2 on the stream this harness
+     was written on, 9 on the Round 504 engine's, and 1 on the Round 505
+     engine's against a floor of 2 (SIM_SEED 1 to 6 on the 505 engine: 4, 7,
+     6, 6, 8, 5). Five premium careers give it real room; the measured band
+     is in the header. The standard price careers are not padding: a trust
+     letter arriving at one of them is the engine writing on the wrong
+     prices, and that is checked below. */
+  const clubs = ['Everton', 'Barcelona', 'Napoli', 'Celtic', 'Ajax', 'Lyon', 'Sevilla', 'Feyenoord', 'Benfica', 'Marseille'];
   /* Answers rotate rather than always taking the first option, for two
      reasons: every effect gets exercised rather than only the first one on
      each message, and always taking option zero would switch the thing that
@@ -503,6 +521,7 @@ console.log('5) The inbox: five new senders, and nobody real is quoted');
         if (seen.some(x => x.id === m.id)) continue;
         seen.push(m);
         kinds[m.kind] = (kinds[m.kind] ?? 0) + 1;
+        if (m.kind === 'fanGroup' && !premium) fail(`the supporters trust wrote to ${clubs[i]} about premium prices while the ground was on standard prices`);
       }
       for (const m of (st.inbox ?? []).filter(x => !x.resolved)) {
         answerSpin += 1;
