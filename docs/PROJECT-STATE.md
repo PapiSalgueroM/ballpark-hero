@@ -1,5 +1,30 @@
 # Project state
 
+## Round 524 saved bracket profile summary, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-524-profile-bracket`, branch
+`codex/round-524-profile-bracket`, based on Round 523 `8c3d1153` (draft PR74).
+Profile now reads the writer's top-level champion and safely handles malformed
+serialized saves, nulls and invalid champion values. Only nonempty strings
+render, with current champion first, then legacy awards.champion before
+knockoutWinners.final. The Bracket saved fallback and exact link remain.
+
+Both exact types, fresh build, all 49 related Profile cases, the thirteen-case
+bracket harness and all fifteen generated-site fences pass. The scoped runner
+skips browser-classified simPrerenderBoot; its direct Chrome run separately
+passes all boot samples and retired routes. Fourteen built payload states and
+four exact DOM controls pass with zero boundary/runtime errors. Independent
+review clear. Details and source-control results are in
+docs/profile-bracket-2026-09-08.md. Preview 4200 remains available.
+No saved-bracket writer/loader, storage, sports data, real account or backend
+changes. Draft only, no default full-suite pass, merge or publication.
+
+Root belongs to Claude. Preserve all previous worktrees and previews.
+The user resumed the interrupted work on September 8. Next free round: 525,
+verify before claiming. Bounded next repair: simLoginReturn bypasses the
+shared browser loader and lacks complete local request interception. The
+default broad suite still includes production probes and must not be run.
+
 ## Round 523 profile avatar identity, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-523-profile-avatar`, branch

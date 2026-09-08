@@ -466,11 +466,19 @@ export default function Profile() {
   const avatarInitial = (viewingProfile?.display_name || viewingProfile?.username || avatarAccount?.email || 'U').charAt(0).toUpperCase();
 
   /* ── WC champion ── */
+  let bracketData: unknown = savedBracket?.bracket_data;
+  if (typeof bracketData === 'string') {
+    try { bracketData = JSON.parse(bracketData); } catch { bracketData = null; }
+  }
   let wcChampion: string | null = null;
-  if (savedBracket?.bracket_data) {
-    const bd = typeof savedBracket.bracket_data === 'string' ? JSON.parse(savedBracket.bracket_data) : savedBracket.bracket_data;
-    if (bd.knockoutWinners?.final) wcChampion = bd.knockoutWinners.final;
-    if (bd.awards?.champion) wcChampion = bd.awards.champion;
+  if (bracketData && typeof bracketData === 'object' && !Array.isArray(bracketData)) {
+    const bd = bracketData as Record<string, unknown>;
+    const awards = bd.awards && typeof bd.awards === 'object' && !Array.isArray(bd.awards)
+      ? bd.awards as Record<string, unknown> : {};
+    const knockoutWinners = bd.knockoutWinners && typeof bd.knockoutWinners === 'object' && !Array.isArray(bd.knockoutWinners)
+      ? bd.knockoutWinners as Record<string, unknown> : {};
+    wcChampion = [bd.champion, awards.champion, knockoutWinners.final]
+      .find((value): value is string => typeof value === 'string' && value.trim().length > 0)?.trim() ?? null;
   }
 
   /* ── Loading states ── */

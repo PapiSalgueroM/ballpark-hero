@@ -1,5 +1,19 @@
 # Work board
 
+**Round 524, Codex, scoped verification complete September 8:** saved-bracket profile summary in
+`.worktrees/round-524-profile-bracket`, branch `codex/round-524-profile-bracket`,
+based on Round 523 `8c3d1153` (draft PR74). Current top-level string champion
+takes precedence, malformed values keep the page usable, and both legacy
+shapes plus Bracket saved/link fallback remain. Both types/build, 49 Profile
+cases, bracket harness and all fifteen generated-site fences pass, with the
+browser boot fence run directly through installed Chrome. Built phone/desktop
+matrix and four exact DOM controls pass without boundary/runtime errors.
+Independent review clear; full evidence in docs/profile-bracket-2026-09-08.md.
+Local synthetic fixtures only, no save protocol/data/backend changes, root
+edits, full suite, merge or publish. Preview 4200 preserved. Next free: 525.
+Next bounded candidate: login-return harness browser portability and complete
+local template fixtures. Broad-suite process isolation remains unresolved.
+
 **Round 523, Codex, scoped verification complete September 8:** profile header avatar and initial
 identity in `.worktrees/round-523-profile-avatar`, branch
 `codex/round-523-profile-avatar`, based on Round 522 `2b60a88d` (draft PR73).
