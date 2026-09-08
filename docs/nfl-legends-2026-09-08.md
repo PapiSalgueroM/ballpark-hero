@@ -3,6 +3,8 @@
 Worktree `.worktrees/round-535-nfl-legend-cards`, branch
 `codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85).
 Claim `2ac533bb`. Root belongs to Claude, tracked-clean at `b0c339b1`.
+Implementation `b9093683`, draft PR86:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/86.
 All previous worktrees and previews are preserved.
 
 ## Reproduction

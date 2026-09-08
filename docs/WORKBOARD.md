@@ -5,6 +5,7 @@
 Codex owns the NFL same-name legend/card repair, with real-action baseline
 witnesses. Worktree `.worktrees/round-535-nfl-legend-cards`,
 branch `codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85).
+Implementation `b9093683`, draft PR86: https://github.com/PapiSalgueroM/ballpark-hero/pull/86.
 Earned legend identity now follows acquisition, battle use, transfer and
 market returns. Ordinary same-name cards keep their existing pool ratings.
 The existing NBA duplicate rule keeps unavailable rewards saveable. No new

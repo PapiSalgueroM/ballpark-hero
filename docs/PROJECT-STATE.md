@@ -4,7 +4,9 @@
 
 Scoped verification complete in `.worktrees/round-535-nfl-legend-cards`, branch
 `codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85),
-claim `2ac533bb`. Pure engine and real-hook fixture witnesses reproduce
+claim `2ac533bb`, implementation `b9093683`.
+Draft PR86: https://github.com/PapiSalgueroM/ballpark-hero/pull/86.
+Pure engine and real-hook fixture witnesses reproduce
 ordinary pool cards becoming legends by franchise name, and earned legends
 losing their rating after a transfer. An explicit run-scoped activation set
 now distinguishes those cards. It follows transfers and market returns,
