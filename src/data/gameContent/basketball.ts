@@ -357,7 +357,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       { q: "Is there a one away warning?", a: "No. A wrong submission costs a life even if four of five were right, which is why the fifth name deserves the most thought." },
       { q: "Is everyone solving the same puzzle?", a: "In daily mode, yes, the whole world gets the same 20 players, and progress saves if you leave. Unlimited deals random boards." },
       { q: "What kinds of connections show up?", a: "Franchises, career milestones like 28,000 points or 2,000 threes, birth countries like France or Canada, and draft slots like number one overall. Every grouping is checked against real career data." },
-      { q: "Do I need an account to play?", a: "No. An account, email or Google, is optional and only matters if you want saved stats and leaderboards. The daily puzzle itself needs nothing." },
+      { q: "Do I need an account to play?", a: "No. An account is optional and only matters if you want saved stats and leaderboards. The daily puzzle itself needs nothing." },
     ],
   },
 

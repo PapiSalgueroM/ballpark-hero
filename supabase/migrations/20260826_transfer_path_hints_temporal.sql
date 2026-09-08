@@ -60,7 +60,7 @@ update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Real Madrid with Federico Valverde; the last was at Atlético Madrid with Jan Oblak.' where puzzle_id = 'tpa-62';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Atlético Madrid with Memphis Depay and, in another season, at Atlético Madrid with Thibaut Courtois.' where puzzle_id = 'tpa-64';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Manchester United with Bruno Fernandes; the last was at Real Madrid with Endrick.' where puzzle_id = 'tpa-65';
-update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Real Madrid with Arjen Robben and at PSG with Neymar.' where puzzle_id = 'tpa-66';
+update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Real Madrid with Arjen Robben and at Santos with Neymar.' where puzzle_id = 'tpa-66';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Chelsea with Eden Hazard and at Atlético Madrid with João Félix.' where puzzle_id = 'tpa-67';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Juventus with Cristiano Ronaldo and at Manchester City with Rúben Dias.' where puzzle_id = 'tpa-68';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Manchester United with Alejandro Garnacho; the last was at Manchester City with Phil Foden.' where puzzle_id = 'tpa-69';
@@ -94,7 +94,7 @@ update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man do
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Arsenal with Viktor Gyökeres; the last was at Real Madrid with Vinícius Tobias.' where puzzle_id = 'tpa-98';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Liverpool with Alisson and at PSV with Xavi Simons.' where puzzle_id = 'tpa-99';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Real Madrid with Arda Güler and at PSG with Marquinhos.' where puzzle_id = 'tpa-100';
-update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Tottenham with Hugo Lloris; the last was at Chelsea with Thiago Silva.' where puzzle_id = 'tpa-101';
+update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at LAFC with Hugo Lloris and at Chelsea with Thiago Silva.' where puzzle_id = 'tpa-101';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Tottenham with Hugo Lloris and at Manchester United with Raphaël Varane.' where puzzle_id = 'tpa-102';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Manchester City with Bernardo Silva and at Chelsea with Kalidou Koulibaly.' where puzzle_id = 'tpa-104';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Bayer Leverkusen with Florian Wirtz; the last was at PSG with Khvicha Kvaratskhelia.' where puzzle_id = 'tpa-105';
@@ -259,7 +259,7 @@ update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Borussia Dortmund with Alexander Isak and at AC Milan with Rafael Leão.' where puzzle_id = 'tpa-273';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Bayern Munich with Arjen Robben; the last was at Tottenham with Hugo Lloris.' where puzzle_id = 'tpa-274';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Liverpool with Darwin Núñez and at Real Sociedad with Mikel Oyarzabal.' where puzzle_id = 'tpa-275';
-update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Arsenal with Bukayo Saka; the last was at Tottenham with Hugo Lloris.' where puzzle_id = 'tpa-276';
+update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Arsenal with Bukayo Saka; the last was at LAFC with Hugo Lloris.' where puzzle_id = 'tpa-276';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Borussia Dortmund with Alexander Isak and at Manchester United with Raphaël Varane.' where puzzle_id = 'tpa-277';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Napoli with Dries Mertens; the last was at Liverpool with Steven Gerrard.' where puzzle_id = 'tpa-279';
 update public.transfer_path_puzzles set min_steps = 4, hint = 'Three middle men at least. The first was at Juventus with Jonathan David; the last was at Liverpool with Steven Gerrard.' where puzzle_id = 'tpa-280';
@@ -799,7 +799,7 @@ update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Benfica with Angel Di María and at Chelsea with N''Golo Kanté.' where puzzle_id = 'tpa-851';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Barcelona with Dani Alves and at Liverpool with Steven Gerrard.' where puzzle_id = 'tpa-852';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Barcelona with Alexis Sánchez and at PSG with Angel Di María.' where puzzle_id = 'tpa-853';
-update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Chelsea with Frank Lampard; the last was at Tottenham with Hugo Lloris.' where puzzle_id = 'tpa-855';
+update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Chelsea with Frank Lampard; the last was at LAFC with Hugo Lloris.' where puzzle_id = 'tpa-855';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Bayern Munich with Arturo Vidal and, in another season, at Bayern Munich with Sadio Mané.' where puzzle_id = 'tpa-856';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Benfica with Enzo Fernández and at Real Madrid with Pepe.' where puzzle_id = 'tpa-857';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Chelsea with Didier Drogba; the last was at Barcelona with Ivan Rakitić.' where puzzle_id = 'tpa-858';
@@ -846,7 +846,7 @@ update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at PSG with Gianluigi Donnarumma and at Barcelona with Lamine Yamal.' where puzzle_id = 'tpa-901';
 update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Real Madrid with Dani Carvajal and, in another season, at Real Madrid with Endrick.' where puzzle_id = 'tpa-902';
 update public.transfer_path_puzzles set min_steps = 4, hint = 'Three middle men at least. The first was at Juventus with Jonathan David; the last was at Real Sociedad with Mikel Oyarzabal.' where puzzle_id = 'tpa-903';
-update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at Juventus with Andrea Pirlo and at Atlético Madrid with Diego Costa.' where puzzle_id = 'tpa-905';
+update public.transfer_path_puzzles set min_steps = 2, hint = 'One middle man does it. He was at New York City FC with Andrea Pirlo and at Atlético Madrid with Diego Costa.' where puzzle_id = 'tpa-905';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Inter Milan with Alexis Sánchez; the last was at Tottenham with Xavi Simons.' where puzzle_id = 'tpa-906';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Borussia Dortmund with Ciro Immobile; the last was at Real Madrid with Cristiano Ronaldo.' where puzzle_id = 'tpa-907';
 update public.transfer_path_puzzles set min_steps = 3, hint = 'Two middle men at least. The first was at Arsenal with Bukayo Saka; the last was at Atlético Madrid with Jan Oblak.' where puzzle_id = 'tpa-908';

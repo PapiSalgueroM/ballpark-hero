@@ -39,7 +39,7 @@ How it works:
   schedule a 600ms shake timer with no cleanup, so an unmount mid shake sets state on a dead
   component and the full vitest run prints "window is not defined" at random (the open bug
   1bc0ab47 recorded); fenced with a fake timer test and a control that puts the bare timer back.
-  **504 CLUB MANAGER LIVE MATCH V1, DONE 2026-09-07, on the branch with a PR open.** His words: "Ball at players' feet, both teams with names and
+  **504 CLUB MANAGER LIVE MATCH V1, DONE 2026-09-07, merged on origin/main.** His words: "Ball at players' feet, both teams with names and
   numbers on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live
   stats visible during play, subs and tactics at any moment, the AI opponent also subs." Built on
   the Round 472 merged flow, never a second match screen. Every ask
@@ -90,8 +90,8 @@ How it works:
   results, squads and the takeover date must come from verified sources rather than reconstructed
   or invented history.
 
-- **Codex lane, Round 509, CLAIMED 2026-09-07. IMPLEMENTATION COMMITTED LOCALLY, FINAL
-  VERIFICATION, PR, MERGE AND DEPLOY STILL PENDING. next: Round 510 (Codex lane).** This batch
+- **Codex lane, Round 509, CLAIMED 2026-09-07. CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
+  STILL PENDING. next: Round 510 (Codex lane).** This batch
   stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score
   again on every visit; repels a losing NBA Conquest attacker instead of deleting it; fixes the
   College Grid browser player's false stall; connects the Soccer Career wall and strengthens
@@ -110,7 +110,17 @@ How it works:
   douknowball.com, and corrects the report-data disclosure in Privacy. The tested Google code
   remains behind a false production flag, so no button, divider or Google script can appear
   until Branding uses douknowball1@gmail.com. Round 509 also reran the full
-  site-side AdSense readiness audit; Google still decides approval.
+  site-side AdSense readiness audit; Google still decides approval. The indexing audit measured
+  58 of 149 known URLs indexed, up from 41 of 129 on August 17. Of the 91 exclusions, 71 have not
+  been crawled, 17 were crawled but not selected, and three are intentional redirects. All 140
+  submitted pages passed canonical, noindex, metadata, schema, content, link depth and orphan
+  checks. Guess the Nation was the one concrete defect: its saved page had no H1. It now has one
+  H1 in every state, and `simIndexing` checks the real saved H1 count on every submitted document
+  with a firing negative control. Final gates: TypeScript zero, 22 test files and 194 tests green,
+  all generated-site fences green, 145 public routes prerendered with zero failures, 608 visual
+  route-width checks with zero findings, and four priority games played for 14 interactions each
+  with zero findings. Next indexing work starts from the exact Search Console 71 and 17 URL
+  exports, with the 17 crawled-but-declined pages first.
 
 - **Desktop lane, Round 464, claimed and SHIPPED 2026-09-05.** A player's report the same
   morning: Alphabet Sprint "wont exept anything". The mechanics were fine; the pool was Who
@@ -765,7 +775,9 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ### PENDING PUBLISH
 
-(empty as of 2026-08-30, everything through ccc4c583 is live)
+- **Rounds 503 and 504 are merged on origin/main at `7af40013` but are not in the live
+  deployment checked above.** Round 509 is merged locally with both and remains on its Codex
+  branch until the combined gates, PR and merge finish.
 
 ## Inbox (unclaimed)
 

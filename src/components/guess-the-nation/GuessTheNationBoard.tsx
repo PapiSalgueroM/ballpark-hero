@@ -69,9 +69,9 @@ export function GuessTheNationBoard() {
         <div className="container mx-auto px-4 py-8 max-w-xl">
           <div className="text-center mb-8">
             <div className="text-5xl mb-3">🌍</div>
-            <h1 className="text-4xl font-bold text-amber-400 font-display mb-2">
+            <h2 className="text-4xl font-bold text-amber-400 font-display mb-2">
               Guess The Nation
-            </h1>
+            </h2>
             <p className="text-muted-foreground">
               How well do you know the world's greatest sporting nations?
             </p>
@@ -205,6 +205,7 @@ export function GuessTheNationBoard() {
       <GameShell
         width="narrow"
         title="Guess The Nation"
+        headingLevel={2}
         emoji="🌍"
         subtitle={modeLabel}
       >

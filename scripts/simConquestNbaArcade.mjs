@@ -113,6 +113,9 @@ const copyCase = 'tells the player that the failed away raid was repelled';
 
 if (!CONTROL) {
   if (code !== 0 || !/2 passed/.test(out)) abort('NBA Arcade regression is red:\n' + out.slice(-2400));
+  console.log('NBA Conquest away-loss regression');
+  console.log(`  1) ${mapCase}: green`);
+  console.log(`  2) ${copyCase}: green`);
   console.log('NBA Arcade: 2 of 2 real hook and board outcomes green');
   process.exit(0);
 }

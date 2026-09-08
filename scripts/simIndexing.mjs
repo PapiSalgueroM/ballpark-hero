@@ -33,6 +33,12 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
+const isPageSource = file => file.endsWith('.tsx') && !file.endsWith('.test.tsx');
+const CONTROL = process.env.SIM_INDEXING_CONTROL || '';
+if (CONTROL && CONTROL !== 'snapshot-noh1') {
+  console.error(`Unknown SIM_INDEXING_CONTROL "${CONTROL}". Use snapshot-noh1.`);
+  process.exit(1);
+}
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -54,7 +60,7 @@ const sitemap = new Set([...xml.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)
 const pages = [];
 const dir = path.join(ROOT, 'src/pages');
 for (const f of fs.readdirSync(dir)) {
-  if (!f.endsWith('.tsx')) continue;
+  if (!isPageSource(f)) continue;
   const s = fs.readFileSync(path.join(dir, f), 'utf-8');
   const m = s.match(/<PageSeo([\s\S]{0,700}?)\/>/);
   if (!m) {
@@ -231,7 +237,8 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
     const t = readFile(file);
     if (/<h1/.test(t)) return true;
     const at = t.indexOf('<GameShell');
-    return at >= 0 && /\btitle=/.test(t.slice(at, at + 600));
+    const shell = at >= 0 ? t.slice(at, at + 600) : '';
+    return /\btitle=/.test(shell) && !/\bheadingLevel=\{2\}/.test(shell);
   };
   /* Two hops, because the usual shape is page to board to shell. */
   const hasOwnH1 = (file, depth = 2, seen = new Set()) => {
@@ -249,7 +256,7 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
 
   let checked = 0, own = 0;
   for (const f of fs.readdirSync(PAGES_DIR)) {
-    if (!f.endsWith('.tsx')) continue;
+    if (!isPageSource(f)) continue;
     const fp = path.join(PAGES_DIR, f);
     const t = readFile(fp);
     if (!t.includes('<GameSeoContent')) continue;
@@ -274,6 +281,52 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
   walk(path.join(ROOT, 'src/components'));
   if (dupes.length) fail(`components rendering the SEO block on top of their page: ${dupes.join(' | ')}`);
   console.log(`   ${checked} pages carry the block, ${own} have a headline of their own, ${checked - own} rely on it for their h1`);
+}
+
+/* ---------- 6b. The saved document has one h1 too ---------- */
+console.log('6b) Every submitted snapshot carries exactly one real h1');
+{
+  /* The source-level check above can only see what a component is capable of
+     rendering. The saved page may take a loading or error branch, or the
+     prerenderer's clock comparison may remove a changing game board. Count
+     the HTML a crawler actually receives as the final authority. */
+  const snapshotFile = route => route === '/'
+    ? path.join(ROOT, 'index.html')
+    : path.join(ROOT, 'public', route.slice(1), 'index.html');
+  const stripNonMarkupClaims = html => html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<script\b[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[\s\S]*?<\/style>/gi, '');
+
+  let checked = 0;
+  let controlFired = false;
+  for (const route of sitemap) {
+    const file = snapshotFile(route);
+    if (!fs.existsSync(file)) {
+      fail(`${route}: submitted without a saved HTML document`);
+      continue;
+    }
+    let html = stripNonMarkupClaims(fs.readFileSync(file, 'utf8'));
+    const before = (html.match(/<h1(?:\s|>)/gi) ?? []).length;
+    if (CONTROL === 'snapshot-noh1' && !controlFired && before === 1) {
+      const changed = html
+        .replace(/<h1(\s|>)/i, '<h2$1')
+        .replace(/<\/h1>/i, '</h2>');
+      if (changed === html || (changed.match(/<h1(?:\s|>)/gi) ?? []).length !== 0) {
+        fail('snapshot-noh1 control found a heading but did not remove it');
+      } else {
+        html = changed;
+        controlFired = true;
+      }
+    }
+    const headings = (html.match(/<h1(?:\s|>)/gi) ?? []).length;
+    if (headings !== 1) fail(`${route}: saved page has ${headings} h1 elements, expected exactly 1`);
+    checked += 1;
+  }
+  if (CONTROL === 'snapshot-noh1' && !controlFired) {
+    fail('snapshot-noh1 control did not find a one-heading page to mutate');
+  }
+  console.log(`   ${checked} submitted documents checked at the bytes a crawler receives`);
 }
 
 /* ---------- 7. robots.txt is one honest set of rules ---------- */

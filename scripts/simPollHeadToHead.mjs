@@ -131,6 +131,10 @@ if (/Failed to load|Cannot find module|SyntaxError|Failed to resolve import/.tes
 
 if (!CONTROL) {
   if (code !== 0 || !/Tests\s+5 passed/.test(out)) abort('poll head to head regression is red:\n' + out.slice(-2400));
+  console.log('Poll of the Day head-to-head regression');
+  console.log('  database rows render exactly two named sides');
+  console.log('  fallback and database questions use simple matchup wording');
+  console.log('  public copy uses the rounded game count');
   console.log('Poll of the Day: 5 of 5 head to head and rounded count checks green');
   process.exit(0);
 }

@@ -7,9 +7,10 @@ now serves `href="/quiz-board"` where it served `href="/jeopardy"`, which is the
 Round 496 fix; all eight probed routes answer 200 and the sitemap dates `/` to
 2026-09-07). Rounds 495 to 501 shipped, plus the 475-479 batch merged.
 
-`origin/main` is `a1a162e6`, Round 503. Round 503 is merged but is not included in the
-live deployment above. Round 509 is committed on `codex/round-509-quality-batch`, merged
-locally with Round 503, and still needs final verification, a PR, merge to main and deploy.
+`origin/main` is `7af40013`, Round 504. Rounds 503 and 504 are merged but are not included in
+the live deployment above. Round 509 is code complete and verified on
+`codex/round-509-quality-batch`, merged locally with Rounds 503 and 504, and still needs its final
+commit, PR, merge to main and deploy.
 None of Round 509's frontend, game-engine or prerender fixes should be called live yet.
 
 Edge functions deployed this session, all recorded in `scripts/data/edgeDeployed.json`:
@@ -31,7 +32,8 @@ timer cleanup. Round 504 turns Club Manager's live match into a committed footba
 both elevens, the ball, set pieces, fouls, live stats and in-match changes. Change log entries
 below. The Claude Code lane still holds Rounds 505 to 508 on the workboard.
 
-**Round 509 is complete in the local Codex branch, pending final verification, PR and deploy.**
+**Round 509 is complete and verified in the local Codex branch, pending its final commit, PR and
+deploy.**
 Its College Grid finding was a false stall in `playGames`, not a broken page. The rest of its
 status is recorded in the progress table, Open bugs and change log below.
 
@@ -76,7 +78,7 @@ new game requests, and a stack of P1 bugs he hit live. **The full transcription 
 document below.** The first wave is claimed by lane in `docs/WORKBOARD.md`: bugs first,
 his order within a lane.
 
-### His 2026-08-28 list, item by item (kept current; last reconciled 2026-09-05)
+### His 2026-08-28 list, item by item (kept current; last reconciled 2026-09-07)
 
 He asked twice: "how much of this have u fixed?" and "remember to do all the things ive asked
 you to do previosuly". This table is the answer, and it is the backlog. DONE means shipped and
@@ -3034,8 +3036,8 @@ today rather than adding alongside them. Every new poll must obey all of these r
 
 ## Change log for this file
 
-- **2026-09-07, Round 509 (Codex lane), IMPLEMENTATION COMMITTED LOCALLY, FINAL VERIFICATION,
-  PR, MERGE AND DEPLOY PENDING.** This is one correctness and presentation batch, not a claim
+- **2026-09-07, Round 509 (Codex lane), CODE COMPLETE AND VERIFIED, PR, MERGE AND DEPLOY
+  PENDING.** This is one correctness and presentation batch, not a claim
   that the live site already changed.
 
   **THE FOUR MY CAREER REPEAT-CREDIT LEAKS.** NFL, NBA, MLB and NHL restored a retired save
@@ -3079,7 +3081,7 @@ today rather than adding alongside them. Every new poll must obey all of these r
   new controls. Prerender's days 0, 5 and 11 now start from one fixed snapshot epoch and one fixed
   America/New_York timezone, so a host calendar change cannot pick a different intersection by
   coincidence. Three controls cover the old relative clock and both installation wires. The
-  final full build and snapshot hash pass remain part of the pending Round 509 gate.
+  final full build and snapshot hash pass are green.
 
   **ADSENSE RE-AUDIT.** Seventeen AdSense, legal, SEO, crawler, content and brand checks passed;
   all 14 negative controls fired; 140 of 140 live sitemap routes were clean; 139 substantive
@@ -3095,9 +3097,9 @@ today rather than adding alongside them. Every new poll must obey all of these r
   the page, and Supabase verifies it with a matching 32-byte cryptographic nonce. The old Google
   `signInWithOAuth` redirect is gone while email and Apple paths remain. Four rendered checks cover
   the token exchange, nonce hash, rejected token, 268px phone width and every script retry path;
-  seven controls restore the hosted redirect, break the nonce, remove the official button, strand
-  a stale script, remove the load timeout, silence the accessible status announcements and expose
-  the unfinished branding. A
+  eight controls restore the hosted redirect, break the nonce, remove the official button, strand
+  a stale script, remove the load timeout, silence the accessible status announcements, expose
+  the unfinished branding and disconnect public sign-in claims from the release gate. A
   live-origin check rendered the real GIS button
   without a console error and confirmed that the current client already authorizes
   douknowball.com. Production keeps the Google flag false, which removes the button, divider and
@@ -3106,6 +3108,33 @@ today rather than adding alongside them. Every new poll must obey all of these r
   The privacy policy now also says exactly what a submitted report carries: selected category,
   typed text, page, Eastern date and limited in-game context, with no account email, screenshot or
   general device data attached. `simReportContext` holds that disclosure and its control goes red.
+
+  **INDEX COVERAGE, MEASURED.** The latest saved Search Console aggregate from September 6 has
+  58 indexed pages out of 149 known, or 38.9 percent. The 91 exclusions are 71 discovered but not
+  yet crawled, 17 crawled but not selected, and three intentional redirects. That is still weak,
+  but it has improved from 41 of 129 on August 17: 17 more pages indexed while Google discovered
+  20 more. A fresh audit of all 140 submitted snapshots found unique titles and descriptions,
+  self canonicals, no noindex, valid schema, zero orphans, maximum depth three and at least 414
+  words on every game page. The one definite page defect was `/guess-the-nation`: its saved and
+  live raw HTML had no H1 because its mode heading lived inside a board branch the prerenderer
+  correctly drops. The page now has one persistent H1 in loading, error, menu, play, win and loss
+  states. `simIndexing` section 6b parses every submitted snapshot and requires exactly one H1 on
+  all 140 documents; its in-memory negative control removes one and fails. The exact 71 and 17 URL
+  exports are not saved in the repo. Pulling those lists from Search Console and improving the 17
+  crawled-but-declined pages first is the next evidence-based indexing round. Do not answer this
+  with filler pages, blanket links or repeated sitemap submissions.
+
+  **FINAL VERIFICATION.** `build:seo` prerendered all 145 public routes with zero failures, kept
+  the three account-only routes hidden, submitted 140 URLs and held 139 existing lastmod dates
+  while changing only Guess the Nation. All 15 generated-site fences are green, including the
+  real-browser boot fence. The full visual sweep covered 152 routes at four widths, 608 checks,
+  with zero findings. Real play reached 14 interactions with zero findings on Transfer Path,
+  Soccer Career, College Grid and NBA Conquest. The hidden Google release gate was also checked
+  in the built site at 320px and 390px: email and password are usable, the dialog fits, and there
+  is no Google button, divider or identity script. TypeScript is at zero errors and Vitest is 22
+  files, 194 tests, all green. The full sim board exercised 262 harnesses; the five reports that
+  were not initially green were three weak one-line evidence outputs, one transient live database
+  fetch and one static quote-check false positive. Each was repaired or cleared and rerun green.
 - **2026-09-07, Round 504 (Claude Code lane). THE LIVE MATCH IS FOOTBALL NOW, AND YOU CAN
   MANAGE IT AT ANY MINUTE.** His words: "Ball at players' feet, both teams with names and numbers
   on their dots, players cover the whole pitch, throw ins, corners and fouls exist. Live stats

@@ -134,6 +134,7 @@ for (const days of SAMPLE_DAYS) {
       console.error(`day ${days}: the prerender flag was not set`);
       process.exit(1);
     }
+    console.log(`sample +${days} days: stable at ${a.noArg}`);
   }
 }
 
