@@ -54,18 +54,36 @@
        must go red.
      Each control refuses to run if its rewrite found nothing to rewrite.
 
-   Thresholds, from this harness on its own seed and on SIM_SEED=1, 2, 3
-   (2026-09-05), each one roughly midway between the fixed band and the
-   control's band where a control has one:
-     sackings across the careers        fixed 23 to 24                          floor 12
-     press answers in the careers       fixed 533 to 582                        floor 200
-     largest single week fall           fixed 11.7 to 14.0, p99 11.3 to 11.8    the edge is 10
-     promise landings on zero           fixed 9 to 27                           floor 4
-     disliked press options probed      fixed 6 to 10                           floor 3
-     fan meter vs last ten PPG, r       fixed 0.921 to 0.940   deaf 0.519       floor 0.75
-     mean fan move after a win          fixed +5.5 to +6.5     deaf +1.0        floor +3
-     mean fan move after a defeat       fixed -9.5 to -10.9    deaf -1.5        ceiling -5
-     fan samples                        fixed 518 to 666                        floor 300
+   Round 505 gate pass (2026-09-08). Section 2 read 87 failures on the Round
+   505 engine's stream: Newcastle was sacked on exactly its twelfth league
+   week, the keep for the probe bases sat above the sacking check, and the
+   probes wrote half a point onto a save whose sacked flag was already set,
+   then read the harness's own invariant back. The engine had sacked him
+   exactly when the meter read zero, answerPress floors the number at one
+   between matches, and boardMeter reads the number rather than the flag, so
+   nothing in the engine lied. A probe base is now a manager still in a job,
+   the number of bases is held to a floor, and the promise probes run on
+   every promise base rather than the first four, because on four the
+   landings on zero read 4 and 5 on SIM_SEED 2 and 3, sitting on the floor.
+
+   Thresholds, from this harness on its own seed and on SIM_SEED=1, 2, 3 on
+   the Round 505 engine and on its own seed on the Round 504 engine
+   (2026-09-08; the 2026-09-05 bands were the same shape), each one roughly
+   midway between the fixed band and the control's band where a control has
+   one:
+     sackings across the careers        fixed 22 to 26                          floor 12
+     press answers in the careers       fixed 487 to 646                        floor 200
+     largest single week fall           fixed 11.8 to 14.6, p99 11.1 to 11.7    the edge is 10
+     probe bases kept, mid and promise  fixed 8 to 9 and 9 to 10                floor 5 each
+     promise landings on zero           fixed 21 to 35 on every promise base    floor 4
+                                        (9 to 27 on the first four bases on
+                                        2026-09-05; 4 and 5 on SIM_SEED 2 and 3
+                                        of the 505 engine, on the floor)
+     disliked press options probed      fixed 4 to 12                           floor 3
+     fan meter vs last ten PPG, r       fixed 0.893 to 0.932   deaf 0.519       floor 0.75
+     mean fan move after a win          fixed +5.45 to +6.42   deaf +1.0        floor +3
+     mean fan move after a defeat       fixed -10.2 to -10.75  deaf -1.5        ceiling -5
+     fan samples                        fixed 514 to 652                        floor 300
      table rows rendered                fixed 84 in five tables                 floor 60
 
    Run: node scripts/simClubManagerMeters.mjs
@@ -236,6 +254,7 @@ const falls = [];
 const fanSamples = [];   // [fan value, last ten PPG]
 const fanMoves = { W: [], D: [], L: [] };
 const keptStates = { mid: [], end: [], promiseProbes: [] };
+let keptSkipped = 0;
 
 function ppgLastTen(s) {
   const log = (s.resultLog ?? []).slice(-10);
@@ -268,8 +287,19 @@ function playCareer(tag, start, seasons, opts = {}) {
         }
         prevFan = fanNow;
         if (r.report?.competition === 'league' || (s.calendar[s.week - 1]?.type === 'league')) leagueWeeks += 1;
-        if (opts.keep && leagueWeeks === 12 && season === 1) keptStates.mid.push(clone(s));
-        if (opts.keep && s.press && leagueWeeks === 8 && season === 1) keptStates.promiseProbes.push(clone(s));
+        /* Round 505 gate pass: a probe base is a manager still in a job. This
+           keep sat above the sacking check below, so a career sacked on
+           exactly its twelfth league week (Newcastle, on the Round 505
+           stream) was kept with sacked=true; section 2 then wrote half a
+           point onto it and read its own invariant back as 87 failures. The
+           engine was right both times: the sacking came exactly when the
+           meter read zero, and boardMeter reads the number, not the flag. A
+           career sacked at a keep point is left out of the probes and
+           counted, and section 2 holds the bases it has against a floor. */
+        const keepPoint = opts.keep && season === 1 && (leagueWeeks === 12 || (s.press && leagueWeeks === 8));
+        if (keepPoint && s.sacked) keptSkipped += 1;
+        if (opts.keep && !s.sacked && leagueWeeks === 12 && season === 1) keptStates.mid.push(clone(s));
+        if (opts.keep && !s.sacked && s.press && leagueWeeks === 8 && season === 1) keptStates.promiseProbes.push(clone(s));
       }
       if (s.sacked) { sackings += 1; break; }
       if (r.kind === 'seasonOver') break;
@@ -318,8 +348,15 @@ if (largestFall < BOARD_EDGE) fail(`the bottom band starts at ${BOARD_EDGE} but 
 
 /* ---------- 2. the promise path and the between-match paths ---------- */
 console.log('2) A broken promise, a press answer or a handshake can never leave the meter on zero with the manager in a job');
+console.log(`   ${keptStates.mid.length} mid season base(s) and ${keptStates.promiseProbes.length} promise base(s) kept from managers still in a job, ${keptSkipped} keep point(s) skipped for a sacking`);
+if (keptStates.mid.length < 5 || keptStates.promiseProbes.length < 5) fail(`only ${keptStates.mid.length} mid season and ${keptStates.promiseProbes.length} promise bases were kept, the probes below have too little to stand on`);
 let probes = 0, promiseZero = 0, promiseFired = 0;
-for (const base of keptStates.promiseProbes.slice(0, 4)) {
+/* Round 505 gate pass: every promise base, not the first four. On four bases
+   the landings on zero read 16, 16, 4 and 5 across this seed and SIM_SEED 1
+   to 3 on the Round 505 engine, the last two sitting on the floor of 4, so
+   the check was a coin toss in waiting; the measured band on all bases is in
+   the header. */
+for (const base of keptStates.promiseProbes) {
   for (let conf = 4; conf <= 12; conf += 0.5) {
     const s0 = clone(base);
     s0.boardConfidence = conf;
