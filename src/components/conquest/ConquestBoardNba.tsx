@@ -2,9 +2,9 @@
 // ConquestRegionMap supplies the shared map and takeover animation.
 
 import { useState, useEffect, useRef } from 'react';
-import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
+import { useConquestNba, PowerRankEntry, type Phase } from '@/hooks/useConquestNba';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
-import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA } from '@/data/conquestDataNba';
+import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba } from '@/data/conquestDataNba';
 import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -134,42 +134,55 @@ function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
 
 function FreeAgencyPanel({
   favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining,
+  phase, aliveTeamIds, availableCandidates,
 }: {
   favoriteTeam: string | null;
   setFavoriteTeam: (teamId: string) => void;
   canSignFreeAgent: () => boolean;
   signFreeAgencyCandidate: (candidate: ConquestFreeAgentCandidateNba) => void;
   freeAgencyCooldownRemaining: number;
+  phase: Phase;
+  aliveTeamIds: string[];
+  availableCandidates: ConquestFreeAgentCandidateNba[];
 }) {
-  const canSign = canSignFreeAgent();
-  const cooldownLabel = freeAgencyCooldownRemaining > 0
-    ? `Available after ${freeAgencyCooldownRemaining} more conquest${freeAgencyCooldownRemaining === 1 ? '' : 's'}`
-    : 'Pick a team to unlock signing';
+  const activeFavorite = favoriteTeam && aliveTeamIds.includes(favoriteTeam) ? favoriteTeam : '';
+  const canSign = phase === 'ready' && !!activeFavorite && freeAgencyCooldownRemaining === 0 && canSignFreeAgent();
+  const status = phase === 'gameover'
+    ? 'This run is finished. Start a new run to sign players.'
+    : phase !== 'ready'
+      ? 'Finish this turn before changing teams or signing.'
+      : !activeFavorite
+        ? 'Pick an active team to sign a player.'
+        : freeAgencyCooldownRemaining > 0
+          ? `Available after ${freeAgencyCooldownRemaining} more settled battle${freeAgencyCooldownRemaining === 1 ? '' : 's'}.`
+          : 'Signing waives this team\'s lowest-rated in-game player and adds a +2 team rating bonus, within the rating cap.';
 
   return (
     <details className="rounded-xl border border-border bg-card">
       <summary className="cursor-pointer select-none px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
         ✍️ Free Agency
       </summary>
-      <div className="px-3 pb-3">
-        {!favoriteTeam ? (
-          <div className="space-y-2 py-1">
-            <p className="text-[11px] text-muted-foreground text-center">Pick your team to unlock free agency</p>
-            <select
-              defaultValue=""
-              onChange={(e) => { if (e.target.value) setFavoriteTeam(e.target.value); }}
-              aria-label="Pick your team"
-              className="w-full px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground"
-            >
-              <option value="" disabled>Select a team...</option>
-              {NBA_TEAMS.map(t => (
-                <option key={t.id} value={t.id}>{t.city} {t.name}</option>
-              ))}
-            </select>
-          </div>
-        ) : (
+      <div className="px-3 pb-3 space-y-2">
+        <p className="text-[11px] text-muted-foreground text-center">Arcade player pool. Availability follows the rosters in this run.</p>
+        <select
+          value={activeFavorite}
+          disabled={phase !== 'ready'}
+          onChange={(e) => { if (e.target.value) setFavoriteTeam(e.target.value); }}
+          aria-label="Pick your team"
+          className="w-full min-h-10 px-2 py-2 rounded-lg border border-border bg-background text-xs text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <option value="" disabled>Select a team...</option>
+          {NBA_TEAMS.filter(team => aliveTeamIds.includes(team.id)).map(t => (
+            <option key={t.id} value={t.id}>{t.city} {t.name}</option>
+          ))}
+        </select>
+        {favoriteTeam && !activeFavorite && (
+          <p role="status" className="text-[11px] text-muted-foreground">{NBA_TEAM_MAP.get(favoriteTeam)?.name || favoriteTeam} have been eliminated. Pick another active team.</p>
+        )}
+        <p className="text-[11px] text-muted-foreground text-center">{status}</p>
+        {availableCandidates.length > 0 ? (
           <div className="max-h-64 overflow-y-auto space-y-1.5">
-            {CONQUEST_FREE_AGENCY_POOL_NBA.map(candidate => (
+            {availableCandidates.map(candidate => (
               <div
                 key={candidate.name}
                 className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-border/50 text-[11px]"
@@ -179,22 +192,21 @@ function FreeAgencyPanel({
                     <span className="font-semibold text-foreground">{candidate.name}</span>
                     <span className="text-muted-foreground">{candidate.position} · {candidate.overall} OVR</span>
                   </div>
-                  <div className="text-muted-foreground truncate">{candidate.blurb}</div>
                 </div>
                 <button
                   onClick={() => signFreeAgencyCandidate(candidate)}
                   disabled={!canSign}
-                  title={!canSign ? cooldownLabel : undefined}
-                  className="shrink-0 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition-opacity active:scale-95 bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
+                  aria-label={`Sign ${candidate.name} for ${NBA_TEAM_MAP.get(activeFavorite)?.name || 'your team'}`}
+                  title={!canSign ? status : undefined}
+                  className="shrink-0 min-h-8 min-w-10 px-2.5 py-1.5 rounded-lg font-bold text-[10px] transition-opacity active:scale-95 bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                 >
                   Sign
                 </button>
               </div>
             ))}
-            {!canSign && (
-              <p className="text-[10px] text-muted-foreground text-center pt-1">{cooldownLabel}</p>
-            )}
           </div>
+        ) : (
+          <p className="text-[11px] text-muted-foreground text-center py-2">No players from this Arcade pool are available right now.</p>
         )}
       </div>
     </details>
@@ -780,6 +792,9 @@ export default function ConquestBoardNba() {
 
       {/* Free Agency */}
       <FreeAgencyPanel
+        phase={game.phase}
+        aliveTeamIds={aliveIds}
+        availableCandidates={game.availableFreeAgencyCandidates}
         favoriteTeam={game.favoriteTeam}
         setFavoriteTeam={game.setFavoriteTeam}
         canSignFreeAgent={game.canSignFreeAgent}

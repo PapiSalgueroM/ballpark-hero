@@ -26,7 +26,7 @@ import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
   FreeAgent,
 } from '@/data/conquestPowerups';
-import { simulateDetailedBattleNba, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattleNba';
+import { simulateDetailedBattleNba, getNbaRosterPlayer, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattleNba';
 
 export type Phase =
   | 'ready' | 'animating' | 'battle' | 'steal' | 'gameover'
@@ -232,7 +232,12 @@ export function useConquestNba() {
   const [turn, setTurn] = useState(0);
   const [phase, setPhaseState] = useState<Phase>('ready');
   const phaseRef = useRef<Phase>('ready');
+  // A consumed or older render cannot spend the same signing opportunity.
+  const freeAgencyToken = {};
+  const freeAgencyTokenRef = useRef<object | null>(freeAgencyToken);
+  freeAgencyTokenRef.current = freeAgencyToken;
   const setPhase = useCallback((next: Phase) => {
+    freeAgencyTokenRef.current = null;
     phaseRef.current = next;
     setPhaseState(next);
   }, []);
@@ -283,6 +288,8 @@ export function useConquestNba() {
   const [favoriteTeam, setFavoriteTeamState] = useState<string | null>(null);
   const [conquestsSinceSign, setConquestsSinceSign] = useState(0);
   const [signedFreeAgents, setSignedFreeAgents] = useState<string[]>([]);
+
+  useEffect(() => () => { freeAgencyTokenRef.current = null; }, []);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -352,6 +359,7 @@ export function useConquestNba() {
   }, [territories, rosters, eliminated]);
 
   const activeRosterNames = new Set(getAliveTeamsFrom(territories).flatMap(id => rosters[id] || []));
+  const availableFreeAgencyCandidates = CONQUEST_FREE_AGENCY_POOL_NBA.filter(candidate => !activeRosterNames.has(candidate.name));
   const pendingLegend = pendingPowerup && TEAM_LEGENDS_NBA[pendingPowerup.teamId];
   const powerupUnavailableReason = !pendingPowerup ? null
     : pendingPowerup.powerup.id === 'invincibility' && invincibleTeams.has(pendingPowerup.teamId)
@@ -479,46 +487,52 @@ export function useConquestNba() {
   }, [pendingPowerup, powerupUseType, availablePowerupTerritories, territories, finishPowerup, setPhase]);
 
   const setFavoriteTeam = useCallback((teamId: string) => {
+    if (freeAgencyTokenRef.current !== freeAgencyToken || phaseRef.current !== 'ready'
+      || teamId === favoriteTeam || !getAliveTeamsFrom(territories).includes(teamId)) return;
+    freeAgencyTokenRef.current = null;
     setFavoriteTeamState(teamId);
-  }, []);
+  }, [freeAgencyToken, favoriteTeam, territories]);
 
   const canSignFreeAgent = useCallback((): boolean => {
-    if (!favoriteTeam) return false;
+    if (freeAgencyTokenRef.current !== freeAgencyToken || phaseRef.current !== 'ready' || !favoriteTeam) return false;
     if (!getAliveTeamsFrom(territories).includes(favoriteTeam)) return false;
     return conquestsSinceSign >= FREE_AGENCY_SIGN_COOLDOWN;
-  }, [favoriteTeam, territories, conquestsSinceSign]);
+  }, [freeAgencyToken, favoriteTeam, territories, conquestsSinceSign]);
 
   const signFreeAgencyCandidate = useCallback((candidate: ConquestFreeAgentCandidateNba) => {
     if (!canSignFreeAgent() || !favoriteTeam) return;
+    const available = availableFreeAgencyCandidates.find(player => player.name === candidate.name);
+    if (!available) return;
 
     const roster = rosters[favoriteTeam] || [];
     if (roster.length === 0) return;
 
-    const team = NBA_TEAM_MAP.get(favoriteTeam);
-    const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
     let weakestName = roster[0];
-    let weakestOvr = playerMap.get(roster[0])?.overall ?? 75;
+    let weakestOvr = getNbaRosterPlayer(roster[0], favoriteTeam, legendPlayers)?.overall ?? 75;
     for (const name of roster) {
-      const ovr = playerMap.get(name)?.overall ?? 75;
+      const ovr = getNbaRosterPlayer(name, favoriteTeam, legendPlayers)?.overall ?? 75;
       if (ovr < weakestOvr) { weakestOvr = ovr; weakestName = name; }
     }
 
+    freeAgencyTokenRef.current = null;
     setRosters(prev => ({
       ...prev,
-      [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), candidate.name],
+      [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), available.name],
     }));
+    setTeamUpgrades(prev => prev[favoriteTeam] === weakestName
+      ? Object.fromEntries(Object.entries(prev).filter(([id]) => id !== favoriteTeam)) : prev);
     setPowerRankDrift(prev => ({
       ...prev,
       [favoriteTeam]: clampDrift((prev[favoriteTeam] || 0) + FREE_AGENCY_SIGN_BUMP),
     }));
     setConquestsSinceSign(0);
-    setSignedFreeAgents(prev => [...prev, candidate.name]);
+    setSignedFreeAgents(prev => [...prev, available.name]);
     setGameLog(prev => [...prev, {
       turn: prev.length + 1, attacker: favoriteTeam, defender: 'powerup',
       winner: favoriteTeam,
-      score: `✍️ Free agency: signed ${candidate.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
+      score: `✍️ Free agency: signed ${available.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
     }]);
-  }, [canSignFreeAgent, favoriteTeam, rosters]);
+  }, [canSignFreeAgent, favoriteTeam, rosters, availableFreeAgencyCandidates, legendPlayers]);
 
   const startBattle = useCallback(() => {
     if (phaseRef.current !== 'ready') return;
@@ -805,6 +819,7 @@ export function useConquestNba() {
 
   const reset = useCallback(() => {
     clearTimeouts();
+    freeAgencyTokenRef.current = null;
     setTerritories(buildInitialTerritories());
     setRosters(buildInitialRosters());
     setEliminated([]);
@@ -857,7 +872,7 @@ export function useConquestNba() {
     stealModalOpen, pendingBattleApply, playerConfirmed,
     powerRankings,
     favoriteTeam, setFavoriteTeam, conquestsSinceSign, signedFreeAgents,
-    canSignFreeAgent, signFreeAgencyCandidate,
+    canSignFreeAgent, signFreeAgencyCandidate, availableFreeAgencyCandidates,
     freeAgencyCooldownRemaining: Math.max(0, FREE_AGENCY_SIGN_COOLDOWN - conquestsSinceSign),
     canSkipBattle, skipToResult,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,

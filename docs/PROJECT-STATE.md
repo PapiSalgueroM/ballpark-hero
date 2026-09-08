@@ -1,5 +1,31 @@
 # Project state
 
+## Round 530 NBA Arcade Free Agency, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-530-nba-free-agency`, branch
+`codex/round-530-nba-free-agency`, base529 `dcd50886` (draft PR80).
+The surviving-team picker remains available, including after the selected
+team is eliminated. The canonical player pool excludes active roster members.
+Consumed or stale signing callbacks cannot duplicate players, logs or rating
+bonuses. Shared roster metadata protects acquired stars and activated legends
+when choosing the weakest player to waive; a waived player's queued upgrade
+is cleared. The existing three-settled-battle cooldown and +2 bonus remain.
+Unsupported current-contract blurbs are removed, with no new sports facts.
+
+Both duplicate signing and acquired-star waiver defects were reproduced with
+the real hook before editing. Nine hook and ten panel cases, 39 exact source
+controls, 37 prior NBA hook/power UI cases and twelve help cases pass. Both
+exact types, build and all fifteen generated-site fences pass. The actual
+selected runner executes the two new harnesses and prior help harness. Built
+phone/desktop walks each pass eight real battles, two signings, elimination
+recovery and reset; both dead-picker controls pass. Main visual review clear.
+Final independent source, controls and bounded-browser review clear.
+Evidence: docs/nba-free-agency-2026-09-08.md. Preview4207 serves
+index-Bqk1tGcq.js. No snapshots, ledger or dependency changes, real backend
+writes, broad suite, root edits, merge or publication. All previous previews
+and sibling Round525 are preserved. Next free531. Broad-suite process
+isolation remains a separate unresolved task.
+
 ## Round 529 Conquest help storage fallback, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-529-conquest-help`, branch

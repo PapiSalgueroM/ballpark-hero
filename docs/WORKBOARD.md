@@ -1,5 +1,25 @@
 # Work board
 
+## Round 530 complete, September 8, 2026
+
+Codex owns NBA Arcade Free Agency in useConquestNba.ts, ConquestBoardNba.tsx,
+ConquestHowToPlayNba.tsx and the pool's availability prose/schema, plus focused
+tests, controls and browser checks. Worktree `.worktrees/round-530-nba-free-agency`,
+branch `codex/round-530-nba-free-agency`, base529 `dcd50886` (draft PR80).
+Fixed the eliminated-team picker, canonical active-roster eligibility,
+repeated and stale signing actions, and weakest-player metadata. Preserved
+the existing three-settled-battle cooldown and +2 rating drift. Waiving a
+player clears their queued upgrade. Unsupported current-market blurbs are
+removed without changing player identities or game ratings.
+Nine hook and ten panel cases, 39 exact source controls, 49 prior cases,
+both exact types, build and fifteen site fences pass. Built phone/desktop
+walks each settle eight real battles with two signings and elimination
+recovery. Both dead-picker controls pass; main visual inspection clear.
+Final independent production, controls and bounded-browser review clear.
+Evidence: docs/nba-free-agency-2026-09-08.md. Preview4207 remains available.
+No NFL rules, daily saves, account/backend writes, root edits, merge or publish.
+Preserve every prior worktree/preview. Next free531.
+
 ## Round 529 complete, September 8, 2026
 
 Codex owns the NBA/NFL Arcade onboarding storage fallback in Conquest.tsx and
