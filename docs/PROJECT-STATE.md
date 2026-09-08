@@ -2,20 +2,27 @@
 
 ## Round 523 profile avatar identity, September 8, 2026
 
-CLAIMED in `.worktrees/round-523-profile-avatar`, branch
+Scoped verification complete in `.worktrees/round-523-profile-avatar`, branch
 `codex/round-523-profile-avatar`, based on completed Round 522 `2b60a88d`
-(draft PR73). Reproduce another player's missing avatar or display name
-falling back to the signed-in visitor's avatar/email initial. Keep own-account
-fallbacks and saved profile-avatar precedence. No saved identity, auth protocol,
+(draft PR73). Another player's missing avatar or display name no longer falls
+back to the signed-in visitor's avatar/email initial. Own-account fallbacks
+and saved profile-avatar precedence remain. No saved identity, auth protocol,
 share-card redesign, calendar changes or backend/account writes.
 
-Main owns Profile.tsx and coordination docs. The focused test author owns
-Profile.avatar.test.tsx and simProfileAvatar.mjs; the browser author owns
-playProfileAvatar.mjs. Use synthetic data-URI avatars, exact mocked reads,
-local-only share captures, denied transport, and real component/browser
-behavior. Reproduce before fixing; prove each guard with exact controls.
-Run both types, build, related profile regressions and all generated-site
-fences, then independent review before draft push. No broad default suite.
+Twelve real-component avatar cases, fourteen exact source controls, the
+sixteen isolation/eight average cases, both types, build, all fifteen
+generated-site fences, ActivityDays and SessionMarks pass. Built avatar
+checks pass eighteen states at 390/1440, six identity controls and two
+clipping controls. Related isolation passes eight states and average passes
+28. Main reran focused controls and inspected screenshots. Final independent
+review clear. Synthetic reads/share captures only, no real transport. Initial
+selector/test-control corrections are recorded in docs/profile-avatar-2026-09-08.md.
+Preview 4198 serves index-B_xhTMiA.js. No broad suite, merge or publication.
+
+Next bounded candidate: saved-bracket profile summaries ignore the current
+writer's top-level champion, and malformed legacy JSON can crash the profile.
+Read current writer-shaped synthetic fixtures safely, preserve tested legacy
+summaries and leave saving/loading protocol untouched. Not yet reproduced.
 
 Root belongs to Claude, currently 27d0d08b with a modified simPress harness
 and an active measurement. Leave that tree and its processes alone. Preserve
