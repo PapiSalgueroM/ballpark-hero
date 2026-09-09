@@ -1,5 +1,49 @@
 # Project state
 
+## Live as of 2026-09-09 midday: Rounds 518 and 519, and a review that mostly found my own work
+
+**`origin/main` is `05a6a731` and douknowball.com is serving it.** Deployment
+`d550d291-7c5d-430a-a8cd-bc14fe36cd48`, called only after Lovable's `latest_commit_sha` matched.
+Home bundle `index-CgNpIxt7.js` to `index-BQ7LaXxV.js`; both of Round 519's corrected footnote
+sentences are live in `clubManager-UmLs-tRL.js` and were absent from the previous build. Eight
+routes rechecked, all clean.
+
+### Round 519: the adversarial review of 515 to 518
+
+24 findings, 7 confirmed, every gate green while all of it was true. Most of it was mine.
+
+- **A rival brand shipped in `src/`.** `draftNight.ts` quoted his ask verbatim and his ask names
+  a console basketball series. CLAUDE.md bans that anywhere in `src`, comments included, and the
+  repo is public. Now paraphrased. `simNoRivalNames` was green throughout because its pattern
+  covers "2k style" and "2k mode" but not that shape; it covers it now, and is proven not to fire
+  on "2 kilometres".
+- **My own fit harness measured the wrong page.** `playLeagueTableFit` wrapped the card in 12px
+  where GameShell is `px-4`, so it measured a name column 8px WIDER than ships and could have
+  passed while the real page clipped. The true margin is 7px, not the 15px Round 516 claimed.
+- **The last pick of every draft built a reveal that was thrown away**, because all four boards
+  call `setDraftNight` and `setPhase('hub')` in one batched commit. No longer built, and the
+  remaining gap is named rather than hidden.
+- **The NFL reveal could name a position the engine did not give**, on saves written before
+  Round 418, because the own-pick row took the raw prospect value while everything else took the
+  converted one.
+- Four smaller ones, all mine: a headline claiming "Your pick is in" for a run with no pick of
+  yours; a footnote saying head to head "goals" where the sorter reads goal DIFFERENCE; an
+  orphaned JSDoc; and a fixture comment naming a club that is not in the fixture.
+- **Two of my checks claimed more than they checked**, both raised and both DROPPED by the vote,
+  both true. `simDraftNight` printed "capture the rival picks" while only grepping that
+  `buildDraftNight` was called; it now checks the capture, and all four predicates read FALSE
+  against the real pre-515 boards pulled from git. And the `latejan` control's comment claimed it
+  moved only the long league, which is backwards.
+
+### A bench ceiling that had never been measured
+
+The suite went red on `simRoles` at 0.356 against a ceiling of 0.35 whose comment recorded
+"measured worst batch 0.172". Measured over 20 batches of its own scenarios: **0.252 to 0.364,
+median 0.316.** The ceiling sat between the median and the max and fails about one run in twenty
+on correct code; the recorded 0.172 appears nowhere in the distribution. Re-derived to 0.55, with
+the control still reporting 1.000 against it. Not a regression from any round: the statistic
+never moved, the threshold was never measured.
+
 ## Live as of 2026-09-09 morning: Rounds 515, 516 and 517 published, and the first fully green suite
 
 **`origin/main` is `9f9ea3da` and douknowball.com is serving it.** Deployment
