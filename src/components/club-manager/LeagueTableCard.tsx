@@ -62,11 +62,16 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
                 Round 465 trim having been measured without the marker. Moving
                 it takes the clipped count to 0 and costs nothing, because the
                 cell it moves into was already there doing nothing.
-                The column itself is fine: measured across 126 real club names
-                from eight leagues, the longest ("Deportivo La Coruna") needs
-                110px of the 125px column, so there is 15px in hand. It was the
-                star and its space that pushed that one name over, nothing else.
-                playLeagueTableFit keeps the measurement. */}
+                The column itself holds, but only just: measured across 126
+                real club names from eight leagues on the page's real 16px
+                padding, the longest ("Deportivo La Coruna") needs 110px of a
+                117px column, so 7px is in hand, about one more character. It
+                was the star and its space that pushed that name over, nothing
+                else. playLeagueTableFit keeps the measurement and warns under
+                10px of margin.
+                (The 15px this comment first claimed came from measuring against
+                12px of page padding. The shell is px-4, so that column was 8px
+                wider than the one that ships. Found by this round's review.) */}
             <span className={cn('truncate', mine ? 'text-primary font-bold' : 'text-foreground')}>{r.club}</span>
             <span className="text-center text-muted-foreground">{r.w}</span>
             <span className="text-center text-muted-foreground">{r.d}</span>

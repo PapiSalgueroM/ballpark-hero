@@ -100,11 +100,25 @@ const CONTROLS = {
     broken: "      if (false && entry.type === 'window' && dateKey(next) < dateKey(newYear)) {",
     say: 'NEGATIVE CONTROL ON: the window entry takes the next Saturday after the last league round again, December included',
   },
-  /* Pushes a window that has ALREADY cleared new year three weeks later, which
-     is only ever the long league: a short league's window is pulled back to the
-     first Saturday of January by the clamp and never takes this branch. So this
-     moves the Championship and nothing else, which is what the long league
-     bound needs to be proved against. */
+  /*
+   * Pushes a window that has already cleared new year three weeks later.
+   *
+   * WHAT IT DOES NOT DO, corrected in Round 519 after this comment was caught
+   * claiming the opposite: it does NOT move only the long league. The clamp in
+   * dateOfEntries REASSIGNS `next` to the first Saturday of January before the
+   * push this patches, so by then a short league's window is a January date
+   * too and the condition is true for every league in the sample. All of them
+   * move 21 days.
+   *
+   * So a red run here does not by itself prove the long league bound fired: the
+   * pre-existing 10 day bound on the short leagues and the month check both go
+   * red as well. What proves it is the MESSAGE, which names the long league and
+   * its own number ("the long league's January window opens 36 days into
+   * January"), and that message was checked by hand when the bound was written.
+   * The control's job is to move the thing the bound reads; separating it from
+   * the other checks would need a clamp that knows the club count, which the
+   * calendar module deliberately does not.
+   */
   latejan: {
     fixed: '      out.push(next);',
     broken: "      out.push(entry.type === 'window' && dateKey(next) >= dateKey(newYear) ? addDays(next, 21) : next);",

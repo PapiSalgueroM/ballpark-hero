@@ -38,7 +38,7 @@ const RIVAL_NAMES = [
 
   // --- sports video games ---
   'nba ?2k',
-  '2k ?(?:build|style|ratings?|franchise|career|mode|series)',
+  '2k ?(?:build|style|ratings?|franchise|career|mode|series|way)',
   '2k[0-9]{2}',                 // 2K16, 2K25 and friends
   'madden',
   'nba live',

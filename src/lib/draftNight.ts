@@ -3,8 +3,12 @@
  *
  * His 2026-08-28 list, twice over: "More animation across every sim: reveals,
  * draft nights, celebrations. Reading text is not a game feel." And, separately,
- * "Draft nights and college signing days as one by one reveal animations, the
- * 2K way."
+ * a second line asking for draft nights and college signing days as one by one
+ * reveal animations, in the manner of the big console basketball series.
+ *
+ * (He named that series. It is not repeated here: this repo is public and
+ * CLAUDE.md bans a rival product name anywhere in src, comments included. The
+ * ask is what matters and it survives the paraphrase.)
  *
  * What the four front offices did before this: you tapped a prospect, six or so
  * rival picks resolved inside the same synchronous handler, and the board simply
@@ -129,7 +133,17 @@ export function buildDraftNight(mine: RawPick | null, rivals: RawPick[]): DraftN
 export function draftNightHeadline(night: DraftNight): string {
   const n = night.picks.length;
   if (n === 0) return '';
-  const rivals = n - night.picks.filter(p => p.mine).length;
+  const own = night.picks.filter(p => p.mine).length;
+  const rivals = n - own;
+  /* Round 519: a run with no pick of your own is a real case (buildDraftNight
+     accepts a null `mine` and the harness exercises it), and the headline used
+     to claim "Your pick is in" for it because it only ever counted the rivals.
+     That is a false statement about what the player just did. */
+  if (own === 0) {
+    return rivals === 1
+      ? 'One went off the board.'
+      : `${rivals} went off the board.`;
+  }
   if (rivals === 0) return 'Your pick is in.';
   return `Your pick is in, and ${rivals} more went off the board.`;
 }

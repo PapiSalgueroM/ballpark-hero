@@ -20,6 +20,13 @@
  * data rather than typed here, so a longer club arriving in a future data
  * refresh is measured rather than assumed.
  *
+ * THE PAGE PADDING IS 16px AND NOT 12. Every Club Manager screen is drawn inside
+ * GameShell, whose wrapper is `px-4` (src/components/game/GameShell.tsx). The
+ * first version of this harness wrapped the card in 12px, which made its name
+ * column 8px WIDER than the shipped one, so the guard was measuring a table
+ * that is roomier than the real page and could have passed while the real page
+ * clipped. Found by the adversarial review of this very round.
+ *
  * Control: TABLE_FIT_CONTROL=star puts the star back inside the name cell,
  * which is the shipped bug, so the check must go red naming your own club.
  *
@@ -138,7 +145,7 @@ let clippedTotal = 0;
    and the bug was specific to that row. Twenty-odd renders is cheap. */
 for (let i = 0; i < CLUBS.length; i++) {
   const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width"><style>${css}</style></head>
-    <body class="dark"><div style="padding:0 12px"><div class="bg-card border border-border rounded-2xl p-3">
+    <body class="dark"><div style="padding:0 16px"><div class="bg-card border border-border rounded-2xl p-3">
     ${CLUBS.map((c, j) => rowHtml(c, j === i)).join('')}
     </div></div></body></html>`;
   await page.setContent(html, { waitUntil: 'load' });
@@ -207,9 +214,12 @@ if (margin) {
   /* Not a failure, because nothing is clipping today and a warning that fails
      the build would be a threshold nobody measured. It is printed loudly
      because the next longer club name in a data refresh clips on its own, with
-     no star involved, and whoever sees that should know it was expected. */
-  if (margin.slack < 6) {
-    console.log(`   NOTE: that is under 6px. A club name longer than "${margin.club}" will clip on its own, star or no star.`);
+     no star involved, and whoever sees that should know it was expected.
+     Ten rather than six: on the page's real 16px padding the margin is 7px,
+     which is about one more character, so a warning set at six would never fire
+     until something had already clipped. */
+  if (margin.slack < 10) {
+    console.log(`   NOTE: only ${margin.slack}px spare. A club name longer than "${margin.club}" will clip on its own, star or no star.`);
   }
 }
 

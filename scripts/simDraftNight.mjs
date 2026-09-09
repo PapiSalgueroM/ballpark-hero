@@ -236,18 +236,39 @@ console.log('5) All four front offices build a reveal and capture the rival pick
       .replace(/(^|[^:])\/\/.*$/gm, '$1');
     const hasBuild = /buildDraftNight\s*\(/.test(src);
     const hasCard = /<DraftNightCard\b/.test(src);
+    /*
+     * Round 519: those two alone were not enough, and this section's header was
+     * claiming more than they checked. Capturing the rival picks IS the round:
+     * before it the boards applied five or six rival selections inside the same
+     * handler and threw them away. A board could call buildDraftNight with an
+     * empty second argument, pass both checks above, and narrate only the
+     * player's own pick, which is the state this round exists to end.
+     * So the capture is checked too: a rivals array pushed to inside the loop
+     * that hands the picks out, and handed to buildDraftNight as its second
+     * argument.
+     */
+    const capturesRivals = /rivalPicks\.push\(/.test(src);
+    const passesRivals = /buildDraftNight\([\s\S]{0,400}?rivalPicks/.test(src);
     if (!hasBuild) fail(`${label} never calls buildDraftNight, so its draft still resolves invisibly`);
     if (!hasCard) fail(`${label} never renders DraftNightCard, so nothing shows the picks landing`);
-    if (hasBuild && hasCard) wired += 1;
+    if (!capturesRivals) fail(`${label} never pushes a rival pick, so the reveal can only ever show your own selection and the rivals are still thrown away`);
+    if (!passesRivals) fail(`${label} does not hand the captured rivals to buildDraftNight, so the picks it collected go nowhere`);
+    if (hasBuild && hasCard && capturesRivals && passesRivals) wired += 1;
   }
-  console.log(`   ${wired} of ${BOARDS.length} boards build a reveal and render it`);
+  console.log(`   ${wired} of ${BOARDS.length} boards capture the rival picks, hand them over and render the reveal`);
   if (wired !== BOARDS.length) fail(`only ${wired} of ${BOARDS.length} front offices show draft night`);
 
   const card = path.join(ROOT, 'src/components/front-office-shared/DraftNightCard.tsx');
   if (!fs.existsSync(card)) {
     fail('src/components/front-office-shared/DraftNightCard.tsx is missing, so the four boards cannot be sharing one reveal');
   } else {
-    const cs = fs.readFileSync(card, 'utf8');
+    /* Comments stripped, the same as the board scan above and for the same
+       reason: prose ABOUT reduced motion is the one place the string this looks
+       for is guaranteed to appear, so a card that only talked about honouring
+       the setting would have satisfied it. */
+    const cs = fs.readFileSync(card, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/.*$/gm, '$1');
     /* Reduced motion is not optional here: the site has a fence for it and a
        new moving thing that ignores the setting is a regression in it. */
     if (!/prefers-reduced-motion/.test(cs)) {

@@ -574,8 +574,9 @@ function checkRule() {
    * while the table beside it had already dropped. The player was told a rule
    * that was not being applied.
    *
-   * Alpha, Beta and Gamma are level. Beta has played both of the others; Alpha
-   * and Gamma have not met. Every adjacent pair in the sorted order is
+     Alpha, Beta and Delta are level on 30 points each. Alpha has played both of
+     the others; Beta and Delta have not met, and they are the OUTER pair once
+     the rows are sorted on goal difference. Every adjacent pair in the sorted order is
    * therefore complete and the old count was zero.
    */
   const three = [

@@ -237,10 +237,6 @@ export function sortedUclGroupTable(
 }
 
 /**
- * The line under a group table saying how level points were split, and how
- * many level pairs are still waiting on their second meeting.
- */
-/**
  * Round 518: how many LEVEL RUNS are still waiting on a game between them.
  *
  * Shared by this file's group footnote and clubManager's league table footnote,
@@ -277,6 +273,14 @@ export function countWaitingLevelRuns(
   return waiting;
 }
 
+/**
+ * The line under a group table saying how level points were split, and how many
+ * level GROUPS are still waiting on a game between them.
+ *
+ * Round 519: this block had been orphaned onto countWaitingLevelRuns when that
+ * helper was inserted above the function it documents, and it still said
+ * "pairs", which is the count Round 518 replaced.
+ */
 export function uclGroupFootnote(
   rows: TableRow[], rule: UclGroupRule, pairs?: Record<string, [number, number]>,
 ): string {

@@ -332,10 +332,18 @@ export default function FrontOfficeBoard() {
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
     let note: string;
+    /* Round 519: the position he was actually SIGNED at, captured where pl is
+       still in scope. prospectToPlayer rewrites the legacy 'DEF' placeholder
+       into a real DL, LB or DB, and both the news line below and the rival
+       reveal rows show that converted value. The reveal's own row was passing
+       the raw prospect value, which put two positions for the same man on one
+       screen on any save written before Round 418. */
+    let minePos: string = pr.pos;
     {
       /* Round 418: a defensive pick is a man now, not two points on a unit
          number nobody could see. prospectToPlayer refuses nobody. */
       const pl = prospectToPlayer(pr, Math.random);
+      minePos = pl ? pl.pos : pr.pos;
       if (pl) lg.teams[myTeam].players.push(pl);
       note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
     }
@@ -358,10 +366,18 @@ export default function FrontOfficeBoard() {
     const nextPicks = picksLeft - 1;
     setDraftClass(nextClass);
     setPicksLeft(nextPicks);
-    setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: pr.pos, grade: pr.grade },
+    /* Round 519: the final pick of a draft leaves for the hub in this same
+       handler, and React batches both updates into one commit, so a reveal
+       built here would never reach a render. Building it anyway was dead work
+       that read as though the last pick were narrated when it is not.
+       NAMED AS NOT DONE: the last pick and the rivals behind it are still not
+       shown. Fixing that properly means holding the draft screen until the
+       player acknowledges the reveal, which is a flow change across all four
+       boards and belongs in its own round rather than a cleanup pass. */
+    setDraftNight(nextPicks > 0 ? buildDraftNight(
+      { team: myTeam, playerName: pr.name, pos: minePos, grade: pr.grade },
       rivalPicks,
-    ));
+    ) : null);
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
       const news = runOffseason(lg, Math.random);

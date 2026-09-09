@@ -292,10 +292,17 @@ export default function NbaFrontOfficeBoard() {
     });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
-    setDraftNight(buildDraftNight(
+    /* Round 519: the final pick of a draft leaves for the hub in this same
+       handler, and React batches both updates into one commit, so a reveal
+       built here would never reach a render. Building it anyway was dead work
+       that read as though the last pick were narrated when it is not.
+       NAMED AS NOT DONE: the last pick and the rivals behind it are still not
+       shown. Holding the draft screen until the player acknowledges the reveal
+       is a flow change across all four boards and belongs in its own round. */
+    setDraftNight(nextPicks > 0 ? buildDraftNight(
       { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
       rivalPicks,
-    ));
+    ) : null);
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {

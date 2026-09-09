@@ -4418,13 +4418,19 @@ export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: R
     : ` ${waiting} level ${waiting === 1 ? 'group has games' : 'groups have games'} still to play between them, so ${waiting === 1 ? 'it splits' : 'they split'} on goal difference for now.`;
   switch (rule) {
     case 'h2h':
-      return `Level on points splits on head to head (points, then goals, between the clubs) once both games have been played, then overall goal difference, then goals scored.${pending}`;
+      /* Round 519: "goal difference" and not "goals". orderLevel's h2h key is
+         [h.pts, h.gd, gd, r.gf], so the second step between the level clubs is
+         their goal difference against each other; head to head GOALS are never
+         computed. And "every game between them" rather than "both games",
+         because a level run can be three clubs or more and the sorter needs
+         all of those games, which is what the pending clause now counts. */
+      return `Level on points splits on head to head (points, then goal difference, between the clubs) once every game between them has been played, then overall goal difference, then goals scored.${pending}`;
     case 'gdGf':
       return 'Level on points splits on goal difference, then goals scored, then head to head once both games have been played.';
     case 'gdGfAgg':
       return 'Level on points splits on goal difference, then goals scored, then the aggregate of the two games between the clubs once both have been played.';
     case 'gdH2h':
-      return `Level on points splits on goal difference, then head to head (points, then goals, between the clubs) once both games have been played, then goals scored, then wins.${pending}`;
+      return `Level on points splits on goal difference, then head to head (points, then goal difference, between the clubs) once every game between them has been played, then goals scored, then wins.${pending}`;
     default:
       return 'Level on points splits on goal difference, then goals scored.';
   }
