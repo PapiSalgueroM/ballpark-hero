@@ -209,7 +209,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | OPEN | |
-| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining); Round 506 the transfers rework (a typed bid with a live closeness meter, a valuation desk whose read tightens with the lead scout's level, an extreme lowball that ends the talks, patience that actually binds now the ask converges at 0.40 rather than 0.55, loans carrying an option to buy and a release figure, and personal terms after every fee: length, wage, signing bonus and the rung you promise him, feeding Round 127's ladder); Round 507 the two legged Champions League knockout ties per era format; Round 508 a loan out carrying the same option to buy and recall figure a loan in has; Round 513 MANAGER XP and the seven skill trees (spec section 28: XP settled at the season rollover and carried between clubs, seven trees of five points, every effect the identity at zero so untouched and older saves are unchanged). 506, 507, 508 and 513 are merged and LIVE as of 2026-09-08 evening. Still open from his list: start options (display currency, international job offers on or off, negotiation strictness), leagues and eras depth |
+| Club Manager big arc (leagues, staff, facilities, XP, media, transfers rework) | PART | Round 436 fixed the summer budget wipe; Round 465 the two meters and the goals pair on every table; Round 466 the calendar you tap to sim to a day (windows marked from the engine's own dates, opponents named, the four fast forwards on the same loop); Round 467 four facilities, ticket and concession pricing, generated sponsors and the projected finances screen; Round 471 the staff desk (hire, fire, poach, promote); Round 472 the quick sim screen and Play Match merged with Watch Live into one flow; Round 474 board asks that name a real target and the inbox rework; Round 504 the live match itself (each half committed as a stream, both elevens with names and the classic 1 to 11, the ball at a carrier's feet, corners, throw ins and fouls, live stats counted off the same stream as the report, a sub or shape change at any minute, the other dugout's own subs); Round 505 the tactics depth (fit penalties per slot, the bench ordered for the spot, seventeen shapes, the armband and the takers, duties, retraining); Round 506 the transfers rework (a typed bid with a live closeness meter, a valuation desk whose read tightens with the lead scout's level, an extreme lowball that ends the talks, patience that actually binds now the ask converges at 0.40 rather than 0.55, loans carrying an option to buy and a release figure, and personal terms after every fee: length, wage, signing bonus and the rung you promise him, feeding Round 127's ladder); Round 507 the two legged Champions League knockout ties per era format; Round 508 a loan out carrying the same option to buy and recall figure a loan in has; Round 513 MANAGER XP and the seven skill trees (spec section 28: XP settled at the season rollover and carried between clubs, seven trees of five points, every effect the identity at zero so untouched and older saves are unchanged). 506, 507, 508 and 513 are merged and LIVE as of 2026-09-08 evening. Round 514 the start options (display currency, the international job on or off, a negotiation strictness slider that is fenced against switching off Round 506's haggle). Still open from his list: leagues and eras depth |
 | Soccer Career arc | ONGOING | Round 438 retirement money; Round 468 the three training drills you play; the flagship earns the most work |
 | Bring the Soccer Career depth to the NFL career, then the other US careers | PART | Round 469: the money app (Round 134 and 437 rules verbatim behind a sport descriptor), the social feed, a generated rival and a badge case lifted out of Soccer Career into shared modules (careerMoney, careerSocial, careerBadges) and bound to the NFL career, with simCareerParity driving both real engines over forty seeded careers a sport. Still open: interactive rivalry events, an inbox, the phase depth between seasons (soccer 22, NFL 7), rookie scale and cap era contracts, (the NBA, MLB and NHL bindings shipped in Round 470, nbaCareerMoney.ts and its two siblings) |
 | Career Ladder flags | DONE | Round 444 |
@@ -1680,6 +1680,54 @@ arrives, triage it into rounds rather than trying to fix everything in one.
 
 **Note:** the awards round was originally planned as 133, but the 133 slot got spent on the name
 purge. Awards is still unbuilt. See the roadmap below.
+
+---
+
+## Round 514: Club Manager start options, and a slider that is not allowed to switch off the haggle
+
+His 2026-08-28 list, verbatim: "Start options: display currency, international job offers on or
+off, negotiation strictness slider." All three, on an Options tile on the club hub, changeable at
+any time rather than only before kickoff (two of the three are settings a player wants to correct
+once they have seen the game, and none of them touches anything already recorded).
+
+`src/lib/clubManagerStart.ts` is pure and every setting is the identity at its default, so a save
+written before this round, which carries no block at all, plays exactly the game it played.
+`ensureStartOptions` is registered in BOTH `loadCareer` and `playNextEntry` and is idempotent.
+
+**Currency is the symbol and not the amounts, deliberately.** No exchange rate ships, for two
+reasons. A hardcoded rate is a hand written number encoding a fact about the world, which is the
+shape that left Transfer Path's hints describing a rule that had changed for six weeks (Round
+294); it would be stale within days and nothing on this site verifies one. And the transfer desk
+takes three TYPED numbers, so converting the display while the player types in engine units would
+mis-price every bid, in code three weeks old that had just had a round of defects removed. The
+screen states this rather than implying a conversion it does not do. Worth knowing: the values
+come from euro denominated data and the game has always printed a pound sign, so choosing EUR is
+arguably the most accurate option rather than the most exotic one.
+
+**The strictness slider is the dangerous one, and the round is arranged around that.** Round 506's
+haggle rests on a measured guarantee: repeating an unchanged lowball runs the seller out of table.
+Round 513 shipped a Negotiation tree that raised both numbers that guarantee depends on, past
+every green gate, and three skill points took "ran out of patience" to zero at every offer
+multiple in the sweep. A player facing slider is the same defect with a dial on it.
+
+So leniency may never touch patience. It buys a SMALLER OPENING ASK, which cannot help a repeated
+lowball because a lowball is priced as a fraction OF the ask and a smaller ask moves the target
+with it. Strictness may only take rounds away, which can only strengthen the guarantee, and is
+floored so that hard never becomes impossible.
+
+`simClubManagerStart` holds seven sections rather than trusting that paragraph. Section 6 runs
+Round 506's own lowball sweep at all five settings: 0 agreed at every one, with the seller running
+out 8 to 13 times a row. Section 7 proves the top setting is still winnable, paying the ask closing
+24 of 24. Three controls, and `START_CONTROL=addpatience` restores the Round 513 defect exactly and
+is caught TWICE, structurally by section 5 ("strictness 1 adds 2 rounds at the table") and
+behaviourally by section 6 ("ran the seller out of patience only 0 times of 24"). The second is the
+one that would catch a new way of breaking it.
+
+The money formatter now takes an optional career, and `moneyIn(career)` binds it, so each of the
+ten screens shadows the import in one line instead of threading a career through 82 call sites.
+Two helper components that render money outside their screen take the formatter as a prop, because
+they would otherwise have gone on printing pounds while the rest of the screen followed the
+setting.
 
 ---
 

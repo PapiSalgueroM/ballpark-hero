@@ -71,6 +71,26 @@ Four things, in the order they can hurt you.
    already, in a sandbox, and died with the session. See the block below. Push after the first
    commit of a round, not at the end of it.
 
+- **Claude Code lane, Round 514: Club Manager start options. BUILT, on main, not yet published.**
+  His 2026-08-28 line verbatim: "Start options: display currency, international job offers on or
+  off, negotiation strictness slider." All three, on an Options tile on the club hub. Every
+  setting is the identity at its default, so a save from before the round is unchanged.
+  - **Currency is the SYMBOL and not the amounts, on purpose.** No exchange rate is shipped: a
+    hardcoded rate is a hand written number encoding a fact about the world, which is the shape
+    that left Transfer Path's hints wrong for six weeks (Round 294), and nothing on the site
+    verifies one. It would also mis-price the three TYPED numbers on the transfer desk. The
+    screen says so rather than implying a conversion.
+  - **The strictness slider is the dangerous one and the round is built around that.** Round 513
+    proved a dial that raises the seller's patience deletes Round 506's anti lowball guarantee
+    outright. So leniency here may never touch patience: it buys a smaller opening ask, which
+    cannot help a repeated lowball because a lowball is a fraction OF the ask. Strictness may
+    only take rounds away, floored so hard never becomes impossible.
+  - `simClubManagerStart` holds seven sections. Section 6 runs Round 506's own sweep at ALL FIVE
+    settings (0 agreed at every one, seller ran out 8 to 13 times a row); section 7 proves the
+    top setting is still winnable (paying the ask closed 24 of 24). Three controls, and
+    `START_CONTROL=addpatience` restores the Round 513 defect and is caught twice, structurally
+    and behaviourally.
+
 - **MERGED AND LIVE 2026-09-08 evening: Rounds 506, 507, 508 and 513.** `origin/main` is
   `f62d5901` and douknowball.com is serving it, deployment
   `72ab35b7-c521-44eb-94b5-0a75b0b1772c`. Proven by chunk diff rather than assumed: the engine
