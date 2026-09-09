@@ -52,8 +52,22 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
             <span className={cn(
               'font-bold',
               preseason ? 'text-muted-foreground' : pos === 1 ? 'text-gold' : pos <= 4 ? 'text-emerald-400' : 'text-muted-foreground',
-            )}>{preseason ? '·' : pos}</span>
-            <span className={cn('truncate', mine ? 'text-primary font-bold' : 'text-foreground')}>{preseason && mine ? '⭐ ' : ''}{r.club}</span>
+            )}>{preseason ? (mine ? '⭐' : '·') : pos}</span>
+            {/* Round 516: the star marks your club in the POSITION cell, which
+                shows a meaningless dot before a ball is kicked, rather than
+                inside the name. Measured at 390 wide against the shipped
+                stylesheet and the real club list: with the star in the name the
+                column is 125px and "Deportivo La Coruna" needs 137, so your own
+                row was the one row in the table that clipped, which is the
+                Round 465 trim having been measured without the marker. Moving
+                it takes the clipped count to 0 and costs nothing, because the
+                cell it moves into was already there doing nothing.
+                The column itself is fine: measured across 126 real club names
+                from eight leagues, the longest ("Deportivo La Coruna") needs
+                110px of the 125px column, so there is 15px in hand. It was the
+                star and its space that pushed that one name over, nothing else.
+                playLeagueTableFit keeps the measurement. */}
+            <span className={cn('truncate', mine ? 'text-primary font-bold' : 'text-foreground')}>{r.club}</span>
             <span className="text-center text-muted-foreground">{r.w}</span>
             <span className="text-center text-muted-foreground">{r.d}</span>
             <span className="text-center text-muted-foreground">{r.l}</span>

@@ -2653,10 +2653,15 @@ These four fixes are complete in the Round 509 branch. They are not live yet.
 (the three it confirmed and eight smaller ones landed with the batch; these are what
 remains).**
 
-- **Club Manager's pre-season league table clips your own club's name on a 390 wide phone**,
-  because the row marks your club with a star prefix and Round 465's column trim was
-  measured without it. src/components/club-manager/LeagueTableCard.tsx around line 56;
-  measure it in a browser at 390 before changing the template again.
+- **FIXED, Round 516: Club Manager's pre-season league table clipped your own club's name on a
+  390 wide phone.** Measured before changing anything, as the note asked. The star and its
+  space were the whole cause: the name column is 125px and the longest real club name needs
+  110px, so there is 15px in hand, but the star pushed four clubs over. It now marks your club
+  in the POSITION cell, which shows a meaningless dot before a ball is kicked, and the clipped
+  count goes to zero. Kept as `scripts/playLeagueTableFit.mjs`, which renders the row's own
+  markup against the shipped stylesheet with 126 real club names from eight leagues and lets
+  every club take a turn as yours; `TABLE_FIT_CONTROL=star` reproduces the bug. The review found
+  one clipping club because it looked at one league; the harness finds four.
 - **The two Soccer Career drill findings are fixed in the Round 509 branch, pending deploy.**
   The harness has controls for both previously unfenced sections and replays the real daily
   wall draws. The wall's overlapping shoulder spans now read as one wall while the existing
@@ -2665,10 +2670,10 @@ remains).**
 - **The Championship's January window opens 15 days into January** and the calendar harness
   fences the gap only for leagues of 20 clubs or fewer, so the long league's date is printed
   and not held.
-- **Club Manager's nearest mobile gameplay control is 104px from its ad**, below Google's
-  150px game-page recommendation. The rest of the 2026-09-07 site-side AdSense re-audit is
-  clean, so this is a nonblocking placement follow-up in the Claude lane's claimed Club Manager
-  files, not a reason to disturb Round 509.
+- **ALREADY FIXED and this entry was stale: the mobile ad to control gap.** Round 506 set
+  `AD_CONTROL_GAP_PX = 150` in `src/components/ads/AdBanner.tsx` and applies it as the banner's
+  own `paddingTop`, so the 104px measured on 2026-09-07 is not what ships. Round 506 is merged
+  and live as of 2026-09-08.
 
 **Found by the adversarial review of Rounds 459 to 463 on 2026-09-05 and deliberately left
 open (each verified against the code; the seven the review confirmed and could be fixed in
