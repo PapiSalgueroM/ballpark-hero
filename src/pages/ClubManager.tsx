@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
+  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money, moneyIn,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
@@ -56,6 +56,8 @@ import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
 import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
 import { RolesScreen } from '@/components/club-manager/RolesScreen';
 import { XpScreen } from '@/components/club-manager/XpScreen';
+import { StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
+import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { PressScreen } from '@/components/club-manager/PressScreen';
 import { MatchCentre } from '@/components/club-manager/MatchCentre';
@@ -97,7 +99,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -250,6 +252,8 @@ const ClubManager = () => {
   /* ================= RESUME PROMPT ================= */
   if (g.phase === 'resume' && g.career) {
     const c = g.career;
+    /* Round 514: money follows the chosen currency. */
+    const money = moneyIn(c);
     return shell(
       <div className="max-w-md mx-auto">
         <header className="text-center mb-6">
@@ -871,6 +875,8 @@ const ClubManager = () => {
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
   const c = g.career;
+  /* Round 514: money follows the chosen currency. */
+  const money = moneyIn(c);
   /* Round 202: does a federation want him this season? Recomputed on every
      render because it depends on the record, which moves every week. */
   const nationOffer = nationOfferFor(c);
@@ -1161,6 +1167,20 @@ const ClubManager = () => {
                 })()}
                 onClick={() => setHubPanel('xp')}
               />
+              {/* Round 514: the start options. Never accented: nothing here is
+                  ever urgent and an accent would cry wolf. */}
+              <HubTile
+                icon="⚙️" title="Options"
+                value={(() => {
+                  const o = startOptionsOf(c);
+                  return `${CURRENCIES[o.currency].symbol} · ${STRICTNESS_INFO[o.strictness]?.label ?? 'Normal'}`;
+                })()}
+                sub={(() => {
+                  const o = startOptionsOf(c);
+                  return o.nationJobs ? 'Currency, the international job, haggling' : 'International job off';
+                })()}
+                onClick={() => setHubPanel('options')}
+              />
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
                 value={c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
@@ -1412,6 +1432,16 @@ const ClubManager = () => {
 
               {/* Round 513: the manager's own trees, spec section 28. */}
               {hubPanel === 'xp' && <XpScreen career={c} onSpendPoint={g.spendPoint} />}
+
+              {/* Round 514: his three start options. */}
+              {hubPanel === 'options' && (
+                <StartOptionsScreen
+                  career={c}
+                  onCurrency={g.setCurrency}
+                  onNationJobs={g.setNationJobs}
+                  onStrictness={g.setStrictness}
+                />
+              )}
 
               {hubPanel === 'trophies' && (
                 <div className="bg-card border border-border rounded-xl p-3">

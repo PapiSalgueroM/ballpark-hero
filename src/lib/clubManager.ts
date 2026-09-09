@@ -66,6 +66,7 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
+import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -1340,6 +1341,9 @@ export function nationStanding(career: CareerState): number {
  * manager the game has never asked to name.
  */
 export function nationOfferFor(career: CareerState): NationOffer | null {
+  /* Round 514: he can turn the international job off before kickoff, and then
+     the country never calls. On by default, so an older save is unchanged. */
+  if (!nationJobsOn(career)) return null;
   if (career.nationJob) return null;
   if (career.eraId && isHistoricEra(career.eraId)) return null;
   const standing = nationStanding(career);
@@ -1823,6 +1827,12 @@ export interface CareerState {
    * runtime import to the engine.
    */
   managerXp?: import('@/lib/clubManagerXp').ManagerXp;
+  /**
+   * Round 514: the three settings chosen before kickoff. Absent on every save
+   * written before that round, and absent reads as the defaults, which are the
+   * game exactly as it played. Inline type import for the same reason as above.
+   */
+  startOptions?: import('@/lib/clubManagerStart').StartOptions;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
   /** Round 70: the board's demands for this season. */
@@ -3110,17 +3120,34 @@ function slug(name: string): string {
   return foldSpecialLatin(name.toLowerCase()).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
 }
 
-/** £-formatted money in millions: money(180) -> '£180m', money(0.6) -> '£600k'. */
-export function money(n: number): string {
+/**
+ * Money in millions: money(180) -> '£180m', money(0.6) -> '£600k'.
+ *
+ * Round 514: the symbol follows the start option when a career is handed in,
+ * and stays a pound otherwise, so every existing caller is unchanged. Use
+ * moneyIn(career) in a component rather than threading the career through 82
+ * call sites.
+ */
+export function money(n: number, career?: CareerState): string {
+  const S = career ? currencySymbol(career) : '£';
   if (n >= 1000) {
     const bn = n / 1000;
-    return `£${Number.isInteger(bn) ? bn : bn.toFixed(1)}bn`;
+    return `${S}${Number.isInteger(bn) ? bn : bn.toFixed(1)}bn`;
   }
   if (n >= 1) {
     const m = Math.round(n * 10) / 10;
-    return `£${Number.isInteger(m) ? m : m.toFixed(1)}m`;
+    return `${S}${Number.isInteger(m) ? m : m.toFixed(1)}m`;
   }
-  return `£${Math.max(0, Math.round(n * 1000))}k`;
+  return `${S}${Math.max(0, Math.round(n * 1000))}k`;
+}
+
+/**
+ * A money formatter bound to one career, for a component to shadow the plain
+ * `money` import with: `const money = moneyIn(career);` is one line per file
+ * instead of a career argument on all 82 call sites.
+ */
+export function moneyIn(career: CareerState): (n: number) => string {
+  return (n: number) => money(n, career);
 }
 
 export function confidenceLabel(conf: number): string {
@@ -6823,7 +6850,11 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
      at the 1.02 of value the shipped engine already guaranteed, so the ask
      never drops below what the man is worth. One draw from Math.random either
      way, so a seeded run is unchanged at zero points. */
-  const premium = 0.02 + Math.random() * 0.13;
+  /* Round 514: the strictness setting scales the premium the seller opens
+     with, and the Round 513 tree still talks it down. Both land on the same
+     floor of 1.02 of value, so the ask can never drop below what he is worth,
+     and both are the identity at their defaults. */
+  const premium = (0.02 + Math.random() * 0.13) * askPremiumScale(career);
   const theirAsk = Math.round(mp.price * (1 + Math.max(0.02, premium - askEdge(career))) * 10) / 10;
   return {
     ...career,
@@ -6838,7 +6869,10 @@ export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerS
          two rounds here and it switched the whole mechanic off: measured over
          the sweep in simClubManagerDeals section 3, from three points nothing
          at any multiple ever ran out of patience. See askEdge for the table. */
-      patience: OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD),
+      /* Round 514: strictness can take a round away and never add one, which
+         is the property that keeps Round 506's guarantee intact. Floored so
+         a strict game is hard rather than impossible. */
+      patience: Math.max(PATIENCE_FLOOR, OPENING_PATIENCE_MIN + ri(0, OPENING_PATIENCE_SPREAD) + patienceDelta(career)),
       myOffer: null,
       theirAsk,
       status: 'open',
@@ -13144,6 +13178,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 471: and the four staff posts.
   ensureStaff(state);
   ensureXp(state);
+  // Round 514: and the start options, absent on every save before that round.
+  ensureStartOptions(state);
   // Round 474: and a save from before the board asked for anything specific.
   ensureBoardAsks(state);
   // Round 505: and the armband and the set piece takers.
@@ -14867,6 +14903,9 @@ export function loadCareer(): CareerState | null {
        and playNextEntry, because a screen can be opened before a ball is
        kicked and engine only repair is not enough. */
     ensureXp(parsed);
+    /* Round 514: same reasoning, and the currency in particular is read by
+       the very first screen drawn, before a ball is kicked. */
+    ensureStartOptions(parsed);
     /* Round 505: and the armband and the takers, for the same reason: the
        tactics screen reads them before a ball is kicked. */
     ensureSetPieces(parsed);

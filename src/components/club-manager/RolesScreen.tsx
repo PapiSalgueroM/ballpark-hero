@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Users } from 'lucide-react';
 import {
   ROLE_INFO, ROLE_LADDER, roleOf, playingShare, promiseGap, promiseMood,
-  deservedRole, standingGap, roleChangeCost, squadByRole, brokenPromises, money,
+  deservedRole, standingGap, roleChangeCost, squadByRole, brokenPromises, money, moneyIn,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, SquadRole } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -81,6 +81,9 @@ function PlayerRow({ p, onOpen, showRole }: { p: CMPlayer; onOpen: () => void; s
  * the first screen, above the tiles, where your thumb already is.
  */
 export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   const [openId, setOpenId] = useState<string | null>(null);
   const [openRole, setOpenRole] = useState<SquadRole | null>(null);
   const detailRef = useRevealScroll<HTMLDivElement>(`role:${openId ?? ''}:${openRole ?? ''}`, { skipFirst: true });

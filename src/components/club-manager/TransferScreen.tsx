@@ -7,7 +7,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -100,6 +100,9 @@ export function TransferScreen({
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
 }: TransferScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');

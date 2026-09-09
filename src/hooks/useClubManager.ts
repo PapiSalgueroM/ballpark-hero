@@ -29,6 +29,8 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
+import { setStartOption } from '@/lib/clubManagerStart';
+import type { CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -455,6 +457,17 @@ export function useClubManager() {
   const buyFacility = useCallback((id: FacilityId) => {
     setCareer(prev => (prev ? upgradeClubFacility(prev, id) ?? prev : prev));
   }, []);
+  /* Round 514: the three start options. Each one returns null when it would
+     change nothing, so `?? prev` leaves the save alone. */
+  const setCurrency = useCallback((code: CurrencyCode) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'currency', code) ?? prev : prev));
+  }, []);
+  const setNationJobs = useCallback((on: boolean) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'nationJobs', on) ?? prev : prev));
+  }, []);
+  const setStrictness = useCallback((level: number) => {
+    setCareer(prev => (prev ? setStartOption(prev, 'strictness', level) ?? prev : prev));
+  }, []);
   /* Round 513: a point into a tree. One way only, so it never needs a refund
      path, and null when there is nothing free to spend. */
   const spendPoint = useCallback((tree: SkillTree) => {
@@ -651,6 +664,7 @@ export function useClubManager() {
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint,
+    setCurrency, setNationJobs, setStrictness,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

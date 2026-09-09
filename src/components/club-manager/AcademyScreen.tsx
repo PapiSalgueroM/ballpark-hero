@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { GraduationCap, Search, ArrowUpCircle } from 'lucide-react';
 import {
   SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
-  FACILITY_INFO, academyUpgradeCost, tripCost, money,
+  FACILITY_INFO, academyUpgradeCost, tripCost, money, moneyIn,
 } from '@/lib/clubManager';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -36,11 +36,15 @@ function bandLabel(p: Prospect): string {
   return 'One for the reserves';
 }
 
+/* Round 514: fmt is handed in for the same reason as FinancesScreen's Row:
+   this helper is outside the component and would otherwise keep printing
+   pounds while the rest of the screen followed the setting. */
 function ProspectRow({
-  p, budget, squadFull, onPromote, onRelease,
+  p, budget, squadFull, onPromote, onRelease, fmt,
 }: {
   p: Prospect; budget: number; squadFull: boolean;
   onPromote: (id: string) => void; onRelease: (id: string) => void;
+  fmt: (n: number) => string;
 }) {
   const affordable = p.fee <= budget;
   return (
@@ -55,7 +59,7 @@ function ProspectRow({
         </div>
       </div>
       <div className="shrink-0 text-right">
-        <div className="text-[9px] text-muted-foreground mb-0.5">{p.fee > 0 ? money(p.fee) : 'Free'}</div>
+        <div className="text-[9px] text-muted-foreground mb-0.5">{p.fee > 0 ? fmt(p.fee) : 'Free'}</div>
         <div className="flex gap-1">
           <button
             onClick={() => onPromote(p.id)}
@@ -102,6 +106,9 @@ function ScoutOnTheRoad({ s, onRecall }: { s: Scout; onRecall: (id: string) => v
  * books waiting for you to decide.
  */
 export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, onRelease }: AcademyScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   const a = career.academy;
   const [picking, setPicking] = useState<string | null>(null);
   const [region, setRegion] = useState<string>(SCOUT_REGIONS[0].id);
@@ -248,6 +255,7 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
         )}
         {prospects.map(p => (
           <ProspectRow
+            fmt={money}
             key={p.id} p={p} budget={career.budget} squadFull={squadFull}
             onPromote={onPromote} onRelease={onRelease}
           />

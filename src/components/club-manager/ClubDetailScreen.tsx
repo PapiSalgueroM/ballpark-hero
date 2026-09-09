@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
-  money, sortedLeagueTable, isPartialClub, TIER_INFO,
+  money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
   projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf,
@@ -22,6 +22,9 @@ interface ClubDetailScreenProps {
  * rivals just by clicking on their team."
  */
 export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   /* Round 146: everything in this viewer reads the SAVE's world. In a 2010
      career the def is the 2010 def, the league is the 2010 league and the
      roster is the 2010 squad aged to the save's season. */

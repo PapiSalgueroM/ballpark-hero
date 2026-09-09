@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { TICKET_TIERS, gatePricePerFan, money } from '@/lib/clubManager';
+import { TICKET_TIERS, gatePricePerFan, money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
@@ -30,15 +30,18 @@ interface FinancesScreenProps {
   onPush: (offerId: string) => void;
 }
 
-function Row({ line, tone }: { line: ProjectionLine; tone: 'in' | 'out' }) {
+/* Round 514: the formatter is handed in rather than imported, because this
+   helper sits outside the component and would otherwise keep printing pounds
+   while the rest of the screen followed the setting. */
+function Row({ line, tone, fmt }: { line: ProjectionLine; tone: 'in' | 'out'; fmt: (n: number) => string }) {
   return (
     <tr data-projection-line={line.id}>
       <td className="py-0.5 pr-1 text-foreground">
         {line.label}
         {line.note && <span className="text-muted-foreground"> · {line.note}</span>}
       </td>
-      <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(line.actual)}</td>
-      <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', tone === 'in' ? 'text-emerald-400' : 'text-foreground')}>{money(line.projected)}</td>
+      <td className="py-0.5 text-right tabular-nums text-muted-foreground">{fmt(line.actual)}</td>
+      <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', tone === 'in' ? 'text-emerald-400' : 'text-foreground')}>{fmt(line.projected)}</td>
     </tr>
   );
 }
@@ -46,6 +49,9 @@ function Row({ line, tone }: { line: ProjectionLine; tone: 'in' | 'out' }) {
 const BONUS_FOR: Record<string, string> = { title: 'winning the league', europe: 'reaching Europe', topHalf: 'a top half finish' };
 
 export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor, onPush }: FinancesScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(c);
   const books = booksOf(c);
   const p = projectFinances(c);
   const ticketTier = c.finance?.ticketTier ?? 1;
@@ -71,14 +77,14 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             </tr>
           </thead>
           <tbody>
-            {p.income.map(l => <Row key={l.id} line={l} tone="in" />)}
+            {p.income.map(l => <Row key={l.id} line={l} tone="in" fmt={money} />)}
             <tr className="border-t border-border" data-projection-total="income">
               <td className="py-0.5 font-bold text-foreground">Income</td>
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.incomeActual)}</td>
               <td className="py-0.5 pl-2 text-right tabular-nums font-bold text-emerald-400">{money(p.incomeProjected)}</td>
             </tr>
             <tr><td colSpan={3} className="pt-1 text-[9px] text-muted-foreground uppercase tracking-wider">Out</td></tr>
-            {p.spend.map(l => <Row key={l.id} line={l} tone="out" />)}
+            {p.spend.map(l => <Row key={l.id} line={l} tone="out" fmt={money} />)}
             <tr className="border-t border-border" data-projection-total="spend">
               <td className="py-0.5 font-bold text-foreground">Spend</td>
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.spendActual)}</td>

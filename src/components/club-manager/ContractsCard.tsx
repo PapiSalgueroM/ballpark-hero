@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { money, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue } from '@/lib/clubManager';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import { ratingTint } from '@/components/club-manager/SquadScreen';
 
@@ -29,6 +29,9 @@ interface ContractsCardProps {
  * door you have signed in plain sight.
  */
 export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsCardProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   const bill = wageBill(career);
   const cap = career.wageCap ?? wageCapFrom(bill);
   const pct = Math.round((bill / Math.max(1, cap)) * 100);

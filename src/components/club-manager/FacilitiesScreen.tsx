@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { money } from '@/lib/clubManager';
+import { money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost,
@@ -16,6 +16,9 @@ interface FacilitiesScreenProps {
 }
 
 export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
+  /* Round 514: the money symbol follows the start option. Shadowing the
+     import here is one line instead of a career argument on every call. */
+  const money = moneyIn(career);
   const f = facilitiesOf(career);
   return (
     <div className="space-y-2" data-facilities-desk>
