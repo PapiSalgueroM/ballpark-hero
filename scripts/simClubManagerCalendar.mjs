@@ -100,6 +100,16 @@ const CONTROLS = {
     broken: "      if (false && entry.type === 'window' && dateKey(next) < dateKey(newYear)) {",
     say: 'NEGATIVE CONTROL ON: the window entry takes the next Saturday after the last league round again, December included',
   },
+  /* Pushes a window that has ALREADY cleared new year three weeks later, which
+     is only ever the long league: a short league's window is pulled back to the
+     first Saturday of January by the clamp and never takes this branch. So this
+     moves the Championship and nothing else, which is what the long league
+     bound needs to be proved against. */
+  latejan: {
+    fixed: '      out.push(next);',
+    broken: "      out.push(entry.type === 'window' && dateKey(next) >= dateKey(newYear) ? addDays(next, 21) : next);",
+    say: 'NEGATIVE CONTROL ON: a window that already reached January is pushed three weeks later, which moves only the long league',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`CM_CALENDAR_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -293,6 +303,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
 {
   let predicted = 0, augustHeld = 0;
   const gaps = { summer: [], janOpen: [], janOpenBig: [], janClose: [] };
+  const janOpenMonths = [];
   SAVES.forEach((pick, i) => {
     /* Round 504: a manager sacked before January ends the engine run below
        with no January window to compare, which is the game working (about
@@ -365,6 +376,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     if (!real) { fail(`no real window dates recorded for ${pick[1]}`); return; }
     gaps.summer.push(Math.abs(daysBetween(dates[summer0.deadlineWeek], real.summerClose)));
     (s.leagueClubs.length <= 20 ? gaps.janOpen : gaps.janOpenBig).push(Math.abs(daysBetween(dates[jan0.openWeek], real.januaryOpen)));
+    janOpenMonths.push({ who: `${pick[0]} ${pick[1]}`, clubs: s.leagueClubs.length, date: dates[jan0.openWeek] });
     gaps.janClose.push(Math.abs(daysBetween(dates[janShut ?? jan0.deadlineWeek], real.januaryClose)));
     console.log(`   ${pick[0]} ${pick[1]} (${s.leagueClubs.length} clubs): summer deadline ${fmt(dates[summer0.deadlineWeek])} (real ${fmt(real.summerClose)}), January opens ${fmt(dates[jan0.openWeek])} (real ${fmt(real.januaryOpen)}), deadline ${fmt(dates[janShut ?? jan0.deadlineWeek])} (real ${fmt(real.januaryClose)})`);
   });
@@ -373,6 +385,43 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
   if (predicted < SAVES.length * 2) fail(`only ${predicted} of ${SAVES.length * 2} deadline days matched the engine`);
   if (max(gaps.summer) > 21) fail(`the summer deadline drifts ${max(gaps.summer)} days from the real one`);
   if (max(gaps.janOpen) > 10) fail(`the January window opens ${max(gaps.janOpen)} days from the real 1 January`);
+  /*
+   * AND THE LONG LEAGUE, which was measured and then let go.
+   *
+   * The line above only ever held leagues of 20 clubs or fewer: the 24 club
+   * Championship's gap went into its own bucket, was PRINTED in the summary and
+   * never asserted. That was an open bug from the 2026-09-05 review.
+   *
+   * Reading it properly first, because most of what it implied is already
+   * covered and a duplicate check would be noise. The window's MONTH is held for
+   * every league including this one, up in section 3 ("the January window is
+   * drawn on ..."), and the January DEADLINE drift is held for every league too,
+   * because gaps.janClose is not bucketed by size. So the window cannot land in
+   * December and cannot close far from the real date.
+   *
+   * What genuinely had no floor under it is the middle: the Championship's open
+   * could drift to the END of January and nothing would notice, because the
+   * month would still be January and the deadline three weeks later would still
+   * be inside janClose's 21 day bound. A window a player is told is January that
+   * opens on the 28th is not one.
+   *
+   * The bound is 22 rather than something tighter because 15 is correct and
+   * deliberate: Round 466 leaves the long league where the round count puts it,
+   * since it reaches January on its own. This is a DETERMINISTIC number, fixed
+   * by league size and era rather than sampled, so the seven days between the
+   * measured 15 and the bound are real headroom and not a coin toss.
+   *
+   * CM_CALENDAR_CONTROL=latejan pushes a window that already cleared new year
+   * three weeks later, which moves only the long league and trips exactly this.
+   */
+  const bigOpens = janOpenMonths.filter(j => j.clubs > 20);
+  if (bigOpens.length === 0) {
+    fail('no league of more than 20 clubs was in the sample, so the long league check proved nothing');
+  }
+  console.log(`   ${bigOpens.length} long league save(s) checked for opening early enough in January: ${bigOpens.map(j => `${j.who} ${fmt(j.date)}`).join(', ')}`);
+  if (max(gaps.janOpenBig) > 22) {
+    fail(`the long league's January window opens ${max(gaps.janOpenBig)} days into January (bound 22; measured 15, and it is deterministic rather than sampled), which is too late to call a January window`);
+  }
   if (max(gaps.janClose) > 21) fail(`the January deadline drifts ${max(gaps.janClose)} days from the real one`);
   for (const era of ['now', 'era2015', 'era2010', 'era2005']) if (!REAL_WINDOWS[era]) fail(`no real window dates recorded for ${era}`);
 }

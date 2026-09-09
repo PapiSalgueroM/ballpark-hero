@@ -2667,9 +2667,18 @@ remains).**
   wall draws. The wall's overlapping shoulder spans now read as one wall while the existing
   0.22 legal spacing and mechanics stay unchanged. The 90-date audit played 900 walls with
   zero unwinnable rounds.
-- **The Championship's January window opens 15 days into January** and the calendar harness
-  fences the gap only for leagues of 20 clubs or fewer, so the long league's date is printed
-  and not held.
+- **FIXED, Round 517, and most of what this entry implied was already covered.** Read properly
+  before changing anything. The 15 days is CORRECT and deliberate: Round 466 leaves a league long
+  enough to reach January on its own where the round count puts it, and the 24 club Championship
+  is that league. The window's MONTH was already held for every league in section 3, and the
+  January DEADLINE drift was already held for every league because that bucket is not split by
+  size. So it could never land in December and never close far from the real date.
+  What genuinely had nothing under it was the middle: the long league's open could have drifted
+  to the END of January without tripping anything, since the month would still be January and a
+  deadline three weeks later would still sit inside the existing 21 day bound. That now has a
+  bound of 22 days, chosen against a measured 15 that is deterministic rather than sampled, with
+  `CM_CALENDAR_CONTROL=latejan` pushing a window that already cleared new year three weeks later
+  and taking it to 36.
 - **ALREADY FIXED and this entry was stale: the mobile ad to control gap.** Round 506 set
   `AD_CONTROL_GAP_PX = 150` in `src/components/ads/AdBanner.tsx` and applies it as the banner's
   own `paddingTop`, so the 104px measured on 2026-09-07 is not what ships. Round 506 is merged
