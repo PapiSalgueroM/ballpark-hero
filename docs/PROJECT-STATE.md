@@ -1,5 +1,29 @@
 # Project state
 
+## Live as of 2026-09-09 morning: Rounds 515, 516 and 517 published, and the first fully green suite
+
+**`origin/main` is `9f9ea3da` and douknowball.com is serving it.** Deployment
+`e8df3634-0303-4853-9e79-2bcde667c466`, called only after Lovable's `latest_commit_sha` already
+matched.
+
+**All 268 harnesses green, no reds and no skips.** That is the first completely clean suite of
+this stretch, and it is clean because two harness problems were fixed rather than tolerated: the
+connect4 records check was burning its own subjects and rotting on a timer (Round 515's day), and
+`runAllSims` was turning a momentary database blip into a red.
+
+Proven live by chunk diff rather than assumed:
+
+| | before | after |
+|---|---|---|
+| home bundle | `index-IsxooW6H.js` | `index-CgNpIxt7.js` |
+| front office chunk | `FrontOffice-D9SGk6X7.js` | `FrontOffice-HHOfB3sh.js` |
+| "your pick" in it | 0 | 1 |
+| shared front office chunk | | `FoHubTiles-BkAFzijX.js` |
+| "On the clock" in it | 0 | 1 |
+| "went off the board" in it | 0 | 1 |
+
+Eight routes rechecked, all 200 with their own H1 and canonical, including all four front offices.
+
 ## Live as of 2026-09-09: Round 514 published, plus a suite fix and a connect4 harness fix
 
 **`origin/main` is `a97fe373` and douknowball.com is serving it.** Deployment
