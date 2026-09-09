@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
-  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money, moneyIn,
+  TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
   NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
@@ -252,8 +252,6 @@ const ClubManager = () => {
   /* ================= RESUME PROMPT ================= */
   if (g.phase === 'resume' && g.career) {
     const c = g.career;
-    /* Round 514: money follows the chosen currency. */
-    const money = moneyIn(c);
     return shell(
       <div className="max-w-md mx-auto">
         <header className="text-center mb-6">
@@ -511,6 +509,8 @@ const ClubManager = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] text-muted-foreground">Budget</span>
+                      {/* Round 514: the club picker runs before a career exists, so there are no
+                          start options to follow and this one stays in the default symbol. */}
                       <span className="text-xs font-bold text-gold">{money(c.budget)}</span>
                     </div>
                     {/* Round 145: this line said "Top 20" at a rank 20 club,
@@ -776,7 +776,7 @@ const ClubManager = () => {
                 <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Transfer business</div>
                 {sm.signings.slice(0, 8).map((t, i) => (
                   <p key={i} className="text-xs text-muted-foreground">
-                    {t.dir === 'in' ? '🟢 IN' : '🔴 OUT'} {t.name} ({money(t.fee)})
+                    {t.dir === 'in' ? '🟢 IN' : '🔴 OUT'} {t.name} ({money(t.fee, c)})
                   </p>
                 ))}
               </div>
@@ -875,8 +875,6 @@ const ClubManager = () => {
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
   const c = g.career;
-  /* Round 514: money follows the chosen currency. */
-  const money = moneyIn(c);
   /* Round 202: does a federation want him this season? Recomputed on every
      render because it depends on the record, which moves every week. */
   const nationOffer = nationOfferFor(c);
@@ -931,7 +929,7 @@ const ClubManager = () => {
               🏟 {c.customClub.stadium}{c.customClub.capacity ? ` (${Math.round(c.customClub.capacity / 1000)}k)` : ''}
             </span>
           )}
-          <span className="text-gold font-semibold">{money(c.budget)}</span>
+          <span className="text-gold font-semibold">{money(c.budget, c)}</span>
           <span className="inline-flex items-center gap-1">
             {c.form.length === 0 && <span>No matches yet</span>}
             {c.form.map((f, i) => (
@@ -1119,7 +1117,7 @@ const ClubManager = () => {
                 icon="💰" title="Finances"
                 value={(() => {
                   const r = projectFinances(c).resultProjected;
-                  return `${r < 0 ? '-' : '+'}${money(Math.abs(r))} projected`;
+                  return `${r < 0 ? '-' : '+'}${money(Math.abs(r), c)} projected`;
                 })()}
                 sub={`Fans ${fanMeter(c).band.toLowerCase()} · prices, sponsor, the books`}
                 onClick={() => setHubPanel('finance')}
@@ -1561,10 +1559,10 @@ const ClubManager = () => {
                       <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
                     )}
                     {c.careerStats.mostExpensiveBuy && (
-                      <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee)})</p>
+                      <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
                     )}
                     {c.careerStats.mostExpensiveSale && (
-                      <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee)})</p>
+                      <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee, c)})</p>
                     )}
                     {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
                       <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
