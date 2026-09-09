@@ -1,5 +1,36 @@
 # Project state
 
+## Live as of 2026-09-09: Round 514 published, plus a suite fix and a connect4 harness fix
+
+**`origin/main` is `a97fe373` and douknowball.com is serving it.** Deployment
+`616de93b-2704-4df3-b3a5-cbd88ba650f2`, called only after Lovable's `latest_commit_sha` already
+matched. Home bundle `index-CvGo0Pjf.js` to `index-IsxooW6H.js`; the Club Manager page chunk is
+`ClubManager-CgPDY9C-.js` and carries "Display currency", "Negotiation strictness" and
+"International job offers" at one occurrence each, none of which existed before. Eight routes
+rechecked, all 200 with their own H1 and canonical.
+
+Three things landed on top of the evening's publish:
+
+- **Round 514**, the start options. See the round's entry below.
+- **`simConnect4ClubRecords` fixed**, which had been the suite's one red. Nothing was broken:
+  the records pass WRITES every attribute it proves into the fact cache, so a player and
+  attribute can exercise that path exactly once ever, and the section always asked about the same
+  first 40 candidates. It burned its own subjects and rotted on a timer. The scan walks now.
+- **`runAllSims` stops turning a momentary database blip into a red.** Round 356 split "this
+  harness checked nothing" into skip (the sandbox cannot reach the database) and fail (it can, so
+  the data broke), both keyed off one probe taken before anything else runs. The third case, a
+  database that is reachable in general and momentarily was not, was being called a failure.
+  Measured twice on 2026-09-08: five harnesses in the morning, then `simNoZeroFacts` and
+  `simSoccerGridLabels` in the evening, every one green when re-run alone. Such a harness now gets
+  one lone re-run before it counts, and a real break fails the retry too.
+
+**A defect worth reading if you touch a Club Manager screen.** Round 514's first build passed the
+type gate at zero and crashed the game. Ten screens shadow the `money` import with a currency
+aware formatter, which is safe where the binding is the first statement of the component;
+`ClubManager.tsx` is one function with several early returns, so a function level `const money`
+shadowed the import for blocks that run BEFORE it and two call sites hit the temporal dead zone.
+`playClubManager` and `playDealDesk` caught it on the built site and nothing else could have.
+
 ## Live as of 2026-09-08 evening: Rounds 506, 507, 508 and 513 are merged and published
 
 **`origin/main` is `f62d5901` and that is what douknowball.com is serving.** Deployment
