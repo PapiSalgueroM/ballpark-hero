@@ -2795,10 +2795,19 @@ roadmap when a round touches the game named:
   graph, and proves 203 of 885 puzzles have a valid Active Players path. The guarded restore
   migration is ready but stays unapplied until the matching frontend is live. Do not restore
   projected stats simply to make the mode look populated.
-- **Every Conquest map: the first move can sit below the fold on a phone** once a club is
-  picked (the call card renders after the map, the legend and the standings toggle, with no
-  reveal scroll on the shared board or the four private ones). The no scroll rule wants the
-  next step in view on its own.
+- **Conquest fold: PARTLY STALE, and measured again on 2026-09-09 rather than taken on trust.**
+  The claim that the shared board has no reveal scroll is wrong: Round 476 added one to
+  `ImperialismBoardShared.tsx` and its comment quotes the same 390 by 844 measurement this entry
+  describes, so all five Imperialism boards are covered.
+  Re-measured on `/conquest` in ARCADE mode, which is `ConquestBoard.tsx` and genuinely has no
+  reveal scroll: with a club picked and the page at the top, the only step to press
+  ("Start Conquest") sits at y=513 of an 844 viewport, IN VIEW. It does not reproduce there.
+  **Still unverified: `/nba-conquest` in arcade mode** (`ConquestBoardNba.tsx`, also with no
+  reveal scroll). The probe used to drive this was NFL club names and never picked a club on the
+  NBA board, so that route was not actually measured and nothing should be claimed about it.
+  Neither arcade board has a reveal ref, so the risk is real even where it does not currently
+  reproduce; the cheap fix if it is ever seen is to mirror Round 476's ref onto the step to
+  press in both boards.
 - **Club Manager, era Champions League group tables rank level clubs on goal difference**
   where the real group stage from 2003-04 to 2023-24 used head to head first, so the round
   of 16 seeding can read the wrong group winner. Pre existing; Round 462 seeded the draw on
