@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
+import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
+import { buildDraftNight } from '@/lib/draftNight';
+import type { DraftNight } from '@/lib/draftNight';
 import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
   generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
@@ -87,6 +90,10 @@ export default function FrontOfficeBoard() {
   const [playoffRounds, setPlayoffRounds] = useState<PlayoffRound[]>([]);
   const [champion, setChampion] = useState<string>('');
   const [draftClass, setDraftClass] = useState<Prospect[] | null>(null);
+  /* Round 515: draft night. Transient on the board and never persisted, the
+     Round 186 rule for reveals: reload mid reveal and the save opens on the
+     same screen it always did. */
+  const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
   // Round 64: the owner's no scroll rule. You press Play Week at the top and
   // the scoreboard renders underneath it, often below the fold on a phone, so
@@ -307,6 +314,9 @@ export default function FrontOfficeBoard() {
     generateDraftClass(Math.random, 40, leagueNames(lg));
     setDraftClass(cls);
     setPicksLeft(3);
+    /* Round 515: a new draft opens with an empty card, so last season's
+       picks cannot be sitting there when this one starts. */
+    setDraftNight(null);
     setPhase('draft');
     persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 3 }, lg, team);
   };
@@ -333,16 +343,25 @@ export default function FrontOfficeBoard() {
     const order = draftOrder(lg.teams).filter(a => a !== myTeam);
     const remaining = draftClass.filter(p => p.id !== id);
     const aiTakes = remaining.slice(0, 6);
+    /* Round 515: the rival picks were applied and thrown away, so six real
+       decisions the engine made happened where nobody could see them. They are
+       captured here for the reveal and are the SAME objects the engine used. */
+    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     for (let i = 0; i < aiTakes.length; i++) {
       const abbr = order[i % order.length];
       const taken = aiTakes[i];
       const pl = prospectToPlayer(taken, Math.random);
       if (pl) lg.teams[abbr].players.push(pl);
+      rivalPicks.push({ team: abbr, playerName: taken.name, pos: pl ? pl.pos : taken.pos, grade: taken.grade });
     }
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
     setDraftClass(nextClass);
     setPicksLeft(nextPicks);
+    setDraftNight(buildDraftNight(
+      { team: myTeam, playerName: pr.name, pos: pr.pos, grade: pr.grade },
+      rivalPicks,
+    ));
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
       const news = runOffseason(lg, Math.random);
@@ -625,6 +644,7 @@ export default function FrontOfficeBoard() {
             the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
           </p>
         </div>
+        {draftNight && <DraftNightCard night={draftNight} />}
         <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 18).map(pr => (
             <button

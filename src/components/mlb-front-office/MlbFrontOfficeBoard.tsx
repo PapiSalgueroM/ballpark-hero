@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
+import { buildDraftNight } from '@/lib/draftNight';
+import type { DraftNight } from '@/lib/draftNight';
 import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { MLB_TEAMS, MLB_TEAM_MAP } from '@/data/conquestDataMlb';
@@ -75,6 +78,9 @@ export default function MlbFrontOfficeBoard() {
   const [series, setSeries] = useState<MlbSeriesResult[]>([]);
   const [champion, setChampion] = useState('');
   const [draftClass, setDraftClass] = useState<MlbProspect[] | null>(null);
+  /* Round 515: draft night. Transient on the board and never persisted,
+     the Round 186 rule for reveals. */
+  const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
   const [tradePartner, setTradePartner] = useState('');
   // Round 82: trade finder
@@ -258,7 +264,7 @@ export default function MlbFrontOfficeBoard() {
        league, so a prospect cannot arrive sharing a name with a man on a
        roster or in the market. */
     mlbDraftClass(Math.random, 24, leagueNames(lg));
-    setDraftClass(cls); setPicksLeft(2); setPhase('draft');
+    setDraftClass(cls); setPicksLeft(2); setDraftNight(null); setPhase('draft');
     persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 2 }, lg, team);
   };
 
@@ -276,9 +282,21 @@ export default function MlbFrontOfficeBoard() {
     const remaining = draftClass.filter(p => p.id !== id);
     const aiTakes = remaining.slice(0, 5);
     const order = mlbStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
-    aiTakes.forEach((p, i) => lg.teams[order[i % order.length]].players.push(mlbProspectToPlayer(p, Math.random)));
+    /* Round 515: the rival picks were applied and thrown away, so real
+       decisions the engine made happened where nobody could see them.
+       Captured here for the reveal, from the same objects the engine used. */
+    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+    aiTakes.forEach((p, i) => {
+      const abbr = order[i % order.length];
+      lg.teams[abbr].players.push(mlbProspectToPlayer(p, Math.random));
+      rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
+    });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
+    setDraftNight(buildDraftNight(
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
+      rivalPicks,
+    ));
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
@@ -527,6 +545,7 @@ export default function MlbFrontOfficeBoard() {
             You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
           </p>
         </div>
+        {draftNight && <DraftNightCard night={draftNight} />}
         <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
