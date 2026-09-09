@@ -104,6 +104,11 @@
        rule reads goal difference then goals scored, the pre-462 sort.
        Section 4 must go red (measured: every level pair the head to head
        had turned now sits the wrong way round).
+     CM_UCL_CONTROL=adjacent bundles a copy of the engine whose league table
+       footnote counts neighbouring rows again instead of level groups, the
+       pre-518 count. Section 4 must go red (measured: three clubs level with
+       only the outer pair unplayed, where the table has already fallen back to
+       goal difference and the footnote says nothing is waiting).
      CM_UCL_CONTROL=uclgd   bundles a copy of the engine whose group sorter
        hands back sortedTable(rows), which is the pre-478 group order to the
        character: overall goal difference then goals scored, no ledger read.
@@ -129,7 +134,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_UCL_CONTROL || '';
-if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd'].includes(CONTROL)) {
+if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent'].includes(CONTROL)) {
   console.error(`CM_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -141,6 +146,8 @@ const lf = s => s.replaceAll('\r\n', '\n');
 /* ---- the engine and the card, regressed when a control asks ---- */
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'UclGroupsCard.tsx');
+const GROUPS = path.join(ROOT, 'src', 'lib', 'clubManagerUclGroups.ts');
+let groupsAlias = '';
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
 let cardPath = `${ROOT_URL}/src/components/club-manager/UclGroupsCard.tsx`;
 function rewrite(file, from, to, outName, what) {
@@ -166,6 +173,22 @@ if (CONTROL === 'vanish') {
     '  if (!group || career.uclKoRound !== null) return null;\n',
     'UclGroupsCardEraUcl.vanish.tsx', "the groups card's null check");
   console.log('NEGATIVE CONTROL ON: the groups card returns null once the knockouts start, the pre-462 card; section 3 must go red');
+}
+if (CONTROL === 'adjacent') {
+  /* Round 518: the pre-518 footnotes counted NEIGHBOURING rows rather than
+     level groups. Capping a level run at two members reproduces that exactly,
+     because a run of two IS an adjacent pair: three level clubs then split into
+     a pair plus a leftover and the outer pair is never looked at.
+     It patches countWaitingLevelRuns, which is the ONE implementation both
+     footnotes now share, so the league table and the Champions League group
+     regress together the way they were broken together. That needs its own
+     esbuild alias: the engine imports the module by name, so rewriting a copy
+     without aliasing would leave the bundle reading the real one. */
+  groupsAlias = ` "--alias:@/lib/clubManagerUclGroups=${rewrite(GROUPS,
+    '    while (j < sorted.length && sorted[j].pts === sorted[i].pts) j += 1;',
+    '    while (j < sorted.length && sorted[j].pts === sorted[i].pts && j < i + 2) j += 1;',
+    'clubManagerUclGroupsEraUcl.adjacent.ts', 'the shared level run scan').replaceAll('\\\\', '/')}"`;
+  console.log('NEGATIVE CONTROL ON: both footnotes group level clubs in twos again, the pre-518 count; the three level club check in section 4 must go red');
 }
 if (CONTROL === 'gdonly') {
   enginePath = rewrite(ENGINE,
@@ -200,7 +223,7 @@ import React from '${ROOT_URL}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT_URL}/node_modules/react-dom/server.node.js';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic${groupsAlias} --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
   env: { ...process.env, NODE_PATH: `${ROOT}/node_modules` },
 });
@@ -537,8 +560,53 @@ function checkRule() {
   if (order('h2h', {}) !== 'Gamma,Beta,Alpha') note('h2h', `Spain and Italy with no ledger: should fall back to goal difference (${order('h2h', {})})`);
   if (sortedTable(rows).map(r => r.club).join(',') !== 'Gamma,Beta,Alpha') note('h2h', 'a bare sortedTable(rows) no longer reads goal difference then goals scored');
   const foot = tiebreakFootnote('h2h', rows, one);
-  if (!/head to head/.test(foot) || !/1 level pair has not met twice/.test(foot)) note('h2h', `the Spanish footnote does not say the pair has not met twice: "${foot}"`);
-  if (/not met twice/.test(tiebreakFootnote('h2h', rows, both))) note('h2h', 'the Spanish footnote reports a waiting pair after both games were played');
+  if (!/head to head/.test(foot) || !/1 level group has games still to play/.test(foot)) note('h2h', `the Spanish footnote does not say a level group still owes games: "${foot}"`);
+  if (/still to play between them/.test(tiebreakFootnote('h2h', rows, both))) note('h2h', 'the Spanish footnote reports a waiting group after every game was played');
+
+  /*
+   * Round 518: THE CASE THAT WAS SILENTLY WRONG, and the reason the footnote
+   * now counts level RUNS rather than neighbouring rows.
+   *
+   * orderLevel will only read head to head once EVERY game inside a level group
+   * has been played: one missing fixture anywhere and the whole group drops to
+   * goal difference. The footnote used to walk adjacent pairs only, so three
+   * clubs level with the two OUTER ones yet to meet reported nothing waiting
+   * while the table beside it had already dropped. The player was told a rule
+   * that was not being applied.
+   *
+   * Alpha, Beta and Gamma are level. Beta has played both of the others; Alpha
+   * and Gamma have not met. Every adjacent pair in the sorted order is
+   * therefore complete and the old count was zero.
+   */
+  const three = [
+    { club: 'Alpha', w: 9, d: 3, l: 6, gf: 30, ga: 20, pts: 30 },
+    { club: 'Beta', w: 9, d: 3, l: 6, gf: 40, ga: 15, pts: 30 },
+    { club: 'Delta', w: 9, d: 3, l: 6, gf: 25, ga: 20, pts: 30 },
+  ];
+  /* Sorted on goal difference that is Beta (+25), Alpha (+10), Delta (+5), so
+     the ADJACENT pairs are Beta/Alpha and Alpha/Delta. Both are played here and
+     the outer pair, Beta against Delta, is not. The old adjacent count saw
+     nothing missing. */
+  const outerMissing = {
+    'Alpha|Beta': [1, 0], 'Beta|Alpha': [1, 0],
+    'Alpha|Delta': [2, 1], 'Delta|Alpha': [0, 0],
+  };
+  const outerFoot = tiebreakFootnote('h2h', three, outerMissing);
+  if (!/1 level group has games still to play/.test(outerFoot)) {
+    note('h2h', `three level clubs with only the outer pair unplayed: the footnote says nothing is waiting, but the table has already fallen back to goal difference ("${outerFoot}")`);
+  }
+  /* And the table really has fallen back, which is what makes the silence a lie
+     rather than a wording quibble: orderLevel needs every game in the group. */
+  const outerOrder = sortedTable(three, { rule: 'h2h', pairs: outerMissing }).map(r => r.club).join(',');
+  if (outerOrder !== 'Beta,Alpha,Delta') {
+    note('h2h', `three level clubs with the outer pair unplayed should split on goal difference (${outerOrder})`);
+  }
+  /* With every game played the group really does read head to head, so the
+     check above is not simply "the footnote always complains". */
+  const allPlayed = { ...outerMissing, 'Beta|Delta': [0, 3], 'Delta|Beta': [1, 0] };
+  if (/still to play between them/.test(tiebreakFootnote('h2h', three, allPlayed))) {
+    note('h2h', 'three level clubs with every game played still report a waiting group');
+  }
   if (!/goal difference, then goals scored, then head to head/.test(tiebreakFootnote('gdGf', rows, both))) note('h2h', 'the English footnote does not give the English order');
   if (leagueTiebreak('laliga') !== 'h2h' || leagueTiebreak('laliga2005') !== 'h2h' || leagueTiebreak('seriea') !== 'h2h' || leagueTiebreak('seriea2015') !== 'h2h') note('h2h', 'La Liga or Serie A is not on head to head');
   if (leagueTiebreak('premier') !== 'gdGf' || leagueTiebreak('bundesliga') !== 'gdGfAgg' || leagueTiebreak('ligue1') !== 'gdH2h') note('h2h', 'England, Germany or France is on the wrong rule');
@@ -580,7 +648,7 @@ function checkMigration(tally) {
   // The footnote is honest about the empty ledger.
   const foot = tiebreakFootnote(leagueTiebreak(careerLeagueOf(back).id), sortedLeagueTable(back), back.pairResults?.[careerLeagueOf(back).id]);
   const level = (() => { const t = sortedLeagueTable(back); let k = 0; for (let i = 1; i < t.length; i++) if (t[i].pts === t[i - 1].pts) k += 1; return k; })();
-  if (level > 0 && !/not met twice/.test(foot)) note('migrate', `the table has ${level} level pairs, the ledger is empty, and the footnote does not say so: "${foot}"`);
+  if (level > 0 && !/still to play between them/.test(foot)) note('migrate', `the table has ${level} level pairs, the ledger is empty, and the footnote does not say so: "${foot}"`);
   // And it plays out, round of 16 included.
   let koStart = null;
   const end = playUntil(back, () => false, st => { if (!koStart && st.uclKoRound !== null) koStart = clone(st); });
@@ -912,9 +980,9 @@ function checkGroupRule(tally) {
   if (!/first \(points, then goal difference, then away goals\)/.test(footOld)) note('groups', `the 2005 and 2010 footnote does not give that world's steps: "${footOld}"`);
   if (!/first \(points, then goal difference, then goals, then away goals\)/.test(foot15)) note('groups', `the 2015 footnote does not give that world's steps: "${foot15}"`);
   if (/games between the level clubs/.test(footMod)) note('groups', `the league phase footnote claims a head to head step it does not have: "${footMod}"`);
-  if (/not met twice/.test(footOld)) note('groups', `the group stage footnote reports a waiting pair after both games were played: "${footOld}"`);
+  if (/still to play between them/.test(footOld)) note('groups', `the group stage footnote reports a waiting group after every game was played: "${footOld}"`);
   const footOne = foot(old, { 'Red|Blue': [2, 0] });
-  if (!/1 level pair has not met twice/.test(footOne)) note('groups', `the group stage footnote does not say the pair has not met twice: "${footOne}"`);
+  if (!/1 level group has games still to play/.test(footOne)) note('groups', `the group stage footnote does not say a level group still owes games: "${footOne}"`);
   tally.crafted = 8;
 }
 
@@ -970,7 +1038,7 @@ function checkGroupMigration(tally) {
   const sorted = sortedUclGroup(back, g.table);
   for (let i = 1; i < sorted.length; i++) if (sorted[i].pts === sorted[i - 1].pts) levelPairs += 1;
   const foot = uclGroupTiebreakFootnote(back, g.table);
-  if (levelPairs > 0 && !/not met twice/.test(foot)) note('groups', `the pre-478 group table has ${levelPairs} level pairs with an empty ledger and the footnote does not say so: "${foot}"`);
+  if (levelPairs > 0 && !/still to play between them/.test(foot)) note('groups', `the pre-478 group table has ${levelPairs} level pairs with an empty ledger and the footnote does not say so: "${foot}"`);
   /* And it plays out: the nights still to come are recorded, the ones
      already played are not reconstructed. */
   const end = playUntil(back, st => (st.uclGroup?.matchday ?? 0) >= 6);

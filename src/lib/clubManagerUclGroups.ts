@@ -240,6 +240,43 @@ export function sortedUclGroupTable(
  * The line under a group table saying how level points were split, and how
  * many level pairs are still waiting on their second meeting.
  */
+/**
+ * Round 518: how many LEVEL RUNS are still waiting on a game between them.
+ *
+ * Shared by this file's group footnote and clubManager's league table footnote,
+ * because both had the same defect independently and a third copy would drift
+ * the same way. Both sorters demand that EVERY game inside a level run has been
+ * played before they will read head to head (miniLeague here returns null on a
+ * single missing fixture, orderLevel there sets complete to false), so counting
+ * neighbouring rows understated it: three clubs level with only the OUTER pair
+ * unplayed reported nothing waiting while the table beside it had already
+ * fallen back to goal difference. The footnote then described a rule that was
+ * not being applied, which is the Round 294 shape and worse than saying nothing.
+ */
+export function countWaitingLevelRuns(
+  sorted: TableRow[], pairs?: Record<string, [number, number]>,
+): number {
+  let waiting = 0;
+  for (let i = 0; i < sorted.length;) {
+    let j = i + 1;
+    while (j < sorted.length && sorted[j].pts === sorted[i].pts) j += 1;
+    const run = sorted.slice(i, j);
+    if (run.length > 1) {
+      let complete = true;
+      for (let a = 0; a < run.length && complete; a += 1) {
+        for (let b = a + 1; b < run.length; b += 1) {
+          const x = run[a].club;
+          const y = run[b].club;
+          if (!pairs?.[`${x}|${y}`] || !pairs?.[`${y}|${x}`]) { complete = false; break; }
+        }
+      }
+      if (!complete) waiting += 1;
+    }
+    i = j;
+  }
+  return waiting;
+}
+
 export function uclGroupFootnote(
   rows: TableRow[], rule: UclGroupRule, pairs?: Record<string, [number, number]>,
 ): string {
@@ -247,15 +284,9 @@ export function uclGroupFootnote(
     return 'Level on points splits on goal difference, then goals scored.';
   }
   const sorted = sortedUclGroupTable(rows, rule, pairs);
-  let waiting = 0;
-  for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i].pts !== sorted[i - 1].pts) continue;
-    const a = sorted[i - 1].club;
-    const b = sorted[i].club;
-    if (!pairs?.[`${a}|${b}`] || !pairs?.[`${b}|${a}`]) waiting += 1;
-  }
+  const waiting = countWaitingLevelRuns(sorted, pairs);
   const pending = waiting === 0 ? ''
-    : ` ${waiting} level ${waiting === 1 ? 'pair has' : 'pairs have'} not met twice yet, so ${waiting === 1 ? 'that one splits' : 'those split'} on goal difference for now.`;
+    : ` ${waiting} level ${waiting === 1 ? 'group has games' : 'groups have games'} still to play between them, so ${waiting === 1 ? 'it splits' : 'they split'} on goal difference for now.`;
   const steps = rule === 'h2hFull'
     ? 'points, then goal difference, then goals, then away goals'
     : 'points, then goal difference, then away goals';

@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 518 (513 to 517 claimed by the Claude Code lane; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 519 (513 to 518 claimed by the Claude Code lane; checked against origin/main on
   2026-09-08). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
 

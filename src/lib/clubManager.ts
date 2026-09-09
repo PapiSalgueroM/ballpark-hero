@@ -73,7 +73,7 @@ import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoard
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
-import { UCL_GROUP_LEDGER, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';
+import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 
 /**
@@ -4401,15 +4401,21 @@ export function sortedWorldTable(state: Pick<CareerState, 'pairResults'>, league
  */
 export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: Record<string, [number, number]>): string {
   const sorted = sortedTable(rows, { rule, pairs });
-  let waiting = 0;
-  for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i].pts !== sorted[i - 1].pts) continue;
-    const a = sorted[i - 1].club;
-    const b = sorted[i].club;
-    if (!pairs?.[`${a}|${b}`] || !pairs?.[`${b}|${a}`]) waiting += 1;
-  }
+  /*
+   * Round 518: count level RUNS the way orderLevel does, not adjacent pairs.
+   *
+   * orderLevel needs EVERY game inside a level group played before it will read
+   * head to head: one missing fixture anywhere in the group and the whole group
+   * falls to goal difference. This footnote used to walk neighbouring rows only,
+   * so three clubs level with the outer two yet to meet reported nothing waiting
+   * while the table beside it had already dropped to goal difference. The
+   * player was told the rule that was not being applied, which is worse than
+   * saying nothing, and it is the shape Round 294 is about: prose describing a
+   * rule the code stopped following.
+   */
+  const waiting = countWaitingLevelRuns(sorted, pairs);
   const pending = waiting === 0 ? ''
-    : ` ${waiting} level ${waiting === 1 ? 'pair has' : 'pairs have'} not met twice yet, so ${waiting === 1 ? 'that one splits' : 'those split'} on goal difference for now.`;
+    : ` ${waiting} level ${waiting === 1 ? 'group has games' : 'groups have games'} still to play between them, so ${waiting === 1 ? 'it splits' : 'they split'} on goal difference for now.`;
   switch (rule) {
     case 'h2h':
       return `Level on points splits on head to head (points, then goals, between the clubs) once both games have been played, then overall goal difference, then goals scored.${pending}`;
