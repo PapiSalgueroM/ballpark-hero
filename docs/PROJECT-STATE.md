@@ -1714,6 +1714,69 @@ purge. Awards is still unbuilt. See the roadmap below.
 
 ---
 
+## Rounds 515 to 517: draft night, a row that did not fit a phone, and a window nothing held
+
+### Round 515: draft night, so the picks you never saw actually happen
+
+His 2026-08-28 list, twice over: "More animation across every sim: reveals, draft nights,
+celebrations. Reading text is not a game feel", and "Draft nights and college signing days as one
+by one reveal animations, the 2K way."
+
+What the four front offices did before this: you tapped a prospect, five or six rival picks
+resolved inside the same synchronous handler, and the board simply got shorter. Every one of
+those was a real decision the engine made, applied and then thrown away, and the player never saw
+one happen. They are captured now and land one at a time on a shared card, all four sports off one
+component and one pure module.
+
+Three things it is built not to do. It does not INVENT: a reveal is a screen that states facts,
+and one showing a player joining a club he did not join is a fabricated fact rendered as though
+the engine decided it, so the harness holds that the steps are a permutation of the picks that
+actually happened and that the grade shown is the SCOUTED one rather than the true rating. It does
+not BLOCK: the card sits above a board that stays usable, because playGames reads a screen it
+cannot act on as dead, and both walked routes came back 14 interactions clean. And it does not
+VANISH for reduced motion: every row starts at opacity 0, so cancelling the animation would have
+hidden the whole pick list, and the rules end on their final frame instead, which is Round 423's
+rule in Celebration.tsx.
+
+One threshold moved before it shipped: the step was 520ms, putting a nine pick run at 4,860ms
+against the harness's own 5,000ms ceiling. Three percent of headroom is a coin toss, so the step
+is 400ms and the capped run 3,780ms.
+
+### Round 516: your own club was the one row in the table that did not fit a phone
+
+An open bug with a note saying to measure at 390 before touching the template again. Measured
+first, and the measurement changed the fix.
+
+The column is not too narrow. Across 126 real club names from eight leagues the longest,
+"Deportivo La Coruna", needs 110px of the 125px column, so there is 15px in hand. What did not fit
+was the star and its trailing space put in front of YOUR club before a ball is kicked, which
+pushed that name to 137px. The star moves into the POSITION cell, which shows a meaningless dot in
+pre-season and was sitting there doing nothing.
+
+Four clubs, not one. The review found a single clipping club because it looked at one league.
+
+Two measurement bugs of my own, both worth naming because they would have shipped false
+reassurance. `scrollWidth` cannot measure slack on a truncating element: it returns the client
+width whenever the text fits, so every name reported zero room and the first summary line claimed
+the column had NO margin. And the intrinsic probe has to carry the cell's COMPUTED font, because
+the row sets `text-xs` on the grid container and a probe appended to the body renders at 16px and
+overstates every name by a third.
+
+### Round 517: the long league's January window gets a floor
+
+An open bug saying the Championship's window "is printed and not held". Reading it before fixing
+it shrank the fix. The 15 days is correct and deliberate (Round 466 leaves a league that reaches
+January on its own where the round count puts it). The window's MONTH was already held for every
+league, and the January DEADLINE drift was already held for every league. A month check for the
+long league, which is what I wrote first, duplicated a line eleven rows further up and was taken
+back out.
+
+What genuinely had no floor is the middle: the open could have drifted to the END of January
+without tripping anything. Bounded at 22 days against a measured 15 that is deterministic rather
+than sampled.
+
+---
+
 ## Round 514: Club Manager start options, and a slider that is not allowed to switch off the haggle
 
 His 2026-08-28 list, verbatim: "Start options: display currency, international job offers on or
