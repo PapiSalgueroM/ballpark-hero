@@ -181,8 +181,31 @@ console.log('3b) A benched man reads as benched, measured over a run of them');
   const CONTROL = process.env.SIM_ROLES_CONTROL || '';
   if (CONTROL && CONTROL !== 'benchplays') { console.error(`SIM_ROLES_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
   const REPS = 25;
-  const MEAN_CEILING = 0.35;   // measured worst batch 0.172
-  const OVER_HALF_CEILING = 0.30; // measured worst batch 0.080
+  /*
+   * Round 519: both ceilings re-derived, because the first pair sat INSIDE
+   * their own distribution and this section failed on correct code.
+   *
+   * The comments here used to read "measured worst batch 0.172" and "0.080".
+   * Neither survives repetition. Measured 2026-09-09 over 20 batches of these
+   * same 25 scenarios, on an engine nothing had touched in this area:
+   *
+   *   meanShare  min 0.252  median 0.316  max 0.364
+   *   overHalf   min 4%     median 12%    max 20%
+   *
+   * So the old mean ceiling of 0.35 sat between the median and the max and went
+   * red roughly one run in twenty, which is Round 284's coin toss dressed as a
+   * rule; it duly fired in the 2026-09-09 suite at 0.356. The old 0.30 on
+   * overHalf is about three standard deviations over its own mean and would
+   * have followed eventually.
+   *
+   * Nothing is being weakened to get green. What these guard against is a
+   * benched man getting a starter's football, and a starter measures 1.000 in
+   * every batch (starterFloor below never moved off it), so the broken value is
+   * near 1 and the healthy one near 0.32. The new ceilings sit above everything
+   * ever measured and still leave the real failure a long way outside.
+   */
+  const MEAN_CEILING = 0.55;   // measured max 0.364 over 20 batches; a benched man playing like a starter reads 1.0
+  const OVER_HALF_CEILING = 0.50; // measured max 20% over 20 batches; the broken shape is ~100%
   const shares = [];
   let starterFloor = 1;
   for (let rep = 0; rep < REPS; rep += 1) {
