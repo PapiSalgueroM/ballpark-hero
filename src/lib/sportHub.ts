@@ -64,6 +64,8 @@ export interface SportHub {
   startHere?: { path: string; label: string; why: string }[];
   /** context about the sport itself, useful even if no game existed here */
   reference?: string;
+  /** Round 520: reference pages under the paragraph above, each with a reason to open it */
+  referenceLinks?: { path: string; label: string; why: string }[];
   /** questions a visitor to THIS section would really ask */
   hubFaqs?: { q: string; a: string }[];
 
@@ -100,6 +102,9 @@ export const SPORT_HUBS: SportHub[] = [
     ],
     reference:
       'Almost everything in this section runs on the transfer market, so it is worth knowing how that actually works. European clubs register new signings during two windows, a long one across the summer and a short one in January, and the main exception is a player already out of contract, who can generally be signed and registered outside them. That exception traces back to the Bosman ruling in 1995, which established freedom of movement for out-of-contract players inside the EU, and the principle that an expired contract means a move without a fee was carried into the transfer regulations that followed. It is why a club would rather sell someone with a year left than lose him for nothing. The fee is also only half the cost: it goes to the selling club as a one-time cost rather than a recurring one, often spread across instalments over several years, while wages are paid every week for the length of the deal and often add up to more. And the published numbers are estimates. Fees frequently go undisclosed and add-ons sit inside the headline figure. Neymar\'s 222 million euro move from Barcelona to Paris Saint-Germain in 2017 is the one everybody quotes, and as of August 2026 nobody had gone past it.',
+    referenceLinks: [
+      { path: '/champions-league-format-history', label: 'Champions League format history', why: 'every shape the competition has taken since 1955, with the sources for each, and what each Club Manager era actually plays' },
+    ],
     hubFaqs: [
       { q: 'Do I need to follow more than the Premier League?', a: 'No, but the further you look the more of this opens up. The guessing games lean on players who moved around the big European leagues, so if the Premier League is your limit you will still recognise most of them. Club Manager is the one that rewards breadth, since it reaches a long way past the big five and you can sit in whichever league you actually watch. If a puzzle throws up a name you have never heard of, there is another one along in a second.' },
       { q: 'How up to date are the players and the values?', a: 'Squads and valuations come from real data that gets refreshed in batches rather than live, so in the days after a big move a player can still be sitting at his old club. The historical games are out of date on purpose: Club Manager lets you start in a real past season, and Player Stock Market buys you in at that year\'s real prices, which is the whole point of it.' },

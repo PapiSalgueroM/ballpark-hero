@@ -139,6 +139,15 @@ const Records = () => {
         ))}
       </section>
 
+      {/* Round 520: the explainers sit beside the tables, because a reader who
+          wants to know who won also tends to want to know how. */}
+      <div className="mt-10 text-sm text-muted-foreground leading-relaxed space-y-2">
+        <h2 className="text-lg font-semibold text-foreground">How the competitions work</h2>
+        <p>
+          <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">Champions League format history</Link>
+          : every shape the European Cup and the Champions League have taken since 1955, season by season, each checked against two sources.
+        </p>
+      </div>
       <div className="mt-10 text-sm text-muted-foreground leading-relaxed space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Where this comes from</h2>
         <p>

@@ -42,6 +42,12 @@ const STATIC_TYPES: Record<string, string> = {
   '/terms': 'WebPage',
   '/accessibility': 'WebPage',
   '/records': 'CollectionPage',
+  /* Round 520: a reference explainer. Not a Game and not a list of other
+     pages. Not an Article either: the generic emitter below carries none of
+     the fields Google reads an Article by (headline, author, dates, image),
+     so that type would claim a rich result the page cannot back up. WebPage
+     is true and claims nothing, which is the rule this table runs on. */
+  '/champions-league-format-history': 'WebPage',
   '/leaderboard': 'WebPage',
   '/whats-new': 'CollectionPage',
   '/soccer': 'CollectionPage',

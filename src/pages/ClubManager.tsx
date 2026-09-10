@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -371,6 +372,11 @@ const ClubManager = () => {
               seasons are built from real market data records, real squads with their real ages and values from those
               years, not recreations. 2005-06 is as far back as the records honestly reach, so there is no 2000 era and
               there will not be an invented one. No made up name ever appears on a teamsheet unmarked.
+            </p>
+            {/* Round 520: the competition's real format, season by season, one tap
+                from the era you are about to pick. */}
+            <p className="text-[10px] text-center mt-1">
+              <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] px-2 text-primary hover:underline">How the real Champions League format changed, and what each era here plays</Link>
             </p>
           </div>
         )}

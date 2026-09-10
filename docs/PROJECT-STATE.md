@@ -3408,14 +3408,30 @@ matching `option_*_emoji` fields, and `option_*_flag` (a country name only when 
 a country, otherwise empty string). Three rows per day. Replace any pre-stocked generic rows for
 today rather than adding alongside them. Every new poll must obey all of these rules:
 
-- Exactly two choices, A and B. C and D must be empty.
-- The choices name the two participants. The question does not bury their names in a sentence.
-- A team matchup asks exactly `Who you got?`.
-- A player matchup asks exactly `Who ranks higher all time?`.
-- Every row is one named participant versus one named participant.
+**Rewritten 2026-09-10 on the owner's words that day: "your polls are extremely dull u should
+add more character like u used to make them." The Round 509 rulebook (exactly two choices,
+two fixed prompts) is withdrawn. These rules replace it, and they carry his 2026-08-16 rule
+about corny answers unchanged, because that one was about the CHOICES, not the question.**
+
+- THE QUESTION HAS CHARACTER. It is specific to the matchup or the moment: a scenario ("two
+  minutes left in a Super Bowl, who is your quarterback?"), a hook from the day's news, a
+  hot take put to a vote. One sentence, ends in a question mark, under about 100 characters,
+  and reads like a friend asking, not a form. Never the same bare prompt on every row: the
+  fixed strings `Who you got?` and `Who ranks higher all time?` are fine once in a while
+  and dull as a rule, and the home page harness fails a fallback pool that leans on them.
+- THE CHOICES STAY SHORT. His 2026-08-16 rule stands word for word: a choice is a name, a
+  team, Yes or No, at most three words, never a sentence, never a joke option. The question
+  carries the character; the buttons carry the answer.
+- Two, three or four choices. Two for a straight head to head, three when a draw or a third
+  club is a real answer, four for a field (a title race, a draw of four). Empty C and D when
+  unused.
+- Every choice is a real thing a person can pick: a named player, a team, a country, a
+  result, Yes or No. No "someone else" padding unless the field is genuinely open.
+- Facts in the question must be true on the day it runs (a score, a fixture, an injury). If
+  unsure, ask an opinion instead of stating a fact. Never put words in a real person's mouth.
+- No em or en dashes anywhere. No rival product names.
 - Do not repeat a matchup anywhere in the stocked window, including the reverse order.
-- Do not write weird or brittle comparison wording, especially an exact game count such as 121.
-  Public marketing counts use a rounded label such as `120+`.
+- No exact marketing counts in copy (`120+`, never 121).
 
 ---
 

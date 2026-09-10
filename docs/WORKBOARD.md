@@ -19,8 +19,8 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 520 (513 to 519 claimed by the Claude Code lane; checked against origin/main on
-  2026-09-08). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 522 (513 to 521 claimed by the Claude Code lane; checked against origin/main on
+  2026-09-10). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
 
   **WHAT IS ACTUALLY ON origin/main, and a correction worth reading before you repeat my
@@ -465,6 +465,50 @@ Four things, in the order they can hurt you.
   recommendation is 150px from gameplay controls. Address this while working in the claimed
   Club Manager files, then rerun the placement harness. The rest of the site-side AdSense audit
   is clean; Google still makes the approval decision.
+
+  **520 CHAMPIONS LEAGUE FORMAT HISTORY, THE FIRST REFERENCE EXPLAINER, CLAIMED 2026-09-10.**
+  The owner sent the AdSense console again on 2026-09-10 and it shows the same "Low value
+  content" policy card with Request review available, so the 2026-09-02 submission did not
+  clear it. The 2026-08-30 addendum's answer to that is section 4 (a real reference layer:
+  "Champions League format history", "league format explainers", "historical competition
+  structures") and section 9 ("a Club Manager player should reach league rules, competition
+  history and format explanations"). This is one page, done properly, not a batch: a
+  timeline of the competition's structure from 1955-56 to the 36 club league phase, every
+  period two source verified (Wikipedia's season pages against RSSSF's results archive, with
+  UEFA's own pages for the 2024 format and the away goals rule), with the sources and the
+  verification date printed on the page (section 16), and a second block, computed from the
+  engine's own helpers (eraUclHasR16, uclLegsFor, uclAwayGoalsApply, uclFirstKoRound), saying
+  what each Club Manager start actually plays and where it is a stand in (the modern save
+  plays eight groups into the quarter-finals, not the league phase, and says so). A harness
+  holds the typed timeline against the engine so the two can never disagree silently, and
+  against contiguity and the two source rule. Linked from the soccer hub's background block,
+  the Club Manager era picker, the group card and the Record Books.
+  FILE AREA: new `src/lib/uclFormatHistory.ts`, new `src/pages/ChampionsLeagueFormatHistory.tsx`,
+  new `scripts/simUclFormatHistory.mjs`; one line each in `src/App.tsx`, `scripts/genSitemap.mjs`,
+  `src/lib/pageSchema.ts`, `scripts/simIndexNow.mjs` (floor 140 to 141), `src/lib/sportHub.ts`,
+  `src/pages/SportHub.tsx`, `src/pages/Records.tsx`, `src/pages/ClubManager.tsx`,
+  `src/components/club-manager/UclGroupsCard.tsx`; exported constants in `src/lib/clubManager.ts`.
+
+  **521 THE POLLS GET THEIR CHARACTER BACK, CLAIMED 2026-09-10.** His words, sent while the
+  Round 520 build was running: "btw your polls are extremely dull u should add more character
+  like u used to make them". What he is looking at, measured in the table: the polls routine
+  still writes topical questions ("Niners vs Rams in Australia tonight. Who wins?", "Should
+  the NFL keep taking big games overseas?"), and Round 509's component REWRITES every database
+  question to one of two strings before it reaches the screen, so today's home page reads "Who
+  ranks higher all time?" over 49ers and Rams, and over Go global and Keep them home. The 46
+  stocked rows from 2026-09-13 to 2026-10-05 carry those two strings in the table as well.
+  THE FIX, three parts. (1) The component renders the database question as written and two to
+  four choices again (poll_votes already accepts a to d, checked live). (2) A fail closed data
+  migration gives each of the 46 canned rows a real question for its matchup, choices untouched
+  so no vote orphans, and shortens three routine-written choices to his three word rule. (3)
+  The polls routine's rulebook in docs/PROJECT-STATE.md is rewritten: character in the
+  question, his 2026-08-16 rule on the choices kept word for word. The fallback fixtures get
+  their pre-509 questions back with short choices, and the harness holds the new contract with
+  four controls, one of them "every prompt is the same string", which is the dullness he named.
+  FILE AREA: `src/components/home/PollOfTheDay.tsx` and its test, `src/data/pollFixtures.ts`
+  and its test, `scripts/simPollHeadToHead.mjs` replaced by `scripts/simPollCharacter.mjs`,
+  `supabase/migrations/20260910190000_polls_with_character.sql`, the polls rules block in
+  `docs/PROJECT-STATE.md`.
 
   **NEW OWNER REQUEST FOR THE CLUB MANAGER LANE, 2026-09-07.** Add first and second legs to
   Champions League knockout ties whenever that season's real format uses two legs. Also design
@@ -1166,6 +1210,69 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 - (Historical) Rounds 503 and 504 are merged on origin/main at `7af40013` but are not in the
   live deployment checked above. Round 509 is merged locally with both and remains on its Codex
   branch until the combined gates, PR and merge finish.
+
+## Note for the tablet lane, written 2026-09-10 by the desktop session
+
+Anthony told me directly there is another Claude on a tablet working this repo
+right now, and asked us to divide up the work. Read this before claiming
+anything so we do not collide.
+
+**What I am building tonight, already claimed above with round numbers 520 and
+521 (Champions League format history reference page, and the polls getting
+their character back per his own words "your polls are extremely dull").
+Please do not touch these files while I finish: `src/lib/uclFormatHistory.ts`,
+`src/lib/uclFormatHistoryEngine.ts`, `src/pages/ChampionsLeagueFormatHistory.tsx`,
+`scripts/genUclEngineShapes.mjs`, `scripts/simUclFormatHistory.mjs`,
+`src/data/uclEngineShapes.json`, `src/components/home/PollOfTheDay.tsx` and its
+test, `src/data/pollFixtures.ts` and its test, `scripts/simPollCharacter.mjs`.
+Both are gated and ready to publish; I will push and update this section the
+moment that happens.**
+
+**A branch archaeology pass he prompted with "I remember there were a couple
+files that werent done or not published", so I checked every unmerged branch
+on origin against current main. Short version: nothing recent is missing, but
+the debris is worth knowing about so nobody loses time re-discovering it or,
+worse, resurrects a regression by accident.**
+
+- `claude/hopeful-herschel-e8bcee` (diverged 2026-09-06, 4 commits, never
+  merged): a fix for the daily record collapsing to the last guess instead of
+  every guess, and a stray timer surviving unmount ("window is not defined").
+  **Already shipped, independently rebuilt, as Round 503** (`a1a162e6`,
+  `scripts/simDailyRecord.mjs`). The branch's own version is 99% identical.
+  Nothing lost. Safe to delete.
+- `claude/workboard-docs-xs54oc` (diverged 2026-08-30, 17 commits, never
+  merged): a full Soccer Conquest build, world map and all.
+  **Already shipped, independently rebuilt, as Round 459** (`/soccer-conquest`
+  is live, `addedOn: '2026-09-05'` in the registry). Nothing lost. Safe to
+  delete.
+- `claude/debug-previous-session-nyn00u` (diverged 2026-08-29, last commit
+  2026-08-30, "Round 351: the promises audit"): **do not merge this one.** It
+  predates Round 438's trophy math fix in Idle Arena and would revert it: the
+  branch's copy still reads "four trophies at 4M, nine at 9M" where the fixed,
+  live text (correctly, from `trophiesFor = floor(sqrt(earned/1M))`) reads
+  "two trophies at 4M, three at 9M". Whatever else is in this branch (light
+  mode wiring across 19 pages, help="none" on Idle Arena's navbar) may be real
+  and unshipped, but it needs a clean read against current main rather than a
+  merge, because the file is stale enough to carry a known-wrong number back
+  in. Flagging rather than fixing since I did not build it and do not know
+  what else moved underneath it.
+- `claude/board-claim-arc-four`, `claude/board-publish-handoff`,
+  `claude/pipeline-docs-handover`, `claude/project-state-review-qbim85`,
+  `claude/scheduled-tasks-docs`, `claude/ballpark-hero-code-lane-sa1p6b`: all
+  from August, all pure doc edits (WORKBOARD.md, CLAUDE.md, PROJECT-STATE.md,
+  SHIP-PIPELINE.md) fully superseded by everything since. Safe to delete.
+- The whole `codex/round-509` through `codex/round-541` series and the
+  `origin/claude/round-29X` through `round-356` series are OpenAI Codex's own
+  lane and an older cloud-session naming scheme respectively, both well
+  outside what either of us should touch without Anthony's say-so; noted here
+  only so nobody mistakes their unmerged state for something urgent. Round 509
+  of that series IS merged (`1ecc00eb`); 510 and up are not, and that is the
+  Codex lane's own backlog to clear, not ours.
+
+None of the above changed any file. If you want the stale branches gone,
+`git push origin --delete <name>` is safe for every one marked "safe to
+delete" above; I am leaving that action for you or for Anthony rather than
+doing it from here mid round.
 
 ## Inbox (unclaimed)
 
