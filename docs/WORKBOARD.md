@@ -39,6 +39,30 @@ How it works:
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
+## Claude Code lane, CLAIMED 2026-09-10: Rounds 520 and 521, next: Round 522 (Claude Code lane)
+
+Picked off the reconciled 2026-08-28 backlog table in `docs/PROJECT-STATE.md` (both rows PART,
+neither blocked on an owner decision or a pending deploy), per his standing "whatever u think
+should be next" instruction. This lane is a fresh claude.ai/code session on
+`claude/douknowbll-spec-work-c3zcci`, starting from `origin/main` at `05a6a731` (Round 519,
+live). No other session is running against this repo right now (checked via session listing);
+if the desktop or another cloud lane picks up work while this is in flight, this claim is the
+signal, same as always: pull before you start, pull before you push.
+
+- **520: a draft mode game per sport.** Closes "NEW a draft mode game per sport | PART |
+  Gauntlet Draft and Fantasy Draft; not yet one per sport." Built on the shared draft engine
+  per the "one engine, many sports" rule: data and events differ per sport, the loop does not.
+- **521: Soccer Career's interactive rivalry events and inbox, lifted into a shared module and
+  bound to the NFL career.** Closes the open half of "Bring the Soccer Career depth to the NFL
+  career, then the other US careers | PART | ... still open: interactive rivalry events, an
+  inbox," extending the Round 469/470 pattern (careerMoney, careerSocial, careerBadges already
+  shared).
+- **522 reserved for an adversarial review pass on 520 and 521 before either ships**, the same
+  shape Round 519 ran against 515 to 518: independent lenses trying to break the diff, findings
+  fixed before merge, not after.
+
+NEXT FREE NUMBER after this claim: 523.
+
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 
 Four things, in the order they can hurt you.
