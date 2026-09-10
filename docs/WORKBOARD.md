@@ -19,9 +19,11 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 522 (513 to 521 claimed by the Claude Code lane; checked against origin/main on
-  2026-09-10). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
-  both claims below.
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 525 (513 to 519 shipped; 520 and 521 taken
+  twice, once by the desktop lane for real work now shipped and once by the tablet lane before
+  it saw that claim, renumbered to 522 to 524, see the tablet lane's own claim block below for
+  the full account). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512,
+  see both claims below.
 
   **WHAT IS ACTUALLY ON origin/main, and a correction worth reading before you repeat my
   mistake.** main contains every round through 505 AND Round 509, verified with
@@ -39,29 +41,61 @@ How it works:
   completions table sweep and the site wide audit) while 475 to 479 were already scripted
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
-## Claude Code lane, CLAIMED 2026-09-10: Rounds 520 and 521, next: Round 522 (Claude Code lane)
+## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
+
+Original claim (below, unedited) used 520 and 521, picked before this branch had seen the
+desktop lane's own same-day claim on those same two numbers (Champions League format history
+and the polls character rewrite, see "Note for the tablet lane" further down, and its own
+change log entries under 520 and 521). Anthony told the desktop session directly that a tablet
+session (this one) was also working and to divide up the work; this branch only saw that after
+building was already in flight. No file collision: the desktop lane's claim names the exact
+files it touched (`uclFormatHistory*`, `ChampionsLeagueFormatHistory.tsx`, `PollOfTheDay.*`,
+`pollFixtures.*`, `simPollCharacter.mjs`, `simUclFormatHistory.mjs`, `genUclEngineShapes.mjs`,
+`uclEngineShapes.json`) and none of them overlap with this lane's files below. Only the ROUND
+NUMBER labels collided, same shape as the historical 311/313 collision this file's own header
+warns about. Fixing it here rather than after the fact: this lane's two builds are **522** and
+**523**, the review that was **522** is now **524**. `origin/main` was merged into this branch
+at the desktop lane's `26b438ee` before any of this lane's code lands, so the final push will
+sit cleanly on top of both Round 520 and Round 521 as they actually shipped.
+
+There is also a THIRD unrelated claim on the number 520: the Codex lane pushed
+`codex/round-520-dependency-safety`, unmerged. Not a file collision either (different lane,
+different branch), just one more reason the number itself was never reliable here; noted so
+nobody spends time reconciling it as if it were live content.
+
+Files this lane is touching, so nobody else collides with THESE: `src/lib/gauntletDraft.ts`,
+new `src/lib/gauntletEngine.ts`, new NBA/NFL gauntlet draft pages and libs, `src/App.tsx` (two
+new lazy routes), `src/data/gameRegistry.ts` (two new GameDef entries), `src/data/gameContent/`
+(two new SEO entries), new `scripts/simGauntletEngine.mjs`; and separately
+`src/lib/soccerCareerEngine.ts` (rivalry event and phone/inbox extraction only), new
+`src/lib/careerInbox.ts`, new `src/lib/careerRivalryEvents.ts`, new `src/lib/nflCareerInbox.ts`,
+new `src/lib/nflCareerRivalryEvents.ts`, `src/lib/nflCareerLoop.ts`,
+`src/components/nfl-my-career/NflMyCareerBoard.tsx`, `src/components/soccer-career/PhonePanel.tsx`
+(only if a shared sub-component is warranted), new `scripts/simCareerInbox.mjs` and/or
+`scripts/simCareerRivalryEvents.mjs`.
+
+Original claim, numbers corrected in place rather than rewritten, so the reasoning stays intact:
 
 Picked off the reconciled 2026-08-28 backlog table in `docs/PROJECT-STATE.md` (both rows PART,
 neither blocked on an owner decision or a pending deploy), per his standing "whatever u think
 should be next" instruction. This lane is a fresh claude.ai/code session on
 `claude/douknowbll-spec-work-c3zcci`, starting from `origin/main` at `05a6a731` (Round 519,
-live). No other session is running against this repo right now (checked via session listing);
-if the desktop or another cloud lane picks up work while this is in flight, this claim is the
-signal, same as always: pull before you start, pull before you push.
+live).
 
-- **520: a draft mode game per sport.** Closes "NEW a draft mode game per sport | PART |
-  Gauntlet Draft and Fantasy Draft; not yet one per sport." Built on the shared draft engine
-  per the "one engine, many sports" rule: data and events differ per sport, the loop does not.
-- **521: Soccer Career's interactive rivalry events and inbox, lifted into a shared module and
-  bound to the NFL career.** Closes the open half of "Bring the Soccer Career depth to the NFL
-  career, then the other US careers | PART | ... still open: interactive rivalry events, an
-  inbox," extending the Round 469/470 pattern (careerMoney, careerSocial, careerBadges already
-  shared).
-- **522 reserved for an adversarial review pass on 520 and 521 before either ships**, the same
-  shape Round 519 ran against 515 to 518: independent lenses trying to break the diff, findings
-  fixed before merge, not after.
+- **522 (was 520): a draft mode game per sport.** Closes "NEW a draft mode game per sport |
+  PART | Gauntlet Draft and Fantasy Draft; not yet one per sport." Built on the shared draft
+  engine per the "one engine, many sports" rule: data and events differ per sport, the loop
+  does not. Scoped to NBA and NFL this round; NHL and MLB are explicit follow ups.
+- **523 (was 521): Soccer Career's interactive rivalry events and inbox, lifted into a shared
+  module and bound to the NFL career.** Closes the open half of "Bring the Soccer Career depth
+  to the NFL career, then the other US careers | PART | ... still open: interactive rivalry
+  events, an inbox," extending the Round 469/470 pattern (careerMoney, careerSocial,
+  careerBadges already shared).
+- **524 (was 522) reserved for an adversarial review pass on 522 and 523 before either ships**,
+  the same shape Round 519 ran against 515 to 518: independent lenses trying to break the diff,
+  findings fixed before merge, not after.
 
-NEXT FREE NUMBER after this claim: 523.
+NEXT FREE NUMBER after this claim: 525.
 
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 
