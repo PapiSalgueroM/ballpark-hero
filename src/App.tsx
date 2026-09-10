@@ -71,6 +71,8 @@ const TransferPath = lazy(() => import("./pages/TransferPath"));
 const SquadDeal = lazy(() => import("./pages/SquadDeal"));
 const SearchAndDiscard = lazy(() => import("./pages/SearchAndDiscard"));
 const GauntletDraft = lazy(() => import("./pages/GauntletDraft"));
+const NbaGauntletDraft = lazy(() => import("./pages/NbaGauntletDraft"));
+const NflGauntletDraft = lazy(() => import("./pages/NflGauntletDraft"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
 const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
@@ -373,6 +375,8 @@ const AppContent = () => {
         <Route path="/squad-deal" element={<SquadDeal />} />
         <Route path="/search-and-discard" element={<SearchAndDiscard />} />
         <Route path="/gauntlet-draft" element={<GauntletDraft />} />
+        <Route path="/nba-gauntlet-draft" element={<NbaGauntletDraft />} />
+        <Route path="/nfl-gauntlet-draft" element={<NflGauntletDraft />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
         <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
