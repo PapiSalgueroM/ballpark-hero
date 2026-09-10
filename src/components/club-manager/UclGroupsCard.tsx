@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { sortedUclGroup, uclGroupTiebreakFootnote, projectedUclBracket, uclFirstKoRound } from '@/lib/clubManager';
@@ -115,6 +116,10 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
           </p>
         </div>
       )}
+      {/* Round 520: the real format this save is standing in for, or playing. */}
+      <p className="text-[9px] text-muted-foreground px-1">
+        <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] text-primary hover:underline">The real competition's format, season by season, and what this era plays</Link>
+      </p>
     </div>
   );
 }

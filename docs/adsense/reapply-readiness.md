@@ -4,6 +4,19 @@ Asked for by the owner's directive of 2026-08-30, section 19. Written 2026-08-30
 after Rounds 348 to 359. Every number here was measured, and the script that
 measured it is named so it can be re-run. Nothing in this file is an estimate.
 
+**Status update, 2026-09-10: the review did not clear the site.** The owner
+sent the AdSense console again on 2026-09-10. It shows the same "Low value
+content" policy card, with the minimum content and thin content guidelines
+linked and the "I confirm I have fixed the issues" box and Request review
+button available again, which is the state the console returns to after a
+rejection. As before, no page and no reason is named. The date Google decided
+is not visible in the screenshot, so this file records the day the owner
+reported it, not the day it happened. Round 520 is the first response: the
+first reference explainer the 2026-08-30 addendum asked for
+(`/champions-league-format-history`, section 4 and section 9), two source
+verified per season with its sources and verification date printed on the page.
+One page is a start and not a layer; see the verdict.
+
 **Status update, 2026-09-02: Round 400 is live and the AdSense review is
 submitted.** The complete local matrix passed before ship, followed by live
 route-boundary checks and a fresh 29-route Google-render audit. Search Console
@@ -249,7 +262,25 @@ month of growth as a prerequisite to doing the readiness work.
 
 ## Verdict
 
-# SUBMITTED, GOOGLE REVIEW PENDING
+# REJECTED AGAIN, REPORTED 2026-09-10. NOT READY TO REQUEST
+
+The 2026-09-02 request came back as the same "Low value content" finding, per
+the owner's console screenshot of 2026-09-10. Everything below this line is the
+state as it stood at that submission and is kept as the record of what was
+tried. What the second rejection changes: the site side audit (render, thin
+copy, ad delivery, canonical, noindex) has now been clean through two reviews,
+so the remaining lever is the one the addendum named first and the site has
+built least, the reference layer. As of Round 520 that layer is the Record
+Books, the four grid archives, Hall of Champions and one format explainer. Do
+not request another review until the explainers cover more than one competition
+(the addendum lists league formats, playoff systems, draft history, salary caps
+and transfer windows), the hubs link into them, and a Page Indexing report
+taken after those pages ship shows them crawled. The owner submits; this file
+only says when it is worth his click.
+
+## The verdict as it stood at the 2026-09-02 submission
+
+SUBMITTED, GOOGLE REVIEW PENDING
 
 The 2026-08-30 live audit found no measurable thin-content defect, the hub
 weakness it surfaced was fixed and measured, and four genuinely unique archive

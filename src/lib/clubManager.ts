@@ -8419,8 +8419,8 @@ function uclBracketField(state: CareerState, includeMe: boolean): string[] {
  * modern save keeps the shape it has today: eight groups into the
  * quarter-finals.
  */
-const UCL_R16_FIRST_YEAR = 2003;
-const UCL_R16_LAST_YEAR = 2023;
+export const UCL_R16_FIRST_YEAR = 2003;
+export const UCL_R16_LAST_YEAR = 2023;
 export function eraUclHasR16(eraId: string | undefined): boolean {
   if (!eraId || !isHistoricEra(eraId)) return false;
   const year = eraById(eraId).startYear;
@@ -8454,9 +8454,9 @@ export function eraUclHasR16(eraId: string | undefined): boolean {
  */
 
 /** The last season, by its starting year, whose ties used away goals. */
-const UCL_AWAY_GOALS_LAST_YEAR = 2020;
+export const UCL_AWAY_GOALS_LAST_YEAR = 2020;
 /** Two legged knockout ties predate every era this game offers. */
-const UCL_TWO_LEG_FIRST_YEAR = 1955;
+export const UCL_TWO_LEG_FIRST_YEAR = 1955;
 
 /** The starting year of the season this save is playing. */
 function uclSeasonYear(eraId: string | undefined): number {
@@ -8465,8 +8465,9 @@ function uclSeasonYear(eraId: string | undefined): number {
 
 /** How many legs this save's competition plays in a given round. */
 export function uclLegsFor(eraId: string | undefined, round: UclKoRound): 1 | 2 {
-  /* The final has been a single match at a neutral venue for the whole life of
-     the competition, so it is one leg in every era on offer here. */
+  /* The final has been a single match at a venue fixed in advance for the
+     whole life of the competition (now and then a finalist's own ground, Real
+     Madrid's in 1957 for one), so it is one leg in every era on offer here. */
   if (round === 'F') return 1;
   return uclSeasonYear(eraId) >= UCL_TWO_LEG_FIRST_YEAR ? 2 : 1;
 }

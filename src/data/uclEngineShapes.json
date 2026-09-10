@@ -1,0 +1,61 @@
+{
+  "generatedBy": "scripts/genUclEngineShapes.mjs",
+  "shapes": [
+    {
+      "era": {
+        "id": "now",
+        "label": "2026-27",
+        "startYear": 2026,
+        "emoji": "📅"
+      },
+      "firstKo": "QF",
+      "legs": 2,
+      "awayGoals": false,
+      "realId": "league-phase",
+      "matchesReal": false,
+      "line": "Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet."
+    },
+    {
+      "era": {
+        "id": "era2015",
+        "label": "2015-16",
+        "startYear": 2015,
+        "emoji": "🦊"
+      },
+      "firstKo": "R16",
+      "legs": 2,
+      "awayGoals": true,
+      "realId": "eight-groups-r16",
+      "matchesReal": true,
+      "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2015-16 format."
+    },
+    {
+      "era": {
+        "id": "era2010",
+        "label": "2010-11",
+        "startYear": 2010,
+        "emoji": "🕰️"
+      },
+      "firstKo": "R16",
+      "legs": 2,
+      "awayGoals": true,
+      "realId": "eight-groups-r16",
+      "matchesReal": true,
+      "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2010-11 format."
+    },
+    {
+      "era": {
+        "id": "era2005",
+        "label": "2005-06",
+        "startYear": 2005,
+        "emoji": "📼"
+      },
+      "firstKo": "R16",
+      "legs": 2,
+      "awayGoals": true,
+      "realId": "eight-groups-r16",
+      "matchesReal": true,
+      "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2005-06 format."
+    }
+  ]
+}
