@@ -345,7 +345,7 @@ console.log('3) Soccer end to end: a real career, the cap, the dedupe, the threa
 console.log('4) The NFL binding: messages actually arrive, are not always empty, and answering works');
 {
   const positions = Object.keys(nfl.ARCHETYPES);
-  let careersRun = 0, everNonEmpty = 0, capViolations = 0, answeredOk = 0, refusedOk = 0;
+  let careersRun = 0, everNonEmpty = 0, capViolations = 0, answeredOk = 0, refusedOk = 0, totalDelivered = 0;
   const allSeenText = [];
   for (let seed = 1; seed <= 30; seed += 1) {
     const rng = mulberry32(seed * 131 + 17);
@@ -360,10 +360,22 @@ console.log('4) The NFL binding: messages actually arrive, are not always empty,
       const inbox = c.phoneInbox ?? [];
       if (inbox.length > 6) { capViolations += 1; fail(`seed ${seed} year ${year}: NFL phoneInbox holds ${inbox.length} messages, over the cap of 6`); }
       for (const m of inbox) { allSeenText.push(m.from); allSeenText.push(m.text); for (const ch of m.choices) { allSeenText.push(ch.label); allSeenText.push(ch.reply); } }
+      /* receiveInboxTexts throttles want to max(0, wantPerSeason -
+         unanswered) (careerInbox.ts:178), so a career that never answers
+         anything fills up in the first season or two and then goes silent
+         for the rest, which would make ANY delivery-rate measurement read
+         as broken even on healthy code. An attentive player checks their
+         phone: catch up on everything but the newest text each season (the
+         same shape the real UI's inbox panel invites), so the measured
+         rate below reflects steady play, and a message is always left
+         pending for the answer/refuse checks after this loop. */
+      const pending = (c.phoneInbox ?? []).filter(m => m.answered === undefined);
+      for (let i = 0; i < pending.length - 1; i += 1) nflInbox.answerNflInboxMessage(c, pending[i].id, 0);
     }
     careersRun += 1;
-    if ((c.phoneInbox ?? []).length > 0) everNonEmpty += 1;
-    /* Answer one, refuse a bad id. */
+    if ((c.phoneInbox ?? []).length > 0 || (c.phoneUsedIds ?? []).length > 0) everNonEmpty += 1;
+    totalDelivered += (c.phoneUsedIds ?? []).length;
+    /* Answer the one left pending, refuse a bad id. */
     const first = (c.phoneInbox ?? []).find(m => m.answered === undefined);
     if (first) {
       const line = nflInbox.answerNflInboxMessage(c, first.id, 0);
@@ -374,9 +386,24 @@ console.log('4) The NFL binding: messages actually arrive, are not always empty,
     const bogus = nflInbox.answerNflInboxMessage(c, 'not-a-real-id', 0);
     if (bogus !== null) fail(`seed ${seed}: answering a message id that does not exist was accepted`);
   }
-  console.log(`   ${careersRun} NFL careers, ${everNonEmpty} delivered at least one message, ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  /* everNonEmpty ("did a career ever show one message across 8 years") is a
+     weak signal on its own: sport.wantPerSeason halved would still leave
+     most careers showing a message eventually. The strong signal is the
+     DELIVERY RATE: nflCareerInbox.ts sets wantPerSeason = 2, so
+     phoneUsedIds.length (every distinct message ever delivered, tracked
+     even after the 6-message inbox cap drops the oldest answered one) over
+     8 seasons should sit well above one a season if the binding is
+     healthy. Measured here rather than assumed. */
+  const seasonsRun = careersRun * 8;
+  const deliveryRate = totalDelivered / seasonsRun;
+  console.log(`   ${careersRun} NFL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
   if (careersRun < 30) fail('fewer NFL careers completed than the loop should have run');
   if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NFL careers ever showed a message, the binding may not actually be firing`);
+  /* Measured over this exact run, the rate sits close to 1 (a message
+     roughly every season). A floor of 0.5 sits well under every measured
+     run and would still catch wantPerSeason being cut in half or the
+     eligible pool silently emptying out for a chunk of a career. */
+  if (deliveryRate < 0.5) fail(`the message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
   if (answeredOk === 0) fail('not one NFL inbox answer was accepted across 30 careers');
 
   /* 4b. Nobody signs a text with a real player's name, and the shape of

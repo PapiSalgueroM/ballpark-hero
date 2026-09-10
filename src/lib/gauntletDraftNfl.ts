@@ -12,19 +12,22 @@ import { GauntletConfig, FormationLike } from '@/lib/gauntletEngine';
  * position families: QB, RB, WR, TE, OL, DL, LB, DB. Measured on that data
  * (scripts/simGauntletEngine.mjs prints the numbers), the four skill
  * positions span a real 66 to 97 rating range each, the same order of
- * spread soccer's pool offers a slot. OL, DL, LB and LINEBACKER/DB by
- * contrast sit in a visibly narrower band (OL alone is 80 to 90, ten points
- * wide against the skill positions' thirty one), because the data file's
- * own header says defensive and line ratings lean on draft position and
- * years played rather than the counting stats the skill ratings are built
- * on. A gauntlet pick that is not a real choice is the exact failure mode
- * CLAUDE.md's sim rules warn against ("never assert on a max", "measure the
- * strongest signal"), so this draft is scoped to the four skill positions
- * only: one quarterback, two running backs, three receivers, one tight
- * end, seven slots, not eleven. Extending it to a genuine offensive line
- * read (today's OL field is only the top two linemen a team, not a full
- * five man front) is future scope, noted in the round report rather than
- * faked here.
+ * spread soccer's pool offers a slot. The data file's own header says every
+ * one of the other four families leans on draft position and years played
+ * rather than the counting stats the skill ratings are built on, and for OL
+ * specifically that shows up as a visibly narrower band too (80 to 90, ten
+ * points wide against the skill positions' thirty one); DL, LB and DB
+ * measure a spread close to the skill positions' own (roughly 66 to 95
+ * each), so the real reason those four sit out is the proxy rating itself,
+ * not a universally narrow band. A gauntlet pick that is not a real choice
+ * is the exact failure mode CLAUDE.md's sim rules warn against ("never
+ * assert on a max", "measure the strongest signal"), so this draft is
+ * scoped to the four skill positions only: one quarterback, two running
+ * backs, three receivers, one tight end, seven slots, not eleven. Extending
+ * it to the other four families needs ratings built on something sturdier
+ * than draft position and tenure first; today's OL field is also only the
+ * top two linemen a team, not a full five man front. Future scope, noted in
+ * the round report rather than faked here.
  */
 
 export interface NflGauntletPlayer {

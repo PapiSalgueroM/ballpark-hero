@@ -105,7 +105,7 @@ export default function NflGauntletDraft() {
 
   const matchLine = (m: GauntletRun['matches'][number]) =>
     `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` +
-    (m.wonOnPens !== null ? (m.wonOnPens ? ', won in overtime' : ', lost in overtime') : '');
+    (m.wonOnPens !== null ? (m.wonOnPens ? ', won in a shootout' : ', lost in a shootout') : '');
 
   return (
     <>

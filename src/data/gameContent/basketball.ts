@@ -477,7 +477,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Survive a round for 16 points; lift the trophy for exactly 100.",
     ],
     rules: [
-      "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 67 names across every era; every opponent club is invented on purpose.",
+      "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
       "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
       "No player is dealt twice in one draft.",
       "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to extra time and then a shootout, and replaying the same lineup replays the same cup.",

@@ -8,7 +8,7 @@ import { GauntletConfig, FormationLike } from '@/lib/gauntletEngine';
  * for the original soccer game this genericizes).
  *
  * The pool and the starting five shape are NOT new: both come straight off
- * src/data/nbaPerfectLineupPool.ts, the same 67 player curated pool and the
+ * src/data/nbaPerfectLineupPool.ts, the same 66 player curated pool and the
  * same five slot PG/SG/SF/PF/C shape (with the same cross position fit,
  * e.g. an SG slot also takes a PG or an SF) that Perfect Lineup: NBA already
  * plays and the owner already signed off on. Nothing here re-derives a
@@ -33,7 +33,7 @@ const NBA_FORMATION: FormationLike = {
    always-worst-card five around 87. Against this ladder that lands the
    best five 3.3 rounds cleared and the trophy about 1 run in 10, the worst
    five under 1 round cleared and the trophy effectively never; NBA's own
-   pool is a curated legends list (84 to 99 rating, a 67 player pool, not the
+   pool is a curated legends list (84 to 99 rating, a 66 player pool, not the
    thousands soccer draws from), so the ladder sits inside that narrower
    85 to 101 band rather than soccer's wider 70 to 89, and reaches slightly
    past the best five's own ceiling the same way soccer's final round (89)

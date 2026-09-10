@@ -542,7 +542,14 @@ export default function NflMyCareerBoard() {
   if (career.pendingRivalryEvent) {
     return (
       <div ref={revealRef}>
-        <RivalryEventCard event={career.pendingRivalryEvent} onContinue={dismissRivalry} />
+        <RivalryEventCard
+          event={career.pendingRivalryEvent}
+          onContinue={dismissRivalry}
+          headToHead={career.rival ? {
+            myName: career.name, myRating: career.ovr,
+            rivalName: career.rival.name, rivalRating: career.rival.ovr,
+          } : undefined}
+        />
       </div>
     );
   }

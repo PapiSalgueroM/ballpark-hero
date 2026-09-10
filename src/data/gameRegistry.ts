@@ -197,7 +197,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/conquest-nba', label: 'NBA Conquest', emoji: '🗺️', description: 'Imperialism mode: winners annex whole empires until one team rules the map', daily: true, addedOn: '2026-03-14' },
       { path: '/nba-front-office', label: 'NBA Front Office', emoji: '🏢', description: 'Full GM sim: cap, trades, the play-in, best-of-7 wars, dynasties', addedOn: '2026-08-11', featured: true },
       { path: '/nba-my-career', label: 'NBA My Career', emoji: '🌟', description: 'Draft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call', addedOn: '2026-08-11', featured: true },
-      { path: '/nba-gauntlet-draft', label: 'Gauntlet Draft: NBA', emoji: '⚔️', description: 'Pick your five five cards at a time, then survive a five round cup', daily: true, addedOn: '2026-09-10' },
+      { path: '/nba-gauntlet-draft', label: 'Gauntlet Draft: NBA', emoji: '⚔️', description: 'Pick your five, five cards at a time, then survive a five round cup', daily: true, addedOn: '2026-09-10' },
     ],
   },
   {

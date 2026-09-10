@@ -1,5 +1,92 @@
 # Project state
 
+## Built 2026-09-10, PR open, not yet merged: Rounds 522 to 524, a draft mode per sport and the rivalry/inbox lift to NFL
+
+**Not live yet.** Built and pushed to `claude/douknowbll-spec-work-c3zcci` from `origin/main` at
+`26b438ee` (Round 521, the desktop lane's Champions League format history page and polls
+rewrite, both already merged). A PR is open; nothing here reaches `main` or douknowball.com
+until it merges and `deploy_project` is called afterward.
+
+**The round-number collision, so the next reader does not re-diagnose it.** This lane and the
+desktop lane both claimed 520 and 521 the same day for unrelated work; see
+`docs/WORKBOARD.md`'s "Claude Code (tablet) lane" section for the full account. This lane's two
+builds were renumbered to 522 and 523, its review to 524, before any of it merged, so the
+numbers below are final, not a relabeling still to happen.
+
+### Round 522: a draft mode game per sport, Gauntlet Draft genericized and bound to NBA and NFL
+
+Closes the backlog row "NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy
+Draft; not yet one per sport." `src/lib/gauntletEngine.ts` is the new generic engine (a
+`GauntletConfig<P>` carrying a pool, accessor functions, formations and a ladder, mirroring
+`perfectLineupEngine.ts`'s shape), and `src/lib/gauntletDraft.ts` is now a thin soccer descriptor
+over it, byte identical to the pre-refactor game (proven over 300 seeded drafts and 150 gauntlet
+runs). Two new routes on the same engine: `/nba-gauntlet-draft` (the existing Perfect Lineup: NBA
+66 player pool, five slot PG/SG/SF/PF/C shape) and `/nfl-gauntlet-draft` (the real 2026 roster
+data, scoped honestly to the four skill positions whose ratings are built from production stats,
+QB/RB/WR/TE, seven slots, not forced to eleven; OL/DL/LB/DB stay out because their ratings lean
+on draft position and years played, a different reason than a narrow rating band, corrected from
+an overstated first draft of that comment). NHL and MLB are explicit follow-up rounds, not
+started. `scripts/simGauntletEngine.mjs` is the new harness (five sections, two negative
+controls); `scripts/simGauntletDraft.mjs`'s existing controls were repointed at the engine and
+re-verified.
+
+### Round 523: Soccer Career's rivalry events and phone/inbox, lifted into shared engines and bound to the NFL career
+
+Closes the open half of "Bring the Soccer Career depth to the NFL career, then the other US
+careers | PART | ... still open: interactive rivalry events, an inbox," extending the Round
+469/470 pattern (`careerMoney.ts`, `careerSocial.ts`, `careerBadges.ts` already shared).
+`src/lib/careerInbox.ts` and `src/lib/careerRivalryEvents.ts` are the new generic engines;
+`soccerCareerEngine.ts` now calls through them via `SOCCER_INBOX`/`SOCCER_RIVALRY_EVENTS`
+descriptors with its behavior proven unchanged (1,200 seeded scenario comparisons for the inbox,
+600 fixtures for rivalry events, 0 divergence either way). `src/lib/nflCareerInbox.ts` and
+`src/lib/nflCareerRivalryEvents.ts` bind the NFL career the same way `nflCareerMoney.ts` already
+does, wired into `nflCareerLoop.ts`'s season tick and surfaced in `NflMyCareerBoard.tsx` as an
+inbox panel and a rivalry-event interstitial (the latter now also carrying the same head to head
+VS block the flagship's own card shows, added in the review pass below, since the underlying
+`career.ovr` and `CareerRival.ovr` data was already there and unused).
+
+**The rival name collision guard, the single most important check in this round.** Round 499
+found a generated soccer rival's name could collide with a real footballer and put an invented
+quote in his mouth; this round proves the NFL binding cannot repeat it. `careerRival.ts`'s name
+generator, enumerated in full (576 combinations) and sampled live 6,000 times through the real
+`draftRival` function: zero collisions against a 13,731 name real-player harvest, both ways.
+`RIVALRY_CONTROL=collision` proves the check would actually catch it: splicing "Tom" and "Brady"
+into the generator's own banks makes the harness fail naming him by name, immediately.
+
+### Round 524: the adversarial review of 522 and 523, and what it found
+
+Four independent lenses (correctness/regression, legal exposure and data correctness, harness
+honesty, UX and site convention) against the full diff, each finding independently verified by
+two more agents before counting, the same shape Round 519 ran. Nine findings, nine confirmed,
+zero disqualifying, all fixed before this entry was written:
+
+- A duplicated-word typo in the NBA tile's shipped description ("Pick your five five cards").
+- The NBA pool's own copy and code comment said 67 players; the real curated pool
+  (`nbaPerfectLineupPool.ts`) is 66, matching the site's pre-existing `/perfect-lineup-nba` FAQ.
+- The NFL scope comment overstated why OL/DL/LB/DB sit out: only OL actually has a narrow rating
+  band (80 to 90); DL, LB and DB measure close to the same spread the draft already uses (66 to
+  95). The real reason, corrected to be the primary one: all four lean on draft position and
+  tenure rather than production stats.
+- Two harness assertions in the new career harnesses measured the wrong signal: "did a career
+  ever show one pending item across many seasons" is a binary bar a mechanic weakened five times
+  over could still clear. Both rewritten to measure the actual delivery RATE, with the NFL inbox
+  harness's own play pattern fixed alongside it (it was never answering a message all career,
+  which throttles delivery by the engine's own backlog rule and made the rate read artificially
+  low; an "attentive player" pattern now keeps at most one message unread, the same way a real
+  player would). One rivalry-event floor had no measured basis at all; re-measured over 60 seeds
+  against the engine's actual forced-at-21 rival creation rule.
+- The NFL gauntlet page called the same tiebreak "overtime" in one place and "shootout" in
+  another for the identical match; unified on "shootout" to match its NBA sibling.
+- The shared `RivalryEventCard`'s header comment claimed to match the flagship's own card shape
+  while quietly dropping its head to head VS block; fixed by adding the block (optional prop,
+  degrades cleanly without it) rather than just correcting the comment, since the data was
+  already on hand and several NFL beats are specifically about that numeric gap.
+
+**Gates, this exact tree.** `tsc --noEmit -p tsconfig.app.json`: 0. `npm run build`: clean. All
+four round harnesses green, all negative controls re-verified firing after the fixes.
+`simNoRivalNames`, `simInventedNames`, `simNoInventedQuotes`: all green, the new generated-text
+banks structurally visible to the site's own registry scanner.
+
 ## Live as of 2026-09-09 midday: Rounds 518 and 519, and a review that mostly found my own work
 
 **`origin/main` is `05a6a731` and douknowball.com is serving it.** Deployment

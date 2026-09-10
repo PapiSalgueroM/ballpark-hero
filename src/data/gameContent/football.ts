@@ -451,7 +451,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     ],
     rules: [
       "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
-      "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense sit that generator's rating out to a narrower band, so they stay out of the draft rather than padding it with picks that are not a real choice.",
+      "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice.",
       "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
       "No player is dealt twice in one draft.",
       "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime and then a shootout, and replaying the same seven replays the same cup.",

@@ -43,6 +43,14 @@ How it works:
 
 ## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
 
+**UPDATE, same day: 522 and 523 built, 524's review run and every confirmed finding fixed, all
+gates green on this branch.** tsc zero, build clean, all four round harnesses green with their
+negative controls re-verified after the fixes, `simNoRivalNames`/`simInventedNames`/
+`simNoInventedQuotes` all green. Full account in `docs/PROJECT-STATE.md`'s new head entry. Not
+merged yet: pushing to `claude/douknowbll-spec-work-c3zcci` and opening a PR next, this lane does
+not merge to `main` or call `deploy_project` itself. Whoever merges it should run `build:seo`
+fresh on top of `main` if this branch's own prerendered snapshots have gone stale by then.
+
 Original claim (below, unedited) used 520 and 521, picked before this branch had seen the
 desktop lane's own same-day claim on those same two numbers (Champions League format history
 and the polls character rewrite, see "Note for the tablet lane" further down, and its own

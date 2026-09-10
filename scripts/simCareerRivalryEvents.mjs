@@ -343,7 +343,8 @@ console.log('3) Soccer end to end: a real career, the pending slot, the no-repea
 {
   const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
   let careersWithRival = 0, everPending = 0, dismissedOk = 0, noRepeatOk = 0, sawForcedRetire = 0;
-  for (let seed = 1; seed <= 10; seed += 1) {
+  const SOCCER_SEEDS = 60;
+  for (let seed = 1; seed <= SOCCER_SEEDS; seed += 1) {
     Math.random = mulberry32(seed * 13 + 3);
     let c = soccer.initCareer(`Rivalry ${seed}`, 'England', 'CM', 'modern', flat(58), 78, 2015, soccer.FALLBACK_CLUBS, null, 90);
     Math.random = REAL_RANDOM;
@@ -367,9 +368,17 @@ console.log('3) Soccer end to end: a real career, the pending slot, the no-repea
     if (repeats === 0) noRepeatOk += 1;
     if (applied === 0 && !c.rival) { /* never drafted a rival this run, nothing to check */ }
   }
-  console.log(`   ${careersWithRival} of 10 careers drafted a rival, ${everPending} pending beats seen, ${dismissedOk} dismissed cleanly, ${noRepeatOk} of 10 careers never repeated the last beat back to back, ${sawForcedRetire} saw the forced retirement beat`);
-  if (careersWithRival < 8) fail(`only ${careersWithRival} of 10 careers drafted a rival, which is below what draftRival's own odds should produce over 22 years`);
-  if (everPending === 0) fail('not one pending rivalry beat appeared across 10 careers, so the trigger may not be firing');
+  console.log(`   ${careersWithRival} of ${SOCCER_SEEDS} careers drafted a rival, ${everPending} pending beats seen, ${dismissedOk} dismissed cleanly, ${noRepeatOk} of ${SOCCER_SEEDS} careers never repeated the last beat back to back, ${sawForcedRetire} saw the forced retirement beat`);
+  /* soccerCareerEngine.ts:4816 forces rival creation unconditionally at
+     age === 21 if the 19-20 coin flip has not already created one, so this
+     is not a probabilistic floor, it is close to a determinism check: the
+     only miss is a career that retires before 21, which the engine's own
+     injury and burnout paths make possible but rare. Measured here over 60
+     seeds rather than assumed: 60 of 60 had a rival every run this was
+     checked, so the floor is set one below that measured result, not at a
+     number that felt right (CLAUDE.md's own rule on margins). */
+  if (careersWithRival < SOCCER_SEEDS - 1) fail(`only ${careersWithRival} of ${SOCCER_SEEDS} careers drafted a rival; the forced-at-21 rule should make this near universal`);
+  if (everPending === 0) fail(`not one pending rivalry beat appeared across ${SOCCER_SEEDS} careers, so the trigger may not be firing`);
   if (dismissedOk === 0) fail('not one dismiss actually cleared the pending slot');
   if (noRepeatOk < careersWithRival) fail('a beat repeated back to back, so the no-repeat filter is not holding');
 }
@@ -461,9 +470,25 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     }
     if (sawPendingThisCareer) sawAnyBeat += 1;
   }
-  console.log(`   ${careersWithRival} of 40 NFL careers drafted a rival, ${sawAnyBeat} showed at least one pending beat, ${everPending} pending beats total, ${dismissedOk} dismissed cleanly, ${sawForcedRetire} saw the forced retirement beat`);
+  /* The strongest signal here is not "did a career ever see one pending beat
+     across 14 years" (sawAnyBeat), which a coin flip weakened five times
+     over would still clear: a 0.1 per-season rate still has roughly a 77%
+     chance of firing at least once in 14 tries, so that binary bar would
+     stay green through a five times weaker mechanic. rollRivalryEvent
+     (careerRivalryEvents.ts) rolls a straight 0.5 coin flip every season the
+     rival is alive and the gated pool is non-empty, so the RATE, beats per
+     career-season, is the measurable CLAUDE.md asks for. Measured here
+     rather than assumed: */
+  const seasonsRun = careersWithRival * 14;
+  const rate = everPending / seasonsRun;
+  console.log(`   ${careersWithRival} of 40 NFL careers drafted a rival, ${sawAnyBeat} showed at least one pending beat, ${everPending} pending beats total over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${dismissedOk} dismissed cleanly, ${sawForcedRetire} saw the forced retirement beat`);
   if (careersWithRival < 40) fail(`only ${careersWithRival} of 40 NFL careers had a rival; draftRival runs unconditionally at startCareer so this should be 40`);
-  if (sawAnyBeat < 40 * 0.5) fail(`only ${sawAnyBeat} of 40 careers ever showed a pending beat over 14 seasons, the tick may not be firing often enough to be real`);
+  /* Measured over this exact run: the rate sits close to the raw 0.5 coin
+     flip once the mostly-satisfied gates and the no-repeat filter are
+     accounted for. A floor of 0.30 sits well under every measured run and
+     would still catch the coin flip being weakened by more than a third,
+     which sawAnyBeat's binary bar could not. */
+  if (rate < 0.30) fail(`the pending-beat rate is ${rate.toFixed(3)} per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should`);
   if (dismissedOk === 0) fail('not one NFL dismiss actually cleared the pending slot');
 }
 
