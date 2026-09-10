@@ -125,6 +125,16 @@ const SportHub = ({ route }: { route: string }) => {
               {hub.h1.replace(/ Games( Hub)?$/, '')}, the background
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">{hub.reference}</p>
+            {hub.referenceLinks && hub.referenceLinks.length > 0 && (
+              <ul className="mt-3 space-y-1 text-sm">
+                {hub.referenceLinks.map(r => (
+                  <li key={r.path}>
+                    <Link to={r.path} className="font-semibold text-primary hover:underline">{r.label}</Link>
+                    <span className="text-muted-foreground">: {r.why}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         )}
 

@@ -11,20 +11,26 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
  * - Polls rotate at NOON Eastern (getPollDayET), so match-day polls show up
  *   the day of the match: e.g. the France vs Morocco quarterfinal poll
  *   appears from 12pm ET on matchday until 12pm ET the next day.
- * - Every poll is one head to head with exactly two choices. Older database
- *   rows can still carry option_c or option_d, but the home page ignores them.
+ * - Round 521: the question is shown AS WRITTEN in the table, and a row
+ *   carries two, three or four choices. Round 509 had this component rewrite
+ *   every question to one of two fixed strings and drop C and D, so a
+ *   topical row ("Niners vs Rams in Australia tonight. Who wins?") reached
+ *   the screen as "Who ranks higher all time?" over 49ers and Rams. The
+ *   owner's verdict on 2026-09-10: "extremely dull". The character lives in
+ *   the question; the choices stay short (his 2026-08-16 rule, held by
+ *   scripts/simPollCharacter.mjs).
  * - Real flag IMAGES via FlagImg (option_*_flag holds a country name), not
  *   emoji, Windows renders flag emoji as bare letter codes, which is what
  *   the owner was seeing ("just showing the abbreviation of the flag").
- * - Voting: one row into public.poll_votes (poll_key, choice in a|b),
- *   localStorage anti-repeat guard per poll_key (courtesy, not security).
+ * - Voting: one row into public.poll_votes (poll_key, choice in a|b|c|d, the
+ *   table's own CHECK), localStorage anti-repeat guard per poll_key
+ *   (courtesy, not security).
  * - Fallback: if the poll day has no daily_polls rows, deterministically
- *   pick from the legacy POLLS fixture pool so the section never renders
- *   empty.
+ *   pick from the POLLS fixture pool so the section never renders empty.
  */
 
-type ChoiceKey = 'a' | 'b';
-const CHOICE_KEYS: ChoiceKey[] = ['a', 'b'];
+type ChoiceKey = 'a' | 'b' | 'c' | 'd';
+const CHOICE_KEYS: ChoiceKey[] = ['a', 'b', 'c', 'd'];
 
 interface PollOption {
   choice: ChoiceKey;
@@ -42,10 +48,14 @@ interface PollItem {
 const VOTE_KEY_PREFIX = 'dukb-poll-vote-';
 const FALLBACK_COUNT = 2;
 
+function isChoiceKey(v: unknown): v is ChoiceKey {
+  return typeof v === 'string' && (CHOICE_KEYS as string[]).includes(v);
+}
+
 function readStoredVote(pollKey: string): ChoiceKey | null {
   try {
     const raw = localStorage.getItem(VOTE_KEY_PREFIX + pollKey);
-    return raw === 'a' || raw === 'b' ? raw : null;
+    return isChoiceKey(raw) ? raw : null;
   } catch {
     return null;
   }
@@ -59,20 +69,20 @@ function storeVote(pollKey: string, choice: ChoiceKey): void {
   }
 }
 
-/** Deterministic fallback from the legacy fixture pool (2-option only). */
+/** Deterministic fallback from the fixture pool. */
 function fallbackPolls(dateStr: string): PollItem[] {
   const seed = dateSeed(dateStr);
   const items: PollItem[] = [];
   for (let i = 0; i < FALLBACK_COUNT; i++) {
     const idx = (seed + i * 7919) % POLLS.length;
     const fixture: PollFixture = POLLS[idx];
+    const labels: [ChoiceKey, string | undefined][] = [['a', fixture.a], ['b', fixture.b], ['c', fixture.c], ['d', fixture.d]];
     items.push({
       key: fixture.key,
       question: fixture.prompt,
-      options: [
-        { choice: 'a', label: fixture.a, emoji: '', flag: '' },
-        { choice: 'b', label: fixture.b, emoji: '', flag: '' },
-      ],
+      options: labels
+        .filter((pair): pair is [ChoiceKey, string] => typeof pair[1] === 'string' && pair[1].length > 0)
+        .map(([choice, label]) => ({ choice, label, emoji: '', flag: '' })),
     });
   }
   return items;
@@ -115,11 +125,14 @@ export function PollOfTheDay() {
           };
           push('a', r.option_a, r.option_a_emoji, r.option_a_flag);
           push('b', r.option_b, r.option_b_emoji, r.option_b_flag);
-          const question = r.question === 'Who you got?'
-            ? 'Who you got?'
-            : 'Who ranks higher all time?';
+          push('c', r.option_c, r.option_c_emoji, r.option_c_flag);
+          push('d', r.option_d, r.option_d_emoji, r.option_d_flag);
+          /* The question ships as written. The polls routine owns its
+             wording (the rules live in docs/PROJECT-STATE.md); this
+             component's job is to show it, not to flatten it. */
+          const question = typeof r.question === 'string' ? r.question.trim() : '';
           return { key: r.poll_key as string, question, options };
-        }).filter((p) => p.options.length >= 2);
+        }).filter((p) => p.question.length > 0 && p.options.length >= 2);
 
         setPolls(items.length > 0 ? items : fallbackPolls(pollDay));
       } catch {
@@ -152,7 +165,7 @@ export function PollOfTheDay() {
 type VoteCounts = Record<ChoiceKey, number>;
 
 function emptyCounts(): VoteCounts {
-  return { a: 0, b: 0 };
+  return { a: 0, b: 0, c: 0, d: 0 };
 }
 
 function PollCard({ poll }: { poll: PollItem }) {
@@ -189,8 +202,8 @@ function PollCard({ poll }: { poll: PollItem }) {
 
       const next = emptyCounts();
       for (const row of data as { choice: string }[]) {
-        if (CHOICE_KEYS.includes(row.choice as ChoiceKey)) {
-          next[row.choice as ChoiceKey]++;
+        if (isChoiceKey(row.choice)) {
+          next[row.choice]++;
         }
       }
       setErrored(false);
@@ -253,7 +266,10 @@ function PollCard({ poll }: { poll: PollItem }) {
       </p>
 
       {!myVote ? (
-        <div className="grid grid-cols-2 gap-2">
+        /* Two or four choices sit in a two by two; three sit in a row, and
+           every label is at most three words so three across still fits a
+           phone. */
+        <div className={cn('grid gap-2', poll.options.length === 3 ? 'grid-cols-3' : 'grid-cols-2')}>
           {poll.options.map((o) => (
             <PollButton key={o.choice} option={o} onClick={() => handleVote(o.choice)} disabled={voting} />
           ))}
