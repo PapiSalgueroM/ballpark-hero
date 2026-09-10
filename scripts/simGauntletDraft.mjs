@@ -26,7 +26,12 @@
  * in a bundled copy (every card drawn from one band) and section 1's
  * genuine-choice floor must go red. SIM_GAUNTLET_CONTROL=blindload removes
  * the validator's consistency check in a bundled copy and section 5's
- * tampered record must then load.
+ * tampered record must then load. Round 520: both needles now live in
+ * src/lib/gauntletEngine.ts, the generic engine this file's soccer game
+ * was pulled out onto (see scripts/simGauntletEngine.mjs for the two other
+ * sports now on the same engine and for the byte-for-byte proof that this
+ * refactor changed nothing about how soccer plays); the controls patch that
+ * file and rewrite gauntletDraft.ts's own bundled copy to import the patch.
  *
  * Run: node scripts/simGauntletDraft.mjs
  */
@@ -47,21 +52,41 @@ const ENTRY = `${TMP}/gauntletDraft.entry.mjs`;
 const BUNDLE = `${TMP}/gauntletDraft.bundle.mjs`;
 
 let libPath = `${ROOT}/src/lib/gauntletDraft.ts`;
-if (CONTROL === 'flatdeal') {
-  const src = fs.readFileSync(libPath, 'utf8');
-  const needle = 'for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {';
-  if (!src.includes(needle)) { console.error('control run: the band spread to collapse is not in the source, refusing to run a dead control'); process.exit(1); }
+/* Round 520: the band spread loop and the daily record consistency check
+   both moved out of this file and into src/lib/gauntletEngine.ts, the
+   generic engine gauntletDraft.ts now wraps (soccer is one of three sports
+   on it, see scripts/simGauntletEngine.mjs for the other two and for the
+   soccer-behavior-unchanged regression proof). So a control here patches
+   THAT file's needle, then rewrites this file's own copy to import the
+   patched engine instead of the real one, the same "bundled copy" technique,
+   just across the one extra hop the refactor added. */
+function patchEngineControl(needle, replacement, describe) {
+  const enginePath = `${ROOT}/src/lib/gauntletEngine.ts`;
+  const engineSrc = fs.readFileSync(enginePath, 'utf8');
+  if (!engineSrc.includes(needle)) { console.error('control run: the needle to patch is not in src/lib/gauntletEngine.ts, refusing to run a dead control'); process.exit(1); }
+  const patchedEnginePath = `${TMP}/gauntletEngine.fromSimGauntletDraft.control.ts`;
+  fs.writeFileSync(patchedEnginePath, engineSrc.replace(needle, replacement));
+
+  const draftSrc = fs.readFileSync(libPath, 'utf8');
+  const importNeedle = "from '@/lib/gauntletEngine'";
+  if (!draftSrc.includes(importNeedle)) { console.error('control run: gauntletDraft.ts no longer imports the engine this control patches, refusing'); process.exit(1); }
   libPath = `${TMP}/gauntletDraft.control.ts`;
-  fs.writeFileSync(libPath, src.replace(needle, 'for (const [lo, hi] of [[0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6]] as const) {'));
-  console.log('NEGATIVE CONTROL ON: the band spread collapsed in a bundled copy, the genuine-choice floor must now go red');
+  fs.writeFileSync(libPath, draftSrc.replace(importNeedle, `from '${patchedEnginePath}'`));
+  console.log(`NEGATIVE CONTROL ON: ${describe}`);
+}
+if (CONTROL === 'flatdeal') {
+  patchEngineControl(
+    'for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {',
+    'for (const [lo, hi] of [[0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6]] as const) {',
+    'the band spread collapsed in a bundled copy of gauntletEngine.ts, the genuine-choice floor must now go red',
+  );
 }
 if (CONTROL === 'blindload') {
-  const src = fs.readFileSync(libPath, 'utf8');
-  const needle = 'if (!consistent) return null;';
-  if (!src.includes(needle)) { console.error('control run: the consistency check to remove is not in the source, refusing to run a dead control'); process.exit(1); }
-  libPath = `${TMP}/gauntletDraft.control.ts`;
-  fs.writeFileSync(libPath, src.replace(needle, 'if (!consistent && false) return null;'));
-  console.log('NEGATIVE CONTROL ON: the daily record validator no longer checks that the run adds up, the tampered record must now load');
+  patchEngineControl(
+    'if (!consistent) return null;',
+    'if (!consistent && false) return null;',
+    'the daily record validator no longer checks that the run adds up, in a bundled copy of gauntletEngine.ts, the tampered record must now load',
+  );
 }
 fs.writeFileSync(ENTRY, `
 export * as gd from '${libPath}';

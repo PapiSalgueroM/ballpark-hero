@@ -1,8 +1,13 @@
 import { Player } from '@/types/game';
 import { FORMATIONS, Formation, FormationSlot, playerRating } from '@/lib/squadDeal';
 import { eligiblePositions } from '@/lib/worldXi';
-import { dailyPrngSeed } from '@/lib/dateUtils';
-import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import {
+  GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
+  buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
+  runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
+  saveDailyRun as engineSaveDailyRun, GauntletRun,
+} from '@/lib/gauntletEngine';
+export type { GauntletRun } from '@/lib/gauntletEngine';
 
 /**
  * Gauntlet Draft (Round 328, the third and last of the owner's three new
@@ -27,6 +32,18 @@ import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
  * Daily mode deals the same five card choices to everyone (dailyPrngSeed);
  * unlimited deals fresh. Everything is derived from the same verified pool
  * Squad Deal plays; nothing is invented.
+ *
+ * Round 520: this file used to hold the whole engine. It is now a thin
+ * wrapper over src/lib/gauntletEngine.ts, the generic config-driven engine
+ * that also runs the NBA and NFL gauntlets (src/lib/gauntletDraftNba.ts,
+ * src/lib/gauntletDraftNfl.ts), the same way nflCareerMoney.ts wraps
+ * careerMoney.ts. Every function below still does exactly what it did
+ * before: the seed math, the band spread, the daily record shape and the
+ * scoring are unchanged, only pulled out from under a soccer only name so a
+ * second and third sport could reuse them instead of copying them. Nothing
+ * about this page's behavior changed; the soccer regression in
+ * scripts/simGauntletEngine.mjs section 1 proves the same seed still deals
+ * the same draft and runs the same gauntlet as before this round.
  */
 
 /* Tuned against the measured draft distributions (best-card XIs land 86 to
@@ -44,20 +61,18 @@ export const GAUNTLET_ROUNDS = [
   { name: 'The Final', opp: 'Los Reyes del Sur', rating: 89 },
 ] as const;
 
-export const PICK_SIZE = 5;
+export const PICK_SIZE = ENGINE_PICK_SIZE;
 
+/** Kept for anything reading this file's own seed stream (nothing external
+ *  does; the sim harness bundles gauntletEngine.ts directly for its
+ *  controls). */
 export function gdRng(seed: number): () => number {
-  let s = seed % 2147483647;
-  if (s <= 0) s += 2147483646;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
+  return gRng(seed);
 }
 
-export function gdFits(p: Player, slot: FormationSlot): boolean {
+export function gdFits(p: Player, slot: FormationSlotLike): boolean {
   return eligiblePositions(p.position as Parameters<typeof eligiblePositions>[0])
-    .some(pos => (slot.allowed as string[]).includes(pos));
+    .some(pos => slot.allowed.includes(pos));
 }
 
 export interface DraftPick {
@@ -70,6 +85,30 @@ export interface GauntletDraft {
   picks: DraftPick[];
 }
 
+/** Round 428: the daily record slug, `gauntlet-draft-daily-${date}` in
+ *  localStorage (src/lib/dailyRecord.ts). Declared here, ahead of the
+ *  functions that read and write under it, now that this file no longer
+ *  ends with the daily lock section that used to define it in place. */
+const DAILY_SLUG = 'gauntlet-draft';
+const SOCCER_DAILY_SALT = 0x47445231;
+
+/** The soccer descriptor: the pool is whatever the caller fetched (Squad
+ *  Deal's live pool or its offline fallback), so this is built fresh per
+ *  call rather than once at module scope, the way the soccer formations and
+ *  rating curve were always read live rather than frozen at import time. */
+function soccerConfig(pool: Player[]): GauntletConfig<Player> {
+  return {
+    gameId: DAILY_SLUG,
+    pool,
+    nameOf: p => p.name,
+    ratingOf: playerRating,
+    fitsSlot: gdFits,
+    formations: FORMATIONS,
+    rounds: GAUNTLET_ROUNDS,
+    dailySeedSalt: SOCCER_DAILY_SALT,
+  };
+}
+
 /**
  * Builds the whole draft: a formation off the seed and, for each slot in
  * order, five fitting players spread across the pool's value range (one
@@ -79,122 +118,25 @@ export interface GauntletDraft {
  * PLAYER always picks in the formation's own display order.
  */
 export function buildDraft(pool: Player[], seed: number): GauntletDraft {
-  const rng = gdRng(seed);
-  const seen = new Set<string>();
-  const deduped = pool.filter(p => {
-    if (seen.has(p.name)) return false;
-    seen.add(p.name);
-    return true;
-  });
-  const formation = FORMATIONS[Math.floor(rng() * FORMATIONS.length)];
-  const used = new Set<string>();
-
-  const slotOrder = formation.slots
-    .map((slot, index) => ({ slot, index, supply: deduped.filter(p => gdFits(p, slot)).length }))
-    .sort((a, b) => a.supply - b.supply);
-
-  const picksByIndex: DraftPick[] = new Array(formation.slots.length);
-  for (const { slot, index } of slotOrder) {
-    const fits = deduped.filter(p => gdFits(p, slot) && !used.has(p.name))
-      .sort((a, b) => playerRating(b) - playerRating(a));
-    const grab = (lo: number, hi: number): Player => {
-      const a = Math.floor(lo * fits.length);
-      const b = Math.max(a + 1, Math.floor(hi * fits.length));
-      const band = fits.slice(a, b).filter(p => !used.has(p.name));
-      const src = band.length ? band : fits.filter(p => !used.has(p.name));
-      return src[Math.floor(rng() * src.length)];
-    };
-    const choices: Player[] = [];
-    for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {
-      let c = grab(lo, hi);
-      let hops = 0;
-      while (choices.includes(c) && hops < 10) { c = grab(lo, hi); hops += 1; }
-      if (!choices.includes(c)) { choices.push(c); used.add(c.name); }
-    }
-    picksByIndex[index] = { slot, choices };
-  }
-  return { formation, picks: picksByIndex };
+  /* The engine is generic in FormationSlotLike/FormationLike; soccer's real
+     runtime objects (FORMATIONS' FormationSlot entries, carrying x/y on top
+     of label/allowed) satisfy that shape exactly, so this cast only narrows
+     the TYPE back to the soccer-specific one, nothing about the VALUE
+     changes. scripts/simGauntletEngine.mjs section 1 proves the output is
+     byte identical to the pre-refactor implementation. */
+  return engineBuildDraft(soccerConfig(pool), seed) as unknown as GauntletDraft;
 }
 
 export function dailyDraftSeed(dateStr: string): number {
-  return dailyPrngSeed(dateStr) ^ 0x47445231 || 11;
+  return dailySeedFor(soccerConfig([]), dateStr);
 }
 
 export function squadRatingOf(squad: (Player | null)[]): number {
-  const players = squad.filter((p): p is Player => p !== null);
-  if (players.length === 0) return 0;
-  return Math.round(players.reduce((s, p) => s + playerRating(p), 0) / players.length);
+  return engineSquadRatingOf(soccerConfig([]), squad);
 }
 
-export interface GauntletMatch {
-  round: (typeof GAUNTLET_ROUNDS)[number];
-  yourGoals: number;
-  theirGoals: number;
-  wonOnPens: boolean | null; /* null = decided in normal or extra time */
-  won: boolean;
-}
-
-export interface GauntletRun {
-  rating: number;
-  matches: GauntletMatch[];
-  roundsCleared: number;
-  champion: boolean;
-  score: number;
-}
-
-function seedFromSquad(squad: (Player | null)[]): number {
-  const key = squad.map(p => (p ? p.name : '-')).join('|');
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < key.length; i += 1) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
-  return (h % 2147483646) + 1;
-}
-
-/**
- * The knockout. Goals per side are drawn from the rating gap (a stronger
- * side expects more), level after ninety goes to extra time and then
- * pens, and the run is fully deterministic in the XI.
- *
- * Scoring on the sitewide ~100 scale: 16 a round cleared, 20 more for
- * lifting the trophy, so a champion lands exactly 100 and every earlier
- * exit is worth exactly what it survived.
- */
 export function runGauntlet(squad: (Player | null)[]): GauntletRun {
-  const rating = squadRatingOf(squad);
-  const rng = gdRng(seedFromSquad(squad));
-  const matches: GauntletMatch[] = [];
-  let cleared = 0;
-  for (const round of GAUNTLET_ROUNDS) {
-    const gap = rating - round.rating;
-    const myExp = Math.max(0.35, 1.45 + gap / 7);
-    const theirExp = Math.max(0.35, 1.45 - gap / 7);
-    const goals = (exp: number) => {
-      let g = 0;
-      for (let i = 0; i < 6; i += 1) if (rng() < exp / 6) g += 1;
-      return g;
-    };
-    let mine = goals(myExp);
-    let theirs = goals(theirExp);
-    let wonOnPens: boolean | null = null;
-    if (mine === theirs) {
-      /* extra time: one more short burst each */
-      const extraMine = rng() < myExp / 8 ? 1 : 0;
-      const extraTheirs = rng() < theirExp / 8 ? 1 : 0;
-      mine += extraMine;
-      theirs += extraTheirs;
-      if (mine === theirs) {
-        /* pens: the gap still matters, but barely, the way pens really are */
-        const p = 0.5 + gap / 120;
-        wonOnPens = rng() < Math.max(0.25, Math.min(0.75, p));
-      }
-    }
-    const won = wonOnPens !== null ? wonOnPens : mine > theirs;
-    matches.push({ round, yourGoals: mine, theirGoals: theirs, wonOnPens, won });
-    if (!won) break;
-    cleared += 1;
-  }
-  const champion = cleared === GAUNTLET_ROUNDS.length;
-  const score = Math.min(100, cleared * 16 + (champion ? 20 : 0));
-  return { rating, matches, roundsCleared: cleared, champion, score };
+  return engineRunGauntlet(soccerConfig([]), squad);
 }
 
 /**
@@ -209,45 +151,10 @@ export function runGauntlet(squad: (Player | null)[]): GauntletRun {
  * refused, so a tampered or broken record deals a fresh daily rather than
  * drawing a screen that adds up to nothing.
  */
-const DAILY_SLUG = 'gauntlet-draft';
-
-function validateDailyRun(fields: Record<string, unknown>): GauntletRun | null {
-  const raw = fields.run;
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
-  const run = raw as Record<string, unknown>;
-  const { rating, roundsCleared, champion, score } = run;
-  if (!Number.isInteger(rating) || (rating as number) < 0 || (rating as number) > 99) return null;
-  if (!Array.isArray(run.matches) || run.matches.length < 1 || run.matches.length > GAUNTLET_ROUNDS.length) return null;
-  const goals = (g: unknown) => Number.isInteger(g) && (g as number) >= 0 && (g as number) <= 9;
-  const matches: GauntletMatch[] = [];
-  for (let i = 0; i < run.matches.length; i += 1) {
-    const m = run.matches[i] as Record<string, unknown> | null;
-    if (!m || typeof m !== 'object' || Array.isArray(m)) return null;
-    if (!goals(m.yourGoals) || !goals(m.theirGoals)) return null;
-    if (m.wonOnPens !== null && typeof m.wonOnPens !== 'boolean') return null;
-    if (typeof m.won !== 'boolean') return null;
-    /* the run only goes on while it is being won */
-    if (!m.won && i < run.matches.length - 1) return null;
-    matches.push({
-      round: GAUNTLET_ROUNDS[i],
-      yourGoals: m.yourGoals as number,
-      theirGoals: m.theirGoals as number,
-      wonOnPens: m.wonOnPens as boolean | null,
-      won: m.won,
-    });
-  }
-  const cleared = matches.filter(m => m.won).length;
-  const consistent = roundsCleared === cleared
-    && champion === (cleared === GAUNTLET_ROUNDS.length)
-    && score === Math.min(100, cleared * 16 + (champion ? 20 : 0));
-  if (!consistent) return null;
-  return { rating: rating as number, matches, roundsCleared: cleared, champion: champion as boolean, score: score as number };
-}
-
 export function loadDailyRun(date: string): GauntletRun | null {
-  return readDailyRecord(DAILY_SLUG, date, validateDailyRun);
+  return engineLoadDailyRun(soccerConfig([]), date);
 }
 
 export function saveDailyRun(date: string, run: GauntletRun): void {
-  writeDailyRecord(DAILY_SLUG, date, { run });
+  engineSaveDailyRun(soccerConfig([]), date, run);
 }
