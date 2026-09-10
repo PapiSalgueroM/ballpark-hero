@@ -4,7 +4,7 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
-  BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts,
+  BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
@@ -25,6 +25,15 @@ import {
   ensureMoney, moneySeasonTick, moneyWealth, moneyAct,
 } from "./soccerMoney";
 import type { MoneyAction, MoneyState } from "./soccerMoney";
+/* Round 521: the Round 80 phone texts and the 2026-08-05 rivalry beats moved
+   into careerInbox.ts and careerRivalryEvents.ts, the same lift careerMoney.ts
+   already proved for the bank. Both wrappers below bind soccer's own fields
+   and keep every export name unchanged; the Round 130 thread system stays
+   exactly where it was, on top of the lifted inbox rather than inside it. */
+import { receiveInboxTexts, answerInboxMessage } from "./careerInbox";
+import type { InboxSport } from "./careerInbox";
+import { rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventShared } from "./careerRivalryEvents";
+import type { RivalryEventDef } from "./careerRivalryEvents";
 import { intlName, familyFor } from './intlNames';
 /* Round 258: display only. soccerCurrency imports nothing, so there is no
    cycle, and every amount inside the engine stays in euros forever. */
@@ -902,37 +911,28 @@ export function unreadPhoneCount(s: CareerState): number {
   return unreadThreads(s);
 }
 
-/** Season tick: karma drift + coupling, then deliver up to 2 new texts. */
-function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
-  const karma = s.karma ?? 50;
-  const k = karma > 50 ? karma - 2 : karma < 50 ? Math.min(50, karma + 2) : karma;
-  if (k >= 70) { s.popularity = clamp(s.popularity + 2, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); }
-  else if (k <= 30) { s.popularity = clamp(s.popularity - 2, 0, 100); s.morale = clamp(s.morale - 1, 0, 100); }
-  s.karma = k;
-  const inbox = [...(s.phoneInbox ?? [])];
-  const used = [...(s.phoneUsedIds ?? [])];
-  const unanswered = inbox.filter(m => m.answered === undefined).length;
-  const want = Math.max(0, 2 - unanswered);
-  const year = s.seasons[s.seasons.length - 1]?.year ?? 2020;
-  const fresh: PhoneMessage[] = [];
-  for (const def of pickPhoneTexts(s.age, phase, used, want)) {
-    const msg: PhoneMessage = { id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices };
-    inbox.push(msg);
-    fresh.push(msg);
-    used.push(def.id);
-  }
-  /* Keep the thread tidy: dropping oldest ANSWERED first. Round 80 kept 18,
-     which is about 8 KB of choice arrays in a save that is already tight, and
-     since Round 130 the conversation itself lives in the thread list, so the
-     only reason to hold a legacy message at all is so an unanswered one stays
-     answerable. Six is plenty for that. */
-  while (inbox.length > 6) {
-    const idx = inbox.findIndex(m => m.answered !== undefined);
-    if (idx === -1) break;
-    inbox.splice(idx, 1);
-  }
-  s.phoneInbox = inbox;
-  s.phoneUsedIds = used;
+/* Round 521: soccer's own descriptor for the lifted inbox. The pool, the
+   field names and every number here (6 kept, 2 wanted a season) are the
+   Round 80 ones, unchanged, so a save opens on the exact texts it always
+   would have. */
+export const SOCCER_INBOX: InboxSport<CareerState> = {
+  pool: PHONE_POOL,
+  moodOf: s => s.karma ?? 50,
+  setMood: (s, v) => { s.karma = v; },
+  addPopularity: (s, delta) => { s.popularity = clamp(s.popularity + delta, 0, 100); },
+  addCash: (s, amount) => { s.netWorth = Math.round((s.netWorth + amount) * 100) / 100; },
+  ageOf: s => s.age,
+  yearOf: s => s.seasons[s.seasons.length - 1]?.year ?? 2020,
+  maxInbox: 6,
+  wantPerSeason: 2,
+};
+
+/** Season tick: karma drift + coupling, then deliver up to 2 new texts.
+ *  Exported (Round 521) only so scripts/simCareerInbox.mjs can drive it
+ *  directly for the unchanged-behavior proof; every call site inside this
+ *  file still calls it exactly as before. */
+export function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void {
+  const fresh = receiveInboxTexts(s, phase, SOCCER_INBOX);
   /* Round 130: a Round 80 text is now the FIRST line of a conversation rather
      than a dead end, so mirror it into the thread list and let the thread
      system carry it on once you answer. */
@@ -1051,21 +1051,9 @@ export function applyMoneyAction(
 
 /** The Round 80 karma path, unchanged. Returns null when nothing applied. */
 function answerLegacyText(s: CareerState, msgId: string, choiceIdx: number): CareerState | null {
-  const inbox = [...(s.phoneInbox ?? [])];
-  const i = inbox.findIndex(m => m.id === msgId);
-  if (i === -1) return null;
-  const msg = inbox[i];
-  if (msg.answered !== undefined) return null;
-  const choice = msg.choices[choiceIdx];
-  if (!choice) return null;
-  inbox[i] = { ...msg, answered: choiceIdx };
-  s.phoneInbox = inbox;
-  s.karma = clamp((s.karma ?? 50) + choice.karma, 0, 100);
-  if (choice.morale) s.morale = clamp(s.morale + choice.morale, 0, 100);
-  if (choice.popularity) s.popularity = clamp(s.popularity + choice.popularity, 0, 100);
-  if (choice.cash) s.netWorth = Math.round((s.netWorth + choice.cash) * 100) / 100;
-  const swing = choice.karma >= 5 ? " Karma up." : choice.karma <= -5 ? " Karma down." : "";
-  s.events = [...s.events, `📱 Replied to ${msg.from}: ${choice.label}.${swing}`];
+  const event = answerInboxMessage(s, msgId, choiceIdx, SOCCER_INBOX);
+  if (event === null) return null;
+  s.events = [...s.events, event];
   return s;
 }
 
@@ -4837,18 +4825,13 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.rival = simulateRivalSeason(s.rival, clubs, thisYear);
   }
   
-  // Rivalry event (1 per year)
-  if (s.rival && !s.rival.retired && Math.random() < 0.5) {
-    const rivalEvents = getRivalryEvents(s).filter(e => e.id !== s.lastRivalryEventId);
-    if (rivalEvents.length > 0) {
-      s.pendingRivalryEvent = pick(rivalEvents);
-    }
-  }
-  // Rival just retired, show retirement event
-  if (s.rival?.retired && s.lastRivalryEventId !== 105) {
-    const retireEvt = getRivalryEvents(s).find(e => e.id === 105);
-    if (retireEvt) s.pendingRivalryEvent = retireEvt;
-  }
+  // Rivalry event (1 per year), and the forced beat on retirement. Round
+  // 521: rolled through careerRivalryEvents.ts now, same two calls to
+  // Math.random in the same order, so a seeded stream draws identically.
+  const rolledRivalry = rollRivalryEvent(s, s.rival, s.lastRivalryEventId, SOCCER_RIVALRY_EVENTS, Math.random);
+  if (rolledRivalry) s.pendingRivalryEvent = rolledRivalry;
+  const forcedRivalry = forcedRetirementEvent(s, s.rival, s.lastRivalryEventId, SOCCER_RIVALRY_EVENTS, 105);
+  if (forcedRivalry) s.pendingRivalryEvent = forcedRivalry;
 
   // UCL Simulation
   const uclResult = simulateUCL(s, season);
@@ -6644,151 +6627,191 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   return r;
 }
 
-function getRivalryEvents(state: CareerState): RivalryEvent[] {
-  if (!state.rival) return [];
-  const r = state.rival;
-  const events: RivalryEvent[] = [];
-  
-  if (r.ballonDors > 0) {
-    events.push({ id: 101, emoji: "🏅", title: "Rival Wins Ballon d'Or", description: `${r.name} won the Ballon d'Or. You finished 3rd.`, consequence: "Motivation boost: stats +1 next season" });
-  }
-  events.push({ id: 102, emoji: "🏠", title: "Transfer Battle", description: `You and ${r.name} both want to sign for the same club. The club chose your rival.`, consequence: "Morale -5" });
-  events.push({ id: 103, emoji: "🤝", title: "Rival Shows Respect", description: `${r.name} publicly says he respects you as the best player in the world.`, consequence: "Popularity +5, Morale +5" });
-  events.push({ id: 104, emoji: "⚽", title: "Head to Head Victory!", description: `In a head-to-head match you scored twice against ${r.name}'s team.`, consequence: "Popularity +5, Confidence boost" });
-  if (r.retired) {
-    events.push({ id: 105, emoji: "👋", title: "Rival Retires", description: `${r.name} announces retirement. He calls you the greatest rival of his career.`, consequence: "Legacy +10, End of an era" });
-  }
-  if (state.internationalCareer) {
-    events.push({ id: 106, emoji: "🇺🇳", title: "National Team Battle", description: `Both you and ${r.name} are on the same national team. The manager must pick one to start.`, consequence: "50/50 outcome" });
-  }
-  if (r.championsLeagues > 0) {
-    events.push({ id: 107, emoji: "⭐", title: "Rival Wins Champions League", description: `${r.name} wins the Champions League. You were eliminated in the semis.`, consequence: "Morale -5, Motivation boost" });
-  }
-  if (state.overall > r.overall && state.overall - r.overall >= 2) {
-    events.push({ id: 108, emoji: "📈", title: "Surpassed Your Rival!", description: `For the first time in your career, your overall rating (${state.overall}) has surpassed ${r.name}'s (${r.overall}).`, consequence: "Morale +10, Legacy boost" });
-  }
-  
-  // 2026-08-05 rivalry expansion: ten more beats in the saga
-  if (r.club === state.currentClub) {
-    events.push({ id: 109, emoji: "😬", title: "Your Rival Is Now Your Teammate", description: `${r.name} just signed for YOUR club. The first training session is the most watched non-match footage of the year.`, consequence: "The feud cools, the cameras multiply" });
-  }
-  events.push({ id: 110, emoji: "🤬", title: "Tunnel Bust-Up", description: `Cameras catch you and ${r.name} chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.`, consequence: "Rivalry intensifies, the league schedules you for prime time" });
-  if (r.careerGoals >= 300) {
-    events.push({ id: 111, emoji: "🎯", title: "The Chase", description: `${r.name} just passed 300 career goals. Every broadcast now shows your tallies side by side in real time.`, consequence: "Motivation surges: +1 Shooting next season" });
-  }
-  if (r.nationality === state.nationality) {
-    events.push({ id: 112, emoji: "💫", title: "The Armband Snub", description: `The national team named ${r.name} captain. Your shirt number stays, the armband does not.`, consequence: "Morale -5, motivation +2 Physical next season" });
-  }
-  events.push({ id: 113, emoji: "👕", title: "The Shirt Swap", description: `After a classic against ${r.name}, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.`, consequence: "Popularity +8, the feud softens" });
-  events.push({ id: 114, emoji: "🏥", title: "Rival Goes Down", description: `${r.name} tears a ligament and faces a year out. You post a genuine get-well message within the hour.`, consequence: "Integrity +5, Popularity +5, rivalry cools" });
-  if (state.overall >= 88 && r.overall >= 88) {
-    events.push({ id: 115, emoji: "🐐", title: "The GOAT Debate", description: `Every pundit panel this week ran the same segment: you or ${r.name}. Your teammates printed the losing poll and taped it to his locker room door.`, consequence: "Popularity +5, the era has a name now" });
-  }
-  if (state.popularity >= 40) {
-    events.push({ id: 116, emoji: "🏴", title: "The Banner", description: `${r.name}'s ultras unveil a 40-meter banner mocking you before kickoff. You answer the only way that matters.`, consequence: "+1 Shooting and +1 Dribbling next season, rivalry intensifies" });
-  }
-  if (state.age >= 28) {
-    events.push({ id: 117, emoji: "🎬", title: "The Rivalry Documentary", description: `A streaming giant offers to make a series about you and ${r.name}. Both camps say yes before the call ends.`, consequence: "Net worth +3M, Popularity +8" });
-  }
-  if (state.age >= 32) {
-    events.push({ id: 118, emoji: "🤝", title: "Testimonial Invitation", description: `${r.name} personally invites you to captain the opposition in his testimonial match. Two decades of war, one guard of honor.`, consequence: "Integrity +8, Popularity +8, the feud becomes history" });
-  }
-
-  return events;
-}
-
-function applyRivalryEvent(state: CareerState, event: RivalryEvent): CareerState {
-  const s = { ...state };
-  switch (event.id) {
-    case 101:
+/* Round 521: the eighteen beats, lifted onto careerRivalryEvents.ts's
+   descriptor shape. Every `when`, every description and every mutation
+   below is the exact one the un-lifted switch statement had; only the
+   plumbing moved. */
+export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] = [
+  {
+    id: 101, emoji: "🏅", title: "Rival Wins Ballon d'Or",
+    description: (_s, r) => `${r.name} won the Ballon d'Or. You finished 3rd.`,
+    consequence: "Motivation boost: stats +1 next season",
+    when: (_s, r) => r.ballonDors > 0,
+    apply: s => {
       s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
       s.morale = clamp(s.morale - 5, 0, 100);
-      break;
-    case 102:
-      s.morale = clamp(s.morale - 5, 0, 100);
-      break;
-    case 103:
-      s.popularity = clamp(s.popularity + 5, 0, 100);
-      s.morale = clamp(s.morale + 5, 0, 100);
-      break;
-    case 104:
-      s.popularity = clamp(s.popularity + 5, 0, 100);
-      s.morale = clamp(s.morale + 5, 0, 100);
-      break;
-    case 105:
-      s.popularity = clamp(s.popularity + 10, 0, 100);
-      break;
-    case 106:
-      if (Math.random() < 0.5) {
-        s.morale = clamp(s.morale + 5, 0, 100);
-        s.events = [...s.events, `🇺🇳 Manager chose you over ${s.rival?.name}!`];
-      } else {
-        s.morale = clamp(s.morale - 5, 0, 100);
-        s.events = [...s.events, `🇺🇳 Manager chose ${s.rival?.name} over you.`];
-      }
-      break;
-    case 107:
+    },
+  },
+  {
+    id: 102, emoji: "🏠", title: "Transfer Battle",
+    description: (_s, r) => `You and ${r.name} both want to sign for the same club. The club chose your rival.`,
+    consequence: "Morale -5",
+    when: () => true,
+    apply: s => { s.morale = clamp(s.morale - 5, 0, 100); },
+  },
+  {
+    id: 103, emoji: "🤝", title: "Rival Shows Respect",
+    description: (_s, r) => `${r.name} publicly says he respects you as the best player in the world.`,
+    consequence: "Popularity +5, Morale +5",
+    when: () => true,
+    apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); },
+  },
+  {
+    id: 104, emoji: "⚽", title: "Head to Head Victory!",
+    description: (_s, r) => `In a head-to-head match you scored twice against ${r.name}'s team.`,
+    consequence: "Popularity +5, Confidence boost",
+    when: () => true,
+    apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); },
+  },
+  {
+    id: 105, emoji: "👋", title: "Rival Retires",
+    description: (_s, r) => `${r.name} announces retirement. He calls you the greatest rival of his career.`,
+    consequence: "Legacy +10, End of an era",
+    when: (_s, r) => r.retired,
+    apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); },
+  },
+  {
+    id: 106, emoji: "🇺🇳", title: "National Team Battle",
+    description: (_s, r) => `Both you and ${r.name} are on the same national team. The manager must pick one to start.`,
+    consequence: "50/50 outcome",
+    when: s => s.internationalCareer,
+    apply: (s, r, rng, pushLine) => {
+      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🇺🇳 Manager chose you over ${r.name}!`); }
+      else { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🇺🇳 Manager chose ${r.name} over you.`); }
+    },
+  },
+  {
+    id: 107, emoji: "⭐", title: "Rival Wins Champions League",
+    description: (_s, r) => `${r.name} wins the Champions League. You were eliminated in the semis.`,
+    consequence: "Morale -5, Motivation boost",
+    when: (_s, r) => r.championsLeagues > 0,
+    apply: s => {
       s.morale = clamp(s.morale - 5, 0, 100);
       s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 };
-      break;
-    case 108:
-      s.morale = clamp(s.morale + 10, 0, 100);
-      break;
-    case 109:
+    },
+  },
+  {
+    id: 108, emoji: "📈", title: "Surpassed Your Rival!",
+    description: (s, r) => `For the first time in your career, your overall rating (${s.overall}) has surpassed ${r.name}'s (${r.overall}).`,
+    consequence: "Morale +10, Legacy boost",
+    when: (s, r) => s.overall > r.overall && s.overall - r.overall >= 2,
+    apply: s => { s.morale = clamp(s.morale + 10, 0, 100); },
+  },
+  // 2026-08-05 rivalry expansion: ten more beats in the saga
+  {
+    id: 109, emoji: "😬", title: "Your Rival Is Now Your Teammate",
+    description: (_s, r) => `${r.name} just signed for YOUR club. The first training session is the most watched non-match footage of the year.`,
+    consequence: "The feud cools, the cameras multiply",
+    when: (s, r) => r.club === s.currentClub,
+    apply: s => {
       s.morale = clamp(s.morale + 3, 0, 100);
       s.popularity = clamp(s.popularity + 5, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 10, 0, 100);
-      break;
-    case 110:
+    },
+  },
+  {
+    id: 110, emoji: "🤬", title: "Tunnel Bust-Up",
+    description: (_s, r) => `Cameras catch you and ${r.name} chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.`,
+    consequence: "Rivalry intensifies, the league schedules you for prime time",
+    when: () => true,
+    apply: s => {
       s.popularity = clamp(s.popularity + 3, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 15, 0, 100);
-      break;
-    case 111:
+    },
+  },
+  {
+    id: 111, emoji: "🎯", title: "The Chase",
+    description: (_s, r) => `${r.name} just passed 300 career goals. Every broadcast now shows your tallies side by side in real time.`,
+    consequence: "Motivation surges: +1 Shooting next season",
+    when: (_s, r) => r.careerGoals >= 300,
+    apply: s => {
       s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 };
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 5, 0, 100);
-      break;
-    case 112:
+    },
+  },
+  {
+    id: 112, emoji: "💫", title: "The Armband Snub",
+    description: (_s, r) => `The national team named ${r.name} captain. Your shirt number stays, the armband does not.`,
+    consequence: "Morale -5, motivation +2 Physical next season",
+    when: (s, r) => r.nationality === s.nationality,
+    apply: s => {
       s.morale = clamp(s.morale - 5, 0, 100);
       s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 2 };
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-      break;
-    case 113:
+    },
+  },
+  {
+    id: 113, emoji: "👕", title: "The Shirt Swap",
+    description: (_s, r) => `After a classic against ${r.name}, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.`,
+    consequence: "Popularity +8, the feud softens",
+    when: () => true,
+    apply: s => {
       s.popularity = clamp(s.popularity + 8, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 15, 0, 100);
-      break;
-    case 114:
+    },
+  },
+  {
+    id: 114, emoji: "🏥", title: "Rival Goes Down",
+    description: (_s, r) => `${r.name} tears a ligament and faces a year out. You post a genuine get-well message within the hour.`,
+    consequence: "Integrity +5, Popularity +5, rivalry cools",
+    when: () => true,
+    apply: s => {
       s.integrityBonus += 5;
       s.popularity = clamp(s.popularity + 5, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
-      break;
-    case 115:
+    },
+  },
+  {
+    id: 115, emoji: "🐐", title: "The GOAT Debate",
+    description: (_s, r) => `Every pundit panel this week ran the same segment: you or ${r.name}. Your teammates printed the losing poll and taped it to his locker room door.`,
+    consequence: "Popularity +5, the era has a name now",
+    when: (s, r) => s.overall >= 88 && r.overall >= 88,
+    apply: s => {
       s.popularity = clamp(s.popularity + 5, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-      break;
-    case 116:
+    },
+  },
+  {
+    id: 116, emoji: "🏴", title: "The Banner",
+    description: (_s, r) => `${r.name}'s ultras unveil a 40-meter banner mocking you before kickoff. You answer the only way that matters.`,
+    consequence: "+1 Shooting and +1 Dribbling next season, rivalry intensifies",
+    when: s => s.popularity >= 40,
+    apply: s => {
       s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-      break;
-    case 117:
+    },
+  },
+  {
+    id: 117, emoji: "🎬", title: "The Rivalry Documentary",
+    description: (_s, r) => `A streaming giant offers to make a series about you and ${r.name}. Both camps say yes before the call ends.`,
+    consequence: "Net worth +3M, Popularity +8",
+    when: s => s.age >= 28,
+    apply: s => {
       s.netWorth = Math.round((s.netWorth + 3) * 100) / 100;
       s.popularity = clamp(s.popularity + 8, 0, 100);
-      break;
-    case 118:
+    },
+  },
+  {
+    id: 118, emoji: "🤝", title: "Testimonial Invitation",
+    description: (_s, r) => `${r.name} personally invites you to captain the opposition in his testimonial match. Two decades of war, one guard of honor.`,
+    consequence: "Integrity +8, Popularity +8, the feud becomes history",
+    when: s => s.age >= 32,
+    apply: s => {
       s.integrityBonus += 8;
       s.popularity = clamp(s.popularity + 8, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 25, 0, 100);
-      break;
-  }
-  s.events = [...s.events, `${event.emoji} ${event.title}`];
-  return s;
-}
+    },
+  },
+];
 
 export function dismissRivalryEvent(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  if (s.pendingRivalryEvent) {
-    const applied = applyRivalryEvent(s, s.pendingRivalryEvent);
-    Object.assign(s, applied);
-    s.lastRivalryEventId = s.pendingRivalryEvent.id;
+  if (s.pendingRivalryEvent && s.rival) {
+    const event = s.pendingRivalryEvent;
+    applyRivalryEventShared(s, s.rival, event, SOCCER_RIVALRY_EVENTS, Math.random, line => { s.events = [...s.events, line]; });
+    s.lastRivalryEventId = event.id;
+    s.pendingRivalryEvent = null;
+  } else {
     s.pendingRivalryEvent = null;
   }
   // Continue to next phase after rivalry event
