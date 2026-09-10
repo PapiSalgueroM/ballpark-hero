@@ -34,6 +34,14 @@ import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPr
    scope. */
 import type { MoneyState } from './careerMoney';
 import { nflMoneySeasonTick } from './nflCareerMoney';
+/* Round 521: the inbox and the rivalry events, the same lift. Both auxiliary
+   files import this one for the CareerState type only, so there is no cycle
+   at runtime: both ticks are called through the functions below, never at
+   module scope. */
+import type { InboxMessage } from './careerInbox';
+import { receiveNflInboxTexts } from './nflCareerInbox';
+import type { RivalryEvent } from './careerRivalryEvents';
+import { nflRivalryTick } from './nflCareerRivalryEvents';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -253,6 +261,22 @@ export interface CareerState {
       so the News screen does not forget the career on reload. Absent on a
       pre-469 save. */
   headlines?: string[];
+  /** Round 521: the inbox, on the same engine the flagship's phone runs
+      (careerInbox.ts), bound to the NFL in nflCareerInbox.ts. Absent on a
+      pre-521 save and repaired lazily the way the money app's fields
+      already are: an empty inbox and a karma of 50 read the same as a save
+      that has never opened the app. */
+  phoneInbox?: InboxMessage[];
+  phoneUsedIds?: string[];
+  karma?: number;
+  /** Round 521: the rivalry events, on the same engine the flagship's
+      eighteen beats run (careerRivalryEvents.ts), bound in
+      nflCareerRivalryEvents.ts. The SAME rival draftRival already drafts;
+      no second rival concept. rivalryIntensity is flavor only, read by
+      nothing outside the event table itself. */
+  pendingRivalryEvent?: RivalryEvent | null;
+  lastRivalryEventId?: number | null;
+  rivalryIntensity?: number;
 }
 
 export interface CareerEvent {
@@ -579,6 +603,13 @@ export function simSeason(
   if (c.rival && !c.rival.retired) {
     for (const n of judgeRivalSeason(c.rival, (((line.passYds ?? 0) + (line.rushYds ?? 0) + (line.recYds ?? 0) + (line.tackles ?? 0) * 9 + (line.fgMade ?? 0) * 30) / 60 + ((line.passTd ?? 0) + (line.rushTd ?? 0) + (line.recTd ?? 0) + (line.sacks ?? 0) + (line.picks ?? 0)) * 2), c.name, 'nfl', rng)) notes.push(n);
   }
+  /* Round 521: the rivalry beat, rolled right after the rival's own season,
+     the same point in the loop the flagship rolls its own. A fired beat
+     waits as a pending card; the board applies it through
+     dismissNflRivalryEvent, never here, so the state this function hands
+     back stays the pure season sim it always was. */
+  const rivalryEvent = nflRivalryTick(c, rng);
+  if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   c.seasons.push(line);
   return { line, notes };
 }
@@ -662,6 +693,10 @@ export function progress(c: CareerState, rng: () => number): string[] {
      is covered out of savings and then holdings before anything else sees
      it. Its own random stream, so nothing here shifts the season's rng. */
   for (const line of nflMoneySeasonTick(c).events) notes.push(line);
+  /* Round 521: the inbox. Silent on purpose, the same way the flagship's
+     phone never announces a new text in the season feed: the unread badge
+     on the Inbox box is the tell. */
+  receiveNflInboxTexts(c, rng);
   return notes;
 }
 
