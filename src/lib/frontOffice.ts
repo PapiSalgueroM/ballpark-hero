@@ -1,6 +1,8 @@
 import { FO_TEAMS, FO_TEAM_MAP, type FoPlayer, type FoTeam } from '@/data/frontOfficePlayers';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
+/* Round 531: the cap comes from one sourced file, never a bare literal here. */
+import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -17,7 +19,7 @@ import { leagueNames, uniqueName } from './foNames';
  * tests can replay seasons.
  */
 
-export const SALARY_CAP_BASE = 260; // $M, rises 5% per season
+export const SALARY_CAP_BASE = NFL_SALARY_CAP_2026; // $M; the 5% rise per season in game is the game's own assumption, see leagueCaps.ts
 export const REGULAR_WEEKS = 17;
 
 export interface GmPlayer extends FoPlayer {

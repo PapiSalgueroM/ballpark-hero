@@ -12,6 +12,8 @@ import {
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
 } from '@/lib/nhlFrontOffice';
+/* Round 531: the cap on screen says which day its figure was read. */
+import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 /* Round 190: true negotiations, shared engine and shared card. The direct
@@ -644,6 +646,7 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">Cap hit ${nhlCapUsed(my)}M of the ${league.cap}M ceiling</p>
+          <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
               <div key={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">

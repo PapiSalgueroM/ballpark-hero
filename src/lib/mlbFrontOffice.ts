@@ -1,6 +1,8 @@
 import { MLB_FO_ROSTERS } from '@/data/mlbFoPlayers';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
+/* Round 531: the tax line comes from one sourced file, never a bare literal here. */
+import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
@@ -18,7 +20,7 @@ import { leagueNames, uniqueName } from './foNames';
  * ($244M for 2026); the game treats it as a hard payroll line.
  */
 
-export const MLB_TAX_BASE = 244; // $M, 2026 CBA luxury tax line, +3%/season in-game
+export const MLB_TAX_BASE = MLB_CBT_THRESHOLD_2026; // $M, the 2026 competitive balance tax line; the 3% rise per season in game is the game's own assumption, see leagueCaps.ts
 export const MLB_ROUNDS = 27;
 export const MLB_GAMES_PER_ROUND = 6;
 

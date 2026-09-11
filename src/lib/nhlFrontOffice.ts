@@ -1,6 +1,8 @@
 import { NHL_FO_ROSTERS } from '@/data/nhlFoPlayers';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
+/* Round 531: the cap comes from one sourced file, never a bare literal here. */
+import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
@@ -19,7 +21,7 @@ import { leagueNames, uniqueName } from './foNames';
  * rising about 9% per season as in the current CBA memo.
  */
 
-export const NHL_CAP_BASE = 104; // $M, announced 2026-27 upper limit
+export const NHL_CAP_BASE = NHL_UPPER_LIMIT_2026_27; // $M, the published 2026-27 upper limit; the 9% rise per season in game is the game's own assumption, see leagueCaps.ts
 export const NHL_FO_ROUNDS = 20;
 export const NHL_GAMES_PER_ROUND = 4;
 
