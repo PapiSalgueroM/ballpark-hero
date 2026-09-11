@@ -193,6 +193,14 @@ block is 541 to 550. Next free is 551.
   ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
   `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
 
+- **550 VERIFICATION NOTE, read before trusting it.** The walk's coverage claim is verified: it
+  signed a player, reached the season review, and the transfer business block really rendered (the
+  `signingsMade > 0 && !/Transfer business/` check did not fire), and the line that threw lives
+  inside that block. What is NOT verified is that the walk goes RED on the crash. That control
+  (delete `const c = g.career;` from the SEASON END block, rebuild, re-run expecting a non-zero
+  exit) was started and stopped part way, because it dirties the working tree for the ~15 minutes it
+  takes and that is a bad thing to leave sitting on an open PR. Worth running in a window where that
+  does not matter. `scripts/` has no automated form of it on purpose: it needs a real rebuild.
 - **550: the browser walk signs players and opens the season review.** Closing the verification hole
   that let Round 541's P1 reach a player. `scripts/playClubManager.mjs` said in its own header that
   it "never signs anyone", and the season review's transfer business list sits behind

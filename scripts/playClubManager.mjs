@@ -42,6 +42,22 @@
  * review it reads what the review drew instead of leaving on the heading. When
  * a run happens to sign nobody it says so out loud rather than letting a green
  * light imply a branch it never reached.
+ *
+ * WHAT IS VERIFIED, AND WHAT IS NOT. Verified on 2026-09-11 against the fixed
+ * tree: the walk signed a player, reached the season review, and the check
+ * `signingsMade > 0 && !/Transfer business/` did NOT fire, which means the
+ * transfer business block really rendered. The line that threw on 2026-09-11
+ * lives inside that block, so it was evaluated. That is the coverage claim and
+ * it holds.
+ *
+ * NOT verified: that the walk would go RED on the crash. The control for that
+ * is to delete `const c = g.career;` from the SEASON END block of
+ * src/pages/ClubManager.tsx, rebuild, and re-run this file expecting a non-zero
+ * exit. It was written and started and then stopped part way, because it dirties
+ * the working tree for the ~15 minutes it takes and that is a bad thing to leave
+ * lying around on an open PR. Run it when you have the window. The detection it
+ * would exercise is the pair of checks below: an almost empty page (a render
+ * throw unmounts the root) and the Round 544 error boundary's own copy.
  */
 import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
