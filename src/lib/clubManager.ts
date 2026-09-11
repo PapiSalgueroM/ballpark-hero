@@ -1675,7 +1675,9 @@ export function sponsorBonusEarned(state: CareerState, position: number, clubs: 
   const deal = state.sponsor;
   if (!deal || !deal.bonusFor || deal.bonus <= 0) return false;
   if (deal.bonusFor === 'title') return position === 1;
-  if (deal.bonusFor === 'europe') return position <= 4;
+  /* Round 543: a sponsor's Europe bonus pays on a real European place, so it
+     follows the league's slot count like everything else. */
+  if (deal.bonusFor === 'europe') return position <= uclPlacesIn(careerLeagueOf(state));
   return position <= Math.floor(clubs / 2);
 }
 
@@ -9312,6 +9314,27 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
   laliga2005:  { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' },
 };
 
+/* Round 543: how many Champions League places this league actually has.
+ *
+ * Until this round the table above was read ONLY to write the board's
+ * objective label, and the three places that decide whether you are actually
+ * in the competition each hardcoded the number 4. So the Eredivisie, which
+ * sends two, put you in the group stage for finishing fourth; the Scottish
+ * Premiership, the Super Lig, the Pro League, Austria, Greece, Denmark,
+ * Switzerland and Croatia all send their champion and only their champion,
+ * and all of them put you in for finishing fourth as well. Nine of the
+ * fifteen modern leagues were wrong, and the board was telling you the right
+ * number in the same breath, which is how a player notices.
+ *
+ * This is CLAUDE.md's derived-never-typed rule at its plainest: the game's own
+ * table already knows the answer, so nothing should be asserting a second one
+ * beside it. A league the table does not carry keeps the old default of 4
+ * rather than silently sending nobody. */
+export function uclPlacesIn(league: Pick<LeagueDef, 'id' | 'euro'>): number {
+  if (!league.euro) return 0;
+  return EURO_SLOTS[league.id]?.ucl ?? 4;
+}
+
 /* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
    "The second highest overall team dosent want to be top 2. They also want to
    win it. The same with 3rd place." What separates Sporting CP (who should be
@@ -14017,7 +14040,8 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     trophies: seasonTrophies,
     topScorer,
     topAssister,
-    qualifiedUcl: position <= 4 && careerLeagueOf(state).euro,
+    /* Round 543: the league's own slot count, not a hardcoded four. */
+    qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)),
     signings: state.seasonSignings,
     offers,
     seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
@@ -14312,7 +14336,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      The euro flag of the league the season was PLAYED in is read before
      the swap registers, for the UCL guard further down. */
   const pr = runPromotionRelegation(career);
-  const playedLeagueEuro = careerLeagueOf(career).euro;
+  /* Round 543: uclPlacesIn returns 0 for a non-European league, so this one
+     value carries both halves of what Round 310 added here. */
+  const playedLeagueUclPlaces = uclPlacesIn(careerLeagueOf(career));
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -14525,7 +14551,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      already encodes the league it was earned in; the fallback arm now
      checks the euro flag of the league the season was PLAYED in, captured
      above before the new memberships registered. */
-  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= 4 && playedLeagueEuro) && nextLeague.euro;
+  /* Round 543: the fallback arm counts the places the league PLAYED in really
+     had, the same way Round 310 made it check that league's euro flag. */
+  const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= playedLeagueUclPlaces) && nextLeague.euro;
   const league = nextLeague;
   /* Round 154: the swap is recomputed every summer, because the weakest club
      of the league can change as the world ages. The spec remembers who is

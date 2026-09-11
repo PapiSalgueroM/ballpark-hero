@@ -410,6 +410,31 @@ export function LiveSimScreen({
     };
   }, [running, finished, live, onMark]);
 
+  /* Round 543: the listeners above only fire when the DOCUMENT goes away, and
+     a router navigation is not that. Tapping Back, or the DoUKnowBall logo, or
+     any nav link unmounts this viewer with the document still very much alive,
+     so the minute was thrown away and "Resume match" replayed the half from
+     minute 1. A player reported it as the watch mode needing fixing.
+
+     It has to be its own effect with an empty dependency list, because the
+     cleanup of the effect above runs on every change of running, finished,
+     live or onMark, and marking the clock there would write the career on
+     every one of them. Everything this cleanup reads goes through a ref for
+     the same reason. */
+  const runningRef = useRef(running);
+  const liveRef = useRef(live);
+  const onMarkRef = useRef(onMark);
+  useEffect(() => {
+    runningRef.current = running;
+    liveRef.current = live;
+    onMarkRef.current = onMark;
+  });
+  useEffect(() => () => {
+    if (runningRef.current && !finishedRef.current && liveRef.current) {
+      onMarkRef.current(Math.floor(clockRef.current));
+    }
+  }, []);
+
   /* The report is the match settled: full time, whatever the clock says. */
   useEffect(() => {
     if (report && stage !== 'done') {

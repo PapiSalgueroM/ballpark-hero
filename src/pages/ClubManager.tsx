@@ -1051,12 +1051,21 @@ const ClubManager = () => {
                   </button>
                 </div>
                 <p className="mt-1.5 text-[9px] text-muted-foreground">On the pitch with the break in your hands, or straight to the report. Same match either way.</p>
-                <button
-                  onClick={() => setHubPanel('matchCentre')}
-                  className="mt-2 text-[11px] font-bold text-primary hover:underline"
-                >
-                  📊 Match Centre: form, head to head, odds, team talk
-                </button>
+                {/* Round 543: only offered when it can actually open. The facts
+                    are built only for a match that has not kicked off (the panel
+                    carries the pre-match team talk, which is not a thing you get
+                    to give at minute 37), so with a match paused mid-flight this
+                    button used to set the panel and render nothing at all. A
+                    player who walks away from a live match and comes back is
+                    exactly the case that hit it. */}
+                {g.facts && (
+                  <button
+                    onClick={() => setHubPanel('matchCentre')}
+                    className="mt-2 text-[11px] font-bold text-primary hover:underline"
+                  >
+                    📊 Match Centre: form, head to head, odds, team talk
+                  </button>
+                )}
               </>
             )}
             {fx && fx.kind === 'window' && (
