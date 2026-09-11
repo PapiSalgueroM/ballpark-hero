@@ -232,6 +232,12 @@ for (const c of CASES) {
       for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
+      /* Round 530: the last pick is narrated, so the screen holds the draft
+         with its card until Continue is pressed. The save already says hub,
+         which is what the two lines above check; the hub itself is not drawn
+         until the press. */
+      expect(screen.queryByText(c.tile)).toBeNull();
+      fireEvent.click(screen.getByText('Continue to the hub'));
       fireEvent.click(screen.getByText(c.tile));
       fireEvent.click(screen.getByText(c.firstButton));
       expect(read().league[c.periodKey]).toBe(2);
