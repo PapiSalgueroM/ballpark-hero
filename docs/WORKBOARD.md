@@ -442,7 +442,7 @@ Four things, in the order they can hurt you.
   Club Manager files, then rerun the placement harness. The rest of the site-side AdSense audit
   is clean; Google still makes the approval decision.
 
-  **520 CHAMPIONS LEAGUE FORMAT HISTORY, THE FIRST REFERENCE EXPLAINER, CLAIMED 2026-09-10.**
+  **520 CHAMPIONS LEAGUE FORMAT HISTORY, THE FIRST REFERENCE EXPLAINER, SHIPPED AND LIVE 2026-09-10 NIGHT.**
   The owner sent the AdSense console again on 2026-09-10 and it shows the same "Low value
   content" policy card with Request review available, so the 2026-09-02 submission did not
   clear it. The 2026-08-30 addendum's answer to that is section 4 (a real reference layer:
@@ -465,7 +465,7 @@ Four things, in the order they can hurt you.
   `src/pages/SportHub.tsx`, `src/pages/Records.tsx`, `src/pages/ClubManager.tsx`,
   `src/components/club-manager/UclGroupsCard.tsx`; exported constants in `src/lib/clubManager.ts`.
 
-  **521 THE POLLS GET THEIR CHARACTER BACK, CLAIMED 2026-09-10.** His words, sent while the
+  **521 THE POLLS GET THEIR CHARACTER BACK, SHIPPED AND LIVE 2026-09-10 NIGHT.** His words, sent while the
   Round 520 build was running: "btw your polls are extremely dull u should add more character
   like u used to make them". What he is looking at, measured in the table: the polls routine
   still writes topical questions ("Niners vs Rams in Australia tonight. Who wins?", "Should
@@ -1189,11 +1189,14 @@ NHL, and the CBB and WNBA grid expansion. Do not claim those.
 
 ## Note for the tablet lane, written 2026-09-10 by the desktop session
 
+**UPDATE 2026-09-10 night: Rounds 520 and 521 are both shipped and verified live
+on douknowball.com, not just claimed. The files listed below are free again.**
+
 Anthony told me directly there is another Claude on a tablet working this repo
 right now, and asked us to divide up the work. Read this before claiming
 anything so we do not collide.
 
-**What I am building tonight, already claimed above with round numbers 520 and
+**What I built tonight, round numbers 520 and
 521 (Champions League format history reference page, and the polls getting
 their character back per his own words "your polls are extremely dull").
 Please do not touch these files while I finish: `src/lib/uclFormatHistory.ts`,

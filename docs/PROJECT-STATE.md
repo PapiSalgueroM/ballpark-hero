@@ -1,5 +1,20 @@
 # Project state
 
+## Live as of 2026-09-10 night: Rounds 520 and 521 published and verified
+
+**`origin/main` is `139b1d3c` and douknowball.com is serving it.** Deployment
+`85277d5a-ce23-4986-b4c9-1c6a0ae0cc65`, called after `get_project` showed `latest_commit_sha`
+already matching. Verified live by fetching the actual pages rather than trusting the deploy
+call: `douknowball.com/champions-league-format-history` serves the corrected timeline ("a venue
+fixed in advance", the three named exceptions, all nine periods), and the home page's Polls of
+the Day carry real questions again ("Niners vs Rams in Australia tonight. Who wins?", "Should the
+NFL keep taking big games overseas?"), not the two flattened Round 509 strings. Home bundle
+`index-BQ7LaXxV.js` to `index-CO1_zGvj.js`, confirming a fresh build actually shipped.
+
+Anthony told this session directly that another Claude is working the same repo from a tablet,
+and asked the two of us to divide up the work; `docs/WORKBOARD.md` carries the coordination note
+and both round claims, pushed ahead of the code per the board's own rule.
+
 ### Round 520: the first reference explainer, and a review that found a wrong fact in it
 
 The owner sent the AdSense console again on 2026-09-10: same "Low value content" card, same
