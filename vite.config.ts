@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import fs from "fs";
 import { componentTagger } from "lovable-tagger";
+import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
 
 /**
  * Round 275: put the real asset tags into every prerendered snapshot at build
@@ -145,7 +146,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
+  plugins: [dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
