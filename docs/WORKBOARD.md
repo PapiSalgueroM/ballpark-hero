@@ -284,12 +284,21 @@ block is 541 to 550. Next free is 551.
      could not drive a live match to measure the result, and the alternative of moving the control
      row above the pitch costs no pitch size at all and may be the better answer. Needs
      `dukb-visual-qa` with a browser: measured rectangles at 390x844 and 375x667, both options.
-   - **Half the viewer branch condition is unreachable dead code.** In `ClubManager.tsx` the
-     `phase === 'halftime'` arm can only be reached through `g.play()`, and every call site that can
-     return a halftime also sets watch mode true, so the `|| g.career.live?.h2Drawn` clause never
-     fires and the classic `HalftimeScreen` branch below it is dead. Round 472 merged the two ways
-     in, so either delete the dead branch and the clause, or give the running viewer a real exit
-     that marks the clock. Decide it in code rather than in a comment.
+   - **The viewer has no way out between kick off and full time**, and the "dead code" half of this
+     finding is not quite right, so read this before deleting anything. The classic `HalftimeScreen`
+     branch in `ClubManager.tsx` is reachable whenever `watchMode` is false while the phase is
+     `halftime`; what does not exist is any button that puts you in that state, because `onExit` is
+     only rendered at stage `done` (the Full report button). So it is unreached rather than
+     unreachable, and deleting it on the "dead code" reading risks removing the only thing that
+     renders for a save state nobody has enumerated. **Do not delete it without proving the state
+     cannot occur.**
+     The harm the finding actually named is already gone: Round 543 marks the clock on unmount, so
+     leaving the page mid-match no longer costs the minute. What is left is a genuine but small UX gap,
+     a deliberate "step away" that marks the clock and returns to the hub. I did not ship one: at
+     halftime it would drop the player on the classic dressing room rather than the hub, which is a
+     design decision, and the control row it would live near is the same one that is already below
+     the fold. Both want a browser and measured rectangles, which Round 550's walk now provides the
+     rig for.
 
 ## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
 
