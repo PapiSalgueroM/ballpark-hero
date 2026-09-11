@@ -195,6 +195,23 @@ without rewriting a single stored row, and avoids leaving `completed_on` with mi
 **No row is rewritten and no score is retroactively subtracted**, matching the standing precedent
 from the 61,964 point leak.
 
+**Two things checked before building, because getting either wrong reintroduces a P0.** First,
+`game_completions` is indexed on `completed_on` twice (`idx_game_completions_day_game`,
+`idx_game_completions_player_day`) and **not at all on `created_at`**, so simply swapping the
+filter would drop to a sequential scan over 356k rows, on the one project that has already had a
+Disk IO budget P0: Round 370 exists because `global_rank` was burning 1.9 billion buffer blocks
+across 1.5 million calls. The round adds the matching index in the same migration. Second, the
+expression is safe to index: `timezone(text, timestamptz)` is **IMMUTABLE** in Postgres (only the
+one argument session-timezone form is merely STABLE), confirmed against `pg_proc.provolatile`
+rather than assumed, so an index on `((created_at AT TIME ZONE 'America/New_York')::date)` is
+accepted and the rewritten filter still uses one.
+
+`scripts/simLeaderboardCache.mjs` (Round 370) already fences that the cached `player_ranks`
+agrees with the live `global_leaderboard` on both rank and points, so it will catch this round if
+it changes one surface and not the other. All four surfaces move together or the fence goes red:
+the two functions, the materialized view, and nothing else (the `refresh-player-ranks` cron at
+`*/5` keeps working unchanged).
+
 DB work goes through the Supabase MCP with the SQL saved under `supabase/migrations/`, and
 `get_advisors` after, per CLAUDE.md. Spec section 104's Week and Month views ride along in the
 same round, since they are the same predicate and would have inherited this exact bug if they had
