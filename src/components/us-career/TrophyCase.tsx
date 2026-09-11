@@ -9,9 +9,15 @@
  * This reads the seasons themselves rather than the career counters, so
  * what it shows is what actually happened, and every honour carries the
  * years it was won in.
+ *
+ * Round 530: the rows tick in one after the other when the case opens,
+ * keyed on the honour so a new one animates and the rest hold still.
+ * Reduced motion lands every row on its final frame (CelebrationStyles).
  */
 import { Trophy } from 'lucide-react';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { trophyLines } from '@/lib/careerHub';
+import { revealDelay } from '@/lib/usCareerReveal';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -26,7 +32,8 @@ export default function TrophyCase({ seasons, rings, ringWord }: Props) {
   const total = lines.reduce((n, l) => n + l.n, 0);
   return (
     <div className="space-y-2" data-trophy-case>
-      <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+      <CelebrationStyles />
+      <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">
           <Trophy className="mr-1 inline h-4 w-4 text-gold" />
           {rings} {rings === 1 ? ringWord : `${ringWord}s`}
@@ -40,8 +47,12 @@ export default function TrophyCase({ seasons, rings, ringWord }: Props) {
 
       {lines.length === 0 ? null : (
         <div className="space-y-1.5">
-          {lines.map(l => (
-            <div key={l.label} className="rounded-xl border border-border bg-card px-3 py-2">
+          {lines.map((l, i) => (
+            <div
+              key={l.label}
+              className="cm-tick-in rounded-xl border border-border bg-card px-3 py-2"
+              style={{ animationDelay: `${revealDelay(i, 0.2, 0.1)}s` }}
+            >
               <div className="flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate text-sm font-bold text-foreground">{l.label}</span>
                 <span className={cn(
