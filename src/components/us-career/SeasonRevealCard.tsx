@@ -9,16 +9,17 @@
    The reveal is transient state on each board, never persisted: reload
    mid-curtain and the save opens on the same screen it always did. */
 
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { SeasonReveal } from '@/lib/usCareerReveal';
 
 export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal; onContinue: () => void }) {
   const banned = reveal.resultTone === 'banned';
   const title = reveal.resultTone === 'title';
-  /* Lines start after the header (0.05s) and result (0.25s) have landed. */
-  const lineDelay = (i: number) => `${0.6 + i * 0.22}s`;
-  const afterLines = 0.6 + reveal.lines.length * 0.22 + 0.15;
+  /* Lines start after the header (0.05s) and result (0.25s) have landed, on
+     the kit's stagger; the button follows the last line by a beat. */
+  const lineDelay = (i: number) => revealDelay(i);
+  const afterLines = revealDelay(reveal.lines.length, 0.75);
   return (
     <div
       data-season-reveal
@@ -66,7 +67,7 @@ export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal;
       <button
         onClick={onContinue}
         className="cm-rise mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
-        style={{ animationDelay: `${afterLines}s` }}
+        style={{ animationDelay: afterLines }}
       >
         Continue
       </button>
