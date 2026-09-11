@@ -317,6 +317,30 @@ export function parseActiveRestoreMigration(sql) {
   return rows;
 }
 
+const ACTIVE_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', (\d+|null::smallint), (?:'((?:[^']|'')*)'|(null::text)), (\d+), '((?:[^']|'')*)'\),?$/gm;
+
+/** Round 531: puzzle id -> exact endpoint tuple, the applied active value the
+ *  refresh replaces (null where the pair had none) and the value it writes */
+export function parseActiveRefreshMigration(sql) {
+  const normalized = String(sql).replaceAll('\r\n', '\n');
+  const start = normalized.indexOf('  for desired in');
+  const end = normalized.indexOf('\n    ) as rows(puzzle_id, player_a, player_b, old_active_min_steps, old_active_hint, active_min_steps, active_hint)', start);
+  if (start < 0 || end < 0) return new Map();
+  const rows = new Map();
+  const unquote = value => value.replace(/''/g, "'");
+  for (const match of normalized.slice(start, end).matchAll(ACTIVE_REFRESH_ROW_RE)) {
+    rows.set(unquote(match[1]), {
+      a: unquote(match[2]),
+      b: unquote(match[3]),
+      oldMinSteps: match[4] === 'null::smallint' ? null : Number(match[4]),
+      oldHint: match[6] === 'null::text' ? null : unquote(match[5]),
+      minSteps: Number(match[7]),
+      hint: unquote(match[8]),
+    });
+  }
+  return rows;
+}
+
 /** exact deletions and retained six-field rows from the quarantine companion */
 export function parseTransferPathCompanionMigration(sql) {
   const normalized = String(sql).replaceAll('\r\n', '\n');

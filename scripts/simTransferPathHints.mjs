@@ -21,8 +21,12 @@
  *      against src/data/careerPlayers.ts by the same test, and each
  *      oneOptimalPath is a chain the game would accept, link by link.
  *   3. THE LIVE TABLES, through the site's own fetchers plus a raw active-pair
- *      read. Active accepts only two atomic rollout states: all 885 pairs null,
- *      or the exact 203 verified migration pairs. Partial and mixed states fail.
+ *      read. Active accepts only two atomic rollout states: the applied
+ *      2026-09-07 restore's 203 pairs exactly, or the Round 531 refresh's 212
+ *      pairs exactly (the identity set grew from 78 to 90; the refresh is
+ *      applied after the Round 531 frontend is live). Partial and mixed states
+ *      fail, and the applied state prints how many of its rows the current
+ *      identity set already beats, so the pending refresh cannot be forgotten.
  *      SKIPS LOUDLY when Supabase is unreachable.
  *   4. THE WORDING: no long dash, under 200 characters, and no hint that
  *      says "Direct link" on a pair the game would refuse (the exact shape
@@ -49,7 +53,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { MODE_RULES, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRestoreMigration, parseHint, parseTransferPathCompanionMigration, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { MODE_RULES, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseTransferPathCompanionMigration, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
@@ -63,7 +67,13 @@ const fail = m => { failures += 1; if (failures <= 25) console.error('  FAIL: ' 
 const PUZZLE_FLOOR = 885;
 const PLAYER_FLOOR = 253;
 const COMPANION = path.join(ROOT, 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql');
-const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const APPLIED_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refresh_verified_active_transfer_path_hints.sql');
+/* Round 531: the 90 verified identities connect 212 of the 885 retained puzzles
+   (docs/audits/transfer-path-active-identities-2026-09-11.md); the applied
+   2026-09-07 restore holds 203 on 78 and is the other valid live state */
+const ACTIVE_RESTORE_ROWS = 212;
+const APPLIED_ACTIVE_ROWS = 203;
 
 function checkRows(graph, rows, label) {
   let unreachable = 0, checked = 0;
@@ -173,34 +183,35 @@ console.log('3) the live tables, through the site\'s own fetchers');
     const alisson = players.find(p => p.name === 'Alisson');
     if (alisson && alisson.career.some(s => s.club === 'Roma' && /^201[45]-/.test(s.season))) fail('the "Alisson" row still has Roma seasons before 2016');
     console.log(`   ${checked} live puzzles checked on ${graph.names.length} live players`);
-    const restoreRows = parseActiveRestoreMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+    const restoreRows = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+    const appliedRows = parseActiveRestoreMigration(fs.readFileSync(APPLIED_RESTORE, 'utf8'));
     const parsedCompanion = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8'));
     const companionRows = new Map(parsedCompanion.desired.map(row => [row.id, row]));
     if (puzzles.length !== PUZZLE_FLOOR || companionRows.size !== puzzles.length) fail(`the atomic rollout expects ${PUZZLE_FLOOR} live and companion rows, found ${puzzles.length} live and ${companionRows.size} companion`);
-    if (restoreRows.size !== 203) fail(`the exact verified active restore carries ${restoreRows.size} rows, expected 203`);
+    if (restoreRows.size !== ACTIVE_RESTORE_ROWS) fail(`the exact verified active restore carries ${restoreRows.size} rows, expected ${ACTIVE_RESTORE_ROWS}`);
+    if (appliedRows.size !== APPLIED_ACTIVE_ROWS) fail(`the applied active restore parses to ${appliedRows.size} rows, expected ${APPLIED_ACTIVE_ROWS}`);
     if (rawPuzzles.length !== puzzles.length) fail(`the raw live read has ${rawPuzzles.length} rows, the site fetcher has ${puzzles.length}`);
     const partialActive = rawPuzzles.filter(row => (row.active_min_steps === null) !== (row.active_hint === null));
     for (const row of partialActive.slice(0, 10)) fail(`live ${row.puzzle_id} has only half of its active hint pair`);
     if (partialActive.length > 10) fail(`${partialActive.length} live rows have only half of their active hint pair`);
     const liveActiveCount = rawPuzzles.filter(row => row.active_min_steps !== null && row.active_hint !== null).length;
-    const restoredActiveCount = restoreRows.size;
-    const activeLiveState = partialActive.length === 0 && liveActiveCount === 0
-      ? 'staged-null'
-      : partialActive.length === 0 && liveActiveCount === restoredActiveCount
-        ? 'restored'
+    const activeLiveState = partialActive.length === 0 && liveActiveCount === appliedRows.size
+      ? 'applied'
+      : partialActive.length === 0 && liveActiveCount === restoreRows.size
+        ? 'refreshed'
         : 'mixed';
-    if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only staged zero or restored ${restoredActiveCount} is valid`);
+    if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only the applied ${appliedRows.size} or the refreshed ${restoreRows.size} is valid`);
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) {
       fail(`proposed active restore ${id} is absent from the live table`);
       if (CONTROL === 'livepuzzleid' && id === 'tpa-26') liveIdControlCaught = true;
     }
 
-    /* Each special rule is checked on the graph its filter leaves. The active
-       restore is preflighted even while the database is atomically null. */
+    /* Each special rule is checked on the graph its filter leaves. The pending
+       refresh is preflighted even while the database holds the applied restore. */
     for (const rule of MODE_RULES) {
       const rg = buildGraph(site.playersUnderRule(players, rule));
-      let withPath = 0, same = 0;
+      let withPath = 0, same = 0, staleApplied = 0;
       if (rule === 'active') {
         for (const p of puzzles) {
           const restore = restoreRows.get(p.id) ?? null;
@@ -209,15 +220,18 @@ console.log('3) the live tables, through the site\'s own fetchers');
           for (const pr of ruleProblems(rg, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
           if (proposed) withPath += 1;
           const entry = p.active ?? null;
-          if (activeLiveState === 'staged-null') {
-            if (entry !== null) fail(`live ${p.id} has an active hint during the staged-null rollout state`);
+          if (activeLiveState === 'applied') {
+            const appliedRow = appliedRows.get(p.id) ?? null;
+            if ((entry === null) !== (appliedRow === null) || (entry && (entry.minSteps !== appliedRow.minSteps || entry.hint !== appliedRow.hint))) fail(`live ${p.id} under active differs from the applied 2026-09-07 restore row`);
             else same += 1;
-          } else if (activeLiveState === 'restored') {
-            if ((entry === null) !== (proposed === null) || (entry && (entry.minSteps !== proposed.minSteps || entry.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified restore row`);
+            if (appliedRow && ruleProblems(rg, p.playerA, p.playerB, { minSteps: appliedRow.minSteps, hint: appliedRow.hint }).length) staleApplied += 1;
+          } else if (activeLiveState === 'refreshed') {
+            if ((entry === null) !== (proposed === null) || (entry && (entry.minSteps !== proposed.minSteps || entry.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified refresh row`);
             else same += 1;
           }
         }
-        console.log(`   active restore preflighted on ${rg.names.length} live players (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
+        console.log(`   active refresh preflighted on ${rg.names.length} live players (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
+        if (activeLiveState === 'applied') console.log(`   PENDING: the Round 531 refresh (${path.basename(ACTIVE_RESTORE)}) is not applied; ${staleApplied} applied rows are already beaten on the current identity set and ${restoreRows.size - appliedRows.size} pairs have no live hint. Apply it once the Round 531 frontend is live.`);
         continue;
       }
       for (const p of puzzles) {
@@ -246,7 +260,7 @@ console.log('5) current special rule rows against the pull, per rule');
   const pairs = new Map(fs.readFileSync(path.join(pull, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => { const [id, a, b] = l.split('|'); return [id, { a, b }]; }));
   const parsedCompanion = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8'));
   const companionRows = new Map(parsedCompanion.desired.map(row => [row.id, row]));
-  const restoreRows = parseActiveRestoreMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+  const restoreRows = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
   const stored = new Map([...pairs].map(([id]) => {
     const companion = companionRows.get(id);
     const active = restoreRows.get(id);
@@ -258,7 +272,7 @@ console.log('5) current special rule rows against the pull, per rule');
     }];
   }));
   if (companionRows.size !== pairs.size) fail(`the applied companion carries ${companionRows.size} rows for ${pairs.size} pulled puzzles`);
-  if (restoreRows.size !== 203) fail(`the active restore carries ${restoreRows.size} rows, expected 203`);
+  if (restoreRows.size !== ACTIVE_RESTORE_ROWS) fail(`the active restore carries ${restoreRows.size} rows, expected ${ACTIVE_RESTORE_ROWS}`);
   for (const [id, restore] of restoreRows) {
     const pair = pairs.get(id);
     if (!pair) fail(`the active restore carries unknown puzzle ${id}`);

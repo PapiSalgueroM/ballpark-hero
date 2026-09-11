@@ -5,7 +5,7 @@ Alejandro Garnacho|Argentina|Manchester United:2022-2024
 Alessandro Del Piero|Padova:1991-1992;Juventus:1993-2011;Sydney FC:2012-2013;Delhi Dynamos:2014
 Alessandro Nesta|Lazio:1993-2001;AC Milan:2002-2011;Montreal Impact:2012-2013c;Chennaiyin:2014c
 Alexander Isak|Sweden|Borussia Dortmund:2017;Willem II:2018;Real Sociedad:2019-2021;Newcastle:2022-2024
-Alexis Mac Allister|Argentinos Juniors:2016-2018;Boca Juniors:2019;Brighton:2019-2022;Liverpool:2023-2025
+Alexis Mac Allister|Argentina|Argentinos Juniors:2016-2018;Boca Juniors:2019;Brighton:2019-2022;Liverpool:2023-2025
 Alexis Sánchez|Udinese:2008-2010;Barcelona:2011-2013;Arsenal:2014-2016;Manchester United:2017-2018;Inter Milan:2019-2020
 Alisson|Brazil|Roma:2016-2017;Liverpool:2018-2024
 Alisson Becker|Roma:2016-2017;Liverpool:2018-2024
@@ -26,7 +26,7 @@ Bastian Schweinsteiger|Bayern Munich:2002-2014;Manchester United:2015-2016;Chica
 Bernardo Silva|Portugal|Monaco:2014-2016;Manchester City:2017-2024
 Bradley Barcola|France|Lyon:2021-2022;PSG:2023-2024
 Bruno Fernandes|Portugal|Udinese:2015;Sampdoria:2016;Sporting CP:2017-2018;Manchester United:2019-2024
-Bruno Guimarães|Audax:2015c;Athletico Paranaense:2017-2019c;Audax:2017c;Lyon:2019-2021;Newcastle:2021-2025
+Bruno Guimarães|Brazil|Audax:2015c;Athletico Paranaense:2017-2019c;Audax:2017c;Lyon:2019-2021;Newcastle:2021-2025
 Bukayo Saka|England|Arsenal:2018-2024
 Cafu|São Paulo:1989-1994c;Real Zaragoza:1994;Juventude:1995c;Palmeiras:1995-1996c;Roma:1997-2002;AC Milan:2003-2007
 Carles Puyol|Barcelona:1999-2013
@@ -38,7 +38,7 @@ Christian Vieri|Torino:1991-1992;Pisa:1992;Ravenna:1993;Venezia:1994;Atalanta:19
 Ciro Immobile|Torino:2013;Borussia Dortmund:2014;Lazio:2015-2023;Beşiktaş:2024
 Clarence Seedorf|Ajax:1992-1994;Sampdoria:1995;Real Madrid:1996-1999;Inter Milan:1999-2001;AC Milan:2002-2011;Botafogo:2012-2013
 Claude Makélélé|Nantes:1992-1996;Marseille:1997;Celta Vigo:1998-1999;Real Madrid:2000-2002;Chelsea:2003-2007;PSG:2008-2010
-Cody Gakpo|PSV:2017-2022;Liverpool:2022-2025
+Cody Gakpo|Netherlands|PSV:2017-2022;Liverpool:2022-2025
 Cole Palmer|Manchester City:2020-2022;Chelsea:2023-2024
 Cristian Pulisic|Borussia Dortmund:2015-2018;Chelsea:2019-2022;AC Milan:2023-2024
 Cristiano Ronaldo|Portugal|Manchester United:2003-2008;Real Madrid:2009-2017;Juventus:2018-2020;Manchester United:2021;Al-Nassr:2023-2024
@@ -48,7 +48,7 @@ Darwin Núñez|Uruguay|Almería:2019;Benfica:2020-2021;Liverpool:2022-2024
 David Alaba|Austria|Bayern Munich:2010-2020;Real Madrid:2021-2023
 David Beckham|Manchester United:1992;Manchester United:1994-2002;Preston North End:1994;Real Madrid:2003-2006;LA Galaxy:2007-2012;AC Milan:2008-2009;PSG:2012
 David de Gea|Atlético Madrid:2009-2010;Manchester United:2011-2022;Fiorentina:2024-2025
-David Luiz|Benfica:2006-2010;Vitória:2006;Chelsea:2010-2013;PSG:2014-2015;Chelsea:2016-2018;Arsenal:2019-2020;Flamengo:2021-2024;Fortaleza:2024;Pafos:2025
+David Luiz|Brazil|Benfica:2006-2010;Vitória:2006;Chelsea:2010-2013;PSG:2014-2015;Chelsea:2016-2018;Arsenal:2019-2020;Flamengo:2021-2024;Fortaleza:2024;Pafos:2025
 David Silva|Valencia:2006-2009;Manchester City:2010-2019;Real Sociedad:2020
 David Trezeguet|Platense:1993-1994;Monaco:1995-1999;Juventus:2000-2010;Hércules:2010;Baniyas:2011;River Plate:2011-2012;Newell's Old Boys:2013;Pune City:2014c
 David Villa|Sporting Gijón:2000-2002;Real Zaragoza:2003-2004;Valencia:2005-2009;Barcelona:2010-2012;Atlético Madrid:2013;Melbourne City:2014;New York City FC:2015-2018c;Vissel Kobe:2019c
@@ -114,12 +114,12 @@ João Félix|Portugal|Benfica:2018;Atlético Madrid:2019-2021;Chelsea:2022;Barce
 Johan Cruyff|Ajax:1964-1973;Barcelona:1973-1977;Los Angeles Aztecs:1979;Levante:1980;Washington Diplomats:1980-1981;Ajax:1981-1982;Feyenoord:1983
 John Terry|Chelsea:1998-2016;Nottingham Forest:1999;Aston Villa:2017
 Jonathan David|Canada|Gent:2018-2019;Lille:2020-2024
-Jordan Henderson|Coventry City:2008;Sunderland:2008-2010;Liverpool:2011-2022;Ajax:2023-2024;Al-Ettifaq:2023;Brentford:2025
+Jordan Henderson|England|Coventry City:2008;Sunderland:2008-2010;Liverpool:2011-2022;Ajax:2023-2024;Al-Ettifaq:2023;Brentford:2025
 Jordi Alba|Valencia:2009-2011;Barcelona:2012-2022;Inter Miami:2023
 Joshua Kimmich|Germany|Bayern Munich:2015-2024
-Juan Mata|Real Madrid Castilla:2006;Valencia:2007-2010;Chelsea:2011-2013;Manchester United:2013-2021;Galatasaray:2022;Vissel Kobe:2023;Western Sydney Wanderers:2024;Melbourne Victory:2025
+Juan Mata|Spain|Real Madrid Castilla:2006;Valencia:2007-2010;Chelsea:2011-2013;Manchester United:2013-2021;Galatasaray:2022;Vissel Kobe:2023;Western Sydney Wanderers:2024;Melbourne Victory:2025
 Jude Bellingham|England|Birmingham City:2019;Borussia Dortmund:2020-2022;Real Madrid:2023-2024
-Julián Álvarez|River Plate:2018-2019;River Plate:2020-2022c;Manchester City:2022-2023;Atlético Madrid:2024-2025
+Julián Álvarez|Argentina|River Plate:2018-2019;River Plate:2020-2022c;Manchester City:2022-2023;Atlético Madrid:2024-2025
 Kaká|São Paulo:2001-2003;AC Milan:2003-2008;Real Madrid:2009-2012;AC Milan:2013;São Paulo:2014;Orlando City:2015-2017
 Kalidou Koulibaly|Senegal|Napoli:2014-2021;Chelsea:2022;Al-Hilal:2023
 Karim Benzema|Lyon:2007-2008;Real Madrid:2009-2022;Al-Ittihad:2023-2024
@@ -131,11 +131,11 @@ Koke|Atlético Madrid:2009-2025
 Kyle Walker|Tottenham:2011-2016;Manchester City:2017-2023;AC Milan:2024
 Kylian Mbappé|France|Monaco:2015-2016;PSG:2017-2023;Real Madrid:2024-2024
 Lamine Yamal|Spain|Barcelona:2022-2024
-Lautaro Martínez|Racing Club:2015-2016c;Racing Club:2016-2017;Inter Milan:2018-2025
+Lautaro Martínez|Argentina|Racing Club:2015-2016c;Racing Club:2016-2017;Inter Milan:2018-2025
 Leroy Sané|Germany|Schalke 04:2014-2015;Manchester City:2016-2018;Bayern Munich:2020-2024
 Lionel Messi|Argentina|Barcelona:2004-2020;PSG:2021-2022;Inter Miami:2023-2024
 Lorenzo Insigne|Napoli:2012-2021;Toronto FC:2022-2023
-Luis Díaz|Barranquilla:2016-2017c;Junior FC:2017-2019c;Porto:2019-2021;Liverpool:2021-2024;Bayern Munich:2025
+Luis Díaz|Colombia|Barranquilla:2016-2017c;Junior FC:2017-2019c;Porto:2019-2021;Liverpool:2021-2024;Bayern Munich:2025
 Luís Figo|Sporting CP:1989;Sporting CP:1991-1994;Barcelona:1995-1999;Real Madrid:2000-2004;Inter Milan:2005-2008
 Luis Suárez|Ajax:2007-2009;Liverpool:2010-2013;Barcelona:2014-2019;Atlético Madrid:2020;Inter Miami:2023-2024
 Luka Modrić|Croatia|Tottenham:2008-2011;Real Madrid:2012-2024
@@ -155,7 +155,7 @@ Mauro Icardi|Inter Milan:2013-2018;PSG:2019-2021;Galatasaray:2022-2023
 Memphis Depay|Netherlands|PSV:2013-2014;Manchester United:2015;Lyon:2016-2020;Barcelona:2021;Atlético Madrid:2022-2023;Corinthians:2024
 Mesut Özil|Werder Bremen:2008-2009;Real Madrid:2010-2012;Arsenal:2013-2019
 Michael Ballack|Chemnitzer FC:1995-1996;Kaiserslautern:1997-1998;Bayer Leverkusen:1999-2001;Bayern Munich:2002-2005;Chelsea:2006-2009;Bayer Leverkusen:2010-2011
-Michael Olise|Reading:2018-2020;Crystal Palace:2021-2023;Bayern Munich:2024-2025
+Michael Olise|France|Reading:2018-2020;Crystal Palace:2021-2023;Bayern Munich:2024-2025
 Michael Owen|Liverpool:1996-2003;Real Madrid:2004;Newcastle:2005-2008;Manchester United:2009-2011;Stoke City:2012
 Michel Platini|Nancy:1972-1978;Saint-Étienne:1979-1981;Juventus:1982-1986
 Mikel Oyarzabal|Spain|Real Sociedad:2015-2020;Real Sociedad:2022-2024
@@ -172,7 +172,7 @@ Nicolas Anelka|Paris Saint-Germain:1995-1996;Arsenal:1996-1998;Real Madrid:1999;
 Nicolò Barella|Cagliari:2014-2018;Como:2015;Inter Milan:2019-2025
 Oliver Kahn|Karlsruher SC:1987-1988;Karlsruher SC:1990-1993;Bayern Munich:1994-2007
 Olivier Giroud|Grenoble:2005-2006;Istres:2007;Tours:2008-2009;Montpellier:2010-2011;Arsenal:2012-2017;Chelsea:2017-2020;AC Milan:2021-2023;LAFC:2024-2025c;Lille:2025
-Ollie Watkins|Exeter City:2013-2016;Weston-super-Mare:2014;Brentford:2017-2019;Aston Villa:2020-2025
+Ollie Watkins|England|Exeter City:2013-2016;Weston-super-Mare:2014;Brentford:2017-2019;Aston Villa:2020-2025
 Ousmane Dembélé|France|Rennes:2015;Borussia Dortmund:2016;Barcelona:2017-2022;PSG:2023-2024
 Paolo Maldini|AC Milan:1984-2008
 Patrice Evra|Marsala:1998;Monza:1999;Nice:2000-2001;Monaco:2002-2005;Manchester United:2005-2013;Juventus:2014-2016;Marseille:2016-2017;West Ham:2017
@@ -239,7 +239,7 @@ Vincent Kompany|Anderlecht:2003-2005;Hamburg:2006-2007;Manchester City:2008-2018
 Vinícius Júnior|Brazil|Flamengo:2017;Real Madrid:2018-2024
 Vinícius Tobias|Shakhtar Donetsk:2021;Real Madrid:2022-2023
 Virgil van Dijk|Netherlands|Celtic:2013;Southampton:2014-2016;Liverpool:2017-2024
-Vitinha|Porto:2019;Wolverhampton:2020;Porto:2021;PSG:2022-2025
+Vitinha|Portugal|Porto:2019;Wolverhampton:2020;Porto:2021;PSG:2022-2025
 Warren Zaïre-Emery|France|PSG:2022-2024
 Wayne Rooney|Manchester United:2004-2016;Everton:2017
 Wesley Sneijder|Ajax:2002-2006;Real Madrid:2007-2008;Inter Milan:2009-2012;Galatasaray:2012-2016;Al-Gharafa:2017-2018;Nice:2017

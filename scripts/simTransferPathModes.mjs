@@ -24,15 +24,19 @@
         nationality identity, under Europe every link's shared club is European, and
         every link is a same club same season link on the everyday graph. The
         share of puzzles with a path is measured and floored from headroom
-        (2026-09-07: Active 203 of 885, Europe 872 of 885).
+        (2026-09-07: Active 203 of 885, Europe 872 of 885; 2026-09-11, Round
+        531: Active 212 of 885 on the 90 identity set).
      2) THE FALLBACK THE PAGE SHOWS WHEN THE TABLE IS DOWN, PER RULE.
         src/data/transferPathPuzzles.ts against src/data/careerPlayers.ts by
         the same test, and each rule's oneOptimalPath walked link by link.
      3) THE LIVE TABLE, through the site's own fetcher plus a raw read for null
         pair integrity. Europe equals the migration text for text. Active may
-        be in exactly one of two atomic rollout states: all 885 pairs null, or
-       all 203 verified paths restored exactly. Any partial
-        or mixed third state fails. SKIPS LOUDLY when Supabase is unreachable.
+        be in exactly one of two atomic rollout states: the applied 2026-09-07
+        restore's 203 pairs exactly, or the Round 531 refresh's 212 pairs
+        exactly (applied after the Round 531 frontend is live). Any partial
+        or mixed third state fails, and the applied state prints how many of
+        its rows the current identity set already beats, so the pending refresh
+        cannot be forgotten. SKIPS LOUDLY when Supabase is unreachable.
      4) THE SOURCE. The hook filters through playersUnderRule and reads
         puzzleUnderRule, the fetcher selects all four columns. Comments are
         stripped before matching.
@@ -58,7 +62,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
-  MODE_RULES, buildGraph, distances, expandCompactCareers, parseActiveRestoreMigration, parseTransferPathCompanionMigration, ruleProblems, sharedClub, shortestPath,
+  MODE_RULES, buildGraph, distances, expandCompactCareers, parseActiveRefreshMigration, parseActiveRestoreMigration, parseTransferPathCompanionMigration, ruleProblems, sharedClub, shortestPath,
 } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -70,11 +74,15 @@ let failures = 0;
 const findings = [];
 const fail = m => { failures += 1; findings.push(m); if (failures <= 25) console.error('  FAIL: ' + m); };
 
-/* measured 2026-09-07 on the corrected 885 puzzle pull: Europe 872 */
+/* measured 2026-09-07 on the corrected 885 puzzle pull: Europe 872, Active 203;
+   Round 531 (2026-09-11) measured Active 212 on the 90 identity set, the floor holds */
 const SHARE_FLOOR = { active: 0.22, europe: 0.95 };
 const PUZZLE_FLOOR = 885;
+const ACTIVE_RESTORE_ROWS = 212;
+const APPLIED_ACTIVE_ROWS = 203;
 const COMPANION = path.join(ROOT, 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql');
-const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const APPLIED_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refresh_verified_active_transfer_path_hints.sql');
 
 /* ── the real module, and under the abroad control a rewritten copy for the graph ── */
 const TMP = os.tmpdir();
@@ -131,7 +139,8 @@ const players = expandCompactCareers(fs.readFileSync(path.join(pull, 'careers.tx
 const pairs = new Map(fs.readFileSync(path.join(pull, 'puzzles.txt'), 'utf8').replaceAll('\r\n', '\n').split('\n').filter(Boolean).map(l => { const [id, a, b] = l.split('|'); return [id, { a, b }]; }));
 const companionParsed = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8'));
 const companionRows = new Map(companionParsed.desired.map(row => [row.id, row]));
-const restoreRows = parseActiveRestoreMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+const restoreRows = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+const appliedRows = parseActiveRestoreMigration(fs.readFileSync(APPLIED_RESTORE, 'utf8'));
 const stored = new Map([...pairs].map(([id]) => {
   const companion = companionRows.get(id);
   const active = restoreRows.get(id);
@@ -147,7 +156,8 @@ console.log('1) current stored rule rows against the pull, per rule');
 {
   if (companionParsed.desired.length !== companionRows.size) fail('the applied companion repeats a retained puzzle id');
   if (companionRows.size !== pairs.size) fail(`the applied companion carries ${companionRows.size} rows for ${pairs.size} pulled puzzles`);
-  if (restoreRows.size !== 203) fail(`the separate active restore carries ${restoreRows.size} rows, expected 203`);
+  if (restoreRows.size !== ACTIVE_RESTORE_ROWS) fail(`the separate active restore carries ${restoreRows.size} rows, expected ${ACTIVE_RESTORE_ROWS}`);
+  if (appliedRows.size !== APPLIED_ACTIVE_ROWS) fail(`the applied active restore parses to ${appliedRows.size} rows, expected ${APPLIED_ACTIVE_ROWS}`);
   if (stored.size < PUZZLE_FLOOR) fail(`${stored.size} puzzles, the floor is ${PUZZLE_FLOOR}`);
   for (const row of companionParsed.desired) {
     const pair = pairs.get(row.id);
@@ -252,20 +262,19 @@ console.log('3) the live table, through the site\'s own fetcher');
     for (const row of partialActive.slice(0, 10)) fail(`live ${row.puzzle_id} has only half of its active hint pair`);
     if (partialActive.length > 10) fail(`${partialActive.length} live rows have only half of their active hint pair`);
     const liveActiveCount = rawPuzzles.filter(row => row.active_min_steps !== null && row.active_hint !== null).length;
-    const restoredActiveCount = restoreRows.size;
-    const activeLiveState = partialActive.length === 0 && liveActiveCount === 0
-      ? 'staged-null'
-      : partialActive.length === 0 && liveActiveCount === restoredActiveCount
-        ? 'restored'
+    const activeLiveState = partialActive.length === 0 && liveActiveCount === appliedRows.size
+      ? 'applied'
+      : partialActive.length === 0 && liveActiveCount === restoreRows.size
+        ? 'refreshed'
         : 'mixed';
-    if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only staged zero or restored ${restoredActiveCount} is valid`);
+    if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only the applied ${appliedRows.size} or the refreshed ${restoreRows.size} is valid`);
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) fail(`proposed active restore ${id} is absent from the live table`);
     const everyday = buildGraph(players);
     const byName = new Map(players.map(p => [p.name, p]));
     for (const rule of MODE_RULES) {
       const graph = buildGraph(real.playersUnderRule(players, rule));
-      let same = 0, withPath = 0;
+      let same = 0, withPath = 0, staleApplied = 0;
       if (rule === 'active') {
         for (const p of puzzles) {
           const restore = restoreRows.get(p.id) ?? null;
@@ -278,15 +287,18 @@ console.log('3) the live table, through the site\'s own fetcher');
             if (chain) for (const pr of chainProblems(rule, everyday, byName, chain, (x, y) => sharedClub(graph, x, y))) fail(`proposed active restore ${p.id}: ${pr}`);
           }
           const live = p.active ?? null;
-          if (activeLiveState === 'staged-null') {
-            if (live !== null) fail(`live ${p.id} has an active hint during the staged-null rollout state`);
+          if (activeLiveState === 'applied') {
+            const appliedRow = appliedRows.get(p.id) ?? null;
+            if ((live === null) !== (appliedRow === null) || (live && (live.minSteps !== appliedRow.minSteps || live.hint !== appliedRow.hint))) fail(`live ${p.id} under active differs from the applied 2026-09-07 restore row`);
             else same += 1;
-          } else if (activeLiveState === 'restored') {
-            if ((live === null) !== (proposed === null) || (live && (live.minSteps !== proposed.minSteps || live.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified restore row`);
+            if (appliedRow && ruleProblems(graph, p.playerA, p.playerB, { minSteps: appliedRow.minSteps, hint: appliedRow.hint }).length) staleApplied += 1;
+          } else if (activeLiveState === 'refreshed') {
+            if ((live === null) !== (proposed === null) || (live && (live.minSteps !== proposed.minSteps || live.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified refresh row`);
             else same += 1;
           }
         }
-        console.log(`   active: proposed restore checks on the live graph (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
+        console.log(`   active: proposed refresh checks on the live graph (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
+        if (activeLiveState === 'applied') console.log(`   PENDING: the Round 531 refresh (${path.basename(ACTIVE_RESTORE)}) is not applied; ${staleApplied} applied rows are already beaten on the current identity set and ${restoreRows.size - appliedRows.size} pairs have no live hint. Apply it once the Round 531 frontend is live.`);
         continue;
       }
       for (const p of puzzles) {
