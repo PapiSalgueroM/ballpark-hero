@@ -90,12 +90,18 @@ export default function AchievementCase({ profile, bestScoreByGame, points }: Ac
       <CardHeader className="pb-3 px-3 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
           <CardTitle className="text-lg font-display">🎖️ Achievements</CardTitle>
+          {/* Round 539: the denominator INCLUDES the secret ones, and the line
+              below says "plus N secret ones", so a reader added them and got a
+              total that does not exist. The count now excludes the secrets that
+              are still out there, which makes the two lines add up: what you can
+              see, plus what you cannot, is the whole case. */}
           <span className="text-sm font-semibold text-primary whitespace-nowrap">
-            {earnedCount} / {ACHIEVEMENTS.length} earned
+            {earnedCount} / {ACHIEVEMENTS.length - secrets} earned
           </span>
         </div>
         <p className="text-[11px] text-muted-foreground leading-snug">
-          Worked out from what you have already played, so they turn up on their own. Tiers are our
+          Worked out from what you have already played, so they turn up on their own. A game counts
+          once a day, so a long session on one game is one finish rather than forty. Tiers are our
           call on how hard each one is, not a share of players.
         </p>
       </CardHeader>

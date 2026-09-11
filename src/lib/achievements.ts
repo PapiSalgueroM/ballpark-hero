@@ -1,7 +1,7 @@
 import { CATEGORIES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { getStreakState, type StreakState } from '@/lib/streaks';
-import { getCurrentPlayerName } from '@/lib/completions';
+import { peekCurrentPlayerName } from '@/lib/completions';
 
 /* Round 527: the achievement case, spec item 16.
 
@@ -27,24 +27,38 @@ import { getCurrentPlayerName } from '@/lib/completions';
    sentence read twice. A definition that computed the two separately could
    say 10 out of 10 and still show locked, and nobody would find it for weeks.
 
+   A FINISH IS A GAME ON A DAY. Round 539, after the adversarial pass. This is
+   the single most important line in the file, because Round 527 got it wrong.
+   public.game_completions is an ACTIVITY LOG, not a list of finishes:
+   recordActivity writes a row per Club Manager MATCH and per Soccer Career
+   SEASON. Measured on production, 376,818 rows are 25,182 distinct
+   (player, game, Eastern day) triples, and the busiest handle's 6,440 rows are
+   49 real game days, a factor of 131. So the counts here come from
+   public.player_game_days, which does that grouping in SQL, and every "finish"
+   below means one game played on one day. A long evening on one game is one
+   finish, not forty, which is also the fair reading of the words.
+
    RARITY IS AN EDITORIAL TIER, NOT A MEASURED POPULATION. This site cannot
    compute what share of players hold an achievement: a guest is a browser
    handle and the handle regenerates, so the handle count is not a people
    count. So nothing here prints "0.4% of players", because that number would
-   be made up. What the tiers ARE grounded in is this site's own play, read
-   off its own tables on 2026-09-11 and written down here so the next person
-   can re-measure rather than guess:
+   be made up. What the tiers ARE grounded in is this site's own play, in game
+   days, re-measured on 2026-09-11 after the correction above and written down
+   so the next person can re-measure rather than guess:
 
-     6,970 handles in game_completions over the 73 days since 2026-07-01.
-     Finishes per handle: half stop at 7, the top tenth pass 104, the top
-       hundredth pass 786, the busiest has 6,440.
-     Different games per handle: the top tenth pass 5, the top hundredth pass
-       17, the widest has 53.
-     Days played per handle: the top hundredth pass 12, the deepest has 43 of
-       the 73 available.
+     6,981 handles have ever played. In GAME DAYS: half stop at 2, the top
+       twentieth pass 14, the top hundredth pass 28, the top thousandth pass
+       59, and the deepest handle on the site has 121.
+     Different games per handle: the widest has 53.
+     Days played per handle: the deepest has 43.
+     Days on one single game: the most anybody has is 43, the top thousandth
+       reaches 15.
+     Different games in one day: the most is 36, and 129 player days have
+       reached ten.
      Points, from user_scores' 455 signed in players: half stop at 3,000, the
        top tenth pass 19,965, the top hundredth pass 65,942, the highest is
-       100,651.
+       100,651. Points are unaffected by the row inflation, since they come
+       from a different table.
 
    So common sits around the median, uncommon around the top tenth, rare above
    the top hundredth, and legendary at or past the best anybody has managed.
@@ -88,7 +102,8 @@ export interface AchievementDef {
    knocking each field out and watching the earned set move. */
 
 export interface AchievementFacts {
-  /** Finished games, lifetime. The local tally and the row count, whichever knows more. */
+  /** Game days, lifetime: one game played on one Eastern day counts once.
+   *  Exact, not a floor, and it can only ever grow. See the header. */
   totalPlays: number;
   /** Points, lifetime. The signed in total and the local one, whichever knows more. */
   totalPoints: number;
@@ -96,15 +111,15 @@ export interface AchievementFacts {
   longestStreak: number;
   /** Best run of consecutive days on ONE game. */
   bestGameStreak: number;
-  /** Distinct days with at least one finish. A floor, see the row cap below. */
+  /** Distinct Eastern days with at least one finish. */
   daysPlayed: number;
   /** Most different games finished inside one day. */
   mostGamesInOneDay: number;
   /** Most different sports finished inside one day. */
   mostSportsInOneDay: number;
-  /** Finishes per game slug. */
+  /** Game days per game slug. */
   playsByGame: Record<string, number>;
-  /** Finishes per sport, by registry category title. */
+  /** Game days per sport, by registry category title. */
   playsBySport: Record<string, number>;
   /** Saved best score per game slug. */
   bestScoreByGame: Record<string, number>;
@@ -172,22 +187,22 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     f => highest(f.playsByGame), 5),
   rung({ id: 'triple-header', title: 'Triple header', description: 'Three different games in one day.', emoji: '🎪', rarity: 'common', hidden: false },
     f => f.mostGamesInOneDay, 3),
-  rung({ id: 'plays-25', title: 'Twenty five finishes', description: 'Finish 25 games.', emoji: '🎮', rarity: 'common', hidden: false },
-    f => f.totalPlays, 25),
+  rung({ id: 'plays-10', title: 'Ten finishes', description: 'Finish ten games.', emoji: '🎮', rarity: 'common', hidden: false },
+    f => f.totalPlays, 10),
 
   /* uncommon: roughly the top tenth */
   rung({ id: 'streak-5', title: 'Five days running', description: 'Play something five days in a row.', emoji: '🔥', rarity: 'uncommon', hidden: false },
     f => f.longestStreak, 5),
-  rung({ id: 'plays-100', title: 'A hundred finishes', description: 'Finish 100 games.', emoji: '💯', rarity: 'uncommon', hidden: false },
-    f => f.totalPlays, 100),
+  rung({ id: 'plays-25', title: 'Twenty five finishes', description: 'Finish 25 games.', emoji: '💯', rarity: 'uncommon', hidden: false },
+    f => f.totalPlays, 25),
   rung({ id: 'games-10', title: 'Ten different games', description: 'Finish ten different games.', emoji: '🧩', rarity: 'uncommon', hidden: false },
     f => tally(f.playsByGame), 10),
   rung({ id: 'days-10', title: 'Ten days in the books', description: 'Play on ten different days.', emoji: '📅', rarity: 'uncommon', hidden: false },
     f => f.daysPlayed, 10),
   rung({ id: 'points-5000', title: 'Five thousand up', description: 'Bank 5,000 points.', emoji: '⭐', rarity: 'uncommon', hidden: false },
     f => f.totalPoints, 5000),
-  rung({ id: 'sport-25', title: 'Deep in one sport', description: '25 finishes inside a single sport.', emoji: '🧱', rarity: 'uncommon', hidden: false },
-    f => highest(f.playsBySport), 25),
+  rung({ id: 'sport-15', title: 'Deep in one sport', description: '15 finishes inside a single sport.', emoji: '🧱', rarity: 'uncommon', hidden: false },
+    f => highest(f.playsBySport), 15),
   rung({ id: 'scored-10', title: 'Ten on the board', description: 'Have a saved score in ten different games.', emoji: '📊', rarity: 'uncommon', hidden: false },
     f => tally(f.bestScoreByGame), 10),
 
@@ -196,12 +211,12 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     f => f.longestStreak, 21),
   rung({ id: 'game-streak-10', title: 'Same game, ten days', description: 'Ten days in a row on one game.', emoji: '🔂', rarity: 'rare', hidden: false },
     f => f.bestGameStreak, 10),
-  rung({ id: 'plays-500', title: 'Five hundred finishes', description: 'Finish 500 games.', emoji: '💠', rarity: 'rare', hidden: false },
-    f => f.totalPlays, 500),
+  rung({ id: 'plays-60', title: 'Sixty finishes', description: 'Finish 60 games.', emoji: '💠', rarity: 'rare', hidden: false },
+    f => f.totalPlays, 60),
   rung({ id: 'games-25', title: 'Twenty five different games', description: 'Finish 25 different games.', emoji: '🎯', rarity: 'rare', hidden: false },
     f => tally(f.playsByGame), 25),
-  rung({ id: 'one-game-100', title: 'A hundred of one', description: 'Play a single game 100 times.', emoji: '🏟️', rarity: 'rare', hidden: false },
-    f => highest(f.playsByGame), 100),
+  rung({ id: 'one-game-25', title: 'Twenty five of one', description: 'Play a single game 25 times.', emoji: '🏟️', rarity: 'rare', hidden: false },
+    f => highest(f.playsByGame), 25),
   rung({ id: 'days-30', title: 'Thirty days played', description: 'Play on 30 different days.', emoji: '🗓️', rarity: 'rare', hidden: false },
     f => f.daysPlayed, 30),
   rung({ id: 'points-25000', title: 'Twenty five thousand', description: 'Bank 25,000 points.', emoji: '🌠', rarity: 'rare', hidden: false },
@@ -211,15 +226,22 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   gauge({ id: 'every-sport', title: 'One from every sport', description: 'Finish a game in every sport on the site.', emoji: '🌍', rarity: 'rare', hidden: false },
     f => ({ have: tally(f.playsBySport), need: f.totalSports })),
 
-  /* legendary: at or past the best anybody has managed so far */
-  rung({ id: 'plays-1000', title: 'A thousand games', description: 'Finish 1,000 games.', emoji: '💎', rarity: 'legendary', hidden: false },
-    f => f.totalPlays, 1000),
+  /* legendary: at or past the best anybody has managed so far, and since
+     Round 539 that phrase is measured rather than asserted. Over all 6,981
+     handles that have ever played, the ceilings are: 121 game days, 43 distinct
+     days, 53 different games, 43 days on one single game. The plays ladder used
+     to run 25, 100, 500, 1,000, which was reachable only because a Club Manager
+     season wrote a row a match; against real game days its top two rungs were
+     unreachable by four to eight times. The streak rungs are untouched, because
+     a streak was always counted in days and was never inflated by this. */
+  rung({ id: 'plays-100', title: 'A hundred games', description: 'Finish 100 games.', emoji: '💎', rarity: 'legendary', hidden: false },
+    f => f.totalPlays, 100),
   rung({ id: 'games-50', title: 'Fifty different games', description: 'Finish 50 different games.', emoji: '🗃️', rarity: 'legendary', hidden: false },
     f => tally(f.playsByGame), 50),
   rung({ id: 'streak-60', title: 'Two months, every day', description: 'Play something 60 days in a row.', emoji: '👑', rarity: 'legendary', hidden: false },
     f => f.longestStreak, 60),
-  rung({ id: 'days-100', title: 'A hundred days played', description: 'Play on 100 different days.', emoji: '🏛️', rarity: 'legendary', hidden: false },
-    f => f.daysPlayed, 100),
+  rung({ id: 'days-40', title: 'Forty days played', description: 'Play on 40 different days.', emoji: '🏛️', rarity: 'legendary', hidden: false },
+    f => f.daysPlayed, 40),
   rung({ id: 'points-100000', title: 'Six figures', description: 'Bank 100,000 points.', emoji: '🌟', rarity: 'legendary', hidden: false },
     f => f.totalPoints, 100000),
   gauge({ id: 'every-sport-deep', title: 'Round the world', description: 'Three finishes in every sport on the site.', emoji: '🌐', rarity: 'legendary', hidden: false },
@@ -338,14 +360,24 @@ export function buildAchievementFacts(
   const playsBySport: Record<string, number> = {};
   const gamesPerDay = new Map<string, Set<string>>();
   const sportsPerDay = new Map<string, Set<string>>();
+  /* Round 539: the rows arriving here are already one per (game, Eastern day),
+     because public.player_game_days does the grouping in SQL. Deduplicating
+     again would be free but pointless; what matters is that a row is now a DAY
+     a game was played, so every count below is a count of game days. Guarded
+     anyway against a duplicate pair, since a caller could hand this raw rows. */
+  const seenPairs = new Set<string>();
 
   for (const row of rows) {
     if (!row || typeof row.game !== 'string' || !row.game) continue;
+    const day = row.completed_on;
+    if (typeof day !== 'string' || !day) continue;
+    const pair = `${row.game}|${day}`;
+    if (seenPairs.has(pair)) continue;
+    seenPairs.add(pair);
+
     playsByGame[row.game] = (playsByGame[row.game] ?? 0) + 1;
     const sport = sportForSlug(row.game);
     if (sport) playsBySport[sport] = (playsBySport[sport] ?? 0) + 1;
-    const day = row.completed_on;
-    if (typeof day !== 'string' || !day) continue;
     const games = gamesPerDay.get(day) ?? new Set<string>();
     games.add(row.game);
     gamesPerDay.set(day, games);
@@ -369,7 +401,15 @@ export function buildAchievementFacts(
   }
 
   return {
-    totalPlays: Math.max(rows.length, streaks.totalPlays ?? 0),
+    /* Round 539: this was Math.max(rows.length, streaks.totalPlays). BOTH of
+       those were inflated and the larger inflated one always won.
+       streaks.totalPlays is bumped unconditionally by recordStreakDay, outside
+       the once a day guard, and the rows were an activity log. Measured on
+       production: 376,818 rows are 25,182 real game days site wide, and the
+       deepest handle's 6,440 rows are 49. So the local tally is no longer
+       consulted at all for this number; it is the count of distinct game days,
+       which is a fact the database can state exactly. */
+    totalPlays: seenPairs.size,
     totalPoints: Math.max(serverPoints, streaks.totalPoints ?? 0),
     longestStreak: streaks.global?.longest ?? 0,
     bestGameStreak,
@@ -395,16 +435,22 @@ export function buildAchievementFacts(
  * other games in front of it.
  */
 async function fetchOwnCompletions(playerName: string): Promise<CompletionRow[]> {
+  if (!playerName) return [];
   try {
-    // Dynamic .from() access: game_completions predates the generated types,
-    // same pattern as src/lib/completions.ts and src/lib/badges.ts.
-    const { data, error } = await (supabase.from as any)('game_completions')
-      .select('game, completed_on')
-      .eq('player_name', playerName)
-      .order('completed_on', { ascending: false })
-      .limit(1000);
-    if (error || !data) return [];
-    return data as CompletionRow[];
+    /* Round 539: this was a SELECT of the 1,000 most recent rows. Three things
+       were wrong with that and all three are fixed by asking a different
+       question, so it is now an RPC that returns one row per (game, Eastern
+       day). See supabase/migrations/20260911_player_game_days.sql for the
+       measurements. In short: the rows are an activity log rather than a list
+       of finishes and inflate by up to 131x for a real handle; the 1,000 row
+       cap was a SLIDING WINDOW, so achievements un earned themselves as a
+       player kept playing, against this file's own promise that they could
+       not; and completed_on is a UTC date, which the Round 537 migration
+       already measured as the wrong day for 20.3% of completions. */
+    const { data, error } = await (supabase.rpc as any)('player_game_days', { p_player: playerName });
+    if (error || !Array.isArray(data)) return [];
+    return (data as { game: string; et_day: string }[])
+      .map(r => ({ game: r.game, completed_on: r.et_day }));
   } catch {
     return [];
   }
@@ -422,7 +468,12 @@ export async function loadAchievementFacts(
   serverPoints = 0,
 ): Promise<AchievementFacts> {
   try {
-    const rows = await fetchOwnCompletions(getCurrentPlayerName(profile));
+    /* Round 539: peek, never getCurrentPlayerName. That one reaches
+       getGuestHandle, which MINTS and STORES a handle when there is not one,
+       so this file's own "writes nothing" promise was false for a signed in
+       user whose profile row carries neither a display name nor a username.
+       See src/lib/completions.ts for the read only variant. */
+    const rows = await fetchOwnCompletions(peekCurrentPlayerName(profile));
     return buildAchievementFacts(rows, getStreakState(), bestScoreByGame, serverPoints);
   } catch {
     return emptyAchievementFacts();
