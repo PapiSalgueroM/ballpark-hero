@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, GraduationCap, ListOrdered, RotateCcw, ShieldHalf, Trophy, Users } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import {
   CBB_SCHOOLS, CBB_SCHOOL_MAP, CBB_CONFS, CBB_ROUNDS,
   initCbb, simCbbRound, cbbRankings, cbbConfStandings, runMarch,
@@ -24,11 +25,22 @@ interface SaveShape {
 
 const confLabel = (c: string) => c === 'B1G' ? 'Big Ten' : c === 'B12' ? 'Big 12' : c === 'BE' ? 'Big East' : c === 'MM' ? 'Mid-Majors' : c;
 
+/* Round 530: revealDelay timing. The i-th line of a staggered list lands at
+   start + i * step seconds, the Round 186 pace every reveal on the site
+   shares. Same arithmetic as the helper Celebration.tsx grows this round, so
+   the integration can swap this for the import. */
+const revealDelay = (i: number, start = 0.6, step = 0.22) => `${start + i * step}s`;
+
 export default function CbbDynastyBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
   const [tab, setTab] = useState<Tab>('team');
   const [st, setSt] = useState<CbbState | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
+  /* Round 530: the recruiting feed is prepended to, one line per signing, so
+     a row's key is its distance from the newest line. The newest row is the
+     only one that animates; the rows below it keep their identity and their
+     final frame instead of replaying every time a line lands above them. */
+  const feedSeq = useRef(0);
   const [lastGames, setLastGames] = useState<CbbGame[]>([]);
   // Round 66: the owner's no scroll rule. You press Play Week at the top and
   // the results render underneath, so the scoreboard pulls itself into view.
@@ -123,6 +135,7 @@ export default function CbbDynastyBoard() {
   const sign = (r: CbbRecruit, fromPortal: boolean) => {
     if (!st) return;
     const state: CbbState = JSON.parse(JSON.stringify(st));
+    feedSeq.current += 1;
     if (!cbbSignRecruit(state, r, fromPortal ? 'SO' : 'FR', Math.random)) {
       setFeed(f => [`❌ Not enough NIL for ${r.name} (asks ${r.nilAsk}).`, ...f].slice(0, 5));
       return;
@@ -186,35 +199,44 @@ export default function CbbDynastyBoard() {
   if (phase === 'recap' && march && poy) {
     const isChamp = march.champion === st.myTeam;
     const title = march.bracket[march.bracket.length - 1];
+    /* Round 530: the season curtain. Pure presentation over the March the
+       engine already ran: the champion slams in, your own line rises, the
+       player of the year lands after the champion, Cinderella after him, then
+       the title game and the bracket tick in round by round in the order the
+       engine played them. Keyed on the season so next year's recap plays
+       again from the top. Every number is the final value from frame one. */
+    const ledger = march.bracket.filter(g => g.name !== 'Round of 32');
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-gold/50 bg-card p-5 text-center">
-          <Crown className="mx-auto h-10 w-10 text-gold" />
-          <p className="mt-2 font-display text-2xl font-black text-foreground">{label(march.champion)} cut down the nets</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div key={st.season} className={cn('relative overflow-hidden rounded-2xl border border-gold/50 bg-card p-5 text-center', isChamp && 'cm-win-pulse')}>
+          <CelebrationStyles />
+          {isChamp && <ConfettiBurst seed={st.season} count={34} />}
+          <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
+          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.05s' }}>{label(march.champion)} cut down the nets</p>
+          <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.25s' }}>
             {isChamp ? 'One Shining Moment is about you this year.' : `Your ${label(st.myTeam)}: ${my.wins}-${my.losses}. ${march.myExit}.`}
           </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            Title game: ({title.homeSeed}) {label(title.home)} vs ({title.awaySeed}) {label(title.away)}, {label(title.winner)} win {Math.max(title.hs, title.as)}-{Math.min(title.hs, title.as)}
+          <p className="cm-rise mt-1 text-xs text-amber-300 font-bold" style={{ animationDelay: '0.45s' }}>
+            🏆 National Player of the Year: {poy[0].name} ({poy[0].pos}, {label(poy[0].team)})
           </p>
           {march.cinderella && (
-            <p className="mt-1 text-xs font-bold text-emerald-400">
+            <p className="cm-rise mt-1 text-xs font-bold text-emerald-400" style={{ animationDelay: '0.55s' }}>
               🕰️ Cinderella: {label(march.cinderella.team)} crashed the Final Four as a {march.cinderella.seed} seed
             </p>
           )}
-          <p className="mt-1 text-xs text-amber-300 font-bold">
-            🏆 National Player of the Year: {poy[0].name} ({poy[0].pos}, {label(poy[0].team)})
+          <p className="cm-tick-in mt-2 text-xs text-muted-foreground" style={{ animationDelay: revealDelay(0) }}>
+            Title game: ({title.homeSeed}) {label(title.home)} vs ({title.awaySeed}) {label(title.away)}, {label(title.winner)} win {Math.max(title.hs, title.as)}-{Math.min(title.hs, title.as)}
           </p>
           <div className="mt-2 max-h-44 space-y-0.5 overflow-y-auto text-[11px] text-muted-foreground">
-            {march.bracket.filter(g => g.name !== 'Round of 32').map((g, i) => (
-              <p key={i}>{g.name}: ({g.homeSeed}) {label(g.home)} vs ({g.awaySeed}) {label(g.away)}, {label(g.winner)} advance</p>
+            {ledger.map((g, i) => (
+              <p key={`${st.season}:${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i + 1) }}>{g.name}: ({g.homeSeed}) {label(g.home)} vs ({g.awaySeed}) {label(g.away)}, {label(g.winner)} advance</p>
             ))}
           </div>
-          <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
           </div>
-          <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
               <GraduationCap className="h-4 w-4" /> Hit the recruiting trail
             </button>
@@ -233,6 +255,7 @@ export default function CbbDynastyBoard() {
   if (phase === 'recruit' && (recruits || portal)) {
     return (
       <div className="space-y-4">
+        <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">The {st.season + 1} class</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -240,8 +263,12 @@ export default function CbbDynastyBoard() {
           </p>
         </div>
         {feed.length > 0 && (
-          <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
-            {feed.slice(0, 4).map((n, i) => <p key={i}>{n}</p>)}
+          <div className="overflow-hidden rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+            {/* Round 530: a commitment slams in at the top of the class feed; a
+                refused one ticks in. Older lines keep their key and stay put. */}
+            {feed.slice(0, 4).map((n, i) => (
+              <p key={feedSeq.current - i} className={i === 0 ? (n.startsWith('🖊️') ? 'cm-slam font-semibold text-foreground' : 'cm-tick-in') : undefined}>{n}</p>
+            ))}
           </div>
         )}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -283,6 +310,7 @@ export default function CbbDynastyBoard() {
 
   return (
     <div className="space-y-4">
+      <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: school.color }}>{school.name}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{st.season}-{(st.season + 1) % 100} · Round {st.round}/{CBB_ROUNDS}</span>
@@ -306,7 +334,11 @@ export default function CbbDynastyBoard() {
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
-          {feed.slice(0, 5).map((n, i) => <p key={i}>{n}</p>)}
+          {/* Round 530: the round's lines tick in. Keyed on the season and the
+              round so a new round replays them and a tab switch does not. */}
+          {feed.slice(0, 5).map((n, i) => (
+            <p key={`${st.season}:${st.round}:${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i, 0.05) }}>{n}</p>
+          ))}
         </div>
       )}
 
@@ -340,8 +372,10 @@ export default function CbbDynastyBoard() {
             <div ref={revealRef} className="rounded-2xl border border-border bg-card p-3">
               <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Around the country</p>
               <div className="grid max-h-48 grid-cols-1 gap-0.5 overflow-y-auto text-[11px] sm:grid-cols-2">
+                {/* Round 530: the scoreboard ticks in at a quick step, there
+                    are forty rows. Keyed on the round so it replays each round. */}
                 {lastGames.map((g, i) => (
-                  <p key={i} className={cn('rounded px-2 py-0.5', (g.home === st.myTeam || g.away === st.myTeam) ? 'bg-gold/10 font-semibold text-foreground' : 'text-muted-foreground')}>
+                  <p key={`${st.round}:${i}`} className={cn('cm-tick-in rounded px-2 py-0.5', (g.home === st.myTeam || g.away === st.myTeam) ? 'bg-gold/10 font-semibold text-foreground' : 'text-muted-foreground')} style={{ animationDelay: revealDelay(i, 0.15, 0.04) }}>
                     {label(g.winner)} beat {label(g.winner === g.home ? g.away : g.home)} {Math.max(g.hs, g.as)}-{Math.min(g.hs, g.as)}
                   </p>
                 ))}
