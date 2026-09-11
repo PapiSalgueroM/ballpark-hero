@@ -1,4 +1,4 @@
--- Round 528: the shared leaderboard's day ends at midnight Eastern, not 8pm.
+-- Round 537 (built as 528, see docs/WORKBOARD.md): the shared leaderboard's day ends at midnight Eastern, not 8pm.
 --
 -- WHAT WAS WRONG. public.game_completions.completed_on defaults to
 -- ((now() AT TIME ZONE 'utc'))::date and global_leaderboard filtered the same

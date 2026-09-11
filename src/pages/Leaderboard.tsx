@@ -57,12 +57,12 @@ const SPORT_OPTIONS: SportOption[] = [
   })),
 ];
 
-/* Round 528: week and month are TRAILING windows, the last 7 and the last 30
+/* Round 537: week and month are TRAILING windows, the last 7 and the last 30
    Eastern days, not calendar weeks or months. The labels say "7 Days" and
    "30 Days" rather than "This Week" for that reason: a trailing window is what
    the question "am I climbing" actually means, and a label that says week while
    the query means something else is the kind of small lie this repo does not
-   ship. The day itself is Eastern everywhere now; before Round 528 this board
+   ship. The day itself is Eastern everywhere now; before Round 537 this board
    was the one surface still rolling over at 20:00 Eastern.
 
    Today and All Time are served by the cached player_ranks view. The two new
@@ -271,7 +271,7 @@ export default function Leaderboard() {
           </div>
 
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Period)}>
-            {/* Round 528: four tabs have to fit a 320px phone, so the two new
+            {/* Round 537: four tabs have to fit a 320px phone, so the two new
                 ones carry no icon and every label stays short. The icons on
                 Today and All-Time are kept because they were already there and
                 removing them would change two tabs nobody asked about. */}

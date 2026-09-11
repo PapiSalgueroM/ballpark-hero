@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>NFL Playoff Format History: Every Change Since 1933</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"NFL Playoff Format History: Every Change Since 1933 | DoUKnowBall","description":"How the NFL playoffs grew from one championship game to a 14 team bracket: every format change since 1933, the postseason overtime rule's own history, checked against two sources, and what NFL Front Office plays.","url":"https://douknowball.com/nfl-playoff-format-history","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/nfl-playoff-format-history" data-rh="true"><meta name="description" content="How the NFL playoffs grew from one championship game to a 14 team bracket: every format change since 1933, the postseason overtime rule's own history, checked against two sources, and what NFL Front Office plays." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/nfl-playoff-format-history" data-rh="true"><meta property="og:title" content="NFL Playoff Format History: Every Change Since 1933 | DoUKnowBall" data-rh="true"><meta property="og:description" content="How the NFL playoffs grew from one championship game to a 14 team bracket: every format change since 1933, the postseason overtime rule's own history, checked against two sources, and what NFL Front Office plays." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NFL Playoff Format History: Every Change Since 1933 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="How the NFL playoffs grew from one championship game to a 14 team bracket: every format change since 1933, the postseason overtime rule's own history, checked against two sources, and what NFL Front Office plays." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>NFL playoff format history</h1>
+<p>Every shape the NFL postseason has taken since 1933, and the overtime rule's own changes. Each was checked against two independent publishers on 2026-09-10, listed at the bottom. Where a detail only had one reading it was left out rather than guessed.</p>
+<h2>The timeline at a glance</h2>
+<p>Seasons</p>
+<p>Field</p>
+<p>Qualifying</p>
+<p>1933 to 1969</p>
+<p>None</p>
+<p>The winner of each conference (later each division) met once, for the championship. No other postseason games existed.</p>
+<p>1970 to 1977</p>
+<p>8 teams</p>
+<p>Three division winners plus one wild card (the best remaining record) in each of the AFC and the NFC.</p>
+<p>1978 to 1989</p>
+<p>10 teams</p>
+<p>Three division winners plus two wild cards in each conference; the two wild cards play each other in a new wild card round before the round of eight.</p>
+<p>1990 to 2001</p>
+<p>12 teams</p>
+<p>Three division winners plus three wild cards in each conference.</p>
+<p>2002 to 2019</p>
+<p>12 teams</p>
+<p>Four division winners plus two wild cards in each conference, the same twelve team total under a new division map.</p>
+<p>2020 onward</p>
+<p>14 teams</p>
+<p>Four division winners plus three wild cards in each conference; only the top seed in each conference gets a first round bye.</p>
+<h2>Season by season</h2>
+<h3>1933 to 1969: One title game, no bracket</h3>
+<p>The winner of each conference (later each division) met once, for the championship. No other postseason games existed.</p>
+<li>The NFL split into an Eastern and a Western conference in 1933 specifically to set up a title game between them, the first time the champion was decided on the field rather than by regular season record alone.</li>
+<li>The American Football League ran its own separate championship from 1960; the two leagues agreed to merge in 1966 and first played a combined championship game, the one later known as Super Bowl I, after the 1966 season, while remaining separate leagues through the 1969 season.</li>
+<h3>1970 to 1977: The merger: eight teams</h3>
+<p>Three division winners plus one wild card (the best remaining record) in each of the AFC and the NFC.</p>
+<li>The 1970 season was the first after the AFL and NFL fully merged into one league of two conferences, and the first with a guaranteed multi-game bracket rather than a single title game.</li>
+<h3>1978 to 1989: A second wild card: ten teams</h3>
+<p>Three division winners plus two wild cards in each conference; the two wild cards play each other in a new wild card round before the round of eight.</p>
+<li>This season also grew the regular season from 14 games to 16, where it stayed until 2021.</li>
+<h3>1990 to 2001: A third wild card: twelve teams</h3>
+<p>Three division winners plus three wild cards in each conference.</p>
+<li>Driven by complaints that a strong record was missing the playoffs under the ten team field: in four of the five seasons before this one, at least one 10-6 team stayed home.</li>
+<h3>2002 to 2019: Realigned to eight divisions, same twelve teams</h3>
+<p>Four division winners plus two wild cards in each conference, the same twelve team total under a new division map.</p>
+<li>The league expanded to 32 teams and regrouped from six divisions into eight, four per conference, four teams each. The playoff field size did not change, only how a division winner is decided.</li>
+<h3>2020 onward: A third wild card returns: fourteen teams</h3>
+<p>Four division winners plus three wild cards in each conference; only the top seed in each conference gets a first round bye.</p>
+<li>The last time the field grew (1990) every division winner got a bye; from this season only the #1 seed does, so three of the four winners play in the opening wild card round.</li>
+<h2>The overtime rule</h2>
+<p>Sudden death overtime, first score wins, was the rule for divisional playoff tiebreakers from the early 1940s and was extended to the championship game in 1946, but no postseason game actually reached overtime and was decided by it until 1958: the Baltimore Colts beat the New York Giants in the NFL Championship Game, still called the Greatest Game Ever Played, on a one yard touchdown run eight minutes and fifteen seconds into extra time. The pure sudden death rule held until 2010, when the NFL changed postseason overtime so a field goal alone on the first possession does not end the game, only a touchdown or a second score does; the regular season adopted the same rule in 2012. In 2022 the postseason rule changed again, to guarantee both teams at least one possession in overtime regardless of how the first one ends, unless it ends in a safety; the regular season adopted that rule in 2025.</p>
+<h2>What NFL Front Office plays</h2>
+<p>The real fourteen team format: seven seeds in each conference, four division winners and three wild cards, with only the #1 seed getting a bye through wild card weekend. Front Office runs the modern league rather than a chosen era, so this is the whole answer rather than a comparison across starts.</p>
+<p><a href="/front-office">Run a club through it</a></p>
+<h2>Questions people ask</h2>
+<h3>How many teams make the NFL playoffs?</h3>
+<p>Fourteen, since the 2020 season: four division winners and three wild cards in each of the AFC and NFC. Only the top seed in each conference gets a first round bye; the other three division winners play in wild card weekend along with the three wild card teams.</p>
+<h3>When did the NFL playoffs start using a bracket instead of one title game?</h3>
+<p>The 1970 season, the first after the AFL and NFL fully merged into two conferences. Before that, from 1933, the league's two conferences (later divisions) each sent their winner straight to one championship game with no other postseason games.</p>
+<h3>Why did the field keep growing?</h3>
+<p>A wild card was added in 1970 so a strong non-division-winner still had a path in. A second wild card in 1978 came with the regular season growing to 16 games. A third in 1990 followed years of complaints that a good team (multiple 10-6 records) was missing out. The 2002 realignment kept the field at twelve but reshaped the divisions. The third wild card returned in 2020, this time with only the top seed keeping a bye.</p>
+<h3>How does NFL playoff overtime work?</h3>
+<p>The current rule, since 2022, guarantees both teams at least one possession in a playoff overtime no matter how the first one ends, unless it ends in a safety. Before that, from 2010, only a first-possession field goal did not end it outright. Before 2010 it was pure sudden death: first score, any kind, wins. That is the rule that decided the famous 1958 NFL Championship Game.</p>
+<h2>Where this comes from</h2>
+<p>Every change above rests on at least two independent publishers agreeing, mostly Wikipedia's own season pages cross-checked against the Chicago Bears' official site history piece or Sportscasting's explainer. 11 sources across 4 publishers, last checked 2026-09-10.</p>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/NFL_playoffs">NFL playoffs</a></li>
+<li>Chicago Bears, <a href="https://www.chicagobears.com/news/history-of-how-nfl-playoffs-have-expanded">History of how NFL playoffs have expanded</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1970_NFL_season">1970 NFL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1978_NFL_season">1978 NFL season</a></li>
+<li>Sportscasting, <a href="https://www.sportscasting.com/news/why-are-there-more-teams-in-the-nfl-playoffs/">Why Are There More Teams in the NFL Playoffs?</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1990_NFL_season">1990 NFL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2002_NFL_season">2002 NFL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2020_NFL_season">2020 NFL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1958_NFL_Championship_Game">1958 NFL Championship Game</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Overtime_(sports)">Overtime (sports)</a></li>
+<li>Quirky Research, <a href="https://www.quirkyresearch.com/football-lists/when-overtime-wasnt-sudden-death/">When overtime wasn’t sudden death</a></li>
+<h2>Play with this history</h2>
+<li><a href="/front-office">NFL Front Office</a>: run a club through the real 14 team bracket, first round bye and all</li>
+<li><a href="/nfl-my-career">NFL My Career</a>: play a career through this era from a player's seat</li>
+<li><a href="/missing-eleven">Missing Eleven</a>: a real Super Bowl starting lineup, one name blanked</li>
+<li><a href="/football-grid">NFL Grid</a>: the daily 3x3 knowledge puzzle</li>
+<li><a href="/records">The Record Books</a>: every Super Bowl champion, year by year</li>
+<li><a href="/pro-football">All the football games</a>: the whole section on one page</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -25,8 +25,8 @@
     "date": "2026-08-25"
   },
   "/baseball": {
-    "hash": "206462c055bd213e",
-    "date": "2026-08-30"
+    "hash": "149ad86713f61f4b",
+    "date": "2026-09-11"
   },
   "/baseball-career": {
     "hash": "68d206bdcb581ff5",
@@ -93,8 +93,8 @@
     "date": "2026-09-05"
   },
   "/college": {
-    "hash": "5ab33e14857307b5",
-    "date": "2026-08-31"
+    "hash": "148204f3654be605",
+    "date": "2026-09-11"
   },
   "/college-grid": {
     "hash": "93be793bbfba3c6f",
@@ -217,8 +217,8 @@
     "date": "2026-09-05"
   },
   "/hockey": {
-    "hash": "676b20b82458e5cc",
-    "date": "2026-08-30"
+    "hash": "716e443b744cfc80",
+    "date": "2026-09-11"
   },
   "/hockey-career": {
     "hash": "5427ba68ddb85460",
@@ -376,6 +376,10 @@
     "hash": "c1be3533426e914f",
     "date": "2026-09-05"
   },
+  "/nfl-playoff-format-history": {
+    "hash": "573437f0fe0d7196",
+    "date": "2026-09-11"
+  },
   "/nhl-connect-4": {
     "hash": "72eb4bfbc713d344",
     "date": "2026-09-03"
@@ -437,11 +441,11 @@
     "date": "2026-09-11"
   },
   "/pro-basketball": {
-    "hash": "b9394d855db86445",
+    "hash": "59941bc5d15022fe",
     "date": "2026-09-11"
   },
   "/pro-football": {
-    "hash": "0fe4e57b383e2f7d",
+    "hash": "11feb9a6dda95088",
     "date": "2026-09-11"
   },
   "/puck-detective": {
@@ -485,8 +489,8 @@
     "date": "2026-09-05"
   },
   "/soccer": {
-    "hash": "676b0fe83ac0490d",
-    "date": "2026-09-10"
+    "hash": "ba2885785af74088",
+    "date": "2026-09-11"
   },
   "/soccer-career": {
     "hash": "d47614011aa60eb1",

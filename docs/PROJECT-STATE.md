@@ -129,6 +129,42 @@ zero disqualifying, all fixed before this entry was written:
 four round harnesses green, all negative controls re-verified firing after the fixes.
 `simNoRivalNames`, `simInventedNames`, `simNoInventedQuotes`: all green, the new generated-text
 banks structurally visible to the site's own registry scanner.
+## Live as of 2026-09-10 late night: Round 522 published and verified
+
+**`origin/main` is `9c889cdc` and douknowball.com is serving it.** Deployment
+`9de64bdb-cc2e-48b2-9ca3-033d2c4ec23a`, called only after `get_project` showed
+`latest_commit_sha` matching (the first check showed the previous commit, so the deploy waited).
+Proven live rather than assumed: `douknowball.com/nfl-playoff-format-history` answers with its
+own title where the previous build served the home template, and the home bundle moved from
+`index-CO1_zGvj.js` to `index-CojH-TZn.js`. Full suite 270 of 270 green before the push.
+
+The reference layer now covers two competitions (Champions League format, NFL playoff format),
+which is the bar the readiness verdict set before the next AdSense review request is worth
+Anthony's click; it still says NOT READY until the hubs link into more of it and a Page Indexing
+report shows the new pages crawled.
+
+### Round 522: the second reference explainer, NFL playoff format history
+
+Same pattern as Round 520, and the readiness verdict written after that round said not to request
+another AdSense review until the reference layer covers more than one competition.
+`/nfl-playoff-format-history` covers the format from the 1933 single championship game to the
+2020 fourteen team field, plus the postseason overtime rule's own history (the early 1940s
+divisional rule, the 1946 championship extension, the 1958 game that first actually used it, and
+the 2010 and 2022 rule changes), every change two source verified.
+
+**The harness itself caught a real gap in the sourcing before it shipped: the 2002 realignment
+period cited two Wikipedia pages and nothing else.** Fixed with the Chicago Bears' own site
+history piece, which independently confirms the same numbers (eight divisions, four teams each,
+the twelve team field unchanged). Pro Football Reference and NFL.com were both attempted and both
+blocked (403 and 404), so neither appears as a source, matching the rule from Round 520: nothing
+here rests on a source that could not actually be read.
+
+Unlike the Champions League page, this one carries no generated "what the game plays" block: NFL
+Front Office runs the modern league rather than a chosen era, so there is nothing to compare
+across starts, only a short honest sentence naming the real format it already plays. Linked from
+the pro football hub. `scripts/simNflPlayoffFormatHistory.mjs` holds the timeline's contiguity
+(field sizes never shrink), its two-publisher sourcing, and the shipped snapshot, with two
+controls (`gap`, `onesrc`).
 
 ## Live as of 2026-09-10 night: Rounds 520 and 521 published and verified
 
