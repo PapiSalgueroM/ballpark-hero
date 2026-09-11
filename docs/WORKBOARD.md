@@ -1,5 +1,25 @@
 # Work board
 
+## Round 535 complete, September 8, 2026
+
+Codex owns the NFL same-name legend/card repair, with real-action baseline
+witnesses. Worktree `.worktrees/round-535-nfl-legend-cards`,
+branch `codex/round-535-nfl-legend-cards`, base 534 `fb0f12c9` (draft PR85).
+Implementation `b9093683`, draft PR86: https://github.com/PapiSalgueroM/ballpark-hero/pull/86.
+Earned legend identity now follows acquisition, battle use, transfer and
+market returns. Ordinary same-name cards keep their existing pool ratings.
+The existing NBA duplicate rule keeps unavailable rewards saveable. No new
+player data or formula tuning. All 26 new cases, 63 controls with 106 exact
+failures, 132 prior cases, both exact types, build and all fifteen site
+checks pass. Four browser cases each pass five turns across two fresh runs.
+Source/runtime and main visual reviews are clear. Evidence:
+docs/nfl-legends-2026-09-08.md. Preview 4212 preserved.
+Root belongs to Claude and is tracked-clean at `b0c339b1`. Preserve all
+previous worktrees and previews. Draft PR only, no backend/account writes,
+broad suite, root edits, main merge or publication. Next free 536: repair
+the independently reproduced player-steal validation, repeated settlement
+and reset/unmount timer failures.
+
 ## Round 534 complete, September 8, 2026
 
 Codex owns the reproduced NFL queued upgrade lifetime repair in

@@ -47,8 +47,8 @@ export interface BattleSimulation {
 
 /* ── Helpers ── */
 
-function getPlayersByPos(roster: string[], teamId: string) {
-  const all = roster.map(name => getNflRosterPlayer(name, teamId) || { name, position: '?', overall: 75, keyStat: '' });
+function getPlayersByPos(roster: string[], teamId: string, legendPlayers?: ReadonlySet<string>) {
+  const all = roster.map(name => getNflRosterPlayer(name, teamId, legendPlayers) || { name, position: '?', overall: 75, keyStat: '' });
 
   return {
     qbs: all.filter(p => p.position === 'QB'),
@@ -96,9 +96,10 @@ function generatePlay(
   offTeamId: string, defTeamId: string,
   offRoster: string[], defRoster: string[],
   upgrades: Record<string, string>,
+  legendPlayers?: ReadonlySet<string>,
 ): PlayResult {
-  const off = getPlayersByPos(offRoster, offTeamId);
-  const def = getPlayersByPos(defRoster, defTeamId);
+  const off = getPlayersByPos(offRoster, offTeamId, legendPlayers);
+  const def = getPlayersByPos(defRoster, defTeamId, legendPlayers);
 
   const getOvr = (p: ConquestPlayer, teamId: string) => {
     if (upgrades[teamId] === p.name) return 99;
@@ -339,8 +340,9 @@ function snapToNflScore(score: number): number {
 function generateFullGameStats(
   teamId: string, roster: string[],
   score: number, upgradedPlayer?: string,
+  legendPlayers?: ReadonlySet<string>,
 ): TeamStatLine {
-  const pos = getPlayersByPos(roster, teamId);
+  const pos = getPlayersByPos(roster, teamId, legendPlayers);
 
   const getOvr = (p: ConquestPlayer) => {
     if (upgradedPlayer === p.name) return 99;
@@ -422,6 +424,7 @@ export function simulateDetailedBattle(
   // in-run adjustments actually drive the odds instead of just being cosmetic.
   ratingOverrides?: Record<string, TeamRatingOverride>,
   teamUpgrades?: Record<string, string>,
+  legendPlayers?: ReadonlySet<string>,
 ): BattleSimulation {
   const upgrades = teamUpgrades ?? (upgradeTeam && upgradedPlayer ? { [upgradeTeam]: upgradedPlayer } : {});
   const attTeam = TEAM_MAP.get(attackerId)!;
@@ -450,7 +453,7 @@ export function simulateDetailedBattle(
     const defRosterFor = isAttPossession ? defRoster : attRoster;
     const side: 'att' | 'def' = isAttPossession ? 'att' : 'def';
 
-    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgrades);
+    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgrades, legendPlayers);
 
     if (side === 'att') pbpAttScore += play.points;
     else pbpDefScore += play.points;
@@ -476,8 +479,8 @@ export function simulateDetailedBattle(
   const winner: 'att' | 'def' = finalAttScore > finalDefScore ? 'att' : 'def';
 
   // Step 3: Generate full-game box score stats based on final scores
-  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgrades[attackerId]);
-  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgrades[defenderId]);
+  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgrades[attackerId], legendPlayers);
+  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgrades[defenderId], legendPlayers);
 
   return {
     plays,

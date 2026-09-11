@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useConquest, PowerRankEntry } from '@/hooks/useConquest';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
 import { TEAM_MAP, NFL_TEAMS, NFL_CONQUEST_MAP, DIRECTIONS, DIR_LABELS, isLightColor, ConquestFreeAgentCandidate } from '@/data/conquestData';
-import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
 import { HOME_FIELD_BUMP } from '@/lib/conquestBattle';
@@ -28,10 +27,9 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
   return display;
 }
 
-function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
-  title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null;
+function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer, legendPlayers }: {
+  title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null; legendPlayers: ReadonlySet<string>;
 }) {
-  const legend = TEAM_LEGENDS[teamId];
 
   return (
     <div className="rounded-lg border border-border overflow-hidden">
@@ -50,8 +48,8 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
           </thead>
           <tbody>
             {rosterNames.map(name => {
-              const p = getNflRosterPlayer(name, teamId);
-              const isLegend = legend && name === legend.name;
+              const p = getNflRosterPlayer(name, teamId, legendPlayers);
+              const isLegend = p?.keyStat === 'Legend';
               const isUpgraded = name === upgradedPlayer;
               const ovr = isUpgraded ? 99 : (isLegend ? 99 : p?.overall);
               return (
@@ -61,7 +59,7 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
                     {isUpgraded && <span className="mr-0.5">⬆️</span>}
                     {name}
                   </td>
-                  <td className="px-2 py-1 text-muted-foreground">{isLegend ? legend.position : (p?.position || '-')}</td>
+                  <td className="px-2 py-1 text-muted-foreground">{p?.position || '-'}</td>
                   <td className={`px-2 py-1 text-center font-bold ${isUpgraded || isLegend ? 'text-yellow-400' : 'text-foreground'}`}>{ovr || '-'}</td>
                   <td className="px-2 py-1 text-right text-muted-foreground whitespace-nowrap">{isLegend ? 'Legend' : (p?.keyStat || '-')}</td>
                 </tr>
@@ -660,7 +658,7 @@ export default function ConquestBoard() {
 
           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
             {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
-              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '');
+              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '', game.legendPlayers);
               return (
                 <button
                   key={player}
@@ -685,6 +683,7 @@ export default function ConquestBoard() {
               rosterNames={game.rosters[game.battleResult?.winner || ''] || []}
               teamId={game.battleResult?.winner || ''}
               upgradedPlayer={game.battleUpgrades[game.battleResult?.winner || '']}
+              legendPlayers={game.legendPlayers}
             />
             <RosterTable
               title={`${loseTeam?.name || 'Loser'}'s Roster`}
@@ -692,6 +691,7 @@ export default function ConquestBoard() {
               rosterNames={game.rosters[game.battleResult?.loser || ''] || []}
               teamId={game.battleResult?.loser || ''}
               upgradedPlayer={game.battleUpgrades[game.battleResult?.loser || '']}
+              legendPlayers={game.legendPlayers}
             />
           </div>
         </DialogContent>
@@ -831,7 +831,7 @@ export default function ConquestBoard() {
           <div className="space-y-1.5 max-h-72 overflow-y-auto">
             {(game.rosters[game.powerupTeam || ''] || []).length === 0 && <p className="text-sm text-muted-foreground text-center">No roster players are available.</p>}
             {(game.rosters[game.powerupTeam || ''] || []).map(player => {
-              const playerData = getNflRosterPlayer(player, game.powerupTeam || '');
+              const playerData = getNflRosterPlayer(player, game.powerupTeam || '', game.legendPlayers);
               return (
                 <button
                   key={player}

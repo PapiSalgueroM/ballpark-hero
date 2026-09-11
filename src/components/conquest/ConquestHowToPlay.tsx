@@ -50,7 +50,7 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
               <li>🛡️ <span className="text-foreground">Invincibility:</span> Survive one home loss without losing territory</li>
               <li>✍️ <span className="text-foreground">Free Agent:</span> Choose an offered player for the awarded team</li>
               <li>⬆️ <span className="text-foreground">Upgrade:</span> Choose a roster player, or pick randomly, to boost to 99 OVR for that team's next actual battle</li>
-              <li>🐐 <span className="text-foreground">Legend:</span> Add a franchise legend to the roster</li>
+              <li>🐐 <span className="text-foreground">Legend:</span> Add a franchise legend at 99 OVR for this run. The legend card follows the player when another team recruits them.</li>
               <li>🗺️ <span className="text-foreground">Territory Steal:</span> Choose a bordering enemy state, or use the random option, to claim it for free</li>
             </ul>
             <p className="text-muted-foreground mt-1.5">
@@ -64,6 +64,9 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             </p>
             <p className="text-muted-foreground mt-1.5">
               Neutral claims and other teams' battles keep your upgrade queued. Different teams can each have their own upgrades. If a team already has an upgrade queued, choose Save for Later on its next Upgrade card.
+            </p>
+            <p className="text-muted-foreground mt-1.5">
+              If your legend's name is already on a surviving roster, the All-Time Great card cannot be used yet. Choose Save for Later to keep it. Signing a same-name player from the ordinary pool does not make them a legend.
             </p>
           </section>
 
