@@ -1,5 +1,28 @@
 # Project state
 
+## Round 538 NBA retired callback cleanup, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-538-nba-disposal`, branch
+`codex/round-538-nba-disposal`, base 537 `426cc673` (draft PR88), claim
+`ec203cf9`, implementation `56162e3c`.
+Draft PR89: https://github.com/PapiSalgueroM/ballpark-hero/pull/89.
+Original-map real-hook evidence shows an unused player-choice
+callback can schedule and execute a confirmation after unmount. Cleanup now
+invalidates the pending-battle ref before clearing timers. Existing accepted
+timer, repeated-choice, later-battle and reset behavior remains. The unchanged
+four-case copied-hook audit passes after this minimal repair. All four new
+cases and 68 prior NBA/help cases pass through the selected runner. Six new
+controls and the migrated old timer control produce their exact failures;
+runtime/backend faults reject. Both exact types, build (25.57 seconds), all
+fifteen site checks and independent review pass. Phone/desktop each settle
+one real battle and restart cleanly, with zero faults. Main visual review
+is clear. Preview4214, PID23984: index-HQ5kJYFh.js and ConquestNba-BzJsKAFc.js.
+Evidence: docs/nba-disposal-2026-09-08.md. No game rules or player data change.
+Preserve root, all earlier worktrees and previews. Draft PR only, no broad
+suite, backend/account writes, main merge or publish. Next free 539. Runner
+network/process isolation and individual legacy availability reviews remain
+separate open work.
+
 ## Round 537 explicit runner skip contract, September 8, 2026
 
 Scoped verification complete in `.worktrees/round-537-runner-skip-contract`, branch
