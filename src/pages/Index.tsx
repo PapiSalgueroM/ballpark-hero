@@ -1,4 +1,3 @@
-import { foldSpecialLatin } from '@/lib/nameFold';
 import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
@@ -14,6 +13,7 @@ import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { isNewGame } from '@/lib/newBadge';
+import { searchSite } from '@/lib/siteSearch';
 import { getTodayET } from '@/lib/dateUtils';
 import { SPORT_HUBS } from '@/lib/sportHub';
 
@@ -23,155 +23,20 @@ const hubForCategory = (title: CategoryTitle) =>
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /**
- * Home search (item #15 audit pass).
+ * Home search (item #15 audit pass, rehomed in Round 526).
  *
- * Matching is case/diacritic-insensitive and scores across four fields
- * (label, description, category title, path fragments) with label matches
- * weighted highest. Exact/prefix matches on label outrank plain substring
- * hits, and a small alias table maps obvious shorthand ("grid", "xi",
- * "quiz", league abbreviations, common spellings) onto the terms that
- * actually appear in the registry, since the registry itself doesn't use
- * every synonym a player might type.
- */
-
-/**
- * Strips diacritics and lowercases, e.g. "Beyonce" (accented) -> "beyonce".
- * NFD decomposes accented characters into base letter + combining mark, then
- * the U+0300..U+036F escape range strips every Unicode combining diacritical
- * mark. Written as a numeric \u escape range (not a literal character class)
- * so the source can't be corrupted by an editor/encoding round-trip.
- */
-function normalizeSearchText(s: string): string {
-  return foldSpecialLatin(
-    s
-      .normalize('NFD')
-      .replace(new RegExp('[\\u0300-\\u036f]', 'g'), '')
-      .toLowerCase()
-      .trim(),
-  );
-}
-
-/**
- * Obvious aliases players might type that don't literally appear in a game's
- * label/description/category/path. Each alias expands to extra terms that
- * ARE searched against those fields. Intentionally small and curated rather
- * than exhaustive, this is a quality pass, not a synonym engine.
- */
-const SEARCH_ALIASES: Record<string, string[]> = {
-  grid: ['grid'],
-  deal: ['deal'],
-  xi: ['xi', 'lineup', 'squad'],
-  quiz: ['quiz', 'trivia'],
-  trivia: ['quiz'],
-  nba: ['nba', 'basketball'],
-  basketball: ['nba', 'basketball', 'cbb', 'college basketball'],
-  nfl: ['nfl', 'football', 'pro football'],
-  football: ['nfl', 'football', 'college football'],
-  soccer: ['soccer', 'football', 'club', 'transfer'],
-  // Only the unaccented form is needed here: normQuery has already been run
-  // through normalizeSearchText() (NFD + strip diacritics) before this table
-  // is consulted, so a search for "futbol" always normalizes to this exact key.
-  futbol: ['soccer'],
-  hockey: ['hockey', 'nhl'],
-  nhl: ['hockey', 'nhl'],
-  baseball: ['baseball', 'mlb'],
-  mlb: ['baseball', 'mlb'],
-  tennis: ['tennis', 'grand slam'],
-  ufc: ['ufc', 'mma', 'fighter', 'combat'],
-  mma: ['ufc', 'mma', 'fighter', 'combat'],
-  f1: ['f1', 'formula 1', 'racing', 'driver'],
-  formula1: ['f1', 'formula 1'],
-  nascar: ['nascar', 'racing', 'driver'],
-  gameshow: ['deal', 'name them all', 'squad deal'],
-  connections: ['connections', 'connect 4'],
-  wheel: ['squad deal', 'mystery box'],
-  banker: ['squad deal', 'mystery box'],
-};
-
-interface SearchableGame {
-  game: GameDef;
-  categoryTitle: string;
-  normLabel: string;
-  normDescription: string;
-  normCategory: string;
-  normPath: string;
-}
-
-/** One entry per game, pre-normalized once so scoring is cheap per keystroke. */
-function buildSearchIndex(): SearchableGame[] {
-  return VISIBLE_CATEGORIES.flatMap(cat =>
-    cat.games.map(game => ({
-      game,
-      categoryTitle: cat.title,
-      normLabel: normalizeSearchText(game.label),
-      normDescription: normalizeSearchText(game.description),
-      normCategory: normalizeSearchText(cat.title),
-      normPath: normalizeSearchText(game.path.replace(/^\//, '').replace(/-/g, ' ')),
-    }))
-  );
-}
-
-/**
- * Scores a single search term against one indexed game. Higher is better;
- * 0 means "no match on this field for this term."
+ * The ranking used to live in this file: about 150 lines of normalising,
+ * scoring and an alias table, all of it good, none of it reachable from
+ * anywhere else. Round 526 built /search and the choice was to write that
+ * ranking a second time or to lift this one out. It is lifted:
+ * src/lib/siteSearch.ts is the engine now, this box and the search page both
+ * call it, and scripts/simSiteSearch.mjs measures it directly. A change to how
+ * results are ordered lands in both places at once, which is the whole reason
+ * this repo keeps one engine per idea.
  *
- * Weighting: label exact (100) > label prefix (80) > label substring (60)
- * > description/category/path exact-word (40) > description/category/path
- * substring (20). A term can score on multiple fields; scores are summed.
+ * The home box still shows what it always showed: a flat ranked list of tiles.
+ * Only the ranking moved.
  */
-function scoreTerm(term: string, entry: SearchableGame): number {
-  if (!term) return 0;
-  let score = 0;
-
-  if (entry.normLabel === term) score += 100;
-  else if (entry.normLabel.startsWith(term)) score += 80;
-  else if (entry.normLabel.includes(term)) score += 60;
-
-  const labelWords = entry.normLabel.split(/\s+/);
-  if (labelWords.includes(term)) score += 15; // whole-word bonus, e.g. "xi" in "Build Your XI"
-
-  if (entry.normDescription.includes(term)) {
-    score += entry.normDescription.split(/\s+/).includes(term) ? 40 : 20;
-  }
-  if (entry.normCategory === term) score += 45;
-  else if (entry.normCategory.includes(term)) score += 20;
-
-  if (entry.normPath.includes(term)) {
-    score += entry.normPath.split(/\s+/).includes(term) ? 30 : 15;
-  }
-
-  return score;
-}
-
-/**
- * Ranks every game against a raw query string. Expands the query into the
- * query itself plus any aliased terms, scores each game against every term,
- * keeps the best single-term score per game (so a game doesn't get inflated
- * just because many alias terms happen to match), and returns games with a
- * positive score sorted highest first. Ties fall back to label alphabetical
- * so results are stable across renders.
- */
-function rankGames(rawQuery: string, index: SearchableGame[]): GameDef[] {
-  const normQuery = normalizeSearchText(rawQuery);
-  if (!normQuery) return [];
-
-  const terms = new Set<string>([normQuery]);
-  const aliasHits = SEARCH_ALIASES[normQuery];
-  if (aliasHits) aliasHits.forEach(t => terms.add(normalizeSearchText(t)));
-
-  const scored = index
-    .map(entry => {
-      let best = 0;
-      for (const term of terms) {
-        best = Math.max(best, scoreTerm(term, entry));
-      }
-      return { entry, score: best };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || a.entry.normLabel.localeCompare(b.entry.normLabel));
-
-  return scored.map(({ entry }) => entry.game);
-}
 
 /** Shown in the "no results" state so a dead-end search still has a next step. */
 const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];
@@ -219,12 +84,11 @@ export default function Index() {
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
 
-  // Index built once (registry is static at runtime), scoring re-run only
-  // when the query text changes.
-  const searchIndex = useMemo(buildSearchIndex, []);
+  // The engine builds its index once on first call and caches it, so this is
+  // scoring only, re-run when the query text changes and not before.
   const filteredGames = useMemo(
-    () => (isSearching ? rankGames(searchQuery, searchIndex) : []),
-    [isSearching, searchQuery, searchIndex]
+    () => (isSearching ? searchSite(searchQuery).map(r => r.game) : []),
+    [isSearching, searchQuery]
   );
 
   useEffect(() => {
