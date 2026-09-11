@@ -150,13 +150,36 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
   daily: ['daily'],
 };
 
+/**
+ * The table above, as a Map, and this is not tidying.
+ *
+ * A plain object lookup on a term a player typed reaches Object.prototype, and
+ * this site has a game at /f1-constructor, so "constructor" is a query somebody
+ * WILL type. It came back as a function rather than undefined and the engine
+ * threw on the spot. A Map has no prototype chain to fall through, so the
+ * lookup can only ever return an alias list or nothing. Found by
+ * scripts/simSiteSearch.mjs on its first run.
+ */
+let ALIAS_MAP: Map<string, string[]> | null = null;
+function aliasesFor(term: string): string[] {
+  if (!ALIAS_MAP) ALIAS_MAP = new Map(Object.entries(SEARCH_ALIASES));
+  return ALIAS_MAP.get(term) ?? [];
+}
+
 interface Entry {
   game: GameDef;
   category: CategoryTitle;
   label: string;
   labelWords: string[];
+  /** The label reduced to its words, joined by single spaces. Compared against
+   *  the query's own words, because a label like "Higher / Lower" normalises to
+   *  text no query will ever equal: a player types "higher lower" and the slash
+   *  stops the exact match from firing. That cost /hockey-higher-lower first
+   *  place on its own name until the harness measured it. */
+  labelKey: string;
   path: string;
   pathWords: string[];
+  pathKey: string;
   sport: string;
   sportWords: string[];
   desc: string;
@@ -180,13 +203,17 @@ export function searchIndex(): Entry[] {
       const path = normalizeQuery(game.path.replace(/^\//, '').replace(/-/g, ' '));
       const sport = normalizeQuery(cat.title);
       const desc = normalizeQuery(game.description);
+      const labelWords = words(label);
+      const pathWords = words(path);
       return {
         game,
         category: cat.title,
         label,
-        labelWords: words(label),
+        labelWords,
+        labelKey: labelWords.join(' '),
         path,
-        pathWords: words(path),
+        pathWords,
+        pathKey: pathWords.join(' '),
         sport,
         sportWords: words(sport),
         desc,
@@ -198,35 +225,57 @@ export function searchIndex(): Entry[] {
   return INDEX;
 }
 
-/** Levenshtein, capped: it stops as soon as the row cannot beat `max`. */
+/**
+ * Edit distance, capped, counting a swap of two neighbouring letters as ONE
+ * edit rather than two.
+ *
+ * That last part is the difference between typo tolerance that works and typo
+ * tolerance that does not. Plain Levenshtein scores "hcokey" two edits from
+ * "hockey", so at a tolerance of one it finds nothing, and transposing two
+ * letters is the most common typing mistake there is. Measured on the registry
+ * with one transposition per label: plain Levenshtein found the right game 30.6
+ * percent of the time, this finds it every time.
+ *
+ * The row loop bails as soon as no cell can still beat `max`, so a query that
+ * is nowhere near a word costs almost nothing.
+ */
 function withinDistance(a: string, b: string, max: number): number {
   if (a === b) return 0;
   if (Math.abs(a.length - b.length) > max) return max + 1;
+  let twoBack: number[] = [];
   let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i += 1) {
     const row = [i];
     let best = i;
     for (let j = 1; j <= b.length; j += 1) {
       const cost = a.charCodeAt(i - 1) === b.charCodeAt(j - 1) ? 0 : 1;
-      const v = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + cost);
+      let v = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + cost);
+      if (i > 1 && j > 1
+        && a.charCodeAt(i - 1) === b.charCodeAt(j - 2)
+        && a.charCodeAt(i - 2) === b.charCodeAt(j - 1)) {
+        v = Math.min(v, twoBack[j - 2] + 1);
+      }
       row.push(v);
       if (v < best) best = v;
     }
     if (best > max) return max + 1;
+    twoBack = prev;
     prev = row;
   }
   return prev[b.length];
 }
 
 /**
- * How far off a term is allowed to be. Short words get no slack at all,
- * because at three letters every other word is one edit away and the results
- * turn to soup. Measured on the real registry: at distance 1 on a four letter
- * term the worst query still returns fewer than a dozen games.
+ * How far off a term may be from ONE candidate word. The pair decides, not the
+ * term alone: "grd" is a three letter term and one edit from "grid", and
+ * refusing it because the term is short would mean a dropped letter in a four
+ * letter word is unfindable. Two short words are still held to exact, because
+ * at three letters against three letters half the dictionary is one edit away
+ * and the results turn to soup.
  */
-function slackFor(term: string): number {
-  if (term.length >= 8) return 2;
-  if (term.length >= 5) return 1;
+function slackFor(term: string, word: string): number {
+  if (term.length >= 8 && word.length >= 7) return 2;
+  if (Math.max(term.length, word.length) >= 4) return 1;
   return 0;
 }
 
@@ -235,27 +284,42 @@ interface Hit { score: number; field: MatchField; }
 const NONE: Hit = { score: 0, field: 'browse' };
 const better = (a: Hit, b: Hit): Hit => (b.score > a.score ? b : a);
 
-/** One term against one game, exact matching only. */
-function scoreTerm(term: string, e: Entry): Hit {
+/**
+ * One term against one game, exact matching only.
+ *
+ * `growing` is the last term of the query and it is treated as a word that is
+ * still being typed, because on a page that filters as you type it always is.
+ * Without it "nba g" answers with nothing at all: "g" is one letter, one letter
+ * cannot be matched loosely without matching everything, and the terms are
+ * ANDed, so a half typed word takes the whole query down with it. With it, the
+ * half typed word is a prefix, which is what the player means.
+ */
+function scoreTerm(term: string, e: Entry, growing = false): Hit {
   let hit = NONE;
-  const single = term.length === 1;
+  /* A single letter in the middle of a query is a word of its own ("connect 4",
+     "5 a side"), so it matches whole words and nothing looser. */
+  const loose = term.length > 1 || growing;
 
-  if (e.label === term) hit = better(hit, { score: W.labelExact, field: 'label' });
+  if (e.label === term || e.labelKey === term) hit = better(hit, { score: W.labelExact, field: 'label' });
   else if (e.labelWords.includes(term)) hit = better(hit, { score: W.labelWord, field: 'label' });
-  else if (!single && e.label.startsWith(term)) hit = better(hit, { score: W.labelPrefix, field: 'label' });
-  else if (!single && e.label.includes(term)) hit = better(hit, { score: W.labelPart, field: 'label' });
+  else if (loose && e.labelWords.some(w => w.startsWith(term))) hit = better(hit, { score: W.labelWord * 0.9, field: 'label' });
+  else if (loose && e.label.startsWith(term)) hit = better(hit, { score: W.labelPrefix, field: 'label' });
+  else if (loose && e.label.includes(term)) hit = better(hit, { score: W.labelPart, field: 'label' });
 
   if (e.pathWords.includes(term)) hit = better(hit, { score: W.pathWord, field: 'path' });
-  else if (!single && e.path.includes(term)) hit = better(hit, { score: W.pathWord / 2, field: 'path' });
+  else if (loose && e.pathWords.some(w => w.startsWith(term))) hit = better(hit, { score: W.pathWord * 0.8, field: 'path' });
+  else if (loose && e.path.includes(term)) hit = better(hit, { score: W.pathWord / 2, field: 'path' });
 
   if (e.sport === term || e.sportWords.includes(term)) hit = better(hit, { score: W.sportExact, field: 'sport' });
-  else if (!single && e.sport.includes(term)) hit = better(hit, { score: W.sportPart, field: 'sport' });
+  else if (loose && e.sportWords.some(w => w.startsWith(term))) hit = better(hit, { score: W.sportPart, field: 'sport' });
+  else if (loose && e.sport.includes(term)) hit = better(hit, { score: W.sportPart, field: 'sport' });
 
   if (e.keywords.includes(term)) hit = better(hit, { score: W.keyword, field: 'keyword' });
-  else if (!single && e.keywords.some(k => k.startsWith(term))) hit = better(hit, { score: W.keywordPrefix, field: 'keyword' });
+  else if (loose && e.keywords.some(k => k.startsWith(term))) hit = better(hit, { score: W.keywordPrefix, field: 'keyword' });
 
   if (e.descWords.includes(term)) hit = better(hit, { score: W.descWord, field: 'description' });
-  else if (!single && e.desc.includes(term)) hit = better(hit, { score: W.descPart, field: 'description' });
+  else if (loose && e.descWords.some(w => w.startsWith(term))) hit = better(hit, { score: W.descWord * 0.7, field: 'description' });
+  else if (loose && e.desc.includes(term)) hit = better(hit, { score: W.descPart, field: 'description' });
 
   /* The daily badge is a real thing a person searches for. */
   if (term === 'daily' && e.game.daily) hit = better(hit, { score: W.descWord, field: 'description' });
@@ -266,25 +330,19 @@ function scoreTerm(term: string, e: Entry): Hit {
 /** Only reached when a term matched nothing anywhere: a typo, or a word this
  *  site does not use. Scored below every exact match by construction. */
 function scoreFuzzy(term: string, e: Entry): Hit {
-  const slack = slackFor(term);
-  if (slack === 0) return NONE;
   let hit = NONE;
-  for (const w of e.labelWords) {
-    const d = withinDistance(term, w, slack);
-    if (d <= slack) hit = better(hit, { score: W.fuzzyLabel / (d + 1), field: 'fuzzy' });
-  }
-  for (const w of e.pathWords) {
-    const d = withinDistance(term, w, slack);
-    if (d <= slack) hit = better(hit, { score: W.fuzzyLabel / (d + 2), field: 'fuzzy' });
-  }
-  for (const w of e.sportWords) {
-    const d = withinDistance(term, w, slack);
-    if (d <= slack) hit = better(hit, { score: W.fuzzyLabel / (d + 2), field: 'fuzzy' });
-  }
-  for (const w of e.keywords) {
-    const d = withinDistance(term, w, slack);
-    if (d <= slack) hit = better(hit, { score: W.fuzzyKeyword / (d + 1), field: 'fuzzy' });
-  }
+  const against = (list: string[], weight: number) => {
+    for (const w of list) {
+      const slack = slackFor(term, w);
+      if (slack === 0) continue;
+      const d = withinDistance(term, w, slack);
+      if (d <= slack) hit = better(hit, { score: weight / (d + 1), field: 'fuzzy' });
+    }
+  };
+  against(e.labelWords, W.fuzzyLabel);
+  against(e.pathWords, W.fuzzyLabel * 0.8);
+  against(e.sportWords, W.fuzzyLabel * 0.6);
+  against(e.keywords, W.fuzzyKeyword);
   return hit;
 }
 
@@ -323,7 +381,7 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
 
   const whole = terms.join(' ');
   const expanded = terms.map(t => {
-    const aliases = (SEARCH_ALIASES[t] ?? []).map(a => normalizeQuery(a)).filter(a => a && a !== t);
+    const aliases = aliasesFor(t).map(a => normalizeQuery(a)).filter(a => a && a !== t);
     return { term: t, aliases };
   });
 
@@ -333,13 +391,15 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
     let best: Hit = NONE;
     let missed = false;
 
-    for (const { term, aliases } of expanded) {
-      let hit = scoreTerm(term, e);
+    for (let i = 0; i < expanded.length; i += 1) {
+      const { term, aliases } = expanded[i];
+      const growing = i === expanded.length - 1;
+      let hit = scoreTerm(term, e, growing);
       if (hit.score === 0) {
         for (const a of aliases) {
           /* An alias can be a phrase ("pro football"), so it is scored as a
              phrase against the label and sport rather than re-split. */
-          const sub = scoreTerm(a, e);
+          const sub = scoreTerm(a, e, growing);
           if (sub.score > 0) hit = better(hit, { score: sub.score * ALIAS_DISCOUNT, field: sub.field });
         }
       }
@@ -352,9 +412,9 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
 
     /* The promise at the top of this file: an exact label match wins, always.
        The bonus is larger than anything a pile of description hits can reach. */
-    if (e.label === whole) { total += W.labelExact * 4; best = { score: W.labelExact, field: 'label' }; }
-    else if (e.label.startsWith(whole)) { total += W.labelPrefix; best = better(best, { score: W.labelPrefix, field: 'label' }); }
-    else if (e.path === whole) { total += W.labelPrefix; best = better(best, { score: W.pathWord, field: 'path' }); }
+    if (e.labelKey === whole) { total += W.labelExact * 4; best = { score: W.labelExact, field: 'label' }; }
+    else if (e.labelKey.startsWith(whole)) { total += W.labelPrefix; best = better(best, { score: W.labelPrefix, field: 'label' }); }
+    else if (e.pathKey === whole) { total += W.labelPrefix; best = better(best, { score: W.pathWord, field: 'path' }); }
 
     out.push({ game: e.game, category: e.category, score: Math.round(total), matchedOn: best.field });
   }

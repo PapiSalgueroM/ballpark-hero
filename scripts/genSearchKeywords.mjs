@@ -62,12 +62,17 @@ const MIN_LEN = 3;
    written stoplist is a thing that rots. */
 const STOP = new Set(`the and for you your with that this from what when have has had not but all any are was were will can could would should its it's into out off over under more most less least each per one two three four five six seven eight nine ten they them their there here then than only just also both few many much some such same other another which while during before after again once every very too own same able because about above below between through until upon still ever never always often sometimes way ways thing things get gets got give gives given take takes taken make makes made keep keeps kept put puts run runs ran going goes gone come comes came know knows knew see sees seen look looks looked want wants wanted need needs needed use uses used say says said tell tells told ask asks asked show shows shown turn turns turned start starts started end ends ended play plays played player players game games score scores scored point points pick picks picked best better good great real right wrong new old next last first second third time times day days year years season seasons team teams club clubs top back down up out in on at by to of a an is be as if or so no yes do does did done how why who whom whose where`.split(/\s+/));
 
-/* Tokens that must never reach a shipped file whatever the prose says. FIFA is
-   the live one: scripts/simNoRivalNames.mjs allows the word only in shapes that
-   read as the governing body ("FIFA World Cup", "FIFA rankings"), and a bare
-   token in a JSON array reads as neither, so it would turn that guard red. The
-   rest are single word rival names that the same guard bans outright. */
-const BLOCKED = new Set(['fifa', 'jeopardy', 'madden', 'wordle', 'sporcle', 'monopoly', 'minecraft', 'fortnite', 'catan', 'kahoot', 'blooket', 'cluedo', 'globle', 'worldle', 'heardle', 'nerdle', 'quordle', 'dordle', 'absurdle', 'semantle', 'contexto', 'tradle', 'redactle', 'whoareya', 'efootball']);
+/* ONE WORD, and the short list is the point rather than an oversight.
+
+   A blocklist of other companies' games would be a list of words that cannot
+   reach this line: scripts/simNoRivalNames.mjs already scans the guides, so a
+   rival product name in them turns the build red long before anything here
+   reads them. The single exception is the football governing body. That name
+   is allowed in the guides in the shapes that read as the organisation (the
+   World Cup, the world rankings) and banned on its own, because on its own it
+   reads as the video game, and one token in a JSON file is exactly "on its
+   own". So it is dropped here rather than shipped and argued about. */
+const BLOCKED = new Set(['fifa']); // rival-names-allow: this line is the guard, not a mention
 
 const SPECIALS = { 'ø': 'o', 'đ': 'd', 'ð': 'd', 'ł': 'l', 'æ': 'ae', 'œ': 'oe', 'ß': 'ss', 'þ': 'th', 'ħ': 'h', 'ı': 'i', 'ŋ': 'n' };
 const norm = s => s
