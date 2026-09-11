@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import type { CareerState } from '@/lib/clubManager';
 import {
   MAX_LEVEL, MAX_TREE_POINTS, SKILL_TREES, TREE_INFO,
@@ -32,12 +34,34 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
   const atCap = level >= MAX_LEVEL;
   const nextAt = atCap ? null : xpForLevel(level + 1);
 
+  /* Round 530: the point earned moment. The screen opens with a point waiting
+     (the common case, because XP lands at season end and the panel is opened
+     after) or the count rises while it is open; either way a line slams in
+     above the trees and the level chip pulses once. Both are keyed on the
+     count, so a second point re-runs them and an unrelated re-render does
+     not. Spending a point drops the count below the mark and the line goes,
+     because "earned" over a point just spent would be a lie. No fact is
+     chosen here: the count is pointsFree over the career the engine wrote. */
+  const prevFree = useRef(free);
+  const [earnedAt, setEarnedAt] = useState<number | null>(free > 0 ? free : null);
+  useEffect(() => {
+    if (free > prevFree.current) setEarnedAt(free);
+    prevFree.current = free;
+  }, [free]);
+  const earned = earnedAt !== null && earnedAt === free;
+
   return (
     <div className="space-y-3" data-cm-xp>
+      <CelebrationStyles />
       {/* The bar: where you are, and what it takes to get one more point. */}
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2">
         <div className="flex items-center justify-between gap-2">
-          <div className="text-xs font-bold text-foreground">🎖️ Manager level {level}</div>
+          <div
+            key={earned ? `lvl-${earnedAt}` : 'lvl'}
+            className={cn('text-xs font-bold text-foreground rounded-full', earned && 'cm-win-pulse')}
+          >
+            🎖️ Manager level {level}
+          </div>
           <div className="text-[10px] text-muted-foreground tabular-nums">
             {Math.round(block.xp).toLocaleString()} XP
           </div>
@@ -64,6 +88,22 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
           more than it bought. Points are yours for good: nothing here can be taken back.
         </p>
       </div>
+
+      {earned && (
+        <div
+          key={`earned-${earnedAt}`}
+          data-cm-point-earned={earnedAt}
+          className="cm-slam rounded-xl border border-gold/50 bg-gold/10 px-3 py-2 text-center"
+          style={{ animationDelay: '0.1s' }}
+        >
+          <div className="text-xs font-bold text-gold">
+            🎖️ Skill point{earnedAt === 1 ? '' : 's'} earned
+          </div>
+          <div className="text-[10px] text-muted-foreground">
+            {earnedAt === 1 ? 'Put it into a tree below.' : `${earnedAt} waiting. Put them into the trees below.`}
+          </div>
+        </div>
+      )}
 
       {/* The trees. Small tiles, one row of controls each, no long stacked page. */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

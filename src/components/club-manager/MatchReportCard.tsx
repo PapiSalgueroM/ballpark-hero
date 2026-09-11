@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { confidenceLabel } from '@/lib/clubManager';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
@@ -147,6 +147,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
   const hasChips = !!detail && (
     detail.cards.length > 0 || detail.injuries.length > 0 || detail.subs.length > 0 || oppCards.length > 0 || oppSubs.length > 0
   );
+  /* Round 530: one running beat across all five chip groups, restarted on
+     every render because the row is rebuilt on every render. */
+  let chip = 0;
+  const chipIn = () => ({ animationDelay: revealDelay(chip++, 0.6, 0.1) });
 
   /* The staged reveal, second draft. The first draft counted the score up
      from 0-0, and playClubManager flagged it within the hour: for a moment
@@ -245,37 +249,44 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         )}
 
         {/* Round 157: cards, injuries and subs with their minutes, right under
-            the scorers where a matchday app puts them. */}
+            the scorers where a matchday app puts them.
+            Round 530: they tick in one chip at a time once the verdict has
+            landed (0.45s) and the scorers have started rising, on a shorter
+            step than the season lines because a busy match can carry a dozen
+            chips and nobody waits three seconds for a substitution. The
+            counter runs across all five groups so the row reads left to right
+            in one sweep. Laid out at final size from frame one; only opacity
+            and a 6px slide move, so the no-scroll rule holds. */}
         {detail && hasChips && (
           <div className="flex flex-wrap justify-center gap-1.5 mt-3">
             {detail.cards.map((c, i) => (
-              <span key={`c${i}`} className={cn(
-                'text-[10px] rounded-full px-2 py-0.5 border',
+              <span key={`c${i}`} style={chipIn()} className={cn(
+                'cm-tick-in text-[10px] rounded-full px-2 py-0.5 border',
                 c.kind === 'red' ? 'bg-red-500/10 border-red-500/40 text-red-400' : 'bg-yellow-500/10 border-yellow-500/40 text-yellow-500',
               )}>
                 {c.kind === 'red' ? '🟥' : '🟨'} {c.name} {c.minute}'
               </span>
             ))}
             {detail.injuries.map((inj, i) => (
-              <span key={`i${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
+              <span key={`i${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
                 🩹 {inj.name} {inj.minute}' ({inj.weeks}w)
               </span>
             ))}
             {detail.subs.map((s, i) => (
-              <span key={`s${i}`} className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
+              <span key={`s${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
                 <span className="text-emerald-400">▲ {s.on}</span> <span className="text-red-400">▼ {s.off}</span> {s.minute}'
               </span>
             ))}
             {oppCards.map((c, i) => (
-              <span key={`oc${i}`} data-cm-opp-chip="card" className={cn(
-                'text-[10px] rounded-full px-2 py-0.5 border',
+              <span key={`oc${i}`} data-cm-opp-chip="card" style={chipIn()} className={cn(
+                'cm-tick-in text-[10px] rounded-full px-2 py-0.5 border',
                 c.kind === 'red' ? 'bg-red-500/10 border-red-500/30 text-red-400/80' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500/80',
               )}>
                 <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> {c.kind === 'red' ? '🟥' : '🟨'} {c.name}{c.gen && <MadeUpTag className="ml-1" />} {c.minute}'
               </span>
             ))}
             {oppSubs.map((s, i) => (
-              <span key={`os${i}`} data-cm-opp-chip="sub" className="text-[10px] rounded-full px-2 py-0.5 border bg-secondary/60 border-border/60 text-muted-foreground">
+              <span key={`os${i}`} data-cm-opp-chip="sub" style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary/60 border-border/60 text-muted-foreground">
                 <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> <span className="text-emerald-400/80">▲ {s.on}</span>{s.onGen && <MadeUpTag className="ml-1" />} <span className="text-red-400/80">▼ {s.off}</span>{s.offGen && <MadeUpTag className="ml-1" />} {s.minute}'
               </span>
             ))}
