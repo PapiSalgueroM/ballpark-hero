@@ -65,9 +65,21 @@ export default function AchievementCase({ profile, bestScoreByGame, points }: Ac
   }, [profile, bestScoreByGame, points]);
 
   const entries = visibleAchievements(facts);
-  const earnedCount = entries.filter(e => e.earned).length;
+  const earned = entries.filter(e => e.earned);
+  const locked = entries.filter(e => !e.earned);
+  const earnedCount = earned.length;
   const secrets = hiddenRemaining(facts);
-  const shown = showAll ? entries : entries.slice(0, FOLDED);
+
+  /* The fold always keeps room for something to chase. Measured at 320 on a
+     player with 15 earned, a straight "first twelve" showed twelve earned
+     tiles and not one progress bar, which is the half of the card that makes
+     anybody go and play another game. So the locked side gets at least four
+     slots whenever there are locked ones left, and a brand new player, who has
+     no earned ones to show, gets the twelve nearest instead. */
+  const lockedSlots = Math.min(locked.length, Math.max(4, FOLDED - earnedCount));
+  const shown = showAll
+    ? entries
+    : [...earned.slice(0, Math.max(0, FOLDED - lockedSlots)), ...locked.slice(0, lockedSlots)];
 
   return (
     <Card className="border-border/60">
