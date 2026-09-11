@@ -147,6 +147,7 @@ const ChampOrNot = lazy(() => import("./pages/ChampOrNot"));
 const Records = lazy(() => import("./pages/Records"));
 const ChampionsLeagueFormatHistory = lazy(() => import("./pages/ChampionsLeagueFormatHistory"));
 const NflPlayoffFormatHistory = lazy(() => import("./pages/NflPlayoffFormatHistory"));
+const NhlPlayoffFormatHistory = lazy(() => import("./pages/NhlPlayoffFormatHistory"));
 const WhodTheyBeat = lazy(() => import("./pages/WhodTheyBeat"));
 const SilverwareSort = lazy(() => import("./pages/SilverwareSort"));
 const HallOfChampions = lazy(() => import("./pages/HallOfChampions"));
@@ -470,6 +471,7 @@ const AppContent = () => {
         <Route path="/records" element={<Records />} />
         <Route path="/champions-league-format-history" element={<ChampionsLeagueFormatHistory />} />
         <Route path="/nfl-playoff-format-history" element={<NflPlayoffFormatHistory />} />
+        <Route path="/nhl-playoff-format-history" element={<NhlPlayoffFormatHistory />} />
         <Route path="/whod-they-beat" element={<WhodTheyBeat />} />
         <Route path="/silverware-sort" element={<SilverwareSort />} />
         <Route path="/hall-of-champions" element={<HallOfChampions />} />
