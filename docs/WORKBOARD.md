@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 526 (513 to 519 shipped; 520 and 521 taken
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 528 (513 to 519 shipped; 520 and 521 taken
   twice, once by the desktop lane for real work now shipped and once by the tablet lane before
   it saw that claim, renumbered to 522 to 524; 522 taken a THIRD time by the desktop lane's own
   later claim below, "NFL playoff format history", pushed before it had pulled the tablet lane's
@@ -121,6 +121,35 @@ combinations, 6,000 live rolls, zero real-name collisions) already covers these 
 re-derived, just cited. Files: `src/lib/nbaCareerInbox.ts`, `nbaCareerRivalryEvents.ts`,
 `mlbCareerInbox.ts`, `mlbCareerRivalryEvents.ts`, `nhlCareerInbox.ts`, `nhlCareerRivalryEvents.ts`,
 each sport's `*CareerLoop.ts` and `*MyCareerBoard.tsx`. NEXT FREE NUMBER after this claim: 526.
+
+**UPDATE, same session: Rounds 526 and 527 claimed, both off the MASTER SPEC frontier rather
+than the 2026-08-28 tweaks list.** Picked from `docs/SPEC-RECONCILIATION.md`'s "New, nothing
+shipped covers it" section, after verifying against the actual codebase that they are genuinely
+unbuilt (that list is partly stale: it still says Conquest, NBA Stat Line and the training drills
+do not exist, and all three shipped). Both need no owner decision and no backend decision, which
+rules out most of the rest of that frontier (multiplayer rooms, the virtual economy, manager
+attributes and the owner dashboards are all blocked on one or the other).
+
+- **526: sitewide search, spec D124 plus D125.** There are 123 games and no way to search them;
+  the only discovery paths are the home grid, the six sport hubs and the nav drawer. A search
+  page and a shared search engine over the registry and the per-game SEO copy, so a visitor can
+  find a game by name, sport, or what it actually is. Also feeds the internal link graph the
+  indexing work cares about. FILE AREA: new `src/lib/siteSearch.ts`, new `src/pages/Search.tsx`,
+  new `scripts/simSiteSearch.mjs`, one line each in `src/App.tsx` and `src/lib/pageSchema.ts`,
+  plus a header entry point and a sitemap/route registration.
+- **527: the achievement framework, spec 16 (and the honest half of D7).** No generic achievement
+  system exists; achievement-like flavor lives only inside individual games. Built DERIVED and
+  READ ONLY over data the site already records (completions, streaks, per game bests), never as a
+  second thing to write, which keeps it entirely clear of the scoring pipeline that Rounds 299,
+  300 and 301 spent three rounds repairing. Same shape `careerBadges.ts` already uses:
+  definitions plus a pure `earned()` over facts. FILE AREA: new `src/lib/achievements.ts`, new
+  `src/components/profile/AchievementCase.tsx`, new `scripts/simAchievements.mjs`, and the
+  profile page mount.
+
+Both builders write their OWN new harness file rather than extending a shared one, deliberately:
+Round 525's three parallel builders each extended the same two shared harnesses without knowing
+about each other and every one of them numbered itself "section 5", which cost a careful manual
+splice to reconcile. NEXT FREE NUMBER after this claim: 528.
 
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 
