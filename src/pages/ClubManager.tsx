@@ -674,6 +674,16 @@ const ClubManager = () => {
   /* ================= SEASON END ================= */
   if (g.phase === 'seasonEnd' && g.summary && g.career) {
     const sm = g.summary;
+    /* Round 541: this block's own career binding, exactly like the resume
+       block and the sacked block below. The transfer business list reads it
+       for the currency symbol, and the only other binding sits at function
+       body level BELOW this early return, so reaching for that one put the
+       screen in the temporal dead zone and threw ReferenceError the moment a
+       player finished a season having signed or sold anybody. Round 514 fixed
+       the identical trap for the `money` identifier and moved it onto `c` at
+       this one call site, which is the argument for the scope check in
+       scripts/simEarlyReturnScope.mjs rather than another careful read. */
+    const c = g.career;
     const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
     // Round 66: same treatment as full time. Only one phase screen renders at a
     // time, so the shared ref is safe here too.
