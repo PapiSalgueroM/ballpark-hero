@@ -56,7 +56,7 @@ const CONTROLS = {
     '    freeAgencyTokenRef.current = null;\n    setFavoriteTeamState(teamId);', '    setFavoriteTeamState(teamId);'),
   reset: hook(4, 'RESET: reset rejects old signing work and clears the transaction state', '    setFavoriteTeamState(null);', ''),
   unmount: hook(4, 'UNMOUNT: disposed callbacks reject before reading the candidate',
-    '  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n    rewardActionTokenRef.current = null;\n  }, []);', '  useEffect(() => () => {\n    rewardActionTokenRef.current = null;\n  }, []);'),
+    '  useEffect(() => () => {\n    freeAgencyTokenRef.current = null;\n    rewardActionTokenRef.current = null;\n    pendingBattleApplyRef.current = null;\n  }, []);', '  useEffect(() => () => {\n    rewardActionTokenRef.current = null;\n    pendingBattleApplyRef.current = null;\n  }, []);'),
   metadata: hook(5, 'ACQUIRED: canonical global metadata keeps the strong recruit and waives the actual weakest player',
     '      const ovr = getNflRosterPlayer(name, favoriteTeam, legendPlayers)?.overall ?? 75;', '      const ovr = TEAM_MAP.get(favoriteTeam)?.players?.find(player => player.name === name)?.overall ?? 75;'),
   released: hook(6, 'RELEASED: signing history does not hide a candidate who was waived',

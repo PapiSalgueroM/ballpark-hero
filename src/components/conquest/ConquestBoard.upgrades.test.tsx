@@ -23,6 +23,7 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 function fixture(overrides: Partial<ReturnType<typeof useConquest>> = {}) {
   const game = {
+    stealActionReady: true, canStealPlayer: () => true, canSkipSteal: true,
     phase: 'ready', turn: 3, territories: { MO: 'KC', NY: 'BUF' },
     rosters: { KC: TEAM_MAP.get('KC')!.players!.map(player => player.name), BUF: TEAM_MAP.get('BUF')!.players!.map(player => player.name) },
     eliminated: [], gameLog: [], visiblePlays: [], powerupStates: new Set(), invincibleTeams: new Set(),

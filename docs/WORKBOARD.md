@@ -1,5 +1,26 @@
 # Work board
 
+## Round 536 complete, September 8, 2026
+
+Codex owns the reproduced NFL player-steal settlement repair in useConquest
+and its Board controls. Worktree `.worktrees/round-536-nfl-steal-settlement`,
+branch `codex/round-536-nfl-steal-settlement`, base 535 `d2a7b176` (draft PR86).
+Implementation `488dde2b`, draft PR87: https://github.com/PapiSalgueroM/ballpark-hero/pull/87.
+The exact current pending result now permits one valid loser choice or skip,
+with tracked confirmation canceled on reset or unmount. Board eligibility
+and Continue follow the same authority, preserving Close/Escape and reopen.
+The five unchanged original-map baseline witnesses now pass. All nineteen
+new cases, 158 prior cases, both exact types, build and fifteen site checks
+pass. Forty-four new source controls earn 79 intended failures, and three
+migrated old controls still detect their original bugs. Phone, desktop and
+both duplicate-row controls pass two settled battles plus one abandoned
+confirmation per run. Main visual review is clear. Evidence:
+docs/nfl-steal-settlement-2026-09-08.md. Preview 4213, PID 34964,
+index-C-uiq91h.js and Conquest-yIPBLjiX.js. Root belongs to Claude. Preserve
+all previous worktrees and previews. Draft PR only, no backend/account
+writes, broad suite, root edits, main merge or publication. Next free 537.
+Broad-suite process isolation remains separate.
+
 ## Round 535 complete, September 8, 2026
 
 Codex owns the NFL same-name legend/card repair, with real-action baseline
