@@ -71,8 +71,12 @@ interface Props {
 interface Session {
   run: ConquestRun;
   rng: () => number;
-  /** The round just settled in THIS session, for the scenes. Null after a reload or after Continue, so the recap shows directly. */
-  settled: { featured: [string, string] | null; call: string } | null;
+}
+
+/** The round just settled in THIS session, for the scenes. Null after a reload or after Continue, so the recap shows directly. */
+interface Settled {
+  featured: [string, string] | null;
+  call: string;
 }
 
 const prefersReducedMotion = () =>
@@ -116,11 +120,9 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
   /* The whole season in one value, with the rng that dealt it. Restoring in
      the initialiser means a reloaded daily is already in place before the
      first paint, and useGameCompletion never sees a false finish. */
-  const [session, setSession] = useState<Session | null>(() => {
-    const restored = restoreDailyRun(sport, todayStr);
-    return restored ? { ...restored, settled: null } : null;
-  });
+  const [session, setSession] = useState<Session | null>(() => restoreDailyRun(sport, todayStr));
   const [prediction, setPrediction] = useState<string | null>(null);
+  const [settled, setSettled] = useState<Settled | null>(null);
 
   // Round 50: the Daily Challenge. Same seeded season for every player
   // (fixtures AND results), one scored run per ET day, streaks, share line.
@@ -179,7 +181,6 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
 
   /* Round 529: the round just settled, as scenes. Empty after a reload or
      once Continue has been pressed, so the recap shows directly. */
-  const settled = session?.settled ?? null;
   const scenes = useMemo(
     () => (run && settled && run.rounds.length > 0 ? buildScenes(run, run.rounds.length - 1, settled.featured, settled.call) : []),
     [run, settled],
@@ -288,7 +289,8 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
        come back to the same club. */
     const opened = startRun(sport, teamId, rng);
     if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(opened), todayStr);
-    setSession({ run: opened, rng, settled: null });
+    setSession({ run: opened, rng });
+    setSettled(null);
     setPrediction(null);
     setHighlightTeam(null);
     setScrubIndex(null);
@@ -303,7 +305,8 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
        would let a player read the result, reload, and call it again knowing
        the answer, which is the whole defect. */
     if (mode === 'daily') saveDailyRun(sport.key, dailyRunRecord(next), todayStr);
-    setSession({ run: next, rng: session.rng, settled: { featured: featuredNow, call: prediction } });
+    setSession({ run: next, rng: session.rng });
+    setSettled({ featured: featuredNow, call: prediction });
     setPrediction(null);
     setHighlightTeam(null);
     setScrubIndex(null);
@@ -311,12 +314,14 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
 
   const continueOn = () => {
     if (!session) return;
-    setSession({ run: continueRun(sport, session.run, session.rng), rng: session.rng, settled: null });
+    setSession({ run: continueRun(sport, session.run, session.rng), rng: session.rng });
+    setSettled(null);
     setPrediction(null);
   };
 
   const reset = () => {
     setSession(null);
+    setSettled(null);
     setPrediction(null);
     setHighlightTeam(null);
     setScrubIndex(null);

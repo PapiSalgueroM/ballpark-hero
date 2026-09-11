@@ -48,6 +48,7 @@ export default function ConquestTimeline({ labels, index, onChange, disabled = f
         .cq-timeline::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; margin-top: -12px; border-radius: 50%; background: hsl(var(--gold)); border: 3px solid hsl(var(--card)); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
         .cq-timeline::-moz-range-track { height: 6px; border-radius: 3px; background: hsl(var(--muted)); }
         .cq-timeline::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: hsl(var(--gold)); border: 3px solid hsl(var(--card)); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+        @media (prefers-reduced-motion: reduce) { .cq-timeline { transition: none; } }
       `}</style>
     </div>
   );

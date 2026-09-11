@@ -331,7 +331,15 @@ console.log('4) Every conquest route renders the one shared board with a sport i
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 {
   const dir = `${ROOT}/src/components/conquest`;
-  const boards = fs.readdirSync(dir).filter(f => /^Imperialism.*\.tsx$/.test(f));
+  /* A board is a file that produces a run or renders the map, not a file
+     with Imperialism in its name: Round 529 added ImperialismHowToPlay.tsx,
+     a dialog, beside the board. The old copies this catches (ImperialismBoardNba
+     and friends) called startRun and rendered the map, so they still count. */
+  const boards = fs.readdirSync(dir).filter(f => {
+    if (!/^Imperialism.*\.tsx$/.test(f)) return false;
+    const src = stripComments(norm(fs.readFileSync(`${dir}/${f}`, 'utf8')));
+    return /\bstartRun\s*\(|\bplayRound\s*\(|<ConquestRegionMap\b/.test(src);
+  });
   const pages = [
     ['Conquest.tsx', 'NFL_IMPERIALISM'],
     ['ConquestNba.tsx', 'NBA_IMPERIALISM'],

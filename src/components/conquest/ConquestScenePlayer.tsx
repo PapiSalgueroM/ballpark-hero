@@ -190,7 +190,8 @@ export default function ConquestScenePlayer({
 
   const { game, before } = scene;
   const label = (id: string) => teamLabel(sport, id);
-  const scored = cursor.beat === 'score' || cursor.beat === 'takeover' || cursor.beat === 'done';
+  /* The score exists only from its own beat: never a placeholder, never a count. */
+  const scored = cursor.beat === 'score' || cursor.beat === 'takeover';
   const loser = game.winner === game.home ? game.away : game.home;
   const gained = scene.flipped.length;
   const side = (teamId: string, role: 'attacker' | 'defender') => {

@@ -45,8 +45,25 @@
  *      on the attacker, an unknown attacker lands nowhere, and arrowAngle
  *      answers the four compass cases and stays on [0, 360). The renderer with
  *      none of the Round 529 props draws none of the Round 529 layers.
- *   7 and 8 land with wave 2 (the scene player, the wheel, the timeline, the
- *      strip): see the marked place at the bottom.
+ *   7. THE PLAYER SHOWS THE SCENE AND NOTHING EARLY. The real scene player,
+ *      driven by useScenePlayer with initialCursor at every beat, mounts the
+ *      score element only at the score and takeover beats and with the
+ *      scene's own score, opens on the matchup card naming both teams with
+ *      no score, hands the map the scene's opening map before the score and
+ *      its closing map with exactly the flipped regions in the wave after
+ *      it, marks the call and the hit on the featured scene only, and under
+ *      reduced motion play() lands on the last scene at beat done with
+ *      nothing playing. The wheel's landing wedge is the attacker and its
+ *      needle carries the angle; the timeline has one stop per kept map; the
+ *      strip lists one chip per team ranked by land with the favourite first
+ *      and the right counts; and every style block the stage mounts stills
+ *      every animated class under prefers-reduced-motion, the camera to
+ *      transform none.
+ *   8. NOBODY ELSE DRAWS A SCENE. In src/components/conquest, comments
+ *      stripped, the scene card, the wheel and the timeline attributes live
+ *      only in their own files, the board imports all five new components
+ *      and seasonRecords, and no other file (the arcade boards included)
+ *      renders a scene, a wheel or a timeline.
  *
  * NEGATIVE CONTROLS (SCENE_CONTROL=...), each rewriting a temp copy of one
  * lib and refusing to run if the rewrite changed nothing. A control run exits
@@ -147,6 +164,40 @@ if (CONTROL === 'records') {
    layout effect on every server render and would bury the output. */
 const ENTRY = `${TMP}/conquestScenes.entry.mjs`;
 const BUNDLE = `${TMP}/conquestScenes.bundle.cjs`;
+/* The probe: the real hook driving the real player, with the cursor and the
+   frame written onto a wrapper so a server render can be read back. kick
+   calls play() once during render, which the server renderer honours as a
+   render phase update, so the reduced motion jump can be observed without a
+   browser. The scene player never reads the copied lib: the scenes it is
+   handed come from the copy, so a control that rewrites them is measured by
+   sections 1 to 3, not here. */
+const PROBE = `${TMP}/conquestScenes.probe.tsx`;
+fs.writeFileSync(PROBE, `
+import { useRef } from 'react';
+import ConquestScenePlayer, { useScenePlayer } from '${ROOT}/src/components/conquest/ConquestScenePlayer.tsx';
+export function Probe(props) {
+  const { sport, map, scenes, cursor, records, favorite, wheel, arrowDeg, reducedMotion, kick } = props;
+  const p = useScenePlayer(scenes, map, { reducedMotion, initialCursor: cursor });
+  const kicked = useRef(false);
+  if (kick && !kicked.current) { kicked.current = true; p.play(); }
+  const f = p.frame;
+  const s = scenes[p.cursor.index];
+  return (
+    <div
+      data-probe-index={p.cursor.index}
+      data-probe-beat={p.cursor.beat}
+      data-probe-playing={String(p.playing)}
+      data-probe-battle={f.battle ? f.battle.stage : ''}
+      data-probe-winner={f.battle && f.battle.winner ? f.battle.winner : ''}
+      data-probe-takeover={f.takeover ? Object.keys(f.takeover.from).sort().join('|') : ''}
+      data-probe-focus={f.focusRegions ? f.focusRegions.length : -1}
+      data-probe-owners={s && f.owners === s.before ? 'before' : s && f.owners === s.after ? 'after' : 'other'}
+    >
+      <ConquestScenePlayer sport={sport} map={map} scenes={scenes} cursor={p.cursor} records={records} favorite={favorite} wheel={wheel} arrowDeg={arrowDeg} onSkip={() => {}} />
+    </div>
+  );
+}
+`);
 fs.writeFileSync(ENTRY, `
 export * as runlib from '${LIB}/conquestRun.ts';
 export * as scenelib from '${LIB}/conquestScenes.ts';
@@ -160,6 +211,11 @@ export { NBA_CONQUEST_MAP } from '${ROOT}/src/data/conquestDataNba.ts';
 export { MLB_CONQUEST_MAP } from '${ROOT}/src/data/conquestDataMlb.ts';
 export { NHL_CONQUEST_MAP } from '${ROOT}/src/data/conquestDataNhl.ts';
 export { default as ConquestRegionMap } from '${ROOT}/src/components/conquest/ConquestRegionMap.tsx';
+export { default as ConquestWheel } from '${ROOT}/src/components/conquest/ConquestWheel.tsx';
+export { default as ConquestTimeline } from '${ROOT}/src/components/conquest/ConquestTimeline.tsx';
+export { default as ConquestStandingsStrip } from '${ROOT}/src/components/conquest/ConquestStandingsStrip.tsx';
+export * as playerlib from '${ROOT}/src/components/conquest/ConquestScenePlayer.tsx';
+export { Probe } from '${PROBE}';
 import React from '${NM}/react/index.js';
 import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
 import { StaticRouter } from '${NM}/react-router/dist/development/index.mjs';
@@ -179,7 +235,7 @@ globalThis.localStorage = {
   get length() { return store.size; },
 };
 const mod = createRequire(import.meta.url)(BUNDLE);
-const { runlib, scenelib, daily, eng, look, usSports, render, ConquestRegionMap } = mod;
+const { runlib, scenelib, daily, eng, look, usSports, render, ConquestRegionMap, ConquestWheel, ConquestTimeline, ConquestStandingsStrip, playerlib, Probe } = mod;
 
 const SPORTS = [
   { sport: usSports.NFL_IMPERIALISM, map: mod.NFL_CONQUEST_MAP },
@@ -572,21 +628,309 @@ console.log('6) The wheel lands on the featured attacker in the sport\'s team or
      no label under 5.5 units; size stage drops the border classes. */
 }
 
-/* ---------- 7 and 8: WAVE 2, NOT YET MEASURED ----------
-   7. Reduced motion and the score element. useScenePlayer with initialCursor
-      at each beat: the rendered player mounts data-scene-score only at beats
-      score and takeover, with text equal to the engine's score; with
-      reducedMotion true the cursor after play() is the last scene at beat
-      done; the rendered style of the map under reduced motion carries the
-      .cq-camera transform none rule and every .cq-* animation is stilled; the
-      timeline and the strip render one chip per team with the favourite first.
-   8. Source scan. In src/components/conquest, comments stripped first, the
-      scene card, wheel and timeline data attributes appear only in
-      ConquestScenePlayer.tsx, ConquestWheel.tsx and ConquestTimeline.tsx
-      respectively; ImperialismBoardShared.tsx imports all five new components
-      and seasonRecords; no other file draws a scene, a wheel or a timeline.
-   Add them above this line, numbered 7 and 8, each with a printed count and a
-   floor on its sample. */
+/* ---------- 7: the player shows the scene and nothing early ---------- */
+console.log('7) The player mounts the score only at its beats with the scene\'s score, hands the map the right frame, the wheel lands on the attacker, the timeline and the strip are the season, and reduced motion stills every animation');
+/** The text between a tag carrying an attribute and its closing tag, for the score line. */
+const textAfter = (html, attr) => {
+  const i = html.indexOf(attr);
+  if (i < 0) return '';
+  const open = html.indexOf('>', i);
+  const close = html.indexOf('<', open);
+  return html.slice(open + 1, close).replace(/&#x27;/g, "'").replace(/&quot;/g, '"');
+};
+const decode = s => s.replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+/** Every <style> block's text, in order. */
+const styles = html => [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]);
+/** Base classes that animate or transition, and whether the reduced motion block stills each of them. */
+function reducedMotionAudit(css) {
+  const at = css.indexOf('@media (prefers-reduced-motion: reduce)');
+  const base = at < 0 ? css : css.slice(0, at);
+  const reduced = at < 0 ? '' : css.slice(at);
+  const moving = new Set();
+  for (const m of base.matchAll(/([^{}@]+)\{([^}]*)\}/g)) {
+    if (!/\b(animation|transition)\s*:/.test(m[2])) continue;
+    for (const sel of m[1].split(',')) {
+      const cls = sel.trim().match(/^\.(cq-[\w-]+)/);
+      if (cls) moving.add(cls[1]);
+    }
+  }
+  const stilled = new Set();
+  const inner = reduced.slice(reduced.indexOf('{') + 1);
+  for (const m of inner.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+    if (!/\b(animation|transition)\s*:\s*none/.test(m[2])) continue;
+    for (const sel of m[1].split(',')) {
+      const cls = sel.trim().match(/^\.(cq-[\w-]+)/);
+      if (cls) stilled.add(cls[1]);
+    }
+  }
+  return { hasBlock: at >= 0, moving: [...moving], unstilled: [...moving].filter(c => !stilled.has(c)) };
+}
+{
+  const BEATS = ['card', 'fight', 'score', 'takeover', 'done'];
+  let rounds = 0, renders = 0, cursorOff = 0, scoreEarly = 0, scoreMissing = 0, scoreWrong = 0, cardWrong = 0, teamsMissing = 0, frameWrong = 0, callWrong = 0, hitWrong = 0, skipMissing = 0, featuredSeen = 0, chipWrong = 0;
+  let reducedRuns = 0, reducedWrong = 0;
+  const seenBeats = new Set();
+  for (const { sport, map } of SPORTS) {
+    for (const { run, snaps } of RUNS.get(sport.key).slice(0, 2)) {
+      for (let i = 0; i < run.rounds.length; i++) {
+        const scenes = scenelib.buildScenes(run, i, snaps[i].featured, snaps[i].call);
+        if (scenes.length === 0) continue;
+        rounds += 1;
+        const featuredScene = scenes.find(s => s.featured) ?? null;
+        const wheel = featuredScene ? scenelib.wheelSpec(sport, map, featuredScene.game.home) : null;
+        const picks = featuredScene && featuredScene.index !== 0 ? [scenes[0], featuredScene] : [scenes[0]];
+        const hit = s => scenes[s.index] === s;
+        for (const scene of picks) {
+          if (!hit(scene)) continue;
+          for (const beat of BEATS) {
+            if (beat === 'takeover' && scene.flipped.length === 0) continue;
+            renders += 1;
+            seenBeats.add(beat);
+            const cursor = { index: scene.index, beat };
+            const html = render(Probe, { sport, map, scenes, cursor, records: run.records, favorite: run.favorite, wheel, arrowDeg: 42, reducedMotion: false, kick: false });
+            const probe = tags(html, 'div').find(d => 'data-probe-beat' in d) || {};
+            if (probe['data-probe-beat'] !== beat || Number(probe['data-probe-index']) !== scene.index) cursorOff += 1;
+            /* The score element exists only at its own beats, and then it is the scene's score. */
+            const hasScore = html.includes('data-scene-score');
+            const shouldScore = beat === 'score' || beat === 'takeover';
+            if (hasScore && !shouldScore) scoreEarly += 1;
+            if (!hasScore && shouldScore) scoreMissing += 1;
+            if (hasScore) {
+              const text = textAfter(html, 'data-scene-score');
+              if (!text.includes(`${scene.game.homeScore} to ${scene.game.awayScore}`) || !text.includes('FINAL')) scoreWrong += 1;
+            }
+            /* The card is this scene's, and it names both teams. */
+            const card = tags(html, 'div').find(d => 'data-scene-card' in d) || {};
+            if (Number(card['data-scene-index']) !== scene.index || card['data-scene-featured'] !== (scene.featured ? 'yes' : 'no')) cardWrong += 1;
+            const plain = decode(html.replace(/<style>[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' '));
+            if (!plain.includes(eng.teamLabel(sport, scene.game.home)) || !plain.includes(eng.teamLabel(sport, scene.game.away))) teamsMissing += 1;
+            /* The frame handed to the map: opening map and a pending or live fight before the score, the closing map with exactly the flipped regions in the wave after it. */
+            const takeover = probe['data-probe-takeover'] || '';
+            const flipped = [...scene.flipped].sort().join('|');
+            if (beat === 'card' && (probe['data-probe-owners'] !== 'before' || probe['data-probe-battle'] !== 'pending' || probe['data-probe-winner'] !== '')) frameWrong += 1;
+            if (beat === 'fight' && (probe['data-probe-owners'] !== 'before' || probe['data-probe-battle'] !== 'live')) frameWrong += 1;
+            if (beat === 'score' && (probe['data-probe-owners'] !== 'before' || probe['data-probe-battle'] !== 'resolved' || probe['data-probe-winner'] !== scene.game.winner || takeover !== '')) frameWrong += 1;
+            if (beat === 'takeover' && (probe['data-probe-owners'] !== 'after' || probe['data-probe-battle'] !== 'resolved' || takeover !== flipped)) frameWrong += 1;
+            if (beat !== 'done' && Number(probe['data-probe-focus']) < 0) frameWrong += 1;
+            if (beat === 'done' && (Number(probe['data-probe-focus']) !== -1 || probe['data-probe-battle'] !== '')) frameWrong += 1;
+            /* The call and the hit live on the featured scene only, from the score beat. */
+            const callTag = tags(html, 'p').find(p => 'data-scene-call' in p);
+            if (scene.featured) {
+              featuredSeen += 1;
+              if (!callTag || callTag['data-team'] !== scene.call) callWrong += 1;
+              const hitTag = tags(html, 'span').find(s => 'data-scene-hit' in s);
+              if (shouldScore ? (!hitTag || hitTag['data-scene-hit'] !== (scene.hit ? 'yes' : 'no')) : !!hitTag) hitWrong += 1;
+            } else if (callTag || html.includes('data-scene-hit')) callWrong += 1;
+            /* The gain chip lands with the wave and carries the flipped count. */
+            const chip = tags(html, 'span').find(s => 'data-scene-chip' in s);
+            if (beat === 'takeover' || beat === 'done') { if (!chip || Number(chip['data-gain']) !== scene.flipped.length) chipWrong += 1; }
+            else if (chip) chipWrong += 1;
+            if (!/<button[^>]*data-scene-skip/.test(html)) skipMissing += 1;
+          }
+        }
+        /* Reduced motion: play() lands on the last scene at beat done, nothing playing. */
+        reducedRuns += 1;
+        const rm = render(Probe, { sport, map, scenes, cursor: { index: 0, beat: 'card' }, records: run.records, favorite: run.favorite, wheel, arrowDeg: null, reducedMotion: true, kick: true });
+        const rp = tags(rm, 'div').find(d => 'data-probe-beat' in d) || {};
+        if (rp['data-probe-beat'] !== 'done' || Number(rp['data-probe-index']) !== scenes.length - 1 || rp['data-probe-playing'] !== 'false' || rm.includes('data-scene-score')) reducedWrong += 1;
+      }
+    }
+  }
+  console.log(`   ${rounds} settled rounds, ${renders} player renders over beats ${[...seenBeats].join(', ')}: ${cursorOff} with the cursor off the initial one, ${scoreEarly} with a score before its beat, ${scoreMissing} without one at its beat, ${scoreWrong} with a score that is not the scene's, ${cardWrong} with the wrong card, ${teamsMissing} not naming both teams, ${frameWrong} handing the map the wrong frame, ${chipWrong} with the gain chip wrong, ${skipMissing} without a Skip button`);
+  console.log(`   ${featuredSeen} featured renders: ${callWrong} with the call wrong or on the wrong scene, ${hitWrong} with the hit wrong or early; ${reducedRuns} reduced motion plays, ${reducedWrong} not landing on the last scene at done with nothing playing`);
+  if (rounds < 150) fail('7', `only ${rounds} settled rounds rendered`);
+  if (renders < 1200) fail('7', `only ${renders} player renders`);
+  if (seenBeats.size !== BEATS.length) fail('7', `beats rendered: ${[...seenBeats].join(', ')}, not all five`);
+  if (cursorOff > 0) fail('7', `${cursorOff} renders did not start on the cursor they were given`);
+  if (scoreEarly > 0) fail('7', `${scoreEarly} renders mounted the score before its beat`);
+  if (scoreMissing > 0) fail('7', `${scoreMissing} renders had no score at the score or takeover beat`);
+  if (scoreWrong > 0) fail('7', `${scoreWrong} renders showed a score that is not the scene's, or without FINAL`);
+  if (cardWrong > 0) fail('7', `${cardWrong} renders carried the wrong card`);
+  if (teamsMissing > 0) fail('7', `${teamsMissing} renders did not name both teams`);
+  if (frameWrong > 0) fail('7', `${frameWrong} renders handed the map the wrong owners, fight or wave`);
+  if (chipWrong > 0) fail('7', `${chipWrong} renders carried the gain chip at the wrong beat or with the wrong count`);
+  if (skipMissing > 0) fail('7', `${skipMissing} renders had no Skip button`);
+  if (featuredSeen < 150) fail('7', `only ${featuredSeen} featured renders`);
+  if (callWrong > 0) fail('7', `${callWrong} renders put the call on the wrong scene or the wrong team`);
+  if (hitWrong > 0) fail('7', `${hitWrong} renders showed the hit early, wrong or missing`);
+  if (reducedRuns < 150) fail('7', `only ${reducedRuns} reduced motion plays`);
+  if (reducedWrong > 0) fail('7', `${reducedWrong} reduced motion plays did not land on the last scene at beat done`);
+
+  /* The wheel: every wedge a team in order, the landing wedge the attacker,
+     the needle carrying the angle, colour and text only. */
+  let wheels = 0, wedgesOff = 0, landingOff = 0, needleOff = 0, spinningNeedle = 0, imagery = 0, pathsDrawn = 0;
+  for (const { sport, map } of SPORTS) {
+    for (const { snaps } of RUNS.get(sport.key).slice(0, 2)) {
+      snaps.forEach(({ featured }, k) => {
+        if (!featured || k % 2 !== 0) return;
+        wheels += 1;
+        const spec = scenelib.wheelSpec(sport, map, featured[0]);
+        const html = render(ConquestWheel, { spec, spinning: false, arrowDeg: 123.5 });
+        const wedges = tags(html, 'circle').filter(c => 'data-wedge' in c);
+        if (wedges.length !== sport.teams.length || wedges.some((w, i) => w['data-team'] !== sport.teams[i].id)) wedgesOff += 1;
+        const landing = wedges.filter(w => w['data-landing'] === 'yes');
+        if (landing.length !== 1 || landing[0]['data-team'] !== featured[0]) landingOff += 1;
+        const root = tags(html, 'div').find(d => 'data-wheel' in d) || {};
+        if (root['data-landing-team'] !== featured[0] || root['data-landed'] !== 'yes') landingOff += 1;
+        const needle = tags(html, 'g').find(g => 'data-wheel-arrow' in g);
+        if (!needle || needle['data-angle'] !== '123.5') needleOff += 1;
+        if (/<img\b|<image\b|url\(/.test(html)) imagery += 1;
+        if (/<path\b/.test(html)) pathsDrawn += 1;
+        /* Still spinning: no needle yet, and the ring has not landed. */
+        const spinning = render(ConquestWheel, { spec, spinning: true, arrowDeg: 123.5 });
+        if (spinning.includes('data-wheel-arrow') || (tags(spinning, 'div').find(d => 'data-wheel' in d) || {})['data-landed'] !== 'no') spinningNeedle += 1;
+      });
+    }
+    if (render(ConquestWheel, { spec: scenelib.wheelSpec(sport, map, 'nobody-of-this-sport'), spinning: false, arrowDeg: 0 }) !== '') landingOff += 1;
+  }
+  console.log(`   ${wheels} wheels: ${wedgesOff} not one wedge per team in order, ${landingOff} not landing on the attacker (unknown attacker included), ${needleOff} needles without the angle, ${spinningNeedle} showing the needle or landed while still spinning, ${imagery} with an image, ${pathsDrawn} drawing a path`);
+  if (wheels < 60) fail('7', `only ${wheels} wheels rendered`);
+  if (wedgesOff > 0) fail('7', `${wedgesOff} wheels were not one wedge per team in the sport's order`);
+  if (landingOff > 0) fail('7', `${landingOff} wheels did not land on the attacker`);
+  if (needleOff > 0) fail('7', `${needleOff} wheels had no needle carrying the angle`);
+  if (spinningNeedle > 0) fail('7', `${spinningNeedle} wheels showed the needle before landing`);
+  if (imagery > 0) fail('7', `${imagery} wheels carried an image: colour and text only`);
+  if (pathsDrawn > 0) fail('7', `${pathsDrawn} wheels drew an SVG path, which simConquestMap section 4 forbids outside the map`);
+
+  /* The timeline: one stop per kept map, Start first. The strip: one chip
+     per team ranked by land, the favourite first, the counts the engine's. */
+  let timelines = 0, stopsOff = 0, strips = 0, chipCountOff = 0, favouriteOff = 0, orderOff = 0, countOff = 0, summaryOff = 0, compactOff = 0;
+  for (const { sport, map } of SPORTS) {
+    for (const { run } of RUNS.get(sport.key).slice(0, 2)) {
+      const labels = ['Start', ...run.rounds.map(r => r.label)];
+      for (const index of [0, Math.floor(run.history.length / 2), run.history.length - 1]) {
+        timelines += 1;
+        const html = render(ConquestTimeline, { labels, index, onChange: () => {} });
+        const input = tags(html, 'input').find(i => 'data-timeline' in i) || {};
+        if (Number(input.max) !== run.history.length - 1 || Number(input['data-stops']) !== run.history.length || Number(input.value) !== index || input.min !== '0') stopsOff += 1;
+        if (textAfter(html, 'data-timeline-label') !== labels[index]) stopsOff += 1;
+      }
+      for (const at of [1, Math.floor(run.history.length / 2), run.history.length - 1]) {
+        strips += 1;
+        const owners = run.history[at];
+        const counts = eng.empireCounts(sport, owners);
+        const html = render(ConquestStandingsStrip, { sport, map, owners, records: run.records, favorite: run.favorite, highlightTeam: null, onHighlight: () => {}, compact: false });
+        const chips = tags(html, 'button').filter(b => 'data-team' in b);
+        if (chips.length !== sport.teams.length) chipCountOff += 1;
+        if (chips[0]?.['data-team'] !== run.favorite) favouriteOff += 1;
+        const rest = chips.slice(1);
+        for (let i = 1; i < rest.length; i++) if (Number(rest[i]['data-count']) > Number(rest[i - 1]['data-count'])) orderOff += 1;
+        if (chips.some(c => Number(c['data-count']) !== (counts.get(c['data-team']) ?? 0))) countOff += 1;
+        const holding = sport.teams.filter(t => (counts.get(t.id) ?? 0) > 0).length;
+        const root = tags(html, 'div').find(d => 'data-standings' in d) || {};
+        if (Number(root['data-holding']) !== holding || Number(root['data-wiped']) !== sport.teams.length - holding) summaryOff += 1;
+        if (!textAfter(html, 'data-standings-summary').includes(`${holding} of ${sport.teams.length} hold land, ${sport.teams.length - holding} wiped out`)) summaryOff += 1;
+        const compact = render(ConquestStandingsStrip, { sport, map, owners, records: run.records, favorite: run.favorite, highlightTeam: null, onHighlight: () => {}, compact: true });
+        const shown = tags(compact, 'button').filter(b => 'data-team' in b);
+        if (shown.length !== 8 || !compact.includes('data-standings-more') || !decode(compact).includes(`+${sport.teams.length - 8} more`)) compactOff += 1;
+      }
+    }
+  }
+  console.log(`   ${timelines} timelines: ${stopsOff} without one stop per kept map or the right label; ${strips} strips: ${chipCountOff} not one chip per team, ${favouriteOff} without the favourite first, ${orderOff} out of rank order, ${countOff} with a count off the engine's, ${summaryOff} with the summary wrong, ${compactOff} compact strips not top eight plus more`);
+  if (timelines < 30 || strips < 30) fail('7', `only ${timelines} timelines and ${strips} strips rendered`);
+  if (stopsOff > 0) fail('7', `${stopsOff} timelines did not carry one stop per kept map`);
+  if (chipCountOff > 0) fail('7', `${chipCountOff} strips did not list one chip per team`);
+  if (favouriteOff > 0) fail('7', `${favouriteOff} strips did not pin the favourite first`);
+  if (orderOff > 0) fail('7', `${orderOff} strips listed a team above one holding more land`);
+  if (countOff > 0) fail('7', `${countOff} strips carried a count that is not the engine's`);
+  if (summaryOff > 0) fail('7', `${summaryOff} strips got the hold land summary wrong`);
+  if (compactOff > 0) fail('7', `${compactOff} compact strips did not show the top eight plus more`);
+
+  /* Reduced motion, at the style level: the map's block stills the camera
+     and every animated class; the player's, the wheel's and the timeline's
+     blocks each carry the rule and still everything they animate. */
+  let blocks = 0, blocksWithoutRule = 0, unstilledClasses = [], cameraRule = 0;
+  {
+    const { sport, map } = SPORTS[0];
+    const { run } = RUNS.get(sport.key)[0];
+    const focus = Object.keys(run.history[0]).slice(0, 6);
+    const mapCss = styles(render(ConquestRegionMap, { sport: map, owners: run.history[0], focusRegions: focus, homeRegions: {}, labelStyle: 'caps', size: 'stage' })).join('\n');
+    const audit = reducedMotionAudit(mapCss);
+    blocks += 1;
+    if (!audit.hasBlock) blocksWithoutRule += 1;
+    unstilledClasses.push(...audit.unstilled.map(c => `map:${c}`));
+    if (/@media \(prefers-reduced-motion: reduce\)[^]*\.cq-camera \{ transform: none !important/.test(mapCss)) cameraRule += 1;
+    const scenes = scenelib.buildScenes(run, 0, RUNS.get(sport.key)[0].snaps[0].featured, RUNS.get(sport.key)[0].snaps[0].call);
+    const featuredScene = scenes.find(s => s.featured) ?? scenes[0];
+    const wheel = scenelib.wheelSpec(sport, map, featuredScene.game.home);
+    const named = [
+      ['player', render(Probe, { sport, map, scenes, cursor: { index: featuredScene.index, beat: 'takeover' }, records: run.records, favorite: run.favorite, wheel, arrowDeg: 10, reducedMotion: false, kick: false })],
+      ['wheel', render(ConquestWheel, { spec: wheel, spinning: false, arrowDeg: 10 })],
+      ['timeline', render(ConquestTimeline, { labels: ['Start', 'Week 1'], index: 1, onChange: () => {} })],
+    ];
+    for (const [name, html] of named) {
+      const css = styles(html);
+      if (css.length === 0) { blocksWithoutRule += 1; continue; }
+      for (const block of css) {
+        blocks += 1;
+        const a = reducedMotionAudit(block);
+        if (!a.hasBlock) blocksWithoutRule += 1;
+        unstilledClasses.push(...a.unstilled.map(c => `${name}:${c}`));
+      }
+    }
+  }
+  console.log(`   ${blocks} style blocks (map, player, wheel, timeline): ${blocksWithoutRule} without the reduced motion rule, ${unstilledClasses.length} animated classes not stilled${unstilledClasses.length ? ` (${unstilledClasses.join(', ')})` : ''}; camera transform none under reduced motion: ${cameraRule ? 'yes' : 'NO'}`);
+  if (blocks < 4) fail('7', `only ${blocks} style blocks audited`);
+  if (blocksWithoutRule > 0) fail('7', `${blocksWithoutRule} style blocks carry no prefers-reduced-motion rule`);
+  if (unstilledClasses.length > 0) fail('7', `animated classes not stilled under reduced motion: ${unstilledClasses.join(', ')}`);
+  if (cameraRule === 0) fail('7', 'the map does not set the camera to transform none under reduced motion');
+}
+
+/* ---------- 8: nobody else draws a scene ---------- */
+console.log('8) The scene card, the wheel and the timeline live in their own files, the board imports all five and seasonRecords, and no other file draws them');
+{
+  const DIR = `${ROOT}/src/components/conquest`;
+  const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const files = new Map();
+  for (const name of fs.readdirSync(DIR).filter(f => /\.tsx?$/.test(f))) {
+    files.set(name, stripComments(norm(fs.readFileSync(`${DIR}/${name}`, 'utf8'))));
+  }
+  const OWNERS = [
+    ['data-scene-card', 'ConquestScenePlayer.tsx'],
+    ['data-wheel', 'ConquestWheel.tsx'],
+    ['data-timeline', 'ConquestTimeline.tsx'],
+    ['data-standings', 'ConquestStandingsStrip.tsx'],
+    ['data-imperialism-help', 'ImperialismHowToPlay.tsx'],
+  ];
+  let attrs = 0, strays = 0, missing = 0;
+  for (const [attr, owner] of OWNERS) {
+    attrs += 1;
+    const carriers = [...files.entries()].filter(([, src]) => src.includes(attr)).map(([n]) => n);
+    if (!carriers.includes(owner)) { missing += 1; fail('8', `${attr} is not in ${owner}, so the check has nothing to hold`); }
+    const stray = carriers.filter(n => n !== owner);
+    if (stray.length) { strays += stray.length; fail('8', `${attr} also appears in ${stray.join(', ')}`); }
+  }
+  const board = files.get('ImperialismBoardShared.tsx') || '';
+  const NEW = ['ConquestScenePlayer', 'ConquestWheel', 'ConquestTimeline', 'ConquestStandingsStrip', 'ImperialismHowToPlay'];
+  let imported = 0, rendered = 0;
+  for (const c of NEW) {
+    if (new RegExp(`from ['"]@/components/conquest/${c}['"]`).test(board)) imported += 1; else fail('8', `the board does not import ${c}`);
+    if (new RegExp(`<${c}\\b`).test(board)) rendered += 1; else fail('8', `the board does not render ${c}`);
+  }
+  const bookImported = /import\s*\{[^}]*\bseasonRecords\b[^}]*\}\s*from\s*['"]@\/lib\/conquestRun['"]/.test(board) && /seasonRecords\s*\(/.test(board);
+  if (!bookImported) fail('8', 'the board does not import and call seasonRecords');
+  const bookRows = /data-record=\{[^}]*\.key\}/.test(board) && board.includes('data-team=') && board.includes('data-value=');
+  if (!bookRows) fail('8', 'the board does not render the record rows with data-record, data-team and data-value');
+  /* Nobody else draws a scene, a wheel or a timeline: the shapes, not only
+     the attributes, so a copy under a new name is caught. */
+  const SHAPES = [
+    [/useScenePlayer\s*\(/, 'drives a scene player', ['ConquestScenePlayer.tsx', 'ImperialismBoardShared.tsx']],
+    [/<ConquestScenePlayer\b|<ConquestWheel\b|<ConquestTimeline\b|<ConquestStandingsStrip\b/, 'renders a stage component', ['ImperialismBoardShared.tsx']],
+    [/strokeDasharray=\{`\$\{arc\}/, 'draws colour wedges', ['ConquestWheel.tsx']],
+    [/type="range"/, 'draws a range input', ['ConquestTimeline.tsx']],
+    [/data-scene-score/, 'mounts a score element', ['ConquestScenePlayer.tsx']],
+  ];
+  let shapes = 0, shapeStrays = 0;
+  for (const [re, what, allowed] of SHAPES) {
+    shapes += 1;
+    const carriers = [...files.entries()].filter(([, src]) => re.test(src)).map(([n]) => n);
+    if (carriers.length === 0) { fail('8', `nothing ${what}, so the shape check has nothing to hold`); continue; }
+    const stray = carriers.filter(n => !allowed.includes(n));
+    if (stray.length) { shapeStrays += stray.length; fail('8', `${stray.join(', ')} also ${what}`); }
+  }
+  console.log(`   ${files.size} files in src/components/conquest; ${attrs} owned attributes, ${missing} missing from their owner, ${strays} stray carriers; the board imports ${imported} of ${NEW.length} new components and renders ${rendered}, seasonRecords imported and called: ${bookImported ? 'yes' : 'NO'}, record rows carry the data attributes: ${bookRows ? 'yes' : 'NO'}; ${shapes} shapes scanned, ${shapeStrays} drawn outside their files`);
+  if (files.size < 10) fail('8', `only ${files.size} files scanned`);
+}
 
 if (CONTROL) {
   const want = KNOWN_CONTROLS[CONTROL];
