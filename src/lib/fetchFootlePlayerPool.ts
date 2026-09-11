@@ -10,7 +10,7 @@ import { normalizeName } from '@/lib/playerSearch';
 // always tiered 'easy', value is a fame proxy that breaks for aging legends
 // (a 39-year-old Messi is worth $12.8M, less than a mid-table squad player).
 // ---------------------------------------------------------------------------
-const GOAT_NAMES = new Set([
+export const GOAT_NAMES = new Set([
   'Lionel Messi',
   'Cristiano Ronaldo',
   'Neymar',
@@ -33,7 +33,7 @@ const GOAT_KEYS = new Set([...GOAT_NAMES].map(n => normalizeName(n)));
 // ---------------------------------------------------------------------------
 // Transfermarkt-style position string → Position union type
 // ---------------------------------------------------------------------------
-const POSITION_NORMALIZE: Record<string, Position> = {
+export const POSITION_NORMALIZE: Record<string, Position> = {
   // Goalkeepers
   'Goalkeeper': 'GK',
   'GK': 'GK',
@@ -115,7 +115,7 @@ const INSANE_POOL_MAX = 1200;
 // exact player_market_values.club strings for 2025/26 (verified via SQL on
 // flawuiqbvjobmkfkauhw, 2026-07-08); leagues are each club's 2025/26 division.
 // ---------------------------------------------------------------------------
-const INSANE_CLUB_LEAGUE: Record<string, League> = {
+export const INSANE_CLUB_LEAGUE: Record<string, League> = {
   // Serie A
   'Pisa Sporting Club': 'Serie A', 'Udinese Calcio': 'Serie A', 'Torino FC': 'Serie A',
   'US Cremonese': 'Serie A', 'US Lecce': 'Serie A', 'Cagliari Calcio': 'Serie A',
