@@ -10,9 +10,16 @@
 
    House rules it follows: one card, no stacking, full width buttons for a
    phone, and the way out is always visible: turning it down is a button,
-   not a corner. */
+   not a corner.
+
+   Round 530: the talk rises in when it opens. The board mounts this card
+   the moment the final year is reached, so "on mount" is "a new talk", and
+   a push re-renders the same card in place without replaying the entrance.
+   The numbers are printed final from frame one (Round 147). Reduced motion
+   lands everything on its final frame through CelebrationStyles. */
 
 import { PenLine, TrendingUp } from 'lucide-react';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { extensionHeadline } from '@/lib/usCareerExtension';
 import type { ExtensionTalk } from '@/lib/usCareerExtension';
 import { cn } from '@/lib/utils';
@@ -33,7 +40,8 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
   const gap = o ? Math.round(((o.salary - talk.market) / Math.max(0.1, talk.market)) * 100) : 0;
   return (
     <div className="space-y-3" data-extension-talk>
-      <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+      <CelebrationStyles />
+      <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">
           <PenLine className="mr-1 inline h-4 w-4 text-gold" /> The final year
         </p>
@@ -46,7 +54,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
       </div>
 
       {o ? (
-        <div className={cn('rounded-2xl border bg-card p-3', talk.pushed ? 'border-border' : 'border-primary/50')}>
+        <div className={cn('cm-rise rounded-2xl border bg-card p-3', talk.pushed ? 'border-border' : 'border-primary/50')} style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between">
             <span className="min-w-0 truncate font-display text-sm font-bold text-foreground">{talk.label}</span>
             <span className="shrink-0 rounded-full bg-primary/15 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-primary">
@@ -93,7 +101,8 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
 
       <button
         onClick={onDecline}
-        className="w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm font-bold text-muted-foreground hover:border-gold hover:text-foreground"
+        className="cm-rise w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm font-bold text-muted-foreground hover:border-gold hover:text-foreground"
+        style={{ animationDelay: o ? '0.4s' : '0.2s' }}
       >
         {o ? 'Turn it down and play the year out' : 'Play the year out'}
       </button>

@@ -11,11 +11,22 @@
      PHONES. Full width buttons, truncating team names, wrapping chip rows.
 
    Legal note: pitches come from the engine and are attributed to franchises
-   and front offices, never to a named real person. Keep it that way. */
+   and front offices, never to a named real person. Keep it that way.
+
+   Round 530: the market opens as a moment. The header rises, the offers
+   tick in one by one in the order the engine sorted them (incumbent first,
+   then best money down), and the line from a push rises in under the
+   header, keyed on its text so only a new line moves. The board mounts this
+   panel when the window opens, so "on mount" is "a new window"; a push
+   re-renders the same cards in place. Every dollar figure is final from
+   frame one (Round 147). Reduced motion lands on the final frame through
+   CelebrationStyles. */
 
 import { Handshake, TrendingUp } from 'lucide-react';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { FA_TIER_WORD, faTotalValue } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
+import { revealDelay } from '@/lib/usCareerReveal';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -33,7 +44,8 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
     /* data-fa-window scopes the browser harness to this screen, because the
        sitewide ticker above it also talks about teams and signings. */
     <div className="space-y-3" data-fa-window>
-      <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+      <CelebrationStyles />
+      <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">🖊️ Free agency</p>
         <p className="mt-1 text-xs text-muted-foreground">
           Your deal is up. Every {sportNoun} below is a real destination with its own money,
@@ -41,7 +53,7 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
           offer can disappear, but your own {sportNoun} never walks away.
         </p>
         <p className="mt-1 text-[11px] font-semibold text-gold">{w.note}</p>
-        {talkLine && <p className="mt-2 rounded-xl bg-secondary px-3 py-2 text-xs text-foreground">{talkLine}</p>}
+        {talkLine && <p key={talkLine} className="cm-rise mt-2 rounded-xl bg-secondary px-3 py-2 text-xs text-foreground">{talkLine}</p>}
       </div>
 
       <div className="space-y-2">
@@ -49,9 +61,10 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
           <div
             key={`${o.team}-${i}`}
             className={cn(
-              'rounded-2xl border p-3',
+              'cm-tick-in rounded-2xl border p-3',
               o.gone ? 'border-border bg-card opacity-45' : o.incumbent ? 'border-gold/50 bg-card' : 'border-border bg-card',
             )}
+            style={{ animationDelay: `${revealDelay(i, 0.3, 0.14)}s` }}
           >
             <div className="flex items-center justify-between gap-2">
               <p className="min-w-0 truncate text-sm font-black text-foreground">

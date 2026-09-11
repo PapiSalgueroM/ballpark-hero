@@ -118,6 +118,15 @@ export function stageVerdict(a: { iAmChampion: boolean; fired: boolean }): Verdi
   };
 }
 
+/* Round 530: revealDelay timing. The stagger every reveal in the US careers
+   uses: the first row lands after the headline has (start), then one row
+   per step. Same arithmetic as the Club Manager kit's revealDelay in
+   Celebration.tsx; the integration pass swaps this for that shared helper
+   and nothing here changes shape. Pure: seconds in, seconds out. */
+export function revealDelay(i: number, start = 0.6, step = 0.22): number {
+  return start + i * step;
+}
+
 export function buildSeasonReveal(a: RevealBuildArgs): SeasonReveal {
   const banned = a.teamResult === 'SUSPENDED';
   const confetti = !banned && a.teamResult.startsWith('WON THE');
