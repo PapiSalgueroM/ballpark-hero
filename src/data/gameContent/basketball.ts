@@ -464,6 +464,41 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     ],
   },
 
+  '/nba-gauntlet-draft': {
+    intro: [
+      "The draft mode, NBA style: five picks, one per starting five slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
+      "Then the cup begins. Your finished five runs five knockout rounds against ever stronger invented opposition, rated 85 up to 101, with extra time and a shootout when the game is level.",
+      "The run is decided entirely by the five you drafted: the same lineup always runs the same gauntlet, so every pick is the game.",
+    ],
+    howToPlay: [
+      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+      "For each slot, PG through C, read the five cards, star to bargain, and tap the one you keep. Positions flex the same way Perfect Lineup's do: an SG slot also takes a PG or an SF.",
+      "After pick five the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+      "Survive a round for 16 points; lift the trophy for exactly 100.",
+    ],
+    rules: [
+      "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
+      "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
+      "No player is dealt twice in one draft.",
+      "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to extra time and then a shootout, and replaying the same lineup replays the same cup.",
+      "Opposition ratings climb 85, 89, 93, 97, 101. A bargain five usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in ten.",
+    ],
+    example: [
+      "The center slot deals a 98 rated all timer next to a 91, an 88, a 86 and an 84. There is no cost to any of them, so the 98 is the pick unless you are chasing a specific team or era on the card.",
+      "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 88 you took at power forward.",
+    ],
+    tips: [
+      "The center card matters as much as the point guard card: one weak slot drags the whole rating.",
+      "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
+      "Champions need a five in the high nineties. Check your running rating under the cards as you go.",
+    ],
+    faqs: [
+      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
+      { q: "Are the opponents real teams?", a: "No, and that is deliberate: every gauntlet opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, from the same pool Perfect Lineup: NBA plays." },
+      { q: "Is this the same game as the soccer Gauntlet Draft?", a: "Same engine, NBA's own pool and positions. Five picks instead of eleven, because a basketball lineup is five players, and the ladder is tuned to this pool's own rating range." },
+    ],
+  },
+
   '/conquest-nba': {
     intro: [
       "Pick a team, inherit the land around its arena, and try to own the entire country. This is the NBA imperialism map format: every game swallows empires whole.",

@@ -116,6 +116,160 @@ Tablet lane, yours, nothing of mine overlaps it:
 
 If you disagree with any of this, write it under your own heading and push; I re-read this
 file before every round. Board file conflicts between us are resolved by keeping both sides.
+## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
+
+**UPDATE, same day: 522 and 523 built, 524's review run and every confirmed finding fixed, all
+gates green on this branch, PR open.** tsc zero, build clean, all four round harnesses green with
+their negative controls re-verified after the fixes, `simNoRivalNames`/`simInventedNames`/
+`simNoInventedQuotes` all green, the full built-site fence list green (two ratchets raised:
+`simAdsense`'s `EXPECTED_CALLERS` 75 to 77, `simIndexNow`'s `SITEMAP_FLOOR` 141 to 143), and a
+real Chromium playthrough of both new routes plus `/nfl-my-career`, 0 findings. Full account in
+`docs/PROJECT-STATE.md`'s new head entry. **PR:**
+https://github.com/PapiSalgueroM/ballpark-hero/pull/92, `claude/douknowbll-spec-work-c3zcci` into
+`main`. Not merged yet: this lane does not merge to `main` or call `deploy_project` itself.
+Whoever merges it should run `build:seo` fresh on top of `main` if this branch's own prerendered
+snapshots have gone stale by then.
+
+Original claim (below, unedited) used 520 and 521, picked before this branch had seen the
+desktop lane's own same-day claim on those same two numbers (Champions League format history
+and the polls character rewrite, see "Note for the tablet lane" further down, and its own
+change log entries under 520 and 521). Anthony told the desktop session directly that a tablet
+session (this one) was also working and to divide up the work; this branch only saw that after
+building was already in flight. No file collision: the desktop lane's claim names the exact
+files it touched (`uclFormatHistory*`, `ChampionsLeagueFormatHistory.tsx`, `PollOfTheDay.*`,
+`pollFixtures.*`, `simPollCharacter.mjs`, `simUclFormatHistory.mjs`, `genUclEngineShapes.mjs`,
+`uclEngineShapes.json`) and none of them overlap with this lane's files below. Only the ROUND
+NUMBER labels collided, same shape as the historical 311/313 collision this file's own header
+warns about. Fixing it here rather than after the fact: this lane's two builds are **522** and
+**523**, the review that was **522** is now **524**. `origin/main` was merged into this branch
+at the desktop lane's `26b438ee` before any of this lane's code lands, so the final push will
+sit cleanly on top of both Round 520 and Round 521 as they actually shipped.
+
+There is also a THIRD unrelated claim on the number 520: the Codex lane pushed
+`codex/round-520-dependency-safety`, unmerged. Not a file collision either (different lane,
+different branch), just one more reason the number itself was never reliable here; noted so
+nobody spends time reconciling it as if it were live content.
+
+Files this lane is touching, so nobody else collides with THESE: `src/lib/gauntletDraft.ts`,
+new `src/lib/gauntletEngine.ts`, new NBA/NFL gauntlet draft pages and libs, `src/App.tsx` (two
+new lazy routes), `src/data/gameRegistry.ts` (two new GameDef entries), `src/data/gameContent/`
+(two new SEO entries), new `scripts/simGauntletEngine.mjs`; and separately
+`src/lib/soccerCareerEngine.ts` (rivalry event and phone/inbox extraction only), new
+`src/lib/careerInbox.ts`, new `src/lib/careerRivalryEvents.ts`, new `src/lib/nflCareerInbox.ts`,
+new `src/lib/nflCareerRivalryEvents.ts`, `src/lib/nflCareerLoop.ts`,
+`src/components/nfl-my-career/NflMyCareerBoard.tsx`, `src/components/soccer-career/PhonePanel.tsx`
+(only if a shared sub-component is warranted), new `scripts/simCareerInbox.mjs` and/or
+`scripts/simCareerRivalryEvents.mjs`.
+
+Original claim, numbers corrected in place rather than rewritten, so the reasoning stays intact:
+
+Picked off the reconciled 2026-08-28 backlog table in `docs/PROJECT-STATE.md` (both rows PART,
+neither blocked on an owner decision or a pending deploy), per his standing "whatever u think
+should be next" instruction. This lane is a fresh claude.ai/code session on
+`claude/douknowbll-spec-work-c3zcci`, starting from `origin/main` at `05a6a731` (Round 519,
+live).
+
+- **522 (was 520): a draft mode game per sport.** Closes "NEW a draft mode game per sport |
+  PART | Gauntlet Draft and Fantasy Draft; not yet one per sport." Built on the shared draft
+  engine per the "one engine, many sports" rule: data and events differ per sport, the loop
+  does not. Scoped to NBA and NFL this round; NHL and MLB are explicit follow ups.
+- **523 (was 521): Soccer Career's interactive rivalry events and inbox, lifted into a shared
+  module and bound to the NFL career.** Closes the open half of "Bring the Soccer Career depth
+  to the NFL career, then the other US careers | PART | ... still open: interactive rivalry
+  events, an inbox," extending the Round 469/470 pattern (careerMoney, careerSocial,
+  careerBadges already shared).
+- **524 (was 522) reserved for an adversarial review pass on 522 and 523 before either ships**,
+  the same shape Round 519 ran against 515 to 518: independent lenses trying to break the diff,
+  findings fixed before merge, not after.
+
+NEXT FREE NUMBER after this claim: 525.
+
+**UPDATE, same session: Round 525 claimed.** Completing Round 523's lift: binding NBA, MLB and
+NHL careers to `careerInbox.ts` and `careerRivalryEvents.ts`, the same way Round 523 bound NFL.
+`careerRival.ts`'s FIRST/LAST name bank is shared across all four `RivalSport` values (not
+per-sport), so the invented-name collision guard Round 523 already built and ran (576 enumerated
+combinations, 6,000 live rolls, zero real-name collisions) already covers these three; not
+re-derived, just cited. Files: `src/lib/nbaCareerInbox.ts`, `nbaCareerRivalryEvents.ts`,
+`mlbCareerInbox.ts`, `mlbCareerRivalryEvents.ts`, `nhlCareerInbox.ts`, `nhlCareerRivalryEvents.ts`,
+each sport's `*CareerLoop.ts` and `*MyCareerBoard.tsx`. NEXT FREE NUMBER after this claim: 526.
+
+**UPDATE, same session: Rounds 526 and 527 claimed, both off the MASTER SPEC frontier rather
+than the 2026-08-28 tweaks list.** Picked from `docs/SPEC-RECONCILIATION.md`'s "New, nothing
+shipped covers it" section, after verifying against the actual codebase that they are genuinely
+unbuilt (that list is partly stale: it still says Conquest, NBA Stat Line and the training drills
+do not exist, and all three shipped). Both need no owner decision and no backend decision, which
+rules out most of the rest of that frontier (multiplayer rooms, the virtual economy, manager
+attributes and the owner dashboards are all blocked on one or the other).
+
+- **526: sitewide search, spec D124 plus D125.** There are 123 games and no way to search them;
+  the only discovery paths are the home grid, the six sport hubs and the nav drawer. A search
+  page and a shared search engine over the registry and the per-game SEO copy, so a visitor can
+  find a game by name, sport, or what it actually is. Also feeds the internal link graph the
+  indexing work cares about. FILE AREA: new `src/lib/siteSearch.ts`, new `src/pages/Search.tsx`,
+  new `scripts/simSiteSearch.mjs`, one line each in `src/App.tsx` and `src/lib/pageSchema.ts`,
+  plus a header entry point and a sitemap/route registration.
+- **527: the achievement framework, spec 16 (and the honest half of D7).** No generic achievement
+  system exists; achievement-like flavor lives only inside individual games. Built DERIVED and
+  READ ONLY over data the site already records (completions, streaks, per game bests), never as a
+  second thing to write, which keeps it entirely clear of the scoring pipeline that Rounds 299,
+  300 and 301 spent three rounds repairing. Same shape `careerBadges.ts` already uses:
+  definitions plus a pure `earned()` over facts. FILE AREA: new `src/lib/achievements.ts`, new
+  `src/components/profile/AchievementCase.tsx`, new `scripts/simAchievements.mjs`, and the
+  profile page mount.
+
+Both builders write their OWN new harness file rather than extending a shared one, deliberately:
+Round 525's three parallel builders each extended the same two shared harnesses without knowing
+about each other and every one of them numbered itself "section 5", which cost a careful manual
+splice to reconcile. NEXT FREE NUMBER after this claim: 528.
+
+### MASTER SPEC TRIAGE, done 2026-09-11 while 526 and 527 built. Read this before picking spec work.
+
+`docs/SPEC-RECONCILIATION.md` is the map of the master spec, and it is the right place to pick
+from, but **it has gone stale in a way that will cost you a whole round if you trust it**. It was
+last reconciled 2026-09-07 and roughly forty rounds have landed since. Everything below was
+checked against the actual codebase on 2026-09-11, not against the doc.
+
+**Listed as unbuilt, ACTUALLY SHIPPED. Do not rebuild these:**
+
+| Spec section | Says | Reality |
+|---|---|---|
+| 50 Interactive training drills | "No click/drag/swipe skill drills exist anywhere" | Round 468 shipped three Soccer Career drills |
+| 68 / F NBA Stat Line | "Nothing shipped" | `/nba-stat-line` is live, Round 352, in the registry |
+| 82/83 Arcade engine and soccer arcade | "No shared physics/input arcade engine exists" | Round 433 Free Kick and Round 445 Buzzer Beater share one lifted arcade engine |
+| D106/D107/D108 Conquest data model, map UI, history | "No conquest game exists" | four Conquest maps plus `/soccer-conquest` (Round 459) on Round 457's shared renderer |
+| 28 Manager XP / skill tree | already corrected inline in the doc | Round 513, live |
+| 29 Staff | "No hireable staff system" | `src/lib/clubManagerStaff.ts`, Round 471's staff desk (hire, fire, poach, promote) |
+| 32 Finance system | "the projection dashboard does not [exist]" | `src/lib/clubManagerFinances.ts` plus `FinancesScreen.tsx`, Round 467 |
+| 33 Ticketing / concessions | "ticket, concession and merchandise pricing controls do not" | ticket and concession pricing shipped in Round 467 |
+| 34 Facilities | "the ten separate tracks do not [exist]" | `src/lib/clubManagerFacilities.ts`, four facilities levelled 1 to 10, Round 467 |
+| 35 Transfer engine | "the full add-on matrix is not implemented" | Round 506 shipped the transfers rework and personal terms; sell-on, swaps and add-ons predate it in Round 161 |
+| 31 Sentiment meters | "Separate fan approval ... do not exist" | Round 465 put board patience and fan mood on every tab, `clubManagerMeters.ts` |
+| 40/41 Tactics, substitutions | "roles, duties, mentality ... do not" | Round 505 shipped the tactics depth: roles, duties, seventeen shapes, the armband, retraining |
+| 43/44/45 Match centre, live presentation, event timeline | "no merged Match Center", "no animated live match view" | Round 472 merged the flow, Round 504 built the live match as a committed stream with both elevens, the ball, set pieces and live stats |
+
+**Genuinely open, no owner or backend decision needed, recommended queue in this order:**
+
+1. **104 Global leaderboard, the Week and Month views.** Verified still only Today plus All Time
+   (`src/pages/Leaderboard.tsx`). Week/Month/Season are real user value and are a server side
+   query change plus tabs. The friends and country filters in the same spec line are NOT
+   claimable: they need the social layer, which is blocked (see below).
+2. **127 Error handling, the sitewide fence.** `simNoZeroFacts.mjs` exists but covers only the
+   three games Round 443 fixed. The spec asks for a sitewide guard against raw stacks, NaN and
+   age-0 renders reaching a player. This repo's whole culture is fences, and this is a real
+   recurring class: Round 443 (Who Am I age 0), Round 315 (Rodri at age 0, value 0). Widening
+   that harness to every game is a strong, low risk round.
+3. **123 Report issue admin workflow.** The report pipeline delivers and the owner actually reads
+   it; what is missing is the status taxonomy (New, Investigating, Fixed) on the admin shelf.
+   Small, closes a loop he uses weekly.
+4. **D16 Global loading experience**, and **20 Analytics event taxonomy** (careful: must stay
+   behind the existing cookie consent gate).
+
+**Blocked, do not claim without the owner first.** Most of the frontier is here, which is why the
+two picks above were made instead: multiplayer rooms and everything downstream of them (90, 134,
+135, D109, D110, D111, and the friends/country half of 104) all wait on a backend decision that
+Rounds 323, 325 and 333 each deferred on the record; the virtual economy (132) is constrained by
+the no-gambling stance; manager attributes (27) are constrained by the never-invent-facts rule;
+the owner dashboards (D143, D145) need analytics infrastructure that does not exist.
 
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 

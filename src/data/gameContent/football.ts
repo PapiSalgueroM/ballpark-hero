@@ -437,6 +437,43 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     ],
   },
 
+  '/nfl-gauntlet-draft': {
+    intro: [
+      "The draft mode, NFL style: seven picks, one per starting offense slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
+      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 78 up to 99, with overtime and a shootout when the game is level.",
+      "The run is decided entirely by the offense you drafted: the same seven always runs the same gauntlet, so every pick is the game.",
+    ],
+    howToPlay: [
+      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+      "For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.",
+      "After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+      "Survive a round for 16 points; lift the trophy for exactly 100.",
+    ],
+    rules: [
+      "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
+      "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice.",
+      "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
+      "No player is dealt twice in one draft.",
+      "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime and then a shootout, and replaying the same seven replays the same cup.",
+      "Opposition ratings climb 78, 85, 90, 95, 99. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.",
+    ],
+    example: [
+      "The quarterback slot deals a 97 rated MVP season next to an 88, an 82, a 76 and a 68. There is no cost to any of them, so the 97 is the pick unless you are chasing a specific team on the card.",
+      "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs a shootout, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
+    ],
+    tips: [
+      "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",
+      "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
+      "Champions need an offense in the mid nineties. Check your running rating under the cards as you go.",
+    ],
+    faqs: [
+      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
+      { q: "Are the opponents real teams?", a: "No, and that is deliberate: every gauntlet opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off the same roster data NFL Front Office plays." },
+      { q: "Why seven slots instead of eleven?", a: "The real position data behind this game groups linemen and defenders more broadly than it splits out quarterbacks, running backs, receivers and tight ends, so those four skill positions are where every pick is a genuinely graded choice. A full eleven man lineup is possible future scope; this round scoped it to what the data actually supports." },
+      { q: "Is this the same game as the soccer Gauntlet Draft?", a: "Same engine, NFL's own pool and positions. Seven picks instead of eleven, and the ladder is tuned to this pool's own, much wider rating spread." },
+    ],
+  },
+
   '/conquest': {
     intro: [
       "Picture America painted in 32 team colors, every state owned by its nearest stadium. Now play a season where each result redraws the borders, because in this football conquest game every winner annexes the loser's entire empire. Part season sim, part sports battle map, all chaos.",

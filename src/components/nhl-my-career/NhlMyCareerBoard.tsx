@@ -37,6 +37,7 @@ import type { CoachCareerState } from '@/lib/usCoachCareer';
    Manager, and the trophy case they now open onto. */
 import { careerHubTiles } from '@/lib/careerHub';
 import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';
+import type { HubTile } from '@/components/hub/HubTiles';
 import TrophyCase from '@/components/us-career/TrophyCase';
 /* Round 470: the money app, the gram, the rival card and the badges, on the
    same engines Soccer Career and the NFL career run (careerMoney,
@@ -49,6 +50,13 @@ import { NHL_MONEY, nhlMoneyAct, nhlMoneyWealth } from '@/lib/nhlCareerMoney';
 import { nhlEarnedBadges, nhlFanComments, nhlFollowers, nhlHeadlinesFor } from '@/lib/nhlCareerLoop';
 import { NHL_BADGES } from '@/lib/careerBadges';
 import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
+/* Round 525: the inbox and the rivalry events, the same engines the
+   flagship and the NFL career run (careerInbox.ts, careerRivalryEvents.ts),
+   bound to hockey in nhlCareerInbox.ts and nhlCareerRivalryEvents.ts. */
+import { InboxPanel } from '@/components/us-career/InboxPanel';
+import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
+import { nhlUnreadInboxCount, answerNhlInboxMessage } from '@/lib/nhlCareerInbox';
+import { dismissNhlRivalryEvent } from '@/lib/nhlCareerRivalryEvents';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -68,7 +76,7 @@ export default function NhlMyCareerBoard() {
   // Round 59: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
-  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news'>('none');
+  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox'>('none');
   /* Round 470: the News box opens on three screens, the paper, the gram and
      the rival, so the hub keeps its five boxes (simCareerHub holds that). */
   const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
@@ -340,6 +348,31 @@ export default function NhlMyCareerBoard() {
     persist(c, 'season', teamQuality);
   };
 
+  /* Round 525: the inbox's one write path, the same shape the flagship's
+     and the NFL board's phone use. Refuses rather than throws when the
+     message is already answered or does not exist, so a double tap changes
+     nothing. */
+  const handleInboxAnswer = (msgId: string, choiceIdx: number) => {
+    if (!career) return;
+    const c: NhlCareerState = JSON.parse(JSON.stringify(career));
+    const line = answerNhlInboxMessage(c, msgId, choiceIdx);
+    if (line === null) return;
+    setCareer(c);
+    setFeed(f => [line, ...f].slice(0, 8));
+    persist(c, phase, teamQuality);
+  };
+
+  /* Round 525: dismissing a pending rivalry beat applies its effect and
+     clears the card, the same {state, log} shape buyNhlItem already
+     returns. */
+  const dismissRivalry = () => {
+    if (!career) return;
+    const { state, lines } = dismissNhlRivalryEvent(career);
+    setCareer(state);
+    if (lines.length) setFeed(f => [...lines, ...f].slice(0, 8));
+    persist(state, phase, teamQuality);
+  };
+
   const retireNow = () => {
     if (!career) return;
     const c: NhlCareerState = JSON.parse(JSON.stringify(career));
@@ -492,6 +525,26 @@ export default function NhlMyCareerBoard() {
     );
   }
 
+  /* ------------------- Round 525: a pending rivalry beat -------------------
+     Shown right after the season curtain and before the crossroads deck,
+     the same place in the flow the flagship's and the NFL career's own
+     rivalry card interrupts. Persisted on the save (unlike reveal), so a
+     reload mid-beat still shows it rather than losing it. */
+  if (career.pendingRivalryEvent) {
+    return (
+      <div ref={revealRef}>
+        <RivalryEventCard
+          event={career.pendingRivalryEvent}
+          onContinue={dismissRivalry}
+          headToHead={career.rival ? {
+            myName: career.name, myRating: career.ovr,
+            rivalName: career.rival.name, rivalRating: career.rival.ovr,
+          } : undefined}
+        />
+      </div>
+    );
+  }
+
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {
     return (
@@ -564,7 +617,7 @@ export default function NhlMyCareerBoard() {
     return (
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
-          title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : '\u{1F4F0} News Feed'}
+          title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : panel === 'inbox' ? '\u{1F4F1} Inbox' : '\u{1F4F0} News Feed'}
           onBack={() => setPanel('none')}
         />
         {panel === 'bank' && (
@@ -679,6 +732,11 @@ export default function NhlMyCareerBoard() {
             )}
           </div>
         )}
+        {panel === 'inbox' && (
+          /* Round 525: the Round 80 half of the flagship's phone, on the
+             engine careerInbox.ts, bound to hockey in nhlCareerInbox.ts. */
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} />
+        )}
       </div>
     );
   }
@@ -713,6 +771,22 @@ export default function NhlMyCareerBoard() {
        the save, so the box does not forget the career. */
     headlines: feed.length ? feed : (career.headlines ?? []),
   });
+  /* Round 525: a sixth box for the inbox, appended locally rather than
+     folded into careerHub.ts's shared five: that function also draws the
+     NBA and MLB hubs, neither of which had an inbox to show at the time this
+     round shipped, and a box with nothing behind it is worse than no box. */
+  const unread = nhlUnreadInboxCount(career);
+  const hubTilesWithInbox: HubTile[] = [
+    ...hubTiles,
+    {
+      key: 'inbox',
+      icon: '📱',
+      title: 'Inbox',
+      value: unread === 0 ? 'All caught up' : `${unread} unread`,
+      sub: unread === 0 ? 'Texts show up between seasons' : 'Somebody is waiting on a reply',
+      accent: unread > 0,
+    },
+  ];
 
   /* ------------------------------ season hub ------------------------------ */
   return (
@@ -810,7 +884,7 @@ export default function NhlMyCareerBoard() {
 
       {/* Round 208: the same boxes the rest of the site opens on, and every
           one of them now carries the fact you used to have to tap for. */}
-      <HubTiles tiles={hubTiles} onOpen={k => setPanel(k as typeof panel)} />
+      <HubTiles tiles={hubTilesWithInbox} onOpen={k => setPanel(k as typeof panel)} />
 
     </div>
   );
