@@ -48,6 +48,7 @@ const STATIC_TYPES: Record<string, string> = {
      so that type would claim a rich result the page cannot back up. WebPage
      is true and claims nothing, which is the rule this table runs on. */
   '/champions-league-format-history': 'WebPage',
+  '/nfl-playoff-format-history': 'WebPage',
   '/leaderboard': 'WebPage',
   '/whats-new': 'CollectionPage',
   '/soccer': 'CollectionPage',

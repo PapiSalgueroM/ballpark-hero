@@ -368,6 +368,10 @@
     "hash": "c1be3533426e914f",
     "date": "2026-09-05"
   },
+  "/nfl-playoff-format-history": {
+    "hash": "573437f0fe0d7196",
+    "date": "2026-09-11"
+  },
   "/nhl-connect-4": {
     "hash": "72eb4bfbc713d344",
     "date": "2026-09-03"
@@ -425,16 +429,16 @@
     "date": "2026-09-05"
   },
   "/privacy": {
-    "hash": "4b17851a39d91d10",
-    "date": "2026-09-07"
+    "hash": "06f7d95a75df5356",
+    "date": "2026-09-11"
   },
   "/pro-basketball": {
     "hash": "1e7a4d781e5e1ba5",
     "date": "2026-09-05"
   },
   "/pro-football": {
-    "hash": "78b68bc674127695",
-    "date": "2026-08-30"
+    "hash": "8aeac5a84968cc08",
+    "date": "2026-09-11"
   },
   "/puck-detective": {
     "hash": "3f820f4d4781acaa",
