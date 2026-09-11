@@ -62,7 +62,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_GAUNTLET_ENGINE_CONTROL || '';
-if (CONTROL && CONTROL !== 'flatdeal' && CONTROL !== 'blindload') {
+if (CONTROL && CONTROL !== 'flatdeal' && CONTROL !== 'blindload' && CONTROL !== 'badscore') {
   console.error(`SIM_GAUNTLET_ENGINE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -91,6 +91,19 @@ function patchedEngineBundle(control) {
     needle = 'for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {';
     replacement = 'for (const [lo, hi] of [[0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6], [0.4, 0.6]] as const) {';
     describe = 'the band spread collapsed in a bundled copy of gauntletEngine.ts, the genuine-choice floor must now go red';
+  } else if (control === 'badscore') {
+    /* Round 538. displayScore is the one place a rendered board can contradict
+       the result it came from: the winner is decided upstream from the goals
+       and only then drawn through the sport's own scoreline. Handing the
+       decider's bump to the loser is exactly the shape of that mistake, and
+       section 6 must catch it on real runs rather than on made up numbers. */
+    needle = `  return m.wonOnPens
+    ? { mine: mine + config.tiebreakBump, theirs }
+    : { mine, theirs: theirs + config.tiebreakBump };`;
+    replacement = `  return m.wonOnPens
+    ? { mine, theirs: theirs + config.tiebreakBump }
+    : { mine: mine + config.tiebreakBump, theirs };`;
+    describe = 'the decider bump is awarded to the loser in a bundled copy of gauntletEngine.ts, so a won match renders a losing scoreline and section 6 must go red';
   } else {
     needle = 'if (!consistent) return null;';
     replacement = 'if (!consistent && false) return null;';
@@ -104,7 +117,7 @@ function patchedEngineBundle(control) {
   fs.writeFileSync(patchedEnginePath, engineSrc.replace(needle, replacement));
 
   const sportPaths = {};
-  for (const sport of ['gauntletDraftNba', 'gauntletDraftNfl']) {
+  for (const sport of ['gauntletDraftNba', 'gauntletDraftNfl', 'gauntletDraftMlb']) {
     const src = fs.readFileSync(`${ROOT}/src/lib/${sport}.ts`, 'utf8');
     const importNeedle = "from '@/lib/gauntletEngine'";
     if (!src.includes(importNeedle)) {
@@ -116,7 +129,12 @@ function patchedEngineBundle(control) {
     sportPaths[sport] = patchedPath;
   }
   console.log(`NEGATIVE CONTROL ON: ${describe}`);
-  return { enginePath: patchedEnginePath, nbaPath: sportPaths.gauntletDraftNba, nflPath: sportPaths.gauntletDraftNfl };
+  return {
+    enginePath: patchedEnginePath,
+    nbaPath: sportPaths.gauntletDraftNba,
+    nflPath: sportPaths.gauntletDraftNfl,
+    mlbPath: sportPaths.gauntletDraftMlb,
+  };
 }
 
 async function bundle(entrySrc, name) {
@@ -269,7 +287,15 @@ const worstOf = (choices, ratingOf) => [...choices].sort((a, b) => ratingOf(a) -
    SIM_GAUNTLET_ENGINE_CONTROL=flatdeal, the same 500 drafts never exceeded
    a 4 point spread for NBA or a 9 point spread for NFL. These floors sit
    comfortably inside both gaps. */
-const SPREAD_FLOOR = { nba: 6, nfl: 12 };
+/* MLB floor, measured rather than guessed, the same way the other two were.
+   Over 300 drafts the per pick spread runs: overall min 7, 1st percentile 8,
+   median 17, mean 17.7. Ten of the eleven slots never come in under 11. The
+   floor is the CLOSER slot and it is a real property of the sport rather than
+   a defect: relief pitchers are rated off a compressed percentile band, so CL
+   measures min 7, median 10, where every other slot medians 14 to 22. A floor
+   of 5 therefore sits under the measured minimum with room, and the collapsed
+   control still buries it. */
+const SPREAD_FLOOR = { nba: 6, nfl: 12, mlb: 5 };
 
 async function section2(label, config, floor, slots) {
   console.log(`2) the deal law, ${label}, 300 seeded drafts`);
@@ -394,19 +420,125 @@ async function section5(label, config, dateStr) {
   return true;
 }
 
+/* ── 6: THE SCOREBOARD, added Round 538 with the display layer it checks ──
+   Round 520 printed the engine's raw goal counts on every board, so the NBA
+   game showed "4 - 2" as a basketball result and the NFL one showed scores no
+   football game has ever ended on. Each sport now maps a goal count onto its
+   own scale through config.scoreline, for DISPLAY ONLY.
+
+   That map is the dangerous kind of small function: the winner is decided
+   upstream from the goals, then drawn through this, so a map that is not
+   strictly increasing could print a losing scoreline over a match the player
+   won and there is nothing else in the system that would notice. So this
+   section does not read the comment promising monotonicity, it measures it
+   across the whole range the engine can produce, and then checks the rendered
+   board against the actual result over real runs rather than over made up
+   numbers.
+
+   It also checks the words, because Round 522 shipped an NFL board that told
+   the player their game was decided by a shootout. */
+async function section6(sports) {
+  console.log('6) the scoreboard says what happened, every sport');
+  for (const [label, config] of sports) {
+    const e = config.__engine;
+
+    /* Strictly increasing over the full range. The engine draws goals from six
+       Bernoulli trials plus one extra time burst, so 0 to 7 is everything it
+       can produce; 0 to 12 is measured anyway, with headroom, because the
+       model could widen and this check should not have to be remembered. */
+    let lastVal = -Infinity;
+    for (let g = 0; g <= 12; g += 1) {
+      const v = config.scoreline(g);
+      if (!Number.isFinite(v)) { fail(`${label}: scoreline(${g}) is not a finite number`); break; }
+      if (!Number.isInteger(v)) fail(`${label}: scoreline(${g}) is ${v}, and a scoreboard shows whole numbers`);
+      if (v <= lastVal) {
+        fail(`${label}: scoreline is not strictly increasing, ${g} maps to ${v} after ${lastVal}. A losing scoreline can now be printed over a won match`);
+        break;
+      }
+      lastVal = v;
+    }
+    if (!(config.tiebreakBump > 0)) fail(`${label}: tiebreakBump is ${config.tiebreakBump}, so a game settled by the decider still shows level`);
+
+    /* And the rendered board against the real result, over real runs. This is
+       the assertion that matters: whatever the map is, the bigger number on
+       the screen must belong to whoever actually won. */
+    let checked = 0, level = 0, decided = 0;
+    for (let s = 1; s <= 300; s += 1) {
+      const d = e.buildDraft(config, s * 7919 + 3);
+      const squad = d.picks.map(p => p.choices[s % p.choices.length]);
+      const run = e.runGauntlet(config, squad);
+      for (const m of run.matches) {
+        const shown = e.displayScore(config, m);
+        checked += 1;
+        if (m.won && shown.mine <= shown.theirs) fail(`${label}: a match the player WON renders ${shown.mine}-${shown.theirs}`);
+        if (!m.won && shown.theirs <= shown.mine) fail(`${label}: a match the player LOST renders ${shown.mine}-${shown.theirs}`);
+        if (m.wonOnPens !== null) {
+          decided += 1;
+          if (m.yourGoals !== m.theirGoals) fail(`${label}: a match went to the decider from ${m.yourGoals}-${m.theirGoals}, which was not level`);
+        } else if (m.yourGoals === m.theirGoals) {
+          level += 1;
+        }
+        /* The line the result screen and the share grid both print. */
+        const line = e.matchLine(config, m);
+        if (!line.includes(m.round.opp)) fail(`${label}: the match line does not name the opponent: ${line}`);
+        if (m.wonOnPens !== null) {
+          const word = (m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost).toLowerCase();
+          if (!line.includes(word)) fail(`${label}: a decided match does not say how: ${line}`);
+        }
+      }
+    }
+    if (checked < 300) fail(`${label}: only ${checked} matches rendered, too few to mean anything`);
+    if (decided === 0) fail(`${label}: no match in 300 runs reached the decider, so the tiebreak path is untested here`);
+    if (level > 0) fail(`${label}: ${level} matches ended level without going to the decider, which no board should ever show`);
+
+    /* The sport's own words, not another sport's. A shootout is a hockey and a
+       soccer thing; Round 522 put one on the NFL board. */
+    const words = `${config.tiebreak.phrase} ${config.tiebreak.won} ${config.tiebreak.lost}`.toLowerCase();
+    if (/shootout/.test(words) && !/hockey|nhl|soccer|gauntlet draft$/i.test(config.gameName)) {
+      fail(`${label} calls its decider a shootout, and ${config.gameName} is not a sport that has one`);
+    }
+    if (!config.squadNoun || !config.slotsPhrase || !config.gameName || !config.gamePath) {
+      fail(`${label}: the presentation half of the config is incomplete, and the shared board draws from it`);
+    }
+    console.log(`   ${label}: scoreline strictly increasing over 0..12, ${checked} rendered matches agree with their result, ${decided} reached the decider, none shown level`);
+  }
+}
+
 async function main() {
   if (CONTROL === 'flatdeal') {
     const paths = patchedEngineBundle('flatdeal');
     const mod = await bundle(`
 export { NBA_GAUNTLET_CONFIG } from '${paths.nbaPath}';
 export { NFL_GAUNTLET_CONFIG } from '${paths.nflPath}';
+export { MLB_GAUNTLET_CONFIG } from '${paths.mlbPath}';
 export * as engine from '${paths.enginePath}';
 `, 'flatdeal');
     const nba = { ...mod.NBA_GAUNTLET_CONFIG, __engine: mod.engine };
     const nfl = { ...mod.NFL_GAUNTLET_CONFIG, __engine: mod.engine };
+    const mlb = { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine };
     const nbaOk = await section2('NBA', nba, SPREAD_FLOOR.nba, 5);
     const nflOk = await section2('NFL', nfl, SPREAD_FLOOR.nfl, 7);
-    if (nbaOk && nflOk) process.exit(0);
+    const mlbOk = await section2('MLB', mlb, SPREAD_FLOOR.mlb, 11);
+    if (nbaOk && nflOk && mlbOk) process.exit(0);
+    process.exit(1);
+  }
+  if (CONTROL === 'badscore') {
+    const paths = patchedEngineBundle('badscore');
+    const mod = await bundle(`
+export { NBA_GAUNTLET_CONFIG } from '${paths.nbaPath}';
+export { NFL_GAUNTLET_CONFIG } from '${paths.nflPath}';
+export { MLB_GAUNTLET_CONFIG } from '${paths.mlbPath}';
+export * as engine from '${paths.enginePath}';
+`, 'badscore');
+    const before = failures;
+    await section6([
+      ['NBA', { ...mod.NBA_GAUNTLET_CONFIG, __engine: mod.engine }],
+      ['NFL', { ...mod.NFL_GAUNTLET_CONFIG, __engine: mod.engine }],
+      ['MLB', { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine }],
+    ]);
+    const fired = failures - before;
+    if (fired > 0) { console.log(`\n   control: green. ${fired} failure(s) fired in section 6, as they must.`); process.exit(0); }
+    console.error('\n   control: RED. The bump was handed to the loser and section 6 still passed, so it proves nothing.');
     process.exit(1);
   }
   if (CONTROL === 'blindload') {
@@ -414,13 +546,16 @@ export * as engine from '${paths.enginePath}';
     const mod = await bundle(`
 export { NBA_GAUNTLET_CONFIG } from '${paths.nbaPath}';
 export { NFL_GAUNTLET_CONFIG } from '${paths.nflPath}';
+export { MLB_GAUNTLET_CONFIG } from '${paths.mlbPath}';
 export * as engine from '${paths.enginePath}';
 `, 'blindload');
     const nba = { ...mod.NBA_GAUNTLET_CONFIG, __engine: mod.engine };
     const nfl = { ...mod.NFL_GAUNTLET_CONFIG, __engine: mod.engine };
+    const mlb = { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine };
     const nbaOk = await section5('NBA', nba, '2026-09-04');
     const nflOk = await section5('NFL', nfl, '2026-09-06');
-    if (nbaOk && nflOk) process.exit(0);
+    const mlbOk = await section5('MLB', mlb, '2026-09-08');
+    if (nbaOk && nflOk && mlbOk) process.exit(0);
     process.exit(1);
   }
 
@@ -429,23 +564,30 @@ export * as engine from '${paths.enginePath}';
   const mod = await bundle(`
 export { NBA_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftNba.ts';
 export { NFL_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftNfl.ts';
+export { MLB_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftMlb.ts';
 export * as engine from '${ROOT}/src/lib/gauntletEngine.ts';
 `, 'sports');
   const nba = { ...mod.NBA_GAUNTLET_CONFIG, __engine: mod.engine };
   const nfl = { ...mod.NFL_GAUNTLET_CONFIG, __engine: mod.engine };
+  const mlb = { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine };
 
   await section2('NBA', nba, SPREAD_FLOOR.nba, 5);
   await section2('NFL', nfl, SPREAD_FLOOR.nfl, 7);
+  await section2('MLB', mlb, SPREAD_FLOOR.mlb, 11);
   await section3('NBA', nba, nba.rounds.length);
   await section3('NFL', nfl, nfl.rounds.length);
+  await section3('MLB', mlb, mlb.rounds.length);
   await section4('NBA', nba);
   await section4('NFL', nfl);
+  await section4('MLB', mlb);
   await section5('NBA', nba, '2026-09-04');
   await section5('NFL', nfl, '2026-09-06');
+  await section5('MLB', mlb, '2026-09-08');
+  await section6([['NBA', nba], ['NFL', nfl], ['MLB', mlb]]);
 
   console.log('');
   if (failures > 0) { console.error(`simGauntletEngine: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
-  console.log('simGauntletEngine: green. Soccer plays exactly as it did, and NBA and NFL are the same game wearing their own pool and ladder.');
+  console.log('simGauntletEngine: green. Soccer plays exactly as it did, and NBA, NFL and MLB are the same game wearing their own pool, ladder and scoreboard.');
 }
 
 main();

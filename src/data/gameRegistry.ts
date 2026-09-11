@@ -209,6 +209,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/mlb-higher-lower', label: 'MLB Higher or Lower', emoji: '📊', description: 'Which legend hit more career home runs?', daily: true, addedOn: '2026-03-08' },
       { path: '/mlb-grid', label: 'MLB Franchise Grid', emoji: '🔲', description: 'Fill the 3×3 with legends who match both teams', daily: true, addedOn: '2026-07-03' },
       { path: '/mlb-connect-4', label: 'MLB Connect 4', emoji: '⚾', description: 'Baseball trivia meets Connect 4', addedOn: '2026-02-10' },
+      { path: '/mlb-gauntlet-draft', label: 'Gauntlet Draft: MLB', emoji: '⚾', description: 'Fill the lineup card five cards at a time, then survive October', daily: true, addedOn: '2026-09-11' },
       { path: '/conquest-mlb', label: 'MLB Conquest', emoji: '🗺️', description: 'Imperialism at the ballpark: winners annex whole empires, two invaders start landless', daily: true, addedOn: '2026-08-11' },
       { path: '/mlb-my-career', label: 'MLB My Career', emoji: '🌟', description: 'Draft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field', addedOn: '2026-08-11', featured: true },
       { path: '/mlb-front-office', label: 'MLB Front Office', emoji: '🏢', description: 'Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties', addedOn: '2026-08-11', featured: true },
