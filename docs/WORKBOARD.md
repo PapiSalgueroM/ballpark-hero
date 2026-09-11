@@ -151,6 +151,55 @@ Round 525's three parallel builders each extended the same two shared harnesses 
 about each other and every one of them numbered itself "section 5", which cost a careful manual
 splice to reconcile. NEXT FREE NUMBER after this claim: 528.
 
+### MASTER SPEC TRIAGE, done 2026-09-11 while 526 and 527 built. Read this before picking spec work.
+
+`docs/SPEC-RECONCILIATION.md` is the map of the master spec, and it is the right place to pick
+from, but **it has gone stale in a way that will cost you a whole round if you trust it**. It was
+last reconciled 2026-09-07 and roughly forty rounds have landed since. Everything below was
+checked against the actual codebase on 2026-09-11, not against the doc.
+
+**Listed as unbuilt, ACTUALLY SHIPPED. Do not rebuild these:**
+
+| Spec section | Says | Reality |
+|---|---|---|
+| 50 Interactive training drills | "No click/drag/swipe skill drills exist anywhere" | Round 468 shipped three Soccer Career drills |
+| 68 / F NBA Stat Line | "Nothing shipped" | `/nba-stat-line` is live, Round 352, in the registry |
+| 82/83 Arcade engine and soccer arcade | "No shared physics/input arcade engine exists" | Round 433 Free Kick and Round 445 Buzzer Beater share one lifted arcade engine |
+| D106/D107/D108 Conquest data model, map UI, history | "No conquest game exists" | four Conquest maps plus `/soccer-conquest` (Round 459) on Round 457's shared renderer |
+| 28 Manager XP / skill tree | already corrected inline in the doc | Round 513, live |
+| 29 Staff | "No hireable staff system" | `src/lib/clubManagerStaff.ts`, Round 471's staff desk (hire, fire, poach, promote) |
+| 32 Finance system | "the projection dashboard does not [exist]" | `src/lib/clubManagerFinances.ts` plus `FinancesScreen.tsx`, Round 467 |
+| 33 Ticketing / concessions | "ticket, concession and merchandise pricing controls do not" | ticket and concession pricing shipped in Round 467 |
+| 34 Facilities | "the ten separate tracks do not [exist]" | `src/lib/clubManagerFacilities.ts`, four facilities levelled 1 to 10, Round 467 |
+| 35 Transfer engine | "the full add-on matrix is not implemented" | Round 506 shipped the transfers rework and personal terms; sell-on, swaps and add-ons predate it in Round 161 |
+| 31 Sentiment meters | "Separate fan approval ... do not exist" | Round 465 put board patience and fan mood on every tab, `clubManagerMeters.ts` |
+| 40/41 Tactics, substitutions | "roles, duties, mentality ... do not" | Round 505 shipped the tactics depth: roles, duties, seventeen shapes, the armband, retraining |
+| 43/44/45 Match centre, live presentation, event timeline | "no merged Match Center", "no animated live match view" | Round 472 merged the flow, Round 504 built the live match as a committed stream with both elevens, the ball, set pieces and live stats |
+
+**Genuinely open, no owner or backend decision needed, recommended queue in this order:**
+
+1. **104 Global leaderboard, the Week and Month views.** Verified still only Today plus All Time
+   (`src/pages/Leaderboard.tsx`). Week/Month/Season are real user value and are a server side
+   query change plus tabs. The friends and country filters in the same spec line are NOT
+   claimable: they need the social layer, which is blocked (see below).
+2. **127 Error handling, the sitewide fence.** `simNoZeroFacts.mjs` exists but covers only the
+   three games Round 443 fixed. The spec asks for a sitewide guard against raw stacks, NaN and
+   age-0 renders reaching a player. This repo's whole culture is fences, and this is a real
+   recurring class: Round 443 (Who Am I age 0), Round 315 (Rodri at age 0, value 0). Widening
+   that harness to every game is a strong, low risk round.
+3. **123 Report issue admin workflow.** The report pipeline delivers and the owner actually reads
+   it; what is missing is the status taxonomy (New, Investigating, Fixed) on the admin shelf.
+   Small, closes a loop he uses weekly.
+4. **D16 Global loading experience**, and **20 Analytics event taxonomy** (careful: must stay
+   behind the existing cookie consent gate).
+
+**Blocked, do not claim without the owner first.** Most of the frontier is here, which is why the
+two picks above were made instead: multiplayer rooms and everything downstream of them (90, 134,
+135, D109, D110, D111, and the friends/country half of 104) all wait on a backend decision that
+Rounds 323, 325 and 333 each deferred on the record; the virtual economy (132) is constrained by
+the no-gambling stance; manager attributes (27) are constrained by the never-invent-facts rule;
+the owner dashboards (D143, D145) need analytics infrastructure that does not exist.
+
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 
 Four things, in the order they can hurt you.
