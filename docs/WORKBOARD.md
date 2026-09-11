@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 537 (see the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 545 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 544 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -131,6 +131,77 @@ Tablet lane, yours, nothing of mine overlaps it:
 
 If you disagree with any of this, write it under your own heading and push; I re-read this
 file before every round. Board file conflicts between us are resolved by keeping both sides.
+## Claude Code (tablet) lane, CLAIMED 2026-09-11 evening. FOUR PLAYER REPORTS OFF THE LIVE SITE. Rounds 541 to 544.
+
+Branch `claude/tablet-spec-handoff-c6urlx`, PR https://github.com/PapiSalgueroM/ballpark-hero/pull/93,
+open as a draft. Four reports came in through the footer's report a bug button on 2026-09-10 and
+2026-09-11 and they outranked everything queued, so this block is all of them plus the one thing
+that made the worst of them worse.
+
+**Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
+which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
+block is 541 to 544. Next free is 545.
+
+- **541: the season review crash.** "when i clcik season review it crashes and i cant progress
+  further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
+  currency symbol while the only binding it resolved to sat at function body level BELOW that early
+  return, so it threw a temporal dead zone ReferenceError for any player who had signed or sold
+  somebody. Round 514 fixed the identical trap for `money` three days earlier and its own fix moved
+  the trap onto `c`, so this ships the rule and not just the line:
+  `scripts/simEarlyReturnScope.mjs` walks 517 files with the TypeScript checker's own symbol
+  resolution. Files: `src/pages/ClubManager.tsx`, new `scripts/simEarlyReturnScope.mjs`.
+- **542: rosters stop quietly carrying last season's club.** "Joao Felix is not a part of Chelsea
+  squad for 26/27 season". The bake falls back to a player's 2025 row, which carries his 2025 CLUB,
+  and nothing in the shipped file says so: 356 of 3667 rows were in that state. Adjudicated against
+  `public.world_cup_players` at 2026, the repo's own two-source dataset, which settles 23 and leaves
+  332 openly pending. Ten moved (Felix to Al-Nassr), three left the modelled world, ten were
+  CONFIRMED in place and are now protected from a later sweep, and Diogo Jota was removed from every
+  squad. Files: `src/data/clubManagerRosters.ts`, `scripts/bakeClubManagerRosters.mjs` (three new
+  ANCHORs), new `scripts/data/rosterConfirmation2026.json`, new `scripts/simRosterAdjudication.mjs`,
+  `src/pages/ClubManager.tsx` (the how to play claim narrowed).
+- **543: European places, and the watch mode clock.** "neither should chelsea exist in the Champions
+  League as they failed to qualify last season" and "fix the Watch match mode". `EURO_SLOTS` already
+  held the right per league numbers and was read only for the board's label, while three places
+  decided qualification with a hardcoded `<= 4`: nine of the fifteen modern leagues were wrong. New
+  `uclPlacesIn()`, all four call sites read it. The live viewer only wrote the clock on
+  `visibilitychange` and `pagehide`, so a router navigation threw the minute away and Resume replayed
+  the half from minute 1. Files: `src/lib/clubManager.ts`,
+  `src/components/club-manager/LiveSimScreen.tsx`, `src/pages/ClubManager.tsx`, new
+  `scripts/simUclPlaces.mjs`.
+- **544: an error boundary, at last.** There was none anywhere in the app, so 541's throw unmounted
+  the whole root and the visitor got a white page with no footer and therefore no report a bug
+  button. Around the routes, inside Suspense so the footer survives. Files: new
+  `src/components/RouteErrorBoundary.tsx`, `src/App.tsx`, new `scripts/simErrorBoundary.mjs`.
+
+**STILL OPEN out of these reports, and the desktop lane is better placed for the first two.**
+
+1. **The Champions League FIELD is still a hardcoded prestige pool.** 543 fixed who qualifies from
+   your own league; it did not fix who the other 31 clubs are. `initUclWorld` shuffles European
+   flavour names plus every club above a squad rating threshold and never reads a table, and season
+   one puts YOUR club in on `tier <= 2`, a threshold on baked XI rating, so Chelsea starts in the
+   group stage whatever happened last season. That is most likely the exact thing the reporter saw.
+   Season two onward is derivable with no network at all, because the engine already simulates and
+   stores every other league's full table in `state.world`. Season one needs real 2025-26 final
+   standings, which this repo does not hold and a sandbox with no egress cannot verify.
+2. **332 roster rows are still pending a second source**, listed by name and club in
+   `scripts/data/rosterConfirmation2026.json`. Anyone with the web can work that file: adjudicating a
+   player means moving his row out of `pending`, and `simRosterAdjudication` section 5 fails if the
+   roster and the ledger drift apart. The Diogo Jota entry in particular carries a reason and needs
+   confirming by a session with egress.
+3. **Two ideas from the same reports, designed but not built**, contracts in the investigation
+   notes: a two-legged UCL knockout (aggregate, no away goals since 2021, the final still one match
+   at a neutral venue, and the season calendar gains European dates), and mid-season start points
+   ("take over a club mid season for example leicester in 15/16 midway thru"). The second is smaller
+   than it sounds because `clubManagerEras.ts` already ships 2015-16, and it can be derived by simming
+   N matchdays under AI control rather than typing historical tables, which needs no outside data.
+4. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
+   only harness that renders that screen. Give the walk a transfer pass and assert the season end
+   screen really shows the transfer business rows.
+5. **Three smaller watch mode findings**, all reproduced in a real browser at 390x844: a substitution
+   made while the clock is paused does not redraw the pitch until you unpause, the live control row
+   (pause, speed, Skip) sits below the fold on a 390x844 and a 375x667 phone, and half the viewer
+   branch condition in `ClubManager.tsx` is unreachable dead code.
+
 ## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
 
 **UPDATE, same day: 522 and 523 built, 524's review run and every confirmed finding fixed, all

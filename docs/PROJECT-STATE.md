@@ -1,5 +1,106 @@
 # Project state
 
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 544, four player reports off the live site
+
+Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
+Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
+file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
+heading. Numbering note: the previous tablet session took 537 to 540 on
+`claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 545.
+
+**541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
+further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
+The SEASON END block read `c` for a currency symbol while the only binding it could resolve to sat
+at function body level BELOW that return, so it was in the temporal dead zone and threw
+`ReferenceError: Cannot access 'c' before initialization`. It fired only for a player who had
+signed or sold somebody, because the block sits behind `signings.length > 0`. "Cannot progress
+further" is the same bug: the season review is the only route forward out of a finished season and
+all three entry points land on it. The save survives in localStorage; the player just could not
+reach past it without retiring the career.
+
+Four gates were green on the broken code. tsc does not report TS2448 because the use is inside a
+`.map()` callback it cannot prove runs early, the build is green, the sim harnesses call the season
+close as a pure function and never render, and `playClubManager` renders the screen but never signs
+anyone so the crashing branch is dead code for it.
+
+Round 514 fixed the identical trap for `money` in the same file three days earlier and its own fix
+moved the trap onto `c`, so this round adds the rule rather than another careful read.
+`scripts/simEarlyReturnScope.mjs` walks 517 files using the TypeScript checker's own symbol
+resolution (shadowing handled properly, not by matching names) and fails when a block that can
+return early reads a block-scoped binding declared below it. It allows a reference inside a JSX
+event handler, which runs on a tap. Control `EARLY_RETURN_CONTROL=tdz` reproduces the shipped bug.
+
+**542, rosters stop quietly carrying last season's club.** "Joao Felix is not a part of Chelsea
+squad for 26/27 season." `bakeClubManagerRosters.mjs` prefers a 2026 market value row and falls back
+to the 2025 row, which carries the 2025 CLUB, ageing the player a year and discounting 5 percent.
+`BakedPlayer` is `{n,p,a,v,r}`, so the bake's own `isFallback` flag never reaches the file and a
+planted row is byte-identical to a verified one. Measured against the live database on 2026-09-11:
+**356 of the 3667 shipped rows**, across 195 clubs.
+
+The obvious fix was wrong and the measurement says so. Dropping every unconfirmed player looked
+clean (250 rows, no club falling under the CM_PARTIAL threshold of 8) until the same question went
+to a second dataset: `public.world_cup_players` at 2026 confirms David Alaba is still at Real
+Madrid, Charles De Ketelaere still at Atalanta, Wout Weghorst still at Ajax, and seven more.
+**Absence from one dataset is not evidence of a transfer**, and the blanket rule would have wrongly
+removed roughly a third of what it touched.
+
+So nothing is dropped on a heuristic. The adjudicator is the Round 389 World Cup squads table, where
+every row is a player two independent sources agree on. It settles 23 of the 356: 10 moved (Felix to
+Al-Nassr), 3 left the modelled world, 10 were confirmed in place and are now protected from a later
+sweep. Brøndby IF and NEC Nijmegen fell to 7 real players and joined CM_PARTIAL. The other **332 stay
+in the file and stay listed as pending** in `scripts/data/rosterConfirmation2026.json`, so nobody
+mistakes "not yet checked" for "checked and fine". Diogo Jota was removed from every 2026-27 squad
+with the reason written down; that one is not from the World Cup table and needs confirming by a
+session with web egress.
+
+The how to play copy said "2026-27 is the real thing, every name and every value", which with 332
+rows pending is an absolute the data cannot stand behind. It now says real clubs, real players, real
+market values, with the summer window applied. The bake carries three new ANCHORs beside the
+existing ones, which is this repo's convention for turning a player's complaint into a permanent
+assertion.
+
+**543, European places come from the league's own table, plus the watch mode clock.** "neither
+should chelsea exist in the Champions League as they failed to qualify last season" and "fix the
+Watch match mode".
+
+`EURO_SLOTS` has carried the right per league, per era numbers all along and was read ONLY to write
+the board's objective label, while three separate places decided qualification with a hardcoded
+`<= 4`. Nine of the fifteen modern leagues were wrong: the board would tell a Scottish manager that
+Europe means winning the league and the season end would put him in the Champions League for
+finishing fourth. New `uclPlacesIn(league)`, and all four call sites read it.
+
+The live viewer wrote the clock to the save only on `visibilitychange` and `pagehide`, which fire
+when the DOCUMENT goes away. A router navigation is not that, so tapping Back or the logo threw the
+minute away and "Resume match" replayed the half from minute 1. Fixed with its own unmount-only
+effect. Same walk: with a match paused the hub's Match Centre button was dead, because the facts are
+built only for a match that has not kicked off; it is now only offered when it can open.
+
+**544, an error boundary, at last.** A grep for `ErrorBoundary`, `componentDidCatch` and
+`getDerivedStateFromError` across the whole repo returned nothing, so 541's throw unmounted the
+entire React root and the visitor got a white page with no header, no footer and therefore no report
+a bug button. That had been true since the site was built, for every render bug on all 130-odd
+routes. `src/components/RouteErrorBoundary.tsx` goes around the routes and inside Suspense so the
+footer survives, keyed on the path so navigating away clears it. The screen offers the games list, a
+retry, and the line that the save is still on the device, because "the page went blank" and "my
+career is gone" feel identical from the player's side and only one of them is true.
+
+`scripts/simErrorBoundary.mjs` renders a throwing child through the real reconciler in jsdom, because
+React's server renderer does not support error boundaries at all and would have reported this one as
+broken. Writing that section the easy way first is also what caught a false green in its own
+section 3, which was passing on an empty string. Two controls: `unwrapped` and `nocatch`.
+
+**Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
+simClubManagerBudget, simClubManagerDeals, simEras, simLiveSim, simLiveMatch, simNoRivalNames all
+green. The four new harnesses green with every negative control confirmed firing and a bogus control
+name exiting 1 on each. The 15 built site fences were run after the build; see the workboard entry
+for the result.
+
+**What is still open out of these four reports** is listed in `docs/WORKBOARD.md`, and the biggest
+item is that the Champions League FIELD is still a hardcoded prestige pool: 543 fixed who qualifies
+from your own league, not who the other 31 clubs are, and season one still puts your club in on a
+squad rating threshold rather than a league position.
+
 ## Built 2026-09-11, PR open, not yet merged: Round 525, the inbox and rivalry lift completed for NBA, MLB and NHL
 
 **Not live yet, same open PR as 522 to 524** (https://github.com/PapiSalgueroM/ballpark-hero/pull/92), pushed on top of them on `claude/douknowbll-spec-work-c3zcci`.
