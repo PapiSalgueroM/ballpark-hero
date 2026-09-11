@@ -36,7 +36,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { ConfettiBurst } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, revealDelay } from '@/components/club-manager/Celebration';
 import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClubForm';
 import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
 import { MetersStrip } from '@/components/club-manager/MetersStrip';
@@ -675,6 +675,16 @@ const ClubManager = () => {
   if (g.phase === 'seasonEnd' && g.summary && g.career) {
     const sm = g.summary;
     const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
+    /* Round 530: the season's facts tick in one at a time, in the order they
+       are listed, on the shared Round 186 pace. A running counter rather than
+       a map index because the lines are conditional: the tenth thing to land
+       is the tenth thing that exists, not the tenth thing that could have.
+       The counter restarts on every render because the block is rebuilt on
+       every render; the wrapper is keyed on the season so a new season
+       remounts the rows and they tick again. Only the arrival moves: every
+       number is the true final from frame one (Round 147). */
+    let tick = 0;
+    const tickIn = () => ({ animationDelay: revealDelay(tick++) });
     // Round 66: same treatment as full time. Only one phase screen renders at a
     // time, so the shared ref is safe here too.
     return shell(
@@ -707,11 +717,15 @@ const ClubManager = () => {
               {sm.offers.length > 0 && (
                 <div className="text-left bg-surface-2 border border-border/60 rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">📞 Job offers on the table</div>
-                  {sm.offers.map(o => (
+                  {/* Round 530: each offer rises in on its own beat, keyed on
+                      the season so next year's offers rise again. The button
+                      works from frame one; only its opacity is on the way in. */}
+                  {sm.offers.map((o, i) => (
                     <button
-                      key={o.club}
+                      key={`${sm.season}:${o.club}`}
                       onClick={() => g.nextSeason(o.club)}
-                      className="w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors"
+                      className="cm-rise w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors"
+                      style={{ animationDelay: revealDelay(i) }}
                     >
                       <div className="text-sm font-bold text-primary">{o.club} want you as manager</div>
                       <div className="text-[10px] text-muted-foreground">{o.blurb}</div>
@@ -726,52 +740,68 @@ const ClubManager = () => {
             </div>
           }
         >
-          <div className="text-left space-y-1.5 mb-2">
-            <p className="text-sm text-foreground flex items-start gap-2">
+          {/* Round 530: every line below ticks in on its own beat, keyed on
+              the season. ResultScreen mounts CelebrationStyles, so the
+              classes are live here. A trophy line glows once it has landed:
+              the glow sits on an inner span because cm-tick-in and
+              cm-gold-glow both set the animation shorthand and would cancel
+              each other on one element, which would leave the trophy line at
+              opacity 0 for good. */}
+          <div key={sm.season} data-season-lines className="text-left space-y-1.5 mb-2">
+            <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
               <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
               Champions: <span className="font-bold">{sm.champion}</span>
             </p>
-            {sm.trophies.map(t => (
-              <p key={t} className="text-sm text-foreground flex items-start gap-2">
-                <Trophy className="w-3.5 h-3.5 text-gold mt-0.5 shrink-0" />You won the <span className="font-bold">{t}</span>!
-              </p>
-            ))}
+            {sm.trophies.map(t => {
+              /* The glow starts 0.35s after this line's own beat, once the
+                 tick-in has finished. */
+              const glowAt = revealDelay(tick, 0.95);
+              return (
+                <p key={t} className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                  <Trophy className="w-3.5 h-3.5 text-gold mt-0.5 shrink-0" />
+                  <span>
+                    You won the{' '}
+                    <span className="cm-gold-glow font-bold rounded px-1 text-gold" style={{ animationDelay: glowAt }}>{t}</span>!
+                  </span>
+                </p>
+              );
+            })}
             {sm.topScorer && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">⚽</span>Top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)
               </p>
             )}
             {sm.topAssister && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">🎯</span>Most assists: {sm.topAssister.name} ({sm.topAssister.assists})
               </p>
             )}
             {/* Round 165: the season's individual honours. */}
             {sm.goldenBoot && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">👟</span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)
               </p>
             )}
             {sm.playerOfSeason && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">🎖️</span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})
               </p>
             )}
             {sm.ballonDor && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">🌍</span>Ballon d'Or: <span className="font-bold">{sm.ballonDor.name}</span> ({sm.ballonDor.club})
               </p>
             )}
             {sm.qualifiedUcl && (
-              <p className="text-sm text-foreground flex items-start gap-2">
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">⭐</span>Qualified for next season's Champions League
               </p>
             )}
             {sm.objectives && sm.objectives.length > 0 && (
               <div className="pt-1">
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Board objectives</div>
+                <div className="cm-tick-in text-[10px] text-muted-foreground uppercase tracking-wider mb-1" style={tickIn()}>Board objectives</div>
                 {sm.objectives.map((o, i) => (
-                  <p key={i} className={cn('text-xs', o.hit ? 'text-emerald-400' : 'text-red-400')}>
+                  <p key={i} className={cn('cm-tick-in text-xs', o.hit ? 'text-emerald-400' : 'text-red-400')} style={tickIn()}>
                     {o.hit ? '✓' : '✗'} <span className="text-foreground">{o.label}</span>
                   </p>
                 ))}
@@ -779,9 +809,9 @@ const ClubManager = () => {
             )}
             {sm.signings.length > 0 && (
               <div className="pt-1">
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Transfer business</div>
+                <div className="cm-tick-in text-[10px] text-muted-foreground uppercase tracking-wider mb-1" style={tickIn()}>Transfer business</div>
                 {sm.signings.slice(0, 8).map((t, i) => (
-                  <p key={i} className="text-xs text-muted-foreground">
+                  <p key={i} className="cm-tick-in text-xs text-muted-foreground" style={tickIn()}>
                     {t.dir === 'in' ? '🟢 IN' : '🔴 OUT'} {t.name} ({money(t.fee, c)})
                   </p>
                 ))}
@@ -798,7 +828,10 @@ const ClubManager = () => {
     const c = g.career;
     return shell(
       <div className="text-center">
-        <h1 className="text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
+        {/* Round 530: the headline shakes once, the way a front office firing
+            does. ResultScreen below mounts CelebrationStyles, and the rules
+            are document wide once mounted, so the class is live up here. */}
+        <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ResultScreen
           won={false}
           outcomeEmoji="🚪"
@@ -821,7 +854,7 @@ const ClubManager = () => {
           {/* Round 201: the wilderness. A sacking used to end the save here,
               which is the one moment in a manager's life that should not end
               anything. Your record follows you and decides who calls. */}
-          <div data-wilderness className="text-left rounded-xl border border-border bg-card p-3 mb-3">
+          <div data-wilderness className="cm-rise text-left rounded-xl border border-border bg-card p-3 mb-3" style={{ animationDelay: '0.35s' }}>
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Out of work</div>
             <p className="text-xs text-foreground">
               {(c.wilderness?.weeksOut ?? 0) === 0
@@ -829,8 +862,16 @@ const ClubManager = () => {
                 : `${c.wilderness?.weeksOut} week${c.wilderness?.weeksOut === 1 ? '' : 's'} without a club. ${(c.wilderness?.offers.length ?? 0) > 0 ? 'The phone has rung.' : 'Nobody has called yet.'}`}
             </p>
             <div className="mt-2 space-y-1.5">
-              {(c.wilderness?.offers ?? []).map(o => (
-                <div key={o.club} data-wilderness-offer={o.club} className="rounded-lg border border-border bg-background/40 p-2">
+              {/* Round 530: the offers rise in one after another, keyed on the
+                  week out so a new week's phone calls rise again rather than
+                  sitting there as though they had always been on the table. */}
+              {(c.wilderness?.offers ?? []).map((o, i) => (
+                <div
+                  key={`${c.wilderness?.weeksOut ?? 0}:${o.club}`}
+                  data-wilderness-offer={o.club}
+                  className="cm-rise rounded-lg border border-border bg-background/40 p-2"
+                  style={{ animationDelay: revealDelay(i) }}
+                >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[11px] font-bold text-foreground truncate">{o.club}</span>
                     <span className="text-[9px] text-muted-foreground shrink-0">{o.league}</span>
