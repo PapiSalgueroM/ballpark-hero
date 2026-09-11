@@ -51,6 +51,7 @@ const STATIC_TYPES: Record<string, string> = {
   '/nfl-playoff-format-history': 'WebPage',
   '/nba-playoff-format-history': 'WebPage',
   '/mlb-postseason-format-history': 'WebPage',
+  '/nhl-playoff-format-history': 'WebPage',
   '/leaderboard': 'WebPage',
   '/whats-new': 'CollectionPage',
   '/soccer': 'CollectionPage',
