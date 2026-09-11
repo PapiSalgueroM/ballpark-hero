@@ -30,6 +30,14 @@ import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPr
    scope. */
 import type { MoneyState } from './careerMoney';
 import { nhlMoneySeasonTick } from './nhlCareerMoney';
+/* Round 525: the inbox and the rivalry events, the same lift Round 521 gave
+   the NFL career. Both auxiliary files import this one for the
+   NhlCareerState type only, so there is no cycle at runtime: both ticks are
+   called through the functions below, never at module scope. */
+import type { InboxMessage } from './careerInbox';
+import { receiveNhlInboxTexts } from './nhlCareerInbox';
+import type { RivalryEvent } from './careerRivalryEvents';
+import { nhlRivalryTick } from './nhlCareerRivalryEvents';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -154,6 +162,22 @@ export interface NhlCareerState {
       so the News screen does not forget the career on reload. Absent on a
       pre-470 save. */
   headlines?: string[];
+  /** Round 525: the inbox, on the same engine the flagship's phone runs
+      (careerInbox.ts), bound to the NHL in nhlCareerInbox.ts. Absent on a
+      pre-525 save and repaired lazily the way the money app's fields
+      already are: an empty inbox and a karma of 50 read the same as a save
+      that has never opened the app. */
+  phoneInbox?: InboxMessage[];
+  phoneUsedIds?: string[];
+  karma?: number;
+  /** Round 525: the rivalry events, on the same engine the flagship's
+      eighteen beats run (careerRivalryEvents.ts), bound in
+      nhlCareerRivalryEvents.ts. The SAME rival draftRival already drafts;
+      no second rival concept. rivalryIntensity is flavor only, read by
+      nothing outside the event table itself. */
+  pendingRivalryEvent?: RivalryEvent | null;
+  lastRivalryEventId?: number | null;
+  rivalryIntensity?: number;
 }
 
 export interface NhlCareerEvent {
@@ -525,6 +549,13 @@ export function simNhlSeason(
   if (c.rival && !c.rival.retired) {
     for (const n of judgeRivalSeason(c.rival, (c.pos === 'G' ? Math.round((line.wins ?? 0) * 1.6 + Math.max(0, ((line.svpct ?? 0.9) - 0.9) * 900)) : (line.points ?? 0)), c.name, 'nhl', rng)) notes.push(n);
   }
+  /* Round 525: the rivalry beat, rolled right after the rival's own season,
+     the same point in the loop the flagship and the NFL career roll their
+     own. A fired beat waits as a pending card; the board applies it through
+     dismissNhlRivalryEvent, never here, so the state this function hands
+     back stays the pure season sim it always was. */
+  const rivalryEvent = nhlRivalryTick(c, rng);
+  if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   c.seasons.push(line);
   return { line, notes };
 }
@@ -599,6 +630,10 @@ export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
      anything else sees it. Its own random stream, so nothing here shifts the
      season's rng. */
   for (const line of nhlMoneySeasonTick(c).events) notes.push(line);
+  /* Round 525: the inbox. Silent on purpose, the same way the flagship's
+     phone never announces a new text in the season feed: the unread badge
+     on the Inbox box is the tell. */
+  receiveNhlInboxTexts(c, rng);
   return notes;
 }
 

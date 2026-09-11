@@ -30,7 +30,17 @@
  *      cap, and answering one works; plus a structural check that no
  *      message is ever signed by anything that reads as a real person's
  *      name rather than a role.
- *   5. Negative controls, INBOX_CONTROL=...
+ *   5. The MLB binding fires. Round 525's baseball slice, on the same
+ *      engine, proven the same way as section 4: a measured delivery RATE
+ *      over many simulated careers (never a weak "ever fired once" binary
+ *      signal, which Round 524's review found and fixed in the NFL section
+ *      above), the double-answer-refused and bogus-id-refused checks, and
+ *      the same real-name and role-shape structural checks.
+ *   6. The NBA binding fires. Round 525's basketball slice, same proof
+ *      shape as section 5.
+ *   7. The NHL binding fires. Round 525's hockey slice, same proof shape
+ *      as section 5.
+ *   8. Negative controls, INBOX_CONTROL=...
  *
  * NEGATIVE CONTROLS, INBOX_CONTROL=...
  *
@@ -122,6 +132,12 @@ export const eras = await import('${R}/src/lib/careerEras.ts');
 export const inboxMod = await import('${R}/src/lib/careerInbox.ts');
 export const nfl = await import('${R}/src/lib/nflMyCareer.ts');
 export const nflInbox = await import('${R}/src/lib/nflCareerInbox.ts');
+export const mlb = await import('${R}/src/lib/mlbMyCareer.ts');
+export const mlbInbox = await import('${R}/src/lib/mlbCareerInbox.ts');
+export const nba = await import('${R}/src/lib/nbaMyCareer.ts');
+export const nbaInbox = await import('${R}/src/lib/nbaCareerInbox.ts');
+export const nhl = await import('${R}/src/lib/nhlMyCareer.ts');
+export const nhlInbox = await import('${R}/src/lib/nhlCareerInbox.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
@@ -129,7 +145,7 @@ await build({
   plugins: [redirectPlugin], absWorkingDir: ROOT,
 });
 const B = await import(pathToFileURL(BUNDLE).href);
-const { soccer, eras, inboxMod, nfl, nflInbox } = B;
+const { soccer, eras, inboxMod, nfl, nflInbox, mlb, mlbInbox, nba, nbaInbox, nhl, nhlInbox } = B;
 
 /* ═══════════════════════════════════════════════════════════════════════════
    1. Source: one module, imported by both careers, copied by neither
@@ -171,6 +187,15 @@ const IMPORTS = [
   { rel: 'src/lib/nflCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NFL binding binds careerInbox' },
   { rel: 'src/lib/nflMyCareer.ts', re: /from\s+["']\.\/nflCareerInbox["']/, what: 'the NFL engine runs the inbox tick' },
   { rel: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nflCareerInbox["']/, what: 'the NFL board opens the inbox' },
+  { rel: 'src/lib/mlbCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the MLB binding binds careerInbox' },
+  { rel: 'src/lib/mlbMyCareer.ts', re: /from\s+["']\.\/mlbCareerInbox["']/, what: 'the MLB engine runs the inbox tick' },
+  { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/lib\/mlbCareerInbox["']/, what: 'the MLB board opens the inbox' },
+  { rel: 'src/lib/nbaCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NBA binding binds careerInbox' },
+  { rel: 'src/lib/nbaMyCareer.ts', re: /from\s+["']\.\/nbaCareerInbox["']/, what: 'the NBA engine runs the inbox tick' },
+  { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nbaCareerInbox["']/, what: 'the NBA board opens the inbox' },
+  { rel: 'src/lib/nhlCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NHL binding binds careerInbox' },
+  { rel: 'src/lib/nhlMyCareer.ts', re: /from\s+["']\.\/nhlCareerInbox["']/, what: 'the NHL engine runs the inbox tick' },
+  { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nhlCareerInbox["']/, what: 'the NHL board opens the inbox' },
 ];
 for (const imp of IMPORTS) {
   if (!imp.re.test(code.get(imp.rel) ?? '')) fail(`${imp.what}: no import found in ${imp.rel}`);
@@ -441,9 +466,291 @@ console.log('4) The NFL binding: messages actually arrive, are not always empty,
   if (real.size < 3000) fail(`only ${real.size} real names harvested, this check is not checking much`);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. The MLB binding fires
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('5) The MLB binding: messages actually arrive, are not always empty, and answering works');
+{
+  const positions = Object.keys(mlb.MLB_ARCHETYPES);
+  let careersRun = 0, everNonEmpty = 0, capViolations = 0, answeredOk = 0, refusedOk = 0, totalDelivered = 0;
+  const allSeenText = [];
+  for (let seed = 1; seed <= 30; seed += 1) {
+    const rng = mulberry32(seed * 197 + 41);
+    const pos = positions[seed % positions.length];
+    const arch = mlb.MLB_ARCHETYPES[pos][seed % mlb.MLB_ARCHETYPES[pos].length];
+    let c = mlb.startMlbCareer(`Inbox MLB ${seed}`, pos, arch, rng, null);
+    for (let year = 0; year < 8 && !c.retired; year += 1) {
+      const tq = mlb.mlbRollTeamQuality(year === 0 ? null : 78, rng);
+      mlb.simMlbSeason(c, tq, rng);
+      mlb.mlbProgress(c, rng);
+      if (mlb.mlbShouldRetire(c)) c.retired = true;
+      const inbox = c.phoneInbox ?? [];
+      if (inbox.length > 6) { capViolations += 1; fail(`seed ${seed} year ${year}: MLB phoneInbox holds ${inbox.length} messages, over the cap of 6`); }
+      for (const m of inbox) { allSeenText.push(m.from); allSeenText.push(m.text); for (const ch of m.choices) { allSeenText.push(ch.label); allSeenText.push(ch.reply); } }
+      /* Same reasoning as section 4: an attentive player checks their phone,
+         so catch up on everything but the newest text each season and let
+         the delivery rate below measure steady play rather than a career
+         that answered nothing and went silent. */
+      const pending = (c.phoneInbox ?? []).filter(m => m.answered === undefined);
+      for (let i = 0; i < pending.length - 1; i += 1) mlbInbox.answerMlbInboxMessage(c, pending[i].id, 0);
+    }
+    careersRun += 1;
+    if ((c.phoneInbox ?? []).length > 0 || (c.phoneUsedIds ?? []).length > 0) everNonEmpty += 1;
+    totalDelivered += (c.phoneUsedIds ?? []).length;
+    /* Answer the one left pending, refuse a bad id. */
+    const first = (c.phoneInbox ?? []).find(m => m.answered === undefined);
+    if (first) {
+      const line = mlbInbox.answerMlbInboxMessage(c, first.id, 0);
+      if (line) answeredOk += 1;
+      const again = mlbInbox.answerMlbInboxMessage(c, first.id, 0);
+      if (again === null) refusedOk += 1; else fail(`seed ${seed}: answering the same message twice was accepted a second time`);
+    }
+    const bogus = mlbInbox.answerMlbInboxMessage(c, 'not-a-real-id', 0);
+    if (bogus !== null) fail(`seed ${seed}: answering a message id that does not exist was accepted`);
+  }
+  /* Same reasoning as section 4: the strong signal is the DELIVERY RATE,
+     phoneUsedIds.length over the seasons run, measured against
+     mlbCareerInbox.ts's own wantPerSeason rather than a weak "ever showed
+     one message" binary. */
+  const seasonsRun = careersRun * 8;
+  const deliveryRate = totalDelivered / seasonsRun;
+  console.log(`   ${careersRun} MLB careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of ${mlbInbox.MLB_INBOX.wantPerSeason}), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  if (careersRun < 30) fail('fewer MLB careers completed than the loop should have run');
+  if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} MLB careers ever showed a message, the binding may not actually be firing`);
+  /* Same floor logic as section 4: measured over this exact run the rate
+     sits close to 1 (a message roughly every season); 0.5 sits well under
+     every measured run and would still catch the want dropping by half or
+     the eligible pool silently emptying for a chunk of a career. */
+  if (deliveryRate < 0.5) fail(`the message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of ${mlbInbox.MLB_INBOX.wantPerSeason}, well under what a healthy binding should show`);
+  if (answeredOk === 0) fail('not one MLB inbox answer was accepted across 30 careers');
+
+  /* 5b. Nobody signs a text with a real player's name, and the shape of
+     every "from" is a role, never a generated "First Last" name. Same
+     harvest section 4b already built; rebuilt here rather than shared
+     across sections so this section reads standalone. */
+  const dataFiles = [];
+  (function scan(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) scan(p);
+      else if (/\.tsx?$/.test(e.name)) dataFiles.push(p);
+    }
+  })(path.join(ROOT, 'src/data'));
+  const real = new Set();
+  for (const f of dataFiles) {
+    const t = fs.readFileSync(f, 'utf8');
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*'([A-Z][^']{2,40})'/g)) real.add(m[1]);
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*"([A-Z][^"]{2,40})"/g)) real.add(m[1]);
+  }
+  const froms = new Set();
+  for (const t of allSeenText) if (typeof t === 'string') froms.add(t);
+  let matchesReal = 0;
+  for (const from of froms) {
+    if (real.has(from)) { matchesReal += 1; fail(`text harvested from the MLB inbox equals a real player's name: "${from}"`); }
+  }
+  const NAME_SHAPE = /^[A-Z][a-z]+\s[A-Z][a-z]+/;
+  const froms2 = new Set(mlbInbox.MLB_INBOX.pool.map(d => d.from));
+  let shapedLikeAName = 0;
+  for (const from of froms2) {
+    if (NAME_SHAPE.test(from)) { shapedLikeAName += 1; fail(`inbox sender "${from}" reads as a First Last name rather than a role`); }
+  }
+  console.log(`   ${real.size} real names harvested from src/data, ${matchesReal} collisions in harvested inbox text, ${froms2.size} distinct senders in the bank, ${shapedLikeAName} shaped like a person's name`);
+  if (real.size < 3000) fail(`only ${real.size} real names harvested, this check is not checking much`);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. Round 525: the NBA binding fires
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('6) The NBA binding: messages actually arrive, are not always empty, and answering works');
+{
+  const positions = Object.keys(nba.NBA_ARCHETYPES);
+  let careersRun = 0, everNonEmpty = 0, capViolations = 0, answeredOk = 0, refusedOk = 0, totalDelivered = 0;
+  const allSeenText = [];
+  for (let seed = 1; seed <= 30; seed += 1) {
+    const rng = mulberry32(seed * 131 + 17);
+    const pos = positions[seed % positions.length];
+    const arch = nba.NBA_ARCHETYPES[pos][seed % nba.NBA_ARCHETYPES[pos].length];
+    let c = nba.startNbaCareer(`Inbox NBA ${seed}`, pos, arch, rng, null);
+    for (let year = 0; year < 8 && !c.retired; year += 1) {
+      const tq = nba.nbaRollTeamQuality(year === 0 ? null : 78, rng);
+      nba.simNbaSeason(c, tq, rng);
+      nba.nbaProgress(c, rng);
+      if (nba.nbaShouldRetire(c)) c.retired = true;
+      const inbox = c.phoneInbox ?? [];
+      if (inbox.length > 6) { capViolations += 1; fail(`seed ${seed} year ${year}: NBA phoneInbox holds ${inbox.length} messages, over the cap of 6`); }
+      for (const m of inbox) { allSeenText.push(m.from); allSeenText.push(m.text); for (const ch of m.choices) { allSeenText.push(ch.label); allSeenText.push(ch.reply); } }
+      /* Same reason as the NFL section above: throttled want means a career
+         that never answers anything goes silent after a season or two, which
+         would make any delivery-rate measurement read as broken even on
+         healthy code. Catch up on everything but the newest text each
+         season, leaving one pending for the answer/refuse checks after the
+         loop. */
+      const pending = (c.phoneInbox ?? []).filter(m => m.answered === undefined);
+      for (let i = 0; i < pending.length - 1; i += 1) nbaInbox.answerNbaInboxMessage(c, pending[i].id, 0);
+    }
+    careersRun += 1;
+    if ((c.phoneInbox ?? []).length > 0 || (c.phoneUsedIds ?? []).length > 0) everNonEmpty += 1;
+    totalDelivered += (c.phoneUsedIds ?? []).length;
+    /* Answer the one left pending, refuse a bad id. */
+    const first = (c.phoneInbox ?? []).find(m => m.answered === undefined);
+    if (first) {
+      const line = nbaInbox.answerNbaInboxMessage(c, first.id, 0);
+      if (line) answeredOk += 1;
+      const again = nbaInbox.answerNbaInboxMessage(c, first.id, 0);
+      if (again === null) refusedOk += 1; else fail(`seed ${seed}: answering the same NBA message twice was accepted a second time`);
+    }
+    const bogus = nbaInbox.answerNbaInboxMessage(c, 'not-a-real-id', 0);
+    if (bogus !== null) fail(`seed ${seed}: answering an NBA message id that does not exist was accepted`);
+  }
+  /* Same measured-rate reasoning as the NFL section: everNonEmpty alone is a
+     weak signal (halving wantPerSeason would still leave most careers
+     showing a message eventually). nbaCareerInbox.ts sets wantPerSeason = 2,
+     so phoneUsedIds.length (every distinct message ever delivered, tracked
+     even after the 6-message cap drops the oldest answered one) over 8
+     seasons should sit well above one a season if the binding is healthy. */
+  const seasonsRun = careersRun * 8;
+  const deliveryRate = totalDelivered / seasonsRun;
+  console.log(`   ${careersRun} NBA careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  if (careersRun < 30) fail('fewer NBA careers completed than the loop should have run');
+  if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NBA careers ever showed a message, the binding may not actually be firing`);
+  /* Same 0.5 floor as the NFL section: measured over this exact run the rate
+     sits close to 1 (a message roughly every season), and 0.5 sits well
+     under every measured run while still catching wantPerSeason being cut
+     in half or the eligible pool silently emptying out for a chunk of a
+     career. */
+  if (deliveryRate < 0.5) fail(`the NBA message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
+  if (answeredOk === 0) fail('not one NBA inbox answer was accepted across 30 careers');
+
+  /* 5b. Nobody signs a text with a real player's name, and the shape of
+     every "from" is a role, never a generated "First Last" name. Reuses the
+     same src/data harvest section 4 already built. */
+  const dataFiles = [];
+  (function scan(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) scan(p);
+      else if (/\.tsx?$/.test(e.name)) dataFiles.push(p);
+    }
+  })(path.join(ROOT, 'src/data'));
+  const real = new Set();
+  for (const f of dataFiles) {
+    const t = fs.readFileSync(f, 'utf8');
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*'([A-Z][^']{2,40})'/g)) real.add(m[1]);
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*"([A-Z][^"]{2,40})"/g)) real.add(m[1]);
+  }
+  const froms = new Set();
+  for (const t of allSeenText) if (typeof t === 'string') froms.add(t);
+  let matchesReal = 0;
+  for (const from of froms) {
+    if (real.has(from)) { matchesReal += 1; fail(`text harvested from the NBA inbox equals a real player's name: "${from}"`); }
+  }
+  const NAME_SHAPE = /^[A-Z][a-z]+\s[A-Z][a-z]+/;
+  const froms2 = new Set(nbaInbox.NBA_INBOX.pool.map(d => d.from));
+  let shapedLikeAName = 0;
+  for (const from of froms2) {
+    if (NAME_SHAPE.test(from)) { shapedLikeAName += 1; fail(`NBA inbox sender "${from}" reads as a First Last name rather than a role`); }
+  }
+  console.log(`   ${real.size} real names harvested from src/data, ${matchesReal} collisions in harvested NBA inbox text, ${froms2.size} distinct senders in the bank, ${shapedLikeAName} shaped like a person's name`);
+  if (real.size < 3000) fail(`only ${real.size} real names harvested, this check is not checking much`);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. The NHL binding fires (Round 525)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('7) The NHL binding: messages actually arrive, are not always empty, and answering works');
+{
+  const positions = Object.keys(nhl.NHL_ARCHETYPES);
+  let careersRun = 0, everNonEmpty = 0, capViolations = 0, answeredOk = 0, refusedOk = 0, totalDelivered = 0;
+  const allSeenText = [];
+  for (let seed = 1; seed <= 30; seed += 1) {
+    const rng = mulberry32(seed * 151 + 23);
+    const pos = positions[seed % positions.length];
+    const arch = nhl.NHL_ARCHETYPES[pos][seed % nhl.NHL_ARCHETYPES[pos].length];
+    let c = nhl.startNhlCareer(`Inbox NHL ${seed}`, pos, arch, rng, null);
+    let tq = nhl.nhlRollTeamQuality(null, rng);
+    for (let year = 0; year < 8 && !c.retired; year += 1) {
+      tq = nhl.nhlRollTeamQuality(year === 0 ? tq : 78, rng);
+      nhl.simNhlSeason(c, tq, rng);
+      nhl.nhlProgress(c, rng);
+      if (nhl.nhlShouldRetire(c)) c.retired = true;
+      const inbox = c.phoneInbox ?? [];
+      if (inbox.length > 6) { capViolations += 1; fail(`seed ${seed} year ${year}: NHL phoneInbox holds ${inbox.length} messages, over the cap of 6`); }
+      for (const m of inbox) { allSeenText.push(m.from); allSeenText.push(m.text); for (const ch of m.choices) { allSeenText.push(ch.label); allSeenText.push(ch.reply); } }
+      /* Same catch-up shape section 4 uses for the NFL: an attentive player
+         checks their phone, so the measured rate below reflects steady play
+         rather than a career that fills up in year one and goes silent. */
+      const pending = (c.phoneInbox ?? []).filter(m => m.answered === undefined);
+      for (let i = 0; i < pending.length - 1; i += 1) nhlInbox.answerNhlInboxMessage(c, pending[i].id, 0);
+    }
+    careersRun += 1;
+    if ((c.phoneInbox ?? []).length > 0 || (c.phoneUsedIds ?? []).length > 0) everNonEmpty += 1;
+    totalDelivered += (c.phoneUsedIds ?? []).length;
+    /* Answer the one left pending, refuse a bad id. */
+    const first = (c.phoneInbox ?? []).find(m => m.answered === undefined);
+    if (first) {
+      const line = nhlInbox.answerNhlInboxMessage(c, first.id, 0);
+      if (line) answeredOk += 1;
+      const again = nhlInbox.answerNhlInboxMessage(c, first.id, 0);
+      if (again === null) refusedOk += 1; else fail(`seed ${seed}: answering the same NHL message twice was accepted a second time`);
+    }
+    const bogus = nhlInbox.answerNhlInboxMessage(c, 'not-a-real-id', 0);
+    if (bogus !== null) fail(`seed ${seed}: answering an NHL message id that does not exist was accepted`);
+  }
+  /* Same reasoning as section 4: everNonEmpty is a weak binary signal on its
+     own, the strong signal is the DELIVERY RATE, measured rather than
+     assumed. nhlCareerInbox.ts sets wantPerSeason = 2 the same as the NFL. */
+  const seasonsRun = careersRun * 8;
+  const deliveryRate = totalDelivered / seasonsRun;
+  console.log(`   ${careersRun} NHL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  if (careersRun < 30) fail('fewer NHL careers completed than the loop should have run');
+  if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NHL careers ever showed a message, the binding may not actually be firing`);
+  /* Same floor section 4 uses, for the same measured reason: well under
+     every healthy run, well above a broken one. */
+  if (deliveryRate < 0.5) fail(`the NHL message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
+  if (answeredOk === 0) fail('not one NHL inbox answer was accepted across 30 careers');
+
+  /* 5b. Nobody signs a text with a real player's name, and the shape of
+     every "from" is a role, never a generated "First Last" name. Harvested
+     fresh here (rather than reusing section 4's local `real` set, which is
+     scoped to that block) so this section stands on its own. */
+  const dataFiles = [];
+  (function scan(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) scan(p);
+      else if (/\.tsx?$/.test(e.name)) dataFiles.push(p);
+    }
+  })(path.join(ROOT, 'src/data'));
+  const real = new Set();
+  for (const f of dataFiles) {
+    const t = fs.readFileSync(f, 'utf8');
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*'([A-Z][^']{2,40})'/g)) real.add(m[1]);
+    for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*"([A-Z][^"]{2,40})"/g)) real.add(m[1]);
+  }
+  const froms = new Set();
+  for (const t of allSeenText) if (typeof t === 'string') froms.add(t);
+  let matchesReal = 0;
+  for (const from of froms) {
+    if (real.has(from)) { matchesReal += 1; fail(`text harvested from the NHL inbox equals a real player's name: "${from}"`); }
+  }
+  const NAME_SHAPE = /^[A-Z][a-z]+\s[A-Z][a-z]+/;
+  const froms2 = new Set(nhlInbox.NHL_INBOX.pool.map(d => d.from));
+  let shapedLikeAName = 0;
+  for (const from of froms2) {
+    if (NAME_SHAPE.test(from)) { shapedLikeAName += 1; fail(`inbox sender "${from}" reads as a First Last name rather than a role`); }
+  }
+  console.log(`   ${real.size} real names harvested from src/data, ${matchesReal} collisions in harvested inbox text, ${froms2.size} distinct senders in the bank, ${shapedLikeAName} shaped like a person's name`);
+  if (real.size < 3000) fail(`only ${real.size} real names harvested, this check is not checking much`);
+}
+
+console.log('');
+
 console.log('');
 if (failures > 0) {
   console.error(`simCareerInbox: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simCareerInbox: green. Soccer is unchanged, and the NFL inbox fires.');
+console.log('simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.');

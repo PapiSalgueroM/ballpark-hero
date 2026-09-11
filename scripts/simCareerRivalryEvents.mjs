@@ -38,8 +38,18 @@
  *      one), enumerated in full against a freshly harvested real-name
  *      universe, and the live draftRival function sampled thousands of
  *      times and checked the same way. Zero collisions required, printed
- *      either way.
- *   6. Negative controls, RIVALRY_CONTROL=...
+ *      either way. Covers MLB structurally already: the bank is shared
+ *      across every RivalSport value, not per sport, so Round 525's MLB
+ *      slice needs nothing added here.
+ *   6. The MLB binding, Round 525's slice: the same two proofs section 4
+ *      gives the NFL, against src/lib/mlbCareerRivalryEvents.ts's own
+ *      seventeen beats, gated on what a baseball rival's save actually
+ *      tracks (the same CareerRival shape the NFL, NBA and NHL rivals share).
+ *      A measured pending-beat RATE over many simulated careers, never a
+ *      weak "ever showed one beat" binary signal, matching the fix Round
+ *      524's review made to section 4 below.
+ *   7. The NBA binding, Round 525's slice: same proof shape as section 6.
+ *   8. The NHL binding, Round 525's slice: same proof shape as section 6.
  *
  * NEGATIVE CONTROLS, RIVALRY_CONTROL=...
  *
@@ -153,6 +163,12 @@ export const rivalryMod = await import('${R}/src/lib/careerRivalryEvents.ts');
 export const careerRival = await import('${R}/src/lib/careerRival.ts');
 export const nfl = await import('${R}/src/lib/nflMyCareer.ts');
 export const nflRivalry = await import('${R}/src/lib/nflCareerRivalryEvents.ts');
+export const mlb = await import('${R}/src/lib/mlbMyCareer.ts');
+export const mlbRivalry = await import('${R}/src/lib/mlbCareerRivalryEvents.ts');
+export const nba = await import('${R}/src/lib/nbaMyCareer.ts');
+export const nbaRivalry = await import('${R}/src/lib/nbaCareerRivalryEvents.ts');
+export const nhl = await import('${R}/src/lib/nhlMyCareer.ts');
+export const nhlRivalry = await import('${R}/src/lib/nhlCareerRivalryEvents.ts');
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
@@ -160,7 +176,7 @@ await build({
   plugins: [redirectPlugin], absWorkingDir: ROOT,
 });
 const B = await import(pathToFileURL(BUNDLE).href);
-const { soccer, rivalryMod, careerRival, nfl, nflRivalry } = B;
+const { soccer, rivalryMod, careerRival, nfl, nflRivalry, mlb, mlbRivalry, nba, nbaRivalry, nhl, nhlRivalry } = B;
 
 /* ═══════════════════════════════════════════════════════════════════════════
    1. Source: one module, imported by both careers, copied by neither
@@ -202,6 +218,15 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
     { rel: 'src/lib/nflCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NFL binding binds careerRivalryEvents' },
     { rel: 'src/lib/nflMyCareer.ts', re: /from\s+["']\.\/nflCareerRivalryEvents["']/, what: 'the NFL engine runs the rivalry tick' },
     { rel: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nflCareerRivalryEvents["']/, what: 'the NFL board dismisses the pending beat' },
+    { rel: 'src/lib/mlbCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the MLB binding binds careerRivalryEvents' },
+    { rel: 'src/lib/mlbMyCareer.ts', re: /from\s+["']\.\/mlbCareerRivalryEvents["']/, what: 'the MLB engine runs the rivalry tick' },
+    { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/lib\/mlbCareerRivalryEvents["']/, what: 'the MLB board dismisses the pending beat' },
+    { rel: 'src/lib/nbaCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NBA binding binds careerRivalryEvents' },
+    { rel: 'src/lib/nbaMyCareer.ts', re: /from\s+["']\.\/nbaCareerRivalryEvents["']/, what: 'the NBA engine runs the rivalry tick' },
+    { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nbaCareerRivalryEvents["']/, what: 'the NBA board dismisses the pending beat' },
+    { rel: 'src/lib/nhlCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NHL binding binds careerRivalryEvents' },
+    { rel: 'src/lib/nhlMyCareer.ts', re: /from\s+["']\.\/nhlCareerRivalryEvents["']/, what: 'the NHL engine runs the rivalry tick' },
+    { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nhlCareerRivalryEvents["']/, what: 'the NHL board dismisses the pending beat' },
   ];
   for (const imp of IMPORTS) {
     if (!imp.re.test(code.get(imp.rel) ?? '')) fail(`${imp.what}: no import found in ${imp.rel}`);
@@ -556,7 +581,11 @@ export { allIntlNames } from '${R}/src/lib/intlNames.ts';
   /* 5b. Runtime: the LIVE draftRival function, sampled thousands of times
      across positions, teams and ages, checked the same way the static half
      was. A guard that is correct on paper and wired up wrong would pass 5a
-     and fail here. */
+     and fail here. Round 525 note: draftRival takes no sport parameter and
+     careerRival.ts's FIRST/LAST bank is shared across every RivalSport
+     value (mlb, nba, nfl, nhl all draw from it), so this single runtime
+     sweep already covers the MLB rival too; nothing extra is needed in
+     section 6 below for the name guard specifically. */
   const teams = ['KC', 'DAL', 'BUF', 'SF', 'PHI', 'GB', 'MIA', 'BAL'];
   const seen = new Set();
   let emitted = 0, realHits = 0;
@@ -574,9 +603,318 @@ export { allIntlNames } from '${R}/src/lib/intlNames.ts';
   if (seen.size < 200) fail(`only ${seen.size} distinct names in ${emitted} rolls, the generator may have collapsed`);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. The MLB binding, Round 525's slice
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('6) The MLB binding: every beat reachable and correct, and the tick fires in real careers');
+{
+  /* 6a. Every id in mlbCareerRivalryEvents.ts's own table, exercised
+     against a fixture built to satisfy its gate. Same badge-style
+     reachability proof as section 4a: a beat nobody can trigger is dead
+     words. */
+  const mlbFixture = over => ({
+    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'BOS', ...over,
+  });
+  const rivalFixture = over => ({
+    name: 'Rival MLB', pos: 'SP', team: 'NYY', ovr: 80, pot: 90, age: 25, rings: 0,
+    hisYears: 0, myYears: 0, retired: false, lastLine: '', lastScore: 0, ...over,
+  });
+  const gates = {
+    201: [mlbFixture({ rings: 0 }), rivalFixture({ rings: 1 })],
+    202: [mlbFixture(), rivalFixture()],
+    203: [mlbFixture(), rivalFixture()],
+    204: [mlbFixture(), rivalFixture()],
+    205: [mlbFixture(), rivalFixture({ retired: true })],
+    206: [mlbFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    207: [mlbFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
+    208: [mlbFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
+    209: [mlbFixture({ team: 'NYY' }), rivalFixture({ team: 'NYY' })],
+    210: [mlbFixture(), rivalFixture()],
+    211: [mlbFixture(), rivalFixture({ hisYears: 4, myYears: 1 })],
+    212: [mlbFixture(), rivalFixture({ myYears: 4, hisYears: 1 })],
+    213: [mlbFixture(), rivalFixture()],
+    214: [mlbFixture(), rivalFixture({ ovr: 55, retired: false })],
+    215: [mlbFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
+    216: [mlbFixture({ age: 30 }), rivalFixture()],
+    217: [mlbFixture({ age: 34 }), rivalFixture()],
+  };
+  let reachable = 0, correct = 0;
+  const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
+  for (const def of mlbRivalry.MLB_RIVALRY_EVENTS) {
+    const [p, r] = gates[def.id] ?? [];
+    if (!p) { fail(`beat ${def.id} (${def.title}) has no fixture written for it in this harness`); continue; }
+    if (!def.when(p, r)) { fail(`beat ${def.id} (${def.title}) is not reachable with the fixture built for it, so its gate may have drifted`); continue; }
+    reachable += 1;
+    const pool = rivalryMod.rivalryEventPool(p, r, mlbRivalry.MLB_RIVALRY_EVENTS);
+    const built = pool.find(e => e.id === def.id);
+    if (!built) { fail(`beat ${def.id}: rivalryEventPool did not include it even though when() returned true`); continue; }
+    if (!built.description.includes(r.name)) { fail(`beat ${def.id}: description does not mention the rival by name`); continue; }
+    const before = JSON.stringify(p);
+    const lines = [];
+    const rng = mulberry32(def.id * 3);
+    rivalryMod.applyRivalryEvent(p, r, built, mlbRivalry.MLB_RIVALRY_EVENTS, rng, l => lines.push(l));
+    if (JSON.stringify(p) === before) fail(`beat ${def.id}: applying it changed nothing on the player state`);
+    else correct += 1;
+    if (lines.length === 0) fail(`beat ${def.id}: apply produced no line for the feed`);
+  }
+  console.log(`   ${reachable} of ${total} beats reachable with a built fixture, ${correct} of ${total} actually mutated state when applied`);
+  if (reachable < total) fail(`${total - reachable} beats were not reachable, so the table has dead entries`);
+  if (total < 15) fail(`only ${total} beats in MLB_RIVALRY_EVENTS, short of the 15 to 18 the round asked for`);
+
+  /* 6b. Real careers: the tick fires, and the forced retirement beat shows
+     up when it should. Same shape as section 4b, and the same reasoning on
+     why the RATE is the measured signal rather than a binary "ever showed
+     one beat", which Round 524's review found missing from an earlier draft
+     of this exact check on the NFL side. */
+  const positions = Object.keys(mlb.MLB_ARCHETYPES);
+  let careersWithRival = 0, everPending = 0, dismissedOk = 0, sawForcedRetire = 0, sawAnyBeat = 0;
+  for (let seed = 1; seed <= 40; seed += 1) {
+    const rng = mulberry32(seed * 911 + 13);
+    const pos = positions[seed % positions.length];
+    const arch = mlb.MLB_ARCHETYPES[pos][seed % mlb.MLB_ARCHETYPES[pos].length];
+    let c = mlb.startMlbCareer(`Rivalry MLB ${seed}`, pos, arch, rng, null);
+    if (c.rival) careersWithRival += 1;
+    let lastId = null, sawPendingThisCareer = false;
+    for (let year = 0; year < 14 && !c.retired; year += 1) {
+      const tq = mlb.mlbRollTeamQuality(year === 0 ? null : 78, rng);
+      mlb.simMlbSeason(c, tq, rng);
+      mlb.mlbProgress(c, rng);
+      if (mlb.mlbShouldRetire(c)) c.retired = true;
+      if (c.pendingRivalryEvent) {
+        everPending += 1;
+        sawPendingThisCareer = true;
+        if (c.pendingRivalryEvent.id === mlbRivalry.MLB_RIVAL_RETIRE_ID) sawForcedRetire += 1;
+        const { state, lines } = mlbRivalry.dismissMlbRivalryEvent(c, rng);
+        c = state;
+        if (c.pendingRivalryEvent === null && lines.length > 0) { dismissedOk += 1; lastId = c.lastRivalryEventId; }
+        void lastId;
+      }
+    }
+    if (sawPendingThisCareer) sawAnyBeat += 1;
+  }
+  const seasonsRun = careersWithRival * 14;
+  const rate = everPending / seasonsRun;
+  console.log(`   ${careersWithRival} of 40 MLB careers drafted a rival, ${sawAnyBeat} showed at least one pending beat, ${everPending} pending beats total over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${dismissedOk} dismissed cleanly, ${sawForcedRetire} saw the forced retirement beat`);
+  if (careersWithRival < 40) fail(`only ${careersWithRival} of 40 MLB careers had a rival; draftRival runs unconditionally at startMlbCareer so this should be 40`);
+  /* Same floor logic as section 4b, measured over this exact run: the rate
+     sits close to the raw 0.5 coin flip once the mostly-satisfied gates and
+     the no-repeat filter are accounted for, and 0.30 sits well under every
+     measured run. */
+  if (rate < 0.30) fail(`the pending-beat rate is ${rate.toFixed(3)} per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should`);
+  if (dismissedOk === 0) fail('not one MLB dismiss actually cleared the pending slot');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. Round 525: the NBA binding
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('7) The NBA binding: every beat reachable and correct, and the tick fires in real careers');
+{
+  /* 6a. Every id in the table, exercised against a fixture built to satisfy
+     its gate, the same badge-style reachability proof section 4 ran for the
+     NFL table: a beat nobody can trigger is dead words. */
+  const nbaFixture = over => ({
+    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, ...over,
+  });
+  const rivalFixture = over => ({
+    name: 'Rival NBA', pos: 'PG', team: 'LAL', ovr: 80, pot: 90, age: 25, rings: 0,
+    hisYears: 0, myYears: 0, retired: false, lastLine: '', lastScore: 0, ...over,
+  });
+  const gates = {
+    301: [nbaFixture({ rings: 0 }), rivalFixture({ rings: 1 })],
+    302: [nbaFixture(), rivalFixture()],
+    303: [nbaFixture(), rivalFixture()],
+    304: [nbaFixture(), rivalFixture()],
+    305: [nbaFixture(), rivalFixture({ retired: true })],
+    306: [nbaFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    307: [nbaFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
+    308: [nbaFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
+    309: [nbaFixture({ team: 'LAL' }), rivalFixture({ team: 'LAL' })],
+    310: [nbaFixture(), rivalFixture()],
+    311: [nbaFixture(), rivalFixture({ hisYears: 4, myYears: 1 })],
+    312: [nbaFixture(), rivalFixture({ myYears: 4, hisYears: 1 })],
+    313: [nbaFixture(), rivalFixture()],
+    314: [nbaFixture(), rivalFixture({ ovr: 55, retired: false })],
+    315: [nbaFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
+    316: [nbaFixture({ age: 30 }), rivalFixture()],
+    317: [nbaFixture({ age: 34 }), rivalFixture()],
+  };
+  let reachable = 0, correct = 0;
+  const total = nbaRivalry.NBA_RIVALRY_EVENTS.length;
+  for (const def of nbaRivalry.NBA_RIVALRY_EVENTS) {
+    const [p, r] = gates[def.id] ?? [];
+    if (!p) { fail(`NBA beat ${def.id} (${def.title}) has no fixture written for it in this harness`); continue; }
+    if (!def.when(p, r)) { fail(`NBA beat ${def.id} (${def.title}) is not reachable with the fixture built for it, so its gate may have drifted`); continue; }
+    reachable += 1;
+    const pool = rivalryMod.rivalryEventPool(p, r, nbaRivalry.NBA_RIVALRY_EVENTS);
+    const built = pool.find(e => e.id === def.id);
+    if (!built) { fail(`NBA beat ${def.id}: rivalryEventPool did not include it even though when() returned true`); continue; }
+    if (!built.description.includes(r.name)) { fail(`NBA beat ${def.id}: description does not mention the rival by name`); continue; }
+    /* Apply and confirm SOMETHING moved: every beat here mutates morale,
+       fanbase, netWorth or rivalryIntensity, so a no-op apply is a bug. */
+    const before = JSON.stringify(p);
+    const lines = [];
+    const rng = mulberry32(def.id);
+    rivalryMod.applyRivalryEvent(p, r, built, nbaRivalry.NBA_RIVALRY_EVENTS, rng, l => lines.push(l));
+    if (JSON.stringify(p) === before) fail(`NBA beat ${def.id}: applying it changed nothing on the player state`);
+    else correct += 1;
+    if (lines.length === 0) fail(`NBA beat ${def.id}: apply produced no line for the feed`);
+  }
+  console.log(`   ${reachable} of ${total} beats reachable with a built fixture, ${correct} of ${total} actually mutated state when applied`);
+  if (reachable < total) fail(`${total - reachable} NBA beats were not reachable, so the table has dead entries`);
+
+  /* 6b. Real careers: the tick fires, and the forced retirement beat shows
+     up when it should. */
+  const positions = Object.keys(nba.NBA_ARCHETYPES);
+  let careersWithRival = 0, everPending = 0, dismissedOk = 0, sawForcedRetire = 0, sawAnyBeat = 0;
+  for (let seed = 1; seed <= 40; seed += 1) {
+    const rng = mulberry32(seed * 733 + 5);
+    const pos = positions[seed % positions.length];
+    const arch = nba.NBA_ARCHETYPES[pos][seed % nba.NBA_ARCHETYPES[pos].length];
+    let c = nba.startNbaCareer(`Rivalry NBA ${seed}`, pos, arch, rng, null);
+    if (c.rival) careersWithRival += 1;
+    let lastId = null, sawPendingThisCareer = false;
+    for (let year = 0; year < 14 && !c.retired; year += 1) {
+      const tq = nba.nbaRollTeamQuality(year === 0 ? null : 78, rng);
+      nba.simNbaSeason(c, tq, rng);
+      nba.nbaProgress(c, rng);
+      if (nba.nbaShouldRetire(c)) c.retired = true;
+      if (c.pendingRivalryEvent) {
+        everPending += 1;
+        sawPendingThisCareer = true;
+        if (c.pendingRivalryEvent.id === nbaRivalry.NBA_RIVAL_RETIRE_ID) sawForcedRetire += 1;
+        const { state, lines } = nbaRivalry.dismissNbaRivalryEvent(c, rng);
+        c = state;
+        if (c.pendingRivalryEvent === null && lines.length > 0) { dismissedOk += 1; lastId = c.lastRivalryEventId; }
+        void lastId;
+      }
+    }
+    if (sawPendingThisCareer) sawAnyBeat += 1;
+  }
+  /* Same reasoning as section 4b: sawAnyBeat (did a career ever see one
+     pending beat across 14 years) is a weak binary signal a coin flip
+     weakened five times over would still mostly clear. rollRivalryEvent
+     rolls a straight 0.5 coin flip every season the rival is alive and the
+     gated pool is non-empty, so the RATE, beats per career-season, is the
+     measurable CLAUDE.md asks for. Measured here rather than assumed. */
+  const seasonsRun = careersWithRival * 14;
+  const rate = everPending / seasonsRun;
+  console.log(`   ${careersWithRival} of 40 NBA careers drafted a rival, ${sawAnyBeat} showed at least one pending beat, ${everPending} pending beats total over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${dismissedOk} dismissed cleanly, ${sawForcedRetire} saw the forced retirement beat`);
+  if (careersWithRival < 40) fail(`only ${careersWithRival} of 40 NBA careers had a rival; draftRival runs unconditionally at startNbaCareer so this should be 40`);
+  /* Same 0.30 floor as section 4b: measured over this exact run the rate
+     sits close to the raw 0.5 coin flip once the mostly-satisfied gates and
+     the no-repeat filter are accounted for, and 0.30 sits well under every
+     measured run while still catching the coin flip being weakened by more
+     than a third, which sawAnyBeat's binary bar could not. */
+  if (rate < 0.30) fail(`the NBA pending-beat rate is ${rate.toFixed(3)} per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should`);
+  if (dismissedOk === 0) fail('not one NBA dismiss actually cleared the pending slot');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. The NHL binding (Round 525)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('8) The NHL binding: every beat reachable and correct, and the tick fires in real careers');
+{
+  /* 5a. Every id in the table, exercised against a fixture built to satisfy
+     its gate, the same badge-style reachability proof section 4 runs for
+     the NFL table. */
+  const nhlFixture = over => ({
+    ovr: 80, age: 25, cups: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'TOR', ...over,
+  });
+  const rivalFixture = over => ({
+    name: 'Rival NHL', pos: 'C', team: 'BOS', ovr: 80, pot: 90, age: 25, rings: 0,
+    hisYears: 0, myYears: 0, retired: false, lastLine: '', lastScore: 0, ...over,
+  });
+  const gates = {
+    301: [nhlFixture({ cups: 0 }), rivalFixture({ rings: 1 })],
+    302: [nhlFixture(), rivalFixture()],
+    303: [nhlFixture(), rivalFixture()],
+    304: [nhlFixture(), rivalFixture()],
+    305: [nhlFixture(), rivalFixture({ retired: true })],
+    306: [nhlFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    307: [nhlFixture({ cups: 0 }), rivalFixture({ rings: 2 })],
+    308: [nhlFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
+    309: [nhlFixture({ team: 'DAL' }), rivalFixture({ team: 'DAL' })],
+    310: [nhlFixture(), rivalFixture()],
+    311: [nhlFixture(), rivalFixture({ hisYears: 4, myYears: 1 })],
+    312: [nhlFixture(), rivalFixture({ myYears: 4, hisYears: 1 })],
+    313: [nhlFixture(), rivalFixture()],
+    314: [nhlFixture(), rivalFixture({ ovr: 55, retired: false })],
+    315: [nhlFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
+    316: [nhlFixture({ age: 30 }), rivalFixture()],
+    317: [nhlFixture({ age: 34 }), rivalFixture()],
+  };
+  let reachable = 0, correct = 0;
+  const total = nhlRivalry.NHL_RIVALRY_EVENTS.length;
+  for (const def of nhlRivalry.NHL_RIVALRY_EVENTS) {
+    const [p, r] = gates[def.id] ?? [];
+    if (!p) { fail(`beat ${def.id} (${def.title}) has no fixture written for it in this harness`); continue; }
+    if (!def.when(p, r)) { fail(`beat ${def.id} (${def.title}) is not reachable with the fixture built for it, so its gate may have drifted`); continue; }
+    reachable += 1;
+    const pool = rivalryMod.rivalryEventPool(p, r, nhlRivalry.NHL_RIVALRY_EVENTS);
+    const built = pool.find(e => e.id === def.id);
+    if (!built) { fail(`beat ${def.id}: rivalryEventPool did not include it even though when() returned true`); continue; }
+    if (!built.description.includes(r.name)) { fail(`beat ${def.id}: description does not mention the rival by name`); continue; }
+    /* Apply and confirm SOMETHING moved: every beat here mutates morale,
+       fanbase, netWorth or rivalryIntensity, so a no-op apply is a bug. */
+    const before = JSON.stringify(p);
+    const lines = [];
+    const rng = mulberry32(def.id);
+    rivalryMod.applyRivalryEvent(p, r, built, nhlRivalry.NHL_RIVALRY_EVENTS, rng, l => lines.push(l));
+    if (JSON.stringify(p) === before) fail(`beat ${def.id}: applying it changed nothing on the player state`);
+    else correct += 1;
+    if (lines.length === 0) fail(`beat ${def.id}: apply produced no line for the feed`);
+  }
+  console.log(`   ${reachable} of ${total} beats reachable with a built fixture, ${correct} of ${total} actually mutated state when applied`);
+  if (reachable < total) fail(`${total - reachable} beats were not reachable, so the table has dead entries`);
+
+  /* 5b. Real careers: the tick fires, and the forced retirement beat shows
+     up when it should. */
+  const positions = Object.keys(nhl.NHL_ARCHETYPES);
+  let careersWithRival = 0, everPending = 0, dismissedOk = 0, sawForcedRetire = 0, sawAnyBeat = 0;
+  for (let seed = 1; seed <= 40; seed += 1) {
+    const rng = mulberry32(seed * 823 + 11);
+    const pos = positions[seed % positions.length];
+    const arch = nhl.NHL_ARCHETYPES[pos][seed % nhl.NHL_ARCHETYPES[pos].length];
+    let c = nhl.startNhlCareer(`Rivalry NHL ${seed}`, pos, arch, rng, null);
+    if (c.rival) careersWithRival += 1;
+    let lastId = null, sawPendingThisCareer = false;
+    let tq = nhl.nhlRollTeamQuality(null, rng);
+    for (let year = 0; year < 14 && !c.retired; year += 1) {
+      tq = nhl.nhlRollTeamQuality(year === 0 ? tq : 78, rng);
+      nhl.simNhlSeason(c, tq, rng);
+      nhl.nhlProgress(c, rng);
+      if (nhl.nhlShouldRetire(c)) c.retired = true;
+      if (c.pendingRivalryEvent) {
+        everPending += 1;
+        sawPendingThisCareer = true;
+        if (c.pendingRivalryEvent.id === nhlRivalry.NHL_RIVAL_RETIRE_ID) sawForcedRetire += 1;
+        const { state, lines } = nhlRivalry.dismissNhlRivalryEvent(c, rng);
+        c = state;
+        if (c.pendingRivalryEvent === null && lines.length > 0) { dismissedOk += 1; lastId = c.lastRivalryEventId; }
+        void lastId;
+      }
+    }
+    if (sawPendingThisCareer) sawAnyBeat += 1;
+  }
+  /* Same reasoning as section 4: the RATE is the measurable signal, not the
+     binary "did it ever fire once" bar. rollRivalryEvent rolls a straight
+     0.5 coin flip every season the rival is alive and the gated pool is
+     non-empty, measured here rather than assumed. */
+  const seasonsRun = careersWithRival * 14;
+  const rate = everPending / seasonsRun;
+  console.log(`   ${careersWithRival} of 40 NHL careers drafted a rival, ${sawAnyBeat} showed at least one pending beat, ${everPending} pending beats total over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${dismissedOk} dismissed cleanly, ${sawForcedRetire} saw the forced retirement beat`);
+  if (careersWithRival < 40) fail(`only ${careersWithRival} of 40 NHL careers had a rival; draftRival runs unconditionally at startNhlCareer so this should be 40`);
+  /* Same floor section 4 uses, for the same measured reason. */
+  if (rate < 0.30) fail(`the NHL pending-beat rate is ${rate.toFixed(3)} per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should`);
+  if (dismissedOk === 0) fail('not one NHL dismiss actually cleared the pending slot');
+}
+
 console.log('');
 if (failures > 0) {
   console.error(`simCareerRivalryEvents: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simCareerRivalryEvents: green. Soccer is unchanged, the NFL beats fire, and the rival is never a real player.');
+console.log('simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.');
