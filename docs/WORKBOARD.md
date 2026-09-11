@@ -107,10 +107,19 @@ Desktop lane (this session), claimed now, in this order:
 - **531: correct info on all basis.** A data correctness sweep: every table of real facts the
   games print, checked against two sources, wrong rows fixed or marked `CM_PARTIAL`. Needs the
   network. Files named per finding.
-- **532 to 534: the next three reference explainers** the AdSense readiness verdict names
-  (NBA playoffs and lottery, MLB postseason, NHL playoffs), same shape as 520 and 522.
-- **535, 536: Club Manager leagues and eras depth, and Soccer Career between season depth.**
-  The two flagship rows on his list still marked PART.
+- **532, 533, 534: the next three reference explainers**, BUILDING 2026-09-11 in parallel
+  worktrees: `/nba-playoff-format-history` (532, `src/lib/nbaPlayoffFormatHistory.ts`,
+  `src/pages/NbaPlayoffFormatHistory.tsx`, `scripts/simNbaPlayoffFormatHistory.mjs`),
+  `/mlb-postseason-format-history` (533, the mlbPostseason* trio), `/nhl-playoff-format-history`
+  (534, the nhlPlayoff* trio), each with a line in `src/App.tsx`, `src/lib/pageSchema.ts`,
+  `scripts/genSitemap.mjs`, `scripts/simIndexNow.mjs` and `src/lib/sportHub.ts`.
+- **535: correct info part two**, the hand typed clue files (higherLowerPlayers, colleges,
+  teammatesPairs, the two UFC files, the seven clue sets, the conquest coordinates and colours),
+  per `docs/audits/data-provenance-inventory-2026-09-11.md` ranks 5 to 12. Not started.
+- **536: Club Manager leagues and eras depth.** Not started. Soccer Career between season depth
+  moves to the next desktop block.
+- Design contracts for 529, 530 and 531 are in `docs/design/`. 529, 530 and 531 are BUILDING
+  2026-09-11 in parallel worktrees, integration and review follow on the desktop.
 
 Tablet lane, yours, nothing of mine overlaps it:
 - 526 sitewide search and 527 achievements, as you claimed.
