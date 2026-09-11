@@ -132,11 +132,23 @@ async function tapText(rx, label) {
 async function signSomebody() {
   const clause = page.locator('button:visible[title^="Release clause"]:not([disabled])').first();
   if (await clause.count().catch(() => 0) === 0) return false;
+  /* The clause button's own label is the fee, which is unique enough in the
+     market list to tell whether this deal actually went through. */
+  const before = ((await clause.innerText().catch(() => '')) || '').trim();
   const ok = await clause.click({ timeout: 4000 }).then(() => true).catch(() => false);
   if (!ok) return false;
   await page.waitForTimeout(700);
   /* A clause deal can still put a confirm in front of you. */
   await tap(/confirm|yes|sign him|do it/i, 'confirm the signing').catch(() => {});
+  await page.waitForTimeout(400);
+  /* A CLICK IS NOT A SIGNING. Counting the press rather than the deal would let
+     this harness claim a coverage it does not have, and then report "signings
+     were made and the review shows no transfer business" as a finding when the
+     truth is that nothing was ever bought. A completed deal takes the player
+     out of the market, so his clause button goes with him. */
+  const still = page.locator(`button:visible[title^="Release clause"]:has-text(${JSON.stringify(before)})`);
+  const gone = await still.count().catch(() => 1) === 0;
+  if (!gone) { say('the clause press did not complete a deal'); return false; }
   say('signed a player through his release clause');
   return true;
 }
