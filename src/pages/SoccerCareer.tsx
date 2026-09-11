@@ -79,7 +79,10 @@ import {
 } from "@/lib/soccerCareerAppearance";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
-import { Confetti, CountUp, ShineWrap } from "@/components/soccer-career/CareerFx";
+import { Confetti, ShineWrap } from "@/components/soccer-career/CareerFx";
+import { CelebrationStyles } from "@/components/club-manager/Celebration";
+import { SignedSlip } from "@/components/soccer-career/SignedSlip";
+import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
@@ -426,7 +429,7 @@ function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOf
 }
 
 /* ─── Newspaper Card ─── */
-function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onContinue: () => void }) {
+function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArticle[]; seasonKey: number; onContinue: () => void }) {
   const typeColor = (t: string) => {
     switch (t) {
       case "positive": return "text-emerald-400";
@@ -452,7 +455,13 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
         <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">📰 In The Headlines</span>
       </div>
       {articles.map((article, i) => (
-        <div key={i} className="bg-card border-2 border-border rounded-xl overflow-hidden">
+        /* Round 530: the front pages tick in one at a time, keyed on the season
+           plus index so a new edition re-runs the stagger and an unrelated
+           re-render does not. A milestone edition glows gold; the glow sits on
+           the inner card because the kit's classes share one animation slot.
+           Round 530: revealDelay timing. */
+        <div key={`${seasonKey}-${i}`} className="cm-tick-in" style={{ animationDelay: `${0.6 + i * 0.22}s` }}>
+        <div className={`bg-card border-2 rounded-xl overflow-hidden ${article.type === "milestone" ? "border-amber-400/50 cm-gold-glow" : "border-border"}`}>
           {/* Newspaper masthead */}
           <div className="bg-muted/30 border-b border-border px-4 py-2 flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-[0.15em] text-muted-foreground italic">{article.newspaper}</span>
@@ -472,6 +481,7 @@ function NewspaperCard({ articles, onContinue }: { articles: NewsArticle[]; onCo
               {money(article.body)}
             </p>
           </div>
+        </div>
         </div>
       ))}
       <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
@@ -495,17 +505,20 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club}{season.onLoanFrom ? ` (on loan from ${season.onLoanFrom})` : ""} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
       </div>
 
+      {/* Round 530: the finals, printed in place. They used to count up from
+          zero, which is Round 147's rule broken (a number passing through
+          values that were never true). The card's own fade is the arrival. */}
       <div className="grid grid-cols-3 gap-3">
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black tabular-nums"><CountUp value={season.apps} /></div>
+          <div className="text-xl font-black tabular-nums">{season.apps}</div>
           <div className="text-[10px] text-muted-foreground">Apps</div>
         </div>
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black tabular-nums"><CountUp value={isGK ? season.cleanSheets : season.goals} duration={1100} /></div>
+          <div className="text-xl font-black tabular-nums">{isGK ? season.cleanSheets : season.goals}</div>
           <div className="text-[10px] text-muted-foreground">{isGK ? "Clean Sheets" : "Goals"}</div>
         </div>
         <div className="text-center bg-muted/20 rounded-lg p-2">
-          <div className="text-xl font-black tabular-nums"><CountUp value={season.assists} /></div>
+          <div className="text-xl font-black tabular-nums">{season.assists}</div>
           <div className="text-[10px] text-muted-foreground">Assists</div>
         </div>
       </div>
@@ -516,7 +529,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       </div>
 
       {season.injury && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2 text-center">
+        /* Round 530: one shake as it lands, nothing more. */
+        <div className="cm-loss-shake bg-red-500/10 border border-red-500/20 rounded-lg p-2 text-center">
           <span className="text-xs font-bold text-red-400">🚑 {season.injury}, out {season.injuryWeeks} weeks</span>
         </div>
       )}
@@ -657,6 +671,11 @@ export default function SoccerCareer() {
   // Round 81: the training ground overlay
   const [trainingOpen, setTrainingOpen] = useState(false);
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
+  /* Round 530: the slip that lands under the toast when a deal is done. It
+     remembers the career object it was written for, and every action in this
+     game produces a new career object, so the next action of any kind
+     dismisses it without anybody having to clear it. */
+  const [signedNote, setSignedNote] = useState<SignedNote | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
@@ -765,7 +784,10 @@ export default function SoccerCareer() {
 
   const handleAcceptOffer = (offer: ContractOffer) => {
     if (!career) return;
-    setCareer(acceptOffer(career, offer));
+    const next = acceptOffer(career, offer);
+    setCareer(next);
+    // Round 530: the slip prints the engine's wage, after the agent's cut, never the offer's.
+    setSignedNote({ kind: "transfer", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
     toast.success(`Signed with ${offer.club.name}!`);
   };
 
@@ -787,13 +809,20 @@ export default function SoccerCareer() {
 
   const onAcceptLoan = (offer: ContractOffer) => {
     if (!career) return;
-    setCareer(acceptLoan(career, offer));
+    const next = acceptLoan(career, offer);
+    setCareer(next);
+    // Round 530: the engine refuses a second loan by handing the state back untouched, so only a real move gets a slip.
+    if (next.loan && next !== career) {
+      setSignedNote({ kind: "loan", club: next.currentClub, years: 1, wage: next.weeklyWage, from: next.loan.parentClub, forCareer: next });
+    }
     toast.success(`Off on loan to ${offer.club.name} for the season`);
   };
 
   const handleSignExtension = () => {
     if (!career) return;
-    setCareer(signExtension(career));
+    const next = signExtension(career);
+    setCareer(next);
+    setSignedNote({ kind: "extension", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
     toast.success("Contract extended!");
   };
 
@@ -1065,6 +1094,7 @@ export default function SoccerCareer() {
             <GameScreen
               career={career}
               clubs={clubs}
+              signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
@@ -2727,7 +2757,11 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
   return (
     <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
       {isWinner && <Confetti pieces={70} gold />}
-      <div className="text-center space-y-2">
+      {/* Round 530: the headline lands after the last nominee has ticked in,
+          so the countdown reads before the verdict. The whole header block
+          carries the delay; the card's own fade is untouched.
+          Round 530: revealDelay timing. */}
+      <div className="cm-slam text-center space-y-2" style={{ animationDelay: `${0.6 + bdor.nominees.length * 0.22 + 0.15}s` }}>
         {career.appearance && (
           <div className="flex justify-center">
             <div className={`rounded-xl overflow-hidden border-2 ${isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
@@ -2756,10 +2790,14 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
         )}
       </div>
       
-      {/* Top 10 nominees */}
+      {/* Top 10 nominees. Round 530: the list stays in the engine's rank order
+          on screen, winner at the top, but the ARRIVAL runs the other way:
+          tenth ticks in first and the winner last, a countdown. Keyed on the
+          year plus index so a fresh ceremony re-runs it and nothing else does.
+          Round 530: revealDelay timing. */}
       <div className="space-y-1">
         {bdor.nominees.map((n, i) => (
-          <div key={i} className={`flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
+          <div key={`${bdor.year}-${i}`} style={{ animationDelay: `${0.6 + (bdor.nominees.length - 1 - i) * 0.22}s` }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
             n.isPlayer ? (i === 0 ? "bg-amber-500/20 border border-amber-500/30" : "bg-emerald-500/10 border border-emerald-500/20") : "bg-muted/20"
           }`}>
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
@@ -2797,6 +2835,11 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
     if (!acc.includes(s.club)) acc.push(s.club);
     return acc;
   }, []);
+  /* Round 530: one clock for the whole ceremony. The six grid cells tick in,
+     then the clubs and the money rise, then the tier slams. Every number is
+     its final from the frame it appears (Round 147).
+     Round 530: revealDelay timing. */
+  const at = (i: number) => `${0.6 + i * 0.22}s`;
 
   return (
     <div className="relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
@@ -2821,8 +2864,8 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
           { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
-        ].map(s => (
-          <div key={s.l} className="bg-muted/20 rounded-lg p-2">
+        ].map((s, i) => (
+          <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
             <div className="text-lg font-black">{s.v}</div>
             <div className="text-[9px] text-muted-foreground">{s.l}</div>
           </div>
@@ -2830,7 +2873,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       </div>
 
       {/* Clubs played for */}
-      <div className="text-center">
+      <div className="cm-rise text-center" style={{ animationDelay: at(6) }}>
         <div className="text-[10px] text-muted-foreground uppercase font-bold mb-1">Clubs</div>
         <div className="flex flex-wrap justify-center gap-1">
           {clubHistory.map(c => (
@@ -2840,7 +2883,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       </div>
 
       {/* Financial summary */}
-      <div className="grid grid-cols-2 gap-2 text-center text-xs">
+      <div className="cm-rise grid grid-cols-2 gap-2 text-center text-xs" style={{ animationDelay: at(7) }}>
         <div className="bg-muted/20 rounded-lg p-2">
           <div className="font-black text-emerald-400">{formatNetWorth(career.netWorth)}</div>
           <div className="text-[9px] text-muted-foreground">Net Worth</div>
@@ -2852,10 +2895,10 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       </div>
 
       {/* Legacy score */}
-      <div className="text-center space-y-1 py-2">
+      <div className="cm-slam text-center space-y-1 py-2" style={{ animationDelay: at(8) }}>
         <div className="text-3xl">{tierEmoji[legacy.tier]}</div>
         <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
-        <div className="text-4xl font-black tabular-nums"><CountUp value={legacy.score} duration={1400} /><span className="text-lg text-muted-foreground">/100</span></div>
+        <div className="text-4xl font-black tabular-nums">{legacy.score}<span className="text-lg text-muted-foreground">/100</span></div>
       </div>
 
       {/* Post-retirement choices */}
@@ -2904,10 +2947,14 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
         <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
       </div>
 
+      {/* Round 530: the results, then the final table under them, tick in on
+          one clock, top to bottom. Keyed on the season plus index so a new
+          season re-runs the stagger and an unrelated re-render does not.
+          Round 530: revealDelay timing. */}
       {manager.seasonResults.length > 0 && (
         <div className="space-y-1">
           {manager.seasonResults.slice(-5).map((r, i) => (
-            <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: `${0.6 + i * 0.22}s` }}>
               <span className="text-muted-foreground">S{r.year}</span>
               <span className="font-semibold">{r.club}</span>
               <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
@@ -2921,16 +2968,18 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
       {(() => {
         const last = manager.seasonResults[manager.seasonResults.length - 1];
         if (!last?.table) return null;
+        const afterResults = Math.min(manager.seasonResults.length, 5);
         return (
           <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table</span>
               {last.record && <span className="text-[10px] text-muted-foreground">{last.record}</span>}
             </div>
-            {last.table.map(row => (
+            {last.table.map((row, i) => (
               <div
-                key={row.club}
-                className={`flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
+                key={`${last.year}-${i}`}
+                className={`cm-tick-in flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
+                style={{ animationDelay: `${0.6 + (afterResults + i) * 0.22}s` }}
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>
@@ -2948,7 +2997,10 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
 
       {/* Round 111: out of work, with a feed you had to earn. */}
       {manager.unemployed && (
-        <div className="rounded-xl border-2 border-amber-500/50 bg-amber-500/5 p-3 space-y-2">
+        /* Round 530: the block shakes once when it lands, and once more for
+           each further season out (the key moves with seasonsOut). The offers
+           under it rise one at a time. Round 530: revealDelay timing. */
+        <div key={`out-${manager.seasonsOut ?? 0}`} className="cm-loss-shake rounded-xl border-2 border-amber-500/50 bg-amber-500/5 p-3 space-y-2">
           <div className="text-center">
             <div className="text-2xl">📪</div>
             <h4 className="text-sm font-black">OUT OF WORK</h4>
@@ -2963,7 +3015,8 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
             <button
               key={`${o.club}-${i}`}
               onClick={() => onAcceptOffer?.(i)}
-              className="w-full text-left rounded-lg border border-border bg-card hover:border-primary p-2.5 transition-all"
+              className="cm-rise w-full text-left rounded-lg border border-border bg-card hover:border-primary p-2.5 transition-all"
+              style={{ animationDelay: `${0.6 + i * 0.22}s` }}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-black truncate">{o.club}</span>
@@ -3347,9 +3400,11 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote }: {
   career: CareerState;
   clubs: ClubData[];
+  /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
+  signedNote?: SignedNote | null;
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
@@ -3495,6 +3550,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
   return (
     <div ref={screenRef} className="space-y-3 pb-20">
+      {/* Round 530: the shared celebration keyframes, mounted once for every
+          card on this screen (headlines, ceremonies, the manager table). */}
+      <CelebrationStyles />
       {/* Header */}
       {/* Round 330, the mobile depth walk: at 320 the Retire and New Career
           buttons plus the OVR block left the name about 30px, so it rendered
@@ -3598,9 +3656,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         <div className="space-y-3 order-1 md:order-2">
 
           <div ref={revealRef}>
+          {/* Round 530: the deal slip. Under the toast, inside the reveal area
+              so the page does not move, gone with the next action. */}
+          {signedNote && career.phase === "playing" && (
+            <SignedSlip note={signedNote} />
+          )}
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
-            <NewspaperCard articles={career.pendingNews} onContinue={onDismissNewspaper} />
+            <NewspaperCard articles={career.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} />
           )}
 
           {/* OVERLAY: Season Summary */}

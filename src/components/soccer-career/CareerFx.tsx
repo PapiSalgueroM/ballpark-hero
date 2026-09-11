@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /* ─── CareerFx (Round 54) ───
    The juice layer for Soccer Career. Owner asked for "way more animation", so
-   the big moments now actually move: confetti on trophy nights, numbers that
-   count up instead of appearing, and a shine sweep across anything golden.
+   the big moments now actually move: confetti on trophy nights and a shine
+   sweep across anything golden (the counting numbers left in Round 530).
    Everything here is CSS keyframes (defined in tailwind.config.ts) driving a
    handful of divs. No canvas, no libraries, no bundle cost worth measuring.
    All of it respects prefers-reduced-motion by rendering the end state. */
@@ -55,39 +55,19 @@ export const Confetti = ({ pieces = 40, gold = false }: { pieces?: number; gold?
   );
 };
 
-/** A number that rolls up to its value. Falls back to the final value when the
-    player prefers reduced motion, or when the value is tiny. */
+/** Round 530: the counting number is gone. It rolled from zero to the value,
+    which breaks Round 147's rule (never animate a number through values that
+    were never true). Soccer Career prints its finals in place now. The four
+    US career boards still import this name until their own Round 530 pass
+    lands, so the export stays as a plain span that prints the final value
+    with no motion; the integration pass deletes it once those imports go. */
 export const CountUp = ({
   value,
-  duration = 900,
   decimals = 0,
   className = "",
-}: { value: number; duration?: number; decimals?: number; className?: string }) => {
-  const [display, setDisplay] = useState(value);
-  const frame = useRef<number>();
-
-  useEffect(() => {
-    if (prefersReducedMotion() || value === 0) {
-      setDisplay(value);
-      return;
-    }
-    const start = performance.now();
-    const from = 0;
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      // ease-out cubic, so it lands softly instead of stopping dead
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDisplay(from + (value - from) * eased);
-      if (t < 1) frame.current = requestAnimationFrame(tick);
-    };
-    frame.current = requestAnimationFrame(tick);
-    return () => {
-      if (frame.current) cancelAnimationFrame(frame.current);
-    };
-  }, [value, duration]);
-
-  return <span className={className}>{display.toFixed(decimals)}</span>;
-};
+}: { value: number; duration?: number; decimals?: number; className?: string }) => (
+  <span className={className}>{value.toFixed(decimals)}</span>
+);
 
 /** Gold shine sweeping across a container. Wrap anything trophy-ish. */
 export const ShineWrap = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
