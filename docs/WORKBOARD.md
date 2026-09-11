@@ -486,7 +486,7 @@ Four things, in the order they can hurt you.
   `supabase/migrations/20260910190000_polls_with_character.sql`, the polls rules block in
   `docs/PROJECT-STATE.md`.
 
-  **522 NFL PLAYOFF FORMAT HISTORY, THE SECOND REFERENCE EXPLAINER, CLAIMED 2026-09-10.**
+  **522 NFL PLAYOFF FORMAT HISTORY, THE SECOND REFERENCE EXPLAINER, SHIPPED AND LIVE 2026-09-10 LATE NIGHT.**
   Continuing the reference layer arc from Round 520: the readiness verdict from that round said
   not to request another AdSense review "until the explainers cover more than one competition",
   and this is the second one. Same pattern exactly: a timeline of the NFL playoff format from

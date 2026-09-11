@@ -1,5 +1,19 @@
 # Project state
 
+## Live as of 2026-09-10 late night: Round 522 published and verified
+
+**`origin/main` is `9c889cdc` and douknowball.com is serving it.** Deployment
+`9de64bdb-cc2e-48b2-9ca3-033d2c4ec23a`, called only after `get_project` showed
+`latest_commit_sha` matching (the first check showed the previous commit, so the deploy waited).
+Proven live rather than assumed: `douknowball.com/nfl-playoff-format-history` answers with its
+own title where the previous build served the home template, and the home bundle moved from
+`index-CO1_zGvj.js` to `index-CojH-TZn.js`. Full suite 270 of 270 green before the push.
+
+The reference layer now covers two competitions (Champions League format, NFL playoff format),
+which is the bar the readiness verdict set before the next AdSense review request is worth
+Anthony's click; it still says NOT READY until the hubs link into more of it and a Page Indexing
+report shows the new pages crawled.
+
 ### Round 522: the second reference explainer, NFL playoff format history
 
 Same pattern as Round 520, and the readiness verdict written after that round said not to request
