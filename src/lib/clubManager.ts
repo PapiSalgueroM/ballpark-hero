@@ -1859,6 +1859,12 @@ export interface CareerState {
   uclBracket?: UclTie[];
   /** Round 163: every OTHER Champions League group, simulated alongside mine. */
   uclWorld?: UclAiGroup[];
+  /** Round 547: this season's Champions League field, DERIVED from last
+   *  season's final tables rather than drawn from a prestige pool. Absent on
+   *  season one (there is no last season to read), on a historic era, and on a
+   *  save from before the round, and every one of those falls back to the pool
+   *  exactly as before. */
+  uclField?: string[];
   /** Round 165: the league's golden boot race, AI entries only. */
   scorerRace?: RaceScorer[];
   /** Round 168: the live mid-season approach, if a club is courting me. */
@@ -8436,9 +8442,16 @@ function uclBracketField(state: CareerState, includeMe: boolean): string[] {
       ...field,
     ]);
     const historic = !!state.eraId && isHistoricEra(state.eraId);
+    /* Round 547: top up from this season's real qualifiers when we have them.
+       Without this the group stage could be derived and the knockout could
+       still hand a place to a club that finished nowhere, which is the same
+       bug one round later. */
+    const derived = (state.uclField ?? []).filter(c => !taken.has(c));
     const pool = historic
       ? shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)))
-      : shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
+      : derived.length
+        ? shuffle(derived)
+        : shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
     field = [...field, ...pool.slice(0, 8 - field.length)];
   }
   // Guard against a thin pool: never hand back fewer than eight names.
@@ -8912,8 +8925,20 @@ function recordMyUclTie(
   tie.winner = iWon ? state.clubName : opponent;
 }
 
-function initUclGroup(qualified: boolean, myClub: string, eraId?: string): UclGroupState | null {
+function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?: string[]): UclGroupState | null {
   if (!qualified) return null;
+  /* Round 547: when last season's tables gave us a real field, my three group
+     opponents come out of it, avoiding my own league the way the real draw
+     does. Only when that leaves too few does it fall back to the pool below,
+     which is what season one and a historic era always use. */
+  if (field && field.length >= 8) {
+    const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+    const fromField = shuffle(field.filter(c => c !== myClub && !myLeagueClubs.has(c)));
+    if (fromField.length >= 3) {
+      const opponents = fromField.slice(0, 3);
+      return { opponents, table: [myClub, ...opponents].map(emptyRow), matchday: 0 };
+    }
+  }
   // Groups avoid clubs from my own league, like the real group/league phase.
   // Round 146: a historic era draws from its own continental pool.
   if (eraId && isHistoricEra(eraId)) {
@@ -8932,6 +8957,86 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string): UclGr
     matchday: 0,
   };
 }
+
+/**
+ * Round 547: who is actually in the Champions League, read off last season.
+ *
+ * WHY THIS EXISTS. A player reported on 2026-09-11 that Chelsea should not be
+ * in the 2026-27 Champions League because they failed to qualify. Round 543
+ * fixed half of it, which is how many places YOUR league gives and whether YOU
+ * are in. This is the other half: who the other clubs are. Until now the field
+ * was a shuffled prestige pool, EURO_CLUBS plus every club above a squad rating
+ * threshold, and nothing anywhere read a league table. A club could be bottom
+ * of its division and in the group stage, every season, forever.
+ *
+ * The engine has had the answer the whole time. state.world carries a live
+ * standings table for every league that is not mine (initWorld, driven to its
+ * own finish line by syncWorld as my season ends), and state.table carries
+ * mine. So at the moment a season rolls over, the final table of every league
+ * in the world is sitting in the save. This reads them.
+ *
+ * THE RULE. Per European league, the top uclPlacesIn(league) clubs, ordered by
+ * that league's own table with its own tiebreaks. Then the reigning European
+ * champion, who qualifies whether or not his league sent him, which is the
+ * competition's real holders' route. That comes to 31 of a 32 club field, so
+ * the last places go to the next placed clubs in the deepest leagues, which is
+ * the honest stand-in for the coefficient and playoff routes this game does not
+ * model. Everything it uses is a real finishing position; nothing is invented.
+ *
+ * WHERE IT DELIBERATELY DOES NOT APPLY. Season one has no last season to read,
+ * a historic era draws from its own verified period pool, and a save from
+ * before this round has no field stored. All three fall back to exactly the
+ * behaviour that shipped, so nothing that works today stops working.
+ */
+export function uclQualifiersFrom(career: CareerState): string[] {
+  if (!!career.eraId && isHistoricEra(career.eraId)) return [];
+  if (!career.world || !Array.isArray(career.table) || !career.table.length) return [];
+  const myLeague = careerLeagueOf(career);
+  const seen = new Set<string>();
+  const field: string[] = [];
+  const take = (club: string) => {
+    if (!club || seen.has(club)) return;
+    seen.add(club);
+    field.push(club);
+  };
+
+  /* Each European league's own qualifiers, its own table, its own tiebreaks. */
+  const leagues = worldLeagueDefs(career).filter(l => l.euro);
+  const ranked = new Map<string, TableRow[]>();
+  for (const lg of leagues) {
+    const rows = lg.id === myLeague.id
+      ? sortedLeagueTable(career)
+      : (career.world[lg.id] ? sortedWorldTable(career, lg.id, career.world[lg.id].table) : null);
+    if (!rows || !rows.length) continue;
+    ranked.set(lg.id, rows);
+    for (const r of rows.slice(0, uclPlacesIn(lg))) take(r.club);
+  }
+  if (!field.length) return [];
+
+  /* The holders go in whatever their league did, which is the real rule and
+     the one route that is not a finishing position. */
+  const holder = career.uclBracket?.find(t => t.round === 'F')?.winner;
+  if (holder) take(holder);
+
+  /* A 32 club field needs a few more than the league places give. They go to
+     the next placed clubs in the leagues with the most places, deepest first,
+     which is where the coefficient and playoff routes really send them. */
+  const byDepth = [...ranked.keys()].sort((a, b) =>
+    (uclPlacesIn(leagues.find(l => l.id === b)!) - uclPlacesIn(leagues.find(l => l.id === a)!))
+    || a.localeCompare(b));
+  for (let extra = 0; field.length < UCL_FIELD_SIZE && extra < 8; extra++) {
+    for (const id of byDepth) {
+      if (field.length >= UCL_FIELD_SIZE) break;
+      const lg = leagues.find(l => l.id === id)!;
+      const row = ranked.get(id)![uclPlacesIn(lg) + extra];
+      if (row) take(row.club);
+    }
+  }
+  return field.slice(0, UCL_FIELD_SIZE);
+}
+
+/** Eight groups of four. */
+const UCL_FIELD_SIZE = 32;
 
 /* ---------- Round 163: the whole group stage, not just my corner ---------- */
 
@@ -8955,6 +9060,11 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
     // group draw; an era without a field keeps the honest sixteen and its
     // smaller stage rather than padding with relegation fodder.
     pool = shuffle(eraEuroPool(state.eraId!).filter(c => !taken.has(c)));
+  } else if (state.uclField && state.uclField.length >= 8) {
+    /* Round 547: the derived field, minus my own group. Anything left over
+       after the eight groups are filled simply does not play, the same way a
+       real qualifier who loses his playoff does not. */
+    pool = shuffle(state.uclField.filter(c => !taken.has(c)));
   } else {
     const primary = shuffle([...new Set([...EURO_CLUBS, ...CLUBS.filter(c => c.tier <= 2).map(c => c.name)])].filter(c => !taken.has(c)));
     const inPrimary = new Set(primary);
@@ -9183,6 +9293,11 @@ function drawUclKoOpponent(state: CareerState): string {
     ...(state.uclGroup ? state.uclGroup.opponents : []),
     ...Object.values(state.uclDraw).filter((c): c is string => !!c),
   ]);
+  /* Round 547: a knockout opponent is somebody who qualified, when this save
+     knows who did. The prestige pool stays as the fallback for season one, a
+     historic era, and a save from before the field existed. */
+  const derived = (state.uclField ?? []).filter(c => !already.has(c));
+  if (derived.length) return pick(derived);
   const bigLeague = CLUBS.filter(c => c.tier <= 2).map(c => c.name);
   const pool = [...EURO_CLUBS, ...bigLeague].filter(c => !already.has(c));
   return pool.length ? pick(pool) : 'Galacticos XI';
@@ -14611,6 +14726,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const leagueClubs = shuffle(nextCustom
     ? league.clubs.map(c => (c === nextCustom.replacedClub ? nextCustom.name : c))
     : [...league.clubs]);
+  /* Round 547: read the Champions League field off the season that has just
+     finished, while its tables are still on `career`. The new state's own
+     world is blank, so this has to happen here and not later. */
+  const nextUclField = uclQualifiersFrom(career);
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
@@ -14635,7 +14754,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     seasonSignings: [],
     cupRound: 'R16',
     cupDraw: {},
-    uclGroup: initUclGroup(qualifiedUcl, clubName, eraId),
+    uclField: nextUclField.length ? nextUclField : undefined,
+    uclGroup: initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
