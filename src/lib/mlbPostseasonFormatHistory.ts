@@ -2,11 +2,11 @@
  * Round 533: the MLB postseason format, season by season, as a reference page
  * that would be worth reading if MLB Front Office did not exist.
  *
- * The third reference explainer, same pattern as Round 520 (Champions League)
- * and Round 522 (NFL playoffs). The 2026-08-30 AdSense recovery addendum asks
- * for league and playoff format explainers plural, and the readiness verdict
- * after Round 520 said not to request another review until more than one
- * competition is covered. Baseball is the third.
+ * The fourth reference explainer, same pattern as Round 520 (Champions League),
+ * Round 522 (NFL playoffs) and Round 532 (NBA playoffs). The 2026-08-30 AdSense
+ * recovery addendum asks for league and playoff format explainers plural, and
+ * the readiness verdict after Round 520 said not to request another review
+ * until more than one competition is covered. Baseball is the fourth.
  *
  * WHAT WAS VERIFIED. Every format change below was checked against Wikipedia
  * (the postseason overview, the World Series page, the wild card page, the
@@ -149,7 +149,7 @@ export const MLB_POSTSEASON_PERIODS: MlbPostseasonPeriod[] = [
     fieldSize: 10,
     qualifying: 'A second wild card in each league, and the two wild cards met in a single Wild Card Game after the regular season. The winner went on to face the top seed in the best of five Division Series; the three division winners waited for that round.',
     notes: [
-      'The one game format was the point of it: winning a division now meant skipping a coin flip, where under the old format a wild card with a strong record was in exactly the same place as a division winner.',
+      'The single game was the point of it: winning a division now meant skipping a one game playoff, where under the old format a wild card with a strong record was in exactly the same place as a division winner.',
     ],
     sources: ['wpwc', 'wpost', 'espnwc', 'mlbfaq', 'almanacpost'],
   },
@@ -200,8 +200,8 @@ export const MLB_SERIES_LENGTHS = {
   unplayed: MLB_UNPLAYED_SEASONS,
   lcsBestOfFive: { from: 1969, to: 1984 },
   lcsBestOfSevenFrom: 1985,
-  divisionSeriesBestOfFiveFrom: 1995,
-  text: 'The World Series has been best of seven in every year it was played except four: 1903, 1919, 1920 and 1921 were best of nine, so the winner needed five games rather than four. Boston won the first one five games to three. Two years since 1903 had no series at all. In 1904 the Giants refused to play the American League champion, and the series has been played every year since 1905 with one exception. In 1994 the players\' strike cancelled the postseason outright, the first October without a World Series in ninety years. The League Championship Series was best of five from its first year in 1969 through 1984 and has been best of seven since 1985. The Division Series has been best of five since it was first played in 1995, and the Wild Card Series introduced for good in 2022 is best of three, played entirely at the higher seed\'s park.',
+  divisionSeriesPermanentFrom: 1995,
+  text: 'The World Series has been best of seven in every year it was played except four: 1903, 1919, 1920 and 1921 were best of nine, so the winner needed five games rather than four. Boston won the first one five games to three. Two years since 1903 had no series at all. In 1904 the Giants refused to play the American League champion, and the series has been played every year since 1905 with one exception. In 1994 the players\' strike cancelled the postseason outright, the first October without a World Series in ninety years. The League Championship Series was best of five from its first year in 1969 through 1984 and has been best of seven since 1985. The Division Series has been best of five since it became a permanent round in 1995; the one off 1981 round is described above. The Wild Card Series introduced for good in 2022 is best of three, played entirely at the higher seed\'s park.',
   sources: ['wpws', 'wpost', 'almanacws', 'wplcs', 'almanacpost'],
 };
 

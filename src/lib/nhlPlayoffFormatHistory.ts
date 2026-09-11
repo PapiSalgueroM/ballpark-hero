@@ -4,7 +4,8 @@
  *
  * The same pattern Round 520 built for the Champions League and Round 522
  * built for the NFL. The 2026-08-30 AdSense recovery addendum asks for
- * "playoff system explainers" plural; this is the third.
+ * "playoff system explainers" plural; this is the fifth, after Round 532 (NBA)
+ * and Round 533 (MLB).
  *
  * WHAT WAS VERIFIED. Every format change below was checked against Wikipedia
  * (the relevant season page, or the Stanley Cup and Stanley Cup playoffs
@@ -42,11 +43,11 @@ export interface NhlPlayoffSource {
 }
 
 export const NHL_PLAYOFF_SOURCES: NhlPlayoffSource[] = [
-  { id: 'nhlguide', publisher: 'NHL', title: '2025 Stanley Cup Playoffs Information Guide: History of Stanley Cup Playoff Formats', url: 'https://media.nhl.com/site/asset/public/ext/2024-25/2025StanleyCupPlayoffs_1stRound.pdf' },
-  { id: 'nhlformat', publisher: 'NHL', title: 'Playoff Format', url: 'https://www.nhl.com/info/standings-info/playoff-format' },
-  { id: 'nhlchamps', publisher: 'NHL', title: 'Stanley Cup Champions 1918-1929', url: 'https://www.nhl.com/news/nhl-stanley-cup-champions-1918-1929-288144788' },
-  { id: 'nhlreturn', publisher: 'NHL', title: 'Blue Jackets among 24 teams included in NHL return to play format', url: 'https://www.nhl.com/bluejackets/news/blue-jackets-among-24-nhl-teams-to-return-to-play-317031564' },
-  { id: 'nhlrealign', publisher: 'NHL', title: 'NHL teams in new divisions with realignment for 2020-21 season', url: 'https://www.nhl.com/news/nhl-teams-in-new-divisions-for-2020-21-season-319844882' },
+  { id: 'nhlguide', publisher: 'NHL.com', title: '2025 Stanley Cup Playoffs Information Guide: History of Stanley Cup Playoff Formats', url: 'https://media.nhl.com/site/asset/public/ext/2024-25/2025StanleyCupPlayoffs_1stRound.pdf' },
+  { id: 'nhlformat', publisher: 'NHL.com', title: 'Playoff Format', url: 'https://www.nhl.com/info/standings-info/playoff-format' },
+  { id: 'nhlchamps', publisher: 'NHL.com', title: 'Stanley Cup Champions 1918-1929', url: 'https://www.nhl.com/news/nhl-stanley-cup-champions-1918-1929-288144788' },
+  { id: 'nhlreturn', publisher: 'NHL.com', title: 'Blue Jackets among 24 teams included in NHL return to play format', url: 'https://www.nhl.com/bluejackets/news/blue-jackets-among-24-nhl-teams-to-return-to-play-317031564' },
+  { id: 'nhlrealign', publisher: 'NHL.com', title: 'NHL teams in new divisions with realignment for 2020-21 season', url: 'https://www.nhl.com/news/nhl-teams-in-new-divisions-for-2020-21-season-319844882' },
   { id: 'hhof', publisher: 'Hockey Hall of Fame', title: 'Stanley Cup History', url: 'https://www.hhof.com/thecollection/stanleycup_history.html' },
   { id: 'si', publisher: 'Sports Illustrated', title: 'NHL Stanley Cup Playoffs: Format, Teams, Rules and Changes Through the Years', url: 'https://www.si.com/nhl/nhl-stanley-cup-playoffs-format-teams-rules-changes-through-the-years' },
   { id: 'silockout', publisher: 'Sports Illustrated', title: 'Revisiting the 2004-05 NHL Lockout', url: 'https://www.si.com/nhl/2012/08/21/21revisiting-the-2004-05-nhl-lockout' },
@@ -101,11 +102,11 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     title: 'The NHL champion plays the West for the Cup',
     leagueSize: 4,
     fieldSize: 2,
-    qualifying: 'The NHL played off for its own title, two teams in a two game total goals series, and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.',
+    qualifying: 'The NHL played off for its own title, two clubs in a two game total goals series, and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.',
     notes: [
       'The Cup is older than the league. It was donated in 1892 and spent its first decades as a challenge trophy, and by the time the NHL was formed in 1917 the eastern and western champions were already meeting for it every spring. The NHL simply took the eastern seat.',
       'In the first seasons the schedule was split into two halves and the half winners played off for the right to face the West. The split season was dropped in the early 1920s (Wikipedia\'s season page says 1921-22, the NHL\'s own guide first describes the top two meeting in 1922-23), after which first met second.',
-      'When the Western Canada Hockey League arrived in 1921-22 there were three champions chasing one trophy, and who met whom was redrawn more than once: some springs the two western champions played off first, one spring the NHL champion had to win a semifinal to reach the Final at all. In 1925-26 the NHL let a third team into its own playoff for the first time: second played third, the winner played first.',
+      'When the Western Canada Hockey League arrived in 1921-22 there were three champions chasing one trophy, and who met whom was redrawn more than once: some springs the two western champions played off first, one spring the NHL champion had to win a semifinal to reach the Final at all. In 1925-26 the NHL let a third club into its own playoff for the first time: second played third, the winner played first.',
       'The West folded after the 1926 Final, and from 1926-27 only NHL clubs have played for the Cup.',
     ],
     sources: ['wp1917', 'wp1921', 'wp1925', 'wpcup', 'wpplayoffs', 'nhlguide', 'nhlchamps', 'hhof'],
@@ -120,8 +121,8 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     qualifying: 'Ten clubs in a Canadian and an American division, five each; the top three in each division qualified.',
     notes: [
       'For the first two seasons the bracket stayed inside each division: second played third in a two game total goals series, the winner played the division leader, and the two division champions met in the Stanley Cup Final.',
-      'From 1928-29 it crossed over instead. The two division winners met each other in a best of five, the two seconds played each other and the two thirds played each other in two game total goals series, and the survivors of that side met the winner of the top series in the Final.',
-      'The league shrank through the Depression as clubs folded. By 1937-38, the last season of the two division shape, eight teams were left, and the Montreal Maroons played their final game that March.',
+      'From 1928-29 it crossed over instead. The two division winners met each other in a best of five for one place in the Final. The two seconds played each other and the two thirds played each other in two game total goals series, and the winners of those two then played each other for the other place in the Final.',
+      'The league shrank through the Depression as clubs folded. By 1937-38, the last season of the two division shape, eight clubs were left, and the Montreal Maroons played their final game that March.',
     ],
     sources: ['wp1926', 'wp1928', 'wp1937', 'nhlguide', 'wpplayoffs'],
   },
@@ -157,7 +158,7 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     id: 'expansion',
     from: 1967,
     to: 1973,
-    title: 'Expansion: two divisions, eight teams',
+    title: 'Expansion: two divisions, eight clubs',
     leagueSize: 12,
     fieldSize: 8,
     qualifying: 'The league doubled to twelve in one summer, split into an East division of the six old clubs and a West division of the six new ones, and the top four in each division qualified, every series best of seven.',
@@ -171,7 +172,7 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     id: 'four-divisions',
     from: 1974,
     to: 1978,
-    title: 'Four divisions, twelve teams, byes',
+    title: 'Four divisions, twelve clubs, byes',
     leagueSize: 18,
     fieldSize: 12,
     qualifying: 'Eighteen clubs in two conferences of two divisions; the top three in each division qualified, twelve in all.',
@@ -271,8 +272,8 @@ export const NHL_PLAYOFF_EXCEPTIONS: NhlPlayoffException[] = [
     id: 'bubble-2020',
     season: 2019,
     label: '2019-20',
-    title: 'Twenty four teams in two bubbles',
-    text: 'The 2019-20 season was paused in March 2020 with games unplayed, and the league came back in August with a one off 24 team tournament, the top twelve in each conference by points percentage. The top four in each conference played a round robin for seeding while seeds five to twelve played best of five qualifying series; the survivors formed a normal sixteen team bracket of best of seven series, the whole thing played in two hub arenas, Toronto for the East and Edmonton for the West and then for the last two rounds.',
+    title: 'Twenty four clubs in two bubbles',
+    text: 'The 2019-20 season was paused in March 2020 with games unplayed, and the league came back in August with a one off 24 club tournament, the top twelve in each conference by points percentage. The top four in each conference played a round robin for seeding while seeds five to twelve played best of five qualifying series; the survivors formed a normal sixteen club bracket of best of seven series, the whole thing played in two hub arenas, Toronto for the East and Edmonton for the West and then for the last two rounds.',
     sources: ['wp2020po', 'nhlguide', 'nhlreturn'],
   },
   {
@@ -280,7 +281,7 @@ export const NHL_PLAYOFF_EXCEPTIONS: NhlPlayoffException[] = [
     season: 2020,
     label: '2020-21',
     title: 'Four temporary divisions, no conferences',
-    text: 'With pandemic travel rules still in force the league played a 56 game season in four one year divisions (the seven Canadian clubs together in the North) and no conferences at all. The top four in each division qualified, the first two rounds stayed inside the division, and the four division champions were reseeded by points for the semifinals, so the Final could pair any two of them. Sixteen teams, every round best of seven, and the usual shape came back the following season.',
+    text: 'With pandemic travel rules still in force the league played a 56 game season in four one year divisions (the seven Canadian clubs together in the North) and no conferences at all. The top four in each division qualified, the first two rounds stayed inside the division, and the four division champions were reseeded by points for the semifinals, so the Final could pair any two of them. Sixteen clubs, every round best of seven, and the usual shape came back the following season.',
     sources: ['wp2020', 'nhlguide', 'nhlrealign'],
   },
 ];

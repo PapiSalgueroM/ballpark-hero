@@ -172,7 +172,7 @@ export const NBA_PLAYOFF_PERIODS: NbaPlayoffPeriod[] = [
     qualifying: 'The top three in each division. First place sat out while second and third played a division semifinal, then met the winner in the division final.',
     notes: [
       'Twelve seasons of the same shape while the league was small enough that most of it made the playoffs, so the reward for a great regular season was rest rather than a weaker opponent.',
-      'The rounds lengthened during this period: the division finals became best of five in 1955 and best of seven in 1958.',
+      'The rounds lengthened during this period: the division finals went back to best of five in 1955, after the round robin year\'s best of three, and reached best of seven in 1958.',
     ],
     sources: ['wpoverview', 'fansidedreform', 'fansidedseries'],
   },
@@ -330,7 +330,7 @@ export const NBA_LOTTERY: { intro: string; eras: NbaLotteryEra[] } = {
       id: 'ping-pong',
       year: 1994,
       title: 'A thousand combinations',
-      text: 'In 1993 Orlando, which had missed the playoffs at 41-41, won the first pick with one chance in 66, about 1.5 percent, the second year running it had won the lottery. From 1994 the draw used fourteen numbered balls and four number combinations: 1,001 are possible, 1,000 are assigned, and the worst team held 250 of them, a 25 percent chance of the first pick, up from 16.7 percent. The pool later grew to fourteen teams, where it stands.',
+      text: 'In 1993 Orlando, which had missed the playoffs at 41-41, won the first pick with one chance in 66, about 1.5 percent, the second year running it had won the lottery. From 1994 the draw used fourteen numbered balls and four number combinations: 1,001 are possible, 1,000 are assigned, and the worst team held 250 of them, a 25 percent chance of the first pick, up from 16.7 percent. The pool later grew to fourteen teams, the size it kept until the 2027 change below.',
       sources: ['wplottery', 'nbalotterychanges', 'nbalotteryexplainer', 'espnlottery', 'si2014'],
     },
     {

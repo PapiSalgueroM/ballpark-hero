@@ -50,8 +50,8 @@ const NbaPlayoffFormatHistory = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="NBA Playoff Format History: Every Change Since 1947 | DoUKnowBall"
-        description="How the NBA playoffs went from six BAA teams to a sixteen team bracket with a play-in: every field and seeding change since 1946-47, plus the draft lottery's own history from the coin flip to the 3-2-1 lottery, checked against two sources."
+        title="NBA Playoff Format History: Every Change Since 1946-47 | DoUKnowBall"
+        description="Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery."
         path="/nba-playoff-format-history"
       />
       <GameNavbar />

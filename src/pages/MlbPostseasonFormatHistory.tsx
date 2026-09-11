@@ -7,7 +7,7 @@ import {
 } from '@/lib/mlbPostseasonFormatHistory';
 
 /**
- * Round 533: the third reference explainer, same shape as Round 522's NFL
+ * Round 533: the fourth reference explainer, same shape as Round 522's NFL
  * page. Static, no clock, no database, and it imports nothing from the MLB
  * Front Office engine: the prerendered snapshot is the whole page.
  */
@@ -51,7 +51,7 @@ const MlbPostseasonFormatHistory = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
         title="MLB Postseason Format History: Every Change Since 1903 | DoUKnowBall"
-        description="How the MLB postseason grew from one World Series to a twelve team bracket: every format change since 1903, the two Octobers with no series, the length of every round, checked against two publishers, and what MLB Front Office plays."
+        description="Every MLB postseason format change since 1903, one World Series to a twelve club bracket, the two Octobers with no series, and how long each round has been."
         path="/mlb-postseason-format-history"
       />
       <GameNavbar />
@@ -110,7 +110,7 @@ const MlbPostseasonFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-1">What MLB Front Office plays</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            The current format and only the current format: in each league the three division winners are seeded 1 to 3 and three wild cards 4 to 6, the top two seeds sit out the first round, the 3 seed plays the 6 and the 4 plays the 5 in best of three Wild Card series, the 1 seed then meets the 4 against 5 winner and the 2 seed the 3 against 6 winner in a best of five Division Series, and the League Championship Series and World Series are best of seven. The season underneath is 162 games in shape (27 rounds of six) on real 2026 rosters. It does not offer a past era, so there is no older bracket to compare against.
+            The current format and only the current format: in each league the three division winners are seeded 1 to 3 and three wild cards 4 to 6, the top two seeds sit out the first round, the 3 seed plays the 6 and the 4 plays the 5 in best of three Wild Card Series, the 1 seed then meets the 4 against 5 winner and the 2 seed the 3 against 6 winner in a best of five Division Series, and the League Championship Series and World Series are best of seven. The season underneath is 162 games in shape (27 rounds of six) on real 2026 rosters. It does not offer a past era, so there is no older bracket to compare against.
           </p>
           <p className="text-xs mt-3">
             <Link to="/mlb-front-office" className={LINK}>Run a club through it</Link>

@@ -7,7 +7,7 @@ import {
 } from '@/lib/nhlPlayoffFormatHistory';
 
 /**
- * Round 534: the third reference explainer, same shape as Round 522's NFL
+ * Round 534: the fifth reference explainer, same shape as Round 522's NFL
  * page. Static, no clock, no database: the prerendered snapshot is the whole
  * page. Nothing here imports the NHL Front Office engine; the sentence about
  * what the game plays is written by hand against src/lib/nhlFrontOffice.ts.
@@ -19,14 +19,14 @@ const RELATED = [
   { path: '/nhl-front-office', label: 'NHL Front Office', why: 'run a club through the real divisional bracket, wild cards and all' },
   { path: '/nhl-my-career', label: 'NHL My Career', why: 'chase the Cup from a player\'s seat instead of the office' },
   { path: '/hockey-grid', label: 'NHL Franchise Grid', why: 'the daily 3x3 franchise puzzle' },
-  { path: '/records#cup', label: 'The Record Books', why: 'every Stanley Cup final since 1915, with 1919 and 2005 left honestly blank' },
+  { path: '/records#cup', label: 'The Record Books', why: 'every Stanley Cup final since 1915, with 1919 and 2005 left blank on purpose' },
   { path: '/hockey', label: 'All the hockey games', why: 'the whole section on one page' },
 ];
 
 const FAQS = [
   {
     q: 'How many teams make the NHL playoffs?',
-    a: 'Sixteen, and it has been sixteen since 1979-80 apart from the 24 team return to play in 2020. Since 2013-14 they are the top three in each of the four divisions plus the two best remaining records in each conference as wild cards.',
+    a: 'Sixteen, and it has been sixteen since 1979-80 apart from the 24 club return to play in 2020. Since 2013-14 they are the top three in each of the four divisions plus the two best remaining records in each conference as wild cards.',
   },
   {
     q: 'When did the NHL start using wild cards?',
@@ -54,8 +54,8 @@ const NhlPlayoffFormatHistory = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="NHL Playoff Format History: Every Change Since 1917 | DoUKnowBall"
-        description="How the Stanley Cup playoffs went from a challenge against the West to a 16 team divisional bracket with wild cards: every NHL format change since 1917-18, the seasons that broke the pattern, checked against two sources, and what NHL Front Office plays."
+        title="NHL Playoff Format History: Every Change Since 1917-18 | DoUKnowBall"
+        description="Every NHL playoff format change since 1917-18, from meeting the West for the Cup to sixteen clubs with wild cards, and the four springs that broke the pattern."
         path="/nhl-playoff-format-history"
       />
       <GameNavbar />

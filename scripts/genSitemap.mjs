@@ -75,9 +75,9 @@ const STATIC_PAGES = [
   { p: '/nfl-playoff-format-history', freq: 'monthly', pri: '0.6' },
   /* Round 532: the third reference explainer. */
   { p: '/nba-playoff-format-history', freq: 'monthly', pri: '0.6' },
-  /* Round 533: the third reference explainer. */
+  /* Round 533: the fourth reference explainer. */
   { p: '/mlb-postseason-format-history', freq: 'monthly', pri: '0.6' },
-  /* Round 534: the third reference explainer. */
+  /* Round 534: the fifth reference explainer. */
   { p: '/nhl-playoff-format-history', freq: 'monthly', pri: '0.6' },
   /* Round 354: the NBA grid archive. A non-game page has to be named here to
      be submitted at all, and being submitted is also what puts it in front of
