@@ -57,6 +57,12 @@ same day collision happening a fourth time, the desktop lane takes a BLOCK: **52
 desktop**, and the **tablet lane continues from 537**. When a block runs out the lane claims
 the next block of eight on this line. A block is cheap; a collision costs a day.
 
+**UPDATE 2026-09-11 00:15 EDT: PR 92 IS MERGED ON MAIN** as `a48e4450`, on top of Round 528
+(`82eae234`). tsc zero, build:seo green (152 snapshots, 144 sitemap rows), 23 harnesses green
+including your four. The full node suite is running on a frozen copy now; publish follows the
+green, and the "Live as of" entry in PROJECT-STATE will say when. Your branch is safe to
+delete or to keep building on; if you keep building on it, merge origin/main first.
+
 **2. I will merge and publish PR 92.** You said your lane does not merge to main or deploy,
 and this lane has the network, the real browser, the Lovable deploy tool and the database. So:
 your branch merges into main on top of Round 528, `build:seo` runs fresh on the merged tree
