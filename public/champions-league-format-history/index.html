@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Champions League Format History: Every Change Since 1955</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"Champions League Format History: Every Change Since 1955 | DoUKnowBall","description":"How the European Cup became the Champions League: every format from the two legged knockouts of 1955 to the 36 club league phase, each change checked against two sources, and what Club Manager plays in each era.","url":"https://douknowball.com/champions-league-format-history","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/champions-league-format-history" data-rh="true"><meta name="description" content="How the European Cup became the Champions League: every format from the two legged knockouts of 1955 to the 36 club league phase, each change checked against two sources, and what Club Manager plays in each era." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/champions-league-format-history" data-rh="true"><meta property="og:title" content="Champions League Format History: Every Change Since 1955 | DoUKnowBall" data-rh="true"><meta property="og:description" content="How the European Cup became the Champions League: every format from the two legged knockouts of 1955 to the 36 club league phase, each change checked against two sources, and what Club Manager plays in each era." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Champions League Format History: Every Change Since 1955 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="How the European Cup became the Champions League: every format from the two legged knockouts of 1955 to the 36 club league phase, each change checked against two sources, and what Club Manager plays in each era." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Champions League format history</h1>
+<p>Every shape the European Cup and the Champions League have taken since 1955, and what each Club Manager start actually plays. Each change of format was checked against two independent publishers on 2026-09-10, and the sources are listed at the bottom. Where a detail only had one source it was left out rather than guessed.</p>
+<h2>The timeline at a glance</h2>
+<p>Seasons</p>
+<p>Name</p>
+<p>First stage</p>
+<p>Knockout</p>
+<p>1955-56 to 1990-91</p>
+<p>European Cup</p>
+<p>Knockout from the first round</p>
+<p>Two legs in every round, then a one match final</p>
+<p>1991-92</p>
+<p>European Cup</p>
+<p>2 groups of four</p>
+<p>Group winners straight to the final</p>
+<p>1992-93</p>
+<p>Champions League</p>
+<p>2 groups of four</p>
+<p>Group winners straight to the final</p>
+<p>1993-94</p>
+<p>Champions League</p>
+<p>2 groups of four</p>
+<p>One off semi-finals at the group winners' grounds</p>
+<p>1994-95 to 1996-97</p>
+<p>Champions League</p>
+<p>4 groups of four</p>
+<p>Two legged quarter-finals and semi-finals</p>
+<p>1997-98 to 1998-99</p>
+<p>Champions League</p>
+<p>6 groups of four</p>
+<p>Two legged quarter-finals and semi-finals</p>
+<p>1999-2000 to 2002-03</p>
+<p>Champions League</p>
+<p>8 groups of four, then a second group stage</p>
+<p>Two legged quarter-finals and semi-finals</p>
+<p>2003-04 to 2023-24</p>
+<p>Champions League</p>
+<p>8 groups of four</p>
+<p>Two legs from the round of 16 to the semi-finals</p>
+<p>2024-25 onward</p>
+<p>Champions League</p>
+<p>One 36 club league table</p>
+<p>Two legs from the play-offs to the semi-finals</p>
+<h2>Season by season</h2>
+<h3>1955-56 to 1990-91: Straight knockout, home and away</h3>
+<p>European Cup</p>
+<p>Sixteen invited clubs in the first season, then the champions of each national league. Every round before the final was a two legged tie decided on aggregate, and the final was one match at a venue fixed in advance.</p>
+<li>The first edition, 1955-56, was won by Real Madrid, 4-3 against Reims at the Parc des Princes in Paris.</li>
+<li>Three times in this era the final landed on a finalist's own ground: Real Madrid won at the Bernabeu in 1957, Inter won at San Siro in 1965, and Roma lost to Liverpool on penalties at the Stadio Olimpico in 1984.</li>
+<li>The 1974 final is the only one ever replayed: Bayern Munich and Atletico Madrid drew 1-1 after extra time in Brussels, and Bayern won the replay 4-0 two days later at the same ground.</li>
+<h3>1991-92: The first group stage</h3>
+<p>Thirty two clubs entered the first round; eight survived two knockout rounds. The eight survivors were split into two groups of four, played home and away, and the two group winners met in the final with no semi-finals.</p>
+<li>Barcelona beat Sampdoria 1-0 after extra time at Wembley, the first final reached through a group.</li>
+<h3>1992-93: Renamed, same shape</h3>
+<p>Champions League</p>
+<p>Eight clubs in two groups of four after the knockout rounds. The two group winners went straight to the final again.</p>
+<li>The Champions League name arrived this season, at first only for the group stage. Marseille beat Milan 1-0 in Munich.</li>
+<h3>1993-94: Semi-finals return, as single matches</h3>
+<p>Eight clubs in two groups of four after the knockout rounds. The top two of each group went to one off semi-finals, each hosted by a group winner, and the winners met in the final.</p>
+<li>Milan beat Barcelona 4-0 in Athens.</li>
+<h3>1994-95 to 1996-97: Sixteen clubs, four groups, quarter-finals</h3>
+<p>Sixteen clubs in the group stage. Four groups of four, the top two of each into two legged quarter-finals and semi-finals, then a one match final.</p>
+<li>Ajax beat Milan 1-0 in Vienna in the first season of this shape, 1994-95, and the shape held for three seasons.</li>
+<h3>1997-98 to 1998-99: Twenty four clubs, six groups, runners-up let in</h3>
+<p>Twenty four clubs in the group stage, including the runners-up of eight domestic leagues for the first time. Six groups of four; the six winners and the two best runners-up went to the quarter-finals.</p>
+<li>This is where the champions only competition ended, and the name stopped being literally true.</li>
+<li>Real Madrid beat Juventus 1-0 in Amsterdam in 1998, and Manchester United came from a goal down in stoppage time to beat Bayern Munich 2-1 in Barcelona in 1999.</li>
+<h3>1999-2000 to 2002-03: Thirty two clubs and a second group stage</h3>
+<p>Thirty two clubs in the first group stage, with up to four from the strongest leagues. Eight groups of four, the top two into a second group stage of four groups of four, and the top two of those into the quarter-finals.</p>
+<li>Third placed clubs from the first stage dropped into the UEFA Cup.</li>
+<li>Real Madrid beat Valencia 3-0 in Paris in the first season of this format, and the double group stage ran for four seasons.</li>
+<h3>2003-04 to 2023-24: Thirty two clubs, eight groups, a round of 16</h3>
+<p>Thirty two clubs in the group stage. Eight groups of four, the top two into a round of 16, then two legged quarter-finals and semi-finals and a one match final.</p>
+<li>Porto beat Monaco 3-0 in Gelsenkirchen in the first season of this shape, and it lasted 21 seasons.</li>
+<li>The 2019-20 season finished as a one city tournament in Lisbon: single match quarter-finals and semi-finals behind closed doors, and Bayern Munich beat Paris Saint-Germain 1-0 in the final.</li>
+<li>Away goals stopped counting double from 2021-22, so a tie level after two legs now goes to extra time and then penalties.</li>
+<h3>2024-25 onward: Thirty six clubs in one league table</h3>
+<p>Thirty six clubs. One table: each club plays eight different opponents, four at home and four away. The top eight go straight to the round of 16, ninth to 24th play a two legged knockout play-off for the other eight places, and 25th and below are out, with no drop into the Europa League.</p>
+<li>UEFA calls it the league phase. From the play-offs to the semi-finals the ties are two legged, and the final is still one match at a venue picked well in advance.</li>
+<h2>The away goals rule</h2>
+<p>UEFA first used the away goals rule in 1965, in the Cup Winners' Cup, and for most of this competition's life a tie level on aggregate went to whichever side had scored more away from home. It was abolished in every UEFA club competition from 2021-22. A tie level after two legs now goes to extra time and then penalties, and a goal scored away in extra time counts the same as one at home.</p>
+<h2>What Club Manager plays</h2>
+<p>Generated from the game engine itself. A check recomputes these lines from the engine before every release and fails if they have gone stale, so this block cannot quietly describe a game that has moved on. Where the engine stands in for a format it cannot play yet, it says so.</p>
+<h3>📅 Starting 2026-27</h3>
+<p>Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet.</p>
+<p>The real 2024-25 onward shape: thirty six clubs in one league table.</p>
+<h3>🦊 Starting 2015-16</h3>
+<p>Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2015-16 format.</p>
+<p>The real 2003-04 to 2023-24 shape: thirty two clubs, eight groups, a round of 16.</p>
+<h3>🕰️ Starting 2010-11</h3>
+<p>Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2010-11 format.</p>
+<h3>📼 Starting 2005-06</h3>
+<p>Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2005-06 format.</p>
+<p><a href="/club-manager">Pick an era and manage a club through it</a></p>
+<h2>Questions people ask</h2>
+<h3>When did the Champions League start?</h3>
+<p>The competition started in 1955-56 as the European Cup, sixteen invited clubs playing two legged knockout ties with a one match final. The Champions League name arrived in 1992-93, at first only for the group stage, and the shape it named had already been played once, in 1991-92.</p>
+<h3>When did the group stage begin, and when did it end?</h3>
+<p>The first group stage was 1991-92: two groups of four whose winners met in the final. Groups grew to four in 1994-95, six in 1997-98 and eight in 1999-2000, with a second group stage from 1999-2000 to 2002-03 and a round of 16 in its place from 2003-04. The last group stage was 2023-24; since 2024-25 there is one league table of 36 clubs.</p>
+<h3>When did away goals stop counting double?</h3>
+<p>From 2021-22, in every UEFA club competition. A tie level after two legs now goes to extra time and then penalties. UEFA had used the rule since 1965.</p>
+<h3>How does the league phase work?</h3>
+<p>Thirty six clubs sit in one table. Each plays eight different opponents, four at home and four away. The top eight go straight to the round of 16, ninth to 24th play a two legged play-off for the other eight places, and 25th to 36th go out with no Europa League place. From the play-offs to the semi-finals the ties are two legged, and the final is one match.</p>
+<h3>Why does the modern Club Manager save play groups instead of the league phase?</h3>
+<p>Because the engine does not play the league phase yet, and we would rather say so than pretend. The 2026-27 start is the stand in: eight groups of four into the quarter-finals, two legged ties, no away goals rule. the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet. The 2015-16, 2010-11, 2005-06 starts play the real format of their own seasons.</p>
+<h2>Where this comes from</h2>
+<p>Every change of format above, and the first season of the shape it opened, rests on at least two publishers agreeing: Wikipedia's page for that season against RSSSF's results archive for the same season, which lists every tie with both of its legs, and UEFA's own pages for the 2024 format and the away goals rule. The seasons inside a longer period rest on those same sources saying when the shape changed next. 39 sources across 4 publishers, last checked 2026-09-10. A season that changes format after that date is a season this page does not describe yet, and it will say so here when it is checked.</p>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1955%E2%80%9356_European_Cup">1955-56 European Cup</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec195556.html">European Champions Cup 1955-56</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1957_European_Cup_final">1957 European Cup final</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec195657.html">European Champions Cup 1956-57</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/List_of_European_Cup_and_UEFA_Champions_League_finals">List of European Cup and UEFA Champions League finals</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec196465.html">European Champions Cup 1964-65</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec198384.html">European Champions Cup 1983-84</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1974_European_Cup_final">1974 European Cup final</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec197374.html">European Champions Cup 1973-74</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/UEFA_Champions_League">UEFA Champions League</a></li>
+<li>Sportmonks, <a href="https://www.sportmonks.com/glossary/champions-league/">Champions League glossary entry</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1991%E2%80%9392_European_Cup">1991-92 European Cup</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199192.html">European Champions Cup 1991-92</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1992%E2%80%9393_UEFA_Champions_League">1992-93 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199293.html">Champions League 1992-93</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1993%E2%80%9394_UEFA_Champions_League">1993-94 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199394.html">Champions League 1993-94</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1994%E2%80%9395_UEFA_Champions_League">1994-95 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199495.html">Champions League 1994-95</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1995%E2%80%9396_UEFA_Champions_League">1995-96 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199596.html">Champions League 1995-96</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1996%E2%80%9397_UEFA_Champions_League">1996-97 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199697.html">Champions League 1996-97</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1997%E2%80%9398_UEFA_Champions_League">1997-98 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199798.html">Champions League 1997-98</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1998%E2%80%9399_UEFA_Champions_League">1998-99 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199899.html">Champions League 1998-99</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1999%E2%80%932000_UEFA_Champions_League">1999-2000 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec199900.html">Champions League 1999-2000</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec200001.html">Champions League 2000-01</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec200102.html">Champions League 2001-02</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec200203.html">Champions League 2002-03</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2003%E2%80%9304_UEFA_Champions_League">2003-04 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec200304.html">Champions League 2003-04</a></li>
+<li>UEFA, <a href="https://www.uefa.com/uefachampionsleague/news/0268-12157d69ce2d-9f011c70f6fa-1000--new-format-for-champions-league-post-2024-everything-you-ne/">New format for Champions League post-2024: everything you need to know</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2019%E2%80%9320_UEFA_Champions_League">2019-20 UEFA Champions League</a></li>
+<li>RSSSF, <a href="https://www.rsssf.org/ec/ec201920.html">Champions League 2019-20</a></li>
+<li>UEFA, <a href="https://www.uefa.com/uefachampionsleague/news/027d-17172d2190e2-03070c1a3001-1000--do-away-goals-count-double-in-the-champions-league-europa/">Do away goals count double in the Champions League?</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Away_goals_rule">Away goals rule</a></li>
+<h2>Play with this history</h2>
+<li><a href="/club-manager">Club Manager</a>: manage a real club through these formats, today or in 2005-06, 2010-11 or 2015-16</li>
+<li><a href="/soccer-career">Soccer Career</a>: play the nights rather than pick the team</li>
+<li><a href="/whod-they-beat">Who'd They Beat</a>: the beaten finalists, year by year</li>
+<li><a href="/champ-or-not">Champ or Not</a>: did that club ever win it</li>
+<li><a href="/records">The Record Books</a>: every champion in every sport we cover</li>
+<li><a href="/soccer">All the soccer games</a>: the whole section on one page</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
