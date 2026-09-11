@@ -80,34 +80,37 @@ export function sceneFocus(scene: ConquestScene, known?: Set<string>): string[] 
   return out;
 }
 
-/** The map's frame at a cursor. The attacker is the home side: that is the wedge the wheel lands on. */
+/** The takeover a scene ran, keyed by its index so the map restarts the wave once per scene; null when it moved nothing. */
+function takeoverOf(scene: ConquestScene): ConquestTakeover | null {
+  return scene.flipped.length > 0 ? { key: scene.index + 1, from: diffOwners(scene.before, scene.after) } : null;
+}
+
+/** The map's frame at a cursor. The attacker is the home side: that is the
+ *  wedge the wheel lands on. The previous scene's wave is carried into the
+ *  next scene's card and fight beats (and the last scene's into done) so the
+ *  outer waves finish rather than being cut on the beat. */
 export function frameAt(scenes: ConquestScene[], cursor: SceneCursor, known?: Set<string>): SceneFrame {
   const scene = scenes[cursor.index];
   if (!scene) return { owners: {}, battle: null, takeover: null, focusRegions: null, highlightTeam: null };
   if (cursor.beat === 'done') {
     const last = scenes[scenes.length - 1];
-    return { owners: last.after, battle: null, takeover: null, focusRegions: null, highlightTeam: null };
+    return { owners: last.after, battle: null, takeover: takeoverOf(last), focusRegions: null, highlightTeam: null };
   }
   const { game } = scene;
   const focusRegions = sceneFocus(scene, known);
   if (cursor.beat === 'card' || cursor.beat === 'fight') {
+    const previous = cursor.index > 0 ? scenes[cursor.index - 1] : null;
     return {
       owners: scene.before,
       battle: { attacker: game.home, defender: game.away, stage: cursor.beat === 'card' ? 'pending' : 'live' },
-      takeover: null,
+      takeover: previous ? takeoverOf(previous) : null,
       focusRegions,
       highlightTeam: null,
     };
   }
   const battle: ConquestBattleView = { attacker: game.home, defender: game.away, stage: 'resolved', winner: game.winner };
   if (cursor.beat === 'score') return { owners: scene.before, battle, takeover: null, focusRegions, highlightTeam: null };
-  return {
-    owners: scene.after,
-    battle,
-    takeover: scene.flipped.length > 0 ? { key: scene.index + 1, from: diffOwners(scene.before, scene.after) } : null,
-    focusRegions,
-    highlightTeam: null,
-  };
+  return { owners: scene.after, battle, takeover: takeoverOf(scene), focusRegions, highlightTeam: null };
 }
 
 /** Steps through the scenes on SCENE_TIMINGS; reduced motion jumps every scene to its final frame. skip() lands on the last scene's final frame and fires onDone once. */
