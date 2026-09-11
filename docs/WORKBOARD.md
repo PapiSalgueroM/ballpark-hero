@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 549 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 548 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 550 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 549 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 548. Next free is 549.
+block is 541 to 549. Next free is 550.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -193,6 +193,24 @@ block is 541 to 548. Next free is 549.
   ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
   `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
 
+- **549: take over a club mid season.** The fourth player report, and the only one nothing had
+  shipped for: "add live start points to manager career: take over a club mid season for example
+  leicester in 15/16 midway thru". Far smaller than it reads, because 2015-16 already ships as a
+  fully built world; only the entry week was missing. Three entry points (Autumn, New year, The
+  run-in) on the dugout step, defaulting to the summer window so a normal start is untouched. The
+  run-in is played by `simToWeek`, which already drives a career forward unattended THROUGH THE REAL
+  MATCH ENGINE, so the table, form, injuries, fitness, money, cup run and European campaign are all
+  genuine consequences of matches really played rather than hand seeded numbers. The handover then
+  clears everything belonging to the manager before you (not sacked, no inherited approach or agreed
+  move, a new appointment's board confidence, your own progression starting now), because "take
+  over" is exactly what the player asked for and it settles every awkward question on its own.
+  **It makes no historical claim and the harness holds it to that**: this game shuffles its own
+  fixture list every save over a synthetic calendar, so the real 2015-16 run of results cannot be
+  reproduced and a simulated Leicester lands mid table. Typing the real one would be asserting
+  history the repo cannot two-source verify. Files: `src/lib/clubManagerCalendar.ts`,
+  `src/lib/clubManager.ts` (one save field), `src/hooks/useClubManager.ts`,
+  `src/pages/ClubManager.tsx`, `src/components/club-manager/ManagerForm.tsx`, new
+  `scripts/simMidSeasonStart.mjs`.
 - **548: a substitution while the clock is paused redraws the pitch.** The third watch mode finding.
   `myOnPitchAt`'s rule is strictly-after (he played that minute), and tapping a dot pauses the clock,
   so a change filed at exactly the frozen minute left the man who had just come off still standing
@@ -227,10 +245,15 @@ block is 541 to 548. Next free is 549.
    player means moving his row out of `pending`, and `simRosterAdjudication` section 5 fails if the
    roster and the ledger drift apart. The Diogo Jota entry in particular carries a reason and needs
    confirming by a session with egress.
-3. **Mid-season start points**, designed but not built: "take over a club mid season for example
-   leicester in 15/16 midway thru". Smaller than it sounds, because `clubManagerEras.ts` already
-   ships 2015-16, and the position can be derived by simming N matchdays under AI control rather
-   than typing historical tables, which needs no outside data and so needs no two-source pass.
+3. **The mid season start could take a SECOND round backed by verified aggregate standings.** Round
+   549 ships the engine capability honestly framed as a simulated run-in, which is what the data
+   rules allow without egress. The payoff the player actually pictured, Leicester really being top
+   in March, needs real aggregate standings per league per checkpoint. That is roughly 140 numbers
+   per league per checkpoint rather than a season of results, and Round 462 set the precedent for
+   rendering a table whose underlying results are unknown (it degrades level clubs to goal
+   difference and prints a footnote saying so). Owner decision first: `docs/WORKBOARD.md` records a
+   "verified sources, not reconstructed history" constraint, and a typed historical table sits right
+   on that line.
 4. **Soccer Career still has no Champions League GROUP or league phase.** Round 546 fixed the
    knockout; a campaign still begins at the first knockout round with a flat qualification roll
    (`tier === 1 ? 0.85 : 0.35`) rather than a group the player plays through. That is the next piece

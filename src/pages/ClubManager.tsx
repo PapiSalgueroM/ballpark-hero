@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase, ShieldAlert, ClipboardList } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
@@ -283,9 +284,9 @@ const ClubManager = () => {
   if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
-    const confirmAndReset = (manager: ManagerSpec | null) => {
-      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined);
-      else g.confirmClub(pickEra, manager ?? undefined);
+    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
+      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry);
+      else g.confirmClub(pickEra, manager ?? undefined, entry);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
       setPickNation(null);
@@ -933,6 +934,15 @@ const ClubManager = () => {
           <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
+          {/* Round 549: a career that began part way through says so for as long
+              as that season runs. The run-in was simulated, and a badge that
+              only lives on the picker would let somebody forget that by the
+              time they are reading the table. */}
+          {c.midSeasonStart && c.season === 1 && (
+            <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              🗓️ Took over mid season · run-in simulated
+            </span>
+          )}
         </div>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
           {/* Round 99: found by playing it. Before a ball is kicked every

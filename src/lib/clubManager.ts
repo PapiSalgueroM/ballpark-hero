@@ -1859,6 +1859,10 @@ export interface CareerState {
   uclBracket?: UclTie[];
   /** Round 163: every OTHER Champions League group, simulated alongside mine. */
   uclWorld?: UclAiGroup[];
+  /** Round 549: set when the career began part way through the season, with
+   *  the run-in played by the manager before you. The board screen says so, and
+   *  it is what stops a simulated run-in ever being presented as real history. */
+  midSeasonStart?: 'autumn' | 'newYear' | 'runIn';
   /** Round 547: this season's Champions League field, DERIVED from last
    *  season's final tables rather than drawn from a prestige pool. Absent on
    *  season one (there is no last season to read), on a historic era, and on a

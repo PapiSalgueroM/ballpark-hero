@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 548, four player reports off the live site
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 549, all four player reports closed
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 549.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 550.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -200,10 +200,40 @@ and moving the control row above the pitch instead costs no pitch size at all an
 answer. It is written up in `docs/WORKBOARD.md` with its measured rectangles for a session that has
 a browser. The fifth finding, a dead branch in the viewer's phase condition, is written up there too.
 
+**549, take over a club mid season.** The fourth report, and the only one nothing had shipped for:
+"add live start points to manager career: take over a club mid season for example leicester in 15/16
+midway thru". Far smaller than it reads. 2015-16 already ships as a fully built world with its own
+bake and its own tile; only the entry week was missing.
+
+Three entry points on the dugout step (Autumn, New year, The run-in), defaulting to the summer
+window so an ordinary start is byte for byte what it was. The run-in is played by `simToWeek`, a
+shipped function that already drives a career forward unattended THROUGH THE REAL MATCH ENGINE, so
+the table, the form, the injuries, the fitness, the money, the cup run and the European campaign are
+consequences of matches that were really played rather than numbers somebody typed. Every halt it
+can return is somebody else's problem during a run-in (a window is the old manager's business, an
+approach was made to him, a sacking is why the job is open), so the loop rides through all of them.
+
+**The handover is the load bearing part.** Nothing belonging to the manager before you follows you
+in: you are not sacked on arrival, you inherit no pending approach or agreed move, the board's
+opinion is a new appointment's rather than the one they had formed of somebody else, your own
+progression starts now, and the inbox is not his post. "Take over" is exactly what the player asked
+for and that framing settles every awkward question on its own. The harness's control skips the
+tidy-up and immediately catches an inherited approach from another club.
+
+**It makes no historical claim, and section 5 of the harness holds it to that.** Club Manager
+shuffles its own fixture list every save over a synthetic calendar, so the real 2015-16 run of
+results cannot be reproduced and a simulated Leicester lands mid table (measured: 16th, 10th and
+14th at the three entry points). Typing the real table instead would be asserting history the repo
+cannot two-source verify. The dugout screen says the run-in is simulated, the hub keeps saying it
+for as long as that season runs, and the harness fails on any affirmative historical claim in the
+copy. Writing that check taught something worth keeping: its first version matched the bare phrase
+"real results" and went red on the screen's own DENIAL of it, which would have pushed whoever hit it
+into weakening the honest sentence to get a green.
+
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
 simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
 simNoRivalNames, simSoccerCareer, simCareerRealism, simBallonDorTruth, simCareerNoDeadEnd and
-simCareerParity all green. The seven new harnesses green with every negative control confirmed firing and a bogus control
+simCareerParity all green. The eight new harnesses green with every negative control confirmed firing and a bogus control
 name exiting 1 on each. All 15 built site fences green after a fresh build; `simBrand` needs
 `pip3 install fonttools pillow` first, which a fresh sandbox does not carry, and is green with zero
 drift once they are there.
