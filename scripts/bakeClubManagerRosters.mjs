@@ -372,6 +372,36 @@ for (const move of TRANSFER_OVERLAY_2026) {
 console.log(`Overlay applied: ${overlayMoved} moved, ${overlayDropped} left the modeled world`);
 
 /* ------------------------------------------------------------------ */
+/* Round 542: apply the 2026 roster adjudication                      */
+/* ------------------------------------------------------------------ */
+/* The 2025 fallback above carries the player's 2025 CLUB, so anyone the market
+   dataset stopped tracking is planted at last season's club and looks exactly
+   like a verified current row. A player reported it on 2026-09-11 (Joao Felix
+   at Chelsea), and the measurement was 356 rows in that state.
+
+   These are NOT dropped on the absence, because absence from one dataset is
+   not evidence of a transfer: the 2026 World Cup squads confirm ten of them,
+   David Alaba and Wout Weghorst among them, are exactly where the bake put
+   them. Only rows a named source actually resolves are changed here, and the
+   332 still unresolved stay in the file and stay listed as pending, so nobody
+   mistakes "not yet checked" for "checked and fine".
+
+   scripts/data/rosterConfirmation2026.json is the ledger and
+   scripts/simRosterAdjudication.mjs holds the shipped file to it. */
+const adjudication = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/rosterConfirmation2026.json'), 'utf8'));
+let adjMoved = 0;
+let adjRemoved = 0;
+for (const m of adjudication.movedTo) {
+  const rec = byPlayer.get(m.name);
+  if (!engineClubSet.has(m.to)) { errors.push(`ADJUDICATION: unknown destination "${m.to}" for ${m.name}`); continue; }
+  if (rec) { rec.club = m.to; adjMoved += 1; }
+}
+for (const r of [...adjudication.removedClubNotModelled, ...adjudication.notCurrent]) {
+  if (byPlayer.delete(r.name)) adjRemoved += 1;
+}
+console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${adjudication.pending.length} still pending a second source`);
+
+/* ------------------------------------------------------------------ */
 /* Group by club + validate                                           */
 /* ------------------------------------------------------------------ */
 const byClub = new Map(engineClubs.map(c => [c, []]));
@@ -420,6 +450,11 @@ if (!at('Orlando City', 'Griezmann')) errors.push('ANCHOR: Griezmann not at Orla
 if (!at('Real Madrid', 'Mbapp')) errors.push('ANCHOR: Mbappé missing from Real Madrid');
 if (!at('Al-Nassr', 'Ronaldo')) errors.push('ANCHOR: Ronaldo missing from Al-Nassr');
 if (at('Barcelona', 'Lewandowski')) errors.push('ANCHOR: Lewandowski still at Barcelona');
+/* Round 542, from the 2026-09-11 player report. The 2026 World Cup squads put
+   Felix at Al-Nassr; the bake had him at Chelsea off a 2025 fallback row. */
+if (at('Chelsea', 'João Félix')) errors.push('ANCHOR: Joao Felix still at Chelsea, reported wrong by a player 2026-09-11');
+if (!at('Al-Nassr', 'João Félix')) errors.push('ANCHOR: Joao Felix missing from Al-Nassr');
+if (at('Liverpool', 'Diogo Jota')) errors.push('ANCHOR: Diogo Jota must not ship in any 2026-27 squad');
 
 const xiAvg = club => {
   const rs = (byClub.get(club) ?? []).map(p => p.r).sort((a, b) => b - a).slice(0, 11);

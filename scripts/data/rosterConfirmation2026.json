@@ -1,0 +1,1465 @@
+{
+ "measuredOn": "2026-09-11",
+ "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
+ "population": 356,
+ "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
+ "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
+ "confirmedStill": [
+  {
+   "name": "Abdul Mumin",
+   "club": "Rayo Vallecano",
+   "wc2026": "Rayo Vallecano"
+  },
+  {
+   "name": "Ante Budimir",
+   "club": "Osasuna",
+   "wc2026": "Osasuna"
+  },
+  {
+   "name": "Charles De Ketelaere",
+   "club": "Atalanta",
+   "wc2026": "Atalanta"
+  },
+  {
+   "name": "David Alaba",
+   "club": "Real Madrid",
+   "wc2026": "Real Madrid"
+  },
+  {
+   "name": "Facundo Pellistri",
+   "club": "Panathinaikos",
+   "wc2026": "Panathinaikos"
+  },
+  {
+   "name": "Gustaf Nilsson",
+   "club": "Club Brugge",
+   "wc2026": "Club Brugge"
+  },
+  {
+   "name": "John Yeboah",
+   "club": "Venezia",
+   "wc2026": "Venezia"
+  },
+  {
+   "name": "Ross Stewart",
+   "club": "Southampton",
+   "wc2026": "Southampton"
+  },
+  {
+   "name": "Wout Weghorst",
+   "club": "Ajax",
+   "wc2026": "Ajax"
+  },
+  {
+   "name": "Zidane Iqbal",
+   "club": "Utrecht",
+   "wc2026": "Utrecht"
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Derek Cornelius",
+   "from": "Marseille",
+   "to": "Rangers"
+  },
+  {
+   "name": "Jayden Nelson",
+   "from": "Vancouver Whitecaps",
+   "to": "Austin FC"
+  },
+  {
+   "name": "João Félix",
+   "from": "Chelsea",
+   "to": "Al-Nassr"
+  },
+  {
+   "name": "Julio Enciso",
+   "from": "Brighton",
+   "to": "Strasbourg"
+  },
+  {
+   "name": "Louicius Deedson",
+   "from": "OB",
+   "to": "FC Dallas"
+  },
+  {
+   "name": "Mehdi Taremi",
+   "from": "Inter Milan",
+   "to": "Olympiacos"
+  },
+  {
+   "name": "Mert Günok",
+   "from": "Beşiktaş",
+   "to": "Fenerbahçe"
+  },
+  {
+   "name": "Michael Gregoritsch",
+   "from": "Freiburg",
+   "to": "Augsburg"
+  },
+  {
+   "name": "Sontje Hansen",
+   "from": "NEC Nijmegen",
+   "to": "Middlesbrough"
+  },
+  {
+   "name": "Yuito Suzuki",
+   "from": "Brøndby IF",
+   "to": "Freiburg"
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Andrés Gómez",
+   "from": "Rennes",
+   "realClub": "Vasco da Gama"
+  },
+  {
+   "name": "Antonio Sanabria",
+   "from": "Torino",
+   "realClub": "Cremonese"
+  },
+  {
+   "name": "Ramón Sosa",
+   "from": "Nottingham Forest",
+   "realClub": "Palmeiras"
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Diogo Jota",
+   "from": "Liverpool",
+   "why": "Removed from every 2026-27 squad because he is not a current player. NOT adjudicated by the World Cup table, which covers only players picked for the 2026 tournament, and NOT confirmable from this sandbox, which has no web egress. A session with egress must confirm this entry and record its two sources here. It is removed rather than left pending because the cost of shipping this particular row wrongly is not the same as the cost of a stale transfer."
+  }
+ ],
+ "pending": [
+  {
+   "name": "Duk",
+   "club": "Aberdeen"
+  },
+  {
+   "name": "Topi Keskinen",
+   "club": "Aberdeen"
+  },
+  {
+   "name": "Stavro Pilo",
+   "club": "AEK Athens"
+  },
+  {
+   "name": "Branco van den Boomen",
+   "club": "Ajax"
+  },
+  {
+   "name": "Davy Klaassen",
+   "club": "Ajax"
+  },
+  {
+   "name": "Steven Berghuis",
+   "club": "Ajax"
+  },
+  {
+   "name": "Ezgjan Alioski",
+   "club": "Al-Ahli"
+  },
+  {
+   "name": "Mohammed Majrashi",
+   "club": "Al-Faisaly"
+  },
+  {
+   "name": "Henry Onyekuru",
+   "club": "Al-Fayha"
+  },
+  {
+   "name": "Danilo Pereira",
+   "club": "Al-Ittihad"
+  },
+  {
+   "name": "Abdulrahman Ghareeb",
+   "club": "Al-Nassr"
+  },
+  {
+   "name": "Saad Haqawi",
+   "club": "Al-Nassr"
+  },
+  {
+   "name": "Giacomo Bonaventura",
+   "club": "Al-Shabab"
+  },
+  {
+   "name": "Glen Kamara",
+   "club": "Al-Shabab"
+  },
+  {
+   "name": "Mateus Castro",
+   "club": "Al-Taawoun"
+  },
+  {
+   "name": "Musa Barrow",
+   "club": "Al-Taawoun"
+  },
+  {
+   "name": "Rony Lopes",
+   "club": "Alanyaspor"
+  },
+  {
+   "name": "Abdel Abqar",
+   "club": "Alavés"
+  },
+  {
+   "name": "Hugo Novoa",
+   "club": "Alavés"
+  },
+  {
+   "name": "Stoichkov",
+   "club": "Alavés"
+  },
+  {
+   "name": "Youssef Enríquez",
+   "club": "Alavés"
+  },
+  {
+   "name": "Emanuel Schreiner",
+   "club": "Altach"
+  },
+  {
+   "name": "Francis Amuzu",
+   "club": "Anderlecht"
+  },
+  {
+   "name": "Lucas Hey",
+   "club": "Anderlecht"
+  },
+  {
+   "name": "Thomas Foket",
+   "club": "Anderlecht"
+  },
+  {
+   "name": "Emmanuel Biumla",
+   "club": "Angers"
+  },
+  {
+   "name": "Farid El Melali",
+   "club": "Angers"
+  },
+  {
+   "name": "Nico Mantl",
+   "club": "Arouca"
+  },
+  {
+   "name": "Neto",
+   "club": "Arsenal"
+  },
+  {
+   "name": "Michael Gardawski",
+   "club": "Asteras Tripolis"
+  },
+  {
+   "name": "Tyrone Mings",
+   "club": "Aston Villa"
+  },
+  {
+   "name": "Nicolò Zaniolo",
+   "club": "Atalanta"
+  },
+  {
+   "name": "Iñigo Lekue",
+   "club": "Athletic Club"
+  },
+  {
+   "name": "Yeray Álvarez",
+   "club": "Athletic Club"
+  },
+  {
+   "name": "Yuri Berchiche",
+   "club": "Athletic Club"
+  },
+  {
+   "name": "Ángel Correa",
+   "club": "Atlético Madrid"
+  },
+  {
+   "name": "Denzel Jubitana",
+   "club": "Atromitos"
+  },
+  {
+   "name": "Arne Maier",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Henri Koudossou",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Mads Pedersen",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Mergim Berisha",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Robert Gumny",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Samuel Essende",
+   "club": "Augsburg"
+  },
+  {
+   "name": "Osman Bukari",
+   "club": "Austin FC"
+  },
+  {
+   "name": "Ibrahim Sadiq",
+   "club": "AZ Alkmaar"
+  },
+  {
+   "name": "Mayckel Lahdo",
+   "club": "AZ Alkmaar"
+  },
+  {
+   "name": "Zico Buurmeester",
+   "club": "AZ Alkmaar"
+  },
+  {
+   "name": "Miguel Crespo",
+   "club": "Başakşehir"
+  },
+  {
+   "name": "Yusuf Sarı",
+   "club": "Başakşehir"
+  },
+  {
+   "name": "Adrian Leon Barisic",
+   "club": "Basel"
+  },
+  {
+   "name": "Finn van Breemen",
+   "club": "Basel"
+  },
+  {
+   "name": "Marin Soticek",
+   "club": "Basel"
+  },
+  {
+   "name": "Xherdan Shaqiri",
+   "club": "Basel"
+  },
+  {
+   "name": "Serge Gnabry",
+   "club": "Bayern Munich"
+  },
+  {
+   "name": "Thomas Müller",
+   "club": "Bayern Munich"
+  },
+  {
+   "name": "Wisdom Mike",
+   "club": "Bayern Munich"
+  },
+  {
+   "name": "Gianluca Prestianni",
+   "club": "Benfica"
+  },
+  {
+   "name": "Hugo Félix",
+   "club": "Benfica"
+  },
+  {
+   "name": "Renato Sanches",
+   "club": "Benfica"
+  },
+  {
+   "name": "Tiago Gouveia",
+   "club": "Benfica"
+  },
+  {
+   "name": "Felix Uduokhai",
+   "club": "Beşiktaş"
+  },
+  {
+   "name": "Jonas Svensson",
+   "club": "Beşiktaş"
+  },
+  {
+   "name": "Rafa Silva",
+   "club": "Beşiktaş"
+  },
+  {
+   "name": "Liam Kerrigan",
+   "club": "Beveren"
+  },
+  {
+   "name": "Augustus Kargbo",
+   "club": "Blackburn Rovers"
+  },
+  {
+   "name": "Joe Rankin-Costello",
+   "club": "Blackburn Rovers"
+  },
+  {
+   "name": "Felix Passlack",
+   "club": "Bochum"
+  },
+  {
+   "name": "Matus Bero",
+   "club": "Bochum"
+  },
+  {
+   "name": "John McAtee",
+   "club": "Bolton Wanderers"
+  },
+  {
+   "name": "Emre Can",
+   "club": "Borussia Dortmund"
+  },
+  {
+   "name": "Niklas Süle",
+   "club": "Borussia Dortmund"
+  },
+  {
+   "name": "André Horta",
+   "club": "Braga"
+  },
+  {
+   "name": "Diego Rodrigues",
+   "club": "Braga"
+  },
+  {
+   "name": "Vasconcelos",
+   "club": "Braga"
+  },
+  {
+   "name": "Ethan Pinnock",
+   "club": "Brentford"
+  },
+  {
+   "name": "Josh Dasilva",
+   "club": "Brentford"
+  },
+  {
+   "name": "Jordan Amavi",
+   "club": "Brest"
+  },
+  {
+   "name": "Massadio Haïdara",
+   "club": "Brest"
+  },
+  {
+   "name": "Romain Del Castillo",
+   "club": "Brest"
+  },
+  {
+   "name": "Jason Steele",
+   "club": "Brighton"
+  },
+  {
+   "name": "Lewis Dunk",
+   "club": "Brighton"
+  },
+  {
+   "name": "Jeremy Sarmiento",
+   "club": "Burnley"
+  },
+  {
+   "name": "Joe Worrall",
+   "club": "Burnley"
+  },
+  {
+   "name": "Jordan Beyer",
+   "club": "Burnley"
+  },
+  {
+   "name": "Nathan Redmond",
+   "club": "Burnley"
+  },
+  {
+   "name": "Simone Scuffet",
+   "club": "Cagliari"
+  },
+  {
+   "name": "Tommaso Augello",
+   "club": "Cagliari"
+  },
+  {
+   "name": "Zito Luvumbo",
+   "club": "Cagliari"
+  },
+  {
+   "name": "Ethan Horvath",
+   "club": "Cardiff City"
+  },
+  {
+   "name": "Perry Ng",
+   "club": "Cardiff City"
+  },
+  {
+   "name": "Iker Losada",
+   "club": "Celta Vigo"
+  },
+  {
+   "name": "Jota",
+   "club": "Celtic"
+  },
+  {
+   "name": "Bruninho",
+   "club": "Cercle Brugge"
+  },
+  {
+   "name": "Christiaan Ravych",
+   "club": "Cercle Brugge"
+  },
+  {
+   "name": "Nazinho",
+   "club": "Cercle Brugge"
+  },
+  {
+   "name": "Bryce Duke",
+   "club": "CF Montréal"
+  },
+  {
+   "name": "Mohamed Koné",
+   "club": "Charleroi"
+  },
+  {
+   "name": "Raymond Asante",
+   "club": "Charleroi"
+  },
+  {
+   "name": "Mykhaylo Mudryk",
+   "club": "Chelsea"
+  },
+  {
+   "name": "Simon Mignolet",
+   "club": "Club Brugge"
+  },
+  {
+   "name": "Omir Fernandez",
+   "club": "Colorado Rapids"
+  },
+  {
+   "name": "Theodore Ku-DiPietro",
+   "club": "Colorado Rapids"
+  },
+  {
+   "name": "AZ Jackson",
+   "club": "Columbus Crew"
+  },
+  {
+   "name": "Alberto Moreno",
+   "club": "Como"
+  },
+  {
+   "name": "Alessio Iovine",
+   "club": "Como"
+  },
+  {
+   "name": "Jay Dasilva",
+   "club": "Coventry City"
+  },
+  {
+   "name": "David Schnegg",
+   "club": "D.C. United"
+  },
+  {
+   "name": "Jared Stroud",
+   "club": "D.C. United"
+  },
+  {
+   "name": "David Mella",
+   "club": "Deportivo La Coruña"
+  },
+  {
+   "name": "Ivan Nevistic",
+   "club": "Dinamo Zagreb"
+  },
+  {
+   "name": "Lukas Kacavenda",
+   "club": "Dinamo Zagreb"
+  },
+  {
+   "name": "Ansgar Knauff",
+   "club": "Eintracht Frankfurt"
+  },
+  {
+   "name": "Mahmoud Dahoud",
+   "club": "Eintracht Frankfurt"
+  },
+  {
+   "name": "Michy Batshuayi",
+   "club": "Eintracht Frankfurt"
+  },
+  {
+   "name": "Adam Boayar",
+   "club": "Elche"
+  },
+  {
+   "name": "Agustín Álvarez",
+   "club": "Elche"
+  },
+  {
+   "name": "Lukas Petkov",
+   "club": "Elversberg"
+  },
+  {
+   "name": "Alex Král",
+   "club": "Espanyol"
+  },
+  {
+   "name": "Brian Oliván",
+   "club": "Espanyol"
+  },
+  {
+   "name": "Marash Kumbulla",
+   "club": "Espanyol"
+  },
+  {
+   "name": "Michael Keane",
+   "club": "Everton"
+  },
+  {
+   "name": "Rafa Soares",
+   "club": "Famalicão"
+  },
+  {
+   "name": "Mohamed Elyounoussi",
+   "club": "FC Copenhagen"
+  },
+  {
+   "name": "Léo Chú",
+   "club": "FC Dallas"
+  },
+  {
+   "name": "Paxton Pomykal",
+   "club": "FC Dallas"
+  },
+  {
+   "name": "Mikel Gogorza",
+   "club": "FC Midtjylland"
+  },
+  {
+   "name": "Andreas Hansen",
+   "club": "FC Nordsjælland"
+  },
+  {
+   "name": "Zidan Sertdemir",
+   "club": "FC Nordsjælland"
+  },
+  {
+   "name": "Alexander Djiku",
+   "club": "Fenerbahçe"
+  },
+  {
+   "name": "Cengiz Ünder",
+   "club": "Fenerbahçe"
+  },
+  {
+   "name": "Rodrigo Becão",
+   "club": "Fenerbahçe"
+  },
+  {
+   "name": "Albert Gudmundsson",
+   "club": "Fiorentina"
+  },
+  {
+   "name": "Christian Kouamé",
+   "club": "Fiorentina"
+  },
+  {
+   "name": "Riccardo Sottil",
+   "club": "Fiorentina"
+  },
+  {
+   "name": "Maximilian Philipp",
+   "club": "Freiburg"
+  },
+  {
+   "name": "Niklas Beste",
+   "club": "Freiburg"
+  },
+  {
+   "name": "Vincenzo Grifo",
+   "club": "Freiburg"
+  },
+  {
+   "name": "Filippo Distefano",
+   "club": "Frosinone"
+  },
+  {
+   "name": "Riccardo Marchizza",
+   "club": "Frosinone"
+  },
+  {
+   "name": "Berkan Kutlu",
+   "club": "Galatasaray"
+  },
+  {
+   "name": "Dries Mertens",
+   "club": "Galatasaray"
+  },
+  {
+   "name": "Yusuf Demir",
+   "club": "Galatasaray"
+  },
+  {
+   "name": "Dante Vanzeir",
+   "club": "Gent"
+  },
+  {
+   "name": "Leonardo Lopes",
+   "club": "Gent"
+  },
+  {
+   "name": "Max Dean",
+   "club": "Gent"
+  },
+  {
+   "name": "Álex Sola",
+   "club": "Getafe"
+  },
+  {
+   "name": "Carles Pérez",
+   "club": "Getafe"
+  },
+  {
+   "name": "Juan Bernat",
+   "club": "Getafe"
+  },
+  {
+   "name": "Juanmi",
+   "club": "Getafe"
+  },
+  {
+   "name": "Alassane Pléa",
+   "club": "Gladbach"
+  },
+  {
+   "name": "Luca Netz",
+   "club": "Gladbach"
+  },
+  {
+   "name": "Tomas Cvancara",
+   "club": "Gladbach"
+  },
+  {
+   "name": "Oliver Edvardsen",
+   "club": "Go Ahead Eagles"
+  },
+  {
+   "name": "İsmail Köybaşı",
+   "club": "Göztepe"
+  },
+  {
+   "name": "Ivan Lucic",
+   "club": "Hajduk Split"
+  },
+  {
+   "name": "Marko Livaja",
+   "club": "Hajduk Split"
+  },
+  {
+   "name": "Stipe Biuk",
+   "club": "Hajduk Split"
+  },
+  {
+   "name": "Emir Sahiti",
+   "club": "Hamburg"
+  },
+  {
+   "name": "Immanuel Pherai",
+   "club": "Hamburg"
+  },
+  {
+   "name": "Jean-Luc Dompé",
+   "club": "Hamburg"
+  },
+  {
+   "name": "Rabbi Matondo",
+   "club": "Hannover 96"
+  },
+  {
+   "name": "Mario Kröpfl",
+   "club": "Hartberg"
+  },
+  {
+   "name": "Levi Smans",
+   "club": "Heerenveen"
+  },
+  {
+   "name": "Jonas Föhrenbach",
+   "club": "Heidenheim"
+  },
+  {
+   "name": "Armin Gigovic",
+   "club": "Holstein Kiel"
+  },
+  {
+   "name": "Lasse Rosenboom",
+   "club": "Holstein Kiel"
+  },
+  {
+   "name": "Phil Harres",
+   "club": "Holstein Kiel"
+  },
+  {
+   "name": "Abu Kamara",
+   "club": "Hull City"
+  },
+  {
+   "name": "Steven Alzate",
+   "club": "Hull City"
+  },
+  {
+   "name": "Jordi Alba",
+   "club": "Inter Miami"
+  },
+  {
+   "name": "Tomás Avilés",
+   "club": "Inter Miami"
+  },
+  {
+   "name": "Joaquín Correa",
+   "club": "Inter Milan"
+  },
+  {
+   "name": "Stefan de Vrij",
+   "club": "Inter Milan"
+  },
+  {
+   "name": "Conor Chaplin",
+   "club": "Ipswich Town"
+  },
+  {
+   "name": "Louey Ben Farhat",
+   "club": "Karlsruhe"
+  },
+  {
+   "name": "Antonín Barák",
+   "club": "Kasımpaşa"
+  },
+  {
+   "name": "Can Keleş",
+   "club": "Kasımpaşa"
+  },
+  {
+   "name": "Josip Brekalo",
+   "club": "Kasımpaşa"
+  },
+  {
+   "name": "Kamil Piątkowski",
+   "club": "Kasımpaşa"
+  },
+  {
+   "name": "Kévin Rodrigues",
+   "club": "Kasımpaşa"
+  },
+  {
+   "name": "Leart Paçarada",
+   "club": "Köln"
+  },
+  {
+   "name": "Marco Reus",
+   "club": "LA Galaxy"
+  },
+  {
+   "name": "Miki Yamane",
+   "club": "LA Galaxy"
+  },
+  {
+   "name": "Ivann Botella",
+   "club": "La Louvière"
+  },
+  {
+   "name": "David Martínez",
+   "club": "LAFC"
+  },
+  {
+   "name": "Javairô Dilrosun",
+   "club": "LAFC"
+  },
+  {
+   "name": "Krystof Danek",
+   "club": "LASK"
+  },
+  {
+   "name": "Robert Zulj",
+   "club": "LASK"
+  },
+  {
+   "name": "Gaetano Castrovilli",
+   "club": "Lazio"
+  },
+  {
+   "name": "Loum Tchaouna",
+   "club": "Lazio"
+  },
+  {
+   "name": "Antoine Joujou",
+   "club": "Le Havre"
+  },
+  {
+   "name": "Arthur Desmas",
+   "club": "Le Havre"
+  },
+  {
+   "name": "Étienne Youté Kinkoué",
+   "club": "Le Havre"
+  },
+  {
+   "name": "Reda Khadra",
+   "club": "Le Havre"
+  },
+  {
+   "name": "Frédéric Guilbert",
+   "club": "Lecce"
+  },
+  {
+   "name": "Thórir Jóhann Helgason",
+   "club": "Lecce"
+  },
+  {
+   "name": "Maximilian Wöber",
+   "club": "Leeds United"
+  },
+  {
+   "name": "Wesley Saïd",
+   "club": "Lens"
+  },
+  {
+   "name": "Ramiro Macagno",
+   "club": "Levadiakos"
+  },
+  {
+   "name": "Rémy Cabella",
+   "club": "Lille"
+  },
+  {
+   "name": "Mohamed Bamba",
+   "club": "Lorient"
+  },
+  {
+   "name": "Georgios Koutsias",
+   "club": "Lugano"
+  },
+  {
+   "name": "Martim Marques",
+   "club": "Lugano"
+  },
+  {
+   "name": "Uran Bislimi",
+   "club": "Lugano"
+  },
+  {
+   "name": "Lars Villiger",
+   "club": "Luzern"
+  },
+  {
+   "name": "Pascal Schürpf",
+   "club": "Luzern"
+  },
+  {
+   "name": "Thibault Klidjé",
+   "club": "Luzern"
+  },
+  {
+   "name": "Duje Caleta-Car",
+   "club": "Lyon"
+  },
+  {
+   "name": "Martijn Kaars",
+   "club": "Magdeburg"
+  },
+  {
+   "name": "Andreas Hanche-Olsen",
+   "club": "Mainz"
+  },
+  {
+   "name": "Armindo Sieb",
+   "club": "Mainz"
+  },
+  {
+   "name": "Antoñito Cordero",
+   "club": "Málaga"
+  },
+  {
+   "name": "İlkay Gündoğan",
+   "club": "Manchester City"
+  },
+  {
+   "name": "Harry Amass",
+   "club": "Manchester United"
+  },
+  {
+   "name": "Luiz Felipe",
+   "club": "Marseille"
+  },
+  {
+   "name": "Nikola Storm",
+   "club": "Mechelen"
+  },
+  {
+   "name": "Ortwin De Wolf",
+   "club": "Mechelen"
+  },
+  {
+   "name": "Isaiah Jones",
+   "club": "Middlesbrough"
+  },
+  {
+   "name": "Kelechi Iheanacho",
+   "club": "Middlesbrough"
+  },
+  {
+   "name": "Bongokuhle Hlongwane",
+   "club": "Minnesota United"
+  },
+  {
+   "name": "Lucas Michal",
+   "club": "Monaco"
+  },
+  {
+   "name": "Dany Mota",
+   "club": "Monza"
+  },
+  {
+   "name": "Gianluca Caprari",
+   "club": "Monza"
+  },
+  {
+   "name": "Omari Forson",
+   "club": "Monza"
+  },
+  {
+   "name": "Pedro Pereira",
+   "club": "Monza"
+  },
+  {
+   "name": "Giacomo Raspadori",
+   "club": "Napoli"
+  },
+  {
+   "name": "Matteo Politano",
+   "club": "Napoli"
+  },
+  {
+   "name": "Lars Olden Larsen",
+   "club": "NEC Nijmegen"
+  },
+  {
+   "name": "Lewis Morgan",
+   "club": "New York Red Bulls"
+  },
+  {
+   "name": "Emil Krafth",
+   "club": "Newcastle"
+  },
+  {
+   "name": "Taxiarchis Fountas",
+   "club": "OFI"
+  },
+  {
+   "name": "Jovan Mijatovic",
+   "club": "OH Leuven"
+  },
+  {
+   "name": "Duncan McGuire",
+   "club": "Orlando City"
+  },
+  {
+   "name": "Kike Barja",
+   "club": "Osasuna"
+  },
+  {
+   "name": "Moi Gómez",
+   "club": "Osasuna"
+  },
+  {
+   "name": "Roko Jurisic",
+   "club": "Osijek"
+  },
+  {
+   "name": "Joel Vega Zambrano",
+   "club": "Paderborn"
+  },
+  {
+   "name": "Lucas Chaves",
+   "club": "Panetolikos"
+  },
+  {
+   "name": "Sergio Díaz",
+   "club": "Panetolikos"
+  },
+  {
+   "name": "Adrian Benedyczak",
+   "club": "Parma"
+  },
+  {
+   "name": "Dylan Mbayo",
+   "club": "PEC Zwolle"
+  },
+  {
+   "name": "Indiana Vassilev",
+   "club": "Philadelphia Union"
+  },
+  {
+   "name": "Cláudio Ramos",
+   "club": "Porto"
+  },
+  {
+   "name": "Gonçalo Borges",
+   "club": "Porto"
+  },
+  {
+   "name": "Vasco Sousa",
+   "club": "Porto"
+  },
+  {
+   "name": "Matt Ritchie",
+   "club": "Portsmouth"
+  },
+  {
+   "name": "Presnel Kimpembe",
+   "club": "PSG"
+  },
+  {
+   "name": "Adamo Nagalo",
+   "club": "PSV"
+  },
+  {
+   "name": "Johan Bakayoko",
+   "club": "PSV"
+  },
+  {
+   "name": "Zan Celar",
+   "club": "QPR"
+  },
+  {
+   "name": "Andrés Martín",
+   "club": "Racing Santander"
+  },
+  {
+   "name": "Clément Michelin",
+   "club": "Racing Santander"
+  },
+  {
+   "name": "Ekain Zenitagoia",
+   "club": "Racing Santander"
+  },
+  {
+   "name": "Isak Jansson",
+   "club": "Rapid Wien"
+  },
+  {
+   "name": "Jonas Auer",
+   "club": "Rapid Wien"
+  },
+  {
+   "name": "Matthias Seidl",
+   "club": "Rapid Wien"
+  },
+  {
+   "name": "Nikolaus Wurmbrand",
+   "club": "Rapid Wien"
+  },
+  {
+   "name": "Serge-Philippe Raux-Yao",
+   "club": "Rapid Wien"
+  },
+  {
+   "name": "Isi Palazón",
+   "club": "Rayo Vallecano"
+  },
+  {
+   "name": "Lukas Klostermann",
+   "club": "RB Leipzig"
+  },
+  {
+   "name": "Yussuf Poulsen",
+   "club": "RB Leipzig"
+  },
+  {
+   "name": "Diego Llorente",
+   "club": "Real Betis"
+  },
+  {
+   "name": "Dominik Marczuk",
+   "club": "Real Salt Lake"
+  },
+  {
+   "name": "Jon Ander Olasagasti",
+   "club": "Real Sociedad"
+  },
+  {
+   "name": "Sheraldo Becker",
+   "club": "Real Sociedad"
+  },
+  {
+   "name": "Dal Varesanovic",
+   "club": "Rizespor"
+  },
+  {
+   "name": "Paulo Dybala",
+   "club": "Roma"
+  },
+  {
+   "name": "Marcus Ingvartsen",
+   "club": "San Diego FC"
+  },
+  {
+   "name": "Samuele Mulattieri",
+   "club": "Sassuolo"
+  },
+  {
+   "name": "Jordan Morris",
+   "club": "Seattle Sounders"
+  },
+  {
+   "name": "Alexis Antunes",
+   "club": "Servette"
+  },
+  {
+   "name": "Théo Magnin",
+   "club": "Servette"
+  },
+  {
+   "name": "Peque Fernández",
+   "club": "Sevilla"
+  },
+  {
+   "name": "Gora Diouf",
+   "club": "Sion"
+  },
+  {
+   "name": "Ilyas Chouaref",
+   "club": "Sion"
+  },
+  {
+   "name": "Kayky",
+   "club": "Sparta Rotterdam"
+  },
+  {
+   "name": "Jeremiah St. Juste",
+   "club": "Sporting CP"
+  },
+  {
+   "name": "Graham Carey",
+   "club": "St Johnstone"
+  },
+  {
+   "name": "Jannes Horn",
+   "club": "St. Louis City"
+  },
+  {
+   "name": "Tomas Totland",
+   "club": "St. Louis City"
+  },
+  {
+   "name": "Oladapo Afolayan",
+   "club": "St. Pauli"
+  },
+  {
+   "name": "Robert Wagner",
+   "club": "St. Pauli"
+  },
+  {
+   "name": "Andi Zeqiri",
+   "club": "Standard Liège"
+  },
+  {
+   "name": "Lazare Amani",
+   "club": "Standard Liège"
+  },
+  {
+   "name": "Abakar Sylla",
+   "club": "Strasbourg"
+  },
+  {
+   "name": "Lovro Zvonarek",
+   "club": "Sturm Graz"
+  },
+  {
+   "name": "Ameen Al-Dakhil",
+   "club": "Stuttgart"
+  },
+  {
+   "name": "Pascal Stenzel",
+   "club": "Stuttgart"
+  },
+  {
+   "name": "Chris Mepham",
+   "club": "Sunderland"
+  },
+  {
+   "name": "Florian Bianchini",
+   "club": "Swansea City"
+  },
+  {
+   "name": "Yann Karamoh",
+   "club": "Torino"
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "club": "Toronto FC"
+  },
+  {
+   "name": "Timo Werner",
+   "club": "Tottenham"
+  },
+  {
+   "name": "Shavy Babicka",
+   "club": "Toulouse"
+  },
+  {
+   "name": "Denis Drăguș",
+   "club": "Trabzonspor"
+  },
+  {
+   "name": "Edin Visca",
+   "club": "Trabzonspor"
+  },
+  {
+   "name": "Enis Destan",
+   "club": "Trabzonspor"
+  },
+  {
+   "name": "Thierno Baldé",
+   "club": "Troyes"
+  },
+  {
+   "name": "Mees Hilgers",
+   "club": "Twente"
+  },
+  {
+   "name": "Mitchell van Bergen",
+   "club": "Twente"
+  },
+  {
+   "name": "Sam Lammers",
+   "club": "Twente"
+  },
+  {
+   "name": "Alexis Sánchez",
+   "club": "Udinese"
+  },
+  {
+   "name": "Damián Pizarro",
+   "club": "Udinese"
+  },
+  {
+   "name": "Isaak Touré",
+   "club": "Udinese"
+  },
+  {
+   "name": "Jordan Zemura",
+   "club": "Udinese"
+  },
+  {
+   "name": "Marin Ljubicic",
+   "club": "Union Berlin"
+  },
+  {
+   "name": "Can Bozdogan",
+   "club": "Utrecht"
+  },
+  {
+   "name": "Yoann Cathline",
+   "club": "Utrecht"
+  },
+  {
+   "name": "Joël Ris",
+   "club": "Vaduz"
+  },
+  {
+   "name": "Antonio Candela",
+   "club": "Venezia"
+  },
+  {
+   "name": "Serginho",
+   "club": "Viborg FF"
+  },
+  {
+   "name": "Gerard Moreno",
+   "club": "Villarreal"
+  },
+  {
+   "name": "Gustavo Silva",
+   "club": "Vitória Guimarães"
+  },
+  {
+   "name": "Kaio César",
+   "club": "Vitória Guimarães"
+  },
+  {
+   "name": "Tiago Silva",
+   "club": "Vitória Guimarães"
+  },
+  {
+   "name": "Toni Borevković",
+   "club": "Vitória Guimarães"
+  },
+  {
+   "name": "Daniel Bachmann",
+   "club": "Watford"
+  },
+  {
+   "name": "Yasser Larouci",
+   "club": "Watford"
+  },
+  {
+   "name": "Marvin Ducksch",
+   "club": "Werder Bremen"
+  },
+  {
+   "name": "John Swift",
+   "club": "West Brom"
+  },
+  {
+   "name": "Karlan Grant",
+   "club": "West Brom"
+  },
+  {
+   "name": "Danny Ings",
+   "club": "West Ham"
+  },
+  {
+   "name": "Luís Guilherme",
+   "club": "West Ham"
+  },
+  {
+   "name": "Allahyar Sayyadmanesh",
+   "club": "Westerlo"
+  },
+  {
+   "name": "Andreas Skov Olsen",
+   "club": "Wolfsburg"
+  },
+  {
+   "name": "Marius Müller",
+   "club": "Wolfsburg"
+  },
+  {
+   "name": "Rogério",
+   "club": "Wolfsburg"
+  },
+  {
+   "name": "Daniel Bentley",
+   "club": "Wolves"
+  },
+  {
+   "name": "Enso González",
+   "club": "Wolves"
+  },
+  {
+   "name": "Sasa Kalajdzic",
+   "club": "Wolves"
+  },
+  {
+   "name": "Danny Ward",
+   "club": "Wrexham"
+  },
+  {
+   "name": "Ebrima Colley",
+   "club": "Young Boys"
+  }
+ ]
+}
