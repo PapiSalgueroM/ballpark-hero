@@ -195,6 +195,35 @@ without rewriting a single stored row, and avoids leaving `completed_on` with mi
 **No row is rewritten and no score is retroactively subtracted**, matching the standing precedent
 from the 61,964 point leak.
 
+**CAUGHT IN THE ACT, 2026-09-11 at 23:48 Eastern, which is inside the broken window.** The
+aggregate above says one play in five. What that actually does to the screen, measured against
+production at that minute, is worse than the percentage suggests:
+
+| | at 23:48 Eastern |
+|---|---|
+| day the board was using | 2026-09-11 (UTC) |
+| day the rest of the site was using | 2026-09-10 (Eastern) |
+| players shown on the Today board | **111** |
+| players who had actually played that Eastern day | **407** |
+| plays counted | 2,844 of 14,933 |
+
+So 296 of the day's 407 players, 73 percent, were erased from a board they had earned a place
+on. And the board was not merely short, it was **wrong about who was winning**. Top five as the
+site served it against top five computed on the Eastern day, same minute:
+
+| Rank | the board said | the truth was |
+|---|---|---|
+| 1 | RowdyTifo-71, 527 | **HumbleUtility-87, 754 over 14 games** |
+| 2 | SlickTifo-43, 325 | **IcyUtility-44, 599 over 12** |
+| 3 | LuckyWorldie-59, 303 | **SundayDime-76, 539** |
+| 4 | RowdyPaint-78, 302 | RowdyTifo-71, 527 |
+| 5 | SilkyGlueguy-88, 293 | RowdyPaint-78, 511 |
+
+The day's actual top three did not appear at all, the player shown first was really fourth, and
+RowdyPaint-78 was shown 302 points from 5 games while really holding 511 from 8. The corrected
+query is the second column and was run read only, before any DDL, which is how the fix was
+verified rather than hoped.
+
 **Two things checked before building, because getting either wrong reintroduces a P0.** First,
 `game_completions` is indexed on `completed_on` twice (`idx_game_completions_day_game`,
 `idx_game_completions_player_day`) and **not at all on `created_at`**, so simply swapping the
