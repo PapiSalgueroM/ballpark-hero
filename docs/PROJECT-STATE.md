@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 546, four player reports off the live site
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 547, four player reports off the live site
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 547.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 548.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -154,10 +154,39 @@ a max" rule exactly. It gates on two pooled statistics now and prints the worst 
 only. The uncalibrated model produced a mean absolute gap of 40 and the control produces 10, against
 a gate of 3.
 
+**547, the Champions League field is who qualified, not who is famous.** The half of the report
+543 did not reach. 543 fixed how many places YOUR league gives and whether YOU are in; this is who
+the other thirty one clubs are. The field was a shuffled prestige pool, `EURO_CLUBS` plus every club
+above a squad rating threshold, and nothing anywhere read a league table, so a club could finish
+bottom of its division and be in the group stage every season forever.
+
+The engine has had the answer the whole time and nobody was reading it: `state.world` carries a live
+standings table for every league that is not mine and `syncWorld` drags each one to its own finish
+line as my season ends, so at a rollover the final table of every league in the world is in the
+save. The field is now the top `uclPlacesIn(league)` of each European league by that league's own
+tiebreaks, plus the reigning European champion (the real holders' route, and the one entry that is
+not a finishing position), plus a documented top up from the next places in the deepest leagues to
+fill 32. Measured on a real rollover: the Premier League contributes exactly its top four and the
+club that finished fifth is not in the competition.
+
+**Four draws read it, not one.** My own group, the other seven groups, the knockout field top up and
+the knockout opponent draw. Wiring only the group stage would have left a club that finished nowhere
+walking into the quarter finals instead, which is the same bug one round later, and the harness's
+own control catches exactly that.
+
+`scripts/simUclField.mjs` plays four careers to the end of a season and rolls them over, then traces
+every one of the 128 places back to a finishing position, the holders' route or a top up, and checks
+60 league cuts for the club that finished one place short. Section 6 plays a second season through to
+its end so the knockout is measured rather than asserted. The control is worth reading: a first
+version killed the derivation outright, which was weaker, because the harness then goes red for the
+field being ABSENT rather than for the wrong clubs being in it. It now disables only the draws'
+consultation of the field, and puts Lazio, Olympiacos, Sporting CP and Club Brugge back into groups
+they never qualified for.
+
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
 simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
 simNoRivalNames, simSoccerCareer, simCareerRealism, simBallonDorTruth, simCareerNoDeadEnd and
-simCareerParity all green. The six new harnesses green with every negative control confirmed firing and a bogus control
+simCareerParity all green. The seven new harnesses green with every negative control confirmed firing and a bogus control
 name exiting 1 on each. All 15 built site fences green after a fresh build; `simBrand` needs
 `pip3 install fonttools pillow` first, which a fresh sandbox does not carry, and is green with zero
 drift once they are there.

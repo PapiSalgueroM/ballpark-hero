@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 547 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 546 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 548 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 547 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 546. Next free is 547.
+block is 541 to 547. Next free is 548.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -193,16 +193,28 @@ block is 541 to 546. Next free is 547.
   ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
   `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
 
+- **547: the Champions League field is who qualified, not who is famous.** The half of the report
+  543 did not reach. The 32 club field was a shuffled prestige pool (`EURO_CLUBS` plus every club
+  above a squad rating threshold) and nothing anywhere read a league table, so a club could finish
+  bottom of its division and be in the group stage forever. It is derived now from last season's
+  final tables, which the engine already keeps in `state.world` and drives to each league's own
+  finish line: top `uclPlacesIn(league)` per European league by that league's own tiebreaks, plus
+  the holders' route, plus a documented top up from the next places in the deepest leagues. FOUR
+  draws read it, not one (my group, the other seven, the knockout field top up, the knockout
+  opponent draw), because wiring only the group stage leaves the same bug one round later. Season
+  one, historic eras and pre-round saves fall back unchanged. Files: `src/lib/clubManager.ts`, new
+  `scripts/simUclField.mjs`.
+
 **STILL OPEN out of these reports, and the desktop lane is better placed for the first two.**
 
-1. **The Champions League FIELD is still a hardcoded prestige pool.** 543 fixed who qualifies from
-   your own league; it did not fix who the other 31 clubs are. `initUclWorld` shuffles European
-   flavour names plus every club above a squad rating threshold and never reads a table, and season
-   one puts YOUR club in on `tier <= 2`, a threshold on baked XI rating, so Chelsea starts in the
-   group stage whatever happened last season. That is most likely the exact thing the reporter saw.
-   Season two onward is derivable with no network at all, because the engine already simulates and
-   stores every other league's full table in `state.world`. Season one needs real 2025-26 final
-   standings, which this repo does not hold and a sandbox with no egress cannot verify.
+1. **SEASON ONE still seeds the Champions League on squad rating.** Round 547 derived the field for
+   season two onward, but season one has no previous season to read, so `startCareer` still puts
+   YOUR club in on `club.tier <= 2`, a threshold on baked XI average, and fills the field from the
+   prestige pool. So a first season at Chelsea still starts in the group stage whatever happened in
+   2025-26. Closing it needs the real 2025-26 final standings, which this repo does not hold
+   anywhere (grep for 2025-26 in `clubManager.ts` returns two prose comments) and which a sandbox
+   with no web egress cannot two-source verify. That is a desktop lane job: one verified table per
+   European league, then `startCareer` reads it the way `startNextSeason` now reads `state.world`.
 2. **332 roster rows are still pending a second source**, listed by name and club in
    `scripts/data/rosterConfirmation2026.json`. Anyone with the web can work that file: adjudicating a
    player means moving his row out of `pending`, and `simRosterAdjudication` section 5 fails if the
