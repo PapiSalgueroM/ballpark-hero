@@ -5,7 +5,8 @@
    projection tranche, not relabeled as completed-season fact.
 
    1. The ledger matches the seed, historical fallback and Git evidence.
-   2. The current fallback contains no 2025-2026 row.
+   2. The current fallback's 2025-2026 rows are exactly the 27 researched
+      tuples (Round 531: the fallback is baked from the live table).
    3. Two exact, fail-closed migrations cover all 77 live seed tuples.
    4. The 27 later researched live tuples remain outside the quarantine.
    5. After both migrations are applied, live must equal those 27 tuples.
@@ -300,7 +301,7 @@ console.log('1) Ledger provenance matches the seed, fallback snapshot and Git hi
 }
 
 section = 2;
-console.log('2) Current fallback contains no 2025-2026 row');
+console.log('2) Current fallback carries exactly the 27 researched 2025-2026 rows and no projection');
 {
   const fallbackRows = parseFallback(read('src/data/careerPlayers.ts'));
   if (fallbackRows.length < 1500) abort('fallback parser found only ' + fallbackRows.length + ' season rows');
@@ -310,8 +311,13 @@ console.log('2) Current fallback contains no 2025-2026 row');
     if (fallbackRows.length !== before + 1) abort('fallback control changed nothing');
     console.log('   NEGATIVE CONTROL ON: restored one quarantined fallback tuple in memory');
   }
+  /* Round 531: the fallback is baked from the live table, so it carries the
+     same 27 researched 2025-2026 tuples section 5 pins on live, and nothing
+     else from that season. Before the bake the file was hand typed and the
+     rule was simply "none", because every 2025-2026 row it had was a
+     projection. */
   const currentSeason = fallbackRows.filter(row => row.season === '2025-2026');
-  if (currentSeason.length) fail(currentSeason.length + ' 2025-2026 fallback row(s) remain');
+  compareSets('fallback 2025-2026 rows', ledger.preservedResearchedLiveRows, currentSeason, tupleKey);
   const present = new Set(fallbackRows.map(tupleKey));
   const lingering = ledger.fallbackProjectionRows.filter(row => present.has(tupleKey(row)));
   if (lingering.length) fail(lingering.length + ' exact quarantined fallback tuple(s) remain');
