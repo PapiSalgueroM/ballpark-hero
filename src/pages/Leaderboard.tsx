@@ -57,7 +57,26 @@ const SPORT_OPTIONS: SportOption[] = [
   })),
 ];
 
-type Period = 'today' | 'alltime';
+/* Round 528: week and month are TRAILING windows, the last 7 and the last 30
+   Eastern days, not calendar weeks or months. The labels say "7 Days" and
+   "30 Days" rather than "This Week" for that reason: a trailing window is what
+   the question "am I climbing" actually means, and a label that says week while
+   the query means something else is the kind of small lie this repo does not
+   ship. The day itself is Eastern everywhere now; before Round 528 this board
+   was the one surface still rolling over at 20:00 Eastern.
+
+   Today and All Time are served by the cached player_ranks view. The two new
+   windows are not in that cache and take the live path, so they are fetched
+   only when their own tab is opened, never on mount. Round 370 exists because
+   this query family was costing the project its Disk IO budget, and putting two
+   more live scans on every leaderboard load would have walked straight back
+   into it. */
+type Period = 'today' | 'week' | 'month' | 'alltime';
+
+const CACHED_PERIODS: Period[] = ['today', 'alltime'];
+
+const EMPTY_BOARDS: Record<Period, BoardRow[]> = { today: [], week: [], month: [], alltime: [] };
+const EMPTY_RANKS: Record<Period, MyRank | null> = { today: null, week: null, month: null, alltime: null };
 
 export default function Leaderboard() {
   const { profile } = useAuth();
@@ -70,8 +89,33 @@ export default function Leaderboard() {
   const [sport, setSport] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<Period>('today');
   const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<Record<Period, BoardRow[]>>({ today: [], alltime: [] });
-  const [myRank, setMyRank] = useState<Record<Period, MyRank | null>>({ today: null, alltime: null });
+  const [rows, setRows] = useState<Record<Period, BoardRow[]>>(EMPTY_BOARDS);
+  const [myRank, setMyRank] = useState<Record<Period, MyRank | null>>(EMPTY_RANKS);
+  /* Which of the live-path windows this sport filter has already paid for. */
+  const [loadedLive, setLoadedLive] = useState<Period[]>([]);
+
+  const mapBoard = (res: any): BoardRow[] =>
+    Array.isArray(res?.data)
+      ? res.data.map((r: any) => ({
+          rank: Number(r.rank),
+          /* Round 318: every name shown on this shared board passes
+             the render-time blocklist; a dirty stored name prints as
+             its stable substitute handle instead */
+          playerName: publicName(String(r.player_name)),
+          totalPoints: Number(r.total_points) || 0,
+          gamesPlayed: Number(r.games_played) || 0,
+        }))
+      : [];
+
+  const mapMine = (res: any): MyRank | null => {
+    const row = Array.isArray(res?.data) ? res.data[0] : null;
+    if (!row) return null;
+    return {
+      rank: Number(row.rank),
+      totalPoints: Number(row.total_points) || 0,
+      totalPlayers: Number(row.total_players) || 0,
+    };
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -79,6 +123,10 @@ export default function Leaderboard() {
 
     const load = async () => {
       setLoading(true);
+      /* A sport change invalidates the live windows too, so they are paid for
+         again the next time one is opened rather than showing another
+         filter's numbers. */
+      setLoadedLive([]);
       try {
         const [todayBoard, allBoard, myToday, myAll] = await Promise.all([
           (supabase.rpc as any)('global_leaderboard', { p_period: 'today', p_games: slugs }),
@@ -88,35 +136,12 @@ export default function Leaderboard() {
         ]);
         if (cancelled) return;
 
-        const mapBoard = (res: any): BoardRow[] =>
-          Array.isArray(res?.data)
-            ? res.data.map((r: any) => ({
-                rank: Number(r.rank),
-                /* Round 318: every name shown on this shared board passes
-                   the render-time blocklist; a dirty stored name prints as
-                   its stable substitute handle instead */
-                playerName: publicName(String(r.player_name)),
-                totalPoints: Number(r.total_points) || 0,
-                gamesPlayed: Number(r.games_played) || 0,
-              }))
-            : [];
-
-        const mapMine = (res: any): MyRank | null => {
-          const row = Array.isArray(res?.data) ? res.data[0] : null;
-          if (!row) return null;
-          return {
-            rank: Number(row.rank),
-            totalPoints: Number(row.total_points) || 0,
-            totalPlayers: Number(row.total_players) || 0,
-          };
-        };
-
-        setRows({ today: mapBoard(todayBoard), alltime: mapBoard(allBoard) });
-        setMyRank({ today: mapMine(myToday), alltime: mapMine(myAll) });
+        setRows({ ...EMPTY_BOARDS, today: mapBoard(todayBoard), alltime: mapBoard(allBoard) });
+        setMyRank({ ...EMPTY_RANKS, today: mapMine(myToday), alltime: mapMine(myAll) });
       } catch {
         if (!cancelled) {
-          setRows({ today: [], alltime: [] });
-          setMyRank({ today: null, alltime: null });
+          setRows(EMPTY_BOARDS);
+          setMyRank(EMPTY_RANKS);
         }
       }
       if (!cancelled) setLoading(false);
@@ -125,6 +150,37 @@ export default function Leaderboard() {
     load();
     return () => { cancelled = true; };
   }, [sport, ownHandle]);
+
+  /* The live windows, fetched the first time their tab is opened. */
+  useEffect(() => {
+    if (CACHED_PERIODS.includes(activeTab) || loadedLive.includes(activeTab)) return;
+    let cancelled = false;
+    const slugs = SPORT_OPTIONS.find(o => o.value === sport)?.slugs ?? null;
+    const period = activeTab;
+
+    const loadWindow = async () => {
+      setLoading(true);
+      try {
+        const [board, mine] = await Promise.all([
+          (supabase.rpc as any)('global_leaderboard', { p_period: period, p_games: slugs }),
+          (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: period, p_games: slugs }),
+        ]);
+        if (cancelled) return;
+        setRows(prev => ({ ...prev, [period]: mapBoard(board) }));
+        setMyRank(prev => ({ ...prev, [period]: mapMine(mine) }));
+        setLoadedLive(prev => (prev.includes(period) ? prev : [...prev, period]));
+      } catch {
+        if (!cancelled) {
+          setRows(prev => ({ ...prev, [period]: [] }));
+          setMyRank(prev => ({ ...prev, [period]: null }));
+        }
+      }
+      if (!cancelled) setLoading(false);
+    };
+
+    loadWindow();
+    return () => { cancelled = true; };
+  }, [activeTab, sport, ownHandle, loadedLive]);
 
   const getRankDisplay = (rank: number) => {
     if (rank === 1) return <Medal className="w-5 h-5 text-yellow-500" />;
@@ -191,7 +247,7 @@ export default function Leaderboard() {
     <>
       <PageSeo
         title="World Leaderboard: Total Points | DoUKnowBall"
-        description="One global leaderboard for every game on DoUKnowBall. Top 100 today and all-time, plus your own world rank. No account needed."
+        description="One global leaderboard for every game on DoUKnowBall. Top 100 for today, the last 7 days, the last 30 days and all-time, plus your own world rank. No account needed."
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
@@ -215,13 +271,23 @@ export default function Leaderboard() {
           </div>
 
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Period)}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="today" className="gap-1.5 py-2 text-xs sm:text-sm">
-                <Calendar className="w-4 h-4" />
+            {/* Round 528: four tabs have to fit a 320px phone, so the two new
+                ones carry no icon and every label stays short. The icons on
+                Today and All-Time are kept because they were already there and
+                removing them would change two tabs nobody asked about. */}
+            <TabsList className="grid w-full grid-cols-4 mb-4">
+              <TabsTrigger value="today" className="gap-1.5 px-1 py-2 text-xs sm:text-sm">
+                <Calendar className="w-4 h-4 hidden sm:inline" />
                 Today
               </TabsTrigger>
-              <TabsTrigger value="alltime" className="gap-1.5 py-2 text-xs sm:text-sm">
-                <Trophy className="w-4 h-4" />
+              <TabsTrigger value="week" className="px-1 py-2 text-xs sm:text-sm">
+                7 Days
+              </TabsTrigger>
+              <TabsTrigger value="month" className="px-1 py-2 text-xs sm:text-sm">
+                30 Days
+              </TabsTrigger>
+              <TabsTrigger value="alltime" className="gap-1.5 px-1 py-2 text-xs sm:text-sm">
+                <Trophy className="w-4 h-4 hidden sm:inline" />
                 All-Time
               </TabsTrigger>
             </TabsList>
@@ -240,6 +306,30 @@ export default function Leaderboard() {
                     </CardHeader>
                     <CardContent>
                       <BoardList list={rows.today} emptyLabel="No scores yet today. Be the first!" />
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="week">
+                  <MyRankCard mine={myRank.week} />
+                  <Card className="bg-surface-1">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">Top 100, last 7 days</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <BoardList list={rows.week} emptyLabel="No scores in the last 7 days. Be the first!" />
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="month">
+                  <MyRankCard mine={myRank.month} />
+                  <Card className="bg-surface-1">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg">Top 100, last 30 days</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <BoardList list={rows.month} emptyLabel="No scores in the last 30 days. Be the first!" />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -297,13 +387,17 @@ export default function Leaderboard() {
             played well, not how many times they hit retry.
           </p>
 
-          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Today, all time, and your own rank</h3>
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Four windows, and your own rank</h3>
           <p className="mb-3">
-            <strong className="text-foreground">Today</strong> resets for everyone at the same moment, so it is
-            a straight race on the same set of daily puzzles. <strong className="text-foreground">All-Time</strong> is
-            the running total and rewards turning up. Both tabs list the top 100, and your own rank
-            card sits above them whether you are 7th or 4,000th, with how many players you are being
-            measured against, because a rank with no field size behind it does not tell you anything.
+            <strong className="text-foreground">Today</strong> resets for everyone at the same moment, midnight
+            Eastern, so it is a straight race on the same set of daily puzzles.
+            {' '}<strong className="text-foreground">7 Days</strong> and <strong className="text-foreground">30 Days</strong> are
+            rolling windows rather than calendar weeks and months: they cover the last seven and the last thirty
+            days ending today, which is the honest answer to whether you are climbing right now.
+            {' '}<strong className="text-foreground">All-Time</strong> is the running total and rewards turning up.
+            Every tab lists the top 100, and your own rank card sits above it whether you are 7th or 4,000th,
+            with how many players you are being measured against, because a rank with no field size behind it
+            does not tell you anything.
           </p>
 
           <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Filtering by sport</h3>
