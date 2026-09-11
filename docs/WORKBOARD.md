@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 538 (see the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 540 (see the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11. 537 is now spent: it is the tablet
   lane's leaderboard Eastern day round, built and pushed as "528" before that note existed and
@@ -343,7 +343,47 @@ the two functions, the materialized view, and nothing else (the `refresh-player-
 DB work goes through the Supabase MCP with the SQL saved under `supabase/migrations/`, and
 `get_advisors` after, per CLAUDE.md. Spec section 104's Week and Month views ride along in the
 same round, since they are the same predicate and would have inherited this exact bug if they had
-been built first. NEXT FREE NUMBER after this claim: 529.
+been built first. NEXT FREE NUMBER after this claim: 529 (superseded, see the renumbering note at
+the top of this claim: the desktop block takes 529 to 536 and this round became 537).
+
+### CLAIMED 2026-09-11, Round 538, tablet lane: the gauntlet draft reaches the NHL and MLB
+
+Straight off the desktop lane's list for this lane ("the NHL and MLB gauntlet drafts you named as
+follow ups") and straight down the one engine many sports rule. The engine is already lifted:
+`src/lib/gauntletEngine.ts` holds `GauntletConfig<P>` and both existing boards are descriptors
+over it, `gauntletDraftNba.ts` over `NBA_POOL` and `gauntletDraftNfl.ts` over `FO_TEAMS`. So this
+round is two descriptors, two thin pages, two SEO entries and the harness coverage, and **no new
+engine**. If I find myself writing loop or scoring logic in a descriptor, that is the Round 426
+mistake (the same roster refill bug fixed twice because CFB and CBB were two copies of one idea)
+and it goes into the shared file instead, where the NBA and NFL boards get it too.
+
+Data already in the repo, checked before claiming rather than after:
+- NHL: `src/data/nhlPerfectLineupPool.ts`, `NHL_POOL` plus `NHL_LINEUP_CONFIG`, the same pairing
+  `gauntletDraftNba.ts` consumes. 58 skaters.
+- MLB: `src/data/mlbFoPlayers.ts`, the front office shape `gauntletDraftNfl.ts` consumes.
+
+Two things to be honest about up front. The NHL pool is 58 players, which is small next to the
+NBA's, so the round has to measure whether a draft over it is actually varied or whether the same
+names come back every run, and say so rather than shipping a board that repeats itself. And the
+ratings in the front office data are proxies, exactly as recorded in `gauntletDraftNfl.ts`'s scope
+comment, so the MLB descriptor inherits that caveat and must not claim more precision than it has.
+
+Files: `src/lib/gauntletDraftNhl.ts`, `src/lib/gauntletDraftMlb.ts`, `src/pages/NhlGauntletDraft.tsx`,
+`src/pages/MlbGauntletDraft.tsx`, the two routes in `src/App.tsx`, two `GameDef` entries in
+`src/data/gameRegistry.ts`, two files under `src/data/gameContent/`, and the existing
+`scripts/simGauntletDraft.mjs` extended to all four sports. Desktop lane: nothing here touches
+your 529 to 536 files.
+
+### CLAIMED 2026-09-11, Round 539, tablet lane: the zero facts fence reaches every game
+
+The permanent half of Anthony's "correct info on all basis". The desktop lane's 531 is a sweep,
+which fixes what is wrong today; this is the fence that stops the next one, and the two are
+complementary rather than overlapping (a sweep is a date, a fence is a rule). `simNoZeroFacts`
+exists and covers a subset; this round takes it to every game that prints a real fact, and its
+negative control has to actually fire, per the harness rules in CLAUDE.md. Desktop lane: if your
+531 wants this fence moved earlier, say so here and take it, I will pick something else.
+
+NEXT FREE NUMBER after these two claims: 540.
 
 ### MASTER SPEC TRIAGE, done 2026-09-11 while 526 and 527 built. Read this before picking spec work.
 
