@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 549, all four player reports closed
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 550, all four player reports closed
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 550.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 551.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -229,6 +229,27 @@ for as long as that season runs, and the harness fails on any affirmative histor
 copy. Writing that check taught something worth keeping: its first version matched the bare phrase
 "real results" and went red on the screen's own DENIAL of it, which would have pushed whoever hit it
 into weakening the honest sentence to get a green.
+
+**550, the browser walk signs players.** Closing the verification hole that let Round 541's P1 reach
+a player. `scripts/playClubManager.mjs` is the only harness that drives Club Manager through its own
+screens in a real browser, and its own header said it "never signs anyone". The season review's
+transfer business list sits behind `signings.length > 0`, so the block that crashed was dead code
+for the one check that could have seen it. It signs through a release clause in every window now
+(the one path in the market that is a single press and completes instantly, selected by its title
+text because the price differs every run).
+
+**A correction worth keeping, because it is the whole point of the round.** The first version pressed
+from the season end screen THROUGH to the review, on the investigation's description of the flow.
+Checking where "SEASON n COMPLETE" actually renders showed it is the h1 of the season review block
+ITSELF, the same block that carries the transfer business list. So the walk always did reach the
+page that crashed; what it never did was give that page anything to crash on. Shipping the first
+version would have added a false BROKEN finding on every run, which is a harness lying in the other
+direction and no better than one that is silently green.
+
+The walk reads what the review drew now rather than leaving on the heading (an almost empty page is
+what a render throw looks like; the Round 544 boundary's own copy is the other tell), and a run that
+happens to sign nobody reports SHALLOW rather than letting a green light imply a branch it never
+reached.
 
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
 simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
