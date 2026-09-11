@@ -87,6 +87,90 @@ four round harnesses green, all negative controls re-verified firing after the f
 `simNoRivalNames`, `simInventedNames`, `simNoInventedQuotes`: all green, the new generated-text
 banks structurally visible to the site's own registry scanner.
 
+## Live as of 2026-09-10 night: Rounds 520 and 521 published and verified
+
+**`origin/main` is `139b1d3c` and douknowball.com is serving it.** Deployment
+`85277d5a-ce23-4986-b4c9-1c6a0ae0cc65`, called after `get_project` showed `latest_commit_sha`
+already matching. Verified live by fetching the actual pages rather than trusting the deploy
+call: `douknowball.com/champions-league-format-history` serves the corrected timeline ("a venue
+fixed in advance", the three named exceptions, all nine periods), and the home page's Polls of
+the Day carry real questions again ("Niners vs Rams in Australia tonight. Who wins?", "Should the
+NFL keep taking big games overseas?"), not the two flattened Round 509 strings. Home bundle
+`index-BQ7LaXxV.js` to `index-CO1_zGvj.js`, confirming a fresh build actually shipped.
+
+Anthony told this session directly that another Claude is working the same repo from a tablet,
+and asked the two of us to divide up the work; `docs/WORKBOARD.md` carries the coordination note
+and both round claims, pushed ahead of the code per the board's own rule.
+
+### Round 520: the first reference explainer, and a review that found a wrong fact in it
+
+The owner sent the AdSense console again on 2026-09-10: same "Low value content" card, same
+Request review button, meaning the 2026-09-02 submission did not clear it. The 2026-08-30
+addendum's answer to that is a real reference layer, and the site had shipped none of it yet
+beyond the Record Books and the grid archives. `/champions-league-format-history` is the first
+purpose-built explainer: the competition's format from the 1955-56 knockout to the 36 club
+league phase, nine periods, each two source verified against Wikipedia's season page and
+RSSSF's independent results archive, with UEFA's own pages for the 2024 format and the away
+goals rule. A second block, generated at build time from the real engine
+(`scripts/genUclEngineShapes.mjs` writes `src/data/uclEngineShapes.json`), says what each Club
+Manager era actually plays and names the modern save's league-phase gap rather than hiding it.
+
+**A five lens adversarial review with three refuters per finding caught a real wrong fact
+before it shipped for good: the page claimed every European Cup final before 1991 was at "a
+neutral ground".** Three weren't. Real Madrid won the 1957 final at their own Bernabeu, Inter
+won 1965 at San Siro, and Roma lost the 1984 final on penalties at their own Stadio Olimpico.
+Corrected to "a venue fixed in advance", which is true of the whole period, with the three
+exceptions named in the copy. Four other real findings, all fixed: the "what Club Manager
+plays" block was pulling the full 1.2 MB game engine into a page meant for reading (moved to
+the generated-JSON pattern the Record Books already use); the structured data type claimed to
+be an Article without any of the fields that make one (switched to the honest `WebPage`); two
+multi-season claims cited only one publisher for an interior season (added the missing RSSSF
+and Wikipedia rows for 1995-96, 2000-01 and 2001-02); and two new links landed under the phone
+sweep's 30px tap target floor (both widened). The harness's two negative controls were rewritten
+so each asserts on the exact message its own break produces, not a neighbouring one that could
+stay green after a real regression.
+
+**Fixing the review's finding on the group card and the era picker broke two other harnesses,
+caught by a full suite run rather than the round's own gates: `simClubManagerEraUcl` and
+`simClubManagerEraMidSeason` both render `UclGroupsCard` through `react-dom/server` with no
+Router, and the new `<Link>` inside that card crashed `useContext` with no Router to read.**
+Both harnesses' render helpers now wrap the component in a bare `MemoryRouter`, which takes no
+navigation and changes nothing about what the card renders. Both pass clean afterward with their
+full measurements intact (68 final tables, 1744 group nights, his 2005 save playing every
+league). A third, unrelated red in the same run was real and mine too: the new file's citation
+links put `wikipedia.org` into shipped `src` for the first time, which `simLegalPages` has
+tracked since Round 304 as an external host that must be named in Privacy Section 4. It wasn't.
+Added, worded honestly as a citation link rather than a data processor, since the existing
+Section 4 sentence says every listed service "processes data on our behalf" and Wikipedia does
+not.
+
+Linked from the soccer hub's background block, the Club Manager era picker, the group card and
+the Record Books. `scripts/simUclFormatHistory.mjs` holds the timeline's contiguity, its
+sourcing, the generated file's freshness against the engine, and the shipped snapshot, with two
+controls (`gap`, `legs`) that each name the exact section and message their break must produce.
+
+### Round 521: the polls get their character back
+
+His words, sent while the Round 520 build was running: "your polls are extremely dull u should
+add more character like u used to make them." What he was looking at, measured rather than
+guessed: the polls generation routine still writes a real, topical question every day ("Niners
+vs Rams in Australia tonight. Who wins?"), but Round 509's home page component **rewrote every
+database question to one of two fixed strings** before it reached the screen, and dropped a
+row's third and fourth choices. So the live page read "Who ranks higher all time?" over 49ers
+and Rams, on every poll, every day, since Round 509 shipped.
+
+Three parts, all live. **The component now renders the database question as written**, with two
+to four choices instead of a hard floor of two. **A fail closed migration rewrote the 46
+still-to-come canned rows** (2026-09-13 through 2026-10-05) with a real question for their real
+matchup, choices left untouched so no vote orphans, verified with a `select count(*)` on the
+live table (0 canned questions left across 52 stocked rows) before and after. **The polls
+rulebook in `docs/PROJECT-STATE.md` is rewritten**, keeping his 2026-08-16 rule on the choices
+word for word (a name, a team, Yes or No, three words, never a sentence) and adding the missing
+half: character in the question. The fallback fixture pool got the same treatment, with its
+pre-509 personality restored under the new word limit. `scripts/simPollCharacter.mjs` replaces
+`simPollHeadToHead.mjs` and holds the new contract with five controls, one of them the exact
+shape of the dullness he named: every fallback prompt collapsed to one string.
+
 ## Live as of 2026-09-09 midday: Rounds 518 and 519, and a review that mostly found my own work
 
 **`origin/main` is `05a6a731` and douknowball.com is serving it.** Deployment
@@ -389,7 +473,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | How to play popup on first open plus "?" | PART | RulesGate exists on every game; the other lane has an uncommitted change making it once per route (2026-09-05) |
 | Report a bug as a real pipeline | DONE | Round 316 kinds, Round 446 delivery tracking; email proved live |
 | Flags, never abbreviations, everywhere | DONE | Round 444 for Career Ladder and Missing XI; Round 453 swept the rest: every printed nationality renders through FlagImg with its name beside the flag (17 bare sites plus 2 country lines to 0), simNationalityFlags fences it, and the two long lists (Soccer Career's picker, Club Manager's market filter) sit under their confederation |
-| Polls more engaging | DATABASE DONE, UI PENDING DEPLOY | Round 509 restocked 58 upcoming rows and the live table now has zero C or D choices, zero off-format prompts and zero repeated matchups. Every poll is a named participant versus participant with exactly A and B. Team polls ask exactly `Who you got?`; player polls ask exactly `Who ranks higher all time?`. The component and fixture fallback enforce the same contract once the pending Round 509 code deploys. No weird specific comparison wording. |
+| Polls more engaging | DONE | Round 521, his own words: "your polls are extremely dull u should add more character". Round 509's fixed two-string rewrite is gone; the component renders the database question as written, with two to four choices. The 46 still-to-come canned rows and the fallback pool both got a real question per matchup. His 2026-08-16 rule on the choices (three words, never a sentence) stays in force. |
 | Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
 | A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
