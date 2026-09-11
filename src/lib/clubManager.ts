@@ -8991,6 +8991,15 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
 export function uclQualifiersFrom(career: CareerState): string[] {
   if (!!career.eraId && isHistoricEra(career.eraId)) return [];
   if (!career.world || !Array.isArray(career.table) || !career.table.length) return [];
+  /* Only a season that actually FINISHED has a table worth reading. syncWorld
+     drags the rest of the world to the same fraction of its season that I am
+     through mine, so a half played save carries half played tables everywhere,
+     and "the top four" of those is not a qualification, it is a snapshot of
+     November. The normal rollover always arrives here complete, but
+     acceptWildernessJob also rolls a season over, and a manager sacked in
+     November reaches it with his calendar unfinished. That case falls back to
+     the pool, which is the honest answer when there is no final table. */
+  if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return [];
   const myLeague = careerLeagueOf(career);
   const seen = new Set<string>();
   const field: string[] = [];

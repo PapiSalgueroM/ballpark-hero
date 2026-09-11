@@ -34,6 +34,11 @@
  *      the prestige pool (the top up in uclBracketField and the opponent draw
  *      in drawUclKoOpponent), so fixing the group stage alone would have left
  *      the same bug standing one round later.
+ *   7. A HALF PLAYED season yields no field. The world is only dragged as far
+ *      through its season as I am through mine, so mid season tables are a
+ *      snapshot of November and their top four is not a qualification. The
+ *      normal rollover always arrives complete; acceptWildernessJob does not,
+ *      because a manager can be sacked in November and take a job from there.
  *
  * NEGATIVE CONTROL: UCL_FIELD_CONTROL=pool makes the two DRAWS ignore the
  * derived field while leaving the derivation itself running, which is exactly
@@ -94,7 +99,7 @@ if (CONTROL === 'pool') {
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
 const {
-  startCareer, playNextEntry, finishSeason, startNextSeason,
+  startCareer, playNextEntry, finishSeason, startNextSeason, uclQualifiersFrom,
   sortedLeagueTable, sortedWorldTable, careerLeagueOf, worldLeagueDefs,
   uclPlacesIn, leagueOf,
 } = cm;
@@ -274,6 +279,31 @@ console.log('6) The knockout draws from the field too, not from the pool');
     }
     if (failures === before) console.log(`   ${base.club}'s second season: ${[...new Set(drawn)].length} clubs across the draw and bracket, all qualifiers`);
   }
+}
+
+/* ------------------------------------------------------------------ */
+console.log('7) A half played season yields no field at all');
+{
+  const before = failures;
+  /* syncWorld drags the rest of the world to the same FRACTION of its season
+     that I am through mine, so a half played save carries half played tables
+     everywhere and "the top four" of those is a snapshot of November, not a
+     qualification. The normal rollover always arrives complete, but
+     acceptWildernessJob also rolls a season over and a manager sacked in
+     November reaches it with his calendar unfinished. */
+  const base = runs[0];
+  const midSeason = JSON.parse(JSON.stringify(base.fin));
+  midSeason.week = Math.floor(midSeason.calendar.length / 2);
+  const derived = uclQualifiersFrom(midSeason);
+  if (derived.length) {
+    fail(`a save stopped at week ${midSeason.week} of ${midSeason.calendar.length} produced a ${derived.length} club field off tables that are not final`);
+  }
+  /* And the finished one it was copied from still does, so this section is not
+     passing because the fixture is broken. */
+  if (!uclQualifiersFrom(base.fin).length) {
+    fail('the finished save it was copied from produces no field either, so this section proves nothing');
+  }
+  if (failures === before) console.log('   mid season yields nothing, the finished season it came from still yields 32');
 }
 
 /* ------------------------------------------------------------------ */
