@@ -80,9 +80,13 @@
     "hash": "50ec7802b70c6816",
     "date": "2026-09-05"
   },
+  "/champions-league-format-history": {
+    "hash": "ff85d7307b7a7563",
+    "date": "2026-09-10"
+  },
   "/club-manager": {
-    "hash": "d4459a9af1819922",
-    "date": "2026-09-06"
+    "hash": "7ae12ff39121029d",
+    "date": "2026-09-10"
   },
   "/clue-auction": {
     "hash": "17d25413c6a75e74",
@@ -453,8 +457,8 @@
     "date": "2026-09-07"
   },
   "/records": {
-    "hash": "891a5b4305879fe3",
-    "date": "2026-09-01"
+    "hash": "491d3782b0d6da19",
+    "date": "2026-09-10"
   },
   "/score-predictor": {
     "hash": "1c0d85e79745b7d5",
@@ -473,8 +477,8 @@
     "date": "2026-09-05"
   },
   "/soccer": {
-    "hash": "bfeb7bc359309621",
-    "date": "2026-09-05"
+    "hash": "676b0fe83ac0490d",
+    "date": "2026-09-10"
   },
   "/soccer-career": {
     "hash": "d47614011aa60eb1",

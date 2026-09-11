@@ -221,7 +221,11 @@ export { UclGroupsCard } from '${cardPath}';
 export { UclBracketCard } from '${ROOT_URL}/src/components/club-manager/UclBracketCard.tsx';
 import React from '${ROOT_URL}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT_URL}/node_modules/react-dom/server.node.js';
-export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
+import { MemoryRouter } from 'react-router-dom';
+/* Round 520 gave UclGroupsCard a react-router Link, and renderToStaticMarkup
+   has no Router by default, which crashes useContext inside Link. A router
+   with no navigation ever taken changes nothing about what the card renders. */
+export const render = (Component, props) => renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(Component, props)));
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic${groupsAlias} --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
