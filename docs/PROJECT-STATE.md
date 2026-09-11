@@ -1,5 +1,48 @@
 # Project state
 
+## Built 2026-09-11, PR open, not yet merged: Round 525, the inbox and rivalry lift completed for NBA, MLB and NHL
+
+**Not live yet, same open PR as 522 to 524** (https://github.com/PapiSalgueroM/ballpark-hero/pull/92), pushed on top of them on `claude/douknowbll-spec-work-c3zcci`.
+
+Closes the rest of "Bring the Soccer Career depth to the NFL career, then the other US careers":
+Round 523 bound NFL to the shared `careerInbox.ts` and `careerRivalryEvents.ts` engines, this round
+binds the three remaining US careers the same way, each following `nflCareerInbox.ts` and
+`nflCareerRivalryEvents.ts` file for file: `src/lib/nbaCareerInbox.ts`, `nbaCareerRivalryEvents.ts`,
+`mlbCareerInbox.ts`, `mlbCareerRivalryEvents.ts`, `nhlCareerInbox.ts`, `nhlCareerRivalryEvents.ts`,
+each with its own sport-flavored message bank and beat table (every sender a role, never a name),
+wired into that sport's own season tick and surfaced on its board as an inbox tile and a
+rivalry-event interstitial carrying the same head to head comparison Round 524 added to the shared
+card. The invented-name collision guard needed nothing added: `careerRival.ts`'s FIRST/LAST bank is
+shared across every `RivalSport` value, not per sport, so Round 523's proof (576 combinations
+enumerated, 6,000 live rolls, zero real-name collisions) already covers these three.
+
+**Built as three parallel isolated worktrees, one per sport, and they didn't know about each other.**
+Each treated itself as the only new section in the two shared harness files
+(`scripts/simCareerInbox.mjs`, `scripts/simCareerRivalryEvents.mjs`), and two of the three (NBA,
+NHL) had branched before Round 524's review fixes landed, so their copies of the shared engine and
+harness files were stale (missing the rate-based assertion fix and the `RivalryEventCard` head to
+head prop). Reconciled by hand rather than by a raw three way merge: the six brand new per-sport
+files and the six sport-specific board/loop edits copied straight across (verified byte-identical
+starting point first), the two shared harness files rebuilt from the one worktree (MLB) that had
+extracted from this branch's actual tip, with NBA's and NHL's new sections individually
+renumbered and spliced onto that already-fixed base. Full harness re-run afterward proves the
+splice: all eight sections green (soccer, NFL, MLB, NBA, NHL, the collision guard), and both
+`INBOX_CONTROL` and `RIVALRY_CONTROL` negative controls confirmed to still break every sport's
+section, proving each genuinely runs through the shared engine and not a private copy.
+
+**Adversarial review: three lenses (legal exposure in the six new banks, season-tick wiring
+correctness per sport against the NFL reference, UX consistency across all four boards), zero
+findings, all three dimensions reported clean.**
+
+**Gates, this exact tree.** `tsc --noEmit -p tsconfig.app.json`: 0. Both harnesses green across all
+eight sections with every negative control re-verified (these bundle straight from `src/` into a
+temp directory and never touch `dist/` or `public/`, so they're trustworthy regardless of what else
+is building). `simInventedNames`, `simNoInventedQuotes`, `simNoRivalNames`: all green. `npm run
+build` was run during this round's integration but raced against a concurrent background
+`build:seo` regenerating Rounds 522 to 524's snapshots, both writing `dist/` at once, so that one
+result is not trusted; a clean, uncontended `npm run build` still needs to run before this entry
+counts as fully gated.
+
 ## Built 2026-09-10, PR open, not yet merged: Rounds 522 to 524, a draft mode per sport and the rivalry/inbox lift to NFL
 
 **Not live yet.** Built and pushed to `claude/douknowbll-spec-work-c3zcci` from `origin/main` at
