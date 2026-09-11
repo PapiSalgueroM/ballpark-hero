@@ -42,6 +42,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src/lib/siteSearch.ts');
@@ -70,6 +71,15 @@ const CONTROLS = {
     to: 'score: Math.round(total) + Math.random(), matchedOn: best.field',
     breaks: 'determinism: the same query twice comes back in a different order',
   },
+  /* Round 538. Puts back the exact bug Round 526 shipped: isBrowse answering
+     "did this tokenise" instead of "is the box empty", so a query in a script
+     the tokeniser cannot read falls into the browse branch and the whole
+     catalog comes back as matches. Section 5's new assertions must go red. */
+  catalogdump: {
+    from: 'export function isBrowse(raw: string): boolean {\n  return normalizeQuery(raw).length === 0;\n}',
+    to: 'export function isBrowse(raw: string): boolean {\n  return queryTerms(raw).length === 0;\n}',
+    breaks: 'the empty box and an unreadable query collapse back together: every non-Latin query returns all 123 games',
+  },
 };
 
 let source = fs.readFileSync(SRC, 'utf8');
@@ -96,7 +106,7 @@ execSync(
   { stdio: 'inherit' },
 );
 const engine = await import(pathToFileURL(BUNDLE).href);
-const { searchSite, normalizeQuery } = engine;
+const { searchSite, normalizeQuery, isBrowse, isUnreadableQuery } = engine;
 
 /* the registry, straight from source, so the harness counts what ships */
 const REG_ENTRY = path.join(TMP, 'reg.ts');
@@ -264,6 +274,42 @@ console.log('5) hostile input');
     }
   }
   console.log(`   ${ok}/${hostile.length} survived, including 4096 characters and every regex metacharacter`);
+
+  /* THE CHECK THIS SECTION WAS MISSING, and worth writing down rather than
+     just adding. Until Round 538 this section asserted only `Array.isArray`,
+     on exactly the inputs where the engine was most wrong. A 123 element array
+     passes that, so the section was green while every non-Latin and
+     punctuation-only query below returned THE WHOLE CATALOG, which the home
+     page then drew as search results. That is CLAUDE.md's "a harness that only
+     proves no crash is close to worthless", and this is what it costs: the
+     check ran, on the right inputs, and proved nothing.
+
+     A non-empty query is a question. The answer may legitimately be nothing.
+     It may never be everything. */
+  const typedSomething = ['*', '(', '\\', '.*', '?', '$^', '()|', '/', '//', '-', '--', '%%%', '{}',
+    '🏒🏒🏒', '你好', 'サッカー', 'хоккей', '"', "'", '<script>'];
+  let bounded = 0;
+  for (const q of typedSomething) {
+    const r = searchSite(q);
+    if (r.length === GAMES.length) fail(`"${q}" returned the entire ${GAMES.length} game catalog, which the home page draws as matches`);
+    else bounded += 1;
+    if (isBrowse(q)) fail(`isBrowse("${q}") is true, but the person typed something: browse is for an EMPTY box`);
+  }
+  console.log(`   ${bounded}/${typedSomething.length} non-empty queries answered with something other than the whole catalog`);
+
+  /* And the two states stay distinguishable, which is the invariant under it. */
+  for (const q of ['', '   ']) {
+    if (!isBrowse(q)) fail(`isBrowse(${JSON.stringify(q)}) should be true for an empty box`);
+    if (isUnreadableQuery(q)) fail(`isUnreadableQuery(${JSON.stringify(q)}) should be false for an empty box`);
+  }
+  const unreadables = ['你好', 'サッカー', 'хоккей', '%%%', '🏒'];
+  let unreadable = 0;
+  for (const q of unreadables) {
+    if (!isUnreadableQuery(q)) fail(`isUnreadableQuery("${q}") should be true: real text, no terms`);
+    else unreadable += 1;
+    if (searchSite(q).length !== 0) fail(`"${q}" should return no matches, not a list`);
+  }
+  console.log(`   ${unreadable}/${unreadables.length} unreadable queries reported as unreadable rather than as a browse`);
 }
 
 /* ── 6: an empty query is a browse state ────────────────────────────────── */
@@ -297,6 +343,26 @@ console.log('7) the generated keyword index');
     if (covered < GAMES.length) {
       fail(`${GAMES.length - covered} games have no keywords. A new game needs: node scripts/genSearchKeywords.mjs`);
     }
+    /* Round 538: COVERAGE IS NOT FRESHNESS, and coverage was all this asserted.
+       A game with an entry passes the check above forever, so editing a guide in
+       src/data/gameContent left the keywords describing the old text with every
+       check still green. The generator already computes the answer and writes it
+       into the file as `source`; its own comment called that "a note, not a
+       gate". Nothing read it. Recomputing it here is what turns it into one, and
+       it catches the edit case that coverage structurally cannot. */
+    const liveHash = createHash('sha256')
+      .update(fs.readdirSync(path.join(ROOT, 'src/data/gameContent')).sort()
+        .map(f => fs.readFileSync(path.join(ROOT, 'src/data/gameContent', f), 'utf8')).join('\n'))
+      .digest('hex').slice(0, 16);
+    if (kw.source !== liveHash) {
+      fail(`the guides have changed since the keyword index was built (index ${kw.source}, guides now ${liveHash}). Rerun: node scripts/genSearchKeywords.mjs`);
+    } else {
+      console.log(`   guide hash ${liveHash} matches the index, so the keywords describe the guides that ship`);
+    }
+    /* An entry for a game that no longer exists is the other direction, and the
+       file could only ever grow without this. */
+    const stale = Object.keys(kw.k || {}).filter(p => !GAMES.some(g => g.path === p));
+    if (stale.length) fail(`the keyword index still carries ${stale.length} removed game(s): ${stale.join(', ')}`);
     /* Measured 9505 bytes at 121 games, about 79 bytes a game. The ceiling is
        double that per game, which leaves room for the site to grow and still
        goes red if somebody decides to paste whole paragraphs in here. */

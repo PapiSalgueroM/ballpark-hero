@@ -151,7 +151,10 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
   clicker: ['idle', 'tycoon'],
   xi: ['xi', 'lineup', 'squad'],
   lineup: ['lineup', 'xi', 'squad'],
-  daily: ['daily'],
+  /* Round 538: carried over from the home page's old private table, where it
+     was the one alias the lift genuinely lost. It was the only query in an 826
+     query comparison that used to return something and came back empty. */
+  gameshow: ['deal', 'banker', 'list'],
 };
 
 /**
@@ -307,7 +310,13 @@ function scoreTerm(term: string, e: Entry, growing = false): Hit {
   if (e.label === term || e.labelKey === term) hit = better(hit, { score: W.labelExact, field: 'label' });
   else if (e.labelWords.includes(term)) hit = better(hit, { score: W.labelWord, field: 'label' });
   else if (loose && e.labelWords.some(w => w.startsWith(term))) hit = better(hit, { score: W.labelWord * 0.9, field: 'label' });
-  else if (loose && e.label.startsWith(term)) hit = better(hit, { score: W.labelPrefix, field: 'label' });
+  /* Round 538: there was a `e.label.startsWith(term)` branch scoring
+     W.labelPrefix here and it could never run. A term is alphanumeric only by
+     construction, and a label starts with its own first word, so anything that
+     starts the label also starts labelWords[0] and the line above has already
+     taken it. Exhaustively checked over every prefix of every label: it fired
+     0 times for 123 games. W.labelPrefix still does real work in the whole
+     query bonus below, which is why the weight stays. */
   else if (loose && e.label.includes(term)) hit = better(hit, { score: W.labelPart, field: 'label' });
 
   if (e.pathWords.includes(term)) hit = better(hit, { score: W.pathWord, field: 'path' });
@@ -356,9 +365,34 @@ export function queryTerms(raw: string): string[] {
   return words(n).slice(0, MAX_TERMS);
 }
 
-/** True when the query asks for everything rather than for something. */
+/**
+ * True when the query asks for everything rather than for something, which
+ * means the box is genuinely EMPTY.
+ *
+ * Round 538 fix. This used to read `queryTerms(raw).length === 0`, which is a
+ * different question with the same answer shape, and the difference was the
+ * worst thing in Round 526. The tokenizer splits on `[^a-z0-9+]+`, so every
+ * non-Latin script, every emoji and every punctuation-only string reduces to
+ * zero terms too. Treating those as browse meant a visitor typing "хоккей" or
+ * "サッカー" into the home page box got all 123 games rendered as though all
+ * 123 had matched, in place of the curated layout, and the /search status line
+ * read "123 games, sport by sport" with their own text visible in the box. The
+ * home page ranking this replaced showed the honest no results state with three
+ * popular picks, so it was a silent regression on the most visited page on the
+ * site, and worse than no results because it looked like an answer.
+ */
 export function isBrowse(raw: string): boolean {
-  return queryTerms(raw).length === 0;
+  return normalizeQuery(raw).length === 0;
+}
+
+/**
+ * True when somebody typed something real and this engine got nothing out of
+ * it: a script it cannot tokenise, or punctuation only. Callers show their no
+ * results state. Kept separate from isBrowse so the two can never collapse
+ * back into each other, and asserted apart in simSiteSearch section 5.
+ */
+export function isUnreadableQuery(raw: string): boolean {
+  return !isBrowse(raw) && queryTerms(raw).length === 0;
 }
 
 /**
@@ -379,6 +413,8 @@ export function browseAll(): SearchResult[] {
 export function searchSite(raw: string, options?: { limit?: number }): SearchResult[] {
   const terms = queryTerms(raw);
   if (terms.length === 0) {
+    /* Text we could not read is a miss, not a browse. See isUnreadableQuery. */
+    if (!isBrowse(raw)) return [];
     const all = browseAll();
     return options?.limit ? all.slice(0, options.limit) : all;
   }

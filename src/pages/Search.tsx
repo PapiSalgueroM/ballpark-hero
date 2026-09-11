@@ -45,16 +45,44 @@ export default function Search() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
+  /* The last value this page itself put in the address, so the two effects
+     below can tell their own write apart from somebody else's navigation. */
+  const pushedRef = useRef<string>(params.get('q') ?? '');
+
   /* The address carries the query so a search can be sent to somebody.
      replace: true, or every keystroke would be a back button press. */
   useEffect(() => {
     const current = params.get('q') ?? '';
-    if (current === query) return;
-    const next = new URLSearchParams(params);
-    if (query) next.set('q', query); else next.delete('q');
-    setParams(next, { replace: true });
+    if (current === query) { pushedRef.current = query; return; }
+    /* Round 538: DEBOUNCED, and not for tidiness. This ran on every keystroke,
+       and setParams is history.replaceState underneath. Safari throttles that
+       to roughly 100 calls in 30 seconds and then THROWS SecurityError, from
+       inside an effect with nothing to catch it, so a long query typed quickly
+       took the page down. 250ms is shorter than the gap between two typed
+       characters and far longer than the throttle needs. */
+    const t = setTimeout(() => {
+      const next = new URLSearchParams(params);
+      if (query) next.set('q', query); else next.delete('q');
+      pushedRef.current = query;
+      setParams(next, { replace: true });
+    }, 250);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
+
+  /* Round 538: and the other direction, which was missing entirely. The
+     footer's own "Search games" link points at /search with no q. Clicking it
+     while already on /search?q=hockey does not remount the route, so the box
+     kept the old text and the address disagreed with it. Adopting an external
+     change cannot loop: a change this page wrote is recognised by pushedRef
+     and ignored here. */
+  useEffect(() => {
+    const fromUrl = params.get('q') ?? '';
+    if (fromUrl === pushedRef.current) return;
+    pushedRef.current = fromUrl;
+    setQuery(fromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   /* Focus the box on a pointer device only. On a phone, focusing it on arrival
      throws the keyboard up and shoves the page around, and this site has a rule
