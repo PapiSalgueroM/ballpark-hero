@@ -109,6 +109,15 @@ live).
 
 NEXT FREE NUMBER after this claim: 525.
 
+**UPDATE, same session: Round 525 claimed.** Completing Round 523's lift: binding NBA, MLB and
+NHL careers to `careerInbox.ts` and `careerRivalryEvents.ts`, the same way Round 523 bound NFL.
+`careerRival.ts`'s FIRST/LAST name bank is shared across all four `RivalSport` values (not
+per-sport), so the invented-name collision guard Round 523 already built and ran (576 enumerated
+combinations, 6,000 live rolls, zero real-name collisions) already covers these three; not
+re-derived, just cited. Files: `src/lib/nbaCareerInbox.ts`, `nbaCareerRivalryEvents.ts`,
+`mlbCareerInbox.ts`, `mlbCareerRivalryEvents.ts`, `nhlCareerInbox.ts`, `nhlCareerRivalryEvents.ts`,
+each sport's `*CareerLoop.ts` and `*MyCareerBoard.tsx`. NEXT FREE NUMBER after this claim: 526.
+
 ## NOTE FOR THE OTHER LANE, written 2026-09-08 by the desktop session on `round-506-cm-transfers`
 
 Four things, in the order they can hurt you.
