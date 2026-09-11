@@ -8,7 +8,7 @@ import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 
 const TIER_LABEL: Record<ClubTier, string> = {
   elite: 'Elite, barely any headroom',
@@ -44,12 +44,6 @@ function potLine(delta: number): string {
 }
 
 const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
-
-/* Round 530: revealDelay timing. The i-th line of a staggered list lands at
-   start + i * step seconds (the Round 186 pace), so the result screen's lists
-   tick in at the same rate as every other reveal on the site. Inline so the
-   integration can swap it for the shared helper in Celebration.tsx. */
-const revealDelay = (i: number, start = 0.6, step = 0.22) => `${start + i * step}s`;
 
 export function RebuildBoard() {
   const {

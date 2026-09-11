@@ -16,6 +16,7 @@
    in after its own curtain has landed. */
 
 import { cn } from '@/lib/utils';
+import { revealDelay } from '@/components/club-manager/Celebration';
 import type { GmPresser } from '@/lib/foGmPress';
 
 interface Props {
@@ -28,11 +29,10 @@ interface Props {
 const REGISTERS = ['Measured', 'Candid', 'Bold'] as const;
 
 export function GmPressCard({ presser, onAnswer, delay = 0 }: Props) {
-  /* Round 530: revealDelay timing (start 0.6s, step 0.22s) for the answers,
-     written inline until the shared helper lands in Celebration.tsx. The
-     heading, title and body take the three beats before it. */
+  /* The heading, title and body take three beats; the answers then land on
+     the kit's stagger, offset by where this card's run starts. */
   const at = (s: number) => `${(delay + s).toFixed(2)}s`;
-  const answerDelay = (i: number) => at(0.6 + i * 0.22);
+  const answerDelay = (i: number) => revealDelay(i, delay + 0.6);
   return (
     <div className="rounded-2xl border border-gold/40 bg-card p-3" data-gm-press>
       <div key={presser.id}>

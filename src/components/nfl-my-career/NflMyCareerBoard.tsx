@@ -19,12 +19,12 @@ import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 import { extensionDue, pushExtension, type ExtensionTalk } from '@/lib/usCareerExtension';
 import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
-import { buildSeasonReveal, revealDelay, type SeasonReveal } from '@/lib/usCareerReveal';
+import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { nflHeatLabel } from '@/lib/nflCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
@@ -602,16 +602,16 @@ export default function NflMyCareerBoard() {
           <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.1s' }}>{career.name} retires</p>
           <p className="cm-slam mt-1 text-sm font-semibold text-gold" style={{ animationDelay: '0.3s' }}>{legacy.verdict}</p>
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-            {legacy.bullets.map((b, i) => <p key={i} className="cm-tick-in" style={{ animationDelay: `${revealDelay(i)}s` }}>{b}</p>)}
+            {legacy.bullets.map((b, i) => <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(i) }}>{b}</p>)}
             {/* Round 469: the badges the career earned, on the retirement card. */}
             {(() => {
               const earned = nflEarnedBadges(career);
               return earned.length > 0
-                ? <p className="cm-rise pt-1 text-gold" style={{ animationDelay: `${revealDelay(legacy.bullets.length) + 0.15}s` }}>{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
+                ? <p className="cm-rise pt-1 text-gold" style={{ animationDelay: revealDelay(legacy.bullets.length, 0.75) }}>{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
                 : null;
             })()}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: `${revealDelay(legacy.bullets.length) + 0.35}s` }}>
+          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: revealDelay(legacy.bullets.length, 0.95) }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Legacy <b className="text-gold">{legacy.score}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{legacy.hof ? '🏛️ Hall of Fame' : 'No bust in Canton'}</span>
           </div>

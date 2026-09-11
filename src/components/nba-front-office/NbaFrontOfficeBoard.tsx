@@ -35,7 +35,7 @@ import { stageVerdict } from '@/lib/usCareerReveal';
    trust and can tilt next season's mandate one tier. */
 import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
 import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 /* Round 204: the hub is boxes now, the same boxes Club Manager has had
    since Round 74. What each box says lives in the engine, not here. */
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
@@ -200,16 +200,15 @@ export default function NbaFrontOfficeBoard() {
      period stamp plus their index, so a new round remounts them and they
      re-animate, while a re-render for anything else leaves them still. The
      slam row carries its own key, so a deal landing remounts that one row
-     and nothing under it moves.
-     Round 530: revealDelay timing (start 0.2s, step 0.22s), written inline
-     until the shared helper lands in Celebration.tsx. */
+     and nothing under it moves. The rows land on the kit's stagger from
+     0.2s, so the feed reads before the tiles under it settle. */
   const feedRows = (lines: string[], stamp: string) => lines.map((n, i) => {
     const slamKey = feedSlam && i === 0 && feedSlam.text === n ? `slam:${feedSlam.n}` : null;
     return (
       <p
         key={slamKey ?? `${stamp}:${i}`}
         className={slamKey ? 'cm-slam font-semibold text-foreground' : 'cm-tick-in'}
-        style={{ animationDelay: slamKey ? '0s' : `${(0.2 + i * 0.22).toFixed(2)}s` }}
+        style={{ animationDelay: slamKey ? '0s' : revealDelay(i, 0.2) }}
       >
         {n}
       </p>

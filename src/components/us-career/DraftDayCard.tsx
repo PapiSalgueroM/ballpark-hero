@@ -18,8 +18,7 @@
    motion. CelebrationStyles carries that rule for the cm- classes and
    ConfettiBurst carries its own (decoration, so it simply does not run). */
 
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
-import { revealDelay } from '@/lib/usCareerReveal';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 
 export interface DraftDayFacts {
@@ -57,7 +56,7 @@ export default function DraftDayCard({ pick, teamLabel, playerName, lines, first
               <p
                 key={`${pick}-${i}`}
                 className="cm-tick-in rounded-lg bg-background px-2.5 py-1.5 text-xs leading-snug text-muted-foreground"
-                style={{ animationDelay: `${revealDelay(i)}s` }}
+                style={{ animationDelay: revealDelay(i) }}
               >
                 {l}
               </p>

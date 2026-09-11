@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, GraduationCap, ListOrdered, RotateCcw, ShieldHalf, Trophy, Users } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   CBB_SCHOOLS, CBB_SCHOOL_MAP, CBB_CONFS, CBB_ROUNDS,
   initCbb, simCbbRound, cbbRankings, cbbConfStandings, runMarch,
@@ -24,12 +24,6 @@ interface SaveShape {
 }
 
 const confLabel = (c: string) => c === 'B1G' ? 'Big Ten' : c === 'B12' ? 'Big 12' : c === 'BE' ? 'Big East' : c === 'MM' ? 'Mid-Majors' : c;
-
-/* Round 530: revealDelay timing. The i-th line of a staggered list lands at
-   start + i * step seconds, the Round 186 pace every reveal on the site
-   shares. Same arithmetic as the helper Celebration.tsx grows this round, so
-   the integration can swap this for the import. */
-const revealDelay = (i: number, start = 0.6, step = 0.22) => `${start + i * step}s`;
 
 export default function CbbDynastyBoard() {
   const [phase, setPhase] = useState<Phase>('pick');

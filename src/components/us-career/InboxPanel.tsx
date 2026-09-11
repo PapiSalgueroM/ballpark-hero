@@ -16,8 +16,7 @@
    does not replay the whole list, and only a genuinely new row moves.
    Reduced motion lands the row on its final frame (CelebrationStyles). */
 import { useEffect, useRef, useState } from 'react';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
-import { revealDelay } from '@/lib/usCareerReveal';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { InboxMessage } from '@/lib/careerInbox';
 
@@ -92,7 +91,7 @@ export function InboxPanel({ messages, onAnswer }: {
               freshIdx >= 0 && 'cm-tick-in',
               m.answered === undefined ? 'border-primary/40 bg-primary/5' : 'border-border bg-card',
             )}
-            style={freshIdx >= 0 ? { animationDelay: `${revealDelay(freshIdx, 0.1, 0.12)}s` } : undefined}
+            style={freshIdx >= 0 ? { animationDelay: revealDelay(freshIdx, 0.1, 0.12) } : undefined}
           >
             <span className="text-lg leading-none">{m.emoji}</span>
             <span className="min-w-0 flex-1">

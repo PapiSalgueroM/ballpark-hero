@@ -80,7 +80,7 @@ import {
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti, ShineWrap } from "@/components/soccer-career/CareerFx";
-import { CelebrationStyles } from "@/components/club-manager/Celebration";
+import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
@@ -458,9 +458,8 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
         /* Round 530: the front pages tick in one at a time, keyed on the season
            plus index so a new edition re-runs the stagger and an unrelated
            re-render does not. A milestone edition glows gold; the glow sits on
-           the inner card because the kit's classes share one animation slot.
-           Round 530: revealDelay timing. */
-        <div key={`${seasonKey}-${i}`} className="cm-tick-in" style={{ animationDelay: `${0.6 + i * 0.22}s` }}>
+           the inner card because the kit's classes share one animation slot. */
+        <div key={`${seasonKey}-${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i) }}>
         <div className={`bg-card border-2 rounded-xl overflow-hidden ${article.type === "milestone" ? "border-amber-400/50 cm-gold-glow" : "border-border"}`}>
           {/* Newspaper masthead */}
           <div className="bg-muted/30 border-b border-border px-4 py-2 flex items-center justify-between">
@@ -2759,9 +2758,8 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
       {isWinner && <Confetti pieces={70} gold />}
       {/* Round 530: the headline lands after the last nominee has ticked in,
           so the countdown reads before the verdict. The whole header block
-          carries the delay; the card's own fade is untouched.
-          Round 530: revealDelay timing. */}
-      <div className="cm-slam text-center space-y-2" style={{ animationDelay: `${0.6 + bdor.nominees.length * 0.22 + 0.15}s` }}>
+          carries the delay; the card's own fade is untouched. */}
+      <div className="cm-slam text-center space-y-2" style={{ animationDelay: revealDelay(bdor.nominees.length, 0.75) }}>
         {career.appearance && (
           <div className="flex justify-center">
             <div className={`rounded-xl overflow-hidden border-2 ${isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
@@ -2793,11 +2791,10 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
       {/* Top 10 nominees. Round 530: the list stays in the engine's rank order
           on screen, winner at the top, but the ARRIVAL runs the other way:
           tenth ticks in first and the winner last, a countdown. Keyed on the
-          year plus index so a fresh ceremony re-runs it and nothing else does.
-          Round 530: revealDelay timing. */}
+          year plus index so a fresh ceremony re-runs it and nothing else does. */}
       <div className="space-y-1">
         {bdor.nominees.map((n, i) => (
-          <div key={`${bdor.year}-${i}`} style={{ animationDelay: `${0.6 + (bdor.nominees.length - 1 - i) * 0.22}s` }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
+          <div key={`${bdor.year}-${i}`} style={{ animationDelay: revealDelay(bdor.nominees.length - 1 - i) }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
             n.isPlayer ? (i === 0 ? "bg-amber-500/20 border border-amber-500/30" : "bg-emerald-500/10 border border-emerald-500/20") : "bg-muted/20"
           }`}>
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
@@ -2837,9 +2834,8 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
   }, []);
   /* Round 530: one clock for the whole ceremony. The six grid cells tick in,
      then the clubs and the money rise, then the tier slams. Every number is
-     its final from the frame it appears (Round 147).
-     Round 530: revealDelay timing. */
-  const at = (i: number) => `${0.6 + i * 0.22}s`;
+     its final from the frame it appears (Round 147). */
+  const at = (i: number) => revealDelay(i);
 
   return (
     <div className="relative rounded-xl border-2 border-amber-400/40 bg-gradient-to-b from-amber-500/10 to-transparent p-5 space-y-4">
@@ -2949,12 +2945,11 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
 
       {/* Round 530: the results, then the final table under them, tick in on
           one clock, top to bottom. Keyed on the season plus index so a new
-          season re-runs the stagger and an unrelated re-render does not.
-          Round 530: revealDelay timing. */}
+          season re-runs the stagger and an unrelated re-render does not. */}
       {manager.seasonResults.length > 0 && (
         <div className="space-y-1">
           {manager.seasonResults.slice(-5).map((r, i) => (
-            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: `${0.6 + i * 0.22}s` }}>
+            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
               <span className="text-muted-foreground">S{r.year}</span>
               <span className="font-semibold">{r.club}</span>
               <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
@@ -2979,7 +2974,7 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
               <div
                 key={`${last.year}-${i}`}
                 className={`cm-tick-in flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
-                style={{ animationDelay: `${0.6 + (afterResults + i) * 0.22}s` }}
+                style={{ animationDelay: revealDelay(afterResults + i) }}
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>
@@ -2999,7 +2994,7 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
       {manager.unemployed && (
         /* Round 530: the block shakes once when it lands, and once more for
            each further season out (the key moves with seasonsOut). The offers
-           under it rise one at a time. Round 530: revealDelay timing. */
+           under it rise one at a time. */
         <div key={`out-${manager.seasonsOut ?? 0}`} className="cm-loss-shake rounded-xl border-2 border-amber-500/50 bg-amber-500/5 p-3 space-y-2">
           <div className="text-center">
             <div className="text-2xl">📪</div>
@@ -3016,7 +3011,7 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
               key={`${o.club}-${i}`}
               onClick={() => onAcceptOffer?.(i)}
               className="cm-rise w-full text-left rounded-lg border border-border bg-card hover:border-primary p-2.5 transition-all"
-              style={{ animationDelay: `${0.6 + i * 0.22}s` }}
+              style={{ animationDelay: revealDelay(i) }}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-black truncate">{o.club}</span>

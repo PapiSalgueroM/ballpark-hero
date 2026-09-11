@@ -20,8 +20,7 @@ import { useState } from 'react';
 import { Briefcase, ClipboardList, Flame, RotateCcw, TrendingUp } from 'lucide-react';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 /* Round 530: the season result is a moment. Same kit as the season curtain. */
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
-import { revealDelay } from '@/lib/usCareerReveal';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   acceptCoachOffer, playCoachSeason, sitOutCoachSeason,
   coachOutlook, coachHotSeat, coachTotals, coachVerdict, formatCoachRecord,
@@ -293,7 +292,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                 key={`${o.team}-${i}`}
                 onClick={() => take(i)}
                 className="cm-tick-in w-full rounded-xl border border-border bg-background p-2.5 text-left transition-colors hover:border-primary/60"
-                style={{ animationDelay: `${revealDelay(i, 0.3, 0.14)}s` }}
+                style={{ animationDelay: revealDelay(i, 0.3, 0.14) }}
               >
                 <div className="flex items-start justify-between gap-2">
                   <span className="min-w-0 flex-1 truncate text-xs font-black text-foreground">{o.team}</span>
@@ -352,7 +351,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                         <p
                           key={`${last.n}-${i}`}
                           className="cm-tick-in rounded-lg bg-card px-2 py-1 text-[11px] leading-snug text-muted-foreground"
-                          style={{ animationDelay: `${revealDelay(i)}s` }}
+                          style={{ animationDelay: revealDelay(i) }}
                         >
                           {n}
                         </p>

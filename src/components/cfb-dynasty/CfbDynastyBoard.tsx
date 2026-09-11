@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Crown, GraduationCap, ListOrdered, RotateCcw, ShieldHalf, Trophy, Users } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   CFB_SCHOOLS, CFB_SCHOOL_MAP, CFB_CONFS, CFB_ROUNDS,
   initCfb, simCfbRound, cfbRankings, confStandings, runCfbPostseason,
@@ -19,12 +19,6 @@ type Tab = 'team' | 'play' | 'rankings' | 'standings';
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
 type Postseason = { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; heisman: HeismanFinalist[] };
-
-/* Round 530: revealDelay timing. The i-th line of a staggered list lands at
-   start + i * step seconds, the Round 186 pace every reveal on the site
-   shares. Same arithmetic as the helper Celebration.tsx grows this round, so
-   the integration can swap this for the import. */
-const revealDelay = (i: number, start = 0.6, step = 0.22) => `${start + i * step}s`;
 
 interface SaveShape {
   st: CfbState; phase: Phase;

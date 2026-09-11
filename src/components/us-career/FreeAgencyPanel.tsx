@@ -23,10 +23,9 @@
    CelebrationStyles. */
 
 import { Handshake, TrendingUp } from 'lucide-react';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { FA_TIER_WORD, faTotalValue } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
-import { revealDelay } from '@/lib/usCareerReveal';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -64,7 +63,7 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
               'cm-tick-in rounded-2xl border p-3',
               o.gone ? 'border-border bg-card opacity-45' : o.incumbent ? 'border-gold/50 bg-card' : 'border-border bg-card',
             )}
-            style={{ animationDelay: `${revealDelay(i, 0.3, 0.14)}s` }}
+            style={{ animationDelay: revealDelay(i, 0.3, 0.14) }}
           >
             <div className="flex items-center justify-between gap-2">
               <p className="min-w-0 truncate text-sm font-black text-foreground">

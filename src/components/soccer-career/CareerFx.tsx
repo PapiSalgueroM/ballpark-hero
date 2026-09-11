@@ -55,20 +55,6 @@ export const Confetti = ({ pieces = 40, gold = false }: { pieces?: number; gold?
   );
 };
 
-/** Round 530: the counting number is gone. It rolled from zero to the value,
-    which breaks Round 147's rule (never animate a number through values that
-    were never true). Soccer Career prints its finals in place now. The four
-    US career boards still import this name until their own Round 530 pass
-    lands, so the export stays as a plain span that prints the final value
-    with no motion; the integration pass deletes it once those imports go. */
-export const CountUp = ({
-  value,
-  decimals = 0,
-  className = "",
-}: { value: number; duration?: number; decimals?: number; className?: string }) => (
-  <span className={className}>{value.toFixed(decimals)}</span>
-);
-
 /** Gold shine sweeping across a container. Wrap anything trophy-ish. */
 export const ShineWrap = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`relative overflow-hidden ${className}`}>

@@ -15,9 +15,8 @@
  * Reduced motion lands every row on its final frame (CelebrationStyles).
  */
 import { Trophy } from 'lucide-react';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { trophyLines } from '@/lib/careerHub';
-import { revealDelay } from '@/lib/usCareerReveal';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -51,7 +50,7 @@ export default function TrophyCase({ seasons, rings, ringWord }: Props) {
             <div
               key={l.label}
               className="cm-tick-in rounded-xl border border-border bg-card px-3 py-2"
-              style={{ animationDelay: `${revealDelay(i, 0.2, 0.1)}s` }}
+              style={{ animationDelay: revealDelay(i, 0.2, 0.1) }}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate text-sm font-bold text-foreground">{l.label}</span>
