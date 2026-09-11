@@ -21,7 +21,10 @@
  *
  * WHAT THIS HOLDS:
  *   1. The format is read from uclFormatHistory, not retyped: a modern tie is
- *      two legs, the final is one, and a pre-2003 season plays no round of 16.
+ *      two legs, the final is one, a pre-2003 season plays no round of 16, and
+ *      1991-92 plays no knockout ladder at all (the two group winners met in
+ *      the final, no semi finals). A career can start in 1990, so that last one
+ *      is reachable rather than academic.
  *   2. The outcome is derived from the score. Across thousands of ties the
  *      aggregate and the winner agree every single time, level aggregates DO
  *      occur (they were impossible before), and every one of them is settled by
@@ -159,7 +162,22 @@ console.log('1) The format is read from the competition\'s history, not retyped'
     if (r.qualified && r.matches.some(m => m.round === 'R16')) { sawR16Old = true; break; }
   }
   if (sawR16Old) fail('a 1999-2000 campaign played a round of 16, and that round did not exist until 2003-04');
-  if (failures === before) console.log('   two legs per tie, one for the final, no round of 16 before 2003');
+  /* 1991 and 1992 ran no knockout ladder at all: the two group winners met in
+     the final and there were no semi finals, which uclFormatHistory says in
+     those periods' own words. A Soccer Career can start in 1990 (the era picker
+     offers 1990, 1995 and 2000 starts), so those seasons are reachable, and the
+     first version of this round played them as a full quarter final ladder that
+     never existed. */
+  let ladder9192 = null;
+  for (let i = 0; i < 600; i++) {
+    const r = simulateUCL(stateFor(88, 1, 'Real Madrid', 1991), {});
+    if (r.qualified && r.matches.length) { ladder9192 = [...new Set(r.matches.map(m => m.round))]; break; }
+  }
+  if (!ladder9192) fail('no 1991-92 campaign ever qualified, so that season could not be checked');
+  else if (ladder9192.join(',') !== 'Final') {
+    fail(`a 1991-92 campaign played ${ladder9192.join(', ')}, but that season went straight from the groups to the final with no semi finals`);
+  }
+  if (failures === before) console.log('   two legs per tie, one for the final, no round of 16 before 2003, and 1991-92 goes groups straight to the final');
 }
 
 /* ------------------------------------------------------------------ */

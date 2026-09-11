@@ -5904,9 +5904,17 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   const uclYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year + 1 : 2024;
   const period = periodFor(uclYear);
   /* The ladder the competition really ran that season. Before 2003 there was no
-     round of 16, and the old code played one anyway. */
-  const rounds = period.roundOf16 ? ["R16", "QF", "SF", "Final"] : ["QF", "SF", "Final"];
-  const tieLegs = period.koLegs ?? 2;
+     round of 16, and the old code played one anyway.
+     A null koLegs is not "unknown, assume two": it is the 1991 and 1992 shape,
+     where the two group winners met in the final and there were no semi finals
+     at all, which uclFormatHistory says in those periods' own words. A Soccer
+     Career can start in 1990, so those seasons are reachable and were being
+     played as a full quarter final ladder that never existed. */
+  const noKnockoutLadder = period.koLegs === null;
+  const rounds = noKnockoutLadder
+    ? ["Final"]
+    : period.roundOf16 ? ["R16", "QF", "SF", "Final"] : ["QF", "SF", "Final"];
+  const tieLegs = period.koLegs ?? 1;
   const awayGoalsApply = uclYear >= UCL_AWAY_GOALS.introduced && uclYear <= UCL_AWAY_GOALS.lastSeason;
 
   const opponents = getEraUclOpponents(uclYear).filter(o => o !== state.currentClub);
