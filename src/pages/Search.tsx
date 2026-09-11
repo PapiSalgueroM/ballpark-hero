@@ -176,7 +176,7 @@ export default function Search() {
 
       <p className="text-xs text-muted-foreground mb-6" role="status">
         {browsing
-          ? `${shown.length} ${shown.length === 1 ? 'game' : 'games'}, newest sports last. Start typing to narrow it down.`
+          ? `${shown.length} ${shown.length === 1 ? 'game' : 'games'}, sport by sport. Start typing to narrow it down.`
           : `${shown.length} ${shown.length === 1 ? 'match' : 'matches'} for "${query.trim()}"`}
       </p>
 
@@ -188,8 +188,11 @@ export default function Search() {
             <section key={group.sport} className="mb-8">
               <h2 className="flex items-baseline gap-2 text-sm font-display font-bold uppercase tracking-wider text-muted-foreground mb-3">
                 {group.sport}
+                {/* the leading space is for the saved copy: the prerenderer
+                    keeps the words and not the flex gap, so without it the
+                    heading reads "Soccer(33)" */}
                 <span className="text-xs font-normal normal-case tracking-normal">
-                  ({group.results.length})
+                  {` (${group.results.length})`}
                 </span>
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -239,9 +242,16 @@ function ResultTile({ result, browsing }: { result: SearchResult; browsing: bool
             </span>
           )}
         </div>
-        <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</p>
+        {/* A span rather than a p, and that is not a style choice. The
+            prerenderer captures every readable block AND every link, and a
+            paragraph sitting inside a link gets written out twice: once
+            flattened into the link's own text, once on its own. Measured on
+            the first snapshot of this page, that was 121 duplicated
+            descriptions. A block span reads identically and is captured once,
+            as part of the link. */}
+        <span className="block text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</span>
         {reason && (
-          <p className="text-[10px] text-muted-foreground/70 mt-1">{reason}</p>
+          <span className="block text-[10px] text-muted-foreground/70 mt-1">{reason}</span>
         )}
       </div>
     </Link>

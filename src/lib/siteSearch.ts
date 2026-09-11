@@ -140,7 +140,11 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
   puzzle: ['puzzle', 'grid', 'connections'],
   wordgame: ['puzzle'],
   sim: ['career', 'manager', 'dynasty', 'season'],
-  manager: ['manager', 'career'],
+  /* "manager" pointed at "career" in the first draft and that turned a precise
+     query into 23 results, nearly all of them career sims. The front offices
+     are the games that actually are the same idea wearing another sport's
+     name, so those are what it points at now: five results instead of 23. */
+  manager: ['manager', 'front office'],
   gm: ['front office', 'manager'],
   franchise: ['dynasty', 'front office'],
   idle: ['idle', 'tycoon'],
