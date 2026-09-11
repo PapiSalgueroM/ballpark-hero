@@ -23,8 +23,25 @@
  * A run ends one of three ways and only one of them is a problem: the season
  * plays out, the board sacks you, or it runs out of steps. Being sacked is a
  * real ending, not a failure. This harness plays badly on purpose, because it
- * never sets a tactic, never signs anyone and chases every game it is losing,
- * so a mid-table club losing patience is the game working as designed.
+ * never sets a tactic and chases every game it is losing, so a mid-table club
+ * losing patience is the game working as designed.
+ *
+ * ROUND 550: IT SIGNS PLAYERS NOW, AND IT READS THE SEASON REVIEW RATHER THAN
+ * JUST MATCHING ITS HEADING. Until then this header said "never signs anyone",
+ * and that sentence was the hole a P1 walked through on 2026-09-11.
+ *
+ * The detail that matters, and which the first attempt at this round got wrong:
+ * "SEASON n COMPLETE" is the h1 of the season review ITSELF, not of a screen
+ * before it, so the walk always did reach the page that crashed. What it never
+ * did was give that page anything to crash on. The transfer business list sits
+ * behind `signings.length > 0`, and with nobody signed the line that threw was
+ * never evaluated, so a harness driving the real game in a real browser
+ * reported a clean run on a career that could not be continued.
+ *
+ * So it signs through a release clause in every window, and when it reaches the
+ * review it reads what the review drew instead of leaving on the heading. When
+ * a run happens to sign nobody it says so out loud rather than letting a green
+ * light imply a branch it never reached.
  */
 import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
@@ -95,6 +112,33 @@ async function tapText(rx, label) {
   const ok = await b.click({ timeout: 4000 }).then(() => true).catch(() => false);
   if (ok) { say(`pressed ${label}`); await page.waitForTimeout(500); }
   return ok;
+}
+
+/**
+ * Round 550: sign somebody, through the release clause, which is the one path
+ * in the market that is a single press and completes instantly.
+ *
+ * WHY THE HARNESS NEEDED THIS. Until now this file said in its own header that
+ * it "never signs anyone", and that was the hole a P1 walked through on
+ * 2026-09-11. The season review's transfer business list is behind
+ * `signings.length > 0`, so with an empty list the block that crashed was dead
+ * code for this walk: the harness rendered the season end screen, matched the
+ * heading, and reported a clean run on a page that threw for any player who had
+ * done any business at all.
+ *
+ * The clause button is selected by its own title text rather than by a price,
+ * because the price is different every run.
+ */
+async function signSomebody() {
+  const clause = page.locator('button:visible[title^="Release clause"]:not([disabled])').first();
+  if (await clause.count().catch(() => 0) === 0) return false;
+  const ok = await clause.click({ timeout: 4000 }).then(() => true).catch(() => false);
+  if (!ok) return false;
+  await page.waitForTimeout(700);
+  /* A clause deal can still put a confirm in front of you. */
+  await tap(/confirm|yes|sign him|do it/i, 'confirm the signing').catch(() => {});
+  say('signed a player through his release clause');
+  return true;
 }
 
 async function clearRoom() {
@@ -176,6 +220,10 @@ if (!/Season 1/i.test(t)) {
 /* ---------- play a season ---------- */
 console.log('2) Playing a season through the interface');
 let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, seasonEnd = false, sacked = false;
+/* Round 550: how many players this walk actually bought, which decides
+   whether the season review's transfer business branch was covered at all. */
+let signingsMade = 0;
+let reviewSeen = false;
 /* Round 472: how many times the live viewer was skipped through. */
 let liveSkips = 0;
 let lastHt = null;
@@ -306,7 +354,35 @@ for (let step = 0; step < MAX_STEPS; step++) {
      score tile, so the harness declared the season over on its very first step
      and then reported a clean run. A loose end condition is how a harness ends
      up proving nothing at all. */
-  if (/SEASON \d+ COMPLETE/i.test(t)) { seasonEnd = true; break; }
+  if (/SEASON \d+ COMPLETE/i.test(t)) {
+    seasonEnd = true;
+    /* Round 550: this heading IS the season review, not the screen before it.
+       "SEASON n COMPLETE" is the h1 of the SEASON END block itself, the same
+       block that carries the transfer business list. So the walk always did
+       reach the page that crashed on 2026-09-11, and the reason it saw nothing
+       is the one this round fixes: the crashing list sits behind
+       `signings.length > 0` and this harness never signed anybody, so the line
+       that threw was never evaluated. Read the screen rather than just matching
+       the heading and leaving. */
+    const rv = t;
+    reviewSeen = true;
+    /* A render throw unmounts the root, so the tell is an empty page rather
+       than an error message. Round 544 put a boundary in, so the other tell is
+       the boundary's own copy. */
+    if (rv.length < 80) {
+      note('BROKEN ', `the season review drew almost nothing (${rv.length} characters), which is what a render throw looks like`);
+    }
+    if (/This page broke/i.test(rv)) {
+      note('BROKEN ', 'the season review threw and the error boundary caught it');
+    }
+    if (signingsMade > 0 && !/Transfer business/i.test(rv)) {
+      note('BROKEN ', `${signingsMade} player(s) were signed this season and the review shows no transfer business block`);
+    }
+    if (signingsMade > 0 && !/🟢 IN|🔴 OUT/.test(rv)) {
+      note('BROKEN ', 'the transfer business block rendered no IN or OUT rows despite a signing');
+    }
+    break;
+  }
   /* Getting sacked is a real ending, not a stuck screen. Round 111 made the
      board mean it, and this harness plays badly on purpose: it never sets a
      tactic, never signs anyone and chases every game it is losing, so a
@@ -426,6 +502,14 @@ for (let step = 0; step < MAX_STEPS; step++) {
     if (await tap(/Open the Window/i, 'open the transfer window')) {
       windows++;
       await page.waitForTimeout(600);
+      /* Round 550: the window is the only place a signing can happen, and a
+         signing is the only way this walk ever renders the season review's
+         transfer business list. Two, so one failed deal does not leave the
+         branch uncovered. */
+      for (let a = 0; a < 2; a++) {
+        if (await signSomebody()) signingsMade++;
+        else break;
+      }
       /* Opening the window drops you on the Market tab, and the way back to
          the fixture list is the Home tab, not a close button. */
       if (!await tapText(/^Home$/, 'home tab')
@@ -465,13 +549,25 @@ for (let step = 0; step < MAX_STEPS; step++) {
 }
 
 const ending = seasonEnd ? 'played the season out' : sacked ? 'was sacked, which is a real ending' : 'ran out of steps';
-console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows, ${liveSkips} skips through the live viewer`);
+console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows, ${signingsMade} signings, ${liveSkips} skips through the live viewer`);
 console.log(`   ending: ${ending}`);
 if (!seasonEnd && !sacked && fullTimes < 5) note('SHALLOW', `only reached ${fullTimes} matches, so most of the season was never exercised`);
 if (fullTimes < 5) note('SHALLOW', `only ${fullTimes} matches were played, which is too few to have exercised much`);
 if (halftimes === 0) note('BROKEN ', 'never reached a single half time, so Round 119 is not covered by this run');
 if (halftimes > 0 && fullTimes === 0) note('BROKEN ', 'reached half time but never a full time, so matches do not finish');
 if (halftimes > 0 && subsMade === 0) note('BROKEN ', 'never managed to make a single substitution');
+/* Round 550: the coverage this walk claims has to be the coverage it had. A run
+   that reached the season review having signed nobody proves the review renders
+   for a manager who did no business, which is exactly the state that was green
+   while the page threw for everybody else. Say so rather than let a green light
+   imply more than it covered. */
+if (seasonEnd && !reviewSeen) note('BROKEN ', 'the season ended and the review was never opened');
+if (reviewSeen && signingsMade === 0) {
+  note('SHALLOW', 'reached the season review having signed nobody, so the transfer business block was not rendered and its branch is still uncovered');
+}
+if (windows > 0 && signingsMade === 0) {
+  note('SHALLOW', `${windows} transfer window(s) opened and not one signing completed, so the market was not exercised either`);
+}
 
 console.log(`\nPlayed Club Manager through its own screens. ${findings.length} findings.`);
 await browser.close();

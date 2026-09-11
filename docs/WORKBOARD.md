@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 550 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 549 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 551 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 550 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 549. Next free is 550.
+block is 541 to 550. Next free is 551.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -193,6 +193,16 @@ block is 541 to 549. Next free is 550.
   ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
   `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
 
+- **550: the browser walk signs players and opens the season review.** Closing the verification hole
+  that let Round 541's P1 reach a player. `scripts/playClubManager.mjs` said in its own header that
+  it "never signs anyone", and the season review's transfer business list sits behind
+  `signings.length > 0`, so the block that crashed was dead code for the one harness that drives the
+  real game in a real browser. Worse, the walk matched the `SEASON n COMPLETE` heading and stopped
+  there, ONE SCREEN SHORT of the page that threw. It signs through a release clause in every window
+  now, presses on into the review, and reads what the review drew (an almost empty page is what a
+  render throw looks like; the Round 544 boundary's own copy is the other tell). When a run happens
+  to sign nobody it says so out loud rather than letting a green light imply a branch it never
+  reached. Files: `scripts/playClubManager.mjs`.
 - **549: take over a club mid season.** The fourth player report, and the only one nothing had
   shipped for: "add live start points to manager career: take over a club mid season for example
   leicester in 15/16 midway thru". Far smaller than it reads, because 2015-16 already ships as a
@@ -258,9 +268,10 @@ block is 541 to 549. Next free is 550.
    knockout; a campaign still begins at the first knockout round with a flat qualification roll
    (`tier === 1 ? 0.85 : 0.35`) rather than a group the player plays through. That is the next piece
    of the same job, and `uclFormatHistory.ts` already describes which format each season ran.
-5. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
-   only harness that renders that screen. Give the walk a transfer pass and assert the season end
-   screen really shows the transfer business rows.
+5. **The live control row fold still needs measuring in the browser.** Round 550 gave
+   `playClubManager` a real walk through a live match and a season review, so the rig to measure it
+   now exists: add a bounding-box read of the pause/speed/Skip row at 390x844 and 375x667 while the
+   viewer is up, then decide between shrinking the pitch and moving the row above it.
 6. **Two watch mode findings left, both needing a real browser to close.** The substitution one is
    fixed in Round 548. What remains:
    - **The live control row sits below the fold on a phone.** Measured in Chromium: heading and
