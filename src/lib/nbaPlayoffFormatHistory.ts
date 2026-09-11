@@ -19,16 +19,15 @@
  * blocked, so none of them appears as a source; nothing here rests on a page
  * that could not actually be read.
  *
- * WHAT WAS LEFT OUT FOR HAVING ONE READING. Wikipedia says a division winner
- * was guaranteed a top three seed in 2004-05 and 2005-06 and that the floor
- * moved to fourth after two 60 win teams met in the 2006 second round; no
- * second publisher this page could open says either, so the period states
- * only what ESPN and NBA.com confirm: division winners were protected, and
- * the floor was a top four seed by the time the rule was dropped in 2015.
- * The 1973 wild card note, the 1961 division semifinal length, the year the
- * lottery pool reached 14 teams, the 2027 lottery's exact percentage odds and
- * how many of its picks are drawn each had a single reading and are not
- * stated.
+ * WHAT WAS LEFT OUT FOR HAVING ONE READING. Wikipedia and FanSided both have
+ * the division winner's floor at a top three seed in 2004-05 and 2005-06 and
+ * at a top four seed from 2006-07, so the period states both floors. Only
+ * Wikipedia gives the reason for the move (two 60 win teams meeting in the
+ * 2006 second round), so the reason is not stated. The 1973 wild card note,
+ * the 1961 division semifinal length, the year the lottery pool reached 14
+ * teams, the 2027 lottery's exact percentage odds, how many of its picks are
+ * drawn and the Board of Governors vote tally that approved it (only ESPN
+ * prints one) each had a single reading and are not stated.
  *
  * ONE DISAGREEMENT, RECORDED RATHER THAN HIDDEN. NBA.com's lottery history
  * says the rule limiting the lottery to the first three picks was "changed in
@@ -255,7 +254,7 @@ export const NBA_PLAYOFF_PERIODS: NbaPlayoffPeriod[] = [
     to: 2014,
     title: 'Division winners protected in the seeding',
     fieldSize: 16,
-    qualifying: 'Eight per conference: each division winner plus the best remaining records, with a division winner guaranteed a seed no lower than a fixed floor whatever its record. By the time the rule was dropped that floor was the fourth seed.',
+    qualifying: 'Eight per conference: each division winner plus the best remaining records, with a division winner guaranteed a seed no lower than a fixed floor whatever its record: a top three seed in 2004-05 and 2005-06, a top four seed from 2006-07 until the rule was dropped.',
     notes: [
       'The rule arrived with the 2004-05 season, the first with the league at thirty teams after Charlotte joined and the divisions were redrawn. It meant a weak division champion could sit above a stronger team in the bracket, and the seeding was adjusted during the period before being removed altogether.',
       'What the rule protected was the seed, not home court: the 2015 change notes that a division winner seeded above a team with a better record did not get home court against it.',
@@ -309,7 +308,7 @@ export const NBA_LOTTERY: { intro: string; eras: NbaLotteryEra[] } = {
       id: 'coin-flip',
       year: 1966,
       title: 'The coin flip',
-      text: 'From 1966 through 1984 the worst team in each conference flipped a coin for the first overall pick, and the loser picked second. Every other team drafted in reverse order of record. It kept the two worst teams from being certain of the top pick, and did nothing about the incentive to be one of those two.',
+      text: 'From 1966 through 1984 the worst team in each division, and from 1970-71 each conference, flipped a coin for the first overall pick, and the loser picked second. Every other team drafted in reverse order of record. It kept the two worst teams from being certain of the top pick, and did nothing about the incentive to be one of those two.',
       sources: ['wplottery', 'nbalotterychanges', 'espnlottery'],
     },
     {
@@ -344,7 +343,7 @@ export const NBA_LOTTERY: { intro: string; eras: NbaLotteryEra[] } = {
       id: 'three-two-one',
       year: 2027,
       title: 'The 3-2-1 lottery',
-      text: 'Approved 29 to 1 on 28 May 2026 and in force from the 2027 draft: sixteen teams in the lottery rather than fourteen. Teams that miss both the playoffs and the play-in get three balls each, except the three worst records, which are labelled draft relegated, lose a ball and hold two apiece, with a promise of no worse than the twelfth pick. The ninth and tenth placed play-in teams get two balls, and the two teams that lose the seventh versus eighth play-in game get one. The three worst teams have gone from the best odds in the room to worse than the teams just above them, which is the whole point.',
+      text: 'Approved on 28 May 2026 and in force from the 2027 draft: sixteen teams in the lottery rather than fourteen. Teams that miss both the playoffs and the play-in get three balls each, except the three worst records, which are labelled draft relegated, lose a ball and hold two apiece, with a promise of no worse than the twelfth pick. The ninth and tenth placed play-in teams get two balls, and the two teams that lose the seventh versus eighth play-in game get one. The three worst teams have gone from the best odds in the room to worse than the teams just above them, which is the whole point.',
       sources: ['wplottery', 'nba2026lottery', 'espnlottery2026'],
     },
   ],

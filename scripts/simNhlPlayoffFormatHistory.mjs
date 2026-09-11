@@ -181,7 +181,7 @@ if (CONTROL) {
       if (!text.includes(must)) fail(`the snapshot does not contain ${JSON.stringify(must)}`);
     }
     const cited = NHL_PLAYOFF_SOURCES.filter(s => html.includes(s.url)).length;
-    if (cited < NHL_PLAYOFF_SOURCES.length - 1) fail(`only ${cited} of ${NHL_PLAYOFF_SOURCES.length} source URLs reached the snapshot`);
+    if (cited < NHL_PLAYOFF_SOURCES.length) fail(`only ${cited} of ${NHL_PLAYOFF_SOURCES.length} source URLs reached the snapshot`);
     if (/<meta name="robots"[^>]*noindex/i.test(html)) fail('the snapshot carries a noindex');
     const words = text.split(' ').filter(Boolean).length;
     if (words < 700) fail(`the snapshot carries only ${words} words, which is a shell rather than the page`);

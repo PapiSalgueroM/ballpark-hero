@@ -144,7 +144,7 @@ const NhlPlayoffFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-2">Where this comes from</h2>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-            Every change above rests on at least two independent publishers agreeing: Wikipedia's season pages cross-checked against the NHL's own playoff format history, the "History of Stanley Cup Playoff Formats" section of the league's 2025 playoffs information guide, with Sports Illustrated, the Hockey Hall of Fame and two NHL.com news pages behind individual rows. Hockey Reference, Britannica and Last Word on Sports all refused the fetch, and two NHL.com history addresses came back empty or missing, so none of those is cited. {sources.length} sources across {publishers} publishers, last checked {NHL_PLAYOFF_VERIFIED_ON}.
+            Every change above rests on at least two independent publishers agreeing: Wikipedia's season pages cross-checked against the NHL's own playoff format history, the "History of Stanley Cup Playoff Formats" section of the league's 2025 playoffs information guide, with Sports Illustrated, the Hockey Hall of Fame, three NHL.com news pages and the league's playoff format page behind individual rows. Hockey Reference, Britannica and Last Word on Sports all refused the fetch, and two NHL.com history addresses came back empty or missing, so none of those is cited. {sources.length} sources across {publishers} publishers, last checked {NHL_PLAYOFF_VERIFIED_ON}.
           </p>
           <ol className="text-xs text-muted-foreground space-y-1 list-decimal pl-5">
             {sources.map(s => (

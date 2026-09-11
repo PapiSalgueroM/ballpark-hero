@@ -13,8 +13,9 @@
  * Cup Playoff Formats" section of the league's 2025 Stanley Cup Playoffs
  * information guide, a PDF the league publishes on media.nhl.com, read in
  * full on NHL_PLAYOFF_VERIFIED_ON below. Sports Illustrated's format history
- * piece, the Hockey Hall of Fame's Stanley Cup history page and two NHL.com
- * news pages back individual rows. Hockey Reference, Britannica and Last Word
+ * piece, the Hockey Hall of Fame's Stanley Cup history page, three NHL.com
+ * news pages and the league's playoff format page back individual rows.
+ * Hockey Reference, Britannica and Last Word
  * on Sports were all attempted and all blocked (403), records.nhl.com and the
  * NHL.com all time results page answered with an empty shell and a 404, so
  * none of those appears as a source; nothing here rests on a page that could
@@ -54,6 +55,8 @@ export const NHL_PLAYOFF_SOURCES: NhlPlayoffSource[] = [
   { id: 'wpcup', publisher: 'Wikipedia', title: 'Stanley Cup', url: 'https://en.wikipedia.org/wiki/Stanley_Cup' },
   { id: 'wpplayoffs', publisher: 'Wikipedia', title: 'Stanley Cup playoffs', url: 'https://en.wikipedia.org/wiki/Stanley_Cup_playoffs' },
   { id: 'wp1917', publisher: 'Wikipedia', title: '1917-18 NHL season', url: 'https://en.wikipedia.org/wiki/1917%E2%80%9318_NHL_season' },
+  { id: 'wp1918', publisher: 'Wikipedia', title: '1918-19 NHL season', url: 'https://en.wikipedia.org/wiki/1918%E2%80%9319_NHL_season' },
+  { id: 'wp1919', publisher: 'Wikipedia', title: '1919-20 NHL season', url: 'https://en.wikipedia.org/wiki/1919%E2%80%9320_NHL_season' },
   { id: 'wp1921', publisher: 'Wikipedia', title: '1921-22 NHL season', url: 'https://en.wikipedia.org/wiki/1921%E2%80%9322_NHL_season' },
   { id: 'wp1925', publisher: 'Wikipedia', title: '1925-26 NHL season', url: 'https://en.wikipedia.org/wiki/1925%E2%80%9326_NHL_season' },
   { id: 'wp1926', publisher: 'Wikipedia', title: '1926-27 NHL season', url: 'https://en.wikipedia.org/wiki/1926%E2%80%9327_NHL_season' },
@@ -64,6 +67,7 @@ export const NHL_PLAYOFF_SOURCES: NhlPlayoffSource[] = [
   { id: 'wp1942', publisher: 'Wikipedia', title: '1942-43 NHL season', url: 'https://en.wikipedia.org/wiki/1942%E2%80%9343_NHL_season' },
   { id: 'wp1967', publisher: 'Wikipedia', title: '1967-68 NHL season', url: 'https://en.wikipedia.org/wiki/1967%E2%80%9368_NHL_season' },
   { id: 'wp1970', publisher: 'Wikipedia', title: '1970-71 NHL season', url: 'https://en.wikipedia.org/wiki/1970%E2%80%9371_NHL_season' },
+  { id: 'wp1971', publisher: 'Wikipedia', title: '1971-72 NHL season', url: 'https://en.wikipedia.org/wiki/1971%E2%80%9372_NHL_season' },
   { id: 'wp1974', publisher: 'Wikipedia', title: '1974-75 NHL season', url: 'https://en.wikipedia.org/wiki/1974%E2%80%9375_NHL_season' },
   { id: 'wp1977', publisher: 'Wikipedia', title: '1977-78 NHL season', url: 'https://en.wikipedia.org/wiki/1977%E2%80%9378_NHL_season' },
   { id: 'wp1979', publisher: 'Wikipedia', title: '1979-80 NHL season', url: 'https://en.wikipedia.org/wiki/1979%E2%80%9380_NHL_season' },
@@ -102,14 +106,14 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     title: 'The NHL champion plays the West for the Cup',
     leagueSize: 4,
     fieldSize: 2,
-    qualifying: 'The NHL played off for its own title, two clubs in a two game total goals series, and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.',
+    qualifying: 'The NHL played off for its own title, usually two clubs in a two game total goals series (a best of seven in 1918-19, and none at all in 1919-20 when Ottawa won both halves of the schedule), and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.',
     notes: [
       'The Cup is older than the league. It was donated in 1892 and spent its first decades as a challenge trophy, and by the time the NHL was formed in 1917 the eastern and western champions were already meeting for it every spring. The NHL simply took the eastern seat.',
       'In the first seasons the schedule was split into two halves and the half winners played off for the right to face the West. The split season was dropped in the early 1920s (Wikipedia\'s season page says 1921-22, the NHL\'s own guide first describes the top two meeting in 1922-23), after which first met second.',
-      'When the Western Canada Hockey League arrived in 1921-22 there were three champions chasing one trophy, and who met whom was redrawn more than once: some springs the two western champions played off first, one spring the NHL champion had to win a semifinal to reach the Final at all. In 1925-26 the NHL let a third club into its own playoff for the first time: second played third, the winner played first.',
+      'When the Western Canada Hockey League arrived in 1921-22 there were three champions chasing one trophy, and who met whom was redrawn more than once: some springs the two western champions played off first, and in 1923 and 1924 the NHL champion had to win a best of three semifinal against one western champion before meeting the other in the Final. In 1925-26 the NHL let a third club into its own playoff for the first time: second played third, the winner played first.',
       'The West folded after the 1926 Final, and from 1926-27 only NHL clubs have played for the Cup.',
     ],
-    sources: ['wp1917', 'wp1921', 'wp1925', 'wpcup', 'wpplayoffs', 'nhlguide', 'nhlchamps', 'hhof'],
+    sources: ['wp1917', 'wp1918', 'wp1919', 'wp1921', 'wp1925', 'wpcup', 'wpplayoffs', 'nhlguide', 'nhlchamps', 'hhof'],
   },
   {
     id: 'two-divisions',
@@ -120,8 +124,8 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     fieldSize: 6,
     qualifying: 'Ten clubs in a Canadian and an American division, five each; the top three in each division qualified.',
     notes: [
-      'For the first two seasons the bracket stayed inside each division: second played third in a two game total goals series, the winner played the division leader, and the two division champions met in the Stanley Cup Final.',
-      'From 1928-29 it crossed over instead. The two division winners met each other in a best of five for one place in the Final. The two seconds played each other and the two thirds played each other in two game total goals series, and the winners of those two then played each other for the other place in the Final.',
+      'For the first two seasons the bracket stayed inside each division: second played third in a two game total goals series, the winner played the division leader, and the two division champions met in the Stanley Cup Final (for 1926-27 the NHL\'s guide has that Final at best of five and Wikipedia describes a best of three that could stretch to five, so this page does not pick a length).',
+      'From 1928-29 it crossed over instead. The two division winners met each other in a best of five for one place in the Final. The two seconds played each other and the two thirds played each other in two game total goals series, and the winners of those two then played each other for the other place in the Final. The seconds and thirds series stayed two game total goals until 1936-37, when they became best of three, and the Final went to best of five from 1930-31.',
       'The league shrank through the Depression as clubs folded. By 1937-38, the last season of the two division shape, eight clubs were left, and the Montreal Maroons played their final game that March.',
     ],
     sources: ['wp1926', 'wp1928', 'wp1937', 'nhlguide', 'wpplayoffs'],
@@ -164,9 +168,9 @@ export const NHL_PLAYOFF_PERIODS: NhlPlayoffPeriod[] = [
     qualifying: 'The league doubled to twelve in one summer, split into an East division of the six old clubs and a West division of the six new ones, and the top four in each division qualified, every series best of seven.',
     notes: [
       'The two brackets ran separately, first against third and second against fourth inside each division, and the division champions met in the Final. Since every expansion club sat in the West, that guaranteed one of them a place in the Stanley Cup Final in its first year.',
-      'From 1970-71 the semifinals crossed over, so an East club could meet a West club a round early. The field stayed at eight as the league kept growing.',
+      'From 1970-71 the semifinals crossed over, so an East club could meet a West club a round early, and from 1971-72 the quarterfinals paired first with fourth and second with third instead. The field stayed at eight as the league kept growing.',
     ],
-    sources: ['wp1967', 'wp1970', 'nhlguide', 'si'],
+    sources: ['wp1967', 'wp1970', 'wp1971', 'nhlguide', 'si'],
   },
   {
     id: 'four-divisions',

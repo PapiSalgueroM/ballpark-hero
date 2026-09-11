@@ -34,11 +34,11 @@ const FAQS = [
   },
   {
     q: 'Do division winners still get a top seed?',
-    a: 'No. From the 2015-16 season the eight playoff teams in each conference are seeded purely by record. Between 2004-05 and 2014-15 a division winner was guaranteed a seed no lower than a floor whatever its record, a top four seed by the end, which is how a 51 win Portland team took the fourth seed in the West in 2015 with the sixth best record in the conference.',
+    a: 'No. From the 2015-16 season the eight playoff teams in each conference are seeded purely by record. Between 2004-05 and 2014-15 a division winner was guaranteed a seed no lower than a floor whatever its record, a top three seed for the first two seasons and a top four seed after that, which is how a 51 win Portland team took the fourth seed in the West in 2015 with the sixth best record in the conference.',
   },
   {
     q: 'How does the NBA draft lottery work now?',
-    a: 'Through the 2026 draft: fourteen non-playoff teams, fourteen numbered balls, four drawn at a time, 1,000 of the 1,001 possible combinations shared out by record, with the three worst teams holding 14 percent each and the draw deciding the first four picks. From the 2027 draft the pool grows to sixteen teams, the play-in losers included, and the three worst records hold two balls each against three for the teams just above them.',
+    a: 'Through the 2026 draft: fourteen non-playoff teams, fourteen numbered balls, four drawn at a time, 1,000 of the 1,001 possible combinations shared out by record, with the three worst teams holding 14 percent each and the draw deciding the first four picks. From the 2027 draft the pool grows to sixteen teams because the two No. 8 seeds that come through the play-in stay in it, and the three worst records hold two balls each against three for the teams just above them.',
   },
 ];
 
@@ -140,7 +140,7 @@ const NbaPlayoffFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-2">Where this comes from</h2>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-            Every change above rests on at least two independent publishers agreeing: Wikipedia's playoffs, season and lottery pages cross-checked against NBA.com's own history pieces and press releases, ESPN, FanSided, TickPick, Land of Basketball and Sports Illustrated. Basketball Reference and two CBC stories were attempted and blocked, so they are not cited. NBA.com dates the lottery's cut to three picks to 1986 and Wikipedia to 1987; the page says neither. {sources.length} sources across {publishers} publishers, last checked {NBA_PLAYOFF_VERIFIED_ON}.
+            Every change above rests on at least two independent publishers agreeing: Wikipedia's playoffs, season and lottery pages cross-checked against NBA.com's own history pieces and press releases, ESPN, FanSided, TickPick, Land of Basketball and Sports Illustrated. Basketball Reference, Wikipedia's 1985 draft lottery page and two CBC stories were attempted and blocked, so none of them is cited. NBA.com dates the lottery's cut to three picks to 1986 and Wikipedia to 1987; the page says neither. {sources.length} sources across {publishers} publishers, last checked {NBA_PLAYOFF_VERIFIED_ON}.
           </p>
           <ol className="text-xs text-muted-foreground space-y-1 list-decimal pl-5">
             {sources.map(s => (

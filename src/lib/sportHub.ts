@@ -205,7 +205,7 @@ export const SPORT_HUBS: SportHub[] = [
     referenceLinks: [
       { path: '/records#cup', label: 'Stanley Cup champions, year by year', why: 'every final since 1915 with the beaten side and the series, with the two seasons nobody won left honestly empty' },
       { path: '/hockey-grid/archive', label: 'NHL Grid archive', why: 'the past boards and their answer keys, which double as a record of who skated for two clubs' },
-      { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', why: 'from the NHL champion meeting the West for the Cup to top three plus wild cards, every bracket since 1917-18 with the league\'s own account and Wikipedia agreeing on each' },
+      { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', why: 'from the NHL champion meeting the West for the Cup to top three plus wild cards, every bracket since 1917-18 checked against the league\'s own account and Wikipedia, with the three places they disagree printed rather than picked' },
     ],
     hubFaqs: [
       { q: 'Which of these use this season\'s players and which go all the way back?', a: 'Puck Detective picks from current NHL rosters, and NHL Front Office starts you on the real 2026-27 rosters. Career Path, NHL Franchise Grid, Higher / Lower and Perfect Lineup: NHL pull from an all-era career database instead, so a 1970s winger turns up as readily as anyone playing tonight.' },

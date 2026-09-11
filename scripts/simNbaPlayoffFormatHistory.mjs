@@ -181,7 +181,7 @@ if (CONTROL) {
       if (!text.includes(must)) fail(`the snapshot does not contain ${JSON.stringify(must)}`);
     }
     const cited = NBA_PLAYOFF_SOURCES.filter(s => html.includes(s.url)).length;
-    if (cited < NBA_PLAYOFF_SOURCES.length - 1) fail(`only ${cited} of ${NBA_PLAYOFF_SOURCES.length} source URLs reached the snapshot`);
+    if (cited < NBA_PLAYOFF_SOURCES.length) fail(`only ${cited} of ${NBA_PLAYOFF_SOURCES.length} source URLs reached the snapshot`);
     if (/<meta name="robots"[^>]*noindex/i.test(html)) fail('the snapshot carries a noindex');
     const words = text.split(' ').filter(Boolean).length;
     if (words < 900) fail(`the snapshot carries only ${words} words, which is a shell rather than the page`);
