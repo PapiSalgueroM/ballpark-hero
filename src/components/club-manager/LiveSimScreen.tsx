@@ -129,7 +129,16 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   /* The shape the eleven kicked off in, whatever the tactics tab says now. */
   const myFormation = FORMATIONS[live?.formationIndex ?? career.formationIndex] ?? FORMATIONS[0];
   if (live) {
-    const ids = myOnPitchAt(live, minute);
+    /* Round 548: minute + 1, so a change made AT the minute on the clock is on
+       the pitch rather than one minute late. Tapping a dot pauses the clock, so
+       a substitution from the pitch is filed at exactly the frozen minute, and
+       myOnPitchAt's rule is strictly-after (he played that minute), which left
+       the man who had just come off still standing there until you unpaused.
+       My side only, deliberately: my substitutions are recorded when I make
+       them, so nothing beyond the current minute exists, while the opponent's
+       half is drawn ahead and reading theirs inclusively would show their
+       change a minute before it happens. */
+    const ids = myOnPitchAt(live, minute + 1);
     const numbers = squadNumbers(career, live);
     const gone = new Set<string>();
     for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
@@ -626,7 +635,10 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!picking) return;
     if (!running || !liveNow) { closeSheet(); return; }
-    const on = new Set(myOnPitchAt(liveNow, minute));
+    /* Round 548: same inclusive read as the pitch above, so the action sheet for
+       a man you have just taken off closes instead of hanging over a dot that
+       is no longer his. */
+    const on = new Set(myOnPitchAt(liveNow, minute + 1));
     const gone = liveGoneIds(liveNow, minute);
     for (const inj of [...(liveNow.h1Injuries ?? []), ...(liveNow.h2Injuries ?? [])]) {
       if (inj.id && inj.minute <= minute && on.has(inj.id)) gone.delete(inj.id);

@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 548 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 547 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 549 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 548 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 547. Next free is 548.
+block is 541 to 548. Next free is 549.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -193,6 +193,13 @@ block is 541 to 547. Next free is 548.
   ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
   `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
 
+- **548: a substitution while the clock is paused redraws the pitch.** The third watch mode finding.
+  `myOnPitchAt`'s rule is strictly-after (he played that minute), and tapping a dot pauses the clock,
+  so a change filed at exactly the frozen minute left the man who had just come off still standing
+  there until you unpaused. The viewer reads `minute + 1` now, MY SIDE ONLY: my substitutions are
+  recorded when I make them so nothing beyond the current minute exists, while the opponent's half is
+  drawn ahead and an inclusive read there would show their change a minute early. Files:
+  `src/components/club-manager/LiveSimScreen.tsx`.
 - **547: the Champions League field is who qualified, not who is famous.** The half of the report
   543 did not reach. The 32 club field was a shuffled prestige pool (`EURO_CLUBS` plus every club
   above a squad rating threshold) and nothing anywhere read a league table, so a club could finish
@@ -231,10 +238,24 @@ block is 541 to 547. Next free is 548.
 5. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
    only harness that renders that screen. Give the walk a transfer pass and assert the season end
    screen really shows the transfer business rows.
-6. **Three smaller watch mode findings**, all reproduced in a real browser at 390x844: a substitution
-   made while the clock is paused does not redraw the pitch until you unpause, the live control row
-   (pause, speed, Skip) sits below the fold on a 390x844 and a 375x667 phone, and half the viewer
-   branch condition in `ClubManager.tsx` is unreachable dead code.
+6. **Two watch mode findings left, both needing a real browser to close.** The substitution one is
+   fixed in Round 548. What remains:
+   - **The live control row sits below the fold on a phone.** Measured in Chromium: heading and
+     scoreboard 271px, the 3/4 pitch 457 to 507px, the stats strip 95px, so pause, the 0.5x to 4x
+     speed buttons and Skip land at y=863 on a 390x844 and y=843 on a 375x667, with `useRevealScroll`
+     leaving the page alone because the top of the viewer is already readable. The owner asked for
+     speed control by name in the Round 158 brief. I drafted a fix (the pitch takes the height that
+     is left, `height: max(240px, min(calc(100dvh - 430px), 520px))` with the aspect giving the
+     width) and REVERTED it rather than ship it: it is a visual change to a game and this sandbox
+     could not drive a live match to measure the result, and the alternative of moving the control
+     row above the pitch costs no pitch size at all and may be the better answer. Needs
+     `dukb-visual-qa` with a browser: measured rectangles at 390x844 and 375x667, both options.
+   - **Half the viewer branch condition is unreachable dead code.** In `ClubManager.tsx` the
+     `phase === 'halftime'` arm can only be reached through `g.play()`, and every call site that can
+     return a halftime also sets watch mode true, so the `|| g.career.live?.h2Drawn` clause never
+     fires and the classic `HalftimeScreen` branch below it is dead. Round 472 merged the two ways
+     in, so either delete the dead branch and the clause, or give the running viewer a real exit
+     that marks the clock. Decide it in code rather than in a comment.
 
 ## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
 
