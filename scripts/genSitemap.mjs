@@ -73,6 +73,8 @@ const STATIC_PAGES = [
   { p: '/champions-league-format-history', freq: 'monthly', pri: '0.6' },
   /* Round 522: the second reference explainer. */
   { p: '/nfl-playoff-format-history', freq: 'monthly', pri: '0.6' },
+  /* Round 533: the third reference explainer. */
+  { p: '/mlb-postseason-format-history', freq: 'monthly', pri: '0.6' },
   /* Round 354: the NBA grid archive. A non-game page has to be named here to
      be submitted at all, and being submitted is also what puts it in front of
      the prerenderer, which reads its route list from this file's output. */
