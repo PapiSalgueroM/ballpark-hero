@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 522 (513 to 521 claimed by the Claude Code lane; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 523 (513 to 522 claimed by the Claude Code lane; checked against origin/main on
   2026-09-10). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
 
@@ -485,6 +485,23 @@ Four things, in the order they can hurt you.
   and its test, `scripts/simPollHeadToHead.mjs` replaced by `scripts/simPollCharacter.mjs`,
   `supabase/migrations/20260910190000_polls_with_character.sql`, the polls rules block in
   `docs/PROJECT-STATE.md`.
+
+  **522 NFL PLAYOFF FORMAT HISTORY, THE SECOND REFERENCE EXPLAINER, CLAIMED 2026-09-10.**
+  Continuing the reference layer arc from Round 520: the readiness verdict from that round said
+  not to request another AdSense review "until the explainers cover more than one competition",
+  and this is the second one. Same pattern exactly: a timeline of the NFL playoff format from
+  the 1933 championship game to the 2020 fourteen team field, every change two source verified
+  (Wikipedia's season pages cross-checked against a second independent source per claim, listed
+  on the page), plus the postseason overtime rule's own history (the 1941 divisional rule, the
+  1946 championship extension, the 1958 game that first actually used it, and the 2010 and 2022
+  rule changes). Linked from the pro football hub and, where the shared front office engine's
+  own constants describe the modern format it already plays (comment at
+  `src/lib/frontOffice.ts:10`, "the real 14-team playoff format"), a short honest note rather
+  than a whole generated comparison block, since NFL Front Office has no era system the way Club
+  Manager does. FILE AREA: new `src/lib/nflPlayoffFormatHistory.ts`, new
+  `src/pages/NflPlayoffFormatHistory.tsx`, new `scripts/simNflPlayoffFormatHistory.mjs`; one
+  line each in `src/App.tsx`, `scripts/genSitemap.mjs`, `src/lib/pageSchema.ts`,
+  `scripts/simIndexNow.mjs` (floor 141 to 142), `src/lib/sportHub.ts`, `src/pages/SportHub.tsx`.
 
   **NEW OWNER REQUEST FOR THE CLUB MANAGER LANE, 2026-09-07.** Add first and second legs to
   Champions League knockout ties whenever that season's real format uses two legs. Also design
