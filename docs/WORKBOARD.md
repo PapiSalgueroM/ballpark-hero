@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 523 (513 to 522 claimed by the Claude Code lane; checked against origin/main on
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 524 (513 to 523 claimed by the Claude Code lane; checked against origin/main on
   2026-09-10). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
 
@@ -502,6 +502,19 @@ Four things, in the order they can hurt you.
   `src/pages/NflPlayoffFormatHistory.tsx`, new `scripts/simNflPlayoffFormatHistory.mjs`; one
   line each in `src/App.tsx`, `scripts/genSitemap.mjs`, `src/lib/pageSchema.ts`,
   `scripts/simIndexNow.mjs` (floor 141 to 142), `src/lib/sportHub.ts`, `src/pages/SportHub.tsx`.
+
+  **523 EVERY SPORT HUB LINKS INTO THE REFERENCE LAYER, CLAIMED 2026-09-10.** The readiness
+  verdict after Round 520 named two conditions before the next AdSense review request is worth
+  his click: explainers covering more than one competition (done, Rounds 520 and 522) and the
+  hubs linking into the reference layer (section 14 of the addendum: sport hub, then games, then
+  record and reference content). Measured now: two of six hubs carry reference links, four carry
+  none, while the Record Books already hold a verified champions table for every one of those
+  sports and three of them have a grid archive. Data only, in `src/lib/sportHub.ts`: each hub
+  gains a short list of the reference pages that exist for its sport (the Record Books section by
+  anchor, the grid archive where there is one, the format explainer where there is one), with a
+  plain reason to open each. No copy claims a column the table does not carry. Snapshots rebuilt
+  so the links reach the crawler. FILE AREA: `src/lib/sportHub.ts` only, plus the six hub
+  snapshots under `public/` and the sitemap ledger.
 
   **NEW OWNER REQUEST FOR THE CLUB MANAGER LANE, 2026-09-07.** Add first and second legs to
   Champions League knockout ties whenever that season's real format uses two legs. Also design
