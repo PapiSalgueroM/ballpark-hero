@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 528 (513 to 519 shipped; 520 and 521 taken
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 529 (513 to 519 shipped; 520 and 521 taken
   twice, once by the desktop lane for real work now shipped and once by the tablet lane before
   it saw that claim, renumbered to 522 to 524; 522 taken a THIRD time by the desktop lane's own
   later claim below, "NFL playoff format history", pushed before it had pulled the tablet lane's
@@ -150,6 +150,55 @@ Both builders write their OWN new harness file rather than extending a shared on
 Round 525's three parallel builders each extended the same two shared harnesses without knowing
 about each other and every one of them numbered itself "section 5", which cost a careful manual
 splice to reconcile. NEXT FREE NUMBER after this claim: 528.
+
+### CLAIMED 2026-09-11, Round 528, a live P1 found while scoping spec section 104: THE LEADERBOARD'S DAY ENDS AT 8PM
+
+Found by reading `global_leaderboard`'s definition before building the Week and Month views spec
+section 104 asks for, and worth more than that feature: **the shared leaderboard's "Today" rolls
+over at 20:00 Eastern, not midnight**, because it is the one surface Round 301's move to Eastern
+days never reached.
+
+**The mechanism.** `public.game_completions.completed_on` defaults to
+`((now() AT TIME ZONE 'utc'))::date` and `global_leaderboard` filters
+`gc.completed_on = (now() at time zone 'utc')::date`. Writer and reader agree with each other, so
+nothing looks broken from inside that pair. They just both disagree with the rest of the site:
+`getTodayET()` is what 74 files use, and Round 301 specifically moved the Games Today clock "from
+UTC to the same Eastern day as everything else". The leaderboard was not brought along.
+
+**Measured on production, 2026-09-11, not argued.** Over the last 30 days, 72,460 of 356,808
+completions (20.3%) sit under a UTC day that is not their Eastern day. Grouped by Eastern hour
+over 14 days the signature is exact, with no noise in it at all:
+
+| Eastern hour | plays | filed to the wrong Eastern day |
+|---|---|---|
+| 00 through 19 | 193,636 | **0** |
+| 20 | 13,977 | 13,977 |
+| 21 | 12,261 | 12,261 |
+| 22 | 10,199 | 10,199 |
+| 23 | 8,090 | 8,090 |
+
+Every evening play, none of the rest. 44,527 of 193,636 plays in that window, 23%.
+
+**Why it is a P1 and not a curiosity.** 19:00 and 20:00 Eastern are the site's two busiest hours
+(14,356 and 13,977 plays). So the Today board wipes and restarts at the exact peak of the US
+evening: a player climbing it at 7:55pm watches their standing reset at 8pm, and every game they
+play after that counts toward tomorrow's board while their streak, their played-today and their
+daily puzzle all still say today. Those two halves of the same screen disagree for four hours a
+night, every night.
+
+**The fix, and the one decision in it.** Read the day from `created_at` (a real timestamptz) in
+Eastern at read time rather than trusting `completed_on`, in `global_leaderboard`, `global_rank`
+and the `player_ranks` materialized view from `20260831_disk_io_leaderboard_cache.sql`, plus an
+expression index so the filter still uses one. That corrects HISTORY as well as the future
+without rewriting a single stored row, and avoids leaving `completed_on` with mixed meaning
+(UTC before the change, Eastern after), which is what a default swap plus backfill would do.
+**No row is rewritten and no score is retroactively subtracted**, matching the standing precedent
+from the 61,964 point leak.
+
+DB work goes through the Supabase MCP with the SQL saved under `supabase/migrations/`, and
+`get_advisors` after, per CLAUDE.md. Spec section 104's Week and Month views ride along in the
+same round, since they are the same predicate and would have inherited this exact bug if they had
+been built first. NEXT FREE NUMBER after this claim: 529.
 
 ### MASTER SPEC TRIAGE, done 2026-09-11 while 526 and 527 built. Read this before picking spec work.
 
