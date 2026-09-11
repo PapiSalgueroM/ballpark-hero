@@ -42,6 +42,21 @@
  * when kind, base and accent all agree (plain has no accent). Measured before
  * the rule: 38 pairs of the 96 clubs indistinguishable at six kinds.
  *
+ * Round 529 gave the renderer a stage mode for the scene player, five
+ * optional props, and section 7 holds them:
+ *   7. THE STAGE PROPS DRAW WHAT THEY SAY AND NOTHING WHEN ABSENT. With
+ *      focusRegions the camera group carries a transform whose scale sits
+ *      between 1 and the cap and whose scaled, translated box of the focused
+ *      regions sits inside the viewBox (the zoom never shows the ground past
+ *      the map's edge); with homeRegions every listed team has exactly one
+ *      home ring at its region's label point; with highlightTeam exactly that
+ *      team's regions carry the highlight ring and the lifted fill; with caps
+ *      labels every label is its uppercase, tracked, and never under the
+ *      floor, and a name that only fits in mixed case falls back to the code;
+ *      the stage size drops the border; and with all five absent the markup
+ *      equals the explicit defaults byte for byte and carries none of the new
+ *      layers or attributes.
+ *
  * NEGATIVE CONTROLS (SIM_CONQUEST_MAP_CONTROL=...), each refusing to run if
  * its rewrite changes nothing:
  *   private   adds an in-memory copy of one sport's old private renderer to
@@ -50,6 +65,8 @@
  *             first region's owner colour; sections 1 and 2 must go red.
  *   takeover  bundles a copy whose overlay marks every region; section 3 must
  *             go red.
+ *   camera    bundles a copy whose camera scale is capped at 10 instead of
+ *             2.6; section 7 must go red.
  *
  * Run: node scripts/simConquestMap.mjs
  */
@@ -61,11 +78,14 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
+/* Round 529: resolved by walking up from this file, the way node itself does,
+   so the harness runs from a worktree that has no node_modules of its own. */
+const NODE_MODULES = path.resolve(path.dirname(createRequire(import.meta.url).resolve('react/package.json')), '..').replace(/\\/g, '/');
 const CONQUEST_DIR = `${ROOT}/src/components/conquest`;
 const MAP_FILE = 'ConquestRegionMap.tsx';
 const MAP_SRC = `${CONQUEST_DIR}/${MAP_FILE}`;
 const CONTROL = process.env.SIM_CONQUEST_MAP_CONTROL || '';
-const KNOWN_CONTROLS = ['private', 'owner', 'takeover'];
+const KNOWN_CONTROLS = ['private', 'owner', 'takeover', 'camera'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SIM_CONQUEST_MAP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(1);
@@ -100,6 +120,10 @@ if (CONTROL === 'takeover') {
   controlCopy('Object.keys(takeover.from).map(regionId =>', 'Object.keys(owners).map(regionId =>',
     'the takeover overlay marks every region on the map, section 3 must go red');
 }
+if (CONTROL === 'camera') {
+  controlCopy('cameraTransform(box, sport.viewBox)', 'cameraTransform(box, sport.viewBox, 0.08, 10)',
+    'the camera zooms up to 10x instead of the cap, section 7 must go red');
+}
 
 /* ---------- bundle the real component, the pure helpers and the four sport specs ---------- */
 fs.writeFileSync(ENTRY, `
@@ -112,19 +136,19 @@ export { MLB_CONQUEST_MAP, INITIAL_TERRITORIES_MLB } from '${ROOT}/src/data/conq
 export { NHL_CONQUEST_MAP, INITIAL_TERRITORIES_NHL } from '${ROOT}/src/data/conquestDataNhl.ts';
 export { SOCCER_CONQUEST_MAP, INITIAL_TERRITORIES_SOCCER } from '${ROOT}/src/data/soccerConquest.ts';
 export { seedNflEmpires as seedEmpires } from '${ROOT}/src/data/conquestSports.ts';
-import React from '${ROOT}/node_modules/react/index.js';
-import { renderToStaticMarkup } from '${ROOT}/node_modules/react-dom/server.node.js';
+import React from '${NODE_MODULES}/react/index.js';
+import { renderToStaticMarkup } from '${NODE_MODULES}/react-dom/server.node.js';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic --alias:@=${ROOT}/src --outfile="${BUNDLE}" --log-level=error`, {
+execSync(`"${NODE_MODULES}/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic --alias:@=${ROOT}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
-  env: { ...process.env, NODE_PATH: `${ROOT}/node_modules` },
+  env: { ...process.env, NODE_PATH: NODE_MODULES },
 });
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const mod = createRequire(import.meta.url)(BUNDLE);
 const { ConquestRegionMap, look, geometry, render, seedEmpires } = mod;
-const { assignTeamLooks, looksDistinct, colorDistance, diffOwners, CLASH_DISTANCE, LOOK_KINDS, UNCLAIMED_COLOR } = look;
+const { assignTeamLooks, looksDistinct, colorDistance, diffOwners, labelFor, CLASH_DISTANCE, LOOK_KINDS, UNCLAIMED_COLOR, CAMERA_MAX_SCALE, CAPS_MIN_FONT, PHONE_LABEL_SCALE } = look;
 
 const SPORTS = [
   { spec: mod.NFL_CONQUEST_MAP, seed: () => seedEmpires() },
@@ -467,6 +491,217 @@ console.log('6) One label per empire, and reduced motion turns the takeover into
   const takeoverRule = /\.cq-takeover[^{]*\{[^}]*animation:\s*none[^}]*opacity:\s*0/.test(reduce);
   console.log(`   rendered style carries a reduced motion rule that stills the takeover overlay: ${takeoverRule ? 'yes' : 'NO'}`);
   if (!takeoverRule) fail('reduced motion does not turn the takeover into a plain colour change');
+}
+
+/* ---------- 7: the stage props (Round 529) ---------- */
+console.log('7) The stage props draw what they say, and nothing when absent');
+{
+  const EPS = 1e-6;
+  const cameraOf = html => {
+    const groups = tags(html, 'g').filter(g => g['data-layer'] === 'camera');
+    if (groups.length !== 1) return { count: groups.length };
+    const style = groups[0].style || '';
+    const m = style.match(/transform:translate\((-?[\d.]+)px, ?(-?[\d.]+)px\) scale\(([\d.]+)\)/);
+    const none = /transform:none(;|$)/.test(style);
+    return { count: 1, attr: groups[0]['data-camera-scale'], none, tx: m ? Number(m[1]) : null, ty: m ? Number(m[2]) : null, scale: m ? Number(m[3]) : null, transition: /transition:transform 450ms/.test(style) };
+  };
+  const unionBox = (spec, ids) => {
+    let box = null;
+    for (const id of ids) {
+      const region = spec.regions.find(r => r.id === id);
+      if (!region) continue;
+      const b = geometry.pathBoundingBox(region.path);
+      box = box ? { minX: Math.min(box.minX, b.minX), minY: Math.min(box.minY, b.minY), maxX: Math.max(box.maxX, b.maxX), maxY: Math.max(box.maxY, b.maxY) } : b;
+    }
+    return box;
+  };
+
+  // The camera over every takeover pair: the two empires as they stood before the fight.
+  let focused = 0, badGroup = 0, badScale = 0, attrOff = 0, outside = 0, noTransition = 0, zoomed = 0, atCap = 0, layersOut = 0, noRule = 0;
+  let badNull = 0, nulls = 0;
+  for (const { spec } of SPORTS) {
+    const list = states.get(spec.key);
+    for (let i = 0; i < list.length; i += 3) {
+      const { prev, next } = list[i];
+      const from = diffOwners(prev, next);
+      const pair = [...new Set([...Object.values(from), ...Object.keys(from).map(r => next[r])].filter(Boolean))];
+      if (pair.length !== 2) continue;
+      const focus = spec.regions.map(r => r.id).filter(r => pair.includes(prev[r]));
+      const html = render(ConquestRegionMap, { sport: spec, owners: prev, focusRegions: focus, battle: { attacker: pair[0], defender: pair[1], stage: 'pending' } });
+      focused += 1;
+      const cam = cameraOf(html);
+      if (cam.count !== 1 || cam.scale === null) { badGroup += 1; continue; }
+      if (!(cam.scale >= 1 - EPS && cam.scale <= CAMERA_MAX_SCALE + EPS)) badScale += 1;
+      if (cam.attr !== cam.scale.toFixed(3)) attrOff += 1;
+      if (!cam.transition) noTransition += 1;
+      if (cam.scale > 1 + EPS) zoomed += 1;
+      if (Math.abs(cam.scale - CAMERA_MAX_SCALE) < 1e-3) atCap += 1;
+      const box = unionBox(spec, focus);
+      const { width: vw, height: vh } = spec.viewBox;
+      if (!box || cam.scale * box.minX + cam.tx < -EPS - 0.01 || cam.scale * box.maxX + cam.tx > vw + EPS + 0.01
+        || cam.scale * box.minY + cam.ty < -EPS - 0.01 || cam.scale * box.maxY + cam.ty > vh + EPS + 0.01) outside += 1;
+      // every drawn layer sits inside the camera group: the group opens before the first fill and the arrow, and closes right before the svg does
+      const open = html.indexOf('<g data-layer="camera"');
+      const firstFill = html.indexOf('data-layer="fill"');
+      const arrow = html.indexOf('data-layer="arrow"');
+      const svgClose = html.indexOf('</svg>');
+      if (open < 0 || firstFill < open || arrow < open || html.lastIndexOf('</g>', svgClose) !== svgClose - 4) layersOut += 1;
+      const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+      const reduce = (style.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*)/) || [])[1] || '';
+      if (!/\.cq-camera\s*\{[^}]*transform:\s*none\s*!important[^}]*transition:\s*none/.test(reduce)) noRule += 1;
+    }
+    // null: the group is there with no transform, so a board can mount it once and never restart the takeover
+    const seedMap = list[0].prev;
+    nulls += 1;
+    const nul = cameraOf(render(ConquestRegionMap, { sport: spec, owners: seedMap, focusRegions: null }));
+    if (nul.count !== 1 || !nul.none || nul.attr !== '1') badNull += 1;
+    // unknown ids are ignored and an empty union is no zoom
+    const ghost = cameraOf(render(ConquestRegionMap, { sport: spec, owners: seedMap, focusRegions: ['NOT_A_REGION'] }));
+    nulls += 1;
+    if (ghost.count !== 1 || ghost.scale !== 1 || ghost.tx !== 0 || ghost.ty !== 0) badNull += 1;
+  }
+  console.log(`   camera: ${focused} takeover pairs focused, ${zoomed} zoomed past 1, ${atCap} at the ${CAMERA_MAX_SCALE} cap, ${badGroup} without exactly one transformed group, ${badScale} with a scale outside [1, ${CAMERA_MAX_SCALE}], ${attrOff} with data-camera-scale off, ${outside} with the focused box outside the viewBox, ${layersOut} with a layer outside the group, ${noTransition} without the 450ms transition, ${noRule} without the reduced motion rule; ${badNull} of ${nulls} null or empty cameras wrong`);
+  if (focused < 200) fail(`only ${focused} camera focuses exercised`);
+  if (badGroup > 0) fail(`${badGroup} focused renders did not carry exactly one camera group with a transform`);
+  if (badScale > 0) fail(`${badScale} camera scales fell outside [1, ${CAMERA_MAX_SCALE}]`);
+  if (attrOff > 0) fail(`${attrOff} camera groups reported a different scale than they applied`);
+  if (outside > 0) fail(`${outside} cameras left part of the focused empires outside the viewBox`);
+  if (layersOut > 0) fail(`${layersOut} renders drew a layer outside the camera group`);
+  if (noTransition > 0) fail(`${noTransition} cameras have no transition`);
+  if (noRule > 0) fail(`${noRule} renders lack the reduced motion rule for the camera`);
+  // measured 2026-09-11: 365 of 480 pairs zoom past 1 and 48 sit at the cap; the floors sit well under that
+  if (zoomed < focused * 0.5) fail(`only ${zoomed} of ${focused} focused pairs zoomed at all, the camera is not moving`);
+  if (atCap < 20) fail(`only ${atCap} focuses reached the cap, the control has nothing to fire on`);
+  if (badNull > 0) fail(`${badNull} null or empty cameras were not drawn as a transform free group`);
+
+  // Home rings: one per listed team at its region's label point, none for a region that does not exist.
+  let homeTeams = 0, badHome = 0, ghostRings = 0;
+  for (const { spec, seed } of SPORTS) {
+    const owners = seed();
+    const homes = {};
+    for (const region of spec.regions) if (owners[region.id] && !(owners[region.id] in homes)) homes[owners[region.id]] = region.id;
+    homes.__ghost = 'NOT_A_REGION';
+    const html = render(ConquestRegionMap, { sport: spec, owners, homeRegions: homes });
+    const rings = tags(html, 'circle').filter(c => c['data-layer'] === 'home');
+    for (const [teamId, regionId] of Object.entries(homes)) {
+      if (teamId === '__ghost') { ghostRings += rings.filter(r => r['data-team'] === teamId).length; continue; }
+      homeTeams += 1;
+      const mine = rings.filter(r => r['data-team'] === teamId);
+      const region = spec.regions.find(r => r.id === regionId);
+      if (mine.length !== 1 || mine[0]['data-region'] !== regionId || Number(mine[0].cx) !== region.labelX || Number(mine[0].cy) !== region.labelY || mine[0].fill !== 'none') badHome += 1;
+    }
+    if (rings.length !== Object.keys(homes).length - 1) badHome += 1;
+  }
+  console.log(`   home rings: ${homeTeams} teams listed across ${SPORTS.length} sports, ${badHome} without exactly one ring at the label point, ${ghostRings} rings for a region that does not exist`);
+  if (homeTeams < 200) fail(`only ${homeTeams} home rings exercised`);
+  if (badHome > 0) fail(`${badHome} teams did not get exactly one home ring at their region's label point`);
+  if (ghostRings > 0) fail('a home ring was drawn for a region that does not exist');
+
+  // Highlight: exactly that team's regions ringed and lifted, a stolen region keeps its own filter.
+  let hlChecked = 0, badRing = 0, badLift = 0, stolenKept = 0, stolenChecked = 0;
+  for (const { spec } of SPORTS) {
+    const list = states.get(spec.key);
+    for (let i = 0; i < list.length; i += 8) {
+      const owners = list[i].next;
+      const counts = new Map();
+      for (const o of Object.values(owners)) if (o) counts.set(o, (counts.get(o) || 0) + 1);
+      const team = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+      if (!team) continue;
+      hlChecked += 1;
+      const want = spec.regions.map(r => r.id).filter(r => owners[r] === team).sort();
+      const stolen = want[0];
+      const html = render(ConquestRegionMap, { sport: spec, owners, highlightTeam: team, territoryStolenState: stolen });
+      const ringed = tags(html, 'path').filter(p => p['data-layer'] === 'highlight');
+      if (ringed.map(p => p['data-region']).sort().join() !== want.join() || ringed.some(p => p['data-team'] !== team)) badRing += 1;
+      const fills = tags(html, 'path').filter(p => p['data-layer'] === 'fill');
+      for (const f of fills) {
+        const lifted = /brightness\(1\.25\)/.test(f.style || '');
+        if (f['data-region'] === stolen) { stolenChecked += 1; if (/brightness\(1\.5\)/.test(f.style || '') && !lifted) stolenKept += 1; continue; }
+        if (lifted !== (owners[f['data-region']] === team)) badLift += 1;
+      }
+    }
+  }
+  console.log(`   highlight: ${hlChecked} empires highlighted, ${badRing} with the wrong ring set, ${badLift} fills lifted or not against their owner, stolen region kept its own filter on ${stolenKept} of ${stolenChecked}`);
+  if (hlChecked < 100) fail(`only ${hlChecked} highlights exercised`);
+  if (badRing > 0) fail(`${badRing} highlights ringed a different set of regions than the team owns`);
+  if (badLift > 0) fail(`${badLift} fills were lifted against their owner`);
+  if (stolenKept !== stolenChecked) fail('a stolen region lost its own filter to the highlight');
+
+  // Caps labels: uppercase, tracked, never under the floor, and the fitter falls back sooner.
+  let capsLabels = 0, notUpper = 0, noTrack = 0, underFloor = 0, capsRenders = 0, noAttr = 0, capsNames = 0, classicNames = 0;
+  for (const { spec } of SPORTS) {
+    const teamById = new Map(spec.teams.map(t => [t.id, t]));
+    const list = states.get(spec.key);
+    for (let i = 0; i < list.length; i += 5) {
+      const owners = list[i].next;
+      const html = render(ConquestRegionMap, { sport: spec, owners, labelStyle: 'caps' });
+      capsRenders += 1;
+      if ((tags(html, 'svg')[0] || {})['data-label-style'] !== 'caps') noAttr += 1;
+      for (const l of html.matchAll(/<text\b([^>]*data-label-team="([^"]+)"[^>]*)>([^<]*)<\/text>/g)) {
+        capsLabels += 1;
+        const team = teamById.get(l[2]);
+        const text = decode(l[3]);
+        if (!team || (text !== team.name.toUpperCase() && text !== team.id.toUpperCase())) notUpper += 1;
+        else if (text === team.name.toUpperCase() && text !== team.id.toUpperCase()) capsNames += 1;
+        const attrs = tags(`<text ${l[1]}>`, 'text')[0] || {};
+        if (attrs['letter-spacing'] !== '0.06em') noTrack += 1;
+        const fs = Number((attrs.style || '').match(/--fs:([\d.]+)/)?.[1]);
+        if (!(fs >= CAPS_MIN_FONT - EPS)) underFloor += 1;
+      }
+      const classic = render(ConquestRegionMap, { sport: spec, owners });
+      for (const l of classic.matchAll(/<text\b[^>]*data-label-team="([^"]+)"[^>]*>([^<]*)<\/text>/g)) {
+        const team = teamById.get(l[1]);
+        if (team && decode(l[2]) === team.name && team.name !== team.id) classicNames += 1;
+      }
+    }
+  }
+  // the pure fitter: a width the mixed case name just fits must not fit the wider caps
+  let fitterTeams = 0, fitterWrong = 0;
+  for (const { spec } of SPORTS) {
+    for (const team of spec.teams) {
+      if (team.name === team.id) continue;
+      fitterTeams += 1;
+      const justFits = team.name.length * 8 * PHONE_LABEL_SCALE * 0.6 * 1.05;
+      if (labelFor(team, 8, justFits) !== team.name || labelFor(team, 8, justFits, true) !== team.id) fitterWrong += 1;
+      if (labelFor(team, 8, justFits * 1.2, true) !== team.name) fitterWrong += 1;
+    }
+  }
+  console.log(`   caps: ${capsLabels} labels over ${capsRenders} renders, ${notUpper} not the uppercase name or code, ${noTrack} without tracking, ${underFloor} under the ${CAPS_MIN_FONT} floor, ${noAttr} renders without the caps attribute; names on ${capsNames} caps labels against ${classicNames} classic; fitter wrong on ${fitterWrong} of ${fitterTeams} teams`);
+  if (capsLabels < 2000) fail(`only ${capsLabels} caps labels exercised`);
+  if (notUpper > 0) fail(`${notUpper} caps labels were not the uppercase name or code`);
+  if (noTrack > 0) fail(`${noTrack} caps labels carry no letter spacing`);
+  if (underFloor > 0) fail(`${underFloor} caps labels sit under the size floor`);
+  if (noAttr > 0) fail(`${noAttr} caps renders did not mark the svg`);
+  if (capsNames === 0) fail('no empire ever got its name in caps');
+  if (capsNames > classicNames) fail(`caps fitted more names (${capsNames}) than mixed case (${classicNames}), the wider glyphs are not being counted`);
+  if (fitterWrong > 0) fail(`${fitterWrong} teams: labelFor does not fall back sooner in caps`);
+
+  // Stage size, and the identity: nothing new when every new prop is absent.
+  let identityRenders = 0, notIdentical = 0, leaked = 0, badStage = 0, badCard = 0;
+  const CARD_CLASS = 'w-full h-auto rounded-xl border border-border bg-[#0a0f1a]';
+  for (const { spec } of SPORTS) {
+    const list = states.get(spec.key);
+    for (let i = 0; i < list.length; i += 10) {
+      const { prev, next } = list[i];
+      const from = diffOwners(prev, next);
+      const props = { sport: spec, owners: next, takeover: Object.keys(from).length ? { key: i + 1, from } : null };
+      const plain = render(ConquestRegionMap, props);
+      const explicit = render(ConquestRegionMap, { ...props, labelStyle: 'classic', size: 'card', highlightTeam: null });
+      identityRenders += 1;
+      if (plain !== explicit) notIdentical += 1;
+      if (/data-layer="(camera|home|highlight)"|data-size=|data-label-style=|letter-spacing=|\.cq-camera|brightness\(1\.25\)/.test(plain)) leaked += 1;
+      const root = tags(plain, 'svg')[0] || {};
+      if (root.class !== CARD_CLASS || 'data-size' in root) badCard += 1;
+      const stage = tags(render(ConquestRegionMap, { ...props, size: 'stage' }), 'svg')[0] || {};
+      if (stage['data-size'] !== 'stage' || /rounded-xl|border/.test(stage.class || '') || !/w-full h-auto bg-\[#0a0f1a\]/.test(stage.class || '')) badStage += 1;
+    }
+  }
+  console.log(`   identity: ${identityRenders} renders with no new prop, ${notIdentical} differ from the explicit defaults, ${leaked} carry a stage layer, attribute or rule; card class wrong on ${badCard}, stage class wrong on ${badStage}`);
+  if (identityRenders < 100) fail(`only ${identityRenders} identity renders`);
+  if (notIdentical > 0) fail(`${notIdentical} renders with no new prop differ from the explicit defaults`);
+  if (leaked > 0) fail(`${leaked} renders with no new prop carry a stage layer, attribute or style rule`);
+  if (badCard > 0) fail(`${badCard} card renders lost today's class string or gained a size attribute`);
+  if (badStage > 0) fail(`${badStage} stage renders kept the border or lost the size attribute`);
 }
 
 console.log(failures === 0 ? '\nALL CONQUEST MAP CHECKS PASSED' : `\n${failures} FAILURES`);

@@ -177,10 +177,82 @@ export function looksDistinct(a: TeamLook, b: TeamLook, clash = CLASH_DISTANCE):
   return colorDistance(a.accent, b.accent) >= clash;
 }
 
-/** The name where it fits the territory at the phone size, else the code. */
-export function labelFor(team: ConquestMapTeam, fontSize: number, availableWidth: number): string {
-  const widthAtPhone = team.name.length * fontSize * PHONE_LABEL_SCALE * GLYPH_EM;
+/** Round 529: an uppercase, letter spaced label runs wider than the same name
+ *  in mixed case. Capitals average about 0.68 em against 0.6 for the mixed
+ *  case glyphs, and 0.06 em of tracking goes on top of that, so a name that
+ *  only fits in mixed case has to fall back to the code when the stage draws
+ *  in caps. */
+export const CAPS_WIDTH_FACTOR = 1.15;
+
+/** Round 529: the smallest base size a caps label is drawn at. Below this an
+ *  uppercase name on a phone is a smear; the label falls back to the code
+ *  through labelFor rather than shrinking. */
+export const CAPS_MIN_FONT = 5.5;
+
+/** The name where it fits the territory at the phone size, else the code.
+ *  With `caps` the estimate is widened by CAPS_WIDTH_FACTOR, so the fit is
+ *  judged for the uppercase rendering the stage uses. */
+export function labelFor(team: ConquestMapTeam, fontSize: number, availableWidth: number, caps = false): string {
+  const widthAtPhone = team.name.length * fontSize * PHONE_LABEL_SCALE * GLYPH_EM * (caps ? CAPS_WIDTH_FACTOR : 1);
   return widthAtPhone <= availableWidth ? team.name : team.id;
+}
+
+/** Round 529: the camera. Each side of the focused box is padded by this
+ *  fraction of the box's own width and height before the zoom is fitted. */
+export const CAMERA_PAD = 0.08;
+
+/** Round 529: the camera never zooms past this. Two single region empires on
+ *  the US map would otherwise fit at 12x, which is a blur of one border. */
+export const CAMERA_MAX_SCALE = 2.6;
+
+export interface CameraBox { minX: number; minY: number; maxX: number; maxY: number }
+export interface CameraTransform { scale: number; tx: number; ty: number }
+
+/**
+ * The CSS transform that zooms a map group onto a box: `translate(tx, ty)
+ * scale(scale)` in user units, so a point p lands at scale * p + t. The box
+ * is padded by `pad` on each side, the zoom is the largest that fits the
+ * padded box in the viewBox, never above `cap` and never below 1 (the whole
+ * map is the widest shot there is), and the translation centres the padded
+ * box, then slides just enough that the scaled map still covers the whole
+ * viewBox, so no zoom ever shows the ground beyond the map's edge. A box with
+ * no size (unknown regions, an empty union) is no zoom at all.
+ */
+export function cameraTransform(
+  box: CameraBox,
+  viewBox: { width: number; height: number },
+  pad = CAMERA_PAD,
+  cap = CAMERA_MAX_SCALE,
+): CameraTransform {
+  const w = box.maxX - box.minX;
+  const h = box.maxY - box.minY;
+  if (!(w >= 0) || !(h >= 0) || (w === 0 && h === 0)) return { scale: 1, tx: 0, ty: 0 };
+  const paddedW = w * (1 + 2 * pad);
+  const paddedH = h * (1 + 2 * pad);
+  const fitW = paddedW > 0 ? viewBox.width / paddedW : cap;
+  const fitH = paddedH > 0 ? viewBox.height / paddedH : cap;
+  const scale = Math.max(1, Math.min(fitW, fitH, cap));
+  const cx = (box.minX + box.maxX) / 2;
+  const cy = (box.minY + box.maxY) / 2;
+  const clamp = (t: number, span: number) => Math.min(0, Math.max(span - scale * span, t));
+  return {
+    scale,
+    tx: clamp(viewBox.width / 2 - scale * cx, viewBox.width),
+    ty: clamp(viewBox.height / 2 - scale * cy, viewBox.height),
+  };
+}
+
+/** The union of several boxes; null when there are none. */
+export function unionBoxes(boxes: readonly CameraBox[]): CameraBox | null {
+  if (boxes.length === 0) return null;
+  const out = { ...boxes[0] };
+  for (const b of boxes.slice(1)) {
+    out.minX = Math.min(out.minX, b.minX);
+    out.minY = Math.min(out.minY, b.minY);
+    out.maxX = Math.max(out.maxX, b.maxX);
+    out.maxY = Math.max(out.maxY, b.maxY);
+  }
+  return out;
 }
 
 /**

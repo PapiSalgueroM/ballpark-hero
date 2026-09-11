@@ -20,12 +20,20 @@
  *
  * What a sport injects: data, in ConquestMapSport. What must not differ:
  * anything drawn here.
+ *
+ * Round 529 gave the map a stage mode for the scene player: a camera (one
+ * transformed group around every drawn layer, so hovers stay aligned), a
+ * ring at each team's home region, a highlight for one empire, uppercase
+ * letter spaced labels, and a borderless size that fills its container. Each
+ * is an optional prop, and with all of them absent the markup is byte for
+ * byte what Round 457 drew, which simConquestMap section 7 holds.
  */
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { bboxArea, blobFontSize, computeTeamBlobs, pathBoundingBox, type TerritoryGeom } from '@/lib/conquestMapGeometry';
 import {
-  assignTeamLooks, diffOwners, labelFor, lookCss, takeoverWaves, UNCLAIMED_COLOR, PHONE_LABEL_SCALE,
-  type ConquestMapSport, type TeamLook,
+  assignTeamLooks, cameraTransform, diffOwners, labelFor, lookCss, takeoverWaves, unionBoxes,
+  CAPS_MIN_FONT, UNCLAIMED_COLOR, PHONE_LABEL_SCALE,
+  type CameraBox, type ConquestMapSport, type TeamLook,
 } from '@/lib/conquestMapLook';
 import { POWERUPS } from '@/data/conquestPowerups';
 
@@ -56,6 +64,16 @@ export interface ConquestRegionMapProps {
   invincibleTeams?: Set<string>;
   territoryStolenState?: string | null;
   showLegend?: boolean;
+  /** The camera. undefined: no camera group at all (today's markup). null: the group is drawn with no transform. An array: zoom to those regions. */
+  focusRegions?: string[] | null;
+  /** teamId to its home region id: a ring at that region's label point, the "stadium dot". */
+  homeRegions?: Record<string, string>;
+  /** That team's regions get brightness 1.25 and a white ring. */
+  highlightTeam?: string | null;
+  /** 'caps' renders every empire label in uppercase, letter spaced, with a floor on the size. Default 'classic'. */
+  labelStyle?: 'classic' | 'caps';
+  /** 'stage' drops the rounded border and lets the svg fill its container. Default 'card'. */
+  size?: 'card' | 'stage';
 }
 
 /**
@@ -80,17 +98,20 @@ export function useOwnerTakeover(owners: Record<string, string | null>, enabled 
   return takeover;
 }
 
-interface RegionGeom extends TerritoryGeom { width: number }
+interface RegionGeom extends TerritoryGeom { width: number; box: CameraBox }
 
 const LEGEND_TILES = 6;
 const WAVE_DELAY_MS = 160;
+const CAMERA_TRANSITION_MS = 450;
 
 export default function ConquestRegionMap({
   sport, owners, battle = null, takeover = null,
   powerupStates, invincibleTeams, territoryStolenState = null, showLegend = true,
+  focusRegions, homeRegions, highlightTeam = null, labelStyle = 'classic', size = 'card',
 }: ConquestRegionMapProps) {
   const uid = useId().replace(/[^A-Za-z0-9_-]/g, '');
   const [hovered, setHovered] = useState<string | null>(null);
+  const caps = labelStyle === 'caps';
 
   const teamById = useMemo(() => new Map(sport.teams.map(t => [t.id, t])), [sport]);
   const looks = useMemo(() => assignTeamLooks(sport.teams), [sport]);
@@ -101,11 +122,26 @@ export default function ConquestRegionMap({
       const bbox = pathBoundingBox(region.path);
       map.set(region.id, {
         id: region.id, x: region.labelX, y: region.labelY,
-        area: bboxArea(bbox), width: Math.max(0, bbox.maxX - bbox.minX),
+        area: bboxArea(bbox), width: Math.max(0, bbox.maxX - bbox.minX), box: bbox,
       });
     }
     return map;
   }, [sport]);
+
+  // The camera: undefined means no camera group at all, null a group with no
+  // transform, an array a zoom onto the union of those regions' boxes.
+  const camera = useMemo(() => {
+    if (focusRegions === undefined) return null;
+    if (focusRegions === null) return { scale: 1, tx: 0, ty: 0, transform: 'none' };
+    const boxes: CameraBox[] = [];
+    for (const id of focusRegions) {
+      const geom = geomById.get(id);
+      if (geom) boxes.push(geom.box);
+    }
+    const box = unionBoxes(boxes);
+    const fit = box ? cameraTransform(box, sport.viewBox) : { scale: 1, tx: 0, ty: 0 };
+    return { ...fit, transform: `translate(${fit.tx.toFixed(2)}px, ${fit.ty.toFixed(2)}px) scale(${fit.scale.toFixed(3)})` };
+  }, [focusRegions, geomById, sport]);
 
   const blobs = useMemo(() => computeTeamBlobs(owners, geomById, sport.adjacency), [owners, geomById, sport]);
 
@@ -145,12 +181,16 @@ export default function ConquestRegionMap({
 
   // One label per contiguous empire, at its area weighted centroid. The name
   // goes on when it fits the widest member at the phone size, else the code.
+  // Caps labels carry a floor on the base size and are fitted for their
+  // wider glyphs, so a name that only fits in mixed case falls back to the code.
   const labels = useMemo(() => blobs.map(blob => {
     const team = teamById.get(blob.teamId);
     const single = blob.memberIds.length === 1;
     const anchor = single ? geomById.get(blob.memberIds[0]) : null;
-    const fontSize = (blobFontSize(blob.totalArea, blob.memberIds.length) + 1) * (sport.labelScale ?? 1);
+    const baseSize = (blobFontSize(blob.totalArea, blob.memberIds.length) + 1) * (sport.labelScale ?? 1);
+    const fontSize = caps ? Math.max(baseSize, CAPS_MIN_FONT) : baseSize;
     const width = 0.85 * Math.max(...blob.memberIds.map(id => geomById.get(id)?.width ?? 0));
+    const text = team ? labelFor(team, fontSize, width, caps) : blob.teamId;
     return {
       teamId: blob.teamId,
       key: blob.memberIds.join('-'),
@@ -158,10 +198,10 @@ export default function ConquestRegionMap({
       y: single && anchor ? anchor.y : blob.centroidY,
       fontSize,
       area: blob.totalArea,
-      text: team ? labelFor(team, fontSize, width) : blob.teamId,
+      text: caps ? text.toUpperCase() : text,
       look: looks.get(blob.teamId) ?? null,
     };
-  }), [blobs, teamById, geomById, looks]);
+  }), [blobs, teamById, geomById, looks, caps, sport]);
 
   const anchorFor = (teamId: string | null | undefined) => {
     if (!teamId) return null;
@@ -216,16 +256,254 @@ export default function ConquestRegionMap({
     return one.endsWith('y') ? `${one.slice(0, -1)}ies` : `${one}s`;
   };
 
+  // Layers 1 to 9, in render order. With a camera they sit inside one
+  // transformed group (the hit targets included, so hovers stay aligned);
+  // without one they are the svg's direct children exactly as before.
+  const layers = (
+    <>
+      {/* 1. Every region in its owner's colour. */}
+      {sport.regions.map(region => {
+        const owner = owners[region.id] ?? null;
+        const role = roleOf(owner);
+        const stolen = region.id === territoryStolenState;
+        const lifted = !!highlightTeam && owner === highlightTeam;
+        return (
+          <path
+            key={`fill-${region.id}`}
+            d={region.path}
+            fill={fillOf(owner)}
+            stroke="none"
+            data-layer="fill"
+            data-region={region.id}
+            data-owner={owner ?? ''}
+            className={role === 'attacker' && battle?.stage !== 'resolved' ? 'cq-lit' : undefined}
+            style={{
+              transition: 'fill 0.5s ease-in-out',
+              filter: stolen ? 'brightness(1.5) drop-shadow(0 0 6px rgba(255,215,0,0.8))' : lifted ? 'brightness(1.25)' : undefined,
+            }}
+          />
+        );
+      })}
+
+      {/* 2. The takeover: the old colour sits on top and burns away, wave by
+          wave from the winner's border, so the map shows who took what. */}
+      {takeover && Object.keys(takeover.from).map(regionId => {
+        const region = sport.regions.find(r => r.id === regionId);
+        if (!region) return null;
+        const wave = waves[regionId] ?? 0;
+        return (
+          <g key={`take-${takeover.key}-${regionId}`} data-layer="takeover" data-region={regionId} data-from={takeover.from[regionId] ?? ''} data-wave={wave}>
+            <path d={region.path} fill={fillOf(takeover.from[regionId])} className="cq-takeover" style={{ animationDelay: `${wave * WAVE_DELAY_MS}ms` }} />
+            <path d={region.path} className="cq-flash" style={{ animationDelay: `${wave * WAVE_DELAY_MS}ms` }} />
+          </g>
+        );
+      })}
+
+      {/* 3. Borders: faint inside an empire, dark along its frontier. */}
+      {sport.regions.map(region => {
+        const owner = owners[region.id] ?? null;
+        if (!owner) {
+          return <path key={`edge-${region.id}`} d={region.path} fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth={0.7} strokeLinejoin="round" />;
+        }
+        const interior = isInterior(region.id);
+        return (
+          <path
+            key={`edge-${region.id}`}
+            d={region.path}
+            fill="none"
+            stroke={interior ? 'rgba(0,0,0,0.28)' : '#0b1020'}
+            strokeWidth={interior ? 0.5 : 1.3}
+            strokeLinejoin="round"
+            data-layer="edge"
+            data-region={region.id}
+            data-frontier={interior ? 'no' : 'yes'}
+          />
+        );
+      })}
+
+      {/* 3b. The stadium dot: a ring at each team's home region (stage only). */}
+      {homeRegions && Object.entries(homeRegions).map(([teamId, regionId]) => {
+        const geom = geomById.get(regionId);
+        if (!geom) return null;
+        return (
+          <circle
+            key={`home-${teamId}`}
+            data-layer="home"
+            data-team={teamId}
+            data-region={regionId}
+            cx={geom.x}
+            cy={geom.y}
+            r={2.2}
+            fill="none"
+            stroke={lookOf(teamId)?.ink ?? '#ffffff'}
+            strokeWidth={0.8}
+          />
+        );
+      })}
+
+      {/* 4. The fight, readable on the map: the attacker's empire pulses
+          white, the target is ringed in gold, and once the result is in
+          the loser's ring dims. */}
+      {battle && sport.regions.map(region => {
+        const owner = owners[region.id] ?? null;
+        const role = region.id === battle.targetRegion ? 'defender' : roleOf(owner);
+        if (!role) return null;
+        const lost = battle.stage === 'resolved' && !!battle.winner && (role === 'attacker' ? battle.attacker : battle.defender) !== battle.winner;
+        return (
+          <path
+            key={`role-${region.id}`}
+            d={region.path}
+            fill="none"
+            className={role === 'attacker' ? 'cq-attacker' : 'cq-target'}
+            stroke={role === 'attacker' ? '#ffffff' : '#ffd166'}
+            strokeWidth={region.id === battle.targetRegion ? 2.2 : 1.7}
+            strokeDasharray={role === 'defender' ? '3.5 2.5' : undefined}
+            strokeOpacity={lost ? 0.45 : 1}
+            strokeLinejoin="round"
+            data-layer="role"
+            data-role={role}
+            data-region={region.id}
+          />
+        );
+      })}
+
+      {/* 4b. The highlighted empire, ringed in white (a tapped standings chip). */}
+      {highlightTeam && sport.regions.map(region => {
+        if (owners[region.id] !== highlightTeam) return null;
+        return (
+          <path
+            key={`hl-${region.id}`}
+            d={region.path}
+            data-layer="highlight"
+            data-team={highlightTeam}
+            data-region={region.id}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+            style={{ pointerEvents: 'none' }}
+          />
+        );
+      })}
+
+      {/* 5. Hover and tap targets. */}
+      {sport.regions.map(region => (
+        <path
+          key={`hit-${region.id}`}
+          d={region.path}
+          fill="transparent"
+          stroke="none"
+          className="cursor-pointer"
+          onMouseEnter={() => setHovered(region.id)}
+          onMouseLeave={() => setHovered(null)}
+          onClick={() => setHovered(h => (h === region.id ? null : region.id))}
+        />
+      ))}
+
+      {/* 6. Power-up tiles on unclaimed land (arcade). */}
+      {sport.regions.map(region => {
+        if (owners[region.id] || !powerupStates?.has(region.id)) return null;
+        return (
+          <text
+            key={`pu-${region.id}`}
+            x={region.labelX}
+            y={region.labelY}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={10}
+            className="cq-powerup"
+            style={{ pointerEvents: 'none', transformOrigin: `${region.labelX}px ${region.labelY}px` }}
+          >
+            {powerupIconByRegion.get(region.id)}
+          </text>
+        );
+      })}
+
+      {/* 7. One name per empire. */}
+      {labels.map(label => {
+        const role = roleOf(label.teamId);
+        const ink = label.look?.ink ?? '#ffffff';
+        return (
+          <g key={`label-${label.key}`} style={{ pointerEvents: 'none' }}>
+            <text
+              x={label.x}
+              y={label.y}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontWeight="bold"
+              fill={ink}
+              stroke={ink === '#111111' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.8)'}
+              strokeWidth={label.fontSize * 0.22}
+              paintOrder="stroke"
+              strokeLinejoin="round"
+              letterSpacing={caps ? '0.06em' : undefined}
+              className="cq-label"
+              data-label-team={label.teamId}
+              style={{
+                '--fs': label.fontSize,
+                filter: role ? 'drop-shadow(0 0 3px rgba(255,255,255,0.7))' : undefined,
+                transition: 'font-size 0.4s ease-in-out',
+              } as CSSProperties}
+            >
+              {label.text}
+            </text>
+            {invincibleTeams?.has(label.teamId) && (
+              <text x={label.x + label.fontSize + 5} y={label.y - label.fontSize * 0.5} textAnchor="middle" dominantBaseline="central" fontSize={6}>
+                🛡️
+              </text>
+            )}
+          </g>
+        );
+      })}
+
+      {/* 8. The attack arrow: dashed before the roll, pulsing while the
+          fight is on, solid in the winner's colour once it is over. */}
+      {showArrow && (
+        <path
+          d={arrowPath}
+          fill="none"
+          stroke={arrowColor}
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeDasharray={battle?.stage === 'pending' ? '5 3' : undefined}
+          markerEnd={`url(#${uid}-arrow)`}
+          className={battle?.stage === 'live' ? 'cq-arrow cq-arrow-live' : 'cq-arrow'}
+          data-layer="arrow"
+          data-stage={battle?.stage}
+          style={{ pointerEvents: 'none', filter: `drop-shadow(0 0 3px ${arrowColor}aa)` }}
+        />
+      )}
+
+      {/* 9. The result, on the map: what the winner gained. */}
+      {winnerAnchor && battle?.winner && (() => {
+        const chip = winnerGain > 0 ? `+${winnerGain} ${noun(winnerGain)}` : 'WIN';
+        const chipWidth = chip.length * 4.4 + 8;
+        const cx = Math.min(Math.max(winnerAnchor.x, chipWidth / 2 + 2), sport.viewBox.width - chipWidth / 2 - 2);
+        const cy = Math.max(winnerAnchor.y - winnerAnchor.fontSize - 8, 8);
+        return (
+          <g data-layer="result" data-winner={battle.winner} data-gain={winnerGain} style={{ pointerEvents: 'none' }} className="cq-result">
+            <rect x={cx - chipWidth / 2} y={cy - 5} width={chipWidth} height={10} rx={3} fill="#ffd166" />
+            <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fontSize={7} fontWeight="bold" fill="#111111">
+              {chip}
+            </text>
+          </g>
+        );
+      })()}
+    </>
+  );
+
   return (
     <div className="relative w-full">
       <svg
         viewBox={`0 0 ${sport.viewBox.width} ${sport.viewBox.height}`}
-        className="w-full h-auto rounded-xl border border-border bg-[#0a0f1a]"
+        className={size === 'stage' ? 'w-full h-auto bg-[#0a0f1a]' : 'w-full h-auto rounded-xl border border-border bg-[#0a0f1a]'}
         preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label={`${sport.key.toUpperCase()} conquest map. Biggest empires: ${summary || 'none yet'}.`}
         data-sport={sport.key}
         data-map="conquest-region-map"
+        data-size={size === 'stage' ? 'stage' : undefined}
+        data-label-style={caps ? 'caps' : undefined}
       >
         <defs>
           {[...looks.values()].filter(l => l.kind !== 'plain').map(look => (
@@ -259,193 +537,16 @@ export default function ConquestRegionMap({
           </marker>
         </defs>
 
-        {/* 1. Every region in its owner's colour. */}
-        {sport.regions.map(region => {
-          const owner = owners[region.id] ?? null;
-          const role = roleOf(owner);
-          const stolen = region.id === territoryStolenState;
-          return (
-            <path
-              key={`fill-${region.id}`}
-              d={region.path}
-              fill={fillOf(owner)}
-              stroke="none"
-              data-layer="fill"
-              data-region={region.id}
-              data-owner={owner ?? ''}
-              className={role === 'attacker' && battle?.stage !== 'resolved' ? 'cq-lit' : undefined}
-              style={{
-                transition: 'fill 0.5s ease-in-out',
-                filter: stolen ? 'brightness(1.5) drop-shadow(0 0 6px rgba(255,215,0,0.8))' : undefined,
-              }}
-            />
-          );
-        })}
-
-        {/* 2. The takeover: the old colour sits on top and burns away, wave by
-            wave from the winner's border, so the map shows who took what. */}
-        {takeover && Object.keys(takeover.from).map(regionId => {
-          const region = sport.regions.find(r => r.id === regionId);
-          if (!region) return null;
-          const wave = waves[regionId] ?? 0;
-          return (
-            <g key={`take-${takeover.key}-${regionId}`} data-layer="takeover" data-region={regionId} data-from={takeover.from[regionId] ?? ''} data-wave={wave}>
-              <path d={region.path} fill={fillOf(takeover.from[regionId])} className="cq-takeover" style={{ animationDelay: `${wave * WAVE_DELAY_MS}ms` }} />
-              <path d={region.path} className="cq-flash" style={{ animationDelay: `${wave * WAVE_DELAY_MS}ms` }} />
-            </g>
-          );
-        })}
-
-        {/* 3. Borders: faint inside an empire, dark along its frontier. */}
-        {sport.regions.map(region => {
-          const owner = owners[region.id] ?? null;
-          if (!owner) {
-            return <path key={`edge-${region.id}`} d={region.path} fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth={0.7} strokeLinejoin="round" />;
-          }
-          const interior = isInterior(region.id);
-          return (
-            <path
-              key={`edge-${region.id}`}
-              d={region.path}
-              fill="none"
-              stroke={interior ? 'rgba(0,0,0,0.28)' : '#0b1020'}
-              strokeWidth={interior ? 0.5 : 1.3}
-              strokeLinejoin="round"
-              data-layer="edge"
-              data-region={region.id}
-              data-frontier={interior ? 'no' : 'yes'}
-            />
-          );
-        })}
-
-        {/* 4. The fight, readable on the map: the attacker's empire pulses
-            white, the target is ringed in gold, and once the result is in
-            the loser's ring dims. */}
-        {battle && sport.regions.map(region => {
-          const owner = owners[region.id] ?? null;
-          const role = region.id === battle.targetRegion ? 'defender' : roleOf(owner);
-          if (!role) return null;
-          const lost = battle.stage === 'resolved' && !!battle.winner && (role === 'attacker' ? battle.attacker : battle.defender) !== battle.winner;
-          return (
-            <path
-              key={`role-${region.id}`}
-              d={region.path}
-              fill="none"
-              className={role === 'attacker' ? 'cq-attacker' : 'cq-target'}
-              stroke={role === 'attacker' ? '#ffffff' : '#ffd166'}
-              strokeWidth={region.id === battle.targetRegion ? 2.2 : 1.7}
-              strokeDasharray={role === 'defender' ? '3.5 2.5' : undefined}
-              strokeOpacity={lost ? 0.45 : 1}
-              strokeLinejoin="round"
-              data-layer="role"
-              data-role={role}
-              data-region={region.id}
-            />
-          );
-        })}
-
-        {/* 5. Hover and tap targets. */}
-        {sport.regions.map(region => (
-          <path
-            key={`hit-${region.id}`}
-            d={region.path}
-            fill="transparent"
-            stroke="none"
-            className="cursor-pointer"
-            onMouseEnter={() => setHovered(region.id)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() => setHovered(h => (h === region.id ? null : region.id))}
-          />
-        ))}
-
-        {/* 6. Power-up tiles on unclaimed land (arcade). */}
-        {sport.regions.map(region => {
-          if (owners[region.id] || !powerupStates?.has(region.id)) return null;
-          return (
-            <text
-              key={`pu-${region.id}`}
-              x={region.labelX}
-              y={region.labelY}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize={10}
-              className="cq-powerup"
-              style={{ pointerEvents: 'none', transformOrigin: `${region.labelX}px ${region.labelY}px` }}
-            >
-              {powerupIconByRegion.get(region.id)}
-            </text>
-          );
-        })}
-
-        {/* 7. One name per empire. */}
-        {labels.map(label => {
-          const role = roleOf(label.teamId);
-          const ink = label.look?.ink ?? '#ffffff';
-          return (
-            <g key={`label-${label.key}`} style={{ pointerEvents: 'none' }}>
-              <text
-                x={label.x}
-                y={label.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontWeight="bold"
-                fill={ink}
-                stroke={ink === '#111111' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.8)'}
-                strokeWidth={label.fontSize * 0.22}
-                paintOrder="stroke"
-                strokeLinejoin="round"
-                className="cq-label"
-                data-label-team={label.teamId}
-                style={{
-                  '--fs': label.fontSize,
-                  filter: role ? 'drop-shadow(0 0 3px rgba(255,255,255,0.7))' : undefined,
-                  transition: 'font-size 0.4s ease-in-out',
-                } as CSSProperties}
-              >
-                {label.text}
-              </text>
-              {invincibleTeams?.has(label.teamId) && (
-                <text x={label.x + label.fontSize + 5} y={label.y - label.fontSize * 0.5} textAnchor="middle" dominantBaseline="central" fontSize={6}>
-                  🛡️
-                </text>
-              )}
-            </g>
-          );
-        })}
-
-        {/* 8. The attack arrow: dashed before the roll, pulsing while the
-            fight is on, solid in the winner's colour once it is over. */}
-        {showArrow && (
-          <path
-            d={arrowPath}
-            fill="none"
-            stroke={arrowColor}
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeDasharray={battle?.stage === 'pending' ? '5 3' : undefined}
-            markerEnd={`url(#${uid}-arrow)`}
-            className={battle?.stage === 'live' ? 'cq-arrow cq-arrow-live' : 'cq-arrow'}
-            data-layer="arrow"
-            data-stage={battle?.stage}
-            style={{ pointerEvents: 'none', filter: `drop-shadow(0 0 3px ${arrowColor}aa)` }}
-          />
-        )}
-
-        {/* 9. The result, on the map: what the winner gained. */}
-        {winnerAnchor && battle?.winner && (() => {
-          const chip = winnerGain > 0 ? `+${winnerGain} ${noun(winnerGain)}` : 'WIN';
-          const chipWidth = chip.length * 4.4 + 8;
-          const cx = Math.min(Math.max(winnerAnchor.x, chipWidth / 2 + 2), sport.viewBox.width - chipWidth / 2 - 2);
-          const cy = Math.max(winnerAnchor.y - winnerAnchor.fontSize - 8, 8);
-          return (
-            <g data-layer="result" data-winner={battle.winner} data-gain={winnerGain} style={{ pointerEvents: 'none' }} className="cq-result">
-              <rect x={cx - chipWidth / 2} y={cy - 5} width={chipWidth} height={10} rx={3} fill="#ffd166" />
-              <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fontSize={7} fontWeight="bold" fill="#111111">
-                {chip}
-              </text>
-            </g>
-          );
-        })()}
+        {camera ? (
+          <g
+            data-layer="camera"
+            className="cq-camera"
+            data-camera-scale={camera.transform === 'none' ? '1' : camera.scale.toFixed(3)}
+            style={{ transform: camera.transform, transition: `transform ${CAMERA_TRANSITION_MS}ms ease-in-out` }}
+          >
+            {layers}
+          </g>
+        ) : layers}
       </svg>
 
       <style>{`
@@ -475,7 +576,7 @@ export default function ConquestRegionMap({
         .cq-powerup { animation: cq-powerup-pulse 1.6s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
           .cq-takeover, .cq-flash { animation: none; opacity: 0; }
-          .cq-attacker, .cq-arrow-live, .cq-result, .cq-powerup { animation: none; opacity: 1; }
+          .cq-attacker, .cq-arrow-live, .cq-result, .cq-powerup { animation: none; opacity: 1; }${camera ? '\n          .cq-camera { transform: none !important; transition: none; }' : ''}
         }
       `}</style>
 
