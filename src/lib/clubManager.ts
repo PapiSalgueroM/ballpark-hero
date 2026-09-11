@@ -8066,6 +8066,48 @@ export function ensureUclCalendar(state: CareerState): void {
   state.calendar.splice(idx, 0, { type: 'uclKo', round: 0, uclRound: 'R16' });
 }
 
+/**
+ * Round 545: give a career in flight the second legs its season is supposed to
+ * play.
+ *
+ * Round 507 built the two legged knockout, and every save made before it kept
+ * one knockout week per round with no `uclLeg` on it. Nothing migrated those,
+ * which the engine says in its own words further down and handles defensively
+ * so a legacy save still crowns a champion, one legged, for the rest of its
+ * season. A player reported it on 2026-09-11 as the knockout needing a second
+ * leg, and they were right about their own save even though the feature had
+ * been live for three days.
+ *
+ * ensureUclCalendar cannot do this. It only ever inserts a MISSING round of 16
+ * week, returns early the moment one is there, and never looks at the quarter
+ * or semi finals.
+ *
+ * WHAT IT WILL NOT TOUCH. A round whose week has already been played stays
+ * exactly as it was. Those ties were settled on one match, that result is in
+ * the bracket and in the player's history, and going back to add a leg to a
+ * round already decided would rewrite a result rather than repair a calendar.
+ * So this only reaches rounds still in front of the player, which is the half
+ * that can still be made right.
+ *
+ * Idempotent: a calendar whose knockout weeks already carry legs is left alone.
+ */
+export function ensureUclLegs(state: CareerState): void {
+  if (!Array.isArray(state.calendar)) return;
+  const rounds: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+  for (const round of rounds) {
+    if (uclLegsFor(state.eraId, round) !== 2) continue;
+    const weeks = state.calendar
+      .map((e, i) => ({ e, i }))
+      .filter(({ e }) => e.type === 'uclKo' && e.uclRound === round);
+    if (weeks.length !== 1) continue;          /* already two legs, or none */
+    const { e, i } = weeks[0];
+    if (e.uclLeg !== undefined) continue;      /* already migrated */
+    if (i < state.week) continue;              /* played one legged, leave it */
+    e.uclLeg = 1;
+    state.calendar.splice(i + 1, 0, { type: 'uclKo', round: 0, uclRound: round, uclLeg: 2 });
+  }
+}
+
 /* ---------- Round 95: the rest of the football world ---------- */
 
 /** Total rounds a league of this size plays (mirrors buildCalendar). */
@@ -14932,6 +14974,10 @@ export function loadCareer(): CareerState | null {
        both before any screen reads the table or the calendar. */
     ensurePairLedger(parsed);
     ensureUclCalendar(parsed);
+    /* Round 545: and the second legs, for a career that was in flight when
+       Round 507 shipped the two legged knockout. Rounds already played stay as
+       they were settled; only the ones still ahead are repaired. */
+    ensureUclLegs(parsed);
     /* Round 467: the facilities and the books, both fail closed on shape, so
        a save from before either existed (or a mangled block) opens on the
        club's day one levels and fresh books before any screen reads them. */

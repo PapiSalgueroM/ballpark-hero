@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 544, four player reports off the live site
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 545, four player reports off the live site
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 545.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 546.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -90,11 +90,46 @@ React's server renderer does not support error boundaries at all and would have 
 broken. Writing that section the easy way first is also what caught a false green in its own
 section 3, which was passing on an empty string. Two controls: `unwrapped` and `nocatch`.
 
+**545, the second legs a career in flight never got.** The "2nd leg in UCL knockout" half of the
+same report, and the answer is not what it looks like. Club Manager has played two legged knockout
+ties since Round 507 on 2026-09-08: legs per round by season year, both legs stored in one
+orientation, aggregate resolution, away goals correctly ending after 2020, the final still one match.
+The feature was not missing. The MIGRATION was. Every save made before that date carries one knockout
+week per round with no `uclLeg`, `ensureUclCalendar` only ever inserts a MISSING round of 16 week and
+returns early when one is already there and never looks at the quarter or semi finals, and the engine
+documents the gap and handles it defensively so a legacy save keeps crowning a champion, one legged,
+for the rest of its season. The player was right about their own save even though the feature had
+been live for three days.
+
+New `ensureUclLegs` in the `loadCareer` repair chain. It repairs every knockout round still AHEAD of
+the player and deliberately leaves a round already played exactly as it was: those ties were settled
+on one match, that result is in the bracket and in the player's history, and going back to add a leg
+would rewrite a result rather than repair a calendar. Idempotent, so it is safe in a path that runs
+on every open.
+
+`scripts/simUclLegMigration.mjs` measures it on a real career built by the engine and stripped back
+to the legacy shape, not on a hand written fixture. Six sections, and section 5 is worth the note:
+the first draft asked about the round of 16, and a MODERN save does not play one, it starts at the
+quarter final, so that section would have passed on a career that never plays the round it was
+asking about. It asks the save which round it starts at now, and section 6 covers an era save, which
+really does play a round of 16 and is the one round `ensureUclCalendar` also touches. Control
+`LEG_MIGRATION_CONTROL=noop` reproduces the unmigrated state and four sections go red.
+
+**Two things this turned up that are NOT fixed and are worth more than the fix.** Soccer Career's
+Champions League knockout is four coin flips: `simulateUCL` runs one match per round, decides the
+winner BEFORE the score, then fabricates a scoreline to fit. No legs, no aggregate, no group stage,
+no draws, no extra time, no penalties. It is the one UCL knockout on the site that is not two-legged
+and it sits on the flagship, about 1 in 5 of all pageviews. `src/lib/uclFormatHistory.ts` already
+carries `roundOf16` and `koLegs` per period from 1955 on, two-source verified, and imports nothing,
+so it can be the shared source of truth for both games; reading it also exposes that Soccer Career's
+hardcoded four-round ladder is wrong for every career year before 2003.
+
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
-simClubManagerBudget, simClubManagerDeals, simEras, simLiveSim, simLiveMatch, simNoRivalNames all
-green. The four new harnesses green with every negative control confirmed firing and a bogus control
-name exiting 1 on each. The 15 built site fences were run after the build; see the workboard entry
-for the result.
+simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
+simNoRivalNames all green. The five new harnesses green with every negative control confirmed firing and a bogus control
+name exiting 1 on each. All 15 built site fences green after a fresh build; `simBrand` needs
+`pip3 install fonttools pillow` first, which a fresh sandbox does not carry, and is green with zero
+drift once they are there.
 
 **What is still open out of these four reports** is listed in `docs/WORKBOARD.md`, and the biggest
 item is that the Champions League FIELD is still a hardcoded prestige pool: 543 fixed who qualifies

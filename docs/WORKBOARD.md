@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 545 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 544 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 546 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 545 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 544. Next free is 545.
+block is 541 to 545. Next free is 546.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -168,6 +168,15 @@ block is 541 to 544. Next free is 545.
   the half from minute 1. Files: `src/lib/clubManager.ts`,
   `src/components/club-manager/LiveSimScreen.tsx`, `src/pages/ClubManager.tsx`, new
   `scripts/simUclPlaces.mjs`.
+- **545: the second legs a career in flight never got.** The "2nd leg in UCL knockout" half of the
+  same report. Club Manager has played two legged ties since Round 507 (2026-09-08), so the feature
+  was not missing; the MIGRATION was. Every save made before that date carries one knockout week per
+  round with no `uclLeg`, `ensureUclCalendar` only ever inserts a missing round of 16 week and
+  returns early when one is there, and the engine documents the gap and handles it defensively so a
+  legacy save keeps playing one legged for the rest of its season. New `ensureUclLegs` in the
+  `loadCareer` repair chain repairs every round still AHEAD of the player and deliberately leaves a
+  round already settled alone, because adding a leg to a decided tie rewrites a result rather than
+  repairing a calendar. Files: `src/lib/clubManager.ts`, new `scripts/simUclLegMigration.mjs`.
 - **544: an error boundary, at last.** There was none anywhere in the app, so 541's throw unmounted
   the whole root and the visitor got a white page with no footer and therefore no report a bug
   button. Around the routes, inside Suspense so the footer survives. Files: new
@@ -188,16 +197,23 @@ block is 541 to 544. Next free is 545.
    player means moving his row out of `pending`, and `simRosterAdjudication` section 5 fails if the
    roster and the ledger drift apart. The Diogo Jota entry in particular carries a reason and needs
    confirming by a session with egress.
-3. **Two ideas from the same reports, designed but not built**, contracts in the investigation
-   notes: a two-legged UCL knockout (aggregate, no away goals since 2021, the final still one match
-   at a neutral venue, and the season calendar gains European dates), and mid-season start points
-   ("take over a club mid season for example leicester in 15/16 midway thru"). The second is smaller
-   than it sounds because `clubManagerEras.ts` already ships 2015-16, and it can be derived by simming
-   N matchdays under AI control rather than typing historical tables, which needs no outside data.
-4. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
+3. **Mid-season start points**, designed but not built: "take over a club mid season for example
+   leicester in 15/16 midway thru". Smaller than it sounds, because `clubManagerEras.ts` already
+   ships 2015-16, and the position can be derived by simming N matchdays under AI control rather
+   than typing historical tables, which needs no outside data and so needs no two-source pass.
+4. **Soccer Career's Champions League knockout is four coin flips.** `simulateUCL` in
+   `src/lib/soccerCareerEngine.ts` runs one match per round, decides the winner BEFORE the score,
+   then fabricates a scoreline to fit. No legs, no aggregate, no group stage, no draws, no extra
+   time, no penalties. It is the one UCL knockout on the site that is not two-legged, and it sits on
+   the flagship, about 1 in 5 of all pageviews. `src/lib/uclFormatHistory.ts` already carries
+   `roundOf16` and `koLegs` per period from 1955 on, two-source verified 2026-09-10, and imports
+   nothing, so it can be the shared source of truth for both games. Reading it also exposes that
+   Soccer Career's hardcoded four-round ladder is wrong for every career year before 2003. This is
+   the one-engine rule's next real job.
+5. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
    only harness that renders that screen. Give the walk a transfer pass and assert the season end
    screen really shows the transfer business rows.
-5. **Three smaller watch mode findings**, all reproduced in a real browser at 390x844: a substitution
+6. **Three smaller watch mode findings**, all reproduced in a real browser at 390x844: a substitution
    made while the clock is paused does not redraw the pitch until you unpause, the live control row
    (pause, speed, Skip) sits below the fold on a 390x844 and a 375x667 phone, and half the viewer
    branch condition in `ClubManager.tsx` is unreachable dead code.
