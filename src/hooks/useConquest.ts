@@ -236,11 +236,10 @@ function simulateBattle(
   attacker: string, defender: string,
   territories: Record<string, string | null>,
   rosters: Record<string, string[]>,
-  upgradeTeam?: string | null,
-  upgradedPlayer?: string | null,
+  teamUpgrades: Record<string, string>,
   ratingOverrides?: Record<string, TeamRatingOverride>,
 ): BattleResult {
-  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, upgradeTeam || null, upgradedPlayer || null, ratingOverrides);
+  const sim = simulateDetailedBattle(attacker, defender, territories, rosters, null, null, ratingOverrides, teamUpgrades);
 
   const winnerId = sim.winner === 'att' ? attacker : defender;
   const loserId = sim.winner === 'att' ? defender : attacker;
@@ -300,8 +299,8 @@ export function useConquest() {
   // Powerup system
   const [teamSavedPowerups, setTeamSavedPowerups] = useState<Record<string, SavedPowerup[]>>({});
   const [invincibleTeams, setInvincibleTeams] = useState<Set<string>>(new Set());
-  const [upgradeActiveTeam, setUpgradeActiveTeam] = useState<string | null>(null);
-  const [upgradedPlayer, setUpgradedPlayer] = useState<string | null>(null);
+  const [teamUpgrades, setTeamUpgrades] = useState<Record<string, string>>({});
+  const [battleUpgrades, setBattleUpgrades] = useState<Record<string, string>>({});
   
   // Powerup modal state
   const [pendingPowerup, setPendingPowerup] = useState<{ teamId: string; powerup: PowerupDef } | null>(null);
@@ -316,6 +315,8 @@ export function useConquest() {
   // and (for territory steal) the legal border-state candidates.
   const [powerupTeam, setPowerupTeam] = useState<string | null>(null);
   const [stealCandidates, setStealCandidates] = useState<StealCandidate[]>([]);
+  const powerupUnavailableReason = pendingPowerup?.powerup.id === 'upgrade' && teamUpgrades[pendingPowerup.teamId]
+    ? 'This team already has an upgrade waiting for its next battle. Save this one for later.' : null;
   
   // Play-by-play state
   const [visiblePlays, setVisiblePlays] = useState<PlayEvent[]>([]);
@@ -556,7 +557,7 @@ export function useConquest() {
   // Resolve the Upgrade power-up for the chosen player (or a random roster
   // player when called with no argument, the auto-pick fallback).
   const chooseUpgradePlayer = useCallback((playerName?: string) => {
-    if (!canResolvePowerup('powerup_use', 'upgrade') || !powerupTeam) return;
+    if (!canResolvePowerup('powerup_use', 'upgrade') || !powerupTeam || teamUpgrades[powerupTeam]) return;
     const roster = rosters[powerupTeam] || [];
     if (roster.length === 0) {
       finishPowerup();
@@ -565,13 +566,12 @@ export function useConquest() {
     if (playerName !== undefined && !roster.includes(playerName)) return;
     const player = playerName ?? roster[Math.floor(Math.random() * roster.length)];
     finishPowerup();
-    setUpgradeActiveTeam(powerupTeam);
-    setUpgradedPlayer(player);
+    setTeamUpgrades(prev => ({ ...prev, [powerupTeam]: player }));
     setGameLog(prev => [...prev, {
       turn: prev.length + 1, attacker: powerupTeam, defender: 'powerup',
       winner: powerupTeam, score: `⬆️ ${player} upgraded to 99 OVR!`,
     }]);
-  }, [powerupTeam, rosters, canResolvePowerup, finishPowerup]);
+  }, [powerupTeam, rosters, teamUpgrades, canResolvePowerup, finishPowerup]);
 
   // Resolve the Territory Steal power-up for the chosen border state (or a
   // random candidate when called with no argument, the auto-pick fallback).
@@ -597,6 +597,7 @@ export function useConquest() {
     const ownerStatesLeft = prevOwner ? Object.values(updatedTerr).filter(t => t === prevOwner).length : 0;
     if (prevOwner && ownerStatesLeft === 0) {
       setEliminated(e => [...e, prevOwner]);
+      setTeamUpgrades(prev => Object.fromEntries(Object.entries(prev).filter(([id]) => id !== prevOwner)));
     }
 
     setGameLog(prev => [...prev, {
@@ -610,11 +611,11 @@ export function useConquest() {
 
   // Called when user chooses "Use Now" on powerup received modal
   const usePowerupNow = useCallback(() => {
-    if (!canResolvePowerup('powerup_received') || !pendingPowerup) return;
+    if (!canResolvePowerup('powerup_received') || !pendingPowerup || powerupUnavailableReason) return;
     const { teamId, powerup } = pendingPowerup;
     rewardActionTokenRef.current = null;
     executePowerup(teamId, powerup.id);
-  }, [pendingPowerup, executePowerup, canResolvePowerup]);
+  }, [pendingPowerup, powerupUnavailableReason, executePowerup, canResolvePowerup]);
 
   // Called when user chooses "Save for Later"
   const savePowerupForLater = useCallback(() => {
@@ -723,10 +724,8 @@ export function useConquest() {
       ...prev,
       [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), available.name],
     }));
-    if (upgradeActiveTeam === favoriteTeam && upgradedPlayer === weakestName) {
-      setUpgradeActiveTeam(null);
-      setUpgradedPlayer(null);
-    }
+    setTeamUpgrades(prev => prev[favoriteTeam] === weakestName
+      ? Object.fromEntries(Object.entries(prev).filter(([id]) => id !== favoriteTeam)) : prev);
     setPowerRankDrift(prev => ({
       ...prev,
       [favoriteTeam]: clampDrift((prev[favoriteTeam] || 0) + FREE_AGENCY_SIGN_BUMP),
@@ -738,7 +737,7 @@ export function useConquest() {
       winner: favoriteTeam,
       score: `✍️ Free agency: signed ${available.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
     }]);
-  }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool, upgradeActiveTeam, upgradedPlayer]);
+  }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool]);
 
   const startBattle = useCallback(() => {
     if (rewardActionTokenRef.current !== rewardActionToken || phaseRef.current !== 'ready'
@@ -751,11 +750,7 @@ export function useConquest() {
     setNoEnemyMsg(null);
     setTerritoryStolenState(null);
 
-    // Clear upgrade after one battle if it was active
-    if (upgradeActiveTeam) {
-      setUpgradeActiveTeam(null);
-      setUpgradedPlayer(null);
-    }
+    setBattleUpgrades({});
 
     const team = alive[Math.floor(Math.random() * alive.length)];
 
@@ -853,7 +848,10 @@ export function useConquest() {
       }
     } else {
       const enemyId = target.id;
-      const result = simulateBattle(team, enemyId, territories, rosters, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides());
+      const upgrades = Object.fromEntries(Object.entries(teamUpgrades).filter(([id]) => id === team || id === enemyId));
+      const result = simulateBattle(team, enemyId, territories, rosters, upgrades, buildRatingOverrides());
+      setBattleUpgrades(upgrades);
+      setTeamUpgrades(prev => Object.fromEntries(Object.entries(prev).filter(([id]) => id !== team && id !== enemyId)));
       if (longDistanceRaid) result.longDistance = true;
 
       const startPlayByPlay = () => {
@@ -910,7 +908,7 @@ export function useConquest() {
         addTimeout(startPlayByPlay, 6000);
       }
     }
-  }, [rewardActionToken, pendingPowerup, powerupUseType, territories, rosters, powerupStates, upgradeActiveTeam, upgradedPlayer, buildRatingOverrides]);
+  }, [rewardActionToken, pendingPowerup, powerupUseType, territories, rosters, powerupStates, teamUpgrades, buildRatingOverrides]);
 
   // Power rankings update (item 86): a battle win nudges the winner's O/D up
   // and the loser's down by a small clamped amount, and both teams' in-run
@@ -1085,8 +1083,8 @@ export function useConquest() {
     setPowerupStates(pickRandomPowerupStates());
     setTeamSavedPowerups({});
     setInvincibleTeams(new Set());
-    setUpgradeActiveTeam(null);
-    setUpgradedPlayer(null);
+    setTeamUpgrades({});
+    setBattleUpgrades({});
     setPendingPowerup(null);
     setPowerupUseType(null);
     setTerritoryStolenState(null);
@@ -1113,9 +1111,9 @@ export function useConquest() {
     attackingTeam, direction, defendingTeam, battleResult, gameLog,
     animStartTime, noEnemyMsg, powerupStates,
     // Powerup system
-    teamSavedPowerups, invincibleTeams, upgradeActiveTeam, upgradedPlayer,
+    teamSavedPowerups, invincibleTeams, teamUpgrades, battleUpgrades,
     pendingPowerup, powerupUseType, freeAgentList, territoryStolenState, targetState,
-    powerupTeam, stealCandidates,
+    powerupTeam, stealCandidates, powerupUnavailableReason,
     // Play-by-play
     visiblePlays, playByPlayActive, simulatingRemainder, boxScore,
     stealModalOpen, pendingBattleApply, playerConfirmed,

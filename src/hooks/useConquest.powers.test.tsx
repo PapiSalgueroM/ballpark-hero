@@ -32,7 +32,7 @@ function mount(power: PowerupId = 'invincibility') {
 function snapshot(game: Game) { return JSON.stringify({ phase: game.phase, turn: game.turn,
   territories: game.territories, rosters: game.rosters, log: game.gameLog, eliminated: game.eliminated,
   saved: game.teamSavedPowerups, pending: game.pendingPowerup, type: game.powerupUseType,
-  owner: game.powerupTeam, shield: [...game.invincibleTeams], upgrade: [game.upgradeActiveTeam, game.upgradedPlayer],
+  owner: game.powerupTeam, shield: [...game.invincibleTeams], upgrade: game.teamUpgrades, battleUpgrades: game.battleUpgrades,
   candidates: game.stealCandidates, agents: game.freeAgentList, highlight: game.territoryStolenState,
   attacking: game.attackingTeam, defending: game.defendingTeam }); }
 function step(view: View) {
@@ -147,7 +147,7 @@ describe('NFL earned power actions', () => {
     check(snapshot(view.result.current) === before, 'UPGRADE INPUT: invalid names and other power actions preserve the picker');
     const choose = view.result.current.chooseUpgradePlayer, name = view.result.current.rosters[owner][0], logs = view.result.current.gameLog.length;
     act(() => { choose(name); choose(name); });
-    check(view.result.current.upgradeActiveTeam === owner && view.result.current.upgradedPlayer === name && view.result.current.gameLog.length === logs + 1
+    check(view.result.current.teamUpgrades[owner] === name && view.result.current.gameLog.length === logs + 1
       && view.result.current.phase === 'ready' && !view.result.current.pendingPowerup, 'UPGRADE ONCE: one roster choice creates one owned upgrade');
   });
 
@@ -182,7 +182,7 @@ describe('NFL earned power actions', () => {
   it('preserves the optional random fallback for both valid power pickers', () => {
     const view = mount('upgrade'), owner = picker(view, 'upgrade'), logs = view.result.current.gameLog.length;
     act(() => view.result.current.chooseUpgradePlayer());
-    check(view.result.current.upgradeActiveTeam === owner && view.result.current.rosters[owner].includes(view.result.current.upgradedPlayer!)
+    check(view.result.current.rosters[owner].includes(view.result.current.teamUpgrades[owner])
       && view.result.current.gameLog.length === logs + 1, 'RANDOM UPGRADE: omitted input chooses a real current roster player');
     view.unmount(); vi.spyOn(Math, 'random').mockImplementation(seeded(29));
     const other = mount('territory_steal'), recipient = picker(other, 'territory_steal'), choices = other.result.current.stealCandidates.map(item => item.stateId);

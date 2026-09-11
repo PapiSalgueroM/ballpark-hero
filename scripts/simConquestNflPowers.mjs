@@ -133,8 +133,8 @@ const CONTROLS = {
     "file": "hook",
     "test": 3,
     "message": "UPGRADE ONCE: one roster choice creates one owned upgrade",
-    "from": "    setUpgradedPlayer(player);",
-    "to": "    setUpgradedPlayer(null);"
+    "from": "    setTeamUpgrades(prev => ({ ...prev, [powerupTeam]: player }));",
+    "to": "    setTeamUpgrades({});"
   },
   "territoryname": {
     "file": "hook",

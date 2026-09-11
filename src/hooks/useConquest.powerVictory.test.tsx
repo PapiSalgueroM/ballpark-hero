@@ -8,6 +8,8 @@ import { useConquest } from '@/hooks/useConquest';
 import { TEAM_MAP } from '@/data/conquestData';
 import { TERRITORY_ADJACENCY } from '@/lib/conquestMapGeometry';
 
+function check(value: unknown, message: string): void { assert.ok(value, message); }
+
 const boundary = vi.hoisted(() => ({ faults: [] as string[] }));
 vi.mock('@/data/conquestData', async importOriginal => {
   const actual = await importOriginal<typeof import('@/data/conquestData')>();
@@ -36,21 +38,21 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup(); vi.clearAllTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers();
-  assert.ok(boundary.faults.length === 0, 'BOUNDARY: no runtime transport storage or backend faults');
+  check(boundary.faults.length === 0, 'BOUNDARY: no runtime transport storage or backend faults');
 });
 
 it('earns and resolves the final territory power from a declared legal starting map', () => {
   const view = renderHook(() => useConquest());
   const initial = view.result.current;
   assert.deepEqual(initial.aliveTeams().sort(), ['CIN', 'WAS']);
-  assert.ok(initial.territories.PA_W === null && initial.territories.MD === 'WAS'
+  check(initial.territories.PA_W === null && initial.territories.MD === 'WAS'
     && initial.getTeamTerritoryCount('WAS') === 1 && initial.powerupStates.has('PA_W')
     && TERRITORY_ADJACENCY.PA_W.includes('MD'), 'SETUP: the declared map has one marked neutral and one adjacent final enemy state');
   assert.deepEqual(initial.rosters.CIN, TEAM_MAP.get('CIN')!.players!.map(player => player.name));
   act(() => view.result.current.startBattle());
-  assert.ok(view.result.current.phase === 'animating' && view.result.current.targetState === 'PA_W', 'SETUP: the actual map turn targets the marked neutral region');
+  check(view.result.current.phase === 'animating' && view.result.current.targetState === 'PA_W', 'SETUP: the actual map turn targets the marked neutral region');
   act(() => vi.advanceTimersByTime(10000));
-  assert.ok(view.result.current.turn === 1 && view.result.current.territories.PA_W === 'CIN'
+  check(view.result.current.turn === 1 && view.result.current.territories.PA_W === 'CIN'
     && view.result.current.phase === 'powerup_received' && view.result.current.pendingPowerup?.teamId === 'CIN'
     && view.result.current.pendingPowerup.powerup.id === 'territory_steal' && !view.result.current.battleResult,
   'EARNED: the real neutral claim awards its territory power to CIN');
@@ -60,14 +62,14 @@ it('earns and resolves the final territory power from a declared legal starting 
   assert.deepEqual(view.result.current.stealCandidates.map(candidate => candidate.stateId), ['MD']);
   const choose = view.result.current.stealTerritoryTarget, before = view.result.current.gameLog.length;
   act(() => { choose('MD'); choose('MD'); });
-  assert.ok(view.result.current.phase === 'gameover' && view.result.current.aliveTeams().length === 1
+  check(view.result.current.phase === 'gameover' && view.result.current.aliveTeams().length === 1
     && view.result.current.aliveTeams()[0] === 'CIN' && view.result.current.territories.MD === 'CIN'
     && !view.result.current.pendingPowerup, 'VICTORY: the actual final territory choice ends the fixture run immediately');
-  assert.ok(view.result.current.eliminated.filter(id => id === 'WAS').length === 1
+  check(view.result.current.eliminated.filter(id => id === 'WAS').length === 1
     && view.result.current.gameLog.length === before + 1 && view.result.current.gameLog[view.result.current.gameLog.length - 1]?.defender === 'powerup',
   'FINAL ONCE: the final territory choice records one elimination and one power action');
   act(() => vi.advanceTimersByTime(2000));
-  assert.ok(view.result.current.phase === 'gameover' && view.result.current.territoryStolenState === null,
+  check(view.result.current.phase === 'gameover' && view.result.current.territoryStolenState === null,
     'FINAL TIMER: animation cleanup preserves the completed game');
   console.log('DECLARED MAP FIXTURE: 1 real neutral claim, 1 earned and banked power, MD claimed from WAS, CIN wins immediately and after timer cleanup; not a natural endgame witness');
 });

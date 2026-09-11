@@ -1,6 +1,39 @@
 # Project state
 
+## Round 534 NFL upgrade lifetime, September 8, 2026
+
+Scoped verification complete in `.worktrees/round-534-nfl-upgrade-lifetime`, branch
+`codex/round-534-nfl-upgrade-lifetime`, base533 `2e34734c` (draft PR84),
+claim `03d4a795`, implementation `42eabb52`.
+Draft PR85: https://github.com/PapiSalgueroM/ballpark-hero/pull/85.
+Per-team queues now survive neutral and unrelated turns.
+The actual participants consume their upgrades when their battle is
+created, with a separate snapshot for both result roster tables. A second
+same-owner Upgrade stays saveable. Waiver, elimination and reset cleanup
+preserve unrelated owners. The engine accepts both teams' entries, retains
+legacy calls, and prevents same-name boosts crossing team boundaries.
+No new player data or formula tuning.
+
+Build passes in 24.80 seconds. Both exact types pass after all final test
+files are present, as do all fifteen site checks and 108 prior NFL/NBA/help
+cases. The selected runner executes all 24 new cases; 71 source controls
+produce 96 exact intended failures. Phone and desktop each pass eleven
+actual turns, seven battles and four neutral claims, plus both missing-queue
+controls. Main visual and independent source reviews are clear.
+Preview 4211, PID 36716: index-C2ak2tWO.js and Conquest-MNngEgrY.js.
+Evidence: docs/nfl-upgrades-2026-09-08.md. This round also fixes the late
+533 victory-test narrowing error described below. Preserve all previous
+worktrees and previews. No root edits, backend/account writes, broad suite,
+main merge or publication. Broad-suite process isolation remains separate.
+Next free 535: audit the documented NFL same-name legend/card ambiguity,
+starting with a reproduction before choosing any identity change.
+
 ## Round 533 NFL reward action lifecycle, September 8, 2026
+
+Round 534 follow-up: a fresh app check at the preserved 533 checkpoint finds
+TS2367 in its late powerVictory test. The earlier type check preceded that
+file. The assertion narrowing is corrected in Round 534, with the runtime
+conditions unchanged. PR84 now records this qualification and stays draft.
 
 Scoped verification complete in `.worktrees/round-533-nfl-powers`, branch
 `codex/round-533-nfl-powers`, base532 `41810f8b` (draft PR83).

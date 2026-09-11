@@ -95,13 +95,13 @@ interface PlayResult {
 function generatePlay(
   offTeamId: string, defTeamId: string,
   offRoster: string[], defRoster: string[],
-  upgradeTeam: string | null, upgradedPlayer: string | null,
+  upgrades: Record<string, string>,
 ): PlayResult {
   const off = getPlayersByPos(offRoster, offTeamId);
   const def = getPlayersByPos(defRoster, defTeamId);
 
-  const getOvr = (p: ConquestPlayer) => {
-    if ((upgradeTeam === offTeamId || upgradeTeam === defTeamId) && upgradedPlayer === p.name) return 99;
+  const getOvr = (p: ConquestPlayer, teamId: string) => {
+    if (upgrades[teamId] === p.name) return 99;
     return p.overall;
   };
 
@@ -116,8 +116,8 @@ function generatePlay(
   // Pass play (~55%)
   if (roll < 0.55 && receivers.length > 0) {
     const target = pick(receivers);
-    const offRating = (getOvr(qb) + getOvr(target)) / 2;
-    const defRating = getOvr(defPlayer);
+    const offRating = (getOvr(qb, offTeamId) + getOvr(target, offTeamId)) / 2;
+    const defRating = getOvr(defPlayer, defTeamId);
 
     if (ratingCheck(offRating, defRating)) {
       const yards = randInt(5, 44);
@@ -150,8 +150,8 @@ function generatePlay(
   // Rush play (~35%)
   if (roll < 0.90) {
     const runner = pick(rushers);
-    const offRating = getOvr(runner);
-    const defRating = getOvr(defPlayer);
+    const offRating = getOvr(runner, offTeamId);
+    const defRating = getOvr(defPlayer, defTeamId);
 
     if (ratingCheck(offRating, defRating)) {
       const yards = randInt(2, 32);
@@ -338,12 +338,12 @@ function snapToNflScore(score: number): number {
 
 function generateFullGameStats(
   teamId: string, roster: string[],
-  score: number, upgradeTeam: string | null, upgradedPlayer: string | null,
+  score: number, upgradedPlayer?: string,
 ): TeamStatLine {
   const pos = getPlayersByPos(roster, teamId);
 
   const getOvr = (p: ConquestPlayer) => {
-    if (upgradeTeam === teamId && upgradedPlayer === p.name) return 99;
+    if (upgradedPlayer === p.name) return 99;
     return p.overall;
   };
 
@@ -421,7 +421,9 @@ export function simulateDetailedBattle(
   // override the static conquestData.ts offense/defense so the panel's
   // in-run adjustments actually drive the odds instead of just being cosmetic.
   ratingOverrides?: Record<string, TeamRatingOverride>,
+  teamUpgrades?: Record<string, string>,
 ): BattleSimulation {
+  const upgrades = teamUpgrades ?? (upgradeTeam && upgradedPlayer ? { [upgradeTeam]: upgradedPlayer } : {});
   const attTeam = TEAM_MAP.get(attackerId)!;
   const defTeam = TEAM_MAP.get(defenderId)!;
   const aTerr = Object.values(territories).filter(t => t === attackerId).length;
@@ -448,7 +450,7 @@ export function simulateDetailedBattle(
     const defRosterFor = isAttPossession ? defRoster : attRoster;
     const side: 'att' | 'def' = isAttPossession ? 'att' : 'def';
 
-    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgradeTeam, upgradedPlayer);
+    const play = generatePlay(offTeamId, defTeamId2, offRoster, defRosterFor, upgrades);
 
     if (side === 'att') pbpAttScore += play.points;
     else pbpDefScore += play.points;
@@ -474,8 +476,8 @@ export function simulateDetailedBattle(
   const winner: 'att' | 'def' = finalAttScore > finalDefScore ? 'att' : 'def';
 
   // Step 3: Generate full-game box score stats based on final scores
-  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgradeTeam, upgradedPlayer);
-  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgradeTeam, upgradedPlayer);
+  const attStats = generateFullGameStats(attackerId, attRoster, finalAttScore, upgrades[attackerId]);
+  const defStats = generateFullGameStats(defenderId, defRoster, finalDefScore, upgrades[defenderId]);
 
   return {
     plays,

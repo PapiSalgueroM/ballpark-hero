@@ -1,5 +1,32 @@
 # Work board
 
+## Round 534 complete, September 8, 2026
+
+Codex owns the reproduced NFL queued upgrade lifetime repair in
+useConquest.ts, conquestBattle.ts and ConquestBoard.tsx, plus accurate
+help and bounded outcome checks. Worktree
+`.worktrees/round-534-nfl-upgrade-lifetime`, branch
+`codex/round-534-nfl-upgrade-lifetime`, base533 `2e34734c` (draft PR84).
+Implementation `42eabb52`, draft PR85: https://github.com/PapiSalgueroM/ballpark-hero/pull/85.
+Each owner's queued boost now survives neutral and unrelated turns until
+its next actual battle. Independent queues and both result roster snapshots
+preserve the right owner and player. Duplicate upgrades stay saveable.
+Existing data, formulas and legacy engine calls remain, with same-name
+players receiving only their own team's boost.
+All 24 new cases pass; 71 source controls produce 96 intended failures.
+Both exact types, build, all fifteen site checks and 108 prior cases pass.
+Phone and desktop each pass eleven real turns and the queue-removal control.
+Source and main visual reviews are clear. Evidence:
+docs/nfl-upgrades-2026-09-08.md. Preview 4211 preserved.
+This also corrects the late Round 533 test's assertion narrowing. A fresh
+check of the preserved 533 checkpoint found TS2367; its earlier app check
+preceded that fixture. PR84 records the qualification and stays draft.
+Next free 535: reproduce the documented NFL same-name legend/card ambiguity
+before choosing an identity change. Broad-suite process isolation remains
+separate. Root belongs to Claude. Preserve every prior worktree and preview.
+Draft PR only, no backend/account writes, broad suite, root edits, main merge
+or publication.
+
 ## Round 533 complete, September 8, 2026
 
 Codex owns the NFL Arcade reward action lifecycle in useConquest.ts and
