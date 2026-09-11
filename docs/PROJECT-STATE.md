@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 547, four player reports off the live site
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 548, four player reports off the live site
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 548.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 549.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -182,6 +182,23 @@ version killed the derivation outright, which was weaker, because the harness th
 field being ABSENT rather than for the wrong clubs being in it. It now disables only the draws'
 consultation of the field, and puts Lazio, Olympiacos, Sporting CP and Club Brugge back into groups
 they never qualified for.
+
+**548, a substitution while the clock is paused redraws the pitch.** The third of five watch mode
+findings. `myOnPitchAt`'s rule is strictly-after, correctly so, because a man replaced at minute 60
+played minute 60 and the report needs that. But tapping a dot PAUSES the clock, so a change made
+from the pitch is filed at exactly the frozen minute and the viewer draws at that same minute: the
+man who had just come off was still on the grass until you unpaused. The viewer reads `minute + 1`
+now, MY SIDE ONLY, and the asymmetry is the point: my substitutions are recorded when I make them so
+nothing later exists to leak, while the opponent's half is drawn ahead by the engine and an
+inclusive read there would show their change a minute early.
+
+**What was deliberately NOT shipped with it.** The fourth finding is the live control row (pause,
+the speed buttons, Skip) sitting below the fold on a 390x844 and a 375x667 phone. A fix was drafted
+(the pitch taking the height that is left rather than all of it) and reverted rather than shipped:
+it is a visual change to a game, this sandbox could not drive a live match to measure the result,
+and moving the control row above the pitch instead costs no pitch size at all and may be the better
+answer. It is written up in `docs/WORKBOARD.md` with its measured rectangles for a session that has
+a browser. The fifth finding, a dead branch in the viewer's phase condition, is written up there too.
 
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
 simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
