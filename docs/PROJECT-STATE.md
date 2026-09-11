@@ -1,13 +1,13 @@
 # Project state
 
-## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 545, four player reports off the live site
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 546, four player reports off the live site
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
 Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
 file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
 heading. Numbering note: the previous tablet session took 537 to 540 on
 `claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
-`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 546.
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 547.
 
 **541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
 further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
@@ -124,9 +124,40 @@ carries `roundOf16` and `koLegs` per period from 1955 on, two-source verified, a
 so it can be the shared source of truth for both games; reading it also exposes that Soccer Career's
 hardcoded four-round ladder is wrong for every career year before 2003.
 
+**546, the flagship's Champions League is played, not flipped.** Found while answering 545, and it
+deserved the round more than 545 did. Soccer Career's `simulateUCL` ran
+`const won = Math.random() < winChance` and then painted a scoreline on to match: a win drew 1 to 4
+goals for and strictly fewer against, a defeat drew a bigger number against. No legs, no aggregate,
+no draws (a level score could not be generated at all), no extra time, no penalties, and a hardcoded
+R16/QF/SF/Final ladder in every season, wrong for every year before 2003. This is the flagship,
+about 1 in 5 of all pageviews, and it was the one Champions League on the site that was not real.
+
+It plays the tie now: two legs for every round but the final, home advantage that swaps with the leg
+so it cancels across the tie, aggregate, away goals only in the seasons that had them, then extra
+time, then penalties. The format is read from `src/lib/uclFormatHistory.ts` rather than kept as a
+second hardcoded copy.
+
+**The hard part was not the mechanism, it was not moving the balance.** The win probability the game
+already had is kept as the TARGET and the goal expectations are SOLVED to reproduce it: aggregate
+goal difference over N legs is the difference of two Poissons, so inverting its normal approximation
+gives the edge that lands on the old rate. Solved rather than tuned, so a later change to the base
+rate or the leg count cannot silently rebalance a career. Measured over 44,540 ties: signed drift
+0.16 points against the replaced model, mean absolute gap 1.21, and the aggregate agrees with who
+went through every single time. 17.8% of ties now finish level on aggregate, which the old model
+could not produce at all.
+
+**A mistake worth keeping written down.** The harness's balance section first gated on the WORST
+single cell across the grid and went red at 11 points, on a model that direct measurement then
+showed accurate to under a point at high sample size. A max over sixty cells is dominated by
+whichever one happened to have the fewest campaigns in it, which is this repo's own "never assert on
+a max" rule exactly. It gates on two pooled statistics now and prints the worst cell for information
+only. The uncalibrated model produced a mean absolute gap of 40 and the control produces 10, against
+a gate of 3.
+
 **Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
 simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
-simNoRivalNames all green. The five new harnesses green with every negative control confirmed firing and a bogus control
+simNoRivalNames, simSoccerCareer, simCareerRealism, simBallonDorTruth, simCareerNoDeadEnd and
+simCareerParity all green. The six new harnesses green with every negative control confirmed firing and a bogus control
 name exiting 1 on each. All 15 built site fences green after a fresh build; `simBrand` needs
 `pip3 install fonttools pillow` first, which a fresh sandbox does not carry, and is green with zero
 drift once they are there.

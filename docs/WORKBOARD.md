@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 546 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 545 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 547 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 546 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
   both claims below.
@@ -140,7 +140,7 @@ that made the worst of them worse.
 
 **Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
 which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
-block is 541 to 545. Next free is 546.
+block is 541 to 546. Next free is 547.
 
 - **541: the season review crash.** "when i clcik season review it crashes and i cant progress
   further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
@@ -182,6 +182,17 @@ block is 541 to 545. Next free is 546.
   button. Around the routes, inside Suspense so the footer survives. Files: new
   `src/components/RouteErrorBoundary.tsx`, `src/App.tsx`, new `scripts/simErrorBoundary.mjs`.
 
+- **546: the flagship's Champions League is played, not flipped.** Found while answering 545.
+  Soccer Career's `simulateUCL` decided the tie BEFORE the score and then painted a scoreline on to
+  match, so there were no legs, no aggregate, no draws at all, no extra time and no penalties, and
+  the ladder was hardcoded R16/QF/SF/Final in every season. It plays the tie now, with the format
+  read from `src/lib/uclFormatHistory.ts` rather than kept as a second copy. The balance is held by
+  construction: the win probability the game already had is the TARGET and the goal expectations are
+  SOLVED to reproduce it (inverting the normal approximation of a Poisson difference), so a later
+  change to the base rate or the leg count cannot silently rebalance a career. Measured over 44,540
+  ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
+  `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
+
 **STILL OPEN out of these reports, and the desktop lane is better placed for the first two.**
 
 1. **The Champions League FIELD is still a hardcoded prestige pool.** 543 fixed who qualifies from
@@ -201,15 +212,10 @@ block is 541 to 545. Next free is 546.
    leicester in 15/16 midway thru". Smaller than it sounds, because `clubManagerEras.ts` already
    ships 2015-16, and the position can be derived by simming N matchdays under AI control rather
    than typing historical tables, which needs no outside data and so needs no two-source pass.
-4. **Soccer Career's Champions League knockout is four coin flips.** `simulateUCL` in
-   `src/lib/soccerCareerEngine.ts` runs one match per round, decides the winner BEFORE the score,
-   then fabricates a scoreline to fit. No legs, no aggregate, no group stage, no draws, no extra
-   time, no penalties. It is the one UCL knockout on the site that is not two-legged, and it sits on
-   the flagship, about 1 in 5 of all pageviews. `src/lib/uclFormatHistory.ts` already carries
-   `roundOf16` and `koLegs` per period from 1955 on, two-source verified 2026-09-10, and imports
-   nothing, so it can be the shared source of truth for both games. Reading it also exposes that
-   Soccer Career's hardcoded four-round ladder is wrong for every career year before 2003. This is
-   the one-engine rule's next real job.
+4. **Soccer Career still has no Champions League GROUP or league phase.** Round 546 fixed the
+   knockout; a campaign still begins at the first knockout round with a flat qualification roll
+   (`tier === 1 ? 0.85 : 0.35`) rather than a group the player plays through. That is the next piece
+   of the same job, and `uclFormatHistory.ts` already describes which format each season ran.
 5. **`playClubManager.mjs` never signs anyone**, so the crashing branch in 541 was dead code for the
    only harness that renders that screen. Give the walk a transfer pass and assert the season end
    screen really shows the transfer business rows.
