@@ -67,8 +67,11 @@ see who ends up ruling the map.
      Round 147's rule),
    - the takeover wave spreads across the loser's land, the "+N states" chip lands on the
      winner, the standings strip reorders,
-   - next game. The featured game plays LAST, with the player's call shown on the card and the
-     hit or miss landing with it.
+   - next game. Scenes play in the ENGINE'S order (the round's pairing order), because the
+     engine applies transfers in that order and `ImpGame.flipped` records exactly what each
+     game moved; reordering would show land moving that did not move. The featured game is
+     marked when its turn comes, with the player's call on the card and the hit or miss landing
+     with it.
    A Skip button jumps to the end of the round at any point. On reduced motion every scene
    lands on its final frame with no camera move, and the round shows its recap directly.
 
@@ -129,8 +132,8 @@ wheel wedge is a colour and a name. The "stadium dot" is a ring, not a mark.
 `scripts/simConquestScenes.mjs`, node, renders the real components through react-dom/server
 inside a MemoryRouter over seeded runs for all five sports, and asserts the strongest signals:
 
-1. The scene list for a settled round is a permutation of that round's games, the featured game
-   last. No scene shows a game the engine did not play (nothing invented).
+1. The scene list for a settled round is exactly that round's games in engine order. No scene
+   shows a game the engine did not play (nothing invented).
 2. Every scene's score is the engine's score, and the score element does not exist before its
    scene (no number through false values).
 3. The takeover of each scene marks exactly the regions that game flipped, recomputed by
