@@ -5,10 +5,11 @@
  * same component the nine sim games share) and opening one REPLACES the
  * grid, never stacks under it.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Star, HelpCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HubTiles, HubPanelHeader, HubTile } from '@/components/hub/HubTiles';
@@ -36,6 +37,46 @@ const WonderkidFactory = () => {
   const goal = region.goal;
   const goalPct = Math.min(100, (s.lifetime / goal) * 100);
   const showcaseReady = s.showcaseCooldown <= 0 && s.showcaseLeft <= 0;
+
+  /* Round 530: the move up gets a card naming the new region, in the tile
+     slot for four seconds or until Continue. The engine is a mutable object
+     behind the hook's ref, so the flip is read off the star count between
+     renders rather than off an event. */
+  const [moved, setMoved] = useState<{ name: string; emoji: string; seq: number } | null>(null);
+  const prevRep = useRef(s.rep);
+  useEffect(() => {
+    if (s.rep > prevRep.current) setMoved({ name: region.name, emoji: region.emoji, seq: s.rep });
+    prevRep.current = s.rep;
+  }, [s.rep, region]);
+  useEffect(() => {
+    if (!moved) return;
+    const t = window.setTimeout(() => setMoved(null), 4000);
+    return () => window.clearTimeout(t);
+  }, [moved]);
+
+  /* Round 530: a kid walking out at 24 shakes a line in the academy box.
+     leftFree is the engine's count; the name comes from the bed he was in on
+     the previous render, and when that cannot be pinned to the count the
+     line says a kid rather than guessing a name. */
+  const [walked, setWalked] = useState<{ text: string; seq: number } | null>(null);
+  const bedsRef = useRef(s.prospects.map(p => ({ id: p.id, name: p.name })));
+  const prevLeftFree = useRef(s.leftFree);
+  useEffect(() => {
+    const before = bedsRef.current;
+    bedsRef.current = s.prospects.map(p => ({ id: p.id, name: p.name }));
+    const gone = s.leftFree - prevLeftFree.current;
+    prevLeftFree.current = s.leftFree;
+    if (gone <= 0) return;
+    const still = new Set(s.prospects.map(p => p.id));
+    const names = before.filter(k => !still.has(k.id)).map(k => k.name);
+    const who = names.length === gone ? names.join(' and ') : gone === 1 ? 'a kid' : `${gone} kids`;
+    setWalked({ text: `${who} turned 24 and walked out on a free`, seq: s.leftFree });
+  });
+  useEffect(() => {
+    if (!walked) return;
+    const t = window.setTimeout(() => setWalked(null), 4000);
+    return () => window.clearTimeout(t);
+  }, [walked]);
 
   const tiles: HubTile[] = FACILITIES.map(f => {
     const lvl = s.levels[f.id];
@@ -68,6 +109,7 @@ const WonderkidFactory = () => {
         path="/wonderkid-factory"
       />
       <main id="dukb-main" className="max-w-2xl mx-auto px-4 py-4 md:py-8">
+        <CelebrationStyles />
         <header className="text-center mb-3">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">WONDERKID FACTORY</h1>
           <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
@@ -137,6 +179,11 @@ const WonderkidFactory = () => {
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">The academy</span>
             <span className="text-[10px] text-muted-foreground">sell when the price is right, kids leave free at 24</span>
           </div>
+          {walked && (
+            <p key={walked.seq} className="cm-loss-shake mb-2 rounded-lg border border-destructive/40 bg-destructive/10 px-2.5 py-1.5 text-xs font-bold text-destructive">
+              🚪 {walked.text}
+            </p>
+          )}
           {s.prospects.length === 0 ? (
             <div className="h-24 flex items-center justify-center text-xs text-muted-foreground text-center px-4">
               the beds are empty. The scouts are out looking, the first kid arrives in about {Math.max(1, Math.ceil(findSec(s) - s.scoutProgress))}s.
@@ -178,8 +225,26 @@ const WonderkidFactory = () => {
           )}
         </div>
 
-        {/* the boxes, or the one opened panel in their place */}
-        {panel === null ? (
+        {/* the boxes, or the one opened panel in their place, or the move up
+            card (Round 530) while the new region is being announced */}
+        {moved ? (
+          <div key={`moved|${moved.seq}`} className="relative overflow-hidden rounded-2xl border border-gold/60 bg-card p-4 text-center">
+            <ConfettiBurst seed={moved.seq} count={30} />
+            <p className="cm-slam font-display text-xl font-black text-gold" style={{ animationDelay: '0.05s' }}>
+              {moved.emoji} Welcome to {moved.name}
+            </p>
+            <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
+              star {s.rep} is forever: +{Math.round(s.rep * 15)}% training, +{Math.round(s.rep * 10)}% fees, and the scouts here find ceilings up to {region.potMax}
+            </p>
+            <button
+              onClick={() => setMoved(null)}
+              className="cm-rise mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+              style={{ animationDelay: '0.7s' }}
+            >
+              Continue
+            </button>
+          </div>
+        ) : panel === null ? (
           <HubTiles tiles={tiles} onOpen={k => setPanel(k as Panel)} />
         ) : panel === 'legacy' ? (
           <div className="space-y-2">
@@ -312,6 +377,12 @@ const WonderkidFactory = () => {
         .wf-float { animation: wfFloat 2.6s ease-out forwards; }
         @keyframes wfGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
         .wf-glow { animation: wfGlow 1.6s ease-in-out infinite; }
+        /* Round 530: the setting the visitor already made. The glow stops
+           looping and the floaters land as plain text until they are cleared. */
+        @media (prefers-reduced-motion: reduce) {
+          .wf-glow { animation: none; }
+          .wf-float { animation: none; opacity: 1; transform: none; }
+        }
       `}</style>
     </div>
   );
