@@ -17,15 +17,23 @@
  *  1. Source level, comments stripped before any matching (prose about a
  *     check is the one place the string it looks for is guaranteed to appear):
  *     a. the counting number has no importer, no renderer and no export left
- *        in src (a ratchet at zero);
+ *        in src (a ratchet at zero), AND no file rolls one of its own: a state
+ *        setter easing a value toward a target inside an animation frame loop
+ *        is a counting number whatever it is called, which is how Stadium
+ *        Tycoon kept one through a check that only knew the name;
  *     b. every src file whose <style> block declares a keyframe also declares
- *        a reduced motion rule. Two files from before this round do not and
- *        are frozen in REDUCED_MOTION_BASELINE; a file that gets fixed must
- *        leave that list. The five keyframe files this round touched are
+ *        a reduced motion rule, AND every class that file gives an animation
+ *        to is named inside that rule. The rule merely existing was the old
+ *        test, which a new animated class beside the guarded ones would have
+ *        walked straight past. Two files from before this round carry no rule
+ *        and are frozen in REDUCED_MOTION_BASELINE; a file that gets fixed
+ *        must leave that list. The five keyframe files this round touched are
  *        named and must hold, so the check cannot go vacuous if one moves;
  *     c. the stagger helper is defined once, in the celebration kit, every
- *        caller imports it from there, and no file keeps its own copy of the
- *        pace.
+ *        caller imports it from there, and no animationDelay works its stagger
+ *        out by multiplying a count by a step. Passing a custom step into
+ *        revealDelay is fine; typing the arithmetic out is the pace escaping
+ *        the kit, whatever the numbers happen to be.
  *  2. Render level, react-dom/server inside a MemoryRouter, over fixtures:
  *     every fact in the fixture appears in the markup in engine order, every
  *     number printed is one the fixture carries, the animated elements read
@@ -51,8 +59,13 @@
  * required to redden its own section and no other:
  *   REVEAL_CONTROL=countup    a copy of one career board imports the counting
  *                             number again; section 1 must go red.
+ *   REVEAL_CONTROL=rollup     a copy of Stadium Tycoon rolls its money again
+ *                             under a name the import check cannot see;
+ *                             section 1 must go red.
  *   REVEAL_CONTROL=motion     the reduced motion rule is stripped from a copy
  *                             of DraftNightCard; section 1 must go red.
+ *   REVEAL_CONTROL=inlinepace a copy of the Rebuild board works its stagger
+ *                             out inline again; section 1 must go red.
  *   REVEAL_CONTROL=nostagger  every row of DraftDayCard's list gets the same
  *                             delay in a copy; section 2 must go red.
  *
@@ -80,7 +93,7 @@ const scratch = name => path.join(SCRATCH, name).replaceAll('\\', '/');
 process.on('exit', () => fs.rmSync(SCRATCH, { recursive: true, force: true }));
 
 const CONTROL = process.env.REVEAL_CONTROL || '';
-const KNOWN = { countup: 1, motion: 1, nostagger: 2 };
+const KNOWN = { countup: 1, motion: 1, nostagger: 2, rollup: 1, inlinepace: 1 };
 if (CONTROL && !(CONTROL in KNOWN)) {
   console.error(`REVEAL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(KNOWN).join(', ')})`);
   process.exit(1);
@@ -107,6 +120,8 @@ const KIT = 'src/components/club-manager/Celebration.tsx';
 const NBA_BOARD = 'src/components/nba-my-career/NbaMyCareerBoard.tsx';
 const DRAFT_NIGHT = 'src/components/front-office-shared/DraftNightCard.tsx';
 const DRAFT_DAY = 'src/components/us-career/DraftDayCard.tsx';
+const TYCOON = 'src/pages/StadiumTycoon.tsx';
+const REBUILD = 'src/components/rebuild/RebuildBoard.tsx';
 
 /* ---------- 1. Source level ---------- */
 console.log('1) Source level: no counting number, a reduced motion rule beside every keyframe, one stagger helper');
@@ -125,6 +140,50 @@ if (CONTROL === 'countup') {
   extra.push(copy);
   console.log('   NEGATIVE CONTROL ON: a copy of the NBA career board imports the counting number again, section 1 must go red');
 }
+if (CONTROL === 'rollup') {
+  const src = read(path.join(ROOT, TYCOON));
+  const anchor = '/* ---------- tiny animation helpers ---------- */\n';
+  if (!src.includes(anchor)) abort(`control cannot run: ${TYCOON} is not in the shape REVEAL_CONTROL=rollup rewrites`);
+  /* The exact helper Round 530's review took out of this page, back under a
+     name the CountUp check would never find. */
+  const rewritten = src.replace(anchor, anchor + `
+function useMoneyRoll(target: number): number {
+  const [shown, setShown] = useState(target);
+  const ref = useRef(target);
+  useEffect(() => {
+    ref.current = target;
+    let raf = 0;
+    const step = () => {
+      setShown(cur => {
+        const d = ref.current - cur;
+        if (Math.abs(d) < 1) return ref.current;
+        return cur + d * 0.18;
+      });
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+  return shown;
+}
+`);
+  if (rewritten === src) abort(`control cannot run: the rewrite of ${TYCOON} changed nothing`);
+  const copy = scratch('StadiumTycoon.control.tsx');
+  fs.writeFileSync(copy, rewritten);
+  extra.push(copy);
+  console.log('   NEGATIVE CONTROL ON: a copy of Stadium Tycoon rolls its money again under another name, section 1 must go red');
+}
+if (CONTROL === 'inlinepace') {
+  const src = read(path.join(ROOT, REBUILD));
+  const anchor = 'animationDelay: revealDelay(i, 0.5, 0.08)';
+  if (!src.includes(anchor)) abort(`control cannot run: ${REBUILD} does not carry ${anchor}, so there is nothing to flatten into an inline pace`);
+  const rewritten = src.split(anchor).join('animationDelay: `${0.5 + i * 0.08}s`');
+  if (rewritten === src) abort(`control cannot run: the rewrite of ${REBUILD} changed nothing`);
+  const copy = scratch('RebuildBoard.control.tsx');
+  fs.writeFileSync(copy, rewritten);
+  extra.push(copy);
+  console.log('   NEGATIVE CONTROL ON: a copy of the Rebuild board works its stagger out inline again, section 1 must go red');
+}
 if (CONTROL === 'motion') {
   const src = read(path.join(ROOT, DRAFT_NIGHT));
   const rewritten = src.split('prefers-reduced-motion').join('prefers-no-such-setting');
@@ -137,18 +196,42 @@ if (CONTROL === 'motion') {
 const scanSet = [...files, ...extra];
 const codeOf = f => stripComments(read(substitute.get(rel(f)) ?? f));
 
-/* 1a. The counting number. */
+/* 1a. The counting number, by name and by shape.
+
+   The name check alone was the known-offender trap CLAUDE.md warns about: it
+   found every import of the kit's CountUp and reported the site clean while
+   Stadium Tycoon ran its own copy under a different name, on the page this
+   round touched. So the shape is checked too: a state setter, inside a file
+   that drives a requestAnimationFrame loop, easing a value toward a target.
+   That is what a rolling number IS, whatever it is called. A position or a
+   sweep eased the same way is not caught, and should not be: it prints no
+   number (the pitch dots in LiveSimScreen are exactly that case). */
+const EASES = [
+  /\(\s*[\w.]+\s*-\s*[\w.]+\s*\)\s*\*\s*0?\.\d+/,
+  /(?:const|let)\s+(\w+)\s*=\s*[\w.]+\s*-\s*[\w.]+\s*;[\s\S]{0,300}?\+\s*\1\s*\*\s*0?\.\d+/,
+];
+const rollsANumber = code => {
+  if (!/requestAnimationFrame/.test(code)) return false;
+  for (const m of code.matchAll(/set[A-Z]\w*\(/g)) {
+    const near = code.slice(m.index, m.index + 400);
+    if (EASES.some(r => r.test(near))) return true;
+  }
+  return false;
+};
 {
   const importers = [];
   const exporters = [];
+  const rollers = [];
   for (const f of scanSet) {
     const code = codeOf(f);
     if (/import\s+(?:type\s+)?\{[^}]*\bCountUp\b[^}]*\}\s*from\s*['"]/.test(code) || /import\s+CountUp\s+from/.test(code) || /<CountUp\b/.test(code)) importers.push(rel(f));
     if (/export\s+(?:const|function)\s+CountUp\b/.test(code)) exporters.push(rel(f));
+    if (rollsANumber(code)) rollers.push(rel(f));
   }
-  console.log(`   ${scanSet.length} source files scanned: ${importers.length} import or render the counting number, ${exporters.length} export it`);
+  console.log(`   ${scanSet.length} source files scanned: ${importers.length} import or render the counting number, ${exporters.length} export it, ${rollers.length} roll one of their own`);
   for (const f of importers) fail(`${f} still imports or renders CountUp, the counting number Round 530 removed (a number must never roll through values that were never true)`);
   for (const f of exporters) fail(`${f} still exports CountUp, so one import brings it back`);
+  for (const f of rollers) fail(`${f} eases a state value toward a target inside an animation frame loop, which is a counting number under another name; print the engine's value and animate its arrival instead`);
 }
 
 /* 1b. Reduced motion beside every keyframe. */
@@ -158,8 +241,40 @@ const ROUND_530_KEYFRAME_FILES = [KIT, DRAFT_NIGHT, 'src/pages/IdleArena.tsx', '
   const styleBlocks = code => [...code.matchAll(/<style[^>]*>\{([\s\S]*?)\}<\/style>/g)].map(m => m[1]);
   const keyframe = /@keyframes\s+[\w-]+/;
   const rule = /@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/;
+  /* The body of the reduced motion at-rule, braces balanced, or null. */
+  const reduceBody = block => {
+    const m = /@media\s*\([^)]*prefers-reduced-motion\s*:\s*reduce[^)]*\)\s*\{/.exec(block);
+    if (!m) return null;
+    let i = m.index + m[0].length;
+    const start = i;
+    let depth = 1;
+    while (i < block.length && depth > 0) {
+      if (block[i] === '{') depth += 1;
+      else if (block[i] === '}') depth -= 1;
+      i += 1;
+    }
+    return block.slice(start, i - 1);
+  };
+  /* Every class a rule OUTSIDE the reduced motion body hands an animation to.
+     Round 530 review: section 1b used to pass a file the moment any reduced
+     motion rule appeared anywhere in it, even an empty one, so a new animated
+     class added beside the guarded ones was invisible to it. That is the known
+     offender shape: the check has to ask about the classes the file declares,
+     not about the presence of the rule. */
+  const animatedClasses = block => {
+    const body = reduceBody(block);
+    const outside = body === null ? block : block.split(body).join(' ');
+    const out = new Set();
+    for (const m of outside.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const sel = m[1].trim();
+      if (sel.startsWith('@') || !/(^|[;\s])animation(-name)?\s*:/.test(m[2])) continue;
+      for (const c of sel.matchAll(/\.([\w-]+)/g)) out.add(c[1]);
+    }
+    return [...out];
+  };
   const seen = new Set();
   let guarded = 0;
+  let classesHeld = 0;
   for (const f of scanSet) {
     const r = rel(f);
     const blocks = styleBlocks(codeOf(f));
@@ -171,10 +286,21 @@ const ROUND_530_KEYFRAME_FILES = [KIT, DRAFT_NIGHT, 'src/pages/IdleArena.tsx', '
     } else if (!REDUCED_MOTION_BASELINE.includes(r)) {
       fail(`${r} declares a keyframe in a <style> block and no reduced motion rule, so it moves for people who asked for less motion`);
     }
+    if (REDUCED_MOTION_BASELINE.includes(r)) continue;
+    for (const b of blocks) {
+      const body = reduceBody(b);
+      for (const c of animatedClasses(b)) {
+        classesHeld += 1;
+        if (!body || !new RegExp(`\\.${c}\\b`).test(body)) {
+          fail(`${r} animates .${c} and its reduced motion rule never names it, so that one still moves for somebody who asked for less motion`);
+        }
+      }
+    }
   }
   for (const r of ROUND_530_KEYFRAME_FILES) if (!seen.has(r)) fail(`${r} no longer declares a keyframe in a <style> block, so this check is not covering a file the round changed`);
   for (const r of REDUCED_MOTION_BASELINE) if (!seen.has(r)) fail(`${r} is in REDUCED_MOTION_BASELINE but declares no keyframe now; remove the entry`);
-  console.log(`   ${seen.size} files declare a keyframe in a <style> block, ${guarded} carry the reduced motion rule, ${REDUCED_MOTION_BASELINE.length} frozen in the baseline`);
+  if (classesHeld < 15) fail(`only ${classesHeld} animated class(es) were held to the reduced motion rule, so this check is not reading the style blocks any more`);
+  console.log(`   ${seen.size} files declare a keyframe in a <style> block, ${guarded} carry the reduced motion rule, ${classesHeld} animated classes named inside it, ${REDUCED_MOTION_BASELINE.length} frozen in the baseline`);
 }
 
 /* 1c. One stagger helper. */
@@ -193,12 +319,24 @@ const ROUND_530_KEYFRAME_FILES = [KIT, DRAFT_NIGHT, 'src/pages/IdleArena.tsx', '
       callers += 1;
       if (!/import\s*\{[^}]*\brevealDelay\b[^}]*\}\s*from\s*['"]@\/components\/club-manager\/Celebration['"]/.test(code)) wrongImport.push(r);
     }
-    if (/\b0\.6\s*\+\s*[\w.]+\s*\*\s*0\.22\b/.test(code)) inlinePace.push(r);
+    /* Round 530 review: the old test here was the literal `0.6 + i * 0.22`,
+       which is the kit's DEFAULT pace and nothing else, so Rebuild writing
+       `0.6 + table.length * 0.08` five times sailed past it and chained three
+       blocks off a step the kit no longer owned. The rule is not about those
+       two numbers: a stagger worked out by multiplying a count by a step,
+       inside an animationDelay, is the pace living outside the kit whatever
+       the numbers are. Passing a custom step INTO revealDelay stays fine,
+       there is no multiplication in the call. */
+    for (const m of code.matchAll(/animationDelay\s*:/g)) {
+      const expr = code.slice(m.index, m.index + 200);
+      if (/[\w.\])]\s*\*\s*0?\.\d+/.test(expr)) { inlinePace.push(`${r}: ${expr.split('\n')[0].trim().slice(0, 90)}`); break; }
+    }
   }
   console.log(`   revealDelay defined in ${defs.join(', ') || 'no file'}; ${callers} callers, ${wrongImport.length} import it from somewhere else, ${inlinePace.length} keep the pace inline`);
   if (defs.length !== 1 || defs[0] !== `${KIT} (1)`) fail(`revealDelay must be defined exactly once, in ${KIT}; found ${defs.join(', ') || 'none'}`);
+  if (callers < 15) fail(`only ${callers} files call revealDelay, so this check is not looking at the tree the round built`);
   for (const r of wrongImport) fail(`${r} calls revealDelay without importing it from the celebration kit`);
-  for (const r of inlinePace) fail(`${r} writes the 0.6 + i * 0.22 pace by hand instead of calling revealDelay, so a change to the kit's pace would leave it behind`);
+  for (const r of inlinePace) fail(`${r} works its stagger out by hand inside an animationDelay instead of calling revealDelay, so a change to the pace would leave it behind`);
 }
 
 /* ---------- 2. Render level ---------- */
@@ -468,8 +606,15 @@ section = 3;
 console.log('3) Behaviour under vitest: the last pick holds the draft until Continue, and the career hubs mount draft day');
 const TESTS = ['src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx', 'src/test/usCareerReveals.test.tsx'];
 for (const t of TESTS) if (!fs.existsSync(path.join(ROOT, t))) fail(`${t} is missing, so its moments are unchecked`);
+/* Round 530 review: with no timeout, a jsdom hang or a test waiting on a
+   promise that never settles blocked this harness, and therefore runAllSims,
+   for ever instead of failing. A missing binary already failed closed (status
+   1, no basename in the output); a hang did not fail at all. */
 const r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
-  { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
+  { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
+    timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
+if (r.error) fail(`vitest could not be run: ${r.error.message}`);
+if (r.signal) fail(`vitest was killed with ${r.signal}, so the tests did not finish; a ten minute hang is treated as red`);
 const out = (r.stdout || '') + (r.stderr || '');
 for (const t of TESTS) if (!out.includes(path.basename(t))) fail(`vitest did not report on ${t}, so nothing there was checked:\n${out.slice(-1200)}`);
 const summary = out.match(/Tests\s+(.+)/);

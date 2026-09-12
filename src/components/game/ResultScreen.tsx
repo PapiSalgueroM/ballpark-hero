@@ -7,7 +7,7 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
  * this screen now celebrates a win the same way. It keeps its club-manager
  * home so Round 147's package stays byte-stable; a future tidy round can
  * move the file without changing a single behavior. */
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 
 interface ResultScreenStat {
   label: string;
@@ -141,7 +141,7 @@ export function ResultScreen({
       {statRow && statRow.length > 0 && (
         <div className="flex items-center justify-center gap-4 mt-2 mb-1">
           {statRow.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center cm-rise" style={{ animationDelay: `${0.16 + i * 0.09}s` }}>
+            <div key={i} className="flex flex-col items-center cm-rise" style={{ animationDelay: revealDelay(i, 0.16, 0.09) }}>
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{stat.label}</span>
               <span className="text-base font-bold font-display text-foreground">{stat.value}</span>
             </div>

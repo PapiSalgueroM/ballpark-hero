@@ -232,7 +232,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{clubName}</div>
               {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: `${0.35 + i * 0.14}s` }}>
+                <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
                   ⚽ {sc.name} {sc.minute}'
                   {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
                 </p>
@@ -242,7 +242,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
               {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.oppScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: `${0.45 + i * 0.14}s` }}>⚽ {sc.name} {sc.minute}'</p>
+                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {sc.name} {sc.minute}'</p>
               ))}
             </div>
           </div>
@@ -431,7 +431,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         {r.events.length > 0 && (
           <div className="mt-4 bg-surface-2 border border-border/60 rounded-xl p-3">
             {r.events.map((e, i) => (
-              <p key={i} className="text-[11px] text-foreground py-0.5 cm-rise" style={{ animationDelay: `${0.5 + i * 0.1}s` }}>{e}</p>
+              <p key={i} className="text-[11px] text-foreground py-0.5 cm-rise" style={{ animationDelay: revealDelay(i, 0.5, 0.1) }}>{e}</p>
             ))}
           </div>
         )}

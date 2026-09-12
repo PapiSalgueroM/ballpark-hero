@@ -649,7 +649,7 @@ export default function FrontOfficeBoard() {
           )}
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {playoffRounds.map((r, i) => (
-              <p key={i} className="cm-tick-in" style={{ animationDelay: `${0.8 + i * 0.15}s` }}>
+              <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(i, 0.8, 0.15) }}>
                 <b className="text-foreground">{r.name}:</b>{' '}
                 {r.games.map(g => `${label(g.winner)} beat ${label(g.winner === g.home ? g.away : g.home)} ${Math.max(g.homeScore, g.awayScore)}-${Math.min(g.homeScore, g.awayScore)}`).join(' · ')}
               </p>

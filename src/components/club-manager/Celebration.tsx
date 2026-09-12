@@ -26,6 +26,18 @@ export function revealDelay(i: number, start = 0.6, step = 0.22): string {
 }
 
 /**
+ * Round 530 review: where a run of `count` staggered rows finishes, in seconds,
+ * so a second run can start after the first without its caller writing the
+ * pace out by hand. Rebuild chained three blocks this way with the step typed
+ * into the page five times over, which is the one thing the kit exists to stop:
+ * change the step here and those blocks would have landed on top of each other.
+ * Returns a number, not a CSS string, because it is a start to pass back in.
+ */
+export function revealAfter(count: number, start = 0.6, step = 0.22): number {
+  return Math.round((start + count * step) * 1000) / 1000;
+}
+
+/**
  * A one-shot confetti burst that fills its nearest positioned ancestor.
  * Give it a changing `seed` to re-fire; same seed, same fall, every render.
  */

@@ -8,7 +8,7 @@ import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
 
 const TIER_LABEL: Record<ClubTier, string> = {
   elite: 'Elite, barely any headroom',
@@ -291,6 +291,13 @@ export function RebuildBoard() {
   if (phase === 'season') {
     if (!sharedSeason) return null;
     const seatRows = seats.filter(s => s.club);
+    /* Round 530 review: the trophies start once the table has finished
+       ticking and the seat cards once the trophies have, each chained off the
+       kit's own helper. Written out (0.6 + table.length * 0.08) the step sat
+       in this file five times, so a change to the kit's pace would have left
+       these three blocks landing on top of each other. */
+    const afterTable = revealAfter(sharedSeason.table.length, 0.5, 0.08) + 0.1;
+    const afterTrophies = revealAfter(sharedSeason.trophies.length, afterTable) + 0.1;
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         {/* Round 530: the table ticks in row by row, the trophies land after
@@ -329,7 +336,7 @@ export function RebuildBoard() {
           <div className="mt-4 rounded-xl border border-gold/40 bg-gold/5 p-3">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">The trophies</p>
             {sharedSeason.trophies.map((t, i) => (
-              <p key={t.title} className="cm-tick-in mt-1 text-xs text-foreground" style={{ animationDelay: revealDelay(i, 0.6 + sharedSeason.table.length * 0.08) }}>
+              <p key={t.title} className="cm-tick-in mt-1 text-xs text-foreground" style={{ animationDelay: revealDelay(i, afterTable) }}>
                 {t.emoji} <span className="font-bold">{t.title}:</span> {t.winner}
                 <span className="text-muted-foreground"> ({t.detail})</span>
               </p>
@@ -341,7 +348,7 @@ export function RebuildBoard() {
               const rec = sharedSeason.records.find(r => r.seat === s.index);
               const pos = sharedSeason.positions[k];
               return (
-                <div key={s.index} className="cm-rise rounded-xl border border-border bg-background p-3" style={{ animationDelay: revealDelay(k, 0.7 + sharedSeason.table.length * 0.08 + sharedSeason.trophies.length * 0.22) }}>
+                <div key={s.index} className="cm-rise rounded-xl border border-border bg-background p-3" style={{ animationDelay: revealDelay(k, afterTrophies) }}>
                   <p className="flex items-center justify-between text-sm font-bold text-foreground">
                     <span className="truncate">{s.emoji} {s.name} · {s.club?.club}</span>
                     <span className="ml-2 shrink-0 text-primary">#{pos}</span>
@@ -359,7 +366,7 @@ export function RebuildBoard() {
           </div>
 
           {sharedSeason.thriller && (
-            <p className="cm-rise mt-3 text-center text-xs text-muted-foreground" style={{ animationDelay: revealDelay(seatRows.length, 0.7 + sharedSeason.table.length * 0.08 + sharedSeason.trophies.length * 0.22) }}>🎢 Game of the season: {sharedSeason.thriller}</p>
+            <p className="cm-rise mt-3 text-center text-xs text-muted-foreground" style={{ animationDelay: revealDelay(seatRows.length, afterTrophies) }}>🎢 Game of the season: {sharedSeason.thriller}</p>
           )}
 
           <div className="mt-5 flex justify-center gap-2">
@@ -610,6 +617,9 @@ export function RebuildBoard() {
       );
     }
 
+    /* Round 530 review: same chain as the shared season above, off the kit. */
+    const afterSeasonTable = season ? revealAfter(season.table.length, 0.5, 0.08) + 0.1 : 0.6;
+
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
         {/* Round 530: same reveal as the hand over card. The grade slams, the
@@ -709,7 +719,7 @@ export function RebuildBoard() {
               {/* The highlights and the golden boot land after the last row. */}
               <div className="mt-2 space-y-1">
                 {season.highlights.map((h, i) => (
-                  <p key={i} className="cm-tick-in text-xs text-muted-foreground" style={{ animationDelay: revealDelay(i, 0.6 + season.table.length * 0.08) }}>{h}</p>
+                  <p key={i} className="cm-tick-in text-xs text-muted-foreground" style={{ animationDelay: revealDelay(i, afterSeasonTable) }}>{h}</p>
                 ))}
               </div>
               <div className="mt-2 space-y-0.5 text-xs text-foreground">
@@ -718,7 +728,7 @@ export function RebuildBoard() {
                   season.yourTopScorer && season.goldenBoot?.player !== season.yourTopScorer.player && <>⚽ Your top scorer: <b>{season.yourTopScorer.player}</b>, {season.yourTopScorer.goals} goals</>,
                   season.yourAssistKing && <>🎯 Your top assister: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</>,
                 ].filter(Boolean).map((line, i) => (
-                  <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(season.highlights.length + i, 0.6 + season.table.length * 0.08) }}>{line}</p>
+                  <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(season.highlights.length + i, afterSeasonTable) }}>{line}</p>
                 ))}
               </div>
             </div>
