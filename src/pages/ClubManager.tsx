@@ -862,12 +862,18 @@ const ClubManager = () => {
                 : `${c.wilderness?.weeksOut} week${c.wilderness?.weeksOut === 1 ? '' : 's'} without a club. ${(c.wilderness?.offers.length ?? 0) > 0 ? 'The phone has rung.' : 'Nobody has called yet.'}`}
             </p>
             <div className="mt-2 space-y-1.5">
-              {/* Round 530: the offers rise in one after another, keyed on the
-                  week out so a new week's phone calls rise again rather than
-                  sitting there as though they had always been on the table. */}
+              {/* Round 530: the offers rise in one after another. Round 530
+                  review: keyed on the CLUB, not on the week. Keyed on the week,
+                  every "wait a week" remounted the lot and re-ran the rise on
+                  offers that had been on the table for weeks (wildernessWeek
+                  carries them forward and adds at most one new call, and only
+                  in about half of the weeks), so a phone that had not rung read
+                  as though it had. On the club, a new call rises and the rest
+                  hold their final frame. Clubs cannot repeat: wildernessWeek
+                  adds every offered club to seen and excludes seen. */}
               {(c.wilderness?.offers ?? []).map((o, i) => (
                 <div
-                  key={`${c.wilderness?.weeksOut ?? 0}:${o.club}`}
+                  key={o.club}
                   data-wilderness-offer={o.club}
                   className="cm-rise rounded-lg border border-border bg-background/40 p-2"
                   style={{ animationDelay: revealDelay(i) }}

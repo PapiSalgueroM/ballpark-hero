@@ -118,6 +118,11 @@ export default function NflMyCareerBoard() {
      feed, held for the card until the first season is played. Transient
      like the curtain: a reload lands on the plain hub. */
   const [draftDay, setDraftDay] = useState<DraftDayFacts | null>(null);
+  /* Round 530 review: which inbox rows this save has already shown. It lives
+     here rather than in InboxPanel because the panel is mounted only while the
+     inbox tab is open, so a set inside it started empty on every open and
+     replayed the whole list with nothing new in it. */
+  const inboxSeenRef = useRef<Set<string>>(new Set());
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -775,7 +780,7 @@ export default function NflMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 521: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to the NFL in nflCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
         )}
       </div>
     );

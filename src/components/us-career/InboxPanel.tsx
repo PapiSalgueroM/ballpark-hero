@@ -11,30 +11,40 @@
    callback come in as props.
 
    Round 530: a text that arrived since this panel last drew the list ticks
-   in, the way a phone slides a new one to the top. The panel remembers the
-   ids it has already shown in a ref, so opening a message and coming back
-   does not replay the whole list, and only a genuinely new row moves.
+   in, the way a phone slides a new one to the top. Only a genuinely new row
+   moves, so opening a message and coming back does not replay the list and
+   neither does leaving the inbox tab and returning to it.
+
+   Round 530 review: the set of ids already shown belongs to the BOARD, not to
+   this file. Every board mounts the panel only while its inbox tab is open,
+   so a set living here started empty on every open and the whole list ticked
+   in again with nothing new in it, which is the header claim above being
+   false as shipped. It cannot be fixed by seeding the set at mount either: a
+   text lands at season end, with the inbox closed, so a set seeded on the
+   first draw would mean the new text never moves at all, which is the whole
+   feature gone. The board's ref outlives the tab, so it is the right owner.
    Reduced motion lands the row on its final frame (CelebrationStyles). */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { InboxMessage } from '@/lib/careerInbox';
 
-export function InboxPanel({ messages, onAnswer }: {
+export function InboxPanel({ messages, onAnswer, seen }: {
   /** Newest delivered first reads best; this component does not resort them. */
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
+  /** Ids already listed, owned by the board so it survives closing the tab. */
+  seen: Set<string>;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = messages.find(m => m.id === openId) ?? null;
-  /* Ids this panel has already listed. Read during render on purpose: it is
-     a ref, not state, and the answer is "was this row here last time", which
-     is exactly what a ref remembers. Marked after commit so the first draw
-     of a new row is the one that animates. */
-  const seenRef = useRef<Set<string>>(new Set());
-  const fresh = messages.filter(m => !seenRef.current.has(m.id)).map(m => m.id);
+  /* Read during render on purpose: it is a plain set behind the board's ref,
+     not state, and the answer is "was this row here last time", which is
+     exactly what a ref remembers. Marked after commit so the first draw of a
+     new row is the one that animates. */
+  const fresh = messages.filter(m => !seen.has(m.id)).map(m => m.id);
   useEffect(() => {
-    for (const id of fresh) seenRef.current.add(id);
+    for (const id of fresh) seen.add(id);
   });
 
   if (open) {

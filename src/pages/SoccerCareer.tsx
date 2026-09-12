@@ -810,11 +810,19 @@ export default function SoccerCareer() {
     if (!career) return;
     const next = acceptLoan(career, offer);
     setCareer(next);
-    // Round 530: the engine refuses a second loan by handing the state back untouched, so only a real move gets a slip.
-    if (next.loan && next !== career) {
+    /* Round 530 review: test the MOVE, not object identity. acceptLoan opens
+       with a shallow copy and returns that copy on a refusal, so the old
+       next !== career was true on every path and the comment beside it had the
+       engine wrong. On the refusal that matters (a loan already running) the
+       old guard would have printed "Loan agreed" with the club you are
+       already at. No screen can reach that today, because determineLoanOffers
+       and clubVerdict both return null while state.loan is set, so no loan
+       button is drawn; this is the guard saying what it meant. The slip and
+       the toast go together, so a refusal cannot announce a move either. */
+    if (!career.loan && next.loan && next.currentClub === offer.club.name) {
       setSignedNote({ kind: "loan", club: next.currentClub, years: 1, wage: next.weeklyWage, from: next.loan.parentClub, forCareer: next });
+      toast.success(`Off on loan to ${offer.club.name} for the season`);
     }
-    toast.success(`Off on loan to ${offer.club.name} for the season`);
   };
 
   const handleSignExtension = () => {
