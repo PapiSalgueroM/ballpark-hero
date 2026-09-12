@@ -27,14 +27,24 @@
  *      slug. Without Round 376's resolver the four Conquest boards and the Quiz
  *      Board record under other names, so five daily games could never count
  *      toward the badge and it would stay unwinnable for a second reason.
+ *      Round 537 rewrote how this is proved: it follows each game's own page
+ *      module through its imports instead of pooling every string in every
+ *      file that records a completion. The old pool could prove one game's
+ *      slug with another game's file and still missed the shared board case,
+ *      which is how it called three wired games unreachable. See the section.
  *   4. The bar is reported against the observed record, so nobody has to guess
  *      whether it is achievable. This section prints rather than fails: how hard
  *      a badge should be is a product call, not a correctness one, and a harness
  *      that fails on a judgement is a harness people learn to ignore.
  *
- * NEGATIVE CONTROL: LEGEND_CONTROL=hardcode puts a typed "37 games" back into an
- * in memory copy of the overlay, restoring the shipped bug, and section 1 must
- * go red.
+ * NEGATIVE CONTROLS, both on in memory copies, nothing on disk moves.
+ * LEGEND_CONTROL=hardcode puts a typed "37 games" back into the overlay,
+ * restoring the shipped bug, and section 1 must go red.
+ * LEGEND_CONTROL=unwired renames the NBA Gauntlet Draft's slug wherever the
+ * source quotes it, which is a game recording under a name the badge does not
+ * look for, and section 3 must go red. It refuses to run if the rename hits no
+ * file, and it also hides that slug's live rows, so it cannot quietly stop
+ * firing once the game has been played.
  *
  * Run: node scripts/simDailyLegend.mjs   (needs the database for section 4)
  */
@@ -46,10 +56,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.LEGEND_CONTROL || '';
-if (CONTROL && CONTROL !== 'hardcode') {
+if (CONTROL && CONTROL !== 'hardcode' && CONTROL !== 'unwired') {
   console.error(`LEGEND_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
+/* The game section 3's control unwires. Any daily game would do; this one is
+   the shared board case that section was rewritten for. */
+const CONTROL_SLUG = 'nba-gauntlet-draft';
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -142,44 +155,109 @@ console.log('3) every game the target counts can actually be reached');
   /* A daily game whose recorded slug is not the one the badge looks for can
      never be ticked off, and one such game is enough to make the badge
      unwinnable on its own. */
-  const walk = d => {
-    const out = [];
-    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
-      const f = path.join(d, e.name);
-      if (e.isDirectory()) out.push(...walk(f));
-      else if (/\.tsx?$/.test(e.name)) out.push(f);
-    }
-    return out;
-  };
   /* NOT A LITERAL-ONLY SCAN, and the first draft of this section was, which
      reported seven false positives. Plenty of games pass the slug through a
      `const SLUG = '...'` or a shared config (usePerfectLineupGeneric takes
-     config.gameId), so the name never appears inside the call parentheses. A
-     slug counts as written if it is quoted anywhere in a file that records
-     completions at all. */
-  const written = new Set();
-  for (const f of walk(path.join(ROOT, 'src'))) {
+     config.gameId, the four Gauntlet Drafts take it from their sport's config
+     file), so the name never appears inside the call parentheses.
+
+     THE SECOND DRAFT WIDENED THAT INTO A SOUP and Round 537 had to replace it:
+     a slug counted as written if it was quoted in ANY file that records
+     completions, which is one global bag of strings shared by every game, so a
+     name could be proven by a file belonging to a different game entirely.
+     It also still missed the shared board case it was widened for, because
+     GauntletBoard.tsx holds the call and the three sport configs hold the
+     names, and those are different files. It reported the three new Gauntlet
+     Drafts as unreachable while a player finishing one did tick the badge.
+
+     WHAT IT DOES NOW: follow the game's own code. Read the route table out of
+     App.tsx, resolve the page module, walk its imports transitively inside
+     src, and ask two questions of that set and nothing else. Does something in
+     it record a completion, and is the slug the badge looks for quoted
+     somewhere in it? That is strictly narrower than the bag of strings, it
+     cannot be satisfied by another game's file, and a game whose recorded name
+     drifts from its registry path fails it. */
+  const appSrc = fs.readFileSync(path.join(ROOT, 'src', 'App.tsx'), 'utf8');
+  const moduleOf = new Map();
+  for (const m of appSrc.matchAll(/const\s+(\w+)\s*=\s*(?:React\.)?lazy\(\s*\(\)\s*=>\s*import\(\s*['"]([^'"]+)['"]/g)) moduleOf.set(m[1], m[2]);
+  for (const m of appSrc.matchAll(/^import\s+(\w+)\s+from\s+['"]([^'"]+)['"]/gm)) if (!moduleOf.has(m[1])) moduleOf.set(m[1], m[2]);
+  const routeComponent = new Map();
+  for (const m of appSrc.matchAll(/<Route\s+path=\{?["'`]([^"'`}]+)["'`]\}?\s+element=\{<(\w+)/g)) routeComponent.set(m[1], m[2]);
+
+  const resolveSpec = (fromFile, spec) => {
+    let base;
+    if (spec.startsWith('@/')) base = path.join(ROOT, 'src', spec.slice(2));
+    else if (spec.startsWith('.')) base = path.resolve(path.dirname(fromFile), spec);
+    else return null;
+    const tries = [base, base + '.ts', base + '.tsx', base + '.js', base + '.jsx',
+      path.join(base, 'index.ts'), path.join(base, 'index.tsx')];
+    for (const c of tries) if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
+    return null;
+  };
+  /* The control renames the slug wherever it is written, which is what a game
+     recording under a name the badge does not look for actually looks like. */
+  let controlHits = 0;
+  const readSrc = f => {
     const s = fs.readFileSync(f, 'utf8');
-    if (!s.includes('useGameCompletion(')) continue;
-    for (const m of s.matchAll(/['"]([a-z0-9][a-z0-9-]{2,})['"]/g)) written.add(m[1]);
-  }
+    if (CONTROL !== 'unwired') return s;
+    const out = s.replaceAll(`'${CONTROL_SLUG}'`, `'${CONTROL_SLUG}-renamed'`)
+                 .replaceAll(`"${CONTROL_SLUG}"`, `"${CONTROL_SLUG}-renamed"`);
+    if (out !== s) controlHits += 1;
+    return out;
+  };
+  const reachFrom = start => {
+    const seen = new Set([start]);
+    const queue = [start];
+    while (queue.length) {
+      const f = queue.pop();
+      const s = readSrc(f);
+      const specs = [];
+      for (const m of s.matchAll(/from\s*['"]([^'"]+)['"]/g)) specs.push(m[1]);
+      for (const m of s.matchAll(/import\(\s*['"]([^'"]+)['"]\s*\)/g)) specs.push(m[1]);
+      for (const spec of specs) {
+        const r = resolveSpec(f, spec);
+        if (r && !seen.has(r)) { seen.add(r); queue.push(r); }
+      }
+    }
+    return seen;
+  };
+
   /* TWO INDEPENDENT SOURCES, because neither alone is sufficient and widening
-     one regex until it passes is not the same as being right. The source scan
-     misses a slug held in a data file (the Perfect Lineup boards take theirs
-     from a pool config, so the name appears nowhere near a completion call).
-     The live table misses a game too new or too quiet to have rows. A daily
-     game is reachable if EITHER can show it. */
+     one regex until it passes is not the same as being right. The source walk
+     misses a slug the code builds rather than quotes. The live table misses a
+     game too new or too quiet to have rows, which is why the three Gauntlet
+     Drafts that shipped on 2026-09-10 and 2026-09-11 had nothing on that side.
+     A daily game is reachable if EITHER can show it. */
   let bySource = 0, byData = 0;
   const unproven = [];
   for (const g of DAILY) {
     const slug = completionSlugForPath(g.path);
-    if (written.has(slug)) { bySource += 1; continue; }
-    if (liveSlugs.has(slug)) { byData += 1; continue; }
+    const comp = routeComponent.get(g.path);
+    const spec = comp ? moduleOf.get(comp) : null;
+    const page = spec ? resolveSpec(path.join(ROOT, 'src', 'App.tsx'), spec) : null;
+    if (!page) {
+      fail(`${g.path} has no page module this harness can find in App.tsx, so nothing about its completions can be checked`);
+      continue;
+    }
+    let records = false, quoted = false;
+    for (const f of reachFrom(page)) {
+      const s = readSrc(f);
+      if (s.includes('useGameCompletion(') || s.includes('recordCompletion(')) records = true;
+      if (s.includes(`'${slug}'`) || s.includes(`"${slug}"`)) quoted = true;
+    }
+    if (records && quoted) { bySource += 1; continue; }
+    /* Under the control that slug's rows are treated as absent too, else the
+       control would quietly stop firing the day the game gets its first row. */
+    if (liveSlugs.has(slug) && !(CONTROL === 'unwired' && slug === CONTROL_SLUG)) { byData += 1; continue; }
     unproven.push({ path: g.path, slug });
+  }
+  if (CONTROL === 'unwired') {
+    if (!controlHits) { console.error(`control cannot run: no file quotes '${CONTROL_SLUG}', so renaming it changes nothing`); process.exit(1); }
+    console.log(`   NEGATIVE CONTROL ON (unwired): '${CONTROL_SLUG}' renamed in ${controlHits} file reads, so that game records under a name the badge does not look for. Section 3 must go red.`);
   }
   console.log(`   ${bySource} proven by source, ${byData} by rows in the live table, ${unproven.length} unproven of ${DAILY.length}`);
   for (const u of unproven.slice(0, 6)) {
-    fail(`${u.path} counts toward the badge as "${u.slug}", no file that records completions mentions that name and the live table has never seen it, so it can never be ticked off`);
+    fail(`${u.path} counts toward the badge as "${u.slug}", nothing reachable from that game's own page module both records a completion and quotes that name, and the live table has never seen it, so it can never be ticked off`);
   }
   if (!dbOk) console.log('   (the database did not answer, so only the source side was available)');
 }
@@ -208,7 +286,7 @@ console.log('4) the bar, against what anyone has actually managed');
 console.log('');
 if (CONTROL) {
   if (failures > 0) { console.log(`simDailyLegend control (${CONTROL}): green. The restored bug was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
-  console.error(`simDailyLegend control (${CONTROL}): RED. A typed game count was put back and nothing noticed.`);
+  console.error(`simDailyLegend control (${CONTROL}): RED. The bug was put back and nothing noticed.`);
   process.exit(1);
 }
 if (failures > 0) { console.error(`simDailyLegend: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
