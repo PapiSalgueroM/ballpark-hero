@@ -32,6 +32,9 @@
  */
 import pw from 'file:///C:/Users/antho/ballpark-hero/scripts/lib/playwrightLoader.mjs';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 const { chromium } = pw;
 
 const src = fs.readFileSync('C:/Users/antho/ballpark-hero/src/components/club-manager/Celebration.tsx', 'utf8');
@@ -102,18 +105,101 @@ for (const pref of ['no-preference', 'reduce']) {
   }
   await ctx.close();
 }
+/* ---------- Round 530: the touched routes, in a real browser, under reduce ----------
+   The synthetic page above proves the kit's CSS in isolation. This walks the
+   routes Round 530 animated, served from dist the way the live host serves
+   them, with the preference set, and holds three things on each first screen:
+   every <style> block on the page that declares a keyframe also declares the
+   reduced motion rule; every element wearing one of the site's reveal classes
+   has no running animation and is not invisible (the final frame, never
+   display:none or opacity 0); and the page really rendered, so a blank route
+   cannot pass. It needs dist/ from npm run build and fails closed without it.
+   Under the noguard control the served bundles have the rule rewritten in
+   flight, so the same routes must then report unguarded keyframes or reveal
+   elements still animating; the control refuses if no bundle was rewritten. */
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROUTES = [
+  '/cfb-dynasty', '/cbb-dynasty',
+  '/front-office', '/nba-front-office', '/mlb-front-office', '/nhl-front-office',
+  '/nfl-my-career', '/nba-my-career', '/mlb-my-career', '/nhl-my-career',
+  '/club-manager', '/soccer-career', '/rebuild',
+  '/idle-arena', '/stadium-tycoon', '/wonderkid-factory',
+];
+const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue'];
+let badRoutes = 0;
+if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
+  console.error('  FAIL: dist/index.html is missing, so the route stage cannot run; build first (npm run build)');
+  badRoutes += 1;
+} else {
+  /* Serve dist the way the live host serves it (see hostLikeServer's header).
+     The port dodges 4173 and the other harnesses' ports. */
+  const PORT = 4189;
+  const server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), path.join(ROOT, 'dist'), String(PORT)], { stdio: 'ignore' });
+  await new Promise(r => setTimeout(r, 800));
+  const base = `http://127.0.0.1:${PORT}`;
+  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
+  /* The cookie banner is a fixed overlay; answer it the privacy-preserving
+     way before any page loads, as the other route walkers do. */
+  await ctx.addInitScript(() => {
+    try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ }
+  });
+  let rewritten = 0;
+  if (CONTROL === 'noguard') {
+    await ctx.route('**/assets/*.js', async route => {
+      const res = await route.fetch();
+      const body = await res.text();
+      const swapped = body.split('prefers-reduced-motion: reduce').join('prefers-no-such-preference: reduce');
+      if (swapped !== body) rewritten += 1;
+      await route.fulfill({ response: res, body: swapped });
+    });
+  }
+  console.log(`\nRound 530 routes under prefers-reduced-motion: reduce, ${ROUTES.length} routes served from dist`);
+  for (const route of ROUTES) {
+    const p = await ctx.newPage();
+    await p.goto(base + route, { waitUntil: 'networkidle' });
+    await p.waitForTimeout(400);
+    const got = await p.evaluate(classes => {
+      const styles = [...document.querySelectorAll('style')].map(s => s.textContent || '');
+      const withKeyframes = styles.filter(t => /@keyframes\s+[\w-]+/.test(t));
+      const unguarded = withKeyframes.filter(t => !/@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/.test(t)).length;
+      let reveal = 0;
+      let animating = 0;
+      let invisible = 0;
+      for (const el of document.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+        reveal += 1;
+        const s = getComputedStyle(el);
+        if (s.animationName !== 'none') animating += 1;
+        if (s.display === 'none' || Number(s.opacity) === 0) invisible += 1;
+      }
+      return { text: (document.body.innerText || '').length, blocks: withKeyframes.length, unguarded, reveal, animating, invisible };
+    }, REVEAL_CLASSES);
+    await p.close();
+    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible}`);
+    if (got.text < 200) { console.error(`  FAIL: ${route} rendered almost nothing (${got.text} chars of text), so nothing here was checked`); badRoutes += 1; continue; }
+    if (got.unguarded > 0) { console.error(`  FAIL: ${route} mounts ${got.unguarded} <style> block(s) with a keyframe and no reduced motion rule`); badRoutes += 1; }
+    if (got.animating > 0) { console.error(`  FAIL: ${route}: ${got.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
+    if (got.invisible > 0) { console.error(`  FAIL: ${route}: ${got.invisible} reveal element(s) are invisible under reduce, worse than the motion`); badRoutes += 1; }
+  }
+  await ctx.close();
+  server.kill();
+  if (CONTROL === 'noguard' && rewritten === 0) {
+    console.error('control noguard: no served bundle carried a reduced motion rule to rewrite, so the route stage of this control would prove nothing');
+    await browser.close();
+    process.exit(1);
+  }
+}
 await browser.close();
 console.log('');
 if (CONTROL === 'noguard') {
-  if (bad > 0) {
-    console.log(`playReducedMotion control: green. The stripped guard was reported (${bad} finding${bad === 1 ? '' : 's'}), so this harness works.`);
+  if (bad > 0 && badRoutes > 0) {
+    console.log(`playReducedMotion control: green. The stripped guard was reported on the synthetic page (${bad} finding${bad === 1 ? '' : 's'}) and on the routes (${badRoutes}), so both stages work.`);
     process.exit(0);
   }
-  console.error('playReducedMotion control: RED. The guards were removed and nothing failed, so this harness proves nothing.');
+  console.error(`playReducedMotion control: RED. The guards were removed and ${bad === 0 ? 'the synthetic page' : 'the routes'} stayed green, so that stage proves nothing.`);
   process.exit(1);
 }
-if (bad > 0) {
-  console.error(`playReducedMotion: ${bad} problem(s)`);
+if (bad + badRoutes > 0) {
+  console.error(`playReducedMotion: ${bad + badRoutes} problem(s)`);
   process.exit(1);
 }
-console.log('playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, and everyone else keeps the celebration.');
+console.log('playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.');

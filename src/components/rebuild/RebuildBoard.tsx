@@ -8,6 +8,7 @@ import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { CelebrationStyles, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
 
 const TIER_LABEL: Record<ClubTier, string> = {
   elite: 'Elite, barely any headroom',
@@ -290,11 +291,23 @@ export function RebuildBoard() {
   if (phase === 'season') {
     if (!sharedSeason) return null;
     const seatRows = seats.filter(s => s.club);
+    /* Round 530 review: the trophies start once the table has finished
+       ticking and the seat cards once the trophies have, each chained off the
+       kit's own helper. Written out (0.6 + table.length * 0.08) the step sat
+       in this file five times, so a change to the kit's pace would have left
+       these three blocks landing on top of each other. */
+    const afterTable = revealAfter(sharedSeason.table.length, 0.5, 0.08) + 0.1;
+    const afterTrophies = revealAfter(sharedSeason.trophies.length, afterTable) + 0.1;
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">📅 The season, simulated</p>
-          <p className="mt-1 text-center text-sm text-muted-foreground">
+        {/* Round 530: the table ticks in row by row, the trophies land after
+            the last row, then each seat's card rises. Keyed on the table so an
+            unrelated re-render (the share button flipping to Copied) never
+            replays it. */}
+        <div key={`season|${sharedSeason.table.map(r => r.clubName).join('|')}`} className="rounded-2xl border border-border bg-card p-4">
+          <CelebrationStyles />
+          <p className="cm-slam text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground" style={{ animationDelay: '0.05s' }}>📅 The season, simulated</p>
+          <p className="cm-rise mt-1 text-center text-sm text-muted-foreground" style={{ animationDelay: '0.25s' }}>
             Every finished XI in one league, {sharedSeason.gamesEach} games each, home and away.
             The results are a sim of the squads you built and nothing more.
           </p>
@@ -306,9 +319,10 @@ export function RebuildBoard() {
             {sharedSeason.table.map((r, i) => (
               <div
                 key={`${r.name}|${r.clubName}`}
-                className={`grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
+                className={`cm-tick-in grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
                   r.seat !== undefined ? 'bg-primary/10 font-bold text-foreground' : 'text-muted-foreground'
                 }`}
+                style={{ animationDelay: revealDelay(i, 0.5, 0.08) }}
               >
                 <span>{i + 1}</span>
                 <span className="truncate">{r.emoji} {r.seat !== undefined ? `${r.name} · ${r.clubName}` : r.clubName}</span>
@@ -321,8 +335,8 @@ export function RebuildBoard() {
 
           <div className="mt-4 rounded-xl border border-gold/40 bg-gold/5 p-3">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">The trophies</p>
-            {sharedSeason.trophies.map(t => (
-              <p key={t.title} className="mt-1 text-xs text-foreground">
+            {sharedSeason.trophies.map((t, i) => (
+              <p key={t.title} className="cm-tick-in mt-1 text-xs text-foreground" style={{ animationDelay: revealDelay(i, afterTable) }}>
                 {t.emoji} <span className="font-bold">{t.title}:</span> {t.winner}
                 <span className="text-muted-foreground"> ({t.detail})</span>
               </p>
@@ -334,7 +348,7 @@ export function RebuildBoard() {
               const rec = sharedSeason.records.find(r => r.seat === s.index);
               const pos = sharedSeason.positions[k];
               return (
-                <div key={s.index} className="rounded-xl border border-border bg-background p-3">
+                <div key={s.index} className="cm-rise rounded-xl border border-border bg-background p-3" style={{ animationDelay: revealDelay(k, afterTrophies) }}>
                   <p className="flex items-center justify-between text-sm font-bold text-foreground">
                     <span className="truncate">{s.emoji} {s.name} · {s.club?.club}</span>
                     <span className="ml-2 shrink-0 text-primary">#{pos}</span>
@@ -352,7 +366,7 @@ export function RebuildBoard() {
           </div>
 
           {sharedSeason.thriller && (
-            <p className="mt-3 text-center text-xs text-muted-foreground">🎢 Game of the season: {sharedSeason.thriller}</p>
+            <p className="cm-rise mt-3 text-center text-xs text-muted-foreground" style={{ animationDelay: revealDelay(seatRows.length, afterTrophies) }}>🎢 Game of the season: {sharedSeason.thriller}</p>
           )}
 
           <div className="mt-5 flex justify-center gap-2">
@@ -540,31 +554,36 @@ export function RebuildBoard() {
       const isCpu = seat.kind === 'cpu';
       return (
         <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+          {/* Round 530: the grade slams, the two ratings rise one after the
+              other as their final values, the target lands after them and the
+              board's notes tick in. Keyed on the seat so the next window's
+              result plays its own reveal. */}
+          <div key={`done|${seat.index}`} className="rounded-2xl border border-border bg-card p-6 text-center">
+            <CelebrationStyles />
+            <p className="cm-rise text-xs font-semibold uppercase tracking-wider text-primary" style={{ animationDelay: '0.05s' }}>
               {seat.emoji} {seat.name}{isCpu ? "'s window, played by the CPU" : "'s window is shut"}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">{club.club}</p>
+            <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.05s' }}>{club.club}</p>
             <div className="mt-3 flex items-center justify-center gap-4">
-              <div>
+              <div className="cm-rise" style={{ animationDelay: '0.5s' }}>
                 <p className="text-[11px] text-muted-foreground">Before</p>
                 <p className="font-display text-4xl font-black text-muted-foreground">{startRating}</p>
               </div>
-              <span className="text-2xl text-muted-foreground">→</span>
-              <div>
+              <span className="cm-rise text-2xl text-muted-foreground" style={{ animationDelay: '0.6s' }}>→</span>
+              <div className="cm-rise" style={{ animationDelay: '0.75s' }}>
                 <p className="text-[11px] text-muted-foreground">After</p>
                 <p className={`font-display text-5xl font-black ${hit ? 'text-emerald-500' : 'text-destructive'}`}>
                   {currentRating}
                 </p>
               </div>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
-            <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '1s' }}>target was {target}</p>
+            <p className="cm-slam mt-3 font-display text-2xl font-bold text-gold" style={{ animationDelay: '0.15s' }}>{grade}</p>
+            <p className="cm-rise mt-2 text-xs text-muted-foreground" style={{ animationDelay: '1.1s' }}>
               Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
             </p>
             {(run.sold.length > 0 || run.signed.length > 0) && (
-              <div className="mt-3 rounded-xl border border-border bg-background p-3 text-left text-xs">
+              <div className="cm-rise mt-3 rounded-xl border border-border bg-background p-3 text-left text-xs" style={{ animationDelay: '1.2s' }}>
                 {run.sold.length > 0 && (
                   <p className="text-muted-foreground">
                     <span className="font-semibold text-destructive">Out:</span> {run.sold.map(p => `${p.name} (€${p.marketValue}M)`).join(', ')}
@@ -578,16 +597,17 @@ export function RebuildBoard() {
               </div>
             )}
             {penalties.length > 0 && (
-              <div className="mt-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left">
+              <div className="cm-rise mt-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left" style={{ animationDelay: '1.2s' }}>
                 <p className="text-xs font-semibold uppercase tracking-wider text-destructive">What the board did</p>
                 {penalties.map((p, i) => (
-                  <p key={i} className="mt-1 text-xs text-muted-foreground">{p}</p>
+                  <p key={i} className="cm-tick-in mt-1 text-xs text-muted-foreground" style={{ animationDelay: revealDelay(i, 1.3) }}>{p}</p>
                 ))}
               </div>
             )}
             <button
               onClick={passOn}
-              className="mt-5 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              className="cm-rise mt-5 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
+              style={{ animationDelay: revealDelay(penalties.length, 1.3) }}
             >
               {next ? `Pass to ${next.name}` : 'Kick off the season'}
             </button>
@@ -597,41 +617,48 @@ export function RebuildBoard() {
       );
     }
 
+    /* Round 530 review: same chain as the shared season above, off the kit. */
+    const afterSeasonTable = season ? revealAfter(season.table.length, 0.5, 0.08) + 0.1 : 0.6;
+
     return (
       <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-8">
-        <div className="rounded-2xl border border-border bg-card p-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {/* Round 530: same reveal as the hand over card. The grade slams, the
+            ratings rise as final values, the target lands, then the board's
+            notes, the rival windows and the season tick in. Keyed on the seat. */}
+        <div key={`done|${seat.index}`} className="rounded-2xl border border-border bg-card p-6 text-center">
+          <CelebrationStyles />
+          <p className="cm-rise text-xs font-semibold uppercase tracking-wider text-muted-foreground" style={{ animationDelay: '0.05s' }}>
             {club.club}
           </p>
           <div className="mt-3 flex items-center justify-center gap-4">
-            <div>
+            <div className="cm-rise" style={{ animationDelay: '0.5s' }}>
               <p className="text-[11px] text-muted-foreground">Before</p>
               <p className="font-display text-4xl font-black text-muted-foreground">{startRating}</p>
             </div>
-            <span className="text-2xl text-muted-foreground">→</span>
-            <div>
+            <span className="cm-rise text-2xl text-muted-foreground" style={{ animationDelay: '0.6s' }}>→</span>
+            <div className="cm-rise" style={{ animationDelay: '0.75s' }}>
               <p className="text-[11px] text-muted-foreground">After</p>
               <p className={`font-display text-5xl font-black ${hit ? 'text-emerald-500' : 'text-destructive'}`}>
                 {currentRating}
               </p>
             </div>
           </div>
-          <p className="mt-2 text-sm text-muted-foreground">target was {target}</p>
-          <p className="mt-3 font-display text-2xl font-bold text-gold">{grade}</p>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '1s' }}>target was {target}</p>
+          <p className="cm-slam mt-3 font-display text-2xl font-bold text-gold" style={{ animationDelay: '0.15s' }}>{grade}</p>
+          <p className="cm-rise mt-2 text-xs text-muted-foreground" style={{ animationDelay: '1.1s' }}>
             Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
           </p>
 
           {penalties.length > 0 && (
-            <div className="mt-4 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left">
+            <div className="cm-rise mt-4 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-left" style={{ animationDelay: '1.2s' }}>
               <p className="text-xs font-semibold uppercase tracking-wider text-destructive">What the board did</p>
               {penalties.map((p, i) => (
-                <p key={i} className="mt-1 text-xs text-muted-foreground">{p}</p>
+                <p key={i} className="cm-tick-in mt-1 text-xs text-muted-foreground" style={{ animationDelay: revealDelay(i, 1.3) }}>{p}</p>
               ))}
             </div>
           )}
 
-          <div className="mt-4 rounded-xl border border-border bg-background p-3 text-left">
+          <div className="cm-rise mt-4 rounded-xl border border-border bg-background p-3 text-left" style={{ animationDelay: '1.3s' }}>
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               🏁 The other managers' windows
             </p>
@@ -643,7 +670,7 @@ export function RebuildBoard() {
                 {[{ name: 'You', emoji: '🫵', club: { club: club.club }, startRating, finalRating: currentRating, signings: run.signed.map(s => s.name) }, ...rivals]
                   .sort((a, b) => b.finalRating - a.finalRating)
                   .map((r, i) => (
-                    <div key={r.name} className={`flex items-center justify-between rounded-lg border px-3 py-2 ${r.name === 'You' ? 'border-primary/50 bg-primary/5' : 'border-border'}`}>
+                    <div key={r.name} className={`cm-tick-in flex items-center justify-between rounded-lg border px-3 py-2 ${r.name === 'You' ? 'border-primary/50 bg-primary/5' : 'border-border'}`} style={{ animationDelay: revealDelay(i) }}>
                       <span className="flex min-w-0 items-center gap-2 text-sm">
                         <span className="font-bold text-muted-foreground">#{i + 1}</span>
                         <span>{r.emoji}</span>
@@ -667,8 +694,8 @@ export function RebuildBoard() {
           {/* Season sim (owner 2026-08-05: full season with stats) */}
           {season && (
             <div className="mt-4 rounded-xl border border-border bg-background p-3 text-left">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">📅 The season, simulated</p>
-              <p className="mt-1 text-sm font-bold text-foreground">{season.headline}</p>
+              <p className="cm-slam text-xs font-semibold uppercase tracking-wider text-muted-foreground" style={{ animationDelay: '0.05s' }}>📅 The season, simulated</p>
+              <p className="cm-rise mt-1 text-sm font-bold text-foreground" style={{ animationDelay: '0.25s' }}>{season.headline}</p>
               <div className="mt-2 overflow-hidden rounded-lg border border-border">
                 <div className="grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 bg-card px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground">
                   <span>#</span><span>Club</span><span>W</span><span>D</span><span>L</span><span>GD</span><span>Pts</span>
@@ -676,9 +703,10 @@ export function RebuildBoard() {
                 {season.table.map((r, i) => (
                   <div
                     key={r.name}
-                    className={`grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
+                    className={`cm-tick-in grid grid-cols-[1.2rem_1fr_1.6rem_1.6rem_1.6rem_2rem_2rem] gap-x-1 border-t border-border/40 px-2 py-1 text-xs ${
                       r.isYou ? 'bg-primary/10 font-bold text-primary' : 'text-foreground'
                     }`}
+                    style={{ animationDelay: revealDelay(i, 0.5, 0.08) }}
                   >
                     <span>{i + 1}</span>
                     <span className="truncate">{r.emoji} {r.isYou || r.isRival ? `${r.name} · ${r.clubName}` : r.clubName}</span>
@@ -688,21 +716,20 @@ export function RebuildBoard() {
                   </div>
                 ))}
               </div>
+              {/* The highlights and the golden boot land after the last row. */}
               <div className="mt-2 space-y-1">
                 {season.highlights.map((h, i) => (
-                  <p key={i} className="text-xs text-muted-foreground">{h}</p>
+                  <p key={i} className="cm-tick-in text-xs text-muted-foreground" style={{ animationDelay: revealDelay(i, afterSeasonTable) }}>{h}</p>
                 ))}
               </div>
               <div className="mt-2 space-y-0.5 text-xs text-foreground">
-                {season.goldenBoot && (
-                  <p>👟 Golden Boot: <b>{season.goldenBoot.player}</b> ({season.goldenBoot.team}), {season.goldenBoot.goals} goals</p>
-                )}
-                {season.yourTopScorer && season.goldenBoot?.player !== season.yourTopScorer.player && (
-                  <p>⚽ Your top scorer: <b>{season.yourTopScorer.player}</b>, {season.yourTopScorer.goals} goals</p>
-                )}
-                {season.yourAssistKing && (
-                  <p>🎯 Your top assister: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</p>
-                )}
+                {[
+                  season.goldenBoot && <>👟 Golden Boot: <b>{season.goldenBoot.player}</b> ({season.goldenBoot.team}), {season.goldenBoot.goals} goals</>,
+                  season.yourTopScorer && season.goldenBoot?.player !== season.yourTopScorer.player && <>⚽ Your top scorer: <b>{season.yourTopScorer.player}</b>, {season.yourTopScorer.goals} goals</>,
+                  season.yourAssistKing && <>🎯 Your top assister: <b>{season.yourAssistKing.player}</b>, {season.yourAssistKing.assists} assists</>,
+                ].filter(Boolean).map((line, i) => (
+                  <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(season.highlights.length + i, afterSeasonTable) }}>{line}</p>
+                ))}
               </div>
             </div>
           )}

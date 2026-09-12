@@ -118,6 +118,21 @@ export function stageVerdict(a: { iAmChampion: boolean; fired: boolean }): Verdi
   };
 }
 
+/* ---------------- Round 530 review: the draft day line ----------------
+   The line printed under the pick and the card's own first round rule were
+   two separate numbers on the same screen: three boards said round one ends
+   at 30 while writing the line with 32, so a pick of 31 drew as a second
+   rounder directly under "First round money, first round pressure."
+
+   One rule, one number. The board owns the number (its sport's round one),
+   this owns the wording, and the board hands the SAME number to the card,
+   so the two can never state different things about one pick. */
+export function draftPressureLine(pick: number, firstRoundEnd: number): string {
+  if (pick <= 10) return 'The city expects a savior.';
+  if (pick <= firstRoundEnd) return 'First round money, first round pressure.';
+  return 'Late pick. Everything must be earned.';
+}
+
 export function buildSeasonReveal(a: RevealBuildArgs): SeasonReveal {
   const banned = a.teamResult === 'SUSPENDED';
   const confetti = !banned && a.teamResult.startsWith('WON THE');

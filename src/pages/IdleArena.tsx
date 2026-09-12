@@ -14,6 +14,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HubTiles, HubPanelHeader, type HubTile } from '@/components/hub/HubTiles';
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useIdleArena } from '@/hooks/useIdleArena';
 import {
@@ -28,7 +29,7 @@ type BuyMode = 1 | 10 | 'max';
 const BALLS = ['⚽', '🏀', '⚾', '🏒', '🏈', '🎾', '🏐', '🏉'];
 
 const IdleArena = () => {
-  const { state: s, fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift } = useIdleArena();
+  const { state: s, fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift } = useIdleArena();
   const [panel, setPanel] = useState<Panel>(null);
   const [mode, setMode] = useState<BuyMode>(1);
   const [showHelp, setShowHelp] = useState(fresh);
@@ -36,6 +37,31 @@ const IdleArena = () => {
   const arenaRef = useRef<HTMLDivElement>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(panel);
   useEffect(() => { if (panel !== 'trophy') setConfirmLift(false); }, [panel]);
+
+  /* Round 530: the lift card stands in the tile slot for four seconds, or
+     until Continue. Same slot the drawers use, so the page never grows for it. */
+  useEffect(() => {
+    if (!lastLift) return;
+    const t = window.setTimeout(dismissLift, 4000);
+    return () => window.clearTimeout(t);
+  }, [lastLift, dismissLift]);
+
+  /* Round 530: a badge whose unlocked flag just flipped slams in above the
+     drawer. Seeded from the save on mount so an old badge never replays. */
+  const achRef = useRef(s.ach);
+  const [newBadge, setNewBadge] = useState<(typeof ACHIEVEMENTS)[number] | null>(null);
+  useEffect(() => {
+    const before = achRef.current;
+    achRef.current = s.ach;
+    const added = s.ach.find(id => !before.includes(id));
+    const a = added === undefined ? undefined : ACHIEVEMENTS.find(x => x.id === added);
+    if (a) setNewBadge(a);
+  }, [s.ach]);
+  useEffect(() => {
+    if (!newBadge) return;
+    const t = window.setTimeout(() => setNewBadge(null), 4000);
+    return () => window.clearTimeout(t);
+  }, [newBadge]);
 
   const rate = totalRate(s);
   const perTap = tapValue(s);
@@ -96,6 +122,7 @@ const IdleArena = () => {
         path="/idle-arena"
       />
       <main id="dukb-main" className="max-w-2xl mx-auto px-4 py-4 md:py-8">
+        <CelebrationStyles />
         <header className="text-center mb-3">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">IDLE ARENA</h1>
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
@@ -110,7 +137,7 @@ const IdleArena = () => {
         </header>
 
         {offline && (
-          <div className="mb-2 rounded-xl border border-gold/60 bg-gold/10 px-3 py-2 flex items-center justify-between gap-3">
+          <div className="cm-rise mb-2 rounded-xl border border-gold/60 bg-gold/10 px-3 py-2 flex items-center justify-between gap-3">
             <span className="text-xs text-gold font-bold">
               🌙 the squad kept scoring: {fmt(offline.earned)} points in {fmtDuration(offline.seconds)} while you were away
             </span>
@@ -155,6 +182,20 @@ const IdleArena = () => {
               </span>
             ))}
           </div>
+          {/* Round 530 review: the badge line lies over the bottom of the
+              arena for its few seconds. Sat in the flow above the tile slot it
+              pushed the tiles, an open drawer panel and the lift card down
+              about 36px on arrival and snapped them back when the timer
+              cleared it, while the player was tapping. It takes no taps, so
+              the ball underneath still scores. */}
+          {newBadge && (
+            <p
+              key={newBadge.id}
+              className="cm-slam pointer-events-none absolute inset-x-2 bottom-2 z-10 rounded-xl border border-gold/50 bg-card px-3 py-2 text-center text-xs font-bold text-gold"
+            >
+              🎖️ Badge earned: {newBadge.label}, +{Math.round(ACHIEVEMENT_BONUS * 100)}% on everything from here
+            </p>
+          )}
         </div>
 
         {/* the squad */}
@@ -180,8 +221,26 @@ const IdleArena = () => {
           )}
         </div>
 
-        {/* the boxes, or the one opened panel in their place */}
-        {panel === null ? (
+        {/* the boxes, or the one opened panel in their place, or the lift card
+            (Round 530) while the trophy is still in the air */}
+        {lastLift ? (
+          <div ref={panelRef} key={`lift|${lastLift.seq}`} className="relative overflow-hidden rounded-2xl border border-gold/60 bg-card p-4 text-center">
+            <ConfettiBurst seed={lastLift.seq} count={30} />
+            <p className="cm-slam font-display text-xl font-black text-gold" style={{ animationDelay: '0.05s' }}>
+              🏆 {lastLift.lifted} troph{lastLift.lifted === 1 ? 'y' : 'ies'} lifted
+            </p>
+            <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
+              {lastLift.total} held now, +{Math.round(lastLift.total * TROPHY_BONUS * 100)}% on everything in every run from here
+            </p>
+            <button
+              onClick={dismissLift}
+              className="cm-rise mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:brightness-110"
+              style={{ animationDelay: '0.7s' }}
+            >
+              Continue
+            </button>
+          </div>
+        ) : panel === null ? (
           <HubTiles tiles={tiles} onOpen={k => setPanel(k as Panel)} />
         ) : (
           <div ref={panelRef} className="space-y-2">

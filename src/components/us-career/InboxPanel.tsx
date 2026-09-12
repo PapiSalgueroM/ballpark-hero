@@ -8,18 +8,44 @@
    that, which nothing outside the flagship has yet, so this file
    deliberately stays the smaller thing rather than trying to be a second
    copy of a 600 line component. Sport neutral: messages and the answer
-   callback come in as props. */
-import { useState } from 'react';
+   callback come in as props.
+
+   Round 530: a text that arrived since this panel last drew the list ticks
+   in, the way a phone slides a new one to the top. Only a genuinely new row
+   moves, so opening a message and coming back does not replay the list and
+   neither does leaving the inbox tab and returning to it.
+
+   Round 530 review: the set of ids already shown belongs to the BOARD, not to
+   this file. Every board mounts the panel only while its inbox tab is open,
+   so a set living here started empty on every open and the whole list ticked
+   in again with nothing new in it, which is the header claim above being
+   false as shipped. It cannot be fixed by seeding the set at mount either: a
+   text lands at season end, with the inbox closed, so a set seeded on the
+   first draw would mean the new text never moves at all, which is the whole
+   feature gone. The board's ref outlives the tab, so it is the right owner.
+   Reduced motion lands the row on its final frame (CelebrationStyles). */
+import { useEffect, useState } from 'react';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { InboxMessage } from '@/lib/careerInbox';
 
-export function InboxPanel({ messages, onAnswer }: {
+export function InboxPanel({ messages, onAnswer, seen }: {
   /** Newest delivered first reads best; this component does not resort them. */
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
+  /** Ids already listed, owned by the board so it survives closing the tab. */
+  seen: Set<string>;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = messages.find(m => m.id === openId) ?? null;
+  /* Read during render on purpose: it is a plain set behind the board's ref,
+     not state, and the answer is "was this row here last time", which is
+     exactly what a ref remembers. Marked after commit so the first draw of a
+     new row is the one that animates. */
+  const fresh = messages.filter(m => !seen.has(m.id)).map(m => m.id);
+  useEffect(() => {
+    for (const id of fresh) seen.add(id);
+  });
 
   if (open) {
     return (
@@ -62,25 +88,32 @@ export function InboxPanel({ messages, onAnswer }: {
 
   return (
     <div className="space-y-1.5">
-      {messages.map(m => (
-        <button
-          key={m.id}
-          onClick={() => setOpenId(m.id)}
-          className={cn(
-            'flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left',
-            m.answered === undefined ? 'border-primary/40 bg-primary/5' : 'border-border bg-card',
-          )}
-        >
-          <span className="text-lg leading-none">{m.emoji}</span>
-          <span className="min-w-0 flex-1">
-            <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
-              {m.from}
-              {m.answered === undefined && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+      <CelebrationStyles />
+      {messages.map(m => {
+        const freshIdx = fresh.indexOf(m.id);
+        return (
+          <button
+            key={m.id}
+            onClick={() => setOpenId(m.id)}
+            data-inbox-row={m.id}
+            className={cn(
+              'flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left',
+              freshIdx >= 0 && 'cm-tick-in',
+              m.answered === undefined ? 'border-primary/40 bg-primary/5' : 'border-border bg-card',
+            )}
+            style={freshIdx >= 0 ? { animationDelay: revealDelay(freshIdx, 0.1, 0.12) } : undefined}
+          >
+            <span className="text-lg leading-none">{m.emoji}</span>
+            <span className="min-w-0 flex-1">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
+                {m.from}
+                {m.answered === undefined && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+              </span>
+              <span className="block truncate text-[11px] text-muted-foreground">{m.text}</span>
             </span>
-            <span className="block truncate text-[11px] text-muted-foreground">{m.text}</span>
-          </span>
-        </button>
-      ))}
+          </button>
+        );
+      })}
     </div>
   );
 }

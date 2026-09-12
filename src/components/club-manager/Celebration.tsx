@@ -15,6 +15,29 @@ function det(i: number): number {
 const PIECE_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316', '#facc15'];
 
 /**
+ * Round 530: the animation delay for the i-th line of a staggered list, as
+ * the CSS string an inline style wants ("0.82s"). The defaults are Round
+ * 186's season curtain timings, so every feed, bullet list and chip row on
+ * the site ticks at the same pace. Rounded to the millisecond so two builders
+ * doing the same arithmetic land on the same string.
+ */
+export function revealDelay(i: number, start = 0.6, step = 0.22): string {
+  return `${Math.round((start + i * step) * 1000) / 1000}s`;
+}
+
+/**
+ * Round 530 review: where a run of `count` staggered rows finishes, in seconds,
+ * so a second run can start after the first without its caller writing the
+ * pace out by hand. Rebuild chained three blocks this way with the step typed
+ * into the page five times over, which is the one thing the kit exists to stop:
+ * change the step here and those blocks would have landed on top of each other.
+ * Returns a number, not a CSS string, because it is a start to pass back in.
+ */
+export function revealAfter(count: number, start = 0.6, step = 0.22): number {
+  return Math.round((start + count * step) * 1000) / 1000;
+}
+
+/**
  * A one-shot confetti burst that fills its nearest positioned ancestor.
  * Give it a changing `seed` to re-fire; same seed, same fall, every render.
  */
@@ -57,6 +80,14 @@ export function ConfettiBurst({ seed = 1, count = 30 }: { seed?: number; count?:
   );
 }
 
+/* Round 530 review, for anyone putting one of these classes on a control:
+   cm-rise, cm-slam and cm-tick-in all fill forwards, and an animated value
+   outranks a normal author rule for the same property. So a hover or a
+   conditional state that changes opacity or transform on the SAME element is
+   dead once the animation has run. Two ways out, both in the tree already:
+   put the class on a wrapper and keep the control as its child (GmPressCard,
+   FreeAgencyPanel), or change a property the keyframes never touch (the
+   Continue buttons lift with brightness rather than opacity). */
 /** The keyframes the match report's staged reveal leans on, mounted once. */
 export function CelebrationStyles() {
   return (

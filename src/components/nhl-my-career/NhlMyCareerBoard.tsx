@@ -19,7 +19,11 @@ import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 import { extensionDue, pushExtension, type ExtensionTalk } from '@/lib/usCareerExtension';
 import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
-import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
+import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';
+/* Round 530: draft day as a moment, and the retirement card on the same
+   celebration kit the season curtain uses. */
+import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { markRestoredFinish } from '@/lib/restoredFinish';
@@ -29,7 +33,7 @@ import { nhlHeatLabel } from '@/lib/nhlCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
-import { Confetti, CountUp } from '@/components/soccer-career/CareerFx';
+import { Confetti } from '@/components/soccer-career/CareerFx';
 import CoachCareerPanel, { CoachStartCard } from '@/components/us-career/CoachCareerPanel';
 import { startCoachCareer, ensureCoachCareer } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
@@ -69,6 +73,11 @@ type Phase = 'create' | 'season' | 'event' | 'extension' | 'freeagency' | 'retir
 
 const SAVE_KEY = 'nhl-my-career-save-v1';
 
+/* Round 530 review: one number for round one, used by the pressure line and
+   by the card's confetti rule, so the card and the line under it can never
+   disagree about the same pick. The NHL has 32 clubs, so round one is 32. */
+export const FIRST_ROUND_END = 32;
+
 interface SaveShape { c: NhlCareerState; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null }
 
 export default function NhlMyCareerBoard() {
@@ -103,6 +112,15 @@ export default function NhlMyCareerBoard() {
   /* Round 186: the season curtain. Transient like the market window: never
      persisted, so a reload mid-reveal opens on the save's real screen. */
   const [reveal, setReveal] = useState<SeasonReveal | null>(null);
+  /* Round 530: draft day. The same three strings create() pushes into the
+     feed, held for the card until the first season is played. Transient
+     like the curtain: a reload lands on the plain hub. */
+  const [draftDay, setDraftDay] = useState<DraftDayFacts | null>(null);
+  /* Round 530 review: which inbox rows this save has already shown. It lives
+     here rather than in InboxPanel because the panel is mounted only while the
+     inbox tab is open, so a set inside it started empty on every open and
+     replayed the whole list with nothing new in it. */
+  const inboxSeenRef = useRef<Set<string>>(new Set());
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -166,11 +184,14 @@ export default function NhlMyCareerBoard() {
     const roleNote = nhlAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
+    const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${nhlTeamLabelOf(c.team)} select ${c.name}.`,
-      c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.',
+      pressureLine,
       roleNote,
     ]);
+    /* Round 530: the same facts, given a moment. */
+    setDraftDay({ pick: c.draftPick, teamLabel: nhlTeamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: FIRST_ROUND_END });
     setPhase('season');
     persist(c, 'season', tq);
   };
@@ -391,6 +412,7 @@ export default function NhlMyCareerBoard() {
     setPendingEvent(null);
     setFaWindow(null);
     setTalkLine(null);
+    setDraftDay(null);
     setPanel('none');
     coachRef.current = null;
     setCoach(null);
@@ -562,21 +584,29 @@ export default function NhlMyCareerBoard() {
   if (phase === 'retired') {
     return (
       <div className="space-y-4">
-        <div className="rounded-2xl border border-gold/50 bg-card p-5 text-center">
+        {/* Round 530: the retirement is a reveal. The verdict slams, the
+            bullets tick in one at a time, the badges rise after them, and
+            the legacy score is its final value from frame one (Round 147:
+            never a number through values that were never true). Reduced
+            motion lands every piece on its final frame (CelebrationStyles).
+            The Hall of Fame confetti the NFL card already had comes with it. */}
+        <div className="relative rounded-2xl border border-gold/50 bg-card p-5 text-center">
+          <CelebrationStyles />
+          {legacy.hof && <Confetti pieces={60} gold />}
           <Crown className="mx-auto h-10 w-10 text-gold" />
-          <p className="mt-2 font-display text-2xl font-black text-foreground">{career.name} retires</p>
-          <p className="mt-1 text-sm font-semibold text-gold">{legacy.verdict}</p>
+          <p className="cm-slam mt-2 font-display text-2xl font-black text-foreground" style={{ animationDelay: '0.1s' }}>{career.name} retires</p>
+          <p className="cm-slam mt-1 text-sm font-semibold text-gold" style={{ animationDelay: '0.3s' }}>{legacy.verdict}</p>
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
-            {legacy.bullets.map((b, i) => <p key={i}>{b}</p>)}
+            {legacy.bullets.map((b, i) => <p key={i} className="cm-tick-in" style={{ animationDelay: revealDelay(i) }}>{b}</p>)}
             {/* Round 470: the badges the career earned, on the retirement card. */}
             {(() => {
               const earned = nhlEarnedBadges(career);
               return earned.length > 0
-                ? <p className="pt-1 text-gold">{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
+                ? <p className="cm-rise pt-1 text-gold" style={{ animationDelay: revealDelay(legacy.bullets.length, 0.75) }}>{earned.map(b => `${b.emoji} ${b.label}`).join(' · ')}</p>
                 : null;
             })()}
           </div>
-          <div className="mt-3 flex items-center justify-center gap-3 text-sm">
+          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: revealDelay(legacy.bullets.length, 0.95) }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Legacy <b className="text-gold">{legacy.score}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{legacy.hof ? '🏛️ Hockey Hall of Fame' : 'No plaque in Toronto'}</span>
           </div>
@@ -735,7 +765,7 @@ export default function NhlMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to hockey in nhlCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
         )}
       </div>
     );
@@ -861,6 +891,14 @@ export default function NhlMyCareerBoard() {
         </div>
       ) : (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+          {/* Round 530: draft day sits inside the Play card until the first
+              season is played, so the hub does not grow a new box and the
+              page does not jump. The feed keeps its copy of the lines. */}
+          {draftDay && career.seasons.length === 0 && (
+            <div className="mb-3">
+              <DraftDayCard {...draftDay} />
+            </div>
+          )}
           {lastLine && (
             <p className="mb-2 text-xs text-muted-foreground">
               Last season: {statLine(lastLine, career.pos)} · {lastLine.teamResult}

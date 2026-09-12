@@ -19,6 +19,11 @@ import {
 
 export interface Floater { id: number; text: string; x: number; y: number }
 
+/** Round 530: what the last trophy lift produced, for the lift card. Both
+ *  numbers are read off the engine's own before and after states, never
+ *  recomputed on the page. */
+export interface LiftResult { lifted: number; total: number; seq: number }
+
 const SAVE_EVERY_MS = 5000;
 
 function readState(): { state: ArenaState; offline: { earned: number; seconds: number } | null; fresh: boolean } {
@@ -36,9 +41,11 @@ export function useIdleArena() {
   const [state, setState] = useState<ArenaState>(boot.state);
   const [offline, setOffline] = useState(boot.offline);
   const [floaters, setFloaters] = useState<Floater[]>([]);
+  const [lastLift, setLastLift] = useState<LiftResult | null>(null);
   const stateRef = useRef(state);
   stateRef.current = state;
   const floaterId = useRef(0);
+  const liftSeq = useRef(0);
 
   /* the clock */
   useEffect(() => {
@@ -94,8 +101,18 @@ export function useIdleArena() {
   }, [markSessionPlay]);
 
   const doUpgrade = useCallback((id: string) => setState(s => buyUpgrade(s, id)), []);
-  const doLift = useCallback(() => setState(s => lift(s, Date.now())), []);
+  /* Round 530: the lift records what it produced (the doTap shape, a side
+     state set inside the updater) so the page can show the moment without
+     working the trophy maths out a second time. A lift the engine refuses
+     records nothing. */
+  const doLift = useCallback(() => setState(s => {
+    const next = lift(s, Date.now());
+    if (next === s) return s;
+    setLastLift({ lifted: next.trophies - s.trophies, total: next.trophies, seq: ++liftSeq.current });
+    return next;
+  }), []);
+  const dismissLift = useCallback(() => setLastLift(null), []);
   const dismissOffline = useCallback(() => setOffline(null), []);
 
-  return { state, fresh: boot.fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift };
+  return { state, fresh: boot.fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift };
 }

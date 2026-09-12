@@ -10,6 +10,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { ChevronDown, Award } from 'lucide-react';
 import { FlagFromEmoji } from '@/components/FlagImg';
+import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 
 const EMOJI_TO_COUNTRY: Record<string, string> = {
@@ -136,7 +137,7 @@ export default function Olympics() {
                 <div
                   key={clue.label}
                   className="rounded-xl border border-[hsl(43,85%,55%)/0.2] bg-card p-4 animate-cell-reveal"
-                  style={{ animationDelay: `${i * 0.05}s` }}
+                  style={{ animationDelay: revealDelay(i, 0, 0.05) }}
                 >
                   <div className="text-xs font-semibold uppercase tracking-wider text-[hsl(43,85%,55%)] mb-1">
                     {clue.label}

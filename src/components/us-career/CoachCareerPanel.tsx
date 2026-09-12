@@ -19,6 +19,8 @@
 import { useState } from 'react';
 import { Briefcase, ClipboardList, Flame, RotateCcw, TrendingUp } from 'lucide-react';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+/* Round 530: the season result is a moment. Same kit as the season curtain. */
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   acceptCoachOffer, playCoachSeason, sitOutCoachSeason,
   coachOutlook, coachHotSeat, coachTotals, coachVerdict, formatCoachRecord,
@@ -66,8 +68,16 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}`,
   );
 
+  /* Round 530: the notes the last coached season produced, kept only for
+     that season (n is the results count they belong to). Transient by
+     design, like the boards' season curtain: a reload keeps the season's
+     line off the save and drops the notes, and the log has them anyway. */
+  const [seasonNotes, setSeasonNotes] = useState<{ n: number; notes: string[] } | null>(null);
+  const lastNotes = seasonNotes && seasonNotes.n === state.results.length ? seasonNotes.notes : [];
+
   const coachSeason = () => {
     const r = playCoachSeason(state);
+    setSeasonNotes({ n: r.state.results.length, notes: r.notes });
     onChange(r.state, r.notes);
   };
   const sitOut = () => {
@@ -266,9 +276,13 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
       </div>
 
       <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
+        <CelebrationStyles />
         {state.unemployed ? (
-          <div className="space-y-2">
-            <div className="text-center">
+          /* Round 530: being let go, or a new cycle of offers, lands as a
+             beat too: the header rises and the offers tick in. Keyed on the
+             results count and the offer count so only a new cycle moves. */
+          <div className="space-y-2" key={`${state.results.length}:${state.offers.length}`}>
+            <div className="cm-rise text-center">
               <p className="text-2xl">📪</p>
               <p className="text-sm font-black text-foreground">{outLabel}</p>
               <p className="mt-1 text-[11px] italic text-muted-foreground">{state.offerNote}</p>
@@ -277,7 +291,8 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
               <button
                 key={`${o.team}-${i}`}
                 onClick={() => take(i)}
-                className="w-full rounded-xl border border-border bg-background p-2.5 text-left transition-colors hover:border-primary/60"
+                className="cm-tick-in w-full rounded-xl border border-border bg-background p-2.5 text-left transition-colors hover:border-primary/60"
+                style={{ animationDelay: revealDelay(i, 0.3, 0.14) }}
               >
                 <div className="flex items-start justify-between gap-2">
                   <span className="min-w-0 flex-1 truncate text-xs font-black text-foreground">{o.team}</span>
@@ -302,8 +317,49 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
           </div>
         ) : (
           <div className="text-center">
+            {/* Round 530: the season you just coached, as a reveal rather
+                than one grey line. The record slams in as its final value
+                (Round 147), the fan's sentence follows, the notes
+                playCoachSeason wrote tick in one by one, and a title pours
+                confetti. Keyed on the season so the next one plays again and
+                a re-render of this one does not. Nothing here is new: the
+                record, the line and the notes are the engine's own. */}
             {last && last.team === state.job?.team && (
-              <p className="mb-1 text-xs text-muted-foreground">Last season: {last.line}</p>
+              <div
+                key={`${last.year}-${last.n}`}
+                data-coach-season-reveal
+                className={cn(
+                  'relative mb-2 overflow-hidden rounded-xl border p-2.5',
+                  last.champion ? 'border-gold/60 bg-gold/5 cm-win-pulse' : 'border-border bg-background',
+                )}
+              >
+                {last.champion && <ConfettiBurst seed={last.year} count={28} />}
+                <div className="relative">
+                  <p className="cm-rise text-[10px] font-bold uppercase tracking-widest text-muted-foreground" style={{ animationDelay: '0.05s' }}>
+                    The {last.year} season
+                  </p>
+                  <p
+                    className={cn('cm-slam mt-0.5 font-display text-base font-black', last.champion ? 'text-gold' : 'text-foreground')}
+                    style={{ animationDelay: '0.25s' }}
+                  >
+                    {formatCoachRecord(last)}{last.champion ? `, won ${titleWord(state.sport)}` : ''}
+                  </p>
+                  <p className="cm-rise mt-0.5 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>{last.line}</p>
+                  {lastNotes.length > 0 && (
+                    <div className="mt-1.5 space-y-1 text-left">
+                      {lastNotes.map((n, i) => (
+                        <p
+                          key={`${last.n}-${i}`}
+                          className="cm-tick-in rounded-lg bg-card px-2 py-1 text-[11px] leading-snug text-muted-foreground"
+                          style={{ animationDelay: revealDelay(i) }}
+                        >
+                          {n}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
             <p className={cn('mb-2 text-[11px]', TONE[seat.tone])}>{seat.label} · {seat.line}</p>
             <button

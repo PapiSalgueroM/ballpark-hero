@@ -10,7 +10,7 @@ import { recordCompletion } from '@/lib/completions';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
-  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive,
+  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind } from '@/lib/stadiumTycoon';
@@ -38,6 +38,11 @@ export interface Floater {
 
 let floaterSeq = 1;
 
+/** Round 530: the two loudest events, held for the page's cards. The label
+ *  and the bonus are the engine's own event fields, printed as they came. */
+export interface Promotion { label: string; amount: number; seq: number }
+export interface BadgeEarned { label: string; seq: number }
+
 export function useStadiumTycoon() {
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
@@ -51,6 +56,8 @@ export function useStadiumTycoon() {
   const [awayPay, setAwayPay] = useState<number | null>(null);
   const [confetti, setConfetti] = useState(0);
   const [golden, setGolden] = useState<PendingGolden | null>(null);
+  const [promotion, setPromotion] = useState<Promotion | null>(null);
+  const [badge, setBadge] = useState<BadgeEarned | null>(null);
   const stateRef = useRef(state);
   stateRef.current = state;
   const goldenRef = useRef(golden);
@@ -155,12 +162,17 @@ export function useStadiumTycoon() {
         pushFloater(`🏁 ${e.label} +$${e.amount}`, 'win', 18, 30);
         setConfetti(c => c + 1);
       } else if (e.kind === 'promoted') {
-        // Round 162: the loudest moment the game has.
+        // Round 162: the loudest moment the game has. Round 530: it also
+        // gets a card on the pitch, held until Continue or four seconds.
         pushFloater(`${e.label} +$${e.amount}`, 'win', 16, 20);
         setConfetti(c => c + 2);
+        setPromotion({ label: e.label, amount: e.amount, seq: floaterSeq++ });
       } else if (e.kind === 'ach') {
-        pushFloater(`${e.label}: +2% forever`, 'win', 22, 36);
+        /* Round 530 review: the lib's own bonus, so a retune cannot leave
+           the floater announcing a number the game no longer pays. */
+        pushFloater(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 'win', 22, 36);
         setConfetti(c => c + 1);
+        setBadge({ label: e.label, seq: floaterSeq++ });
       } else if (e.kind === 'conceded') {
         pushFloater('they score', 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {
@@ -270,10 +282,13 @@ export function useStadiumTycoon() {
   }, [pushFloater]);
 
   const dismissAway = useCallback(() => setAwayPay(null), []);
+  const dismissPromotion = useCallback(() => setPromotion(null), []);
+  const dismissBadge = useCallback(() => setBadge(null), []);
 
   return {
     state, floaters, awayPay, dismissAway, confetti,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
+    promotion, dismissPromotion, badge, dismissBadge,
   };
 }

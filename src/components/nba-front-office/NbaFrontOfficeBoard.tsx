@@ -37,7 +37,7 @@ import { stageVerdict } from '@/lib/usCareerReveal';
    trust and can tilt next season's mandate one tier. */
 import { buildGmPresser, applyGmPressChoice, type GmPresser } from '@/lib/foGmPress';
 import { GmPressCard } from '@/components/front-office-shared/GmPressCard';
-import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 /* Round 204: the hub is boxes now, the same boxes Club Manager has had
    since Round 74. What each box says lives in the engine, not here. */
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
@@ -76,6 +76,11 @@ export default function NbaFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NbaLeague | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
+  /* Round 530: a done deal or a signing slams in at the top of the feed the
+     moment it happens. Matched on the line's text, never its index, so the
+     moment anything else is prepended it reads as an ordinary row. Transient
+     like the reveal, never persisted. */
+  const [feedSlam, setFeedSlam] = useState<{ text: string; n: number } | null>(null);
   const [series, setSeries] = useState<SeriesResult[]>([]);
   const [champion, setChampion] = useState('');
   const [draftClass, setDraftClass] = useState<NbaProspect[] | null>(null);
@@ -193,6 +198,29 @@ export default function NbaFrontOfficeBoard() {
     persist({ trust: res.trust, pressTilt: res.tilt }, league, myTeam);
   };
 
+  /* Round 530: the feed ticks in a row at a time. Rows are keyed on the
+     period stamp plus their index, so a new round remounts them and they
+     re-animate, while a re-render for anything else leaves them still. The
+     slam row carries its own key, so a deal landing remounts that one row
+     and nothing under it moves. The rows land on the kit's stagger from
+     0.2s, so the feed reads before the tiles under it settle. */
+  const feedRows = (lines: string[], stamp: string) => lines.map((n, i) => {
+    const slamKey = feedSlam && i === 0 && feedSlam.text === n ? `slam:${feedSlam.n}` : null;
+    return (
+      <p
+        key={slamKey ?? `${stamp}:${i}`}
+        className={slamKey ? 'cm-slam font-semibold text-foreground' : 'cm-tick-in'}
+        style={{ animationDelay: slamKey ? '0s' : revealDelay(i, 0.2) }}
+      >
+        {n}
+      </p>
+    );
+  });
+  const slamFeed = (line: string) => {
+    setFeed(f => [line, ...f].slice(0, 6));
+    setFeedSlam(s => ({ text: line, n: (s?.n ?? 0) + 1 }));
+  };
+
   const my = league?.teams[myTeam];
 
   const playRound = () => {
@@ -245,13 +273,13 @@ export default function NbaFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      setFeed(newFeed);
+      setFeed(newFeed); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.round += 1;
     setLeague(lg);
-    setFeed(newFeed);
+    setFeed(newFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
   };
 
@@ -294,17 +322,16 @@ export default function NbaFrontOfficeBoard() {
     });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
     const nextPicks = picksLeft - 1;
-    /* Round 519: the final pick of a draft leaves for the hub in this same
-       handler, and React batches both updates into one commit, so a reveal
-       built here would never reach a render. Building it anyway was dead work
-       that read as though the last pick were narrated when it is not.
-       NAMED AS NOT DONE: the last pick and the rivals behind it are still not
-       shown. Holding the draft screen until the player acknowledges the reveal
-       is a flow change across all four boards and belongs in its own round. */
-    setDraftNight(nextPicks > 0 ? buildDraftNight(
+    /* Round 530: every pick builds its reveal, the last one included. Round
+       519 had named the final pick as not narrated: it left for the hub in
+       this same handler, so its card never reached a render. The screen now
+       stays on the draft after the last pick (no setPhase below) and leaves
+       when the player presses Continue under the card. The offseason still
+       runs right here, in the same order, drawing the same randomness. */
+    setDraftNight(buildDraftNight(
       { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
       rivalPicks,
-    ) : null);
+    ));
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
@@ -322,13 +349,23 @@ export default function NbaFrontOfficeBoard() {
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
       setSeries([]); setChampion(''); setWonNow(false);
-      setPhase('hub'); setTab(null);
+      /* Round 530: the phase stays 'draft' so the last pick's card is seen;
+         leaveDraft moves it on. The save says 'hub' as it always did, so a
+         reload skips the reveal and opens where it opened before. */
+      setFeedSlam(null); setTab(null);
       setLeague(lg);
       persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
       return;
     }
     setLeague(lg);
     persist({ draftClass: nextClass, picksLeft: nextPicks }, lg, myTeam);
+  };
+
+  /* Round 530: the Continue button under the final pick's card. Nothing to
+     persist: the last pick already wrote the hub. */
+  const leaveDraft = () => {
+    setPhase('hub');
+    setTab(null);
   };
 
   const doRelease = (pid: string) => {
@@ -339,7 +376,14 @@ export default function NbaFrontOfficeBoard() {
   const doSign = (pid: string) => {
     if (!league) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    if (nbaSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)) { setLeague(lg); persist({}, lg, myTeam); }
+    if (nbaSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)) {
+      /* Round 530: the signing lands in the feed as a slam. The man and the
+         number are read off the roster he just joined, so the line can only
+         say what the engine did. */
+      const signed = lg.teams[myTeam].players.find(p => p.id === pid);
+      if (signed) slamFeed(`✍️ ${signed.name} (${signed.pos}) signs, $${signed.salary}M a year.`);
+      setLeague(lg); persist({}, lg, myTeam);
+    }
   };
   /* Round 190: the direct deal is a phone call now. The instant verdict
      that lived here is exactly the three-button haggle the owner banned
@@ -376,7 +420,7 @@ export default function NbaFrontOfficeBoard() {
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const res = nbaExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
     if (res === 'done') {
-      setFeed(f => [`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`, ...f].slice(0, 6));
+      slamFeed(`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${pkg.theirPlayerName} in`;
@@ -399,7 +443,7 @@ export default function NbaFrontOfficeBoard() {
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
     if (res === 'accepted') {
-      setFeed(f => [`🤝 Trade finder deal done with ${label(o.teamId)}.`, ...f].slice(0, 6));
+      slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${o.playerName} in`;
@@ -521,7 +565,9 @@ export default function NbaFrontOfficeBoard() {
             /* Round 192: the room stands between the season and the draft.
                Answer it (or reload, which ends the scrum) to move on. */
             <div className="cm-rise mt-4 text-left" style={{ animationDelay: '1.35s' }}>
-              <GmPressCard presser={presser} onAnswer={answerPress} />
+              {/* Round 530: the wrapper lands first and the card's own rise runs
+                  from the same mark, so the box and its content arrive together. */}
+              <GmPressCard presser={presser} onAnswer={answerPress} delay={1.35} />
             </div>
           ) : (
             <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '1.35s' }}>
@@ -542,16 +588,28 @@ export default function NbaFrontOfficeBoard() {
   }
 
   if (phase === 'draft' && draftClass) {
+    /* Round 530: after the last pick the offseason has run and the season
+       has rolled, so the heading reads the season as it stands rather than
+       one on from it, and the board is put away: no picks, no grid, just the
+       card and its Continue button. */
+    const draftDone = picksLeft <= 0;
     return (
       <div className="space-y-4">
+        <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
-          <p className="font-display text-lg font-bold text-foreground">The {league.season + 1} Draft</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
-          </p>
+          <p className="font-display text-lg font-bold text-foreground">The {draftDone ? league.season : league.season + 1} Draft</p>
+          {draftDone ? (
+            <p className="mt-1 text-xs text-muted-foreground">
+              That is your draft done. The offseason has run and the new season is set up on the hub.
+            </p>
+          ) : (
+            <p className="mt-1 text-xs text-muted-foreground">
+              You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
+            </p>
+          )}
         </div>
-        {draftNight && <DraftNightCard night={draftNight} />}
-        <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+        {draftNight && <DraftNightCard night={draftNight} onContinue={draftDone ? leaveDraft : undefined} />}
+        {!draftDone && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
@@ -561,10 +619,12 @@ export default function NbaFrontOfficeBoard() {
               <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{pr.grade}</span>
             </button>
           ))}
-        </div>
+        </div>}
         {feed.length > 0 && (
           <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
-            {feed.slice(0, 4).map((n, i) => <p key={i}>{n}</p>)}
+            {/* Keyed on the pick count so each pick's news ticks in, and on the
+                season so the offseason lines after the last pick do too. */}
+            {feedRows(feed.slice(0, 4), `${league.season}:d${picksLeft}`)}
           </div>
         )}
       </div>
@@ -604,6 +664,7 @@ export default function NbaFrontOfficeBoard() {
 
   return (
     <div className="space-y-4">
+      <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{league.season} · Round {league.round}/{NBA_ROUNDS}</span>
@@ -635,7 +696,7 @@ export default function NbaFrontOfficeBoard() {
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
-          {feed.slice(0, 5).map((n, i) => <p key={i}>{n}</p>)}
+          {feedRows(feed.slice(0, 5), `${league.season}:r${league.round}`)}
         </div>
       )}
 

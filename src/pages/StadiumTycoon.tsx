@@ -4,8 +4,9 @@
  * the idle game. Suprise me." The surprises are all motion: a live toy match
  * with player dots that actually chase the ball, a crowd that fills the
  * stands seat by seat as the real attendance number grows, money that
- * physically floats off everything, confetti on goals, count-up cash, pulse
- * rings on every purchase, and a streak flame that grows with the run.
+ * physically floats off everything, confetti on goals, pulse rings on every
+ * purchase, and a streak flame that grows with the run. The balance itself
+ * never counts up: it is the engine's number, always (Round 147).
  *
  * No scroll on the core loop (pitch + upgrades fit a phone screen), tiles
  * per the house style, "?" rules modal, everything original.
@@ -23,34 +24,21 @@ import {
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, winsToNextDivision,
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
-  ACHIEVEMENTS, achMult, goldenActive, GOLDEN_INFO,
+  ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
+import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 
 /* ---------- tiny animation helpers ---------- */
 
-/** A number that rolls toward its target instead of jumping. */
-function useCountUp(target: number): number {
-  const [shown, setShown] = useState(target);
-  const ref = useRef(target);
-  useEffect(() => {
-    ref.current = target;
-    let raf = 0;
-    const step = () => {
-      setShown(cur => {
-        const d = ref.current - cur;
-        if (Math.abs(d) < 1) return ref.current;
-        return cur + d * 0.18;
-      });
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [target]);
-  return shown;
-}
+/* Round 530 review: the balance used to ease toward s.money by 18 percent a
+   frame, so the printed number walked through amounts the club never held,
+   most visibly after a purchase and after an away settle. Round 147's rule is
+   that emphasis animates and a number never does. The balance is the engine's
+   own now, and the arrival still has all its theatre: the money floats off
+   the pitch, the pulse rings fire and the confetti lands. */
 
 /** Deterministic pseudo-random for stable crowd seat positions. */
 function seatRand(i: number): number {
@@ -63,7 +51,6 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 export default function StadiumTycoon() {
   const g = useStadiumTycoon();
   const s = g.state;
-  const money = useCountUp(s.money);
   const [showHelp, setShowHelp] = useState(false);
   /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
      house style: each opens its own panel instead of stretching the page. */
@@ -130,6 +117,20 @@ export default function StadiumTycoon() {
     }));
   }, [fans]);
 
+  /* Round 530: the promotion card sits on the pitch for four seconds or until
+     Continue, and a badge line above the drawers for four seconds. Both are
+     the hook's own event fields; the timers only take them down. */
+  useEffect(() => {
+    if (!g.promotion) return;
+    const t = window.setTimeout(g.dismissPromotion, 4000);
+    return () => window.clearTimeout(t);
+  }, [g.promotion, g.dismissPromotion]);
+  useEffect(() => {
+    if (!g.badge) return;
+    const t = window.setTimeout(g.dismissBadge, 4000);
+    return () => window.clearTimeout(t);
+  }, [g.badge, g.dismissBadge]);
+
   const onPitchClick = (e: React.MouseEvent) => {
     const el = pitchRef.current;
     if (!el) return;
@@ -146,6 +147,7 @@ export default function StadiumTycoon() {
         path="/stadium-tycoon"
       />
       <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
+        <CelebrationStyles />
         <header className="text-center mb-3">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>
           {/* Round 162: the ladder this ground is climbing, front and center. */}
@@ -165,7 +167,7 @@ export default function StadiumTycoon() {
         {/* Money header */}
         <div className="flex items-end justify-between mb-2 px-1">
           <div>
-            <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(money)}</div>
+            <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(s.money)}</div>
             <div className="text-[11px] text-muted-foreground">
               +{fmtMoney(rate)}/s
               {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x2 ({Math.ceil(s.boostLeftSec)}s)</span>}
@@ -273,6 +275,49 @@ export default function StadiumTycoon() {
                 🪙
               </button>
             )}
+            {/* Round 530 review: the badge line lies over the pitch for its
+                few seconds, the same reason the promotion card below does. In
+                the flow above the drawer buttons it pushed them, an open
+                drawer and everything under it down about 36px on arrival and
+                snapped them back when the timer cleared it, with the player
+                mid tap. It takes no clicks, so the ground underneath still
+                pays. The bonus is the lib's own ACH_BONUS, never a typed 2. */}
+            {g.badge && (
+              <p
+                key={g.badge.seq}
+                className="cm-slam pointer-events-none absolute inset-x-2 bottom-7 z-10 rounded-xl border border-emerald-500/40 bg-card px-3 py-2 text-center text-xs font-bold text-emerald-400"
+              >
+                🏅 Badge earned: {g.badge.label}, +{Math.round(ACH_BONUS * 100)}% income forever
+              </p>
+            )}
+            {/* Round 530: promotion. The card covers the pitch so the page
+                never grows for it, and it swallows the click so a tap on it
+                is not a tap on the ground. */}
+            {g.promotion && (
+              <div
+                key={g.promotion.seq}
+                data-promotion-card
+                onClick={e => e.stopPropagation()}
+                className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 p-3 cursor-default"
+              >
+                <ConfettiBurst seed={g.promotion.seq} count={30} />
+                <div className="relative rounded-2xl border border-yellow-500/70 bg-card px-4 py-3 text-center shadow-lg">
+                  <p className="cm-slam font-display text-lg font-black text-yellow-400" style={{ animationDelay: '0.05s' }}>
+                    {g.promotion.label}
+                  </p>
+                  <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
+                    +{fmtMoney(g.promotion.amount)} promotion bonus, every payout scaled up from here
+                  </p>
+                  <button
+                    onClick={g.dismissPromotion}
+                    className="cm-rise mt-2 inline-flex min-h-[36px] items-center rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-primary-foreground hover:brightness-110"
+                    style={{ animationDelay: '0.7s' }}
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -360,7 +405,7 @@ export default function StadiumTycoon() {
         </div>
 
         {/* Round 162: the drawers. Achievements are the long game's long game:
-            every badge is +2% income, forever, across every ground.
+            every badge is a standing income bonus, across every ground.
             Round 196: the boardroom joins them. */}
         <div className="grid grid-cols-3 gap-2 mb-3">
           <button
@@ -537,6 +582,14 @@ export default function StadiumTycoon() {
         .st-glow { animation: stGlow 1.6s ease-in-out infinite; }
         @keyframes stGoldwob { 0%, 100% { transform: rotate(-14deg) scale(1); filter: brightness(1); } 25% { transform: rotate(10deg) scale(1.22); filter: brightness(1.35); } 50% { transform: rotate(-8deg) scale(1.05); filter: brightness(1.1); } 75% { transform: rotate(12deg) scale(1.18); filter: brightness(1.3); } }
         .st-goldwob { animation: stGoldwob 0.9s ease-in-out infinite; }
+        /* Round 530: the setting the visitor already made. The two loops stop
+           looping, the floaters land as plain text until they are cleared, and
+           the confetti (decoration, nothing to read) does not run at all. */
+        @media (prefers-reduced-motion: reduce) {
+          .st-glow, .st-goldwob { animation: none; }
+          .st-float { animation: none; opacity: 1; transform: none; }
+          .st-confetti { display: none; }
+        }
       `}</style>
     </div>
   );
