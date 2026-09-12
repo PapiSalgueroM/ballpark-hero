@@ -49,6 +49,9 @@ const STATIC_TYPES: Record<string, string> = {
      is true and claims nothing, which is the rule this table runs on. */
   '/champions-league-format-history': 'WebPage',
   '/nfl-playoff-format-history': 'WebPage',
+  '/nba-playoff-format-history': 'WebPage',
+  '/mlb-postseason-format-history': 'WebPage',
+  '/nhl-playoff-format-history': 'WebPage',
   '/leaderboard': 'WebPage',
   '/whats-new': 'CollectionPage',
   '/soccer': 'CollectionPage',

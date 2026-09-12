@@ -153,6 +153,7 @@ export const SPORT_HUBS: SportHub[] = [
       'Basketball\'s record book has hard start dates, and a lot of the sport\'s arguments trace back to them. The NBA adopted the 24 second shot clock for the 1954-55 season, which is the line between the modern game and the stalling contests before it. Steals, blocks and the split between offensive and defensive rebounds only became official statistics in 1973-74, and individual turnovers waited until 1977-78, which is why Bill Russell and Wilt Chamberlain carry no official career block totals despite both being remembered as dominant shot blockers. The three point line came in for 1979-80, originally as a one year trial. And the 82 game season only started in 1967-68, the year expansion took the league to twelve teams. So compare eras all you like, but for some whole careers the numbers people want were simply never written down.',
     referenceLinks: [
       { path: '/records#nba', label: 'NBA champions, year by year', why: 'every Finals since 1947 with the beaten side and the series score, and the Finals MVP from 1969 when the award began, checked against the record' },
+      { path: '/nba-playoff-format-history', label: 'NBA playoff format history', why: 'how the bracket grew from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery, each change twice sourced' },
       { path: '/records#wnba', label: 'WNBA champions, year by year', why: 'every Finals with the runner-up, the series and the Finals MVP' },
       { path: '/nba-grid/archive', label: 'NBA Grid archive', why: 'every past board with its full answer key, so a franchise crossed with a franchise reads as a list of the men who wore both' },
     ],
@@ -204,6 +205,7 @@ export const SPORT_HUBS: SportHub[] = [
     referenceLinks: [
       { path: '/records#cup', label: 'Stanley Cup champions, year by year', why: 'every final since 1915 with the beaten side and the series, with the two seasons nobody won left honestly empty' },
       { path: '/hockey-grid/archive', label: 'NHL Grid archive', why: 'the past boards and their answer keys, which double as a record of who skated for two clubs' },
+      { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', why: 'from the NHL champion meeting the West for the Cup to top three plus wild cards, every bracket since 1917-18 checked against the league\'s own account and Wikipedia, with the three places they disagree printed rather than picked' },
     ],
     hubFaqs: [
       { q: 'Which of these use this season\'s players and which go all the way back?', a: 'Puck Detective picks from current NHL rosters, and NHL Front Office starts you on the real 2026-27 rosters. Career Path, NHL Franchise Grid, Higher / Lower and Perfect Lineup: NHL pull from an all-era career database instead, so a 1970s winger turns up as readily as anyone playing tonight.' },
@@ -301,6 +303,7 @@ export const SPORT_HUBS: SportHub[] = [
       'Baseball still has no game clock. A pitch clock arrived in 2023 and pulled that season\'s average nine inning game down to roughly two hours 40 minutes, but nothing counts down to zero, so a team in front has no clock to run out. The infield is fixed by rule, 90 feet between bases and the pitching rubber 60 feet 6 inches from home, a distance the National League set in 1893 and nobody has moved since. Past the infield the rule book only sets a floor: any field built after June 1, 1958 has to reach at least 325 feet down each foul line and 400 feet to center, with older parks exempt and waivers handed out since. No exact shape is prescribed, which is why the left field wall at Fenway Park, the Green Monster, stands about 37 feet tall barely 310 feet down the line. The season runs 162 games, the length the American League adopted in 1961 and the National League in 1962.',
     referenceLinks: [
       { path: '/records#ws', label: 'World Series champions, year by year', why: 'every series since 1903 with the beaten pennant winner and the series score, the two unplayed years missing on purpose' },
+      { path: '/mlb-postseason-format-history', label: 'MLB postseason format history', why: 'how October grew from one series to a twelve club bracket, each round added since 1903 and how long it has been, checked against two publishers' },
       { path: '/mlb-grid/archive', label: 'MLB Grid archive', why: 'past boards with the answers filled in, a quiet reference for which players suited up for two clubs' },
     ],
     hubFaqs: [
