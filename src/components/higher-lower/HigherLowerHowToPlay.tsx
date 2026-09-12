@@ -30,14 +30,17 @@ export function HigherLowerHowToPlay({ open, onOpenChange }: HigherLowerHowToPla
           </section>
 
           <section>
-            <h3 className="font-bold text-foreground mb-2">📊 The 5 Stats</h3>
+            <h3 className="font-bold text-foreground mb-2">📊 The 3 Stats</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>🎽 <span className="text-foreground font-semibold">Appearances</span>: All-time career games</li>
-              <li>⚽ <span className="text-foreground font-semibold">Goals</span>: All-time career goals</li>
-              <li>👟 <span className="text-foreground font-semibold">Assists</span>: All-time career assists</li>
-              <li>🏆 <span className="text-foreground font-semibold">Trophies</span>: Total silverware won</li>
-              <li>🌍 <span className="text-foreground font-semibold">Int'l Caps</span>: National team appearances</li>
+              <li>🎽 <span className="text-foreground font-semibold">Appearances</span>: Competitive club games, all competitions</li>
+              <li>⚽ <span className="text-foreground font-semibold">Goals</span>: Goals in those same club games</li>
+              <li>🌍 <span className="text-foreground font-semibold">Int'l Caps</span>: Senior national team appearances</li>
             </ul>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Friendlies, tour games, youth and reserve football do not count. Caps are checked
+              against two published sources before a player joins the pool, and the club columns
+              say on the card when we are still checking them.
+            </p>
           </section>
 
           <section>

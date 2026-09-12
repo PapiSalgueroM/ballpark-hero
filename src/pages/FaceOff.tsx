@@ -227,6 +227,12 @@ const FaceOff = () => {
             </div>
             )}
 
+            {g.phase === 'reveal' && g.current.note && (
+              <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
+                {g.current.note}
+              </p>
+            )}
+
             {g.phase === 'reveal' && g.lastResult && (
               <div className="mt-3 rounded-2xl border border-border bg-card p-3 text-sm">
                 <div className="flex items-center justify-between gap-2">

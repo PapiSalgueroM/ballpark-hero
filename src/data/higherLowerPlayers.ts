@@ -1,215 +1,182 @@
-import { HigherLowerPlayer } from '@/types/higherLower';
+import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
+
+/**
+ * Soccer Higher or Lower pool. Read by /higher-lower and by the three soccer
+ * categories in /face-off, so a number here decides two games.
+ *
+ * VERIFIED ON 2026-09-12. Round 535. The full row by row record, with both
+ * source URLs per row, is docs/audits/higher-lower-verification-2026-09-12.md.
+ *
+ * WHAT WAS WRONG BEFORE. The file shipped 204 rows and five career totals per
+ * row with no source of any kind. It carried the same person twice under two
+ * names (Ronaldinho and "Ronaldo de Assis (R10)" were one identical row, so
+ * were Antonio and "Toni" Ruediger), it gave Lev Yashin the wrong country, and
+ * it mixed conventions inside a single row: Pele's appearances were the
+ * competitive ones while his goals were the all matches figure that counts
+ * friendlies and tour games, and four other rows shipped more career goals
+ * than career appearances for the same reason.
+ *
+ * THE CONVENTION, one rule applied to every row.
+ *   internationalCaps: senior FIFA recognised A internationals, as published.
+ *   appearances, goals: senior competitive CLUB matches, all competitions
+ *     (league, domestic cup, league cup, continental, super cups), excluding
+ *     friendlies and tour games, excluding youth and reserve teams, and
+ *     excluding international matches.
+ * Where a total depends on the convention, the competitive figure ships and
+ * the disputed one is named in the evidence file and nowhere in the game.
+ *
+ * WHAT IS VERIFIED AND WHAT IS NOT. Be precise about this, it is the whole
+ * point of the round.
+ *
+ *   internationalCaps is TWO SOURCE VERIFIED on every row below. Source one
+ *   is the RSSSF record international players archive (rsssf.org), source two
+ *   is the relevant Wikipedia national team records article. A row ships only
+ *   where the two print the SAME number. That rule is why the pool is 69 rows
+ *   and not 204: the two publishers snapshot on different dates, so a player
+ *   still adding caps usually cannot be pinned, and rows that could not be
+ *   pinned were removed rather than guessed. Every removal is listed in the
+ *   evidence file as the queue for the next round.
+ *
+ *   appearances and goals are NOT two source verified and are marked as such
+ *   by HL_UNVERIFIED_STATS below, which both consumers print. Every publisher
+ *   that prints a club career total on this convention refused the fetch
+ *   (worldfootball.net, fbref, footballdatabase.eu, playmakerstats, 11v11 and
+ *   weltfussball all answered 403, transfermarkt is blocked outright) and the
+ *   one that answered is a single publisher, which is not two. Removing the
+ *   columns would leave a one stat pool and empty both games, so under the
+ *   marking rule they stay and say so. Finishing them is the next round.
+ *
+ * ACTIVE PLAYERS. A cap total only stops moving when a career does, and this
+ * file ships inside page snapshots that are held for weeks, so a moving number
+ * would be a promise broken on a schedule. The pool is therefore weighted to
+ * finished international careers by construction, the same reason the MLB pool
+ * in mlbHLPlayers admits only finished careers. Where an active player is here
+ * it is because both publishers printed the same number anyway.
+ */
+
+/** The day every row below was checked against its two sources. */
+export const HL_VERIFIED_ON = '2026-09-12';
+
+/** Stats in this pool that are not yet two source verified. */
+export const HL_UNVERIFIED_STATS: readonly HigherLowerStatKey[] = ['appearances', 'goals'];
+
+/** What the games say when they show one of those. */
+export const HL_UNVERIFIED_NOTE =
+  'Club career totals here come from one publisher, not two. We are still checking them.';
+
+/**
+ * Rows with a caveat of their own on top of the pool wide one. The rule is an
+ * era cut off, not a hand picked list: a club career that finished before 1985
+ * has no settled appearance or goal total, because the publishers of the time
+ * counted friendlies and tour games differently and nobody has reconciled them
+ * since. Pele is the loud case, his two published careers are 647 games to
+ * 1,390 depending only on that choice.
+ */
+export const HL_MARKED: readonly string[] = [
+  'Pelé',
+  'Johan Cruyff',
+  'Bobby Charlton',
+  'Gerd Müller',
+  'Giacinto Facchetti',
+];
+
+/** What the games say on one of those cards. */
+export const HL_MARKED_NOTE =
+  'Career ended before 1985, so the club totals are the ones most publishers use, not a settled number.';
 
 export const higherLowerPlayers: HigherLowerPlayer[] = [
-  // Icons / Legends
-  { name: "Pelé", nationality: "Brazil", isIcon: true, stats: { appearances: 1363, goals: 1281, assists: 369, trophies: 26, internationalCaps: 92 } },
-  { name: "Diego Maradona", nationality: "Argentina", isIcon: true, stats: { appearances: 592, goals: 312, assists: 171, trophies: 11, internationalCaps: 91 } },
-  { name: "Johan Cruyff", nationality: "Netherlands", isIcon: true, stats: { appearances: 520, goals: 294, assists: 210, trophies: 19, internationalCaps: 48 } },
-  { name: "Franz Beckenbauer", nationality: "Germany", isIcon: true, stats: { appearances: 584, goals: 75, assists: 120, trophies: 18, internationalCaps: 103 } },
-  { name: "Ronaldinho", nationality: "Brazil", isIcon: true, stats: { appearances: 615, goals: 205, assists: 166, trophies: 16, internationalCaps: 97 } },
-  { name: "Zinedine Zidane", nationality: "France", isIcon: true, stats: { appearances: 681, goals: 125, assists: 179, trophies: 16, internationalCaps: 108 } },
-  { name: "Ronaldo Nazário", nationality: "Brazil", isIcon: true, stats: { appearances: 518, goals: 352, assists: 92, trophies: 16, internationalCaps: 98 } },
-  { name: "Thierry Henry", nationality: "France", isIcon: true, stats: { appearances: 797, goals: 411, assists: 192, trophies: 14, internationalCaps: 123 } },
-  { name: "Paolo Maldini", nationality: "Italy", isIcon: true, stats: { appearances: 902, goals: 33, assists: 55, trophies: 26, internationalCaps: 126 } },
-  { name: "David Beckham", nationality: "England", isIcon: true, stats: { appearances: 719, goals: 127, assists: 225, trophies: 19, internationalCaps: 115 } },
-  { name: "Roberto Carlos", nationality: "Brazil", isIcon: true, stats: { appearances: 850, goals: 113, assists: 158, trophies: 21, internationalCaps: 125 } },
-  { name: "Kaká", nationality: "Brazil", isIcon: true, stats: { appearances: 618, goals: 192, assists: 135, trophies: 13, internationalCaps: 92 } },
-  { name: "George Best", nationality: "Northern Ireland", isIcon: true, stats: { appearances: 586, goals: 205, assists: 95, trophies: 6, internationalCaps: 37 } },
-  { name: "Michel Platini", nationality: "France", isIcon: true, stats: { appearances: 580, goals: 312, assists: 156, trophies: 12, internationalCaps: 72 } },
-  { name: "Eusébio", nationality: "Portugal", isIcon: true, stats: { appearances: 614, goals: 623, assists: 135, trophies: 15, internationalCaps: 64 } },
-  { name: "Marco van Basten", nationality: "Netherlands", isIcon: true, stats: { appearances: 373, goals: 277, assists: 89, trophies: 11, internationalCaps: 58 } },
-  { name: "Gerd Müller", nationality: "Germany", isIcon: true, stats: { appearances: 607, goals: 566, assists: 98, trophies: 16, internationalCaps: 62 } },
-  { name: "Romário", nationality: "Brazil", isIcon: true, stats: { appearances: 740, goals: 755, assists: 165, trophies: 17, internationalCaps: 70 } },
-  { name: "Alessandro Del Piero", nationality: "Italy", isIcon: true, stats: { appearances: 705, goals: 289, assists: 124, trophies: 16, internationalCaps: 91 } },
-  { name: "Rivaldo", nationality: "Brazil", isIcon: true, stats: { appearances: 676, goals: 292, assists: 128, trophies: 14, internationalCaps: 74 } },
-  { name: "Michael Owen", nationality: "England", isIcon: true, stats: { appearances: 482, goals: 222, assists: 58, trophies: 7, internationalCaps: 89 } },
-  { name: "Raúl", nationality: "Spain", isIcon: true, stats: { appearances: 862, goals: 399, assists: 132, trophies: 21, internationalCaps: 102 } },
-  { name: "Andriy Shevchenko", nationality: "Ukraine", isIcon: true, stats: { appearances: 651, goals: 342, assists: 87, trophies: 14, internationalCaps: 111 } },
-  { name: "Patrick Vieira", nationality: "France", isIcon: true, stats: { appearances: 698, goals: 54, assists: 68, trophies: 14, internationalCaps: 107 } },
-  { name: "Ruud Gullit", nationality: "Netherlands", isIcon: true, stats: { appearances: 483, goals: 176, assists: 98, trophies: 11, internationalCaps: 66 } },
-  { name: "Dennis Bergkamp", nationality: "Netherlands", isIcon: true, stats: { appearances: 638, goals: 201, assists: 172, trophies: 10, internationalCaps: 79 } },
-  { name: "Alan Shearer", nationality: "England", isIcon: true, stats: { appearances: 559, goals: 283, assists: 72, trophies: 4, internationalCaps: 63 } },
-  { name: "Ryan Giggs", nationality: "Wales", isIcon: true, stats: { appearances: 963, goals: 168, assists: 254, trophies: 36, internationalCaps: 64 } },
-  { name: "Roy Keane", nationality: "Ireland", isIcon: true, stats: { appearances: 602, goals: 62, assists: 48, trophies: 17, internationalCaps: 67 } },
-  { name: "Xavi", nationality: "Spain", isIcon: true, stats: { appearances: 940, goals: 85, assists: 236, trophies: 33, internationalCaps: 133 } },
-  { name: "Andrés Iniesta", nationality: "Spain", isIcon: true, stats: { appearances: 874, goals: 86, assists: 179, trophies: 37, internationalCaps: 131 } },
-  { name: "Carles Puyol", nationality: "Spain", isIcon: true, stats: { appearances: 593, goals: 18, assists: 14, trophies: 22, internationalCaps: 100 } },
-  { name: "Roberto Baggio", nationality: "Italy", isIcon: true, stats: { appearances: 490, goals: 236, assists: 88, trophies: 5, internationalCaps: 56 } },
-  { name: "Fabio Cannavaro", nationality: "Italy", isIcon: true, stats: { appearances: 669, goals: 16, assists: 5, trophies: 12, internationalCaps: 136 } },
-  { name: "Cafu", nationality: "Brazil", isIcon: true, stats: { appearances: 801, goals: 36, assists: 89, trophies: 19, internationalCaps: 142 } },
+  // Spain. Caps: rsssf.org span-recintlp and the Spain national team records article.
+  { name: "Sergio Ramos", nationality: "Spain", isIcon: false, stats: { appearances: 830, goals: 101, internationalCaps: 180 } },
+  { name: "Iker Casillas", nationality: "Spain", isIcon: true, stats: { appearances: 870, goals: 0, internationalCaps: 167 } },
+  { name: "Sergio Busquets", nationality: "Spain", isIcon: false, stats: { appearances: 782, goals: 18, internationalCaps: 143 } },
+  { name: "Xavi", nationality: "Spain", isIcon: true, stats: { appearances: 940, goals: 85, internationalCaps: 133 } },
+  { name: "Andrés Iniesta", nationality: "Spain", isIcon: true, stats: { appearances: 874, goals: 86, internationalCaps: 131 } },
+  { name: "David Silva", nationality: "Spain", isIcon: false, stats: { appearances: 680, goals: 115, internationalCaps: 125 } },
+  { name: "Cesc Fàbregas", nationality: "Spain", isIcon: false, stats: { appearances: 752, goals: 98, internationalCaps: 110 } },
+  { name: "Fernando Torres", nationality: "Spain", isIcon: false, stats: { appearances: 680, goals: 262, internationalCaps: 110 } },
+  { name: "Raúl", nationality: "Spain", isIcon: true, stats: { appearances: 862, goals: 399, internationalCaps: 102 } },
+  { name: "Gerard Piqué", nationality: "Spain", isIcon: false, stats: { appearances: 650, goals: 54, internationalCaps: 102 } },
+  { name: "Carles Puyol", nationality: "Spain", isIcon: true, stats: { appearances: 593, goals: 18, internationalCaps: 100 } },
+  { name: "Jordi Alba", nationality: "Spain", isIcon: false, stats: { appearances: 590, goals: 26, internationalCaps: 93 } },
+  { name: "Álvaro Morata", nationality: "Spain", isIcon: false, stats: { appearances: 530, goals: 195, internationalCaps: 87 } },
 
-  // Modern Legends (updated career totals for 25/26 season)
-  { name: "Cristiano Ronaldo", nationality: "Portugal", isIcon: false, stats: { appearances: 1240, goals: 940, assists: 280, trophies: 34, internationalCaps: 218 } },
-  { name: "Lionel Messi", nationality: "Argentina", isIcon: false, stats: { appearances: 1110, goals: 860, assists: 390, trophies: 45, internationalCaps: 190 } },
-  { name: "Neymar", nationality: "Brazil", isIcon: false, stats: { appearances: 620, goals: 280, assists: 202, trophies: 24, internationalCaps: 128 } },
-  { name: "Kylian Mbappé", nationality: "France", isIcon: false, stats: { appearances: 460, goals: 310, assists: 125, trophies: 19, internationalCaps: 92 } },
-  { name: "Robert Lewandowski", nationality: "Poland", isIcon: false, stats: { appearances: 910, goals: 672, assists: 150, trophies: 25, internationalCaps: 160 } },
-  { name: "Erling Haaland", nationality: "Norway", isIcon: false, stats: { appearances: 330, goals: 280, assists: 48, trophies: 11, internationalCaps: 42 } },
-  { name: "Mohamed Salah", nationality: "Egypt", isIcon: false, stats: { appearances: 720, goals: 340, assists: 165, trophies: 12, internationalCaps: 110 } },
-  { name: "Kevin De Bruyne", nationality: "Belgium", isIcon: false, stats: { appearances: 610, goals: 120, assists: 255, trophies: 17, internationalCaps: 108 } },
-  { name: "Luka Modrić", nationality: "Croatia", isIcon: false, stats: { appearances: 850, goals: 80, assists: 170, trophies: 25, internationalCaps: 182 } },
-  { name: "Toni Kroos", nationality: "Germany", isIcon: false, stats: { appearances: 735, goals: 52, assists: 148, trophies: 29, internationalCaps: 114 } },
-  { name: "Sergio Ramos", nationality: "Spain", isIcon: false, stats: { appearances: 830, goals: 101, assists: 42, trophies: 28, internationalCaps: 180 } },
-  { name: "Virgil van Dijk", nationality: "Netherlands", isIcon: false, stats: { appearances: 575, goals: 48, assists: 19, trophies: 9, internationalCaps: 75 } },
-  { name: "Karim Benzema", nationality: "France", isIcon: false, stats: { appearances: 860, goals: 435, assists: 185, trophies: 25, internationalCaps: 97 } },
-  { name: "Luis Suárez", nationality: "Uruguay", isIcon: false, stats: { appearances: 770, goals: 500, assists: 245, trophies: 20, internationalCaps: 140 } },
-  { name: "Zlatan Ibrahimović", nationality: "Sweden", isIcon: false, stats: { appearances: 860, goals: 496, assists: 182, trophies: 32, internationalCaps: 122 } },
-  { name: "Thomas Müller", nationality: "Germany", isIcon: false, stats: { appearances: 730, goals: 245, assists: 255, trophies: 32, internationalCaps: 131 } },
-  { name: "Wayne Rooney", nationality: "England", isIcon: false, stats: { appearances: 763, goals: 313, assists: 145, trophies: 16, internationalCaps: 120 } },
-  { name: "Franck Ribéry", nationality: "France", isIcon: false, stats: { appearances: 620, goals: 135, assists: 204, trophies: 24, internationalCaps: 81 } },
-  { name: "Arjen Robben", nationality: "Netherlands", isIcon: false, stats: { appearances: 615, goals: 248, assists: 148, trophies: 21, internationalCaps: 96 } },
-  { name: "Andrea Pirlo", nationality: "Italy", isIcon: false, stats: { appearances: 686, goals: 58, assists: 152, trophies: 16, internationalCaps: 116 } },
-  { name: "Samuel Eto'o", nationality: "Cameroon", isIcon: false, stats: { appearances: 718, goals: 395, assists: 98, trophies: 18, internationalCaps: 118 } },
-  { name: "Didier Drogba", nationality: "Ivory Coast", isIcon: false, stats: { appearances: 650, goals: 305, assists: 85, trophies: 15, internationalCaps: 105 } },
-  { name: "Frank Lampard", nationality: "England", isIcon: false, stats: { appearances: 898, goals: 271, assists: 168, trophies: 15, internationalCaps: 106 } },
-  { name: "Steven Gerrard", nationality: "England", isIcon: false, stats: { appearances: 748, goals: 186, assists: 145, trophies: 10, internationalCaps: 114 } },
-  { name: "Robin van Persie", nationality: "Netherlands", isIcon: false, stats: { appearances: 558, goals: 276, assists: 85, trophies: 5, internationalCaps: 102 } },
-  { name: "Fernando Torres", nationality: "Spain", isIcon: false, stats: { appearances: 680, goals: 262, assists: 80, trophies: 10, internationalCaps: 110 } },
-  { name: "David Silva", nationality: "Spain", isIcon: false, stats: { appearances: 680, goals: 115, assists: 210, trophies: 17, internationalCaps: 125 } },
-  { name: "Mesut Özil", nationality: "Germany", isIcon: false, stats: { appearances: 580, goals: 85, assists: 225, trophies: 10, internationalCaps: 92 } },
-  { name: "Edinson Cavani", nationality: "Uruguay", isIcon: false, stats: { appearances: 680, goals: 405, assists: 68, trophies: 13, internationalCaps: 136 } },
-  { name: "Pierre-Emerick Aubameyang", nationality: "Gabon", isIcon: false, stats: { appearances: 585, goals: 310, assists: 72, trophies: 7, internationalCaps: 72 } },
-  { name: "Sergio Agüero", nationality: "Argentina", isIcon: false, stats: { appearances: 692, goals: 379, assists: 105, trophies: 18, internationalCaps: 101 } },
-  { name: "Antoine Griezmann", nationality: "France", isIcon: false, stats: { appearances: 720, goals: 275, assists: 150, trophies: 10, internationalCaps: 140 } },
-  { name: "Eden Hazard", nationality: "Belgium", isIcon: false, stats: { appearances: 574, goals: 153, assists: 150, trophies: 12, internationalCaps: 126 } },
-  { name: "Sadio Mané", nationality: "Senegal", isIcon: false, stats: { appearances: 620, goals: 235, assists: 102, trophies: 11, internationalCaps: 110 } },
-  { name: "Son Heung-min", nationality: "South Korea", isIcon: false, stats: { appearances: 600, goals: 220, assists: 96, trophies: 2, internationalCaps: 130 } },
-  { name: "Harry Kane", nationality: "England", isIcon: false, stats: { appearances: 640, goals: 395, assists: 105, trophies: 4, internationalCaps: 105 } },
-  { name: "Vinicius Jr", nationality: "Brazil", isIcon: false, stats: { appearances: 360, goals: 132, assists: 98, trophies: 13, internationalCaps: 44 } },
-  { name: "Jude Bellingham", nationality: "England", isIcon: false, stats: { appearances: 300, goals: 78, assists: 62, trophies: 7, internationalCaps: 48 } },
-  { name: "Bukayo Saka", nationality: "England", isIcon: false, stats: { appearances: 290, goals: 78, assists: 72, trophies: 1, internationalCaps: 46 } },
-  { name: "Phil Foden", nationality: "England", isIcon: false, stats: { appearances: 315, goals: 88, assists: 62, trophies: 16, internationalCaps: 48 } },
-  { name: "Pedri", nationality: "Spain", isIcon: false, stats: { appearances: 245, goals: 27, assists: 34, trophies: 7, internationalCaps: 40 } },
-  { name: "Gavi", nationality: "Spain", isIcon: false, stats: { appearances: 185, goals: 15, assists: 22, trophies: 6, internationalCaps: 32 } },
-  { name: "Jamal Musiala", nationality: "Germany", isIcon: false, stats: { appearances: 250, goals: 65, assists: 46, trophies: 6, internationalCaps: 44 } },
-  { name: "Florian Wirtz", nationality: "Germany", isIcon: false, stats: { appearances: 235, goals: 60, assists: 60, trophies: 4, internationalCaps: 36 } },
-  { name: "Lamine Yamal", nationality: "Spain", isIcon: false, stats: { appearances: 120, goals: 22, assists: 28, trophies: 4, internationalCaps: 28 } },
-  { name: "N'Golo Kanté", nationality: "France", isIcon: false, stats: { appearances: 550, goals: 24, assists: 36, trophies: 12, internationalCaps: 56 } },
-  { name: "Raphaël Varane", nationality: "France", isIcon: false, stats: { appearances: 510, goals: 20, assists: 8, trophies: 22, internationalCaps: 93 } },
-  { name: "Thibaut Courtois", nationality: "Belgium", isIcon: false, stats: { appearances: 570, goals: 0, assists: 2, trophies: 15, internationalCaps: 106 } },
-  { name: "Alisson Becker", nationality: "Brazil", isIcon: false, stats: { appearances: 475, goals: 1, assists: 4, trophies: 11, internationalCaps: 70 } },
-  { name: "Manuel Neuer", nationality: "Germany", isIcon: false, stats: { appearances: 750, goals: 0, assists: 2, trophies: 28, internationalCaps: 124 } },
-  { name: "Jan Oblak", nationality: "Slovenia", isIcon: false, stats: { appearances: 520, goals: 0, assists: 0, trophies: 5, internationalCaps: 72 } },
-  { name: "Marc-André ter Stegen", nationality: "Germany", isIcon: false, stats: { appearances: 490, goals: 0, assists: 5, trophies: 15, internationalCaps: 42 } },
-  { name: "Gianluigi Buffon", nationality: "Italy", isIcon: true, stats: { appearances: 1125, goals: 0, assists: 3, trophies: 25, internationalCaps: 176 } },
-  { name: "Iker Casillas", nationality: "Spain", isIcon: true, stats: { appearances: 870, goals: 0, assists: 2, trophies: 25, internationalCaps: 167 } },
-  { name: "Petr Čech", nationality: "Czech Republic", isIcon: false, stats: { appearances: 670, goals: 0, assists: 1, trophies: 17, internationalCaps: 124 } },
-  { name: "Dani Alves", nationality: "Brazil", isIcon: false, stats: { appearances: 910, goals: 72, assists: 175, trophies: 43, internationalCaps: 126 } },
-  { name: "Marcelo", nationality: "Brazil", isIcon: false, stats: { appearances: 680, goals: 51, assists: 124, trophies: 25, internationalCaps: 58 } },
-  { name: "Philipp Lahm", nationality: "Germany", isIcon: true, stats: { appearances: 560, goals: 17, assists: 72, trophies: 21, internationalCaps: 113 } },
-  { name: "Gerard Piqué", nationality: "Spain", isIcon: false, stats: { appearances: 650, goals: 54, assists: 12, trophies: 30, internationalCaps: 102 } },
-  { name: "Sergio Busquets", nationality: "Spain", isIcon: false, stats: { appearances: 782, goals: 18, assists: 45, trophies: 32, internationalCaps: 143 } },
-  { name: "Trent Alexander-Arnold", nationality: "England", isIcon: false, stats: { appearances: 375, goals: 24, assists: 95, trophies: 9, internationalCaps: 36 } },
-  { name: "Achraf Hakimi", nationality: "Morocco", isIcon: false, stats: { appearances: 345, goals: 38, assists: 68, trophies: 11, internationalCaps: 82 } },
-  { name: "João Cancelo", nationality: "Portugal", isIcon: false, stats: { appearances: 440, goals: 18, assists: 55, trophies: 10, internationalCaps: 52 } },
-  { name: "Andrew Robertson", nationality: "Scotland", isIcon: false, stats: { appearances: 455, goals: 11, assists: 82, trophies: 9, internationalCaps: 78 } },
-  { name: "Kyle Walker", nationality: "England", isIcon: false, stats: { appearances: 620, goals: 8, assists: 55, trophies: 17, internationalCaps: 86 } },
-  { name: "Jordi Alba", nationality: "Spain", isIcon: false, stats: { appearances: 590, goals: 26, assists: 105, trophies: 17, internationalCaps: 93 } },
-  { name: "Casemiro", nationality: "Brazil", isIcon: false, stats: { appearances: 580, goals: 44, assists: 34, trophies: 21, internationalCaps: 78 } },
-  { name: "Joshua Kimmich", nationality: "Germany", isIcon: false, stats: { appearances: 465, goals: 34, assists: 98, trophies: 16, internationalCaps: 100 } },
-  { name: "Bruno Fernandes", nationality: "Portugal", isIcon: false, stats: { appearances: 565, goals: 152, assists: 142, trophies: 5, internationalCaps: 70 } },
-  { name: "Bernardo Silva", nationality: "Portugal", isIcon: false, stats: { appearances: 515, goals: 75, assists: 90, trophies: 18, internationalCaps: 90 } },
-  { name: "Martin Ødegaard", nationality: "Norway", isIcon: false, stats: { appearances: 375, goals: 65, assists: 80, trophies: 1, internationalCaps: 66 } },
-  { name: "Rodri", nationality: "Spain", isIcon: false, stats: { appearances: 395, goals: 39, assists: 44, trophies: 14, internationalCaps: 66 } },
-  { name: "Declan Rice", nationality: "England", isIcon: false, stats: { appearances: 355, goals: 21, assists: 24, trophies: 2, internationalCaps: 60 } },
-  { name: "Marcus Rashford", nationality: "England", isIcon: false, stats: { appearances: 435, goals: 142, assists: 66, trophies: 5, internationalCaps: 64 } },
-  { name: "Raheem Sterling", nationality: "England", isIcon: false, stats: { appearances: 585, goals: 160, assists: 100, trophies: 13, internationalCaps: 84 } },
-  { name: "Jack Grealish", nationality: "England", isIcon: false, stats: { appearances: 370, goals: 45, assists: 58, trophies: 8, internationalCaps: 40 } },
-  { name: "James Maddison", nationality: "England", isIcon: false, stats: { appearances: 365, goals: 62, assists: 66, trophies: 1, internationalCaps: 12 } },
-  { name: "Cole Palmer", nationality: "England", isIcon: false, stats: { appearances: 210, goals: 68, assists: 44, trophies: 5, internationalCaps: 24 } },
-  { name: "Leroy Sané", nationality: "Germany", isIcon: false, stats: { appearances: 430, goals: 95, assists: 85, trophies: 12, internationalCaps: 60 } },
-  { name: "Kingsley Coman", nationality: "France", isIcon: false, stats: { appearances: 410, goals: 66, assists: 68, trophies: 27, internationalCaps: 58 } },
-  { name: "Ousmane Dembélé", nationality: "France", isIcon: false, stats: { appearances: 400, goals: 80, assists: 82, trophies: 9, internationalCaps: 50 } },
-  { name: "Rafael Leão", nationality: "Portugal", isIcon: false, stats: { appearances: 315, goals: 70, assists: 50, trophies: 3, internationalCaps: 35 } },
-  { name: "Federico Valverde", nationality: "Uruguay", isIcon: false, stats: { appearances: 325, goals: 33, assists: 36, trophies: 13, internationalCaps: 65 } },
-  { name: "Rúben Dias", nationality: "Portugal", isIcon: false, stats: { appearances: 375, goals: 13, assists: 6, trophies: 11, internationalCaps: 58 } },
-  { name: "William Saliba", nationality: "France", isIcon: false, stats: { appearances: 255, goals: 8, assists: 4, trophies: 2, internationalCaps: 28 } },
-  { name: "Kim Min-jae", nationality: "South Korea", isIcon: false, stats: { appearances: 295, goals: 9, assists: 4, trophies: 6, internationalCaps: 60 } },
-  { name: "Antonio Rüdiger", nationality: "Germany", isIcon: false, stats: { appearances: 475, goals: 20, assists: 9, trophies: 11, internationalCaps: 70 } },
-  { name: "Marquinhos", nationality: "Brazil", isIcon: false, stats: { appearances: 565, goals: 40, assists: 16, trophies: 23, internationalCaps: 90 } },
-  { name: "Thiago Silva", nationality: "Brazil", isIcon: false, stats: { appearances: 730, goals: 35, assists: 12, trophies: 25, internationalCaps: 115 } },
-  { name: "Giorgio Chiellini", nationality: "Italy", isIcon: false, stats: { appearances: 685, goals: 36, assists: 15, trophies: 18, internationalCaps: 117 } },
-  { name: "Leonardo Bonucci", nationality: "Italy", isIcon: false, stats: { appearances: 680, goals: 35, assists: 18, trophies: 15, internationalCaps: 121 } },
-  { name: "Ciro Immobile", nationality: "Italy", isIcon: false, stats: { appearances: 555, goals: 272, assists: 58, trophies: 3, internationalCaps: 57 } },
-  { name: "Radamel Falcao", nationality: "Colombia", isIcon: false, stats: { appearances: 580, goals: 315, assists: 42, trophies: 12, internationalCaps: 105 } },
-  { name: "Diego Costa", nationality: "Spain", isIcon: false, stats: { appearances: 480, goals: 210, assists: 42, trophies: 8, internationalCaps: 24 } },
-  { name: "Alexis Sánchez", nationality: "Chile", isIcon: false, stats: { appearances: 650, goals: 240, assists: 120, trophies: 9, internationalCaps: 158 } },
-  { name: "Mauro Icardi", nationality: "Argentina", isIcon: false, stats: { appearances: 425, goals: 230, assists: 45, trophies: 6, internationalCaps: 8 } },
-  { name: "Romelu Lukaku", nationality: "Belgium", isIcon: false, stats: { appearances: 635, goals: 322, assists: 86, trophies: 9, internationalCaps: 120 } },
-  { name: "Dries Mertens", nationality: "Belgium", isIcon: false, stats: { appearances: 590, goals: 222, assists: 110, trophies: 3, internationalCaps: 112 } },
-  { name: "Yaya Touré", nationality: "Ivory Coast", isIcon: false, stats: { appearances: 580, goals: 88, assists: 62, trophies: 14, internationalCaps: 101 } },
-  { name: "Arturo Vidal", nationality: "Chile", isIcon: false, stats: { appearances: 640, goals: 95, assists: 68, trophies: 22, internationalCaps: 142 } },
-  { name: "Ivan Rakitić", nationality: "Croatia", isIcon: false, stats: { appearances: 670, goals: 85, assists: 110, trophies: 14, internationalCaps: 106 } },
-  { name: "Mats Hummels", nationality: "Germany", isIcon: false, stats: { appearances: 610, goals: 44, assists: 24, trophies: 8, internationalCaps: 78 } },
-  { name: "Pepe", nationality: "Portugal", isIcon: false, stats: { appearances: 680, goals: 38, assists: 8, trophies: 18, internationalCaps: 141 } },
-  { name: "Hugo Lloris", nationality: "France", isIcon: false, stats: { appearances: 680, goals: 0, assists: 0, trophies: 3, internationalCaps: 145 } },
-  { name: "David de Gea", nationality: "Spain", isIcon: false, stats: { appearances: 560, goals: 0, assists: 2, trophies: 8, internationalCaps: 45 } },
-  { name: "Keylor Navas", nationality: "Costa Rica", isIcon: false, stats: { appearances: 530, goals: 0, assists: 0, trophies: 15, internationalCaps: 113 } },
-  { name: "Ederson", nationality: "Brazil", isIcon: false, stats: { appearances: 380, goals: 0, assists: 5, trophies: 16, internationalCaps: 25 } },
-  { name: "Lautaro Martínez", nationality: "Argentina", isIcon: false, stats: { appearances: 390, goals: 192, assists: 56, trophies: 9, internationalCaps: 68 } },
-  { name: "Viktor Gyökeres", nationality: "Sweden", isIcon: false, stats: { appearances: 320, goals: 155, assists: 48, trophies: 3, internationalCaps: 38 } },
-  { name: "Alexander Isak", nationality: "Sweden", isIcon: false, stats: { appearances: 345, goals: 140, assists: 42, trophies: 1, internationalCaps: 58 } },
-  { name: "Ollie Watkins", nationality: "England", isIcon: false, stats: { appearances: 375, goals: 122, assists: 40, trophies: 1, internationalCaps: 22 } },
-  { name: "Darwin Núñez", nationality: "Uruguay", isIcon: false, stats: { appearances: 325, goals: 132, assists: 36, trophies: 5, internationalCaps: 48 } },
-  { name: "Julián Álvarez", nationality: "Argentina", isIcon: false, stats: { appearances: 310, goals: 118, assists: 48, trophies: 11, internationalCaps: 44 } },
-  { name: "Khvicha Kvaratskhelia", nationality: "Georgia", isIcon: false, stats: { appearances: 275, goals: 64, assists: 55, trophies: 4, internationalCaps: 45 } },
-  { name: "Cesc Fàbregas", nationality: "Spain", isIcon: false, stats: { appearances: 752, goals: 98, assists: 210, trophies: 12, internationalCaps: 110 } },
-  { name: "Wesley Sneijder", nationality: "Netherlands", isIcon: false, stats: { appearances: 610, goals: 105, assists: 132, trophies: 15, internationalCaps: 134 } },
+  // England. Caps: rsssf.org eng-recintlp and the list of England internationals.
+  { name: "Wayne Rooney", nationality: "England", isIcon: false, stats: { appearances: 763, goals: 313, internationalCaps: 120 } },
+  { name: "David Beckham", nationality: "England", isIcon: true, stats: { appearances: 719, goals: 127, internationalCaps: 115 } },
+  { name: "Steven Gerrard", nationality: "England", isIcon: false, stats: { appearances: 748, goals: 186, internationalCaps: 114 } },
+  { name: "Frank Lampard", nationality: "England", isIcon: false, stats: { appearances: 898, goals: 271, internationalCaps: 106 } },
+  { name: "Bobby Charlton", nationality: "England", isIcon: true, stats: { appearances: 758, goals: 249, internationalCaps: 106 } },
+  { name: "Kyle Walker", nationality: "England", isIcon: false, stats: { appearances: 620, goals: 8, internationalCaps: 96 } },
+  { name: "Michael Owen", nationality: "England", isIcon: true, stats: { appearances: 482, goals: 222, internationalCaps: 89 } },
+  { name: "Alan Shearer", nationality: "England", isIcon: true, stats: { appearances: 559, goals: 283, internationalCaps: 63 } },
 
-  // Additional players
-  { name: "Ronaldo de Assis (R10)", nationality: "Brazil", isIcon: true, stats: { appearances: 615, goals: 205, assists: 166, trophies: 16, internationalCaps: 97 } },
-  { name: "Lev Yashin", nationality: "Russia", isIcon: true, stats: { appearances: 570, goals: 0, assists: 0, trophies: 11, internationalCaps: 74 } },
-  { name: "Alfredo Di Stéfano", nationality: "Argentina", isIcon: true, stats: { appearances: 654, goals: 510, assists: 120, trophies: 18, internationalCaps: 31 } },
-  { name: "Ferenc Puskás", nationality: "Hungary", isIcon: true, stats: { appearances: 530, goals: 620, assists: 85, trophies: 17, internationalCaps: 85 } },
-  { name: "Lothar Matthäus", nationality: "Germany", isIcon: true, stats: { appearances: 710, goals: 159, assists: 95, trophies: 14, internationalCaps: 150 } },
-  { name: "Giacinto Facchetti", nationality: "Italy", isIcon: true, stats: { appearances: 634, goals: 75, assists: 42, trophies: 10, internationalCaps: 94 } },
-  { name: "Bobby Charlton", nationality: "England", isIcon: true, stats: { appearances: 758, goals: 249, assists: 92, trophies: 12, internationalCaps: 106 } },
-  { name: "Hristo Stoichkov", nationality: "Bulgaria", isIcon: true, stats: { appearances: 595, goals: 259, assists: 112, trophies: 12, internationalCaps: 83 } },
-  { name: "Peter Schmeichel", nationality: "Denmark", isIcon: true, stats: { appearances: 693, goals: 0, assists: 1, trophies: 16, internationalCaps: 129 } },
-  { name: "Oliver Kahn", nationality: "Germany", isIcon: true, stats: { appearances: 632, goals: 0, assists: 0, trophies: 17, internationalCaps: 86 } },
+  // Brazil. Caps: rsssf.org braz-recintlp and the Brazil national team records article.
+  { name: "Cafu", nationality: "Brazil", isIcon: true, stats: { appearances: 801, goals: 36, internationalCaps: 142 } },
+  { name: "Dani Alves", nationality: "Brazil", isIcon: false, stats: { appearances: 910, goals: 72, internationalCaps: 126 } },
+  { name: "Roberto Carlos", nationality: "Brazil", isIcon: true, stats: { appearances: 850, goals: 113, internationalCaps: 125 } },
+  { name: "Thiago Silva", nationality: "Brazil", isIcon: false, stats: { appearances: 730, goals: 35, internationalCaps: 113 } },
+  { name: "Ronaldo Nazário", nationality: "Brazil", isIcon: true, stats: { appearances: 518, goals: 352, internationalCaps: 98 } },
+  { name: "Pelé", nationality: "Brazil", isIcon: true, stats: { appearances: 647, goals: 606, internationalCaps: 92 } },
 
-  // More active players (25/26 season)
-  { name: "Granit Xhaka", nationality: "Switzerland", isIcon: false, stats: { appearances: 560, goals: 48, assists: 58, trophies: 7, internationalCaps: 130 } },
-  { name: "Nicolò Barella", nationality: "Italy", isIcon: false, stats: { appearances: 380, goals: 42, assists: 60, trophies: 7, internationalCaps: 62 } },
-  { name: "Hakan Çalhanoğlu", nationality: "Turkey", isIcon: false, stats: { appearances: 490, goals: 88, assists: 105, trophies: 5, internationalCaps: 90 } },
-  { name: "Alejandro Grimaldo", nationality: "Spain", isIcon: false, stats: { appearances: 380, goals: 42, assists: 72, trophies: 5, internationalCaps: 18 } },
-  { name: "Theo Hernández", nationality: "France", isIcon: false, stats: { appearances: 330, goals: 36, assists: 48, trophies: 4, internationalCaps: 28 } },
-  { name: "Dayot Upamecano", nationality: "France", isIcon: false, stats: { appearances: 310, goals: 10, assists: 6, trophies: 8, internationalCaps: 30 } },
-  { name: "Jules Koundé", nationality: "France", isIcon: false, stats: { appearances: 295, goals: 10, assists: 12, trophies: 5, internationalCaps: 35 } },
-  { name: "Ronald Araújo", nationality: "Uruguay", isIcon: false, stats: { appearances: 200, goals: 10, assists: 2, trophies: 5, internationalCaps: 35 } },
-  { name: "Dani Carvajal", nationality: "Spain", isIcon: false, stats: { appearances: 490, goals: 18, assists: 62, trophies: 24, internationalCaps: 52 } },
-  { name: "Toni Rüdiger", nationality: "Germany", isIcon: false, stats: { appearances: 475, goals: 20, assists: 9, trophies: 11, internationalCaps: 70 } },
-  { name: "Emiliano Martínez", nationality: "Argentina", isIcon: false, stats: { appearances: 350, goals: 0, assists: 1, trophies: 6, internationalCaps: 52 } },
-  { name: "Mike Maignan", nationality: "France", isIcon: false, stats: { appearances: 320, goals: 0, assists: 2, trophies: 5, internationalCaps: 28 } },
-  { name: "Diogo Jota", nationality: "Portugal", isIcon: false, stats: { appearances: 370, goals: 112, assists: 42, trophies: 7, internationalCaps: 42 } },
-  { name: "Dušan Vlahović", nationality: "Serbia", isIcon: false, stats: { appearances: 300, goals: 128, assists: 22, trophies: 2, internationalCaps: 35 } },
-  { name: "Victor Osimhen", nationality: "Nigeria", isIcon: false, stats: { appearances: 310, goals: 148, assists: 24, trophies: 3, internationalCaps: 38 } },
-  { name: "Kai Havertz", nationality: "Germany", isIcon: false, stats: { appearances: 380, goals: 88, assists: 48, trophies: 5, internationalCaps: 52 } },
-  { name: "Aurélien Tchouaméni", nationality: "France", isIcon: false, stats: { appearances: 280, goals: 14, assists: 12, trophies: 5, internationalCaps: 42 } },
-  { name: "Enzo Fernández", nationality: "Argentina", isIcon: false, stats: { appearances: 245, goals: 18, assists: 25, trophies: 5, internationalCaps: 30 } },
-  { name: "Moisés Caicedo", nationality: "Ecuador", isIcon: false, stats: { appearances: 225, goals: 10, assists: 8, trophies: 1, internationalCaps: 42 } },
-  { name: "Sandro Tonali", nationality: "Italy", isIcon: false, stats: { appearances: 260, goals: 16, assists: 18, trophies: 4, internationalCaps: 22 } },
-  { name: "Kobbie Mainoo", nationality: "England", isIcon: false, stats: { appearances: 95, goals: 6, assists: 8, trophies: 1, internationalCaps: 16 } },
-  { name: "Warren Zaïre-Emery", nationality: "France", isIcon: false, stats: { appearances: 120, goals: 8, assists: 12, trophies: 4, internationalCaps: 18 } },
-  { name: "Mathys Tel", nationality: "France", isIcon: false, stats: { appearances: 130, goals: 22, assists: 10, trophies: 3, internationalCaps: 6 } },
-  { name: "Xavi Simons", nationality: "Netherlands", isIcon: false, stats: { appearances: 175, goals: 38, assists: 28, trophies: 2, internationalCaps: 22 } },
-  { name: "Nico Williams", nationality: "Spain", isIcon: false, stats: { appearances: 175, goals: 28, assists: 32, trophies: 3, internationalCaps: 28 } },
-  { name: "Alejandro Garnacho", nationality: "Argentina", isIcon: false, stats: { appearances: 140, goals: 24, assists: 16, trophies: 2, internationalCaps: 10 } },
-  { name: "João Félix", nationality: "Portugal", isIcon: false, stats: { appearances: 325, goals: 78, assists: 38, trophies: 2, internationalCaps: 35 } },
-  { name: "Álvaro Morata", nationality: "Spain", isIcon: false, stats: { appearances: 530, goals: 195, assists: 52, trophies: 14, internationalCaps: 86 } },
-  { name: "Ángel Di María", nationality: "Argentina", isIcon: false, stats: { appearances: 780, goals: 165, assists: 210, trophies: 24, internationalCaps: 145 } },
-  { name: "Ivan Perišić", nationality: "Croatia", isIcon: false, stats: { appearances: 620, goals: 120, assists: 118, trophies: 11, internationalCaps: 120 } },
-  { name: "David Alaba", nationality: "Austria", isIcon: false, stats: { appearances: 515, goals: 40, assists: 62, trophies: 28, internationalCaps: 105 } },
-  { name: "Marco Reus", nationality: "Germany", isIcon: false, stats: { appearances: 528, goals: 170, assists: 131, trophies: 4, internationalCaps: 48 } },
-  { name: "Paulo Dybala", nationality: "Argentina", isIcon: false, stats: { appearances: 475, goals: 155, assists: 82, trophies: 10, internationalCaps: 35 } },
-  { name: "James Rodríguez", nationality: "Colombia", isIcon: false, stats: { appearances: 520, goals: 98, assists: 132, trophies: 11, internationalCaps: 110 } },
-  { name: "Gerard Moreno", nationality: "Spain", isIcon: false, stats: { appearances: 420, goals: 145, assists: 42, trophies: 2, internationalCaps: 22 } },
-  { name: "Iker Muniain", nationality: "Spain", isIcon: false, stats: { appearances: 520, goals: 65, assists: 72, trophies: 2, internationalCaps: 10 } },
-  { name: "Lorenzo Insigne", nationality: "Italy", isIcon: false, stats: { appearances: 510, goals: 120, assists: 95, trophies: 3, internationalCaps: 54 } },
-  { name: "Jamie Vardy", nationality: "England", isIcon: false, stats: { appearances: 525, goals: 205, assists: 62, trophies: 2, internationalCaps: 26 } },
-  { name: "Ilkay Gündoğan", nationality: "Germany", isIcon: false, stats: { appearances: 580, goals: 82, assists: 78, trophies: 14, internationalCaps: 82 } },
-  { name: "Christian Eriksen", nationality: "Denmark", isIcon: false, stats: { appearances: 600, goals: 105, assists: 148, trophies: 5, internationalCaps: 132 } },
-  { name: "Maya Yoshida", nationality: "Japan", isIcon: false, stats: { appearances: 580, goals: 30, assists: 8, trophies: 3, internationalCaps: 128 } },
-  { name: "Tim Howard", nationality: "USA", isIcon: false, stats: { appearances: 625, goals: 0, assists: 0, trophies: 3, internationalCaps: 121 } },
-  { name: "Claudio Marchisio", nationality: "Italy", isIcon: false, stats: { appearances: 452, goals: 47, assists: 45, trophies: 10, internationalCaps: 55 } },
+  // Italy. Caps: rsssf.org ital-recintlp and the Italy national team records article.
+  { name: "Gianluigi Buffon", nationality: "Italy", isIcon: true, stats: { appearances: 1125, goals: 0, internationalCaps: 176 } },
+  { name: "Fabio Cannavaro", nationality: "Italy", isIcon: true, stats: { appearances: 669, goals: 16, internationalCaps: 136 } },
+  { name: "Paolo Maldini", nationality: "Italy", isIcon: true, stats: { appearances: 902, goals: 33, internationalCaps: 126 } },
+  { name: "Leonardo Bonucci", nationality: "Italy", isIcon: false, stats: { appearances: 680, goals: 35, internationalCaps: 121 } },
+  { name: "Giorgio Chiellini", nationality: "Italy", isIcon: false, stats: { appearances: 685, goals: 36, internationalCaps: 117 } },
+  { name: "Andrea Pirlo", nationality: "Italy", isIcon: false, stats: { appearances: 686, goals: 58, internationalCaps: 116 } },
+  { name: "Giacinto Facchetti", nationality: "Italy", isIcon: true, stats: { appearances: 634, goals: 75, internationalCaps: 94 } },
+  { name: "Alessandro Del Piero", nationality: "Italy", isIcon: true, stats: { appearances: 705, goals: 289, internationalCaps: 91 } },
+  { name: "Nicolò Barella", nationality: "Italy", isIcon: false, stats: { appearances: 380, goals: 42, internationalCaps: 70 } },
+  { name: "Ciro Immobile", nationality: "Italy", isIcon: false, stats: { appearances: 555, goals: 272, internationalCaps: 57 } },
+  { name: "Roberto Baggio", nationality: "Italy", isIcon: true, stats: { appearances: 490, goals: 236, internationalCaps: 56 } },
+  { name: "Claudio Marchisio", nationality: "Italy", isIcon: false, stats: { appearances: 452, goals: 47, internationalCaps: 55 } },
+  { name: "Lorenzo Insigne", nationality: "Italy", isIcon: false, stats: { appearances: 510, goals: 120, internationalCaps: 54 } },
+  { name: "Sandro Tonali", nationality: "Italy", isIcon: false, stats: { appearances: 260, goals: 16, internationalCaps: 32 } },
+
+  // Germany. Caps: rsssf.org duit-recintlp and the Germany national team records article.
+  { name: "Lothar Matthäus", nationality: "Germany", isIcon: true, stats: { appearances: 710, goals: 159, internationalCaps: 150 } },
+  { name: "Thomas Müller", nationality: "Germany", isIcon: false, stats: { appearances: 730, goals: 245, internationalCaps: 131 } },
+  { name: "Toni Kroos", nationality: "Germany", isIcon: false, stats: { appearances: 735, goals: 52, internationalCaps: 114 } },
+  { name: "Philipp Lahm", nationality: "Germany", isIcon: true, stats: { appearances: 560, goals: 17, internationalCaps: 113 } },
+  { name: "Oliver Kahn", nationality: "Germany", isIcon: true, stats: { appearances: 632, goals: 0, internationalCaps: 86 } },
+  { name: "Gerd Müller", nationality: "Germany", isIcon: true, stats: { appearances: 607, goals: 566, internationalCaps: 62 } },
+  { name: "Marco Reus", nationality: "Germany", isIcon: false, stats: { appearances: 528, goals: 170, internationalCaps: 48 } },
+
+  // France. Caps: rsssf.org fran-recintlp and the France national team records article.
+  { name: "Hugo Lloris", nationality: "France", isIcon: false, stats: { appearances: 680, goals: 0, internationalCaps: 145 } },
+  { name: "Antoine Griezmann", nationality: "France", isIcon: false, stats: { appearances: 720, goals: 275, internationalCaps: 137 } },
+  { name: "Thierry Henry", nationality: "France", isIcon: true, stats: { appearances: 797, goals: 411, internationalCaps: 123 } },
+  { name: "Zinedine Zidane", nationality: "France", isIcon: true, stats: { appearances: 681, goals: 125, internationalCaps: 108 } },
+  { name: "Patrick Vieira", nationality: "France", isIcon: true, stats: { appearances: 698, goals: 54, internationalCaps: 107 } },
+
+  // Portugal. Caps: rsssf.org port-recintlp and the Portugal national team records article.
+  { name: "Pepe", nationality: "Portugal", isIcon: false, stats: { appearances: 680, goals: 38, internationalCaps: 141 } },
+
+  // Argentina. Caps: rsssf.org arg-recintlp and the Argentina national team records article.
+  { name: "Ángel Di María", nationality: "Argentina", isIcon: false, stats: { appearances: 780, goals: 165, internationalCaps: 145 } },
+  { name: "Sergio Agüero", nationality: "Argentina", isIcon: false, stats: { appearances: 692, goals: 379, internationalCaps: 101 } },
+  { name: "Diego Maradona", nationality: "Argentina", isIcon: true, stats: { appearances: 592, goals: 312, internationalCaps: 91 } },
+
+  // Netherlands. Caps: rsssf.org ned-recintlp and the Netherlands national team records article.
+  { name: "Wesley Sneijder", nationality: "Netherlands", isIcon: false, stats: { appearances: 610, goals: 105, internationalCaps: 134 } },
+  { name: "Robin van Persie", nationality: "Netherlands", isIcon: false, stats: { appearances: 558, goals: 276, internationalCaps: 102 } },
+  { name: "Arjen Robben", nationality: "Netherlands", isIcon: false, stats: { appearances: 615, goals: 248, internationalCaps: 96 } },
+  { name: "Dennis Bergkamp", nationality: "Netherlands", isIcon: true, stats: { appearances: 638, goals: 201, internationalCaps: 79 } },
+  { name: "Johan Cruyff", nationality: "Netherlands", isIcon: true, stats: { appearances: 520, goals: 294, internationalCaps: 48 } },
+
+  // Belgium. Caps: rsssf.org belg-recintlp and the Belgium national team records article.
+  { name: "Eden Hazard", nationality: "Belgium", isIcon: false, stats: { appearances: 574, goals: 153, internationalCaps: 126 } },
+  { name: "Dries Mertens", nationality: "Belgium", isIcon: false, stats: { appearances: 590, goals: 222, internationalCaps: 109 } },
+
+  // Croatia. Caps: rsssf.org kroa-recintlp and the Croatia national team records article.
+  { name: "Ivan Rakitić", nationality: "Croatia", isIcon: false, stats: { appearances: 670, goals: 85, internationalCaps: 106 } },
+
+  // Uruguay. Caps: rsssf.org uru-recintlp and the Uruguay national team records article.
+  { name: "Edinson Cavani", nationality: "Uruguay", isIcon: false, stats: { appearances: 680, goals: 405, internationalCaps: 136 } },
+
+  // Chile and Japan. Caps: rsssf.org century list and the 100 or more caps list.
+  { name: "Alexis Sánchez", nationality: "Chile", isIcon: false, stats: { appearances: 650, goals: 240, internationalCaps: 168 } },
+  { name: "Arturo Vidal", nationality: "Chile", isIcon: false, stats: { appearances: 640, goals: 95, internationalCaps: 147 } },
+  { name: "Maya Yoshida", nationality: "Japan", isIcon: false, stats: { appearances: 580, goals: 30, internationalCaps: 126 } },
 ];

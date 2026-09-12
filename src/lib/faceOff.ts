@@ -18,7 +18,11 @@
  * scripts/simFaceOff.mjs can play thousands of duels in node and measure
  * that the rival is the difficulty it says it is.
  */
-import { higherLowerPlayers } from '@/data/higherLowerPlayers';
+import {
+  higherLowerPlayers,
+  HL_UNVERIFIED_STATS,
+  HL_UNVERIFIED_NOTE,
+} from '@/data/higherLowerPlayers';
 import { nbaHLPlayers } from '@/data/nbaHLPlayers';
 import { mlbHLPlayers } from '@/data/mlbHLPlayers';
 import { NFL_HL_CATEGORIES } from '@/data/nflHLCategories';
@@ -82,17 +86,25 @@ export interface Category {
   question: string;
   unit: string;
   pool: Athlete[];
+  /** Round 535: a category whose numbers the pool has not finished verifying
+   *  carries the pool's own note, and the reveal prints it. Undefined means
+   *  the numbers are verified and there is nothing to say. */
+  note?: string;
 }
 
 /* Built inside a function, never at module scope: the data files are large
    and an import cycle evaluated at load time is how a page once crashed. */
 export function buildCategories(): Category[] {
   const cats: Category[] = [];
-  const soccer = (key: string, question: string, unit: string, pick: (p: (typeof higherLowerPlayers)[number]) => number) =>
-    cats.push({ key, sport: 'soccer', emoji: '⚽', question, unit, pool: higherLowerPlayers.map(p => ({ name: p.name, sub: p.nationality, value: pick(p) })) });
-  soccer('soccer-goals', 'Who scored more career goals?', 'goals', p => p.stats.goals);
-  soccer('soccer-apps', 'Who made more career appearances?', 'apps', p => p.stats.appearances);
-  soccer('soccer-caps', 'Who won more international caps?', 'caps', p => p.stats.internationalCaps);
+  const soccer = (key: string, stat: (typeof HL_UNVERIFIED_STATS)[number] | 'internationalCaps', question: string, unit: string) =>
+    cats.push({
+      key, sport: 'soccer', emoji: '⚽', question, unit,
+      pool: higherLowerPlayers.map(p => ({ name: p.name, sub: p.nationality, value: p.stats[stat] })),
+      note: HL_UNVERIFIED_STATS.includes(stat as (typeof HL_UNVERIFIED_STATS)[number]) ? HL_UNVERIFIED_NOTE : undefined,
+    });
+  soccer('soccer-goals', 'goals', 'Who scored more career goals?', 'goals');
+  soccer('soccer-apps', 'appearances', 'Who made more career appearances?', 'apps');
+  soccer('soccer-caps', 'internationalCaps', 'Who won more international caps?', 'caps');
   cats.push({ key: 'nba-points', sport: 'basketball', emoji: '🏀', question: 'Who scored more career NBA points?', unit: 'pts', pool: nbaHLPlayers.map(p => ({ name: p.name, sub: `${p.position}, ${p.teams}`, value: p.careerPoints })) });
   cats.push({ key: 'mlb-hr', sport: 'baseball', emoji: '⚾', question: 'Who hit more career home runs?', unit: 'HR', pool: mlbHLPlayers.map(p => ({ name: p.name, sub: `${p.firstSeason} to ${p.lastSeason}`, value: p.careerHrs })) });
   for (const c of NFL_HL_CATEGORIES) {
@@ -158,6 +170,8 @@ export interface Round {
   emoji: string;
   question: string;
   unit: string;
+  /** the category's provenance note, printed at the reveal when it has one */
+  note?: string;
   a: Athlete;
   b: Athlete;
   /** which card has the bigger number */
@@ -208,7 +222,7 @@ export function dealRounds(cats: Category[], rng: Rng, difficulty: Difficulty, c
     const hit = rivalHitRate(rival, a.value, b.value);
     const correct = rng() < hit;
     const seconds = Math.round((rival.fastest + rng() * (rival.slowest - rival.fastest)) * 10) / 10;
-    rounds.push({ category: cat.key, sport, emoji: cat.emoji, question: cat.question, unit: cat.unit, a, b, higher: a.value > b.value ? 'a' : 'b', rival: { correct, seconds } });
+    rounds.push({ category: cat.key, sport, emoji: cat.emoji, question: cat.question, unit: cat.unit, note: cat.note, a, b, higher: a.value > b.value ? 'a' : 'b', rival: { correct, seconds } });
     used.add(a.name); used.add(b.name);
     lastSport = sport;
   }

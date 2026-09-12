@@ -1,18 +1,34 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
-import { HigherLowerPlayer } from '@/types/higherLower';
-import { higherLowerPlayers } from '@/data/higherLowerPlayers';
+import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
+import {
+  higherLowerPlayers,
+  HL_UNVERIFIED_STATS,
+  HL_UNVERIFIED_NOTE,
+  HL_MARKED,
+  HL_MARKED_NOTE,
+} from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { makeFirstDraw } from '@/lib/firstDraw';
 
-type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
+type StatKey = HigherLowerStatKey;
 
 const STAT_LABELS: Record<StatKey, string> = {
   appearances: 'Appearances',
   goals: 'Goals',
-  assists: 'Assists',
-  trophies: 'Trophies',
   internationalCaps: 'Int\'l Caps',
 };
+
+const MARKED = new Set(HL_MARKED);
+
+/** What the card says under a stat, or nothing. Round 535: the pool says out
+ *  loud which of its numbers are not two source verified yet, and which rows
+ *  come from an era whose club totals were never reconciled between
+ *  publishers. Both notes live in the data file, not here. */
+export function noteFor(playerName: string, stat: StatKey): string | null {
+  if (MARKED.has(playerName) && HL_UNVERIFIED_STATS.includes(stat)) return HL_MARKED_NOTE;
+  if (HL_UNVERIFIED_STATS.includes(stat)) return HL_UNVERIFIED_NOTE;
+  return null;
+}
 
 function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): HigherLowerPlayer {
   const available = higherLowerPlayers.filter(p => !exclude.includes(p.name));
@@ -22,7 +38,7 @@ function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): 
 
   // If we have a current player, ensure at least one stat where current >= next
   if (currentPlayer) {
-    const statKeys: (keyof HigherLowerPlayer['stats'])[] = ['appearances', 'goals', 'assists', 'trophies', 'internationalCaps'];
+    const statKeys: StatKey[] = ['appearances', 'goals', 'internationalCaps'];
     const valid = available.filter(p =>
       statKeys.some(stat => currentPlayer.stats[stat] >= p.stats[stat])
     );
@@ -176,5 +192,6 @@ export function useHigherLower() {
     streakReaction,
     lossReaction,
     statLabels,
+    noteFor,
   };
 }
