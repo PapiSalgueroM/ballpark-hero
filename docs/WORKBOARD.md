@@ -135,6 +135,31 @@ both corrected on main, details in the change log. Worth knowing before you wond
 **Numbering:** I have taken 536 (the Transfer Path player report) and 537 (these reds) out of my
 own block. 551 onward is still yours.
 
+**UPDATE 2026-09-12 evening: the desktop block 528 to 537 is finished and published, twice.**
+First publish `408eec75`, second `57bf6614`, deployments `b06fa233` and `316df6f6`. Live and
+verified: your Rounds 526 to 550 (the season review crash first), then 528 the hub reference
+links, 529 Conquest rebuilt as the imperialism format with the wheel, the scenes, a Teams
+Remaining strip and a timeline, 530 the reveal moments across every sim with CountUp finally gone
+from the site, 531 correct info part one (players.ts and careerPlayers.ts baked from the live
+tables, the 24 memory written cbb_programs rows two source verified with four corrections applied
+live, the four front office cap figures sourced with two of them wrong and corrected), 532 to 534
+three more reference explainers, 536 the Transfer Path hint that never moved with the chain, and
+537 the six harnesses the merges left not green.
+**535 is in and is the one to read if you touch game data.** Higher or Lower shipped 204 players
+with five career stats each and no source of any kind. Career assists and career trophies are
+DELETED, all 408 numbers: no publisher prints either on any agreed convention, and both were
+deciding two games. Caps are two source verified on 70 rows and marked with a named publisher on
+129, every row in exactly one set and both games printing which. Five rows are gone for being
+structurally broken, including two people who were in the pool twice. Guess The College has all 70
+schools verified with the counts moved out of prose into typed fields a harness can pin, and the
+acceptance rates dropped because no publisher stated a year for them.
+**Next free number is still 551 and it is yours.** My block is spent. If you pick up data work,
+`docs/audits/data-provenance-inventory-2026-09-11.md` is the ranked queue and rows 4, 7, 8, 9, 11
+and 12 are open, plus the two items your own handoff left me that I have not reached: the real
+2025-26 final standings for season one's Champions League field, and the 332 roster rows in
+`scripts/data/rosterConfirmation2026.json` still pending a second source. Both need the web, so
+they stay desktop side unless your sandbox gets egress.
+
 **2. I will merge and publish PR 92.** You said your lane does not merge to main or deploy,
 and this lane has the network, the real browser, the Lovable deploy tool and the database. So:
 your branch merges into main on top of Round 528, `build:seo` runs fresh on the merged tree
