@@ -34,18 +34,23 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
   const atCap = level >= MAX_LEVEL;
   const nextAt = atCap ? null : xpForLevel(level + 1);
 
-  /* Round 530: the point earned moment. The screen opens with a point waiting
-     (the common case, because XP lands at season end and the panel is opened
-     after) or the count rises while it is open; either way a line slams in
-     above the trees and the level chip pulses once. Both are keyed on the
-     count, so a second point re-runs them and an unrelated re-render does
-     not. Spending a point drops the count below the mark and the line goes,
-     because "earned" over a point just spent would be a lie. No fact is
-     chosen here: the count is pointsFree over the career the engine wrote. */
+  /* Round 530: the point earned moment, and Round 530's review of it.
+     Two different things get told apart here, because they are not the same
+     fact. A point arriving WHILE the screen is open is a moment: it slams in
+     and the level chip pulses. A screen opened with points already sitting
+     there is not a moment, it is a reminder, so it says they are waiting and
+     it arrives quietly. Saying "earned" and slamming on every open would
+     stage a point banked five seasons ago as though it had just landed, on
+     every visit. Both are keyed on the count, so a second point re-runs them
+     and an unrelated re-render does not. Spending a point drops the count
+     below the mark and the line goes. No fact is chosen here: the count is
+     pointsFree over the career the engine wrote. */
   const prevFree = useRef(free);
   const [earnedAt, setEarnedAt] = useState<number | null>(free > 0 ? free : null);
+  /* False until the count actually rises with the screen open. */
+  const [rose, setRose] = useState(false);
   useEffect(() => {
-    if (free > prevFree.current) setEarnedAt(free);
+    if (free > prevFree.current) { setEarnedAt(free); setRose(true); }
     prevFree.current = free;
   }, [free]);
   const earned = earnedAt !== null && earnedAt === free;
@@ -57,8 +62,8 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2">
         <div className="flex items-center justify-between gap-2">
           <div
-            key={earned ? `lvl-${earnedAt}` : 'lvl'}
-            className={cn('text-xs font-bold text-foreground rounded-full', earned && 'cm-win-pulse')}
+            key={earned && rose ? `lvl-${earnedAt}` : 'lvl'}
+            className={cn('text-xs font-bold text-foreground rounded-full', earned && rose && 'cm-win-pulse')}
           >
             🎖️ Manager level {level}
           </div>
@@ -93,14 +98,14 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
         <div
           key={`earned-${earnedAt}`}
           data-cm-point-earned={earnedAt}
-          className="cm-slam rounded-xl border border-gold/50 bg-gold/10 px-3 py-2 text-center"
-          style={{ animationDelay: '0.1s' }}
+          className={cn('rounded-xl border border-gold/50 bg-gold/10 px-3 py-2 text-center', rose && 'cm-slam')}
+          style={rose ? { animationDelay: '0.1s' } : undefined}
         >
           <div className="text-xs font-bold text-gold">
-            🎖️ Skill point{earnedAt === 1 ? '' : 's'} earned
+            🎖️ Skill point{earnedAt === 1 ? '' : 's'} {rose ? 'earned' : 'waiting'}
           </div>
           <div className="text-[10px] text-muted-foreground">
-            {earnedAt === 1 ? 'Put it into a tree below.' : `${earnedAt} waiting. Put them into the trees below.`}
+            {earnedAt === 1 ? 'Put it into a tree below.' : 'Put them into the trees below.'}
           </div>
         </div>
       )}

@@ -4,8 +4,9 @@
  * the idle game. Suprise me." The surprises are all motion: a live toy match
  * with player dots that actually chase the ball, a crowd that fills the
  * stands seat by seat as the real attendance number grows, money that
- * physically floats off everything, confetti on goals, count-up cash, pulse
- * rings on every purchase, and a streak flame that grows with the run.
+ * physically floats off everything, confetti on goals, pulse rings on every
+ * purchase, and a streak flame that grows with the run. The balance itself
+ * never counts up: it is the engine's number, always (Round 147).
  *
  * No scroll on the core loop (pitch + upgrades fit a phone screen), tiles
  * per the house style, "?" rules modal, everything original.
@@ -32,26 +33,12 @@ import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Cele
 
 /* ---------- tiny animation helpers ---------- */
 
-/** A number that rolls toward its target instead of jumping. */
-function useCountUp(target: number): number {
-  const [shown, setShown] = useState(target);
-  const ref = useRef(target);
-  useEffect(() => {
-    ref.current = target;
-    let raf = 0;
-    const step = () => {
-      setShown(cur => {
-        const d = ref.current - cur;
-        if (Math.abs(d) < 1) return ref.current;
-        return cur + d * 0.18;
-      });
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [target]);
-  return shown;
-}
+/* Round 530 review: the balance used to ease toward s.money by 18 percent a
+   frame, so the printed number walked through amounts the club never held,
+   most visibly after a purchase and after an away settle. Round 147's rule is
+   that emphasis animates and a number never does. The balance is the engine's
+   own now, and the arrival still has all its theatre: the money floats off
+   the pitch, the pulse rings fire and the confetti lands. */
 
 /** Deterministic pseudo-random for stable crowd seat positions. */
 function seatRand(i: number): number {
@@ -64,7 +51,6 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 export default function StadiumTycoon() {
   const g = useStadiumTycoon();
   const s = g.state;
-  const money = useCountUp(s.money);
   const [showHelp, setShowHelp] = useState(false);
   /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
      house style: each opens its own panel instead of stretching the page. */
@@ -181,7 +167,7 @@ export default function StadiumTycoon() {
         {/* Money header */}
         <div className="flex items-end justify-between mb-2 px-1">
           <div>
-            <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(money)}</div>
+            <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(s.money)}</div>
             <div className="text-[11px] text-muted-foreground">
               +{fmtMoney(rate)}/s
               {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x2 ({Math.ceil(s.boostLeftSec)}s)</span>}
