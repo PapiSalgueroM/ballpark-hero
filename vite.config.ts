@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import fs from "fs";
 import { componentTagger } from "lovable-tagger";
+import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
 
 /**
  * Round 275: put the real asset tags into every prerendered snapshot at build
@@ -145,7 +146,17 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
+  /* Both taggers are development tooling and both are gated on it.
+     The Dyad one arrived ungated on 2026-09-11. Measured before gating it
+     rather than assumed: a production build with it ungated emits zero
+     data-dyad-id attributes, so it self gates internally and nothing was
+     reaching visitors or the 154 snapshots. This is hygiene, not a rescue. It
+     is gated anyway to match the line beside it, to keep a plugin with no
+     production job out of the production pipeline, and so that a future
+     version of it which does tag cannot quietly start rewriting every element
+     and every snapshot. Anthony's Dyad session runs in development and still
+     sees its tags. */
+  plugins: [mode === "development" && dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
