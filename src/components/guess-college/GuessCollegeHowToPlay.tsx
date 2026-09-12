@@ -30,7 +30,18 @@ const GuessCollegeHowToPlay = () => {
           <div>
             <h3 className="font-semibold text-foreground mb-1">🎯 Clue Order</h3>
             <p>
-              Clues go from vague to obvious: vibe, region, size, acceptance rate, conference, basketball, football, Olympics, NFL Draft, alumni, colors, reveal.
+              Clues go from vague to obvious: vibe, region, size, level, conference, basketball, football, Olympics, NFL Draft, alumni, colors, reveal.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-foreground mb-1">📚 Where the numbers come from</h3>
+            <p>
+              Enrollment is the fall headcount that school reported to IPEDS, with the year in the clue.
+              Football titles count the seasons a school took the final AP or coaches poll, 1936 onward.
+              Basketball titles are NCAA Tournament wins. Vacated titles are not counted, so Louisville
+              is a two title school here and USC a six title one. A handful of clues say they were held
+              back: that means two sources would not agree and we would rather show you one fewer.
             </p>
           </div>
 

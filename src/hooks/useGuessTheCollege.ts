@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { colleges } from '@/data/colleges';
+import { colleges, cfbTitleCount, mbbTitleCount } from '@/data/colleges';
 import { College, CollegeGameMode, CollegeDifficulty, CollegeClue } from '@/types/guessTheCollege';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
@@ -10,15 +10,53 @@ const SCORE_MAP: Record<number, number> = {
   1: 1200, 2: 1000, 3: 900, 4: 800, 5: 700, 6: 600, 7: 500, 8: 400, 9: 300, 10: 200, 11: 100,
 };
 
+/** The clue we could not stand behind says so, rather than showing a number two
+ *  publishers would not agree on. See COLLEGE_THIN in src/data/colleges.ts. */
+const WITHHELD = 'Not shown for this school: we could not confirm it with two sources';
+
+const sizeClue = (c: College): string =>
+  c.enrollment && c.enrollmentYear
+    ? `Enrollment: about ${c.enrollment.toLocaleString()} students in fall ${c.enrollmentYear}`
+    : WITHHELD;
+
+const levelClue = (c: College): string => {
+  if (c.conferenceType === 'power4') return 'Plays in one of the four power conferences';
+  if (c.conferenceType === 'independent') return 'Plays outside the power conferences, as an independent';
+  return 'Plays outside the four power conferences';
+};
+
+const conferenceClue = (c: College): string => {
+  const base = c.conference === 'Independent' ? 'Competes as an Independent' : `Competes in the ${c.conference}`;
+  return c.conferenceNote ? `${base}, ${c.conferenceNote}` : base;
+};
+
+/** Counts are derived from the championship ledgers, never typed beside a
+ *  school, so the prose and the number cannot drift apart. */
+const titled = (count: number, noun: string, rest: string): string => {
+  if (count === 0) return rest;
+  const head = `${count} ${noun}${count === 1 ? '' : 's'}`;
+  return rest ? `${head}. ${rest}` : head;
+};
+
 const generateClues = (college: College): CollegeClue[] => [
   { number: 1, icon: '✨', label: 'Vibe', text: college.vibeWord },
   { number: 2, icon: '🗺️', label: 'Region', text: college.region },
-  { number: 3, icon: '👥', label: 'School Size', text: `Enrollment: approximately ${college.enrollment.toLocaleString()} students` },
-  { number: 4, icon: '📊', label: 'Acceptance Rate', text: `Acceptance rate: around ${college.acceptanceRate}%` },
-  { number: 5, icon: '🏆', label: 'Conference', text: college.conference === 'Independent' ? 'Competes as an Independent' : `Competes in the ${college.conference}` },
-  { number: 6, icon: '🏀', label: 'Basketball History', text: college.basketballHistory },
-  { number: 7, icon: '🏈', label: 'CFB History', text: college.cfbHistory },
-  { number: 8, icon: '🏅', label: 'Olympic Athletes', text: college.olympicAthletes },
+  { number: 3, icon: '👥', label: 'School Size', text: sizeClue(college) },
+  { number: 4, icon: '📊', label: 'Level', text: levelClue(college) },
+  { number: 5, icon: '🏆', label: 'Conference', text: conferenceClue(college) },
+  {
+    number: 6,
+    icon: '🏀',
+    label: 'Basketball History',
+    text: titled(mbbTitleCount(college.name), 'NCAA Tournament title', college.basketballHistory),
+  },
+  {
+    number: 7,
+    icon: '🏈',
+    label: 'CFB History',
+    text: titled(cfbTitleCount(college.name), 'poll era national title', college.cfbHistory),
+  },
+  { number: 8, icon: '🏅', label: 'Olympic Athletes', text: college.olympicAthletes || WITHHELD },
   { number: 9, icon: '📋', label: 'NFL Draft History', text: college.nflDraftHistory },
   { number: 10, icon: '🌟', label: 'Famous Alumni', text: college.famousAlumniHint },
   { number: 11, icon: '🎨', label: 'School Colors', text: `School colors are ${college.colors}` },
