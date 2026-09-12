@@ -1,5 +1,185 @@
 # Project state
 
+## Live as of 2026-09-12 evening: five desktop rounds, and the Transfer Path hint that never moved
+
+**`origin/main` is `57bf6614` and douknowball.com is serving it.** Deployment
+`316df6f6-c014-4766-8c6b-fd7f222b5858`, called only after `get_project` showed `latest_commit_sha` matching. Home
+bundle `index-DaZuEGn-.js` to `index-CzDArel0.js`.
+
+114 files, 18,035 lines added. Every round was built in its own worktree, gated there, merged onto
+main one at a time with the type gate at zero after each, then built, fenced and suited together
+once rather than five times.
+
+### Round 536: the Transfer Path hint never moved with the chain
+
+The fourth of the player reports Anthony forwarded. The context it carried was complete enough to
+work from: puzzle `tpa-662`, Messi to Salah, the classic rule, an accepted chain of Messi, Neymar,
+Mbappe, Hakimi, Ronaldo, and `lastRejected: null`.
+
+The puzzle was sound and so was its hint. Every link the player made was real, and the game was
+right to take all four. What was wrong is that the hint is derived from the puzzle row and the rule
+and **nothing else**, while the chain walks forward: `addPlayer` links each new name to the last one
+played, so the guidance stays nailed to player A. The board was telling this player "one middle man
+does it, he was at Barcelona with Messi and at Liverpool with Salah", which is Philippe Coutinho,
+while they stood on Cristiano Ronaldo, who shares no club season with Coutinho at all. Following
+the hint would have produced a refusal.
+
+That is Round 294's documented failure, a hint leading into a refusal, through a door no fence
+watched: not a stale row, a row that never moves. It is not a corner case either. Measured over the
+253 player graph the live game plays on, one legal step off the optimal line already strands the
+stored hint on **463 of 865** puzzles, and a one to three step wander on **651 of 884**.
+
+The hint now searches from the head of the chain, skipping every name already played, and says so
+from where the player actually is: "From Cristiano Ronaldo one more man does it. He was at Juventus
+with him and at Liverpool with Mohamed Salah." A second, smaller finding came out of the same
+measurement: a chain can wall its own head in, which happened on 5 of 884 deterministic wanders,
+and the board said nothing. A walled in head now says so without being asked, because that is a
+state rather than a clue, and points at the give up button.
+
+No puzzle row, no migration and no hint generator was touched, so the round carries no data risk.
+
+### Round 529: Conquest plays the season out on the map
+
+His words twice, on 2026-08-28 and again on 2026-09-11: the map presentation is far behind the
+videos the format comes from, and he wants the conquest games to look and feel like them.
+
+The research pass read both lineages that share the name. The web map (a county or Voronoi map,
+team colours, the name in caps on the land, a week slider, a result feed, a Teams Remaining
+sidebar, season records at the end) and the video series (a blank state map, a wheel that picks the
+attacker, an arrow for a direction, the sim, the loser's land recoloured, the camera zoomed to the
+fight). The engine already played the web map's rules exactly. What was missing was everything that
+makes it feel like the videos.
+
+A round is now a sequence of scenes instead of a list of thirteen result lines. The map is the
+stage, edge to edge on a phone. Before the featured game the wheel spins to the attacker and the
+arrow points at the defender, both deterministic over a value the engine already fixed so a reload
+cannot change anything. Each scene brings the matchup card, a camera that zooms to the two empires,
+the score landing at its final value, and the takeover spreading across the loser's land. A Teams
+Remaining strip sits under the map, a timeline scrubs back through every settled round, and when
+one colour owns the map a Conquest Complete banner lands with four season records computed from the
+run's own log: Biggest Land Grab, Longest Reign, Most Conquered, Biggest Collapse. The imperialism
+mode finally has its own How to Play, on all five routes.
+
+Scenes play in the ENGINE'S order, not a prettier one, because the engine applies transfers in that
+order and each game's record of what it moved is only true in place. Colour and name text only, no
+crest anywhere, and the wheel wedge is a colour and a name.
+
+### Round 530: the reveal moments, across every sim
+
+His open row, twice over: more animation across every sim, reveals, draft nights, celebrations,
+because reading text is not a game feel.
+
+An inventory came first, `docs/audits/animation-inventory-2026-09-11.md`, listing every announced
+moment in every simulation with the ones already animated marked so nobody rebuilt them. Six
+builders then worked one sim family each off that inventory. The front offices narrate the final
+pick of a draft at last, which Round 519 had named as not done and which needed the draft screen
+held until the player acknowledges it; the weekly feed ticks in; a trade and a signing land at the
+top of it. The four US careers get a draft day card, a staged retirement and a coach season that is
+more than one grey line. Both dynasties get their champion, their bracket and their Heisman or
+player of the year. Club Manager's season end block ticks in line by line, the sacked screen shakes
+and a skill point announces itself. Soccer Career counts the Ballon d'Or down from tenth to first.
+Rebuild's grade lands, Idle Arena's trophy lift is finally a moment rather than a silent state
+wipe, and Stadium Tycoon and Wonderkid Factory got the reduced motion rules they had been missing.
+
+**`CountUp` is gone from the site.** Round 147's rule says never animate a number through values
+that were never true, and the two oldest career screens had been doing exactly that since before
+the rule existed, rolling a legacy score and a season's goals up from zero. Every number prints its
+final value now and only its arrival is animated. One helper, `revealDelay`, sets the pace
+everywhere, so a stagger cannot drift per file.
+
+The adversarial review raised 19 findings across three lenses and 18 were applied. The one worth
+naming: three of the four career boards told `DraftDayCard` the first round ends at pick 30 while
+printing "first round money, first round pressure" under it for anything up to 32, so a pick of 31
+drew as a second rounder directly beneath a line calling it a first. The NHL's 30 was simply wrong
+for a 32 team league. One constant per board now feeds both.
+
+### Round 531: correct info, part one
+
+His ask was correct info on all basis. An inventory ranked every hand typed fact file by exposure
+over verification, and this round took the top of that list where the fix is structural: derived,
+never typed.
+
+`src/data/players.ts` was 748 hand typed rows with nine fact fields each, one dating comment, no
+source and no harness, and it is the fallback pool for Footle plus five other libs. It is generated
+now from the live market values table plus the verified transfer overlay, with the league coming
+from the club through the verified 2026-27 memberships. 261 of the kept rows had been at the wrong
+club, including moves the file never learned.
+
+`src/data/careerPlayers.ts` was 151 players and 1,648 season rows with no header at all, and it is
+the fallback for Career Ladder AND Transfer Path, which validates guesses against the graph built
+from it, so a wrong club season refuses a correct answer. It is baked from the live career tables
+now: 253 players, 3,608 seasons, nothing dropped, 102 players added. Alisson lost two Roma seasons
+he never played.
+
+The 24 `cbb_programs` rows whose own audit said every field was generated from memory with a
+January 2026 cutoff, applied 2026-06-14 and never verified, are two source verified row by row.
+Four were wrong and were corrected live: Michigan's second title, Gonzaga's move to the Pac-12, and
+the arena renames at UConn and Villanova.
+
+The four front office cap constants priced every contract in four sims with no publisher and no
+read date. Two were wrong against both publishers: the NFL cap was 260 where it is 301.2, and the
+NBA's 155 where it is 164.961. They live in `src/lib/leagueCaps.ts` now with a date and two sources
+each, the four engines import rather than retype, and every cap screen prints the date.
+
+`src/lib/clubData.ts` is deleted: dead, no importers, and its league map contradicted the verified
+memberships.
+
+### Rounds 532, 533 and 534: three more reference explainers
+
+The AdSense readiness verdict names league format and playoff system explainers, plural, and said
+not to request another review until the reference layer covers more than one competition. It now
+covers five: the Champions League and the NFL playoffs from Rounds 520 and 522, plus the NBA
+playoff format and the draft lottery's own history, the MLB postseason from the 1903 World Series
+to the twelve club bracket, and the NHL playoffs from 1917-18 to the wild card era.
+
+Each is two source verified per period, prints its sources and verification date, leaves out
+anything only one publisher carries, and names the fetches that were blocked rather than citing
+them.
+
+**The adversarial review found fifteen and twelve were confirmed and fixed, two of them
+disqualifying.** The NHL page said the NHL champion had to win a Cup semifinal in one spring when
+its own cited sources have it in two, 1923 and 1924. The NBA page printed the 29 to 1 vote on the
+2027 lottery when only one publisher carries that tally, so it is left out and named. The rest were
+a page contradicting its own table three cards up, a claim about "where it stands" that the same
+page said changes in 2027, and meta descriptions running to 253 characters.
+
+### Proven live
+
+- Home bundle `index-DaZuEGn-.js` to `index-CzDArel0.js`.
+- The three new explainers answer with their own titles: "NBA Playoff Format History: Every Change
+  Since 1946-47", "MLB Postseason Format History: Every Change Since 1903", "NHL Playoff Format
+  History: Every Change Since 1917-18".
+- `/pro-basketball` links to `/nba-playoff-format-history`, so the hub reference blocks picked the
+  new pages up.
+- Round 529's machinery is in the shipped Conquest chunk (`ImperialismBoardShared-nL49wmu4.js`,
+  200): `data-scene-player`, `data-conquest-stage`, `data-season-records`, `data-timeline` and
+  `data-wheel`, one each.
+- `CountUp` appears zero times in the live bundle, which is Round 530's Round 147 cleanup arriving.
+
+### The gates, and the two reds that were worth the delay
+
+283 harnesses on the merged tree before the five rounds, then 293 after. The five round tree came
+back with two not green, both mine, and the second one is the interesting one.
+
+`simInventedNames` was right: Round 531's re-bake dropped Diego Rossi from the player pool, so the
+rival name generator's collision blocklist was still refusing a name that is no longer real
+anywhere on the site. The entry is gone.
+
+`simLiveScores` banned any `espn.com` string from `src`, which was correct when it was written
+because nothing in the browser had a reason to name ESPN except calling it. The reference
+explainers cite ESPN articles as one of their two publishers and print the URL, exactly as they
+already cite Wikipedia, and `leagueCaps.ts` cites ESPN for two of the four cap figures. Three files
+went red for doing what the data rules ask. A feed host is a fetch target and a publisher is a
+citation, so the ban is precise now and stricter where it counts: the feed's own hosts are refused
+outright wherever they appear, and any other `espn.com` string is allowed only as the value of a
+`url` field, so the same string in a fetch or a bare constant still fails.
+
+**And the two new controls immediately earned themselves.** Both fired and the section stayed
+green, because the comment stripper written alongside them matched the two slashes inside a URL
+scheme and deleted the host and the rest of the line. Every URL in every file was being erased
+before the check looked at it, so the section was passing on nothing at all. Without the controls
+that would have shipped as a check that could never fail, which is worse than no check.
+
 ## Live as of 2026-09-12 midday: both lanes merged, and the black screen three players reported is fixed
 
 **`origin/main` is `408eec75` and douknowball.com is serving it.** Deployment

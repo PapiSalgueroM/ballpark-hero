@@ -1,5 +1,49 @@
 # AdSense re-application readiness
 
+**Status update, 2026-09-12: two of the verdict's three conditions are now met, and the
+third is Anthony's to produce.** The verdict below, written after the second rejection, said
+not to request another review until three things were true. Where they stand after the
+2026-09-12 publish:
+
+1. **"the explainers cover more than one competition": MET.** The reference layer covers five
+   now, not one. `/champions-league-format-history` (Round 520) and `/nfl-playoff-format-history`
+   (Round 522) were live already. Rounds 532, 533 and 534 add `/nba-playoff-format-history`
+   (fifteen format periods from the 1946-47 BAA bracket, plus the draft lottery's own history
+   from the coin flip era), `/mlb-postseason-format-history` (eight periods from the 1903 World
+   Series to the twelve club bracket, with the 1904 and 1994 Octobers that were never played)
+   and `/nhl-playoff-format-history` (ten periods from 1917-18, with 1919 and 2004-05 when the
+   Cup was not awarded). Each is two source verified per period, prints its sources and its
+   verification date on the page, leaves out anything only one publisher carries, and names the
+   fetches that were blocked rather than citing them.
+2. **"the hubs link into them": MET.** Round 528 gave every sport hub a reference block: the
+   Record Books section for that sport by anchor, the grid archive where one exists, and the
+   format explainer where one exists. Verified live on 2026-09-12: `records#cup` on `/hockey`,
+   `records#ws` on `/baseball`, `records#nba` on `/pro-basketball`, `records#cbb` on `/college`.
+3. **"a Page Indexing report taken after those pages ship showing them crawled": NOT MET, AND
+   ONLY ANTHONY CAN PRODUCE IT.** Search Console is his login. The three new pages went live on
+   2026-09-12, so the report is not worth taking yet: Google needs to find and crawl them first.
+
+**What the reference layer looks like as a whole now**, which is the thing a reviewer would be
+judging: five format explainers, the Record Books over twelve audited champion tables (1,068
+rows), four grid archives (56 past boards, 4,032 published answers, every one recomputed by the
+game's own matcher), and the Hall of Champions. All of it is either derived from the site's own
+audited tables or two source verified with the sources printed.
+
+**The verdict is therefore unchanged in form but not in substance: still do not click yet, and
+the reason is now waiting rather than building.** Give Google roughly a week from 2026-09-12,
+then Anthony opens Search Console, takes the Page Indexing report, and sends it. If the five
+explainers and the hubs show as crawled and indexed, that is the moment the review request is
+worth his click. If they show as "Crawled, currently not indexed", the reference layer is not
+the lever and this file should say so plainly rather than asking for a sixth explainer.
+
+**What is NOT recommended, and why it is worth writing down.** The addendum's list also names
+salary cap explainers, transfer window explainers and draft history. Round 531 has just put the
+four real salary cap figures into `src/lib/leagueCaps.ts` with a date and two publishers each,
+so a cap explainer is now cheap to build honestly. Do not build it yet. Three of the five
+existing explainers have never been crawled, so another one adds pages nobody has read rather
+than evidence about what Google objects to. Build the sixth only if the Page Indexing report
+comes back showing the first five indexed and the site still rejected.
+
 Asked for by the owner's directive of 2026-08-30, section 19. Written 2026-08-30
 after Rounds 348 to 359. Every number here was measured, and the script that
 measured it is named so it can be re-run. Nothing in this file is an estimate.
