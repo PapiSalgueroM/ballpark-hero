@@ -1,4 +1,4 @@
-/* The achievement case, proven. Round 527.
+/* The achievement case, proven. Round 527, extended Round 539.
  *
  * src/lib/achievements.ts computes achievements from facts the site already
  * records. Nothing writes, so the things that can go wrong are not crashes,
@@ -8,9 +8,26 @@
  * leaks through the locked list, and a bar that goes backwards when you play
  * more. This harness is those six questions and the read only claim.
  *
+ * TWO OF THOSE QUESTIONS WERE BEING ASKED IN THE WRONG LAYER, and Round 539's
+ * adversarial pass found both defects sitting under the gap:
+ *   - Section 6 proved the earned set only grows as a hand built FACTS object
+ *     grows. It was never wrong. The defect was one level down in
+ *     rows -> buildAchievementFacts: the client read the 1,000 most recent
+ *     game_completions rows, so the facts were computed over a SLIDING WINDOW
+ *     and achievements un earned themselves as a player kept playing. Nine
+ *     tiles, both hidden ones among them, walked off a real history once a
+ *     thousand newer rows landed in front of them. Section 9 asks the question
+ *     across the builder, where it lives.
+ *   - Section 0 proved the read is a read by grepping two files for write
+ *     verbs. The write was one call deep and invisible to it: loadAchievementFacts
+ *     called getCurrentPlayerName, which reaches getGuestHandle, which MINTS a
+ *     handle off Math.random and localStorage.setItems it. Section 10 runs the
+ *     real call graph against a recording localStorage and counts, which is
+ *     the only way to see a write somebody else's module performs.
+ *
  * WHAT IT HOLDS:
  *   0. READ ONLY, AS CODE. Neither shipped file contains a write verb, the one
- *      database call is a select, and the case is actually mounted on Profile.
+ *      database call is a read only RPC, and the case is mounted on Profile.
  *   1. REACHABLE, ONE BY ONE. A twelve step ladder of player facts, each step
  *      pointwise at or above the last. Every definition must be unearned at
  *      step 0 and earned by the top, and the step it flips is printed. Nothing
@@ -31,6 +48,17 @@
  *      change what is earned, so the shape carries nothing nobody reads.
  *   8. THE BUILDER, ON REAL SLUGS. buildAchievementFacts over real registry
  *      routes maps sports, counts days and leaves its inputs alone.
+ *   9. MONOTONE ACROSS THE BUILDER. A real history as ROWS, then five appends
+ *      of different shapes (more of one game, games never tried, more days,
+ *      and two long single game sessions that are hundreds of rows on ONE
+ *      day). After every append the row derived facts must be at or above what
+ *      they were and the earned set must be a superset. Plus the property all
+ *      of that rests on: forty rows of one game on one day are one game day,
+ *      not forty.
+ *  10. NOTHING WRITTEN, AT RUNTIME. loadAchievementFacts through the real call
+ *      graph against a recording localStorage, for the three reader shapes
+ *      that reach the handle code, asserting zero writes and naming any key
+ *      that gets one.
  *
  * NO STATISTICAL THRESHOLD ANYWHERE, on purpose. Every check here is exact: a
  * set equality, a deep equality, a comparison between two runs. There is no
@@ -48,6 +76,8 @@
  *   SIM_ACH_CONTROL=nonmono      a measure that falls as you play          -> 6
  *   SIM_ACH_CONTROL=deadfact     a definition that reads a constant        -> 7
  *   SIM_ACH_CONTROL=builder      the per game count broken                 -> 8
+ *   SIM_ACH_CONTROL=window       the 1,000 row sliding window put back     -> 9
+ *   SIM_ACH_CONTROL=mint         the identity read that mints a handle     -> 10
  *
  * Run: node scripts/simAchievements.mjs
  */
@@ -63,7 +93,7 @@ const CASE = 'src/components/profile/AchievementCase.tsx';
 const PROFILE = 'src/pages/Profile.tsx';
 const CONTROL = process.env.SIM_ACH_CONTROL || '';
 
-const SECTIONS = 9;
+const SECTIONS = 11;
 const failures = Array.from({ length: SECTIONS }, () => 0);
 let section = 0;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
@@ -128,6 +158,27 @@ const CONTROLS = {
     now: 'playsByGame[row.game] = 1;',
     say: 'the per game count flattened to one',
   },
+  /* The Round 527 defect itself, put back at the layer it lived at. The client
+     read the 1,000 most recent rows, so the facts were a window on the end of
+     a history rather than the history. 1,000 is the number that actually
+     shipped, not a number picked to make the control fire. */
+  window: {
+    sec: 9, file: LIB,
+    old: '  for (const row of rows) {',
+    now: '  for (const row of rows.slice(-1000)) {',
+    say: 'the 1,000 row sliding window put back into the builder',
+  },
+  /* The other Round 527 defect. Swapping the identifier everywhere fixes the
+     import too, so the control compiles and the call really does reach
+     getGuestHandle, which mints off Math.random and stores the result. A
+     control that only rewrote the call site would leave an undefined name,
+     throw, be swallowed by the catch and prove nothing. */
+  mint: {
+    sec: 10, file: LIB,
+    old: 'peekCurrentPlayerName',
+    now: 'getCurrentPlayerName',
+    say: 'the identity read swapped back to the one that mints and stores a handle',
+  },
 };
 
 if (CONTROL && !CONTROLS[CONTROL]) abort(`unknown control "${CONTROL}" (${Object.keys(CONTROLS).join(', ')})`);
@@ -160,8 +211,42 @@ if (CONTROL && CONTROLS[CONTROL].file === LIB) {
 }
 const ENTRY = path.join(TMP, 'entry.mjs');
 const OUT = path.join(TMP, 'bundle.mjs');
+/* A RECORDING localStorage, not the no op one this used to install.
+   Round 527's write was one call deep, in another module: loadAchievementFacts
+   asked getCurrentPlayerName for a name, that reaches getGuestHandle, and
+   getGuestHandle mints a handle off Math.random and setItems it when there is
+   not one stored. A setItem that does nothing swallows that in silence and
+   section 0's source grep cannot see it either, because the verb is not in
+   either file it reads. So every read and every write is recorded here and
+   section 10 counts them.
+   The store is real, so a mint is visible to the next read exactly as it is in
+   a browser, and reset(seed) sets up one case.
+   fetch is stubbed on purpose too. Nothing in this harness may reach the live
+   project, and the write control injects an insert into game_completions: a
+   test run must never be able to put a row in production. */
 fs.writeFileSync(ENTRY, `
-globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const store = new Map();
+const writes = [];
+const reads = [];
+globalThis.__dukbStorage = {
+  writes, reads,
+  reset(seed) {
+    store.clear();
+    for (const k of Object.keys(seed || {})) store.set(k, String(seed[k]));
+    writes.length = 0;
+    reads.length = 0;
+  },
+};
+globalThis.localStorage = {
+  getItem(k) { const key = String(k); reads.push(key); return store.has(key) ? store.get(key) : null; },
+  setItem(k, v) { const key = String(k); writes.push({ op: 'setItem', key, value: String(v) }); store.set(key, String(v)); },
+  removeItem(k) { const key = String(k); writes.push({ op: 'removeItem', key, value: null }); store.delete(key); },
+  clear() { writes.push({ op: 'clear', key: '*', value: null }); store.clear(); },
+  get length() { return store.size; },
+  key(i) { return Array.from(store.keys())[i] ?? null; },
+};
+globalThis.fetch = () => Promise.reject(new Error('simAchievements: the network is stubbed, nothing here talks to the live project'));
+export const storage = globalThis.__dukbStorage;
 export const ach = await import('${libPath}');
 export const registry = await import('${p(path.join(ROOT, 'src/data/gameRegistry.ts'))}');
 `);
@@ -169,10 +254,10 @@ await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
 });
-const { ach, registry } = await import(pathToFileURL(OUT).href);
+const { ach, registry, storage } = await import(pathToFileURL(OUT).href);
 const {
   ACHIEVEMENTS, earnedAchievements, achievementProgress, visibleAchievements,
-  hiddenRemaining, emptyAchievementFacts, buildAchievementFacts,
+  hiddenRemaining, emptyAchievementFacts, buildAchievementFacts, loadAchievementFacts,
 } = ach;
 
 /* ─── small tools ─────────────────────────────────────────────────────────── */
@@ -304,8 +389,8 @@ const SHAPES = [
       playsByGame: { 'game-0': 200 }, playsBySport: { 'Sport 0': 200 },
       bestScoreByGame: { 'game-0': 900 },
     }),
-    holds: ['first-finish', 'favourite-five', 'plays-25', 'plays-100', 'one-game-100', 'sport-25', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'days-30', 'points-5000'],
-    lacks: ['three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'every-sport', 'every-sport-deep', 'scored-10', 'hidden-marathon', 'hidden-four-sports'],
+    holds: ['first-finish', 'favourite-five', 'plays-10', 'plays-25', 'plays-60', 'plays-100', 'one-game-25', 'sport-15', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'days-30', 'points-5000'],
+    lacks: ['three-games', 'two-sports', 'games-10', 'games-25', 'games-50', 'triple-header', 'every-sport', 'every-sport-deep', 'scored-10', 'days-40', 'streak-60', 'points-25000', 'points-100000', 'hidden-marathon', 'hidden-four-sports'],
   },
   {
     label: 'the tourist (39 games once each, every sport, three big days)',
@@ -317,8 +402,8 @@ const SHAPES = [
       playsBySport: spread('Sport ', SPORT_COUNT, 3, 3),
       bestScoreByGame: spread('scored-', 12, 50, 50),
     }),
-    holds: ['first-finish', 'three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'plays-25', 'scored-10', 'every-sport', 'every-sport-deep', 'hidden-marathon', 'hidden-four-sports'],
-    lacks: ['favourite-five', 'one-game-100', 'plays-100', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'sport-25', 'points-5000'],
+    holds: ['first-finish', 'three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'plays-10', 'plays-25', 'scored-10', 'every-sport', 'every-sport-deep', 'hidden-marathon', 'hidden-four-sports'],
+    lacks: ['favourite-five', 'one-game-25', 'plays-60', 'plays-100', 'games-50', 'streak-5', 'streak-21', 'streak-60', 'game-streak-10', 'days-10', 'days-30', 'days-40', 'sport-15', 'points-5000', 'points-25000', 'points-100000'],
   },
 ];
 
@@ -352,17 +437,23 @@ console.log('0) read only, as code: neither file writes anything and the case is
       if (re.test(code)) fail(`${file} contains ${name}, this round is supposed to be read only`);
     }
   }
-  /* the one database call, and its shape rather than its spelling */
+  /* The one database call, and its shape rather than its spelling. Round 539
+     moved it off a table select onto player_game_days, which groups a player's
+     activity log into one row per (game, Eastern day) in SQL. So the case
+     touches no table directly at all now, and a supabase.from appearing in
+     here is either a write or a return to the raw rows. */
   const lib = stripComments(sourceOf(LIB));
-  const hits = lib.match(/supabase\.from/g) || [];
-  if (hits.length !== 1) fail(`${LIB} touches supabase.from ${hits.length} times, expected exactly the one read`);
-  const at = lib.indexOf('supabase.from');
+  const fromHits = lib.match(/supabase\.from/g) || [];
+  if (fromHits.length !== 0) fail(`${LIB} touches supabase.from ${fromHits.length} time(s), the case reads through the player_game_days RPC and nothing else`);
+  const rpcHits = lib.match(/supabase\.rpc/g) || [];
+  if (rpcHits.length !== 1) fail(`${LIB} touches supabase.rpc ${rpcHits.length} times, expected exactly the one read`);
+  const at = lib.indexOf('supabase.rpc');
   const callWindow = at < 0 ? '' : lib.slice(at, at + 400);
-  if (!/\.select\s*\(/.test(callWindow)) fail('the database call in achievements.ts is not a select');
+  if (!/['"]player_game_days['"]/.test(callWindow)) fail('the database call in achievements.ts is not the player_game_days read');
   /* mounted for real */
   const profile = stripComments(read(PROFILE));
   if (!/<AchievementCase/.test(profile)) fail('AchievementCase is not mounted in src/pages/Profile.tsx');
-  console.log(`   ${LIB} and ${CASE} clean, supabase.from used ${hits.length} time(s), mounted on Profile: ${/<AchievementCase/.test(profile)}`);
+  console.log(`   ${LIB} and ${CASE} clean, supabase.rpc used ${rpcHits.length} time(s) and supabase.from ${fromHits.length}, mounted on Profile: ${/<AchievementCase/.test(profile)}`);
 }
 
 /* ═══ 1: reachable, one by one ════════════════════════════════════════════ */
@@ -426,12 +517,18 @@ console.log('3) ids: pinned against the list, unique, and the copy is shaped rig
   /* Pinned on purpose. An id is the only handle anything has on an
      achievement, so a rename is a silent orphan and has to be a decision
      somebody made here rather than a find and replace that went wide. */
+  /* Round 539 re-cut the ladder against real game days rather than activity
+     log rows, so five ids moved with it: plays-500, plays-1000, one-game-100,
+     sport-25 and days-100 were unreachable by four to eight times once a Club
+     Manager evening stopped counting as forty finishes, and are now plays-60,
+     plays-10, one-game-25, sport-15 and days-40. The list is re-pinned, which
+     is the deliberate decision this check exists to force. */
   const PINNED = [
-    'days-10', 'days-100', 'days-30', 'every-sport', 'every-sport-deep',
+    'days-10', 'days-30', 'days-40', 'every-sport', 'every-sport-deep',
     'favourite-five', 'first-finish', 'game-streak-10', 'games-10', 'games-25',
-    'games-50', 'hidden-four-sports', 'hidden-marathon', 'one-game-100',
-    'plays-100', 'plays-1000', 'plays-25', 'plays-500', 'points-100000',
-    'points-25000', 'points-5000', 'scored-10', 'sport-25', 'streak-21',
+    'games-50', 'hidden-four-sports', 'hidden-marathon', 'one-game-25',
+    'plays-10', 'plays-100', 'plays-25', 'plays-60', 'points-100000',
+    'points-25000', 'points-5000', 'scored-10', 'sport-15', 'streak-21',
     'streak-5', 'streak-60', 'three-games', 'triple-header', 'two-sports',
   ].sort();
   const live = idsOf(ACHIEVEMENTS);
@@ -641,7 +738,14 @@ console.log('8) the builder: real routes in, coherent facts out, inputs untouche
   if (!deepEqual(streaks, streaksBefore)) fail('buildAchievementFacts edited the streak state it was handed');
   if (!deepEqual(scores, scoresBefore)) fail('buildAchievementFacts edited the scores it was handed');
 
-  if (f.totalPlays !== Math.max(rows.length, 40)) fail(`totalPlays ${f.totalPlays}, expected the larger of ${rows.length} rows and the local 40`);
+  /* Round 539: totalPlays is the count of distinct (game, day) pairs and
+     nothing else. It used to be Math.max(rows.length, streaks.totalPlays), and
+     both of those were inflated: the rows are an activity log, and
+     recordStreakDay bumps the local tally outside its own once a day guard.
+     The local tally here is 40 against 26 real game days, so an assertion that
+     lands on 26 pins that the inflated number is no longer consulted. */
+  const distinctPairs = new Set(rows.map(r => `${r.game}|${r.completed_on}`)).size;
+  if (f.totalPlays !== distinctPairs) fail(`totalPlays ${f.totalPlays}, expected ${distinctPairs} distinct game days (the local tally of ${streaks.totalPlays} is inflated and must not be consulted)`);
   if (f.totalPoints !== 6000) fail(`totalPoints ${f.totalPoints}, expected the larger of 1200 and the local 6000`);
   if (f.longestStreak !== 9) fail(`longestStreak ${f.longestStreak}, expected 9`);
   if (f.bestGameStreak !== 12) fail(`bestGameStreak ${f.bestGameStreak}, expected 12`);
@@ -658,6 +762,232 @@ console.log('8) the builder: real routes in, coherent facts out, inputs untouche
   if (!earned.includes('every-sport')) fail('a row in every sport did not earn every-sport');
   if (earned.includes('every-sport-deep')) fail('one row per sport earned the three deep version');
   console.log(`   ${rows.length} real rows over ${cats.length} sports: ${f.daysPlayed} days, best day ${f.mostGamesInOneDay} games and ${f.mostSportsInOneDay} sports, earns ${earned.length}`);
+}
+
+/* ═══ 9: monotone across the builder, which is where it broke ═════════════ */
+section = 9;
+console.log('9) the builder is monotone: appending rows never takes an achievement away');
+{
+  /* WHY THIS IS NOT SECTION 6 AGAIN. Section 6 walks hand built facts objects
+     and proves the earned set only grows as those numbers grow. That layer was
+     never wrong. The defect was underneath it: the client read the 1,000 most
+     recent game_completions rows, so buildAchievementFacts saw a WINDOW on the
+     end of a history rather than the history, and a player who kept playing
+     pushed their own past out of it. On a real handle that took nine tiles
+     away, both hidden ones included. So the fixture here is ROWS, the thing
+     that grows is the row list, and nothing is hand built except the history
+     itself.
+     The streak state and the saved scores are held fixed across every step on
+     purpose: they come from elsewhere, and holding them still means every
+     movement in the earned set below is the rows talking. */
+  const cats = registry.CATEGORIES.filter(c => c.games.length > 0);
+  const slugOf = g => g.path.replace(/^\//, '');
+  const DAY_ONE = Date.UTC(2026, 4, 1);
+  const day = n => new Date(DAY_ONE + n * 86400000).toISOString().slice(0, 10);
+
+  const firstOfEachSport = cats.map(c => slugOf(c.games[0]));
+  const allSlugs = cats.flatMap(c => c.games.map(slugOf));
+  const wider = allSlugs.filter(s => !firstOfEachSport.includes(s));
+  const favourite = firstOfEachSport[0];
+  /* Club Manager is the honest example of the shape that broke this: Round 392
+     put an activity ping behind every MATCH, so one evening on it is hundreds
+     of rows on one day. Fall back to the favourite if the route ever goes. */
+  const burstGame = allSlugs.includes('club-manager') ? 'club-manager' : favourite;
+
+  const STREAKS = {
+    version: 1,
+    global: { current: 4, longest: 22, lastDate: day(31) },
+    perGame: { [favourite]: { current: 4, longest: 11, lastDate: day(31) } },
+    loginDates: [day(0)], totalPlays: 40, totalPoints: 30000,
+  };
+  const SCORES = Object.fromEntries(allSlugs.slice(0, 12).map(s => [s, 250]));
+
+  /* A history somebody could really have, built as rows. One game in every
+     sport on the first day, the same again twice so every sport has depth,
+     three weeks of coming back to one game, then a spread of other games. */
+  const rows = [];
+  const put = (game, n) => rows.push({ game, completed_on: day(n) });
+  for (const n of [0, 1, 2]) for (const s of firstOfEachSport) put(s, n);
+  for (let n = 3; n <= 24; n += 1) put(favourite, n);
+  wider.slice(0, 17).forEach((s, i) => put(s, 25 + (i % 7)));
+  const startRows = rows.length;
+
+  const APPENDS = [
+    {
+      label: 'six more days of the game they keep coming back to',
+      make: () => Array.from({ length: 6 }, (_, i) => ({ game: favourite, completed_on: day(32 + i) })),
+    },
+    {
+      label: 'twenty five games they had never tried, in one sitting',
+      make: () => wider.slice(17, 42).map(s => ({ game: s, completed_on: day(38) })),
+    },
+    {
+      label: 'a quiet week, one game a day',
+      make: () => Array.from({ length: 7 }, (_, i) => ({ game: wider[i], completed_on: day(39 + i) })),
+    },
+    {
+      /* The one that matters. 400 rows on ONE day is one game day, and under
+         the old read it was 400 rows of window spent on it. */
+      label: 'a long evening on one game, 400 rows on one day',
+      make: () => Array.from({ length: 400 }, () => ({ game: burstGame, completed_on: day(46) })),
+    },
+    {
+      label: 'a second session the same day, 900 rows more',
+      make: () => Array.from({ length: 900 }, () => ({ game: burstGame, completed_on: day(46) })),
+    },
+  ];
+
+  const ROW_NUMERIC = ['totalPlays', 'daysPlayed', 'mostGamesInOneDay', 'mostSportsInOneDay'];
+  const ROW_RECORDS = ['playsByGame', 'playsBySport'];
+  /* The earned set comes off a COPY of the facts every time. Whether a
+     predicate edits what it is handed is section 5's question, and a predicate
+     that does would stamp a key onto the facts this section then compares
+     against the next step's fresh ones, which reads as a count that fell. This
+     section is about the builder, so it keeps its own fixtures untouched. */
+  const earnedFrom = f => new Set(earnedIds(clone(f)));
+
+  let prevFacts = buildAchievementFacts(rows, STREAKS, SCORES, 0);
+  let prevEarned = earnedFrom(prevFacts);
+  const baseEarned = new Set(prevEarned);
+
+  /* A superset test over a player who earned nothing passes every time and
+     means nothing, so the starting history has to be somebody real first. */
+  if (baseEarned.size === 0) fail('the starting history earns nothing, so every superset test below would pass for the wrong reason');
+  /* And it has to earn the DEEP ones, because those are what a window takes
+     away. If the fixture stops reaching them the section still passes while
+     testing nothing, which is the same failure wearing a different hat. */
+  const MUST_REACH = ['every-sport', 'every-sport-deep', 'games-25', 'one-game-25', 'days-30', 'hidden-marathon', 'hidden-four-sports'];
+  for (const id of MUST_REACH) {
+    if (!prevEarned.has(id)) fail(`the starting history does not earn "${id}", so this section has nothing deep for an append to take away`);
+  }
+  console.log(`   start: ${startRows} rows, ${prevFacts.totalPlays} game days over ${prevFacts.daysPlayed} days, ${baseEarned.size} earned`);
+
+  for (const step of APPENDS) {
+    rows.push(...step.make());
+    const f = buildAchievementFacts(rows, STREAKS, SCORES, 0);
+
+    for (const k of ROW_NUMERIC) {
+      if (f[k] < prevFacts[k]) fail(`after "${step.label}" facts.${k} fell from ${prevFacts[k]} to ${f[k]}, the history only grew`);
+    }
+    for (const k of ROW_RECORDS) {
+      for (const [key, v] of Object.entries(prevFacts[k])) {
+        if ((f[k][key] ?? 0) < v) fail(`after "${step.label}" ${k}.${key} fell from ${v} to ${f[k][key] ?? 0}`);
+      }
+    }
+    const now = earnedFrom(f);
+    const lost = [...prevEarned].filter(id => !now.has(id));
+    if (lost.length) {
+      fail(`after "${step.label}" (${rows.length} rows) ${lost.length} achievement(s) un earned themselves: ${lost.slice(0, 6).join(', ')}${lost.length > 6 ? ' and more' : ''}`);
+    }
+    const gained = [...now].filter(id => !prevEarned.has(id));
+    console.log(`   + ${step.label}: ${rows.length} rows, ${f.totalPlays} game days, ${now.size} earned${gained.length ? ` (new: ${gained.join(', ')})` : ''}`);
+    prevFacts = f;
+    prevEarned = now;
+  }
+
+  const lostOverall = [...baseEarned].filter(id => !prevEarned.has(id));
+  if (lostOverall.length) fail(`over the whole run ${lostOverall.length} achievement(s) went missing: ${lostOverall.join(', ')}`);
+  console.log(`   ${APPENDS.length} append steps, ${startRows} rows to ${rows.length}, earned ${baseEarned.size} -> ${prevEarned.size}, never fewer`);
+
+  /* A history is a set, not a queue, so where a row sits in the list cannot
+     matter. If it does, something is reading a slice rather than the lot, and
+     that is the defect itself in one line: the same rows in the other order. */
+  const reversedFacts = buildAchievementFacts([...rows].reverse(), STREAKS, SCORES, 0);
+  for (const k of ROW_NUMERIC) {
+    if (reversedFacts[k] !== prevFacts[k]) {
+      fail(`the same ${rows.length} rows in the opposite order give facts.${k} of ${reversedFacts[k]} instead of ${prevFacts[k]}, so something is reading a slice of the history`);
+    }
+  }
+  const reversedEarned = earnedFrom(reversedFacts);
+  const orderDiff = [...prevEarned].filter(id => !reversedEarned.has(id));
+  if (orderDiff.length || reversedEarned.size !== prevEarned.size) {
+    fail(`the same ${rows.length} rows in the opposite order earn ${reversedEarned.size} instead of ${prevEarned.size}${orderDiff.length ? `, missing ${orderDiff.slice(0, 6).join(', ')}` : ''}`);
+  }
+  console.log(`   the same ${rows.length} rows reversed: ${reversedFacts.totalPlays} game days, ${reversedEarned.size} earned, identical`);
+
+  /* The property all of the above rests on: a row is an ACTIVITY, a finish is
+     a game on a day. Measured on production, 376,818 rows are 25,182 distinct
+     (player, game, Eastern day) triples, and the busiest handle's 6,440 rows
+     are 49 real game days, a factor of 131. The local tally handed in here is
+     40, the inflated number that used to win a Math.max, so this pins both
+     halves at once. */
+  const oneEvening = Array.from({ length: 40 }, () => ({ game: burstGame, completed_on: day(60) }));
+  const evening = buildAchievementFacts(oneEvening, STREAKS, {}, 0);
+  if (evening.totalPlays !== 1) fail(`40 rows of one game on one day came out as ${evening.totalPlays} finishes, they are one game day`);
+  if (evening.playsByGame[burstGame] !== 1) fail(`40 rows of one game on one day counted ${evening.playsByGame[burstGame]} plays of it, expected 1`);
+  if (evening.daysPlayed !== 1) fail(`40 rows on one day counted ${evening.daysPlayed} days`);
+  if (evening.mostGamesInOneDay !== 1) fail(`40 rows of ONE game counted ${evening.mostGamesInOneDay} different games in the day`);
+  console.log(`   40 rows of ${burstGame} on one day: ${evening.totalPlays} finish, ${evening.daysPlayed} day, ${evening.mostGamesInOneDay} game (local tally handed in was ${STREAKS.totalPlays})`);
+}
+
+/* ═══ 10: nothing written, through the real call graph ════════════════════ */
+section = 10;
+console.log('10) read only, at runtime: loadAchievementFacts against a recording localStorage');
+{
+  /* WHY THIS IS NOT SECTION 0 AGAIN. Section 0 greps two files for write
+     verbs. The write was in neither: loadAchievementFacts called
+     getCurrentPlayerName in src/lib/completions.ts, that falls through to
+     getGuestHandle, and getGuestHandle mints a handle off Math.random and
+     stores it when there is not one. Opening /profile as a signed in user
+     whose row carries no display_name and no username therefore wrote. No
+     grep of these two files could ever see that, so this runs the call and
+     counts what the storage was asked to do.
+     The key is spelled out here rather than imported because completions.ts
+     keeps it private. If it is ever renamed this check goes red asking why,
+     which is the right conversation to have. */
+  const GUEST_KEY = 'dukb-guest-handle';
+  const CASES = [
+    {
+      label: 'signed in, profile row has neither a display name nor a username',
+      seed: {},
+      profile: { display_name: null, username: null },
+    },
+    {
+      label: 'a guest with nothing stored yet',
+      seed: {},
+      profile: null,
+    },
+    {
+      /* Round 318 regenerates a pre Round 299 handle on sight, so the minting
+         path writes for this one even though a handle IS stored. A reader must
+         leave it alone. */
+      label: 'a guest still holding a pre Round 318 handle',
+      seed: { [GUEST_KEY]: 'Baller-1234' },
+      profile: undefined,
+    },
+  ];
+
+  /* The supabase client reads its own auth key once on load, asynchronously,
+     so let that land before the first case. Left alone it turns up inside
+     whichever case happens to be running and the per case output moves about.
+     A WRITE from module load would be a different matter, so it is checked
+     rather than waved through. */
+  await new Promise(r => { setTimeout(r, 50); });
+  for (const w of storage.writes.slice()) {
+    fail(`loading the achievement case wrote "${w.key}" (${w.op}) before anything was called`);
+  }
+
+  let totalWrites = 0;
+  for (const c of CASES) {
+    storage.reset(c.seed);
+    const facts = await loadAchievementFacts(c.profile, {}, 0);
+    const wrote = storage.writes.slice();
+    const readKeys = [...new Set(storage.reads)];
+
+    /* Zero writes because the call never got there is not a pass. The handle
+       key is the exact spot that used to mint, so the call has to have read
+       it for the count above to mean anything. */
+    if (!readKeys.includes(GUEST_KEY)) {
+      fail(`${c.label}: the call never read ${GUEST_KEY}, so counting zero writes proves nothing about the path that used to mint`);
+    }
+    for (const w of wrote) {
+      fail(`${c.label}: loadAchievementFacts did ${w.op} on "${w.key}"${w.value === null ? '' : ` = "${w.value}"`}, the case promises it writes nothing`);
+    }
+    if (!facts || typeof facts.totalSports !== 'number') fail(`${c.label}: no facts came back from loadAchievementFacts`);
+    totalWrites += wrote.length;
+    console.log(`   ${c.label}: ${wrote.length} writes, read ${readKeys.length} key(s) (${readKeys.join(', ')})`);
+  }
+  console.log(`   ${CASES.length} reader shapes through the real call graph, ${totalWrites} localStorage writes in total`);
 }
 
 /* ─── verdict ─────────────────────────────────────────────────────────────── */
