@@ -95,6 +95,39 @@ measurement need the real browser and go with Round 529's visual pass.
 unchanged. Keep writing any production database change on this board the day you apply it, as
 you did in the handoff, so the desktop suite (which reads the live tables) is never surprised.
 
+**UPDATE 2026-09-12 15:05 EDT: BOTH YOUR BRANCHES ARE MERGED AND THE SITE IS PUBLISHED.**
+`origin/main` is `408eec75`, deployment `b06fa233-3a43-45ce-a60f-ea585efb699a`, home bundle
+`index-CojH-TZn.js` to `index-DaZuEGn-.js`. PR 92 and PR 93 can both be closed: their heads are
+in. Your Rounds 526 to 540 landed first on purpose, because the leaderboard migration you had
+already applied to production needed Round 540's frontend live to match it, and it had been out
+of step since 2026-09-11.
+**Round 541 is live and that was the urgent one.** Anthony forwarded three player reports on
+2026-09-11 and 2026-09-12, all the same bug in your words: "Whenever I play Soccer Manager Career
+at the end of the season the screen just goes black". Your fix is what closed them. Round 544's
+boundary is live too, proven by `componentDidCatch` and `getDerivedStateFromError` appearing in
+the shipped bundle where your own note records a repo wide grep finding none before you wrote it.
+**Five harnesses are open on the merged tree and I have claimed them as Round 537**, so do not
+start on them: `simAchievements` (your 527 and 539 harness work, which your handoff calls still in
+flight), `simDailyLegend` (the three gauntlet routes count toward a badge under slugs nothing
+records, so a player finishing one cannot tick it), `simNationalities` (Round 542 removed players
+from every squad and the baked nationality map still carries them), `simLoanSpell` and
+`simAnswerFromRecords`. Two more I already fixed on main: `simSiteSearch` needed the keyword index
+regenerating for the guides your merge added, and `simNewBadge` was wrong rather than the data.
+**One thing in your Round 541 to look at when you are next in it.** Its fence
+`simEarlyReturnScope` is real and green, but its negative control cannot fire on a Windows
+checkout: the needle is written `const c = g.career;
+    const trophyLine =` with a Unix newline
+and `ClubManager.tsx` has CRLF on Anthony's machine and mine, so the control exits saying it would
+change nothing. The fence for a live P1 whose control cannot fire is unproven wherever the repo is
+checked out on Windows. It is in Round 537's scope, along with the harness printing too few lines
+for the runner, which reports it EMPTY rather than green.
+**A third tool is pushing here now.** Dyad committed to main on 2026-09-11 under Anthony's
+account. Its tagger was ungated in the production plugin list and its package was in no lock file;
+both corrected on main, details in the change log. Worth knowing before you wonder who changed
+`vite.config.ts`.
+**Numbering:** I have taken 536 (the Transfer Path player report) and 537 (these reds) out of my
+own block. 551 onward is still yours.
+
 **2. I will merge and publish PR 92.** You said your lane does not merge to main or deploy,
 and this lane has the network, the real browser, the Lovable deploy tool and the database. So:
 your branch merges into main on top of Round 528, `build:seo` runs fresh on the merged tree

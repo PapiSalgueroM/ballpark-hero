@@ -1,5 +1,148 @@
 # Project state
 
+## Live as of 2026-09-12 midday: both lanes merged, and the black screen three players reported is fixed
+
+**`origin/main` is `408eec75` and douknowball.com is serving it.** Deployment
+`b06fa233-3a43-45ce-a60f-ea585efb699a`, called only after `get_project` showed `latest_commit_sha` matching. Home
+bundle `index-CojH-TZn.js` to `index-DaZuEGn-.js`. Proven live rather than assumed: see the
+verification block below.
+
+### The player reports this publish answers
+
+Anthony forwarded four reports off the live site on 2026-09-11 and 2026-09-12. Three of them
+are one bug, and it was the worst kind: a dead end a player could not get out of.
+
+> "Whenever I play Soccer Manager Career at the end of the season the screen just goes black"
+> "In manager game after season ends and I click season report black screen comes"
+
+The tablet lane found it and fixed it as Round 541 the same night, and the fix sat on an
+unmerged branch while players kept hitting it. The cause is one identifier:
+`src/pages/ClubManager.tsx` is one component function with a dozen early return blocks, and the
+SEASON END block read the currency symbol `c` while the only binding it resolved to sat at
+function body level below it. That is a temporal dead zone, so it threw
+`ReferenceError: Cannot access 'c' before initialization` for any player who had signed or sold
+somebody, which is why casual testing never saw it. With no error boundary anywhere in the app
+the throw unmounted the whole root, so the player got a blank page with no footer and therefore
+no report button either. Round 544 adds the boundary. Round 550 makes the browser walk sign a
+player and press on into the season review, so the branch that crashed is no longer dead code
+for the one harness that drives the real game in a real browser.
+
+The fourth report is Transfer Path (puzzle tpa-662, Messi to Salah) and is being worked
+separately as Round 536. The puzzle itself is sound: the live row's minimum of 2 and its hint
+naming a man who was at Barcelona with Messi and at Liverpool with Salah are both correct, and
+the player's five name chain was accepted with nothing refused, so the defect is in what the
+game lets a player do next rather than in the data.
+
+### What landed, in the order it landed
+
+**The tablet lane's Rounds 526 to 540**, merged clean. 526 sitewide search over the registry
+and the per game copy, 527 the derived read only achievement case on the profile, 537 the
+leaderboard's day ending at midnight Eastern rather than 8pm plus the Week and Month views,
+538 Gauntlet Draft MLB with the four sport board lifted into one component, 539 and 540 the
+follow ups. **This half was urgent on its own**: Round 537's migration and Round 539's were
+already applied to the production database by that lane, so the live tables and the live code
+had been out of step since 2026-09-11. 72,460 of 356,808 completions over thirty days had been
+filed under the wrong day, measured on production before the migration ran.
+
+**The tablet lane's Rounds 541 to 550**, one conflict in the board, resolved by keeping both
+lanes' notes. 541 the crash above, 542 the roster adjudication that stopped squads quietly
+carrying last season's club (Joao Felix was still at Chelsea; 356 of 3,667 rows were in that
+state, 23 settled against the repo's own two source dataset and 332 left openly pending),
+543 European places read from the league's own slot table with the watch mode clock marked on
+unmount, 544 the error boundary, 545 the second legs a career in flight never got, 546 the
+flagship's Champions League played rather than decided and then painted, 547 the field derived
+from who qualified rather than who is famous, 548 a substitution while the clock is paused,
+549 a mid season takeover, 550 the browser walk that signs players.
+
+**The desktop lane's Round 528**, already on main: every sport hub links into the reference
+layer, the second of the two conditions the AdSense readiness verdict names.
+
+### The harness that was wrong about a date, and the harness that was right
+
+The merge turned two suite harnesses red and they wanted opposite things.
+
+`simLeaderboardCaps` was right and the merge fixed it: `mlb-gauntlet-draft` was on the live
+caps allowlist with no code able to send it, because the tablet lane's database was ahead of
+main's code. Merging Round 538 brought the code.
+
+`simNewBadge` was wrong, and fixing it properly took three attempts. It derived a page's ship
+date with `git log --follow`, which walks renames AND copies, so a page written by adapting
+another page is dated to its ancestor: it dated both new gauntlet pages to 2026-08-29, the day
+the soccer gauntlet page shipped, when both files were created on 2026-09-10. Dropping
+`--follow` was worse: `/footle` was extracted from `Index.tsx` long after the game shipped, so
+the exact path dates to 2026-03-08 while the game is the one the site opened with, and 23
+entries went into disagreement. Nothing separates the two mechanically, because git records a
+copy and an extraction identically. So the check stops guessing and holds the typed date inside
+the window git can justify: not later than the day the path appeared, not earlier than the
+oldest file git traces it to. That still refuses the only abuse it exists to catch, a date typed
+newer than the page can be, and for a page with no ancestor both ends are the same day and the
+check is exactly as tight as before. 124 dates checked, both controls still fire.
+
+Two ratchets were raised with their reason recorded: `simAdsense` 77 to 78 callers
+(MlbGauntletDraft.tsx) and `simIndexNow` 144 to 145 sitemap rows (/mlb-gauntlet-draft; /search
+is noindexed and moves no floor).
+
+### Proven live, four ways, not assumed
+
+- The home bundle moved from `index-CojH-TZn.js` to `index-DaZuEGn-.js`, so a fresh build really shipped.
+- `/search`, `/mlb-gauntlet-draft` and `/nfl-gauntlet-draft` answer with their own titles. An hour
+  earlier `/search` served the home page's title, which is what the soft 404 fallback looks like,
+  so those three pages were genuinely not live before this.
+- The four hubs Round 528 wired carry their Record Books anchors: `records#cup` on `/hockey`,
+  `records#ws` on `/baseball`, `records#nba` on `/pro-basketball`, `records#cbb` on `/college`.
+- `componentDidCatch` and `getDerivedStateFromError` both appear in the live bundle. Round 544's
+  own note records that a grep for an error boundary across the whole repo returned nothing before
+  it was written, so their presence in the shipped JavaScript is the boundary arriving.
+
+Thirteen routes rechecked, all 200. `scripts/playClubManager.mjs` walked a full season in a real
+browser on the built tree before the push: 42 half times, 44 full times, 42 subs, 48 windows,
+1 signing, 0 findings.
+
+### Seven harnesses were not green on the merged tree, and what each one was
+
+283 harnesses ran on the frozen merged tree. Two were fixed before the push and are green:
+`simSiteSearch` (the search keyword index is derived from the per game guides and the merge added
+guides it was not built from; regenerated) and `simNewBadge` (the date window rewrite above).
+`simLeaderboardCaps` was red BEFORE the merge and the merge fixed it: `mlb-gauntlet-draft` sat on
+the live caps allowlist with no code able to send it, because that lane's database was ahead of
+main's code.
+
+Five are open and are being worked as Round 537, none of them breaking a page, which is why this
+published rather than waiting:
+
+- `simAchievements`: the other lane's own Round 527 and 539 harness work, which their handoff
+  records as still in flight.
+- `simDailyLegend`: the three gauntlet draft routes count toward a badge under slugs nothing
+  records, so a player finishing one cannot tick it. A real defect in a feature that shipped here.
+- `simNationalities`: Round 542 removed players from every squad (Diogo Jota deliberately) and the
+  baked nationality map still carries them, so it holds entries for players no world contains.
+- `simLoanSpell`: 117 of 150 benched careers saw a loan offer against a threshold of 150. Being
+  measured before anything is changed, because this repo has been burned both ways by a bar
+  sitting inside its own distribution.
+- `simAnswerFromRecords`: probably the family CLAUDE.md already documents, a harness that queries
+  live state rather than the branch. Being established rather than assumed.
+
+One more was reported EMPTY rather than failing: `simEarlyReturnScope`, the fence for the crash
+itself, prints only four lines and falls under the runner's "a harness that prints almost nothing
+did not run" floor. It did run, scanning 522 files and finding no binding read above its own
+declaration. Worse, its negative control CANNOT FIRE on a Windows checkout: the needle is written
+with Unix newlines and `ClubManager.tsx` has CRLF here, so the control exits saying it would change
+nothing. A fence for a live P1 whose control cannot fire is a fence nobody has proven, and both
+halves are in Round 537's scope.
+
+### A third tool is now pushing to this repo
+
+`origin/main` gained two commits from Dyad on 2026-09-11, run under Anthony's own account:
+a component tagger and a generated `AI_RULES.md`. The rules file is kept as it stands, it is a
+short tech stack summary that points at `CLAUDE.md` and contradicts nothing. The tagger commit
+needed two corrections. It added its package to `devDependencies` and to no lock file, so
+`package.json` and every lock file disagreed and a lockfile respecting install could not build the
+repo; it is installed and `package-lock.json` carries it now. And it put the plugin in the list
+ungated where the Lovable tagger one slot over is gated on development. That was measured rather
+than assumed before changing it: a production build with it ungated emits zero `data-dyad-id`
+attributes, so it self gates internally and nothing was reaching visitors. It is gated anyway as
+hygiene, and the comment in `vite.config.ts` says so in those words.
+
 ## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 550, all four player reports closed
 
 Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
