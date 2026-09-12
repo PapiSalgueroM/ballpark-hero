@@ -182,6 +182,20 @@ const IdleArena = () => {
               </span>
             ))}
           </div>
+          {/* Round 530 review: the badge line lies over the bottom of the
+              arena for its few seconds. Sat in the flow above the tile slot it
+              pushed the tiles, an open drawer panel and the lift card down
+              about 36px on arrival and snapped them back when the timer
+              cleared it, while the player was tapping. It takes no taps, so
+              the ball underneath still scores. */}
+          {newBadge && (
+            <p
+              key={newBadge.id}
+              className="cm-slam pointer-events-none absolute inset-x-2 bottom-2 z-10 rounded-xl border border-gold/50 bg-card px-3 py-2 text-center text-xs font-bold text-gold"
+            >
+              🎖️ Badge earned: {newBadge.label}, +{Math.round(ACHIEVEMENT_BONUS * 100)}% on everything from here
+            </p>
+          )}
         </div>
 
         {/* the squad */}
@@ -206,12 +220,6 @@ const IdleArena = () => {
             <p className="text-center text-[11px] text-muted-foreground py-1">{GENERATORS.length - shown.length} more archetypes to unlock</p>
           )}
         </div>
-
-        {newBadge && (
-          <p key={newBadge.id} className="cm-slam mb-2 rounded-xl border border-gold/50 bg-gold/10 px-3 py-2 text-center text-xs font-bold text-gold">
-            🎖️ Badge earned: {newBadge.label}, +{Math.round(ACHIEVEMENT_BONUS * 100)}% on everything from here
-          </p>
-        )}
 
         {/* the boxes, or the one opened panel in their place, or the lift card
             (Round 530) while the trophy is still in the air */}

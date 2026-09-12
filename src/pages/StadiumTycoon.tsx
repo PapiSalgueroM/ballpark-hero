@@ -23,7 +23,7 @@ import {
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, winsToNextDivision,
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
-  ACHIEVEMENTS, achMult, goldenActive, GOLDEN_INFO,
+  ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale,
 } from '@/lib/stadiumTycoon';
@@ -289,6 +289,21 @@ export default function StadiumTycoon() {
                 🪙
               </button>
             )}
+            {/* Round 530 review: the badge line lies over the pitch for its
+                few seconds, the same reason the promotion card below does. In
+                the flow above the drawer buttons it pushed them, an open
+                drawer and everything under it down about 36px on arrival and
+                snapped them back when the timer cleared it, with the player
+                mid tap. It takes no clicks, so the ground underneath still
+                pays. The bonus is the lib's own ACH_BONUS, never a typed 2. */}
+            {g.badge && (
+              <p
+                key={g.badge.seq}
+                className="cm-slam pointer-events-none absolute inset-x-2 bottom-7 z-10 rounded-xl border border-emerald-500/40 bg-card px-3 py-2 text-center text-xs font-bold text-emerald-400"
+              >
+                🏅 Badge earned: {g.badge.label}, +{Math.round(ACH_BONUS * 100)}% income forever
+              </p>
+            )}
             {/* Round 530: promotion. The card covers the pitch so the page
                 never grows for it, and it swallows the click so a tap on it
                 is not a tap on the ground. */}
@@ -404,13 +419,8 @@ export default function StadiumTycoon() {
         </div>
 
         {/* Round 162: the drawers. Achievements are the long game's long game:
-            every badge is +2% income, forever, across every ground.
+            every badge is a standing income bonus, across every ground.
             Round 196: the boardroom joins them. */}
-        {g.badge && (
-          <p key={g.badge.seq} className="cm-slam mb-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-center text-xs font-bold text-emerald-400">
-            🏅 Badge earned: {g.badge.label}, +2% income forever
-          </p>
-        )}
         <div className="grid grid-cols-3 gap-2 mb-3">
           <button
             onClick={() => setDrawer(d => (d === 'ach' ? 'none' : 'ach'))}

@@ -17,7 +17,7 @@ import { useWonderkidFactory } from '@/hooks/useWonderkidFactory';
 import {
   FACILITIES, REGIONS, SAVE_KEY, MAX_REP,
   basePrice, capacity, facilityCost, findSec, fmtCash, potentialRead, priceMult,
-  regionIndex, salePrice, trainMult, canMoveUp,
+  regionIndex, salePrice, trainMult, canMoveUp, REP_TRAIN_BONUS, REP_FEE_BONUS,
   SHOWCASE_COOLDOWN,
 } from '@/lib/wonderkidFactory';
 
@@ -122,7 +122,7 @@ const WonderkidFactory = () => {
             <span className="inline-flex items-center gap-1">
               {Array.from({ length: Math.min(s.rep, 6) }, (_, i) => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}
               {s.rep > 6 && <span className="font-bold text-yellow-500">x{s.rep}</span>}
-              {s.rep > 0 && <span className="text-yellow-500 font-bold">+{Math.round(s.rep * 15)}% training, +{Math.round(s.rep * 10)}% fees</span>}
+              {s.rep > 0 && <span className="text-yellow-500 font-bold">+{Math.round(s.rep * REP_TRAIN_BONUS * 100)}% training, +{Math.round(s.rep * REP_FEE_BONUS * 100)}% fees</span>}
             </span>
             <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-foreground">
               <HelpCircle className="w-3.5 h-3.5" /> How it works
@@ -174,15 +174,24 @@ const WonderkidFactory = () => {
         )}
 
         {/* the academy */}
-        <div className="rounded-2xl border border-border bg-card p-3 mb-3">
+        <div className="relative rounded-2xl border border-border bg-card p-3 mb-3">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">The academy</span>
             <span className="text-[10px] text-muted-foreground">sell when the price is right, kids leave free at 24</span>
           </div>
+          {/* Round 530 review: the walked line lies OVER the academy header
+              for its four seconds rather than in the flow above the beds. In
+              the flow it pushed every bed card and its sell button down about
+              34px on arrival and snapped them back when the timer cleared it,
+              which is the no scroll rule's layout shift and, worse, a sell tap
+              during the snap lands on a different kid. Nothing under it moves
+              now, and it does not take taps. */}
           {walked && (
-            <p key={walked.seq} className="cm-loss-shake mb-2 rounded-lg border border-destructive/40 bg-destructive/10 px-2.5 py-1.5 text-xs font-bold text-destructive">
-              🚪 {walked.text}
-            </p>
+            <div key={walked.seq} className="pointer-events-none absolute inset-x-3 top-3 z-10 rounded-lg bg-card">
+              <p className="cm-loss-shake rounded-lg border border-destructive/40 bg-destructive/10 px-2.5 py-1.5 text-xs font-bold text-destructive">
+                🚪 {walked.text}
+              </p>
+            </div>
           )}
           {s.prospects.length === 0 ? (
             <div className="h-24 flex items-center justify-center text-xs text-muted-foreground text-center px-4">
@@ -234,7 +243,7 @@ const WonderkidFactory = () => {
               {moved.emoji} Welcome to {moved.name}
             </p>
             <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
-              star {s.rep} is forever: +{Math.round(s.rep * 15)}% training, +{Math.round(s.rep * 10)}% fees, and the scouts here find ceilings up to {region.potMax}
+              star {s.rep} is forever: +{Math.round(s.rep * REP_TRAIN_BONUS * 100)}% training, +{Math.round(s.rep * REP_FEE_BONUS * 100)}% fees, and the scouts here find ceilings up to {region.potMax}
             </p>
             <button
               onClick={() => setMoved(null)}

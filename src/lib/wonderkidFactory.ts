@@ -208,11 +208,20 @@ function makeProspect(s: FactoryState): Prospect {
 export function regionIndex(s: FactoryState): number {
   return Math.min(s.rep, REGIONS.length - 1);
 }
+/* Round 530 review: the page prints both of these, on the star card and on
+   the header chip. They are exported so it reads them off the engine rather
+   than re-typing them, which is how a retune here would otherwise leave the
+   card announcing a bonus the game no longer pays. */
+/** What one star of reputation adds to training speed. */
+export const REP_TRAIN_BONUS = 0.15;
+/** What one star of reputation adds to a sale fee. */
+export const REP_FEE_BONUS = 0.1;
+
 export function trainMult(s: FactoryState): number {
-  return (1 + 0.3 * s.levels.coaching) * (1 + 0.15 * s.rep) * (s.showcaseLeft > 0 ? SHOWCASE_MULT : 1);
+  return (1 + 0.3 * s.levels.coaching) * (1 + REP_TRAIN_BONUS * s.rep) * (s.showcaseLeft > 0 ? SHOWCASE_MULT : 1);
 }
 export function priceMult(s: FactoryState): number {
-  return (1 + 0.08 * s.levels.agents) * (1 + 0.1 * s.rep) * (s.deadlineLeft > 0 ? DEADLINE_MULT : 1);
+  return (1 + 0.08 * s.levels.agents) * (1 + REP_FEE_BONUS * s.rep) * (s.deadlineLeft > 0 ? DEADLINE_MULT : 1);
 }
 export function findSec(s: FactoryState): number {
   return Math.max(5, FIND_BASE_SEC / (1 + 0.25 * s.levels.scouting));

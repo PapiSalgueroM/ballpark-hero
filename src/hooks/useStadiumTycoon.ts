@@ -10,7 +10,7 @@ import { recordCompletion } from '@/lib/completions';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
-  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive,
+  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind } from '@/lib/stadiumTycoon';
@@ -168,7 +168,9 @@ export function useStadiumTycoon() {
         setConfetti(c => c + 2);
         setPromotion({ label: e.label, amount: e.amount, seq: floaterSeq++ });
       } else if (e.kind === 'ach') {
-        pushFloater(`${e.label}: +2% forever`, 'win', 22, 36);
+        /* Round 530 review: the lib's own bonus, so a retune cannot leave
+           the floater announcing a number the game no longer pays. */
+        pushFloater(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 'win', 22, 36);
         setConfetti(c => c + 1);
         setBadge({ label: e.label, seq: floaterSeq++ });
       } else if (e.kind === 'conceded') {
