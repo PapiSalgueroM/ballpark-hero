@@ -133,7 +133,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "Unlimited streaks earn badges at 3, 5, and 10 straight.",
     ],
     example: [
-      "You skip the early clues. Clue 5 says SEC, so you swing on Georgia. Red. Clue 6 is basketball history, skip. Then clue 7 mentions a perfect national championship season in 2019 and it clicks: LSU.",
+      "You skip the early clues. Clue 5 says SEC, so you swing on Georgia. Red. Clue 6 is basketball history, skip. Then clue 7 counts four poll era football titles and talks up the 2019 team and it clicks: LSU.",
       "The card flips: 500 points for solving on clue 7, plus a fun fact about the school. Not the hero guess, but a clean save.",
     ],
     tips: [

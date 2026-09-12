@@ -13,6 +13,7 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { CollegeGameMode } from '@/types/guessTheCollege';
+import { COLLEGE_THIN } from '@/data/colleges';
 
 const MODE_OPTIONS: { value: CollegeGameMode; label: string; icon: string }[] = [
   { value: 'daily', label: 'Daily', icon: '📅' },
@@ -217,6 +218,12 @@ const GuessTheCollege = () => {
                           💡 {currentCollege.funFact}
                         </p>
                       )}
+                      {clue.number === 12 && currentCollege && COLLEGE_THIN[currentCollege.name] && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                          One clue was held back for this school. {COLLEGE_THIN[currentCollege.name]}.
+                          We would rather show you one clue fewer than a number we cannot stand behind.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -363,17 +370,17 @@ const GuessTheCollege = () => {
             title="Guess The College: D1 Trivia | DoUKnowBall"
             description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
             howToPlay={[
-              "Read each clue about the mystery college: region, conference, mascot, and tournament history.",
+              "Read each clue about the mystery college: region, school size, conference and championship history.",
               "Type your guess at any time. Fewer clues used means a higher score.",
               "Play daily mode, unlimited mode, or filter by specific conference."
             ]}
             examples={[
-              "Alabama Crimson Tide: SEC, Tuscaloosa, 18× National Football Champions",
+              "Alabama Crimson Tide: SEC, Tuscaloosa, 13 poll era national football titles",
               "Ohio State Buckeyes: Big Ten, Columbus, 'THE' Ohio State University",
-              "Clemson Tigers: ACC, Death Valley, 3× Football National Champions",
-              "Michigan Wolverines: Big Ten, Ann Arbor, Winningest program in CFB",
-              "LSU Tigers: SEC, Baton Rouge, Death Valley, 2019 Perfect Season",
-              "Notre Dame Fighting Irish: Independent, South Bend, Touchdown Jesus"
+              "Clemson Tigers: ACC, Death Valley, 3 poll era national football titles",
+              "Michigan Wolverines: Big Ten, Ann Arbor, winningest program in college football",
+              "LSU Tigers: SEC, Baton Rouge, Death Valley, 2019 unbeaten season",
+              "Notre Dame Fighting Irish: ACC in every sport but football, South Bend, Touchdown Jesus"
             ]}
           />
           <GameNav />
