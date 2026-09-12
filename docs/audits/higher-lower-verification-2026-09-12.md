@@ -16,13 +16,31 @@ career totals per row with no source of any kind.
   domestic cup, league cup, continental, super cups). Friendlies and tour games do not
   count, youth and reserve teams do not count, international matches do not count.
 
-Where a total depends on the convention, the competitive figure ships and the disputed
-one is named here and nowhere in the game. The one live case is Pele: his club career
-is 647 games and 606 goals competitive (Santos 583/569 plus New York Cosmos 64/37), and
-1,390 games and 1,301 goals once friendlies and tour games are counted, which is the
-figure RSSSF computes and the one the file was shipping. The old row was worse than
-either, because it paired an all matches goal count with a competitive appearance count
-and so claimed 1,281 goals in 1,363 games.
+Where a total depends on the convention, the narrowest figure a publisher actually
+prints ships, and every competing figure is named here and nowhere in the game.
+
+**Pele is the case where even that is not enough, and this record originally overstated
+it.** A first pass through this file said his club pair was "the competitive figure both
+publishers agree on". That was wrong and is corrected here. The three published figures
+are not three readings of one convention, they are three different conventions:
+
+| Figure | What it actually counts | Source |
+| --- | --- | --- |
+| 647 games, 606 goals (Santos 583/569 plus New York Cosmos 64/37) | Wikipedia's club career table, which that article labels **league** appearances and goals, so it is narrower than this file's convention | https://en.wikipedia.org/wiki/Pel%C3%A9 |
+| 851 games, 778 goals | RSSSF's "official matches" total, which is **club plus national team** together, so it is wider than this file's convention | https://www.rsssf.org/players/ppeledata.html |
+| 1,413 games, 1,324 goals | RSSSF's all matches total, friendlies and tour games counted | https://www.rsssf.org/players/ppeledata.html |
+
+No publisher reached in this round prints Pele's senior competitive club total on this
+file's convention, all competitions and club only. **647/606 ships because it is the one
+published pair that cannot be an overstatement**, being a strict subset of the convention,
+and the row is in `HL_MARKED` so both games say on the card that the number is one
+publisher's figure and not a settled one. It is not claimed as verified anywhere.
+
+The old row shipped 1,363 games and 1,281 goals, which is the all matches pair and is
+internally coherent. What was wrong with it was not arithmetic, it was that the pool
+never said which convention it was on, so one row counted friendlies and tour games
+while the rest did not, and the two games compared them as though they were the same
+kind of number.
 
 ## The sources, and which ones refused
 
@@ -91,10 +109,13 @@ Giacinto Facchetti.
 - **Lev Yashin was given the wrong country.** He played for the Soviet Union, not Russia.
   His caps could not be two source verified in this round, so the row is removed rather
   than corrected.
-- **Four rows shipped more career goals than career appearances**, which is what happens
-  when an all matches goal total meets a competitive appearance total in the same row:
-  Pele, Eusebio, Romario and Ferenc Puskas. Pele is corrected. The other three are removed,
-  because the competitive pair for each is itself disputed between publishers.
+- **Three rows shipped more career goals than career appearances**, which is what happens
+  when an all matches goal total meets a narrower appearance total in the same row:
+  Eusebio (623 goals in 614 games), Romario (755 in 740) and Ferenc Puskas (620 in 530).
+  All three are removed, because the competitive pair for each is itself disputed between
+  publishers, and `scripts/simHigherLower.mjs` section 2 now fails on the shape so it
+  cannot come back. Pele was a fourth row on the same theme but not the same defect: his
+  pair was coherent and simply on the other convention, and he is handled above.
 - **Two stats were deleted outright rather than verified: career assists and career
   trophies.** No publisher prints either on any agreed convention. There is no career
   assist figure at all for a career that ended before the 1990s, and "trophies won" depends
@@ -129,7 +150,7 @@ publisher was not read for that row.
 
 | Player | Before apps/goals/caps | After apps/goals/caps | Source A | Source B | Note | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Pelé | 1363/1281/92 | 647/606/92 | https://www.rsssf.org/miscellaneous/braz-recintlp.html | https://en.wikipedia.org/wiki/Brazil_national_football_team_records_and_statistics | club pair was the all matches figure (1,363 games, 1,281 goals) that counts friendlies and tour games; the competitive pair ships | CORRECTED |
+| Pelé | 1363/1281/92 | 647/606/92 | https://www.rsssf.org/miscellaneous/braz-recintlp.html | https://en.wikipedia.org/wiki/Brazil_national_football_team_records_and_statistics | caps 92 agreed by both. Club pair was an all matches goal count against a narrower appearance count; the narrowest published pair ships and is marked, see the Pele table above, no publisher prints this file's convention for him | CORRECTED |
 | Diego Maradona | 592/312/91 | 592/312/91 | https://www.rsssf.org/miscellaneous/arg-recintlp.html | https://en.wikipedia.org/wiki/Argentina_national_football_team_records_and_statistics | caps agreed by both, club pair unchanged and marked | VERIFIED |
 | Johan Cruyff | 520/294/48 | 520/294/48 | https://www.rsssf.org/miscellaneous/ned-recintlp.html | https://en.wikipedia.org/wiki/Netherlands_national_football_team_records_and_statistics | caps agreed by both, club pair unchanged and marked | VERIFIED |
 | Franz Beckenbauer | 584/75/103 | removed | https://www.rsssf.org/miscellaneous/duit-recintlp.html |  | one source only: RSSSF prints 103 caps, no independent second reached | REMOVED |

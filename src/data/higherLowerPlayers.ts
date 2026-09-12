@@ -11,10 +11,11 @@ import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
  * row with no source of any kind. It carried the same person twice under two
  * names (Ronaldinho and "Ronaldo de Assis (R10)" were one identical row, so
  * were Antonio and "Toni" Ruediger), it gave Lev Yashin the wrong country, and
- * it mixed conventions inside a single row: Pele's appearances were the
- * competitive ones while his goals were the all matches figure that counts
- * friendlies and tour games, and four other rows shipped more career goals
- * than career appearances for the same reason.
+ * it ran two conventions side by side without saying so. Pele shipped the all
+ * matches pair (1,363 games, 1,281 goals), which counts friendlies and tour
+ * games, in a pool where everybody else was on a competitive figure. Three
+ * other rows shipped more career goals than career appearances, which is what
+ * a mix inside one row looks like from the outside.
  *
  * THE CONVENTION, one rule applied to every row.
  *   internationalCaps: senior full internationals (A matches), as published.
@@ -22,8 +23,10 @@ import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
  *     (league, domestic cup, league cup, continental, super cups), excluding
  *     friendlies and tour games, excluding youth and reserve teams, and
  *     excluding international matches.
- * Where a total depends on the convention, the competitive figure ships and
- * the disputed one is named in the evidence file and nowhere in the game.
+ * Where a total depends on the convention, the narrowest figure a publisher
+ * actually prints ships, so the row can understate a career but never inflate
+ * one, and every competing figure is named in the evidence file and nowhere in
+ * the game.
  *
  * WHAT IS VERIFIED AND WHAT IS NOT. Be precise about this, it is the whole
  * point of the round.
@@ -69,8 +72,10 @@ export const HL_UNVERIFIED_NOTE =
  * era cut off, not a hand picked list: a club career that finished before 1985
  * has no settled appearance or goal total, because the publishers of the time
  * counted friendlies and tour games differently and nobody has reconciled them
- * since. Pele is the loud case, his two published careers are 647 games to
- * 1,390 depending only on that choice.
+ * since. Pele is the loud case and the evidence file carries his three figures
+ * side by side: no publisher reached in this round prints his career on the
+ * convention above, so the narrowest published pair ships, being the one that
+ * cannot overstate him, and the card says it is not settled.
  */
 export const HL_MARKED: readonly string[] = [
   'Pelé',
@@ -82,7 +87,7 @@ export const HL_MARKED: readonly string[] = [
 
 /** What the games say on one of those cards. */
 export const HL_MARKED_NOTE =
-  'Career ended before 1985, so the club totals are the ones most publishers use, not a settled number.';
+  'Career ended before 1985, back when publishers never agreed which games counted. This club total is one of them, not a settled number.';
 
 const MARKED_SET = new Set<string>(HL_MARKED);
 

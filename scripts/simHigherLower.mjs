@@ -57,9 +57,12 @@ function codeOnly(src) {
 
 /* ── the anchors, lifted from the evidence file ─────────────────────────────
    Caps only, on purpose. Caps are the column two publishers agreed on, so they
-   are the column worth pinning. Pele's club pair is pinned as well because it
-   is the one club total this round rewrote, from the all matches figure that
-   counts friendlies to the competitive one. */
+   are the column worth pinning. Pele's club pair is pinned for a different
+   reason and it is worth being exact about which: it is NOT a two source
+   agreement, no publisher reached prints his career on this file's convention.
+   It is the one club total this round rewrote, so it is pinned to the published
+   pair the evidence file argues for, and a silent drift back to an all matches
+   figure goes red here rather than reaching the game. */
 const CAP_ANCHORS = {
   'Sergio Ramos': 180,
   'Gianluigi Buffon': 176,
