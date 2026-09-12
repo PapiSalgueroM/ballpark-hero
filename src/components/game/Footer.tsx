@@ -45,6 +45,17 @@ export function Footer() {
         ))}
       </nav>
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
+        {/* Round 526: the way in to /search, and it is here rather than in the
+            header on purpose. Round 320 got that header row to fit a 320px
+            phone almost exactly (the worst case, a streaked signed out guest,
+            measures 347px at 360 and only fits because the mark sits out below
+            360), and one more control in it is how Sign Up ended up 37px off
+            the right edge last time. This row wraps, so it fits any width, and
+            it is on every page of the site. */}
+        <Link to="/search" className="underline hover:text-foreground transition-colors">
+          Search Games
+        </Link>
+        <span>·</span>
         <Link to="/about" className="underline hover:text-foreground transition-colors">
           About
         </Link>

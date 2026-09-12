@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
+import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { LiveTicker } from "@/components/layout/LiveTicker";
@@ -43,6 +44,11 @@ import NotFound from "./pages/NotFound";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
+/* Round 526. The const name has to match the file name: the hidden page
+   readers in scripts/genHiddenStubs.mjs and scripts/prerender.mjs pull the
+   component name out of the Route below and look for a page file called that,
+   so calling this SiteSearch would quietly cost /search its snapshot. */
+const Search = lazy(() => import("./pages/Search"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminReports = lazy(() => import("./pages/AdminReports"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -72,6 +78,7 @@ const SquadDeal = lazy(() => import("./pages/SquadDeal"));
 const SearchAndDiscard = lazy(() => import("./pages/SearchAndDiscard"));
 const GauntletDraft = lazy(() => import("./pages/GauntletDraft"));
 const NbaGauntletDraft = lazy(() => import("./pages/NbaGauntletDraft"));
+const MlbGauntletDraft = lazy(() => import("./pages/MlbGauntletDraft"));
 const NflGauntletDraft = lazy(() => import("./pages/NflGauntletDraft"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
@@ -299,6 +306,13 @@ const AppContent = () => {
       <LiveTicker />
       {shouldShowHeader(pathname) && <Header />}
       <Suspense fallback={<RouteLoader />}>
+      {/* Round 544: around the routes, inside Suspense. A render throw in one
+          game now costs that game and nothing else: the header above and the
+          global footer below both survive, and the footer is where the report a
+          bug button lives. Before this, a throw anywhere unmounted the whole
+          root and the visitor got a white page with no way off it. Keyed on the
+          path so navigating away clears it. */}
+      <RouteErrorBoundary resetKey={pathname}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
@@ -329,6 +343,7 @@ const AppContent = () => {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/accessibility" element={<Accessibility />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/whats-new" element={<WhatsNew />} />
@@ -380,6 +395,7 @@ const AppContent = () => {
         <Route path="/search-and-discard" element={<SearchAndDiscard />} />
         <Route path="/gauntlet-draft" element={<GauntletDraft />} />
         <Route path="/nba-gauntlet-draft" element={<NbaGauntletDraft />} />
+        <Route path="/mlb-gauntlet-draft" element={<MlbGauntletDraft />} />
         <Route path="/nfl-gauntlet-draft" element={<NflGauntletDraft />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
@@ -502,6 +518,7 @@ const AppContent = () => {
           three unrelated pages. Inside the boundary the footer simply waits for
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
+      </RouteErrorBoundary>
       <Footer />
       </Suspense>
     </>

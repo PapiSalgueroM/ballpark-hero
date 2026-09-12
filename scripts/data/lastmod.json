@@ -25,8 +25,8 @@
     "date": "2026-08-25"
   },
   "/baseball": {
-    "hash": "149ad86713f61f4b",
-    "date": "2026-09-11"
+    "hash": "27aef56197990ed0",
+    "date": "2026-09-12"
   },
   "/baseball-career": {
     "hash": "68d206bdcb581ff5",
@@ -117,8 +117,8 @@
     "date": "2026-09-11"
   },
   "/conquest-nhl": {
-    "hash": "387628f47104426f",
-    "date": "2026-09-07"
+    "hash": "08258dbcf7346de5",
+    "date": "2026-09-12"
   },
   "/contact": {
     "hash": "7be5f0e1d001c2bb",
@@ -245,8 +245,8 @@
     "date": "2026-09-05"
   },
   "/leaderboard": {
-    "hash": "047e537f426b730b",
-    "date": "2026-08-25"
+    "hash": "69ac03793458756a",
+    "date": "2026-09-12"
   },
   "/list-quiz": {
     "hash": "61f20988b285f283",
@@ -273,24 +273,28 @@
     "date": "2026-09-11"
   },
   "/mlb-connect-4": {
-    "hash": "776ac948837eb57f",
-    "date": "2026-09-05"
+    "hash": "320972c596a4538e",
+    "date": "2026-09-12"
   },
   "/mlb-front-office": {
     "hash": "31544af6c42ea0f7",
     "date": "2026-08-25"
   },
+  "/mlb-gauntlet-draft": {
+    "hash": "51e48bfcc78515ce",
+    "date": "2026-09-12"
+  },
   "/mlb-grid": {
-    "hash": "f5831df92b63e889",
-    "date": "2026-08-31"
+    "hash": "04474262b6622020",
+    "date": "2026-09-12"
   },
   "/mlb-grid/archive": {
     "hash": "b9bbb8960bb624b8",
     "date": "2026-09-05"
   },
   "/mlb-higher-lower": {
-    "hash": "8e5155d096219fc6",
-    "date": "2026-08-25"
+    "hash": "4709524fc6d839d7",
+    "date": "2026-09-12"
   },
   "/mlb-my-career": {
     "hash": "ab1e2c8b998fb301",
@@ -325,8 +329,8 @@
     "date": "2026-09-11"
   },
   "/nba-gauntlet-draft": {
-    "hash": "9501a59eb5b0a527",
-    "date": "2026-09-11"
+    "hash": "265d5c52cbcddfad",
+    "date": "2026-09-12"
   },
   "/nba-grid": {
     "hash": "a1ded92bc1153386",
@@ -365,8 +369,8 @@
     "date": "2026-08-25"
   },
   "/nfl-gauntlet-draft": {
-    "hash": "56d46e7ee4fa3db2",
-    "date": "2026-09-11"
+    "hash": "44f30d76d777ad13",
+    "date": "2026-09-12"
   },
   "/nfl-higher-lower": {
     "hash": "45896e8d7f3002d8",
@@ -497,8 +501,8 @@
     "date": "2026-09-07"
   },
   "/soccer-conquest": {
-    "hash": "dc337b8d4bc6d13f",
-    "date": "2026-09-07"
+    "hash": "9beb322ca59252c9",
+    "date": "2026-09-12"
   },
   "/soccer-grid": {
     "hash": "0a981bb30ac03886",
