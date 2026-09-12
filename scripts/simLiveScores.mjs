@@ -35,7 +35,8 @@ const BUNDLE = path.join(os.tmpdir(), 'liveScores.bundle.mjs');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.LIVE_CONTROL || '';
-if (CONTROL && CONTROL !== 'leak') { console.error(`LIVE_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+const CONTROLS = ['leak', 'feedhost', 'citedespn'];
+if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`LIVE_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
@@ -100,8 +101,61 @@ console.log('2) the feed stays server side');
   const src = fs.readdirSync(path.join(ROOT, 'src'), { recursive: true })
     .filter(f => /\.(ts|tsx)$/.test(String(f)))
     .map(f => [String(f), fs.readFileSync(path.join(ROOT, 'src', String(f)), 'utf8')]);
-  const offenders = src.filter(([, t]) => /api-sports\.io|apisports|site\.api\.espn|espn\.com/i.test(t)).map(([f]) => f);
-  if (offenders.length) fail(`the feed's host is named in the browser bundle: ${offenders.join(', ')}`);
+  if (CONTROL === 'feedhost') {
+    const i = src.findIndex(([f]) => String(f).endsWith('liveScores.ts'));
+    if (i < 0) { console.error('control feedhost cannot find liveScores.ts, so it would change nothing'); process.exit(1); }
+    const before = src[i][1];
+    const after = `${before}\nconst poll = "https://site.api.espn.com/apis/site/v2/scoreboard";\n`;
+    if (after === before) { console.error('control feedhost changed nothing'); process.exit(1); }
+    src[i] = [src[i][0], after];
+    console.log('   NEGATIVE CONTROL ON: the feed host pasted into a browser file, this section must go red');
+  }
+  if (CONTROL === 'citedespn') {
+    const i = src.findIndex(([f]) => String(f).endsWith('leagueCaps.ts'));
+    if (i < 0) { console.error('control citedespn cannot find leagueCaps.ts, so it would change nothing'); process.exit(1); }
+    const before = src[i][1];
+    const after = `${before}\nconst elsewhere = "https://www.espn.com/nfl/story/_/id/1";\n`;
+    if (after === before) { console.error('control citedespn changed nothing'); process.exit(1); }
+    src[i] = [src[i][0], after];
+    console.log('   NEGATIVE CONTROL ON: an espn.com string outside a cited source url, this section must go red');
+  }
+  /* A FEED HOST IS A FETCH TARGET. A PUBLISHER IS A CITATION. They are not the
+     same thing and this check used to ban both, because when it was written
+     nothing in src had any reason to name ESPN except calling it.
+     That changed on 2026-09-12: the reference explainers cite ESPN articles as
+     one of their two publishers per period and print the URL on the page, the
+     way they already cite Wikipedia, and src/lib/leagueCaps.ts cites ESPN for
+     two of the four salary cap figures. Three files went red for doing exactly
+     what the data rules ask.
+     So the ban is now precise instead of broad, and stricter where it counts.
+     The feed's own hosts are refused outright, wherever they appear and in
+     whatever shape, because nothing in the browser may ever name one. Any
+     other espn.com string is allowed ONLY as the value of a url field, which
+     is what a source list entry looks like; the same string in a fetch, a
+     template literal or a bare constant still fails. Comments are stripped
+     first so prose about the rule cannot satisfy it. */
+  const FEED_HOSTS = /api-sports\.io|apisports|site\.api\.espn/i;
+  /* The line comment stripper must not eat a URL, and the lookbehind below is
+     the whole reason it does not. A stripper that matches two slashes anywhere
+     also matches the pair inside a scheme, so it deletes the host and the rest
+     of the line with it. That silently emptied this entire check on the first
+     attempt: both new controls fired and the section stayed green, because no
+     URL survived stripping to be found. Requiring that the pair is not
+     preceded by a colon leaves a scheme alone and still removes a real
+     comment. */
+  const stripped = src.map(([f, t]) => [f, t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ')]);
+  const feedOffenders = stripped.filter(([, t]) => FEED_HOSTS.test(t)).map(([f]) => f);
+  if (feedOffenders.length) fail(`the feed's host is named in the browser bundle: ${feedOffenders.join(', ')}`);
+  const looseOffenders = stripped.filter(([, t]) => {
+    const hits = [...t.matchAll(/espn\.com/gi)];
+    if (!hits.length) return false;
+    /* every occurrence must sit inside a url: '...' or url: "..." value */
+    const cited = [...t.matchAll(/\burl:\s*(['"])([^'"]*espn\.com[^'"]*)\1/gi)].length;
+    return hits.length !== cited;
+  }).map(([f]) => f);
+  if (looseOffenders.length) {
+    fail(`espn.com is named outside a cited source url in the browser bundle: ${looseOffenders.join(', ')}`);
+  }
   const client = fs.readFileSync(path.join(ROOT, 'src/lib/liveScores.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' ');
   if (!/from '@\/integrations\/supabase\/client'/.test(client)) fail('liveScores.ts does not read the project URL and key from the one file that knows them');
   if (/VITE_SUPABASE/.test(client)) fail('liveScores.ts reads VITE_SUPABASE_*, which points at a deleted project (see CLAUDE.md)');

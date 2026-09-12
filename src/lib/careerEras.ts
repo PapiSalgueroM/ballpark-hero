@@ -430,7 +430,7 @@ const RIVAL_LASTS = ["Silva", "Fernández", "Müller", "Santos", "Rossi", "Ander
    combinations against the live harvest, so a name that becomes real later
    turns the suite red rather than shipping. */
 const RIVAL_NAME_COLLISIONS = new Set([
-  "Iván López", "Fernando Torres", "Diego Rossi", "Diego López", "Diego Costa",
+  "Iván López", "Fernando Torres", "Diego López", "Diego Costa",
   "Andrés Fernández", "Sergio Fernández", "Theo Hernández", "Paulo Costa",
   "Paulo Ferreira", "Ángel López", "Marco Rossi", "Thiago Silva",
   "Florian Müller", "Pablo López", "Pablo Hernández", "Xavi Hernández", "Xavi Torres",
