@@ -66,7 +66,7 @@ export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal;
       )}
       <button
         onClick={onContinue}
-        className="cm-rise mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+        className="cm-rise mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
         style={{ animationDelay: afterLines }}
       >
         Continue

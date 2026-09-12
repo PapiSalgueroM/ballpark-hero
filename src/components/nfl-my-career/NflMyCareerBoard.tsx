@@ -19,7 +19,7 @@ import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 import { extensionDue, pushExtension, type ExtensionTalk } from '@/lib/usCareerExtension';
 import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
-import { buildSeasonReveal, type SeasonReveal } from '@/lib/usCareerReveal';
+import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
@@ -72,6 +72,11 @@ import { cn } from '@/lib/utils';
 type Phase = 'create' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';
 
 const SAVE_KEY = 'nfl-my-career-save-v1';
+
+/* Round 530 review: one number for round one, used by the pressure line and
+   by the card's confetti rule, so the card and the line under it can never
+   disagree about the same pick. The NFL has 32 clubs, so round one is 32. */
+export const FIRST_ROUND_END = 32;
 
 interface SaveShape { c: CareerState; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null }
 
@@ -176,14 +181,14 @@ export default function NflMyCareerBoard() {
     const roleNote = nflAssignRole(c, tq, Math.random);
     setCareer(c);
     setTeamQuality(tq);
-    const pressureLine = c.draftPick <= 10 ? 'The city expects a savior.' : c.draftPick <= 32 ? 'First round money, first round pressure.' : 'Late pick. Everything must be earned.';
+    const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${teamLabelOf(c.team)} select ${c.name}.`,
       pressureLine,
       roleNote,
     ]);
-    /* Round 530: the same facts, given a moment. Round one is 32 picks. */
-    setDraftDay({ pick: c.draftPick, teamLabel: teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: 32 });
+    /* Round 530: the same facts, given a moment. */
+    setDraftDay({ pick: c.draftPick, teamLabel: teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: FIRST_ROUND_END });
     setPhase('season');
     persist(c, 'season', tq);
   };

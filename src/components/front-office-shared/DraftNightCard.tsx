@@ -87,7 +87,7 @@ export function DraftNightCard({ night, onContinue }: { night: DraftNight; onCon
             type="button"
             data-draft-continue
             onClick={onContinue}
-            className="fo-draft-continue mt-3 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+            className="fo-draft-continue mt-3 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
             style={{ animationDelay: `${continueAtMs}ms` }}
           >
             Continue to the hub

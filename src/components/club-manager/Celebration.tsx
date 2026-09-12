@@ -68,6 +68,14 @@ export function ConfettiBurst({ seed = 1, count = 30 }: { seed?: number; count?:
   );
 }
 
+/* Round 530 review, for anyone putting one of these classes on a control:
+   cm-rise, cm-slam and cm-tick-in all fill forwards, and an animated value
+   outranks a normal author rule for the same property. So a hover or a
+   conditional state that changes opacity or transform on the SAME element is
+   dead once the animation has run. Two ways out, both in the tree already:
+   put the class on a wrapper and keep the control as its child (GmPressCard,
+   FreeAgencyPanel), or change a property the keyframes never touch (the
+   Continue buttons lift with brightness rather than opacity). */
 /** The keyframes the match report's staged reveal leans on, mounted once. */
 export function CelebrationStyles() {
   return (

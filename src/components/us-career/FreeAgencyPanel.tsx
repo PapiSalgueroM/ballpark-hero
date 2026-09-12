@@ -57,49 +57,55 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
 
       <div className="space-y-2">
         {w.offers.map((o, i) => (
-          <div
-            key={`${o.team}-${i}`}
-            className={cn(
-              'cm-tick-in rounded-2xl border p-3',
-              o.gone ? 'border-border bg-card opacity-45' : o.incumbent ? 'border-gold/50 bg-card' : 'border-border bg-card',
-            )}
-            style={{ animationDelay: revealDelay(i, 0.3, 0.14) }}
-          >
-            <div className="flex items-center justify-between gap-2">
-              <p className="min-w-0 truncate text-sm font-black text-foreground">
-                {o.label}
-                {o.incumbent && <span className="ml-2 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold text-gold">Your team</span>}
-              </p>
-              <span className="shrink-0 text-[10px] font-bold text-muted-foreground">{FA_TIER_WORD[o.tier]}</span>
-            </div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-              <span className="font-bold text-foreground">${o.salary}M x {o.years} yr{o.years === 1 ? '' : 's'}</span>
-              <span>${faTotalValue(o)}M total</span>
-              <span>Roster {o.quality}</span>
-            </div>
-            <p className="mt-1 text-[11px] italic text-muted-foreground">{o.gone ? 'Offer withdrawn.' : `"${o.pitch}"`}</p>
-            {!o.gone && (
-              <div className="mt-2 grid grid-cols-2 gap-1.5">
-                <button
-                  onClick={() => onSign(i)}
-                  className="flex items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
-                >
-                  <Handshake className="h-3.5 w-3.5" /> Sign
-                </button>
-                <button
-                  onClick={() => onPush(i)}
-                  disabled={o.pushed}
-                  className={cn(
-                    'flex items-center justify-center gap-1 rounded-xl border px-3 py-2 text-xs font-bold',
-                    o.pushed
-                      ? 'cursor-not-allowed border-border text-muted-foreground opacity-50'
-                      : 'border-gold/50 text-gold hover:bg-gold/10',
-                  )}
-                >
-                  <TrendingUp className="h-3.5 w-3.5" /> {o.pushed ? 'Talks done' : 'Push for more'}
-                </button>
+          /* Round 530 review: the tick in sits on a wrapper, not on the card.
+             It fills forwards at opacity 1, and an animated value outranks a
+             normal rule, so with both on one element a withdrawn offer could
+             never dim once the tick had run; under reduced motion the kit's
+             own .cm-tick-in { opacity: 1 } beat the dim as well. Same split
+             GmPressCard uses for its hover scale. */
+          <div key={`${o.team}-${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i, 0.3, 0.14) }}>
+            <div
+              className={cn(
+                'rounded-2xl border p-3',
+                o.gone ? 'border-border bg-card opacity-45' : o.incumbent ? 'border-gold/50 bg-card' : 'border-border bg-card',
+              )}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className="min-w-0 truncate text-sm font-black text-foreground">
+                  {o.label}
+                  {o.incumbent && <span className="ml-2 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-bold text-gold">Your team</span>}
+                </p>
+                <span className="shrink-0 text-[10px] font-bold text-muted-foreground">{FA_TIER_WORD[o.tier]}</span>
               </div>
-            )}
+              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                <span className="font-bold text-foreground">${o.salary}M x {o.years} yr{o.years === 1 ? '' : 's'}</span>
+                <span>${faTotalValue(o)}M total</span>
+                <span>Roster {o.quality}</span>
+              </div>
+              <p className="mt-1 text-[11px] italic text-muted-foreground">{o.gone ? 'Offer withdrawn.' : `"${o.pitch}"`}</p>
+              {!o.gone && (
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
+                  <button
+                    onClick={() => onSign(i)}
+                    className="flex items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
+                  >
+                    <Handshake className="h-3.5 w-3.5" /> Sign
+                  </button>
+                  <button
+                    onClick={() => onPush(i)}
+                    disabled={o.pushed}
+                    className={cn(
+                      'flex items-center justify-center gap-1 rounded-xl border px-3 py-2 text-xs font-bold',
+                      o.pushed
+                        ? 'cursor-not-allowed border-border text-muted-foreground opacity-50'
+                        : 'border-gold/50 text-gold hover:bg-gold/10',
+                    )}
+                  >
+                    <TrendingUp className="h-3.5 w-3.5" /> {o.pushed ? 'Talks done' : 'Push for more'}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

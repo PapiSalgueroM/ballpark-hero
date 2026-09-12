@@ -309,7 +309,7 @@ export default function StadiumTycoon() {
                   </p>
                   <button
                     onClick={g.dismissPromotion}
-                    className="cm-rise mt-2 inline-flex min-h-[36px] items-center rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+                    className="cm-rise mt-2 inline-flex min-h-[36px] items-center rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-primary-foreground hover:brightness-110"
                     style={{ animationDelay: '0.7s' }}
                   >
                     Continue

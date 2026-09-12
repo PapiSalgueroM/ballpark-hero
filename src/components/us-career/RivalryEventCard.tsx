@@ -58,7 +58,7 @@ export function RivalryEventCard({
       </div>
       <button
         onClick={onContinue}
-        className="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+        className="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
         style={{ animationDelay: headToHead ? '1.2s' : '0.95s' }}
       >
         Continue

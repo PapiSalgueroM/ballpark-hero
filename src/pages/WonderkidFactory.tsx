@@ -238,7 +238,7 @@ const WonderkidFactory = () => {
             </p>
             <button
               onClick={() => setMoved(null)}
-              className="cm-rise mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+              className="cm-rise mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:brightness-110"
               style={{ animationDelay: '0.7s' }}
             >
               Continue
