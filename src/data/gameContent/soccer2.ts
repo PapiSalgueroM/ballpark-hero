@@ -186,7 +186,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Ties count for you: a pick is correct when your number is higher than or equal to the opponent's.",
       "One wrong pick ends the run. There are no lives and no timer.",
       "Every matchup is winnable by design, with at least one stat where your player is not behind.",
-      "International caps are senior full internationals, checked against two published sources before a player joins the pool.",
+      "International caps are senior full internationals, and a card says on the reveal when its number comes from one publisher rather than two.",
     ],
     example: [
       "Your card is Paolo Maldini. Goals is a trap for a defender who played 25 years at the back, so you tap appearances, and 902 games holds up against almost anybody.",

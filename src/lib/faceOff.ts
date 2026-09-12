@@ -92,9 +92,10 @@ export interface Category {
   question: string;
   unit: string;
   pool: Athlete[];
-  /** Round 535: a category whose numbers the pool has not finished verifying
-   *  carries the pool's own note, and the reveal prints it. Undefined means
-   *  the numbers are verified and there is nothing to say. */
+  /** Round 535: a category whose numbers carry the SAME caveat on every row
+   *  carries it once here, and the reveal prints it. Undefined means there is
+   *  nothing to say about the whole pool, which is not the same as nothing to
+   *  say: caps are checked row by row, so that caveat rides on the card. */
   note?: string;
 }
 

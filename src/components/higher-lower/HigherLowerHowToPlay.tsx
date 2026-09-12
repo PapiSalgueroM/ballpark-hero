@@ -37,9 +37,9 @@ export function HigherLowerHowToPlay({ open, onOpenChange }: HigherLowerHowToPla
               <li>🌍 <span className="text-foreground font-semibold">Int'l Caps</span>: Senior national team appearances</li>
             </ul>
             <p className="mt-2 text-xs text-muted-foreground">
-              Friendlies, tour games, youth and reserve football do not count. Caps are checked
-              against two published sources before a player joins the pool, and the club columns
-              say on the card when we are still checking them.
+              Friendlies, tour games, youth and reserve football do not count. When a number is
+              backed by one publisher rather than two, or comes from an era nobody ever
+              reconciled, the card says so under the stats.
             </p>
           </section>
 

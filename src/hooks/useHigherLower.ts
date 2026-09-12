@@ -13,9 +13,10 @@ const STAT_LABELS: Record<StatKey, string> = {
 };
 
 /** What the card says under a stat, or nothing. Round 535: the pool says out
- *  loud which of its numbers are not two source verified yet, and which rows
+ *  loud which of its numbers one publisher stands behind rather than two,
+ *  which of them are not checked against a publisher at all, and which rows
  *  come from an era whose club totals were never reconciled between
- *  publishers. The rule and both notes live in the data file beside the lists
+ *  publishers. The rule and the notes live in the data file beside the lists
  *  they read, so /face-off asks the same question and gets the same answer. */
 export function noteFor(playerName: string, stat: StatKey): string | null {
   return hlNoteFor(playerName, stat);

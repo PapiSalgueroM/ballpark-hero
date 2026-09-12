@@ -186,9 +186,14 @@ interface PlayerCardProps {
 function PlayerCard({
   player, revealed, statKeys, statEmojis, statLabels, noteFor, onChooseStat, interactive, lastChoice, nextPlayerStats,
 }: PlayerCardProps) {
-  /* One line, shown only once the numbers are on screen: which of them the
-     pool has not finished checking, and the era caveat when the row has one. */
-  const provenanceNote = noteFor(player.name, 'appearances');
+  /* Shown only once the numbers are on screen: every caveat this row carries,
+     one line each, and never the same line twice. Asked of every stat on the
+     card rather than one of them, because the club columns and the cap column
+     are checked to different depths, so a single question would leave the
+     other column saying nothing. */
+  const provenanceNotes = [...new Set(
+    statKeys.map((stat) => noteFor(player.name, stat)).filter((n): n is string => !!n),
+  )];
   return (
     <div className="flex-1 max-w-sm w-full mx-auto">
       <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
@@ -239,10 +244,14 @@ function PlayerCard({
           })}
         </div>
 
-        {revealed && provenanceNote && (
-          <p className="text-center text-[11px] leading-snug text-muted-foreground mt-3">
-            {provenanceNote}
-          </p>
+        {revealed && provenanceNotes.length > 0 && (
+          <div className="mt-3 space-y-1">
+            {provenanceNotes.map((note) => (
+              <p key={note} className="text-center text-[11px] leading-snug text-muted-foreground">
+                {note}
+              </p>
+            ))}
+          </div>
         )}
 
         {interactive && (
