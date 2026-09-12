@@ -322,9 +322,10 @@ export function useTransferPath(): TransferPathState {
      man in the pool who fits that is Philippe Coutinho, and Coutinho from
      Cristiano Ronaldo is a refusal. That is Round 294's defect, a hint into a
      refusal, arriving through a door no fence was watching: not a stale row,
-     a row that never moves. Measured over the 885 puzzle pull, after a one to
-     three step legal wander the stored hint's own middle man is refused from
-     the head in 651 of 884 puzzles.
+     a row that never moves. Measured over the 885 puzzle pull by
+     scripts/simTransferPathGuidance.mjs, ONE legal step off the optimal line
+     already leaves the stored hint pointing at a refused man on 463 of 865
+     puzzles, and a one to three step wander pushes that to 651 of 884.
 
      So once the chain has moved, the hint is derived from the head, over the
      rule's own graph, skipping every name already played (offering one would
@@ -334,10 +335,11 @@ export function useTransferPath(): TransferPathState {
 
      The other half is the stranded case. Adding any teammate of the target
      wins on the spot, so the chain can never eat the target's last neighbour,
-     but it can still wall its own head in: 97 of 5310 random legal walks over
-     the pull ended with no route left, one of them after two steps. The board
-     said nothing about that and the player could type forever. Now it says so
-     and points at the exit that already exists. */
+     but it can still wall its own head in: 5 of 884 deterministic deep wanders
+     over the pull ended with no route left, the shortest after five steps, and
+     97 of 5310 random ones did. The board said nothing about that and the
+     player could type forever. Now it says so and points at the exit that
+     already exists. */
   const fromHere = useMemo((): { steps: number; first: string; last: string } | 'stranded' | null => {
     if (status !== 'building' || chain.length < 2) return null;
     const head = chain[chain.length - 1];
