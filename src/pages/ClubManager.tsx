@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase, ShieldAlert, ClipboardList } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
@@ -191,7 +192,7 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <div className="space-y-3 text-left">
               <p>🌍 <span className="font-semibold text-foreground">Pick any club in 20 real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship and the 2. Bundesliga, the Primeira Liga, the Scottish Premiership, the Süper Lig, the Belgian Pro League, the Austrian Bundesliga, the Super League Greece, the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, the Saudi Pro League, both MLS conferences and the Eredivisie: 330 clubs and over 3,600 real players, each squad at its real market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
-              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing, every name and every value. Or go back: 2015-16 is the season Leicester won at 5000 to 1, with Vardy, Mahrez and Kante at their real pre-title values, MSN at Barcelona, De Bruyne newly at City and, since the Serie A joined the era, Juventus chasing a fifth straight Scudetto with Dybala newly arrived from Palermo; 2010-11 is prime Messi, Mourinho's Madrid and Rooney's United; 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi on the bench, Mourinho's back to back Chelsea, Henry's Arsenal and Gerrard's Istanbul champions, back when the second European prize was still called the UEFA Cup, and the boards say so. Each past season is the real top flight football of its year: 2015-16 runs the Premier League, La Liga and Serie A, all 60 clubs, while 2010-11 and 2005-06 run the Premier League and La Liga, 40 each, hundreds of real players at their real ages and values from that year, with the famous summer moves applied. Each era's giants rate like the legends they are, above anyone in the current generation, with the whole era scaled around them. Every era is a sealed world, so no 2026 player can leak into your past market, and there is no Conference League back there because it did not exist yet. We only offer a past we hold real data for, and we never invent one: 2005-06 is the floor of the records, so there is no 2000 era. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
+              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing: real clubs, real players, real market values, with the summer window applied. Or go back: 2015-16 is the season Leicester won at 5000 to 1, with Vardy, Mahrez and Kante at their real pre-title values, MSN at Barcelona, De Bruyne newly at City and, since the Serie A joined the era, Juventus chasing a fifth straight Scudetto with Dybala newly arrived from Palermo; 2010-11 is prime Messi, Mourinho's Madrid and Rooney's United; 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi on the bench, Mourinho's back to back Chelsea, Henry's Arsenal and Gerrard's Istanbul champions, back when the second European prize was still called the UEFA Cup, and the boards say so. Each past season is the real top flight football of its year: 2015-16 runs the Premier League, La Liga and Serie A, all 60 clubs, while 2010-11 and 2005-06 run the Premier League and La Liga, 40 each, hundreds of real players at their real ages and values from that year, with the famous summer moves applied. Each era's giants rate like the legends they are, above anyone in the current generation, with the whole era scaled around them. Every era is a sealed world, so no 2026 player can leak into your past market, and there is no Conference League back there because it did not exist yet. We only offer a past we hold real data for, and we never invent one: 2005-06 is the floor of the records, so there is no 2000 era. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
               <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
               <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
               <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
@@ -283,9 +284,9 @@ const ClubManager = () => {
   if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
-    const confirmAndReset = (manager: ManagerSpec | null) => {
-      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined);
-      else g.confirmClub(pickEra, manager ?? undefined);
+    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
+      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry);
+      else g.confirmClub(pickEra, manager ?? undefined, entry);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
       setPickNation(null);
@@ -674,6 +675,16 @@ const ClubManager = () => {
   /* ================= SEASON END ================= */
   if (g.phase === 'seasonEnd' && g.summary && g.career) {
     const sm = g.summary;
+    /* Round 541: this block's own career binding, exactly like the resume
+       block and the sacked block below. The transfer business list reads it
+       for the currency symbol, and the only other binding sits at function
+       body level BELOW this early return, so reaching for that one put the
+       screen in the temporal dead zone and threw ReferenceError the moment a
+       player finished a season having signed or sold anybody. Round 514 fixed
+       the identical trap for the `money` identifier and moved it onto `c` at
+       this one call site, which is the argument for the scope check in
+       scripts/simEarlyReturnScope.mjs rather than another careful read. */
+    const c = g.career;
     const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
     /* Round 530: the season's facts tick in one at a time, in the order they
        are listed, on the shared Round 186 pace. A running counter rather than
@@ -970,6 +981,15 @@ const ClubManager = () => {
           <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
+          {/* Round 549: a career that began part way through says so for as long
+              as that season runs. The run-in was simulated, and a badge that
+              only lives on the picker would let somebody forget that by the
+              time they are reading the table. */}
+          {c.midSeasonStart && c.season === 1 && (
+            <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              🗓️ Took over mid season · run-in simulated
+            </span>
+          )}
         </div>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
           {/* Round 99: found by playing it. Before a ball is kicked every
@@ -1088,12 +1108,21 @@ const ClubManager = () => {
                   </button>
                 </div>
                 <p className="mt-1.5 text-[9px] text-muted-foreground">On the pitch with the break in your hands, or straight to the report. Same match either way.</p>
-                <button
-                  onClick={() => setHubPanel('matchCentre')}
-                  className="mt-2 text-[11px] font-bold text-primary hover:underline"
-                >
-                  📊 Match Centre: form, head to head, odds, team talk
-                </button>
+                {/* Round 543: only offered when it can actually open. The facts
+                    are built only for a match that has not kicked off (the panel
+                    carries the pre-match team talk, which is not a thing you get
+                    to give at minute 37), so with a match paused mid-flight this
+                    button used to set the panel and render nothing at all. A
+                    player who walks away from a live match and comes back is
+                    exactly the case that hit it. */}
+                {g.facts && (
+                  <button
+                    onClick={() => setHubPanel('matchCentre')}
+                    className="mt-2 text-[11px] font-bold text-primary hover:underline"
+                  >
+                    📊 Match Centre: form, head to head, odds, team talk
+                  </button>
+                )}
               </>
             )}
             {fx && fx.kind === 'window' && (

@@ -139,6 +139,44 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
   },
 
+  '/mlb-gauntlet-draft': {
+    intro: [
+      "The draft mode, baseball style: eleven picks, one per spot on the lineup card, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
+      "Then October begins. Your finished lineup runs five knockout rounds against ever stronger invented opposition, rated 74 up to 97, with extra innings when the game is level.",
+      "The run is decided entirely by the lineup you drafted: the same lineup always runs the same postseason, so every pick is the game.",
+    ],
+    howToPlay: [
+      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+      "For each spot, catcher through closer, read the five cards, star to bargain, and tap the one you keep.",
+      "The spots follow real baseball. The corner outfield cards take either corner, center field does not, and the designated hitter card takes any position player at all, so a catcher turning up as your DH is correct rather than a glitch.",
+      "After the eleventh pick the postseason starts on its own: five rounds, one game each, revealed one at a time.",
+      "Survive a round for 16 points; win the Series for exactly 100.",
+    ],
+    rules: [
+      "Every card is a real player off a real 2026 roster, 30 clubs and 13 players each, the same data MLB Front Office plays. Every opponent club is invented on purpose.",
+      "Ratings are derived from real production, not opinion: hitters from their 2025 OPS percentile, pitchers from a fielding independent percentile, closers with a save load nudged up a little.",
+      "The five cards per spot are spread across the pool's rating range, so a star and a bargain are always both on the table.",
+      "No player is dealt twice in one draft.",
+      "The knockout is deterministic in your lineup: scoring comes from the rating gap, level games go to extra innings, and replaying the same lineup replays the same October.",
+      "Opposition ratings climb 74, 81, 87, 92, 97. A bargain lineup usually goes out in the first two rounds, an elite one reaches the Series, and even a perfect draft takes the title about one run in four.",
+    ],
+    example: [
+      "The shortstop spot deals a 94 next to an 88, an 84, a 79 and a 71. Nothing costs anything, so the 94 is the pick unless you are collecting one club.",
+      "Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived, 48 points, and the card you would take back is the 71 you shrugged at in right field.",
+    ],
+    tips: [
+      "The pitching cards move the rating as much as the bats do. A 96 starter next to a 70 is the single biggest swing on the card.",
+      "The designated hitter spot is dealt last and can hand you anybody, so it is often where the best remaining card of the whole draft turns up.",
+      "Titles need a lineup in the mid nineties. Watch the running rating under the cards as you fill the order.",
+    ],
+    faqs: [
+      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
+      { q: "Are the opponents real teams?", a: "No, and that is deliberate: every opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off real 2026 rosters." },
+      { q: "Why does the card say LAD instead of the club's full name?", a: "The abbreviation is what the roster data itself carries, and it keeps the page light. Any baseball fan reads it at a glance." },
+      { q: "Is this the same game as the soccer Gauntlet Draft?", a: "Same engine, baseball's own roster data, lineup card and postseason ladder. Eleven picks, the same depth as the soccer XI, because a lineup card is nine plus the arms that decide a modern game." },
+    ],
+  },
+
   '/mlb-connect-4': {
     intro: [
       "Connect 4 with a baseball brain. Every column and row carries a category, and claiming a cell means naming a player who fits both at once.",

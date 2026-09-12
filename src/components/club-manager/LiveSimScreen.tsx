@@ -129,7 +129,16 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   /* The shape the eleven kicked off in, whatever the tactics tab says now. */
   const myFormation = FORMATIONS[live?.formationIndex ?? career.formationIndex] ?? FORMATIONS[0];
   if (live) {
-    const ids = myOnPitchAt(live, minute);
+    /* Round 548: minute + 1, so a change made AT the minute on the clock is on
+       the pitch rather than one minute late. Tapping a dot pauses the clock, so
+       a substitution from the pitch is filed at exactly the frozen minute, and
+       myOnPitchAt's rule is strictly-after (he played that minute), which left
+       the man who had just come off still standing there until you unpaused.
+       My side only, deliberately: my substitutions are recorded when I make
+       them, so nothing beyond the current minute exists, while the opponent's
+       half is drawn ahead and reading theirs inclusively would show their
+       change a minute before it happens. */
+    const ids = myOnPitchAt(live, minute + 1);
     const numbers = squadNumbers(career, live);
     const gone = new Set<string>();
     for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
@@ -410,6 +419,31 @@ export function LiveSimScreen({
     };
   }, [running, finished, live, onMark]);
 
+  /* Round 543: the listeners above only fire when the DOCUMENT goes away, and
+     a router navigation is not that. Tapping Back, or the DoUKnowBall logo, or
+     any nav link unmounts this viewer with the document still very much alive,
+     so the minute was thrown away and "Resume match" replayed the half from
+     minute 1. A player reported it as the watch mode needing fixing.
+
+     It has to be its own effect with an empty dependency list, because the
+     cleanup of the effect above runs on every change of running, finished,
+     live or onMark, and marking the clock there would write the career on
+     every one of them. Everything this cleanup reads goes through a ref for
+     the same reason. */
+  const runningRef = useRef(running);
+  const liveRef = useRef(live);
+  const onMarkRef = useRef(onMark);
+  useEffect(() => {
+    runningRef.current = running;
+    liveRef.current = live;
+    onMarkRef.current = onMark;
+  });
+  useEffect(() => () => {
+    if (runningRef.current && !finishedRef.current && liveRef.current) {
+      onMarkRef.current(Math.floor(clockRef.current));
+    }
+  }, []);
+
   /* The report is the match settled: full time, whatever the clock says. */
   useEffect(() => {
     if (report && stage !== 'done') {
@@ -601,7 +635,10 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!picking) return;
     if (!running || !liveNow) { closeSheet(); return; }
-    const on = new Set(myOnPitchAt(liveNow, minute));
+    /* Round 548: same inclusive read as the pitch above, so the action sheet for
+       a man you have just taken off closes instead of hanging over a dot that
+       is no longer his. */
+    const on = new Set(myOnPitchAt(liveNow, minute + 1));
     const gone = liveGoneIds(liveNow, minute);
     for (const inj of [...(liveNow.h1Injuries ?? []), ...(liveNow.h2Injuries ?? [])]) {
       if (inj.id && inj.minute <= minute && on.has(inj.id)) gone.delete(inj.id);

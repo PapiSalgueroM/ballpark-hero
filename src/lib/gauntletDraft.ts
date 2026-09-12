@@ -106,6 +106,26 @@ function soccerConfig(pool: Player[]): GauntletConfig<Player> {
     formations: FORMATIONS,
     rounds: GAUNTLET_ROUNDS,
     dailySeedSalt: SOCCER_DAILY_SALT,
+
+    /* Round 538: the presentation half of the config. Soccer's own page is
+       NOT drawn by the shared board yet and is the one sport that cannot be
+       yet: it fetches its pool from the database, so it carries boot and error
+       phases the static pool sports have no use for, and it draws a flag on
+       every card. Filling these in anyway costs nothing and means the soccer
+       config is a complete GauntletConfig like every other, so whoever folds
+       this page in later has the copy already written and only has to teach
+       the board an async pool and a card decoration. */
+    gameName: 'Gauntlet Draft',
+    gamePath: '/gauntlet-draft',
+    emoji: '⚔️',
+    squadNoun: 'XI',
+    slotsPhrase: 'slots in the formation you drew',
+    tiebreak: { phrase: 'extra time, then a shootout', won: 'Won in a shootout', lost: 'Lost in a shootout' },
+    subtitleOf: p => p.club,
+    positionOf: p => p.position,
+    tierFloors: [86, 78, 70],
+    scoreline: g => g,
+    tiebreakBump: 1,
   };
 }
 

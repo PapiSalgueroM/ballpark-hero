@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Gauntlet Draft: MLB, Fill the Card, Win the Series</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Gauntlet Draft: MLB","item":"https://douknowball.com/mlb-gauntlet-draft"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the daily draft the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly."}},{"@type":"Question","name":"Are the opponents real teams?","acceptedAnswer":{"@type":"Answer","text":"No, and that is deliberate: every opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off real 2026 rosters."}},{"@type":"Question","name":"Why does the card say LAD instead of the club's full name?","acceptedAnswer":{"@type":"Answer","text":"The abbreviation is what the roster data itself carries, and it keeps the page light. Any baseball fan reads it at a glance."}},{"@type":"Question","name":"Is this the same game as the soccer Gauntlet Draft?","acceptedAnswer":{"@type":"Answer","text":"Same engine, baseball's own roster data, lineup card and postseason ladder. Eleven picks, the same depth as the soccer XI, because a lineup card is nine plus the arms that decide a modern game."}},{"@type":"Question","name":"Is Gauntlet Draft: MLB free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Gauntlet Draft: MLB is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Gauntlet Draft: MLB, Fill the Card, Win the Series | DoUKnowBall","description":"The MLB draft mode: eleven picks of five real players each, one per spot on the lineup card, then your lineup runs a five round postseason against ever stronger opposition. One shared daily draft, an unlimited mode, and the same lineup always runs the same gauntlet.","url":"https://douknowball.com/mlb-gauntlet-draft","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/mlb-gauntlet-draft" data-rh="true"><meta name="description" content="The MLB draft mode: eleven picks of five real players each, one per spot on the lineup card, then your lineup runs a five round postseason against ever stronger opposition. One shared daily draft, an unlimited mode, and the same lineup always runs the same gauntlet." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/mlb-gauntlet-draft" data-rh="true"><meta property="og:title" content="Gauntlet Draft: MLB, Fill the Card, Win the Series | DoUKnowBall" data-rh="true"><meta property="og:description" content="The MLB draft mode: eleven picks of five real players each, one per spot on the lineup card, then your lineup runs a five round postseason against ever stronger opposition. One shared daily draft, an unlimited mode, and the same lineup always runs the same gauntlet." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Gauntlet Draft: MLB, Fill the Card, Win the Series | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="The MLB draft mode: eleven picks of five real players each, one per spot on the lineup card, then your lineup runs a five round postseason against ever stronger opposition. One shared daily draft, an unlimited mode, and the same lineup always runs the same gauntlet." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>⚾Gauntlet Draft: MLB</h1>
+<p>Fill the lineup card, five cards at a time, then survive October.</p>
+<p>How to play</p>
+<p>For each of the eleven spots on the lineup card (the nine, a starter and a closer) you get five real players who fit it, spread from a star to a bargain, and you keep exactly one.</p>
+<p>Then your lineup runs the gauntlet: five knockout rounds against opposition rated 74 up to 97. A level game goes to extra innings, and more of them until somebody wins.</p>
+<p>The run is decided by the lineup you drafted: the same lineup always runs the same gauntlet. 16 points a round survived, the trophy lands exactly 100.</p>
+<h2>Gauntlet Draft: MLB, Fill the Card, Win the Series</h2>
+<p>The MLB draft mode: each of the eleven spots on the lineup card, the nine in the batting order plus a starter and a closer, deals five real players from a star to a bargain, you keep one per spot, and the finished lineup runs a five round postseason against ever stronger invented opposition. Players and ratings come from real 2026 rosters, with hitters rated off their production and pitchers off theirs. One shared daily draft, unlimited redrafts, and a fully deterministic run so the draft is the game.</p>
+<p>The draft mode, baseball style: eleven picks, one per spot on the lineup card, five real players a pick from a genuine star to a bargain, and you keep exactly one.</p>
+<p>Then October begins. Your finished lineup runs five knockout rounds against ever stronger invented opposition, rated 74 up to 97, with extra innings when the game is level.</p>
+<p>The run is decided entirely by the lineup you drafted: the same lineup always runs the same postseason, so every pick is the game.</p>
+<h2>How to play Gauntlet Draft: MLB</h2>
+<li>Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.</li>
+<li>For each spot, catcher through closer, read the five cards, star to bargain, and tap the one you keep.</li>
+<li>The spots follow real baseball. The corner outfield cards take either corner, center field does not, and the designated hitter card takes any position player at all, so a catcher turning up as your DH is correct rather than a glitch.</li>
+<li>After the eleventh pick the postseason starts on its own: five rounds, one game each, revealed one at a time.</li>
+<li>Survive a round for 16 points; win the Series for exactly 100.</li>
+<h2>Rules to know</h2>
+<li>Every card is a real player off a real 2026 roster, 30 clubs and 13 players each, the same data MLB Front Office plays. Every opponent club is invented on purpose.</li>
+<li>Ratings are derived from real production, not opinion: hitters from their 2025 OPS percentile, pitchers from a fielding independent percentile, closers with a save load nudged up a little.</li>
+<li>The five cards per spot are spread across the pool's rating range, so a star and a bargain are always both on the table.</li>
+<li>No player is dealt twice in one draft.</li>
+<li>The knockout is deterministic in your lineup: scoring comes from the rating gap, level games go to extra innings, and replaying the same lineup replays the same October.</li>
+<li>Opposition ratings climb 74, 81, 87, 92, 97. A bargain lineup usually goes out in the first two rounds, an elite one reaches the Series, and even a perfect draft takes the title about one run in four.</li>
+<h2>Example walkthrough</h2>
+<p>The shortstop spot deals a 94 next to an 88, an 84, a 79 and a 71. Nothing costs anything, so the 94 is the pick unless you are collecting one club.</p>
+<p>Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived, 48 points, and the card you would take back is the 71 you shrugged at in right field.</p>
+<h2>Strategy tips</h2>
+<li>The pitching cards move the rating as much as the bats do. A 96 starter next to a 70 is the single biggest swing on the card.</li>
+<li>The designated hitter spot is dealt last and can hand you anybody, so it is often where the best remaining card of the whole draft turns up.</li>
+<li>Titles need a lineup in the mid nineties. Watch the running rating under the cards as you fill the order.</li>
+<h2>Gauntlet Draft: MLB FAQ</h2>
+<h3>Is the daily draft the same for everyone?</h3>
+<p>Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly.</p>
+<h3>Are the opponents real teams?</h3>
+<p>No, and that is deliberate: every opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off real 2026 rosters.</p>
+<h3>Why does the card say LAD instead of the club's full name?</h3>
+<p>The abbreviation is what the roster data itself carries, and it keeps the page light. Any baseball fan reads it at a glance.</p>
+<h3>Is this the same game as the soccer Gauntlet Draft?</h3>
+<p>Same engine, baseball's own roster data, lineup card and postseason ladder. Eleven picks, the same depth as the soccer XI, because a lineup card is nine plus the arms that decide a modern game.</p>
+<h3>Is Gauntlet Draft: MLB free to play?</h3>
+<p>Yes. Gauntlet Draft: MLB is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/conquest-mlb">🗺️ MLB Conquest Imperialism at the ballpark: winners annex whole empires, two invaders start landless</a>
+<a href="/mlb-my-career">🌟 MLB My Career Draft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field</a>
+<a href="/mlb-front-office">🏢 MLB Front Office Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties</a>
+<a href="/conquest-nhl">🗺️ NHL Conquest Imperialism on ice: winners annex whole empires, five invaders start landless</a>
+<a href="/college-grid">🎓 College Grid College football 3×3 grid puzzle</a>
+<a href="/conquest-nba">🗺️ NBA Conquest Imperialism mode: winners annex whole empires until one team rules the map</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,5 +1,269 @@
 # Project state
 
+## Built 2026-09-11 evening, PR 93 open, not yet merged: Rounds 541 to 550, all four player reports closed
+
+Branch `claude/tablet-spec-handoff-c6urlx`, https://github.com/PapiSalgueroM/ballpark-hero/pull/93.
+Four reports arrived through the footer's report a bug button and outranked the queue. Claims,
+file areas and the open items are in `docs/WORKBOARD.md` under this lane's 2026-09-11 evening
+heading. Numbering note: the previous tablet session took 537 to 540 on
+`claude/douknowbll-spec-work-c3zcci`, pushed and still unmerged, with its own handoff at
+`docs/HANDOFF-TABLET-2026-09-11.md`. Next free number is 551.
+
+**541, the season review crash, P1.** "when i clcik season review it crashes and i cant progress
+further." `src/pages/ClubManager.tsx` is one component function with a dozen early-return blocks.
+The SEASON END block read `c` for a currency symbol while the only binding it could resolve to sat
+at function body level BELOW that return, so it was in the temporal dead zone and threw
+`ReferenceError: Cannot access 'c' before initialization`. It fired only for a player who had
+signed or sold somebody, because the block sits behind `signings.length > 0`. "Cannot progress
+further" is the same bug: the season review is the only route forward out of a finished season and
+all three entry points land on it. The save survives in localStorage; the player just could not
+reach past it without retiring the career.
+
+Four gates were green on the broken code. tsc does not report TS2448 because the use is inside a
+`.map()` callback it cannot prove runs early, the build is green, the sim harnesses call the season
+close as a pure function and never render, and `playClubManager` renders the screen but never signs
+anyone so the crashing branch is dead code for it.
+
+Round 514 fixed the identical trap for `money` in the same file three days earlier and its own fix
+moved the trap onto `c`, so this round adds the rule rather than another careful read.
+`scripts/simEarlyReturnScope.mjs` walks 517 files using the TypeScript checker's own symbol
+resolution (shadowing handled properly, not by matching names) and fails when a block that can
+return early reads a block-scoped binding declared below it. It allows a reference inside a JSX
+event handler, which runs on a tap. Control `EARLY_RETURN_CONTROL=tdz` reproduces the shipped bug.
+
+**542, rosters stop quietly carrying last season's club.** "Joao Felix is not a part of Chelsea
+squad for 26/27 season." `bakeClubManagerRosters.mjs` prefers a 2026 market value row and falls back
+to the 2025 row, which carries the 2025 CLUB, ageing the player a year and discounting 5 percent.
+`BakedPlayer` is `{n,p,a,v,r}`, so the bake's own `isFallback` flag never reaches the file and a
+planted row is byte-identical to a verified one. Measured against the live database on 2026-09-11:
+**356 of the 3667 shipped rows**, across 195 clubs.
+
+The obvious fix was wrong and the measurement says so. Dropping every unconfirmed player looked
+clean (250 rows, no club falling under the CM_PARTIAL threshold of 8) until the same question went
+to a second dataset: `public.world_cup_players` at 2026 confirms David Alaba is still at Real
+Madrid, Charles De Ketelaere still at Atalanta, Wout Weghorst still at Ajax, and seven more.
+**Absence from one dataset is not evidence of a transfer**, and the blanket rule would have wrongly
+removed roughly a third of what it touched.
+
+So nothing is dropped on a heuristic. The adjudicator is the Round 389 World Cup squads table, where
+every row is a player two independent sources agree on. It settles 23 of the 356: 10 moved (Felix to
+Al-Nassr), 3 left the modelled world, 10 were confirmed in place and are now protected from a later
+sweep. Brøndby IF and NEC Nijmegen fell to 7 real players and joined CM_PARTIAL. The other **332 stay
+in the file and stay listed as pending** in `scripts/data/rosterConfirmation2026.json`, so nobody
+mistakes "not yet checked" for "checked and fine". Diogo Jota was removed from every 2026-27 squad
+with the reason written down; that one is not from the World Cup table and needs confirming by a
+session with web egress.
+
+The how to play copy said "2026-27 is the real thing, every name and every value", which with 332
+rows pending is an absolute the data cannot stand behind. It now says real clubs, real players, real
+market values, with the summer window applied. The bake carries three new ANCHORs beside the
+existing ones, which is this repo's convention for turning a player's complaint into a permanent
+assertion.
+
+**543, European places come from the league's own table, plus the watch mode clock.** "neither
+should chelsea exist in the Champions League as they failed to qualify last season" and "fix the
+Watch match mode".
+
+`EURO_SLOTS` has carried the right per league, per era numbers all along and was read ONLY to write
+the board's objective label, while three separate places decided qualification with a hardcoded
+`<= 4`. Nine of the fifteen modern leagues were wrong: the board would tell a Scottish manager that
+Europe means winning the league and the season end would put him in the Champions League for
+finishing fourth. New `uclPlacesIn(league)`, and all four call sites read it.
+
+The live viewer wrote the clock to the save only on `visibilitychange` and `pagehide`, which fire
+when the DOCUMENT goes away. A router navigation is not that, so tapping Back or the logo threw the
+minute away and "Resume match" replayed the half from minute 1. Fixed with its own unmount-only
+effect. Same walk: with a match paused the hub's Match Centre button was dead, because the facts are
+built only for a match that has not kicked off; it is now only offered when it can open.
+
+**544, an error boundary, at last.** A grep for `ErrorBoundary`, `componentDidCatch` and
+`getDerivedStateFromError` across the whole repo returned nothing, so 541's throw unmounted the
+entire React root and the visitor got a white page with no header, no footer and therefore no report
+a bug button. That had been true since the site was built, for every render bug on all 130-odd
+routes. `src/components/RouteErrorBoundary.tsx` goes around the routes and inside Suspense so the
+footer survives, keyed on the path so navigating away clears it. The screen offers the games list, a
+retry, and the line that the save is still on the device, because "the page went blank" and "my
+career is gone" feel identical from the player's side and only one of them is true.
+
+`scripts/simErrorBoundary.mjs` renders a throwing child through the real reconciler in jsdom, because
+React's server renderer does not support error boundaries at all and would have reported this one as
+broken. Writing that section the easy way first is also what caught a false green in its own
+section 3, which was passing on an empty string. Two controls: `unwrapped` and `nocatch`.
+
+**545, the second legs a career in flight never got.** The "2nd leg in UCL knockout" half of the
+same report, and the answer is not what it looks like. Club Manager has played two legged knockout
+ties since Round 507 on 2026-09-08: legs per round by season year, both legs stored in one
+orientation, aggregate resolution, away goals correctly ending after 2020, the final still one match.
+The feature was not missing. The MIGRATION was. Every save made before that date carries one knockout
+week per round with no `uclLeg`, `ensureUclCalendar` only ever inserts a MISSING round of 16 week and
+returns early when one is already there and never looks at the quarter or semi finals, and the engine
+documents the gap and handles it defensively so a legacy save keeps crowning a champion, one legged,
+for the rest of its season. The player was right about their own save even though the feature had
+been live for three days.
+
+New `ensureUclLegs` in the `loadCareer` repair chain. It repairs every knockout round still AHEAD of
+the player and deliberately leaves a round already played exactly as it was: those ties were settled
+on one match, that result is in the bracket and in the player's history, and going back to add a leg
+would rewrite a result rather than repair a calendar. Idempotent, so it is safe in a path that runs
+on every open.
+
+`scripts/simUclLegMigration.mjs` measures it on a real career built by the engine and stripped back
+to the legacy shape, not on a hand written fixture. Six sections, and section 5 is worth the note:
+the first draft asked about the round of 16, and a MODERN save does not play one, it starts at the
+quarter final, so that section would have passed on a career that never plays the round it was
+asking about. It asks the save which round it starts at now, and section 6 covers an era save, which
+really does play a round of 16 and is the one round `ensureUclCalendar` also touches. Control
+`LEG_MIGRATION_CONTROL=noop` reproduces the unmigrated state and four sections go red.
+
+**Two things this turned up that are NOT fixed and are worth more than the fix.** Soccer Career's
+Champions League knockout is four coin flips: `simulateUCL` runs one match per round, decides the
+winner BEFORE the score, then fabricates a scoreline to fit. No legs, no aggregate, no group stage,
+no draws, no extra time, no penalties. It is the one UCL knockout on the site that is not two-legged
+and it sits on the flagship, about 1 in 5 of all pageviews. `src/lib/uclFormatHistory.ts` already
+carries `roundOf16` and `koLegs` per period from 1955 on, two-source verified, and imports nothing,
+so it can be the shared source of truth for both games; reading it also exposes that Soccer Career's
+hardcoded four-round ladder is wrong for every career year before 2003.
+
+**546, the flagship's Champions League is played, not flipped.** Found while answering 545, and it
+deserved the round more than 545 did. Soccer Career's `simulateUCL` ran
+`const won = Math.random() < winChance` and then painted a scoreline on to match: a win drew 1 to 4
+goals for and strictly fewer against, a defeat drew a bigger number against. No legs, no aggregate,
+no draws (a level score could not be generated at all), no extra time, no penalties, and a hardcoded
+R16/QF/SF/Final ladder in every season, wrong for every year before 2003. This is the flagship,
+about 1 in 5 of all pageviews, and it was the one Champions League on the site that was not real.
+
+It plays the tie now: two legs for every round but the final, home advantage that swaps with the leg
+so it cancels across the tie, aggregate, away goals only in the seasons that had them, then extra
+time, then penalties. The format is read from `src/lib/uclFormatHistory.ts` rather than kept as a
+second hardcoded copy.
+
+**The hard part was not the mechanism, it was not moving the balance.** The win probability the game
+already had is kept as the TARGET and the goal expectations are SOLVED to reproduce it: aggregate
+goal difference over N legs is the difference of two Poissons, so inverting its normal approximation
+gives the edge that lands on the old rate. Solved rather than tuned, so a later change to the base
+rate or the leg count cannot silently rebalance a career. Measured over 44,540 ties: signed drift
+0.16 points against the replaced model, mean absolute gap 1.21, and the aggregate agrees with who
+went through every single time. 17.8% of ties now finish level on aggregate, which the old model
+could not produce at all.
+
+**A mistake worth keeping written down.** The harness's balance section first gated on the WORST
+single cell across the grid and went red at 11 points, on a model that direct measurement then
+showed accurate to under a point at high sample size. A max over sixty cells is dominated by
+whichever one happened to have the fewest campaigns in it, which is this repo's own "never assert on
+a max" rule exactly. It gates on two pooled statistics now and prints the worst cell for information
+only. The uncalibrated model produced a mean absolute gap of 40 and the control produces 10, against
+a gate of 3.
+
+**547, the Champions League field is who qualified, not who is famous.** The half of the report
+543 did not reach. 543 fixed how many places YOUR league gives and whether YOU are in; this is who
+the other thirty one clubs are. The field was a shuffled prestige pool, `EURO_CLUBS` plus every club
+above a squad rating threshold, and nothing anywhere read a league table, so a club could finish
+bottom of its division and be in the group stage every season forever.
+
+The engine has had the answer the whole time and nobody was reading it: `state.world` carries a live
+standings table for every league that is not mine and `syncWorld` drags each one to its own finish
+line as my season ends, so at a rollover the final table of every league in the world is in the
+save. The field is now the top `uclPlacesIn(league)` of each European league by that league's own
+tiebreaks, plus the reigning European champion (the real holders' route, and the one entry that is
+not a finishing position), plus a documented top up from the next places in the deepest leagues to
+fill 32. Measured on a real rollover: the Premier League contributes exactly its top four and the
+club that finished fifth is not in the competition.
+
+**Four draws read it, not one.** My own group, the other seven groups, the knockout field top up and
+the knockout opponent draw. Wiring only the group stage would have left a club that finished nowhere
+walking into the quarter finals instead, which is the same bug one round later, and the harness's
+own control catches exactly that.
+
+`scripts/simUclField.mjs` plays four careers to the end of a season and rolls them over, then traces
+every one of the 128 places back to a finishing position, the holders' route or a top up, and checks
+60 league cuts for the club that finished one place short. Section 6 plays a second season through to
+its end so the knockout is measured rather than asserted. The control is worth reading: a first
+version killed the derivation outright, which was weaker, because the harness then goes red for the
+field being ABSENT rather than for the wrong clubs being in it. It now disables only the draws'
+consultation of the field, and puts Lazio, Olympiacos, Sporting CP and Club Brugge back into groups
+they never qualified for.
+
+**548, a substitution while the clock is paused redraws the pitch.** The third of five watch mode
+findings. `myOnPitchAt`'s rule is strictly-after, correctly so, because a man replaced at minute 60
+played minute 60 and the report needs that. But tapping a dot PAUSES the clock, so a change made
+from the pitch is filed at exactly the frozen minute and the viewer draws at that same minute: the
+man who had just come off was still on the grass until you unpaused. The viewer reads `minute + 1`
+now, MY SIDE ONLY, and the asymmetry is the point: my substitutions are recorded when I make them so
+nothing later exists to leak, while the opponent's half is drawn ahead by the engine and an
+inclusive read there would show their change a minute early.
+
+**What was deliberately NOT shipped with it.** The fourth finding is the live control row (pause,
+the speed buttons, Skip) sitting below the fold on a 390x844 and a 375x667 phone. A fix was drafted
+(the pitch taking the height that is left rather than all of it) and reverted rather than shipped:
+it is a visual change to a game, this sandbox could not drive a live match to measure the result,
+and moving the control row above the pitch instead costs no pitch size at all and may be the better
+answer. It is written up in `docs/WORKBOARD.md` with its measured rectangles for a session that has
+a browser. The fifth finding, a dead branch in the viewer's phase condition, is written up there too.
+
+**549, take over a club mid season.** The fourth report, and the only one nothing had shipped for:
+"add live start points to manager career: take over a club mid season for example leicester in 15/16
+midway thru". Far smaller than it reads. 2015-16 already ships as a fully built world with its own
+bake and its own tile; only the entry week was missing.
+
+Three entry points on the dugout step (Autumn, New year, The run-in), defaulting to the summer
+window so an ordinary start is byte for byte what it was. The run-in is played by `simToWeek`, a
+shipped function that already drives a career forward unattended THROUGH THE REAL MATCH ENGINE, so
+the table, the form, the injuries, the fitness, the money, the cup run and the European campaign are
+consequences of matches that were really played rather than numbers somebody typed. Every halt it
+can return is somebody else's problem during a run-in (a window is the old manager's business, an
+approach was made to him, a sacking is why the job is open), so the loop rides through all of them.
+
+**The handover is the load bearing part.** Nothing belonging to the manager before you follows you
+in: you are not sacked on arrival, you inherit no pending approach or agreed move, the board's
+opinion is a new appointment's rather than the one they had formed of somebody else, your own
+progression starts now, and the inbox is not his post. "Take over" is exactly what the player asked
+for and that framing settles every awkward question on its own. The harness's control skips the
+tidy-up and immediately catches an inherited approach from another club.
+
+**It makes no historical claim, and section 5 of the harness holds it to that.** Club Manager
+shuffles its own fixture list every save over a synthetic calendar, so the real 2015-16 run of
+results cannot be reproduced and a simulated Leicester lands mid table (measured: 16th, 10th and
+14th at the three entry points). Typing the real table instead would be asserting history the repo
+cannot two-source verify. The dugout screen says the run-in is simulated, the hub keeps saying it
+for as long as that season runs, and the harness fails on any affirmative historical claim in the
+copy. Writing that check taught something worth keeping: its first version matched the bare phrase
+"real results" and went red on the screen's own DENIAL of it, which would have pushed whoever hit it
+into weakening the honest sentence to get a green.
+
+**550, the browser walk signs players.** Closing the verification hole that let Round 541's P1 reach
+a player. `scripts/playClubManager.mjs` is the only harness that drives Club Manager through its own
+screens in a real browser, and its own header said it "never signs anyone". The season review's
+transfer business list sits behind `signings.length > 0`, so the block that crashed was dead code
+for the one check that could have seen it. It signs through a release clause in every window now
+(the one path in the market that is a single press and completes instantly, selected by its title
+text because the price differs every run).
+
+**A correction worth keeping, because it is the whole point of the round.** The first version pressed
+from the season end screen THROUGH to the review, on the investigation's description of the flow.
+Checking where "SEASON n COMPLETE" actually renders showed it is the h1 of the season review block
+ITSELF, the same block that carries the transfer business list. So the walk always did reach the
+page that crashed; what it never did was give that page anything to crash on. Shipping the first
+version would have added a false BROKEN finding on every run, which is a harness lying in the other
+direction and no better than one that is silently green.
+
+The walk reads what the review drew now rather than leaving on the heading (an almost empty page is
+what a render throw looks like; the Round 544 boundary's own copy is the other tell), and a run that
+happens to sign nobody reports SHALLOW rather than letting a green light imply a branch it never
+reached.
+
+**Gates, this tree.** tsc zero. `npm run build` green (152 snapshots). simClubManager,
+simClubManagerBudget, simClubManagerDeals, simEras, simWorld, simLiveSim, simLiveMatch,
+simNoRivalNames, simSoccerCareer, simCareerRealism, simBallonDorTruth, simCareerNoDeadEnd and
+simCareerParity all green. The eight new harnesses green with every negative control confirmed firing and a bogus control
+name exiting 1 on each. All 15 built site fences green after a fresh build; `simBrand` needs
+`pip3 install fonttools pillow` first, which a fresh sandbox does not carry, and is green with zero
+drift once they are there.
+
+**What is still open out of these four reports** is listed in `docs/WORKBOARD.md`, and the biggest
+item is that the Champions League FIELD is still a hardcoded prestige pool: 543 fixed who qualifies
+from your own league, not who the other 31 clubs are, and season one still puts your club in on a
+squad rating threshold rather than a league position.
+
 ## Built 2026-09-11, PR open, not yet merged: Round 525, the inbox and rivalry lift completed for NBA, MLB and NHL
 
 **Not live yet, same open PR as 522 to 524** (https://github.com/PapiSalgueroM/ballpark-hero/pull/92), pushed on top of them on `claude/douknowbll-spec-work-c3zcci`.

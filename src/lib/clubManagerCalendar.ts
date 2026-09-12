@@ -628,3 +628,82 @@ export const REAL_WINDOWS: Record<string, { summerClose: CalDate; januaryOpen: C
   era2010: { summerClose: { y: 2010, m: 8, d: 31 }, januaryOpen: { y: 2011, m: 1, d: 1 }, januaryClose: { y: 2011, m: 1, d: 31 } },
   era2005: { summerClose: { y: 2005, m: 8, d: 31 }, januaryOpen: { y: 2006, m: 1, d: 1 }, januaryClose: { y: 2006, m: 1, d: 31 } },
 };
+
+/* ---------- Round 549: taking a club over mid season ---------- */
+
+/**
+ * A player asked for this on 2026-09-11: "add live start points to manager
+ * career: take over a club mid season for example leicester in 15/16 midway
+ * thru".
+ *
+ * WHAT IT IS AND WHAT IT IS HONESTLY NOT. The season is played forward before
+ * you get the keys, by the engine, through the real match engine rather than a
+ * lighter model, so the table, the form, the injuries, the fitness, the money,
+ * the cup run and the European campaign are all genuine consequences of
+ * matches that were actually played. What it is NOT is history. Club Manager's
+ * fixture list is a per save shuffle over a synthetic calendar, so the real
+ * 2015-16 run of results cannot be reproduced here and this does not pretend
+ * to: a simulated Leicester will usually be mid table, and the copy says the
+ * run-in was simulated rather than implying you are looking at the real one.
+ * Inventing the real table instead would be typing history the repo cannot
+ * two-source verify, which is the thing the data rules exist to stop.
+ *
+ * THE RUN-IN IS THE PREVIOUS MANAGER'S, NOT YOURS. That framing is what the
+ * player asked for ("take over"), and it settles every awkward question on its
+ * own: the results are the club's, the league position is what you inherit,
+ * and none of it is charged to your record. So the handover clears the things
+ * that belong to whoever had the job before you, listed one by one below,
+ * rather than handing you a career that has already been half lived.
+ */
+export const MIDSEASON_ENTRY = {
+  autumn: { fraction: 0.28, label: 'Autumn', blurb: 'A few months in. Enough table to read, most of the season still to play.' },
+  newYear: { fraction: 0.5, label: 'New year', blurb: 'Halfway, with the January window about to open.' },
+  runIn: { fraction: 0.72, label: 'The run-in', blurb: 'The last stretch, with the table nearly settled and everything to hold on to.' },
+} as const;
+
+export type MidSeasonEntry = keyof typeof MIDSEASON_ENTRY;
+
+/**
+ * Play `career` forward under the previous manager and hand it over.
+ *
+ * Every halt simToWeek can return is somebody else's problem during the run-in:
+ * a transfer window is business the old manager did, an approach from another
+ * club was made to him, and a sacking is precisely why the job is open. So the
+ * loop rides through all of them and the handover tidies up after. The guard
+ * and the no-progress break are there because a loop that calls a simulator
+ * until a number goes up is exactly the shape that hangs a page.
+ */
+export function startMidSeason(career: CareerState, entry: MidSeasonEntry): CareerState {
+  const total = career.calendar.length;
+  if (!total) return career;
+  /* Never the very end: a takeover with nothing left to play is not a game. */
+  const target = Math.max(1, Math.min(total - 3, Math.round(total * MIDSEASON_ENTRY[entry].fraction)));
+  let s = career;
+  let guard = 0;
+  while (s.week < target && guard < 400) {
+    guard += 1;
+    const before = s.week;
+    const run = simToWeek(s, target);
+    s = run.state;
+    if (run.halt === 'seasonOver') break;
+    if (s.week <= before) break;   /* no progress: stop rather than spin */
+  }
+  /* The handover. Everything cleared here belonged to the manager before you. */
+  return {
+    ...s,
+    sacked: false,
+    approach: null,
+    pendingMove: null,
+    wilderness: null,
+    /* A new appointment gets a fresh mandate, not the opinion the board had
+       formed of somebody else. Slightly warm, because they just hired you. */
+    boardConfidence: 62,
+    /* Your record starts now. The club's season is inherited; the manager's is
+       not, so the progression is the day one one rather than a run of matches
+       you did not pick a team for. */
+    managerXp: career.managerXp,
+    /* The inbox is the old manager's post. */
+    inbox: career.inbox,
+    midSeasonStart: entry,
+  };
+}
