@@ -18,7 +18,13 @@
  * scripts/simFaceOff.mjs can play thousands of duels in node and measure
  * that the rival is the difficulty it says it is.
  */
-import { higherLowerPlayers } from '@/data/higherLowerPlayers';
+import {
+  higherLowerPlayers,
+  HL_UNVERIFIED_STATS,
+  HL_UNVERIFIED_NOTE,
+  hlNoteFor,
+} from '@/data/higherLowerPlayers';
+import type { HigherLowerStatKey } from '@/types/higherLower';
 import { nbaHLPlayers } from '@/data/nbaHLPlayers';
 import { mlbHLPlayers } from '@/data/mlbHLPlayers';
 import { NFL_HL_CATEGORIES } from '@/data/nflHLCategories';
@@ -73,6 +79,10 @@ export interface Athlete {
   /** the second line on the card: nationality, teams, years */
   sub: string;
   value: number;
+  /** Round 535: a caveat this card carries on top of whatever the category
+   *  already says. Only set when it differs from the category note, so the
+   *  reveal never prints the same sentence twice. */
+  note?: string;
 }
 
 export interface Category {
@@ -82,17 +92,40 @@ export interface Category {
   question: string;
   unit: string;
   pool: Athlete[];
+  /** Round 535: a category whose numbers carry the SAME caveat on every row
+   *  carries it once here, and the reveal prints it. Undefined means there is
+   *  nothing to say about the whole pool, which is not the same as nothing to
+   *  say: caps are checked row by row, so that caveat rides on the card. */
+  note?: string;
 }
 
 /* Built inside a function, never at module scope: the data files are large
    and an import cycle evaluated at load time is how a page once crashed. */
 export function buildCategories(): Category[] {
   const cats: Category[] = [];
-  const soccer = (key: string, question: string, unit: string, pick: (p: (typeof higherLowerPlayers)[number]) => number) =>
-    cats.push({ key, sport: 'soccer', emoji: '⚽', question, unit, pool: higherLowerPlayers.map(p => ({ name: p.name, sub: p.nationality, value: pick(p) })) });
-  soccer('soccer-goals', 'Who scored more career goals?', 'goals', p => p.stats.goals);
-  soccer('soccer-apps', 'Who made more career appearances?', 'apps', p => p.stats.appearances);
-  soccer('soccer-caps', 'Who won more international caps?', 'caps', p => p.stats.internationalCaps);
+  /* Both notes are derived from the pool's own rule, never typed here, so a
+     stat that gets verified later stops printing the caveat by itself. The
+     category line covers the whole pool; a card only carries its own line when
+     that row has something extra to say. */
+  const soccer = (key: string, stat: HigherLowerStatKey, question: string, unit: string) => {
+    const catNote = HL_UNVERIFIED_STATS.includes(stat) ? HL_UNVERIFIED_NOTE : undefined;
+    cats.push({
+      key, sport: 'soccer', emoji: '⚽', question, unit,
+      pool: higherLowerPlayers.map(p => {
+        const own = hlNoteFor(p.name, stat);
+        return {
+          name: p.name,
+          sub: p.nationality,
+          value: p.stats[stat],
+          note: own && own !== catNote ? own : undefined,
+        };
+      }),
+      note: catNote,
+    });
+  };
+  soccer('soccer-goals', 'goals', 'Who scored more career goals?', 'goals');
+  soccer('soccer-apps', 'appearances', 'Who made more career appearances?', 'apps');
+  soccer('soccer-caps', 'internationalCaps', 'Who won more international caps?', 'caps');
   cats.push({ key: 'nba-points', sport: 'basketball', emoji: '🏀', question: 'Who scored more career NBA points?', unit: 'pts', pool: nbaHLPlayers.map(p => ({ name: p.name, sub: `${p.position}, ${p.teams}`, value: p.careerPoints })) });
   cats.push({ key: 'mlb-hr', sport: 'baseball', emoji: '⚾', question: 'Who hit more career home runs?', unit: 'HR', pool: mlbHLPlayers.map(p => ({ name: p.name, sub: `${p.firstSeason} to ${p.lastSeason}`, value: p.careerHrs })) });
   for (const c of NFL_HL_CATEGORIES) {
@@ -158,6 +191,8 @@ export interface Round {
   emoji: string;
   question: string;
   unit: string;
+  /** the category's provenance note, printed at the reveal when it has one */
+  note?: string;
   a: Athlete;
   b: Athlete;
   /** which card has the bigger number */
@@ -208,7 +243,7 @@ export function dealRounds(cats: Category[], rng: Rng, difficulty: Difficulty, c
     const hit = rivalHitRate(rival, a.value, b.value);
     const correct = rng() < hit;
     const seconds = Math.round((rival.fastest + rng() * (rival.slowest - rival.fastest)) * 10) / 10;
-    rounds.push({ category: cat.key, sport, emoji: cat.emoji, question: cat.question, unit: cat.unit, a, b, higher: a.value > b.value ? 'a' : 'b', rival: { correct, seconds } });
+    rounds.push({ category: cat.key, sport, emoji: cat.emoji, question: cat.question, unit: cat.unit, note: cat.note, a, b, higher: a.value > b.value ? 'a' : 'b', rival: { correct, seconds } });
     used.add(a.name); used.add(b.name);
     lastSport = sport;
   }

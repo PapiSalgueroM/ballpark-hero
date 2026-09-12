@@ -12,15 +12,14 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { HigherLowerStatKey } from '@/types/higherLower';
 
-type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
+type StatKey = HigherLowerStatKey;
 
-const STAT_KEYS: StatKey[] = ['appearances', 'goals', 'assists', 'trophies', 'internationalCaps'];
+const STAT_KEYS: StatKey[] = ['appearances', 'goals', 'internationalCaps'];
 const STAT_EMOJIS: Record<StatKey, string> = {
   appearances: '🎽',
   goals: '⚽',
-  assists: '👟',
-  trophies: '🏆',
   internationalCaps: '🌍',
 };
 
@@ -38,6 +37,7 @@ const HigherLowerGame = () => {
     resetGame,
     lossReaction,
     statLabels,
+    noteFor,
   } = useHigherLower();
 
   const [showHelp, setShowHelp] = useState(false);
@@ -79,6 +79,7 @@ const HigherLowerGame = () => {
                 statKeys={STAT_KEYS}
                 statEmojis={STAT_EMOJIS}
                 statLabels={statLabels}
+                noteFor={noteFor}
                 onChooseStat={chooseStat}
                 interactive={!revealedStats}
                 lastChoice={lastChoice}
@@ -96,6 +97,7 @@ const HigherLowerGame = () => {
                 statKeys={STAT_KEYS}
                 statEmojis={STAT_EMOJIS}
                 statLabels={statLabels}
+                noteFor={noteFor}
                 interactive={false}
                 lastChoice={null}
               />
@@ -147,12 +149,12 @@ const HigherLowerGame = () => {
             "Correct picks extend your streak. Wrong picks end the game",
           ]}
           examples={[
-            "Messi vs Ronaldo: Who has more goals?",
-            "Neymar vs Salah: Who has more assists?",
-            "Mbappé vs Haaland: Who has more trophies?",
-            "Modric vs De Bruyne: Who has more appearances?",
-            "Kane vs Lewandowski: Who has more international caps?",
-            "Benzema vs Suárez: Who has more career goals?"
+            "Maldini vs Buffon: Who made more club appearances?",
+            "Henry vs Raúl: Who scored more career goals?",
+            "Cafu vs Sergio Ramos: Who won more international caps?",
+            "Zidane vs Xavi: Who made more club appearances?",
+            "Del Piero vs Baggio: Who scored more career goals?",
+            "Casillas vs Lothar Matthäus: Who won more international caps?"
           ]}
         />
 
@@ -174,6 +176,7 @@ interface PlayerCardProps {
   statKeys: StatKey[];
   statEmojis: Record<StatKey, string>;
   statLabels: Record<StatKey, string>;
+  noteFor: (playerName: string, stat: StatKey) => string | null;
   onChooseStat?: (stat: StatKey) => void;
   interactive: boolean;
   lastChoice: { stat: StatKey; correct: boolean } | null;
@@ -181,8 +184,16 @@ interface PlayerCardProps {
 }
 
 function PlayerCard({
-  player, revealed, statKeys, statEmojis, statLabels, onChooseStat, interactive, lastChoice, nextPlayerStats,
+  player, revealed, statKeys, statEmojis, statLabels, noteFor, onChooseStat, interactive, lastChoice, nextPlayerStats,
 }: PlayerCardProps) {
+  /* Shown only once the numbers are on screen: every caveat this row carries,
+     one line each, and never the same line twice. Asked of every stat on the
+     card rather than one of them, because the club columns and the cap column
+     are checked to different depths, so a single question would leave the
+     other column saying nothing. */
+  const provenanceNotes = [...new Set(
+    statKeys.map((stat) => noteFor(player.name, stat)).filter((n): n is string => !!n),
+  )];
   return (
     <div className="flex-1 max-w-sm w-full mx-auto">
       <div className="bg-card border border-border rounded-2xl p-5 shadow-lg">
@@ -232,6 +243,16 @@ function PlayerCard({
             );
           })}
         </div>
+
+        {revealed && provenanceNotes.length > 0 && (
+          <div className="mt-3 space-y-1">
+            {provenanceNotes.map((note) => (
+              <p key={note} className="text-center text-[11px] leading-snug text-muted-foreground">
+                {note}
+              </p>
+            ))}
+          </div>
+        )}
 
         {interactive && (
           <p className="text-center text-xs text-muted-foreground mt-3">

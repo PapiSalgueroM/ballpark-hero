@@ -1,18 +1,26 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
-import { HigherLowerPlayer } from '@/types/higherLower';
-import { higherLowerPlayers } from '@/data/higherLowerPlayers';
+import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
+import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { makeFirstDraw } from '@/lib/firstDraw';
 
-type StatKey = 'appearances' | 'goals' | 'assists' | 'trophies' | 'internationalCaps';
+type StatKey = HigherLowerStatKey;
 
 const STAT_LABELS: Record<StatKey, string> = {
   appearances: 'Appearances',
   goals: 'Goals',
-  assists: 'Assists',
-  trophies: 'Trophies',
   internationalCaps: 'Int\'l Caps',
 };
+
+/** What the card says under a stat, or nothing. Round 535: the pool says out
+ *  loud which of its numbers one publisher stands behind rather than two,
+ *  which of them are not checked against a publisher at all, and which rows
+ *  come from an era whose club totals were never reconciled between
+ *  publishers. The rule and the notes live in the data file beside the lists
+ *  they read, so /face-off asks the same question and gets the same answer. */
+export function noteFor(playerName: string, stat: StatKey): string | null {
+  return hlNoteFor(playerName, stat);
+}
 
 function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): HigherLowerPlayer {
   const available = higherLowerPlayers.filter(p => !exclude.includes(p.name));
@@ -22,7 +30,7 @@ function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): 
 
   // If we have a current player, ensure at least one stat where current >= next
   if (currentPlayer) {
-    const statKeys: (keyof HigherLowerPlayer['stats'])[] = ['appearances', 'goals', 'assists', 'trophies', 'internationalCaps'];
+    const statKeys: StatKey[] = ['appearances', 'goals', 'internationalCaps'];
     const valid = available.filter(p =>
       statKeys.some(stat => currentPlayer.stats[stat] >= p.stats[stat])
     );
@@ -176,5 +184,6 @@ export function useHigherLower() {
     streakReaction,
     lossReaction,
     statLabels,
+    noteFor,
   };
 }

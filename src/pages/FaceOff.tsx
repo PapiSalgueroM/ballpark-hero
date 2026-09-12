@@ -221,10 +221,21 @@ const FaceOff = () => {
                         {yours ? (versus ? '🟢 P1' : 'you') : ''}{yours && theirs ? ' + ' : ''}{theirs ? (versus ? '🔵 P2' : rival.emoji) : ''}
                       </span>
                     )}
+                    {revealed && ath.note && (
+                      <span className="text-[10px] leading-snug text-muted-foreground break-words">
+                        {ath.note}
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
+            )}
+
+            {g.phase === 'reveal' && g.current.note && (
+              <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
+                {g.current.note}
+              </p>
             )}
 
             {g.phase === 'reveal' && g.lastResult && (

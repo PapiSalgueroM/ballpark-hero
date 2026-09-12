@@ -172,28 +172,29 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   '/higher-lower': {
     intro: [
       "Most higher or lower games hide a number and make you call it. This one flips the table: your player's stats are face up, the challenger's are hidden, and you pick the battleground.",
-      "Five career totals are in play: appearances, goals, assists, trophies, and international caps. Choose the one stat where your player beats the mystery opponent. One bad read ends the run.",
+      "Three career totals are in play: appearances, goals and international caps. Choose the one stat where your player beats the mystery opponent. One bad read ends the run.",
     ],
     howToPlay: [
-      "Study your player's five revealed career stats.",
+      "Study your player's three revealed career stats.",
       "Tap the one stat where you think your player is at least as high as the hidden opponent.",
       "The reveal shows both cards for a few seconds either way.",
       "Correct picks grow your streak, and the opponent becomes your next player.",
       "A wrong pick ends the game. Share the streak and go again.",
     ],
     rules: [
-      "All five stats are career totals.",
+      "All three stats are career totals.",
       "Ties count for you: a pick is correct when your number is higher than or equal to the opponent's.",
       "One wrong pick ends the run. There are no lives and no timer.",
       "Every matchup is winnable by design, with at least one stat where your player is not behind.",
+      "International caps are senior full internationals, and a card says on the reveal when its number comes from one publisher rather than two.",
     ],
     example: [
-      "Your card is Lionel Messi. Goals feels safe until you remember a hidden Cristiano Ronaldo would edge it, so you tap trophies, and Messi's cabinet holds up against almost anybody.",
-      "The reveal shows a legendary defender with huge appearances but a lighter trophy shelf. Streak to 7, and now you play as that defender, hunting his one strong column.",
+      "Your card is Paolo Maldini. Goals is a trap for a defender who played 25 years at the back, so you tap appearances, and 902 games holds up against almost anybody.",
+      "The reveal shows a striker with a monster goal column and a short career. Streak to 7, and now you play as that striker, hunting his one strong column.",
     ],
     tips: [
       "Appearances reward longevity, so keepers and one club legends quietly dominate that column.",
-      "Remember who might be hiding: the pool mixes current stars with retired icons carrying finished, giant totals.",
+      "Remember who might be hiding: the pool mixes recent names with retired icons carrying finished, giant totals.",
       "Ties go to you, so a merely solid stat can still be the safest pick.",
       "Your best streak of the session stays on screen. Chase it while the pool is fresh in your head.",
     ],
