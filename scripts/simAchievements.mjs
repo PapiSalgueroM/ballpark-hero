@@ -10,7 +10,9 @@
  *
  * WHAT IT HOLDS:
  *   0. READ ONLY, AS CODE. Neither shipped file contains a write verb, the one
- *      database call is a select, and the case is actually mounted on Profile.
+ *      database call is the named read only function and nothing else, the SQL
+ *      that defines it is stable, security invoker and writes nothing, and the
+ *      case is actually mounted on Profile.
  *   1. REACHABLE, ONE BY ONE. A twelve step ladder of player facts, each step
  *      pointwise at or above the last. Every definition must be unearned at
  *      step 0 and earned by the top, and the step it flips is printed. Nothing
@@ -48,6 +50,16 @@
  *   SIM_ACH_CONTROL=nonmono      a measure that falls as you play          -> 6
  *   SIM_ACH_CONTROL=deadfact     a definition that reads a constant        -> 7
  *   SIM_ACH_CONTROL=builder      the per game count broken                 -> 8
+ *   SIM_ACH_CONTROL=rpcname      the read aimed at an unvouched function   -> 0
+ *   SIM_ACH_CONTROL=sqlwrite     a write inside the function it reads      -> 0
+ *   SIM_ACH_CONTROL=inflate      activity rows counted as finishes again   -> 8
+ *
+ * ROUND 537 BROUGHT THIS LEVEL WITH ROUND 539. Five ids moved and the one
+ * database read became an rpc, and this harness was still pinning Round 527's
+ * shape, so it went red on correct code. What changed here is written at each
+ * site; nothing was relaxed, and section 0 and section 8 both ask harder
+ * questions than they did (the SQL behind the read, and the dedup that makes a
+ * row a game day rather than a finish).
  *
  * Run: node scripts/simAchievements.mjs
  */
@@ -61,6 +73,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LIB = 'src/lib/achievements.ts';
 const CASE = 'src/components/profile/AchievementCase.tsx';
 const PROFILE = 'src/pages/Profile.tsx';
+/* The one read, and the SQL behind it. Round 539 moved the read here from a
+   select on game_completions; section 0 pins both ends. */
+const RPC_NAME = 'player_game_days';
+const MIGRATION = 'supabase/migrations/20260911_player_game_days.sql';
 const CONTROL = process.env.SIM_ACH_CONTROL || '';
 
 const SECTIONS = 9;
@@ -127,6 +143,24 @@ const CONTROLS = {
     old: 'playsByGame[row.game] = (playsByGame[row.game] ?? 0) + 1;',
     now: 'playsByGame[row.game] = 1;',
     say: 'the per game count flattened to one',
+  },
+  rpcname: {
+    sec: 0, file: LIB,
+    old: `'${RPC_NAME}', { p_player`,
+    now: `'${RPC_NAME}_v2', { p_player`,
+    say: 'the read pointed at a function nothing here has vouched for',
+  },
+  sqlwrite: {
+    sec: 0, file: MIGRATION,
+    old: '  select gc.game, (gc.created_at at time zone',
+    now: "  insert into public.game_completions (game) values ('control');\n  select gc.game, (gc.created_at at time zone",
+    say: 'a write put into the body of the function the case reads through',
+  },
+  inflate: {
+    sec: 8, file: LIB,
+    old: '    totalPlays: seenPairs.size,',
+    now: '    totalPlays: Math.max(rows.length, streaks.totalPlays ?? 0),',
+    say: 'the Round 527 row count put back, so an activity log reads as finishes',
   },
 };
 
@@ -304,7 +338,7 @@ const SHAPES = [
       playsByGame: { 'game-0': 200 }, playsBySport: { 'Sport 0': 200 },
       bestScoreByGame: { 'game-0': 900 },
     }),
-    holds: ['first-finish', 'favourite-five', 'plays-25', 'plays-100', 'one-game-100', 'sport-25', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'days-30', 'points-5000'],
+    holds: ['first-finish', 'favourite-five', 'plays-10', 'plays-25', 'plays-60', 'plays-100', 'one-game-25', 'sport-15', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'days-30', 'points-5000'],
     lacks: ['three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'every-sport', 'every-sport-deep', 'scored-10', 'hidden-marathon', 'hidden-four-sports'],
   },
   {
@@ -317,8 +351,8 @@ const SHAPES = [
       playsBySport: spread('Sport ', SPORT_COUNT, 3, 3),
       bestScoreByGame: spread('scored-', 12, 50, 50),
     }),
-    holds: ['first-finish', 'three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'plays-25', 'scored-10', 'every-sport', 'every-sport-deep', 'hidden-marathon', 'hidden-four-sports'],
-    lacks: ['favourite-five', 'one-game-100', 'plays-100', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'sport-25', 'points-5000'],
+    holds: ['first-finish', 'three-games', 'two-sports', 'games-10', 'games-25', 'triple-header', 'plays-10', 'plays-25', 'scored-10', 'every-sport', 'every-sport-deep', 'hidden-marathon', 'hidden-four-sports'],
+    lacks: ['favourite-five', 'one-game-25', 'plays-60', 'plays-100', 'streak-5', 'streak-21', 'game-streak-10', 'days-10', 'sport-15', 'points-5000'],
   },
 ];
 
@@ -338,7 +372,6 @@ console.log('0) read only, as code: neither file writes anything and the case is
     [/\.upsert\s*\(/, '.upsert('],
     [/\.update\s*\(/, '.update('],
     [/\.delete\s*\(/, '.delete('],
-    [/\.rpc\s*\(/, '.rpc('],
     [/localStorage\s*\.\s*(setItem|removeItem|clear)/, 'a localStorage write'],
     [/\brecordCompletion\s*\(/, 'recordCompletion('],
     [/\brecordActivity\s*\(/, 'recordActivity('],
@@ -351,18 +384,63 @@ console.log('0) read only, as code: neither file writes anything and the case is
     for (const [re, name] of WRITES) {
       if (re.test(code)) fail(`${file} contains ${name}, this round is supposed to be read only`);
     }
+    /* An rpc used to sit on the blanket list above, which stopped being the
+       right rule in Round 539: the library's one read IS an rpc now. Banning
+       the word would have meant either a false failure or deleting the check,
+       so it is pinned below instead, by name and by the SQL behind it, which
+       is a stricter question than the word ever asked. The case component
+       still may not call one at all. */
+    if (file !== LIB && /supabase\s*\.\s*rpc\b/.test(code)) {
+      fail(`${file} calls an rpc; only the library's one pinned read may`);
+    }
   }
-  /* the one database call, and its shape rather than its spelling */
+  /* THE ONE DATABASE CALL. Round 527 read game_completions with a select and
+     this section counted that. Round 539 (f23ff1cb) replaced it: the rows were
+     an activity log, the 1,000 row cap was a sliding window, and the day was a
+     UTC day, so the read became public.player_game_days, which does the
+     grouping in SQL. Three things are pinned rather than one.
+     The client must not touch a table directly any more, it must call exactly
+     one function, and that function must be named. */
   const lib = stripComments(sourceOf(LIB));
-  const hits = lib.match(/supabase\.from/g) || [];
-  if (hits.length !== 1) fail(`${LIB} touches supabase.from ${hits.length} times, expected exactly the one read`);
-  const at = lib.indexOf('supabase.from');
-  const callWindow = at < 0 ? '' : lib.slice(at, at + 400);
-  if (!/\.select\s*\(/.test(callWindow)) fail('the database call in achievements.ts is not a select');
+  const froms = lib.match(/supabase\s*\.\s*from\b/g) || [];
+  if (froms.length) fail(`${LIB} touches supabase.from ${froms.length} time(s); since Round 539 its one read is the ${RPC_NAME} function`);
+  const rpcs = lib.match(/supabase\s*\.\s*rpc\b/g) || [];
+  if (rpcs.length !== 1) fail(`${LIB} calls supabase.rpc ${rpcs.length} times, expected exactly the one read`);
+  const named = lib.match(/supabase\s*\.\s*rpc[^(]*\(\s*['"]([a-z0-9_]+)['"]/);
+  if (!named) fail('the database call in achievements.ts does not name a function this harness can read');
+  else if (named[1] !== RPC_NAME) fail(`achievements.ts calls "${named[1]}"; the read only function pinned here is "${RPC_NAME}"`);
+
+  /* AND THE SQL BEHIND IT, because "read only" stopped being a property of the
+     client the moment the read became a function call. A select in the browser
+     proves nothing about what the function does. This is the check the old one
+     could not make. */
+  let sqlOk = 'no';
+  if (!fs.existsSync(path.join(ROOT, MIGRATION))) {
+    fail(`${MIGRATION} is missing, so nothing here can say what ${RPC_NAME} does`);
+  } else {
+    const sql = sourceOf(MIGRATION);
+    if (!new RegExp(`create\\s+or\\s+replace\\s+function\\s+public\\.${RPC_NAME}\\b`, 'i').test(sql)) {
+      fail(`${MIGRATION} does not define public.${RPC_NAME}`);
+    }
+    const split = sql.indexOf('as $function$');
+    const header = split < 0 ? '' : sql.slice(0, split);
+    const bodyRaw = (sql.match(/as \$function\$([\s\S]*?)\$function\$/) || [])[1] ?? '';
+    if (!bodyRaw) fail(`${MIGRATION} has no function body this harness can read`);
+    if (!/\bstable\b/i.test(header)) fail(`${RPC_NAME} is not declared stable, so nothing stops it writing`);
+    if (!/security\s+invoker/i.test(header)) fail(`${RPC_NAME} is not declared security invoker`);
+    /* The house rule from the 2026-08-25 exec_sql incident: a definer function
+       reachable from the anon key runs as the owner. */
+    if (/security\s+definer/i.test(sql)) fail(`${MIGRATION} declares security definer, which the anon key can reach`);
+    const body = bodyRaw.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*--.*$/gm, ' ');
+    for (const verb of ['insert', 'update', 'delete', 'drop', 'alter', 'truncate', 'create', 'grant', 'revoke']) {
+      if (new RegExp(`\\b${verb}\\b`, 'i').test(body)) fail(`${RPC_NAME}'s body contains ${verb.toUpperCase()}, so the one read is not read only`);
+    }
+    sqlOk = 'stable, security invoker, body reads only';
+  }
   /* mounted for real */
   const profile = stripComments(read(PROFILE));
   if (!/<AchievementCase/.test(profile)) fail('AchievementCase is not mounted in src/pages/Profile.tsx');
-  console.log(`   ${LIB} and ${CASE} clean, supabase.from used ${hits.length} time(s), mounted on Profile: ${/<AchievementCase/.test(profile)}`);
+  console.log(`   ${LIB} and ${CASE} clean, ${froms.length} table reads and ${rpcs.length} rpc (${named ? named[1] : 'unreadable'}), its SQL ${sqlOk}, mounted on Profile: ${/<AchievementCase/.test(profile)}`);
 }
 
 /* ═══ 1: reachable, one by one ════════════════════════════════════════════ */
@@ -426,12 +504,27 @@ console.log('3) ids: pinned against the list, unique, and the copy is shaped rig
   /* Pinned on purpose. An id is the only handle anything has on an
      achievement, so a rename is a silent orphan and has to be a decision
      somebody made here rather than a find and replace that went wide. */
+  /* MOVED ONCE, DELIBERATELY, IN ROUND 537. Five ids changed in Round 539
+     (f23ff1cb) and this list is the record of that being a decision rather
+     than a find and replace: days-100 to days-40, one-game-100 to one-game-25,
+     plays-500 and plays-1000 out with plays-10 and plays-60 in, sport-25 to
+     sport-15. The reason is in that commit and in the library's header. The
+     old ladder was built on a count of activity log rows, which measured 131x
+     high for a real handle, so once the counting was corrected to game days
+     the old thresholds sat above anything anybody on the site has ever done:
+     the deepest handle has 121 game days, the most on one game is 43, and the
+     widest single sport is well under 25.
+     NOTHING WAS ORPHANED, and that was checked rather than assumed. The case
+     is derived and read only, it stores no earned state anywhere, and a grep
+     of src, scripts and supabase for the five old ids finds them in this
+     harness and nowhere else. So a rename here costs nobody an achievement
+     they had, which is the thing this pin exists to prevent. */
   const PINNED = [
-    'days-10', 'days-100', 'days-30', 'every-sport', 'every-sport-deep',
+    'days-10', 'days-30', 'days-40', 'every-sport', 'every-sport-deep',
     'favourite-five', 'first-finish', 'game-streak-10', 'games-10', 'games-25',
-    'games-50', 'hidden-four-sports', 'hidden-marathon', 'one-game-100',
-    'plays-100', 'plays-1000', 'plays-25', 'plays-500', 'points-100000',
-    'points-25000', 'points-5000', 'scored-10', 'sport-25', 'streak-21',
+    'games-50', 'hidden-four-sports', 'hidden-marathon', 'one-game-25',
+    'plays-10', 'plays-100', 'plays-25', 'plays-60', 'points-100000',
+    'points-25000', 'points-5000', 'scored-10', 'sport-15', 'streak-21',
     'streak-5', 'streak-60', 'three-games', 'triple-header', 'two-sports',
   ].sort();
   const live = idsOf(ACHIEVEMENTS);
@@ -626,6 +719,14 @@ console.log('8) the builder: real routes in, coherent facts out, inputs untouche
   const favourite = slugOf(cats[0].games[0]);
   for (let i = 0; i < 12; i += 1) rows.push({ game: favourite, completed_on: `2026-09-${String(i + 2).padStart(2, '0')}` });
   rows.push({ game: 'a-route-that-no-longer-exists', completed_on: '2026-09-01' });
+  /* A REPEAT OF A PAIR THE FIXTURE ALREADY HOLDS. Round 539's whole point: a
+     row is an activity log entry, not a finish, so a second row for the same
+     game on the same day must count once. recordActivity writes one of these
+     per Club Manager match, and site wide 376,818 rows are 25,182 real game
+     days. With this row present, rows.length and the true answer differ, so
+     the assertion below can tell them apart instead of agreeing by accident. */
+  rows.push({ game: favourite, completed_on: '2026-09-01' });
+  const distinctPairs = new Set(rows.map(r => `${r.game}|${r.completed_on}`)).size;
 
   const streaks = {
     version: 1,
@@ -641,7 +742,17 @@ console.log('8) the builder: real routes in, coherent facts out, inputs untouche
   if (!deepEqual(streaks, streaksBefore)) fail('buildAchievementFacts edited the streak state it was handed');
   if (!deepEqual(scores, scoresBefore)) fail('buildAchievementFacts edited the scores it was handed');
 
-  if (f.totalPlays !== Math.max(rows.length, 40)) fail(`totalPlays ${f.totalPlays}, expected the larger of ${rows.length} rows and the local 40`);
+  /* THREE ASSERTIONS WHERE THERE WAS ONE, and the old one is now the bug.
+     It read Math.max(rows.length, streaks.totalPlays), which is exactly what
+     Round 539 removed: both numbers are inflated (the rows are an activity log,
+     and recordStreakDay bumps totalPlays outside its own once a day guard) and
+     the larger inflated one always won, so the legendary tile was reachable off
+     one Club Manager save. totalPlays is now the count of distinct game days,
+     which the database can state exactly, so this pins it against that count
+     AND against both of the numbers it must no longer be. */
+  if (f.totalPlays !== distinctPairs) fail(`totalPlays ${f.totalPlays}, expected ${distinctPairs} distinct (game, day) pairs`);
+  if (f.totalPlays === rows.length) fail(`totalPlays is ${rows.length}, the raw row count, so a repeat of one game on one day was counted twice`);
+  if (f.totalPlays === streaks.totalPlays) fail(`totalPlays is ${streaks.totalPlays}, the local tally, which Round 539 stopped consulting because it counts activity rather than game days`);
   if (f.totalPoints !== 6000) fail(`totalPoints ${f.totalPoints}, expected the larger of 1200 and the local 6000`);
   if (f.longestStreak !== 9) fail(`longestStreak ${f.longestStreak}, expected 9`);
   if (f.bestGameStreak !== 12) fail(`bestGameStreak ${f.bestGameStreak}, expected 12`);

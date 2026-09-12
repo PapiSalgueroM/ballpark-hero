@@ -55,6 +55,26 @@
  * first and refuses to run otherwise, per the house rule that a control which
  * changes nothing makes the harness green for the wrong reason.
  *
+ * ROUND 537: THE CONTROL COULD NOT FIRE ON A WINDOWS CHECKOUT, for two
+ * separate reasons, and until both were fixed the fence for a live crash was
+ * unproven on the machine this site is built on.
+ *   Its needle was written with bare newlines and the shipped file is CRLF
+ *   here, so it exited saying it could not find the binding, which reads like
+ *   a missing anchor and was really a missing carriage return. Line endings
+ *   are folded before matching now.
+ *   Then, with that fixed, the injected bug WAS caught and printed, and the
+ *   control still reported that it had not fired, because it compared
+ *   src/pages/ClubManager.tsx against the path.join spelling
+ *   src\pages\ClubManager.tsx. Scanned paths carry forward slashes now, which
+ *   also stops a BASELINE written on one platform from silently not matching
+ *   on the other.
+ *
+ * ROUND 537 ALSO MADE IT SAY WHAT IT DID. It printed four lines for a scan of
+ * 522 files, under the suite runner's "a harness that prints almost nothing
+ * did not run" floor, so the runner reported it as EMPTY. It now prints the
+ * narrowing at each step, from every identifier examined down to the hazards,
+ * which is the same walk reported rather than a different check.
+ *
  * Run: node scripts/simEarlyReturnScope.mjs      (no database, no build)
  */
 import fs from 'node:fs';
@@ -82,11 +102,19 @@ const BASELINE = [];
 /* ------------------------------------------------------------------ */
 const SCAN_DIRS = ['src/pages', 'src/components', 'src/hooks'];
 const files = [];
+/* FORWARD SLASHES, ALWAYS. These relative paths are not just for printing:
+   they are half of every BASELINE key and they are what the control matches
+   on. path.join hands back backslashes on Windows, which made the control's
+   own "did it fire" test compare src/pages/ClubManager.tsx against
+   src\pages\ClubManager.tsx and answer no, while the FAIL it was looking for
+   was sitting right above it in the output. It would also have made a baseline
+   written on one platform silently stop matching on the other. */
+const slash = p => p.split(path.sep).join('/');
 const walk = dir => {
   const abs = path.join(ROOT, dir);
   if (!fs.existsSync(abs)) return;
   for (const e of fs.readdirSync(abs, { withFileTypes: true })) {
-    const rel = path.join(dir, e.name);
+    const rel = slash(path.join(dir, e.name));
     if (e.isDirectory()) walk(rel);
     else if (/\.tsx?$/.test(e.name) && !/\.test\.tsx?$/.test(e.name)) files.push(rel);
   }
@@ -103,7 +131,16 @@ if (files.length < 100) {
 const overrides = new Map();
 if (CONTROL === 'tdz') {
   const target = 'src/pages/ClubManager.tsx';
-  const src = fs.readFileSync(path.join(ROOT, target), 'utf8');
+  /* LINE ENDINGS ARE FOLDED FIRST, and that is not tidiness. This control was
+   * written with a bare-newline needle and the shipped file is CRLF on a
+   * Windows checkout, so from Round 541 until Round 537 found it the control
+   * could not run at all here: it exited saying it could not find the binding,
+   * which reads like a missing anchor and is really a missing carriage return.
+   * A control that cannot run leaves the fence for the live season review
+   * crash unproven on the machine the site is actually built on. Folding is
+   * safe for what follows: the source is only ever handed to the TypeScript
+   * parser in memory, and \r\n to \n keeps every line number. */
+  const src = fs.readFileSync(path.join(ROOT, target), 'utf8').split('\r\n').join('\n');
   /* The season end block declares its own `c` since Round 541. Take that line
    * away and the block falls through to the function body binding below it,
    * which is precisely the shape that shipped and crashed. */
@@ -115,7 +152,7 @@ if (CONTROL === 'tdz') {
   const mutated = src.replace(needle, `    const trophyLine =`);
   if (mutated === src) { console.error('CONTROL tdz changed nothing'); process.exit(1); }
   overrides.set(target, mutated);
-  console.log('   NEGATIVE CONTROL ON: the season end block loses its own career binding, the check must go red');
+  console.log(`   NEGATIVE CONTROL ON: ${target} loses the season end block's own career binding, the check must go red`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -188,12 +225,22 @@ const canReturnEarly = st => {
 };
 
 const findings = [];
+/* COUNTERS, so the output proves the work rather than asserting it. Before
+   Round 537 this harness printed four lines for a full scan of the tree, which
+   is under the suite runner's "a harness that prints almost nothing did not
+   run" floor, so it was reported as EMPTY while it was in fact reading 522
+   files. None of these change what is checked; they are read off the same walk
+   and printed at the end. */
+const seen = { filesRead: 0, fns: 0, idents: 0, bodyLevel: 0, aboveDecl: 0, deferred: 0, inReturningBlock: 0 };
+const filesWithFindings = new Set();
 
 for (const rel of files) {
   const sf = program.getSourceFile(path.join(ROOT, rel));
   if (!sf) continue;
+  seen.filesRead += 1;
 
   const visit = node => {
+    if (isFunctionLike(node) && node.body && ts.isBlock(node.body)) seen.fns += 1;
     if (ts.isIdentifier(node)) {
       /* Skip declaration names, property names, JSX tag names. */
       const p = node.parent;
@@ -202,6 +249,7 @@ for (const rel of files) {
         ts.isImportSpecifier(p) || ts.isImportClause(p)) && p.name === node;
       const isPropAccess = p && ts.isPropertyAccessExpression(p) && p.name === node;
       if (!isDeclName && !isPropAccess) {
+        seen.idents += 1;
         const sym = checker.getSymbolAtLocation(node);
         const decl = sym?.declarations?.[0];
         if (decl && ts.isVariableDeclaration(decl) && decl.getSourceFile() === sf) {
@@ -218,14 +266,21 @@ for (const rel of files) {
             const declAtBodyLevel = declFn && declFn.body.statements.includes(stmt);
             let sameFn = false;
             for (let q = refFn; q; q = owningFunction(q)) { if (q === declFn) { sameFn = true; break; } }
+            if (declAtBodyLevel && sameFn) seen.bodyLevel += 1;
+            if (declAtBodyLevel && sameFn && node.getStart() < stmt.getStart()) {
+              seen.aboveDecl += 1;
+              if (insideEventHandler(node)) seen.deferred += 1;
+            }
             if (declAtBodyLevel && sameFn && node.getStart() < stmt.getStart() && !insideEventHandler(node)) {
               const host = bodyStatementContaining(declFn, node);
               if (host && canReturnEarly(host)) {
+                seen.inReturningBlock += 1;
                 const fnName = declFn.parent && ts.isVariableDeclaration(declFn.parent) &&
                   ts.isIdentifier(declFn.parent.name) ? declFn.parent.name.text : '(anonymous)';
                 const line = sf.getLineAndCharacterOfPosition(node.getStart()).line + 1;
                 const declLine = sf.getLineAndCharacterOfPosition(stmt.getStart()).line + 1;
                 findings.push({ key: `${rel}::${fnName}::${node.text}`, rel, fnName, name: node.text, line, declLine });
+                filesWithFindings.add(rel);
               }
             }
           }
@@ -242,19 +297,39 @@ const byKey = new Map();
 for (const f of findings) if (!byKey.has(f.key)) byKey.set(f.key, f);
 const unique = [...byKey.values()];
 
-console.log(`1. Scanned ${files.length} files for a binding read above its own declaration`);
+console.log(`1. What was read: ${SCAN_DIRS.join(', ')}`);
+console.log(`   ${files.length} source files listed, ${seen.filesRead} parsed by the TypeScript program, ${seen.fns} functions with a block body`);
+console.log(`   ${seen.idents} identifier references examined, declaration names, property names and JSX tags skipped`);
+
+console.log('2. Narrowing, one rule at a time');
+console.log(`   ${seen.bodyLevel} of those resolve to a const or let declared at their own function's statement level`);
+console.log(`   ${seen.aboveDecl} of those sit textually ABOVE that declaration, so the binding has not run yet`);
+console.log(`   ${seen.deferred} of those are allowed on purpose: inside a JSX on* handler, which runs on a tap, long after the declaration`);
+console.log(`   ${seen.inReturningBlock} of the rest sit inside a block that can return first, which is the hazard`);
+if (seen.aboveDecl === 0 && !CONTROL) {
+  fail('not one reference above its own declaration was found in the whole tree, which means the walk is not reaching real code');
+}
+
+console.log(`3. The verdict, against a baseline of ${BASELINE.length}`);
 const fresh = unique.filter(f => !BASELINE.includes(f.key));
 const baselineHit = unique.filter(f => BASELINE.includes(f.key));
 
 for (const f of fresh) {
   fail(`${f.rel}:${f.line} reads "${f.name}" but the only binding it resolves to is declared at line ${f.declLine}, below an early return. This throws ReferenceError at render.`);
 }
-if (!fresh.length) console.log(`   no new offenders (${baselineHit.length} baseline entries still present)`);
+if (!fresh.length && !unique.length) {
+  console.log('   no hazard anywhere in the tree: nothing reads a body level binding from above it inside a block that can return');
+} else if (!fresh.length) {
+  console.log(`   ${unique.length} distinct file/function/identifier hazards, all of them in the baseline, ${baselineHit.length} still present, 0 new`);
+} else {
+  console.log(`   ${fresh.length} new across ${filesWithFindings.size} file(s), ${baselineHit.length} baseline entries still present`);
+}
 
 /* A baseline entry that stopped reproducing must leave the list, so the list
  * cannot quietly become a permanent excuse. */
 const stale = BASELINE.filter(k => !byKey.has(k));
 for (const k of stale) fail(`BASELINE still lists ${k} but it no longer reproduces. Remove it from the list.`);
+if (!stale.length && BASELINE.length) console.log(`   every one of the ${BASELINE.length} baseline entries still reproduces, so the list is not rotting`);
 
 if (CONTROL === 'tdz') {
   const fired = fresh.some(f => f.rel === 'src/pages/ClubManager.tsx' && f.name === 'c');

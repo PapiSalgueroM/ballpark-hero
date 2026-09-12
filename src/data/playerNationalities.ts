@@ -2,7 +2,7 @@
    One map per sealed world, because a name is not a person: the 2010
    Aaron Ramsey is Welsh, the modern one is English, and a single map
    would invent one of them. Provenance, year windows and the fail-closed
-   rules live in the bake script's header. 6314 entries total. */
+   rules live in the bake script's header. 6310 entries total. */
 
 export const NATIONALITY_BY_WORLD: Record<string, Record<string, string>> = {
 now: {
@@ -253,7 +253,6 @@ now: {
   'André Onana': 'Cameroon',
   'Andréas Hountondji': 'Benin',
   'Andrés García': 'Spain',
-  'Andrés Gómez': 'Colombia',
   'Andrés Herrera': 'Argentina',
   'Andrés Martín': 'Spain',
   'Andy Diouf': 'France',
@@ -302,7 +301,6 @@ now: {
   'Antonio Nusa': 'Norway',
   'Antonio Raimondo': 'Italy',
   'Antonio Rüdiger': 'Germany',
-  'Antonio Sanabria': 'Paraguay',
   'Antonio Sivera': 'Spain',
   'Antonio Vergara': 'Italy',
   'Antoniu Roca': 'Spain',
@@ -832,7 +830,6 @@ now: {
   'Diogo Costa': 'Portugal',
   'Diogo Dalot': 'Portugal',
   'Diogo Gonçalves': 'Portugal',
-  'Diogo Jota': 'Portugal',
   'Diogo Leite': 'Portugal',
   'Diogo Nascimento': 'Portugal',
   'Diogo Rodrigues': 'Portugal',
@@ -2918,7 +2915,6 @@ now: {
   'Ramiro Macagno': 'Argentina',
   'Ramon Hendriks': 'Netherlands',
   'Ramy Bensebaini': 'Algeria',
-  'Ramón Sosa': 'Paraguay',
   'Ramón Terrats': 'Spain',
   'Randal Kolo Muani': 'France',
   'Randell Williams': 'England',

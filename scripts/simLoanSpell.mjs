@@ -25,6 +25,11 @@
  *  6. THE WIRING. All five window entries go through enterTransferWindow,
  *     and the screen carries the loan copy it claims to.
  *
+ * NEGATIVE CONTROL: LOAN_CONTROL=shut closes the loan market in a copy of the
+ * engine and section 4's cohort must collapse through its floor. It exists
+ * because Round 537 widened that cohort from 150 careers to 900, and a
+ * widening is only honest if the floor can still fail.
+ *
  * Run: node scripts/simLoanSpell.mjs
  */
 import { writeFileSync } from "node:fs";
@@ -38,14 +43,51 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(os.tmpdir(), 'loan-engine.mjs');
 const ENTRY = path.join(os.tmpdir(), 'loan-engine-entry.mjs');
 
+/* NEGATIVE CONTROL, LOAN_CONTROL=shut. Round 537 widened the cohort in section
+   4 from 150 careers to 900, and the fair question about any widening is
+   whether the floor can still fail at all. This shuts the loan market in the
+   bundle only, through an esbuild load hook, so nothing on disk moves and the
+   copy keeps the real file's directory and therefore its relative imports. The
+   cohort count must then collapse through the floor.
+   Line endings are folded before matching, because the shipped file is CRLF on
+   a Windows checkout and a needle written with bare newlines finds nothing
+   there. That is not hypothetical: simEarlyReturnScope's control could not
+   fire on this machine for exactly that reason. */
+const CONTROL = process.env.LOAN_CONTROL || '';
+if (CONTROL && CONTROL !== 'shut') {
+  console.error(`LOAN_CONTROL=${CONTROL} is not a control this harness knows (shut)`);
+  process.exit(1);
+}
+const ENGINE_SRC = 'src/lib/soccerCareerEngine.ts';
+const plugins = [];
+if (CONTROL === 'shut') {
+  const src = fs.readFileSync(path.join(ROOT, ENGINE_SRC), 'utf8').split('\r\n').join('\n');
+  const needle = 'export function determineLoanOffers(state: CareerState, clubs: ClubData[]): ContractOffer[] | null {\n';
+  if (!src.includes(needle)) {
+    console.error('CONTROL shut cannot find determineLoanOffers, so it would change nothing');
+    process.exit(1);
+  }
+  const mutated = src.replace(needle, needle + '  return null;\n');
+  if (mutated === src) { console.error('CONTROL shut changed nothing'); process.exit(1); }
+  plugins.push({
+    name: 'loan-control',
+    setup(b) {
+      b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => ({
+        contents: mutated, loader: 'ts', resolveDir: path.dirname(args.path),
+      }));
+    },
+  });
+  console.log('NEGATIVE CONTROL ON (shut): the loan market closed in the bundle, section 4 must go red');
+}
+
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
+const mod = await import('${ROOT.replaceAll('\\', '/')}/${ENGINE_SRC}');
 export const engine = mod;
 `);
 await build({
   entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node",
-  outfile: OUT, logLevel: "error", alias: { "@": path.join(ROOT, "src") },
+  outfile: OUT, logLevel: "error", alias: { "@": path.join(ROOT, "src") }, plugins,
 });
 const { engine } = await import(pathToFileURL(OUT).href);
 const {
@@ -218,7 +260,35 @@ console.log("3) the lifecycle and 4) the measured payoff");
      loan. */
   const realRandom = Math.random;
   const seeded = seed => { let a = seed >>> 0; return () => { a += 0x6d2b79f5; let x = a; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; };
-  const N = 150, SEASONS = 3;
+  /* N WIDENED FROM 150 TO 900 IN ROUND 537, AND NO FLOOR MOVED. The loan count
+     went 123 to 117 across the merge of the tablet lane's Rounds 526 to 550
+     and tripped the 0.8 bar at 120. It was not the loan rule. Round 546 made
+     the flagship's Champions League play two legged ties instead of flipping
+     one coin, so a season now draws a different NUMBER of values from the
+     stream, every seeded career realigns, and which 150 of them happen to see
+     an offer is re-rolled. Any future change that draws differently will do
+     the same, which is the point: the old check was reading the fixture.
+
+     MEASURED both sides, 12 batches of 150 careers each per tree:
+       pre merge  (edd21816): 120 to 131, mean 124.3
+       post merge (main):     113 to 131, mean 124.7
+     The mean is the same to within half a career and the payoff gaps match to
+     two decimals, so the engine's loan behaviour did not move. The bar at 120
+     simply sat INSIDE that distribution, which is CLAUDE.md's Round 284 lesson
+     exactly, and it was already touching it before the merge (two pre merge
+     batches landed on 120 and passed by one career).
+
+     So the sample got bigger rather than the bar smaller, which is the house
+     policy: widen or seed, never loosen. At 900 careers, 10 batches per tree,
+     20 in all over 18,000 careers:
+       pre merge  746 to 764 of 900, mean 755.0
+       post merge 752 to 766 of 900, mean 759.4
+     The floor of 0.8 is 720, which is 26 careers below the lowest batch of the
+     twenty and roughly six standard deviations below their mean. The gap for
+     the payoff floors widened the same way: dOverall reads 0.34 to 0.42
+     against a floor of 0.2, and dApps reads 7 in every one of the twenty
+     batches against a floor of 5. Costs about ten seconds. */
+  const N = 900, SEASONS = 3;
   let aOverall = 0, bOverall = 0, aApps = 0, bApps = 0, aLoans = 0, careersWithLoan = 0, violations = 0;
   let loanRecordBad = 0, returnBad = 0;
   for (let i = 0; i < N; i++) {
@@ -258,6 +328,11 @@ console.log("3) the lifecycle and 4) the measured payoff");
      run, from headroom: what this check exists to catch is the gap going
      to ZERO or negative, which is exactly what it caught when the bench
      still earned the full big club training bonus.
+
+     RE-MEASURED 2026-09-12 at the widened N of 900, twenty batches over two
+     trees: +0.34 to +0.42 and +7 apps flat, against floors of 0.2 and 5. The
+     levels below are the 150 career readings and are kept for the history;
+     the note above the cohort loop carries the current numbers.
 
      RE-MEASURED 2026-08-22: the same seeded arms now read +0.4 and +7, so
      both numbers have come down while staying above their floors. The arms
@@ -333,6 +408,14 @@ console.log("6) the wiring and the words");
 }
 
 console.log("");
+if (CONTROL) {
+  if (failures > 0) {
+    console.log(`simLoanSpell control (${CONTROL}): green. Shutting the loan market was caught (${failures} finding${failures === 1 ? "" : "s"}).`);
+    process.exit(0);
+  }
+  console.error(`simLoanSpell control (${CONTROL}): RED. The loan market was closed and nothing noticed.`);
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simLoanSpell: ${failures} failure${failures === 1 ? "" : "s"}`);
   process.exit(1);
