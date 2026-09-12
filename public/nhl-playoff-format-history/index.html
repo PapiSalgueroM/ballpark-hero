@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>NHL Playoff Format History: Every Change Since 1917-18</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"NHL Playoff Format History: Every Change Since 1917-18 | DoUKnowBall","description":"Every NHL playoff format change since 1917-18, from meeting the West for the Cup to sixteen clubs with wild cards, and the four springs that broke the pattern.","url":"https://douknowball.com/nhl-playoff-format-history","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/nhl-playoff-format-history" data-rh="true"><meta name="description" content="Every NHL playoff format change since 1917-18, from meeting the West for the Cup to sixteen clubs with wild cards, and the four springs that broke the pattern." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/nhl-playoff-format-history" data-rh="true"><meta property="og:title" content="NHL Playoff Format History: Every Change Since 1917-18 | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every NHL playoff format change since 1917-18, from meeting the West for the Cup to sixteen clubs with wild cards, and the four springs that broke the pattern." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NHL Playoff Format History: Every Change Since 1917-18 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every NHL playoff format change since 1917-18, from meeting the West for the Cup to sixteen clubs with wild cards, and the four springs that broke the pattern." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>NHL playoff format history</h1>
+<p>Every shape the Stanley Cup playoffs have taken since the NHL's first season in 1917-18, and the four springs that broke the pattern. Each was checked against two independent publishers on 2026-09-11, listed at the bottom. Where a detail only had one reading it was left out rather than guessed, and where the two accounts disagree the disagreement is printed.</p>
+<h2>The timeline at a glance</h2>
+<p>Seasons</p>
+<p>Field</p>
+<p>Qualifying</p>
+<p>1917-18 to 1925-26</p>
+<p>2 of 4</p>
+<p>The NHL played off for its own title, usually two clubs in a two game total goals series (a best of seven in 1918-19, and none at all in 1919-20 when Ottawa won both halves of the schedule), and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.</p>
+<p>1926-27 to 1937-38</p>
+<p>6 of 10</p>
+<p>Ten clubs in a Canadian and an American division, five each; the top three in each division qualified.</p>
+<p>1938-39 to 1941-42</p>
+<p>6 of 7</p>
+<p>With the Maroons gone the two divisions were folded into one table of seven, and six of the seven made the playoffs.</p>
+<p>1942-43 to 1966-67</p>
+<p>4 of 6</p>
+<p>Six clubs, and only the top four qualified: first played third and second played fourth in best of seven semifinals, then a best of seven Final.</p>
+<p>1967-68 to 1973-74</p>
+<p>8 of 12</p>
+<p>The league doubled to twelve in one summer, split into an East division of the six old clubs and a West division of the six new ones, and the top four in each division qualified, every series best of seven.</p>
+<p>1974-75 to 1978-79</p>
+<p>12 of 18</p>
+<p>Eighteen clubs in two conferences of two divisions; the top three in each division qualified, twelve in all.</p>
+<p>1979-80 to 1980-81</p>
+<p>16 of 21</p>
+<p>The WHA merger took the league to twenty one clubs and the field grew to sixteen, seeded one to sixteen by record regardless of division or conference.</p>
+<p>1981-82 to 1992-93</p>
+<p>16 of 21</p>
+<p>Realigned into the Wales and Campbell conferences, each of two divisions (Adams, Patrick, Norris, Smythe), with the top four in every division qualifying and the first two rounds played entirely inside the division.</p>
+<p>1993-94 to 2012-13</p>
+<p>16 of 26</p>
+<p>The conferences became Eastern and Western, and the top eight in each conference qualified and were seeded one to eight, the division winners taking the top seeds and one playing eight, two playing seven and so on.</p>
+<p>2013-14 onward</p>
+<p>16 of 30</p>
+<p>Two conferences of two divisions again (Atlantic, Metropolitan, Central, Pacific): the top three in each division qualify, then the two best remaining records in each conference come in as wild cards, sixteen in all.</p>
+<p>The field column counts the clubs in the NHL's own playoff against the clubs in the league, both in the first season of each row; the league kept growing inside most of them.</p>
+<h2>Season by season</h2>
+<h3>1917-18 to 1925-26: The NHL champion plays the West for the Cup</h3>
+<p>The NHL played off for its own title, usually two clubs in a two game total goals series (a best of seven in 1918-19, and none at all in 1919-20 when Ottawa won both halves of the schedule), and the winner then met the champion of the Pacific Coast Hockey Association (later the western leagues generally) in the Stanley Cup Final.</p>
+<li>The Cup is older than the league. It was donated in 1892 and spent its first decades as a challenge trophy, and by the time the NHL was formed in 1917 the eastern and western champions were already meeting for it every spring. The NHL simply took the eastern seat.</li>
+<li>In the first seasons the schedule was split into two halves and the half winners played off for the right to face the West. The split season was dropped in the early 1920s (Wikipedia's season page says 1921-22, the NHL's own guide first describes the top two meeting in 1922-23), after which first met second.</li>
+<li>When the Western Canada Hockey League arrived in 1921-22 there were three champions chasing one trophy, and who met whom was redrawn more than once: some springs the two western champions played off first, and in 1923 and 1924 the NHL champion had to win a best of three semifinal against one western champion before meeting the other in the Final. In 1925-26 the NHL let a third club into its own playoff for the first time: second played third, the winner played first.</li>
+<li>The West folded after the 1926 Final, and from 1926-27 only NHL clubs have played for the Cup.</li>
+<h3>1926-27 to 1937-38: Two divisions, six of ten qualify</h3>
+<p>Ten clubs in a Canadian and an American division, five each; the top three in each division qualified.</p>
+<li>For the first two seasons the bracket stayed inside each division: second played third in a two game total goals series, the winner played the division leader, and the two division champions met in the Stanley Cup Final (for 1926-27 the NHL's guide has that Final at best of five and Wikipedia describes a best of three that could stretch to five, so this page does not pick a length).</li>
+<li>From 1928-29 it crossed over instead. The two division winners met each other in a best of five for one place in the Final. The two seconds played each other and the two thirds played each other in two game total goals series, and the winners of those two then played each other for the other place in the Final. The seconds and thirds series stayed two game total goals until 1936-37, when they became best of three, and the Final went to best of five from 1930-31.</li>
+<li>The league shrank through the Depression as clubs folded. By 1937-38, the last season of the two division shape, eight clubs were left, and the Montreal Maroons played their final game that March.</li>
+<h3>1938-39 to 1941-42: One division of seven, six qualify</h3>
+<p>With the Maroons gone the two divisions were folded into one table of seven, and six of the seven made the playoffs.</p>
+<li>First and second met straight away in a best of seven for one place in the Final. Third played fourth and fifth played sixth in short series, then the two winners met for the other place. The NHL's guide has those shorter series at best of three, Wikipedia has them at best of five, and this page does not pick.</li>
+<li>What both agree on is the part that stuck: the Stanley Cup Final became a best of seven in 1939, and it has never gone back.</li>
+<h3>1942-43 to 1966-67: The Original Six: four of six</h3>
+<p>Six clubs, and only the top four qualified: first played third and second played fourth in best of seven semifinals, then a best of seven Final.</p>
+<li>The Brooklyn Americans were dropped before the 1942-43 season, leaving Boston, Chicago, Detroit, Montreal, New York and Toronto. That is the whole league for twenty five seasons, which is why the era got its name.</li>
+<li>This is the one format change that made the field smaller: six qualifiers out of seven became four out of six, and two thirds of the league still made it. Two rounds, both best of seven, is the simplest shape the tournament has ever had.</li>
+<h3>1967-68 to 1973-74: Expansion: two divisions, eight clubs</h3>
+<p>The league doubled to twelve in one summer, split into an East division of the six old clubs and a West division of the six new ones, and the top four in each division qualified, every series best of seven.</p>
+<li>The two brackets ran separately, first against third and second against fourth inside each division, and the division champions met in the Final. Since every expansion club sat in the West, that guaranteed one of them a place in the Stanley Cup Final in its first year.</li>
+<li>From 1970-71 the semifinals crossed over, so an East club could meet a West club a round early, and from 1971-72 the quarterfinals paired first with fourth and second with third instead. The field stayed at eight as the league kept growing.</li>
+<h3>1974-75 to 1978-79: Four divisions, twelve clubs, byes</h3>
+<p>Eighteen clubs in two conferences of two divisions; the top three in each division qualified, twelve in all.</p>
+<li>The four division winners skipped the first round. The eight seconds and thirds were pooled, ranked one to eight by record, and played a best of three preliminary round; the four survivors joined the division winners in best of seven quarterfinals, with the field reranked before every round rather than following a fixed bracket.</li>
+<li>From 1977-78 the last four places went to the best four records among clubs that finished third or lower, regardless of division, the first time the NHL used a wild card in all but name.</li>
+<h3>1979-80 to 1980-81: Sixteen of twenty one, ranked one to sixteen</h3>
+<p>The WHA merger took the league to twenty one clubs and the field grew to sixteen, seeded one to sixteen by record regardless of division or conference.</p>
+<li>The preliminary round became best of five, the three rounds after it stayed best of seven, and the highest surviving seed always drew the lowest. Sixteen is the number the playoffs have kept ever since, apart from one summer.</li>
+<h3>1981-82 to 1992-93: The divisional playoffs</h3>
+<p>Realigned into the Wales and Campbell conferences, each of two divisions (Adams, Patrick, Norris, Smythe), with the top four in every division qualifying and the first two rounds played entirely inside the division.</p>
+<li>First played fourth and second played third in a division semifinal, the winners met in a division final, the two division champions in each conference met in the conference final, and the conference champions played for the Cup. No wild cards, no crossing over: a decade of the same neighbours every April.</li>
+<li>The division semifinals were best of five until 1986-87, when they became best of seven to cut down on first round upsets. Every round has been best of seven since.</li>
+<h3>1993-94 to 2012-13: Conference seeding, one to eight</h3>
+<p>The conferences became Eastern and Western, and the top eight in each conference qualified and were seeded one to eight, the division winners taking the top seeds and one playing eight, two playing seven and so on.</p>
+<li>For the first five seasons the two division winners in each conference held seeds one and two. When the league realigned into six divisions in 1998-99 the three division winners took seeds one to three and the next five by points filled four to eight. Series were reseeded after each round so the best surviving seed always met the worst. All best of seven throughout.</li>
+<li>The 2004-05 season inside this period was never played, which is why the Record Books show a blank for 2005.</li>
+<h3>2013-14 onward: Top three per division plus two wild cards</h3>
+<p>Two conferences of two divisions again (Atlantic, Metropolitan, Central, Pacific): the top three in each division qualify, then the two best remaining records in each conference come in as wild cards, sixteen in all.</p>
+<li>The division winner with the better record draws the wild card with the worse one, the other division winner gets the other, and second plays third inside each division. The first two rounds are settled within the division, the conference finals pit the two division survivors against each other, and every series is best of seven.</li>
+<li>The only two seasons that broke the pattern were the pandemic ones, set out below. Since 2021-22 the format has been exactly this again.</li>
+<h2>The springs that broke the pattern</h2>
+<h3>1919: The Final nobody finished</h3>
+<p>The 1919 Stanley Cup Final between the Montreal Canadiens and the Seattle Metropolitans was cancelled after five games because of the influenza epidemic, and no champion was named. It stayed the only blank on the trophy for the next 86 years.</p>
+<h3>2004-05: The lockout season</h3>
+<p>The whole 2004-05 season was cancelled on 16 February 2005 over the collective bargaining dispute, the first time a North American major league lost a full season to a labour fight. No playoffs were played and the Cup went unawarded for the first time since 1919.</p>
+<h3>2019-20: Twenty four clubs in two bubbles</h3>
+<p>The 2019-20 season was paused in March 2020 with games unplayed, and the league came back in August with a one off 24 club tournament, the top twelve in each conference by points percentage. The top four in each conference played a round robin for seeding while seeds five to twelve played best of five qualifying series; the survivors formed a normal sixteen club bracket of best of seven series, the whole thing played in two hub arenas, Toronto for the East and Edmonton for the West and then for the last two rounds.</p>
+<h3>2020-21: Four temporary divisions, no conferences</h3>
+<p>With pandemic travel rules still in force the league played a 56 game season in four one year divisions (the seven Canadian clubs together in the North) and no conferences at all. The top four in each division qualified, the first two rounds stayed inside the division, and the four division champions were reseeded by points for the semifinals, so the Final could pair any two of them. Sixteen clubs, every round best of seven, and the usual shape came back the following season.</p>
+<h2>What NHL Front Office plays</h2>
+<p>The real format from 2013-14 onward and nothing else: the top three in each of the four divisions plus two wild cards per conference, the division winner with the better record drawing the lower wild card, the first two rounds inside the division, then a conference final and the Stanley Cup Final, every series best of seven. Front Office runs the modern league on real 2026-27 rosters rather than a chosen era, so there is no older bracket to compare it against.</p>
+<p><a href="/nhl-front-office">Run a club through it</a></p>
+<h2>Questions people ask</h2>
+<h3>How many teams make the NHL playoffs?</h3>
+<p>Sixteen, and it has been sixteen since 1979-80 apart from the 24 club return to play in 2020. Since 2013-14 they are the top three in each of the four divisions plus the two best remaining records in each conference as wild cards.</p>
+<h3>When did the NHL start using wild cards?</h3>
+<p>The name arrived with the 2013-14 realignment, but the idea is older: from 1977-78 the last four playoff places went to the best remaining records regardless of division, and from 1979-80 to 1980-81 the whole field of sixteen was ranked by record with no regard to divisions at all.</p>
+<h3>Why do the first two rounds stay inside the division?</h3>
+<p>Because the league went back to a shape it had already used. From 1981-82 to 1992-93 the top four in each division played each other in the first two rounds, which is where a lot of the famous rivalries were built. The 1993-94 change to conference wide seeding, one through eight, lasted twenty seasons, and the 2013-14 format brought the divisional rounds back with wild cards attached.</p>
+<h3>Why was no Stanley Cup awarded in 1919 or 2005?</h3>
+<p>Different reasons, same result. The 1919 Final between Montreal and Seattle was cancelled after five games because of the influenza epidemic. The whole 2004-05 season was lost to a lockout, so there were no playoffs to award it from. The Record Books leave both years empty rather than filling them.</p>
+<h3>Has the playoff field ever got smaller?</h3>
+<p>Once by design. When the league dropped to six clubs in 1942-43, the six qualifiers out of seven became four out of six. Every change since has either kept the field or grown it, and it settled at sixteen in 1979-80.</p>
+<h2>Where this comes from</h2>
+<p>Every change above rests on at least two independent publishers agreeing: Wikipedia's season pages cross-checked against the NHL's own playoff format history, the "History of Stanley Cup Playoff Formats" section of the league's 2025 playoffs information guide, with Sports Illustrated, the Hockey Hall of Fame, three NHL.com news pages and the league's playoff format page behind individual rows. Hockey Reference, Britannica and Last Word on Sports all refused the fetch, and two NHL.com history addresses came back empty or missing, so none of those is cited. 34 sources across 4 publishers, last checked 2026-09-11.</p>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1917%E2%80%9318_NHL_season">1917-18 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1918%E2%80%9319_NHL_season">1918-19 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1919%E2%80%9320_NHL_season">1919-20 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1921%E2%80%9322_NHL_season">1921-22 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1925%E2%80%9326_NHL_season">1925-26 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Stanley_Cup">Stanley Cup</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Stanley_Cup_playoffs">Stanley Cup playoffs</a></li>
+<li>NHL.com, <a href="https://media.nhl.com/site/asset/public/ext/2024-25/2025StanleyCupPlayoffs_1stRound.pdf">2025 Stanley Cup Playoffs Information Guide: History of Stanley Cup Playoff Formats</a></li>
+<li>NHL.com, <a href="https://www.nhl.com/news/nhl-stanley-cup-champions-1918-1929-288144788">Stanley Cup Champions 1918-1929</a></li>
+<li>Hockey Hall of Fame, <a href="https://www.hhof.com/thecollection/stanleycup_history.html">Stanley Cup History</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1926%E2%80%9327_NHL_season">1926-27 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1928%E2%80%9329_NHL_season">1928-29 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1937%E2%80%9338_NHL_season">1937-38 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1938%E2%80%9339_NHL_season">1938-39 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1939_Stanley_Cup_playoffs">1939 Stanley Cup playoffs</a></li>
+<li>Sports Illustrated, <a href="https://www.si.com/nhl/nhl-stanley-cup-playoffs-format-teams-rules-changes-through-the-years">NHL Stanley Cup Playoffs: Format, Teams, Rules and Changes Through the Years</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1942%E2%80%9343_NHL_season">1942-43 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1967%E2%80%9368_NHL_season">1967-68 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1970%E2%80%9371_NHL_season">1970-71 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1971%E2%80%9372_NHL_season">1971-72 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1974%E2%80%9375_NHL_season">1974-75 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1977%E2%80%9378_NHL_season">1977-78 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1979%E2%80%9380_NHL_season">1979-80 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1981%E2%80%9382_NHL_season">1981-82 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1986%E2%80%9387_NHL_season">1986-87 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1993%E2%80%9394_NHL_season">1993-94 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1998%E2%80%9399_NHL_season">1998-99 NHL season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2013%E2%80%9314_NHL_season">2013-14 NHL season</a></li>
+<li>NHL.com, <a href="https://www.nhl.com/info/standings-info/playoff-format">Playoff Format</a></li>
+<li>Sports Illustrated, <a href="https://www.si.com/nhl/2012/08/21/21revisiting-the-2004-05-nhl-lockout">Revisiting the 2004-05 NHL Lockout</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2020_Stanley_Cup_playoffs">2020 Stanley Cup playoffs</a></li>
+<li>NHL.com, <a href="https://www.nhl.com/bluejackets/news/blue-jackets-among-24-nhl-teams-to-return-to-play-317031564">Blue Jackets among 24 teams included in NHL return to play format</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2020%E2%80%9321_NHL_season">2020-21 NHL season</a></li>
+<li>NHL.com, <a href="https://www.nhl.com/news/nhl-teams-in-new-divisions-for-2020-21-season-319844882">NHL teams in new divisions with realignment for 2020-21 season</a></li>
+<h2>Play with this history</h2>
+<li><a href="/nhl-front-office">NHL Front Office</a>: run a club through the real divisional bracket, wild cards and all</li>
+<li><a href="/nhl-my-career">NHL My Career</a>: chase the Cup from a player's seat instead of the office</li>
+<li><a href="/hockey-grid">NHL Franchise Grid</a>: the daily 3x3 franchise puzzle</li>
+<li><a href="/records#cup">The Record Books</a>: every Stanley Cup final since 1915, with 1919 and 2005 left blank on purpose</li>
+<li><a href="/hockey">All the hockey games</a>: the whole section on one page</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

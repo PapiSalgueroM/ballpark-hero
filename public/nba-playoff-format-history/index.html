@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>NBA Playoff Format History: Every Change Since 1946-47</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"NBA Playoff Format History: Every Change Since 1946-47 | DoUKnowBall","description":"Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery.","url":"https://douknowball.com/nba-playoff-format-history","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/nba-playoff-format-history" data-rh="true"><meta name="description" content="Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/nba-playoff-format-history" data-rh="true"><meta property="og:title" content="NBA Playoff Format History: Every Change Since 1946-47 | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="NBA Playoff Format History: Every Change Since 1946-47 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>NBA playoff format history</h1>
+<p>Every shape the NBA postseason has taken since the BAA's first season in 1946-47, and the draft lottery's own changes, because the two have always pulled on each other. Each was checked against two independent publishers on 2026-09-11, listed at the bottom. Where a detail only had one reading it was left out rather than guessed, and the one date the sources disagree on is left as a disagreement.</p>
+<h2>The timeline at a glance</h2>
+<p>Seasons</p>
+<p>Field</p>
+<p>Qualifying</p>
+<p>1946-47 to 1947-48</p>
+<p>6 teams</p>
+<p>The top three in each of two divisions. The two division winners met straight away in a best of seven semifinal; the second and third place teams played best of three quarterfinals and a best of three semifinal to produce the other finalist.</p>
+<p>1948-49</p>
+<p>8 teams</p>
+<p>The top four in each division. Division semifinals and division finals were both best of three, then a best of seven Finals.</p>
+<p>1949-50</p>
+<p>12 teams</p>
+<p>The top four in each of three divisions. Two best of three rounds inside each division produced three division champions; one of those drew a bye while the other two played a best of three for the second place in the Finals.</p>
+<p>1950-51 to 1952-53</p>
+<p>8 teams</p>
+<p>The top four in each of two divisions again. Division semifinals best of three, division finals now best of five, Finals best of seven.</p>
+<p>1953-54</p>
+<p>6 teams</p>
+<p>The top three in each division played a double round robin, home and away against each other, to eliminate one team; the surviving two met in a best of three division final.</p>
+<p>1954-55 to 1965-66</p>
+<p>6 teams</p>
+<p>The top three in each division. First place sat out while second and third played a division semifinal, then met the winner in the division final.</p>
+<p>1966-67 to 1969-70</p>
+<p>8 teams</p>
+<p>The top four in each division, no bye: first played fourth and second played third in the division semifinals.</p>
+<p>1970-71 to 1973-74</p>
+<p>8 teams</p>
+<p>Four teams from each conference, drawn from the two divisions inside it, playing conference semifinals and conference finals before the Finals.</p>
+<p>1974-75 to 1975-76</p>
+<p>10 teams</p>
+<p>Five teams per conference. A new best of three first round matched the fourth and fifth seeds, and the winner met the top seed while the top three seeds waited.</p>
+<p>1976-77 to 1982-83</p>
+<p>12 teams</p>
+<p>Six teams per conference. The two division winners in each conference got a bye; the other four played a best of three first round.</p>
+<p>1983-84 to 2001-02</p>
+<p>16 teams</p>
+<p>Eight teams per conference, everyone plays the first round. First round best of five, every later round best of seven.</p>
+<p>2002-03 to 2003-04</p>
+<p>16 teams</p>
+<p>Eight per conference, all four rounds best of seven.</p>
+<p>2004-05 to 2014-15</p>
+<p>16 teams</p>
+<p>Eight per conference: each division winner plus the best remaining records, with a division winner guaranteed a seed no lower than a fixed floor whatever its record: a top three seed in 2004-05 and 2005-06, a top four seed from 2006-07 until the rule was dropped.</p>
+<p>2015-16 to 2019-20</p>
+<p>16 teams</p>
+<p>The eight best records in each conference, seeded one to eight by record, with no automatic berth and no protected seed for a division winner.</p>
+<p>2020-21 onward</p>
+<p>16 teams</p>
+<p>The top six in each conference go straight in. Seventh through tenth play a play-in: seventh hosts eighth for the seventh seed, ninth hosts tenth with the loser out, then the loser of the first game hosts the winner of the second for the eighth seed.</p>
+<h2>Season by season</h2>
+<h3>1946-47 to 1947-48: The BAA: six of eleven</h3>
+<p>The top three in each of two divisions. The two division winners met straight away in a best of seven semifinal; the second and third place teams played best of three quarterfinals and a best of three semifinal to produce the other finalist.</p>
+<li>The Basketball Association of America opened with eleven teams and sent six of them to the postseason. Nothing about it was a bracket in the modern sense: the strongest two teams in the league could only meet in a semifinal, never in the Finals, because the format sent them at each other first.</li>
+<li>The Finals were best of seven from the very first season. Every other round was short.</li>
+<h3>1948-49: Eight teams, two short rounds</h3>
+<p>The top four in each division. Division semifinals and division finals were both best of three, then a best of seven Finals.</p>
+<li>The last BAA season before the league became the NBA. The field grew to eight, the first two rounds stayed short, and the Finals stayed best of seven.</li>
+<h3>1949-50: Three divisions, twelve teams, one bye</h3>
+<p>The top four in each of three divisions. Two best of three rounds inside each division produced three division champions; one of those drew a bye while the other two played a best of three for the second place in the Finals.</p>
+<li>The one season the league had three divisions, because the merger with the NBL left it with seventeen teams. Twelve of them made the playoffs, the biggest field the league would have until 1984.</li>
+<h3>1950-51 to 1952-53: Back to two divisions and eight teams</h3>
+<p>The top four in each of two divisions again. Division semifinals best of three, division finals now best of five, Finals best of seven.</p>
+<li>The league shrank after the merger season, and the playoffs went back to the BAA shape with one change: the division finals got longer.</li>
+<h3>1953-54: The round robin year</h3>
+<p>The top three in each division played a double round robin, home and away against each other, to eliminate one team; the surviving two met in a best of three division final.</p>
+<li>The only round robin in NBA playoff history, tried once and dropped. Minneapolis and Syracuse came through it to a Finals that went seven games.</li>
+<h3>1954-55 to 1965-66: Six teams, a bye for first place</h3>
+<p>The top three in each division. First place sat out while second and third played a division semifinal, then met the winner in the division final.</p>
+<li>Twelve seasons of the same shape while the league was small enough that most of it made the playoffs, so the reward for a great regular season was rest rather than a weaker opponent.</li>
+<li>The rounds lengthened during this period: the division finals went back to best of five in 1955, after the round robin year's best of three, and reached best of seven in 1958.</li>
+<h3>1966-67 to 1969-70: Expansion brings back eight</h3>
+<p>The top four in each division, no bye: first played fourth and second played third in the division semifinals.</p>
+<li>Expansion in 1966-67 let the league fill an eight team bracket again. A year later the division semifinals went to best of seven, and from the 1968 playoffs every series in the tournament was best of seven, a state that lapsed in 1975 and did not come back until 2003.</li>
+<h3>1970-71 to 1973-74: Two conferences of two divisions</h3>
+<p>Four teams from each conference, drawn from the two divisions inside it, playing conference semifinals and conference finals before the Finals.</p>
+<li>The 1970-71 season was the first with an Eastern and a Western Conference, each split into two divisions, the structure the league still uses. The field stayed at eight, so the change was to how the bracket was organised rather than how many got in.</li>
+<h3>1974-75 to 1975-76: A first round for the fourth and fifth seeds</h3>
+<p>Five teams per conference. A new best of three first round matched the fourth and fifth seeds, and the winner met the top seed while the top three seeds waited.</p>
+<li>The first time the NBA had a round that not every playoff team played, and the origin of the modern idea of a first round as a separate stage.</li>
+<h3>1976-77 to 1982-83: Twelve after the ABA merger</h3>
+<p>Six teams per conference. The two division winners in each conference got a bye; the other four played a best of three first round.</p>
+<li>The season after the ABA merger, the field grew from ten to twelve and the byes went to the division winners. This is the last period in which a first round series was best of three.</li>
+<h3>1983-84 to 2001-02: Sixteen teams, no byes, best of five first round</h3>
+<p>Eight teams per conference, everyone plays the first round. First round best of five, every later round best of seven.</p>
+<li>The 1984 playoffs were the first with sixteen teams, and the field has been sixteen ever since. Byes vanished with the expansion, and the first round grew from best of three to best of five in the same stroke.</li>
+<li>The first round stayed best of five for nineteen seasons, which is the one thing about this format a modern viewer would find strange.</li>
+<h3>2002-03 to 2003-04: Every round best of seven</h3>
+<p>Eight per conference, all four rounds best of seven.</p>
+<li>The first round was extended to best of seven for the 2003 playoffs, which is why an NBA champion has needed sixteen wins every spring since.</li>
+<h3>2004-05 to 2014-15: Division winners protected in the seeding</h3>
+<p>Eight per conference: each division winner plus the best remaining records, with a division winner guaranteed a seed no lower than a fixed floor whatever its record: a top three seed in 2004-05 and 2005-06, a top four seed from 2006-07 until the rule was dropped.</p>
+<li>The rule arrived with the 2004-05 season, the first with the league at thirty teams after Charlotte joined and the divisions were redrawn. It meant a weak division champion could sit above a stronger team in the bracket, and the seeding was adjusted during the period before being removed altogether.</li>
+<li>What the rule protected was the seed, not home court: the 2015 change notes that a division winner seeded above a team with a better record did not get home court against it.</li>
+<h3>2015-16 to 2019-20: Seeded by record alone</h3>
+<p>The eight best records in each conference, seeded one to eight by record, with no automatic berth and no protected seed for a division winner.</p>
+<li>Approved unanimously in September 2015 after a season in which 51 win Portland took the fourth seed in the West as a division champion with the sixth best record in the conference.</li>
+<li>The 2020 season was finished inside a bubble at Walt Disney World after the pandemic stopped it in March: twenty two teams were invited, each played eight seeding games, and if the ninth placed team in a conference finished within four games of eighth, the two played off for the eighth seed, with the ninth needing to win twice and the eighth once. Memphis forced that in the West and Portland won it. The sixteen team bracket that followed was unchanged.</li>
+<h3>2020-21 onward: The play-in tournament</h3>
+<p>The top six in each conference go straight in. Seventh through tenth play a play-in: seventh hosts eighth for the seventh seed, ninth hosts tenth with the loser out, then the loser of the first game hosts the winner of the second for the eighth seed.</p>
+<li>First staged in May 2021, and approved a season at a time for 2020-21 and 2021-22 before the Board of Governors made it permanent in July 2022.</li>
+<li>The bracket itself is still sixteen teams and four best of seven rounds. What changed is who the last two seeds are: the seventh and eighth placed teams now have to keep their place, and the ninth and tenth have a way in that did not exist before.</li>
+<h2>The draft lottery</h2>
+<p>The lottery exists because of the playoffs: once a team knows it is out, the only thing left to play for is the draft, and the league has spent sixty years trying to make losing on purpose not worth it. Every rule below is a different answer to that one problem.</p>
+<h3>1966: The coin flip</h3>
+<p>From 1966 through 1984 the worst team in each division, and from 1970-71 each conference, flipped a coin for the first overall pick, and the loser picked second. Every other team drafted in reverse order of record. It kept the two worst teams from being certain of the top pick, and did nothing about the incentive to be one of those two.</p>
+<h3>1985: Envelopes in a drum</h3>
+<p>In 1985 the seven teams that missed the playoffs each had an envelope in a hopper, every one with the same chance, and the order they were drawn was the draft order for the first seven picks. The Knicks came out first and took Patrick Ewing. After the first lottery or two the rule was changed so the draw decided only the first three picks, with the rest of the non-playoff teams drafting in reverse order of record.</p>
+<h3>1990: Weighted chances</h3>
+<p>From the 1990 lottery the draw was weighted. Eleven teams took part, and the worst record held eleven of the 66 chances, the second worst ten, down to a single chance for the best team that missed the playoffs. The draw still decided three picks, so the worst team could fall no lower than fourth.</p>
+<h3>1994: A thousand combinations</h3>
+<p>In 1993 Orlando, which had missed the playoffs at 41-41, won the first pick with one chance in 66, about 1.5 percent, the second year running it had won the lottery. From 1994 the draw used fourteen numbered balls and four number combinations: 1,001 are possible, 1,000 are assigned, and the worst team held 250 of them, a 25 percent chance of the first pick, up from 16.7 percent. The pool later grew to fourteen teams, the size it kept until the 2027 change below.</p>
+<h3>2019: Three teams at fourteen percent</h3>
+<p>Approved in September 2017 and first used in 2019: the three worst records each hold 14 percent of the combinations for the first pick, down from 25, 19.9 and 15.6, and the draw decides four picks rather than three, so the worst team can fall as low as fifth. It was the league trying to make the bottom of the standings less worth reaching, without giving up on rewarding a bad season at all.</p>
+<h3>2027: The 3-2-1 lottery</h3>
+<p>Approved on 28 May 2026 and in force from the 2027 draft: sixteen teams in the lottery rather than fourteen. Teams that miss both the playoffs and the play-in get three balls each, except the three worst records, which are labelled draft relegated, lose a ball and hold two apiece, with a promise of no worse than the twelfth pick. The ninth and tenth placed play-in teams get two balls, and the two teams that lose the seventh versus eighth play-in game get one. The three worst teams have gone from the best odds in the room to worse than the teams just above them, which is the whole point.</p>
+<h2>What the games play</h2>
+<p>NBA Front Office plays the current format and nothing older: the top six in each conference go straight in, seventh through tenth play the real play-in, and the sixteen that come out of it play four best of seven rounds. Its draft has no lottery. NBA My Career hands the rookie a draft slot from how good the prospect is, with no lottery odds behind it, and NBA Conquest has no draft at all, so none of the three models the odds described above.</p>
+<p><a href="/nba-front-office">Run a franchise through it</a></p>
+<h2>Questions people ask</h2>
+<h3>How many teams make the NBA playoffs?</h3>
+<p>Sixteen, eight per conference, since the 1984 playoffs. Since 2021 the top six in each conference qualify outright and the seventh through tenth placed teams play a play-in for the last two seeds, so twenty teams are still alive when the regular season ends, but only sixteen enter the bracket.</p>
+<h3>When did the first round become best of seven?</h3>
+<p>The 2003 playoffs. From 1984 to 2002 the first round was best of five, and before that, from 1975, it was best of three. Every round has been best of seven since 2003, which is why a champion needs sixteen wins.</p>
+<h3>Do division winners still get a top seed?</h3>
+<p>No. From the 2015-16 season the eight playoff teams in each conference are seeded purely by record. Between 2004-05 and 2014-15 a division winner was guaranteed a seed no lower than a floor whatever its record, a top three seed for the first two seasons and a top four seed after that, which is how a 51 win Portland team took the fourth seed in the West in 2015 with the sixth best record in the conference.</p>
+<h3>How does the NBA draft lottery work now?</h3>
+<p>Through the 2026 draft: fourteen non-playoff teams, fourteen numbered balls, four drawn at a time, 1,000 of the 1,001 possible combinations shared out by record, with the three worst teams holding 14 percent each and the draw deciding the first four picks. From the 2027 draft the pool grows to sixteen teams because the two No. 8 seeds that come through the play-in stay in it, and the three worst records hold two balls each against three for the teams just above them.</p>
+<h2>Where this comes from</h2>
+<p>Every change above rests on at least two independent publishers agreeing: Wikipedia's playoffs, season and lottery pages cross-checked against NBA.com's own history pieces and press releases, ESPN, FanSided, TickPick, Land of Basketball and Sports Illustrated. Basketball Reference, Wikipedia's 1985 draft lottery page and two CBC stories were attempted and blocked, so none of them is cited. NBA.com dates the lottery's cut to three picks to 1986 and Wikipedia to 1987; the page says neither. 31 sources across 7 publishers, last checked 2026-09-11.</p>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/NBA_playoffs">NBA playoffs</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1946%E2%80%9347_BAA_season">1946-47 BAA season</a></li>
+<li>TickPick, <a href="https://www.tickpick.com/blog/the-evolution-of-nba-playoff-format-and-structure/">The Evolution of NBA Playoff Format and Structure</a></li>
+<li>FanSided, <a href="https://fansided.com/2017/10/12/nba-playoff-reform-adam-silver-history/">Throwback Thursday: The history of NBA playoff reformatting</a></li>
+<li>FanSided, <a href="https://fansided.com/posts/how-many-games-are-in-the-nba-playoffs-explaining-the-history-of-best-of-seven-series-01hq66dn3900">How many games are in the NBA playoffs? Explaining the history of best-of-seven series</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1950_NBA_playoffs">1950 NBA playoffs</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1954_NBA_playoffs">1954 NBA playoffs</a></li>
+<li>Land of Basketball, <a href="https://www.landofbasketball.com/yearbyyear/1953_1954_playoffs_brackets.htm">1953-54 NBA playoffs brackets</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1966%E2%80%9367_NBA_season">1966-67 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1970%E2%80%9371_NBA_season">1970-71 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1974%E2%80%9375_NBA_season">1974-75 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1976%E2%80%9377_NBA_season">1976-77 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1983%E2%80%9384_NBA_season">1983-84 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2002%E2%80%9303_NBA_season">2002-03 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2004%E2%80%9305_NBA_season">2004-05 NBA season</a></li>
+<li>ESPN, <a href="https://www.espn.com/nba/story/_/id/13611671/nba-seed-playoff-teams-conference-record">Board of Governors unanimously approve changes to playoff seeding</a></li>
+<li>NBA.com, <a href="https://pr.nba.com/nba-playoff-seeding-changes">NBA to seed conference playoff teams by record</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2015%E2%80%9316_NBA_season">2015-16 NBA season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2020_NBA_Bubble">2020 NBA Bubble</a></li>
+<li>NBA.com, <a href="https://www.nba.com/news/play-in-tournament-history">Play-In Tournament history</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2020%E2%80%9321_NBA_season">2020-21 NBA season</a></li>
+<li>NBA.com, <a href="https://pr.nba.com/nba-board-of-governors-play-in-roster-rules-2021-22-season">NBA Board of Governors approves Play-In Tournament for 2021-22 season</a></li>
+<li>ESPN, <a href="https://www.espn.com/nba/story/_/id/34227968/sources-nba-board-governors-expected-vote-make-play-tournament-permanent">Sources: NBA board of governors expected to vote to make play-in tournament permanent</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/NBA_draft_lottery">NBA draft lottery</a></li>
+<li>NBA.com, <a href="https://www.nba.com/news/nba-draft-lottery-changes-over-the-years">A history of the NBA Draft Lottery and its changes over time</a></li>
+<li>ESPN, <a href="https://www.espn.com/nba/story/_/id/44921796/nba-draft-lottery-format-history-key-facts">NBA draft lottery 101: Date, time, odds, format, history</a></li>
+<li>NBA.com, <a href="https://www.nba.com/news/nba-draft-lottery-explainer">NBA Draft Lottery explainer</a></li>
+<li>Sports Illustrated, <a href="https://www.si.com/nba/2014/05/18/beating-draft-lottery-odds">Beating the NBA Draft Lottery Odds</a></li>
+<li>NBA.com, <a href="https://www.nba.com/article/2017/09/28/nba-board-governors-approves-changes-draft-lottery-system">NBA Board of Governors approves changes to draft lottery system</a></li>
+<li>NBA.com, <a href="https://www.nba.com/news/nba-board-governors-approve-new-draft-lottery-system">NBA Board of Governors approves new Draft Lottery system to address tanking</a></li>
+<li>ESPN, <a href="https://www.espn.com/nba/story/_/id/48903380/sources-nba-bog-votes-expand-lottery-disincentivizes-tanking">NBA's BOG votes to expand lottery, addresses tanking problem</a></li>
+<h2>Play with this history</h2>
+<li><a href="/nba-front-office">NBA Front Office</a>: run a franchise through the real play-in and four best of seven rounds</li>
+<li><a href="/nba-my-career">NBA My Career</a>: draft night to the rafters from a player's seat</li>
+<li><a href="/conquest-nba">NBA Conquest</a>: the map game, a franchise a day</li>
+<li><a href="/nba-grid">NBA Franchise Grid</a>: the daily 3x3 knowledge puzzle</li>
+<li><a href="/records#nba">The Record Books</a>: every NBA champion since 1947, year by year</li>
+<li><a href="/pro-basketball">All the basketball games</a>: the whole section on one page</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

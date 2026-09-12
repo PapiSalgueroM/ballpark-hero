@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>MLB Postseason Format History: Every Change Since 1903</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"MLB Postseason Format History: Every Change Since 1903 | DoUKnowBall","description":"Every MLB postseason format change since 1903, one World Series to a twelve club bracket, the two Octobers with no series, and how long each round has been.","url":"https://douknowball.com/mlb-postseason-format-history","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/mlb-postseason-format-history" data-rh="true"><meta name="description" content="Every MLB postseason format change since 1903, one World Series to a twelve club bracket, the two Octobers with no series, and how long each round has been." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/mlb-postseason-format-history" data-rh="true"><meta property="og:title" content="MLB Postseason Format History: Every Change Since 1903 | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every MLB postseason format change since 1903, one World Series to a twelve club bracket, the two Octobers with no series, and how long each round has been." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="MLB Postseason Format History: Every Change Since 1903 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every MLB postseason format change since 1903, one World Series to a twelve club bracket, the two Octobers with no series, and how long each round has been." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>MLB postseason format history</h1>
+<p>Every shape the baseball postseason has taken since the first modern World Series in 1903, the two years it was not played, and how long each round has been. Each change was checked against two independent publishers on 2026-09-11, listed at the bottom. Where a detail only had one reading it was left out rather than guessed, and the bottom of the page says which.</p>
+<h2>The timeline at a glance</h2>
+<p>Seasons</p>
+<p>Field</p>
+<p>Qualifying</p>
+<p>1903 to 1968</p>
+<p>2 clubs</p>
+<p>The American League pennant winner met the National League pennant winner in the World Series, and that was the whole postseason. Each pennant went to the club that finished first in its league over the regular season.</p>
+<p>1969 to 1984</p>
+<p>4 clubs</p>
+<p>Each league split into an East and a West division. The two division winners in each league met in a best of five League Championship Series for the pennant, and the two pennant winners went to the World Series as before.</p>
+<p>1985 to 1993</p>
+<p>4 clubs</p>
+<p>The same four clubs, two division winners per league, but the League Championship Series was lengthened from best of five to best of seven, the same length as the World Series.</p>
+<p>1994 to 2011</p>
+<p>8 clubs</p>
+<p>Each league realigned into East, Central and West divisions. The three division winners and one wild card, the best record among the clubs that did not win a division, gave four clubs per league. A new best of five Division Series came before the League Championship Series.</p>
+<p>2012 to 2019</p>
+<p>10 clubs</p>
+<p>A second wild card in each league, and the two wild cards met in a single Wild Card Game after the regular season. The winner went on to face the top seed in the best of five Division Series; the three division winners waited for that round.</p>
+<p>2020</p>
+<p>16 clubs</p>
+<p>The shortened pandemic season sent eight clubs per league to October: the three division winners, the three second place clubs, and the two best remaining records. There were no byes. Every club started in a best of three Wild Card Series, with all three games at the higher seed's park, before the usual Division Series.</p>
+<p>2021</p>
+<p>10 clubs</p>
+<p>The 2012 shape returned for one more season: three division winners and two wild cards per league, with the two wild cards playing a single game for a place in the Division Series.</p>
+<p>2022 onward</p>
+<p>12 clubs</p>
+<p>Six clubs per league: three division winners seeded 1 to 3 by record, and three wild cards seeded 4 to 6. The top two division winners skip straight to the Division Series. Seeds 3 to 6 play best of three Wild Card Series, 3 against 6 and 4 against 5, every game hosted by the higher seed. There is no reseeding: the 1 seed meets the winner of 4 against 5 and the 2 seed meets the winner of 3 against 6. Then best of five Division Series, best of seven League Championship Series and a best of seven World Series.</p>
+<h2>Season by season</h2>
+<h3>1903 to 1968: Two pennant winners, one series</h3>
+<p>The American League pennant winner met the National League pennant winner in the World Series, and that was the whole postseason. Each pennant went to the club that finished first in its league over the regular season.</p>
+<li>The first modern World Series in 1903 was best of nine, and Boston beat Pittsburgh five games to three. It was best of nine again in 1919, 1920 and 1921, and best of seven in every other year it was played.</li>
+<li>There was no series in 1904. The National League champion New York Giants, under owner John T. Brush, refused to play the American League champion, which the Giants regarded as an inferior league. From 1905 the series was played every year until 1994.</li>
+<h3>1969 to 1984: Divisions, and a series for the pennant</h3>
+<p>Each league split into an East and a West division. The two division winners in each league met in a best of five League Championship Series for the pennant, and the two pennant winners went to the World Series as before.</p>
+<li>For the first time a club could finish with the best record in its league and not reach the World Series, because the pennant was now decided by a short series rather than by the standings.</li>
+<li>The 1981 season was the odd one out. A midseason strike split the year in half, and the winners of each half in each division met in an extra round before the League Championship Series, so eight clubs played that October instead of four. The shape went back to four clubs in 1982.</li>
+<h3>1985 to 1993: The LCS goes to best of seven</h3>
+<p>The same four clubs, two division winners per league, but the League Championship Series was lengthened from best of five to best of seven, the same length as the World Series.</p>
+<li>The two extra possible games were the whole change: no new round, no new qualifiers. A pennant now took four wins rather than three.</li>
+<h3>1994 to 2011: Three divisions and a wild card</h3>
+<p>Each league realigned into East, Central and West divisions. The three division winners and one wild card, the best record among the clubs that did not win a division, gave four clubs per league. A new best of five Division Series came before the League Championship Series.</p>
+<li>The format was adopted for 1994, but the players' strike that August cancelled that year's entire postseason, including the World Series, so it was first played on the field in 1995. 1994 is the second year since 1903 with no series, after 1904.</li>
+<li>The wild card was the first route into October for a club that had not won anything during the regular season, and it changed what a September pennant race looked like for the clubs sitting second.</li>
+<h3>2012 to 2019: A second wild card and a one game playoff</h3>
+<p>A second wild card in each league, and the two wild cards met in a single Wild Card Game after the regular season. The winner went on to face the top seed in the best of five Division Series; the three division winners waited for that round.</p>
+<li>The single game was the point of it: winning a division now meant skipping a one game playoff, where under the old format a wild card with a strong record was in exactly the same place as a division winner.</li>
+<h3>2020: Sixteen clubs, one season only</h3>
+<p>The shortened pandemic season sent eight clubs per league to October: the three division winners, the three second place clubs, and the two best remaining records. There were no byes. Every club started in a best of three Wild Card Series, with all three games at the higher seed's park, before the usual Division Series.</p>
+<li>Agreed between the league and the players on July 23, 2020, with the shortened season about to start, and never used again. It is the only time more than twelve clubs have played in an MLB postseason.</li>
+<h3>2021: Back to ten and the Wild Card Game</h3>
+<p>The 2012 shape returned for one more season: three division winners and two wild cards per league, with the two wild cards playing a single game for a place in the Division Series.</p>
+<li>This was the last single game playoff in the format. The twelve club bracket that followed in 2022 replaced it with a short series.</li>
+<h3>2022 onward: Twelve clubs, byes for the top two</h3>
+<p>Six clubs per league: three division winners seeded 1 to 3 by record, and three wild cards seeded 4 to 6. The top two division winners skip straight to the Division Series. Seeds 3 to 6 play best of three Wild Card Series, 3 against 6 and 4 against 5, every game hosted by the higher seed. There is no reseeding: the 1 seed meets the winner of 4 against 5 and the 2 seed meets the winner of 3 against 6. Then best of five Division Series, best of seven League Championship Series and a best of seven World Series.</p>
+<li>A third wild card in each league, so the bracket has twelve clubs rather than ten, and the Wild Card Game became a short series for the first time outside 2020.</li>
+<li>The third division winner does not get a bye. Winning a weak division puts a club into the Wild Card Series as the 3 seed, at home, rather than into the Division Series.</li>
+<h2>How long each round has been</h2>
+<p>The World Series has been best of seven in every year it was played except four: 1903, 1919, 1920 and 1921 were best of nine, so the winner needed five games rather than four. Boston won the first one five games to three. Two years since 1903 had no series at all. In 1904 the Giants refused to play the American League champion, and the series has been played every year since 1905 with one exception. In 1994 the players' strike cancelled the postseason outright, the first October without a World Series in ninety years. The League Championship Series was best of five from its first year in 1969 through 1984 and has been best of seven since 1985. The Division Series has been best of five since it became a permanent round in 1995; the one off 1981 round is described above. The Wild Card Series introduced for good in 2022 is best of three, played entirely at the higher seed's park.</p>
+<h2>What MLB Front Office plays</h2>
+<p>The current format and only the current format: in each league the three division winners are seeded 1 to 3 and three wild cards 4 to 6, the top two seeds sit out the first round, the 3 seed plays the 6 and the 4 plays the 5 in best of three Wild Card Series, the 1 seed then meets the 4 against 5 winner and the 2 seed the 3 against 6 winner in a best of five Division Series, and the League Championship Series and World Series are best of seven. The season underneath is 162 games in shape (27 rounds of six) on real 2026 rosters. It does not offer a past era, so there is no older bracket to compare against.</p>
+<p><a href="/mlb-front-office">Run a club through it</a></p>
+<h2>Questions people ask</h2>
+<h3>How many teams make the MLB playoffs?</h3>
+<p>Twelve, since 2022: six per league, the three division winners and three wild cards. The two division winners with the best records skip the first round. The other four clubs in each league play a best of three Wild Card Series, 3 seed against 6 and 4 against 5, with every game at the higher seed's park.</p>
+<h3>When did baseball first have playoffs before the World Series?</h3>
+<p>1969. Each league split into East and West divisions and the two division winners played a best of five League Championship Series for the pennant. Before that, from 1903, the pennant went to the best regular season record and the only postseason series was the World Series itself.</p>
+<h3>Which years had no World Series?</h3>
+<p>Two since 1903. In 1904 the Giants refused to play the American League champion, and the series has been played every year since 1905 with one exception. In 1994 the players' strike cancelled the whole postseason, which is why the three division, wild card format adopted that year was not played until 1995.</p>
+<h3>What happened to the Wild Card Game?</h3>
+<p>It ran from 2012 to 2019 and once more in 2021: the two wild cards in each league played a single game for a place in the Division Series. The 2022 agreement replaced it with a best of three Wild Card Series and added a third wild card, so four clubs per league now play that round while the top two division winners rest.</p>
+<h2>Where this comes from</h2>
+<p>Every change above rests on at least two independent publishers agreeing: Wikipedia's postseason, World Series, wild card and League Championship Series pages, cross-checked against Baseball Almanac's year by year charts, MLB.com's own format FAQ, ESPN's wild card explainer and CBS Sports' report of the 2020 agreement. 11 sources across 5 publishers, last checked 2026-09-11.</p>
+<p>Three details had only one reading and are not on this page: how long the extra 1981 strike round was, the 1995 to 2011 rule about a wild card and its own division winner meeting early, and how many clubs each league had in 1969. Baseball Reference, the Hall of Fame and four MLB.com history pages could not be fetched on the day, so none of them is cited.</p>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/World_Series">World Series</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Major_League_Baseball_postseason">Major League Baseball postseason</a></li>
+<li>Baseball Almanac, <a href="https://www.baseball-almanac.com/ws/wsmenu.shtml">World Series history, year by year</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/League_Championship_Series">League Championship Series</a></li>
+<li>Baseball Almanac, <a href="https://www.baseball-almanac.com/ws/postseason.shtml">MLB Postseason Playoffs 1969 to 2025</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/1981_Major_League_Baseball_season">1981 Major League Baseball season</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/Major_League_Baseball_wild_card">Major League Baseball wild card</a></li>
+<li>ESPN, <a href="https://www.espn.com/mlb/story/_/id/46358337/mlb-wild-card-format-history-records-facts-stats">How does MLB wild card work? Format, history, stats</a></li>
+<li>MLB.com, <a href="https://www.mlb.com/news/mlb-playoff-format-faq">MLB's postseason format, explained</a></li>
+<li>CBS Sports, <a href="https://www.cbssports.com/mlb/news/mlb-expands-playoffs-to-16-teams-for-shortened-2020-season-adds-best-of-three-wild-card-series/">MLB expands playoffs to 16 teams for shortened 2020 season, adds best-of-three Wild Card Series</a></li>
+<li>Wikipedia, <a href="https://en.wikipedia.org/wiki/2022_Major_League_Baseball_postseason">2022 Major League Baseball postseason</a></li>
+<h2>Play with this history</h2>
+<li><a href="/mlb-front-office">MLB Front Office</a>: run a club through the real twelve team bracket, byes and all</li>
+<li><a href="/mlb-my-career">MLB My Career</a>: a whole career from the player's side of the clubhouse</li>
+<li><a href="/missing-nine">Missing Nine</a>: a real World Series lineup with one name blanked</li>
+<li><a href="/mlb-grid">MLB Franchise Grid</a>: the daily 3x3 knowledge puzzle</li>
+<li><a href="/records#ws">The Record Books</a>: every World Series winner since 1903, with 1904 and 1994 left empty on purpose</li>
+<li><a href="/baseball">All the baseball games</a>: the whole section on one page</li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
