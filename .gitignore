@@ -56,3 +56,23 @@ src/hooks/__control_*.ts
 # simTacticsEngine write (they live under .sim-control now, this is the belt).
 src/lib/__control_*.ts
 .dyad/
+
+# Cowork era and tooling debris, 2026-09-12. CLAUDE.md has said since Round 133
+# that none of this is repo content, but nothing stopped it: a single
+# `git add -A` swept 1000 of these files into a merge commit on 2026-09-12 and
+# it had to be unpicked by hand. Ignored so the accident cannot repeat.
+/_bat_backup_*/
+/_to_delete/
+/ship_log*.txt
+/_commit_msg_*.txt
+/ROUND*_FILES.zip
+/RUN*.bat
+/SHIP*.bat
+/tmp/
+*.tsbuildinfo
+# Snapshot dumps written by the Playwright MCP server while driving the site.
+/.playwright-mcp/
+# Other tools' local config, theirs to manage and never ours to commit.
+/.agents/
+/.codex/
+/.claude/launch.json
