@@ -1,12 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
-import {
-  higherLowerPlayers,
-  HL_UNVERIFIED_STATS,
-  HL_UNVERIFIED_NOTE,
-  HL_MARKED,
-  HL_MARKED_NOTE,
-} from '@/data/higherLowerPlayers';
+import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { makeFirstDraw } from '@/lib/firstDraw';
 
@@ -18,16 +12,13 @@ const STAT_LABELS: Record<StatKey, string> = {
   internationalCaps: 'Int\'l Caps',
 };
 
-const MARKED = new Set(HL_MARKED);
-
 /** What the card says under a stat, or nothing. Round 535: the pool says out
  *  loud which of its numbers are not two source verified yet, and which rows
  *  come from an era whose club totals were never reconciled between
- *  publishers. Both notes live in the data file, not here. */
+ *  publishers. The rule and both notes live in the data file beside the lists
+ *  they read, so /face-off asks the same question and gets the same answer. */
 export function noteFor(playerName: string, stat: StatKey): string | null {
-  if (MARKED.has(playerName) && HL_UNVERIFIED_STATS.includes(stat)) return HL_MARKED_NOTE;
-  if (HL_UNVERIFIED_STATS.includes(stat)) return HL_UNVERIFIED_NOTE;
-  return null;
+  return hlNoteFor(playerName, stat);
 }
 
 function getRandomPlayer(exclude: string[], currentPlayer?: HigherLowerPlayer): HigherLowerPlayer {

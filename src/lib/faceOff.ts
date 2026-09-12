@@ -22,7 +22,9 @@ import {
   higherLowerPlayers,
   HL_UNVERIFIED_STATS,
   HL_UNVERIFIED_NOTE,
+  hlNoteFor,
 } from '@/data/higherLowerPlayers';
+import type { HigherLowerStatKey } from '@/types/higherLower';
 import { nbaHLPlayers } from '@/data/nbaHLPlayers';
 import { mlbHLPlayers } from '@/data/mlbHLPlayers';
 import { NFL_HL_CATEGORIES } from '@/data/nflHLCategories';
@@ -77,6 +79,10 @@ export interface Athlete {
   /** the second line on the card: nationality, teams, years */
   sub: string;
   value: number;
+  /** Round 535: a caveat this card carries on top of whatever the category
+   *  already says. Only set when it differs from the category note, so the
+   *  reveal never prints the same sentence twice. */
+  note?: string;
 }
 
 export interface Category {
@@ -96,12 +102,26 @@ export interface Category {
    and an import cycle evaluated at load time is how a page once crashed. */
 export function buildCategories(): Category[] {
   const cats: Category[] = [];
-  const soccer = (key: string, stat: (typeof HL_UNVERIFIED_STATS)[number] | 'internationalCaps', question: string, unit: string) =>
+  /* Both notes are derived from the pool's own rule, never typed here, so a
+     stat that gets verified later stops printing the caveat by itself. The
+     category line covers the whole pool; a card only carries its own line when
+     that row has something extra to say. */
+  const soccer = (key: string, stat: HigherLowerStatKey, question: string, unit: string) => {
+    const catNote = HL_UNVERIFIED_STATS.includes(stat) ? HL_UNVERIFIED_NOTE : undefined;
     cats.push({
       key, sport: 'soccer', emoji: '⚽', question, unit,
-      pool: higherLowerPlayers.map(p => ({ name: p.name, sub: p.nationality, value: p.stats[stat] })),
-      note: HL_UNVERIFIED_STATS.includes(stat as (typeof HL_UNVERIFIED_STATS)[number]) ? HL_UNVERIFIED_NOTE : undefined,
+      pool: higherLowerPlayers.map(p => {
+        const own = hlNoteFor(p.name, stat);
+        return {
+          name: p.name,
+          sub: p.nationality,
+          value: p.stats[stat],
+          note: own && own !== catNote ? own : undefined,
+        };
+      }),
+      note: catNote,
     });
+  };
   soccer('soccer-goals', 'goals', 'Who scored more career goals?', 'goals');
   soccer('soccer-apps', 'appearances', 'Who made more career appearances?', 'apps');
   soccer('soccer-caps', 'internationalCaps', 'Who won more international caps?', 'caps');

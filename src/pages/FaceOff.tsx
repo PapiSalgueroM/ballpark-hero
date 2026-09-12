@@ -221,6 +221,11 @@ const FaceOff = () => {
                         {yours ? (versus ? '🟢 P1' : 'you') : ''}{yours && theirs ? ' + ' : ''}{theirs ? (versus ? '🔵 P2' : rival.emoji) : ''}
                       </span>
                     )}
+                    {revealed && ath.note && (
+                      <span className="text-[10px] leading-snug text-muted-foreground break-words">
+                        {ath.note}
+                      </span>
+                    )}
                   </button>
                 );
               })}

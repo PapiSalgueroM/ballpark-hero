@@ -17,7 +17,7 @@ import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
  * than career appearances for the same reason.
  *
  * THE CONVENTION, one rule applied to every row.
- *   internationalCaps: senior FIFA recognised A internationals, as published.
+ *   internationalCaps: senior full internationals (A matches), as published.
  *   appearances, goals: senior competitive CLUB matches, all competitions
  *     (league, domestic cup, league cup, continental, super cups), excluding
  *     friendlies and tour games, excluding youth and reserve teams, and
@@ -31,7 +31,7 @@ import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
  *   internationalCaps is TWO SOURCE VERIFIED on every row below. Source one
  *   is the RSSSF record international players archive (rsssf.org), source two
  *   is the relevant Wikipedia national team records article. A row ships only
- *   where the two print the SAME number. That rule is why the pool is 69 rows
+ *   where the two print the SAME number. That rule is why the pool is 70 rows
  *   and not 204: the two publishers snapshot on different dates, so a player
  *   still adding caps usually cannot be pinned, and rows that could not be
  *   pinned were removed rather than guessed. Every removal is listed in the
@@ -84,6 +84,19 @@ export const HL_MARKED: readonly string[] = [
 export const HL_MARKED_NOTE =
   'Career ended before 1985, so the club totals are the ones most publishers use, not a settled number.';
 
+const MARKED_SET = new Set<string>(HL_MARKED);
+
+/**
+ * The one rule both games ask. It is derived from the two lists above rather
+ * than typed into either consumer, so a stat that gets two source verified in a
+ * later round stops printing its caveat everywhere at once. Returns null when
+ * there is nothing to say, which is the case for internationalCaps today.
+ */
+export function hlNoteFor(playerName: string, stat: HigherLowerStatKey): string | null {
+  if (!HL_UNVERIFIED_STATS.includes(stat)) return null;
+  return MARKED_SET.has(playerName) ? HL_MARKED_NOTE : HL_UNVERIFIED_NOTE;
+}
+
 export const higherLowerPlayers: HigherLowerPlayer[] = [
   // Spain. Caps: rsssf.org span-recintlp and the Spain national team records article.
   { name: "Sergio Ramos", nationality: "Spain", isIcon: false, stats: { appearances: 830, goals: 101, internationalCaps: 180 } },
@@ -107,6 +120,7 @@ export const higherLowerPlayers: HigherLowerPlayer[] = [
   { name: "Frank Lampard", nationality: "England", isIcon: false, stats: { appearances: 898, goals: 271, internationalCaps: 106 } },
   { name: "Bobby Charlton", nationality: "England", isIcon: true, stats: { appearances: 758, goals: 249, internationalCaps: 106 } },
   { name: "Kyle Walker", nationality: "England", isIcon: false, stats: { appearances: 620, goals: 8, internationalCaps: 96 } },
+  { name: "Raheem Sterling", nationality: "England", isIcon: false, stats: { appearances: 585, goals: 160, internationalCaps: 82 } },
   { name: "Michael Owen", nationality: "England", isIcon: true, stats: { appearances: 482, goals: 222, internationalCaps: 89 } },
   { name: "Alan Shearer", nationality: "England", isIcon: true, stats: { appearances: 559, goals: 283, internationalCaps: 63 } },
 
