@@ -558,7 +558,7 @@ export const colleges: College[] = [
     ipedsUnitId: 151351,
     conference: "Big Ten",
     conferenceType: "power4",
-    basketballHistory: "Won 5 NCAA basketball championships and is one of the most storied programs in college basketball",
+    basketballHistory: "One of the most storied programs in college basketball, with titles running from 1940 to 1987",
     cfbHistory: "Football was an afterthought here for a century, until the 2025 season",
     olympicAthletes: "Has produced Olympic swimmers and track athletes",
     nflDraftHistory: "Has produced some NFL Draft picks but is better known for NBA talent",
