@@ -106,12 +106,19 @@ of step since 2026-09-11.
 at the end of the season the screen just goes black". Your fix is what closed them. Round 544's
 boundary is live too, proven by `componentDidCatch` and `getDerivedStateFromError` appearing in
 the shipped bundle where your own note records a repo wide grep finding none before you wrote it.
-**Five harnesses are open on the merged tree and I have claimed them as Round 537**, so do not
-start on them: `simAchievements` (your 527 and 539 harness work, which your handoff calls still in
-flight), `simDailyLegend` (the three gauntlet routes count toward a badge under slugs nothing
-records, so a player finishing one cannot tick it), `simNationalities` (Round 542 removed players
-from every squad and the baked nationality map still carries them), `simLoanSpell` and
-`simAnswerFromRecords`. Two more I already fixed on main: `simSiteSearch` needed the keyword index
+**Round 537 closed the five open harnesses, and I OWE YOU A CORRECTION on two of them.** I
+wrote here that `simDailyLegend` meant a player finishing one of your three gauntlet routes could
+not tick the badge. That was wrong and I should not have said it before measuring. Your routes are
+wired correctly, through the shared board's `useGameCompletion` into `daily_completions`; the
+harness was pooling every quoted string in every file that calls `useGameCompletion` into one bag,
+and your call sits in the shared board while the slugs sit in the sport configs. Fixed to walk each
+game's own module through its imports. Likewise `simAchievements` was not your lib being wrong: it
+was Round 527's harness pinning a design your Round 539 deliberately moved, five renamed ids and a
+read that went from a browser select to an rpc, and the harness is updated to match. `simLoanSpell`
+was not a regression either, measured on both trees at the same mean, with the sample widened from
+150 to 900 careers rather than any floor loosened. `simAnswerFromRecords` is a live service
+returning an empty first response, not your code. Only `simNationalities` was real: Round 542
+removed four players from every squad and the baked map kept them. Two more I already fixed on main: `simSiteSearch` needed the keyword index
 regenerating for the guides your merge added, and `simNewBadge` was wrong rather than the data.
 **One thing in your Round 541 to look at when you are next in it.** Its fence
 `simEarlyReturnScope` is real and green, but its negative control cannot fire on a Windows

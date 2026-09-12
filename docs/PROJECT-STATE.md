@@ -107,28 +107,42 @@ guides it was not built from; regenerated) and `simNewBadge` (the date window re
 the live caps allowlist with no code able to send it, because that lane's database was ahead of
 main's code.
 
-Five are open and are being worked as Round 537, none of them breaking a page, which is why this
-published rather than waiting:
+All five are now closed as Round 537, and FOUR OF THEM WERE THE HARNESS RATHER THAN THE SITE.
+That matters more than the fix: on a first read they looked like five defects this publish was
+shipping, and the board was told so before they were measured.
 
-- `simAchievements`: the other lane's own Round 527 and 539 harness work, which their handoff
-  records as still in flight.
-- `simDailyLegend`: the three gauntlet draft routes count toward a badge under slugs nothing
-  records, so a player finishing one cannot tick it. A real defect in a feature that shipped here.
-- `simNationalities`: Round 542 removed players from every squad (Diogo Jota deliberately) and the
-  baked nationality map still carries them, so it holds entries for players no world contains.
-- `simLoanSpell`: 117 of 150 benched careers saw a loan offer against a threshold of 150. Being
-  measured before anything is changed, because this repo has been burned both ways by a bar
-  sitting inside its own distribution.
-- `simAnswerFromRecords`: probably the family CLAUDE.md already documents, a harness that queries
-  live state rather than the branch. Being established rather than assumed.
+- `simDailyLegend`: NOT a defect. The three gauntlet routes are wired, through the shared board's
+  `useGameCompletion` into `daily_completions`. Section 3 was pooling every quoted string in every
+  file that calls `useGameCompletion` into one bag, and the call lives in the shared board while
+  the slugs live in the sport configs. It walks each game's own module through its imports now, so
+  one game's slug can no longer be proven by a different game's file.
+- `simAchievements`: NOT a defect. Round 527's harness was pinning a design Round 539 deliberately
+  moved: five renamed ids, and a read that went from a select in the browser to an rpc. The lib is
+  right. The harness now also reads the migration and requires the function be stable, security
+  invoker and free of any write verb, which the old shape structurally could not ask.
+- `simLoanSpell`: NOT a regression. Measured on both trees, twelve batches of 150 careers each:
+  pre-merge mean 124.3, post-merge 124.7, the same distribution. Round 546's two legged ties draw a
+  different number of random values, so every seeded career realigns. The floor of 120 sat inside
+  its own distribution and had already touched it before the merge. Widened rather than loosened:
+  N from 150 to 900 with every floor unchanged, and at 900 the lowest of twenty batches is 26
+  careers clear.
+- `simAnswerFromRecords`: NOT the branch. It queries deployed edge functions and live tables, and
+  no commit in this range touches `supabase/functions`. The failing check was the file's first call
+  and carried no reason text, so an empty response rather than a wrong verdict, and three later
+  calls to the same function passed in the same run. A silent call is retried twice now; a verdict
+  is never retried, so a wrong answer still fails the first time.
+- `simNationalities`: REAL. Round 542 removed four players from every squad, Diogo Jota
+  deliberately, and left their entries in the baked nationality map, so it held people no world
+  contains. `bakeNationalities` gains a `--prune` that removes only and fails closed both ways.
 
-One more was reported EMPTY rather than failing: `simEarlyReturnScope`, the fence for the crash
-itself, prints only four lines and falls under the runner's "a harness that prints almost nothing
-did not run" floor. It did run, scanning 522 files and finding no binding read above its own
-declaration. Worse, its negative control CANNOT FIRE on a Windows checkout: the needle is written
-with Unix newlines and `ClubManager.tsx` has CRLF here, so the control exits saying it would change
-nothing. A fence for a live P1 whose control cannot fire is a fence nobody has proven, and both
-halves are in Round 537's scope.
+And `simEarlyReturnScope`, the fence for the crash this whole publish is about, had TWO bugs that
+each stopped its negative control from firing, so on any Windows checkout it was a fence nobody had
+proven. Its needle was written with a Unix newline against a CRLF file; with that folded the
+injected bug was caught and printed while the control still reported nothing, because it compared a
+forward slash path against `path.join`'s backslashes. Both folded. The control now says
+`src/pages/ClubManager.tsx:795 reads "c" but the only binding it resolves to is declared at line
+893, below an early return. This throws ReferenceError at render`, which is the crash three players
+reported, reproduced on demand.
 
 ### A third tool is now pushing to this repo
 
