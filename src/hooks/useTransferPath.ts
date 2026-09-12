@@ -61,8 +61,11 @@ export interface TransferPathState {
   ruleAvailability: Record<TransferPathRule, number>;
   /** The minimum under the rule in force, which is what the target card shows and what unlimited scores against. */
   optimal: number;
-  /** The hint under the rule in force. */
+  /** The hint for where the chain actually is: the stored one at the start, a
+   *  live one from the head once the chain has moved. See the note on `fromHere`. */
   hint: string;
+  /** No route left from the head to the target without reusing a name already played. */
+  stranded: boolean;
   addPlayer: (name: string) => { ok: boolean; club: string | null; reason?: TransferPathRefusal };
   /** Owner 2026-08-05: players can surrender and see a real connecting path. */
   giveUp: () => void;
@@ -220,13 +223,15 @@ export function useTransferPath(): TransferPathState {
   // The same keys the other way round: who holds each one. Powers the give-up path search.
   const seasonIndex = useMemo(() => buildSeasonIndex(playerToClubSeasons), [playerToClubSeasons]);
 
-  /** BFS shortest path through the temporal-teammate graph. */
+  /** BFS shortest path through the temporal-teammate graph. `skip` holds names
+   *  the path may not run through, which is how a search from the head of a
+   *  live chain avoids offering a man the board would refuse as a duplicate. */
   const findPath = useMemo(
-    () => (from: string, to: string): RevealStep[] | null => {
+    () => (from: string, to: string, skip: readonly string[] = []): RevealStep[] | null => {
       if (!playerToClubSeasons.has(from) || !playerToClubSeasons.has(to)) return null;
       if (from === to) return [{ player: from, club: null }];
       const prev = new Map<string, { via: string; club: string }>();
-      const seen = new Set<string>([from]);
+      const seen = new Set<string>([from, ...skip]);
       const queue: string[] = [from];
       while (queue.length > 0) {
         const cur = queue.shift()!;
@@ -305,7 +310,59 @@ export function useTransferPath(): TransferPathState {
     return under ?? { minSteps: puzzle.minSteps, hint: puzzle.hint };
   }, [puzzle, activeRule]);
   const optimal = inForce.minSteps;
-  const hint = inForce.hint;
+
+  /* ROUND 536: the hint speaks from where the player actually is.
+     ------------------------------------------------------------------------
+     A report on 2026-09-11 (tpa-662, Lionel Messi to Mohamed Salah) came in
+     from a chain the game had accepted link by link: Messi, Neymar, Mbappé,
+     Hakimi, Ronaldo. Every one of those is a real same club same season link.
+     But the stored hint is written from playerA and nothing recomputed it, so
+     four names later the board still said "One middle man does it. He was at
+     Barcelona with Lionel Messi and at Liverpool with Mohamed Salah". The only
+     man in the pool who fits that is Philippe Coutinho, and Coutinho from
+     Cristiano Ronaldo is a refusal. That is Round 294's defect, a hint into a
+     refusal, arriving through a door no fence was watching: not a stale row,
+     a row that never moves. Measured over the 885 puzzle pull, after a one to
+     three step legal wander the stored hint's own middle man is refused from
+     the head in 651 of 884 puzzles.
+
+     So once the chain has moved, the hint is derived from the head, over the
+     rule's own graph, skipping every name already played (offering one would
+     be a refusal too). The stored hint is still what a player sees before
+     their first move: it is richer, it is derived, and simTransferPathHints
+     holds it to the search. Nothing here touches a stored row.
+
+     The other half is the stranded case. Adding any teammate of the target
+     wins on the spot, so the chain can never eat the target's last neighbour,
+     but it can still wall its own head in: 97 of 5310 random legal walks over
+     the pull ended with no route left, one of them after two steps. The board
+     said nothing about that and the player could type forever. Now it says so
+     and points at the exit that already exists. */
+  const fromHere = useMemo((): { steps: number; first: string; last: string } | 'stranded' | null => {
+    if (status !== 'building' || chain.length < 2) return null;
+    const head = chain[chain.length - 1];
+    const path = findPath(head, puzzle.playerB, chain.slice(0, -1));
+    if (!path) return 'stranded';
+    return {
+      steps: path.length - 1,
+      first: path[1].club ?? '',
+      last: path[path.length - 1].club ?? '',
+    };
+  }, [status, chain, puzzle, findPath]);
+
+  const stranded = fromHere === 'stranded';
+  const hint = useMemo(() => {
+    if (fromHere === null) return inForce.hint;
+    const head = chain[chain.length - 1];
+    if (fromHere === 'stranded') {
+      return `No route left from ${head} to ${puzzle.playerB} without reusing a name you have played. Give up to see one that works.`;
+    }
+    if (fromHere.steps === 1) return `You are one away. ${head} and ${puzzle.playerB} were at ${fromHere.first} together.`;
+    if (fromHere.steps === 2) {
+      return `From ${head} one more man does it. He was at ${fromHere.first} with him and at ${fromHere.last} with ${puzzle.playerB}.`;
+    }
+    return `From ${head} it takes ${fromHere.steps - 1} more men at least. The first was at ${fromHere.first} with him, the last at ${fromHere.last} with ${puzzle.playerB}.`;
+  }, [fromHere, chain, puzzle, inForce]);
 
   // ── useGameCompletion ──────────────────────────────────────────────────────
   // A surrendered daily still counts as "played today" (score 0, no win).
@@ -432,6 +489,7 @@ export function useTransferPath(): TransferPathState {
     ruleAvailability,
     optimal,
     hint,
+    stranded,
     addPlayer,
     giveUp,
     revealPath,

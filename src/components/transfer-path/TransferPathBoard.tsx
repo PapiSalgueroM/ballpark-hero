@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 export function TransferPathBoard() {
   const {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
-    rule, activeRule, setRule, ruleLocked, dailyRuleBlocked, ruleAvailability, optimal, hint,
+    rule, activeRule, setRule, ruleLocked, dailyRuleBlocked, ruleAvailability, optimal, hint, stranded,
     addPlayer, giveUp, revealPath, switchToUnlimited, nextPuzzle,
     getAllPlayerNames, getPlayerNationality,
     isLoadingPool, isLoading,
@@ -107,7 +107,7 @@ export function TransferPathBoard() {
                 <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
                 <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
                 <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
-                <p>💡 Stuck? The hint nudges you toward a route, and giving up shows a full working path.</p>
+                <p>💡 Stuck? The hint follows your chain, so it always speaks from the last name you played, and giving up shows a full working path.</p>
                 <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
                 <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, is in our verified {ACTIVE_YEAR} active-player records. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
                 <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
@@ -262,16 +262,19 @@ export function TransferPathBoard() {
             {error && (
               <p className="text-xs text-destructive text-center">{error}</p>
             )}
-            {/* Hint button */}
-            {!showHint && (
+            {/* Round 536: a walled in head is a state, not a clue, so it shows
+                without asking and the hint button steps aside. There is nothing
+                left to hint at and the exit is the button underneath. */}
+            {stranded ? (
+              <p className="text-xs text-center text-muted-foreground">🚧 {hint}</p>
+            ) : !showHint ? (
               <button
                 onClick={() => setShowHint(true)}
                 className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg border border-dashed border-border text-xs text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
               >
                 <Lightbulb className="w-3.5 h-3.5" /> Show hint
               </button>
-            )}
-            {showHint && (
+            ) : (
               <p className="text-xs text-center text-muted-foreground italic">💡 {hint}</p>
             )}
             <GiveUpButton onGiveUp={giveUp} label="Give up and see a path" />
