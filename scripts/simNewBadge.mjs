@@ -107,15 +107,47 @@ console.log('2) every live entry records addedOn, and git agrees with the date')
   const elementOf = {};
   for (const m of app.matchAll(/<Route path="([^"]+)" element=\{<(\w+)/g)) elementOf[m[1]] = m[2];
 
-  const gitFirstAdd = page => {
+  /* The window of dates git can justify for a page, oldest to newest.
+   *
+   * Asking git one question gives a wrong answer in one direction or the
+   * other, and it took a red on 2026-09-12 to see both.
+   *
+   * --follow walks through renames AND through copies git scores as similar
+   * enough, so a page written by adapting another page is dated to the day its
+   * ANCESTOR shipped: it dated NbaGauntletDraft.tsx and NflGauntletDraft.tsx
+   * to 2026-08-29, the day the soccer gauntlet page they were adapted from
+   * shipped, when both files were created on 2026-09-10.
+   *
+   * Dropping --follow asks which commit added this exact path, which is wrong
+   * the other way: /footle was extracted from Index.tsx long after the game
+   * itself shipped, so the exact path dates to 2026-03-08 while the game is
+   * the one the site opened with on 2025-01-01. That form put 23 entries in
+   * disagreement on the same tree.
+   *
+   * Nothing distinguishes the two mechanically. Both are "this file came from
+   * that file", and git records a copy and an extraction identically. So the
+   * check stops pretending to know which, and asks the question the badge
+   * actually depends on: the typed date must sit between the oldest date git
+   * can trace the page to and the day the path itself appeared. That still
+   * refuses the thing this harness exists to catch, a date typed NEWER than
+   * the page can possibly be, which is the only way to hold a NEW badge that
+   * was never earned. For the great majority of pages the two ends are the
+   * same day and the check is exactly as tight as it was. */
+  const gitWindow = page => {
     for (const cand of [`src/pages/${page}.tsx`, `src/pages/${page}/index.tsx`]) {
       try {
-        const out = execSync(`git log --diff-filter=A --format=%as --follow -- "${cand}"`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-        const d = out.trim().split('\n').filter(Boolean).pop();
-        if (d) return d;
+        const followed = execSync(`git log --diff-filter=A --format=%as --follow -- "${cand}"`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+          .trim().split('\n').filter(Boolean).pop() || '';
+        const exact = execSync(`git log --diff-filter=A --format=%as -- "${cand}"`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+          .trim().split('\n').filter(Boolean).pop() || '';
+        /* A page with no add of its own path is one --follow rewrote into a
+           rename; its own creation is the followed date. */
+        const oldest = followed || exact;
+        const newest = exact || followed;
+        if (oldest || newest) return { oldest, newest: newest < oldest ? oldest : newest };
       } catch { /* try the next shape */ }
     }
-    return '';
+    return null;
   };
 
   let missing = 0, unmapped = 0, disagree = [];
@@ -123,8 +155,13 @@ console.log('2) every live entry records addedOn, and git agrees with the date')
     if (!e.addedOn) { missing += 1; continue; }
     const page = lazyOf[elementOf[e.route]];
     if (!page) { unmapped += 1; continue; }
-    const truth = gitFirstAdd(page);
-    if (truth && truth !== e.addedOn) disagree.push(`${e.route} says ${e.addedOn}, git says ${truth}`);
+    const win = gitWindow(page);
+    if (!win || !win.oldest) continue;
+    if (e.addedOn > win.newest) {
+      disagree.push(`${e.route} says ${e.addedOn}, later than the day its page appeared (${win.newest})`);
+    } else if (e.addedOn < win.oldest) {
+      disagree.push(`${e.route} says ${e.addedOn}, earlier than anything git traces the page to (${win.oldest})`);
+    }
   }
   if (missing) fail(`${missing} live entries record no addedOn, so they can never be new and never stop being new by accident either; the fact must be recorded for every game`);
   if (unmapped) console.log(`   ${unmapped} live entries render through a shape this check does not map, so their date was recorded but not compared`);

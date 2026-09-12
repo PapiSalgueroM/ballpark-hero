@@ -440,7 +440,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/nfl-gauntlet-draft': {
     intro: [
       "The draft mode, NFL style: seven picks, one per starting offense slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
-      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 78 up to 99, with overtime and a shootout when the game is level.",
+      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 78 up to 99, and overtime when the game is level.",
       "The run is decided entirely by the offense you drafted: the same seven always runs the same gauntlet, so every pick is the game.",
     ],
     howToPlay: [
@@ -454,12 +454,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice.",
       "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
       "No player is dealt twice in one draft.",
-      "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime and then a shootout, and replaying the same seven replays the same cup.",
+      "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime, and replaying the same seven replays the same cup.",
       "Opposition ratings climb 78, 85, 90, 95, 99. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.",
     ],
     example: [
       "The quarterback slot deals a 97 rated MVP season next to an 88, an 82, a 76 and a 68. There is no cost to any of them, so the 97 is the pick unless you are chasing a specific team on the card.",
-      "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs a shootout, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
+      "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
     ],
     tips: [
       "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",

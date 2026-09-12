@@ -461,7 +461,7 @@ console.log('6c) no global Auto Ads eligibility on non-content routes');
 /* ── 7: every manual ad uses the real display unit ────────────────────── */
 console.log('7) one production slot on every AdBanner caller');
 const EXPECTED_SLOT = '7540487748';
-const EXPECTED_CALLERS = 77; /* Round 522: +2, NbaGauntletDraft.tsx and NflGauntletDraft.tsx */
+const EXPECTED_CALLERS = 78; /* Round 538: +1, MlbGauntletDraft.tsx. Before that Round 522: +2, NbaGauntletDraft.tsx and NflGauntletDraft.tsx */
 const srcDir = path.join(ROOT, 'src');
 const adCallers = [];
 const walk = d => {

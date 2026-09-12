@@ -4005,13 +4005,31 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 {career.lastUCLResult.isTopScorer && " · 👟 Top Scorer"}
               </div>
               <div className="space-y-1">
+                {/* Round 546: a tie is two legs now, so each leg is its own row
+                    and the deciding one carries the aggregate and how it was
+                    settled. The W or L sits on the deciding leg only, because a
+                    first leg does not win or lose anything. */}
                 {career.lastUCLResult.matches.map((m, i) => (
                   <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                    <span className="text-[10px] text-muted-foreground w-10">{m.round}</span>
-                    <span className="font-semibold text-foreground">{career.currentClub}</span>
-                    <span className="font-black mx-2">{m.goalsFor} - {m.goalsAgainst}</span>
-                    <span className="text-muted-foreground">{m.opponent}</span>
-                    <span className={`text-[10px] ml-1 ${m.won ? "text-emerald-400" : "text-red-400"}`}>{m.won ? "W" : "L"}</span>
+                    <span className="text-[10px] text-muted-foreground w-14 shrink-0">
+                      {m.round}{m.aggFor !== undefined && m.leg === 2 ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
+                    </span>
+                    <span className="font-semibold text-foreground truncate">{m.home ? career.currentClub : m.opponent}</span>
+                    <span className="font-black mx-2 shrink-0">{m.home ? m.goalsFor : m.goalsAgainst} - {m.home ? m.goalsAgainst : m.goalsFor}</span>
+                    <span className="text-muted-foreground truncate">{m.home ? m.opponent : career.currentClub}</span>
+                    <span className={`text-[10px] ml-1 shrink-0 ${m.decidedBy === undefined ? "text-muted-foreground" : m.won ? "text-emerald-400" : "text-red-400"}`}>
+                      {m.decidedBy === undefined ? "" : m.won ? "W" : "L"}
+                    </span>
+                  </div>
+                ))}
+                {/* How each tie was settled, when it was not just the aggregate. */}
+                {career.lastUCLResult.matches.filter(m => m.decidedBy && m.decidedBy !== 'aggregate').map((m, i) => (
+                  <div key={`d${i}`} className="text-[10px] text-center text-muted-foreground">
+                    {m.round}: {m.aggFor}-{m.aggAgainst} on aggregate, {
+                      m.decidedBy === 'awayGoals' ? 'settled on away goals' :
+                      m.decidedBy === 'extraTime' ? 'settled in extra time' :
+                      `${m.pensFor}-${m.pensAgainst} on penalties`
+                    }
                   </div>
                 ))}
               </div>

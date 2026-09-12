@@ -1,6 +1,10 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
+/* Round 546: the competition's real format per season, two source verified and
+   importing nothing, so the knockout ladder and the leg count are read rather
+   than kept as a second hardcoded copy here. */
+import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -267,10 +271,22 @@ export interface BallonDorResult {
 export interface UCLKnockoutMatch {
   opponent: string;
   round: string; // "R16", "QF", "SF", "Final"
+  /** Round 546: which leg of the tie. A one legged round carries 1. */
+  leg: number;
+  /** Was this leg at my ground? The final is at neither, and carries false. */
+  home: boolean;
   goalsFor: number;
   goalsAgainst: number;
   playerGoals: number;
+  /** Did I go through? Only meaningful on the DECIDING leg of a tie. */
   won: boolean;
+  /** Set on the deciding leg: the aggregate across both legs. */
+  aggFor?: number;
+  aggAgainst?: number;
+  /** How a level tie was settled. */
+  decidedBy?: 'aggregate' | 'awayGoals' | 'extraTime' | 'penalties';
+  pensFor?: number;
+  pensAgainst?: number;
 }
 
 export interface UCLResult {
@@ -5800,7 +5816,84 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
 }
 
 /* ─── UCL Simulation ─── */
-function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
+/* ─── Round 546: the Champions League knockout, actually played ───────────
+ *
+ * WHAT THIS REPLACED, and why it had to go. The old simulateUCL decided the
+ * winner first (`const won = Math.random() < winChance`) and then fabricated a
+ * scoreline to fit it: a win drew 1 to 4 goals for and strictly fewer against,
+ * a defeat drew a bigger number against. So the score was decoration painted on
+ * a coin flip, there were no legs, no aggregate, no draws (a level score could
+ * not be generated at all), no extra time and no penalties. The ladder was the
+ * hardcoded R16, QF, SF, Final in every season, which is wrong for every year
+ * before 2003.
+ *
+ * A player asked for the second leg on 2026-09-11. Club Manager has played two
+ * legged ties since Round 507; this is the flagship, about 1 in 5 of all
+ * pageviews, and it was the one Champions League on the site that was not real.
+ *
+ * WHERE THE FORMAT COMES FROM. src/lib/uclFormatHistory.ts, which already
+ * carries roundOf16, koLegs and the away goals window per period from 1955 on,
+ * two source verified, and imports nothing so there is no cycle risk. The
+ * engine reads it rather than keeping a second copy, per the derived-never-
+ * typed rule. That also fixes the ladder for the older years for free.
+ *
+ * BALANCE DELIBERATELY HELD. The goal model is built from the SAME inputs the
+ * old win chance used (overall, the elite bonus, the round difficulty), scaled
+ * so a tie comes out at roughly the old per-round advance rate, and the player's
+ * goal chance is halved per leg so a two legged tie yields what the old single
+ * match yielded. scripts/simSoccerCareerUcl.mjs measures both and fails if the
+ * advance rate or the tournament goal total has moved, because a fix to a
+ * mechanism must not quietly rebalance a career.
+ */
+
+/**
+ * The inverse normal CDF (Acklam's rational approximation), used to turn the
+ * win probability this game already had into a goal EXPECTATION that produces
+ * it. That is the whole trick to replacing a coin flip without rebalancing a
+ * career: rather than inventing a strength scale and hoping the rates land,
+ * solve for the scale that reproduces the old rate exactly.
+ */
+function uclProbit(p: number): number {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.3577518672690, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const pl = 0.02425;
+  const q = Math.min(Math.max(p, 1e-9), 1 - 1e-9);
+  if (q < pl) {
+    const x = Math.sqrt(-2 * Math.log(q));
+    return (((((c[0] * x + c[1]) * x + c[2]) * x + c[3]) * x + c[4]) * x + c[5]) / ((((d[0] * x + d[1]) * x + d[2]) * x + d[3]) * x + 1);
+  }
+  if (q > 1 - pl) {
+    const x = Math.sqrt(-2 * Math.log(1 - q));
+    return -(((((c[0] * x + c[1]) * x + c[2]) * x + c[3]) * x + c[4]) * x + c[5]) / ((((d[0] * x + d[1]) * x + d[2]) * x + d[3]) * x + 1);
+  }
+  const x = q - 0.5;
+  const r = x * x;
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * x /
+         (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+
+/** Goals a side is expected to score in a level Champions League leg. */
+const UCL_BASE_LAMBDA = 1.32;
+/** How much a home leg is worth, added to mine and taken off theirs. It swaps
+ *  with the leg, so across a two legged tie it cancels. */
+const UCL_HOME_EDGE = 0.18;
+
+/** One leg's goals for a side, drawn from its expectation. */
+function uclLegGoals(lambda: number): number {
+  /* Knuth, which is fine at these lambdas and keeps the draw on the shared
+     Math.random stream the rest of this engine uses. */
+  const L = Math.exp(-Math.max(0.05, lambda));
+  let k = 0;
+  let p = 1;
+  do { k += 1; p *= Math.random(); } while (p > L && k < 12);
+  return k - 1;
+}
+
+/* Exported for scripts/simSoccerCareerUcl.mjs, which measures this against the
+   model it replaced and fails if the balance moved. */
+export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
   const tier = state.currentClubTier;
   // Only T1-T2 clubs qualify
   if (tier > 2) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
@@ -5808,40 +5901,135 @@ function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
   const qualChance = tier === 1 ? 0.85 : 0.35;
   if (Math.random() > qualChance) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
 
-  const rounds = ["R16", "QF", "SF", "Final"];
   const uclYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year + 1 : 2024;
+  const period = periodFor(uclYear);
+  /* The ladder the competition really ran that season. Before 2003 there was no
+     round of 16, and the old code played one anyway.
+     A null koLegs is not "unknown, assume two": it is the 1991 and 1992 shape,
+     where the two group winners met in the final and there were no semi finals
+     at all, which uclFormatHistory says in those periods' own words. A Soccer
+     Career can start in 1990, so those seasons are reachable and were being
+     played as a full quarter final ladder that never existed. */
+  const noKnockoutLadder = period.koLegs === null;
+  const rounds = noKnockoutLadder
+    ? ["Final"]
+    : period.roundOf16 ? ["R16", "QF", "SF", "Final"] : ["QF", "SF", "Final"];
+  const tieLegs = period.koLegs ?? 1;
+  const awayGoalsApply = uclYear >= UCL_AWAY_GOALS.introduced && uclYear <= UCL_AWAY_GOALS.lastSeason;
+
   const opponents = getEraUclOpponents(uclYear).filter(o => o !== state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
+  const isEliteUCL = ELITE_CLUBS.includes(state.currentClub);
+  const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
 
+  /* The player's goals per LEG are half the old per-match chance, so a two
+     legged tie yields what the old single match yielded and the top scorer
+     threshold below still means what it meant. */
+  const legPlayerGoals = (legs: number) => {
+    const share = legs === 2 ? 0.5 : 1;
+    if (state.position === "GK") return 0;
+    if (isAttacker) return Math.random() < 0.4 * share ? rand(1, 2) : 0;
+    return Math.random() < 0.1 * share ? 1 : 0;
+  };
+
+  let out = false;
   for (const round of rounds) {
+    if (out) break;
     const available = opponents.filter(o => !usedOpponents.has(o));
     const opponent = available.length > 0 ? pick(available) : "Unknown FC";
     usedOpponents.add(opponent);
 
-    // Win probability: elite clubs get a significant boost
-    const isEliteUCL = ELITE_CLUBS.includes(state.currentClub);
     const roundDifficulty = rounds.indexOf(round) * 0.04;
     const eliteBonus = isEliteUCL ? 0.15 : (tier === 1 ? 0.08 : 0);
-    const winChance = clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundDifficulty, 0.15, 0.75);
-    const won = Math.random() < winChance;
-    const goalsFor = won ? rand(1, 4) : rand(0, 2);
-    const goalsAgainst = won ? rand(0, goalsFor - 1 < 0 ? 0 : goalsFor - 1) : rand(goalsFor + 1, goalsFor + 3);
-    const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
-    const playerGoals = isAttacker ? (Math.random() < 0.4 ? rand(1, 2) : 0) :
-                        state.position === "GK" ? 0 : (Math.random() < 0.1 ? 1 : 0);
-    totalPlayerGoals += playerGoals;
-    matches.push({ opponent, round, goalsFor, goalsAgainst: Math.max(0, goalsAgainst), playerGoals, won });
-    if (!won) break;
+    const legs = round === "Final" ? 1 : tieLegs;
+    /* The probability this game has always given this player at this club in
+       this round. It is the TARGET, not a coin to flip: the goal expectations
+       below are solved to reproduce it. */
+    const target = clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundDifficulty, 0.15, 0.75);
+    /* Aggregate goal difference over N legs is the difference of two Poissons,
+       so its mean is 2*N*edge and its variance about 2*N*UCL_BASE_LAMBDA. The
+       probability of finishing ahead is therefore about
+       Phi(2*N*edge / sqrt(2*N*base)), and inverting that gives the edge that
+       lands on the target rate. Solved rather than tuned, so a change to the
+       base or the leg count cannot silently move the balance. */
+    const spread = Math.sqrt(2 * legs * UCL_BASE_LAMBDA);
+    const edge = (uclProbit(target) * spread) / (2 * legs);
+
+    let aggFor = 0;
+    let aggAgainst = 0;
+    let myAwayGoals = 0;
+    let theirAwayGoals = 0;
+    const legRows: UCLKnockoutMatch[] = [];
+
+    for (let leg = 1; leg <= legs; leg++) {
+      /* Leg one at home, leg two away, which is the orientation the tie is
+         stored in everywhere else on this site. The final is at neither. */
+      const home = legs === 2 ? leg === 1 : false;
+      /* Home advantage swaps with the leg, so it cancels across the tie and
+         changes the shape of the two nights without moving who goes through. */
+      const venue = legs === 2 ? (home ? UCL_HOME_EDGE : -UCL_HOME_EDGE) : 0;
+      const gf = uclLegGoals(clamp(UCL_BASE_LAMBDA + edge + venue, 0.25, 3.4));
+      const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
+      aggFor += gf;
+      aggAgainst += ga;
+      if (legs === 2 && !home) myAwayGoals += gf;
+      if (legs === 2 && home) theirAwayGoals += ga;
+      const pg = legPlayerGoals(legs);
+      totalPlayerGoals += pg;
+      legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
+    }
+
+    const decider = legRows[legRows.length - 1];
+    decider.aggFor = aggFor;
+    decider.aggAgainst = aggAgainst;
+
+    let through: boolean;
+    if (aggFor !== aggAgainst) {
+      through = aggFor > aggAgainst;
+      decider.decidedBy = 'aggregate';
+    } else if (legs === 2 && awayGoalsApply && myAwayGoals !== theirAwayGoals) {
+      through = myAwayGoals > theirAwayGoals;
+      decider.decidedBy = 'awayGoals';
+    } else {
+      /* Extra time, then penalties. Away goals in extra time were part of the
+         rule while it applied, and are abolished with it. */
+      const etFor = uclLegGoals(clamp(0.34 + edge * 0.25, 0.05, 1.1));
+      const etAgainst = uclLegGoals(clamp(0.34 - edge * 0.25, 0.05, 1.1));
+      decider.goalsFor += etFor;
+      decider.goalsAgainst += etAgainst;
+      aggFor += etFor;
+      aggAgainst += etAgainst;
+      decider.aggFor = aggFor;
+      decider.aggAgainst = aggAgainst;
+      if (etFor !== etAgainst) {
+        through = etFor > etAgainst;
+        decider.decidedBy = 'extraTime';
+      } else {
+        /* A shootout is close to a coin flip and only slightly weighted. */
+        const pensFor = rand(2, 5);
+        let pensAgainst = rand(2, 5);
+        if (pensFor === pensAgainst) pensAgainst += Math.random() < clamp(0.5 + edge * 0.5, 0.3, 0.7) ? -1 : 1;
+        decider.pensFor = pensFor;
+        decider.pensAgainst = Math.max(0, pensAgainst);
+        through = pensFor > decider.pensAgainst;
+        decider.decidedBy = 'penalties';
+      }
+    }
+
+    decider.won = through;
+    matches.push(...legRows);
+    if (!through) out = true;
   }
 
-  const lastMatch = matches[matches.length - 1];
-  const result = lastMatch.won && lastMatch.round === "Final" ? "Winner" :
-                 lastMatch.round === "Final" ? "Final" :
-                 lastMatch.round === "SF" ? "Semi-final" :
-                 lastMatch.round === "QF" ? "Quarter-final" : "R16";
-  
+  const decidedRows = matches.filter(m => m.decidedBy !== undefined);
+  const last = decidedRows[decidedRows.length - 1] ?? matches[matches.length - 1];
+  const result = last.won && last.round === "Final" ? "Winner" :
+                 last.round === "Final" ? "Final" :
+                 last.round === "SF" ? "Semi-final" :
+                 last.round === "QF" ? "Quarter-final" : "R16";
+
   // Top scorer if 6+ goals
   const isTopScorer = totalPlayerGoals >= 6 && Math.random() < 0.5;
 

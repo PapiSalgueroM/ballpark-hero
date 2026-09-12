@@ -115,6 +115,35 @@ export function getCurrentPlayerName(profile?: { display_name?: string | null; u
 }
 
 /**
+ * Round 539: the same answer, WITHOUT minting a handle when there is not one.
+ *
+ * getGuestHandle is a read that writes: no stored handle, or a stored one in
+ * the pre Round 318 shape, and it mints a new one off Math.random and saves it.
+ * That is correct for the recorder, which is about to insert a row and needs a
+ * name to put on it. It is wrong for a READER, and Round 527's achievement case
+ * is a pure reader that claimed in its own header to write nothing. It called
+ * getCurrentPlayerName, which reaches getGuestHandle, so opening /profile as a
+ * signed in user whose row has no display_name and no username minted and
+ * stored a guest handle. Proved at runtime with a recording localStorage.
+ *
+ * Readers use this. No handle stored means no handle, which is the honest
+ * answer: a player with no identity yet has no rows to find either, so the
+ * empty string an unknown handle produces is the same empty board.
+ */
+export function peekCurrentPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string {
+  const fromProfile = profile?.display_name || profile?.username;
+  if (fromProfile) return fromProfile;
+  const cached = getCachedDisplayName();
+  if (cached) return cached;
+  try {
+    const existing = localStorage.getItem(GUEST_HANDLE_KEY);
+    return existing && !LEGACY_HANDLE.test(existing) ? existing : '';
+  } catch {
+    return '';
+  }
+}
+
+/**
  * Round 318, the second half of the owner's leaderboard names decision: a
  * profanity blocklist in front of every name RENDERED on a shared surface.
  * Profile.tsx has refused dirty names at write time since the moderation
