@@ -16,6 +16,9 @@ type ConquestMode = 'select' | 'imperialism' | 'arcade';
 
 const ConquestNba = () => {
   const [showHelp, setShowHelp] = useState(false);
+  /* Round 529: the imperialism mode has its own help, opened by the board
+     once before the first run and by the "?" after that. */
+  const [showImpHelp, setShowImpHelp] = useState(false);
   /* Round 476: a daily left half played opens straight back on the board it
      was left on, rather than on the mode chooser with the run one tap away. */
   const [mode, setMode] = useState<ConquestMode>(() => (hasUnfinishedDaily('nba') ? 'imperialism' : 'select'));
@@ -47,9 +50,9 @@ const ConquestNba = () => {
                 ? 'The imperialism map: winners take entire empires, the wiped-out fight back, one team ends up ruling America.'
                 : '30 teams. One map. One champion.'}
             </p>
-            {mode === 'arcade' && (
+            {mode !== 'select' && (
               <button
-                onClick={() => setShowHelp(true)}
+                onClick={() => (mode === 'arcade' ? setShowHelp(true) : setShowImpHelp(true))}
                 className="absolute top-0 right-0 p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="How to play"
               >
@@ -95,7 +98,9 @@ const ConquestNba = () => {
             </div>
           )}
 
-          {mode === 'imperialism' && <ImperialismBoardShared sport={NBA_IMPERIALISM} map={NBA_CONQUEST_MAP} game={NBA_CONQUEST_GAME} />}
+          {mode === 'imperialism' && (
+            <ImperialismBoardShared sport={NBA_IMPERIALISM} map={NBA_CONQUEST_MAP} game={NBA_CONQUEST_GAME} helpOpen={showImpHelp} onHelpOpenChange={setShowImpHelp} />
+          )}
           {mode === 'arcade' && <ConquestBoardNba />}
           <GameSeoContent
           pageHasOwnH1
@@ -103,6 +108,7 @@ const ConquestNba = () => {
             description="Two ways to conquer America. Imperialism mode plays the classic map format: every territory starts with its nearest NBA arena, winners annex the loser's entire empire, wiped-out teams can storm back with one win, and a territory-seeded playoff crowns the ruler of the map. Arcade mode is the original battle sim with player steals and power-ups."
             howToPlay={[
               "Imperialism mode: pick your team, predict their game each round, then watch all 30 results redraw the map. Winners take EVERYTHING the loser owned.",
+              "Press Play and every game in the round plays out on the map one at a time: the wheel lands on the attacker, the map zooms in, the final score lands, and the loser's territories turn the winner's colour. Skip jumps to the results, and the timeline under the map shows the map after any earlier round.",
               "Wiped off the map? Keep playing. One win takes your conqueror's whole empire back.",
               "After 14 rounds the top 8 empires enter the playoffs. Losers hand everything to the winners until one team rules America.",
               "Arcade mode keeps the original formula: play-by-play battles, steal a player from every beaten team, grab power-ups, expand territory by territory."

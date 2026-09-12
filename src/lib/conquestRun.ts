@@ -1,7 +1,7 @@
 import { dailyConquestRng, loadDailyRun, type ConquestDailyRun } from './conquestDaily';
 import {
   seedEmpires, randomPairings, resolveGame, buildHeadlines, emptyRecords, applyRecords,
-  empireCounts, playoffSeeds, totalConquest, finalScore,
+  empireCounts, playoffSeeds, totalConquest, finalScore, statesOf, teamLabel, regionNoun,
   type ImperialismSport, type ImpGame, type ImpRoundResult, type ImpRecords,
 } from './imperialismEngine';
 
@@ -53,6 +53,10 @@ export interface ConquestRun {
   /** How many of those calls came in. */
   hits: number;
   phase: ConquestPhase;
+  /** The owners map after every settled round. history[0] is the opening map. Each entry is its own object. */
+  history: Record<string, string>[];
+  /** Every settled round in order, regular then playoff. rounds[i] was played on history[i] and produced history[i + 1]. */
+  rounds: ImpRoundResult[];
 }
 
 /** The label the board prints for the round about to be played. */
@@ -81,9 +85,10 @@ export function featuredResult(run: ConquestRun, featured: [string, string] | nu
 }
 
 export function startRun(sport: ImperialismSport, favorite: string, rng: () => number): ConquestRun {
+  const owners = seedEmpires(sport);
   return {
     favorite,
-    owners: seedEmpires(sport),
+    owners,
     records: emptyRecords(sport),
     round: 1,
     bracket: null,
@@ -94,6 +99,8 @@ export function startRun(sport: ImperialismSport, favorite: string, rng: () => n
     picks: [],
     hits: 0,
     phase: 'preview',
+    history: [{ ...owners }],
+    rounds: [],
   };
 }
 
@@ -141,6 +148,8 @@ export function playRound(sport: ImperialismSport, run: ConquestRun, call: strin
     picks: [...run.picks, call],
     hits,
     phase: 'recap',
+    history: [...run.history, { ...owners }],
+    rounds: [...run.rounds, lastRound],
   };
 }
 
@@ -175,6 +184,140 @@ export function replayRun(sport: ImperialismSport, favorite: string, picks: stri
 
 export function runScore(run: ConquestRun): number {
   return finalScore(run.favorite, run.owners, run.hits, run.champion, run.madePlayoffs);
+}
+
+/* Round 529: the season's own record book, read off history and rounds.
+ * Nothing here is saved. A reload rebuilds history through replayRun, so the
+ * records come back identical without the daily record growing a byte. */
+
+/** One of the four end of season records the web map's format shows. */
+export interface SeasonRecord {
+  key: 'landGrab' | 'reign' | 'conquered' | 'collapse';
+  /** 'Biggest Land Grab', 'Longest Reign', 'Most Conquered', 'Biggest Collapse'. */
+  title: string;
+  teamId: string | null;
+  value: number;
+  /** Names the team and the round label, e.g. "Chiefs took 9 states from the Broncos, Week 4". Empty when teamId is null. */
+  detail: string;
+}
+
+const RECORD_TITLES: Record<SeasonRecord['key'], string> = {
+  landGrab: 'Biggest Land Grab',
+  reign: 'Longest Reign',
+  conquered: 'Most Conquered',
+  collapse: 'Biggest Collapse',
+};
+
+function emptyRecord(key: SeasonRecord['key']): SeasonRecord {
+  return { key, title: RECORD_TITLES[key], teamId: null, value: 0, detail: '' };
+}
+
+/** A team losing its last region in one settled round: round is the 1 based
+ *  index into history, held is the empire it had going in. */
+interface Wipe { teamId: string; round: number; held: number }
+
+/** Every wipe in round order, then sport team order inside a round. */
+function wipesOf(sport: ImperialismSport, run: ConquestRun): Wipe[] {
+  const out: Wipe[] = [];
+  for (let i = 1; i < run.history.length; i++) {
+    for (const t of sport.teams) {
+      const held = statesOf(run.history[i - 1], t.id).length;
+      if (held > 0 && statesOf(run.history[i], t.id).length === 0) out.push({ teamId: t.id, round: i, held });
+    }
+  }
+  return out;
+}
+
+/** The four records, always in the order landGrab, reign, conquered, collapse, computed from run.rounds and run.history only. */
+export function seasonRecords(sport: ImperialismSport, run: ConquestRun): SeasonRecord[] {
+  const label = (id: string) => teamLabel(sport, id);
+  const labelAt = (round: number) => run.rounds[round - 1].label;
+
+  /* Biggest Land Grab: the single game that moved the most land, earliest on a tie. */
+  const games: { game: ImpGame; order: number; label: string }[] = [];
+  for (const r of run.rounds) for (const game of r.games) games.push({ game, order: games.length, label: r.label });
+  const grabs = games.filter(x => x.game.swing > 0).sort((a, b) => b.game.swing - a.game.swing || a.order - b.order);
+  const top = grabs[0];
+  let landGrab = emptyRecord('landGrab');
+  if (top) {
+    const loser = top.game.winner === top.game.home ? top.game.away : top.game.home;
+    landGrab = {
+      ...landGrab,
+      teamId: top.game.winner,
+      value: top.game.swing,
+      detail: `${label(top.game.winner)} took ${top.game.swing} ${regionNoun(sport, top.game.swing)} from ${label(loser)}, ${top.label}`,
+    };
+  }
+
+  /* Longest Reign: the most consecutive settled rounds ending as the outright
+     biggest empire. A round with a tie at the top counts for nobody. */
+  const leaders: (string | null)[] = [];
+  for (let i = 1; i < run.history.length; i++) {
+    let best: string | null = null;
+    let max = -1;
+    let tied = false;
+    for (const [t, n] of empireCounts(sport, run.history[i])) {
+      if (n > max) { max = n; best = t; tied = false; }
+      else if (n === max) tied = true;
+    }
+    leaders.push(tied ? null : best);
+  }
+  let reign = emptyRecord('reign');
+  let start = 0;
+  for (let i = 0; i <= leaders.length; i++) {
+    if (i < leaders.length && leaders[i] !== null && leaders[i] === leaders[start]) continue;
+    const team = leaders[start];
+    const length = i - start;
+    if (team !== null && length > reign.value) {
+      const first = labelAt(start + 1);
+      const last = labelAt(i);
+      reign = {
+        ...reign,
+        teamId: team,
+        value: length,
+        detail: `${label(team)} held the biggest empire ${length === 1 ? `in ${first}` : `from ${first} to ${last}`}`,
+      };
+    }
+    start = i;
+  }
+
+  /* Most Conquered: the team wiped off the map most often; on a tie the one
+     wiped first, then sport team order. wipesOf lists in exactly that order. */
+  const wipes = wipesOf(sport, run);
+  const byTeam = new Map<string, Wipe[]>();
+  for (const w of wipes) byTeam.set(w.teamId, [...(byTeam.get(w.teamId) ?? []), w]);
+  let mostWiped: Wipe[] | null = null;
+  for (const t of sport.teams) {
+    const list = byTeam.get(t.id);
+    if (!list) continue;
+    if (!mostWiped || list.length > mostWiped.length || (list.length === mostWiped.length && list[0].round < mostWiped[0].round)) mostWiped = list;
+  }
+  let conquered = emptyRecord('conquered');
+  if (mostWiped) {
+    const last = mostWiped[mostWiped.length - 1];
+    conquered = {
+      ...conquered,
+      teamId: last.teamId,
+      value: mostWiped.length,
+      detail: `${label(last.teamId)} wiped off the map ${mostWiped.length} time${mostWiped.length === 1 ? '' : 's'}, last in ${labelAt(last.round)}`,
+    };
+  }
+
+  /* Biggest Collapse: the largest empire lost in one round, credited to the
+     team that lost it. Strictly greater keeps the earliest on a tie. */
+  let collapse = emptyRecord('collapse');
+  for (const w of wipes) {
+    if (w.held > collapse.value) {
+      collapse = {
+        ...collapse,
+        teamId: w.teamId,
+        value: w.held,
+        detail: `${label(w.teamId)} lost an empire of ${w.held} ${regionNoun(sport, w.held)} in ${labelAt(w.round)}`,
+      };
+    }
+  }
+
+  return [landGrab, reign, conquered, collapse];
 }
 
 /** The run as the daily record holds it: the club, the calls, nothing else. */
