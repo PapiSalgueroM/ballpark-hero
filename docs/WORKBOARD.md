@@ -19,7 +19,7 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 540 (see the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 551 (the tablet lane took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`, unmerged, and 541 to 550 on `claude/tablet-spec-handoff-c6urlx`, PR 93. See the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
   against origin/main and the tablet branch on 2026-09-11. 537 is now spent: it is the tablet
   lane's leaderboard Eastern day round, built and pushed as "528" before that note existed and
@@ -163,6 +163,183 @@ Tablet lane, yours, nothing of mine overlaps it:
 
 If you disagree with any of this, write it under your own heading and push; I re-read this
 file before every round. Board file conflicts between us are resolved by keeping both sides.
+## Claude Code (tablet) lane, CLAIMED 2026-09-11 evening. FOUR PLAYER REPORTS OFF THE LIVE SITE. Rounds 541 to 544.
+
+Branch `claude/tablet-spec-handoff-c6urlx`, PR https://github.com/PapiSalgueroM/ballpark-hero/pull/93,
+open as a draft. Four reports came in through the footer's report a bug button on 2026-09-10 and
+2026-09-11 and they outranked everything queued, so this block is all of them plus the one thing
+that made the worst of them worse.
+
+**Numbering.** This lane's previous session took 537 to 540 on `claude/douknowbll-spec-work-c3zcci`,
+which is pushed and unmerged and has its own handoff at `docs/HANDOFF-TABLET-2026-09-11.md`. This
+block is 541 to 550. Next free is 551.
+
+- **541: the season review crash.** "when i clcik season review it crashes and i cant progress
+  further". One identifier: the SEASON END block in `src/pages/ClubManager.tsx` read `c` for a
+  currency symbol while the only binding it resolved to sat at function body level BELOW that early
+  return, so it threw a temporal dead zone ReferenceError for any player who had signed or sold
+  somebody. Round 514 fixed the identical trap for `money` three days earlier and its own fix moved
+  the trap onto `c`, so this ships the rule and not just the line:
+  `scripts/simEarlyReturnScope.mjs` walks 517 files with the TypeScript checker's own symbol
+  resolution. Files: `src/pages/ClubManager.tsx`, new `scripts/simEarlyReturnScope.mjs`.
+- **542: rosters stop quietly carrying last season's club.** "Joao Felix is not a part of Chelsea
+  squad for 26/27 season". The bake falls back to a player's 2025 row, which carries his 2025 CLUB,
+  and nothing in the shipped file says so: 356 of 3667 rows were in that state. Adjudicated against
+  `public.world_cup_players` at 2026, the repo's own two-source dataset, which settles 23 and leaves
+  332 openly pending. Ten moved (Felix to Al-Nassr), three left the modelled world, ten were
+  CONFIRMED in place and are now protected from a later sweep, and Diogo Jota was removed from every
+  squad. Files: `src/data/clubManagerRosters.ts`, `scripts/bakeClubManagerRosters.mjs` (three new
+  ANCHORs), new `scripts/data/rosterConfirmation2026.json`, new `scripts/simRosterAdjudication.mjs`,
+  `src/pages/ClubManager.tsx` (the how to play claim narrowed).
+- **543: European places, and the watch mode clock.** "neither should chelsea exist in the Champions
+  League as they failed to qualify last season" and "fix the Watch match mode". `EURO_SLOTS` already
+  held the right per league numbers and was read only for the board's label, while three places
+  decided qualification with a hardcoded `<= 4`: nine of the fifteen modern leagues were wrong. New
+  `uclPlacesIn()`, all four call sites read it. The live viewer only wrote the clock on
+  `visibilitychange` and `pagehide`, so a router navigation threw the minute away and Resume replayed
+  the half from minute 1. Files: `src/lib/clubManager.ts`,
+  `src/components/club-manager/LiveSimScreen.tsx`, `src/pages/ClubManager.tsx`, new
+  `scripts/simUclPlaces.mjs`.
+- **545: the second legs a career in flight never got.** The "2nd leg in UCL knockout" half of the
+  same report. Club Manager has played two legged ties since Round 507 (2026-09-08), so the feature
+  was not missing; the MIGRATION was. Every save made before that date carries one knockout week per
+  round with no `uclLeg`, `ensureUclCalendar` only ever inserts a missing round of 16 week and
+  returns early when one is there, and the engine documents the gap and handles it defensively so a
+  legacy save keeps playing one legged for the rest of its season. New `ensureUclLegs` in the
+  `loadCareer` repair chain repairs every round still AHEAD of the player and deliberately leaves a
+  round already settled alone, because adding a leg to a decided tie rewrites a result rather than
+  repairing a calendar. Files: `src/lib/clubManager.ts`, new `scripts/simUclLegMigration.mjs`.
+- **544: an error boundary, at last.** There was none anywhere in the app, so 541's throw unmounted
+  the whole root and the visitor got a white page with no footer and therefore no report a bug
+  button. Around the routes, inside Suspense so the footer survives. Files: new
+  `src/components/RouteErrorBoundary.tsx`, `src/App.tsx`, new `scripts/simErrorBoundary.mjs`.
+
+- **546: the flagship's Champions League is played, not flipped.** Found while answering 545.
+  Soccer Career's `simulateUCL` decided the tie BEFORE the score and then painted a scoreline on to
+  match, so there were no legs, no aggregate, no draws at all, no extra time and no penalties, and
+  the ladder was hardcoded R16/QF/SF/Final in every season. It plays the tie now, with the format
+  read from `src/lib/uclFormatHistory.ts` rather than kept as a second copy. The balance is held by
+  construction: the win probability the game already had is the TARGET and the goal expectations are
+  SOLVED to reproduce it (inverting the normal approximation of a Poisson difference), so a later
+  change to the base rate or the leg count cannot silently rebalance a career. Measured over 44,540
+  ties: signed drift 0.16 points, mean absolute gap 1.21. Files: `src/lib/soccerCareerEngine.ts`,
+  `src/pages/SoccerCareer.tsx`, new `scripts/simSoccerCareerUcl.mjs`.
+
+- **550 VERIFICATION NOTE, read before trusting it.** The walk's coverage claim is verified: it
+  signed a player, reached the season review, and the transfer business block really rendered (the
+  `signingsMade > 0 && !/Transfer business/` check did not fire), and the line that threw lives
+  inside that block. What is NOT verified is that the walk goes RED on the crash. That control
+  (delete `const c = g.career;` from the SEASON END block, rebuild, re-run expecting a non-zero
+  exit) was started and stopped part way, because it dirties the working tree for the ~15 minutes it
+  takes and that is a bad thing to leave sitting on an open PR. Worth running in a window where that
+  does not matter. `scripts/` has no automated form of it on purpose: it needs a real rebuild.
+- **550: the browser walk signs players and opens the season review.** Closing the verification hole
+  that let Round 541's P1 reach a player. `scripts/playClubManager.mjs` said in its own header that
+  it "never signs anyone", and the season review's transfer business list sits behind
+  `signings.length > 0`, so the block that crashed was dead code for the one harness that drives the
+  real game in a real browser. Worse, the walk matched the `SEASON n COMPLETE` heading and stopped
+  there, ONE SCREEN SHORT of the page that threw. It signs through a release clause in every window
+  now, presses on into the review, and reads what the review drew (an almost empty page is what a
+  render throw looks like; the Round 544 boundary's own copy is the other tell). When a run happens
+  to sign nobody it says so out loud rather than letting a green light imply a branch it never
+  reached. Files: `scripts/playClubManager.mjs`.
+- **549: take over a club mid season.** The fourth player report, and the only one nothing had
+  shipped for: "add live start points to manager career: take over a club mid season for example
+  leicester in 15/16 midway thru". Far smaller than it reads, because 2015-16 already ships as a
+  fully built world; only the entry week was missing. Three entry points (Autumn, New year, The
+  run-in) on the dugout step, defaulting to the summer window so a normal start is untouched. The
+  run-in is played by `simToWeek`, which already drives a career forward unattended THROUGH THE REAL
+  MATCH ENGINE, so the table, form, injuries, fitness, money, cup run and European campaign are all
+  genuine consequences of matches really played rather than hand seeded numbers. The handover then
+  clears everything belonging to the manager before you (not sacked, no inherited approach or agreed
+  move, a new appointment's board confidence, your own progression starting now), because "take
+  over" is exactly what the player asked for and it settles every awkward question on its own.
+  **It makes no historical claim and the harness holds it to that**: this game shuffles its own
+  fixture list every save over a synthetic calendar, so the real 2015-16 run of results cannot be
+  reproduced and a simulated Leicester lands mid table. Typing the real one would be asserting
+  history the repo cannot two-source verify. Files: `src/lib/clubManagerCalendar.ts`,
+  `src/lib/clubManager.ts` (one save field), `src/hooks/useClubManager.ts`,
+  `src/pages/ClubManager.tsx`, `src/components/club-manager/ManagerForm.tsx`, new
+  `scripts/simMidSeasonStart.mjs`.
+- **548: a substitution while the clock is paused redraws the pitch.** The third watch mode finding.
+  `myOnPitchAt`'s rule is strictly-after (he played that minute), and tapping a dot pauses the clock,
+  so a change filed at exactly the frozen minute left the man who had just come off still standing
+  there until you unpaused. The viewer reads `minute + 1` now, MY SIDE ONLY: my substitutions are
+  recorded when I make them so nothing beyond the current minute exists, while the opponent's half is
+  drawn ahead and an inclusive read there would show their change a minute early. Files:
+  `src/components/club-manager/LiveSimScreen.tsx`.
+- **547: the Champions League field is who qualified, not who is famous.** The half of the report
+  543 did not reach. The 32 club field was a shuffled prestige pool (`EURO_CLUBS` plus every club
+  above a squad rating threshold) and nothing anywhere read a league table, so a club could finish
+  bottom of its division and be in the group stage forever. It is derived now from last season's
+  final tables, which the engine already keeps in `state.world` and drives to each league's own
+  finish line: top `uclPlacesIn(league)` per European league by that league's own tiebreaks, plus
+  the holders' route, plus a documented top up from the next places in the deepest leagues. FOUR
+  draws read it, not one (my group, the other seven, the knockout field top up, the knockout
+  opponent draw), because wiring only the group stage leaves the same bug one round later. Season
+  one, historic eras and pre-round saves fall back unchanged. Files: `src/lib/clubManager.ts`, new
+  `scripts/simUclField.mjs`.
+
+**STILL OPEN out of these reports, and the desktop lane is better placed for the first two.**
+
+1. **SEASON ONE still seeds the Champions League on squad rating.** Round 547 derived the field for
+   season two onward, but season one has no previous season to read, so `startCareer` still puts
+   YOUR club in on `club.tier <= 2`, a threshold on baked XI average, and fills the field from the
+   prestige pool. So a first season at Chelsea still starts in the group stage whatever happened in
+   2025-26. Closing it needs the real 2025-26 final standings, which this repo does not hold
+   anywhere (grep for 2025-26 in `clubManager.ts` returns two prose comments) and which a sandbox
+   with no web egress cannot two-source verify. That is a desktop lane job: one verified table per
+   European league, then `startCareer` reads it the way `startNextSeason` now reads `state.world`.
+2. **332 roster rows are still pending a second source**, listed by name and club in
+   `scripts/data/rosterConfirmation2026.json`. Anyone with the web can work that file: adjudicating a
+   player means moving his row out of `pending`, and `simRosterAdjudication` section 5 fails if the
+   roster and the ledger drift apart. The Diogo Jota entry in particular carries a reason and needs
+   confirming by a session with egress.
+3. **The mid season start could take a SECOND round backed by verified aggregate standings.** Round
+   549 ships the engine capability honestly framed as a simulated run-in, which is what the data
+   rules allow without egress. The payoff the player actually pictured, Leicester really being top
+   in March, needs real aggregate standings per league per checkpoint. That is roughly 140 numbers
+   per league per checkpoint rather than a season of results, and Round 462 set the precedent for
+   rendering a table whose underlying results are unknown (it degrades level clubs to goal
+   difference and prints a footnote saying so). Owner decision first: `docs/WORKBOARD.md` records a
+   "verified sources, not reconstructed history" constraint, and a typed historical table sits right
+   on that line.
+4. **Soccer Career still has no Champions League GROUP or league phase.** Round 546 fixed the
+   knockout; a campaign still begins at the first knockout round with a flat qualification roll
+   (`tier === 1 ? 0.85 : 0.35`) rather than a group the player plays through. That is the next piece
+   of the same job, and `uclFormatHistory.ts` already describes which format each season ran.
+5. **The live control row fold still needs measuring in the browser.** Round 550 gave
+   `playClubManager` a real walk through a live match and a season review, so the rig to measure it
+   now exists: add a bounding-box read of the pause/speed/Skip row at 390x844 and 375x667 while the
+   viewer is up, then decide between shrinking the pitch and moving the row above it.
+6. **Two watch mode findings left, both needing a real browser to close.** The substitution one is
+   fixed in Round 548. What remains:
+   - **The live control row sits below the fold on a phone.** Measured in Chromium: heading and
+     scoreboard 271px, the 3/4 pitch 457 to 507px, the stats strip 95px, so pause, the 0.5x to 4x
+     speed buttons and Skip land at y=863 on a 390x844 and y=843 on a 375x667, with `useRevealScroll`
+     leaving the page alone because the top of the viewer is already readable. The owner asked for
+     speed control by name in the Round 158 brief. I drafted a fix (the pitch takes the height that
+     is left, `height: max(240px, min(calc(100dvh - 430px), 520px))` with the aspect giving the
+     width) and REVERTED it rather than ship it: it is a visual change to a game and this sandbox
+     could not drive a live match to measure the result, and the alternative of moving the control
+     row above the pitch costs no pitch size at all and may be the better answer. Needs
+     `dukb-visual-qa` with a browser: measured rectangles at 390x844 and 375x667, both options.
+   - **The viewer has no way out between kick off and full time**, and the "dead code" half of this
+     finding is not quite right, so read this before deleting anything. The classic `HalftimeScreen`
+     branch in `ClubManager.tsx` is reachable whenever `watchMode` is false while the phase is
+     `halftime`; what does not exist is any button that puts you in that state, because `onExit` is
+     only rendered at stage `done` (the Full report button). So it is unreached rather than
+     unreachable, and deleting it on the "dead code" reading risks removing the only thing that
+     renders for a save state nobody has enumerated. **Do not delete it without proving the state
+     cannot occur.**
+     The harm the finding actually named is already gone: Round 543 marks the clock on unmount, so
+     leaving the page mid-match no longer costs the minute. What is left is a genuine but small UX gap,
+     a deliberate "step away" that marks the clock and returns to the hub. I did not ship one: at
+     halftime it would drop the player on the classic dressing room rather than the hub, which is a
+     design decision, and the control row it would live near is the same one that is already below
+     the fold. Both want a browser and measured rectangles, which Round 550's walk now provides the
+     rig for.
+
 ## Claude Code (tablet) lane, CLAIMED 2026-09-10, RENUMBERED 522 to 524 after colliding with the desktop lane's 520/521
 
 **UPDATE, same day: 522 and 523 built, 524's review run and every confirmed finding fixed, all

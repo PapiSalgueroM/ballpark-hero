@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
+import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { LiveTicker } from "@/components/layout/LiveTicker";
@@ -302,6 +303,13 @@ const AppContent = () => {
       <LiveTicker />
       {shouldShowHeader(pathname) && <Header />}
       <Suspense fallback={<RouteLoader />}>
+      {/* Round 544: around the routes, inside Suspense. A render throw in one
+          game now costs that game and nothing else: the header above and the
+          global footer below both survive, and the footer is where the report a
+          bug button lives. Before this, a throw anywhere unmounted the whole
+          root and the visitor got a white page with no way off it. Keyed on the
+          path so navigating away clears it. */}
+      <RouteErrorBoundary resetKey={pathname}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
@@ -504,6 +512,7 @@ const AppContent = () => {
           three unrelated pages. Inside the boundary the footer simply waits for
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
+      </RouteErrorBoundary>
       <Footer />
       </Suspense>
     </>

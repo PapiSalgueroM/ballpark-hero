@@ -20,7 +20,8 @@ import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlo
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { simToWeek as runSimToWeek } from '@/lib/clubManagerCalendar';
+import { simToWeek as runSimToWeek, startMidSeason } from '@/lib/clubManagerCalendar';
+import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
@@ -174,9 +175,12 @@ export function useClubManager() {
      current era, which is the world this game has always started in.
      Round 303: the optional manager spec rides the same way; absent means
      the second person career this has always been. */
-  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec) => {
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
     if (!pendingClub) return;
-    const s = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager);
+    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager);
+    /* Round 549: a mid season takeover plays the run-in first, under the
+       manager before you, and hands the club over where it stands. */
+    const s = entry ? startMidSeason(fresh, entry) : fresh;
     setCareer(s);
     setActiveTab('overview');
     setPhase('hub');
@@ -184,8 +188,9 @@ export function useClubManager() {
 
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
-  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec) => {
-    const s = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
+    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
+    const s = entry ? startMidSeason(fresh, entry) : fresh;
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');
