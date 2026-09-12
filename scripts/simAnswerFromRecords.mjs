@@ -19,9 +19,21 @@
  * object without it, so checking the field alone reports a perfectly working
  * records path as broken the second time it is asked.
  *
- * Negative control: RECORDS_CONTROL=nofallthrough expects the cases that must
+ * Negative controls. RECORDS_CONTROL=nofallthrough expects the cases that must
  * NOT be confirmed to be confirmed, so it goes red against correct code and
  * proves this file can tell a confirmation from a fall-through.
+ * RECORDS_CONTROL=silent makes every function call come back with no verdict,
+ * which is the 2026-09-12 failure reproduced on demand. It proves the retry
+ * runs, that three silent tries still fail rather than passing, and that the
+ * run says so in words. It refuses to pass if it silenced nothing.
+ *
+ * IT RUNS AGAINST THE LIVE SITE, WHICH MEANS ITS RED IS NOT ALWAYS A BRANCH.
+ * Nothing here reads branch code beyond the project URL and the publishable
+ * key: every answer comes from the DEPLOYED edge functions and the live
+ * tables, so this file reports the same thing on every branch and on none.
+ * That is the same family as simConnect4ClubRecords, which CLAUDE.md already
+ * records as red for live reasons. Round 537 made the distinction visible
+ * rather than leaving the next reader to find it: see the call helper below.
  *
  * Run: node scripts/simAnswerFromRecords.mjs
  */
@@ -30,12 +42,39 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RECORDS_CONTROL || '';
-if (CONTROL && CONTROL !== 'nofallthrough') { console.error(`RECORDS_CONTROL=${CONTROL} is not a control this harness knows (nofallthrough)`); process.exit(1); }
+if (CONTROL && CONTROL !== 'nofallthrough' && CONTROL !== 'silent') { console.error(`RECORDS_CONTROL=${CONTROL} is not a control this harness knows (nofallthrough, silent)`); process.exit(1); }
 const c = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const U = c.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const K = c.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const H = { apikey: K, Authorization: `Bearer ${K}`, 'Content-Type': 'application/json' };
-const call = (fn, body) => fetch(`${U}/functions/v1/${fn}`, { method: 'POST', headers: H, body: JSON.stringify(body) }).then(r => r.json()).catch(() => ({}));
+/* A CALL THAT NEVER ANSWERED IS NOT A WRONG ANSWER, and Round 537 had to tell
+   the two apart. On 2026-09-12 this harness went red on exactly one of its
+   sixteen checks, the FIRST call it makes, with no reason string in the
+   response at all: `.catch(() => ({}))` had swallowed a transport failure and
+   the empty object then read as "not settled from records". The verdict it was
+   asking for has been cached and correct since 2026-09-06, every other call in
+   the same run succeeded, and no commit in the branch touches
+   supabase/functions, so nothing about the answer was wrong. A cold isolate on
+   the first request is what that looks like.
+   So a call that comes back with no verdict at all is retried, twice, with a
+   short backoff, and the empties are counted. A verdict is NEVER retried:
+   a wrong answer stays a failure the first time it is given, which is the
+   whole point of the file. */
+let emptyAnswers = 0, retried = 0;
+const once = (fn, body) => (CONTROL === 'silent'
+  ? Promise.resolve({})
+  : fetch(`${U}/functions/v1/${fn}`, { method: 'POST', headers: H, body: JSON.stringify(body) }).then(r => r.json()).catch(() => ({})));
+const answered = j => j && (typeof j.valid === 'boolean' || String(j.reason || '') !== '');
+const call = async (fn, body) => {
+  let j = await once(fn, body);
+  for (let attempt = 1; attempt <= 2 && !answered(j); attempt++) {
+    retried += 1;
+    await new Promise(r => setTimeout(r, 700 * attempt));
+    j = await once(fn, body);
+  }
+  if (!answered(j)) { emptyAnswers += 1; j = { ...j, reason: 'THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data' }; }
+  return j;
+};
 /* A records answer is recognised by its REASON, not by the source field: the
    field is only attached on a fresh answer, and a cached verdict returns the
    stored object without it. Checking the field alone reports a working records
@@ -117,8 +156,15 @@ const check = (round, what, ok, detail) => {
 }
 
 if (CONTROL) {
-  console.log(`\nNEGATIVE CONTROL ${CONTROL} was on; ${fail} finding(s). A control run is expected to be red.`);
+  if (CONTROL === 'silent' && (retried === 0 || emptyAnswers === 0)) {
+    console.error(`\nNEGATIVE CONTROL silent silenced nothing (${retried} retries, ${emptyAnswers} empties), so it proves nothing.`);
+    process.exit(1);
+  }
+  console.log(`\nNEGATIVE CONTROL ${CONTROL} was on; ${fail} finding(s), ${retried} retried, ${emptyAnswers} silent. A control run is expected to be red.`);
   process.exit(fail > 0 ? 0 : 1);
 }
-console.log(`\n${pass} passed, ${fail} failed`);
+console.log(`\n${pass} passed, ${fail} failed. ${retried} call(s) retried for an empty response, ${emptyAnswers} still silent after three tries.`);
+if (emptyAnswers > 0) {
+  console.error('Read the failures above as the live service, not the branch: those calls returned no verdict at all.');
+}
 process.exit(fail === 0 ? 0 : 1);
