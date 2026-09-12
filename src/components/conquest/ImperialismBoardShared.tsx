@@ -459,8 +459,10 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
           size="stage"
           showLegend={false}
         />
+        {/* The overlay's bottom padding is the landed name's room: the name
+            hangs 28px under the ring and the stage clips its overflow. */}
         {showWheel && wheel && (
-          <div data-conquest-wheel-overlay className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a0f1a]/75">
+          <div data-conquest-wheel-overlay className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a0f1a]/75 pb-7">
             <ConquestWheel spec={wheel} spinning arrowDeg={arrowDeg} reducedMotion={reducedMotion} />
           </div>
         )}
@@ -469,6 +471,15 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
             {timelineLabels[scrubIndex ?? 0]}
           </span>
         )}
+        {/* On a phone the map has to be the stage, not a strip. The four US
+            maps are 590 by 310, so at 390 wide the svg draws itself 205px
+            tall, barely a quarter of the screen. The floor below stretches
+            the svg box and preserveAspectRatio centres the drawing on its own
+            dark ground, which is the videos' framing and leaves the wheel
+            room. 64 rather than the 60 the browser harness asks for: a floor
+            set at the number being measured is a coin toss, and 64vw is 250px
+            against the 234px the check wants at 390 wide. */}
+        <style>{`@media (max-width: 639px) { [data-conquest-stage] svg[data-map="conquest-region-map"] { min-height: 64vw; } }`}</style>
       </div>
 
       <ConquestStandingsStrip

@@ -45,6 +45,13 @@ const CY = 100;
 const R = 66;
 const W = 40;
 const DEFAULT_SPIN_MS = 1600;
+/**
+ * How wide the ring draws. It has to sit INSIDE the stage, not over its
+ * edges: the phone stage is 64vw tall, the landed name hangs 28px under the
+ * ring and the stage clips what it cannot hold, so half the screen's width is
+ * the most the ring can take at 390 wide and still show its own name.
+ */
+const RING_WIDTH = 'min(200px, 50vw)';
 
 /** The centre of wedge i in degrees clockwise from three o'clock. */
 function wedgeCentreDeg(i: number, n: number): number {
@@ -112,7 +119,7 @@ export default function ConquestWheel({
       data-landing-team={landing.teamId}
       data-landed={landed ? 'yes' : 'no'}
       className="relative mx-auto"
-      style={{ width: 'min(240px, 62vw)', aspectRatio: '1 / 1' }}
+      style={{ width: RING_WIDTH, aspectRatio: '1 / 1' }}
       role="img"
       aria-label={`The wheel lands on ${landing.name}`}
     >
