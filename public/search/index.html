@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Search Every Game - DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/search" data-rh="true"><meta name="description" content="Search all of the free sports games on DoUKnowBall by name, sport or the kind of game it is." data-rh="true"><meta name="robots" content="noindex, follow" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/search" data-rh="true"><meta property="og:title" content="Search Every Game - DoUKnowBall" data-rh="true"><meta property="og:description" content="Search all of the free sports games on DoUKnowBall by name, sport or the kind of game it is." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Search Every Game - DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Search all of the free sports games on DoUKnowBall by name, sport or the kind of game it is." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<h1>Search every game</h1>
+<p>All 121 of them. Type a name, a sport, or the kind of game you are after. Close enough spelling is fine.</p>
+<p>121 games, sport by sport. Start typing to narrow it down.</p>
+<h2>Soccer (33)</h2>
+<a href="/budget-builder">💵 $1B Budget Builder One billion dollars, real values, eleven slots. Spend it well</a>
+<a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board</a>
+<a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
+<a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
+<a href="/who-am-i">🕵️ Who Am I? Hunt the secret player with similarity scores</a>
+<a href="/club-manager">💼 Club Manager Manage any of 330 real clubs across 20 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race</a>
+<a href="/soccer-conquest">🗺️ Soccer Conquest DAILY Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent</a>
+<a href="/stadium-tycoon">🏟️ Stadium Tycoon Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom</a>
+<a href="/wonderkid-factory">🔭 Wonderkid Factory Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment</a>
+<a href="/world-xi">🌍 World XI Pick a formation, fill 11 random countries</a>
+<a href="/player-bingo">🎱 Player Bingo Complete a line on a 5x5 board before 3 strikes</a>
+<a href="/sports-bingo">🎫 Sports Bingo DAILY Open packs of real players on a timer, mark the squares they satisfy</a>
+<a href="/alphabet-sprint">⚡ Alphabet Sprint Name a player per letter against the clock</a>
+<a href="/clue-auction">💰 Clue Auction Buy clues, save points, name the secret player</a>
+<a href="/rarity-round">💎 Rarity Round DAILY Name the answer nobody else would. Rarest wins</a>
+<a href="/missing-xi">🧩 Missing XI DAILY Name the missing player from a famous real lineup</a>
+<a href="/sign-the-player">🔨 Sign the Player A blind auction: outbid two AI moguls, £1B each, then sim the showdown</a>
+<a href="/footle">🎯 Footle Guess the soccer player from stats</a>
+<a href="/career">📜 Career Quiz Guess from career history</a>
+<a href="/higher-lower">📊 Higher or Lower Compare all-time career stats</a>
+<a href="/connections">🔗 Connections Find groups of 4 connected players</a>
+<a href="/build-your-xi">⚽ Build Your XI Create a lineup, get AI rated</a>
+<a href="/football-connect-4">🔴 Connect 4 Soccer trivia meets Connect 4</a>
+<a href="/free-kick">🥅 Free Kick DAILY Aim it, bend it, beat the wall and the keeper</a>
+<a href="/soccer-grid">⚽ Soccer Grid DAILY 3×3 grid puzzle with rarity scores</a>
+<a href="/world-cup-bracket">🌍 2026 Bracket Build the 2026 bracket and score it against how the World Cup really went</a>
+<a href="/soccer-career">⚽ Soccer Career Create your look, sign for your boyhood club, get rich, get shady, retire a legend.</a>
+<a href="/fantasy-draft">🧑‍💼 Fantasy Draft Draft your ultimate XI against an AI opponent</a>
+<a href="/transfer-path">🔄 Transfer Path DAILY Connect two players through shared clubs</a>
+<a href="/squad-deal">🏟️ Squad Deal Build an XI out of mystery boxes</a>
+<a href="/search-and-discard">🔎 Search and Discard The squad duel: keep one, bin two, settle it in a season</a>
+<a href="/gauntlet-draft">⚔️ Gauntlet Draft DAILY Pick your XI five cards at a time, then survive a five round cup</a>
+<a href="/player-stock-market">📈 Player Stock Market DAILY Open a past season, buy an XI on stats alone, then roll the years forward</a>
+<h2>Pro Football (10)</h2>
+<a href="/perfect-season-nfl">🏆 17-0 Perfect Season Draft an offense across eras, run the table</a>
+<a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
+<a href="/nfl-my-career">🌟 NFL My Career Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope</a>
+<a href="/football-grid">🏈 NFL Grid DAILY 3×3 grid puzzle with rarity scores</a>
+<a href="/nfl-career">🏈 NFL Career Path DAILY Guess the NFL player from clues</a>
+<a href="/nfl-higher-lower">📊 NFL Higher or Lower DAILY Which star scored more career touchdowns?</a>
+<a href="/nfl-connections">🧩 NFL Connections DAILY Group 20 players into four hidden connections</a>
+<a href="/nfl-connect-4">🏈 NFL Connect 4 Football trivia meets Connect 4</a>
+<a href="/missing-eleven">🕵️ Missing Eleven DAILY Name the missing starter from a famous Super Bowl offense</a>
+<a href="/conquest">🗺️ NFL Conquest DAILY The imperialism map: winners annex whole empires until one team rules America</a>
+<h2>College Sports (7)</h2>
+<a href="/college-grid">🎓 College Grid DAILY College football 3×3 grid puzzle</a>
+<a href="/guess-the-college">🏫 Guess The College DAILY Guess the D1 school from clues</a>
+<a href="/guess-cbb-team">🏀 Guess The CBB Program DAILY Guess the college basketball program</a>
+<a href="/cbb-grid">🔲 College Basketball Grid DAILY Fill the 3×3 with players who match the school and the achievement</a>
+<a href="/cfb-higher-lower">📊 CFB Higher or Lower DAILY Which QB threw for more college yards?</a>
+<a href="/cfb-dynasty">🏟️ CFB Dynasty Full program sim: NIL recruiting, the portal, the 12-team Playoff, dynasties</a>
+<a href="/cbb-dynasty">🏀 CBB Dynasty College hoops sim: one-and-dones, conference tournaments, 32-team March, Cinderella</a>
+<h2>Pro Basketball (16)</h2>
+<a href="/buzzer-beater">🏀 Buzzer Beater DAILY Pick the arc, beat the hand, drop ten jump shots</a>
+<a href="/perfect-season-nba">🏆 82-0 Perfect Season Spin team seasons, draft a six man rotation</a>
+<a href="/stat-detective">🔎 Stat Detective Name the player behind the mystery stat line</a>
+<a href="/nba-stat-line">📊 NBA Stat Line DAILY Blend five real seasons into a target per 36 line</a>
+<a href="/nba-starting-5">🏀 NBA Starting 5 Build a lineup with stat challenges</a>
+<a href="/nba-connect-4">🏀 NBA Connect 4 NBA trivia meets Connect 4</a>
+<a href="/nba-chain">🔗 NBA Chain Build a chain of connected players</a>
+<a href="/nba-higher-lower">📊 NBA Higher or Lower DAILY Which legend scored more career points?</a>
+<a href="/nba-grid">🔲 NBA Franchise Grid DAILY Fill the 3×3 with players who match both teams</a>
+<a href="/nba-connections">🧩 NBA Connections DAILY Group 20 players into four hidden connections</a>
+<a href="/nba-career">📜 NBA Career Path DAILY Guess the NBA player from progressive clues</a>
+<a href="/missing-five">🕵️ Missing Five DAILY Name the missing starter from a famous real lineup</a>
+<a href="/perfect-lineup-nba">🏀 Perfect Lineup: NBA DAILY Build a starting 5 under random team &amp; era constraints, then simulate</a>
+<a href="/conquest-nba">🗺️ NBA Conquest DAILY Imperialism mode: winners annex whole empires until one team rules the map</a>
+<a href="/nba-front-office">🏢 NBA Front Office Full GM sim: cap, trades, the play-in, best-of-7 wars, dynasties</a>
+<a href="/nba-my-career">🌟 NBA My Career Draft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call</a>
+<h2>Baseball (10)</h2>
+<a href="/perfect-season-mlb">🏆 162-0 Perfect Season Spin, draft across eras, chase perfection</a>
+<a href="/baseball-career">⚾ Career Path DAILY Guess the baseball player</a>
+<a href="/mlb-higher-lower">📊 MLB Higher or Lower DAILY Which legend hit more career home runs?</a>
+<a href="/mlb-grid">🔲 MLB Franchise Grid DAILY Fill the 3×3 with legends who match both teams</a>
+<a href="/mlb-connect-4">⚾ MLB Connect 4 Baseball trivia meets Connect 4</a>
+<a href="/conquest-mlb">🗺️ MLB Conquest DAILY Imperialism at the ballpark: winners annex whole empires, two invaders start landless</a>
+<a href="/mlb-my-career">🌟 MLB My Career Draft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field</a>
+<a href="/mlb-front-office">🏢 MLB Front Office Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties</a>
+<a href="/missing-nine">🕵️ Missing Nine DAILY Name the missing starter from a famous World Series batting order</a>
+<a href="/baseball-connections">⚾ Connections DAILY Group baseball players</a>
+<h2>Hockey (11)</h2>
+<a href="/perfect-season-nhl">🏆 82-0 Perfect Season Spin franchises and eras, chase 82-0</a>
+<a href="/puck-detective">🏒 Puck Detective DAILY Guess the mystery NHL player with attribute clues</a>
+<a href="/hockey-grid">🥅 NHL Franchise Grid DAILY 3x3 grid with NHL franchises and career milestones</a>
+<a href="/hockey-career">🏒 Career Path DAILY Guess the hockey player</a>
+<a href="/hockey-higher-lower">🏒 Higher / Lower DAILY Compare career points</a>
+<a href="/nhl-connections">🧩 NHL Connections DAILY Group 20 players into four hidden connections</a>
+<a href="/conquest-nhl">🗺️ NHL Conquest DAILY Imperialism on ice: winners annex whole empires, five invaders start landless</a>
+<a href="/nhl-my-career">🌟 NHL My Career Draft day to the rafters. 5 positions, 100+ crossroads, and an envelope on the bench</a>
+<a href="/nhl-front-office">🏢 NHL Front Office Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup</a>
+<a href="/nhl-connect-4">🏒 NHL Connect 4 Hockey trivia meets Connect 4</a>
+<a href="/perfect-lineup-nhl">🏒 Perfect Lineup: NHL DAILY Build a dream line under random team &amp; era constraints, then simulate</a>
+<h2>Formula 1 (4)</h2>
+<a href="/f1-driver">🏎️ Guess The F1 Driver DAILY Guess the mystery F1 driver from clues</a>
+<a href="/f1-higher-lower">📊 F1 Higher or Lower DAILY Which driver won more Grands Prix?</a>
+<a href="/f1-constructor">🏗️ Guess The Constructor DAILY Guess the mystery F1 team from clues</a>
+<a href="/perfect-lineup-f1">🏎️ Perfect Lineup: F1 DAILY Build a 5-driver dream squad under random team/era/country constraints</a>
+<h2>Tennis (3)</h2>
+<a href="/guess-tennis-player">🎾 Guess The Player DAILY Guess the mystery tennis player from clues</a>
+<a href="/tennis-chain">🔗 Tennis Chain Build a chain of Grand Slam defeats</a>
+<a href="/tennis-higher-lower">📊 Tennis Higher or Lower DAILY Which legend won more Grand Slam titles?</a>
+<h2>Golf (2)</h2>
+<a href="/guess-the-golfer">⛳ Guess The Golfer DAILY A mystery major champion, six clues, fewer is better</a>
+<a href="/golf-higher-lower">📊 Golf Higher or Lower DAILY Which legend won more majors?</a>
+<h2>Aussie Rules (1)</h2>
+<a href="/afl-higher-lower">📊 AFL Higher or Lower DAILY Which legend kicked more career goals?</a>
+<h2>NASCAR (2)</h2>
+<a href="/guess-nascar-driver">🏁 Guess The Driver DAILY Guess the mystery NASCAR driver from clues</a>
+<a href="/nascar-chain">🔗 NASCAR Chain Build a chain of Cup champions</a>
+<h2>Combat Sports (2)</h2>
+<a href="/ufc">🥊 UFC Guesser Guess the UFC fighter</a>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other</a>
+<h2>World &amp; Olympic Games (20)</h2>
+<a href="/rank-em">📊 Rank 'Em DAILY Put five players in order by a career stat, most to fewest</a>
+<a href="/teammates">🤝 Teammates or Not? Were they ever teammates?</a>
+<a href="/olympics">🏅 The Medal Games DAILY Guess the mystery athlete from clues</a>
+<a href="/guess-the-year">📅 Guess The Year DAILY What year did these happen?</a>
+<a href="/guess-the-nation">🌍 Guess The Nation DAILY Identify the mystery sporting nation</a>
+<a href="/hof-or-bust">🏆 Hall of Fame or Bust? DAILY Is this player a legend or a letdown?</a>
+<a href="/champ-or-not">🏆 Champ or Not DAILY Ten title claims, true or false. Spot the fakes</a>
+<a href="/whod-they-beat">🥈 Who'd They Beat? DAILY The champ is given. Name the team they beat in the finals</a>
+<a href="/silverware-sort">🥇 Silverware Sort DAILY Stack five teams in order by real title counts</a>
+<a href="/hall-of-champions">🏛️ Hall of Champions Idle museum: buy real championships, fill ten wings, earn while you are away</a>
+<a href="/idle-arena">👆 Idle Arena Tap to score, sign a squad that scores for you, lift trophies, earn while you are away</a>
+<a href="/face-off">⚡ Face Off DAILY Two names, one stat, ten seconds. Beat the rival across ten sports</a>
+<a href="/score-predictor">📊 Score Predictor DAILY Predict the final score of famous matches</a>
+<a href="/list-quiz">📝 Name Them All How many champions can you name?</a>
+<a href="/minefield">💣 Minefield DAILY Click everyone who belongs. Some tiles explode</a>
+<a href="/sports-millionaire">💰 Sports Millionaire DAILY Climb a 15-question money ladder with lifelines</a>
+<a href="/quiz-board">🎓 Sports Quiz Board DAILY Five categories, $200 to $1000. Wrong answers cost you</a>
+<a href="/ball-iq">🧠 Ball Knowledge IQ DAILY Twelve questions, getting harder. Do you actually know ball?</a>
+<a href="/emoji-guess">🤔 Emoji Guess DAILY Five football riddles told entirely in emoji</a>
+<a href="/mystery-box">📦 Mystery Box DAILY Open 15 packs, keep or bin, build the best XI your luck allows</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

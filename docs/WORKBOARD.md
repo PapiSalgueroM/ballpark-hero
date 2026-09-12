@@ -19,10 +19,17 @@ How it works:
   dead session cannot squat on work.
 - ROUND NUMBERS ARE CLAIMED HERE TOO (added after 311 and 313 both collided): when a lane
   starts a round it writes "next: Round NNN (lane)" on its own claim line and pushes,
-  and the other lane takes NNN+1. NEXT FREE NUMBER: 537 (see the 2026-09-11 desktop note directly below: 528 is the desktop
+  and the other lane takes NNN+1. NEXT FREE NUMBER: 540 (see the 2026-09-11 desktop note directly below: 528 is the desktop
   lane's hub links round, 529 to 536 are a desktop BLOCK, the tablet lane continues at 537; checked
-  against origin/main and the tablet branch on 2026-09-11). The Claude Code lane holds 506 to 508 and the Codex lane holds 509 to 512, see
-  both claims below.
+  against origin/main and the tablet branch on 2026-09-11. 537 is now spent: it is the tablet
+  lane's leaderboard Eastern day round, built and pushed as "528" before that note existed and
+  renumbered to 537 on merging it, see the tablet renumbering note below). The Claude Code lane
+  holds 506 to 508 and the Codex lane holds 509 to 512, see both claims below.
+  A FOURTH set of labels exists and is not on main: `origin/codex/round-526-*` through
+  `origin/codex/round-535-*`, ten Codex branches carrying the same numbers the desktop block and
+  the tablet lane are using. None of them is an ancestor of main (checked 2026-09-11). Before
+  anyone merges one of those, read this line: the labels collide and the merge order, not the
+  number, decides what a round is.
 
   **WHAT IS ACTUALLY ON origin/main, and a correction worth reading before you repeat my
   mistake.** main contains every round through 505 AND Round 509, verified with
@@ -261,6 +268,156 @@ Both builders write their OWN new harness file rather than extending a shared on
 Round 525's three parallel builders each extended the same two shared harnesses without knowing
 about each other and every one of them numbered itself "section 5", which cost a careful manual
 splice to reconcile. NEXT FREE NUMBER after this claim: 528.
+
+### CLAIMED 2026-09-11, Round 537 (built and pushed as "528"), a live P1 found while scoping spec section 104: THE LEADERBOARD'S DAY ENDS AT 8PM
+
+**RENUMBERED 528 to 537, tablet lane, 2026-09-11.** This round was claimed, built, applied to the
+production database and pushed under the label 528 while 528 was the next free number on the copy
+of this board the tablet lane could see. The desktop lane's note above, written the same night,
+gives 528 to its own hub links round, which is live on main, and gives the tablet lane 537 onward.
+Live beats unmerged, so this one moves and theirs stays. What that renumbering touches and what it
+deliberately does not:
+
+- Changed: this heading, the round's entry in `docs/PROJECT-STATE.md`, and the `Round 528:` line at
+  the top of `supabase/migrations/20260911_leaderboard_eastern_day.sql`.
+- NOT changed: the commit subjects, which say 528 and stay that way. Rewriting pushed history to
+  fix a label is a bad trade, and the desktop lane's own rule is that numbers are labels. Anyone
+  reading `git log` for this work is looking for the leaderboard, not the number.
+- NOT changed: the migration filename. It is dated, not numbered, and it has already run against
+  production, so its name is now a fact about that database rather than a choice.
+
+Found by reading `global_leaderboard`'s definition before building the Week and Month views spec
+section 104 asks for, and worth more than that feature: **the shared leaderboard's "Today" rolls
+over at 20:00 Eastern, not midnight**, because it is the one surface Round 301's move to Eastern
+days never reached.
+
+**The mechanism.** `public.game_completions.completed_on` defaults to
+`((now() AT TIME ZONE 'utc'))::date` and `global_leaderboard` filters
+`gc.completed_on = (now() at time zone 'utc')::date`. Writer and reader agree with each other, so
+nothing looks broken from inside that pair. They just both disagree with the rest of the site:
+`getTodayET()` is what 74 files use, and Round 301 specifically moved the Games Today clock "from
+UTC to the same Eastern day as everything else". The leaderboard was not brought along.
+
+**Measured on production, 2026-09-11, not argued.** Over the last 30 days, 72,460 of 356,808
+completions (20.3%) sit under a UTC day that is not their Eastern day. Grouped by Eastern hour
+over 14 days the signature is exact, with no noise in it at all:
+
+| Eastern hour | plays | filed to the wrong Eastern day |
+|---|---|---|
+| 00 through 19 | 193,636 | **0** |
+| 20 | 13,977 | 13,977 |
+| 21 | 12,261 | 12,261 |
+| 22 | 10,199 | 10,199 |
+| 23 | 8,090 | 8,090 |
+
+Every evening play, none of the rest. 44,527 of 193,636 plays in that window, 23%.
+
+**Why it is a P1 and not a curiosity.** 19:00 and 20:00 Eastern are the site's two busiest hours
+(14,356 and 13,977 plays). So the Today board wipes and restarts at the exact peak of the US
+evening: a player climbing it at 7:55pm watches their standing reset at 8pm, and every game they
+play after that counts toward tomorrow's board while their streak, their played-today and their
+daily puzzle all still say today. Those two halves of the same screen disagree for four hours a
+night, every night.
+
+**The fix, and the one decision in it.** Read the day from `created_at` (a real timestamptz) in
+Eastern at read time rather than trusting `completed_on`, in `global_leaderboard`, `global_rank`
+and the `player_ranks` materialized view from `20260831_disk_io_leaderboard_cache.sql`, plus an
+expression index so the filter still uses one. That corrects HISTORY as well as the future
+without rewriting a single stored row, and avoids leaving `completed_on` with mixed meaning
+(UTC before the change, Eastern after), which is what a default swap plus backfill would do.
+**No row is rewritten and no score is retroactively subtracted**, matching the standing precedent
+from the 61,964 point leak.
+
+**CAUGHT IN THE ACT, 2026-09-11 at 23:48 Eastern, which is inside the broken window.** The
+aggregate above says one play in five. What that actually does to the screen, measured against
+production at that minute, is worse than the percentage suggests:
+
+| | at 23:48 Eastern |
+|---|---|
+| day the board was using | 2026-09-11 (UTC) |
+| day the rest of the site was using | 2026-09-10 (Eastern) |
+| players shown on the Today board | **111** |
+| players who had actually played that Eastern day | **407** |
+| plays counted | 2,844 of 14,933 |
+
+So 296 of the day's 407 players, 73 percent, were erased from a board they had earned a place
+on. And the board was not merely short, it was **wrong about who was winning**. Top five as the
+site served it against top five computed on the Eastern day, same minute:
+
+| Rank | the board said | the truth was |
+|---|---|---|
+| 1 | RowdyTifo-71, 527 | **HumbleUtility-87, 754 over 14 games** |
+| 2 | SlickTifo-43, 325 | **IcyUtility-44, 599 over 12** |
+| 3 | LuckyWorldie-59, 303 | **SundayDime-76, 539** |
+| 4 | RowdyPaint-78, 302 | RowdyTifo-71, 527 |
+| 5 | SilkyGlueguy-88, 293 | RowdyPaint-78, 511 |
+
+The day's actual top three did not appear at all, the player shown first was really fourth, and
+RowdyPaint-78 was shown 302 points from 5 games while really holding 511 from 8. The corrected
+query is the second column and was run read only, before any DDL, which is how the fix was
+verified rather than hoped.
+
+**Two things checked before building, because getting either wrong reintroduces a P0.** First,
+`game_completions` is indexed on `completed_on` twice (`idx_game_completions_day_game`,
+`idx_game_completions_player_day`) and **not at all on `created_at`**, so simply swapping the
+filter would drop to a sequential scan over 356k rows, on the one project that has already had a
+Disk IO budget P0: Round 370 exists because `global_rank` was burning 1.9 billion buffer blocks
+across 1.5 million calls. The round adds the matching index in the same migration. Second, the
+expression is safe to index: `timezone(text, timestamptz)` is **IMMUTABLE** in Postgres (only the
+one argument session-timezone form is merely STABLE), confirmed against `pg_proc.provolatile`
+rather than assumed, so an index on `((created_at AT TIME ZONE 'America/New_York')::date)` is
+accepted and the rewritten filter still uses one.
+
+`scripts/simLeaderboardCache.mjs` (Round 370) already fences that the cached `player_ranks`
+agrees with the live `global_leaderboard` on both rank and points, so it will catch this round if
+it changes one surface and not the other. All four surfaces move together or the fence goes red:
+the two functions, the materialized view, and nothing else (the `refresh-player-ranks` cron at
+`*/5` keeps working unchanged).
+
+DB work goes through the Supabase MCP with the SQL saved under `supabase/migrations/`, and
+`get_advisors` after, per CLAUDE.md. Spec section 104's Week and Month views ride along in the
+same round, since they are the same predicate and would have inherited this exact bug if they had
+been built first. NEXT FREE NUMBER after this claim: 529 (superseded, see the renumbering note at
+the top of this claim: the desktop block takes 529 to 536 and this round became 537).
+
+### CLAIMED 2026-09-11, Round 538, tablet lane: the gauntlet draft reaches the NHL and MLB
+
+Straight off the desktop lane's list for this lane ("the NHL and MLB gauntlet drafts you named as
+follow ups") and straight down the one engine many sports rule. The engine is already lifted:
+`src/lib/gauntletEngine.ts` holds `GauntletConfig<P>` and both existing boards are descriptors
+over it, `gauntletDraftNba.ts` over `NBA_POOL` and `gauntletDraftNfl.ts` over `FO_TEAMS`. So this
+round is two descriptors, two thin pages, two SEO entries and the harness coverage, and **no new
+engine**. If I find myself writing loop or scoring logic in a descriptor, that is the Round 426
+mistake (the same roster refill bug fixed twice because CFB and CBB were two copies of one idea)
+and it goes into the shared file instead, where the NBA and NFL boards get it too.
+
+Data already in the repo, checked before claiming rather than after:
+- NHL: `src/data/nhlPerfectLineupPool.ts`, `NHL_POOL` plus `NHL_LINEUP_CONFIG`, the same pairing
+  `gauntletDraftNba.ts` consumes. 58 skaters.
+- MLB: `src/data/mlbFoPlayers.ts`, the front office shape `gauntletDraftNfl.ts` consumes.
+
+Two things to be honest about up front. The NHL pool is 58 players, which is small next to the
+NBA's, so the round has to measure whether a draft over it is actually varied or whether the same
+names come back every run, and say so rather than shipping a board that repeats itself. And the
+ratings in the front office data are proxies, exactly as recorded in `gauntletDraftNfl.ts`'s scope
+comment, so the MLB descriptor inherits that caveat and must not claim more precision than it has.
+
+Files: `src/lib/gauntletDraftNhl.ts`, `src/lib/gauntletDraftMlb.ts`, `src/pages/NhlGauntletDraft.tsx`,
+`src/pages/MlbGauntletDraft.tsx`, the two routes in `src/App.tsx`, two `GameDef` entries in
+`src/data/gameRegistry.ts`, two files under `src/data/gameContent/`, and the existing
+`scripts/simGauntletDraft.mjs` extended to all four sports. Desktop lane: nothing here touches
+your 529 to 536 files.
+
+### CLAIMED 2026-09-11, Round 539, tablet lane: the zero facts fence reaches every game
+
+The permanent half of Anthony's "correct info on all basis". The desktop lane's 531 is a sweep,
+which fixes what is wrong today; this is the fence that stops the next one, and the two are
+complementary rather than overlapping (a sweep is a date, a fence is a rule). `simNoZeroFacts`
+exists and covers a subset; this round takes it to every game that prints a real fact, and its
+negative control has to actually fire, per the harness rules in CLAUDE.md. Desktop lane: if your
+531 wants this fence moved earlier, say so here and take it, I will pick something else.
+
+NEXT FREE NUMBER after these two claims: 540.
 
 ### MASTER SPEC TRIAGE, done 2026-09-11 while 526 and 527 built. Read this before picking spec work.
 

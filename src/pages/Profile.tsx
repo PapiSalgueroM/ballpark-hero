@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,6 +19,7 @@ import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
+import AchievementCase from '@/components/profile/AchievementCase';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -448,6 +449,14 @@ export default function Profile() {
 
   const earnedCount = badges.filter(b => b.earned).length;
 
+  /* Round 527: the saved best scores, keyed by slug, for the achievement
+     case. Memoised off the loaded rows so the case's read effect is not
+     handed a new object on every render. */
+  const bestScoreByGame = useMemo(
+    () => Object.fromEntries(bestScores.map(s => [s.game_type, s.best_score])),
+    [bestScores],
+  );
+
   const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;
 
   /* ── WC champion ── */
@@ -755,6 +764,20 @@ export default function Profile() {
               </div>
             </CardContent>
           </Card>
+          )}
+
+          {/* ═══════════════ 4b. ACHIEVEMENTS (Round 527) ═══════════════ */}
+          {/* Own profile only, for the same reason the badges above are: the
+              facts behind them are this browser's streak state and this
+              browser's own completion rows, which say nothing about anybody
+              else. Everything in the case is DERIVED, so it writes nothing
+              and cannot disturb the scoring pipeline it reads. */}
+          {isOwnProfile && (
+            <AchievementCase
+              profile={profile}
+              bestScoreByGame={bestScoreByGame}
+              points={totalPoints}
+            />
           )}
 
           {/* ═══════════════ WC Predictor Card ═══════════════ */}

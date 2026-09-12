@@ -54,7 +54,74 @@ export interface GauntletRoundDef {
   rating: number;
 }
 
-export interface GauntletConfig<P> {
+/**
+ * Round 538: how a sport talks about itself, so one board component can draw
+ * every sport instead of one page per sport.
+ *
+ * WHY THIS IS HERE AT ALL. Round 520 lifted the RULES into this file and then
+ * left NbaGauntletDraft.tsx and NflGauntletDraft.tsx as two 230 line pages
+ * that were 184 lines identical. That is the Round 426 mistake exactly, the
+ * one CLAUDE.md names (the same roster refill bug fixed twice because CFB and
+ * CBB were two copies of one idea), and adding a third and fourth copy for
+ * the NHL and MLB would have made it four. So the page is lifted too, into
+ * src/components/gauntlet/GauntletBoard.tsx, and everything that legitimately
+ * differs between sports lands in the fields below.
+ *
+ * The split is the one CLAUDE.md draws. What may differ: the data, the
+ * positions, the events and the language around them. What must not: the
+ * loop, the save shape, the daily record shape, the scoring pipeline, the how
+ * to play affordance and the result screen, all of which stay in this file
+ * and in the one board for every sport.
+ */
+export interface GauntletPresentation<P> {
+  /** 'Gauntlet Draft: NHL'. Used in the shell, the share text and the grid. */
+  gameName: string;
+  /** '/nhl-gauntlet-draft'. */
+  gamePath: string;
+  emoji: string;
+  /** The bare noun for a finished squad in this sport, no article: 'five',
+   *  'offense', 'line', 'lineup'. The board writes "your {squadNoun}",
+   *  "a 92 rated {squadNoun}" and "the same {squadNoun} always runs the same
+   *  gauntlet", so it has to read right in all three. */
+  squadNoun: string;
+  /** What the slots are, after the count, which the board derives from the
+   *  formation rather than taking on trust: 'starting five slots',
+   *  'starting offense slots (QB, two RB, three WR, TE)'. */
+  slotsPhrase: string;
+  /** How a level game is settled IN THIS SPORT'S OWN WORDS. The engine's
+   *  mechanism is the same everywhere (an extra burst, then a weighted
+   *  decider), but calling that a shootout in basketball is a small lie on
+   *  the screen, and Round 522 shipped exactly that on the NFL board.
+   *  `phrase` completes "A level game goes to ...". */
+  tiebreak: { phrase: string; won: string; lost: string };
+  /** The line under a card: 'Oilers · 1980s', 'Kansas City Chiefs'. */
+  subtitleOf: (p: P) => string;
+  /** The position flash on a card. */
+  positionOf: (p: P) => string;
+  /** Card tint floors, gold then violet then sky, anything below is grey.
+   *  Per sport because a curated legends pool (84 to 99) and a whole league's
+   *  roster (66 to 97) do not mean the same thing by gold. */
+  tierFloors: readonly [number, number, number];
+  /**
+   * DISPLAY ONLY: the engine deals in goals, small integers off one shared
+   * model that reads as a real hockey or soccer score and reads as nonsense
+   * on a basketball scoreboard. Round 522 shipped "4 - 2" as an NBA result.
+   * Each sport maps a goal count onto its own scale here.
+   *
+   * THIS MUST BE STRICTLY INCREASING, because the winner is decided from the
+   * goals and only then drawn through this: a map that was not increasing
+   * could print a losing scoreline over a won match. simGauntletEngine
+   * asserts that over the whole range rather than trusting the comment.
+   */
+  scoreline: (goals: number) => number;
+  /** Added to the winner's displayed score when a level game went to the
+   *  decider, so a sport that cannot end level does not show a level board.
+   *  A hockey shootout winner really is recorded a goal up, so 1 there; a
+   *  field goal for the NFL, a possession for the NBA, a run for the MLB. */
+  tiebreakBump: number;
+}
+
+export interface GauntletConfig<P> extends GauntletPresentation<P> {
   /** Slug for the daily record key and useGameCompletion, e.g. 'gauntlet-draft',
    *  'nba-gauntlet-draft', 'nfl-gauntlet-draft'. */
   gameId: string;
@@ -223,6 +290,35 @@ export function runGauntlet<P>(config: GauntletConfig<P>, squad: (P | null)[]): 
   const champion = cleared === config.rounds.length;
   const score = Math.min(100, cleared * 16 + (champion ? 20 : 0));
   return { rating, matches, roundsCleared: cleared, champion, score };
+}
+
+/**
+ * Round 538: the scoreboard a sport actually shows for a match.
+ *
+ * Two things it is careful about. The winner was already decided from the
+ * goals, upstream, so this only dresses the numbers and can never change who
+ * won. And a sport that cannot end level does not get shown a level board:
+ * when the decider settled it, the winner takes the sport's own smallest
+ * winning margin on top.
+ *
+ * It lives in the engine, not in the board, so the running screen, the result
+ * list and the shared emoji grid all read the same scoreline. Three places
+ * printing the same match is exactly how they drift.
+ */
+export function displayScore<P>(config: GauntletConfig<P>, m: GauntletMatch): { mine: number; theirs: number } {
+  const mine = config.scoreline(m.yourGoals);
+  const theirs = config.scoreline(m.theirGoals);
+  if (m.wonOnPens === null) return { mine, theirs };
+  return m.wonOnPens
+    ? { mine: mine + config.tiebreakBump, theirs }
+    : { mine, theirs: theirs + config.tiebreakBump };
+}
+
+/** One match as a line of text, for the result list and the share grid. */
+export function matchLine<P>(config: GauntletConfig<P>, m: GauntletMatch): string {
+  const s = displayScore(config, m);
+  const decided = m.wonOnPens === null ? '' : `, ${(m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost).toLowerCase()}`;
+  return `${m.round.name}: ${s.mine}-${s.theirs} v ${m.round.opp}${decided}`;
 }
 
 /**

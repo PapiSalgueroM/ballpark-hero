@@ -467,7 +467,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
   '/nba-gauntlet-draft': {
     intro: [
       "The draft mode, NBA style: five picks, one per starting five slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
-      "Then the cup begins. Your finished five runs five knockout rounds against ever stronger invented opposition, rated 85 up to 101, with extra time and a shootout when the game is level.",
+      "Then the cup begins. Your finished five runs five knockout rounds against ever stronger invented opposition, rated 85 up to 101, and overtime when the game is level.",
       "The run is decided entirely by the five you drafted: the same lineup always runs the same gauntlet, so every pick is the game.",
     ],
     howToPlay: [
@@ -480,7 +480,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
       "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
       "No player is dealt twice in one draft.",
-      "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to extra time and then a shootout, and replaying the same lineup replays the same cup.",
+      "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to overtime, and replaying the same lineup replays the same cup.",
       "Opposition ratings climb 85, 89, 93, 97, 101. A bargain five usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in ten.",
     ],
     example: [

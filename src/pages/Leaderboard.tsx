@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { getCurrentPlayerName, publicName } from '@/lib/completions';
@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { CATEGORIES } from '@/data/gameRegistry';
 
 import PageSeo from '@/components/seo/PageSeo';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -57,7 +58,74 @@ const SPORT_OPTIONS: SportOption[] = [
   })),
 ];
 
-type Period = 'today' | 'alltime';
+/* Round 537: week and month are TRAILING windows, the last 7 and the last 30
+   Eastern days, not calendar weeks or months. The labels say "7 Days" and
+   "30 Days" rather than "This Week" for that reason: a trailing window is what
+   the question "am I climbing" actually means, and a label that says week while
+   the query means something else is the kind of small lie this repo does not
+   ship. The day itself is Eastern everywhere now; before Round 537 this board
+   was the one surface still rolling over at 20:00 Eastern.
+
+   Today and All Time are the two windows this page loads on mount; the two new
+   ones are fetched only when their own tab is opened. Round 370 exists because
+   this query family was costing the project its Disk IO budget, and doubling
+   the board scans on every leaderboard load would have walked back into it.
+
+   Round 540 correction, because the sentence that used to be here was wrong and
+   a later session would have trusted it. It said Today and All Time were
+   "served by the cached player_ranks view". Read off pg_proc on production:
+   global_leaderboard does not reference player_ranks at all, only global_rank
+   does. So the two eager board calls were always live scans, and the choice
+   below is between two live board scans and four, not between none and two. The
+   decision still holds on those numbers. The cache is real, it just sits under
+   the personal rank card rather than under the board. */
+type Period = 'today' | 'week' | 'month' | 'alltime';
+
+const ALL_PERIODS: Period[] = ['today', 'week', 'month', 'alltime'];
+const EAGER_PERIODS: Period[] = ['today', 'alltime'];
+
+/* Round 540: undefined means NOT LOADED YET and an array means loaded, even
+   when it is empty. Round 537 used [] for both, so every one of these was the
+   same value: a window still in flight, a window whose request failed, and a
+   window that genuinely has nobody in it. The page then told a player "No
+   scores in the last 7 days. Be the first!" during the fetch and again after a
+   500, which is two different lies with the same words. */
+type Board = BoardRow[] | undefined;
+type Rank = MyRank | null | undefined;
+
+const blank = <T,>(v: T): Record<Period, T> => ({ today: v, week: v, month: v, alltime: v });
+
+const mapBoard = (res: any): BoardRow[] =>
+  Array.isArray(res?.data)
+    ? res.data.map((r: any) => ({
+        rank: Number(r.rank),
+        /* Round 318: every name shown on this shared board passes the render
+           time blocklist; a dirty stored name prints as its stable substitute
+           handle instead */
+        playerName: publicName(String(r.player_name)),
+        totalPoints: Number(r.total_points) || 0,
+        gamesPlayed: Number(r.games_played) || 0,
+      }))
+    : [];
+
+const mapMine = (res: any): MyRank | null => {
+  const row = Array.isArray(res?.data) ? res.data[0] : null;
+  if (!row) return null;
+  return {
+    rank: Number(row.rank),
+    totalPoints: Number(row.total_points) || 0,
+    totalPlayers: Number(row.total_players) || 0,
+  };
+};
+
+/** What a window is called in a sentence, so the empty and error copy can name
+ *  the window the reader is actually looking at. */
+const WINDOW_WORDS: Record<Period, string> = {
+  today: 'today',
+  week: 'in the last 7 days',
+  month: 'in the last 30 days',
+  alltime: 'yet',
+};
 
 export default function Leaderboard() {
   const { profile } = useAuth();
@@ -69,16 +137,51 @@ export default function Leaderboard() {
 
   const [sport, setSport] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<Period>('today');
-  const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<Record<Period, BoardRow[]>>({ today: [], alltime: [] });
-  const [myRank, setMyRank] = useState<Record<Period, MyRank | null>>({ today: null, alltime: null });
+  const [rows, setRows] = useState<Record<Period, Board>>(() => blank(undefined as Board));
+  const [myRank, setMyRank] = useState<Record<Period, Rank>>(() => blank(undefined as Rank));
+  const [failed, setFailed] = useState<Record<Period, boolean>>(() => blank(false));
 
+  /* Round 540: ONE generation counter, bumped the moment the filter or the
+     handle changes, and every response checked against it before it is allowed
+     to write. It replaces a pair of per effect `cancelled` flags that could not
+     see each other, which is what made the two worst bugs in Round 537
+     possible:
+
+     The filter change race. The mount effect reset the boards to empty
+     SYNCHRONOUSLY but wrote its results AFTER its await, while the window
+     effect was in flight. The window usually won, because it awaits two RPCs
+     over a covering index while the other awaits four including an unfiltered
+     all time scan. Its rows landed, then the slower effect's late write spread
+     empty over the top, and the 7 Days tab was stuck reading "No scores in the
+     last 7 days. Be the first!" with no way to refetch, because the window was
+     already marked as paid for.
+
+     A generation check fixes that properly: a response from an older filter
+     cannot write at all, in either direction, no matter which finishes first.
+
+     A ref rather than state on purpose. It has to be readable by a closure
+     created before the change happened. */
+  const genRef = useRef(0);
+  /* Which windows have a request in the air right now, so flapping between two
+     tabs cannot fire the same live scan twice. Round 537 discarded superseded
+     responses client side but the server had already run every one of them. */
+  const inFlight = useRef<Set<Period>>(new Set());
+
+  const slugsFor = (s: string) => SPORT_OPTIONS.find(o => o.value === s)?.slugs ?? null;
+
+  /* The two windows this page always needs. Also the reset: a filter change
+     invalidates every window, including the two lazy ones, so they are paid for
+     again next time one is opened rather than showing another filter's numbers. */
   useEffect(() => {
-    let cancelled = false;
-    const slugs = SPORT_OPTIONS.find(o => o.value === sport)?.slugs ?? null;
+    const gen = genRef.current + 1;
+    genRef.current = gen;
+    inFlight.current.clear();
+    setRows(blank(undefined as Board));
+    setMyRank(blank(undefined as Rank));
+    setFailed(blank(false));
 
-    const load = async () => {
-      setLoading(true);
+    const slugs = slugsFor(sport);
+    (async () => {
       try {
         const [todayBoard, allBoard, myToday, myAll] = await Promise.all([
           (supabase.rpc as any)('global_leaderboard', { p_period: 'today', p_games: slugs }),
@@ -86,45 +189,65 @@ export default function Leaderboard() {
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: 'today', p_games: slugs }),
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: 'alltime', p_games: slugs }),
         ]);
-        if (cancelled) return;
-
-        const mapBoard = (res: any): BoardRow[] =>
-          Array.isArray(res?.data)
-            ? res.data.map((r: any) => ({
-                rank: Number(r.rank),
-                /* Round 318: every name shown on this shared board passes
-                   the render-time blocklist; a dirty stored name prints as
-                   its stable substitute handle instead */
-                playerName: publicName(String(r.player_name)),
-                totalPoints: Number(r.total_points) || 0,
-                gamesPlayed: Number(r.games_played) || 0,
-              }))
-            : [];
-
-        const mapMine = (res: any): MyRank | null => {
-          const row = Array.isArray(res?.data) ? res.data[0] : null;
-          if (!row) return null;
-          return {
-            rank: Number(row.rank),
-            totalPoints: Number(row.total_points) || 0,
-            totalPlayers: Number(row.total_players) || 0,
-          };
-        };
-
-        setRows({ today: mapBoard(todayBoard), alltime: mapBoard(allBoard) });
-        setMyRank({ today: mapMine(myToday), alltime: mapMine(myAll) });
+        if (genRef.current !== gen) return;
+        setRows(prev => ({ ...prev, today: mapBoard(todayBoard), alltime: mapBoard(allBoard) }));
+        setMyRank(prev => ({ ...prev, today: mapMine(myToday), alltime: mapMine(myAll) }));
       } catch {
-        if (!cancelled) {
-          setRows({ today: [], alltime: [] });
-          setMyRank({ today: null, alltime: null });
-        }
+        if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, today: true, alltime: true }));
+        setRows(prev => ({ ...prev, today: [], alltime: [] }));
+        setMyRank(prev => ({ ...prev, today: null, alltime: null }));
       }
-      if (!cancelled) setLoading(false);
-    };
-
-    load();
-    return () => { cancelled = true; };
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sport, ownHandle]);
+
+  /* The two lazy windows, fetched the first time their own tab is opened.
+     Round 540: there is no shared `loading` flag any more, and that is the
+     point. Round 537 had one boolean owned by two effects and gating all four
+     panels, so opening 7 Days and clicking away before it landed left it true
+     for good: the cleanup stopped the in flight effect from clearing it, and
+     the re-run returned early above the line that would have. The page sat on a
+     spinner with no board on any tab until a reload. A keyboard user hit it
+     every time, because a tab strip activates as the arrow key moves through
+     it, so the two expensive windows were opened and abandoned in passing.
+     Each window now owns its own state: undefined is loading, an array is
+     loaded, and `failed` is failed. */
+  useEffect(() => {
+    const period = activeTab;
+    if (EAGER_PERIODS.includes(period)) return;
+    if (rows[period] !== undefined || failed[period]) return;
+    if (inFlight.current.has(period)) return;
+
+    const gen = genRef.current;
+    inFlight.current.add(period);
+    const slugs = slugsFor(sport);
+    (async () => {
+      try {
+        const [board, mine] = await Promise.all([
+          (supabase.rpc as any)('global_leaderboard', { p_period: period, p_games: slugs }),
+          (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: period, p_games: slugs }),
+        ]);
+        if (genRef.current !== gen) return;
+        setRows(prev => ({ ...prev, [period]: mapBoard(board) }));
+        setMyRank(prev => ({ ...prev, [period]: mapMine(mine) }));
+      } catch {
+        if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, [period]: true }));
+        setRows(prev => ({ ...prev, [period]: [] }));
+        setMyRank(prev => ({ ...prev, [period]: null }));
+      } finally {
+        inFlight.current.delete(period);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, sport, ownHandle, rows, failed]);
+
+  /** Lets a failed window be asked for again, which Round 537 had no way to do. */
+  const retry = (period: Period) => {
+    setFailed(prev => ({ ...prev, [period]: false }));
+    setRows(prev => ({ ...prev, [period]: undefined }));
+  };
 
   const getRankDisplay = (rank: number) => {
     if (rank === 1) return <Medal className="w-5 h-5 text-yellow-500" />;
@@ -133,7 +256,12 @@ export default function Leaderboard() {
     return <span className="w-8 text-center text-sm font-medium text-muted-foreground">{rank}</span>;
   };
 
-  const MyRankCard = ({ mine }: { mine: MyRank | null }) => (
+  /* Round 540: the empty line names the window it is talking about. It used to
+     read "No points yet" with " today" appended only on the Today tab, which
+     was written when there were two tabs and never extended. On 7 Days it told
+     4,555 of the 5,501 scoring players on this site that they had no points,
+     while their all time total sat behind the next tab along. */
+  const MyRankCard = ({ mine, period }: { mine: MyRank | null; period: Period }) => (
     <div className="mb-4 rounded-xl border border-gold/50 bg-surface-1 px-4 py-3 flex items-center gap-3">
       <Globe className="w-5 h-5 text-gold shrink-0" />
       {mine ? (
@@ -148,12 +276,52 @@ export default function Leaderboard() {
         </div>
       ) : (
         <div className="flex-1 min-w-0">
-          <p className="font-semibold">No points yet{activeTab === 'today' ? ' today' : ''}</p>
-          <p className="text-xs text-muted-foreground">Finish any game and you'll appear here as {ownShownName}.</p>
+          <p className="font-semibold">No points {WINDOW_WORDS[period]}</p>
+          <p className="text-xs text-muted-foreground">
+            {period === 'alltime'
+              ? `Finish any game and you'll appear here as ${ownShownName}.`
+              : `Play something and you'll appear here as ${ownShownName}.`}
+          </p>
         </div>
       )}
     </div>
   );
+
+  /* Round 540: a window's whole panel, so each tab owns its own state and the
+     four can never share one spinner again. Order matters: failed before empty,
+     because a request that 500'd used to render as "be the first" and looked
+     exactly like a board nobody is on. */
+  const Panel = ({ period, title, emptyLabel }: { period: Period; title: string; emptyLabel: string }) => {
+    const list = rows[period];
+    if (failed[period]) {
+      return (
+        <div className="text-center py-12 space-y-3">
+          <p className="text-muted-foreground">That board did not load. It is us, not you.</p>
+          <Button size="sm" variant="outline" onClick={() => retry(period)}>Try again</Button>
+        </div>
+      );
+    }
+    if (list === undefined) {
+      return (
+        <div className="flex justify-center py-16">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      );
+    }
+    return (
+      <>
+        <MyRankCard mine={myRank[period] ?? null} period={period} />
+        <Card className="bg-surface-1">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">{title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BoardList list={list} emptyLabel={emptyLabel} />
+          </CardContent>
+        </Card>
+      </>
+    );
+  };
 
   const BoardList = ({ list, emptyLabel }: { list: BoardRow[]; emptyLabel: string }) => {
     if (list.length === 0) {
@@ -191,7 +359,7 @@ export default function Leaderboard() {
     <>
       <PageSeo
         title="World Leaderboard: Total Points | DoUKnowBall"
-        description="One global leaderboard for every game on DoUKnowBall. Top 100 today and all-time, plus your own world rank. No account needed."
+        description="One global leaderboard for every game on DoUKnowBall. Top 100 for today, the last 7 days, the last 30 days and all-time, plus your own world rank. No account needed."
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
@@ -214,49 +382,55 @@ export default function Leaderboard() {
             </Select>
           </div>
 
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Period)}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="today" className="gap-1.5 py-2 text-xs sm:text-sm">
-                <Calendar className="w-4 h-4" />
+          {/* Round 540: activationMode="manual". Radix activates a tab as the
+              arrow key moves onto it, so a keyboard user going from Today to
+              All-Time used to open BOTH expensive live windows in passing and
+              abandon them, which is also how they hit the stuck spinner every
+              single time. Manual means the arrows move focus and Enter or Space
+              opens, so the two live scans are only ever run on purpose. */}
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Period)} activationMode="manual">
+            {/* Round 537: four tabs have to fit a 320px phone, so the two new
+                ones carry no icon and every label stays short. The icons on
+                Today and All-Time are kept because they were already there and
+                removing them would change two tabs nobody asked about. */}
+            <TabsList aria-label="Leaderboard time window" className="grid w-full grid-cols-4 mb-4">
+              <TabsTrigger value="today" className="gap-1.5 px-1 py-2 text-xs sm:text-sm">
+                <Calendar className="w-4 h-4 hidden sm:inline" />
                 Today
               </TabsTrigger>
-              <TabsTrigger value="alltime" className="gap-1.5 py-2 text-xs sm:text-sm">
-                <Trophy className="w-4 h-4" />
+              <TabsTrigger value="week" className="px-1 py-2 text-xs sm:text-sm">
+                7 Days
+              </TabsTrigger>
+              <TabsTrigger value="month" className="px-1 py-2 text-xs sm:text-sm">
+                30 Days
+              </TabsTrigger>
+              <TabsTrigger value="alltime" className="gap-1.5 px-1 py-2 text-xs sm:text-sm">
+                <Trophy className="w-4 h-4 hidden sm:inline" />
                 All-Time
               </TabsTrigger>
             </TabsList>
 
-            {loading ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <>
-                <TabsContent value="today">
-                  <MyRankCard mine={myRank.today} />
-                  <Card className="bg-surface-1">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg">Top 100 Today</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <BoardList list={rows.today} emptyLabel="No scores yet today. Be the first!" />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+            {/* Round 540: all four panels are always mounted. Round 537 rendered
+                NO TabsContent at all while loading, so the selected trigger kept
+                aria-selected true and pointed at a tabpanel id that did not
+                exist in the document: a screen reader user opened a tab and
+                found nothing, and the Tab key skipped from the tab strip to the
+                page copy. A panel showing its own spinner is a panel. */}
+            <TabsContent value="today">
+              <Panel period="today" title="Top 100 Today" emptyLabel="No scores yet today. Be the first!" />
+            </TabsContent>
 
-                <TabsContent value="alltime">
-                  <MyRankCard mine={myRank.alltime} />
-                  <Card className="bg-surface-1">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg">Top 100 All-Time</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <BoardList list={rows.alltime} emptyLabel="No scores yet. Be the first!" />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </>
-            )}
+            <TabsContent value="week">
+              <Panel period="week" title="Top 100, last 7 days" emptyLabel="No scores in the last 7 days. Be the first!" />
+            </TabsContent>
+
+            <TabsContent value="month">
+              <Panel period="month" title="Top 100, last 30 days" emptyLabel="No scores in the last 30 days. Be the first!" />
+            </TabsContent>
+
+            <TabsContent value="alltime">
+              <Panel period="alltime" title="Top 100 All-Time" emptyLabel="No scores yet. Be the first!" />
+            </TabsContent>
           </Tabs>
         </main>
 
@@ -297,13 +471,17 @@ export default function Leaderboard() {
             played well, not how many times they hit retry.
           </p>
 
-          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Today, all time, and your own rank</h3>
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Four windows, and your own rank</h3>
           <p className="mb-3">
-            <strong className="text-foreground">Today</strong> resets for everyone at the same moment, so it is
-            a straight race on the same set of daily puzzles. <strong className="text-foreground">All-Time</strong> is
-            the running total and rewards turning up. Both tabs list the top 100, and your own rank
-            card sits above them whether you are 7th or 4,000th, with how many players you are being
-            measured against, because a rank with no field size behind it does not tell you anything.
+            <strong className="text-foreground">Today</strong> resets for everyone at the same moment, midnight
+            Eastern, so it is a straight race on the same set of daily puzzles.
+            {' '}<strong className="text-foreground">7 Days</strong> and <strong className="text-foreground">30 Days</strong> are
+            rolling windows rather than calendar weeks and months: they cover the last seven and the last thirty
+            days ending today, which is the honest answer to whether you are climbing right now.
+            {' '}<strong className="text-foreground">All-Time</strong> is the running total and rewards turning up.
+            Every tab lists the top 100, and your own rank card sits above it whether you are 7th or 4,000th,
+            with how many players you are being measured against, because a rank with no field size behind it
+            does not tell you anything.
           </p>
 
           <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Filtering by sport</h3>

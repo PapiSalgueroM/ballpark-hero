@@ -32,6 +32,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/conquest-mlb': 'baseball',
   '/missing-nine': 'baseball',
   '/mlb-connect-4': 'baseball',
+  '/mlb-gauntlet-draft': 'baseball',
   '/mlb-front-office': 'baseball',
   '/mlb-grid': 'baseball',
   '/mlb-higher-lower': 'baseball',

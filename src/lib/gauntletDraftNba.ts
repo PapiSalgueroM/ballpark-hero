@@ -59,4 +59,25 @@ export const NBA_GAUNTLET_CONFIG: GauntletConfig<NbaPoolPlayer> = {
   formations: [NBA_FORMATION],
   rounds: NBA_GAUNTLET_ROUNDS,
   dailySeedSalt: NBA_DAILY_SALT,
+
+  gameName: 'Gauntlet Draft: NBA',
+  gamePath: '/nba-gauntlet-draft',
+  emoji: '⚔️',
+  squadNoun: 'five',
+  slotsPhrase: 'starting five slots',
+  /* Round 538: this said "overtime, then a shootout" and then labelled the
+     result "won in a shootout". Basketball has no shootout. The engine's
+     mechanism is the same in every sport, but the words for it are not, and
+     the words are what a reader checks against the sport they know. */
+  tiebreak: { phrase: 'overtime, and another overtime if it is still level', won: 'Won in overtime', lost: 'Lost in overtime' },
+  subtitleOf: p => `${p.team} · ${p.era}`,
+  positionOf: NBA_LINEUP_CONFIG.positionOf,
+  tierFloors: [96, 92, 88],
+  /* Round 538: the engine deals in goals, and Round 520 printed them raw, so
+     this board showed "4 - 2" as a basketball result. A base of 92 plus six a
+     goal lands every match on a real NBA scoreline (92, 98, 104 ... 128) and
+     is strictly increasing, so it can never contradict who won. */
+  scoreline: g => 92 + g * 6,
+  /* A possession, so a game the decider settled does not show level. */
+  tiebreakBump: 5,
 };
