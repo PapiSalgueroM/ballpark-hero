@@ -4,6 +4,8 @@ import { ChevronLeft, Briefcase } from 'lucide-react';
 import { NATIONS, CLUB_IDENTITIES, MANAGER_BACKGROUNDS, validateManagerName } from '@/lib/clubManager';
 import type { ManagerSpec, ManagerBackground, ClubIdentity } from '@/lib/clubManager';
 import { FlagImg } from '@/components/FlagImg';
+import { MIDSEASON_ENTRY } from '@/lib/clubManagerCalendar';
+import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 
 /**
  * Round 303, off the owner's tweaks list: "customizable created manager".
@@ -25,10 +27,13 @@ interface ManagerFormProps {
   defaultNation: string;
   onBack: () => void;
   /** null means skip: no manager spec, the classic career. */
-  onConfirm: (spec: ManagerSpec | null) => void;
+  onConfirm: (spec: ManagerSpec | null, entry?: MidSeasonEntry) => void;
 }
 
 export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: ManagerFormProps) {
+  /* Round 549: null is the summer window, which is how this game has always
+     started and stays the default. */
+  const [entry, setEntry] = useState<MidSeasonEntry | null>(null);
   const [name, setName] = useState('');
   const [nationality, setNationality] = useState(
     NATIONS.some(n => n.name === defaultNation) ? defaultNation : NATIONS[0].name,
@@ -42,7 +47,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
   const create = () => {
     setTriedSubmit(true);
     if (nameError) return;
-    onConfirm({ name: name.trim(), nationality, background, style });
+    onConfirm({ name: name.trim(), nationality, background, style }, entry ?? undefined);
   };
 
   return (
@@ -140,6 +145,48 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
           </div>
         </div>
 
+        {/* Round 549, from a player on 2026-09-11: "add live start points to
+            manager career: take over a club mid season for example leicester in
+            15/16 midway thru". The season is played forward by the engine first
+            and handed over where it stands, so the table, the injuries, the
+            money and the cup run are real consequences of matches that were
+            really played. It is NOT the real season's run of results: this
+            game's fixture list is a per save shuffle over its own calendar, so
+            the real one cannot be reproduced, and the note below says that
+            rather than letting anybody assume otherwise. */}
+        <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2">
+          <div className="text-xs font-bold text-foreground">🗓️ When do you take over</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+            {([null, 'autumn', 'newYear', 'runIn'] as const).map(key => {
+              const on = entry === key;
+              const info = key === null ? null : MIDSEASON_ENTRY[key];
+              return (
+                <button
+                  key={key ?? 'summer'}
+                  type="button"
+                  onClick={() => setEntry(key)}
+                  className={cn(
+                    'rounded-xl border px-2.5 py-2 text-left transition-colors',
+                    on ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-primary/60',
+                  )}
+                >
+                  <div className="text-[11px] font-bold text-foreground">{info ? info.label : 'Summer'}</div>
+                  <div className="text-[9px] text-muted-foreground leading-tight">
+                    {info ? info.blurb : 'Pre-season, a clean slate and the whole window to spend.'}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          {entry && (
+            <p className="text-[10px] text-muted-foreground">
+              The season up to here is played out by the manager before you, so you inherit his table, his
+              injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this
+              game draws its own fixture list every save, so nobody's real results can be replayed here.
+            </p>
+          )}
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-2 pt-1">
           <button
             onClick={create}
@@ -148,7 +195,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
             <Briefcase className="w-4 h-4" /> Take the job
           </button>
           <button
-            onClick={() => onConfirm(null)}
+            onClick={() => onConfirm(null, entry ?? undefined)}
             className="flex-1 inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold border border-border text-muted-foreground hover:text-foreground hover:border-primary transition-colors text-sm"
           >
             Skip: just manage

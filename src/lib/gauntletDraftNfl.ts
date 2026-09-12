@@ -94,4 +94,24 @@ export const NFL_GAUNTLET_CONFIG: GauntletConfig<NflGauntletPlayer> = {
   formations: [NFL_FORMATION],
   rounds: NFL_GAUNTLET_ROUNDS,
   dailySeedSalt: NFL_DAILY_SALT,
+
+  gameName: 'Gauntlet Draft: NFL',
+  gamePath: '/nfl-gauntlet-draft',
+  emoji: '⚔️',
+  squadNoun: 'offense',
+  slotsPhrase: 'starting offense slots (QB, two RB, three WR, TE)',
+  /* Round 538: this said "overtime, then a shootout", and Round 522 then made
+     the result label agree with it by calling an NFL result a shootout. The
+     two agreeing was an improvement on them disagreeing, and both were wrong
+     about the sport. Football has overtime and no shootout. */
+  tiebreak: { phrase: 'overtime, and another if it is still level', won: 'Won in overtime', lost: 'Lost in overtime' },
+  subtitleOf: p => p.team,
+  positionOf: p => p.pos,
+  tierFloors: [93, 84, 75],
+  /* Round 538: three plus seven a goal, so every match reads as a real NFL
+     scoreline (3, 10, 17, 24, 31 ...) instead of the raw goal counts Round 520
+     printed. Strictly increasing, so it cannot contradict who won. */
+  scoreline: g => 3 + g * 7,
+  /* A field goal. */
+  tiebreakBump: 3,
 };

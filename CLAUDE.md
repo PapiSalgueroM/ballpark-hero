@@ -214,6 +214,16 @@ rather than whole.
 3. Add a `GameDef` entry under the right category in `src/data/gameRegistry.ts`.
 4. Add per-game SEO copy in `src/data/gameContent/`.
 5. Add a sim harness in `scripts/` named `sim*.mjs` so `runAllSims.mjs` discovers it.
+6. Run `node scripts/genSearchKeywords.mjs` and commit `src/data/searchKeywords.json`. Sitewide
+   search finds a game by name, path and sport straight off the registry, but every mechanic
+   word ("shootout", "wildcard", "relegation") comes from this generated index, so a game added
+   without it is invisible to anyone searching for what it actually is. **Nothing runs the
+   generator for you**: it is in no npm script and no CI step. Round 526 shipped the index at
+   121 games while the branch had 123 and needed a follow up commit to fix it, which is the
+   whole reason this line exists. `simSiteSearch` section 7 is the net: it fails on a game with
+   no keywords, on an entry for a game that no longer exists, and, since Round 538, on guides
+   that have changed since the index was built. Editing copy in `src/data/gameContent/` is
+   therefore also a reason to rerun it.
 
 ---
 
