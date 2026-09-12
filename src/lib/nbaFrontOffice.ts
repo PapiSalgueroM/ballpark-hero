@@ -1,6 +1,8 @@
 import { NBA_TEAMS } from '@/data/conquestDataNba';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
+/* Round 531: the cap comes from one sourced file, never a bare literal here. */
+import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -12,7 +14,7 @@ import { leagueNames, uniqueName } from './foNames';
  * 7 to 10, then best-of-7 series simulated round by round.
  */
 
-export const NBA_CAP_BASE = 155; // $M, rises 7% per season
+export const NBA_CAP_BASE = NBA_SALARY_CAP_2026_27; // $M; the 7% rise per season in game is the game's own assumption, see leagueCaps.ts
 export const NBA_ROUNDS = 20;
 export const GAMES_PER_ROUND = 4;
 

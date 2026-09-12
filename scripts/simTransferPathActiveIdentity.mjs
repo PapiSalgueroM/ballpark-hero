@@ -11,13 +11,23 @@
  *
  * What this holds:
  *   1) the generated identity set equals a fresh derivation from those three
- *      sources, with 78 safe career identities;
+ *      sources, with 90 safe career identities. Round 531: 78 became 90 when
+ *      the fallback pool was baked from the live tables (253 players, was 151),
+ *      and this fresh derivation now applies the same three guards the
+ *      generator applies and section 2 asserts (the normalized name is unique
+ *      in the fallback pool and in the pull, and no second directly evidenced
+ *      identity shares it), which is what keeps Emiliano Martinez out while
+ *      the World Cup squads carry that name for Argentina and for Uruguay;
  *   2) runtime eligibility ignores projected career seasons and refuses the
  *      Colombian Luis Suarez evidence for the Uruguayan Luis Suarez;
  *   3) the compact pull carries the same identities as runtime, and its active
- *      graph connects exactly 203 of the 885 retained puzzles;
- *   4) the staged companion keeps active hints null and the separate restore
- *      migration carries those same 203 derived active hints.
+ *      graph connects exactly 212 of the 885 retained puzzles;
+ *   4) the staged companion keeps active hints null, the applied 2026-09-07
+ *      restore (78 identities, 203 pairs, live since before 2026-09-11) is
+ *      carried whole by the Round 531 refresh, and that refresh names beside
+ *      each of its 212 derived active hints exactly the applied value it
+ *      replaces (null for the 9 pairs the bigger set connects for the first
+ *      time), so it can only ever apply on the table it was derived against.
  *
  * Negative controls:
  *   TPAI_CONTROL=rawname adds the Uruguayan Luis Suarez key to a temporary
@@ -26,8 +36,8 @@
  *   from a temporary derivation copy.
  *   TPAI_CONTROL=careernamecollision removes the unique career-name guard from
  *   a temporary derivation copy.
- *   TPAI_CONTROL=restoreguard removes one null precondition from the parsed
- *   restore migration.
+ *   TPAI_CONTROL=restoreguard removes one replaced-value precondition from the
+ *   parsed refresh migration.
  *   TPAI_CONTROL=appliedwrite plants a write to the applied companion.
  *   TPAI_CONTROL=restorerewrite removes the restore's write-once branch.
  *
@@ -38,7 +48,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { buildGraph, deriveHint, expandCompactCareers, parseActiveRestoreMigration, ruleProblems } from './lib/transferPathHints.mjs';
+import { buildGraph, deriveHint, expandCompactCareers, parseActiveRefreshMigration, parseActiveRestoreMigration, ruleProblems } from './lib/transferPathHints.mjs';
 import { deriveVerifiedActiveIdentities } from './lib/transferPathActiveIdentities.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -48,6 +58,14 @@ if (CONTROL && !['rawname', 'directcollision', 'careernamecollision', 'restoregu
   console.error(`TPAI_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
+
+/* Round 531 pins (docs/audits/transfer-path-active-identities-2026-09-11.md):
+   90 identities over the 253 player pool connect 212 of the 885 retained puzzles. */
+const EXPECTED_IDENTITIES = 90;
+const EXPECTED_ACTIVE_PUZZLES = 212;
+const APPLIED_ACTIVE_PUZZLES = 203;
+const APPLIED_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
+const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refresh_verified_active_transfer_path_hints.sql');
 
 let failures = 0;
 const findings = [];
@@ -149,15 +167,19 @@ const directEvidence = new Set([
   ...staleRows.map(player => site.transferPathIdentityKey(player.name, player.nationality)),
 ]);
 const directEvidenceNames = new Set([...directEvidence].map(key => key.split('|')[0]));
+const directNamesakes = counted([...directEvidence].map(key => key.split('|')[0]));
 const expected = new Set();
 for (const player of site.fallbackPlayers) {
   const key = site.transferPathIdentityKey(player.name, player.nationality);
   const name = key.split('|')[0];
-  const uniqueOverlayMatch = overlayByName.get(name) === 1
-    && fallbackByName.get(name) === 1
-    && pullByName.get(name) === 1
-    && !directEvidenceNames.has(name);
-  if (directEvidence.has(key) || uniqueOverlayMatch) expected.add(key);
+  /* Round 531: the same three guards the generator applies and section 2
+     asserts, so this derivation and the generated file can only agree for
+     the same reason. A name that two career records share, or that two
+     directly evidenced identities share, never activates by name. */
+  if (fallbackByName.get(name) !== 1 || pullByName.get(name) !== 1) continue;
+  const directMatch = directEvidence.has(key) && directNamesakes.get(name) === 1;
+  const uniqueOverlayMatch = overlayByName.get(name) === 1 && !directEvidenceNames.has(name);
+  if (directMatch || uniqueOverlayMatch) expected.add(key);
 }
 
 console.log('1) generated identities against the three committed evidence sets');
@@ -165,8 +187,8 @@ console.log('1) generated identities against the three committed evidence sets')
   const generated = new Set(site.VERIFIED_ACTIVE_IDENTITY_KEYS);
   for (const key of expected) if (!generated.has(key)) fail(`verified evidence identity is missing from the generated set: ${key}`);
   for (const key of generated) if (!expected.has(key)) fail(`generated active identity has no safe evidence match: ${key}`);
-  if (expected.size !== 78) fail(`fresh evidence derivation found ${expected.size} safe identities, expected 78`);
-  if (generated.size !== 78) fail(`generated file carries ${generated.size} identities, expected 78`);
+  if (expected.size !== EXPECTED_IDENTITIES) fail(`fresh evidence derivation found ${expected.size} safe identities, expected ${EXPECTED_IDENTITIES}`);
+  if (generated.size !== EXPECTED_IDENTITIES) fail(`generated file carries ${generated.size} identities, expected ${EXPECTED_IDENTITIES}`);
   console.log(`   ${worldCupRows.length} World Cup rows, ${site.overlay.length} transfer rows, ${staleRows.length} stale-sweep rows, ${generated.size} safe career identities`);
 }
 
@@ -229,9 +251,9 @@ console.log('3) compact pull and active graph use the same identity rule');
   const pullKeys = new Set(activePlayers.map(player => site.transferPathIdentityKey(player.name, player.nationality)));
   for (const key of expected) if (!pullKeys.has(key)) fail(`verified identity is missing or has no nationality in careers.txt: ${key}`);
   for (const key of pullKeys) if (!expected.has(key)) fail(`careers.txt activates an identity outside the evidence set: ${key}`);
-  if (activePlayers.length !== 78) fail(`the pull activates ${activePlayers.length} players, expected 78`);
+  if (activePlayers.length !== EXPECTED_IDENTITIES) fail(`the pull activates ${activePlayers.length} players, expected ${EXPECTED_IDENTITIES}`);
   if (pairs.size !== 885) fail(`the retained pull carries ${pairs.size} puzzles, expected 885`);
-  if (eligible !== 203) fail(`the verified active graph connects ${eligible} puzzles, expected 203`);
+  if (eligible !== EXPECTED_ACTIVE_PUZZLES) fail(`the verified active graph connects ${eligible} puzzles, expected ${EXPECTED_ACTIVE_PUZZLES}`);
   console.log(`   ${activePlayers.length} of ${players.length} pull players verified active, ${eligible} of ${pairs.size} puzzles have a path`);
 }
 
@@ -275,43 +297,48 @@ for (const line of companionSql.slice(desiredStart, desiredEnd).split('\n')) {
   companionRows.set(id, active);
 }
 
-let restoreSql = read(path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql'));
+let restoreSql = read(ACTIVE_RESTORE);
 if (CONTROL === 'restoreguard') {
-  const needle = '      and p.active_hint is null;';
+  const needle = '      and p.active_hint is not distinct from desired.old_active_hint;';
   if ((restoreSql.match(new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) ?? []).length !== 2) {
-    console.error('control cannot run: the restore does not have two active-hint null preconditions');
+    console.error('control cannot run: the refresh does not have two replaced-hint preconditions');
     process.exit(1);
   }
   const changed = restoreSql.replace(needle, '      and true;');
   if (changed === restoreSql) {
-    console.error('control cannot run: removing a restore null precondition changed nothing');
+    console.error('control cannot run: removing a refresh replaced-value precondition changed nothing');
     process.exit(1);
   }
   restoreSql = changed;
-  console.log('NEGATIVE CONTROL ON: one exact null precondition is missing from the active restore');
+  console.log('NEGATIVE CONTROL ON: one exact replaced-value precondition is missing from the active refresh');
 }
-const restoreRows = parseActiveRestoreMigration(restoreSql);
+const restoreRows = parseActiveRefreshMigration(restoreSql);
+const appliedRows = parseActiveRestoreMigration(read(APPLIED_RESTORE));
 
 function checkRestoreGuards(sql) {
   const code = sql.replace(/^\s*--.*$/gm, '');
   const count = needle => code.split(needle).length - 1;
   if ((code.match(/^begin;$/gm) ?? []).length !== 1 || (code.match(/^commit;$/gm) ?? []).length !== 1) fail('restore guard: the migration is not enclosed by one explicit transaction');
   if (!/select count\(\*\) into matching_rows from public\.transfer_path_puzzles;\s*if matching_rows <> 885 then/.test(code)) fail('restore guard: the retained-table precondition is not exactly 885 rows');
+  const loopStart = code.indexOf('for desired in');
+  const appliedPrecondition = new RegExp(`where p\\.active_min_steps is not null and p\\.active_hint is not null;\\s*if matching_rows <> ${APPLIED_ACTIVE_PUZZLES} then`).exec(code);
+  if (!appliedPrecondition || loopStart < 0 || appliedPrecondition.index > loopStart) fail(`restore guard: the applied-state precondition (exactly ${APPLIED_ACTIVE_PUZZLES} complete pairs before the loop) is missing`);
   const preflight = code.match(/select count\(\*\) into matching_rows\s*from public\.transfer_path_puzzles p\s*where p\.puzzle_id = desired\.puzzle_id[\s\S]*?;/)?.[0] ?? '';
   const update = code.match(/update public\.transfer_path_puzzles p\s*set[\s\S]*?;/)?.[0] ?? '';
   for (const predicate of [
     'p.puzzle_id = desired.puzzle_id',
     'p.player_a = desired.player_a',
     'p.player_b = desired.player_b',
-    'p.active_min_steps is null',
-    'p.active_hint is null',
+    'p.active_min_steps is not distinct from desired.old_active_min_steps::smallint',
+    'p.active_hint is not distinct from desired.old_active_hint',
   ]) {
-    if (!preflight.includes(predicate) || !update.includes(predicate)) fail(`restore guard: exact tuple and null predicate "${predicate}" must protect both the preflight and update`);
+    if (!preflight.includes(predicate) || !update.includes(predicate)) fail(`restore guard: exact tuple and replaced-value predicate "${predicate}" must protect both the preflight and update`);
   }
   if (count('if matching_rows <> 1 then') !== 1) fail('restore guard: each desired tuple is not required to match exactly once');
   if (!code.includes('get diagnostics updated_this_row = row_count;') || !code.includes('updated_rows := updated_rows + updated_this_row;')) fail('restore guard: updated rows are not counted from database row_count');
-  if (!code.includes('if updated_rows <> 203 then')) fail('restore guard: the update count is not fixed at 203');
-  if (!/where p\.active_min_steps is not null and p\.active_hint is not null;\s*if matching_rows <> 203 then/.test(code)) fail('restore guard: the final complete active-pair count is not fixed at 203');
+  if (!code.includes(`if updated_rows <> ${EXPECTED_ACTIVE_PUZZLES} then`)) fail(`restore guard: the update count is not fixed at ${EXPECTED_ACTIVE_PUZZLES}`);
+  const finalCount = new RegExp(`where p\\.active_min_steps is not null and p\\.active_hint is not null;\\s*if matching_rows <> ${EXPECTED_ACTIVE_PUZZLES} then`).exec(code);
+  if (!finalCount || finalCount.index < code.indexOf('end loop;')) fail(`restore guard: the final complete active-pair count is not fixed at ${EXPECTED_ACTIVE_PUZZLES} after the loop`);
   if (!/where \(p\.active_min_steps is null\) <> \(p\.active_hint is null\)/.test(code)) fail('restore guard: partial active pairs are not rejected');
   const assignments = [...update.matchAll(/\b(active_[a-z_]+)\s*=/g)].map(match => match[1]);
   if (assignments.join(',') !== 'active_min_steps,active_hint') fail('restore guard: the restore update must set only the two active fields');
@@ -339,7 +366,7 @@ console.log('4) staged companion and separate restore preserve the rollout order
     generatorCode = changed;
     console.log('   NEGATIVE CONTROL ON: the generator can rewrite an existing active restore migration');
   }
-  if (/fs\.writeFileSync\((?:OUT|MODE_OUT|COMPANION_OUT)\b/.test(generatorCode)) fail('the generator still rewrites an already applied Transfer Path migration');
+  if (/fs\.writeFileSync\((?:OUT|MODE_OUT|COMPANION_OUT|APPLIED_RESTORE)\b/.test(generatorCode)) fail('the generator still rewrites an already applied Transfer Path migration');
   if (!/if \(fs\.existsSync\(ACTIVE_RESTORE_OUT\)\)[\s\S]*?existing !== restore[\s\S]*?create a new dated migration[\s\S]*?else \{\s*fs\.writeFileSync\(ACTIVE_RESTORE_OUT/.test(generatorCode)) fail('the active restore generator is not write-once with an identical-content check');
   let derivedEligible = 0;
   let companionEligible = 0;
@@ -356,13 +383,22 @@ console.log('4) staged companion and separate restore preserve the rollout order
       fail(`separate active restore ${id} differs from current verified graph truth`);
     }
     if (restore && (restore.a !== a || restore.b !== b)) fail(`separate active restore ${id} names ${restore.a} to ${restore.b}, expected ${a} to ${b}`);
+    /* Round 531: the value the refresh says it replaces is the applied
+       restore's row, or null where the applied restore had none. */
+    const appliedRow = appliedRows.get(id) ?? null;
+    if (restore && ((appliedRow === null) !== (restore.oldMinSteps === null) || (appliedRow && (appliedRow.minSteps !== restore.oldMinSteps || appliedRow.hint !== restore.oldHint)))) {
+      fail(`refresh ${id} names a replaced value the applied restore did not write`);
+    }
+    if (appliedRow && !restore) fail(`applied active pair ${id} is not carried by the refresh; a bigger identity set cannot lose a path`);
   }
   for (const id of restoreRows.keys()) if (!pairs.has(id)) fail(`separate active restore carries unknown puzzle ${id}`);
+  for (const id of appliedRows.keys()) if (!pairs.has(id)) fail(`the applied restore carries unknown puzzle ${id}`);
   if (companionRows.size !== pairs.size) fail(`pending companion carries ${companionRows.size} rows for ${pairs.size} puzzles`);
-  if (restoreRows.size !== 203) fail(`separate active restore carries ${restoreRows.size} rows, expected 203`);
-  if (derivedEligible !== 203) fail(`current verified graph connects ${derivedEligible} active paths, expected 203`);
+  if (appliedRows.size !== APPLIED_ACTIVE_PUZZLES) fail(`the applied restore parses to ${appliedRows.size} rows, expected ${APPLIED_ACTIVE_PUZZLES}`);
+  if (restoreRows.size !== EXPECTED_ACTIVE_PUZZLES) fail(`separate active restore carries ${restoreRows.size} rows, expected ${EXPECTED_ACTIVE_PUZZLES}`);
+  if (derivedEligible !== EXPECTED_ACTIVE_PUZZLES) fail(`current verified graph connects ${derivedEligible} active paths, expected ${EXPECTED_ACTIVE_PUZZLES}`);
   if (companionEligible !== 0) fail(`pending companion carries ${companionEligible} active paths, expected zero until the frontend is live`);
-  console.log(`   applied companion ${companionEligible} active paths, separate restore ${restoreRows.size}, current verified graph ${derivedEligible}`);
+  console.log(`   applied companion ${companionEligible} active paths, applied restore ${appliedRows.size}, pending refresh ${restoreRows.size}, current verified graph ${derivedEligible}`);
 }
 
 console.log('');
@@ -376,7 +412,7 @@ if (CONTROL) {
     : CONTROL === 'restorerewrite'
       ? findings.some(message => /active restore generator is not write-once/.test(message))
     : CONTROL === 'restoreguard'
-      ? findings.some(message => /restore guard: exact tuple and null predicate/.test(message))
+      ? findings.some(message => /restore guard: exact tuple and replaced-value predicate/.test(message))
       : findings.some(message => /Luis Suárez of Uruguay|luis suarez\|uruguay|connects \d+ puzzles/.test(message));
   if (failures > 0 && caught) {
     console.log(`simTransferPathActiveIdentity control (${CONTROL}): green. The planted defect was reported (${failures} findings).`);

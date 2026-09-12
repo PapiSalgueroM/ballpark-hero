@@ -131,7 +131,12 @@ export * as du from '${ROOT_URL}/src/lib/dateUtils.ts';
     const today = du.getTodayET();
     const tier = du.getDailyTier(today);
     console.log(`   file ${players.length}, live ${live.length}, today ${today} is a ${tier} day`);
-    const FLOOR = { easy: 10, hard: 40, insane: 300 };
+    /* Round 531: the file is baked from the same table the live pool reads,
+       so its easy tier now covers nearly all of the live top 80 by design.
+       Measured 2026-09-11 after that bake: easy 10, hard 184, insane 1156
+       live only. The old easy floor of 10 sat exactly on the measurement,
+       a coin toss dressed as a rule; half of it leaves headroom. */
+    const FLOOR = { easy: 5, hard: 40, insane: 300 };
     for (const t of ['easy', 'hard', 'insane']) {
       const fileNames = new Set(players.filter(p => p.difficulty === t).map(p => p.name));
       const liveTier = live.filter(p => p.difficulty === t);
