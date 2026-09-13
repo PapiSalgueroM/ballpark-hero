@@ -1,5 +1,66 @@
 # Project state
 
+## Live as of 2026-09-12 night: Round 535, and two games that had been decided by numbers nobody checked
+
+**`origin/main` is `751077a0` and douknowball.com is serving it.** Deployment
+`4aebf897-6997-458a-9665-e9aa5fcb664c`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-CzDArel0.js` to `index-DFolUycD.js`. **All 295 harnesses green**, the
+first completely clean suite of the day.
+
+Correct info on all basis, part two: the two hand typed clue files the provenance inventory ranked
+highest for exposure over verification.
+
+### Higher or Lower: two whole stats deleted, and the rest of the pool kept honestly
+
+`src/data/higherLowerPlayers.ts` shipped 204 footballers with five career totals each and no source
+of any kind, and two games were decided purely by those numbers: `/higher-lower` and the three
+soccer categories in `/face-off`.
+
+**Career assists and career trophies are gone, all 408 numbers.** No publisher prints either on any
+convention two of them agree on: there is no career assist figure at all for a career that ended
+before the 1990s, and "trophies won" is a house rule every time you ask. They were deciding a game
+on nothing, so the type lost them.
+
+Caps are now in one of two states and the row says which. 70 rows are two source verified, RSSSF's
+record international players archive against that country's own records article, both printing the
+same number. 129 carry one named publisher with the URL on the row. Both games print which. Five
+rows are gone for being structurally broken: two people who were in the pool TWICE (Ronaldinho also
+as Ronaldo de Assis, Antonio Ruediger also as Toni Ruediger, so either game could ask which of two
+identical people had more of something), and three careers with more goals than appearances.
+
+**The first pass of this round shipped 70 rows and removed 134, and that was sent back.** Its own
+evidence sorted the removals into buckets: only 6 were proven wrong, and the other 128 were
+unfinished verification. The same round had already chosen marking over removal for appearances and
+goals, on the reasoning that removing them would empty both games, so removing rows on weaker
+grounds was inconsistent. The rework restored them, and **it did not restore them on the old
+numbers**: the 34 rows no publisher had ever been read for were read first, which caught Cole
+Palmer at 24 caps against a published 14, James Maddison 12 against 7, Iker Muniain 10 against 2,
+and Mathys Tel credited with 6 France caps when he has no senior cap at all. Lev Yashin kept his 74
+caps and lost the wrong country, and Alfredo Di Stefano's 31 turned out to be his Spain total on a
+row that said Argentina.
+
+Two consumer bugs fell out of it. `/higher-lower` asked whether the note applied to appearances
+only, so a marked cap figure would have printed nothing on screen; the card asks about every stat
+it shows now. And the note itself claimed the club totals come from one publisher, which no read
+supported, so it says unchecked, and the how to play copy lost the claim that caps are two source
+checked before a player joins the pool, which was false for 129 of 199 rows.
+
+### Guess The College: the counts come out of the prose
+
+All 70 schools verified against two publishers each, and the countable claims moved out of free
+text into typed fields a harness can pin, so a championship count can no longer drift inside a
+sentence. Acceptance rates are dropped rather than kept: no publisher stated a year for them, and a
+rate without a year is a number pretending to be a fact.
+
+### What this round does not claim
+
+Appearances and goals are still unchecked against any publisher on this file's convention, on all
+199 rows, and both games say so. Every publisher that prints club career totals that way refused
+the fetch. That is the queue, written into
+`docs/audits/higher-lower-verification-2026-09-12.md` row by row, along with the 26 rows where two
+publishers disagree and the 11 whose only source is a Wikipedia infobox because their country's
+RSSSF page stops above their cap total.
+
 ## Live as of 2026-09-12 evening: five desktop rounds, and the Transfer Path hint that never moved
 
 **`origin/main` is `57bf6614` and douknowball.com is serving it.** Deployment
