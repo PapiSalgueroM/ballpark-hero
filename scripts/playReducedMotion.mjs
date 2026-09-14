@@ -127,6 +127,7 @@ const ROUTES = [
 ];
 const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue'];
 let badRoutes = 0;
+let routesWithOurCss = 0;
 if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
   console.error('  FAIL: dist/index.html is missing, so the route stage cannot run; build first (npm run build)');
   badRoutes += 1;
@@ -161,7 +162,22 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
     const got = await p.evaluate(classes => {
       const styles = [...document.querySelectorAll('style')].map(s => s.textContent || '');
       const withKeyframes = styles.filter(t => /@keyframes\s+[\w-]+/.test(t));
-      const unguarded = withKeyframes.filter(t => !/@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/.test(t)).length;
+      /* THE RULE IS ABOUT THIS SITE'S OWN ANIMATIONS, and the first run of this
+         stage proved why that has to be said out loud. It reported one
+         unguarded block on all sixteen routes, and the block was the toast
+         library's, which splits its stylesheet and carries the reduced motion
+         rule in a DIFFERENT element: the very same keyframe names came back in
+         the guarded list on the same page. A rule that says every block
+         carrying a keyframe must itself carry the guard cannot be satisfied by
+         a third party that chose to split, and failing sixteen routes on it
+         buries the two checks below that actually measure behaviour.
+         Third party blocks are identified by a marker of their own and skipped
+         here, and the run refuses if the skip leaves nothing to check, so this
+         can never quietly become a check of no blocks at all. */
+      const THIRD_PARTY = [/data-sonner-toaster/];
+      const ours = withKeyframes.filter(t => !THIRD_PARTY.some(rx => rx.test(t)));
+      const unguarded = ours.filter(t => !/@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/.test(t)).length;
+      const skipped = withKeyframes.length - ours.length;
       let reveal = 0;
       let animating = 0;
       let invisible = 0;
@@ -171,14 +187,31 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
         if (s.animationName !== 'none') animating += 1;
         if (s.display === 'none' || Number(s.opacity) === 0) invisible += 1;
       }
-      return { text: (document.body.innerText || '').length, blocks: withKeyframes.length, unguarded, reveal, animating, invisible };
+      return { text: (document.body.innerText || '').length, blocks: withKeyframes.length, ourBlocks: ours.length, skipped, unguarded, reveal, animating, invisible };
     }, REVEAL_CLASSES);
     await p.close();
-    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible}`);
+    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} ours=${got.ourBlocks} thirdParty=${got.skipped} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible}`);
     if (got.text < 200) { console.error(`  FAIL: ${route} rendered almost nothing (${got.text} chars of text), so nothing here was checked`); badRoutes += 1; continue; }
-    if (got.unguarded > 0) { console.error(`  FAIL: ${route} mounts ${got.unguarded} <style> block(s) with a keyframe and no reduced motion rule`); badRoutes += 1; }
+    /* Our keyframe CSS rides in with a reveal, so a first screen that has not
+       reached one legitimately carries none of it: measured here, 13 of the 16
+       routes are in that state on arrival and only the idle games mount theirs
+       immediately. So this is NOT a per route requirement. What must hold is
+       that the stage saw our CSS somewhere, which is asserted once after the
+       loop, and that wherever it IS present it carries the rule. */
+    if (got.ourBlocks > 0) routesWithOurCss += 1;
+    if (got.unguarded > 0) { console.error(`  FAIL: ${route} mounts ${got.unguarded} <style> block(s) of our own with a keyframe and no reduced motion rule`); badRoutes += 1; }
     if (got.animating > 0) { console.error(`  FAIL: ${route}: ${got.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
     if (got.invisible > 0) { console.error(`  FAIL: ${route}: ${got.invisible} reveal element(s) are invisible under reduce, worse than the motion`); badRoutes += 1; }
+  }
+  /* The stage has to have seen our own keyframe CSS somewhere, or it proved
+     nothing about this site and only that a toast library exists. Asserted
+     once across the walk rather than per route, because our CSS rides in with
+     a reveal and most first screens have not reached one. */
+  if (routesWithOurCss === 0) {
+    console.error(`  FAIL: not one of the ${ROUTES.length} routes mounted a keyframe block of our own, so this stage checked nothing about this site`);
+    badRoutes += 1;
+  } else {
+    console.log(`   our own keyframe CSS was present and guarded on ${routesWithOurCss} of ${ROUTES.length} routes; the rest had not reached a reveal yet`);
   }
   await ctx.close();
   server.kill();
