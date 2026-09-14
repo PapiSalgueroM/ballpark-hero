@@ -22,9 +22,10 @@
  *      under it; every visible button in main is 30px or taller.
  *   3. Play starts the scenes: a matchup card mounts with no score element,
  *      the score element mounts only later (never before a card), and the
- *      step stays where it is on screen from the first scene to the recap.
- *   4. Skip ends the round: the recap card replaces the player, in the same
- *      place on screen the player was in.
+ *      step holds its place on the page from the first scene to the recap.
+ *   4. Skip ends the round: the recap card replaces the player, at the same
+ *      place in the document the player held, so nothing grew or vanished
+ *      above the step.
  *   5. The timeline: dragging the thumb to the left end shows Start (the
  *      label, and one empire per home ring on the map); releasing returns
  *      the map to now and the label goes. The input is scrolled under the
@@ -44,7 +45,8 @@
  *
  * Data attributes this reads (all in src/components/conquest):
  *   data-imperialism-help, data-conquest-stage, svg[data-map],
- *   data-standings, input[data-timeline], data-conquest-scrub-label,
+ *   data-conquest-status, data-standings, input[data-timeline],
+ *   data-conquest-scrub-label,
  *   [data-layer="home"], path[data-layer="fill"][data-owner],
  *   data-conquest-pick, data-conquest-play, data-scene-player,
  *   data-scene-card, data-scene-score, data-scene-skip, data-conquest-recap,
