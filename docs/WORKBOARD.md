@@ -244,7 +244,10 @@ onward and say so here. First one landed:
 persisted, so after a reload the counter restarts at 0 and a new player can be handed an id a
 saved player already holds. `wonderkidFactory.ts:195` keeps its counter in the save and is
 immune, so that is the shape to copy. This is the "one engine, many sports" rule biting again:
-Round 426 had to fix the same roster refill bug twice for the same reason.
+Round 426 had to fix the same roster refill bug twice for the same reason. **That is Round 568,
+and it should be done as ONE shared fix injected into six engines rather than six copies of the
+same edit, per the owner's 2026-09-04 instruction.** Round 567's `freeSquadId` is the pattern for
+the repair half; the mint half wants the counter in the save the way wonderkidFactory does it.
 
 - **Correction to the queue in the same round as 560.** Ranks 4 and 9 were listed as open and were
   already done (Round 475's Transfer Path season key rule, fenced by `simTransferPathSeasons`;
