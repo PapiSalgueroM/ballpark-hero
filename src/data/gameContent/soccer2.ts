@@ -750,6 +750,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Stadium Tycoon is an idle game about the part of football nobody streams: the turnstiles. You start with a fence, two benches and ninety loyal fans, and you grow that into a ground that hums, one upgrade at a time, while a live toy match plays out on screen and pays you for every goal.",
       "It is built to be alive. The crowd fills the stand seat by seat as your real attendance grows, money floats off everything that earns, goals throw confetti, and a win streak lights a flame that multiplies the lot. Leave the tab and the turnstiles keep spinning at half speed for up to eight hours.",
       "And it goes deep. Wins climb a ladder of ten divisions that multiply everything you earn, a payroll of eight staff earns around the clock, a golden whistle drifts in with five different prizes, and 47 badges each add a permanent two percent. Selling up resets the club but never the badges, so every run starts faster than the last.",
+      "There is a second room too. The Academy tab runs a youth academy right beside the ground, on its own save, and once you have opened it the kids keep training and ageing while you watch the match.",
     ],
     howToPlay: [
       "Watch the money counter climb. Every fan in the ground pays you every second.",
@@ -760,6 +761,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
       "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from everything paying seven times over to fifteen minutes of income in one lump.",
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
+      "Open the Academy tab to run your youth academy beside the stadium.",
     ],
     rules: [
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
@@ -805,6 +807,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         q: "Is anything in it real players or clubs?",
         a: "No. Stadium Tycoon is entirely our own toy world, which is exactly why the crowd can throw confetti at whatever it likes.",
+      },
+      {
+        q: "Is Wonderkid Factory part of this now?",
+        a: "Yes. The Academy tab runs the same academy with the same save, and the Wonderkid Factory page still works too.",
       },
     ],
   },

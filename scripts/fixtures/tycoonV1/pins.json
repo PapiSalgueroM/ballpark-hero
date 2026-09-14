@@ -1,0 +1,8 @@
+{
+  "note": "Test oracle only, never imported by the app. Byte copies (LF) of the two tycoon libs as they stood when Round 580 began, for scripts/simTycoonRooms.mjs section B3. Their @/ imports resolve to the live src tree.",
+  "commit": "2ccf2938f6b65ec5d713f06e12e57eff95a803f2",
+  "files": {
+    "stadiumTycoon.ts": "195167956397d4c3e6413f5fdf1acf470bdbf27cdcd78129318f9cfd9e007b78",
+    "wonderkidFactory.ts": "718adcdbdcbd15800cd3913cb22a03666d85a4a73023ce7a923037a8020bf931"
+  }
+}

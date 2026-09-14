@@ -10,8 +10,17 @@
  *
  * No scroll on the core loop (pitch + upgrades fit a phone screen), tiles
  * per the house style, "?" rules modal, everything original.
+ *
+ * Round 580: two tabs, one tycoon. The page holds the h1 and a Stadium and
+ * Academy tab strip; the ground itself is StadiumRoom below, moved here
+ * unchanged, and the Academy tab is Wonderkid Factory's academy panel on its
+ * own save (docs/design/round-580-tycoon-merge.md). The stadium hook lives on
+ * the PAGE, not in the room, so the match clock never stops while you are in
+ * the Academy, and the academy panel stays mounted once opened so its clock
+ * never stops while you are at the ground. scripts/simTycoonRooms.mjs holds
+ * both to it, and its controls rewrite the exact lines marked below.
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, Flame, X } from 'lucide-react';
@@ -30,6 +39,9 @@ import {
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
+
+const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
 
 /* ---------- tiny animation helpers ---------- */
 
@@ -50,6 +62,105 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 
 export default function StadiumTycoon() {
   const g = useStadiumTycoon();
+  const [room, setRoom] = useState<Room>('stadium');
+  const [academyOpened, setAcademyOpened] = useState(false);
+  const [academyStatus, setAcademyStatus] = useState<AcademyStatus | null>(null);
+  const [stadiumNeedsYou, setStadiumNeedsYou] = useState(false);
+
+  const openRoom = (next: Room) => {
+    if (next === 'academy') setAcademyOpened(true);
+    setRoom(next);
+  };
+  /* A tab lights when the room behind it needs you. Never the room you are in. */
+  const academyAccent = room !== 'academy' && academyStatus !== null
+    && (academyStatus.deadline || academyStatus.bedsFull || academyStatus.moveUp || academyStatus.leavingSoon);
+  const stadiumAccent = room !== 'stadium' && stadiumNeedsYou;
+  const tabs: { id: Room; label: string; emoji: string; accent: boolean }[] = [
+    { id: 'stadium', label: 'Stadium', emoji: '🏟️', accent: stadiumAccent },
+    { id: 'academy', label: 'Academy', emoji: '🎓', accent: academyAccent },
+  ];
+
+  return (
+    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
+      <GameNavbar />
+      <PageSeo
+        title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
+        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."
+        path="/stadium-tycoon"
+      />
+      <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
+        <CelebrationStyles />
+        <header className="text-center mb-2">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>
+        </header>
+
+        {/* Round 580: the rooms. Each keeps its own clock whichever one is on screen. */}
+        <div className="grid grid-cols-2 gap-2 mb-2" role="group" aria-label="Tycoon rooms">
+          {tabs.map(t => (
+            <button
+              key={t.id}
+              type="button"
+              data-room={t.id}
+              data-accent={t.accent ? 'true' : 'false'}
+              aria-pressed={room === t.id}
+              onClick={() => openRoom(t.id)}
+              className={cn(
+                'relative min-h-[40px] rounded-xl border text-sm font-bold transition-all',
+                room === t.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',
+              )}
+            >
+              {t.emoji} {t.label}
+              {t.accent && (
+                <>
+                  <span aria-hidden="true" className="absolute top-1.5 right-2 h-2.5 w-2.5 rounded-full bg-yellow-400 motion-safe:animate-pulse" />
+                  <span className="sr-only"> (needs you)</span>
+                </>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
+        {academyOpened && (
+          <Suspense fallback={<div className="h-40" />}>
+            <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} />
+          </Suspense>
+        )}
+
+        <GameSeoContent
+          pageHasOwnH1
+          title="Stadium Tycoon"
+          description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
+        />
+      </div>
+
+      {/* local animation keyframes */}
+      <style>{`
+        @keyframes stFloat { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 12% { opacity: 1; transform: translateY(0) scale(1.06); } 100% { opacity: 0; transform: translateY(-46px) scale(1); } }
+        .st-float { animation: stFloat 1.8s ease-out forwards; }
+        @keyframes stConfetti { 0% { opacity: 1; transform: translateY(-8px) rotate(0deg); } 100% { opacity: 0; transform: translateY(190px) rotate(540deg); } }
+        .st-confetti { animation-name: stConfetti; animation-timing-function: ease-in; animation-fill-mode: forwards; }
+        @keyframes stGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
+        .st-glow { animation: stGlow 1.6s ease-in-out infinite; }
+        @keyframes stGoldwob { 0%, 100% { transform: rotate(-14deg) scale(1); filter: brightness(1); } 25% { transform: rotate(10deg) scale(1.22); filter: brightness(1.35); } 50% { transform: rotate(-8deg) scale(1.05); filter: brightness(1.1); } 75% { transform: rotate(12deg) scale(1.18); filter: brightness(1.3); } }
+        .st-goldwob { animation: stGoldwob 0.9s ease-in-out infinite; }
+        /* Round 530: the setting the visitor already made. The two loops stop
+           looping, the floaters land as plain text until they are cleared, and
+           the confetti (decoration, nothing to read) does not run at all. */
+        @media (prefers-reduced-motion: reduce) {
+          .st-glow, .st-goldwob { animation: none; }
+          .st-float { animation: none; opacity: 1; transform: none; }
+          .st-confetti { display: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+/* The ground. Everything the page used to render, unchanged, except that it
+   renders nothing while the Academy tab is showing and holds its two cards'
+   timers until you are looking again. Its hooks keep running either way. */
+function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
   const [showHelp, setShowHelp] = useState(false);
   /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
@@ -121,15 +232,20 @@ export default function StadiumTycoon() {
      Continue, and a badge line above the drawers for four seconds. Both are
      the hook's own event fields; the timers only take them down. */
   useEffect(() => {
-    if (!g.promotion) return;
+    if (!g.promotion || !visible) return;
     const t = window.setTimeout(g.dismissPromotion, 4000);
     return () => window.clearTimeout(t);
-  }, [g.promotion, g.dismissPromotion]);
+  }, [g.promotion, g.dismissPromotion, visible]);
   useEffect(() => {
-    if (!g.badge) return;
+    if (!g.badge || !visible) return;
     const t = window.setTimeout(g.dismissBadge, 4000);
     return () => window.clearTimeout(t);
-  }, [g.badge, g.dismissBadge]);
+  }, [g.badge, g.dismissBadge, visible]);
+
+  /* Round 580: the Stadium tab lights while a card or the away total is waiting. */
+  useEffect(() => {
+    onNeedsYou(Boolean(g.promotion || g.badge || g.awayPay !== null));
+  }, [g.promotion, g.badge, g.awayPay, onNeedsYou]);
 
   const onPitchClick = (e: React.MouseEvent) => {
     const el = pitchRef.current;
@@ -138,18 +254,11 @@ export default function StadiumTycoon() {
     g.doTap(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
   };
 
+  if (!visible) return null;
+
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
-      <GameNavbar />
-      <PageSeo
-        title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
-        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."
-        path="/stadium-tycoon"
-      />
-      <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
-        <CelebrationStyles />
-        <header className="text-center mb-3">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>
+    <>
+        <div className="text-center mb-3">
           {/* Round 162: the ladder this ground is climbing, front and center. */}
           <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
             {div.emoji} {div.name}
@@ -162,7 +271,7 @@ export default function StadiumTycoon() {
             {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{achCount * 2}%</span>}
             <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-foreground"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
           </div>
-        </header>
+        </div>
 
         {/* Money header */}
         <div className="flex items-end justify-between mb-2 px-1">
@@ -525,13 +634,6 @@ export default function StadiumTycoon() {
           lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
-        <GameSeoContent
-          pageHasOwnH1
-          title="Stadium Tycoon"
-          description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
-        />
-      </div>
-
       {/* Away earnings modal */}
       {g.awayPay !== null && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={g.dismissAway}>
@@ -566,31 +668,12 @@ export default function StadiumTycoon() {
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +50% income each, every badge, and your club records. The ladder is faster every run.</p>
               <p>Selling up also pays legacy points: 1 for the sale plus 1 per division that ground climbed, so cashing out early pays 1 and a sale from The Summit pays 10. Spend them in the Legacy boardroom on eight permanent perks, from Boardroom Sway (+10% income per level, forever) to a Steady Dressing Room that keeps half your streak through a loss. The whole board costs exactly 100 points. Perks survive every future sale.</p>
               <p>Away from the game, you earn at half speed for up to 8 hours (the Away Day Deal perk raises both, up to 80% for 12 hours). Progress saves on this device.</p>
+              <p>The Academy tab runs your youth academy inside this game, on its own save, with its own How it works button.</p>
               <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>
             </div>
           </div>
         </div>
       )}
-
-      {/* local animation keyframes */}
-      <style>{`
-        @keyframes stFloat { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 12% { opacity: 1; transform: translateY(0) scale(1.06); } 100% { opacity: 0; transform: translateY(-46px) scale(1); } }
-        .st-float { animation: stFloat 1.8s ease-out forwards; }
-        @keyframes stConfetti { 0% { opacity: 1; transform: translateY(-8px) rotate(0deg); } 100% { opacity: 0; transform: translateY(190px) rotate(540deg); } }
-        .st-confetti { animation-name: stConfetti; animation-timing-function: ease-in; animation-fill-mode: forwards; }
-        @keyframes stGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
-        .st-glow { animation: stGlow 1.6s ease-in-out infinite; }
-        @keyframes stGoldwob { 0%, 100% { transform: rotate(-14deg) scale(1); filter: brightness(1); } 25% { transform: rotate(10deg) scale(1.22); filter: brightness(1.35); } 50% { transform: rotate(-8deg) scale(1.05); filter: brightness(1.1); } 75% { transform: rotate(12deg) scale(1.18); filter: brightness(1.3); } }
-        .st-goldwob { animation: stGoldwob 0.9s ease-in-out infinite; }
-        /* Round 530: the setting the visitor already made. The two loops stop
-           looping, the floaters land as plain text until they are cleared, and
-           the confetti (decoration, nothing to read) does not run at all. */
-        @media (prefers-reduced-motion: reduce) {
-          .st-glow, .st-goldwob { animation: none; }
-          .st-float { animation: none; opacity: 1; transform: none; }
-          .st-confetti { display: none; }
-        }
-      `}</style>
-    </div>
+    </>
   );
 }

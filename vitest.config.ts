@@ -40,6 +40,12 @@ export default defineConfig({
       ...(process.env.DAILY_RECORD_CONTROL === "stale"
         ? { "@/hooks/useDailyPuzzle": path.resolve(__dirname, "./src/hooks/__control_useDailyPuzzle.ts") }
         : {}),
+      /* Round 580 negative controls. scripts/simTycoonRooms.mjs writes a copy of
+         the Stadium Tycoon page with one of its room rules broken and points
+         src/test/tycoonRooms.test.tsx at it. Same ordering rule: above "@". */
+      ...(process.env.TYCOON_ROOMS_PAGE
+        ? { "@/pages/StadiumTycoon": path.resolve(process.env.TYCOON_ROOMS_PAGE) }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

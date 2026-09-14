@@ -927,6 +927,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 | `duplicateIds` | academy | `midAcademy` with two kids sharing id 12, `nextId` 5 and rep 1.5 |
 | `doctoredKids` | academy | valid positions and nations, rating 120 over potential 80, age 30, `ageClock` 1e9, scouting 9999, plus one kid with `pos: 'XX'` |
 
+**As built in Round 580, three deliberate differences from the rows above:**
+- `midAcademy` has levels scouting 2, coaching 5, dorms 9, agents 4, not 6, 5, 3, 4. With three dorm levels the academy has six beds, so six kids fill it and `bedsFull` lights the Academy accent from the first second. Test 6 could then never read `"false"` at 5 seconds. Twelve beds and a find every 20 seconds cannot fill inside that test, so the only thing that can light the accent there is the kid about to turn 24.
+- `doctored` stores `matchSec` as `null`, not NaN. A NaN cannot be written to JSON (it serializes as null), so a raw NaN save would be refused whole by `JSON.parse` and would test nothing about field validation.
+- A tab's accent lights only while that room is NOT the one on screen. Tests 6 and 7 only sample the other room, so the contract's assertions are unchanged.
+
 ### Strongest signal: the stadium never stops while you are in the Academy
 
 - **Session S:** load `midGame`. 60 seconds on the Stadium tab, 60 seconds on Academy, 60 seconds back on Stadium.

@@ -127,6 +127,12 @@ const RIVAL_NAMES = [
   'candy crush',
   'rocket league',
   'The Sims',                   // case-sensitive, see below
+  // Round 580: the idle sports app the owner cited as the tycoon merge's
+  // inspiration (docs/TWEAKS-2026-08-28.md). All three words, with a boundary at
+  // both ends: the two word prefix alone already matches ordinary copy ("the
+  // worst line in sports starts moving" in src/lib/nhlCareerLifeA.ts).
+  // scripts/simTycoonRooms.mjs section B4 proves both halves of that.
+  '\\bsports ?star ?idle\\b',
 ];
 
 /* Matched with a capital letter required, because the lowercase form is
