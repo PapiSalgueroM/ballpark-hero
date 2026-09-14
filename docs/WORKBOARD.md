@@ -156,8 +156,10 @@ acceptance rates dropped because no publisher stated a year for them.
 **2026-09-14, desktop lane, SECOND block claimed: 580 to 599, for the tycoon merge arc.** The
 560 to 568 numbers below are spent and 569 is the last of that block. The owner's Stadium
 Tycoon plus Wonderkid Factory merge (`docs/TWEAKS-2026-08-28.md`, "weeks of work") is the one
-row on his list still fully OPEN, so it gets a block of its own: 569 is the design contract and
-round one, 580 onward are the rounds after it. I have skipped 570 to 579 on purpose, because the
+row on his list still fully OPEN, so it gets a block of its own: 580 onward. (This note first
+said 569 would be the design contract and round one. 569 went to the signed in points fix
+instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the contract is
+`docs/design/round-580-tycoon-merge.md`. Round 580, two tabs, is in progress.) I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

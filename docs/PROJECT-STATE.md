@@ -1,5 +1,36 @@
 # Project state
 
+## LIVE as of 2026-09-14 morning: Round 569, signed in points save in one call
+
+**`origin/main` is `79bddedc` and douknowball.com is serving it.** Deployment
+`106deeba-c152-493f-b018-fac3eec6afc1`, called only after `get_project` showed `latest_commit_sha`
+matching. Proof: `record_auth_completion` is in the live entry chunk `index-Bgviz6S2.js`.
+Round 568 had already shipped the same night (deployment `520cd106`, `entityIds-Clki3xAH.js`).
+
+- **569: a signed in finish is one atomic database call.** It used to be four browser writes, one
+  request each, with a read then write on the running total, so an interrupted save left partial
+  rows and two games finishing together lost one. `public.record_auth_completion` is SECURITY
+  INVOKER under the existing row policies, takes the user from `auth.uid()`, increments inside the
+  upsert and refuses anonymous callers (verified live, 401). The recorder reads the local session
+  instead of a network `getUser`. Fenced by the new `scripts/simAuthSave.mjs` (controls
+  `readwrite`, `getuser`, `definer`, all fire) and by `simScoringCoverage`, which now asserts
+  delivery (control `nosave`) and had three Windows path and comment bugs that left its `unwire`
+  control unable to fire; fixed.
+- **Also recorded in 569: three indexes** for the anonymous statement timeouts in the live logs
+  (32 in 24 hours). nflfastr season and team 3,167ms to 11ms, market value club trigram 181ms to
+  46ms, year and value 23ms to 7ms. Migration files are in `supabase/migrations/20260914*`.
+- **Past points are NOT restored.** 34 accounts are short 19,857 points; the owner decision with
+  a recommended default is further down this file.
+- **Gates:** tsc zero, build green, vitest 218 of 218, and every harness that references
+  completions (19) green. Three vitest timeouts on the way turned out to be two runaway probe
+  scripts from 2026-09-12 pinning two cores; killed, suite went from 41s to 18s.
+
+**Next: the tycoon merge arc, Rounds 580 to 589.** The design contract is
+`docs/design/round-580-tycoon-merge.md` (three designs, a judge panel and a synthesis). The
+workflow wrote round one as 569; that number went to the points fix, so everything shifted up one.
+Round 580 is two tabs on `/stadium-tycoon` with the academy on its own unchanged save, no save
+migration, harness `simTycoonRooms`.
+
 ## LIVE as of 2026-09-14: desktop Rounds 560 to 567, two player-reported bugs closed
 
 **`origin/main` is `f78163d4` and douknowball.com is serving it.** Deployment
