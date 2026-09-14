@@ -999,6 +999,15 @@ export function serializeTycoon(s: TycoonState, now: number): string {
   return JSON.stringify({ ...s, savedAt: now });
 }
 
+/** Seconds of play per match minute. tick() spells the same 1.4 as MIN_LEN;
+ *  the loader needs it to know what a banked remainder can legally hold. */
+const MATCH_MINUTE_SEC = 1.4;
+
+/** A whole number inside [lo, hi], or lo for anything that is not a number. */
+function wholeIn(v: unknown, lo: number, hi: number): number {
+  return Number.isFinite(v) ? Math.min(hi, Math.max(lo, Math.floor(v as number))) : lo;
+}
+
 export function deserializeTycoon(raw: string | null, now: number): TycoonState | null {
   if (!raw) return null;
   try {
@@ -1014,6 +1023,35 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     for (const k of ['money', 'lifetime', 'fanbase'] as const) {
       if (!Number.isFinite(s[k]) || s[k] < 0) s[k] = base[k];
     }
+    /* Round 581: the upgrade levels come back as the tracks define them. Before
+       this the stored object was merged in raw, so a save carrying
+       levels.squad = "abc" loaded as a string: levelOf read NaN, every goal
+       chance compared against NaN and no goal was ever scored again, and an
+       unknown id rode along into every later save. Only known tracks, whole
+       levels, inside each track's cap. */
+    const cleanLevels: Record<string, number> = {};
+    for (const t of TRACKS) {
+      const lvl = s.levels[t.id];
+      cleanLevels[t.id] = Number.isFinite(lvl) && lvl > 0 ? Math.min(Math.floor(lvl), t.maxLevel) : 0;
+    }
+    s.levels = cleanLevels;
+    /* Round 581: the match and the counters. A whole minute from 0 to 89, the
+       banked seconds inside one match minute, goals a match can hold, and
+       counters that are whole and never negative. matchSec stays absent on a
+       save that never had it, so an older save loads byte for byte.
+       89, not 90: tick() settles full time in the same tick that reaches
+       minute 90, so no honest save holds 90, and a loaded 90 would be settled a
+       minute late and lose that minute off the match clock. */
+    s.minute = wholeIn(s.minute, 0, 89);
+    s.goalsFor = wholeIn(s.goalsFor, 0, 90);
+    s.goalsAgainst = wholeIn(s.goalsAgainst, 0, 90);
+    if (s.matchSec !== undefined && !(Number.isFinite(s.matchSec) && (s.matchSec as number) >= 0 && (s.matchSec as number) < MATCH_MINUTE_SEC)) s.matchSec = 0;
+    for (const k of ['streak', 'matchNo', 'totalGoals', 'totalWins', 'totalTaps'] as const) {
+      s[k] = wholeIn(s[k], 0, Number.MAX_SAFE_INTEGER);
+    }
+    /* A save stamped in the future, or not stamped with a number at all, would
+       make the away settle pay NaN or refuse to pay for real time away. */
+    if (!Number.isFinite(s.savedAt) || s.savedAt > now) s.savedAt = now;
     if (!Number.isFinite(s.rep) || s.rep < 0 || s.rep > 50) s.rep = 0;
     // Round 150: hype clocks come back sane whatever the save says.
     if (!Number.isFinite(s.boostChargeSec) || s.boostChargeSec < 0) s.boostChargeSec = 0;

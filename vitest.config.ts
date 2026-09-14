@@ -46,6 +46,21 @@ export default defineConfig({
       ...(process.env.TYCOON_ROOMS_PAGE
         ? { "@/pages/StadiumTycoon": path.resolve(process.env.TYCOON_ROOMS_PAGE) }
         : {}),
+      /* Round 581 negative controls. scripts/simTycoonLoads.mjs writes a broken
+         copy of one tycoon hook or lib and points the load and away suites at
+         it. Same ordering rule: above "@". */
+      ...(process.env.TYCOON_LOADS_STADIUM_HOOK
+        ? { "@/hooks/useStadiumTycoon": path.resolve(process.env.TYCOON_LOADS_STADIUM_HOOK) }
+        : {}),
+      ...(process.env.TYCOON_LOADS_ACADEMY_HOOK
+        ? { "@/hooks/useWonderkidFactory": path.resolve(process.env.TYCOON_LOADS_ACADEMY_HOOK) }
+        : {}),
+      ...(process.env.TYCOON_LOADS_STADIUM_LIB
+        ? { "@/lib/stadiumTycoon": path.resolve(process.env.TYCOON_LOADS_STADIUM_LIB) }
+        : {}),
+      ...(process.env.TYCOON_LOADS_ACADEMY_LIB
+        ? { "@/lib/wonderkidFactory": path.resolve(process.env.TYCOON_LOADS_ACADEMY_LIB) }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

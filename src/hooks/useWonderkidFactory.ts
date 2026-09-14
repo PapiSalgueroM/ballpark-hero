@@ -10,7 +10,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FactoryState, FacilityId, SAVE_KEY,
-  newFactory, deserialize, serialize, applyOffline, tick,
+  newFactory, deserialize, serialize, applyOffline, advanceClock,
   buyFacility, sellProspect, startShowcase, moveUp,
 } from '@/lib/wonderkidFactory';
 import { recordCompletion } from '@/lib/completions';
@@ -43,13 +43,22 @@ export function useWonderkidFactory() {
     window.setTimeout(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);
   }, []);
 
-  /* the clock, and the save that survives a closed lid */
+  /* the clock, and the save that survives a closed lid.
+     Round 581: each callback pays the wall time since the last one, not a fixed
+     quarter second. A browser that hides the tab slows this interval to once a
+     second and then once a minute, and a fixed step turned three hidden hours
+     into a minute or two of training. advanceClock pays a watched gap at full
+     speed and a hidden page, or a gap too long to have been watched, as time
+     away, under the same half speed, eight hour, nobody-ages rule a closed tab
+     gets on load. The academy panel hidden under Stadium Tycoon's other tab is
+     still a visible page, so it keeps its watched clock. */
   useEffect(() => {
     const iv = window.setInterval(() => {
       const s = stateRef.current!;
       const before = s.prospects.length;
-      tick(s, 0.25);
-      s.lastSeen = Date.now();
+      const now = Date.now();
+      advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');
+      s.lastSeen = now;
       if (s.prospects.length > before) pushFloater('🔭 the scouts found someone', 'find');
       if (s.prospects.length < before && s.leftFree > 0) {
         /* only the leaver path shrinks the academy inside a tick */

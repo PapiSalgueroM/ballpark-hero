@@ -88,6 +88,32 @@ export const DEADLINE_MULT = 1.5;
 /** offline progress: everything runs at half speed, capped at eight hours. */
 const OFFLINE_RATE = 0.5;
 const OFFLINE_CAP_SEC = 8 * 3600;
+/**
+ * Round 581: the longest gap between two clock callbacks on a VISIBLE page that
+ * still counts as somebody watching. A hidden page is always away, whatever the
+ * gap (see advanceClock).
+ *
+ * The first draft used Idle Arena's 750ms and decided on the gap alone. The
+ * review found both halves of that wrong for this game: a hidden tab whose
+ * throttled wakes jitter can land one gap under 750ms and reset the eight hour
+ * meter (twenty hidden hours credited ten, against a promise of four), and a
+ * slow phone whose visible callbacks come every 800ms was paid as away, so kids
+ * stopped ageing while being watched and after eight hours the academy stopped
+ * dead. Visibility decides hidden; this bound only catches a visible page that
+ * was not really running (a sleeping laptop wakes with one huge gap), and five
+ * seconds is far past any honest main thread stall.
+ *
+ * Before this round the hook ticked a fixed quarter second per callback, so a
+ * tab hidden for three hours (a callback a second at first, then one a minute
+ * once the browser throttles it hard) trained for a minute or two and stamped
+ * lastSeen on every callback, so a reload could not pay those hours either. The
+ * rules modal promises half speed for up to eight hours.
+ */
+export const AWAY_AFTER_MS = 5000;
+/** Away time trains in steps of at most this many academy seconds, so one long
+ *  closed absence and the same absence paid a wake at a time land on the same
+ *  academy. Growth slows toward the ceiling, so one giant step used to overpay. */
+const AWAY_STEP_SEC = 5;
 
 export const MAX_REP = 60;
 
@@ -129,6 +155,11 @@ export interface FactoryState {
   leftFree: number;
   lastSeen: number;
   nextId: number;
+  /** Round 581: wall ms already paid as away time in the current absence, so
+   *  the eight hour cap counts the whole absence rather than each throttled
+   *  callback inside it. The first watched tick sets it back to zero. Optional,
+   *  so every older save loads and older builds carry it through untouched. */
+  awayMs?: number;
 }
 
 /* -------------------------------------------------------------------- prng */
@@ -328,12 +359,13 @@ export function canMoveUp(s: FactoryState): boolean {
 export function moveUp(s: FactoryState): boolean {
   if (!canMoveUp(s)) return false;
   const now = s.lastSeen;
-  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId'> = {
+  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId' | 'awayMs'> = {
     rep: s.rep + 1,
     careerEarned: s.careerEarned,
     soldCareer: s.soldCareer,
     seed: s.seed,
     nextId: s.nextId,
+    awayMs: s.awayMs ?? 0,
   };
   Object.assign(s, newFactory(now), carried);
   return true;
@@ -379,7 +411,13 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
 
   /* training and the clock. Growth slows toward the ceiling and never
      crosses it: headroom is the fraction of the original climb left. */
-  const tm = trainMult(s);
+  /* Round 581 review: a showcase is a watched moment. Away time trains at the
+     away rate without it, and its clock waits (above), so hiding the tab during
+     a showcase neither multiplies the away pay by three nor burns the showcase.
+     Before this, a hidden tab with a showcase lit trained at 1.5 times the
+     WATCHED speed and the showcase never ran out: the stadium's Matchday Hype
+     has had the same exclusion since Round 150. */
+  const tm = offline && s.showcaseLeft > 0 ? trainMult(s) / SHOWCASE_MULT : trainMult(s);
   const leavers: number[] = [];
   for (const p of s.prospects) {
     if (p.rating < p.potential) {
@@ -411,13 +449,46 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
 }
 
 /** Offline progress at half speed, capped hard. Sales are manual so cash can
- *  never accrue offline; only scouting and training move. */
+ *  never accrue offline; only scouting and training move. This is the load
+ *  path: the whole gap since the save was last stamped is one absence. */
 export function applyOffline(s: FactoryState, now: number): number {
-  const gapSec = Math.max(0, (now - s.lastSeen) / 1000);
-  const applied = Math.min(gapSec, OFFLINE_CAP_SEC) * OFFLINE_RATE;
-  if (applied > 1) tick(s, applied, { offline: true });
+  const applied = applyAway(s, now - s.lastSeen);
   s.lastSeen = now;
   return applied;
+}
+
+/**
+ * Round 581: pay `gapMs` of wall clock as away time. Half speed, nobody ages,
+ * no Deadline Day, and the eight hour cap counts the WHOLE absence through the
+ * `awayMs` meter, because a throttled tab wakes up once a minute and would
+ * otherwise collect a fresh eight hours on every wake. Returns the academy
+ * seconds credited. Idle Arena's shape (src/lib/idleArena.ts applyOffline).
+ */
+export function applyAway(s: FactoryState, gapMs: number): number {
+  const used = Number.isFinite(s.awayMs) && (s.awayMs as number) > 0 ? (s.awayMs as number) : 0;
+  const left = Math.max(0, OFFLINE_CAP_SEC * 1000 - used);
+  const away = Math.min(Math.max(0, Number.isFinite(gapMs) ? gapMs : 0), left);
+  s.awayMs = used + away;
+  const applied = (away / 1000) * OFFLINE_RATE;
+  for (let left = applied; left > 0; left -= AWAY_STEP_SEC) {
+    tick(s, Math.min(AWAY_STEP_SEC, left), { offline: true });
+  }
+  return applied;
+}
+
+/**
+ * Round 581: one callback of the academy's clock, `gapMs` after the last. On a
+ * visible page a gap up to AWAY_AFTER_MS is somebody watching: full speed, the
+ * calendar turns, and the absence meter goes back to zero. A hidden page, or a
+ * longer gap, is time away and goes through applyAway. The caller stamps
+ * lastSeen and says whether the page is visible.
+ */
+export function advanceClock(s: FactoryState, gapMs: number, visible = true): { away: boolean; seconds: number } {
+  if (!(gapMs > 0)) return { away: false, seconds: 0 };
+  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, seconds: applyAway(s, gapMs) };
+  s.awayMs = 0;
+  tick(s, gapMs / 1000);
+  return { away: false, seconds: gapMs / 1000 };
 }
 
 /* ------------------------------------------------------------ persistence */
@@ -444,12 +515,32 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
       s[k] = Math.min(s[k], 1e15);
     }
     if (!Number.isFinite(s.rep) || s.rep < 0 || s.rep > MAX_REP) s.rep = 0;
+    /* Round 581: stars are whole. A fractional rep indexes REGIONS with a
+       fraction and quotes bonuses the game never pays. */
+    s.rep = Math.floor(s.rep);
     for (const f of FACILITIES) {
       const lvl = s.levels[f.id];
       s.levels[f.id] = Number.isFinite(lvl) && lvl > 0 ? Math.min(Math.floor(lvl), f.maxLevel) : 0;
     }
     for (const k of ['sold', 'soldCareer', 'leftFree', 'nextId'] as const) {
       if (!Number.isFinite(s[k]) || s[k] < 0) s[k] = k === 'nextId' ? 1 : 0;
+      s[k] = Math.floor(s[k]);
+    }
+    /* An honest academy mints a kid every few seconds at most, so a billion ids
+       is centuries of play; anything at or past it is a doctored save, and past
+       2^53 the arithmetic that keeps ids apart stops working at all. */
+    if (s.nextId < 1 || s.nextId >= MAX_KID_ID) s.nextId = 1;
+    /* Round 581: the away meter comes back inside the only range it can hold.
+       Left absent when the save never had one, so an older save loads byte for
+       byte as it did. */
+    if (s.awayMs !== undefined) {
+      s.awayMs = Number.isFinite(s.awayMs) && (s.awayMs as number) > 0 ? Math.min(s.awayMs as number, OFFLINE_CAP_SEC * 1000) : 0;
+    }
+    /* Round 581, Round 568's rule for a persisted counter: the next id must sit
+       above every id already written, or the next kid scouted is handed an id a
+       saved kid already wears and selling one sells the other. */
+    for (const k of Array.isArray(s.prospects) ? s.prospects : []) {
+      if (k && isKidId(k.id) && k.id >= s.nextId) s.nextId = k.id + 1;
     }
     if (!Number.isFinite(s.seed)) s.seed = Math.floor(now % 2147483647) | 0;
     s.seed = s.seed | 0;
@@ -463,6 +554,7 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
        world, ratings under their ceilings, and no shared names */
     const cap = 3 + s.levels.dorms;
     const seen = new Set<string>();
+    const ids = new Set<number>();
     const clean: Prospect[] = [];
     for (const k of Array.isArray(s.prospects) ? s.prospects : []) {
       if (!k || typeof k !== 'object') continue;
@@ -473,8 +565,13 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
       const potential = Math.min(99, Math.max(45, Math.round(k.potential)));
       const rating = Math.min(potential, Math.max(30, k.rating));
       const age = Number.isFinite(k.age) ? Math.min(LEAVE_AGE - 1, Math.max(15, Math.floor(k.age))) : 17;
+      /* First holder wins (entityIds.ts): the first kid under an id keeps it,
+         so nothing already pointing at it moves, and a shadowed or broken id
+         is re-minted rather than the kid dropped. */
+      const id = isKidId(k.id) && !ids.has(k.id) ? k.id : s.nextId++;
+      ids.add(id);
       clean.push({
-        id: Number.isFinite(k.id) ? k.id : s.nextId++,
+        id,
         name: k.name,
         nation: k.nation,
         pos: k.pos,
@@ -491,6 +588,11 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
   } catch {
     return null;
   }
+}
+
+const MAX_KID_ID = 1e9;
+function isKidId(v: unknown): v is number {
+  return Number.isSafeInteger(v) && (v as number) >= 0 && (v as number) < MAX_KID_ID;
 }
 
 function clampClock(v: unknown, max: number): number {

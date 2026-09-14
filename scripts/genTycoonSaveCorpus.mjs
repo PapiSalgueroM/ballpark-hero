@@ -7,18 +7,24 @@
  * what today's loaders do with today's saves, so a later round can prove it did
  * not change the answer. This script writes that record.
  *
- *   src/test/fixtures/tycoonSaves.json   eight saves, { name, key, raw, loaded }
+ *   src/test/fixtures/tycoonSaves.json   nine saves, { name, key, raw, loaded, current }
  *   scripts/fixtures/tycoonV1/           byte copies of the two libs plus pins.json
  *                                        (only with --freeze)
  *
- * `loaded` is what the CURRENT loader returns for `raw` at the fixed NOW, put
+ * `loaded` is what the FROZEN V1 loader returns for `raw` at the fixed NOW, put
  * back through the lib's own serializer (null when the loader refuses the save).
- * scripts/simTycoonRooms.mjs section B2 reruns every entry through the current
- * libs and B3 through the frozen copies, and both must reproduce it exactly.
+ * `current` is the same for today's libs. They were equal when Round 580 froze
+ * the libs; a save round that repairs a field on load changes `current` for the
+ * saves it repairs and regenerates this file on purpose, and must leave every
+ * other entry's `current` equal to its `loaded`. scripts/simTycoonRooms.mjs
+ * section B2 holds today's libs to `current`, B3 the frozen copies to `loaded`,
+ * and scripts/simTycoonLoads.mjs says which entries may differ.
  *
- * Its name does not start with sim, so runAllSims skips it. Run it by hand, once,
- * when the corpus is being (re)made on purpose:
- *   node scripts/genTycoonSaveCorpus.mjs --freeze
+ * Its name does not start with sim, so runAllSims skips it. Run it by hand when
+ * the corpus is being (re)made on purpose:
+ *   node scripts/genTycoonSaveCorpus.mjs            rewrite the corpus
+ *   node scripts/genTycoonSaveCorpus.mjs --freeze   also re-freeze the V1 libs
+ *                                                   (only ever at a new baseline)
  */
 import { execSync } from 'node:child_process';
 import crypto from 'node:crypto';
@@ -48,6 +54,34 @@ async function bundle(entry, name) {
 
 const stadium = await bundle(path.join(ROOT, LIBS.stadium), 'stadium');
 const academy = await bundle(path.join(ROOT, LIBS.academy), 'academy');
+
+if (FREEZE) {
+  fs.mkdirSync(FROZEN, { recursive: true });
+  const files = {};
+  for (const rel of Object.values(LIBS)) {
+    const text = fs.readFileSync(path.join(ROOT, rel), 'utf8').split('\r\n').join('\n');
+    const name = path.basename(rel);
+    fs.writeFileSync(path.join(FROZEN, name), text);
+    /* Hashed with line endings folded to LF, so a Windows checkout and a Linux
+       clone of the same commit agree. */
+    files[name] = crypto.createHash('sha256').update(text).digest('hex');
+  }
+  const commit = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+  fs.writeFileSync(path.join(FROZEN, 'pins.json'), JSON.stringify({
+    note: 'Test oracle only, never imported by the app. Byte copies (LF) of the two tycoon libs as they stood when Round 580 began, for scripts/simTycoonRooms.mjs section B3. Their @/ imports resolve to the live src tree.',
+    commit,
+    files,
+  }, null, 2) + '\n');
+  console.log(`froze both libs at ${commit.slice(0, 8)} into ${path.relative(ROOT, FROZEN)}`);
+}
+for (const f of ['stadiumTycoon.ts', 'wonderkidFactory.ts']) {
+  if (!fs.existsSync(path.join(FROZEN, f))) {
+    console.error(`no frozen ${f} in ${path.relative(ROOT, FROZEN)}, so there is no V1 answer to record. Run with --freeze only at a new baseline.`);
+    process.exit(1);
+  }
+}
+const frozenStadium = await bundle(path.join(FROZEN, 'stadiumTycoon.ts'), 'frozen-stadium');
+const frozenAcademy = await bundle(path.join(FROZEN, 'wonderkidFactory.ts'), 'frozen-academy');
 
 /* ---------- stadium saves ---------- */
 
@@ -153,6 +187,11 @@ duplicateIds.prospects[1].id = 12;
 duplicateIds.nextId = 5;
 duplicateIds.rep = 1.5;
 
+/* Round 581: an academy saved partway through a hidden absence, carrying the away
+   meter the round added, so the frozen V1 build is proven to keep the field. */
+const awayMeter = midAcademyState();
+awayMeter.awayMs = 3 * 3600 * 1000;
+
 const doctoredKids = midAcademyState();
 doctoredKids.levels.scouting = 9999;
 doctoredKids.prospects[0].rating = 120;
@@ -180,34 +219,19 @@ const entries = [
   ['fresh', 'academy', academyFresh],
   ['midAcademy', 'academy', midAcademy],
   ['duplicateIds', 'academy', duplicateIds],
+  ['awayMeter', 'academy', awayMeter],
   ['doctoredKids', 'academy', doctoredKids],
 ].map(([name, key, save]) => {
   const raw = JSON.stringify(save);
-  const loaded = key === 'stadium' ? loadStadium(stadium, raw) : loadAcademy(academy, raw);
-  return { name, key, raw, loaded };
+  const loaded = key === 'stadium' ? loadStadium(frozenStadium, raw) : loadAcademy(frozenAcademy, raw);
+  const current = key === 'stadium' ? loadStadium(stadium, raw) : loadAcademy(academy, raw);
+  return { name, key, raw, loaded, current };
 });
 
 fs.mkdirSync(path.dirname(CORPUS), { recursive: true });
 fs.writeFileSync(CORPUS, JSON.stringify({ now: NOW, entries }, null, 2) + '\n');
 console.log(`wrote ${path.relative(ROOT, CORPUS)}: ${entries.length} saves`);
-for (const e of entries) console.log(`   ${e.key.padEnd(7)} ${e.name.padEnd(13)} raw ${String(e.raw.length).padStart(5)} bytes, loaded ${e.loaded === null ? 'REFUSED' : `${e.loaded.length} bytes`}`);
-
-if (FREEZE) {
-  fs.mkdirSync(FROZEN, { recursive: true });
-  const files = {};
-  for (const rel of Object.values(LIBS)) {
-    const text = fs.readFileSync(path.join(ROOT, rel), 'utf8').split('\r\n').join('\n');
-    const name = path.basename(rel);
-    fs.writeFileSync(path.join(FROZEN, name), text);
-    /* Hashed with line endings folded to LF, so a Windows checkout and a Linux
-       clone of the same commit agree. */
-    files[name] = crypto.createHash('sha256').update(text).digest('hex');
-  }
-  const commit = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
-  fs.writeFileSync(path.join(FROZEN, 'pins.json'), JSON.stringify({
-    note: 'Test oracle only, never imported by the app. Byte copies (LF) of the two tycoon libs as they stood when Round 580 began, for scripts/simTycoonRooms.mjs section B3. Their @/ imports resolve to the live src tree.',
-    commit,
-    files,
-  }, null, 2) + '\n');
-  console.log(`froze both libs at ${commit.slice(0, 8)} into ${path.relative(ROOT, FROZEN)}`);
+for (const e of entries) {
+  const size = v => (v === null ? 'REFUSED' : `${v.length} bytes`);
+  console.log(`   ${e.key.padEnd(7)} ${e.name.padEnd(13)} raw ${String(e.raw.length).padStart(5)} bytes, V1 loads ${size(e.loaded)}, today loads ${size(e.current)}${e.loaded === e.current ? '' : '  (repaired)'}`);
 }

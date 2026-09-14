@@ -11,9 +11,9 @@
  *     match clock and the academy's own save against a baseline (part A).
  *   - A save that stops loading the way it did. The arc never bumps a version or
  *     renames a key; later rounds only add optional fields. Part B holds today's
- *     loaders to a committed corpus of eight saves, and holds a frozen copy of
- *     today's two libs to the same answers, so a later round can prove its saves
- *     still load in the build it replaced.
+ *     loaders to a committed corpus of eight saves (each entry's `current`), and
+ *     a frozen copy of the Round 580 libs to the V1 answers (`loaded`), so a later
+ *     round can prove its saves still load in the build it replaced.
  *
  * Every check has a negative control and the harness runs all of them. A control
  * that rewrites text asserts the text is there first, or refuses to run.
@@ -221,7 +221,9 @@ async function bundle(entry, name) {
   return import('file:///' + out.replace(/\\/g, '/'));
 }
 
-function reproduce(stadium, academy, entries, now) {
+/** Every entry through one pair of loaders, against the recorded answer in `field`:
+ *  `current` for today's libs, `loaded` for the frozen V1 copies. */
+function reproduce(stadium, academy, entries, now, field) {
   const wrong = [];
   for (const e of entries) {
     let got;
@@ -232,7 +234,7 @@ function reproduce(stadium, academy, entries, now) {
       const s = academy.deserialize(e.raw, now);
       got = s ? academy.serialize(s) : null;
     }
-    if (got !== e.loaded) wrong.push(`${e.key}/${e.name}`);
+    if (got !== e[field]) wrong.push(`${e.key}/${e.name}`);
   }
   return wrong;
 }
@@ -267,7 +269,7 @@ async function saveSections({ stadiumLib, academyLib, frozenDir, rivalsFile, cor
   if (stadium.TYCOON_SAVE_KEY !== 'stadiumTycoonSaveV1') out.B1.push(`the stadium save key is ${JSON.stringify(stadium.TYCOON_SAVE_KEY)}, and every existing save lives under stadiumTycoonSaveV1`);
   if (academy.SAVE_KEY !== 'wonderkidFactoryV1') out.B1.push(`the academy save key is ${JSON.stringify(academy.SAVE_KEY)}, and every existing save lives under wonderkidFactoryV1`);
 
-  const wrong = reproduce(stadium, academy, entries, corpus.now);
+  const wrong = reproduce(stadium, academy, entries, corpus.now, 'current');
   if (entries.length === 0) out.B2.push('the corpus is empty');
   if (wrong.length) out.B2.push(`the current loaders no longer give the recorded answer for ${wrong.join(', ')}`);
 
@@ -282,7 +284,7 @@ async function saveSections({ stadiumLib, academyLib, frozenDir, rivalsFile, cor
     if (out.B3.length === 0) {
       const fStadium = await bundle(path.join(frozenDir, 'stadiumTycoon.ts'), 'frozen-stadium');
       const fAcademy = await bundle(path.join(frozenDir, 'wonderkidFactory.ts'), 'frozen-academy');
-      const fWrong = reproduce(fStadium, fAcademy, entries, corpus.now);
+      const fWrong = reproduce(fStadium, fAcademy, entries, corpus.now, 'loaded');
       if (fWrong.length) out.B3.push(`the frozen V1 loaders give a different answer for ${fWrong.join(', ')}`);
     }
   }

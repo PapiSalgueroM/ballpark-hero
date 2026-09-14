@@ -717,6 +717,37 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 - `LOADS_CONTROL=rawlevels`: the doctored-level test goes red.
 - `LOADS_CONTROL=updater` restores prestige inside a setState updater: the pagehide test goes red.
 
+**As built, and what the adversarial review changed.** The first draft followed the rows above
+and passed every gate. The review found one real defect and five minor ones, and the round was
+changed before it shipped:
+- **Showcase while away (real).** Away ticks kept the x3 showcase multiplier and never burned
+  the showcase, so a hidden tab with a showcase lit trained at 1.5 times the WATCHED speed, and
+  one showcase lasted a hundred alt tabs. Away training now excludes the showcase and its clock
+  waits, the rule Matchday Hype has had since Round 150. Closing the tab during a showcase had
+  the same overpay on the load path before this round; that is fixed too.
+- **750 ms on the gap alone (minor, twice).** A hidden tab whose throttled wakes jitter could
+  land one gap under 750 ms and reset the meter (twenty hidden hours credited ten), and a slow
+  phone with 800 ms visible callbacks was paid as away, froze ages and after eight hours stopped
+  the academy while being watched. Visibility now decides: a hidden page is always away, and a
+  visible page counts as watched for gaps up to `AWAY_AFTER_MS = 5000`, which only a sleeping
+  machine exceeds. This replaces the contract's 750.
+- **One giant away step (minor).** Growth slows toward the ceiling, so paying an absence in one
+  tick overpaid a closed tab against the same absence paid a wake at a time (85 and 80 against
+  83.5 and 79.3 over fifteen minutes). Away time now trains in steps of at most 5 academy
+  seconds, and hidden and closed land on identical academies, which the tests now compare
+  instead of just the meter.
+- **Stale meter after a rollback (minor, not fixed, stated).** An older build keeps `awayMs` in
+  the save but never resets it, so rolling back, playing, and rolling forward can withhold up to
+  one absence of away pay. Added to the rollback losses in section 10 in spirit; the corpus now
+  carries a save with the meter so the frozen V1 build is proven to keep it.
+- **Ids at or past 2^53 (doctored saves only).** Kid ids must now be safe integers under a
+  billion or they are re-minted.
+- **`minute` clamps to 0 to 89, not 0 to 90.** `tick()` settles full time in the same tick that
+  reaches 90, so no honest save holds 90, and a loaded 90 would lose that minute off the clock.
+- **Controls as shipped:** `fixeddt`, `showcaseaway`, `gaponly`, `quickaway`, `bigstep`,
+  `rawlevels`, `updater`, `renderref` over 13 tests, plus three save controls. Each fires exactly
+  where its test says.
+
 ### Round 582: The league (rides alone)
 
 **Files.**

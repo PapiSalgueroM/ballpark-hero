@@ -23,9 +23,14 @@
  *     space against every real name on the site), every nation mapped
  *  6. the move up: star arithmetic exact, higher region ceilings really
  *     higher, nothing carried that should stay behind
- *  7. offline: half speed, hard 8 hour cap, zero cash movement
+ *  7. offline: half speed, hard 8 hour cap, zero cash movement; since Round
+ *     581 a hidden tab waking once a minute is capped over the whole absence,
+ *     pays exactly what a closed tab pays, ages nobody, and a watched tick
+ *     ends the absence
  *  8. the save: roundtrip identity, corrupt JSON refused, a doctored save
- *     comes back clamped (a working game, never a printing press)
+ *     comes back clamped (a working game, never a printing press); since
+ *     Round 581 the doctored kids carry real positions so the clamps are
+ *     reached at all, ids come back unique with nextId above them, stars whole
  *  9. static wiring: the unscored session mark in the tycoon shape, the
  *     route, the registry row, the guide bundle entry
  *
@@ -57,7 +62,7 @@ const { W, N } = await import(pathToFileURL(BUNDLE).href);
 const {
   REGIONS, FACILITIES, MAX_REP, YEAR_SEC, LEAVE_AGE,
   SHOWCASE_SEC, SHOWCASE_MULT, DEADLINE_MULT,
-  newFactory, tick, applyOffline, buyFacility, sellProspect, startShowcase,
+  newFactory, tick, applyOffline, applyAway, advanceClock, AWAY_AFTER_MS, buyFacility, sellProspect, startShowcase,
   canMoveUp, moveUp, capacity, facilityCost, findSec, salePrice, basePrice,
   trainMult, priceMult, regionIndex, serialize, deserialize, potentialRead,
 } = W;
@@ -327,6 +332,56 @@ console.log('7) offline: half speed, the eight hour wall, no cash');
   const appliedC = applyOffline(c, NOW);
   if (appliedC > 15) fail('a twenty second blip applied real offline progress');
   console.log(`   1000h and 8h both apply ${(appliedA / 3600).toFixed(1)}h of progress, blip applied ${appliedC.toFixed(1)}s, cash untouched`);
+
+  /* Round 581: a hidden tab. The browser wakes the clock once a minute, so the
+     eight hour cap has to count the whole absence, not each wake, and a
+     watched callback has to reset it. Measured in credited academy seconds. */
+  const hidden = mk(32);
+  hidden.prospects = [];
+  for (let k = 0; k < 400 && hidden.prospects.length < 2; k += 1) tick(hidden, 5, { offline: true });
+  const agesBefore = new Map(hidden.prospects.map(p => [p.id, `${p.age}:${p.ageClock}`]));
+  const deadlineBefore = hidden.deadlineIn;
+  let credited = 0;
+  for (let wake = 0; wake < 1200; wake += 1) {
+    const r = advanceClock(hidden, 60_000); /* twenty hours of one callback a minute */
+    if (!r.away) fail('a sixty second gap between callbacks was treated as watched time');
+    credited += r.seconds;
+  }
+  const closed = mk(32);
+  closed.awayMs = 0;
+  const closedCredited = applyAway(closed, 20 * 3600 * 1000);
+  if (Math.abs(credited - 4 * 3600) > 1e-6) fail(`twenty hidden hours credited ${(credited / 3600).toFixed(4)}h, the rule is half speed for eight hours, 4h`);
+  if (Math.abs(credited - closedCredited) > 1e-6) fail(`twenty hidden hours credited ${credited}s and twenty closed hours ${closedCredited}s, so hiding the tab pays differently from closing it`);
+  if (agesBefore.size === 0) fail('no kid was in the academy to watch for ageing, so the no-ageing check proves nothing');
+  for (const [id, was] of agesBefore) {
+    const now = hidden.prospects.find(p => p.id === id);
+    if (!now || `${now.age}:${now.ageClock}` !== was) fail(`kid ${id} aged or left while the tab was hidden, and the rules say nobody ages while you are gone`);
+  }
+  if (hidden.deadlineIn !== deadlineBefore || hidden.deadlineLeft > 0) fail('the Deadline Day clock ran while the tab was hidden');
+  const watched = advanceClock(hidden, 250);
+  if (watched.away || hidden.awayMs !== 0) fail('a watched quarter second did not end the absence');
+  const again = advanceClock(hidden, 60_000);
+  if (Math.abs(again.seconds - 30) > 1e-9) fail(`the next absence after watching was paid ${again.seconds}s for a minute, so the meter did not reset`);
+  if (advanceClock(newFactory(NOW, 1), AWAY_AFTER_MS).away) fail(`a gap of exactly ${AWAY_AFTER_MS}ms on a visible page was counted as away`);
+
+  /* Round 581 review, the three things the first draft got wrong. */
+  const lit = mk(33); const dark = mk(33);
+  for (const f of [lit, dark]) for (let k = 0; k < 400 && f.prospects.length < 3; k += 1) tick(f, 5, { offline: true });
+  startShowcase(lit);
+  const showcaseAtHide = lit.showcaseLeft;
+  for (let wake = 0; wake < 10; wake += 1) { advanceClock(lit, 60_000, false); advanceClock(dark, 60_000, false); }
+  if (JSON.stringify(lit.prospects.map(p => p.rating)) !== JSON.stringify(dark.prospects.map(p => p.rating))) fail('ten hidden minutes with a showcase lit trained faster than without one, so hiding the tab multiplies away pay');
+  if (lit.showcaseLeft !== showcaseAtHide) fail('the showcase burned while the tab was hidden');
+  const jitter = mk(34); jitter.awayMs = 0;
+  for (let wake = 0; wake < 1200; wake += 1) { advanceClock(jitter, 60_000, false); advanceClock(jitter, 700, false); }
+  if (jitter.awayMs !== 8 * 3600 * 1000) fail(`twenty hidden hours with a 700ms gap after every wake reached a meter of ${(jitter.awayMs / 3600000).toFixed(2)}h, so a short gap on a hidden page reopened the cap`);
+  const slow = mk(35);
+  for (let k = 0; k < 400 && slow.prospects.length < 1; k += 1) tick(slow, 5, { offline: true });
+  const clock0 = slow.prospects[0].ageClock;
+  for (let cb = 0; cb < 75; cb += 1) advanceClock(slow, 800, true);
+  if (Math.abs(slow.prospects[0].ageClock - clock0 - 60) > 1e-6) fail(`sixty watched seconds of 800ms callbacks aged a kid ${(slow.prospects[0].ageClock - clock0).toFixed(2)}s on a visible page`);
+  console.log(`   twenty hidden hours at one wake a minute credited ${(credited / 3600).toFixed(2)}h, the same as twenty closed hours; nobody aged; a watched tick reset the meter`);
+  console.log('   a showcase neither multiplies nor burns away time; a hidden page\'s short gap keeps the cap; a slow visible page still ages kids');
 }
 
 /* --------------------------------------------------------- 8. the save */
@@ -351,12 +406,23 @@ console.log('8) the save: roundtrip, refusal, the doctored save');
   const doctored = JSON.stringify({
     v: 1, cash: 1e308, lifetime: -5, rep: 400, seed: 'x',
     levels: { scouting: 9999, coaching: -3, dorms: 9999, agents: 2.7 },
-    prospects: Array.from({ length: 60 }, (_, i) => ({ id: i, name: i < 30 ? 'Same Name' : `K${i}`, nation: i % 2 ? 'England' : 'Narnia', pos: 'XX', age: 99, ageClock: 1e9, rating: 999, potential: 12 })),
-    showcaseLeft: 1e9, deadlineLeft: 1e9, lastSeen: NOW * 2,
+    /* Round 581: until this round every one of these kids had pos 'XX', so the
+       loader dropped all sixty before a single clamp ran and the per-kid checks
+       below looped over nothing. Two in three now carry a real position, so the
+       rating, ceiling and age clamps are actually reached, and ids repeat so the
+       first-holder-wins repair is too. */
+    prospects: Array.from({ length: 60 }, (_, i) => ({ id: i < 40 ? i : 7, name: i < 30 ? 'Same Name' : `K${i}`, nation: i % 2 ? 'England' : 'Narnia', pos: i % 3 === 0 ? 'XX' : ['GK', 'DF', 'MF', 'FW'][i % 4], age: 99, ageClock: 1e9, rating: 999, potential: 12 })),
+    showcaseLeft: 1e9, deadlineLeft: 1e9, lastSeen: NOW * 2, nextId: 2,
   });
   const d = deserialize(doctored, NOW);
   if (!d) fail('the doctored save should load CLAMPED, not refuse (v matched)');
   else {
+    if (d.prospects.length === 0) fail('no doctored kid survived to be clamped, so every per-kid check below proves nothing');
+    const ids = d.prospects.map(p => p.id);
+    if (new Set(ids).size !== ids.length) fail(`duplicate kid ids survived the load: ${ids.join(',')}`);
+    if (ids.some(id => id >= d.nextId)) fail(`nextId ${d.nextId} is not above every loaded id (${Math.max(...ids)}), so the next kid scouted would share an id`);
+    const fractional = deserialize(JSON.stringify({ v: 1, rep: 2.7 }), NOW);
+    if (!fractional || fractional.rep !== 2) fail(`a save with rep 2.7 loaded as rep ${fractional && fractional.rep}, stars are whole`);
     if (d.cash > 1e15) fail('doctored money kept its printing press');
     if (d.lifetime !== 0) fail('negative lifetime survived');
     if (d.rep !== 0) fail('doctored stars survived');
@@ -371,7 +437,7 @@ console.log('8) the save: roundtrip, refusal, the doctored save');
     }
     if (d.showcaseLeft > SHOWCASE_SEC) fail('a doctored showcase clock survived');
   }
-  console.log('   roundtrip identity, garbage refused, the doctored save came back clamped');
+  console.log(`   roundtrip identity, garbage refused, the doctored save came back clamped (${d ? d.prospects.length : 0} kids reached the clamps, ids unique, nextId ${d ? d.nextId : '-'})`);
 }
 
 /* ------------------------------------------------------ 9. static wiring */

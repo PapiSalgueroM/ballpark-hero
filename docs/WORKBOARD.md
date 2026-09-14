@@ -170,7 +170,24 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   each tab lights when the room behind it needs you. Fenced by `scripts/simTycoonRooms.mjs` (7
   real page tests, drift 0.000s, byte identical academies) with five page controls and five save
   controls, over a committed save corpus and frozen V1 copies of both libs for the rounds that
-  follow. `RIVAL_NAMES` gains the owner's cited idle app, full name with boundaries. I have skipped 570 to 579 on purpose, because the
+  follow. `RIVAL_NAMES` gains the owner's cited idle app, full name with boundaries.
+- **581: safe loads, ref-first writes, the academy's away clock.** Rides alone, adversarial
+  review before ship. A hidden academy tab is now paid by the same away rule as a closed one
+  (half speed, eight hours per absence through an `awayMs` meter, nobody ages): before, a
+  throttled tab trained for a minute or two per three hidden hours. The stadium loader stops
+  trusting stored levels (a save with `squad: "abc"` could never score again), the minute,
+  banked seconds, counters and savedAt. The academy loader re-mints duplicate kid ids, first
+  holder wins, and keeps stars whole. The stadium hook writes its ref before React renders, so
+  Sell up survives a pagehide in the same task and a tap in a ticking frame keeps the tick.
+  Fenced by `scripts/simTycoonLoads.mjs` (13 tests, 8 code controls, 3 save controls, every
+  save this build writes proven to load unchanged in the frozen V1 build), and `simWonderkid`
+  section 8 finally reaches its clamps (its doctored kids all had position XX, so zero survived).
+  **The adversarial review changed the round before it shipped:** a hidden showcase paid 1.5x the
+  watched speed (fixed, the showcase is excluded from away time and waits), 750ms on the gap alone
+  let jittered hidden wakes reopen the cap and froze slow visible phones (fixed, visibility decides
+  hidden and a visible gap counts as watched up to 5s), and one giant away step overpaid a closed
+  tab (fixed, 5s steps, hidden and closed now leave identical academies). Written into the contract.
+  Flagged, not fixed: `src/hooks/useHallOfChampions.ts` has the same fixed-step interval shape. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

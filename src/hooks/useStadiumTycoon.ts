@@ -58,8 +58,18 @@ export function useStadiumTycoon() {
   const [golden, setGolden] = useState<PendingGolden | null>(null);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
+  /* Round 581: the ref is the truth and it is written FIRST. Every change
+     computes from the ref, assigns the ref, saves if it has to, and only then
+     tells React. It used to be assigned during render, so between an action and
+     the render that followed it the ref still held the state from before the
+     action: a pagehide in that gap (the Round 567 shape) saved the old state
+     over the new one, and a tick and a tap landing in the same frame each read
+     the old ref and the second erased the first. */
   const stateRef = useRef(state);
-  stateRef.current = state;
+  const commit = useCallback((next: TycoonState) => {
+    stateRef.current = next;
+    setState(next);
+  }, []);
   const goldenRef = useRef(golden);
   goldenRef.current = golden;
 
@@ -92,16 +102,16 @@ export function useStadiumTycoon() {
   const paidUntilRef = useRef(state.savedAt);
   const settleAway = useCallback(() => {
     const now = Date.now();
-    const pay = offlineEarnings({ ...stateRef.current, savedAt: paidUntilRef.current }, now);
+    const cur = stateRef.current;
+    const pay = offlineEarnings({ ...cur, savedAt: paidUntilRef.current }, now);
     paidUntilRef.current = now;
-    if (pay <= 0) return;
+    if (!(pay > 0)) return;
     setAwayPay(pay);
-    setState(s => {
-      const next = { ...s, money: s.money + pay, lifetime: s.lifetime + pay, savedAt: now };
-      // Bank it straight away: an unsaved settle would be paid a second time.
-      try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
-      return next;
-    });
+    const next = { ...cur, money: cur.money + pay, lifetime: cur.lifetime + pay, savedAt: now };
+    stateRef.current = next;
+    // Bank it straight away: an unsaved settle would be paid a second time.
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
+    setState(next);
   }, []);
 
   // The settlement for the time before this mount, before the loop starts.
@@ -128,6 +138,7 @@ export function useStadiumTycoon() {
         // settle must not bill for them again.
         paidUntilRef.current += use * 1000;
         const { state: next, events } = tick(stateRef.current, use, Math.random);
+        stateRef.current = next;
         for (const e of events) reactToEvent(e);
         setState(next);
         /* Round 162: the golden whistle. One drifts in every couple of
@@ -216,14 +227,14 @@ export function useStadiumTycoon() {
 
   const doBuy = useCallback((id: string) => {
     markSessionPlay();
-    setState(s => buy(s, id));
-  }, []);
+    commit(buy(stateRef.current, id));
+  }, [commit]);
 
   /* Round 162: the payroll. */
   const doHire = useCallback((id: string) => {
     markSessionPlay();
-    setState(s => hire(s, id));
-  }, []);
+    commit(hire(stateRef.current, id));
+  }, [commit]);
 
   /* Round 162: catching the whistle. The floater says what it was worth. */
   const doCatchGolden = useCallback(() => {
@@ -238,16 +249,16 @@ export function useStadiumTycoon() {
     else if (g.kind === 'freeLevel') pushFloater(`🪙 ${info.label}: ${info.blurb}`, 'win', g.x, g.y);
     else pushFloater(`🪙 ${info.label}: ${info.blurb}!`, 'win', g.x, g.y);
     setConfetti(c => c + 1);
-    setState(next);
-  }, [pushFloater]);
+    commit(next);
+  }, [pushFloater, commit]);
 
   const doTap = useCallback((xPct: number, yPct: number) => {
     markSessionPlay();
     const before = stateRef.current;
     const after = tap(before);
     pushFloater(`+$${after.money - before.money >= 1 ? Math.round(after.money - before.money) : 1}`, 'tap', xPct, yPct);
-    setState(after);
-  }, [pushFloater]);
+    commit(after);
+  }, [pushFloater, commit]);
 
   const doBoost = useCallback(() => {
     const before = stateRef.current;
@@ -255,16 +266,21 @@ export function useStadiumTycoon() {
     if (after !== before) {
       pushFloater('MATCHDAY HYPE x2!', 'win', 30, 18);
       setConfetti(c => c + 1);
-      setState(after);
+      commit(after);
     }
-  }, [pushFloater]);
+  }, [pushFloater, commit]);
 
+  /* Round 581: selling up is the most destructive thing this game does, so it
+     is written from the ref and saved before React hears about it. Inside a
+     setState updater the save ran whenever React got round to the updater, and
+     a pagehide landing first wrote the pre-sale ground back over the sale. */
   const doPrestige = useCallback(() => {
-    setState(s => {
-      const next = prestige(s, Date.now());
-      try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { /* ignore */ }
-      return next;
-    });
+    const now = Date.now();
+    const next = prestige(stateRef.current, now);
+    if (next === stateRef.current) return;
+    stateRef.current = next;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
+    setState(next);
   }, []);
 
   /* Round 196: the boardroom. Spending legacy is a meaningful action too,
@@ -277,8 +293,9 @@ export function useStadiumTycoon() {
     const p = perkById(id);
     if (p) pushFloater(`${p.emoji} ${p.name}: locked in forever`, 'win', 24, 30);
     setConfetti(c => c + 1);
-    setState(after);
+    stateRef.current = after;
     try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(after, Date.now())); } catch { /* ignore */ }
+    setState(after);
   }, [pushFloater]);
 
   const dismissAway = useCallback(() => setAwayPay(null), []);
