@@ -1,5 +1,36 @@
 # Project state
 
+## 2026-09-14 night: Round 582, the Stadium Tycoon league
+
+**Built and gated; commit and live proof go here.**
+
+- **Promotion is by winning your league.** Each division is a small league of named generated
+  rivals with a real table on a new League tab, and only the champion goes up. No relegation, a
+  Summit title pays the bonus again, rivals you failed to beat come back next season, and the club
+  can take one of three generated names. Older saves start in the division their home wins had
+  reached and finish the match they were in first.
+- **Measured, not assumed.** A pace baseline captured before the first edit
+  (`scripts/data/tycoonLeagueBaseline.json`) put the old ladder's first promotion at a median 14.7
+  minutes against a first Sell up at 13.4. Home and away at the bottom would have been 21 minutes,
+  so divisions 0 to 2 play one leg: first promotion at 10.5 minutes, before Sell up in 10 of 10
+  seeds. Rival names capped at 17 characters after rendering showed the contract's 19 clipping
+  ("Redmoor Corinthians").
+- **The adversarial review changed it before it shipped.** The career-long opponent climb walled
+  weak clubs in the bottom league (91 of 200 three hour runs for a squad of 3, 0 under the old
+  game); each division's rivals now keep the strength they had when drawn (0 of 200). A stored
+  league that fails a check keeps its division instead of falling back to the old win count;
+  doctored leagues are capped at the career best and must add up; a dead heat at the top goes to
+  your club; last season's final table is shown.
+- **Proof.** `scripts/simTycoonLeague.mjs` (10 sections, 10 controls: champion only, table
+  integrity, strength 100% against 10% with a neutral arm at 13 against 10, pace, no reroll, all
+  251 V1 saves migrate, names, the shared calendar, no wall, the loader), `simTycoonRooms` test 8
+  on the League tab, `playLeagueTableFit` section 1b with a `longnames` control,
+  `simStadiumTycoon` sections 8, 9 and 13 moved onto the league (income growth at 30 minutes
+  re-measured at 668x, first Sell up at minute 13), Rebuild's four harnesses byte identical.
+- **Rollback losses, stated**: an older build's Sell up forgets league titles and the club name,
+  and shows the division from the win count until rolled forward.
+- **Next: Round 583, the pitch, goals, taps and honest help** (contract section 14).
+
 ## LIVE as of 2026-09-14 evening: Round 581, safe tycoon loads and the academy's away clock
 
 **`origin/main` is `25583ae1` and douknowball.com is serving it.** Deployment

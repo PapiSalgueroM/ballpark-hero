@@ -62,6 +62,17 @@ const FROZEN = path.join(ROOT, 'scripts/fixtures/tycoonV1');
 const CORPUS = path.join(ROOT, 'src/test/fixtures/tycoonSaves.json');
 /** The saves this round repairs on load. Anything else changing is a regression. */
 const REPAIRED = ['stadium/doctored', 'academy/duplicateIds'];
+/** Fields later rounds ADD to every save on load (Round 582: the league, the
+ *  title count, the picked club name). A save that only gains these has not
+ *  changed in the sense C2 guards; everything it already held must be as V1
+ *  loaded it. */
+const ADDED = { stadium: ['league', 'leagueTitles', 'clubName'], academy: [] };
+function withoutAdded(key, text) {
+  if (text === null || !ADDED[key].length) return text;
+  const o = JSON.parse(text);
+  for (const k of ADDED[key]) delete o[k];
+  return JSON.stringify(o);
+}
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -295,7 +306,7 @@ function saveSections(corpus, stadiumLib, academyLib) {
   for (const e of corpus.entries) {
     const today = loadWith(stadiumLib, academyLib, e, e.raw, now);
     if (today !== e.current) out.C0.push(`${e.key}/${e.name}: today's loader no longer gives the committed answer; regenerate the corpus on purpose or find what moved`);
-    if (today !== e.loaded) changed.push(`${e.key}/${e.name}`);
+    if (withoutAdded(e.key, today) !== e.loaded) changed.push(`${e.key}/${e.name}`);
     if (today === null) continue;
     const back = loadWith(v1Stadium, v1Academy, e, today, now);
     if (back === null) out.C1.push(`${e.key}/${e.name}: the V1 build refuses the save this build writes`);

@@ -777,6 +777,59 @@ changed before it shipped:
 
 **Walks:** `playLeagueTableFit` against the tycoon table at 390 wide.
 
+**As built, what the measurements changed.**
+- **One leg at the bottom, from the start.** The pre-league baseline
+  (`scripts/data/tycoonLeagueBaseline.json`, committed before the first edit) showed the old
+  win count already promoting a greedy player AFTER the first reachable Sell up in 5 of 10
+  seeds (median 14.7 minutes against 13.44). A six club double round robin is 21 minutes, and
+  measured it promoted after Sell up in 10 of 10. With the section 5 fallback, divisions 0 to 2
+  play the first leg only (`SINGLE_LEG_BELOW = 3`): first promotion at 10.5 minutes in 10 of
+  10, before Sell up and faster than the old ladder. Section 4's fence is both comparisons, and
+  the `doubleleg` control proves it.
+- **17 characters, not 19.** Section 8's "248 of 288 names fit at 19 characters" counted
+  characters. `playLeagueTableFit` rendered every name in the real row against the shipped
+  stylesheet and found 10 of the 18 and 19 character names clipping ("Redmoor Corinthians" and
+  the Wanderers), because width is letters. `LEAGUE_NAME_MAX = 17` leaves 168 names, 0 clipped,
+  with a `longnames` control that goes red on the uncapped bank.
+- **Section 2's "each goal with a minute from 1 to 90"** waits for Round 583, which adds the
+  minute to goal events. Section 2 checks your row against your goal and conceded events.
+- **The season-end events carry the final table**, so section 1 sorts it itself instead of
+  trusting the engine's own choice of champion.
+- **A fifth control, `doubleleg`,** joins `threshold`, `flat`, `reroll` and `spread`.
+- **`simTycoonLoads` C2** now ignores fields a later round adds to every save (`league`,
+  `leagueTitles`, `clubName`) when asking whether a valid save changed, and the corpus raws are
+  built with the frozen V1 lib so they stay saves an older build really wrote.
+
+**What the adversarial review changed before it shipped** (two real, one real on doctored saves,
+several minor; all fixed except the rollback losses, which are stated):
+- **The matchNo climb became a wall.** Opponents strengthened by the career match count, and a
+  title-only league turned that into "never": a squad of 3 never left the bottom league in 91 of
+  200 three hour runs (the old win count promoted all 200), and title odds fell to 0% by the
+  eighth season. **A division's rivals now keep the strength they had when its league was drawn**
+  (`league.baseMatchNo`, `leagueMatchNo`): 0 of 200 stuck, title odds flat across seasons, and
+  every division up is drawn later and is tougher. This softens the contract's section 5 claim
+  that the `matchNo x 0.0011` climb is what makes a ground peak: the peak now comes from the
+  division ladder and the ever later draws, and the rules copy and guide say so. Measured cost: a
+  greedy bot that never sells up reaches The Summit in about 233 watched minutes (the old game was
+  in division 7 at 360), the fast edge of the "weeks 2 to 6" target for a 30 minute a day
+  visitor, and real players sell up long before.
+- **A league that failed a check was rebuilt from the old win count**, which trails the league by
+  up to four divisions, so one bad field or any later change to the league's shape would have
+  dropped a club (division 8 to 6, division 4 to 1 in the review's probes). It now rebuilds at
+  the stored division capped at the career best.
+- **Doctored leagues**: a stored division above `bestDivision` is refused, and a table where wins
+  do not equal losses or goals for do not equal goals against is refused.
+- **Minor, fixed**: the header chip read "6th of 6" before a ball was kicked; a dead heat at the
+  top went against "Your club" on name (it now goes to your club); keeping "Your club" is saved;
+  the League tab shows last season's final table instead of silently wiping; the season label and
+  the Summit copy are corrected.
+- **Rollback losses, stated not fixed**: the frozen V1 `prestige` drops `league`, `leagueTitles`
+  and `clubName`, and V1 shows the division from the win count, so rolling this round back shows a
+  lower division until rolled forward and forgets titles earned before a V1 sale.
+- **Harness**: `simTycoonLeague` sections 9 (no wall) and 10 (the loader) with controls
+  `globalclimb`, `dropdivision`, `uncapped`, `lopsided` and `nametie`; `simTycoonRooms` test 8
+  renders the League tab and the name picker with a `noleague` control.
+
 ### Round 583: The pitch, goals, taps and honest help
 
 **Files.**

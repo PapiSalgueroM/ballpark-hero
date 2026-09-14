@@ -749,7 +749,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     intro: [
       "Stadium Tycoon is an idle game about the part of football nobody streams: the turnstiles. You start with a fence, two benches and ninety loyal fans, and you grow that into a ground that hums, one upgrade at a time, while a live toy match plays out on screen and pays you for every goal.",
       "It is built to be alive. The crowd fills the stand seat by seat as your real attendance grows, money floats off everything that earns, goals throw confetti, and a win streak lights a flame that multiplies the lot. Leave the tab and the turnstiles keep spinning at half speed for up to eight hours.",
-      "And it goes deep. Wins climb a ladder of ten divisions that multiply everything you earn, a payroll of eight staff earns around the clock, a golden whistle drifts in with five different prizes, and 47 badges each add a permanent two percent. Selling up resets the club but never the badges, so every run starts faster than the last.",
+      "And it goes deep. Your ground plays in a league with a real table, and winning it climbs a ladder of ten divisions that multiply everything you earn, a payroll of eight staff earns around the clock, a golden whistle drifts in with five different prizes, and 47 badges each add a permanent two percent. Selling up resets the club but never the badges, so every run starts faster than the last.",
       "There is a second room too. The Academy tab runs a youth academy right beside the ground, on its own save, and once you have opened it the kids keep training and ageing while you watch the match.",
     ],
     howToPlay: [
@@ -757,7 +757,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Tap the stadium for instant cash. The Megaphone track makes every tap stronger.",
       "Buy upgrades from the nine tiles: Stands add seats, Ticket Office, Snack Bar and Club Shop raise what each fan spends, Parking pays flat money, Floodlights and Academy grow the fanbase, Squad wins matches, Megaphone boosts taps.",
       "Follow the match at the top of the pitch. Goals pay a bonus scaled by the crowd, wins extend your streak, and the streak multiplies income and pulls in new fans.",
-      "Win at home to climb the divisions. Every win counts toward promotion, every division multiplies all income up to five and a half times, and each promotion pays a bonus on the spot. Higher divisions send tougher opponents.",
+      "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
       "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
       "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from everything paying seven times over to fifteen minutes of income in one lump.",
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
@@ -765,10 +765,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     rules: [
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
-      "Matches run about two real minutes. Your Squad level drives your goal chance; opponents get harder with every match played, forever.",
+      "Matches run about two real minutes. Your Squad level drives your goal chance. A division's rivals stay as strong as they were when you arrived, so a club that can compete there can always win it in time, but every division up is tougher, and the longer the club has played the tougher each new division is.",
       "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
       "Matchday Hype charges over eight minutes of play; pressing it doubles all money for sixty seconds. It never charges or burns while you are away, and it cannot stack.",
-      "Divisions are earned at your current ground: promotion needs home wins, from six for the second division to two hundred for The Summit. Selling up drops you back to the bottom league, though your best division is remembered forever in Club records.",
+      "Divisions are earned by winning the league at your current ground. The bottom three divisions are six clubs playing each other once, five matchdays; the middle three are eight clubs home and away, and the top four ten clubs home and away. The table is ordered by points, then goal difference, then goals scored. Only the champion goes up, nobody goes down, and a title at The Summit pays the promotion bonus again. Selling up drops you back to the bottom league, though your best division and your league titles are remembered forever.",
       "The golden whistle appears only while you are actually playing, roughly every couple of minutes, and its timed prizes (DERBY DAY at seven times everything, CROWD SURGE at twenty five times taps) cannot stack with each other.",
       "Badges pay no cash. Each of the 47 is a permanent two percent income multiplier, earned exactly once per career, and they never reset.",
       "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
@@ -776,7 +776,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     example: [
       "You open the game to 90 fans and about six dollars a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
-      "Ten minutes in, Floodlights have pulled your fanbase past your 280 seats, the ground is full, and Stands become the best purchase on the board. Your striker puts one in, the crowd of 280 pays a 168 dollar goal bonus, the streak hits three, and the sixth home win lifts you out of the Muddy Meadows League with a promotion bonus and a bigger multiplier on every dollar after it.",
+      "Ten minutes in, Floodlights have pulled your fanbase past your 280 seats, the ground is full, and Stands become the best purchase on the board. Your striker puts one in, the crowd of 280 pays a 168 dollar goal bonus, the streak hits three, and a win on the fifth matchday takes the Muddy Meadows title and lifts you into the Gravel Lane League with a promotion bonus and a bigger multiplier on every dollar after it.",
       "Around twenty minutes in, lifetime earnings crest four million and the yellow bar glows. You sell up, keep a star, and the ninety-fan fence starts again at one and a half times the speed.",
     ],
     tips: [
@@ -802,7 +802,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Can the opponents be beaten forever?",
-        a: "They scale without end, so eventually a run stops winning every match. That is the signal the current ground has peaked and the sell-up bar is the way forward.",
+        a: "Each division is tougher than the last, and a division drawn later in a club's life is tougher again, so eventually the next title stops coming. That is the signal the current ground has peaked and the sell-up bar is the way forward.",
       },
       {
         q: "Is anything in it real players or clubs?",

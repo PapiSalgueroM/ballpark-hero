@@ -83,16 +83,18 @@ for (const f of ['stadiumTycoon.ts', 'wonderkidFactory.ts']) {
 const frozenStadium = await bundle(path.join(FROZEN, 'stadiumTycoon.ts'), 'frozen-stadium');
 const frozenAcademy = await bundle(path.join(FROZEN, 'wonderkidFactory.ts'), 'frozen-academy');
 
-/* ---------- stadium saves ---------- */
+/* ---------- stadium saves ----------
+   Round 582: built with the FROZEN V1 libs, so every raw save here stays a
+   save an older build really wrote, whatever today's newTycoon adds. */
 
-const fresh = stadium.newTycoon(EPOCH);
+const fresh = frozenStadium.newTycoon(EPOCH);
 
 const midGame = {
-  ...stadium.newTycoon(EPOCH),
+  ...frozenStadium.newTycoon(EPOCH),
   money: 5200,
   lifetime: 152000,
   fanbase: 900,
-  levels: { ...stadium.newTycoon(EPOCH).levels, stands: 30, tickets: 20, squad: 25, megaphone: 10 },
+  levels: { ...frozenStadium.newTycoon(EPOCH).levels, stands: 30, tickets: 20, squad: 25, megaphone: 10 },
   rep: 1,
   matchNo: 37,
   totalMatches: 37,
@@ -135,7 +137,7 @@ const doctored = {
 
 /* ---------- academy saves ---------- */
 
-const academyFresh = academy.newFactory(EPOCH, 7);
+const academyFresh = frozenAcademy.newFactory(EPOCH, 7);
 
 /* Six real kids from the lib's own generator, so every name, nation and
    position is one the loader accepts. Scouted offline so nobody ages while
@@ -148,11 +150,11 @@ const academyFresh = academy.newFactory(EPOCH, 7);
    seconds the beds cannot fill inside that test, so the only thing that can
    light the accent there is the kid about to turn 24. */
 function midAcademyState() {
-  const f = academy.newFactory(EPOCH, 7);
+  const f = frozenAcademy.newFactory(EPOCH, 7);
   f.rep = 2;
   f.levels = { scouting: 0, coaching: 5, dorms: 9, agents: 4 };
   let guard = 0;
-  while (f.prospects.length < 6 && guard < 400) { academy.tick(f, 5, { offline: true }); guard += 1; }
+  while (f.prospects.length < 6 && guard < 400) { frozenAcademy.tick(f, 5, { offline: true }); guard += 1; }
   if (f.prospects.length < 6) throw new Error('the generator did not scout six kids');
   f.prospects = f.prospects.slice(0, 6);
   const ages = [15, 17, 18, 20, 22, 23];

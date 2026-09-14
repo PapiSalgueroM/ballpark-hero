@@ -34,7 +34,7 @@ import { act, cleanup, fireEvent } from '@testing-library/react';
 import { mountPage } from './dailyReload/harness';
 import StadiumTycoon from '@/pages/StadiumTycoon';
 import WonderkidFactory from '@/pages/WonderkidFactory';
-import { TYCOON_SAVE_KEY } from '@/lib/stadiumTycoon';
+import { TYCOON_SAVE_KEY, newLeague, leagueShape } from '@/lib/stadiumTycoon';
 import { SAVE_KEY as ACADEMY_SAVE_KEY } from '@/lib/wonderkidFactory';
 import corpus from './fixtures/tycoonSaves.json';
 
@@ -103,7 +103,7 @@ async function settle() {
   }
 }
 
-async function openTab(room: 'stadium' | 'academy') {
+async function openTab(room: 'stadium' | 'academy' | 'league') {
   const tab = document.querySelector(`[data-room="${room}"]`);
   if (!tab) throw new Error(`no ${room} tab on the page`);
   await act(async () => { fireEvent.click(tab); });
@@ -292,7 +292,16 @@ describe('Stadium Tycoon rooms', () => {
 
   it('7 a promotion earned while you are in the Academy waits for you', async () => {
     const base = JSON.parse(save('stadium', 'fresh').loaded as string);
-    localStorage.setItem(TYCOON_SAVE_KEY, JSON.stringify({ ...base, minute: 89, matchSec: 0, goalsFor: 3, goalsAgainst: 0, groundWins: 5, savedAt: EPOCH }));
+    /* Round 582: promotion is by winning the league, so the fixture is the last
+       matchday of the bottom league with the club four wins clear. */
+    const lg = newLeague(0, 0, 0);
+    const last = leagueShape(0).matchdays - 1;
+    /* A table that adds up, or the loader rightly refuses it: the club beat four
+       rivals 1 to 0, and every other match was a goalless draw. */
+    const clubs = lg.clubs.map((c, i) => (i === 0
+      ? { ...c, w: last, gf: last, pts: 3 * last }
+      : i <= last ? { ...c, l: 1, d: last - 1, ga: 1, pts: last - 1 } : { ...c, d: last, pts: last }));
+    localStorage.setItem(TYCOON_SAVE_KEY, JSON.stringify({ ...base, minute: 89, matchSec: 0, goalsFor: 3, goalsAgainst: 0, league: { ...lg, matchday: last, clubs }, savedAt: EPOCH }));
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     await openTab('academy');
     const lit: string[] = [];
@@ -310,5 +319,33 @@ describe('Stadium Tycoon rooms', () => {
     expect(cardOnReturn, 'the promotion earned while the Academy was open was gone by the time the player came back').toBe(true);
     expect(cardLater, 'the promotion card never came down after the player had seen it for five seconds').toBe(false);
     measured(`unseen promotion: Stadium tab lit for all ${lit.length} samples from 4s to 14s; card waiting on return, gone 5s later`);
+  }, TEST_MS);
+
+  it('8 the League tab shows the table, and a picked club name survives a reload', async () => {
+    /* Round 582 review: nothing rendered the League room, the name picker or its
+       persistence. */
+    localStorage.setItem(TYCOON_SAVE_KEY, save('stadium', 'fresh').raw);
+    const first = mountPage(<StadiumTycoon />, '/stadium-tycoon');
+    await openTab('league');
+    const room = document.querySelector('[data-league-room]');
+    expect(room, 'the League tab opened no league room').not.toBeNull();
+    const rows = room!.querySelectorAll('[data-goals]').length;
+    expect(rows, `the league table showed ${rows} rows`).toBe(leagueShape(0).clubs);
+    const picker = document.querySelector('[data-club-name-pick]');
+    expect(picker, 'a club with no name was not offered one').not.toBeNull();
+    const choices = [...picker!.querySelectorAll('button')];
+    expect(choices.length, 'the picker should offer three names and a keep').toBe(4);
+    const picked = (choices[0].textContent ?? '').trim();
+    await act(async () => { fireEvent.click(choices[0]); });
+    const saved = JSON.parse(read(TYCOON_SAVE_KEY) as string);
+    expect(saved.clubName, 'the picked name was not saved').toBe(picked);
+    expect(document.querySelector('[data-club-name-pick]'), 'the picker stayed after a name was picked').toBeNull();
+    first.unmount();
+
+    mountPage(<StadiumTycoon />, '/stadium-tycoon');
+    await openTab('league');
+    expect(document.querySelector('[data-club-name-pick]'), 'the picker came back after a reload').toBeNull();
+    expect(document.querySelector('[data-league-room]')?.textContent ?? '', 'the picked name is not in the reloaded table').toContain(picked);
+    measured(`league tab: ${rows} rows, three names offered, "${picked}" picked, saved and still there after a reload`);
   }, TEST_MS);
 });

@@ -31,7 +31,8 @@ import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
-  DIVISIONS, divisionOf, divisionIndex, winsToNextDivision,
+  DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,
+  clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
@@ -39,6 +40,7 @@ import {
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
@@ -78,6 +80,7 @@ export default function StadiumTycoon() {
   const tabs: { id: Room; label: string; emoji: string; accent: boolean }[] = [
     { id: 'stadium', label: 'Stadium', emoji: '🏟️', accent: stadiumAccent },
     { id: 'academy', label: 'Academy', emoji: '🎓', accent: academyAccent },
+    { id: 'league', label: 'League', emoji: '🏆', accent: false },
   ];
 
   return (
@@ -95,7 +98,7 @@ export default function StadiumTycoon() {
         </header>
 
         {/* Round 580: the rooms. Each keeps its own clock whichever one is on screen. */}
-        <div className="grid grid-cols-2 gap-2 mb-2" role="group" aria-label="Tycoon rooms">
+        <div className="grid grid-cols-3 gap-2 mb-2" role="group" aria-label="Tycoon rooms">
           {tabs.map(t => (
             <button
               key={t.id}
@@ -121,6 +124,7 @@ export default function StadiumTycoon() {
         </div>
 
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
+        <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
             <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} />
@@ -157,6 +161,64 @@ export default function StadiumTycoon() {
   );
 }
 
+/* Round 582: the league. The table through Club Manager's own card, today's
+   fixture, and the club name picked from the generated banks. Never the
+   default tab, so none of it reaches a snapshot. */
+function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean }) {
+  if (!visible) return null;
+  const s = g.state;
+  const lg = s.league;
+  if (!lg) return null;
+  const shape = leagueShape(lg.division);
+  const div = DIVISIONS[lg.division];
+  const rows = leagueStandings(lg).map(c => ({ club: c.name, w: c.w, d: c.d, l: c.l, gf: c.gf, ga: c.ga, pts: c.pts }));
+  const preseason = lg.matchday === 0;
+  const options = s.clubName ? [] : clubNameOptions(s);
+  const atSummit = lg.division >= DIVISIONS.length - 1;
+  const last = g.lastSeason;
+  return (
+    <div data-league-room className="space-y-3 mb-3">
+      <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+        <div className="font-bold text-foreground">{div.emoji} {div.name}</div>
+        <div className="mt-0.5">
+          {lg.carryover
+            ? `Finishing a friendly against ${opponentName(s)}, then matchday 1 of ${shape.matchdays}.`
+            : `Matchday ${lg.matchday + 1} of ${shape.matchdays}: ${opponentName(s)} at your ground.`}
+          {' '}{atSummit ? 'This is the top: win the title and it pays the bonus again.' : 'Only the champion goes up.'}
+        </div>
+        {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
+      </div>
+      <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
+      {last && (
+        <div data-last-season>
+          <LeagueTableCard
+            rows={leagueStandings({ ...lg, clubs: last.table }).map(c => ({ club: c.name, w: c.w, d: c.d, l: c.l, gf: c.gf, ga: c.ga, pts: c.pts }))}
+            myClub={last.table[0].name}
+            title={`Last season: ${ordinal(last.position)}`}
+            zoneTop={1}
+            compact
+          />
+        </div>
+      )}
+      {options.length > 0 && (
+        <div data-club-name-pick className="rounded-xl border border-border bg-card p-3">
+          <div className="text-xs font-bold text-foreground mb-2">Name your club</div>
+          <div className="grid grid-cols-1 gap-2">
+            {options.map(name => (
+              <button key={name} type="button" onClick={() => g.doSetClubName(name)} className="min-h-[40px] rounded-lg border border-border bg-background/40 text-sm font-bold text-foreground hover:border-primary">
+                {name}
+              </button>
+            ))}
+            <button type="button" onClick={() => g.doSetClubName(YOUR_CLUB)} className="min-h-[40px] rounded-lg text-xs text-muted-foreground hover:text-foreground">
+              Keep "{YOUR_CLUB}"
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* The ground. Everything the page used to render, unchanged, except that it
    renders nothing while the Academy tab is showing and holds its two cards'
    timers until you are looking again. Its hooks keep running either way. */
@@ -173,7 +235,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const cap = capacity(s);
   const rate = incomePerSec(s);
   const div = divisionOf(s);
-  const nextDivIn = winsToNextDivision(s);
+  /* Round 582: where this ground stands in its league. */
+  const lg = s.league;
+  const lgShape = lg ? leagueShape(lg.division) : null;
+  const lgPos = lg ? leaguePosition(lg) : 0;
+  const atSummit = divisionIndex(s) >= DIVISIONS.length - 1;
   const achCount = (s.ach ?? []).length;
 
   // Goal confetti: a fresh burst every time the hook's counter moves.
@@ -259,11 +325,19 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   return (
     <>
         <div className="text-center mb-3">
-          {/* Round 162: the ladder this ground is climbing, front and center. */}
+          {/* Round 162: the ladder this ground is climbing, front and center.
+              Round 582: where the club sits in this division's league. */}
           <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
             {div.emoji} {div.name}
             <span className="text-[10px] text-muted-foreground font-normal">
-              {nextDivIn !== null ? `· ${nextDivIn} win${nextDivIn === 1 ? '' : 's'} to go up` : '· the top of the pyramid'}
+              {lg && lgShape
+                ? lg.carryover
+                  ? `· a friendly first, then matchday 1 of ${lgShape.matchdays}`
+                  : lg.matchday === 0
+                    /* Level on nothing, the table sorts by name, so a place would be a lie. */
+                    ? `· matchday 1 of ${lgShape.matchdays}`
+                    : `· ${ordinal(lgPos)} of ${lg.clubs.length} · matchday ${Math.min(lg.matchday + 1, lgShape.matchdays)} of ${lgShape.matchdays}`
+                : ''}
             </span>
           </div>
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
@@ -443,7 +517,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           )}
           <div className="text-[10px] text-muted-foreground text-center mt-1">
             {canPrestige(s)
-              ? `the club has outgrown this ground${winsToNextDivision(s) !== null ? `. One more division before selling would pay ${pointsForSale(s) + 1} legacy points instead` : ''}`
+              ? `the club has outgrown this ground${!atSummit ? `. Win this league first and the sale pays ${pointsForSale(s) + 1} legacy points instead` : ''}`
               : `next star at ${fmtMoney(prestigeThreshold(s))} lifetime earnings (${fmtMoney(s.lifetime)} so far)`}
           </div>
         </div>
@@ -657,10 +731,10 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             </div>
             <div className="text-sm text-muted-foreground space-y-2">
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
-              <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. Opponents get harder forever.</p>
+              <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. A division's rivals stay as strong as they were when you arrived, but every division up is tougher, and the longer the club has played the tougher each new one is.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Matchday Hype charges over eight minutes of play (Stadium Voltage in the boardroom trims that to seven, then six). Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
-              <p>Wins at your ground climb a ladder of ten divisions, from the Muddy Meadows League to The Summit. Every division multiplies all income, up to x5.5 at the top, and going up pays a promotion bonus on the spot. Higher divisions send tougher opponents.</p>
+              <p>Your ground plays in a league, ten divisions from the Muddy Meadows League to The Summit. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{DIVISIONS[DIVISIONS.length - 1].incomeMult} at the top, going up pays a promotion bonus on the spot, and a title at The Summit pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
               <p>The payroll hires eight staff, from a matchday steward to a club legend. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about 12 seconds to catch it, for one of five prizes: DERBY DAY (everything pays x7 for 77 seconds), CROWD SURGE (taps pay x25 for 30 seconds), TV WINDFALL (fifteen minutes of income, instantly), WONDERGOAL GOES VIRAL (the fanbase jumps) or SPONSOR GIFT (a free upgrade level).</p>
               <p>Milestones pay once each for the club's firsts: the first win, the first full house, 10,000 fans, five wins in a row. Ten in all, and they stay earned even after you sell up.</p>

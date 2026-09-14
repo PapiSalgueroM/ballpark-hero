@@ -18,6 +18,8 @@
  * lands in a sane window, offline pay is capped.
  */
 
+import { roundRobinCalendar, tableOrder, mulberry32, hash32 } from '@/lib/leagueCore';
+
 export interface TycoonTrack {
   id: string;
   name: string;
@@ -89,25 +91,26 @@ export const DIVISIONS: TycoonDivision[] = [
   { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, oppBoost: 0.082 },
 ];
 
-/** Index into DIVISIONS for the current ground. */
+/** Index into DIVISIONS for the current ground. Round 582: the league decides.
+ *  A save without one (only ever mid-load) falls back to the old win count. */
 export function divisionIndex(s: TycoonState): number {
-  const wins = s.groundWins ?? 0;
+  if (s.league) return Math.min(DIVISIONS.length - 1, Math.max(0, s.league.division | 0));
+  return legacyDivisionIndex(s.groundWins ?? 0);
+}
+
+/** Round 162 to 581: the division a ground's home win count put it in. Since
+ *  Round 582 promotion is by winning the league, and this survives only to seed
+ *  the league of a save written before the league existed, so nobody drops. */
+export function legacyDivisionIndex(groundWins: number): number {
   let idx = 0;
   for (let i = 0; i < DIVISIONS.length; i++) {
-    if (wins >= DIVISIONS[i].winsNeeded) idx = i;
+    if (groundWins >= DIVISIONS[i].winsNeeded) idx = i;
   }
   return idx;
 }
 
 export function divisionOf(s: TycoonState): TycoonDivision {
   return DIVISIONS[divisionIndex(s)];
-}
-
-/** Wins still needed for the next division, or null at the top. */
-export function winsToNextDivision(s: TycoonState): number | null {
-  const idx = divisionIndex(s);
-  if (idx >= DIVISIONS.length - 1) return null;
-  return DIVISIONS[idx + 1].winsNeeded - (s.groundWins ?? 0);
 }
 
 /* ---------- staff: the payroll that earns while you sleep ---------- */
@@ -504,6 +507,15 @@ export interface TycoonState {
    *  point per already-earned star exactly once (the minimum any of those
    *  sales could have paid); this flag stops the grant repeating. */
   legacySeeded?: boolean;
+  /** Round 582: this ground's league: the division, the season, the table and
+   *  the rivals. Optional so every older save loads; the loader seeds one from
+   *  the old win count the first time. */
+  league?: TycoonLeague;
+  /** Round 582: league titles won, career-wide. Survives selling up. */
+  leagueTitles?: number;
+  /** Round 582: the club name picked from the generated banks, career-wide.
+   *  Absent means "Your club". Never free text. */
+  clubName?: string;
 }
 
 export const TYCOON_SAVE_KEY = 'stadiumTycoonSaveV1';
@@ -542,6 +554,9 @@ export function newTycoon(now: number): TycoonState {
     legacyPoints: 0,
     legacyPerks: {},
     legacySeeded: true,
+    /* Round 582: a fresh club always meets the same Muddy Meadows. */
+    league: newLeague(0, 0, 0),
+    leagueTitles: 0,
   };
 }
 
@@ -594,8 +609,10 @@ const OPP_SUFFIXES = [
   'Harriers', 'Corinthians', 'Swifts', 'Rangers', 'Olympic', 'Victoria',
 ];
 
-/** The name of the opponent for a given match, stable for that match. */
-export function opponentName(s: TycoonState): string {
+/** Round 146 to 581: the opponent a match drew before the league, stable for
+ *  that match. Since Round 582 it names only the match an older save was in the
+ *  middle of when it first loaded, which finishes outside the table. */
+export function legacyOpponentName(s: TycoonState): string {
   const k = (s.matchNo ?? 0) + (s.rep ?? 0) * 137;
   const h = ((k * 2654435761) >>> 0);
   const place = OPP_PLACES[h % OPP_PLACES.length];
@@ -608,6 +625,280 @@ export function allOpponentNames(): string[] {
   const out: string[] = [];
   for (const p of OPP_PLACES) for (const sfx of OPP_SUFFIXES) out.push(`${p} ${sfx}`);
   return out;
+}
+
+/* ================================================================== */
+/* Round 582: the league. The owner's list for the tycoon merge:      */
+/* "divisions and a scoreboard against named generated opponents,    */
+/* promotion by winning your league". Until now a ground climbed on   */
+/* its home win count and every match drew a fresh name; now each     */
+/* division is a small league of rivals with a table, and only the    */
+/* champion goes up (docs/design/round-580-tycoon-merge.md, section   */
+/* 8). No relegation, on purpose: income multipliers stay monotone    */
+/* per ground and a school-age audience gets no loss loop.            */
+/* ================================================================== */
+
+export interface LeagueClub {
+  name: string;
+  /** Strength against the division's baseline, per minute. Zero for you. */
+  offset: number;
+  w: number;
+  d: number;
+  l: number;
+  gf: number;
+  ga: number;
+  pts: number;
+}
+
+export interface TycoonLeague {
+  division: number;
+  /** Seasons started at this ground, counted from 0. Seeds the rivals. */
+  season: number;
+  /** The next matchday to be played, from 0. */
+  matchday: number;
+  /** The seed this set of rivals was drawn from. */
+  seed: number;
+  /** Round 582 review: the career match count when this division's league was
+   *  drawn. Its rivals play at that strength for as long as you chase the title,
+   *  so a club that could compete on arrival can always win it eventually. */
+  baseMatchNo?: number;
+  /** Index 0 is you. */
+  clubs: LeagueClub[];
+  /** An older save's match in progress when it first loaded: played to full
+   *  time against this name, outside the table, before matchday 1. */
+  carryover?: string;
+}
+
+export const YOUR_CLUB = 'Your club';
+/** The longest rival name the league draws. Measured, not counted: the contract
+ *  said 19 characters fit the table's club column at 390 wide, and
+ *  scripts/playLeagueTableFit.mjs rendered all 249 and found 10 of the 18 and
+ *  19 character names clipping ("Redmoor Corinthians", the Wanderers), because
+ *  width is letters, not length. At 17 all 168 names fit. */
+export const LEAGUE_NAME_MAX = 17;
+/** Rivals are spread this far either side of the division's baseline. */
+const OFFSET_SPREAD = 0.006;
+/**
+ * Divisions below this play one leg, every other club once; the rest play home
+ * and away. A six club double round robin is ten matchdays, 21 watched minutes,
+ * and before the league a greedy player's first promotion already came at a
+ * median of 14.7 minutes against a first Sell up at 13.4
+ * (scripts/data/tycoonLeagueBaseline.json), so a full double season at the
+ * bottom would push the first promotion far past the first sale. The contract's
+ * fallback (section 5): the first three divisions play the first leg only.
+ */
+export const SINGLE_LEG_BELOW = 3;
+
+/** How big a division's league is and how long its season runs. */
+export function leagueShape(division: number): { clubs: number; matchdays: number; perMatchday: number } {
+  const clubs = division <= 2 ? 6 : division <= 5 ? 8 : 10;
+  const legs = division < SINGLE_LEG_BELOW ? 1 : 2;
+  return { clubs, matchdays: (clubs - 1) * legs, perMatchday: clubs / 2 };
+}
+
+/** The generated names short enough for the table. */
+export function leagueNameBank(): string[] {
+  return allOpponentNames().filter(n => n.length <= LEAGUE_NAME_MAX);
+}
+
+function blankClub(name: string, offset: number): LeagueClub {
+  return { name, offset, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+}
+
+/** Offsets evenly spaced from -SPREAD to +SPREAD, mean zero, in a seeded order. */
+function spreadOffsets(count: number, rnd: () => number): number[] {
+  const out = Array.from({ length: count }, (_, i) => (count <= 1 ? 0 : -OFFSET_SPREAD + (2 * OFFSET_SPREAD * i) / (count - 1)));
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rnd() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** A fresh league for this ground at this division: rivals drawn without
+ *  replacement from the name bank, seeded by (rep, division, season), so the same
+ *  ground always meets the same rivals. No Math.random, no clock. */
+export function newLeague(rep: number, division: number, season: number, clubName?: string, baseMatchNo = 0): TycoonLeague {
+  const { clubs } = leagueShape(division);
+  const seed = hash32(rep | 0, division | 0, season | 0, 582);
+  const rnd = mulberry32(seed);
+  const you = clubName ?? YOUR_CLUB;
+  const bank = leagueNameBank().filter(n => n !== you);
+  for (let i = 0; i < clubs - 1; i += 1) {
+    const j = i + Math.floor(rnd() * (bank.length - i));
+    [bank[i], bank[j]] = [bank[j], bank[i]];
+  }
+  const offsets = spreadOffsets(clubs - 1, mulberry32(hash32(seed, season | 0)));
+  return {
+    division,
+    season,
+    matchday: 0,
+    seed,
+    baseMatchNo: Math.max(0, Math.floor(baseMatchNo)),
+    clubs: [blankClub(you, 0), ...bank.slice(0, clubs - 1).map((n, i) => blankClub(n, offsets[i]))],
+  };
+}
+
+/** A failed season: the same rivals come back with their strengths reshuffled. */
+function nextSeason(lg: TycoonLeague): TycoonLeague {
+  const season = lg.season + 1;
+  const offsets = spreadOffsets(lg.clubs.length - 1, mulberry32(hash32(lg.seed, season)));
+  return {
+    division: lg.division,
+    season,
+    matchday: 0,
+    seed: lg.seed,
+    baseMatchNo: lg.baseMatchNo,
+    clubs: lg.clubs.map((c, i) => blankClub(c.name, i === 0 ? 0 : offsets[i - 1])),
+  };
+}
+
+/** This matchday's fixtures, as pairs of club indexes. */
+export function matchdayFixtures(lg: TycoonLeague): [number, number][] {
+  const { perMatchday } = leagueShape(lg.division);
+  const calendar = roundRobinCalendar(lg.clubs.length);
+  return calendar.slice(lg.matchday * perMatchday, (lg.matchday + 1) * perMatchday);
+}
+
+/** The index of the club you meet on this matchday. */
+export function yourOpponentIndex(lg: TycoonLeague): number {
+  const f = matchdayFixtures(lg).find(([h, a]) => h === 0 || a === 0);
+  return f ? (f[0] === 0 ? f[1] : f[0]) : 1;
+}
+
+/** The table, in order: points, goal difference, goals for, then a dead heat
+ *  goes to your club (Round 582 review: sorting it by name meant "Your club"
+ *  lost every one), then name. */
+export function leagueStandings(lg: TycoonLeague): LeagueClub[] {
+  const you = lg.clubs[0];
+  return [...lg.clubs].sort((a, b) => tableOrder(a, b) || (a === you ? -1 : b === you ? 1 : 0) || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+}
+
+/** Your place in the table, from 1. */
+export function leaguePosition(lg: TycoonLeague): number {
+  return leagueStandings(lg).indexOf(lg.clubs[0]) + 1;
+}
+
+/** The name of the opponent in the match being played. */
+export function opponentName(s: TycoonState): string {
+  const lg = s.league;
+  if (!lg) return legacyOpponentName(s);
+  if (lg.carryover) return lg.carryover;
+  return lg.clubs[yourOpponentIndex(lg)]?.name ?? legacyOpponentName(s);
+}
+
+/** The current opponent's strength against the baseline, per minute. */
+export function currentOpponentOffset(s: TycoonState): number {
+  const lg = s.league;
+  if (!lg || lg.carryover) return 0;
+  return lg.clubs[yourOpponentIndex(lg)]?.offset ?? 0;
+}
+
+/** Three generated names to pick from, none already in this league. */
+export function clubNameOptions(s: TycoonState): string[] {
+  const taken = new Set((s.league?.clubs ?? []).map(c => c.name));
+  const bank = leagueNameBank().filter(n => !taken.has(n));
+  const rnd = mulberry32(hash32(s.rep | 0, s.league?.seed ?? 0, 91));
+  const out: string[] = [];
+  while (out.length < 3 && bank.length) out.push(bank.splice(Math.floor(rnd() * bank.length), 1)[0]);
+  return out;
+}
+
+/** Take a generated name, or keep "Your club" (which is remembered, so the
+ *  picker does not come back). Anything else is refused. */
+export function setClubName(s: TycoonState, name: string): TycoonState {
+  if (!s.league || (name !== YOUR_CLUB && !clubNameOptions(s).includes(name))) return s;
+  return { ...s, clubName: name, league: { ...s.league, clubs: s.league.clubs.map((c, i) => (i === 0 ? { ...c, name } : c)) } };
+}
+
+function recordResult(c: LeagueClub, gf: number, ga: number): void {
+  c.gf += gf;
+  c.ga += ga;
+  if (gf > ga) { c.w += 1; c.pts += 3; } else if (gf === ga) { c.d += 1; c.pts += 1; } else { c.l += 1; }
+}
+
+/**
+ * The match count opponents are strengthened by. Until Round 582 it was the
+ * career count, so every match was harder than the last forever, and under a
+ * title-only league that turned into a wall: the review measured a club with a
+ * squad of 3 never leaving the bottom league in 91 of 200 three hour runs, where
+ * the old win count had promoted all 200, because a whole season has to be won
+ * against rivals who kept getting stronger while it failed. A division's rivals
+ * now play at the strength they had when its league was drawn, and every
+ * division up is drawn later and is tougher, so the climb still steepens.
+ */
+export function leagueMatchNo(s: TycoonState): number {
+  const base = s.league?.baseMatchNo;
+  return Number.isFinite(base) ? Math.min(s.matchNo, base as number) : s.matchNo;
+}
+
+/** A rival's chance of scoring in one minute: today's baseline plus its offset. */
+function rivalChancePerMin(st: TycoonState, c: LeagueClub): number {
+  return Math.max(0.008, Math.min(0.14, 0.024 + leagueMatchNo(st) * 0.0011 + divisionOf(st).oppBoost + c.offset));
+}
+
+/**
+ * Your full time, in the league: your result goes in the table, every other
+ * fixture of the matchday plays out through the same per-minute model from a
+ * stream seeded by (rivals, season, matchday), so a reload replays nothing, and
+ * the last matchday ends the season. Returns the new league and pushes events.
+ */
+function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent[]): TycoonLeague {
+  const lg = st.league as TycoonLeague;
+  const clubs = lg.clubs.map(c => ({ ...c }));
+  const rnd = mulberry32(hash32(lg.seed, lg.season, lg.matchday, 7));
+  for (const [h, a] of matchdayFixtures(lg)) {
+    if (h === 0 || a === 0) {
+      const opp = h === 0 ? a : h;
+      recordResult(clubs[0], gf, ga);
+      recordResult(clubs[opp], ga, gf);
+      continue;
+    }
+    const ph = rivalChancePerMin(st, clubs[h]);
+    const pa = rivalChancePerMin(st, clubs[a]);
+    let hg = 0;
+    let ag = 0;
+    for (let m = 0; m < 90; m += 1) {
+      if (rnd() < ph) hg += 1;
+      if (rnd() < pa) ag += 1;
+    }
+    recordResult(clubs[h], hg, ag);
+    recordResult(clubs[a], ag, hg);
+  }
+  const played: TycoonLeague = { ...lg, clubs, matchday: lg.matchday + 1 };
+  if (played.matchday < leagueShape(lg.division).matchdays) return played;
+
+  const position = leaguePosition(played);
+  const d = DIVISIONS[played.division];
+  if (position !== 1) {
+    events.push({ kind: 'seasonEnd', label: `Season over: ${ordinal(position)} of ${clubs.length} in the ${d.name}`, position, table: clubs });
+    return nextSeason(played);
+  }
+  st.leagueTitles = (st.leagueTitles ?? 0) + 1;
+  if (played.division >= DIVISIONS.length - 1) {
+    const pay = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));
+    st.money += pay;
+    st.lifetime += pay;
+    events.push({ kind: 'title', amount: pay, label: `${d.emoji} CHAMPIONS OF ${d.name.toUpperCase()}`, position, table: clubs });
+    return nextSeason(played);
+  }
+  events.push({ kind: 'title', label: `🏆 Champions of the ${d.name}`, position, table: clubs });
+  const up = played.division + 1;
+  const nd = DIVISIONS[up];
+  const next = newLeague(st.rep, up, played.season + 1, clubs[0].name === YOUR_CLUB ? undefined : clubs[0].name, st.matchNo);
+  const pay = Math.round(attendance(st) * 8 * nd.incomeMult * repMult(st));
+  st.money += pay;
+  st.lifetime += pay;
+  st.bestDivision = Math.max(st.bestDivision ?? 0, up);
+  events.push({ kind: 'promoted', amount: pay, label: `${nd.emoji} PROMOTED: ${nd.name}` });
+  return next;
+}
+
+/** 1st, 2nd, 3rd, 11th. */
+export function ordinal(n: number): string {
+  const v = n % 100;
+  const sfx = v >= 11 && v <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
+  return `${n}${sfx}`;
 }
 
 /* Round 150: Matchday Hype. The crowd builds it over eight minutes of play,
@@ -741,7 +1032,8 @@ export function oppChancePerMin(s: TycoonState): number {
   const sq = levelOf(s, 'squad');
   // Round 162: the division you climbed into shoots back. Promotion is a
   // real thing, not a bigger number with the same Sunday opposition.
-  const opp = 0.024 + s.matchNo * 0.0011 + divisionOf(s).oppBoost;
+  // Round 582: plus the strength of the league rival you are playing today.
+  const opp = 0.024 + leagueMatchNo(s) * 0.0011 + divisionOf(s).oppBoost + currentOpponentOffset(s);
   // Your squad defends too: half its levels push the opponent back down.
   return Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));
 }
@@ -779,10 +1071,16 @@ export function tap(s: TycoonState): TycoonState {
 }
 
 export interface TickEvent {
-  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw' | 'milestone' | 'promoted' | 'ach';
+  /* Round 582: 'title' when you win the league (with an amount only at The
+     Summit, where the title pays and nobody goes up), 'seasonEnd' when you do not. */
+  kind: 'goal' | 'conceded' | 'win' | 'loss' | 'draw' | 'milestone' | 'promoted' | 'ach' | 'title' | 'seasonEnd';
   amount?: number;
   /** For milestone, promotion and achievement events: the on-screen label. */
   label?: string;
+  /** Round 582, on title and seasonEnd: your final place and the final table,
+   *  in the order it was stored, so a harness can sort it for itself. */
+  position?: number;
+  table?: LeagueClub[];
 }
 
 /**
@@ -856,7 +1154,6 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
     }
     if (st.minute >= 90) {
       // Full time: settle, pay, reset.
-      const divBefore = divisionIndex(st);
       if (st.goalsFor > st.goalsAgainst) {
         const b = winBonus(st);
         st.money += b;
@@ -876,23 +1173,23 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
         // A draw keeps the streak alive but does not extend it.
         events.push({ kind: 'draw' });
       }
+      /* Round 582: the result goes in the league, where the champion goes up
+         (playMatchday). Until this round promotion came from the home win
+         count. An older save's match in progress when it first loaded finishes
+         outside the table, and matchday 1 is the next match. */
+      if (st.league) {
+        if (st.league.carryover) {
+          const { carryover: _finished, ...rest } = st.league;
+          st.league = rest;
+        } else {
+          st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events);
+        }
+      }
       st.matchNo += 1;
       st.totalMatches = (st.totalMatches ?? 0) + 1;
       st.minute = 0;
       st.goalsFor = 0;
       st.goalsAgainst = 0;
-      /* Round 162: promotion. Crossing a division line is the loudest moment
-         this game has, so it pays like one: a promotion bonus scaled to the
-         crowd and the stage you just reached. */
-      const divAfter = divisionIndex(st);
-      if (divAfter > divBefore) {
-        const d = DIVISIONS[divAfter];
-        const payRise = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));
-        st.money += payRise;
-        st.lifetime += payRise;
-        st.bestDivision = Math.max(st.bestDivision ?? 0, divAfter);
-        events.push({ kind: 'promoted', amount: payRise, label: `${d.emoji} PROMOTED: ${d.name}` });
-      }
     }
   }
 
@@ -974,6 +1271,12 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     legacyPerks: { ...(s.legacyPerks ?? {}) },
     legacySeeded: true,
     money: startingMoneyOf(s),
+    /* Round 582: the new ground starts at the bottom of a new league, so
+       Round 196's "climb before you sell" still pays. Titles and the name are
+       the career's. */
+    league: newLeague(s.rep + 1, 0, 0, s.clubName === YOUR_CLUB ? undefined : s.clubName, 0),
+    leagueTitles: s.leagueTitles ?? 0,
+    ...(s.clubName ? { clubName: s.clubName } : {}),
   };
 }
 
@@ -1002,6 +1305,47 @@ export function serializeTycoon(s: TycoonState, now: number): string {
 /** Seconds of play per match minute. tick() spells the same 1.4 as MIN_LEN;
  *  the loader needs it to know what a banked remainder can legally hold. */
 const MATCH_MINUTE_SEC = 1.4;
+
+/** Round 582: a stored league, kept only if every part of it is a league this
+ *  engine could have produced. Null means rebuild it. */
+function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: number, matchNo: number): TycoonLeague | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Partial<TycoonLeague>;
+  const division = r.division;
+  if (!Number.isInteger(division) || (division as number) < 0 || (division as number) > DIVISIONS.length - 1) return null;
+  /* Round 582 review: a doctored save claimed The Summit on a career whose best
+     was the bottom league, and loaded there. */
+  if ((division as number) > bestDivision) return null;
+  const shape = leagueShape(division as number);
+  if (!Number.isInteger(r.matchday) || (r.matchday as number) < 0 || (r.matchday as number) >= shape.matchdays) return null;
+  if (!Number.isInteger(r.season) || (r.season as number) < 0) return null;
+  if (!Number.isFinite(r.seed)) return null;
+  if (!Array.isArray(r.clubs) || r.clubs.length !== shape.clubs) return null;
+  const bank = new Set(leagueNameBank());
+  const names = new Set<string>();
+  const clubs: LeagueClub[] = [];
+  for (let i = 0; i < r.clubs.length; i += 1) {
+    const c = r.clubs[i] as Partial<LeagueClub>;
+    if (!c || typeof c.name !== 'string' || names.has(c.name)) return null;
+    if (i === 0 ? c.name !== (clubName ?? YOUR_CLUB) : !bank.has(c.name)) return null;
+    const offset = i === 0 ? 0 : c.offset;
+    if (!Number.isFinite(offset) || Math.abs(offset as number) > OFFSET_SPREAD + 1e-9) return null;
+    const whole = [c.w, c.d, c.l, c.gf, c.ga];
+    if (!whole.every(v => Number.isInteger(v) && (v as number) >= 0)) return null;
+    /* Points are derived, never trusted: three a win, one a draw. */
+    if ((c.w as number) + (c.d as number) + (c.l as number) !== r.matchday) return null;
+    names.add(c.name);
+    clubs.push({ name: c.name, offset: offset as number, w: c.w as number, d: c.d as number, l: c.l as number, gf: c.gf as number, ga: c.ga as number, pts: 3 * (c.w as number) + (c.d as number) });
+  }
+  /* Every decisive result is one win and one loss, and every goal is someone's
+     goal against: a table where everyone else lost every match is not a table. */
+  const sum = (k: 'w' | 'l' | 'gf' | 'ga') => clubs.reduce((acc, c) => acc + c[k], 0);
+  if (sum('w') !== sum('l') || sum('gf') !== sum('ga')) return null;
+  const base = Number.isInteger(r.baseMatchNo) && (r.baseMatchNo as number) >= 0 && (r.baseMatchNo as number) <= matchNo ? (r.baseMatchNo as number) : matchNo;
+  const out: TycoonLeague = { division: division as number, season: r.season as number, matchday: r.matchday as number, seed: (r.seed as number) >>> 0, baseMatchNo: base, clubs };
+  if (typeof r.carryover === 'string' && allOpponentNames().includes(r.carryover)) out.carryover = r.carryover;
+  return out;
+}
 
 /** A whole number inside [lo, hi], or lo for anything that is not a number. */
 function wholeIn(v: unknown, lo: number, hi: number): number {
@@ -1105,6 +1449,39 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     if ((p as { legacySeeded?: unknown }).legacySeeded !== true) {
       s.legacyPoints = Math.min((s.legacyPoints ?? 0) + s.rep, 5000);
       s.legacySeeded = true;
+    }
+    /* Round 582: the league. The name first, because the league's first row
+       carries it: only a name the generator can produce survives, never text. */
+    if (s.clubName !== undefined && !(typeof s.clubName === 'string' && (s.clubName === YOUR_CLUB || leagueNameBank().includes(s.clubName)))) delete s.clubName;
+    const youName = s.clubName === YOUR_CLUB ? undefined : s.clubName;
+    s.leagueTitles = wholeIn(s.leagueTitles, 0, Number.MAX_SAFE_INTEGER);
+    /* Latches read the RAW save, the legacySeeded lesson again: the base
+       template carries a fresh bottom league, and the spread would put every
+       older save back in the Muddy Meadows. A save written before the league
+       gets one seeded at the division its home win count had reached, so nobody
+       drops a division, and the match it was in the middle of finishes against
+       the opponent it was already playing, outside the table. */
+    const rawLeague = (p as { league?: unknown }).league;
+    if (rawLeague === undefined) {
+      const division = legacyDivisionIndex(s.groundWins ?? 0);
+      const seeded = newLeague(s.rep, division, 0, youName, s.matchNo);
+      if (s.minute > 0 || s.goalsFor > 0 || s.goalsAgainst > 0) seeded.carryover = legacyOpponentName(s);
+      s.league = seeded;
+      /* An honest older save already holds a best division at least this high;
+         raising it here keeps the cap below from ever dropping the club later. */
+      s.bestDivision = Math.max(s.bestDivision ?? 0, division);
+    } else {
+      /* A league that does not hold together is rebuilt, never trusted, never
+         above the best division this career has reached, and never below the
+         division it claimed. The first draft rebuilt it from the old win count,
+         which the review showed trailing the league by up to four divisions (a
+         division 8 club holds about 87 home wins, which the old ladder calls
+         division 6): one bad field, or any later change to the league's shape or
+         name bank, would have dropped the club. */
+      const best = s.bestDivision ?? 0;
+      const claimed = (rawLeague as { division?: unknown }).division;
+      s.league = cleanLeague(rawLeague, youName, best, s.matchNo) ??
+        newLeague(s.rep, Number.isInteger(claimed) ? Math.min(Math.max(0, claimed as number), best) : Math.min(legacyDivisionIndex(s.groundWins ?? 0), best), 0, youName, s.matchNo);
     }
     return s;
   } catch {

@@ -12,7 +12,7 @@
 import { capacity, canMoveUp, LEAVE_AGE, YEAR_SEC } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
 
-export type Room = 'stadium' | 'academy';
+export type Room = 'stadium' | 'academy' | 'league';
 
 /** A kid this close to his 24th birthday lights the Academy tab. */
 export const LEAVING_SOON_SEC = 60;

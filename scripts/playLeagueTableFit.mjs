@@ -29,6 +29,9 @@
  *
  * Control: TABLE_FIT_CONTROL=star puts the star back inside the name cell,
  * which is the shipped bug, so the check must go red naming your own club.
+ * Round 582 control: TABLE_FIT_CONTROL=longnames measures every name the tycoon's
+ * generator can make instead of the ones its league draws, which is the contract's
+ * first draft, so section 1b must go red.
  *
  * Run: node scripts/playLeagueTableFit.mjs   (needs dist, and a built stylesheet)
  */
@@ -44,8 +47,8 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 
 const CONTROL = process.env.TABLE_FIT_CONTROL || '';
-if (CONTROL && CONTROL !== 'star') {
-  console.error(`TABLE_FIT_CONTROL=${CONTROL} is not a control this harness knows (star)`);
+if (CONTROL && CONTROL !== 'star' && CONTROL !== 'longnames') {
+  console.error(`TABLE_FIT_CONTROL=${CONTROL} is not a control this harness knows (star, longnames)`);
   process.exit(1);
 }
 
@@ -81,7 +84,7 @@ if (CONTROL === 'star' && starInName) {
   console.error('control cannot run: the component already puts the star in the name, so the control changes nothing');
   process.exit(1);
 }
-if (!CONTROL && !starInName && !starInPos) {
+if (CONTROL !== 'star' && !starInName && !starInPos) {
   console.error('LeagueTableCard marks your club in a way this harness does not recognise; re-read it before trusting this run');
   process.exit(1);
 }
@@ -92,12 +95,13 @@ const BUNDLE = `${TMP}/tableFit.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const e = await import('${ROOT_URL}/src/lib/clubManager.ts');
+export const t = await import('${ROOT_URL}/src/lib/stadiumTycoon.ts');
 `);
 execSync(
   `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
-const { e } = await import(pathToFileURL(BUNDLE).href);
+const { e, t } = await import(pathToFileURL(BUNDLE).href);
 
 const clubs = new Set();
 const SEEDS = ['Arsenal', 'Real Madrid', 'Bayern Munich', 'Juventus', 'Paris Saint-Germain', 'Ajax', 'Porto', 'Celtic'];
@@ -170,6 +174,39 @@ for (let i = 0; i < CLUBS.length; i++) {
 if (clippedTotal > 5) fail(`and ${clippedTotal - 5} more clipped names`);
 console.log(`   ${measured} name cells measured across ${CLUBS.length} renders, ${clippedTotal} clipped`);
 if (measured < CLUBS.length * CLUBS.length) fail(`only ${measured} cells were measured, so the sweep did not cover every club as yours`);
+
+/* Round 582: Stadium Tycoon's league renders through the same card, on a page
+   with the same 16px padding, and its names are generated rather than real.
+   Every name its league can ever show takes a turn as YOUR row, the tightest
+   case, beside eleven others, plus the default "Your club". */
+console.log('1b) Stadium Tycoon: every generated league name fits the same column at 390 wide');
+{
+  const names = CONTROL === 'longnames' ? [...t.allOpponentNames(), t.YOUR_CLUB] : [...t.leagueNameBank(), t.YOUR_CLUB];
+  if (names.length < 150) fail(`the tycoon name bank read only ${names.length} names, so this measured almost nothing`);
+  let clipped = 0;
+  let cells = 0;
+  const CHUNK = 12;
+  for (let i = 0; i < names.length; i += CHUNK) {
+    const group = names.slice(i, i + CHUNK);
+    for (let k = 0; k < group.length; k++) {
+      const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width"><style>${css}</style></head>
+        <body class="dark"><div style="padding:0 16px"><div class="bg-card border border-border rounded-2xl p-3">
+        ${group.map((c, j) => rowHtml(c, j === k)).join('')}
+        </div></div></body></html>`;
+      await page.setContent(html, { waitUntil: 'load' });
+      const res = await page.evaluate(() => Array.from(document.querySelectorAll('[data-club]')).map(el => ({
+        club: el.getAttribute('data-club'),
+        clipped: el.scrollWidth > Math.ceil(el.getBoundingClientRect().width) + 1,
+      })));
+      cells += res.length;
+      for (const r of res.filter(x => x.clipped)) {
+        clipped += 1;
+        if (clipped <= 5) fail(`the tycoon league name "${r.club}" clips at 390 wide`);
+      }
+    }
+  }
+  console.log(`   ${names.length} tycoon league names, ${cells} cells measured, ${clipped} clipped`);
+}
 
 /*
  * How much room is actually left, which is worth printing even when nothing

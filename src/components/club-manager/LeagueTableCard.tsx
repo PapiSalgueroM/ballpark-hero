@@ -14,12 +14,16 @@ interface LeagueTableCardProps {
   onClubClick?: (club: string) => void;
   /** Round 462: how level points were split, printed under the rows. */
   footnote?: string;
+  /** Round 582: how many places at the top are coloured as the prize zone.
+   *  Club Manager's Champions League four by default; the tycoon passes 1,
+   *  because only its champion goes up. */
+  zoneTop?: number;
 }
 
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote, zoneTop = 4 }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -51,7 +55,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
           >
             <span className={cn(
               'font-bold',
-              preseason ? 'text-muted-foreground' : pos === 1 ? 'text-gold' : pos <= 4 ? 'text-emerald-400' : 'text-muted-foreground',
+              preseason ? 'text-muted-foreground' : pos === 1 ? 'text-gold' : pos <= zoneTop ? 'text-emerald-400' : 'text-muted-foreground',
             )}>{preseason ? (mine ? '⭐' : '·') : pos}</span>
             {/* Round 516: the star marks your club in the POSITION cell, which
                 shows a meaningless dot before a ball is kicked, rather than

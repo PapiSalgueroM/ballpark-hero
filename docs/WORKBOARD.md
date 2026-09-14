@@ -187,7 +187,19 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   let jittered hidden wakes reopen the cap and froze slow visible phones (fixed, visibility decides
   hidden and a visible gap counts as watched up to 5s), and one giant away step overpaid a closed
   tab (fixed, 5s steps, hidden and closed now leave identical academies). Written into the contract.
-  Flagged, not fixed: `src/hooks/useHallOfChampions.ts` has the same fixed-step interval shape. I have skipped 570 to 579 on purpose, because the
+  Flagged, not fixed: `src/hooks/useHallOfChampions.ts` has the same fixed-step interval shape.
+- **582: the league.** Rides alone, adversarial review before ship. Every division is a small
+  league of named generated rivals with a table on a new League tab, and only the champion goes
+  up (no relegation; a Summit title pays). Divisions 0 to 2 are six clubs single round robin,
+  measured against a pre-league baseline committed before the first edit: first promotion at 10.5
+  minutes, before the first Sell up in 10 of 10 seeds and faster than the old win count (14.7).
+  Rival names capped at 17 characters after `playLeagueTableFit` rendered the contract's 19 and
+  found 10 clipping. Older saves land in the division their wins reached. `roundRobinCalendar` and
+  `tableOrder` moved into an import-free `src/lib/leagueCore.ts` (Rebuild's four harnesses
+  byte identical). **The review changed it:** a career-long opponent climb walled weak clubs in
+  the bottom league (91 of 200), now 0 of 200 with each division's rivals held at their arrival
+  strength; a failed stored league now keeps its division; doctored leagues are capped and
+  checked; dead heats go to your club. `scripts/simTycoonLeague.mjs`: 10 sections, 10 controls. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

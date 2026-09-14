@@ -11,9 +11,9 @@ import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
-  GOLDEN_INFO, fmtMoney, buyPerk, perkById,
+  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind } from '@/lib/stadiumTycoon';
+import type { GoldenKind, LeagueClub } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -42,6 +42,9 @@ let floaterSeq = 1;
  *  and the bonus are the engine's own event fields, printed as they came. */
 export interface Promotion { label: string; amount: number; seq: number }
 export interface BadgeEarned { label: string; seq: number }
+/** Round 582 review: the season that just ended, so the League tab can show how
+ *  it finished instead of silently wiping the table. This sitting only. */
+export interface LastSeason { label: string; position: number; table: LeagueClub[] }
 
 export function useStadiumTycoon() {
   const [state, setState] = useState<TycoonState>(() => {
@@ -58,6 +61,7 @@ export function useStadiumTycoon() {
   const [golden, setGolden] = useState<PendingGolden | null>(null);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
+  const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
   /* Round 581: the ref is the truth and it is written FIRST. Every change
      computes from the ref, assigns the ref, saves if it has to, and only then
      tells React. It used to be assigned during render, so between an action and
@@ -163,6 +167,9 @@ export function useStadiumTycoon() {
       raf = requestAnimationFrame(step);
     };
     const reactToEvent = (e: TickEvent) => {
+      if ((e.kind === 'title' || e.kind === 'seasonEnd') && e.table && e.position !== undefined) {
+        setLastSeason({ label: e.label ?? 'Season over', position: e.position, table: e.table });
+      }
       if (e.kind === 'goal') {
         pushFloater(`GOAL! +$${e.amount}`, 'goal', 30 + Math.random() * 40, 20 + Math.random() * 25);
         setConfetti(c => c + 1);
@@ -178,6 +185,15 @@ export function useStadiumTycoon() {
         pushFloater(`${e.label} +$${e.amount}`, 'win', 16, 20);
         setConfetti(c => c + 2);
         setPromotion({ label: e.label, amount: e.amount, seq: floaterSeq++ });
+      } else if (e.kind === 'title') {
+        /* Round 582: a league title. At The Summit it pays and nobody goes up,
+           so it takes the promotion card itself; below that the 'promoted'
+           event right behind it takes the card and this is the headline. */
+        pushFloater(e.label ?? 'CHAMPIONS', 'win', 20, 16);
+        setConfetti(c => c + 2);
+        if (e.amount !== undefined) setPromotion({ label: e.label ?? 'CHAMPIONS', amount: e.amount, seq: floaterSeq++ });
+      } else if (e.kind === 'seasonEnd') {
+        pushFloater(e.label ?? 'Season over', 'bad', 24, 22);
       } else if (e.kind === 'ach') {
         /* Round 530 review: the lib's own bonus, so a retune cannot leave
            the floater announcing a number the game no longer pays. */
@@ -298,6 +314,15 @@ export function useStadiumTycoon() {
     setState(after);
   }, [pushFloater]);
 
+  /* Round 582: the club name, picked from generated options. Not a session mark:
+     naming the club is not playing it. */
+  const doSetClubName = useCallback((name: string) => {
+    const before = stateRef.current;
+    const after = setClubName(before, name);
+    if (after === before) return;
+    commit(after);
+  }, [commit]);
+
   const dismissAway = useCallback(() => setAwayPay(null), []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
   const dismissBadge = useCallback(() => setBadge(null), []);
@@ -306,6 +331,6 @@ export function useStadiumTycoon() {
     state, floaters, awayPay, dismissAway, confetti,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
-    promotion, dismissPromotion, badge, dismissBadge,
+    promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,
   };
 }

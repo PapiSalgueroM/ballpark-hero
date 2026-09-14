@@ -12,9 +12,9 @@
  *    minutes so it can never become a cliff
  *  - progression: income at 30 minutes is a large multiple of income at
  *    minute 1 (measured 2026-08-18 on the division-era economy: about 530x;
- *    floor 8x)
+ *    re-measured 2026-09-14 with the Round 582 league: 668x; floor 8x)
  *  - the carrot: greedy active play reaches the first prestige inside 45
- *    minutes (measured 2026-08-18: minute 14)
+ *    minutes (measured 2026-08-18: minute 14; 2026-09-14 with the league: 13)
  *
  * Round 162 grew the game (divisions, payroll, golden whistle, badges) and
  * sections 9 to 12 pin each new system to its exact formula: the division
@@ -56,7 +56,7 @@ const {
   prestige, canPrestige, prestigeThreshold, offlineEarnings,
   serializeTycoon, deserializeTycoon, repMult, attendance, capacity,
   activateBoost, boostReady, boostActive, BOOST_CHARGE_SEC, BOOST_DURATION_SEC,
-  DIVISIONS, divisionIndex, divisionOf, winsToNextDivision,
+  DIVISIONS, divisionIndex, divisionOf, legacyDivisionIndex,
   STAFF, staffCostOf, canHire, hire, staffBaseIncome, totalStaffLevels,
   GOLDEN_INFO, rollGoldenKind, goldenActive, catchGolden,
   ACHIEVEMENTS, ACH_BONUS, achMult, tapValue, oppChancePerMin, levelOf,
@@ -150,7 +150,7 @@ console.log('2) The curve moves and the carrot arrives');
   const income30 = incomePerSec(r30.s);
   console.log(`   income at 1 min: ${income1.toFixed(1)}/s, at 30 min: ${income30.toFixed(1)}/s (${(income30 / income1).toFixed(1)}x)`);
   // Measured 2026-08-18 on the division-era economy: about 530x at 30
-  // minutes on the greedy floor strategy (divisions and badges compound on
+  // minutes (2026-09-14, Round 582 league: 668x) on the greedy floor strategy (divisions and badges compound on
   // top of the old curve). 8x keeps honest daylight under it; below that
   // the curve died.
   if (income30 < income1 * 8) fail(`30 minute growth is only ${(income30 / income1).toFixed(1)}x`);
@@ -324,15 +324,28 @@ console.log('7) Milestones are exactly-once and exploit-proof');
 /* ---------- 8. Opponent names are stable, fresh, and never real ---------- */
 console.log('8) The opposition is invented, provably');
 {
-  const { opponentName, allOpponentNames } = T;
+  /* Round 582: opponents are a league now. Each division is a small league of
+     named rivals, so the check is that a season meets every rival and nobody
+     twice in a leg, that a new ground meets a different league, and that no
+     name the league or the name picker can produce is a real club. */
+  const { opponentName, allOpponentNames, leagueNameBank, leagueShape, newLeague, clubNameOptions } = T;
   const s0 = newTycoon(0);
   if (opponentName(s0) !== opponentName({ ...s0 })) fail('the same match drew two different opponents');
-  const names = new Set();
-  for (let m = 0; m < 40; m++) names.add(opponentName({ ...s0, matchNo: m }));
-  console.log(`   ${names.size} distinct opponents in the first 40 matches, e.g. ${opponentName(s0)}`);
-  if (names.size < 25) fail(`only ${names.size} distinct opponents in 40 matches, the fixture list is repetitive`);
-  if (opponentName({ ...s0, matchNo: 3 }) === opponentName({ ...s0, matchNo: 3, rep: 1 })) {
-    fail('a new ground replays the exact same fixture list');
+  let meetsAll = true;
+  for (const division of [0, 3, 6]) {
+    const lg0 = newLeague(0, division, 0);
+    const { clubs, matchdays } = leagueShape(division);
+    const met = [];
+    for (let md = 0; md < matchdays; md++) met.push(opponentName({ ...s0, league: { ...lg0, matchday: md } }));
+    const distinct = new Set(met);
+    if (distinct.size !== clubs - 1) { meetsAll = false; fail(`a division ${division} season of ${clubs} clubs met ${distinct.size} distinct rivals`); }
+    if (met.some(n => n === lg0.clubs[0].name)) fail('you were drawn against yourself');
+    const legs = matchdays / (clubs - 1);
+    for (const n of distinct) if (met.filter(x => x === n).length !== legs) fail(`${n} was met ${met.filter(x => x === n).length} times in ${legs} leg(s)`);
+  }
+  if (meetsAll) console.log('   every league of n clubs meets its n-1 rivals, once a leg');
+  if (JSON.stringify(newLeague(0, 0, 0).clubs.map(c => c.name)) === JSON.stringify(newLeague(1, 0, 0).clubs.map(c => c.name))) {
+    fail('a new ground replays the exact same league');
   }
   // The legal-shaped guard: no generated combination may equal a real club
   // name anywhere in the Club Manager world, today or in any era.
@@ -344,13 +357,17 @@ console.log('8) The opposition is invented, provably');
   if (realClubs.size < 200) fail(`the real-club list only loaded ${realClubs.size} names, the collision check is not checking much`);
   const collisions = allOpponentNames().filter(n => realClubs.has(n));
   if (collisions.length) fail(`generated opponents collide with real clubs: ${collisions.join(', ')}`);
-  console.log(`   ${allOpponentNames().length} possible names checked against ${realClubs.size} real clubs, 0 collisions`);
+  if (clubNameOptions(s0).some(n => realClubs.has(n) || !leagueNameBank().includes(n))) fail('the club name picker offers a name outside the checked bank');
+  console.log(`   ${allOpponentNames().length} possible names (${leagueNameBank().length} short enough for the table) checked against ${realClubs.size} real clubs, 0 collisions`);
 }
 
 /* ---------- 9. Divisions: the ladder is real and pays exactly ---------- */
 console.log('9) Ten divisions, exact multipliers, promotion pays');
 {
-  // The table itself: monotonic wins, monotonic pay, monotonic danger.
+  /* Round 582: a division is set through the league, and promotion is by winning
+     it. The old win thresholds survive only to seed saves written before the
+     league, so they are still checked as that. */
+  const inDivision = (st, d) => ({ ...st, league: T.newLeague(st.rep, d, 0) });
   if (DIVISIONS.length !== 10) fail(`expected 10 divisions, found ${DIVISIONS.length}`);
   for (let i = 1; i < DIVISIONS.length; i++) {
     if (DIVISIONS[i].winsNeeded <= DIVISIONS[i - 1].winsNeeded) fail(`division ${i} needs no more wins than division ${i - 1}`);
@@ -359,46 +376,64 @@ console.log('9) Ten divisions, exact multipliers, promotion pays');
   }
   const s0 = newTycoon(0);
   if (divisionIndex(s0) !== 0) fail('a new club is not in the bottom division');
-  if (divisionIndex({ ...s0, groundWins: 5 }) !== 0) fail('5 wins already promoted');
-  if (divisionIndex({ ...s0, groundWins: 6 }) !== 1) fail('6 wins did not promote to division 2');
-  if (divisionIndex({ ...s0, groundWins: 500 }) !== 9) fail('500 wins is not The Summit');
-  if (winsToNextDivision({ ...s0, groundWins: 4 }) !== 2) fail('wins-to-next arithmetic is off');
-  if (winsToNextDivision({ ...s0, groundWins: 200 }) !== null) fail('The Summit still shows a next division');
+  if (legacyDivisionIndex(5) !== 0) fail('the legacy seed puts 5 wins above the bottom');
+  if (legacyDivisionIndex(6) !== 1) fail('the legacy seed does not put 6 wins in division 2');
+  if (legacyDivisionIndex(500) !== 9) fail('the legacy seed does not put 500 wins at The Summit');
+  if (divisionIndex({ ...s0, groundWins: 500 }) !== 0) fail('home wins still promote a club that has a league');
 
-  // The multiplier is exact: the same club lifted to Silverline (60 wins,
-  // x2.25) earns exactly 2.25x, nothing else about it changed.
+  // The multiplier is exact: the same club lifted to Silverline (x2.25)
+  // earns exactly 2.25x, nothing else about it changed.
   const base = { ...newTycoon(0), fanbase: 900, money: 0 };
-  const lifted = { ...base, groundWins: 60 };
+  const lifted = inDivision(base, 5);
   const ratio = incomePerSec(lifted) / incomePerSec(base);
   if (Math.abs(ratio - 2.25) > 1e-9) fail(`Silverline pays x${ratio}, the table says x2.25`);
 
-  // And it shoots back: the opposition chance gap is exactly the oppBoost
-  // gap while both sit inside the clamp window.
-  const oppGap = oppChancePerMin(lifted) - oppChancePerMin(base);
+  // And it shoots back: net of today's rival's own strength, the opposition
+  // chance gap is exactly the oppBoost gap while both sit inside the clamp.
+  const oppGap = (oppChancePerMin(lifted) - T.currentOpponentOffset(lifted)) - (oppChancePerMin(base) - T.currentOpponentOffset(base));
   if (Math.abs(oppGap - DIVISIONS[5].oppBoost) > 1e-9) fail(`Silverline oppBoost lands as ${oppGap}, table says ${DIVISIONS[5].oppBoost}`);
 
-  // Promotion pays on the spot: exactly attendance x8 x stage x rep, once.
-  let p = { ...newTycoon(0), fanbase: 2000, groundWins: 5, minute: 89, goalsFor: 1, goalsAgainst: 0 };
+  // Promotion pays on the spot, only for the champion, on the last matchday:
+  // exactly attendance x8 x the new stage x rep, once.
   const noGoals = () => 0.999; // one quiet minute, straight to full time
-  const r = tick(p, 1.4, noGoals);
+  const finalDay = (youPts, rivalPts) => {
+    const lg = T.newLeague(0, 0, 0);
+    const last = T.leagueShape(0).matchdays - 1;
+    const clubs = lg.clubs.map((c, i) => {
+      const w = i === 0 ? youPts / 3 : i === 1 ? rivalPts / 3 : 0;
+      return { ...c, w, d: 0, l: last - w, gf: w, ga: last - w, pts: w * 3 };
+    });
+    return { ...newTycoon(0), fanbase: 2000, minute: 89, goalsFor: 1, goalsAgainst: 0, league: { ...lg, matchday: last, clubs } };
+  };
+  const r = tick(finalDay(12, 3), 1.4, noGoals);
   const promo = r.events.find(e => e.kind === 'promoted');
-  if (!promo) fail('winning the sixth match did not raise a promotion');
+  if (!r.events.some(e => e.kind === 'title')) fail('winning the league raised no title');
+  if (!promo) fail('winning the league on the last matchday did not raise a promotion');
   else {
     const expect = Math.round(attendance(r.state) * 8 * DIVISIONS[1].incomeMult * repMult(r.state));
     if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
     if (!promo.label.includes('Gravel Lane')) fail(`promotion label reads "${promo.label}"`);
     if (r.state.bestDivision !== 1) fail('bestDivision did not record the climb');
+    if (divisionIndex(r.state) !== 1 || r.state.league.matchday !== 0) fail('the champion did not start the new division at matchday 1');
+    if (r.state.leagueTitles !== 1) fail(`the title count reads ${r.state.leagueTitles}`);
   }
-  // A won match that does NOT cross a line pays no promotion.
-  const rQuiet = tick({ ...p, groundWins: 7 }, 1.4, noGoals);
-  if (rQuiet.events.some(e => e.kind === 'promoted')) fail('a mid-table win paid a promotion');
+  // A win that is not the last matchday pays no promotion.
+  const midSeason = finalDay(3, 0);
+  midSeason.league = { ...midSeason.league, matchday: 1, clubs: midSeason.league.clubs.map((c, i) => ({ ...c, w: i === 0 ? 1 : 0, l: i === 0 ? 0 : 1, gf: i === 0 ? 1 : 0, ga: i === 0 ? 0 : 1, pts: i === 0 ? 3 : 0 })) };
+  if (tick(midSeason, 1.4, noGoals).events.some(e => e.kind === 'promoted')) fail('a mid-season win paid a promotion');
+  // A last-matchday win that does not top the table pays no promotion.
+  const beaten = tick(finalDay(3, 12), 1.4, noGoals);
+  if (beaten.events.some(e => e.kind === 'promoted')) fail('a club that did not win the league went up');
+  if (!beaten.events.some(e => e.kind === 'seasonEnd')) fail('a season that ended without a title raised no season end');
+  if (divisionIndex(beaten.state) !== 0) fail('a club that did not win the league changed division');
 
   // Selling up starts the ladder over but the record book remembers.
-  const climbed = { ...newTycoon(0), groundWins: 90, bestDivision: 6, lifetime: 1e12, rep: 0 };
+  const climbed = inDivision({ ...newTycoon(0), bestDivision: 6, lifetime: 1e12, rep: 0, leagueTitles: 6 }, 6);
   const sold = prestige(climbed, 0);
-  if ((sold.groundWins ?? 0) !== 0) fail('prestige kept the ground wins, the new climb is fake');
+  if (divisionIndex(sold) !== 0) fail('prestige kept the division, the new climb is fake');
   if (sold.bestDivision !== 6) fail('prestige forgot the best division reached');
-  console.log(`   x2.25 exact at Silverline, promotion paid ${promo ? promo.amount : '?'} on the line, ladder resets on sale, record survives`);
+  if (sold.leagueTitles !== 6) fail('prestige forgot the league titles');
+  console.log(`   x2.25 exact at Silverline, promotion paid ${promo ? promo.amount : '?'} to the champion only, ladder resets on sale, record survives`);
 }
 
 /* ---------- 10. Staff: the payroll earns exactly what it says ---------- */
@@ -582,17 +617,18 @@ console.log('13) Legacy points pay by the climb and every perk does exactly what
   // The sale pays by the climb: 1 at the bottom, 10 from The Summit.
   const s0 = newTycoon(0);
   if (pointsForSale(s0) !== 1) fail(`a bottom-league sale pays ${pointsForSale(s0)}, expected 1`);
-  const summit = { ...s0, groundWins: 200 };
-  if (divisionIndex(summit) !== 9) fail('200 wins is not The Summit');
+  /* Round 582: divisions come from the league. */
+  const summit = { ...s0, league: T.newLeague(0, 9, 0) };
+  if (divisionIndex(summit) !== 9) fail('a Summit league is not The Summit');
   if (pointsForSale(summit) !== 10) fail(`a Summit sale pays ${pointsForSale(summit)}, expected 10`);
 
   // Prestige reads the ground BEFORE the reset and carries the boardroom.
-  const mid = { ...s0, groundWins: 60, lifetime: 1e12, legacyPoints: 3, legacyPerks: { sway: 2 } };
-  if (divisionIndex(mid) !== 5) fail('60 wins should sit in division 5');
+  const mid = { ...s0, league: T.newLeague(0, 5, 0), lifetime: 1e12, legacyPoints: 3, legacyPerks: { sway: 2 } };
+  if (divisionIndex(mid) !== 5) fail('a Silverline league should sit in division 5');
   const sold = prestige(mid, 0);
   if (legacyPointsOf(sold) !== 3 + 6) fail(`the sale banked ${legacyPointsOf(sold)} points, expected 9 (3 held + 1 + division 5)`);
   if (perkLevelOf(sold, 'sway') !== 2) fail('perks did not survive the sale');
-  if ((sold.groundWins ?? 0) !== 0) fail('the new ground kept the old wins');
+  if (divisionIndex(sold) !== 0) fail('the new ground kept the old division');
 
   // Buying: exact deduction, refusal when short, capped, unknown ids inert.
   let b = { ...newTycoon(0), legacyPoints: 3 };

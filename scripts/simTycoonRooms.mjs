@@ -24,6 +24,7 @@
  *      doublemount     a second academy hook on the page
  *      noaccent        the panel's status never reaches the tab
  *      unseentimer     the promotion card's timer runs while nobody can see it
+ *      noleague        the League room is never mounted (Round 582)
  *   B) save sections, plain, then five broken inputs
  *      bump            a lib copy with SAVE_VERSION 2
  *      rename          a lib copy with another stadium save key
@@ -111,6 +112,7 @@ const PAGE_LINES = {
   onStatus: 'onStatus={setAcademyStatus}',
   unseenTimer: 'if (!g.promotion || !visible) return;',
   hookImport: "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n",
+  leagueMount: "        <LeagueRoom g={g} visible={room === 'league'} />\n",
 };
 
 /** Each control: the rewrites it plants, and the sections it must turn red and
@@ -123,6 +125,8 @@ const PAGE_CONTROLS = [
       [PAGE_LINES.hook, ''],
       [PAGE_LINES.roomSignature, 'function StadiumRoom({ visible, onNeedsYou }: { visible: boolean; onNeedsYou: (v: boolean) => void }) {\n  const g = useStadiumTycoon();\n'],
       [PAGE_LINES.roomMount, "{room === 'stadium' && <StadiumRoom visible onNeedsYou={setStadiumNeedsYou} />}"],
+      /* Round 582: the League room reads the page's hook too, so it goes with it. */
+      [PAGE_LINES.leagueMount, ''],
     ],
     red: [2],
     green: [1, 3, 4, 5, 6],
@@ -156,7 +160,14 @@ const PAGE_CONTROLS = [
     why: "the promotion card's four second timer runs while the Academy is showing",
     rewrites: [[PAGE_LINES.unseenTimer, 'if (!g.promotion) return;']],
     red: [7],
-    green: [1, 2, 3, 4, 5, 6],
+    green: [1, 2, 3, 4, 5, 6, 8],
+  },
+  {
+    name: 'noleague',
+    why: 'the League room is never mounted (Round 582)',
+    rewrites: [[PAGE_LINES.leagueMount, '']],
+    red: [8],
+    green: [1, 2, 3, 4, 5, 6, 7],
   },
 ];
 
@@ -170,10 +181,10 @@ for (const row of live) {
   console.log(`   ${row.status === 'passed' ? 'pass' : 'FAIL'}  ${row.title}`);
   if (row.status !== 'passed') fail(`${row.title}: ${detail(row.messages)}`);
 }
-if (live.length < 7) fail(`only ${live.length} of the 7 room tests ran, so this harness measured less than it claims`);
+if (live.length < 8) fail(`only ${live.length} of the 8 room tests ran, so this harness measured less than it claims`);
 console.log('   what it measured:');
 for (const note of live.notes) console.log(`     ${note}`);
-if (live.notes.length < 7) fail(`the suite printed ${live.notes.length} measurements, so some test returned without measuring anything`);
+if (live.notes.length < 8) fail(`the suite printed ${live.notes.length} measurements, so some test returned without measuring anything`);
 
 const pageSrc = read(PAGE);
 for (const control of PAGE_CONTROLS) {
@@ -193,7 +204,7 @@ for (const control of PAGE_CONTROLS) {
   fs.rmSync(dir, { recursive: true, force: true });
   if (!rows) { fail(`control ${control.name}: the run produced no report, so the control proves nothing`); continue; }
   if (rows.loadError) { fail(`control ${control.name}: the rewritten page did not load, so every red is a crash:\n${rows.loadError}`); continue; }
-  if (rows.length < 7) { fail(`control ${control.name}: only ${rows.length} tests ran`); continue; }
+  if (rows.length < 8) { fail(`control ${control.name}: only ${rows.length} tests ran`); continue; }
   for (const row of rows) {
     const n = sectionOf(row.title);
     const graded = control.red.includes(n) || control.green.includes(n);

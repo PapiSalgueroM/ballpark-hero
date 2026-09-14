@@ -1,6 +1,7 @@
 import { Player, type League } from '@/types/game';
 import { FORMATIONS, playerRating, normalizePosition, type Formation, type FormationSlot } from '@/lib/squadDeal';
 import type { RebuildClub, ClubTier } from '@/lib/fetchRebuild';
+import { roundRobinCalendar, tableOrder } from '@/lib/leagueCore';
 
 /**
  * Rebuild Challenge: the deck. Everything the loop deals from lives here as
@@ -872,29 +873,10 @@ function everyPairing(n: number): [number, number][] {
   return out;
 }
 
-/** A calendar, round by round (the circle method), then the reverse fixtures.
- *  Every team plays once a round, so a run of results is a run in time and
- *  "longest unbeaten" means what it says. */
-export function roundRobinCalendar(n: number): [number, number][] {
-  const teams = Array.from({ length: n }, (_, i) => i);
-  if (n % 2 === 1) teams.push(-1);
-  const half = teams.length / 2;
-  const firstLeg: [number, number][] = [];
-  for (let round = 0; round < teams.length - 1; round++) {
-    for (let k = 0; k < half; k++) {
-      const a = teams[k];
-      const b = teams[teams.length - 1 - k];
-      if (a === -1 || b === -1) continue;
-      // Alternate home advantage so the fixed first team does not host every round.
-      firstLeg.push(round % 2 === 0 ? [a, b] : [b, a]);
-    }
-    teams.splice(1, 0, teams.pop() as number);
-  }
-  return [...firstLeg, ...firstLeg.map(([h, a]): [number, number] => [a, h])];
-}
+/* Round 582: roundRobinCalendar and tableOrder moved verbatim into
+   src/lib/leagueCore.ts, which Stadium Tycoon's league shares. */
+export { roundRobinCalendar };
 
-const tableOrder = (a: SeasonRow, b: SeasonRow): number =>
-  b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf;
 
 /**
  * A 6-team mini league season, double round robin (10 games each): you, your
