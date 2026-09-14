@@ -1,3 +1,4 @@
+import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
  *
@@ -121,8 +122,19 @@ export interface CfbState {
   heismanWinners: string[];
 }
 
-let cfbId = 0;
-function fid(): string { cfbId += 1; return `c${cfbId}`; }
+/* Round 568: this counter used to live at module scope, which restarts on
+   every page load while the save does not, so a reload handed a new man an
+   id a saved man already wore. See src/lib/entityIds.ts for the measurement
+   and the rule. Call sites below are unchanged. */
+const fid = makeIdMinter('c');
+
+/** Round 568: repair a save written before the minter above. First holder
+    keeps its id, every shadowed entity gets a fresh one, nobody is dropped.
+    Loose lists (a draft class, a recruiting class, a portal) come from the
+    same counter, so they are one id space with the rosters. */
+export function ensureCfbIds(lg: CfbState, ...loose: (({ id: string }[]) | null | undefined)[]): number {
+  return ensureLeagueEntityIds(fid, lg as never, ...loose);
+}
 
 const FIRST = ['Jaylen', 'Cade', 'Marcus', 'Deuce', 'Bryce', 'Trey', 'Xavier', 'Knox', 'Amari', 'Judd', 'Tyce', 'Rocco', 'Dax', 'Malachi', 'Beau', 'Kingston', 'Zeke', 'Landry', 'Colt', 'Rex'];
 const LAST = ['Whitfield', 'Broussard', 'Callahan', 'Okafor', 'Ledoux', 'Maddox', 'Prather', 'Stallworth', 'Vann', 'Hollins', 'Beaumont', 'Rucker', 'Tatum', 'Winslow', 'Crowder', 'Delgado', 'Fontaine', 'Granger', 'Huxley', 'McCrae'];

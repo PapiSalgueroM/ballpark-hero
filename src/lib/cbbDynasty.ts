@@ -1,3 +1,4 @@
+import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -113,8 +114,19 @@ export interface CbbState {
   poyWinners: string[];
 }
 
-let cbbId = 0;
-function fid(): string { cbbId += 1; return `b${cbbId}`; }
+/* Round 568: this counter used to live at module scope, which restarts on
+   every page load while the save does not, so a reload handed a new man an
+   id a saved man already wore. See src/lib/entityIds.ts for the measurement
+   and the rule. Call sites below are unchanged. */
+const fid = makeIdMinter('b');
+
+/** Round 568: repair a save written before the minter above. First holder
+    keeps its id, every shadowed entity gets a fresh one, nobody is dropped.
+    Loose lists (a draft class, a recruiting class, a portal) come from the
+    same counter, so they are one id space with the rosters. */
+export function ensureCbbIds(lg: CbbState, ...loose: (({ id: string }[]) | null | undefined)[]): number {
+  return ensureLeagueEntityIds(fid, lg as never, ...loose);
+}
 
 const FIRST = ['Jalen', 'Zion', 'Cooper', 'Tre', 'DeAndre', 'Boogie', 'Kellan', 'Marcus', 'Ty', 'Isaiah', 'Jett', 'Duncan', 'Ace', 'Miles', 'Quincy', 'Reed', 'Silas', 'Trey', 'Vance', 'Zeke'];
 const LAST = ['Abernathy', 'Bright', 'Calloway', 'Dupree', 'Eastwood', 'Fenwick', 'Grimes', 'Holloway', 'Ivey', 'Jasper', 'Kingsley', 'Lockhart', 'Mabrey', 'Northcutt', 'Overton', 'Pryor', 'Quarles', 'Ridley', 'Sessoms', 'Thurman'];

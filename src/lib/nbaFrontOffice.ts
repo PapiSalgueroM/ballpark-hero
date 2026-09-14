@@ -3,6 +3,7 @@ import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
+import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -52,8 +53,19 @@ export interface NbaLeague {
   champions: { season: number; team: string }[];
 }
 
-let nbaId = 0;
-function fid(): string { nbaId += 1; return `n${nbaId}`; }
+/* Round 568: this counter used to live at module scope, which restarts on
+   every page load while the save does not, so a reload handed a new man an
+   id a saved man already wore. See src/lib/entityIds.ts for the measurement
+   and the rule. Call sites below are unchanged. */
+const fid = makeIdMinter('n');
+
+/** Round 568: repair a save written before the minter above. First holder
+    keeps its id, every shadowed entity gets a fresh one, nobody is dropped.
+    Loose lists (a draft class, a recruiting class, a portal) come from the
+    same counter, so they are one id space with the rosters. */
+export function ensureNbaLeagueIds(lg: NbaLeague, ...loose: (({ id: string }[]) | null | undefined)[]): number {
+  return ensureLeagueEntityIds(fid, lg as never, ...loose);
+}
 
 function normPos(p: string): NbaPos {
   const c = p[0];

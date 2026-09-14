@@ -3,6 +3,7 @@ import { FO_TEAMS, FO_TEAM_MAP, type FoPlayer, type FoTeam } from '@/data/frontO
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
+import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -69,10 +70,18 @@ export interface LeagueState {
   champions: { season: number; team: string }[];
 }
 
-let idCounter = 0;
-export function freshId(): string {
-  idCounter += 1;
-  return `p${idCounter}`;
+/* Round 568: this counter used to live at module scope, which restarts on
+   every page load while the save does not, so a reload handed a new man an
+   id a saved man already wore. See src/lib/entityIds.ts for the measurement
+   and the rule. Call sites below are unchanged. */
+export const freshId = makeIdMinter('p');
+
+/** Round 568: repair a save written before the minter above. First holder
+    keeps its id, every shadowed entity gets a fresh one, nobody is dropped.
+    Loose lists (a draft class, a recruiting class, a portal) come from the
+    same counter, so they are one id space with the rosters. */
+export function ensureFoLeagueIds(lg: LeagueState, ...loose: (({ id: string }[]) | null | undefined)[]): number {
+  return ensureLeagueEntityIds(freshId, lg as never, ...loose);
 }
 
 export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {

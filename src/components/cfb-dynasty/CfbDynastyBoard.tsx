@@ -8,6 +8,7 @@ import {
   heismanRace, cfbRecruitClass, cfbPortalPool, signRecruit, cfbOffseason,
   nilBudgetFor, cfbStrength,
   type CfbState, type CfbGame, type CfbPlayoffGame, type CfbRecruit, type HeismanFinalist,
+  ensureCfbIds,
 } from '@/lib/cfbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
@@ -76,6 +77,10 @@ export default function CfbDynastyBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.st?.myTeam) return;
+      /* Round 568: FIRST, above every setState below. The recruits and the
+         portal are minted from the same counter as the rosters, so all three
+         are one id space and the repair has to see all three at once. */
+      ensureCfbIds(s.st, s.recruits, s.portal);
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);

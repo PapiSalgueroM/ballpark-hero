@@ -11,6 +11,7 @@ import {
   nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, WESTERN, NHL_FO_DIVISIONS,
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
+  ensureNhlLeagueIds,
 } from '@/lib/nhlFrontOffice';
 /* Round 531: the cap on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
@@ -123,6 +124,11 @@ export default function NhlFrontOfficeBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
+      /* Round 568: FIRST, above every setState below, because everything
+         past this line reads the league by id and a save written before the
+         id fix can hold two men under one. The draft class is passed too: it
+         is minted from the same counter, so it shares the id space. */
+      ensureNhlLeagueIds(s.league, s.draftClass);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
