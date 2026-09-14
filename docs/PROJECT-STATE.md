@@ -1,10 +1,24 @@
 # Project state
 
-## On main, 2026-09-13, NOT YET PUBLISHED: desktop Rounds 560 to 564
+## LIVE as of 2026-09-14: desktop Rounds 560 to 567, two player-reported bugs closed
 
-**Read this before the 2026-09-12 section below, which describes the last PUBLISHED state.**
-`origin/main` has moved past the deployed build and `deploy_project` has NOT been called for any
-of the following. The published site is still the `751077a0` build described in the next section.
+**`origin/main` is `f78163d4` and douknowball.com is serving it.** Deployment
+`7b4a8c8a-cbdc-4408-aee8-21a306b97983`, called only after `get_project` showed `latest_commit_sha`
+matching the push. Home bundle `index-DFolUycD.js` to `index-CMx1kdv0.js`.
+
+**Verified on the live site, not inferred from the deploy call:**
+
+| Round | Proof grepped out of the live chunk |
+|---|---|
+| 560 | `"West Ham United":"EFL Championship"` and `Segunda División` in `footleEnrichment-F-wXhfCj.js` |
+| 563 | the comma-prefixed `, settled on away goals` clause in `SoccerCareer-feqyD_tb.js` |
+| 564 | `min-h-[30px]` in `Conquest-Dk3-X6Sn.js` |
+| 567 | the accented `Michał Karbownik` is gone from `clubManager-DwK69CU9.js`; both surviving occurrences are the unaccented man |
+
+**Suite before the ship:** all 300 node harnesses green. One, `simLeaderboardCache`, went red once
+on "today's leader is rank 1 live and 2 in the cache" and passed on a clean re-run: it compares a
+live table against a cache that refreshes on a schedule, so a real player submitting a score
+mid-run flips it. Worth knowing about that harness rather than fixing today.
 
 The desktop lane took a new block, **560 to 569**, because its old 529 to 536 was spent and 551
 onward had already been handed to the tablet lane. Two of these rounds were renumbered off a
