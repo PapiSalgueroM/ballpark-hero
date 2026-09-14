@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
@@ -125,6 +125,52 @@ export function useClubManager() {
     if (career) saveCareer(career);
   }, [career]);
 
+  /* ---------- Round 538: and persist it when the page goes away ---------- */
+
+  /*
+   * The effect above is the ordinary write and it is reliable for everything
+   * done while the page is up: measured across 23 transitions (a club chosen,
+   * a shape, an XI, a training plan, a role, a transfer status, a ticket
+   * price, a negotiation, a signing, a match, a half time, a quick sim, a run
+   * of weeks) the save on disk was byte identical to the career in memory
+   * after every single one.
+   *
+   * What it cannot do is write a change that is decided at the moment the page
+   * is going. A setCareer from a pagehide listener, a visibilitychange
+   * listener or an unmount cleanup is a state update on a tree React is
+   * tearing down: it never commits, so the effect keyed on `career` never
+   * runs, so nothing reaches localStorage.
+   *
+   * That is not hypothetical. Round 543 added exactly such a handler to the
+   * live match viewer for the clock, for the case it names in its own comment,
+   * "tapping Back, or the DoUKnowBall logo, or any nav link". Measured on the
+   * shipped code: the viewer on screen in the 19th minute, the save still at
+   * minute 0, and still at 0 after the route unmounted, so the half was
+   * replayed from the start. It worked only when the viewer alone unmounted
+   * and the page stayed, which is the one case it was not written for.
+   *
+   * So the career is readable synchronously here, and the write at that moment
+   * goes straight to localStorage rather than through a render.
+   */
+  const careerRef = useRef<CareerState | null>(null);
+  useEffect(() => { careerRef.current = career; }, [career]);
+
+  useEffect(() => {
+    const write = () => { const c = careerRef.current; if (c) saveCareer(c); };
+    const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
+    window.addEventListener('pagehide', write);
+    document.addEventListener('visibilitychange', onHidden);
+    return () => {
+      window.removeEventListener('pagehide', write);
+      document.removeEventListener('visibilitychange', onHidden);
+      /* Leaving the route is the same event as leaving the site as far as this
+         hook is concerned: both end with no render left to run. Writing the
+         career it is holding costs one localStorage write and closes the gap
+         between a commit and the passive effect that would have saved it. */
+      write();
+    };
+  }, []);
+
   /* ---------- derived ---------- */
   const market: MarketPlayer[] = useMemo(
     () => (career ? buildMarket(career) : []),
@@ -160,6 +206,11 @@ export function useClubManager() {
 
   const startNew = useCallback(() => {
     clearCareer();
+    /* Round 538: synchronously, not on the next commit. The handler above
+       writes whatever this ref holds when the page goes, and a player who
+       taps Start Fresh and then leaves before React has re-rendered must not
+       have the career he just deleted written back over the empty slot. */
+    careerRef.current = null;
     setCareer(null);
     setReport(null);
     setSummary(null);
@@ -629,8 +680,22 @@ export function useClubManager() {
      opens again in the 30th rather than at the last change. The viewer calls
      it at the interval and when the page is hidden, never on a tick, because
      every career write goes to localStorage. The engine hands back the same
-     object when nothing moves, so React skips the write. */
+     object when nothing moves, so React skips the write.
+
+     Round 538: and the write happens HERE rather than in the persist effect,
+     because three of the four moments this is called are moments the page is
+     going away (a pagehide, a tab hidden, the viewer's own unmount cleanup)
+     and a state update made then never commits. The state update is still
+     made, from the latest state and through the engine's own pure function,
+     so nothing about the in-page behaviour changes; the disk write just no
+     longer depends on a render that may not happen. */
   const markMinute = useCallback((minute: number) => {
+    const now = careerRef.current;
+    if (!now) return;
+    const next = markLiveMinute(now, minute);
+    if (next === now) return;
+    careerRef.current = next;
+    saveCareer(next);
     setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
   }, []);
 
