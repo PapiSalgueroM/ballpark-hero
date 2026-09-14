@@ -34,6 +34,21 @@
  * rank 8 asks for. This harness is the floor under that work, not a
  * substitute for it, and a green run means "consistent", never "verified".
  *
+ * DO NOT USE public.mma_fighter_careers AS THE SECOND SOURCE. It has 86 rows,
+ * nothing in the site reads it, and it looks like exactly what this work
+ * needs until you query it. Measured 2026-09-13: 15 of the 86 rows claim more
+ * knockouts plus submissions plus decisions than they claim wins, which is
+ * impossible; 63 of 86 have a weight_class that is a prose career history
+ * with reference markers still in it ("Light heavyweight (2008-2020) [ 4 ]")
+ * rather than a division; 71 of 86 have no nationality and 74 have no draws.
+ * Spot checks of the rest: Conor McGregor 1-0, Stipe Miocic 5-5, Michael
+ * Bisping 2-9, Ronda Rousey 3-0, Dricus du Plessis 33-0 with 30 knockouts.
+ * It is a half captured scrape, not a source, and importing it would replace
+ * hand typed numbers that are at least self consistent with numbers that are
+ * not. It stays in the database because deleting a table nobody reads is a
+ * separate decision; this note exists so the next person to find it does not
+ * lose an afternoon to it the way this round nearly did.
+ *
  * CONTROLS (each rewrites the source text and refuses to run if the rewrite
  * changed nothing):
  *   UFC_CONTROL=record     a record string no longer matches its own fields
