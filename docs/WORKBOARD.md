@@ -292,21 +292,28 @@ being selectable is game data; `pg_trgm` and `unaccent` in the public schema are
 Two are real and neither is the 2026-08-25 `exec_sql` class (neither runs arbitrary SQL):
 
 - `public.admin_exists(p_role text)` is SECURITY DEFINER, `STABLE`, `SET search_path TO ''`, and
-  **executable by `anon`** via `/rest/v1/rpc/admin_exists`. It returns `count(*)` of
-  `user_roles` for a role, so the whole disclosure is "how many admins exist", with no ids and no
-  emails. **It has no caller at all**: nothing in `src`, nothing in `supabase/functions`, nothing
-  in the migrations. Remediation is one statement,
-  `REVOKE EXECUTE ON FUNCTION public.admin_exists(text) FROM anon, authenticated;`
+  executable by `anon` via `/rest/v1/rpc/admin_exists`. It returns `count(*)` of `user_roles` for
+  a role, so the whole disclosure is "how many holders of a role exist", with no ids and no
+  emails.
+  **CORRECTED 2026-09-14, and do NOT apply the revoke this note used to recommend.** This entry
+  first said the function "has no caller at all" and recommended
+  `REVOKE EXECUTE ... FROM anon, authenticated`. Both were wrong. The search that produced that
+  claim covered `src`, `supabase/functions` and the migrations but not `scripts`. It is a
+  **deliberate probe**: migration `supabase/migrations/20260901_admin_exists_probe.sql` created it,
+  and `scripts/simAdminAccess.mjs` section 1 calls it with the public anon key to prove an admin
+  exists, which is invisible from outside by design. `docs/PROJECT-STATE.md` already recorded it as
+  "a deliberate probe with its own migration and its own harness". The revoke would have broken
+  that harness and its `norole` control. What caught it was checking live traffic before acting:
+  five successful calls in 24 hours, all user agent `node`, all anon, no origin, all from this
+  machine's suite runs. It stays as it is.
 - `public.has_role(_user_id uuid, _role app_role)` is executable by `authenticated`, so a signed
   in user can ask whether a user id they already know holds a role. It **must stay SECURITY
   DEFINER**: it is called from inside the RLS policies themselves
   (`USING (public.has_role(auth.uid(), 'admin'))`) across at least three migrations.
 
-**Why nothing was changed today.** Both are grant changes on a live auth path while a publish was
-pending, and the cost of being wrong is locking an admin out of the admin tables, which is worse
-than an anonymous caller learning there are N admins. It wants its own round with a test that
-signs in, exercises an admin-gated policy after the revoke, and proves the policies still
-evaluate. `auth_leaked_password_protection` is a third item and is a dashboard toggle only
+**Why nothing was changed.** `admin_exists` is intended, see the correction above. `has_role` must
+stay executable by `authenticated` because the RLS policies call it, so revoking it would lock
+signed in users out of whatever those policies gate. Neither is a defect to fix. `auth_leaked_password_protection` is a third item and is a dashboard toggle only
 Anthony can flip (Supabase Auth, check passwords against HaveIBeenPwned).
 
 - **Correction to the queue in the same round as 560.** Ranks 4 and 9 were listed as open and were

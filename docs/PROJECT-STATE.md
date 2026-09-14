@@ -4103,6 +4103,26 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
    on a public board. Either is one SQL statement once he says which; a backup of
    `user_game_scores` and `user_scores` comes first either way.
 
+   **ADDED 2026-09-14, and it belongs inside this same decision rather than beside it.**
+   A second, different defect was found in the same save path: 34 of 488 signed in accounts hold
+   FEWER total points than their own recorded plays add up to, **19,857 points short in all, the
+   worst account 3,170**. That is the opposite direction from the repeat saves above (those are
+   points some would call too many; these are points players genuinely earned and never got).
+   The cause was the old client save reading `total_points` and writing it back, which lost
+   points two ways (an interrupted save and two saves racing), both visible in the data. Round
+   569 fixed it going forward with one atomic database function, so no new points are lost. **The
+   19,857 already lost were deliberately NOT restored**, because restoring them moves the same
+   public board this decision is about. Whichever option he picks, the same statement should fix
+   these accounts:
+   - *leave history as it is:* set each short account's total to the sum of its own recorded
+     plays, `greatest(total_points, sum(score))`, which only ever raises a total and never lowers
+     one (the 3 accounts whose total is above their plays keep what they have);
+   - *recompute:* the recompute rebuilds every total from the kept rows anyway, which repairs
+     these as a side effect.
+   Recommended default if he does not want to think about it: leave history as it is, and restore
+   the 19,857 points in the same pass, because those are points players earned and saw nothing
+   for.
+
 *Closed 2026-08-25: the score ticker data source. He chose the free API-Sports tier ("i want the
 free version unless the 9 dollars is per year"); Round 287 built on it. Historical outcome,
 superseded by Round 311 after that account was suspended: the live feed now uses ESPN's open
