@@ -244,10 +244,30 @@ onward and say so here. First one landed:
 persisted, so after a reload the counter restarts at 0 and a new player can be handed an id a
 saved player already holds. `wonderkidFactory.ts:195` keeps its counter in the save and is
 immune, so that is the shape to copy. This is the "one engine, many sports" rule biting again:
-Round 426 had to fix the same roster refill bug twice for the same reason. **That is Round 568,
-and it should be done as ONE shared fix injected into six engines rather than six copies of the
-same edit, per the owner's 2026-09-04 instruction.** Round 567's `freeSquadId` is the pattern for
-the repair half; the mint half wants the counter in the save the way wonderkidFactory does it.
+Round 426 had to fix the same roster refill bug twice for the same reason.
+
+- **568: DONE, and it is worse than the flag suggested in four games and milder in two.** Six
+  agents mapped the engines and eighteen more were asked to REFUTE reachability, three per
+  engine through three lenses. **Not one of the six was refuted.** The four Front Office games
+  are the Club Manager shape exactly, and it was measured with probes rather than argued:
+  `releasePlayer("p1")` returned true, removed Jacoby Brissett and left the rookie on the
+  roster, so you press Cut on your draft pick and lose your starting quarterback; in NBA a one
+  for one trade took Boston from eleven men to ten with BOTH players gone and only one arriving
+  in Denver. CFB and CBB Dynasty are real but MILD, and the audit corrected the original
+  framing: neither engine reads a player id at all (every `.id` there is a school id) and the
+  only consumer in the repo is a React key, so a duplicate is a rendering defect, not a lost
+  player.
+  One fix, not six: new `src/lib/entityIds.ts`, three lines changed and one added per engine,
+  two per board. The id is unique BY CONSTRUCTION (Round 567's rule applied to a counter): the
+  counter still runs but every id carries a token drawn once per document. The counter
+  deliberately does NOT move into the save, and `entityIds.ts` says why. Saves already corrupted
+  are repaired on load, first holder wins.
+  Fenced by `scripts/simEngineIds.mjs`, which models a page load by re-importing one bundle with
+  a fresh query. Controls `modulecounter` (sections 1 and 2 red, 46 ids held by two entities on
+  the first reload alone) and `norepair` (section 1b red, and deliberately not section 1).
+  **Writing the controls exposed a real gap:** once the minter is fixed no new duplicate ever
+  arises, so nothing exercised the REPAIR. Section 1b now builds a save that is already
+  corrupted, which is the state of a save on a player's machine right now.
 
 **DATABASE ADVISOR REVIEW, 2026-09-13, read and triaged, nothing changed on purpose.** CLAUDE.md
 says to read the advisor's FUNCTION warnings and not just its table ones, so I did. Seven WARN

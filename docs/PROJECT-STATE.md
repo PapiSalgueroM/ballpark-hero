@@ -55,11 +55,18 @@ tablet lane's 537 to 540, and the Conquest work landed as 564.
   case its own comment named. Fenced by `scripts/simClubManagerSave.mjs` plus six tests driving
   the real hook and the real viewer; both controls fire.
 
-**Open and flagged, same class as 567's duplicate:** six engines (`cfbDynasty`, `cbbDynasty`,
-`frontOffice`, `mlbFrontOffice`, `nbaFrontOffice`, `nhlFrontOffice`) mint player ids from a
-module-scope counter while persisting the roster, so a reload restarts the counter and a new
-player can take an id a saved player holds. `wonderkidFactory` keeps its counter in the save and
-is the shape to copy.
+- **565: the flagship got its first browser walk.** `scripts/playSoccerCareer.mjs` creates a
+  player, drives the career through every decision phase, reaches a qualified Champions League
+  campaign and reads the card on screen, which verifies Round 563's change for the first time.
+  It tries several careers before declaring a coverage failure, because measured across four
+  seeds three reach a campaign and one does not, and one pinned seed would be a coin toss.
+- **568: the same id collision class as 567, in six more engines, fixed once.** Six agents
+  mapped them and eighteen more were asked to refute reachability; none of the six was refuted.
+  The four Front Office games are the Club Manager shape exactly and it was measured: pressing
+  Cut on a draft pick removes your starting quarterback instead, and a one for one trade takes a
+  roster from eleven men to ten with both players gone. CFB and CBB Dynasty are real but mild,
+  because neither reads a player id at all. One shared `src/lib/entityIds.ts` rather than six
+  copies, fenced by `scripts/simEngineIds.mjs` with two controls.
 
 **A dead end recorded so nobody repeats it:** `public.mma_fighter_careers` looks exactly like the
 second source rank 8 still needs and is a half captured scrape. 15 of its 86 rows claim more
