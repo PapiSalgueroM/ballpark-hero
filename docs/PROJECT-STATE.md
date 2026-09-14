@@ -1,5 +1,28 @@
 # Project state
 
+## LIVE as of 2026-09-15: Round 584, the tycoon league keeps playing while you are away
+
+**`origin/main` is `a4bbcd76` (Round 584 at `7509f1e1` plus the Round 585 scout baseline) and
+douknowball.com is serving it.** Deployment `8bbca8cd-1bbc-4f46-811f-55a559f825a9`, called only after
+`get_project` showed `latest_commit_sha` matching. Home bundle `index-B-oxyeXl.js` to
+`index-DVjVh43D.js`; page chunk `StadiumTycoon-CDbq1YF-.js` holds `data-away-results` and "Milestones
+reached on the road", and the live `/stadium-tycoon` snapshot says "leave for an hour and two matchdays
+play without you". Suite 308 of 308, vitest 252 of 252, `playSessionMarks`, `playLegacy`, `playIphone`,
+`playReducedMotion`, `playLeagueTableFit` green, phone screenshot of the away card after a three hour
+trip.
+
+- **A matchday plays for every half hour away**, on the same capped clock the away pay reads, hidden
+  or closed alike. The match in progress finishes first; the final matchday of a season never plays
+  away; no goal or win bonuses. The away card shows W, D and L chips, milestone money and the table.
+- **The adversarial review changed it**: a doctored match counter of 2^53 let away play overrun into a
+  title and the Summit prize (each matchday now ends at its own full time), and a five win run played
+  away and lost before you came back was never rewarded (milestones and badges now settle after each
+  away matchday).
+- **Proof.** `scripts/simTycoonAwayMatchdays.mjs` (6 sections, 6 controls) and `tycoonAway` tests 7
+  and 8 over the real hook.
+- **Next: Round 585, gems and packs** (contract sections 6 and 14). The pre-round scout baseline is
+  committed (`scripts/data/academyScoutBaseline.json`).
+
 ## LIVE as of 2026-09-15 early: Round 583 part two, the tycoon pitch plays the engine's match
 
 **`origin/main` is `b3a8e62e` and douknowball.com is serving it.** Deployment
