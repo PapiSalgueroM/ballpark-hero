@@ -46,6 +46,25 @@ export const cm = mod;
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
+/* Round 567. AWARD_CONTROL=leak makes the top tracked scorer take almost
+   every one of his club's goals instead of his share of them. That is exactly
+   what "the sharing leaks" means, and it is the right shape of control for
+   section 2 because it inflates the WINNER without changing any club's goals
+   for, so the per club reconciliation above it stays green and only the mean
+   gate moves. Section 2 must go red. */
+const CONTROL = process.env.AWARD_CONTROL || '';
+if (CONTROL === 'leak') {
+  const text = fs.readFileSync(BUNDLE, 'utf8');
+  const needle = 'if (r < RACE_TOP_SHARE)';
+  if (!text.includes(needle)) {
+    console.error('CONTROL leak cannot find the sharing line in the bundle, so it would change nothing.');
+    console.error('The control is stale, and this run would have been green for the wrong reason.');
+    process.exit(2);
+  }
+  fs.writeFileSync(BUNDLE, text.split(needle).join('if (r < 0.95)'));
+  console.log('   NEGATIVE CONTROL ON: the top scorer takes 95 percent of the share, section 2 must go red');
+}
+
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, sortedTable,
@@ -87,10 +106,12 @@ console.log('1) Fresh race: right names, right clubs, all zeros');
 /* ---------- 2. A season's race cannot outscore the table ---------- */
 console.log('2) Race goals reconcile against the simulated table');
 {
-  let worstWinner = 0;
-  let bestWinner = 99;
-  for (const seed of [0, 1, 2]) {
-    const s = runSeason(startCareer(seed === 0 ? 'Everton' : seed === 1 ? 'Real Madrid' : 'Ajax'));
+  /* Round 567: ten clubs, not three, and the gate is the MEAN and not the
+     worst one. See the note below the loop for why. */
+  const winners = [];
+  for (const club of ['Everton', 'Real Madrid', 'Ajax', 'Arsenal', 'Chelsea',
+    'Liverpool', 'Barcelona', 'Napoli', 'Sevilla', 'Lyon']) {
+    const s = runSeason(startCareer(club));
     const table = sortedTable(s.table);
     const race = s.scorerRace ?? [];
     for (const club of s.leagueClubs) {
@@ -102,8 +123,7 @@ console.log('2) Race goals reconcile against the simulated table');
     const board = goldenBootTable(s, 12);
     if (!board.length) { fail('an empty golden boot board after a full season'); continue; }
     const winner = board[0];
-    worstWinner = Math.max(worstWinner, winner.goals);
-    bestWinner = Math.min(bestWinner, winner.goals);
+    winners.push(winner.goals);
     // My own scorers merge in from the real league bucket.
     const myTop = [...s.squad].sort((a, b) => (b.comp?.league?.goals ?? 0) - (a.comp?.league?.goals ?? 0))[0];
     if ((myTop?.comp?.league?.goals ?? 0) > 0) {
@@ -112,12 +132,45 @@ console.log('2) Race goals reconcile against the simulated table');
       else if (mine.goals !== myTop.comp.league.goals) fail('my scorer\'s race line disagrees with his stat line');
     }
   }
-  /* Measured 2026-08-18 over three full seasons: winners landed between 26
-     and 31. Real golden boots live in the high teens to low thirties; 12 or
-     fewer means the race is dead, 45 or more means it leaks. */
-  console.log(`   winners across seeds: ${bestWinner} to ${worstWinner} goals`);
-  if (worstWinner >= 45) fail(`a boot winner reached ${worstWinner}, the sharing leaks`);
-  if (bestWinner <= 12) fail(`a boot winner managed only ${bestWinner}, the race is dead`);
+  /* WHY THIS GATES ON THE MEAN, rewritten in Round 567 after it went red on
+     healthy code.
+
+     It used to run three seasons and fail if the WORST of the three reached
+     45, with a comment recording that three seasons measured on 2026-08-18
+     landed between 26 and 31. On 2026-09-14 it went red at 47, and the cause
+     was not a leak: removing ONE duplicated player from the roster reshuffled
+     every seeded draw downstream, and the new draw happened to include a big
+     season.
+
+     Measured properly, over thirty seasons rather than three:
+
+       17 24 24 25 26 26 26 27 27 28 28 29 29 30 30 30 31 31 31 31 32 32 34 35
+       35 36 38 38 46 47
+
+       min 17, p25 27, median 30, p75 34, p90 38, max 47, mean 30.8
+
+     TWO of thirty seasons land at or above 45. So the old threshold sat
+     INSIDE the distribution, and with three draws it had roughly a one in
+     five chance of being red on perfectly healthy code every single run. That
+     is the "never assert on a max" rule in CLAUDE.md exactly, and the same
+     mistake Round 284 made with a ceiling gap and simSoccerCareerUcl made
+     with a worst cell.
+
+     So: ten seasons, and the gate is the mean, which uses every season
+     instead of the luckiest and unluckiest. The spread above gives a standard
+     deviation near 6, so the standard error of a mean over ten seasons is
+     about 1.9. The band 24 to 38 is therefore about three and a half standard
+     errors either side of the measured 30.8, far outside the noise and still
+     nowhere near a real leak, which would move the mean by much more than
+     that. The single season bound is kept only as an absurdity check: 60 in a
+     league season is 13 clear of anything thirty seasons produced and is not
+     a tuned threshold, it is a "something is structurally broken" line. */
+  const mean = winners.reduce((a, b) => a + b, 0) / winners.length;
+  const worst = Math.max(...winners);
+  console.log(`   ${winners.length} seasons, winners ${Math.min(...winners)} to ${worst}, mean ${mean.toFixed(1)}`);
+  if (mean > 38) fail(`the mean golden boot winner is ${mean.toFixed(1)} over ${winners.length} seasons, so the sharing leaks`);
+  if (mean < 24) fail(`the mean golden boot winner is only ${mean.toFixed(1)} over ${winners.length} seasons, so the race is dead`);
+  if (worst >= 60) fail(`one winner reached ${worst}, which no healthy season comes near`);
 }
 
 /* ---------- 3. One formula for the player of the season ---------- */
@@ -229,6 +282,12 @@ console.log('7) A new season starts a new race');
     fail('the day one watch already claims league goals');
   }
   console.log('   zeroed board, quiet watch, ready for round one');
+}
+
+if (CONTROL === 'leak') {
+  if (failures > 0) { console.log('\n   CONTROL FIRED: the leaked share was caught'); process.exit(0); }
+  console.error('\n   CONTROL DID NOT FIRE: the top man took 95 percent of every club\'s goals and section 2 still passed, so it is not measuring the sharing at all');
+  process.exit(1);
 }
 
 console.log(failures === 0 ? '\nALL AWARD RACE CHECKS PASSED' : `\n${failures} FAILURES`);

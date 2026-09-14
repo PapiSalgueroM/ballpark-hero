@@ -261,8 +261,20 @@ export function buildLeagueResolver(app) {
       if (league) return { league, source: 'clubManager 2026-27' };
       return { league: null, reason: `"${club}" maps to engine club "${engine}" that no 2026-27 league lists` };
     }
+    /* Round 567: 'Other' from EITHER map means the same thing as no mapping at
+       all, which is "nobody here knows this club's division", so it is skipped
+       and reported rather than shipped as a player's league. It used to be
+       treated as an answer when it came from INSANE_CLUB_LEAGUE, which only
+       stayed invisible because nothing was mapped to 'Other' on purpose until
+       Round 560 put Leicester there: REAL_LEAGUES has them in no 2026-27
+       competition and does not record where they went, so guessing a third
+       tier was refused. That shipped Stephy Mavididi with a league of "Other"
+       and simPlayersPool caught it, correctly, because 'Other' is not a league
+       a guessing game can compare a tile against. */
     const fromEnrichment = app.getEnrichment('', club).league;
-    const league = fromEnrichment !== 'Other' ? fromEnrichment : (app.INSANE_CLUB_LEAGUE[club] ?? null);
+    const fromInsane = app.INSANE_CLUB_LEAGUE[club];
+    const league = fromEnrichment !== 'Other' ? fromEnrichment
+      : (fromInsane && fromInsane !== 'Other' ? fromInsane : null);
     if (!league) return { league: null, reason: `no club to league mapping knows "${club}"` };
     if (modelled.has(league)) {
       return { league: null, reason: `"${club}" is mapped to ${league} by a 2025/26 list but is not a 2026-27 member of it` };

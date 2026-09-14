@@ -28,7 +28,13 @@ export interface BakedPlayer {
 export const CM_ROSTER_META = {
   generated: '2026-09-05',
   asOf: 'August 2026, after the summer window',
-  players: 3663,
+  /* 3663 until Round 567, which removed the second Michał Karbownik from
+     Hertha BSC. He was in the file twice under two spellings of the same
+     name, and because squad ids were built from a fold that maps the Polish
+     barred l onto a plain l, both rows claimed the id p-michal-karbownik, so
+     the manager was handed two men one of whom could never be picked and a
+     sale of either removed both. Hertha is already in CM_PARTIAL. */
+  players: 3662,
   clubs: 330,
   overlayMoves: 239,
   /** Round 542: 13 rows adjudicated against the two-source 2026 World Cup squads

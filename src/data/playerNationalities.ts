@@ -2,7 +2,24 @@
    One map per sealed world, because a name is not a person: the 2010
    Aaron Ramsey is Welsh, the modern one is English, and a single map
    would invent one of them. Provenance, year windows and the fail-closed
-   rules live in the bake script's header. 6310 entries total. */
+   rules live in the bake script's header. 6310 entries total.
+
+   ROUND 567, AND READ THIS BEFORE TRUSTING THE LINE ABOVE THAT SAYS TO RE-RUN
+   THE BAKE. One entry was removed BY HAND: 'Michał Karbownik' in the now
+   world, whose player Round 567 deleted from clubManagerRosters.ts as a
+   duplicate of 'Michal Karbownik' (the two spellings folded onto one squad id,
+   so one of the pair could never be picked and selling either removed both).
+   simNationalities was red on the orphan and it is a real wrong entry, so it
+   went.
+
+   It was done by hand because scripts/bakeNationalities.mjs CANNOT BE RE-RUN.
+   It reads its era nationalities from transcription blobs at /tmp/nat194,
+   a temp directory from Round 194 that no longer exists, so the bake now fails
+   closed on era2005 and era2010 ("0 of 802 names carry a nationality") and
+   writes nothing. That is pre-existing and has nothing to do with this entry,
+   but it means the now world is currently hand maintained whether anyone
+   intended that or not. Rebuilding those inputs, or re-sourcing the era
+   nationalities from a table that still exists, is on the workboard. */
 
 export const NATIONALITY_BY_WORLD: Record<string, Record<string, string>> = {
 now: {
@@ -2443,7 +2460,6 @@ now: {
   'Michal Sadílek': 'Czech Republic',
   'Michal Skoras': 'Poland',
   'Michaël Cuisance': 'France',
-  'Michał Karbownik': 'Poland',
   'Michel Adopo': 'France',
   'Michel Aebischer': 'Switzerland',
   'Michel Vlap': 'Netherlands',
