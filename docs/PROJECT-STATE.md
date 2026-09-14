@@ -4297,7 +4297,34 @@ repo.
 
 ## Analytics truth
 
-Fresh 15-day pull, 2026-08-11 through 2026-08-25, taken 2026-08-25 for Round 291:
+**Newest pull: 30 days, 2026-08-15 through 2026-09-14, taken 2026-09-14** before committing the
+desktop lane to the Stadium Tycoon plus Wonderkid Factory merge, because CLAUDE.md says to re-pull
+before a big prioritisation call and that merge is "weeks of work":
+
+- **22,904 visitors, 78,484 pageviews**, 3.43 pages a visit, about 5 minute sessions, 54% bounce.
+  The busiest days were 2026-09-09 (1,070 visitors) and 2026-09-02 (1,046), so the trend is still
+  up against the 16,954 visitors of the July to August window.
+- Pageviews by page: `/soccer-career` **12,350** (16% of the site, 3.9x the next game), `/`
+  8,327, **`/club-manager` 3,159**, `/college-grid` 866, `/build-your-xi` 793, `/nba-my-career`
+  674, `/perfect-season-nba` 592, `/dart-draft` 549, `/budget-builder` 501, **`/stadium-tycoon`
+  489**. `/wonderkid-factory` is not in the top ten.
+- **Club Manager quadrupled**, 762 to 3,159 against the July to August window. It is now clearly
+  the second game on the site, which matters because both of the player reports fixed in Round
+  567 were Club Manager.
+- **What it means for the merge.** Stadium Tycoon draws about a twenty-fifth of the flagship's
+  pageviews and Wonderkid Factory less than that. The merge is still the owner's explicit ask and
+  still the one fully open row on his list, so it gets built, but in cheap independently shippable
+  slices, and it must not crowd the flagship or Club Manager out of the queue. When in doubt,
+  still build for Soccer Career.
+- Sources: Direct 9,650, Bing 7,953, Google 2,619, DuckDuckGo 592, Google accounts 411, Yahoo
+  283, chatgpt.com 230, MSN 193. **A Catholic school dashboard in Australia
+  (`dashboard-wag.cenet.catholic.edu.au`) sent 50 visits**, so school age players are a
+  confirmed audience, not a hypothetical. That is the practical reason any pack or reward
+  mechanic must publish its odds and avoid slot machine presentation.
+- Devices 84% desktop, 14% mobile, 1% tablet. Countries: US 5,989, **Australia 5,711**, UK 1,634,
+  India 838, Germany 659, China 540, Canada 440, Brazil 419, Netherlands 384.
+
+Previous 15-day pull, 2026-08-11 through 2026-08-25, taken 2026-08-25 for Round 291:
 
 - **10,069 visitors, 34,135 pageviews**, 3.39 pages a visit, about 5 minute sessions, 56%
   bounce; the last two days were 735 and 792 visitors.
