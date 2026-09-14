@@ -1,5 +1,29 @@
 # Project state
 
+## LIVE as of 2026-09-15 early: Round 583 part two, the tycoon pitch plays the engine's match
+
+**`origin/main` is `b3a8e62e` and douknowball.com is serving it.** Deployment
+`8e6026ae-f88f-46aa-9285-83fc07f80fa0`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-D0J1PVYH.js` to `index-B-oxyeXl.js`; page chunk `StadiumTycoon-C63S59ij.js`
+to `StadiumTycoon-BGOHpkOk.js`, which holds `data-tycoon-pitch`, `data-tile`, `data-tap-run`,
+`st-ball-landed` and "The club office" (none of them in the chunk before). Suite 307 of 307, vitest
+250 of 250, `playSessionMarks`, `playLegacy`, `playIphone`, `playReducedMotion`,
+`playLeagueTableFit` and `playRenderStability` green, phone screenshots of a live replay, the taps
+chip and the tiles at 390 by 844.
+
+- **The pitch replays every goal the engine commits**, once, at the end it went in, with its minute,
+  and only while it is on screen; the 1900ms decoration timer is gone. 22 players in a 4-3-3, a
+  vertical halfway line, nets that ripple, a pop and six sparks per tap, a "12 taps" chip.
+- **The Stadium tab's lower half is five tiles**: Upgrades, Payroll, Badges, Legacy, Records.
+- **Every number on the screen now reads the engine.** The scan that covered the modal now parses the
+  page, hook and pitch with the TypeScript compiler, plus the engine's blurbs, and it found the away
+  card's "half speed" (wrong for Away Day Deal holders), a typed +50% on Sell up, a typed legacy
+  point rule and a "+2% to everything" badge line. Small rates keep their cents.
+- **Proof.** `scripts/simTycoonPitch.mjs` (6 page tests, 8 controls) and `simTycoonHelp` sections M2
+  and L1 (2 more controls).
+- **Next: Round 584, away matchdays** (contract section 14): a matchday for every half hour away,
+  never the final one of a season, no money moved.
+
 ## LIVE as of 2026-09-14 late night: Round 583 part one, Stadium Tycoon's honest help
 
 **`origin/main` is `fd71be3a` and douknowball.com is serving it.** Deployment
