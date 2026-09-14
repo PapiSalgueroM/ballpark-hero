@@ -503,14 +503,6 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
         />
       </div>
 
-      {landless.length > 0 && !sceneActive && (
-        <p className="text-center text-[11px] text-muted-foreground">
-          🏴 Wiped out but still dangerous: {landless.length > 12
-            ? `${landless.slice(0, 12).map(label).join(', ')} and ${landless.length - 12} more`
-            : landless.map(label).join(', ')}
-        </p>
-      )}
-
       {/* the step to press: kept in view on a phone by the reveal ref */}
       <div ref={revealRef}>
         {/* preview: prediction + play */}
@@ -682,6 +674,27 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
           </div>
         )}
       </div>
+
+      {/* Round 539: this sits UNDER the step, and it used to sit over it.
+          It is gated on the scenes being done, so at the moment the recap
+          replaced the player it was inserted directly above the step, which
+          pushed the step down by its own height plus the gap. Measured on the
+          built site at 430 wide: 66px of line plus a 12px gap, and whether the
+          player saw a jump came down to whether the browser's scroll anchoring
+          happened to absorb it. On /conquest at 430 it did, and window.scrollY
+          moved 838 to 916 while the step held still; at 390 it did not, and the
+          step dropped 95px on screen with window.scrollY unchanged. Both are
+          the same bug and neither is something to leave to a heuristic, so the
+          line moved below the step, where growing costs nobody their place.
+          playConquestScenes section 4 measures where the step sits in the
+          document, which is where this either shows up or does not. */}
+      {landless.length > 0 && !sceneActive && (
+        <p className="text-center text-[11px] text-muted-foreground">
+          🏴 Wiped out but still dangerous: {landless.length > 12
+            ? `${landless.slice(0, 12).map(label).join(', ')} and ${landless.length - 12} more`
+            : landless.map(label).join(', ')}
+        </p>
+      )}
       {help}
     </div>
   );

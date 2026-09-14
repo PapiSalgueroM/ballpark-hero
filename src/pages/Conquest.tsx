@@ -62,7 +62,7 @@ const Conquest = () => {
             {mode !== 'select' && (
               <button
                 onClick={() => setMode('select')}
-                className="absolute top-0 left-0 rounded-full border border-border px-2.5 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground"
+                className="absolute top-0 left-0 inline-flex min-h-[30px] items-center rounded-full border border-border px-2.5 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground"
               >
                 Modes
               </button>
