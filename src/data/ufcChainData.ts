@@ -1,5 +1,17 @@
 import { UfcFighter, FightResult, WeightClass } from '@/types/ufcChain';
 
+/* Round 561: weightClass here is NOT the same field as weightClass in
+   src/data/ufcFighters.ts, and the two are allowed to differ for one reason.
+   Here it decides which division's CHAIN a fighter belongs to: the weight
+   class mode filters this whole graph by it, so retagging someone deletes
+   them from that division and breaks every route through them. There it is
+   the division the fighter is guessed as, and that file uses the last one
+   they competed in. For Randy Couture, Frankie Edgar, Deiveson Figueiredo and
+   Henry Cejudo both answers are true, because all four fought in both.
+   scripts/simUfcFacts.mjs compares the two files and fails on any
+   disagreement that is not one of those four, so do not "fix" them to match:
+   that would break working chains to quiet a harness. Records, wins, losses
+   and draws must agree across the files with no exception. */
 export const UFC_FIGHTERS: UfcFighter[] = [
   // Heavyweights
   { name: 'Jon Jones', weightClass: 'Heavyweight', record: '28-1-0', wins: 28, losses: 1, draws: 0, isHallOfFamer: false },

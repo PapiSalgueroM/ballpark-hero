@@ -1,5 +1,18 @@
 import { UfcFighter } from '@/types/ufc';
 
+/* Round 561: every row here is hand typed and none of it is two source
+   verified yet, which is rank 8 of docs/audits/data-provenance-inventory-2026-09-11.md
+   and still open. What IS enforced, by scripts/simUfcFacts.mjs, is that the
+   rows do not contradict themselves or the other UFC file: the record string
+   must equal the wins, losses and draws beside it, yearsActive must equal the
+   two year fields, knockouts plus submissions cannot exceed wins, an age and
+   a start year cannot imply a debut under 16, and every record shared with
+   src/data/ufcChainData.ts must match. weightClass is the division the
+   fighter LAST competed in; the chain file tags a fighter by the division
+   whose chain they belong to, so four two division fighters differ on purpose
+   and the harness carries the reason. A green run there means consistent, not
+   verified, and it is the floor under the verification pass, not a substitute
+   for it. */
 export const ufcFighters: UfcFighter[] = [
   // ALL-TIME GREATS
   { name: 'Jon Jones', nationality: 'USA', weightClass: 'Heavyweight', yearsActive: '2008-2026', yearsActiveStart: 2008, yearsActiveEnd: 2026, record: '28-1-0', wins: 28, losses: 1, draws: 0, age: 38, koTko: 10, submissions: 6, highestP4PRank: 1 },
