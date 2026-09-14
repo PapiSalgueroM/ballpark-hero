@@ -16,6 +16,13 @@
    Negative control: SIM_SCORING_CONTROL=unwire deletes the completion
    imports from WorldCupPredictor's in-memory copy and the run must fail.
 
+   Negative control: SIM_SCORING_CONTROL=nosave (Round 569) makes the stub's
+   local session come back empty, so a signed in play is never handed to the
+   atomic save. Section 2's signed in points, daily marks, best scores and
+   save call count must all go red. It reproduces the one way Round 569's
+   switch from getUser to getSession could fail silently: the recorder asking
+   for a session the client does not hand back.
+
    Run: node scripts/simScoringCoverage.mjs
 */
 import fs from 'node:fs';
@@ -27,13 +34,21 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_SCORING_CONTROL === 'unwire';
+const NOSAVE = process.env.SIM_SCORING_CONTROL === 'nosave';
 let controlBit = false;
 
 const read = p => {
   for (const e of ['', '.tsx', '.ts']) {
     try {
       let s = fs.readFileSync(p + e, 'utf8');
-      if (CONTROL && (p + e).endsWith('pages/WorldCupPredictor.tsx')) {
+      /* Round 569: the separators are folded before matching. path.join gives
+         backslashes on Windows, so this control compared "...\pages\..." to
+         "pages/WorldCupPredictor.tsx", never matched, and reported itself
+         dead on every run on the owner's machine: section 1 was never proven
+         there. Checked against the committed version before this round, which
+         was dead too, so it predates the save change it was found beside. The
+         same trap was fixed in simEarlyReturnScope. */
+      if (CONTROL && (p + e).replaceAll('\\', '/').endsWith('pages/WorldCupPredictor.tsx')) {
         const before = s;
         /* Sever the call names AND the import specifier: the walk follows
            imports into the completions module, whose own source contains
@@ -77,10 +92,24 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
          somewhere else, or every page that transitively imports the module
          through shared chrome would count as wired. The first draft of this
          walk had exactly that hole, found by its own negative control. */
-      if (/lib\/completions$|hooks\/useGameCompletion$/.test(f)) return;
+      /* Round 569: folded separators, for the same reason as the control
+         above. On Windows f holds backslashes, so this exclusion never
+         matched, the definition files counted as hits again, and every page
+         importing AuthContext or the navbar (both reach the completions
+         module) was "wired" whether or not its game records anything. The
+         fix for the first draft's hole had silently reopened it on the
+         owner's machine, and the dead control hid that. */
+      if (/lib\/completions$|hooks\/useGameCompletion$/.test(f.replaceAll('\\', '/'))) return;
       const s = read(f);
       if (!s) return;
-      if (/\b(recordCompletion|useGameCompletion)\s*\(/.test(s)) { hit = true; return; }
+      /* Round 569: the CALL is matched in the code with comments stripped.
+         src/data/completionSlugs.ts has no call at all, only a doc comment
+         reading "each game's own `useGameCompletion(...)` call", and shared
+         chrome imports it (DailyChecklist, useDailyLegend, useMostPlayed), so
+         that sentence alone was counting pages as wired. The lookbehind keeps
+         a URL's double slash from being read as a comment. */
+      const code = s.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ');
+      if (/\b(recordCompletion|useGameCompletion)\s*\(/.test(code)) { hit = true; return; }
       for (const m of s.matchAll(/from ['"]@\/([^'"]+)['"]/g)) walk(path.join(ROOT, 'src', m[1]), d + 1);
     };
     walk(file, 0);
@@ -132,9 +161,50 @@ function table(name: string) {
   };
   return q;
 }
+/* Round 569: the signed in save is one call to the record_auth_completion
+   database function now, not direct writes to four tables, and the recorder
+   reads the local session (getSession) instead of asking the auth server.
+   This stub models that function's CONTRACT so every outcome assertion below
+   keeps meaning "a signed in play reaches the scoreboard with the right
+   numbers": a score row per play, one daily mark per game per day, an in place
+   increment of total_points, and a best score that only rises. It is NOT a test
+   of the SQL itself. The SQL is pinned by simAuthSave section 3 and was
+   exercised against the real database in a rolled back transaction, recorded
+   in supabase/migrations/20260914120000_record_auth_completion.sql. */
+function recordAuthCompletion(args: any) {
+  if (!sessionUser) return { data: null, error: { code: '42501' } };
+  const uid = sessionUser.id;
+  const day = 'today';
+  const slug = args.p_game_slug;
+  const score = Number(args.p_score) || 0;
+  table('user_game_scores');
+  ledger['user_game_scores'].push({ user_id: uid, game_type: slug, score, correct_answers: args.p_correct || 0 });
+  table('daily_completions');
+  if (!ledger['daily_completions'].some(r => r.user_id === uid && r.game_slug === slug && r.date === day)) {
+    ledger['daily_completions'].push({ user_id: uid, game_slug: slug, date: day });
+  }
+  table('user_scores');
+  const mine = ledger['user_scores'].find(r => r.user_id === uid);
+  if (mine) mine.total_points += score;
+  else ledger['user_scores'].push({ user_id: uid, total_points: score });
+  table('user_best_scores');
+  const best = ledger['user_best_scores'].find(r => r.user_id === uid && r.game_type === slug);
+  if (!best) ledger['user_best_scores'].push({ user_id: uid, game_type: slug, best_score: score });
+  else if (score > best.best_score) best.best_score = score;
+  return { data: { total_points: (ledger['user_scores'].find(r => r.user_id === uid) || {}).total_points }, error: null };
+}
 export const supabase: any = {
   from: (name: string) => table(name),
-  auth: { getUser: async () => ({ data: { user: sessionUser } }) },
+  rpc: async (name: string, args: any) => {
+    ledger['__rpc__'] = ledger['__rpc__'] || [];
+    ledger['__rpc__'].push({ name, args });
+    if (name === 'record_auth_completion') return recordAuthCompletion(args);
+    return { data: null, error: { code: 'PGRST202' } };
+  },
+  auth: {
+    getUser: async () => ({ data: { user: sessionUser } }),
+    getSession: async () => ({ data: { session: ${NOSAVE ? 'null' : '(sessionUser ? { user: sessionUser } : null)'} } }),
+  },
 };
 `);
   fs.writeFileSync(ENTRY, `
@@ -171,7 +241,17 @@ export { ledger, setSessionUser } from '${STUB}';
   if (daily.length !== 2) fail(`daily_completions got ${daily.length} rows from 2 different games`);
   const best = mod.ledger['user_best_scores'] || [];
   if (best.length !== 2) fail(`user_best_scores got ${best.length} rows from 2 different games`);
-  console.log(`   2 calls: ${anon.length} anonymous rows, ${streaks.totalPlays} plays and ${streaks.totalPoints} points on the streak record, ${scores[0]?.total_points ?? 'no'} signed in points`);
+  /* Round 569: the delivery itself. Two plays must be exactly two save calls
+     carrying the right game and score, because a recorder that saved twice per
+     play, or saved under the wrong slug, would still leave the totals above
+     looking plausible. */
+  const saves = (mod.ledger['__rpc__'] || []).filter(c => c.name === 'record_auth_completion');
+  if (saves.length !== 2) fail(`2 plays made ${saves.length} record_auth_completion calls, wanted exactly 2`);
+  else {
+    const got = saves.map(c => `${c.args.p_game_slug}:${c.args.p_score}`).join(',');
+    if (!/soccer-grid:40/.test(got) || !/missing-xi:100/.test(got)) fail(`the save calls carried ${got}, wanted soccer-grid:40 and missing-xi:100`);
+  }
+  console.log(`   2 calls: ${anon.length} anonymous rows, ${streaks.totalPlays} plays and ${streaks.totalPoints} points on the streak record, ${scores[0]?.total_points ?? 'no'} signed in points, ${saves.length} atomic save calls`);
 
   /* Round 301, audit finding 2: the activity ping must stay a ping. The sim
      boards fire it every simulated round, and Round 300's fan out briefly
@@ -184,9 +264,16 @@ export { ledger, setSessionUser } from '${STUB}';
   if (anonAfter !== 3) fail(`an activity ping should add exactly one anonymous row (${anonAfter} total, wanted 3)`);
   if ((streaksAfter.totalPlays || 0) !== 2) fail(`an activity ping advanced totalPlays to ${streaksAfter.totalPlays}, pings must never count as plays`);
   if ((mod.ledger['user_game_scores'] || []).length !== 2) fail('an activity ping wrote a ranked user_game_scores row');
+  const savesAfter = (mod.ledger['__rpc__'] || []).filter(c => c.name === 'record_auth_completion').length;
+  if (savesAfter !== 2) fail(`an activity ping made a signed in save call (${savesAfter} total, wanted still 2)`);
   console.log(`   1 activity ping: anonymous rows ${anonAfter}, plays still ${streaksAfter.totalPlays}, ranked rows still 2`);
 }
 
+if (NOSAVE) {
+  if (failures > 0) { console.log(`\ncontrol run (nosave): ${failures} failure(s) fired as expected`); process.exit(0); }
+  console.error('\ncontrol run (nosave): an empty session changed NOTHING, so section 2 is not measuring the signed in save');
+  process.exit(1);
+}
 if (CONTROL) {
   if (!controlBit) { console.error('\ncontrol run: nothing was unwired, the control is dead'); process.exit(1); }
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }

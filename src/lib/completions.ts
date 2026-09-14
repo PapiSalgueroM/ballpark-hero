@@ -295,9 +295,18 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        twice. */
     recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0);
 
-    supabase.auth.getUser()
+    /* Round 569: getSession, not getUser. getUser is a network round trip to
+       the auth server, and every round trip in front of the save widens the
+       window in which a player closing the tab loses the play's points (the
+       interrupted save this round measured). getSession reads the session
+       this browser already holds. That is safe because the save itself is
+       authenticated on the server: record_auth_completion takes the player
+       from auth.uid(), so a stale or forged local session is refused there
+       rather than trusted here. */
+    supabase.auth.getSession()
       .then(({ data }) => {
-        if (data?.user) return saveAuthCompletion(data.user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
+        const user = data?.session?.user;
+        if (user) return saveAuthCompletion(user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
       })
       .then(saved => {
         if (saved) {
@@ -313,100 +322,67 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
 }
 
 /**
- * Round 300: the signed in save, moved VERBATIM out of useGameCompletion so
- * every recordCompletion caller feeds it, not only the 19 games that mounted
- * the hook. Writes user_game_scores, daily_completions (its unique
- * constraint dedupes a same day replay), the user_scores row the navbar and
- * leaderboard read, and user_best_scores. Returns true when it ran to the
- * end so the caller can announce the save. All errors are swallowed by the
- * caller: a stats failure must never surface to the player.
+ * Round 300 moved the signed in save out of useGameCompletion so every
+ * recordCompletion caller feeds it. It writes user_game_scores,
+ * daily_completions, the user_scores row the navbar and leaderboard read, and
+ * user_best_scores. All errors are swallowed by the caller: a stats failure
+ * must never surface to the player.
+ *
+ * ROUND 569: IT IS ONE ATOMIC DATABASE CALL NOW, BECAUSE THE OLD SHAPE LOST
+ * PLAYERS' POINTS. Until this round this function made six sequential round
+ * trips, and the fourth READ total_points so the fifth could WRITE back the
+ * value it read plus the new score. Measured on the live tables on
+ * 2026-09-14: 34 of 488 signed in accounts held fewer total points than their
+ * own recorded plays add up to, 19,857 points in all, the worst account short
+ * by 3,170. This function was the only writer of both tables (no trigger, no
+ * database function), so they could only disagree two ways, and the data
+ * carried the fingerprint of both:
+ *
+ *   an INTERRUPTED SAVE: the score row lands, the player closes the tab, the
+ *   total never updates. Many accounts are short by exactly their final
+ *   play's score (1,000 and a last play of 1,000; 600 and 600) with no plays
+ *   near each other;
+ *
+ *   a LOST UPDATE: two saves read the same total and each writes back total
+ *   plus its own score, so one vanishes. The heaviest accounts carry
+ *   hundreds of plays within five seconds of the previous one, and shortfalls
+ *   that match no single score.
+ *
+ * It also generated error noise that buried real faults: 177 duplicate key
+ * violations a day, because the daily mark was de-duplicated by letting the
+ * insert FAIL on its unique constraint, and 57 PostgREST 406s a day from
+ * .single() against a player's first ever row.
+ *
+ * record_auth_completion (supabase/migrations/..._record_auth_completion.sql)
+ * does all four writes in one transaction. total_points is incremented in
+ * place by INSERT ... ON CONFLICT DO UPDATE, which locks the row, so racing
+ * saves serialise and every one adds. The daily mark is ON CONFLICT DO
+ * NOTHING. It is SECURITY INVOKER, so each table's existing row level
+ * security (`auth.uid() = user_id`) still decides, and the player comes from
+ * auth.uid() on the server.
+ *
+ * `userId` is therefore NOT sent to the save, so nothing a client passes can
+ * credit another account. It is still used by the best effort profile streak
+ * backup below, which the profiles table's own row level security gates.
+ *
+ * Returns true only when the database confirmed the save. The old version
+ * returned true whether or not its writes succeeded, so the header announced
+ * a save that may never have happened.
+ *
+ * NOT DONE HERE, on purpose: the 19,857 points already lost are not restored.
+ * How historical points are treated is an open decision owed by the owner
+ * (docs/PROJECT-STATE.md, the repeat saves across 152 accounts), and restoring
+ * these would move the same public board he has not decided about yet.
  */
 export async function saveAuthCompletion(userId: string, gameSlug: string, score: number, correctAnswers: number): Promise<boolean> {
-  const today = new Date().toISOString().split('T')[0];
-
-  await supabase.from('user_game_scores').insert({
-    user_id: userId,
-    game_type: gameSlug,
-    score,
-    correct_answers: correctAnswers,
-    puzzle_date: today,
+  const { error } = await (supabase.rpc as any)('record_auth_completion', {
+    p_game_slug: gameSlug,
+    p_score: score,
+    p_correct: correctAnswers,
   });
-
-  await supabase.from('daily_completions').insert({
-    user_id: userId,
-    game_slug: gameSlug,
-    date: today,
-  });
-
-  const { data: existing } = await supabase
-    .from('user_scores')
-    .select('total_points, games_played_today, last_played_at, current_streak, longest_streak')
-    .eq('user_id', userId)
-    .single();
-
-  const { count: distinctGamesToday } = await supabase
-    .from('daily_completions')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .eq('date', today);
-
-  const gamesPlayedToday = distinctGamesToday || 1;
-  const lastDate = existing?.last_played_at
-    ? new Date(existing.last_played_at).toISOString().split('T')[0]
-    : null;
-  const isSameDay = lastDate === today;
-
-  if (!existing) {
-    await supabase.from('user_scores').insert({
-      user_id: userId,
-      total_points: score,
-      games_played_today: gamesPlayedToday,
-      last_played_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      current_streak: 1,
-      longest_streak: 1,
-    });
-  } else {
-    let newStreak = existing.current_streak || 0;
-    if (!isSameDay) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-      newStreak = lastDate === yesterdayStr ? newStreak + 1 : 1;
-    }
-    const newLongest = Math.max(newStreak, existing.longest_streak || 0);
-    await supabase
-      .from('user_scores')
-      .update({
-        total_points: existing.total_points + score,
-        games_played_today: gamesPlayedToday,
-        last_played_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        current_streak: newStreak,
-        longest_streak: newLongest,
-      })
-      .eq('user_id', userId);
-  }
-
-  const { data: existingBest } = await supabase
-    .from('user_best_scores')
-    .select('best_score')
-    .eq('user_id', userId)
-    .eq('game_type', gameSlug)
-    .single();
-
-  if (!existingBest) {
-    await supabase.from('user_best_scores').insert({
-      user_id: userId,
-      game_type: gameSlug,
-      best_score: score,
-    });
-  } else if (score > existingBest.best_score) {
-    await supabase
-      .from('user_best_scores')
-      .update({ best_score: score, achieved_at: new Date().toISOString() })
-      .eq('user_id', userId)
-      .eq('game_type', gameSlug);
+  if (error) {
+    console.debug('[completions] signed in save refused (ignored):', error);
+    return false;
   }
 
   /* Round 301, audit finding 15: back up the local streak state to the
