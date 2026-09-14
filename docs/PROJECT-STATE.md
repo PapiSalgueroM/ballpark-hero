@@ -1,5 +1,32 @@
 # Project state
 
+## LIVE as of 2026-09-14 late night: Round 583 part one, Stadium Tycoon's honest help
+
+**`origin/main` is `fd71be3a` and douknowball.com is serving it.** Deployment
+`5e867e7a-a5a8-4e58-898d-3d09c88e49d6`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-DzmN1KOa.js` to `index-D0J1PVYH.js`. Proof: the live `/stadium-tycoon`
+snapshot says "seven times the income" (it said "everything paying seven times over" just before),
+and `StadiumTycoon-C63S59ij.js` holds `data-tap-key`, `data-tycoon-rules`, "Close the rules" and
+"income pays x2". Suite 306 of 306 (`simMostPlayed` hit a network connect timeout and was green on
+rerun), vitest 244 of 244, `playSessionMarks`, `playLegacy`, `playIphone`, `playReducedMotion`,
+`playLeagueTableFit` and `playRenderStability` green, phone check of the rules and the keyboard tap
+at 390 by 844.
+
+- **Every money floater prints through `fmtMoney`**, so a tap deep in a run no longer reads
+  "+$4830000000" beside a "$4.83B" balance. The rules open before first play (Let's go, a named
+  close button), a real keyboard tap button sits beside the pitch, and every number in the rules
+  modal is computed from the engine.
+- **The claims table found more wrong than the contract listed.** Hype and DERBY DAY never touched
+  goal or win bonuses, so "everything pays x2" and "everything pays x7" now say income; the guide's
+  worked example was false at its own clock; the academy's "roughly triple" is about a quarter;
+  moving the academy up does not carry earnings.
+- **Proof.** `scripts/simTycoonHelp.mjs`: 5 page tests (1,196 taps from $3 to $9.8T, 553 paying
+  events, help on a fresh save and not an old one, the keyboard tap), 49 engine claims with a scan
+  that fails on any untracked number in the guide or the modal, 9 controls.
+- **Next: Round 583 part two**, the pitch (22 players, goal replays by minute, pop and sparks, the
+  taps chip), the Stadium tab's tiles, and the typed numbers still on the page outside the modal
+  (the away card's "half speed" is wrong for anyone with the Away Day Deal perk).
+
 ## LIVE as of 2026-09-14 night: Round 582, the Stadium Tycoon league
 
 **`origin/main` is `d1b9742f` and douknowball.com is serving it.** Deployment
