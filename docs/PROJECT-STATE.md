@@ -1,5 +1,37 @@
 # Project state
 
+## LIVE as of 2026-09-14 evening: Round 581, safe tycoon loads and the academy's away clock
+
+**`origin/main` is `25583ae1` and douknowball.com is serving it.** Deployment
+`43a66338-5ee7-4053-9e3a-98bbcf6df20e`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-BBM6U-Zm.js` to `index-B-PAZeul.js`. Proof: the academy chunk went from
+`AcademyPanel-dfKFmTuF.js` (no `awayMs`, checked just before the deploy landed) to
+`AcademyPanel-C-be2MFQ.js`, which carries it.
+
+- **A hidden academy is paid for its time away.** Wonderkid Factory (and the Academy tab) ticked
+  a fixed quarter second per timer callback, so three hidden hours trained for a minute or two.
+  The clock now pays the measured gap: a visible page's gap up to 5 seconds is watched time, and
+  a hidden page or a longer gap is away time under the rule the rules modal already promised,
+  half speed, eight hours per absence (an `awayMs` meter on the save), nobody ages. Hidden and
+  closed now leave byte identical academies.
+- **Bad saves load as working games.** A stadium save with a garbage upgrade level made the goal
+  chance NaN, so the club never scored again; levels, minute (0 to 89), banked seconds,
+  counters and savedAt are now checked on load. Academy stars load whole and duplicate kid ids
+  are re-minted, first holder wins.
+- **Writes land before React renders.** Sell up survives the page closing in the same instant
+  (it used to save 1 star after selling up to 2), and a tap in a ticking frame keeps the tick.
+- **The adversarial review changed the round before it shipped** (one real, five minor): a
+  hidden showcase paid 1.5 times the watched speed, jittered hidden wakes could reopen the cap,
+  a slow visible phone was paid as away, and one giant away step overpaid a closed tab. All four
+  fixed with tests and controls; a stale meter after a rollback is stated, not fixed. Details in
+  `docs/design/round-580-tycoon-merge.md` under Round 581.
+- **Proof.** `scripts/simTycoonLoads.mjs`: 13 tests, 8 code controls and 3 save controls, each
+  firing where it should, plus every save this build writes proven to load unchanged in the
+  frozen V1 build. Suite 303 of 303 (one live-data race in `simMostPlayed`, green on rerun and it
+  reads no tycoon code), vitest 238 of 238, tsc zero, build green.
+- **Next in the arc: Round 582, the league** (contract section 8): divisions and a table against
+  named generated opponents, promotion by winning the league.
+
 ## LIVE as of 2026-09-14 afternoon: Round 580, Stadium Tycoon's Academy tab (first round of the tycoon merge)
 
 **`origin/main` is `0e46121e` and douknowball.com is serving it.** Deployment
