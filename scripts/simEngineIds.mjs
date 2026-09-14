@@ -43,20 +43,31 @@
  *      real number of new ids, because a scenario that mints nothing passes a
  *      duplicate check for the wrong reason. Measured per load: 30 in each GM
  *      engine, 18 in CFB, 14 in CBB.
+ *   1b. A save that is ALREADY corrupted, which is the state of a save
+ *      sitting on a player's machine right now, is repaired on load: the
+ *      duplicate is gone, the FIRST holder keeps his id because every stored
+ *      reference resolves to him, the shadowed man gets a fresh one, and the
+ *      entity count does not move. Section 1 cannot prove this, because once
+ *      the minter is fixed no new duplicate arises for the repair to clean.
  *   2. On the four GM engines, the consequence itself: release the most
  *      recently minted man and the man who leaves must be HIM, by name, with
  *      the roster exactly one shorter. This is behaviour, not a count.
  *   3. On the two dynasties, the id population every roster's React keys are
  *      drawn from is unique, and no recruit or portal id equals a roster id.
  *
- * CONTROLS, each restoring the real defect rather than renaming a string:
- *   ENGINE_IDS_CONTROL=modulecounter  puts the module scope counter back in
- *                                     every engine, so ids restart at 1 on
- *                                     each load. Sections 1 and 2 must fire.
- *   ENGINE_IDS_CONTROL=norepair       keeps the fixed minter but makes the
- *                                     repair a no-op, which is the state of a
- *                                     save written before this round. Section
- *                                     1 must fire.
+ * CONTROLS, each restoring the real defect rather than renaming a string, and
+ * each rewriting the BUNDLE rather than the tree:
+ *   ENGINE_IDS_CONTROL=modulecounter  drops the per document token, so ids
+ *                                     restart at 1 on every load exactly as
+ *                                     the module scope counter did. Sections
+ *                                     1 and 2 must fire.
+ *   ENGINE_IDS_CONTROL=norepair       keeps the fixed minter and makes the
+ *                                     repair a no-op. Section 1b must fire,
+ *                                     and deliberately NOT section 1: the
+ *                                     first draft of this header claimed it
+ *                                     would fire section 1, the run stayed
+ *                                     green, and that is how the missing
+ *                                     repair check was found.
  *
  * Run: node scripts/simEngineIds.mjs
  */
@@ -94,10 +105,6 @@ const NL = String.fromCharCode(10);
 const ENTRY = path.join(TMP, 'engIdsEntry.mjs');
 const BUNDLE = path.join(TMP, 'engIds.bundle.mjs');
 
-/* ------------------------------------------------------------------ *
- * The controls rewrite SOURCE COPIES, never the tree, and each refuses
- * to run if its rewrite changed nothing.
- * ------------------------------------------------------------------ */
 const LIBS = ['cfbDynasty', 'cbbDynasty', 'frontOffice', 'mlbFrontOffice', 'nbaFrontOffice', 'nhlFrontOffice'];
 const srcUrl = {};
 for (const lib of LIBS) srcUrl[lib] = `${ROOT_URL}/src/lib/${lib}.ts`;
