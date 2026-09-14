@@ -185,7 +185,7 @@ export function staffBaseIncome(s: TycoonState): number {
 export type GoldenKind = 'frenzy' | 'tapRush' | 'windfall' | 'fanWave' | 'freeLevel';
 
 export const GOLDEN_INFO: Record<GoldenKind, { label: string; blurb: string; duration: number }> = {
-  frenzy: { label: 'DERBY DAY', blurb: 'everything pays x7', duration: 77 },
+  frenzy: { label: 'DERBY DAY', blurb: 'income pays x7', duration: 77 },
   tapRush: { label: 'CROWD SURGE', blurb: 'taps pay x25', duration: 30 },
   windfall: { label: 'TV WINDFALL', blurb: 'fifteen minutes of income, instantly', duration: 0 },
   fanWave: { label: 'WONDERGOAL GOES VIRAL', blurb: 'the fanbase jumps', duration: 0 },
@@ -212,6 +212,14 @@ export function goldenActive(s: TycoonState): boolean {
  * The windfall pays fifteen minutes of the CURRENT rate (no golden active
  * by construction here), capped so a doctored state cannot print money.
  */
+/** Round 583: the whistle's numbers, exported so the help reads them rather
+ *  than typing them. A TV WINDFALL pays this many seconds of income. */
+export const WINDFALL_SEC = 900;
+/** A whistle drifts away after this many seconds uncaught. */
+export const GOLDEN_CATCH_SEC = 12;
+/** One drifts in on average every this many seconds of play. */
+export const GOLDEN_MEAN_GAP_SEC = 150;
+
 export function catchGolden(s: TycoonState, kind: GoldenKind): { state: TycoonState; amount?: number } {
   if (goldenActive(s)) return { state: s };
   const st: TycoonState = { ...s, goldenCaught: (s.goldenCaught ?? 0) + 1 };
@@ -222,7 +230,7 @@ export function catchGolden(s: TycoonState, kind: GoldenKind): { state: TycoonSt
     return { state: st };
   }
   if (kind === 'windfall') {
-    const pay = Math.round(Math.min(incomePerSec(s) * 900, 1e15));
+    const pay = Math.round(Math.min(incomePerSec(s) * WINDFALL_SEC, 1e15));
     st.money += pay;
     st.lifetime += pay;
     return { state: st, amount: pay };
@@ -902,7 +910,7 @@ export function ordinal(n: number): string {
 }
 
 /* Round 150: Matchday Hype. The crowd builds it over eight minutes of play,
- * one button spends it, and for sixty seconds everything pays double: the
+ * one button spends it, and for sixty seconds income pays double: the
  * per-second income, the taps that scale off it, the goal and win bonuses.
  * The numbers sit where the harness measured them fair: a dedicated player
  * gets about one boost per upgrade wall, never a boost economy. */
@@ -978,8 +986,9 @@ export function incomePerSec(s: TycoonState): number {
   const fans = attendance(s);
   const perFan = perFanRate(s);
   const parking = levelOf(s, 'parking') * 0.9;
-  // Round 150: an active Matchday Hype doubles everything downstream of
-  // this line, which is deliberately ALL money (taps and bonuses included).
+  // Round 150: an active Matchday Hype doubles this line. Taps ride it through
+  // tapValue (the Megaphone's flat part is not doubled), and goal and win
+  // bonuses never read it (Round 583 corrected the copy that said they did).
   const hype = boostActive(s) ? 2 : 1;
   /* Round 162: the payroll earns alongside the crowd, the division you have
      climbed to pays its stage multiplier, every achievement is +2 percent
@@ -1080,6 +1089,8 @@ export interface TickEvent {
   /** Round 582, on title and seasonEnd: your final place and the final table,
    *  in the order it was stored, so a harness can sort it for itself. */
   position?: number;
+  /** Round 583, on goal and conceded: the match minute it went in, 1 to 90. */
+  minute?: number;
   table?: LeagueClub[];
 }
 
@@ -1145,11 +1156,11 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
         const b = goalBonus(st);
         st.money += b;
         st.lifetime += b;
-        events.push({ kind: 'goal', amount: b });
+        events.push({ kind: 'goal', amount: b, minute: st.minute });
       }
       if (roll() < oppChancePerMin(st)) {
         st.goalsAgainst += 1;
-        events.push({ kind: 'conceded' });
+        events.push({ kind: 'conceded', minute: st.minute });
       }
     }
     if (st.minute >= 90) {

@@ -855,6 +855,44 @@ several minor; all fixed except the rollback losses, which are stated):
 - `PITCH_CONTROL=nohelp`: help check red.
 - `PITCH_CONTROL=typed` (a typed number in the guide): claims check red.
 
+**As built, part one: honest help, floaters and the keyboard tap.** The round ships in two halves
+so the corrected help does not wait on the pitch. Part one is everything above except
+`TycoonPitch.tsx`, the replays, pop, sparks, the "12 taps" chip, reduced motion and the tiles,
+which are part two with `simTycoonPitch` and its `decor` control. What part one changed from the
+rows above:
+- **Harness `scripts/simTycoonHelp.mjs`** (suite `src/test/tycoonHelp.test.tsx`) carries this
+  half. Controls: `rawtap` and `rawgoal` (the `raw` control split, one per floater path),
+  `nohelp`, `deadkey`, `typed`, `stale`, `engine`, `typedmodal` and `typedfact`, nine in all.
+- **$1e15 is not reachable**, so the floater test does not claim it. A save the loader keeps tops
+  out at a $9.8T tap (a maxed club at 50 stars with a ten game streak, Hype and a crowd surge),
+  and the windfall's $1e15 cap sits far above the $1.9e13 the richest income could pay. Test 1
+  covers $3 to $9.8T over 1,196 taps and every `fmtMoney` branch but Q; test 2 covers 553 goal,
+  win and milestone events.
+- **The keyboard tap is a real button** beside the pitch, hidden until focused and calling the same
+  `doTap`, instead of Enter on the pitch div, so there is one tap path. `deadkey` leaves the
+  button in place and makes it pay nothing.
+- **The claims table measures what no export states**: a match lasts 126.0 seconds at the hook's
+  0.2 second cadence (the guide's "about two real minutes" and "fifth matchday about ten minutes
+  in"), and the greedy floor player from `simStadiumTycoon` can first sell up at minutes 12.7,
+  12.7 and 13.3 ("around a quarter of an hour", band 10 to 20). 41 stadium guide claims, 6 in the
+  modal's own words, 7 excused idioms ("once you have opened it"), each idiom itself checked to
+  still be in the text.
+- **Copy the table found wrong beyond this section's list**: DERBY DAY never multiplied goal or
+  win bonuses either, so "everything pays x7" (the engine's own blurb, the guide three times) and
+  the Hype button's "everything pays x2" now say income, and the frenzy claim fails if the blurb
+  says everything while bonuses ignore it; the badge chip's typed 2 reads `ACH_BONUS`. Hype does
+  not fully double a tap (the
+  Megaphone's flat part is not doubled), so the modal and guide say taps rise with it; "Ten
+  minutes in, the ground is full at 280 seats" was false for the measured player (2,040 seats and
+  1,234 fans at minute 10), so the example keeps the 280 crowd's 168 dollar goal without a clock;
+  "two benches" had no engine behind it; the `incomePerSec` comment saying Hype doubled bonuses
+  is corrected. `WINDFALL_SEC`, `GOLDEN_CATCH_SEC` and `GOLDEN_MEAN_GAP_SEC` are exported so the
+  hook, the engine and the help read one number each.
+- **The academy guide** has only its two corrected lines claimed ("about a quarter more", and the
+  move up leaving cash behind). Its full table comes with the 589 fold.
+- **Goal and conceded events carry `minute`** from this half, for the replays in part two, where
+  `simTycoonLeague` section 2 also starts checking goal minutes.
+
 ### Round 584: Away matchdays (rides alone)
 
 **Files.**

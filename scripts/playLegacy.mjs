@@ -42,6 +42,9 @@ async function openGame() {
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
+  /* Round 583: the rules greet a player with no save; clear them first. */
+  const letsGo = page.getByRole('button', { name: "Let's go", exact: true });
+  if (await letsGo.count()) { await letsGo.click(); await page.waitForTimeout(400); }
   /* The away-pay modal can greet a reopened save; clear it if so. */
   const back = page.locator('button:has-text("Back to work")');
   if (await back.count()) { await back.click(); await page.waitForTimeout(400); }

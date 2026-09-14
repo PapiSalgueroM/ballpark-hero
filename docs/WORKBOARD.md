@@ -199,7 +199,16 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   byte identical). **The review changed it:** a career-long opponent climb walled weak clubs in
   the bottom league (91 of 200), now 0 of 200 with each division's rivals held at their arrival
   strength; a failed stored league now keeps its division; doctored leagues are capped and
-  checked; dead heats go to your club. `scripts/simTycoonLeague.mjs`: 10 sections, 10 controls. I have skipped 570 to 579 on purpose, because the
+  checked; dead heats go to your club. `scripts/simTycoonLeague.mjs`: 10 sections, 10 controls.
+- **583 part one: honest help, floaters and a keyboard tap.** Every money floater prints through
+  `fmtMoney` (a deep run's tap read "+$4830000000" beside a "$4.83B" balance), the rules open
+  before first play with a Let's go button, a real keyboard tap button sits beside the pitch, and
+  every number in the rules modal is computed from the engine. The claims table found the copy
+  wrong in more places than the contract listed: Hype and DERBY DAY never touched goal or win
+  bonuses ("everything pays x2", "everything pays x7"), the guide's worked example was false at
+  its own clock, and "400 fans and $12/s" could not happen. `scripts/simTycoonHelp.mjs`: 5 page
+  tests over 1,196 taps to $9.8T and 553 paying events, 49 engine claims with an untracked-number
+  scan, 9 controls. Part two (the pitch, replays, tiles) follows with `simTycoonPitch`. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

@@ -33,6 +33,8 @@ import {
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,
   clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,
+  newTycoon, newLeague, goalBonus, winBonus, BOOST_CHARGE_SEC, BOOST_DURATION_SEC, WINDFALL_SEC,
+  GOLDEN_CATCH_SEC, offlineRateOf, offlineCapHoursOf, TYCOON_SAVE_KEY, swayMult,
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
@@ -161,6 +163,61 @@ export default function StadiumTycoon() {
   );
 }
 
+/** Round 583: every number the rules modal states, read off the engine when the
+ *  modal opens. Called at render, never at module scope (the import cycle rule). */
+function helpFacts() {
+  const fresh = newTycoon(0);
+  const full = { ...fresh, fanbase: 400, levels: { ...fresh.levels, stands: 7 } };
+  const maxed = { ...fresh, legacyPerks: Object.fromEntries(LEGACY_PERKS.map(p => [p.id, p.costs.length])) };
+  const byId = (id: string) => MILESTONES.find(m => m.id === id)?.label.toLowerCase() ?? '';
+  const perk = (id: string) => LEGACY_PERKS.find(p => p.id === id);
+  return {
+    chargeMin: BOOST_CHARGE_SEC / 60,
+    voltage1: boostChargeSecOf({ ...fresh, legacyPerks: { voltage: 1 } }) / 60,
+    voltage2: boostChargeSecOf({ ...fresh, legacyPerks: { voltage: 2 } }) / 60,
+    hypeSec: BOOST_DURATION_SEC,
+    divisions: DIVISIONS.length,
+    firstDivision: DIVISIONS[0].name,
+    lastDivision: DIVISIONS[DIVISIONS.length - 1].name,
+    topMult: DIVISIONS[DIVISIONS.length - 1].incomeMult,
+    staff: STAFF.length,
+    firstStaff: STAFF[0].name,
+    lastStaff: STAFF[STAFF.length - 1].name,
+    catchSec: GOLDEN_CATCH_SEC,
+    prizes: Object.keys(GOLDEN_INFO).length,
+    windfallMin: WINDFALL_SEC / 60,
+    milestoneExamples: `${byId('win1')}, ${byId('full')}, ${byId('fans10k')} and ${byId('streak5')}`,
+    milestones: MILESTONES.length,
+    badges: ACHIEVEMENTS.length,
+    firstBadge: ACHIEVEMENTS[0].label,
+    lastBadge: ACHIEVEMENTS[ACHIEVEMENTS.length - 1].label,
+    badgePct: Math.round(ACH_BONUS * 100),
+    starPct: Math.round((repMult({ ...fresh, rep: 1 }) - 1) * 100),
+    saleBase: pointsForSale(fresh),
+    summitPoints: pointsForSale({ ...fresh, league: newLeague(0, DIVISIONS.length - 1, 0) }),
+    perks: LEGACY_PERKS.length,
+    firstPerk: perk('sway')?.name ?? '',
+    swayPct: Math.round((swayMult({ ...fresh, legacyPerks: { sway: 1 } }) - 1) * 100),
+    perDivision: pointsForSale({ ...fresh, league: newLeague(0, 1, 0) }) - pointsForSale(fresh),
+    shieldPerk: perk('shield')?.name ?? '',
+    boardCost: LEGACY_PERKS.reduce((a, p) => a + p.costs.reduce((x, y) => x + y, 0), 0),
+    awayPct: Math.round(offlineRateOf(fresh) * 100),
+    awayHours: offlineCapHoursOf(fresh),
+    awayPerk: perk('away')?.name ?? '',
+    awayMaxPct: Math.round(offlineRateOf(maxed) * 100),
+    awayMaxHours: offlineCapHoursOf(maxed),
+    freshFans: fresh.fanbase,
+    perFan: (incomePerSec(fresh) / attendance(fresh)).toFixed(2),
+    freshRate: incomePerSec(fresh).toFixed(2),
+    standsCost: costOf(fresh, 'stands'),
+    seatsPerStand: capacity({ ...fresh, levels: { ...fresh.levels, stands: 1 } }) - capacity(fresh),
+    exampleFans: attendance(full),
+    rate400: incomePerSec(full),
+    goal400: goalBonus(full),
+    win400: winBonus(full),
+  };
+}
+
 /* Round 582: the league. The table through Club Manager's own card, today's
    fixture, and the club name picked from the generated banks. Never the
    default tab, so none of it reaches a snapshot. */
@@ -225,11 +282,20 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
 function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
   const [showHelp, setShowHelp] = useState(false);
+  /* Round 583: the rules open themselves once, before first play, the way the
+     academy's always have. A save on this device means somebody has played. */
+  useEffect(() => {
+    try { if (!localStorage.getItem(TYCOON_SAVE_KEY)) setShowHelp(true); } catch { /* storage blocked: leave it closed */ }
+  }, []);
   /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
      house style: each opens its own panel instead of stretching the page. */
   const [drawer, setDrawer] = useState<'none' | 'ach' | 'stats' | 'legacy'>('none');
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
+  /* Round 583: floaters are positioned inside the pitch, so the tap is measured
+     on the pitch too. It was measured on the stand-plus-pitch wrapper, which put
+     every tap floater below where the finger landed. */
+  const pitchAreaRef = useRef<HTMLDivElement | null>(null);
 
   const fans = attendance(s);
   const cap = capacity(s);
@@ -314,10 +380,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   }, [g.promotion, g.badge, g.awayPay, onNeedsYou]);
 
   const onPitchClick = (e: React.MouseEvent) => {
-    const el = pitchRef.current;
+    const el = pitchAreaRef.current ?? pitchRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    g.doTap(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100);
+    const pct = (v: number) => (Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : 50);
+    g.doTap(pct(((e.clientX - r.left) / r.width) * 100), pct(((e.clientY - r.top) / r.height) * 100));
   };
 
   if (!visible) return null;
@@ -342,7 +409,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           </div>
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1">{Array.from({ length: Math.min(s.rep, 6) }, (_, i) => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}{s.rep > 6 && <span className="font-bold text-yellow-500">x{s.rep}</span>}{s.rep > 0 && <span className="text-yellow-500 font-bold">rep {Math.round((repMult(s) - 1) * 100)}%</span>}</span>
-            {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{achCount * 2}%</span>}
+            {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{Math.round(achCount * ACH_BONUS * 100)}%</span>}
             <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-foreground"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
           </div>
         </div>
@@ -384,13 +451,20 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <span className="absolute inset-y-0 left-0 bg-yellow-500/15 transition-all duration-700" style={{ width: `${Math.min(100, ((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%` }} />
           )}
           <span className="relative">
-            {boostActive(s) ? `🔥 HYPE IS LIVE: everything pays x2 (${Math.ceil(s.boostLeftSec)}s)`
+            {boostActive(s) ? `🔥 HYPE IS LIVE: income pays x2 (${Math.ceil(s.boostLeftSec)}s)`
               : boostReady(s) ? '📣 MATCHDAY HYPE READY: press for x2'
               : `📣 Matchday Hype charging: ${Math.floor(((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%`}
           </span>
         </button>
 
         {/* The stadium: stand + pitch + all the motion */}
+        {/* Round 583: a real button for keyboard players. It sits beside the
+            pitch rather than making the pitch a button, because the pitch holds
+            buttons of its own (the golden whistle, the promotion card's Continue)
+            and a button inside a button is not a control anyone can use. */}
+        <button type="button" data-tap-key onClick={() => g.doTap(50, 50)} className="sr-only focus:not-sr-only focus:mb-2 focus:block focus:w-full focus:rounded-xl focus:border focus:border-primary focus:py-2 focus:text-sm focus:font-bold">
+          Tap the stadium for {fmtMoney(tapValue(s))}
+        </button>
         <div ref={pitchRef} onClick={onPitchClick} className="relative rounded-2xl overflow-hidden border border-border cursor-pointer select-none mb-3 group">
           {/* Stand (crowd) */}
           <div className="relative h-16 md:h-20 bg-gradient-to-b from-secondary to-secondary/40 border-b border-border overflow-hidden">
@@ -400,7 +474,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             {fans < 30 && <span className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground">the stand is nearly empty. build something worth watching</span>}
           </div>
           {/* Pitch */}
-          <div className="relative h-44 md:h-56 bg-emerald-700">
+          <div ref={pitchAreaRef} className="relative h-44 md:h-56 bg-emerald-700">
             {/* stripes + lines */}
             <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,0.25) 12% 24%)' }} />
             <div className="absolute inset-x-0 top-1/2 h-px bg-white/40" />
@@ -665,7 +739,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                       <button
                         onClick={() => g.doLegacyPerk(p.id)}
                         disabled={!ok}
-                        className={cn('shrink-0 rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
+                        className={cn('shrink-0 min-h-[30px] rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
                           ok ? 'bg-gold text-black hover:opacity-90' : 'bg-secondary text-muted-foreground')}
                       >
                         {cost} pt{cost === 1 ? '' : 's'}
@@ -721,33 +795,46 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         </div>
       )}
 
-      {/* Rules modal */}
-      {showHelp && (
+      {/* Rules modal. Round 583: every number in it is read off the engine, and
+          the claims the engine did not back are gone: Hype never doubled goal or
+          win bonuses, and "400 fans and $12/s" could not happen (400 fans pay
+          $20 a second). scripts/simTycoonHelp.mjs holds the guide to the same. */}
+      {showHelp && (() => {
+        const h = helpFacts();
+        return (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Stadium Tycoon works</div>
-              <button onClick={() => setShowHelp(false)}><X className="w-4 h-4 text-muted-foreground" /></button>
+              <button onClick={() => setShowHelp(false)} aria-label="Close the rules"><X className="w-4 h-4 text-muted-foreground" /></button>
             </div>
-            <div className="text-sm text-muted-foreground space-y-2">
+            <div data-tycoon-rules className="text-sm text-muted-foreground space-y-2">
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. A division's rivals stay as strong as they were when you arrived, but every division up is tougher, and the longer the club has played the tougher each new one is.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
-              <p>Matchday Hype charges over eight minutes of play (Stadium Voltage in the boardroom trims that to seven, then six). Press it and everything pays double for sixty seconds: income, taps, goal and win bonuses. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, ten divisions from the Muddy Meadows League to The Summit. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{DIVISIONS[DIVISIONS.length - 1].incomeMult} at the top, going up pays a promotion bonus on the spot, and a title at The Summit pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
-              <p>The payroll hires eight staff, from a matchday steward to a club legend. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
-              <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about 12 seconds to catch it, for one of five prizes: DERBY DAY (everything pays x7 for 77 seconds), CROWD SURGE (taps pay x25 for 30 seconds), TV WINDFALL (fifteen minutes of income, instantly), WONDERGOAL GOES VIRAL (the fanbase jumps) or SPONSOR GIFT (a free upgrade level).</p>
-              <p>Milestones pay once each for the club's firsts: the first win, the first full house, 10,000 fans, five wins in a row. Ten in all, and they stay earned even after you sell up.</p>
-              <p>Badges are the long game: 47 of them, from 500 fans to promotion into The Summit, and each one earned is +2% income forever. Check them in the Badges drawer, and your career numbers in Club records.</p>
-              <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +50% income each, every badge, and your club records. The ladder is faster every run.</p>
-              <p>Selling up also pays legacy points: 1 for the sale plus 1 per division that ground climbed, so cashing out early pays 1 and a sale from The Summit pays 10. Spend them in the Legacy boardroom on eight permanent perks, from Boardroom Sway (+10% income per level, forever) to a Steady Dressing Room that keeps half your streak through a loss. The whole board costs exactly 100 points. Perks survive every future sale.</p>
-              <p>Away from the game, you earn at half speed for up to 8 hours (the Away Day Deal perk raises both, up to 80% for 12 hours). Progress saves on this device.</p>
+              <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
+              <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
+              <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
+              <p>Milestones pay once each for the club's firsts, like {h.milestoneExamples}. {h.milestones} in all, and they stay earned even after you sell up.</p>
+              <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them in the Badges drawer, and your career numbers in Club records.</p>
+              <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>
+              <p>Selling up also pays legacy points: {h.saleBase} for the sale plus {h.perDivision} per division that ground climbed, so cashing out early pays {h.saleBase} and a sale from {h.lastDivision} pays {h.summitPoints}. Spend them in the Legacy boardroom on {h.perks} permanent perks, from {h.firstPerk} (+{h.swayPct}% income per level, forever) to {h.shieldPerk}, which keeps half your streak through a loss. The whole board costs exactly {h.boardCost} points. Perks survive every future sale.</p>
+              <p>Away from the game, you earn at {h.awayPct}% speed for up to {h.awayHours} hours (the {h.awayPerk} perk raises both, up to {h.awayMaxPct}% for {h.awayMaxHours} hours). Progress saves on this device.</p>
               <p>The Academy tab runs your youth academy inside this game, on its own save, with its own How it works button.</p>
-              <p>Worked example: at 400 fans and $12/s, one goal pays about $240, a win about $880, and Stands level 10 (adding 40 seats) pays itself back in under two minutes if the ground was full.</p>
+              <p>Worked example: a new club has {h.freshFans} fans paying ${h.perFan} each, ${h.freshRate} a second. The first Stands level costs ${h.standsCost} and adds {h.seatsPerStand} seats you cannot fill yet, so the Ticket Office pays first. Later, a full ground of {h.exampleFans} fans pays {fmtMoney(h.rate400)} a second, a goal pays {fmtMoney(h.goal400)} before any streak, and a win pays {fmtMoney(h.win400)}.</p>
             </div>
+            <button
+              type="button"
+              onClick={() => setShowHelp(false)}
+              className="mt-4 w-full py-3 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              Let's go
+            </button>
           </div>
         </div>
-      )}
+        );
+      })()}
     </>
   );
 }

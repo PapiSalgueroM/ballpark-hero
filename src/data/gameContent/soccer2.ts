@@ -747,7 +747,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   },
   '/stadium-tycoon': {
     intro: [
-      "Stadium Tycoon is an idle game about the part of football nobody streams: the turnstiles. You start with a fence, two benches and ninety loyal fans, and you grow that into a ground that hums, one upgrade at a time, while a live toy match plays out on screen and pays you for every goal.",
+      "Stadium Tycoon is an idle game about the part of football nobody streams: the turnstiles. You start with a fence and ninety loyal fans, and you grow that into a ground that hums, one upgrade at a time, while a live toy match plays out on screen and pays you for every goal.",
       "It is built to be alive. The crowd fills the stand seat by seat as your real attendance grows, money floats off everything that earns, goals throw confetti, and a win streak lights a flame that multiplies the lot. Leave the tab and the turnstiles keep spinning at half speed for up to eight hours.",
       "And it goes deep. Your ground plays in a league with a real table, and winning it climbs a ladder of ten divisions that multiply everything you earn, a payroll of eight staff earns around the clock, a golden whistle drifts in with five different prizes, and 47 badges each add a permanent two percent. Selling up resets the club but never the badges, so every run starts faster than the last.",
       "There is a second room too. The Academy tab runs a youth academy right beside the ground, on its own save, and once you have opened it the kids keep training and ageing while you watch the match.",
@@ -759,7 +759,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Follow the match at the top of the pitch. Goals pay a bonus scaled by the crowd, wins extend your streak, and the streak multiplies income and pulls in new fans.",
       "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
       "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
-      "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from everything paying seven times over to fifteen minutes of income in one lump.",
+      "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from seven times the income to fifteen minutes of income in one lump.",
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
       "Open the Academy tab to run your youth academy beside the stadium.",
     ],
@@ -767,17 +767,17 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
       "Matches run about two real minutes. Your Squad level drives your goal chance. A division's rivals stay as strong as they were when you arrived, so a club that can compete there can always win it in time, but every division up is tougher, and the longer the club has played the tougher each new division is.",
       "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
-      "Matchday Hype charges over eight minutes of play; pressing it doubles all money for sixty seconds. It never charges or burns while you are away, and it cannot stack.",
+      "Matchday Hype charges over eight minutes of play; pressing it doubles your income for sixty seconds and lifts your taps with it, though goal and win bonuses are not doubled. It never charges or burns while you are away, and it cannot stack.",
       "Divisions are earned by winning the league at your current ground. The bottom three divisions are six clubs playing each other once, five matchdays; the middle three are eight clubs home and away, and the top four ten clubs home and away. The table is ordered by points, then goal difference, then goals scored. Only the champion goes up, nobody goes down, and a title at The Summit pays the promotion bonus again. Selling up drops you back to the bottom league, though your best division and your league titles are remembered forever.",
-      "The golden whistle appears only while you are actually playing, roughly every couple of minutes, and its timed prizes (DERBY DAY at seven times everything, CROWD SURGE at twenty five times taps) cannot stack with each other.",
+      "The golden whistle appears only while you are actually playing, roughly every couple of minutes, and its timed prizes (DERBY DAY at seven times income, CROWD SURGE at twenty five times taps) cannot stack with each other.",
       "Badges pay no cash. Each of the 47 is a permanent two percent income multiplier, earned exactly once per career, and they never reset.",
       "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
       "Progress saves on this device automatically. Selling up is permanent: only Reputation, badges, club records and your lifetime totals survive.",
     ],
     example: [
-      "You open the game to 90 fans and about six dollars a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
-      "Ten minutes in, Floodlights have pulled your fanbase past your 280 seats, the ground is full, and Stands become the best purchase on the board. Your striker puts one in, the crowd of 280 pays a 168 dollar goal bonus, the streak hits three, and a win on the fifth matchday takes the Muddy Meadows title and lifts you into the Gravel Lane League with a promotion bonus and a bigger multiplier on every dollar after it.",
-      "Around twenty minutes in, lifetime earnings crest four million and the yellow bar glows. You sell up, keep a star, and the ninety-fan fence starts again at one and a half times the speed.",
+      "You open the game to 90 fans paying five cents each, $4.50 a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
+      "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. With 280 in the ground a goal pays a 168 dollar bonus before any streak, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
+      "Around a quarter of an hour in, lifetime earnings crest four million and the yellow bar glows. You sell up, keep a star, and the ninety-fan fence starts again at one and a half times the speed.",
     ],
     tips: [
       "Balance seats against spend. A full ground with a poor Snack Bar wastes fans; a rich concourse with empty seats wastes upgrades.",
@@ -794,7 +794,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What is the golden whistle?",
-        a: "A catchable bonus that drifts onto the pitch every couple of minutes while you play. Catch it inside about twelve seconds for one of five prizes: DERBY DAY (everything pays seven times over for 77 seconds), CROWD SURGE (taps pay 25 times for 30 seconds), TV WINDFALL (fifteen minutes of income at once), WONDERGOAL GOES VIRAL (a fanbase jump) or SPONSOR GIFT (a free upgrade level).",
+        a: "A catchable bonus that drifts onto the pitch every couple of minutes while you play. Catch it inside about twelve seconds for one of five prizes: DERBY DAY (income pays seven times over for 77 seconds), CROWD SURGE (taps pay 25 times for 30 seconds), TV WINDFALL (fifteen minutes of income at once), WONDERGOAL GOES VIRAL (a fanbase jump) or SPONSOR GIFT (a free upgrade level).",
       },
       {
         q: "Does it earn while the tab is closed?",
@@ -841,7 +841,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     example: [
       'Say the scouts drop off a 17 year old midfielder rated 58, and your level 3 scouts read his ceiling as somewhere between 68 and 75. Selling on the spot pays a modest fee: decent rating, healthy promise premium.',
-      'You leave him with the coaches while you upgrade the Agent office. By the time he is 19 he is rated 71 and the growth has visibly slowed, which tells you the ceiling is close. His card now quotes roughly triple the day one fee.',
+      'You leave him with the coaches while you upgrade the Agent office. By the time he is 19 he is rated 71 and the growth has visibly slowed, which tells you the ceiling is close. His card now quotes about a quarter more than the day one fee: the rating grew, but the promise premium shrank with his age.',
       'Deadline Day lights up. You press Sell inside the window and the fee pays half as much again. That one sale funds two Scouting levels, and the next kid through the door is found faster and read more precisely.',
     ],
     tips: [
@@ -849,7 +849,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       'Scouting level 3 changes the game. Knowing the ceiling range tells you who is worth the wait.',
       'A kid within a point of his ceiling has stopped earning you anything by waiting. Sell him on the next Deadline Day.',
       'Dorms are quietly the best value when your academy keeps sitting full: a stopped scout earns nothing.',
-      'Do not move up the moment the target clears. One more big sale first travels with you as a head start toward the NEXT star, because career earnings never reset.',
+      'Spend before you move up. Cash, facilities and every kid stay behind when the academy moves, and the next region\'s target counts from zero, so money left in the bank on moving day is simply gone.',
     ],
     faqs: [
       { q: 'Are the players real?', a: 'No. Every kid is generated, names and all, and the game checks its generated names against every real player on the site so a made up kid can never wear a real name.' },

@@ -102,6 +102,12 @@ const unscored = (m, game) =>
   await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1400);
   say(marks.length === 0, `no mark on tycoon load (${marks.length} sent)`);
+  /* Round 583: a player with no save sees the rules first. Reading them is not play. */
+  const letsGo = page.getByRole('button', { name: "Let's go", exact: true });
+  say(await letsGo.count() === 1, 'the rules greet a player with no save');
+  await letsGo.click();
+  await page.waitForTimeout(400);
+  say(marks.length === 0, `closing the rules adds no mark (${marks.length} sent)`);
   const pitch = page.locator('div.cursor-pointer.select-none.group').first();
   await pitch.click();
   await page.waitForTimeout(800);

@@ -11,7 +11,7 @@ import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
-  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName,
+  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, LeagueClub } from '@/lib/stadiumTycoon';
 
@@ -150,13 +150,13 @@ export function useStadiumTycoon() {
            already lit, and it drifts away after 12 seconds uncaught. */
         const g = goldenRef.current;
         if (g && t > g.expiresAt) setGolden(null);
-        else if (!g && !goldenActive(next) && Math.random() < use / 150) {
+        else if (!g && !goldenActive(next) && Math.random() < use / GOLDEN_MEAN_GAP_SEC) {
           setGolden({
             id: Date.now(),
             kind: rollGoldenKind(Math.random),
             x: 12 + Math.random() * 70,
             y: 24 + Math.random() * 45,
-            expiresAt: t + 12000,
+            expiresAt: t + GOLDEN_CATCH_SEC * 1000,
           });
         }
         if (sinceSave >= 5) {
@@ -171,18 +171,18 @@ export function useStadiumTycoon() {
         setLastSeason({ label: e.label ?? 'Season over', position: e.position, table: e.table });
       }
       if (e.kind === 'goal') {
-        pushFloater(`GOAL! +$${e.amount}`, 'goal', 30 + Math.random() * 40, 20 + Math.random() * 25);
+        pushFloater(`GOAL! +${fmtMoney(e.amount ?? 0)}`, 'goal', 30 + Math.random() * 40, 20 + Math.random() * 25);
         setConfetti(c => c + 1);
       } else if (e.kind === 'win') {
-        pushFloater(`FULL TIME WIN +$${e.amount}`, 'win', 32, 12);
+        pushFloater(`FULL TIME WIN +${fmtMoney(e.amount ?? 0)}`, 'win', 32, 12);
         setConfetti(c => c + 1);
       } else if (e.kind === 'milestone') {
-        pushFloater(`🏁 ${e.label} +$${e.amount}`, 'win', 18, 30);
+        pushFloater(`🏁 ${e.label} +${fmtMoney(e.amount ?? 0)}`, 'win', 18, 30);
         setConfetti(c => c + 1);
       } else if (e.kind === 'promoted') {
         // Round 162: the loudest moment the game has. Round 530: it also
         // gets a card on the pitch, held until Continue or four seconds.
-        pushFloater(`${e.label} +$${e.amount}`, 'win', 16, 20);
+        pushFloater(`${e.label} +${fmtMoney(e.amount ?? 0)}`, 'win', 16, 20);
         setConfetti(c => c + 2);
         setPromotion({ label: e.label, amount: e.amount, seq: floaterSeq++ });
       } else if (e.kind === 'title') {
@@ -272,7 +272,10 @@ export function useStadiumTycoon() {
     markSessionPlay();
     const before = stateRef.current;
     const after = tap(before);
-    pushFloater(`+$${after.money - before.money >= 1 ? Math.round(after.money - before.money) : 1}`, 'tap', xPct, yPct);
+    /* Round 583: every floater prints the engine's real change through fmtMoney,
+       the way the balance does. Taps printed raw numbers, so deep into a run a
+       tap read +$4830000000 beside a balance reading $4.83B. */
+    pushFloater(`+${fmtMoney(after.money - before.money)}`, 'tap', xPct, yPct);
     commit(after);
   }, [pushFloater, commit]);
 
