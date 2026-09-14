@@ -11,7 +11,7 @@ matching the push. Home bundle `index-DFolUycD.js` to `index-CMx1kdv0.js`.
 | Round | Proof grepped out of the live chunk |
 |---|---|
 | 560 | `"West Ham United":"EFL Championship"` and `Segunda División` in `footleEnrichment-F-wXhfCj.js` |
-| 563 | the comma-prefixed `, settled on away goals` clause in `SoccerCareer-feqyD_tb.js` |
+| 563 | the comma-prefixed `, settled on away goals` clause in `SoccerCareer-feqyD_tb.js`, and since Round 565 the card itself is verified on screen by `playSoccerCareer` |
 | 564 | `min-h-[30px]` in `Conquest-Dk3-X6Sn.js` |
 | 567 | the accented `Michał Karbownik` is gone from `clubManager-DwK69CU9.js`; both surviving occurrences are the unaccented man |
 

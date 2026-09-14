@@ -285,7 +285,27 @@ Anthony can flip (Supabase Auth, check passwords against HaveIBeenPwned).
   its clubs carry a `tier` that decides who signs you, so moving West Ham is a career world
   decision rather than a stale lookup. It needs a call, not a sweep.
 
-**THE NEXT ROUND IN THIS BLOCK, 565, and it is the biggest verification hole on the site.**
+- **565: DONE. The flagship has a browser walk, and Round 563 is verified on screen.**
+  `scripts/playSoccerCareer.mjs` creates a player, drives the career through every decision
+  phase, reaches a qualified Champions League campaign and reads the card a player actually
+  sees. Seeded so a run is reproducible. On seed 20260914 it gets there in 47 steps across 10
+  phases and the card reads `R16 L1 Tigres UANL 1-2 Atletico Madrid, R16 L2 Atletico Madrid 1-0
+  Tigres UANL, L, 1-3 on aggregate`, a tie settled BY AGGREGATE, which is exactly the case that
+  printed no aggregate at all before Round 563. That closes the honest limit 563 shipped with.
+  Controls: `noagg` restores the pre-563 condition in the SERVED bytes (it captures the
+  minified guard and match variables out of the chunk rather than typing them, so it survives a
+  rebuild) and check 2 goes red naming the tie; `noreach` caps the walk at two steps and check
+  1 goes red, which proves check 1 is a real gate.
+  **It went red on its own first two runs and both were real.** The action list ended with a
+  generic `'Stay'`, which matched "Stay and fight for place", and had nothing matching "Leave on
+  free transfer", so the walk chose to stay in every window, spent a whole career at West Ham (a
+  Championship club since Round 560) and retired at 38 having never qualified: 213 steps, twelve
+  phases, card never drawn. Check 1 is written as a COVERAGE FAILURE rather than a skip for
+  exactly that reason, and it is what caught it.
+
+**THE NEXT ROUND AFTER THAT, 569, if 568 is taken by an agent.**
+
+**(superseded, kept for the reasoning) 565 was the biggest verification hole on the site.**
 Soccer Career is about one in five pageviews and **no browser walk has ever played it**. Club
 Manager got one in Round 550 and it immediately found real defects. Round 563 shipped a change to
 the flagship's season result card that tsc, the build and a 42,390 tie engine fence all approve
