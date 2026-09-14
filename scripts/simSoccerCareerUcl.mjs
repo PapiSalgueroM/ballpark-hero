@@ -39,6 +39,11 @@
  *      threshold of 6 would have become far easier to reach.
  *   5. Away goals appear only in the seasons that had them, and never after
  *      2020-21, which is when the competition abolished them.
+ *   6. Round 563: a second leg always carries an aggregate and a first leg
+ *      never does, and the aggregate adds its own two legs up. The result
+ *      card tells L1 from L2 by exactly that, and prints the aggregate line
+ *      from it, so without this the labels and the line go quietly blank
+ *      while everything else stays green.
  *
  * ON THE TOLERANCES, and on a mistake worth keeping written down. Section 3
  * first gated on the WORST single cell across the grid, and it went red at 11
@@ -52,9 +57,11 @@
  * gates are 2.5 and 3, and the uncalibrated version produced 40, so the gates
  * are nowhere near either the noise or the failure.
  *
- * NEGATIVE CONTROL: SC_UCL_CONTROL=coinflip puts the replaced model back inside
+ * NEGATIVE CONTROLS: SC_UCL_CONTROL=coinflip puts the replaced model back inside
  * the bundle, deciding the tie before the score, and section 2 must go red
- * because the aggregate and the winner stop agreeing.
+ * because the aggregate and the winner stop agreeing. SC_UCL_CONTROL=noagg
+ * takes the aggregate off the deciding leg and section 6 must go red, because
+ * the result card cannot then tell a second leg from a first.
  *
  * Run: node scripts/simSoccerCareerUcl.mjs      (no database)
  */
@@ -70,7 +77,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_UCL_CONTROL || '';
-const KNOWN_CONTROLS = ['coinflip'];
+const KNOWN_CONTROLS = ['coinflip', 'noagg'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -98,6 +105,22 @@ if (CONTROL === 'coinflip') {
   if (mutated === text) { console.error('CONTROL coinflip changed nothing'); process.exit(1); }
   fs.writeFileSync(BUNDLE, mutated);
   console.log('   NEGATIVE CONTROL ON: the tie decided by a flip again, section 2 must go red');
+}
+
+if (CONTROL === 'noagg') {
+  /* Round 563: take the aggregate off the deciding leg. Section 6 must go
+     red, because with it gone the result card cannot tell a second leg from a
+     first and prints neither the L2 label nor the aggregate line. */
+  const text = fs.readFileSync(BUNDLE, 'utf8');
+  const re = /decider\.aggFor = aggFor;/;
+  if (!re.test(text)) {
+    console.error('CONTROL noagg cannot find the aggregate assignment in the bundle, so it would change nothing');
+    process.exit(1);
+  }
+  const mutated = text.replace(re, 'decider.aggFor = undefined;');
+  if (mutated === text) { console.error('CONTROL noagg changed nothing'); process.exit(1); }
+  fs.writeFileSync(BUNDLE, mutated);
+  console.log('   NEGATIVE CONTROL ON: the deciding leg carries no aggregate, section 6 must go red');
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
@@ -300,9 +323,63 @@ console.log('5) Away goals only in the seasons that had them');
 }
 
 /* ------------------------------------------------------------------ */
+/* Round 563: the aggregate is what makes two legs one tie, and the result
+   card now reads it for every two legged tie rather than only for the ones
+   settled by something else. That was a player's report ("ADD 2nd legs in
+   ucl") about a feature that had shipped in Round 546: the legs were there,
+   the aggregate binding them was printed only on away goals, extra time or
+   penalties, so an ordinary tie showed as two loose scorelines with a W on
+   the second and never said it was a tie. So the screen now depends on two
+   things the engine was never asked to guarantee: a second leg always
+   carries an aggregate, and a first leg never does (the card tells L1 from
+   L2 by exactly that). Both are checked here so the labels cannot go quietly
+   blank. */
+{
+  const before = failures;
+  let secondLegs = 0, missingAgg = 0, firstLegsWithAgg = 0, wrongSum = 0;
+  for (const { r } of rows) {
+    const byRound = new Map();
+    for (const m of r.matches) {
+      if (!byRound.has(m.round)) byRound.set(m.round, []);
+      byRound.get(m.round).push(m);
+    }
+    for (const [, legs] of byRound) {
+      if (legs.length < 2) continue;
+      const first = legs.find(m => m.leg === 1);
+      const second = legs.find(m => m.leg === 2);
+      if (!first || !second) continue;
+      secondLegs += 1;
+      if (second.aggFor === undefined || second.aggAgainst === undefined) { missingAgg += 1; continue; }
+      if (first.aggFor !== undefined) firstLegsWithAgg += 1;
+      /* Extra time goals are added into the aggregate after the legs, so the
+         aggregate may exceed the two legs there and must equal them anywhere
+         else. */
+      const sumFor = first.goalsFor + second.goalsFor;
+      const sumAgainst = first.goalsAgainst + second.goalsAgainst;
+      if (second.decidedBy === 'extraTime') {
+        if (second.aggFor < sumFor || second.aggAgainst < sumAgainst) wrongSum += 1;
+      } else if (second.aggFor !== sumFor || second.aggAgainst !== sumAgainst) {
+        wrongSum += 1;
+      }
+    }
+  }
+  if (secondLegs === 0) fail('not one tie in the whole sample had two legs, so this section checked nothing about the thing the card shows');
+  if (missingAgg > 0) fail(`${missingAgg} of ${secondLegs} second legs carry no aggregate, so the card would label them as first legs and print no aggregate line`);
+  if (firstLegsWithAgg > 0) fail(`${firstLegsWithAgg} first legs carry an aggregate, so the card would print a tie's aggregate before the tie was played`);
+  if (wrongSum > 0) fail(`${wrongSum} of ${secondLegs} aggregates do not match the two legs they are supposed to add up`);
+  if (failures === before) console.log(`   ${secondLegs} two legged ties: every second leg carries an aggregate that adds its legs up, and no first leg carries one`);
+}
+
+/* ------------------------------------------------------------------ */
 if (CONTROL === 'coinflip') {
   if (failures > 0) { console.log('\n   CONTROL FIRED: the flipped result was caught'); process.exit(0); }
   console.error('\n   CONTROL DID NOT FIRE: the harness cannot see a result decided before the score');
+  process.exit(1);
+}
+
+if (CONTROL === 'noagg') {
+  if (failures > 0) { console.log('\n   CONTROL FIRED: the missing aggregate was caught'); process.exit(0); }
+  console.error('\n   CONTROL DID NOT FIRE: the harness cannot see a second leg with no aggregate, so the result card\'s labels are unguarded');
   process.exit(1);
 }
 

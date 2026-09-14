@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { Fragment, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
@@ -4075,29 +4075,44 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                     and the deciding one carries the aggregate and how it was
                     settled. The W or L sits on the deciding leg only, because a
                     first leg does not win or lose anything. */}
-                {career.lastUCLResult.matches.map((m, i) => (
-                  <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                    <span className="text-[10px] text-muted-foreground w-14 shrink-0">
-                      {m.round}{m.aggFor !== undefined && m.leg === 2 ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
-                    </span>
-                    <span className="font-semibold text-foreground truncate">{m.home ? career.currentClub : m.opponent}</span>
-                    <span className="font-black mx-2 shrink-0">{m.home ? m.goalsFor : m.goalsAgainst} - {m.home ? m.goalsAgainst : m.goalsFor}</span>
-                    <span className="text-muted-foreground truncate">{m.home ? m.opponent : career.currentClub}</span>
-                    <span className={`text-[10px] ml-1 shrink-0 ${m.decidedBy === undefined ? "text-muted-foreground" : m.won ? "text-emerald-400" : "text-red-400"}`}>
-                      {m.decidedBy === undefined ? "" : m.won ? "W" : "L"}
-                    </span>
-                  </div>
-                ))}
-                {/* How each tie was settled, when it was not just the aggregate. */}
-                {career.lastUCLResult.matches.filter(m => m.decidedBy && m.decidedBy !== 'aggregate').map((m, i) => (
-                  <div key={`d${i}`} className="text-[10px] text-center text-muted-foreground">
-                    {m.round}: {m.aggFor}-{m.aggAgainst} on aggregate, {
-                      m.decidedBy === 'awayGoals' ? 'settled on away goals' :
-                      m.decidedBy === 'extraTime' ? 'settled in extra time' :
-                      `${m.pensFor}-${m.pensAgainst} on penalties`
-                    }
-                  </div>
-                ))}
+                {/* Round 563, from a player's report asking for second legs in
+                    the Champions League. They were already here, since Round
+                    546, and that is the point: a tie showed as two loose
+                    scorelines with a W on the second, and the aggregate that
+                    makes them ONE tie was printed only when something other
+                    than the aggregate settled it. So a normal two legged tie,
+                    which is most of them, never said it was a tie at all and
+                    the reader had to add the legs up. The aggregate now sits
+                    under its own deciding leg, where it belongs, for every two
+                    legged tie. A one legged final still shows none, because
+                    there is nothing to aggregate. */}
+                {career.lastUCLResult.matches.map((m, i) => {
+                  const twoLegged = m.leg === 2 && m.aggFor !== undefined;
+                  return (
+                    <Fragment key={i}>
+                      <div className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
+                        <span className="text-[10px] text-muted-foreground w-14 shrink-0">
+                          {m.round}{twoLegged ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
+                        </span>
+                        <span className="font-semibold text-foreground truncate">{m.home ? career.currentClub : m.opponent}</span>
+                        <span className="font-black mx-2 shrink-0">{m.home ? m.goalsFor : m.goalsAgainst} - {m.home ? m.goalsAgainst : m.goalsFor}</span>
+                        <span className="text-muted-foreground truncate">{m.home ? m.opponent : career.currentClub}</span>
+                        <span className={`text-[10px] ml-1 shrink-0 ${m.decidedBy === undefined ? "text-muted-foreground" : m.won ? "text-emerald-400" : "text-red-400"}`}>
+                          {m.decidedBy === undefined ? "" : m.won ? "W" : "L"}
+                        </span>
+                      </div>
+                      {twoLegged && (
+                        <div className="text-[10px] text-center text-muted-foreground">
+                          {m.aggFor}-{m.aggAgainst} on aggregate{
+                            m.decidedBy === 'awayGoals' ? ', settled on away goals' :
+                            m.decidedBy === 'extraTime' ? ', settled in extra time' :
+                            m.decidedBy === 'penalties' ? `, ${m.pensFor}-${m.pensAgainst} on penalties` : ''
+                          }
+                        </div>
+                      )}
+                    </Fragment>
+                  );
+                })}
               </div>
               {career.lastUCLResult.playerGoals > 0 && (
                 <div className="text-[10px] text-center text-muted-foreground">
