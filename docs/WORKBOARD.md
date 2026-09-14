@@ -204,7 +204,48 @@ onward and say so here. First one landed:
   down 95px at 390 wide. And the "one colour left" check was simply wrong about the rule: the
   season ends in a playoff of the eight biggest empires at 13 rounds of a 40 budget, so one
   colour is what that rule produces. Replaced with two exact equalities. **113 checks, 0 failed,
-  was 93 of 18.**
+  was 93 of 18.** Re-run on main after the merge: 113 checks, 0 failed.
+- **566: six of eight tournament squads were filed under the wrong nation.** Rank 7, diagnosed
+  2026-05-29 and still wrong today. "WC 2022 Argentina winners" was Ecuador's squad, "Euro 2024
+  Spain winners" was Germany's. Proved a second time, independently of that audit, by resolving
+  every list against `playerNationalities.ts`: each of the eight came back as exactly ONE
+  nationality and the same six disagreed with their key. The two World Cup keys now carry the
+  real winners from `national_team_squads`; the other four are re-keyed to the nation they
+  really are and no longer say "winners", because no table here holds Spain 2024, Italy 2020,
+  Argentina 2021 or Senegal 2022. Nothing deleted, 111 names went from libelled to correct.
+  Fenced by `scripts/simTournamentWinners.mjs`, which also fails if anything shipped starts
+  reading the file (it is a generation input, not a source) or if the quarantined Connections
+  migration stops being quarantined.
+- **567 (renumbered off the tablet lane's 538): the two newest player reports, both real, and
+  they did NOT share a cause.** "the players duplicate if you buy them" and "doesnt save if you
+  leave the website".
+  - *The duplicate.* `slug()` folds the Polish barred l onto a plain l and strips accents, and
+    squad ids were built straight from it, so Éderson and Ederson both became
+    `sign-ederson-s1` and the two Karbowniks both became `p-michal-karbownik`. Not cosmetic:
+    every engine lookup is `find(p => p.id === id)` and resolves to the first of the pair, so
+    the second man cannot be picked, and `acceptBid` runs `filter(x => x.id !== playerId)` and
+    takes **both** off the books. Fixed by construction with `freeSquadId`, not by filtering,
+    because a filter would have to discard one of two real footballers. Existing saves are
+    repaired in `loadCareer` and `playNextEntry`, keeping the first holder's id so nothing
+    already referenced moves.
+  - *The save.* A `setCareer` from a `pagehide` listener is a state update on a tree React is
+    tearing down, so it never commits, so the persist effect never runs and nothing reaches
+    localStorage. **Round 543 added exactly such a handler for the live clock, for the case its
+    own comment names, and it did nothing in that case.** Fixed with a synchronously readable
+    `careerRef` and a direct `saveCareer` on `pagehide`, on `visibilitychange` to hidden, and in
+    unmount cleanup.
+  - *Found in passing:* the same Karbownik twice in `clubSquads.ts` for Olympiacos 2022, which
+    made "you would be Nth of M defenders" one out for anyone at that club that season on the
+    flagship. A sweep confirmed no other id anywhere in the repo is derived from a name.
+
+**FLAGGED, NOT FIXED, and it is the same class of bug in six more engines.** `cfbDynasty.ts:124`,
+`cbbDynasty.ts:116`, `frontOffice.ts:73`, `mlbFrontOffice.ts:76`, `nbaFrontOffice.ts:56` and
+`nhlFrontOffice.ts:74` mint player ids from a counter at MODULE scope while the roster is
+persisted, so after a reload the counter restarts at 0 and a new player can be handed an id a
+saved player already holds. `wonderkidFactory.ts:195` keeps its counter in the save and is
+immune, so that is the shape to copy. This is the "one engine, many sports" rule biting again:
+Round 426 had to fix the same roster refill bug twice for the same reason.
+
 - **Correction to the queue in the same round as 560.** Ranks 4 and 9 were listed as open and were
   already done (Round 475's Transfer Path season key rule, fenced by `simTransferPathSeasons`;
   the era UCL head to head, fenced by `simClubManagerEraUcl`, which measures 28 of 89 level

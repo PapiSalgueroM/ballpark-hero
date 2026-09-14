@@ -1,5 +1,5 @@
 /**
- * Round 538: two live player reports on Club Manager, filed 2026-09-13 through
+ * Round 567: two live player reports on Club Manager, filed 2026-09-13 through
  * the site's own report button.
  *
  *   "Manager career doesnt save if you leave the website"
@@ -32,7 +32,7 @@
  * stayed, which is the one case it was not written for.
  *
  * scripts/simClubManagerSave.mjs runs this file and carries the negative
- * controls. CM_HOOK points it at a copy of the hook with the Round 538 write
+ * controls. CM_HOOK points it at a copy of the hook with the Round 567 write
  * taken back out.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';

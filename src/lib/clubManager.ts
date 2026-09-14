@@ -3133,7 +3133,7 @@ function slug(name: string): string {
 }
 
 /**
- * Round 538: a squad id has to be unique inside the squad, and slug() is not
+ * Round 567: a squad id has to be unique inside the squad, and slug() is not
  * injective, so an id built from a name is not unique either.
  *
  * TWO REAL PAIRS IN THE SHIPPED MARKET, both measured rather than imagined.
@@ -3168,7 +3168,7 @@ function freeSquadId(squad: readonly { id: string }[], base: string): string {
 }
 
 /**
- * Round 538: the same rule over a whole list being assembled. Everything built
+ * Round 567: the same rule over a whole list being assembled. Everything built
  * before the first man is placed goes through here, so a roster, a rollover and
  * a founded club all come out with distinct ids. The FIRST holder keeps the
  * plain id, which is what every save already written resolves to, so this
@@ -3188,7 +3188,7 @@ function withUniqueIds<T extends { id: string }>(list: T[]): T[] {
 }
 
 /**
- * Round 538: and the repair for a save written before any of the above, run on
+ * Round 567: and the repair for a save written before any of the above, run on
  * the way in and at the top of playNextEntry, which is the house pattern for
  * every other ensure in this file. A career already carrying a duplicate keeps
  * the FIRST holder's id, so every reference in the save (the XI, the set
@@ -3445,7 +3445,7 @@ function ensureSquadCoverage(squad: CMPlayer[]): CMPlayer[] {
   while (out.length < 16) {
     out.push(makeYouth(pick([...POS_DEF, ...POS_MID, ...POS_ATT]), 55, 68, takenNames));
   }
-  /* Round 538: every squad this engine assembles funnels through here, the
+  /* Round 567: every squad this engine assembles funnels through here, the
      baked roster, the old pool, the summer rollover and the emergency free
      agents, so this is the one place the id rule has to hold for all of them. */
   return withUniqueIds(out);
@@ -3797,7 +3797,7 @@ export function buildCustomSquad(spec: CustomClubSpec): CMPlayer[] {
      gets told to win it all, honestly. */
   const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
   const used = new Set<string>();
-  /* Round 538: the generated names are already deduped through `used`, so this
+  /* Round 567: the generated names are already deduped through `used`, so this
      is the belt to that brace: two different generated names that slug to one
      string still leave two players with two ids. */
   return withUniqueIds(CUSTOM_SLOTS.map((slot, i) => {
@@ -6142,7 +6142,7 @@ function completeSigning(
   if (career.squad.length >= 30) return null;
   if (career.squad.some(p => p.name === mp.name)) return null;
   const player: CMPlayer = {
-    /* Round 538: unique inside THIS squad, see freeSquadId. Two real players
+    /* Round 567: unique inside THIS squad, see freeSquadId. Two real players
        whose names slug to one string are both signable and stay two men. */
     id: freeSquadId(career.squad, `sign-${slug(mp.name)}-s${career.season}`),
     name: mp.name,
@@ -7662,7 +7662,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
   if (career.squad.length >= 30) return null;
   const back: CMPlayer = {
     ...entry.player,
-    /* Round 538: he left with an id and somebody signed since may be wearing
+    /* Round 567: he left with an id and somebody signed since may be wearing
        it, so it is claimed again rather than assumed free. */
     id: freeSquadId(career.squad, entry.player.id),
     morale: Math.max(40, (entry.player.morale ?? 70) - 6),
@@ -13447,7 +13447,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureAcademy(state);
   // Round 127: and everybody gets told where he stands.
   ensureRoles(state);
-  // Round 538: and nobody shares an id with anybody, so every lookup by id
+  // Round 567: and nobody shares an id with anybody, so every lookup by id
   // below this line answers with the player it was asked about.
   ensureSquadIds(state);
   // Round 132: and a save made before the world had a clock gets put on one.
@@ -15173,7 +15173,7 @@ export function loadCareer(): CareerState | null {
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
     ensureRoles(parsed);
-    /* Round 538: FIRST, because every repair below and every screen above reads
+    /* Round 567: FIRST, because every repair below and every screen above reads
        the squad by id, and a career carrying two men under one id has been
        answering those lookups with the wrong player. Registered in BOTH
        loadCareer and playNextEntry for Round 127's reason: a screen can be

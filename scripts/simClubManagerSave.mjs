@@ -1,5 +1,5 @@
 /*
- * Round 538 harness: buying a player leaves exactly one of him, and leaving the
+ * Round 567 harness: buying a player leaves exactly one of him, and leaving the
  * site does not cost a career.
  *
  * Two live player reports, filed 2026-09-13 through the site's own report
@@ -27,7 +27,7 @@
  * every lookup in the engine is find(p => p.id === id), which resolves to the
  * first of the pair: the second man cannot be put in the XI, a set piece job
  * handed to him lands on the first, and selling either one runs
- * squad.filter(x => x.id !== playerId) and takes both off the books. Round 538
+ * squad.filter(x => x.id !== playerId) and takes both off the books. Round 567
  * makes the id unique where it is handed out (freeSquadId, withUniqueIds) and
  * repairs a save that already carries a pair (ensureSquadIds), rather than
  * filtering afterwards, which would have to throw one real footballer away.
@@ -63,7 +63,7 @@
  *
  * Negative controls (house rule: prove the checks can fail):
  *   CM_SAVE_CONTROL=dupeid       rewrites copies of the engine and the roster
- *                                data with Round 538 taken back out: the bare
+ *                                data with Round 567 taken back out: the bare
  *                                template literal id in completeSigning, no
  *                                withUniqueIds in ensureSquadCoverage, no
  *                                ensureSquadIds in loadCareer or playNextEntry,
@@ -71,7 +71,7 @@
  *                                must then find duplicate ids on the signing
  *                                paths AND on a club's day one squad.
  *   CM_SAVE_CONTROL=unloadwrite  writes a copy of the hook with markMinute back
- *                                to its pre Round 538 line (setCareer only, no
+ *                                to its pre Round 567 line (setCareer only, no
  *                                write) and points the test file at it through
  *                                CM_HOOK. The "leaving the site mid match" test
  *                                must then go red with the save at 0.
@@ -129,7 +129,7 @@ const ENGINE_PATH = `${ROOT_URL}/src/lib/clubManager.ts`;
 let enginePath = ENGINE_PATH;
 let rosterAlias = '';
 
-/* ---------- the dupeid control: Round 538 taken back out ---------- */
+/* ---------- the dupeid control: Round 567 taken back out ---------- */
 const NEW_ID = "    id: freeSquadId(career.squad, `sign-${slug(mp.name)}-s${career.season}`),";
 const OLD_ID = "    id: `sign-${slug(mp.name)}-s${career.season}`,";
 const NEW_COVER = '  return withUniqueIds(out);\n';
@@ -430,7 +430,7 @@ console.log('4) The hook and the viewer, rendered: the save after every transiti
 /* ================================================================== */
 const TEST = 'src/test/clubManagerSave.test.tsx';
 
-/* The pre Round 538 write path, put back in full: markMinute through setCareer
+/* The pre Round 567 write path, put back in full: markMinute through setCareer
    alone, and no hide-and-unload handler at all. */
 const NEW_MARK = [
   '  const markMinute = useCallback((minute: number) => {',
@@ -459,9 +459,9 @@ if (CONTROL === 'unloadwrite') {
   let hook = readLF(path.join(ROOT, 'src/hooks/useClubManager.ts'));
   hook = swap(hook, NEW_MARK, OLD_MARK, 'useClubManager.ts (markMinute)');
   const at = hook.indexOf(HANDLER_HEAD);
-  if (at < 0) abort('control cannot run: useClubManager.ts carries no Round 538 hide-and-unload handler to remove');
+  if (at < 0) abort('control cannot run: useClubManager.ts carries no Round 567 hide-and-unload handler to remove');
   const end = hook.indexOf(HANDLER_TAIL, at);
-  if (end < 0) abort('control cannot run: the Round 538 handler does not end where this control expects');
+  if (end < 0) abort('control cannot run: the Round 567 handler does not end where this control expects');
   hook = hook.slice(0, at) + hook.slice(end + HANDLER_TAIL.length);
   if (hook.includes('saveCareer(next)')) abort('control cannot run: the direct write is still in the rewritten hook');
   /* Under dist, inside the project root: vite refuses to load a module from
@@ -472,7 +472,7 @@ if (CONTROL === 'unloadwrite') {
   const hookCopy = path.join(hookCopyDir, 'useClubManager.control.ts');
   fs.writeFileSync(hookCopy, hook);
   env.CM_HOOK = hookCopy.replaceAll('\\', '/');
-  console.log('   NEGATIVE CONTROL ON: the test runs against a copy of the hook with the Round 538 write removed');
+  console.log('   NEGATIVE CONTROL ON: the test runs against a copy of the hook with the Round 567 write removed');
 }
 
 let run;
@@ -508,7 +508,7 @@ if (CONTROL === 'unloadwrite') {
   const viewerGreen = /[\u2713v].*leaving only the viewer/.test(out);
   console.log('   control: the leaving-the-site check went red ' + leftRed + ', the viewer-only check is still green ' + viewerGreen);
   if (!leftRed) fail('the control did not make "leaving the site mid match keeps the clock" fail, so that check is unproven');
-  else fail('CONTROL FIRED as it should: with the Round 538 write removed the save stays at minute 0 and the half is replayed');
+  else fail('CONTROL FIRED as it should: with the Round 567 write removed the save stays at minute 0 and the half is replayed');
   if (run.status === 0) fail('the control left the whole file green');
 } else if (run.status !== 0) {
   fail('the rendered tests failed (vitest exit ' + run.status + '); the output is above');

@@ -30,6 +30,22 @@ tablet lane's 537 to 540, and the Conquest work landed as 564.
 - **564: the Conquest browser sweep goes from 93 checks with 18 red to 113 with 0.** Eight reds
   were the harness driving a control that was off screen and out of reach, so it was measuring
   nothing and calling the feature broken. Two were real site defects and are fixed.
+- **566: rank 7, six of eight tournament squads filed under the wrong nation.** Known since
+  2026-05-29 and still wrong. Re-keyed and fenced; `docs/data/soccer-data.json` is read by
+  nothing shipped, and `simTournamentWinners` now fails if that stops being true.
+- **567: both of the newest player reports, and they did not share a cause.** The duplicate
+  signings were squad ids built from a name fold that is not injective (Éderson and Ederson
+  collapse to one id, so selling one removed both). The lost save was a `setCareer` from a
+  `pagehide` listener, which never commits on a tree React is tearing down, so the persist
+  effect never ran. Round 543's clock handler had the same flaw and had never worked for the
+  case its own comment named. Fenced by `scripts/simClubManagerSave.mjs` plus six tests driving
+  the real hook and the real viewer; both controls fire.
+
+**Open and flagged, same class as 567's duplicate:** six engines (`cfbDynasty`, `cbbDynasty`,
+`frontOffice`, `mlbFrontOffice`, `nbaFrontOffice`, `nhlFrontOffice`) mint player ids from a
+module-scope counter while persisting the roster, so a reload restarts the counter and a new
+player can take an id a saved player holds. `wonderkidFactory` keeps its counter in the save and
+is the shape to copy.
 
 **A dead end recorded so nobody repeats it:** `public.mma_fighter_careers` looks exactly like the
 second source rank 8 still needs and is a half captured scrape. 15 of its 86 rows claim more

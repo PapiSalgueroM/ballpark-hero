@@ -125,7 +125,7 @@ export function useClubManager() {
     if (career) saveCareer(career);
   }, [career]);
 
-  /* ---------- Round 538: and persist it when the page goes away ---------- */
+  /* ---------- Round 567: and persist it when the page goes away ---------- */
 
   /*
    * The effect above is the ordinary write and it is reliable for everything
@@ -206,7 +206,7 @@ export function useClubManager() {
 
   const startNew = useCallback(() => {
     clearCareer();
-    /* Round 538: synchronously, not on the next commit. The handler above
+    /* Round 567: synchronously, not on the next commit. The handler above
        writes whatever this ref holds when the page goes, and a player who
        taps Start Fresh and then leaves before React has re-rendered must not
        have the career he just deleted written back over the empty slot. */
@@ -682,7 +682,7 @@ export function useClubManager() {
      every career write goes to localStorage. The engine hands back the same
      object when nothing moves, so React skips the write.
 
-     Round 538: and the write happens HERE rather than in the persist effect,
+     Round 567: and the write happens HERE rather than in the persist effect,
      because three of the four moments this is called are moments the page is
      going away (a pagehide, a tab hidden, the viewer's own unmount cleanup)
      and a state update made then never commits. The state update is still
