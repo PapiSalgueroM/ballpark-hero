@@ -36,10 +36,24 @@
  *      near empty, which is what a render throw looks like from outside.
  *   5. No console error and no page error across the whole walk.
  *
- * IT IS DETERMINISTIC ON PURPOSE. Math.random is replaced before any page
- * code runs with a seeded generator, so a run is reproducible and a failure
- * can be re-examined instead of being shrugged off as variance. SEED moves
- * it. Without that, "the walk did not qualify this time" would be untestable.
+ * IT IS DETERMINISTIC ON PURPOSE, AND IT TRIES MORE THAN ONE CAREER.
+ * Math.random is replaced before any page code runs with a seeded generator,
+ * so a run is reproducible and a failure can be re-examined instead of being
+ * shrugged off as variance.
+ *
+ * But one pinned seed would be a coin toss. Measured across four seeds on
+ * 2026-09-14, three reached a qualified campaign (in 2, 47 and 79 steps) and
+ * one played a full career to retirement without ever qualifying. That is the
+ * GAME being variable, not the site being broken: a career that never reaches
+ * a European club is a real career. Pinning a single seed would make this
+ * harness go red on a non-bug the first time an engine change shifted the
+ * seeded trajectory, which is the mistake simAwardRaces made with three
+ * seasons and a max until Round 567 rewrote it. So the question asked is "can
+ * the walk reach a campaign AT ALL", over a deterministic sequence of seeds
+ * derived from SEED by a fixed stride, and every attempt is named in the
+ * output so a run that needed three careers cannot read as one that needed
+ * one. Verified on 2026-09-14: SEED=20260101 fails its first career at 186
+ * steps and reaches one on the second at 115.
  *
  * WHAT IT DOES NOT DO. It does not judge the balance of a career, which is
  * what the sim harnesses are for, and it does not walk every screen. It plays
@@ -149,42 +163,53 @@ server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mj
 await new Promise(r => setTimeout(r, 1200));
 
 const browser = await chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
-const ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
-
-/* Seed the page's randomness before any app code runs, and take the cookie
-   banner out of the way so it cannot sit over a control. */
-await ctx.addInitScript(([seed]) => {
-  let t = seed >>> 0;
-  Math.random = () => {
-    t = (t + 0x6D2B79F5) >>> 0;
-    let x = Math.imul(t ^ (t >>> 15), 1 | t);
-    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
-    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
-  };
-  try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* private mode */ }
-  try { localStorage.removeItem('soccerCareerSave'); } catch { /* private mode */ }
-}, [SEED]);
-
-const page = await ctx.newPage();
 const consoleErrors = [];
 const pageErrors = [];
-page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
-page.on('pageerror', e => pageErrors.push(String(e).slice(0, 200)));
 
-if (CONTROL === 'noagg') {
-  await page.route('**/assets/SoccerCareer-*.js', async route => {
-    const res = await route.fetch();
-    const body = await res.text();
-    const swapped = rewriteAgg(body);
-    if (swapped && swapped !== body) { controlSwaps += 1; await route.fulfill({ response: res, body: swapped }); return; }
-    await route.fulfill({ response: res, body });
-  });
+/* MORE THAN ONE SEED, and this is not the check going soft.
+   Measured on 2026-09-14 across four seeds: three reached a qualified
+   campaign (in 2, 47 and 79 steps) and one played a full career to
+   retirement without ever qualifying. That is the GAME being variable, not
+   the site being broken: a career that never reaches a European club is a
+   real career. Pinning one seed would make this harness a coin toss that
+   goes red on a non-bug the first time an engine change shifts the seeded
+   trajectory, which is exactly the mistake simAwardRaces made with three
+   seasons and a max. So the question it asks is "can the walk reach a
+   campaign at all", over a deterministic sequence of seeds derived from
+   SEED, and it says how many it needed. */
+const ATTEMPTS = Number(process.env.ATTEMPTS || (CONTROL === 'noreach' ? 1 : 4));
+
+async function newSeededContext(seed) {
+  const ctx = await browser.newContext({ viewport: { width: 430, height: 900 }, ignoreHTTPSErrors: true });
+  await ctx.addInitScript(([s]) => {
+    let t = s >>> 0;
+    Math.random = () => {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let x = Math.imul(t ^ (t >>> 15), 1 | t);
+      x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+    try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* private mode */ }
+    try { localStorage.removeItem('soccerCareerSave'); } catch { /* private mode */ }
+  }, [seed]);
+
+  const page = await ctx.newPage();
+  page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
+  page.on('pageerror', e => pageErrors.push(String(e).slice(0, 200)));
+
+  if (CONTROL === 'noagg') {
+    await page.route('**/assets/SoccerCareer-*.js', async route => {
+      const res = await route.fetch();
+      const body = await res.text();
+      const swapped = rewriteAgg(body);
+      if (swapped && swapped !== body) { controlSwaps += 1; await route.fulfill({ response: res, body: swapped }); return; }
+      await route.fulfill({ response: res, body });
+    });
+  }
+  return { ctx, page };
 }
 
-console.log(`playSoccerCareer: seed ${SEED}, era "${ERA}", up to ${MAX_STEPS} steps${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
-
-await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 30000 });
-await page.waitForSelector('input[placeholder*="player name"]', { timeout: 20000 });
+console.log(`playSoccerCareer: base seed ${SEED}, era "${ERA}", up to ${ATTEMPTS} career(s) of ${MAX_STEPS} steps${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
 
 /* ------------------------------------------------------------------ *
  * Character creation. Every one of these is required before the game
@@ -192,7 +217,7 @@ await page.waitForSelector('input[placeholder*="player name"]', { timeout: 20000
  * selects AND a rolled potential are present, which is why a generic
  * sweep never got past this screen.
  * ------------------------------------------------------------------ */
-async function pickCombo(triggerText, wanted) {
+async function pickCombo(page, triggerText, wanted) {
   const trigger = page.locator('[role="combobox"]', { hasText: triggerText }).first();
   await trigger.click();
   await page.waitForSelector('[role="option"]', { timeout: 8000 });
@@ -208,28 +233,23 @@ async function pickCombo(triggerText, wanted) {
   return chosen;
 }
 
-await page.fill('input[placeholder*="player name"]', 'Harness Tester');
-const nat = await pickCombo('Choose nationality', 'England');
-const pos = await pickCombo('Choose position', 'Striker');
-const era = await pickCombo('Choose era', ERA);
-say(`created ${nat} / ${pos} / ${era}`);
-
-await page.getByRole('button', { name: /Generate Starting Potential/ }).click();
-await page.waitForTimeout(2600);
-const beginBtn = page.getByRole('button', { name: /Begin Career/ });
-await beginBtn.click();
-await page.waitForTimeout(1800);
-
-const started = await page.evaluate(() => {
-  const raw = localStorage.getItem('soccerCareerSave');
-  return raw ? JSON.parse(raw).phase : null;
-});
-if (!started) {
-  check('0. the career started', false, 'Begin Career left no save, so nothing below could run');
-  await browser.close();
-  report();
+async function createCareer(page) {
+  await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForSelector('input[placeholder*="player name"]', { timeout: 20000 });
+  await page.fill('input[placeholder*="player name"]', 'Harness Tester');
+  const nat = await pickCombo(page, 'Choose nationality', 'England');
+  const pos = await pickCombo(page, 'Choose position', 'Striker');
+  const era = await pickCombo(page, 'Choose era', ERA);
+  say(`created ${nat} / ${pos} / ${era}`);
+  await page.getByRole('button', { name: /Generate Starting Potential/ }).click();
+  await page.waitForTimeout(2600);
+  await page.getByRole('button', { name: /Begin Career/ }).click();
+  await page.waitForTimeout(1800);
+  return page.evaluate(() => {
+    const raw = localStorage.getItem('soccerCareerSave');
+    return raw ? JSON.parse(raw).phase : null;
+  });
 }
-say(`career started in phase ${started}`);
 
 /* ------------------------------------------------------------------ *
  * The advance loop. The game is a chain of decision phases, so the walk
@@ -260,7 +280,7 @@ const ACTIONS = [
 ];
 const SKIP = /Retire|New Career|Report a bug|Light mode|Cookie|Sign up|^Back$|Full attributes|Essential only|^Accept$|^⏸$|^🏋️$|^📱/;
 
-async function stepOnce() {
+async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {
     const skip = new RegExp(skipSrc);
     const save = () => { try { return JSON.parse(localStorage.getItem('soccerCareerSave') || '{}'); } catch { return {}; } };
@@ -286,37 +306,60 @@ async function stepOnce() {
   }, [ACTIONS, SKIP.source]);
 }
 
-const trail = [];
 const stuckPhases = new Set();
-let reached = false;
-let steps = 0;
-for (; steps < MAX_STEPS; steps++) {
-  const r = await stepOnce();
-  trail.push(r);
-  if (r.phase === 'transfer_window') say(`window @${r.age}: chose "${r.action}" from [${(r.options || []).join(' / ')}]`);
-  if (r.action === 'STUCK') { stuckPhases.add(r.phase || 'unknown'); if (stuckPhases.size > 3) break; }
-  if (r.retired) { say('the career retired before a campaign'); break; }
-  if (r.qualified && r.cardMounted) { reached = true; break; }
-}
-const phasesSeen = [...new Set(trail.map(t => t.phase).filter(Boolean))];
-say(`${steps} steps across ${phasesSeen.length} phases: ${phasesSeen.join(', ')}`);
 
-/* If the campaign exists but the card is not mounted (some phases do not
-   render it), keep advancing a little to bring it on screen. */
-if (!reached) {
-  for (let extra = 0; extra < 12 && steps < MAX_STEPS; extra++, steps++) {
-    const r = await stepOnce();
+async function playOneCareer(seed) {
+  const { ctx, page } = await newSeededContext(seed);
+  const started = await createCareer(page);
+  if (!started) return { reached: false, steps: 0, phasesSeen: [], noStart: true, ctx, page };
+  say(`career started in phase ${started}`);
+  const trail = [];
+  let reached = false;
+  let steps = 0;
+  for (; steps < MAX_STEPS; steps++) {
+    const r = await stepOnce(page);
     trail.push(r);
+    if (r.phase === 'transfer_window') say(`window @${r.age}: chose "${r.action}" from [${(r.options || []).join(' / ')}]`);
+    if (r.action === 'STUCK') { stuckPhases.add(r.phase || 'unknown'); if (stuckPhases.size > 3) break; }
+    if (r.retired) { say('the career retired before a campaign'); break; }
     if (r.qualified && r.cardMounted) { reached = true; break; }
-    if (r.retired || r.action === 'STUCK') break;
   }
+  /* The campaign can exist while the card is not mounted, because some
+     phases do not render it. Advance a little to bring it on screen. */
+  if (!reached) {
+    for (let extra = 0; extra < 12 && steps < MAX_STEPS; extra++, steps++) {
+      const r = await stepOnce(page);
+      trail.push(r);
+      if (r.qualified && r.cardMounted) { reached = true; break; }
+      if (r.retired || r.action === 'STUCK') break;
+    }
+  }
+  const phasesSeen = [...new Set(trail.map(t => t.phase).filter(Boolean))];
+  say(`${steps} steps across ${phasesSeen.length} phases: ${phasesSeen.join(', ')}`);
+  return { reached, steps, phasesSeen, ctx, page, seed };
 }
+
+let run = null;
+const tried = [];
+for (let i = 0; i < ATTEMPTS; i++) {
+  const seed = (SEED + i * 7919) >>> 0;   // a fixed stride, so the sequence is deterministic
+  say(`career attempt ${i + 1} of ${ATTEMPTS}, seed ${seed}`);
+  const r = await playOneCareer(seed);
+  tried.push(`${seed}:${r.reached ? `reached in ${r.steps}` : `${r.steps} steps, no campaign`}`);
+  /* Keep the last page alive either way, so the health checks below can still
+     say whether the walk failed because the page broke. */
+  if (run && run.ctx) await run.ctx.close();
+  run = r;
+  if (r.reached) break;
+}
+const reached = !!(run && run.reached);
+const page = run ? run.page : null;
 
 console.log('\nThe walk');
 check('1. the walk reached a qualified Champions League campaign', reached,
   reached
-    ? `after ${steps} steps, ${phasesSeen.length} distinct phases driven`
-    : `${steps} steps and no campaign on screen. This is a coverage failure, not a pass: the card below was never checked.`);
+    ? `seed ${run.seed} after ${run.steps} steps, ${run.phasesSeen.length} distinct phases driven (attempts: ${tried.join('; ')})`
+    : `no campaign on screen in ${tried.length} career(s): ${tried.join('; ')}. This is a coverage failure, not a pass: the card below was never checked.`);
 
 /* ------------------------------------------------------------------ *
  * The card. The save says where to look, the DOM says what a player saw.
