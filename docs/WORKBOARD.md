@@ -153,6 +153,19 @@ deciding two games. Caps are two source verified on 70 rows and marked with a na
 structurally broken, including two people who were in the pool twice. Guess The College has all 70
 schools verified with the counts moved out of prose into typed fields a harness can pin, and the
 acceptance rates dropped because no publisher stated a year for them.
+**2026-09-14, desktop lane, SECOND block claimed: 580 to 599, for the tycoon merge arc.** The
+560 to 568 numbers below are spent and 569 is the last of that block. The owner's Stadium
+Tycoon plus Wonderkid Factory merge (`docs/TWEAKS-2026-08-28.md`, "weeks of work") is the one
+row on his list still fully OPEN, so it gets a block of its own: 569 is the design contract and
+round one, 580 onward are the rounds after it. I have skipped 570 to 579 on purpose, because the
+note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
+numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
+
+**Also corrected 2026-09-14:** the "More animation across every sim" row in
+`docs/PROJECT-STATE.md` still read OPEN. It is DONE for its inventory: all ten ranked moments in
+`docs/audits/animation-inventory-2026-09-11.md` are in the code (checked by grep, not trusted
+from the Round 530 contract) and `CountUp` has zero importers.
+
 **2026-09-13, desktop lane, new block claimed: 560 to 569.** My 529 to 536 block was spent and
 551 onward had already been handed to the tablet lane below, so rather than take 551 and collide
 I am starting at 560 and leaving 551 to 559 to that lane. If you need more than nine, take 570
