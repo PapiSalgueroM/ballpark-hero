@@ -170,7 +170,42 @@ onward and say so here. First one landed:
   reproduces the mistake that cost the first pass of this round, where an unbounded parse read
   `clubManager.ts`'s ERA league definitions as current membership and "proved" Leicester are a
   2026-27 Premier League club.
-- **Correction to the queue in the same round.** Ranks 4 and 9 were listed as open and were
+- **561: the two UFC tables are cross checked.** `ufcFighters.ts` and `ufcChainData.ts` each
+  carry a fighter's record and weight class and nothing compared them, so the site could answer
+  the same question two ways. `scripts/simUfcFacts.mjs` compares all 62 shared fighters and pins
+  what each row can compute about itself (a record string is the wins, losses and draws already
+  typed three fields along). All 176 record strings agreed. The four weight class disagreements
+  are Couture, Edgar, Figueiredo and Cejudo, and none is an error: the field means the division
+  the fighter is guessed as in one file and the division whose CHAIN he belongs to in the other,
+  the chain mode filters the graph by it, and all four fought in both. Declared, not "fixed".
+- **562: the Teammates game's 50 claims get a harness.** `scripts/simTeammatesPairs.mjs`
+  adjudicates 10 of the 16 soccer rows against `soccer_player_club_stints` and confirms each
+  one's club. The asymmetry is the design: a shared club refutes a "never teammates" row, an
+  absent one refutes nothing, so the adjudicated count is ratcheted at 10 rather than letting
+  "unadjudicated" become a free pass. Two of my own first drafts were wrong and are written into
+  the file: it demanded the word "never" in every false row and flagged two rows that explain
+  themselves fine without it, and it joined on `player_name`, which reported Zlatan and Vinicius
+  as having no career at all. It matches on `name_folded` now with the fold LIFTED from the
+  shipped edge function, which is the rule `simSoccerStintNameFold` already states.
+- **563: a Champions League tie now says it is one tie.** A player sent "Idea: ADD 2nd legs in
+  ucl" through the footer on 2026-09-13. They have been there since Round 546 and I proved the
+  flagship's are live in the published chunk before touching anything. The card just never said
+  so: the aggregate binding two legs into one tie printed only when away goals, extra time or
+  penalties settled it, so 36,616 of 44,540 ties showed as two loose scorelines. Fenced by
+  `simSoccerCareerUcl` section 6 with a new `noagg` control. **Not seen on screen**, see below.
+- **564: the Conquest browser findings, and the harness was measuring nothing.** Eight of the
+  eighteen reds were the harness: the timeline input sat at y=-74.9 with `elementFromPoint`
+  returning null, so the drag drove nothing and the feature was fine. A shared
+  `bringIntoReach` now ASSERTS a control is in the viewport and answers `elementFromPoint`
+  before driving it, so measuring nothing goes red. Two were real and on the site: `Modes` at
+  25px against the 30px tap floor (on two routes, not five, because only `/conquest` and
+  `/conquest-nba` have a mode chooser), and the "Wiped out but still dangerous" line sitting
+  directly above the step at the instant the recap replaced the player, which pushed the step
+  down 95px at 390 wide. And the "one colour left" check was simply wrong about the rule: the
+  season ends in a playoff of the eight biggest empires at 13 rounds of a 40 budget, so one
+  colour is what that rule produces. Replaced with two exact equalities. **113 checks, 0 failed,
+  was 93 of 18.**
+- **Correction to the queue in the same round as 560.** Ranks 4 and 9 were listed as open and were
   already done (Round 475's Transfer Path season key rule, fenced by `simTransferPathSeasons`;
   the era UCL head to head, fenced by `simClubManagerEraUcl`, which measures 28 of 89 level
   groups reordered and 10 group winners changed). Both rows now say DONE with that evidence, so
@@ -178,6 +213,17 @@ onward and say so here. First one landed:
   `src/lib/soccerCareerEngine.ts` makes the same kind of claim and disagrees the same way, but
   its clubs carry a `tier` that decides who signs you, so moving West Ham is a career world
   decision rather than a stale lookup. It needs a call, not a sweep.
+
+**THE NEXT ROUND IN THIS BLOCK, 565, and it is the biggest verification hole on the site.**
+Soccer Career is about one in five pageviews and **no browser walk has ever played it**. Club
+Manager got one in Round 550 and it immediately found real defects. Round 563 shipped a change to
+the flagship's season result card that tsc, the build and a 42,390 tie engine fence all approve
+of and that nobody has seen render, because the card only appears for a career that reached a
+Champions League season and nothing automated gets there. I tried by hand today and could not
+even get a save written from the creation screen inside a reasonable time, which is itself worth
+knowing. `scripts/playSoccerCareer.mjs`, on the shape of `playClubManager.mjs`: create a player,
+get through the academy, reach a season with European football, and assert the result card
+renders both legs and the aggregate. Until it exists, treat 563's screen claims as unverified.
 
 **Next free number for your lane is still 551.** My old block is spent. If you pick up data work,
 `docs/audits/data-provenance-inventory-2026-09-11.md` is the ranked queue and rows 4, 7, 8, 9, 11

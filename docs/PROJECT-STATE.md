@@ -1,5 +1,40 @@
 # Project state
 
+## On main, 2026-09-13, NOT YET PUBLISHED: desktop Rounds 560 to 564
+
+**Read this before the 2026-09-12 section below, which describes the last PUBLISHED state.**
+`origin/main` has moved past the deployed build and `deploy_project` has NOT been called for any
+of the following. The published site is still the `751077a0` build described in the next section.
+
+The desktop lane took a new block, **560 to 569**, because its old 529 to 536 was spent and 551
+onward had already been handed to the tablet lane. Two of these rounds were renumbered off a
+collision after the fact: what this lane's agents called Rounds 538 and 539 collided with the
+tablet lane's 537 to 540, and the Conquest work landed as 564.
+
+- **560: Footle's club to league maps re-based on 2026-27, and fenced.** The site was telling a
+  Club Manager player that West Ham are a Championship club and a Footle player that West Ham are
+  a Premier League club on the same afternoon, because `CLUB_TO_LEAGUE` and `INSANE_CLUB_LEAGUE`
+  were written for 2025/26 and never moved. Hull City had no entry at all, so their 17 rows in the
+  live pool read "Other". Both maps now derive from `REAL_LEAGUES`, `scripts/simFootleLeagues.mjs`
+  fails if they disagree again, and `CLUB_TO_LEAGUE` names all 20 Premier League and all 24
+  Championship clubs so a promotion is a move between two blocks. Leicester is the one club left
+  at "Other": `REAL_LEAGUES` has them in no 2026-27 competition and does not say where they went.
+- **561 and 562: rank 8 of the provenance inventory gets its harnesses.** `simUfcFacts` cross
+  checks the two UFC tables (all 62 shared fighters agree on record; the four weight class
+  disagreements are not errors, the field means two different things). `simTeammatesPairs`
+  adjudicates 10 of 16 soccer rows against `soccer_player_club_stints`. **Neither means verified:**
+  none of those 226 rows is two source verified and both headers say so.
+- **563: the Champions League tie says it is one tie.** From a player's footer report today,
+  "Idea: ADD 2nd legs in ucl", about a feature that shipped in Round 546. **Not seen on screen**,
+  see the workboard's note on Round 565.
+- **564: the Conquest browser sweep goes from 93 checks with 18 red to 113 with 0.** Eight reds
+  were the harness driving a control that was off screen and out of reach, so it was measuring
+  nothing and calling the feature broken. Two were real site defects and are fixed.
+
+**A dead end recorded so nobody repeats it:** `public.mma_fighter_careers` looks exactly like the
+second source rank 8 still needs and is a half captured scrape. 15 of its 86 rows claim more
+finishes than wins, and it holds Conor McGregor at 1-0 and Stipe Miocic at 5-5. Nothing reads it.
+
 ## Live as of 2026-09-12 night: Round 535, and two games that had been decided by numbers nobody checked
 
 **`origin/main` is `751077a0` and douknowball.com is serving it.** Deployment

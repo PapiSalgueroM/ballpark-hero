@@ -675,7 +675,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
         )}
       </div>
 
-      {/* Round 539: this sits UNDER the step, and it used to sit over it.
+      {/* Round 564: this sits UNDER the step, and it used to sit over it.
           It is gated on the scenes being done, so at the moment the recap
           replaced the player it was inserted directly above the step, which
           pushed the step down by its own height plus the gap. Measured on the

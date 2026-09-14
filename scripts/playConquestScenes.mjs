@@ -73,7 +73,7 @@ const CONTROL = process.env.CONQUEST_SCENES_CONTROL || '';
 const V = !!process.env.VERBOSE;
 const ROUTES = (process.env.ROUTES || '/conquest,/soccer-conquest').split(',').map(s => s.trim()).filter(Boolean);
 const WIDTHS = (process.env.WIDTHS || '390,430').split(',').map(Number).filter(Boolean);
-/* A season is regularRounds + 3. Measured on the built site in Round 539:
+/* A season is regularRounds + 3. Measured on the built site in Round 564:
    /conquest takes 21 rounds and /soccer-conquest takes 13, so 40 is roughly
    double the longest season here and nothing in section 6 is budget bound. */
 const MAX_ROUNDS = 40;
@@ -201,7 +201,7 @@ const shortButtons = page => page.evaluate(() => {
 /**
  * Put a control under the mouse and report whether it is really there.
  *
- * Round 539: page.mouse works in VIEWPORT coordinates and boundingBox() hands
+ * Round 564: page.mouse works in VIEWPORT coordinates and boundingBox() hands
  * back a viewport rectangle that is happily negative for anything above the
  * fold, so a box read without scrolling first can send every press to nothing
  * at all. Playwright's own click() scrolls for you, but it does it INSIDE the
@@ -310,7 +310,7 @@ async function walk(route, width) {
   say('pressed Play');
   /* The reveal ref may move the page once, at Play. From here on it must not. */
   await page.waitForTimeout(700);
-  /* Round 539: where the step sits in the DOCUMENT is the signal, not
+  /* Round 564: where the step sits in the DOCUMENT is the signal, not
      window.scrollY. The two come apart the moment the game inserts anything
      above the step: the browser then moves scrollY on purpose to hold the step
      still, and a scrollY check reads that compensation as a jump. Document
@@ -383,7 +383,7 @@ async function walk(route, width) {
   const stepAtRecap = await boxOf('[data-conquest-recap]');
   const scrollAtRecap = await page.evaluate(() => window.scrollY);
   check(`4. Skip ends the round on the recap card with the player gone (${tag})`, hadSkip && recapUp && playerGone, `${hadSkip ? 'skip pressed' : 'NO SKIP BUTTON'}, recap ${recapUp ? 'up' : 'missing'}, player ${playerGone ? 'gone' : 'still up'}`);
-  /* Round 539: this used to compare window.scrollY, and that was the wrong
+  /* Round 564: this used to compare window.scrollY, and that was the wrong
      instrument in both directions. It called a jump on a transition where
      nothing on screen moved: the wiped-out line used to be inserted above the
      step the moment the scenes ended, and the browser moved scrollY by exactly
@@ -408,7 +408,7 @@ async function walk(route, width) {
   const lines = await page.locator('[data-recap-line]').count();
   check(`4. the recap lists the round's games (${tag})`, lines > 0, `${lines} lines`);
 
-  /* Round 539: the map at the recap the playoff was seeded from. The engine
+  /* Round 564: the map at the recap the playoff was seeded from. The engine
      seeds the bracket with the eight biggest empires the moment the last
      regular round settles, so the first recap whose round line is a playoff
      label rather than "<noun> N of M" is the one holding those eight. */
@@ -424,7 +424,7 @@ async function walk(route, width) {
   /* ---- 5) the timeline ---- */
   console.log('5) The timeline scrubs the map back to Start and returns on release');
   const slider = page.locator('input[data-timeline]').first();
-  /* Round 539: the very first run of this harness measured this input at y=-75
+  /* Round 564: the very first run of this harness measured this input at y=-75
      in an 844 tall viewport, because section 4 leaves the page down at the
      recap, so document.elementFromPoint at its centre was null and every press
      and move landed on nothing at all. The three checks under it then read a
@@ -498,7 +498,7 @@ async function walk(route, width) {
   check(`6. the season reached the Conquest Complete banner (${tag})`, banner, `${rounds} rounds played`);
   check(`6. the banner carries the crown and the four season records (${tag})`, crown === 1 && recordRows === 4, `crown ${crown}, records ${recordRows}`);
   check(`6. the map and the standings agree on who holds land (${tag})`, finalOwners === stripHolding, `${finalOwners} colours painted, the strip says ${stripHolding}`);
-  /* Round 539: this asked for one colour, which is an NFL number, not the rule.
+  /* Round 564: this asked for one colour, which is an NFL number, not the rule.
      The rule is that the eight biggest empires enter a knockout and one club
      comes out of it holding all eight, so the map ends with the champion plus
      whoever the bracket never reached. On /conquest only two to four clubs
