@@ -686,7 +686,8 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
           step dropped 95px on screen with window.scrollY unchanged. Both are
           the same bug and neither is something to leave to a heuristic, so the
           line moved below the step, where growing costs nobody their place.
-          playConquestScenes section 4 measures the step's screen position. */}
+          playConquestScenes section 4 measures where the step sits in the
+          document, which is where this either shows up or does not. */}
       {landless.length > 0 && !sceneActive && (
         <p className="text-center text-[11px] text-muted-foreground">
           🏴 Wiped out but still dangerous: {landless.length > 12
