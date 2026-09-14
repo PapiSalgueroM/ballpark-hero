@@ -153,7 +153,33 @@ deciding two games. Caps are two source verified on 70 rows and marked with a na
 structurally broken, including two people who were in the pool twice. Guess The College has all 70
 schools verified with the counts moved out of prose into typed fields a harness can pin, and the
 acceptance rates dropped because no publisher stated a year for them.
-**Next free number is still 551 and it is yours.** My block is spent. If you pick up data work,
+**2026-09-13, desktop lane, new block claimed: 560 to 569.** My 529 to 536 block was spent and
+551 onward had already been handed to the tablet lane below, so rather than take 551 and collide
+I am starting at 560 and leaving 551 to 559 to that lane. If you need more than nine, take 570
+onward and say so here. First one landed:
+
+- **560: Footle's club to league maps re-based on 2026-27, and fenced.** Rank 13 of
+  `docs/audits/data-provenance-inventory-2026-09-11.md`, confirmed live before touching it:
+  `CLUB_TO_LEAGUE` in `src/data/footleEnrichment.ts` and `INSANE_CLUB_LEAGUE` in
+  `src/lib/fetchFootlePlayerPool.ts` were both written for 2025/26 and never moved, so the site
+  was telling a Club Manager player that West Ham are a Championship club and a Footle player
+  that West Ham are a Premier League club, on the same afternoon. Hull City had no entry at all,
+  so their 17 rows in the live 2026 pool read "Other". Both maps now derive from `REAL_LEAGUES`,
+  `scripts/simFootleLeagues.mjs` fails if they ever disagree again, and its three controls
+  (`relegated`, `missing`, `erapool`) all fire. `erapool` is the one worth knowing about: it
+  reproduces the mistake that cost the first pass of this round, where an unbounded parse read
+  `clubManager.ts`'s ERA league definitions as current membership and "proved" Leicester are a
+  2026-27 Premier League club.
+- **Correction to the queue in the same round.** Ranks 4 and 9 were listed as open and were
+  already done (Round 475's Transfer Path season key rule, fenced by `simTransferPathSeasons`;
+  the era UCL head to head, fenced by `simClubManagerEraUcl`, which measures 28 of 89 level
+  groups reordered and 10 group winners changed). Both rows now say DONE with that evidence, so
+  nobody is sent to redo them. Rank 15 is new and deliberately NOT fixed: the 190 club world in
+  `src/lib/soccerCareerEngine.ts` makes the same kind of claim and disagrees the same way, but
+  its clubs carry a `tier` that decides who signs you, so moving West Ham is a career world
+  decision rather than a stale lookup. It needs a call, not a sweep.
+
+**Next free number for your lane is still 551.** My old block is spent. If you pick up data work,
 `docs/audits/data-provenance-inventory-2026-09-11.md` is the ranked queue and rows 4, 7, 8, 9, 11
 and 12 are open, plus the two items your own handoff left me that I have not reached: the real
 2025-26 final standings for season one's Champions League field, and the 332 roster rows in

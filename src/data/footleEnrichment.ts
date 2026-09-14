@@ -271,13 +271,33 @@ export const footleEnrichment: Record<string, { kitNumber: number; league: Leagu
    Southampton are EFL Championship rows, and clubs whose current division
    is genuinely uncertain are left out on purpose, because an absent mapping
    now falls to 'Other' rather than to a false Premier League. */
+/* Round 560: re-based on the 2026-27 season. The entries above were written
+   for 2025/26 and were never moved when the season turned, so on 2026-09-13
+   this map was telling players that West Ham, Wolves and Burnley are Premier
+   League clubs, that Coventry and Ipswich are Championship clubs, and that
+   Girona, Mallorca, Oviedo, Verona and Nantes are still top flight. Hull City
+   had no entry at all, so their 17 rows in the live pool read 'Other'.
+
+   The memberships now come from REAL_LEAGUES in src/lib/clubManager.ts, which
+   is the repo's dated and commented source for who is in which division this
+   season, and scripts/simFootleLeagues.mjs fails if this map ever disagrees
+   with it again. Read that harness before editing anything below: a club
+   moving division is a one line change here and a red suite if it is missed.
+
+   Two honest limits, both deliberate. A club that drops out of every division
+   REAL_LEAGUES models is named by its real division where the relegation is
+   recorded there (Segunda División, Serie B, Ligue 2). Leicester is the one
+   case where it is not: REAL_LEAGUES has them in no 2026-27 competition and
+   says nothing about where they went, so they are mapped to 'Other' rather
+   than to a guessed third tier. */
 const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   // Round 393: destinations of the verified 2026 window moves that the map did
   // not name (the club decides the league since Round 315, so an unmapped club
   // reads 'Other' and drops out of every league filter).
   'Al-Khaleej FC': 'Saudi Pro League', 'Abha Club': 'Saudi Pro League',
   'Chicago Fire FC': 'MLS', 'Orlando City SC': 'MLS', 'Charlotte FC': 'MLS',
-  // Premier League, 2025/26 membership
+  // Premier League, 2026-27 membership (REAL_LEAGUES 'premier'). Coventry,
+  // Ipswich and Hull came up; Wolves, Burnley and West Ham went down.
   'Manchester City': 'Premier League', 'Arsenal': 'Premier League', 'Arsenal FC': 'Premier League',
   'Liverpool': 'Premier League', 'Liverpool FC': 'Premier League',
   'Chelsea': 'Premier League', 'Chelsea FC': 'Premier League',
@@ -285,25 +305,37 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   'Manchester United': 'Premier League',
   'Newcastle': 'Premier League', 'Newcastle United': 'Premier League',
   'Aston Villa': 'Premier League',
-  'West Ham': 'Premier League', 'West Ham United': 'Premier League',
   'Brighton': 'Premier League', 'Brighton & Hove Albion': 'Premier League',
   'Brentford': 'Premier League', 'Brentford FC': 'Premier League',
-  'Wolverhampton': 'Premier League', 'Wolverhampton Wanderers': 'Premier League',
   'Nottingham Forest': 'Premier League',
   'Fulham': 'Premier League', 'Fulham FC': 'Premier League',
   'Everton': 'Premier League', 'Everton FC': 'Premier League',
   'Crystal Palace': 'Premier League',
   'Bournemouth': 'Premier League', 'AFC Bournemouth': 'Premier League',
   'Sunderland AFC': 'Premier League', 'Leeds United': 'Premier League',
-  'Burnley FC': 'Premier League',
-  // EFL Championship (the relegated and the rest of the second tier pool)
-  'Leicester': 'EFL Championship', 'Leicester City': 'EFL Championship',
-  'Ipswich Town': 'EFL Championship', 'Southampton': 'EFL Championship',
-  'Southampton FC': 'EFL Championship', 'Coventry City': 'EFL Championship',
+  'Coventry City': 'Premier League', 'Ipswich Town': 'Premier League',
+  'Hull City': 'Premier League',
+  // EFL Championship, 2026-27 membership (REAL_LEAGUES 'championship'). All
+  // twenty four, so a club coming up or going down is a move between these
+  // two blocks rather than a club quietly falling out of the map.
+  'West Ham': 'EFL Championship', 'West Ham United': 'EFL Championship',
+  'Wolverhampton': 'EFL Championship', 'Wolverhampton Wanderers': 'EFL Championship',
+  'Burnley FC': 'EFL Championship',
+  'Southampton': 'EFL Championship', 'Southampton FC': 'EFL Championship',
   'Middlesbrough FC': 'EFL Championship', 'Sheffield United': 'EFL Championship',
   'Norwich City': 'EFL Championship', 'Watford FC': 'EFL Championship',
   'Swansea City': 'EFL Championship', 'Bristol City': 'EFL Championship',
   'Birmingham City': 'EFL Championship', 'Stoke City': 'EFL Championship',
+  'Blackburn Rovers': 'EFL Championship', 'Bolton Wanderers': 'EFL Championship',
+  'Cardiff City': 'EFL Championship', 'Charlton Athletic': 'EFL Championship',
+  'Derby County': 'EFL Championship', 'Lincoln City': 'EFL Championship',
+  'Millwall FC': 'EFL Championship', 'Portsmouth FC': 'EFL Championship',
+  'Preston North End': 'EFL Championship', 'QPR': 'EFL Championship',
+  'Queens Park Rangers': 'EFL Championship', 'West Brom': 'EFL Championship',
+  'West Bromwich Albion': 'EFL Championship', 'Wrexham AFC': 'EFL Championship',
+  // Leicester: not in any 2026-27 competition REAL_LEAGUES carries, and it
+  // does not record where they went, so this says so rather than guessing.
+  'Leicester': 'Other', 'Leicester City': 'Other',
   // La Liga
   'Real Madrid': 'La Liga', 'Barcelona': 'La Liga', 'FC Barcelona': 'La Liga',
   'Atlético Madrid': 'La Liga', 'Atlético de Madrid': 'La Liga',
@@ -314,14 +346,18 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   'Sevilla': 'La Liga', 'Sevilla FC': 'La Liga',
   'Valencia': 'La Liga', 'Valencia CF': 'La Liga',
   'Rayo Vallecano': 'La Liga',
-  'Girona': 'La Liga', 'Girona FC': 'La Liga',
+  'Racing Santander': 'La Liga', 'Deportivo de La Coruña': 'La Liga', 'Málaga CF': 'La Liga',
   'Celta Vigo': 'La Liga', 'Celta de Vigo': 'La Liga',
   'Osasuna': 'La Liga', 'CA Osasuna': 'La Liga',
-  'Mallorca': 'La Liga', 'RCD Mallorca': 'La Liga',
   'Alavés': 'La Liga', 'Deportivo Alavés': 'La Liga',
   'Getafe': 'La Liga', 'Getafe CF': 'La Liga',
   'Elche CF': 'La Liga', 'RCD Espanyol Barcelona': 'La Liga',
-  'Levante UD': 'La Liga', 'Real Oviedo': 'La Liga',
+  'Levante UD': 'La Liga',
+  // Went down out of La Liga for 2026-27, per the REAL_LEAGUES 'laliga' note:
+  // "Racing Santander, Deportivo and Málaga up; Oviedo, Girona and Mallorca down".
+  'Real Oviedo': 'Segunda División',
+  'Girona': 'Segunda División', 'Girona FC': 'Segunda División',
+  'Mallorca': 'Segunda División', 'RCD Mallorca': 'Segunda División',
   // Serie A
   'Inter Milan': 'Serie A', 'AC Milan': 'Serie A',
   'Juventus': 'Serie A', 'Juventus FC': 'Serie A',
@@ -336,14 +372,20 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   'Como': 'Serie A', 'Como 1907': 'Serie A',
   'Cagliari': 'Serie A', 'Cagliari Calcio': 'Serie A',
   'Genoa': 'Serie A', 'Genoa CFC': 'Serie A',
-  'Verona': 'Serie A', 'US Sassuolo': 'Serie A',
+  'US Sassuolo': 'Serie A',
   'Parma Calcio 1913': 'Serie A', 'US Lecce': 'Serie A',
+  'Venezia FC': 'Serie A', 'AC Monza': 'Serie A', 'Frosinone Calcio': 'Serie A',
+  // Went down out of Serie A for 2026-27, per the REAL_LEAGUES 'seriea' note:
+  // "Venezia, Frosinone and Monza up; Cremonese, Verona and Pisa down".
+  'Verona': 'Serie B', 'Hellas Verona': 'Serie B',
+  'Pisa Sporting Club': 'Serie B', 'US Cremonese': 'Serie B',
   // Bundesliga
   'Bayern Munich': 'Bundesliga', 'Borussia Dortmund': 'Bundesliga',
   'Bayer Leverkusen': 'Bundesliga', 'Bayer 04 Leverkusen': 'Bundesliga',
   'RB Leipzig': 'Bundesliga', 'VfB Stuttgart': 'Bundesliga',
-  'Wolfsburg': 'Bundesliga', 'VfL Wolfsburg': 'Bundesliga',
   'SC Freiburg': 'Bundesliga', 'Eintracht Frankfurt': 'Bundesliga',
+  'FC Schalke 04': 'Bundesliga', 'SC Paderborn 07': 'Bundesliga',
+  'SV 07 Elversberg': 'Bundesliga',
   'Hoffenheim': 'Bundesliga', 'TSG 1899 Hoffenheim': 'Bundesliga',
   'Borussia Mönchengladbach': 'Bundesliga',
   'Mainz 05': 'Bundesliga', '1.FSV Mainz 05': 'Bundesliga',
@@ -351,6 +393,10 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   'Werder Bremen': 'Bundesliga', 'SV Werder Bremen': 'Bundesliga',
   '1.FC Union Berlin': 'Bundesliga', '1.FC Köln': 'Bundesliga',
   'Hamburger SV': 'Bundesliga',
+  // Went down for 2026-27, per the REAL_LEAGUES 'bundesliga' note: "Schalke,
+  // Elversberg and Paderborn up; Heidenheim, St. Pauli and Wolfsburg down".
+  'Wolfsburg': '2. Bundesliga', 'VfL Wolfsburg': '2. Bundesliga',
+  '1.FC Heidenheim 1846': '2. Bundesliga', 'FC St. Pauli': '2. Bundesliga',
   // Ligue 1
   'PSG': 'Ligue 1', 'Paris Saint-Germain': 'Ligue 1',
   'Marseille': 'Ligue 1', 'Olympique Marseille': 'Ligue 1',
@@ -360,9 +406,12 @@ const CLUB_TO_LEAGUE: Partial<Record<string, League>> = {
   'Rennes': 'Ligue 1', 'Stade Rennais FC': 'Ligue 1',
   'Nice': 'Ligue 1', 'OGC Nice': 'Ligue 1',
   'Lens': 'Ligue 1', 'RC Lens': 'Ligue 1',
-  'Nantes': 'Ligue 1', 'FC Nantes': 'Ligue 1',
   'RC Strasbourg Alsace': 'Ligue 1', 'Angers SCO': 'Ligue 1',
   'AJ Auxerre': 'Ligue 1', 'FC Lorient': 'Ligue 1', 'Paris FC': 'Ligue 1',
+  'ESTAC Troyes': 'Ligue 1', 'Le Mans FC': 'Ligue 1',
+  // Went down for 2026-27, per the REAL_LEAGUES 'ligue1' note: "Troyes and
+  // Le Mans up; Metz and Nantes down".
+  'Nantes': 'Ligue 2', 'FC Nantes': 'Ligue 2',
   // Liga Portugal
   'Benfica': 'Liga Portugal', 'SL Benfica': 'Liga Portugal',
   'Porto': 'Liga Portugal', 'FC Porto': 'Liga Portugal',

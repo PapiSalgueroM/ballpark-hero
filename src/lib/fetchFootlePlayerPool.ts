@@ -113,37 +113,66 @@ const INSANE_POOL_MAX = 1200;
 // actively wrong "close" hints. Instead the insane batch is fetched ONLY from
 // clubs listed here, with the league labeled by hand. Club spellings are the
 // exact player_market_values.club strings for 2025/26 (verified via SQL on
-// flawuiqbvjobmkfkauhw, 2026-07-08); leagues are each club's 2025/26 division.
+// flawuiqbvjobmkfkauhw, 2026-07-08).
+//
+// Round 560: the leagues were each club's 2025/26 division and had never been
+// moved, so months into 2026-27 this map still had Burnley in the Premier
+// League, Ipswich in the Championship, and Wolfsburg, St. Pauli, Heidenheim,
+// Verona, Pisa, Cremonese, Girona, Mallorca and Oviedo in top flights they
+// had been relegated out of. Every league here is now the club's 2026-27
+// division per REAL_LEAGUES in src/lib/clubManager.ts, and
+// scripts/simFootleLeagues.mjs fails if the two ever disagree again.
+//
+// The club list itself is unchanged: these keys are what the obscure query
+// asks Supabase for, so adding one widens the insane pool and changes which
+// player each day's puzzle lands on. That is a pool decision, not a league
+// fix, and it does not belong in the same change.
 // ---------------------------------------------------------------------------
 export const INSANE_CLUB_LEAGUE: Record<string, League> = {
   // Serie A
-  'Pisa Sporting Club': 'Serie A', 'Udinese Calcio': 'Serie A', 'Torino FC': 'Serie A',
-  'US Cremonese': 'Serie A', 'US Lecce': 'Serie A', 'Cagliari Calcio': 'Serie A',
-  'Hellas Verona': 'Serie A', 'Genoa CFC': 'Serie A', 'Parma Calcio 1913': 'Serie A',
+  'Udinese Calcio': 'Serie A', 'Torino FC': 'Serie A',
+  'US Lecce': 'Serie A', 'Cagliari Calcio': 'Serie A',
+  'Genoa CFC': 'Serie A', 'Parma Calcio 1913': 'Serie A',
   'SS Lazio': 'Serie A', 'Bologna FC 1909': 'Serie A', 'US Sassuolo': 'Serie A',
+  // Serie B: Cremonese, Verona and Pisa went down for 2026-27. They stay in
+  // this map because their rows are still in the pool and the league is the
+  // thing being stated; only the league moved.
+  'US Cremonese': 'Serie B', 'Hellas Verona': 'Serie B', 'Pisa Sporting Club': 'Serie B',
   // La Liga
-  'RCD Mallorca': 'La Liga', 'Elche CF': 'La Liga', 'Deportivo Alavés': 'La Liga',
-  'Real Oviedo': 'La Liga', 'Athletic Bilbao': 'La Liga', 'Valencia CF': 'La Liga',
-  'Villarreal CF': 'La Liga', 'Real Betis Balompié': 'La Liga', 'Girona FC': 'La Liga',
+  'Elche CF': 'La Liga', 'Deportivo Alavés': 'La Liga',
+  'Athletic Bilbao': 'La Liga', 'Valencia CF': 'La Liga',
+  'Villarreal CF': 'La Liga', 'Real Betis Balompié': 'La Liga',
   'Rayo Vallecano': 'La Liga', 'RCD Espanyol Barcelona': 'La Liga',
+  // Segunda División: Oviedo, Girona and Mallorca went down for 2026-27.
+  'Real Oviedo': 'Segunda División', 'Girona FC': 'Segunda División',
+  'RCD Mallorca': 'Segunda División',
   // Bundesliga
-  'VfL Wolfsburg': 'Bundesliga', 'FC Augsburg': 'Bundesliga', 'Borussia Mönchengladbach': 'Bundesliga',
-  '1.FC Heidenheim 1846': 'Bundesliga', '1.FC Köln': 'Bundesliga', 'Hamburger SV': 'Bundesliga',
+  'FC Augsburg': 'Bundesliga', 'Borussia Mönchengladbach': 'Bundesliga',
+  '1.FC Köln': 'Bundesliga', 'Hamburger SV': 'Bundesliga',
   '1.FC Union Berlin': 'Bundesliga', 'SV Werder Bremen': 'Bundesliga', 'TSG 1899 Hoffenheim': 'Bundesliga',
-  'FC St. Pauli': 'Bundesliga', '1.FSV Mainz 05': 'Bundesliga', 'RB Leipzig': 'Bundesliga',
+  '1.FSV Mainz 05': 'Bundesliga', 'RB Leipzig': 'Bundesliga',
+  // 2. Bundesliga: Heidenheim, St. Pauli and Wolfsburg went down for 2026-27.
+  'VfL Wolfsburg': '2. Bundesliga', '1.FC Heidenheim 1846': '2. Bundesliga',
+  'FC St. Pauli': '2. Bundesliga',
   // Ligue 1
   'Stade Brestois 29': 'Ligue 1', 'RC Lens': 'Ligue 1', 'FC Lorient': 'Ligue 1',
   'FC Toulouse': 'Ligue 1', 'AJ Auxerre': 'Ligue 1', 'Le Havre AC': 'Ligue 1', 'Paris FC': 'Ligue 1',
-  // Premier League fringe
-  'Burnley FC': 'Premier League',
+  // Premier League: Ipswich came up for 2026-27, Burnley went down. This map
+  // is also the club list the obscure query asks Supabase for, so a club is
+  // only added here to widen the insane pool, never as part of a league fix.
+  'Ipswich Town': 'Premier League',
   // EFL Championship
+  'Burnley FC': 'EFL Championship',
   'Norwich City': 'EFL Championship', 'Birmingham City': 'EFL Championship',
   'Queens Park Rangers': 'EFL Championship', 'Preston North End': 'EFL Championship',
   'Bristol City': 'EFL Championship', 'Watford FC': 'EFL Championship',
   'Sheffield United': 'EFL Championship', 'Stoke City': 'EFL Championship',
   'Millwall FC': 'EFL Championship', 'Swansea City': 'EFL Championship',
   'West Bromwich Albion': 'EFL Championship', 'Southampton FC': 'EFL Championship',
-  'Leicester City': 'EFL Championship', 'Ipswich Town': 'EFL Championship',
+  // Leicester are in no 2026-27 competition REAL_LEAGUES carries and it does
+  // not record where they went, so this says 'Other' rather than guessing a
+  // division. They stay in the map so their rows stay in the pool.
+  'Leicester City': 'Other',
   // Belgian Pro League
   'RSC Anderlecht': 'Belgian Pro League', 'KRC Genk': 'Belgian Pro League',
   'KAA Gent': 'Belgian Pro League', 'Union Saint-Gilloise': 'Belgian Pro League',
