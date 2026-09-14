@@ -218,7 +218,16 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   card's "half speed" (wrong with the Away Day Deal), a typed +50% on Sell up and a typed legacy
   point rule; all read the engine now. `scripts/simTycoonPitch.mjs`: 6 page tests (186 goals over
   30 matches one for one, no late replays after another tab, reduced motion, a 360 goal storm), 8
-  controls; `simTycoonHelp` gains sections M2 and L1 with 2 more controls. I have skipped 570 to 579 on purpose, because the
+  controls; `simTycoonHelp` gains sections M2 and L1 with 2 more controls.
+- **584: away matchdays.** Rides alone, adversarial review before ship. A matchday plays for every
+  half hour away, on the same capped clock the away pay reads, hidden tab or closed alike, never
+  the final matchday of a season, with no goal or win bonuses. `playMinute` is tick's minute body
+  lifted verbatim (the review ran 1.2 million ticks against HEAD: 0 differences). **The review
+  changed it:** a doctored match counter of 2^53 let away play overrun into a title and the Summit
+  prize (each matchday now ends at its own full time), and a five win run played away and lost
+  before you came back was never rewarded (milestones and badges now settle after each away
+  matchday). The away card lists W, D and L chips, milestone money and a table snapshot.
+  `scripts/simTycoonAwayMatchdays.mjs`: 6 sections, 6 controls, plus `tycoonAway` tests 7 and 8. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

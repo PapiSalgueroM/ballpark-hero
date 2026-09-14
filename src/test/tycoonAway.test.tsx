@@ -32,6 +32,7 @@ import { act, render, cleanup } from '@testing-library/react';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import {
   incomePerSec, offlineRateOf, offlineCapHoursOf, serializeTycoon, TYCOON_SAVE_KEY,
+  newTycoon, newLeague, leagueShape,
 } from '@/lib/stadiumTycoon';
 import type { TycoonState } from '@/lib/stadiumTycoon';
 
@@ -183,10 +184,12 @@ describe('Stadium Tycoon away earnings', () => {
     const promised = 3 * 3600;
     const detail = `three hours behind another window: the away total reads ${g().awayPay === null ? 'nothing' : String(Math.round(g().awayPay as number))} and the bank moved ${withReturnFrame.toFixed(0)}, which is ${awaySeconds(withReturnFrame, hidden).toFixed(1)}s of away pay where the rules promise ${promised}s`;
     expect(g().awayPay, detail).not.toBeNull();
-    const secs = awaySeconds(settled, hidden);
+    /* Round 584: milestone money an away matchday earned is banked too, and is not away pay. */
+    const secs = awaySeconds(settled - (g().awayTrip?.milestonePay ?? 0), hidden);
     expect(secs, detail).toBeGreaterThan(promised - MARGIN_SEC);
     expect(secs, detail).toBeLessThan(promised + MARGIN_SEC);
-    expect(settled, 'the "While you were away" total and the money actually banked disagree').toBeCloseTo(g().awayPay as number, 6);
+    /* Round 584: milestones an away matchday reached are banked in the same settle, and the card lists them. */
+    expect(settled, 'the "While you were away" total and the money actually banked disagree').toBeCloseTo((g().awayPay as number) + (g().awayTrip?.milestonePay ?? 0), 6);
     measured(`visibility path, 3h hidden: paid ${secs.toFixed(3)}s of away time, ${(secs - promised).toFixed(3)}s off the wall clock, margin ${MARGIN_SEC}s`);
     measured(`visibility path, 3h hidden: the return frame alone would have paid ${(withReturnFrame - settled).toFixed(1)}, worth ${awaySeconds(withReturnFrame - settled, hidden).toFixed(1)}s of away time`);
   });
@@ -245,5 +248,65 @@ describe('Stadium Tycoon away earnings', () => {
     expect(g().awayPay, 'twenty seconds behind another window popped the away modal').toBeNull();
     expect(g().state.money, 'twenty seconds behind another window paid away money').toBe(bank);
     measured('floor: 20s behind another window paid nothing, which is the lib rule that a tab refresh is not a trip away');
+  });
+
+  /* Round 584: matchdays keep playing while you are away, one for every half
+     hour of the trip the pay counts, never the final matchday of a season. The
+     wrapper for these two is scripts/simTycoonAwayMatchdays.mjs. */
+  it('7 a closed tab plays one matchday per half hour away, and never the final one', () => {
+    const club = (division: number) => {
+      const f = newTycoon(Date.now());
+      return { ...f, league: newLeague(0, division, 0), bestDivision: division, savedAt: Date.now() };
+    };
+    /** Close a club at this division, wait, reopen: how many matchdays played, and what the card lists. */
+    const reopenAfter = (seconds: number, division: number) => {
+      cleanup();
+      latest = null;
+      frameCb = null;
+      const save = club(division);
+      localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(save, Date.now()));
+      vnow += seconds * 1000;
+      mount();
+      const played = (g().state.totalMatches ?? 0) - (save.totalMatches ?? 0);
+      return { played, listed: g().awayTrip?.results.length ?? 0, matchday: g().state.league?.matchday ?? -1, season: g().state.league?.season ?? -1, startSeason: save.league.season };
+    };
+    const top = 6;
+    const topLeft = leagueShape(top).matchdays;
+    const cases: [string, number, number, number][] = [
+      ['no time', 0, top, 0], ['29 seconds', 29, top, 0], ['1,799 seconds', 1799, top, 0], ['1,800 seconds', 1800, top, 1],
+      ['3 hours', 3 * 3600, top, 6], ['8 hours', 8 * 3600, top, Math.min(16, topLeft - 1)],
+      ['8 hours in a 14 matchday league', 8 * 3600, 3, Math.min(16, leagueShape(3).matchdays - 1)],
+    ];
+    const got: string[] = [];
+    for (const [label, seconds, division, want] of cases) {
+      const r = reopenAfter(seconds, division);
+      got.push(`${label}: ${r.played}`);
+      expect(r.played, `${label} away played ${r.played} matchdays, the rule says ${want}`).toBe(want);
+      expect(r.listed, `${label} away: the away card lists ${r.listed} results for ${r.played} matchdays`).toBe(r.played);
+      expect(r.season, `${label} away turned the season over`).toBe(r.startSeason);
+      if (want === leagueShape(division).matchdays - 1) expect(r.matchday, `${label} away should stop on the final matchday, and stopped on matchday ${r.matchday}`).toBe(leagueShape(division).matchdays - 1);
+    }
+    measured(`away matchdays on the load path: ${got.join(', ')}`);
+  });
+
+  it('8 a hidden tab plays as many away matchdays as a closed one', () => {
+    const f = newTycoon(Date.now());
+    const start = { ...f, league: newLeague(0, 6, 0), bestDivision: 6, savedAt: Date.now() };
+    localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(start, Date.now()));
+    const view = mount();
+    const before = g().state;
+    backgroundFor(3);
+    const hidden = (g().state.totalMatches ?? 0) - (before.totalMatches ?? 0);
+    expect(hidden, 'three hours behind another window played no away matchdays').toBeGreaterThan(0);
+
+    view.unmount();
+    latest = null;
+    frameCb = null;
+    localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(before, Date.now()));
+    vnow += 3 * 3600 * 1000;
+    mount();
+    const closed = (g().state.totalMatches ?? 0) - (before.totalMatches ?? 0);
+    expect(hidden, `three hours hidden played ${hidden} matchdays and three hours closed played ${closed}`).toBe(closed);
+    measured(`3h hidden played ${hidden} away matchdays, 3h closed played ${closed}`);
   });
 });

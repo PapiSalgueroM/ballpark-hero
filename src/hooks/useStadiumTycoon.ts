@@ -12,8 +12,9 @@ import {
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
+  awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, LeagueClub } from '@/lib/stadiumTycoon';
+import type { GoldenKind, LeagueClub, AwayMatch } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -48,6 +49,14 @@ export interface LastSeason { label: string; position: number; table: LeagueClub
 /** Round 583: one goal the pitch replays, straight off the engine's event: which
  *  end it went in and the minute the engine committed it. Never a second roll. */
 export interface Replay { id: number; side: 'for' | 'against'; minute: number }
+/** Round 584: what the away card says about a trip. The results as they were
+ *  played, the milestone money they earned, and the table as it stood when you
+ *  came back (a snapshot, so a card left open never describes a later table). */
+export interface AwayTrip {
+  results: AwayMatch[];
+  milestonePay: number;
+  standing: { position: number; clubs: number; left: number } | null;
+}
 
 export function useStadiumTycoon() {
   const [state, setState] = useState<TycoonState>(() => {
@@ -60,6 +69,8 @@ export function useStadiumTycoon() {
   });
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const [awayPay, setAwayPay] = useState<number | null>(null);
+  /* Round 584: the matchdays played while you were away, for the away card. */
+  const [awayTrip, setAwayTrip] = useState<AwayTrip | null>(null);
   const [confetti, setConfetti] = useState(0);
   const [golden, setGolden] = useState<PendingGolden | null>(null);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
@@ -115,11 +126,27 @@ export function useStadiumTycoon() {
   const settleAway = useCallback(() => {
     const now = Date.now();
     const cur = stateRef.current;
-    const pay = offlineEarnings({ ...cur, savedAt: paidUntilRef.current }, now);
+    const trip = { ...cur, savedAt: paidUntilRef.current };
+    const pay = offlineEarnings(trip, now);
+    /* Round 584: a matchday for every half hour of the same trip the pay counts.
+       Played after the pay is worked out, so the results cannot move it. */
+    const matchdays = Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC);
     paidUntilRef.current = now;
-    if (!(pay > 0)) return;
-    setAwayPay(pay);
-    const next = { ...cur, money: cur.money + pay, lifetime: cur.lifetime + pay, savedAt: now };
+    /* Review: a club with no income (a doctored fanbase of 0) still plays its
+       matchdays, so the pay alone cannot gate the settle. */
+    if (!(pay > 0) && matchdays === 0) return;
+    setAwayPay(Math.max(0, pay));
+    const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };
+    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random) : null;
+    const lg = away?.state.league;
+    setAwayTrip(away && away.results.length > 0 ? {
+      results: away.results,
+      milestonePay: away.events.reduce((sum, e) => sum + (e.kind === 'milestone' ? e.amount ?? 0 : 0), 0),
+      standing: lg && away.results.some(r => !r.friendly)
+        ? { position: leaguePosition(lg), clubs: lg.clubs.length, left: leagueShape(lg.division).matchdays - lg.matchday }
+        : null,
+    } : null);
+    const next = away ? away.state : paid;
     stateRef.current = next;
     // Bank it straight away: an unsaved settle would be paid a second time.
     try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
@@ -338,7 +365,7 @@ export function useStadiumTycoon() {
     commit(after);
   }, [commit]);
 
-  const dismissAway = useCallback(() => setAwayPay(null), []);
+  const dismissAway = useCallback(() => { setAwayPay(null); setAwayTrip(null); }, []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
   const dismissBadge = useCallback(() => setBadge(null), []);
   /* Round 583: the pitch says when a replay has finished, and whether it is on
@@ -350,7 +377,7 @@ export function useStadiumTycoon() {
   }, []);
 
   return {
-    state, floaters, awayPay, dismissAway, confetti,
+    state, floaters, awayPay, awayTrip, dismissAway, confetti,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,

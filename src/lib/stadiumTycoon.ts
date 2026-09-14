@@ -1104,6 +1104,121 @@ export interface TickEvent {
 }
 
 /**
+ * Round 584: one minute of the match. This is the body tick() has run since
+ * Round 424, lifted out unchanged so the minutes a club plays while you are away
+ * are the same minutes on the same rolls. With `pay: false` (an away minute)
+ * the goals, the result, the streak, the fans a win brings and the table all
+ * happen, and no money moves: no goal bonus and no win bonus.
+ */
+export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }): void {
+  st.minute += 1;
+  if (st.minute <= 90) {
+    if (roll() < goalChancePerMin(st)) {
+      st.goalsFor += 1;
+      st.totalGoals += 1;
+      if (opts.pay) {
+        const b = goalBonus(st);
+        st.money += b;
+        st.lifetime += b;
+        events.push({ kind: 'goal', amount: b, minute: st.minute });
+      } else {
+        events.push({ kind: 'goal', minute: st.minute });
+      }
+    }
+    if (roll() < oppChancePerMin(st)) {
+      st.goalsAgainst += 1;
+      events.push({ kind: 'conceded', minute: st.minute });
+    }
+  }
+  if (st.minute >= 90) {
+    // Full time: settle, pay, reset.
+    if (st.goalsFor > st.goalsAgainst) {
+      const b = opts.pay ? winBonus(st) : 0;
+      st.money += b;
+      st.lifetime += b;
+      st.streak += 1;
+      st.totalWins += 1;
+      st.groundWins = (st.groundWins ?? 0) + 1;
+      st.fanbase += 6 + st.streak * 2;
+      events.push(opts.pay ? { kind: 'win', amount: b } : { kind: 'win' });
+    } else if (st.goalsFor < st.goalsAgainst) {
+      /* Round 196: a Steady Dressing Room keeps half the run alive.
+         Halved DOWN, so a streak of 1 still dies and the perk can never
+         hold a streak forever on its own. */
+      st.streak = perkLevelOf(st, 'shield') > 0 ? Math.floor(st.streak / 2) : 0;
+      events.push({ kind: 'loss' });
+    } else {
+      // A draw keeps the streak alive but does not extend it.
+      events.push({ kind: 'draw' });
+    }
+    /* Round 582: the result goes in the league, where the champion goes up
+       (playMatchday). Until this round promotion came from the home win
+       count. An older save's match in progress when it first loaded finishes
+       outside the table, and matchday 1 is the next match. */
+    if (st.league) {
+      if (st.league.carryover) {
+        const { carryover: _finished, ...rest } = st.league;
+        st.league = rest;
+      } else {
+        st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events);
+      }
+    }
+    st.matchNo += 1;
+    st.totalMatches = (st.totalMatches ?? 0) + 1;
+    st.minute = 0;
+    st.goalsFor = 0;
+    st.goalsAgainst = 0;
+  }
+}
+
+/** Round 584: a matchday plays for every half hour you are away. */
+export const AWAY_MATCHDAY_SEC = 1800;
+
+/** Round 584: a result as the away card prints it, and whether it was the
+ *  leftover friendly an older save finishes outside the table. */
+export type AwayResult = 'W' | 'D' | 'L';
+export interface AwayMatch { result: AwayResult; friendly: boolean }
+
+/** How many of `count` away matchdays this club may play: the match in progress
+ *  finishes first (a friendly left over from an older save counts, and plays
+ *  outside the table), and the final matchday of a season is never played away,
+ *  so a title, a promotion and a Summit prize always happen with you watching. */
+export function awayMatchdaysPlayable(s: TycoonState, count: number): number {
+  const n = Math.max(0, Math.floor(count));
+  const lg = s.league;
+  if (!lg) return n;
+  const beforeFinal = Math.max(0, leagueShape(lg.division).matchdays - 1 - lg.matchday);
+  return Math.min(n, (lg.carryover ? 1 : 0) + beforeFinal);
+}
+
+/** Round 584: play the club's away matchdays, minute by minute through
+ *  playMinute on the roll stream given, with no goal or win bonuses. Each
+ *  matchday ends at its own full time, never at a change in a counter (a
+ *  doctored totalMatches of 2^53 does not change when one is added, and the
+ *  review found away play then spilling into the final matchday). After each
+ *  one the milestones and badges it reached settle as they would have live. */
+export function playAwayMatchdays(s: TycoonState, count: number, roll: () => number): { state: TycoonState; results: AwayMatch[]; events: TickEvent[] } {
+  const st: TycoonState = { ...s, levels: { ...s.levels } };
+  const events: TickEvent[] = [];
+  const results: AwayMatch[] = [];
+  const n = awayMatchdaysPlayable(s, count);
+  for (let i = 0; i < n; i += 1) {
+    const friendly = Boolean(st.league?.carryover);
+    let result: TickEvent['kind'] | null = null;
+    for (let guard = 0; guard <= 90 && result === null; guard += 1) {
+      const k = events.length;
+      playMinute(st, roll, events, { pay: false });
+      for (let j = k; j < events.length; j += 1) {
+        if (events[j].kind === 'win' || events[j].kind === 'draw' || events[j].kind === 'loss') result = events[j].kind;
+      }
+    }
+    settleFirsts(st, events);
+    results.push({ result: result === 'win' ? 'W' : result === 'loss' ? 'L' : 'D', friendly });
+  }
+  return { state: st, results, events };
+}
+
+/**
  * Advance the sim by dt seconds. `roll` is the caller's randomness (the hook
  * passes Math.random, the harness passes a seeded stream). Match minutes run
  * at 1.4 real seconds each, so a full match is about two minutes of play.
@@ -1156,63 +1271,16 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   // A huge dt (returning from background) fast-forwards at most one match.
   if (minutes > 120) { minutes = 120; st.matchSec = 0; }
   minutes = Math.max(0, minutes);
-  for (let i = 0; i < minutes; i++) {
-    st.minute += 1;
-    if (st.minute <= 90) {
-      if (roll() < goalChancePerMin(st)) {
-        st.goalsFor += 1;
-        st.totalGoals += 1;
-        const b = goalBonus(st);
-        st.money += b;
-        st.lifetime += b;
-        events.push({ kind: 'goal', amount: b, minute: st.minute });
-      }
-      if (roll() < oppChancePerMin(st)) {
-        st.goalsAgainst += 1;
-        events.push({ kind: 'conceded', minute: st.minute });
-      }
-    }
-    if (st.minute >= 90) {
-      // Full time: settle, pay, reset.
-      if (st.goalsFor > st.goalsAgainst) {
-        const b = winBonus(st);
-        st.money += b;
-        st.lifetime += b;
-        st.streak += 1;
-        st.totalWins += 1;
-        st.groundWins = (st.groundWins ?? 0) + 1;
-        st.fanbase += 6 + st.streak * 2;
-        events.push({ kind: 'win', amount: b });
-      } else if (st.goalsFor < st.goalsAgainst) {
-        /* Round 196: a Steady Dressing Room keeps half the run alive.
-           Halved DOWN, so a streak of 1 still dies and the perk can never
-           hold a streak forever on its own. */
-        st.streak = perkLevelOf(st, 'shield') > 0 ? Math.floor(st.streak / 2) : 0;
-        events.push({ kind: 'loss' });
-      } else {
-        // A draw keeps the streak alive but does not extend it.
-        events.push({ kind: 'draw' });
-      }
-      /* Round 582: the result goes in the league, where the champion goes up
-         (playMatchday). Until this round promotion came from the home win
-         count. An older save's match in progress when it first loaded finishes
-         outside the table, and matchday 1 is the next match. */
-      if (st.league) {
-        if (st.league.carryover) {
-          const { carryover: _finished, ...rest } = st.league;
-          st.league = rest;
-        } else {
-          st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events);
-        }
-      }
-      st.matchNo += 1;
-      st.totalMatches = (st.totalMatches ?? 0) + 1;
-      st.minute = 0;
-      st.goalsFor = 0;
-      st.goalsAgainst = 0;
-    }
-  }
+  for (let i = 0; i < minutes; i++) playMinute(st, roll, events, { pay: true });
+  settleFirsts(st, events);
+  return { state: st, events };
+}
 
+/** Round 584: the milestones and badges a state has reached, settled exactly as
+ *  tick() always settled them at the end of every tick, lifted so away play can
+ *  settle them after each away matchday. Without that, a five win run played
+ *  away and lost before you came back was never rewarded. */
+export function settleFirsts(st: TycoonState, events: TickEvent[]): void {
   // Round 152: milestones settle last, so a goal or win inside this very
   // tick can be the thing that crosses the line. Exactly once per ground.
   const claimed = st.claimed ?? [];
@@ -1242,7 +1310,6 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
     events.push({ kind: 'ach', label: `${a.emoji} ${a.label}` });
   }
   if (newAch) st.ach = newAch;
-  return { state: st, events };
 }
 
 /* ---------------- prestige ---------------- */
@@ -1302,15 +1369,24 @@ export function prestige(s: TycoonState, now: number): TycoonState {
 
 /* ---------------- offline earnings ---------------- */
 
+/** Round 584: the seconds of a trip away that count, under the away cap. A tab
+ *  refresh (under thirty seconds) is not a trip away. The away pay and the away
+ *  matchdays both read this, so they can never disagree about how long you were
+ *  gone. */
+export function awaySecondsOf(s: TycoonState, now: number): number {
+  const elapsed = Math.max(0, (now - s.savedAt) / 1000);
+  const capped = Math.min(elapsed, offlineCapHoursOf(s) * 3600);
+  return capped < 30 ? 0 : capped;
+}
+
 /** Away pay: half rate, capped at eight hours, both raised by the Away
  *  Day Deal legacy perk (65%/10h, then 80%/12h). Returns whole pounds.
  *  Round 150: computed at the UNboosted rate on purpose. Saving mid-hype
  *  and leaving must not turn sixty seconds of double pay into eight hours
  *  of it. */
 export function offlineEarnings(s: TycoonState, now: number): number {
-  const elapsed = Math.max(0, (now - s.savedAt) / 1000);
-  const capped = Math.min(elapsed, offlineCapHoursOf(s) * 3600);
-  if (capped < 30) return 0; // a tab refresh is not a trip away
+  const capped = awaySecondsOf(s, now);
+  if (capped === 0) return 0;
   // Round 162: same rule for the golden whistle as for hype: saving mid
   // frenzy must not turn 77 seconds of x7 into eight hours of it.
   return Math.round(incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }) * capped * offlineRateOf(s));

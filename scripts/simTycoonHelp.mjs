@@ -417,7 +417,38 @@ const CLAIMS = [
     check: (T, m) => { const r = T.tapValue(m.crowd) / T.tapValue(m.fresh); return T.attendance(m.crowd) === 400 && r >= 3 ? '' : `a tap at ${T.attendance(m.crowd)} fans is x${r.toFixed(2)} a tap at 90`; },
   },
 
+  /* ---- Round 584: the league keeps playing while you are away ---- */
+  {
+    where: 'stadium', phrase: 'Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap',
+    check: (T, m) => {
+      const s = { ...m.fresh, league: T.newLeague(0, 6, 0), savedAt: 0 };
+      const count = sec => Math.floor(T.awaySecondsOf(s, sec * 1000) / T.AWAY_MATCHDAY_SEC);
+      const played = sec => T.playAwayMatchdays(s, count(sec), () => 0.5).results.length;
+      return T.AWAY_MATCHDAY_SEC === 1800 && played(1800) === 1 && played(5400) === 3 && played(20 * 3600) === (T.offlineCapHoursOf(s) * 3600) / 1800 ? '' : `a half hour plays ${played(1800)}, ninety minutes ${played(5400)}, twenty hours ${played(20 * 3600)}`;
+    },
+  },
+  {
+    where: 'stadium', phrase: 'leave for an hour and two matchdays play without you',
+    check: (T, m) => { const s = { ...m.fresh, league: T.newLeague(0, 6, 0), savedAt: 0 }; const n = T.playAwayMatchdays(s, Math.floor(T.awaySecondsOf(s, 3600e3) / T.AWAY_MATCHDAY_SEC), () => 0.5).results.length; return n === 2 ? '' : `an hour away plays ${n}`; },
+  },
+  {
+    where: 'stadium', phrase: 'the final matchday of a season always waits for you',
+    check: (T, m) => {
+      const bad = [];
+      for (let d = 0; d < T.DIVISIONS.length; d += 1) {
+        const md = T.leagueShape(d).matchdays - 1;
+        const s = { ...m.fresh, league: { ...T.newLeague(0, d, 0), matchday: md } };
+        if (T.awayMatchdaysPlayable(s, 16) !== 0) bad.push(d);
+      }
+      return bad.length ? `the final matchday plays away in divisions ${bad.join(', ')}` : '';
+    },
+  },
+
   /* ---- the rules modal's own words (its numbers are computed) ---- */
+  {
+    where: 'modal', phrase: 'Matchdays keep playing while you are away, one every',
+    check: (T, m) => { const s = { ...m.fresh, league: T.newLeague(0, 6, 0) }; const r = T.playAwayMatchdays(s, 1, () => 0.5); return r.results.length === 1 && (r.state.totalMatches ?? 0) - (s.totalMatches ?? 0) === 1 ? '' : `one away matchday played ${r.results.length}`; },
+  },
   { where: 'modal', phrase: 'pays double for', check: (T, m) => hype(T, m, T.BOOST_DURATION_SEC) },
   { where: 'modal', phrase: 'bonuses are not doubled', check: (T, m) => hype(T, m, T.BOOST_DURATION_SEC) },
   { where: 'modal', phrase: 'every couple of minutes', check: T => (T.GOLDEN_MEAN_GAP_SEC >= 90 && T.GOLDEN_MEAN_GAP_SEC <= 180 ? '' : `the mean gap is ${T.GOLDEN_MEAN_GAP_SEC} seconds`) },

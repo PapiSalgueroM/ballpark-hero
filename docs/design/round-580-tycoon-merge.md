@@ -948,6 +948,35 @@ rows above:
 - `AWAY_MATCHDAY_CONTROL=cash`: 3 red.
 - `AWAY_MATCHDAY_CONTROL=finale`: 4 red.
 
+**As built, and what the adversarial review changed.**
+- **`playMinute`** is tick's minute loop body, lifted; the review ran HEAD's `tick` against this one
+  over 1,200,000 calls on 60 clubs and found 0 differences, and `offlineEarnings` (now on
+  `awaySecondsOf`) matched HEAD with `Object.is` on 52 inputs. `playAwayMatchdays` plays
+  `awayMatchdaysPlayable` matchdays: the match in progress first, a leftover friendly outside the
+  table, and never the final matchday.
+- **The review found a real overrun on doctored saves.** Each away matchday first ended when
+  `totalMatches` changed, and the loader keeps any finite count: at 2^53 adding one changes
+  nothing, so a matchday ran its 91 guard minutes and spilled on until a title, a promotion and
+  the Summit prize happened away (money 40 to 4,272 in one probe). Each matchday now ends at its
+  own full time. Section 4 carries 20 doctored counters and a `counter` control.
+- **The review found a lost reward.** Milestones and badges waited for the first live tick, so a
+  five win run played away and lost before you came back was never rewarded (285 of 2,000 eight
+  hour trips). The settle loops are lifted into `settleFirsts`, run after every away matchday, so
+  away play pays milestone money exactly as live play would. The contract's "money untouched"
+  therefore reads "no goal or win bonuses": section 3 requires money to move by exactly the
+  milestones reached, section 6 (control `nofirsts`) requires every streak first reached away to be
+  kept, and the away card lists the milestone money on its own line.
+- **Also from the review**: the card said "no bonuses paid" (now "no goal or win bonuses"); a
+  leftover friendly is marked as one and never earns a table line; the table line is a snapshot
+  taken at the settle, so a card left open never describes a later table; a club with no income
+  still plays its matchdays; section 1 also compares `totalWins`, `totalGoals` and `groundWins`;
+  section 5 adds a real outcome (a squad of 50 wins 94.8% of its away matches, a squad of 0 wins
+  8.8%, fence a 50 point gap) because the count alone is arithmetic; vitest 7's dead assertion is
+  replaced by "the season did not turn over, and a capped trip stops on the final matchday".
+- **Measured**: 200 of 200 matches identical; absences of 0 s, 29 s, 1,799 s, 1,800 s, 3 h and
+  8 h play 0, 0, 0, 1, 6 and 16; a mean of 10.1 matchdays for 40 mid-season clubs away 8 hours;
+  a club that buys nothing loses 38% of its away matches.
+
 ### Round 585: Gems and packs (rides alone)
 
 **Files.**

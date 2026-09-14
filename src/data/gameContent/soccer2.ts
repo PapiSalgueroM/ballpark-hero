@@ -772,6 +772,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The golden whistle appears only while you are actually playing, roughly every couple of minutes, and its timed prizes (DERBY DAY at seven times income, CROWD SURGE at twenty five times taps) cannot stack with each other.",
       "Badges pay no cash. Each of the 47 is a permanent two percent income multiplier, earned exactly once per career, and they never reset.",
       "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
+      "Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
       "Progress saves on this device automatically. Selling up is permanent: only Reputation, badges, club records and your lifetime totals survive.",
     ],
     example: [
@@ -798,7 +799,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Does it earn while the tab is closed?",
-        a: "Yes, at half rate for up to eight hours, paid out the next time you open the game on the same device.",
+        a: "Yes, at half rate for up to eight hours, paid out the next time you open the game on the same device. The league keeps going too: leave for an hour and two matchdays play without you, though the final matchday of a season always waits for you.",
       },
       {
         q: "Can the opponents be beaten forever?",

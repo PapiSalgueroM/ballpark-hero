@@ -38,7 +38,7 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale, HYPE_MULT,
+  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -217,6 +217,7 @@ function helpFacts() {
     awayPerk: perk('away')?.name ?? '',
     awayMaxPct: Math.round(offlineRateOf(maxed) * 100),
     awayMaxHours: offlineCapHoursOf(maxed),
+    awayMatchMin: AWAY_MATCHDAY_SEC / 60,
     freshFans: fresh.fanbase,
     perFan: (incomePerSec(fresh) / attendance(fresh)).toFixed(2),
     freshRate: incomePerSec(fresh).toFixed(2),
@@ -333,6 +334,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const lg = s.league;
   const lgShape = lg ? leagueShape(lg.division) : null;
   const lgPos = lg ? leaguePosition(lg) : 0;
+  /* Round 584: where the table stood when you came back, from the hook's snapshot. */
+  const standing = g.awayTrip?.standing ?? null;
+  const awayTableLine = !standing ? '' : standing.left <= 1
+    ? `You are ${ordinal(standing.position)} of ${standing.clubs}, and the final matchday is waiting for you.`
+    : `You are ${ordinal(standing.position)} of ${standing.clubs} with ${standing.left} matchdays to go.`;
   const atSummit = divisionIndex(s) >= DIVISIONS.length - 1;
   const achCount = (s.ach ?? []).length;
   const pts = legacyPointsOf(s);
@@ -796,6 +802,28 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <div className="text-lg font-bold font-display text-foreground">While you were away</div>
             <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.</p>
             <div className="text-3xl font-bold font-display text-gold mt-3">+{fmtMoney(g.awayPay)}</div>
+            {g.awayTrip && (
+              <div data-away-results className="mt-3">
+                <p className="text-xs text-muted-foreground">Your club kept playing while you were away, with no goal or win bonuses:</p>
+                <div className="mt-1.5 flex flex-wrap justify-center gap-1">
+                  {g.awayTrip.results.map((m, i) => (
+                    <span
+                      key={i}
+                      role="img"
+                      aria-label={`${m.result === 'W' ? 'won' : m.result === 'L' ? 'lost' : 'drew'}${m.friendly ? ' a friendly' : ''}`}
+                      className={cn('inline-flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold',
+                        m.result === 'W' ? 'bg-emerald-500/20 text-emerald-400' : m.result === 'L' ? 'bg-red-500/20 text-red-400' : 'bg-secondary text-muted-foreground',
+                        m.friendly && 'opacity-60 ring-1 ring-border')}
+                    >
+                      {m.result}
+                    </span>
+                  ))}
+                </div>
+                {g.awayTrip.results[0]?.friendly && <p className="mt-1 text-[11px] text-muted-foreground">The faded result was a friendly, played outside the table.</p>}
+                {g.awayTrip.milestonePay > 0 && <p className="mt-2 text-xs font-bold text-gold">Milestones reached on the road: +{fmtMoney(g.awayTrip.milestonePay)}</p>}
+                {awayTableLine && <p className="mt-2 text-xs text-muted-foreground">{awayTableLine}</p>}
+              </div>
+            )}
             <button onClick={g.dismissAway} className="mt-4 w-full py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">Back to work</button>
           </div>
         </div>
@@ -826,7 +854,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them on the Badges tile, and your career numbers on Records.</p>
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>
               <p>Selling up also pays legacy points: {h.saleBase} for the sale plus {h.perDivision} per division that ground climbed, so cashing out early pays {h.saleBase} and a sale from {h.lastDivision} pays {h.summitPoints}. Spend them in the Legacy boardroom on {h.perks} permanent perks, from {h.firstPerk} (+{h.swayPct}% income per level, forever) to {h.shieldPerk}, which keeps half your streak through a loss. The whole board costs exactly {h.boardCost} points. Perks survive every future sale.</p>
-              <p>Away from the game, you earn at {h.awayPct}% speed for up to {h.awayHours} hours (the {h.awayPerk} perk raises both, up to {h.awayMaxPct}% for {h.awayMaxHours} hours). Progress saves on this device.</p>
+              <p>Away from the game, you earn at {h.awayPct}% speed for up to {h.awayHours} hours (the {h.awayPerk} perk raises both, up to {h.awayMaxPct}% for {h.awayMaxHours} hours). Matchdays keep playing while you are away, one every {h.awayMatchMin} minutes with no goal or win bonuses, and the final matchday of a season always waits for you. Progress saves on this device.</p>
               <p>The Academy tab runs your youth academy inside this game, on its own save, with its own How it works button.</p>
               <p>Worked example: a new club has {h.freshFans} fans paying ${h.perFan} each, ${h.freshRate} a second. The first Stands level costs ${h.standsCost} and adds {h.seatsPerStand} seats you cannot fill yet, so the Ticket Office pays first. Later, a full ground of {h.exampleFans} fans pays {fmtMoney(h.rate400)} a second, a goal pays {fmtMoney(h.goal400)} before any streak, and a win pays {fmtMoney(h.win400)}.</p>
             </div>
