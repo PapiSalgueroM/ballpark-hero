@@ -1995,7 +1995,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Michaël Cuisance', p: 'CM', a: 26, v: 3, r: 72 },
     { n: 'Tjark Ernst', p: 'GK', a: 22, v: 3, r: 72 },
     { n: 'Michal Karbownik', p: 'LB', a: 24, v: 1.5, r: 68 },
-    { n: 'Michał Karbownik', p: 'RB', a: 24, v: 1.5, r: 68 },
   ],
   'Hibernian': [
     { n: 'Nicky Cadden', p: 'LM', a: 29, v: 0.7, r: 64 },
